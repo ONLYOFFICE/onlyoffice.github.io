@@ -486,7 +486,9 @@
         switchClass(elements.logoutLink, displayNoneClass, hide);
     }
 
+    var currentAuthState;
     function switchAuthState(state) {
+        currentAuthState = state;
         configState(true);
         loginState(true);
         mainState(true);
@@ -532,6 +534,8 @@
                 clearTimeout(loadTimeout);
             }
 
+            if (!lastSearch.ownObj && !lastSearch.catObj && !lastSearch.text.trim()) return;
+
             waitForLoad = true;
             loadTimeout = setTimeout(function () {
                 if (shouldLoadMore(holder)) {
@@ -551,6 +555,7 @@
     }
 
     function shouldLoadMore(holder) {
+        if (currentAuthState != "main") return false;
         if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) return false;
         if ((!lastSearch.ownObj || !lastSearch.ownObj.next) && (lastSearch.catObj && !lastSearch.catObj.next)) return false;
 
