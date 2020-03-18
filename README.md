@@ -36,7 +36,7 @@ For **Integration Edition and Document Server integrated with a 3rd-party storag
         "editorConfig": {
             "plugins": {
                 "autostart": [
-                    "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
+                    "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
                     ...
                 ],
                 "pluginsData": [
