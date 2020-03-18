@@ -56,7 +56,7 @@ In case you need to install it yourself, do the following:
 1. Clone repository
 
     ```
-    git clone --branch community-server git@github.com:ONLYOFFICE/onlyoffice-mendeley.git
+    git clone --branch community-server https://github.com/ONLYOFFICE/onlyoffice-mendeley.git
     ```
 
 2. Copy `onlyoffice-mendeley` directory to `<community-server>\web\studio\ASC.Web.Studio\ThirdParty\plugin\mendeley`
