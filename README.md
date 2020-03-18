@@ -36,13 +36,11 @@ For **Integration Edition and Document Server integrated with a 3rd-party storag
         "editorConfig": {
             "plugins": {
                 "autostart": [
-                    "asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}",
-                    "asc.{FFE1F462-1EA2-4391-990D-4CC84940B754}",
+                    "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
                     ...
                 ],
                 "pluginsData": [
-                    "https://example.com/plugin1/config.json",
-                    "https://example.com/plugin2/config.json",
+                    "https://example.com/path/to/mendeley/config.json",
                     ...
                 ]
             },
