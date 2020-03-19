@@ -49,6 +49,7 @@ For **Integration Edition and Document Server integrated with a 3rd-party storag
         ...
     });
     ```
+**Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
 
 Mendeley plugin is installed by default for **Enterprise and Community Edition**.
 In case you need to install it yourself, do the following:
