@@ -49,13 +49,19 @@ For **Integration Edition and Document Server integrated with a 3rd-party storag
         ...
     });
     ```
+**Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable.
 
 ## Configuration
 
-For **Enterprise and Community Edition**
+1. Find Zotero plugin in `Plugins` tab of the ONLYOFFICE Document Editor and click it.
 
+2. Follow `Zotero API settings` link from the plugin’s window.
 
-For **Integration Edition and Document Server integrated with a 3rd-party storage**:
+3. Log in to your Zotero account, press `Create new private key`.
+
+4. Fill in `Key Description`, make sure `Allow library access` box is checked and press `Save Key`.
+
+5. Copy the newly created key and paste to `API Key` field in the plugin’s interface and save it. 
 
 
 ## User feedback and support
