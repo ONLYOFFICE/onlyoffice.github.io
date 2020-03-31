@@ -15,7 +15,6 @@
   "Open Mendeley website": "Сайт Mendeley",
   "Logout": "Выйти",
   "AppId is empty": "Поле AppId пустое",
-  "Copy Link and Open Form": "Скопировать ссылку и открыть форму",
   "Application ID": "Application ID",
   "Reconfigure": "Перенастроить",
   "To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "Чтобы использовать Mendeley, зарегистрируйте этот редактор как приложение. Скопируйте ссылку ниже и вставьте её в поле Redirect URL в открывшейся форме.",
