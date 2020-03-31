@@ -1,0 +1,21 @@
+{
+  "To use Zotero you should get an API key.": "要使用Zotero，您应该获得一个API密钥。",
+  "Navigate to": "导航到",
+  "Zotero API settings": "Zotero API设置",
+  "Create and copy API key into the field below.": "创建API密钥并将其复制到下面的字段中。",
+  "Open Zotero website": "Zotero网站",
+  "Invalid API key": "无效的API密钥",
+  "API Key": "API密钥",
+  "Nothing found": "未找到任何东西",
+  "Style is not selected": "未选择样式",
+  "Language is not selected": "未选择语言",
+  "Search references by author, title or year": "作者、标题或年份搜索引用",
+  "Cancel": "取消",
+  "Insert Bibliography": "插入参考文献",
+  "Style": "样式",
+  "Enter style name": "输入样式名称",
+  "Language": "语言",
+  "Reconfigure": "重新配置",
+  "Learn more here.": "もっとここで知る。",
+  "Save": "セーブ"
+}
