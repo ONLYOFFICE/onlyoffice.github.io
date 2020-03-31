@@ -1,0 +1,21 @@
+{
+  "To use Zotero you should get an API key.": "Per usare Zotero è necessaria una chiave API.",
+  "Navigate to": "Naviga verso",
+  "Zotero API settings": "Impostazioni API Zotero",
+  "Create and copy API key into the field below.": "Crea e copia la chiave API nel campo sottostante.",
+  "Open Zotero website": "Apri il sito web Zotero",
+  "Invalid API key": "Chiave API non valida",
+  "API Key": "Chiave API",
+  "Search in all literature:": "Cerca in tutta la letteratura",
+  "Style is not selected": "Lo stile non ? selezionato",
+  "Language is not selected": "Il linguaggio non ? selezionato",
+  "Search references by author, title or year": "Cerca riferimenti per autore, titolo o anno",
+  "Cancel": "Annulla",
+  "Insert Bibliography": "Inserisci Bibliografia",
+  "Style": "Stile",
+  "Enter style name": "Inserisci nome dello stile",
+  "Language": "Lingua",
+  "Reconfigure": "Riconfigura",
+  "Learn more here.": "Ulteriori informazioni qui.",
+  "Save": "Salva"
+}
