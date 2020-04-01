@@ -1,1 +1,1 @@
-# plugin-wordpress
+# ONLYOFFICE WordPress plugin
