@@ -1,1 +1,1 @@
-# plugin-easybib
+# ONLYOFFICE EasyBib plugin
