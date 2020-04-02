@@ -20,7 +20,7 @@ For ONLYOFFICE Integration Edition as well as ONLYOFFICE Document Server integra
 
 For **Integration Edition and Document Server integrated with a 3rd-party storage** (e.g. ownCloud, Nextcloud, Seafile) two installation ways are available:
 
-1. Put the folder with the plugin code to ONLYOFFICE Document Server folder depending on the operating system:
+1. Put the folder with Mendeley plugin (it must contain the content of the src folder only) to ONLYOFFICE Document Server folder depending on the operating system:
 
     For Linux - `/var/www/onlyoffice/documentserver/sdkjs-plugins/`.
 
