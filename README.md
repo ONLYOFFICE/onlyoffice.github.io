@@ -2,7 +2,7 @@
 
 The Photo Editor plugin allows users to edit images and screenshots within text documents, spreadsheets and presentations.
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal.
+The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
 
 ## Features
 
