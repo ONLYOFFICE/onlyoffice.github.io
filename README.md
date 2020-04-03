@@ -4,7 +4,7 @@ Macros plugin allows creating your own macros, scripts that help you automate yo
 
 ONLYOFFICE macros use JavaScript language syntax and ONLYOFFICE [Document Builder API scripting notation](https://api.onlyoffice.com/docbuilder/basic). 
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal.
+The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
 
 ## Features
 
