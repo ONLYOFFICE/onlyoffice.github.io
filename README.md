@@ -4,7 +4,7 @@ The Speech plugin allows users to have text documents read out loud to them, by 
 
 The plugin uses Yandex.Translate to recognize the language and the [ResponsiveVoice service](https://responsivevoice.org/) to read the text out loud. By default, it uses a female voice. 
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server),ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
+The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
 
 ## How to use
 
