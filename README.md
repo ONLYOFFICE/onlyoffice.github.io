@@ -2,7 +2,7 @@
 
 The EasyBib plugin allows users to automatically add the references to the document in full accordance with style guides of their choice.
 
-The plugin is pre-installed in ONLYOFFICE cloud service. 
+The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), and ONLYOFFICE cloud service. 
 
 ## Features
 
