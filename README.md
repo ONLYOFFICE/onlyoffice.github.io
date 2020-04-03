@@ -4,7 +4,7 @@ The OCR plugin allows users to recognize text in pictures (.png and .jpg formats
 
 The plugin uses [Tesseract.js](https://tesseract.projectnaptha.com/) and supports more than 60 languages. 
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal.
+The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
 
 ## How to use
 
