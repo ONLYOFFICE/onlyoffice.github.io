@@ -25,6 +25,12 @@ The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition 
 4. Click the Apply button.
 5. Click the Save button. 
 
+## Documentation
+
+Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
+
+Plugins code and methods https://api.onlyoffice.com/docbuilder/basic.
+
 ## User feedback and support
 
 To ask questions and share feedback, use Issues in this repository.
