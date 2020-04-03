@@ -1,4 +1,4 @@
-# Photo Editor plugin for ONLYOFFICE editors
+# Photo Editor plugin 
 
 The Photo Editor plugin allows users to edit images and screenshots within text documents, spreadsheets and presentations.
 
