@@ -1,14 +1,16 @@
 # Photo editor plugin for ONLYOFFICE editors
 
-Photo editor plugin allows embedding YouTube videos into your documents.
+The Photo Editor plugin allows users to edit images and screenshots within text documents, spreadsheets and presentations.
 
 The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal.
 
 ## How to use
 
-1. Find the YouTube plugin in the Plugins tab.
-2. Insert the video URL and press OK.
-3. The video preview in form of an image will appear in your doc. Click on it to play the video. 
+1. Click an image in your document you would like to change .
+2. Choose Photo Editor from the Plugins tab.
+3. Select the necessary option to edit the image.
+4. Click the Apply button.
+5. Click the Save button. 
 
 ## User feedback and support
 
