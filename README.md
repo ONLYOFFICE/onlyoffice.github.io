@@ -4,6 +4,19 @@ The Photo Editor plugin allows users to edit images and screenshots within text 
 
 The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal.
 
+## Features
+
+* Enhance (Hi-Def, Scenery, Portrait and other);
+* Apply effects, frames, overlays and stickers;
+* Change image orientation: rotate, mirror;
+* Crop and resize;
+* Adjust brightness, contrast, highlights and shadows;
+* Adjust color, sharpness and focus;
+* Add vignette effect;
+* Blemish and whiten;
+* Remove red-eye effect;
+* Draw, splash and add text;
+
 ## How to use
 
 1. Click an image in your document you would like to change .
