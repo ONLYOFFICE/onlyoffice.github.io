@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>OCR</title>
+    <script type='text/javascript' src='../pluginBase.js'></script>
+    <link rel="stylesheet" href="../plugins.css">
+    <script type='text/javascript' src='ocr.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+    <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
+</head>
+
+<style>
+    label{
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 11px;
+    }
+    div{
+        display: inline-block;
+        vertical-align: top;
+    }
+    html{
+        height: 100%;
+    }
+    button{
+        width: 125px;
+    }
+    .disabled {
+        color: darkgrey;
+    }
+
+    #lang-select {
+        background: #fff;
+        border: 1px solid #cfcfcf;
+        border-radius: 2px;
+        color: #444444;
+        font-size: 11px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        height: 22px;
+        cursor: pointer;
+    }
+
+    #lang-select[disabled],
+    #lang-select.disabled {
+        opacity: 0.65;
+    }
+
+</style>
+<body style="box-sizing:border-box; width: 100%; height: 100%; margin: 0; padding-left: 22px; background: #F7F7F7;">
+    <div style="height: 100%; width: 100%">
+        <div style="height: 99px">
+            <label class="noselect" style="display: inline-block; margin-top: 15px; margin-bottom: 22px" id="label1">Tesseract.js lets recognize text in pictures (png, jpg)</label><br>
+            <div class="noselect">
+                <div style="margin-right: 0px; width: 175px; overflow: visible;">
+                    <button class="btn-text-default" id="load-file-button-id">Load File</button><br>
+                    <label disabled  class="noselect disabled" style="overflow-x: visible" id="file-name-label"></label>
+                    <input style="display: none" type="file" id="images-input" multiple accept='image/jpeg,image/png' />
+                </div>
+            </div>
+            <div class="noselect" style="margin-right: 22px">
+                <label class="noselect" id="label2">Choose language</label>
+                <select name = 'lang_combo' disabled  class="noselect" id='lang-select' style="width: 125px">
+                    <option value = 'eng'>English</option>
+                    <option value = 'chi_sim'>Chinese</option>
+                    <option value = 'rus'>Russian</option>
+                    <option value = 'meme'>Meme</option>
+                    <option value = 'tha'>Thai</option>
+                    <option value = 'deu'>German</option>
+                    <option value = 'jpn'>Japanese</option>
+                    <option value = 'spa'>Spanish</option>
+                    <option value = 'fra'>French</option>
+                    <option value = 'por'>Portuguese</option>
+                    <option value = 'ita'>Italian</option>
+                    <option value = 'pol'>Polish</option>
+                    <option value = 'tur'>Turkish</option>
+                    <option value = 'nld'>Dutch</option>
+                    <option value = 'ara'>Arabic</option>
+                    <option value = 'ces'>Czech</option>
+                    <option value = 'kor'>Korean</option>
+                    <option value = 'swe'>Swedish</option>
+                    <option value = 'vie'>Vietnamese</option>
+                    <option value = 'ron'>Romanian</option>
+                    <option value = 'ell'>Greek</option>
+                    <option value = 'ind'>Indonesian</option>
+                    <option value = 'hun'>Hungarian</option>
+                    <option value = 'dan'>Danish</option>
+                    <option value = 'bul'>Bulgarian</option>
+                    <option value = 'fin'>Finnish</option>
+                    <option value = 'nor'>Norwegian</option>
+                    <option value = 'ukr'>Ukrainian</option>
+                    <option value = 'cat'>Catalan</option>
+                    <option value = 'hrv'>Croatian</option>
+                    <option value = 'heb'>Hebrew</option>
+                    <option value = 'lit'>Lithuanian</option>
+                    <option value = 'slv'>Slovenian</option>
+                    <option value = 'hin'>Hindi</option>
+                    <option value = 'ben'>Bengali</option>
+                    <option value = 'tel'>Telugu</option>
+                    <option value = 'tam'>Tamil</option>
+                    <option value = 'kan'>Kannada</option>
+                    <option value = 'mal'>Malayalam</option>
+                    <option value = 'tgl'>Tagalog</option>
+                    <option value = 'swa'>Swahili</option>
+                    <option value = 'aze'>Azerbaijani</option>
+                    <option value = 'bel'>Belarusian</option>
+                    <option value = 'afr'>Afrikaans</option>
+                    <option value = 'sqi'>Albanian</option>
+                    <option value = 'eus'>Basque</option>
+                    <option value = 'epo'>Esperanto</option>
+                    <option value = 'est'>Estonian</option>
+                    <option value = 'glg'>Galician</option>
+                    <option value = 'isl'>Icelandic</option>
+                    <option value = 'lav'>Latvian</option>
+                    <option value = 'mkd'>Macedonian</option>
+                    <option value = 'msa'>Malay</option>
+                    <option value = 'mlt'>Maltese</option>
+                    <option value = 'grc'>Ancient Greek</option>
+                    <option value = 'chr'>Cherokee</option>
+                    <option value = 'enm'>English (Old)</option>
+                    <option value = 'frk'>Frankish</option>
+                    <option value = 'equ'>Math</option>
+                    <option value = 'srp'>Serbian (Latin)</option>
+                    <option value = 'slk'>Slovak</option>
+                </select>
+            </div>
+            <div  class="noselect">
+                <button class="btn-text-default" id='recognize-button' disabled>Recognize</button><br>
+                <label id="status-label" class="noselect disabled" ></label>
+            </div>
+        </div>
+        <div id="scrollable-image-text-div" style="position:absolute; display: none; height: calc(100% - 99px); width: calc(100% - 5px); position: relative; overflow: hidden">
+            <div style="width: calc(50% - 20px); margin-right: 25px" id="image-container-div" class="noselect">
+
+            </div>
+            <div id="text-container-div" style="width: calc(50% - 24px)">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
