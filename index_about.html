@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+    <style>
+        p, a{
+            font-size: 12px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        a:link {
+            color: darkgrey;
+        }
+
+        /* visited link */
+        a:visited {
+            color: darkgrey;
+        }
+
+        /* mouse over link */
+        a:hover {
+            color: #8d8d8d;
+        }
+
+        /* selected link */
+        a:active {
+            color: darkgrey;
+        }
+    </style>
+    <script type="text/javascript" src="../pluginBase.js"></script>
+    <script type="text/javascript">
+        window.Asc.plugin.init = function()
+        {
+            this.resizeWindow(392, 147, 392, 147, 392, 147);
+            // none
+        };
+
+        window.Asc.plugin.button = function(id)
+        {
+            this.executeCommand("close", "");
+        };
+		
+		window.Asc.plugin.onTranslate = function(){
+		
+			var elem = document.getElementById("p1");
+			if (elem){
+				elem.innerHTML = window.Asc.plugin.tr("Tesseract.js Add-on");
+			}
+			elem = document.getElementById("p1");
+			if (elem){
+				elem.innerHTML = window.Asc.plugin.tr("Tesseract.js Add-on");
+			}
+			elem = document.getElementById("p2");
+			if (elem){
+				elem.innerHTML = window.Asc.plugin.tr("Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.");
+			}		
+			elem = document.getElementById("a1");
+			if (elem){
+				elem.innerHTML = window.Asc.plugin.tr("Source code");
+			}
+		};
+
+    </script>
+</head>
+<body style="padding-left: 20px; padding-right: 20px">
+<p style="font-size: 15px" id="p1">Tesseract.js Add-on</p>
+<p style="font-size: 12px" id="p2">Tesseract.js is a pure javascript version of the <a href="http://tesseract.projectnaptha.com" target="_blank">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.</p>
+<a href="https://github.com/ONLYOFFICE/sdkjs-plugins/tree/master/ocr" target="_blank" id="a1">Source code</a>
+</body>
+</html>
