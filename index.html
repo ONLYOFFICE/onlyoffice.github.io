@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Highligh code</title>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link id = "style" rel="stylesheet" href="highlight/styles/googlecode.css">
+		<link rel="stylesheet" type="text/css" href="spectrum/spectrum.css">
+		<link rel="stylesheet" href="../plugins.css">
+		<link rel="stylesheet" href="plugin_style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<script src="../pluginBase.js"></script>
+		<script src="highlight/highlight.pack.js"></script>
+		<script src="code.js"></script>
+		<script src="scrollable_div.js"></script>
+		<script type="text/javascript" src="spectrum/spectrum.js"></script>
+	</head>
+	<body spellcheck="false">
+		<label id="lb_lanuage" class="label" style = "padding: 5px 0px 0px 12px">Language</label>
+		<div class="language">	
+			<select id="language_id" style="flex: 1" class="combo"></select>
+			<button class = "button" id ="btn_highlight" style="display: none;">Highlight</button>
+		</div>
+		<div id="TabColor" class="TabColor">
+			<div class="styleselect">
+					<label id="lb_style" class="label" style = "padding: 5px 0px 0px 2px">Style</label>	
+					<select id="style_id" class="combo">
+						<option value = "googlecode.css">Googlecode</option>
+						<option value = "github.css">GitHub</option>
+						<option value = "github-gist.css">GitHub Gist</option>
+						<option value = "androidstudio.css">Android Studio</option>
+						<option value = "vs.css">Visual Studio</option>
+						<option value = "vs2015.css">Visual Studio 2015</option>
+						<option value = "idea.css">Idea</option>
+						<option value = "qtcreator_dark.css">Qtcreator Dark</option>
+						<option value = "qtcreator_light.css">Qtcreator Light</option>
+						<option value = "xcode.css">XCode</option>
+						<option value = "far.css">Fortran</option>
+						<option value = "foundation.css">Foundation</option>
+						<option value = "xml_1.css">XML 1</option>
+						<option value = "xml_2.css">XML 2</option>
+					</select>
+			</div>
+			<div id="tabselect" class="tabselect">	
+				<label id="lb_repTab" class="label">Replace Tab with spaces</label>
+				<select id="tab_replace_id" class="combo">
+					<option id="opt_DontRep" value="0">Don`t replace</option>
+					<option id="opt_2sp" value="2">Replace by 2 spaces</option>
+					<option id="opt_4sp" value="4">Replace by 4 spaces</option>
+				</select>
+			</div>
+			<div id="colorselect" class="colorselect">
+					<label id="lb_bgColor" for="background_color" class="label">Choose background color</label>
+					<input id="background_color" style="padding: 0" type="color" value="#ffffff">
+					<input type='text' style="display: none; padding: 0" id="jq_color"/>		
+			</div>
+		</div>
+	</body>
+</html>
