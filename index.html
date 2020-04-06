@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Photo Editor</title>
+    <script type='text/javascript' src='../pluginBase.js'></script>
+	<script type='text/javascript' src='photoeditor.js'></script>
+	<script type="text/javascript" src="tui/vendor/fabric.min.js"></script>
+    <script type="text/javascript" src="tui/vendor/tui-code-snippet.min.js"></script>
+    <script type="text/javascript" src="tui/vendor/tui-color-picker.min.js"></script>
+    <script type="text/javascript" src="tui/tui-image-editor.min.js"></script>
+    <script type="text/javascript" src="white-theme.js"></script>
+    <script src='tui/vendor/jquery-3.4.1.min.js'></script>
+	<link type="text/css" href="tui/vendor/tui-color-picker.min.css" rel="stylesheet">
+    <link type="text/css" href="tui/tui-image-editor.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../plugins.css">
+	 <style>
+        #message_paragraph{
+            font-size: 15px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+		 html, body {
+                height: 100%;
+				weight: 100%;
+                margin: 0;
+            }
+    </style>
+</head>
+
+<body >
+	<div style="height: 100%; width: 100% " id="tui-image-editor-container"></div> 	    		
+</body>
+<style>
+.tui-image-editor-container .tui-image-editor-controls {
+background-color: #f1f1f1;
+}
+.tui-image-editor-container .tui-image-editor-menu>.tui-image-editor-item{
+cursor: default;
+}
+#tie-btn-undo:hover,#tie-btn-redo:hover,#tie-btn-reset:hover,#tie-btn-delete:hover,#tie-btn-delete-all:hover,#tie-btn-crop:hover,#tie-btn-flip:hover,#tie-btn-rotate:hover,#tie-btn-draw:hover,#tie-btn-shape:hover,#tie-btn-icon:hover,#tie-btn-text:hover,#tie-btn-mask:hover,#tie-btn-filter:hover{ 
+background-color: #d8dadc;
+cursor:pointer;
+}
+.tui-image-editor-container .tui-image-editor-menu>.tui-image-editor-item.active {
+background-color: #7d858c !important;
+}
+.tui-image-editor-container .tui-image-editor-submenu {
+ background-color: rgba(226,226,226,0.96)
+}
+.tui-image-editor-container .tui-image-editor-main {
+  top: 0px;
+}
+.tui-image-editor-container .tui-image-editor-partition > div {
+ border-left: 1px solid #282828;
+}
+#tie-draw-line-select-button.line .tui-image-editor-button.line .svg_ic-submenu, #tie-draw-line-select-button.free .tui-image-editor-button.free .svg_ic-submenu{
+ background-color: #7d858c;
+ transition: all 0.3s ease;
+   border-radius: 2px;
+}
+#tie-crop-button .tui-image-editor-button.preset.active .svg_ic-submenu,
+#tie-crop-preset-button .tui-image-editor-button.preset.active .svg_ic-submenu{
+background-color: #7d858c;
+ transition: all 0.3s ease;
+   border-radius: 2px;
+}
+#tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype="icon-bubble"] .svg_ic-submenu,#tie-icon-add-button.icon-heart .tui-image-editor-button[data-icontype="icon-heart"] .svg_ic-submenu,#tie-icon-add-button.icon-location .tui-image-editor-button[data-icontype="icon-location"] .svg_ic-submenu,#tie-icon-add-button.icon-polygon .tui-image-editor-button[data-icontype="icon-polygon"] .svg_ic-submenu,#tie-icon-add-button.icon-star .tui-image-editor-button[data-icontype="icon-star"] .svg_ic-submenu,#tie-icon-add-button.icon-star-2 .tui-image-editor-button[data-icontype="icon-star-2"] .svg_ic-submenu,#tie-icon-add-button.icon-arrow-3 .tui-image-editor-button[data-icontype="icon-arrow-3"] .svg_ic-submenu,#tie-icon-add-button.icon-arrow-2 .tui-image-editor-button[data-icontype="icon-arrow-2"] .svg_ic-submenu,#tie-icon-add-button.icon-arrow .tui-image-editor-button[data-icontype="icon-arrow"] .svg_ic-submenu,#tie-shape-button.rect .tui-image-editor-button.rect .svg_ic-submenu, #tie-shape-button.circle .tui-image-editor-button.circle .svg_ic-submenu,#tie-shape-button.triangle .tui-image-editor-button.triangle .svg_ic-submenu,#tie-flip-button.resetFlip .tui-image-editor-button.resetFlip .svg_ic-submenu,#tie-flip-button.flipX .tui-image-editor-button.flipX .svg_ic-submenu,#tie-flip-button.flipY .tui-image-editor-button.flipY .svg_ic-submenu {
+ background-color: #7d858c;
+ transition: all 0.3s ease;
+   border-radius: 2px;
+}
+#tie-text-effect-button .tui-image-editor-button.bold.active .svg_ic-submenu,
+#tie-text-effect-button .tui-image-editor-button.italic.active .svg_ic-submenu,
+#tie-text-effect-button .tui-image-editor-button.underline.active .svg_ic-submenu{
+ background-color: #7d858c;
+ transition: all 0.3s ease;
+   border-radius: 2px;
+}
+.tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-menu-text .tui-image-editor-submenu-item .center .tui-image-editor-button.center .svg_ic-submenu, .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-menu-text .tui-image-editor-submenu-item .left .tui-image-editor-button.left .svg_ic-submenu, .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-menu-text .tui-image-editor-submenu-item .right .tui-image-editor-button.right .svg_ic-submenu {
+ background-color: #7d858c;
+ transition: all 0.3s ease;
+   border-radius: 2px;
+}
+.tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-button:hover .svg_ic-submenu {
+ background-color: #7d858c;
+ transition: all 0.3s ease;
+   border-radius: 2px;
+}
+</style>
+</html>
