@@ -1,0 +1,32 @@
+{
+    "name" : "example_autocomplete",
+    "guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
+
+    "variations" : [
+        {
+            "description" : "example_autocomplete",
+            "url"         : "index.html",
+
+            "icons"           : ["icon.png", "icon@2x.png"],
+            "isViewer"        : false,
+            "EditorsSupport"  : ["word", "slide", "cell"],
+
+            "isVisual"        : false,
+            "isModal"         : false,
+            "isInsideMode"    : false,
+            "isSystem"        : true,
+
+            "initDataType"    : "none",
+            "initData"        : "",
+
+            "isUpdateOleOnResize" : false,
+
+            "buttons"        : [ ],
+			
+			"events" : [
+				"onInputHelperClear",
+				"onInputHelperInput"
+			]
+        }
+    ]
+}
