@@ -1,0 +1,38 @@
+{
+    "name": "Speech",
+    "nameLocale": {
+        "ru": "Речь",
+        "fr": "Parole",
+        "es": "Habla",
+        "de": "Rede"
+    },
+    "guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
+
+    "variations": [
+        {
+            "description": "Speech",
+            "descriptionLocale": {
+                "ru": "Речь",
+                "fr": "Parole",
+                "es": "Habla",
+                "de": "Rede"
+            },
+            "url": "index.html",
+
+            "icons": [ "icon.png", "icon@2x.png", "icon2.png", "icon2@2x.png" ],
+            "isViewer": true,
+            "EditorsSupport": [ "word" ],
+
+            "isVisual": false,
+            "isModal": false,
+            "isInsideMode": false,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": []
+        }
+    ]
+}
