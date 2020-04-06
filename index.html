@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>youtube</title>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	
+	<script type="text/javascript" src="../pluginBase.js"></script>
+	<script type="text/javascript" src="youtube.js"></script>
+
+	<link rel="stylesheet" href="../plugins.css" />
+	<style>
+		.input_error {
+			display: none;
+			float: left;
+			position: relative;
+		}
+
+		.input_error:before {
+			content: '';
+			position: absolute;
+			right: 3px;
+			top: 3px;
+			width: 16px;
+			height: 16px;
+			background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACvSURBVDhPrZNRDoIwEER7COA6HgJPpAnHM4oXQdFE/VDfNrsfpQvGhkneT2dmky40rK77pq6ggx4eyhF2UGnMF4EWBvjMcIFW46nEgLcGl5BMOoSDGmR6EjZNz0GyjdbjALlfFjR5HnRajwNkSVnI5HnQaz0OkE1nIZPnwVPrxQNGrc9f4Qcnra+zxAbKP6OIg/IfyYSxhasGPcTzyyYC9pjO8IIbHGAPy4/pf4XwBSVejZ5wzd0zAAAAAElFTkSuQmCC);
+		}
+	</style>
+</head>
+<body style="-ms-touch-action: none;-moz-user-select:none;-khtml-user-select:none;user-select:none;width:100%;height:100%;margin:0;padding:0;overflow:hidden;box-sizing:border-box;">
+
+<div style="position:absolute;left:15px;top:15px;right:15px;height:20px;margin:0;padding:0;" class="defaultlable">Paste youtube video URL</div>
+
+<div style="position:absolute;left:15px;top:35px;right:15px;height:40px;margin:0;padding:0;">
+	<div style="position:absolute;left:0px;top:0px;right:40px;height:100%;margin:0;padding:0;">  
+		<input type="text" class="form-control" style="left:0px;top:0px;width:100%;" id="textbox_url" autofocus="autofocus" autocomplete="off">
+		<div id="input_error_id" class="input_error" style="position:absolute; top:0px; right:0px; width: 0px; height: 16px; display: none;"></div>
+	</div>
+	<button class="btn-text-default" style="position:absolute;top:0px;right:0px;width:30px;" id="textbox_button">OK</button>
+</div>
+
+<div id="id_player" style="position:absolute;left:15px;top:75px;right:15px;bottom:15px;margin:0;padding:0;"></div>
+
+</body>
+</html>
+</html>

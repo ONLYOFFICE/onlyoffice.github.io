@@ -1,22 +1,11 @@
-# YouTube plugin
+## Overview
 
-The YouTube plugin allows users to insert YouTube videos into text documents, spreadsheets and presentations, as well as to manipulate the embedded video: adjust its size, rotate and change position.
+Easily embed YouTube videos into your documents.
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
+It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 
 ## How to use
 
-1. Place the cursor where you want a video to appear.
-2. Choose YouTube from the Plugins tab.
-3. Paste YouTube video URL and click the OK button.
-4. Double click the video to play it.
-
-## Documentation
-
-Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
-
-Plugins code and methods https://api.onlyoffice.com/docbuilder/basic.
-
-## User feedback and support
-
-To ask questions and share feedback, use Issues in this repository.
+1. Find the YouTube plugin in the Plugins tab.
+2. Insert the video URL and press OK.
+3. The video preview in form of an image will appear in your doc. Click on it to play the video. 
