@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>translate</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="../pluginBase.js"></script>
+	<script src="translate.js"></script>
+	<style>
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			overflow-y:hidden;
+            overflow-x: hidden;
+		}
+
+		.noselect {
+			-khtml-user-select: none;
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+		}
+
+        .combo {
+            background: #fff;
+            border: 1px solid #cfcfcf;
+            border-radius: 2px;
+            color: #444444;
+            font-size: 11px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            height: 22px;
+            cursor: pointer;
+            margin: 0px 0px 10px 0px;
+            box-sizing: border-box;
+        }
+
+        div::selection {
+            background: #a8d1ff;
+        }
+        div::-moz-selection {
+            background: #a8d1ff;
+        }
+	</style>
+	<link rel="stylesheet" href="../plugins.css">
+</head>
+<body style="width: 100%;height: 100%; margin: 0;">
+	<div id="main-search-container-id" style="height: 74px; margin: 0px; padding: 10px; box-sizing: border-box; width: 100%;">
+		<select id="lang1_id" class="noselect combo" style="width: 100%"></select>
+		<select id="lang2_id" class="noselect combo" style="width: 100%"></select>
+	</div>
+	<div id="scrollable-container-id" style="position: relative; height: calc(100% - 144px); overflow: hidden">
+		<div id="translateresult_id" style="display: block; position: absolute; margin: 0; left:0px; top: 0px; width: 100%; box-sizing:border-box;padding-left: 5px; padding-right: 15px; color: #444444; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; word-wrap: break-word;">
+        </div>
+	</div>
+    <div style="background: rgba(200, 200, 200, 0.5); position: relative; margin: 0px; padding: 10px; box-sizing: border-box; width: 100%; height: 70px; overflow: hidden; color: #444444; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+		<div id="id_progress" style="background: #A0A0A0; position: fixed; margin: -10px; padding: 0px; width: 0%; height: 100%; z-index: -100; display: none;-webkit-transition: width .5s ease-in-out; -moz-transition: width .5s ease-in-out; -o-transition: width .5s ease-in-out; transition: width .5s ease-in-out;"></div>
+		Переведено сервисом «Яндекс.Переводчик»
+        <a href="http://translate.yandex.ru/" target="_blank">http://translate.yandex.ru/</a>
+    </div>
+</body>
+</html>
