@@ -253,7 +253,7 @@
             OAuthError("State validation failed. Possible CSRF attack.");
             return;
         }
-        document.cookie = "mendToken=" + token + "; max-age=3600";
+        document.cookie = "mendToken=" + token + "; max-age=43200";
         switchAuthState('main');
     };
 
