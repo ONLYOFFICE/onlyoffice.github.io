@@ -97,6 +97,8 @@
             if (e.target.classList.contains(displayNoneClass)) return true;
             switchClass(elements.searchClear, displayNoneClass, true);
             elements.searchField.value = "";
+            lastSearch.text = "";
+            clearLibrary();
             return true;
         };
 
