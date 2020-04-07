@@ -753,7 +753,6 @@
         }
 
         var remove = document.createElement("span");
-        remove.textContent = "\xd7";
         remove.onclick = function () {
             removeSelected(item.id);
         };
