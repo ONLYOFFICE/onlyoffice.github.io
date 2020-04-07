@@ -388,7 +388,7 @@ input[type="text"] {
     .selDoc > span {
         display: inline-block;
         margin-right: 5px;
-        vertical-align: bottom;
+        vertical-align: middle;
     }
 
         .selDoc > span:first-of-type {
@@ -400,8 +400,10 @@ input[type="text"] {
 
         .selDoc > span:last-of-type {
             cursor: pointer;
-            font-size: 20px;
-            line-height: 15px;
+            background: url('./x.png') no-repeat;
+            background-size: contain;
+            width: 9px;
+            height: 9px;
         }
 
 /* loader */
