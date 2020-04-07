@@ -194,6 +194,16 @@
         fetch("https://www.zotero.org/styles-files/styles.json")
             .then(function (resp) { return resp.json(); })
             .then(function (json) {
+                var lastStyle = getLastUsedStyle();
+                var found = false;
+
+                var onStyleSelect = function (f) {
+                    return function (ev) {
+                        var sel = ev.target.getAttribute("data-value");
+                        saveLastUsedStyle(sel);
+                        f(ev);
+                    }
+                }
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].dependent != 0) continue;
 
@@ -202,7 +212,18 @@
                     el.textContent = json[i].title;
                     switchClass(el, displayNoneClass, true);
                     elements.styleSelectList.append(el);
-                    el.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
+                    el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                    if (json[i].name == lastStyle) {
+                        el.setAttribute("selected", "");
+                        selectInput(elements.styleSelect, el, elements.styleSelectList);
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    var first = elements.styleSelectList.children[0];
+                    first.setAttribute("selected", "");
+                    selectInput(elements.styleSelect, first, elements.styleSelectList);
                 }
             })
             .catch(function (err) { });
@@ -395,6 +416,14 @@
             if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
             if (el.innerText) el.innerText = getMessage(el.innerText);
         }
+    }
+
+    function saveLastUsedStyle(id) {
+        localStorage.setItem("mendStyleId", id);
+    }
+
+    function getLastUsedStyle() {
+        return localStorage.getItem("mendStyleId");
     }
 
     function saveSettings(id) {
