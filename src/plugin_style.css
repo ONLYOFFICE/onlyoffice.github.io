@@ -245,8 +245,7 @@ input[type="text"] {
 
 
 #styleLangList {
-    left: -35px;
-    width: 134px;
+    right: 0px;
 }
 
 .selectList {
@@ -260,7 +259,6 @@ input[type="text"] {
     background: #ffffff;
     bottom: 22px;
     max-height: 158px;
-    max-width: 233px;
     overflow-x: hidden;
     overflow-y: auto;
 }

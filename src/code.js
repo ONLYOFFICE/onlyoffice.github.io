@@ -91,6 +91,7 @@
         searchClear: document.getElementById("searchClear"),
         searchField: document.getElementById("searchField"),
 
+        styleWrapper: document.getElementById("styleWrapper"),
         styleSelectList: document.getElementById("styleSelectList"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
@@ -204,13 +205,13 @@
                         f(ev);
                     }
                 }
+
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].dependent != 0) continue;
 
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-                    switchClass(el, displayNoneClass, true);
                     elements.styleSelectList.append(el);
                     el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
                     if (json[i].name == lastStyle) {
@@ -236,7 +237,7 @@
             for (var i = 0; i < list.children.length; i++) {
                 var text = list.children[i].textContent || list.children[i].innerText;
                 var hide = true;
-                if (filter && text.toLowerCase().indexOf(filter) > -1) {
+                if (!filter || text.toLowerCase().indexOf(filter) > -1) {
                     hide = false;
                 }
                 switchClass(list.children[i], displayNoneClass, hide);
@@ -253,6 +254,9 @@
         };
 
         initSelectBoxes();
+        elements.styleSelectList.onopen = function () {
+            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+        }
 
         if (window.Asc.plugin.mendeley || getSettings()) {
             switchAuthState(authFlow.getToken() ? 'main' : 'login');
@@ -326,14 +330,11 @@
         for (var i = 0; i < select.length; i++) {
             var input = select[i];
             var holder = input.parentElement;
-            var arrow = null;
-            if (input.hasAttribute("readonly")) {
-                arrow = document.createElement("span");
-                arrow.classList.add("selectArrow");
-                arrow.append(document.createElement("span"));
-                arrow.append(document.createElement("span"));
-                holder.append(arrow);
-            }
+            var arrow = document.createElement("span");
+            arrow.classList.add("selectArrow");
+            arrow.append(document.createElement("span"));
+            arrow.append(document.createElement("span"));
+            holder.append(arrow);
 
             var list = holder.getElementsByClassName("selectList")[0];
             if (list.children.length > 0) {
@@ -351,18 +352,22 @@
                 }
             }
 
-            var f = function (list) {
+            var f = function (list, input) {
                 return function (ev) {
                     ev.stopPropagation();
+                    if (list.onopen) {
+                        list.onopen();
+                    }
+                    if (!input.hasAttribute("readonly")) {
+                        input.select();
+                    }
                     openList(list);
                     return true;
                 };
             };
 
-            input.onclick = f(list);
-            if (arrow) {
-                arrow.onclick = f(list);
-            }
+            input.onclick = f(list, input);
+            arrow.onclick = f(list, input);
             selectLists.push(list);
         }
 
