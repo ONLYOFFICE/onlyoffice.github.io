@@ -447,17 +447,15 @@
         switchClass(elements.contentHolder, blurClass, show);
     }
 
-    var errorTimeout;
     function showError(message) {
-        if (errorTimeout) clearTimeout(errorTimeout);
-        errorTimeout = null;
         if (message) {
             switchClass(elements.error, displayNoneClass, false);
             elements.error.textContent = message;
-            errorTimeout = setTimeout(() => { showError(); }, 3000);
+            setTimeout(function () { window.onclick = function () { showError(); }; }, 100);
         } else {
             switchClass(elements.error, displayNoneClass, true);
             elements.error.textContent = "";
+            window.onclick = null;
         }
     }
 
