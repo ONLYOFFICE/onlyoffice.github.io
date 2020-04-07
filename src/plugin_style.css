@@ -28,6 +28,10 @@ div::-moz-selection {
     background: #D8DADC; /* Gecko Browsers */
 }
 
+textarea:focus, input:focus {
+    outline: none;
+}
+
 .button {
     background: #fff;
     outline: none;
