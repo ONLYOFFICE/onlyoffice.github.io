@@ -91,6 +91,7 @@
         searchClear: document.getElementById("searchClear"),
         searchField: document.getElementById("searchField"),
 
+        styleWrapper: document.getElementById("styleWrapper"),
         styleSelectList: document.getElementById("styleSelectList"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
@@ -194,15 +195,36 @@
         fetch("https://www.zotero.org/styles-files/styles.json")
             .then(function (resp) { return resp.json(); })
             .then(function (json) {
+                var lastStyle = getLastUsedStyle();
+                var found = false;
+
+                var onStyleSelect = function (f) {
+                    return function (ev) {
+                        var sel = ev.target.getAttribute("data-value");
+                        saveLastUsedStyle(sel);
+                        f(ev);
+                    }
+                }
+
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].dependent != 0) continue;
 
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-                    switchClass(el, displayNoneClass, true);
                     elements.styleSelectList.append(el);
-                    el.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
+                    el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                    if (json[i].name == lastStyle) {
+                        el.setAttribute("selected", "");
+                        selectInput(elements.styleSelect, el, elements.styleSelectList);
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    var first = elements.styleSelectList.children[0];
+                    first.setAttribute("selected", "");
+                    selectInput(elements.styleSelect, first, elements.styleSelectList);
                 }
             })
             .catch(function (err) { });
@@ -215,7 +237,7 @@
             for (var i = 0; i < list.children.length; i++) {
                 var text = list.children[i].textContent || list.children[i].innerText;
                 var hide = true;
-                if (filter && text.toLowerCase().indexOf(filter) > -1) {
+                if (!filter || text.toLowerCase().indexOf(filter) > -1) {
                     hide = false;
                 }
                 switchClass(list.children[i], displayNoneClass, hide);
@@ -232,6 +254,9 @@
         };
 
         initSelectBoxes();
+        elements.styleSelectList.onopen = function () {
+            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+        }
 
         if (window.Asc.plugin.mendeley || getSettings()) {
             switchAuthState(authFlow.getToken() ? 'main' : 'login');
@@ -253,7 +278,7 @@
             OAuthError("State validation failed. Possible CSRF attack.");
             return;
         }
-        document.cookie = "mendToken=" + token + "; max-age=3600";
+        document.cookie = "mendToken=" + token + "; max-age=43200";
         switchAuthState('main');
     };
 
@@ -305,14 +330,11 @@
         for (var i = 0; i < select.length; i++) {
             var input = select[i];
             var holder = input.parentElement;
-            var arrow = null;
-            if (input.hasAttribute("readonly")) {
-                arrow = document.createElement("span");
-                arrow.classList.add("selectArrow");
-                arrow.append(document.createElement("span"));
-                arrow.append(document.createElement("span"));
-                holder.append(arrow);
-            }
+            var arrow = document.createElement("span");
+            arrow.classList.add("selectArrow");
+            arrow.append(document.createElement("span"));
+            arrow.append(document.createElement("span"));
+            holder.append(arrow);
 
             var list = holder.getElementsByClassName("selectList")[0];
             if (list.children.length > 0) {
@@ -330,18 +352,22 @@
                 }
             }
 
-            var f = function (list) {
+            var f = function (list, input) {
                 return function (ev) {
                     ev.stopPropagation();
+                    if (list.onopen) {
+                        list.onopen();
+                    }
+                    if (!input.hasAttribute("readonly")) {
+                        input.select();
+                    }
                     openList(list);
                     return true;
                 };
             };
 
-            input.onclick = f(list);
-            if (arrow) {
-                arrow.onclick = f(list);
-            }
+            input.onclick = f(list, input);
+            arrow.onclick = f(list, input);
             selectLists.push(list);
         }
 
@@ -397,6 +423,14 @@
         }
     }
 
+    function saveLastUsedStyle(id) {
+        localStorage.setItem("mendStyleId", id);
+    }
+
+    function getLastUsedStyle() {
+        return localStorage.getItem("mendStyleId");
+    }
+
     function saveSettings(id) {
         mendAppId = id;
         localStorage.setItem("mendAppId", id);
@@ -447,17 +481,15 @@
         switchClass(elements.contentHolder, blurClass, show);
     }
 
-    var errorTimeout;
     function showError(message) {
-        if (errorTimeout) clearTimeout(errorTimeout);
-        errorTimeout = null;
         if (message) {
             switchClass(elements.error, displayNoneClass, false);
             elements.error.textContent = message;
-            errorTimeout = setTimeout(() => { showError(); }, 3000);
+            setTimeout(function () { window.onclick = function () { showError(); }; }, 100);
         } else {
             switchClass(elements.error, displayNoneClass, true);
             elements.error.textContent = "";
+            window.onclick = null;
         }
     }
 
@@ -753,7 +785,6 @@
         }
 
         var remove = document.createElement("span");
-        remove.textContent = "\xd7";
         remove.onclick = function () {
             removeSelected(item.id);
         };
@@ -787,7 +818,7 @@
         }
 
         try {
-            var formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return data[id]; } }, styles[selectedStyle], selectedLocale);
+            var formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return data[id]; } }, styles[selectedStyle], selectedLocale, true);
             formatter.updateItems(keys);
 
             insertInDocument(formatter.makeBibliography()[1]);
