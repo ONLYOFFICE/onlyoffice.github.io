@@ -169,6 +169,10 @@ input[type="text"] {
     overflow-y: hidden;
 }
 
+#selectedHolder > div:last-of-type {
+    margin-bottom: 14px;
+}
+
 #controlsHolder {
     border-top: 1px solid #cfcfcf;
     padding-top: 15px;
