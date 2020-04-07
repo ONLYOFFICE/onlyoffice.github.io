@@ -261,7 +261,8 @@ input[type="text"] {
     bottom: 22px;
     max-height: 158px;
     max-width: 233px;
-    overflow: hidden auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .selectList > span {
