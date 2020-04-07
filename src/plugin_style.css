@@ -9,7 +9,7 @@ body {
     flex-flow: column;
     display: flex;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 input::selection {
@@ -26,6 +26,10 @@ div::selection {
 
 div::-moz-selection {
     background: #D8DADC; /* Gecko Browsers */
+}
+
+textarea:focus, input:focus {
+    outline: none;
 }
 
 .button {
@@ -165,6 +169,10 @@ input[type="text"] {
     overflow-y: hidden;
 }
 
+#selectedHolder > div:last-of-type {
+    margin-bottom: 14px;
+}
+
 #controlsHolder {
     border-top: 1px solid #cfcfcf;
     padding-top: 15px;
@@ -237,8 +245,7 @@ input[type="text"] {
 
 
 #styleLangList {
-    left: -35px;
-    width: 134px;
+    right: 0px;
 }
 
 .selectList {
@@ -252,8 +259,8 @@ input[type="text"] {
     background: #ffffff;
     bottom: 22px;
     max-height: 158px;
-    max-width: 233px;
-    overflow: hidden auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .selectList > span {
@@ -380,7 +387,7 @@ input[type="text"] {
     .selDoc > span {
         display: inline-block;
         margin-right: 5px;
-        vertical-align: bottom;
+        vertical-align: middle;
     }
 
         .selDoc > span:first-of-type {
@@ -392,8 +399,10 @@ input[type="text"] {
 
         .selDoc > span:last-of-type {
             cursor: pointer;
-            font-size: 20px;
-            line-height: 15px;
+            background: url('./x.png') no-repeat;
+            background-size: contain;
+            width: 9px;
+            height: 9px;
         }
 
 /* loader */
