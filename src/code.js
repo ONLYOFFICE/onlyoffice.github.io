@@ -787,7 +787,7 @@
         }
 
         try {
-            var formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return data[id]; } }, styles[selectedStyle], selectedLocale);
+            var formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return data[id]; } }, styles[selectedStyle], selectedLocale, true);
             formatter.updateItems(keys);
 
             insertInDocument(formatter.makeBibliography()[1]);
