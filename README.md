@@ -14,6 +14,16 @@ To publish any document on your WordPress website:
 2. Click the Connect button.
 3. Give any title to your article and click the Publish button.
 
+## Configuration
+
+1. Sign in to your Wordpress account. If you have not yet registered, go to the [Wordpress signup page](https://wordpress.com/start/user) and fill in the registration form to create a new account. A new free website will be created together with your account.
+2. When you are signed in, go to the [Wordpress Developers page](https://developer.wordpress.com/apps/new/).
+3. Fill in all the required fields to create a new application: specify your application Name, Description, Website URL.
+4. In the Redirect URLs field, paste https://service.onlyoffice.com/oauth2.aspx. 
+5. Answer the verification question (e.g. 'What is 6 + 2?') and click the Create button.
+6. You will be redirected to the Manage Settings page. Click on your application name to display your application information. 
+7. In the OAuth Information section, copy or write down the `Client ID` and `Client Secret`.
+
 ## Documentation
 
 Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
