@@ -11,13 +11,18 @@ The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition 
 
 ## How to use
 
-1. Get the EasyBib apikey.
-2. Configure the EasyBib settings in the ONLYOFFICE admin settings.
-3. Choose the EasyBib plugin from the Plugins tab.
-4. Search for the necessary book, journal article or website.
-5. Select for the bibliography style and add the bibliography to your doc.
+1. Choose the EasyBib plugin from the Plugins tab.
+2. Search for the necessary book, journal article or website.
+3. Select for the bibliography style and add the bibliography to your doc.
 
 The bibliography list will begin where you put the cursor.
+
+## Configuration
+
+1. Go to the [EasyBib signup page](https://api.citation-api.com/signup). 
+2. Fill in the form. Paste https://service.onlyoffice.com/oauth2.aspx into the URL field, accept the Terms of service and click Submit.
+3. You will receive the confirmation message to the specified email address. Follow the confirmation link;
+4. After that you will receive another email message with your application information. Copy or write down the `apikey`.
 
 ## Documentation
 
