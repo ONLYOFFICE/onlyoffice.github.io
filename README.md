@@ -4,7 +4,10 @@ This plugin is an example of an input assistant for ONLYOFFICE editors.
 
 ## How to use
 
-[detailed info coming soon]
+1. Start typing and the plugin will suggest variants for you. 
+2. Click on the variant you want to be inserted into your doc.
+
+Please note that it is the system plugin so that's OK that you can't see it in the Plugins tab. 
 
 ## How to install
 
@@ -17,7 +20,7 @@ Put the folder with the plugin code to ONLYOFFICE Document Server folder:
 
 **For desktop editors**
 
-* Archive the plugin files (config.json, index.html, and pluginCode.js).
+* Archive the plugin files (it must contain config.json, index.html, and pluginCode.js).
 * Change the file extension to .plugin. 
 * Go to the Plugins tab, click Manage Plugins >> Add plugin, browse for the .plugin file.
 
