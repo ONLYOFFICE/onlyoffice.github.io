@@ -40,11 +40,11 @@
 var Ps = null;
 
 // check css load
-if (document.currentScript && document.currentScript.src && document.currentScript.loadCss) {
+if (document.currentScript && document.currentScript.src) {
 	if (document.currentScript.getAttribute("loadCss") === "true") {
 		var scriptDirectory = document.currentScript.src;
 		var lastSlash = scriptDirectory.lastIndexOf("/");
-		if (0 > lastSlash) scriptDirectory = scriptDirectory.substr(0, lastSlash);
+		if (0 < lastSlash) scriptDirectory = scriptDirectory.substr(0, lastSlash);
 
 		var link = document.createElement("link");
         link.rel = "stylesheet";
