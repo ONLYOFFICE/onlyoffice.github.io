@@ -11,8 +11,6 @@
 
 	var language = hljs.listLanguages(),					//array languages
 		isInitLang = false, 								//flag init lang select
-		language_select,									//select for languages
-		style_select,										//select for style
 		style_value,										//current value style
 		curLang,											//current language
 		code_field,											//field for higlight code		
@@ -24,7 +22,29 @@
 
 	var myscroll = window.Asc.ScrollableDiv;
 
-	window.Asc.plugin.init = function(text){	
+	window.Asc.plugin.init = function(text){
+		$('#style_id').select2({
+			minimumResultsForSearch: Infinity
+		}).on('select2:select', function (e) {
+			document.getElementById("style").href = "highlight/styles/" + e.params.data.id;
+			window.Asc.plugin.loadModule("./highlight/styles/" + e.params.data.id , function(content){
+				style_value = content;
+				if (isDE) {
+					$("#jq_color").spectrum("set", (hexc($(container).css('backgroundColor'))));
+				} else {
+					background_color.value = hexc($(container).css('backgroundColor'));
+				}
+			});
+		});
+		$('#language_id').select2({
+			data : createLangForSelect(),
+			minimumResultsForSearch: Infinity
+		}).on('select2:select', function (e) {
+			text = code_field.innerText;
+			curLang = e.params.data.text;		// change current language
+			ChangeCode(curLang);
+			flag = true;
+		});
 		myscroll = window.Asc.ScrollableDiv;
 		myscroll.create_div("TabColor",{
 					width: "",
@@ -40,8 +60,6 @@
 		$(container).addClass('codefield');
 		$(code_field).addClass('content');
 		$(container).addClass('hljs');
-		language_select = document.getElementById("language_id");
-		style_select = document.getElementById("style_id");
 		var background_color = document.getElementById("background_color");
 		var temp_code,
 			flag = false;	//flag change code (true = changed)
@@ -64,7 +82,6 @@
 
 		if (!isInitLang)
 		{
-			initLang();
 			window.Asc.plugin.loadModule("./highlight/styles/googlecode.css", function(content){
 				style_value = content;
 				if (isDE) {
@@ -83,27 +100,20 @@
 				if (parts[i].length == 1) parts[i] = '0' + parts[i];
 			}
 			return ('#' + parts.join(''));
-		}
-
-		curLang = language_select.options[language_select.selectedIndex].text;		//get current language
-		language_select.onchange = function() {
-			text = code_field.innerText;
-			curLang = language_select.options[language_select.selectedIndex].text;		// change current language
-			ChangeCode(curLang);
-			flag = true;
 		};
-		
-		style_select.onchange = function(){
-			document.getElementById("style").href = "highlight/styles/" + style_select.options[style_select.selectedIndex].value;
-			window.Asc.plugin.loadModule("./highlight/styles/" + style_select.options[style_select.selectedIndex].value , function(content){
-				style_value = content;
-				if (isDE) {
-					$("#jq_color").spectrum("set", (hexc($(container).css('backgroundColor'))));
-				} else {
-					background_color.value = hexc($(container).css('backgroundColor'));
-				}
-			});
-		}
+
+		function createLangForSelect () {
+			var tmpArr = [{id:0,text:"Auto"}];
+			for (var i = 0; i < language.length; i++) {
+				tmpArr.push({
+					id : i+1,
+					text : language[i]
+				});
+			}
+			return tmpArr;
+		};
+
+		curLang = $('#language_id')[0].options[$('#language_id').val()].text;		//get current language		
 
 		function deleteSelected(start,end) {
 			text = code_field.innerText;
@@ -360,16 +370,6 @@
 			]
 		});
 	};
-
-	function initLang(){
-		var temp_language = [];
-		for (var i = 0; i < language.length; i++)
-			{
-				temp_language += ("<option value=\"" + (i + 1) + "\">" + language[i] + "</option>");
-			}
-		language_select.innerHTML ="<option value = 0>" + "Auto" + "</option>" + temp_language;
-		isInitLang = true;
-	};
 	
 	function insertHTML(html){
 		try {
@@ -402,12 +402,13 @@
 			$("#conteiner_id1").set_selection(range.start, range.end);
 		}
 			
-		for (var i=0; i<language_select.length;i++)
+		for (var i=0; i<$('#language_id')[0].length;i++)
 		{
-			if (language_select.options[i].text == code.language)
+			if ($('#language_id')[0].options[i].text == code.language)
 			{
 				curLang = code.language;
-				language_select.selectedIndex = i;
+				$('#language_id').val(i).trigger("change");
+				break;
 			}	
 		}
 		myscroll.updateScroll(code_field);
@@ -415,7 +416,7 @@
 	};
 	
 	function createHTML(code){
-		var tab_rep_count = $("#tab_replace_id").val();
+		var tab_rep_count = $('#tab_replace_id option:selected')[0].value;
 		if(tab_rep_count == 2)
 		{
 			code = code.replace(/\t/g,"&nbsp;&nbsp;");
@@ -581,6 +582,10 @@
 		var btn_sp_choose = document.getElementById("btn_sp_choose");
 		if (btn_sp_choose)
 			btn_sp_choose.innerHTML = window.Asc.plugin.tr("Choose");
+			
+		$('#tab_replace_id').select2({
+			minimumResultsForSearch: Infinity
+		});
 	};
 
 })(window, undefined);
