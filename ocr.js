@@ -83,7 +83,9 @@
     var arrParsedData = [];
 
     window.Asc.plugin.init = function(){
-
+        $('#lang-select').select2({
+            minimumResultsForSearch: Infinity
+        });
         this.resizeWindow(592, 100, 592, 100, 592, 100);
         var nStartFilesCount = 0, arrImages;
 
