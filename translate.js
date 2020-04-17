@@ -85,8 +85,12 @@
 
 					document.getElementById("lang2_id").selectedIndex = _defaultDest;
 
-					document.getElementById("lang1_id").onchange = function(e) { translate(); };
-					document.getElementById("lang2_id").onchange = function(e) { translate(); };
+					$('#lang1_id').select2({
+						// minimumResultsForSearch: Infinity
+					}).on('select2:select', function (e) { translate(); });
+					$('#lang2_id').select2({
+						// minimumResultsForSearch: Infinity
+					}).on('change', function (e) { translate(); });
 
 					translate();
 				}
