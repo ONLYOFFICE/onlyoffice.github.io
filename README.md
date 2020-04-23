@@ -16,6 +16,8 @@ For ONLYOFFICE Integration Edition as well as ONLYOFFICE Document Server integra
 
 4. Press `Insert citation`.
 
+Please note that Zotero works only with user’s personal library associated with the your account. The desired sources must be added to your library in Zotero before you can search and add them to your bibliography via plugin.
+
 ## How to install
 
 For **Integration Edition and Document Server integrated with a 3rd-party storage** two installation ways are available:
