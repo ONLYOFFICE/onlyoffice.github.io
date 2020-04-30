@@ -214,6 +214,7 @@ input[type="text"] {
 
         #styleWrapper .label input {
             width: 100%;
+            padding-right: 18px;
         }
 
 .selectHolder {
