@@ -540,7 +540,10 @@
         if (item.data.creators && item.data.creators.length > 0) {
             var authors = document.createElement("div");
             authors.textContent = item.data.creators
-                .map(function (a) { return a.lastName + ", " + a.firstName; })
+                .map(function (a) {
+                    if (a.name) return a.name;
+                    return a.lastName + ", " + a.firstName;
+                })
                 .join("; ");
             authors.setAttribute("title", authors.textContent);
             authors.classList.add("secondary-text");
