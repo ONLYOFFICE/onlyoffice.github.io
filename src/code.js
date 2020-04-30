@@ -830,7 +830,11 @@
     }
 
     function insertInDocument(html) {
-        window.Asc.plugin.executeMethod("PasteHtml", [html.join('')]);
+        if (html) {
+            window.Asc.plugin.executeMethod("PasteHtml", [html.join('')]);
+        } else {
+            showError(getMessage("Bibliography cannot be created with selected style"));
+        }
     };
 
     function convertMendeleyWriter(csl, item, fieldTo, fieldFrom) {
