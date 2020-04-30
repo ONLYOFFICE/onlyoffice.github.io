@@ -667,7 +667,11 @@
     }
 
     function insertInDocument(html) {
-        window.Asc.plugin.executeMethod("PasteHtml", [html]);
+        if (html) {
+            window.Asc.plugin.executeMethod("PasteHtml", [html]);
+        } else {
+            showError(getMessage("Bibliography cannot be created with selected style"));
+        }
     };
 
 })();
