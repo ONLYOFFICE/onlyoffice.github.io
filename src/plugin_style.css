@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -13,22 +14,27 @@ body {
 }
 
 input::selection {
-    background: #D8DADC; /* WebKit/Blink Browsers */
+    background: #D8DADC;
+    /* WebKit/Blink Browsers */
 }
 
 input::-moz-selection {
-    background: #D8DADC; /* Gecko Browsers */
+    background: #D8DADC;
+    /* Gecko Browsers */
 }
 
 div::selection {
-    background: #D8DADC; /* WebKit/Blink Browsers */
+    background: #D8DADC;
+    /* WebKit/Blink Browsers */
 }
 
 div::-moz-selection {
-    background: #D8DADC; /* Gecko Browsers */
+    background: #D8DADC;
+    /* Gecko Browsers */
 }
 
-textarea:focus, input:focus {
+textarea:focus,
+input:focus {
     outline: none;
 }
 
@@ -101,9 +107,9 @@ textarea:focus, input:focus {
         cursor: text;
     }
 
-    .control.text.wide {
-        width: 100%;
-    }
+        .control.text.wide {
+            width: 100%;
+        }
 
 input[type="text"] {
     padding: 2px;
@@ -169,9 +175,9 @@ input[type="text"] {
     overflow-y: hidden;
 }
 
-#selectedHolder > div:last-of-type {
-    margin-bottom: 14px;
-}
+    #selectedHolder > div:last-of-type {
+        margin-bottom: 14px;
+    }
 
 #controlsHolder {
     border-top: 1px solid #cfcfcf;
@@ -228,22 +234,21 @@ input[type="text"] {
     right: 8px;
 }
 
-.selectArrow > span {
-    display: inline-block;
-    width: 4px;
-    height: 0.5px;
-    margin: -1px;
-    background-color: #000000;
-}
-
-    .selectArrow > span:first-of-type {
-        transform: rotateZ(45deg);
+    .selectArrow > span {
+        display: inline-block;
+        width: 4px;
+        height: 0.5px;
+        margin: -1px;
+        background-color: #000000;
     }
 
-    .selectArrow > span:last-of-type {
-        transform: rotateZ(-45deg);
-    }
+        .selectArrow > span:first-of-type {
+            transform: rotateZ(45deg);
+        }
 
+        .selectArrow > span:last-of-type {
+            transform: rotateZ(-45deg);
+        }
 
 #styleLangList {
     right: 0px;
@@ -253,10 +258,10 @@ input[type="text"] {
     display: flex;
     flex-direction: column;
     position: absolute;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, .15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     background: #ffffff;
     bottom: 22px;
     max-height: 158px;
@@ -264,11 +269,11 @@ input[type="text"] {
     overflow-y: auto;
 }
 
-.selectList > span {
-    padding: 5px 20px;
-    cursor: pointer;
-    color: #444444;
-}
+    .selectList > span {
+        padding: 5px 20px;
+        cursor: pointer;
+        color: #444444;
+    }
 
         .selectList > span:hover {
             background-color: #d8dadc;
@@ -347,6 +352,7 @@ input[type="text"] {
         flex: 1;
     }
 
+
 /* checkbox */
 
 .checkbox {
@@ -406,7 +412,9 @@ input[type="text"] {
             height: 9px;
         }
 
+
 /* loader */
+
 .cssload-container {
     z-index: 1;
     display: flex;
@@ -424,7 +432,7 @@ input[type="text"] {
     height: 19px;
     display: inline-block;
     border-radius: 50%;
-    background: rgb(68,68,68);
+    background: rgb(68, 68, 68);
 }
 
     .cssload-loading i:first-child {
@@ -557,6 +565,8 @@ input[type="text"] {
         -moz-transform: translate(19px);
     }
 }
+
+
 /* end loader */
 
 .display-none {
