@@ -227,7 +227,15 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
         if (isOK)
         {
-            Content.macrosArray[Content.current].name = document.getElementById("rename_text").value;
+            var value = document.getElementById("rename_text").value;
+
+            value = value.replace(/&/g,'&amp;');
+            value = value.replace(/</g,'&lt;');
+            value = value.replace(/>/g,'&gt;');
+            value = value.replace(/'/g,'&apos;');
+            value = value.replace(/"/g,'&quot;');
+
+            Content.macrosArray[Content.current].name = value;
             updateMenu();
         }
 
