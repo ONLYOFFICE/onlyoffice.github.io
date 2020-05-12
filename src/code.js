@@ -602,6 +602,9 @@
             holder.removeChild(holder.lastChild);
         }
         holder.scrollTop = 0;
+        lastSearch.catObj = null;
+        lastSearch.ownObj = null;
+        docsScroller.onscroll();
     }
 
     function loadLibrary(promise, append, own) {
