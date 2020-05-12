@@ -2,9 +2,7 @@
 
 Zotero plugin allows users to create bibliographies in ONLYOFFICE editors using Zotero service.
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal. 
-
-For ONLYOFFICE Integration Edition as well as ONLYOFFICE Document Server integrated with a 3rd-party storage manual installation is required. 
+The plugin can be installed to Document Server manually.  
 
 ## How to use
 
@@ -20,7 +18,7 @@ Please note that Zotero works only with user’s personal library associated wit
 
 ## How to install
 
-For **Integration Edition and Document Server integrated with a 3rd-party storage** two installation ways are available:
+Two installation ways are available:
 
 1. Put the folder with the plugin code to ONLYOFFICE Document Server folder depending on the operating system:
 
@@ -65,6 +63,19 @@ For **Integration Edition and Document Server integrated with a 3rd-party storag
 
 5. Copy the newly created key and paste to `API Key` field in the plugin’s interface and save it. 
 
+## Known issues
+
+For CentOS users with SELinx enabled, after copying the src folder to sdkjs-plugins, plugins may not work due to the variable file security context. To restore the rights, use the following command:
+
+```
+sudo restorecon -Rv /var/www/onlyoffice/documentserver/sdkjs-plugins/
+```
+
+After that restart the services:
+
+```
+sudo supervisorctl restart ds:docservice
+```
 
 ## User feedback and support
 
