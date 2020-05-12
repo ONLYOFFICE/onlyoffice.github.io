@@ -1,0 +1,21 @@
+{
+  "To use Zotero you should get an API key.": "Для использования Zotero необходимо получить ключ API.",
+  "Navigate to": "Перейти к",
+  "Zotero API settings": "Параметрам API Zotero",
+  "Create and copy API key into the field below.": "Создайте ключ API и скопируйте его в поле ниже.",
+  "Open Zotero website": "Сайт Zotero",
+  "Invalid API key": "Недопустимый ключ API",
+  "API Key": "Ключ API",
+  "Nothing found": "Ничего не найдено",
+  "Style is not selected": "Стиль не выбран",
+  "Language is not selected": "Язык не выбран",
+  "Search references by author, title or year": "Поиск по автору, названию или году издания",
+  "Cancel": "Отмена",
+  "Insert Bibliography": "Вставить библиографию",
+  "Style": "Стиль",
+  "Enter style name": "Введите имя стиля",
+  "Language": "Язык",
+  "Reconfigure": "Перенастроить",
+  "Learn more here.": "Подробности здесь.",
+  "Save": "Сохранить"
+}
