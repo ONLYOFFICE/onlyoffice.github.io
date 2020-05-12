@@ -2,9 +2,7 @@
 
 Mendeley plugin allows users to create bibliographies in ONLYOFFICE editors using Mendeley service.
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE cloud service, and ONLYOFFICE Personal. 
-
-For ONLYOFFICE Integration Edition as well as ONLYOFFICE Document Server integrated with a 3rd-party storage (e.g. ownCloud, Nextcloud, Seafile) manual installation is required. 
+The plugin can be installed to Document Server manually.  
 
 ## How to use
 
@@ -18,7 +16,7 @@ For ONLYOFFICE Integration Edition as well as ONLYOFFICE Document Server integra
 
 ## How to install
 
-For **Integration Edition and Document Server integrated with a 3rd-party storage** (e.g. ownCloud, Nextcloud, Seafile) two installation ways are available:
+Two installation ways are available:
 
 1. Put the folder with Mendeley plugin (it must contain the content of the src folder only) to ONLYOFFICE Document Server folder depending on the operating system:
 
@@ -51,34 +49,7 @@ For **Integration Edition and Document Server integrated with a 3rd-party storag
     ```
 **Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
 
-Mendeley plugin is installed by default for **Enterprise and Community Edition**.
-In case you need to install it yourself, do the following:
-
-1. Clone repository
-
-    ```
-    git clone --branch community-server https://github.com/ONLYOFFICE/onlyoffice-mendeley.git
-    ```
-
-2. Copy `onlyoffice-mendeley` directory to `<community-server>\web\studio\ASC.Web.Studio\ThirdParty\plugin\mendeley`
-
-    ```
-    cp src <community-server>\web\studio\ASC.Web.Studio\ThirdParty\plugin\mendeley
-    ```
-
 ## Configuration
-
-For **Enterprise and Community Edition**
-
-1. Proceed to `Settings` -> `Integration` -> `Third Party Authorization`, find `Mendeley` and turn it on. Popup with configuration will appear.
-
-2. Register the app here https://dev.mendeley.com/myapps.html. Use https://service.onlyoffice.com/oauth2.aspx as a redirect URL.
-
-3. Press `Generate secret`, copy the secret and get the application id.
-
-4. Paste the secret and the application id into the form in the popup configuration window.
-
-For **Integration Edition and Document Server integrated with a 3rd-party storage** (e.g. ownCloud, Nextcloud, Seafile):
 
 You will need to register the application.
 
@@ -89,6 +60,20 @@ You will need to register the application.
 3. Press `Generate secret` and copy it.
 
 4. Insert the secret into the appropriate field in the plugin interface.
+
+## Known issues
+
+For CentOS users with SELinx enabled, after copying the src folder to sdkjs-plugins, plugins may not work due to the variable file security context. To restore the rights, use the following command:
+
+```
+sudo restorecon -Rv /var/www/onlyoffice/documentserver/sdkjs-plugins/
+```
+
+After that restart the services:
+
+```
+sudo supervisorctl restart ds:docservice
+```
 
 ## User feedback and support
 
