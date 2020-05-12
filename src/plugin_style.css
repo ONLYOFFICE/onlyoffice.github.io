@@ -120,6 +120,7 @@ input[type="text"] {
 
 #searchField {
     width: 100%;
+    padding-right: 18px;
 }
 
 #searchLabel {
