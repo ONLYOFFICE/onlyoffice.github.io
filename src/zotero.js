@@ -114,6 +114,7 @@
         var linkHeaderRegex = /<(.*?)>; rel="(.*?)"/g;
         function parseLinkHeader(headerValue) {
             var links = {};
+            if (!headerValue) return links;
             headerValue = headerValue.trim();
             if (!headerValue) return links;
 
