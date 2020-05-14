@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zotero</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="../plugins.css">
+    <link rel="stylesheet" href="plugin_style.css">
+    <script src="../pluginBase.js"></script>
+</head>
+<body spellcheck="false" class="noselect">
+    <div id="errorWrapper" class="errorMsg display-none"></div>
+
+    <div id="content">
+
+        <div id="mainCont" class="flexCol">
+
+            <div id="configState" class="display-none">
+                <div><span class="i18n">To use Zotero you should get an API key.</span> <span class="i18n">Navigate to</span> <a class="i18n" target="_blank" href="https://www.zotero.org/settings/keys">Zotero API settings</a>. <span class="i18n">Create and copy API key into the field below.</span></div>
+                <div class="mrtop label">
+                    <span class="i18n">API Key</span>
+                    <input id="apiKeyField" class="control text wide i18n" type="text" placeholder="API Key" />
+                </div>
+                <div id="saveConfigBtn" class="button wide control i18n">Save</div>
+            </div>
+
+            <div id="mainState" class="flexCol flexSize display-none">
+                <div id="selectedWrapper">
+                    <div class="flexCol flexSize flexCenter">
+                        <div id="selectedHolder"></div>
+                    </div>
+                    <div id="selectedThumb" class="scrollThumb display-none"></div>
+                </div>
+                <label id="searchLabel">
+                    <input id="searchField" autocomplete="off" class="control text i18n" type="text" placeholder="Search references by author, title or year" />
+                    <span id="searchClear" class="display-none">&#xd7;</span>
+                </label>
+                <div id="docsWrapper" class="flexSize">
+                    <div class="flexCol flexSize">
+                        <div id="docsHolder" class="flexCol"></div>
+                        <div class="flex flexCenter">
+                            <div id="libLoader" class="cssload-loading display-none"><i></i><i></i><i></i><i></i></div>
+                        </div>
+                    </div>
+                    <div id="docsThumb" class="scrollThumb display-none"></div>
+                </div>
+                <div id="controlsHolder" class="flexCol">
+                    <div id="buttonsWrapper" class="flex display-none">
+                        <div id="insertBibBtn" class="button control i18n">Insert Bibliography</div>
+                        <div id="cancelBtn" class="button control i18n">Cancel</div>
+                    </div>
+                    <div id="styleWrapper">
+                        <div class="label">
+                            <span class="i18n">Style</span>
+                            <div class="selectHolder">
+                                <input id="styleSelect" class="control select text i18n" type="text" placeholder="Enter style name">
+                                <div id="styleSelectList" class="selectList display-none">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="label">
+                            <span class="i18n">Language</span>
+                            <div class="selectHolder">
+                                <input id="styleLang" readonly class="control select" type="text">
+                                <div id="styleLangList" class="selectList display-none">
+                                    <span data-value="af-ZA">Afrikaans</span>
+                                    <span data-value="ar">Arabic</span>
+                                    <span data-value="bg-BG">Bulgarian</span>
+                                    <span data-value="ca-AD">Catalan</span>
+                                    <span data-value="cs-CZ">Czech</span>
+                                    <span data-value="cy-GB">Welsh</span>
+                                    <span data-value="da-DK">Danish</span>
+                                    <span data-value="de-AT">German (Austria)</span>
+                                    <span data-value="de-CH">German (Switzerland)</span>
+                                    <span data-value="de-DE">German (Germany)</span>
+                                    <span data-value="el-GR">Greek</span>
+                                    <span data-value="en-GB">English (UK)</span>
+                                    <span selected data-value="en-US">English (US)</span>
+                                    <span data-value="es-CL">Spanish (Chile)</span>
+                                    <span data-value="es-ES">Spanish (Spain)</span>
+                                    <span data-value="es-MX">Spanish (Mexico)</span>
+                                    <span data-value="et-EE">Estonian</span>
+                                    <span data-value="eu">Basque</span>
+                                    <span data-value="fa-IR">Persian</span>
+                                    <span data-value="fi-FI">Finnish</span>
+                                    <span data-value="fr-CA">French (Canada)</span>
+                                    <span data-value="fr-FR">French (France)</span>
+                                    <span data-value="he-IL">Hebrew</span>
+                                    <span data-value="hr-HR">Croatian</span>
+                                    <span data-value="hu-HU">Hungarian</span>
+                                    <span data-value="id-ID">Indonesian</span>
+                                    <span data-value="is-IS">Icelandic</span>
+                                    <span data-value="it-IT">Italian</span>
+                                    <span data-value="ja-JP">Japanese</span>
+                                    <span data-value="km-KH">Khmer</span>
+                                    <span data-value="ko-KR">Korean</span>
+                                    <span data-value="la">Latin</span>
+                                    <span data-value="lt-LT">Lithuanian</span>
+                                    <span data-value="lv-LV">Latvian</span>
+                                    <span data-value="mn-MN">Mongolian</span>
+                                    <span data-value="nb-NO">Norwegian (Bokmål)</span>
+                                    <span data-value="nl-NL">Dutch</span>
+                                    <span data-value="nn-NO">Norwegian (Nynorsk)</span>
+                                    <span data-value="pl-PL">Polish</span>
+                                    <span data-value="pt-BR">Portuguese (Brazil)</span>
+                                    <span data-value="pt-PT">Portuguese (Portugal)</span>
+                                    <span data-value="ro-RO">Romanian</span>
+                                    <span data-value="ru-RU">Russian</span>
+                                    <span data-value="sk-SK">Slovak</span>
+                                    <span data-value="sl-SI">Slovenian</span>
+                                    <span data-value="sr-RS">Serbian</span>
+                                    <span data-value="sv-SE">Swedish</span>
+                                    <span data-value="th-TH">Thai</span>
+                                    <span data-value="tr-TR">Turkish</span>
+                                    <span data-value="uk-UA">Ukrainian</span>
+                                    <span data-value="vi-VN">Vietnamese</span>
+                                    <span data-value="zh-CN">Chinese (PRC)</span>
+                                    <span data-value="zh-TW">Chinese (Taiwan)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="footerCont">
+            <span><a href="https://www.zotero.org/" target="_blank" class="link i18n">Open Zotero website</a></span>
+            <span id="logoutLink" class="link display-none i18n">Reconfigure</span>
+        </div>
+
+    </div>
+
+    <script src="zotero.js"></script>
+    <script src="code.js"></script>
+</body>
+</html>	
