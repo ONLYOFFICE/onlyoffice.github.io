@@ -1,25 +1,80 @@
-## Mendeley ONLYOFFICE integration plugin
+# ONLYOFFICE Mendeley plugin
 
-The add-ons for [ONLYOFFICE Document Server][2] and [ONLYOFFICE Desktop Editors][3]. Used for the developers to add specific functions to the editors which are not directly related to the OOXML format.
+Mendeley plugin allows users to create bibliographies in ONLYOFFICE editors using Mendeley service.
 
-## Project Information
+The plugin can be installed to Document Server manually.  
 
-Official website: [https://www.onlyoffice.com/](https://www.onlyoffice.com/?utm_source=github&utm_medium=cpc&utm_campaign=GitHubPlugins)
+## How to use
 
-Code repository: [https://github.com/ONLYOFFICE/web-apps](https://github.com/ONLYOFFICE/web-apps "https://github.com/ONLYOFFICE/web-apps")
+1. Search references by author, title or year.
 
-SaaS version: [https://www.onlyoffice.com/cloud-office.aspx](https://www.onlyoffice.com/cloud-office.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubPlugins)
+2. Among search results, choose ones you want to add to your document.
 
-## Documentation
+3. Choose style (e.g. Chicago Manual, American Psychological Association) and language.
 
-To learn more about the plugin structure and find out how to integrate plugins with the editors, please refer to the [ONLYOFFICE Document Server Plugins](https://api.onlyoffice.com/plugin/basic "https://api.onlyoffice.com/plugin/basic") documentation.
+4. Press `Insert citation`.
 
-For the detailed information about the plugin code, you can refer to the [ONLYOFFICE Document Builder](https://helpcenter.onlyoffice.com/developers/document-builder/index.aspx "https://helpcenter.onlyoffice.com/developers/document-builder/index.aspx") section.
+## How to install
 
-## User Feedback and Support
+Two installation ways are available:
 
-If you have any problems with or questions about [ONLYOFFICE Document Server][2], please visit our official forum to find answers to your questions: [dev.onlyoffice.org][1].
+1. Put the folder with Mendeley plugin (it must contain the content of the src folder only) to ONLYOFFICE Document Server folder depending on the operating system:
 
-  [1]: http://dev.onlyoffice.org
-  [2]: https://github.com/ONLYOFFICE/DocumentServer
-  [3]: https://github.com/ONLYOFFICE/DesktopEditors
+    For Linux - `/var/www/onlyoffice/documentserver/sdkjs-plugins/`.
+
+    For Windows - `%ProgramFiles%\ONLYOFFICE\DocumentServer\sdkjs-plugins\`.
+
+    The plugins will be available to all the users users of ONLYOFFICE Document Server.
+    No service restart is required.
+
+2. Edit the Document Server config to add the following lines:
+
+    ```
+    var docEditor = new DocsAPI.DocEditor("placeholder", {
+        "editorConfig": {
+            "plugins": {
+                "autostart": [
+                    "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
+                    ...
+                ],
+                "pluginsData": [
+                    "https://example.com/path/to/mendeley/config.json",
+                    ...
+                ]
+            },
+            ...
+        },
+        ...
+    });
+    ```
+**Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
+
+## Configuration
+
+You will need to register the application.
+
+1. Go to https://dev.mendeley.com/myapps.html.
+
+2. Fill in the form using link provided in the plugin interface as a redirect URL.
+
+3. Press `Generate secret` and copy it.
+
+4. Insert the secret into the appropriate field in the plugin interface.
+
+## Known issues
+
+For CentOS users with SELinx enabled, after copying the src folder to sdkjs-plugins, plugins may not work due to the variable file security context. To restore the rights, use the following command:
+
+```
+sudo restorecon -Rv /var/www/onlyoffice/documentserver/sdkjs-plugins/
+```
+
+After that restart the services:
+
+```
+sudo supervisorctl restart ds:docservice
+```
+
+## User feedback and support
+
+To ask questions and share feedback, use Issues in this repository.
