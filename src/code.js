@@ -452,28 +452,32 @@
         return window.Asc.plugin.tr(key);
     }
 
+    var loadingLocale = false;
     function getLocale(langTag) {
         return new Promise(function (res, rej) {
             if (locales[langTag] != null) {
                 res(locales[langTag]);
             } else {
+                loadingLocale = true;
                 fetch("https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-" + langTag + ".xml")
                     .then(function (resp) { return resp.text(); })
-                    .then(function (text) { locales[langTag] = text; res(text); })
-                    .catch(function (err) { rej(err); });
+                    .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
+                    .catch(function (err) { rej(err); loadingLocale = false; });
             }
         });
     }
 
+    var loadingStyle = false;
     function getStyle(styleName) {
         return new Promise(function (res, rej) {
             if (styles[styleName] != null) {
                 res(styles[styleName]);
             } else {
+                loadingStyle = true;
                 fetch("https://www.zotero.org/styles/" + styleName)
                     .then(function (resp) { return resp.text(); })
-                    .then(function (text) { styles[styleName] = text; res(text); })
-                    .catch(function (err) { rej(err); });
+                    .then(function (text) { styles[styleName] = text; res(text); loadingStyle = false; })
+                    .catch(function (err) { rej(err); loadingStyle = false; });
             }
         });
     }
@@ -805,6 +809,7 @@
         switchClass(elements.buttonsWrapper, displayNoneClass, selected.count() <= 0);
     }
 
+    var repeatTimeout;
     function formatInsertBibliography() {
         if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
@@ -812,6 +817,12 @@
         }
         if (!selectedLocale) {
             showError(getMessage("Language is not selected"));
+            return;
+        }
+
+        clearTimeout(repeatTimeout);
+        if (loadingStyle || loadingLocale) {
+            repeatTimeout = setTimeout(formatInsertBibliography, 100);
             return;
         }
 
