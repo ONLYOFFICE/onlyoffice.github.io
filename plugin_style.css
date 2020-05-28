@@ -1,0 +1,95 @@
+html, body {
+  width: 98%;
+  height: 98%;
+};
+.noselect {
+  -khtml-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.combo {
+  background: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  color: #444444;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 22px;
+  cursor: pointer;
+  margin: 0px 0px 10px 0px;
+  box-sizing: border-box;
+}
+div::selection {
+  background: #a8d1ff;
+}
+.button {
+  color: #fff;
+  background-color: #7d858c;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  outline: none;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 22px;
+  cursor: pointer;
+}
+.input-synonim {
+  outline-color: #7d858c;
+  flex: 1;
+  height: 18px;
+  border: 1px solid #cfcfcf;
+}
+.input-synonim::selection {
+  background: #D8DADC; /* WebKit/Blink Browsers */
+  
+}
+.input-synonim::-moz-selection {
+  background: #D8DADC; /* Gecko Browsers */
+}
+.input-field {
+  display: flex;
+  align-content: center;
+}
+.not-found {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-left: 5px;
+}
+.div-words {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.label-selected	{
+background: rgba(200, 200, 200, 0.5);
+}
+.label-words {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.global {
+  height: 99%;
+  display: flex;
+  width: 96%;
+  flex-flow: column;
+  line-height: 90%;
+  -moz-user-select: none;
+}
+.label-syn {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+}
+.content-items {
+  width: 98%;
+  height: 95%;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  user-select: none;
+}
+div::-moz-selection {
+  background: #a8d1ff;
+}
