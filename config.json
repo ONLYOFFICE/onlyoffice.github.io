@@ -1,0 +1,55 @@
+{
+    "name": "Highlight code",
+    "nameLocale": {
+        "ru": "Подсветка кода",
+        "fr": "Code en surbrillance",
+        "es": "Resaltar el código",
+        "de": "Code hervorheben"
+    },
+    "guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9841}",
+
+    "variations": [
+        {
+            "description": "Highlight code",
+            "descriptionLocale": {
+                "ru": "Подсветка кода",
+                "fr": "Code en surbrillance",
+                "es": "Resaltar el código",
+                "de": "Code hervorheben"
+            },
+            "url": "index.html",
+
+            "icons": [ "icon.png", "icon@2x.png", "icon.png", "icon@2x.png" ],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "html",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                },
+                {
+                    "text": "Cancel",
+                    "primary": false,
+                    "textLocale": {
+                        "ru": "Отмена",
+                        "fr": "Annuler",
+                        "es": "Cancelar",
+                        "de": "Abbrechen"
+                    }
+                }
+            ],
+
+            "initOnSelectionChanged": true
+        }
+    ]
+}

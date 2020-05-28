@@ -1,0 +1,31 @@
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: white;
+  color: black;
+}
+p {
+  margin: 0;
+  line-height: 1;
+  font-family: 'Consolas';
+  color: black;
+}
+.hljs-tag{
+  color: #2008c0;
+}
+.hljs-name {
+  color: #ad3b3d;
+}
+.hljs-meta {
+  color: #2008c0;
+}
+.hljs-string {
+  color: black;
+}
+.php {
+  color: #2008c0;
+}
+.hljs-attr {
+color: #ad3b3d;
+}
