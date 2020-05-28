@@ -1,0 +1,58 @@
+{
+    "name": "Macros",
+    "nameLocale": {
+        "ru": "Макросы",
+        "fr": "Macros",
+        "es": "Macros",
+        "de": "Makros"
+    },
+    "guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
+
+    "group": {
+        "name": "Macros",
+        "rank": 2
+    },
+
+    "variations": [
+        {
+            "description": "Macros",
+            "descriptionLocale": {
+                "ru": "Макросы",
+                "fr": "Macros",
+                "es": "Macros",
+                "de": "Makros"
+            },
+            "url": "index.html",
+
+            "icons": [ "icon.png", "icon@2x.png", "icon2.png", "icon2@2x.png" ],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                },
+                {
+                    "text": "Cancel",
+                    "primary": false,
+                    "textLocale": {
+                        "ru": "Отмена",
+                        "fr": "Annuler",
+                        "es": "Cancelar",
+                        "de": "Abbrechen"
+                    }
+                }
+            ]
+        }
+    ]
+}
