@@ -49,21 +49,22 @@
 				}
 			}
 
-			var _index = 0;
-			if (_data.length > 0)
-				_index = _data[0].index;
-
+			_data.sort(function(a, b) { return a.gender.charCodeAt(0) - b.gender.charCodeAt(0) }); // family :)
+			var voiceName = "";
 			for (var j = 0; j < _data.length; j++)
 			{
-				// family
-				if (_data[j].gender == "f")
+				var nameCandidate = _langs[_data[j].index].name;
+				for (var k = 0, k_len = voicelist.length; k < k_len; k++)
 				{
-					_index = _data[j].index;
-					break;
+					if (voicelist[k].name === nameCandidate)
+					{
+						voiceName = nameCandidate;
+						break;
+					}
 				}
 			}
 
-			responsiveVoice.speak(text_init, voicelist[_index].name, {onstart : StartCallback, onend : EndCallback});
+			responsiveVoice.speak(text_init, voiceName, {onstart : StartCallback, onend : EndCallback});
 		}
 
 		responsiveVoice.AddEventListener("OnReady", function() {
