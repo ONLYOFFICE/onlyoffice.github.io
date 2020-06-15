@@ -1,6 +1,7 @@
 (function(window, undefined)
 {
 	var text_init = "";
+	var is_end_callback = false;
 
 	window.Asc.plugin.init      = function(text)
 	{
@@ -13,10 +14,17 @@
 		text_init = text;
 		function StartCallback()
 		{
+			setTimeout(function(){
+				if (!is_end_callback && !responsiveVoice.isPlaying())
+				{
+					responsiveVoice.speak(text_init, undefined, {onstart : StartCallback, onend : EndCallback, onerror : EndCallback});
+				}
+			}, 5000);
 		}
 
 		function EndCallback()
 		{
+			is_end_callback = true;
 			window.Asc.plugin.button(-1);
 		}
 
@@ -62,9 +70,11 @@
 						break;
 					}
 				}
+				if (voiceName !== "")
+					break;
 			}
 
-			responsiveVoice.speak(text_init, voiceName, {onstart : StartCallback, onend : EndCallback});
+			responsiveVoice.speak(text_init, voiceName, {onstart : StartCallback, onend : EndCallback, onerror : EndCallback});
 		}
 
 		responsiveVoice.AddEventListener("OnReady", function() {
