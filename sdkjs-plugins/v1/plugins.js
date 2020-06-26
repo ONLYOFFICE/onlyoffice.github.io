@@ -105,7 +105,7 @@
                 }
 
                 // ie11 not support message from another domain
-                window.Asc.plugin.init = true;
+                window.Asc.plugin._initInternal = true;
 
                 window.parent.postMessage(JSON.stringify(obj), "*");
             }
@@ -127,7 +127,7 @@
             return;
         }
 
-        if (!window.Asc.plugin.init)
+        if (!window.Asc.plugin._initInternal)
             return;
 
         if (typeof(event.data) == "string") {
