@@ -82,27 +82,30 @@
                     type : "initialize",
                     guid : window.Asc.plugin.guid
                 };
-				
-				var _body = document.body;
-				if (_body && true !== window.Asc.plugin.enableDrops) {
-					_body.ondrop = function(e) {
-						if (e && e.preventDefault)
-							e.preventDefault();
-						return false;
-					};
-					_body.ondragenter = function(e) {
-						if (e && e.preventDefault)
-							e.preventDefault();
-						return false;
-					};
-					_body.ondragover = function(e) {
-						if (e && e.preventDefault)
-							e.preventDefault();
-						if (e && e.dataTransfer)
-							e.dataTransfer.dropEffect = "none";
-						return false;
-					};
-				}
+
+                var _body = document.body;
+                if (_body && true !== window.Asc.plugin.enableDrops) {
+                    _body.ondrop = function(e) {
+                        if (e && e.preventDefault)
+                            e.preventDefault();
+                        return false;
+                    };
+                    _body.ondragenter = function(e) {
+                        if (e && e.preventDefault)
+                            e.preventDefault();
+                        return false;
+                	};
+                	_body.ondragover = function(e) {
+                        if (e && e.preventDefault)
+                            e.preventDefault();
+                        if (e && e.dataTransfer)
+                            e.dataTransfer.dropEffect = "none";
+                        return false;
+                    };
+                }
+
+                // ie11 not support message from another domain
+                window.Asc.plugin.init = true;
 
                 window.parent.postMessage(JSON.stringify(obj), "*");
             }
@@ -124,6 +127,9 @@
             return;
         }
 
+        if (!window.Asc.plugin.init)
+            return;
+
         if (typeof(event.data) == "string") {
             var pluginData = {};
             try {
@@ -134,16 +140,16 @@
             }
 
             if (pluginData.type == "plugin_init") {
-				window.Asc.supportOrigins[event.origin] = true;
-				eval(pluginData.data);
-			}
+                window.Asc.supportOrigins[event.origin] = true;
+                eval(pluginData.data);
+            }
         }
     }
 
     if (window.addEventListener)
-		window.addEventListener("message", onMessage, false);
+        window.addEventListener("message", onMessage, false);
     else
-		window.attachEvent("onmessage", onMessage);
+        window.attachEvent("onmessage", onMessage);
 
     window.onunload = function() {
         if (window.addEventListener)
