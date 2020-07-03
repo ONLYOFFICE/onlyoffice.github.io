@@ -2,7 +2,7 @@
 
 Zotero plugin allows users to create bibliographies in ONLYOFFICE editors using Zotero service.
 
-The plugin can be installed to Document Server manually.  
+The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition, Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal. It can also be installed to Document Server manually. 
 
 ## How to use
 
