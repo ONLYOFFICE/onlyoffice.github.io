@@ -7,8 +7,6 @@
         "de": "Makros"
     },
     "guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
-    "help" : " https://api.onlyoffice.com/plugin/macros",
-
     "group": {
         "name": "Macros",
         "rank": 2
@@ -24,6 +22,8 @@
                 "de": "Makros"
             },
             "url": "index.html",
+            "help" : " https://api.onlyoffice.com/plugin/macros",
+
 
             "icons": [ "icon.png", "icon@2x.png", "icon2.png", "icon2@2x.png" ],
             "isViewer": false,
