@@ -77,8 +77,13 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
         {
             var cl = (i == Content.current) ? "macrosSelected" : "macros";
             var item = "<div class=\"" + cl + "\" id=\"item" + i + "\" onclick=\"window.onItemClick(" + i + ");\">" + Content.macrosArray[i].name;
-            if (true === Content.macrosArray[i].autostart)
-                item += ("<div class=\"macrosAutostart\">(A)</div>");
+            if (true === Content.macrosArray[i].autostart) {
+                var PropForMac = "";
+                if (navigator.userAgent.indexOf('Macintosh') != -1) {
+                    PropForMac = "style = \"top : calc(50% - 6px)\"";
+                }
+                item += ("<div class=\"macrosAutostart\"" +PropForMac+ ">(A)</div>");
+            }
             item += "</div>";
             menuContent += item;
         }
