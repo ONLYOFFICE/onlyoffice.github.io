@@ -1,0 +1,115 @@
+html, body {
+  min-height: 100% !important;
+  height: 100%;
+  overflow-y:hidden;
+  overflow-x: hidden;
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  margin: 0;				
+}
+.noselect {
+  -khtml-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  width: 100%;
+}
+.codefield { 
+  border-width: 3px;
+  border-style: solid;
+  border-color: rgba(68,68,68,0.266666666666);  
+}
+.content{  
+  font-weight: bold;
+  font-size: 14px; 
+  font-family: "Helvetica Neue", Helvetica, Consolas, sans-serif; 
+}
+.content::selection {
+  background: #D8DADC; /* WebKit/Blink Browsers */
+}
+.content::-moz-selection {
+  background: #D8DADC; /* Gecko Browsers */
+}
+.combo {
+  background: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  color: #444444;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 22px;
+  cursor: pointer;
+  margin: 0px 0px 10px 0px;
+  box-sizing: border-box;
+  flex: 0.95;
+  outline-color: #D8DADC;
+}
+select:focus > option:checked { 
+  background: #D8DADC !important;
+}
+.label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  -khtml-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.language {
+  display: flex;
+  margin: 0px; 
+  padding: 2px 10px 0px; 
+  box-sizing: border-box; 
+  width: 100%;
+}
+.TabColor {
+  display: inline-flex;
+  padding-left: 10px;
+}
+.tabselect {
+  padding-left: 10px;
+  padding-top: 5px;
+  -khtml-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.styleselect{
+  padding-top: 5px;
+}
+.button {
+  color: #fff;
+  background-color: #7d858c;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  outline: none;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 22px;
+  cursor: pointer;
+  flex: 0.05;
+}
+.colorselect {
+  padding-left: 10px;
+  padding-top: 2px;
+  -khtml-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.divbutton {
+  padding: 15px 0px 0px 10px;
+}
+.label
+{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+span::selection {
+  background: #D8DADC; /* WebKit/Blink Browsers */
+  
+}
+span::-moz-selection {
+  background: #D8DADC; /* Gecko Browsers */
+}

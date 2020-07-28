@@ -1,11 +1,10 @@
-# Highlight code plugin 
+## Overview
 
-The Highlight code plugin allows you to highlight syntax of the code in text documents, spreadsheets, and presentations with the ability to select the necessary programming language, style, background color.
+Highlight syntax of the code selecting the necessary language, style, and background color.
 
 The plugin uses the [highlight.js](https://highlightjs.org/) engine. 
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
-
+It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 ## Supported languages and styles
 
 Supported languages: apache, bash, shell, matlab, erlang, javascript, profile, ruby, prolong, swift, sql, java, http, fortran, perl, xml, cpp, json, cs, nginx, basic, markdown, css, python, objectivec, php, delphi. 
@@ -14,22 +13,7 @@ Supported styles: Googlecode, GitHub, GitHub Gist, Android Studio, Visual Studio
 
 ## How to use
 
-1. Select a part of the text you would like to highlight as a code.
-2. Choose Highlight code from the Plugins tab.
-3. Select the necessary programming language (e.g. JavaScript, Ruby, Python, etc).
-4. Select the necessary style (e.g. GitHub, XCode, Idea, etc).
-5. Apply any background color.
-6. If necessary, replace tabs with spaces using the corresponding option.
-7. Click the Ok button.
-
-## Documentation
-
-Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
-
-Plugins code and methods https://api.onlyoffice.com/docbuilder/basic.
-
-## User feedback and support
-
-To ask questions and share feedback, use Issues in this repository.
-
-
+1. Find the plugin in the Plugins tab.
+2. Insert your code.
+3. Set the language you use. It will be defined automatically, but you can also change it manually. 
+4. Choose style/background color and press OK to insert your code into the document. 
