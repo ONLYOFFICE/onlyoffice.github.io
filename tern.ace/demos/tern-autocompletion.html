@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tern - ACE Autocompletion demo</title>
+  <style type="text/css" media="screen">
+    body {
+        overflow: hidden;
+    }
+    
+    #editor { 
+        margin: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+  </style>
+</head>
+<body>
+
+<pre id="editor"></pre>
+
+<!-- load ace -->
+<script src="scripts/ace-builds/src-min/ace.js"></script>
+<!-- load ace language tools -->
+<script src="scripts/ace-builds/src-min/ext-language_tools.js"></script>
+
+<!-- Tern JS -->
+<script src="scripts/ternjs/acorn/acorn.js"></script>
+<script src="scripts/ternjs/acorn/acorn_loose.js"></script>
+<script src="scripts/ternjs/acorn/util/walk.js"></script>
+<script src="scripts/ternjs/tern/lib/signal.js"></script>
+<script src="scripts/ternjs/tern/lib/tern.js"></script>
+<script src="scripts/ternjs/tern/lib/def.js"></script>
+<script src="scripts/ternjs/tern/lib/comment.js"></script>
+<script src="scripts/ternjs/tern/lib/infer.js"></script>
+
+<!-- ACE Tern -->
+<script src="../lib/tern-ace.js"></script>
+
+<script src="browser.json.js"></script>
+<script src="ecma5.json.js"></script>
+
+<script>
+    // trigger extension
+    var langTools = ace.require("ace/ext/language_tools");
+    var editor = ace.edit("editor");    
+    editor.session.setMode("ace/mode/javascript");
+    // enable autocompletion and snippets
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: false
+    });
+	editor.setValue('var arr = [];\narr.');
+    
+	// Create tern server
+	var TernServer = ace.require("ace/tern/server").TernServer;
+	var defs = [ternEcma5Def];
+	var ternServer = new TernServer({defs: defs});
+        
+	// Tern Completion
+	langTools.addCompleter(ternServer);
+
+	// Tern Tooltip
+	var TernTooltip = ace.require("ace/tern/tern_tooltip").TernTooltip;
+	editor.ternTooltip = new TernTooltip(editor, ternServer);
+    
+</script>
+
+</body>
+</html>
