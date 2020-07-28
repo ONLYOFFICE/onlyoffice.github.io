@@ -1,0 +1,40 @@
+{
+    "name": "Thesaurus",
+    "nameLocale": {
+        "ru": "Синонимы",
+        "fr": "Thésaurus",
+        "es": "Tesauro",
+        "de": "Thesaurus"
+    },
+    "guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9840}",
+
+    "variations": [
+        {
+            "description": "Thesaurus",
+            "descriptionLocale": {
+                "ru": "Синонимы",
+                "fr": "Thésaurus",
+                "es": "Tesauro",
+                "de": "Thesaurus"
+            },
+            "url": "index.html",
+
+            "icons": [ "icon.png", "icon@2x.png", "icon.png", "icon@2x.png" ],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        }
+    ]
+}
