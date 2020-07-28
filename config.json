@@ -1,0 +1,45 @@
+{
+    "name": "YouTube",
+    "guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
+
+    "variations": [
+        {
+            "description": "YouTube",
+            "url": "index.html",
+
+            "icons": [ "icon.png", "icon@2x.png", "icon2.png", "icon2@2x.png" ],
+            "isViewer": true,
+            "isDisplayedInViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "ole",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                },
+                {
+                    "text": "Cancel",
+                    "primary": false,
+                    "isViewer": false,
+                    "textLocale": {
+                        "ru": "Отмена",
+                        "fr": "Annuler",
+                        "es": "Cancelar",
+                        "de": "Abbrechen"
+                    }
+                }
+            ],
+
+            "size": [ 350, 90 ]
+        }
+    ]
+}
