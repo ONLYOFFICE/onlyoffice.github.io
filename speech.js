@@ -1,6 +1,7 @@
 (function(window, undefined)
 {
 	var text_init = "";
+	var is_end_callback = false;
 
 	window.Asc.plugin.init      = function(text)
 	{
@@ -13,10 +14,17 @@
 		text_init = text;
 		function StartCallback()
 		{
+			setTimeout(function(){
+				if (!is_end_callback && !responsiveVoice.isPlaying())
+				{
+					responsiveVoice.speak(text_init, undefined, {onstart : StartCallback, onend : EndCallback, onerror : EndCallback});
+				}
+			}, 5000);
 		}
 
 		function EndCallback()
 		{
+			is_end_callback = true;
 			window.Asc.plugin.button(-1);
 		}
 
@@ -49,21 +57,24 @@
 				}
 			}
 
-			var _index = 0;
-			if (_data.length > 0)
-				_index = _data[0].index;
-
+			_data.sort(function(a, b) { return a.gender.charCodeAt(0) - b.gender.charCodeAt(0) }); // family :)
+			var voiceName = "";
 			for (var j = 0; j < _data.length; j++)
 			{
-				// family
-				if (_data[j].gender == "f")
+				var nameCandidate = _langs[_data[j].index].name;
+				for (var k = 0, k_len = voicelist.length; k < k_len; k++)
 				{
-					_index = _data[j].index;
-					break;
+					if (voicelist[k].name === nameCandidate)
+					{
+						voiceName = nameCandidate;
+						break;
+					}
 				}
+				if (voiceName !== "")
+					break;
 			}
 
-			responsiveVoice.speak(text_init, voicelist[_index].name, {onstart : StartCallback, onend : EndCallback});
+			responsiveVoice.speak(text_init, voiceName, {onstart : StartCallback, onend : EndCallback, onerror : EndCallback});
 		}
 
 		responsiveVoice.AddEventListener("OnReady", function() {
