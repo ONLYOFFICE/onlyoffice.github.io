@@ -1,25 +1,13 @@
-# OCR plugin
+## Overview
 
-The OCR plugin allows users to recognize text in pictures (.png and .jpg formats) and insert it into documents.
+Recognize text from pictures and screenshots and insert it into your documents with multilingual  OCR. 
 
 The plugin uses [Tesseract.js](https://tesseract.projectnaptha.com/) and supports more than 60 languages. 
 
-The plugin is pre-installed in ONLYOFFICE Enterprise Edition, Community Edition (Document Server + Community Server), ONLYOFFICE Integration Edition, ONLYOFFICE cloud service, and ONLYOFFICE Personal.
+It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 
 ## How to use
 
-1. Choose OCR from the Plugins tab.
-2. Load the necessary image.
-3. Select the text language from the drop-down list.
-4. Click the Recognize button.
-5. Click the Insert Text button.
-
-## Documentation
-
-Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
-
-Plugins code and methods https://api.onlyoffice.com/docbuilder/basic.
-
-## User feedback and support
-
-To ask questions and share feedback, use Issues in this repository.
+1. Find the OCR plugin in the Plugins tab, click on it and press start.
+2. Load the image with text you want to insert into you doc.
+3. Choose the language and press Recognize. 
