@@ -43,22 +43,49 @@
         }
         div::-moz-selection {
             background: #a8d1ff;
-        }
+		}
+		.input-apikey {
+			outline-color: #7d858c;
+			flex: 1;
+			height: 18px;
+			border: 1px solid #cfcfcf;
+		}
+		.input-apikey::selection {
+			background: #D8DADC; /* WebKit/Blink Browsers */
+		}
+		.input-apikey::-moz-selection {
+			background: #D8DADC; /* Gecko Browsers */
+		}
+		.input-field {
+			display: flex;
+			align-content: center;
+		}
 	</style>
 </head>
-<body style="width: 100%;height: 100%; margin: 0;">
+<body style="width: 100%;height: 100%; display: flex; flex-wrap: wrap; margin: 0;">
 	<div id="main-search-container-id" style="height: 74px; margin: 0px; padding: 10px; box-sizing: border-box; width: 100%;">
 		<div><select id="lang1_id" class="noselect combo" style="width: 100%"></select></div>
 		<div style="margin-top: 15px;"><select id="lang2_id" class="noselect combo" style="width: 100%"></select></div>
 	</div>
-	<div id="scrollable-container-id" style="position: relative; height: calc(100% - 144px); overflow: hidden">
+	<div id="div_ApiKey" style="padding: 10px; width: 100%; display: none;">
+		<div style="width: 100%;  display: flex; align-content: center;">
+			<input type="text" class = "input-apikey" title="Enter your ApiKey" id = "inp_ApiKey" autocomplete="off">
+			<button class = "button" id ="btn_enterApiKey">Ok</button>
+		</div>
+	</div>
+	<div id="scrollable-container-id" style="position: relative; width: 100%; height: calc(100% - 144px); overflow: hidden">
 		<div id="translateresult_id" style="display: block; position: absolute; margin: 0; left:0px; top: 0px; width: 100%; box-sizing:border-box;padding-left: 5px; padding-right: 15px; color: #444444; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; word-wrap: break-word;">
         </div>
 	</div>
-    <div style="background: rgba(200, 200, 200, 0.5); position: relative; margin: 0px; padding: 10px; box-sizing: border-box; width: 100%; height: 70px; overflow: hidden; color: #444444; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-		<div id="id_progress" style="background: #A0A0A0; position: fixed; margin: -10px; padding: 0px; width: 0%; height: 100%; z-index: -100; display: none;-webkit-transition: width .5s ease-in-out; -moz-transition: width .5s ease-in-out; -o-transition: width .5s ease-in-out; transition: width .5s ease-in-out;"></div>
-		Переведено сервисом «Яндекс.Переводчик»
-        <a href="http://translate.yandex.ru/" target="_blank">http://translate.yandex.ru/</a>
-    </div>
+    <div style="background: rgba(200, 200, 200, 0.5); position: relative; margin: 0px; height: 70px; padding-left: 10px; box-sizing: content-box; width: 100%; overflow: hidden; color: #444444; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+		<div>
+			<div id="id_progress" style="background: #A0A0A0; position: fixed; margin: -10px; padding: 0px; width: 0%; height: 100%; z-index: -100; display: none;-webkit-transition: width .5s ease-in-out; -moz-transition: width .5s ease-in-out; -o-transition: width .5s ease-in-out; transition: width .5s ease-in-out;"></div>
+			Переведено сервисом «Яндекс.Переводчик»
+			<a href="http://translate.yandex.ru/" target="_blank">http://translate.yandex.ru/</a>
+		</div>
+		<div>
+			<button id="btn_showApiKey">ApiKey</button>
+		</div>
+	</div>
 </body>
 </html>
