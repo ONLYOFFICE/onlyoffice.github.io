@@ -8,7 +8,7 @@
 		return false;
 	};
 	
-	var ApiKey = "34aacef03e39ff2e622f10d1fc5313f3", // generated APi key on bighugelabs.com
+	var ApiKey = localStorage.getItem("UserApiKey_Thesaurus") || "34aacef03e39ff2e622f10d1fc5313f3", // generated APi key on https://words.bighugelabs.com
 		SynonimFormat = "json",
 		version = 2,
 		synonim_data = "",
@@ -41,6 +41,24 @@
 				synonim();
 			}
 		};
+		inputApiKey = document.getElementById("inp_ApiKey");
+		btnEnterApiKey = document.getElementById("btn_enterApiKey");
+		btnShowApiKey = document.getElementById("btn_showApiKey");
+		btnShowApiKey.onclick = function() {
+			divApiKey = document.getElementById("div_ApiKey");
+			if (divApiKey.style.display == "none") {
+				divApiKey.style.display = "block";
+				inputApiKey.value = ApiKey;
+			} else {
+				divApiKey.style.display = "none";
+				inputApiKey.value = "";
+			}
+		};
+		btnEnterApiKey.onclick = function() {
+			ApiKey = inputApiKey.value.trim;
+			localStorage.setItem("UserApiKey_Thesaurus", ApiKey);
+			btnShowApiKey.onclick();
+		};
 	});	
 
 	function synonim() {
@@ -70,6 +88,11 @@
 				updateScroll();
 				updateScroll();
 			}
+			if (this.readyState == 4 && this.status == 500) {
+				$('#global').append("<h3 id = \"not_found\" class = \"not-found\">"+this.statusText+"</h3>"); //if synonym not found
+				updateScroll();
+				updateScroll();
+			}
 			if (this.readyState == 4 && this.status == 200  && !closed)
 			{
 				try
@@ -92,7 +115,7 @@
 				}
 				catch (err)
 				{}
-			}else if (401 == this.readyState || 500 == this.readyState || 403 == this.status)
+			}else if (401 == this.readyState || 403 == this.status)
 				synonim();
 		};
 		xhr.send(null);
@@ -173,6 +196,10 @@
 		var inp_search = document.getElementById("inp_search");
 		if (inp_search)
 			inp_search.placeholder = window.Asc.plugin.tr("Search");
+		var inp_ApiKey = document.getElementById("inp_ApiKey");
+		if (inp_ApiKey)
+			inp_ApiKey.title = window.Asc.plugin.tr("Title");
+			
 	};
 		  
 })(window, undefined);
