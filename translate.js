@@ -14,6 +14,7 @@
 	var translate_data_send = null;
 	var isBreakTranslate = false;
 	var breakTimeoutId = -1;
+	var ApiKey = localStorage.getItem("UserApiKey_Translate") || 'trnsl.1.1.20160604T115612Z.107ebb05a7757bcc.804e900f347ddfbeadd7ca5999bd5cb6ca32805b';
 
 	var isInit = false;
 
@@ -26,7 +27,7 @@
 	{
 		var xhr = new XMLHttpRequest();
 		var _url = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?";
-		_url += "key=trnsl.1.1.20160604T115612Z.107ebb05a7757bcc.804e900f347ddfbeadd7ca5999bd5cb6ca32805b";
+		_url += "key=" + ApiKey;
 		_url += "&ui=en";
 		xhr.open('POST', _url, true);
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -104,8 +105,10 @@
 				try
 				{
 					var _obj = JSON.parse(this.responseText);
-					if (_obj.message)
+					if (_obj.message) {
+						$('#translateresult_id').append("<h3 id = \"not_found\" class = \"not-found\">"+_obj.message+"</h3>");
 						console.log("[translator] : " + _obj.message);
+					}
 				}
 				catch (err)
 				{					
@@ -188,7 +191,7 @@
 
 		var xhr = new XMLHttpRequest();
 		var _url = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
-		_url += "key=trnsl.1.1.20160604T115612Z.107ebb05a7757bcc.804e900f347ddfbeadd7ca5999bd5cb6ca32805b";
+		_url += "key=" + ApiKey;
 		_url += "&text=";
 		_url += _text;
 		_url += ("&lang=" + language_current);
@@ -233,6 +236,9 @@
 					return;
 				}
 				translateIter();
+				if (this.readyState == 4 && this.statusText == "Forbidden")
+					$('#translateresult_id').append("<h3 id = \"not_found\" class = \"not-found\">"+JSON.parse(this.response).message+"</h3>");
+
 			}
 			else if (this.readyState == 4)
 			{
@@ -288,6 +294,32 @@
 	window.Asc.plugin.init = function(text)
 	{
 		document.getElementById("translateresult_id").innerHTML = "";
+
+		var btn_ShowApiKey = document.getElementById("btn_showApiKey");
+		var input_ApiKey = document.getElementById("inp_ApiKey");
+		var btn_EnterApiKey = document.getElementById("btn_enterApiKey");
+		
+		btn_ShowApiKey.onclick = function () {
+			var div_ApiKey = document.getElementById("div_ApiKey");
+			if (div_ApiKey.style.display == "none") {
+				div_ApiKey.style.display = "block";
+				document.getElementById('scrollable-container-id').style.height = "calc(100% - 188px)"
+				input_ApiKey.value = ApiKey;
+			} else {
+				document.getElementById('scrollable-container-id').style.height = "calc(100% - 144px)"
+				div_ApiKey.style.display = "none";
+				input_ApiKey.value = "";
+			}
+		};
+		
+		btn_EnterApiKey.onclick = function() {
+			ApiKey = input_ApiKey.value.trim();
+			localStorage.setItem("UserApiKey_Translate", ApiKey);
+			btn_ShowApiKey.onclick();
+			if (!languages.length)
+				getLanguagesSupport();
+			translate();
+		};
 		
 		text = text.replace(/;/g, "%3B");
 
