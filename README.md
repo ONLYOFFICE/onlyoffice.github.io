@@ -55,11 +55,13 @@ Two installation ways are available:
 
 1. Find Zotero plugin in `Plugins` tab of the ONLYOFFICE Document Editor and click it.
 
-2. Follow `Zotero API settings` link from the plugin’s window.
+2. Log in to your Zotero account. 
 
-3. Log in to your Zotero account, press `Create new private key`.
+3. Follow `Zotero API settings` link from the plugin’s window. If you are logged in, you'll be able to proceed. If you are not logged in, you'll see an error message. In this case, click `Log in` (top right corner of your screen). 
 
-4. Fill in `Key Description`, make sure `Allow library access` box is checked and press `Save Key`.
+4. Press `Create new private key`.
+
+5. Fill in `Key Description`, make sure `Allow library access` box is checked and press `Save Key`.
 
 5. Copy the newly created key and paste to `API Key` field in the plugin’s interface and save it. 
 
