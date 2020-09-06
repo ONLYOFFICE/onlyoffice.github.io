@@ -39,7 +39,7 @@
 	window.Asc.plugin.ie_channel = null;
 	window.Asc.plugin.ie_channel_check = function(e) {
 		var uagent = navigator.userAgent.toLowerCase();
-		if (uagent.indexOf("msie") > -1 && uagent.indexOf("trident") > -1)
+		if (uagent.indexOf("msie") > -1 || uagent.indexOf("trident") > -1)
 		{
 			if (e.ports && e.ports[0])
 				this.ie_channel = e.ports[0];
