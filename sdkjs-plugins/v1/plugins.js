@@ -34,6 +34,17 @@
 
     window.Asc = window.Asc || {};
     window.Asc.plugin = {};
+	
+	// ie channel
+	window.Asc.plugin.ie_channel = null;
+	window.Asc.plugin.ie_channel_check = function(e) {
+		var uagent = navigator.userAgent.toLowerCase();
+		if (uagent.indexOf("msie") > -1 && uagent.indexOf("trident") > -1)
+		{
+			if (e.ports && e.ports[0])
+				this.ie_channel = e.ports[0];
+		}
+	};
 
     window.Asc.plugin.tr_init = false;
     window.Asc.plugin.tr = function(val) { return val; }
@@ -106,7 +117,7 @@
 
                 // ie11 not support message from another domain
                 window.Asc.plugin._initInternal = true;
-
+			
                 window.parent.postMessage(JSON.stringify(obj), "*");
             }
         };
@@ -141,6 +152,7 @@
 
             if (pluginData.type == "plugin_init") {
                 window.Asc.supportOrigins[event.origin] = true;
+				window.Asc.plugin.ie_channel_check(event);
                 eval(pluginData.data);
             }
         }
