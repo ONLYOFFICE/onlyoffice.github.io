@@ -176,6 +176,21 @@
 		background-color: #000000;
 		opacity: 0.2;
 	}
+	.input_error {
+		display: none;
+		float: left;
+		position: relative;
+	}
+
+	.input_error:before {
+		content: '';
+		position: absolute;
+		right: 25px;
+		top: 21px;
+		width: 16px;
+		height: 16px;
+		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACvSURBVDhPrZNRDoIwEER7COA6HgJPpAnHM4oXQdFE/VDfNrsfpQvGhkneT2dmky40rK77pq6ggx4eyhF2UGnMF4EWBvjMcIFW46nEgLcGl5BMOoSDGmR6EjZNz0GyjdbjALlfFjR5HnRajwNkSVnI5HnQaz0OkE1nIZPnwVPrxQNGrc9f4Qcnra+zxAbKP6OIg/IfyYSxhasGPcTzyyYC9pjO8IIbHGAPy4/pf4XwBSVejZ5wzd0zAAAAAElFTkSuQmCC);
+	}
 
   </style>
 </head>
@@ -205,6 +220,8 @@
 	</div>
 	<div class="divRename" id="idRename" style="display: none">
 		<input type="text" class="form-control textSelect" style="top:18px;margin: 0px;width:260px;left:20px;position:absolute;" id="rename_text" autofocus="autofocus" />
+		<div id="input_error_id" class="input_error" style="position:absolute; top:0px; right:0px; width: 0px; height: 16px; display: none;"></div>
+
 		<div class="divFooter">
 			<button class="btn-text-default primary" style="left: 75px; top: 10px; width:70px; position:absolute; bottom: 10px;" id="rename_ok">Ok</button>
 			<button class="btn-text-default" style="right: 75px; top: 10px; width:70px; position:absolute; bottom: 10px;" id="rename_cancel">Cancel</button>

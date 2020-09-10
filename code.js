@@ -220,19 +220,24 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
     function unShowRename(isOK)
     {
-        var _elem1 = document.getElementById("idRenameMask");
-        var _elem2 = document.getElementById("idRename");
-        _elem1.style.display = "none";
-        _elem2.style.display = "none";
+        var value = document.getElementById("rename_text").value;
 
-        isShowRename = false;
+        if ((isOK && value) || !isOK) {
+            var _elem1 = document.getElementById("idRenameMask");
+            var _elem2 = document.getElementById("idRename");
+            _elem1.style.display = "none";
+            _elem2.style.display = "none";
+            document.getElementById("input_error_id").style.display = "none";
+            document.getElementById("rename_text").style.borderColor = "#cfcfcf";
+            isShowRename = false;
+        }
+        
 
         if (Content.current < 0)
             return;
 
-        if (isOK)
+        if (isOK && value)
         {
-            var value = document.getElementById("rename_text").value;
 
             value = value.replace(/&/g,'&amp;');
             value = value.replace(/</g,'&lt;');
@@ -242,9 +247,12 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
             Content.macrosArray[Content.current].name = value;
             updateMenu();
+        } else if (isOK && !value) {
+            document.getElementById("input_error_id").style.display = "block";
+            document.getElementById("rename_text").style.borderColor = "#d9534f";
         }
 
-        document.getElementById("rename_text").value = "";
+        value.value = "";
     }
 
     window.onresize = function()
@@ -307,6 +315,20 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
             
             updateMenu();
             window.CustomContextMenu.init();
+        });
+
+        var _textbox = document.getElementById("rename_text");
+        // clear validation on input/paste
+        _textbox.oninput = _textbox.onpaste = function(e)
+        {
+            this.style.borderColor = "";
+            document.getElementById("input_error_id").style.display = "none";
+        };
+        // ie
+        _textbox.addEventListener("paste", function(e)
+        {
+            this.style.borderColor = "";
+            document.getElementById("input_error_id").style.display = "none";
         });
 	};
 	
