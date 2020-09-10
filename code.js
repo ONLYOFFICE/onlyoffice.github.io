@@ -37,6 +37,12 @@
 				}
 			});
 		});
+		if (isIE)
+		{
+			document.getElementById("btn_highlight").style.display ="inline";
+			document.getElementById("tabselect").style.display ="none";
+			document.getElementById("language_id").style.width ="88%";
+		}
 		$('#language_id').select2({
 			data : createLangForSelect(),
 			minimumResultsForSearch: Infinity
@@ -64,13 +70,6 @@
 		var background_color = document.getElementById("background_color");
 		var temp_code,
 			flag = false;	//flag change code (true = changed)
-
-		if (isIE)
-		{
-			document.getElementById("btn_highlight").style.display ="inline";
-			document.getElementById("tabselect").style.display ="none";
-			document.getElementById("language_id").style.flex ="0.95";
-		}
 
 		if (isDE || isFF) {
 			document.getElementById("jq_color").style.display ="inline";
