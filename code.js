@@ -364,6 +364,7 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
         document.getElementById("button_run").innerHTML = window.Asc.plugin.tr("Run");
         document.getElementById("rename_ok").innerHTML = window.Asc.plugin.tr("Ok");
         document.getElementById("rename_cancel").innerHTML = window.Asc.plugin.tr("Cancel");
+        document.getElementById("input_error_id").title = window.Asc.plugin.tr("Title");
     };
     
     // context menu
