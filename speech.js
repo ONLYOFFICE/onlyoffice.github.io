@@ -102,7 +102,7 @@
 							Run("en");
 						}
 					}
-					else if (401 == this.readyState || 404 == this.readyState || 413 == this.readyState || 422 == this.readyState || 501 == this.readyState)
+					else if ( (this.readyState == 4 && this.status == 403) || (401 == this.readyState || 404 == this.readyState || 413 == this.readyState || 422 == this.readyState || 501 == this.readyState) )
 					{
 						Run("en");
 					}
