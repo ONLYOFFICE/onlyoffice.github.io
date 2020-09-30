@@ -9,16 +9,17 @@
 		return false;
 	};
 
-	var language = hljs.listLanguages(),					//array languages
-		isInitLang = false, 								//flag init lang select
-		style_value,										//current value style
-		curLang,											//current language
-		code_field,											//field for higlight code		
-		container,											//scrollable conteiner	
-		timer,												//for timer 
-		f_Paste = false;									//flag paste 
-	const isIE = checkInternetExplorer();					//check IE
-	const isDE = (window.AscDesktopEditor) ? true : false;	//check desktope editor
+	var language = hljs.listLanguages(),											//array languages
+		isInitLang = false, 														//flag init lang select
+		style_value,																//current value style
+		curLang,																	//current language
+		code_field,																	//field for higlight code		
+		container,																	//scrollable conteiner	
+		timer,																		//for timer 
+		f_Paste = false;															//flag paste 
+	const isIE = checkInternetExplorer();											//check IE
+	const isDE = (window.AscDesktopEditor) ? true : false;							//check desktope editor
+	const isFF = (navigator.userAgent.indexOf("Firefox") > -1) ? true : false;		//check FF
 
 	var myscroll = window.Asc.ScrollableDiv;
 
@@ -29,13 +30,19 @@
 			document.getElementById("style").href = "highlight/styles/" + e.params.data.id;
 			window.Asc.plugin.loadModule("./highlight/styles/" + e.params.data.id , function(content){
 				style_value = content;
-				if (isDE) {
+				if (isDE || isFF) {
 					$("#jq_color").spectrum("set", (hexc($(container).css('backgroundColor'))));
 				} else {
 					background_color.value = hexc($(container).css('backgroundColor'));
 				}
 			});
 		});
+		if (isIE)
+		{
+			document.getElementById("btn_highlight").style.display ="inline";
+			document.getElementById("tabselect").style.display ="none";
+			document.getElementById("language_id").style.width ="88%";
+		}
 		$('#language_id').select2({
 			data : createLangForSelect(),
 			minimumResultsForSearch: Infinity
@@ -64,14 +71,7 @@
 		var temp_code,
 			flag = false;	//flag change code (true = changed)
 
-		if (isIE)
-		{
-			document.getElementById("btn_highlight").style.display ="inline";
-			document.getElementById("tabselect").style.display ="none";
-			document.getElementById("language_id").style.flex ="0.95";
-		}
-
-		if (isDE) {
+		if (isDE || isFF) {
 			document.getElementById("jq_color").style.display ="inline";
 			document.getElementById("background_color").style.display ="none";
 			initSpectrum("#FFFFFF");
@@ -84,7 +84,7 @@
 		{
 			window.Asc.plugin.loadModule("./highlight/styles/googlecode.css", function(content){
 				style_value = content;
-				if (isDE) {
+				if (isDE || isFF) {
 					$("#jq_color").spectrum("set", (hexc($(container).css('backgroundColor'))));
 				} else {
 					background_color.value = hexc($(container).css('backgroundColor'));
