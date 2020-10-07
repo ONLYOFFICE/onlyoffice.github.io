@@ -37,6 +37,8 @@
 			{
 				try
 				{
+					$('#main-search-container-id').show();
+					document.getElementById('scrollable-container-id').style.height = "calc(100% - 144px)";
 					var _obj = JSON.parse(this.responseText);
 					var _langs = _obj.langs;
 
@@ -107,6 +109,8 @@
 					var _obj = JSON.parse(this.responseText);
 					if (_obj.message) {
 						$('#translateresult_id').append("<h3 id = \"not_found\" class = \"not-found\">"+_obj.message+"</h3>");
+						$('#main-search-container-id').hide();
+						document.getElementById('scrollable-container-id').style.height = "calc(100% - 70px)";
 						console.log("[translator] : " + _obj.message);
 					}
 				}
@@ -204,6 +208,11 @@
 			{
 				try
 				{
+					if(!$('#main-search-container-id').is(':visible'))
+					{
+						$('#main-search-container-id').show();
+						document.getElementById('scrollable-container-id').style.height = "calc(100% - 144px)";
+					} 
 					if (isBreakTranslate)
 					{
 						translate();
@@ -236,8 +245,12 @@
 					return;
 				}
 				translateIter();
-				if (this.readyState == 4 && this.statusText == "Forbidden")
+				if (this.readyState == 4 && this.statusText == "Forbidden") {
 					$('#translateresult_id').append("<h3 id = \"not_found\" class = \"not-found\">"+JSON.parse(this.response).message+"</h3>");
+					$('#main-search-container-id').hide();
+					document.getElementById('scrollable-container-id').style.height = "calc(100% - 70px)";
+
+				}
 
 			}
 			else if (this.readyState == 4)
@@ -303,10 +316,20 @@
 			var div_ApiKey = document.getElementById("div_ApiKey");
 			if (div_ApiKey.style.display == "none") {
 				div_ApiKey.style.display = "block";
-				document.getElementById('scrollable-container-id').style.height = "calc(100% - 188px)"
+				if($('#main-search-container-id').is(':visible'))
+				{
+					document.getElementById('scrollable-container-id').style.height = "calc(100% - 188px)";
+				} else {
+					document.getElementById('scrollable-container-id').style.height = "calc(100% - 113px)";
+				}
 				input_ApiKey.value = ApiKey;
 			} else {
-				document.getElementById('scrollable-container-id').style.height = "calc(100% - 144px)"
+				if($('#main-search-container-id').is(':visible'))
+				{
+					document.getElementById('scrollable-container-id').style.height = "calc(100% - 144px)";
+				} else {
+					document.getElementById('scrollable-container-id').style.height = "calc(100% - 70px)";
+				}
 				div_ApiKey.style.display = "none";
 				input_ApiKey.value = "";
 			}
