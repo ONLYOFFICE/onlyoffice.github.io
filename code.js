@@ -330,6 +330,12 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
             this.style.borderColor = "";
             document.getElementById("input_error_id").style.display = "none";
         });
+        var textarea = document.getElementsByTagName("textarea");
+        if (textarea.length) {
+            textarea[0].focus();
+        } else {
+            document.getElementById("button_new").focus();
+        }
 	};
 	
 	window.Asc.plugin.button = function(id)
