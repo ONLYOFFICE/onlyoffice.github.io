@@ -4,7 +4,7 @@ Convert selected text into speech.
 
 The plugin uses Yandex.Translate to recognize the language and the [ResponsiveVoice service](https://responsivevoice.org/) to read the text out loud. By default, it uses a female voice. 
 
-The Speech plugin is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
+The Speech plugin is installed by default in cloud and [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) of ONLYOFFICE editors. 
 
 ## How to use
 
