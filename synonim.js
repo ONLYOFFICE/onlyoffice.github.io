@@ -132,14 +132,16 @@
 		}else{
 			inputSerch.value = text;
 			synonim_data = text;
-			if (null == synonim_data)
-			{
-				synonim();
-			}else if (predata == synonim_data)
+			if (predata == synonim_data)
 			{
 				return;
 			}else {
 				$('#global').empty(); // cleared global div
+				if (synonim_data == "")
+				{
+					predata = "";
+					return;
+				}
 				synonim();
 			}
 		}
