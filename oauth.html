@@ -10,7 +10,7 @@
             function parseLocation() {
                 try {
                     var matches = document.location.hash.match(new RegExp("access_token=([^&]*)&state=([^&]*)"));
-
+                    
                     if (matches && matches[1] && matches[2]) {
                         window.opener.OAuthCallback(matches[1], matches[2]);
                     } else {
