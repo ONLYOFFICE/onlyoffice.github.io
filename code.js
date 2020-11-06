@@ -97,6 +97,7 @@
         styleLang: document.getElementById("styleLang"),
 
         insertBibBtn: document.getElementById("insertBibBtn"),
+        insertLinkBtn: document.getElementById("insertLinkBtn"),
         cancelBtn: document.getElementById("cancelBtn"),
     };
 
@@ -190,6 +191,7 @@
         };
 
         elements.insertBibBtn.onclick = formatInsertBibliography;
+        elements.insertLinkBtn.onclick = formatInsertLink;
 
         selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
         docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
@@ -842,10 +844,44 @@
             showError(e);
         }
     }
+    function formatInsertLink() {
+        if (!selectedStyle) {
+            showError(getMessage("Style is not selected"));
+            return;
+        }
+        if (!selectedLocale) {
+            showError(getMessage("Language is not selected"));
+            return;
+        }
+
+        clearTimeout(repeatTimeout);
+        if (loadingStyle || loadingLocale) {
+            repeatTimeout = setTimeout(formatInsertLink, 100);
+            return;
+        }
+
+        var data = {};
+        var keys = [];
+        var keysL = [];
+        for (var item in selected.items) {
+            data[item] = convertMendeleyToCSL(selected.items[item]);
+            keys.push(item);
+            keysL.push({id:item});
+        }
+
+        try {
+            var formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return data[id]; } }, styles[selectedStyle], selectedLocale, true);
+            formatter.updateItems(keys);
+
+            insertInDocument(formatter.makeCitationCluster(keysL));
+        } catch (e) {
+            showError(e);
+        }
+    }
 
     function insertInDocument(html) {
         if (html) {
-            window.Asc.plugin.executeMethod("PasteHtml", [html.join('')]);
+            window.Asc.plugin.executeMethod("PasteHtml", [(html.join) ? html.join('') : html]);
         } else {
             showError(getMessage("Bibliography cannot be created with selected style"));
         }

@@ -15,7 +15,7 @@
         "isModal": false,
         "isInsideMode": true,
         "isUpdateOleOnResize": false,
-        "initOnSelectionChanged": true
+        "initOnSelectionChanged": false
       }
     ]
 }
