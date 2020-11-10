@@ -14,6 +14,15 @@
         }
     };
 
+    var defaultStyles = 
+    {
+        "American Medical Association 11th edition" : 1, "American Political Science Association" : 1,
+        "American Psychological Association 7th edition" : 1, "American Sociological Association 6th edition" : 1,
+        "Chicago Manual of Style 17th edition (author-date)" : 1, "Cite Them Right 10th edition - Harvard" : 1,
+        "IEEE" : 1, "Modern Humanities Research Association 3rd edition (note with bibliography)" : 1,
+        "Modern Language Association 8th edition" : 1, "Nature" : 1
+    };
+
     var locales = {};
     var styles = {};
     var selectedLocale;
@@ -93,6 +102,7 @@
 
         styleWrapper: document.getElementById("styleWrapper"),
         styleSelectList: document.getElementById("styleSelectList"),
+        styleSelectListOther: document.getElementById("styleSelectedListOther"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
 
@@ -210,20 +220,60 @@
                     }
                 }
 
+                var openOtherStyleList = function (list) {
+                    return function (ev) {
+                        elements.styleSelectListOther.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+                        ev.stopPropagation();
+                        openList(list);
+                    }
+                }
+
+                var onStyleSelectOther = function (list, other) {
+                    return function (ev) {
+                        var tmpEl = list.removeChild(list.children[list.children.length - 2]);
+                        var newEl = document.createElement("span");
+                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                        newEl.textContent = tmpEl.textContent;
+                        other.appendChild(newEl);
+                        newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                        tmpEl = other.removeChild(ev.target);
+                        newEl = document.createElement("span");
+                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                        newEl.textContent = tmpEl.textContent;
+                        list.insertBefore(newEl, list.firstElementChild);
+                        newEl.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                        var event = new Event("click");
+                        newEl.dispatchEvent(event);
+                        openList(null);
+                    }
+                }
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].dependent != 0) continue;
 
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-                    elements.styleSelectList.appendChild(el);
-                    el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                    if (defaultStyles[json[i].title] || json[i].name == lastStyle) {
+                        if (json[i].name == lastStyle)
+                            elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
+                        else
+                            elements.styleSelectList.appendChild(el);
+
+                        el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                    } else {
+                        elements.styleSelectListOther.appendChild(el);
+                        el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                    }
                     if (json[i].name == lastStyle) {
                         el.setAttribute("selected", "");
                         selectInput(elements.styleSelect, el, elements.styleSelectList);
                         found = true;
                     }
                 }
+                var other = document.createElement("span");
+                other.textContent = "More Styles...";
+                elements.styleSelectList.appendChild(other);
+                other.onclick = openOtherStyleList(elements.styleSelectListOther);
 
                 if (!found) {
                     var first = elements.styleSelectList.children[0];
@@ -236,7 +286,7 @@
         elements.styleSelect.onkeyup = function () {
             var input = elements.styleSelect;
             var filter = input.value.toLowerCase();
-            var list = elements.styleSelectList;
+            var list = (elements.styleSelectList.classList.contains(displayNoneClass)) ? elements.styleSelectListOther : elements.styleSelectList;
 
             for (var i = 0; i < list.children.length; i++) {
                 var text = list.children[i].textContent || list.children[i].innerText;
@@ -340,39 +390,46 @@
             arrow.appendChild(document.createElement("span"));
             holder.appendChild(arrow);
 
-            var list = holder.getElementsByClassName("selectList")[0];
-            if (list.children.length > 0) {
-                var def = false;
-                for (var j = 0; j < list.children.length; j++) {
-                    if (list.children[j].hasAttribute("selected")) {
-                        selectInput(input, list.children[j], list);
-                        def = true;
-                    }
+            for (var k = 0; k < holder.getElementsByClassName("selectList").length; k++) {
+                var list = holder.getElementsByClassName("selectList")[k];
+                if (list.children.length > 0) {
+                    var def = false;
+                    for (var j = 0; j < list.children.length; j++) {
+                        if (list.children[j].hasAttribute("selected")) {
+                            selectInput(input, list.children[j], list);
+                            def = true;
+                        }
 
-                    list.children[j].onclick = onClickListElement(list, input);
+                        list.children[j].onclick = onClickListElement(list, input);
+                    }
+                    if (!def) {
+                        selectInput(input, list.children[0], list);
+                    }
                 }
-                if (!def) {
-                    selectInput(input, list.children[0], list);
-                }
-            }
 
-            var f = function (list, input) {
-                return function (ev) {
-                    ev.stopPropagation();
-                    if (list.onopen) {
-                        list.onopen();
-                    }
-                    if (!input.hasAttribute("readonly")) {
-                        input.select();
-                    }
-                    openList(list);
-                    return true;
+                var f = function (list, input) {
+                    return function (ev) {
+                        ev.stopPropagation();
+                        if (!elements.styleSelectListOther.classList.contains(displayNoneClass))
+                        return true;
+
+                        if (list.onopen) {
+                            list.onopen();
+                        }
+                        if (!input.hasAttribute("readonly")) {
+                            input.select();
+                        }
+                        openList(list);
+                        return true;
+                    };
                 };
-            };
 
-            input.onclick = f(list, input);
-            arrow.onclick = f(list, input);
-            selectLists.push(list);
+                if (k !== 1) {
+                    input.onclick = f(list, input);
+                    arrow.onclick = f(list, input);
+                }
+                selectLists.push(list);
+            }
         }
 
         window.onclick = function () {
