@@ -26,13 +26,13 @@ var whiteTheme = {
     'downloadButton.fontSize': '12px',
 
     // main icons
-    'menu.normalIcon.path': 'tui/svg/icon-d.svg',
+    'menu.normalIcon.path': 'scripts/tui/svg/icon-d.svg',
     'menu.normalIcon.name': 'icon-d',
-    'menu.activeIcon.path': 'tui/svg/icon-b.svg',
+    'menu.activeIcon.path': 'scripts/tui/svg/icon-b.svg',
     'menu.activeIcon.name': 'icon-b',
-    'menu.disabledIcon.path': 'tui/svg/icon-a.svg',
+    'menu.disabledIcon.path': 'scripts/tui/svg/icon-a.svg',
     'menu.disabledIcon.name': 'icon-a',
-    'menu.hoverIcon.path': 'tui/svg/icon-c.svg',
+    'menu.hoverIcon.path': 'scripts/tui/svg/icon-c.svg',
     'menu.hoverIcon.name': 'icon-c',
     'menu.iconSize.width': '24px',
     'menu.iconSize.height': '24px',
@@ -42,9 +42,9 @@ var whiteTheme = {
     'submenu.partition.color': '#e5e5e5',
 
     // submenu icons
-    'submenu.normalIcon.path': 'tui/svg/icon-d.svg',
+    'submenu.normalIcon.path': 'scripts/tui/svg/icon-d.svg',
     'submenu.normalIcon.name': 'icon-d',
-    'submenu.activeIcon.path': 'tui/svg/icon-b.svg',
+    'submenu.activeIcon.path': 'scripts/tui/svg/icon-b.svg',
     'submenu.activeIcon.name': 'icon-b',
     'submenu.iconSize.width': '32px',
     'submenu.iconSize.height': '32px',
