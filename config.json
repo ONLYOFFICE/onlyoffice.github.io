@@ -6,7 +6,7 @@
       {
         "description": "Mendeley",
         "url": "index.html",
-        "icons": [ "src/resources/img/icon.png", "src/resources/img/icon@2x.png", "src/resources/img/icon.png", "src/resources/img/icon@2x.png" ],
+        "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
         "isViewer": false,
         "EditorsSupport": [ "word" ],
         "initDataType": "text",
