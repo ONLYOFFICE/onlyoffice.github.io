@@ -42,9 +42,10 @@
 <body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
 	<div id="google_translate_state"></div>
 	<div style="overflow: auto;">
-		<div id="google_translate_element" style="width: calc(100% - 15px);"></div>
+		<div id="google_translate_element" style="width: calc(100% - 15px); word-break: break-word;"></div>
 	</div>
 	<script>
+		var timeOut;
 		function googleTranslateElementInit() 
 		{
 			document.getElementById("google_translate_element").style.height = document.getElementById("body").clientHeight- 60 +"px";
@@ -57,6 +58,14 @@
 				disableAutoTranslation : false,
 			}, 'google_translate_state');
 		}
+		window.addEventListener('message', function (msg) {
+			if (msg.data !== "onchange_goog-te-combo") {
+				document.getElementById("google_translate_element").innerHTML = msg.data;
+			}
+			timeOut = setTimeout(function() {
+				document.getElementById("google_translate_element").style.opacity = 1;
+			}, 600);
+		});
 	</script>
 <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
 </body>

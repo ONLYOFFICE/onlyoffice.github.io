@@ -21,10 +21,17 @@
 			ifr.onload = function() {
 				if (ifr.contentWindow.document.readyState == 'complete') //чтобы текс не появлялся первее селекта с языками
 					setTimeout(function() {ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;}, 500);
-			  }
+				
+				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
+				selectElement.addEventListener('change', (event) => {
+					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
+					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
+				});
+			}
 		} else {
-			ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;
-		}		
+			ifr.contentWindow.postMessage(text, '*');
+			ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
+		}
 	};
 	
 	window.Asc.plugin.button = function(id)
