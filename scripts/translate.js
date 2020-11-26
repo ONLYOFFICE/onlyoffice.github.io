@@ -19,7 +19,7 @@
 			document.getElementById("iframe_parent").appendChild(ifr);
 			isInit = true;
 			ifr.onload = function() {
-				if (ifr.contentWindow.document.readyState == 'complete') //чтобы текс не появлялся первее селекта с языками
+				if (ifr.contentWindow.document.readyState == 'complete')
 					setTimeout(function() {ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;}, 500);
 				
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
