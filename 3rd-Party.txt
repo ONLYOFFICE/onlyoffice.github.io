@@ -1,0 +1,25 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. Highlight.js is a syntax highlighter written in JavaScript. It works in the browser as well as on the server. It works with pretty much any markup, doesn’t depend on any framework, and has automatic language detection. (https://highlightjs.org/)
+
+License:        BSD 3-Clause
+License File:   Highlight.license
+
+
+2. jQuery - Query is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development. (http://jquery.com/)
+
+License:        MIT License
+License File:   jQuery.license
+
+
+3. Select2 gives you a customizable select box with support for searching, tagging, remote data sets, infinite scrolling, and many other highly used options. (https://select2.org/)
+
+License:        MIT
+License File:   Select2.license
+
+
+4. Spectrum.js the script choice of colors. (http://bgrins.github.io/spectrum/)
+
+License:        MIT
+License File:   spectrum.license
