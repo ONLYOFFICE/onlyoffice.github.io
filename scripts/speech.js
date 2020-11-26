@@ -38,6 +38,25 @@
 			var _map   = {};
 			_map["en"] = ["gb"];
 			_map["ko"] = ["kr"];
+			_map["hy"] = ["ar"];
+			_map["uk"] = ["ru"]; //ua not supported
+			_map["zh"] = ["cn"];
+			_map["ja"] = ["jp"];
+			_map["pt-BR"] = ["br"];
+			_map["pt-Pt"] = ["pt"];
+			_map["zh-TW"] = ["tw"];
+			_map["cs"] = ["cz"];
+			_map["da"] = ["dk"];
+			_map["et"] = ["ee"];
+			_map["el"] = ["gr"];
+			_map["va"] = ["la"];
+			_map["ne"] = ["np"];
+			_map["nn"] = ["no"];
+			_map["sl"] = ["sk"];
+			_map["ta"] = ["hi"];
+			_map["ro"] = ["md"];
+			_map["sh"] = ["hr"];
+			_map["ca"] = ["catalonia"];
 			for (var i = 0; i < _langs.length; i++)
 			{
 				if (_langs[i].flag == lang)
@@ -56,7 +75,9 @@
 					}
 				}
 			}
-
+			if (!_data.length) {
+				_data.push({index : 0, gender : "f"});
+			}
 			_data.sort(function(a, b) { return a.gender.charCodeAt(0) - b.gender.charCodeAt(0) }); // family :)
 			var voiceName = "";
 			for (var j = 0; j < _data.length; j++)
@@ -80,34 +101,10 @@
 		responsiveVoice.AddEventListener("OnReady", function() {
 			setTimeout(function()
 			{
-				// detect language with yandex translate api
-				var xhr  = new XMLHttpRequest();
-				var _url = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
-				_url += "key=trnsl.1.1.20160604T115612Z.107ebb05a7757bcc.804e900f347ddfbeadd7ca5999bd5cb6ca32805b";
-				_url += "&text=";
-				_url += encodeURIComponent(text_init);
-				xhr.open('POST', _url, true);
-				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				xhr.onreadystatechange = function()
-				{
-					if (this.readyState == 4 && this.status == 200)
-					{
-						try
-						{
-							var _obj = JSON.parse(this.responseText);
-							Run(_obj.lang);
-						}
-						catch (err)
-						{
-							Run("en");
-						}
-					}
-					else if ( (this.readyState == 4 && this.status == 403) || (401 == this.readyState || 404 == this.readyState || 413 == this.readyState || 422 == this.readyState || 501 == this.readyState) )
-					{
-						Run("en");
-					}
-				};
-				xhr.send(null);
+				guessLanguage.info(text_init, function(info) {
+					//console.log('Detected Language: ' + info[2] + " [" + info[0] + "]" +"_____" +info[1]);
+					Run(info[0]);
+				});
 			}, 1);
 		});
 	};
