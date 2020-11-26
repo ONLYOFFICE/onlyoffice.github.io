@@ -8,16 +8,16 @@
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-		<script src="synonim.js"></script>
-		<link rel="stylesheet" href="plugin_style.css">
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		<script src="scripts/synonim.js"></script>
+		<link rel="stylesheet" href="resources/css/plugin_style.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	</head>
 	<body class='body'>
 		<div id="synonimresult_id" class = "input-field">
 			<input type="text" class = "input-synonim" name="q" id = "inp_search" placeholder="Search" autocomplete="off">
-			<button class = "button" id ="btn_search">Lookup</button>
-			<button class = "button" id="btn_showApiKey">ApiKey</button>
+			<button class = "button" style="max-width: 50px;" id ="btn_search">Lookup</button>
+			<button class = "button" style="max-width: 50px;" id="btn_showApiKey">ApiKey</button>
 		</div>
 		<div id="div_ApiKey" style="display: none; padding-top: 10px;">
 			<div class = "input-field">
