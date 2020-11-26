@@ -2,6 +2,8 @@
 
 Easily embed YouTube videos into your documents.
 
+The plugin uses [youtube iframe_api](https://developers.google.com/youtube/iframe_api_reference) allows to embed the YouTube video player and manage the use of JavaScript. 
+
 It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 
 ## How to use
