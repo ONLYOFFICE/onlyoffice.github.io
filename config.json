@@ -33,6 +33,38 @@
             "isUpdateOleOnResize": false,
 
             "buttons": []
+        },
+        {
+            "description": "About",
+            "descriptionLocale": {
+                "ru": "Справка",
+                "fr": "À propos",
+                "es": "Sobre programa",
+                "de": "Über"
+            },
+            "url": "index_about.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
+            "isViewer": false,
+            "EditorsSupport": [ "word" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "none",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                }
+            ],
+
+            "size": [ 400, 50 ]
         }
     ]
 }
