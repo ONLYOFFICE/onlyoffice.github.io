@@ -55,7 +55,7 @@
 			}
 		};
 		btnEnterApiKey.onclick = function() {
-			ApiKey = inputApiKey.value.trim;
+			ApiKey = inputApiKey.value.trim();
 			localStorage.setItem("UserApiKey_Thesaurus", ApiKey);
 			btnShowApiKey.onclick();
 		};
