@@ -118,11 +118,9 @@
             headerValue = headerValue.trim();
             if (!headerValue) return links;
 
-            var iterator = headerValue.matchAll(linkHeaderRegex);
-            while (true) {
-                var match = iterator.next();
-                if (match.done) break;
-                links[match.value[2]] = match.value[1];
+            var match;
+            while ((match = linkHeaderRegex.exec(headerValue)) !== null) {
+                links[match[2]] = match[1];
             }
 
             return links;
