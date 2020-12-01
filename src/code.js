@@ -149,7 +149,7 @@
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-                    elements.styleSelectList.append(el);
+                    elements.styleSelectList.appendChild(el);
                     el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
                     if (json[i].name == lastStyle) {
                         el.setAttribute("selected", "");
@@ -250,9 +250,9 @@
             var holder = input.parentElement;
             var arrow = document.createElement("span");
             arrow.classList.add("selectArrow");
-            arrow.append(document.createElement("span"));
-            arrow.append(document.createElement("span"));
-            holder.append(arrow);
+            arrow.appendChild(document.createElement("span"));
+            arrow.appendChild(document.createElement("span"));
+            holder.appendChild(arrow);
 
             var list = holder.getElementsByClassName("selectList")[0];
             if (list.children.length > 0) {
