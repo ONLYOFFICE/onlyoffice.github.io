@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>Mendeley</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="plugin_style.css">
+    <link rel="stylesheet" href="resources/css/plugin_style.css">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="mendeley-sdk/standalone.min.js"></script>
-    <script src="citeproc/citeproc_commonjs.js"></script>
+    <script src="scripts/thirdparty/fetch.umd.js"></script>
+    <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
+    <script src="scripts/thirdparty/url-polyfill.min.js"></script>
+    <script src="scripts/mendeley-sdk/standalone.min.js"></script>
+    <script src="scripts/citeproc/citeproc_commonjs.js"></script>
 </head>
 <body spellcheck="false" class="noselect">
     <div id="loader" class="cssload-container display-none">
@@ -62,6 +65,7 @@
                 <div id="controlsHolder" class="flexCol">
                     <div id="buttonsWrapper" class="flex display-none">
                         <div id="insertBibBtn" class="button control i18n">Insert Bibliography</div>
+                        <div id="insertLinkBtn" class="button control i18n">Insert Link</div>
                         <div id="cancelBtn" class="button control i18n">Cancel</div>
                     </div>
                     <div id="styleWrapper">
@@ -71,6 +75,7 @@
                                 <input id="styleSelect" class="control select text i18n" type="text" placeholder="Enter style name">
                                 <div id="styleSelectList" class="selectList display-none">
                                 </div>
+                                <div id="styleSelectedListOther" class="selectList display-none"></div>
                             </div>
                         </div>
                         <div class="label">
@@ -147,6 +152,6 @@
 
     </div>
 
-    <script src="code.js"></script>
+    <script src="scripts/code.js"></script>
 </body>
-</html>	
+</html>
