@@ -11,3 +11,5 @@ It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE
 1. Find the OCR plugin in the Plugins tab, click on it and press start.
 2. Load the image with text you want to insert into you doc.
 3. Choose the language and press Recognize. 
+
+If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
