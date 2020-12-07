@@ -2,7 +2,7 @@
 
 Translate the selected text into other languages.
 
-The plugin uses Yandex Translator API. All the languages supported by the service are supported by the ONLYOFFICE plugin.
+The plugin uses Google Translate API. All the languages supported by the service are supported by the ONLYOFFICE plugin.
 
 It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 
@@ -11,5 +11,3 @@ It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE
 1. Select text you want to translate.
 2. Open the Plugins tab and press Translator.
 3. Select the language you wan’t your text to be translated to.
-
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
