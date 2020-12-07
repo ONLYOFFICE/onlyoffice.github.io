@@ -206,8 +206,16 @@
 		/* end loader */
 	</style>
 </head>
+
+<style>
+#main-container-id {
+  height: 750px;
+  overflow-y: scroll;
+}
+</style>
+
 <body style="width: 100%;height: 100%; margin: 0;">
-    <div id="main-container-id" >
+    <div id="main-container-id" style="overflow-y: scroll">
 		<div id="correct">
 			<button onсlick="" style="width: 90%;height: 60%">Correct text</button>
 		</div>
@@ -655,26 +663,6 @@
               </div>
             </div>
           </fieldset>
-        </div>
-
-        <div id="pagination-container-id" style=" display: table; width: 100%; text-align: center; ">
-            <div id="pagination-table-container-id" style="display:table-cell; vertical-align: middle; text-align: center;  ">
-                <table style="margin:auto; display: none" id="pagination-table-id">
-                    <tr>
-                        <td style="height: auto; vertical-align: middle">
-                            <div class="pagination-button-div noselect" id="navigation-first-page-id" style="width:22px; height:22px;"><p><<</p></div>
-                            <div class="pagination-button-div noselect" id="navigation-prev-page-id" style="width:22px; height:22px;"><p><</p></div>
-                        </td>
-                        <td style="height: auto; vertical-align: middle" id="pages-cell-id">
-
-                        </td>
-                        <td style="height: auto; vertical-align: middle">
-                            <div class="pagination-button-div noselect" id="navigation-next-page-id" style="width:22px; height:22px;"><p>></p></div>
-                            <div class="pagination-button-div noselect" id="navigation-last-page-id" style="width:22px; height:22px;"><p>>></p></div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
         </div>
     </div>
 </body>
