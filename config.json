@@ -6,8 +6,7 @@
         "es": "Traductor",
         "de": "Übersetzer"
     },
-    "guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F687D}",
-    "version": "1.0",
+    "guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F6800}",
 
     "variations": [
         {
@@ -20,7 +19,7 @@
             },
             "url": "index.html",
 
-            "icons": [ "icon.png", "icon@2x.png", "icon2.png", "icon2@2x.png" ],
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
             "isViewer": true,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
