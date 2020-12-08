@@ -21,198 +21,13 @@
     		font-size: 11px
 		}
 
-		.noselect {
-			-khtml-user-select: none;
-			user-select: none;
-			-moz-user-select: none;
-			-webkit-user-select: none;
-		}
-
-        .combo {
-            background: #fff;
-            border: 1px solid #cfcfcf;
-            border-radius: 2px;
-            color: #444444;
-            font-size: 11px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            height: 22px;
-            cursor: pointer;
-            margin: 0px 0px 10px 0px;
-            box-sizing: border-box;
+		#main-container-id {
+        height: 750px;
+        overflow-y: scroll;
         }
-		.link {
-			color: #444444;
-			text-decoration: underline dotted;
-			cursor: pointer;
-		}
-        div::selection {
-            background: #a8d1ff;
-        }
-        div::-moz-selection {
-            background: #a8d1ff;
-		}
-		.input-apikey {
-			outline-color: #7d858c;
-			flex: 1;
-			height: 18px;
-			border: 1px solid #cfcfcf;
-		}
-		.input-apikey::selection {
-			background: #D8DADC; /* WebKit/Blink Browsers */
-		}
-		.input-apikey::-moz-selection {
-			background: #D8DADC; /* Gecko Browsers */
-		}
-		.input-field {
-			display: flex;
-			align-content: center;
-		}
-		.main-div {
-			width: 100%;
-			height: 100%;
-			display: none;
-			flex-wrap: wrap;
-			margin: 0;
-		}
-		/* loader */
-		.cssload-container{
-			z-index: 1;
-			display: none;
-			position: absolute;
-			top: 50%;
-			left: 37%;
-			width:97px;
-		}
-		.cssload-loading i{
-			width: 19px;
-			height: 19px;
-			display: inline-block;
-			border-radius: 50%;
-			background: rgb(68,68,68);
-		}
-		.cssload-loading i:first-child{
-			opacity: 0;
-			animation:cssload-loading-ani2 0.58s linear infinite;
-				-o-animation:cssload-loading-ani2 0.58s linear infinite;
-				-ms-animation:cssload-loading-ani2 0.58s linear infinite;
-				-webkit-animation:cssload-loading-ani2 0.58s linear infinite;
-				-moz-animation:cssload-loading-ani2 0.58s linear infinite;
-			transform:translate(-19px);
-				-o-transform:translate(-19px);
-				-ms-transform:translate(-19px);
-				-webkit-transform:translate(-19px);
-				-moz-transform:translate(-19px);
-		}
-		.cssload-loading i:nth-child(2),
-		.cssload-loading i:nth-child(3){
-			animation:cssload-loading-ani3 0.58s linear infinite;
-				-o-animation:cssload-loading-ani3 0.58s linear infinite;
-				-ms-animation:cssload-loading-ani3 0.58s linear infinite;
-				-webkit-animation:cssload-loading-ani3 0.58s linear infinite;
-				-moz-animation:cssload-loading-ani3 0.58s linear infinite;
-		}
-		.cssload-loading i:last-child{
-			animation:cssload-loading-ani1 0.58s linear infinite;
-				-o-animation:cssload-loading-ani1 0.58s linear infinite;
-				-ms-animation:cssload-loading-ani1 0.58s linear infinite;
-				-webkit-animation:cssload-loading-ani1 0.58s linear infinite;
-				-moz-animation:cssload-loading-ani1 0.58s linear infinite;
-		}
-		@keyframes cssload-loading-ani1{
-			100%{
-				transform:translate(39px);
-				opacity: 0;
-			}
-		}
-		@-o-keyframes cssload-loading-ani1{
-			100%{
-				-o-transform:translate(39px);
-				opacity: 0;
-			}
-		}
-		@-ms-keyframes cssload-loading-ani1{
-			100%{
-				-ms-transform:translate(39px);
-				opacity: 0;
-			}
-		}
-		@-webkit-keyframes cssload-loading-ani1{
-			100%{
-				-webkit-transform:translate(39px);
-				opacity: 0;
-			}
-		}
-		@-moz-keyframes cssload-loading-ani1{
-			100%{
-				-moz-transform:translate(39px);
-				opacity: 0;
-			}
-		}
-		@keyframes cssload-loading-ani2{
-			100%{
-				transform:translate(19px);
-				opacity: 1;
-			}
-		}
-		@-o-keyframes cssload-loading-ani2{
-			100%{
-				-o-transform:translate(19px);
-				opacity: 1;
-			}
-		}
-		@-ms-keyframes cssload-loading-ani2{
-			100%{
-				-ms-transform:translate(19px);
-				opacity: 1;
-			}
-		}
-		@-webkit-keyframes cssload-loading-ani2{
-			100%{
-				-webkit-transform:translate(19px);
-				opacity: 1;
-			}
-		}
-		@-moz-keyframes cssload-loading-ani2{
-			100%{
-				-moz-transform:translate(19px);
-				opacity: 1;
-			}
-		}
-		@keyframes cssload-loading-ani3{
-			100%{
-				transform:translate(19px);
-			}
-		}
-		@-o-keyframes cssload-loading-ani3{
-			100%{
-				-o-transform:translate(19px);
-			}
-		}
-		@-ms-keyframes cssload-loading-ani3{
-			100%{
-				-ms-transform:translate(19px);
-			}
-		}
-		@-webkit-keyframes cssload-loading-ani3{
-			100%{
-				-webkit-transform:translate(19px);
-			}
-		}
-		@-moz-keyframes cssload-loading-ani3{
-			100%{
-				-moz-transform:translate(19px);
-			}
-		}
-		/* end loader */
 	</style>
 </head>
 
-<style>
-#main-container-id {
-  height: 750px;
-  overflow-y: scroll;
-}
-</style>
 
 <body style="width: 100%;height: 100%; margin: 0;">
     <div id="main-container-id" style="overflow-y: scroll">
@@ -311,7 +126,7 @@
         <div class="prefs__rules">
           <fieldset class="prefs__fieldset">
             <legend class="prefs__legend button">Punctuation</legend>
-            <div class="prefs__group-rules" style="display: none;">
+            <div class="prefs__group-rules">
               <div class="prefs__rule" title="ru/punctuation/exclamation">
                 <input type="checkbox" class="prefs__rule-checkbox" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label for="setting-ru/punctuation/exclamation">!! → !<span class="prefs__rule-lang">ru</span></label>
               </div>
