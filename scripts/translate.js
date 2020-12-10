@@ -23,7 +23,7 @@
 					setTimeout(function() {ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;}, 500);
 				
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
-				selectElement.addEventListener('change', (event) => {
+				selectElement.addEventListener('change', function(event) {
 					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
 					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 				});
