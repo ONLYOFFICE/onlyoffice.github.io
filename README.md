@@ -2,7 +2,7 @@
 
 Translate the selected text into other languages.
 
-The plugin uses Yandex Translator API. All the languages supported by the service are supported by the ONLYOFFICE plugin.
+The plugin uses Google Translate API. All the languages supported by the service are supported by the ONLYOFFICE plugin.
 
 It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 
