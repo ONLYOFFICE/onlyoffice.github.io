@@ -27,6 +27,16 @@
 					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
 					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 				});
+				var btn = ifr.contentDocument.createElement("button");
+				var div = ifr.contentDocument.createElement("div");
+				div.appendChild(btn);
+				div.style = "padding-top:3px; padding-left:3px;"
+				btn.innerHTML = window.Asc.plugin.tr("Copy");
+				btn.id = "btn_copy";
+				btn.style = "font-size: 11px;"
+				btn.classList.add("skiptranslate");
+				ifr.contentDocument.getElementById("google_translate_state").style = "display:flex;"
+				setTimeout(function() {ifr.contentDocument.getElementById("google_translate_state").appendChild(div);}, 100);
 			}
 		} else {
 			ifr.contentWindow.postMessage(text, '*');
