@@ -45,6 +45,20 @@
 		.goog-te-gadget {
 			flex: 1;
 		}
+		.goog-te-combo {
+			height: 22px;
+		}
+		button {
+			color: #fff;
+			background-color: #7d858c;
+			border: 1px solid #cfcfcf;
+			border-radius: 2px;
+			outline: none;
+			font-size: 11px;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			height: 22px;
+			cursor: pointer;
+		}
 	</style>
 </head>
 <body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
@@ -72,6 +86,9 @@
 				selectText("google_translate_element");
 				}
 			}, 500);
+			if (navigator.userAgent.indexOf("Chrome") !== -1) {
+				document.getElementById(":0.targetLanguage").firstChild.style = "height:21px;"
+			}
 
 			function selectText(id) {
 				var sel, range;
