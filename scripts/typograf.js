@@ -38,69 +38,14 @@
                 allTypografedParas.push(typografedText);
             }
 
+            Asc.scope.arr = allTypografedParas;
             window.Asc.plugin.info.recalculate = true;
-            window.Asc.plugin.executeCommand("command", createScript(allTypografedParas));
+
+            window.Asc.plugin.callCommand(function() {
+                Api.ReplaceTextSmart(Asc.scope.arr);
+            });
         })
     });
-
-
-    function createScript(arrParas){
-        var sScript = '';
-
-        if(arrParas.length !== 0) {
-            switch (window.Asc.plugin.info.editorType) {
-                case 'word': {
-                    var lastParaIdx = arrParas.length - 1;
-                    sScript += 'var oDocument = Api.GetDocument();';
-                    sScript += '\nvar arrInsertResult = [];';
-                    arrParas.forEach(function(item, i, arrParas) {
-                        sScript += '\nvar oParagraph' + i + ' = Api.CreateParagraph();';
-                        sScript += '\noParagraph' + i + '.AddText("' + item + '");';
-                        sScript += '\narrInsertResult.push(oParagraph' + i + ');'
-                    })
-                    sScript += '\noDocument.InsertContent(arrInsertResult, true);';
-                    sScript += '\nif (oParagraph0.GetPrevious() !== null) { oParagraph0.GetPrevious().private_GetImpl().Concat(oParagraph0.private_GetImpl()); oParagraph0.Delete(); }';
-                    sScript += '\nif (oParagraph' + String(lastParaIdx) + '.GetNext() !== null) { oParagraph' + String(lastParaIdx) + '.private_GetImpl().Concat(oParagraph' + String(lastParaIdx) + '.GetNext().private_GetImpl()); oParagraph' + String(lastParaIdx) + '.GetNext().Delete(); }';
-
-                    //sScript += '\noDocument.Document.Remove(-1, true, false, false, false);';
-
-                    //sScript += '\noParagraph0.MoveCursorToStartPos();';
-                    //sScript += '\noParagraph0.Paragraph.ConcatBefore(oDocument.GetElement(0).Paragraph);';
-                    //sScript += '\noDocument.Document.Recalculate();';
-                    //sScript += '\noDocument.Document.Remove(-1, true, false, false, false);';
-                    break;
-                }
-                case 'slide':{
-                    sScript += 'var oPresentation = Api.GetPresentation();';
-
-                    sScript += '\nvar oSlide = oPresentation.GetCurrentSlide()';
-                    sScript += '\nif(oSlide){';
-                    sScript += '\nvar fSlideWidth = oSlide.GetWidth(), fSlideHeight = oSlide.GetHeight();';
-                    var sSrc = oElement.Src;
-                    var nEmuWidth = ((w / 96) * 914400) >> 0;
-                    var nEmuHeight = ((h / 96) * 914400) >> 0;
-                    sScript += '\n oImage = Api.CreateImage(\'' + sSrc + '\', ' + nEmuWidth + ', ' + nEmuHeight + ');';
-                    sScript += '\n oImage.SetPosition((fSlideWidth -' + nEmuWidth +  ')/2, (fSlideHeight -' + nEmuHeight +  ')/2);';
-                    sScript += '\n oSlide.AddObject(oImage);';
-                    sScript += '\n}'
-                    break;
-                }
-                case 'cell':{
-                    sScript += '\nvar oWorksheet = Api.GetActiveSheet();';
-                    sScript += '\nif(oWorksheet){';
-                    sScript += '\nvar oActiveCell = oWorksheet.GetActiveCell();';
-                    sScript += '\nvar nCol = oActiveCell.GetCol(), nRow = oActiveCell.GetRow();';
-                    var sSrc = oElement.Src;
-                    var nEmuWidth = ((w / 96) * 914400) >> 0;
-                    var nEmuHeight = ((h / 96) * 914400) >> 0;
-                    sScript += '\n oImage = oWorksheet.AddImage(\'' + sSrc + '\', ' + nEmuWidth + ', ' + nEmuHeight + ', nCol, 0, nRow, 0);';
-                    sScript += '\n}';
-                    break;
-                }
-            }
-        }
-        return sScript;
-    };
 
     window.Asc.plugin.button = function(id)
 	{
