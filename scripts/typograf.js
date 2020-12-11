@@ -31,10 +31,26 @@
             }
 
             var allParasInSelection = txt.split(/\n/);
+            var allParsedParas = [];
+
+            for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
+                if (allParasInSelection[nStr].search(/	/) === 0) {
+                    allParsedParas.push("");
+                    allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
+                }
+                var sSplited = allParasInSelection[nStr].split(/	/);
+
+                sSplited.forEach(function(item, i, sSplited) {
+                    allParsedParas.push(item);
+                });
+
+
+            }
+
             var allTypografedParas = [];
 
-            for (var Item = 0; Item < allParasInSelection.length; Item++) {
-                typografedText = tp.execute(allParasInSelection[Item]);
+            for (var Item = 0; Item < allParsedParas.length; Item++) {
+                typografedText = tp.execute(allParsedParas[Item]);
                 allTypografedParas.push(typografedText);
             }
 
