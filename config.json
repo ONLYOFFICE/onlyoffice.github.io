@@ -1,0 +1,26 @@
+{
+    "name" : "Telegram",
+    "guid" : "asc.{E5773A43-F9B3-4E81-81D9-CE0A132470E7}",
+
+    "variations" : [
+        {
+            "description" : "Telegram",
+            "url"         : "index.html",
+
+            "icons"           : ["resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png"],
+            "isViewer"        : true,
+            "EditorsSupport"  : ["word", "cell", "slide"],
+
+            "isVisual"        : true,
+            "isModal"         : false,
+            "isInsideMode"    : true,
+
+            "initDataType"    : "none",
+            "initData"        : "",
+
+            "isUpdateOleOnResize" : false,
+
+            "buttons"         : [ ]
+        }
+    ]
+}
