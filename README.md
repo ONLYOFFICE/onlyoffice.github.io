@@ -8,7 +8,7 @@ The plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/Docume
 
 ## How to use
 
-1. Open the Plugins tab and press "Get and past html".
+1. Open the Plugins tab and press "Get and paste html".
 2. Select the necessary content.
 3. In the plugin field on the left panel, you'll see the HTML code of the selected abstract.
 4. Modify the HTML code if necessary.
