@@ -18,8 +18,3 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 * Footnotes/endnotes symbols are not included in the word count (bug #47828 in the internal bug tracker)
 * Numbers from numbered lists are included in the word count (#47805)
 * Page numbers are not included (#47809)
-
-
-
-
-
