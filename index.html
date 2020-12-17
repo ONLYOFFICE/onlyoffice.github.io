@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Get and paste html</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<script src="scripts/code.js"></script>
+	<script src="vendor/codemirror/codemirror.js"></script>
+	<script src="vendor/codemirror/xml.js"></script>
+	<link rel="stylesheet" href="vendor/codemirror/codemirror.css">
+
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+		}
+		button {
+			color: #fff;
+			background-color: #7d858c;
+			border: 1px solid #cfcfcf;
+			border-radius: 2px;
+			outline: none;
+			font-size: 11px;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			height: 22px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body id="body" style="max-height: calc(100% - 15px); max-width: calc(100% - 20px);">
+	<div id="div_main" style="height: calc(100% - 50px);">
+		<!-- <textarea id="main" spellcheck="false"></textarea> -->
+		<div id="main" style="border:1px solid black; height:100%"></div>
+	</div>
+	<div style="display:flex; justify-content: center; margin: 15px;">
+		<button id="btn_paste">Paste into the document</button>
+	</div>
+</body>
+</html>

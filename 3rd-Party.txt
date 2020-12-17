@@ -1,0 +1,7 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. CodeMirror is a versatile text editor implemented in JavaScript for the browser. (https://codemirror.net/#)
+
+License:        MIT License
+License File:   codemirror.license
