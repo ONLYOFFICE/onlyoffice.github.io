@@ -22,8 +22,28 @@
 		}
 
 		#main-container-id {
-        height: 750px;
-        overflow-y: scroll;
+            height: 100%;
+            overflow-y: scroll;
+        }
+        #correct {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .input__head {
+            width: 100%;
+            text-align: center;
+        }
+        .prefs__locale {
+            font-size: 130%;
+            margin-left: 10px;
+        }
+        .prefs__set-locale {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin: right;
+        }
+        .prefs__legend {
+            font-size: 110%;
         }
 	</style>
 </head>
@@ -32,97 +52,98 @@
 <body style="width: 100%;height: 100%; margin: 0;">
     <div id="main-container-id" style="overflow-y: scroll">
 		<div id="correct">
-			<button onсlick="" style="width: 90%;height: 60%">Correct text</button>
+			<button onсlick="" style="width: 80%;height: 30px;">Correct text</button>
 		</div>
 
         <div class="input__head">
-        <span class="prefs__locale"><span data-text-id="locale">Locale</span>: <select class="prefs__set-locale" data-title-id="locale" title="Locale">
-          <option value="be" data-text-id="locale-be">
-            Belarusian
-          </option>
-          <option value="bg" data-text-id="locale-bg">
-            Bulgarian
-          </option>
-          <option value="ca" data-text-id="locale-ca">
-            Catalan
-          </option>
-          <option value="da" data-text-id="locale-da">
-            Danish
-          </option>
-          <option value="nl" data-text-id="locale-nl">
-            Dutch
-          </option>
-          <option value="en-GB" data-text-id="locale-en-GB">
-            English UK
-          </option>
-          <option value="en-US" data-text-id="locale-en-US">
-            English US
-          </option>
-          <option value="eo" data-text-id="locale-eo">
-            Esperanto
-          </option>
-          <option value="et" data-text-id="locale-et">
-            Estonian
-          </option>
-          <option value="fi" data-text-id="locale-fi">
-            Finnish
-          </option>
-          <option value="fr" data-text-id="locale-fr">
-            French
-          </option>
-          <option value="de" data-text-id="locale-de">
-            German
-          </option>
-          <option value="el" data-text-id="locale-el">
-            Greek
-          </option>
-          <option value="hu" data-text-id="locale-hu">
-            Hungarian
-          </option>
-          <option value="ga" data-text-id="locale-ga">
-            Irish
-          </option>
-          <option value="it" data-text-id="locale-it">
-            Italian
-          </option>
-          <option value="lv" data-text-id="locale-lv">
-            Latvian
-          </option>
-          <option value="no" data-text-id="locale-no">
-            Norwegian
-          </option>
-          <option value="pl" data-text-id="locale-pl">
-            Polish
-          </option>
-          <option value="ro" data-text-id="locale-ro">
-            Romanian
-          </option>
-          <option value="ru" data-text-id="locale-ru">
-            Russian
-          </option>
-          <option value="sr" data-text-id="locale-sr">
-            Serbian
-          </option>
-          <option value="sk" data-text-id="locale-sk">
-            Slovak
-          </option>
-          <option value="sl" data-text-id="locale-sl">
-            Slovenian
-          </option>
-          <option value="es" data-text-id="locale-es">
-            Spanish
-          </option>
-          <option value="sv" data-text-id="locale-sv">
-            Swedish
-          </option>
-          <option value="tr" data-text-id="locale-tr">
-            Turkish
-          </option>
-          <option value="uk" data-text-id="locale-uk">
-            Ukrainian
-          </option>
-        </select></span>
-      </div>
+            <span class="prefs__locale"><span data-text-id="locale">Locale</span>: <select class="prefs__set-locale" data-title-id="locale" title="Locale">
+                <option value="be" data-text-id="locale-be">
+                  Belarusian
+                </option>
+                <option value="bg" data-text-id="locale-bg">
+                  Bulgarian
+                </option>
+                <option value="ca" data-text-id="locale-ca">
+                  Catalan
+                </option>
+                <option value="da" data-text-id="locale-da">
+                  Danish
+                </option>
+                <option value="nl" data-text-id="locale-nl">
+                  Dutch
+                </option>
+                <option selected="selected" value="en-GB" data-text-id="locale-en-GB">
+                  English UK
+                </option>
+                <option value="en-US" data-text-id="locale-en-US">
+                  English US
+                </option>
+                <option value="eo" data-text-id="locale-eo">
+                  Esperanto
+                </option>
+                <option value="et" data-text-id="locale-et">
+                  Estonian
+                </option>
+                <option value="fi" data-text-id="locale-fi">
+                  Finnish
+                </option>
+                <option value="fr" data-text-id="locale-fr">
+                  French
+                </option>
+                <option value="de" data-text-id="locale-de">
+                  German
+                </option>
+                <option value="el" data-text-id="locale-el">
+                  Greek
+                </option>
+                <option value="hu" data-text-id="locale-hu">
+                  Hungarian
+                </option>
+                <option value="ga" data-text-id="locale-ga">
+                  Irish
+                </option>
+                <option value="it" data-text-id="locale-it">
+                  Italian
+                </option>
+                <option value="lv" data-text-id="locale-lv">
+                  Latvian
+                </option>
+                <option value="no" data-text-id="locale-no">
+                  Norwegian
+                </option>
+                <option value="pl" data-text-id="locale-pl">
+                  Polish
+                </option>
+                <option value="ro" data-text-id="locale-ro">
+                  Romanian
+                </option>
+                <option value="ru" data-text-id="locale-ru">
+                  Russian
+                </option>
+                <option value="sr" data-text-id="locale-sr">
+                  Serbian
+                </option>
+                <option value="sk" data-text-id="locale-sk">
+                  Slovak
+                </option>
+                <option value="sl" data-text-id="locale-sl">
+                  Slovenian
+                </option>
+                <option value="es" data-text-id="locale-es">
+                  Spanish
+                </option>
+                <option value="sv" data-text-id="locale-sv">
+                  Swedish
+                </option>
+                <option value="tr" data-text-id="locale-tr">
+                  Turkish
+                </option>
+                <option value="uk" data-text-id="locale-uk">
+                  Ukrainian
+                </option>
+        </select>
+            </span>
+        </div>
         <div class="prefs__rules">
           <fieldset class="prefs__fieldset">
             <legend class="prefs__legend button">Punctuation</legend>
