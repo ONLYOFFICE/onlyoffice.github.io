@@ -49,7 +49,7 @@ showLoader = function (parent, text) {
 	var loader = document.createElement('div');
 	loader.className = 'asc-plugin-loader';
 	loader.innerHTML  = '<div class="asc-loader-image"></div><div class="asc-loader-title">' + (text || 'Loading') + '</div>';
-	parent.append(loader);
+	parent.append ? parent.append(loader) : parent.appendChild(loader);
 	return loader;
 };
 // check css load
