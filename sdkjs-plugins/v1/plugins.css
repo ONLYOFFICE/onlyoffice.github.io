@@ -125,6 +125,36 @@ body {
 textarea.form-control {
     resize: none;
 }
+
+@supports(-webkit-appearance: none) or (-moz-appearance: none) {
+    input[type='checkbox'].form-control {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border: 1px solid #cfcfcf;
+        border-radius: 2px;
+        padding: 0;
+        position: relative;
+        margin: 0;
+    }
+
+    input[type='checkbox'].form-control:checked:after {
+        content: '';
+        position: absolute;
+        border: solid #444444;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        width: 3px;
+        height: 7px;
+        left: 4px;
+    }
+
+    input[type='checkbox'].form-control:disabled {
+        opacity: .5;
+    }
+}
 /* label */
 
 label.link {
@@ -155,9 +185,8 @@ label.header {
     font-size: 12px;
 }
 
-.user-comment-item .user-check {
-    width: 13px;
-    margin: 0 5px 0 0;
+.user-comment-item .form-control.user-check {
+    margin-right: 5px;
     flex-grow: 0;
     flex-shrink: 0;
 }
