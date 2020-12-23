@@ -11,6 +11,11 @@
 
 	window.Asc.plugin.init = function (text) {
 
+        $('#select_example').select2({
+			minimumResultsForSearch: Infinity,
+			width : '120px'
+		});
+
         txt = text;
     };
 
@@ -43,8 +48,6 @@
                 sSplited.forEach(function(item, i, sSplited) {
                     allParsedParas.push(item);
                 });
-
-
             }
 
             var allTypografedParas = [];
