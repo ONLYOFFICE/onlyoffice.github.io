@@ -43,8 +43,6 @@
                 sSplited.forEach(function(item, i, sSplited) {
                     allParsedParas.push(item);
                 });
-
-
             }
 
             var allTypografedParas = [];
