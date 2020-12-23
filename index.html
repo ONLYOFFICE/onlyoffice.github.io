@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<script src="scripts/typograf.js"></script>
-	<link rel="stylesheet" href="scripts/select2-4.0.6-rc.1/dist/css/select2.css"/>
-    <script src="scripts/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
     <script src="vendor/typograf/typograf.all.js"></script>
 	<style>
 		html, body {
@@ -27,6 +27,7 @@
         }
         #correct {
             margin-top: 10px;
+            margin-bottom: 10px;
             text-align: center;
         }
         .input__head {
@@ -54,7 +55,6 @@
 		<div id="correct">
 			<button onсlick="" class="btn-text-default submit primary" style="width:50%;margin-left: 10px;">Correct text</button>
 		</div>
-
         <div class="input__head">
             <span class="prefs__locale"><label class="header">Locale</label>: <select id="select_example" class="prefs__set-locale" data-title-id="locale" title="Locale">
                 <option value="be" data-text-id="locale-be">

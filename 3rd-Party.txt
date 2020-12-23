@@ -9,3 +9,8 @@ License File:   jQuery.license
 
 License:        MIT License
 License File:   Typograf.license
+
+3. Select2 gives you a customizable select box with support for searching, tagging, remote data sets, infinite scrolling, and many other highly used options. (https://select2.org/)
+
+License:        MIT
+License File:   Select2.license

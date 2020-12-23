@@ -11,6 +11,11 @@
 
 	window.Asc.plugin.init = function (text) {
 
+        $('#select_example').select2({
+			minimumResultsForSearch: Infinity,
+			width : '120px'
+		});
+
         txt = text;
     };
 
