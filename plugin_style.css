@@ -21,6 +21,12 @@
     overflow-y: hidden;
 }
 
+#errorWrapper {
+    background-color: #ffffff;
+    padding: 10px 12px;
+	color: #D9534F;
+}
+
 /* loader */
 
 .cssload-container {
