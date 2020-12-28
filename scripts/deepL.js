@@ -7,6 +7,22 @@
     var elements         = null;
     var apikey           = "";
 
+    function getMessage(key) {
+        return window.Asc.plugin.tr(key);
+    }
+
+    function showError(message) {
+        if (message) {
+            switchClass(elements.error, displayNoneClass, false);
+            elements.error.textContent = message;
+            setTimeout(function () { window.onclick = function () { showError(); }; }, 100);
+        } else {
+            switchClass(elements.error, displayNoneClass, true);
+            elements.error.textContent = "";
+            window.onclick = null;
+        }
+    }
+
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -109,7 +125,8 @@
             api_value: document.getElementById("api-value"),
             re_api: document.getElementById("re-api"),
             translator: document.getElementById("translator"),
-            select: document.getElementById("select_example")
+            select: document.getElementById("select_example"),
+            error: document.getElementById("errorWrapper")
 		};
 
         $('#select_example').on('change', function() {
@@ -121,9 +138,14 @@
 
         $('#save').on('click', function() {
             apikey = elements.api_value.value.trim();
-            switchClass(elements.api, 'display-none', true);
-            switchClass(elements.re_api, 'display-none', false);
-            switchClass(elements.translator, 'display-none', false);
+            if (apikey !== '') {
+                switchClass(elements.api, 'display-none', true);
+                switchClass(elements.re_api, 'display-none', false);
+                switchClass(elements.translator, 'display-none', false);
+            }
+            else {
+                showError(getMessage("Apikey is empty"));
+            }
         })
         $('#reconf').on('click', function() {
             apikey = '';
