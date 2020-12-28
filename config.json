@@ -1,0 +1,41 @@
+{
+    "name": "DeepL",
+    "nameLocale": {
+        "ru": "DeepL",
+        "fr": "DeepL",
+        "es": "DeepL",
+        "de": "DeepL"
+    },
+    "guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
+    "version": "1.0",
+
+    "variations": [
+        {
+            "description": "Translator",
+            "descriptionLocale": {
+                "ru": "DeepL",
+                "fr": "DeepL",
+                "es": "DeepL",
+                "de": "DeepL"
+            },
+            "url": "index.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        }
+    ]
+}
