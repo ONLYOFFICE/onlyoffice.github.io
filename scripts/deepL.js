@@ -5,6 +5,7 @@
     var displayNoneClass = "display-none";
 	var blurClass        = "blur";
     var elements         = null;
+    var apikey           = "";
 
 	function showLoader(elements, show) {
 
@@ -28,11 +29,13 @@
 
         txt = text;
 
-        var allParsedParas = SplitText(txt);
-        var sParams = CreateParams(allParsedParas);
-        var target_lang = GetTargetLang();
+        if (text !== '') {
+            var allParsedParas = SplitText(txt);
+            var sParams = CreateParams(allParsedParas);
+            var target_lang = GetTargetLang();
 
-        Translate(target_lang, sParams);
+            Translate(apikey, target_lang, sParams);
+        }
 	};
 
     function CreateParams(allParas) {
@@ -49,11 +52,11 @@
         return document.getElementsByClassName("prefs__set-locale")[0].value;
     }
 
-    function Translate(targetLanguage, sParams) {
+    function Translate(apikey, targetLanguage, sParams) {
         showLoader(elements, true);
         $.ajax({
             method: 'GET',
-            url: 'https://api.deepl.com/v2/translate?auth_key=' + sParams + '&target_lang=' + targetLanguage,
+            url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
             dataType: 'json'
         }).success(function (oResponse) {
             container = document.getElementById('display');
@@ -69,7 +72,13 @@
         }).error(function() {
             showLoader(elements, false);
             container = document.getElementById('display');
-            container.innerHTML = "Failed!";
+            if (apikey == '') {
+                container.innerHTML = "Apikey required!";
+            }
+            else {
+                container.innerHTML = "Failed!";
+            }
+
         });
     }
 
@@ -95,14 +104,32 @@
     $(document).ready(function () {
         elements = {
             loader: document.getElementById("loader-container"),
-            contentHolder: document.getElementById("display")
+            contentHolder: document.getElementById("display"),
+            api: document.getElementById("api"),
+            api_value: document.getElementById("api-value"),
+            re_api: document.getElementById("re-api"),
+            translator: document.getElementById("translator"),
+            select: document.getElementById("select_example")
 		};
 
         $('#select_example').on('change', function() {
             var allParsedParas = SplitText(txt);
             var sParams = CreateParams(allParsedParas);
             var target_lang = GetTargetLang();
-            Translate(target_lang, sParams);
+            Translate(apikey, target_lang, sParams);
+        })
+
+        $('#save').on('click', function() {
+            apikey = elements.api_value.value.trim();
+            switchClass(elements.api, 'display-none', true);
+            switchClass(elements.re_api, 'display-none', false);
+            switchClass(elements.translator, 'display-none', false);
+        })
+        $('#reconf').on('click', function() {
+            apikey = '';
+            switchClass(elements.re_api, 'display-none', true)
+            switchClass(elements.api, 'display-none', false);
+            switchClass(elements.translator, 'display-none', true);
         })
 
         setTimeout(function() {
