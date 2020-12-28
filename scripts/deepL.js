@@ -117,6 +117,32 @@
         return allParsedParas;
     }
 
+    function selectText(id) {
+        var sel, range;
+        var el = document.getElementById(id); //get element id
+        if (window.getSelection && document.createRange) { //Browser compatibility
+        sel = window.getSelection();
+        if (sel.toString() == '') { //no text selection
+            window.setTimeout(function(){
+                range = document.createRange(); //range object
+                range.selectNodeContents(el); //sets Range
+                sel.removeAllRanges(); //remove all ranges from selection
+                sel.addRange(range);//add Range to a Selection.
+                document.execCommand("copy"); //copy
+                sel.removeAllRanges(); //remove all ranges from selection
+            },1);
+        }
+        } else if (document.selection) { //older ie
+            sel = document.selection.createRange();
+            if (sel.text == '') { //no text selection
+                range = document.body.createTextRange();//Creates TextRange object
+                range.moveToElementText(el);//sets Range
+                range.select(); //make selection.
+                document.execCommand("copy"); //copy
+            }
+        }
+    }
+
     $(document).ready(function () {
         elements = {
             loader: document.getElementById("loader-container"),
@@ -128,6 +154,12 @@
             select: document.getElementById("select_example"),
             error: document.getElementById("errorWrapper")
 		};
+
+        setTimeout(function() {
+            document.getElementById("copy").onclick = function () {
+            selectText("display");
+            }
+        }, 500);
 
         $('#select_example').on('change', function() {
             var allParsedParas = SplitText(txt);
