@@ -40,7 +40,7 @@
 
             for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
                 if (allParasInSelection[nStr].search(/	/) === 0) {
-                    allParsedParas.push("");
+                    //allParsedParas.push("");
                     allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
                 }
                 var sSplited = allParasInSelection[nStr].split(/	/);
@@ -61,7 +61,17 @@
             window.Asc.plugin.info.recalculate = true;
 
             window.Asc.plugin.callCommand(function() {
-                Api.ReplaceTextSmart(Asc.scope.arr);
+                //Api.ReplaceTextSmart(Asc.scope.arr);
+                var AllParas = [];
+                var oPara    = null;
+                for (var nText = 0; nText < Asc.scope.arr.length; nText++) {
+                    if (Asc.scope.arr[nText] === "")
+                        continue;
+                    oPara = Api.CreateParagraph();
+                    oPara.AddText(Asc.scope.arr[nText]);
+                    AllParas.push(oPara);
+                }
+                Api.GetDocument().InsertContent(AllParas);
             });
         })
     });
