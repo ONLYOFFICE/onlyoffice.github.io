@@ -1,10 +1,22 @@
 {
     "name" : "Count words and characters",
+    "nameLocale": {
+        "ru": "Подсчет слов и символов",
+        "fr": "Compter les mots et les caractères",
+        "es": "Contar palabras y caracteres",
+        "de": "Wörter und Zeichen zählen"
+    },
     "guid" : "asc.{584EEEE8-DBF5-45C3-A4CA-F52177C82754}",
 
     "variations" : [
         {
             "description" : "Count words and characters",
+            "descriptionLocale": {
+                "ru": "Подсчет слов и символов",
+                "fr": "Compter les mots et les caractères",
+                "es": "Contar palabras y caracteres",
+                "de": "Wörter und Zeichen zählen"
+            },
             "url"         : "index.html",
 
             "icons"           : ["resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png"],
