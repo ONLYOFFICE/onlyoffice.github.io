@@ -8,11 +8,14 @@
     var translatedParas  = [];
     var iterationCount   = 0;
     var curIter          = 0;
+    var select           = null;
+    var selectClone      = null;
+
     var allPairs         = {
-        slv: ["hbs_BS", "hbs_HR", "hbs_SR"],
+        slv: ["hbs"],
         afr: ["nld"],
         arg: ["cat"],
-        ara: ["mlt", "mlt_translit"],
+        ara: ["mlt"],
         ast: ["spa"],
         bel: ["rus"],
         bul: ["mkd"],
@@ -21,9 +24,9 @@
         crh: ["tur"],
         cym: ["eng"],
         dan: ["nno", "nob", "swe"],
-        eng: ["epo", "spa", "glg", "cat", "cat_iec2017", "cat_valencia"],
+        eng: ["epo", "spa", "glg", "cat"],
         epo: ["eng"],
-        spa: ["cat", "cat_iec2017", "cat_valencia", "ita"],
+        spa: ["cat", "ita"],
         eus: ["eng", "spa"],
         fra: ["frp"],
         glg: ["eng", "spa", "por"],
@@ -38,12 +41,12 @@
         nld: ["afr"],
         nno: ["dan", "nno_e", "nob", "swe"],
         nno_e: ["nno"],
-        nob: ["dan", "nno", "nno_e", "swe"],
+        nob: ["dan", "nno", "swe"],
         oci: ["cat", "spa"],
         oci_aran: ["cat", "spa"],
         pol: ["szl"],
         por: ["cat", "spa", "glg"],
-        ron: ["spa", "cat", "cat_iec2017"],
+        ron: ["spa", "cat"],
         rus: ["bel", "ukr"],
         sme: ["nob"],
         swe: ["dan", "isl", "nno", "nob"],
@@ -81,7 +84,8 @@
 		});
 
         var sourceLang     = GetSourceLang();
-        HideOptions(sourceLang, allPairs[sourceLang]);
+        //HideOptions(sourceLang, allPairs[sourceLang]);
+        updateSelect(allPairs[sourceLang]);
         txt = text;
         if (txt !== '') {
             //var sourceLang = IdentifyLang(PrepareTextToSend(allParas[0]));
@@ -98,36 +102,6 @@
         }
 	};
 
-    jQuery.fn.toggleOption = function( show ) {
-        jQuery( this ).toggle( show );
-        if( show ) {
-            if( jQuery( this ).parent( 'span.toggleOption' ).length )
-                jQuery( this ).unwrap( );
-        } else {
-            if( jQuery( this ).parent( 'span.toggleOption' ).length == 0 )
-                jQuery( this ).wrap( '<span class="toggleOption" style="display: none;" />' );
-        }
-    };
-
-    function HideOptions(sSourseLang, arrLangPairs) {
-        $(function() {
-            if (!arrLangPairs) {
-                $('.target').each(function() {
-                    $(this).toggleOption(false);
-                })
-                return;
-            }
-            $('.target').each(function() {
-                if (arrLangPairs.indexOf($(this).val()) === -1)
-                    $(this).toggleOption(false);
-                else {
-                    $(this).toggleOption(true);
-                    $("option:selected", this);
-                }
-            })
-        })
-    }
-
     function PrepareTextToSend(allParas) {
         var result = [];
         var preparedTxt = ""
@@ -138,10 +112,10 @@
     };
 
     function GetSourceLang() {
-        return document.getElementsByClassName("select_example")[0].value;
+        return document.getElementById("source").value;
     };
     function GetTargetLang() {
-        return document.getElementsByClassName("select_example")[1].value;
+        return document.getElementById("target").value;
     };
 
     function IdentifyLang() {
@@ -277,6 +251,21 @@
         }
     }
 
+    function updateSelect(arrTargetLangs) {
+        // first, remove all options
+        select.find("option").remove();
+
+        var options = [];
+
+        for (var nLang = 0; nLang < arrTargetLangs.length; nLang++) {
+            options.push(selectClone.find("option[value=" + arrTargetLangs[nLang] + "]").clone()[0]);
+        }
+
+        select.append(options);
+        // update select2
+        select.trigger('change');
+    }
+
     $(document).ready(function () {
         elements = {
             loader: document.getElementById("loader-container"),
@@ -284,6 +273,11 @@
             translator: document.getElementById("translator"),
             select: document.getElementById("select_example"),
 		};
+
+        if (!select) {
+            select = $('#target');
+            selectClone = select.clone();
+        }
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
@@ -295,9 +289,9 @@
             curIter = 0;
 
             var source_lang = GetSourceLang();
-            HideOptions(source_lang, allPairs[source_lang]);
-
             var allParas = SplitText(txt);
+
+            updateSelect(allPairs[source_lang]);
 
             var target_lang = GetTargetLang();
             var txtToTranslate = PrepareTextToSend(allParas);
