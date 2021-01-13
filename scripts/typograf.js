@@ -9,6 +9,7 @@
     };
     var txt ="";
 
+
 	window.Asc.plugin.init = function (text) {
 
         $('#select_example').select2({
@@ -73,7 +74,16 @@
                 }
                 Api.GetDocument().InsertContent(AllParas);
             });
-        })
+        });
+
+        $(".prefs__legend.button").click(function() {
+            $(this).closest(".prefs__fieldset").toggleClass("prefs__fieldset_visible").find(".prefs__group-rules").slideToggle("fast");
+        });
+
+        //$("#111").click(function() {
+        //   $("#1111").slideToggle("fast");
+        //});
+
     });
 
     window.Asc.plugin.button = function(id)
