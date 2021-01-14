@@ -1,6 +1,6 @@
 ## Overview
 
-The plugin allows preparing your text for publishing by correcting the typography. It helps to automatically place non-breaking spaces, remove extra spaces, correct minor typos, insert correct quotes, replace hyphens with dashes, and much more.
+The plugin allows preparing your text for publishing by correcting typography. It helps to automatically place non-breaking spaces, remove extra spaces, correct minor typos, insert correct quotes, replace hyphens with dashes, and much more.
 
 The plugin is based on [JavaScript Typograf](https://github.com/typograf/typograf). 
 
