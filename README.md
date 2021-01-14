@@ -22,7 +22,7 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 ## Known issues
 
 * When using the plugin on a document abstract with graphic objects, those objects (images, shapes, Text Arts, tables, charts) are lost along with text they contained.
-* If you select the text inside the graphic object, the graphic object will be lost. The corrected text will be inserted into the document.
+* If you select the text inside the graphic object, the text will be removed from the object and inserted into the document in the corrected form. 
 * Graphic formulas are converted to strings.
 * Drop caps, content controls, hyperlinks, underlays, footnotes, bookmarks, caption, tables of contents are removed.
 * If at least part of the text is split into columns, then the columns will be applied to the entire document.
