@@ -10,7 +10,7 @@ Typograf is compatible with [self-hosted](https://github.com/ONLYOFFICE/Document
 
 ## How to use
 
-1. Choose the locale and the rules you want to apply to your document.
+1. Choose the locale and the rules you want to apply to your text.
 2. Select the text you want to correct.
 3. Click the Correct text button.
 
