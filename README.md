@@ -21,7 +21,7 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 ## Known issues
 
-* When using the plugin on a document abstract with graphic objects, those objects (images, shapes, Text Arts, tables, charts) are lost. If the shape or other object, contained any text, it will be inserted into the document. Chart legends, titles, etc will be lost.
+* When using the plugin on a document abstract with graphic objects, those objects (images, shapes, Text Arts, tables, charts) are lost. If the shape or other object contain any text, it will be inserted into the document. Chart legends, titles, etc will be lost.
 * Graphic formulas are converted to strings.
 * Drop caps, content controls, hyperlinks, underlays, footnotes, bookmarks, caption, tables of contents are removed.
 * If at least part of the text is split into columns, then the columns will be applied to the entire document.
