@@ -78,6 +78,7 @@
 
         $(".prefs__legend.button").click(function() {
             $(this).closest(".prefs__fieldset").toggleClass("prefs__fieldset_visible").find(".prefs__group-rules").slideToggle("fast");
+            $(this).find(".arrow").toggleClass("transform");
         });
 
         //$("#111").click(function() {
