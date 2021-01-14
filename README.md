@@ -1,6 +1,6 @@
 ## Overview
 
-The plugin allows preparing your text for publishing by correcting typography. It helps to automatically place non-breaking spaces, remove extra spaces, correct minor typos, insert correct quotes, replace hyphens with dashes, and much more.
+The Typograf plugin allows preparing your text for publishing by correcting typography. It helps automatically place non-breaking spaces, remove extra spaces, correct minor typos, insert correct quotes, replace hyphens with dashes, and much more.
 
 The plugin is based on [JavaScript Typograf](https://github.com/typograf/typograf). 
 
@@ -22,7 +22,7 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 ## Known issues
 
 * When using the plugin on a document abstract with graphic objects, those objects (images, shapes, Text Arts, tables, charts) are lost along with text they contained.
-* To correct text within a graphic object (e.g. shape), it's necessary to select the text inside the graphic object, not the whole object. 
+* If you select the text inside the graphic object, the graphic object will be lost. The corrected text will be inserted into the document.
 * Graphic formulas are converted to strings.
 * Drop caps, content controls, hyperlinks, underlays, footnotes, bookmarks, caption, tables of contents are removed.
 * If at least part of the text is split into columns, then the columns will be applied to the entire document.
