@@ -72,7 +72,11 @@
                     oPara.AddText(Asc.scope.arr[nText]);
                     AllParas.push(oPara);
                 }
-                Api.GetDocument().InsertContent(AllParas);
+                if (AllParas.length === 1)
+                    Api.GetDocument().InsertContent(AllParas, true);
+                else
+                    Api.GetDocument().InsertContent(AllParas, true);
+                    
             });
         });
 
@@ -80,11 +84,6 @@
             $(this).closest(".prefs__fieldset").toggleClass("prefs__fieldset_visible").find(".prefs__group-rules").slideToggle("fast");
             $(this).find(".arrow").toggleClass("transform");
         });
-
-        //$("#111").click(function() {
-        //   $("#1111").slideToggle("fast");
-        //});
-
     });
 
     window.Asc.plugin.button = function(id)
