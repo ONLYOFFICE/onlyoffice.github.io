@@ -9,7 +9,6 @@
     };
     var txt ="";
 
-
 	window.Asc.plugin.init = function (text) {
 
         $('#select_example').select2({
@@ -78,9 +77,26 @@
             });
         });
 
-        $(".prefs__legend.button").click(function() {
+        $(".hidden").click(function() {
+            $(this).hide();
+            $("#hide_show").find(".opened").show();
+            $(document).find("#settings").slideToggle("fast");
+        });
+        $(".opened").click(function() {
+            $(this).hide();
+            $("#hide_show").find(".hidden").show();
+            $(document).find("#settings").slideToggle("fast");
+        });
+        $(".header.button").click(function() {
             $(this).closest(".prefs__fieldset").toggleClass("prefs__fieldset_visible").find(".prefs__group-rules").slideToggle("fast");
-            $(this).find(".arrow").toggleClass("transform");
+            $(this).closest(".prefs__fieldset").find(".arrow").toggleClass("transform");
+        });
+
+        $(".prefs__all-rules").click(function() {
+            var inputMain = $(this).find(".form-control");
+            var allInputs = $(this).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
+
+            allInputs.prop("checked", $(inputMain).prop('checked'));
         });
     });
 
