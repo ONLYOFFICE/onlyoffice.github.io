@@ -21,7 +21,7 @@
 
 	$(document).ready(function () {
 
-        $("#correct").click(function() {
+        $("#correct").find(".btn-text-default").click(function() {
             var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
             var tp = new Typograf({locale: [locale]});
             var rules = document.getElementsByClassName("prefs__rule-checkbox");
