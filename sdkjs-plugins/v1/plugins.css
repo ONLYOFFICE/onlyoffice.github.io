@@ -126,6 +126,11 @@ textarea.form-control {
     resize: none;
 }
 
+input[type='checkbox'].form-control {
+    height: auto;
+    margin: 0;
+}
+
 @supports(-webkit-appearance: none) or (-moz-appearance: none) {
     input[type='checkbox'].form-control {
         -webkit-appearance: none;
