@@ -92,9 +92,10 @@
         }
         .prefs__legend {
             display: flex;
+            justify-content: start;
         }
         .arrow {
-            position: absolute;
+            float:right;
             align-self: center;
             margin-top: -4px;
         }
@@ -228,7 +229,7 @@
           </div>
             <div class="prefs__rules">
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Punctuation</label><img class="arrow" style="margin-left: 80px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Punctuation</label><img class="arrow" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/punctuation/exclamation">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label class="checkbox" for="setting-ru/punctuation/exclamation">!! → !<span class="prefs__rule-lang">ru</span></label>
@@ -260,7 +261,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Hanging punctuation</label><img class="arrow" style="margin-left: 124px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Hanging punctuation</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/optalign/comma">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/optalign/comma" data-id="ru/optalign/comma"> <label class="checkbox" for="setting-ru/optalign/comma">for comma<span class="prefs__rule-lang">ru</span></label>
@@ -274,7 +275,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Dash and hyphen</label><img class="arrow" style="margin-left: 109px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Dash and hyphen</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/dash/surname">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/surname" data-id="ru/dash/surname"> <label class="checkbox" for="setting-ru/dash/surname">Acronyms with a&nbsp;dash<span class="prefs__rule-lang">ru</span></label>
@@ -333,7 +334,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Non-breaking space</label><img class="arrow" style="margin-left: 122px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Non-breaking space</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/nbsp/initials">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/initials" data-id="ru/nbsp/initials"> <label class="checkbox" for="setting-ru/nbsp/initials">Binding of&nbsp;initials to&nbsp;the name<span class="prefs__rule-lang">ru</span></label>
@@ -413,7 +414,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Space and line ending</label><img class="arrow" style="margin-left: 132px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Space and line ending</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="common/space/insertFinalNewline">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/space/insertFinalNewline" data-id="common/space/insertFinalNewline"> <label class="checkbox" for="setting-common/space/insertFinalNewline">Insert final newline</label>
@@ -466,7 +467,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">HTML</label><img class="arrow" style="margin-left: 52px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">HTML</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="common/html/quot">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/html/quot" data-id="common/html/quot"> <label class="checkbox" for="setting-common/html/quot">&amp;⁠quot; → "</label>
@@ -495,7 +496,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Date</label><img class="arrow" style="margin-left: 46px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Date</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/date/weekday">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/date/weekday" data-id="ru/date/weekday"> <label class="checkbox" for="setting-ru/date/weekday">2 Мая, Понедельник → 2 мая, понедельник<span class="prefs__rule-lang">ru</span></label>
@@ -506,7 +507,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Money</label><img class="arrow" style="margin-left: 55px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Money</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/money/ruble">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/money/ruble" data-id="ru/money/ruble"> <label class="checkbox" for="setting-ru/money/ruble">1 руб. → 1 ₽<span class="prefs__rule-lang">ru</span></label>
@@ -517,7 +518,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Numbers and mathematical expressions</label><img class="arrow" style="margin-left: 220px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Numbers and mathematical expressions</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="common/number/mathSigns">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/number/mathSigns" data-id="common/number/mathSigns"> <label class="checkbox" for="setting-common/number/mathSigns">!= → ≠, &lt;= → ≤, &gt;= → ≥, ~= → ≅, +- → ±</label>
@@ -540,7 +541,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Symbols and signs</label><img class="arrow" style="margin-left: 115px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Symbols and signs</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="common/symbols/copy">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/symbols/copy" data-id="common/symbols/copy"> <label class="checkbox" for="setting-common/symbols/copy">(c) → ©, (tm) → ™, (r) → ®</label>
@@ -557,7 +558,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Typos</label><img class="arrow" style="margin-left: 51px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Typos</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="ru/typo/switchingKeyboardLayout">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/typo/switchingKeyboardLayout" data-id="ru/typo/switchingKeyboardLayout"> <label class="checkbox" for="setting-ru/typo/switchingKeyboardLayout">Replacement of&nbsp;Latin letters in&nbsp;Russian. Typos occur when you switch keyboard layouts<span class="prefs__rule-lang">ru</span></label>
@@ -565,7 +566,7 @@
               </div>
             </div>
             <div class="prefs__fieldset">
-              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><label class="header button">Other</label><img class="arrow" style="margin-left: 51px;" src="resources/img/faq_arrow_down.png"></div>
+              <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div><label class="header button">Other</label><img class="arrow" style="margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
               <div class="prefs__group-rules">
                 <div class="prefs__rule" title="common/other/delBOM">
                   <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/other/delBOM" data-id="common/other/delBOM"> <label class="checkbox" for="setting-common/other/delBOM">Delete character BOM (Byte Order Mark)</label>
