@@ -20,7 +20,7 @@
     };
 
 	$(document).ready(function () {
-
+        $('.prefs__rule-checkbox').wrap("<label></label>");
         $("#correct").find(".btn-text-default").click(function() {
             var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
             var tp = new Typograf({locale: [locale]});
