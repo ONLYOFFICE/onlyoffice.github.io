@@ -10,53 +10,7 @@
     var curIter          = 0;
     var select           = null;
     var selectClone      = null;
-
-    var allPairs         = {
-        slv: ["hbs"],
-        afr: ["nld"],
-        arg: ["cat"],
-        ara: ["mlt"],
-        ast: ["spa"],
-        bel: ["rus"],
-        bul: ["mkd"],
-        bre: ["fra"],
-        cat: ["fra"],
-        crh: ["tur"],
-        cym: ["eng"],
-        dan: ["nno", "nob", "swe"],
-        eng: ["epo", "spa", "glg", "cat"],
-        epo: ["eng"],
-        spa: ["cat", "ita"],
-        eus: ["eng", "spa"],
-        fra: ["frp"],
-        glg: ["eng", "spa", "por"],
-        hbs: ["eng", "slv"],
-        hin: ["urd"],
-        ind: ["zlm"],
-        isl: ["eng", "swe"],
-        ita: ["cat", "spa", "srd"],
-        kaz: ["tat"],
-        mkd: ["bul", "eng"],
-        mlt: ["ara"],
-        nld: ["afr"],
-        nno: ["dan", "nno_e", "nob", "swe"],
-        nno_e: ["nno"],
-        nob: ["dan", "nno", "swe"],
-        oci: ["cat", "spa"],
-        oci_aran: ["cat", "spa"],
-        pol: ["szl"],
-        por: ["cat", "spa", "glg"],
-        ron: ["spa", "cat"],
-        rus: ["bel", "ukr"],
-        sme: ["nob"],
-        swe: ["dan", "isl", "nno", "nob"],
-        szl: ["pol"],
-        tat: ["kaz"],
-        tur: ["crh"],
-        urd: ["hin"],
-        zlm: ["ind"],
-        frp: ["fra"]
-    };
+    var allPairs         = {};
 
     function InitializationParas(nCount) {
         for (var nPara = 0; nPara < nCount; nPara++) {
@@ -85,7 +39,7 @@
 
         var sourceLang     = GetSourceLang();
         //HideOptions(sourceLang, allPairs[sourceLang]);
-        updateSelect(allPairs[sourceLang]);
+        //updateSelect(allPairs[sourceLang]);
         txt = text;
         if (txt !== '') {
             //var sourceLang = IdentifyLang(PrepareTextToSend(allParas[0]));
@@ -160,23 +114,45 @@
                 }
             }
 
-            var object = "";
-            for (var key in allPairs) {
-                object += key + ': [';
-                for (var nLang = 0; nLang < allPairs[key].length; nLang++) {
-                    if (nLang !== allPairs[key].length - 1)
-                        object += '"' + allPairs[key][nLang] + '", ';
-                    else
-                        object += '"' + allPairs[key][nLang] + '"';
-                }
-                object += '], ';
-            }
-
+            AddLangOptions(allPairs);
         }).error(function(){
 
         });
     };
 
+    function AddLangOptions(allPairs) {
+        var sUrlRequest = 'listLanguageNames?locale=en&languages='
+        for (var sLang in allPairs) {
+            sUrlRequest += sLang + '+';
+        }
+        $.ajax({
+            method: 'GET',
+            url: 'https://cors-anywhere.herokuapp.com/https://www.apertium.org/apy/' + sUrlRequest,
+            dataType: 'json'
+        }).success(function (oResponse) {
+            var sourceLang     = GetSourceLang();
+
+            for (var sLang in oResponse) {
+                $("#source").append($("<option>", {
+                    value: sLang,
+                    text: oResponse[sLang],
+                    class: "source"
+                    }));
+                $("#target").append($("<option>", {
+                    value: sLang,
+                    text: oResponse[sLang],
+                    class: "target"
+                    }
+                ));
+            }
+            $("#source option[value=eng]").prop('selected', true);
+            select = $('#target');
+            selectClone = select.clone();
+            updateSelect(allPairs["eng"]);
+        }).error(function(){
+
+        });
+    };
     function Translate(sourceLanguage, targetLanguage, oText) {
         showLoader(elements, true);
         $.ajax({
@@ -267,17 +243,13 @@
     }
 
     $(document).ready(function () {
+        GetAllLangPairs();
         elements = {
             loader: document.getElementById("loader-container"),
             contentHolder: document.getElementById("display"),
             translator: document.getElementById("translator"),
             select: document.getElementById("select_example"),
 		};
-
-        if (!select) {
-            select = $('#target');
-            selectClone = select.clone();
-        }
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
