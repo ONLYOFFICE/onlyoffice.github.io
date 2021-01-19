@@ -11,6 +11,7 @@
     var select           = null;
     var selectClone      = null;
     var allPairs         = {};
+    var serviceUrl       = "https://cors-anywhere.herokuapp.com/https://www.apertium.org/";
 
     function InitializationParas(nCount) {
         for (var nPara = 0; nPara < nCount; nPara++) {
@@ -21,6 +22,11 @@
 
        switchClass(elements.contentHolder, blurClass, show);
        switchClass(elements.loader, displayNoneClass, !show);
+    };
+    function showLoader2(elements, show) {
+
+       switchClass(elements.contentHolder2, blurClass, show);
+       switchClass(elements.loader2, displayNoneClass, !show);
     };
 
 	function switchClass(el, className, add) {
@@ -38,9 +44,12 @@
 		});
 
         var sourceLang     = GetSourceLang();
-        //HideOptions(sourceLang, allPairs[sourceLang]);
-        //updateSelect(allPairs[sourceLang]);
         txt = text;
+
+        if (!isReadyToTranslate()) {
+            console.log('Languages not loaded!');
+            return false;
+        }
         if (txt !== '') {
             //var sourceLang = IdentifyLang(PrepareTextToSend(allParas[0]));
             curIter            = 0;
@@ -54,6 +63,7 @@
                 Translate(sourceLang, targetLang, txtToTranslate[nText]);
             }
         }
+
 	};
 
     function PrepareTextToSend(allParas) {
@@ -75,7 +85,7 @@
     function IdentifyLang() {
         $.ajax({
             method: 'GET',
-            url: 'https://cors-anywhere.herokuapp.com/https://www.apertium.org/apy/listPairs',
+            url: serviceUrl + 'apy/listPairs',
             dataType: 'json'
         }).success(function (oResponse) {
             var maxPredicVal = 0;
@@ -95,7 +105,7 @@
     function GetAllLangPairs() {
         $.ajax({
             method: 'GET',
-            url: 'https://cors-anywhere.herokuapp.com/https://www.apertium.org/apy/list?',
+            url: serviceUrl + 'apy/list?',
             dataType: 'json'
         }).success(function (oResponse) {
             var sourceLang = oResponse.responseData[0].sourceLanguage;
@@ -116,7 +126,7 @@
 
             AddLangOptions(allPairs);
         }).error(function(){
-
+            showLoader2(elements, false);
         });
     };
 
@@ -127,7 +137,7 @@
         }
         $.ajax({
             method: 'GET',
-            url: 'https://cors-anywhere.herokuapp.com/https://www.apertium.org/apy/' + sUrlRequest,
+            url: serviceUrl + 'apy/' + sUrlRequest,
             dataType: 'json'
         }).success(function (oResponse) {
             var sourceLang     = GetSourceLang();
@@ -149,15 +159,16 @@
             select = $('#target');
             selectClone = select.clone();
             updateSelect(allPairs["eng"]);
+            showLoader2(elements, false);
         }).error(function(){
-
+            showLoader2(elements, false);
         });
     };
     function Translate(sourceLanguage, targetLanguage, oText) {
         showLoader(elements, true);
         $.ajax({
             method: 'GET',
-            url: 'https://cors-anywhere.herokuapp.com/https://www.apertium.org/apy/translate?markUnknown=no&langpair=' + sourceLanguage + '|' + targetLanguage + '&q=' + oText.Text,
+            url: serviceUrl + 'apy/translate?markUnknown=no&langpair=' + sourceLanguage + '|' + targetLanguage + '&q=' + oText.Text,
             dataType: 'json'
         }).success(function (oResponse) {
             translatedParas[oText.Index] = oResponse.responseData.translatedText;
@@ -242,14 +253,23 @@
         select.trigger('change');
     }
 
+    function isReadyToTranslate() {
+        if ($('#source').val() == null)
+            return false;
+        return true;
+    }
     $(document).ready(function () {
-        GetAllLangPairs();
         elements = {
             loader: document.getElementById("loader-container"),
+            loader2: document.getElementById("loader-container2"),
             contentHolder: document.getElementById("display"),
+            contentHolder2: document.getElementById("main_panel"),
             translator: document.getElementById("translator"),
             select: document.getElementById("select_example"),
 		};
+
+        showLoader2(elements, true);
+        GetAllLangPairs();
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
@@ -270,6 +290,8 @@
             iterationCount = txtToTranslate.length - 1;
 
             for (var nText = 0; nText < txtToTranslate.length; nText++) {
+                if (txtToTranslate[nText].Text === "")
+                    continue;
                 Translate(source_lang, target_lang, txtToTranslate[nText]);
             }
         })
