@@ -1,3 +1,5 @@
+var Ps;
+var container;
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -13,9 +15,10 @@
 
         $('#select_example').select2({
 			minimumResultsForSearch: Infinity,
-			width : '120px'
+			width : '120px',
 		});
 
+		Ps = new PerfectScrollbar("#scrollable-container", {suppressScrollX: true});
         txt = text;
     };
 
@@ -82,15 +85,21 @@
             $(this).hide();
             $("#hide_show").find(".opened").show();
             $(document).find("#settings").slideToggle("fast");
+            updateScroll();
+            updateScroll();
         });
         $(".opened").click(function() {
             $(this).hide();
             $("#hide_show").find(".hidden").show();
             $(document).find("#settings").slideToggle("fast");
+            updateScroll();
+            updateScroll();
         });
-        $(".header.button").click(function() {
+        $(".button").click(function() {
             $(this).closest(".prefs__fieldset").toggleClass("prefs__fieldset_visible").find(".prefs__group-rules").slideToggle("fast");
             $(this).closest(".prefs__fieldset").find(".arrow").toggleClass("transform");
+            updateScroll();
+            updateScroll();
         });
 
         $(".prefs__all-rules").click(function() {
@@ -98,8 +107,15 @@
             var allInputs = $(this).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
 
             allInputs.prop("checked", $(inputMain).prop('checked'));
+            updateScroll();
+            updateScroll();
         });
     });
+
+    function updateScroll()
+	{
+		Ps && Ps.update();
+	};
 
     window.Asc.plugin.button = function(id)
 	{
