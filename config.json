@@ -7,6 +7,7 @@
         "de": "Übersetzer"
     },
     "guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F6800}",
+    "version": "1.0",
 
     "variations": [
         {
@@ -19,7 +20,7 @@
             },
             "url": "index.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
             "isViewer": true,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
