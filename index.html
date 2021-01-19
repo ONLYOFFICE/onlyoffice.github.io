@@ -55,7 +55,8 @@
 		}
         .select_example {
         	margin-top: 5px;
-        	width: 350px;
+        	width:85%;
+
         }
 	</style>
 
@@ -70,21 +71,31 @@
 				Loading...
 			</div>
     	</div>
-		<div class="input__head">
-			<span class="prefs__locale_source"><label class="header" style="margin-left: 5px;">Source: </label><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+		<div id="loader-container2" class="asc-plugin-loader display-none">
+			<div class="asc-loader-image">
+				<div class="asc-loader-title"></div>
+			</div>
+			<div class="asc-loader-title">
+				Loading languages...
+			</div>
+    	</div>
+		<div id="main_panel">
+			<div class="input__head">
+				<span class="prefs__locale_source"><label class="header" style="margin-left: 5px;">Source: </label><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 
-			</select>
-			</span>
-			<br>
-			<br>
-			<span class="prefs__locale_target"><label class="header" style="margin-left: 6px; margin-right: 5px;">Target: </label><select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+				</select>
+				</span>
+				<br>
+				<br>
+				<span class="prefs__locale_target"><label class="header" style="margin-left: 6px; margin-right: 5px;">Target: </label><select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 
-			</select>
-			</span>
-		</div>
-		<div>
-			<button onсlick="" id="copy" class="btn-text-default submit primary">Copy</button>
-			<button onсlick="" id="paste" class="btn-text-default submit primary">Paste</button>
+				</select>
+				</span>
+			</div>
+			<div>
+				<button onсlick="" id="copy" class="btn-text-default submit primary">Copy</button>
+				<button onсlick="" id="paste" class="btn-text-default submit primary">Paste</button>
+			</div>
 		</div>
 		<div class="separator horizontal" style="margin: 5px 0;"></div>
 		<div id="display"></div>
