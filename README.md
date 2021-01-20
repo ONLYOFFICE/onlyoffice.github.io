@@ -33,6 +33,7 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 * Headers and footers remain unchanged if the entire document is selected.
 * If header/footer content is selected, graphic objects it contained are lost.
 * Line numbering is saved if it is applied to the entire document. If it was applied to a section, then it will be lost along with the section.
+* When two or more paragraphs have been selected, an empty paragraph will be added after the corrected text.
 
 ## User feedback and support
 
