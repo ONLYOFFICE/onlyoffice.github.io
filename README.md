@@ -11,3 +11,8 @@ The plugin uses [Apertium](https://www.apertium.org/) - A free/open-source machi
 1. Select text you want to translate.
 2. Open the Plugins tab and press Translator.
 3. Select the language you wan’t your text to be translated to.
+
+## Using your service
+
+You can send translation requests to your service. To do this, you need to change the url
+address of the **serviceUrl** variable in the **./scripts/apertium.js»** file.
