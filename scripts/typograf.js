@@ -19,7 +19,7 @@ var Ps;
 			width : '120px',
 		});
 
-		Ps = new PerfectScrollbar("#scrollable-container", {suppressScrollX: true});
+		Ps = new PerfectScrollbar("#settings", {suppressScrollX: true});
 
 	    $('.prefs__rule').removeAttr('title');
         $('.prefs__rule-checkbox').wrap("<label></label>");
