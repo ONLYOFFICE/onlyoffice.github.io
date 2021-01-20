@@ -58,13 +58,19 @@
             var targetLang     = GetTargetLang();
             var allParas       = SplitText(txt);
             var txtToTranslate = PrepareTextToSend(allParas);
-            iterationCount     = txtToTranslate.length - 1;
+            iterationCount     = 0;
+            for (var nText = 0; nText < txtToTranslate.length; nText++) {
+                if (txtToTranslate[nText].Text === "")
+                    continue;
+                iterationCount++;
+            }
             InitializationParas(iterationCount);
             for (var nText = 0; nText < txtToTranslate.length; nText++) {
+                if (txtToTranslate[nText].Text === "")
+                    continue;
                 Translate(sourceLang, targetLang, txtToTranslate[nText]);
             }
         }
-
 	};
 
     function PrepareTextToSend(allParas) {
@@ -165,6 +171,7 @@
             showLoader2(elements, false);
         });
     };
+
     function Translate(sourceLanguage, targetLanguage, oText) {
         showLoader(elements, true);
         $.ajax({
@@ -174,6 +181,7 @@
         }).success(function (oResponse) {
             translatedParas[oText.Index] = oResponse.responseData.translatedText;
 
+            curIter++;
             if (curIter === iterationCount) {
                 container = document.getElementById('display');
                 container.innerHTML = "";
@@ -184,14 +192,11 @@
 
                 showLoader(elements, false);
             }
-
-            curIter++;
         }).error(function() {
             showLoader(elements, false);
             container = document.getElementById('display');
             container.innerHTML = "Failed!"
         });
-
     };
 
     function SplitText(sText) {
@@ -288,7 +293,12 @@
 
             var target_lang = GetTargetLang();
             var txtToTranslate = PrepareTextToSend(allParas);
-            iterationCount = txtToTranslate.length - 1;
+            iterationCount = 0;
+            for (var nText = 0; nText < txtToTranslate.length; nText++) {
+                if (txtToTranslate[nText].Text === "")
+                    continue;
+                iterationCount++;
+            }
 
             for (var nText = 0; nText < txtToTranslate.length; nText++) {
                 if (txtToTranslate[nText].Text === "")
