@@ -11,7 +11,8 @@
     var select           = null;
     var selectClone      = null;
     var allPairs         = {};
-    var serviceUrl       = "https://cors-anywhere.herokuapp.com/https://www.apertium.org/";
+
+    var serviceUrl       = "https://www.apertium.org/"; //paste your service's url address here
 
     function InitializationParas(nCount) {
         for (var nPara = 0; nPara < nCount; nPara++) {
