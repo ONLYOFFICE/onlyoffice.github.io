@@ -1,0 +1,41 @@
+{
+    "name": "Apertium",
+    "nameLocale": {
+        "ru": "Apertium",
+        "fr": "Apertium",
+        "es": "Apertium",
+        "de": "Apertium"
+    },
+    "guid": "asc.{9b224050-2354-4c1b-822b-03a97f61c79d}",
+    "version": "1.0",
+
+    "variations": [
+        {
+            "description": "Translator",
+            "descriptionLocale": {
+                "ru": "Apertium",
+                "fr": "Apertium",
+                "es": "Apertium",
+                "de": "Apertium"
+            },
+            "url": "index.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        }
+    ]
+}
