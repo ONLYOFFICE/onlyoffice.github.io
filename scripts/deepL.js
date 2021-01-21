@@ -189,9 +189,7 @@
         setTimeout(function() {
             $('#paste').click(function () {
                 Asc.scope.arr = translatedText;
-                window.Asc.plugin.callCommand(function() {
-                    Api.ReplaceTextSmart(Asc.scope.arr);
-                });
+                window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
             })
         });
     })
