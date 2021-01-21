@@ -250,7 +250,7 @@
 
     $(document).ready(function () {
         $('.select_example').select2({
-			minimumResultsForSearch: Infinity,
+			minimumResultsForSearch: Infinity
 		});
         elements = {
             loader: document.getElementById("loader-container"),
@@ -315,6 +315,10 @@
 		evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0,
 			false, false, false, false, 0, null);
 
+        $('.select_example').select2({
+			minimumResultsForSearch: Infinity,
+			width: "calc(100% - 67px)"
+		});
 		document.dispatchEvent(evt);
 	};
 
