@@ -311,7 +311,19 @@
             $('#paste').click(function () {
                 Asc.scope.arr = translatedParas;
                 window.Asc.plugin.callCommand(function() {
-                    Api.ReplaceTextSmart(Asc.scope.arr);
+                    var AllParas = [];
+                    var oPara    = null;
+                    for (var nText = 0; nText < Asc.scope.arr.length; nText++) {
+                        if (Asc.scope.arr[nText] === "")
+                            continue;
+                        oPara = Api.CreateParagraph();
+                        oPara.AddText(Asc.scope.arr[nText]);
+                        AllParas.push(oPara);
+                    }
+                    if (AllParas.length === 1)
+                        Api.GetDocument().InsertContent(AllParas, true);
+                    else
+                        Api.GetDocument().InsertContent(AllParas, true);
                 });
             })
         });
