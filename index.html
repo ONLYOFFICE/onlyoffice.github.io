@@ -18,8 +18,8 @@
 			height: 100%;
 			overflow-y: hidden;
 			overflow-x: hidden;
-			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    		font-size: 11px
+			font-family: "Arial"
+    		font-size: 11px;
 		}
 
 		#main-container-id {
@@ -28,35 +28,51 @@
         }
 
         #copy {
-        	width:35%;
-        	margin-left: 5%;
-        	margin-top: 10px;
+        	width:40%;
+        	margin-left: 12px;
+        	margin-top: 16px;
         	margin-right: 5%;
+        	text-align: center;
         }
 		#paste {
-			width:35%;
 			float: right;
-        	margin-right: 5%;
-        	margin-top: 10px;
+			width:40%;
+        	margin-right: 12px;
+        	margin-top: 16px;
         	margin-left: 5%;
+        	text-align: center;
         }
         #display {
         	width:100%;
         	height: 100%;
-        	margin-left: 2%;
-        	font-size: 150%;
+        	margin-left: 12px;
+        	font-size: 13px;
         }
 
 		.input__head {
-			margin-top: 5px;
+			margin-top: 16px;
+			width: 100%;
 		}
 		.header {
 			margin-right: 2px;
-		}
-        .select_example {
-        	margin-top: 5px;
-        	width:85%;
+			font-weight: normal !important;
 
+		}
+        #source {
+        	margin-top: 5px;
+        	width: calc(100% - 67px);
+        }
+        #target {
+        	float:right;
+        	margin-top: 5px;
+        	width: calc(100% - 67px);
+        }
+        .select2-results__options {
+            font-size: 11px !important;
+        }
+        .select2-selection__rendered {
+            font-size: 11px !important;
+            margin-top: -1px;
         }
 	</style>
 
@@ -81,23 +97,19 @@
     	</div>
 		<div id="main_panel">
 			<div class="input__head">
-				<span class="prefs__locale_source"><label class="header" style="margin-left: 5px;">Source: </label><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
-
+				<span class="prefs__locale_source"><label class="header" style="margin-left: 12px; margin-right: 7px;">Source</label><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 				</select>
 				</span>
 				<br>
 				<br>
-				<span class="prefs__locale_target"><label class="header" style="margin-left: 6px; margin-right: 5px;">Target: </label><select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
-
+				<span class="prefs__locale_target"><label class="header" style="margin-left: 12px; margin-right: 11px;">Target</label><select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 				</select>
 				</span>
 			</div>
-			<div>
-				<button onсlick="" id="copy" class="btn-text-default submit primary">Copy</button>
-				<button onсlick="" id="paste" class="btn-text-default submit primary">Paste</button>
-			</div>
+			<button onсlick="" id="copy" class="btn-text-default">Copy</button>
+			<button onсlick="" id="paste" class="btn-text-default">Paste</button>
 		</div>
-		<div class="separator horizontal" style="margin: 5px 0;"></div>
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
 		<div id="display"></div>
 	</div>
 </body>
