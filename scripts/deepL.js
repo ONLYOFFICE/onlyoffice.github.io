@@ -169,6 +169,10 @@
         })
 
         $('#save').on('click', function() {
+            $('#select_example').select2({
+                minimumResultsForSearch: Infinity,
+                width: "calc(100% - 24px)"
+		    });
             apikey = elements.api_value.value.trim();
             if (apikey !== '') {
                 switchClass(elements.api, 'display-none', true);
@@ -206,6 +210,10 @@
 			false, false, false, false, 0, null);
 
 		document.dispatchEvent(evt);
+		$('#select_example').select2({
+            minimumResultsForSearch: Infinity,
+            width: "calc(100% - 24px)"
+        });
 	};
 
 })(window, undefined);

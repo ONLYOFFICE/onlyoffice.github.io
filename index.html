@@ -18,8 +18,8 @@
 			height: 100%;
 			overflow-y: hidden;
 			overflow-x: hidden;
-			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    		font-size: 11px
+			font-family: "Arial";
+    		font-size: 11px;
 		}
 
 		#main-container{
@@ -29,54 +29,45 @@
             overflow: hidden;
         }
         #select_example {
-        	width: 90%;
+        	width: calc(100% - 24px);
         }
         #save {
         	width: 95%;
         	margin-left: 2.5%;
         }
         #reconf {
-        	width: 95%;
-        	margin-left: 2.5%;
-        	margin-top: 5px;
+        	width: calc(100% - 24px);
+        	margin-left: 12px;
+        	margin-right: 12px;
+        	margin-top: 16px;
         }
-        #copy {
-        	width:35%;
-        	margin-left: 5%;
-        	margin-top: 10px;
-        	margin-right: 5%;
+         #copy {
+        	width:40%;
+        	margin-left: 12px;
+        	margin-top: 23px;
+        	text-align: center;
         }
 		#paste {
-			width:35%;
 			float: right;
-        	margin-right: 5%;
-        	margin-top: 10px;
-        	margin-left: 5%;
+			width:40%;
+        	margin-right: 12px;
+        	margin-top: 23px;
+        	text-align: center;
         }
         #display {
         	width:100%;
         	height: 100%;
-        	margin-left: 2%;
-        	font-size: 150%;
+        	margin-left: 12px;
+        	font-size: 13px;
         }
         .input__head {
             width: 100%;
             text-align: center;
             margin-top: 10px;
         }
-        .prefs__locale {
-            font-size: 130%;
-            margin-left: 10px;
-        }
-        .prefs__set-locale {
-            margin-bottom: 10px;
-            margin: right;
-        }
-        .prefs__legend {
-            font-size: 110%;
-        }
+
         .header {
-        	margin-top: 50px;
+        	font-weight: normal !important;
         }
 
 
@@ -94,16 +85,15 @@
 	<div id="main-container" style="width:100%; height:100%;margin:0;padding:0">
 		<div id="errorWrapper" class="errorMsg display-none"></div>
 		<div id="api">
-			<input type="text" id="api-value" class="form-control" placeholder="Apikey" style="width: 95%;margin-bottom: 2px; margin-top: 2px; margin-left: 2.5%; text-align: center">
-			<button onсlick="" id="save" class="btn-text-default submit primary">Save</button>
+			<input type="text" id="api-value" class="form-control" placeholder="Apikey" style="width: 95%;margin-bottom: 12px; margin-top: 16px; margin-left: 2.5%; text-align: center">
+			<button onсlick="" id="save" class="btn-text-default">Save</button>
 		</div>
 		<div id="re-api" class="display-none">
-			<button onсlick="" id="reconf" class="btn-text-default submit primary">Reconfigure</button>
+			<button onсlick="" id="reconf" class="btn-text-default">Reconfigure</button>
 		</div>
-		<div class="separator horizontal" style="margin: 5px 0;"></div>
 		<div id="translator" class="display-none">
 			<div class="input__head">
-				<span class="prefs__locale"><label class="header"></label><select id="select_example" class="prefs__set-locale" data-title-id="locale" title="Locale">
+				<span class="prefs__locale"><label class="header" style="margin: 0 11px 5px 12px;">Target language</label><select id="select_example" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 					<option value="DE" data-text-id="locale-de">
 					  German
 					</option>
@@ -147,12 +137,12 @@
 				</span>
 			</div>
 			<div>
-				<button onсlick="" id="copy" class="btn-text-default submit primary">Copy</button>
-				<button onсlick="" id="paste" class="btn-text-default submit primary">Paste</button>
+				<button onсlick="" id="copy" class="btn-text-default">Copy</button>
+				<button onсlick="" id="paste" class="btn-text-default">Paste</button>
 			</div>
 		</div>
 
-		<div class="separator horizontal" style="margin: 5px 0;"></div>
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
 		<div id="display">
 		</div>
 	</div>
