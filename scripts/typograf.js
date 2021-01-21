@@ -92,22 +92,17 @@ var Ps;
         Asc.scope.arr = allTypografedParas;
         window.Asc.plugin.info.recalculate = true;
 
-        window.Asc.plugin.callCommand(function() {
-            var AllParas = [];
-            var oPara    = null;
-            for (var nText = 0; nText < Asc.scope.arr.length; nText++) {
-                if (Asc.scope.arr[nText] === "")
-                    continue;
-                oPara = Api.CreateParagraph();
-                oPara.AddText(Asc.scope.arr[nText]);
-                AllParas.push(oPara);
-            }
-            if (AllParas.length === 1)
-                Api.GetDocument().InsertContent(AllParas, true);
-            else
-                Api.GetDocument().InsertContent(AllParas, true);
+        var strResult = "";
 
-        });
+        for (var Item = 0; Item < allTypografedParas.length; Item++) {
+            if (allTypografedParas[Item] === "")
+                continue;
+            if (Item < allTypografedParas.length - 1)
+                strResult += allTypografedParas[Item] + '\n';
+            else
+                strResult += allTypografedParas[Item];
+        }
+        window.Asc.plugin.executeMethod("PasteText", [strResult]);
     }
 
     function updateScroll()

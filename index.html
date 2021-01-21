@@ -115,7 +115,7 @@
         }
         .opened {
             cursor:pointer;
-            border-bottom: 1px solid #444444;
+            border-bottom: 1px dashed #444444;
         }
         .hidden {
             cursor:pointer;
@@ -126,6 +126,14 @@
         }
         .cursor_pointer {
             cursor:pointer;
+        }
+
+        .select2-results__options {
+            font-size: 11px !important;
+        }
+        .select2-selection__rendered {
+            font-size: 11px !important;
+            margin-top: -1px;
         }
 
 	</style>
@@ -235,7 +243,7 @@
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox"></label><div class="button"><label class="header cursor_pointer">Punctuation</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
                     <div class="prefs__rule" title="ru/punctuation/exclamation">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label class="checkbox" for="setting-ru/punctuation/exclamation">!! → !<span class="prefs__rule-lang">ru</span></label>
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label class="checkbox" >!! → !<span class="prefs__rule-lang">ru</span></label>
                     </div>
                     <div class="prefs__rule" title="ru/punctuation/exclamationQuestion">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamationQuestion" data-id="ru/punctuation/exclamationQuestion"> <label class="checkbox" for="setting-ru/punctuation/exclamationQuestion">!? → ?!<span class="prefs__rule-lang">ru</span></label>
