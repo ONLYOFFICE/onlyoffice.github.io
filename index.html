@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>typograf</title>
+	<link rel="stylesheet" href="plugin_style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+    <script src="scripts/deepL.js"></script>
+
+	<style>
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			overflow-y: hidden;
+			overflow-x: hidden;
+			font-family: "Arial";
+    		font-size: 11px;
+		}
+
+		#main-container{
+            background-color: rgb(244, 244, 244);
+            height: 100%;
+
+            overflow: hidden;
+        }
+        #select_example {
+        	width: calc(100% - 24px);
+        }
+        #save {
+        	width: 95%;
+        	margin-left: 2.5%;
+        }
+        #reconf {
+        	width: calc(100% - 24px);
+        	margin-left: 12px;
+        	margin-right: 12px;
+        	margin-top: 16px;
+        }
+         #copy {
+        	width:40%;
+        	margin-left: 12px;
+        	margin-top: 23px;
+        	text-align: center;
+        }
+		#paste {
+			float: right;
+			width:40%;
+        	margin-right: 12px;
+        	margin-top: 23px;
+        	text-align: center;
+        }
+        #display {
+        	width:100%;
+        	height: 100%;
+        	margin-left: 12px;
+        	font-size: 13px;
+        }
+        .input__head {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .header {
+        	font-weight: normal !important;
+        }
+
+
+	</style>
+</head>
+<body id="body" style="width: 100%;height: 100%; margin: 0;">
+	<div id="loader-container" class="asc-plugin-loader display-none">
+			<div class="asc-loader-image">
+				<div class="asc-loader-title"></div>
+			</div>
+			<div class="asc-loader-title">
+				Loading...
+			</div>
+    </div>
+	<div id="main-container" style="width:100%; height:100%;margin:0;padding:0">
+		<div id="errorWrapper" class="errorMsg display-none"></div>
+		<div id="api">
+			<input type="text" id="api-value" class="form-control" placeholder="Apikey" style="width: 95%;margin-bottom: 12px; margin-top: 16px; margin-left: 2.5%; text-align: center">
+			<button onсlick="" id="save" class="btn-text-default">Save</button>
+		</div>
+		<div id="re-api" class="display-none">
+			<button onсlick="" id="reconf" class="btn-text-default">Reconfigure</button>
+		</div>
+		<div id="translator" class="display-none">
+			<div class="input__head">
+				<span class="prefs__locale"><label class="header" style="margin: 0 11px 5px 12px;">Target language</label><select id="select_example" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+					<option value="DE" data-text-id="locale-de">
+					  German
+					</option>
+					<option selected="selected" value="EN-GB" data-text-id="locale-en-GB">
+					  English-GB
+					</option>
+					<option value="EN-US" data-text-id="locale-en-US">
+					  English-US
+					</option>
+					<option value="FR" data-text-id="locale-fr">
+					  French
+					</option>
+					<option value="IT" data-text-id="locale-it">
+					  Italian
+					</option>
+					<option value="JA" data-text-id="locale-ja">
+					  Japanese
+					</option>
+					<option value="ES" data-text-id="locale-es">
+					  Spanish
+					</option>
+					<option value="NL" data-text-id="locale-nl">
+					  Dutch
+					</option>
+					<option value="PL" data-text-id="locale-pl">
+					  Polish
+					</option>
+					<option value="PT-PT" data-text-id="locale-pt-PT">
+					  Portuguese PT
+					</option>
+					<option value="PT-BR" data-text-id="locale-pt-BR">
+					  Portuguese PT
+					</option>
+					<option value="RU" data-text-id="locale-ru">
+					  Russian
+					</option>
+					<option value="ZH" data-text-id="locale-zh">
+					  Chinese
+					</option>
+				</select>
+				</span>
+			</div>
+			<div>
+				<button onсlick="" id="copy" class="btn-text-default">Copy</button>
+				<button onсlick="" id="paste" class="btn-text-default">Paste</button>
+			</div>
+		</div>
+
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
+		<div id="display">
+		</div>
+	</div>
+</body>
+</html>
