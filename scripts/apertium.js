@@ -15,6 +15,7 @@
     var serviceUrl       = "https://www.apertium.org/"; //paste your service's url address here
 
     function InitializationParas(nCount) {
+        translatedParas = [];
         for (var nPara = 0; nPara < nCount; nPara++) {
             translatedParas.push("");
         }
@@ -29,7 +30,6 @@
        switchClass(elements.contentHolder2, blurClass, show);
        switchClass(elements.loader2, displayNoneClass, !show);
     };
-
 	function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
@@ -40,37 +40,12 @@
 
 	window.Asc.plugin.init = function(text)
 	{
-        $('.select_example').select2({
-			minimumResultsForSearch: Infinity,
-		});
-
-        var sourceLang     = GetSourceLang();
-        txt = text;
-
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
             return false;
         }
-        if (txt !== '') {
-            //var sourceLang = IdentifyLang(PrepareTextToSend(allParas[0]));
-            curIter            = 0;
-            translatedParas    = [];
-            var targetLang     = GetTargetLang();
-            var allParas       = SplitText(txt);
-            var txtToTranslate = PrepareTextToSend(allParas);
-            iterationCount     = 0;
-            for (var nText = 0; nText < txtToTranslate.length; nText++) {
-                if (txtToTranslate[nText].Text === "")
-                    continue;
-                iterationCount++;
-            }
-            InitializationParas(iterationCount);
-            for (var nText = 0; nText < txtToTranslate.length; nText++) {
-                if (txtToTranslate[nText].Text === "")
-                    continue;
-                Translate(sourceLang, targetLang, txtToTranslate[nText]);
-            }
-        }
+
+        RunTranslate(text);
 	};
 
     function PrepareTextToSend(allParas) {
@@ -89,6 +64,7 @@
         return document.getElementById("target").value;
     };
 
+    //don't work with default service
     function IdentifyLang() {
         $.ajax({
             method: 'GET',
@@ -167,6 +143,12 @@
             selectClone = select.clone();
             updateSelect(allPairs["eng"]);
             showLoader2(elements, false);
+
+            $('.prefs__locale_target').on('change', function() {
+                window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+                    RunTranslate(sText);
+                });
+            });
         }).error(function(){
             showLoader2(elements, false);
         });
@@ -255,6 +237,7 @@
         }
 
         select.append(options);
+
         // update select2
         select.trigger('change');
     }
@@ -263,8 +246,12 @@
         if ($('#source').val() == null)
             return false;
         return true;
-    }
+    };
+
     $(document).ready(function () {
+        $('.select_example').select2({
+			minimumResultsForSearch: Infinity,
+		});
         elements = {
             loader: document.getElementById("loader-container"),
             loader2: document.getElementById("loader-container2"),
@@ -284,50 +271,38 @@
         }, 500);
 
         $('.prefs__locale_source').on('change', function() {
-            curIter = 0;
-
-            var source_lang = GetSourceLang();
-            var allParas = SplitText(txt);
-
-            updateSelect(allPairs[source_lang]);
-
-            var target_lang = GetTargetLang();
-            var txtToTranslate = PrepareTextToSend(allParas);
-            iterationCount = 0;
-            for (var nText = 0; nText < txtToTranslate.length; nText++) {
-                if (txtToTranslate[nText].Text === "")
-                    continue;
-                iterationCount++;
-            }
-
-            for (var nText = 0; nText < txtToTranslate.length; nText++) {
-                if (txtToTranslate[nText].Text === "")
-                    continue;
-                Translate(source_lang, target_lang, txtToTranslate[nText]);
-            }
-        })
+            updateSelect(allPairs[GetSourceLang()]);
+        });
 
         setTimeout(function() {
             $('#paste').click(function () {
-                Asc.scope.arr = translatedParas;
-                window.Asc.plugin.callCommand(function() {
-                    var AllParas = [];
-                    var oPara    = null;
-                    for (var nText = 0; nText < Asc.scope.arr.length; nText++) {
-                        if (Asc.scope.arr[nText] === "")
-                            continue;
-                        oPara = Api.CreateParagraph();
-                        oPara.AddText(Asc.scope.arr[nText]);
-                        AllParas.push(oPara);
-                    }
-                    if (AllParas.length === 1)
-                        Api.GetDocument().InsertContent(AllParas, true);
-                    else
-                        Api.GetDocument().InsertContent(AllParas, true);
-                });
+                window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
             })
         });
     });
+
+    function RunTranslate(sText) {
+        translatedParas = [];
+        curIter = 0;
+
+        var source_lang = GetSourceLang();
+        var allParas = SplitText(sText);
+
+        var target_lang = GetTargetLang();
+        var txtToTranslate = PrepareTextToSend(allParas);
+        iterationCount = 0;
+        for (var nText = 0; nText < txtToTranslate.length; nText++) {
+            if (txtToTranslate[nText].Text === "")
+                continue;
+            iterationCount++;
+        }
+
+        for (var nText = 0; nText < txtToTranslate.length; nText++) {
+            if (txtToTranslate[nText].Text === "")
+                continue;
+            Translate(source_lang, target_lang, txtToTranslate[nText]);
+        }
+    };
 
 	window.Asc.plugin.button = function(id)
 	{
