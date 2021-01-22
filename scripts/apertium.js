@@ -3,7 +3,7 @@
     var txt              = "";
     var translatedText   = [];
     var displayNoneClass = "display-none";
-	var blurClass        = "blur";
+	var blurClass        = "no_class";
     var elements         = null;
     var translatedParas  = [];
     var iterationCount   = 0;
@@ -44,8 +44,8 @@
             console.log('Languages not loaded!');
             return false;
         }
-
-        RunTranslate(text);
+        txt = text;
+        RunTranslate(txt);
 	};
 
     function PrepareTextToSend(allParas) {
@@ -144,6 +144,9 @@
             updateSelect(allPairs["eng"]);
             showLoader2(elements, false);
 
+            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+                RunTranslate(sText);
+            });
             $('.prefs__locale_target').on('change', function() {
                 window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
                     RunTranslate(sText);
@@ -250,7 +253,8 @@
 
     $(document).ready(function () {
         $('.select_example').select2({
-			minimumResultsForSearch: Infinity
+			minimumResultsForSearch: Infinity,
+			width: "calc(100% - 67px)"
 		});
         elements = {
             loader: document.getElementById("loader-container"),
@@ -266,7 +270,8 @@
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
-            selectText("display");
+                if (isReadyToTranslate())
+                    selectText("display");
             }
         }, 500);
 
@@ -276,12 +281,15 @@
 
         setTimeout(function() {
             $('#paste').click(function () {
-                window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
+                if (isReadyToTranslate())
+                    window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
+                return;
             })
         });
     });
 
     function RunTranslate(sText) {
+        document.getElementById('display').innerHTML = "";
         translatedParas = [];
         curIter = 0;
 
