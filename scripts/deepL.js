@@ -3,7 +3,7 @@
     var txt              = "";
     var translatedText   = [];
     var displayNoneClass = "display-none";
-	var blurClass        = "blur";
+	var blurClass        = "no_class";
     var elements         = null;
     var apikey           = "";
 
@@ -46,6 +46,7 @@
         txt = text;
 
         if (text !== '') {
+            document.getElementById('display').innerHTML = '';
             var allParsedParas = SplitText(txt);
             var sParams = CreateParams(allParsedParas);
             var target_lang = GetTargetLang();
@@ -162,10 +163,13 @@
         }, 500);
 
         $('#select_example').on('change', function() {
-            var allParsedParas = SplitText(txt);
-            var sParams = CreateParams(allParsedParas);
-            var target_lang = GetTargetLang();
-            Translate(apikey, target_lang, sParams);
+            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+                document.getElementById('display').innerHTML = '';
+                var allParsedParas = SplitText(sText);
+                var sParams = CreateParams(allParsedParas);
+                var target_lang = GetTargetLang();
+                Translate(apikey, target_lang, sParams);
+            });
         })
 
         $('#save').on('click', function() {
@@ -178,6 +182,14 @@
                 switchClass(elements.api, 'display-none', true);
                 switchClass(elements.re_api, 'display-none', false);
                 switchClass(elements.translator, 'display-none', false);
+
+                window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+                    document.getElementById('display').innerHTML = '';
+                    var allParsedParas = SplitText(sText);
+                    var sParams = CreateParams(allParsedParas);
+                    var target_lang = GetTargetLang();
+                    Translate(apikey, target_lang, sParams);
+                });
             }
             else {
                 showError(getMessage("Apikey is empty"));
