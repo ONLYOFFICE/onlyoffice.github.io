@@ -11,6 +11,25 @@ var Ps;
     };
 
 	window.Asc.plugin.init = function () {
+	    var inputsMain = $(".prefs__all-rules").find(".form-control");
+	    var allInputs = $(inputsMain).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
+
+	    $(inputsMain).each(function() {
+	        var savedValue = localStorage.getItem($(this).attr("data-id"));
+	        if (savedValue !== null)
+	            if (savedValue === true.toString())
+                    $(this).prop("checked", true);
+                else
+                    $(this).prop("checked", false);
+	    });
+	    $(allInputs).each(function() {
+	        var savedValue = localStorage.getItem($(this).attr("data-id"));
+	        if (savedValue !== null)
+	            if (savedValue === true.toString())
+                    $(this).prop("checked", true);
+                else
+                    $(this).prop("checked", false);
+	    });
     };
 
 	$(document).ready(function () {
@@ -51,6 +70,15 @@ var Ps;
             var allInputs = $(this).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
 
             allInputs.prop("checked", $(inputMain).prop('checked'));
+
+            localStorage.setItem($(inputMain).attr("data-id"), $(inputMain).prop('checked'));
+            allInputs.each(function() {
+                localStorage.setItem($(this).attr("data-id"), $(this).prop('checked'));
+            });
+        });
+
+        $(".prefs__all-rules").closest(".prefs__fieldset").find(".prefs__rule").find(".form-control").click(function() {
+            localStorage.setItem($(this).attr("data-id"), $(this).prop('checked'));
         });
     });
 
