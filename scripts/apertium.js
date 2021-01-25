@@ -1,3 +1,5 @@
+var Ps;
+
 (function(window, undefined){
 
     var txt              = "";
@@ -174,7 +176,8 @@
                     if (translatedParas[nText] !== "")
                         container.innerHTML += translatedParas[nText] + '<br>';
                 }
-
+                updateScroll();
+                updateScroll();
                 showLoader(elements, false);
             }
         }).error(function() {
@@ -182,6 +185,13 @@
             container = document.getElementById('display');
             container.innerHTML = "Failed!"
         });
+    };
+
+    function DelInvalidChars(arrParas) {
+        for (var nPara = 0; nPara < arrParas.length; nPara++) {
+            arrParas[nPara] = arrParas[nPara].replace(/#/gi, '');
+            arrParas[nPara] = arrParas[nPara].replace(/&/gi, '');
+        }
     };
 
     function SplitText(sText) {
@@ -265,6 +275,8 @@
             select: document.getElementById("select_example"),
 		};
 
+        Ps = new PerfectScrollbar("#display", {suppressScrollX: true});
+
         showLoader2(elements, true);
         GetAllLangPairs();
 
@@ -295,6 +307,7 @@
 
         var source_lang = GetSourceLang();
         var allParas = SplitText(sText);
+        DelInvalidChars(allParas);
 
         var target_lang = GetTargetLang();
         var txtToTranslate = PrepareTextToSend(allParas);
@@ -311,6 +324,11 @@
             Translate(source_lang, target_lang, txtToTranslate[nText]);
         }
     };
+
+    function updateScroll()
+	{
+		Ps && Ps.update();
+	};
 
 	window.Asc.plugin.button = function(id)
 	{
