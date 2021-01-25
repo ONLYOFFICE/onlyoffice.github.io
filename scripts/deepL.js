@@ -201,6 +201,8 @@ var Ps;
                 });
             }
             else {
+                if (!$('#display').hasClass('error'))
+                    $('#display').toggleClass('error');
                 document.getElementById('display').innerHTML = 'Apikey is empty!';
             }
         })
