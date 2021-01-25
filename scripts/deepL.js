@@ -8,22 +8,6 @@ var Ps;
     var elements         = null;
     var apikey           = "";
 
-    function getMessage(key) {
-        return window.Asc.plugin.tr(key);
-    }
-
-    function showError(message) {
-        if (message) {
-            switchClass(elements.error, displayNoneClass, false);
-            elements.error.textContent = message;
-            setTimeout(function () { window.onclick = function () { showError(); }; }, 100);
-        } else {
-            switchClass(elements.error, displayNoneClass, true);
-            elements.error.textContent = "";
-            window.onclick = null;
-        }
-    }
-
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -87,7 +71,14 @@ var Ps;
         }).success(function (oResponse) {
             if ($('#display').hasClass('error'))
                 $('#display').toggleClass('error');
-                
+
+            localStorage.setItem('deepL_Apikey', apikey);
+
+            //switching menu
+            switchClass(elements.api, 'display-none', true);
+            switchClass(elements.re_api, 'display-none', false);
+            switchClass(elements.translator, 'display-none', false);
+
             container = document.getElementById('display');
             container.innerHTML = "";
             translatedText = [];
@@ -114,7 +105,6 @@ var Ps;
                 else
                     container.innerHTML = "Connection failed!";
             }
-
         });
     };
 
@@ -201,12 +191,7 @@ var Ps;
 		    });
 		    apikey = elements.api_value.value.trim();
 		    if (apikey !== '') {
-		        localStorage.setItem('deepL_Apikey', apikey);
-                switchClass(elements.api, 'display-none', true);
-                switchClass(elements.re_api, 'display-none', false);
-                switchClass(elements.translator, 'display-none', false);
-
-                window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+		        window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
                     document.getElementById('display').innerHTML = '';
                     var allParsedParas = SplitText(sText);
                     DelInvalidChars(allParsedParas);
@@ -216,7 +201,7 @@ var Ps;
                 });
             }
             else {
-                showError(getMessage("Apikey is empty"));
+                document.getElementById('display').innerHTML = 'Apikey is empty!';
             }
         })
         $('#reconf').on('click', function() {
