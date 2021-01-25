@@ -1,3 +1,4 @@
+var Ps;
 (function(window, undefined){
 
     var txt              = "";
@@ -48,6 +49,7 @@
         if (text !== '') {
             document.getElementById('display').innerHTML = '';
             var allParsedParas = SplitText(txt);
+            DelInvalidChars(allParsedParas);
             var sParams = CreateParams(allParsedParas);
             var target_lang = GetTargetLang();
 
@@ -69,6 +71,13 @@
         return document.getElementsByClassName("prefs__set-locale")[0].value;
     }
 
+    function DelInvalidChars(arrParas) {
+        for (var nPara = 0; nPara < arrParas.length; nPara++) {
+            arrParas[nPara] = arrParas[nPara].replace(/#/gi, '');
+            arrParas[nPara] = arrParas[nPara].replace(/&/gi, '');
+        }
+    };
+
     function Translate(apikey, targetLanguage, sParams) {
         showLoader(elements, true);
         $.ajax({
@@ -76,6 +85,9 @@
             url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
             dataType: 'json'
         }).success(function (oResponse) {
+            if ($('#display').hasClass('error'))
+                $('#display').toggleClass('error');
+                
             container = document.getElementById('display');
             container.innerHTML = "";
             translatedText = [];
@@ -85,19 +97,26 @@
                 if (oResponse.translations[nText].text !== "")
                     container.innerHTML += oResponse.translations[nText].text + '<br>';
             }
+            updateScroll();
+            updateScroll();
             showLoader(elements, false);
-        }).error(function() {
+        }).error(function(oResponse) {
             showLoader(elements, false);
             container = document.getElementById('display');
+            if (!$('#display').hasClass('error'))
+                $('#display').toggleClass('error');
             if (apikey == '') {
                 container.innerHTML = "Apikey required!";
             }
             else {
-                container.innerHTML = "Failed!";
+                if (oResponse.status === 403)
+                    container.innerHTML = "Apikey is invalid!";
+                else
+                    container.innerHTML = "Connection failed!";
             }
 
         });
-    }
+    };
 
     function SplitText(sText) {
         var allParasInSelection = sText.split(/\n/);
@@ -156,6 +175,8 @@
             error: document.getElementById("errorWrapper")
 		};
 
+        Ps = new PerfectScrollbar("#display", {suppressScrollX: true});
+
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
             selectText("display");
@@ -166,6 +187,7 @@
             window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
                 document.getElementById('display').innerHTML = '';
                 var allParsedParas = SplitText(sText);
+                DelInvalidChars(allParsedParas);
                 var sParams = CreateParams(allParsedParas);
                 var target_lang = GetTargetLang();
                 Translate(apikey, target_lang, sParams);
@@ -177,8 +199,9 @@
                 minimumResultsForSearch: Infinity,
                 width: "calc(100% - 24px)"
 		    });
-            apikey = elements.api_value.value.trim();
-            if (apikey !== '') {
+		    apikey = elements.api_value.value.trim();
+		    if (apikey !== '') {
+		        localStorage.setItem('deepL_Apikey', apikey);
                 switchClass(elements.api, 'display-none', true);
                 switchClass(elements.re_api, 'display-none', false);
                 switchClass(elements.translator, 'display-none', false);
@@ -186,6 +209,7 @@
                 window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
                     document.getElementById('display').innerHTML = '';
                     var allParsedParas = SplitText(sText);
+                    DelInvalidChars(allParsedParas);
                     var sParams = CreateParams(allParsedParas);
                     var target_lang = GetTargetLang();
                     Translate(apikey, target_lang, sParams);
@@ -208,7 +232,19 @@
                 window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
             })
         });
+
+        apikey = localStorage.getItem('deepL_Apikey');
+        if (apikey !== null) {
+            switchClass(elements.api, 'display-none', true);
+            switchClass(elements.re_api, 'display-none', false);
+            switchClass(elements.translator, 'display-none', false);
+        }
     })
+
+    function updateScroll()
+	{
+		Ps && Ps.update();
+	};
 
 	window.Asc.plugin.button = function(id)
 	{
