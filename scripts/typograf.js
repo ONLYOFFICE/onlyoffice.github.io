@@ -14,6 +14,8 @@ var Ps;
 	    var inputsMain = $(".prefs__all-rules").find(".form-control");
 	    var allInputs = $(inputsMain).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
 
+        $('#select_example').val(localStorage.getItem('locale_typograf'));
+        $('#select_example').trigger('change');
 	    $(inputsMain).each(function() {
 	        var savedValue = localStorage.getItem($(this).attr("data-id"));
 	        if (savedValue !== null)
@@ -79,6 +81,9 @@ var Ps;
 
         $(".prefs__all-rules").closest(".prefs__fieldset").find(".prefs__rule").find(".form-control").click(function() {
             localStorage.setItem($(this).attr("data-id"), $(this).prop('checked'));
+        });
+        $("#select_example").change(function() {
+            localStorage.setItem('locale_typograf', $(this).val());
         });
     });
 
