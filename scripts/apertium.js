@@ -45,8 +45,12 @@ var Ps;
             console.log('Languages not loaded!');
             return false;
         }
+        
         txt = text;
-        RunTranslate(txt);
+
+        if (text !== '') {
+            RunTranslate(txt);
+        }
 	};
 
     function PrepareTextToSend(allParas) {
