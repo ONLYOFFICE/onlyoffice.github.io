@@ -16,10 +16,10 @@
 		html, body {
 			min-height: 100% !important;
 			height: 100%;
-			overflow-y: hidden;
-			overflow-x: hidden;
 			font-family: "Arial";
     		font-size: 11px;
+    		font-weight: normal !important;
+    		color: #444444;
 		}
 
 		#main-container{
@@ -32,26 +32,28 @@
         	width: calc(100% - 24px);
         }
         #save {
-        	width: 95%;
-        	margin-left: 2.5%;
+        	width: calc(100% - 24px);
+        	margin: 16px 12px 0 12px;
         }
         #reconf {
         	width: calc(100% - 24px);
         	margin-left: 12px;
         	margin-right: 12px;
         	margin-top: 16px;
+            cursor:pointer;
+            border-bottom: 1px dashed #444444;
         }
          #copy {
         	width:40%;
         	margin-left: 12px;
-        	margin-top: 23px;
+        	margin-top: 16px;
         	text-align: center;
         }
 		#paste {
 			float: right;
 			width:40%;
         	margin-right: 12px;
-        	margin-top: 23px;
+        	margin-top: 16px;
         	text-align: center;
         }
         #display {
@@ -61,8 +63,8 @@
         }
         .input__head {
             width: 100%;
-            text-align: center;
-            margin-top: 10px;
+            text-align: left;
+            margin: 16px 12px 0 12px;
         }
 
         .header {
@@ -72,7 +74,18 @@
         .error {
         	color: #D9534F;
         }
-
+        .error_api {
+        	border: 1px solid #D9534F;
+        }
+		#img_error {
+			position: absolute;
+			right: 20px;
+			top: 37px;
+			display: none;
+		}
+		#api input[type=text] {
+			padding-right: 25px;
+		}
 
 	</style>
 </head>
@@ -82,21 +95,24 @@
 				<div class="asc-loader-title"></div>
 			</div>
 			<div class="asc-loader-title">
-				Translating...
+				Loading...
 			</div>
     </div>
 	<div id="main-container" style="width:100%; height:100%;margin:0;padding:0">
-		<div id="errorWrapper" class="errorMsg display-none"></div>
 		<div id="api">
-			<input type="text" id="api-value" class="form-control" placeholder="Apikey" style="width: 95%;margin-bottom: 12px; margin-top: 16px; margin-left: 2.5%; text-align: center">
+			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+				<label style="margin-left:12px;">API key</label>
+			</div>
+			<input type="text" id="api-value" class="form-control" placeholder="Enter your DeepL API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
+			<div id="img_error" title="API key is not valid"><img src="./resources/img/error_icon.png" alt=""></div>
 			<button onсlick="" id="save" class="btn-text-default">Save</button>
-		</div>
-		<div id="re-api" class="display-none">
-			<button onсlick="" id="reconf" class="btn-text-default">Reconfigure</button>
 		</div>
 		<div id="translator" class="display-none">
 			<div class="input__head">
-				<span class="prefs__locale"><label class="header" style="margin: 0 11px 5px 12px;">Target language</label><select id="select_example" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+				<div style="margin: 0 0 4px 0;">
+					<label class="header">Target language</label>
+				</div>
+				<span class="prefs__locale"><select id="select_example" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 					<option value="DE" data-text-id="locale-de">
 					  German
 					</option>
@@ -147,7 +163,13 @@
 
 		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
 		<div id="display" style="height: 78%; width: calc(100% - 12px); position: relative;">
+			<div id="txt_shower" style="width:calc(100% - 20px); margin-right:8px; word-break: break-all;">
 
+			</div>
+		</div>
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 12px 0 6px 12px;"></div>
+		<div id="re-api" class="display-none">
+			<label id="reconf">Reconfigure API key</label>
 		</div>
 		</div>
 	</div>

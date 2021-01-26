@@ -7,6 +7,7 @@ var Ps;
 	var blurClass        = "no_class";
     var elements         = null;
     var apikey           = "";
+    var isValidKey       = false;
 
 	function showLoader(elements, show) {
 
@@ -31,7 +32,7 @@ var Ps;
         txt = text;
 
         if (text !== '') {
-            document.getElementById('display').innerHTML = '';
+            document.getElementById('txt_shower').innerHTML = '';
             var allParsedParas = SplitText(txt);
             DelInvalidChars(allParsedParas);
             var sParams = CreateParams(allParsedParas);
@@ -69,8 +70,12 @@ var Ps;
             url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
             dataType: 'json'
         }).success(function (oResponse) {
-            if ($('#display').hasClass('error'))
-                $('#display').toggleClass('error');
+            isValidKey = true;
+            if ($('#txt_shower').hasClass('error'))
+                $('#txt_shower').toggleClass('error');
+            if ($('#api-value').hasClass('error_api'))
+                $('#api-value').toggleClass('error_api');
+            $('#img_error').hide();
 
             localStorage.setItem('deepL_Apikey', apikey);
 
@@ -79,7 +84,7 @@ var Ps;
             switchClass(elements.re_api, 'display-none', false);
             switchClass(elements.translator, 'display-none', false);
 
-            container = document.getElementById('display');
+            container = document.getElementById('txt_shower');
             container.innerHTML = "";
             translatedText = [];
             for (var nText = 0; nText < oResponse.translations.length; nText++) {
@@ -92,16 +97,21 @@ var Ps;
             updateScroll();
             showLoader(elements, false);
         }).error(function(oResponse) {
+            isValidKey = false;
             showLoader(elements, false);
-            container = document.getElementById('display');
-            if (!$('#display').hasClass('error'))
-                $('#display').toggleClass('error');
+            container = document.getElementById('txt_shower');
+            if (!$('#txt_shower').hasClass('error'))
+                $('#txt_shower').toggleClass('error');
+
             if (apikey == '') {
                 container.innerHTML = "Apikey required!";
             }
             else {
-                if (oResponse.status === 403)
-                    container.innerHTML = "Apikey is invalid!";
+                if (oResponse.status === 403) {
+                    $('#img_error').show();
+                    if (!$('#api-value').hasClass('error_api'))
+                        $('#api-value').toggleClass('error_api');
+                }
                 else
                     container.innerHTML = "Connection failed!";
             }
@@ -169,13 +179,13 @@ var Ps;
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
-            selectText("display");
+            selectText("txt_shower");
             }
         }, 500);
 
         $('#select_example').on('change', function() {
             window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                document.getElementById('display').innerHTML = '';
+                document.getElementById('txt_shower').innerHTML = '';
                 var allParsedParas = SplitText(sText);
                 DelInvalidChars(allParsedParas);
                 var sParams = CreateParams(allParsedParas);
@@ -192,7 +202,7 @@ var Ps;
 		    apikey = elements.api_value.value.trim();
 		    if (apikey !== '') {
 		        window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                    document.getElementById('display').innerHTML = '';
+                    document.getElementById('txt_shower').innerHTML = '';
                     var allParsedParas = SplitText(sText);
                     DelInvalidChars(allParsedParas);
                     var sParams = CreateParams(allParsedParas);
@@ -201,9 +211,9 @@ var Ps;
                 });
             }
             else {
-                if (!$('#display').hasClass('error'))
-                    $('#display').toggleClass('error');
-                document.getElementById('display').innerHTML = 'Apikey is empty!';
+                if (!$('#txt_shower').hasClass('error'))
+                    $('#txt_shower').toggleClass('error');
+                document.getElementById('txt_shower').innerHTML = 'Apikey is empty!';
             }
         })
         $('#reconf').on('click', function() {
@@ -216,7 +226,7 @@ var Ps;
         setTimeout(function() {
             $('#paste').click(function () {
                 Asc.scope.arr = translatedText;
-                window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
+                window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
             })
         });
 
