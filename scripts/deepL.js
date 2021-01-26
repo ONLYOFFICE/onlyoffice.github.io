@@ -218,6 +218,10 @@ var Ps;
         })
         $('#reconf').on('click', function() {
             apikey = '';
+            saved_key = localStorage.getItem('deepL_Apikey');
+            if (saved_key !== null) {
+                elements.api_value.value = saved_key;
+            }
             switchClass(elements.re_api, 'display-none', true)
             switchClass(elements.api, 'display-none', false);
             switchClass(elements.translator, 'display-none', true);
