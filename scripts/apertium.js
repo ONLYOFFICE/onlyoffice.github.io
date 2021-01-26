@@ -1,5 +1,4 @@
 var Ps;
-
 (function(window, undefined){
 
     var txt              = "";
@@ -170,7 +169,7 @@ var Ps;
 
             curIter++;
             if (curIter === iterationCount) {
-                container = document.getElementById('display');
+                container = document.getElementById('txt_shower');
                 container.innerHTML = "";
                 for (var nText = 0; nText < translatedParas.length; nText++) {
                     if (translatedParas[nText] !== "")
@@ -182,7 +181,7 @@ var Ps;
             }
         }).error(function() {
             showLoader(elements, false);
-            container = document.getElementById('display');
+            container = document.getElementById('txt_shower');
             container.innerHTML = "Failed!"
         });
     };
@@ -275,7 +274,7 @@ var Ps;
             select: document.getElementById("select_example"),
 		};
 
-        Ps = new PerfectScrollbar("#display", {suppressScrollX: true});
+        Ps = new PerfectScrollbar("#display", {});
 
         showLoader2(elements, true);
         GetAllLangPairs();
@@ -283,7 +282,7 @@ var Ps;
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
                 if (isReadyToTranslate())
-                    selectText("display");
+                    selectText("txt_shower");
             }
         }, 500);
 
@@ -294,14 +293,14 @@ var Ps;
         setTimeout(function() {
             $('#paste').click(function () {
                 if (isReadyToTranslate())
-                    window.Asc.plugin.executeMethod("PasteText", [$("#display")[0].innerText]);
+                    window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
                 return;
             })
         });
     });
 
     function RunTranslate(sText) {
-        document.getElementById('display').innerHTML = "";
+        document.getElementById('txt_shower').innerHTML = "";
         translatedParas = [];
         curIter = 0;
 
