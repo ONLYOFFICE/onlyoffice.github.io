@@ -14,8 +14,12 @@ var Ps;
 	    var inputsMain = $(".prefs__all-rules").find(".form-control");
 	    var allInputs = $(inputsMain).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
 
-        $('#select_example').val(localStorage.getItem('locale_typograf'));
-        $('#select_example').trigger('change');
+        var locale_saved = localStorage.getItem('locale_typograf');
+        if (locale_saved !== null) {
+            $('#select_example').val(locale_saved);
+            $('#select_example').trigger('change');
+        }
+
 	    $(inputsMain).each(function() {
 	        var savedValue = localStorage.getItem($(this).attr("data-id"));
 	        if (savedValue !== null)
