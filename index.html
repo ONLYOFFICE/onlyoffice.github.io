@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>typograf</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+    <script src="vendor/typograf/typograf.all.js"></script>
+    <script src="scripts/typograf.js"></script>
+
+	<style>
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			font-family: Arial;
+    		font-size: 11px;
+    		color: #444;
+		}
+        .prefs__fieldset {
+            clear:both;
+            margin:1em 0 0;
+            margin-left:13px;
+            padding:0;
+            border:0px solid transparent;
+            border-radius:5px;
+            transition:border-color .3s ease;
+            width: 95%;
+        }
+        .prefs__rule-lang {
+            color:#00acc7;
+            text-transform:uppercase;
+            margin-left:7px
+        }
+
+        .prefs__rule:first-child {
+            padding-top: 1em;
+        }
+        .prefs__rule {
+            margin-top: 5px;
+            margin-left:20px;
+            margin-right:5%;
+            line-height:15px;
+            display: flex;
+        }
+        .prefs__rule:last-child {
+            margin-bottom: 0px;
+        }
+        .prefs__rule:first-child {
+            margin-top: 0px;
+        }
+        
+        .prefs__fieldset .prefs__group-rules {
+            display:none
+        }
+        .prefs__fieldset_visible {
+            border:0px solid #e0e0e0
+        }
+        .header {
+            font-weight: normal !important;
+        }
+
+		#main-container-id {
+            height: 100%;
+        }
+        #correct {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .input__head {
+            margin-left: 4px;
+            width: 100%;
+            text-align: left;
+        }
+        .prefs__locale {
+            margin-left: 9px;
+        }
+        .prefs__set-locale {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin: right;
+        }
+        .prefs__legend {
+            display: flex;
+            justify-content: start;
+        }
+        .arrow {
+            float:right;
+            align-self: center;
+
+        }
+        .transform {
+            transform: rotate(180deg);
+        }
+        .checkbox {
+            margin-top: 0px;
+            margin-left: 5px;
+        }
+        .prefs__all-rules {
+            margin-right: 5px;
+        }
+
+        #hide_show {
+            width: 130px;
+            margin-top: 16px;
+            margin-bottom: 10px;
+            margin-left: 14px;
+        }
+        #settings {
+            display: none;
+        }
+        .opened {
+            cursor:pointer;
+            border-bottom: 1px dashed #444444;
+        }
+        .hidden {
+            cursor:pointer;
+            border-bottom: 1px dashed #444444;
+        }
+        .button {
+            cursor:pointer;
+        }
+        .cursor_pointer {
+            cursor:pointer;
+        }
+
+        .select2-results__options {
+            font-size: 11px !important;
+        }
+        .select2-selection__rendered {
+            font-size: 11px !important;
+            margin-top: -1px;
+        }
+
+	</style>
+</head>
+
+<body style="width: 100%;height: 100%; margin: 0;">
+    <div id="main-container-id" style="overflow: hidden;">
+        <div id="floating" style="width: 100%; height: 80px; z-index: 1; position: fixed; background: #F1F1F1;">
+            <div id="correct" style="margin-left: 0px;">
+                <button onсlick="" class="btn-text-default" style="margin:0 14px 15px 14px; float: left; width:calc(100% - 30px); height: 25px;">Correct text</button>
+            </div>
+            <div id="hide_show"><label class="hidden">Hide advanced settings</label><label class="opened">Show advanced settings</label></div>
+            <div class="separator horizontal" style="margin: 0px 14px 5px; width:calc(100% - 30px);"></div>
+        </div>
+        <div id="settings" style="margin-top: 80px; position: relative; height: 88%; ">
+            <div class="input__head">
+              <span class="prefs__locale"><label class="header">Locale</label>: <select id="select_example" class="prefs__set-locale" data-title-id="locale" title="Locale">
+                  <option value="be" data-text-id="locale-be">
+                    Belarusian
+                  </option>
+                  <option value="bg" data-text-id="locale-bg">
+                    Bulgarian
+                  </option>
+                  <option value="ca" data-text-id="locale-ca">
+                    Catalan
+                  </option>
+                  <option value="da" data-text-id="locale-da">
+                    Danish
+                  </option>
+                  <option value="nl" data-text-id="locale-nl">
+                    Dutch
+                  </option>
+                  <option selected="selected" value="en-GB" data-text-id="locale-en-GB">
+                    English UK
+                  </option>
+                  <option value="en-US" data-text-id="locale-en-US">
+                    English US
+                  </option>
+                  <option value="eo" data-text-id="locale-eo">
+                    Esperanto
+                  </option>
+                  <option value="et" data-text-id="locale-et">
+                    Estonian
+                  </option>
+                  <option value="fi" data-text-id="locale-fi">
+                    Finnish
+                  </option>
+                  <option value="fr" data-text-id="locale-fr">
+                    French
+                  </option>
+                  <option value="de" data-text-id="locale-de">
+                    German
+                  </option>
+                  <option value="el" data-text-id="locale-el">
+                    Greek
+                  </option>
+                  <option value="hu" data-text-id="locale-hu">
+                    Hungarian
+                  </option>
+                  <option value="ga" data-text-id="locale-ga">
+                    Irish
+                  </option>
+                  <option value="it" data-text-id="locale-it">
+                    Italian
+                  </option>
+                  <option value="lv" data-text-id="locale-lv">
+                    Latvian
+                  </option>
+                  <option value="no" data-text-id="locale-no">
+                    Norwegian
+                  </option>
+                  <option value="pl" data-text-id="locale-pl">
+                    Polish
+                  </option>
+                  <option value="ro" data-text-id="locale-ro">
+                    Romanian
+                  </option>
+                  <option value="ru" data-text-id="locale-ru">
+                    Russian
+                  </option>
+                  <option value="sr" data-text-id="locale-sr">
+                    Serbian
+                  </option>
+                  <option value="sk" data-text-id="locale-sk">
+                    Slovak
+                  </option>
+                  <option value="sl" data-text-id="locale-sl">
+                    Slovenian
+                  </option>
+                  <option value="es" data-text-id="locale-es">
+                    Spanish
+                  </option>
+                  <option value="sv" data-text-id="locale-sv">
+                    Swedish
+                  </option>
+                  <option value="tr" data-text-id="locale-tr">
+                    Turkish
+                  </option>
+                  <option value="uk" data-text-id="locale-uk">
+                    Ukrainian
+                  </option>
+          </select>
+              </span>
+          </div>
+            <div class="prefs__rules">
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="punctuation"></label><div class="button"><label class="header cursor_pointer">Punctuation</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/punctuation/exclamation">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label class="checkbox" >!! → !<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/punctuation/exclamationQuestion">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamationQuestion" data-id="ru/punctuation/exclamationQuestion"> <label class="checkbox" for="setting-ru/punctuation/exclamationQuestion">!? → ?!<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/punctuation/ano">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/ano" data-id="ru/punctuation/ano"> <label class="checkbox" for="setting-ru/punctuation/ano">Placement of&nbsp;commas before “а” and “но”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/punctuation/apostrophe">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/apostrophe" data-id="common/punctuation/apostrophe"> <label class="checkbox" for="setting-common/punctuation/apostrophe">Placement of&nbsp;correct apostrophe</label>
+                    </div>
+                    <div class="prefs__rule" title="common/punctuation/quote">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/quote" data-id="common/punctuation/quote"> <label class="checkbox" for="setting-common/punctuation/quote">Placement of&nbsp;quotation marks in&nbsp;texts</label>
+                    </div>
+                    <div class="prefs__rule" title="common/punctuation/quoteLink">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/quoteLink" data-id="common/punctuation/quoteLink"> <label class="checkbox" for="setting-common/punctuation/quoteLink">Removal quotes outside a&nbsp;link</label>
+                    </div>
+                    <div class="prefs__rule" title="common/punctuation/delDoublePunctuation">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/delDoublePunctuation" data-id="common/punctuation/delDoublePunctuation"> <label class="checkbox" for="setting-common/punctuation/delDoublePunctuation">Removing double punctuation</label>
+                    </div>
+                    <div class="prefs__rule" title="common/punctuation/hellip">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/hellip" data-id="common/punctuation/hellip"> <label class="checkbox" for="setting-common/punctuation/hellip">Replacement of&nbsp;three points by&nbsp;ellipsis</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/punctuation/hellipQuestion">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/hellipQuestion" data-id="ru/punctuation/hellipQuestion"> <label class="checkbox" for="setting-ru/punctuation/hellipQuestion">«?…» → «?..», «!…» → «!..», «…,» → «…»<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="hanging_punctuation"></label><div class="button"><label class="header cursor_pointer">Hanging punctuation</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/optalign/comma">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/optalign/comma" data-id="ru/optalign/comma"> <label class="checkbox" for="setting-ru/optalign/comma">for comma<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/optalign/bracket">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/optalign/bracket" data-id="ru/optalign/bracket"> <label class="checkbox" for="setting-ru/optalign/bracket">for opening bracket<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/optalign/quote">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/optalign/quote" data-id="ru/optalign/quote"> <label class="checkbox" for="setting-ru/optalign/quote">for opening quotation marks<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="dash_hyphen"></label><div class="button"><label class="header cursor_pointer">Dash and hyphen</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/dash/surname">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/surname" data-id="ru/dash/surname"> <label class="checkbox" for="setting-ru/dash/surname">Acronyms with a&nbsp;dash<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/daysMonth">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/daysMonth" data-id="ru/dash/daysMonth"> <label class="checkbox" for="setting-ru/dash/daysMonth">Dash between days of&nbsp;one month<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/month">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/month" data-id="ru/dash/month"> <label class="checkbox" for="setting-ru/dash/month">Dash between months<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/weekday">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/weekday" data-id="ru/dash/weekday"> <label class="checkbox" for="setting-ru/dash/weekday">Dash between the days of&nbsp;the week<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/decade">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/decade" data-id="ru/dash/decade"> <label class="checkbox" for="setting-ru/dash/decade">Dash in&nbsp;decade<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/directSpeech">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/directSpeech" data-id="ru/dash/directSpeech"> <label class="checkbox" for="setting-ru/dash/directSpeech">Dash in&nbsp;direct speech<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/time">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/time" data-id="ru/dash/time"> <label class="checkbox" for="setting-ru/dash/time">Dash in&nbsp;time intervals<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/koe">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/koe" data-id="ru/dash/koe"> <label class="checkbox" for="setting-ru/dash/koe">Hyphen after “кое” and “кой”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/de">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/dash/de" data-id="ru/dash/de"> <label class="checkbox" for="setting-ru/dash/de">Hyphen before “де”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/ka">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/ka" data-id="ru/dash/ka"> <label class="checkbox" for="setting-ru/dash/ka">Hyphen before “ка” and “кась”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/to">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/to" data-id="ru/dash/to"> <label class="checkbox" for="setting-ru/dash/to">Hyphen before “то”, “либо”, “нибудь”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/taki">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/taki" data-id="ru/dash/taki"> <label class="checkbox" for="setting-ru/dash/taki">Hyphen between “верно-таки” and&nbsp;etc.<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/izza">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/izza" data-id="ru/dash/izza"> <label class="checkbox" for="setting-ru/dash/izza">Hyphen between “из-за”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/izpod">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/izpod" data-id="ru/dash/izpod"> <label class="checkbox" for="setting-ru/dash/izpod">Hyphen between “из-под”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/centuries">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/centuries" data-id="ru/dash/centuries"> <label class="checkbox" for="setting-ru/dash/centuries">Hyphen to&nbsp;dash in&nbsp;centuries<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/years">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/years" data-id="ru/dash/years"> <label class="checkbox" for="setting-ru/dash/years">Hyphen to&nbsp;dash in&nbsp;years<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="en-US/dash/main">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-en-US/dash/main" data-id="en-US/dash/main"> <label class="checkbox" for="setting-en-US/dash/main">Replace hyphens surrounded by&nbsp;spaces with an&nbsp;em-dash<span class="prefs__rule-lang">en-US</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/dash/main">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/dash/main" data-id="ru/dash/main"> <label class="checkbox" for="setting-ru/dash/main">Replacement hyphen with dash<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="non_br_space"></label><div class="button"><label class="header cursor_pointer">Non-breaking space</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/nbsp/initials">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/initials" data-id="ru/nbsp/initials"> <label class="checkbox" for="setting-ru/nbsp/initials">Binding of&nbsp;initials to&nbsp;the name<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/see">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/see" data-id="ru/nbsp/see"> <label class="checkbox" for="setting-ru/nbsp/see">Non-breaking space after abbreviation «см.» and «им.»<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/afterShortWord">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/afterShortWord" data-id="common/nbsp/afterShortWord"> <label class="checkbox" for="setting-common/nbsp/afterShortWord">Non-breaking space after short word</label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/afterSectionMark">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/afterSectionMark" data-id="common/nbsp/afterSectionMark"> <label class="checkbox" for="setting-common/nbsp/afterSectionMark">Non-breaking space after §</label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/afterParagraphMark">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/afterParagraphMark" data-id="common/nbsp/afterParagraphMark"> <label class="checkbox" for="setting-common/nbsp/afterParagraphMark">Non-breaking space after ¶</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/ooo">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/ooo" data-id="ru/nbsp/ooo"> <label class="checkbox" for="setting-ru/nbsp/ooo">Non-breaking space after “OOO, ОАО, ЗАО, НИИ, ПБОЮЛ”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/page">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/page" data-id="ru/nbsp/page"> <label class="checkbox" for="setting-ru/nbsp/page">Non-breaking space after “стр.”, “гл.”, “рис.”, “илл.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/year">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/year" data-id="ru/nbsp/year"> <label class="checkbox" for="setting-ru/nbsp/year">Non-breaking space before XXXX г. (2012 г.)<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/beforeShortLastWord">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/beforeShortLastWord" data-id="common/nbsp/beforeShortLastWord"> <label class="checkbox" for="setting-common/nbsp/beforeShortLastWord">Non-breaking space before last short word in&nbsp;sentence</label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/dpi">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/dpi" data-id="common/nbsp/dpi"> <label class="checkbox" for="setting-common/nbsp/dpi">Non-breaking space before lpi and dpi</label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/beforeShortLastNumber">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/beforeShortLastNumber" data-id="common/nbsp/beforeShortLastNumber"> <label class="checkbox" for="setting-common/nbsp/beforeShortLastNumber">Non-breaking space before number (maximum 2&nbsp;digits) at&nbsp;end of&nbsp;sentence</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/beforeParticle">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/beforeParticle" data-id="ru/nbsp/beforeParticle"> <label class="checkbox" for="setting-ru/nbsp/beforeParticle">Non-breaking space before “ли”, “ль”, “же”, “бы”, “б”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/dayMonth">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/dayMonth" data-id="ru/nbsp/dayMonth"> <label class="checkbox" for="setting-ru/nbsp/dayMonth">Non-breaking space between number and month<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/afterNumber">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/nbsp/afterNumber" data-id="common/nbsp/afterNumber"> <label class="checkbox" for="setting-common/nbsp/afterNumber">Non-breaking space between number and word</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/mln">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/mln" data-id="ru/nbsp/mln"> <label class="checkbox" for="setting-ru/nbsp/mln">Non-breaking space between number and “тыс.”, “млн”, “млрд” and “трлн”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/ps">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/ps" data-id="ru/nbsp/ps"> <label class="checkbox" for="setting-ru/nbsp/ps">Non-breaking space in&nbsp;P. S. and&nbsp;P. P. S.<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/abbr">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/abbr" data-id="ru/nbsp/abbr"> <label class="checkbox" for="setting-ru/nbsp/abbr">Non-breaking space in&nbsp;abbreviations, e.g. “т. д.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/afterNumberSign">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/afterNumberSign" data-id="ru/nbsp/afterNumberSign"> <label class="checkbox" for="setting-ru/nbsp/afterNumberSign">Non-breaking thin space after №<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/rubleKopek">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/rubleKopek" data-id="ru/nbsp/rubleKopek"> <label class="checkbox" for="setting-ru/nbsp/rubleKopek">Not once. space before the “rub” and “cop.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/addr">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/addr" data-id="ru/nbsp/addr"> <label class="checkbox" for="setting-ru/nbsp/addr">Placement of&nbsp;non-breaking space after “г.”, “обл.”, “ул.”, “пр.”, “кв.” et&nbsp;al.<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/centuries">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/centuries" data-id="ru/nbsp/centuries"> <label class="checkbox" for="setting-ru/nbsp/centuries">Remove spaces and extra points in&nbsp;“вв.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/nowrap">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/nowrap" data-id="common/nbsp/nowrap"> <label class="checkbox" for="setting-common/nbsp/nowrap">Replace non-breaking space to&nbsp;normal space in&nbsp;tags nowrap and nobr</label>
+                    </div>
+                    <div class="prefs__rule" title="common/nbsp/replaceNbsp">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/nbsp/replaceNbsp" data-id="common/nbsp/replaceNbsp"> <label class="checkbox" for="setting-common/nbsp/replaceNbsp">Replacing non-breaking space on&nbsp;normal before text correction</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/m">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/m" data-id="ru/nbsp/m"> <label class="checkbox" for="setting-ru/nbsp/m">m2 → м², m3 → м³ and non-breaking space<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/nbsp/years">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/years" data-id="ru/nbsp/years"> <label class="checkbox" for="setting-ru/nbsp/years">г.г. → гг. and non-breaking space<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="space"></label><div class="button"><label class="header cursor_pointer">Space and line ending</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="common/space/insertFinalNewline">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/space/insertFinalNewline" data-id="common/space/insertFinalNewline"> <label class="checkbox" for="setting-common/space/insertFinalNewline">Insert final newline</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/delRepeatN">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/delRepeatN" data-id="common/space/delRepeatN"> <label class="checkbox" for="setting-common/space/delRepeatN">Remove duplicate line breaks</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/bracket">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/bracket" data-id="common/space/bracket"> <label class="checkbox" for="setting-common/space/bracket">Remove extra spaces after opening and before closing bracket</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/squareBracket">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/squareBracket" data-id="common/space/squareBracket"> <label class="checkbox" for="setting-common/space/squareBracket">Remove extra spaces after opening and before closing square bracket</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/delBeforePercent">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/delBeforePercent" data-id="common/space/delBeforePercent"> <label class="checkbox" for="setting-common/space/delBeforePercent">Remove space before %, ‰ and ‱</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/trimRight">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/trimRight" data-id="common/space/trimRight"> <label class="checkbox" for="setting-common/space/trimRight">Remove spaces and line breaks at&nbsp;end of&nbsp;text</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/trimLeft">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/trimLeft" data-id="common/space/trimLeft"> <label class="checkbox" for="setting-common/space/trimLeft">Remove spaces and line breaks in&nbsp;beginning of&nbsp;text</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/delTrailingBlanks">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/delTrailingBlanks" data-id="common/space/delTrailingBlanks"> <label class="checkbox" for="setting-common/space/delTrailingBlanks">Remove spaces at&nbsp;end of&nbsp;line</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/delLeadingBlanks">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/space/delLeadingBlanks" data-id="common/space/delLeadingBlanks"> <label class="checkbox" for="setting-common/space/delLeadingBlanks">Remove spaces at&nbsp;start of&nbsp;line</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/delBeforePunctuation">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/delBeforePunctuation" data-id="common/space/delBeforePunctuation"> <label class="checkbox" for="setting-common/space/delBeforePunctuation">Remove spaces before punctuation</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/delRepeatSpace">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/delRepeatSpace" data-id="common/space/delRepeatSpace"> <label class="checkbox" for="setting-common/space/delRepeatSpace">Removing duplicate spaces between characters</label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/replaceTab">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/replaceTab" data-id="common/space/replaceTab"> <label class="checkbox" for="setting-common/space/replaceTab">Replacement of&nbsp;tab to&nbsp;4&nbsp;spaces</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/space/afterHellip">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/space/afterHellip" data-id="ru/space/afterHellip"> <label class="checkbox" for="setting-ru/space/afterHellip">Space after “...”, “!..” and “?..”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/beforeBracket">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/beforeBracket" data-id="common/space/beforeBracket"> <label class="checkbox" for="setting-common/space/beforeBracket">Space before opening bracket</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/space/year">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/space/year" data-id="ru/space/year"> <label class="checkbox" for="setting-ru/space/year">Space between number and word “год”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/space/afterPunctuation">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/afterPunctuation" data-id="common/space/afterPunctuation"> <label class="checkbox" for="setting-common/space/afterPunctuation">space after punctuation</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="html"></label><div class="button"><label class="header cursor_pointer">HTML</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="common/html/quot">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/html/quot" data-id="common/html/quot"> <label class="checkbox" for="setting-common/html/quot">&amp;⁠quot; → "</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/escape">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/escape" data-id="common/html/escape"> <label class="checkbox" for="setting-common/html/escape">Escaping HTML</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/url">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/url" data-id="common/html/url"> <label class="checkbox" for="setting-common/html/url">Placement of&nbsp;links</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/e-mail">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/e-mail" data-id="common/html/e-mail"> <label class="checkbox" for="setting-common/html/e-mail">Placement of&nbsp;links for e-mail</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/p">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/p" data-id="common/html/p"> <label class="checkbox" for="setting-common/html/p">Placement of&nbsp;paragraph</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/processingAttrs">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/processingAttrs" data-id="common/html/processingAttrs"> <label class="checkbox" for="setting-common/html/processingAttrs">Processing HTML attributes</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/stripTags">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/stripTags" data-id="common/html/stripTags"> <label class="checkbox" for="setting-common/html/stripTags">Removing HTML-tags</label>
+                    </div>
+                    <div class="prefs__rule" title="common/html/nbr">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/html/nbr" data-id="common/html/nbr"> <label class="checkbox" for="setting-common/html/nbr">Replacement line break on&nbsp;&lt;br/&gt;</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="date"></label><div class="button"><label class="header cursor_pointer">Date</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/date/weekday">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/date/weekday" data-id="ru/date/weekday"> <label class="checkbox" for="setting-ru/date/weekday">2 Мая, Понедельник → 2 мая, понедельник<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/date/fromISO">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/date/fromISO" data-id="ru/date/fromISO"> <label class="checkbox" for="setting-ru/date/fromISO">Converting dates YYYY-MM-DD type DD.MM.YYYY<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="money"></label><div class="button"><label class="header cursor_pointer">Money</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/money/ruble">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/money/ruble" data-id="ru/money/ruble"> <label class="checkbox" for="setting-ru/money/ruble">1 руб. → 1 ₽<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/money/currency">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/money/currency" data-id="ru/money/currency"> <label class="checkbox" for="setting-ru/money/currency">Currency symbol ($, €, ¥, Ұ, £ and ₤) after the number, $100 → 100 $<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="numbers_math"></label><div class="button"><label class="header cursor_pointer">Numbers and mathematical expressions</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="common/number/mathSigns">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/number/mathSigns" data-id="common/number/mathSigns"> <label class="checkbox" for="setting-common/number/mathSigns">!= → ≠, &lt;= → ≤, &gt;= → ≥, ~= → ≅, +- → ±</label>
+                    </div>
+                    <div class="prefs__rule" title="common/number/fraction">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/number/fraction" data-id="common/number/fraction"> <label class="checkbox" for="setting-common/number/fraction">1/2 → ½, 1/4 → ¼, 3/4 → ¾</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/number/comma">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/number/comma" data-id="ru/number/comma"> <label class="checkbox" for="setting-ru/number/comma">Commas in&nbsp;numbers<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/number/digitGrouping">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/number/digitGrouping" data-id="common/number/digitGrouping"> <label class="checkbox" for="setting-common/number/digitGrouping">Divide into groups numbers with many digits</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/number/ordinals">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/number/ordinals" data-id="ru/number/ordinals"> <label class="checkbox" for="setting-ru/number/ordinals">N-ый, -ой, -ая, -ое, -ые, -ым, -ом, -ых → N-й, -я, -е, -м, -х (25-й)<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/number/times">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/number/times" data-id="common/number/times"> <label class="checkbox" for="setting-common/number/times">x&nbsp;→ × (10&nbsp;x&nbsp;5 → 10×5)</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="symbols"></label><div class="button"><label class="header cursor_pointer">Symbols and signs</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="common/symbols/copy">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/symbols/copy" data-id="common/symbols/copy"> <label class="checkbox" for="setting-common/symbols/copy">(c) → ©, (tm) → ™, (r) → ®</label>
+                    </div>
+                    <div class="prefs__rule" title="common/symbols/arrow">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/symbols/arrow" data-id="common/symbols/arrow"> <label class="checkbox" for="setting-common/symbols/arrow">-&gt; → →, &lt;- → ←</label>
+                    </div>
+                    <div class="prefs__rule" title="common/symbols/cf">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/symbols/cf" data-id="common/symbols/cf"> <label class="checkbox" for="setting-common/symbols/cf">Adding ° to&nbsp;C&nbsp;and F</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/symbols/NN">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/symbols/NN" data-id="ru/symbols/NN"> <label class="checkbox" for="setting-ru/symbols/NN">№№ → №<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="typos"></label><div class="button"><label class="header cursor_pointer">Typos</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="ru/typo/switchingKeyboardLayout">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/typo/switchingKeyboardLayout" data-id="ru/typo/switchingKeyboardLayout"> <label class="checkbox" for="setting-ru/typo/switchingKeyboardLayout">Replacement of&nbsp;Latin letters in&nbsp;Russian. Typos occur when you switch keyboard layouts<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="prefs__fieldset">
+                  <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="other"></label><div class="button"><label class="header cursor_pointer">Other</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+                  <div class="prefs__group-rules">
+                    <div class="prefs__rule" title="common/other/delBOM">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/other/delBOM" data-id="common/other/delBOM"> <label class="checkbox" for="setting-common/other/delBOM">Delete character BOM (Byte Order Mark)</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/other/phone-number">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/other/phone-number" data-id="ru/other/phone-number"> <label class="checkbox" for="setting-ru/other/phone-number">Formatting phone numbers<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="common/other/repeatWord">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/other/repeatWord" data-id="common/other/repeatWord"> <label class="checkbox" for="setting-common/other/repeatWord">Removing repeat words</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/other/accent">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/other/accent" data-id="ru/other/accent"> <label class="checkbox" for="setting-ru/other/accent">Replacement capital letters to&nbsp;lowercase with addition of&nbsp;accent<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
