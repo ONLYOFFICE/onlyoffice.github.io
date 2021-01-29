@@ -240,6 +240,8 @@ var Ps;
             switchClass(elements.re_api, 'display-none', false);
             switchClass(elements.translator, 'display-none', false);
         }
+        else
+            apikey = '';
     })
 
     function updateScroll()
