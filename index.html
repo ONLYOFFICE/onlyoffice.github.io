@@ -68,6 +68,15 @@
             font-size: 11px !important;
             margin-top: -1px;
         }
+        #button_wrapper {
+			display: flex;
+			justify-content: space-between;
+		}
+		.btn-text-default {
+			display: flex;
+   			align-items: center;
+    		justify-content: center;
+		}
 	</style>
 
 </head>
@@ -100,8 +109,10 @@
 				</select>
 				</span>
 			</div>
-			<button onсlick="" id="copy" class="btn-text-default">Copy</button>
-			<button onсlick="" id="paste" class="btn-text-default">Paste</button>
+			<div id="button_wrapper">
+				<div onсlick="" id="copy" class="btn-text-default">Copy</div>
+				<div onсlick="" id="paste" class="btn-text-default">Insert to document</div>
+			</div>
 		</div>
 		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
 		<div id="display" style="height: 80%; width: calc(100% - 12px); position: relative; ">
