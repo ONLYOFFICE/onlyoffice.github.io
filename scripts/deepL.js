@@ -31,10 +31,12 @@ var Ps;
 
         txt = text;
 
-        window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-            if (sText !== '')
-                RunTranslate(sText);
-        });
+        if (text !== '') {
+            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+                if (sText !== '')
+                    RunTranslate(sText);
+            });
+        }
 	};
 
     function CreateParams(allParas) {
