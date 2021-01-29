@@ -31,15 +31,10 @@ var Ps;
 
         txt = text;
 
-        if (text !== '') {
-            document.getElementById('txt_shower').innerHTML = '';
-            var allParsedParas = SplitText(txt);
-            DelInvalidChars(allParsedParas);
-            var sParams = CreateParams(allParsedParas);
-            var target_lang = GetTargetLang();
-
-            Translate(apikey, target_lang, sParams);
-        }
+        window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+            if (sText !== '')
+                RunTranslate(sText);
+        });
 	};
 
     function CreateParams(allParas) {
@@ -104,10 +99,11 @@ var Ps;
                 $('#txt_shower').toggleClass('error');
 
             if (apikey == '') {
-                container.innerHTML = "Apikey required!";
+                container.innerHTML = "API key required!";
             }
             else {
                 if (oResponse.status === 403) {
+                    $('#api_empty').hide();
                     $('#img_error').show();
                     if (!$('#api-value').hasClass('error_api'))
                         $('#api-value').toggleClass('error_api');
@@ -185,12 +181,8 @@ var Ps;
 
         $('#select_example').on('change', function() {
             window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                document.getElementById('txt_shower').innerHTML = '';
-                var allParsedParas = SplitText(sText);
-                DelInvalidChars(allParsedParas);
-                var sParams = CreateParams(allParsedParas);
-                var target_lang = GetTargetLang();
-                Translate(apikey, target_lang, sParams);
+                if (sText !== '')
+                    RunTranslate(sText);
             });
         })
 
@@ -213,7 +205,10 @@ var Ps;
             else {
                 if (!$('#txt_shower').hasClass('error'))
                     $('#txt_shower').toggleClass('error');
-                document.getElementById('txt_shower').innerHTML = 'Apikey is empty!';
+                if (!$('#api-value').hasClass('error_api'))
+                    $('#api-value').toggleClass('error_api');
+                $('#img_error').hide();
+                $('#api_empty').show();
             }
         })
         $('#reconf').on('click', function() {
@@ -225,8 +220,13 @@ var Ps;
             switchClass(elements.re_api, 'display-none', true)
             switchClass(elements.api, 'display-none', false);
             switchClass(elements.translator, 'display-none', true);
+            $(elements.api_value).focus();
         })
-
+        $(elements.api_value).focus(function(){
+            if(this.value !== this.defaultValue){
+                this.select();
+            }
+        });
         setTimeout(function() {
             $('#paste').click(function () {
                 Asc.scope.arr = translatedText;
@@ -254,6 +254,15 @@ var Ps;
 		this.executeCommand("close", "");
 	};
 
+    function RunTranslate(sText) {
+        document.getElementById('txt_shower').innerHTML = '';
+        var allParsedParas = SplitText(sText);
+        DelInvalidChars(allParsedParas);
+        var sParams = CreateParams(allParsedParas);
+        var target_lang = GetTargetLang();
+
+        Translate(apikey, target_lang, sParams);
+    };
 	window.Asc.plugin.onExternalMouseUp = function()
 	{
 		var evt = document.createEvent("MouseEvents");
