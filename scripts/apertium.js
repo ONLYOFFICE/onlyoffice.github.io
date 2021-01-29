@@ -49,7 +49,10 @@ var Ps;
         txt = text;
 
         if (text !== '') {
-            RunTranslate(txt);
+            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
+                if (sText !== '')
+                    RunTranslate(sText);
+            });
         }
 	};
 
