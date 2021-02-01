@@ -63,9 +63,13 @@ var Ps;
     function Translate(apikey, targetLanguage, sParams) {
         showLoader(elements, true);
         $.ajax({
-            method: 'GET',
-            url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
-            dataType: 'json'
+            method: 'POST',
+            beforeSend: function(request) {
+				request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
+			},
+			data: '?auth_key=' + apikey + sParams  + '&target_lang=' + targetLanguage,
+            url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey
+
         }).success(function (oResponse) {
             isValidKey = true;
             if ($('#txt_shower').hasClass('error'))
