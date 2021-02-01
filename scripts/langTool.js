@@ -14,6 +14,7 @@
 	var displayNoneClass = "display-none";
 	var blurClass        = "no_class";
     var elements         = null;
+    var serviceUrl = "https://languagetool.org/api/v2/check";
 
 	function showLoader(elements, show) {
 
@@ -71,14 +72,14 @@
 			language : lang,
 			enabledOnly : false
 		}
-		var _url = "https://languagetool.org/api/v2/check"
+
 		$.ajax({
 			method: 'POST',
 			beforeSend: function(request) {
 				request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
 			},
 			data : data,
-			url: _url
+			url: serviceUrl
 		}).success(function (oResponse) {
 			matches = oResponse.matches.map(function(el, ind) {
 				el.index = ind;
