@@ -15,3 +15,8 @@ It is called Languagetool in the interface and is installed by default in cloud,
 5. The text in the plugin window will change according to your choice.
 
 Another way to use it: open the plugin and type the word in the field. Press Lookup to search for synonyms.
+
+## Using your service
+
+You can send translation requests to your service. To do this, you need to change the url
+address of the **serviceUrl** variable in the **./scripts/langTool.js»** file.
