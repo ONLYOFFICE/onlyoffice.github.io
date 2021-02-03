@@ -110,12 +110,13 @@ var Ps;
 
         for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
             if (allParasInSelection[nStr].search(/	/) === 0) {
+                allParsedParas.push("");
                 allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
             }
             var sSplited = allParasInSelection[nStr].split(/	/);
 
             sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
+                allParsedParas.push(removeCR(item));
             });
         }
 
@@ -129,18 +130,14 @@ var Ps;
         Asc.scope.arr = allTypografedParas;
         window.Asc.plugin.info.recalculate = true;
 
-        var strResult = "";
-
-        for (var Item = 0; Item < allTypografedParas.length; Item++) {
-            if (allTypografedParas[Item] === "")
-                continue;
-            if (Item < allTypografedParas.length - 1)
-                strResult += allTypografedParas[Item] + '\n';
-            else
-                strResult += allTypografedParas[Item];
-        }
-        window.Asc.plugin.executeMethod("PasteText", [strResult]);
+        window.Asc.plugin.callCommand(function() {
+            Api.ReplaceTextSmart(Asc.scope.arr);
+        });
     }
+
+    function removeCR(text) {
+        return text.replace(/\r\n?/g, '');
+    };
 
     function updateScroll()
 	{
