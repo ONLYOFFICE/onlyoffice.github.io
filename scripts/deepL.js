@@ -236,7 +236,11 @@ var Ps;
         setTimeout(function() {
             $('#paste').click(function () {
                 Asc.scope.arr = translatedText;
-                window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                window.Asc.plugin.info.recalculate = true;
+
+                window.Asc.plugin.callCommand(function() {
+                    Api.ReplaceTextSmart(Asc.scope.arr);
+                });
             })
         });
 
