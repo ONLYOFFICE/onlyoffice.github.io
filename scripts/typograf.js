@@ -10,8 +10,13 @@ var Ps;
 		return false;
     };
 
-	window.Asc.plugin.init = function () {
-	    var inputsMain = $(".prefs__all-rules").find(".form-control");
+    var sText = '';
+	window.Asc.plugin.init = function (text) {
+        sText = text;
+    };
+
+    function SetSavedSettings() {
+        var inputsMain = $(".prefs__all-rules").find(".form-control");
 	    var allInputs = $(inputsMain).closest(".prefs__fieldset").find(".prefs__rule").find(".form-control");
 
         var locale_saved = localStorage.getItem('locale_typograf');
@@ -43,16 +48,14 @@ var Ps;
 			minimumResultsForSearch: Infinity,
 			width : '120px',
 		});
-
+        SetSavedSettings();
 		Ps = new PerfectScrollbar("#settings", {suppressScrollX: true});
 
 	    $('.prefs__rule').removeAttr('title');
         $('.prefs__rule-checkbox').wrap("<label></label>");
 
         $("#correct").find(".btn-text-default").click(function() {
-            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                CorrectText(sText);
-            })
+            CorrectText(sText);
         });
 
         $(".hidden").click(function() {
@@ -106,6 +109,7 @@ var Ps;
         }
 
         var allParasInSelection = sText.split(/\n/);
+
         var allParsedParas = [];
 
         for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {

@@ -21,13 +21,13 @@
 
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png"],
             "isViewer": true,
-            "EditorsSupport": [ "word" ],
+            "EditorsSupport": [ "word", "slide", "cell" ],
 
             "isVisual": true,
             "isModal": false,
             "isInsideMode": true,
 
-            "initDataType": "",
+            "initDataType": "text",
             "initData": "",
 
             "isUpdateOleOnResize": false,
