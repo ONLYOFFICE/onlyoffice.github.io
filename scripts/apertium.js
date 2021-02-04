@@ -299,8 +299,15 @@ var Ps;
 
         setTimeout(function() {
             $('#paste').click(function () {
-                if (isReadyToTranslate())
-                    window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                if (isReadyToTranslate()) {
+                    Asc.scope.arr = translatedParas;
+                    window.Asc.plugin.info.recalculate = true;
+
+                    window.Asc.plugin.callCommand(function() {
+                        Api.ReplaceTextSmart(Asc.scope.arr);
+                    });
+                }
+
                 return;
             })
         });
