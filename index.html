@@ -135,6 +135,9 @@
             font-size: 11px !important;
             margin-top: -1px;
         }
+        .display-none {
+            display: none;
+        }
 
 	</style>
 </head>
@@ -242,15 +245,6 @@
                 <div class="prefs__fieldset">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="punctuation"></label><div class="button"><label class="header cursor_pointer">Punctuation</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
-                    <div class="prefs__rule" title="ru/punctuation/exclamation">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label class="checkbox" >!! → !<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/punctuation/exclamationQuestion">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamationQuestion" data-id="ru/punctuation/exclamationQuestion"> <label class="checkbox" for="setting-ru/punctuation/exclamationQuestion">!? → ?!<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/punctuation/ano">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/ano" data-id="ru/punctuation/ano"> <label class="checkbox" for="setting-ru/punctuation/ano">Placement of&nbsp;commas before “а” and “но”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/punctuation/apostrophe">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/apostrophe" data-id="common/punctuation/apostrophe"> <label class="checkbox" for="setting-common/punctuation/apostrophe">Placement of&nbsp;correct apostrophe</label>
                     </div>
@@ -266,12 +260,21 @@
                     <div class="prefs__rule" title="common/punctuation/hellip">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/punctuation/hellip" data-id="common/punctuation/hellip"> <label class="checkbox" for="setting-common/punctuation/hellip">Replacement of&nbsp;three points by&nbsp;ellipsis</label>
                     </div>
-                    <div class="prefs__rule" title="ru/punctuation/hellipQuestion">
+                    <div class="prefs__rule locale-ru" title="ru/punctuation/exclamation">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamation" data-id="ru/punctuation/exclamation"> <label class="checkbox" >!! → !<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/punctuation/exclamationQuestion">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/exclamationQuestion" data-id="ru/punctuation/exclamationQuestion"> <label class="checkbox" for="setting-ru/punctuation/exclamationQuestion">!? → ?!<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/punctuation/ano">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/ano" data-id="ru/punctuation/ano"> <label class="checkbox" for="setting-ru/punctuation/ano">Placement of&nbsp;commas before “а” and “но”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/punctuation/hellipQuestion">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/punctuation/hellipQuestion" data-id="ru/punctuation/hellipQuestion"> <label class="checkbox" for="setting-ru/punctuation/hellipQuestion">«?…» → «?..», «!…» → «!..», «…,» → «…»<span class="prefs__rule-lang">ru</span></label>
                     </div>
                   </div>
                 </div>
-                <div class="prefs__fieldset">
+                <div class="prefs__fieldset locale-ru">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="hanging_punctuation"></label><div class="button"><label class="header cursor_pointer">Hanging punctuation</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
                     <div class="prefs__rule" title="ru/optalign/comma">
@@ -285,7 +288,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="prefs__fieldset">
+                <div class="prefs__fieldset locale-ru">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="dash_hyphen"></label><div class="button"><label class="header cursor_pointer">Dash and hyphen</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
                     <div class="prefs__rule" title="ru/dash/surname">
@@ -347,12 +350,6 @@
                 <div class="prefs__fieldset">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="non_br_space"></label><div class="button"><label class="header cursor_pointer">Non-breaking space</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
-                    <div class="prefs__rule" title="ru/nbsp/initials">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/initials" data-id="ru/nbsp/initials"> <label class="checkbox" for="setting-ru/nbsp/initials">Binding of&nbsp;initials to&nbsp;the name<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/see">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/see" data-id="ru/nbsp/see"> <label class="checkbox" for="setting-ru/nbsp/see">Non-breaking space after abbreviation «см.» and «им.»<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/nbsp/afterShortWord">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/afterShortWord" data-id="common/nbsp/afterShortWord"> <label class="checkbox" for="setting-common/nbsp/afterShortWord">Non-breaking space after short word</label>
                     </div>
@@ -361,15 +358,6 @@
                     </div>
                     <div class="prefs__rule" title="common/nbsp/afterParagraphMark">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/afterParagraphMark" data-id="common/nbsp/afterParagraphMark"> <label class="checkbox" for="setting-common/nbsp/afterParagraphMark">Non-breaking space after ¶</label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/ooo">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/ooo" data-id="ru/nbsp/ooo"> <label class="checkbox" for="setting-ru/nbsp/ooo">Non-breaking space after “OOO, ОАО, ЗАО, НИИ, ПБОЮЛ”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/page">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/page" data-id="ru/nbsp/page"> <label class="checkbox" for="setting-ru/nbsp/page">Non-breaking space after “стр.”, “гл.”, “рис.”, “илл.”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/year">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/year" data-id="ru/nbsp/year"> <label class="checkbox" for="setting-ru/nbsp/year">Non-breaking space before XXXX г. (2012 г.)<span class="prefs__rule-lang">ru</span></label>
                     </div>
                     <div class="prefs__rule" title="common/nbsp/beforeShortLastWord">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/beforeShortLastWord" data-id="common/nbsp/beforeShortLastWord"> <label class="checkbox" for="setting-common/nbsp/beforeShortLastWord">Non-breaking space before last short word in&nbsp;sentence</label>
@@ -380,35 +368,8 @@
                     <div class="prefs__rule" title="common/nbsp/beforeShortLastNumber">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/beforeShortLastNumber" data-id="common/nbsp/beforeShortLastNumber"> <label class="checkbox" for="setting-common/nbsp/beforeShortLastNumber">Non-breaking space before number (maximum 2&nbsp;digits) at&nbsp;end of&nbsp;sentence</label>
                     </div>
-                    <div class="prefs__rule" title="ru/nbsp/beforeParticle">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/beforeParticle" data-id="ru/nbsp/beforeParticle"> <label class="checkbox" for="setting-ru/nbsp/beforeParticle">Non-breaking space before “ли”, “ль”, “же”, “бы”, “б”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/dayMonth">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/dayMonth" data-id="ru/nbsp/dayMonth"> <label class="checkbox" for="setting-ru/nbsp/dayMonth">Non-breaking space between number and month<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/nbsp/afterNumber">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/nbsp/afterNumber" data-id="common/nbsp/afterNumber"> <label class="checkbox" for="setting-common/nbsp/afterNumber">Non-breaking space between number and word</label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/mln">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/mln" data-id="ru/nbsp/mln"> <label class="checkbox" for="setting-ru/nbsp/mln">Non-breaking space between number and “тыс.”, “млн”, “млрд” and “трлн”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/ps">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/ps" data-id="ru/nbsp/ps"> <label class="checkbox" for="setting-ru/nbsp/ps">Non-breaking space in&nbsp;P. S. and&nbsp;P. P. S.<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/abbr">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/abbr" data-id="ru/nbsp/abbr"> <label class="checkbox" for="setting-ru/nbsp/abbr">Non-breaking space in&nbsp;abbreviations, e.g. “т. д.”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/afterNumberSign">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/afterNumberSign" data-id="ru/nbsp/afterNumberSign"> <label class="checkbox" for="setting-ru/nbsp/afterNumberSign">Non-breaking thin space after №<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/rubleKopek">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/rubleKopek" data-id="ru/nbsp/rubleKopek"> <label class="checkbox" for="setting-ru/nbsp/rubleKopek">Not once. space before the “rub” and “cop.”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/addr">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/addr" data-id="ru/nbsp/addr"> <label class="checkbox" for="setting-ru/nbsp/addr">Placement of&nbsp;non-breaking space after “г.”, “обл.”, “ул.”, “пр.”, “кв.” et&nbsp;al.<span class="prefs__rule-lang">ru</span></label>
-                    </div>
-                    <div class="prefs__rule" title="ru/nbsp/centuries">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/centuries" data-id="ru/nbsp/centuries"> <label class="checkbox" for="setting-ru/nbsp/centuries">Remove spaces and extra points in&nbsp;“вв.”<span class="prefs__rule-lang">ru</span></label>
                     </div>
                     <div class="prefs__rule" title="common/nbsp/nowrap">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/nbsp/nowrap" data-id="common/nbsp/nowrap"> <label class="checkbox" for="setting-common/nbsp/nowrap">Replace non-breaking space to&nbsp;normal space in&nbsp;tags nowrap and nobr</label>
@@ -416,11 +377,53 @@
                     <div class="prefs__rule" title="common/nbsp/replaceNbsp">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/nbsp/replaceNbsp" data-id="common/nbsp/replaceNbsp"> <label class="checkbox" for="setting-common/nbsp/replaceNbsp">Replacing non-breaking space on&nbsp;normal before text correction</label>
                     </div>
-                    <div class="prefs__rule" title="ru/nbsp/m">
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/m">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/m" data-id="ru/nbsp/m"> <label class="checkbox" for="setting-ru/nbsp/m">m2 → м², m3 → м³ and non-breaking space<span class="prefs__rule-lang">ru</span></label>
                     </div>
-                    <div class="prefs__rule" title="ru/nbsp/years">
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/years">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/years" data-id="ru/nbsp/years"> <label class="checkbox" for="setting-ru/nbsp/years">г.г. → гг. and non-breaking space<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/initials">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/initials" data-id="ru/nbsp/initials"> <label class="checkbox" for="setting-ru/nbsp/initials">Binding of&nbsp;initials to&nbsp;the name<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/see">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/see" data-id="ru/nbsp/see"> <label class="checkbox" for="setting-ru/nbsp/see">Non-breaking space after abbreviation «см.» and «им.»<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/ooo">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/ooo" data-id="ru/nbsp/ooo"> <label class="checkbox" for="setting-ru/nbsp/ooo">Non-breaking space after “OOO, ОАО, ЗАО, НИИ, ПБОЮЛ”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/page">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/page" data-id="ru/nbsp/page"> <label class="checkbox" for="setting-ru/nbsp/page">Non-breaking space after “стр.”, “гл.”, “рис.”, “илл.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/year">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/year" data-id="ru/nbsp/year"> <label class="checkbox" for="setting-ru/nbsp/year">Non-breaking space before XXXX г. (2012 г.)<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/mln">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/mln" data-id="ru/nbsp/mln"> <label class="checkbox" for="setting-ru/nbsp/mln">Non-breaking space between number and “тыс.”, “млн”, “млрд” and “трлн”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/ps">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/ps" data-id="ru/nbsp/ps"> <label class="checkbox" for="setting-ru/nbsp/ps">Non-breaking space in&nbsp;P. S. and&nbsp;P. P. S.<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/abbr">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/abbr" data-id="ru/nbsp/abbr"> <label class="checkbox" for="setting-ru/nbsp/abbr">Non-breaking space in&nbsp;abbreviations, e.g. “т. д.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/afterNumberSign">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/afterNumberSign" data-id="ru/nbsp/afterNumberSign"> <label class="checkbox" for="setting-ru/nbsp/afterNumberSign">Non-breaking thin space after №<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/rubleKopek">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/rubleKopek" data-id="ru/nbsp/rubleKopek"> <label class="checkbox" for="setting-ru/nbsp/rubleKopek">Not once. space before the “rub” and “cop.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/addr">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/addr" data-id="ru/nbsp/addr"> <label class="checkbox" for="setting-ru/nbsp/addr">Placement of&nbsp;non-breaking space after “г.”, “обл.”, “ул.”, “пр.”, “кв.” et&nbsp;al.<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/centuries">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/centuries" data-id="ru/nbsp/centuries"> <label class="checkbox" for="setting-ru/nbsp/centuries">Remove spaces and extra points in&nbsp;“вв.”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/beforeParticle">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/beforeParticle" data-id="ru/nbsp/beforeParticle"> <label class="checkbox" for="setting-ru/nbsp/beforeParticle">Non-breaking space before “ли”, “ль”, “же”, “бы”, “б”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/nbsp/dayMonth">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/nbsp/dayMonth" data-id="ru/nbsp/dayMonth"> <label class="checkbox" for="setting-ru/nbsp/dayMonth">Non-breaking space between number and month<span class="prefs__rule-lang">ru</span></label>
                     </div>
                   </div>
                 </div>
@@ -463,17 +466,17 @@
                     <div class="prefs__rule" title="common/space/replaceTab">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/replaceTab" data-id="common/space/replaceTab"> <label class="checkbox" for="setting-common/space/replaceTab">Replacement of&nbsp;tab to&nbsp;4&nbsp;spaces</label>
                     </div>
-                    <div class="prefs__rule" title="ru/space/afterHellip">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/space/afterHellip" data-id="ru/space/afterHellip"> <label class="checkbox" for="setting-ru/space/afterHellip">Space after “...”, “!..” and “?..”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/space/beforeBracket">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/beforeBracket" data-id="common/space/beforeBracket"> <label class="checkbox" for="setting-common/space/beforeBracket">Space before opening bracket</label>
                     </div>
-                    <div class="prefs__rule" title="ru/space/year">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/space/year" data-id="ru/space/year"> <label class="checkbox" for="setting-ru/space/year">Space between number and word “год”<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/space/afterPunctuation">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/space/afterPunctuation" data-id="common/space/afterPunctuation"> <label class="checkbox" for="setting-common/space/afterPunctuation">space after punctuation</label>
+                    </div>
+                    <div class="prefs__rule" title="ru/space/afterHellip">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/space/afterHellip" data-id="ru/space/afterHellip"> <label class="checkbox" for="setting-ru/space/afterHellip">Space after “...”, “!..” and “?..”<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule" title="ru/space/year">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/space/year" data-id="ru/space/year"> <label class="checkbox" for="setting-ru/space/year">Space between number and word “год”<span class="prefs__rule-lang">ru</span></label>
                     </div>
                   </div>
                 </div>
@@ -506,7 +509,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="prefs__fieldset">
+                <div class="prefs__fieldset locale-ru">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="date"></label><div class="button"><label class="header cursor_pointer">Date</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
                     <div class="prefs__rule" title="ru/date/weekday">
@@ -517,7 +520,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="prefs__fieldset">
+                <div class="prefs__fieldset locale-ru">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="money"></label><div class="button"><label class="header cursor_pointer">Money</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
                     <div class="prefs__rule" title="ru/money/ruble">
@@ -537,17 +540,17 @@
                     <div class="prefs__rule" title="common/number/fraction">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/number/fraction" data-id="common/number/fraction"> <label class="checkbox" for="setting-common/number/fraction">1/2 → ½, 1/4 → ¼, 3/4 → ¾</label>
                     </div>
-                    <div class="prefs__rule" title="ru/number/comma">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/number/comma" data-id="ru/number/comma"> <label class="checkbox" for="setting-ru/number/comma">Commas in&nbsp;numbers<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/number/digitGrouping">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/number/digitGrouping" data-id="common/number/digitGrouping"> <label class="checkbox" for="setting-common/number/digitGrouping">Divide into groups numbers with many digits</label>
                     </div>
-                    <div class="prefs__rule" title="ru/number/ordinals">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/number/ordinals" data-id="ru/number/ordinals"> <label class="checkbox" for="setting-ru/number/ordinals">N-ый, -ой, -ая, -ое, -ые, -ым, -ом, -ых → N-й, -я, -е, -м, -х (25-й)<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/number/times">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/number/times" data-id="common/number/times"> <label class="checkbox" for="setting-common/number/times">x&nbsp;→ × (10&nbsp;x&nbsp;5 → 10×5)</label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/number/comma">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/number/comma" data-id="ru/number/comma"> <label class="checkbox" for="setting-ru/number/comma">Commas in&nbsp;numbers<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/number/ordinals">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/number/ordinals" data-id="ru/number/ordinals"> <label class="checkbox" for="setting-ru/number/ordinals">N-ый, -ой, -ая, -ое, -ые, -ым, -ом, -ых → N-й, -я, -е, -м, -х (25-й)<span class="prefs__rule-lang">ru</span></label>
                     </div>
                   </div>
                 </div>
@@ -563,12 +566,12 @@
                     <div class="prefs__rule" title="common/symbols/cf">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/symbols/cf" data-id="common/symbols/cf"> <label class="checkbox" for="setting-common/symbols/cf">Adding ° to&nbsp;C&nbsp;and F</label>
                     </div>
-                    <div class="prefs__rule" title="ru/symbols/NN">
+                    <div class="prefs__rule locale-ru" title="ru/symbols/NN">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/symbols/NN" data-id="ru/symbols/NN"> <label class="checkbox" for="setting-ru/symbols/NN">№№ → №<span class="prefs__rule-lang">ru</span></label>
                     </div>
                   </div>
                 </div>
-                <div class="prefs__fieldset">
+                <div class="prefs__fieldset locale-ru">
                   <div class="prefs__legend"><label class="prefs__all-rules"><input class="form-control" type="checkbox" data-id="typos"></label><div class="button"><label class="header cursor_pointer">Typos</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
                   <div class="prefs__group-rules">
                     <div class="prefs__rule" title="ru/typo/switchingKeyboardLayout">
@@ -582,14 +585,14 @@
                     <div class="prefs__rule" title="common/other/delBOM">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-common/other/delBOM" data-id="common/other/delBOM"> <label class="checkbox" for="setting-common/other/delBOM">Delete character BOM (Byte Order Mark)</label>
                     </div>
-                    <div class="prefs__rule" title="ru/other/phone-number">
-                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/other/phone-number" data-id="ru/other/phone-number"> <label class="checkbox" for="setting-ru/other/phone-number">Formatting phone numbers<span class="prefs__rule-lang">ru</span></label>
-                    </div>
                     <div class="prefs__rule" title="common/other/repeatWord">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-common/other/repeatWord" data-id="common/other/repeatWord"> <label class="checkbox" for="setting-common/other/repeatWord">Removing repeat words</label>
                     </div>
-                    <div class="prefs__rule" title="ru/other/accent">
+                    <div class="prefs__rule locale-ru" title="ru/other/accent">
                       <input type="checkbox" class="prefs__rule-checkbox form-control" id="setting-ru/other/accent" data-id="ru/other/accent"> <label class="checkbox" for="setting-ru/other/accent">Replacement capital letters to&nbsp;lowercase with addition of&nbsp;accent<span class="prefs__rule-lang">ru</span></label>
+                    </div>
+                    <div class="prefs__rule locale-ru" title="ru/other/phone-number">
+                      <input type="checkbox" class="prefs__rule-checkbox form-control" checked="checked" id="setting-ru/other/phone-number" data-id="ru/other/phone-number"> <label class="checkbox" for="setting-ru/other/phone-number">Formatting phone numbers<span class="prefs__rule-lang">ru</span></label>
                     </div>
                   </div>
                 </div>

@@ -49,6 +49,19 @@ var Ps;
 			width : '120px',
 		});
         SetSavedSettings();
+
+        var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
+        if (locale === 'ru') {
+            if ($('.locale-ru').hasClass('display-none')) {
+                $('.locale-ru').toggleClass('display-none');
+            }
+        }
+        else {
+            if (!$('.locale-ru').hasClass('display-none')) {
+                $('.locale-ru').toggleClass('display-none');
+            }
+        }
+
 		Ps = new PerfectScrollbar("#settings", {suppressScrollX: true});
 
 	    $('.prefs__rule').removeAttr('title');
@@ -91,6 +104,17 @@ var Ps;
         });
         $("#select_example").change(function() {
             localStorage.setItem('locale_typograf', $(this).val());
+            var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
+            if (locale === 'ru') {
+                if ($('.locale-ru').hasClass('display-none')) {
+                    $('.locale-ru').toggleClass('display-none');
+                }
+            }
+            else {
+                if (!$('.locale-ru').hasClass('display-none')) {
+                    $('.locale-ru').toggleClass('display-none');
+                }
+            }
         });
     });
 
