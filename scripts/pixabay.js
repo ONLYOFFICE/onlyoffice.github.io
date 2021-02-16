@@ -350,14 +350,14 @@ var  Ps;
 
         $(".hidden").click(function() {
             $(this).hide();
-            $("#hide_show").find(".opened").show();
+            $("#hide_show_reconf").find(".opened").show();
             if ($('#preview-images-container-id')[0].children.length !== 0)
                 $('#first-separator').show();
             $(document).find("#settings").slideToggle("fast", function() { updateScroll(); });
         });
         $(".opened").click(function() {
             $(this).hide();
-            $("#hide_show").find(".hidden").show();
+            $("#hide_show_reconf").find(".hidden").show();
             $('#first-separator').hide();
             $(document).find("#settings").slideToggle("fast", function() { updateScroll(); });
         });
