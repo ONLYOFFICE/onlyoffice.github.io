@@ -153,6 +153,7 @@ var Ps;
             RunTranslate(txt);
 
             $('.prefs__locale_target').on('change', function() {
+                translatedParas = [];
                 RunTranslate(txt);
             });
         }).error(function(){
