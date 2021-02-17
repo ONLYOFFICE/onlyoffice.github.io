@@ -31,11 +31,8 @@ var Ps;
 
         txt = text;
 
-        if (text !== '') {
-            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                if (sText !== '')
-                    RunTranslate(sText);
-            });
+        if (txt !== '') {
+            RunTranslate(txt);
         }
 	};
 
@@ -87,7 +84,6 @@ var Ps;
 
             container = document.getElementById('txt_shower');
             container.innerHTML = "";
-            translatedText = [];
             for (var nText = 0; nText < oResponse.translations.length; nText++) {
                 translatedText.push(oResponse.translations[nText].text);
 
@@ -186,10 +182,9 @@ var Ps;
         }, 500);
 
         $('#select_example').on('change', function() {
-            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                if (sText !== '')
-                    RunTranslate(sText);
-            });
+            translatedText = [];
+            if (txt !== '')
+                RunTranslate(txt);
         })
 
         $('#save').on('click', function() {
@@ -264,13 +259,27 @@ var Ps;
 		this.executeCommand("close", "");
 	};
 
+    function IsLastTransate(arrParas) {
+        if (arrParas.length !== translatedText.length)
+            return false;
+        for (var nPara = 0; nPara < arrParas.length; nPara++) {
+            if (arrParas[nPara] !== translatedText[nPara])
+                return false;
+        }
+        return true;
+    };
+
     function RunTranslate(sText) {
-        document.getElementById('txt_shower').innerHTML = '';
+
         var allParsedParas = SplitText(sText);
         DelInvalidChars(allParsedParas);
+        if (IsLastTransate(allParsedParas))
+            return false;
         var sParams = CreateParams(allParsedParas);
         var target_lang = GetTargetLang();
 
+        document.getElementById('txt_shower').innerHTML = '';
+        translatedText = [];
         Translate(apikey, target_lang, sParams);
     };
 	window.Asc.plugin.onExternalMouseUp = function()
