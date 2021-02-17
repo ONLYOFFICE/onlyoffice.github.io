@@ -40,8 +40,18 @@ var Ps;
             return false;
         }
 
-        if (txt !== '') {
-            RunTranslate(txt);
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                if (text !== "") {
+                    RunTranslate(txt);
+                }
+                break;
+            }
+            case 'cell': {
+                RunTranslate(txt);
+            }
+            break;
         }
 	};
 
