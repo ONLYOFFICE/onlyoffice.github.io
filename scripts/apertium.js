@@ -1,26 +1,19 @@
 var Ps;
 (function(window, undefined){
 
-    var txt              = "";
-    var translatedText   = [];
-    var displayNoneClass = "display-none";
-	var blurClass        = "no_class";
-    var elements         = null;
-    var translatedParas  = [];
-    var iterationCount   = 0;
-    var curIter          = 0;
-    var select           = null;
-    var selectClone      = null;
-    var allPairs         = {};
+    var txt                 = "";
+    var displayNoneClass    = "display-none";
+	var blurClass           = "no_class";
+    var elements            = null;
+    var translatedParas     = [];
+    var iterationCount      = 0;
+    var curIter             = 0;
+    var select              = null;
+    var selectClone         = null;
+    var allPairs            = {};
 
     var serviceUrl       = "https://www.apertium.org/"; //paste your service's url address here
 
-    function InitializationParas(nCount) {
-        translatedParas = [];
-        for (var nPara = 0; nPara < nCount; nPara++) {
-            translatedParas.push("");
-        }
-    };
     function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -41,18 +34,14 @@ var Ps;
 
 	window.Asc.plugin.init = function(text)
 	{
+	    txt = text;
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
             return false;
         }
-        
-        txt = text;
 
-        if (text !== '') {
-            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                if (sText !== '')
-                    RunTranslate(sText);
-            });
+        if (txt !== '') {
+            RunTranslate(txt);
         }
 	};
 
@@ -65,6 +54,15 @@ var Ps;
         return result;
     };
 
+    function IsLastTransate(arrParas) {
+        if (arrParas.length !== translatedParas.length)
+            return false;
+        for (var nPara = 0; nPara < arrParas.length; nPara++) {
+            if (arrParas[nPara] !== translatedParas[nPara])
+                return false;
+        }
+        return true;
+    };
     function GetSourceLang() {
         return document.getElementById("source").value;
     };
@@ -152,13 +150,10 @@ var Ps;
             updateSelect(allPairs["eng"]);
             showLoader2(elements, false);
 
-            window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                RunTranslate(sText);
-            });
+            RunTranslate(txt);
+
             $('.prefs__locale_target').on('change', function() {
-                window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                    RunTranslate(sText);
-                });
+                RunTranslate(txt);
             });
         }).error(function(){
             showLoader2(elements, false);
@@ -179,7 +174,7 @@ var Ps;
                 container = document.getElementById('txt_shower');
                 container.innerHTML = "";
                 for (var nText = 0; nText < translatedParas.length; nText++) {
-                    if (translatedParas[nText] !== "")
+                    if (translatedParas[nText] !== "" && translatedParas[nText])
                         container.innerHTML += translatedParas[nText] + '<br>';
                 }
                 updateScroll();
@@ -212,13 +207,15 @@ var Ps;
             var sSplited = allParasInSelection[nStr].split(/	/);
 
             sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
+                allParsedParas.push(removeCR(item));
             });
         }
 
         return allParsedParas;
     };
-
+    function removeCR(text) {
+        return text.replace(/\r\n?/g, '');
+    };
     function selectText(id) {
         var sel, range;
         var el = document.getElementById(id); //get element id
@@ -314,13 +311,15 @@ var Ps;
     });
 
     function RunTranslate(sText) {
-        document.getElementById('txt_shower').innerHTML = "";
-        translatedParas = [];
         curIter = 0;
-
         var source_lang = GetSourceLang();
         var allParas = SplitText(sText);
         DelInvalidChars(allParas);
+        if (IsLastTransate(allParas))
+            return false;
+
+        translatedParas = [];
+        document.getElementById('txt_shower').innerHTML = "";
 
         var target_lang = GetTargetLang();
         var txtToTranslate = PrepareTextToSend(allParas);
@@ -332,8 +331,10 @@ var Ps;
         }
 
         for (var nText = 0; nText < txtToTranslate.length; nText++) {
-            if (txtToTranslate[nText].Text === "")
+            if (txtToTranslate[nText].Text === "") {
+                translatedParas[nText] = "";
                 continue;
+            }
             Translate(source_lang, target_lang, txtToTranslate[nText]);
         }
     };
