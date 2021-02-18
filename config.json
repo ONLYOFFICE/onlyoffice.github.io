@@ -6,7 +6,7 @@
       {
         "description": "Zotero",
         "url": "index.html",
-        "icons": [ "icon.png", "icon@2x.png" ],
+        "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
         "isViewer": false,
         "EditorsSupport": [ "word" ],
         "initDataType": "text",
