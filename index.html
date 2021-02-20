@@ -29,7 +29,7 @@
 		}
 	</style>
 </head>
-<body id="body" style="max-height: calc(100% - 15px); max-width: calc(100% - 20px);">
+<body id="body" style="max-height: calc(100% - 40px); max-width: calc(100% - 20px);">
 	<div id="div_main" style="height: calc(100% - 50px);">
 		<!-- <textarea id="main" spellcheck="false"></textarea> -->
 		<div id="main" style="border:1px solid black; height:100%"></div>
@@ -37,5 +37,10 @@
 	<div style="display:flex; justify-content: center; margin: 15px;">
 		<button id="btn_paste">Paste into the document</button>
 	</div>
+	<div style="display:flex; justify-content: center; margin-bottom:10px;">
+		<button id="btn_copy">Copy</button>
+		<button id="btn_clear">Clear</button>
+	</div>
+	<div style="width: fit-content; height: fit-content; opacity: 0;" id="textarea_copy"></div>
 </body>
 </html>
