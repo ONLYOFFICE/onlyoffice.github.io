@@ -34,7 +34,9 @@
 
             "buttons"         : [],
 
-            "initOnSelectionChanged": true
+            "initOnSelectionChanged": true,
+            
+            "events" : ["onTargetPositionChanged"]
         }
     ]
 }

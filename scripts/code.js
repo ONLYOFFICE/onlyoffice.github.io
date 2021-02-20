@@ -1,8 +1,10 @@
 (function(window, undefined)
 {
-	
+	var isInit = false;
+
 	window.Asc.plugin.init = function(text)
 	{
+		isInit = true;
 		var str = text
 		var REGEX_CHINESE = /[\u3131-\uD79D]|[\u3000-\u303f]|[\u3040-\u309f]|[\u30a0-\u30ff]|[\uff00-\uff9f]|[\u4e00-\u9faf]|[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
 		var REPLACE_REGEX = /[\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3131-\uD79D\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2b73f}\u{2b740}-\u{2b81f}\u{2b820}-\u{2ceaf}\uf900-\ufaff\u3300-\u33ff\ufe30-\ufe4f\uf900-\ufaff\u{2f800}-\u{2fa1f}]/gu;
@@ -20,18 +22,30 @@
 		var lines = text.split(/\r\n/);
 		// // lines.length--; //will be like ms
 		if (lines[lines.length-1] == "") lines.length--;
-		document.getElementById("charsNoSpaces").innerHTML = text.replace(/\s+/g, '').length;
+		showResults(text.replace(/\s+/g, '').length, chars, words, lines.length);		
+	};
+
+	function showResults (charsNoSpaces, chars, words, lines) {
+		document.getElementById("charsNoSpaces").innerHTML = charsNoSpaces;
 		document.getElementById("chars").innerHTML         = chars;
 		document.getElementById("words").innerHTML         = words;
-		document.getElementById("lines").innerHTML         = lines.length;
-		
-	};
+		document.getElementById("lines").innerHTML         = lines;
+	}
 
 
 	window.Asc.plugin.button = function()
 	{
 		this.executeCommand("close", "");
 	};
+
+	window.Asc.plugin.event_onTargetPositionChanged = function()
+	{
+		if (!isInit)
+			showResults(0, 0, 0, 0);
+		else
+			isInit = false;
+	};
+
 	window.Asc.plugin.onTranslate = function()
 	{
 		var label = document.getElementById("caption");
