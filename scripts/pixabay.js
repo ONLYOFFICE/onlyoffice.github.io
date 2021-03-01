@@ -3,12 +3,10 @@ var  Ps;
 (function(window, undefined) {
 	
 	var displayNoneClass = "display-none";
-	var blurClass = "blur";
 	var waitForLoad = false;
 
 	function showLoader(elements, show) {
         switchClass(elements.loader, displayNoneClass, !show);
-        switchClass(elements.contentHolder, blurClass, show);
     }
 
 	function switchClass(el, className, add) {
