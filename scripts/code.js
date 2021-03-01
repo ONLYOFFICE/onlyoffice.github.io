@@ -27,8 +27,8 @@
 		$('#style_id').select2({
 			minimumResultsForSearch: Infinity
 		}).on('select2:select', function (e) {
-			document.getElementById("style").href = "scripts/highlight/styles/" + e.params.data.id;
-			window.Asc.plugin.loadModule("./scripts/highlight/styles/" + e.params.data.id , function(content){
+			document.getElementById("style").href = "vendor/highlight/styles/" + e.params.data.id;
+			window.Asc.plugin.loadModule("./vendor/highlight/styles/" + e.params.data.id , function(content){
 				style_value = content;
 				if (isDE || isFF) {
 					$("#jq_color").spectrum("set", (hexc($(container).css('backgroundColor'))));
@@ -82,7 +82,7 @@
 
 		if (!isInitLang)
 		{
-			window.Asc.plugin.loadModule("./scripts/highlight/styles/googlecode.css", function(content){
+			window.Asc.plugin.loadModule("./vendor/highlight/styles/googlecode.css", function(content){
 				style_value = content;
 				if (isDE || isFF) {
 					$("#jq_color").spectrum("set", (hexc($(container).css('backgroundColor'))));
