@@ -142,17 +142,33 @@
         	width: calc(100% - 24px);
         	margin: 16px 12px 0 12px;
         }
+        #flex-loader-container {
+		    display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 50px;
+            border: none;
+            background-image: none;
+            background-color: rgba(68, 68, 68, 0.95);
+            color: #f1f1f1;
+            border-radius: 6px;
+		}
 
     </style>
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 </head>
 <body style="width: 100%;height: 100%; margin: 0;">
 	<div id="loader-container" class="asc-plugin-loader">
-        <div class="asc-loader-image">
-            <div class="asc-loader-title"></div>
-        </div>
-        <div class="asc-loader-title">
-            Loading...
+        <div id="flex-loader-container">
+            <div>
+                <div class="asc-loader-image">
+                    <div class="asc-loader-title"></div>
+                </div>
+                <div class="asc-loader-title">
+                    Loading...
+                </div>
+            </div>
         </div>
     </div>
     <div id="main-container-id" >
