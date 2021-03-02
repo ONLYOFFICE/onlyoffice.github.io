@@ -1,0 +1,61 @@
+{
+    "name": "LanguageTool",
+    "guid": "asc.{7CDB02C9-A0BF-4B56-9A1A-71C860B8498F}",
+    "version": "1.0",
+
+    "variations": [
+        {
+            "description": "LanguageTool",
+            "url": "index.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        },
+        {
+            "description": "About",
+            "descriptionLocale": {
+                "ru": "Справка",
+                "fr": "À propos",
+                "es": "Sobre programa",
+                "de": "Über"
+            },
+            "url": "index_about.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "none",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                }
+            ],
+
+            "size": [ 400, 50 ]
+        }
+    ]
+}
