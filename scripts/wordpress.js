@@ -121,6 +121,11 @@
                 $(docElements.loginState).show();
             }
         });
+        $(docElements.redirectUrlCopy).click(function () {
+            docElements.redirectConfigUrl.select();
+            document.execCommand("copy");
+            window.open("https://developer.wordpress.com/apps/new/", '_blank');
+        });
         $(docElements.reconfigBtn).click(function() {
             if (clientID)
                 docElements.appIdField.value = clientID;
