@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mendeley</title>
+</head>
+<body spellcheck="false" class="noselect">
+    <script>
+        (function () {
+            function parseLocation() {
+                try {
+                    var matches = document.location.hash.match(new RegExp("access_token=([^&]*)&state=([^&]*)"));
+                    if (matches && matches[1] && matches[2]) {
+                        window.opener.OAuthCallback(matches[1], matches[2]);
+                    } else {
+                        window.opener.OAuthError("No token or state", document.location);
+                    }
+                } finally {
+                    window.close();
+                }
+            }
+
+            window.onload = parseLocation;
+        })();
+    </script>
+</body>
+</html>	
