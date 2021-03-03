@@ -9,6 +9,10 @@ The plugin is pre-installed in ONLYOFFICE Workspace (Enterprise and Community Ed
 * Generate citations and add bibliography.
 * Select the necessary bibliography style: Harward, IEEE, Chicago or any other. 
 
+## How to install
+
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+
 ## How to use
 
 1. Choose the EasyBib plugin from the Plugins tab.
@@ -20,15 +24,10 @@ The bibliography list will begin where you put the cursor.
 ## Configuration
 
 1. Go to the [EasyBib signup page](https://api.citation-api.com/signup). 
-2. Fill in the form. Paste https://service.onlyoffice.com/oauth2.aspx into the URL field, accept the Terms of service and click Submit.
+2. Fill in the form. Paste URL from field with redirect URL from plugin into the URL field in form, accept the Terms of service and click Submit.
 3. You will receive the confirmation message to the specified email address. Follow the confirmation link;
 4. After that you will receive another email message with your application information. Copy or write down the `apikey`.
-
-## Documentation
-
-Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
-
-Plugins code and methods https://api.onlyoffice.com/docbuilder/basic.
+5. Paste `apikey` to specific fields in plugin, save.
 
 ## User feedback and support
 
