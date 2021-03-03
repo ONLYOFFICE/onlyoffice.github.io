@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>EasyBib</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script type="text/javascript" src="scripts/localstorage.js"></script>
+    <script type="text/javascript" src="scripts/bibliography.js"></script>
+    <script type="text/javascript" src="vendor/select2-4.0.6-rc.1/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="scripts/easybib.js"></script>
+    <script type="text/javascript" src="scripts/easybibhelper.js"></script>
+    <link href="resources/css/style.css" rel="stylesheet">
+    <link href="vendor/select2-4.0.6-rc.1/dist/css/select2.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="configState" style="margin: 12px;">
+        <div><span>To use EasyBib, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-mendeley/tree/master#configuration">Learn more here.</a></div>
+        <input id="redirectConfig" style="width: 100%; margin-top: 8px;" readonly class="form-control" />
+        <div id="redirectUrlCopy" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="btn-text-default">Copy Link and Open Form</div>
+        <div>In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</div>
+        <div style="margin-top: 8px;">
+            <span>API key</span>
+            <input id="appIdField" style="width: 100%;" autocomplete="off" class="form-control" type="text" placeholder="API key" />
+        </div>
+        <div id="saveConfigBtn" style="width: 100%; margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="btn-text-default">Save</div>
+    </div>
+    <div id="main-container" style="display:none">
+        <div class="buttons-container">
+            <button id="bookButton" class="source-button active-button i18n">Book</button>
+            <button id="journalButton" class="source-button book-active-button i18n">Journal Article</button>
+            <button id="websiteButton" class="source-button i18n">Website</button>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search" />
+            <button id="searchButton" class="search-button i18n">Search</button>
+        </div>
+        <div class="result-container">
+            <div class="search-title">
+                <span class="result i18n">Search result</span>
+                <span class="back-to-bib i18n" onclick="backToBibliography()">Back to bibliography</span>
+            </div>
+            <div class="bibliography-title i18n">Bibliography</div>
+        </div>
+        <div id="search_result" class="webkit-scrollbar"></div>
+        <div id="bib" class="webkit-scrollbar"></div>
+    
+    <div class="add-bibl-container">
+        <div class="bib-style">
+            <label class="i18n">Style</label>
+        </div>
+        <select id="styles" class="style-list combo" size="1" disabled="disabled">
+            <option>Loading...</option>
+        </select>
+        <button class="add-button i18n">Add Bibliography to Doc</button>
+    </div>
+        <div class="clear_float"></div>
+    </div>
+</body>
+</html>
