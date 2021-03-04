@@ -6,7 +6,8 @@ The plugin is pre-installed in ONLYOFFICE Workspace (Enterprise and Community Ed
 
 ## Important
 
-** Easybib will no longer issue an access key to its API and will probably close support soon.**
+Easybib will no longer issue an access key to its API and will probably close support soon.
+*Citation:*
 >API access is no longer offered or supported. We have made a request to the development
 >team to take down that page, as it is now obsolete. We do apologize for any inconvenience.
 
