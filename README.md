@@ -4,6 +4,12 @@ The EasyBib plugin allows users to automatically add the references to the docum
 
 The plugin is pre-installed in ONLYOFFICE Workspace (Enterprise and Community Edition) and ONLYOFFICE cloud service. 
 
+## Important
+
+** Easybib will no longer issue an access key to its API and will probably close support soon.**
+>API access is no longer offered or supported. We have made a request to the development
+>team to take down that page, as it is now obsolete. We do apologize for any inconvenience.
+
 ## Features
 
 * Generate citations and add bibliography.
