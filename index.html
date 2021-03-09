@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Zoom</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+    <script src="scripts/zoom.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+	<style>
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			overflow-y: hidden;
+			overflow-x: hidden;
+			font-family: Arial;
+    		font-size: 11px
+		}
+		.select {
+			margin-left: 12px;
+		}
+		.settings_group {
+            display:none
+        }
+        .cursor_pointer {
+            cursor:pointer;
+        }
+        .legend {
+            display: flex;
+            justify-content: start;
+        }
+        .arrow {
+            float:right;
+            align-self: center;
+        }
+        .button {
+            cursor:pointer;
+        }
+        .input_container {
+        	display: flex;
+        }
+        .checkbox {
+        	margin-top: 1px;
+            margin-left: 5px;
+        }
+        .transform {
+            transform: rotate(180deg);
+        }
+        .radiobox {
+        	margin-left: 7px;
+        }
+        .display-none {
+        	display: none !important;
+        }
+        .error_api {
+        	border: 1px solid #D9534F;
+        }
+
+	</style>
+</head>
+<body style="width: 100%;height: 100%; margin: 0;">
+    <div id="iframe_join" class="display-none" style="width:100%; height:100%;margin:0;padding:0;"></div>
+	<div id="iframe_meeting" class="display-none" style="width:100%; height:100%;margin:0;padding:0;"></div>
+	<div id="scheduler-container" class="display-none" style="width:100%; height:90%;margin:0;padding:0; display:flex; flex-direction:column;">
+		<div id="topic">
+			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+				<label style="margin-left:12px;">Topic</label>
+			</div>
+			<input type="text" id="topic-value" class="form-control" placeholder="Enter topic here" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
+		</div>
+		<div id="date">
+			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+				<label style="margin-left:12px;">Date</label>
+			</div>
+			<span class="select">
+				<input id="date-value" style="width:calc(100% - 24px);" class="form-control" type="text" name="date"/>
+			</span>
+		</div>
+		<div id="time">
+			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+				<label style="margin-left:12px;">Time</label>
+			</div>
+			<span class="select">
+				<select id="time-hour" class="select_example group" data-id="time-hour">
+				</select>
+			</span>
+			<span class="select">
+				<select id="time-am-pm"class="select_example group" style="float:right; margin-right: 12px;" data-id="time-am-pm">
+					<option value="am">
+						AM
+					</option>
+					<option value="pm">
+						PM
+					</option>
+				</select>
+			</span>
+		</div>
+		<div id="duration">
+			<div style="margin: 16px 0 8px 0; font-weight: normal !important;">
+				<label style="margin-left:12px;">Duration</label>
+			</div>
+			<div style="display:flex; flex-direction: row; justify-content: space-between;">
+				<span class="select" style="display:flex; flex-direction: column; width: calc(50% - 20px);">
+					<label style="margin-bottom: 4px;">hour</label>
+					<div>
+						<select id="duration-hour" class="select_example duration" data-id="duration-hour">
+						</select>
+					</div>
+				</span>
+				<span class="select" style="display:flex; flex-direction: column; margin-right: 12px; width: calc(50% - 20px);">
+					<label style="margin-bottom: 4px;">min</label>
+					<div>
+						<select id="duration-min" class="select_example duration" style="" data-id="duration-min">
+						</select>
+					</div>
+				</span>
+			</div>
+		</div>
+		<div style="margin:16px 12px 0px 12px;">
+			<button id="schedule_meeting" onсlick="" class="btn-text-default" style="width:100%; height: 30px;">Schedule meeting</button>
+		</div>
+		<div id="settings_wrapper" style="margin-top: 16px;">
+			<div class="legend"><div id="adv_settings" class="button"><label class="header cursor_pointer" style="margin-left: 12px;">Advanced settings</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+		  	<div class="settings_group">
+			  	<div id="meeting_id" style="display: flex; flex-direction: column;">
+			  		<div style="margin: 16px 0 8px 0; font-weight: normal !important;">
+						<label style="margin-left:12px;">Meeting ID</label>
+					</div>
+					<div class="input_container" style="margin-bottom: 8px;">
+						<label class="radiobox"><input type="radio" checked="checked" value="false" name="meeting-id" id="auto_meet_id" data-id="auto_meet_id" class="button__radiobox checked"><span>Generate Automatically</span></label>
+					</div>
+					<div class="input_container">
+						<label class="radiobox"><input type="radio" name="meeting-id" value="true" id="personal_meet_id" data-id="personal_meet_id" class="button__radiobox checked"><span>Personal Meeting ID XXX XXX XXXX</span></label>
+					</div>
+			  	</div>
+				<div id="password_container">
+					<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+						<label style="margin-left:12px;">Password</label>
+					</div>
+					<input type="text" id="password" class="form-control" placeholder="Enter meeting password here" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
+				</div>
+				<div id="waiting_room" class="input_container" style="margin-top: 16px;">
+					<input type="checkbox" style="margin-left: 12px;" class="form-control" checked="checked" id="is_waiting_room" data-id="auto_meet_id"> <label class="checkbox">Waiting Room</label>
+			  	</div>
+				<div id="timezone_container">
+					<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+						<label style="margin-left:12px;">Timezone</label>
+					</div>
+					<span class="select">
+						<select id="timezone" class="select_example" data-id="timezone">
+							<option value="Pacific/Midway">
+							  Midway Island, Samoa
+							</option>
+							<option value="Pacific/Pago_Pago">
+							  Pago Pago
+							</option>
+							<option value="Pacific/Honolulu">
+							  Hawaii
+							</option>
+							<option value="America/Anchorage">
+							  Alaska
+							</option>
+							<option value="America/Vancouver">
+							  Vancouver
+							</option>
+							<option value="America/Los_Angeles">
+							  Pacific Time (US and Canada)
+							</option>
+							<option value="America/Tijuana">
+							  Tijuana
+							</option>
+							<option value="America/Edmonton">
+							  Edmonton
+							</option>
+							<option value="America/Denver">
+							  Mountain Time (US and Canada)
+							</option>
+							<option value="America/Phoenix">
+							  Arizona
+							</option>
+							<option value="America/Mazatlan">
+							  Mazatlan
+							</option>
+							<option value="America/Winnipeg">
+							  Winnipeg
+							</option>
+							<option value="America/Regina">
+							  Saskatchewan
+							</option>
+							<option value="America/Chicago">
+							  Central Time (US and Canada)
+							</option>
+							<option value="America/Mexico_City">
+							  Mexico City
+							</option>
+							<option value="America/Guatemala">
+							  Guatemala
+							</option>
+							<option value="America/El_Salvador">
+							  El Salvador
+							</option>
+							<option value="America/Managua">
+							  Managua
+							</option>
+							<option value="America/Costa_Rica">
+							  Costa Rica
+							</option>
+							<option value="America/Montreal">
+							  Montreal
+							</option>
+							<option value="America/New_York">
+							  Eastern Time (US and Canada)
+							</option>
+							<option value="America/Indianapolis">
+							  Indiana (East)
+							</option>
+							<option value="America/Panama">
+							  Panama
+							</option>
+							<option value="America/Bogota">
+							  Bogota
+							</option>
+							<option value="America/Lima">
+							  Lima
+							</option>
+							<option value="America/Halifax">
+							  Halifax
+							</option>
+							<option value="America/Puerto_Rico">
+							  Puerto Rico
+							</option>
+							<option value="America/Caracas">
+							  Caracas
+							</option>
+							<option value="America/Santiago">
+							  Santiago
+							</option>
+							<option value="America/St_Johns">
+							  Newfoundland and Labrador
+							</option>
+							<option value="America/Montevideo">
+							  Montevideo
+							</option>
+							<option value="America/Araguaina">
+							  Brasilia
+							</option>
+							<option value="America/Argentina/Buenos_Aires">
+							  Buenos Aires, Georgetown
+							</option>
+							<option value="America/Godthab">
+							  Greenland
+							</option>
+							<option value="America/Sao_Paulo">
+							  Sao Paulo
+							</option>
+							<option value="Atlantic/Azores">
+							  Azores
+							</option>
+							<option value="Canada/Atlantic">
+							  Atlantic Time (Canada)
+							</option>
+							<option value="Atlantic/Cape_Verde">
+							  Cape Verde Islands
+							</option>
+							<option value="UTC">
+							  Universal Time UTC
+							</option>
+							<option value="Etc/Greenwich">
+							  Greenwich Mean Time
+							</option>
+							<option value="Europe/Belgrade">
+							  Belgrade, Bratislava, Ljubljana
+							</option>
+							<option value="CET">
+							  Sarajevo, Skopje, Zagreb
+							</option>
+							<option value="Atlantic/Reykjavik">
+							  Reykjavik
+							</option>
+							<option value="Europe/Dublin">
+							  Dublin
+							</option>
+							<option value="Europe/London">
+							  London
+							</option>
+							<option value="Europe/Lisbon">
+							  Lisbon
+							</option>
+							<option value="Africa/Casablanca">
+							  Casablanca
+							</option>
+							<option value="Africa/Nouakchott">
+							  Nouakchott
+							</option>
+							<option value="Europe/Oslo">
+							  Oslo
+							</option>
+							<option value="Europe/Copenhagen">
+							  Copenhagen
+							</option>
+							<option value="Europe/Brussels">
+							  Brussels
+							</option>
+							<option value="Europe/Berlin">
+							  Amsterdam, Berlin, Rome, Stockholm, Vienna
+							</option>
+							<option value="Europe/Helsinki">
+							  Helsinki
+							</option>
+							<option value="Europe/Amsterdam">
+							  Amsterdam
+							</option>
+							<option value="Europe/Rome">
+							  Rome
+							</option>
+							<option value="Europe/Stockholm">
+							  Stockholm
+							</option>
+							<option value="Europe/Vienna">
+							  Vienna
+							</option>
+							<option value="Europe/Luxembourg">
+							  Luxembourg
+							</option>
+							<option value="Europe/Paris">
+							  Paris
+							</option>
+							<option value="Europe/Zurich">
+							  Zurich
+							</option>
+							<option value="Europe/Madrid">
+							  Madrid
+							</option>
+							<option value="Africa/Bangui">
+							  West Central Africa
+							</option>
+							<option value="Africa/Algiers">
+							  Algiers
+							</option>
+							<option value="Africa/Tunis">
+							  Tunis
+							</option>
+							<option value="Africa/Harare">
+							  Harare, Pretoria
+							</option>
+							<option value="Africa/Nairobi">
+							  Nairobi
+							</option>
+							<option value="Europe/Warsaw">
+							  Warsaw
+							</option>
+							<option value="Europe/Prague">
+							  Prague Bratislava
+							</option>
+							<option value="Europe/Budapest">
+							  Budapest
+							</option>
+							<option value="Europe/Sofia">
+							  Sofia
+							</option>
+							<option value="Europe/Istanbul">
+							  Istanbul
+							</option>
+							<option value="Europe/Athens">
+							  Athens
+							</option>
+							<option value="Europe/Bucharest">
+							  Bucharest
+							</option>
+							<option value="Asia/Nicosia">
+							  Nicosia
+							</option>
+							<option value="Asia/Beirut">
+							  Beirut
+							</option>
+							<option value="Asia/Damascus">
+							  Damascus
+							</option>
+							<option value="Asia/Jerusalem">
+							  Jerusalem
+							</option>
+							<option value="Asia/Amman">
+							  Amman
+							</option>
+							<option value="Africa/Tripoli">
+							  Tripoli
+							</option>
+							<option value="Africa/Cairo">
+							  Cairo
+							</option>
+							<option value="Africa/Johannesburg">
+							  Johannesburg
+							</option>
+							<option value="Europe/Moscow">
+							  Moscow
+							</option>
+							<option value="Asia/Baghdad">
+							  Baghdad
+							</option>
+							<option value="Asia/Kuwait">
+							  Kuwait
+							</option>
+							<option value="Asia/Riyadh">
+							  Riyadh
+							</option>
+							<option value="Asia/Bahrain">
+							  Bahrain
+							</option>
+							<option value="Asia/Qatar">
+							  Qatar
+							</option>
+							<option value="Asia/Aden">
+							  Aden
+							</option>
+							<option value="Asia/Tehran">
+							  Tehran
+							</option>
+							<option value="Africa/Khartoum">
+							  Khartoum
+							</option>
+							<option value="Africa/Djibouti">
+							  Djibouti
+							</option>
+							<option value="Africa/Mogadishu">
+							  Mogadishu
+							</option>
+							<option value="Asia/Dubai">
+							  Dubai
+							</option>
+							<option value="Asia/Muscat">
+							  Muscat
+							</option>
+							<option value="Asia/Baku">
+							  Baku, Tbilisi, Yerevan
+							</option>
+							<option value="Asia/Kabul">
+							  Kabul
+							</option>
+							<option value="Asia/Yekaterinburg">
+							  Yekaterinburg
+							</option>
+							<option value="Asia/Tashkent">
+							  Islamabad, Karachi, Tashkent
+							</option>
+							<option value="Asia/Calcutta">
+							  India
+							</option>
+							<option value="Asia/Kathmandu">
+							  Kathmandu
+							</option>
+							<option value="Asia/Novosibirsk">
+							  Novosibirsk
+							</option>
+							<option value="Asia/Almaty">
+							  Almaty
+							</option>
+							<option value="Asia/Dacca">
+							  Dacca
+							</option>
+							<option value="Asia/Krasnoyarsk">
+							  Krasnoyarsk
+							</option>
+							<option value="Asia/Dhaka">
+							  Astana, Dhaka
+							</option>
+							<option value="Asia/Bangkok">
+							  Bangkok
+							</option>
+							<option value="Asia/Saigon">
+							  Vietnam
+							</option>
+							<option value="Asia/Jakarta">
+							  Jakarta
+							</option>
+							<option value="Asia/Irkutsk">
+							  Irkutsk, Ulaanbaatar
+							</option>
+							<option value="Asia/Shanghai">
+							  Beijing, Shanghai
+							</option>
+							<option value="Asia/Hong_Kong">
+							  Hong Kong
+							</option>
+							<option value="Asia/Taipei">
+							  Taipei
+							</option>
+							<option value="Asia/Kuala_Lumpur">
+							  Kuala Lumpur
+							</option>
+							<option value="Asia/Singapore">
+							  Singapore
+							</option>
+							<option value="Australia/Perth">
+							  Perth
+							</option>
+							<option value="Asia/Yakutsk">
+							  Yakutsk
+							</option>
+							<option value="Asia/Seoul">
+							  Seoul
+							</option>
+							<option value="Asia/Tokyo">
+							  Osaka, Sapporo, Tokyo
+							</option>
+							<option value="Australia/Darwin">
+							  Darwin
+							</option>
+							<option value="Australia/Adelaide">
+							  Adelaide
+							</option>
+							<option value="Asia/Vladivostok">
+							  Vladivostok
+							</option>
+							<option value="Pacific/Port_Moresby">
+							  Guam, Port Moresby
+							</option>
+							<option value="Australia/Brisbane">
+							  Brisbane
+							</option>
+							<option value="Australia/Sydney">
+							  Canberra, Melbourne, Sydney
+							</option>
+							<option value="Australia/Hobart">
+							  Hobart
+							</option>
+							<option value="Asia/Magadan">
+							  Magadan
+							</option>
+							<option value="SST">
+							  Solomon Islands
+							</option>
+							<option value="Pacific/Noumea">
+							  New Caledonia
+							</option>
+							<option value="Asia/Kamchatka">
+							  Kamchatka
+							</option>
+							<option value="Pacific/Fiji">
+							  Fiji Islands, Marshall Islands
+							</option>
+							<option value="Pacific/Auckland">
+							  Auckland, Wellington
+							</option>
+							<option value="Asia/Kolkata">
+							  Mumbai, Kolkata, New Delhi
+							</option>
+							<option value="Europe/Kiev">
+							  Kiev
+							</option>
+							<option value="America/Tegucigalpa">
+							  Tegucigalpa
+							</option>
+							<option value="Pacific/Apia">
+							  Independent State of Samoa
+							</option>
+						</select>
+					</span>
+				</div>
+				<div id="reccurr_conference">
+					<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+						<label style="margin-left:12px;">Recurring conference</label>
+					</div>
+					<span class="select">
+						<select id="recurring-conf" class="select_example" data-id="rec-conf">
+							<option value="never">
+								Never
+							</option>
+							<option value="daily">
+								Daily
+							</option>
+							<option value="weekly">
+								Weekly
+							</option>
+							<option value="monthly">
+								Monthly
+							</option>
+						</select>
+					</span>
+				</div>
+				<div id="screen_demonstration" style="display: none; flex-direction: column;">
+			  		<div style="margin: 16px 0 8px 0; font-weight: normal !important;">
+						<label style="margin-left:12px;">Screen Demonstration</label>
+					</div>
+					<div class="input_container" style="margin-bottom: 8px;">
+						<label class="radiobox"><input type="radio" checked="checked" name="screen-share" id="screen-share-for-organizer" data-id="screen-share-for-organizer" class="button__radiobox checked"><span>Organizer only</span></label>
+					</div>
+					<div class="input_container">
+						<label class="radiobox"><input type="radio" name="screen-share" id="screen-share-for-all" data-id="screen-share-for-all" class="button__radiobox checked"><span>All participants</span></label>
+					</div>
+			  	</div>
+		  </div>
+		</div>
+		<div id="reconf">
+            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; right: 10px;">Reconfigure</label>
+        </div>
+		<div id="switch">
+            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; left: 10px;">Meeting mode</label>
+        </div>
+	</div>
+	<div id="configState">
+		<div>
+			<div style="margin:12px;">
+				<span class="i18n">To use Zoom plugin, register this editor as a JWT app.</span>
+				<a target="_blank" href="https://github.com/ONLYOFFICE/plugin-zoom/tree/develop#configuration" class="link i18n">Learn more here.</a>
+			</div>
+			<div style="margin:12px;">
+				In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Client ID, Secret ID, JWT token below and save it.
+			</div>
+		</div>
+		<div style="display: flex; flex-direction: column; margin: 12px;">
+			<span>Email</span>
+			<input id="emailField" autocomplete="off" class="form-control" data-id="zoom-email-value" type="text" placeholder="Client ID" />
+		</div>
+		<div style="display: flex; flex-direction: column; margin: 12px;">
+			<span>API key</span>
+			<input id="apiKeyField" autocomplete="off" class="form-control" data-id="zoom-client-key" type="text" placeholder="Client ID" />
+		</div>
+		<div style="display: flex; flex-direction: column; margin: 12px;">
+			<span>Secret key</span>
+			<input id="secretKeyField" autocomplete="off" class="form-control" data-id="zoom-secret-key" type="text" placeholder="Client ID" />
+		</div>
+		<div style="display: flex; flex-direction: column; margin: 12px;">
+			<span>JWT Token</span>
+			<input id="tokenKeyField" autocomplete="off" class="form-control" data-id="zoom-jwt-token" type="text" placeholder="JWT Token" />
+		</div>
+		<div id="saveConfigBtn" class="button wide control i18n">
+			<button onсlick="" class="btn-text-default" style="width:calc(100% - 24px); margin: 0 12px 0px 12px; height: 30px;">Save</button>
+		</div>
+
+	</div>
+</body>
+</html>
