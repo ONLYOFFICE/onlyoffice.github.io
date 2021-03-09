@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Zoom WebSDK</title>
+    <meta charset="utf-8" />
+    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.8.6/css/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.8.6/css/react-select.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+</head>
+<body id="body">
+    <style>
+
+        body, html {
+            font-size: 11px !important;
+            min-height: 100% !important;
+			height: 100%;
+			min-width: 100% !important;
+			width: 100%;
+			font-family: "Arial"; !important
+        }
+        .sdk-select {
+            height: 34px;
+            border-radius: 4px;
+        }
+
+        #nav-tool {
+            margin-bottom: 0px;
+        }
+
+        #show-test-tool {
+            float:bottom;
+            top: 100px;
+            left: 0;
+            display: block;
+            z-index: 99999;
+        }
+
+        #display_name {
+            width: 100%;
+        }
+
+        .btn-primary {
+            margin-top: 5%;
+        }
+
+        #websdk-iframe {
+            width: 100%;
+            height: 100%;
+            border: 1px;
+            border-color: red;
+            border-style: dashed;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            margin: 0;
+        }
+
+        .btn-text-default {
+            min-height: 22px;
+            height: auto;
+			display: flex;
+   			align-items: center;
+    		justify-content: center;
+    		width: 40%;
+    		margin-top: 16px;
+    		text-align: center;
+		}
+		.form-group {
+		    display: flex;
+		    flex-direction: column;
+		}
+		label {
+		    font-size: 11px;
+		    margin-bottom: 0 !important;
+		    color: #f1f1f1;
+		}
+		.form-control {
+		    outline:0 !important;
+		}
+		input[type=text]:focus {
+		    outline: 0 !important;
+		}
+    </style>
+
+    <div id="join_container">
+        <nav id="nav-tool" class="navbar navbar-inverse navbar-fixed-top" style="height: 100%;">
+            <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Zoom WebSDK</a>
+            </div>
+            <div id="navbar" class="websdktest">
+                <form class="navbar-form navbar-right" id="meeting_form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="display_name" id="display_name" data-id="zoom-display-name-id" value="" maxLength="100"
+                            placeholder="Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Meeting ID</label>
+                        <input type="text" name="meeting_number" id="meeting_number" value="" maxLength="200"
+                            style="width:150px" placeholder="Meeting Number" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Meeting password</label>
+                        <input type="text" name="meeting_pwd" id="meeting_pwd" value="" style="width:150px"
+                            maxLength="32" placeholder="Meeting Password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" name="meeting_email" id="meeting_email" value="" data-id="zoom-email-id" style="width:150px"
+                            maxLength="32" placeholder="Email option" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Meeting role</label>
+                        <select id="meeting_role" class="sdk-select">
+                            <option value=0>Attendee</option>
+                            <option value=1>Host</option>
+                            <option value=5>Assistant</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Meeting region</label>
+                        <select id="meeting_china" class="sdk-select">
+                            <option value=0>Global</option>
+                            <option value=1>China</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Meeting language</label>
+                        <select id="meeting_lang" class="sdk-select">
+                            <option value="en-US">English</option>
+                            <option value="de-DE">German Deutsch</option>
+                            <option value="es-ES">Spanish Español</option>
+                            <option value="fr-FR">French Français</option>
+                            <option value="jp-JP">Japanese 日本語</option>
+                            <option value="pt-PT">Portuguese Portuguese</option>
+                            <option value="ru-RU">Russian Русский</option>
+                            <option value="zh-CN">Chinese 简体中文</option>
+                            <option value="zh-TW">Chinese 繁体中文</option>
+                            <option value="ko-KO">Korean 한국어</option>
+                            <option value="vi-VN">Vietnamese Tiếng Việt</option>
+                            <option value="it-IT">Italian italiano</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" value="" id="copy_link_value" />
+                    <div id="button_wrapper" style="display: flex; justify-content: space-between;">
+                        <div type="submit" class="btn-text-default" id="join_meeting" onclick="window.joinMeeting('#joinMeeting')">Join</div>
+                        <div type="button" link="" onclick="window.copyJoinLink('#copy_join_link')"
+                            class="btn-text-default" id="copy_join_link">Copy Direct join link</div>
+                    </div>
+
+
+
+                </form>
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+        </nav>
+        <div id="show-test-tool">
+        <button type="submit" class="btn btn-primary" id="show-test-tool-btn"
+            title="show or hide top test tool">Show</button>
+    </div>
+    </div>
+    <div id="iframe_meeting" style="width:100%; height:100%;margin:0;padding:0; display:none;"></div>
+    <div id="reconf" style="z-index: 9999;">
+        <label style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; right: 10px; z-index: 9999;">Reconfigure</label>
+    </div>
+    <div id="switch" style="z-index: 9999;">
+        <label style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; left: 10px; z-index: 9999;">Schedule mode</label>
+    </div>
+
+    <script>
+        document.getElementById('show-test-tool-btn').addEventListener("click", function (e) {
+            var textContent = e.target.textContent;
+            if (textContent === 'Show') {
+                document.getElementById('nav-tool').style.display = 'block';
+                document.getElementById('show-test-tool-btn').textContent = 'Hide';
+            } else {
+                document.getElementById('nav-tool').style.display = 'none';
+                document.getElementById('show-test-tool-btn').textContent = 'Show';
+            }
+        })
+    </script>
+
+    <script src="https://source.zoom.us/1.8.6/lib/vendor/react.min.js"></script>
+    <script src="https://source.zoom.us/1.8.6/lib/vendor/react-dom.min.js"></script>
+    <script src="https://source.zoom.us/1.8.6/lib/vendor/redux.min.js"></script>
+    <script src="https://source.zoom.us/1.8.6/lib/vendor/redux-thunk.min.js"></script>
+    <script src="https://source.zoom.us/1.8.6/lib/vendor/lodash.min.js"></script>
+    <script src="https://source.zoom.us/zoom-meeting-1.8.6.min.js"></script>
+    <script src="vendor/zoom-sdk/tool.js"></script>
+    <script src="vendor/zoom-sdk/meeting.js"></script>
+    <script src="vendor/zoom-sdk/vconsole.min.js"></script>
+    <script src="vendor/zoom-sdk/index.js"></script>
+
+    <script>
+        $('.sdk-select').select2({
+			minimumResultsForSearch: Infinity,
+			width : '100%',
+		});
+    </script>
+</body>
+
+</html>
