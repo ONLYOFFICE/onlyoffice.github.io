@@ -34,7 +34,9 @@ var Ps;
 
 	window.Asc.plugin.init = function(text)
 	{
-	    txt = text;
+	    document.getElementById("textarea").value = text;
+	    txt = document.getElementById("textarea").value;
+
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
             return false;
@@ -43,7 +45,7 @@ var Ps;
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
             case 'slide': {
-                if (text !== "") {
+                if (txt !== "") {
                     RunTranslate(txt);
                 }
                 break;
@@ -172,6 +174,8 @@ var Ps;
     };
 
     function Translate(sourceLanguage, targetLanguage, oText) {
+        if (!$('#vanish_container').hasClass('display-none'))
+            $('#vanish_container').toggleClass('display-none');
         showLoader(elements, true);
         $.ajax({
             method: 'GET',
@@ -188,6 +192,8 @@ var Ps;
                     if (translatedParas[nText] !== "" && translatedParas[nText])
                         container.innerHTML += translatedParas[nText] + '<br>';
                 }
+                if ($('#vanish_container').hasClass('display-none'))
+                    $('#vanish_container').toggleClass('display-none');
                 updateScroll();
                 updateScroll();
                 showLoader(elements, false);
@@ -278,7 +284,7 @@ var Ps;
     $(document).ready(function () {
         $('.select_example').select2({
 			minimumResultsForSearch: Infinity,
-			width: "calc(100% - 67px)"
+			width: "100%"
 		});
         elements = {
             loader: document.getElementById("loader-container"),
@@ -319,6 +325,51 @@ var Ps;
                 return;
             })
         });
+
+        $('#show_manually').click(function() {
+            $(this).hide();
+            $('#hide_manually').show();
+            $('#enter_container').show();
+        });
+        $('#hide_manually').click(function() {
+            $(this).hide();
+            $('#show_manually').show();
+            $('#enter_container').hide();
+        });
+
+        function delay(callback, ms) {
+            var timer = 0;
+            return function() {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                    }, ms || 0);
+            };
+        };
+
+        $('#textarea').keyup(delay(function(e) {
+            txt = document.getElementById("textarea").value;
+
+                if (!isReadyToTranslate()) {
+                    console.log('Languages not loaded!');
+                    return false;
+                }
+
+                switch (window.Asc.plugin.info.editorType) {
+                    case 'word':
+                    case 'slide': {
+                        if (txt !== "") {
+                            RunTranslate(txt);
+                        }
+                        break;
+                    }
+                    case 'cell': {
+                        RunTranslate(txt);
+                    }
+                    break;
+                }
+        }, 500));
     });
 
     function RunTranslate(sText) {
@@ -368,7 +419,7 @@ var Ps;
 
         $('.select_example').select2({
 			minimumResultsForSearch: Infinity,
-			width: "calc(100% - 67px)"
+			width: "100%"
 		});
 		document.dispatchEvent(evt);
 	};
