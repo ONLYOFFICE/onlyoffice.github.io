@@ -71,17 +71,28 @@
         #button_wrapper {
 			display: flex;
 			justify-content: space-between;
+			margin-bottom: 20px;
 		}
 		.btn-text-default {
 			display: flex;
    			align-items: center;
     		justify-content: center;
 		}
+		#hide_show {
+            width: 130px;
+            margin-top: 16px;
+            margin-bottom: 10px;
+            margin-left: 14px;
+        }
+        #show_manually, #hide_manually {
+            cursor:pointer;
+            border-bottom: 1px dashed #444444;
+        }
 	</style>
 
 </head>
 <body id="body" style="left:0px; top:0px; margin:0px; padding:0px;">
-	<div id="main_container-id" style="width:100%; height:100%;margin:0;padding:0; overflow: hidden;">
+	<div id="main_container-id" style="width:100%; height:100%;margin:0;padding:0; overflow: hidden; display: flex; flex-direction: column">
 
 		<div id="loader-container" class="asc-plugin-loader display-none">
 			<div class="asc-loader-image">
@@ -101,27 +112,37 @@
     	</div>
 
 		<div id="main_panel">
-			<div class="input__head">
-				<span class="prefs__locale_source"><label class="header" style="margin-left: 12px; margin-right: 8px;">Source</label><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
-				</select>
+			<div class="input__head" style="display: flex; flex-direction: row; justify-content: space-between;">
+				<span class="prefs__locale_source" style="margin-left: 12px; width: calc(40% + 2px);"><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+					</select>
 				</span>
-				<br>
-				<br>
-				<span class="prefs__locale_target"><label class="header" style="margin-left: 12px; margin-right: 12px;">Target</label><select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
-				</select>
+				<span style="display:flex;">
+					<img id="arrow" style="align-self:center;" src="resources/img/arrow.png">
+				</span>
+				<span class="prefs__locale_target" style="margin-right: 12px; width: calc(40% + 2px);"><select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+					</select>
 				</span>
 			</div>
+			<div id="hide_show"><label style="display:none;" id="hide_manually">Hide enter text manually</label><label id="show_manually">Enter text manually</label></div>
+			<div id="enter_container" style="margin: 0px 12px 0px 12px; display:none;">
+				<textarea id="textarea" class="form-control" spellcheck="false" style="width: 100%; resize: none; height: 100px;"></textarea>
+			</div>
+
+		</div>
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
+		<div id="display" style="width: calc(100% - 12px); position: relative; ">
+			<div id="txt_shower" style="width:calc(100% - 20px); margin-right:8px; word-break: break-all;">
+
+			</div>
+		</div>
+		<div id="vanish_container" class="display-none">
+			<div class="separator horizontal" style="width: calc(100% - 24px); margin: 12px 0 0 12px;"></div>
 			<div id="button_wrapper">
 				<div onсlick="" id="copy" class="btn-text-default">Copy</div>
 				<div onсlick="" id="paste" class="btn-text-default">Replace</div>
 			</div>
 		</div>
-		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
-		<div id="display" style="height: 80%; width: calc(100% - 12px); position: relative; ">
-			<div id="txt_shower" style="width:calc(100% - 20px); margin-right:8px; word-break: break-all;">
 
-			</div>
-		</div>
 	</div>
 </body>
 </html>
