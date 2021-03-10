@@ -29,7 +29,8 @@ var Ps;
 			minimumResultsForSearch: Infinity,
 		});
 
-        txt = text;
+        document.getElementById("textarea").value = text;
+	    txt = document.getElementById("textarea").value;
 
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
@@ -68,6 +69,8 @@ var Ps;
     };
 
     function Translate(apikey, targetLanguage, sParams) {
+        if (!$('#vanish_container').hasClass('display-none'))
+            $('#vanish_container').toggleClass('display-none');
         showLoader(elements, true);
         $.ajax({
             method: 'POST',
@@ -100,9 +103,15 @@ var Ps;
                 if (oResponse.translations[nText].text !== "")
                     container.innerHTML += oResponse.translations[nText].text + '<br>';
             }
+
+            if ($('#vanish_container').hasClass('display-none'))
+                $('#vanish_container').toggleClass('display-none');
+
             updateScroll();
             updateScroll();
+
             showLoader(elements, false);
+
         }).error(function(oResponse) {
             isValidKey = false;
             showLoader(elements, false);
@@ -257,6 +266,45 @@ var Ps;
         }
         else
             apikey = '';
+
+        $('#show_manually').click(function() {
+            $(this).hide();
+            $('#hide_manually').show();
+            $('#enter_container').show();
+        });
+        $('#hide_manually').click(function() {
+            $(this).hide();
+            $('#show_manually').show();
+            $('#enter_container').hide();
+        });
+
+        function delay(callback, ms) {
+            var timer = 0;
+            return function() {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                    }, ms || 0);
+            };
+        };
+
+        $('#textarea').keyup(delay(function(e) {
+            txt = document.getElementById("textarea").value;
+            switch (window.Asc.plugin.info.editorType) {
+                case 'word':
+                case 'slide': {
+                    if (txt !== "") {
+                        RunTranslate(txt);
+                    }
+                    break;
+                }
+                case 'cell': {
+                    RunTranslate(txt);
+                }
+                break;
+            }
+        }, 500));
     })
 
     function updateScroll()
