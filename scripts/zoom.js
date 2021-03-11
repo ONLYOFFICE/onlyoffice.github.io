@@ -382,20 +382,14 @@ var Ps;
             var sResult   = sTopic + '\r' + sTime + '\r' + sJoinUrl +'\r' + sConfId + '\r' + sPassword + '\r';
 
             Asc.scope.meeting_info = sResult;
-            /*window.Asc.plugin.callCommand(function() {
-                Api.CoAuthoringChatSendMessage(Asc.scope.meeting_info);
-            }, false, true, function(isTrue) {
-                if (isTrue)
-                    alert('Meeting was created');
-                else
-                    alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
-            });*/
-            window.Asc.plugin.executeMethod('CoAuthoringChatSendMessage', Asc.scope.meeting_info, function(isTrue) {
+
+            window.Asc.plugin.executeMethod('CoAuthoringChatSendMessage', [Asc.scope.meeting_info], function(isTrue) {
                 if (isTrue)
                     alert('Meeting was created');
                 else
                     alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
             });
+
             showLoader(elements, false);
         }).error(function(e) {
             alert('Meeting was not created');
