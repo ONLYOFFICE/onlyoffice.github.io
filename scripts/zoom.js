@@ -1,5 +1,6 @@
 var Ps;
 (function(window, undefined){
+    var displayNoneClass = "display-none";
 	var isInit = false;
 	var ifr;
     var time_hour_data     = [];
@@ -34,6 +35,17 @@ var Ps;
 		if (e.stopPropagation)
 			e.stopPropagation();
 		return false;
+    };
+
+    function showLoader(elements, bShow) {
+       switchClass(elements.loader, displayNoneClass, !bShow);
+    };
+    function switchClass(el, className, add) {
+        if (add) {
+            el.classList.add(className);
+        } else {
+            el.classList.remove(className);
+        }
     };
 
 	window.Asc.plugin.init = function () {
@@ -86,6 +98,10 @@ var Ps;
     };
 
 	$(document).ready(function () {
+	    elements = {
+            loader: document.getElementById("loader-container"),
+		};
+
 	    $('input[name="date"]').daterangepicker({
             singleDatePicker: true,
         });
@@ -181,13 +197,19 @@ var Ps;
 		SaveConfiguration(false);
     });
 
-    function SaveConfiguration(bShowError) {
-        if (!IsEmptyFields(bShowError)) {
-            email = $('#emailField').val().trim();
-            apiKey = $('#apiKeyField').val().trim();
-            secretKey = $('#secretKeyField').val().trim();
-            tokenKey = $('#tokenKeyField').val().trim();
-
+    async function IsValidConfigData() {
+        showLoader(elements, true);
+        var url =
+        $.ajax({
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + tokenKey,
+            },
+            dataType: 'json',
+            json: true,
+            data: JSON.stringify(jsonData),
+            url: proxyUrl + zoomApiUrl + email
+        }).success(function (oResponse) {
             localStorage.setItem($('#emailField').attr("data-id"), email);
             localStorage.setItem($('#apiKeyField').attr("data-id"), apiKey);
             localStorage.setItem($('#secretKeyField').attr("data-id"), secretKey);
@@ -195,6 +217,22 @@ var Ps;
 
             $('#configState').toggleClass('display-none');
             $('#scheduler-container').toggleClass('display-none');
+
+            showLoader(elements, false);
+        }).error(function(e){
+            alert('Check your details');
+            showLoader(elements, false);
+        });
+    };
+
+    async function SaveConfiguration(bShowError) {
+        if (!IsEmptyFields(bShowError)) {
+            email = $('#emailField').val().trim();
+            apiKey = $('#apiKeyField').val().trim();
+            secretKey = $('#secretKeyField').val().trim();
+            tokenKey = $('#tokenKeyField').val().trim();
+
+            await IsValidConfigData();
         }
     };
     function IsEmptyFields(bShowError) {
@@ -262,6 +300,8 @@ var Ps;
         return isEmpty;
     }
     function ScheduleMeeting() {
+        showLoader(elements, true);
+
         // getting parameters
         var sTopic         = $('#topic-value').val();
         var meetingType    = 2;
@@ -342,11 +382,24 @@ var Ps;
             var sResult   = sTopic + '\r' + sTime + '\r' + sJoinUrl +'\r' + sConfId + '\r' + sPassword + '\r';
 
             Asc.scope.meeting_info = sResult;
-            window.Asc.plugin.callCommand(function() {
+            /*window.Asc.plugin.callCommand(function() {
                 Api.CoAuthoringChatSendMessage(Asc.scope.meeting_info);
+            }, false, true, function(isTrue) {
+                if (isTrue)
+                    alert('Meeting was created');
+                else
+                    alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
+            });*/
+            window.Asc.plugin.executeMethod('CoAuthoringChatSendMessage', Asc.scope.meeting_info, function(isTrue) {
+                if (isTrue)
+                    alert('Meeting was created');
+                else
+                    alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
             });
-        }).error(function(e){
-
+            showLoader(elements, false);
+        }).error(function(e) {
+            alert('Meeting was not created');
+            showLoader(elements, false);
         });
     };
     window.Asc.plugin.button = function(id)
