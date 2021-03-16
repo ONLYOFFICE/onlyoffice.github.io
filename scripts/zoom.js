@@ -7,8 +7,9 @@ var Ps;
     var duration_hour_data = [];
     var duration_min_data  = [];
     var times = ["12:00","12:30","1:00","1:30","2:00","2:30","3:00","3:30","4:00","4:30","5:00","5:30","6:00","6:30","7:00","7:30","8:00","8:30","9:00","9:30","10:00","10:30","11:00","11:30"];
-    var hours = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"];
-    var minutes = ["0","15","30","45"];
+    var hours = ["0 hour","1 hour","2 hour","3 hour","4 hour","5 hour","6 hour","7 hour","8 hour","9 hour","10 hour","11 hour","12 hour",
+    "13 hour","14 hour","15 hour","16 hour","17 hour","18 hour","19 hour","20 hour","21 hour","22 hour","23 hour","24 hour"];
+    var minutes = ["0 minutes","15 minutes","30 minutes","45 minutes"];
     var elements = { };
     var proxyUrl = "https://proxy-zoom.herokuapp.com/"
     var zoomApiUrl = "https://api.zoom.us/v2/users/";
@@ -17,13 +18,13 @@ var Ps;
     var secretKey = '';
     var tokenKey = '';
     for (var nTime = 0; nTime < times.length; nTime++) {
-        time_hour_data.push({id: nHour, text: times[nTime]});
+        time_hour_data.push({id: nTime, text: times[nTime]});
     }
     for (var nHour = 0; nHour < hours.length; nHour++) {
-        duration_hour_data.push({id: hours[nHour], text: hours[nHour]});
+        duration_hour_data.push({id: hours[nHour].split(' hour')[0], text: hours[nHour]});
     }
     for (var nMin = 0; nMin < minutes.length; nMin++) {
-        duration_min_data.push({id: minutes[nMin], text: minutes[nMin]});
+        duration_min_data.push({id: minutes[nMin].split(' minutes')[0], text: minutes[nMin]});
     }
 
     var jsonData = { };
@@ -178,24 +179,80 @@ var Ps;
                 $(this).toggleClass('error_api');
         });
         $('#reconf').click(function() {
-            $('#scheduler-container').toggleClass('display-none');
+            $('#create-meeting-container').toggleClass('display-none');
             $('#configState').toggleClass('display-none');
         });
         $('#switch').click(function() {
-            $('#scheduler-container').toggleClass('display-none');
+            $('#create-meeting-container').toggleClass('display-none');
             $('#iframe_join').toggleClass('display-none');
         });
-        $('#schedule_meeting').click(function() {
-            ScheduleMeeting();
+        $('#create_meeting').click(function() {
+            CreateMeeting();
         });
-		Ps = new PerfectScrollbar("#scheduler-container", {suppressScrollX: true});
+        $('#start-meeting').click(function() {
+            CreateMeeting(true);
+        });
+        $('#schedule-meeting').click(function() {
+            $('#scheduler-container').slideToggle('fast', function() { updateScroll(); });
+        });
+        $('#recurring-conf').change(function() {
+            if ($(this).val() !== 'never') {
+                $('input[name="meeting-id"][value="false"]').prop('checked', true);
+                $("input[name=meeting-id]").prop("disabled", true);
+            }
+            else {
+                $("input[name=meeting-id]").prop("disabled", false);
+            }
+        });
+        $('#recurring-conf').trigger('change');
+
+        SetSavedFromLocalStorage();
+
+		Ps = new PerfectScrollbar("#create-meeting-container", {suppressScrollX: true});
 
         document.getElementById('emailField').value = localStorage.getItem($('#emailField').attr("data-id")) || "";
 		document.getElementById('apiKeyField').value = localStorage.getItem($('#apiKeyField').attr("data-id")) || "";
 		document.getElementById('secretKeyField').value = localStorage.getItem($('#secretKeyField').attr("data-id")) || "";
 		document.getElementById('tokenKeyField').value = localStorage.getItem($('#tokenKeyField').attr("data-id")) || "";
+
 		SaveConfiguration(false);
     });
+
+    function SaveToLocalStorage() {
+        localStorage.setItem('is-auto-meet-id-zoom', $("input[name=meeting-id]:checked").val());
+        localStorage.setItem($('#is-waiting-room').attr('data-id'), $('#is-waiting-room').prop('checked'));
+        localStorage.setItem($('#timezone').attr('data-id'), $('#timezone').val());
+        localStorage.setItem($('#recurring-conf').attr('data-id'), $('#recurring-conf').val());
+    };
+    function SetSavedFromLocalStorage() {
+        var isPersonalMeetId = localStorage.getItem('is-auto-meet-id-zoom');
+        if (isPersonalMeetId !== null) {
+            if (isPersonalMeetId === true.toString())
+                $('input[name="meeting-id"][value="true"]').prop('checked', true);
+            else
+                $('input[name="meeting-id"][value="false"]').prop('checked', true);
+        }
+
+        var isWaitingRoom = localStorage.getItem($('#is-waiting-room').attr('data-id'));
+        if (isWaitingRoom !== null) {
+            if (isWaitingRoom === true.toString())
+                $('#is-waiting-room').prop("checked", true);
+            else
+                $('#is-waiting-room').prop("checked", false);
+        }
+
+        var sTimeZone = localStorage.getItem($('#timezone').attr('data-id'));
+        if (sTimeZone) {
+            $('#timezone').val(sTimeZone);
+            $('#timezone').trigger('change');
+        }
+
+        var sRecurringConf = localStorage.getItem($('#recurring-conf').attr('data-id'));
+        if (sRecurringConf) {
+            $('#recurring-conf').val(sRecurringConf);
+            $('#recurring-conf').trigger('change');
+        }
+    };
 
     async function IsValidConfigData() {
         showLoader(elements, true);
@@ -216,7 +273,7 @@ var Ps;
             localStorage.setItem($('#tokenKeyField').attr("data-id"), tokenKey);
 
             $('#configState').toggleClass('display-none');
-            $('#scheduler-container').toggleClass('display-none');
+            $('#create-meeting-container').toggleClass('display-none');
 
             showLoader(elements, false);
         }).error(function(e){
@@ -299,7 +356,8 @@ var Ps;
 
         return isEmpty;
     }
-    function ScheduleMeeting() {
+    function CreateMeeting(isNowMeeting) {
+        SaveToLocalStorage();
         showLoader(elements, true);
 
         // getting parameters
@@ -312,7 +370,7 @@ var Ps;
         var sDurationMin   = $('#duration-min').val();
         var sMeetPasswd    = $('#password').val();
         var bPersonalId    = ('true' === $("input[name=meeting-id]:checked").val());
-        var bWaitingRoom   = document.getElementById("is_waiting_room").checked;
+        var bWaitingRoom   = document.getElementById("is-waiting-room").checked;
         var sTimeZone      = $('#timezone').val();
         var sRecurringConf = null;
         if ($('#recurring-conf').val() !== 'never') {
@@ -355,13 +413,18 @@ var Ps;
         }
         jsonData["topic"]        = sTopic;
         jsonData["type"]         = meetingType;
-        jsonData["start_time"]   = sResultTime;
-        jsonData["duration"]     = sResultDuration;
-        jsonData["settings"]     = meetingSettings;
-        if (sMeetPasswd !== "")
-            jsonData["password"] = sMeetPasswd;
-        jsonData["timezone"]     = sTimeZone;
-        jsonData["recurrence"]   = sRecurringConf;
+        if (!isNowMeeting) {
+            jsonData["start_time"] = sResultTime;
+            jsonData["duration"]     = sResultDuration;
+            jsonData["settings"]     = meetingSettings;
+            if (sMeetPasswd !== "")
+                jsonData["password"] = sMeetPasswd;
+            jsonData["timezone"]     = sTimeZone;
+            jsonData["recurrence"]   = sRecurringConf;
+        }
+        else {
+            jsonData["type"]         = 1;
+        }
 
         $.ajax({
             type: 'POST',
@@ -375,7 +438,7 @@ var Ps;
             url: proxyUrl + zoomApiUrl + email + '/meetings'
         }).success(function (oResponse) {
             var sTopic    = 'Topic: ' + oResponse.topic;
-            var sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + jsonData["timezone"];
+            var sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + oResponse["timezone"];
             var sJoinUrl  = 'Join URL: ' + oResponse.join_url;
             var sConfId   = 'Conference ID: ' + oResponse.id;
             var sPassword = 'Password: ' + oResponse.password;
