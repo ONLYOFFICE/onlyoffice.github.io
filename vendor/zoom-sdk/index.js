@@ -9,7 +9,7 @@ $(document).ready(function () {
         window.parent.switchForms('#iframe_join', '#configState');
     });
     $('#switch').click(function() {
-        window.parent.switchForms('#iframe_join', '#scheduler-container');
+        window.parent.switchForms('#iframe_join', '#create-meeting-container');
     });
 });
 function websdkready() {
