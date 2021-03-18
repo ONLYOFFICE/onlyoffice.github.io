@@ -50,6 +50,28 @@
 			width: calc(100% - 24px) !important;
 			margin: 0 12px 0 12px;
 		}
+		#button_wrapper {
+			display: flex;
+			justify-content: space-between;
+		}
+		.btn-text-default {
+			display: flex;
+   			align-items: center;
+    		justify-content: center;
+		}
+		#check {
+        	width:40%;
+        	margin-left: 12px;
+        	margin-top: 16px;
+        	text-align: center;
+        }
+		#replace {
+			float: right;
+			width:40%;
+        	margin-right: 12px;
+        	margin-top: 16px;
+        	text-align: center;
+        }
 	</style>
 	<body class='body' style="margin: 0; display: flex; flex-direction: column;">
 		<div id="loader-container" class="asc-plugin-loader display-none">
@@ -69,7 +91,10 @@
 		<div style="margin: 0px 12px 0px 12px;">
 			<textarea id="textarea" class="form-control" spellcheck="false" style="width: 100%; resize: none; height: 100px;"></textarea>
 		</div>
-		<button class="btn-text-default" style="width: calc(100% - 24px); margin: 16px 12px 0px 12px" id="check">Check text</button>
+		<div id="button_wrapper">
+			<div onсlick="" id="check" class="btn-text-default">Check</div>
+			<div onсlick="" id="replace" class="btn-text-default">Replace</div>
+		</div>
 		<div id="scrollable-container-id" style="position: relative; width: 100%; height: 70%; overflow: hidden ">
 			<div id="result" style="width: calc(100% - 24px); margin: 0px 12px 0px 12px; word-break: break-word; display: flex; flex-flow: column;"></div>
 		</div>
