@@ -1,0 +1,61 @@
+{
+    "name": "Grammalecte",
+    "guid": "asc.{6ef67492-a111-4ca5-bd4f-bf02645afc61}",
+    "version": "1.0",
+
+    "variations": [
+        {
+            "description": "Grammalecte",
+            "url": "index.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        },
+        {
+            "description": "About",
+            "descriptionLocale": {
+                "ru": "Справка",
+                "fr": "À propos",
+                "es": "Sobre programa",
+                "de": "Über"
+            },
+            "url": "index_about.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "none",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                }
+            ],
+
+            "size": [ 400, 50 ]
+        }
+    ]
+}
