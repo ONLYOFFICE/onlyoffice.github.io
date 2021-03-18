@@ -53,8 +53,35 @@
 				checkText(txt, CurLang);
 			};
 		});
+		$('#replace').click(function () {
+            Asc.scope.arr = ParseText(document.getElementById("textarea").value);
+            window.Asc.plugin.info.recalculate = true;
+
+            window.Asc.plugin.callCommand(function() {
+                Api.ReplaceTextSmart(Asc.scope.arr);
+            });
+        });
 	});
 
+
+    function ParseText(sText) {
+        var allParasInSelection = sText.split(/\n/);
+        var allParsedParas = [];
+
+        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
+            if (allParasInSelection[nStr].search(/	/) === 0) {
+                allParsedParas.push("");
+                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
+            }
+            var sSplited = allParasInSelection[nStr].split(/	/);
+
+            sSplited.forEach(function(item, i, sSplited) {
+                allParsedParas.push(item);
+            });
+        }
+
+        return allParsedParas;
+    };
 
 	function getLanguages() {
 		var url = "https://languagetool.org/api/v2/languages";
