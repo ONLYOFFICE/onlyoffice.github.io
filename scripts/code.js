@@ -132,6 +132,7 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
             editor.setReadOnly(false);
             window.isDisable = false;
             buttonAutoStart.style.display = "inline-block";
+            editor.focus();
             if (Content.macrosArray[Content.current].autostart)
                 buttonAutoStart.classList.add("primary");
             else
@@ -164,6 +165,7 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
         Content.macrosArray.push({ name : (macrosTranslate + " " + indexMax), value : "(function()\n{\n})();" });
         Content.current = Content.macrosArray.length - 1;
         updateMenu();
+        editor.focus();
     };
     document.getElementById("button_delete").onclick = function() {
         if (Content.current != -1)
@@ -214,6 +216,7 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
         _elem1.style.display = "block";
         _elem2.style.display = "block";
         document.getElementById("rename_text").value = Content.macrosArray[Content.current].name;
+        document.getElementById("rename_text").select();
 
         isShowRename = true;
     }
@@ -315,6 +318,12 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
             
             updateMenu();
             window.CustomContextMenu.init();
+            if (Content.current === -1)
+            {
+                let event = new Event("click");
+                document.getElementById("button_new").dispatchEvent(event);
+            }
+
         });
 
         var _textbox = document.getElementById("rename_text");
@@ -330,12 +339,6 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
             this.style.borderColor = "";
             document.getElementById("input_error_id").style.display = "none";
         });
-        var textarea = document.getElementsByTagName("textarea");
-        if (textarea.length) {
-            textarea[0].focus();
-        } else {
-            document.getElementById("button_new").focus();
-        }
 	};
 	
 	window.Asc.plugin.button = function(id)
