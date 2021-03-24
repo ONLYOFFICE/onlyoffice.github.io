@@ -1,3 +1,4 @@
 {
-	"Copy" : "Копировать"
+	"Copy" : "Копировать",
+    "This plugin doesn't work in Internet Explorer." : "Этот плагин не работает в Internet Explorer."
 }

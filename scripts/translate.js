@@ -6,12 +6,12 @@
 	
 	window.Asc.plugin.init = function(text)
 	{
-	    if (isIE) {
-			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
-			return;
-		}
-
-	    text = ProcessText(text);
+	   if (isIE) {
+		   document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
+			 return;
+		 }
+    
+	  text = ProcessText(text);
 
 		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
@@ -32,7 +32,7 @@
 					setTimeout(function() {ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;}, 500);
 				
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
-				selectElement.addEventListener('change', (event) => {
+				selectElement.addEventListener('change', function(event) {
 					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
 					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 				});
@@ -83,12 +83,12 @@
 		}
 	};
 
-    function ProcessText(sText) {
+  function ProcessText(sText) {
         return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
     };
 
-    function checkInternetExplorer(){
-		var rv = -1;
+	function checkInternetExplorer(){
+    var rv = -1;
 		if (window.navigator.appName == 'Microsoft Internet Explorer') {
 			const ua = window.navigator.userAgent;
 			const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
@@ -118,6 +118,16 @@
 			false, false, false, false, 0, null);
 
 		document.dispatchEvent(evt);
+	};
+
+	window.Asc.plugin.onTranslate = function()
+	{
+		if (isIE) {
+			var field = document.getElementById("h4");
+			if (field)
+				field.innerHTML = message = window.Asc.plugin.tr(message);
+		}
+		
 	};
 
 })(window, undefined);
