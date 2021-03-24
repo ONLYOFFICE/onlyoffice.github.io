@@ -6,10 +6,13 @@
 	
 	window.Asc.plugin.init = function(text)
 	{
-		if (isIE) {
-			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
-			return;
-		}
+	   if (isIE) {
+		   document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
+			 return;
+		 }
+    
+	  text = ProcessText(text);
+
 		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
 			ifr                = document.createElement("iframe");
@@ -34,15 +37,45 @@
 					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 				});
 				var btn = ifr.contentDocument.createElement("button");
+				var btnPaste = ifr.contentDocument.createElement("button");
 				var div = ifr.contentDocument.createElement("div");
 				div.appendChild(btn);
+				div.appendChild(btnPaste);
 				div.style = "padding-top:3px; padding-left:3px;"
 				btn.innerHTML = window.Asc.plugin.tr("Copy");
 				btn.id = "btn_copy";
 				btn.style = "font-size: 11px;"
+				btnPaste.innerHTML = window.Asc.plugin.tr("Paste");
+				btnPaste.id = "btn_paste";
+				btnPaste.style = "font-size: 11px;"
 				btn.classList.add("skiptranslate");
+				btnPaste.classList.add("skiptranslate");
 				ifr.contentDocument.getElementById("google_translate_state").style = "display:flex;"
 				setTimeout(function() {ifr.contentDocument.getElementById("google_translate_state").appendChild(div);}, 100);
+
+				setTimeout(function() {
+                    btnPaste.onclick = function () {
+                        var translatedTxt = ifr.contentDocument.getElementById("google_translate_element").outerText;
+                        var allParasTxt = translatedTxt.split(/\n/);
+                        var allParsedParas = [];
+
+                        for (var nStr = 0; nStr < allParasTxt.length; nStr++) {
+                            if (allParasTxt[nStr].search(/	/) === 0) {
+                                allParsedParas.push("");
+                                allParasTxt[nStr] = allParasTxt[nStr].replace(/	/, "");
+                            }
+                            var sSplited = allParasTxt[nStr].split(/	/);
+
+                            sSplited.forEach(function(item, i, sSplited) {
+                                allParsedParas.push(item);
+                            });
+                        }
+                        Asc.scope.arr = allParsedParas;
+                        window.Asc.plugin.callCommand(function() {
+                            Api.ReplaceTextSmart(Asc.scope.arr);
+                        });
+                    }
+                });
 			}
 		} else {
 			ifr.contentWindow.postMessage(text, '*');
@@ -50,8 +83,12 @@
 		}
 	};
 
+  function ProcessText(sText) {
+        return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
+    };
+
 	function checkInternetExplorer(){
-		var rv = -1;
+    var rv = -1;
 		if (window.navigator.appName == 'Microsoft Internet Explorer') {
 			const ua = window.navigator.userAgent;
 			const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
@@ -68,7 +105,7 @@
 		}
 		return rv !== -1;
 	};
-	
+
 	window.Asc.plugin.button = function(id)
 	{
 		this.executeCommand("close", "");
