@@ -1,10 +1,18 @@
 (function(window, undefined){
 	var isInit = false;
 	var ifr;
+	const isIE = checkInternetExplorer();	//check IE
+	var message = "This plugin doesn't work in Internet Explorer."
 	
 	window.Asc.plugin.init = function(text)
 	{
+	    if (isIE) {
+			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
+			return;
+		}
+
 	    text = ProcessText(text);
+
 		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
 			ifr                = document.createElement("iframe");
@@ -78,6 +86,25 @@
     function ProcessText(sText) {
         return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
     };
+
+    function checkInternetExplorer(){
+		var rv = -1;
+		if (window.navigator.appName == 'Microsoft Internet Explorer') {
+			const ua = window.navigator.userAgent;
+			const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
+			if (re.exec(ua) != null) {
+				rv = parseFloat(RegExp.$1);
+			}
+		} else if (window.navigator.appName == 'Netscape') {
+			const ua = window.navigator.userAgent;
+			const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
+
+			if (re.exec(ua) != null) {
+				rv = parseFloat(RegExp.$1);
+			}
+		}
+		return rv !== -1;
+	};
 
 	window.Asc.plugin.button = function(id)
 	{
