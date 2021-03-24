@@ -4,6 +4,7 @@
 	
 	window.Asc.plugin.init = function(text)
 	{
+	    text = ProcessText(text);
 		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
 			ifr                = document.createElement("iframe");
@@ -74,7 +75,9 @@
 		}
 	};
 
-
+    function ProcessText(sText) {
+        return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
+    };
 
 	window.Asc.plugin.button = function(id)
 	{
