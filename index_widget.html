@@ -59,6 +59,13 @@
 			height: 22px;
 			cursor: pointer;
 		}
+		#btn_copy, #btn_paste {
+			width: 50px !important;
+		}
+		#hr {
+			width: 100% !important;
+			margin-left: 0px !important;
+		}
 	</style>
 </head>
 <body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
@@ -71,9 +78,9 @@
 		var timeOut;
 		function googleTranslateElementInit() 
 		{
-			document.getElementById("hr").style.width = document.getElementById("body").clientWidth +"px";
-			document.getElementById("hr").style.marginLeft = "-11px";
-			document.getElementById("google_translate_element").style.height = document.getElementById("body").clientHeight- 100 +"px";			
+
+			document.getElementById("google_translate_element").style.height = document.getElementById("body").clientHeight- 100 +"px";
+
 			// const urlParams = new URLSearchParams(window.location.search);
 			// console.log(urlParams);
 			// document.getElementById("google_translate_element").innerHTML = decodeURIComponent(urlParams.get("text"));
