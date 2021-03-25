@@ -4,8 +4,6 @@ Checking text for errors.
 
 The plugin uses [Languagetool's] multilingual grammar and style checker (https://languagetool.org/).
 
-It is called Languagetool in the interface and is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
-
 ## How to use
 
 1. Open the Plugins tab and press Languagetool.
