@@ -16,5 +16,5 @@ Another way to use it: open the plugin and type the word in the field. Press Loo
 
 ## Using your service
 
-You can send translation requests to your service. To do this, you need to change the url
+You can send requests to your service. To do this, you need to change the url
 address of the **serviceUrl** variable in the **./scripts/langTool.js»** file.
