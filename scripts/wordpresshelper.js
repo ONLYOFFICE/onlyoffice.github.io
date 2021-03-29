@@ -59,6 +59,7 @@
             })
             .error(function(error) {
                 reject(error);
+                alert('Please try relogin');
             });
         });
         var result = await promise;
