@@ -438,7 +438,8 @@ var  Ps;
         });
 
         updateScroll();
-        loadClipArtPage(1, sLastQuery);
+        if (elements.api_input.value.trim() !== '')
+            loadClipArtPage(1, sLastQuery);
     };
 
     function loadClipArtPage(nIndex, sQuery) {
