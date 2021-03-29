@@ -242,11 +242,6 @@
 	    }
 
 		var ind = data.data().index;
-		ind = arrAllWords.findIndex(function(el) {
-			if (el.i - 1 === ind) {
-				return true;
-			}
-		});
 		var end = arrAllWords[ind].nEnd;
 		var temp = sText.slice(0, arrAllWords[ind].nStart) + data.text() + sText.slice(end);
 		var count = sText.length - temp.length;
