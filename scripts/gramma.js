@@ -124,7 +124,8 @@
         for (var nWord in arrAllWords)
             oResult.push({
                 Word: arrAllWords[nWord].sValue,
-                Replacements: oGramma.suggest(arrAllWords[nWord].sValue)
+                Replacements: oGramma.suggest(arrAllWords[nWord].sValue),
+                Index: arrAllWords[nWord].i
             })
 
         return oResult;
@@ -152,7 +153,7 @@
 		    }
 
 			$('<div>', {
-				id : "div_" + ind,
+				id : "div_" + el.Index,
 				"class": 'result_div',
 				click: function() {
 				        var mainElm = this;
@@ -186,19 +187,19 @@
             img_arrow.appendTo(img_container);
             caption_text.appendTo(caption);
             img_container.appendTo(caption);
-            caption.appendTo('#div_'+ind);
-            separateLine.appendTo('#div_'+ind);
+            caption.appendTo('#div_'+ el.Index);
+            separateLine.appendTo('#div_'+ el.Index);
 
             var div_details = $('<div>', {
 				"class": 'details'
 			});
 
 			$('<div>', {
-				id : "div_replacments_" + ind,
+				id : "div_replacments_" + el.Index,
 				"class": 'replacments',
 			}).appendTo(div_details);
 
-			div_details.appendTo('#div_'+ind);
+			div_details.appendTo('#div_'+ el.Index);
 
 			el.Replacements.forEach(function(elem) {
 			    var sClass = '';
@@ -212,8 +213,8 @@
 			            $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
 						correctText($(this));
 					}
-				}).data({ index : ind })
-				.appendTo('#div_replacments_'+ind);
+				}).data({ index : el.Index })
+				.appendTo('#div_replacments_' + el.Index);
 			});
 
 			var dismiss_buttons = $('<div>', {
@@ -225,7 +226,7 @@
 			    click: function () {
 					$('#div_'+$(this).data().index).remove();
 					var ind = arrAllWords.findIndex(function(el) {
-						if (el.index === ind) {
+						if (el.i === ind) {
 							return true;
 						}
 					});
@@ -234,7 +235,7 @@
 					arrAllWords.splice(ind, 1);
 				},
 			    "class": "dismiss btn-text-default"
-			}).data({ index : ind }).appendTo(dismiss_buttons);
+			}).data({ index : el.Index}).appendTo(dismiss_buttons);
 
 			$('<button>', {
 			    text: "Dismiss all",
@@ -256,6 +257,11 @@
 	    }
 
 		var ind = data.data().index;
+		ind = arrAllWords.findIndex(function(el) {
+			if (el.i === ind) {
+				return true;
+			}
+		});
 		var end = arrAllWords[ind].nEnd;
 		var temp = sText.slice(0, arrAllWords[ind].nStart) + data.text() + sText.slice(end);
 		var count = sText.length - temp.length;
@@ -266,7 +272,7 @@
 			arrAllWords[i].nStart -= count;
 			arrAllWords[i].nEnd -= count;
 		}
-		$('#div_'+data.data().index).remove();
+		$('#div_' + data.data().index).remove();
 		if (!arrAllWords.length) {
 			$('#check').trigger("click");
 		}
