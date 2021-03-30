@@ -22,19 +22,24 @@
 
             "icons": [
 				{
+					"theme" : "flat",
 					"style" : "light",
 					
 					"100%": {
-						"normal": "resources/light/icon.png",
+						"normal": "resources/light/icon.png"
 					},
 					"150%": {
 						"normal": "resources/light/icon@1.5x.png"
 					},
 					"200%": {
 						"normal": "resources/light/icon@2x.png"
+					},
+					"default": {
+						"normal": "resources/light/icon.png"
 					}
 				},
 				{
+					"theme" : "flatDark",
 					"style" : "dark",
 					
 					"100%": {
