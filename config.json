@@ -11,7 +11,7 @@
 				"style" : "light",
 				
 				"100%": {
-					"normal": "resources/light/icon.png",
+					"normal": "resources/light/icon.png"
 				},
 				"150%": {
 					"normal": "resources/light/icon@1.5x.png"
