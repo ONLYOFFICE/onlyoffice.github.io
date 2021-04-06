@@ -334,11 +334,17 @@ var Ps;
                     Asc.scope.arr = translatedParas;
                     window.Asc.plugin.info.recalculate = true;
 
-                    window.Asc.plugin.callCommand(function() {
-                        Api.ReplaceTextSmart(Asc.scope.arr);
+                    window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
+                        if (version === undefined) {
+                            window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                        }
+                        else {
+                            window.Asc.plugin.callCommand(function() {
+                                Api.ReplaceTextSmart(Asc.scope.arr);
+                            });
+                        }
                     });
                 }
-
                 return;
             })
         });
