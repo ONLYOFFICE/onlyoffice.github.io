@@ -176,8 +176,25 @@ var Ps;
         Asc.scope.arr = allTypografedParas;
         window.Asc.plugin.info.recalculate = true;
 
-        window.Asc.plugin.callCommand(function() {
-            Api.ReplaceTextSmart(Asc.scope.arr);
+        window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
+            if (version === undefined) {
+                var strResult = "";
+
+                for (var Item = 0; Item < allTypografedParas.length; Item++) {
+                    if (allTypografedParas[Item] === "")
+                        continue;
+                    if (Item < allTypografedParas.length - 1)
+                        strResult += allTypografedParas[Item] + '\n';
+                    else
+                        strResult += allTypografedParas[Item];
+                }
+                window.Asc.plugin.executeMethod("PasteText", [strResult]);
+            }
+            else {
+                window.Asc.plugin.callCommand(function() {
+                    Api.ReplaceTextSmart(Asc.scope.arr);
+                });
+            }
         });
     }
 
