@@ -74,8 +74,25 @@
             Asc.scope.arr = ParseText(document.getElementById("textarea").value);
             window.Asc.plugin.info.recalculate = true;
 
-            window.Asc.plugin.callCommand(function() {
-                Api.ReplaceTextSmart(Asc.scope.arr);
+            window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
+                if (version === undefined) {
+                    var strResult = "";
+
+                    for (var Item = 0; Item < Asc.scope.arr.length; Item++) {
+                        if (Asc.scope.arr[Item] === "")
+                            continue;
+                        if (Item < Asc.scope.arr.length - 1)
+                            strResult += Asc.scope.arr[Item] + '\n';
+                        else
+                            strResult += Asc.scope.arr[Item];
+                    }
+                    window.Asc.plugin.executeMethod("PasteText", [strResult]);
+                }
+                else {
+                    window.Asc.plugin.callCommand(function() {
+                        Api.ReplaceTextSmart(Asc.scope.arr);
+                    });
+                }
             });
         });
 	});
