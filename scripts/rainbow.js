@@ -4,10 +4,6 @@
 
 	window.Asc.plugin.init = function(text)
 	{
-		if (isIE) {
-			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
-			return;
-		}
 		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
 			ifr                = document.createElement("iframe");
@@ -44,15 +40,4 @@
 
 		document.dispatchEvent(evt);
 	};
-
-	window.Asc.plugin.onTranslate = function()
-	{
-		if (isIE) {
-			var field = document.getElementById("h4");
-			if (field)
-				field.innerHTML = message = window.Asc.plugin.tr(message);
-		}
-		
-	};
-
 })(window, undefined);
