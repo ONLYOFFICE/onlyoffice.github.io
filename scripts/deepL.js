@@ -64,6 +64,14 @@ var Ps;
         }
 	};
 
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+
+        $('#body').css('color', window.Asc.plugin.theme.Color);
+        $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+    };
+
     function CreateParams(allParas) {
         var sRequest = "";
 
