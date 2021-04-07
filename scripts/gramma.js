@@ -69,6 +69,12 @@
 			isInit = true;
 		}
 	};
+	window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+
+        $('.body').css('color', window.Asc.plugin.theme.Color);
+    };
 
 	$(document).ready(function () {
 	    elements = {
@@ -98,6 +104,7 @@
 				$("#result").empty();
 				var oResult = checkText(sText);
 				parseResult(oResult);
+				$('.result_div').css('background', window.Asc.plugin.theme.DemButtonBackgroundColor);
 				showLoader(elements, false);
 			};
 		});
