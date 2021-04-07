@@ -19,7 +19,6 @@ div::-moz-selection {
 }
 
 #no_mistakes {
-    color: #000000 !important;
     font-size: 12px;
     font-weight: 700 !important;
     margin-top: 16px;
@@ -51,7 +50,6 @@ div::-moz-selection {
   cursor: pointer;
   min-height: 49px;
   border-radius: 3px;
-  background: #FFFFFF;
   margin-top: 16px;
 }
 
