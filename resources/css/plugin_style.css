@@ -37,14 +37,13 @@ div::selection {
 .input-synonim {
   outline-color: #7d858c;
   width: calc(100% - 10px);
-  height: 18px;
   border: 1px solid #cfcfcf;
 }
-.input-synonim::selection {
+.input-white::selection {
   background: #D8DADC; /* WebKit/Blink Browsers */
   
 }
-.input-synonim::-moz-selection {
+.input-white::-moz-selection {
   background: #D8DADC; /* Gecko Browsers */
 }
 .input-field {
@@ -61,7 +60,7 @@ div::selection {
   flex-wrap: wrap;
 }
 .label-selected	{
-background: rgba(200, 200, 200, 0.5);
+  background: rgba(0, 100, 215, 0.5);
 }
 .label-words {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
