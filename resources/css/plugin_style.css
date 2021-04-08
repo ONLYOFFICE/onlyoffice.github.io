@@ -31,19 +31,6 @@ html, body {
 .content::-moz-selection {
   background: #D8DADC; /* Gecko Browsers */
 }
-.combo {
-  background: #fff;
-  border: 1px solid #cfcfcf;
-  border-radius: 2px;
-  color: #444444;
-  font-size: 11px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  height: 22px;
-  cursor: pointer;
-  margin: 0px 0px 10px 0px;
-  box-sizing: border-box;
-  outline-color: #D8DADC;
-}
 select:focus > option:checked { 
   background: #D8DADC !important;
 }
