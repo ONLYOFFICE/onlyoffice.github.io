@@ -143,9 +143,8 @@
 
 	window.Asc.plugin.onThemeChanged = function(theme)
 	{
-		window.Asc.plugin.onThemeChangedBase(theme); // вызвать, если нужно поменять стили в plugins.css - то, что делается по умолчани
+		window.Asc.plugin.onThemeChangedBase(theme);
 		setTimeout(()=>ifr.contentWindow.postMessage(theme, '*'),600);
-		// дальше своя реализация
 	};
 
 })(window, undefined);
