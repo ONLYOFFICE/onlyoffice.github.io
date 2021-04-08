@@ -46,32 +46,37 @@
 			isInit = true;
 			ifr.onload = function() {
 				if (ifr.contentWindow.document.readyState == 'complete')
-					setTimeout(function() {ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;}, 500);
+					setTimeout(function() {
+						ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;
+						if (text.length)
+							ifr.contentDocument.getElementById("div_btn").classList.remove("hidden");
+					}, 500);
 				
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
 				selectElement.addEventListener('change', function(event) {
 					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
 					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 				});
+				ifr.contentDocument.getElementById("google_translate_element").style.height = "fit-content";
 				var btn = ifr.contentDocument.createElement("button");
-				var btnPaste = ifr.contentDocument.createElement("button");
+				var btnReplace = ifr.contentDocument.createElement("button");
 				var div = ifr.contentDocument.createElement("div");
 				div.appendChild(btn);
-				div.appendChild(btnPaste);
-				div.style = "padding-top:3px; padding-left:3px;"
+				div.appendChild(btnReplace);
+				div.id = "div_btn";
+				div.classList.add("skiptranslate");
+				div.classList.add("div_btn");
+				div.classList.add("hidden");
 				btn.innerHTML = window.Asc.plugin.tr("Copy");
 				btn.id = "btn_copy";
-				btn.style = "font-size: 11px;"
-				btnPaste.innerHTML = window.Asc.plugin.tr("Paste");
-				btnPaste.id = "btn_paste";
-				btnPaste.style = "font-size: 11px;"
-				btn.classList.add("skiptranslate");
-				btnPaste.classList.add("skiptranslate");
-				ifr.contentDocument.getElementById("google_translate_state").style = "display:flex;"
-				setTimeout(function() {ifr.contentDocument.getElementById("google_translate_state").appendChild(div);}, 100);
+				btn.classList.value = "btn-text-default primary";
+				btnReplace.classList.value = "btn-text-default primary";
+				btnReplace.innerHTML = window.Asc.plugin.tr("Replace");
+				btnReplace.id = "btn_replace";
+				setTimeout(function() {ifr.contentDocument.getElementById("body").appendChild(div);}, 100);
 
 				setTimeout(function() {
-                    btnPaste.onclick = function () {
+                    btnReplace.onclick = function () {
                         var translatedTxt = ifr.contentDocument.getElementById("google_translate_element").outerText;
                         var allParasTxt = translatedTxt.split(/\n/);
                         var allParsedParas = [];
@@ -93,6 +98,7 @@
                         });
                     }
                 });
+				ifr.contentWindow.postMessage("update_scroll", '*');
 			}
 		} else {
 			ifr.contentWindow.postMessage(text, '*');
@@ -126,6 +132,11 @@
 	window.Asc.plugin.button = function(id)
 	{
 		this.executeCommand("close", "");
+	};
+
+	window.onresize = function()
+	{
+		ifr.contentWindow.postMessage("update_scroll", '*');
 	};
 
 	window.Asc.plugin.onExternalMouseUp = function()

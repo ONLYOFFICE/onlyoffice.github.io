@@ -4,13 +4,16 @@
 	<meta charset="UTF-8">
 	<title>translate</title>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<style>
 		.body_class {
 			top: 0 !important;
 			left: 0 !important;
-			padding: 10px !important;
+			padding: 5px !important;
 			box-sizing: border-box;
 			overflow: hidden;
+			font-size: 14px !important;
 		}
 		.goog-te-banner-frame {
 			display: none;
@@ -59,27 +62,38 @@
 			height: 22px;
 			cursor: pointer;
 		}
-		#btn_copy, #btn_paste {
-			width: 50px !important;
+		.div_btn {
+			padding-top: 3px;
+			padding-left: 5px;
+			width: calc(100% - 20px);
+		}
+		.hidden {
+			display: none !important;
+		}
+		#btn_copy, #btn_replace {
+			width: calc(50% - 10px) !important;
+			font-size: 11px;
+			margin: 5px;
 		}
 		#hr {
-			width: 100% !important;
-			margin-left: 0px !important;
+			width: calc(100% - 20px) !important;
+			margin-left: 10px !important;
 		}
 	</style>
 </head>
 <body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
-	<div id="google_translate_state"></div>
+	<div id="google_translate_state" style="width: calc(100% - 20px); margin-left: 10px;"></div>
 	<hr id ="hr">
-	<div style="overflow: auto; overflow-x: hidden; padding-top: 15px;">
-		<div id="google_translate_element" style="width: calc(100% - 15px); font-family: 'Arial'; word-break: break-word; white-space: pre-wrap;"></div>
+	<div id="div_parent" style="overflow: hidden; overflow-x: hidden; padding-top: 15px; position: relative;">
+		<div id="google_translate_element" style="position: relative; font-family: 'Arial'; word-break: break-word; white-space: pre-wrap; height: fit-content; margin-left: 10px; margin-right: 15px;"></div>
 	</div>
 	<script>
+		if (!Ps) Ps = new PerfectScrollbar('#' + "div_parent", {});
 		var timeOut;
 		function googleTranslateElementInit() 
 		{
 
-			document.getElementById("google_translate_element").style.height = document.getElementById("body").clientHeight- 100 +"px";
+			document.getElementById("google_translate_element").style.maxHeight = document.getElementById("body").clientHeight- 120 +"px";
 
 			// const urlParams = new URLSearchParams(window.location.search);
 			// console.log(urlParams);
@@ -93,7 +107,7 @@
 		window.onload = function () {
 			setTimeout(function() {
 				document.getElementById("btn_copy").onclick = function () {
-				selectText("google_translate_element");
+					selectText("google_translate_element");
 				}
 			}, 500);
 			if (navigator.userAgent.indexOf("Chrome") !== -1) {
@@ -125,15 +139,26 @@
 					}
 				}
 			}
-			
 		}
 		window.addEventListener('message', function (msg) {
-			if (msg.data !== "onchange_goog-te-combo") {
-				document.getElementById("google_translate_element").innerHTML = msg.data;
+			if (msg.data === "update_scroll")
+			{
+				setTimeout(()=> Ps.update(), 600);
 			}
-			timeOut = setTimeout(function() {
-				document.getElementById("google_translate_element").style.opacity = 1;
-			}, 600);
+			else
+			{
+				if (msg.data !== "onchange_goog-te-combo") {
+				document.getElementById("google_translate_element").innerHTML = msg.data;
+				}
+				timeOut = setTimeout(function() {
+					document.getElementById("google_translate_element").style.opacity = 1;
+					Ps.update();
+					if (msg.data.length)
+						document.getElementById("div_btn").classList.remove("hidden");
+					else
+						document.getElementById("div_btn").classList.add("hidden");
+				}, 600);
+			}
 		});
 	</script>
 <script src="vendor/google/google.js"></script>
