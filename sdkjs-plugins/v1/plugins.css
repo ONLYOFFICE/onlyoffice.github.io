@@ -277,6 +277,7 @@ label.header {
     user-select: none;	
 }
 
+
 .defaultcenterlable {
 	color: #444444;
 	cursor: default;
@@ -292,6 +293,31 @@ label.header {
 	margin: 0px;
 	padding: 0px;
 	width: 100%;
+}
+
+
+.aboutlable {
+	color: #444444;
+	cursor: default;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;	
+}
+
+a.aboutlink {
+	color: #444444;
+    text-decoration: none;
+}
+
+a.aboutlink:hover {
+	text-decoration: underline;
+}
+a.aboutlink:active {
+	text-decoration: underline;
 }
 
 .noselect{
