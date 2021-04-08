@@ -203,5 +203,20 @@
 			inp_ApiKey.title = window.Asc.plugin.tr("Title");
 			
 	};
+
+	window.Asc.plugin.onThemeChanged = function(theme)
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
+		if (theme.name !== "theme-light")
+		{
+			document.getElementById("inp_search").classList.remove("input-white");
+			document.getElementById("inp_ApiKey").classList.remove("input-white");
+		}
+		else
+		{
+			document.getElementById("inp_search").classList.add("input-white");
+			document.getElementById("inp_ApiKey").classList.add("input-white");
+		}
+	};
 		  
 })(window, undefined);
