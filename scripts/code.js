@@ -105,4 +105,11 @@
 			btn.innerHTML = window.Asc.plugin.tr("Paste into the document");
 	};
 
+	window.Asc.plugin.onThemeChanged = function(theme)
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
+		if (theme.name.indexOf("dark") !== -1)
+			setTimeout(()=>editor.setOption("theme", "bespin"));
+	};
+
 })(window, undefined);
