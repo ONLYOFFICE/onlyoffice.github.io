@@ -53,6 +53,7 @@
         .arrow {
             float:right;
             align-self: center;
+            margin-left: 7px;
         }
         .button {
             cursor:pointer;
@@ -63,9 +64,6 @@
         .checkbox {
         	margin-top: 1px;
             margin-left: 5px;
-        }
-        .transform {
-            transform: rotate(180deg);
         }
         .radiobox {
         	margin-left: 7px;
@@ -91,10 +89,26 @@
 		.asc-plugin-loader .asc-loader-image {
 			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;
 		}
+		i {
+            border: solid black;
+            border-width: 0 1px 1px 0;
+            display: inline-block;
+            padding: 2px;
+        }
+        .down {
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            margin-top: 3px;
+        }
+        .up {
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            margin-top: 5px;
+        }
 
 	</style>
 </head>
-<body style="width: 100%;height: 100%; margin: 0;">
+<body id="body" style="width: 100%;height: 100%; margin: 0;">
 	<div id="loader-container" class="asc-plugin-loader display-none">
         <div id="flex-loader-container">
             <div>
@@ -175,7 +189,7 @@
 				<button id="create_meeting" onсlick="" class="btn-text-default" style="width:100%; height: 30px;">Create a meeting</button>
 			</div>
 			<div id="settings_wrapper" style="margin-top: 16px;">
-				<div class="legend"><div id="adv_settings" class="button"><label class="header cursor_pointer" style="margin-left: 12px;">Advanced settings</label><img class="arrow" style="margin-top: -2px; margin-left: 5px;" src="resources/img/faq_arrow_down.png"></div></div>
+				<div class="legend"><div id="adv_settings" class="button"><label id="label-settings" class="header cursor_pointer" style="margin-left: 12px;">Advanced settings</label><i class="arrow down"></i></div></div>
 				<div class="settings_group">
 					<div id="meeting_id" style="display: flex; flex-direction: column;">
 						<div style="margin: 16px 0 8px 0; font-weight: normal !important;">
@@ -648,10 +662,10 @@
 		</div>
 
 		<div id="reconf">
-            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; right: 10px;">Reconfigure</label>
+            <label id="reconf-label" style="cursor:pointer; position:absolute; bottom: 15px; right: 10px;">Reconfigure</label>
         </div>
 		<div id="switch">
-            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; left: 10px;">Meeting mode</label>
+            <label id="switch-label" style="cursor:pointer; position:absolute; bottom: 15px; left: 10px;">Meeting mode</label>
         </div>
 	</div>
 	<div id="configState">
