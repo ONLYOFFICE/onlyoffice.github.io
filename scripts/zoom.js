@@ -85,9 +85,14 @@ var Ps;
 			document.getElementById("iframe_join").appendChild(ifr);
 			isInit = true;
 			ifr.onload = function() {
-
 			}
 		}
+    };
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#reconf-label, #switch-label, #label-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
     };
 
     window.openMeeting = function(sUrl) {
@@ -153,7 +158,8 @@ var Ps;
 
 		$('#adv_settings').click(function() {
 		    $('#settings_wrapper').find('.settings_group').slideToggle('fast', function() { updateScroll(); });
-		    $('#settings_wrapper').find(".arrow").toggleClass("transform");
+            $(this).find(".arrow").toggleClass("down");
+            $(this).find(".arrow").toggleClass("up");
 		});
 
         $('#saveConfigBtn').click(function() {
