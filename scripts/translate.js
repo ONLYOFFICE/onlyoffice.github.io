@@ -144,7 +144,8 @@
 	window.Asc.plugin.onThemeChanged = function(theme)
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
-		setTimeout(()=>ifr.contentWindow.postMessage(theme, '*'),600);
+		var style = document.getElementsByTagName('head')[0].lastChild;
+		setTimeout(()=>ifr.contentWindow.postMessage({theme,style : style.innerHTML}, '*'),600);
 	};
 
 })(window, undefined);
