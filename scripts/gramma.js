@@ -69,12 +69,6 @@
 			isInit = true;
 		}
 	};
-	window.Asc.plugin.onThemeChanged = function(theme)
-    {
-        window.Asc.plugin.onThemeChangedBase(theme);
-
-        $('.body').css('color', window.Asc.plugin.theme.Color);
-    };
 
 	$(document).ready(function () {
 	    elements = {
