@@ -10,16 +10,7 @@ html, body {
   -webkit-user-select: none;
 }
 
-div::selection {
-  background: #a8d1ff;
-}
-
-div::-moz-selection {
-  background: #a8d1ff;
-}
-
 #no_mistakes {
-    color: #000000 !important;
     font-size: 12px;
     font-weight: 700 !important;
     margin-top: 16px;
@@ -51,7 +42,6 @@ div::-moz-selection {
   cursor: pointer;
   min-height: 49px;
   border-radius: 3px;
-  background: #FFFFFF;
   margin-top: 16px;
 }
 
@@ -84,7 +74,6 @@ div::-moz-selection {
   height: 34px!important;
   background-size: 16px 16px!important;
   box-sizing: initial!important;
-  color: #000!important;
   cursor: pointer!important;
   display: block!important;
 }
