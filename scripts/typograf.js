@@ -32,6 +32,13 @@ var Ps;
 	window.Asc.plugin.init = function (text) {
         sText = text;
     };
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+
+        $('#floating').css('background', window.Asc.plugin.theme["background-toolbar"]);
+        $('.opened, .hidden').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+    };
 
     function SetSavedSettings() {
         var inputsMain = $(".prefs__all-rules").find(".form-control");
