@@ -78,8 +78,15 @@ var Ps;
     {
         window.Asc.plugin.onThemeChangedBase(theme);
 
-        $('#body').css('color', window.Asc.plugin.theme.Color);
         $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        if (theme.type === 'dark') {
+            $('#arrow-dark').show();
+            $('#arrow-light').hide();
+        }
+        else {
+            $('#arrow-dark').hide();
+            $('#arrow-light').show();
+        }
     };
 
     function PrepareTextToSend(allParas) {
