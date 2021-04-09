@@ -51,17 +51,6 @@
 		.goog-te-combo {
 			height: 22px;
 		}
-		button {
-			color: #fff;
-			background-color: #7d858c;
-			border: 1px solid #cfcfcf;
-			border-radius: 2px;
-			outline: none;
-			font-size: 11px;
-			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-			height: 22px;
-			cursor: pointer;
-		}
 		.div_btn {
 			padding-top: 3px;
 			padding-left: 5px;
@@ -108,8 +97,9 @@
 			setTimeout(function() {
 				document.getElementById("btn_copy").onclick = function () {
 					selectText("google_translate_element");
-				}
-			}, 500);
+				};
+				document.getElementsByClassName("goog-te-combo")[0].classList.add("form-control")
+			}, 300);
 			if (navigator.userAgent.indexOf("Chrome") !== -1) {
 				document.getElementById(":0.targetLanguage").firstChild.style = "height:21px;"
 			}
@@ -140,11 +130,59 @@
 				}
 			}
 		}
+		var g_themes_map = {
+			"body" : { "background-color" : "background-toolbar" },
+			".defaultlable" : { "color" : "text-normal" },
+			".aboutlable" : { "color" : "text-normal" },
+			"a.aboutlink" : { "color" : "text-normal" },
+			".form-control" : { "color" : "text-normal", "background-color" : "background-normal", "border-color" : "border-regular-control" },
+			".form-control:focus" : { "border-color" : "border-control-focus" },
+			".btn-text-default" : { "background-color" : "background-normal", "border-color" : "border-regular-control", "color" : "text-normal" },
+			".btn-text-default:hover" : { "background-color" : "highlight-button-hover" },
+			".btn-text-default:active" : { "background-color" : "highlight-button-pressed !important" },
+			".btn-text-default[disabled]:hover,\
+			.btn-text-default.disabled:hover,\
+			.btn-text-default[disabled]:active,\
+			.btn-text-default[disabled].active,\
+			.btn-text-default.disabled:active,\
+			.btn-text-default.disabled.active": {"background-color" : "background-normal !important", "color" : "text-normal"}
+		};
+		function onThemeChangedBase (newTheme)
+		{
+			// correct theme
+			if (newTheme) // default
+			{
+				var rules = "";
+				for (var className in g_themes_map)
+				{
+					rules += (className + " {");
+
+					var attributes = g_themes_map[className];
+					for (var attr in attributes)
+					{
+						var attrValue = attributes[attr];
+						var attrValueImportant = attrValue.indexOf(" !important");
+						if (-1 < attrValueImportant)
+							attrValue = attrValue.substr(0, attrValueImportant);
+						var newVal = newTheme[attrValue];
+						if (newVal)
+							rules += (attr + " : " + newVal + ((-1 === attrValueImportant) ? ";" : " !important;"));
+					}
+
+					rules += " }\n";
+				}
+
+				var styleTheme = document.createElement('style');
+				styleTheme.type = 'text/css';
+				styleTheme.innerHTML = rules;
+				document.getElementsByTagName('head')[0].appendChild(styleTheme);
+			}
+		};
 		window.addEventListener('message', function (msg) {
-			console.log(msg.data["text-normal"]);
 			if (typeof(msg.data) === "object")
 			{
 				//event for change theme
+				onThemeChangedBase(msg.data);
 				document.getElementById("google_translate_element").style.color = msg.data["text-normal"];
 				document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data["text-normal"];				
 			}
@@ -168,7 +206,7 @@
 			}
 		});
 	</script>
-<script src="vendor/google/google.js"></script>
+	<script src="vendor/google/google.js"></script>
 <!-- for russian language -->
 <!-- <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
 </body>
