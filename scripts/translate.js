@@ -52,8 +52,8 @@
 				div.classList.add("hidden");
 				btn.innerHTML = window.Asc.plugin.tr("Copy");
 				btn.id = "btn_copy";
-				btn.classList.value = "btn-text-default primary";
-				btnReplace.classList.value = "btn-text-default primary";
+				btn.classList.add("btn-text-default");
+				btnReplace.classList.add("btn-text-default");
 				btnReplace.innerHTML = window.Asc.plugin.tr("Replace");
 				btnReplace.id = "btn_replace";
 				setTimeout(function() {ifr.contentDocument.getElementById("body").appendChild(div);}, 100);
