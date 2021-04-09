@@ -108,8 +108,8 @@ var Ps;
         });
         $(".button").click(function() {
             $(this).closest(".prefs__fieldset").toggleClass("prefs__fieldset_visible").find(".prefs__group-rules").slideToggle("fast", function() { updateScroll(); });
-            $(this).closest(".prefs__fieldset").find(".arrow").toggleClass("transform");
-
+            $(this).closest(".prefs__fieldset").find(".arrow").toggleClass("down");
+            $(this).closest(".prefs__fieldset").find(".arrow").toggleClass("up");
         });
 
         $(".prefs__all-rules").click(function() {
