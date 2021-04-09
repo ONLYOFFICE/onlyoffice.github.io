@@ -175,7 +175,7 @@
 				return el;
 			});
 			parseResult(oResponse);
-			console.log(oResponse);
+			$('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 			showLoader(elements, false);
 		}).error(function(e){
 		    $('<span>', {
