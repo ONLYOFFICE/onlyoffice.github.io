@@ -130,61 +130,16 @@
 				}
 			}
 		}
-		var g_themes_map = {
-			"body" : { "background-color" : "background-toolbar" },
-			".defaultlable" : { "color" : "text-normal" },
-			".aboutlable" : { "color" : "text-normal" },
-			"a.aboutlink" : { "color" : "text-normal" },
-			".form-control" : { "color" : "text-normal", "background-color" : "background-normal", "border-color" : "border-regular-control" },
-			".form-control:focus" : { "border-color" : "border-control-focus" },
-			".btn-text-default" : { "background-color" : "background-normal", "border-color" : "border-regular-control", "color" : "text-normal" },
-			".btn-text-default:hover" : { "background-color" : "highlight-button-hover" },
-			".btn-text-default:active" : { "background-color" : "highlight-button-pressed !important" },
-			".btn-text-default[disabled]:hover,\
-			.btn-text-default.disabled:hover,\
-			.btn-text-default[disabled]:active,\
-			.btn-text-default[disabled].active,\
-			.btn-text-default.disabled:active,\
-			.btn-text-default.disabled.active": {"background-color" : "background-normal !important", "color" : "text-normal"}
-		};
-		function onThemeChangedBase (newTheme)
-		{
-			// correct theme
-			if (newTheme) // default
-			{
-				var rules = "";
-				for (var className in g_themes_map)
-				{
-					rules += (className + " {");
-
-					var attributes = g_themes_map[className];
-					for (var attr in attributes)
-					{
-						var attrValue = attributes[attr];
-						var attrValueImportant = attrValue.indexOf(" !important");
-						if (-1 < attrValueImportant)
-							attrValue = attrValue.substr(0, attrValueImportant);
-						var newVal = newTheme[attrValue];
-						if (newVal)
-							rules += (attr + " : " + newVal + ((-1 === attrValueImportant) ? ";" : " !important;"));
-					}
-
-					rules += " }\n";
-				}
-
-				var styleTheme = document.createElement('style');
-				styleTheme.type = 'text/css';
-				styleTheme.innerHTML = rules;
-				document.getElementsByTagName('head')[0].appendChild(styleTheme);
-			}
-		};
 		window.addEventListener('message', function (msg) {
 			if (typeof(msg.data) === "object")
 			{
 				//event for change theme
-				onThemeChangedBase(msg.data);
-				document.getElementById("google_translate_element").style.color = msg.data["text-normal"];
-				document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data["text-normal"];				
+				var styleTheme = document.createElement('style');
+				styleTheme.type = 'text/css';
+				styleTheme.innerHTML = msg.data.style;
+				document.getElementsByTagName('head')[0].appendChild(styleTheme);
+				document.getElementById("google_translate_element").style.color = msg.data.theme["text-normal"];
+				document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data.theme["text-normal"];				
 			}
 			else if (msg.data === "update_scroll")
 			{
