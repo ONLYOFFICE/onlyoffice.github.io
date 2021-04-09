@@ -55,6 +55,15 @@
 			isInit = true;
 		}
 	};
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}'
+        var styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rule;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+    };
 
 	$(document).ready(function () {
 	    elements = {
@@ -84,7 +93,7 @@
 				$("#result").empty();
 				var oResult = checkText(sText);
 				parseResult(oResult);
-				$('.result_div').css('background', window.Asc.plugin.theme.DemButtonBackgroundColor);
+				$('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 				showLoader(elements, false);
 			};
 		});
@@ -180,14 +189,13 @@
                             updateScroll();
                             $(mainElm).find(".separator").toggleClass("display-none");
                         });
-                        $(this).find(".arrow").toggleClass("transform");
-
+                        $(this).find(".arrow").toggleClass("down");
+                        $(this).find(".arrow").toggleClass("up");
                     }
 			}).appendTo('#result');
 
-			var img_arrow = $('<img>', {
-                "class": "arrow",
-                src: "resources/img/faq_arrow_down.png"
+            var img_arrow = $('<i>', {
+                "class": "arrow down",
             });
             var img_container = $('<div>', {
                 "class": "arrow_container"
