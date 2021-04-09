@@ -38,6 +38,7 @@ var Ps;
 
         $('#floating').css('background', window.Asc.plugin.theme["background-toolbar"]);
         $('.opened, .hidden').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
     };
 
     function SetSavedSettings() {
