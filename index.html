@@ -39,16 +39,12 @@
 		}
 		.arrow {
 			align-self: center;
-			margin-top: -20px;
 		}
 		.caption_text {
 			width: 90%;
 			margin-left: 4px;
 			margin-bottom: 17px;
 		}
-		.transform {
-            transform: rotate(180deg);
-        }
 		.dismiss_buttons {
 			margin: 14px 0 16px 0;
 			display: flex;
@@ -86,6 +82,22 @@
         	margin-right: 12px;
         	margin-top: 16px;
         	text-align: center;
+        }
+        i {
+            border: solid black;
+            border-width: 0 1px 1px 0;
+            display: inline-block;
+            padding: 2px;
+        }
+        .down {
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            margin-top: -20px;
+        }
+        .up {
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            margin-top: -14px;
         }
 	</style>
 	<body class='body' style="margin: 0; display: flex; flex-direction: column;">
