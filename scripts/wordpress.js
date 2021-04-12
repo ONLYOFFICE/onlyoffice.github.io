@@ -163,7 +163,12 @@
         getBlogInfo();
         window.Asc.plugin.onTranslate = applyTranslations;
     };
-
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#body').css('color', window.Asc.plugin.theme.Color);
+        $('#logout_label').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+    };
     window.Asc.plugin.onMethodReturn = function (returnValue) {
         var _plugin = window.Asc.plugin;
         if (_plugin.info.methodName == "GetFileHTML") {

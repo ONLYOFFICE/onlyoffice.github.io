@@ -25,7 +25,7 @@
     <script type="text/javascript" src="scripts/wordpresshelper.js"></script>
     <link href="resources/css/style.css" rel="stylesheet">
 </head>
-<body>
+<body id="body">
     <div id="main-container">
         <div id="configState" style="margin: 12px;">
             <div><span>To use Wordpress, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-wordpress/tree/develop#configuration">Learn more here.</a></div>
@@ -59,16 +59,16 @@
             </div>
             <div class="publish">
                 <label class="i18n">Title</label>
-                <input type="text" id="title" />
+                <input type="text" id="title" class="form-control" />
 
                 <div style="display: flex; justify-content: start;">
-                    <button id="publish" class="i18n">Publish</button>
-                    <button id="draft" class="i18n">Save as Draft</button>
+                    <div id="publish" class="btn-text-default" style="margin: 15px 5px 15px 0; display: flex; align-items: center; justify-content: center; width: 50px;">Publish</div>
+                    <div id="draft" class="btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center; width: 80px;">Save as Draft</div>
                 </div>
             </div>
         </div>
         <div id="logout" style="display: none;">
-            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; right: 10px;">Logout</label>
+            <label id="logout_label" style="cursor:pointer; position:absolute; bottom: 15px; right: 10px;">Logout</label>
         </div>
     </div>
 </body>
