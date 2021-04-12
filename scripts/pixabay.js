@@ -33,7 +33,7 @@
 var  Ps;
 
 (function(window, undefined) {
-	
+
 	var displayNoneClass = "display-none";
 	var waitForLoad = false;
 
@@ -341,7 +341,10 @@ var  Ps;
             updateScroll();
             updateNavigation();
         });
-
+        $('input').keydown(function(e) {
+            if(e.keyCode === 13)
+                $('#button-search-id').trigger('click');
+        });
         $('#button-search-id').click(function() {
             sLastQuery = elements.search_phrase.value;
             if(sLastQuery === ''){
@@ -440,6 +443,12 @@ var  Ps;
         updateScroll();
         if (elements.api_input.value.trim() !== '')
             loadClipArtPage(1, sLastQuery);
+    };
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#body').css('color', window.Asc.plugin.theme.Color);
+        $('.hidden, .opened, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
     };
 
     function loadClipArtPage(nIndex, sQuery) {
