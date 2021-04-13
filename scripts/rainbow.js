@@ -16,7 +16,7 @@
 			ifr.style.width    = "100%";
 			ifr.style.height   = "100%";
 			ifr.setAttribute("frameBorder", "0");
-			ifr.setAttribute("allow", "camera; microphone");
+			ifr.setAttribute("allow", "camera https://web.openrainbow.com; microphone https://web.openrainbow.com");
 			document.getElementById("iframe_parent").appendChild(ifr);
 			isInit = true;
 			ifr.onload = function() {
