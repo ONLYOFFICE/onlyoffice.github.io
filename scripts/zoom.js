@@ -91,7 +91,7 @@ var Ps;
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
-        $('#reconf-label, #switch-label, #label-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('#reconf-label, #switch-label, #label-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color + ' !important');
         $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
     };
 
