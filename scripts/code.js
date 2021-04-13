@@ -202,7 +202,8 @@
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
-        var rules = '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
+        var rules = '.selectArrow > span { background-color: ' + window.Asc.plugin.theme['text-normal'] + '}\n';
+        rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
         rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
         rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
         rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
