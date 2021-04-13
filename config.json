@@ -6,7 +6,8 @@
       {
         "description": "Zotero",
         "url": "index.html",
-        "icons": [
+        "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+		"icons2": [
 			{
 				"style" : "light",
 				
