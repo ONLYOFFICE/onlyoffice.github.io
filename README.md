@@ -14,6 +14,10 @@ The plugin uses [Languagetool's] multilingual grammar and style checker (https:/
 
 Another way to use it: open the plugin and type the word in the field. Press Lookup to search for synonyms.
 
+## How to install
+
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+
 ## Using your service
 
 You can send requests to your service. To do this, you need to change the url
