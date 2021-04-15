@@ -171,7 +171,7 @@ var Ps;
             var sInfo = '';
             if (!oConfig.suppressInfo)
                 sInfo += sTopInfo;
-            window.Asc.plugin.executeMethod('DocToMarkdown', [oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
+            window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
                 document.getElementById("text-area").value = sInfo + sOutput;
             });
             SaveToLocalStorage();
@@ -181,7 +181,7 @@ var Ps;
             var sInfo = '';
             if (!oConfig.suppressInfo)
                 sInfo += sTopInfo;
-            window.Asc.plugin.executeMethod('DocToHtml', [oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
+            window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
                 document.getElementById("text-area").value = sInfo + sOutput;
             });
             SaveToLocalStorage();
