@@ -10,7 +10,7 @@ Docs to Markdown convert a Doc to Markdown or HTML.
 
 ## Options
 
-- Demote headings (H1 → H2, etc.): If you have used multiple Heading 1 headings in your Doc, choose this option to demote all heading levels to conform with the following standard: single H1 as title, H2 as top-level heading in the text body. You may need to add an H1 to function as the title after conversion.
+- Demote headings (H1 → H2, etc.): If you have used multiple Heading 1 headings in your Doc, choose this option to demote all heading levels to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.
 - HTML headings/IDs: Not all Markdown renderers handle Markdown-style IDs. If that is the case for your target platform, choose this option to generate HTML headings and IDs.
 - Create base64 images: Select this option if you want images to be created in base64 format.
 - Render HTML tags: By default, angle brackets (<) will be replaced by the &lt; entity. If you really want to embed HTML tags in your Markdown, select this option to preserve them. Or, if you just want to use an occasional HTML tag, you can escape the opening angle bracket like this: \<tag>text\</tag>.

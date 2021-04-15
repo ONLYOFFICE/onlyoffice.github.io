@@ -26,7 +26,6 @@ var Ps;
 	    convertType : '',
 	    htmlHeadings : false,
 	    base64img : false,
-	    zipImages : false,
 	    demoteHeadings : false,
 	    renderHTMLTags : false,
 	    suppressInfo : false,
@@ -133,7 +132,6 @@ var Ps;
     function SetConfig(sConvertType) {
         oConfig.htmlHeadings   = false;
         oConfig.base64img      = false;
-        oConfig.zipImages      = false;
         oConfig.demoteHeadings = false;
         oConfig.renderHTMLTags = false;
         oConfig.suppressInfo   = false;
@@ -173,10 +171,8 @@ var Ps;
             var sInfo = '';
             if (!oConfig.suppressInfo)
                 sInfo += sTopInfo;
-            window.Asc.plugin.executeMethod('GetSelectedText', [], function(sText) {
-                window.Asc.plugin.executeMethod('DocToMarkdown', [oConfig], function(sOutput) {
-                    document.getElementById("text-area").value = sInfo + sOutput;
-                });
+            window.Asc.plugin.executeMethod('DocToMarkdown', [oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
+                document.getElementById("text-area").value = sInfo + sOutput;
             });
             SaveToLocalStorage();
         });
@@ -185,10 +181,8 @@ var Ps;
             var sInfo = '';
             if (!oConfig.suppressInfo)
                 sInfo += sTopInfo;
-            window.Asc.plugin.executeMethod('GetSelectedText', [], function(sText) {
-                window.Asc.plugin.executeMethod('DocToHtml', [oConfig], function(sOutput) {
-                    document.getElementById("text-area").value = sInfo + sOutput;
-                });
+            window.Asc.plugin.executeMethod('DocToHtml', [oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
+                document.getElementById("text-area").value = sInfo + sOutput;
             });
             SaveToLocalStorage();
         });
