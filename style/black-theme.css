@@ -1,0 +1,7 @@
+.tui-image-editor-container .tui-image-editor-menu>.tui-image-editor-item.active {
+    background-color: #ffffff !important;
+}
+#tie-btn-undo:hover,#tie-btn-redo:hover,#tie-btn-reset:hover,#tie-btn-delete:hover,#tie-btn-delete-all:hover,#tie-btn-crop:hover,#tie-btn-flip:hover,#tie-btn-rotate:hover,#tie-btn-draw:hover,#tie-btn-shape:hover,#tie-btn-icon:hover,#tie-btn-text:hover,#tie-btn-mask:hover,#tie-btn-filter:hover{
+    background-color: #151515;
+    cursor:pointer;
+}
