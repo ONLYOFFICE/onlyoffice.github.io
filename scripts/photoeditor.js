@@ -1,8 +1,27 @@
 
 var oImage = false;
 var imageEditor = null;
+var themeStyle = null;
 
 (function(window, undefined){
+
+    window.Asc.plugin.onThemeChanged = function (theme) {
+
+        var head  = document.getElementsByTagName('head')[0];
+        var link  = document.createElement('link');
+        link.rel  = 'stylesheet';
+        link.type = 'text/css';
+        link.media = 'all';
+
+        if(theme.type === "dark") {
+            themeStyle = blackTheme;
+            link.href = './style/black-theme.css';
+        } else {
+            themeStyle = whiteTheme;
+            link.href = './style/white-theme.css';
+        }
+        head.appendChild(link);
+    };
 
 var translationDone = false;
 var initializationDone = false;
@@ -132,7 +151,7 @@ var language = null;
                         path: oImage.src,
                         name: 'Image'
                     },
-                    theme: whiteTheme,
+                    theme: themeStyle,
                     initMenu: 'filter',
                     menuBarPosition: 'bottom',
                     locale: language,
