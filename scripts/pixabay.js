@@ -484,6 +484,15 @@ var  Ps;
                 img.src = sUrl;
             }
 
+            if (oResponse.hits.length == 0) {
+                showLoader(elements, false);
+                $('#preview-images-container-id').empty();
+                $('<div>', {
+                    "class": "no-results",
+                    text: "No results."
+                }).appendTo('#preview-images-container-id');
+                return;
+            }
             for (var nUrl = 0; nUrl < oResponse.hits.length; nUrl++) {
                 //loadImgs(oResponse.items[nUrl].pngurl[oResponse.items[0].pngurl.length - 1]);
                 loadImgs(oResponse.hits[nUrl].largeImageURL);
