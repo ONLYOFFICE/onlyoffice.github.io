@@ -13,33 +13,12 @@ body {
     font-size: 11px;
 }
 
-input::selection {
-    background: #D8DADC;
-    /* WebKit/Blink Browsers */
-}
-
-input::-moz-selection {
-    background: #D8DADC;
-    /* Gecko Browsers */
-}
-
-div::selection {
-    background: #D8DADC;
-    /* WebKit/Blink Browsers */
-}
-
-div::-moz-selection {
-    background: #D8DADC;
-    /* Gecko Browsers */
-}
-
 textarea:focus,
 input:focus {
     outline: none;
 }
 
 .button {
-    background: #fff;
     outline: none;
     font-size: 12px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -95,12 +74,11 @@ input:focus {
     box-sizing: border-box;
     border: 1px solid #cfcfcf;
     border-radius: 2px;
-    color: #333333;
+    /* color: #333333; */
 }
 
     .control.select {
         cursor: pointer;
-        background-color: #ffffff;
     }
 
     .control.text {
@@ -149,7 +127,6 @@ input[type="text"] {
 }
 
 #errorWrapper {
-    background-color: #ffffff;
     padding: 10px 12px;
 }
 
@@ -257,15 +234,16 @@ input[type="text"] {
 
 .selectList {
     display: flex;
-    flex-direction: column;
-    position: absolute;
-    border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    background: #ffffff;
+    flex-direction: column !important;
+    position: absolute !important;
+    /* border: 1px solid rgba(0, 0, 0, .15); */
+    /* border-radius: 4px; */
+    /* -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175); */
+    /* box-shadow: 0 6px 12px rgba(0, 0, 0, .175); */
+    /* background: #ffffff; */
     bottom: 22px;
-    max-height: 158px;
+    max-height: 158px !important;
+    min-height: 158px !important;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -273,7 +251,7 @@ input[type="text"] {
     .selectList > span {
         padding: 5px 20px;
         cursor: pointer;
-        color: #444444;
+        /* color: #444444; */
     }
 
         .selectList > span:hover {
@@ -303,15 +281,15 @@ input[type="text"] {
     }
 
 .searchInfo {
-    color: #333333;
+    /* color: #333333; */
 }
 
 .errorMsg {
-    color: #D9534F;
+    color: #D9534F !important;
 }
 
 .searchDivider {
-    color: #666666;
+    /* color: #666666; */
     margin: 12px 0;
 }
 
@@ -378,8 +356,8 @@ input[type="text"] {
         width: 11px;
         height: 10px;
         position: relative;
-        top: -3px;
-        left: 3px;
+        /* top: -3px;
+        left: 3px; */
     }
 
     .checkbox > input:checked ~ span {
@@ -407,10 +385,10 @@ input[type="text"] {
 
         .selDoc > span:last-of-type {
             cursor: pointer;
-            background: url('../img/x.png') no-repeat;
+            /* background: url('../img/x.png') no-repeat; */
             background-size: contain;
-            width: 9px;
-            height: 9px;
+            font-size: 20px !important;
+            margin-top: 1px;
         }
 
 
