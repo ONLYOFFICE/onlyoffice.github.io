@@ -30,7 +30,7 @@
  *
  */
 
-var  Ps;
+var  Ps1, Ps2;
 
 (function(window, undefined) {
 
@@ -311,7 +311,8 @@ var  Ps;
     };
 
     function updateScroll(){
-        Ps.update();
+        Ps1.update();
+        Ps2.update();
     };
 
     window.Asc.plugin.init = function () {
@@ -334,7 +335,8 @@ var  Ps;
         SetSavedSettings();
 
 		var container = document.getElementsByClassName ('scrollable-container-id');
-        Ps = new PerfectScrollbar('#scrollable-container-id', {});
+        Ps1 = new PerfectScrollbar('#scrollable-container-id', {});
+        Ps2 = new PerfectScrollbar('#main-container-id', {});
 
         $( window ).resize(function(){
             updatePaddings();
@@ -468,7 +470,7 @@ var  Ps;
 
             container = document.getElementById('scrollable-container-id');
             container.scrollTop = 0;
-            Ps.update();
+            updateScroll();
             updateNavigation(nIndex, Math.ceil(oResponse.totalHits/20) + 1);
 
             var imgCount = oResponse.hits.length;
@@ -515,7 +517,7 @@ var  Ps;
             showLoader(elements, false);
             container = document.getElementById('scrollable-container-id');
             container.scrollTop = 0;
-            Ps.update();
+            updateScroll();
             updateNavigation(0, 0);
             var oContainer = $('#preview-images-container-id');
             oContainer.empty();
