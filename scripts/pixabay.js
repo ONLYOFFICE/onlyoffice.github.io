@@ -493,6 +493,7 @@ var  Ps1, Ps2;
                     "class": "no-results",
                     text: "No results."
                 }).appendTo('#preview-images-container-id');
+                updateScroll();
                 return;
             }
             for (var nUrl = 0; nUrl < oResponse.hits.length; nUrl++) {
