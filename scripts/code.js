@@ -108,7 +108,7 @@
 	window.Asc.plugin.onThemeChanged = function(theme)
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
-		if (theme.name.indexOf("dark") !== -1)
+		if (theme.type.indexOf("dark") !== -1)
 			setTimeout(()=>editor.setOption("theme", "bespin"));
 	};
 
