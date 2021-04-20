@@ -108,9 +108,11 @@ var Ps;
             isValidKey = true;
             if ($('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
-            if ($('#api-value').hasClass('error_api'))
+
+            if ($('#api-value').hasClass('img_error'))
+                $('#api-value').toggleClass('img_error');
+            if (!$('#api-value').hasClass('error_api'))
                 $('#api-value').toggleClass('error_api');
-            $('#img_error').hide();
 
             localStorage.setItem('deepL_Apikey', apikey);
 
@@ -148,10 +150,9 @@ var Ps;
             }
             else {
                 if (oResponse.status === 403) {
-                    $('#api_empty').hide();
-                    $('#img_error').show();
-                    if (!$('#api-value').hasClass('error_api'))
-                        $('#api-value').toggleClass('error_api');
+                    if (!$('#api-value').hasClass('img_error'))
+                        $('#api-value').toggleClass('img_error');
+                    container.innerHTML = "API key is not valid!"
                 }
                 else
                     container.innerHTML = "Connection failed!";
@@ -251,8 +252,9 @@ var Ps;
                     $('#txt_shower').toggleClass('error');
                 if (!$('#api-value').hasClass('error_api'))
                     $('#api-value').toggleClass('error_api');
-                $('#img_error').hide();
-                $('#api_empty').show();
+                if (!$('#api-value').hasClass('img_error'))
+                    $('#api-value').toggleClass('img_error');
+                container = document.getElementById('txt_shower').innerHTML = 'API key in empty!'
             }
         })
         $('#reconf').on('click', function() {
