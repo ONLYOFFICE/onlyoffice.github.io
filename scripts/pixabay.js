@@ -398,10 +398,20 @@ var  Ps1, Ps2;
                 loadClipArtPage(1, sLastQuery);
             }
             else {
+                $('#preview-images-container-id').empty();
+
                 if (!$('#api-value').hasClass('error_api'))
                     $('#api-value').toggleClass('error_api');
-                $('#img_error').hide();
-                $('#api_empty').show();
+                if (!$('#api-value').hasClass('api_empty'))
+                    $('#api-value').toggleClass('api_empty');
+                if ($('#empty-key'))
+                    $('#empty-key').remove();
+                $('<div>', {
+                    id : "empty-key",
+                    "class": "error_color",
+                    text: "API key is empty!"
+                }).appendTo('#preview-images-container-id');
+                updateScroll();
             }
         });
 
@@ -411,19 +421,16 @@ var  Ps1, Ps2;
             }
         });
         $('#reconf').on('click', function() {
-            saved_key = localStorage.getItem('deepL_Apikey');
+            saved_key = localStorage.getItem($('#api-value').attr('data-id'));
             if (saved_key !== null) {
                 elements.api_input.value = saved_key;
-
             }
             if ($('#api-value').hasClass('error_api')) {
                     $('#api-value').toggleClass('error_api');
-                    $('#api_empty').hide();
-                    $('#img_error').hide();
             }
             $('#api').show();
             $('#main-search-container-id').hide();
-            $('#scrollable-container-id').hide();
+            $('#preview-images-container-id').empty();
             $('#pagination-container-id').hide();
             $(elements.api_input).focus();
         });
@@ -453,6 +460,11 @@ var  Ps1, Ps2;
             $('#pagination-container-id').show();
             localStorage.setItem($(elements.api_input).attr('data-id'), elements.api_input.value.trim());
             localStorage.setItem($(elements.search_phrase).attr('data-id'), elements.search_phrase.value);
+
+            if ($('#api-value').hasClass('error_api'))
+                $('#api-value').toggleClass('error_api');
+            if ($('#api-value').hasClass('api_empty'))
+                $('#api-value').toggleClass('api_empty');
 
             container = document.getElementById('scrollable-container-id');
             container.scrollTop = 0;
@@ -511,14 +523,20 @@ var  Ps1, Ps2;
             if (elements.api_input.value.trim() === '') {
                 if (!$('#api-value').hasClass('error_api'))
                     $('#api-value').toggleClass('error_api');
-                $('#img_error').hide();
-                $('#api_empty').show();
+                $('#preview-images-container-id').empty();
+
+                if ($('#empty-key'))
+                    $('#empty-key').remove();
+                $('<div>', {
+                    id : 'empty-key',
+                    "class": "error_color",
+                    text: "Invalid API key"
+                }).appendTo('#preview-images-container-id');
+                updateScroll();
             }
             else {
-                if (!$('#api-value').hasClass('error_api'))
+                if ($('#api-value').hasClass('error_api'))
                     $('#api-value').toggleClass('error_api');
-                $('#img_error').show();
-                $('#api_empty').hide();
             }
         });
     };

@@ -131,20 +131,18 @@
         .checkbox {
             margin: 1px 0 0 4px;
         }
-        #img_error {
-			position: absolute;
-			right: 20px;
-			top: 36px;
-			display: none;
-		}
+		.error_color {
+        	color: #D9534F;
+        	font-size: 13px;
+        }
 		.error_api {
         	border: 1px solid #D9534F !important;
         }
-		#api_empty {
-			position: absolute;
-			right: 20px;
-			top: 36px;
-			display: none;
+		.api_empty {
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEDSURBVHgBnVLRTcMwEH1nIFKrfhiJIj7NBozgTcgGhAmqTFAyAWETqwvABvQTESTyUQoqbY5zlJSqTaukT7J8su/5ne8eYQNstZ4jiCS8BbOpjl/8UnQS99zbtM6lOpjZYUiMsYQazciZOB64j4c1cWYvImIaowUUI+xNsif6tlem4NXztlLfvZf73F7uKC/o91oVWI2wv7wm6ACndwqMG3QFU6hk604EjMKRoC87fJVyTRcS+7nKJ9OmS9/VurM7ap74g2UicY72an4ccWWA0jWPbYiSF/UnWVI2Z+CyVOx0f0jZKykuQk+qyv3Hp9UmwNmomm09pqkYPl2oZXLu8vXDf54ZXXDvkOajAAAAAElFTkSuQmCC);
+			background-repeat: no-repeat;
+			background-position: right;
+			background-position-x: 98%;
 		}
 		#save {
         	width: calc(100% - 24px);
@@ -189,8 +187,6 @@
 				<label style="margin-left:12px;">API key</label>
 			</div>
 			<input type="text" id="api-value" class="form-control" data-id="pixabay-api-value-id" placeholder="Enter your Pixabay API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
-			<div id="img_error" title="API key is not valid"><img src="./resources/img/error_icon.png" alt=""></div>
-			<div id="api_empty" title="API key is empty"><img src="./resources/img/error_icon.png" alt=""></div>
 			<button onсlick="" id="save" class="btn-text-default">Save</button>
 		</div>
         <div id="main-search-container-id" style="display:none;">
