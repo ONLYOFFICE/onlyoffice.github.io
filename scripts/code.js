@@ -1,3 +1,15 @@
+window.initCounter = 0;
+function on_init_server(type)
+{
+    if (type === (window.initCounter & type))
+        return;
+    window.initCounter |= type;
+    if (window.initCounter === 3)
+    {
+        load_library("onlyoffice", "./libs/" + Asc.plugin.info.editorType + "/api.js");
+    }
+}
+
 function load_library(name, url) 
 {
     var xhr = new XMLHttpRequest();
@@ -50,7 +62,7 @@ ace.config.loadModule('ace/ext/tern', function () {
             useWorker: !!window.Worker,            
             switchToDoc: function (name, start) {},            
             startedCb: function () {
-                load_library("onlyoffice", "./libs/apibuilder.js");
+                on_init_server(1);
             },
         }, 
         enableSnippets: false,
@@ -303,6 +315,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
     window.Asc.plugin.init = function(text)
 	{
+        on_init_server(2);
         this.executeMethod("GetMacros", [JSON.stringify(Content)], function(data) {
             
             try
