@@ -558,3 +558,22 @@ a.aboutlink:active {
     font-size: 13px;
     padding-left: 25px;
 }
+
+/* default scroll */
+
+* {
+    scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+    width: 13px;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    border: 2px solid;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAQAAAAz1Zf0AAAAIUlEQVR42mNgAILz/0GQAQo+/gdBBqLAqE5ydH5k+sgEANHgUH2JtDRHAAAAAElFTkSuQmCC);
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-position: 1px center;
+}
