@@ -96,6 +96,12 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
     });
 
+    function create_guid(a,b)
+    {
+       for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');
+       return b
+    };
+
     function updateMenu()
     {
         if (Content.current < 0)
@@ -117,6 +123,9 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
             }
             item += "</div>";
             menuContent += item;
+
+            if (!Content.macrosArray["guid"])
+                Content.macrosArray["guid"] = create_guid();
         }
         
         var elem = document.getElementById("menu_content");
