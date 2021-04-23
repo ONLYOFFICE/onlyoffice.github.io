@@ -1,72 +1,85 @@
-/**
- *
- * (c) Copyright Ascensio System SIA 2020
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+window.initCounter = 0;
+function on_init_server(type)
+{
+    if (type === (window.initCounter & type))
+        return;
+    window.initCounter |= type;
+    if (window.initCounter === 3)
+    {
+        load_library("onlyoffice", "./libs/" + Asc.plugin.info.editorType + "/api.js");
+    }
+}
 
-var langTools = ace.require("ace/ext/language_tools");
-var editor = ace.edit("editor");    
-editor.session.setMode("ace/mode/javascript");
-// enable autocompletion and snippets
-editor.setOptions({
-    enableBasicAutocompletion: true,
-    enableSnippets: false
+function load_library(name, url) 
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function() 
+    {
+        if (xhr.readyState == 4)
+        {
+            var EditSession = ace.require("ace/edit_session").EditSession;
+            var editDoc = new EditSession(xhr.responseText, "ace/mode/javascript");
+            editor.ternServer.addDoc(name, editDoc);
+        }
+    };
+    xhr.send();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var styleTheme = document.createElement('style');
+    styleTheme.type = 'text/css';
+
+    window.lockTooltipsPosition = true;
+    var editor_elem = document.getElementById("editorWrapper");
+    var rules = ".Ace-Tern-tooltip {\
+box-sizing: border-box;\
+max-width: " + editor_elem.offsetWidth + "px !important;\
+min-width: " + editor_elem.offsetWidth + "px !important;\
+left: " + editor_elem.offsetLeft + "px !important;\
+bottom: " + parseInt(document.getElementsByClassName("divFooter")[0].offsetHeight) + "px !important;\
+}";
+
+    styleTheme.innerHTML = rules;
+    document.getElementsByTagName('head')[0].appendChild(styleTheme);
 });
+
+var editor = ace.edit("editor");      
+editor.session.setMode("ace/mode/javascript");
+editor.setValue("");
+
+
+editor.getSession().setUseWrapMode(true);
+editor.getSession().setWrapLimitRange(null, null);
 editor.setShowPrintMargin(false);
-editor.setValue('');
+editor.$blockScrolling = Infinity;
 
-// Create tern server
-var TernServer = ace.require("ace/tern/server").TernServer;
-var defs = [ternEcma5Def];
-var ternServer = new TernServer({defs: defs});
-    
-// Tern Completion
-langTools.addCompleter(ternServer);
+ace.config.loadModule('ace/ext/tern', function () {
+    editor.setOptions({
+        enableTern: {
+            defs: ['browser', 'ecma5'],
+            plugins: { doc_comment: { fullDocs: true } },
+            useWorker: !!window.Worker,            
+            switchToDoc: function (name, start) {},            
+            startedCb: function () {
+                on_init_server(1);
+            },
+        }, 
+        enableSnippets: false,
+        enableBasicAutocompletion: true,
+    });
+});
 
-// Tern Tooltip
-var TernTooltip = ace.require("ace/tern/tern_tooltip").TernTooltip;
-editor.ternTooltip = new TernTooltip(editor, ternServer);
+ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
+    editor.setOptions({
+        autoBeautify: true,
+        htmlBeautify: true,
+    });
+    window.beautifyOptions = beautify.options;
+});
 
 (function(window, undefined){
 
-    /*
-    setTimeout(function(){
-
-        var _elements = document.getElementsByClassName("ace_scrollbar");
-        
-        for (var i = 0; i < _elements.length; i++)
-        {
-            _elements[i].style.overflow = "hidden";
-            Ps.initialize(_elements[i], {
-                theme : 'custom-theme'
-            });
-        }
-        
-    }, 100);
-
-    function updateScroll()
-    {
-        var _elements = document.getElementsByClassName("ace_scrollbar");
-        
-        for (var i = 0; i < _elements.length; i++)
-        {
-            _elements[i].style.overflow = "hidden";
-            Ps.update(_elements[i]);
-        }
-    }
-    */
     var Content = {
 
         macrosArray : [],
@@ -305,6 +318,7 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
     window.Asc.plugin.init = function(text)
 	{
+        on_init_server(2);
         this.executeMethod("GetMacros", [JSON.stringify(Content)], function(data) {
             
             try
@@ -447,6 +461,24 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
             updateMenu();
         }
+    };
+
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#menu_content, .ace_content').css('background', window.Asc.plugin.theme["background-normal"]);
+        $('#menu_content, .ace_content').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('background', window.Asc.plugin.theme["background-toolbar"]);
+        $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('#menu, .divFooter').css('border-color', window.Asc.plugin.theme["border-divider"]);
+        $('.ace_scroller').css('border-left', 'solid 1px ' + window.Asc.plugin.theme["border-divider"]);
+        $('.ace_cursor').css('color', window.Asc.plugin.theme["text-normal"]);
+
+        if (theme.type === 'dark')
+            editor.setTheme("ace/theme/vs-dark")
+        else
+            editor.setTheme("ace/theme/vs-light")
+
     };
 
 })(window, undefined);
