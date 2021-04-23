@@ -1,86 +1,85 @@
-/*
- * (c) Copyright Ascensio System SIA 2010
- *
- * This program is a free software product. You can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License (AGPL)
- * version 3 as published by the Free Software Foundation. In accordance with
- * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement
- * of any third-party rights.
- *
- * This program is distributed WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
- *
- * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
- * street, Riga, Latvia, EU, LV-1050.
- *
- * The  interactive user interfaces in modified source and object code versions
- * of the Program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU AGPL version 3.
- *
- * Pursuant to Section 7(b) of the License you must retain the original Product
- * logo when distributing the program. Pursuant to Section 7(e) we decline to
- * grant you any rights under trademark law for use of our trademarks.
- *
- * All the Product's GUI elements, including illustrations and icon sets, as
- * well as technical writing content are licensed under the terms of the
- * Creative Commons Attribution-ShareAlike 4.0 International. See the License
- * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
- *
- */
+window.initCounter = 0;
+function on_init_server(type)
+{
+    if (type === (window.initCounter & type))
+        return;
+    window.initCounter |= type;
+    if (window.initCounter === 3)
+    {
+        load_library("onlyoffice", "./libs/" + Asc.plugin.info.editorType + "/api.js");
+    }
+}
 
-var langTools = ace.require("ace/ext/language_tools");
-var editor = ace.edit("editor");    
-editor.session.setMode("ace/mode/javascript");
-// enable autocompletion and snippets
-editor.setOptions({
-    enableBasicAutocompletion: true,
-    enableSnippets: false
+function load_library(name, url) 
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function() 
+    {
+        if (xhr.readyState == 4)
+        {
+            var EditSession = ace.require("ace/edit_session").EditSession;
+            var editDoc = new EditSession(xhr.responseText, "ace/mode/javascript");
+            editor.ternServer.addDoc(name, editDoc);
+        }
+    };
+    xhr.send();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var styleTheme = document.createElement('style');
+    styleTheme.type = 'text/css';
+
+    window.lockTooltipsPosition = true;
+    var editor_elem = document.getElementById("editorWrapper");
+    var rules = ".Ace-Tern-tooltip {\
+box-sizing: border-box;\
+max-width: " + editor_elem.offsetWidth + "px !important;\
+min-width: " + editor_elem.offsetWidth + "px !important;\
+left: " + editor_elem.offsetLeft + "px !important;\
+bottom: " + parseInt(document.getElementsByClassName("divFooter")[0].offsetHeight) + "px !important;\
+}";
+
+    styleTheme.innerHTML = rules;
+    document.getElementsByTagName('head')[0].appendChild(styleTheme);
 });
+
+var editor = ace.edit("editor");      
+editor.session.setMode("ace/mode/javascript");
+editor.setValue("");
+
+
+editor.getSession().setUseWrapMode(true);
+editor.getSession().setWrapLimitRange(null, null);
 editor.setShowPrintMargin(false);
-editor.setValue('');
+editor.$blockScrolling = Infinity;
 
-// Create tern server
-var TernServer = ace.require("ace/tern/server").TernServer;
-var defs = [ternEcma5Def];
-var ternServer = new TernServer({defs: defs});
-    
-// Tern Completion
-langTools.addCompleter(ternServer);
+ace.config.loadModule('ace/ext/tern', function () {
+    editor.setOptions({
+        enableTern: {
+            defs: ['browser', 'ecma5'],
+            plugins: { doc_comment: { fullDocs: true } },
+            useWorker: !!window.Worker,            
+            switchToDoc: function (name, start) {},            
+            startedCb: function () {
+                on_init_server(1);
+            },
+        }, 
+        enableSnippets: false,
+        enableBasicAutocompletion: true,
+    });
+});
 
-// Tern Tooltip
-var TernTooltip = ace.require("ace/tern/tern_tooltip").TernTooltip;
-editor.ternTooltip = new TernTooltip(editor, ternServer);
+ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
+    editor.setOptions({
+        autoBeautify: true,
+        htmlBeautify: true,
+    });
+    window.beautifyOptions = beautify.options;
+});
 
 (function(window, undefined){
 
-    /*
-    setTimeout(function(){
-
-        var _elements = document.getElementsByClassName("ace_scrollbar");
-        
-        for (var i = 0; i < _elements.length; i++)
-        {
-            _elements[i].style.overflow = "hidden";
-            Ps.initialize(_elements[i], {
-                theme : 'custom-theme'
-            });
-        }
-        
-    }, 100);
-
-    function updateScroll()
-    {
-        var _elements = document.getElementsByClassName("ace_scrollbar");
-        
-        for (var i = 0; i < _elements.length; i++)
-        {
-            _elements[i].style.overflow = "hidden";
-            Ps.update(_elements[i]);
-        }
-    }
-    */
     var Content = {
 
         macrosArray : [],
@@ -319,6 +318,7 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
     window.Asc.plugin.init = function(text)
 	{
+        on_init_server(2);
         this.executeMethod("GetMacros", [JSON.stringify(Content)], function(data) {
             
             try
@@ -461,6 +461,24 @@ editor.ternTooltip = new TernTooltip(editor, ternServer);
 
             updateMenu();
         }
+    };
+
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#menu_content, .ace_content').css('background', window.Asc.plugin.theme["background-normal"]);
+        $('#menu_content, .ace_content').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('background', window.Asc.plugin.theme["background-toolbar"]);
+        $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('#menu, .divFooter').css('border-color', window.Asc.plugin.theme["border-divider"]);
+        $('.ace_scroller').css('border-left', 'solid 1px ' + window.Asc.plugin.theme["border-divider"]);
+        $('.ace_cursor').css('color', window.Asc.plugin.theme["text-normal"]);
+
+        if (theme.type === 'dark')
+            editor.setTheme("ace/theme/vs-dark")
+        else
+            editor.setTheme("ace/theme/vs-light")
+
     };
 
 })(window, undefined);
