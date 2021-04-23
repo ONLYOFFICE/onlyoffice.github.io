@@ -124,7 +124,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
             item += "</div>";
             menuContent += item;
 
-            if (!Content.macrosArray["guid"])
+            if (!Content.macrosArray[i]["guid"])
                 Content.macrosArray["guid"] = create_guid();
         }
         
