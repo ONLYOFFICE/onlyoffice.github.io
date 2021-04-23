@@ -48,7 +48,7 @@ var editor = ace.edit("editor");
 editor.session.setMode("ace/mode/javascript");
 editor.setValue("");
 
-editor.setTheme("ace/theme/chrome");
+
 editor.getSession().setUseWrapMode(true);
 editor.getSession().setWrapLimitRange(null, null);
 editor.setShowPrintMargin(false);
@@ -458,6 +458,24 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
             updateMenu();
         }
+    };
+
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#menu_content, .ace_content').css('background', window.Asc.plugin.theme["background-normal"]);
+        $('#menu_content, .ace_content').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('background', window.Asc.plugin.theme["background-toolbar"]);
+        $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('#menu, .divFooter').css('border-color', window.Asc.plugin.theme["border-divider"]);
+        $('.ace_scroller').css('border-left', 'solid 1px ' + window.Asc.plugin.theme["border-divider"]);
+        $('.ace_cursor').css('color', window.Asc.plugin.theme["text-normal"]);
+
+        if (theme.type === 'dark')
+            editor.setTheme("ace/theme/vs-dark")
+        else
+            editor.setTheme("ace/theme/vs-light")
+
     };
 
 })(window, undefined);
