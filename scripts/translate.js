@@ -78,7 +78,7 @@
                         Asc.scope.arr = allParsedParas;
                         window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                             if (version === undefined) {
-                                window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
                             }
                             else {
                                 window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
