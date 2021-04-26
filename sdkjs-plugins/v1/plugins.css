@@ -577,3 +577,6 @@ a.aboutlink:active {
     background-repeat: no-repeat;
     background-position: 0px center;
 }
+*::-webkit-scrollbar-thumb:hover {
+    background-position: -7px center;
+}
