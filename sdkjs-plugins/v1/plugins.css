@@ -566,14 +566,14 @@ a.aboutlink:active {
 }
 
 *::-webkit-scrollbar {
-    width: 13px;
+    width: 9px;
 }
 
 *::-webkit-scrollbar-thumb {
-    border-radius: 20px;
-    border: 2px solid;
+    border-radius: 2px;
+    border: 1px solid;
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAQAAAAz1Zf0AAAAIUlEQVR42mNgAILz/0GQAQo+/gdBBqLAqE5ydH5k+sgEANHgUH2JtDRHAAAAAElFTkSuQmCC);
     image-rendering: pixelated;
     background-repeat: no-repeat;
-    background-position: 1px center;
+    background-position: 0px center;
 }
