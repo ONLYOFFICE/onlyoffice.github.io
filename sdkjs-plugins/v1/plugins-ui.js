@@ -46,3 +46,5 @@ if (document.currentScript && document.currentScript.src) {
         document.getElementsByTagName('HEAD')[0].appendChild(link);  
 	}
 }
+// escape and unescape functions
+var createEscaper=function(t){function r(e){return t[e]}var e="(?:"+Object.keys(t).join("|")+")",a=RegExp(e),c=RegExp(e,"g");return function(e){return e=null==e?"":""+e,a.test(e)?e.replace(c,r):e}};escape=createEscaper({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"}),unescape=createEscaper({"&amp;":"&","&lt;":"<","&gt;":">","&quot;":'"',"&#x27;":"'","&#x60;":"`"});
