@@ -79,14 +79,7 @@ var Ps;
         window.Asc.plugin.onThemeChangedBase(theme);
 
         $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
-        if (theme.type === 'dark') {
-            $('#arrow-dark').show();
-            $('#arrow-light').hide();
-        }
-        else {
-            $('#arrow-dark').hide();
-            $('#arrow-light').show();
-        }
+        $('#arrow-svg-path').css('fill', theme["text-normal"]);
     };
 
     function PrepareTextToSend(allParas) {
@@ -315,7 +308,7 @@ var Ps;
 
     $(document).ready(function () {
         $('.select_example').select2({
-			minimumResultsForSearch: Infinity,
+			minimumResultsForSearch: 6,
 			width: "100%"
 		});
         elements = {
