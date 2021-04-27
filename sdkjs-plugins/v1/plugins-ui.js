@@ -46,3 +46,5 @@ if (document.currentScript && document.currentScript.src) {
         document.getElementsByTagName('HEAD')[0].appendChild(link);  
 	}
 }
+// escape and unescape func
+!function(e){function n(n){function t(e){return n[e]}var e="(?:"+Object.keys(n).join("|")+")",u=RegExp(e),c=RegExp(e,"g");return function(e){return e=null==e?"":""+e,u.test(e)?e.replace(c,t):e}}escape=n({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"}),unescape=n({"&amp;":"&","&lt;":"<","&gt;":">","&quot;":'"',"&#x27;":"'","&#x60;":"`"}),e.escape=escape,e.unescape=unescape}(window);
