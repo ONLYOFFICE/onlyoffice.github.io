@@ -21,7 +21,7 @@
 			isInit = true;
 			ifr.onload = function() {
 			    // checking what iframe is downloaded clearly
-			    if (document.querySelector('c-button.c-button--navigation.c-button--active.topActionButton_chat') && document.querySelector('.c-button.c-button--navigation.topActionButton_newsfeed'))
+			    if ($('body[ng-controller="MainController"]'))
 			        console.log('Downloaded...')
 			    else {
 			        $('#google_id').remove();
@@ -33,7 +33,7 @@
 			    }
 			}
 			ifr.onerror = function() {
-			    $('#google_id').remove();
+			     $('#google_id').remove();
 			        $('<span>', {
                         "class": "error",
                         text: "Refused to frame 'https://web.openrainbow.com/' because an ancestor violates the Content Security Policy directive."
