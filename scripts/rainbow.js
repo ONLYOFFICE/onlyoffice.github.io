@@ -20,8 +20,27 @@
 			document.getElementById("iframe_parent").appendChild(ifr);
 			isInit = true;
 			ifr.onload = function() {
-				console.log('Downloaded...')
+			    // checking what iframe is downloaded clearly
+			    if (document.querySelector('c-button.c-button--navigation.c-button--active.topActionButton_chat') && document.querySelector('.c-button.c-button--navigation.topActionButton_newsfeed'))
+			        console.log('Downloaded...')
+			    else {
+			        $('#google_id').remove();
+			        $('<span>', {
+                        "class": "error",
+                        text: "Refused to frame 'https://web.openrainbow.com/' because an ancestor violates the Content Security Policy directive."
+                    }).appendTo('#iframe_parent');
+			        $('#iframe_parent').css('text-align', 'center');
+			    }
 			}
+			ifr.onerror = function() {
+			    $('#google_id').remove();
+			        $('<span>', {
+                        "class": "error",
+                        text: "Refused to frame 'https://web.openrainbow.com/' because an ancestor violates the Content Security Policy directive."
+                    }).appendTo('#iframe_parent');
+                $('#iframe_parent').css('text-align', 'center');
+			}
+
 		} else {
 			console.log('Error while loading...')
 		}
