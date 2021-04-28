@@ -65,8 +65,8 @@ var Ps;
 
 	window.Asc.plugin.init = function(text)
 	{
-	    document.getElementById("textarea").value = text;
-	    txt = document.getElementById("textarea").value;
+	    txt = text;
+        document.getElementById("textarea").value = text;
 
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
@@ -229,7 +229,7 @@ var Ps;
                 container.innerHTML = "";
                 for (var nText = 0; nText < translatedParas.length; nText++) {
                     if (translatedParas[nText] !== "" && translatedParas[nText])
-                        container.innerHTML += translatedParas[nText] + '<br>';
+                        container.innerHTML += escape(translatedParas[nText]) + '<br>';
                 }
                 if ($('#vanish_container').hasClass('display-none'))
                     $('#vanish_container').toggleClass('display-none');
@@ -404,6 +404,7 @@ var Ps;
         };
 
         $('#textarea').keyup(delay(function(e) {
+            document.getElementById("textarea").value = escape(document.getElementById("textarea").value);
             txt = document.getElementById("textarea").value;
 
                 if (!isReadyToTranslate()) {
