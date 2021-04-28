@@ -30,7 +30,7 @@
 			ifr.onload = function() {
 				if (ifr.contentWindow.document.readyState == 'complete')
 					setTimeout(function() {
-						ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;
+						ifr.contentDocument.getElementById("google_translate_element").innerHTML = escape(text);
 						if (text.length)
 							ifr.contentDocument.getElementById("div_btn").classList.remove("hidden");
 					}, 500);
