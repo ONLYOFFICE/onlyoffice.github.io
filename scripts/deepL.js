@@ -61,7 +61,7 @@ var Ps;
 		});
 
         txt = text;
-        document.getElementById("textarea").value = escape(text);
+        document.getElementById("textarea").value = text;
 
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
