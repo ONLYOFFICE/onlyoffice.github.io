@@ -148,7 +148,7 @@
 			else
 			{
 				if (msg.data !== "onchange_goog-te-combo") {
-				document.getElementById("google_translate_element").innerHTML = msg.data;
+				document.getElementById("google_translate_element").innerHTML = escape(msg.data);
 				}
 				timeOut = setTimeout(function() {
 					document.getElementById("google_translate_element").style.opacity = 1;
