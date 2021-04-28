@@ -46,8 +46,8 @@ var Ps;
 			minimumResultsForSearch: Infinity,
 		});
 
-        document.getElementById("textarea").value = text;
-	    txt = document.getElementById("textarea").value;
+        txt = text;
+        document.getElementById("textarea").value = escape(text);
 
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
@@ -127,7 +127,7 @@ var Ps;
                 translatedText.push(oResponse.translations[nText].text);
 
                 if (oResponse.translations[nText].text !== "")
-                    container.innerHTML += oResponse.translations[nText].text + '<br>';
+                    container.innerHTML += escape(oResponse.translations[nText].text) + '<br>';
             }
 
             if ($('#vanish_container').hasClass('display-none'))
@@ -333,6 +333,7 @@ var Ps;
         };
 
         $('#textarea').keyup(delay(function(e) {
+            document.getElementById("textarea").value = escape(document.getElementById("textarea").value);
             txt = document.getElementById("textarea").value;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
