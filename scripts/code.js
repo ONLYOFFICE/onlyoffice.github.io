@@ -110,6 +110,8 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 		if (theme.type.indexOf("dark") !== -1)
 			setTimeout(()=>editor.setOption("theme", "bespin"));
+		else
+			setTimeout(()=>editor.setOption("theme", "default"));
 	};
 
 })(window, undefined);
