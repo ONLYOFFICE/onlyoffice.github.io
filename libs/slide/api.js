@@ -39,6 +39,7 @@ ApiRange.prototype.GetParagraph = function(nPos){ return new ApiParagraph(); };
  * @extends {ApiDocumentContent}
  */
 function ApiDocument(Document){}
+ApiDocument.prototype = Object.create(ApiDocumentContent.prototype);
 ApiDocument.prototype.constructor = ApiDocument;
 
 /**
@@ -59,6 +60,7 @@ function ApiBullet(Bullet){}
  * @extends {ApiParaPr}
  */
 function ApiParagraph(Paragraph){}
+ApiParagraph.prototype = Object.create(ApiParaPr.prototype);
 ApiParagraph.prototype.constructor = ApiParagraph;
 
 /**
@@ -79,6 +81,7 @@ function ApiTextPr(Parent, TextPr){}
  * @extends {ApiTextPr}
  */
 function ApiRun(Run){}
+ApiRun.prototype = Object.create(ApiTextPr.prototype);
 ApiRun.prototype.constructor = ApiRun;
 
 /**
@@ -163,6 +166,7 @@ function ApiUniColor(Unicolor){}
  * @constructor
  */
 function ApiRGBColor(r, g, b){}
+ApiRGBColor.prototype = Object.create(ApiUniColor.prototype);
 ApiRGBColor.prototype.constructor = ApiRGBColor;
 
 /**
@@ -170,6 +174,7 @@ ApiRGBColor.prototype.constructor = ApiRGBColor;
  * @constructor
  */
 function ApiSchemeColor(sColorId){}
+ApiSchemeColor.prototype = Object.create(ApiUniColor.prototype);
 ApiSchemeColor.prototype.constructor = ApiSchemeColor;
 
 /**
@@ -177,6 +182,7 @@ ApiSchemeColor.prototype.constructor = ApiSchemeColor;
  * @constructor
  * */
 function ApiPresetColor(sPresetColor){}
+ApiPresetColor.prototype = Object.create(ApiUniColor.prototype);
 ApiPresetColor.prototype.constructor = ApiPresetColor;
 
 /**
@@ -1358,6 +1364,7 @@ function ApiDrawing(Drawing){}
  * @constructor
  */
 function ApiShape(oShape){}
+ApiShape.prototype = Object.create(ApiDrawing.prototype);
 ApiShape.prototype.constructor = ApiShape;
 
 /**
@@ -1365,6 +1372,7 @@ ApiShape.prototype.constructor = ApiShape;
  * @constructor
  */
 function ApiImage(oImage){}
+ApiImage.prototype = Object.create(ApiDrawing.prototype);
 ApiImage.prototype.constructor = ApiImage;
 
 /**
@@ -1372,6 +1380,7 @@ ApiImage.prototype.constructor = ApiImage;
  * @constructor
  */
 function ApiChart(oChart){}
+ApiChart.prototype = Object.create(ApiDrawing.prototype);
 ApiChart.prototype.constructor = ApiChart;
 
 /**
@@ -1379,6 +1388,7 @@ ApiChart.prototype.constructor = ApiChart;
  * @constructor
  */
 function ApiGroup(oGroup){}
+ApiGroup.prototype = Object.create(ApiDrawing.prototype);
 ApiGroup.prototype.constructor = ApiGroup;
 
 /**
@@ -1387,6 +1397,7 @@ ApiGroup.prototype.constructor = ApiGroup;
  * @constructor
  * */
 function ApiTable(oGraphicFrame){}
+ApiTable.prototype = Object.create(ApiDrawing.prototype);
 ApiTable.prototype.constructor = ApiTable;
 
 /**
