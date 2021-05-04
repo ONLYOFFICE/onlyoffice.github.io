@@ -586,3 +586,10 @@ a.aboutlink:active {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAYAAAD0f5bSAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAALElEQVQokWNgoBs4f/78f1JpJnIsIkvTsAQfP378TypNxyD/+PEjyRrJsgkAKS81km7nDNQAAAAASUVORK5CYII=);
     background-position: center 0px;
 }
+
+*::-webkit-scrollbar-thumb:vertical:hover {
+    background-position: -7px center;
+}
+*::-webkit-scrollbar-thumb:horizontal:hover {
+    background-position: center -7px;
+}
