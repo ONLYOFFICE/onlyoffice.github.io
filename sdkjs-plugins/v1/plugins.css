@@ -567,16 +567,22 @@ a.aboutlink:active {
 
 *::-webkit-scrollbar {
     width: 9px;
+    height: 9px;
 }
 
 *::-webkit-scrollbar-thumb {
     border-radius: 2px;
     border: 1px solid;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAQAAAAz1Zf0AAAAIUlEQVR42mNgAILz/0GQAQo+/gdBBqLAqE5ydH5k+sgEANHgUH2JtDRHAAAAAElFTkSuQmCC);
     image-rendering: pixelated;
     background-repeat: no-repeat;
+}
+
+*::-webkit-scrollbar-thumb:vertical {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAQAAAAz1Zf0AAAAIUlEQVR42mNgAILz/0GQAQo+/gdBBqLAqE5ydH5k+sgEANHgUH2JtDRHAAAAAElFTkSuQmCC);
     background-position: 0px center;
 }
-*::-webkit-scrollbar-thumb:hover {
-    background-position: -7px center;
+
+*::-webkit-scrollbar-thumb:horizontal {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAYAAAD0f5bSAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAALElEQVQokWNgoBs4f/78f1JpJnIsIkvTsAQfP378TypNxyD/+PEjyRrJsgkAKS81km7nDNQAAAAASUVORK5CYII=);
+    background-position: center 0px;
 }
