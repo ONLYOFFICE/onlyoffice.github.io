@@ -296,6 +296,7 @@ ApiRange.prototype.Delete = function(){ return true; };
  * @extends {ApiDocumentContent}
  */
 function ApiDocument(Document){}
+ApiDocument.prototype = Object.create(ApiDocumentContent.prototype);
 ApiDocument.prototype.constructor = ApiDocument;
 
 /**
@@ -316,6 +317,7 @@ function ApiBullet(Bullet){}
  * @extends {ApiParaPr}
  */
 function ApiParagraph(Paragraph){}
+ApiParagraph.prototype = Object.create(ApiParaPr.prototype);
 ApiParagraph.prototype.constructor = ApiParagraph;
 
 /**
@@ -330,6 +332,7 @@ function ApiTablePr(Parent, TablePr){}
  * @extends {ApiTablePr}
  */
 function ApiTable(Table){}
+ApiTable.prototype = Object.create(ApiTablePr.prototype);
 ApiTable.prototype.constructor = ApiTable;
 
 /**
@@ -344,6 +347,7 @@ function ApiTextPr(Parent, TextPr){}
  * @extends {ApiTextPr}
  */
 function ApiRun(Run){}
+ApiRun.prototype = Object.create(ApiTextPr.prototype);
 ApiRun.prototype.constructor = ApiRun;
 
 /**
@@ -461,6 +465,7 @@ function ApiTableRowPr(Parent, RowPr){}
  * @extends {ApiTableRowPr}
  */
 function ApiTableRow(Row){}
+ApiTableRow.prototype = Object.create(ApiTableRowPr.prototype);
 ApiTableRow.prototype.constructor = ApiTableRow;
 
 /**
@@ -475,6 +480,7 @@ function ApiTableCellPr(Parent, CellPr){}
  * @extends {ApiTableCellPr}
  */
 function ApiTableCell(Cell){}
+ApiTableCell.prototype = Object.create(ApiTableCellPr.prototype);
 ApiTableCell.prototype.constructor = ApiTableCell;
 
 /**
@@ -513,6 +519,7 @@ function ApiDrawing(Drawing){}
  * @constructor
  */
 function ApiImage(Image){}
+ApiImage.prototype = Object.create(ApiDrawing.prototype);
 ApiImage.prototype.constructor = ApiImage;
 
 /**
@@ -520,6 +527,7 @@ ApiImage.prototype.constructor = ApiImage;
  * @constructor
  * */
 function ApiShape(Shape){}
+ApiShape.prototype = Object.create(ApiDrawing.prototype);
 ApiShape.prototype.constructor = ApiShape;
 
 /**
@@ -528,6 +536,7 @@ ApiShape.prototype.constructor = ApiShape;
  *
  */
 function ApiChart(Chart){}
+ApiChart.prototype = Object.create(ApiDrawing.prototype);
 ApiChart.prototype.constructor = ApiChart;
 
 /**
@@ -541,6 +550,7 @@ function ApiUniColor(Unicolor){}
  * @constructor
  */
 function ApiRGBColor(r, g, b){}
+ApiRGBColor.prototype = Object.create(ApiUniColor.prototype);
 ApiRGBColor.prototype.constructor = ApiRGBColor;
 
 /**
@@ -548,6 +558,7 @@ ApiRGBColor.prototype.constructor = ApiRGBColor;
  * @constructor
  */
 function ApiSchemeColor(sColorId){}
+ApiSchemeColor.prototype = Object.create(ApiUniColor.prototype);
 ApiSchemeColor.prototype.constructor = ApiSchemeColor;
 
 /**
@@ -555,6 +566,7 @@ ApiSchemeColor.prototype.constructor = ApiSchemeColor;
  * @constructor
  * */
 function ApiPresetColor(sPresetColor){}
+ApiPresetColor.prototype = Object.create(ApiUniColor.prototype);
 ApiPresetColor.prototype.constructor = ApiPresetColor;
 
 /**
@@ -5149,5 +5161,12 @@ ApiBlockLvlSdt.prototype.GetRange = function(Start, End){ return new ApiRange();
  * @returns {ApiRange[]}  
  */
 ApiBlockLvlSdt.prototype.Search = function(sText, isMatchCase){ return [new ApiRange()]; };
+
+/**
+ * Select a content control.
+ * @memberof ApiBlockLvlSdt
+ * @typeofeditors ["CDE"]
+ */
+ApiBlockLvlSdt.prototype.Select = function(){};
 
 
