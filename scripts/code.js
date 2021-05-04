@@ -471,6 +471,15 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         $('.ace_scroller').css('border-left', 'solid 1px ' + window.Asc.plugin.theme["border-divider"]);
         $('.ace_cursor').css('color', window.Asc.plugin.theme["text-normal"]);
 
+        var rules = '.macros { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
+        rules += '.macros:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
+        rules += '.macrosSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
+        var styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rules;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+
+
         if (theme.type === 'dark')
             editor.setTheme("ace/theme/vs-dark")
         else
