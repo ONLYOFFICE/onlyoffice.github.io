@@ -21,6 +21,7 @@ function ApiDocumentContent(Document){}
  * @extends {ApiDocumentContent}
  */
 function ApiDocument(Document){}
+ApiDocument.prototype = Object.create(ApiDocumentContent.prototype);
 ApiDocument.prototype.constructor = ApiDocument;
 
 /**
@@ -41,6 +42,7 @@ function ApiBullet(Bullet){}
  * @extends {ApiParaPr}
  */
 function ApiParagraph(Paragraph){}
+ApiParagraph.prototype = Object.create(ApiParaPr.prototype);
 ApiParagraph.prototype.constructor = ApiParagraph;
 
 /**
@@ -61,6 +63,7 @@ function ApiTextPr(Parent, TextPr){}
  * @extends {ApiTextPr}
  */
 function ApiRun(Run){}
+ApiRun.prototype = Object.create(ApiTextPr.prototype);
 ApiRun.prototype.constructor = ApiRun;
 
 /**
@@ -145,6 +148,7 @@ function ApiUniColor(Unicolor){}
  * @constructor
  */
 function ApiRGBColor(r, g, b){}
+ApiRGBColor.prototype = Object.create(ApiUniColor.prototype);
 ApiRGBColor.prototype.constructor = ApiRGBColor;
 
 /**
@@ -152,6 +156,7 @@ ApiRGBColor.prototype.constructor = ApiRGBColor;
  * @constructor
  */
 function ApiSchemeColor(sColorId){}
+ApiSchemeColor.prototype = Object.create(ApiUniColor.prototype);
 ApiSchemeColor.prototype.constructor = ApiSchemeColor;
 
 /**
@@ -159,6 +164,7 @@ ApiSchemeColor.prototype.constructor = ApiSchemeColor;
  * @constructor
  * */
 function ApiPresetColor(sPresetColor){}
+ApiPresetColor.prototype = Object.create(ApiUniColor.prototype);
 ApiPresetColor.prototype.constructor = ApiPresetColor;
 
 /**
@@ -1342,6 +1348,7 @@ function ApiSlide(oSlide){}
  * @constructor
  */
 function ApiGroup(oGroup){}
+ApiGroup.prototype = Object.create(ApiDrawing.prototype);
 ApiGroup.prototype.constructor = ApiGroup;
 
 /**
@@ -1350,6 +1357,7 @@ ApiGroup.prototype.constructor = ApiGroup;
  * @constructor
  * */
 function ApiTable(oGraphicFrame){}
+ApiTable.prototype = Object.create(ApiDrawing.prototype);
 ApiTable.prototype.constructor = ApiTable;
 
 /**
@@ -1688,12 +1696,58 @@ ApiTableCell.prototype.SetVerticalAlign = function(sType){};
 /**
  * Class representing a sheet.
  * @constructor
+ * @property {bool} Visible - Returns or sets the state of sheet visibility.
+ * @property {number} Active - Makes the current sheet the active sheet.
+ * @property {ApiRange} ActiveCell - Returns an object that represents the active cell.
+ * @property {ApiRange} Selection - Returns an object that represents the selection range.
+ * @property {ApiRange} Cells - Returns ApiRange that represents all the cells on the worksheet (not just the cells that are currently in use).
+ * @property {ApiRange} Rows - Returns ApiRange that represents all the cells of the rows range.
+ * @property {ApiRange} Cols - Returns ApiRange that represents all the cells of the columns range.
+ * @property {ApiRange} UsedRange - Returns ApiRange that represents the used range on the specified worksheet.
+ * @property {string} Name - Returns or sets a name of the active sheet.
+ * @property {number} Index - Returns a sheet index.
+ * @property {number} LeftMargin - Returns or sets the size of the sheet left margin measured in points.
+ * @property {number} RightMargin - Returns or sets the size of the sheet right margin measured in points.
+ * @property {number} TopMargin - Returns or sets the size of the sheet top margin measured in points.
+ * @property {number} BottomMargin - Returns or sets the size of the sheet bottom margin measured in points.
+ * @property {PageOrientation} PageOrientation - Returns or sets the page orientation.
+ * @property {bool} PrintHeadings - Returns or sets the page PrintHeadings property.
+ * @property {bool} PrintGridlines - Returns or sets the page PrintGridlines property.
+ * @property {Array} Defnames - Returns an array of the ApiName objects.
+ * @property {Array} Comments - Returns an array of the ApiComment objects.
  */
 function ApiWorksheet(worksheet) {}
 
 /**
  * Class representing a range.
  * @constructor
+ * @property {number} Row - Returns the row number for the selected cell.
+ * @property {number} Col - Returns the column number for the selected cell.
+ * @property {ApiRange} Rows - Returns the ApiRange object that represents the rows of the specified range.
+ * @property {number} Count - Returns the rows or columns count.
+ * @property {string} Value - Returns the value from the first cell of the specified range or sets it to this cell.
+ * @property {string} Formula - Returns the formula from the first cell of the specified range or sets it to this cell.
+ * @property {string} Value2 - Returns the value2 (value without format) from the first cell of the specified range or sets it to this cell.
+ * @property {string} Text - Returns the text from the first cell of the specified range or sets it to this cell.
+ * @property {ApiColor} FontColor - Sets the text color to the current cell range with the previously created color object.
+ * @property {bool} Hidden - Returns or sets the value hiding property.
+ * @property {number} ColumnWidth - Returns or sets the width of all the columns in the specified range measured in points.
+ * @property {number} Width - Returns a value that represents the range width measured in points.
+ * @property {number} RowHeight - Returns or sets the height of the first row in the specified range measured in points.
+ * @property {number} Height - Returns a value that represents the range height measured in points.
+ * @property {number} FontSize - Sets the font size to the characters of the current cell range.
+ * @property {string} FontName - Sets the specified font family as the font name for the current cell range.
+ * @property {'center' | 'bottom' | 'top' | 'distributed' | 'justify'} AlignVertical - Sets the text vertical alignment to the current cell range.
+ * @property {'left' | 'right' | 'center' | 'justify'} AlignHorizontal - Sets the text horizontal alignment to the current cell range.
+ * @property {bool} Bold - Sets the bold property to the text characters from the current cell or cell range.
+ * @property {'none' | 'single' | 'singleAccounting' | 'double' | 'doubleAccounting'} Underline - Sets the type of underline applied to the font.
+ * @property {bool} Strikeout - Sets a value that indicates whether the contents of the current cell or cell range are displayed struck through.
+ * @property {ApiColor|'No Fill'} FillColor - Returns or sets the background color of the current cell range.
+ * @property {string} NumberFormat - Sets a value that represents the format code for the object.
+ * @property {ApiRange} MergeArea - Returns the cell or cell range from the merge area.
+ * @property {ApiWorksheet} Worksheet - Returns the ApiWorksheet object that represents the worksheet containing the specified range.
+ * @property {ApiName} DefName - Returns the ApiName object.
+ * @property {ApiComment | null} Comments - Returns the ApiComment collection that represents all the comments from the specified worksheet.
  */
 function ApiRange(range) {}
 
@@ -1708,6 +1762,7 @@ function ApiDrawing(Drawing){}
  * @constructor
  */
 function ApiShape(oShape){}
+ApiShape.prototype = Object.create(ApiDrawing.prototype);
 ApiShape.prototype.constructor = ApiShape;
 
 /**
@@ -1715,6 +1770,7 @@ ApiShape.prototype.constructor = ApiShape;
  * @constructor
  */
 function ApiImage(oImage){}
+ApiImage.prototype = Object.create(ApiDrawing.prototype);
 ApiImage.prototype.constructor = ApiImage;
 
 /**
@@ -1722,6 +1778,7 @@ ApiImage.prototype.constructor = ApiImage;
  * @constructor
  */
 function ApiChart(oChart){}
+ApiChart.prototype = Object.create(ApiDrawing.prototype);
 ApiChart.prototype.constructor = ApiChart;
 
 /**
@@ -1779,14 +1836,18 @@ ApiChart.prototype.constructor = ApiChart;
 function ApiColor(color) {}
 
 /**
- * Class representing a names
+ * Class representing a name.
  * @constructor
+ * @property {string} Name - Sets a name to the active sheet.
+ * @property {string} RefersTo - Returns or sets the formula that the name is defined to refer to.
+ * @property {apiRange} RefersToRange - Returns the ApiRange object by reference.
  */
 function ApiName(DefName) {}
 
 /**
- * Class representing a comments
+ * Class representing a comment.
  * @constructor
+ * @property {string} Text - Returns the text from the first cell in range.
  */
 function ApiComment(comment) {}
 
