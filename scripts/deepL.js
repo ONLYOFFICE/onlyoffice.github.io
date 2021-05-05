@@ -333,7 +333,7 @@ var Ps;
         };
 
         $('#textarea').keyup(delay(function(e) {
-            document.getElementById("textarea").value = escape(document.getElementById("textarea").value);
+            document.getElementById("textarea").value = document.getElementById("textarea").value;
             txt = document.getElementById("textarea").value;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
