@@ -308,7 +308,7 @@ var Ps;
 
     $(document).ready(function () {
         $('.select_example').select2({
-			minimumResultsForSearch: 6,
+			minimumResultsForSearch: Infinity,
 			width: "100%"
 		});
         elements = {
