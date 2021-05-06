@@ -41,13 +41,17 @@
 			window.Asc.plugin.executeMethod("PasteHtml",[editor.getValue()]);
 		};
 		document.getElementById("btn_copy").onclick = function() {
-			editor.focus();
-			if (editor.getValue() == "")
-				document.getElementById("textarea_copy").innerHTML = "⁣";
-			else
-				document.getElementById("textarea_copy").innerHTML = editor.getValue().replace(/>/g,"&gt").replace(/</g,"&lt").replace(/\n/g,"<br>").replace(/\t/g,"&nbsp&nbsp&nbsp&nbsp");
-			selectText("textarea_copy");
-			editor.focus();
+			if (editor.getValue() !== "") {
+				editor.focus();
+				var start = {line : 0, ch : 0};
+				var end = {line : (editor.lineCount() - 1), ch : (editor.getLine(editor.lineCount() - 1).length)};
+				editor.setSelection(start, end);
+				document.execCommand("copy"); //copy
+				editor.undoSelection();
+				editor.focus();
+			} else {
+				editor.focus();
+			}
 		};
 		document.getElementById("btn_clear").onclick = function() {
 			editor.setValue("");
@@ -66,32 +70,6 @@
 			// });
 		}
 	};
-
-	function selectText(id) {
-		var sel, range;
-		var el = document.getElementById(id); //get element id
-		if (window.getSelection && document.createRange) { //Browser compatibility
-		sel = window.getSelection();
-		if (sel.toString() == '') { //no text selection
-			window.setTimeout(function(){
-				range = document.createRange(); //range object
-				range.selectNodeContents(el); //sets Range
-				sel.removeAllRanges(); //remove all ranges from selection
-				sel.addRange(range);//add Range to a Selection.
-				document.execCommand("copy"); //copy
-				sel.removeAllRanges(); //remove all ranges from selection
-			},1);
-		}
-		} else if (document.selection) { //older ie
-			sel = document.selection.createRange();
-			if (sel.text == '') { //no text selection
-				range = document.body.createTextRange();//Creates TextRange object
-				range.moveToElementText(el);//sets Range
-				range.select(); //make selection.
-				document.execCommand("copy"); //copy
-			}
-		}
-	}
 
 	window.Asc.plugin.button = function(id)
 	{
