@@ -13,18 +13,7 @@ Please note that it is the system plugin so that's OK that you can't see it in t
 
 ## How to install
 
-**For server solutions**
-
-Put the folder with the plugin code to ONLYOFFICE Document Server folder:
-
-* For Linux - /var/www/onlyoffice/documentserver/sdkjs-plugins/.
-* For Windows - %ProgramFiles%\ONLYOFFICE\DocumentServer\sdkjs-plugins\.
-
-**For desktop editors**
-
-* Archive the plugin files (it must contain config.json, index.html, and pluginCode.js).
-* Change the file extension to .plugin. 
-* Go to the Plugins tab, click Manage Plugins >> Add plugin, browse for the .plugin file.
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
 
 ## Documentation
 
