@@ -11,7 +11,18 @@ The plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/Docume
 
 ## How to install
 
-Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+**For server solutions**
+
+Put the folder with the plugin code to ONLYOFFICE Document Server folder:
+
+* For Linux - /var/www/onlyoffice/documentserver/sdkjs-plugins/.
+* For Windows - %ProgramFiles%\ONLYOFFICE\DocumentServer\sdkjs-plugins\.
+
+**For desktop editors**
+
+* Archive the plugin files (it must contain config.json, index.html, and pluginCode.js).
+* Change the file extension to .plugin. 
+* Go to the Plugins tab, click Manage Plugins >> Add plugin, browse for the .plugin file.
 
 ## Known issues
 
