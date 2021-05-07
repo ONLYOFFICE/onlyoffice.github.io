@@ -2,6 +2,8 @@
 
 This plugin is an example of an input assistant for ONLYOFFICE editors.
 
+The plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of ONLYOFFICE editors. It can be added to ONLYOFFICE instances manually.
+
 ## How to use
 
 1. Start typing and the plugin will suggest variants for you. 
