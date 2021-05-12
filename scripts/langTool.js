@@ -81,7 +81,7 @@
             setTimeout(function() {
                 if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
                     el.style.cssText = 'height:100px; width: 100%;';
-                    el.style.cssText = 'height:' + (el.scrollHeight + 5) + 'px; width:100%;';
+                    el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px; width:100%;';
                 }
             }, 1);
         };
