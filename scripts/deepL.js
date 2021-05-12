@@ -349,6 +349,20 @@ var Ps;
                 break;
             }
         }, 500));
+        var textarea = document.getElementsByTagName('textarea')[0];
+        textarea.addEventListener('keydown', resize);
+        function resize() {
+            var nBodyHeight = document.querySelector('body').offsetHeight;
+            var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
+
+            var el = this;
+            setTimeout(function() {
+                if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
+                    el.style.cssText = 'height:100px; width: 100%;';
+                    el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px; width:100%;';
+                }
+            }, 1);
+        };
     })
 
     function updateScroll()
