@@ -39,7 +39,7 @@ var Ps;
     var elements         = null;
     var apikey           = "";
     var isValidKey       = false;
-
+    var functionResize;
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -62,6 +62,7 @@ var Ps;
 
         txt = text;
         document.getElementById("textarea").value = text;
+        functionResize();
 
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
@@ -369,14 +370,13 @@ var Ps;
             var nBodyHeight = document.querySelector('body').offsetHeight;
             var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
 
-            var el = this;
+            var el = document.getElementById('textarea');
             setTimeout(function() {
-                if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
-                    el.style.cssText = 'height:100px; width: 100%;';
-                    el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px; width:100%;';
-                }
+                el.style.cssText = 'height:100px  !important; width: 100%;';
+                el.style.cssText = 'height:' + Math.max(98, el.scrollHeight + 2) + 'px !important; width:100%;';
             }, 1);
         };
+        functionResize = resize;
     })
 
     function updateScroll()
