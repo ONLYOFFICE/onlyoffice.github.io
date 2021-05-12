@@ -28,7 +28,7 @@ var Ps;
     var select              = null;
     var selectClone         = null;
     var allPairs            = {};
-
+    var functionResize;
     var serviceUrl       = "https://www.apertium.org/"; //paste your service's url address here
 
     function showLoader(elements, show) {
@@ -53,7 +53,7 @@ var Ps;
 	{
 	    txt = text;
         document.getElementById("textarea").value = text;
-
+        functionResize();
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
             return false;
@@ -389,43 +389,19 @@ var Ps;
             };
         };
 
-        $('#textarea').keyup(delay(function(e) {
-            document.getElementById("textarea").value = document.getElementById("textarea").value;
-            txt = document.getElementById("textarea").value;
-
-                if (!isReadyToTranslate()) {
-                    console.log('Languages not loaded!');
-                    return false;
-                }
-
-                switch (window.Asc.plugin.info.editorType) {
-                    case 'word':
-                    case 'slide': {
-                        if (txt !== "") {
-                            RunTranslate(txt);
-                        }
-                        break;
-                    }
-                    case 'cell': {
-                        RunTranslate(txt);
-                    }
-                    break;
-                }
-        }, 500));
         var textarea = document.getElementsByTagName('textarea')[0];
         textarea.addEventListener('keydown', resize);
         function resize() {
             var nBodyHeight = document.querySelector('body').offsetHeight;
             var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
 
-            var el = this;
+            var el = document.getElementById('textarea');
             setTimeout(function() {
-                if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
-                    el.style.cssText = 'height:100px; width: 100%;';
-                    el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px; width:100%;';
-                }
+                el.style.cssText = 'height:100px  !important; width: 100%;';
+                el.style.cssText = 'height:' + Math.max(98, el.scrollHeight + 2) + 'px !important; width:100%;';
             }, 1);
         };
+        functionResize = resize;
     });
 
     function RunTranslate(sText) {
