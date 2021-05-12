@@ -32,7 +32,7 @@
 	var blurClass        = "no_class";
     var elements         = null;
     var serviceUrl = "https://languagetool.org/api/v2/check";
-
+    var functionResize;
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -51,6 +51,7 @@
 	window.Asc.plugin.init = function(text)	{
 		txt = text;
 		document.getElementById("textarea").value = text;
+		functionResize();
 		if (!isInit) {
 			init();
 			isInit = true;
@@ -77,14 +78,13 @@
             var nBodyHeight = document.querySelector('body').offsetHeight;
             var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
 
-            var el = this;
+            var el = document.getElementById('textarea');
             setTimeout(function() {
-                if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
-                    el.style.cssText = 'height:100px; width: 100%;';
-                    el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px; width:100%;';
-                }
+                el.style.cssText = 'height:100px  !important; width: 100%;';
+                el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px !important; width:100%;';
             }, 1);
         };
+        functionResize = resize;
 		$('#check').on('click', function(){
 			txt = document.getElementById("textarea").value.trim();
 			if (txt !== "") {
