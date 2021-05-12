@@ -34,6 +34,7 @@
     var sPathRoot = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
     var oGramma = null;
     var arrAllWords = null;
+    var functionResize;
 
 	function showLoader(elements, show) {
        switchClass(elements.loader, displayNoneClass, !show);
@@ -50,6 +51,7 @@
 	window.Asc.plugin.init = function(text)	{
 		sText = text;
 		document.getElementById("textarea").value = text;
+		functionResize();
 		if (!isInit) {
 			init();
 			isInit = true;
@@ -140,14 +142,13 @@
             var nBodyHeight = document.querySelector('body').offsetHeight;
             var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
 
-            var el = this;
+            var el = document.getElementById('textarea');
             setTimeout(function() {
-                if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
-                    el.style.cssText = 'height:100px; width: 100%;';
-                    el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px; width:100%;';
-                }
+                el.style.cssText = 'height:100px  !important; width: 100%;';
+                el.style.cssText = 'height:' + Math.max(98, el.scrollHeight + 2) + 'px !important; width:100%;';
             }, 1);
         };
+        functionResize = resize;
 	});
 
     function ParseText(sText) {
