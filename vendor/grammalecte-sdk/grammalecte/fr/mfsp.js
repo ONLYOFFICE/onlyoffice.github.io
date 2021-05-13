@@ -11,8 +11,7 @@ if (typeof(process) !== 'undefined') {
     var helpers = require("../graphspell/helpers.js");
 }
 
-
-var mfsp = {
+window.grammalecte["mfsp"] = {
     // list of affix codes
     _lTagMiscPlur: [],
     _lTagFemForm: [],
@@ -100,19 +99,13 @@ var mfsp = {
         }
     }
 };
-
+var mfsp = window.grammalecte["conj"];
 
 // Initialization
-if (!mfsp.bInit && typeof(process) !== 'undefined') {
-    // NodeJS
-    mfsp.init(helpers.loadFile(__dirname+"/mfsp_data.json"));
-} else if (!mfsp.bInit && typeof(browser) !== 'undefined') {
-    // WebExtension
-    mfsp.init(helpers.loadFile(browser.runtime.getURL("grammalecte/fr/mfsp_data.json")));
+if (!mfsp.bInit) {
+    mfsp.init(helpers.loadFile(browser.runtime.getURL("vendor/grammalecte-sdk/grammalecte/fr/mfsp_data.json")));
 } else if (mfsp.bInit){
     console.log("Module mfsp déjà initialisé");
-} else {
-    //console.log("Module mfsp non initialisé");
 }
 
 

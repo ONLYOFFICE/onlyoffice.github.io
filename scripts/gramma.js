@@ -33,9 +33,8 @@
     var serviceUrl = "https://languagetool.org/api/v2/check";
     var sPathRoot = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
     var oGramma = null;
-    var arrAllWords = null;
     var functionResize;
-
+    var aResults = [];
 	function showLoader(elements, show) {
        switchClass(elements.loader, displayNoneClass, !show);
     };
@@ -47,7 +46,42 @@
             el.classList.remove(className);
         }
     };
+    function ConcatResults(arrResults) {
+        var allParas          = SplitText(document.getElementById("textarea").value);
+        var nCharsCountBefore = 0;
+        var nCurMistakeIndex  = 1;
+        var aConcatResults    = [];
 
+        for (var nResult = 0; nResult < arrResults.length; nResult++) {
+            for (var nGrammErr = 0; nGrammErr < arrResults[nResult].aGrammErr.length; nGrammErr ++) {
+                arrResults[nResult].aGrammErr[nGrammErr].nStart += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
+                arrResults[nResult].aGrammErr[nGrammErr].nEnd += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
+                arrResults[nResult].aGrammErr[nGrammErr].i = nCurMistakeIndex++;
+                nCharsCountBefore += allParas[nResult].length;
+                aConcatResults.push({
+                    nStart : arrResults[nResult].aGrammErr[nGrammErr].nStart,
+                    nEnd : arrResults[nResult].aGrammErr[nGrammErr].nEnd,
+                    aSuggestions : arrResults[nResult].aGrammErr[nGrammErr].aSuggestions,
+                    nIndex : arrResults[nResult].aGrammErr[nGrammErr].i,
+                    sMessage : arrResults[nResult].aGrammErr[nGrammErr].sMessage
+                });
+            }
+            for (var nSpellErr = 0; nSpellErr < arrResults[nResult].aSpellErr.length; nSpellErr ++) {
+                arrResults[nResult].aSpellErr[nSpellErr].nStart += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
+                arrResults[nResult].aSpellErr[nSpellErr].nEnd += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
+                arrResults[nResult].aSpellErr[nSpellErr].i = nCurMistakeIndex++;
+                nCharsCountBefore += allParas[nResult].length;
+                aConcatResults.push({
+                    nStart : arrResults[nResult].aSpellErr[nSpellErr].nStart,
+                    nEnd : arrResults[nResult].aSpellErr[nSpellErr].nEnd,
+                    aSuggestions : arrResults[nResult].aSpellErr[nSpellErr].aSuggestions,
+                    nIndex : arrResults[nResult].aSpellErr[nSpellErr].i,
+                    sMessage : arrResults[nResult].aSpellErr[nSpellErr].sMessage || "Possible mistake"
+                })
+            }
+        }
+        return aConcatResults;
+    };
 	window.Asc.plugin.init = function(text)	{
 		sText = text;
 		document.getElementById("textarea").value = text;
@@ -93,15 +127,15 @@
 			sText = document.getElementById("textarea").value.trim();
 			if (sText !== "") {
 				$("#result").empty();
-				var oResult = checkText(sText);
-				parseResult(oResult);
+				aResult = checkText(sText);
+				parseResult(aResult);
 				if (window.Asc.plugin.theme)
 				    $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 				showLoader(elements, false);
 			};
 		});
 		$('#replace').click(function () {
-            Asc.scope.arr = ParseText(document.getElementById("textarea").value);
+            Asc.scope.arr = SplitText(document.getElementById("textarea").value);
             window.Asc.plugin.info.recalculate = true;
 
             // for usual paste
@@ -151,7 +185,7 @@
         functionResize = resize;
 	});
 
-    function ParseText(sText) {
+    function SplitText(sText) {
         var allParasInSelection = sText.split(/\n/);
         var allParsedParas = [];
 
@@ -163,7 +197,7 @@
             var sSplited = allParasInSelection[nStr].split(/	/);
 
             sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
+                allParsedParas.push(item.replace(/\r\n?/g, ''));
             });
         }
 
@@ -174,20 +208,12 @@
 	    updateScroll();
 	    showLoader(elements, true);
 
-        var oResult = [];
-        arrAllWords = oGramma.oSpellChecker.parseParagraph(sText);
-        for (var nWord in arrAllWords)
-            oResult.push({
-                Word: arrAllWords[nWord].sValue,
-                Replacements: oGramma.suggest(arrAllWords[nWord].sValue),
-                Index: arrAllWords[nWord].i
-            })
-
-        return oResult;
+        aResults = ConcatResults(oGramma.parseAndSpellcheck(sText, "FR", false, false, oInfo={}))
+        return aResults;
 	};
 
-	function parseResult (oResult) {
-        if (oResult.length === 0) {
+	function parseResult (arrResults) {
+        if (arrResults.length === 0) {
             $('<div>', {
                 id: "no_mistakes",
                 text: "No possible mistakes found"
@@ -196,19 +222,19 @@
         else {
             $('<div>', {
                 id: "yes_mistakes",
-                text: "Possible mistakes found: " + Object.keys(oResult).length
+                text: "Possible mistakes found: " + arrResults.length
             }).appendTo('#result');
         }
 
-		oResult.forEach(function(el, ind) {
-		    if (el.Replacements.length === 0) {
+		arrResults.forEach(function(el, ind) {
+		    if (el.aSuggestions.length === 0) {
 		        var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
 			    $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
 			    return;
 		    }
 
 			$('<div>', {
-				id : "div_" + el.Index,
+				id : "div_" + el.nIndex,
 				"class": 'result_div',
 				click: function() {
 				        var mainElm = this;
@@ -229,7 +255,7 @@
             });
             var caption_text = $('<span>', {
 				"class": 'caption_text',
-				text : 'Possible mistake'
+				text : el.sMessage
 			});
             var caption = $('<div>', {
 				"class": 'caption',
@@ -241,21 +267,21 @@
             img_arrow.appendTo(img_container);
             caption_text.appendTo(caption);
             img_container.appendTo(caption);
-            caption.appendTo('#div_'+ el.Index);
-            separateLine.appendTo('#div_'+ el.Index);
+            caption.appendTo('#div_'+ el.nIndex);
+            separateLine.appendTo('#div_'+ el.nIndex);
 
             var div_details = $('<div>', {
 				"class": 'details'
 			});
 
 			$('<div>', {
-				id : "div_replacments_" + el.Index,
+				id : "div_replacments_" + el.nIndex,
 				"class": 'replacments',
 			}).appendTo(div_details);
 
-			div_details.appendTo('#div_'+ el.Index);
+			div_details.appendTo('#div_'+ el.nIndex);
 
-			el.Replacements.forEach(function(elem) {
+			el.aSuggestions.forEach(function(elem) {
 			    var sClass = '';
 			    if (elem === ' ')
 			        sClass = ' replacment_space';
@@ -267,8 +293,8 @@
 			            $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
 						correctText($(this));
 					}
-				}).data({ index : el.Index })
-				.appendTo('#div_replacments_' + el.Index);
+				}).data({ index : el.nIndex })
+				.appendTo('#div_replacments_' + el.nIndex);
 			});
 
 			var dismiss_buttons = $('<div>', {
@@ -278,18 +304,18 @@
 			$('<button>', {
 			    text: "Dismiss",
 			    click: function () {
-					$('#div_'+$(this).data().index).remove();
-					var ind = arrAllWords.findIndex(function(el) {
+					$('#div_'+$(this).data().nIndex).remove();
+					var ind = aResults.findIndex(function(el) {
 						if (el.i === ind) {
 							return true;
 						}
 					});
 					var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
 					$('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-					arrAllWords.splice(ind, 1);
+					aResults.splice(ind, 1);
 				},
 			    "class": "dismiss btn-text-default"
-			}).data({ index : el.Index}).appendTo(dismiss_buttons);
+			}).data({ index : el.nIndex}).appendTo(dismiss_buttons);
 
 			$('<button>', {
 			    text: "Dismiss all",
@@ -311,25 +337,23 @@
 	    }
 
 		var ind = data.data().index;
-		ind = arrAllWords.findIndex(function(el) {
-			if (el.i === ind) {
+		ind = aResults.findIndex(function(el) {
+			if (el.nIndex === ind) {
 				return true;
 			}
 		});
-		var end = arrAllWords[ind].nEnd;
-		var temp = sText.slice(0, arrAllWords[ind].nStart) + data.text() + sText.slice(end);
+		var end = aResults[ind].nEnd;
+		var temp = sText.slice(0, aResults[ind].nStart) + data.text() + sText.slice(end);
 		var count = sText.length - temp.length;
-		arrAllWords.splice(ind, 1);
+		aResults.splice(ind, 1);
 		sText = temp;
 		document.getElementById("textarea").value = sText;
-		for (var i = ind; i < arrAllWords.length; i++) {
-			arrAllWords[i].nStart -= count;
-			arrAllWords[i].nEnd -= count;
+		for (var i = ind; i < aResults.length; i++) {
+			aResults[i].nStart -= count;
+			aResults[i].nEnd -= count;
 		}
 		$('#div_' + data.data().index).remove();
-		if (!arrAllWords.length) {
-			$('#check').trigger("click");
-		}
+        $('#check').trigger("click");
 		updateScroll();
 	};
 

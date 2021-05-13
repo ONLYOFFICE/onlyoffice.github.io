@@ -80,12 +80,10 @@ if (Set.prototype.grammalecte === undefined) {
 
 
 
-if (typeof(process) !== 'undefined') {
-    var helpers = require("../graphspell/helpers.js");
-}
+var helpers = window.grammalecte["helpers"];
 
 
-var conj = {
+window.grammalecte["conj"] = {
     _lVtyp: [],
     _lTags: [],
     _dPatternConj: {},
@@ -242,7 +240,7 @@ var conj = {
         }
     }
 };
-
+var conj = window.grammalecte["conj"];
 
 class Verb {
 
@@ -654,21 +652,11 @@ class Verb {
 
 
 // Initialization
-if(!conj.bInit && typeof(process) !== 'undefined') {
-    // NodeJS
-    conj.init(helpers.loadFile(__dirname+"/conj_data.json"));
-} else if (!conj.bInit && typeof(browser) !== 'undefined') {
-    // WebExtension Standard (but not in Worker)
-    conj.init(helpers.loadFile(browser.runtime.getURL("grammalecte/fr/conj_data.json")));
-} else if (!conj.bInit && typeof(chrome) !== 'undefined') {
-    // WebExtension Chrome (but not in Worker)
-    conj.init(helpers.loadFile(chrome.runtime.getURL("grammalecte/fr/conj_data.json")));
+if(!conj.bInit) {
+    conj.init(helpers.loadFile("vendor/grammalecte-sdk/grammalecte/fr/conj_data.json"));
 } else if (conj.bInit){
     console.log("Module conj déjà initialisé");
-} else {
-    //console.log("Module conj non initialisé");
 }
-
 
 if (typeof(exports) !== 'undefined') {
     exports._lVtyp = conj._lVtyp;
