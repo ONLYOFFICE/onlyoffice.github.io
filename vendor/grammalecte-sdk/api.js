@@ -8,6 +8,24 @@
 /* global require, exports, console */
 
 "use strict";
+function SplitText(sText) {
+    var allParasInSelection = sText.split(/\n/);
+    var allParsedParas = [];
+
+    for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
+        if (allParasInSelection[nStr].search(/	/) === 0) {
+            allParsedParas.push("");
+            allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
+        }
+        var sSplited = allParasInSelection[nStr].split(/	/);
+
+        sSplited.forEach(function(item, i, sSplited) {
+            allParsedParas.push(item.replace(/\r\n?/g, ''));
+        });
+    }
+
+    return allParsedParas;
+};
 
 class GrammarChecker {
 
@@ -271,6 +289,24 @@ class GrammarChecker {
             lGrammarErrors: Array.from(this._oGce.parse(sText, this.sLangCode)),
             lSpellingErrors: this.spellParagraph(sText, bSuggest)
         };
+    }
+
+    parseAndSpellcheck (sText, sCountry, bDebug, bContext) {
+        //sText, "FR", false, false, oInfo={}
+        var i = 0;
+        var arrParagraphs = SplitText(sText);
+        var arrMistakes = [];
+        sText = sText.replace(/­/g, "").normalize("NFC");
+        for (var sParagraph of arrParagraphs) {
+            var aGrammErr = this._oGce.parse(sParagraph, "FR", false, null, false);
+            var aSpellErr = this.oSpellChecker.parseParagraph(sParagraph);
+            for (var nSpellErr = 0; nSpellErr < aSpellErr.length; nSpellErr++) {
+                aSpellErr[nSpellErr]["aSuggestions"] = this.suggest(aSpellErr[nSpellErr].sValue);
+            }
+            arrMistakes.push({sParagraph: sParagraph, iParaNum: i, aGrammErr: aGrammErr, aSpellErr: aSpellErr});
+            i += 1;
+        }
+        return arrMistakes;
     }
 
 }

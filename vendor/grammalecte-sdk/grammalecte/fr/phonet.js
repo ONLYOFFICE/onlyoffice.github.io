@@ -8,8 +8,7 @@ if (typeof(process) !== 'undefined') {
     var helpers = require("../graphspell/helpers.js");
 }
 
-
-var phonet = {
+window.grammalecte["phonet"] = {
     _dWord: new Map(),
     _lSet: [],
     _dMorph: new Map(),
@@ -112,7 +111,7 @@ var phonet = {
         return n == this._getSetNumber(sSimil);
     }
 };
-
+var phonet = window.grammalecte["phonet"];
 
 // Initialization
 if (!phonet.bInit && typeof(process) !== 'undefined') {

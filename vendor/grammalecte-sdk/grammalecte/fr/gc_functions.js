@@ -209,9 +209,9 @@ if (Map.prototype.grammalecte === undefined) {
 
 
 
-if (typeof(process) !== 'undefined') {
-    var gc_options = require("./gc_options.js");
-}
+var gc_engine;
+var gc_options = window.grammalecte["gc_options"];
+
 
 
 let _sAppContext = "JavaScript";        // what software is running
@@ -407,6 +407,7 @@ function g_value (oToken, sValues, nLeft=null, nRight=null) {
 
 function g_morph (oToken, sPattern, sNegPattern="", nLeft=null, nRight=null, bMemorizeMorph=true) {
     // analyse a token, return True if <sNegPattern> not in morphologies and <sPattern> in morphologies
+    gc_engine = window.grammalecte["gc_engine"];
     let lMorph;
     if (oToken.hasOwnProperty("lMorph")) {
         lMorph = oToken["lMorph"];
@@ -597,6 +598,7 @@ function define (dTokenPos, nPos, sMorphs) {
 //// Disambiguation for graph rules
 
 function g_select (oToken, sPattern, sNegPattern="") {
+    gc_engine = window.grammalecte["gc_engine"];
     // select morphologies for <oToken> according to <sPattern>, always return true
     let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
     if (lMorph.length === 0  || lMorph.length === 1) {
@@ -852,12 +854,10 @@ function _getDay (xDate) {
 /* jslint esversion:6 */
 /* global require */
 
-if (typeof(process) !== 'undefined') {
-    var conj = require("./conj.js");
-    var mfsp = require("./mfsp.js");
-    var phonet = require("./phonet.js");
-}
 
+var conj = window.grammalecte["conj"];
+var mfsp = window.grammalecte["mfsp"];
+var phonet = window.grammalecte["phonet"];
 
 //// verbs
 
