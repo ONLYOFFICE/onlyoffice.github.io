@@ -2,7 +2,7 @@
 
 Zotero plugin allows users to create bibliographies in ONLYOFFICE editors using Zotero service.
 
-The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Community Edition), ONLYOFFICE cloud service, and ONLYOFFICE Personal. It can also be installed to Document Server manually. 
+The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Community Edition), ONLYOFFICE cloud service, and ONLYOFFICE Personal. It can also be installed to Document Server and desktop editors manually. 
 
 ## How to use
 
@@ -16,7 +16,7 @@ The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Communi
 
 Please note that Zotero works only with user’s personal library associated with the your account. The desired sources must be added to your library in Zotero before you can search and add them to your bibliography via plugin.
 
-## How to install
+## How to install to server
 
 Two installation ways are available:
 
@@ -50,6 +50,12 @@ Two installation ways are available:
     });
     ```
 **Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable.
+
+## How to install to desktop
+
+* Archive the plugin files (the archive must contain config.json, index.html, and pluginCode.js).
+* Change the file extension to .plugin.
+* Go to the Plugins tab, click Manage Plugins >> Add plugin, browse for the .plugin file.
 
 ## Configuration
 

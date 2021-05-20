@@ -18,6 +18,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Zotero</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="resources/css/plugin_style.css">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
@@ -27,7 +28,7 @@
     <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
     <script src="scripts/thirdparty/url-polyfill.min.js"></script>
 </head>
-<body spellcheck="false" class="noselect">
+<body id="body" spellcheck="false" class="noselect">
     <div id="errorWrapper" class="errorMsg display-none"></div>
 
     <div id="content">
@@ -38,9 +39,9 @@
                 <div><span class="i18n">To use Zotero you should get an API key.</span> <span class="i18n">Navigate to</span> <a class="i18n" target="_blank" href="https://www.zotero.org/settings/keys">Zotero API settings</a>. <span class="i18n">Create and copy API key into the field below.</span></div>
                 <div class="mrtop label">
                     <span class="i18n">API Key</span>
-                    <input id="apiKeyField" class="control text wide i18n" type="text" placeholder="API Key" />
+                    <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" style="width: 100%;"/>
                 </div>
-                <div id="saveConfigBtn" class="button wide control i18n">Save</div>
+                <button id="saveConfigBtn" class="btn-text-default" style="margin-top: 16px; width: 100%;">Save</button>
             </div>
 
             <div id="mainState" class="flexCol flexSize display-none">
@@ -51,7 +52,7 @@
                     <div id="selectedThumb" class="scrollThumb display-none"></div>
                 </div>
                 <label id="searchLabel">
-                    <input id="searchField" autocomplete="off" class="control text i18n" type="text" placeholder="Search references by author, title or year" />
+                    <input id="searchField" autocomplete="off" class="form-control" type="text" placeholder="Search references by author, title or year" style="width: 100%;"/>
                     <span id="searchClear" class="display-none">&#xd7;</span>
                 </label>
                 <div id="docsWrapper" class="flexSize">
@@ -64,9 +65,9 @@
                     <div id="docsThumb" class="scrollThumb display-none"></div>
                 </div>
                 <div id="controlsHolder" class="flexCol">
-                    <div id="buttonsWrapper" class="flex display-none">
-                        <div id="insertBibBtn" class="button control i18n">Insert Bibliography</div>
-                        <div id="cancelBtn" class="button control i18n">Cancel</div>
+                    <div id="buttonsWrapper" class="flex display-none" style="justify-content: space-between;">
+                        <div id="insertBibBtn" class="btn-text-default" style="width: 45%">Insert Bibliography</div>
+                        <div id="cancelBtn" class="btn-text-default" style="width: 45%">Cancel</div>
                     </div>
                     <div id="styleWrapper">
                         <div class="label">
@@ -145,7 +146,7 @@
         </div>
 
         <div id="footerCont">
-            <span><a href="https://www.zotero.org/" target="_blank" class="link i18n">Open Zotero website</a></span>
+            <span><a href="https://www.zotero.org/" target="_blank" id="zotero-link" class="link i18n">Open Zotero website</a></span>
             <span id="logoutLink" class="link display-none i18n">Reconfigure</span>
         </div>
 
