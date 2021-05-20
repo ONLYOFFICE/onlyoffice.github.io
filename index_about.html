@@ -19,29 +19,48 @@
     <meta charset="UTF-8">
     <title>About</title>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <script type="text/javascript">
         window.Asc.plugin.init = function()
         {
             this.resizeWindow(400, 100, 400, 100, 400, 100);
-            // none
         };
 
         window.Asc.plugin.button = function(id)
         {
             this.executeCommand("close", "");
         };
-	</script>
-	<style>
-		p, a{
+    </script>
+    <style>
+        p, a{
             font-size: 12px;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
-	</style>
+        a:link {
+            color: darkgrey;
+        }
+
+        /* visited link */
+        a:visited {
+            color: darkgrey;
+        }
+
+        /* mouse over link */
+        a:hover {
+            color: #8d8d8d;
+        }
+
+        /* selected link */
+        a:active {
+            color: darkgrey;
+        }
+    </style>
 </head>
-<body style="padding-left: 20px; padding-right: 20px">
+<body style="padding-left: 20px; padding-right: 20px" class="defaultlable">
     <div style="width:300px;vertical-align:top;font-family: Arial;font-size:9pt;line-height: normal">
-    <a rel="license" href="//responsivevoice.org/"><img title="ResponsiveVoice Text To Speech" src="https://responsivevoice.org/wp-content/uploads/2014/08/120x31.png" style="float:left;padding-right:2px" /></a><span xmlns:dct="https://purl.org/dc/terms/" property="dct:title"><a href="//responsivevoice.org/" target="_blank" title="ResponsiveVoice Text To Speech">ResponsiveVoice</a></span> used under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License">Non-Commercial License</a></div>
-	<div style="clear:both;">&nbsp;</div>
-	<p>Version: 1.0</p>
+    <a rel="license" class="aboutlink" target="_blank" href="//responsivevoice.org/"><img title="ResponsiveVoice Text To Speech" src="https://responsivevoice.org/wp-content/uploads/2014/08/120x31.png" style="float:left;padding-right:2px" /></a><span xmlns:dct="https://purl.org/dc/terms/" property="dct:title"><a href="//responsivevoice.org/" target="_blank" class="aboutlink" title="ResponsiveVoice Text To Speech">ResponsiveVoice</a></span> used under <a rel="license" target="_blank" class="aboutlink" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License">Non-Commercial License</a></div>
+    <div style="clear:both;">&nbsp;</div>
+    <p class="aboutlable">Version: 1.0</p>
 </body>
 </html>
