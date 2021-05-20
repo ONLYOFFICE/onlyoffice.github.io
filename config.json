@@ -7,6 +7,7 @@
         "de": "Thesaurus"
     },
     "guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9840}",
+    "version": "1.0",
 
     "variations": [
         {
@@ -19,7 +20,35 @@
             },
             "url": "index.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
             "isViewer": true,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
