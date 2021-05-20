@@ -6,7 +6,35 @@
       {
         "description": "Zotero",
         "url": "index.html",
-        "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+        "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+		"icons2": [
+			{
+				"style" : "light",
+				
+				"100%": {
+					"normal": "resources/light/icon.png"
+				},
+				"150%": {
+					"normal": "resources/light/icon@1.5x.png"
+				},
+				"200%": {
+					"normal": "resources/light/icon@2x.png"
+				}
+			},
+			{
+				"style" : "dark",
+				
+				"100%": {
+					"normal": "resources/dark/icon.png"
+				},
+				"150%": {
+					"normal": "resources/dark/icon@1.5x.png"
+				},
+				"200%": {
+					"normal": "resources/dark/icon@2x.png"
+				}
+			}
+		],
         "isViewer": false,
         "EditorsSupport": [ "word" ],
         "initDataType": "text",
