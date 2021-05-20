@@ -20,15 +20,15 @@
 		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
 	</head>
 	<body spellcheck="false">
-		<label id="lb_lanuage" class="label" style = "padding: 5px 0px 0px 12px">Language</label>
+		<label id="lb_lanuage" class="label defaultlable" style = "padding: 5px 0px 0px 12px">Language</label>
 		<div class="language">	
-			<select id="language_id" style="width: 100%;" class="combo"></select>
+			<select id="language_id" style="width: 100%;"></select>
 			<button class = "button" id ="btn_highlight" style="width:10%;display:none;">Highlight</button>
 		</div>
 		<div id="TabColor" class="TabColor">
 			<div class="styleselect">
-					<label id="lb_style" class="label" style = "padding: 5px 0px 0px 2px">Style</label>	
-					<select id="style_id" class="combo">
+					<label id="lb_style" class="label defaultlable" style = "padding: 5px 0px 0px 2px">Style</label>	
+					<select id="style_id">
 						<option value = "googlecode.css">Googlecode</option>
 						<option value = "github.css">GitHub</option>
 						<option value = "github-gist.css">GitHub Gist</option>
@@ -46,16 +46,16 @@
 					</select>
 			</div>
 			<div id="tabselect" class="tabselect">	
-				<label id="lb_repTab" class="label">Replace Tab with spaces</label>
-				<select id="tab_replace_id" class="combo">
+				<label id="lb_repTab" class="label defaultlable">Replace Tab with spaces</label>
+				<select id="tab_replace_id">
 					<option id="opt_DontRep" value="0">Don`t replace</option>
 					<option id="opt_2sp" value="2">Replace by 2 spaces</option>
 					<option id="opt_4sp" value="4">Replace by 4 spaces</option>
 				</select>
 			</div>
 			<div id="colorselect" class="colorselect">
-					<label id="lb_bgColor" for="background_color" class="label">Choose background color</label>
-					<input id="background_color" style="padding: 0" type="color" value="#ffffff">
+					<label id="lb_bgColor" for="background_color" class="label defaultlable">Choose background color</label>
+					<input id="background_color" class="form-control" style="padding: 0" type="color" value="#ffffff">
 					<input type='text' style="display: none; padding: 0" id="jq_color"/>		
 			</div>
 		</div>
