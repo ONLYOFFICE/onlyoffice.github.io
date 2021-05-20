@@ -29,10 +29,6 @@
 </head>
 
 <style>
-    label{
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 11px;
-    }
     div{
         display: inline-block;
         vertical-align: top;
@@ -42,9 +38,6 @@
     }
     button{
         width: 125px;
-    }
-    .disabled {
-        color: darkgrey;
     }
 
     #lang-select {
@@ -64,19 +57,19 @@
     }
 
 </style>
-<body style="box-sizing:border-box; width: 100%; height: 100%; margin: 0; padding-left: 22px; background: #F7F7F7;">
+<body style="box-sizing:border-box; width: 100%; height: 100%; margin: 0; padding-left: 22px;">
     <div style="height: 100%; width: 100%">
-        <div style="height: 99px">
-            <label class="noselect" style="display: inline-block; margin-top: 15px; margin-bottom: 22px" id="label1">Tesseract.js lets recognize text in pictures (png, jpg)</label><br>
+        <div style="height: 99px" class="noselect">
+            <label class="defaultlable" style="display: inline-block; margin-top: 15px; margin-bottom: 22px" id="label1">Tesseract.js lets recognize text in pictures (png, jpg)</label><br class="noselect">
             <div class="noselect">
                 <div style="margin-right: 0px; width: 175px; overflow: visible;">
-                    <button class="btn-text-default" id="load-file-button-id">Load File</button><br>
-                    <label disabled  class="noselect disabled" style="overflow-x: visible" id="file-name-label"></label>
+                    <button class="btn-text-default" id="load-file-button-id">Load File</button><br class="noselect">
+                    <label disabled  class="defaultlable" style="overflow-x: visible" id="file-name-label"></label>
                     <input style="display: none" type="file" id="images-input" multiple accept='image/jpeg,image/png' />
                 </div>
             </div>
             <div class="noselect" style="margin-right: 22px">
-                <label class="noselect" id="label2">Choose language</label>
+                <label class="defaultlable" id="label2">Choose language</label>
                 <select name = 'lang_combo' disabled  class="noselect" id='lang-select' style="width: 125px">
                     <option value = 'eng'>English</option>
                     <option value = 'chi_sim'>Chinese</option>
@@ -142,15 +135,15 @@
                 </select>
             </div>
             <div  class="noselect">
-                <button class="btn-text-default" id='recognize-button' disabled>Recognize</button><br>
-                <label id="status-label" class="noselect disabled" ></label>
+                <button class="btn-text-default" id='recognize-button' disabled>Recognize</button><br class="noselect">
+                <label id="status-label" class="defaultlable" disabled ></label>
             </div>
         </div>
         <div id="scrollable-image-text-div" style="position:absolute; display: none; height: calc(100% - 99px); width: calc(100% - 5px); position: relative; overflow: hidden">
             <div style="width: calc(50% - 20px); margin-right: 25px" id="image-container-div" class="noselect">
 
             </div>
-            <div id="text-container-div" style="width: calc(50% - 24px)">
+            <div id="text-container-div" style="width: calc(50% - 20px); -khtml-user-select: text; user-select: text; -moz-user-select: text; -webkit-user-select: text;" class="defaultlable" style="width: calc(50% - 24px)">
 
             </div>
         </div>

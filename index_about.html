@@ -18,32 +18,9 @@
 <head>
     <meta charset="UTF-8">
     <title>About</title>
-    <style>
-        p, a{
-            font-size: 12px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-
-        a:link {
-            color: darkgrey;
-        }
-
-        /* visited link */
-        a:visited {
-            color: darkgrey;
-        }
-
-        /* mouse over link */
-        a:hover {
-            color: #8d8d8d;
-        }
-
-        /* selected link */
-        a:active {
-            color: darkgrey;
-        }
-    </style>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <script type="text/javascript">
         window.Asc.plugin.init = function()
         {
@@ -68,7 +45,7 @@
 			}
 			elem = document.getElementById("p2");
 			if (elem){
-				elem.innerHTML = window.Asc.plugin.tr("Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.");
+				elem.innerHTML = window.Asc.plugin.tr("Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\" class=\"aboutlink\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.");
 			}		
 			elem = document.getElementById("a1");
 			if (elem){
@@ -79,9 +56,9 @@
     </script>
 </head>
 <body style="padding-left: 20px; padding-right: 20px">
-<p style="font-size: 15px" id="p1">Tesseract.js Add-on</p>
-<p style="font-size: 12px" id="p2">Tesseract.js is a pure javascript version of the <a href="http://tesseract.projectnaptha.com" target="_blank">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.</p>
-<a href="https://github.com/ONLYOFFICE/plugin-ocr" target="_blank" id="a1">Source code</a>
-<p>Version: 1.0</p>
+<p class="aboutlable" id="p1">Tesseract.js Add-on</p>
+<p class="aboutlable" id="p2">Tesseract.js is a pure javascript version of the <a href="http://tesseract.projectnaptha.com" target="_blank" class="aboutlink">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.</p>
+<a href="https://github.com/ONLYOFFICE/plugin-ocr" target="_blank" id="a1" class="aboutlink">Source code</a>
+<p class="aboutlable">Version: 1.0</p>
 </body>
 </html>
