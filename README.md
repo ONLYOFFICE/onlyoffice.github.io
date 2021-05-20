@@ -12,3 +12,4 @@ It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE
 2. Start the plugin located in the Plugins tab. 
 3. Edit the image and press OK to save the changes. 
 
+If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
