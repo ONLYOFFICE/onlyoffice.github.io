@@ -1,16 +1,16 @@
 Zotero ONLYOFFICE integration plugin uses code from the following 3rd party projects:
 
-\src\thirdparty\fetch.umd.js
+\vendor\thirdparty\fetch.umd.js
 fetch-polyfill - This project is a polyfill that implements a subset of the standard Fetch specification, enough to make fetch a viable replacement for most uses of XMLHttpRequest in traditional web applications. (https://github.com/github/fetch)
 License:        MIT
 License File:   fetch-polyfill.license
 
-\src\thirdparty\promise-polyfill.min.js
+\vendor\thirdparty\promise-polyfill.min.js
 promise-polyfill - Lightweight ES6 Promise polyfill for the browser and node. (https://github.com/taylorhakes/promise-polyfill)
 License:        MIT
 License File:   promise-polyfill.license
 
-\src\thirdparty\url-polyfill.min.js
+\vendor\thirdparty\url-polyfill.min.js
 url-polyfill - Polyfill URL and URLSearchParams to match last WHATWG specifications. (https://github.com/lifaon74/url-polyfill)
 License:        MIT
 License File:   url-polyfill.license
