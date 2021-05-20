@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>WordPress</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script type="text/javascript" src="scripts/wordpress.js"></script>
+    <script type="text/javascript" src="scripts/wordpresshelper.js"></script>
+    <link href="resources/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="main-container">
+        <div id="configState" style="margin: 12px;">
+            <div><span>To use Wordpress, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-wordpress/tree/develop#configuration">Learn more here.</a></div>
+            <input id="redirectConfig" style="width: 100%; margin-top: 8px;" readonly class="form-control" />
+            <div id="redirectUrlCopy" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="btn-text-default">Copy Link and Open Form</div>
+            <div>In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</div>
+            <div style="margin-top: 8px;">
+                <span>Client ID</span>
+                <input id="appIdField" style="width: 100%;" autocomplete="off" class="form-control" type="text" placeholder="Client ID" />
+            </div>
+            <div style="margin-top: 8px;">
+                <span>Client secret key</span>
+                <input id="appSecretField" style="width: 100%;" autocomplete="off" class="form-control" type="text" placeholder="Client secret key" />
+            </div>
+            <div id="saveConfigBtn" style="width: 100%; margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="btn-text-default">Save</div>
+        </div>
+        <div id="loginState" style="display:none; margin: 12px;">
+            <span>Connect an account to publish documents to your WordPress site</span>
+            <div id="loginBtn" class="btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;">Login</div>
+            <div id="reconfigBtn" class="btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;">Reconfigure</div>
+        </div>
+        <div class="wait i18n">Please wait...</div>
+        <div id="authorization-form" style="display: none;">
+            <div class="i18n">Connect account to publish documents to your WordPress site</div>
+            <button id="sent-auth" class="i18n">Connect</button>
+        </div>
+        <div id="publish-form">
+            <div class="blog">
+                <p class="blog-url"></p>
+                <p class="username"></p>
+            </div>
+            <div class="publish">
+                <label class="i18n">Title</label>
+                <input type="text" id="title" />
+
+                <div style="display: flex; justify-content: start;">
+                    <button id="publish" class="i18n">Publish</button>
+                    <button id="draft" class="i18n">Save as Draft</button>
+                </div>
+            </div>
+        </div>
+        <div id="logout" style="display: none;">
+            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; right: 10px;">Logout</label>
+        </div>
+    </div>
+</body>
+</html>
