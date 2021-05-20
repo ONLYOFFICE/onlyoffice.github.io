@@ -1,0 +1,49 @@
+{
+    "name" : "Zotero",
+    "guid" : "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
+
+    "variations" : [
+      {
+        "description": "Zotero",
+        "url": "index.html",
+        "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+		"icons2": [
+			{
+				"style" : "light",
+				
+				"100%": {
+					"normal": "resources/light/icon.png"
+				},
+				"150%": {
+					"normal": "resources/light/icon@1.5x.png"
+				},
+				"200%": {
+					"normal": "resources/light/icon@2x.png"
+				}
+			},
+			{
+				"style" : "dark",
+				
+				"100%": {
+					"normal": "resources/dark/icon.png"
+				},
+				"150%": {
+					"normal": "resources/dark/icon@1.5x.png"
+				},
+				"200%": {
+					"normal": "resources/dark/icon@2x.png"
+				}
+			}
+		],
+        "isViewer": false,
+        "EditorsSupport": [ "word" ],
+        "initDataType": "text",
+        "initData": "",
+        "isVisual": true,
+        "isModal": false,
+        "isInsideMode": true,
+        "isUpdateOleOnResize": false,
+        "initOnSelectionChanged": true
+      }
+    ]
+}
