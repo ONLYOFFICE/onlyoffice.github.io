@@ -656,7 +656,8 @@
                     if (lastSearch.ownObj && lastSearch.ownObj.next) {
                         loadLibrary(lastSearch.ownObj.next(), true, true);
                     } else if (!lastSearch.catObj) {
-                        loadLibrary(sdk.search.catalog({ query: lastSearch.text, limit: 20, view: "bib" }), true, false);
+                        // always error
+                        // loadLibrary(sdk.search.catalog({ query: lastSearch.text, limit: 20, view: "bib" }), true, false);
                     } else if (lastSearch.catObj.next) {
                         loadLibrary(lastSearch.catObj.next(), true, false);
                     }
@@ -732,6 +733,7 @@
             var divider = document.createElement("div");
             divider.textContent = getMessage("Search in all literature:");
             divider.classList.add("searchDivider");
+            divider.classList.add("defaultlable");
             holder.appendChild(divider);
         }
 
@@ -748,6 +750,7 @@
                 var notFound = document.createElement("div");
                 notFound.textContent = own ? getMessage("Nothing found in your library") : getMessage("Nothing found");
                 notFound.classList.add("searchInfo");
+                notFound.classList.add("defaultlable");
                 page.appendChild(notFound);
             }
         }
@@ -870,6 +873,8 @@
         }
 
         var remove = document.createElement("span");
+        remove.innerHTML = "&#xd7";
+        remove.classList.add("defaultlable");
         remove.onclick = function () {
             removeSelected(item.id);
         };
