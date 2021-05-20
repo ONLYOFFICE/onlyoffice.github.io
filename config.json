@@ -1,12 +1,20 @@
 {
     "name" : "Mendeley",
     "guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
+    "version" : "1.0",
 
     "variations" : [
       {
         "description": "Mendeley",
         "url": "index.html",
-        "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+        "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+		"icons2": [
+		{
+			"100%": { "normal": "resources/img/icon.png" },
+			"150%": { "normal": "resources/img/icon@1.5x.png" },
+			"200%": { "normal": "resources/img/icon@2x.png" }
+		}
+		],
         "isViewer": false,
         "EditorsSupport": [ "word" ],
         "initDataType": "text",
