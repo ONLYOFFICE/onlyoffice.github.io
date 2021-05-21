@@ -51,17 +51,6 @@
 		.goog-te-combo {
 			height: 22px;
 		}
-		button {
-			color: #fff;
-			background-color: #7d858c;
-			border: 1px solid #cfcfcf;
-			border-radius: 2px;
-			outline: none;
-			font-size: 11px;
-			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-			height: 22px;
-			cursor: pointer;
-		}
 		.div_btn {
 			padding-top: 3px;
 			padding-left: 5px;
@@ -108,8 +97,9 @@
 			setTimeout(function() {
 				document.getElementById("btn_copy").onclick = function () {
 					selectText("google_translate_element");
-				}
-			}, 500);
+				};
+				document.getElementsByClassName("goog-te-combo")[0].classList.add("form-control")
+			}, 300);
 			if (navigator.userAgent.indexOf("Chrome") !== -1) {
 				document.getElementById(":0.targetLanguage").firstChild.style = "height:21px;"
 			}
@@ -141,14 +131,24 @@
 			}
 		}
 		window.addEventListener('message', function (msg) {
-			if (msg.data === "update_scroll")
+			if (typeof(msg.data) === "object")
+			{
+				//event for change theme
+				var styleTheme = document.createElement('style');
+				styleTheme.type = 'text/css';
+				styleTheme.innerHTML = msg.data.style;
+				document.getElementsByTagName('head')[0].appendChild(styleTheme);
+				document.getElementById("google_translate_element").style.color = msg.data.theme["text-normal"];
+				document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data.theme["text-normal"];				
+			}
+			else if (msg.data === "update_scroll")
 			{
 				setTimeout(()=> Ps.update(), 600);
 			}
 			else
 			{
 				if (msg.data !== "onchange_goog-te-combo") {
-				document.getElementById("google_translate_element").innerHTML = msg.data;
+				document.getElementById("google_translate_element").innerHTML = escape(msg.data);
 				}
 				timeOut = setTimeout(function() {
 					document.getElementById("google_translate_element").style.opacity = 1;
@@ -161,7 +161,7 @@
 			}
 		});
 	</script>
-<script src="vendor/google/google.js"></script>
+	<script src="vendor/google/google.js"></script>
 <!-- for russian language -->
 <!-- <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
 </body>
