@@ -29,6 +29,7 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+ 
 (function(window, undefined){
 	var isInit = false;
 	var ifr;
@@ -37,12 +38,12 @@
 	
 	window.Asc.plugin.init = function(text)
 	{
-	   if (isIE) {
-		   document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
-			 return;
-		 }
+		if (isIE) {
+			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
+			return;
+		}
     
-	  text = ProcessText(text);
+	  	text = ProcessText(text);
 
 		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
@@ -61,7 +62,7 @@
 			ifr.onload = function() {
 				if (ifr.contentWindow.document.readyState == 'complete')
 					setTimeout(function() {
-						ifr.contentDocument.getElementById("google_translate_element").innerHTML = text;
+						ifr.contentDocument.getElementById("google_translate_element").innerHTML = escape(text);
 						if (text.length)
 							ifr.contentDocument.getElementById("div_btn").classList.remove("hidden");
 					}, 500);
@@ -83,8 +84,8 @@
 				div.classList.add("hidden");
 				btn.innerHTML = window.Asc.plugin.tr("Copy");
 				btn.id = "btn_copy";
-				btn.classList.value = "btn-text-default primary";
-				btnReplace.classList.value = "btn-text-default primary";
+				btn.classList.add("btn-text-default");
+				btnReplace.classList.add("btn-text-default");
 				btnReplace.innerHTML = window.Asc.plugin.tr("Replace");
 				btnReplace.id = "btn_replace";
 				setTimeout(function() {ifr.contentDocument.getElementById("body").appendChild(div);}, 100);
@@ -107,8 +108,25 @@
                             });
                         }
                         Asc.scope.arr = allParsedParas;
-                        window.Asc.plugin.callCommand(function() {
-                            Api.ReplaceTextSmart(Asc.scope.arr);
+                        window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
+                            if (version === undefined) {
+                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
+                            }
+                            else {
+                                window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
+                                    switch (sType) {
+                                        case "none":
+                                        case "drawing":
+                                            window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
+                                            break;
+                                        case "text":
+                                            window.Asc.plugin.callCommand(function() {
+                                                Api.ReplaceTextSmart(Asc.scope.arr);
+                                            });
+                                            break;
+                                    }
+                                });
+                            }
                         });
                     }
                 });
@@ -120,12 +138,12 @@
 		}
 	};
 
-  function ProcessText(sText) {
+  	function ProcessText(sText) {
         return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
     };
 
 	function checkInternetExplorer(){
-    var rv = -1;
+		var rv = -1;
 		if (window.navigator.appName == 'Microsoft Internet Explorer') {
 			const ua = window.navigator.userAgent;
 			const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
@@ -170,6 +188,13 @@
 				field.innerHTML = message = window.Asc.plugin.tr(message);
 		}
 		
+	};
+
+	window.Asc.plugin.onThemeChanged = function(theme)
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
+		var style = document.getElementsByTagName('head')[0].lastChild;
+		setTimeout(()=>ifr.contentWindow.postMessage({theme,style : style.innerHTML}, '*'),600);
 	};
 
 })(window, undefined);
