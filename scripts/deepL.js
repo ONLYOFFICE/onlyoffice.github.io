@@ -312,11 +312,13 @@ var Ps;
 
         $('#show_manually').click(function() {
             $(this).hide();
+            functionResize();
             $('#hide_manually').show();
             $('#enter_container').show();
         });
         $('#hide_manually').click(function() {
             $(this).hide();
+            functionResize();
             $('#show_manually').show();
             $('#enter_container').hide();
         });
