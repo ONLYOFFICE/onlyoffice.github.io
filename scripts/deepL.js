@@ -269,9 +269,12 @@ var Ps;
             if (saved_key !== null) {
                 elements.api_value.value = saved_key;
             }
+            document.getElementById('txt_shower').innerHTML = '';
             switchClass(elements.re_api, 'display-none', true)
             switchClass(elements.api, 'display-none', false);
             switchClass(elements.translator, 'display-none', true);
+            if (!$('#vanish_container').hasClass('display-none'))
+                $('#vanish_container').toggleClass('display-none');
             $(elements.api_value).focus();
         })
         $(elements.api_value).focus(function(){
