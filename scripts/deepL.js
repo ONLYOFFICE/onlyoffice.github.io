@@ -112,7 +112,7 @@ var Ps;
 
             if ($('#api-value').hasClass('img_error'))
                 $('#api-value').toggleClass('img_error');
-            if (!$('#api-value').hasClass('error_api'))
+            if ($('#api-value').hasClass('error_api'))
                 $('#api-value').toggleClass('error_api');
 
             localStorage.setItem('deepL_Apikey', apikey);
@@ -145,7 +145,8 @@ var Ps;
             container = document.getElementById('txt_shower');
             if (!$('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
-
+            if (!$('#api-value').hasClass('error_api'))
+                $('#api-value').toggleClass('error_api');
             if (apikey == '') {
                 container.innerHTML = "API key required!";
             }
@@ -239,14 +240,12 @@ var Ps;
 		    });
 		    apikey = elements.api_value.value.trim();
 		    if (apikey !== '') {
-		        window.Asc.plugin.executeMethod("GetSelectedText", [], function(sText) {
-                    document.getElementById('txt_shower').innerHTML = '';
-                    var allParsedParas = SplitText(sText);
-                    DelInvalidChars(allParsedParas);
-                    var sParams = CreateParams(allParsedParas);
-                    var target_lang = GetTargetLang();
-                    Translate(apikey, target_lang, sParams);
-                });
+                document.getElementById('txt_shower').innerHTML = '';
+                var allParsedParas = SplitText(txt);
+                DelInvalidChars(allParsedParas);
+                var sParams = CreateParams(allParsedParas);
+                var target_lang = GetTargetLang();
+                Translate(apikey, target_lang, sParams);
             }
             else {
                 if (!$('#txt_shower').hasClass('error'))
