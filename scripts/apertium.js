@@ -390,7 +390,23 @@ var Ps;
                     }, ms || 0);
             };
         };
-
+        $('#textarea').keyup(delay(function(e) {
+            document.getElementById("textarea").value = document.getElementById("textarea").value;
+            txt = document.getElementById("textarea").value;
+            switch (window.Asc.plugin.info.editorType) {
+                case 'word':
+                case 'slide': {
+                    if (txt !== "") {
+                        RunTranslate(txt);
+                    }
+                    break;
+                }
+                case 'cell': {
+                    RunTranslate(txt);
+                }
+                break;
+            }
+        }, 500));
         var textarea = document.getElementsByTagName('textarea')[0];
         textarea.addEventListener('keydown', resize);
         function resize() {
