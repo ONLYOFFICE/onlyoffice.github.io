@@ -81,7 +81,7 @@
             var el = document.getElementById('textarea');
             setTimeout(function() {
                 el.style.cssText = 'height:100px  !important; width: 100%;';
-                el.style.cssText = 'height:' + (el.scrollHeight + 2) + 'px !important; width:100%;';
+                el.style.cssText = 'height:' + Math.max(98, Math.min(el.scrollHeight + 2, nBodyHeight/2)) + 'px !important; width:100%;';
             }, 1);
         };
         functionResize = resize;
