@@ -25,6 +25,7 @@ var Ps;
     var elements         = null;
     var apikey           = "";
     var isValidKey       = false;
+    var isFirstRun       = true;
     var functionResize;
 	function showLoader(elements, show) {
 
@@ -49,6 +50,11 @@ var Ps;
         txt = text;
         document.getElementById("textarea").value = text;
         functionResize();
+
+        if ((apikey == '' || apikey == null) && isFirstRun) {
+            isFirstRun = false;
+            return;
+        }
 
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
@@ -302,7 +308,7 @@ var Ps;
         });
 
         apikey = localStorage.getItem('deepL_Apikey');
-        if (apikey !== null) {
+        if (apikey != null && apikey != '') {
             switchClass(elements.api, 'display-none', true);
             switchClass(elements.re_api, 'display-none', false);
             switchClass(elements.translator, 'display-none', false);
