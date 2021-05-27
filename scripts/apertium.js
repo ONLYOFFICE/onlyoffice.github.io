@@ -30,6 +30,8 @@
  *
  */
 var Ps;
+var PsTextArea;
+
 (function(window, undefined){
 
     var txt                 = "";
@@ -42,7 +44,6 @@ var Ps;
     var select              = null;
     var selectClone         = null;
     var allPairs            = {};
-    var functionResize;
     var serviceUrl       = "https://www.apertium.org/"; //paste your service's url address here
 
     function showLoader(elements, show) {
@@ -66,8 +67,8 @@ var Ps;
 	window.Asc.plugin.init = function(text)
 	{
 	    txt = text;
-        document.getElementById("textarea").value = text;
-        functionResize();
+        document.getElementById("textarea").innerText = text;
+
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
             return false;
@@ -92,8 +93,22 @@ var Ps;
     {
         window.Asc.plugin.onThemeChangedBase(theme);
 
+        var rule = ''
+        if (theme.type == 'dark') {
+            rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important';
+        }
+        else if (theme.type == 'light') {
+            rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDQ0IiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iNy4yNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTYwJSwgNDAlIiAvPjwvc3ZnPg==)';
+        }
+        var styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rule;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+
+        $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
         $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
         $('#arrow-svg-path').css('fill', theme["text-normal"]);
+
     };
 
     function PrepareTextToSend(allParas) {
@@ -237,10 +252,30 @@ var Ps;
                 updateScroll();
                 showLoader(elements, false);
             }
-        }).error(function() {
-            showLoader(elements, false);
-            container = document.getElementById('txt_shower');
-            container.innerHTML = "Failed!"
+        }).error(function(error) {
+            if (error.readyState === 4 && error.status === 200) {
+                translatedParas[oText.Index] = oText.Text;
+
+                curIter++;
+                if (curIter === iterationCount) {
+                    container = document.getElementById('txt_shower');
+                    container.innerHTML = "";
+                    for (var nText = 0; nText < translatedParas.length; nText++) {
+                        if (translatedParas[nText] !== "" && translatedParas[nText])
+                            container.innerHTML += escape(translatedParas[nText]) + '<br>';
+                    }
+                    if ($('#vanish_container').hasClass('display-none'))
+                        $('#vanish_container').toggleClass('display-none');
+                    updateScroll();
+                    updateScroll();
+                    showLoader(elements, false);
+                }
+            }
+            else {
+                showLoader(elements, false);
+                container = document.getElementById('txt_shower');
+                container.innerHTML = "Failed!"
+            }
         });
     };
 
@@ -335,7 +370,7 @@ var Ps;
 		};
 
         Ps = new PerfectScrollbar("#display", {});
-
+        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
         showLoader2(elements, true);
         GetAllLangPairs();
 
@@ -383,15 +418,15 @@ var Ps;
 
         $('#show_manually').click(function() {
             $(this).hide();
-            functionResize();
             $('#hide_manually').show();
             $('#enter_container').show();
+            updateScroll();
         });
         $('#hide_manually').click(function() {
             $(this).hide();
-            functionResize();
             $('#show_manually').show();
             $('#enter_container').hide();
+            updateScroll();
         });
 
         function delay(callback, ms) {
@@ -405,8 +440,7 @@ var Ps;
             };
         };
         $('#textarea').keyup(delay(function(e) {
-            document.getElementById("textarea").value = document.getElementById("textarea").value;
-            txt = document.getElementById("textarea").value;
+            txt = document.getElementById("textarea").innerText;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
                 case 'slide': {
@@ -421,20 +455,6 @@ var Ps;
                 break;
             }
         }, 500));
-        var textarea = document.getElementsByTagName('textarea')[0];
-        textarea.addEventListener('keydown', resize);
-        function resize() {
-            var nBodyHeight = document.querySelector('body').offsetHeight;
-            var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
-
-            var el = document.getElementById('textarea');
-            setTimeout(function() {
-                el.style.cssText = 'height:100px  !important; width: 100%;';
-                el.style.cssText = 'height:' + Math.max(98, Math.min(el.scrollHeight + 2, nBodyHeight/2)) + 'px !important; width:100%;';
-                updateScroll();
-            }, 1);
-        };
-        functionResize = resize;
     });
 
     function RunTranslate(sText) {
@@ -469,6 +489,7 @@ var Ps;
     function updateScroll()
 	{
 		Ps && Ps.update();
+		PsTextArea && PsTextArea.update();
 	};
 
 	window.Asc.plugin.button = function(id)
