@@ -26,7 +26,6 @@
     <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
     <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
     <script src="scripts/apertium.js"></script>
-
 	<style>
 		html, body {
 			min-height: 100% !important;
@@ -135,7 +134,7 @@
 			</div>
     	</div>
 
-		<div id="main_panel">
+		<div id="main_panel" style="display: flex; flex-direction: column; max-height: 55%;">
 			<div class="input__head" style="display: flex; flex-direction: row; justify-content: space-between;">
 				<span class="prefs__locale_source" style="margin-left: 12px; width: calc(40% + 2px);"><select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
 					</select>
@@ -150,13 +149,12 @@
 				</span>
 			</div>
 			<div id="hide_show"><label style="display:none;" id="hide_manually">Hide field</label><label id="show_manually">Enter text manually</label></div>
-			<div id="enter_container" style="margin: 0px 12px 0px 12px; display:none;">
-				<textarea id="textarea" class="form-control" spellcheck="false" style="width: 100%; resize: none; height: 100px;"></textarea>
+			<div id="enter_container" class="form-control" style="position: relative; margin: 0px 12px 0px 12px; min-height: 100px; max-height: 100%; height: fit-content; display:none;">
+				<div id="textarea" contenteditable="true" style="min-width: 100%; min-height: 100px; width: fit-content; height: fit-content; padding: 0px 15px 15px 3px; outline: none; white-space: pre; float: left;" ></div>
 			</div>
-
 		</div>
 		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
-		<div id="display" style="width: calc(100% - 12px); position: relative; ">
+		<div id="display" style="width: calc(100% - 12px); position: relative;">
 			<div id="txt_shower" style="width:calc(100% - 20px); margin-right:8px; word-break: break-all;">
 
 			</div>
