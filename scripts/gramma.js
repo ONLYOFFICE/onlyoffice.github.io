@@ -29,6 +29,8 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+var Ps;
+var PsTextArea;
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -47,7 +49,6 @@
     var serviceUrl = "https://languagetool.org/api/v2/check";
     var sPathRoot = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
     var oGramma = null;
-    var functionResize;
     var aResults = [];
 	function showLoader(elements, show) {
        switchClass(elements.loader, displayNoneClass, !show);
@@ -61,7 +62,7 @@
         }
     };
     function ConcatResults(arrResults) {
-        var allParas          = SplitText(document.getElementById("textarea").value);
+        var allParas          = SplitText(document.getElementById("textarea").innerText);
         var nCharsCountBefore = 0;
         var nCurMistakeIndex  = 1;
         var aConcatResults    = [];
@@ -98,8 +99,7 @@
     };
 	window.Asc.plugin.init = function(text)	{
 		sText = text;
-		document.getElementById("textarea").value = text;
-		functionResize();
+		document.getElementById("textarea").innerText = text;
 		if (!isInit) {
 			init();
 			isInit = true;
@@ -120,25 +120,11 @@
             loader: document.getElementById("loader-container"),
             contentHolder: document.getElementById("result"),
 		};
+        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
-        var textarea = document.getElementsByTagName('textarea')[0];
-        textarea.addEventListener('keydown', resize);
-        function resize() {
-            var nBodyHeight = document.querySelector('body').offsetHeight;
-            var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
-
-            var el = this;
-            setTimeout(function() {
-                if (Math.floor(nBodyHeight/nTextAreaHeight) > 2) {
-                    el.style.cssText = 'height:100px; width: 100%;';
-                    el.style.cssText = 'height:' + (el.scrollHeight + 5) + 'px; width:100%;';
-                }
-            }, 1);
-        };
-        
         oGramma = new GrammarChecker(sPathRoot, ["Grammalecte", "Graphspell", "TextFormatter", "Lexicographer", "Tokenizer"], "fr");
 		$('#check').on('click', function(){
-			sText = document.getElementById("textarea").value.trim();
+			sText = document.getElementById("textarea").innerText.trim();
 			if (sText !== "") {
 				$("#result").empty();
 				aResult = checkText(sText);
@@ -149,7 +135,7 @@
 			};
 		});
 		$('#replace').click(function () {
-            Asc.scope.arr = SplitText(document.getElementById("textarea").value);
+            Asc.scope.arr = SplitText(document.getElementById("textarea").innerText);
             window.Asc.plugin.info.recalculate = true;
 
             // for usual paste
@@ -184,19 +170,6 @@
                 }
             });
         });
-        var textarea = document.getElementsByTagName('textarea')[0];
-        textarea.addEventListener('keydown', resize);
-        function resize() {
-            var nBodyHeight = document.querySelector('body').offsetHeight;
-            var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
-
-            var el = document.getElementById('textarea');
-            setTimeout(function() {
-                el.style.cssText = 'height:100px  !important; width: 100%;';
-                el.style.cssText = 'height:' + Math.max(98, Math.min(el.scrollHeight + 2, nBodyHeight/2)) + 'px !important; width:100%;';
-            }, 1);
-        };
-        functionResize = resize;
 	});
 
     function SplitText(sText) {
@@ -361,7 +334,7 @@
 		var count = sText.length - temp.length;
 		aResults.splice(ind, 1);
 		sText = temp;
-		document.getElementById("textarea").value = sText;
+		document.getElementById("textarea").innerText = sText;
 		for (var i = ind; i < aResults.length; i++) {
 			aResults[i].nStart -= count;
 			aResults[i].nEnd -= count;
@@ -397,6 +370,7 @@
 	function updateScroll()
 	{
 		Ps && Ps.update();
+		PsTextArea && PsTextArea.update();
 	};
 
 	window.Asc.plugin.onTranslate = function()
