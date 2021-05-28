@@ -117,6 +117,9 @@ var PsTextArea;
                 }
             });
         });
+        $('#textarea').keyup(function(e) {
+            updateScroll();
+        });
 	});
 
 
