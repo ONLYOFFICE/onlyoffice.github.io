@@ -436,6 +436,7 @@ var PsTextArea;
             };
         };
         $('#textarea').keyup(delay(function(e) {
+            updateScroll();
             txt = document.getElementById("textarea").innerText;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
