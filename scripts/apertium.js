@@ -355,7 +355,7 @@ var PsTextArea;
             select: document.getElementById("select_example"),
 		};
 
-        Ps = new PerfectScrollbar("#display", {});
+        Ps = new PerfectScrollbar("#display", {suppressScrollX  : true});
         PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
         showLoader2(elements, true);
         GetAllLangPairs();
