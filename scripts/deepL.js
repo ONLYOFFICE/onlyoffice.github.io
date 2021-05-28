@@ -16,6 +16,7 @@
  *
  */
 var Ps;
+var PsTextArea;
 (function(window, undefined){
 
     var txt              = "";
@@ -26,7 +27,6 @@ var Ps;
     var apikey           = "";
     var isValidKey       = false;
     var isFirstRun       = true;
-    var functionResize;
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -48,8 +48,7 @@ var Ps;
 		});
 
         txt = text;
-        document.getElementById("textarea").value = text;
-        functionResize();
+        document.getElementById("textarea").innerText = text;
 
         if ((apikey == '' || apikey == null) && isFirstRun) {
             isFirstRun = false;
@@ -226,6 +225,7 @@ var Ps;
 		};
 
         Ps = new PerfectScrollbar("#display", {suppressScrollX: true});
+        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
@@ -321,15 +321,15 @@ var Ps;
 
         $('#show_manually').click(function() {
             $(this).hide();
-            functionResize();
             $('#hide_manually').show();
             $('#enter_container').show();
+            updateScroll();
         });
         $('#hide_manually').click(function() {
             $(this).hide();
-            functionResize();
             $('#show_manually').show();
             $('#enter_container').hide();
+            updateScroll();
         });
 
         function delay(callback, ms) {
@@ -344,8 +344,7 @@ var Ps;
         };
 
         $('#textarea').keyup(delay(function(e) {
-            document.getElementById("textarea").value = document.getElementById("textarea").value;
-            txt = document.getElementById("textarea").value;
+            txt = document.getElementById("textarea").innerText;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
                 case 'slide': {
@@ -360,25 +359,12 @@ var Ps;
                 break;
             }
         }, 500));
-        var textarea = document.getElementsByTagName('textarea')[0];
-        textarea.addEventListener('keydown', resize);
-        function resize() {
-            var nBodyHeight = document.querySelector('body').offsetHeight;
-            var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
-
-            var el = document.getElementById('textarea');
-            setTimeout(function() {
-                el.style.cssText = 'height:100px  !important; width: 100%;';
-                el.style.cssText = 'height:' + Math.max(98, Math.min(el.scrollHeight + 2, nBodyHeight/2)) + 'px !important; width:100%;';
-                updateScroll();
-            }, 1);
-        };
-        functionResize = resize;
     })
 
     function updateScroll()
 	{
 		Ps && Ps.update();
+		PsTextArea && PsTextArea.update();
 	};
 
 	window.Asc.plugin.button = function(id)

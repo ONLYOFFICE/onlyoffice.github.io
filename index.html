@@ -150,7 +150,7 @@
 			<input type="text" id="api-value" class="form-control" placeholder="Enter your DeepL API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
 			<button onсlick="" id="save" class="btn-text-default">Save</button>
 		</div>
-		<div id="translator" class="display-none">
+		<div id="translator" class="display-none" style="display: flex; flex-direction: column; max-height: 55%;">
 			<div class="input__head">
 				<div style="margin: 0 0 4px 0;">
 					<label class="header">Target language</label>
@@ -199,8 +199,8 @@
 				</span>
 			</div>
 			<div id="hide_show"><label style="display:none;" id="hide_manually">Hide field</label><label id="show_manually">Enter text manually</label></div>
-			<div id="enter_container" style="margin: 0px 12px 0px 12px; display:none;">
-				<textarea id="textarea" class="form-control" spellcheck="false" style="width: 100%; resize: none; height: 100px;"></textarea>
+			<div id="enter_container" class="form-control" style="position: relative; margin: 0px 12px 0px 12px; min-height: 100px; max-height: 100%; height: fit-content; display:none;">
+				<div id="textarea" contenteditable="true" style="min-width: 100%; min-height: 100px; width: fit-content; height: fit-content; padding: 0px 15px 15px 3px; outline: none; white-space: pre; float: left;" ></div>
 			</div>
 		</div>
 
