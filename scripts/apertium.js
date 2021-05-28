@@ -252,6 +252,11 @@ var PsTextArea;
                 updateScroll();
                 showLoader(elements, false);
             }
+            else if (curIter > iterationCount) {
+                updateScroll();
+                updateScroll();
+                showLoader(elements, false);
+            }
         }).error(function(error) {
             if (error.readyState === 4 && error.status === 200) {
                 translatedParas[oText.Index] = oText.Text;
@@ -266,6 +271,11 @@ var PsTextArea;
                     }
                     if ($('#vanish_container').hasClass('display-none'))
                         $('#vanish_container').toggleClass('display-none');
+                    updateScroll();
+                    updateScroll();
+                    showLoader(elements, false);
+                }
+                else if (curIter > iterationCount) {
                     updateScroll();
                     updateScroll();
                     showLoader(elements, false);
