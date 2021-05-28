@@ -170,6 +170,9 @@ var PsTextArea;
                 }
             });
         });
+        $('#textarea').keyup(function(e) {
+            updateScroll();
+        });
 	});
 
     function SplitText(sText) {
