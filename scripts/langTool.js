@@ -15,6 +15,9 @@
  * limitations under the License.
  *
  */
+var Ps;
+var PsTextArea;
+
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -31,8 +34,7 @@
 	var displayNoneClass = "display-none";
 	var blurClass        = "no_class";
     var elements         = null;
-    var serviceUrl = "https://languagetool.org/api/v2/check";
-    var functionResize;
+    var serviceUrl       = "https://languagetool.org/api/v2/check";
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -50,8 +52,7 @@
 
 	window.Asc.plugin.init = function(text)	{
 		txt = text;
-		document.getElementById("textarea").value = text;
-		functionResize();
+		document.getElementById("textarea").innerText = text;
 		if (!isInit) {
 			init();
 			isInit = true;
@@ -71,29 +72,17 @@
             loader: document.getElementById("loader-container"),
             contentHolder: document.getElementById("result"),
 		};
+        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
-        var textarea = document.getElementsByTagName('textarea')[0];
-        textarea.addEventListener('keydown', resize);
-        function resize() {
-            var nBodyHeight = document.querySelector('body').offsetHeight;
-            var nTextAreaHeight = document.querySelector('textarea').offsetHeight;
-
-            var el = document.getElementById('textarea');
-            setTimeout(function() {
-                el.style.cssText = 'height:100px  !important; width: 100%;';
-                el.style.cssText = 'height:' + Math.max(98, Math.min(el.scrollHeight + 2, nBodyHeight/2)) + 'px !important; width:100%;';
-            }, 1);
-        };
-        functionResize = resize;
 		$('#check').on('click', function(){
-			txt = document.getElementById("textarea").value.trim();
+			txt = document.getElementById("textarea").innerText.trim();
 			if (txt !== "") {
 				$("#result").empty();
 				checkText(txt, CurLang);
 			};
 		});
 		$('#replace').click(function () {
-            Asc.scope.arr = ParseText(document.getElementById("textarea").value);
+            Asc.scope.arr = ParseText(document.getElementById("textarea").innerText);
             window.Asc.plugin.info.recalculate = true;
 
             // for usual paste
@@ -337,7 +326,7 @@
 		var count = txt.length - temp.length;
 		matches.splice(ind, 1);
 		txt = temp;
-		document.getElementById("textarea").value = txt;
+		document.getElementById("textarea").innerText = txt;
 		for (var i = ind; i < matches.length; i++) {
 			matches[i].offset -= count;
 		}
@@ -368,7 +357,7 @@
 		}, function(err) {console.log("ouch" +err)});
 
 		var container = document.getElementById('scrollable-container-id');			
-			Ps = new PerfectScrollbar('#' + container.id, { minScrollbarLength: 20 });
+        Ps = new PerfectScrollbar('#' + container.id, { minScrollbarLength: 20 });
 			// updateScroll();
 			// updateScroll();
 	};
@@ -391,10 +380,10 @@
 		document.dispatchEvent(evt);
 	};
 	
-
 	function updateScroll()
 	{
 		Ps && Ps.update();
+		PsTextArea && PsTextArea.update();
 	};
 
 	window.Asc.plugin.onTranslate = function()
