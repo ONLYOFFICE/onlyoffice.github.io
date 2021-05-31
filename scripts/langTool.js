@@ -53,6 +53,7 @@ var PsTextArea;
 	window.Asc.plugin.init = function(text)	{
 		txt = text;
 		document.getElementById("textarea").innerText = text;
+		$("#result").empty();
 		if (!isInit) {
 			init();
 			isInit = true;
