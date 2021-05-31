@@ -49,6 +49,7 @@ var PsTextArea;
 
         txt = text;
         document.getElementById("textarea").innerText = text;
+        updateScroll();
 
         if ((apikey == '' || apikey == null) && isFirstRun) {
             isFirstRun = false;
