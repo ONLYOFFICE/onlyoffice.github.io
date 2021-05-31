@@ -54,6 +54,7 @@ var PsTextArea;
 	{
 	    txt = text;
         document.getElementById("textarea").innerText = text;
+        updateScroll();
 
         if (!isReadyToTranslate()) {
             console.log('Languages not loaded!');
