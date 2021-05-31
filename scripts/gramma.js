@@ -100,6 +100,7 @@ var PsTextArea;
 	window.Asc.plugin.init = function(text)	{
 		sText = text;
 		document.getElementById("textarea").innerText = text;
+		updateScroll();
 		$("#result").empty();
 		if (!isInit) {
 			init();
