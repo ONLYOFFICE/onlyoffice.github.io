@@ -184,5 +184,5 @@
 /* end loader */
 
 .display-none {
-    display: none;
+    display: none !important;
 }
