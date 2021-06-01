@@ -63,7 +63,9 @@ var PsTextArea;
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
-        var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}'
+        var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}\n'
+        rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+
         var styleTheme = document.createElement('style');
         styleTheme.type = 'text/css';
         styleTheme.innerHTML = rule;
