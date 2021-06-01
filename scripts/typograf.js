@@ -36,6 +36,12 @@ var Ps;
     {
         window.Asc.plugin.onThemeChangedBase(theme);
 
+        var rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+        var styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rule;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+
         $('#floating').css('background', window.Asc.plugin.theme["background-toolbar"]);
         $('.opened, .hidden').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
         $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
