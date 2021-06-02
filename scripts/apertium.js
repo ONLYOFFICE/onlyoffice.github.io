@@ -30,7 +30,7 @@ var PsTextArea;
     var select              = null;
     var selectClone         = null;
     var allPairs            = {};
-    var serviceUrl       = "https://www.apertium.org/"; //paste your service's url address here
+    var serviceUrl          = "https://www.apertium.org/"; //paste your service's url address here
 
     function showLoader(elements, show) {
 
@@ -305,6 +305,7 @@ var PsTextArea;
     function removeCR(text) {
         return text.replace(/\r\n?/g, '');
     };
+
     function selectText(id) {
         var sel, range;
         var el = document.getElementById(id); //get element id
@@ -414,6 +415,12 @@ var PsTextArea;
             })
         });
 
+        var textShower = document.getElementById('txt_shower');
+        textShower.addEventListener('copy', (event) => {
+            const selection = document.getSelection();
+            event.clipboardData.setData('text/plain', selection.toString());
+            event.preventDefault();
+        });
         $('#show_manually').click(function() {
             $(this).hide();
             $('#hide_manually').show();
