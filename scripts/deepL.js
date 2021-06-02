@@ -337,6 +337,13 @@ var PsTextArea;
             updateScroll();
         });
 
+        var textShower = document.getElementById('txt_shower');
+        textShower.addEventListener('copy', (event) => {
+            const selection = document.getSelection();
+            event.clipboardData.setData('text/plain', selection.toString());
+            event.preventDefault();
+        });
+
         function delay(callback, ms) {
             var timer = 0;
             return function() {
