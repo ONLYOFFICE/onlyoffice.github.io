@@ -54,7 +54,7 @@
 				btn.id = "btn_copy";
 				btn.classList.add("btn-text-default");
 				btnReplace.classList.add("btn-text-default");
-				btnReplace.innerHTML = window.Asc.plugin.tr("Replace");
+				btnReplace.innerHTML = window.Asc.plugin.tr("Insert to document");
 				btnReplace.id = "btn_replace";
 				setTimeout(function() {ifr.contentDocument.getElementById("body").appendChild(div);}, 100);
 
