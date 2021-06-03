@@ -416,9 +416,9 @@ var PsTextArea;
         });
 
         var textShower = document.getElementById('txt_shower');
-        textShower.addEventListener('copy', (event) => {
+        textShower.addEventListener('copy', function(event) {
             const selection = document.getSelection();
-            event.clipboardData.setData('text/plain', selection.toString());
+            event.clipboardData.setData('text/html', selection.toString());
             event.preventDefault();
         });
         $('#show_manually').click(function() {
