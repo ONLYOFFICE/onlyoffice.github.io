@@ -1,7 +1,7 @@
 {
-	"Characters without spaces" : "Personajes sin espacios",
-	"Characters" : "Personajes",
-	"Words" : "Palabra",
-	"Paragraphs" : "Apartado",
-	"Select part of the text or the whole text to count words and characters." : "Seleccione parte del texto o el texto completo para contar palabras y caracteres."
+	"Characters without spaces" : "Caracteres sin espacios",
+	"Characters" : "Caracteres",
+	"Words" : "Palabras",
+	"Paragraphs" : "Párrafos",
+	"Select part of the text or the whole text to count words and characters." : "Seleccione parte del texto o todo el texto para contar palabras y caracteres."
 }
