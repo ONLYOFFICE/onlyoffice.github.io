@@ -1,0 +1,73 @@
+{
+    "name": "Apertium",
+    "nameLocale": {
+        "ru": "Apertium",
+        "fr": "Apertium",
+        "es": "Apertium",
+        "de": "Apertium"
+    },
+    "guid": "asc.{9b224050-2354-4c1b-822b-03a97f61c79d}",
+    "version": "1.0",
+
+    "variations": [
+        {
+            "description": "Translator",
+            "descriptionLocale": {
+                "ru": "Apertium",
+                "fr": "Apertium",
+                "es": "Apertium",
+                "de": "Apertium"
+            },
+            "url": "index.html",
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"theme" : "flat",
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					},
+					"default": {
+						"normal": "resources/light/icon.png"
+					}
+				},
+				{
+					"theme" : "flatDark",
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "slide", "cell" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        }
+    ]
+}
