@@ -1,0 +1,225 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>typograf</title>
+	<link rel="stylesheet" href="plugin_style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script src="scripts/deepL.js"></script>
+
+	<style>
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			font-family: "Arial";
+    		font-size: 11px;
+    		font-weight: normal !important;
+		}
+
+		#main-container{
+            height: 100%;
+			display: flex;
+			flex-direction: column;
+            overflow: hidden;
+        }
+        #select_example {
+        	width: calc(100% - 24px);
+        }
+        #save {
+        	width: calc(100% - 24px);
+        	margin: 16px 12px 0 12px;
+        }
+        #reconf {
+        	width: calc(100% - 24px);
+        	margin-left: 12px;
+        	margin-right: 12px;
+        	margin-top: 16px;
+            cursor:pointer;
+            border-bottom: 1px dashed #444444;
+        }
+         #copy {
+        	width:40%;
+        	margin-left: 12px;
+        	margin-top: 16px;
+        	text-align: center;
+        }
+		#paste {
+			float: right;
+			width:40%;
+        	margin-right: 12px;
+        	margin-top: 16px;
+        	text-align: center;
+        }
+        #display {
+        	width:100%;
+        	margin-left: 12px;
+        	font-size: 13px;
+        }
+        .input__head {
+            width: 100%;
+            text-align: left;
+            margin: 16px 12px 0 12px;
+        }
+
+        .header {
+        	font-weight: normal !important;
+        }
+
+        .error {
+        	color: #D9534F;
+        }
+        .error_api {
+        	border: 1px solid #D9534F !important;
+        }
+		.img_error {
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEDSURBVHgBnVLRTcMwEH1nIFKrfhiJIj7NBozgTcgGhAmqTFAyAWETqwvABvQTESTyUQoqbY5zlJSqTaukT7J8su/5ne8eYQNstZ4jiCS8BbOpjl/8UnQS99zbtM6lOpjZYUiMsYQazciZOB64j4c1cWYvImIaowUUI+xNsif6tlem4NXztlLfvZf73F7uKC/o91oVWI2wv7wm6ACndwqMG3QFU6hk604EjMKRoC87fJVyTRcS+7nKJ9OmS9/VurM7ap74g2UicY72an4ccWWA0jWPbYiSF/UnWVI2Z+CyVOx0f0jZKykuQk+qyv3Hp9UmwNmomm09pqkYPl2oZXLu8vXDf54ZXXDvkOajAAAAAElFTkSuQmCC);
+			background-repeat: no-repeat;
+			background-position: right;
+			background-position-x: 98%;
+		}
+		#api input[type=text] {
+			padding-right: 25px;
+		}
+		#button_wrapper {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 50px;
+		}
+		.btn-text-default {
+			display: flex;
+   			align-items: center;
+    		justify-content: center;
+		}
+		#hide_show {
+            width: 130px;
+            margin-top: 16px;
+            margin-bottom: 10px;
+            margin-left: 14px;
+        }
+        #show_manually, #hide_manually {
+            cursor:pointer;
+            border-bottom: 1px dashed #444444;
+        }
+        .noselect {
+		  	-webkit-touch-callout: none; /* iOS Safari */
+		  	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+		  	-khtml-user-select: none;    /* Konqueror */
+		  	-moz-user-select: none;      /* Firefox */
+		  	-ms-user-select: none;       /* Internet Explorer/Edge */
+		  	user-select: none;           /* Non-prefixed version, currently
+										 not supported by any browser */
+		}
+
+	</style>
+</head>
+<body id="body" style="width: 100%;height: 100%; margin: 0;">
+	<div id="loader-container" class="asc-plugin-loader display-none">
+			<div class="asc-loader-image">
+				<div class="asc-loader-title"></div>
+			</div>
+			<div class="asc-loader-title">
+				Loading...
+			</div>
+    </div>
+	<div id="main-container" style="width:100%; height:100%;margin:0;padding:0; display: flex; flex-direction: column;">
+		<div id="api">
+			<div style="margin: 12px"><span>To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-deepl/tree/develop#configuration">Learn more here.</a></div>
+			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+				<label style="margin-left:12px;">API key</label>
+			</div>
+			<input type="text" id="api-value" class="form-control" placeholder="Enter your DeepL API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
+			<button onсlick="" id="save" class="btn-text-default">Save</button>
+		</div>
+		<div id="translator" class="display-none" style="display: flex; flex-direction: column; max-height: 55%;">
+			<div class="input__head">
+				<div style="margin: 0 0 4px 0;">
+					<label class="header">Target language</label>
+				</div>
+				<span class="prefs__locale"><select id="select_example" class="prefs__set-locale select_example" data-title-id="locale" title="Locale">
+					<option value="DE" data-text-id="locale-de">
+					  German
+					</option>
+					<option selected="selected" value="EN-GB" data-text-id="locale-en-GB">
+					  English-GB
+					</option>
+					<option value="EN-US" data-text-id="locale-en-US">
+					  English-US
+					</option>
+					<option value="FR" data-text-id="locale-fr">
+					  French
+					</option>
+					<option value="IT" data-text-id="locale-it">
+					  Italian
+					</option>
+					<option value="JA" data-text-id="locale-ja">
+					  Japanese
+					</option>
+					<option value="ES" data-text-id="locale-es">
+					  Spanish
+					</option>
+					<option value="NL" data-text-id="locale-nl">
+					  Dutch
+					</option>
+					<option value="PL" data-text-id="locale-pl">
+					  Polish
+					</option>
+					<option value="PT-PT" data-text-id="locale-pt-PT">
+					  Portuguese PT
+					</option>
+					<option value="PT-BR" data-text-id="locale-pt-BR">
+					  Portuguese PT
+					</option>
+					<option value="RU" data-text-id="locale-ru">
+					  Russian
+					</option>
+					<option value="ZH" data-text-id="locale-zh">
+					  Chinese
+					</option>
+				</select>
+				</span>
+			</div>
+			<div id="hide_show"><label style="display:none;" id="hide_manually">Hide field</label><label id="show_manually">Enter text manually</label></div>
+			<div id="enter_container" class="form-control" style="position: relative; margin: 16px 12px 0px 12px; min-height: 100px; max-height: 100%; height: fit-content; display:none;">
+				<div id="textarea" contenteditable="true" style="min-width: 95%; max-width: 95%; min-height: 100px; height: fit-content; padding: 0px 15px 15px 3px; outline: none; white-space: normal; float: left; word-wrap: break-word;" ></div>
+			</div>
+		</div>
+
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
+		<div id="display" style="width: calc(100% - 12px); position: relative;">
+			<div id="txt_shower" style="width:calc(100% - 20px); margin-right:8px; white-space: normal; word-wrap: break-word;">
+
+			</div>
+		</div>
+		<div id="vanish_container" class="display-none">
+			<div id="button_wrapper">
+				<div onсlick="" id="copy" class="noselect btn-text-default">Copy</div>
+				<div onсlick="" id="paste" class="noselect btn-text-default">Insert to document</div>
+			</div>
+		</div>
+		<div id="re-api" class="display-none" style="position: absolute; bottom: 10px;">
+			<label id="reconf">Reconfigure API key</label>
+		</div>
+		</div>
+	</div>
+</body>
+</html>
