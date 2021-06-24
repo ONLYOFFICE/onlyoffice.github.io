@@ -282,7 +282,7 @@ var PsTextArea;
 			$('<button>', {
 			    text: "Dismiss",
 			    click: function () {
-					$('#div_'+$(this).data().nIndex).remove();
+					$('#div_'+$(this).data().index).remove();
 					var ind = aResults.findIndex(function(el) {
 						if (el.i === ind) {
 							return true;
