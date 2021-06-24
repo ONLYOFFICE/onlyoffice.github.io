@@ -98,8 +98,17 @@ var PsTextArea;
 
     function DelInvalidChars(arrParas) {
         for (var nPara = 0; nPara < arrParas.length; nPara++) {
-            arrParas[nPara] = arrParas[nPara].replace(/#/gi, '');
-            arrParas[nPara] = arrParas[nPara].replace(/&/gi, '');
+            var sSearch = '?';
+            var replaceWith = '%3F';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '#';
+            replaceWith = '%23';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '&';
+            replaceWith = '%26';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
         }
     };
 
