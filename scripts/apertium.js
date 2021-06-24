@@ -279,8 +279,17 @@ var PsTextArea;
 
     function DelInvalidChars(arrParas) {
         for (var nPara = 0; nPara < arrParas.length; nPara++) {
-            arrParas[nPara] = arrParas[nPara].replace(/#/gi, '');
-            arrParas[nPara] = arrParas[nPara].replace(/&/gi, '');
+            var sSearch = '?';
+            var replaceWith = '%3F';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '#';
+            replaceWith = '%23';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '&';
+            replaceWith = '%26';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
         }
     };
 
@@ -479,14 +488,14 @@ var PsTextArea;
         var txtToTranslate = PrepareTextToSend(allParas);
         iterationCount = 0;
         for (var nText = 0; nText < txtToTranslate.length; nText++) {
-            if (txtToTranslate[nText].Text === "")
+            if (txtToTranslate[nText].Text === "" || txtToTranslate[nText].Text === "?")
                 continue;
             iterationCount++;
         }
 
         for (var nText = 0; nText < txtToTranslate.length; nText++) {
-            if (txtToTranslate[nText].Text === "") {
-                translatedParas[nText] = "";
+            if (txtToTranslate[nText].Text === "" || txtToTranslate[nText].Text === "?") {
+                translatedParas[nText] = txtToTranslate[nText].Text;
                 continue;
             }
             Translate(source_lang, target_lang, txtToTranslate[nText]);
