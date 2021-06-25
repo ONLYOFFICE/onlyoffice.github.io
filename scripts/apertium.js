@@ -94,7 +94,7 @@ var PsTextArea;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
 
         $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
-        $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
         $('#arrow-svg-path').css('fill', theme["text-normal"]);
 
     };
