@@ -62,6 +62,7 @@
 
             "initDataType": "text",
             "initData": "",
+			"isNeedNumbering": false,
 
             "isUpdateOleOnResize": false,
 
