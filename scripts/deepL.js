@@ -79,7 +79,7 @@ var PsTextArea;
         styleTheme.type = 'text/css';
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
-        $('#show_manually, #hide_manually, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('#show_manually, #hide_manually, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
     };
 
     function CreateParams(allParas) {
