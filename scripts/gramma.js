@@ -369,6 +369,9 @@ var PsTextArea;
 		var btn = document.getElementById("check");
 		if (btn)
 			btn.innerHTML = window.Asc.plugin.tr("Check");
+		var btn_insert = document.getElementById("replace");
+		if (btn_insert)
+			btn_insert.innerHTML = window.Asc.plugin.tr("Insert to document");
 	};
 		  
 })(window, undefined);
