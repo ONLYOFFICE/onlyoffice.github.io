@@ -43,7 +43,7 @@ var Ps;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
 
         $('#floating').css('background', window.Asc.plugin.theme["background-toolbar"]);
-        $('.opened, .hidden').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('.opened, .hidden').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
         $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
     };
 
