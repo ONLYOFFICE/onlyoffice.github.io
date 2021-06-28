@@ -213,10 +213,8 @@ if (Map.prototype.grammalecte === undefined) {
     Map.prototype.grammalecte = true;
 }
 
-var gc_functions   = window.grammalecte.gc_functions;
 var gc_options     = window.grammalecte.gc_options;
 var gc_rules       = window.grammalecte.gc_rules;
-var gc_rules_graph = window.grammalecte.gc_rules_graph;
 var cregex         = window.grammalecte.cregex;
 var text           = window.grammalecte.text;
 
@@ -258,9 +256,11 @@ window.grammalecte["gc_engine"] = {
             } else {
                 this.oSpellChecker = new SpellChecker("fr", sPath, "fr-allvars.json", "", "");
             }
+
             this.oSpellChecker.activateStorage();
             this.oTokenizer = this.oSpellChecker.getTokenizer();
-            gc_functions.load(sContext, this.oSpellChecker);
+
+            window.grammalecte.gc_functions.load(sContext, this.oSpellChecker);
             gc_options.load(sContext)
             this.oOptionsColors = gc_options.getOptionsColors(sContext, sColorType);
         }
@@ -277,9 +277,9 @@ window.grammalecte["gc_engine"] = {
 
     getRules: function (bParagraph) {
         if (!bParagraph) {
-            return gc_rules.lSentenceRules;
+            return window.grammalecte.gc_rules.lSentenceRules;
         }
-        return gc_rules.lParagraphRules;
+        return window.grammalecte.gc_rules.lParagraphRules;
     },
 
     ignoreRule: function (sRuleId) {
@@ -404,7 +404,7 @@ class TextParser {
         let sText = this._getCleanText();
         let lSentences = [];
         let oSentence = null;
-        for (let [iStart, iEnd] of text.getSentenceBoundaries(sText)) {
+        for (let [iStart, iEnd] of window.grammalecte.text.getSentenceBoundaries(sText)) {
             try {
                 this.sSentence = sText.slice(iStart, iEnd);
                 this.sSentence0 = this.sText0.slice(iStart, iEnd);
@@ -488,7 +488,7 @@ class TextParser {
                         if (bDebug) {
                             console.log(">>>> GRAPH: " + sGraphName + " " + sLineId);
                         }
-                        sText = this.parseGraph(gc_rules_graph.dAllGraph[sGraphName], sCountry, dOptions, bShowRuleId, bDebug, bContext);
+                        sText = this.parseGraph(window.grammalecte.gc_rules_graph.dAllGraph[sGraphName], sCountry, dOptions, bShowRuleId, bDebug, bContext);
                     }
                 }
             }
@@ -500,7 +500,7 @@ class TextParser {
                             for (let [sFuncCond, cActionType, sWhat, ...eAct] of lActions) {
                                 // action in lActions: [ condition, action type, replacement/suggestion/action[, iGroup[, message, URL]] ]
                                 try {
-                                    bCondMemo = (!sFuncCond || gc_functions[sFuncCond](sText, sText0, m, this.dTokenPos, sCountry, bCondMemo));
+                                    bCondMemo = (!sFuncCond || window.grammalecte.gc_functions[sFuncCond](sText, sText0, m, this.dTokenPos, sCountry, bCondMemo));
                                     if (bCondMemo) {
                                         switch (cActionType) {
                                             case "-":
@@ -525,7 +525,7 @@ class TextParser {
                                             case "=":
                                                 // disambiguation
                                                 //console.log("-> disambiguation by " + sLineId + "\nzRegex: " + zRegex.source);
-                                                gc_functions[sWhat](sText, m, this.dTokenPos);
+                                                window.grammalecte.gc_functions[sWhat](sText, m, this.dTokenPos);
                                                 if (bDebug) {
                                                     console.log("= " + m[0] + "  # " + sLineId, "\nDA:", this.dTokenPos);
                                                 }
@@ -849,7 +849,7 @@ class TextParser {
                     if (bDebug) {
                         console.log("   >TRY: " + sRuleId + " " + sLineId);
                     }
-                    let [_, sOption, sFuncCond, cActionType, sWhat, ...eAct] = gc_rules_graph.dRule[sRuleId];
+                    let [_, sOption, sFuncCond, cActionType, sWhat, ...eAct] = window.grammalecte.gc_rules_graph.dRule[sRuleId];
                     // Suggestion    [ option, condition, "-", replacement/suggestion/action, iTokenStart, iTokenEnd, cStartLimit, cEndLimit, bCaseSvty, nPriority, sMessage, iURL ]
                     // TextProcessor [ option, condition, "~", replacement/suggestion/action, iTokenStart, iTokenEnd, bCaseSvty ]
                     // Disambiguator [ option, condition, "=", replacement/suggestion/action ]
@@ -857,7 +857,7 @@ class TextParser {
                     // Immunity      [ option, condition, "!", "",                            iTokenStart, iTokenEnd ]
                     // Test          [ option, condition, ">", "" ]
                     if (!sOption || dOptions.gl_get(sOption, false)) {
-                        bCondMemo = !sFuncCond || gc_functions[sFuncCond](this.lTokens, nTokenOffset, nLastToken, sCountry, bCondMemo, this.dTags, this.sSentence, this.sSentence0);
+                        bCondMemo = !sFuncCond || window.grammalecte.gc_functions[sFuncCond](this.lTokens, nTokenOffset, nLastToken, sCountry, bCondMemo, this.dTags, this.sSentence, this.sSentence0);
                         if (bCondMemo) {
                             if (cActionType == "-") {
                                 // grammar error
@@ -869,7 +869,7 @@ class TextParser {
                                     let nErrorEnd = this.nOffsetWithinParagraph + ((cEndLimit == ">") ? this.lTokens[nTokenErrorEnd]["nEnd"] : this.lTokens[nTokenErrorEnd]["nStart"]);
                                     if (!this.dError.has(nErrorStart) || nPriority > this.dErrorPriority.gl_get(nErrorStart, -1)) {
                                         this.dError.set(nErrorStart, this._createErrorFromTokens(sWhat, nTokenOffset, nLastToken, nTokenErrorStart, nErrorStart, nErrorEnd, sLineId, sRuleId, bCaseSvty,
-                                                                                                 sMessage, gc_rules_graph.dURL[iURL], bShowRuleId, sOption, bContext));
+                                                                                                 sMessage, window.grammalecte.gc_rules_graph.dURL[iURL], bShowRuleId, sOption, bContext));
                                         this.dErrorPriority.set(nErrorStart, nPriority);
                                         this.dSentenceError.set(nErrorStart, this.dError.get(nErrorStart));
                                         if (bDebug) {
@@ -890,7 +890,7 @@ class TextParser {
                             }
                             else if (cActionType == "=") {
                                 // disambiguation
-                                gc_functions[sWhat](this.lTokens, nTokenOffset, nLastToken);
+                                window.grammalecte.gc_functions[sWhat](this.lTokens, nTokenOffset, nLastToken);
                                 if (bDebug) {
                                     console.log(`    DISAMBIGUATOR: (${sWhat})  [${this.lTokens[nTokenOffset+1]["sValue"]}:${this.lTokens[nLastToken]["sValue"]}]`);
                                 }
@@ -973,7 +973,7 @@ class TextParser {
         // suggestions
         let lSugg = [];
         if (sSugg.startsWith("=")) {
-            sSugg = gc_functions[sSugg.slice(1)](sText, m);
+            sSugg = window.grammalecte.gc_functions[sSugg.slice(1)](sText, m);
             lSugg = (sSugg) ? sSugg.replace(/ /g, " ").split("|") : [];
         } else if (sSugg == "_") {
             lSugg = [];
@@ -984,7 +984,7 @@ class TextParser {
             lSugg = (m[iGroup].gl_isUpperCase()) ? lSugg.map((s) => s.toUpperCase()) : capitalizeArray(lSugg);
         }
         // Message
-        let sMessage = (sMsg.startsWith("=")) ? gc_functions[sMsg.slice(1)](sText, m) : sMsg.gl_expand(m);
+        let sMessage = (sMsg.startsWith("=")) ? window.grammalecte.gc_functions[sMsg.slice(1)](sText, m) : sMsg.gl_expand(m);
         if (bShowRuleId) {
             sMessage += "  #" + sLineId + " / " + sRuleId;
         }
@@ -996,7 +996,7 @@ class TextParser {
         // suggestions
         let lSugg = [];
         if (sSugg.startsWith("=")) {
-            sSugg = gc_functions[sSugg.slice(1)](this.lTokens, nTokenOffset, nLastToken);
+            sSugg = window.grammalecte.gc_functions[sSugg.slice(1)](this.lTokens, nTokenOffset, nLastToken);
             lSugg = (sSugg) ? sSugg.replace(/ /g, " ").split("|") : [];
         } else if (sSugg == "_") {
             lSugg = [];
@@ -1007,7 +1007,7 @@ class TextParser {
             lSugg = (this.sSentence.slice(nStart, nEnd).gl_isUpperCase()) ? lSugg.map((s) => s.toUpperCase()) : capitalizeArray(lSugg);
         }
         // Message
-        let sMessage = (sMsg.startsWith("=")) ? gc_functions[sMsg.slice(1)](this.lTokens, nTokenOffset, nLastToken) : this._expand(sMsg, nTokenOffset, nLastToken);
+        let sMessage = (sMsg.startsWith("=")) ? window.grammalecte.gc_functions[sMsg.slice(1)](this.lTokens, nTokenOffset, nLastToken) : this._expand(sMsg, nTokenOffset, nLastToken);
         if (bShowRuleId) {
             sMessage += "  #" + sLineId + " / " + sRuleId;
         }
@@ -1061,7 +1061,7 @@ class TextParser {
             sNew = "@".repeat(ln);
         }
         else if (sRepl.slice(0,1) === "=") {
-            sNew = gc_functions[sRepl.slice(1)](sText, m);
+            sNew = window.grammalecte.gc_functions[sRepl.slice(1)](sText, m);
             sNew = sNew + " ".repeat(ln-sNew.length);
             if (bUppercase && m[iGroup].slice(0,1).gl_isUpperCase()) {
                 sNew = sNew.gl_toCapitalize();
@@ -1107,7 +1107,7 @@ class TextParser {
         }
         else {
             if (sWhat.startsWith("=")) {
-                sWhat = gc_functions[sWhat.slice(1)](this.lTokens, nTokenOffset, nLastToken);
+                sWhat = window.grammalecte.gc_functions[sWhat.slice(1)](this.lTokens, nTokenOffset, nLastToken);
             } else {
                 sWhat = this._expand(sWhat, nTokenOffset, nLastToken);
             }
