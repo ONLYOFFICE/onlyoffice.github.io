@@ -209,10 +209,7 @@ if (Map.prototype.grammalecte === undefined) {
 
 
 
-var gc_engine;
 var gc_options = window.grammalecte["gc_options"];
-
-
 
 let _sAppContext = "JavaScript";        // what software is running
 let _oSpellChecker = null;
@@ -317,7 +314,7 @@ function info (dTokenPos, aWord) {
         console.log("> nothing to find");
         return true;
     }
-    let lMorph = gc_engine.oSpellChecker.getMorph(aWord[1]);
+    let lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(aWord[1]);
     if (lMorph.length === 0) {
         console.log("> not in dictionary");
         return true;
@@ -334,7 +331,7 @@ function morph (dTokenPos, aWord, sPattern, sNegPattern, bNoWord=false) {
     if (!aWord) {
         return bNoWord;
     }
-    let lMorph = (dTokenPos.has(aWord[0])  &&  dTokenPos.get(aWord[0]))["lMorph"] ? dTokenPos.get(aWord[0])["lMorph"] : gc_engine.oSpellChecker.getMorph(aWord[1]);
+    let lMorph = (dTokenPos.has(aWord[0])  &&  dTokenPos.get(aWord[0]))["lMorph"] ? dTokenPos.get(aWord[0])["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(aWord[1]);
     if (lMorph.length === 0) {
         return false;
     }
@@ -356,7 +353,7 @@ function morph (dTokenPos, aWord, sPattern, sNegPattern, bNoWord=false) {
 
 function analyse (sWord, sPattern, sNegPattern) {
     // analyse a word, returns True if not sNegPattern in word morphologies and sPattern in word morphologies (disambiguation off)
-    let lMorph = gc_engine.oSpellChecker.getMorph(sWord);
+    let lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord);
     if (lMorph.length === 0) {
         return false;
     }
@@ -407,7 +404,6 @@ function g_value (oToken, sValues, nLeft=null, nRight=null) {
 
 function g_morph (oToken, sPattern, sNegPattern="", nLeft=null, nRight=null, bMemorizeMorph=true) {
     // analyse a token, return True if <sNegPattern> not in morphologies and <sPattern> in morphologies
-    gc_engine = window.grammalecte["gc_engine"];
     let lMorph;
     if (oToken.hasOwnProperty("lMorph")) {
         lMorph = oToken["lMorph"];
@@ -415,12 +411,12 @@ function g_morph (oToken, sPattern, sNegPattern="", nLeft=null, nRight=null, bMe
     else {
         if (nLeft !== null) {
             let sValue = (nRight !== null) ? oToken["sValue"].slice(nLeft, nRight) : oToken["sValue"].slice(nLeft);
-            lMorph = gc_engine.oSpellChecker.getMorph(sValue);
+            lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(sValue);
             if (bMemorizeMorph) {
                 oToken["lMorph"] = lMorph;
             }
         } else {
-            lMorph = gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
+            lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
         }
     }
     if (lMorph.length == 0) {
@@ -447,12 +443,12 @@ function g_morph0 (oToken, sPattern, sNegPattern="", nLeft=null, nRight=null, bM
     let lMorph;
     if (nLeft !== null) {
         let sValue = (nRight !== null) ? oToken["sValue"].slice(nLeft, nRight) : oToken["sValue"].slice(nLeft);
-        lMorph = gc_engine.oSpellChecker.getMorph(sValue);
+        lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(sValue);
         if (bMemorizeMorph) {
             oToken["lMorph"] = lMorph;
         }
     } else {
-        lMorph = gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
+        lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
     }
     if (lMorph.length == 0) {
         return false;
@@ -475,7 +471,7 @@ function g_morph0 (oToken, sPattern, sNegPattern="", nLeft=null, nRight=null, bM
 
 function g_morph2 (oToken1, oToken2, cMerger, sPattern, sNegPattern="", bSetMorph=true) {
     // merge two token values, return True if <sNegPattern> not in morphologies and <sPattern> in morphologies (disambiguation off)
-    let lMorph = gc_engine.oSpellChecker.getMorph(oToken1["sValue"] + cMerger + oToken2["sValue"]);
+    let lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken1["sValue"] + cMerger + oToken2["sValue"]);
     if (lMorph.length == 0) {
         return false;
     }
@@ -563,7 +559,7 @@ function select (dTokenPos, nPos, sWord, sPattern, sNegPattern="") {
         console.log("Error. There should be a token at this position: ", nPos);
         return true;
     }
-    let lMorph = gc_engine.oSpellChecker.getMorph(sWord);
+    let lMorph = window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord);
     if (lMorph.length === 0  ||  lMorph.length === 1) {
         return true;
     }
@@ -598,9 +594,9 @@ function define (dTokenPos, nPos, sMorphs) {
 //// Disambiguation for graph rules
 
 function g_select (oToken, sPattern, sNegPattern="") {
-    gc_engine = window.grammalecte["gc_engine"];
+    window.grammalecte.gc_engine = window.grammalecte["window.grammalecte.gc_engine"];
     // select morphologies for <oToken> according to <sPattern>, always return true
-    let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
+    let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
     if (lMorph.length === 0  || lMorph.length === 1) {
         return true;
     }
@@ -628,7 +624,7 @@ function g_select (oToken, sPattern, sNegPattern="") {
 
 function g_addmorph (oToken, sNewMorph) {
     // Disambiguation: add a morphology to a token
-    let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
+    let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
     lMorph.push(...sNewMorph.split("|"));
     oToken["lMorph"] = lMorph;
     return true;
@@ -636,7 +632,7 @@ function g_addmorph (oToken, sNewMorph) {
 
 function g_rewrite (oToken, sToReplace, sReplace, bRegEx=false) {
     // Disambiguation: rewrite morphologies
-    let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
+    let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
     if (bRegEx) {
         oToken["lMorph"] = lMorph.map(sMorph => sMorph.replace(new RegExp(sToReplace), sReplace));
     }
@@ -657,7 +653,7 @@ function g_definefrom (oToken, nLeft=null, nRight=null) {
     if (nLeft !== null) {
         sValue = (nRight !== null) ? sValue.slice(nLeft, nRight) : sValue.slice(nLeft);
     }
-    oToken["lMorph"] = gc_engine.oSpellChecker.getMorph(sValue);
+    oToken["lMorph"] = window.grammalecte.gc_engine.oSpellChecker.getMorph(sValue);
     return true;
 }
 
@@ -693,16 +689,16 @@ function g_morphVC (oToken, sPattern, sNegPattern="") {
 
 function apposition (sWord1, sWord2) {
     // returns true if nom + nom (no agreement required)
-    return sWord2.length < 2 || (cregex.mbNomNotAdj(gc_engine.oSpellChecker.getMorph(sWord2)) && cregex.mbPpasNomNotAdj(gc_engine.oSpellChecker.getMorph(sWord1)));
+    return sWord2.length < 2 || (cregex.mbNomNotAdj(window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord2)) && cregex.mbPpasNomNotAdj(window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord1)));
 }
 
 function g_agreement (oToken1, oToken2, bNotOnlyNames=true) {
     // check agreement between <oToken1> and <oToken2>
-    let lMorph1 = oToken1.hasOwnProperty("lMorph") ? oToken1["lMorph"] : gc_engine.oSpellChecker.getMorph(oToken1["sValue"]);
+    let lMorph1 = oToken1.hasOwnProperty("lMorph") ? oToken1["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken1["sValue"]);
     if (lMorph1.length === 0) {
         return true;
     }
-    let lMorph2 = oToken2.hasOwnProperty("lMorph") ? oToken2["lMorph"] : gc_engine.oSpellChecker.getMorph(oToken2["sValue"]);
+    let lMorph2 = oToken2.hasOwnProperty("lMorph") ? oToken2["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken2["sValue"]);
     if (lMorph2.length === 0) {
         return true;
     }
@@ -723,8 +719,8 @@ function mbUnit (s) {
 }
 
 function queryNamesPOS (sWord1, sWord2) {
-    let lMorph1 = gc_engine.oSpellChecker.getMorph(sWord1);
-    let lMorph2 = gc_engine.oSpellChecker.getMorph(sWord2);
+    let lMorph1 = window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord1);
+    let lMorph2 = window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord2);
     if (lMorph1.length == 0 || lMorph2.length == 0) {
         return ":N:e:p";
     }
@@ -880,12 +876,12 @@ function suggVerb (sFlex, sWho, bVC=false, funcSugg2=null, ...args) {
         [sFlex, sSfx] = splitVerb(sFlex);
     }
     let aSugg = new Set();
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         let tTags = conj._getTags(sStem);
         if (tTags) {
             // we get the tense
             let aTense = new Set();
-            for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+            for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
                 let m;
                 let zVerb = new RegExp (">"+sStem+"/.*?(:(?:Y|I[pqsf]|S[pq]|K|P|Q))", "g");
                 while ((m = zVerb.exec(sMorph)) !== null) {
@@ -945,7 +941,7 @@ function joinVerbAndSuffix (sFlex, sSfx) {
 
 function suggVerbPpas (sFlex, sWhat=null) {
     let aSugg = new Set();
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         let tTags = conj._getTags(sStem);
         if (tTags) {
             if (!sWhat) {
@@ -995,7 +991,7 @@ function suggVerbPpas (sFlex, sWhat=null) {
 
 function suggVerbTense (sFlex, sTense, sWho) {
     let aSugg = new Set();
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         if (conj.hasConj(sStem, sTense, sWho)) {
             aSugg.add(conj.getConj(sStem, sTense, sWho));
         }
@@ -1009,7 +1005,7 @@ function suggVerbTense (sFlex, sTense, sWho) {
 function suggVerbFrom (sStem, sFlex, sWho="") {
     "conjugate <sStem> according to <sFlex> (and eventually <sWho>)"
     let aSugg = new Set();
-    for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+    for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
         let lTenses = [ ...sMorph.matchAll(/:(?:Y|I[pqsf]|S[pq]|K|P)/g) ];
         if (sWho) {
             for (let [sTense, ] of lTenses) {
@@ -1041,7 +1037,7 @@ function suggVerbImpe (sFlex, bVC=false) {
         [sFlex, sSfx] = splitVerb(sFlex);
     }
     let aSugg = new Set();
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         let tTags = conj._getTags(sStem);
         if (tTags) {
             if (conj._hasConjWithTags(tTags, ":E", ":2s")) {
@@ -1065,7 +1061,7 @@ function suggVerbImpe (sFlex, bVC=false) {
 }
 
 function suggVerbInfi (sFlex) {
-    return gc_engine.oSpellChecker.getLemma(sFlex).filter(sStem => conj.isVerb(sStem)).join("|");
+    return window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex).filter(sStem => conj.isVerb(sStem)).join("|");
 }
 
 
@@ -1089,7 +1085,7 @@ function suggVerbMode (sFlex, cMode, sSuj) {
     }
     let sWho = _dQuiEst.gl_get(sSuj.toLowerCase(), sSuj);
     let aSugg = new Set();
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         let tTags = conj._getTags(sStem);
         if (tTags) {
             for (let sTense of lMode) {
@@ -1114,33 +1110,33 @@ function suggPlur (sFlex, bSelfSugg=false) {
     // returns plural forms assuming sFlex is singular
     let aSugg = new Set();
     if (sFlex.endsWith("l")) {
-        if (sFlex.endsWith("al") && sFlex.length > 2 && gc_engine.oSpellChecker.isValid(sFlex.slice(0,-1)+"ux")) {
+        if (sFlex.endsWith("al") && sFlex.length > 2 && window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-1)+"ux")) {
             aSugg.add(sFlex.slice(0,-1)+"ux");
         }
-        if (sFlex.endsWith("ail") && sFlex.length > 3 && gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"ux")) {
+        if (sFlex.endsWith("ail") && sFlex.length > 3 && window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"ux")) {
             aSugg.add(sFlex.slice(0,-2)+"ux");
         }
     }
     if (sFlex.endsWith("L")) {
-        if (sFlex.endsWith("AL") && sFlex.length > 2 && gc_engine.oSpellChecker.isValid(sFlex.slice(0,-1)+"UX")) {
+        if (sFlex.endsWith("AL") && sFlex.length > 2 && window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-1)+"UX")) {
             aSugg.add(sFlex.slice(0,-1)+"UX");
         }
-        if (sFlex.endsWith("AIL") && sFlex.length > 3 && gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"UX")) {
+        if (sFlex.endsWith("AIL") && sFlex.length > 3 && window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"UX")) {
             aSugg.add(sFlex.slice(0,-2)+"UX");
         }
     }
     if (sFlex.slice(-1).gl_isLowerCase()) {
-        if (gc_engine.oSpellChecker.isValid(sFlex+"s")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex+"s")) {
             aSugg.add(sFlex+"s");
         }
-        if (gc_engine.oSpellChecker.isValid(sFlex+"x")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex+"x")) {
             aSugg.add(sFlex+"x");
         }
     } else {
-        if (gc_engine.oSpellChecker.isValid(sFlex+"S")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex+"S")) {
             aSugg.add(sFlex+"S");
         }
-        if (gc_engine.oSpellChecker.isValid(sFlex+"X")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex+"X")) {
             aSugg.add(sFlex+"X");
         }
     }
@@ -1161,22 +1157,22 @@ function suggSing (sFlex, bSelfSugg=true) {
     // returns singular forms assuming sFlex is plural
     let aSugg = new Set();
     if (sFlex.endsWith("ux")) {
-        if (gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"l")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"l")) {
             aSugg.add(sFlex.slice(0,-2)+"l");
         }
-        if (gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"il")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"il")) {
             aSugg.add(sFlex.slice(0,-2)+"il");
         }
     }
     if (sFlex.endsWith("UX")) {
-        if (gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"L")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"L")) {
             aSugg.add(sFlex.slice(0,-2)+"L");
         }
-        if (gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"IL")) {
+        if (window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-2)+"IL")) {
             aSugg.add(sFlex.slice(0,-2)+"IL");
         }
     }
-    if ((sFlex.endsWith("s") || sFlex.endsWith("x") || sFlex.endsWith("S") || sFlex.endsWith("X")) && gc_engine.oSpellChecker.isValid(sFlex.slice(0,-1))) {
+    if ((sFlex.endsWith("s") || sFlex.endsWith("x") || sFlex.endsWith("S") || sFlex.endsWith("X")) && window.grammalecte.gc_engine.oSpellChecker.isValid(sFlex.slice(0,-1))) {
         aSugg.add(sFlex.slice(0,-1));
     }
     if (bSelfSugg && aSugg.size == 0) {
@@ -1192,7 +1188,7 @@ function suggSing (sFlex, bSelfSugg=true) {
 function suggMasSing (sFlex, bSuggSimil=false) {
     // returns masculine singular forms
     let aSugg = new Set();
-    for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+    for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
         if (!sMorph.includes(":V")) {
             // not a verb
             if (sMorph.includes(":m") || sMorph.includes(":e")) {
@@ -1228,7 +1224,7 @@ function suggMasSing (sFlex, bSuggSimil=false) {
 function suggMasPlur (sFlex, bSuggSimil=false) {
     // returns masculine plural forms
     let aSugg = new Set();
-    for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+    for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
         if (!sMorph.includes(":V")) {
             // not a verb
             if (sMorph.includes(":m") || sMorph.includes(":e")) {
@@ -1269,7 +1265,7 @@ function suggMasPlur (sFlex, bSuggSimil=false) {
 function suggFemSing (sFlex, bSuggSimil=false) {
     // returns feminine singular forms
     let aSugg = new Set();
-    for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+    for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
         if (!sMorph.includes(":V")) {
             // not a verb
             if (sMorph.includes(":f") || sMorph.includes(":e")) {
@@ -1303,7 +1299,7 @@ function suggFemSing (sFlex, bSuggSimil=false) {
 function suggFemPlur (sFlex, bSuggSimil=false) {
     // returns feminine plural forms
     let aSugg = new Set();
-    for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+    for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
         if (!sMorph.includes(":V")) {
             // not a verb
             if (sMorph.includes(":f") || sMorph.includes(":e")) {
@@ -1336,7 +1332,7 @@ function suggFemPlur (sFlex, bSuggSimil=false) {
 
 function suggAgree (sFlexDst, sFlexSrc) {
     // returns suggestions for <sFlexDst> that matches agreement with <sFlexSrc>
-    let lMorphSrc = gc_engine.oSpellChecker.getMorph(sFlexSrc);
+    let lMorphSrc = window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlexSrc);
     if (lMorphSrc.length === 0) {
         return "";
     }
@@ -1373,7 +1369,7 @@ function suggAgree (sFlexDst, sFlexSrc) {
 
 function g_suggAgree (oTokenDst, oTokenSrc) {
     // returns suggestions for <oTokenDst> that matches agreement with <oTokenSrc>
-    let lMorphSrc = oTokenSrc.hasOwnProperty("lMorph") ? oTokenSrc["lMorph"] : gc_engine.oSpellChecker.getMorph(oTokenSrc["sValue"]);
+    let lMorphSrc = oTokenSrc.hasOwnProperty("lMorph") ? oTokenSrc["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oTokenSrc["sValue"]);
     if (lMorphSrc.length === 0) {
         return "";
     }
@@ -1409,7 +1405,7 @@ function g_suggAgree (oTokenDst, oTokenSrc) {
 }
 
 function hasFemForm (sFlex) {
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         if (mfsp.isMasForm(sStem) || conj.hasConj(sStem, ":Q", ":f:s")) {
             return true;
         }
@@ -1421,7 +1417,7 @@ function hasFemForm (sFlex) {
 }
 
 function hasMasForm (sFlex) {
-    for (let sStem of gc_engine.oSpellChecker.getLemma(sFlex)) {
+    for (let sStem of window.grammalecte.gc_engine.oSpellChecker.getLemma(sFlex)) {
         if (mfsp.isMasForm(sStem) || conj.hasConj(sStem, ":Q", ":m:s")) {
             // what has a feminine form also has a masculine form
             return true;
@@ -1436,7 +1432,7 @@ function hasMasForm (sFlex) {
 function switchGender (sFlex, bPlur=null) {
     let aSugg = new Set();
     if (bPlur === null) {
-        for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+        for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
             if (sMorph.includes(":f")) {
                 if (sMorph.includes(":s")) {
                     aSugg.add(suggMasSing(sFlex));
@@ -1458,7 +1454,7 @@ function switchGender (sFlex, bPlur=null) {
             }
         }
     } else if (bPlur) {
-        for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+        for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
             if (sMorph.includes(":f")) {
                 aSugg.add(suggMasPlur(sFlex));
             } else if (sMorph.includes(":m")) {
@@ -1466,7 +1462,7 @@ function switchGender (sFlex, bPlur=null) {
             }
         }
     } else {
-        for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+        for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
             if (sMorph.includes(":f")) {
                 aSugg.add(suggMasSing(sFlex));
             } else if (sMorph.includes(":m")) {
@@ -1482,7 +1478,7 @@ function switchGender (sFlex, bPlur=null) {
 
 function switchPlural (sFlex) {
     let aSugg = new Set();
-    for (let sMorph of gc_engine.oSpellChecker.getMorph(sFlex)) {
+    for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sFlex)) {
         if (sMorph.includes(":s")) {
             aSugg.add(suggPlur(sFlex));
         } else if (sMorph.includes(":p")) {
@@ -1507,7 +1503,7 @@ function suggSimil (sWord, sPattern=null, bSubst=false, bVC=false) {
     }
     let aSugg = phonet.selectSimil(sWord, sPattern);
     if (aSugg.size === 0 && bSubst) {
-        for (let sMorph of gc_engine.oSpellChecker.getMorph(sWord)) {
+        for (let sMorph of window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord)) {
             if (sMorph.includes(":V")) {
                 let sInfi = sMorph.slice(1, sMorph.indexOf("/"));
                 if (sPattern) {
@@ -1544,7 +1540,7 @@ function suggCeOrCet (sWord) {
 }
 
 function suggLesLa (sWord) {
-    if (gc_engine.oSpellChecker.getMorph(sWord).some(s  =>  s.includes(":p"))) {
+    if (window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord).some(s  =>  s.includes(":p"))) {
         return "les|la";
     }
     return "la";
@@ -1706,7 +1702,7 @@ window.grammalecte["gc_functions"] = {
         return m[0].replace(/\./g, "").replace(/-/g,"");
     },
     _c_p_prénom_lettre_point_patronyme_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return morph(dTokenPos, [m.start[1], m[1]], ":M[12]") && (morph(dTokenPos, [m.start[3], m[3]], ":(?:M[12]|V)") || ! gc_engine.oSpellChecker.isValid(m[3]));
+        return morph(dTokenPos, [m.start[1], m[1]], ":M[12]") && (morph(dTokenPos, [m.start[3], m[3]], ":(?:M[12]|V)") || ! window.grammalecte.gc_engine.oSpellChecker.isValid(m[3]));
     },
     _c_p_prénom_lettre_point_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
         return morph(dTokenPos, [m.start[1], m[1]], ":M[12]") && look(sSentence.slice(m.end[0]), "^\\W+[a-zéèêîïâ]");
@@ -1838,10 +1834,10 @@ window.grammalecte["gc_functions"] = {
         return ! m[1].gl_isDigit();
     },
     _c_typo_espace_manquant_après3_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return (m[1].length > 1 && ! m[1].slice(0,1).gl_isDigit() && gc_engine.oSpellChecker.isValid(m[1])) || look(sSentence.slice(m.end[0]), "^’");
+        return (m[1].length > 1 && ! m[1].slice(0,1).gl_isDigit() && window.grammalecte.gc_engine.oSpellChecker.isValid(m[1])) || look(sSentence.slice(m.end[0]), "^’");
     },
     _c_typo_espace_manquant_après4_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return m[1].slice(0,1).gl_isUpperCase() || m[1].length > 5 || ! m[1].gl_isAlpha() || (m[1].length > 1 && gc_engine.oSpellChecker.isValid(m[1]));
+        return m[1].slice(0,1).gl_isUpperCase() || m[1].length > 5 || ! m[1].gl_isAlpha() || (m[1].length > 1 && window.grammalecte.gc_engine.oSpellChecker.isValid(m[1]));
     },
     _s_typo_point_après_titre_1: function (sSentence, m) {
         return m[1].slice(0,-1);
@@ -1889,7 +1885,7 @@ window.grammalecte["gc_functions"] = {
         return ! bCondMemo;
     },
     _c_unit_nbsp_avant_unités2_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return morph(dTokenPos, [m.start[3], m[3]], ";S", ":[VCR]") || mbUnit(m[3]) || ! gc_engine.oSpellChecker.isValid(m[3]);
+        return morph(dTokenPos, [m.start[3], m[3]], ";S", ":[VCR]") || mbUnit(m[3]) || ! window.grammalecte.gc_engine.oSpellChecker.isValid(m[3]);
     },
     _c_unit_nbsp_avant_unités2_2: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
         return option("num");
@@ -1901,7 +1897,7 @@ window.grammalecte["gc_functions"] = {
         return ! bCondMemo;
     },
     _c_unit_nbsp_avant_unités3_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return (m[2].length > 4 && ! gc_engine.oSpellChecker.isValid(m[3])) || morph(dTokenPos, [m.start[3], m[3]], ";S", ":[VCR]") || mbUnit(m[3]);
+        return (m[2].length > 4 && ! window.grammalecte.gc_engine.oSpellChecker.isValid(m[3])) || morph(dTokenPos, [m.start[3], m[3]], ";S", ":[VCR]") || mbUnit(m[3]);
     },
     _c_unit_nbsp_avant_unités3_2: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
         return option("num");
@@ -2030,7 +2026,7 @@ window.grammalecte["gc_functions"] = {
         return m[1].toLowerCase();
     },
     _c_mots_composés_inconnus_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return ! gc_engine.oSpellChecker.isValid(m[0]) && ! re.search("(?i)-(?:je|tu|on|nous|vous|ie?ls?|elles?|ce|là|ci|les?|la|leur|une?s|moi|toi|en|y)$", m[0]);
+        return ! window.grammalecte.gc_engine.oSpellChecker.isValid(m[0]) && ! re.search("(?i)-(?:je|tu|on|nous|vous|ie?ls?|elles?|ce|là|ci|les?|la|leur|une?s|moi|toi|en|y)$", m[0]);
     },
     _c_ocr_caractères_rares_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
         return m[0] != "<" && m[0] != ">";
@@ -2087,7 +2083,7 @@ window.grammalecte["gc_functions"] = {
         return ! morph(dTokenPos, [m.start[0], m[0]], ":") && morph(dTokenPos, [m.start[1], m[1]], ":");
     },
     _c_tu_trait_union_douteux_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return gc_engine.oSpellChecker.isValid(m[1]+"-"+m[2]) && analyse(m[1]+"-"+m[2], ":");
+        return window.grammalecte.gc_engine.oSpellChecker.isValid(m[1]+"-"+m[2]) && analyse(m[1]+"-"+m[2], ":");
     },
     _c_tu_t_euphonique_incorrect_1: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
         return re.search("(?i)^(?:ie?ls|elles|tu)$", m[2]);
@@ -2111,7 +2107,7 @@ window.grammalecte["gc_functions"] = {
         return ! m[1].gl_isDigit() && ! m[2].gl_isDigit() && ! morph(dTokenPos, [m.start[2], m[2]], ">là|:G") && ! morph(dTokenPos, [m.start[0], m[0]], ":");
     },
     _c_mc_mot_composé_2: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
-        return gc_engine.oSpellChecker.isValid(m[1]+m[2]);
+        return window.grammalecte.gc_engine.oSpellChecker.isValid(m[1]+m[2]);
     },
     _c_mc_mot_composé_3: function (sSentence, sSentence0, m, dTokenPos, sCountry, bCondMemo) {
         return ! bCondMemo && ! re.search("(?i)^(?:ex|mi|quasi|semi|non|demi|pro|anti|multi|pseudo|proto|extra)$", m[1]);
@@ -3062,19 +3058,19 @@ window.grammalecte["gc_functions"] = {
         return lToken[nTokenOffset+1]["sValue"].gl_isTitle() && look(sSentence.slice(0,lToken[1+nTokenOffset]["nStart"]), "[a-zA-Zà-öÀ-Ö0-9_ø-ÿØ-ßĀ-ʯﬁ-ﬆᴀ-ᶿ]") && ! g_morph(lToken[nTokenOffset+1], ">V");
     },
     _g_cond_ocr_29: function (lToken, nTokenOffset, nLastToken, sCountry, bCondMemo, dTags, sSentence, sSentence0) {
-        return gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"]) && gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"].slice(1));
+        return window.grammalecte.gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"]) && window.grammalecte.gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"].slice(1));
     },
     _g_sugg_ocr_9: function (lToken, nTokenOffset, nLastToken) {
         return "v"+lToken[nTokenOffset+1]["sValue"].slice(1) + "|l’"+lToken[nTokenOffset+1]["sValue"].slice(1);
     },
     _g_cond_ocr_30: function (lToken, nTokenOffset, nLastToken, sCountry, bCondMemo, dTags, sSentence, sSentence0) {
-        return ! bCondMemo && gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"].slice(1));
+        return ! bCondMemo && window.grammalecte.gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"].slice(1));
     },
     _g_sugg_ocr_10: function (lToken, nTokenOffset, nLastToken) {
         return "l’"+lToken[nTokenOffset+1]["sValue"].slice(1);
     },
     _g_cond_ocr_31: function (lToken, nTokenOffset, nLastToken, sCountry, bCondMemo, dTags, sSentence, sSentence0) {
-        return ! bCondMemo && gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"]);
+        return ! bCondMemo && window.grammalecte.gc_engine.oSpellChecker.isValid(lToken[nTokenOffset+1]["sValue"]);
     },
     _g_cond_ocr_32: function (lToken, nTokenOffset, nLastToken, sCountry, bCondMemo, dTags, sSentence, sSentence0) {
         return look(sSentence.slice(0,lToken[1+nTokenOffset]["nStart"]), "[a-zA-Zà-öÀ-Ö0-9_ø-ÿØ-ßĀ-ʯﬁ-ﬆᴀ-ᶿ]") && ! g_morph(lToken[nTokenOffset+1], ">P");
