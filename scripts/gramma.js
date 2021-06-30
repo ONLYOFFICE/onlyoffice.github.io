@@ -72,7 +72,6 @@ var PsTextArea;
                 arrResults[nResult].aGrammErr[nGrammErr].nStart += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
                 arrResults[nResult].aGrammErr[nGrammErr].nEnd += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
                 arrResults[nResult].aGrammErr[nGrammErr].i = nCurMistakeIndex++;
-                nCharsCountBefore += allParas[nResult].length;
                 aConcatResults.push({
                     nStart : arrResults[nResult].aGrammErr[nGrammErr].nStart,
                     nEnd : arrResults[nResult].aGrammErr[nGrammErr].nEnd,
@@ -85,7 +84,6 @@ var PsTextArea;
                 arrResults[nResult].aSpellErr[nSpellErr].nStart += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
                 arrResults[nResult].aSpellErr[nSpellErr].nEnd += nCharsCountBefore === 0 ? nCharsCountBefore : nCharsCountBefore + nResult;
                 arrResults[nResult].aSpellErr[nSpellErr].i = nCurMistakeIndex++;
-                nCharsCountBefore += allParas[nResult].length;
                 aConcatResults.push({
                     nStart : arrResults[nResult].aSpellErr[nSpellErr].nStart,
                     nEnd : arrResults[nResult].aSpellErr[nSpellErr].nEnd,
@@ -94,6 +92,7 @@ var PsTextArea;
                     sMessage : arrResults[nResult].aSpellErr[nSpellErr].sMessage || "Possible mistake"
                 })
             }
+            nCharsCountBefore += allParas[nResult].length;
         }
         return aConcatResults;
     };
