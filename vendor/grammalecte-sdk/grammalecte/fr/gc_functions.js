@@ -594,7 +594,6 @@ function define (dTokenPos, nPos, sMorphs) {
 //// Disambiguation for graph rules
 
 function g_select (oToken, sPattern, sNegPattern="") {
-    window.grammalecte.gc_engine = window.grammalecte["window.grammalecte.gc_engine"];
     // select morphologies for <oToken> according to <sPattern>, always return true
     let lMorph = (oToken.hasOwnProperty("lMorph")) ? oToken["lMorph"] : window.grammalecte.gc_engine.oSpellChecker.getMorph(oToken["sValue"]);
     if (lMorph.length === 0  || lMorph.length === 1) {
