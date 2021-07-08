@@ -483,7 +483,9 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         $('.ace_scroller').css('border-left', 'solid 1px ' + window.Asc.plugin.theme["border-divider"]);
         $('.ace_cursor').css('color', window.Asc.plugin.theme["text-normal"]);
         $('#menu').css('background-color', window.Asc.plugin.theme["background-normal"]);
-        
+        $('#idRename').css('background-color', window.Asc.plugin.theme["background-toolbar"]);
+        $('#idRename').css('border-color', window.Asc.plugin.theme["border-toolbar-button-hover"]);
+
         var rules = '.macros { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
         rules += '.macros:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
         rules += '.macrosSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
