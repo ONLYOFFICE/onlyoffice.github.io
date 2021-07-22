@@ -84,7 +84,16 @@ var PsTextArea;
     };
 	window.Asc.plugin.init = function(text)	{
 		sText = text;
-		document.getElementById("textarea").innerText = text;
+        var parsedText = "";
+		var aParagraphs = SplitText(sText);
+        for (var nPara = 0; nPara < aParagraphs.length; nPara++) {
+            parsedText += aParagraphs[nPara];
+            if (nPara !== aParagraphs.length - 1)
+                parsedText += '\n';
+        }
+
+
+		document.getElementById("textarea").innerText = parsedText;
 		updateScroll();
 		$("#result").empty();
 		if (!isInit) {
