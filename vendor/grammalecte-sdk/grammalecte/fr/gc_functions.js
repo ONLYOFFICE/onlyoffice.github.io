@@ -688,7 +688,7 @@ function g_morphVC (oToken, sPattern, sNegPattern="") {
 
 function apposition (sWord1, sWord2) {
     // returns true if nom + nom (no agreement required)
-    return sWord2.length < 2 || (cregex.mbNomNotAdj(window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord2)) && cregex.mbPpasNomNotAdj(window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord1)));
+    return sWord2.length < 2 || (window.grammalecte["cregex"].mbNomNotAdj(window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord2)) && window.grammalecte["cregex"].mbPpasNomNotAdj(window.grammalecte.gc_engine.oSpellChecker.getMorph(sWord1)));
 }
 
 function g_agreement (oToken1, oToken2, bNotOnlyNames=true) {
@@ -701,10 +701,10 @@ function g_agreement (oToken1, oToken2, bNotOnlyNames=true) {
     if (lMorph2.length === 0) {
         return true;
     }
-    if (bNotOnlyNames && !(cregex.mbAdj(lMorph2) || cregex.mbAdjNb(lMorph1))) {
+    if (bNotOnlyNames && !(window.grammalecte["cregex"].mbAdj(lMorph2) || window.grammalecte["cregex"].mbAdjNb(lMorph1))) {
         return false;
     }
-    return cregex.agreement(lMorph1, lMorph2);
+    return window.grammalecte["cregex"].agreement(lMorph1, lMorph2);
 }
 
 function mbUnit (s) {
@@ -723,8 +723,8 @@ function queryNamesPOS (sWord1, sWord2) {
     if (lMorph1.length == 0 || lMorph2.length == 0) {
         return ":N:e:p";
     }
-    let [sGender1, ] = cregex.getGenderNumber(lMorph1);
-    let [sGender2, ] = cregex.getGenderNumber(lMorph2);
+    let [sGender1, ] = window.grammalecte["cregex"].getGenderNumber(lMorph1);
+    let [sGender2, ] = window.grammalecte["cregex"].getGenderNumber(lMorph2);
     if (sGender1 == ":m" || sGender2 == ":m") {
         return ":N:m:p";
     }
@@ -1193,14 +1193,14 @@ function suggMasSing (sFlex, bSuggSimil=false) {
             if (sMorph.includes(":m") || sMorph.includes(":e")) {
                 aSugg.add(suggSing(sFlex));
             } else {
-                let sStem = cregex.getLemmaOfMorph(sMorph);
+                let sStem = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
                 if (mfsp.isMasForm(sStem)) {
                     aSugg.add(sStem);
                 }
             }
         } else {
             // a verb
-            let sVerb = cregex.getLemmaOfMorph(sMorph);
+            let sVerb = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
             if (conj.hasConj(sVerb, ":Q", ":m:s") && conj.hasConj(sVerb, ":Q", ":f:s")) {
                 // We also check if the verb has a feminine form.
                 // If not, we consider it’s better to not suggest the masculine one, as it can be considered invariable.
@@ -1229,14 +1229,14 @@ function suggMasPlur (sFlex, bSuggSimil=false) {
             if (sMorph.includes(":m") || sMorph.includes(":e")) {
                 aSugg.add(suggPlur(sFlex));
             } else {
-                let sStem = cregex.getLemmaOfMorph(sMorph);
+                let sStem = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
                 if (mfsp.isMasForm(sStem)) {
                     aSugg.add(suggPlur(sStem, true));
                 }
             }
         } else {
             // a verb
-            let sVerb = cregex.getLemmaOfMorph(sMorph);
+            let sVerb = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
             if (conj.hasConj(sVerb, ":Q", ":m:p")) {
                 aSugg.add(conj.getConj(sVerb, ":Q", ":m:p"));
             } else if (conj.hasConj(sVerb, ":Q", ":m:s")) {
@@ -1270,14 +1270,14 @@ function suggFemSing (sFlex, bSuggSimil=false) {
             if (sMorph.includes(":f") || sMorph.includes(":e")) {
                 aSugg.add(suggSing(sFlex));
             } else {
-                let sStem = cregex.getLemmaOfMorph(sMorph);
+                let sStem = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
                 if (mfsp.isMasForm(sStem)) {
                     mfsp.getFemForm(sStem, false).forEach(function(x) { aSugg.add(x); });
                 }
             }
         } else {
             // a verb
-            let sVerb = cregex.getLemmaOfMorph(sMorph);
+            let sVerb = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
             if (conj.hasConj(sVerb, ":Q", ":f:s")) {
                 aSugg.add(conj.getConj(sVerb, ":Q", ":f:s"));
             }
@@ -1304,14 +1304,14 @@ function suggFemPlur (sFlex, bSuggSimil=false) {
             if (sMorph.includes(":f") || sMorph.includes(":e")) {
                 aSugg.add(suggPlur(sFlex));
             } else {
-                let sStem = cregex.getLemmaOfMorph(sMorph);
+                let sStem = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
                 if (mfsp.isMasForm(sStem)) {
                     mfsp.getFemForm(sStem, true).forEach(function(x) { aSugg.add(x); });
                 }
             }
         } else {
             // a verb
-            let sVerb = cregex.getLemmaOfMorph(sMorph);
+            let sVerb = window.grammalecte["cregex"].getLemmaOfMorph(sMorph);
             if (conj.hasConj(sVerb, ":Q", ":f:p")) {
                 aSugg.add(conj.getConj(sVerb, ":Q", ":f:p"));
             }
@@ -1335,7 +1335,7 @@ function suggAgree (sFlexDst, sFlexSrc) {
     if (lMorphSrc.length === 0) {
         return "";
     }
-    let [sGender, sNumber] = cregex.getGenderNumber(lMorphSrc);
+    let [sGender, sNumber] = window.grammalecte["cregex"].getGenderNumber(lMorphSrc);
     if (sGender == ":m") {
         if (sNumber == ":s") {
             return suggMasSing(sFlexDst);
@@ -1372,7 +1372,7 @@ function g_suggAgree (oTokenDst, oTokenSrc) {
     if (lMorphSrc.length === 0) {
         return "";
     }
-    let [sGender, sNumber] = cregex.getGenderNumber(lMorphSrc);
+    let [sGender, sNumber] = window.grammalecte["cregex"].getGenderNumber(lMorphSrc);
     if (sGender == ":m") {
         if (sNumber == ":s") {
             return suggMasSing(oTokenDst["sValue"]);
