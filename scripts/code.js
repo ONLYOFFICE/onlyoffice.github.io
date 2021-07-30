@@ -78,9 +78,17 @@
 
 	window.Asc.plugin.onTranslate = function()
 	{
-		var btn = document.getElementById("btn_paste");
-		if (btn)
-			btn.innerHTML = window.Asc.plugin.tr("Paste into the document");
+		var btn_paste = document.getElementById("btn_paste");
+		if (btn_paste)
+			btn_paste.innerHTML = window.Asc.plugin.tr("Paste into the document");
+		
+		var btn_copy = document.getElementById("btn_copy");
+		if (btn_copy)
+			btn_copy.innerHTML = window.Asc.plugin.tr("Copy");
+		
+		var btn_clear = document.getElementById("btn_clear");
+		if (btn_clear)
+			btn_clear.innerHTML = window.Asc.plugin.tr("Clear");
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
