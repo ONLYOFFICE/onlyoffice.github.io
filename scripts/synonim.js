@@ -101,7 +101,7 @@
 		{
 			if (this.readyState == 4 && this.status == 404)
 			{
-				$('#global').append("<h3 id = \"not_found\" class = \"not-found\">This word not found</h3>"); //if synonym not found
+				$('#global').append("<h3 id = \"not_found\" class = \"not-found\">" + window.Asc.plugin.tr("This word not found") + "</h3>"); //if synonym not found
 				updateScroll();
 				updateScroll();
 			}
@@ -185,7 +185,7 @@
 	
 	//draws the structure of the plugin
 	function drawWords(response, type) {
-		$('#global').append("<h3 class = \"not-found\">" + type + "</h3>");
+		$('#global').append("<h3 class = \"not-found\">" + window.Asc.plugin.tr(type) + "</h3>");
 		$('#global').append("<div id = " + type + " ></div>");
 		if (response.syn && response.syn.length)
 		{
@@ -195,7 +195,7 @@
 		}
 		if(response.ant && response.ant.length)
 		{
-			$("#"+type).append("<h4 class = \"not-found\">Antonyms</h4>");
+			$("#"+type).append("<h4 class = \"not-found\">" + window.Asc.plugin.tr("Antonyms") + "</h4>");
 			$("#"+type).append("<div id =\""+ type +"-antonyms\" class = \"div-words\"></div>");
 			for (let i=0; i<response.ant.length; i++)
 				$('#'+ type +'-antonyms').append("<label class =\"label-words\">"+ response.ant[i] +"</label>");
