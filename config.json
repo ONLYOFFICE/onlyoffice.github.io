@@ -29,8 +29,14 @@
 					"100%": {
 						"normal": "resources/light/icon.png"
 					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
 					"150%": {
 						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
 					},
 					"200%": {
 						"normal": "resources/light/icon@2x.png"
@@ -42,8 +48,14 @@
 					"100%": {
 						"normal": "resources/dark/icon.png"
 					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
 					"150%": {
 						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
 					},
 					"200%": {
 						"normal": "resources/dark/icon@2x.png"
