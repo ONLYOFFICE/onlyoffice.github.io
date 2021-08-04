@@ -79,7 +79,7 @@
 	<script>
 		if (!Ps) Ps = new PerfectScrollbar('#' + "div_parent", {});
 		var timeOut;
-		function googleTranslateElementInit() 
+		function googleTranslateElementInit()
 		{
 
 			document.getElementById("google_translate_element").style.maxHeight = document.getElementById("body").clientHeight- 120 +"px";
@@ -141,12 +141,14 @@
 			if (typeof(msg.data) === "object")
 			{
 				//event for change theme
-				var styleTheme = document.createElement('style');
-				styleTheme.type = 'text/css';
-				styleTheme.innerHTML = msg.data.style;
-				document.getElementsByTagName('head')[0].appendChild(styleTheme);
-				document.getElementById("google_translate_element").style.color = msg.data.theme["text-normal"];
-				document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data.theme["text-normal"];				
+				if (msg.data.theme) {
+					var styleTheme = document.createElement('style');
+					styleTheme.type = 'text/css';
+					styleTheme.innerHTML = msg.data.style;
+					document.getElementsByTagName('head')[0].appendChild(styleTheme);
+					document.getElementById("google_translate_element").style.color = msg.data.theme["text-normal"];
+					document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data.theme["text-normal"];
+				}
 			}
 			else if (msg.data === "update_scroll")
 			{
