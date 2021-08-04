@@ -27,6 +27,8 @@ var PsTextArea;
     var apikey           = "";
     var isValidKey       = false;
     var isFirstRun       = true;
+    var paste_done       = true;
+
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -298,24 +300,28 @@ var PsTextArea;
         });
         setTimeout(function() {
             $('#paste').click(function () {
+                if (!paste_done)
+                    return;
+                else
+                    paste_done = false;
                 Asc.scope.arr = translatedText;
                 window.Asc.plugin.info.recalculate = true;
 
                 window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                     if (version === undefined) {
-                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                        paste_done = window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
                     }
                     else {
                         window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
                             switch (sType) {
                                 case "none":
                                 case "drawing":
-                                    window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                                    paste_done = window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
                                     break;
                                 case "text":
-                                    window.Asc.plugin.callCommand(function() {
+                                    paste_done = window.Asc.plugin.callCommand(function() {
                                         Api.ReplaceTextSmart(Asc.scope.arr);
-                                    });
+                                    }) === undefined ? true : false;
                                     break;
                             }
                         });
