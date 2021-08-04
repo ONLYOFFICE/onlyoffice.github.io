@@ -41,15 +41,16 @@ var PsTextArea;
 		return false;
 	};
 
-	var isInit = false;
-	var CurLang = "auto";
-	var sText = "";
+	var isInit           = false;
+	var CurLang          = "auto";
+	var sText            = "";
 	var displayNoneClass = "display-none";
-    var elements         = null;
-    var serviceUrl = "https://languagetool.org/api/v2/check";
-    var sPathRoot = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
-    var oGramma = null;
-    var aResults = [];
+    var elements    = null;
+    var serviceUrl  = "https://languagetool.org/api/v2/check";
+    var sPathRoot   = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
+    var oGramma     = null;
+    var aResults    = [];
+    var paste_done  = true;
 	function showLoader(elements, show) {
        switchClass(elements.loader, displayNoneClass, !show);
     };
@@ -145,6 +146,11 @@ var PsTextArea;
 			};
 		});
 		$('#replace').click(function () {
+		    if (!paste_done)
+		        return;
+		    else
+		        paste_done = false;
+
             Asc.scope.arr = SplitText(document.getElementById("textarea").innerText);
             window.Asc.plugin.info.recalculate = true;
 
@@ -168,12 +174,12 @@ var PsTextArea;
                         switch (sType) {
                             case "none":
                             case "drawing":
-                                window.Asc.plugin.executeMethod("PasteText", [strResult]);
+                                paste_done = window.Asc.plugin.executeMethod("PasteText", [strResult]);
                                 break;
                             case "text":
-                                window.Asc.plugin.callCommand(function() {
+                                paste_done = window.Asc.plugin.callCommand(function() {
                                     Api.ReplaceTextSmart(Asc.scope.arr);
-                                });
+                                }) === undefined ? true : false;
                                 break;
                         }
                     });
