@@ -31,6 +31,7 @@ var PsTextArea;
     var selectClone         = null;
     var allPairs            = {};
     var serviceUrl          = "https://www.apertium.org/"; //paste your service's url address here
+    var paste_done          = true;
 
     function showLoader(elements, show) {
 
@@ -396,6 +397,11 @@ var PsTextArea;
         setTimeout(function() {
             $('#paste').click(function () {
                 if (isReadyToTranslate()) {
+                    if (!paste_done)
+                        return;
+                    else
+                        paste_done = false;
+
                     Asc.scope.arr = translatedParas;
                     window.Asc.plugin.info.recalculate = true;
 
@@ -408,12 +414,12 @@ var PsTextArea;
                                 switch (sType) {
                                     case "none":
                                     case "drawing":
-                                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                                        paste_done = window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
                                         break;
                                     case "text":
-                                        window.Asc.plugin.callCommand(function() {
+                                        paste_done = window.Asc.plugin.callCommand(function() {
                                             Api.ReplaceTextSmart(Asc.scope.arr);
-                                        });
+                                        }) === undefined ? true : false;
                                         break;
                                 }
                             });
