@@ -35,6 +35,7 @@ var PsTextArea;
 	var blurClass        = "no_class";
     var elements         = null;
     var serviceUrl       = "https://languagetool.org/api/v2/check";
+    var paste_done       = true;
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -94,6 +95,11 @@ var PsTextArea;
 			};
 		});
 		$('#replace').click(function () {
+		    if (!paste_done)
+		        return;
+		    else
+		        paste_done = false;
+
             Asc.scope.arr = ParseText(document.getElementById("textarea").innerText);
             window.Asc.plugin.info.recalculate = true;
 
@@ -117,12 +123,12 @@ var PsTextArea;
                         switch (sType) {
                             case "none":
                             case "drawing":
-                                window.Asc.plugin.executeMethod("PasteText", [strResult]);
+                                paste_done = window.Asc.plugin.executeMethod("PasteText", [strResult]);
                                 break;
                             case "text":
-                                window.Asc.plugin.callCommand(function() {
+                                paste_done = window.Asc.plugin.callCommand(function() {
                                     Api.ReplaceTextSmart(Asc.scope.arr);
-                                });
+                                }) === undefined ? true : false;
                                 break;
                         }
                     });
