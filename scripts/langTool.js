@@ -116,19 +116,25 @@ var PsTextArea;
 
             window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                 if (version === undefined) {
-                   paste_done = window.Asc.plugin.executeMethod("PasteText", [strResult]);
+                   window.Asc.plugin.executeMethod("PasteText", [strResult], function(result) {
+                        paste_done = true;
+                   });
                 }
                 else {
                     window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
                         switch (sType) {
                             case "none":
                             case "drawing":
-                                paste_done = window.Asc.plugin.executeMethod("PasteText", [strResult]);
+                                window.Asc.plugin.executeMethod("PasteText", [strResult], function(result) {
+                                    paste_done = true;
+                                });
                                 break;
                             case "text":
-                                paste_done = window.Asc.plugin.callCommand(function() {
+                                window.Asc.plugin.callCommand(function() {
                                     Api.ReplaceTextSmart(Asc.scope.arr);
-                                }) === undefined ? true : false;
+                                }, undefined, undefined, function(result) {
+                                    paste_done = true;
+                                });
                                 break;
                         }
                     });
