@@ -224,6 +224,7 @@ var PsTextArea;
 	};
 
 	function parseResult (oResponse) {
+        $('#result').empty();
 		var data = oResponse.matches.map(function (el) {
 			return {
 				shortMessage : el.shortMessage,
@@ -247,11 +248,11 @@ var PsTextArea;
         }
 
 		data.forEach(function(el, ind) {
-		    if (el.replacements.length === 0) {
-		        var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-			    $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-			    return;
-		    }
+//		    if (el.replacements.length === 0) {
+//		        var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
+//			    $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+//			    return;
+//		    }
 
 			$('<div>', {
 				id : "div_" + ind,
