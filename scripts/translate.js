@@ -20,7 +20,8 @@
 	var isInit = false;
 	var ifr;
 	const isIE = checkInternetExplorer();	//check IE
-	var message = "This plugin doesn't work in Internet Explorer."
+	var message = "This plugin doesn't work in Internet Explorer.";
+	var paste_done  = true;
 	
 	window.Asc.plugin.init = function(text)
 	{
@@ -78,6 +79,11 @@
 
 				setTimeout(function() {
                     btnReplace.onclick = function () {
+                        if (!paste_done)
+                            return;
+                        else
+                            paste_done = false;
+
                         var translatedTxt = ifr.contentDocument.getElementById("google_translate_element").outerText;
                         var allParasTxt = translatedTxt.split(/\n/);
                         var allParsedParas = [];
@@ -96,18 +102,24 @@
                         Asc.scope.arr = allParsedParas;
                         window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                             if (version === undefined) {
-                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
+                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
+                                    paste_done = true;
+                               });
                             }
                             else {
                                 window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
                                     switch (sType) {
                                         case "none":
                                         case "drawing":
-                                            window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
+                                            window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
+                                                paste_done = true;
+                                            });
                                             break;
                                         case "text":
                                             window.Asc.plugin.callCommand(function() {
                                                 Api.ReplaceTextSmart(Asc.scope.arr);
+                                            }, undefined, undefined, function(result) {
+                                                paste_done = true;
                                             });
                                             break;
                                     }
