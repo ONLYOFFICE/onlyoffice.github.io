@@ -116,7 +116,7 @@ var PsTextArea;
 
             window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                 if (version === undefined) {
-                    window.Asc.plugin.executeMethod("PasteText", [strResult]);
+                   paste_done = window.Asc.plugin.executeMethod("PasteText", [strResult]);
                 }
                 else {
                     window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
