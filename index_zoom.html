@@ -18,16 +18,15 @@
 <head>
     <title>Zoom WebSDK</title>
     <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
     <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.8.6/css/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.8.6/css/react-select.css" />
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-
 </head>
 <body id="body">
     <style>
@@ -103,6 +102,17 @@
 		}
 		input[type=text]:focus {
 		    outline: 0 !important;
+		}
+		.navbar-form {
+		    border-top: none;
+		    border-bottom: none;
+		    webkit-box-shadow: none;
+		    box-shadow: none;
+		    margin-top: 0;
+		    padding: 0 15px;
+		}
+		.navbar {
+		    border: none;
 		}
     </style>
 
@@ -189,10 +199,10 @@
     </div>
     <div id="iframe_meeting" style="width:100%; height:100%;margin:0;padding:0; display:none;"></div>
     <div id="reconf" style="z-index: 9999;">
-        <label style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; right: 10px; z-index: 9999;">Reconfigure</label>
+        <label class="reconf-label" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; right: 10px; z-index: 9999;">Reconfigure</label>
     </div>
     <div id="switch" style="z-index: 9999;">
-        <label style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; left: 10px; z-index: 9999;">Schedule mode</label>
+        <label class="switch-label" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; left: 10px; z-index: 9999;">Schedule mode</label>
     </div>
 
     <script>
@@ -205,7 +215,67 @@
                 document.getElementById('nav-tool').style.display = 'none';
                 document.getElementById('show-test-tool-btn').textContent = 'Show';
             }
-        })
+        });
+        window.addEventListener('message', function (msg) {
+            if (typeof(msg.data) === "object")
+            {
+                var oTheme;
+                //event for change theme
+                if (msg.data.oTheme) {
+                    oTheme = msg.data.oTheme;
+                    var rule = ".form-control, .form-control[readonly], .form-control[disabled] { color : " + oTheme["text-normal"] + "; background-color : " + oTheme["background-normal"] + "; border-color : " + oTheme["border-regular-control"] + ";}\n";
+                    rule += ".form-control:focus { border-color : " + oTheme["border-control-focus"] + ";}\n";
+                    rule += ".form-control[disabled] { color : " + oTheme["text-invers"] + ";}\n";
+
+                    rule += ".btn-text-default { background-color : " + oTheme["background-normal"] + "; border-color : " + oTheme["border-regular-control"] + "; color : " + oTheme["text-normal"] + ";}\n";
+                    rule += ".btn-text-default:hover { background-color : " + oTheme["highlight-button-hover"] + ";}\n";
+                    rule += ".btn-text-default:active { background-color : " + oTheme["highlight-button-pressed"] + " !important;}\n";
+                    rule += ".btn-text-default[disabled]:hover,\
+                    .btn-text-default.disabled:hover,\
+                    .btn-text-default[disabled]:active,\
+                    .btn-text-default[disabled].active,\
+                    .btn-text-default.disabled:active,\
+                    .btn-text-default.disabled.active: {background-color : " + oTheme["background-normal"] + " !important; color : " + oTheme["text-normal"] + ";}\n";
+
+                    rule += ".select2-container--default .select2-selection--single { color : " + oTheme["text-normal"] + " !important; background-color : " + oTheme["background-normal"] + " !important;}\n";
+                    rule += ".select2-container--default .select2-selection--single .select2-selection__rendered { color : " + oTheme["text-normal"] + " !important;}\n";
+                    rule += ".select2-results { background-color : " + oTheme["background-normal"] + ";}\n";
+                    rule += ".select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : " + oTheme["border-regular-control"] + " !important;}\n";
+                    rule += ".select2-container--default .select2-results__option[aria-selected=true] { color: " + oTheme["text-contrast-background"] + "!important; background-color : " + oTheme["border-regular-control"] + " !important;}\n";
+                    rule += ".select2-dropdown, .select2-container--default .select2-selection--single { border-color : " + oTheme["border-regular-control"] + " !important;}\n";
+                    rule += ".select2-container--default.select2-container--open .select2-selection--single { border-color : " + oTheme["border-control-focus"] + " !important;}\n";
+                    rule += ".select2-container--default.select2-container--focus:not(.select2-container--open) .select2-selection--single { border-color : " + oTheme["border-regular-control"] + " !important;}\n";
+                    rule += ".select2-container--default.select2-container--open.select2-container--focus .select2-selection--single { border-color : " + oTheme["border-control-focus"] + " !important;}\n";
+                    rule += ".select2-search--dropdown { background-color : " + oTheme["background-normal"] + " !important;}\n";
+                    rule += ".select2-container--default .select2-search--dropdown .select2-search__field { color : " + oTheme["text-normal"] + "; background-color : " + oTheme["background-normal"] + "; border-color : " + oTheme["border-regular-control"] + ";}\n";
+                    rule += ".select2-container--default.select2-container--disabled .select2-selection--single { background-color : " + oTheme["background-normal"] +";}\n";
+                    rule += ".select2-container--default .select2-selection--single .select2-selection__arrow b { border-color : " + oTheme["text-normal"] + " !important" + ";}\n";
+                    rule += ".select2-results__option { color : " + oTheme["text-normal"] + " !important" + ";}\n";
+
+                    rule += ".ps .ps__rail-y:hover { background-color : " + oTheme["background-toolbar"] + ";}\n";
+                    rule += ".ps .ps__rail-y.ps--clicking { background-color : " + oTheme["background-toolbar"] + ";}\n";
+                    rule += ".ps__thumb-y { background-color : " + oTheme["background-normal"] + "; border-color " + oTheme["Border"] + " !important" + ";}\n";
+                    rule += ".ps__rail-y:hover > .ps__thumb-y { border-color : " + oTheme["canvas-scroll-thumb-hover"] + "; background-color : " + oTheme["canvas-scroll-thumb-hover"] + " !important" + ";}\n";
+                    rule += ".ps .ps__rail-x:hover { background-color : " + oTheme["background-toolbar"] + ";}\n";
+                    rule += ".ps .ps__rail-x.ps--clicking { background-color : " + oTheme["background-toolbar"] + ";}\n";
+                    rule += ".ps__thumb-x { background-color : " + oTheme["background-normal"] + "; border-color : " + oTheme["Border"] + " !important" + ";}\n";
+                    rule += ".ps__rail-x:hover > .ps__thumb-x { border-color : " + oTheme["canvas-scroll-thumb-hover"] + ";}\n";
+
+                    rule += "*::-webkit-scrollbar-track { background : " + oTheme["background-normal"] + ";}\n";
+                    rule += "*::-webkit-scrollbar-track:hover { background : " + oTheme["background-toolbar-additional"] + ";}\n";
+                    rule += "*::-webkit-scrollbar-thumb { background-color : " + oTheme["background-toolbar"] + "; border-color : " + oTheme["border-regular-control"] + ";}\n";
+                    rule += "*::-webkit-scrollbar-thumb:hover { background-color : " + oTheme["canvas-scroll-thumb-hover"] + ";}\n";
+
+                    $('#nav-tool').css('background-color', oTheme["background-toolbar"]);
+                    $("label").css('color', oTheme["text-normal"]);
+                    $('.reconf-label, .switch-label, .label-settings').css('border-bottom', '1px dashed ' + oTheme["text-normal"]);
+                    var styleTheme = document.createElement('style');
+                    styleTheme.type = 'text/css';
+                    styleTheme.innerHTML = rule;
+                    document.getElementsByTagName('head')[0].appendChild(styleTheme);
+                }
+            }
+        });
     </script>
 
     <script src="https://source.zoom.us/1.8.6/lib/vendor/react.min.js"></script>
