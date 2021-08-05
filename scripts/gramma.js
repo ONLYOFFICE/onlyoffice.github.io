@@ -48,6 +48,9 @@ var PsTextArea;
             el.classList.remove(className);
         }
     };
+    function getMessage(key) {
+        return window.Asc.plugin.tr(key.trim());
+    };
     function ConcatResults(arrResults) {
         var allParas          = SplitText(document.getElementById("textarea").innerText);
         var nCharsCountBefore = 0;
@@ -386,12 +389,13 @@ var PsTextArea;
 
 	window.Asc.plugin.onTranslate = function()
 	{
-		var btn = document.getElementById("check");
-		if (btn)
-			btn.innerHTML = window.Asc.plugin.tr("Check");
-		var btn_insert = document.getElementById("replace");
-		if (btn_insert)
-			btn_insert.innerHTML = window.Asc.plugin.tr("Insert to document");
-	};
-		  
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.innerText) el.innerText = getMessage(el.innerText);
+        }
+    }
+
 })(window, undefined);
