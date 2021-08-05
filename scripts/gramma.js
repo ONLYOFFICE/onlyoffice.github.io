@@ -198,6 +198,10 @@ var PsTextArea;
         $('#textarea').keyup(function(e) {
             updateScroll();
         });
+
+        $("#enter_container").click(function() {
+            $("#textarea").focus();
+        });
 	});
 
     function SplitText(sText) {
