@@ -49,6 +49,7 @@ var Ps;
     var apiKey = '';
     var secretKey = '';
     var tokenKey = '';
+    var oTheme;
     for (var nTime = 0; nTime < times.length; nTime++) {
         time_hour_data.push({id: nTime, text: times[nTime]});
     }
@@ -105,6 +106,7 @@ var Ps;
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
+        oTheme = theme;
 
         var rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
         var styleTheme = document.createElement('style');
@@ -112,8 +114,13 @@ var Ps;
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
 
-        $('#reconf-label, #switch-label, #label-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color + ' !important');
+        $('.reconf-label, .switch-label, .label-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
         $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
+
+
+
+        var style = document.getElementsByTagName('head')[0].lastChild;
+        setTimeout(()=>ifr.contentWindow.postMessage({oTheme}, '*'));
     };
 
     window.openMeeting = function(sUrl) {
@@ -230,6 +237,9 @@ var Ps;
         $('#switch').click(function() {
             $('#create-meeting-container').toggleClass('display-none');
             $('#iframe_join').toggleClass('display-none');
+
+            var style = document.getElementsByTagName('head')[0].lastChild;
+		    setTimeout(()=>ifr.contentWindow.postMessage({oTheme}, '*'));
         });
         $('#create_meeting').click(function() {
             CreateMeeting();
