@@ -394,7 +394,11 @@ var PsTextArea;
                 break;
             }
         }, 500));
-    })
+
+        $("#enter_container").click(function() {
+            $("#textarea").focus();
+        });
+    });
 
     function updateScroll()
 	{
