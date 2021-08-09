@@ -17,6 +17,25 @@
  */
 var Ps;
 var PsTextArea;
+const isIE = checkInternetExplorer();	//check IE
+function checkInternetExplorer(){
+    var rv = -1;
+    if (window.navigator.appName == 'Microsoft Internet Explorer') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    } else if (window.navigator.appName == 'Netscape') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
+
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    }
+    return rv !== -1;
+};
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -108,11 +127,23 @@ var PsTextArea;
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
+
+        $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
+
         var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}'
         var styleTheme = document.createElement('style');
         styleTheme.type = 'text/css';
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
+
+        if (!isIE) {
+            $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
+            $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+            $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
+            $('#arrow-svg-path').css('fill', theme["text-normal"]);
+        }
+        else
+            $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
     };
 
 	$(document).ready(function () {
