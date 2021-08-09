@@ -111,6 +111,9 @@
 		  	user-select: none;           /* Non-prefixed version, currently
 										 not supported by any browser */
 		}
+		.ps__rail-y {
+			cursor: default !important;
+		}
 	</style>
 
 </head>
@@ -121,7 +124,7 @@
 			<div class="asc-loader-image">
 				<div class="asc-loader-title"></div>
 			</div>
-			<div class="asc-loader-title">
+			<div class="asc-loader-title i18n">
 				Translating...
 			</div>
     	</div>
@@ -129,7 +132,7 @@
 			<div class="asc-loader-image">
 				<div class="asc-loader-title"></div>
 			</div>
-			<div class="asc-loader-title">
+			<div class="asc-loader-title i18n">
 				Loading languages...
 			</div>
     	</div>
@@ -148,7 +151,7 @@
 					</select>
 				</span>
 			</div>
-			<div id="hide_show"><label style="display:none;" id="hide_manually">Hide field</label><label id="show_manually">Enter text manually</label></div>
+			<div id="hide_show"><label style="display:none;" class="i18n" id="hide_manually">Hide field</label><label id="show_manually" class="i18n">Enter text manually</label></div>
 			<div id="enter_container" class="form-control" style="cursor: text; position: relative; margin: 16px 12px 0px 12px; min-height: 100px; max-height: 100%; height: fit-content; display:none;">
 				<div id="textarea" contenteditable="true" style="min-width: 95%; max-width: 95%; height: fit-content; padding: 0px 15px 15px 3px; outline: none; white-space: normal; float: left; word-wrap: break-word;" ></div>
 			</div>
@@ -161,8 +164,8 @@
 		</div>
 		<div id="vanish_container" class="display-none">
 			<div id="button_wrapper">
-				<div onсlick="" id="copy" class="noselect btn-text-default">Copy</div>
-				<div onсlick="" id="paste" class="noselect btn-text-default">Insert to document</div>
+				<div onсlick="" id="copy" style="padding: 2px;" class="noselect btn-text-default i18n">Copy</div>
+				<div onсlick="" id="paste" style="padding: 2px;" class="noselect btn-text-default i18n">Insert to document</div>
 			</div>
 		</div>
 
