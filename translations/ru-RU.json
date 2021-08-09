@@ -1,9 +1,13 @@
 {
+  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Чтобы использовать DeepL, подпишитесь на план DeepL API на официальном веб-сайте DeepL. Скопируйте ключ API и вставьте его в указанное поле.",
+  "Learn more here.": "Узнайте больше здесь.",
+  "Save": "Сохранить",
   "Target language": "Целевой язык",
   "Enter text manually": "Ввести текст вручную",
   "Hide field": "Скрыть поле для ввода",
   "Translating...": "Перевод...",
   "Loading languages...": "Загрузка языков",
   "Copy": "Копировать",
-  "Insert to document": "Вставить в документ"
+  "Insert to document": "Вставить в документ",
+  "Reconfigure API key": "Перенастроить ключ API"
 }
