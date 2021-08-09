@@ -455,6 +455,6 @@ function checkInternetExplorer(){
             if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
             if (el.innerText) el.innerText = getMessage(el.innerText);
         }
-    }
+    };
 		  
 })(window, undefined);
