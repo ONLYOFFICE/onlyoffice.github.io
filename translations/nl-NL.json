@@ -1,9 +1,13 @@
 {
+  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Om DeepL te gebruiken, moet u zich abonneren op het DeepL API-abonnement op de officiële DeepL-website. Kopieer de API-sleutel en plaats deze in het opgegeven veld.",
+  "Learn more here.": "Lees hier meer.",
+  "Save": "Sparen",
   "Target language": "Doel taal",
   "Enter text manually": "Handmatig tekst invoeren",
   "Hide field": "Verberg veld",
   "Translating...": "Vertalen...",
   "Loading languages...": "Talen laden",
   "Copy": "Kopiëren",
-  "Insert to document": "Invoegen in document"
+  "Insert to document": "Invoegen in document",
+  "Reconfigure API key": "API-sleutel opnieuw configureren"
 }
