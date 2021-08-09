@@ -17,7 +17,25 @@
  */
 var Ps;
 var PsTextArea;
+const isIE = checkInternetExplorer();	//check IE
+function checkInternetExplorer(){
+    var rv = -1;
+    if (window.navigator.appName == 'Microsoft Internet Explorer') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    } else if (window.navigator.appName == 'Netscape') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
 
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    }
+    return rv !== -1;
+};
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -41,7 +59,9 @@ var PsTextArea;
        switchClass(elements.contentHolder, blurClass, show);
        switchClass(elements.loader, displayNoneClass, !show);
     };
-
+    function getMessage(key) {
+        return window.Asc.plugin.tr(key.trim());
+    };
 	function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
@@ -79,6 +99,15 @@ var PsTextArea;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
         $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
         $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
+
+        if (!isIE) {
+            $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
+            $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+            $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
+            $('#arrow-svg-path').css('fill', theme["text-normal"]);
+        }
+        else
+            $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
     };
 	$(document).ready(function () {
 	    elements = {
@@ -419,9 +448,13 @@ var PsTextArea;
 
 	window.Asc.plugin.onTranslate = function()
 	{
-		var btn = document.getElementById("check");
-		if (btn)
-			btn.innerHTML = window.Asc.plugin.tr("Check");
-	};
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.innerText) el.innerText = getMessage(el.innerText);
+        }
+    }
 		  
 })(window, undefined);

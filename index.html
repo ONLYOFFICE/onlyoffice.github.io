@@ -100,13 +100,16 @@
             -webkit-transform: rotate(-135deg);
             margin-top: -14px;
         }
+        .ps__rail-y {
+			cursor: default !important;
+		}
 	</style>
 	<body class='body' style="margin: 0; display: flex; flex-direction: column;">
 		<div id="loader-container" class="asc-plugin-loader display-none">
 			<div class="asc-loader-image">
 				<div class="asc-loader-title"></div>
 			</div>
-			<div class="asc-loader-title">
+			<div class="asc-loader-title  i18n">
 				Checking...
 			</div>
     	</div>
@@ -116,12 +119,12 @@
 			</div>
 			<select id="language_id" style="width: 100%;" class="select_example"></select>
 		</div>
-		<div id="enter_container" class="form-control" style="cursor: text; position: relative; margin: 16px 12px 0px 12px; min-height: 100px; max-height: 45%; height: fit-content;">
+		<div id="enter_container" class="form-control" style="cursor: text; position: relative; margin: 0px 12px 0px 12px; min-height: 100px; max-height: 45%; height: fit-content;">
 			<div id="textarea" contenteditable="true" style="min-width: 95%; max-width: 95%; height: fit-content; padding: 0px 15px 5px 3px; outline: none; white-space: normal; float: left; word-wrap: break-word;" ></div>
 		</div>
 		<div id="button_wrapper">
-			<div onсlick="" id="check" class="noselect btn-text-default">Check</div>
-			<div onсlick="" id="replace" class="noselect btn-text-default">Insert to document</div>
+			<div onсlick="" id="check" class="noselect btn-text-default i18n">Check</div>
+			<div onсlick="" id="replace" class="noselect btn-text-default i18n">Insert to document</div>
 		</div>
 		<div id="scrollable-container-id" style="position: relative; width: 100%; height: 70%; overflow: hidden ">
 			<div id="result" style="width: calc(100% - 24px); margin: 0px 12px 0px 12px; word-break: break-word; display: flex; flex-flow: column;"></div>
