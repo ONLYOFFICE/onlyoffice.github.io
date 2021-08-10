@@ -200,7 +200,7 @@ function createSearchItem(title, description, id) {
 
     searchResult.show();
     var item =
-    "<div class=\"search-item\" id=" + escapeHtml(id) + ">" +
+    "<div class=\"search-item\" id=\"" + id + "\">" +
       "<div class = \"citation\">" +
         "<h4 style=\"overflow-x: hidden;margin:0\">" + escapeHtml(title) + "</h4>" +
         "<p style=\";margin:0\">" + escapeHtml(description) + "</p>" +
