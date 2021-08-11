@@ -183,8 +183,10 @@ function getMessage(key) {
                     container.innerHTML += escape(oResponse.translations[nText].text) + '<br>';
             }
 
-            if ($('#vanish_container').hasClass('display-none'))
-                $('#vanish_container').toggleClass('display-none');
+            if (container.innerHTML !== "") {
+                if ($('#vanish_container').hasClass('display-none'))
+                    $('#vanish_container').toggleClass('display-none');
+            }
 
             updateScroll();
             updateScroll();
