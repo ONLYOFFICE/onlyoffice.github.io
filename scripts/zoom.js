@@ -106,7 +106,9 @@ var Ps;
 
 
         var style = document.getElementsByTagName('head')[0].lastChild;
-        setTimeout(()=>ifr.contentWindow.postMessage({oTheme}, '*'));
+        setTimeout(function() {
+            ifr.contentWindow.postMessage({oTheme : oTheme}, '*');
+        });
     };
 
     window.openMeeting = function(sUrl) {
@@ -225,7 +227,9 @@ var Ps;
             $('#iframe_join').toggleClass('display-none');
 
             var style = document.getElementsByTagName('head')[0].lastChild;
-		    setTimeout(()=>ifr.contentWindow.postMessage({oTheme}, '*'));
+		    setTimeout(function() {
+                ifr.contentWindow.postMessage({oTheme : oTheme}, '*');
+            });
         });
         $('#create_meeting').click(function() {
             CreateMeeting();

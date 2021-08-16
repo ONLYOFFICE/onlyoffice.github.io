@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
     <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.8.6/css/bootstrap.css" />
-    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.8.6/css/react-select.css" />
+    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.9.7/css/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.9.7/css/react-select.css" />
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
@@ -109,21 +109,24 @@
 		    webkit-box-shadow: none;
 		    box-shadow: none;
 		    margin-top: 0;
-		    padding: 0 15px;
+		    padding: 16px 12px !important;
+		    margin-bottom: 0px !important;
 		}
 		.navbar {
 		    border: none;
 		}
+		input,
+        input::-webkit-input-placeholder {
+            font-size: 11px;
+            line-height: 3;
+        }
     </style>
 
-    <div id="join_container">
+    <div id="join_container" style="height: 100%;">
         <nav id="nav-tool" class="navbar navbar-inverse navbar-fixed-top" style="height: 100%;">
-            <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Zoom WebSDK</a>
-            </div>
-            <div id="navbar" class="websdktest">
-                <form class="navbar-form navbar-right" id="meeting_form">
+            <div class="container" style="height: 100%;">
+            <div id="navbar" class="websdktest" style="height: 100%;">
+                <form class="navbar-form navbar-right" id="meeting_form" style="height: 100%; display: flex; flex-direction: column;">
                     <div class="form-group">
                         <label>Name</label>
                         <input type="text" name="display_name" id="display_name" data-id="zoom-display-name-id" value="" maxLength="100"
@@ -184,8 +187,17 @@
                         <div type="button" link="" onclick="window.copyJoinLink('#copy_join_link')"
                             class="btn-text-default" id="copy_join_link">Copy Direct join link</div>
                     </div>
+                    <div style="min-height: 16px;">
 
-
+                    </div>
+                    <div style="height: 100%; position: relative;">
+                        <div id="reconf" style="z-index: 9999;">
+                            <label class="reconf-label" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 0; right: 0px; z-index: 9999;">Reconfigure</label>
+                        </div>
+                        <div id="switch" style="z-index: 9999;">
+                            <label class="switch-label" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 0px; left: 0px; z-index: 9999;">Schedule mode</label>
+                        </div>
+                    </div>
 
                 </form>
             </div>
@@ -198,12 +210,7 @@
     </div>
     </div>
     <div id="iframe_meeting" style="width:100%; height:100%;margin:0;padding:0; display:none;"></div>
-    <div id="reconf" style="z-index: 9999;">
-        <label class="reconf-label" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; right: 10px; z-index: 9999;">Reconfigure</label>
-    </div>
-    <div id="switch" style="z-index: 9999;">
-        <label class="switch-label" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; position:absolute; bottom: 15px; left: 10px; z-index: 9999;">Schedule mode</label>
-    </div>
+
 
     <script>
         document.getElementById('show-test-tool-btn').addEventListener("click", function (e) {
@@ -278,12 +285,12 @@
         });
     </script>
 
-    <script src="https://source.zoom.us/1.8.6/lib/vendor/react.min.js"></script>
-    <script src="https://source.zoom.us/1.8.6/lib/vendor/react-dom.min.js"></script>
-    <script src="https://source.zoom.us/1.8.6/lib/vendor/redux.min.js"></script>
-    <script src="https://source.zoom.us/1.8.6/lib/vendor/redux-thunk.min.js"></script>
-    <script src="https://source.zoom.us/1.8.6/lib/vendor/lodash.min.js"></script>
-    <script src="https://source.zoom.us/zoom-meeting-1.8.6.min.js"></script>
+    <script src="https://source.zoom.us/1.9.7/lib/vendor/react.min.js"></script>
+    <script src="https://source.zoom.us/1.9.7/lib/vendor/react-dom.min.js"></script>
+    <script src="https://source.zoom.us/1.9.7/lib/vendor/redux.min.js"></script>
+    <script src="https://source.zoom.us/1.9.7/lib/vendor/redux-thunk.min.js"></script>
+    <script src="https://source.zoom.us/1.9.7/lib/vendor/lodash.min.js"></script>
+    <script src="https://source.zoom.us/zoom-meeting-1.9.7.min.js"></script>
     <script src="vendor/zoom-sdk/tool.js"></script>
     <script src="vendor/zoom-sdk/meeting.js"></script>
     <script src="vendor/zoom-sdk/vconsole.min.js"></script>
