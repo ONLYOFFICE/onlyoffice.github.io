@@ -107,14 +107,31 @@ function checkInternetExplorer(){
     };
 	window.Asc.plugin.init = function(text)	{
 		sText = text;
-        var parsedText = "";
+
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word': {
+                if (sText !== "") {
+                    window.Asc.plugin.executeMethod("GetSelectedText", [false], function(data) {
+                        sText = data;
+                        ExecPlugin();
+                    });
+                }
+                break;
+            }
+            case 'cell':
+            case 'slide':
+                ExecPlugin();
+                break;
+        }
+	};
+	function ExecPlugin() {
+	    var parsedText = "";
 		var aParagraphs = SplitText(sText);
         for (var nPara = 0; nPara < aParagraphs.length; nPara++) {
             parsedText += aParagraphs[nPara];
             if (nPara !== aParagraphs.length - 1)
                 parsedText += '\n';
         }
-
 
 		document.getElementById("textarea").innerText = parsedText;
 		updateScroll();
