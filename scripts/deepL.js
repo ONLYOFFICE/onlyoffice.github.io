@@ -95,9 +95,27 @@ function getMessage(key) {
         }
 
         switch (window.Asc.plugin.info.editorType) {
+            case 'word': {
+                if (txt !== "") {
+                    window.Asc.plugin.executeMethod("GetSelectedText", [false], function(data) {
+                        txt = data;
+                        ExecPlugin();
+                    });
+                }
+                break;
+            }
+            case 'cell':
+            case 'slide':
+                ExecPlugin();
+                break;
+        }
+	};
+
+    function ExecPlugin() {
+        switch (window.Asc.plugin.info.editorType) {
             case 'word':
             case 'slide': {
-                if (text !== "") {
+                if (txt !== "") {
                     RunTranslate(txt);
                 }
                 break;
@@ -107,7 +125,7 @@ function getMessage(key) {
             }
             break;
         }
-	};
+    };
 
     window.Asc.plugin.onThemeChanged = function(theme)
     {
