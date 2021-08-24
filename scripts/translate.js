@@ -21,7 +21,8 @@
 	var ifr;
 	const isIE = checkInternetExplorer();	//check IE
 	var message = "This plugin doesn't work in Internet Explorer."
-	
+	var txt;
+
 	window.Asc.plugin.init = function(text)
 	{
 		if (isIE) {
@@ -29,9 +30,25 @@
 			return;
 		}
     
-	  	text = ProcessText(text);
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [false], function(data) {
+                    txt = ProcessText(data);
+                    ExecPlugin();
+                });
+                break;
+            }
+            case 'cell':
+            case 'slide': {
+                txt = ProcessText(text);
+                ExecPlugin();
+                break;
+            }
+        }
+	};
 
-		if (!isInit) {
+    function ExecPlugin() {
+        if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
 			ifr                = document.createElement("iframe");
 			ifr.position	   = "fixed";
@@ -42,17 +59,18 @@
 			ifr.style.left     = "0px";
 			ifr.style.width    = "100%";
 			ifr.style.height   = "100%";
-			ifr.setAttribute("frameBorder", "0");		
+			ifr.setAttribute("frameBorder", "0");
 			document.getElementById("iframe_parent").appendChild(ifr);
 			isInit = true;
 			ifr.onload = function() {
 				if (ifr.contentWindow.document.readyState == 'complete')
+				    window.Asc.plugin.onThemeChanged(Asc.plugin.theme);
 					setTimeout(function() {
-						ifr.contentDocument.getElementById("google_translate_element").innerHTML = escape(text);
-						if (text.length)
+						ifr.contentDocument.getElementById("google_translate_element").innerHTML = escape(txt);
+						if (txt.length)
 							ifr.contentDocument.getElementById("div_btn").classList.remove("hidden");
 					}, 500);
-				
+
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
 				selectElement.addEventListener('change', function(event) {
 					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
@@ -119,11 +137,10 @@
 				ifr.contentWindow.postMessage("update_scroll", '*');
 			}
 		} else {
-			ifr.contentWindow.postMessage(text, '*');
+			ifr.contentWindow.postMessage(txt, '*');
 			ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 		}
-	};
-
+    };
   	function ProcessText(sText) {
         return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
     };
@@ -175,12 +192,13 @@
 		}
 		
 	};
-
-	window.Asc.plugin.onThemeChanged = function(theme)
+    window.Asc.plugin.onThemeChanged = function(theme)
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
 		var style = document.getElementsByTagName('head')[0].lastChild;
-		setTimeout(()=>ifr.contentWindow.postMessage({theme,style : style.innerHTML}, '*'),600);
+		if (ifr && ifr.contentWindow)
+		    setTimeout(()=>ifr.contentWindow.postMessage({theme,style : style.innerHTML}, '*'),600);
 	};
+
 
 })(window, undefined);
