@@ -166,7 +166,7 @@
 				createPreview(temp_code,text);
 			}else if (text) 
 			{
-				temp_code = hljs.highlight(curLang, text, true, 0);
+				temp_code = hljs.highlight(text,{language:curLang});
 				createPreview(temp_code,text);
 			}else
 			{
