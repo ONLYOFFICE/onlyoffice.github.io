@@ -26,7 +26,7 @@
 		return false;
 	};
 
-	var language = hljs.listLanguages(),											//array languages
+	var language = hljs.listLanguages().sort(),											//array languages
 		isInitLang = false, 														//flag init lang select
 		style_value,																//current value style
 		curLang,																	//current language
