@@ -96,6 +96,12 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
     });
 
+    function create_guid(a,b)
+    {
+       for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');
+       return b
+    };
+
     function updateMenu()
     {
         if (Content.current < 0)
@@ -117,6 +123,9 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
             }
             item += "</div>";
             menuContent += item;
+
+            if (!Content.macrosArray[i]["guid"])
+                Content.macrosArray[i]["guid"] = create_guid();
         }
         
         var elem = document.getElementById("menu_content");
@@ -163,6 +172,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
             editor.setReadOnly(false);
             window.isDisable = false;
             buttonAutoStart.style.display = "inline-block";
+            editor.focus();
             if (Content.macrosArray[Content.current].autostart)
                 buttonAutoStart.classList.add("primary");
             else
@@ -195,6 +205,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         Content.macrosArray.push({ name : (macrosTranslate + " " + indexMax), value : "(function()\n{\n})();" });
         Content.current = Content.macrosArray.length - 1;
         updateMenu();
+        editor.focus();
     };
     document.getElementById("button_delete").onclick = function() {
         if (Content.current != -1)
@@ -245,6 +256,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         _elem1.style.display = "block";
         _elem2.style.display = "block";
         document.getElementById("rename_text").value = Content.macrosArray[Content.current].name;
+        document.getElementById("rename_text").select();
 
         isShowRename = true;
     }
@@ -347,6 +359,12 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
             
             updateMenu();
             window.CustomContextMenu.init();
+            if (Content.current === -1)
+            {
+                let event = new Event("click");
+                document.getElementById("button_new").dispatchEvent(event);
+            }
+
         });
 
         var _textbox = document.getElementById("rename_text");
@@ -362,12 +380,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
             this.style.borderColor = "";
             document.getElementById("input_error_id").style.display = "none";
         });
-        var textarea = document.getElementsByTagName("textarea");
-        if (textarea.length) {
-            textarea[0].focus();
-        } else {
-            document.getElementById("button_new").focus();
-        }
 	};
 	
 	window.Asc.plugin.button = function(id)
