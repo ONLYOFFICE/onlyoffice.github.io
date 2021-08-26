@@ -79,7 +79,7 @@
 	<script>
 		if (!Ps) Ps = new PerfectScrollbar('#' + "div_parent", {});
 		var timeOut;
-		function googleTranslateElementInit() 
+		function googleTranslateElementInit()
 		{
 
 			document.getElementById("google_translate_element").style.maxHeight = document.getElementById("body").clientHeight- 120 +"px";
@@ -140,8 +140,8 @@
 		window.addEventListener('message', function (msg) {
 			if (typeof(msg.data) === "object")
 			{
+				//event for change theme
 				if (msg.data.theme) {
-					//event for change theme
 					var styleTheme = document.createElement('style');
 					styleTheme.type = 'text/css';
 					styleTheme.innerHTML = msg.data.style;
