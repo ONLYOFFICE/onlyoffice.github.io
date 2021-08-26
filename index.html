@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>WordPress</title>
@@ -10,12 +25,12 @@
     <script type="text/javascript" src="scripts/wordpresshelper.js"></script>
     <link href="resources/css/style.css" rel="stylesheet">
 </head>
-<body>
+<body id="body">
     <div id="main-container">
         <div id="configState" style="margin: 12px;">
             <div><span>To use Wordpress, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-wordpress/tree/develop#configuration">Learn more here.</a></div>
             <input id="redirectConfig" style="width: 100%; margin-top: 8px;" readonly class="form-control" />
-            <div id="redirectUrlCopy" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="btn-text-default">Copy Link and Open Form</div>
+            <div id="redirectUrlCopy" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="noselect btn-text-default">Copy Link and Open Form</div>
             <div>In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</div>
             <div style="margin-top: 8px;">
                 <span>Client ID</span>
@@ -25,12 +40,12 @@
                 <span>Client secret key</span>
                 <input id="appSecretField" style="width: 100%;" autocomplete="off" class="form-control" type="text" placeholder="Client secret key" />
             </div>
-            <div id="saveConfigBtn" style="width: 100%; margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="btn-text-default">Save</div>
+            <div id="saveConfigBtn" style="width: 100%; margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;" class="noselect btn-text-default">Save</div>
         </div>
         <div id="loginState" style="display:none; margin: 12px;">
             <span>Connect an account to publish documents to your WordPress site</span>
-            <div id="loginBtn" class="btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;">Login</div>
-            <div id="reconfigBtn" class="btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;">Reconfigure</div>
+            <div id="loginBtn" class="noselect btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;">Login</div>
+            <div id="reconfigBtn" class="noselect btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center;">Reconfigure</div>
         </div>
         <div class="wait i18n">Please wait...</div>
         <div id="authorization-form" style="display: none;">
@@ -44,16 +59,16 @@
             </div>
             <div class="publish">
                 <label class="i18n">Title</label>
-                <input type="text" id="title" />
+                <input type="text" id="title" class="form-control" />
 
                 <div style="display: flex; justify-content: start;">
-                    <button id="publish" class="i18n">Publish</button>
-                    <button id="draft" class="i18n">Save as Draft</button>
+                    <div id="publish" class="noselect btn-text-default" style="margin: 15px 5px 15px 0; display: flex; align-items: center; justify-content: center; width: 50px;">Publish</div>
+                    <div id="draft" class="noselect btn-text-default" style="margin: 15px 0 15px 0; display: flex; align-items: center; justify-content: center; width: 80px;">Save as Draft</div>
                 </div>
             </div>
         </div>
         <div id="logout" style="display: none;">
-            <label style="cursor:pointer; border-bottom: 1px dashed #444444; position:absolute; bottom: 15px; right: 10px;">Logout</label>
+            <label id="logout_label" style="cursor:pointer; position:absolute; bottom: 15px; right: 10px; border-bottom: 1px dashed #444444;">Logout</label>
         </div>
     </div>
 </body>

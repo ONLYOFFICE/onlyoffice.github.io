@@ -1,4 +1,21 @@
-﻿(function (window, undefined) {
+﻿/**
+ *
+ * (c) Copyright Ascensio System SIA 2020
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+(function (window, undefined) {
     var wordpress = null;
     var post = null;
 
@@ -121,6 +138,11 @@
                 $(docElements.loginState).show();
             }
         });
+        $(docElements.redirectUrlCopy).click(function () {
+            docElements.redirectConfigUrl.select();
+            document.execCommand("copy");
+            window.open("https://developer.wordpress.com/apps/new/", '_blank');
+        });
         $(docElements.reconfigBtn).click(function() {
             if (clientID)
                 docElements.appIdField.value = clientID;
@@ -141,7 +163,12 @@
         getBlogInfo();
         window.Asc.plugin.onTranslate = applyTranslations;
     };
-
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        $('#body').css('color', window.Asc.plugin.theme.Color);
+        $('#logout_label').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+    };
     window.Asc.plugin.onMethodReturn = function (returnValue) {
         var _plugin = window.Asc.plugin;
         if (_plugin.info.methodName == "GetFileHTML") {
