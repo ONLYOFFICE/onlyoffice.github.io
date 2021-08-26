@@ -1,8 +1,27 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2020
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+ 
 (function(window, undefined){
 	var isInit = false;
 	var ifr;
 	const isIE = checkInternetExplorer();	//check IE
-	var message = "This plugin doesn't work in Internet Explorer."
+	var message = "This plugin doesn't work in Internet Explorer.";
+	var paste_done  = true;
 	
 	window.Asc.plugin.init = function(text)
 	{
@@ -60,6 +79,11 @@
 
 				setTimeout(function() {
                     btnReplace.onclick = function () {
+                        if (!paste_done)
+                            return;
+                        else
+                            paste_done = false;
+
                         var translatedTxt = ifr.contentDocument.getElementById("google_translate_element").outerText;
                         var allParasTxt = translatedTxt.split(/\n/);
                         var allParsedParas = [];
@@ -78,18 +102,24 @@
                         Asc.scope.arr = allParsedParas;
                         window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                             if (version === undefined) {
-                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
+                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
+                                    paste_done = true;
+                               });
                             }
                             else {
                                 window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
                                     switch (sType) {
                                         case "none":
                                         case "drawing":
-                                            window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText]);
+                                            window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
+                                                paste_done = true;
+                                            });
                                             break;
                                         case "text":
                                             window.Asc.plugin.callCommand(function() {
                                                 Api.ReplaceTextSmart(Asc.scope.arr);
+                                            }, undefined, undefined, function(result) {
+                                                paste_done = true;
                                             });
                                             break;
                                     }

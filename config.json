@@ -24,7 +24,9 @@
             "icons2": [
 			{
 				"100%": { "normal": "resources/img/icon.png" },
+				"125%": { "normal": "resources/img/icon@1.25x.png" },
 				"150%": { "normal": "resources/img/icon@1.5x.png" },
+				"175%": { "normal": "resources/img/icon@1.75x.png" },
 				"200%": { "normal": "resources/img/icon@2x.png" }
 			}
 			],
