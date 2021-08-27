@@ -74,19 +74,13 @@
 
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
 				selectElement.addEventListener('change', function(event) {
-					if (text || ifr.contentDocument.getElementById("google_translate_element").innerHTML) {
-						ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
-						ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
-					}
+					ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
+					ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 				});
 				ifr.contentDocument.getElementById("google_translate_element").style.height = "fit-content";
 				var btn = ifr.contentDocument.createElement("button");
 				var btnReplace = ifr.contentDocument.createElement("button");
 				var div = ifr.contentDocument.createElement("div");
-				var select = ifr.contentDocument.createElement("select");
-				select.id = "select_lang";
-				select.classList.add("select-lang");
-				select.classList.add("goog-te-combo");
 				div.appendChild(btn);
 				div.appendChild(btnReplace);
 				div.id = "div_btn";
@@ -99,10 +93,7 @@
 				btnReplace.classList.add("btn-text-default");
 				btnReplace.innerHTML = window.Asc.plugin.tr("Insert to document");
 				btnReplace.id = "btn_replace";
-				setTimeout(function() {
-					ifr.contentDocument.getElementById("body").appendChild(div);
-					ifr.contentDocument.getElementById(":0.targetLanguage").appendChild(select);
-				}, 100);
+				setTimeout(function() {ifr.contentDocument.getElementById("body").appendChild(div);}, 100);
 
 				setTimeout(function() {
                     btnReplace.onclick = function () {
