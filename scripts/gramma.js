@@ -111,7 +111,7 @@ function checkInternetExplorer(){
         switch (window.Asc.plugin.info.editorType) {
             case 'word': {
                 if (sText !== "") {
-                    window.Asc.plugin.executeMethod("GetSelectedText", [false], function(data) {
+                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
                         sText = data;
                         ExecPlugin();
                     });
