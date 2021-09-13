@@ -2,14 +2,13 @@
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: white;
-  color: black;
+  background: #fff;
+  color: #000;
 }
 p {
   margin: 0;
   line-height: 1;
-  font-family: 'Consolas';
-  color: black;
+  color: #000;
 }
 .hljs-tag{
   color: #2008c0;
@@ -27,5 +26,5 @@ p {
   color: #2008c0;
 }
 .hljs-attr {
-color: red;
+color: #f00;
 }
