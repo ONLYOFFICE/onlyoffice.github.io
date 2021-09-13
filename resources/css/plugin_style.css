@@ -25,7 +25,6 @@ div::-moz-selection {
 #no_mistakes {
     font-size: 12px;
     font-weight: 700 !important;
-    margin-top: 16px;
 }
 .replacment_space {
     border: 1px solid #40865C;
@@ -39,7 +38,6 @@ div::-moz-selection {
 #yes_mistakes {
     font-size: 11px;
     font-weight: 700 !important;
-    margin-top: 16px;
 }
 
 
@@ -62,7 +60,6 @@ div::-moz-selection {
     min-height: 22px;
     min-width: 26px;
 }
-
 .header {
   font-weight: 700;
   margin: 3px;
