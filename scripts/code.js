@@ -257,10 +257,6 @@
 									prettier_settings.parser = "babel";
 									text = prettier.format(text, prettier_settings);
 									break;
-								case "html":
-									prettier_settings.parser = "html";
-									text = prettier.format(text, prettier_settings);
-									break;
 								case "typescript":
 									prettier_settings.parser = "typescript";
 									text = prettier.format(text, prettier_settings);
