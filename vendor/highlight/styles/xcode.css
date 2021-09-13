@@ -9,14 +9,13 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
   overflow-x: auto;
   padding: 0.5em;
   background: #fff;
-  color: black;
+  color: #000;
 }
 
 p {
   margin: 0;
   line-height: 1;
-  font-family: 'Consolas';
-  color: black;
+  color: #000;
 }
 
 .hljs-comment,

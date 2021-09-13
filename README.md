@@ -2,7 +2,7 @@
 
 Highlight syntax of the code selecting the necessary language, style, and background color.
 
-The plugin uses the [highlight.js](https://highlightjs.org/) engine. 
+The plugin uses the [highlight.js](https://highlightjs.org/) engine, [prettier](https://github.com/prettier/prettier) library, [prettier-plugin-php] (https://github.com/prettier/plugin-php) plugin, [xml-formatter.js](https://github.com/chrisbottin/xml-formatter) library and [js-beautify.js](https://github.com/beautify-web/js-beautify) library. 
 
 It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 ## Supported languages and styles

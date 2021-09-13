@@ -10,14 +10,14 @@ Date: 2013-04-02
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: #eee; color: black;
+  background: #eee;
+  color: #000;
 }
 
 p {
   margin: 0;
   line-height: 1;
-  font-family: 'Consolas';
-  color: black;
+  color: #000;
 }
 
 .hljs-link,
