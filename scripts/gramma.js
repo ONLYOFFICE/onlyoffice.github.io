@@ -147,16 +147,17 @@ function checkInternetExplorer(){
 
         $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
 
-        var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}'
+        var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}\n';
+        rule += '#expand, #collapse { border-bottom: 1px dashed ' + window.Asc.plugin.theme["text-normal"] + ';}\n';
         var styleTheme = document.createElement('style');
         styleTheme.type = 'text/css';
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
-
+        $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+        $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
         if (!isIE) {
             $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
             $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
-            $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
             $('#arrow-svg-path').css('fill', theme["text-normal"]);
         }
         else
@@ -277,6 +278,35 @@ function checkInternetExplorer(){
                 id: "yes_mistakes",
                 text: "Possible mistakes found: " + arrResults.length
             }).appendTo('#result');
+            $('<div>', {
+                id: "hide_show",
+                text: ""
+            }).appendTo('#result');
+            $('<label>', {
+                id: "expand",
+                text: "Expand all",
+				click: function() {
+				        $('.result_div').each(function() {
+				            if ($(this).find('.details').css('display') === 'none')
+				                $(this).trigger('click');
+				        });
+				        $(this).hide();
+                        $('#collapse').show();
+                }
+            }).appendTo('#hide_show');
+            $('<label>', {
+                id: "collapse",
+                text: "Collapse all",
+                style: "display:none",
+				click: function() {
+				        $('.result_div').each(function() {
+				            if ($(this).find('.details').css('display') !== 'none')
+				                $(this).trigger('click');
+				        });
+				        $(this).hide();
+                        $('#expand').show();
+                }
+            }).appendTo('#hide_show');
         }
 
 		arrResults.forEach(function(el, ind) {
@@ -294,6 +324,20 @@ function checkInternetExplorer(){
                         $(this).find(".details").slideToggle("fast", function() {
                             updateScroll();
                             $(mainElm).find(".separator").toggleClass("display-none");
+
+                            var nOpened = 0;
+                            $('.result_div').each(function() {
+                                if ($(this).find('.details').css('display') !== 'none')
+                                    nOpened++;
+                            });
+                            if (nOpened === $('.result_div').length) {
+                                $('#expand').hide();
+                                $('#collapse').show();
+                            }
+                            else {
+                                $('#expand').show();
+                                $('#collapse').hide();
+                            }
                         });
                         $(this).find(".arrow").toggleClass("down");
                         $(this).find(".arrow").toggleClass("up");
