@@ -14,7 +14,6 @@
 p {
   margin: 0;
   line-height: 1;
-  font-family: 'Consolas';
   color: #DCDCDC;
 }
 
@@ -85,7 +84,7 @@ p {
 }
 
 .hljs-section {
-  color: gold;
+  color: #FFD700;
 }
 
 .hljs-emphasis {
