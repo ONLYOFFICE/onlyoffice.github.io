@@ -140,10 +140,7 @@ function websdkready() {
         console.log(res.result);
         meetingConfig.signature = res.result;
         meetingConfig.apiKey = API_KEY;
-        var joinUrl =
-          testTool.getCurrentDomain() +
-          "http://127.0.0.1:8001/sdkjs-plugins/plugin-zoom//meeting.html?" +
-          testTool.serialize(meetingConfig);
+        var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
         document.getElementById('copy_link_value').setAttribute('link', joinUrl);
         copyToClipboard('copy_link_value');
         
