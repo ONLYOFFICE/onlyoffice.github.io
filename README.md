@@ -1,15 +1,21 @@
 ## Overview
 
-Alcatel-Lucent Rainbow ™ is a cloud collaboration service from Alcatel-Lucent Enterprise that enables organizations and employees to communicate effectively with colleagues, business partners and customers.
+Communicate with your team, exchange instant messages and make video and voice calls using Rainbow right in the ONLYOFFICE editors. 
+
+[Rainbow](https://www.al-enterprise.com/en) is a business communication platform developed by Alcatel-Lucent Enterprise (ALE).
+
+The Rainbow plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) versions of ONLYOFFICE Docs. 
 
 ## How to use
 
-1. Find the plugin in the Plugins tab. 
-2. Click on it.
-3. Login
+1. Open Plugins tab and click Rainbow.
+2. Log in to your Rainbow account or create a new one.
 
-## Possible problems and solutions
+## How to install
 
-When using the Google Chrome browser, there may be problems with accessing cookies. Change your browser security settings:
-Under Chrome's Settings > Privacy > Content settings, you have the cookie setting set to "Block sites from setting any data"
-This checkbox is what is causing the problem, change it.
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+
+## Known issues
+
+There may be an issue with accessing cookies in Google Chrome browser. To fix that, go to your Chrome settings:
+Settings -> Privacy and security -> Cookies and other site data and enable the Allow all cookies option. 
