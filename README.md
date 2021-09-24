@@ -1,12 +1,16 @@
 ## Overview 
 
-Docs to Markdown convert a Doc to Markdown or HTML.
+Convert your formatted document to Markdown or HTML.
+
+The plugin uses [Docs to Markdown](https://github.com/evbacher/gd2md-html) add-on. 
+
+It is is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of ONLYOFFICE editors. It can be added to ONLYOFFICE instances manually. 
 
 ## How to use
 
-1. Find Docs to Markdown in the Plugins tab. Click on it.
+1. Find the plugin on the Plugins tab and click it.
 2. Use the Markdown or HTML buttons in the sidebar window to convert your document to either Markdown or HTML.
-3. If you select part of the document, Docs to Markdown will convert only the selection. Otherwise it will convert the entire document.
+3. If you select part of the document, Docs to Markdown will convert only the selection. Otherwise, it will convert the entire document.
 
 ## Options
 
