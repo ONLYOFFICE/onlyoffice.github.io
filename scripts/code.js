@@ -573,7 +573,7 @@
 		if (code[code.length-1] == "<p>&nbsp</p>")
 			code.pop();
 
-		window.Asc.plugin.executeMethod("PasteHtml",['<html lang=\"en\"><head><style> p {"background":'+settings.background+' !important}\r\n'+style_value +'</style></head><body><div style = \"white-space: pre;\"><span style =\"font-size:'+settings.font_size+'pt; font-family:'+settings.font+';\">'+code.join("")+'</span></div></body></html>']);
+		window.Asc.plugin.executeMethod("PasteHtml",['<html lang=\"en\"><head><style> p{background:'+settings.background+'}\r\n'+style_value +'</style></head><body><div style = \"white-space: pre;\"><span style =\"font-size:'+settings.font_size+'pt; font-family:'+settings.font+';\">'+code.join("")+'</span></div></body></html>']);
 	};
 
 	$.fn.get_selection_range = function() {
