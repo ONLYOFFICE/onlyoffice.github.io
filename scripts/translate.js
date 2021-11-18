@@ -48,7 +48,7 @@
         switch (window.Asc.plugin.info.editorType) {
             case 'word': {
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
-                    txt = ProcessText(data);
+                    txt = (data === undefined) ? "" : ProcessText(data);
                     ExecPlugin();
                 });
                 break;
