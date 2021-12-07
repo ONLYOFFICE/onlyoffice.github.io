@@ -74,12 +74,10 @@ function checkInternetExplorer(){
 		txt = text;
 		switch (window.Asc.plugin.info.editorType) {
             case 'word': {
-                if (txt !== "") {
-                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
-                        txt = data;
-                        ExecPlugin();
-                    });
-                }
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
+                    txt = data;
+                    ExecPlugin();
+                });
                 break;
             }
             case 'cell':
@@ -415,6 +413,15 @@ function checkInternetExplorer(){
 
 	function init() {
 		getLanguages().then(function(oResponse) {
+		    for (var nLang1 = 0; nLang1 < oResponse.length; nLang1++) {
+			    for (var nLang2 = nLang1 + 1; nLang2 < oResponse.length; nLang2++) {
+                    if (oResponse[nLang1].longCode === oResponse[nLang2].longCode)
+                    {
+                        oResponse.splice(nLang2, 1);
+                        nLang2--;
+                    }
+			    }
+			}
 			var languages = oResponse.map(function(el, ind) {
 				return {
 					id : ind + 1,
@@ -423,6 +430,7 @@ function checkInternetExplorer(){
 					longcode : el.longCode
 				};
 			});
+
 			languages.unshift({id : 0, text:"Auto", code : "auto", longcode : "auto"});
 			$('#language_id').select2({
 				data : languages
