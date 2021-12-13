@@ -101,7 +101,7 @@ var Ps;
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
-        $('#hide-settings, #show-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('#hide-settings, #show-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
     };
     function DelInvalidChars(arrParas) {
         for (var nPara = 0; nPara < arrParas.length; nPara++) {
