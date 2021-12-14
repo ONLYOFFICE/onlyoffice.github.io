@@ -43,8 +43,7 @@
 		}
 		.caption_text {
 			width: 90%;
-			margin-left: 4px;
-			margin-bottom: 17px;
+			margin: 0 4px 17px 4px;
 		}
 		.dismiss_buttons {
 			margin: 14px 0 16px 0;
@@ -84,6 +83,9 @@
         	margin-top: 16px;
         	text-align: center;
         }
+        .replacment {
+        	border-color: #009900 !important;
+        }
         i {
             border: solid black;
             border-width: 0 1px 1px 0;
@@ -103,6 +105,23 @@
         .ps__rail-y {
 			cursor: default !important;
 		}
+		.miniText {
+    		margin: 0 4px 17px 4px;
+			width: 90%;
+		}
+		.unselectable {
+		  -webkit-touch-callout: none; /* iOS Safari */
+		  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+		  -khtml-user-select: none;    /* Konqueror */
+		  -moz-user-select: none;      /* Firefox */
+		  -ms-user-select: none;       /* Internet Explorer/Edge */
+		  user-select: none;           /* Non-prefixed version, currently
+										  not supported by any browser */
+		}
+		#textarea:empty:not(:focus):before{
+			content:attr(data-text);
+			color: gray;
+		}
 	</style>
 	<body class='body' style="margin: 0; display: flex; flex-direction: column;">
 		<div id="loader-container" class="asc-plugin-loader display-none">
@@ -113,18 +132,21 @@
 				Checking...
 			</div>
     	</div>
-		<div id="div_language" style="margin: 0px 12px 16px 12px;">
+		<div id="div_language" style="margin: 0px 12px 0px 12px;">
 			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 				<label style="">Language</label>
 			</div>
 			<select id="language_id" style="width: 100%;" class="select_example"></select>
 		</div>
+		<div id="hide_show" style="margin: 12px 14px 4px 0px;">
+		  <label id="clear" class="unselectable" style="float: right; border-bottom: var(--scaled-one-pixel, 1px) dotted rgba(255, 255, 255, 0.8); cursor: pointer;">Clear</label>
+		</div>
 		<div id="enter_container" class="form-control" style="cursor: text; position: relative; margin: 0px 12px 0px 12px; min-height: 100px; max-height: 45%; height: fit-content;">
-			<div id="textarea" contenteditable="true" style="min-width: 95%; max-width: 95%; height: fit-content; padding: 0px 15px 5px 3px; outline: none; white-space: normal; float: left; word-wrap: break-word;" ></div>
+			<div id="textarea" contenteditable="true" data-text="Select the text to check in the document or enter it manually" style="min-width: 95%; max-width: 95%; height: fit-content; padding: 0px 15px 5px 3px; outline: none; white-space: normal; float: left; word-wrap: break-word;" ></div>
 		</div>
 		<div id="button_wrapper">
-			<div onсlick="" id="check" style="padding: 2px;" class="noselect btn-text-default i18n">Check</div>
-			<div onсlick="" id="replace" style="padding: 2px;" class="noselect btn-text-default i18n">Insert to document</div>
+			<div onсlick="" id="check" class="noselect btn-text-default i18n">Check</div>
+			<div onсlick="" id="replace" class="noselect btn-text-default i18n">Insert to document</div>
 		</div>
 		<div id="scrollable-container-id" style="position: relative; width: 100%; height: 70%; overflow: hidden ">
 			<div id="result" style="width: calc(100% - 24px); margin: 0px 12px 0px 12px; word-break: break-word; display: flex; flex-flow: column;"></div>
