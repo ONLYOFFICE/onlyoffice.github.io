@@ -517,7 +517,7 @@ function checkInternetExplorer(){
 					var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
 					$('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
 				},
-			    "class": "dismiss btn-text-default"
+			    "class": "dismiss btn-text-default i18n"
 			}).data({ index : ind }).appendTo(dismiss_buttons);
 
 //			$('<button>', {
@@ -541,6 +541,8 @@ function checkInternetExplorer(){
                 });
             context.appendTo('#textarea');
         }
+
+        window.Asc.plugin.onTranslate();
 	};
 
 	function correctText(data) {
