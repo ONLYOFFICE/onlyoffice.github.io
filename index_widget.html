@@ -4,11 +4,11 @@
 	<meta charset="UTF-8">
 	<title>translate</title>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.full.min.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.full.min.js"></script>
-	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 	<style>
 		.body_class {
 			top: 0 !important;
@@ -16,7 +16,7 @@
 			padding: 5px !important;
 			box-sizing: border-box;
 			overflow: hidden;
-			font-size: 14px !important;
+			font-size: 11px !important;
 		}
 		.goog-te-banner-frame {
 			display: none;
@@ -55,6 +55,7 @@
 			height: 22px;
 		}
 		.div_btn {
+			display: flex;
 			padding-top: 3px;
 			padding-left: 5px;
 			width: calc(100% - 10px);
@@ -66,15 +67,18 @@
 			width: calc(50% - 10px) !important;
 			font-size: 11px;
 			margin: 5px;
+			height: auto;
+			min-height: 20px;
 		}
 		#hr {
 			width: calc(100% - 20px) !important;
 			margin-left: 10px !important;
 		}
+		
 	</style>
 </head>
 <body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
-	<div id="google_translate_state" style="width: calc(100% - 20px); margin-left: 10px;"></div>
+	<div id="google_translate_state" style="width: calc(100% - 20px); margin-left: 10px; margin-top: 7px;"></div>
 	<hr id ="hr">
 	<div id="div_parent" style="overflow: hidden; overflow-x: hidden; padding-top: 15px; position: relative;">
 		<div id="google_translate_element" style="position: relative; font-family: 'Arial'; word-break: break-word; white-space: pre-wrap; height: fit-content; margin-left: 10px; margin-right: 15px;"></div>
@@ -113,7 +117,8 @@
 				
 				$("#select_lang").select2({
 					// dataAdapter: customAdapter,
-					data : createLangForSelect()
+					data : createLangForSelect(),
+					width: "calc(100% - 0.001px)"
 				}).on('select2:select', function (e) {
 					searchLang(e.params.data.value)
 				});
@@ -189,9 +194,11 @@
 			{
 				//event for change theme
 				if (msg.data.theme) {
+					var rule = "\n.select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + msg.data.theme["text-normal"] + " !important; }\n";
+					rule += "#hr {background-color: " + msg.data.theme["text-normal"] + " !important; }\n";
 					var styleTheme = document.createElement('style');
 					styleTheme.type = 'text/css';
-					styleTheme.innerHTML = msg.data.style;
+					styleTheme.innerHTML = msg.data.style + rule;
 					document.getElementsByTagName('head')[0].appendChild(styleTheme);
 					document.getElementById("google_translate_element").style.color = msg.data.theme["text-normal"];
 					if (document.getElementsByClassName("goog-te-gadget")[0])
