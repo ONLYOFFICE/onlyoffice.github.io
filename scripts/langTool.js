@@ -100,7 +100,7 @@ function checkInternetExplorer(){
 		savedDismiss = [];
 		switch (window.Asc.plugin.info.editorType) {
             case 'word': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false}], function(data) {
                     txt = data;
                     ExecPlugin();
                 });
@@ -113,7 +113,8 @@ function checkInternetExplorer(){
         }
 	};
 	function ExecPlugin() {
-	    document.getElementById("textarea").innerText = txt;
+	    if (txt.trim() !== "")
+	        document.getElementById("textarea").innerText = txt;
 		updateScroll();
 		$("#result").empty();
 		if (!isInit) {
@@ -158,12 +159,12 @@ function checkInternetExplorer(){
         PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
 		$('#check').on('click', function(){
-			txt = document.getElementById("textarea").innerText.trim();
+			txt = document.getElementById("textarea").innerText;
 			if (txt !== "") {
 				$("#result").empty();
 				checkText(txt, CurLang);
 			}
-			else{
+			else {
 			    $('#result').empty();
 			    canAddText = true;
 			}
