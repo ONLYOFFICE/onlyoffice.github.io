@@ -86,7 +86,7 @@ function getMessage(key) {
         switch (window.Asc.plugin.info.editorType) {
             case 'word': {
                 if (txt !== "") {
-                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
+                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false}], function(data) {
                         txt = data;
                         ExecPlugin();
                     });
