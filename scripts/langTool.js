@@ -302,7 +302,7 @@ function checkInternetExplorer(){
         var nPosToSlice = 0;
         for (var nMap = 0; nMap < mapParagraphs.length; nMap++)
         {
-            aFinalResult[nMap] = aSplittedResult.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join('');
+            aFinalResult[nMap] = aSplittedResult.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join(String.fromCharCode(160));
             nPosToSlice = nPosToSlice + mapParagraphs[nMap].length;
         }
 
