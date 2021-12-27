@@ -482,7 +482,7 @@ function getMessage(key) {
 
     function processText(sTxt){
 	    var splittedParas;
-
+        var parasToTranslate = [];
 	    switch (window.Asc.plugin.info.editorType) {
             case 'word': {
                 splittedParas = txt.split('\n');
@@ -496,16 +496,15 @@ function getMessage(key) {
         }
 
         if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = txt;
+            document.getElementById("textarea").innerText = txt.replace(/\r/g, '\n');
 
         mapParagraphs = [];
 	    for (var nPara = 0; nPara < splittedParas.length; nPara++) {
 	        mapParagraphs[nPara] = splittedParas[nPara].split('\r');
-	        if (mapParagraphs[nPara].length > 1 && mapParagraphs[nPara][mapParagraphs[nPara].length - 1] === "")
-                mapParagraphs[nPara].pop();
+	        parasToTranslate = parasToTranslate.concat(splittedParas[nPara].split('\r'));
 	    }
 
-	    return document.getElementById("textarea").innerText.split('\n');
+	    return parasToTranslate;
 	};
 
     function RunTranslate(sText) {
