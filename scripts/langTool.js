@@ -17,11 +17,12 @@
  */
 var Ps;
 var PsTextArea;
-const isIE = checkInternetExplorer();	//check IE
+const isIE          = checkInternetExplorer();	//check IE
 var sTextForDisplay = null;
-var tempMatches = null;
-var savedDismiss = [];
+var tempMatches     = null;
+var savedDismiss    = [];
 var languages;
+var mapParagraphs    = [];
 
 function checkInternetExplorer(){
     var rv = -1;
@@ -53,6 +54,7 @@ function checkInternetExplorer(){
 	var isInit = false;
 	var CurLang = "auto";
 	var txt = "";
+	var txtForChek = "";
 	var matches;
 	var displayNoneClass = "display-none";
 	var blurClass        = "no_class";
@@ -83,7 +85,7 @@ function checkInternetExplorer(){
 	        return;
 	    }
 
-        if (text === "") {
+        if (text === "" && document.getElementById("textarea").innerText === "") {
             if ($('#check').hasClass('disabled') === false)
 	            $('#check').toggleClass('disabled');
 	        if ($('#replace').hasClass('disabled') === false)
@@ -99,22 +101,54 @@ function checkInternetExplorer(){
 		txt = text;
 		savedDismiss = [];
 		switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false}], function(data) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
                     txt = data;
                     ExecPlugin();
                 });
                 break;
             }
             case 'cell':
-            case 'slide':
-                ExecPlugin();
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    if (data == '')
+                        txt = txt.replace(/\t/g, '\n');
+                    else {
+                        txt = data;
+                    }
+                    ExecPlugin();
+                });
                 break;
         }
 	};
+	function processText(sTxt){
+	    var splittedParas;
+
+	    switch (window.Asc.plugin.info.editorType) {
+            case 'word': {
+                splittedParas = txt.split('\n');
+                break;
+            }
+            case 'cell':
+            case 'slide':
+                txt = txt.replace(/\r\n/g, '\n')
+                splittedParas = txt.split('\n');
+                break;
+        }
+
+        if (txt.trim() !== "")
+            document.getElementById("textarea").innerText = txt;
+            
+        mapParagraphs = [];
+	    for (var nPara = 0; nPara < splittedParas.length; nPara++) {
+	        mapParagraphs[nPara] = splittedParas[nPara].split('\r');
+	        if (mapParagraphs[nPara].length > 1 && mapParagraphs[nPara][mapParagraphs[nPara].length - 1] === "")
+                mapParagraphs[nPara].pop();
+	    }
+	}
 	function ExecPlugin() {
-	    if (txt.trim() !== "")
-	        document.getElementById("textarea").innerText = txt;
+	    processText(txt);
+
 		updateScroll();
 		$("#result").empty();
 		if (!isInit) {
@@ -162,7 +196,8 @@ function checkInternetExplorer(){
 			txt = document.getElementById("textarea").innerText;
 			if (txt !== "") {
 				$("#result").empty();
-				checkText(txt, CurLang);
+				txtForChek = txt.replace(/\n/g, '\n\n');
+				checkText(txtForChek, CurLang);
 			}
 			else {
 			    $('#result').empty();
@@ -262,22 +297,16 @@ function checkInternetExplorer(){
 
 
     function ParseText(sText) {
-        var allParasInSelection = sText.split(/\n/);
-        var allParsedParas = [];
-
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
-
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
-            });
+        var aSplittedResult = sText.split(/\n/);
+        var aFinalResult = [];
+        var nPosToSlice = 0;
+        for (var nMap = 0; nMap < mapParagraphs.length; nMap++)
+        {
+            aFinalResult[nMap] = aSplittedResult.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join('');
+            nPosToSlice = nPosToSlice + mapParagraphs[nMap].length;
         }
 
-        return allParsedParas;
+        return aFinalResult;
     };
 
 	function getLanguages() {
@@ -294,7 +323,8 @@ function checkInternetExplorer(){
 		var data = {
 			text : txt,
 			language : lang,
-			enabledOnly : false
+			enabledOnly : false//,
+			//disabledRules: "WORD_REPEAT_RULE"
 		}
 
 		$.ajax({
@@ -360,6 +390,8 @@ function checkInternetExplorer(){
         else {
             canAddText = false;
             changeLangInSelect(oResponse.language.name);
+
+            correctMistakesPosition(matches);
             
             sTextForDisplay = txt;
             tempMatches = [];
@@ -559,6 +591,27 @@ function checkInternetExplorer(){
 		updateScroll();
 	};
 
+    function correctMistakesPosition(matches) {
+        var aPosWithAddedBreaks = [];
+        for (var nChar = 0; nChar < txtForChek.length; nChar++) {
+            if (txtForChek[nChar] === '\n')
+            {
+                aPosWithAddedBreaks.push(nChar);
+                nChar++;
+            }
+        }
+        for (var nMatch = 0; nMatch < matches.length; nMatch++)
+        {
+            var nOffset = 0;
+            for (var nPosWithBreak = 0; nPosWithBreak < aPosWithAddedBreaks.length; nPosWithBreak++)
+            {
+                if (matches[nMatch].offset > aPosWithAddedBreaks[nPosWithBreak])
+                    nOffset++;
+            }
+
+            matches[nMatch].offset -= nOffset;
+        }
+    };
 	function setTextWithErrors(sWord, nInd) {
 	    //if (data.text()[0] === '(' && data.text()[data.text().length - 1] === ')') {
 	    //    return data.parent().parent().find('.dismiss').trigger("click");
