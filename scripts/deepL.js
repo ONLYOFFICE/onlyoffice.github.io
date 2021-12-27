@@ -31,6 +31,7 @@
  */
 var Ps;
 var PsTextArea;
+var mapParagraphs = [];
 const isIE = checkInternetExplorer();	//check IE
 function checkInternetExplorer(){
     var rv = -1;
@@ -86,7 +87,7 @@ function getMessage(key) {
 		});
 
         txt = text;
-        document.getElementById("textarea").innerText = text;
+        document.getElementById("textarea").innerText = txt;
         updateScroll();
 
         if ((apikey == '' || apikey == null) && isFirstRun) {
@@ -95,18 +96,23 @@ function getMessage(key) {
         }
 
         switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                if (txt !== "") {
-                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
-                        txt = data;
-                        ExecPlugin();
-                    });
-                }
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    txt = data;
+                    ExecPlugin();
+                });
                 break;
             }
             case 'cell':
-            case 'slide':
-                ExecPlugin();
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    if (data == '')
+                        txt = txt.replace(/\t/g, '\n');
+                    else {
+                        txt = data;
+                    }
+                    ExecPlugin();
+                });
                 break;
         }
 	};
@@ -186,10 +192,13 @@ function getMessage(key) {
             beforeSend: function(request) {
 				request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
 			},
-			data: '?auth_key=' + apikey + sParams  + '&target_lang=' + targetLanguage,
+			data: '?auth_key=' + apikey + sParams + '&split_sentences=0' + '&target_lang=' + targetLanguage,
             url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey
 
         }).success(function (oResponse) {
+            if (translatedText.length !== 0)
+                return;
+                
             isValidKey = true;
             if ($('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
@@ -208,9 +217,9 @@ function getMessage(key) {
 
             container = document.getElementById('txt_shower');
             container.innerHTML = "";
+
             for (var nText = 0; nText < oResponse.translations.length; nText++) {
                 translatedText.push(oResponse.translations[nText].text);
-
                 if (oResponse.translations[nText].text !== "")
                     container.innerHTML += escape(oResponse.translations[nText].text) + '<br>';
             }
@@ -248,21 +257,20 @@ function getMessage(key) {
         });
     };
 
-    function SplitText(sText) {
-        var allParasInSelection = sText.split(/\n/);
-        var allParsedParas = [];
-
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
-
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
-            });
+    function BuildText(aTranlations) {
+        var aFinalResult = [];
+        var nPosToSlice = 0;
+        for (var nMap = 0; nMap < mapParagraphs.length; nMap++)
+        {
+            aFinalResult[nMap] = aTranlations.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join(String.fromCharCode(160));
+            nPosToSlice = nPosToSlice + mapParagraphs[nMap].length;
         }
+
+        return aFinalResult;
+    };
+
+    function SplitText(sText) {
+        var allParsedParas = sText.split(/\n/);
 
         return allParsedParas;
     }
@@ -369,7 +377,7 @@ function getMessage(key) {
                     return;
                 else
                     paste_done = false;
-                Asc.scope.arr = translatedText;
+                Asc.scope.arr = BuildText(translatedText);
                 window.Asc.plugin.info.recalculate = true;
 
                 window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
@@ -486,9 +494,37 @@ function getMessage(key) {
         return true;
     };
 
+    function processText(sTxt){
+	    var splittedParas;
+
+	    switch (window.Asc.plugin.info.editorType) {
+            case 'word': {
+                splittedParas = txt.split('\n');
+                break;
+            }
+            case 'cell':
+            case 'slide':
+                txt = txt.replace(/\r\n/g, '\n')
+                splittedParas = txt.split('\n');
+                break;
+        }
+
+        if (txt.trim() !== "")
+            document.getElementById("textarea").innerText = txt;
+
+        mapParagraphs = [];
+	    for (var nPara = 0; nPara < splittedParas.length; nPara++) {
+	        mapParagraphs[nPara] = splittedParas[nPara].split('\r');
+	        if (mapParagraphs[nPara].length > 1 && mapParagraphs[nPara][mapParagraphs[nPara].length - 1] === "")
+                mapParagraphs[nPara].pop();
+	    }
+
+	    return document.getElementById("textarea").innerText.split('\n');
+	};
+
     function RunTranslate(sText) {
 
-        var allParsedParas = SplitText(sText);
+        var allParsedParas = processText(sText);
         DelInvalidChars(allParsedParas);
         if (IsLastTransate(allParsedParas))
             return false;
@@ -499,6 +535,7 @@ function getMessage(key) {
         translatedText = [];
         Translate(apikey, target_lang, sParams);
     };
+
 	window.Asc.plugin.onExternalMouseUp = function()
 	{
 		var evt = document.createEvent("MouseEvents");
