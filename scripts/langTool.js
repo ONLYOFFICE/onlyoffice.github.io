@@ -123,7 +123,7 @@ function checkInternetExplorer(){
 	};
 	function processText(sTxt){
 	    var splittedParas;
-
+        var textToDisplay = "";
 	    switch (window.Asc.plugin.info.editorType) {
             case 'word': {
                 splittedParas = txt.split('\n');
@@ -137,13 +137,11 @@ function checkInternetExplorer(){
         }
 
         if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = txt;
+            document.getElementById("textarea").innerText = txt.replace(/\r/g, '\n');
             
         mapParagraphs = [];
 	    for (var nPara = 0; nPara < splittedParas.length; nPara++) {
 	        mapParagraphs[nPara] = splittedParas[nPara].split('\r');
-	        if (mapParagraphs[nPara].length > 1 && mapParagraphs[nPara][mapParagraphs[nPara].length - 1] === "")
-                mapParagraphs[nPara].pop();
 	    }
 	}
 	function ExecPlugin() {
