@@ -17,7 +17,7 @@
  */
 
 var Ps;
-
+var sTabChar;
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -31,6 +31,25 @@ var Ps;
     var sText = '';
 	window.Asc.plugin.init = function (text) {
         sText = text;
+        sTabChar = '\t';
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(9)}], function(data) {
+                    sText = data;
+                });
+                break;
+            }
+            case 'cell': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(9)}], function(data) {
+                    if (data == '')
+                        sText = sText.replace(/\t/g, '\n');
+                    else
+                        sText = data;
+                });
+                break;
+            }
+        }
     };
     window.Asc.plugin.onThemeChanged = function(theme)
     {
@@ -149,7 +168,18 @@ var Ps;
             }
         });
     });
+    function processText(sTxt){
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
 
+	    var splittedParas = sTxt.split('\n');
+
+        splittedParas.forEach(function(item, i, splittedParas) {
+            splittedParas[i] = removeCR(item);
+        });
+
+	    return splittedParas;
+	};
     function CorrectText(sText) {
         var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
         var tp = new Typograf({locale: [locale]});
@@ -164,26 +194,17 @@ var Ps;
             }
         }
 
-        var allParasInSelection = sText.split(/\n/);
-
-        var allParsedParas = [];
-
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
-
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(removeCR(item));
-            });
-        }
-
+        var allParsedParas = processText(sText);
         var allTypografedParas = [];
 
         for (var Item = 0; Item < allParsedParas.length; Item++) {
             typografedText = tp.execute(allParsedParas[Item]);
+            if (typografedText.search('\t') !== - 1)
+            {
+                typografedText = typografedText.replace(/\t/g, String.fromCharCode(32));
+                sTabChar = String.fromCharCode(32);
+            }
+            typografedText = typografedText.replace(/\n/g, String.fromCharCode(32));
             allTypografedParas.push(typografedText);
         }
 
@@ -205,15 +226,24 @@ var Ps;
                 window.Asc.plugin.executeMethod("PasteText", [strResult]);
             }
             else {
-                window.Asc.plugin.callCommand(function() {
-                    Api.ReplaceTextSmart(Asc.scope.arr);
-                });
+                if (sTabChar === String.fromCharCode(32)) {
+                    window.Asc.plugin.callCommand(function() {
+                        Api.ReplaceTextSmart(Asc.scope.arr, String.fromCharCode(32));
+                    });
+                }
+                else {
+                    window.Asc.plugin.callCommand(function() {
+                        Api.ReplaceTextSmart(Asc.scope.arr, String.fromCharCode(9));
+                    });
+                }
+
             }
         });
     }
 
     function removeCR(text) {
-        return text.replace(/\r\n?/g, '');
+        //return text.replace(/\r\n?/g, '');
+        return text;
     };
 
     function updateScroll()
