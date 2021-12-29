@@ -95,8 +95,6 @@ function getMessage(key) {
             console.log('Languages not loaded!');
             return false;
         }
-
-
 	};
 
     function ExecPlugin() {
@@ -514,7 +512,7 @@ function getMessage(key) {
                 }
                 break;
             }
-        }, 500));
+        }, 1000));
 
         $("#enter_container").click(function() {
             $("#textarea").focus();
