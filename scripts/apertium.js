@@ -75,7 +75,6 @@ function getMessage(key) {
 	window.Asc.plugin.init = function(text)
 	{
 	    txt = text;
-        document.getElementById("textarea").innerText = text;
         updateScroll();
 
         if (!isReadyToTranslate()) {
@@ -84,18 +83,23 @@ function getMessage(key) {
         }
 
         switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                if (txt !== "") {
-                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false}], function(data) {
-                        txt = data;
-                        ExecPlugin();
-                    });
-                }
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    txt = data.replace(/\r/g, ' ');
+                    ExecPlugin();
+                });
                 break;
             }
             case 'cell':
-            case 'slide':
-                ExecPlugin();
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    if (data == '')
+                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                    else {
+                        txt = data.replace(/\r/g, ' ');
+                    }
+                    ExecPlugin();
+                });
                 break;
         }
 	};
@@ -336,27 +340,18 @@ function getMessage(key) {
         }
     };
 
-    function SplitText(sText) {
-        var allParasInSelection = sText.split(/\n/);
-        var allParsedParas = [];
+    function processText(sTxt){
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
 
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
+	    var splittedParas = sTxt.split('\n');
+        var parasToTranslate = [];
 
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(removeCR(item));
-            });
-        }
+        if (txt.trim() !== "")
+            document.getElementById("textarea").innerText = sTxt;
 
-        return allParsedParas;
-    };
-    function removeCR(text) {
-        return text.replace(/\r\n?/g, '');
-    };
+	    return splittedParas;
+	};
 
     function selectText(id) {
         var sel, range;
@@ -534,7 +529,7 @@ function getMessage(key) {
     function RunTranslate(sText) {
         curIter = 0;
         var source_lang = GetSourceLang();
-        var allParas = SplitText(sText);
+        var allParas = processText(sText);
         DelInvalidChars(allParas);
         if (IsLastTransate(allParas))
             return false;
