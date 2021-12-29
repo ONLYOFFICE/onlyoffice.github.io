@@ -22,7 +22,6 @@ var sTextForDisplay = null;
 var tempMatches     = null;
 var savedDismiss    = [];
 var languages;
-var mapParagraphs    = [];
 
 function checkInternetExplorer(){
     var rv = -1;
@@ -104,7 +103,7 @@ function checkInternetExplorer(){
             case 'word':
             case 'slide': {
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
-                    txt = data;
+                    txt = data.replace(/\r/g, ' ');
                     ExecPlugin();
                 });
                 break;
@@ -112,9 +111,9 @@ function checkInternetExplorer(){
             case 'cell':
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
                     if (data == '')
-                        txt = txt.replace(/\t/g, '\n');
+                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
                     else {
-                        txt = data;
+                        txt = data.replace(/\r/g, ' ');
                     }
                     ExecPlugin();
                 });
@@ -122,28 +121,18 @@ function checkInternetExplorer(){
         }
 	};
 	function processText(sTxt){
-	    var splittedParas;
-        var textToDisplay = "";
-	    switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                splittedParas = txt.split('\n');
-                break;
-            }
-            case 'cell':
-            case 'slide':
-                txt = txt.replace(/\r\n/g, '\n')
-                splittedParas = txt.split('\n');
-                break;
-        }
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
+
+	    var splittedParas = sTxt.split('\n');
+        var parasToTranslate = [];
 
         if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = txt.replace(/\r/g, '\n');
-            
-        mapParagraphs = [];
-	    for (var nPara = 0; nPara < splittedParas.length; nPara++) {
-	        mapParagraphs[nPara] = splittedParas[nPara].split('\r');
-	    }
-	}
+            document.getElementById("textarea").innerText = sTxt;
+
+	    return splittedParas;
+	};
+
 	function ExecPlugin() {
 	    processText(txt);
 
@@ -228,7 +217,7 @@ function checkInternetExplorer(){
 		    else
 		        paste_done = false;
 
-            Asc.scope.arr = ParseText(document.getElementById("textarea").innerText);
+            Asc.scope.arr = document.getElementById("textarea").innerText.split(/\n/);
             window.Asc.plugin.info.recalculate = true;
 
             // for usual paste
@@ -262,7 +251,7 @@ function checkInternetExplorer(){
                                 break;
                             case "text":
                                 window.Asc.plugin.callCommand(function() {
-                                    Api.ReplaceTextSmart(Asc.scope.arr);
+                                    Api.ReplaceTextSmart(Asc.scope.arr, String.fromCharCode(160));
                                 }, undefined, undefined, function(result) {
                                     paste_done = true;
                                 });
@@ -292,20 +281,6 @@ function checkInternetExplorer(){
             $("#textarea").focus();
         });
 	});
-
-
-    function ParseText(sText) {
-        var aSplittedResult = sText.split(/\n/);
-        var aFinalResult = [];
-        var nPosToSlice = 0;
-        for (var nMap = 0; nMap < mapParagraphs.length; nMap++)
-        {
-            aFinalResult[nMap] = aSplittedResult.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join(String.fromCharCode(160));
-            nPosToSlice = nPosToSlice + mapParagraphs[nMap].length;
-        }
-
-        return aFinalResult;
-    };
 
 	function getLanguages() {
 		var url = "https://languagetool.org/api/v2/languages";
