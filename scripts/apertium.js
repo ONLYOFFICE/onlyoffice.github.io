@@ -96,26 +96,7 @@ function getMessage(key) {
             return false;
         }
 
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
-                    txt = data.replace(/\r/g, ' ');
-                    ExecPlugin();
-                });
-                break;
-            }
-            case 'cell':
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
-                    if (data == '')
-                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
-                    else {
-                        txt = data.replace(/\r/g, ' ');
-                    }
-                    ExecPlugin();
-                });
-                break;
-        }
+
 	};
 
     function ExecPlugin() {
@@ -540,7 +521,7 @@ function getMessage(key) {
         });
     });
 
-    function RunTranslate(sText) {
+    function ExecApertium(sText) {
         curIter = 0;
         var source_lang = GetSourceLang();
         var allParas = processText(sText);
@@ -566,6 +547,28 @@ function getMessage(key) {
                 continue;
             }
             Translate(source_lang, target_lang, txtToTranslate[nText]);
+        }
+    }
+    function RunTranslate(sText) {
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    sText = data.replace(/\r/g, ' ');
+                    ExecApertium(sText);
+                });
+                break;
+            }
+            case 'cell':
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    if (data == '')
+                        sText = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                    else {
+                        sText = data.replace(/\r/g, ' ');
+                    }
+                    ExecApertium(sText);
+                });
+                break;
         }
     };
 
