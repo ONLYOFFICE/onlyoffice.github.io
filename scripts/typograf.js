@@ -17,7 +17,7 @@
  */
 
 var Ps;
-var sTabChar;
+var sText = '';
 (function(window, undefined){
 	window.oncontextmenu = function(e)
 	{
@@ -27,29 +27,8 @@ var sTabChar;
 			e.stopPropagation();
 		return false;
     };
-
-    var sText = '';
 	window.Asc.plugin.init = function (text) {
         sText = text;
-        sTabChar = '\t';
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(9)}], function(data) {
-                    sText = data;
-                });
-                break;
-            }
-            case 'cell': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(9)}], function(data) {
-                    if (data == '')
-                        sText = sText.replace(/\t/g, '\n');
-                    else
-                        sText = data;
-                });
-                break;
-            }
-        }
     };
     window.Asc.plugin.onThemeChanged = function(theme)
     {
@@ -119,7 +98,7 @@ var sTabChar;
         $('.prefs__rule-checkbox').wrap("<label></label>");
 
         $("#correct").find(".btn-text-default").click(function() {
-            CorrectText(sText);
+            CorrectText();
         });
 
         $(".hidden").click(function() {
@@ -180,8 +159,8 @@ var sTabChar;
 
 	    return splittedParas;
 	};
-    function CorrectText(sText) {
-        var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
+	function ExecTypograf(sText) {
+	    var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
         var tp = new Typograf({locale: [locale]});
         var rules = document.getElementsByClassName("prefs__rule-checkbox");
 
@@ -199,17 +178,11 @@ var sTabChar;
 
         for (var Item = 0; Item < allParsedParas.length; Item++) {
             typografedText = tp.execute(allParsedParas[Item]);
-            if (typografedText.search('\t') !== - 1)
-            {
-                typografedText = typografedText.replace(/\t/g, String.fromCharCode(32));
-                sTabChar = String.fromCharCode(32);
-            }
-            typografedText = typografedText.replace(/\n/g, String.fromCharCode(32));
+            typografedText = typografedText.replace(/\n/g, String.fromCharCode(13));
             allTypografedParas.push(typografedText);
         }
 
         Asc.scope.arr = allTypografedParas;
-        window.Asc.plugin.info.recalculate = true;
 
         window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
             if (version === undefined) {
@@ -226,19 +199,34 @@ var sTabChar;
                 window.Asc.plugin.executeMethod("PasteText", [strResult]);
             }
             else {
-                if (sTabChar === String.fromCharCode(32)) {
-                    window.Asc.plugin.callCommand(function() {
-                        Api.ReplaceTextSmart(Asc.scope.arr, String.fromCharCode(32));
-                    });
-                }
-                else {
-                    window.Asc.plugin.callCommand(function() {
-                        Api.ReplaceTextSmart(Asc.scope.arr, String.fromCharCode(9));
-                    });
-                }
-
+                window.Asc.plugin.executeMethod("ReplaceTextSmart", [Asc.scope.arr, String.fromCharCode(9), String.fromCharCode(13)]);
             }
         });
+	};
+    function CorrectText() {
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(9)}], function(data) {
+                    sText = data;
+                    ExecTypograf(sText);
+                });
+                break;
+            }
+            case 'cell': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(9)}], function(data) {
+                    if (data == ''){
+                        sText = sText.replace(/\t/g, '\n');
+                        ExecTypograf(sText);
+                    }
+                    else {
+                        sText = data;
+                        ExecTypograf(sText);
+                    }
+                });
+                break;
+            }
+        }
     }
 
     function removeCR(text) {
