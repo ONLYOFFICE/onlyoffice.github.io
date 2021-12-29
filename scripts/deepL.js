@@ -73,7 +73,6 @@ function getMessage(key) {
 		});
 
         txt = text;
-        document.getElementById("textarea").innerText = txt;
         updateScroll();
 
         if ((apikey == '' || apikey == null) && isFirstRun) {
@@ -84,18 +83,18 @@ function getMessage(key) {
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
             case 'slide': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
-                    txt = data;
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    txt = data.replace(/\r/g, ' ');
                     ExecPlugin();
                 });
                 break;
             }
             case 'cell':
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
                     if (data == '')
-                        txt = txt.replace(/\t/g, '\n');
+                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
                     else {
-                        txt = data;
+                        txt = data.replace(/\r/g, ' ');
                     }
                     ExecPlugin();
                 });
@@ -363,7 +362,8 @@ function getMessage(key) {
                     return;
                 else
                     paste_done = false;
-                Asc.scope.arr = BuildText(translatedText);
+                //Asc.scope.arr = BuildText(translatedText);
+                Asc.scope.arr = translatedText;
                 window.Asc.plugin.info.recalculate = true;
 
                 window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
@@ -452,7 +452,7 @@ function getMessage(key) {
                 }
                 break;
             }
-        }, 500));
+        }, 1000));
 
         $("#enter_container").click(function() {
             $("#textarea").focus();
@@ -481,30 +481,16 @@ function getMessage(key) {
     };
 
     function processText(sTxt){
-	    var splittedParas;
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
+            
+	    var splittedParas = sTxt.split('\n');
         var parasToTranslate = [];
-	    switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                splittedParas = txt.split('\n');
-                break;
-            }
-            case 'cell':
-            case 'slide':
-                txt = txt.replace(/\r\n/g, '\n')
-                splittedParas = txt.split('\n');
-                break;
-        }
 
         if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = txt.replace(/\r/g, '\n');
+            document.getElementById("textarea").innerText = sTxt;
 
-        mapParagraphs = [];
-	    for (var nPara = 0; nPara < splittedParas.length; nPara++) {
-	        mapParagraphs[nPara] = splittedParas[nPara].split('\r');
-	        parasToTranslate = parasToTranslate.concat(splittedParas[nPara].split('\r'));
-	    }
-
-	    return parasToTranslate;
+	    return splittedParas;
 	};
 
     function RunTranslate(sText) {
