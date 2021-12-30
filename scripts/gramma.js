@@ -382,6 +382,7 @@ function checkInternetExplorer(){
 
 	function parseResult (arrResults) {
         if (arrResults.length === 0) {
+            sTextForDisplay = "";
             canAddText = true;
             $('<div>', {
                 id: "no_mistakes",
