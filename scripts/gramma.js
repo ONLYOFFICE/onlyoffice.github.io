@@ -17,6 +17,7 @@
  */
 var Ps;
 var PsTextArea;
+var sTextForDisplay = null;
 const isIE = checkInternetExplorer();	//check IE
 function checkInternetExplorer(){
     var rv = -1;
@@ -50,12 +51,15 @@ function checkInternetExplorer(){
 	var CurLang          = "auto";
 	var sText            = "";
 	var displayNoneClass = "display-none";
-    var elements    = null;
-    var serviceUrl  = "https://languagetool.org/api/v2/check";
-    var sPathRoot   = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
-    var oGramma     = null;
-    var aResults    = [];
-    var paste_done  = true;
+    var elements     = null;
+    var sPathRoot    = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk/grammalecte");
+    var oGramma      = null;
+    var aResults     = [];
+    var paste_done   = true;
+    var canAddText   = true;
+    var tempMatches  = null;
+    var savedDismiss = [];
+
 	function showLoader(elements, show) {
        switchClass(elements.loader, displayNoneClass, !show);
     };
@@ -84,7 +88,7 @@ function checkInternetExplorer(){
                 aConcatResults.push({
                     nStart : arrResults[nResult].aGrammErr[nGrammErr].nStart,
                     nEnd : arrResults[nResult].aGrammErr[nGrammErr].nEnd,
-                    aSuggestions : arrResults[nResult].aGrammErr[nGrammErr].aSuggestions,
+                    aSuggestions : arrResults[nResult].aGrammErr[nGrammErr].aSuggestions.slice(0,5),
                     nIndex : arrResults[nResult].aGrammErr[nGrammErr].i,
                     sMessage : arrResults[nResult].aGrammErr[nGrammErr].sMessage
                 });
@@ -96,7 +100,7 @@ function checkInternetExplorer(){
                 aConcatResults.push({
                     nStart : arrResults[nResult].aSpellErr[nSpellErr].nStart,
                     nEnd : arrResults[nResult].aSpellErr[nSpellErr].nEnd,
-                    aSuggestions : arrResults[nResult].aSpellErr[nSpellErr].aSuggestions,
+                    aSuggestions : arrResults[nResult].aSpellErr[nSpellErr].aSuggestions.slice(0,5),
                     nIndex : arrResults[nResult].aSpellErr[nSpellErr].i,
                     sMessage : arrResults[nResult].aSpellErr[nSpellErr].sMessage || "Possible mistake"
                 })
@@ -105,35 +109,61 @@ function checkInternetExplorer(){
         }
         return aConcatResults;
     };
-	window.Asc.plugin.init = function(text)	{
-		sText = text;
+    function compare(a, b) {
+        if (a.nStart < b.nStart) {
+          return -1;
+        }
+        if (a.nStart > b.nStart) {
+          return 1;
+        }
+        if (a)
+        return 0;
+    };
 
+	window.Asc.plugin.init = function(text)	{
+		if (!canAddText) {
+	        return;
+	    }
+
+        if (text === "" && document.getElementById("textarea").innerText === "") {
+            if ($('#check').hasClass('disabled') === false)
+	            $('#check').toggleClass('disabled');
+	        if ($('#replace').hasClass('disabled') === false)
+	            $('#replace').toggleClass('disabled');
+        }
+        else {
+            if ($('#check').hasClass('disabled') === true)
+	            $('#check').toggleClass('disabled');
+	        if ($('#replace').hasClass('disabled') === true)
+	            $('#replace').toggleClass('disabled');
+        }
+
+        sText = text;
+        savedDismiss = [];
         switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                if (sText !== "") {
-                    window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
-                        sText = data;
-                        ExecPlugin();
-                    });
-                }
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    sText = data.replace(/\r/g, ' ');
+                    ExecPlugin();
+                });
                 break;
             }
             case 'cell':
-            case 'slide':
-                ExecPlugin();
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    if (data == '')
+                        sText = sText.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                    else {
+                        sText = sText.replace(/\r/g, ' ');
+                    }
+                    ExecPlugin();
+                });
                 break;
         }
 	};
 	function ExecPlugin() {
-	    var parsedText = "";
-		var aParagraphs = SplitText(sText);
-        for (var nPara = 0; nPara < aParagraphs.length; nPara++) {
-            parsedText += aParagraphs[nPara];
-            if (nPara !== aParagraphs.length - 1)
-                parsedText += '\n';
-        }
-
-		document.getElementById("textarea").innerText = parsedText;
+	    processText(sText);
+        
 		updateScroll();
 		$("#result").empty();
 		if (!isInit) {
@@ -156,6 +186,7 @@ function checkInternetExplorer(){
         $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
         $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
         if (!isIE) {
+            $('#clear').css('border-bottom', 'var(--scaled-one-pixel, 1px) dotted ' + window.Asc.plugin.theme["text-normal"]);
             $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
             $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
             $('#arrow-svg-path').css('fill', theme["text-normal"]);
@@ -173,18 +204,25 @@ function checkInternetExplorer(){
 
         oGramma = new GrammarChecker(sPathRoot, ["Grammalecte", "Graphspell", "TextFormatter", "Lexicographer", "Tokenizer"], "fr");
 		$('#check').on('click', function(){
+            if ($('#check').hasClass('disabled'))
+                return;
+
 			sText = document.getElementById("textarea").innerText.trim();
 			if (sText !== "") {
 				$("#result").empty();
-				aResult = checkText(sText);
+				aResult = checkText(sText).sort(compare);
 				parseResult(aResult);
 				if (window.Asc.plugin.theme)
 				    $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 				showLoader(elements, false);
-			};
+			}
+            else {
+                $('#result').empty();
+			    canAddText = true;
+            }
 		});
 		$('#replace').click(function () {
-		    if (!paste_done)
+		    if (!paste_done || $('#replace').hasClass('disabled'))
 		        return;
 		    else
 		        paste_done = false;
@@ -231,12 +269,41 @@ function checkInternetExplorer(){
             });
         });
         $('#textarea').keyup(function(e) {
+            if (document.getElementById("textarea").innerText.trim() !== "") {
+                if ($('#check').hasClass('disabled') === true)
+                    $('#check').toggleClass('disabled');
+                if ($('#replace').hasClass('disabled') === true)
+                    $('#replace').toggleClass('disabled');
+            }
+            else {
+                canAddText = true;
+                $('#result').empty();
+                if ($('#check').hasClass('disabled') === false)
+	                $('#check').toggleClass('disabled');
+	            if ($('#replace').hasClass('disabled') === false)
+	                $('#replace').toggleClass('disabled');
+            }
             updateScroll();
         });
 
         $("#enter_container").click(function() {
             $("#textarea").focus();
         });
+
+        $('#clear').click(function() {
+		    savedDismiss = [];
+		    canAddText = true;
+		    $("#result").empty();
+		    $('#textarea').empty();
+
+		    // disable buttons
+		    if ($('#check').hasClass('disabled') === false)
+	            $('#check').toggleClass('disabled');
+	        if ($('#replace').hasClass('disabled') === false)
+	            $('#replace').toggleClass('disabled');
+
+		    updateScroll();
+		});
 	});
 
     function SplitText(sText) {
@@ -258,6 +325,14 @@ function checkInternetExplorer(){
         return allParsedParas;
     };
 
+    function processText(sTxt){
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
+
+        if (sTxt.trim() !== "")
+            document.getElementById("textarea").innerText = sTxt;
+	};
+
 	function checkText(sText) {
 	    updateScroll();
 	    showLoader(elements, true);
@@ -266,14 +341,65 @@ function checkInternetExplorer(){
         return aResults;
 	};
 
+    function setTextWithErrors(sWord, nInd) {
+		var ind = nInd;
+		ind = tempMatches.findIndex(function(el) {
+			if (el.nIndex === ind) {
+				return true;
+			}
+		});
+        if (!tempMatches[ind])
+            return;
+
+		var end = tempMatches[ind].nEnd;
+		var temp = sTextForDisplay.slice(0, tempMatches[ind].nStart) + '<span id="' + tempMatches[ind].nIndex + '" style="color:#f62211; font-weight: bold;">' + sWord + '</span>' + sTextForDisplay.slice(end);
+		var count = sTextForDisplay.length - temp.length;
+		for (var i = ind; i < tempMatches.length; i++) {
+			tempMatches[i].nStart -= count;
+            tempMatches[i].nEnd -= count;
+		}
+
+		sTextForDisplay = temp;
+	};
+
+    // tempMatches используются для выделения ошибок внутри textarea,
+    // функция нужна для того, чтобы с одинаковым началом или концом не выделялись дважды
+    function delExternalMatches(aMatches) {
+        for (var nItem1 = 0; nItem1 < aMatches.length - 1; nItem1++) {
+            var bSkipped = false;
+            for (var nSavedDismiss = 0; nSavedDismiss < savedDismiss.length; nSavedDismiss++) {
+                if (savedDismiss[nSavedDismiss].nStart === aMatches[nItem1].nStart && savedDismiss[nSavedDismiss].nEnd === aMatches[nItem1].nEnd)
+                    bSkipped = true;
+            }
+            if (!bSkipped){
+                for (var nItem2 = nItem1 + 1; nItem2 < aMatches.length; nItem2++) {
+                    if (aMatches[nItem1].nStart === aMatches[nItem2].nStart || aMatches[nItem1].nEnd === aMatches[nItem2].nEnd)
+                        aMatches.splice(nItem2, nItem2 + 1);
+                }
+            }
+        }
+    };
+
 	function parseResult (arrResults) {
         if (arrResults.length === 0) {
+            canAddText = true;
             $('<div>', {
                 id: "no_mistakes",
                 text: "No possible mistakes found"
             }).appendTo('#result');
         }
         else {
+            canAddText = false;
+            sTextForDisplay = sText;
+            tempMatches = [];
+            for (var nElm = 0; nElm < arrResults.length; nElm++) {
+                tempMatches.push({
+                    nEnd: arrResults[nElm].nEnd,
+                    nStart: arrResults[nElm].nStart,
+                    nIndex:  arrResults[nElm].nIndex
+                });
+            }
+            delExternalMatches(tempMatches);
             $('<div>', {
                 id: "yes_mistakes",
                 text: "Possible mistakes found: " + arrResults.length
@@ -310,11 +436,20 @@ function checkInternetExplorer(){
         }
 
 		arrResults.forEach(function(el, ind) {
-		    if (el.aSuggestions.length === 0) {
-		        var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-			    $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-			    return;
-		    }
+            // remember skipped words
+            var bSkipped = false;
+            for (var nSavedDismiss = 0; nSavedDismiss < savedDismiss.length; nSavedDismiss++) {
+                if (savedDismiss[nSavedDismiss].nStart === el.nStart && savedDismiss[nSavedDismiss].nEnd === el.nEnd)
+                    bSkipped = true;
+            }
+
+            if (bSkipped !== true)
+                setTextWithErrors(sText.slice(el.nStart, el.nEnd), el.nIndex);
+            else {
+                var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
+                $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+                return;
+            }
 
 			$('<div>', {
 				id : "div_" + el.nIndex,
@@ -341,6 +476,8 @@ function checkInternetExplorer(){
                         });
                         $(this).find(".arrow").toggleClass("down");
                         $(this).find(".arrow").toggleClass("up");
+                        $(this).find(".caption_text").toggleClass("display-none");
+                        $(this).find(".miniText").toggleClass("display-none");
                     }
 			}).appendTo('#result');
 
@@ -351,7 +488,7 @@ function checkInternetExplorer(){
                 "class": "arrow_container"
             });
             var caption_text = $('<span>', {
-				"class": 'caption_text',
+				"class": 'caption_text display-none unselectable',
 				text : el.sMessage
 			});
             var caption = $('<div>', {
@@ -360,6 +497,16 @@ function checkInternetExplorer(){
             var separateLine = $('<div>', {
 				"class": 'separator horizontal display-none',
 			});
+
+            var context = $('<div>', {
+				html : sText.slice(0, el.nStart)
+					+ '<span style="color:#f62211; font-weight: bold;">'
+					+ sText.slice(el.nStart, el.nEnd)
+					+ '</span>'
+					+ sText.slice(el.nEnd),
+				class: 'miniText unselectable'
+			});
+			context.appendTo(caption);
 
             img_arrow.appendTo(img_container);
             caption_text.appendTo(caption);
@@ -401,30 +548,59 @@ function checkInternetExplorer(){
 			$('<button>', {
 			    text: "Dismiss",
 			    click: function () {
-					$('#div_'+$(this).data().index).remove();
-					var ind = aResults.findIndex(function(el) {
-						if (el.i === ind) {
+					var ind = $(this).data().index;
+					// remove highlight of word
+			        var DisplayedSpanWord = $('#' + ind)[0];
+                    
+                    if (DisplayedSpanWord)
+					    DisplayedSpanWord.outerHTML = DisplayedSpanWord.innerText;
+
+                    var ind = aResults.findIndex(function(el) {
+						if (el.nIndex === ind) {
 							return true;
 						}
 					});
+
+                    savedDismiss.push({
+					    nStart: aResults[ind].nStart,
+					    nEnd: aResults[ind].nEnd
+					});
+
+                    aResults.splice(ind, 1);
+                    
+                    $('#div_'+$(this).data().index).remove();
 					var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
 					$('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-					aResults.splice(ind, 1);
+
+                    $('#check').trigger("click");
 				},
 			    "class": "dismiss btn-text-default"
 			}).data({ index : el.nIndex}).appendTo(dismiss_buttons);
 
-			$('<button>', {
-			    text: "Dismiss all",
-			    click: function () {
-					$('.dismiss').each(function() {
-					     $(this).trigger("click");
-					});
-				},
-			    "class": "dismiss_all btn-text-default"
-			}).appendTo(dismiss_buttons);
+			// $('<button>', {
+			//     text: "Dismiss all",
+			//     click: function () {
+			// 		$('.dismiss').each(function() {
+			// 		     $(this).trigger("click");
+			// 		});
+			// 	},
+			//     "class": "dismiss_all btn-text-default"
+			// }).appendTo(dismiss_buttons);
+
 			dismiss_buttons.appendTo(div_details);
 		});
+
+        if (sTextForDisplay !== "") {
+            sTextForDisplay = sTextForDisplay.replace(/\n/g, '<br>');
+            $('#textarea').empty();
+            var context = $('<div>', {
+                    html : sTextForDisplay
+                });
+            context.appendTo('#textarea');
+        }
+
+        window.Asc.plugin.onTranslate();
+
 		updateScroll();
 	};
 
