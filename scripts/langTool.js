@@ -180,6 +180,8 @@ function checkInternetExplorer(){
         PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
 		$('#check').on('click', function(){
+			if ($('#check').hasClass('disabled'))
+                return;
 			txt = document.getElementById("textarea").innerText;
 			if (txt !== "") {
 				$("#result").empty();
@@ -212,7 +214,7 @@ function checkInternetExplorer(){
 		    updateScroll();
 		});
 		$('#replace').click(function () {
-		    if (!paste_done)
+		    if (!paste_done || $('#replace').hasClass('disabled'))
 		        return;
 		    else
 		        paste_done = false;
@@ -269,6 +271,7 @@ function checkInternetExplorer(){
                     $('#replace').toggleClass('disabled');
             }
             else {
+				canAddText = true;
                 $('#result').empty();
                 if ($('#check').hasClass('disabled') === false)
 	                $('#check').toggleClass('disabled');
@@ -364,6 +367,8 @@ function checkInternetExplorer(){
             canAddText = false;
             changeLangInSelect(oResponse.language.name);
 
+			// чтобы сервис различал параграфы необходимо разделять их двумя "\n" во время отправки,
+			// поэтому после получения ответа нужно поправить позиции, чтобы в исходном тексте верно делать исправления
             correctMistakesPosition(matches);
             
             sTextForDisplay = txt;
@@ -382,12 +387,6 @@ function checkInternetExplorer(){
         }
 
 		data.forEach(function(el, ind) {
-//		    if (el.replacements.length === 0) {
-//		        var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-//			    $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-//			    return;
-//		    }
-
             // remember skipped words
             var bSkipped = false;
             for (var nSavedDismiss = 0; nSavedDismiss < savedDismiss.length; nSavedDismiss++) {
@@ -523,7 +522,6 @@ function checkInternetExplorer(){
 //			}).appendTo(dismiss_buttons);
 			dismiss_buttons.appendTo(div_details);
 		});
-		updateScroll();
 
         if (sTextForDisplay !== "") {
             sTextForDisplay = sTextForDisplay.replace(/\n/g, '<br>');
@@ -534,6 +532,7 @@ function checkInternetExplorer(){
             context.appendTo('#textarea');
         }
 
+		updateScroll();
         window.Asc.plugin.onTranslate();
 	};
 
@@ -586,10 +585,6 @@ function checkInternetExplorer(){
         }
     };
 	function setTextWithErrors(sWord, nInd) {
-	    //if (data.text()[0] === '(' && data.text()[data.text().length - 1] === ')') {
-	    //    return data.parent().parent().find('.dismiss').trigger("click");
-	    //}
-
 		var ind = nInd;
 		ind = tempMatches.findIndex(function(el) {
 			if (el.index === ind) {
