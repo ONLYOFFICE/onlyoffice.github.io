@@ -51,6 +51,15 @@
 		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
 	</head>
 	<style>
+		.unselectable {
+		  -webkit-touch-callout: none; /* iOS Safari */
+		  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+		  -khtml-user-select: none;    /* Konqueror */
+		  -moz-user-select: none;      /* Firefox */
+		  -ms-user-select: none;       /* Internet Explorer/Edge */
+		  user-select: none;           /* Non-prefixed version, currently
+										  not supported by any browser */
+		}
 		.details {
 			display:none;
 			margin: 8px 12px 0 12px;
@@ -65,8 +74,7 @@
 		}
 		.caption_text {
 			width: 90%;
-			margin-left: 4px;
-			margin-bottom: 17px;
+			margin: 0 4px 17px 4px;
 		}
 		.dismiss_buttons {
 			margin: 14px 0 16px 0;
@@ -106,6 +114,9 @@
         	margin-top: 16px;
         	text-align: center;
         }
+		.replacment {
+        	border-color: #009900 !important;
+        }
         i {
             border: solid black;
             border-width: 0 1px 1px 0;
@@ -133,6 +144,10 @@
             cursor:pointer;
             border-bottom: 1px dashed #444444;
         }
+		.miniText {
+    		margin: 0 4px 17px 4px;
+			width: 90%;
+		}
 	</style>
 	<body class='body' style="margin: 0; display: flex; flex-direction: column;">
 		<div id="loader-container" class="asc-plugin-loader display-none">
@@ -143,7 +158,10 @@
 				Checking...
 			</div>
     	</div>
-		<div id="enter_container" class="form-control" style="cursor: text; position: relative; margin: 16px 12px 0px 12px; min-height: 100px; max-height: 45%; height: fit-content;">
+		<div style="margin: 12px 12px 4px 12px; width: calc(100% - 24px);">
+			<label id="clear" class="unselectable" style="float: right; border-bottom: var(--scaled-one-pixel, 1px) dotted rgba(255, 255, 255, 0.8); cursor: pointer;">Clear</label>
+		</div>
+		<div id="enter_container" class="form-control" style="cursor: text; position: relative; margin: 0px 12px 0px 12px; min-height: 100px; max-height: 45%; height: fit-content;">
 			<div id="textarea" contenteditable="true" style="min-width: 95%; max-width: 95%; height: fit-content; padding: 0px 15px 5px 3px; outline: none; white-space: normal; float: left; word-wrap: break-word;" ></div>
 		</div>
 		<div id="button_wrapper">
