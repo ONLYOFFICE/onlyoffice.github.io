@@ -144,7 +144,7 @@ function checkInternetExplorer(){
             case 'word':
             case 'slide': {
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
-                    sText = data.replace(/\r/g, ' ');
+                    sText = (data === undefined) ? "" : data.replace(/\r/g, ' ');
                     ExecPlugin();
                 });
                 break;
@@ -153,7 +153,7 @@ function checkInternetExplorer(){
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
                     if (data == '')
                         sText = sText.replace(/\r/g, ' ').replace(/\t/g, '\n');
-                    else {
+                    else if (data !== undefined) {
                         sText = sText.replace(/\r/g, ' ');
                     }
                     ExecPlugin();
@@ -329,9 +329,8 @@ function checkInternetExplorer(){
         if (sTxt[sTxt.length - 1] === '\n')
             sTxt = sTxt.slice(0, sTxt.length - 1);
 
-        if (sTxt.trim() !== "")
-            document.getElementById("textarea").innerText = sTxt;
-	};
+        document.getElementById("textarea").innerText = sTxt;
+    };
 
 	function checkText(sText) {
 	    updateScroll();
