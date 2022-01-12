@@ -103,7 +103,7 @@ function checkInternetExplorer(){
             case 'word':
             case 'slide': {
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
-                    txt = data.replace(/\r/g, ' ');
+                    txt = (data === undefined) ? "" : data.replace(/\r/g, ' ');
                     ExecPlugin();
                 });
                 break;
@@ -112,7 +112,7 @@ function checkInternetExplorer(){
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
                     if (data == '')
                         txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
-                    else {
+                    else if (data !== undefined) {
                         txt = data.replace(/\r/g, ' ');
                     }
                     ExecPlugin();
@@ -127,8 +127,7 @@ function checkInternetExplorer(){
 	    var splittedParas = sTxt.split('\n');
         var parasToTranslate = [];
 
-        if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = sTxt;
+        document.getElementById("textarea").innerText = sTxt;
 
 	    return splittedParas;
 	};
