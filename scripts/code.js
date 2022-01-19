@@ -28,9 +28,9 @@
 				//create iframe jitsi
 				const domain = 'meet.jit.si';
 				const options = {
-					roomName: 'Test meet',
-					width: document.getElementById("body").clientWidth- 10 +"px",
-					height: '550px',
+					roomName: 'Test meeting',
+					width: document.getElementById("body").clientWidth + "px",
+					height: document.getElementById("meet").clientHeight - 5 + "px",
 					parentNode: document.querySelector('#meet'),
 					interfaceConfigOverwrite: { SHOW_CHROME_EXTENSION_BANNER: false },
 					onload : function () {
@@ -56,7 +56,7 @@
 
 	window.onresize = function(e){
 		//event resize for window
-		iframe.style.width = document.getElementById("body").clientWidth- 10 +"px";
+		iframe.style.width = document.getElementById("body").clientWidth +"px";
 	}
 	window.Asc.plugin.button = function() {		
 		this.executeCommand("close", "");
