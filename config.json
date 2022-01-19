@@ -49,7 +49,7 @@
 				}
 			],
             "isViewer"        : false,
-            "EditorsSupport"  : ["word"],
+            "EditorsSupport"  : ["word", "cell", "slide"],
 
             "isVisual"        : true,
             "isModal"         : false,
