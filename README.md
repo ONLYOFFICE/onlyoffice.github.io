@@ -1,20 +1,29 @@
 ## Overview
 
-This plugin shows how to integrate Jitsi service in editor.
+Make audio and video calls right in the editors.
 
-The plugin uses [Jitsi] is a collection of Open Source projects which provide state-of-the-art video conferencing capabilities that are secure, easy to use and easy to self-host. (https://meet.jit.si/)
+The plugin uses [Jitsi](https://jitsi.org/), an open-source video and audio conferencing tool. 
 
-It is called Jitsi in the interface and isn't installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
+The plugin is compatible with the [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) versions of ONLYOFFICE editors. It can be added to ONLYOFFICE instances manually.
 
 ## How to use
 
-1. Open the Plugins tab and press Jitsi.
-2. Press the "Start" button (for creating jitsi iframe).
-3. Type your nickname and allow the browser to use the camera and microphone.
-3. If you need to destroy jitsi iframe press the "Stop" button.
+1. Open the Plugins tab and click on Jitsi.
+2. Press the "Start" button (for creating Jitsi iframe).
+3. Type your nickname and allow the browser to use your camera and microphone.
+3. If you want to close Jitsi iframe, press the "Stop" button.
+
+## How to install
+
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
 
 ## Known issues
 
 * The plugin doesn't work with http (it works only with https).
 
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+## User feedback and support
+
+To ask questions and share feedback, use Issues in this repository.
+
+If you need more information about how to use or write your own plugin, please visit our [API documentation](https://api.onlyoffice.com/plugin/basic).
+
