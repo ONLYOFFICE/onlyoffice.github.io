@@ -27,12 +27,9 @@ var Ps;
 	    htmlHeadings : false,
 	    base64img : false,
 	    demoteHeadings : false,
-	    renderHTMLTags : false,
-	    suppressInfo : false,
+	    renderHTMLTags : false
 	};
 	var sCopiedInfo = 'Output copied to clipboard!';
-	var sTopInfo  = '<!-----\nNEW: Check the "Suppress top comment" option to remove this info from the output.\nUsing this Markdown file:\n1. Paste this output into your source file.\n2. See the notes and action items below regarding this conversion run.\n3. Check the rendered output (headings, lists, code blocks, tables) for proper formatting and use a linkchecker before you publish this page.----->\n\n'
-
 
 	function showLoader(elements, show) {
        switchClass(elements.loader, displayNoneClass, !show);
@@ -149,9 +146,6 @@ var Ps;
         if (document.getElementById('render_html_tags').checked) {
             oConfig.renderHTMLTags = true;
         }
-        if (document.getElementById('suppress_info').checked) {
-            oConfig.suppressInfo = true;
-        }
     };
 
     $(document).ready(function () {
@@ -169,8 +163,6 @@ var Ps;
         $('#btn-markwodn').click(function() {
             SetConfig('markdown');
             var sInfo = '';
-            if (!oConfig.suppressInfo)
-                sInfo += sTopInfo;
             window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
                 document.getElementById("text-area").value = sInfo + sOutput;
             });
@@ -179,8 +171,6 @@ var Ps;
         $('#btn-html').click(function() {
             SetConfig('html');
             var sInfo = '';
-            if (!oConfig.suppressInfo)
-                sInfo += sTopInfo;
             window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
                 document.getElementById("text-area").value = sInfo + sOutput;
             });
