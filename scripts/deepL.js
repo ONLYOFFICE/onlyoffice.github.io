@@ -17,6 +17,29 @@
  */
 var Ps;
 var PsTextArea;
+var mapParagraphs = [];
+const isIE = checkInternetExplorer();	//check IE
+function checkInternetExplorer(){
+    var rv = -1;
+    if (window.navigator.appName == 'Microsoft Internet Explorer') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    } else if (window.navigator.appName == 'Netscape') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
+
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    }
+    return rv !== -1;
+};
+function getMessage(key) {
+    return window.Asc.plugin.tr(key.trim());
+};
 (function(window, undefined){
 
     var txt              = "";
@@ -27,6 +50,8 @@ var PsTextArea;
     var apikey           = "";
     var isValidKey       = false;
     var isFirstRun       = true;
+    var paste_done       = true;
+
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -48,7 +73,6 @@ var PsTextArea;
 		});
 
         txt = text;
-        document.getElementById("textarea").innerText = text;
         updateScroll();
 
         if ((apikey == '' || apikey == null) && isFirstRun) {
@@ -59,7 +83,30 @@ var PsTextArea;
         switch (window.Asc.plugin.info.editorType) {
             case 'word':
             case 'slide': {
-                if (text !== "") {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    txt = data.replace(/\r/g, ' ');
+                    ExecPlugin();
+                });
+                break;
+            }
+            case 'cell':
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    if (data == '')
+                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                    else {
+                        txt = data.replace(/\r/g, ' ');
+                    }
+                    ExecPlugin();
+                });
+                break;
+        }
+	};
+
+    function ExecPlugin() {
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                if (txt !== "") {
                     RunTranslate(txt);
                 }
                 break;
@@ -69,7 +116,7 @@ var PsTextArea;
             }
             break;
         }
-	};
+    };
 
     window.Asc.plugin.onThemeChanged = function(theme)
     {
@@ -79,7 +126,16 @@ var PsTextArea;
         styleTheme.type = 'text/css';
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
-        $('#show_manually, #hide_manually, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
+        $('#show_manually, #hide_manually, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
+
+        if (!isIE) {
+            $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
+            $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+            $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
+            $('#arrow-svg-path').css('fill', theme["text-normal"]);
+        }
+        else
+            $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
     };
 
     function CreateParams(allParas) {
@@ -98,8 +154,17 @@ var PsTextArea;
 
     function DelInvalidChars(arrParas) {
         for (var nPara = 0; nPara < arrParas.length; nPara++) {
-            arrParas[nPara] = arrParas[nPara].replace(/#/gi, '');
-            arrParas[nPara] = arrParas[nPara].replace(/&/gi, '');
+            var sSearch = '?';
+            var replaceWith = '%3F';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '#';
+            replaceWith = '%23';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '&';
+            replaceWith = '%26';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
         }
     };
 
@@ -112,10 +177,13 @@ var PsTextArea;
             beforeSend: function(request) {
 				request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
 			},
-			data: '?auth_key=' + apikey + sParams  + '&target_lang=' + targetLanguage,
+			data: '?auth_key=' + apikey + sParams + '&split_sentences=0' + '&target_lang=' + targetLanguage,
             url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey
 
         }).success(function (oResponse) {
+            if (translatedText.length !== 0)
+                return;
+                
             isValidKey = true;
             if ($('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
@@ -134,15 +202,17 @@ var PsTextArea;
 
             container = document.getElementById('txt_shower');
             container.innerHTML = "";
+
             for (var nText = 0; nText < oResponse.translations.length; nText++) {
                 translatedText.push(oResponse.translations[nText].text);
-
                 if (oResponse.translations[nText].text !== "")
                     container.innerHTML += escape(oResponse.translations[nText].text) + '<br>';
             }
 
-            if ($('#vanish_container').hasClass('display-none'))
-                $('#vanish_container').toggleClass('display-none');
+            if (container.innerHTML !== "") {
+                if ($('#vanish_container').hasClass('display-none'))
+                    $('#vanish_container').toggleClass('display-none');
+            }
 
             updateScroll();
             updateScroll();
@@ -172,21 +242,20 @@ var PsTextArea;
         });
     };
 
-    function SplitText(sText) {
-        var allParasInSelection = sText.split(/\n/);
-        var allParsedParas = [];
-
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
-
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
-            });
+    function BuildText(aTranlations) {
+        var aFinalResult = [];
+        var nPosToSlice = 0;
+        for (var nMap = 0; nMap < mapParagraphs.length; nMap++)
+        {
+            aFinalResult[nMap] = aTranlations.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join(String.fromCharCode(160));
+            nPosToSlice = nPosToSlice + mapParagraphs[nMap].length;
         }
+
+        return aFinalResult;
+    };
+
+    function SplitText(sText) {
+        var allParsedParas = sText.split(/\n/);
 
         return allParsedParas;
     }
@@ -289,23 +358,34 @@ var PsTextArea;
         });
         setTimeout(function() {
             $('#paste').click(function () {
+                if (!paste_done)
+                    return;
+                else
+                    paste_done = false;
+                //Asc.scope.arr = BuildText(translatedText);
                 Asc.scope.arr = translatedText;
                 window.Asc.plugin.info.recalculate = true;
 
                 window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                     if (version === undefined) {
-                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText], function(result) {
+                            paste_done = true;
+                        });
                     }
                     else {
                         window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
                             switch (sType) {
                                 case "none":
                                 case "drawing":
-                                    window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                                    window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText], function(result) {
+                                        paste_done = true;
+                                    });
                                     break;
                                 case "text":
                                     window.Asc.plugin.callCommand(function() {
                                         Api.ReplaceTextSmart(Asc.scope.arr);
+                                    }, undefined, undefined, function(result) {
+                                        paste_done = true;
                                     });
                                     break;
                             }
@@ -372,8 +452,12 @@ var PsTextArea;
                 }
                 break;
             }
-        }, 500));
-    })
+        }, 1000));
+
+        $("#enter_container").click(function() {
+            $("#textarea").focus();
+        });
+    });
 
     function updateScroll()
 	{
@@ -396,9 +480,22 @@ var PsTextArea;
         return true;
     };
 
+    function processText(sTxt){
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
+            
+	    var splittedParas = sTxt.split('\n');
+        var parasToTranslate = [];
+
+        if (txt.trim() !== "")
+            document.getElementById("textarea").innerText = sTxt;
+
+	    return splittedParas;
+	};
+
     function RunTranslate(sText) {
 
-        var allParsedParas = SplitText(sText);
+        var allParsedParas = processText(sText);
         DelInvalidChars(allParsedParas);
         if (IsLastTransate(allParsedParas))
             return false;
@@ -409,6 +506,7 @@ var PsTextArea;
         translatedText = [];
         Translate(apikey, target_lang, sParams);
     };
+
 	window.Asc.plugin.onExternalMouseUp = function()
 	{
 		var evt = document.createEvent("MouseEvents");
@@ -421,5 +519,15 @@ var PsTextArea;
             width: "calc(100% - 24px)"
         });
 	};
+	window.Asc.plugin.onTranslate = function()
+	{
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.innerText) el.innerText = getMessage(el.innerText);
+        }
+    };
 
 })(window, undefined);
