@@ -1,0 +1,13 @@
+{
+  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Um DeepL zu verwenden, abonnieren Sie den DeepL-API-Plan auf der offiziellen DeepL-Website. Kopieren Sie den API-Schlüssel und fügen Sie ihn in das angegebene Feld ein.",
+  "Learn more here.": "Erfahren Sie hier mehr.",
+  "Save": "Speichern",
+  "Target language": "Zielsprache",
+  "Enter text manually": "Text manuell eingeben",
+  "Hide field": "Feld ausblenden",
+  "Translating...": "Übersetzung...",
+  "Loading languages...": "Sprachen werden geladen",
+  "Copy": "Kopieren",
+  "Insert to document": "In Dokument einfügen",
+  "Reconfigure API key": "API-Schlüssel neu konfigurieren"
+}
