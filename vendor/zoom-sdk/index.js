@@ -1,3 +1,5 @@
+SIGNATURE_SERVER = "https://onlyofficezoom.herokuapp.com/";
+
 window.addEventListener('DOMContentLoaded', function(event) {
   console.log('DOM fully loaded and parsed');
   websdkready();
@@ -98,21 +100,24 @@ function websdkready() {
       testTool.setCookie("meeting_number", meetingConfig.mn);
       testTool.setCookie("meeting_pwd", meetingConfig.pwd);
 
-      var signature = ZoomMtg.generateSignature({
-        meetingNumber: meetingConfig.mn,
-        apiKey: API_KEY,
-        apiSecret: API_SECRET,
-        role: meetingConfig.role,
-        success: function (res) {
-          console.log(res.result);
-          meetingConfig.signature = res.result;
-          meetingConfig.apiKey = API_KEY;
-          var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
+      $.ajax({
+            method: 'POST',
+			data: {
+                'meet_number': meetingConfig.mn,
+                'role_id': meetingConfig.role,
+                'api_key': API_KEY,
+                'api_secret': API_SECRET
+			},
+			url: SIGNATURE_SERVER
 
-          window.parent.openMeeting(joinUrl);
-        },
-      });
-      console.log("!!!");
+        }).success(function (oResponse) {
+            meetingConfig.signature = oResponse;
+            meetingConfig.apiKey = API_KEY;
+            var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
+            window.parent.openMeeting(joinUrl);
+        }).error(function(oResponse) {
+            console.log(oResponse)
+        })
   };
 
   function copyToClipboard(elementId) {
