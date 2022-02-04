@@ -23,7 +23,7 @@
 	
 	window.Asc.plugin.init = function () {
 		//event "init" for plugin
-		document.getElementById("start").onclick = function() {
+		document.getElementById("btn_start").onclick = function() {
 			if (!isInit) {
 				//create iframe jitsi
 				const domain = 'meet.jit.si';
@@ -47,20 +47,33 @@
 			}
 		};
 
-		document.getElementById("stop").onclick = function() {
+		document.getElementById("btn_stop").onclick = function() {
 			//destroy iframe jisti
-			api.dispose();
+			if (api)
+				api.dispose();
+
 			isInit = false;
 		};
 	};
 
-	window.onresize = function(e){
+	window.onresize = function(e) {
 		//event resize for window
-		iframe.style.width = document.getElementById("body").clientWidth +"px";
+		if (iframe)
+			iframe.style.width = document.getElementById("body").clientWidth +"px";
 	}
+
 	window.Asc.plugin.button = function() {		
 		this.executeCommand("close", "");
 	};
 
+	window.Asc.plugin.onTranslate = function() {
+		var btn_start = document.getElementById("btn_start");
+		if (btn_start)
+			btn_start.innerHTML = window.Asc.plugin.tr("Start");
+		
+		var btn_stop = document.getElementById("btn_stop");
+		if (btn_stop)
+			btn_stop.innerHTML = window.Asc.plugin.tr("Stop");
+	};
 
 })(window, undefined);
