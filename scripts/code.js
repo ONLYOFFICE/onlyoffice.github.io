@@ -63,10 +63,10 @@
 				
 			var _param = {
 				guid : _info.guid,
-				widthPix : (_info.mmToPx * _info.width) >> 0,
-				heightPix : (_info.mmToPx * _info.height) >> 0,
-				width : _info.width ? _info.width : 100,
-				height : _info.height ? _info.height : 70,
+				widthPix : (_info.mmToPx * (img.width >> 2) ) >> 0,
+				heightPix : (_info.mmToPx * (img.height >> 2) ) >> 0,
+				width : img.width ? (img.width >> 2) : _info.width ? _info.width : 100,
+				height : img.height ? (img.height >> 2) : _info.height ? _info.height : 70,
 				imgSrc : img.getAttribute('src'),
 				data : img.getAttribute('src'),
 				objectId : _info.objectId,
