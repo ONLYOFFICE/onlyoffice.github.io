@@ -1,8 +1,8 @@
 # ONLYOFFICE Mendeley plugin
 
-Mendeley plugin allows users to create bibliographies in ONLYOFFICE editors using Mendeley service.
+Mendeley plugin allows users to create bibliographies in ONLYOFFICE editors using [Mendeley service](https://www.mendeley.com/).
 
-The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Community Edition), ONLYOFFICE cloud service, and ONLYOFFICE Personal. It can also be installed to Document Server manually.
+The plugin is pre-installed in [ONLYOFFICE Workspace](https://www.onlyoffice.com/workspace.aspx) (both Enterprise and Community Edition), [ONLYOFFICE cloud service](https://www.onlyoffice.com/cloud-office.aspx), and [ONLYOFFICE Personal](https://personal.onlyoffice.com/). It can also be installed to [Document Server](https://github.com/ONLYOFFICE/DocumentServer) manually.
 
 ## How to use
 
@@ -47,7 +47,10 @@ Two installation ways are available:
         ...
     });
     ```
-**Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
+
+Detailed instructions can also be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+
+**Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use [special connectors](https://api.onlyoffice.com/editors/plugins) (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
 
 ## Configuration
 
@@ -78,3 +81,5 @@ sudo supervisorctl restart ds:docservice
 ## User feedback and support
 
 To ask questions and share feedback, use Issues in this repository.
+
+If you need more information about how to use or write your own plugin, please visit our [API documentation](https://api.onlyoffice.com/plugin/basic).
