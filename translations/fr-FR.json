@@ -1,4 +1,5 @@
 {
     "Start": "Commencer",
-	"Stop" : "Arrêter"
+	"Stop" : "Arrêter",
+	"Room name" : "Nom de la chambre"
 }

@@ -28,7 +28,7 @@
 				//create iframe jitsi
 				const domain = 'meet.jit.si';
 				const options = {
-					roomName: 'Test meeting',
+					roomName: document.getElementById('inp_room').value.trim(),
 					width: document.getElementById("body").clientWidth + "px",
 					height: document.getElementById("meet").clientHeight - 5 + "px",
 					parentNode: document.querySelector('#meet'),
@@ -43,7 +43,13 @@
 					}
 				};
 				api = new JitsiMeetExternalAPI(domain, options);
+				api.addEventListeners({
+					videoConferenceLeft: function () {
+						this._parentNode.ownerDocument.getElementById("btn_stop").onclick();
+					}
+				});				
 				iframe = api.getIFrame();
+				toogleClass();
 			}
 		};
 
@@ -53,6 +59,13 @@
 				api.dispose();
 
 			isInit = false;
+			toogleClass();
+		};
+
+		function toogleClass() {
+			document.getElementById('btn_stop').classList.toggle("hidden");
+			document.getElementById('btn_start').classList.toggle("hidden");
+			document.getElementById('inp_room').classList.toggle("hidden");
 		};
 	};
 
@@ -70,10 +83,14 @@
 		var btn_start = document.getElementById("btn_start");
 		if (btn_start)
 			btn_start.innerHTML = window.Asc.plugin.tr("Start");
-		
+
 		var btn_stop = document.getElementById("btn_stop");
 		if (btn_stop)
 			btn_stop.innerHTML = window.Asc.plugin.tr("Stop");
+
+		var inp_room = document.getElementById("inp_room");
+		if (inp_room)
+			inp_room.placeholder = window.Asc.plugin.tr("Room name");
 	};
 
 })(window, undefined);

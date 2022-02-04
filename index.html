@@ -35,8 +35,14 @@
 				width: 100%;
 				height: 100%;
 			}
-			button {
+			button,input {
 				margin: 5px;
+			}
+			button {
+				height: 22px !important;
+			}
+			.hidden {
+				display: none;
 			}
 		</style>
 
@@ -44,8 +50,9 @@
 	<body id="body" class='body'>
 		<div class="meet" id="meet"></div>
 		<div style="display:flex; justify-content: center;">
-			<button id="btn_start">Start</button>
-			<button id="btn_stop">Stop</button>
+			<button id="btn_start" class="btn-text-default">Start</button>
+			<button id="btn_stop" class="btn-text-default hidden">Stop</button>
+			<input id="inp_room" class="form-control" placeholder="Room name">
 		</div>
 	</body>
 </html>
