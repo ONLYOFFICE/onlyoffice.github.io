@@ -160,6 +160,9 @@ var sText = '';
 	    return splittedParas;
 	};
 	function ExecTypograf(sText) {
+	    if (sText == undefined)
+	        return;
+	        
 	    var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
         var tp = new Typograf({locale: [locale]});
         var rules = document.getElementsByClassName("prefs__rule-checkbox");
