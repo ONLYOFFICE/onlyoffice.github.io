@@ -61,25 +61,29 @@
 		{
 			var _info = window.Asc.plugin.info;
 			var _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject";
-				
-			var _param = {
-				guid : _info.guid,
-				widthPix : (_info.mmToPx * (img.width >> 2) ) >> 0,
-				heightPix : (_info.mmToPx * (img.height >> 2) ) >> 0,
-				width : img.width ? (img.width >> 2) : _info.width ? _info.width : 100,
-				height : img.height ? (img.height >> 2) : _info.height ? _info.height : 70,
-				imgSrc : img.getAttribute('src'),
-				data : img.getAttribute('src'),
-				objectId : _info.objectId,
-				resize : _info.resize
-			};
-
-			window.Asc.plugin.executeMethod(_method, [_param], function() {
-				window.Asc.plugin.executeCommand("close", "");
-			});
+			// we should use timeout for image export from diagram editor
+			setTimeout(() => {
+				var _param = {
+					guid : _info.guid,
+					widthPix : (_info.mmToPx * (img.width >> 2) ) >> 0,
+					heightPix : (_info.mmToPx * (img.height >> 2) ) >> 0,
+					width : img.width ? (img.width >> 2) : _info.width ? _info.width : 100,
+					height : img.height ? (img.height >> 2) : _info.height ? _info.height : 70,
+					imgSrc : img.getAttribute('src'),
+					data : img.getAttribute('src'),
+					objectId : _info.objectId,
+					resize : _info.resize
+				};
+	
+				window.Asc.plugin.executeMethod(_method, [_param], function() {
+					window.Asc.plugin.executeCommand("close", "");
+				});
+			}, 1);
+			
+		} else {
+			window.Asc.plugin.executeCommand("close", "");
 		}
 
-		window.Asc.plugin.executeCommand("close", "");
 	};
 
 	function makeLoader() {

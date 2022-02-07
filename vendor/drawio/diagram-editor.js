@@ -270,9 +270,9 @@ DiagramEditor.prototype.getTitle = function()
  */
 DiagramEditor.prototype.getFrameStyle = function()
 {
-	return this.frameStyle + ';left:' +
-		document.body.scrollLeft + 'px;top:' +
-		document.body.scrollTop + 'px;';
+	// if we use left, we have bug 55144  https://bugzilla.onlyoffice.com/show_bug.cgi?id=55141
+	return this.frameStyle + //';left:' +	document.body.scrollLeft + 'px;' +
+		'top:' + document.body.scrollTop + 'px;';
 };
 
 /**
