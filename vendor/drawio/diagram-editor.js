@@ -99,7 +99,7 @@ DiagramEditor.prototype.libraries = true;
 /**
  * CSS style for the iframe.
  */
-DiagramEditor.prototype.frameStyle = 'position:absolute;border:0;width:100%;height:100%;';
+DiagramEditor.prototype.frameStyle = 'position:absolute;border:0;width:calc(100% - 10px);height:100%;';
 
 /**
  * Adds the iframe and starts editing.
@@ -270,8 +270,8 @@ DiagramEditor.prototype.getTitle = function()
  */
 DiagramEditor.prototype.getFrameStyle = function()
 {
-	// if we use left, we have bug 55144  https://bugzilla.onlyoffice.com/show_bug.cgi?id=55141
-	return this.frameStyle + //';left:' +	document.body.scrollLeft + 'px;' +
+	// if we use document.body.scrollLeft, we have bug 55144  https://bugzilla.onlyoffice.com/show_bug.cgi?id=55141
+	return this.frameStyle + ';left:' +	5 /*document.body.scrollLeft*/ + 'px;' +
 		'top:' + document.body.scrollTop + 'px;';
 };
 
