@@ -19,10 +19,6 @@ It is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer
 
 Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
 
-## How to install
-
-Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
-
 ## Using your service
 
 You can install LanguageTool to your own server and send requests to it. 
