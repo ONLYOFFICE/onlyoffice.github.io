@@ -33,7 +33,7 @@
 			data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
 
 		img.setAttribute('src', data);
-		config = {css: "body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img { pointer-events: none; }"};
+		var config = {css: "body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
 		img.onclick = function() {
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, loader);
 			editor.isChanged = true;
