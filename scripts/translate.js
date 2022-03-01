@@ -74,7 +74,7 @@
 
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
 				selectElement.addEventListener('change', function(event) {
-					if (text || ifr.contentDocument.getElementById("google_translate_element").innerHTML) {
+					if (txt || ifr.contentDocument.getElementById("google_translate_element").innerHTML) {
 						ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');
 						ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 					}
