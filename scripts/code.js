@@ -72,8 +72,7 @@
             }, 500);
         },
         getToken: function () {
-            var matches = document.cookie.match(new RegExp("(?:^|; )mendToken=([^;]*)"));
-            return matches ? decodeURIComponent(matches[1]) : null;
+            return localStorage.getItem("mendToken");
         },
         refreshToken: function () {
             return false;
@@ -349,7 +348,7 @@
             OAuthError("State validation failed. Possible CSRF attack.");
             return;
         }
-        document.cookie = "mendToken=" + token + "; max-age=43200";
+        localStorage.setItem('mendToken', token);
         switchAuthState('main');
     };
 
