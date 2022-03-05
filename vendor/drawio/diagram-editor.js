@@ -18,6 +18,8 @@ function DiagramEditor(config, ui, done, initialized, urlParams, callback, loade
 	this.isClosePlugin = false;
 	this.pluginCallback = callback;
 	this.loader = loader;
+	this.unsaved_xml = null;
+	this.empty_xml = "ddHBDoMgDADQr+GOoIl357bLTh52JtIJCVqDGN2+fhpwjrhdSHktlBTCi3a+WNGrG0owhFE5E34ijGV5uqwrPD2wNEBjtfSU7FDpFwSkQUctYYgKHaJxuo+xxq6D2kUmrMUpLnugibv2ooEDVLUwR71r6ZTXPKO7X0E3auuc0JBpxVYcYFBC4vRFvCS8sIjOR+1cgFlnt83Fnzv/yX4eZqFzPw4swX73sok+iJdv";
 
 	var self = this;
 
@@ -53,13 +55,11 @@ DiagramEditor.editElement = function(arrel, config, ui, done, urlParams, callbac
   if (!elt.diagramEditorStarting)
   {
     elt.diagramEditorStarting = true;
-
 	var editor =  new DiagramEditor(config, ui, done, function()
     {
         delete elt.diagramEditorStarting;
 		div.classList.remove("hidden");
 		this.frame.classList.remove("hidden");
-		this.hideLoader();
     }, urlParams, callback, loader);
     editor.editElement(elt);
 	return editor;
@@ -331,70 +331,64 @@ DiagramEditor.prototype.setStatus = function(messageKey, modified)
  */
 DiagramEditor.prototype.handleMessage = function(msg)
 {
-	if (msg.event == 'configure')
-	{
-		this.configureEditor();
-	}
-	else if (msg.event == 'init')
-	{
-		this.initializeEditor();
-	}
-	else if (msg.event == 'autosave')
-	{
-		this.isChanged = true;
-		this.save(msg.xml, true, this.startElement);
-	}
-	else if (msg.event == 'export')
-	{
-		this.setElementData(this.startElement, msg.data);
-		this.stopEditing();
-		this.xml = null;
-		if (this.isClosePlugin || !this.isChanged)
-		{
-			this.isClosePlugin = false;
-			this.pluginCallback(this.isChanged);
-		}
-	}
-	else if (msg.event == 'save')
-	{
-		this.save(msg.xml, false, this.startElement);
-		this.xml = msg.xml;
+	switch (msg.event) {
+		case "configure":
+			this.configureEditor();
+			break;
 
-		if (msg.exit)
-		{
-			msg.event = 'exit';
-		}
-    else
-    {
-      this.setStatus('allChangesSaved', false);
-    }
-	}
+		case "init":
+			this.initializeEditor();
+			break;
 
-	if (msg.event == 'exit')
-	{
-		if (this.format != 'xml')
-		{
-			if (this.xml != null)
-			{
-				this.postMessage({action: 'export', format: this.format,
-				xml: this.xml, spinKey: 'export'});
+		case "autosave":
+			// for normal work when you push exit without save
+			this.save(msg.xml, true, this.startElement);
+			break;
+
+		case "export":
+			this.setElementData(this.startElement, msg.data);
+			this.stopEditing();
+			this.xml = null;
+			if (this.isClosePlugin || !this.isChanged) {
+				this.isClosePlugin = false;
+				this.pluginCallback(this.isChanged);
 			}
-			else
-			{
-				this.stopEditing(msg);
-				if (!this.isChanged)
-					this.pluginCallback(false);
+			break;
+
+		case "save":
+			// todo: saving if nothing has changed in a non-empty diagram
+			this.save(msg.xml, false, this.startElement);
+			if (msg.exit) {
+				msg.event = 'exit';
+				this.handleMessage(msg);
 			}
-		}
-		else
-		{
-			if (msg.modified == null || msg.modified)
-			{
+			else {
+				this.setStatus('allChangesSaved', false);
+			}
+			break;
+
+		case "load":
+			this.hideLoader();
+			break;
+
+		case "exit":
+			this.startElement.classList.remove("hidden");
+			if (this.format != 'xml') {
+				if (this.xml != null) {
+					this.postMessage({action: 'export', format: this.format,
+					xml: this.xml, spinKey: 'export'});
+				} else {
+					this.stopEditing(msg);
+					if (!this.isChanged)
+						this.pluginCallback(false);
+				}
+			} else {
+				if (msg.modified == null || msg.modified)
 					this.save(msg.xml, false, this.startElement);
-			}
 
-			this.stopEditing(msg);
-		}
+				this.stopEditing(msg);
+			}
+			break;
 	}
 };
 
@@ -424,16 +418,22 @@ DiagramEditor.prototype.initializeEditor = function()
  */
 DiagramEditor.prototype.save = function(data, draft, elt)
 {
-	this.done(data, draft, elt);
+	if (data.indexOf(this.empty_xml) === -1) 
+		this.done(data, draft, elt);
 };
 
 /**
  * Invoked after save.
  */
-DiagramEditor.prototype.done = function(data)
+DiagramEditor.prototype.done = function(data, draft)
 {
 	// hook for subclassers
-	this.xml = data;
+	if (!draft) {
+		this.isChanged = true;
+		this.xml = data;
+	} else {
+		this.unsaved_xml = data;
+	}
 };
 
 /**
@@ -447,8 +447,12 @@ DiagramEditor.prototype.initialized = function()
 /**
  * Static method to export the diagram when the plugin is closing.
  */
-DiagramEditor.prototype.closePlugin = function(callback)
+DiagramEditor.prototype.closePlugin = function(bUnsaved)
 {
+	if (bUnsaved && this.unsaved_xml) {
+		this.save(this.unsaved_xml, false);
+	}
+
 	this.isClosePlugin = true;
 	if (this.isChanged)
 		this.postMessage({action: 'export', format: this.format, xml: this.xml, spinKey: 'export'});
@@ -463,5 +467,5 @@ DiagramEditor.prototype.closePlugin = function(callback)
  DiagramEditor.prototype.hideLoader = function()
  {
 	this.loader && (this.loader.remove ? this.loader.remove() : $('#loader-container')[0].removeChild(this.loader));
-	this.loader = undefined;
+	this.loader = null;
  };
