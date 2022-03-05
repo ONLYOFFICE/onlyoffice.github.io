@@ -25,10 +25,19 @@
 		//event "init" for plugin
 		document.getElementById("btn_start").onclick = function() {
 			if (!isInit) {
+				document.getElementById('inp_room').classList.remove('inp_error');
+				document.getElementById("div_err").classList.add("hidden");
 				//create iframe jitsi
 				const domain = document.getElementById("inp_domain").value.trim() || 'meet.jit.si';
+				const roomName = document.getElementById('inp_room').value.trim();
+				if (!roomName) {
+					//the name of the room cannot be empty
+					document.getElementById('inp_room').classList.add('inp_error');
+					document.getElementById("div_err").classList.remove("hidden");
+					return;
+				}
 				const options = {
-					roomName: document.getElementById('inp_room').value.trim(),
+					roomName: roomName,
 					width: document.getElementById("body").clientWidth + "px",
 					height: document.getElementById("meet").clientHeight - 5 + "px",
 					parentNode: document.querySelector('#meet'),
