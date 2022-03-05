@@ -35,6 +35,7 @@
 		img.setAttribute('src', data);
 		var config = {css: "body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
 		img.onclick = function() {
+			makeLoader();
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, loader);
 			editor.isChanged = true;
 		}
@@ -47,7 +48,7 @@
 		if (id == 0) {
 			if (editor.frame) {
 				// if editor is opened
-				editor.closePlugin();
+				editor.closePlugin(true);
 			} else {
 				closePlugin(editor.isChanged);
 			}			
@@ -89,6 +90,7 @@
 	function makeLoader() {
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], window.Asc.plugin.tr('Loading') + '...');
+		if (img) img.classList.add('hidden');
 	};
 
 	window.Asc.plugin.onTranslate = function()
