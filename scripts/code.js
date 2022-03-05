@@ -40,7 +40,7 @@
 		document.getElementById("btn_start").onclick = function() {
 			if (!isInit) {
 				//create iframe jitsi
-				const domain = 'meet.jit.si';
+				const domain = document.getElementById("inp_domain").value.trim() || 'meet.jit.si';
 				const options = {
 					roomName: document.getElementById('inp_room').value.trim(),
 					width: document.getElementById("body").clientWidth + "px",
@@ -80,6 +80,7 @@
 			document.getElementById('btn_stop').classList.toggle("hidden");
 			document.getElementById('btn_start').classList.toggle("hidden");
 			document.getElementById('inp_room').classList.toggle("hidden");
+			document.getElementById('inp_domain').classList.toggle("hidden");
 		};
 	};
 
@@ -105,6 +106,10 @@
 		var inp_room = document.getElementById("inp_room");
 		if (inp_room)
 			inp_room.placeholder = window.Asc.plugin.tr("Room name");
+
+		var inp_domain = document.getElementById("inp_domain");
+		if (inp_domain)
+			inp_domain.placeholder = window.Asc.plugin.tr("Domain");
 	};
 
 })(window, undefined);

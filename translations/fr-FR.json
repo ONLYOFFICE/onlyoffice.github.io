@@ -1,5 +1,6 @@
 {
     "Start": "Commencer",
 	"Stop" : "Arrêter",
-	"Room name" : "Nom de la chambre"
+	"Room name" : "Nom de la chambre",
+	"Domain" : "Domaine"
 }
