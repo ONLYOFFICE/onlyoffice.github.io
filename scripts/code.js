@@ -63,7 +63,7 @@
 			var _info = window.Asc.plugin.info;
 			var _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject";
 			// we should use timeout for image export from diagram editor
-			setTimeout(() => {
+			setTimeout(function() {
 				var _param = {
 					guid : _info.guid,
 					widthPix : (_info.mmToPx * (img.width >> 2) ) >> 0,
