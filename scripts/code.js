@@ -36,10 +36,10 @@
 		var config = {css: "body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
 		img.onclick = function() {
 			makeLoader();
-			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, loader);
+			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
 			editor.isChanged = true;
 		}
-		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, loader);
+		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 
@@ -91,6 +91,11 @@
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], window.Asc.plugin.tr('Loading') + '...');
 		if (img) img.classList.add('hidden');
+	};
+
+	function hideLoader() {
+		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
+		loader = undefined;
 	};
 
 	window.Asc.plugin.onTranslate = function()

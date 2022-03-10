@@ -7,7 +7,7 @@
  *
  * See https://jgraph.github.io/drawio-integration/javascript.html
  */
-function DiagramEditor(config, ui, done, initialized, urlParams, callback, loader)
+function DiagramEditor(config, ui, done, initialized, urlParams, callback, hideLoader)
 {
 	this.config = (config != null) ? config : this.config;
 	this.ui = (ui != null) ? ui : this.ui;
@@ -17,7 +17,7 @@ function DiagramEditor(config, ui, done, initialized, urlParams, callback, loade
 	this.isChanged = false;
 	this.isClosePlugin = false;
 	this.pluginCallback = callback;
-	this.loader = loader;
+	this.hideLoader = hideLoader;
 	this.unsaved_xml = null;
 	this.empty_xml = "ddHBDoMgDADQr+GOoIl357bLTh52JtIJCVqDGN2+fhpwjrhdSHktlBTCi3a+WNGrG0owhFE5E34ijGV5uqwrPD2wNEBjtfSU7FDpFwSkQUctYYgKHaJxuo+xxq6D2kUmrMUpLnugibv2ooEDVLUwR71r6ZTXPKO7X0E3auuc0JBpxVYcYFBC4vRFvCS8sIjOR+1cgFlnt83Fnzv/yX4eZqFzPw4swX73sok+iJdv";
 
@@ -48,7 +48,7 @@ function DiagramEditor(config, ui, done, initialized, urlParams, callback, loade
 /**
  * Static method to edit the diagram in the given img or object.
  */
-DiagramEditor.editElement = function(arrel, config, ui, done, urlParams, callback, loader)
+DiagramEditor.editElement = function(arrel, config, ui, done, urlParams, callback, hideLoader)
 {
   var elt = arrel[0];
   var div = arrel[1];
@@ -60,7 +60,7 @@ DiagramEditor.editElement = function(arrel, config, ui, done, urlParams, callbac
         delete elt.diagramEditorStarting;
 		div.classList.remove("hidden");
 		this.frame.classList.remove("hidden");
-    }, urlParams, callback, loader);
+    }, urlParams, callback, hideLoader);
     editor.editElement(elt);
 	return editor;
    }
@@ -460,12 +460,3 @@ DiagramEditor.prototype.closePlugin = function(bUnsaved)
 		this.pluginCallback(false);
 
 };
-
-/**
- * Static method to hideLoader.
- */
- DiagramEditor.prototype.hideLoader = function()
- {
-	this.loader && (this.loader.remove ? this.loader.remove() : $('#loader-container')[0].removeChild(this.loader));
-	this.loader = null;
- };
