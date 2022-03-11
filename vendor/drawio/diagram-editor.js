@@ -235,6 +235,13 @@ DiagramEditor.prototype.stopEditing = function()
 		document.body.removeChild(this.frame);
 		this.setActive(false);
 		this.frame = null;
+		var t = this;
+		var el = this.startElement;
+		setTimeout(function() {
+			// check for empy element
+			if ( (el.height && el.height < 10) || (el.width && el.width < 10) )
+			t.pluginCallback(false);
+		}, 1);
 	}
 };
 

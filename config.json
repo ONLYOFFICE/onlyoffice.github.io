@@ -74,17 +74,25 @@
 
             "buttons": [
                 {
-                    "text": "Ok",
-                    "primary": true
+                    "text": "Insert",
+                    "primary": true,
+                    "textLocale": {
+                        "ru": "Вставить",
+                        "fr": "Annuler",
+                        "es": "Cancelar",
+                        "de": "Abbrechen",
+                        "cs": "Vložit"
+                    }
                 },
                 {
                     "text": "Cancel",
                     "primary": false,
                     "textLocale": {
                         "ru": "Отмена",
-                        "fr": "Annuler",
-                        "es": "Cancelar",
-                        "de": "Abbrechen"
+                        "fr": "Insérer",
+                        "es": "Insertar",
+                        "de": "Einfügen",
+                        "cs": "Zrušit"
                     }
                 }
             ],
