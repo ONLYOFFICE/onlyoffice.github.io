@@ -19,6 +19,7 @@ function DiagramEditor(config, ui, done, initialized, urlParams, callback, hideL
 	this.pluginCallback = callback;
 	this.hideLoader = hideLoader;
 	this.unsaved_xml = null;
+	this.curPage = 0;
 	this.empty_xml = "ddHBDoMgDADQr+GOoIl357bLTh52JtIJCVqDGN2+fhpwjrhdSHktlBTCi3a+WNGrG0owhFE5E34ijGV5uqwrPD2wNEBjtfSU7FDpFwSkQUctYYgKHaJxuo+xxq6D2kUmrMUpLnugibv2ooEDVLUwR71r6ZTXPKO7X0E3auuc0JBpxVYcYFBC4vRFvCS8sIjOR+1cgFlnt83Fnzv/yX4eZqFzPw4swX73sok+iJdv";
 
 	var self = this;
@@ -252,6 +253,33 @@ DiagramEditor.prototype.postMessage = function(msg)
 {
 	if (this.frame != null)
 	{
+		// if we put id of the current page instead of the first page id, final image will be from curent page
+		if (this.curPage !== 0) {
+			var first = {start : 0, id: ""};
+			var needed = {start : 0, id: ""};
+			var newXml = "";
+			var pos = 0;
+			var i = 0;
+			while (pos !== -1) {
+				var str = '<diagram id="';
+				pos = msg.xml.indexOf(str, pos + 1) + str.length;
+				if (i == 0) {
+					first.start = pos;
+					var end = msg.xml.indexOf('"', first.start);
+					first.id = msg.xml.slice(first.start, end);
+				}
+				if (i == this.curPage) {
+					needed.start = pos;
+					var end = msg.xml.indexOf('"', needed.start);
+					needed.id = msg.xml.slice(needed.start, end);
+					break;
+				}
+				i++;
+			}
+			newXml = msg.xml.slice(0, needed.start).replace(first.id, needed.id) + msg.xml.slice(needed.start).replace(needed.id, first.id);
+			msg.xml = newXml;
+		}
+		
 		this.frame.contentWindow.postMessage(JSON.stringify(msg), '*');
 	}
 };
@@ -349,6 +377,7 @@ DiagramEditor.prototype.handleMessage = function(msg)
 
 		case "autosave":
 			// for normal work when you push exit without save
+			this.curPage = msg.currentPage;
 			this.save(msg.xml, true, this.startElement);
 			break;
 
@@ -364,6 +393,7 @@ DiagramEditor.prototype.handleMessage = function(msg)
 
 		case "save":
 			// todo: saving if nothing has changed in a non-empty diagram
+			this.curPage = msg.currentPage;
 			this.save(msg.xml, false, this.startElement);
 			if (msg.exit) {
 				msg.event = 'exit';
@@ -379,6 +409,8 @@ DiagramEditor.prototype.handleMessage = function(msg)
 			break;
 
 		case "exit":
+			// for dialog window
+			// this.postMessage({action: 'prompt', title: 'page number', okKey: 'ok', defaultValue: '1' });
 			this.startElement.classList.remove("hidden");
 			if (this.format != 'xml') {
 				if (this.xml != null) {
@@ -412,7 +444,8 @@ DiagramEditor.prototype.configureEditor = function()
  */
 DiagramEditor.prototype.initializeEditor = function()
 {
-	this.postMessage({action: 'load',autosave: 1, saveAndExit: '1',
+	//https://desk.draw.io/support/solutions/articles/16000042544-how-does-embed-mode-work-
+	this.postMessage({action: 'load', autosave: 1, noSaveBtn: '1', noExitBtn: '1',
 		modified: 'unsavedChanges', xml: this.getData(),
 		title: this.getTitle()});
 	this.setWaiting(false);
