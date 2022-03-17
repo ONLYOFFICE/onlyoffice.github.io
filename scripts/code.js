@@ -22,18 +22,20 @@
 	var UI = "kennedy";
 	var loader;
 	var lang = "";
+	var title = "Click on diagram to edit."
 
 	window.Asc.plugin.init = function(data)
 	{
 		lang = this.info.lang.split('-')[0];
 		img = document.createElement('img');
+		img.setAttribute('title', title)
 		document.getElementById("div_preview").appendChild(img);
 		// create an empti image for editor (if data doesn't set), after export we put the result in it
 		if (!data)
 			data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
 
 		img.setAttribute('src', data);
-		var config = {css: "body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
+		var config = {css: "button.geBigButton:nth-of-type(1) {background-color:transparent !important; color:"+ (UI == 'dark' ? '#ccc' : '#000') +" !important;} body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
 		img.onclick = function() {
 			makeLoader();
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
@@ -100,8 +102,10 @@
 
 	window.Asc.plugin.onTranslate = function()
 	{
+		title = window.Asc.plugin.tr(title);
+		if (img)
+			img.setAttribute("title", title);
 		makeLoader();
-		//nothing to translate
 	};
 
 	window.Asc.plugin.onExternalMouseUp = function()
