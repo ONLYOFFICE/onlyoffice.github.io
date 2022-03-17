@@ -10,9 +10,9 @@ The plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/Docume
 
 1. Open the Plugins tab and click on **draw.io**.
 2. Create your own diagram in the opened window or paste one from any available resources.
-3. Click "Save & exit" or "Save" and then "Exit".
+3. Click "Save & exit".
 4. You will see a ready diagram. If you need to make further changes to this diagram, just click on it.
-5. To insert the ready diagram into your document, click the OK button. 
+5. To insert the ready diagram into your document, click the Insert button. 
 
 ## How to install
 
