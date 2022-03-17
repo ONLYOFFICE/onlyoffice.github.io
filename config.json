@@ -1,26 +1,27 @@
 {
-    "name": "draw.io",
-    "nameLocale": {
-        "ru": "draw.io",
-        "fr": "draw.io",
-        "es": "draw.io",
-        "de": "draw.io"
-    },
-    "guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
+	"name": "draw.io",
+	"nameLocale": {
+		"ru": "draw.io",
+		"fr": "draw.io",
+		"es": "draw.io",
+		"de": "draw.io"
+	},
+	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
+	"version": "1.0.0",
 
-    "variations": [
-        {
-            "description": "draw.io",
-            "descriptionLocale": {
-                "ru": "draw.io",
-                "fr": "draw.io",
-                "es": "draw.io",
-                "de": "draw.io"
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "draw.io",
+			"descriptionLocale": {
+				"ru": "draw.io",
+				"fr": "draw.io",
+				"es": "draw.io",
+				"de": "draw.io"
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
 				{
 					"style" : "light",
 					
@@ -74,8 +75,15 @@
 
             "buttons": [
                 {
-                    "text": "Ok",
-                    "primary": true
+                    "text": "Insert",
+                    "primary": true,
+                    "textLocale": {
+                        "ru": "Вставить",
+                        "fr": "Insérer",
+                        "es": "Insertar",
+                        "de": "Einfügen",
+                        "cs": "Vložit"
+                    }
                 },
                 {
                     "text": "Cancel",
@@ -84,12 +92,13 @@
                         "ru": "Отмена",
                         "fr": "Annuler",
                         "es": "Cancelar",
-                        "de": "Abbrechen"
+                        "de": "Abbrechen",
+                        "cs": "Zrušit"
                     }
                 }
             ],
 
-			"size": [ 1200, 1000 ]
+            "size": [ 1200, 1000 ]
         }
     ]
 }
