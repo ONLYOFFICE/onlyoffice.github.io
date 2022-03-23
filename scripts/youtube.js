@@ -34,7 +34,6 @@
 	var url = "";
 	var player = null;
 	var isWindowPlayer = false;
-	var isViewerMode = false;
 
 	function getParam(url, param)
 	{
@@ -89,6 +88,13 @@
 	window.Asc.plugin.init = function(text)
 	{
 	    var _textbox = document.getElementById("textbox_url");
+
+		// disable input and button elements in view mode
+		if (this.info.isViewMode) {
+			_textbox.disabled = true;
+			document.getElementById("textbox_button").disabled = true;
+		}
+
 	    _textbox.onkeyup = function(e)
 	    {
 	        if (e.keyCode == 13) // click on Enter
