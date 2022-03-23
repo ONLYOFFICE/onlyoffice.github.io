@@ -72,9 +72,7 @@
             "initDataType": "html",
             "initData": "",
 
-            "isUpdateOleOnResize": false,
-			
-			 "buttons": [
+            "buttons": [
                 {
                     "text": "Ok",
                     "primary": true
@@ -114,10 +112,6 @@
 
             "initDataType": "none",
             "initData": "",
-
-            "isUpdateOleOnResize": false,
-
-           
 
             "size": [ 392, 147 ]
         }
