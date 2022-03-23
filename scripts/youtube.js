@@ -81,21 +81,6 @@
                 document.getElementById("textbox_button").onclick();
 	    };
 		
-		if (this.info.isViewMode != isViewerMode)
-		{
-			isViewMode = this.info.isViewMode;
-			var _table     = document.getElementsByTagName("table")[0];
-			
-			if (_table)
-			{
-				if (_table.rows[0])
-					_table.rows[0].style.display = isViewMode ? "none" : "";
-				
-				if (_table.rows[1])
-					_table.rows[1].style.display = isViewMode ? "none" : "";
-			}
-		}
-
 		// clear validation on input/paste
         _textbox.oninput = _textbox.onpaste = function(e)
         {
@@ -175,16 +160,11 @@
 		};
 
 		url = text;
-		if (url == "")
-		{
-			this.resizeWindow(350, 90, 350, 90, 350, 90);
-		}
-		else
+		if (url !== "")
 		{
 			document.getElementById("textbox_url").value = url;
 			document.getElementById("textbox_button").onclick();
 		}
-		
 		_textbox.focus();
 	};
 	
