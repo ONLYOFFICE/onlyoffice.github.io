@@ -193,14 +193,25 @@ var language = null;
             case 'word': {
                 window.Asc.plugin.callCommand(function () {
                     var oDocument = Api.GetDocument();
-                    var oParagraph, oRun, arrInsertResult = [], oImage;
-                    oParagraph = Api.CreateParagraph();
-                    arrInsertResult.push(oParagraph);
+                    var oParagraph, arrInsertResult = [], oImage;
+                
                     var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
                     var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
                     oImage = Api.CreateImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                    oParagraph.AddDrawing(oImage);
-                    oDocument.InsertContent(arrInsertResult);
+                    var aSelectedImgs = oDocument.GetSelectedDrawings ? oDocument.GetSelectedDrawings() : [];
+                    var oSourceImg = aSelectedImgs[0] ? aSelectedImgs[0] : null;
+                    
+                    if (oSourceImg)
+                    {
+                        oSourceImg.Replace(oImage, true);
+                    }
+                    else
+                    {
+                        oParagraph = Api.CreateParagraph();
+                        arrInsertResult.push(oParagraph);
+                        oParagraph.AddDrawing(oImage);
+                        oDocument.InsertContent(arrInsertResult);
+                    }
                 }, true);
                 break;
 
@@ -226,5 +237,5 @@ var language = null;
 
         }
     };
-	
+    
 })(window, undefined);
