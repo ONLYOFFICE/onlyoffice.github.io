@@ -201,10 +201,12 @@ var language = null;
                     var aSelectedImgs = oDocument.GetSelectedDrawings ? oDocument.GetSelectedDrawings() : [];
                     var oSourceImg = aSelectedImgs[0] ? aSelectedImgs[0] : null;
                     
+                    // replace selected img by new img
                     if (oSourceImg)
                     {
-                        oSourceImg.Replace(oImage, true);
+                        oDocument.ReplaceDrawing(oSourceImg, oImage, true);
                     }
+                    // support old version
                     else
                     {
                         oParagraph = Api.CreateParagraph();
