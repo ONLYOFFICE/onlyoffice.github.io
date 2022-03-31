@@ -1,7 +1,7 @@
 {
     "name": "Docs to Markdown",
     "guid": "asc.{5aff455d-96c4-4bd8-9658-16e5bc143738}",
-    "version": "1.0",
+    "version": "1.0.0",
 	"minVersion" : "6.4.0",
     "variations": [
         {
