@@ -39,6 +39,7 @@
     var lastSearch = {
         text: "",
         obj: null,
+		groups: []
     };
     var elements = {
         libLoader: document.getElementById("libLoader"),
@@ -98,7 +99,13 @@
 
             clearLibrary();
 
-            loadLibrary(sdk.items(text), false);
+            loadLibrary(sdk.items(text), true, true, false);
+			var groups = sdk.getUserGropus();
+			if (groups.length) {
+				for (var i = 0; i < groups.length; i++) {
+					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true );
+				}
+			}
         };
         elements.searchField.onkeypress = function (e) {
             if (e.keyCode == 13) searchFor(e.target.value);
@@ -462,12 +469,15 @@
                 clearTimeout(loadTimeout);
             }
 
-            if (!lastSearch.obj && !lastSearch.text.trim()) return;
+            if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
 
             waitForLoad = true;
             loadTimeout = setTimeout(function () {
                 if (shouldLoadMore(holder)) {
-                    loadLibrary(lastSearch.obj.next(), true, true);
+                    loadLibrary(lastSearch.obj.next(), true, true, lastSearch.groups.length);
+					for (var i = 0; (i < lastSearch.groups.length && lastSearch.groups[i].next); i++) {
+						loadLibrary(sdk.groups(lastSearch.groups[i].next()), true, false, (i == lastSearch.groups.length -1), true );
+					}
                 } else {
                     waitForLoad = false;
                 }
@@ -479,7 +489,11 @@
     function shouldLoadMore(holder) {
         if (currentAuthState != "main") return false;
         if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) return false;
-        if (!lastSearch.obj || !lastSearch.obj.next) return false;
+		var flag = true;
+		lastSearch.groups.forEach(function(el) {
+			if (el.next) flag = false;
+		});
+        if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
 
         return true;
     }
@@ -495,22 +509,24 @@
         docsScroller.onscroll();
     }
 
-    function loadLibrary(promise, append) {
-        showLibLoader(true);
+    function loadLibrary(promise, append, showLoader, hideLoader, isGroup) {
+		if (showLoader) showLibLoader(true);
         promise
             .then(function (res) {
-                displaySearchItems(append, res, null);
+                displaySearchItems(append, res, null, hideLoader, isGroup);
             })
             .catch(function (err) {
-                displaySearchItems(append, null, err.message);
+                displaySearchItems(append, null, err.message, hideLoader, isGroup);
             })
             .finally(function () {
-                showLibLoader(false);
-                waitForLoad = false;
+				if (hideLoader) {
+					showLibLoader(false);
+					waitForLoad = false;
+				}
             });
     }
 
-    function displaySearchItems(append, res, err) {
+    function displaySearchItems(append, res, err, showNotFound, isGroup) {
         var holder = elements.docsHolder;
 
         if (!append) {
@@ -518,12 +534,18 @@
         }
 
         var first = false;
-        if (!lastSearch.obj) first = true;
+        if (!lastSearch.obj && (res.items && !res.items.length) ) first = true;
         if (err) {
-            if (first) lastSearch.obj = {};
+            if (first) {
+				lastSearch.obj = {};
+				lastSearch.groups = [];
+			} 
             lastSearch.obj.next = null;
         } else {
-            lastSearch.obj = res;
+			if (isGroup)
+				lastSearch.groups.push(res);
+			else
+            	lastSearch.obj = res;
         }
 
         var page = document.createElement("div");
@@ -535,7 +557,7 @@
         } else if (err || first) {
             if (err) {
                 showError(err);
-            } else {
+            } else if (showNotFound) {
                 var notFound = document.createElement("div");
                 notFound.textContent = getMessage("Nothing found");
                 notFound.classList.add("searchInfo");
@@ -690,19 +712,55 @@
             return;
         }
 
-        var keys = [];
-        for (var key in selected.items) {
-            keys.push(key);
-        }
-        if (!keys.length) return;
+		var obj = {
+			users: {
+				keys : [],
+			},
+			groups: {}
+		};
+		for (const key in selected.items) {
+			if (Object.hasOwnProperty.call(selected.items, key)) {
+				const el = selected.items[key];
+				if (el.library.type == "user") {
+					obj.users.keys.push(key);
+				} else if (el.library.type == "group") {
+					if (obj.groups[el.library.id]) {
+						obj.groups[el.library.id].keys.push(key);
+					} else {
+						obj.groups[el.library.id] = {
+							keys: [key]
+						};
+					}
+				}
+			}
+		}
+        
+		if (obj.users.keys.length) {
+			sdk.format(obj.users.keys, null, selectedStyle, selectedLocale)
+				.then(function (res) {
+					insertInDocument(res);
+				})
+				.catch(function (err) {
+					showError(err);
+				});
+		}
+		
+		if (Object.keys(obj.groups).length != 0) {
+			for (const key in obj.groups) {
+				if (Object.hasOwnProperty.call(obj.groups, key)) {
+					const element = obj.groups[key];
+					sdk.format(element.keys, key, selectedStyle, selectedLocale)
+						.then(function (res) {
+							insertInDocument(res);
+						})
+						.catch(function (err) {
+							showError(err);
+						});
+				}
+			}
+		}
 
-        sdk.format(keys, selectedStyle, selectedLocale)
-            .then(function (res) {
-                insertInDocument(res);
-            })
-            .catch(function (err) {
-                showError(err);
-            });
+        
     }
 
     function insertInDocument(html) {

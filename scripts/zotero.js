@@ -20,6 +20,7 @@
     window.Asc.plugin.zotero.api = function (cfg) {
         var apiKey;
         var userId;
+        var userGroups = [];
         var baseUrl = cfg.baseUrl || "https://api.zotero.org/";
 
         function getRequest(url) {
@@ -53,14 +54,37 @@
             });
         }
 
-        function format(ids, style, locale) {
+		function groups(search, groupId) {
             return new Promise(function (resolve, reject) {
-                buildGetRequest("users/" + userId + "/items", {
-                    format: "bib",
-                    style: style,
-                    locale: locale,
-                    itemKey: ids.join(",")
-                }).then(function (res) {
+				parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", {
+					q: search
+				}), resolve, reject);
+            });
+        }
+
+		function getUserGropus() {
+			return userGroups;
+		}
+
+        function format(ids, key, style, locale) {
+            return new Promise(function (resolve, reject) {
+				var request;
+				if (key) {
+					request = buildGetRequest("groups/" + key + "/items", {
+						format: "bib",
+						style: style,
+						locale: locale,
+						itemKey: ids.join(",")
+					})
+				} else {
+					request = buildGetRequest("users/" + userId + "/items", {
+						format: "bib",
+						style: style,
+						locale: locale,
+						itemKey: ids.join(",")
+					})
+				}
+                request.then(function (res) {
                     resolve(res.text());
                 }).catch(function (err) {
                     reject(err);
@@ -89,14 +113,30 @@
         }
 
         function saveSettings(id, key) {
-            applySettings(id, key);
+			applySettings(id, key);
             localStorage.setItem("zoteroUserId", id);
             localStorage.setItem("zoteroApiKey", key);
+			buildGetRequest("users/" + id + "/groups")
+			.then(function (res) {
+				if (!res.ok) throw new Error(res.status + " " + res.statusText);
+				return res.json();
+			}).then(function (res) {
+				res.forEach(function(el) {
+					userGroups.push(el.id);
+				});
+				localStorage.setItem("zoteroUserGroups", userGroups.join(';'));
+			}).catch(function (err) {
+				throw new Error(err)
+			});
         }
 
         function getSettings() {
             var uid = localStorage.getItem("zoteroUserId");
             var key = localStorage.getItem("zoteroApiKey");
+			var groups = localStorage.getItem("zoteroUserGroups");
+			if (groups)
+            	userGroups = groups.split(';');
+
             var configured = !(!uid || !key);
             if (configured) applySettings(uid, key);
             return configured;
@@ -105,6 +145,8 @@
         function clearSettings() {
             localStorage.removeItem("zoteroUserId");
             localStorage.removeItem("zoteroApiKey");
+            localStorage.removeItem("zoteroUserGroups");
+			userGroups = [];
         }
 
         function parseItemsResponse(promise, resolve, reject) {
@@ -145,6 +187,8 @@
 
         return {
             items: items,
+			groups: groups,
+			getUserGropus: getUserGropus,
             format: format,
             hasSettings: getSettings,
             clearSettings: clearSettings,
