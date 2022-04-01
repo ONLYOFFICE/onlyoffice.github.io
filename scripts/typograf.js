@@ -168,10 +168,11 @@ var sText = '';
         if (sTxt[sTxt.length - 1] === '\n')
             sTxt = sTxt.slice(0, sTxt.length - 1);
 
+        sTxt = sTxt.replace(/\r/g, "");
 	    var splittedParas = sTxt.split('\n');
 
         splittedParas.forEach(function(item, i, splittedParas) {
-            splittedParas[i] = removeCR(item);
+            splittedParas[i] = item;
         });
 
 	    return splittedParas;
