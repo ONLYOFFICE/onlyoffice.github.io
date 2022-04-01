@@ -181,9 +181,6 @@ function getMessage(key) {
             url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey
 
         }).success(function (oResponse) {
-            if (translatedText.length !== 0)
-                return;
-                
             isValidKey = true;
             if ($('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
