@@ -87,16 +87,27 @@ var sText = '';
 	    });
     };
 
-	$(document).ready(function () {
-	     $('#select_example').select2({
-			minimumResultsForSearch: Infinity,
-			width : '120px',
-		});
-        SetSavedSettings();
-
+    function hideShowForLocale() {
         var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
         if (locale === 'ru') {
+            if ($('#dash-hyphen').hasClass('display-none')) {
+                $('#dash-hyphen').toggleClass('display-none');
+            }
             if ($('.locale-ru').hasClass('display-none')) {
+                $('.locale-ru').toggleClass('display-none');
+            }
+            if (!$('.locale-en-US').hasClass('display-none')) {
+                $('.locale-en-US').toggleClass('display-none');
+            }
+        }
+        else if (locale === 'en-US') {
+            if ($('#dash-hyphen').hasClass('display-none')) {
+                $('#dash-hyphen').toggleClass('display-none');
+            }
+            if ($('.locale-en-US').hasClass('display-none')) {
+                $('.locale-en-US').toggleClass('display-none');
+            }
+            if (!$('.locale-ru').hasClass('display-none')) {
                 $('.locale-ru').toggleClass('display-none');
             }
         }
@@ -104,7 +115,23 @@ var sText = '';
             if (!$('.locale-ru').hasClass('display-none')) {
                 $('.locale-ru').toggleClass('display-none');
             }
+            if (!$('.locale-en-US').hasClass('display-none')) {
+                $('.locale-en-US').toggleClass('display-none');
+            }
+            if (!$('#dash-hyphen').hasClass('display-none')) {
+                $('#dash-hyphen').toggleClass('display-none');
+            }
         }
+    }
+
+	$(document).ready(function () {
+	     $('#select_example').select2({
+			minimumResultsForSearch: Infinity,
+			width : '120px',
+		});
+        SetSavedSettings();
+
+        hideShowForLocale();
 
 		Ps = new PerfectScrollbar("#settings", {suppressScrollX: true});
 
@@ -148,17 +175,7 @@ var sText = '';
         });
         $("#select_example").change(function() {
             localStorage.setItem('locale_typograf', $(this).val());
-            var locale = document.getElementsByClassName("prefs__set-locale")[0].value;
-            if (locale === 'ru') {
-                if ($('.locale-ru').hasClass('display-none')) {
-                    $('.locale-ru').toggleClass('display-none');
-                }
-            }
-            else {
-                if (!$('.locale-ru').hasClass('display-none')) {
-                    $('.locale-ru').toggleClass('display-none');
-                }
-            }
+            hideShowForLocale();
         });
     });
     function processText(sTxt){
@@ -250,11 +267,6 @@ var sText = '';
             }
         }
     }
-
-    function removeCR(text) {
-        //return text.replace(/\r\n?/g, '');
-        return text;
-    };
 
     function updateScroll()
 	{
