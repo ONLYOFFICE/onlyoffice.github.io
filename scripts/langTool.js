@@ -604,7 +604,7 @@ function checkInternetExplorer(){
 		getLanguages().then(function(oResponse) {
 		    for (var nLang1 = 0; nLang1 < oResponse.length; nLang1++) {
 			    for (var nLang2 = nLang1 + 1; nLang2 < oResponse.length; nLang2++) {
-                    if (oResponse[nLang1].longCode === oResponse[nLang2].longCode)
+                    if (oResponse[nLang1].name === oResponse[nLang2].name)
                     {
                         oResponse.splice(nLang2, 1);
                         nLang2--;
