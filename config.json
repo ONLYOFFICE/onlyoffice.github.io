@@ -76,14 +76,14 @@
             "buttons": []
         },
         {
-            "description": "About",
+            "description": "Settings",
             "descriptionLocale": {
-                "ru": "Справка",
-                "fr": "À propos",
-                "es": "Sobre programa",
-                "de": "Über"
+                "ru": "Настройки",
+                "fr": "Paramètres",
+                "es": "Configuración",
+                "de": "Einstellungen"
             },
-            "url": "index_about.html",
+            "url": "settings.html",
 
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
             "isViewer": false,
@@ -105,7 +105,7 @@
                 }
             ],
 
-            "size": [ 400, 50 ]
+            "size": [ 300, 150 ]
         }
     ]
 }

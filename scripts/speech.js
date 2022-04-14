@@ -17,121 +17,391 @@
  */
 (function(window, undefined)
 {
-	var text_init = "";
-	var is_end_callback = false;
+    function detectChrome(){
+        var isChromium = window.chrome;
+        var winNav = window.navigator;
+        var vendorName = winNav.vendor;
+        var isOpera = typeof window.opr !== "undefined";
+        var isIEedge = winNav.userAgent.indexOf("Edg") > -1;
 
-	window.Asc.plugin.init      = function(text)
+        if (isChromium !== null &&
+            typeof isChromium !== "undefined" &&
+            vendorName === "Google Inc." &&
+            isOpera === false &&
+            isIEedge === false)
+            return true;
+
+        return false;
+    };
+
+    var isChrome = detectChrome();
+    var Max_Chars = 32767; // max chars in one sentense
+	var text_init = "";
+    var timer;
+    var voice_name, oMainVoice;
+    var curTextIdx = 0;
+    var allParagraphs = [];
+    var pitch     = 1;
+    var rate      = 1;
+    var voices    = [];
+    var bDefaultLang = false;
+    var aAllUtterance = [];
+    var langsMap = {
+        "ab": "ab",
+        "af": "af-ZA",
+        "ar": "ar-SA",
+        "az": "az-AZ",
+        "be": "be-BY",
+        "bg": "bg-BG",
+        "bn": "bn-IN",
+        "bo": "bo-CN",
+        "br": "br-FR",
+        "ca": "ca-ES",
+        "ceb": "ceb",
+        "cs": "cs-CZ",
+        "cy": "cy-GB",
+        "da": "da-DK",
+        "de": "de-DE",
+        "el": "el-GR",
+        "en": "en-GB",
+        "eo": "eo",
+        "es": "es-ES",
+        "et": "et-EE",
+        "eu": "eu-ES",
+        "fa": "fa-IR",
+        "fi": "fi-FI",
+        "fo": "fo-FO",
+        "fr": "fr-FR",
+        "fy": "fy-NL",
+        "gd": "gd-GB",
+        "gl": "gl",
+        "gu": "gu-IN",
+        "ha": "ha",
+        "haw": "haw-US",
+        "he": "he-IL",
+        "hi": "hi-IN",
+        "hr": "hr-HR",
+        "hu": "hu-HU",
+        "hy": "hy-AM",
+        "id": "id-ID",
+        "is": "is-IS",
+        "it": "it-IT",
+        "ja": "ja-JP",
+        "ka": "ka-GE",
+        "kk": "kk-KZ",
+        "km": "km-KH",
+        "kn": "kn",
+        "ko": "ko-KR",
+        "ku": "ku",
+        "ky": "ky-KG",
+        "la": "la",
+        "lo": "lo-LA",
+        "lt": "lt-LT",
+        "lv": "lv-LV",
+        "mg": "mg",
+        "mk": "mk-MK",
+        "ml": "ml-IN",
+        "mn": "mn-MN",
+        "mr": "mr-IN",
+        "ms": "ms-MY",
+        "nd": "nd",
+        "ne": "ne-NP",
+        "nl": "nl-NL",
+        "nn": "nn-NO",
+        "no": "nb-NO",
+        "nso": "nso-ZA",
+        "or": "or-IN",
+        "nr": "nr",
+        "pa": "pa-PK",
+        "pl": "pl-PL",
+        "ps": "ps-AF",
+        "pt": "pt-PT",
+        "pt-br": "pt-BR",
+        "pt-pt": "pt-PT",
+        "ro": "ro-RO",
+        "ru": "ru-RU",
+        "sa": "sa-IN",
+        "sh": "sh",
+        "si": "si-LK",
+        "sk": "sk-SK",
+        "sl": "sl-SI",
+        "so": "so-SO",
+        "sq": "sq-AL",
+        "sr": "sr-RS",
+        "ss": "ss",
+        "st": "st",
+        "sv": "sv-SE",
+        "sw": "sw-KE",
+        "ta": "ta-LK",
+        "te": "te-IN",
+        "th": "th-TH",
+        "tl": "tl",
+        "tlh": "tlh",
+        "tn": "tn",
+        "tr": "tr-TR",
+        "ts": "ts",
+        "tw": "tw",
+        "uk": "uk-UA",
+        "ur": "ur-PK",
+        "uz": "uz-UZ",
+        "ve": "ve",
+        "vi": "vi-VN",
+        "xh": "xh",
+        "zh": "zh",
+        "zh-TW": "zh-TW",
+        "zu": "zu-ZA"
+    }
+    var cyrilic = ["uk", "kk", "uz", "mn", "sr", "ru", "mk", "bg", "ky"]
+	window.Asc.plugin.init = function(text)
 	{
 		if ("" == text)
 		{
 			window.Asc.plugin.executeCommand("close", "");
 			return;
 		}
-
 		text_init = text;
-		function StartCallback()
-		{
-			setTimeout(function(){
-				if (!is_end_callback && !responsiveVoice.isPlaying())
-				{
-					responsiveVoice.speak(text_init, undefined, {onstart : StartCallback, onend : EndCallback, onerror : EndCallback});
-				}
-			}, 5000);
-		}
 
-		function EndCallback()
-		{
-			is_end_callback = true;
-			window.Asc.plugin.button(-1);
-		}
+		if (!window.speechSynthesis || voices.length === 0)
+        {
+            window.Asc.plugin.executeCommand("close", "");
+            return;
+        }
 
-		function Run(lang)
-		{
-			var voicelist = responsiveVoice.getVoices();
-
-			var _data  = [];
-			var _langs = responsiveVoice.responsivevoices;
-
-			var _map   = {};
-			_map["en"] = ["gb"];
-			_map["ko"] = ["kr"];
-			_map["hy"] = ["ar"];
-			_map["uk"] = ["ru"]; //ua not supported
-			_map["zh"] = ["cn"];
-			_map["ja"] = ["jp"];
-			_map["pt-BR"] = ["br"];
-			_map["pt-Pt"] = ["pt"];
-			_map["zh-TW"] = ["tw"];
-			_map["cs"] = ["cz"];
-			_map["da"] = ["dk"];
-			_map["et"] = ["ee"];
-			_map["el"] = ["gr"];
-			_map["va"] = ["la"];
-			_map["ne"] = ["np"];
-			_map["nn"] = ["no"];
-			_map["sl"] = ["sk"];
-			_map["ta"] = ["hi"];
-			_map["ro"] = ["md"];
-			_map["sh"] = ["hr"];
-			_map["ca"] = ["catalonia"];
-			for (var i = 0; i < _langs.length; i++)
-			{
-				if (_langs[i].flag == lang)
-				{
-					_data.push({index : i, gender : _langs[i].gender});
-				}
-				else if (_map[lang])
-				{
-					for (var k = 0; k < _map[lang].length; k++)
-					{
-						if (_langs[i].flag == _map[lang][k])
-						{
-							_data.push({index : i, gender : _langs[i].gender});
-							break;
-						}
-					}
-				}
-			}
-			if (!_data.length) {
-				_data.push({index : 0, gender : "f"});
-			}
-			_data.sort(function(a, b) { return a.gender.charCodeAt(0) - b.gender.charCodeAt(0) }); // family :)
-			var voiceName = "";
-			for (var j = 0; j < _data.length; j++)
-			{
-				var nameCandidate = _langs[_data[j].index].name;
-				for (var k = 0, k_len = voicelist.length; k < k_len; k++)
-				{
-					if (voicelist[k].name === nameCandidate)
-					{
-						voiceName = nameCandidate;
-						break;
-					}
-				}
-				if (voiceName !== "")
-					break;
-			}
-
-			responsiveVoice.speak(text_init, voiceName, {onstart : StartCallback, onend : EndCallback, onerror : EndCallback});
-		}
-
-		responsiveVoice.AddEventListener("OnReady", function() {
-			setTimeout(function()
-			{
-				guessLanguage.info(text_init, function(info) {
-					//console.log('Detected Language: ' + info[2] + " [" + info[0] + "]" +"_____" +info[1]);
-					Run(info[0]);
-				});
-			}, 1);
-		});
+        guessLanguage.info(text_init, function(info) {
+            Run(info[0]);
+        });
 	};
 
+    function FindVoice(lang, bSkipGoogle) {
+        if (!voice_name || voice_name === "Auto") {
+            for (var i = 0; i < voices.length; i++) {
+                if (langsMap[lang]) {
+                    if (langsMap[lang].search(voices[i].lang) !== -1) {
+                        if (bSkipGoogle && voices[i].name.search('Google') !== -1)
+                            continue;
+
+                        voice_name = voices[i].name;
+                        oMainVoice = voices[i];
+                        break;
+                    }
+                }
+            }
+            if (!voice_name) {
+                for (var i = 0; i < voices.length; i++) {
+                    if (langsMap[lang]) {
+                        if (langsMap[lang].split('-')[0] === voices[i].lang.split('-')[0]) {
+                            if (bSkipGoogle && voices[i].name.search('Google') !== -1)
+                                continue;
+
+                            voice_name = voices[i].name;
+                            oMainVoice = voices[i];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!oMainVoice && bSkipGoogle)
+                FindVoice(lang, false);
+            if (oMainVoice)
+                return true;
+
+            if ((!voice_name || voice_name === "Auto") && cyrilic.indexOf(lang) !== -1) {
+                voice_name = langsMap["ru"];
+                bSkipGoogle = true;
+            }
+            else if (!voice_name || voice_name === "Auto") {
+                bSkipGoogle = true;
+                bDefaultLang = true;
+                voice_name = "en-US";
+            }
+        }
+
+        for(i = 0; i < voices.length ; i++) {
+            if(voices[i].name === voice_name && !bDefaultLang) {
+                if (bSkipGoogle && voices[i].name.search('Google') !== -1)
+                    continue;
+
+                oMainVoice = voices[i];
+                break;
+            }
+            else if (voices[i].lang === voice_name) {
+                if (bSkipGoogle && voices[i].name.search('Google') !== -1)
+                    continue;
+
+                oMainVoice = voices[i];
+                break;
+            }
+        }
+    }
+
+    function Run(lang)
+    {
+        FindVoice(lang, true);
+        if (!oMainVoice)
+            FindVoice(lang, false);
+        if (!oMainVoice) {
+            window.Asc.plugin.executeCommand("close", "");
+            return false;
+        }
+            
+        allParagraphs = correctSentLength(text_init.split('\n'));
+        createAllUtterance();
+        speak();
+    }
+
+    function initVoices() {
+        voices = window.speechSynthesis.getVoices().sort(function (a, b) {
+            const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+            if ( aname < bname ) return -1;
+            else if ( aname == bname ) return 0;
+            else return +1;
+        });
+    }
+
+    function correctSentLength(allSentenses) {
+        if (isChrome && !oMainVoice.localService)
+            Max_Chars = 100;
+
+        var aResult = [];
+        var sCurSentense, nTimes, nTempLength, nTempPos;
+        var sTemp = "";
+        
+        for (var nSen = 0; nSen < allSentenses.length; nSen++) {
+            sCurSentense = allSentenses[nSen];
+            nTempLength = 0;
+            if(sCurSentense.length > Max_Chars) {
+                aSplitSentense = [];
+                nTimes =  Math.floor(sCurSentense.length / Max_Chars) + 1;
+
+                for (var nTime = 0; nTime < nTimes; nTime++) {
+                    nTempPos = -1;
+                    sTemp = sCurSentense.slice(nTempLength, Max_Chars * (nTime + 1));
+                    if (sTemp === "")
+                        break;
+
+                    if (!sTemp[sTemp.length - 1].match(new RegExp(/[.!?,;\r ]/))) {
+                        var aMatches = Array.from(sTemp.matchAll(/[.!?;,\r]/g));
+                        if (aMatches.length === 0)
+                            aMatches = Array.from(sTemp.matchAll(' '));
+
+                        if (aMatches.length !== 0)
+                            sTemp = sTemp.slice(0, aMatches[aMatches.length - 1].index + 1);
+                    }
+
+                    nTempLength += sTemp.length;
+                    sTemp.trim() !== "" && aResult.push(sTemp);
+                }
+            }
+            else
+                sCurSentense.trim() !== "" && aResult.push(sCurSentense);
+        }
+        return aResult;
+    }
+
+    function resumeInfinity() {
+        speechSynthesis.pause();
+        speechSynthesis.resume();
+        timer = setTimeout(function () {
+            resumeInfinity()
+        }, 3000)
+    }
+    function clear() {  clearTimeout(timer) }
+    
+    function createAllUtterance() {
+        var oUtterance;
+        for (var nTxt = 0; nTxt < allParagraphs.length; nTxt++) {
+            if (allParagraphs[nTxt].trim() === "")
+                continue;
+            
+            oUtterance = new SpeechSynthesisUtterance(allParagraphs[nTxt]);
+            oUtterance.voice = oMainVoice;
+            oUtterance.pitch = pitch;
+            oUtterance.rate = rate;
+            oUtterance.onend = onEnd;
+            oUtterance.onstart = onStart;
+            oUtterance.onerror = onError;
+            oUtterance.idx = nTxt;
+
+            aAllUtterance.push(oUtterance);
+        }
+    }
+
+    function onStart() {
+        console.log(this);
+    }
+    function onEnd() {
+        console.log('SpeechSynthesisUtterance.onend');
+        if (this.idx === aAllUtterance.length - 1) {
+            speechSynthesis.cancel();
+            window.Asc.plugin.executeCommand("close", "");
+        }
+        else if (this.idx === curTextIdx + 9 && isChrome && !oMainVoice.localService) {
+            curTextIdx += 10;
+            clear();
+            speak();
+        }
+    }
+    function onError () {
+        console.error('SpeechSynthesisUtterance.onerror');
+        speechSynthesis.cancel();
+        window.Asc.plugin.executeCommand("close", "");
+    }
+
+	function speak() {
+        var utterThis;
+        speechSynthesis.cancel();
+
+        if (window.speechSynthesis.speaking) {
+            console.error('speechSynthesis.speaking');
+            speechSynthesis.cancel();
+            window.Asc.plugin.executeCommand("close", "");
+            return;
+        }
+        
+        console.log(utterThis);
+        
+        if (isChrome && !oMainVoice.localService) {
+            for (var nUtter = curTextIdx; nUtter < curTextIdx + 10 && nUtter < aAllUtterance.length; nUtter++) {
+                window.speechSynthesis.speak(aAllUtterance[nUtter]);
+            }
+
+            resumeInfinity();
+        }
+        else {
+            for (var nUtter = curTextIdx; nUtter < aAllUtterance.length; nUtter++) {
+                window.speechSynthesis.speak(aAllUtterance[nUtter]);
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        initVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = initVoices;
+        }
+
+        var saved_pitch = localStorage.getItem("plugin-speech-pitch");
+        if (saved_pitch)
+            pitch = saved_pitch;
+
+        var saved_rate = localStorage.getItem("plugin-speech-rate");
+        if (saved_rate)
+            rate = saved_rate;
+
+        var saved_voice = localStorage.getItem("plugin-speech-voice-name");
+        if (saved_voice)
+            voice_name = saved_voice;
+    });
+    
 	window.Asc.plugin.button = function(id)
 	{
-		if (-1 == id)
-			responsiveVoice.cancel();
-
+        speechSynthesis.cancel();
 		this.executeCommand("close", "");
 	};
 
+    window.onunload = function()
+    {
+        speechSynthesis.cancel();
+    };
 })(window, undefined);
