@@ -1,10 +1,3 @@
 This plugin uses code from the following 3rd party projects.
 
-
-1. ResponsiveVoice service to read the text out loud. By default, it uses a female voice. (https://responsivevoice.org/)
-
-License:        CC-BY
-License File:   ResponsiveVoice.license
-
-
-2. guessLanguage to recognize the language. (http://richtr.github.io/guessLanguage.js/)
+1. GuessLanguage to recognize the language. (http://richtr.github.io/guessLanguage.js/)
