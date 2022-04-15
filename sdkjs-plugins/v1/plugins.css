@@ -406,6 +406,9 @@ a.aboutlink:active {
 .select2-container--default .select2-results__option--highlighted[aria-selected=true] {
     background-color: #7d858c !important;
 }
+.select2-search.select2-search--dropdown .select2-selection__arrow {
+    cursor: pointer !important
+}
 /*
  * Container style
  */
