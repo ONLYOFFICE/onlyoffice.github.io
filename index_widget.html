@@ -4,11 +4,11 @@
 	<meta charset="UTF-8">
 	<title>translate</title>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.full.min.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.full.min.js"></script>
-	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 	<style>
 		.body_class {
 			top: 0 !important;
@@ -16,7 +16,7 @@
 			padding: 5px !important;
 			box-sizing: border-box;
 			overflow: hidden;
-			font-size: 14px !important;
+			font-size: 13px !important;
 		}
 		.goog-te-banner-frame {
 			display: none;
@@ -55,6 +55,7 @@
 			height: 22px;
 		}
 		.div_btn {
+			display: flex;
 			padding-top: 3px;
 			padding-left: 5px;
 			width: calc(100% - 10px);
@@ -66,158 +67,23 @@
 			width: calc(50% - 10px) !important;
 			font-size: 11px;
 			margin: 5px;
+			height: auto;
+			min-height: 20px;
 		}
 		#hr {
 			width: calc(100% - 20px) !important;
 			margin-left: 10px !important;
 		}
+		
 	</style>
 </head>
 <body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
-	<div id="google_translate_state" style="width: calc(100% - 20px); margin-left: 10px;"></div>
+	<div id="google_translate_state" style="width: calc(100% - 20px); margin-left: 10px; margin-top: 7px;"></div>
 	<hr id ="hr">
 	<div id="div_parent" style="overflow: hidden; overflow-x: hidden; padding-top: 15px; position: relative;">
 		<div id="google_translate_element" style="position: relative; font-family: 'Arial'; word-break: break-word; white-space: pre-wrap; height: fit-content; margin-left: 10px; margin-right: 15px;"></div>
 	</div>
-	<script>
-		if (!Ps) Ps = new PerfectScrollbar('#' + "div_parent", {});
-		var timeOut;
-		var select;
-		
-		function googleTranslateElementInit() {
-			document.getElementById("google_translate_element").style.maxHeight = document.getElementById("body").clientHeight- 120 +"px";
-			// const urlParams = new URLSearchParams(window.location.search);
-			// console.log(urlParams);
-			// document.getElementById("google_translate_element").innerHTML = decodeURIComponent(urlParams.get("text"));
-			window.googleTranslator = new google.translate.TranslateElement({
-				//pageLanguage: 'en',
-				layout: google.translate.TranslateElement.InlineLayout.VERTICAL,
-				disableAutoTranslation : false,
-			}, 'google_translate_state');
-		};
-
-		window.onload = function () {
-			var textShower = document.getElementById('google_translate_element');
-			select = document.getElementsByClassName("goog-te-combo")[0];
-			select.classList.add("hidden");
-			textShower.addEventListener('copy', function(event) {
-				const selection = document.getSelection();
-				event.clipboardData.setData('text/html', selection.toString());
-				event.clipboardData.setData('text/plain', selection.toString());
-				event.preventDefault();
-			});
-			setTimeout(function() {
-				document.getElementById("btn_copy").onclick = function () {
-					selectText("google_translate_element");
-				};
-				
-				$("#select_lang").select2({
-					// dataAdapter: customAdapter,
-					data : createLangForSelect()
-				}).on('select2:select', function (e) {
-					searchLang(e.params.data.value)
-				});
-				$("#select_lang").val(select.selectedIndex).trigger('change');
-				document.getElementById("goog-gt-tt").classList.add("hidden");
-			}, 400);
-			if (navigator.userAgent.indexOf("Chrome") !== -1) {
-				document.getElementById(":0.targetLanguage").firstChild.style = "height:21px;"
-			}
-
-			function createLangForSelect() {
-				var languages = [];
-				for (var i = 0; i < select.length; i++) {
-					languages.push({
-						id : i,
-						value : select.options[i].value,
-						text : select.options[i].text
-					});
-				}
-				return languages;
-			};
-
-			function searchLang(val) {
-				var ind = -1;
-				for(var i = 0; i < select.options.length; i++) {
-					if (select.options[i].value === val) {
-						ind = i;
-						break;
-					}
-				}
-				if (ind < 0) return;
-				select.options[ind].selected = true;
-				console.log(select.options[ind].text);
-				if ("createEvent" in document) {
-					var evt = document.createEvent("HTMLEvents");
-					evt.initEvent("change", false, true);
-					select.dispatchEvent(evt);
-				}
-				else {
-					select.fireEvent("onchange");
-				}
-			};
-
-			function selectText(id) {
-				var sel, range;
-				var el = document.getElementById(id); //get element id
-				if (window.getSelection && document.createRange) { //Browser compatibility
-				sel = window.getSelection();
-				if (sel.toString() == '') { //no text selection
-					window.setTimeout(function(){
-						range = document.createRange(); //range object
-						range.selectNodeContents(el); //sets Range
-						sel.removeAllRanges(); //remove all ranges from selection
-						sel.addRange(range);//add Range to a Selection.
-						document.execCommand("copy"); //copy
-						sel.removeAllRanges(); //remove all ranges from selection
-					},1);
-				}
-				} else if (document.selection) { //older ie
-					sel = document.selection.createRange();
-					if (sel.text == '') { //no text selection
-						range = document.body.createTextRange();//Creates TextRange object
-						range.moveToElementText(el);//sets Range
-						range.select(); //make selection.
-						document.execCommand("copy"); //copy
-					}
-				}
-			}
-		};
-
-		window.addEventListener('message', function (msg) {
-			if (typeof(msg.data) === "object")
-			{
-				//event for change theme
-				if (msg.data.theme) {
-					var styleTheme = document.createElement('style');
-					styleTheme.type = 'text/css';
-					styleTheme.innerHTML = msg.data.style;
-					document.getElementsByTagName('head')[0].appendChild(styleTheme);
-					document.getElementById("google_translate_element").style.color = msg.data.theme["text-normal"];
-					if(document.getElementsByClassName("goog-te-gadget")[0])
-						document.getElementsByClassName("goog-te-gadget")[0].style.color = msg.data.theme["text-normal"];
-				}
-			}
-			else if (msg.data === "update_scroll")
-			{
-				setTimeout(()=> Ps.update(), 600);
-			}
-			else
-			{
-				if (msg.data !== "onchange_goog-te-combo") {
-				document.getElementById("google_translate_element").innerHTML = escape(msg.data);
-				}
-				timeOut = setTimeout(function() {
-					document.getElementById("google_translate_element").style.opacity = 1;
-					Ps.update();
-					if (msg.data.length)
-						document.getElementById("div_btn").classList.remove("hidden");
-					else
-						document.getElementById("div_btn").classList.add("hidden");
-				}, 600);
-			}
-		});
-	</script>
+	<script src="vendor/google/widjet.js"></script>
 	<script src="vendor/google/google.js"></script>
 <!-- for russian language -->
 <!-- <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
