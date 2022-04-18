@@ -81,22 +81,10 @@ function getMessage(key) {
             console.log('Languages not loaded!');
             return false;
         }
+
+        RunTranslate(txt);
 	};
 
-    function ExecPlugin() {
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                if (txt !== "") {
-                    RunTranslate(txt);
-                }
-                break;
-            }
-            case 'cell':
-                RunTranslate(txt);
-                break;
-        }
-    };
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
