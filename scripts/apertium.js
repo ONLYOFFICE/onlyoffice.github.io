@@ -85,6 +85,20 @@ function getMessage(key) {
         RunTranslate(txt);
 	};
 
+    function ExecPlugin() {
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                if (txt !== "") {
+                    RunTranslate(txt);
+                }
+                break;
+            }
+            case 'cell':
+                RunTranslate(txt);
+                break;
+        }
+    };
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
@@ -477,12 +491,12 @@ function getMessage(key) {
                 case 'word':
                 case 'slide': {
                     if (txt !== "") {
-                        RunTranslate(txt);
+                        ExecApertium(txt);
                     }
                     break;
                 }
                 case 'cell': {
-                    RunTranslate(txt);
+                    ExecApertium(txt);
                 }
                 break;
             }
