@@ -85,20 +85,6 @@ function getMessage(key) {
         RunTranslate(txt);
 	};
 
-    function ExecPlugin() {
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                if (txt !== "") {
-                    RunTranslate(txt);
-                }
-                break;
-            }
-            case 'cell':
-                RunTranslate(txt);
-                break;
-        }
-    };
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
@@ -129,7 +115,6 @@ function getMessage(key) {
 
     function PrepareTextToSend(allParas) {
         var result = [];
-        var preparedTxt = ""
         for (var nPara = 0; nPara < allParas.length; nPara++) {
             result.push({Index : nPara, Text : allParas[nPara].replace(/ /gi, "+")});
         }
@@ -152,7 +137,7 @@ function getMessage(key) {
         return document.getElementById("target").value;
     };
 
-    //don't work with default service
+    //don't work with default(web) service
     function IdentifyLang() {
         $.ajax({
             method: 'GET',
@@ -508,6 +493,9 @@ function getMessage(key) {
     });
 
     function ExecApertium(sText) {
+        if (sText.trim() === "")
+            return;
+            
         curIter = 0;
         var source_lang = GetSourceLang();
         var allParas = processText(sText);
