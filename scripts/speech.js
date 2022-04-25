@@ -356,8 +356,9 @@
             speak();
         }
     }
-    function onError () {
+    function onError (oError) {
         console.error('SpeechSynthesisUtterance.onerror');
+        console.log(oError);
         speechSynthesis.cancel();
         window.Asc.plugin.executeCommand("close", "");
     }
