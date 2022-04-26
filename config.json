@@ -7,7 +7,7 @@
         "de": "Rede"
     },
     "guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
-    "version" : "1.0.0",
+    "version" : "2.0.0",
 
     "variations": [
         {
@@ -76,14 +76,14 @@
             "buttons": []
         },
         {
-            "description": "About",
+            "description": "Settings",
             "descriptionLocale": {
-                "ru": "Справка",
-                "fr": "À propos",
-                "es": "Sobre programa",
-                "de": "Über"
+                "ru": "Настройки",
+                "fr": "Paramètres",
+                "es": "Configuración",
+                "de": "Einstellungen"
             },
-            "url": "index_about.html",
+            "url": "settings.html",
 
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
             "isViewer": false,
@@ -105,7 +105,7 @@
                 }
             ],
 
-            "size": [ 400, 50 ]
+            "size": [ 300, 150 ]
         }
     ]
 }
