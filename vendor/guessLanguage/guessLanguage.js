@@ -43,7 +43,7 @@
       }
 
       var MAX_LENGTH = 4096;
-      var MIN_LENGTH = 20;
+      var MIN_LENGTH = 1;
       var MAX_GRAMS = 300;
 
       var NAME_MAP = {
