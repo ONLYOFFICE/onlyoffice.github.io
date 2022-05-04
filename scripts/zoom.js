@@ -179,7 +179,7 @@ var Ps;
 		});
 
         $('#saveConfigBtn').click(function() {
-            SaveConfiguration(true);
+            SaveCredentials(true);
         });
         $('#topic-value').focus(function(){
             if(this.value !== this.defaultValue){
@@ -197,8 +197,8 @@ var Ps;
             }
         });
         $('#apiKeyField').change(function() {
-            if ($(this).hasClass('error_api'))
-                $(this).toggleClass('error_api');
+            if ($(this).hasClass('error_border'))
+                $(this).toggleClass('error_border');
         });
         $('#secretKeyField').focus(function() {
             if(this.value !== this.defaultValue){
@@ -206,8 +206,8 @@ var Ps;
             }
         });
         $('#secretKeyField').change(function() {
-            if ($(this).hasClass('error_api'))
-                $(this).toggleClass('error_api');
+            if ($(this).hasClass('error_border'))
+                $(this).toggleClass('error_border');
         });
         $('#tokenKeyField').focus(function() {
             if(this.value !== this.defaultValue){
@@ -215,8 +215,8 @@ var Ps;
             }
         });
         $('#tokenKeyField').change(function() {
-            if ($(this).hasClass('error_api'))
-                $(this).toggleClass('error_api');
+            if ($(this).hasClass('error_border'))
+                $(this).toggleClass('error_border');
         });
         $('#reconf').click(function() {
             $('#create-meeting-container').toggleClass('display-none');
@@ -249,7 +249,13 @@ var Ps;
                 $("input[name=meeting-id]").prop("disabled", false);
             }
         });
+        $('#duration-hour').change(CheckDuration);
+        $('#duration-min').change(CheckDuration);
+
         $('#recurring-conf').trigger('change');
+
+        $('#duration-hour').val(1);
+        $('#duration-hour').trigger('change');
 
         SetSavedFromLocalStorage();
 
@@ -260,15 +266,31 @@ var Ps;
 		document.getElementById('secretKeyField').value = localStorage.getItem($('#secretKeyField').attr("data-id")) || "";
 		document.getElementById('tokenKeyField').value = localStorage.getItem($('#tokenKeyField').attr("data-id")) || "";
 
-		SaveConfiguration(false);
+		SaveCredentials(false);
     });
+
+    function CheckDuration()
+    {
+        var hour_container = $('#duration-hour').parent().find('.select2-selection.select2-selection--single')[0];
+        var min_container = $('#duration-min').parent().find('.select2-selection.select2-selection--single')[0];
+
+        if ($('#duration-hour').val() === "0" && $('#duration-min').val() === "0") {
+            hour_container.style.setProperty('border-color', '#D9534F', 'important');
+            min_container.style.setProperty('border-color', '#D9534F', 'important');
+        }
+        else {
+            hour_container.style.setProperty('border-color', '');
+            min_container.style.setProperty('border-color', '');
+        }
+    }
 
     function SaveToLocalStorage() {
         localStorage.setItem('is-auto-meet-id-zoom', $("input[name=meeting-id]:checked").val());
         localStorage.setItem($('#is-waiting-room').attr('data-id'), $('#is-waiting-room').prop('checked'));
         localStorage.setItem($('#timezone').attr('data-id'), $('#timezone').val());
         localStorage.setItem($('#recurring-conf').attr('data-id'), $('#recurring-conf').val());
-    };
+    }
+
     function SetSavedFromLocalStorage() {
         var isPersonalMeetId = localStorage.getItem('is-auto-meet-id-zoom');
         if (isPersonalMeetId !== null) {
@@ -297,11 +319,10 @@ var Ps;
             $('#recurring-conf').val(sRecurringConf);
             $('#recurring-conf').trigger('change');
         }
-    };
+    }
 
     async function IsValidConfigData() {
         showLoader(elements, true);
-        var url =
         $.ajax({
             type: 'GET',
             headers: {
@@ -327,7 +348,7 @@ var Ps;
         });
     };
 
-    async function SaveConfiguration(bShowError) {
+    async function SaveCredentials(bShowError) {
         if (!IsEmptyFields(bShowError)) {
             email = $('#emailField').val().trim();
             apiKey = $('#apiKeyField').val().trim();
@@ -336,7 +357,8 @@ var Ps;
 
             await IsValidConfigData();
         }
-    };
+    }
+
     function IsEmptyFields(bShowError) {
         var isEmpty = null;
 
@@ -344,67 +366,74 @@ var Ps;
             isEmpty = true;
 
             if (bShowError)
-                if (!$('#emailField').hasClass('error_api'))
-                    $('#emailField').toggleClass('error_api');
+                if (!$('#emailField').hasClass('error_border'))
+                    $('#emailField').toggleClass('error_border');
         }
         else {
             isEmpty = false;
 
             if (bShowError)
-                if ($('#emailField').hasClass('error_api'))
-                    $('#emailField').toggleClass('error_api');
+                if ($('#emailField').hasClass('error_border'))
+                    $('#emailField').toggleClass('error_border');
         }
         if ($('#apiKeyField').val() === '') {
             isEmpty = true;
 
             if (bShowError)
-                if (!$('#apiKeyField').hasClass('error_api'))
-                    $('#apiKeyField').toggleClass('error_api');
+                if (!$('#apiKeyField').hasClass('error_border'))
+                    $('#apiKeyField').toggleClass('error_border');
         }
         else {
             isEmpty = false;
 
             if (bShowError)
-                if ($('#apiKeyField').hasClass('error_api'))
-                    $('#apiKeyField').toggleClass('error_api');
+                if ($('#apiKeyField').hasClass('error_border'))
+                    $('#apiKeyField').toggleClass('error_border');
         }
 
         if ($('#secretKeyField').val() === '') {
             isEmpty = isEmpty && true;
 
             if (bShowError)
-                if (!$('#secretKeyField').hasClass('error_api'))
-                    $('#secretKeyField').toggleClass('error_api');
+                if (!$('#secretKeyField').hasClass('error_border'))
+                    $('#secretKeyField').toggleClass('error_border');
         }
         else {
             isEmpty = isEmpty && false;
 
             if (bShowError)
-                if ($('#secretKeyField').hasClass('error_api'))
-                    $('#secretKeyField').toggleClass('error_api');
+                if ($('#secretKeyField').hasClass('error_border'))
+                    $('#secretKeyField').toggleClass('error_border');
         }
 
         if ($('#tokenKeyField').val() === '') {
             isEmpty = isEmpty && true;
 
             if (bShowError)
-                if (!$('#tokenKeyField').hasClass('error_api'))
-                    $('#tokenKeyField').toggleClass('error_api');
+                if (!$('#tokenKeyField').hasClass('error_border'))
+                    $('#tokenKeyField').toggleClass('error_border');
         }
         else {
             isEmpty = isEmpty && false;
 
             if (bShowError)
-                if ($('#tokenKeyField').hasClass('error_api'))
-                    $('#tokenKeyField').toggleClass('error_api');
+                if ($('#tokenKeyField').hasClass('error_border'))
+                    $('#tokenKeyField').toggleClass('error_border');
         }
 
         return isEmpty;
     }
+
     function CreateMeeting(isNowMeeting) {
+        if ($('#duration-hour').val() === "0" && $('#duration-min').val() === "0")
+        {
+            alert("Duration can't be 0");
+            return;
+        }
+
         SaveToLocalStorage();
         showLoader(elements, true);
-
+        
         // getting parameters
         var sTopic         = $('#topic-value').val();
         var meetingType    = 2;
@@ -503,7 +532,8 @@ var Ps;
             alert('Meeting was not created');
             showLoader(elements, false);
         });
-    };
+    }
+
     window.Asc.plugin.button = function(id)
 	{
 		this.executeCommand("close", "");
@@ -512,7 +542,7 @@ var Ps;
     function updateScroll()
 	{
 		Ps && Ps.update();
-	};
+	}
 
 	window.Asc.plugin.onExternalMouseUp = function()
 	{
