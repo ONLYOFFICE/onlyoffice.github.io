@@ -15,132 +15,160 @@
  -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Zoom</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
-    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css" />
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-    <script src="scripts/zoom.js"></script>
+	<script src="scripts/zoom.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 	<style>
-		html, body {
-			min-height: 100% !important;
-			height: 100%;
-			overflow-y: hidden;
-			overflow-x: hidden;
-			font-family: Arial;
-    		font-size: 11px
-		}
-		.select {
-			margin-left: 12px;
-		}
-		.settings_group {
-            display:none
-        }
-        .cursor_pointer {
-            cursor:pointer;
-        }
-        .legend {
-            display: flex;
-            justify-content: start;
-        }
-        .arrow {
-            float:right;
-            align-self: center;
-            margin-left: 7px;
-        }
-        .button {
-            cursor:pointer;
-        }
-        .input_container {
-        	display: flex;
-        }
-        .checkbox {
-        	margin-top: 1px;
-            margin-left: 5px;
-        }
-        .radiobox {
-        	margin-left: 7px;
-        }
-        .display-none {
-        	display: none !important;
-        }
-        #flex-loader-container {
-		    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 150px;
-            height: 50px;
-            border: none;
-            background-image: none;
-            background-color: rgba(68, 68, 68, 0.95);
-            color: #f1f1f1;
-            border-radius: 6px;
-		}
-		.asc-plugin-loader .asc-loader-image {
-			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;
-		}
-		i {
-            border: solid black;
-            border-width: 0 1px 1px 0;
-            display: inline-block;
-            padding: 2px;
-        }
-        .down {
-            transform: rotate(45deg);
-            -webkit-transform: rotate(45deg);
-            margin-top: 3px;
-        }
-        .up {
-            transform: rotate(-135deg);
-            -webkit-transform: rotate(-135deg);
-            margin-top: 5px;
-        }
-        .reconf-label, .switch-label, .label-settings {
-        	border-bottom: 1px dashed #444444;
-        }
-		.error_border {
-        	border: 1px solid #D9534F !important;
-        }
-
-		.daterangepicker .drp-calendar.left {
-			padding: 8px 4px 8px 4px !important;
-		}
-		#body > div.daterangepicker.ltr.single.opensright.show-calendar {
-			color: #333 !important;
-		}
-		
+		html,
+			body {
+				min-height: 100% !important;
+				height: 100%;
+				overflow-y: hidden;
+				overflow-x: hidden;
+				font-family: Arial;
+				font-size: 11px;
+			}
+			
+			.select {
+				margin-left: 12px;
+			}
+			
+			.settings_group {
+				display: none
+			}
+			
+			.cursor_pointer {
+				cursor: pointer;
+			}
+			
+			.legend {
+				display: flex;
+				justify-content: start;
+			}
+			
+			.arrow {
+				float: right;
+				align-self: center;
+				margin-left: 7px;
+			}
+			
+			.button {
+				cursor: pointer;
+			}
+			
+			.input_container {
+				display: flex;
+			}
+			
+			.checkbox {
+				margin-top: 1px;
+				margin-left: 5px;
+			}
+			
+			.radiobox {
+				margin-left: 7px;
+			}
+			
+			.display-none {
+				display: none !important;
+			}
+			
+			#flex-loader-container {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 150px;
+				height: 50px;
+				border: none;
+				background-image: none;
+				background-color: rgba(68, 68, 68, 0.95);
+				color: #f1f1f1;
+				border-radius: 6px;
+			}
+			
+			.asc-plugin-loader .asc-loader-image {
+				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;
+			}
+			
+			i {
+				border: solid black;
+				border-width: 0 1px 1px 0;
+				display: inline-block;
+				padding: 2px;
+			}
+			
+			.down {
+				transform: rotate(45deg);
+				-webkit-transform: rotate(45deg);
+				margin-top: 3px;
+			}
+			
+			.up {
+				transform: rotate(-135deg);
+				-webkit-transform: rotate(-135deg);
+				margin-top: 5px;
+			}
+			
+			.reconf-label,
+			.switch-label,
+			.label-settings {
+				border-bottom: 1px dashed #444444;
+			}
+			
+			.error_border {
+				border: 1px solid #D9534F !important;
+			}
+			
+			.daterangepicker .drp-calendar.left {
+				padding: 8px 4px 8px 4px !important;
+			}
+			
+			#body > div.daterangepicker.ltr.single.opensright.show-calendar {
+				color: #333 !important;
+			}
+			.noselect {
+				-webkit-touch-callout: none; /* iOS Safari */
+				-webkit-user-select: none;   /* Chrome/Safari/Opera */
+				-khtml-user-select: none;    /* Konqueror */
+				-moz-user-select: none;      /* Firefox */
+				-ms-user-select: none;       /* Internet Explorer/Edge */
+				user-select: none;           /* Non-prefixed version, currently
+											not supported by any browser */
+			}
 	</style>
 </head>
-<body id="body" style="width: 100%;height: 100%; margin: 0;">
+
+<body id="body" style="width: 100%;height: 100%; margin: 0; !important;">
 	<div id="loader-container" class="asc-plugin-loader display-none">
-        <div id="flex-loader-container">
-            <div>
-                <div class="asc-loader-image">
-                    <div class="asc-loader-title"></div>
-                </div>
-                <div class="asc-loader-title">
-                    Loading...
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="iframe_join" class="display-none" style="width:100%; height:100%;margin:0;padding:0;"></div>
-	<div id="iframe_meeting" class="display-none" style="width:100%; height:100%;margin:0;padding:0;"></div>
-	<div id="create-meeting-container" class="display-none" style="width:100%; height:100%; margin:0;padding:0; display:flex; flex-direction:column;">
-		<div style="height:100%;">
-			<div id="topic">
-			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
-				<label style="margin-left:12px;">Topic</label>
+		<div id="flex-loader-container">
+			<div>
+				<div class="asc-loader-image">
+					<div class="asc-loader-title"></div>
+				</div>
+				<div class="asc-loader-title"> Loading... </div>
 			</div>
-			<input type="text" id="topic-value" class="form-control" placeholder="Enter topic here" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
 		</div>
+	</div>
+	<div id="iframe_join" class="display-none" style="width:100%; height:100%;margin:0;padding:0;"></div>
+	<div id="iframe_meeting" class="display-none" style="width:100%; height:100%;margin:0;padding:0;"></div>
+	<div id="create-meeting-container" class="display-none" style="width:100%; height:100%; margin:0;padding:0; display:flex; flex-direction:column; justify-content: space-between; position: relative;">
+		<div>
+			<div id="topic">
+				<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
+					<label style="margin-left:12px;">Topic</label>
+				</div>
+				<input type="text" id="topic-value" class="form-control" placeholder="Enter topic here" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;"> </div>
 			<div style="margin:16px 12px 0px 12px;">
 				<button id="start-meeting" onсlick="" class="btn-text-default" style="width:100%; height: 30px;">Start a meeting</button>
 			</div>
@@ -151,20 +179,16 @@
 				<div id="date">
 					<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 						<label style="margin-left:12px;">Date</label>
-					</div>
-					<span class="select">
+					</div> <span class="select">
 						<input id="date-value" style="width:calc(100% - 24px);" class="form-control" type="text" name="date"/>
-					</span>
-				</div>
+					</span> </div>
 				<div id="time">
 					<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 						<label style="margin-left:12px;">Time</label>
-					</div>
-					<span class="select">
+					</div> <span class="select">
 						<select id="time-hour" class="select_example group" data-id="time-hour">
 						</select>
-					</span>
-					<span class="select">
+					</span> <span class="select">
 						<select id="time-am-pm"class="select_example group" style="float:right; margin-right: 12px;" data-id="time-am-pm">
 							<option value="am">
 								AM
@@ -173,63 +197,63 @@
 								PM
 							</option>
 						</select>
-					</span>
-				</div>
+					</span> </div>
 				<div id="duration">
 					<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 						<label style="margin-left:12px;">Duration</label>
 					</div>
-					<div style="display:flex; flex-direction: row; justify-content: space-between;">
-						<span class="select" style="display:flex; flex-direction: column; width: calc(50% - 20px);">
+					<div style="display:flex; flex-direction: row; justify-content: space-between;"> <span class="select" style="display:flex; flex-direction: column; width: calc(50% - 20px);">
 							<div>
 								<select id="duration-hour" class="select_example duration" data-id="duration-hour">
 
 								</select>
 							</div>
-						</span>
-						<span class="select" style="display:flex; flex-direction: column; margin-right: 12px; width: calc(50% - 20px);">
+						</span> <span class="select" style="display:flex; flex-direction: column; margin-right: 12px; width: calc(50% - 20px);">
 							<div>
 								<select id="duration-min" class="select_example duration" style="" data-id="duration-min">
 
 								</select>
 							</div>
-						</span>
-					</div>
+						</span> </div>
 				</div>
 				<div style="margin:16px 12px 0px 12px;">
 					<button id="create_meeting" onсlick="" class="btn-text-default" style="width:100%; height: 30px;">Create a meeting</button>
 				</div>
 				<div id="settings_wrapper" style="margin-top: 16px;">
-					<div class="legend"><div id="adv_settings" class="button"><label class="label-settings" class="header cursor_pointer" style="margin-left: 12px;">Advanced settings</label><i class="arrow down"></i></div></div>
+					<div class="legend">
+						<div id="adv_settings" class="button">
+							<label class="label-settings" class="header" style="margin-left: 12px; cursor: pointer;">Advanced settings</label><i class="arrow down"></i></div>
+					</div>
 					<div class="settings_group">
 						<div id="meeting_id" style="display: flex; flex-direction: column;">
 							<div style="margin: 16px 0 8px 0; font-weight: normal !important;">
 								<label style="margin-left:12px;">Meeting ID</label>
 							</div>
 							<div class="input_container" style="margin-bottom: 8px;">
-								<label class="radiobox"><input type="radio" checked="checked" value="false" name="meeting-id" id="auto-meet-id" data-id="auto-meet-id-zoom" class="button__radiobox checked"><span>Generate Automatically</span></label>
+								<label class="radiobox">
+									<input type="radio" checked="checked" value="false" name="meeting-id" id="auto-meet-id" data-id="auto-meet-id-zoom" class="button__radiobox checked"><span>Generate Automatically</span></label>
 							</div>
 							<div class="input_container">
-								<label class="radiobox"><input type="radio" name="meeting-id" value="true" id="personal-meet-id" data-id="personal-meet-id-zoom" class="button__radiobox checked"><span>Personal Meeting ID XXX XXX XXXX</span></label>
+								<label class="radiobox">
+									<input type="radio" name="meeting-id" value="true" id="personal-meet-id" data-id="personal-meet-id-zoom" class="button__radiobox checked"><span>Personal Meeting ID XXX XXX XXXX</span></label>
 							</div>
 						</div>
 						<div id="password_container">
 							<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 								<label style="margin-left:12px;">Password</label>
 							</div>
-							<input type="text" id="password" class="form-control" placeholder="Enter meeting password here" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
-						</div>
+							<input type="text" id="password" class="form-control" placeholder="Enter meeting password here" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;"> </div>
 						<div id="waiting_room" class="input_container" style="margin-top: 16px;">
-							<input type="checkbox" style="margin-left: 12px;" class="form-control" checked="checked" id="is-waiting-room" data-id="auto-meet-id-zoom"> <label class="checkbox">Waiting Room</label>
+							<input type="checkbox" style="margin-left: 12px;" class="form-control" checked="checked" id="is-waiting-room" data-id="auto-meet-id-zoom">
+							<label class="checkbox">Waiting Room</label>
 						</div>
 						<div id="timezone_container">
 							<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 								<label style="margin-left:12px;">Timezone</label>
-							</div>
-							<span class="select">
+							</div> <span class="select">
 								<select id="timezone" class="select_example" data-id="timezone-zoom">
 									<option value="Pacific/Midway">
-									  	(GMT-11:00) Midway Island, Samoa
+										(GMT-11:00) Midway Island, Samoa
 									</option>
 									<option value="Pacific/Pago_Pago">
 										(GMT-11:00) Pago Pago
@@ -249,7 +273,7 @@
 									<option value="America/Tijuana">
 										(GMT-7:00) Tijuana
 									</option>
-									<option value="America/Phoenix"> <!---check it-><!----->
+									<option value="America/Phoenix">
 										(GMT-7:00) Arizona
 									</option>
 									<option value="America/Edmonton">
@@ -634,13 +658,11 @@
 										(GMT+13:00) Independent State of Samoa
 									</option>
 								</select>
-							</span>
-						</div>
+							</span> </div>
 						<div id="reccurr_conference">
 							<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 								<label style="margin-left:12px;">Recurring conference</label>
-							</div>
-							<span class="select">
+							</div> <span class="select">
 								<select id="recurring-conf" class="select_example" data-id="recurring-conf-zoom">
 									<option value="never">
 										Never
@@ -655,63 +677,50 @@
 										Monthly
 									</option>
 								</select>
-							</span>
-						</div>
+							</span> </div>
 						<div id="screen_demonstration" style="display: none; flex-direction: column;">
 							<div style="margin: 16px 0 8px 0; font-weight: normal !important;">
 								<label style="margin-left:12px;">Screen Demonstration</label>
 							</div>
 							<div class="input_container" style="margin-bottom: 8px;">
-								<label class="radiobox"><input type="radio" checked="checked" name="screen-share" id="screen-share-for-organizer" data-id="screen-share-for-organizer-zoom" class="button__radiobox checked"><span>Organizer only</span></label>
+								<label class="radiobox">
+									<input type="radio" checked="checked" name="screen-share" id="screen-share-for-organizer" data-id="screen-share-for-organizer-zoom" class="button__radiobox checked"><span>Organizer only</span></label>
 							</div>
 							<div class="input_container">
-								<label class="radiobox"><input type="radio" name="screen-share" id="screen-share-for-all" data-id="screen-share-for-all-zoom" class="button__radiobox checked"><span>All participants</span></label>
+								<label class="radiobox">
+									<input type="radio" name="screen-share" id="screen-share-for-all" data-id="screen-share-for-all-zoom" class="button__radiobox checked"><span>All participants</span></label>
 							</div>
 						</div>
-				  </div>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div style="margin-bottom: 16px;">
+		<div style="margin: 16px 0 16px 0;">
 			<div id="reconf">
-				<label class="reconf-label" style="float: right; margin-right: 12px; cursor:pointer;">Reconfigure</label>
+				<label class="reconf-label noselect" style="float: right; margin-right: 12px; cursor:pointer;">Reconfigure</label>
 			</div>
 			<div id="switch">
-				<label class="switch-label" style="margin-left: 12px; cursor:pointer;">Meeting mode</label>
+				<label class="switch-label noselect" style="margin-left: 12px; cursor:pointer;">Meeting mode</label>
 			</div>
 		</div>
 	</div>
 	<div id="configState">
 		<div>
-			<div style="margin:12px;">
-				<span class="i18n">To use Zoom plugin, register this editor as a JWT app.</span>
-				<a target="_blank" href="https://github.com/ONLYOFFICE/plugin-zoom/tree/develop#configuration" class="link i18n">Learn more here.</a>
-			</div>
-			<div style="margin:12px;">
-				In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Client ID, Secret ID, JWT token below and save it.
-			</div>
+			<div style="margin:12px;"> <span class="i18n">To use Zoom plugin, register this editor as a JWT app.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-zoom/tree/develop#configuration" class="link i18n">Learn more here.</a> </div>
+			<div style="margin:12px;"> In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Client ID, Secret ID, JWT token below and save it. </div>
 		</div>
-		<div style="display: flex; flex-direction: column; margin: 12px;">
-			<span>Email</span>
-			<input id="emailField" autocomplete="off" class="form-control" data-id="zoom-email-value" type="text" placeholder="Email" />
-		</div>
-		<div style="display: flex; flex-direction: column; margin: 12px;">
-			<span>API Key</span>
-			<input id="apiKeyField" autocomplete="off" class="form-control" data-id="zoom-client-key" type="text" placeholder="API Key" />
-		</div>
-		<div style="display: flex; flex-direction: column; margin: 12px;">
-			<span>API Secret</span>
-			<input id="secretKeyField" autocomplete="off" class="form-control" data-id="zoom-secret-key" type="password" placeholder="API Secret" />
-		</div>
-		<div style="display: flex; flex-direction: column; margin: 12px;">
-			<span>JWT Token</span>
-			<input id="tokenKeyField" autocomplete="off" class="form-control" data-id="zoom-jwt-token" type="text" placeholder="JWT Token" />
-		</div>
+		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>Email</span>
+			<input id="emailField" autocomplete="off" class="form-control" data-id="zoom-email-value" type="text" placeholder="Email" /> </div>
+		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>API Key</span>
+			<input id="apiKeyField" autocomplete="off" class="form-control" data-id="zoom-client-key" type="text" placeholder="API Key" /> </div>
+		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>API Secret</span>
+			<input id="secretKeyField" autocomplete="off" class="form-control" data-id="zoom-secret-key" type="password" placeholder="API Secret" /> </div>
+		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>JWT Token</span>
+			<input id="tokenKeyField" autocomplete="off" class="form-control" data-id="zoom-jwt-token" type="text" placeholder="JWT Token" /> </div>
 		<div id="saveConfigBtn" class="button wide control i18n">
 			<button class="btn-text-default" style="width:calc(100% - 24px); margin: 0 12px 0px 12px; height: 30px;">Save</button>
 		</div>
-
 	</div>
 </body>
+
 </html>

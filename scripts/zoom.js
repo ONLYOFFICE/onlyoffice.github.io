@@ -103,8 +103,6 @@ var Ps;
         $('.reconf-label, .switch-label, .label-settings').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
         $('.arrow').css('border-color', window.Asc.plugin.theme["text-normal"]);
 
-
-
         var style = document.getElementsByTagName('head')[0].lastChild;
         setTimeout(function() {
             ifr.contentWindow.postMessage({oTheme : oTheme}, '*');
