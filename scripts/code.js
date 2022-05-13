@@ -20,13 +20,26 @@
 	var editor;
 	window.Asc.plugin.init = function(text)
 	{
+		var settings = {
+			embeddedLanguageFormatting: "off",
+			htmlWhitespaceSensitivity: "ignore",
+			insertPragma: false,
+			printWidth: 999999999999,
+			proseWrap: "never",
+			requirePragma: false,
+			singleQuote: false,
+			tabWidth: 4,
+			useTabs: true,
+			vueIndentScriptAndStyle: false,
+			plugins: prettierPlugins,
+			parser: "html"
+		};
 		// text = text.replace(/\<[\/]?p[a-zA-Z0-9-:;+"\/= >.]*/g,"");
 		text = text.replace(/class="[a-zA-Z0-9-:;+"\/=]*/g,"");
-		text = text.replace(/\<p/g,"\r\n\t\t<p");
-		text = text.replace(/\<img/g,"\r\n\t\t<img");
 		var temp = (text.indexOf("<p") === -1) ? "\r\n" : ""
 		if (text !== "")
-			text = "<html>\r\n\t<body>" + temp + "\t\t" + text + '\r\n\t</body>\r\n</html>';
+			text =  prettier.format("<html><body>" + temp + text + "</body></html>", settings)  ;
+
 		// document.getElementById("div_main").style.width = document.getElementById("body").clientWidth- 20 +"px";
 		if (editor) {
 			editor.setValue(text);
