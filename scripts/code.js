@@ -816,8 +816,6 @@
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
     };
 
-	//todo добавить и поправить переводы
-	// todo попраить readme и указать все либы
 	window.Asc.plugin.onTranslate = function() {
 		var lb_lanuage = document.getElementById("lb_lanuage");
 		if (lb_lanuage) 
@@ -864,24 +862,24 @@
 			
 		$('#tab_replace_id').select2({
 			minimumResultsForSearch: Infinity
-		}).on('select2:select', function(e) {
-			// так как парсятся не все языки, то при вставке в документ могут быть проблемы
-			switch (e.params.data.id) {
+		}).on('change', function(e) {
+			// так как парсятся не все языки, то на редактировании изменения будут только у тех, что обрабатываются через библиотеки (при вставке в документ у всех)
+			switch (e.currentTarget.value) {
 				case "0":
-					// xml_formatter_settings.indentation = "\t";
-					// prettier_settings.useTabs = true;
+					xml_formatter_settings.indentation = "\t";
+					prettier_settings.useTabs = true;
 					settings.tab_replace = 0;
 					break;
 				case "2":
-					// xml_formatter_settings.indentation = "  ";
-					// prettier_settings.useTabs = false;
-					// prettier_settings.tabWidth = 2;
+					xml_formatter_settings.indentation = "  ";
+					prettier_settings.useTabs = false;
+					prettier_settings.tabWidth = 2;
 					settings.tab_replace = 2;
 					break;
 				case "4":
-					// xml_formatter_settings.indentation = "    ";
-					// prettier_settings.useTabs = false;
-					// prettier_settings.tabWidth = 4;
+					xml_formatter_settings.indentation = "    ";
+					prettier_settings.useTabs = false;
+					prettier_settings.tabWidth = 4;
 					settings.tab_replace = 4;
 					break;
 			}
