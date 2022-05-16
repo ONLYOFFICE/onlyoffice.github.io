@@ -67,7 +67,7 @@ You can apply your classes to this divs
 				height: "",
 				left: "10px",
 				right: "10px",
-				top: "90px",
+				top: "60px",
 				bottom: "5px",
 			};
 			for (var i in settings)

@@ -3,11 +3,12 @@
     "Language": "Язык",
     "Highlight": "Подсветка",
     "Style": "Стиль",
-    "Qtcreator Dark": "Qtcreator - темная тема",
-    "Qtcreator Light": "Qtcreator - светлая тема",
-    "Replace Tab with spaces": "Заменять табуляцию пробелами",
-    "Don`t replace": "Не заменять",
-    "Replace by 2 spaces": "Заменять на 2 пробела",
-    "Replace by 4 spaces": "Заменять на 4 пробела",
-    "Choose background color": "Выбрать цвет фона"
+    "Tab replace": "Табуляция",
+    "Font settings": "Настройки шрифта",
+    "Use tabs": "Не заменять",
+    "2 spaces": "2 пробела",
+    "4 spaces": "4 пробела",
+    "Background": "Задний фон",
+	"Format": "Форматировать",
+	"Available only for the following languages": "Доступно только для слующих языков"
 }

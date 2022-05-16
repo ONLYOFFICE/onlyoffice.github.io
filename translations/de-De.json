@@ -3,11 +3,12 @@
     "Language": "Sprache",
     "Highlight": "Hervorheben",
     "Style": "Stil",
-    "Qtcreator Dark": "Qtcreator Dark",
-    "Qtcreator Light": "Qtcreator Light",
-    "Replace Tab with spaces": "Registerkarte durch Leerzeichen ersetzen",
-    "Don`t replace": "Nicht ersetzen",
-    "Replace by 2 spaces": "Durch 2 Leerzeichen ersetzen",
-    "Replace by 4 spaces": "Durch 4 Leerzeichen ersetzen",
-    "Choose background color": "Hintergrundfarbe wählen"
+    "Tab replace": "Tab Ersatz",
+    "Use tabs": "Nicht ersetzen",
+    "2 spaces": "2 Räume",
+    "4 spaces": "4 Räume",
+    "Background": "Hintergrund",
+	"Font settings": "Schrifteinstellungen",
+	"Format": "Formatierung",
+	"Available only for the following languages": "Nur für folgende Sprachen verfügbar"
 }
