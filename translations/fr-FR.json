@@ -3,11 +3,12 @@
     "Language": "Langue",
     "Highlight": "Surbrillance",
     "Style": "Style",
-    "Qtcreator Dark": "Qtcreator Sombre",
-    "Qtcreator Light": "Qtcreator Lumineux",
-    "Replace Tab with spaces": "Remplacer tabulation par des espaces",
-    "Don`t replace": "Ne pas remplacer",
-    "Replace by 2 spaces": "Remplacer par 2 espaces",
-    "Replace by 4 spaces": "Remplacer par 4 espaces",
-    "Choose background color": "Choisir une couleur de fond"
+    "Tab replace": "Tabulation",
+    "Use tabs": "Ne pas remplacer",
+    "2 spaces": "2 espaces",
+    "4 spaces": "4 espaces",
+    "Background": "Background",
+    "Font settings": "Paramètres de police",
+	"Format": "Format",
+	"Available only for the following languages": "Disponible uniquement pour les langues suivantes"
 }
