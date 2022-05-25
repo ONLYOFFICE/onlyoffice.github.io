@@ -1,11 +1,80 @@
 {
 	"A103601F-FDA0-418A-BC37-A514031894C0" : {
-		"url" : "https://github.com/ONLYOFFICE/plugin-autocomplete/blob/master/config.json"
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-autocomplete/master/config.json"
 	},
 	"E6978D28-0441-4BD7-8346-82FAD68BCA3B" : {
-		"url" : "https://github.com/ONLYOFFICE/plugin-macros/blob/master/config.json"
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-macros/master/config.json"
 	},
 	"BE5CBF95-C0AD-4842-B157-AC40FEDD9441" : {
 		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-mendeley/master/config.json"
+	},
+	"440EBF13-9B19-4BD8-8621-05200E58140B" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-ocr/master/config.json"
+	},
+	"38E022EA-AD92-45FC-B22B-49DF39746DB4" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-youtube/master/config.json"
+	},
+	"7327FC95-16DA-41D9-9AF2-0E7F449F6800" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-translator/master/config.json"
+	},
+	"0847b6a4-b007-11e7-abc4-cec278b6b50a" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordpress/master/config.json"
+	},
+	"BE5CBF95-C0AD-4842-B157-AC40FEDD9841" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-highlightcode/master/config.json"
+	},
+	"c9d216a5-4f1a-49f2-9ff0-67c510a73523" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-easybib/master/config.json"
+	},
+	"BE5CBF95-C0AD-4842-B157-AC40FEDD9840" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-thesaurus/master/config.json"
+	},
+	"07FD8DFA-DFE0-4089-AL24-0730933CC80A" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-photoeditor/master/config.json"
+	},
+	"BFC5D5C6-89DE-4168-9565-ABD8D1E48711" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-zotero/master/config.json"
+	},
+	"D71C2EF0-F15B-47C7-80E9-86D671F9C595" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-speech/master/config.json"
+	},
+	"b78a062b-e349-4634-8a44-99825600d299" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-deepl/master/config.json"
+	},
+	"7CDB02C9-A0BF-4B56-9A1A-71C860B8498F" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-languagetool/master/config.json"
+	},
+	"B631E142-E40B-4B4C-90B9-2D00222A286E" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-glavred/master/config.json"
+	},
+	"E5773A43-F9B3-4E81-81D9-CE0A132470E7" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-telegram/master/config.json"
+	},
+	"0743b63f-cb32-438c-b46b-81ce182ff4f7" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-rainbow/master/config.json"
+	},
+	"7645D461-84BC-4FB0-A42C-98118C14A1CD" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-jitsi/master/config.json"
+	},
+	"584EEEE8-DBF5-45C3-A4CA-F52177C82754" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordscounter/master/config.json"
+	},
+	"DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-drawio/master/config.json"
+	},
+	"E581C417-3C80-4BC2-B42D-502850FDC1E7" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-html/master/config.json"
+	},
+	"9b224050-2354-4c1b-822b-03a97f61c79d" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-apertium/master/config.json"
+	},
+	"55159EC6-C91A-4DDB-8E1E-558454666461" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-typograf/master/config.json"
+	},
+	"6ef67492-a111-4ca5-bd4f-bf02645afc61" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-grammalecte/master/config.json"
+	},
+	"DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5" : {
+		"url" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-drawio/master/config.json"
 	}
 }
