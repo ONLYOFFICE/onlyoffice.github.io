@@ -30,7 +30,7 @@
 			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
 			return;
 		}
-		if (window.Asc.plugin.info.editorType === 'word' && !window.Asc.plugin.info.documentTitle.endsWith(".pdf")) {
+		if (window.Asc.plugin.info.editorType === 'word') {
 			window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
 				txt = (!data) ? "" : ProcessText(data);
 				ExecPlugin();
