@@ -17,17 +17,26 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<title>Digital signature</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<!-- <script src="../plugin-drawio/resources/css/ui.js"></script>
+	<link rel="stylesheet" href="../plugin-drawio/resources/css/ui.css"> -->
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="resources/css/plugin_style.css">
 	<script type="text/javascript" src="scripts/code.js"></script>
-	<style>
-		html, body {
-			width: 100%;
-			height: 100%;
-		}
-	</style>
+	
 </head>
-	<body>
-	</body>
+<body>
+	<div id="div_body" >
+		<div id="sign" class="div-sign">
+			<button id="btn_send" class="btn-text-default noselect">Send file to extention</button>
+		</div>
+		<div id="div_mess" class="div-mess hidden">
+			<span id="span_mess" class="defaultlable"></span>
+		</div>
+	</div>
+	<div id="loader-container" class="asc-loader-container div-loader"></div>
+</body>
 </html>
