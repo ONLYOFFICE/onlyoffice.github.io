@@ -1,0 +1,103 @@
+{
+    "name": "Docs to Markdown",
+    "guid": "asc.{5aff455d-96c4-4bd8-9658-16e5bc143738}",
+    "version": "1.0.0",
+	"minVersion" : "6.4.0",
+    "variations": [
+        {
+            "description": "Docs to Markdown",
+            "url": "index.html",
+
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png",
+						"hover": "resources/light/icon.png",
+						"active": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+            "isViewer": true,
+            "EditorsSupport": [ "word" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        },
+        {
+            "description": "About",
+            "descriptionLocale": {
+                "ru": "Справка",
+                "fr": "À propos",
+                "es": "Sobre programa",
+                "de": "Über"
+            },
+            "url": "index_about.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "isViewer": false,
+            "EditorsSupport": [ "word" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "none",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                }
+            ],
+
+            "size": [ 400, 50 ]
+        }
+    ]
+}
