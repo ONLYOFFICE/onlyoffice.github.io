@@ -1,0 +1,11 @@
+{
+  "Copy": "Kopieren",
+  "Show settings": "Einstellungen anzeigen",
+  "Hide settings": "Einstellungen ausblenden",
+  "Render HTML tags": "HTML-Tags rendern",
+  "Demote headings (H1 → H2, etc.)": "Überschriften herabstufen (H1 → H2, etc.)",
+  "HTML headings/IDs": "HTML-Überschriften/IDs",
+  "Create base64 images": "Base64-Bilder erstellen",
+  "Suppress top comment": "Obersten Kommentar unterdrücken",
+  "Help": "Wählen Sie Markdown oder HTML.\n* Standard: Konvertierung des gesamten Dokuments.\n* Wählen Sie Text, um den Umfang zu begrenzen."
+}
