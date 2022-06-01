@@ -18,6 +18,11 @@
 var Ps;
 var PsTextArea;
 var mapParagraphs = [];
+var pro_api_url = 'https://api.deepl.com/v2/translate?auth_key=';
+var free_api_url = 'https://api-free.deepl.com/v2/translate?auth_key=';
+var curr_api_url = free_api_url;
+var sTextBeforeKeyUp = "";
+
 const isIE = checkInternetExplorer();	//check IE
 function checkInternetExplorer(){
     var rv = -1;
@@ -177,8 +182,8 @@ function getMessage(key) {
             beforeSend: function(request) {
 				request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
 			},
-			data: '?auth_key=' + apikey + sParams + '&split_sentences=0' + '&target_lang=' + targetLanguage,
-            url: 'https://api.deepl.com/v2/translate?auth_key=' + apikey
+			data: '?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
+            url: curr_api_url + apikey
 
         }).success(function (oResponse) {
             isValidKey = true;
@@ -217,6 +222,10 @@ function getMessage(key) {
             showLoader(elements, false);
 
         }).error(function(oResponse) {
+            if (curr_api_url === free_api_url) {
+                curr_api_url = pro_api_url;
+                Translate(apikey, targetLanguage, sParams);
+            }
             isValidKey = false;
             showLoader(elements, false);
             container = document.getElementById('txt_shower');
@@ -237,18 +246,6 @@ function getMessage(key) {
                     container.innerHTML = "Connection failed!";
             }
         });
-    };
-
-    function BuildText(aTranlations) {
-        var aFinalResult = [];
-        var nPosToSlice = 0;
-        for (var nMap = 0; nMap < mapParagraphs.length; nMap++)
-        {
-            aFinalResult[nMap] = aTranlations.slice(nPosToSlice, nPosToSlice + mapParagraphs[nMap].length).join(String.fromCharCode(160));
-            nPosToSlice = nPosToSlice + mapParagraphs[nMap].length;
-        }
-
-        return aFinalResult;
     };
 
     function SplitText(sText) {
@@ -359,7 +356,6 @@ function getMessage(key) {
                     return;
                 else
                     paste_done = false;
-                //Asc.scope.arr = BuildText(translatedText);
                 Asc.scope.arr = translatedText;
                 window.Asc.plugin.info.recalculate = true;
 
@@ -436,6 +432,9 @@ function getMessage(key) {
         $('#textarea').keyup(delay(function(e) {
             updateScroll();
             txt = document.getElementById("textarea").innerText;
+            if (sTextBeforeKeyUp == txt)
+                return;
+                
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
                 case 'slide': {
@@ -482,8 +481,6 @@ function getMessage(key) {
             sTxt = sTxt.slice(0, sTxt.length - 1);
             
 	    var splittedParas = sTxt.split('\n');
-        var parasToTranslate = [];
-
         if (txt.trim() !== "")
             document.getElementById("textarea").innerText = sTxt;
 
@@ -492,7 +489,9 @@ function getMessage(key) {
 
     function RunTranslate(sText) {
 
+        sTextBeforeKeyUp = sText;
         var allParsedParas = processText(sText);
+        
         DelInvalidChars(allParsedParas);
         if (IsLastTransate(allParsedParas))
             return false;
