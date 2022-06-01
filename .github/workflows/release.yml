@@ -1,0 +1,38 @@
+### This workflow release plugin after tag was pushed ###
+name: Plugins release
+
+on:
+  workflow_call:
+  push:
+    tags:
+      - "v*"
+
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get Tag Name
+        id: tag_name
+        run: |
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
+      - name: Zip up files
+        run: |
+           PLUGIN=$(echo ${{ env.REPO_NAME }} | sed 's/plugin-//')
+           zip -r $PLUGIN-${{ steps.tag_name.outputs.SOURCE_TAG }}.plugin . -x *.git*
+
+      - name: Release plugin
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          title: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          prerelease: false
+          files: "*.plugin"
