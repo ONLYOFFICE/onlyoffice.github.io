@@ -409,6 +409,9 @@ a.aboutlink:active {
 .select2-search.select2-search--dropdown .select2-selection__arrow {
     cursor: pointer !important
 }
+.select2-container {
+    max-height : 20px !important;
+}
 /*
  * Container style
  */
