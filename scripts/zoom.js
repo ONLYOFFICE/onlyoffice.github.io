@@ -37,7 +37,7 @@ var Ps;
     var tokenKey = '';
     var oTheme;
     for (var nTime = 0; nTime < times.length; nTime++) {
-        time_hour_data.push({id: nTime, text: times[nTime]});
+        time_hour_data.push({id: times[nTime], text: times[nTime]});
     }
     for (var nHour = 0; nHour < hours.length; nHour++) {
         duration_hour_data.push({id: hours[nHour].split(' hour')[0], text: hours[nHour]});
