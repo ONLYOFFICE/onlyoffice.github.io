@@ -1,0 +1,11 @@
+name: Release
+
+on: 
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs: 
+  release: 
+    uses: ONLYOFFICE/onlyoffice.github.io/.github/workflows/release.yml@master
