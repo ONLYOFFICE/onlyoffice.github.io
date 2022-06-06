@@ -79,7 +79,7 @@ color: rgb(12, 7, 255);\
 color:rgb(185, 6, 144);\
 }\
 .ace-chrome .ace_marker-layer .ace_selection {\
-background: rgba(38,79,120,255);\
+background: rgba(38,79,120);\
 }\
 .ace-chrome .ace_marker-layer .ace_step {\
 background: rgb(252, 255, 0);\
