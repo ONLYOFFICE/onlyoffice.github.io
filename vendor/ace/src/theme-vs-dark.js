@@ -1,6 +1,6 @@
 ace.define("ace/theme/vs-dark",["require","exports","module","ace/lib/dom"], function(require, exports, module) {
 
-exports.isDark = false;
+exports.isDark = true;
 exports.cssClass = "ace-chrome";
 exports.cssText = ".ace-chrome .ace_gutter {\
 background: #ebebeb;\
@@ -79,7 +79,7 @@ color: rgb(12, 7, 255);\
 color:rgb(185, 6, 144);\
 }\
 .ace-chrome .ace_marker-layer .ace_selection {\
-background: rgb(181, 213, 255);\
+background: rgba(38,79,120);\
 }\
 .ace-chrome .ace_marker-layer .ace_step {\
 background: rgb(252, 255, 0);\
