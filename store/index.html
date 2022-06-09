@@ -17,26 +17,32 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Digital signature</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-	<!-- <script src="../plugin-drawio/resources/css/ui.js"></script>
-	<link rel="stylesheet" href="../plugin-drawio/resources/css/ui.css"> -->
-	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<link rel="stylesheet" href="resources/css/plugin_style.css">
+	<link rel="stylesheet" href="./resources/css/styles.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<!-- TODO из-за этого скрипта не работает нормально изменение размера окна (возможно в окне редактора всё будет нормально) -->
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<script type="text/javascript" src="scripts/code.js"></script>
-	
 </head>
-<body>
-	<div id="div_body" >
-		<div id="sign" class="div-sign">
-			<button id="btn_send" class="btn-text-default noselect">Send file to extention</button>
+	<body>
+		<div class="header noselect">
+			<span id="arrow" class="arrow hidden">&#8592;</span>
+			<label class="aboutlable header">Manage plugins</label>
+			<span id="close" class="close">&times;</span>
 		</div>
-		<div id="div_mess" class="div-mess hidden">
-			<span id="span_mess" class="defaultlable"></span>
+		<div id="div_body" class="div_body">
+			<div id="toolbar" class="toolbar noselect">
+				<div class="toolbar_buttons">
+					<button id="btn_myPlugins" class="btn-text-default">My plugins</button>
+					<button id="btn_marketplace" class="btn-text-default btn_selected">Marketplace</button>
+				</div>
+				<div class="toolbar_link">
+					<!-- TODO подумать над тем, как открывать форму для загрузки -->
+					<a id="link_newPlugin" class="aboutlink link_submit" target="blank" href="https://htmldom.dev/make-a-resizable-element/">Submit your own plugin</a>
+				</div>
+			</div>
+			<div id="loader-container" class="asc-loader-container div_loader"></div>
+			<div id="div_main" class="main_content noselect"></div>
 		</div>
-	</div>
-	<div id="loader-container" class="asc-loader-container div-loader"></div>
-</body>
+	</body>
 </html>
