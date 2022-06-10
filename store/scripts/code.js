@@ -26,6 +26,7 @@ let loader;									// loader
 var Ps;										// perfect scrollbar
 const lang = detectLanguage() || "en-EN";	// current language
 const shorLang = lang.split('-')[0];		// short language
+let bTranslate = false;						// flag translate or not
 let translate = 							// translations for current language
 {
 	"My plugins": "My plugins",
@@ -46,7 +47,6 @@ let translate = 							// translations for current language
 	"with the plugin functionality on our forum." : "with the plugin functionality on our forum.",
 	"Create a new plugin using" : "Create a new plugin using"
 }
-console.log(lang);
 // for making preview
 let counter = 0;
 let row;
@@ -90,7 +90,6 @@ window.onload = function() {
 			this.classList.add('btn_selected');
 			elements.linkNewPlugin.innerHTML = translate["Install plugin manually"];
 			elements.divMain.innerHTML = "";
-			Ps.update();
 			counter = 0;
 			installedPlugins.forEach(function(el) {
 				createPluginDiv(el.guid);
@@ -105,17 +104,16 @@ window.onload = function() {
 			this.classList.add('btn_selected');
 			elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
 			elements.divMain.innerHTML = "";
-			Ps.update();
 			for (const guid in allPlugins) {
 				createPluginDiv(guid);	
 			}
-			Ps.update();
 		}
 	};
 
 	elements.arrow.onclick = function() {
 		// click on left arrow in preview mode
-		document.getElementById('div_preview').remove();
+		elements.divSelected.classList.add('hidden');
+		elements.divSelectedMain.classList.add('hidden');
 		elements.divBody.classList.remove('hidden');
 		elements.arrow.classList.add('hidden');
 		Ps.update();
@@ -224,8 +222,18 @@ function initElemnts() {
 	elements.divMain = document.getElementById('div_main');
 	elements.arrow = document.getElementById('arrow');
 	elements.close = document.getElementById('close');
-	elements.lblHeader = document.getElementById('lbl_header');
-	elements.divHeader = document.getElementById('div_header')
+	elements.divHeader = document.getElementById('div_header');
+	elements.divSelected = document.getElementById('div_selected_toolbar');
+	elements.divSelectedMain = document.getElementById('div_selected_main');
+	elements.imgIcon = document.getElementById('img_icon');
+	elements.spanName = document.getElementById('span_name');
+	elements.spanOffered = document.getElementById('span_offered');
+	elements.btnUpdate = document.getElementById('btn_update');
+	elements.btnRemove = document.getElementById('btn_remove');
+	elements.btnInstall = document.getElementById('btn_install');
+	elements.spanSelectedDescr = document.getElementById('span_selected_description');
+	elements.imgScreenshot = document.getElementById('image_screenshot');
+	elements.linkPlugin = document.getElementById('link_plugin');
 };
 
 function toogleLoader(show) {
@@ -234,7 +242,6 @@ function toogleLoader(show) {
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;	
 	} else if(!loader) {
-		console.log('show')
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], 'Loading...');
 	}
@@ -313,8 +320,8 @@ function createPluginDiv(guid) {
 		imageUrl = "./resources/img/defaults/light/icon@2x.png"
 	}
 	// TODO подумать от куда брать цвет на фон под картинку (может в config добавить)
-	let name = (shorLang != 'en' && allPlugins[guid].config.nameLocale) ? allPlugins[guid].config.nameLocale[shorLang] : allPlugins[guid].config.name;
-	let description = (shorLang != 'en' && variations.descriptionLocale) ? variations.descriptionLocale[shorLang] : variations.description;
+	let name = (bTranslate && allPlugins[guid].config.nameLocale) ? allPlugins[guid].config.nameLocale[shorLang] : allPlugins[guid].config.name;
+	let description = (bTranslate && variations.descriptionLocale) ? variations.descriptionLocale[shorLang] : variations.description;
 	let template = '<div class="div_image" onclick="onClickItem(event.target)">' +
 						// временно поставил такие размеры картинки (чтобы выглядело симминтрично пока)
 						'<img style="width:56px;" src="' + imageUrl + '">' +
@@ -337,6 +344,7 @@ function createPluginDiv(guid) {
 	div.innerHTML = template;
 	row.append(div);
 	counter++;
+	Ps.update();
 };
 
 function onClickItemButton(target, bInstall) {
@@ -360,12 +368,13 @@ function onClickItemButton(target, bInstall) {
 };
 
 function onClickItem(target) {
-	// TODO подумать над тем, чтобы перенести этот блок в index.html а здесь только подставлять значения
 	// There we will make preview for selected plugin
 	// TODO продумать где брать offered by и где брать текс для этого блока (может из конфига) (так же переводы для него надо добавить)
 	let offered = "TESTdsadasddasdasdasdasdas";
 	let description = "Correct French grammar and typography. The plugin uses Grammalecte, an open-source grammar and typographic corrector dedicated to the French language.Correct French grammar and typography."
 
+	elements.divSelected.classList.remove('hidden');
+	elements.divSelectedMain.classList.remove('hidden');
 	elements.arrow.classList.remove('hidden');
 	let guid = target.parentNode.getAttribute('data-guid');
 	elements.divBody.classList.add('hidden');
@@ -386,59 +395,38 @@ function onClickItem(target) {
 	}
 	let pluginUrl = gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? allPlugins[guid].Url.replace('plugins/master', 'plugins/tree/master') : allPlugins[guid].Url);
 	// TODO проблема с тем, что в некоторых иконках плагинов есть отступ сверху, а в некоторых его нет (исходя их этого нужен разный отступ у span справа, чтобы верхние края совпадали)
-	let template = '<div class="div_selected_toolbar" data-guid="' + guid + '">' +
-						// временно поставил такие размеры картинки 56 (чтобы выглядело симминтрично пока)
-						'<div style="width:56px">' +
-							'<img style="height:56px" src ="' + target.children[0].src + '">' +
-						'</div>' +
-						'<div class="div_selected_description">' +
-							'<span class="span_name">' + target.nextSibling.children[0].innerText + '</span>' +
-							'<span class="span_description">'+ translate["Offered by"] + ':' + offered + '</span>' +
-							'<div>' +
-								(bHasUpdate
-									? '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">' + translate["Update"] + '</button>'
-									: ''
-								)
-								+''+
-								(installed
-									? (installed.canRemoved ? '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, false)">' + translate["Remove"] + '</button>' : '')
-									: '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">' + translate["Install"] + '</button>'
-								)
-								+
-							'</div>' +
-						'</div>' +
-					'</div>' +
-					'<div class="div_selected_main">' +
-						'<div style="width:100%; height:100%">' +
-							'<div>' +
-								'<span class="span_caption span_selected" onclick="onSelectPreview(event.target, true)">' + translate["Overview"] + '</span>' +
-								'<span class="span_caption" onclick="onSelectPreview(event.target, false)">' + translate["Info & Support"] + '</span>' +
-								'<hr>' +
-							'</div>' +
-							'<div id="div_selected_preview" class="div_selected_preview">' +
-								'<div>' +
-									'<span>' + description + '</span>' +
-								'</div>' +
-								'<div id="div_selected_image" class="div_selected_image">' +
-									// TODO проблема со скрином (не получается его нормально позиционировать при изменении размера, плюс на нём нифига не видно, может использовать скрин только плагина)
-									(allPlugins[guid].config.variations[0].isVisual
-										// TODO подумать что показывать для не визуальных плагинов (пока решил ничего не показывать)
-										? '<img src="./resources/img/screenshotes/' + guid + '.png" class="image_preview">'
-										: ''
-									)
-									+
-								'</div>' +
-							'</div>' +
-							'<div id="div_selected_info" class="div_selected_preview hidden">' +
-								'<div class="div_selected_info"> <span class="span_info">'+ translate["Learn how to use"] + ' </span> <span>' + translate["the plugin in"] + ' </span> <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">Help Center.</a></div>' +
-								'<div class="div_selected_info"> <span class="span_info">' + translate["Contribute"] + ' </span> <span>' + translate["to the plugin developmen or report an issue on"] + ' </span> <a class="aboutlink link_info" target="blank" href=' + pluginUrl + '>Github.</a></div>' +
-								'<div class="div_selected_info"> <span class="span_info">' + translate["Get help"] + ' </span> <span>' + translate["with the plugin functionality on our forum."] + ' </span></div>' +
-								'<div class="div_selected_info"> <span>' + translate["Create a new plugin using"] + ' </span> <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">ONLYOFFICE API.</a></div>' +
-							'</div>' +
-						'<div>' +
-					'</div>';
-	divPreview.innerHTML = template;
-	document.body.append(divPreview);
+	elements.divSelected.setAttribute('data-guid', guid);
+	elements.imgIcon.setAttribute('src', target.children[0].src);
+	elements.spanName.innerHTML = target.nextSibling.children[0].innerText;
+	elements.spanOffered.innerHTML = offered;
+	elements.spanSelectedDescr.innerHTML = description;
+	elements.linkPlugin.setAttribute('href', pluginUrl);
+
+	if (bHasUpdate) {
+		elements.btnUpdate.classList.remove('hidden');
+	} else {
+		elements.btnUpdate.classList.add('hidden');
+	}
+
+	if (installed) {
+		if (installed.canRemoved) {
+			elements.btnRemove.classList.remove('hidden');
+		} else {
+			elements.btnRemove.classList.add('hidden');
+		}
+		elements.btnInstall.classList.add('hidden');
+	} else {
+		elements.btnRemove.classList.add('hidden');
+		elements.btnInstall.classList.remove('hidden');
+	}
+
+	if (allPlugins[guid].config.variations[0].isVisual) {
+		elements.imgScreenshot.setAttribute('src', './resources/img/screenshotes/' + guid + '.png');
+		elements.imgScreenshot.classList.remove('hidden');
+	} else {
+		elements.imgScreenshot.classList.add('hidden');
+	}
+
 	setDivHeight();
 };
 
@@ -493,6 +481,7 @@ function getTranslation() {
 					}
 				}
 				if (fullName || shortName) {
+					bTranslate = true;
 					makeRequest('./translations/' + (fullName || shortName) + '.json').then(
 						function(res) {
 							translate = JSON.parse(res);
@@ -516,11 +505,23 @@ function getTranslation() {
 };
 
 function onTranslate() {
-	console.log('onTranslate');
-	elements.lblHeader.innerHTML = translate['Manage plugins'];
 	elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
 	elements.btnMyPlugins.innerHTML = translate["My plugins"];
 	elements.btnMarketplace.innerHTML = translate["Marketplace"];
+	elements.btnInstall.innerHTML = translate['Install'];
+	elements.btnRemove.innerHTML = translate["Remove"];
+	elements.btnUpdate.innerHTML = translate["Update"];
+	document.getElementById('lbl_header').innerHTML = translate['Manage plugins'];
+	document.getElementById('span_offered_caption').innerHTML = translate['Offered by'] + ': ';
+	document.getElementById('span_overview').innerHTML = translate['Overview'];
+	document.getElementById('span_info').innerHTML = translate['Info & Support'];
+	document.getElementById('span_lern').innerHTML = translate['Learn how to use'] + ' ';
+	document.getElementById('span_lern_plugin').innerHTML = translate['the plugin in'] + ' ';
+	document.getElementById('span_contribute').innerHTML = translate['Contribute'] + ' ';
+	document.getElementById('span_contribute_end').innerHTML = translate['to the plugin developmen or report an issue on'] + ' ';
+	document.getElementById('span_help').innerHTML = translate['Get help'] + ' ';
+	document.getElementById('span_help_end').innerHTML = translate['with the plugin functionality on our forum.'];
+	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
 	showMarketplace();
 };
 
