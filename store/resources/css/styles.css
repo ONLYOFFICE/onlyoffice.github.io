@@ -124,7 +124,7 @@ label.header {
 	font-weight: bold;
 }
 .span_description {
-	margin: 0px 10px;
+	margin-left: 10px;
 }
 .div_footer {
     display: flex;
