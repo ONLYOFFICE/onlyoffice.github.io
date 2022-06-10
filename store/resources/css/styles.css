@@ -182,7 +182,7 @@ label.header {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .div_selected_toolbar {
