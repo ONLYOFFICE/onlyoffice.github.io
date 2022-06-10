@@ -25,12 +25,12 @@
 	<script type="text/javascript" src="scripts/code.js"></script>
 </head>
 	<body>
-		<div class="header noselect">
+		<div id="div_header" class="header noselect hidden">
 			<span id="arrow" class="arrow hidden">&#8592;</span>
-			<label class="aboutlable header">Manage plugins</label>
+			<label id="lbl_header" class="aboutlable header">Manage plugins</label>
 			<span id="close" class="close">&times;</span>
 		</div>
-		<div id="div_body" class="div_body">
+		<div id="div_body" class="div_body hidden">
 			<div id="toolbar" class="toolbar noselect">
 				<div class="toolbar_buttons">
 					<button id="btn_myPlugins" class="btn-text-default">My plugins</button>
@@ -41,8 +41,8 @@
 					<a id="link_newPlugin" class="aboutlink link_submit" target="blank" href="https://htmldom.dev/make-a-resizable-element/">Submit your own plugin</a>
 				</div>
 			</div>
-			<div id="loader-container" class="asc-loader-container div_loader"></div>
 			<div id="div_main" class="main_content noselect"></div>
 		</div>
+		<div id="loader-container" class="asc-loader-container div_loader"></div>
 	</body>
 </html>
