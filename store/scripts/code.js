@@ -16,23 +16,43 @@
  *
  */
 
-let allPlugins;						// list of all plugins from config
-let installedPlugins;				// list of intalled plugins
-const configUrl = './config.json';	// url to config.json
-const elements = {};				// all elements
-const isDesctop = true;				// window.AscDesktopEditor !== undefined;
-let isLoading = false;				// flag loading
-let loader;							// loader
-var Ps;								// perfect scrollbar 
+let allPlugins;								// list of all plugins from config
+let installedPlugins;						// list of intalled plugins
+const configUrl = './config.json';			// url to config.json
+const elements = {};						// all elements
+const isDesctop = true;						// window.AscDesktopEditor !== undefined;
+let isLoading = false;						// flag loading
+let loader;									// loader
+var Ps;										// perfect scrollbar
+const lang = detectLanguage() || "en-EN";	// current language
+const shorLang = lang.split('-')[0];		// short language
+let translate = 							// translations for current language
+{
+	"My plugins": "My plugins",
+	"Marketplace": "Marketplace",
+	"Submit your own plugin": "Submit your own plugin",
+	"Install plugin manually": "Install plugin manually",
+	"Install": "Install",
+	"Remove": "Remove",
+	"Update": "Update",
+	"Offered by" : "Offered by",
+	"Overview": "Overview",
+	"Info & Support": "Info & Support",
+	"Learn how to use": "Learn how to use",
+	"the plugin in" : "the plugin in",
+	"Contribute": "Contribute",
+	"to the plugin developmen or report an issue on" : "to the plugin developmen or report an issue on",
+	"Get help": "Get help",
+	"with the plugin functionality on our forum." : "with the plugin functionality on our forum.",
+	"Create a new plugin using" : "Create a new plugin using"
+}
+console.log(lang);
 // for making preview
 let counter = 0;
 let row;
 const gitRaw = 'https://raw.githubusercontent.com';
 const gitUrl = 'https://github.com';
 let theme;
-
-// TODO переводы добавить и решить что будем переводить (но по нормальному посмотреть можно будет только после интеграции в редактор)
-// в теории язык можно вытащить из parent.location.search
 
 // TODO решить проблему с темой и добавить для неё разные стили (после интеграции можно будет попробовать прокинуть событие смены темы)
 // в теории её можно достать из parent.localStorage.getItem('ui-theme-id')
@@ -44,6 +64,14 @@ window.Asc = {
 	}
 }
 
+// get translation file
+getTranslation();
+// fetch all plugins from config
+fetchAllPlugins();
+// get all installed plugins
+sendMessage({type : 'getInstalled'}, '*');
+detectLanguage();
+
 window.onload = function() {
 	// detect theme (this is not currently in use)
 	theme = parent.localStorage.getItem('ui-theme-id') || '';
@@ -51,12 +79,16 @@ window.onload = function() {
 	// init element
 	initElemnts();
 
+	if (shorLang == "en") {
+		showMarketplace();
+	}
+
 	elements.btnMyPlugins.onclick = function() {
 		// click on my plugins button
 		if ( !this.classList.contains('btn_selected') ) {
 			elements.btnMarketplace.classList.remove('btn_selected');
 			this.classList.add('btn_selected');
-			elements.linkNewPlugin.innerHTML = "Install plugin manually";
+			elements.linkNewPlugin.innerHTML = translate["Install plugin manually"];
 			elements.divMain.innerHTML = "";
 			Ps.update();
 			counter = 0;
@@ -71,7 +103,7 @@ window.onload = function() {
 		if ( !this.classList.contains('primary') ) {
 			elements.btnMyPlugins.classList.remove('btn_selected');
 			this.classList.add('btn_selected');
-			elements.linkNewPlugin.innerHTML = "Submit your own plugin";
+			elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
 			elements.divMain.innerHTML = "";
 			Ps.update();
 			for (const guid in allPlugins) {
@@ -113,11 +145,6 @@ window.addEventListener('message', function(event) {
 	}
 }, false);
 
-// fetch all plugins from config
-fetchAllPlugins();
-// get all installed plugins
-sendMessage({type : 'getInstalled'}, '*');
-
 function fetchAllPlugins() {
 	// function for fetching all plugins from config
 	makeRequest(configUrl).then(
@@ -139,16 +166,18 @@ function makeRequest(url) {
 	// maybe use fetch to in this function
 	isLoading = true;
 	return new Promise(function (resolve, reject) {
-		var xhr = new XMLHttpRequest();
+		let xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
 		
 		xhr.onload = function () {
-			if (this.status == 200) {
-				setTimeout(() => {
-				resolve(this.response);
-					
-				}, 1000);
-				// resolve(this.response);
+			if (this.readyState == 4) {
+				if (this.status == 200 || location.href.indexOf("file:") == 0) {
+					setTimeout(() => {
+					resolve(this.response);
+						
+					}, 1000);
+					// resolve(this.response);
+				}
 			}
 		};
 
@@ -165,6 +194,28 @@ function sendMessage(message) {
 	parent.postMessage(message, '*');
 };
 
+function detectLanguage() {
+	// TODO в теории язык можно вытащить из parent.location.search
+	if (parent.location && parent.location.search) {
+		let _langSearch = parent.location.search;
+		let _pos1 = _langSearch.indexOf("lang=");
+		let _pos2 = (-1 != _pos1) ? _langSearch.indexOf("&", _pos1) : -1;
+		let _lang = null;
+		if (_pos1 >= 0) {
+			_pos1 += 5;
+
+			if (_pos2 < 0)
+				_pos2 = _langSearch.length;
+
+			_lang = _langSearch.substr(_pos1, _pos2 - _pos1);
+			if (_lang.length == 2) {
+				_lang = (_lang.toLowerCase() + "-" + _lang.toUpperCase());
+			}
+		}
+		return _lang;
+	}
+};
+
 function initElemnts() {
 	elements.btnMyPlugins = document.getElementById('btn_myPlugins');
 	elements.btnMarketplace = document.getElementById('btn_marketplace');
@@ -173,6 +224,8 @@ function initElemnts() {
 	elements.divMain = document.getElementById('div_main');
 	elements.arrow = document.getElementById('arrow');
 	elements.close = document.getElementById('close');
+	elements.lblHeader = document.getElementById('lbl_header');
+	elements.divHeader = document.getElementById('div_header')
 };
 
 function toogleLoader(show) {
@@ -181,6 +234,7 @@ function toogleLoader(show) {
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;	
 	} else if(!loader) {
+		console.log('show')
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], 'Loading...');
 	}
@@ -190,7 +244,7 @@ function getAllPluginsData() {
 	for (const guid in allPlugins) {
 		const cur = allPlugins[guid];
 		// gitRaw + cur.Url + '/master/config.json'
-		var pluginUrl = gitRaw + cur.Url + (cur.Url.includes('sdkjs-plugins') ? '/config.json' : '/master/config.json');
+		let pluginUrl = gitRaw + cur.Url + (cur.Url.includes('sdkjs-plugins') ? '/config.json' : '/master/config.json');
 		makeRequest(pluginUrl).then(
 			function(response) {
 				let config = JSON.parse(response);
@@ -214,18 +268,15 @@ function getAllPluginsData() {
 
 
 function createPluginDiv(guid) {
+	// TODO добавить надпись что плагинов установленных нет
 	// this function creates div (preview) for plugins
-	// TODO может сделать динамическое количестов элементов в одной строке или переделать отображание через тег table
+	// TODO может сделать динамическое количество элементов в одной строке
 	if (counter <= 0 || counter >= 4) {
 		row = document.createElement('div');
 		row.className = "div_row"
 		document.getElementById('div_main').append(row);
 		counter = 1;
 	}
-
-
-	let mesh = "fhjdskhfjkdshfkjdshjkfhdjshfdkslnmchxjds jhfdksjka fjsd jksdfdslkfj";
-
 
 	let div = document.createElement('div');
 	div.setAttribute('data-guid', guid);
@@ -262,23 +313,24 @@ function createPluginDiv(guid) {
 		imageUrl = "./resources/img/defaults/light/icon@2x.png"
 	}
 	// TODO подумать от куда брать цвет на фон под картинку (может в config добавить)
-	// TODO добавить в репозитории системных плагинов (по типу settings) иконки, чтобы в маркетплейсе они подтягивались
+	let name = (shorLang != 'en' && allPlugins[guid].config.nameLocale) ? allPlugins[guid].config.nameLocale[shorLang] : allPlugins[guid].config.name;
+	let description = (shorLang != 'en' && variations.descriptionLocale) ? variations.descriptionLocale[shorLang] : variations.description;
 	let template = '<div class="div_image" onclick="onClickItem(event.target)">' +
 						// временно поставил такие размеры картинки (чтобы выглядело симминтрично пока)
 						'<img style="width:56px;" src="' + imageUrl + '">' +
 					'</div>' +
 					'<div class="div_description">'+
-						'<span class="span_name">' + allPlugins[guid].config.name + '</span>' +
-						'<span class="span_description">' + variations.description + (counter==2 ? mesh : "") + '</span>' +
+						'<span class="span_name">' + name + '</span>' +
+						'<span class="span_description">' + description + '</span>' +
 					'</div>' +
 					'<div class="div_footer">' +
 						(bHasUpdate
-							? '<span class="span_update">Update</span>'
+							? '<span class="span_update">' + translate["Update"] + '</span>'
 							: ''
 						)+''+
 						(installed
-							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, false)">Remove</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, true)">Install</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, false)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, true)">'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -305,18 +357,17 @@ function onClickItemButton(target, bInstall) {
 	}
 	// TODO наверно хотелось бы получать сообщения о том успешно ли прошел процесс установки/удаления/лбновления (чтобы уже в этом окне отобразить изменения)
 	sendMessage(message);
-	console.log(target.parentNode.parentNode.getAttribute('data-guid'));
 };
 
 function onClickItem(target) {
+	// TODO подумать над тем, чтобы перенести этот блок в index.html а здесь только подставлять значения
 	// There we will make preview for selected plugin
-	// TODO продумать где брать offered by и где брать текс для этого блока (может из конфига)
+	// TODO продумать где брать offered by и где брать текс для этого блока (может из конфига) (так же переводы для него надо добавить)
 	let offered = "TESTdsadasddasdasdasdasdas";
 	let description = "Correct French grammar and typography. The plugin uses Grammalecte, an open-source grammar and typographic corrector dedicated to the French language.Correct French grammar and typography."
 
 	elements.arrow.classList.remove('hidden');
 	let guid = target.parentNode.getAttribute('data-guid');
-	console.log(guid);
 	elements.divBody.classList.add('hidden');
 	let divPreview = document.createElement('div');
 	divPreview.id = 'div_preview';
@@ -342,16 +393,16 @@ function onClickItem(target) {
 						'</div>' +
 						'<div class="div_selected_description">' +
 							'<span class="span_name">' + target.nextSibling.children[0].innerText + '</span>' +
-							'<span class="span_description">Offered by: ' + offered + '</span>' +
+							'<span class="span_description">'+ translate["Offered by"] + ':' + offered + '</span>' +
 							'<div>' +
 								(bHasUpdate
-									? '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">Update</button>'
+									? '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">' + translate["Update"] + '</button>'
 									: ''
 								)
 								+''+
 								(installed
-									? (installed.canRemoved ? '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, false)">Remove</button>' : '')
-									: '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">Install</button>'
+									? (installed.canRemoved ? '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, false)">' + translate["Remove"] + '</button>' : '')
+									: '<button class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">' + translate["Install"] + '</button>'
 								)
 								+
 							'</div>' +
@@ -360,8 +411,8 @@ function onClickItem(target) {
 					'<div class="div_selected_main">' +
 						'<div style="width:100%; height:100%">' +
 							'<div>' +
-								'<span class="span_caption span_selected" onclick="onSelectPreview(event.target, true)">Overview</span>' +
-								'<span class="span_caption" onclick="onSelectPreview(event.target, false)">Info & Suppor</span>' +
+								'<span class="span_caption span_selected" onclick="onSelectPreview(event.target, true)">' + translate["Overview"] + '</span>' +
+								'<span class="span_caption" onclick="onSelectPreview(event.target, false)">' + translate["Info & Support"] + '</span>' +
 								'<hr>' +
 							'</div>' +
 							'<div id="div_selected_preview" class="div_selected_preview">' +
@@ -379,10 +430,10 @@ function onClickItem(target) {
 								'</div>' +
 							'</div>' +
 							'<div id="div_selected_info" class="div_selected_preview hidden">' +
-								'<div class="div_selected_info"> <span class="span_info">Lern how to use</span> <span> the plugin in </span> <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">Help Center.</a></div>' +
-								'<div class="div_selected_info"> <span class="span_info">Contribute</span> <span> to the plugin developmen or report an issue on</span> <a class="aboutlink link_info" target="blank" href=' + pluginUrl + '>Github.</a></div>' +
-								'<div class="div_selected_info"> <span class="span_info">Get help</span> <span> with the plugin functionality on our forum.</span></div>' +
-								'<div class="div_selected_info"> <span>Create a new plugin using</span> <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">ONLYOFFICE API.</a></div>' +
+								'<div class="div_selected_info"> <span class="span_info">'+ translate["Learn how to use"] + ' </span> <span>' + translate["the plugin in"] + ' </span> <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">Help Center.</a></div>' +
+								'<div class="div_selected_info"> <span class="span_info">' + translate["Contribute"] + ' </span> <span>' + translate["to the plugin developmen or report an issue on"] + ' </span> <a class="aboutlink link_info" target="blank" href=' + pluginUrl + '>Github.</a></div>' +
+								'<div class="div_selected_info"> <span class="span_info">' + translate["Get help"] + ' </span> <span>' + translate["with the plugin functionality on our forum."] + ' </span></div>' +
+								'<div class="div_selected_info"> <span>' + translate["Create a new plugin using"] + ' </span> <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">ONLYOFFICE API.</a></div>' +
 							'</div>' +
 						'<div>' +
 					'</div>';
@@ -398,12 +449,10 @@ function onSelectPreview(target, isOverview) {
 		target.classList.add("span_selected");
 
 		if (isOverview) {
-			console.log("overview");
 			document.getElementById('div_selected_info').classList.add('hidden');
 			document.getElementById('div_selected_preview').classList.remove('hidden');
 			setDivHeight();
 		} else {
-			console.log('Info & Support');
 			document.getElementById('div_selected_preview').classList.add('hidden');
 			document.getElementById('div_selected_info').classList.remove('hidden');
 
@@ -422,7 +471,60 @@ function setDivHeight() {
 		div.style.maxHeight = height;
 	}
 };
+
 window.onresize = function() {
 	setDivHeight();
 	// TODO change icons for plugins preview for new scale
+};
+
+function getTranslation() {
+	if (shorLang != "en") {
+		makeRequest('./translations/langs.json').then(
+			function(response) {
+				let arr = JSON.parse(response);
+				let fullName, shortName;
+				for (let i = 0; i < arr.length; i++) {
+					let file = arr[i];
+					if (file == lang) {
+						fullName = file;
+						break;
+					} else if (file.split('-')[0] == shorLang) {
+						shortName = file;
+					}
+				}
+				if (fullName || shortName) {
+					makeRequest('./translations/' + (fullName || shortName) + '.json').then(
+						function(res) {
+							translate = JSON.parse(res);
+							onTranslate();
+						},
+						function(err) {
+							console.error(err);
+							showMarketplace();
+						}
+					);
+				} else {
+					showMarketplace();
+				}	
+			},
+			function(err) {
+				console.error(err);
+				showMarketplace();
+			}
+		);
+	}
+};
+
+function onTranslate() {
+	console.log('onTranslate');
+	elements.lblHeader.innerHTML = translate['Manage plugins'];
+	elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
+	elements.btnMyPlugins.innerHTML = translate["My plugins"];
+	elements.btnMarketplace.innerHTML = translate["Marketplace"];
+	showMarketplace();
+};
+
+function showMarketplace() {
+	elements.divBody.classList.remove('hidden');
+	elements.divHeader.classList.remove('hidden');
 };
