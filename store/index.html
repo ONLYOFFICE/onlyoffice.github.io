@@ -55,9 +55,9 @@
 					<span id="span_offered"></span>
 				</div>
 				<div>
-					<button id="btn_update" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">Update</button>
-					<button id="btn_remove" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, false)">Remove</button>
-					<button id="btn_install" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, true)">Install</button>
+					<button id="btn_update" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, event.target.innerText)">Update</button>
+					<button id="btn_remove" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, event.target.innerText)">Remove</button>
+					<button id="btn_install" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, event.target.innerText)">Install</button>
 				</div>
 			</div>
 		</div>
