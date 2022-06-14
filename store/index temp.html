@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+		<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+		<script src="./code_temp.js"></script>
+		<style>
+			#resizable {
+				width: 550px;
+				height: 570px;
+				min-height: 520px;
+				min-width: 450px;
+			}
+			iframe {
+				width: 100%;
+				height: 100%;
+				border: 1px solid black;
+			}
+			html, body {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		</style>
+
+		<script>
+			$( function() {
+				$( "#resizable" ).resizable();
+				$( "#resizable" ).draggable();
+			} );
+		</script>
+	</head>
+	<body>
+		<div id="resizable" class="ui-widget-content">
+			<iframe src="./index.html"></iframe>
+			<iframe id="frameEditor" src="http://127.0.0.1/editor?fileName=sample.docx&userid=uid-1&lang=en" style="display: none;"></iframe>
+		</div>
+	</body>
+</html>
