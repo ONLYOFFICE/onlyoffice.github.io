@@ -189,7 +189,7 @@ function makeRequest(url) {
 
 function sendMessage(message) {
 	// this function sends message to editor
-	parent.postMessage(message, '*');
+	parent.postMessage(JSON.stringify(message), '*');
 };
 
 function detectLanguage() {
@@ -336,8 +336,8 @@ function createPluginDiv(guid) {
 							: ''
 						)+''+
 						(installed
-							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, false)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, true)">'  + translate["Install"] + '</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, event.target.innerText)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, event.target.innerText)">'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -347,22 +347,31 @@ function createPluginDiv(guid) {
 	Ps.update();
 };
 
-function onClickItemButton(target, bInstall) {
+function onClickItemButton(target, type) {
 	// click on install/remove button
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message;
-	// TODO update посылать отдельным собитием или можно как install его отправлять?
-	if (bInstall) {
-		message = {
-			type : 'install',
-			url : gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? (allPlugins[guid].Url.replace('plugins/master', 'plugins/blob/master') + 'config.json') : (allPlugins[guid].Url + 'blob/master/config.json'))
-		};
-	} else {
-		message = {
-			type : 'remove',
-			guid: guid
-		};
+	switch (type) {
+		case 'Install':
+			message = {
+				type : 'install',
+				url : gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? (allPlugins[guid].Url.replace('plugins/master', 'plugins/blob/master') + 'config.json') : (allPlugins[guid].Url + 'blob/master/config.json'))
+			};
+			break;
+		case 'Update':
+			message = {
+				type : 'update',
+				url : gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? (allPlugins[guid].Url.replace('plugins/master', 'plugins/blob/master') + 'config.json') : (allPlugins[guid].Url + 'blob/master/config.json'))
+			};
+			break;
+		case 'Remove':
+			message = {
+				type : 'remove',
+				guid: guid
+			};
+			break;
 	}
+
 	// TODO наверно хотелось бы получать сообщения о том успешно ли прошел процесс установки/удаления/лбновления (чтобы уже в этом окне отобразить изменения)
 	sendMessage(message);
 };
