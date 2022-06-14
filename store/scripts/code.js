@@ -16,6 +16,7 @@
  *
  */
 
+// todo ссылки при install/update поправить
 let allPlugins;								// list of all plugins from config
 let installedPlugins;						// list of intalled plugins
 const configUrl = './config.json';			// url to config.json
@@ -50,8 +51,6 @@ let translate = 							// translations for current language
 // for making preview
 let counter = 0;
 let row;
-const gitRaw = 'https://raw.githubusercontent.com';
-const gitUrl = 'https://github.com';
 let theme;
 
 // TODO решить проблему с темой и добавить для неё разные стили (после интеграции можно будет попробовать прокинуть событие смены темы)
@@ -250,8 +249,7 @@ function toogleLoader(show) {
 function getAllPluginsData() {
 	for (const guid in allPlugins) {
 		const cur = allPlugins[guid];
-		// gitRaw + cur.Url + '/master/config.json'
-		let pluginUrl = gitRaw + cur.Url + (cur.Url.includes('sdkjs-plugins') ? '/config.json' : '/master/config.json');
+		let pluginUrl = allPlugins[guid].configUrl;
 		makeRequest(pluginUrl).then(
 			function(response) {
 				let config = JSON.parse(response);
@@ -300,7 +298,7 @@ function createPluginDiv(guid) {
 			bHasUpdate = true;
 	}
 
-	let imageUrl = gitRaw + allPlugins[guid].Url + (allPlugins[guid].Url.includes('sdkjs-plugins') ? '' : 'master/');
+	let imageUrl = allPlugins[guid].imageUrl;
 	let variations = allPlugins[guid].config.variations[0];
 	// TODO решить вопрос со scale, чтобы выбирать нужную иконку
 	if (variations.icons2) {
@@ -313,7 +311,7 @@ function createPluginDiv(guid) {
 			}
 		}
 		imageUrl += icon['200%'].normal;
-	} else if (!variations.isSystem) {
+	} else if (!variations.isSystem && imageUrl != '') {
 		// TODO наверно надо переделать во всех плагинах, где это ещё осталось
 		imageUrl += variations.icons[0];
 	} else {
@@ -351,17 +349,18 @@ function onClickItemButton(target, type) {
 	// click on install/remove button
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message;
+	let confUrl = allPlugins[guid].configUrl.replace('raw.githubusercontent', 'github');
 	switch (type) {
 		case 'Install':
 			message = {
 				type : 'install',
-				url : gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? (allPlugins[guid].Url.replace('plugins/master', 'plugins/blob/master') + 'config.json') : (allPlugins[guid].Url + 'blob/master/config.json'))
+				url : confUrl.replace('master', 'blob/master')
 			};
 			break;
 		case 'Update':
 			message = {
 				type : 'update',
-				url : gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? (allPlugins[guid].Url.replace('plugins/master', 'plugins/blob/master') + 'config.json') : (allPlugins[guid].Url + 'blob/master/config.json'))
+				url : confUrl.replace('master', 'blob/master')
 			};
 			break;
 		case 'Remove':
@@ -402,7 +401,8 @@ function onClickItem(target) {
 		if (lastV > installedV)
 			bHasUpdate = true;
 	}
-	let pluginUrl = gitUrl + (allPlugins[guid].Url.includes('sdkjs-plugins') ? allPlugins[guid].Url.replace('plugins/master', 'plugins/tree/master') : allPlugins[guid].Url);
+	let confUrl = allPlugins[guid].configUrl.replace('raw.githubusercontent', 'github');
+	let pluginUrl = (allPlugins[guid].configUrl.includes('sdkjs-plugins') ? confUrl.replace('master', 'tree/master').replace('config.json', '') : confUrl.replace('master/config.json', ''));
 	// TODO проблема с тем, что в некоторых иконках плагинов есть отступ сверху, а в некоторых его нет (исходя их этого нужен разный отступ у span справа, чтобы верхние края совпадали)
 	elements.divSelected.setAttribute('data-guid', guid);
 	elements.imgIcon.setAttribute('src', target.children[0].src);
