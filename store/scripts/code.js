@@ -16,19 +16,19 @@
  *
  */
 
-// todo ссылки при install/update поправить
-let allPlugins;								// list of all plugins from config
-let installedPlugins;						// list of intalled plugins
-const configUrl = './config.json';			// url to config.json
-const elements = {};						// all elements
-const isDesctop = true;						// window.AscDesktopEditor !== undefined;
-let isLoading = false;						// flag loading
-let loader;									// loader
-var Ps;										// perfect scrollbar
-const lang = detectLanguage() || "en-EN";	// current language
-const shorLang = lang.split('-')[0];		// short language
-let bTranslate = false;						// flag translate or not
-let translate = 							// translations for current language
+let allPlugins;                                               // list of all plugins from config
+let installedPlugins;                                         // list of intalled plugins
+const configUrl = './config.json';                            // url to config.json
+const elements = {};                                          // all elements
+const isDesctop = window.AscDesktopEditor !== undefined;      // desctop detecting
+let isLoading = false;                                        // flag loading
+let loader;                                                   // loader
+var Ps;                                                       // perfect scrollbar
+let theme = parent.localStorage.getItem('ui-theme-id') || ''; // current theme
+const lang = detectLanguage() || "en-EN";                     // current language
+const shortLang = lang.split('-')[0];                         // short language
+let bTranslate = false;                                       // flag translate or not
+let translate =                                               // translations for current language
 {
 	"My plugins": "My plugins",
 	"Marketplace": "Marketplace",
@@ -48,17 +48,33 @@ let translate = 							// translations for current language
 	"with the plugin functionality on our forum." : "with the plugin functionality on our forum.",
 	"Create a new plugin using" : "Create a new plugin using"
 }
+//it's necessary because we show loader before all (and getting translations too)
+switch (shortLang) {
+	case 'ru':
+		translate["Loading"] = "Загрузка"
+		break;
+	case 'fr':
+		translate["Loading"] = "Chargement"
+		break;
+	case 'es':
+		translate["Loading"] = "Carga"
+		break;
+	case 'de':
+		translate["Loading"] = "Laden"
+		break;
+	case 'cs':
+		translate["Loading"] = "Načítání"
+		break;
+}
 // for making preview
 let counter = 0;
 let row;
-let theme;
 
-// TODO решить проблему с темой и добавить для неё разные стили (после интеграции можно будет попробовать прокинуть событие смены темы)
-// в теории её можно достать из parent.localStorage.getItem('ui-theme-id')
+// TODO для того, чтобы лоадер работал нормально нужно создать такой объект (так как он из него берет информацию о теме)
 window.Asc = {
 	plugin : {
 		theme : {
-			type : 'light'
+			type :  JSON.parse(parent.localStorage.getItem('ui-theme')).type
 		}
 	}
 }
@@ -68,49 +84,43 @@ getTranslation();
 // fetch all plugins from config
 fetchAllPlugins();
 // get all installed plugins
-sendMessage({type : 'getInstalled'}, '*');
-detectLanguage();
+setTimeout(function(){
+	// для того, чтобы плагин успел запуститься и не слать кучу сообщений для временного решения
+	sendMessage({type : 'getInstalled'}, '*');
+}, 500);
 
 window.onload = function() {
-	// detect theme (this is not currently in use)
-	theme = parent.localStorage.getItem('ui-theme-id') || '';
-	console.log('detected theme: ' + theme);
 	// init element
 	initElemnts();
 
-	if (shorLang == "en") {
+	if (shortLang == "en") {
+		// if nothing to translate
 		showMarketplace();
 	}
 
 	elements.btnMyPlugins.onclick = function() {
 		// click on my plugins button
-		if ( !this.classList.contains('btn_selected') ) {
-			elements.btnMarketplace.classList.remove('btn_selected');
-			this.classList.add('btn_selected');
+		if ( !this.classList.contains('primary') ) {
+			elements.btnMarketplace.classList.remove('submit','primary');
+			this.classList.add('submit','primary');
 			elements.linkNewPlugin.innerHTML = translate["Install plugin manually"];
-			elements.divMain.innerHTML = "";
-			counter = 0;
-			installedPlugins.forEach(function(el) {
-				createPluginDiv(el.guid);
-			});
+			showListofPlugins(false);
 		}
 	};
 
 	elements.btnMarketplace.onclick = function() {
 		// click on marketplace button
 		if ( !this.classList.contains('primary') ) {
-			elements.btnMyPlugins.classList.remove('btn_selected');
-			this.classList.add('btn_selected');
+			elements.btnMyPlugins.classList.remove('submit','primary');
+			this.classList.add('submit','primary');
 			elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
-			elements.divMain.innerHTML = "";
-			for (const guid in allPlugins) {
-				createPluginDiv(guid);	
-			}
+			showListofPlugins(true);
 		}
 	};
 
 	elements.arrow.onclick = function() {
 		// click on left arrow in preview mode
+		document.getElementById('span_overview').click();
 		elements.divSelected.classList.add('hidden');
 		elements.divSelectedMain.classList.add('hidden');
 		elements.divBody.classList.remove('hidden');
@@ -124,22 +134,96 @@ window.onload = function() {
 	};
 
 	if (isLoading) {
-		toogleLoader(true);
+		toogleLoader(true, "Loading");
 	}
 };
 
-window.addEventListener('message', function(event) {
-	// get message from editors
-	switch (event.data.type) {
-		case 'installed':
-			installedPlugins = event.data.data;
+window.addEventListener('message', function(message) {
+	// getting messages from editor
+	message = JSON.parse(message.data);
+	switch (message.type) {
+		case 'InstalledPlugins':
+			installedPlugins = message.data;
 			if (allPlugins)
 				getAllPluginsData();
 			break;
-	
-		default:
+		case 'Installed':
+			let plugin = allPlugins.find(function(el){ return el.guid === message.guid});
+			installedPlugins.push(
+				{
+					url: plugin.url,
+					guid: message.guid,
+					canRemoved: true,
+					obj: plugin
+				}
+			);
+
+			if (elements.btnMarketplace.classList.contains('primary')) {
+				let btn = this.document.getElementById(message.guid).lastChild.lastChild;
+				btn.innerHTML = translate['Remove'];
+				btn.onclick = function(e) {
+					onClickRemove(e.target);
+				};
+			}
+
+			if (!elements.divSelected.classList.contains('hidden')) {
+				this.document.getElementById('btn_install').classList.add('hidden');
+				this.document.getElementById('btn_remove').classList.remove('hidden');
+			}
+
+			toogleLoader(false);
 			break;
-	}
+		case 'Updated':
+			let installed = installedPlugins.find(function(el) {
+				return (el.guid == message.guid);
+			});
+			let config = allPlugins.find(function(el){ return el.guid === message.guid});
+
+			installed.obj.version = config.version;
+
+			if (!elements.divSelected.classList.contains('hidden')) {
+				this.document.getElementById('btn_update').classList.add('hidden');
+			}
+
+			this.document.getElementById(message.guid).lastChild.firstChild.remove();
+			toogleLoader(false);
+			break;
+		case 'Removed':
+			installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
+
+			if (elements.btnMyPlugins.classList.contains('primary')) {
+				showListofPlugins(false);
+			} else {
+				let btn = this.document.getElementById(message.guid).lastChild.lastChild;
+				btn.innerHTML = translate['Install'];
+				btn.onclick = function(e) {
+					onClickInstall(e.target);
+				};
+				if (btn.parentNode.childElementCount > 1) {
+					btn.parentNode.firstChild.remove();
+				}
+			}
+
+			if (!elements.divSelected.classList.contains('hidden')) {
+				this.document.getElementById('btn_remove').classList.add('hidden');
+				this.document.getElementById('btn_install').classList.remove('hidden');
+				this.document.getElementById('btn_update').classList.add('hidden');
+			}
+
+			toogleLoader(false);
+			break;
+		case 'Error':
+			createError(message.error);
+			toogleLoader(false);
+			break;
+		case 'Theme':
+			let rule = '\n.asc-plugin-loader{background-color:' + message.theme['background-normal'] +';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}';
+			let styleTheme = document.createElement('style');
+            styleTheme.type = 'text/css';
+            styleTheme.innerHTML = message.style + rule;
+            document.getElementsByTagName('head')[0].appendChild(styleTheme);
+			break;
+	};
 }, false);
 
 function fetchAllPlugins() {
@@ -151,9 +235,9 @@ function fetchAllPlugins() {
 				getAllPluginsData();
 		},
 		function(err) {
-			//TODO make error preview
-			console.error(err);
+			createError(err);
 			isLoading = false;
+			toogleLoader(false);
 		}
 	);
 };
@@ -170,10 +254,12 @@ function makeRequest(url) {
 			if (this.readyState == 4) {
 				if (this.status == 200 || location.href.indexOf("file:") == 0) {
 					setTimeout(() => {
-					resolve(this.response);
-						
-					}, 1000);
+						resolve(this.response);
+					}, 500);
 					// resolve(this.response);
+				}
+				if (this.status >= 400) {
+					reject(new Error(this.response));
 				}
 			}
 		};
@@ -192,7 +278,7 @@ function sendMessage(message) {
 };
 
 function detectLanguage() {
-	// TODO в теории язык можно вытащить из parent.location.search
+	// this function detects current language
 	if (parent.location && parent.location.search) {
 		let _langSearch = parent.location.search;
 		let _pos1 = _langSearch.indexOf("lang=");
@@ -235,71 +321,105 @@ function initElemnts() {
 	elements.linkPlugin = document.getElementById('link_plugin');
 };
 
-function toogleLoader(show) {
+function toogleLoader(show, text) {
 	// show or hide loader
 	if (!show) {
+		document.getElementById('loader-container').classList.add('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;	
 	} else if(!loader) {
+		document.getElementById('loader-container').classList.remove('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
-		loader = showLoader($('#loader-container')[0], 'Loading...');
+		loader = showLoader($('#loader-container')[0], (translate[text] || text) + '...');
 	}
 };
 
 function getAllPluginsData() {
-	for (const guid in allPlugins) {
-		const cur = allPlugins[guid];
-		let pluginUrl = allPlugins[guid].configUrl;
+	// get config file for each item in config.json
+	let counter = 0;
+	allPlugins.forEach(function(pluginUrl, i, arr) {
+		counter++;
 		makeRequest(pluginUrl).then(
 			function(response) {
+				counter--;
 				let config = JSON.parse(response);
-				let guid = config.guid.substring(5, 41);
-				allPlugins[guid].config = config;
-				createPluginDiv(guid);
-				Ps.update();
-				isLoading = false;
-				toogleLoader(false)
+				config.url = pluginUrl;
+				arr[i] = config;
+				// Ps.update();
+				if (!counter) {
+					isLoading = false;
+					showListofPlugins(true);
+					toogleLoader(false);
+				}
 			},
 			function(err) {
-				//TODO make error preview
-				console.error(err);
-				isLoading = false;
-				toogleLoader(false);
+				// TODO решить проблему, если не получили конфиг, чтобы у нас не было лишних (пустых элементов)
+				createError(err);
+				if (!counter) {
+					isLoading = false;
+					showListofPlugins(true);
+					toogleLoader(false);
+				}
 			}
 		);
-	}
+	})
 	Ps = new PerfectScrollbar('#' + "div_main", {});
 };
 
+function showListofPlugins(bAll) {
+	// show list of plugins
+	elements.divMain.innerHTML = "";
+	counter = 0;
+	if (bAll) {
+		// show all plugins
+		allPlugins.forEach(function(plugin) {
+			if (plugin)
+				createPluginDiv(plugin, false);
+		});
+	} else if (installedPlugins.length) {
+		// show only installed
+		// TODO подумать над тем, что если в списке установленных есть плагин, которого нет в маркетплейсе
+		installedPlugins.forEach(function(plugin) {
+			createPluginDiv(plugin, true);
+		});
+	} else {
+		// if no istalled plugins and my plugins button was clicked
+		createNotification('No plugins istalled.');
+	}
 
-function createPluginDiv(guid) {
-	// TODO добавить надпись что плагинов установленных нет
+}
+
+function createPluginDiv(plugin, bInstalled) {
 	// this function creates div (preview) for plugins
 	// TODO может сделать динамическое количество элементов в одной строке
 	if (counter <= 0 || counter >= 4) {
 		row = document.createElement('div');
 		row.className = "div_row"
-		document.getElementById('div_main').append(row);
+		elements.divMain.append(row);
 		counter = 1;
 	}
 
 	let div = document.createElement('div');
-	div.setAttribute('data-guid', guid);
+	div.id = plugin.guid;
+	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item';
-	let installed = installedPlugins.find(function(el) {
-		return (el.guid == guid);
-	});
-	
+	let installed = bInstalled ? plugin : installedPlugins.find( function(el) { return (el.guid == plugin.guid); } );
 	let bHasUpdate = false;
 	if (isDesctop && installed) {
-		let installedV = installed.obj.version.split('.').join('');
-		let lastV = allPlugins[guid].config.version.split('.').join('');
+		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
+		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
 			bHasUpdate = true;
 	}
 
-	let imageUrl = allPlugins[guid].imageUrl;
-	let variations = allPlugins[guid].config.variations[0];
+	// TODO либо в getInstalled возвращать ещё и url или делать такой поиск для картинки
+	if (bInstalled)
+		plugin = allPlugins.find(function(el){
+			return el.guid === plugin.guid
+		});
+	if (!plugin) return;
+	let imageUrl = plugin.url.replace('config.json','');
+	let variations = plugin.variations[0];
 	// TODO решить вопрос со scale, чтобы выбирать нужную иконку
 	if (variations.icons2) {
 		//
@@ -318,8 +438,8 @@ function createPluginDiv(guid) {
 		imageUrl = "./resources/img/defaults/light/icon@2x.png"
 	}
 	// TODO подумать от куда брать цвет на фон под картинку (может в config добавить)
-	let name = (bTranslate && allPlugins[guid].config.nameLocale) ? allPlugins[guid].config.nameLocale[shorLang] : allPlugins[guid].config.name;
-	let description = (bTranslate && variations.descriptionLocale) ? variations.descriptionLocale[shorLang] : variations.description;
+	let name = (bTranslate && plugin.nameLocale) ? plugin.nameLocale[shortLang] : plugin.name;
+	let description = (bTranslate && variations.descriptionLocale) ? variations.descriptionLocale[shortLang] : variations.description;
 	let template = '<div class="div_image" onclick="onClickItem(event.target)">' +
 						// временно поставил такие размеры картинки (чтобы выглядело симминтрично пока)
 						'<img style="width:56px;" src="' + imageUrl + '">' +
@@ -334,8 +454,8 @@ function createPluginDiv(guid) {
 							: ''
 						)+''+
 						(installed
-							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, event.target.innerText)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_install" onclick="onClickItemButton(event.target, event.target.innerText)">'  + translate["Install"] + '</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickRemove(event.target)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn-text-default btn_install" onclick="onClickInstall(event.target)">'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -345,40 +465,49 @@ function createPluginDiv(guid) {
 	Ps.update();
 };
 
-function onClickItemButton(target, type) {
-	// click on install/remove button
+function onClickInstall(target) {
+	// click install button
+	toogleLoader(true, "Installation");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
-	let message;
-	let confUrl = allPlugins[guid].configUrl.replace('raw.githubusercontent', 'github');
-	switch (type) {
-		case 'Install':
-			message = {
-				type : 'install',
-				url : confUrl.replace('master', 'blob/master')
-			};
-			break;
-		case 'Update':
-			message = {
-				type : 'update',
-				url : confUrl.replace('master', 'blob/master')
-			};
-			break;
-		case 'Remove':
-			message = {
-				type : 'remove',
-				guid: guid
-			};
-			break;
-	}
+	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
+	let message = {
+		type : 'install',
+		url : plugin.url, //replace('raw.githubusercontent', 'github').replace('master', 'blob/master'),
+		guid : guid,
+		config : plugin
+	};
+	sendMessage(message);
+};
 
-	// TODO наверно хотелось бы получать сообщения о том успешно ли прошел процесс установки/удаления/лбновления (чтобы уже в этом окне отобразить изменения)
+function onClickUpdate(target) {
+	// click update button
+	toogleLoader(true, "Updating");
+	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
+	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
+	let message = {
+		type : 'update',
+		url : plugin.url,
+		guid : guid,
+		config : plugin
+	};
+	sendMessage(message);
+};
+
+function onClickRemove(target) {
+	// click remove button
+	toogleLoader(true, "Removal");
+	let guid = target.parentNode.parentNode.getAttribute('data-guid');
+	let message = {
+		type : 'remove',
+		guid : guid
+	};
 	sendMessage(message);
 };
 
 function onClickItem(target) {
 	// There we will make preview for selected plugin
 	// TODO продумать где брать offered by и где брать текс для этого блока (может из конфига) (так же переводы для него надо добавить)
-	let offered = "TESTdsadasddasdasdasdasdas";
+	let offered = " Ascensio System SIA";
 	let description = "Correct French grammar and typography. The plugin uses Grammalecte, an open-source grammar and typographic corrector dedicated to the French language.Correct French grammar and typography."
 
 	elements.divSelected.classList.remove('hidden');
@@ -393,16 +522,19 @@ function onClickItem(target) {
 	let installed = installedPlugins.find(function(el) {
 		return (el.guid == guid);
 	});
+	let plugin = allPlugins.find(function(el) {
+		return (el.guid == guid);
+	});
 
 	let bHasUpdate = false;
 	if (isDesctop && installed) {
 		let installedV = installed.obj.version.split('.').join('');
-		let lastV = allPlugins[guid].config.version.split('.').join('');
+		let lastV = plugin.version.split('.').join('');
 		if (lastV > installedV)
 			bHasUpdate = true;
 	}
-	let confUrl = allPlugins[guid].configUrl.replace('raw.githubusercontent', 'github');
-	let pluginUrl = (allPlugins[guid].configUrl.includes('sdkjs-plugins') ? confUrl.replace('master', 'tree/master').replace('config.json', '') : confUrl.replace('master/config.json', ''));
+	let confUrl = plugin.url.replace('raw.githubusercontent', 'github');
+	let pluginUrl = (plugin.url.includes('sdkjs-plugins') ? confUrl.replace('master', 'tree/master').replace('config.json', '') : confUrl.replace('master/config.json', ''));
 	// TODO проблема с тем, что в некоторых иконках плагинов есть отступ сверху, а в некоторых его нет (исходя их этого нужен разный отступ у span справа, чтобы верхние края совпадали)
 	elements.divSelected.setAttribute('data-guid', guid);
 	elements.imgIcon.setAttribute('src', target.children[0].src);
@@ -429,7 +561,7 @@ function onClickItem(target) {
 		elements.btnInstall.classList.remove('hidden');
 	}
 
-	if (allPlugins[guid].config.variations[0].isVisual) {
+	if (plugin.variations[0].isVisual) {
 		elements.imgScreenshot.setAttribute('src', './resources/img/screenshotes/' + guid + '.png');
 		elements.imgScreenshot.classList.remove('hidden');
 	} else {
@@ -457,10 +589,39 @@ function onSelectPreview(target, isOverview) {
 	}
 };
 
+function createNotification(text) {
+	// creates any notification for user inside elements.divMain window (you should clear this element before making notification)
+	let div = document.createElement('div');
+	div.className = 'div_notification';
+	let span = document.createElement('span');
+	span.className = 'span_notification';
+	span.innerHTML = translate[text] || text;
+	div.append(span);
+	elements.divMain.append(div);
+};
+
+function createError(err) {
+	// creates a modal window with error message for user and error in console
+	console.error(err);
+	let background = document.createElement('div');
+	background.className = 'asc-plugin-loader';
+	let span = document.createElement('span');
+	span.className = 'error_caption';
+	span.innerHTML = err.message;
+	background.append(span);
+	document.getElementById('div_error').append(background);
+	document.getElementById('div_error').classList.remove('hidden');
+	setTimeout(function() {
+		// remove error after 5 seconds
+		background.remove();
+		document.getElementById('div_error').classList.add('hidden');
+	}, 5000);
+};
+
 function setDivHeight() {
 	// set height for div with image in preview mode
-	Ps.update();
-	console.log(Math.round(window.devicePixelRatio * 100));
+	if (Ps) Ps.update();
+	// console.log(Math.round(window.devicePixelRatio * 100));
 	let div = document.getElementById("div_selected_image");
 	if (div) {
 		let height = div.parentNode.clientHeight - div.previousElementSibling.clientHeight - 20 + "px";
@@ -475,7 +636,8 @@ window.onresize = function() {
 };
 
 function getTranslation() {
-	if (shorLang != "en") {
+	// gets translation for current language
+	if (shortLang != "en") {
 		makeRequest('./translations/langs.json').then(
 			function(response) {
 				let arr = JSON.parse(response);
@@ -485,7 +647,7 @@ function getTranslation() {
 					if (file == lang) {
 						fullName = file;
 						break;
-					} else if (file.split('-')[0] == shorLang) {
+					} else if (file.split('-')[0] == shortLang) {
 						shortName = file;
 					}
 				}
@@ -497,7 +659,7 @@ function getTranslation() {
 							onTranslate();
 						},
 						function(err) {
-							console.error(err);
+							createError(new Error('Cannot load translation for current language.'));
 							showMarketplace();
 						}
 					);
@@ -506,7 +668,7 @@ function getTranslation() {
 				}	
 			},
 			function(err) {
-				console.error(err);
+				createError(err);
 				showMarketplace();
 			}
 		);
@@ -514,6 +676,7 @@ function getTranslation() {
 };
 
 function onTranslate() {
+	// translates elements on current language
 	elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
 	elements.btnMyPlugins.innerHTML = translate["My plugins"];
 	elements.btnMarketplace.innerHTML = translate["Marketplace"];
@@ -535,6 +698,8 @@ function onTranslate() {
 };
 
 function showMarketplace() {
+	// show main window to user
 	elements.divBody.classList.remove('hidden');
-	elements.divHeader.classList.remove('hidden');
+	// убираем пока шапку, так как в плагине есть своя
+	// elements.divHeader.classList.remove('hidden');
 };

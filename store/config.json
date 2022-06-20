@@ -1,218 +1,56 @@
-{
-	"A103601F-FDA0-418A-BC37-A514031894C0" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-autocomplete/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-autocomplete/master/"
-	},
-	"E6978D28-0441-4BD7-8346-82FAD68BCA3B" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-macros/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-macros/master/"
-	},
-	"BE5CBF95-C0AD-4842-B157-AC40FEDD9441" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-mendeley/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-mendeley/master/"
-	},
-	"440EBF13-9B19-4BD8-8621-05200E58140B" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-ocr/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-ocr/master/"
-	},
-	"38E022EA-AD92-45FC-B22B-49DF39746DB4" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-youtube/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-youtube/master/"
-	},
-	"7327FC95-16DA-41D9-9AF2-0E7F449F6800" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-translator/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-translator/master/"
-	},
-	"0847b6a4-b007-11e7-abc4-cec278b6b50a" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordpress/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordpress/master/"
-	},
-	"BE5CBF95-C0AD-4842-B157-AC40FEDD9841" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-highlightcode/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-highlightcode/master/"
-	},
-	"c9d216a5-4f1a-49f2-9ff0-67c510a73523" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-easybib/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-easybib/master/"
-	},
-	"BE5CBF95-C0AD-4842-B157-AC40FEDD9840" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-thesaurus/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-thesaurus/master/"
-	},
-	"07FD8DFA-DFE0-4089-AL24-0730933CC80A" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-photoeditor/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-photoeditor/master/"
-	},
-	"BFC5D5C6-89DE-4168-9565-ABD8D1E48711" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-zotero/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-zotero/master/"
-	},
-	"D71C2EF0-F15B-47C7-80E9-86D671F9C595" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-speech/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-speech/master/"
-	},
-	"b78a062b-e349-4634-8a44-99825600d299" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-deepl/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-deepl/master/"
-	},
-	"7CDB02C9-A0BF-4B56-9A1A-71C860B8498F" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-languagetool/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-languagetool/master/"
-	},
-	"B631E142-E40B-4B4C-90B9-2D00222A286E" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-glavred/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-glavred/master/"
-	},
-	"E5773A43-F9B3-4E81-81D9-CE0A132470E7" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-telegram/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-telegram/master/"
-	},
-	"0743b63f-cb32-438c-b46b-81ce182ff4f7" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-rainbow/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-rainbow/master/"
-	},
-	"7645D461-84BC-4FB0-A42C-98118C14A1CD" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-jitsi/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-jitsi/master/"
-	},
-	"584EEEE8-DBF5-45C3-A4CA-F52177C82754" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordscounter/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordscounter/master/"
-	},
-	"DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-drawio/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-drawio/master/"
-	},
-	"E581C417-3C80-4BC2-B42D-502850FDC1E7" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-html/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-html/master/"
-	},
-	"9b224050-2354-4c1b-822b-03a97f61c79d" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-apertium/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-apertium/master/"
-	},
-	"55159EC6-C91A-4DDB-8E1E-558454666461" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-typograf/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-typograf/master/"
-	},
-	"6ef67492-a111-4ca5-bd4f-bf02645afc61" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-grammalecte/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-grammalecte/master/"
-	},
-	"5aff455d-96c4-4bd8-9658-16e5bc143738" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-doc2md/master/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/plugin-doc2md/master/"
-	},
-	"FFE1F462-1EA2-4391-990D-4CC84940B754" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/chess/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/chess/"
-	},
-	"5C521CB8-FD20-4CA3-83D7-1EEB8F4DC759" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/clippy/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/clippy/"
-	},
-	"89643394-0F74-4297-9E0B-541A67F1E98C" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_add_comment_in_cell/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_add_comment_in_cell/"
-	},
-	"5F9D4EB4-AF61-46EF-AE25-46C96E75E1DD" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/cbr/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/cbr/"
-	},
-	"CD4E451C-6928-43A4-B641-ECBBF688AC76" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_add_content_controls/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_add_content_controls/"
-	},
-	"111735E0-69A7-4D4A-9ABE-F58FD70F488D" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_controls/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_controls/"
-	},
-	"C05D81BC-92C7-4C48-BA49-E8B9AAFCD776" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_custom_fields_add_2/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_custom_fields_add_2/"
-	},
-	"4E2B5030-E1BE-41FA-BEE3-7E9BE7B5BFCF" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_customfields_add/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_customfields_add/"
-	},
-	"E5A81B17-C871-4C4B-A90A-62D3A7EC0751" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_customfields_load/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_customfields_load/"
-	},
-	"91EAC419-EF8B-440C-A960-B451C7DF3A37" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_extended_comments/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_extended_comments/"
-	},
-	"7CC733B1-9B26-4977-926E-D212B13F2B70" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_insert_content_and_document/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_insert_content_and_document/"
-	},
-	"EF5735E0-69A7-4D4A-9ABE-F58FD70F488D" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_move_cursor/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_move_cursor/"
-	},
-	"EF5735E0-69A7-4D4A-9ABE-F58FD70F488J" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_search_and_change_text_background_color/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_search_and_change_text_background_color/"
-	},
-	"5FF5F75F-2977-4B98-8D36-7C406D610B90" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_search_replace/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_search_replace/"
-	},
-	"F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_speech_input/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_speech_input/"
-	},
-	"267D986E-C41D-4E3E-BA4D-54AA6CB952EF" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls/"
-	},
-	"639E69BC-58DE-4029-9B43-F0420F67E6F9" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_combo/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_combo/"
-	},
-	"C9945AC2-8275-4F9B-92E4-CA1104D7305B" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_content/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_content/"
-	},
-	"C36DDFB5-08F0-4A68-B829-5FB1F7D49728" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_navigation/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_navigation/"
-	},
-	"C36DDFB5-08F0-4A68-B829-5FB1F7D49331" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_tags/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_tags/"
-	},
-	"A8705DEE-7544-4C33-B3D5-168406D92F72" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/externallistener/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/externallistener/"
-	},
-	"0616AE85-5DBE-4B6B-A0A9-455C4F1503AD" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/helloworld/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/helloworld/"
-	},
-	"6B6715E5-A558-4F70-8058-40704CD659CF" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/invoices/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/invoices/"
-	},
-	"902F74A4-89F2-4028-8DB0-BD913E07335C" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/num2word/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/num2word/"
-	},
-	"C820F3CC-1248-4CA2-8D0F-D7EFD44DE09C" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/searchAndReplaceOnStart/config.json",
-		"imageUrl" : ""
-	},
-	"CF3A000F-C6B4-451D-AC0B-F3DDAB1880D2" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/settings/config.json",
-		"imageUrl" : ""
-	},
-	"03C18A8D-8E01-444A-86EB-EDDFA7773157" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/symboltable/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/symboltable/"
-	},
-	"94DF0B57-299D-4F68-AF6F-9A6BB53F3031" : {
-		"configUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/templates/config.json",
-		"imageUrl" : "https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/templates/"
-	}
-}
+[
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-autocomplete/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-macros/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-mendeley/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-ocr/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-youtube/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-translator/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordpress/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-highlightcode/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-easybib/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-thesaurus/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-photoeditor/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-zotero/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-speech/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-deepl/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-languagetool/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-glavred/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-telegram/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-rainbow/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-jitsi/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-wordscounter/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-drawio/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-html/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-apertium/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-typograf/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-grammalecte/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/plugin-doc2md/master/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/chess/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/clippy/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_add_comment_in_cell/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/cbr/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_add_content_controls/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_controls/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_custom_fields_add_2/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_customfields_add/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_customfields_load/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_extended_comments/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_insert_content_and_document/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_move_cursor/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_search_and_change_text_background_color/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_search_replace/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_speech_input/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_combo/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_content/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_navigation/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/example_work_with_content_controls_tags/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/externallistener/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/helloworld/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/invoices/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/num2word/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/searchAndReplaceOnStart/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/settings/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/symboltable/config.json",
+	"https://raw.githubusercontent.com/ONLYOFFICE/sdkjs-plugins/master/templates/config.json"
+]
