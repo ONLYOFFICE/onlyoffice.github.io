@@ -1,11 +1,14 @@
 (function(window, undefined){
 	var oElements, oPs, sText;
+	var aPropsToPaste = [];
+	var sSplitText = " > ";
 
 	window.Asc.plugin.init = function(text)
 	{
-		sText = text.trim();
-		if (sText !== "" && $('#props').hasClass('display-none') == true)
+		if (text.trim() !== "" && $('#props').hasClass('display-none') == true)
 		{
+			sText = text.trim();
+
 			$('#info').hide();
 			$('#mainContainer').show();
 			$('input').val(sText);
@@ -96,6 +99,107 @@
 			updateScroll();
 		});
 	})
+
+	$(document).on('copy', function(e) {
+		if (e.target === document.getElementById('search-fld') || e.target === document.getElementById('main-label'))
+			return;
+		
+		aPropsToPaste = [];
+		if (window.getSelection && false == $("#props").hasClass('display-none')) {
+			var sSelectedText = window.getSelection().toString();
+			var sSelectedHTML = prepareHtmlToPaste(getSelectionHtml());
+			
+			sSelectedHTML += `<p><strong>Source:</strong> ${sText} - <a href="https://terminologie.finances.gouv.fr/">https://terminologie.finances.gouv.fr/</a></p>`;
+
+			e.originalEvent.clipboardData.setData('text/html', sSelectedHTML);
+			e.originalEvent.clipboardData.setData('text/plain', sSelectedText);
+			e.preventDefault();
+		}
+	})
+
+	function getSelectionHtml() {
+		var html = "";
+		if (typeof window.getSelection != "undefined") {
+			var sel = window.getSelection();
+			if (sel.rangeCount) {
+				var container = document.createElement("div");
+				for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+					container.appendChild(sel.getRangeAt(i).cloneContents());
+				}
+				
+				html = container.innerHTML;
+			}
+		} else if (typeof document.selection != "undefined") {
+			if (document.selection.type == "Text") {
+				html = document.selection.createRange().htmlText;
+			}
+		}
+		return {
+			container: container,
+			html: container.innerHTML
+		};
+	}
+
+	function prepareHtmlToPaste(oInfo) {
+		var container = oInfo.container;
+		
+		var sHtmlToPaste = '';
+		var aProps = container.getElementsByClassName('prop');
+		var aChildNodes = container.childNodes;
+
+		function preparePropsChilds(aChilds) {
+			var sHtml = '';
+			
+			for (var nChild = 0; nChild < aChilds.length; nChild++) {
+				// prop label
+				if ($(aChilds[nChild]).hasClass('prop-head')) {
+					var labelElm = aChilds[nChild].getElementsByClassName('prop-label')[0];
+					if (labelElm)
+						sHtml += '<span>' + labelElm.textContent + ': ' + '</span>';
+				}
+				// prop definition
+				else if ($(aChilds[nChild]).hasClass('prop-value')) {
+					sHtml += '"' + aChilds[nChild].textContent + '"';
+				}
+				// group elems
+				else if ($(aChilds[nChild]).hasClass('grp-wrap')) {
+					var aGroupElms = aChilds[nChild].childNodes;
+					for (var nElm = 0; nElm < aGroupElms.length; nElm++) {
+						if ($(aGroupElms[nElm]).hasClass('span-link')) {
+							sHtml += `<a href="${aGroupElms[nElm].getAttribute('href')}">` + aGroupElms[nElm].textContent + '</a>';
+						}
+						if ($(aGroupElms[nElm]).hasClass('span-sep')) {
+							sHtml += aGroupElms[nElm].textContent;
+						}
+					}
+					sHtml += "<br>"
+				}
+				// link
+				else if ($(aChilds[nChild]).hasClass('span-link')) {
+					sHtml += `<a href="${aChilds[nChild].getAttribute('href')}">` + aChilds[nChild].textContent + '</a>';
+				}
+				else {
+					sHtml += '<span>' + aChilds[nChild].textContent + '</span>';
+				}
+			}
+			
+			return sHtml;
+		}
+
+		if (aProps.length > 0) {
+			for (var nProp = 0; nProp < aProps.length; nProp++) {
+				sHtmlToPaste += '<p>';
+				var aChildElms = aProps[nProp].childNodes;
+				sHtmlToPaste += preparePropsChilds(aChildElms);
+				sHtmlToPaste += '</p>';
+			}
+		}
+		else {
+			sHtmlToPaste += preparePropsChilds(aChildNodes);
+		}
+
+		return sHtmlToPaste;
+	}
 
 	function GetDefinitions(sText){
 		showLoader(oElements, true);
@@ -276,7 +380,7 @@
 							if (ind != nCount - 1) {
 								var oSep = $('<span>', {
 									"class": 'span-sep',
-									text: ">",
+									text: sSplitText,
 								});
 								oSep.appendTo(oGroupWrap);
 							}
@@ -332,6 +436,7 @@
 			oPara.AddText('Source: ' + Asc.scope.word + ' -');
 			oHyperlink = Api.CreateHyperlink('https://terminologie.finances.gouv.fr/', 'https://terminologie.finances.gouv.fr/');
 			oPara.Push(oHyperlink);
+			aContent.push(oPara);
 
 			// footnote style
 			var oStyle = oDocument.GetStyle('footnote text');
@@ -389,7 +494,6 @@
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
         $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
-        $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 
         // if (!isIE) {
         //     $('#clear').css('border-bottom', 'var(--scaled-one-pixel, 1px) dotted ' + window.Asc.plugin.theme["text-normal"]);
