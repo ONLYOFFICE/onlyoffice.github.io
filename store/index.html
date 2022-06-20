@@ -26,24 +26,26 @@
 </head>
 	<body>
 		<div id="div_header" class="header noselect hidden">
-			<span id="arrow" class="arrow hidden">&#8592;</span>
+			<!-- <span id="arrow" class="arrow hidden">&#8592;</span> -->
 			<label id="lbl_header" class="aboutlable header">Manage plugins</label>
 			<span id="close" class="close">&times;</span>
 		</div>
 		<div id="div_body" class="div_body hidden">
 			<div id="toolbar" class="toolbar noselect">
 				<div class="toolbar_buttons">
-					<button id="btn_myPlugins" class="btn-text-default">My plugins</button>
-					<button id="btn_marketplace" class="btn-text-default btn_selected">Marketplace</button>
+					<button id="btn_myPlugins" class="btn_menu btn-text-default">My plugins</button>
+					<button id="btn_marketplace" class="btn_menu btn-text-default submit primary">Marketplace</button>
 				</div>
 				<div class="toolbar_link">
 					<!-- TODO подумать над тем, как открывать форму для загрузки -->
-					<a id="link_newPlugin" class="aboutlink link_submit" target="blank" href="https://htmldom.dev/make-a-resizable-element/">Submit your own plugin</a>
+					<a id="link_newPlugin" class="aboutlink link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
 				</div>
 			</div>
 			<div id="div_main" class="main_content noselect"></div>
 		</div>
 		<div id="div_selected_toolbar" class="div_selected_toolbar hidden">
+			<!-- временно пока сюда добавил стрелку, чтобы назад можно было вернуться -->
+			<span id="arrow" class="arrow hidden">&#8592;</span>
 			<!-- временно поставил такие размеры картинки 56 (чтобы выглядело симминтрично пока) -->
 			<div style="width:56px">
 				<img id="img_icon" style="height:56px">
@@ -55,9 +57,9 @@
 					<span id="span_offered"></span>
 				</div>
 				<div>
-					<button id="btn_update" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, event.target.innerText)">Update</button>
-					<button id="btn_remove" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, event.target.innerText)">Remove</button>
-					<button id="btn_install" class="btn-text-default btn_preview" onclick="onClickItemButton(event.target.parentNode, event.target.innerText)">Install</button>
+					<button id="btn_update" class="btn-text-default btn_preview" onclick="onClickUpdate(event.target)">Update</button>
+					<button id="btn_remove" class="btn-text-default btn_preview" onclick="onClickRemove(event.target.parentNode)">Remove</button>
+					<button id="btn_install" class="btn-text-default btn_preview" onclick="onClickInstall(event.target.parentNode)">Install</button>
 				</div>
 			</div>
 		</div>
@@ -99,6 +101,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="loader-container" class="asc-loader-container div_loader"></div>
+		<div id="div_error" class="error_main hidden"><div class="loader_background"></div></div>
+		<div id="loader-container" class="asc-loader-container div_loader"><div class="loader_background"></div></div>
 	</body>
 </html>

@@ -1,0 +1,81 @@
+[submodule "store/submodels/plugin-macros"]
+	path = store/submodels/plugin-macros
+	url = https://github.com/ONLYOFFICE/plugin-macros.git
+[submodule "store/submodels/plugin-autocomplete"]
+	path = store/submodels/plugin-autocomplete
+	url = https://github.com/ONLYOFFICE/plugin-autocomplete.git
+[submodule "store/submodels/plugin-mendeley"]
+	path = store/submodels/plugin-mendeley
+	url = https://github.com/ONLYOFFICE/plugin-mendeley.git
+[submodule "store/submodels/plugin-ocr"]
+	path = store/submodels/plugin-ocr
+	url = https://github.com/ONLYOFFICE/plugin-ocr.git
+[submodule "store/submodels/plugin-youtube"]
+	path = store/submodels/plugin-youtube
+	url = https://github.com/ONLYOFFICE/plugin-youtube.git
+[submodule "store/submodels/plugin-translator"]
+	path = store/submodels/plugin-translator
+	url = https://github.com/ONLYOFFICE/plugin-translator.git
+[submodule "store/submodels/plugin-wordpress"]
+	path = store/submodels/plugin-wordpress
+	url = https://github.com/ONLYOFFICE/plugin-wordpress.git
+[submodule "store/submodels/plugin-highlightcode"]
+	path = store/submodels/plugin-highlightcode
+	url = https://github.com/ONLYOFFICE/plugin-highlightcode.git
+[submodule "store/submodels/plugin-easybib"]
+	path = store/submodels/plugin-easybib
+	url = https://github.com/ONLYOFFICE/plugin-easybib.git
+[submodule "store/submodels/plugin-thesaurus"]
+	path = store/submodels/plugin-thesaurus
+	url = https://github.com/ONLYOFFICE/plugin-thesaurus.git
+[submodule "store/submodels/plugin-photoeditor"]
+	path = store/submodels/plugin-photoeditor
+	url = https://github.com/ONLYOFFICE/plugin-photoeditor.git
+[submodule "store/submodels/plugin-zotero"]
+	path = store/submodels/plugin-zotero
+	url = https://github.com/ONLYOFFICE/plugin-zotero.git
+[submodule "store/submodels/plugin-speech"]
+	path = store/submodels/plugin-speech
+	url = https://github.com/ONLYOFFICE/plugin-speech.git
+[submodule "store/submodels/plugin-deepl"]
+	path = store/submodels/plugin-deepl
+	url = https://github.com/ONLYOFFICE/plugin-deepl.git
+[submodule "store/submodels/plugin-languagetool"]
+	path = store/submodels/plugin-languagetool
+	url = https://github.com/ONLYOFFICE/plugin-languagetool.git
+[submodule "store/submodels/plugin-glavred"]
+	path = store/submodels/plugin-glavred
+	url = https://github.com/ONLYOFFICE/plugin-glavred.git
+[submodule "store/submodels/plugin-telegram"]
+	path = store/submodels/plugin-telegram
+	url = https://github.com/ONLYOFFICE/plugin-telegram.git
+[submodule "store/submodels/plugin-rainbow"]
+	path = store/submodels/plugin-rainbow
+	url = https://github.com/ONLYOFFICE/plugin-rainbow.git
+[submodule "store/submodels/plugin-jitsi"]
+	path = store/submodels/plugin-jitsi
+	url = https://github.com/ONLYOFFICE/plugin-jitsi.git
+[submodule "store/submodels/plugin-wordscounter"]
+	path = store/submodels/plugin-wordscounter
+	url = https://github.com/ONLYOFFICE/plugin-wordscounter.git
+[submodule "store/submodels/plugin-drawio"]
+	path = store/submodels/plugin-drawio
+	url = https://github.com/ONLYOFFICE/plugin-drawio.git
+[submodule "store/submodels/plugin-html"]
+	path = store/submodels/plugin-html
+	url = https://github.com/ONLYOFFICE/plugin-html.git
+[submodule "store/submodels/plugin-apertium"]
+	path = store/submodels/plugin-apertium
+	url = https://github.com/ONLYOFFICE/plugin-apertium.git
+[submodule "store/submodels/plugin-typograf"]
+	path = store/submodels/plugin-typograf
+	url = https://github.com/ONLYOFFICE/plugin-typograf.git
+[submodule "store/submodels/plugin-grammalecte"]
+	path = store/submodels/plugin-grammalecte
+	url = https://github.com/ONLYOFFICE/plugin-grammalecte.git
+[submodule "store/submodels/plugin-doc2md"]
+	path = store/submodels/plugin-doc2md
+	url = https://github.com/ONLYOFFICE/plugin-doc2md.git
+[submodule "store/submodels/sdkjs-plugins"]
+	path = store/submodels/sdkjs-plugins
+	url = https://github.com/ONLYOFFICE/sdkjs-plugins.git

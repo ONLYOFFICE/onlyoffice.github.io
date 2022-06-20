@@ -7,14 +7,18 @@
 	"Install": "Установить",
 	"Remove": "Удалить",
 	"Update": "Обновить",
-	"Offered by" : "Предложено",
+	"Offered by": "Предложено",
 	"Overview": "Обзор",
 	"Info & Support": "Информация & Поддержка",
 	"Learn how to use": "Узнайте как использовать",
-	"the plugin in" : "плагин в",
+	"the plugin in": "плагин в",
 	"Contribute": "Внесите свой вклад",
-	"to the plugin developmen or report an issue on" : "в разработку плагина или сообщите о проблеме на",
+	"to the plugin developmen or report an issue on": "в разработку плагина или сообщите о проблеме на",
 	"Get help": "Получите помощь",
-	"with the plugin functionality on our forum." : "с функциональностью плагина на нашем форуме.",
-	"Create a new plugin using" : "Создайте новый плагин используя"
+	"with the plugin functionality on our forum.": "с функциональностью плагина на нашем форуме.",
+	"Create a new plugin using": "Создайте новый плагин используя",
+	"Loading": "Загрузка",
+	"Installation": "Установка",
+	"Updating": "Обновление",
+	"Removal": "Удаление"
 }
