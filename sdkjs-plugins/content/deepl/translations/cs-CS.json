@@ -1,0 +1,13 @@
+{
+  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Chcete -li používat DeepL, přihlaste se k odběru plánu DeepL API na oficiálním webu DeepL. Zkopírujte klíč API a vložte jej do zadaného pole.",
+  "Learn more here.": "Více se dozvíte zde.",
+  "Save": "Uložit",
+  "Target language": "Cílový jazyk",
+  "Enter text manually": "Zadejte text ručně",
+  "Hide field": "Skrýt pole",
+  "Translating...": "Překlad...",
+  "Loading languages...": "Načítání jazyků",
+  "Copy": "Kopírovat",
+  "Insert to document": "Vložte do dokumentu",
+  "Reconfigure API key": "Překonfigurujte klíč API"
+}
