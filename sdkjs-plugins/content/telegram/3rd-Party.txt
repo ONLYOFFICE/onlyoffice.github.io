@@ -1,0 +1,7 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. telegram-react app. The app is based on the ReactJS JavaScript framework and TDLib (Telegram Database library) compiled to WebAssembly. (https://github.com/evgeny-nadymov/telegram-react)
+
+License:        GNU GENERAL PUBLIC LICENSE
+License File:   telegram-react.license
