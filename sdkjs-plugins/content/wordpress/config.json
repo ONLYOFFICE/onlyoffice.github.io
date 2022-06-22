@@ -1,0 +1,60 @@
+{
+    "name"       : "WordPress",
+    "guid"       : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
+    "baseUrl"    : "",
+    "version": "1.0.0",
+    "variations" : [
+        {
+            "description"         : "WordPress",
+            "url"                 : "index.html",
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+            "isViewer"            : false,
+            "EditorsSupport"      : ["word"],
+            "initDataType"        : "html",
+            "isVisual"            : true,
+            "isModal"             : false,
+            "isInsideMode"        : true,
+            "isUpdateOleOnResize" : false
+        }
+    ]
+}
