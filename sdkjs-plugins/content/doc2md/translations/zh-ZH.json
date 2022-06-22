@@ -1,0 +1,11 @@
+{
+  "Copy": "复制自",
+  "Show settings": "显示设置",
+  "Hide settings": "隐藏设置",
+  "Render HTML tags": "渲染HTML标签",
+  "Demote headings (H1 → H2, etc.)": "降级标题（H1→H2，等等）。)",
+  "HTML headings/IDs": "HTML标题/IDs",
+  "Create base64 images": "创建base64图像",
+  "Suppress top comment": "抑制顶部评论",
+  "Help": "选择Markdown或HTML。\n* 默认：转换整个文档。\n* 选择文本以限制范围。"
+}
