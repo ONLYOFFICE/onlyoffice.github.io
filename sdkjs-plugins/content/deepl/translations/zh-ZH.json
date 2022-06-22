@@ -1,0 +1,13 @@
+{
+  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "要使用DeepL，请在DeepL官方网站订阅DeepL API计划。 复制API密钥并将其插入指定的字段中。",
+  "Learn more here.": "点击此处了解更多信息。",
+  "Save": "保存",
+  "Target language": "目标语言",
+  "Enter text manually": "手动输入文本",
+  "Hide field": "隐藏字段",
+  "Translating...": "翻译...",
+  "Loading languages...": "加载语言",
+  "Copy": "复制",
+  "Insert to document": "插入到文档",
+  "Reconfigure API key": "重新配置API密钥"
+}

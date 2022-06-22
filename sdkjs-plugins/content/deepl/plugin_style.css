@@ -1,0 +1,188 @@
+.blur {
+    filter: blur(3px);
+}
+
+.flex {
+    display: flex;
+}
+
+.flexSize {
+    flex: 1;
+}
+
+.flexCenter {
+    align-items: center;
+    justify-content: center;
+}
+
+.flexCol {
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+#errorWrapper {
+    background-color: #ffffff;
+    padding: 10px 12px;
+	color: #D9534F;
+}
+
+/* loader */
+
+.cssload-container {
+    z-index: 1;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.cssload-loading i {
+    width: 19px;
+    height: 19px;
+    display: inline-block;
+    border-radius: 50%;
+    background: rgb(68, 68, 68);
+}
+
+    .cssload-loading i:first-child {
+        opacity: 0;
+        animation: cssload-loading-ani2 0.58s linear infinite;
+        -o-animation: cssload-loading-ani2 0.58s linear infinite;
+        -ms-animation: cssload-loading-ani2 0.58s linear infinite;
+        -webkit-animation: cssload-loading-ani2 0.58s linear infinite;
+        -moz-animation: cssload-loading-ani2 0.58s linear infinite;
+        transform: translate(-19px);
+        -o-transform: translate(-19px);
+        -ms-transform: translate(-19px);
+        -webkit-transform: translate(-19px);
+        -moz-transform: translate(-19px);
+    }
+
+    .cssload-loading i:nth-child(2),
+    .cssload-loading i:nth-child(3) {
+        animation: cssload-loading-ani3 0.58s linear infinite;
+        -o-animation: cssload-loading-ani3 0.58s linear infinite;
+        -ms-animation: cssload-loading-ani3 0.58s linear infinite;
+        -webkit-animation: cssload-loading-ani3 0.58s linear infinite;
+        -moz-animation: cssload-loading-ani3 0.58s linear infinite;
+    }
+
+    .cssload-loading i:last-child {
+        animation: cssload-loading-ani1 0.58s linear infinite;
+        -o-animation: cssload-loading-ani1 0.58s linear infinite;
+        -ms-animation: cssload-loading-ani1 0.58s linear infinite;
+        -webkit-animation: cssload-loading-ani1 0.58s linear infinite;
+        -moz-animation: cssload-loading-ani1 0.58s linear infinite;
+    }
+
+@keyframes cssload-loading-ani1 {
+    100% {
+        transform: translate(39px);
+        opacity: 0;
+    }
+}
+
+@-o-keyframes cssload-loading-ani1 {
+    100% {
+        -o-transform: translate(39px);
+        opacity: 0;
+    }
+}
+
+@-ms-keyframes cssload-loading-ani1 {
+    100% {
+        -ms-transform: translate(39px);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes cssload-loading-ani1 {
+    100% {
+        -webkit-transform: translate(39px);
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes cssload-loading-ani1 {
+    100% {
+        -moz-transform: translate(39px);
+        opacity: 0;
+    }
+}
+
+@keyframes cssload-loading-ani2 {
+    100% {
+        transform: translate(19px);
+        opacity: 1;
+    }
+}
+
+@-o-keyframes cssload-loading-ani2 {
+    100% {
+        -o-transform: translate(19px);
+        opacity: 1;
+    }
+}
+
+@-ms-keyframes cssload-loading-ani2 {
+    100% {
+        -ms-transform: translate(19px);
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes cssload-loading-ani2 {
+    100% {
+        -webkit-transform: translate(19px);
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes cssload-loading-ani2 {
+    100% {
+        -moz-transform: translate(19px);
+        opacity: 1;
+    }
+}
+
+@keyframes cssload-loading-ani3 {
+    100% {
+        transform: translate(19px);
+    }
+}
+
+@-o-keyframes cssload-loading-ani3 {
+    100% {
+        -o-transform: translate(19px);
+    }
+}
+
+@-ms-keyframes cssload-loading-ani3 {
+    100% {
+        -ms-transform: translate(19px);
+    }
+}
+
+@-webkit-keyframes cssload-loading-ani3 {
+    100% {
+        -webkit-transform: translate(19px);
+    }
+}
+
+@-moz-keyframes cssload-loading-ani3 {
+    100% {
+        -moz-transform: translate(19px);
+    }
+}
+
+
+/* end loader */
+
+.display-none {
+    display: none !important;
+}
