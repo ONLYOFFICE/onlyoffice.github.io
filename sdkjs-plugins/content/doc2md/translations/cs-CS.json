@@ -1,0 +1,11 @@
+{
+  "Copy": "Kopírovat",
+  "Show settings": "Zobrazit nastavení",
+  "Hide settings": "Skrýt nastavení",
+  "Render HTML tags": "Vykreslování značek HTML",
+  "Demote headings (H1 → H2, etc.)": "Přeřazení nadpisů (H1 → H2 atd.)",
+  "HTML headings/IDs": "Nadpisy/ID HTML",
+  "Create base64 images": "Vytvoření obrázků base64",
+  "Suppress top comment": "Potlačit horní komentář",
+  "Help": "Vyberte Markdown nebo HTML.\n* Výchozí: převod celého dokumentu.\n* Vyberte text pro omezení rozsahu."
+}
