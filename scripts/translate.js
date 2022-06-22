@@ -37,6 +37,7 @@
 	var message = "This plugin doesn't work in Internet Explorer."
 	var txt;
 	var paste_done  = true;
+	var translated = '';
 	
 	window.Asc.plugin.init = function(text)
 	{
@@ -163,6 +164,7 @@
 					}
 				});
 				ifr.contentWindow.postMessage("update_scroll", '*');
+				ifr.contentWindow.postMessage({type: 'translate', text: translated}, '*')
 			}
 		} else {
 			ifr.contentWindow.postMessage(txt, '*');
@@ -218,15 +220,14 @@
 			if (field)
 				field.innerHTML = message = window.Asc.plugin.tr(message);
 		}
-		
+		translated = window.Asc.plugin.tr('Select Language');
 	};
     window.Asc.plugin.onThemeChanged = function(theme)
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
 		var style = document.getElementsByTagName('head')[0].lastChild;
 		if (ifr && ifr.contentWindow)
-			setTimeout(()=>ifr.contentWindow.postMessage({theme,style : style.innerHTML}, '*'),600);
+			setTimeout(()=>ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*'),600);
 	};
-
 
 })(window, undefined);
