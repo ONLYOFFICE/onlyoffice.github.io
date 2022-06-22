@@ -1,0 +1,251 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Speech settings</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<script src="scripts/settings.js"></script>
+    <style>
+	</style>
+</head>
+<style>
+	html, body {
+		height: 100% !important;
+	}
+	.select2-container--default .select2-results > .select2-results__options {
+		max-height: 115px;
+	}
+	input[type=range] {
+	  width: 100%;
+	  margin: 11px 0;
+	  background-color: transparent;
+	  -webkit-appearance: none;
+	}
+	input[type=range]:focus {
+	  outline: none;
+	}
+	input[type=range]::-webkit-slider-runnable-track {
+	  background: #ffffff;
+	  border: 0.1px solid #010101;
+	  width: 100%;
+	  height: 0px;
+	  cursor: pointer;
+	}
+	input[type=range]::-webkit-slider-thumb {
+	  margin-top: -11.1px;
+	  width: 16px;
+	  height: 22px;
+	  background: #ffffff;
+	  border: 0.2px solid rgba(0, 0, 0, 0.4);
+	  border-radius: 5px;
+	  cursor: pointer;
+	  -webkit-appearance: none;
+	}
+	input[type=range]:focus::-webkit-slider-runnable-track {
+	  background: #ffffff;
+	}
+	input[type=range]::-moz-range-track {
+	  background: #ffffff;
+	  border: 0.1px solid #010101;
+	  width: 100%;
+	  height: 0px;
+	  cursor: pointer;
+	}
+	input[type=range]::-moz-range-thumb {
+	  width: 16px;
+	  height: 22px;
+	  background: #ffffff;
+	  border: 0.2px solid rgba(0, 0, 0, 0.4);
+	  border-radius: 5px;
+	  cursor: pointer;
+	}
+	input[type=range]::-ms-track {
+	  background: transparent;
+	  border-color: transparent;
+	  border-width: 11px 0;
+	  color: transparent;
+	  width: 100%;
+	  height: 0px;
+	  cursor: pointer;
+	}
+	input[type=range]::-ms-fill-lower {
+	  background: #f2f2f2;
+	  border: 0.1px solid #010101;
+	}
+	input[type=range]::-ms-fill-upper {
+	  background: #ffffff;
+	  border: 0.1px solid #010101;
+	}
+	input[type=range]::-ms-thumb {
+	  width: 16px;
+	  height: 22px;
+	  background: #ffffff;
+	  border: 0.2px solid rgba(0, 0, 0, 0.4);
+	  border-radius: 5px;
+	  cursor: pointer;
+	  margin-top: 0px;
+	  /*Needed to keep the Edge thumb centred*/
+	}
+	input[type=range]:focus::-ms-fill-lower {
+	  background: #ffffff;
+	}
+	input[type=range]:focus::-ms-fill-upper {
+	  background: #ffffff;
+	}
+	/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
+	how to remove the virtical space around the range input in IE*/
+	@supports (-ms-ime-align:auto) {
+	  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
+	  input[type=range] {
+		margin: 0;
+		/*Edge starts the margin from the thumb, not the track as other browsers do*/
+	  }
+	}
+
+	input[type=range] {
+	  width: 100%;
+	  margin: 11px 0;
+	  background-color: transparent;
+	  -webkit-appearance: none;
+	}
+	input[type=range]:focus {
+	  outline: none;
+	}
+	input[type=range]::-webkit-slider-runnable-track {
+	  background: #ffffff;
+	  border: 0.1px solid #010101;
+	  width: 100%;
+	  height: 0px;
+	  cursor: pointer;
+	}
+	input[type=range]::-webkit-slider-thumb {
+	  margin-top: -11.1px;
+	  width: 16px;
+	  height: 22px;
+	  background: #ffffff;
+	  border: 0.2px solid rgba(0, 0, 0, 0.4);
+	  border-radius: 5px;
+	  cursor: pointer;
+	  -webkit-appearance: none;
+	}
+	input[type=range]:focus::-webkit-slider-runnable-track {
+	  background: #ffffff;
+	}
+	input[type=range]::-moz-range-track {
+	  background: #ffffff;
+	  border: 0.1px solid #010101;
+	  width: 100%;
+	  height: 0px;
+	  cursor: pointer;
+	}
+	input[type=range]::-moz-range-thumb {
+	  width: 16px;
+	  height: 22px;
+	  background: #ffffff;
+	  border: 0.2px solid rgba(0, 0, 0, 0.4);
+	  border-radius: 5px;
+	  cursor: pointer;
+	}
+	input[type=range]::-ms-track {
+	  background: transparent;
+	  border-color: transparent;
+	  border-width: 11px 0;
+	  color: transparent;
+	  width: 100%;
+	  height: 0px;
+	  cursor: pointer;
+	}
+	input[type=range]::-ms-fill-lower {
+	  background: #f2f2f2;
+	  border: 0.1px solid #010101;
+	}
+	input[type=range]::-ms-fill-upper {
+	  background: #ffffff;
+	  border: 0.1px solid #010101;
+	}
+	input[type=range]::-ms-thumb {
+	  width: 16px;
+	  height: 22px;
+	  background: #ffffff;
+	  border: 0.2px solid rgba(0, 0, 0, 0.4);
+	  border-radius: 5px;
+	  cursor: pointer;
+	  margin-top: 0px;
+	  /*Needed to keep the Edge thumb centred*/
+	}
+	input[type=range]:focus::-ms-fill-lower {
+	  background: #ffffff;
+	}
+	input[type=range]:focus::-ms-fill-upper {
+	  background: #ffffff;
+	}
+	/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
+	how to remove the virtical space around the range input in IE*/
+	@supports (-ms-ime-align:auto) {
+	  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
+	  input[type=range] {
+		margin: 0;
+		/*Edge starts the margin from the thumb, not the track as other browsers do*/
+	  }
+	}
+
+</style>
+<body style="padding-left: 20px; padding-right: 20px">
+	<select id="voice-lang">
+		<option data-lang="id-ID" data-name="Google Bahasa Indonesia">Google Bahasa Indonesia (id-ID)</option>
+		<option data-lang="de-DE" data-name="Google Deutsch">Google Deutsch (de-DE)</option>
+		<option data-lang="es-ES" data-name="Google español">Google español (es-ES)</option>
+		<option data-lang="es-US" data-name="Google español de Estados Unidos">Google español de Estados Unidos (es-US)</option>
+		<option data-lang="fr-FR" data-name="Google français">Google français (fr-FR)</option>
+		<option data-lang="it-IT" data-name="Google italiano">Google italiano (it-IT)</option>
+		<option data-lang="nl-NL" data-name="Google Nederlands">Google Nederlands (nl-NL)</option>
+		<option data-lang="pl-PL" data-name="Google polski">Google polski (pl-PL)</option>
+		<option data-lang="pt-BR" data-name="Google português do Brasil">Google português do Brasil (pt-BR)</option>
+		<option data-lang="en-GB" data-name="Google UK English Female">Google UK English Female (en-GB)</option>
+		<option data-lang="en-GB" data-name="Google UK English Male">Google UK English Male (en-GB)</option>
+		<option data-lang="en-US" data-name="Google US English">Google US English (en-US)</option>
+		<option data-lang="ru-RU" data-name="Google русский">Google русский (ru-RU)</option>
+		<option data-lang="hi-IN" data-name="Google हिन्दी">Google हिन्दी (hi-IN)</option>
+		<option data-lang="zh-TW" data-name="Google 國語（臺灣）">Google 國語（臺灣） (zh-TW)</option>
+		<option data-lang="ja-JP" data-name="Google 日本語">Google 日本語 (ja-JP)</option>
+		<option data-lang="ko-KR" data-name="Google 한국의">Google 한국의 (ko-KR)</option>
+		<option data-lang="zh-CN" data-name="Google&nbsp;普通话（中国大陆）">Google&nbsp;普通话（中国大陆） (zh-CN)</option>
+		<option data-lang="zh-HK" data-name="Google&nbsp;粤語（香港）">Google&nbsp;粤語（香港） (zh-HK)</option>
+		<option data-lang="en-US" data-name="Microsoft David - English (United States)">Microsoft David - English (United States) (en-US) -- DEFAULT</option>
+		<option data-lang="ru-RU" data-name="Microsoft Irina - Russian (Russia)">Microsoft Irina - Russian (Russia) (ru-RU)</option>
+		<option data-lang="en-US" data-name="Microsoft Mark - English (United States)">Microsoft Mark - English (United States) (en-US)</option>
+		<option data-lang="ru-RU" data-name="Microsoft Pavel - Russian (Russia)">Microsoft Pavel - Russian (Russia) (ru-RU)</option>
+		<option data-lang="en-US" data-name="Microsoft Zira - English (United States)">Microsoft Zira - English (United States) (en-US)</option>
+	</select>
+	<div style="margin-top: 12px; display: flex; flex-direction: column;">
+		<div style="display: flex; flex-direction: row; justify-content: space-between;"><label for="rate">Rate</label><div class="rate-value">1</div></div>
+      	<div class="clearfix"></div>
+		<input type="range" min="0.5" max="2" value="1" step="0.1" id="rate">
+    </div>
+	<div style="margin-top: 12px; display: flex; flex-direction: column;">
+     	<div style="display: flex; flex-direction: row; justify-content: space-between;"><label for="pitch">Pitch</label><div class="pitch-value">1</div></div>
+		<input type="range" min="0" max="2" value="1" step="0.1" id="pitch">
+     	<div class="clearfix"></div>
+    </div>
+</body>
+</html>
