@@ -1,0 +1,7 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. Jitsi is a collection of Open Source projects which provide state-of-the-art video conferencing capabilities that are secure, easy to use and easy to self-host. (https://meet.jit.si/)
+
+License:        Apache version 2.0
+License File:   jisty.license
