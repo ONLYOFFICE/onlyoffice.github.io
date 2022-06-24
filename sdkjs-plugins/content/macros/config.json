@@ -1,0 +1,100 @@
+{
+    "name": "Macros",
+    "nameLocale": {
+        "ru": "Макросы",
+        "fr": "Macros",
+        "es": "Macros",
+        "de": "Makros"
+    },
+    "guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
+    "version": "1.0.1",
+    "group": {
+        "name": "Macros",
+        "rank": 2
+    },
+
+    "variations": [
+        {
+            "description": "Macros",
+            "descriptionLocale": {
+                "ru": "Макросы",
+                "fr": "Macros",
+                "es": "Macros",
+                "de": "Makros"
+            },
+            "url": "index.html",
+            "help" : " https://api.onlyoffice.com/plugin/macros",
+
+
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+
+            "initDataType": "",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "primary": true
+                },
+                {
+                    "text": "Cancel",
+                    "primary": false,
+                    "textLocale": {
+                        "ru": "Отмена",
+                        "fr": "Annuler",
+                        "es": "Cancelar",
+                        "de": "Abbrechen"
+                    }
+                }
+            ]
+        }
+    ]
+}
