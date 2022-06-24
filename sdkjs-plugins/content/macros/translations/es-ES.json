@@ -1,0 +1,10 @@
+{
+    "New": "Crear",
+    "Delete": "Eliminar",
+    "Rename": "Renombrar",
+    "Autostart" : "Autoencendido",
+    "Run": "Ejecutar",
+	"Cancel" : "Cancelar",
+    "Macros" : "Macros",
+    "Title" : "El nombre no debe estar vacío"
+}
