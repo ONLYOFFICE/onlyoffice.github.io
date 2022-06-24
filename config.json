@@ -2,7 +2,7 @@
     "name"       : "EasyBib",
     "guid"       : "asc.{c9d216a5-4f1a-49f2-9ff0-67c510a73523}",
     "baseUrl"    : "",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "variations" : [
         {
             "description"         : "EasyBib",
