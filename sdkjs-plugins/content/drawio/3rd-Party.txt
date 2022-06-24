@@ -1,0 +1,7 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. draw.io, this project, is a configurable diagramming/whiteboarding visualization application. draw.io is owned and developed by JGraph Ltd, a UK based software company. (https://github.com/jgraph/drawio)
+
+License:        Apache License 2.0
+License File:   drawio.license
