@@ -1,0 +1,188 @@
+﻿<!--
+ (c) Copyright Ascensio System SIA 2010
+
+ This program is a free software product. You can redistribute it and/or
+ modify it under the terms of the GNU Affero General Public License (AGPL)
+ version 3 as published by the Free Software Foundation. In accordance with
+ Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ that Ascensio System SIA expressly excludes the warranty of non-infringement
+ of any third-party rights.
+
+ This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+
+ You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ street, Riga, Latvia, EU, LV-1050.
+
+ The  interactive user interfaces in modified source and object code versions
+ of the Program must display Appropriate Legal Notices, as required under
+ Section 5 of the GNU AGPL version 3.
+
+ Pursuant to Section 7(b) of the License you must retain the original Product
+ logo when distributing the program. Pursuant to Section 7(e) we decline to
+ grant you any rights under trademark law for use of our trademarks.
+
+ All the Product's GUI elements, including illustrations and icon sets, as
+ well as technical writing content are licensed under the terms of the
+ Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mendeley</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="resources/css/plugin_style.css">
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <script src="scripts/thirdparty/fetch.umd.js"></script>
+    <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
+    <script src="scripts/thirdparty/url-polyfill.min.js"></script>
+    <script src="scripts/mendeley-sdk/standalone.min.js"></script>
+    <script src="scripts/citeproc/citeproc_commonjs.js"></script>
+</head>
+<body spellcheck="false" class="noselect">
+    <div id="loader" class="cssload-container display-none">
+        <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div id="errorWrapper" class="errorMsg display-none defaultlable"></div>
+
+    <div id="content">
+
+        <div id="mainCont" class="flexCol">
+
+            <div id="configState" class="display-none">
+                <div><span class="i18n">To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-mendeley/tree/master#configuration" class="link i18n">Learn more here.</a></div>
+                <input id="redirectConfig" readonly class="mrtop control text wide form-control" />
+                <div id="redirectUrlCopy" class="button wide control i18n btn-text-default">Copy Link and Open Form</div>
+                <div class="i18n">In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</div>
+                <div class="mrtop label">
+                    <span class="i18n">Application ID</span>
+                    <input id="appIdField" autocomplete="off" class="control text wide i18n form-control" type="text" placeholder="Application ID" />
+                </div>
+                <div id="saveConfigBtn" class="button wide control i18n btn-text-default">Save</div>
+            </div>
+
+            <div id="loginState" class="display-none">
+                <span class="i18n">This plugin help you search references by author, title or year in your own library</span>
+                <div id="loginBtn" class="button wide control i18n btn-text-default">Login</div>
+                <div id="reconfigBtn" class="button wide control i18n btn-text-default">Reconfigure</div>
+            </div>
+
+            <div id="mainState" class="flexCol flexSize display-none">
+                <div id="selectedWrapper">
+                    <div class="flexCol flexSize flexCenter">
+                        <div id="selectedHolder"></div>
+                    </div>
+                    <div id="selectedThumb" class="scrollThumb display-none"></div>
+                </div>
+                <label id="searchLabel">
+                    <input id="searchField" autocomplete="off" class="control text i18n form-control" type="text" placeholder="Search references by author, title or year" />
+                    <span id="searchClear" class="display-none">&#xd7;</span>
+                </label>
+                <div id="docsWrapper" class="flexSize">
+                    <div class="flexCol flexSize">
+                        <div id="docsHolder" class="flexCol"></div>
+                        <div class="flex flexCenter">
+                            <div id="libLoader" class="cssload-loading display-none"><i></i><i></i><i></i><i></i></div>
+                        </div>
+                    </div>
+                    <div id="docsThumb" class="scrollThumb display-none"></div>
+                </div>
+                <div id="controlsHolder" class="flexCol">
+                    <div id="buttonsWrapper" class="flex display-none">
+                        <div id="insertBibBtn" class="button control i18n btn-text-default">Insert Bibliography</div>
+                        <div id="insertLinkBtn" class="button control i18n btn-text-default">Insert Link</div>
+                        <div id="cancelBtn" class="button control i18n btn-text-default">Cancel</div>
+                    </div>
+                    <div id="styleWrapper">
+                        <div class="label">
+                            <span class="defaultlable">Style</span>
+                            <div class="selectHolder">
+                                <input id="styleSelect" class="control select form-control" type="text" placeholder="Enter style name">
+                                <div id="styleSelectList" class="selectList display-none form-control">
+                                </div>
+                                <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
+                            </div>
+                        </div>
+                        <div class="label">
+                            <span class="defaultlable">Language</span>
+                            <div class="selectHolder">
+                                <input id="styleLang" readonly class="control select form-control" type="text">
+                                <div id="styleLangList" class="selectList display-none form-control">
+                                    <span data-value="af-ZA">Afrikaans</span>
+                                    <span data-value="ar">Arabic</span>
+                                    <span data-value="bg-BG">Bulgarian</span>
+                                    <span data-value="ca-AD">Catalan</span>
+                                    <span data-value="cs-CZ">Czech</span>
+                                    <span data-value="cy-GB">Welsh</span>
+                                    <span data-value="da-DK">Danish</span>
+                                    <span data-value="de-AT">German (Austria)</span>
+                                    <span data-value="de-CH">German (Switzerland)</span>
+                                    <span data-value="de-DE">German (Germany)</span>
+                                    <span data-value="el-GR">Greek</span>
+                                    <span data-value="en-GB">English (UK)</span>
+                                    <span selected data-value="en-US">English (US)</span>
+                                    <span data-value="es-CL">Spanish (Chile)</span>
+                                    <span data-value="es-ES">Spanish (Spain)</span>
+                                    <span data-value="es-MX">Spanish (Mexico)</span>
+                                    <span data-value="et-EE">Estonian</span>
+                                    <span data-value="eu">Basque</span>
+                                    <span data-value="fa-IR">Persian</span>
+                                    <span data-value="fi-FI">Finnish</span>
+                                    <span data-value="fr-CA">French (Canada)</span>
+                                    <span data-value="fr-FR">French (France)</span>
+                                    <span data-value="he-IL">Hebrew</span>
+                                    <span data-value="hr-HR">Croatian</span>
+                                    <span data-value="hu-HU">Hungarian</span>
+                                    <span data-value="id-ID">Indonesian</span>
+                                    <span data-value="is-IS">Icelandic</span>
+                                    <span data-value="it-IT">Italian</span>
+                                    <span data-value="ja-JP">Japanese</span>
+                                    <span data-value="km-KH">Khmer</span>
+                                    <span data-value="ko-KR">Korean</span>
+                                    <span data-value="la">Latin</span>
+                                    <span data-value="lt-LT">Lithuanian</span>
+                                    <span data-value="lv-LV">Latvian</span>
+                                    <span data-value="mn-MN">Mongolian</span>
+                                    <span data-value="nb-NO">Norwegian (Bokmål)</span>
+                                    <span data-value="nl-NL">Dutch</span>
+                                    <span data-value="nn-NO">Norwegian (Nynorsk)</span>
+                                    <span data-value="pl-PL">Polish</span>
+                                    <span data-value="pt-BR">Portuguese (Brazil)</span>
+                                    <span data-value="pt-PT">Portuguese (Portugal)</span>
+                                    <span data-value="ro-RO">Romanian</span>
+                                    <span data-value="ru-RU">Russian</span>
+                                    <span data-value="sk-SK">Slovak</span>
+                                    <span data-value="sl-SI">Slovenian</span>
+                                    <span data-value="sr-RS">Serbian</span>
+                                    <span data-value="sv-SE">Swedish</span>
+                                    <span data-value="th-TH">Thai</span>
+                                    <span data-value="tr-TR">Turkish</span>
+                                    <span data-value="uk-UA">Ukrainian</span>
+                                    <span data-value="vi-VN">Vietnamese</span>
+                                    <span data-value="zh-CN">Chinese (PRC)</span>
+                                    <span data-value="zh-TW">Chinese (Taiwan)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="footerCont">
+            <span><a href="https://mendeley.com/" target="_blank" class="link i18n">Open Mendeley website</a></span>
+            <span id="logoutLink" class="link display-none i18n defaultlable">Logout</span>
+        </div>
+
+    </div>
+
+    <script src="scripts/code.js"></script>
+</body>
+</html>
