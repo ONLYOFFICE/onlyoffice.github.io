@@ -1,0 +1,19 @@
+Plugin-ocr uses code from the following 3rd party projects.
+
+
+1. Tesseract.js is a javascript library that gets words in almost any language out of images. (https://tesseract.projectnaptha.com/)
+
+License:        Apache License, version 2.0
+License File:   Tesseract.license
+
+
+2. jQuery - Query is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development. (http://jquery.com/)
+
+License:        MIT License
+License File:   jQuery.license
+
+
+3. Select2 gives you a customizable select box with support for searching, tagging, remote data sets, infinite scrolling, and many other highly used options. (https://select2.org/)
+
+License:        MIT
+License File:   Select2.license
