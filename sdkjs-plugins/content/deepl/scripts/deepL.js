@@ -226,24 +226,26 @@ function getMessage(key) {
                 curr_api_url = pro_api_url;
                 Translate(apikey, targetLanguage, sParams);
             }
-            isValidKey = false;
-            showLoader(elements, false);
-            container = document.getElementById('txt_shower');
-            if (!$('#txt_shower').hasClass('error'))
-                $('#txt_shower').toggleClass('error');
-            if (!$('#api-value').hasClass('error_api'))
-                $('#api-value').toggleClass('error_api');
-            if (apikey == '') {
-                container.innerHTML = "API key required!";
-            }
             else {
-                if (oResponse.status === 403) {
-                    if (!$('#api-value').hasClass('img_error'))
-                        $('#api-value').toggleClass('img_error');
-                    container.innerHTML = "API key is not valid!"
+                isValidKey = false;
+                showLoader(elements, false);
+                container = document.getElementById('txt_shower');
+                if (!$('#txt_shower').hasClass('error'))
+                    $('#txt_shower').toggleClass('error');
+                if (!$('#api-value').hasClass('error_api'))
+                    $('#api-value').toggleClass('error_api');
+                if (apikey == '') {
+                    container.innerHTML = "API key required!";
                 }
-                else
-                    container.innerHTML = "Connection failed!";
+                else {
+                    if (oResponse.status === 403) {
+                        if (!$('#api-value').hasClass('img_error'))
+                            $('#api-value').toggleClass('img_error');
+                        container.innerHTML = "API key is not valid!"
+                    }
+                    else
+                        container.innerHTML = "Connection failed!";
+                }
             }
         });
     };
@@ -308,6 +310,8 @@ function getMessage(key) {
         })
 
         $('#save').on('click', function() {
+            curr_api_url = free_api_url;
+            
             $('#select_example').select2({
                 minimumResultsForSearch: Infinity,
                 width: "calc(100% - 24px)"
