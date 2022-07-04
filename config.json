@@ -107,7 +107,7 @@
             },
             "url": "index_about.html",
             "isViewer": false,
-            "EditorsSupport": [ "word", "slide", "cell" ],
+            "EditorsSupport": ["word"],
 
             "isVisual": true,
             "isModal": false,
