@@ -53,3 +53,11 @@
     transition: all 0.3s ease;
     border-radius: 2px;
 }
+.tui-image-editor-help-menu.top {
+    background-color: #fff;
+}
+.hover.use-default {
+    fill-rule: evenodd !important;
+    fill: #000 !important;
+    stroke: #000 !important;
+}
