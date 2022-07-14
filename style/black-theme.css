@@ -5,3 +5,8 @@
     background-color: #151515;
     cursor:pointer;
 }
+.hover.use-default {
+    fill-rule: evenodd !important;
+    fill: #fff !important;
+    stroke: #fff !important;
+}
