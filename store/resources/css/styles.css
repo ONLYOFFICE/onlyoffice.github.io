@@ -5,7 +5,6 @@ html, body {
 	overflow: hidden;
 	display: flex;
 	flex-flow: column;
-	/* font-size: 12px !important; */
 }
 
 .white_bg {
@@ -17,7 +16,6 @@ img {
 }
 
 button {
-	/* font-size: 13px !important; */
 	margin: 0px;
 	min-width: 70px;
 }
@@ -48,14 +46,6 @@ label.header {
 	border-bottom-right-radius: 0;
 	font-weight: normal !important;
 }
-
-/* .div-loader {
-	margin: 10px;
-	height: 40px;
-	top: 50%;
-	right: 50%;
-	position: sticky;
-} */
 
 .close {
 	position: absolute;
@@ -92,7 +82,6 @@ label.header {
 	display: flex;
 	align-items: center;
 	margin-right: 5px;
-	/* font-size: 13px; */
 }
 
 .toolbar_buttons {
@@ -101,7 +90,7 @@ label.header {
 
 .main_content {
 	position: absolute;
-	inset: 90px 0px 0px;
+	inset: 90px 0px 5px;
 	overflow: hidden;
 	display: flex;
 	flex-wrap: wrap;
@@ -187,9 +176,6 @@ label.header {
 }
 
 .div_loader {
-	/* margin: 10px;
-	top: 50%;
-	right: 50%; */
 	width: 100%;
 	height: 100%;
 	position: absolute !important;
@@ -211,14 +197,11 @@ label.header {
 }
 
 .div_body {
-	/* border: 1px solid red; */
 	height: 100%;
 }
 
 .div_preview {
-	/* border: 1px solid green; */
 	height: 100%;
-	/* font-size: 13px !important; */
 }
 
 .link_submit:hover {
@@ -245,7 +228,6 @@ label.header {
 }
 
 .div_selected_main {
-	/* border: 1px solid red; */
 	margin: 0 15px;
 	position: absolute;
 	inset: 130px 0px 0px;
@@ -258,7 +240,6 @@ label.header {
 }
 
 .div_selected_image {
-	/* margin:10px 0 10px; */
 	margin-bottom: 10px;
 }
 
@@ -270,7 +251,6 @@ label.header {
 
 .div_selected_info {
 	margin-top: 10px;
-	/* font-size: 13px; */
 }
 
 .span_caption {
