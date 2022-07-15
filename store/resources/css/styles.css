@@ -1,0 +1,300 @@
+html, body {
+	margin: 0px !important;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-flow: column;
+}
+
+.white_bg {
+	background-color: #fff !important;
+}
+
+img {
+	pointer-events: none;
+}
+
+button {
+	margin: 0px;
+	min-width: 70px;
+}
+
+div.header {
+	background: #d8dadc;
+	display: flex;
+	justify-content: center;
+	border-bottom: solid var(--scaled-one-pixel, 1px) #4444;
+	align-items: center;
+}
+
+label.header {
+	margin: 5px;
+	font-size: 14px !important;
+}
+
+.btn_menu_right {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border-left-width: 0 !important;
+	margin-left: -1px;
+	font-weight: normal !important;
+}
+
+.btn_menu_left {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	font-weight: normal !important;
+}
+
+.close {
+	position: absolute;
+	right: 10px;
+	font-size: 25px;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.close:hover {
+	opacity: 1;
+}
+
+.arrow {
+	position: absolute;
+	/* left: 10px; */
+	top: 0;
+	font-size: 20px;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.arrow:hover {
+	opacity: 1;
+}
+
+.toolbar {
+	display: flex;
+	justify-content: space-between;
+	margin: 20px 15px;
+}
+
+.toolbar_link {
+	display: flex;
+	align-items: center;
+	margin-right: 5px;
+}
+
+.toolbar_buttons {
+	display: flex;
+}
+
+.main_content {
+	position: absolute;
+	inset: 90px 0px 5px;
+	overflow: hidden;
+	display: flex;
+	flex-wrap: wrap;
+	margin-right: 5px;
+	margin-left: 15px;
+}
+
+.div_item {
+	display: flex;
+	flex-flow: column;
+	border: 1px solid #c0c0c0;
+	border-radius: 5px;
+	max-width: 160px;
+	min-width: 160px;
+	margin: 0 20px 20px 0;
+	position: relative;
+	min-height: 225px;
+	max-height: 225px;
+}
+
+.div_description {
+	display: flex;
+	flex-flow: column;
+	word-break: break-all;
+}
+
+.div_image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgb(52,126,232);
+	cursor: pointer;
+	border-radius: 3px 3px 0 0;
+	height: 75px;
+}
+
+.span_name {
+	margin: 10px;
+	font-weight: bold;
+}
+
+.span_name_selected {
+	margin: 10px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.span_description {
+	margin-left: 10px;
+	margin-right: 3px;
+	max-height: 80px;
+	overflow: auto;
+}
+
+.div_footer {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+	flex-flow: column;
+}
+
+.btn_install {
+	margin: 0px 10px 10px;;
+	width: calc(100% - 20px);
+}
+
+.btn_preview {
+	margin: 10px 0px 10px 10px;
+	width: fit-content;
+}
+
+.div_notification {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.span_notification {
+	font-size: 15px;
+}
+
+.div_loader {
+	width: 100%;
+	height: 100%;
+	position: absolute !important;
+}
+
+.loader_background {
+	width: 100%;
+	height: 100%;
+	background-color: #adadad;
+	opacity: 0.5;
+}
+
+.asc-loader-title {
+	padding-left: 10px !important;
+}
+
+.asc-plugin-loader {
+	display: flex !important;
+}
+
+.div_body {
+	height: 100%;
+}
+
+.div_preview {
+	height: 100%;
+}
+
+.link_submit:hover {
+	text-decoration: none !important;
+}
+
+.link_info {
+	border-bottom: 1px solid;
+	text-decoration: none !important;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.div_selected_toolbar {
+	display: flex;
+	margin: 20px 15px;
+}
+
+.div_selected_description {
+	display: flex;
+	flex-flow: column;
+}
+
+.div_selected_main {
+	margin: 0 15px;
+	position: absolute;
+	inset: 130px 0px 0px;
+}
+
+.div_selected_preview {
+	width: 100%;
+	height: calc(100% - 25px);
+	margin-top: 5px;
+}
+
+.div_selected_image {
+	margin-bottom: 10px;
+}
+
+.image_preview {
+	width:100%;
+	height:100%;
+	object-fit:scale-down;
+}
+
+.div_selected_info {
+	margin-top: 10px;
+}
+
+.span_caption {
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.span_selected {
+	border-bottom: 3px solid;
+	padding-bottom: 4px;
+}
+
+.span_info {
+	font-weight: bold;
+}
+
+.span_update {
+	align-self: flex-end;
+	background-color: #06a10d;
+	color: white;
+	padding: 1px 5px;
+	border: 1px solid #06a10d;
+	border-radius: 12px;
+	margin: 10px;
+}
+
+.error_main {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.error_caption {
+	font-size: 15px;
+	color: red;
+}
+
+.div_description_selected {
+	max-height: 50px;
+	min-height: 50px;
+	overflow: auto;
+	overflow-wrap: break-word;
+	margin-top: 20px;
+}
