@@ -5,7 +5,11 @@ html, body {
 	overflow: hidden;
 	display: flex;
 	flex-flow: column;
-	font-size: 12px !important;
+	/* font-size: 12px !important; */
+}
+
+.white_bg {
+	background-color: #fff !important;
 }
 
 img {
@@ -13,8 +17,9 @@ img {
 }
 
 button {
-	font-size: 13px !important;
+	/* font-size: 13px !important; */
 	margin: 0px;
+	min-width: 70px;
 }
 
 div.header {
@@ -30,17 +35,27 @@ label.header {
 	font-size: 14px !important;
 }
 
-.btn_menu {
+.btn_menu_right {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border-left-width: 0 !important;
+	margin-left: -1px;
 	font-weight: normal !important;
 }
 
-.div-loader {
+.btn_menu_left {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	font-weight: normal !important;
+}
+
+/* .div-loader {
 	margin: 10px;
 	height: 40px;
 	top: 50%;
 	right: 50%;
 	position: sticky;
-}
+} */
 
 .close {
 	position: absolute;
@@ -77,7 +92,7 @@ label.header {
 	display: flex;
 	align-items: center;
 	margin-right: 5px;
-	font-size: 13px;
+	/* font-size: 13px; */
 }
 
 .toolbar_buttons {
@@ -89,28 +104,30 @@ label.header {
 	inset: 90px 0px 0px;
 	overflow: hidden;
 	display: flex;
-	flex-flow: column;
+	flex-wrap: wrap;
+	margin-right: 5px;
+	margin-left: 15px;
 }
 
-.div_row {
-	display: flex;
-	margin: 0 10px 20px 5px;
-}
 .div_item {
 	display: flex;
 	flex-flow: column;
 	border: 1px solid #c0c0c0;
 	border-radius: 5px;
-	width: calc((100% - 60px)/3);
-	margin: 0 10px;
+	max-width: 160px;
+	min-width: 160px;
+	margin: 0 20px 20px 0;
 	position: relative;
-	height: 225px;
+	min-height: 225px;
+	max-height: 225px;
 }
+
 .div_description {
 	display: flex;
 	flex-flow: column;
 	word-break: break-all;
 }
+
 .div_image {
 	display: flex;
 	justify-content: center;
@@ -118,14 +135,27 @@ label.header {
 	background: rgb(52,126,232);
 	cursor: pointer;
 	border-radius: 3px 3px 0 0;
+	height: 75px;
 }
+
 .span_name {
 	margin: 10px;
 	font-weight: bold;
 }
+
+.span_name_selected {
+	margin: 10px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
 .span_description {
 	margin-left: 10px;
+	margin-right: 3px;
+	max-height: 80px;
+	overflow: auto;
 }
+
 .div_footer {
 	display: flex;
 	justify-content: center;
@@ -134,14 +164,28 @@ label.header {
 	bottom: 0px;
 	flex-flow: column;
 }
+
 .btn_install {
 	margin: 0px 10px 10px;;
 	width: calc(100% - 20px);
 }
+
 .btn_preview {
 	margin: 10px 0px 10px 10px;
 	width: fit-content;
 }
+
+.div_notification {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.span_notification {
+	font-size: 15px;
+}
+
 .div_loader {
 	/* margin: 10px;
 	top: 50%;
@@ -149,15 +193,6 @@ label.header {
 	width: 100%;
 	height: 100%;
 	position: absolute !important;
-}
-
-.div_notification {
-	display: flex;
-	justify-content: center;
-}
-
-.span_notification {
-	font-size: 15px;
 }
 
 .loader_background {
@@ -170,14 +205,20 @@ label.header {
 .asc-loader-title {
 	padding-left: 10px !important;
 }
+
+.asc-plugin-loader {
+	display: flex !important;
+}
+
 .div_body {
 	/* border: 1px solid red; */
 	height: 100%;
 }
+
 .div_preview {
 	/* border: 1px solid green; */
 	height: 100%;
-	font-size: 13px !important;
+	/* font-size: 13px !important; */
 }
 
 .link_submit:hover {
@@ -207,17 +248,18 @@ label.header {
 	/* border: 1px solid red; */
 	margin: 0 15px;
 	position: absolute;
-	inset: 160px 0px 0px;
+	inset: 130px 0px 0px;
 }
 
 .div_selected_preview {
-	width:100%;
+	width: 100%;
 	height: calc(100% - 25px);
 	margin-top: 5px;
 }
 
 .div_selected_image {
-	margin:10px 0 10px;
+	/* margin:10px 0 10px; */
+	margin-bottom: 10px;
 }
 
 .image_preview {
@@ -227,8 +269,8 @@ label.header {
 }
 
 .div_selected_info {
-	margin: 5px 0 5px;
-	font-size: 13px;
+	margin-top: 10px;
+	/* font-size: 13px; */
 }
 
 .span_caption {
@@ -267,4 +309,12 @@ label.header {
 .error_caption {
 	font-size: 15px;
 	color: red;
+}
+
+.div_description_selected {
+	max-height: 50px;
+	min-height: 50px;
+	overflow: auto;
+	overflow-wrap: break-word;
+	margin-top: 20px;
 }

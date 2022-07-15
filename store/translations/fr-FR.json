@@ -20,5 +20,7 @@
 	"Loading": "Chargement",
 	"Installation": "Installation",
 	"Updating": "Mettre",
-	"Removal": "Suppression"
+	"Removal": "Suppression",
+	"Problem with loading plugins." : "Problème de chargement des plugins.",
+	"No installed plugins." : "Pas de plugins installés."
 }
