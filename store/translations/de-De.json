@@ -20,5 +20,7 @@
 	"Loading": "Laden",
 	"Installation": "Installation",
 	"Updating": "Aktualisieren",
-	"Removal": "Entfernung"
+	"Removal": "Entfernung",
+	"Problem with loading plugins." : "Problem beim Laden von Plugins.",
+	"No installed plugins." : "Keine installierten Plugins."
 }

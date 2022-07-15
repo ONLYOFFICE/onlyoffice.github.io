@@ -20,5 +20,7 @@
 	"Loading": "Načítání",
 	"Installation": "Instalace",
 	"Updating": "Aktualizace",
-	"Removal": "Odstranění"
+	"Removal": "Odstranění",
+	"Problem with loading plugins." : "Problém s načítáním pluginů.",
+	"No installed plugins." : "Žádné nainstalované pluginy."
 }

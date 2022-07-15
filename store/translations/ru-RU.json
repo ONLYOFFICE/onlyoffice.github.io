@@ -20,5 +20,7 @@
 	"Loading": "Загрузка",
 	"Installation": "Установка",
 	"Updating": "Обновление",
-	"Removal": "Удаление"
+	"Removal": "Удаление",
+	"Problem with loading plugins." : "Проблемы с загрузкой плагинов.",
+	"No installed plugins." : "Нет установленных плагинов."
 }
