@@ -23,6 +23,7 @@
 	var message = "This plugin doesn't work in Internet Explorer."
 	var txt;
 	var paste_done  = true;
+	var translated = '';
 	
 	window.Asc.plugin.init = function(text)
 	{
@@ -30,26 +31,19 @@
 			document.getElementById("iframe_parent").innerHTML = "<h4 id='h4' style='margin:5px'>" + message + "</h4>";
 			return;
 		}
-    
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
-                    txt = (data === undefined) ? "" : ProcessText(data);
-                    ExecPlugin();
-                });
-                break;
-            }
-            case 'cell':
-            case 'slide': {
-                txt = ProcessText(text);
-                ExecPlugin();
-                break;
-            }
-        }
+		if (window.Asc.plugin.info.editorType === 'word') {
+			window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
+				txt = (!data) ? "" : ProcessText(data);
+				ExecPlugin();
+			});
+		} else {
+			txt = ProcessText(text);
+			ExecPlugin();
+		}
 	};
 
-    function ExecPlugin() {
-        if (!isInit) {
+	function ExecPlugin() {
+		if (!isInit) {
 			document.getElementById("iframe_parent").innerHTML = "";
 			ifr                = document.createElement("iframe");
 			ifr.position	   = "fixed";
@@ -105,66 +99,67 @@
 				}, 100);
 
 				setTimeout(function() {
-                    btnReplace.onclick = function () {
-                        if (!paste_done)
-                            return;
-                        else
-                            paste_done = false;
+					btnReplace.onclick = function () {
+						if (!paste_done)
+							return;
+						else
+							paste_done = false;
 
-                        var translatedTxt = ifr.contentDocument.getElementById("google_translate_element").outerText;
-                        var allParasTxt = translatedTxt.split(/\n/);
-                        var allParsedParas = [];
+						var translatedTxt = ifr.contentDocument.getElementById("google_translate_element").outerText;
+						var allParasTxt = translatedTxt.split(/\n/);
+						var allParsedParas = [];
 
-                        for (var nStr = 0; nStr < allParasTxt.length; nStr++) {
-                            if (allParasTxt[nStr].search(/	/) === 0) {
-                                allParsedParas.push("");
-                                allParasTxt[nStr] = allParasTxt[nStr].replace(/	/, "");
-                            }
-                            var sSplited = allParasTxt[nStr].split(/	/);
+						for (var nStr = 0; nStr < allParasTxt.length; nStr++) {
+							if (allParasTxt[nStr].search(/	/) === 0) {
+								allParsedParas.push("");
+								allParasTxt[nStr] = allParasTxt[nStr].replace(/	/, "");
+							}
+							var sSplited = allParasTxt[nStr].split(/	/);
 
-                            sSplited.forEach(function(item, i, sSplited) {
-                                allParsedParas.push(item);
-                            });
-                        }
-                        Asc.scope.arr = allParsedParas;
-                        window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
-                            if (version === undefined) {
-                                window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
-                                    paste_done = true;
-                               });
-                            }
-                            else {
-                                window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
-                                    switch (sType) {
-                                        case "none":
-                                        case "drawing":
-                                            window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
-                                                paste_done = true;
-                                            });
-                                            break;
-                                        case "text":
-                                            window.Asc.plugin.callCommand(function() {
-                                                Api.ReplaceTextSmart(Asc.scope.arr);
-                                            }, undefined, undefined, function(result) {
-                                                paste_done = true;
-                                            });
-                                            break;
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+							sSplited.forEach(function(item, i, sSplited) {
+								allParsedParas.push(item);
+							});
+						}
+						Asc.scope.arr = allParsedParas;
+						window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
+							if (version === undefined) {
+								window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
+									paste_done = true;
+								});
+							}
+							else {
+								window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
+									switch (sType) {
+										case "none":
+										case "drawing":
+											window.Asc.plugin.executeMethod("PasteText", [ifr.contentDocument.getElementById("google_translate_element").outerText], function(result) {
+												paste_done = true;
+											});
+											break;
+										case "text":
+											window.Asc.plugin.callCommand(function() {
+												Api.ReplaceTextSmart(Asc.scope.arr);
+											}, undefined, undefined, function(result) {
+												paste_done = true;
+											});
+											break;
+									}
+								});
+							}
+						});
+					}
+				});
 				ifr.contentWindow.postMessage("update_scroll", '*');
+				ifr.contentWindow.postMessage({type: 'translate', text: translated}, '*')
 			}
 		} else {
 			ifr.contentWindow.postMessage(txt, '*');
 			ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 		}
     };
-  	function ProcessText(sText) {
-        return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
-    };
+	function ProcessText(sText) {
+		return sText.replace(/	/gi, '\n').replace(/	/gi, '\n');
+	};
 
 	function checkInternetExplorer(){
 		var rv = -1;
@@ -192,7 +187,7 @@
 
 	window.onresize = function()
 	{
-		ifr.contentWindow.postMessage("update_scroll", '*');
+		ifr && ifr.contentWindow.postMessage("update_scroll", '*');
 	};
 
 	window.Asc.plugin.onExternalMouseUp = function()
@@ -211,15 +206,14 @@
 			if (field)
 				field.innerHTML = message = window.Asc.plugin.tr(message);
 		}
-		
+		translated = window.Asc.plugin.tr('Select Language');
 	};
     window.Asc.plugin.onThemeChanged = function(theme)
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
 		var style = document.getElementsByTagName('head')[0].lastChild;
 		if (ifr && ifr.contentWindow)
-		    setTimeout(()=>ifr.contentWindow.postMessage({theme,style : style.innerHTML}, '*'),600);
+			setTimeout(()=>ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*'),600);
 	};
-
 
 })(window, undefined);
