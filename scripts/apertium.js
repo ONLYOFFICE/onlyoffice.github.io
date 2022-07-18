@@ -30,7 +30,6 @@
  *
  */
 var Ps;
-var PsTextArea;
 const isIE = checkInternetExplorer();	//check IE
 function checkInternetExplorer(){
     var rv = -1;
@@ -117,14 +116,10 @@ function getMessage(key) {
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
 
         if (!isIE) {
-            $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
             $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
             $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
             $('#arrow-svg-path').css('fill', theme["text-normal"]);
         }
-        else
-            $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
-
     };
 
     function PrepareTextToSend(allParas) {
@@ -328,7 +323,7 @@ function getMessage(key) {
         var parasToTranslate = [];
 
         if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = sTxt;
+            document.getElementById("enter_container").value = sTxt;
 
 	    return splittedParas;
 	};
@@ -382,6 +377,8 @@ function getMessage(key) {
     };
 
     $(document).ready(function () {
+        document.getElementById("enter_container").value = "";
+
         $('.select_example').select2({
 			minimumResultsForSearch: Infinity,
 			width: "100%"
@@ -396,7 +393,6 @@ function getMessage(key) {
 		};
 
         Ps = new PerfectScrollbar("#display", {suppressScrollX  : true});
-        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
         showLoader2(elements, true);
         GetAllLangPairs();
 
@@ -483,9 +479,9 @@ function getMessage(key) {
                     }, ms || 0);
             };
         };
-        $('#textarea').keyup(delay(function(e) {
+        $('#enter_container').keyup(delay(function(e) {
             updateScroll();
-            txt = document.getElementById("textarea").innerText;
+            txt = document.getElementById("enter_container").value;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
                 case 'slide': {
@@ -500,10 +496,6 @@ function getMessage(key) {
                 break;
             }
         }, 1000));
-
-        $("#enter_container").click(function() {
-            $("#textarea").focus();
-        });
     });
 
     function ExecApertium(sText) {
@@ -563,7 +555,6 @@ function getMessage(key) {
     function updateScroll()
 	{
 		Ps && Ps.update();
-		PsTextArea && PsTextArea.update();
 	};
 
 	window.Asc.plugin.button = function(id)
