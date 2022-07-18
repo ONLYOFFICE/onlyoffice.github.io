@@ -1,6 +1,7 @@
 if (!Ps) Ps = new PerfectScrollbar('#' + "div_parent", {});
 var timeOut;
 var select;
+var translated = 'Select Language';
 
 function googleTranslateElementInit() {
     document.getElementById("google_translate_element").style.maxHeight = document.getElementById("body").clientHeight- 120 +"px";
@@ -44,8 +45,12 @@ window.onload = function () {
     }
 
     function createLangForSelect() {
-        var languages = [];
-        for (var i = 0; i < select.length; i++) {
+        var languages = [{
+				id: 0,
+				value: '',
+				text: translated
+		}];
+        for (var i = 1; i < select.length; i++) {
             languages.push({
                 id : i,
                 value : select.options[i].value,
@@ -65,7 +70,6 @@ window.onload = function () {
         }
         if (ind < 0) return;
         select.options[ind].selected = true;
-        console.log(select.options[ind].text);
         if ("createEvent" in document) {
             var evt = document.createEvent("HTMLEvents");
             evt.initEvent("change", false, true);
@@ -104,7 +108,7 @@ window.onload = function () {
 };
 
 window.addEventListener('message', function (msg) {
-    if (typeof(msg.data) === "object")
+    if (msg.data.type == 'themeChanged')
     {
         //event for change theme
         if (msg.data.theme) {
@@ -123,10 +127,13 @@ window.addEventListener('message', function (msg) {
     {
         setTimeout(()=> Ps.update(), 600);
     }
+	else if (msg.data.type == 'translate') {
+		translated = msg.data.text;
+	}
     else
     {
         if (msg.data !== "onchange_goog-te-combo") {
-        document.getElementById("google_translate_element").innerHTML = escape(msg.data);
+        	document.getElementById("google_translate_element").innerHTML = escape(msg.data);
         }
         timeOut = setTimeout(function() {
             document.getElementById("google_translate_element").style.opacity = 1;
