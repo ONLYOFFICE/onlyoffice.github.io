@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" style="width: 100%;height: 100%;">
+<head>
+	<meta charset="UTF-8">
+	<title>translate</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.full.min.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<style>
+		.body_class {
+			top: 0 !important;
+			left: 0 !important;
+			padding: 5px !important;
+			box-sizing: border-box;
+			overflow: hidden;
+			font-size: 13px !important;
+		}
+		.goog-te-banner-frame {
+			display: none;
+		}
+		.goog-te-combo {
+			width: 100% !important;
+		}
+		.noselect {
+			-khtml-user-select: none;
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+		}
+		.goog-tooltip {
+			display: none !important;
+		}
+		font {
+			background-color: transparent !important;
+			-webkit-box-shadow: 0px 0px 0px #9999aa !important;
+			-moz-box-shadow: 0px 0px 0px #9999aa !important;
+			box-shadow: 0px 0px 0px #9999aa !important;
+			box-sizing: border-box !important;
+			-webkit-box-sizing: border-box !important;
+			-moz-box-sizing: border-box !important;
+			position: relative !important;
+		}
+		img {
+			width: 42px !important;
+			height: 16px !important;
+			padding-top: 3px !important;
+		}
+		.goog-te-gadget {
+			flex: 1;
+		}
+		.goog-te-combo {
+			height: 22px;
+		}
+		.div_btn {
+			display: flex;
+			padding-top: 3px;
+			padding-left: 5px;
+			width: calc(100% - 10px);
+		}
+		.hidden {
+			display: none !important;
+		}
+		#btn_copy, #btn_replace {
+			width: calc(50% - 10px) !important;
+			font-size: 11px;
+			margin: 5px;
+			height: auto;
+			min-height: 20px;
+		}
+		#hr {
+			width: calc(100% - 20px) !important;
+			margin-left: 10px !important;
+		}
+		
+	</style>
+</head>
+<body id="body" class="body_class" style="left:0px;top:0px;width:100%; height: 100%;margin:0px;padding:0px;">
+	<div id="google_translate_state" style="width: calc(100% - 20px); margin-left: 10px; margin-top: 7px;"></div>
+	<hr id ="hr">
+	<div id="div_parent" style="overflow: hidden; overflow-x: hidden; padding-top: 15px; position: relative;">
+		<div id="google_translate_element" style="position: relative; font-family: 'Arial'; word-break: break-word; white-space: pre-wrap; height: fit-content; margin-left: 10px; margin-right: 15px;"></div>
+	</div>
+	<script src="vendor/google/widjet.js"></script>
+	<script src="vendor/google/google.js"></script>
+<!-- for russian language -->
+<!-- <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
+</body>
+</html>
