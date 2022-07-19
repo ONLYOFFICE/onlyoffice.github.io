@@ -2,7 +2,7 @@
 
 Get your document content as HTML code, modify it, and paste back to the document. 
 
-This plugin uses [CodeMirror](https://codemirror.net), a versatile text editor implemented in JavaScript for the browser.
+This plugin uses [CodeMirror](https://codemirror.net), a versatile text editor implemented in JavaScript for the browser and [prettier](https://github.com/prettier/prettier) Prettier is an opinionated code formatter with support for: JavaScript (including experimental features), JSX, Angular, Vue, Flow, TypeScript, CSS, Less and SCSS, HTML, JSON, GraphQL, Markdown, including GFM and MDX, YAML.
 
 The plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of ONLYOFFICE editors. It can be added to ONLYOFFICE instances manually. 
 

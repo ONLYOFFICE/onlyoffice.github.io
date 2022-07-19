@@ -1,3 +1,18 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +21,13 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="scripts/code.js"></script>
+	<script src="vendor/prettier/standalone@2.3.2.js"></script>
+	<script src="vendor/prettier/parser-html@2.3.2.js"></script>
 	<script src="vendor/codemirror/codemirror.js"></script>
 	<script src="vendor/codemirror/xml.js"></script>
 	<link rel="stylesheet" href="vendor/codemirror/codemirror.css">
-
+	<link rel="stylesheet" href="vendor/codemirror/bespin.css">
+	<script src="scripts/code.js"></script>
 	<style>
 		html, body {
 			width: 100%;
@@ -29,13 +46,17 @@
 		}
 	</style>
 </head>
-<body id="body" style="max-height: calc(100% - 15px); max-width: calc(100% - 20px);">
+<body id="body" style="max-height: calc(100% - 40px); max-width: calc(100% - 20px);">
 	<div id="div_main" style="height: calc(100% - 50px);">
 		<!-- <textarea id="main" spellcheck="false"></textarea> -->
 		<div id="main" style="border:1px solid black; height:100%"></div>
 	</div>
 	<div style="display:flex; justify-content: center; margin: 15px;">
-		<button id="btn_paste">Paste into the document</button>
+		<button id="btn_paste" class="btn-text-default">Paste into the document</button>
+	</div>
+	<div style="display:flex; justify-content: center; margin-bottom:10px;">
+		<button id="btn_copy" class="btn-text-default">Copy</button>
+		<button id="btn_clear" class="btn-text-default">Clear</button>
 	</div>
 </body>
 </html>
