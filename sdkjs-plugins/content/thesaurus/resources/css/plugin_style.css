@@ -1,0 +1,99 @@
+html, body {
+  width: 98%;
+  height: 98%;
+};
+.noselect {
+  -khtml-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.combo {
+  background: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  color: #444444;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 22px;
+  cursor: pointer;
+  margin: 0px 0px 10px 0px;
+  box-sizing: border-box;
+}
+div::selection {
+  background: #a8d1ff;
+}
+button {
+  /* color: #fff;
+  background-color: #7d858c;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  outline: none;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  cursor: pointer; */
+  height: 22px !important;
+}
+.input-synonim {
+  outline-color: #7d858c;
+  width: calc(100% - 10px);
+  border: 1px solid #cfcfcf;
+}
+input::selection {
+  background: #D8DADC; /* WebKit/Blink Browsers */
+  color: #444444;
+}
+input::-moz-selection {
+  background: #D8DADC; /* Gecko Browsers */
+  color: #444444;
+}
+.input-field {
+  display: flex;
+  flex-flow: row;
+}
+.not-found {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-left: 5px;
+  color: red;
+}
+.h3-caption {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding-left: 5px;
+  }
+.div-words {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.label-selected	{
+  background: rgba(0, 100, 215, 0.5);
+}
+.label-words {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding: 5px 5px;
+  cursor: pointer;
+}
+.global {
+  height: 99%;
+  display: flex;
+  width: 96%;
+  flex-flow: column;
+  line-height: 90%;
+  -moz-user-select: none;
+}
+.label-syn {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+}
+.content-items {
+  width: 98%;
+  height: 95%;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  user-select: none;
+}
+div::-moz-selection {
+  background: #a8d1ff;
+}
