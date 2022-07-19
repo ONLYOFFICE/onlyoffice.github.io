@@ -15,9 +15,8 @@
  * limitations under the License.
  *
  */
-(function(window, undefined){
-	window.oncontextmenu = function(e)
-	{
+(function(window, undefined) {
+	window.oncontextmenu = function(e) {
 		if (e.preventDefault)
 			e.preventDefault();
 		if (e.stopPropagation)
@@ -34,7 +33,7 @@
 		isInitp = false,
 		predata = "";
 	
-	$(document).ready(function () {
+	$(document).ready(function() {
 		//event mouseout label
 		$('body').on('mouseout', '.label-words', function() {
 			$(this).removeClass('label-selected');
@@ -45,17 +44,19 @@
 		});
 		//event click label
 		$('body').on('click', '.label-words', function() {
-			var _htmlPaste = "<span >" + $(this).text() +" "+ "</span>";
 			window.Asc.plugin.executeMethod("PasteText", [$(this).text() +" "]);	
 		});
 		//event button click
-		button = document.getElementById("btn_search");
-		button.onclick = function() {
-			synonim_data = inputSerch.value;
-			if ((null!=synonim_data) && (predata != synonim_data))
-			{
+		btn_search = document.getElementById("btn_search");
+		btn_search.onclick = function() {
+			synonim_data = inputSerch.value.trim();
+			if ('' !== synonim_data && null !== synonim_data) {
+				if (predata !== synonim_data) {
+					$('#global').empty(); // cleared global div
+					synonim();
+				}
+			} else {
 				$('#global').empty(); // cleared global div
-				synonim();
 			}
 		};
 		inputApiKey = document.getElementById("inp_ApiKey");
@@ -79,8 +80,7 @@
 	});	
 
 	function synonim() {
-		if (!isInit)
-		{
+		if (!isInit) {
 			var container = document.getElementById('scrollable-container-id');			
 			Ps = new PerfectScrollbar('#' + container.id, {});
 			updateScroll();
@@ -97,76 +97,61 @@
 		_url += SynonimFormat;
 		xhr.open('GET', _url, true);
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.onreadystatechange = function()
-		{
-			if (this.readyState == 4 && this.status == 404)
-			{
-				$('#global').append("<h3 id = \"not_found\" class = \"not-found\">This word not found</h3>"); //if synonym not found
-				updateScroll();
-				updateScroll();
-			}
-			if (this.readyState == 4 && this.status == 500) {
-				$('#global').append("<h3 id = \"not_found\" class = \"not-found\">"+this.statusText+"</h3>"); //if synonym not found
-				updateScroll();
-				updateScroll();
-			}
-			if (this.readyState == 4 && this.status == 200  && !closed)
-			{
-				try
-				{
-					var _obj  = JSON.parse(this.responseText);
-					if (_obj.noun)			//if noun exist
-					{
-						drawWords(_obj.noun,"Noun");
-					}
-					if(_obj.adjective)		//if andjective exist
-					{
-						drawWords(_obj.adjective,"Adjective")
-					}
-					if(_obj.verb)		//if verb exist
-					{
-						drawWords(_obj.verb,"Verb")
-					}
-					updateScroll();
-					updateScroll();
+		xhr.onreadystatechange = function() {
+			if (this.readyState === 4) {
+				switch (this.status) {
+					case 401:
+					case 403:
+						synonim();
+						break;
+					case 404:
+						$('#global').append("<h3 id = \"not_found\" class = \"not-found\">" + window.Asc.plugin.tr("This word not found") + "</h3>"); //if synonym not found
+						break;
+					case 500:
+						$('#global').append("<h3 id = \"not_found\" class = \"not-found\">"+this.statusText+"</h3>"); //if synonym not found
+						break;
+					case 200:
+						if (!closed) {
+							try {
+								var _obj  = JSON.parse(this.responseText);
+								if (_obj.noun)			//if noun exist
+									drawWords(_obj.noun,"Noun");
+			
+								if(_obj.adjective)		//if andjective exist
+									drawWords(_obj.adjective,"Adjective")
+			
+								if(_obj.verb)		//if verb exist
+									drawWords(_obj.verb,"Verb")
+							}
+							catch (err){}
+						}
 				}
-				catch (err)
-				{}
-			}else if (401 == this.readyState || 403 == this.status)
-				synonim();
+				updateScroll();
+				updateScroll();
+			}
 		};
 		xhr.send(null);
 	};
 
 	window.Asc.plugin.init = function(text)	{
-		if (!isInitp)
-		{
+		synonim_data = text.trim();
+		if (!isInitp) {
 			inputSerch = document.getElementById("inp_search");
-			inputSerch.value = text;
-			synonim_data = text;
-			if (null != synonim_data && synonim_data != "")
-				synonim();
-		}else{
-			inputSerch.value = text;
-			synonim_data = text;
-			if (predata == synonim_data)
-			{
-				return;
-			}else {
-				$('#global').empty(); // cleared global div
-				if (synonim_data == "")
-				{
-					predata = "";
-					return;
-				}
-				synonim();
-			}
+			isInitp = true;
 		}
-		isInitp = true;
+		$('#global').empty(); // cleared global div
+		window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+			var val =  (data === undefined) ? "" : (data.trim() == '') ? synonim_data : data.replace(/\r/g, ' ').trim();
+			inputSerch.value = val;
+			synonim_data = val;
+			if (synonim_data && synonim_data !== "" && predata !== synonim_data)
+				synonim();
+
+			predata = val;
+		});
 	};
 	
-	window.Asc.plugin.button = function(id)
-	{
+	window.Asc.plugin.button = function() {
 		this.executeCommand("close", "");
 	};
 	
@@ -185,30 +170,26 @@
 	
 	//draws the structure of the plugin
 	function drawWords(response, type) {
-		$('#global').append("<h3 class = \"not-found\">" + type + "</h3>");
+		$('#global').append("<h3 class = \"h3-caption\">" + window.Asc.plugin.tr(type) + "</h3>");
 		$('#global').append("<div id = " + type + " ></div>");
-		if (response.syn && response.syn.length)
-		{
+		if (response.syn && response.syn.length) {
 			$("#"+type).append("<div id =\""+ type +"-synonims\" class = \"div-words\"></div>");
-			for (let i=0; i<response.syn.length; i++)
+			for (let i = 0; i < response.syn.length; i++)
 				$('#'+ type +'-synonims').append("<label class =\"label-words\">"+ response.syn[i] +"</label>");
 		}
-		if(response.ant && response.ant.length)
-		{
-			$("#"+type).append("<h4 class = \"not-found\">Antonyms</h4>");
+		if (response.ant && response.ant.length) {
+			$("#"+type).append("<h3 class = \"h3-caption\">" + window.Asc.plugin.tr("Antonyms") + "</h3>");
 			$("#"+type).append("<div id =\""+ type +"-antonyms\" class = \"div-words\"></div>");
 			for (let i=0; i<response.ant.length; i++)
 				$('#'+ type +'-antonyms').append("<label class =\"label-words\">"+ response.ant[i] +"</label>");
 		}
 	};
 
-	function updateScroll()
-	{
+	function updateScroll() {
 		Ps && Ps.update();
 	};
 
-	window.Asc.plugin.onTranslate = function()
-	{
+	window.Asc.plugin.onTranslate = function() {
 		var btn_search = document.getElementById("btn_search");
 		if (btn_search)
 			btn_search.innerHTML = window.Asc.plugin.tr("Lookup");
@@ -221,19 +202,8 @@
 			
 	};
 
-	window.Asc.plugin.onThemeChanged = function(theme)
-	{
+	window.Asc.plugin.onThemeChanged = function(theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);
-		if (theme.name !== "theme-light")
-		{
-			document.getElementById("inp_search").classList.remove("input-white");
-			document.getElementById("inp_ApiKey").classList.remove("input-white");
-		}
-		else
-		{
-			document.getElementById("inp_search").classList.add("input-white");
-			document.getElementById("inp_ApiKey").classList.add("input-white");
-		}
 	};
 		  
 })(window, undefined);
