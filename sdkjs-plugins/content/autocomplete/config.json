@@ -1,11 +1,11 @@
 {
-    "name" : "example_autocomplete",
+    "name" : "AutoComplete",
     "guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
     "version" : "1.0.0",
 
     "variations" : [
         {
-            "description" : "example_autocomplete",
+            "description" : "AutoComplete",
             "url"         : "index.html",
 
             "icons"           : ["resources/img/icon.png", "resources/img/icon@2x.png"],
