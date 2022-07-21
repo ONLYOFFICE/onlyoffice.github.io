@@ -16,7 +16,6 @@
  *
  */
 var Ps;
-var PsTextArea;
 var mapParagraphs = [];
 var pro_api_url = 'https://api.deepl.com/v2/translate?auth_key=';
 var free_api_url = 'https://api-free.deepl.com/v2/translate?auth_key=';
@@ -50,20 +49,19 @@ function getMessage(key) {
     var txt              = "";
     var translatedText   = [];
     var displayNoneClass = "display-none";
-	var blurClass        = "no_class";
+    var blurClass        = "no_class";
     var elements         = null;
     var apikey           = "";
-    var isValidKey       = false;
     var isFirstRun       = true;
     var paste_done       = true;
 
-	function showLoader(elements, show) {
+    function showLoader(elements, show) {
 
-       switchClass(elements.contentHolder, blurClass, show);
-       switchClass(elements.loader, displayNoneClass, !show);
+    switchClass(elements.contentHolder, blurClass, show);
+    switchClass(elements.loader, displayNoneClass, !show);
     }
 
-	function switchClass(el, className, add) {
+    function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
         } else {
@@ -71,11 +69,11 @@ function getMessage(key) {
         }
     }
 
-	window.Asc.plugin.init = function(text)
-	{
+    window.Asc.plugin.init = function(text)
+    {
         $('#select_example').select2({
-			minimumResultsForSearch: Infinity,
-		});
+            minimumResultsForSearch: Infinity,
+        });
 
         txt = text;
         updateScroll();
@@ -105,7 +103,7 @@ function getMessage(key) {
                 });
                 break;
         }
-	};
+    };
 
     function ExecPlugin() {
         switch (window.Asc.plugin.info.editorType) {
@@ -134,13 +132,10 @@ function getMessage(key) {
         $('#show_manually, #hide_manually, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
 
         if (!isIE) {
-            $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
             $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
             $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
             $('#arrow-svg-path').css('fill', theme["text-normal"]);
         }
-        else
-            $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
     };
 
     function CreateParams(allParas) {
@@ -180,13 +175,12 @@ function getMessage(key) {
         $.ajax({
             method: 'POST',
             beforeSend: function(request) {
-				request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-			},
-			data: '?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
+                request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
+            },
+            data: '?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
             url: curr_api_url + apikey
 
         }).success(function (oResponse) {
-            isValidKey = true;
             if ($('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
 
@@ -216,34 +210,33 @@ function getMessage(key) {
                     $('#vanish_container').toggleClass('display-none');
             }
 
-            updateScroll();
-            updateScroll();
-
             showLoader(elements, false);
+            updateScroll();
 
         }).error(function(oResponse) {
             if (curr_api_url === free_api_url) {
                 curr_api_url = pro_api_url;
                 Translate(apikey, targetLanguage, sParams);
             }
-            isValidKey = false;
-            showLoader(elements, false);
-            container = document.getElementById('txt_shower');
-            if (!$('#txt_shower').hasClass('error'))
-                $('#txt_shower').toggleClass('error');
-            if (!$('#api-value').hasClass('error_api'))
-                $('#api-value').toggleClass('error_api');
-            if (apikey == '') {
-                container.innerHTML = "API key required!";
-            }
             else {
-                if (oResponse.status === 403) {
-                    if (!$('#api-value').hasClass('img_error'))
-                        $('#api-value').toggleClass('img_error');
-                    container.innerHTML = "API key is not valid!"
+                showLoader(elements, false);
+                container = document.getElementById('txt_shower');
+                if (!$('#txt_shower').hasClass('error'))
+                    $('#txt_shower').toggleClass('error');
+                if (!$('#api-value').hasClass('error_api'))
+                    $('#api-value').toggleClass('error_api');
+                if (apikey == '') {
+                    container.innerHTML = "API key required!";
                 }
-                else
-                    container.innerHTML = "Connection failed!";
+                else {
+                    if (oResponse.status === 403) {
+                        if (!$('#api-value').hasClass('img_error'))
+                            $('#api-value').toggleClass('img_error');
+                        container.innerHTML = "API key is not valid!"
+                    }
+                    else
+                        container.innerHTML = "Connection failed!";
+                }
             }
         });
     };
@@ -281,6 +274,8 @@ function getMessage(key) {
     }
 
     $(document).ready(function () {
+        document.getElementById("enter_container").value = '';
+
         elements = {
             loader: document.getElementById("loader-container"),
             contentHolder: document.getElementById("display"),
@@ -290,10 +285,9 @@ function getMessage(key) {
             translator: document.getElementById("translator"),
             select: document.getElementById("select_example"),
             error: document.getElementById("errorWrapper")
-		};
+        };
 
         Ps = new PerfectScrollbar("#display", {suppressScrollX: true});
-        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
         setTimeout(function() {
             document.getElementById("copy").onclick = function () {
@@ -308,12 +302,14 @@ function getMessage(key) {
         })
 
         $('#save').on('click', function() {
+            curr_api_url = free_api_url;
+            
             $('#select_example').select2({
                 minimumResultsForSearch: Infinity,
                 width: "calc(100% - 24px)"
-		    });
-		    apikey = elements.api_value.value.trim();
-		    if (apikey !== '') {
+            });
+            apikey = elements.api_value.value.trim();
+            if (apikey !== '') {
                 document.getElementById('txt_shower').innerHTML = '';
                 var allParsedParas = SplitText(txt);
                 DelInvalidChars(allParsedParas);
@@ -429,9 +425,8 @@ function getMessage(key) {
             };
         };
 
-        $('#textarea').keyup(delay(function(e) {
-            updateScroll();
-            txt = document.getElementById("textarea").innerText;
+        $('#enter_container').keyup(delay(function(e) {
+            txt = document.getElementById("enter_container").value;
             if (sTextBeforeKeyUp == txt)
                 return;
                 
@@ -449,22 +444,17 @@ function getMessage(key) {
                 break;
             }
         }, 1000));
-
-        $("#enter_container").click(function() {
-            $("#textarea").focus();
-        });
     });
 
     function updateScroll()
-	{
-		Ps && Ps.update();
-		PsTextArea && PsTextArea.update();
-	};
+    {
+        Ps && Ps.update();
+    };
 
-	window.Asc.plugin.button = function(id)
-	{
-		this.executeCommand("close", "");
-	};
+    window.Asc.plugin.button = function(id)
+    {
+        this.executeCommand("close", "");
+    };
 
     function IsLastTransate(arrParas) {
         if (arrParas.length !== translatedText.length)
@@ -480,12 +470,12 @@ function getMessage(key) {
         if (sTxt[sTxt.length - 1] === '\n')
             sTxt = sTxt.slice(0, sTxt.length - 1);
             
-	    var splittedParas = sTxt.split('\n');
+        var splittedParas = sTxt.split('\n');
         if (txt.trim() !== "")
-            document.getElementById("textarea").innerText = sTxt;
+            document.getElementById("enter_container").value = sTxt;
 
-	    return splittedParas;
-	};
+        return splittedParas;
+    };
 
     function RunTranslate(sText) {
 
@@ -503,20 +493,20 @@ function getMessage(key) {
         Translate(apikey, target_lang, sParams);
     };
 
-	window.Asc.plugin.onExternalMouseUp = function()
-	{
-		var evt = document.createEvent("MouseEvents");
-		evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0,
-			false, false, false, false, 0, null);
+    window.Asc.plugin.onExternalMouseUp = function()
+    {
+        var evt = document.createEvent("MouseEvents");
+        evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0,
+            false, false, false, false, 0, null);
 
-		document.dispatchEvent(evt);
-		$('#select_example').select2({
+        document.dispatchEvent(evt);
+        $('#select_example').select2({
             minimumResultsForSearch: Infinity,
             width: "calc(100% - 24px)"
         });
-	};
-	window.Asc.plugin.onTranslate = function()
-	{
+    };
+    window.Asc.plugin.onTranslate = function()
+    {
         var elements = document.getElementsByClassName("i18n");
 
         for (var i = 0; i < elements.length; i++) {
