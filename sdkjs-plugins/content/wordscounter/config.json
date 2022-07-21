@@ -1,0 +1,83 @@
+{
+    "name" : "Count words and characters",
+    "nameLocale": {
+        "ru": "Подсчет слов и символов",
+        "fr": "Compter les mots et les caractères",
+        "es": "Contar palabras y caracteres",
+        "de": "Wörter und Zeichen zählen"
+    },
+    "guid" : "asc.{584EEEE8-DBF5-45C3-A4CA-F52177C82754}",
+    "version": "1.0.0",
+
+    "variations" : [
+        {
+            "description" : "Count words and characters",
+            "descriptionLocale": {
+                "ru": "Подсчет слов и символов",
+                "fr": "Compter les mots et les caractères",
+                "es": "Contar palabras y caracteres",
+                "de": "Wörter und Zeichen zählen"
+            },
+            "url"         : "index.html",
+
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+            "isViewer"        : true,
+            "EditorsSupport"  : ["word"],
+
+            "isVisual"        : true,
+            "isModal"         : false,
+            "isInsideMode"    : true,
+
+            "initDataType"    : "text",
+            "initData"        : "",
+
+            "isUpdateOleOnResize" : true,
+
+            "buttons"         : [],
+
+            "initOnSelectionChanged": true,
+            
+            "events" : ["onTargetPositionChanged"]
+        }
+    ]
+}
