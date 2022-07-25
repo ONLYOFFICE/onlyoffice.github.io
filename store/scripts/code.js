@@ -48,6 +48,7 @@ let bTranslate = false;                                              // flag tra
 let isTranslationLoading = false;                                    // flag translation loading
 let isFrameLoading = true;                                           // flag window loading
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
+let timeout = null;                                                  // delay for loader
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -135,6 +136,7 @@ window.addEventListener('message', function(message) {
 				installedPlugins = message.data.filter(function(el) {
 					return (el.guid !== guidMarkeplace && el.guid !== guidSettings);
 				});
+				sortPlugins(false, true);
 			} else {
 				installedPlugins = [];
 			}
@@ -405,6 +407,7 @@ function initElemnts() {
 function toogleLoader(show, text) {
 	// show or hide loader
 	if (!show) {
+		clearTimeout(timeout);
 		document.getElementById('loader-container').classList.add('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;	
@@ -480,7 +483,8 @@ function createPluginDiv(plugin, bInstalled) {
 	let div = document.createElement('div');
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
-	div.className = 'div_item';
+	div.className = 'div_item form-control noselect';
+
 	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
 	if (isDesctop && installed) {
@@ -503,9 +507,11 @@ function createPluginDiv(plugin, bInstalled) {
 	
 	let variations = plugin.variations[0]
 	// TODO think about when we will get background color for header (maybe from config)
+	let background = 'rgba(52, 126, 232, 1)';
+	let bg_active = 'rgba(52, 126, 232, 0.85)';
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let template = '<div class="div_image" onclick="onClickItem(event.target)">' +
+	let template = '<div class="div_image" style="background:' + background + '" onclick="onClickItem(event.target)" onmouseenter="highlightItem(event.target, true, \''+bg_active.toString()+'\')" onmouseleave="highlightItem(event.target, false, \''+background.toString()+'\')">' +
 						// TODO temporarily set the following image sizes
 						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
 					'</div>' +
@@ -529,9 +535,21 @@ function createPluginDiv(plugin, bInstalled) {
 	Ps.update();
 };
 
+function highlightItem(target, bHighlight, bg) {
+	if (bHighlight) {
+		target.parentNode.classList.add('div_item_hovered_' + themeType);
+	}
+	else {
+		target.parentNode.classList.remove('div_item_hovered_' + themeType);
+	}
+	target.style.background = bg;
+}
+
 function onClickInstall(target) {
 	// click install button
-	toogleLoader(true, "Installation");
+	clearTimeout(timeout);
+	timeout = setTimeout(toogleLoader, 200, true, "Installation");
+	// toogleLoader(true, "Installation");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
 	let installed = installedPlugins.find( function(el) { return el.guid === guid; } );
@@ -546,7 +564,9 @@ function onClickInstall(target) {
 
 function onClickUpdate(target) {
 	// click update button
-	toogleLoader(true, "Updating");
+	clearTimeout(timeout);
+	timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	// toogleLoader(true, "Updating");
 	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
 	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
 	let message = {
@@ -558,9 +578,12 @@ function onClickUpdate(target) {
 	sendMessage(message);
 };
 
+
 function onClickRemove(target) {
 	// click remove button
-	toogleLoader(true, "Removal");
+	clearTimeout(timeout);
+	timeout = setTimeout(toogleLoader, 200, true, "Removal");
+	// toogleLoader(true, "Removal");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message = {
 		type : 'remove',
@@ -588,11 +611,19 @@ function onClickItem(target) {
 	let installed = installedPlugins.find(function(el){return(el.guid===guid);});
 	let plugin = allPlugins.find(function(el){return (el.guid == guid);});
 
+	// TODO change this part when we will add scrinshotes into plugins folder (add to config link to screenshot)
 	if (!plugin) {
 		elements.divGitLink.classList.add('hidden');
+		elements.imgScreenshot.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
+		if (plugin.variations[0].isVisual) {
+			elements.imgScreenshot.setAttribute('src', './resources/img/screenshotes/' + guid + '.png');
+			elements.imgScreenshot.classList.remove('hidden');
+		} else {
+			elements.imgScreenshot.classList.add('hidden');
+		}
 	}
 
 	let bHasUpdate = false;
@@ -628,13 +659,6 @@ function onClickItem(target) {
 	} else {
 		elements.btnRemove.classList.add('hidden');
 		elements.btnInstall.classList.remove('hidden');
-	}
-
-	if (plugin.variations[0].isVisual) {
-		elements.imgScreenshot.setAttribute('src', './resources/img/screenshotes/' + guid + '.png');
-		elements.imgScreenshot.classList.remove('hidden');
-	} else {
-		elements.imgScreenshot.classList.add('hidden');
 	}
 
 	setDivHeight();
