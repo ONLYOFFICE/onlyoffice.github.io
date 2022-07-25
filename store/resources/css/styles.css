@@ -96,12 +96,13 @@ label.header {
 	flex-wrap: wrap;
 	margin-right: 5px;
 	margin-left: 15px;
+	justify-content: center;
 }
 
 .div_item {
 	display: flex;
 	flex-flow: column;
-	border: 1px solid #c0c0c0;
+	/* border: 1px solid #c0c0c0; */
 	border-radius: 5px;
 	max-width: 160px;
 	min-width: 160px;
@@ -109,6 +110,15 @@ label.header {
 	position: relative;
 	min-height: 225px;
 	max-height: 225px;
+	padding: 0px !important;
+}
+
+.div_item_hovered_light {
+	border: 1px solid #333 !important;
+}
+
+.div_item_hovered_dark {
+	border: 1px solid #fff !important;
 }
 
 .div_description {
@@ -121,7 +131,7 @@ label.header {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: rgb(52,126,232);
+	/* background: rgba(52, 126, 232, 1); */
 	cursor: pointer;
 	border-radius: 3px 3px 0 0;
 	height: 75px;
