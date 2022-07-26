@@ -294,7 +294,7 @@
 							}
 							highlight(text, settings.curLang);
 						} catch (error) {
-							console.log(error);
+							console.log(error.name + ':' + error.message);
 						}
 					} else {
 						if (!isAuto) {
