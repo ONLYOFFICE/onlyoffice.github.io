@@ -33,18 +33,26 @@ label.header {
 	font-size: 14px !important;
 }
 
+.btn_menu {
+	height: 24px !important;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
 .btn_menu_right {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 	border-left-width: 0 !important;
 	margin-left: -1px;
 	font-weight: normal !important;
+	min-width: 100px;
 }
 
 .btn_menu_left {
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
 	font-weight: normal !important;
+	min-width: 90px;
 }
 
 .close {
@@ -111,6 +119,7 @@ label.header {
 	min-height: 235px;
 	max-height: 235px;
 	padding: 0px !important;
+	cursor: pointer;
 }
 
 /* .div_item_hovered {
@@ -141,9 +150,9 @@ label.header {
 	align-items: center;
 	background: #f5f5f5;
 	/* background: rgba(52, 126, 232, 1); */
-	cursor: pointer;
+	/* cursor: pointer; */
 	border-radius: 3px 3px 0 0;
-	height: 75px;
+	height: 84px;
 }
 
 .span_name {
@@ -177,11 +186,16 @@ label.header {
 	margin: 0px 10px 10px;;
 	width: calc(100% - 20px);
 	border-radius: 3px !important;
+	font-weight: bold !important;
+	height: 24px !important;
 }
 
 .btn_preview {
 	margin: 10px 0px 10px 10px;
 	width: fit-content;
+	min-width: 109px;
+	height: 24px !important;
+	border-radius: 3px !important;
 }
 
 .div_notification {
@@ -278,7 +292,7 @@ label.header {
 }
 
 .span_caption {
-	margin-right: 10px;
+	margin-right: 16px;
 	cursor: pointer;
 }
 
@@ -293,10 +307,11 @@ label.header {
 
 .span_update {
 	align-self: flex-end;
-	background-color: #06a10d;
+	background-color: #009900;
 	color: white;
+	font-size: 10px !important;
 	padding: 1px 5px;
-	border: 1px solid #06a10d;
+	border: 1px solid #009900;
 	border-radius: 12px;
 	margin: 10px;
 }
