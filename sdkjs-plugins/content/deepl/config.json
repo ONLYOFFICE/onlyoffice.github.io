@@ -66,7 +66,6 @@
                     }
                 }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": true,
             "EditorsSupport": [ "word", "slide", "cell" ],
 
@@ -82,10 +81,59 @@
             "buttons": [],
 
             "initOnSelectionChanged": true,
-            "storeBackground" : {
-                "light" : "#042B48",
-                "dark" : "#042B48"
-            }
+			"store": {
+				"background": {
+					"light" : "#042B48",
+					"dark" : "#042B48"
+				},
+				"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+				"icons2": [
+					{
+						"theme" : "flat",
+						"style" : "light",
+						
+						"100%": {
+							"normal": "resources/light/icon.png"
+						},
+						"125%": {
+							"normal": "resources/light/icon@1.25x.png"
+						},
+						"150%": {
+							"normal": "resources/light/icon@1.5x.png"
+						},
+						"175%": {
+							"normal": "resources/light/icon@1.75x.png"
+						},
+						"200%": {
+							"normal": "resources/light/icon@2x.png"
+						},
+						"default": {
+							"normal": "resources/light/icon.png"
+						}
+					},
+					{
+						"theme" : "flatDark",
+						"style" : "dark",
+						
+						"100%": {
+							"normal": "resources/dark/icon.png"
+						},
+						"125%": {
+							"normal": "resources/dark/icon@1.25x.png"
+						},
+						"150%": {
+							"normal": "resources/dark/icon@1.5x.png"
+						},
+						"175%": {
+							"normal": "resources/dark/icon@1.75x.png"
+						},
+						"200%": {
+							"normal": "resources/dark/icon@2x.png"
+						}
+					}
+				],
+				"screenshots" : ["resources/store/screen_1.png"]
+			}
         }
     ]
 }
