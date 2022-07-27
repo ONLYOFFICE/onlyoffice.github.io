@@ -1,7 +1,7 @@
 {
     "name" : "Jitsi",
     "guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
-	"version": "1.0.1",
+    "version": "1.0.1",
 
     "variations" : [
         {
@@ -9,46 +9,47 @@
             "url"         : "index.html",
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-			"icons2": [
-				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/light/icon@2x.png"
-					}
-				},
-				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/dark/icon@2x.png"
-					}
-				}
-			],
+            "icons2": [
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "screens"         : ["resources/store/screen_1.png"],
             "isViewer"        : false,
             "EditorsSupport"  : ["word", "cell", "slide"],
 
@@ -61,7 +62,11 @@
 
             "isUpdateOleOnResize" : false,
 
-            "buttons"         : []
+            "buttons"         : [],
+            "storeBackground" : {
+                "ligth" : "#2AA0D8",
+                "dark" : "#2AA0D8"
+            }
         }
     ]
 }
