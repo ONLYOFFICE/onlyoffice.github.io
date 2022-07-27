@@ -1,6 +1,6 @@
 {
     "name" : "Glavred",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "Главред"
     },
     "guid" : "asc.{B631E142-E40B-4B4C-90B9-2D00222A286E}",
@@ -9,52 +9,53 @@
     "variations" : [
         {
             "description" : "Glavred",
-			"descriptionLocale": {
-				"ru": "Главред"
-			},
+            "descriptionLocale": {
+                "ru": "Главред"
+            },
             "url"         : "index.html",
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
-				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/light/icon@2x.png"
-					}
-				},
-				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/dark/icon@2x.png"
-					}
-				}
-			],
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "screens"         : ["resources/store/screen_1.png"],
             "isViewer"        : true,
             "EditorsSupport"  : ["word"],
 
@@ -67,7 +68,11 @@
 
             "isUpdateOleOnResize" : false,
 
-            "buttons"         : [ { "text": "Ok", "primary": true } ]
+            "buttons"         : [ { "text": "Ok", "primary": true } ],
+            "storeBackground" : {
+                "ligth" : "#233450",
+                "dark" : "#233450"
+            }
         }
     ]
 }
