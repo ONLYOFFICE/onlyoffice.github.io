@@ -70,7 +70,7 @@
             "buttons"         : [ { "text": "Ok", "primary": true } ],
             "store": {
                 "background": {
-                    "light" : "#233450",
+                    "light" : "#F5F5F5",
                     "dark" : "#233450"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
