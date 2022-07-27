@@ -32,8 +32,8 @@
 		<div id="div_body" class="div_body hidden">
 			<div id="toolbar" class="toolbar">
 				<div class="toolbar_buttons">
-					<button id="btn_myPlugins" class="btn_menu_left btn-text-default">My plugins</button>
-					<button id="btn_marketplace" class="btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
+					<button id="btn_myPlugins" class="btn_menu btn_menu_left btn-text-default">My plugins</button>
+					<button id="btn_marketplace" class="btn_menu btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
 				</div>
 				<div class="toolbar_link">
 					<!-- TODO think about how to open the form for uploading -->
@@ -51,14 +51,14 @@
 			</div>
 			<div class="div_selected_description">
 				<span id="span_name" class="span_name_selected"></span>
-				<div>
+				<div class="div_offered">
 					<span id="span_offered_caption" class="span_description">Offered by:</span>
 					<span id="span_offered"></span>
 				</div>
 				<div>
 					<button id="btn_update" class="btn-text-default btn_preview btn_install" onclick="onClickUpdate(event.target)">Update</button>
-					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode)">Remove</button>
-					<button id="btn_install" class="btn-text-default btn_preview btn_install" onclick="onClickInstall(event.target.parentNode)">Install</button>
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
 				</div>
 			</div>
 		</div>
