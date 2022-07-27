@@ -35,6 +35,7 @@ let isTranslationLoading = false;                                    // flag tra
 let isFrameLoading = true;                                           // flag window loading
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
+let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -265,7 +266,7 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 				rule += '.div_offered{color: rgba(255,255,255,0.8); !important;}\n';
 			}
-			
+
 			let styleTheme = document.createElement('style');
             styleTheme.type = 'text/css';
             styleTheme.innerHTML = message.style + rule;
@@ -527,7 +528,8 @@ function createPluginDiv(plugin, bInstalled) {
 	// TODO think about when we will get background color for header (maybe from config)
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let template = '<div class="div_image">' +
+	let bg = variations.storeBackground ? variations.storeBackground[themeType] : defaultBG;
+	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
 						// TODO temporarily set the following image sizes
 						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
 					'</div>' +
@@ -619,19 +621,18 @@ function onClickItem() {
 	let installed = installedPlugins.find(function(el){return(el.guid===guid);});
 	let plugin = allPlugins.find(function(el){return (el.guid == guid);});
 
-	// TODO change this part when we will add scrinshotes into plugins folder (add to config link to screenshot)
 	if (!plugin) {
 		elements.divGitLink.classList.add('hidden');
-		elements.imgScreenshot.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
-		if (plugin.variations[0].isVisual) {
-			elements.imgScreenshot.setAttribute('src', './resources/img/screenshotes/' + guid + '.png');
-			elements.imgScreenshot.classList.remove('hidden');
-		} else {
-			elements.imgScreenshot.classList.add('hidden');
-		}
+	}
+
+	if (plugin.variations[0].screens) {
+		elements.imgScreenshot.setAttribute('src', '.' + plugin.variations[0].screens[0]);
+		elements.imgScreenshot.classList.remove('hidden');
+	} else {
+		elements.imgScreenshot.classList.add('hidden');
 	}
 
 	let bHasUpdate = false;
