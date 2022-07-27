@@ -1,66 +1,67 @@
 {
-	"name": "draw.io",
-	"nameLocale": {
-		"ru": "draw.io",
-		"fr": "draw.io",
-		"es": "draw.io",
-		"de": "draw.io"
-	},
-	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
-	"version": "1.0.1",
+    "name": "draw.io",
+    "nameLocale": {
+        "ru": "draw.io",
+        "fr": "draw.io",
+        "es": "draw.io",
+        "de": "draw.io"
+    },
+    "guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
+    "version": "1.0.1",
 
-	"variations": [
-		{
-			"description": "draw.io",
-			"descriptionLocale": {
-				"ru": "draw.io",
-				"fr": "draw.io",
-				"es": "draw.io",
-				"de": "draw.io"
-			},
-			"url": "index.html",
+    "variations": [
+        {
+            "description": "draw.io",
+            "descriptionLocale": {
+                "ru": "draw.io",
+                "fr": "draw.io",
+                "es": "draw.io",
+                "de": "draw.io"
+            },
+            "url": "index.html",
 
-			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-			"icons2": [
-				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/light/icon@2x.png"
-					}
-				},
-				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/dark/icon@2x.png"
-					}
-				}
-			],
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "screens": ["resources/store/screen_1.png"],
             "isViewer": false,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
@@ -98,7 +99,11 @@
                 }
             ],
 
-            "size": [ 1200, 1000 ]
+            "size": [ 1200, 1000 ],
+            "storeBackground" : {
+                "ligth" : "#F5F5F5",
+                "dark" : "#F5F5F5"
+            }
         }
     ]
 }
