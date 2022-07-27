@@ -83,7 +83,7 @@
 
             "initOnSelectionChanged": true,
             "storeBackground" : {
-                "ligth" : "#042B48",
+                "light" : "#042B48",
                 "dark" : "#042B48"
             }
         }
