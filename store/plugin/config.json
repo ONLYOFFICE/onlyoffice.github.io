@@ -55,7 +55,7 @@
 			"initData"            : "",
 			"isUpdateOleOnResize" : false,
 			"buttons"             : [],
-			"size"                : [608, 635]
+			"size"                : [608, 600]
 		}
 	]
 }
