@@ -83,7 +83,7 @@
             "initOnSelectionChanged": true,
             "store": {
                 "background": {
-                    "light" : "#042B48",
+                    "light" : "#F5F5F5",
                     "dark" : "#042B48"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
