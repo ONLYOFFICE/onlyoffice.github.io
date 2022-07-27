@@ -29,10 +29,14 @@
                 "onInputHelperClear",
                 "onInputHelperInput"
             ],
-            "storeBackground" : {
-                "light" : "#F5F5F5",
-                "dark" : "#F5F5F5"
-            }
+			"store": {
+				"background": {
+					"light" : "#F5F5F5",
+					"dark" : "#555555"
+				},
+				"icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+				"screenshots" : ["resources/store/screen_1.png"]
+			}
         }
     ]
 }
