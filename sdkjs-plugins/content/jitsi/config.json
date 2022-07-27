@@ -64,7 +64,7 @@
 
             "buttons"         : [],
             "storeBackground" : {
-                "ligth" : "#2AA0D8",
+                "light" : "#2AA0D8",
                 "dark" : "#2AA0D8"
             }
         }
