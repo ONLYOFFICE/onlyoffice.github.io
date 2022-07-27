@@ -69,7 +69,7 @@
             "store": {
                 "background": {
                     "light" : "#333333",
-                    "dark" : "#333333"
+                    "dark" : "#555555"
                 },            
                 "screenshots" : ["resources/store/screen_1.png"]
             }
