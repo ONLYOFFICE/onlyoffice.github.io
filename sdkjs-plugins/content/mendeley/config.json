@@ -59,8 +59,8 @@
         "initOnSelectionChanged": false,
         "store": {
             "background": {
-                "light" : "#E5222E",
-                "dark" : "#E5222E"
+                "light" : "#F5F5F5",
+                "dark" : "#555555"
             },
             "screenshots" : ["resources/store/screen_1.jpg"]
         }
