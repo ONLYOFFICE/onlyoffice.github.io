@@ -160,7 +160,7 @@ window.addEventListener('message', function(message) {
 			btn.classList.remove('btn_install');
 			btn.classList.add('btn_remove');
 			btn.onclick = function(e) {
-				onClickRemove(e.target);
+				onClickRemove(e.target, e);
 			};
 
 			if (!elements.divSelected.classList.contains('hidden')) {
@@ -213,7 +213,7 @@ window.addEventListener('message', function(message) {
 					btn.classList.add('btn_install');
 					btn.classList.remove('btn_remove');
 					btn.onclick = function(e) {
-						onClickInstall(e.target);
+						onClickInstall(e.target, e);
 					};
 				}
 			} else {
@@ -222,7 +222,7 @@ window.addEventListener('message', function(message) {
 				btn.classList.add('btn_install');
 				btn.classList.remove('btn_remove');
 				btn.onclick = function(e) {
-					onClickInstall(e.target);
+					onClickInstall(e.target, e);
 				};
 				
 				if (btn.parentNode.childElementCount > 1) {
@@ -248,26 +248,24 @@ window.addEventListener('message', function(message) {
 
 			let rule = '\n.asc-plugin-loader{background-color:' + message.theme['background-normal'] +';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n';
 			rule += 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n';
-			if (themeType == 'dark') {
-				rule += '.btn_toolbar_active{background-color: #fff !important; color: #000 !important}\n';
-				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
-				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
-				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
-				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 
-			} else {
+			if (themeType.includes('light')) {
+				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
 				rule += '.btn_toolbar_active{background-color: #c0c0c0 !important; color: #000 !important}\n';
 				rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
-
+				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
+			} else {
+				rule += '.btn_toolbar_active{background-color: #fff !important; color: #000 !important}\n';
+				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
+				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
+				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
+				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
+				rule += '.div_offered{color: rgba(255,255,255,0.8); !important;}\n';
 			}
-			// rule += '.btn_toolbar{color:'+message.theme.DemTextColor+' !important}\n'
-
-			if (themeType.includes('light')) {
-				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
-			}
+			
 			let styleTheme = document.createElement('style');
             styleTheme.type = 'text/css';
             styleTheme.innerHTML = message.style + rule;
@@ -494,6 +492,16 @@ function createPluginDiv(plugin, bInstalled) {
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item form-control noselect';
+	
+	div.onmouseenter = function(event) {
+		event.target.classList.add('div_item_hovered_' + themeType);
+	};
+
+	div.onmouseleave = function(event) {
+		event.target.classList.remove('div_item_hovered_' + themeType);
+	};
+
+	div.onclick = onClickItem;
 
 	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
@@ -519,7 +527,7 @@ function createPluginDiv(plugin, bInstalled) {
 	// TODO think about when we will get background color for header (maybe from config)
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let template = '<div class="div_image" onclick="onClickItem(event.target)" onmouseenter="highlightItem(event.target, true)" onmouseleave="highlightItem(event.target, false)">' +
+	let template = '<div class="div_image">' +
 						// TODO temporarily set the following image sizes
 						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
 					'</div>' +
@@ -533,8 +541,8 @@ function createPluginDiv(plugin, bInstalled) {
 							: ''
 						)+''+
 						( (installed && !installed.removed)
-							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target)">'  + translate["Install"] + '</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event)">'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -543,16 +551,8 @@ function createPluginDiv(plugin, bInstalled) {
 	Ps.update();
 };
 
-function highlightItem(target, bHighlight) {
-	if (bHighlight) {
-		target.parentNode.classList.add('div_item_hovered_' + themeType);
-	}
-	else {
-		target.parentNode.classList.remove('div_item_hovered_' + themeType);
-	}
-}
-
-function onClickInstall(target) {
+function onClickInstall(target, event) {
+	event.stopImmediatePropagation();
 	// click install button
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Installation");
@@ -586,7 +586,8 @@ function onClickUpdate(target) {
 };
 
 
-function onClickRemove(target) {
+function onClickRemove(target, event) {
+	event.stopImmediatePropagation();
 	// click remove button
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Removal");
@@ -599,7 +600,7 @@ function onClickRemove(target) {
 	sendMessage(message);
 };
 
-function onClickItem(target) {
+function onClickItem() {
 	// There we will make preview for selected plugin
 	// TODO think about where we will get "offered by" and text for this block (maybe from config) (also we should add translate for it)
 	let offered = " Ascensio System SIA";
@@ -610,7 +611,7 @@ function onClickItem(target) {
 	elements.divBody.classList.add('hidden');
 	elements.arrow.classList.remove('hidden');
 	
-	let guid = target.parentNode.getAttribute('data-guid');
+	let guid = this.getAttribute('data-guid');
 	let divPreview = document.createElement('div');
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
@@ -644,8 +645,8 @@ function onClickItem(target) {
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
-	elements.imgIcon.setAttribute('src', target.children[0].src);
-	elements.spanName.innerHTML = target.nextSibling.children[0].innerText;
+	elements.imgIcon.setAttribute('src', this.children[0].children[0].src);
+	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
 	elements.spanSelectedDescr.innerHTML = description;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
