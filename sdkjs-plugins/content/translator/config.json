@@ -46,23 +46,13 @@
             "buttons": [],
 
             "initOnSelectionChanged": true,
-			"store": {
-				"background": {
-					"light" : "#F5F5F5",
-					"dark" : "#555555"
-				},
-				"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
-				"icons2": [
-				{
-					"100%": { "normal": "resources/img/icon.png" },
-					"125%": { "normal": "resources/img/icon@1.25x.png" },
-					"150%": { "normal": "resources/img/icon@1.5x.png" },
-					"175%": { "normal": "resources/img/icon@1.75x.png" },
-					"200%": { "normal": "resources/img/icon@2x.png" }
-				}
-				],
-				"screenshots" : ["resources/store/screen_1.png"]
-			}
+            "store": {
+                "background": {
+                    "light" : "#F5F5F5",
+                    "dark" : "#555555"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
+            }
         }
     ]
 }
