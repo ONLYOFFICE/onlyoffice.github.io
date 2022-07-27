@@ -59,7 +59,7 @@
         "isUpdateOleOnResize": false,
         "initOnSelectionChanged": false,
         "storeBackground" : {
-            "ligth" : "#E5222E",
+            "light" : "#E5222E",
             "dark" : "#E5222E"
         }
       }

@@ -97,7 +97,7 @@
                 }
             ],
             "storeBackground" : {
-                "ligth" : "#ED7309",
+                "light" : "#ED7309",
                 "dark" : "#ED7309"
             }
         }

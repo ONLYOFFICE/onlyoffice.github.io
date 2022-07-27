@@ -33,7 +33,7 @@
 
             "buttons"         : [ ],
             "storeBackground" : {
-                "ligth" : "#26A8DE",
+                "light" : "#26A8DE",
                 "dark" : "#26A8DE"
             }
         }
