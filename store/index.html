@@ -33,11 +33,11 @@
 			<div id="toolbar" class="toolbar">
 				<div class="toolbar_buttons">
 					<button id="btn_myPlugins" class="btn_menu_left btn-text-default">My plugins</button>
-					<button id="btn_marketplace" class="btn_menu_right btn-text-default submit primary">Marketplace</button>
+					<button id="btn_marketplace" class="btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
 				</div>
 				<div class="toolbar_link">
 					<!-- TODO think about how to open the form for uploading -->
-					<a id="link_newPlugin" class="aboutlink link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+					<a id="link_newPlugin" class="link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
 				</div>
 			</div>
 			<div id="div_main" class="main_content"></div>
@@ -56,9 +56,9 @@
 					<span id="span_offered"></span>
 				</div>
 				<div>
-					<button id="btn_update" class="btn-text-default btn_preview" onclick="onClickUpdate(event.target)">Update</button>
-					<button id="btn_remove" class="btn-text-default btn_preview" onclick="onClickRemove(event.target.parentNode)">Remove</button>
-					<button id="btn_install" class="btn-text-default btn_preview" onclick="onClickInstall(event.target.parentNode)">Install</button>
+					<button id="btn_update" class="btn-text-default btn_preview btn_install" onclick="onClickUpdate(event.target)">Update</button>
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode)">Remove</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install" onclick="onClickInstall(event.target.parentNode)">Install</button>
 				</div>
 			</div>
 		</div>
