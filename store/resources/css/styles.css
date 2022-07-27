@@ -98,7 +98,7 @@ label.header {
 
 .main_content {
 	position: absolute;
-	inset: 90px 0px 5px;
+	inset: 60px 0px 5px;
 	overflow: hidden;
 	display: flex;
 	flex-wrap: wrap;
