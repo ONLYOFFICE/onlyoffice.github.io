@@ -75,7 +75,7 @@ label.header {
 .toolbar {
 	display: flex;
 	justify-content: space-between;
-	margin: 20px 15px;
+	margin: 20px 20px 0px 20px;
 }
 
 .toolbar_link {
@@ -95,7 +95,7 @@ label.header {
 	display: flex;
 	flex-wrap: wrap;
 	margin-right: 5px;
-	margin-left: 15px;
+	margin-left: 20px;
 	justify-content: center;
 }
 
@@ -103,22 +103,30 @@ label.header {
 	display: flex;
 	flex-flow: column;
 	/* border: 1px solid #c0c0c0; */
-	border-radius: 5px;
-	max-width: 160px;
-	min-width: 160px;
+	border-radius: 4px;
+	max-width: 173px;
+	min-width: 173px;
 	margin: 0 20px 20px 0;
 	position: relative;
-	min-height: 225px;
-	max-height: 225px;
+	min-height: 235px;
+	max-height: 235px;
 	padding: 0px !important;
 }
 
+/* .div_item_hovered {
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+} */
+
 .div_item_hovered_light {
 	border: 1px solid #333 !important;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+
 }
 
 .div_item_hovered_dark {
 	border: 1px solid #fff !important;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+
 }
 
 .div_description {
@@ -131,6 +139,7 @@ label.header {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background: #f5f5f5;
 	/* background: rgba(52, 126, 232, 1); */
 	cursor: pointer;
 	border-radius: 3px 3px 0 0;
@@ -164,9 +173,10 @@ label.header {
 	flex-flow: column;
 }
 
-.btn_install {
+.btn_item {
 	margin: 0px 10px 10px;;
 	width: calc(100% - 20px);
+	border-radius: 3px !important;
 }
 
 .btn_preview {
@@ -214,8 +224,12 @@ label.header {
 	height: 100%;
 }
 
+.link_submit {
+	text-decoration: underline dotted !important;
+}
+
 .link_submit:hover {
-	text-decoration: none !important;
+	text-decoration: underline dotted !important;
 }
 
 .link_info {
@@ -229,7 +243,7 @@ label.header {
 
 .div_selected_toolbar {
 	display: flex;
-	margin: 20px 15px;
+	margin: 20px;
 }
 
 .div_selected_description {
@@ -238,7 +252,7 @@ label.header {
 }
 
 .div_selected_main {
-	margin: 0 15px;
+	margin: 0 20px;
 	position: absolute;
 	inset: 130px 0px 0px;
 }
