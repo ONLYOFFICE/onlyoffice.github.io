@@ -9,6 +9,7 @@
             "url"         : "index.html",
 
             "icons"           : ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "screens"         : ["resources/store/screen_1.png"],
             "isViewer"        : false,
             "EditorsSupport"  : ["word", "slide", "cell"],
 
@@ -23,11 +24,15 @@
             "isUpdateOleOnResize" : false,
 
             "buttons"        : [ ],
-			
-			"events" : [
-				"onInputHelperClear",
-				"onInputHelperInput"
-			]
+            
+            "events" : [
+                "onInputHelperClear",
+                "onInputHelperInput"
+            ],
+            "storeBackground" : {
+                "ligth" : "#F5F5F5",
+                "dark" : "#F5F5F5"
+            }
         }
     ]
 }

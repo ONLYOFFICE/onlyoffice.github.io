@@ -22,45 +22,46 @@
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
-				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/light/icon@2x.png"
-					}
-				},
-				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/dark/icon@2x.png"
-					}
-				}
-			],
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "screens": ["resources/store/screen_1.png"],
             "isViewer": true,
             "EditorsSupport": [ "word" ],
 
@@ -105,7 +106,11 @@
                 }
             ],
 
-            "size": [ 300, 150 ]
+            "size": [ 300, 150 ],
+            "storeBackground" : {
+                "ligth" : "#F5F5F5",
+                "dark" : "#F5F5F5"
+            }
         }
     ]
 }
