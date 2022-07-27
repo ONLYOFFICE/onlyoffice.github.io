@@ -157,6 +157,8 @@ window.addEventListener('message', function(message) {
 
 			let btn = this.document.getElementById(message.guid).lastChild.lastChild;
 			btn.innerHTML = translate['Remove'];
+			btn.classList.remove('btn_install');
+			btn.classList.add('btn_remove');
 			btn.onclick = function(e) {
 				onClickRemove(e.target);
 			};
@@ -202,12 +204,14 @@ window.addEventListener('message', function(message) {
 				}
 			}
 
-			if (elements.btnMyPlugins.classList.contains('primary')) {
+			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
 				if (plugin) {
 					showListofPlugins(false);
 				} else {
 					let btn = this.document.getElementById(message.guid).lastChild.lastChild;
 					btn.innerHTML = translate['Install'];
+					btn.classList.add('btn_install');
+					btn.classList.remove('btn_remove');
 					btn.onclick = function(e) {
 						onClickInstall(e.target);
 					};
@@ -215,6 +219,8 @@ window.addEventListener('message', function(message) {
 			} else {
 				let btn = this.document.getElementById(message.guid).lastChild.lastChild;
 				btn.innerHTML = translate['Install'];
+				btn.classList.add('btn_install');
+				btn.classList.remove('btn_remove');
 				btn.onclick = function(e) {
 					onClickInstall(e.target);
 				};
@@ -240,7 +246,25 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let rule = '\n.asc-plugin-loader{background-color:' + message.theme['background-normal'] +';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}';
+			let rule = '\n.asc-plugin-loader{background-color:' + message.theme['background-normal'] +';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n';
+			rule += 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n';
+			if (themeType == 'dark') {
+				rule += '.btn_toolbar_active{background-color: #fff !important; color: #000 !important}\n';
+				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
+				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
+				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
+				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
+
+			} else {
+				rule += '.btn_toolbar_active{background-color: #c0c0c0 !important; color: #000 !important}\n';
+				rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
+				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
+				rule += '.btn_install:active{background-color: #446995 !important;}\n';
+				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
+
+			}
+			// rule += '.btn_toolbar{color:'+message.theme.DemTextColor+' !important}\n'
+
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
 			}
@@ -493,11 +517,9 @@ function createPluginDiv(plugin, bInstalled) {
 	
 	let variations = plugin.variations[0]
 	// TODO think about when we will get background color for header (maybe from config)
-	let background = 'rgba(52, 126, 232, 1)';
-	let bg_active = 'rgba(52, 126, 232, 0.85)';
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let template = '<div class="div_image" style="background:' + background + '" onclick="onClickItem(event.target)" onmouseenter="highlightItem(event.target, true, \''+bg_active.toString()+'\')" onmouseleave="highlightItem(event.target, false, \''+background.toString()+'\')">' +
+	let template = '<div class="div_image" onclick="onClickItem(event.target)" onmouseenter="highlightItem(event.target, true)" onmouseleave="highlightItem(event.target, false)">' +
 						// TODO temporarily set the following image sizes
 						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
 					'</div>' +
@@ -511,8 +533,8 @@ function createPluginDiv(plugin, bInstalled) {
 							: ''
 						)+''+
 						( (installed && !installed.removed)
-							? (installed.canRemoved ? '<button class="btn-text-default btn_install" onclick="onClickRemove(event.target)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_install" onclick="onClickInstall(event.target)">'  + translate["Install"] + '</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target)">'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -521,14 +543,13 @@ function createPluginDiv(plugin, bInstalled) {
 	Ps.update();
 };
 
-function highlightItem(target, bHighlight, bg) {
+function highlightItem(target, bHighlight) {
 	if (bHighlight) {
 		target.parentNode.classList.add('div_item_hovered_' + themeType);
 	}
 	else {
 		target.parentNode.classList.remove('div_item_hovered_' + themeType);
 	}
-	target.style.background = bg;
 }
 
 function onClickInstall(target) {
@@ -853,9 +874,9 @@ function getUrlSearchValue(key) {
 };
 
 function toogleView(current, oldEl, text, bAll) {
-	if ( !current.classList.contains('primary') ) {
-		oldEl.classList.remove('submit', 'primary');
-		current.classList.add('submit', 'primary');
+	if ( !current.classList.contains('btn_toolbar_active') ) {
+		oldEl.classList.remove('btn_toolbar_active');
+		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = translate[text] || text;
 		showListofPlugins(bAll);
 	}
