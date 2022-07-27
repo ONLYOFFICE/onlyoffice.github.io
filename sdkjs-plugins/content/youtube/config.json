@@ -52,7 +52,7 @@
 
             "size": [ 350, 90 ],
             "storeBackground" : {
-                "ligth" : "#FF0000",
+                "light" : "#FF0000",
                 "dark" : "#FF0000"
             }
         }
