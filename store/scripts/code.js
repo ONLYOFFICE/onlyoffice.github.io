@@ -95,6 +95,8 @@ window.onload = function() {
 
 	elements.arrow.onclick = function() {
 		// click on left arrow in preview mode
+		// TODO Fix problem with loading screenshots
+		elements.imgScreenshot.setAttribute('src','')
 		document.getElementById('span_overview').click();
 		elements.divSelected.classList.add('hidden');
 		elements.divSelectedMain.classList.add('hidden');
@@ -609,11 +611,6 @@ function onClickItem() {
 	// TODO think about where we will get "offered by" and text for this block (maybe from config) (also we should add translate for it)
 	let offered = " Ascensio System SIA";
 	let description = "Correct French grammar and typography. The plugin uses Grammalecte, an open-source grammar and typographic corrector dedicated to the French language.Correct French grammar and typography."
-
-	elements.divSelected.classList.remove('hidden');
-	elements.divSelectedMain.classList.remove('hidden');
-	elements.divBody.classList.add('hidden');
-	elements.arrow.classList.remove('hidden');
 	
 	let guid = this.getAttribute('data-guid');
 	let divPreview = document.createElement('div');
@@ -682,6 +679,12 @@ function onClickItem() {
 	}
 
 	setDivHeight();
+
+	// TODO Fix problem with loading screenshots
+	elements.divSelected.classList.remove('hidden');
+	elements.divSelectedMain.classList.remove('hidden');
+	elements.divBody.classList.add('hidden');
+	elements.arrow.classList.remove('hidden');
 };
 
 function onSelectPreview(target, isOverview) {
