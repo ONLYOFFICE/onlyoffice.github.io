@@ -48,7 +48,6 @@
                     }
                 }
             ],
-        "screens": ["resources/store/screen_1.png"],
         "isViewer": false,
         "EditorsSupport": [ "word" ],
         "initDataType": "text",
@@ -58,9 +57,12 @@
         "isInsideMode": true,
         "isUpdateOleOnResize": false,
         "initOnSelectionChanged": false,
-        "storeBackground" : {
-            "light" : "#E5222E",
-            "dark" : "#E5222E"
+        "store": {
+            "background": {
+                "light" : "#F5F5F5",
+                "dark" : "#555555"
+            },
+            "screenshots" : ["resources/store/screen_1.jpg"]
         }
       }
     ]

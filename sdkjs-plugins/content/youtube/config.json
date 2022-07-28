@@ -18,7 +18,6 @@
                 "200%": { "normal": "resources/img/icon@2x.png" }
             }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": true,
             "isDisplayedInViewer": false,
             "EditorsSupport": [ "word", "cell", "slide" ],
@@ -51,9 +50,12 @@
             ],
 
             "size": [ 350, 90 ],
-            "storeBackground" : {
-                "light" : "#FF0000",
-                "dark" : "#FF0000"
+            "store": {
+                "background": {
+                    "light" : "#F5F5F5",
+                    "dark" : "#555555"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         }
     ]

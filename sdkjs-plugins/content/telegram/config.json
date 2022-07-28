@@ -18,7 +18,6 @@
                 "200%": { "normal": "resources/img/icon@2x.png" }
             }
             ],
-            "screens"         : ["resources/store/screen_1.png"],
             "isViewer"        : true,
             "EditorsSupport"  : ["word", "cell", "slide"],
 
@@ -32,9 +31,12 @@
             "isUpdateOleOnResize" : false,
 
             "buttons"         : [ ],
-            "storeBackground" : {
-                "light" : "#26A8DE",
-                "dark" : "#26A8DE"
+            "store": {
+                "background": {
+                    "light" : "#26A8DE",
+                    "dark" : "#26A8DE"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         }
     ]

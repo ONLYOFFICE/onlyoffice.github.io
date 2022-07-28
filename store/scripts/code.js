@@ -24,7 +24,6 @@ const elements = {};                                                 // all elem
 const isDesctop = window.AscDesktopEditor !== undefined;             // desctop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
-const ioUrl = 'https://onlyoffice.github.io/sdkjs-plugins/content/'; // github.io url
 let isPluginLoading = false;                                         // flag plugins loading
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
@@ -93,6 +92,8 @@ window.onload = function() {
 
 	elements.arrow.onclick = function() {
 		// click on left arrow in preview mode
+		// TODO Fix problem with loading screenshots
+		elements.imgScreenshot.setAttribute('src','')
 		document.getElementById('span_overview').click();
 		elements.divSelected.classList.add('hidden');
 		elements.divSelectedMain.classList.add('hidden');
@@ -433,6 +434,8 @@ function getAllPluginsData() {
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
+	let pos = location.href.indexOf('store/index.html');
+	let ioUrl = location.href.substring(0, pos) + 'sdkjs-plugins/content/';
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
 		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + pluginUrl + '/' : pluginUrl;
@@ -528,7 +531,7 @@ function createPluginDiv(plugin, bInstalled) {
 	// TODO think about when we will get background color for header (maybe from config)
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let bg = variations.storeBackground ? variations.storeBackground[themeType] : defaultBG;
+	let bg = variations.store && variations.store.background ? variations.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
 						// TODO temporarily set the following image sizes
 						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
@@ -607,11 +610,6 @@ function onClickItem() {
 	// TODO think about where we will get "offered by" and text for this block (maybe from config) (also we should add translate for it)
 	let offered = " Ascensio System SIA";
 	let description = "Correct French grammar and typography. The plugin uses Grammalecte, an open-source grammar and typographic corrector dedicated to the French language.Correct French grammar and typography."
-
-	elements.divSelected.classList.remove('hidden');
-	elements.divSelectedMain.classList.remove('hidden');
-	elements.divBody.classList.add('hidden');
-	elements.arrow.classList.remove('hidden');
 	
 	let guid = this.getAttribute('data-guid');
 	let divPreview = document.createElement('div');
@@ -628,8 +626,15 @@ function onClickItem() {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	if (plugin.variations[0].screens) {
-		elements.imgScreenshot.setAttribute('src', '.' + plugin.variations[0].screens[0]);
+	if (plugin.variations[0].store && plugin.variations[0].store.screenshots) {
+		let pos, url;
+		if (plugin.imageUrl.includes('defaults')) {
+			url = plugin.url.replace('config.json', plugin.variations[0].store.screenshots[0])
+		} else {
+			pos = plugin.imageUrl.indexOf('resources/');
+			url = plugin.imageUrl.substring(0, pos) + plugin.variations[0].store.screenshots[0];
+		}
+		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.classList.remove('hidden');
 	} else {
 		elements.imgScreenshot.classList.add('hidden');
@@ -644,6 +649,7 @@ function onClickItem() {
 	}
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
+	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	elements.imgIcon.setAttribute('src', this.children[0].children[0].src);
@@ -671,6 +677,12 @@ function onClickItem() {
 	}
 
 	setDivHeight();
+
+	// TODO Fix problem with loading screenshots
+	elements.divSelected.classList.remove('hidden');
+	elements.divSelectedMain.classList.remove('hidden');
+	elements.divBody.classList.add('hidden');
+	elements.arrow.classList.remove('hidden');
 };
 
 function onSelectPreview(target, isOverview) {

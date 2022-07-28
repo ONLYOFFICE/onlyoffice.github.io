@@ -67,7 +67,6 @@
                     }
                 }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": false,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
@@ -96,9 +95,12 @@
                     }
                 }
             ],
-            "storeBackground" : {
-                "light" : "#ED7309",
-                "dark" : "#ED7309"
+            "store": {
+                "background": {
+                    "light" : "#ED7309",
+                    "dark" : "#ED7309"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         }
     ]

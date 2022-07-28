@@ -62,7 +62,6 @@
                     }
                 }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": false,
             "EditorsSupport": [ "word" ],
 
@@ -99,9 +98,12 @@
             ],
 
             "size": [ 592, 100 ],
-            "storeBackground" : {
-                "light" : "#042B48",
-                "dark" : "#042B48"
+            "store": {
+                "background": {
+                    "light" : "#F5F5F5",
+                    "dark" : "#042B48"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         },
         {
