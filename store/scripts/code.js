@@ -35,6 +35,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
+let devicePR = window.devicePixelRatio;                              // device pixel ratio
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -70,6 +71,12 @@ getTranslation();
 fetchAllPlugins();
 
 window.onload = function() {
+	let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
+	rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
+	let styleTheme = document.createElement('style');
+	styleTheme.type = 'text/css';
+	styleTheme.innerHTML = rule;
+	document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	// init element
 	Ps = new PerfectScrollbar('#' + "div_main", {});
 	initElemnts();
@@ -248,8 +255,7 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let rule = '\n.asc-plugin-loader{background-color:' + message.theme['background-normal'] +';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n';
-			rule += 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n';
+			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n';
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
@@ -498,11 +504,11 @@ function createPluginDiv(plugin, bInstalled) {
 	div.className = 'div_item form-control noselect';
 	
 	div.onmouseenter = function(event) {
-		event.target.classList.add('div_item_hovered_' + themeType);
+		event.target.classList.add('div_item_hovered');
 	};
 
 	div.onmouseleave = function(event) {
-		event.target.classList.remove('div_item_hovered_' + themeType);
+		event.target.classList.remove('div_item_hovered');
 	};
 
 	div.onclick = onClickItem;
@@ -744,6 +750,10 @@ function setDivHeight() {
 
 window.onresize = function() {
 	setDivHeight();
+	if (devicePR !== window.devicePixelRatio) {
+		devicePR = window.devicePixelRatio;
+		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+	}
 	// TODO change icons for plugins preview for new scale
 };
 
