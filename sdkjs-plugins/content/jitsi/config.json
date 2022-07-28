@@ -49,7 +49,6 @@
                     }
                 }
             ],
-            "screens"         : ["resources/store/screen_1.png"],
             "isViewer"        : false,
             "EditorsSupport"  : ["word", "cell", "slide"],
 
@@ -63,9 +62,12 @@
             "isUpdateOleOnResize" : false,
 
             "buttons"         : [],
-            "storeBackground" : {
-                "light" : "#2AA0D8",
-                "dark" : "#2AA0D8"
+            "store": {
+                "background": {
+                    "light" : "#2AA0D8",
+                    "dark" : "#2AA0D8"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         }
     ]

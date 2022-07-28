@@ -61,7 +61,6 @@
                     }
                 }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": true,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
@@ -77,9 +76,12 @@
             "buttons": [],
 
             "initOnSelectionChanged": true,
-            "storeBackground" : {
-                "light" : "#F44725",
-                "dark" : "#F44725"
+            "store": {
+                "background": {
+                    "light" : "#F44725",
+                    "dark" : "#F44725"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         }
     ]

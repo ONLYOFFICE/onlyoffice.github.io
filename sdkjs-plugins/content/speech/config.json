@@ -61,7 +61,6 @@
                     }
                 }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": true,
             "EditorsSupport": [ "word" ],
 
@@ -74,7 +73,14 @@
 
             "isUpdateOleOnResize": false,
 
-            "buttons": []
+            "buttons": [],
+            "store": {
+                "background": {
+                    "light" : "#F5F5F5",
+                    "dark" : "#F5F5F5"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
+            }
         },
         {
             "description": "Settings",
@@ -106,11 +112,7 @@
                 }
             ],
 
-            "size": [ 300, 150 ],
-            "storeBackground" : {
-                "light" : "#F5F5F5",
-                "dark" : "#F5F5F5"
-            }
+            "size": [ 300, 150 ]
         }
     ]
 }
