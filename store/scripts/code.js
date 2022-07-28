@@ -632,7 +632,7 @@ function onClickItem() {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	if (plugin.variations[0].store && plugin.variations[0].store.screenshots) {
+	if (plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let pos, url;
 		if (plugin.imageUrl.includes('defaults')) {
 			url = plugin.url.replace('config.json', plugin.variations[0].store.screenshots[0])
