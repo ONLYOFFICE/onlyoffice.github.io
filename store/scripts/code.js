@@ -35,6 +35,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
+let devicePR = window.devicePixelRatio;                              // device pixel ratio
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -749,7 +750,10 @@ function setDivHeight() {
 
 window.onresize = function() {
 	setDivHeight();
-	$('.div_item').css('border', ((1 / window.devicePixelRatio) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+	if (devicePR !== window.devicePixelRatio) {
+		devicePR = window.devicePixelRatio;
+		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+	}
 	// TODO change icons for plugins preview for new scale
 };
 
