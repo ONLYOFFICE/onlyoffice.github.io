@@ -24,9 +24,7 @@ const elements = {};                                                 // all elem
 const isDesctop = window.AscDesktopEditor !== undefined;             // desctop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
-// const ioUrl = 'https://onlyoffice.github.io/sdkjs-plugins/content/'; // github.io url
-const ioUrl = 'https://raw.githubusercontent.com/K0R0L/onlyoffice.github.io/master/sdkjs-plugins/content/'; // github.io url
-
+const ioUrl = getIOUrl();                                            // github.io url
 let isPluginLoading = false;                                         // flag plugins loading
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
@@ -439,7 +437,7 @@ function getAllPluginsData() {
 	let Unloaded = [];
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + pluginUrl + '/' : pluginUrl;
+		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
@@ -650,7 +648,7 @@ function onClickItem() {
 	}
 
 	// let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
-	let pluginUrl = plugin.baseUrl.replace('https://github.com/K0R0L/onlyoffice.github.io/', 'https://github.com/K0R0L/onlyoffice.github.io/tree/master/');
+	let pluginUrl = plugin.baseUrl.replace(ioUrl, ioUrl + 'tree/master/');
 
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
@@ -927,4 +925,9 @@ function removeUnloaded(unloaded) {
 	unloaded.forEach(function(el){
 		allPlugins.splice(el, 1);
 	})
+};
+
+function getIOUrl() {
+	let pos = location.href.indexOf('store/index.html');
+	return location.href.substring(0, pos);
 };
