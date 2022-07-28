@@ -503,11 +503,11 @@ function createPluginDiv(plugin, bInstalled) {
 	div.className = 'div_item form-control noselect';
 	
 	div.onmouseenter = function(event) {
-		event.target.classList.add('div_item_hovered_' + themeType);
+		event.target.classList.add('div_item_hovered');
 	};
 
 	div.onmouseleave = function(event) {
-		event.target.classList.remove('div_item_hovered_' + themeType);
+		event.target.classList.remove('div_item_hovered');
 	};
 
 	div.onclick = onClickItem;
@@ -748,11 +748,8 @@ function setDivHeight() {
 };
 
 window.onresize = function() {
-	console.log('resize');
 	setDivHeight();
 	$('.div_item').css('border', ((1 / window.devicePixelRatio) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-	$('.div_item_hovered_light').css('border', ((1 / window.devicePixelRatio) +'px solid #333'));
-
 	// TODO change icons for plugins preview for new scale
 };
 
