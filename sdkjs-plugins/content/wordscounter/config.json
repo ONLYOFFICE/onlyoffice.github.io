@@ -78,9 +78,12 @@
             "initOnSelectionChanged": true,
             
             "events" : ["onTargetPositionChanged"],
-            "storeBackground" : {
-                "light" : "#ED7309",
-                "dark" : "#ED7309"
+            "store": {
+                "background": {
+                    "light" : "#ED7309",
+                    "dark" : "#ED7309"
+                },
+                "screenshots" : []
             }
         }
     ]

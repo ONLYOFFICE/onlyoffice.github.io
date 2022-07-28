@@ -61,7 +61,6 @@
                     }
                 }
             ],
-            "screens": ["resources/store/screen_1.png"],
             "isViewer": false,
             "EditorsSupport": [ "word", "slide", "cell" ],
 
@@ -85,7 +84,14 @@
                         "de": "Schließen"
                     }
                 }
-            ]
+            ],
+            "store": {
+                "background": {
+                    "light" : "#F5F5F5",
+                    "dark" : "#F5F5F5"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
+            }
         },
         {
             "description": "About",
@@ -117,11 +123,7 @@
                 }
             ],
 
-            "size": [ 392, 147 ],
-            "storeBackground" : {
-                "light" : "#F5F5F5",
-                "dark" : "#F5F5F5"
-            }
+            "size": [ 392, 147 ]
         }
     ]
 }

@@ -48,7 +48,6 @@
                     }
                 }
             ],
-            "screens"             : ["resources/store/screen_1.png"],
             "isViewer"            : false,
             "EditorsSupport"      : ["word"],
             "initDataType"        : "html",
@@ -56,9 +55,12 @@
             "isModal"             : false,
             "isInsideMode"        : true,
             "isUpdateOleOnResize" : false,
-            "storeBackground" : {
-                "light" : "#F5F5F5",
-                "dark" : "#F5F5F5"
+            "store": {
+                "background": {
+                    "light" : "#F5F5F5",
+                    "dark" : "#555555"
+                },
+                "screenshots" : ["resources/store/screen_1.png"]
             }
         }
     ]
