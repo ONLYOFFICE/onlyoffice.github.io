@@ -24,7 +24,6 @@ const elements = {};                                                 // all elem
 const isDesctop = window.AscDesktopEditor !== undefined;             // desctop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
-const ioUrl = getIOUrl();                                            // github.io url
 let isPluginLoading = false;                                         // flag plugins loading
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
@@ -435,9 +434,11 @@ function getAllPluginsData() {
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
+	let pos = location.href.indexOf('store/index.html');
+	let ioUrl = location.href.substring(0, pos) + 'sdkjs-plugins/content/';
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
+		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + pluginUrl + '/' : pluginUrl;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
@@ -647,9 +648,8 @@ function onClickItem() {
 			bHasUpdate = true;
 	}
 
-	// let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
-	let pluginUrl = plugin.baseUrl.replace('https://k0r0l.github.io/onlyoffice.github.io/', 'https://github.com/K0R0L/onlyoffice.github.io/tree/master/');
-
+	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
+	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	elements.imgIcon.setAttribute('src', this.children[0].children[0].src);
@@ -925,9 +925,4 @@ function removeUnloaded(unloaded) {
 	unloaded.forEach(function(el){
 		allPlugins.splice(el, 1);
 	})
-};
-
-function getIOUrl() {
-	let pos = location.href.indexOf('store/index.html');
-	return location.href.substring(0, pos);
 };
