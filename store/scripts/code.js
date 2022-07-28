@@ -648,7 +648,7 @@ function onClickItem() {
 	}
 
 	// let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
-	let pluginUrl = plugin.baseUrl.replace(ioUrl, ioUrl + 'tree/master/');
+	let pluginUrl = plugin.baseUrl.replace('https://k0r0l.github.io/onlyoffice.github.io/', 'https://github.com/K0R0L/onlyoffice.github.io/tree/master/');
 
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
