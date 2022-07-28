@@ -748,7 +748,11 @@ function setDivHeight() {
 };
 
 window.onresize = function() {
+	console.log('resize');
 	setDivHeight();
+	$('.div_item').css('border', ((1 / window.devicePixelRatio) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+	$('.div_item_hovered_light').css('border', ((1 / window.devicePixelRatio) +'px solid #333'));
+
 	// TODO change icons for plugins preview for new scale
 };
 
