@@ -122,11 +122,11 @@ label.header {
 	cursor: pointer;
 }
 
-/* .div_item_hovered {
+.div_item_hovered {
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-} */
+}
 
-.div_item_hovered_light {
+/* .div_item_hovered_light {
 	border: 1px solid #333 !important;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 
@@ -135,8 +135,7 @@ label.header {
 .div_item_hovered_dark {
 	border: 1px solid #fff !important;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-
-}
+} */
 
 .div_description {
 	display: flex;
