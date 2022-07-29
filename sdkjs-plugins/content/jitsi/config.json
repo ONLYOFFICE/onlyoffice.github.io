@@ -64,7 +64,7 @@
             "buttons"         : [],
             "store": {
                 "background": {
-                    "light" : "#2AA0D8",
+                    "light" : "#F5F5F5",
                     "dark" : "#2AA0D8"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
