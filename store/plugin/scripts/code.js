@@ -28,6 +28,7 @@
 
     window.Asc.plugin.button = function(id) {
 		if (id == 'back') {
+			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			let ifr = document.getElementsByTagName('iframe')[0];
 			if (ifr && ifr.contentWindow)
 				ifr.contentWindow.postMessage(JSON.stringify({ type: 'onClickBack'}), "*");
@@ -62,7 +63,7 @@
 				});
 				break;
 			case 'showButton' :
-				window.Asc.plugin.executeMethod('ShowButton',['back', data.bShow]);
+				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
 				break;
 		}
 		
