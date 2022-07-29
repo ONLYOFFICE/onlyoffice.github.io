@@ -1,60 +1,60 @@
 {
-	"name"       : "Plugin Manager",
-	"nameLocale" : {
-		"ru" : "Менеджер плагинов",
-		"fr" : "Gestionnaire de Plugins",
-		"es" : "Administrador de Complementos",
-		"de" : "Plugin-Verwaltung",
-		"cs" : "Správce Pluginů"
-	},
-	"guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
-	"group" : {
+    "name"       : "Plugin Manager",
+    "nameLocale" : {
+        "ru" : "Менеджер плагинов",
+        "fr" : "Gestionnaire de Plugins",
+        "es" : "Administrador de Complementos",
+        "de" : "Plugin-Verwaltung",
+        "cs" : "Správce Pluginů"
+    },
+    "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
+    "group" : {
         "name" : "Plugin Manager",
         "rank" : 1
     },
-	"loader": false,
-	"variations" : [
-		{
-			"description" : "Plugin Manager",
-			"url" : "index.html",
-			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-			"icons2": [
-			{
-				"style" : "light",
+    "loader": false,
+    "variations" : [
+        {
+            "description" : "Plugin Manager",
+            "url" : "index.html",
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+            {
+                "style" : "light",
 
-				"100%": {
-					"normal": "resources/light/icon.png"
-				},
-				"150%": {
-					"normal": "resources/light/icon@1.5x.png"
-				},
-				"200%": {
-					"normal": "resources/light/icon@2x.png"
-				}
-			},
-			{
-				"style" : "dark",
+                "100%": {
+                    "normal": "resources/light/icon.png"
+                },
+                "150%": {
+                    "normal": "resources/light/icon@1.5x.png"
+                },
+                "200%": {
+                    "normal": "resources/light/icon@2x.png"
+                }
+            },
+            {
+                "style" : "dark",
 
-				"100%": {
-					"normal": "resources/dark/icon.png"
-				},
-				"150%": {
-					"normal": "resources/dark/icon@1.5x.png"
-				},
-				"200%": {
-					"normal": "resources/dark/icon@2x.png"
-				}
-			}
-			],
-			"isViewer"            : false,
-			"EditorsSupport"      : ["word", "cell", "slide"],
-			"isVisual"            : true,
-			"isModal"             : true,
-			"isInsideMode"        : false,
-			"isSystem"            : false,
-			"initDataType"        : "none",
-			"isUpdateOleOnResize" : false,
-			"size"                : [608, 570]
-		}
-	]
+                "100%": {
+                    "normal": "resources/dark/icon.png"
+                },
+                "150%": {
+                    "normal": "resources/dark/icon@1.5x.png"
+                },
+                "200%": {
+                    "normal": "resources/dark/icon@2x.png"
+                }
+            }
+            ],
+            "isViewer"            : false,
+            "EditorsSupport"      : ["word", "cell", "slide"],
+            "isVisual"            : true,
+            "isModal"             : true,
+            "isInsideMode"        : false,
+            "isSystem"            : false,
+            "initDataType"        : "none",
+            "isUpdateOleOnResize" : false,
+            "size"                : [608, 570]
+        }
+    ]
 }
