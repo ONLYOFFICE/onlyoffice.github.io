@@ -18,7 +18,7 @@
                 "es": "Contar palabras y caracteres",
                 "de": "Wörter und Zeichen zählen"
             },
-            "url"         : "index.html",
+            "url" : "index.html",
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
@@ -63,25 +63,17 @@
             ],
             "isViewer"        : true,
             "EditorsSupport"  : ["word"],
-
             "isVisual"        : true,
             "isModal"         : false,
             "isInsideMode"    : true,
-
             "initDataType"    : "text",
-            "initData"        : "",
-
             "isUpdateOleOnResize" : true,
-
-            "buttons"         : [],
-
             "initOnSelectionChanged": true,
-            
             "events" : ["onTargetPositionChanged"],
-            "store": {
-                "background": {
+            "store" : {
+                "background" : {
                     "light" : "#ED7309",
-                    "dark" : "#ED7309"
+                    "dark"  : "#ED7309"
                 },
                 "screenshots" : []
             }
