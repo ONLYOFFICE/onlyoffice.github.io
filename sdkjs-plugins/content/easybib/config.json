@@ -1,12 +1,11 @@
 {
     "name"       : "EasyBib",
     "guid"       : "asc.{c9d216a5-4f1a-49f2-9ff0-67c510a73523}",
-    "baseUrl"    : "",
-    "version": "1.0.1",
+    "version"    : "1.0.1",
     "variations" : [
         {
-            "description"         : "EasyBib",
-            "url"                 : "index.html",
+            "description" : "EasyBib",
+            "url"         : "index.html",
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
             "icons2": [
             {
@@ -24,10 +23,10 @@
             "isModal"             : false,
             "isInsideMode"        : true,
             "isUpdateOleOnResize" : false,
-            "store": {
-                "background": {
+            "store" : {
+                "background" : {
                     "light" : "#F5F5F5",
-                    "dark" : "#F5F5F5"
+                    "dark"  : "#F5F5F5"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
             }

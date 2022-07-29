@@ -51,7 +51,6 @@
         "isViewer": false,
         "EditorsSupport": [ "word" ],
         "initDataType": "text",
-        "initData": "",
         "isVisual": true,
         "isModal": false,
         "isInsideMode": true,
@@ -59,10 +58,10 @@
         "initOnSelectionChanged": false,
         "store": {
             "background": {
-                "light" : "#F5F5F5",
-                "dark" : "#555555"
+                "light": "#F5F5F5",
+                "dark": "#555555"
             },
-            "screenshots" : ["resources/store/screen_1.jpg"]
+            "screenshots": ["resources/store/screen_1.jpg"]
         }
       }
     ]

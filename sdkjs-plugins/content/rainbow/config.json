@@ -63,14 +63,10 @@
             ],
             "isViewer": false,
             "EditorsSupport": [ "word", "slide", "cell" ],
-
             "isVisual": true,
             "isModal": false,
             "isInsideMode": true,
-
             "initDataType": "none",
-            "initData": "",
-
             "isUpdateOleOnResize": false,
 
             "buttons": [
@@ -87,10 +83,10 @@
             ],
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#555555"
+                    "light": "#F5F5F5",
+                    "dark": "#555555"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots": ["resources/store/screen_1.png"]
             }
         },
         {
@@ -102,18 +98,13 @@
                 "de": "Über"
             },
             "url": "index_about.html",
-
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
             "isViewer": false,
             "EditorsSupport": [ "word", "slide", "cell" ],
-
             "isVisual": true,
             "isModal": true,
             "isInsideMode": false,
-
             "initDataType": "none",
-            "initData": "",
-
             "isUpdateOleOnResize": false,
 
             "buttons": [
