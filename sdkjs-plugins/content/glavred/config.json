@@ -57,21 +57,16 @@
             ],
             "isViewer"        : true,
             "EditorsSupport"  : ["word"],
-
             "isVisual"        : true,
             "isModal"         : true,
             "isInsideMode"    : false,
-
             "initDataType"    : "text",
-            "initData"        : "",
-
             "isUpdateOleOnResize" : false,
-
             "buttons"         : [ { "text": "Ok", "primary": true } ],
-            "store": {
-                "background": {
+            "store" : {
+                "background" : {
                     "light" : "#F5F5F5",
-                    "dark" : "#233450"
+                    "dark"  : "#233450"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
             }

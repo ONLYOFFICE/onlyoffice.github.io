@@ -19,7 +19,6 @@
                 "de": "DeepL"
             },
             "url": "index.html",
-
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
                 {
@@ -74,11 +73,8 @@
             "isInsideMode": true,
 
             "initDataType": "text",
-            "initData": "",
 
             "isUpdateOleOnResize": false,
-
-            "buttons": [],
 
             "initOnSelectionChanged": true,
             "store": {
