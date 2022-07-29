@@ -63,23 +63,19 @@
             ],
             "isViewer": true,
             "EditorsSupport": [ "word" ],
-
             "isVisual": false,
             "isModal": false,
             "isInsideMode": false,
-
             "initDataType": "text",
-            "initData": "",
-
             "isUpdateOleOnResize": false,
 
             "buttons": [],
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#F5F5F5"
+                    "light": "#F5F5F5",
+                    "dark": "#555555"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots": ["resources/store/screen_1.png"]
             }
         },
         {
@@ -95,14 +91,10 @@
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
             "isViewer": false,
             "EditorsSupport": [ "word" ],
-
             "isVisual": true,
             "isModal": true,
             "isInsideMode": false,
-
             "initDataType": "none",
-            "initData": "",
-
             "isUpdateOleOnResize": false,
 
             "buttons": [

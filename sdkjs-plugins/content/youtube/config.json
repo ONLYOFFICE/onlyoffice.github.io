@@ -21,14 +21,10 @@
             "isViewer": true,
             "isDisplayedInViewer": false,
             "EditorsSupport": [ "word", "cell", "slide" ],
-
             "isVisual": true,
             "isModal": true,
             "isInsideMode": false,
-
             "initDataType": "ole",
-            "initData": "",
-
             "isUpdateOleOnResize": false,
 
             "buttons": [
@@ -52,10 +48,10 @@
             "size": [ 350, 90 ],
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#555555"
+                    "light": "#F5F5F5",
+                    "dark": "#555555"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots": ["resources/store/screen_1.png"]
             }
         }
     ]
