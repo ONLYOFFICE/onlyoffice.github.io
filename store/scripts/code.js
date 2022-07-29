@@ -695,7 +695,7 @@ function onClickItem() {
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
-	sendMessage( { type : "showButton", bShow: true } );
+	sendMessage( { type : "showButton" } );
 	// elements.arrow.classList.remove('hidden');
 };
 
@@ -707,7 +707,6 @@ function onClickBack() {
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
-	sendMessage( { type : "showButton", bShow: false } );
 	// elements.arrow.classList.add('hidden');
 	Ps.update();
 };
