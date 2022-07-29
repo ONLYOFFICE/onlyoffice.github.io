@@ -111,17 +111,7 @@ window.onload = function() {
 		toogleView(event.target, elements.btnMyPlugins, 'Submit your own plugin', true);
 	};
 
-	elements.arrow.onclick = function() {
-		// click on left arrow in preview mode
-		// TODO Fix problem with loading screenshots
-		elements.imgScreenshot.setAttribute('src','')
-		document.getElementById('span_overview').click();
-		elements.divSelected.classList.add('hidden');
-		elements.divSelectedMain.classList.add('hidden');
-		elements.divBody.classList.remove('hidden');
-		elements.arrow.classList.add('hidden');
-		Ps.update();
-	};
+	// elements.arrow.onclick = onClickBack;
 
 	elements.close.onclick = function() {
 		// click on close button
@@ -302,6 +292,9 @@ window.addEventListener('message', function(message) {
 			// get all installed plugins
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
+		case 'onClickBack':
+			onClickBack();
+			break;
 	};
 }, false);
 
@@ -416,7 +409,7 @@ function initElemnts() {
 	elements.linkNewPlugin = document.getElementById('link_newPlugin');
 	elements.divBody = document.getElementById('div_body');
 	elements.divMain = document.getElementById('div_main');
-	elements.arrow = document.getElementById('arrow');
+	// elements.arrow = document.getElementById('arrow');
 	elements.close = document.getElementById('close');
 	elements.divHeader = document.getElementById('div_header');
 	elements.divSelected = document.getElementById('div_selected_toolbar');
@@ -646,7 +639,7 @@ function onClickItem() {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	if (plugin.variations[0].store && plugin.variations[0].store.screenshots) {
+	if (plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let pos, url;
 		if (plugin.imageUrl.includes('defaults')) {
 			url = plugin.url.replace('config.json', plugin.variations[0].store.screenshots[0])
@@ -702,7 +695,20 @@ function onClickItem() {
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
-	elements.arrow.classList.remove('hidden');
+	sendMessage( { type : "showButton" } );
+	// elements.arrow.classList.remove('hidden');
+};
+
+function onClickBack() {
+	// click on left arrow in preview mode
+	// TODO Fix problem with loading screenshots
+	elements.imgScreenshot.setAttribute('src','')
+	document.getElementById('span_overview').click();
+	elements.divSelected.classList.add('hidden');
+	elements.divSelectedMain.classList.add('hidden');
+	elements.divBody.classList.remove('hidden');
+	// elements.arrow.classList.add('hidden');
+	Ps.update();
 };
 
 function onSelectPreview(target, isOverview) {

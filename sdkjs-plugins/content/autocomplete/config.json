@@ -5,34 +5,28 @@
 
     "variations" : [
         {
-            "description" : "AutoComplete",
-            "url"         : "index.html",
-
-            "icons"           : ["resources/img/icon.png", "resources/img/icon@2x.png"],
-            "screens"         : ["resources/store/screen_1.png"],
-            "isViewer"        : false,
-            "EditorsSupport"  : ["word", "slide", "cell"],
-
-            "isVisual"        : false,
-            "isModal"         : false,
-            "isInsideMode"    : false,
-            "isSystem"        : true,
-
-            "initDataType"    : "none",
-            "initData"        : "",
-
+            "description"         : "AutoComplete",
+            "url"                 : "index.html",
+            "icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "screens"             : ["resources/store/screen_1.png"],
+            "isViewer"            : false,
+            "EditorsSupport"      : ["word", "slide", "cell"],
+            "isVisual"            : false,
+            "isModal"             : false,
+            "isInsideMode"        : false,
+            "isSystem"            : true,
+            "initDataType"        : "none",
             "isUpdateOleOnResize" : false,
-
-            "buttons"        : [ ],
             
             "events" : [
                 "onInputHelperClear",
                 "onInputHelperInput"
             ],
-            "store": {
-                "background": {
+
+            "store" : {
+                "background" : {
                     "light" : "#F5F5F5",
-                    "dark" : "#555555"
+                    "dark"  : "#555555"
                 },
                 "screenshots" : ["resources/store/screen_1.jpg"]
             }
