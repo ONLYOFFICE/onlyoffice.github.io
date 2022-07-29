@@ -21,13 +21,20 @@
 		// resize window
 		window.Asc.plugin.resizeWindow(608, 570, 420, 635, 0, 0);
 		// identify iframe
-		ifr = document.getElementsByTagName('iframe')[0];
+		let ifr = document.getElementsByTagName('iframe')[0];
 		// send message that plugin is ready
 		ifr.contentWindow.postMessage(JSON.stringify({type: 'PluginReady'}), "*");
     };
 
-    window.Asc.plugin.button = function() {
-		this.executeCommand("close", "");
+    window.Asc.plugin.button = function(id) {
+		if (id == 'back') {
+			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
+			let ifr = document.getElementsByTagName('iframe')[0];
+			if (ifr && ifr.contentWindow)
+				ifr.contentWindow.postMessage(JSON.stringify({ type: 'onClickBack'}), "*");
+		} else {
+			this.executeCommand("close", "");
+		}
     };
 
 	window.addEventListener("message", function(message) {
@@ -54,6 +61,9 @@
 				window.Asc.plugin.executeMethod("UpdatePlugin", [data.config, data.guid], function(result) {
 					message.source.postMessage(JSON.stringify(result), "*");
 				});
+				break;
+			case 'showButton' :
+				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
 				break;
 		}
 		

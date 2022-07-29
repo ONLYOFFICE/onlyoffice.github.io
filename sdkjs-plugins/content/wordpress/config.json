@@ -2,11 +2,11 @@
     "name"       : "WordPress",
     "guid"       : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
     "baseUrl"    : "",
-    "version": "1.0.0",
+    "version"    : "1.0.0",
     "variations" : [
         {
-            "description"         : "WordPress",
-            "url"                 : "index.html",
+            "description" : "WordPress",
+            "url"         : "index.html",
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
                 {
@@ -55,10 +55,10 @@
             "isModal"             : false,
             "isInsideMode"        : true,
             "isUpdateOleOnResize" : false,
-            "store": {
-                "background": {
+            "store" : {
+                "background" : {
                     "light" : "#F5F5F5",
-                    "dark" : "#555555"
+                    "dark"  : "#555555"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
             }

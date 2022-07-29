@@ -51,21 +51,16 @@
             ],
             "isViewer"        : false,
             "EditorsSupport"  : ["word", "cell", "slide"],
-
             "isVisual"        : true,
             "isModal"         : false,
             "isInsideMode"    : true,
-
             "initDataType"    : "none",
-            "initData"        : "",
-
             "isUpdateOleOnResize" : false,
 
-            "buttons"         : [],
-            "store": {
-                "background": {
-                    "light" : "#2AA0D8",
-                    "dark" : "#2AA0D8"
+            "store" : {
+                "background" : {
+                    "light" : "#F5F5F5",
+                    "dark"  : "#555555"
                 },
                 "screenshots" : ["resources/store/screen_1.png"]
             }
