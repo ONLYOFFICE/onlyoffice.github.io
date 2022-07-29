@@ -57,5 +57,6 @@
 			"buttons"             : [],
 			"size"                : [608, 570]
 		}
-	]
+	],
+	"loader": false
 }
