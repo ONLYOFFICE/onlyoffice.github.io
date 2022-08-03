@@ -26,10 +26,12 @@
             "isUpdateOleOnResize" : false,
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#F5F5F5"
+                    "light" : "#FF5313",
+                    "dark" : "#FF5313"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screen_1.png"],
+                "icon"        : ["resources/store/icons/icon.png", "resources/store/icons/icon@2x.png"]
+
             }
         }
     ]
