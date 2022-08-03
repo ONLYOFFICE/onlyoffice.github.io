@@ -70,10 +70,11 @@
             "buttons"         : [ { "text": "Ok", "primary": true } ],
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#233450"
+                    "light" : "#ED6300",
+                    "dark" : "#ED6300"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screen_1.png"],
+                "icon"        : ["resources/store/icons/icon.png", "resources/store/icons/icon@2x.png"]
             }
         }
     ]

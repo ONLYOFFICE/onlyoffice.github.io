@@ -101,10 +101,11 @@
             "size": [ 1200, 1000 ],
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#F5F5F5"
+                    "light" : "#FC8B00",
+                    "dark" : "#FC8B00;"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screen_1.png"],
+                "icon"        : ["resources/store/icons/icon.png", "resources/store/icons/icon@2x.png"]                
             }
         }
     ]

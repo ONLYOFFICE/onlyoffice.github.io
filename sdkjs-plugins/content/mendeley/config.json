@@ -59,10 +59,11 @@
         "initOnSelectionChanged": false,
         "store": {
             "background": {
-                "light" : "#F5F5F5",
-                "dark" : "#555555"
+                "light" : "#E5222E",
+                "dark" : "#E5222E"
             },
-            "screenshots" : ["resources/store/screen_1.jpg"]
+            "screenshots" : ["resources/store/screen_1.jpg"],
+            "icon"        : ["resources/store/icons/icon.png", "resources/store/icons/icon@2x.png"]
         }
       }
     ]
