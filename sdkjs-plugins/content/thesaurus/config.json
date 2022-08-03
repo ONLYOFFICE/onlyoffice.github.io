@@ -81,7 +81,8 @@
                     "light" : "#F44725",
                     "dark" : "#F44725"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screen_1.png"],
+                "icon"        : ["resources/store/icons/icon.png", "resources/store/icons/icon@2x.png"]
             }
         }
     ]
