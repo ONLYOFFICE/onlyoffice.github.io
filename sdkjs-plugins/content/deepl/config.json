@@ -82,10 +82,10 @@
                     "light" : "#042B48",
                     "dark" : "#042B48"
                 },
-                "screenshots" : ["resources/store/screen_1.png"],
+                "screenshots" : ["resources/store/screenshots/screen_1.jpg"],
                 "icons"       : {
                     "light" : "resources/store/icons",
-                    "dark" : "resources/store/icons"
+                    "dark"  : "resources/store/icons"
                 }
             }
         }
