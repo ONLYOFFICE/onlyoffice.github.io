@@ -820,7 +820,7 @@ function getImageUrl(guid) {
 		if (variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
-			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon@2.png';
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon@2x.png';
 		} else if (variation.icons2) {
 			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
 			let icon = variation.icons2[0];
@@ -837,7 +837,7 @@ function getImageUrl(guid) {
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
 			if (!Array.isArray(variation.icons)) {
 				// новая схема
-				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon@2.png';
+				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon@2x.png';
 			} else {
 				// старая схема
 				if (typeof(variation.icons[0]) == 'object' ) {
