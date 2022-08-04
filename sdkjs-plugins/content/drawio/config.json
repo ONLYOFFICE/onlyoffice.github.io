@@ -103,7 +103,7 @@
                     "light" : "#FC8B00",
                     "dark" : "#FC8B00;"
                 },
-                "screenshots" : ["resources/store/screenshots/screen_1.jpg"],
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
                     "light" : "resources/store/icons",
                     "dark"  : "resources/store/icons"
