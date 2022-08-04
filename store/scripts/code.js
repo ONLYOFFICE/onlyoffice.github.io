@@ -71,7 +71,7 @@ getTranslation();
 fetchAllPlugins();
 
 window.onload = function() {
-	let rule = '\n.asc-plugin-loader{background:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
+	let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
 	rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
 	let styleTheme = document.createElement('style');
 	styleTheme.type = 'text/css';
@@ -493,7 +493,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
-	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
+	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img style="width:fit-content" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
