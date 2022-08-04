@@ -265,9 +265,9 @@ window.addEventListener('message', function(message) {
 			}
 
 			let styleTheme = document.createElement('style');
-            styleTheme.type = 'text/css';
-            styleTheme.innerHTML = message.style + rule;
-            document.getElementsByTagName('head')[0].appendChild(styleTheme);
+			styleTheme.type = 'text/css';
+			styleTheme.innerHTML = message.style + rule;
+			document.getElementsByTagName('head')[0].appendChild(styleTheme);
 			break;
 		case 'onExternalMouseUp':
 			let evt = document.createEvent("MouseEvents");
@@ -586,9 +586,10 @@ function onClickItem() {
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
+	
+	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
 
-	if (plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		// todo сделать ещё чек на то какой протокол и установлен ли плагин
+	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.classList.remove('hidden');
@@ -807,9 +808,7 @@ function getImageUrl(guid) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
-	let icons;
 	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
-	let iconType = 0;		// 0 - defaults, 1 - icons, 2 - icons2
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -818,26 +817,45 @@ function getImageUrl(guid) {
 	if ( plugin && ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
 		let variation = plugin.variations[0];
 		
-		if (variation.store && (variation.store.icons2 || variation.store.icons)) {
-			icons = variation.store.icons2 || variation.store.icons;
-		} else if (variation.icons2 || variation.icons) {
-			icons = variation.icons2 || variation.icons;
-		}
-
-		iconType = (typeof(icons[0]) == 'object') ? 2 : 1;
-
-		if (iconType == 2) {
-			let icon = icons[0];
-			for (let i = 1; i < icons.length; i++) {
-				if ( themeType.includes(icons[i].style) ) {
-					icon = icons[i];
+		if (variation.store && variation.store.icons) {
+			// иконки в конфиге у объекта стор (работаем только по новой схеме)
+			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + 'icon.png';
+		} else if (variation.icons2) {
+			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
+			let icon = variation.icons2[0];
+			for (let i = 1; i < variation.icons2.length; i++) {
+				if ( themeType.includes(variation.icons2[i].style) ) {
+					icon = variation.icons2[i];
 					break;
 				}
 			}
 			curIcon = plugin.baseUrl + icon['200%'].normal;
-		} else if (iconType == 1) {
-			curIcon = plugin.baseUrl + icons[0];
-		}
+		} else if (variation.icons) {
+			// тут может быть как старая так и новая схема
+			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
+			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
+			if (typeof(variation.icons) == 'object') {
+				// новая схема
+				curIcon = plugin.baseUrl + variation.icons[themeType] + 'icon.png';
+			} else {
+				// старая схема
+				if (typeof(variation.icons[0]) == 'object' ) {
+					// старая схема и icons это объект как icons2 в блоке выше
+					let icon = variation.icons[0];
+					for (let i = 1; i < variation.icons.length; i++) {
+						if ( themeType.includes(variation.icons[i].style) ) {
+							icon = variation.icons[i];
+							break;
+						}
+					}
+					curIcon = plugin.baseUrl + icon['200%'].normal;
+				} else {
+					// старая схема и icons это массив со строками
+					curIcon = plugin.baseUrl + variation.icons[0];
+				}
+			}
+		}		
 	}
 	return curIcon;
 };
