@@ -96,10 +96,14 @@
             "size": [ 592, 100 ],
             "store": {
                 "background": {
-                    "light": "#F5F5F5",
-                    "dark": "#042B48"
+                    "light" : "linear-gradient(180deg, #3DB8EC 0%, #21A4DB 100%)",
+                    "dark" : "linear-gradient(180deg, #3DB8EC 0%, #21A4DB 100%)"
                 },
-                "screenshots": ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screenshots/screen_1.jpg"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }
             }
         },
         {
