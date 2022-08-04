@@ -840,7 +840,7 @@ function getImageUrl(guid) {
 				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon@2.png';
 			} else {
 				// старая схема
-				if (!Array.isArray(variation.icons[0])) {
+				if (typeof(variation.icons[0]) == 'object' ) {
 					// старая схема и icons это объект как icons2 в блоке выше
 					let icon = variation.icons[0];
 					for (let i = 1; i < variation.icons.length; i++) {
