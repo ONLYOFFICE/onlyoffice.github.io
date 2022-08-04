@@ -809,7 +809,7 @@ function getImageUrl(guid, bNotForStore) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
-	let curIcon = './resources/img/defaults/' + themeType + '/icon.png';
+	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -821,7 +821,7 @@ function getImageUrl(guid, bNotForStore) {
 		if (!bNotForStore && variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
-			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon@2x.png';
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon.png';
 		} else if (variation.icons2) {
 			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
 			let icon = variation.icons2[0];
@@ -838,7 +838,7 @@ function getImageUrl(guid, bNotForStore) {
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
 			if (!Array.isArray(variation.icons)) {
 				// новая схема
-				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon@2x.png';
+				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon.png';
 			} else {
 				// старая схема
 				if (typeof(variation.icons[0]) == 'object' ) {
