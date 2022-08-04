@@ -445,7 +445,6 @@ function getAllPluginsData() {
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
-				config.fromStore = true;
 				// config.imageUrl = getImageUrl(config, null);
 				arr[i] = config;
 				if (!count) {
@@ -516,17 +515,17 @@ function createPluginDiv(plugin, bInstalled) {
 			bHasUpdate = true;
 	}
 
-	// if (bInstalled) {
-	// 	plugin = allPlugins.find(function(el){
-	// 		return el.guid === plugin.guid
-	// 	});
-	// }
+	if (bInstalled) {
+		plugin = allPlugins.find(function(el){
+			return el.guid === plugin.guid
+		});
+	}
 		
-	// if (!plugin) {
-	// 	plugin = installed.obj;
-	// }
+	if (!plugin) {
+		plugin = installed.obj;
+	}
 	
-	let variations = plugin.variations[0]
+	let variations = plugin.variations[0];
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
 	let bg = variations.store && variations.store.background ? variations.store.background[themeType] : defaultBG;
@@ -848,7 +847,7 @@ function getImageUrl(plugin) {
 	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
 	let iconType = 0;		// 0 - defaults, 1 - icons, 2 - icons2
 
-	if ( plugin.fromStore || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
+	if ( !plugin.obj || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
 		let variation = plugin.variations[0];
 		
 		if (variation.store && (variation.store.icons2 || variation.store.icons)) {
