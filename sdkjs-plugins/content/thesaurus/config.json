@@ -75,7 +75,7 @@
                     "light": "#F44725",
                     "dark": "#F44725"
                 },
-                "screenshots" : ["resources/store/screenshots/screen_1.jpg"],
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
                     "light" : "resources/store/icons",
                     "dark"  : "resources/store/icons"
