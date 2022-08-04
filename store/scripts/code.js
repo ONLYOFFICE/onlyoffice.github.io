@@ -294,8 +294,8 @@ function getInstalledPluginsImages() {
 			return;
 
 		count++;
-		let imageUrl = getImageUrl(el.obj, el);
-		arr[i].obj.imageUrl = imageUrl;
+		// let imageUrl = getImageUrl(el.obj, el);
+		// arr[i].obj.imageUrl = imageUrl;
 		// I've removed it so far, since there's no point in uploading pictures if it doesn't work with http://
 		// makeRequest(imageUrl, 'blob').then(
 		// 	function (res) {
@@ -429,7 +429,7 @@ function toogleLoader(show, text) {
 
 function getAllPluginsData() {
 	// get config file for each item in config.json
-	getInstalledPluginsImages();
+	// getInstalledPluginsImages();
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
@@ -445,7 +445,8 @@ function getAllPluginsData() {
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
-				config.imageUrl = getImageUrl(config, null);
+				config.fromStore = true;
+				// config.imageUrl = getImageUrl(config, null);
 				arr[i] = config;
 				if (!count) {
 					// console.log('getAllPluginsData: ' + (Date.now() - start));
@@ -515,25 +516,23 @@ function createPluginDiv(plugin, bInstalled) {
 			bHasUpdate = true;
 	}
 
-	if (bInstalled) {
-		plugin = allPlugins.find(function(el){
-			return el.guid === plugin.guid
-		});
-	}
+	// if (bInstalled) {
+	// 	plugin = allPlugins.find(function(el){
+	// 		return el.guid === plugin.guid
+	// 	});
+	// }
 		
-
-	if (!plugin) {
-		plugin = installed.obj;
-	}
+	// if (!plugin) {
+	// 	plugin = installed.obj;
+	// }
 	
 	let variations = plugin.variations[0]
-	// TODO think about when we will get background color for header (maybe from config)
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
 	let bg = variations.store && variations.store.background ? variations.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
 						// TODO temporarily set the following image sizes
-						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
+						'<img style="width:56px;" src="' + getImageUrl(plugin) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -626,13 +625,7 @@ function onClickItem() {
 	}
 
 	if (plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		let pos, url;
-		if (plugin.imageUrl.includes('defaults')) {
-			url = plugin.url.replace('config.json', plugin.variations[0].store.screenshots[0])
-		} else {
-			pos = plugin.imageUrl.indexOf('resources/');
-			url = plugin.imageUrl.substring(0, pos) + plugin.variations[0].store.screenshots[0];
-		}
+		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.classList.remove('hidden');
 	} else {
@@ -759,8 +752,10 @@ window.onresize = function() {
 	if (devicePR !== window.devicePixelRatio) {
 		devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		console.log(devicePR);
 	}
 	// TODO change icons for plugins preview for new scale
+	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
 };
 
 function getTranslation() {
@@ -844,49 +839,39 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(plugin, installed) {
-	// get image url for current plugin
+function getImageUrl(plugin) {
+	// эта функция будет возвращать текущую для конкретного плагина иконку (исходя из того какая тема и какой скейл)
+	// get icon url for current plugin (according to theme and scale)
 	// TODO solve the issue with scale to select the appropriate icon
-	let imageUrl;
-	if ( installed && ( installed.baseUrl.includes('http://') || installed.baseUrl.includes('file:') ) ) {
-		imageUrl = './resources/img/defaults/' + themeType + '/icon@2x.png';
-	} else {
-		if (plugin.baseUrl.includes('://')) {
-			imageUrl = plugin.baseUrl;
-		} else {
-			let temp = plugin.baseUrl.replace(/\.\.\//g, '');
-			let endpos = installed.baseUrl.indexOf('/', 9) + 1;
-			imageUrl = installed.baseUrl.slice(0, endpos) + temp;
-		}
-		
+	let icons;
+	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
+	let iconType = 0;		// 0 - defaults, 1 - icons, 2 - icons2
+
+	if ( plugin.fromStore || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
 		let variations = plugin.variations[0];
-		if (variations.icons2) {
-			let icon = variations.icons2[0];
-			for (let i = 0; i < variations.icons2.length; i++) {
-				if (themeType.includes(variations.icons2[i].style)) {
-					icon = variations.icons2[i];
+		
+		if (plugin.store && (plugin.store.icons2 || plugin.store.icons)) {
+			icons = plugin.store.icons2 || plugin.store.icons;
+		} else if (variations.icons2 || variations.icon) {
+			icons = variations.icons2 || variations.icons;
+		}
+
+		iconType = (typeof(icons[0]) == 'object') ? 2 : 1;
+
+		if (iconType == 2) {
+			let icon = icons[0];
+			for (let i = 1; i < icons.length; i++) {
+				if ( themeType.includes(icons[i].style) ) {
+					icon = icons[i];
 					break;
 				}
 			}
-			imageUrl += icon['200%'].normal;
-		} else if (!variations.isSystem && imageUrl != '') {
-			let icon = variations.icons[0];
-			if (typeof(icon) == 'object') {
-				for (let i = 0; i < variations.icons.length; i++) {
-					if (themeType.includes(variations.icons[i].style)) {
-						icon = variations.icons[i];
-						break;
-					}
-				}
-				imageUrl += icon['200%'].normal;
-			} else {
-				imageUrl += variations.icons[0];
-			}
-		} else {
-			imageUrl = './resources/img/defaults/' + themeType + '/icon@2x.png';
+			curIcon = plugin.baseUrl + icon['200%'].normal;
+		} else if (iconType == 1) {
+			curIcon = plugin.baseUrl + icons[0];
 		}
 	}
-	return imageUrl;
+	return curIcon;
 };
 
 function getUrlSearchValue(key) {
