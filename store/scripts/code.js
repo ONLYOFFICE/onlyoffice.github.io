@@ -608,7 +608,9 @@ function onClickItem() {
 	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
-	elements.imgIcon.setAttribute('src', this.children[0].children[0].src);
+	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
+	let tmp = getImageUrl(guid, true);
+	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
 	elements.spanSelectedDescr.innerHTML = description;
@@ -803,7 +805,7 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(guid) {
+function getImageUrl(guid, bNotForStore) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
@@ -816,7 +818,7 @@ function getImageUrl(guid) {
 	if ( plugin && ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
 		let variation = plugin.variations[0];
 		
-		if (variation.store && variation.store.icons) {
+		if (!bNotForStore && variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
 			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon.png';
