@@ -284,40 +284,6 @@ window.addEventListener('message', function(message) {
 	};
 }, false);
 
-function getInstalledPluginsImages() {
-	// get images as base64 for all intalled plugins
-	let count = 0;
-	installedPlugins.forEach(function(el, i, arr) {
-		// skip if plugin is in maekreplace
-		let plugin = allPlugins.find(function(pl){return pl.guid === el.guid}) || allPlugins.find(function(pl){return pl === el.obj.name.toLowerCase()});
-		if (plugin)
-			return;
-
-		count++;
-		// let imageUrl = getImageUrl(el.obj, el);
-		// arr[i].obj.imageUrl = imageUrl;
-		// I've removed it so far, since there's no point in uploading pictures if it doesn't work with http://
-		// makeRequest(imageUrl, 'blob').then(
-		// 	function (res) {
-		// 		let reader = new FileReader();
-		// 		reader.onloadend = function() {
-		// 			arr[i].obj.imageUrl = reader.result;
-		// 			count--;
-		// 			if (!count) {
-		// 				console.log('load all images = ' + (Date.now() - start));
-		// 				// if (allPlugins) {
-		// 					// getAllPluginsData();
-		// 				// }
-		// 			}				}
-		// 		reader.readAsDataURL(res);
-		// 	},
-		// 	function(error) {
-		// 		createError(error);
-		// 	}
-		// );
-	});
-};
-
 function fetchAllPlugins() {
 	// function for fetching all plugins from config
 	isPluginLoading = true;
@@ -429,7 +395,6 @@ function toogleLoader(show, text) {
 
 function getAllPluginsData() {
 	// get config file for each item in config.json
-	// getInstalledPluginsImages();
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
@@ -445,7 +410,6 @@ function getAllPluginsData() {
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
-				// config.imageUrl = getImageUrl(config, null);
 				arr[i] = config;
 				if (!count) {
 					// console.log('getAllPluginsData: ' + (Date.now() - start));
@@ -517,7 +481,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	if (bInstalled) {
 		plugin = allPlugins.find(function(el){
-			return el.guid === plugin.guid
+			return el.guid === plugin.guid;
 		});
 	}
 		
@@ -525,13 +489,13 @@ function createPluginDiv(plugin, bInstalled) {
 		plugin = installed.obj;
 	}
 	
-	let variations = plugin.variations[0];
+	let variation = plugin.variations[0];
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
-	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let bg = variations.store && variations.store.background ? variations.store.background[themeType] : defaultBG;
+	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
+	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
 						// TODO temporarily set the following image sizes
-						'<img style="width:56px;" src="' + getImageUrl(plugin) + '">' +
+						'<img style="width:56px;" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -839,15 +803,19 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(plugin) {
-	// эта функция будет возвращать текущую для конкретного плагина иконку (исходя из того какая тема и какой скейл)
+function getImageUrl(guid) {
 	// get icon url for current plugin (according to theme and scale)
+	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
 	let icons;
 	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
 	let iconType = 0;		// 0 - defaults, 1 - icons, 2 - icons2
 
-	if ( !plugin.obj || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
+	let plugin = allPlugins.find(function(el){
+		return el.guid === guid
+	});
+
+	if ( plugin && ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
 		let variation = plugin.variations[0];
 		
 		if (variation.store && (variation.store.icons2 || variation.store.icons)) {
