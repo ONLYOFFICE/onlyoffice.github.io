@@ -494,8 +494,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
-						// TODO temporarily set the following image sizes
-						'<img style="width:56px;" src="' + getImageUrl(plugin.guid) + '">' +
+						'<img" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -808,7 +807,7 @@ function getImageUrl(guid) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
-	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
+	let curIcon = './resources/img/defaults/' + themeType + '/icon.png';
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -820,7 +819,7 @@ function getImageUrl(guid) {
 		if (variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
-			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon@2x.png';
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon.png';
 		} else if (variation.icons2) {
 			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
 			let icon = variation.icons2[0];
