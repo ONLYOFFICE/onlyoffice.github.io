@@ -835,12 +835,12 @@ function getImageUrl(guid) {
 			// тут может быть как старая так и новая схема
 			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
-			if (typeof(variation.icons) == 'object') {
+			if (!Array.isArray(variation.icons)) {
 				// новая схема
 				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon@2.png';
 			} else {
 				// старая схема
-				if (typeof(variation.icons[0]) == 'object' ) {
+				if (!Array.isArray(variation.icons[0])) {
 					// старая схема и icons это объект как icons2 в блоке выше
 					let icon = variation.icons[0];
 					for (let i = 1; i < variation.icons.length; i++) {
