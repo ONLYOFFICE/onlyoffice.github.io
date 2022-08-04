@@ -625,6 +625,7 @@ function onClickItem() {
 	}
 
 	if (plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
+		// todo сделать ещё чек на то какой протокол и установлен ли плагин
 		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.classList.remove('hidden');
@@ -848,12 +849,12 @@ function getImageUrl(plugin) {
 	let iconType = 0;		// 0 - defaults, 1 - icons, 2 - icons2
 
 	if ( plugin.fromStore || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
-		let variations = plugin.variations[0];
+		let variation = plugin.variations[0];
 		
-		if (plugin.store && (plugin.store.icons2 || plugin.store.icons)) {
-			icons = plugin.store.icons2 || plugin.store.icons;
-		} else if (variations.icons2 || variations.icon) {
-			icons = variations.icons2 || variations.icons;
+		if (variation.store && (variation.store.icons2 || variation.store.icons)) {
+			icons = variation.store.icons2 || variation.store.icons;
+		} else if (variation.icons2 || variation.icons) {
+			icons = variation.icons2 || variation.icons;
 		}
 
 		iconType = (typeof(icons[0]) == 'object') ? 2 : 1;
