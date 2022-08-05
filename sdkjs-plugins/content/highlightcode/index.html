@@ -1,0 +1,121 @@
+<!--
+ (c) Copyright Ascensio System SIA 2010
+
+ This program is a free software product. You can redistribute it and/or
+ modify it under the terms of the GNU Affero General Public License (AGPL)
+ version 3 as published by the Free Software Foundation. In accordance with
+ Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ that Ascensio System SIA expressly excludes the warranty of non-infringement
+ of any third-party rights.
+
+ This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+
+ You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ street, Riga, Latvia, EU, LV-1050.
+
+ The  interactive user interfaces in modified source and object code versions
+ of the Program must display Appropriate Legal Notices, as required under
+ Section 5 of the GNU AGPL version 3.
+
+ Pursuant to Section 7(b) of the License you must retain the original Product
+ logo when distributing the program. Pursuant to Section 7(e) we decline to
+ grant you any rights under trademark law for use of our trademarks.
+
+ All the Product's GUI elements, including illustrations and icon sets, as
+ well as technical writing content are licensed under the terms of the
+ Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Highligh code</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link id = "style" rel="stylesheet" href="vendor/highlight/styles/googlecode.css">
+		<link rel="stylesheet" type="text/css" href="vendor/spectrum/spectrum.css">
+		<link rel="stylesheet" href="resources/css/plugin_style.css">
+		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+
+		<script src="vendor/highlight/highlight.min.js"></script>
+		
+		<script src="vendor/js-beautify-1.14.0/beautify-css.js"></script>
+		<script src="vendor/js-beautify-1.14.0/beautify-html.js"></script>
+		<script src="vendor/js-beautify-1.14.0/beautify.js"></script>
+
+		<script src="vendor/prettier/standalone@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-babel@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-html@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-markdown@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-postcss@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-typescript@2.3.2.js"></script>
+		<script src="vendor/prettier/plugin-php/plugin-php.js"></script>
+
+		<script src="vendor/xml-formatter/xml-formatter.js"></script>
+
+		<script src="scripts/code.js"></script>
+		<script src="scripts/scrollable_div.js"></script>
+		<script type="text/javascript" src="vendor/spectrum/spectrum.js"></script>
+	</head>
+	<body spellcheck="false">
+		<div id="div_settings" class="settings noselect">
+			<div class="item-settings">
+				<label id="lb_lanuage" class="defaultlable">Language</label>
+				<select id="language_id"></select>
+				<button class = "button" id ="btn_highlight" style="width:10%;display:none;">Highlight</button>
+			</div>
+			<div class="item-settings">
+					<label id="lb_style" class="defaultlable">Style</label>
+					<select id="style_id">
+						<option value = "googlecode.css">Googlecode</option>
+						<option value = "github.css">GitHub</option>
+						<option value = "github-gist.css">GitHub Gist</option>
+						<option value = "androidstudio.css">Android Studio</option>
+						<option value = "vs.css">Visual Studio</option>
+						<option value = "vs2015.css">Visual Studio 2015</option>
+						<option value = "idea.css">Idea</option>
+						<option value = "qtcreator_dark.css">Qtcreator Dark</option>
+						<option value = "qtcreator_light.css">Qtcreator Light</option>
+						<option value = "xcode.css">XCode</option>
+						<option value = "far.css">Fortran</option>
+						<option value = "foundation.css">Foundation</option>
+						<option value = "xml_1.css">XML 1</option>
+						<option value = "xml_2.css">XML 2</option>
+					</select>
+			</div>
+			<div id="tabselect" class="item-settings">	
+				<label id="lb_repTab" class="defaultlable">Tab replace</label>
+				<select id="tab_replace_id">
+					<option id="opt_DontRep" value="0">Use tabs</option>
+					<option id="opt_2sp" value="2">2 spaces</option>
+					<option id="opt_4sp" value="4">4 spaces</option>
+				</select>
+			</div>
+			<div id="colorselect" class="item-settings">
+				<label id="lb_bgColor" for="background_color" class="label defaultlable">Background</label>
+				<input id="background_color" class="btn-text-default" style="padding: 0; width: 100%;" type="color" value="#ffffff">
+				<input type='text' style="display: none; padding: 0" id="jq_color"/>
+			</div>
+			<div class="item-settings">	
+				<label id="lb_font" class="defaultlable">Font settings</label>
+				<div style="display: flex;">
+					<select id="fonts"></select>
+					<input id="font_size" type="number" max="300" min="1" value="14" class="form-control" style="margin-left: 5px;">
+				</div>
+			</div>
+			<div class="item-settings">
+				<label id="lb_format" class="defaultlable"> </label>
+				<button id="btn_format" class="btn-text-default" title="Available only for the following languages: xml, javascript, typescript, css, markdown, json, php, html.">Format</button>
+			</div>
+		</div>
+	</body>
+</html>
