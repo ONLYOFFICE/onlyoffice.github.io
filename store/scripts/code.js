@@ -830,10 +830,13 @@ function getZoom(devicePR) {
 
 function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
+	let guid;
 	for (let i = 0; i < arr.length; i++) {
-		let guid = arr[i].getAttribute('data-guid');
+		guid = arr[i].getAttribute('data-guid');
 		arr[i].src = getImageUrl(guid);
 	}
+	guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	elements.imgIcon.setAttribute(src, getImageUrl());
 };
 
 function getTranslation() {
