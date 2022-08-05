@@ -35,7 +35,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let devicePR = window.devicePixelRatio;                              // device pixel ratio
+let devicePR = 1;                                                    // device pixel ratio
 
 
 let scale = {
@@ -765,11 +765,11 @@ window.onresize = function() {
 		}
 		scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
 		scale.value = supportedScaleValues[bestIndex];
-		changeIcons(supportedScaleValues[bestIndex]);
+		changeIcons();
 		console.log(supportedScaleValues[bestIndex]);
 
-		// let val = getZoom(devicePR);
-		// console.log(val);
+		console.log('____________________________________________');
+		console.log(getZoom(devicePR));
 	}
 	// TODO change icons for plugins preview for new scale
 	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
@@ -829,11 +829,10 @@ function getZoom(devicePR) {
 
 function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
-	let guid;
 	for (let i = 0; i < arr.length; i++) {
-		guid = arr[i].getAttribute('data-guid');
-		arr[i].src = getImageUrl(guid);
+		arr[i].setAttribute(src, getImageUrl( arr[i].getAttribute('data-guid') ) );
 	}
+	// временно пришлось сделать так, потому что некоторые иконки плагинов слишком большие для этого окна и пока используем всегда одну
 	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
 	// elements.imgIcon.setAttribute(src, getImageUrl());
 };
