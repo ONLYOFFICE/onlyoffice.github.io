@@ -153,6 +153,9 @@ label.header {
 
 .plugin_icon {
 	width: fit-content;
+	height: fit-content;
+	max-height: 83px;
+	max-width: 169px;
 }
 
 .span_name {
