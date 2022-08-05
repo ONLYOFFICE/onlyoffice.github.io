@@ -53,12 +53,12 @@ const isCorrectApplicationScaleEnabled = (function(){
 	let isOperaOld = (!!window.opera);
 	let isMobile = /android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent || navigator.vendor || window.opera);
 
-	if (isAndroid || !isChrome || isOperaOld || isMobile || !document || !document.firstElementChild || !document.body)
+	if (isAndroid || !isChrome || isOperaOld || isMobile)
 		return false;
 
 	return true;
 
-})()
+})();
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -751,7 +751,7 @@ window.onresize = function() {
 
 function getZoom(devicePR) {
 	let retValue = {
-		retinaPixelRatio : devicePR,
+		devicePixelRatio : devicePR,
 		retinaPixelRatio : devicePR,
 		zoom : 1,
 	}
