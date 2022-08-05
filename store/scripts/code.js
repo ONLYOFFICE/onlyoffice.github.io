@@ -830,11 +830,11 @@ function getZoom(devicePR) {
 function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
-		arr[i].setAttribute(src, getImageUrl( arr[i].getAttribute('data-guid') ) );
+		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ) );
 	}
 	// временно пришлось сделать так, потому что некоторые иконки плагинов слишком большие для этого окна и пока используем всегда одну
 	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	// elements.imgIcon.setAttribute(src, getImageUrl());
+	// elements.imgIcon.setAttribute('src', getImageUrl());
 };
 
 function getTranslation() {
