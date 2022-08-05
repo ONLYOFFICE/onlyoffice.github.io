@@ -832,7 +832,7 @@ function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
 		let guid = arr[i].getAttribute('data-guid');
-		img.src = getImageUrl(guid);
+		arr[i].src = getImageUrl(guid);
 	}
 };
 
