@@ -750,7 +750,6 @@ window.onresize = function() {
 };
 
 function changeIcons() {
-	console.log('changeIcons');
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
 		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ) );
