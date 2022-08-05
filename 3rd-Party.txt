@@ -23,3 +23,23 @@ License File:   Select2.license
 
 License:        MIT
 License File:   spectrum.license
+
+5. js-beautify.js the library for code formatting (css, html, javascript). (https://github.com/beautify-web/js-beautify)
+
+License:        MIT
+License File:   js-beautify.license
+
+6. prettier.js this is an opinionated code formatter. (https://github.com/prettier/prettier)
+
+License:        MIT
+License File:   prettier.license
+
+7. prettier-plugin-php.js this plugin adds support for the PHP language to Prettier. (https://github.com/prettier/plugin-php)
+
+License:        MIT
+License File:   prettier@plugin-php.license
+
+8. xml-formatter.js converts XML into a human readable format (pretty print) while respecting the xml:space attribute. (https://github.com/chrisbottin/xml-formatter)
+
+License:        MIT
+License File:   xml-formatter.license
