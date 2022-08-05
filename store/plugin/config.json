@@ -54,7 +54,8 @@
             "isSystem"            : false,
             "initDataType"        : "none",
             "isUpdateOleOnResize" : false,
-            "size"                : [608, 570]
+            "size"                : [608, 570],
+            "buttons"             : []
         }
     ]
 }
