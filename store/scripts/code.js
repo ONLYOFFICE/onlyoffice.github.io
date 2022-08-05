@@ -35,34 +35,11 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let devicePR = 1;                                                    // device pixel ratio
-
-
-let scale = {
+const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
+let scale = {                                                        // current scale
 	percent : "100%",
 	value : 1
 };
-const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
-const isSailfish = (navigator.userAgent.toLowerCase().indexOf("sailfish") > -1);
-const isEmulateDevicePixelRatio = (navigator.userAgent.toLowerCase().indexOf("emulatedevicepixelratio") > -1);
-const isCorrectApplicationScaleEnabled = (function(){
-
-	if (supportedScaleValues.length === 0)
-		return false;
-
-	let userAgent = navigator.userAgent.toLowerCase();
-	let isAndroid = (userAgent.indexOf("android") > -1);
-	let isIE = (userAgent.indexOf("msie") > -1 || userAgent.indexOf("trident") > -1 || userAgent.indexOf("edge") > -1);
-	let isChrome = !isIE && (userAgent.indexOf("chrome") > -1);
-	let isOperaOld = (!!window.opera);
-	let isMobile = /android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent || navigator.vendor || window.opera);
-
-	if (isAndroid || !isChrome || isOperaOld || isMobile)
-		return false;
-
-	return true;
-
-})();
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -486,7 +463,7 @@ function createPluginDiv(plugin, bInstalled) {
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item form-control noselect';
-	div.style.border = (1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
+	div.style.border = (1 / scale.value) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
 	
 	div.onmouseenter = function(event) {
 		event.target.classList.add('div_item_hovered');
@@ -743,22 +720,21 @@ function setDivHeight() {
 
 window.onresize = function() {
 	setDivHeight();
-	if (devicePR !== window.devicePixelRatio) {
-		devicePR = window.devicePixelRatio;
-		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+	if (scale.value !== window.devicePixelRatio) {
+		$('.div_item').css('border', ((1 / window.devicePixelRatio) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		
 		let bestIndex = 0;
-		let bestDistance = Math.abs(supportedScaleValues[0] - devicePR);
+		let bestDistance = Math.abs(supportedScaleValues[0] - window.devicePixelRatio);
 		let currentDistance = 0;
 		for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
 			if (true) {
-				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
-					if ( (supportedScaleValues[i] - 0.0501) > (devicePR - 0.0001))
+				if (Math.abs(supportedScaleValues[i] - window.devicePixelRatio) > 0.0001) {
+					if ( (supportedScaleValues[i] - 0.0501) > (window.devicePixelRatio - 0.0001))
 						break;
 				}
 			}
 
-			currentDistance = Math.abs(supportedScaleValues[i] - devicePR);
+			currentDistance = Math.abs(supportedScaleValues[i] - window.devicePixelRatio);
 			if (currentDistance < (bestDistance - 0.0001)) {
 				bestDistance = currentDistance;
 				bestIndex = i;
@@ -767,64 +743,6 @@ window.onresize = function() {
 		scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
 		scale.value = supportedScaleValues[bestIndex];
 		changeIcons();
-		console.log(supportedScaleValues[bestIndex]);
-
-		console.log('____________________________________________');
-		console.log(getZoom(devicePR));
-	}
-	// TODO change icons for plugins preview for new scale
-	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
-};
-
-function getZoom(devicePR) {
-	let retValue = {
-		devicePixelRatio : devicePR,
-		retinaPixelRatio : devicePR,
-		zoom : 1,
-		correct : false,
-	}
-
-	if (isSailfish && isEmulateDevicePixelRatio)
-    {
-        let scale = 1;
-        if (screen.width <= 540)
-            scale = 1.5;
-        else if (screen.width > 540 && screen.width <= 768)
-            scale = 2;
-        else if (screen.width > 768)
-            scale = 3;
-
-		retValue.retinaPixelRatio = scale;
-		retValue.devicePixelRatio = scale;
-        return retValue;
-    } else {
-		if (!isCorrectApplicationScaleEnabled)
-			return retValue;
-
-		let bestIndex = 0;
-		let bestDistance = Math.abs(supportedScaleValues[0] - devicePR);
-		let currentDistance = 0;
-		for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
-			if (true) {
-				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
-					if (supportedScaleValues[i] > (devicePR - 0.0001))
-						break;
-				}
-			}
-
-			currentDistance = Math.abs(supportedScaleValues[i] - devicePR);
-			if (currentDistance < (bestDistance - 0.0001)) {
-				bestDistance = currentDistance;
-				bestIndex = i;
-			}
-		}
-
-		retValue.retinaPixelRatio = supportedScaleValues[bestIndex];
-		if (Math.abs(retValue.devicePixelRatio - retValue.retinaPixelRatio) > 0.01) {
-			retValue.zoom = retValue.devicePixelRatio / retValue.retinaPixelRatio;
-			retValue.correct = true;
-		}
-		return retValue;
 	}
 };
 
@@ -922,7 +840,6 @@ function showMarketplace() {
 function getImageUrl(guid, bNotForStore) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
-	// TODO solve the issue with scale to select the appropriate icon
 	let iconScale = '/icon.png';
 	switch (scale.percent) {
 		case '125%':
