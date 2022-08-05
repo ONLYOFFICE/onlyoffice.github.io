@@ -30,20 +30,35 @@
 		<link rel="stylesheet" href="resources/css/plugin_style.css">
 		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 
-		<script src="vendor/highlight/highlight.pack.js"></script>
+		<script src="vendor/highlight/highlight.min.js"></script>
+		
+		<script src="vendor/js-beautify-1.14.0/beautify-css.js"></script>
+		<script src="vendor/js-beautify-1.14.0/beautify-html.js"></script>
+		<script src="vendor/js-beautify-1.14.0/beautify.js"></script>
+
+		<script src="vendor/prettier/standalone@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-babel@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-html@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-markdown@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-postcss@2.3.2.js"></script>
+		<script src="vendor/prettier/parser-typescript@2.3.2.js"></script>
+		<script src="vendor/prettier/plugin-php/plugin-php.js"></script>
+
+		<script src="vendor/xml-formatter/xml-formatter.js"></script>
+
 		<script src="scripts/code.js"></script>
 		<script src="scripts/scrollable_div.js"></script>
 		<script type="text/javascript" src="vendor/spectrum/spectrum.js"></script>
 	</head>
 	<body spellcheck="false">
-		<label id="lb_lanuage" class="label defaultlable" style = "padding: 5px 0px 0px 12px">Language</label>
-		<div class="language">	
-			<select id="language_id" style="width: 100%;"></select>
-			<button class = "button" id ="btn_highlight" style="width:10%;display:none;">Highlight</button>
-		</div>
-		<div id="TabColor" class="TabColor">
-			<div class="styleselect">
-					<label id="lb_style" class="label defaultlable" style = "padding: 5px 0px 0px 2px">Style</label>	
+		<div id="div_settings" class="settings noselect">
+			<div class="item-settings">
+				<label id="lb_lanuage" class="defaultlable">Language</label>
+				<select id="language_id"></select>
+				<button class = "button" id ="btn_highlight" style="width:10%;display:none;">Highlight</button>
+			</div>
+			<div class="item-settings">
+					<label id="lb_style" class="defaultlable">Style</label>
 					<select id="style_id">
 						<option value = "googlecode.css">Googlecode</option>
 						<option value = "github.css">GitHub</option>
@@ -61,18 +76,29 @@
 						<option value = "xml_2.css">XML 2</option>
 					</select>
 			</div>
-			<div id="tabselect" class="tabselect">	
-				<label id="lb_repTab" class="label defaultlable">Replace Tab with spaces</label>
+			<div id="tabselect" class="item-settings">	
+				<label id="lb_repTab" class="defaultlable">Tab replace</label>
 				<select id="tab_replace_id">
-					<option id="opt_DontRep" value="0">Don`t replace</option>
-					<option id="opt_2sp" value="2">Replace by 2 spaces</option>
-					<option id="opt_4sp" value="4">Replace by 4 spaces</option>
+					<option id="opt_DontRep" value="0">Use tabs</option>
+					<option id="opt_2sp" value="2">2 spaces</option>
+					<option id="opt_4sp" value="4">4 spaces</option>
 				</select>
 			</div>
-			<div id="colorselect" class="colorselect">
-					<label id="lb_bgColor" for="background_color" class="label defaultlable">Choose background color</label>
-					<input id="background_color" class="form-control" style="padding: 0" type="color" value="#ffffff">
-					<input type='text' style="display: none; padding: 0" id="jq_color"/>		
+			<div id="colorselect" class="item-settings">
+				<label id="lb_bgColor" for="background_color" class="label defaultlable">Background</label>
+				<input id="background_color" class="btn-text-default" style="padding: 0; width: 100%;" type="color" value="#ffffff">
+				<input type='text' style="display: none; padding: 0" id="jq_color"/>
+			</div>
+			<div class="item-settings">	
+				<label id="lb_font" class="defaultlable">Font settings</label>
+				<div style="display: flex;">
+					<select id="fonts"></select>
+					<input id="font_size" type="number" max="300" min="1" value="14" class="form-control" style="margin-left: 5px;">
+				</div>
+			</div>
+			<div class="item-settings">
+				<label id="lb_format" class="defaultlable"> </label>
+				<button id="btn_format" class="btn-text-default" title="Available only for the following languages: xml, javascript, typescript, css, markdown, json, php, html.">Format</button>
 			</div>
 		</div>
 	</body>
