@@ -152,10 +152,10 @@ label.header {
 }
 
 .plugin_icon {
-	width: fit-content;
-	height: fit-content;
-	max-height: 83px;
-	max-width: 169px;
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
+	margin: 5px;
+	object-fit: contain;
 }
 
 .span_name {
