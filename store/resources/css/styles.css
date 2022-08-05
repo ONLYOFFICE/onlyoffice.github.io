@@ -152,8 +152,8 @@ label.header {
 }
 
 .plugin_icon {
-	width: calc(100% - 10px);
-	height: calc(100% - 10px);
+	max-width: calc(100% - 10px);
+	max-height: calc(100% - 10px);
 	margin: 5px;
 	object-fit: contain;
 }
