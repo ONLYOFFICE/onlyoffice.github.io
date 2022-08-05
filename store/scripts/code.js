@@ -38,6 +38,10 @@ let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default 
 let devicePR = window.devicePixelRatio;                              // device pixel ratio
 
 
+let scale = {
+	percent : "100%",
+	value : 1
+};
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 const isSailfish = (navigator.userAgent.toLowerCase().indexOf("sailfish") > -1);
 const isEmulateDevicePixelRatio = (navigator.userAgent.toLowerCase().indexOf("emulatedevicepixelratio") > -1);
@@ -517,7 +521,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img style="width:fit-content" src="' + getImageUrl(plugin.guid) + '">' +
+						'<img class="plugin_icon" data-guid="' + guid + '" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -742,6 +746,7 @@ window.onresize = function() {
 		devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		
+		// надо объединить 1 и 2 метод и сделать один нормальный (хотя в интерфейсе всегда смотрят только на devicePixelRatio)
 		let bestIndex = 0;
 		let bestDistance = Math.abs(supportedScaleValues[0] - devicePR);
 		let currentDistance = 0;
@@ -759,6 +764,9 @@ window.onresize = function() {
 				bestIndex = i;
 			}
 		}
+		scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
+		scale.value = supportedScaleValues[bestIndex];
+		changeIcons(supportedScaleValues[bestIndex]);
 		console.log(supportedScaleValues[bestIndex]);
 
 		let val = getZoom(devicePR);
@@ -818,7 +826,15 @@ function getZoom(devicePR) {
 		}
 		return retValue;
 	}
-}
+};
+
+function changeIcons() {
+	let arr = document.getElementsByClassName('plugin_icon');
+	arr.forEach(function(img) {
+		let guid = img.getAttribute('data-guid');
+		img.src = getImageUrl(guid);
+	});
+};
 
 function getTranslation() {
 	// gets translation for current language
@@ -905,7 +921,22 @@ function getImageUrl(guid, bNotForStore) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
-	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
+	let iconScale = '/icon.png';
+	switch (scale.percent) {
+		case '125%':
+			iconScale = '/icon@1.25x.png'
+			break;
+		case '150%':
+			iconScale = '/icon@1.5x.png'
+			break;
+		case '175%':
+			iconScale = '/icon@1.75x.png'
+			break;
+		case '200%':
+			iconScale = '/icon@2x.png'
+			break;
+	}
+	let curIcon = './resources/img/defaults/' + themeType + iconScale;
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -917,7 +948,7 @@ function getImageUrl(guid, bNotForStore) {
 		if (!bNotForStore && variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
-			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon.png';
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + iconScale;
 		} else if (variation.icons2) {
 			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
 			let icon = variation.icons2[0];
@@ -927,14 +958,14 @@ function getImageUrl(guid, bNotForStore) {
 					break;
 				}
 			}
-			curIcon = plugin.baseUrl + icon['200%'].normal;
+			curIcon = plugin.baseUrl + icon[scale.percent].normal;
 		} else if (variation.icons) {
 			// тут может быть как старая так и новая схема
 			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
 			if (!Array.isArray(variation.icons)) {
 				// новая схема
-				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon.png';
+				curIcon = plugin.baseUrl + variation.icons[themeType] + iconScale;
 			} else {
 				// старая схема
 				if (typeof(variation.icons[0]) == 'object' ) {
@@ -946,10 +977,10 @@ function getImageUrl(guid, bNotForStore) {
 							break;
 						}
 					}
-					curIcon = plugin.baseUrl + icon['200%'].normal;
+					curIcon = plugin.baseUrl + icon[scale.percent].normal;
 				} else {
 					// старая схема и icons это массив со строками
-					curIcon = plugin.baseUrl + variation.icons[0];
+					curIcon = plugin.baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
 				}
 			}
 		}		
