@@ -48,10 +48,14 @@
             "size": [ 350, 90 ],
             "store": {
                 "background": {
-                    "light": "#F5F5F5",
-                    "dark": "#555555"
+                    "light" : "#FF0000",
+                    "dark" : "#FF0000"
                 },
-                "screenshots": ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }
             }
         }
     ]

@@ -19,7 +19,7 @@
 
     window.Asc.plugin.init = function() {
 		// resize window
-		window.Asc.plugin.resizeWindow(608, 570, 420, 635, 0, 0);
+		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
 		// identify iframe
 		let ifr = document.getElementsByTagName('iframe')[0];
 		// send message that plugin is ready

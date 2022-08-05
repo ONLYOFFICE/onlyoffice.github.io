@@ -23,12 +23,16 @@
             "isModal"             : false,
             "isInsideMode"        : true,
             "isUpdateOleOnResize" : false,
-            "store" : {
-                "background" : {
-                    "light" : "#F5F5F5",
-                    "dark"  : "#F5F5F5"
+            "store": {
+                "background": {
+                    "light" : "#FF5313",
+                    "dark" : "#FF5313"
                 },
-                "screenshots" : ["resources/store/screen_1.png"]
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                } 
             }
         }
     ]

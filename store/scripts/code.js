@@ -265,9 +265,9 @@ window.addEventListener('message', function(message) {
 			}
 
 			let styleTheme = document.createElement('style');
-            styleTheme.type = 'text/css';
-            styleTheme.innerHTML = message.style + rule;
-            document.getElementsByTagName('head')[0].appendChild(styleTheme);
+			styleTheme.type = 'text/css';
+			styleTheme.innerHTML = message.style + rule;
+			document.getElementsByTagName('head')[0].appendChild(styleTheme);
 			break;
 		case 'onExternalMouseUp':
 			let evt = document.createEvent("MouseEvents");
@@ -283,40 +283,6 @@ window.addEventListener('message', function(message) {
 			break;
 	};
 }, false);
-
-function getInstalledPluginsImages() {
-	// get images as base64 for all intalled plugins
-	let count = 0;
-	installedPlugins.forEach(function(el, i, arr) {
-		// skip if plugin is in maekreplace
-		let plugin = allPlugins.find(function(pl){return pl.guid === el.guid}) || allPlugins.find(function(pl){return pl === el.obj.name.toLowerCase()});
-		if (plugin)
-			return;
-
-		count++;
-		let imageUrl = getImageUrl(el.obj, el);
-		arr[i].obj.imageUrl = imageUrl;
-		// I've removed it so far, since there's no point in uploading pictures if it doesn't work with http://
-		// makeRequest(imageUrl, 'blob').then(
-		// 	function (res) {
-		// 		let reader = new FileReader();
-		// 		reader.onloadend = function() {
-		// 			arr[i].obj.imageUrl = reader.result;
-		// 			count--;
-		// 			if (!count) {
-		// 				console.log('load all images = ' + (Date.now() - start));
-		// 				// if (allPlugins) {
-		// 					// getAllPluginsData();
-		// 				// }
-		// 			}				}
-		// 		reader.readAsDataURL(res);
-		// 	},
-		// 	function(error) {
-		// 		createError(error);
-		// 	}
-		// );
-	});
-};
 
 function fetchAllPlugins() {
 	// function for fetching all plugins from config
@@ -429,7 +395,6 @@ function toogleLoader(show, text) {
 
 function getAllPluginsData() {
 	// get config file for each item in config.json
-	getInstalledPluginsImages();
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
@@ -445,7 +410,6 @@ function getAllPluginsData() {
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
-				config.imageUrl = getImageUrl(config, null);
 				arr[i] = config;
 				if (!count) {
 					// console.log('getAllPluginsData: ' + (Date.now() - start));
@@ -517,23 +481,20 @@ function createPluginDiv(plugin, bInstalled) {
 
 	if (bInstalled) {
 		plugin = allPlugins.find(function(el){
-			return el.guid === plugin.guid
+			return el.guid === plugin.guid;
 		});
 	}
 		
-
 	if (!plugin) {
 		plugin = installed.obj;
 	}
 	
-	let variations = plugin.variations[0]
-	// TODO think about when we will get background color for header (maybe from config)
+	let variation = plugin.variations[0];
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
-	let description = (bTranslate && variations.descriptionLocale && variations.descriptionLocale[shortLang]) ? variations.descriptionLocale[shortLang] : variations.description;
-	let bg = variations.store && variations.store.background ? variations.store.background[themeType] : defaultBG;
-	let template = '<div class="div_image" style="background-color: ' + bg + '">' +
-						// TODO temporarily set the following image sizes
-						'<img style="width:56px;" src="' + plugin.imageUrl + '">' +
+	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
+	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
+	let template = '<div class="div_image" style="background: ' + bg + '">' +
+						'<img style="width:fit-content" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -624,15 +585,11 @@ function onClickItem() {
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
+	
+	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
 
-	if (plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		let pos, url;
-		if (plugin.imageUrl.includes('defaults')) {
-			url = plugin.url.replace('config.json', plugin.variations[0].store.screenshots[0])
-		} else {
-			pos = plugin.imageUrl.indexOf('resources/');
-			url = plugin.imageUrl.substring(0, pos) + plugin.variations[0].store.screenshots[0];
-		}
+	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
+		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.classList.remove('hidden');
 	} else {
@@ -651,7 +608,9 @@ function onClickItem() {
 	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
-	elements.imgIcon.setAttribute('src', this.children[0].children[0].src);
+	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
+	let tmp = getImageUrl(guid, true);
+	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
 	elements.spanSelectedDescr.innerHTML = description;
@@ -759,8 +718,10 @@ window.onresize = function() {
 	if (devicePR !== window.devicePixelRatio) {
 		devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		console.log(devicePR);
 	}
 	// TODO change icons for plugins preview for new scale
+	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
 };
 
 function getTranslation() {
@@ -844,49 +805,60 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(plugin, installed) {
-	// get image url for current plugin
+function getImageUrl(guid, bNotForStore) {
+	// get icon url for current plugin (according to theme and scale)
+	// TODO change it when we will be able show icons for installed plugins
 	// TODO solve the issue with scale to select the appropriate icon
-	let imageUrl;
-	if ( installed && ( installed.baseUrl.includes('http://') || installed.baseUrl.includes('file:') ) ) {
-		imageUrl = './resources/img/defaults/' + themeType + '/icon@2x.png';
-	} else {
-		if (plugin.baseUrl.includes('://')) {
-			imageUrl = plugin.baseUrl;
-		} else {
-			let temp = plugin.baseUrl.replace(/\.\.\//g, '');
-			let endpos = installed.baseUrl.indexOf('/', 9) + 1;
-			imageUrl = installed.baseUrl.slice(0, endpos) + temp;
-		}
+	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
+
+	let plugin = allPlugins.find(function(el){
+		return el.guid === guid
+	});
+
+	if ( plugin && ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
+		let variation = plugin.variations[0];
 		
-		let variations = plugin.variations[0];
-		if (variations.icons2) {
-			let icon = variations.icons2[0];
-			for (let i = 0; i < variations.icons2.length; i++) {
-				if (themeType.includes(variations.icons2[i].style)) {
-					icon = variations.icons2[i];
+		if (!bNotForStore && variation.store && variation.store.icons) {
+			// иконки в конфиге у объекта стор (работаем только по новой схеме)
+			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon.png';
+		} else if (variation.icons2) {
+			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
+			let icon = variation.icons2[0];
+			for (let i = 1; i < variation.icons2.length; i++) {
+				if ( themeType.includes(variation.icons2[i].style) ) {
+					icon = variation.icons2[i];
 					break;
 				}
 			}
-			imageUrl += icon['200%'].normal;
-		} else if (!variations.isSystem && imageUrl != '') {
-			let icon = variations.icons[0];
-			if (typeof(icon) == 'object') {
-				for (let i = 0; i < variations.icons.length; i++) {
-					if (themeType.includes(variations.icons[i].style)) {
-						icon = variations.icons[i];
-						break;
-					}
-				}
-				imageUrl += icon['200%'].normal;
+			curIcon = plugin.baseUrl + icon['200%'].normal;
+		} else if (variation.icons) {
+			// тут может быть как старая так и новая схема
+			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
+			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
+			if (!Array.isArray(variation.icons)) {
+				// новая схема
+				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon.png';
 			} else {
-				imageUrl += variations.icons[0];
+				// старая схема
+				if (typeof(variation.icons[0]) == 'object' ) {
+					// старая схема и icons это объект как icons2 в блоке выше
+					let icon = variation.icons[0];
+					for (let i = 1; i < variation.icons.length; i++) {
+						if ( themeType.includes(variation.icons[i].style) ) {
+							icon = variation.icons[i];
+							break;
+						}
+					}
+					curIcon = plugin.baseUrl + icon['200%'].normal;
+				} else {
+					// старая схема и icons это массив со строками
+					curIcon = plugin.baseUrl + variation.icons[0];
+				}
 			}
-		} else {
-			imageUrl = './resources/img/defaults/' + themeType + '/icon@2x.png';
-		}
+		}		
 	}
-	return imageUrl;
+	return curIcon;
 };
 
 function getUrlSearchValue(key) {
