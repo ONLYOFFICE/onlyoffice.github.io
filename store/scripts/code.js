@@ -39,7 +39,7 @@ let devicePR = window.devicePixelRatio;                              // device p
 
 
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
-const isSailFish = (navigator.userAgent.toLowerCase().indexOf("sailfish") > -1);
+const isSailfish = (navigator.userAgent.toLowerCase().indexOf("sailfish") > -1);
 const isEmulateDevicePixelRatio = (navigator.userAgent.toLowerCase().indexOf("emulatedevicepixelratio") > -1);
 const isCorrectApplicationScaleEnabled = (function(){
 
