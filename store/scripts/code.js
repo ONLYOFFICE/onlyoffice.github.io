@@ -752,8 +752,8 @@ window.onresize = function() {
 		let currentDistance = 0;
 		for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
 			if (true) {
-				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
-					if (supportedScaleValues[i] > (devicePR - 0.0001))
+				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.05) {
+					if (supportedScaleValues[i] > (devicePR - 0.05))
 						break;
 				}
 			}
