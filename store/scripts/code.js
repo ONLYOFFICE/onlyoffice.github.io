@@ -741,6 +741,26 @@ window.onresize = function() {
 	if (devicePR !== window.devicePixelRatio) {
 		devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		if (isCorrectApplicationScaleEnabled) {
+			let bestIndex = 0;
+			let bestDistance = Math.abs(supportedScaleValues[0] - devicePR);
+			let currentDistance = 0;
+			for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
+				if (true) {
+					if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
+						if (supportedScaleValues[i] > (devicePR - 0.0001))
+							break;
+					}
+				}
+
+				currentDistance = Math.abs(supportedScaleValues[i] - devicePR);
+				if (currentDistance < (bestDistance - 0.0001)) {
+					bestDistance = currentDistance;
+					bestIndex = i;
+				}
+			}
+			console.log(supportedScaleValues[bestIndex]);
+		}
 
 		let val = getZoom(devicePR);
 		console.log(val);
@@ -754,6 +774,7 @@ function getZoom(devicePR) {
 		devicePixelRatio : devicePR,
 		retinaPixelRatio : devicePR,
 		zoom : 1,
+		correct : false,
 	}
 
 	if (isSailfish && isEmulateDevicePixelRatio)
