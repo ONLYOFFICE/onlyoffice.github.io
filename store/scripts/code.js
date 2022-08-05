@@ -754,7 +754,7 @@ window.onresize = function() {
 			console.log(bestDistance);
 			if (true) {
 				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
-					if (supportedScaleValues[i] > (devicePR - 0.0001))
+					if ( (supportedScaleValues[i] - 0.05) > (devicePR - 0.0001))
 						break;
 				}
 			}
