@@ -37,6 +37,29 @@ let timeout = null;                                                  // delay fo
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let devicePR = window.devicePixelRatio;                              // device pixel ratio
 
+
+const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
+const isSailFish = (navigator.userAgent.toLowerCase().indexOf("sailfish") > -1);
+const isEmulateDevicePixelRatio = (navigator.userAgent.toLowerCase().indexOf("emulatedevicepixelratio") > -1);
+const isCorrectApplicationScaleEnabled = (function(){
+
+	if (supportedScaleValues.length === 0)
+		return false;
+
+	let userAgent = navigator.userAgent.toLowerCase();
+	let isAndroid = (userAgent.indexOf("android") > -1);
+	let isIE = (userAgent.indexOf("msie") > -1 || userAgent.indexOf("trident") > -1 || userAgent.indexOf("edge") > -1);
+	let isChrome = !isIE && (userAgent.indexOf("chrome") > -1);
+	let isOperaOld = (!!window.opera);
+	let isMobile = /android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent || navigator.vendor || window.opera);
+
+	if (isAndroid || !isChrome || isOperaOld || isMobile || !document || !document.firstElementChild || !document.body)
+		return false;
+
+	return true;
+
+})()
+
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
 	case 'ru':
@@ -718,11 +741,64 @@ window.onresize = function() {
 	if (devicePR !== window.devicePixelRatio) {
 		devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		console.log(devicePR);
+
+		let val = getZoom(devicePR);
+		console.log(val);
 	}
 	// TODO change icons for plugins preview for new scale
 	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
 };
+
+function getZoom(devicePR) {
+	let retValue = {
+		retinaPixelRatio : devicePR,
+		retinaPixelRatio : devicePR,
+		zoom : 1,
+	}
+
+	if (isSailfish && isEmulateDevicePixelRatio)
+    {
+        let scale = 1;
+        if (screen.width <= 540)
+            scale = 1.5;
+        else if (screen.width > 540 && screen.width <= 768)
+            scale = 2;
+        else if (screen.width > 768)
+            scale = 3;
+
+		retValue.retinaPixelRatio = scale;
+		retValue.devicePixelRatio = scale;
+        return retValue;
+    } else {
+		if (!isCorrectApplicationScaleEnabled)
+			return retValue;
+
+		let bestIndex = 0;
+		let bestDistance = Math.abs(supportedScaleValues[0] - devicePR);
+		let currentDistance = 0;
+		for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
+			if (true) {
+				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
+					if (supportedScaleValues[i] > (devicePR - 0.0001))
+						break;
+				}
+			}
+
+			currentDistance = Math.abs(supportedScaleValues[i] - devicePR);
+			if (currentDistance < (bestDistance - 0.0001)) {
+				bestDistance = currentDistance;
+				bestIndex = i;
+			}
+		}
+
+		retValue.retinaPixelRatio = supportedScaleValues[bestIndex];
+		if (Math.abs(retValue.devicePixelRatio - retValue.retinaPixelRatio) > 0.01) {
+			retValue.zoom = retValue.devicePixelRatio / retValue.retinaPixelRatio;
+			retValue.correct = true;
+		}
+		return retValue;
+	}
+}
 
 function getTranslation() {
 	// gets translation for current language
