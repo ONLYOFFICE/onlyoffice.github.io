@@ -37,8 +37,9 @@ let timeout = null;                                                  // delay fo
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
-	percent : "100%",
-	value : 1
+	percent  : "100%",                                               // current scale in percent
+	value    : 1,                                                    // current scale value
+	devicePR : 1                                                     // device pixel ratio
 };
 
 // it's necessary because we show loader before all (and getting translations too)
@@ -463,7 +464,7 @@ function createPluginDiv(plugin, bInstalled) {
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item form-control noselect';
-	div.style.border = (1 / scale.value) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
+	div.style.border = (1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
 	
 	div.onmouseenter = function(event) {
 		event.target.classList.add('div_item_hovered');
@@ -720,33 +721,36 @@ function setDivHeight() {
 
 window.onresize = function() {
 	setDivHeight();
-	if (scale.value !== window.devicePixelRatio) {
-		$('.div_item').css('border', ((1 / window.devicePixelRatio) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		
-		let bestIndex = 0;
-		let bestDistance = Math.abs(supportedScaleValues[0] - window.devicePixelRatio);
-		let currentDistance = 0;
-		for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
-			if (true) {
-				if (Math.abs(supportedScaleValues[i] - window.devicePixelRatio) > 0.0001) {
-					if ( (supportedScaleValues[i] - 0.0501) > (window.devicePixelRatio - 0.0001))
-						break;
+	if (scale.devicePR !== window.devicePixelRatio) {
+		scale.devicePR = window.devicePixelRatio;
+		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		if (1 < scale.devicePR && scale.devicePR <= 2) {
+			let bestIndex = 0;
+			let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
+			let currentDistance = 0;
+			for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
+				if (true) {
+					if (Math.abs(supportedScaleValues[i] - scale.devicePR) > 0.0001) {
+						if ( (supportedScaleValues[i] - 0.0501) > (scale.devicePR - 0.0001))
+							break;
+					}
+				}
+	
+				currentDistance = Math.abs(supportedScaleValues[i] - scale.devicePR);
+				if (currentDistance < (bestDistance - 0.0001)) {
+					bestDistance = currentDistance;
+					bestIndex = i;
 				}
 			}
-
-			currentDistance = Math.abs(supportedScaleValues[i] - window.devicePixelRatio);
-			if (currentDistance < (bestDistance - 0.0001)) {
-				bestDistance = currentDistance;
-				bestIndex = i;
-			}
+			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
+			scale.value = supportedScaleValues[bestIndex];
+			changeIcons();
 		}
-		scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
-		scale.value = supportedScaleValues[bestIndex];
-		changeIcons();
 	}
 };
 
 function changeIcons() {
+	console.log('changeIcons');
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
 		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ) );
