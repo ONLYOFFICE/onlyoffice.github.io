@@ -939,7 +939,7 @@ function getImageUrl(guid, bNotForStore) {
 			iconScale = '/icon@2x.png'
 			break;
 	}
-	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png'; // временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
+	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png'; // iconScale временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -961,7 +961,7 @@ function getImageUrl(guid, bNotForStore) {
 					break;
 				}
 			}
-			curIcon = plugin.baseUrl + icon[scale.percent].normal;
+			curIcon = plugin.baseUrl + icon['200%'].normal // icon[scale.percent].normal; временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
 		} else if (variation.icons) {
 			// тут может быть как старая так и новая схема
 			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
@@ -980,10 +980,10 @@ function getImageUrl(guid, bNotForStore) {
 							break;
 						}
 					}
-					curIcon = plugin.baseUrl + icon[scale.percent].normal;
+					curIcon = plugin.baseUrl + icon['200%'].normal // icon[scale.percent].normal; временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
 				} else {
 					// старая схема и icons это массив со строками
-					curIcon = plugin.baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
+					curIcon = plugin.baseUrl + variation.icons[1] // (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]); временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
 				}
 			}
 		}		
