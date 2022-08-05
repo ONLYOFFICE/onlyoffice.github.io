@@ -746,15 +746,13 @@ window.onresize = function() {
 		devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		
-		// надо объединить 1 и 2 метод и сделать один нормальный (хотя в интерфейсе всегда смотрят только на devicePixelRatio)
 		let bestIndex = 0;
 		let bestDistance = Math.abs(supportedScaleValues[0] - devicePR);
 		let currentDistance = 0;
 		for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
-			console.log(bestDistance);
 			if (true) {
 				if (Math.abs(supportedScaleValues[i] - devicePR) > 0.0001) {
-					if ( (supportedScaleValues[i] - 0.05) > (devicePR - 0.0001))
+					if ( (supportedScaleValues[i] - 0.0501) > (devicePR - 0.0001))
 						break;
 				}
 			}
@@ -770,8 +768,8 @@ window.onresize = function() {
 		changeIcons(supportedScaleValues[bestIndex]);
 		console.log(supportedScaleValues[bestIndex]);
 
-		let val = getZoom(devicePR);
-		console.log(val);
+		// let val = getZoom(devicePR);
+		// console.log(val);
 	}
 	// TODO change icons for plugins preview for new scale
 	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
