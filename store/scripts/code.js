@@ -520,7 +520,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
-	let template = '<div class="div_image" style="background: ' + bg + '">' +
+	let template = '<div class="div_image" style="background: ' + bg + ';border:' + ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')) + '">' +
 						'<img class="plugin_icon" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
