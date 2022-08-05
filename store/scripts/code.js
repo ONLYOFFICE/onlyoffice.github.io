@@ -849,8 +849,8 @@ function changeIcons() {
 		guid = arr[i].getAttribute('data-guid');
 		arr[i].src = getImageUrl(guid);
 	}
-	guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	elements.imgIcon.setAttribute(src, getImageUrl());
+	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	// elements.imgIcon.setAttribute(src, getImageUrl());
 };
 
 function getTranslation() {
@@ -953,7 +953,7 @@ function getImageUrl(guid, bNotForStore) {
 			iconScale = '/icon@2x.png'
 			break;
 	}
-	let curIcon = './resources/img/defaults/' + themeType + iconScale;
+	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png'; // временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
