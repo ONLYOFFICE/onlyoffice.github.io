@@ -500,7 +500,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img id="img_'+plugin.guid+'" class="plugin_icon" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -919,6 +919,7 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 							let icon = document.getElementById('img_' + guid);
 							icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
 							icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
+							icon.style.display = '';
 						}
 						
 					}
