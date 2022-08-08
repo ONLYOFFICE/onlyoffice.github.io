@@ -501,7 +501,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	// TODO надо указывать размеры для иконок в любом зуме как для иконки для 100%. Получается надо её грузить и узнавать размеры
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img class="plugin_icon" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -841,7 +841,7 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(guid, bNotForStore) {
+function getImageUrl(guid, bNotForStore, bSetSize) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	let iconScale = '/icon.png';
@@ -908,35 +908,42 @@ function getImageUrl(guid, bNotForStore) {
 			}
 		}		
 	}
-	makeRequest(curIcon, 'blob').then(
-		function (res) {
-			let reader = new FileReader();
-			reader.onloadend = function() {
-				let imageUrl = reader.result;
-				// count--;
-				// if (!count) {
-				// 	console.log('load all images = ' + (Date.now() - start));
-				// 	// if (allPlugins) {
-				// 		// getAllPluginsData();
-				// 	// }
-				// }		
-				let img = document.createElement('img');
-				img.setAttribute('src', imageUrl);
-				img.onload = function () {
-					console.log(`Изображение загружено, размеры ${img.width/scale.value}x${img.height/scale.value}`);
-					console.log(curIcon);
-					console.log(imageUrl);
-					console.log('---------------------------------------------------------');
+	if (bSetSize) {
+		makeRequest(curIcon, 'blob').then(
+			// TODO это нужно делать каждый раз когда мы перерисовывем маркет, но не когда меняем только картинки
+			function (res) {
+				let reader = new FileReader();
+				reader.onloadend = function() {
+					let imageUrl = reader.result;
+					// count--;
+					// if (!count) {
+					// 	console.log('load all images = ' + (Date.now() - start));
+					// 	// if (allPlugins) {
+					// 		// getAllPluginsData();
+					// 	// }
+					// }		
+					let img = document.createElement('img');
+					img.setAttribute('src', imageUrl);
+					img.onload = function () {
+						console.log(`Изображение загружено, размеры ${img.width/scale.value}x${img.height/scale.value}`);
+						console.log(curIcon);
+						console.log(imageUrl);
+						console.log('---------------------------------------------------------');
+						let icon = document.getElementById('img_' + guid);
+						icon.style.width = ( (img.width/scale.value) >> 0 );
+						icon.style.height = ( (img.height/scale.value) >> 0 );
+					}
+					
 				}
-				
+					
+				reader.readAsDataURL(res);
+			},
+			function(error) {
+				createError(error);
 			}
-				
-			reader.readAsDataURL(res);
-		},
-		function(error) {
-			createError(error);
-		}
-	);
+		);
+	}
+	
 	return curIcon;
 };
 
