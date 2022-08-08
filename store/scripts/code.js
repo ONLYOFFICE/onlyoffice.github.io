@@ -746,7 +746,6 @@ window.onresize = function() {
 			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
 			scale.value = supportedScaleValues[bestIndex];
 			isResizeOnStart = false;
-			console.log('change icons');
 			changeIcons();
 		}
 	}
