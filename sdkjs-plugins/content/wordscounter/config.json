@@ -1,22 +1,22 @@
-{
-    "name" : "Count words and characters",
+﻿{
+    "name" : "Word counter",
     "nameLocale": {
-        "ru": "Подсчет слов и символов",
-        "fr": "Compter les mots et les caractères",
-        "es": "Contar palabras y caracteres",
-        "de": "Wörter und Zeichen zählen"
+        "ru": "Подсчёт слов",
+        "fr": "Compteur de mots",
+        "es": "Recuento de palabras",
+        "de": "Wortanzahl"
     },
     "guid" : "asc.{584EEEE8-DBF5-45C3-A4CA-F52177C82754}",
     "version": "1.0.0",
 
     "variations" : [
         {
-            "description" : "Count words and characters",
+            "description" : "Сount words, characters (with/without spaces), and paragraphs in the selected part of your document.",
             "descriptionLocale": {
-                "ru": "Подсчет слов и символов",
-                "fr": "Compter les mots et les caractères",
-                "es": "Contar palabras y caracteres",
-                "de": "Wörter und Zeichen zählen"
+                "ru": "Подсчитайте слова, символы с пробелами и без, а также абзацы в любой части документа.",
+                "fr": "Comptez les mots, les caractères (avec/sans espaces) et les paragraphes dans la partie sélectionnée de votre document.",
+                "es": "Cuente las palabras, los caracteres (con/sin espacios) y los párrafos en la parte seleccionada de su documento.",
+                "de": "Zählen Sie Wörter, Zeichen (mit/ohne Leerzeichen) und Absätze im ausgewählten Teil Ihres Dokuments."
             },
             "url" : "index.html",
 

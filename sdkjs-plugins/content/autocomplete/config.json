@@ -1,11 +1,23 @@
 {
-    "name" : "AutoComplete",
+    "name" : "Autocomplete",
+    "nameLocale": {
+        "ru": "Autocomplete",
+        "fr": "Autocomplete",
+        "es": "Autocomplete",
+        "de": "Autocomplete"
+    },
     "guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
     "version" : "1.0.0",
 
     "variations" : [
         {
-            "description"         : "AutoComplete",
+            "description"         : "Use an input assistant while typing in the editors.",
+            "descriptionLocale": {
+                "ru": "Используйте ассистент набора текста при работе в редакторе.",
+                "fr": "Utilisez un assistant de saisie pendant que vous tapez dans les eduteurs.",
+                "es": "Utilice un asistente de entrada mientras escribe en los editores.",
+                "de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren."
+            },
             "url"                 : "index.html",
             "icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
             "screens"             : ["resources/store/screen_1.png"],

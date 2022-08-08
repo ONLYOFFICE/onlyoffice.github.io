@@ -1,11 +1,23 @@
-{
+﻿{
     "name": "YouTube",
+    "nameLocale": {
+        "ru": "YouTube",
+        "fr": "YouTube",
+        "es": "YouTube",
+        "de": "YouTube"
+    },
     "guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
     "version": "1.0.2",
 
     "variations": [
         {
-            "description": "YouTube",
+            "description": "Easily embed YouTube videos into your documents.",
+            "descriptionLocale": {
+                "ru": "Легко встраивайте  YouTube-видео в документы.",
+                "fr": "Insérez facilement des vidéos YouTube dans vos documents.",
+                "es": "Inserte fácilmente vídeos de YouTube en sus documentos.",
+                "de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein."
+            },
             "url": "index.html",
 
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],

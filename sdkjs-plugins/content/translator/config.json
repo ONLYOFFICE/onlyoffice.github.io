@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "Translator",
     "nameLocale": {
         "ru": "Переводчик",
@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Translator",
+            "description": "Translate the selected text into other languages with Google Translate.",
             "descriptionLocale": {
-                "ru": "Переводчик",
-                "fr": "Traducteur",
-                "es": "Traductor",
-                "de": "Übersetzer"
+                "ru": "Переводите слова, предложения и абзацы на другие языки с помощью Google Translate.",
+                "fr": "Traduisez le texte sélectionné dans d'autres langues avec Google Translate.",
+                "es": "Traduzca el texto seleccionado a otros idiomas con el Traductor de Google.",
+                "de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit Google Translate."
             },
             "url": "index.html",
 

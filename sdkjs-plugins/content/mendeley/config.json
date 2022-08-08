@@ -1,11 +1,23 @@
 {
     "name" : "Mendeley",
+    "nameLocale": {
+        "ru": "Mendeley",
+        "fr": "Mendeley",
+        "es": "Mendeley",
+        "de": "Mendeley"
+    },
     "guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
     "version" : "1.0.1",
 
     "variations" : [
       {
-        "description": "Mendeley",
+        "description": "Create bibliographies and insert citations using the Mendeley service.",
+        "descriptionLocale": {
+                "ru": "Работайте с библиографиями и цитированием, используя сервис Mendeley.",
+                "fr": "Creez des bibliographies et inserez des citations avec Mendeley.",
+                "es": "Cree bibliografias e inserte citas utilizando el servicio Mendeley.",
+                "de": "Erstellen Sie Bibliografien und fugen Sie Zitate mit Mendeley ein."
+            },
         "url": "index.html",
         "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
         "icons2": [

@@ -1,10 +1,22 @@
 {
     "name"       : "EasyBib",
+    "nameLocale": {
+        "ru": "EasyBib",
+        "fr": "EasyBib",
+        "es": "EasyBib",
+        "de": "EasyBib"
+},
     "guid"       : "asc.{c9d216a5-4f1a-49f2-9ff0-67c510a73523}",
     "version"    : "1.0.1",
     "variations" : [
         {
-            "description" : "EasyBib",
+            "description" : "Generate citations and create bibliographies in your documents (compatible with ONLYOFFICE cloud).",
+            "descriptionLocale": {
+                "ru": "Добавляйте библиографии в свои документы (требуется облако ONLYOFFICE).",
+                "fr": "Generez des citations et creez des bibliographies dans vos documents (compatible avec cloud ONLYOFFICE).",
+                "es": "Genere citas y cree bibliografias en sus documentos (compatible con la nube de ONLYOFFICE).",
+                "de": "Generieren Sie Zitate und erstellen Sie Bibliografien in Ihren Dokumenten (kompatibel mit ONLYOFFICE in der Cloud)."
+            },
             "url"         : "index.html",
             "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
             "icons2": [

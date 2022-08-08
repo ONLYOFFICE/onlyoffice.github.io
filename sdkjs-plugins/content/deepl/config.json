@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Translator",
+            "description": "Translate the selected text into other languages using DeepL.",
             "descriptionLocale": {
-                "ru": "DeepL",
-                "fr": "DeepL",
-                "es": "DeepL",
-                "de": "DeepL"
+                "ru": "ѕереводите текст на другие €зыки с помощью сервиса DeepL.",
+                "fr": "Traduisez un texte selectionne dans dТautres langues avec DeepL.",
+                "es": "Traduzca el texto seleccionado a otros idiomas utilizando DeepL.",
+                "de": "Ubersetzen Sie den ausgewahlten Text in andere Sprachen mit DeepL."
             },
             "url": "index.html",
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

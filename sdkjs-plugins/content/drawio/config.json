@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "draw.io",
     "nameLocale": {
         "ru": "draw.io",
@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "draw.io",
+            "description": "Create, edit, and insert professional-looking diagrams into your documents.",
             "descriptionLocale": {
-                "ru": "draw.io",
-                "fr": "draw.io",
-                "es": "draw.io",
-                "de": "draw.io"
+                "ru": "Создавайте, редактируйте и добавляйте в документы различные диаграммы.",
+                "fr": "Créez, modifiez et insérez des diagrammes professinnels dans vos documents.",
+                "es": "Cree, edite e inserte diagramas de aspecto profesional en sus documentos.",
+                "de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein."
             },
             "url": "index.html",
 

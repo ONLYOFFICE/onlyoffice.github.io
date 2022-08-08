@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "Highlight code",
     "nameLocale": {
         "ru": "Подсветка кода",
@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Highlight code",
+            "description": "Highlight syntax of the code selecting the necessary language, style, and background color.",
             "descriptionLocale": {
-                "ru": "Подсветка кода",
-                "fr": "Code en surbrillance",
-                "es": "Resaltar el código",
-                "de": "Code hervorheben"
+                "ru": "Оформите синтаксис кода, выбрав необходимый язык, стиль и цвет фона.",
+                "fr": "Mettez en évidence la syntaxe du code en sélectionnant la langue, le style et la couleur de l’arrère-plan.",
+                "es": "Resalte la sintaxis del código seleccionando el idioma, el estilo y el color de fondo necesarios.",
+                "de": "Heben Sie die Codesyntax hervor, indem Sie die gewünschte Sprache, den Stil und die Hintergrundfarbe auswählen."
             },
             "url": "index.html",
 

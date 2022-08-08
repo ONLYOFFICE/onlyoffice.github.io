@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "Speech",
     "nameLocale": {
         "ru": "Речь",
@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Speech",
+            "description": "Convert the selected text into speech.",
             "descriptionLocale": {
-                "ru": "Речь",
-                "fr": "Parole",
-                "es": "Habla",
-                "de": "Rede"
+                "ru": "Преобразуйте выделенный текст в речь.",
+                "fr": "Convertissez le texte sélectionné en parole.",
+                "es": "Convierta el texto seleccionado en voz.",
+                "de": "Konvertieren Sie den ausgewählten Text in die Rede."
             },
             "url": "index.html",
 
