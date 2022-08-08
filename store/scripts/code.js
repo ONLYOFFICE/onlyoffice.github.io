@@ -922,11 +922,11 @@ function getImageUrl(guid, bNotForStore) {
 				// }		
 				let img = document.getElementById('img_test');
 				img.setAttribute('src', imageUrl);
-				img.onload = function {
+				img.onload = function () {
 					console.log(`Изображение загружено, размеры ${img.width}x${img.height}`);
 					console.log(curIcon);
 					console.log(imageUrl);
-					console.log('---------------------------------------------------------')	
+					console.log('---------------------------------------------------------');
 				}
 				
 			}
