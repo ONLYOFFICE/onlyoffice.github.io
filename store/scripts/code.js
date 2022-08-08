@@ -499,6 +499,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
+	// TODO надо указывать размеры для иконок в любом зуме как для иконки для 100%. Получается надо её грузить и узнавать размеры
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img class="plugin_icon" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid) + '">' +
 					'</div>' +
@@ -907,6 +908,29 @@ function getImageUrl(guid, bNotForStore) {
 			}
 		}		
 	}
+	makeRequest(curIcon, 'blob').then(
+		function (res) {
+			let reader = new FileReader();
+			reader.onloadend = function() {
+				let imageUrl = reader.result;
+				// count--;
+				// if (!count) {
+				// 	console.log('load all images = ' + (Date.now() - start));
+				// 	// if (allPlugins) {
+				// 		// getAllPluginsData();
+				// 	// }
+				// }		
+				console.log(curIcon);
+				console.log(imageUrl);
+				console.log('---------------------------------------------------------');		
+			}
+				
+			reader.readAsDataURL(res);
+		},
+		function(error) {
+			createError(error);
+		}
+	);
 	return curIcon;
 };
 
