@@ -922,9 +922,13 @@ function getImageUrl(guid, bNotForStore) {
 				// }		
 				let img = document.getElementById('img_test');
 				img.setAttribute('src', imageUrl);
-				console.log(img.clientHeight);
-				console.log(img.clientWidth);
-				console.log('---------------------------------------------------------');		
+				img.onload = function {
+					console.log(`Изображение загружено, размеры ${img.width}x${img.height}`);
+					console.log(curIcon);
+					console.log(imageUrl);
+					console.log('---------------------------------------------------------')	
+				}
+				
 			}
 				
 			reader.readAsDataURL(res);
