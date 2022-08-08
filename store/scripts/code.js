@@ -923,7 +923,7 @@ function getImageUrl(guid, bNotForStore) {
 				let img = document.createElement('img');
 				img.setAttribute('src', imageUrl);
 				img.onload = function () {
-					console.log(`Изображение загружено, размеры ${img.width}x${img.height}`);
+					console.log(`Изображение загружено, размеры ${img.width/scale.value}x${img.height/scale.value}`);
 					console.log(curIcon);
 					console.log(imageUrl);
 					console.log('---------------------------------------------------------');
