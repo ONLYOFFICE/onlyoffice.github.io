@@ -740,6 +740,7 @@ window.onresize = function() {
 		scale.devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
@@ -763,12 +764,14 @@ window.onresize = function() {
 			}
 			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
 			scale.value = supportedScaleValues[bestIndex];
-			changeIcons();
+			if (scale.value !== oldScale)
+				changeIcons();
 		}
 	}
 };
 
 function changeIcons() {
+	console.log('changeIcons');
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
 		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ), false, false );
