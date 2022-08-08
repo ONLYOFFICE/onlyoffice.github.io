@@ -920,8 +920,10 @@ function getImageUrl(guid, bNotForStore) {
 				// 		// getAllPluginsData();
 				// 	// }
 				// }		
-				console.log(curIcon);
-				console.log(imageUrl);
+				let img = document.getElementById('img_test');
+				img.setAttribute('src', imageUrl);
+				console.log(img.clientHeight);
+				console.log(img.clientWidth);
 				console.log('---------------------------------------------------------');		
 			}
 				
