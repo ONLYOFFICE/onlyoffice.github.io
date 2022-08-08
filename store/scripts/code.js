@@ -499,7 +499,6 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
-	// TODO надо указывать размеры для иконок в любом зуме как для иконки для 100%. Получается надо её грузить и узнавать размеры
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img id="img_'+plugin.guid+'" class="plugin_icon" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
 					'</div>' +
@@ -616,7 +615,7 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
-	let tmp = getImageUrl(guid, true);
+	let tmp = getImageUrl(guid, true, false);
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
@@ -753,7 +752,7 @@ window.onresize = function() {
 function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
-		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ) );
+		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ), false, false );
 	}
 	// временно пришлось сделать так, потому что некоторые иконки плагинов слишком большие для этого окна и пока используем всегда одну
 	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
@@ -910,7 +909,6 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 		
 		if (bSetSize) {
 			makeRequest(curIcon, 'blob').then(
-				// TODO это нужно делать каждый раз когда мы перерисовывем маркет, но не когда меняем только картинки
 				function (res) {
 					let reader = new FileReader();
 					reader.onloadend = function() {
@@ -918,10 +916,6 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 						let img = document.createElement('img');
 						img.setAttribute('src', imageUrl);
 						img.onload = function () {
-							console.log(`Изображение загружено, размеры ${img.width/scale.value}x${img.height/scale.value}`);
-							console.log(curIcon);
-							console.log(imageUrl);
-							console.log('---------------------------------------------------------');
 							let icon = document.getElementById('img_' + guid);
 							icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
 							icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
