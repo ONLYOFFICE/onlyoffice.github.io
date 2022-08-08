@@ -930,8 +930,8 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 						console.log(imageUrl);
 						console.log('---------------------------------------------------------');
 						let icon = document.getElementById('img_' + guid);
-						icon.style.width = ( (img.width/scale.value) >> 0 );
-						icon.style.height = ( (img.height/scale.value) >> 0 );
+						icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
+						icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
 					}
 					
 				}
