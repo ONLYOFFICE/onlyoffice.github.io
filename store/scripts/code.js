@@ -920,7 +920,7 @@ function getImageUrl(guid, bNotForStore) {
 				// 		// getAllPluginsData();
 				// 	// }
 				// }		
-				let img = document.getElementById('img_test');
+				let img = document.createElement('img');
 				img.setAttribute('src', imageUrl);
 				img.onload = function () {
 					console.log(`Изображение загружено, размеры ${img.width}x${img.height}`);
