@@ -725,7 +725,11 @@ window.onresize = function() {
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (1 < scale.devicePR && scale.devicePR <= 2 || (isResizeOnStart && scale.devicePR > 1)) {
+		if (scale.devicePR <= 2 || isResizeOnStart) {
+			isResizeOnStart = false;
+			if (scale.devicePR < 1)
+				return;
+
 			let bestIndex = 0;
 			let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
 			let currentDistance = 0;
@@ -745,7 +749,6 @@ window.onresize = function() {
 			}
 			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
 			scale.value = supportedScaleValues[bestIndex];
-			isResizeOnStart = false;
 			changeIcons();
 		}
 	}
