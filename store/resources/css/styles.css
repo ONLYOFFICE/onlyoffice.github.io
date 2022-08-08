@@ -151,12 +151,6 @@ label.header {
 	height: 84px;
 }
 
-.plugin_icon {
-	width: 100%;
-	height: 100%;
-	object-fit: scale-down;
-}
-
 .span_name {
 	margin: 10px;
 	font-weight: bold;
