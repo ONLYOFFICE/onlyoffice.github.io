@@ -906,42 +906,35 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 					curIcon = plugin.baseUrl + variation.icons[1] // (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]); временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
 				}
 			}
-		}		
-	}
-	if (bSetSize) {
-		makeRequest(curIcon, 'blob').then(
-			// TODO это нужно делать каждый раз когда мы перерисовывем маркет, но не когда меняем только картинки
-			function (res) {
-				let reader = new FileReader();
-				reader.onloadend = function() {
-					let imageUrl = reader.result;
-					// count--;
-					// if (!count) {
-					// 	console.log('load all images = ' + (Date.now() - start));
-					// 	// if (allPlugins) {
-					// 		// getAllPluginsData();
-					// 	// }
-					// }		
-					let img = document.createElement('img');
-					img.setAttribute('src', imageUrl);
-					img.onload = function () {
-						console.log(`Изображение загружено, размеры ${img.width/scale.value}x${img.height/scale.value}`);
-						console.log(curIcon);
-						console.log(imageUrl);
-						console.log('---------------------------------------------------------');
-						let icon = document.getElementById('img_' + guid);
-						icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
-						icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
+		}	
+		
+		if (bSetSize) {
+			makeRequest(curIcon, 'blob').then(
+				// TODO это нужно делать каждый раз когда мы перерисовывем маркет, но не когда меняем только картинки
+				function (res) {
+					let reader = new FileReader();
+					reader.onloadend = function() {
+						let imageUrl = reader.result;		
+						let img = document.createElement('img');
+						img.setAttribute('src', imageUrl);
+						img.onload = function () {
+							console.log(`Изображение загружено, размеры ${img.width/scale.value}x${img.height/scale.value}`);
+							console.log(curIcon);
+							console.log(imageUrl);
+							console.log('---------------------------------------------------------');
+							let icon = document.getElementById('img_' + guid);
+							icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
+							icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
+						}
+						
 					}
-					
+					reader.readAsDataURL(res);
+				},
+				function(error) {
+					createError(error);
 				}
-					
-				reader.readAsDataURL(res);
-			},
-			function(error) {
-				createError(error);
-			}
-		);
+			);
+		}
 	}
 	
 	return curIcon;
