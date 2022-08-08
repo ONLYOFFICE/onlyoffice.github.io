@@ -35,6 +35,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
+let isResizeOnStart = true;                                          // flag for firs resize on start
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
@@ -724,7 +725,7 @@ window.onresize = function() {
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (1 < scale.devicePR && scale.devicePR <= 2) {
+		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			let bestIndex = 0;
 			let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
 			let currentDistance = 0;
@@ -744,6 +745,8 @@ window.onresize = function() {
 			}
 			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
 			scale.value = supportedScaleValues[bestIndex];
+			isResizeOnStart = false;
+			console.log('change icons');
 			changeIcons();
 		}
 	}
