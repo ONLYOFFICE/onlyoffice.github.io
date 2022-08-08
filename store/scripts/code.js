@@ -725,7 +725,7 @@ window.onresize = function() {
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+		if (1 < scale.devicePR && scale.devicePR <= 2 || (isResizeOnStart && scale.devicePR > 1)) {
 			let bestIndex = 0;
 			let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
 			let currentDistance = 0;
