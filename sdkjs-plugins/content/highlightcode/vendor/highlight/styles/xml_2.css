@@ -1,0 +1,30 @@
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fff;
+  color: #000;
+}
+p {
+  margin: 0;
+  line-height: 1;
+  color: #000;
+}
+.hljs-tag{
+  color: #2008c0;
+}
+.hljs-name {
+  color: #ad3b3d;
+}
+.hljs-meta {
+  color: #2008c0;
+}
+.hljs-string {
+  color: #000;
+}
+.php {
+  color: #2008c0;
+}
+.hljs-attr {
+color: #ad3b3d;
+}
