@@ -725,7 +725,7 @@ window.onresize = function() {
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
 		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (scale.devicePR <= 2 || isResizeOnStart) {
+		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
