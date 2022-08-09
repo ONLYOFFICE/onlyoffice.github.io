@@ -1,11 +1,23 @@
 {
-    "name"       : "WordPress",
+    "name": "WordPress",
+    "nameLocale": {
+        "ru": "WordPress",
+        "fr": "WordPress",
+        "es": "WordPress",
+        "de": "WordPress"
+    },
     "guid"       : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
     "baseUrl"    : "",
     "version"    : "1.0.0",
     "variations" : [
         {
-            "description" : "WordPress",
+            "description": "Publish articles directly from the document editor on your WordPress website (compatible with ONLYOFFICE cloud).",
+            "descriptionLocale": {
+                "ru": "Публикуйте статьи прямо из редактора документов на вашем сайте WordPress (требуется облако ONLYOFFICE).",
+                "fr": "Publiez des articles directement depuis l'éditeur de documents sur votre site web WordPress (compatible avec le cloud ONLYOFFICE).",
+                "es": "Publique artículos directamente desde el editor de documentos en su sitio web de WordPress (compatible con la nube de ONLYOFFICE).",
+                "de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud)."
+            },
             "url"         : "index.html",
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
