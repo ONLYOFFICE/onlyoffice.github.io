@@ -239,9 +239,9 @@
         if (aItems.length === 0) {
             $('<div>', {
                 id: "no_results",
-                text: "No results"
+                text: "Aucun résultat."
             }).appendTo('#results');
-
+			updateScroll();
 			return;
         }
 
@@ -511,6 +511,10 @@
 		this.executeCommand("close", "");
 	};
 
+	window.onresize = function()
+	{
+		updateScroll();
+	};
 	window.Asc.plugin.onExternalMouseUp = function()
 	{
 		var evt = document.createEvent("MouseEvents");
