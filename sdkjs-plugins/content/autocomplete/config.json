@@ -1,6 +1,6 @@
 {
     "name": "Autoсomplete",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "Autocomplete",
         "fr": "Autocomplete",
         "es": "Autocomplete",
@@ -12,7 +12,7 @@
     "variations" : [
         {
             "description": "Use an input assistant while typing in the editors.",
-			 "descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Используйте ассистент набора текста при работе в редакторе.",
                 "fr": "Utilisez un assistant de saisie pendant que vous tapez dans les éditeurs.",
                 "es": "Utilice un asistente de entrada mientras escribe en los editores.",
