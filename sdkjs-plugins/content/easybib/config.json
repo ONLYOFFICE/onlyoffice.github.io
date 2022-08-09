@@ -1,6 +1,6 @@
 {
     "name"       : "EasyBib",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "EasyBib",
         "fr": "EasyBib",
         "es": "EasyBib",
@@ -11,7 +11,7 @@
     "variations" : [
         {
             "description" : "Generate citations and create bibliographies in your documents (compatible with ONLYOFFICE cloud).",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Добавляйте библиографии в свои документы (требуется облако ONLYOFFICE).",
                 "fr": "Générez des citations et créez des bibliographies dans vos documents (compatible avec le cloud ONLYOFFICE).",
                 "es": "Genere citas y cree bibliografías en sus documentos (compatible con la nube de ONLYOFFICE).",

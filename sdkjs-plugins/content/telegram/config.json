@@ -1,6 +1,6 @@
 {
     "name" : "Telegram",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "Telegram",
         "fr": "Telegram",
         "es": "Telegram",
@@ -12,7 +12,7 @@
     "variations" : [
         {
             "description" : "Chat with co-authors in real time using integrated Telegram client.",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Общайтесь с другими авторами в режиме реального времени в Telegram.",
                 "fr": "Chattez avec vos co-auteurs en temps réel grâce au client Telegram intégré.",
                 "es": "Chatee con los coautores en tiempo real utilizando el cliente integrado de Telegram.",

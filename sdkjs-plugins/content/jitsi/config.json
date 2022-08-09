@@ -1,6 +1,6 @@
 {
     "name" : "Jitsi",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "Jitsi",
         "fr": "Jitsi",
         "es": "Jitsi",
@@ -12,7 +12,7 @@
     "variations" : [
         {
             "description" : "Make audio and video calls right in the editors using Jitsi.",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Совершайте аудио- и видеозвонки прямо в редакторах с помощью Jitsi.",
                 "fr": "Organisez des appels audio et vidéo dans les éditeurs avec Jitsi.",
                 "es": "Realice llamadas de audio y vídeo directamente en los editores utilizando Jitsi.",

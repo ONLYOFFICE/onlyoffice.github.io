@@ -1,6 +1,6 @@
 {
     "name": "Doc2md",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "Doc2md",
         "fr": "Doc2md",
         "es": "Doc2md",
@@ -12,7 +12,7 @@
     "variations": [
         {
             "description": "Convert your formatted documents to Markdown or HTML.",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Преобразуйте отформатированные документы в Markdown или HTML.",
                 "fr": "Convertissez votre document mis en forme en Markdown ou HTML.",
                 "es": "Convierta sus documentos formateados a Markdown o HTML.",

@@ -1,6 +1,6 @@
 {
     "name" : "Mendeley",
-	 "nameLocale": {
+    "nameLocale": {
         "ru": "Mendeley",
         "fr": "Mendeley",
         "es": "Mendeley",
@@ -12,7 +12,7 @@
     "variations" : [
       {
         "description": "Create bibliographies and insert citations using the Mendeley service.",
-		"descriptionLocale": {
+        "descriptionLocale": {
                 "ru": "Работайте с библиографиями и цитированием, используя сервис Mendeley.",
                 "fr": "Créez des bibliographies et insérez des citations avec Mendeley.",
                 "es": "Cree bibliografías e inserte citas utilizando el servicio Mendeley.",
