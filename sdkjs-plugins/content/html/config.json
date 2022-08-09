@@ -1,22 +1,22 @@
 {
-    "name": "Get and paste html",
+    "name": "HTML",
     "nameLocale": {
-        "ru": "Получить и вставить html",
-        "fr": "Obtenir et coller du html",
-        "es": "Obtener y pegar html",
-        "de": "HTML abrufen und einfügen"
+        "ru": "HTML",
+        "fr": "HTML",
+        "es": "HTML",
+        "de": "HTML"
     },
     "guid": "asc.{E581C417-3C80-4BC2-B42D-502850FDC1E7}",
     "version": "1.0.0",
 
     "variations": [
         {
-            "description": "Get and paste html",
+            "description": "Get your document content as HTML code, modify it, and paste back to the document.",
             "descriptionLocale": {
-                "ru": "Получить и вставить html",
-                "fr": "Obtenir et coller du html",
-                "es": "Obtener y pegar html",
-                "de": "HTML abrufen und einfügen"
+                "ru": "Получите содержимое документа в виде HTML-кода с возможностью отредактировать полученный результат.",
+                "fr": "Obtenez le contenu de votre document sous forme de code HTML, modifiez-le et collez-le dans le document.",
+                "es": "Obtenga el contenido de su documento como código HTML, modifíquelo y péguelo de nuevo en el documento.",
+                "de": "Erhalten Sie den Inhalt Ihres Dokuments als HTML-Code, modifizieren und fügen Sie ihn wieder ins Dokument ein."
             },
             "url": "index.html",
 

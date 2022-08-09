@@ -1,11 +1,23 @@
 {
     "name" : "Jitsi",
+	"nameLocale": {
+        "ru": "Jitsi",
+        "fr": "Jitsi",
+        "es": "Jitsi",
+        "de": "Jitsi"
+    },
     "guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
     "version": "1.0.1",
 
     "variations" : [
         {
-            "description" : "Jitsi",
+            "description" : "Make audio and video calls right in the editors using Jitsi.",
+			"descriptionLocale": {
+                "ru": "Совершайте аудио- и видеозвонки прямо в редакторах с помощью Jitsi.",
+                "fr": "Organisez des appels audio et vidéo dans les éditeurs avec Jitsi.",
+                "es": "Realice llamadas de audio y vídeo directamente en los editores utilizando Jitsi.",
+                "de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi."
+            },
             "url"         : "index.html",
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
