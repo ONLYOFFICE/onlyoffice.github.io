@@ -617,11 +617,11 @@ function onClickItem() {
 	}
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
-		elements.spanVersion.innerText = installed.obj.version || plugin.version;
-		divVersion.classList.remove('hidden');
+		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
+		elements.divVersion.classList.remove('hidden');
 	} else {
 		elements.spanVersion.innerText = '';
-		divVersion.classList.add('hidden');
+		elements.divVersion.classList.add('hidden');
 	}
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
