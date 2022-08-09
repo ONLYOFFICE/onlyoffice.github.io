@@ -21,6 +21,8 @@
 	"Installation": "Instalace",
 	"Updating": "Aktualizace",
 	"Removal": "Odstranění",
-	"Problem with loading plugins." : "Problém s načítáním pluginů.",
-	"No installed plugins." : "Žádné nainstalované pluginy."
+	"Problem with loading plugins.": "Problém s načítáním pluginů.",
+	"No installed plugins.": "Žádné nainstalované pluginy.",
+	"Version": "Verze",
+	"Languages": "Jazyk"
 }
