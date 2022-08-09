@@ -534,9 +534,9 @@ function onClickInstall(target, event) {
 	let installed = installedPlugins.find( function(el) { return el.guid === guid; } );
 	let message = {
 		type : 'install',
-		url : (plugin ? plugin.url : installed.baseUrl),
+		url : (installed ? installed.baseUrl : plugin.url),
 		guid : guid,
-		config : plugin || installed.obj
+		config : (installed ? installed.obj : plugin)
 	};
 	sendMessage(message);
 };
