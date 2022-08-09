@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Rainbow",
+            "description": "Exchange instant messages and make calls using Rainbow.",
             "descriptionLocale": {
-                "ru": "Rainbow",
-                "fr": "Rainbow",
-                "es": "Rainbow",
-                "de": "Rainbow"
+                "ru": "Общайтесь в чате и совершайте звонки с помощью Rainbow.",
+                "fr": "Communiquez via chat ou passez des appels avec Rainbow.",
+                "es": "Intercambie mensajes instantáneos y realice llamadas con Rainbow.",
+                "de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow."
             },
             "url": "index.html",
 

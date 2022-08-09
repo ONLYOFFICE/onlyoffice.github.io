@@ -35,7 +35,13 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let devicePR = window.devicePixelRatio;                              // device pixel ratio
+let isResizeOnStart = true;                                          // flag for firs resize on start
+const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
+let scale = {                                                        // current scale
+	percent  : "100%",                                               // current scale in percent
+	value    : 1,                                                    // current scale value
+	devicePR : 1                                                     // device pixel ratio
+};
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -459,6 +465,7 @@ function createPluginDiv(plugin, bInstalled) {
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item form-control noselect';
+	div.style.border = (1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
 	
 	div.onmouseenter = function(event) {
 		event.target.classList.add('div_item_hovered');
@@ -494,7 +501,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img style="width:fit-content" src="' + getImageUrl(plugin.guid) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -609,7 +616,7 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
-	let tmp = getImageUrl(guid, true);
+	let tmp = getImageUrl(guid, true, false);
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
@@ -715,13 +722,48 @@ function setDivHeight() {
 
 window.onresize = function() {
 	setDivHeight();
-	if (devicePR !== window.devicePixelRatio) {
-		devicePR = window.devicePixelRatio;
-		$('.div_item').css('border', ((1 / devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		console.log(devicePR);
+	if (scale.devicePR !== window.devicePixelRatio) {
+		scale.devicePR = window.devicePixelRatio;
+		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			let oldScale = scale.value;
+			isResizeOnStart = false;
+			if (scale.devicePR < 1)
+				return;
+
+			let bestIndex = 0;
+			let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
+			let currentDistance = 0;
+			for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
+				if (true) {
+					if (Math.abs(supportedScaleValues[i] - scale.devicePR) > 0.0001) {
+						if ( (supportedScaleValues[i] - 0.0501) > (scale.devicePR - 0.0001))
+							break;
+					}
+				}
+	
+				currentDistance = Math.abs(supportedScaleValues[i] - scale.devicePR);
+				if (currentDistance < (bestDistance - 0.0001)) {
+					bestDistance = currentDistance;
+					bestIndex = i;
+				}
+			}
+			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
+			scale.value = supportedScaleValues[bestIndex];
+			if (scale.value !== oldScale)
+				changeIcons();
+		}
 	}
-	// TODO change icons for plugins preview for new scale
-	// !!IMG здесь мы будем вызывать фукнцию которая пробежиться по всем иконкам и поменяет их на нужный скейл через функцию getImageUrl (img_icon - картинка и div_image - внутри img со всеми иконками)
+};
+
+function changeIcons() {
+	let arr = document.getElementsByClassName('plugin_icon');
+	for (let i = 0; i < arr.length; i++) {
+		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ), false, false );
+	}
+	// временно пришлось сделать так, потому что некоторые иконки плагинов слишком большие для этого окна и пока используем всегда одну
+	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	// elements.imgIcon.setAttribute('src', getImageUrl());
 };
 
 function getTranslation() {
@@ -805,11 +847,25 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(guid, bNotForStore) {
+function getImageUrl(guid, bNotForStore, bSetSize) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
-	// TODO solve the issue with scale to select the appropriate icon
-	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png';
+	let iconScale = '/icon.png';
+	switch (scale.percent) {
+		case '125%':
+			iconScale = '/icon@1.25x.png'
+			break;
+		case '150%':
+			iconScale = '/icon@1.5x.png'
+			break;
+		case '175%':
+			iconScale = '/icon@1.75x.png'
+			break;
+		case '200%':
+			iconScale = '/icon@2x.png'
+			break;
+	}
+	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png'; // iconScale временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -821,7 +877,7 @@ function getImageUrl(guid, bNotForStore) {
 		if (!bNotForStore && variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
-			curIcon = plugin.baseUrl + variation.store.icons[themeType] + '/icon.png';
+			curIcon = plugin.baseUrl + variation.store.icons[themeType] + iconScale;
 		} else if (variation.icons2) {
 			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
 			let icon = variation.icons2[0];
@@ -831,14 +887,14 @@ function getImageUrl(guid, bNotForStore) {
 					break;
 				}
 			}
-			curIcon = plugin.baseUrl + icon['200%'].normal;
+			curIcon = plugin.baseUrl + icon['200%'].normal // icon[scale.percent].normal; временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
 		} else if (variation.icons) {
 			// тут может быть как старая так и новая схема
 			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
 			if (!Array.isArray(variation.icons)) {
 				// новая схема
-				curIcon = plugin.baseUrl + variation.icons[themeType] + '/icon.png';
+				curIcon = plugin.baseUrl + variation.icons[themeType] + iconScale;
 			} else {
 				// старая схема
 				if (typeof(variation.icons[0]) == 'object' ) {
@@ -850,14 +906,39 @@ function getImageUrl(guid, bNotForStore) {
 							break;
 						}
 					}
-					curIcon = plugin.baseUrl + icon['200%'].normal;
+					curIcon = plugin.baseUrl + icon['200%'].normal // icon[scale.percent].normal; временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
 				} else {
 					// старая схема и icons это массив со строками
-					curIcon = plugin.baseUrl + variation.icons[0];
+					curIcon = plugin.baseUrl + variation.icons[1] // (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]); временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
 				}
 			}
-		}		
+		}	
+		
+		if (bSetSize) {
+			makeRequest(curIcon, 'blob').then(
+				function (res) {
+					let reader = new FileReader();
+					reader.onloadend = function() {
+						let imageUrl = reader.result;		
+						let img = document.createElement('img');
+						img.setAttribute('src', imageUrl);
+						img.onload = function () {
+							let icon = document.getElementById('img_' + guid);
+							icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
+							icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
+							icon.style.display = '';
+						}
+						
+					}
+					reader.readAsDataURL(res);
+				},
+				function(error) {
+					createError(error);
+				}
+			);
+		}
 	}
+	
 	return curIcon;
 };
 

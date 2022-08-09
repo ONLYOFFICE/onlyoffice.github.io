@@ -15,12 +15,12 @@
 
     "variations": [
         {
-            "description": "Macros",
+            "description": "Automate your routine tasks and standardize documents using macros (JavaScript language syntax is used).",
             "descriptionLocale": {
-                "ru": "Макросы",
-                "fr": "Macros",
-                "es": "Macros",
-                "de": "Makros"
+                "ru": "Автоматизируйте рутинные задачи и стандартизируйте документы с помощью макросов (работает на синтаксисе JavaScript).",
+                "fr": "Automatisez vos tâches de routine et standardisez vos documents à l’aide des macros (la syntaxe du langage JavaScript est utilisée).",
+                "es": "Automatice sus tareas rutinarias y estandarice los documentos mediante macros (se utiliza la sintaxis del lenguaje JavaScript).",
+                "de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet)."
             },
             "url": "index.html",
             "help" : " https://api.onlyoffice.com/plugin/macros",

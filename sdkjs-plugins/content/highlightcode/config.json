@@ -1,96 +1,94 @@
 {
+    "guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9841}",
     "name": "Highlight code",
     "nameLocale": {
-        "ru": "Подсветка кода",
-        "fr": "Code en surbrillance",
+        "de": "Code hervorheben",
         "es": "Resaltar el código",
-        "de": "Code hervorheben"
+        "fr": "Code en surbrillance",
+        "ru": "Подсветка кода"
     },
-    "guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9841}",
-    "version": "1.0.0",
-
     "variations": [
         {
-            "description": "Highlight code",
-            "descriptionLocale": {
-                "ru": "Подсветка кода",
-                "fr": "Code en surbrillance",
-                "es": "Resaltar el código",
-                "de": "Code hervorheben"
-            },
-            "url": "index.html",
-
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/light/icon@2x.png"
-					}
-				},
-				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/dark/icon@2x.png"
-					}
-				}
-			],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
-
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
-
-            "initDataType": "html",
-            "initData": "",
-
-            "isUpdateOleOnResize": false,
-
+            "EditorsSupport": [
+                "word",
+                "cell",
+                "slide"
+            ],
             "buttons": [
                 {
-                    "text": "Ok",
-                    "primary": true
+                    "primary": true,
+                    "text": "Ok"
                 },
                 {
-                    "text": "Cancel",
                     "primary": false,
+                    "text": "Cancel",
                     "textLocale": {
-                        "ru": "Отмена",
-                        "fr": "Annuler",
+                        "de": "Abbrechen",
                         "es": "Cancelar",
-                        "de": "Abbrechen"
+                        "fr": "Annuler",
+                        "ru": "Отмена"
                     }
                 }
             ],
-
-            "initOnSelectionChanged": true
+            "description": "Highlight syntax of the code selecting the necessary language, style, and background color.",
+            "descriptionLocale": {
+                "de": "Heben Sie die Codesyntax hervor, indem Sie die gewünschte Sprache, den Stil und die Hintergrundfarbe auswählen.",
+                "es": "Resalte la sintaxis del código seleccionando el idioma, el estilo y el color de fondo necesarios.",
+                "fr": "Mettez en évidence la syntaxe du code en sélectionnant la langue, le style et la couleur de l’arrière-plan.",
+                "ru": "Оформите синтаксис кода, выбрав необходимый язык, стиль и цвет фона."
+            },
+            "icons": [
+                "resources/light/icon.png",
+                "resources/light/icon@2x.png"
+            ],
+            "icons2": [
+                {
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    },
+                    "style": "light"
+                },
+                {
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    },
+                    "style": "dark"
+                }
+            ],
+            "initData": "",
+            "initDataType": "html",
+            "initOnSelectionChanged": true,
+            "isInsideMode": false,
+            "isModal": true,
+            "isUpdateOleOnResize": false,
+            "isViewer": false,
+            "isVisual": true,
+            "url": "index.html"
         }
-    ]
+    ],
+    "version": "1.0.0"
 }
