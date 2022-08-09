@@ -576,7 +576,6 @@ function onClickItem() {
 	// There we will make preview for selected plugin
 	// TODO think about where we will get "offered by" and text for this block (maybe from config) (also we should add translate for it)
 	let offered = " Ascensio System SIA";
-	let description = "Correct French grammar and typography. The plugin uses Grammalecte, an open-source grammar and typographic corrector dedicated to the French language.Correct French grammar and typography."
 	
 	let guid = this.getAttribute('data-guid');
 	let divPreview = document.createElement('div');
@@ -620,7 +619,7 @@ function onClickItem() {
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
-	elements.spanSelectedDescr.innerHTML = description;
+	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
 
 	if (bHasUpdate) {
