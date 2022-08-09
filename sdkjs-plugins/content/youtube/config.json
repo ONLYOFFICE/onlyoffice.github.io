@@ -1,6 +1,6 @@
 {
     "name": "YouTube",
-	"nameLocale": {
+    "nameLocale": {
         "ru": "YouTube",
         "fr": "YouTube",
         "es": "YouTube",
@@ -12,7 +12,7 @@
     "variations": [
         {
             "description": "Easily embed YouTube videos into your documents.",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Легко встраивайте  YouTube-видео в документы.",
                 "fr": "Insérez facilement des vidéos YouTube dans vos documents.",
                 "es": "Inserte fácilmente vídeos de YouTube en sus documentos.",

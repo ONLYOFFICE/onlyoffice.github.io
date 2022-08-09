@@ -2,7 +2,7 @@
     "name" : "Glavred",
     "nameLocale": {
         "ru": "Главред",
-		"fr": "Glavred",
+        "fr": "Glavred",
         "es": "Glavred",
         "de": "Glavred"
     },
@@ -12,7 +12,7 @@
     "variations" : [
         {
             "description" : "Make your text more informative and clear (suitable when working with texts in Russian).",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Очистите текст от словесного мусора и проверьте его на соответствие информационному стилю.",
                 "fr": "Rendez votre texte plus informatif et clair (convient pour les textes en russe).",
                 "es": "Haga que su texto sea más informativo y claro (adecuado cuando trabaje con textos en ruso).",
