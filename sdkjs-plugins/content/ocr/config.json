@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "OCR",
+            "description": "Recognize text from pictures and screenshots and insert it into your documents.",
             "descriptionLocale": {
-                "ru": "Распознавание текста",
-                "fr": "Reconnaissance optique de caractères",
-                "es": "Reconocimiento óptico de caracteres",
-                "de": "OCR"
+                "ru": "Распознавайте текст с фотографий и скриншотов и вставляйте его в документы.",
+                "fr": "Reconnaissez le texte des images et des captures d'écran et insérez-le dans vos documents.",
+                "es": "Reconozca el texto de imágenes y capturas de pantalla e insértelo en sus documentos.",
+                "de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein."
             },
             "url": "index.html",
 
