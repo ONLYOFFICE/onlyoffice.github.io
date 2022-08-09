@@ -163,8 +163,7 @@ label.header {
 }
 
 .span_description {
-	margin-left: 10px;
-	margin-right: 3px;
+	margin: 0px 10px 0px;
 	max-height: 80px;
 	overflow: auto;
 }
