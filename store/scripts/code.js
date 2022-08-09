@@ -205,7 +205,7 @@ window.addEventListener('message', function(message) {
 			// Сделал пока для проверки, чтобы не удалять утановленный плагин (надо потом добавить проверку на то, какой у него baseUrl)
 			// если baseUrl локальный, то значит не надо его удалять из списка установленный, чтобы потом можно было установить именно его, а не версию из стора
 			if (installed) {
-				if (plugin && !installed.obj.baseUrl.includes('onlyoffice.github.io')) {
+				if (plugin && installed.obj.baseUrl.includes('onlyoffice.github.io')) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 				} else {
 					installed.removed = true;
