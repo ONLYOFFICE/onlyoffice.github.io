@@ -21,6 +21,8 @@
 	"Installation": "Установка",
 	"Updating": "Обновление",
 	"Removal": "Удаление",
-	"Problem with loading plugins." : "Проблемы с загрузкой плагинов.",
-	"No installed plugins." : "Нет установленных плагинов."
+	"Problem with loading plugins.": "Проблемы с загрузкой плагинов.",
+	"No installed plugins.": "Нет установленных плагинов.",
+	"Version": "Версия",
+	"Languages": "Языки"
 }

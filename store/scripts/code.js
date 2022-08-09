@@ -388,6 +388,7 @@ function initElemnts() {
 	elements.divScreen = document.getElementById("div_selected_image");
 	elements.divGitLink = document.getElementById('div_github_link');
 	elements.spanVersion = document.getElementById('span_ver');
+	elements.divVersion = document.getElementById('div_version');
 };
 
 function toogleLoader(show, text) {
@@ -615,12 +616,12 @@ function onClickItem() {
 			bHasUpdate = true;
 	}
 	
-	if (installed.obj.version || plugin.version) {
-		document.getElementById('div_version').classList.remove('hidden');
+	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = installed.obj.version || plugin.version;
+		divVersion.classList.remove('hidden');
 	} else {
 		elements.spanVersion.innerText = '';
-		document.getElementById('div_version').classList.add('hidden');
+		divVersion.classList.add('hidden');
 	}
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
@@ -842,6 +843,8 @@ function onTranslate() {
 	document.getElementById('span_help').innerHTML = translate['Get help'] + ' ';
 	document.getElementById('span_help_end').innerHTML = translate['with the plugin functionality on our forum.'];
 	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
+	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
+	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
 	showMarketplace();
 };
 
