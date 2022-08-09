@@ -216,6 +216,7 @@ window.addEventListener('message', function(message) {
 			plugin = allPlugins.find(function(el) {return el.guid === message.guid});
 			installed = installedPlugins.find(function(el){return el.guid === message.guid});
 			installed.removed = true;
+			// TODO поправить
 			// Сделал пока для проверки, чтобы не удалять утановленный плагин (надо потом добавить проверку на то, какой у него baseUrl)
 			// если baseUrl локальный, то значит не надо его удалять из списка установленный, чтобы потом можно было установить именно его, а не версию из стора
 			// if (installed) {
@@ -400,6 +401,7 @@ function initElemnts() {
 	elements.linkPlugin = document.getElementById('link_plugin');
 	elements.divScreen = document.getElementById("div_selected_image");
 	elements.divGitLink = document.getElementById('div_github_link');
+	elements.spanVersion = document.getElementById('span_ver');
 };
 
 function toogleLoader(show, text) {
@@ -621,10 +623,18 @@ function onClickItem() {
 
 	let bHasUpdate = false;
 	if (isDesctop && installed) {
-		let installedV = installed.obj.version.split('.').join('');
-		let lastV = plugin.version.split('.').join('');
+		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
+		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
 			bHasUpdate = true;
+	}
+	
+	if (installed.obj.version || plugin.version) {
+		document.getElementById('div_version').classList.remove('hidden');
+		elements.spanVersion.innerText = installed.obj.version || plugin.version;
+	} else {
+		elements.spanVersion.innerText = '';
+		document.getElementById('div_version').classList.add('hidden');
 	}
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
