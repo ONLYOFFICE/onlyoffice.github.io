@@ -450,7 +450,7 @@ function getAllPluginsData() {
 							let short = full.split('-')[0];
 							for (let i = 0; i < languages.length; i++) {
 								if (languages[i][0] == short || languages[i][1] == short) {
-									supportedLangs.push(translate[languages[i][2]]);
+									supportedLangs.push( ( translate[languages[i][2]] || languages[i][2] ) );
 								}
 							}
 						});
