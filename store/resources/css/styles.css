@@ -269,7 +269,7 @@ label.header {
 .div_selected_preview {
 	width: 100%;
 	height: calc(100% - 25px);
-	margin-top: 5px;
+	margin-top: 25px;
 }
 
 .div_selected_image {
@@ -329,6 +329,6 @@ label.header {
 	max-height: 50px;
 	overflow: auto;
 	overflow-wrap: break-word;
-	margin-top: 20px;
+	/* margin-top: 20px; */
 	margin-bottom: 10px;
 }
