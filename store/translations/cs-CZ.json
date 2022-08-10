@@ -24,5 +24,16 @@
 	"Problem with loading plugins.": "Problém s načítáním pluginů.",
 	"No installed plugins.": "Žádné nainstalované pluginy.",
 	"Version": "Verze",
-	"Languages": "Jazyk"
+	"Languages": "Jazyk",
+	"English": "Anglický",
+	"Czech": "Čeština",
+	"German": "Němčina",
+	"Spanish": "Španělský",
+	"French": "Francouzský",
+	"Italian": "Italský",
+	"Japanese": "Japonština",
+	"Dutch": "Nizozemský",
+	"Portuguese": "Portugalský",
+	"Russian": "Ruština",
+	"Chinese": "Čínština"
 }
