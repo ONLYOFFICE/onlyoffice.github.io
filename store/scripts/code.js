@@ -428,6 +428,15 @@ function getAllPluginsData() {
 					isPluginLoading = false;
 					showMarketplace();
 				}
+				makeRequest(pluginUrl + 'translations/langs.json').then(
+					function(response) {
+						let arr = JSON.parse(response);
+						console.log(arr);
+					},
+					function(error) {
+						// nothing to do
+					}
+				)
 			},
 			function(err) {
 				count--;
@@ -621,6 +630,8 @@ function onClickItem() {
 		elements.spanVersion.innerText = '';
 		elements.divVersion.classList.add('hidden');
 	}
+	// TODO добаить здесь языки (при получении информации о плагинах, надо смотреть на то есть ли файл langs.json и из него брать информацию о языках
+	// если этого файла нет, то поле языки не показывается.
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
 	
