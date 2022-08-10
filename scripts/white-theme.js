@@ -13,7 +13,7 @@ var whiteTheme = {
     // main icons
     'menu.normalIcon.color': '#8a8a8a',
     // 'menu.activeIcon.color': '#00ff00',
-    'menu.disabledIcon.color': '#434343',
+    'menu.disabledIcon.color': '#c1c1c1',
     'menu.hoverIcon.color': '#e9e9e9',
     'menu.iconSize.width': '24px',
     'menu.iconSize.height': '24px',
