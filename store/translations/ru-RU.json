@@ -24,5 +24,15 @@
 	"Problem with loading plugins.": "Проблемы с загрузкой плагинов.",
 	"No installed plugins.": "Нет установленных плагинов.",
 	"Version": "Версия",
-	"Languages": "Языки"
+	"Languages": "Языки",
+	"Czech": "Чешский",
+	"German": "Немецкий",
+	"Spanish": "Испанский",
+	"French": "Французкий",
+	"Italian": "Итальянский",
+	"Japanese": "Японский",
+	"Dutch": "Голландский",
+	"Portuguese": "Португальский",
+	"Russian": "Русский",
+	"Chinese": "Китайский"
 }

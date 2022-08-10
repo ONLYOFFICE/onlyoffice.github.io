@@ -42,6 +42,18 @@ let scale = {                                                        // current 
 	value    : 1,                                                    // current scale value
 	devicePR : 1                                                     // device pixel ratio
 };
+const languages = [                                                  // list of languages
+	['cs-CZ', 'cs', 'Czech'],
+	['de-DE', 'de', 'German'],
+	['es-ES', 'es', 'Spanish'],
+	['fr-FR', 'fr', 'French'],
+	['it-IT', 'it', 'Italian'],
+	['ja-JA', 'ja', 'Japanese'],
+	['nl-NL', 'nl', 'Dutch'],
+	['pt-PT', 'pt', 'Portuguese'],
+	['ru-RU', 'ru', 'Russian'],
+	['zh-ZH', 'zh', 'Chinese']
+]
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -430,8 +442,18 @@ function getAllPluginsData() {
 				}
 				makeRequest(pluginUrl + 'translations/langs.json').then(
 					function(response) {
+						let supportedLangs = [translate['English']];
 						let arr = JSON.parse(response);
-						console.log(arr);
+						arr.forEach(function(full) {
+							let short = full.split('-')[0];
+							for (let i = 0; i < languages.length; i++) {
+								if (languages[i][0] == short || languages[i][1] == short) {
+									supportedLangs.push(translate[languages[i][2]]);
+								}
+							}
+						});
+						if (supportedLangs.length > 1)
+							config.languages = supportedLangs;
 					},
 					function(error) {
 						// nothing to do
