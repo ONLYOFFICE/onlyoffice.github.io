@@ -75,7 +75,7 @@ var language = null;
             'Flip X': window.Asc.plugin.tr("Flip X"),
             'Flip Y': window.Asc.plugin.tr("Flip Y"),
             'Crop': window.Asc.plugin.tr("Crop"),
-            'Delete-all': window.Asc.plugin.tr("Delete all"),
+            'DeleteAll': window.Asc.plugin.tr("Delete all"),
             'Delete': window.Asc.plugin.tr("Delete"),
             'Reset': window.Asc.plugin.tr("Reset"),
             'Redo': window.Asc.plugin.tr("Redo"),
@@ -111,7 +111,13 @@ var language = null;
             'Straight': window.Asc.plugin.tr("Straight"),
             'Range': window.Asc.plugin.tr("Range"),
             'Custom': window.Asc.plugin.tr("Custom"),
-            'Square': window.Asc.plugin.tr("Square")
+            'Square': window.Asc.plugin.tr("Square"),
+            'Resize': window.Asc.plugin.tr("Resize"),
+            'Width': window.Asc.plugin.tr("Width"),
+            'Height': window.Asc.plugin.tr("Height"),
+            'Lock Aspect Ratio': window.Asc.plugin.tr("Lock Aspect Ratio"),
+            'Hand': window.Asc.plugin.tr("Hand"),
+            'History': window.Asc.plugin.tr("History")
         };
 
         CreateImageEditor();
@@ -163,18 +169,21 @@ var language = null;
 
                 includeUI: {
                     loadImage: {
-
                         path: oImage.src,
                         name: 'Image'
                     },
                     theme: themeStyle,
                     initMenu: 'filter',
                     menuBarPosition: 'bottom',
-                    locale: language,
+                    usageStatistics: false,
+                    locale: language
                 },
                 cssMaxWidth: 700,
                 cssMaxHeight: 500,
             });
+            document.getElementsByClassName('tie-btn-zoomIn')[0].style.display = 'none';
+            document.getElementsByClassName('tie-btn-zoomOut')[0].style.display = 'none';
+
         }
     }
 

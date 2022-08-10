@@ -70,5 +70,11 @@
   "Range": "Rozsah",
   "Custom": "Uživatelsky určené",
   "Square": "Čtverec",
-  "Grayscale" : "Stupně šedé"
+  "Grayscale" : "Stupně šedé",
+  "Resize" : "Změnit velikost",
+  "Width" : "Šířka",
+  "Height" : "Výška",
+  "Lock Aspect Ratio" : "Uzamknout poměr stran",
+  "Hand" : "Ruka",
+  "History" : "Dějiny"
 }

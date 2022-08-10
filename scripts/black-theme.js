@@ -13,7 +13,7 @@ var blackTheme = {
     // main icons
     'menu.normalIcon.color': '#8a8a8a',
     // 'menu.activeIcon.color': '#555555',
-    'menu.disabledIcon.color': '#8a8a8a',
+    // 'menu.disabledIcon.color': '#8a8a8a',
     'menu.hoverIcon.color': '#e9e9e9',
     'menu.iconSize.width': '24px',
     'menu.iconSize.height': '24px',
