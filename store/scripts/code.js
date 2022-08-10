@@ -399,6 +399,8 @@ function initElemnts() {
 	elements.divGitLink = document.getElementById('div_github_link');
 	elements.spanVersion = document.getElementById('span_ver');
 	elements.divVersion = document.getElementById('div_version');
+	elements.spanLanguages = document.getElementById('span_langs');
+	elements.divLanguages = document.getElementById('div_languages');
 };
 
 function toogleLoader(show, text) {
@@ -651,6 +653,14 @@ function onClickItem() {
 	} else {
 		elements.spanVersion.innerText = '';
 		elements.divVersion.classList.add('hidden');
+	}
+
+	if (plugin.languages) {
+		elements.spanLanguages.innerText = plugin.languages.join(', ') + '.';
+		elements.divLanguages.classList.remove('hidden');
+	} else {
+		elements.spanLanguages.innerText = '';
+		elements.divLanguages.classList.add('hidden');
 	}
 	// TODO добаить здесь языки (при получении информации о плагинах, надо смотреть на то есть ли файл langs.json и из него брать информацию о языках
 	// если этого файла нет, то поле языки не показывается.
