@@ -444,7 +444,7 @@ function getAllPluginsData() {
 				}
 				makeRequest(pluginUrl + 'translations/langs.json').then(
 					function(response) {
-						let supportedLangs = [translate['English']];
+						let supportedLangs = [ ( translate['English'] || 'English' ) ];
 						let arr = JSON.parse(response);
 						arr.forEach(function(full) {
 							let short = full.split('-')[0];
