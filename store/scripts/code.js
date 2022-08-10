@@ -21,7 +21,7 @@ let allPlugins;                                                      // list of 
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
-const isDesctop = window.AscDesktopEditor !== undefined;             // desctop detecting
+const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 let isPluginLoading = false;                                         // flag plugins loading
@@ -516,7 +516,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
-	if (isDesctop && installed) {
+	if (isDesktop && installed) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
@@ -640,7 +640,7 @@ function onClickItem() {
 	}
 
 	let bHasUpdate = false;
-	if (isDesctop && installed) {
+	if (isDesktop && installed) {
 		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
 		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
