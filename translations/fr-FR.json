@@ -70,5 +70,11 @@
   "Range": "Gamme",
   "Custom": "Personnalisé",
   "Square": "Carré",
-  "Grayscale" : "Niveaux de gris"
+  "Grayscale" : "Niveaux de gris",
+  "Resize" : "Redimensionner",
+  "Width" : "Largeur",
+  "Height" : "Hauteur",
+  "Lock Aspect Ratio" : "Verrouiller le format d'image",
+  "Hand" : "Main",
+  "History" : "Histoire"
 }

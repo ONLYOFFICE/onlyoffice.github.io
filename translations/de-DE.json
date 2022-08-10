@@ -70,5 +70,11 @@
   "Range": "Bereich",
   "Custom": "Benutzerdefiniert",
   "Square": "Quadrat",
-  "Grayscale" : "Graustufe"
+  "Grayscale" : "Graustufe",
+  "Resize" : "Größe ändern",
+  "Width" : "Breite",
+  "Height" : "Höhe",
+  "Lock Aspect Ratio" : "Seitenverhältnis sperren",
+  "Hand" : "Hand",
+  "History" : "Geschichte"
 }

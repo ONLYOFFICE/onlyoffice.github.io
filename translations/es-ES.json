@@ -70,5 +70,11 @@
   "Range": "Rango",
   "Custom": "Personalizado",
   "Square": "Cuadrado",
-  "Grayscale" : "Escala de grises"
+  "Grayscale" : "Escala de grises",
+  "Resize" : "Redimensionar",
+  "Width" : "Ancho",
+  "Height" : "Altura",
+  "Lock Aspect Ratio" : "Relación de aspecto de bloqueo",
+  "Hand" : "Mano",
+  "History" : "Historia"
 }
