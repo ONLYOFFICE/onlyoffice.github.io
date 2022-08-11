@@ -11,18 +11,24 @@ var blackTheme = {
     'header.border': '0px',
 
     // main icons
-    'menu.normalIcon.color': '#8a8a8a',
-    // 'menu.activeIcon.color': '#555555',
-    // 'menu.disabledIcon.color': '#8a8a8a',
-    'menu.hoverIcon.color': '#e9e9e9',
+    'menu.normalIcon.path': 'vendor/tui/svg/dark/icon-d.svg',
+    'menu.normalIcon.name': 'icon-d',
+    'menu.activeIcon.path': 'vendor/tui/svg/dark/icon-b.svg',
+    'menu.activeIcon.name': 'icon-b',
+    'menu.disabledIcon.path': 'vendor/tui/svg/dark/icon-a.svg',
+    'menu.disabledIcon.name': 'icon-a',
+    'menu.hoverIcon.path': 'vendor/tui/svg/dark/icon-c.svg',
+    'menu.hoverIcon.name': 'icon-c',
     'menu.iconSize.width': '24px',
     'menu.iconSize.height': '24px',
 
-    // submenu icons
-    'submenu.normalIcon.color': '#8a8a8a',
-    'submenu.activeIcon.color': '#e9e9e9',
-    'submenu.iconSize.width': '32px',
-    'submenu.iconSize.height': '32px',
+	// submenu icons
+	'submenu.normalIcon.path': 'vendor/tui/svg/dark/icon-d.svg',
+	'submenu.normalIcon.name': 'icon-d',
+	'submenu.activeIcon.path': 'vendor/tui/svg/dark/icon-b.svg',
+	'submenu.activeIcon.name': 'icon-b',
+	'submenu.iconSize.width': '32px',
+	'submenu.iconSize.height': '32px',
 
     // submenu primary color
     'submenu.backgroundColor': '#1e1e1e',
