@@ -1,6 +1,7 @@
 {
     "name" : "Zotero",
     "guid" : "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
+	"version": "1.0.0",
 
     "variations" : [
       {
@@ -55,7 +56,7 @@
         "isModal": false,
         "isInsideMode": true,
         "isUpdateOleOnResize": false,
-        "initOnSelectionChanged": true
+        "initOnSelectionChanged": false
       }
     ]
 }
