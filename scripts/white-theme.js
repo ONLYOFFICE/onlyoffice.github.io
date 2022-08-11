@@ -11,18 +11,26 @@ var whiteTheme = {
     'header.border': '0px',
 
     // main icons
-    'menu.normalIcon.color': '#8a8a8a',
-    // 'menu.activeIcon.color': '#00ff00',
-    'menu.disabledIcon.color': '#c1c1c1',
-    'menu.hoverIcon.color': '#e9e9e9',
+    'menu.normalIcon.path': 'vendor/tui/svg/light/icon-d.svg',
+    'menu.normalIcon.name': 'icon-d',
+    'menu.activeIcon.path': 'vendor/tui/svg/light/icon-b.svg',
+    'menu.activeIcon.name': 'icon-b',
+    'menu.disabledIcon.path': 'vendor/tui/svg/light/icon-a.svg',
+    'menu.disabledIcon.name': 'icon-a',
+    'menu.hoverIcon.path': 'vendor/tui/svg/light/icon-c.svg',
+    'menu.hoverIcon.name': 'icon-c',
     'menu.iconSize.width': '24px',
     'menu.iconSize.height': '24px',
 
-    // submenu icons
-    'submenu.normalIcon.color': '#8a8a8a',
-    'submenu.activeIcon.color': '#555555',
-    'submenu.iconSize.width': '32px',
-    'submenu.iconSize.height': '32px',
+	// submenu icons
+	'submenu.normalIcon.path': 'vendor/tui/svg/light/icon-d.svg',
+	'submenu.normalIcon.name': 'icon-d',
+	'submenu.activeIcon.path': 'vendor/tui/svg/light/icon-b.svg',
+	'submenu.activeIcon.name': 'icon-b',
+	'submenu.hoverIcon.path': 'vendor/tui/svg/light/icon-c.svg',
+    'submenu.hoverIcon.name': 'icon-c',
+	'submenu.iconSize.width': '32px',
+	'submenu.iconSize.height': '32px',
 
     // submenu primary color
     'submenu.backgroundColor': 'transparent',
