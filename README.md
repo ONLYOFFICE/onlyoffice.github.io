@@ -27,3 +27,7 @@ By default, the plugin uses the Apertium demo service with limited language pair
 To use Apertium without limitations, install it to your own server.
 
 To send translation requests to your own server, change the url address of the `serviceUrl` variable in the `./scripts/apertium.js` file.
+
+## Know issues
+
+Translation from English to Serbo-Croatian has errors: extra characters are added to the translation.

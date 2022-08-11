@@ -16,8 +16,28 @@
  *
  */
 var Ps;
-var PsTextArea;
+const isIE = checkInternetExplorer();	//check IE
+function checkInternetExplorer(){
+    var rv = -1;
+    if (window.navigator.appName == 'Microsoft Internet Explorer') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    } else if (window.navigator.appName == 'Netscape') {
+        const ua = window.navigator.userAgent;
+        const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
 
+        if (re.exec(ua) != null) {
+            rv = parseFloat(RegExp.$1);
+        }
+    }
+    return rv !== -1;
+};
+function getMessage(key) {
+    return window.Asc.plugin.tr(key.trim());
+};
 (function(window, undefined){
 
     var txt                 = "";
@@ -31,6 +51,7 @@ var PsTextArea;
     var selectClone         = null;
     var allPairs            = {};
     var serviceUrl          = "https://www.apertium.org/"; //paste your service's url address here
+    var paste_done          = true;
 
     function showLoader(elements, show) {
 
@@ -53,7 +74,6 @@ var PsTextArea;
 	window.Asc.plugin.init = function(text)
 	{
 	    txt = text;
-        document.getElementById("textarea").innerText = text;
         updateScroll();
 
         if (!isReadyToTranslate()) {
@@ -61,19 +81,7 @@ var PsTextArea;
             return false;
         }
 
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                if (txt !== "") {
-                    RunTranslate(txt);
-                }
-                break;
-            }
-            case 'cell': {
-                RunTranslate(txt);
-            }
-            break;
-        }
+        RunTranslate(txt);
 	};
 
     window.Asc.plugin.onThemeChanged = function(theme)
@@ -93,15 +101,15 @@ var PsTextArea;
         styleTheme.innerHTML = rule;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
 
-        $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
-        $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
-        $('#arrow-svg-path').css('fill', theme["text-normal"]);
-
+        if (!isIE) {
+            $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+            $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
+            $('#arrow-svg-path').css('fill', theme["text-normal"]);
+        }
     };
 
     function PrepareTextToSend(allParas) {
         var result = [];
-        var preparedTxt = ""
         for (var nPara = 0; nPara < allParas.length; nPara++) {
             result.push({Index : nPara, Text : allParas[nPara].replace(/ /gi, "+")});
         }
@@ -124,7 +132,7 @@ var PsTextArea;
         return document.getElementById("target").value;
     };
 
-    //don't work with default service
+    //don't work with default(web) service
     function IdentifyLang() {
         $.ajax({
             method: 'GET',
@@ -279,32 +287,32 @@ var PsTextArea;
 
     function DelInvalidChars(arrParas) {
         for (var nPara = 0; nPara < arrParas.length; nPara++) {
-            arrParas[nPara] = arrParas[nPara].replace(/#/gi, '');
-            arrParas[nPara] = arrParas[nPara].replace(/&/gi, '');
+            var sSearch = '?';
+            var replaceWith = '%3F';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '#';
+            replaceWith = '%23';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
+
+            sSearch = '&';
+            replaceWith = '%26';
+            arrParas[nPara] = arrParas[nPara].split(sSearch).join(replaceWith);
         }
     };
 
-    function SplitText(sText) {
-        var allParasInSelection = sText.split(/\n/);
-        var allParsedParas = [];
+    function processText(sTxt){
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
 
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
+	    var splittedParas = sTxt.split('\n');
+        var parasToTranslate = [];
 
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(removeCR(item));
-            });
-        }
+        if (txt.trim() !== "")
+            document.getElementById("enter_container").value = sTxt;
 
-        return allParsedParas;
-    };
-    function removeCR(text) {
-        return text.replace(/\r\n?/g, '');
-    };
+	    return splittedParas;
+	};
 
     function selectText(id) {
         var sel, range;
@@ -355,6 +363,8 @@ var PsTextArea;
     };
 
     $(document).ready(function () {
+        document.getElementById("enter_container").value = "";
+
         $('.select_example').select2({
 			minimumResultsForSearch: Infinity,
 			width: "100%"
@@ -369,7 +379,6 @@ var PsTextArea;
 		};
 
         Ps = new PerfectScrollbar("#display", {suppressScrollX  : true});
-        PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
         showLoader2(elements, true);
         GetAllLangPairs();
 
@@ -387,23 +396,34 @@ var PsTextArea;
         setTimeout(function() {
             $('#paste').click(function () {
                 if (isReadyToTranslate()) {
+                    if (!paste_done)
+                        return;
+                    else
+                        paste_done = false;
+
                     Asc.scope.arr = translatedParas;
                     window.Asc.plugin.info.recalculate = true;
 
                     window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                         if (version === undefined) {
-                            window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                           window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText], function(result) {
+                                paste_done = true;
+                           });
                         }
                         else {
                             window.Asc.plugin.executeMethod("GetSelectionType", [], function(sType) {
                                 switch (sType) {
                                     case "none":
                                     case "drawing":
-                                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText]);
+                                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText], function(result) {
+                                            paste_done = true;
+                                        });
                                         break;
                                     case "text":
                                         window.Asc.plugin.callCommand(function() {
                                             Api.ReplaceTextSmart(Asc.scope.arr);
+                                        }, undefined, undefined, function(result) {
+                                            paste_done = true;
                                         });
                                         break;
                                 }
@@ -445,29 +465,32 @@ var PsTextArea;
                     }, ms || 0);
             };
         };
-        $('#textarea').keyup(delay(function(e) {
+        $('#enter_container').keyup(delay(function(e) {
             updateScroll();
-            txt = document.getElementById("textarea").innerText;
+            txt = document.getElementById("enter_container").value;
             switch (window.Asc.plugin.info.editorType) {
                 case 'word':
                 case 'slide': {
                     if (txt !== "") {
-                        RunTranslate(txt);
+                        ExecApertium(txt);
                     }
                     break;
                 }
                 case 'cell': {
-                    RunTranslate(txt);
+                    ExecApertium(txt);
                 }
                 break;
             }
-        }, 500));
+        }, 1000));
     });
 
-    function RunTranslate(sText) {
+    function ExecApertium(sText) {
+        if (sText.trim() === "")
+            return;
+            
         curIter = 0;
         var source_lang = GetSourceLang();
-        var allParas = SplitText(sText);
+        var allParas = processText(sText);
         DelInvalidChars(allParas);
         if (IsLastTransate(allParas))
             return false;
@@ -479,24 +502,45 @@ var PsTextArea;
         var txtToTranslate = PrepareTextToSend(allParas);
         iterationCount = 0;
         for (var nText = 0; nText < txtToTranslate.length; nText++) {
-            if (txtToTranslate[nText].Text === "")
+            if (txtToTranslate[nText].Text === "" || txtToTranslate[nText].Text === "?")
                 continue;
             iterationCount++;
         }
 
         for (var nText = 0; nText < txtToTranslate.length; nText++) {
-            if (txtToTranslate[nText].Text === "") {
-                translatedParas[nText] = "";
+            if (txtToTranslate[nText].Text === "" || txtToTranslate[nText].Text === "?") {
+                translatedParas[nText] = txtToTranslate[nText].Text;
                 continue;
             }
             Translate(source_lang, target_lang, txtToTranslate[nText]);
+        }
+    }
+    function RunTranslate(sText) {
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    sText = data.replace(/\r/g, ' ');
+                    ExecApertium(sText);
+                });
+                break;
+            }
+            case 'cell':
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}], function(data) {
+                    if (data == '')
+                        sText = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                    else {
+                        sText = data.replace(/\r/g, ' ');
+                    }
+                    ExecApertium(sText);
+                });
+                break;
         }
     };
 
     function updateScroll()
 	{
 		Ps && Ps.update();
-		PsTextArea && PsTextArea.update();
 	};
 
 	window.Asc.plugin.button = function(id)
@@ -516,5 +560,15 @@ var PsTextArea;
 		});
 		document.dispatchEvent(evt);
 	};
+	window.Asc.plugin.onTranslate = function()
+	{
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.innerText) el.innerText = getMessage(el.innerText);
+        }
+    };
 
 })(window, undefined);
