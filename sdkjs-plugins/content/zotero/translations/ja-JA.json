@@ -1,0 +1,21 @@
+﻿{
+  "To use Zotero you should get an API key.": "Zoteroを使用するようにAPIキーを取得のが必要です。",
+  "Navigate to": "（noun）に移動する",
+  "Zotero API settings": "ZoteroのAPI設定",
+  "Create and copy API key into the field below.": "キーを作成し、以下のフィールドにコピーしてください。",
+  "Open Zotero website": "Zoteroウェブサイトを開く",
+  "Invalid API key": "無効なAPIキー",
+  "API Key": "APIキー",
+  "Nothing found": "未找到任何东西",
+  "Style is not selected": "未选择样式",
+  "Language is not selected": "未选择语言",
+  "Search references by author, title or year": "作者、标题或年份搜索引用",
+  "Cancel": "取消",
+  "Insert Bibliography": "插入参考文献",
+  "Style": "样式",
+  "Enter style name": "输入样式名称",
+  "Language": "语言",
+  "Reconfigure": "重新配置",
+  "Learn more here.": "もっとここで知る。",
+  "Save": "セーブ"
+}
