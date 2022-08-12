@@ -19,8 +19,8 @@ var whiteTheme = {
     'menu.disabledIcon.name': 'icon-a',
     'menu.hoverIcon.path': 'vendor/tui/svg/light/icon-c.svg',
     'menu.hoverIcon.name': 'icon-c',
-    'menu.iconSize.width': '24px',
-    'menu.iconSize.height': '24px',
+    'menu.iconSize.width': '28px',
+    'menu.iconSize.height': '28px',
 
 	// submenu icons
 	'submenu.normalIcon.path': 'vendor/tui/svg/light/icon-d.svg',
