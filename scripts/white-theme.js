@@ -27,8 +27,6 @@ var whiteTheme = {
 	'submenu.normalIcon.name': 'icon-d',
 	'submenu.activeIcon.path': 'vendor/tui/svg/light/icon-b.svg',
 	'submenu.activeIcon.name': 'icon-b',
-	'submenu.hoverIcon.path': 'vendor/tui/svg/light/icon-c.svg',
-    'submenu.hoverIcon.name': 'icon-c',
 	'submenu.iconSize.width': '32px',
 	'submenu.iconSize.height': '32px',
 
