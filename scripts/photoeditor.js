@@ -198,7 +198,8 @@ var language = null;
             });
             document.getElementsByClassName('tie-btn-zoomIn')[0].style.display = 'none';
             document.getElementsByClassName('tie-btn-zoomOut')[0].style.display = 'none';
-
+            document.getElementsByClassName('tie-btn-hand')[0].style.display = 'none';
+            document.getElementsByClassName('tie-btn-hand')[0].nextSibling.style.display = 'none';
         }
     }
 
