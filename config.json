@@ -7,7 +7,7 @@
         "de": "Foto-Editor"
     },
     "guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
-    "version": "1.0",
+    "version": "1.0.1",
     "baseUrl": "",
 
     "variations": [
@@ -72,9 +72,7 @@
             "initDataType": "html",
             "initData": "",
 
-            "isUpdateOleOnResize": false,
-			
-			 "buttons": [
+            "buttons": [
                 {
                     "text": "Ok",
                     "primary": true
@@ -114,10 +112,6 @@
 
             "initDataType": "none",
             "initData": "",
-
-            "isUpdateOleOnResize": false,
-
-           
 
             "size": [ 392, 147 ]
         }

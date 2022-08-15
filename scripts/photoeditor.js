@@ -75,7 +75,7 @@ var language = null;
             'Flip X': window.Asc.plugin.tr("Flip X"),
             'Flip Y': window.Asc.plugin.tr("Flip Y"),
             'Crop': window.Asc.plugin.tr("Crop"),
-            'Delete-all': window.Asc.plugin.tr("Delete all"),
+            'DeleteAll': window.Asc.plugin.tr("Delete all"),
             'Delete': window.Asc.plugin.tr("Delete"),
             'Reset': window.Asc.plugin.tr("Reset"),
             'Redo': window.Asc.plugin.tr("Redo"),
@@ -92,8 +92,9 @@ var language = null;
             'Color': window.Asc.plugin.tr("Color"),
             'Text size': window.Asc.plugin.tr("Text size"),
             'Arrow': window.Asc.plugin.tr("Arrow"),
-            'Arrow-1': window.Asc.plugin.tr("Arrow-1"),
-            'Arrow-2': window.Asc.plugin.tr("Arrow-2"),
+            'Arrow-1': window.Asc.plugin.tr("Arrow")  + "-1",
+            'Arrow-2': window.Asc.plugin.tr("Arrow")  + "-2",
+            'Arrow-3': window.Asc.plugin.tr("Arrow") + "-3",
             'Star': window.Asc.plugin.tr("Star"),
             'Star-1': window.Asc.plugin.tr("Star-1"),
             'Star-2': window.Asc.plugin.tr("Star-2"),
@@ -111,7 +112,13 @@ var language = null;
             'Straight': window.Asc.plugin.tr("Straight"),
             'Range': window.Asc.plugin.tr("Range"),
             'Custom': window.Asc.plugin.tr("Custom"),
-            'Square': window.Asc.plugin.tr("Square")
+            'Square': window.Asc.plugin.tr("Square"),
+            'Resize': window.Asc.plugin.tr("Resize"),
+            'Width': window.Asc.plugin.tr("Width"),
+            'Height': window.Asc.plugin.tr("Height"),
+            'Lock Aspect Ratio': window.Asc.plugin.tr("Lock Aspect Ratio"),
+            'Hand': window.Asc.plugin.tr("Hand"),
+            'History': window.Asc.plugin.tr("History")
         };
 
         CreateImageEditor();
@@ -120,24 +127,18 @@ var language = null;
 
     window.Asc.plugin.init = function (sHtml) {
 
-        oImage = $(sHtml)[0];
-        if (!oImage || !$(oImage).is('img')) {
-            oImage = $(sHtml).find('img')[0];
-        }
-        if (!oImage) {
+
+		window.Asc.plugin.executeMethod ("GetImageDataFromSelection", [], function(oResult) {
             oImage = document.createElement("img");
-            //white rect
-            oImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAIAAAD2HxkiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMrSURBVHhe7dMxAQAADMOg+TfdycgDHrgBKQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJITU9vSZzteUMFOrAAAAAElFTkSuQmCC';
-            oImage.width = 300;
-            oImage.height = 300;
-        }
-
-        CreateImageEditor();
-        initializationDone = true;
-
-        var imageHeight = null;
-        oImage.height > 500 ? imageHeight = 500 : imageHeight = oImage.height;
-        window.Asc.plugin.resizeWindow(undefined, undefined, 870, imageHeight + 300, 0, 0);
+			oImage.src = oResult.src;
+			oImage.width = oResult.width;
+			oImage.height = oResult.height;
+			CreateImageEditor();
+			initializationDone = true;
+			var imageHeight = null;
+			oImage.height > 500 ? imageHeight = 500 : imageHeight = oImage.height;
+			window.Asc.plugin.resizeWindow(undefined, undefined, 870, imageHeight + 300, 0, 0);
+		});
     };
 
     window.Asc.plugin.button = function (id) {
@@ -163,68 +164,37 @@ var language = null;
 
                 includeUI: {
                     loadImage: {
-
                         path: oImage.src,
                         name: 'Image'
                     },
                     theme: themeStyle,
                     initMenu: 'filter',
                     menuBarPosition: 'bottom',
-                    locale: language,
+                    usageStatistics: false,
+                    locale: language
                 },
                 cssMaxWidth: 700,
                 cssMaxHeight: 500,
             });
+            document.getElementsByClassName('tie-btn-zoomIn')[0].style.display = 'none';
+            document.getElementsByClassName('tie-btn-zoomOut')[0].style.display = 'none';
+            document.getElementsByClassName('tie-btn-hand')[0].style.display = 'none';
+            document.getElementsByClassName('tie-btn-hand')[0].nextSibling.style.display = 'none';
         }
     }
 
     window.saveImage = function () {
-
-        Asc.scope.dataURL = imageEditor.toDataURL();
-        var editorDimension = imageEditor.getCanvasSize();
-        Asc.scope.editorDimensionWidth = editorDimension.width;
-        Asc.scope.editorDimensionHeight = editorDimension.height;
-        var saveImage = createScript();
-    }
-
-    window.createScript = function () {
-
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                window.Asc.plugin.callCommand(function () {
-                    var oDocument = Api.GetDocument();
-                    var oParagraph, oRun, arrInsertResult = [], oImage;
-                    oParagraph = Api.CreateParagraph();
-                    arrInsertResult.push(oParagraph);
-                    var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
-                    var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
-                    oImage = Api.CreateImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                    oParagraph.AddDrawing(oImage);
-                    oDocument.InsertContent(arrInsertResult);
-                }, true);
-                break;
-
-            }
-            case 'cell': {
-                window.Asc.plugin.callCommand(function () {
-                    var oWorksheet = Api.GetActiveSheet();
-                    var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
-                    var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
-                    oWorksheet.ReplaceCurrentImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                }, true);
-                break;
-            }
-            case 'slide': {
-                window.Asc.plugin.callCommand(function () {
-                    var oPresentation = Api.GetPresentation();
-                    var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
-                    var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
-                    oPresentation.ReplaceCurrentImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                }, true);
-                break;
-            }
-
-        }
+        let sImageSrc = imageEditor.toDataURL();
+        let editorDimension = imageEditor.getCanvasSize();
+        let nWidth = editorDimension.width;
+        let nHeight = editorDimension.height;
+		let oImageData = {
+			"src": sImageSrc,
+			"width": nWidth,
+			"height": nHeight
+		};
+		window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+        window.Asc.plugin.executeCommand("close", "");
     };
-	
+    
 })(window, undefined);

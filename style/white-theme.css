@@ -9,7 +9,7 @@
     cursor:pointer;
 }
 .tui-image-editor-container .tui-image-editor-menu>.tui-image-editor-item.active {
-    background-color: #7d858c !important;
+    background-color: #cbcbcb !important;
 }
 .tui-image-editor-container .tui-image-editor-submenu {
     background-color: rgba(226,226,226,0.96)
@@ -32,7 +32,7 @@
     border-radius: 2px;
 }
 #tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype="icon-bubble"] .svg_ic-submenu,#tie-icon-add-button.icon-heart .tui-image-editor-button[data-icontype="icon-heart"] .svg_ic-submenu,#tie-icon-add-button.icon-location .tui-image-editor-button[data-icontype="icon-location"] .svg_ic-submenu,#tie-icon-add-button.icon-polygon .tui-image-editor-button[data-icontype="icon-polygon"] .svg_ic-submenu,#tie-icon-add-button.icon-star .tui-image-editor-button[data-icontype="icon-star"] .svg_ic-submenu,#tie-icon-add-button.icon-star-2 .tui-image-editor-button[data-icontype="icon-star-2"] .svg_ic-submenu,#tie-icon-add-button.icon-arrow-3 .tui-image-editor-button[data-icontype="icon-arrow-3"] .svg_ic-submenu,#tie-icon-add-button.icon-arrow-2 .tui-image-editor-button[data-icontype="icon-arrow-2"] .svg_ic-submenu,#tie-icon-add-button.icon-arrow .tui-image-editor-button[data-icontype="icon-arrow"] .svg_ic-submenu,#tie-shape-button.rect .tui-image-editor-button.rect .svg_ic-submenu, #tie-shape-button.circle .tui-image-editor-button.circle .svg_ic-submenu,#tie-shape-button.triangle .tui-image-editor-button.triangle .svg_ic-submenu,#tie-flip-button.resetFlip .tui-image-editor-button.resetFlip .svg_ic-submenu,#tie-flip-button.flipX .tui-image-editor-button.flipX .svg_ic-submenu,#tie-flip-button.flipY .tui-image-editor-button.flipY .svg_ic-submenu {
-    background-color: #7d858c;
+    background-color: #00ff00;
     transition: all 0.3s ease;
     border-radius: 2px;
 }
@@ -49,7 +49,19 @@
     border-radius: 2px;
 }
 .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-button:hover .svg_ic-submenu {
-    background-color: #7d858c;
+    background-color: #cbcbcb;
     transition: all 0.3s ease;
     border-radius: 2px;
+}
+.tui-image-editor-help-menu.top {
+    background-color: #fff;
+}
+.hover.use-default {
+    fill-rule: evenodd !important;
+    fill: #000 !important;
+    stroke: #000 !important;
+}
+
+.tui-image-editor-container .tui-image-editor-range-wrap label {
+	color: #000;
 }
