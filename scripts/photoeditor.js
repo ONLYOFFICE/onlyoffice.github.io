@@ -127,24 +127,18 @@ var language = null;
 
     window.Asc.plugin.init = function (sHtml) {
 
-        oImage = $(sHtml)[0];
-        if (!oImage || !$(oImage).is('img')) {
-            oImage = $(sHtml).find('img')[0];
-        }
-        if (!oImage) {
+
+		window.Asc.plugin.executeMethod ("GetImageDataFromSelection", [], function(oResult) {
             oImage = document.createElement("img");
-            //white rect
-            oImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAIAAAD2HxkiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMrSURBVHhe7dMxAQAADMOg+TfdycgDHrgBKQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJISYhBCTEGISQkxCiEkIMQkhJiHEJITU9vSZzteUMFOrAAAAAElFTkSuQmCC';
-            oImage.width = 300;
-            oImage.height = 300;
-        }
-
-        CreateImageEditor();
-        initializationDone = true;
-
-        var imageHeight = null;
-        oImage.height > 500 ? imageHeight = 500 : imageHeight = oImage.height;
-        window.Asc.plugin.resizeWindow(undefined, undefined, 870, imageHeight + 300, 0, 0);
+			oImage.src = oResult.src;
+			oImage.width = oResult.width;
+			oImage.height = oResult.height;
+			CreateImageEditor();
+			initializationDone = true;
+			var imageHeight = null;
+			oImage.height > 500 ? imageHeight = 500 : imageHeight = oImage.height;
+			window.Asc.plugin.resizeWindow(undefined, undefined, 870, imageHeight + 300, 0, 0);
+		});
     };
 
     window.Asc.plugin.button = function (id) {
@@ -190,65 +184,17 @@ var language = null;
     }
 
     window.saveImage = function () {
-
-        Asc.scope.dataURL = imageEditor.toDataURL();
-        var editorDimension = imageEditor.getCanvasSize();
-        Asc.scope.editorDimensionWidth = editorDimension.width;
-        Asc.scope.editorDimensionHeight = editorDimension.height;
-        var saveImage = createScript();
-    }
-
-    window.createScript = function () {
-
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word': {
-                window.Asc.plugin.callCommand(function () {
-                    var oDocument = Api.GetDocument();
-                    var oParagraph, arrInsertResult = [], oImage;
-                
-                    var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
-                    var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
-                    oImage = Api.CreateImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                    var aSelectedImgs = oDocument.GetSelectedDrawings ? oDocument.GetSelectedDrawings() : [];
-                    var oSourceImg = aSelectedImgs[0] ? aSelectedImgs[0] : null;
-                    
-                    // replace selected img by new img
-                    if (oSourceImg)
-                    {
-                        oDocument.ReplaceDrawing(oSourceImg, oImage, true);
-                    }
-                    // support old version
-                    else
-                    {
-                        oParagraph = Api.CreateParagraph();
-                        arrInsertResult.push(oParagraph);
-                        oParagraph.AddDrawing(oImage);
-                        oDocument.InsertContent(arrInsertResult);
-                    }
-                }, true);
-                break;
-
-            }
-            case 'cell': {
-                window.Asc.plugin.callCommand(function () {
-                    var oWorksheet = Api.GetActiveSheet();
-                    var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
-                    var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
-                    oWorksheet.ReplaceCurrentImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                }, true);
-                break;
-            }
-            case 'slide': {
-                window.Asc.plugin.callCommand(function () {
-                    var oPresentation = Api.GetPresentation();
-                    var nEmuWidth = ((Asc.scope.editorDimensionWidth / 96) * 914400 + 0.5) >> 0;
-                    var nEmuHeight = ((Asc.scope.editorDimensionHeight / 96) * 914400 + 0.5) >> 0;
-                    oPresentation.ReplaceCurrentImage(Asc.scope.dataURL, nEmuWidth, nEmuHeight);
-                }, true);
-                break;
-            }
-
-        }
+        let sImageSrc = imageEditor.toDataURL();
+        let editorDimension = imageEditor.getCanvasSize();
+        let nWidth = editorDimension.width;
+        let nHeight = editorDimension.height;
+		let oImageData = {
+			"src": sImageSrc,
+			"width": nWidth,
+			"height": nHeight
+		};
+		window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+        window.Asc.plugin.executeCommand("close", "");
     };
     
 })(window, undefined);
