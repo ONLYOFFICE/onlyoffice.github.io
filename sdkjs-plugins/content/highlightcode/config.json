@@ -87,7 +87,18 @@
             "isUpdateOleOnResize": false,
             "isViewer": false,
             "isVisual": true,
-            "url": "index.html"
+            "url": "index.html",
+            "store": {
+                "background": {
+                    "light" : "#282C33",
+                    "dark" : "#282C33"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                } 
+            }
         }
     ],
     "version": "1.0.0"

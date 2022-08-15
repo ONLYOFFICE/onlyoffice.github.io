@@ -96,8 +96,8 @@
             "size": [ 592, 100 ],
             "store": {
                 "background": {
-                    "light" : "linear-gradient(180deg, #3DB8EC 0%, #21A4DB 100%)",
-                    "dark" : "linear-gradient(180deg, #3DB8EC 0%, #21A4DB 100%)"
+                    "light" : "#000000",
+                    "dark" : "#000000"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
