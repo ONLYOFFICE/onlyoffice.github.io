@@ -1,7 +1,7 @@
 var whiteTheme = {
-    'common.bi.image': 'https://uicdn.toast.com/toastui/img/tui-image-editor-bi.png',
     'common.bisize.width': '251px',
     'common.bisize.height': '21px',
+    'common.backgroundImage': 'none',
     'common.backgroundColor': '#e2e2e2',
     'common.border': '1px solid #c1c1c1',
 
@@ -9,45 +9,30 @@ var whiteTheme = {
     'header.backgroundImage': 'none',
     'header.backgroundColor': 'transparent',
     'header.border': '0px',
-    'header.display': 'none',
-
-    // load button
-    'loadButton.backgroundColor': '#fff',
-    'loadButton.border': '1px solid #ddd',
-    'loadButton.color': '#222',
-    'loadButton.fontFamily': '\'Noto Sans\', sans-serif',
-    'loadButton.fontSize': '12px',
-
-    // download button
-    'downloadButton.backgroundColor': '#fdba3b',
-    'downloadButton.border': '1px solid #fdba3b',
-    'downloadButton.color': '#fff',
-    'downloadButton.fontFamily': '\'Noto Sans\', sans-serif',
-    'downloadButton.fontSize': '12px',
 
     // main icons
-    'menu.normalIcon.path': 'vendor/tui/svg/icon-d.svg',
+    'menu.normalIcon.path': 'vendor/tui/svg/light/icon-d.svg',
     'menu.normalIcon.name': 'icon-d',
-    'menu.activeIcon.path': 'vendor/tui/svg/icon-b.svg',
+    'menu.activeIcon.path': 'vendor/tui/svg/light/icon-b.svg',
     'menu.activeIcon.name': 'icon-b',
-    'menu.disabledIcon.path': 'vendor/tui/svg/icon-a.svg',
+    'menu.disabledIcon.path': 'vendor/tui/svg/light/icon-a.svg',
     'menu.disabledIcon.name': 'icon-a',
-    'menu.hoverIcon.path': 'vendor/tui/svg/icon-c.svg',
+    'menu.hoverIcon.path': 'vendor/tui/svg/light/icon-c.svg',
     'menu.hoverIcon.name': 'icon-c',
-    'menu.iconSize.width': '24px',
-    'menu.iconSize.height': '24px',
+    'menu.iconSize.width': '28px',
+    'menu.iconSize.height': '28px',
+
+	// submenu icons
+	'submenu.normalIcon.path': 'vendor/tui/svg/light/icon-d.svg',
+	'submenu.normalIcon.name': 'icon-d',
+	'submenu.activeIcon.path': 'vendor/tui/svg/light/icon-b.svg',
+	'submenu.activeIcon.name': 'icon-b',
+	'submenu.iconSize.width': '32px',
+	'submenu.iconSize.height': '32px',
 
     // submenu primary color
     'submenu.backgroundColor': 'transparent',
     'submenu.partition.color': '#e5e5e5',
-
-    // submenu icons
-    'submenu.normalIcon.path': 'vendor/tui/svg/icon-d.svg',
-    'submenu.normalIcon.name': 'icon-d',
-    'submenu.activeIcon.path': 'vendor/tui/svg/icon-b.svg',
-    'submenu.activeIcon.name': 'icon-b',
-    'submenu.iconSize.width': '32px',
-    'submenu.iconSize.height': '32px',
 
     // submenu labels
     'submenu.normalLabel.color': '#858585',
@@ -78,5 +63,5 @@ var whiteTheme = {
 
     // colorpicker style
     'colorpicker.button.border': '0px',
-    'colorpicker.title.color': '#000'
+    'colorpicker.title.color': '#000',
 };
