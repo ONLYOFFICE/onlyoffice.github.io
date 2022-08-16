@@ -21,6 +21,19 @@
 	"Installation": "Installation",
 	"Updating": "Mettre",
 	"Removal": "Suppression",
-	"Problem with loading plugins." : "Problème de chargement des plugins.",
-	"No installed plugins." : "Pas de plugins installés."
+	"Problem with loading plugins.": "Problème de chargement des plugins.",
+	"No installed plugins.": "Pas de plugins installés.",
+	"Version": "Version",
+	"Languages": "Langue",
+	"English": "Anglais",
+	"Czech": "Tchèque",
+	"German": "Allemand",
+	"Spanish": "Espagnol",
+	"French": "Français",
+	"Italian": "Italien",
+	"Japanese": "Japonais",
+	"Dutch": "Néerlandais",
+	"Portuguese": "Portugais",
+	"Russian": "Russe",
+	"Chinese": "Chinois"
 }

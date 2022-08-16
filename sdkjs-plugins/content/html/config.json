@@ -71,8 +71,8 @@
             "initOnSelectionChanged": true,
             "store": {
                 "background": {
-                    "light" : "linear-gradient(180deg, #3DB8EC 0%, #21A4DB 100%)",
-                    "dark" : "linear-gradient(180deg, #3DB8EC 0%, #21A4DB 100%)"
+                    "light" : "#2AA0D8",
+                    "dark" : "#2AA0D8"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {

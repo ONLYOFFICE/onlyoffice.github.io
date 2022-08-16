@@ -42,7 +42,7 @@
             "store": {
                 "background": {
                     "light": "#F5F5F5",
-                    "dark": "#555555"
+                    "dark": "#444444"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
