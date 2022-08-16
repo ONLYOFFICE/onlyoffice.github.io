@@ -23,21 +23,6 @@ html, body {
 	border-style: solid;
 	border-color: rgba(68,68,68,0.266666666666);	
 }
-.content::selection {
-	background: #D8DADC; /* WebKit/Blink Browsers */
-}
-.content::-moz-selection {
-	background: #D8DADC; /* Gecko Browsers */
-}
-/* label {
-	font-size: 13px !important;
-} */
-span::selection {
-	background: #D8DADC; /* WebKit/Blink Browsers */ 
-}
-span::-moz-selection {
-	background: #D8DADC; /* Gecko Browsers */
-}
 .settings {
 	display: inline-flex;
 }
