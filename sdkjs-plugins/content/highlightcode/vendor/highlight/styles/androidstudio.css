@@ -69,3 +69,19 @@ p {
 .hljs-strong {
   font-weight: bold;
 }
+
+.content::selection {
+  background-color: #4a4543;
+}
+  
+.content::-moz-selection {
+  background-color: #4a4543;
+}
+
+span::selection {
+  background-color: #4a4543;
+}
+  
+span::-moz-selection {
+  background-color: #4a4543;
+}
