@@ -71,8 +71,8 @@
             "buttons"         : [ { "text": "Ok", "primary": true } ],
             "store": {
                 "background": {
-                    "light" : "#ED6300",
-                    "dark" : "#ED6300"
+                    "light" : "#233450",
+                    "dark" : "#233450"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
