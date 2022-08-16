@@ -327,6 +327,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
     window.Asc.plugin.init = function(text)
 	{
+        window.Asc.plugin.resizeWindow(800, 600, 800, 600, 0, 0);
         on_init_server(2);
         this.executeMethod("GetMacros", [JSON.stringify(Content)], function(data) {
             
