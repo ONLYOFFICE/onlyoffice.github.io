@@ -73,7 +73,7 @@
             "isModal": true,
             "isInsideMode": false,
             "isUpdateOleOnResize": false,
-
+            "size": [800, 600],
             "buttons": [
                 {
                     "text": "Ok",
