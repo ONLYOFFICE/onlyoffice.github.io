@@ -21,6 +21,19 @@
 	"Installation": "Installation",
 	"Updating": "Aktualisieren",
 	"Removal": "Entfernung",
-	"Problem with loading plugins." : "Problem beim Laden von Plugins.",
-	"No installed plugins." : "Keine installierten Plugins."
+	"Problem with loading plugins.": "Problem beim Laden von Plugins.",
+	"No installed plugins.": "Keine installierten Plugins.",
+	"Version": "Version",
+	"Languages": "Sprache",
+	"English": "Englischsprachig",
+	"Czech": "Tschechisch",
+	"German": "Deutsch",
+	"Spanish": "Spanisch",
+	"French": "Französisch",
+	"Italian": "Italienisch",
+	"Japanese": "Japanisch",
+	"Dutch": "Niederländisch",
+	"Portuguese": "Portugiesisch",
+	"Russian": "Russisch",
+	"Chinese": "Chinesisch"
 }

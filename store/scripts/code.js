@@ -21,7 +21,7 @@ let allPlugins;                                                      // list of 
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
-const isDesctop = window.AscDesktopEditor !== undefined;             // desctop detecting
+const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 let isPluginLoading = false;                                         // flag plugins loading
@@ -42,6 +42,18 @@ let scale = {                                                        // current 
 	value    : 1,                                                    // current scale value
 	devicePR : 1                                                     // device pixel ratio
 };
+const languages = [                                                  // list of languages
+	['cs-CZ', 'cs', 'Czech'],
+	['de-DE', 'de', 'German'],
+	['es-ES', 'es', 'Spanish'],
+	['fr-FR', 'fr', 'French'],
+	['it-IT', 'it', 'Italian'],
+	['ja-JA', 'ja', 'Japanese'],
+	['nl-NL', 'nl', 'Dutch'],
+	['pt-PT', 'pt', 'Portuguese'],
+	['ru-RU', 'ru', 'Russian'],
+	['zh-ZH', 'zh', 'Chinese']
+]
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -201,16 +213,18 @@ window.addEventListener('message', function(message) {
 			}
 			plugin = allPlugins.find(function(el) {return el.guid === message.guid});
 			installed = installedPlugins.find(function(el){return el.guid === message.guid});
+			let bUpdate = false;
 			if (installed) {
-				if (plugin) {
+				if (plugin && installed.obj.baseUrl.includes('onlyoffice.github.io')) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
+					bUpdate = true;
 				} else {
 					installed.removed = true;
 				}
 			}
 
 			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
-				if (plugin) {
+				if (bUpdate) {
 					showListofPlugins(false);
 				} else {
 					let btn = this.document.getElementById(message.guid).lastChild.lastChild;
@@ -383,6 +397,10 @@ function initElemnts() {
 	elements.linkPlugin = document.getElementById('link_plugin');
 	elements.divScreen = document.getElementById("div_selected_image");
 	elements.divGitLink = document.getElementById('div_github_link');
+	elements.spanVersion = document.getElementById('span_ver');
+	elements.divVersion = document.getElementById('div_version');
+	elements.spanLanguages = document.getElementById('span_langs');
+	elements.divLanguages = document.getElementById('div_languages');
 };
 
 function toogleLoader(show, text) {
@@ -424,6 +442,25 @@ function getAllPluginsData() {
 					isPluginLoading = false;
 					showMarketplace();
 				}
+				makeRequest(pluginUrl + 'translations/langs.json').then(
+					function(response) {
+						let supportedLangs = [ ( translate['English'] || 'English' ) ];
+						let arr = JSON.parse(response);
+						arr.forEach(function(full) {
+							let short = full.split('-')[0];
+							for (let i = 0; i < languages.length; i++) {
+								if (languages[i][0] == short || languages[i][1] == short) {
+									supportedLangs.push( ( translate[languages[i][2]] || languages[i][2] ) );
+								}
+							}
+						});
+						if (supportedLangs.length > 1)
+							config.languages = supportedLangs;
+					},
+					function(error) {
+						// nothing to do
+					}
+				)
 			},
 			function(err) {
 				count--;
@@ -479,7 +516,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
-	if (isDesctop && installed) {
+	if (isDesktop && installed) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
@@ -534,9 +571,9 @@ function onClickInstall(target, event) {
 	let installed = installedPlugins.find( function(el) { return el.guid === guid; } );
 	let message = {
 		type : 'install',
-		url : (plugin ? plugin.url : installed.baseUrl),
+		url : (installed ? installed.baseUrl : plugin.url),
 		guid : guid,
-		config : plugin || installed.obj
+		config : (installed ? installed.obj : plugin)
 	};
 	sendMessage(message);
 };
@@ -603,12 +640,30 @@ function onClickItem() {
 	}
 
 	let bHasUpdate = false;
-	if (isDesctop && installed) {
-		let installedV = installed.obj.version.split('.').join('');
-		let lastV = plugin.version.split('.').join('');
+	if (isDesktop && installed) {
+		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
+		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
 			bHasUpdate = true;
 	}
+	
+	if ( (installed && installed.obj.version) || plugin.version ) {
+		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
+		elements.divVersion.classList.remove('hidden');
+	} else {
+		elements.spanVersion.innerText = '';
+		elements.divVersion.classList.add('hidden');
+	}
+
+	if (plugin.languages) {
+		elements.spanLanguages.innerText = plugin.languages.join(', ') + '.';
+		elements.divLanguages.classList.remove('hidden');
+	} else {
+		elements.spanLanguages.innerText = '';
+		elements.divLanguages.classList.add('hidden');
+	}
+	// TODO добаить здесь языки (при получении информации о плагинах, надо смотреть на то есть ли файл langs.json и из него брать информацию о языках
+	// если этого файла нет, то поле языки не показывается.
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
 	
@@ -829,6 +884,8 @@ function onTranslate() {
 	document.getElementById('span_help').innerHTML = translate['Get help'] + ' ';
 	document.getElementById('span_help_end').innerHTML = translate['with the plugin functionality on our forum.'];
 	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
+	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
+	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
 	showMarketplace();
 };
 
