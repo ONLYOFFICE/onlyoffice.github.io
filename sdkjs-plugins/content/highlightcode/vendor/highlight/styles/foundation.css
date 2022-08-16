@@ -93,3 +93,19 @@ p {
 .hljs-selector-class {
   color: #007700;
 }
+
+.content::selection {
+  background-color: #c8c8fa;
+}
+  
+.content::-moz-selection {
+  background-color: #c8c8fa;
+}
+  
+span::selection {
+  background-color: #c8c8fa;
+}
+  
+span::-moz-selection {
+  background-color: #c8c8fa;
+}
