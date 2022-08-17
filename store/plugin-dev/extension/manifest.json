@@ -1,0 +1,36 @@
+{
+	"name": "ONLYOFFICE plugin for development",
+	"description": "ONLYOFFICE plugin for development",
+	"version": "1.0",
+	"manifest_version": 3,
+	"web_accessible_resources": [{
+        "resources": [				
+		  "/main.js",
+		  "/inject.js"
+        ],
+      "matches": [ "<all_urls>" ]
+    }],
+	"content_scripts": [
+	{
+		"match_about_blank" : true,
+		"all_frames" : true,
+		"matches": ["<all_urls>"],
+		"js": [ "/main.js" ],
+		"run_at": "document_end"
+	}
+	],
+	"permissions": [
+		"storage", 
+		"tabs", 
+		"declarativeContent", 
+		"activeTab", 
+		"scripting"
+	],
+	"host_permissions": [
+        "*://*/*",
+        "<all_urls>"
+    ],
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'"
+	}
+}
