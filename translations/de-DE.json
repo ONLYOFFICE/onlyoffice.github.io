@@ -1,5 +1,8 @@
 {
-  "Checking...": "Untersuchung...",
+  "Checking...": "Wird überprüft...",
   "Check": "Prüfen",
-  "Insert to document": "In dokument einfügen"
+  "Insert to document": "In Dokument einfügen",
+  "Dismiss": "Überspringen",
+  "Clear": "Klar",
+  "Language": "Sprache"
 }

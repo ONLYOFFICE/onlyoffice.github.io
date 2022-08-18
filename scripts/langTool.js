@@ -17,7 +17,12 @@
  */
 var Ps;
 var PsTextArea;
-const isIE = checkInternetExplorer();	//check IE
+const isIE          = checkInternetExplorer();	//check IE
+var sTextForDisplay = null;
+var tempMatches     = null;
+var savedDismiss    = [];
+var languages;
+
 function checkInternetExplorer(){
     var rv = -1;
     if (window.navigator.appName == 'Microsoft Internet Explorer') {
@@ -48,12 +53,16 @@ function checkInternetExplorer(){
 	var isInit = false;
 	var CurLang = "auto";
 	var txt = "";
+	var txtForChek = "";
 	var matches;
 	var displayNoneClass = "display-none";
 	var blurClass        = "no_class";
     var elements         = null;
     var serviceUrl       = "https://languagetool.org/api/v2/check";
     var paste_done       = true;
+    var canAddText       = true;
+    var isLangChangedManually = false;
+
 	function showLoader(elements, show) {
 
        switchClass(elements.contentHolder, blurClass, show);
@@ -70,10 +79,62 @@ function checkInternetExplorer(){
         }
     };
 
-
 	window.Asc.plugin.init = function(text)	{
+	    if (!canAddText) {
+	        return;
+	    }
+
+        if (text === "" && document.getElementById("textarea").innerText === "") {
+            if ($('#check').hasClass('disabled') === false)
+	            $('#check').toggleClass('disabled');
+	        if ($('#replace').hasClass('disabled') === false)
+	            $('#replace').toggleClass('disabled');
+        }
+        else {
+            if ($('#check').hasClass('disabled') === true)
+	            $('#check').toggleClass('disabled');
+	        if ($('#replace').hasClass('disabled') === true)
+	            $('#replace').toggleClass('disabled');
+        }
+
 		txt = text;
-		document.getElementById("textarea").innerText = text;
+		savedDismiss = [];
+		switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    txt = (data === undefined) ? "" : data.replace(/\r/g, ' ');
+                    ExecPlugin();
+                });
+                break;
+            }
+            case 'cell':
+                window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+                    if (data == '')
+                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                    else if (data !== undefined) {
+                        txt = data.replace(/\r/g, ' ');
+                    }
+                    ExecPlugin();
+                });
+                break;
+        }
+	};
+	function processText(sTxt){
+        if (sTxt[sTxt.length - 1] === '\n')
+            sTxt = sTxt.slice(0, sTxt.length - 1);
+
+	    var splittedParas = sTxt.split('\n');
+        var parasToTranslate = [];
+
+        document.getElementById("textarea").innerText = sTxt;
+
+	    return splittedParas;
+	};
+
+	function ExecPlugin() {
+	    processText(txt);
+
 		updateScroll();
 		$("#result").empty();
 		if (!isInit) {
@@ -101,6 +162,7 @@ function checkInternetExplorer(){
         $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 
         if (!isIE) {
+            $('#clear').css('border-bottom', 'var(--scaled-one-pixel, 1px) dotted ' + window.Asc.plugin.theme["text-normal"]);
             $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
             $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
             $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
@@ -117,19 +179,46 @@ function checkInternetExplorer(){
         PsTextArea = new PerfectScrollbar("#enter_container", { suppressScrollX  : true});
 
 		$('#check').on('click', function(){
-			txt = document.getElementById("textarea").innerText.trim();
+			if ($('#check').hasClass('disabled'))
+                return;
+			txt = document.getElementById("textarea").innerText;
 			if (txt !== "") {
 				$("#result").empty();
-				checkText(txt, CurLang);
-			};
+				txtForChek = txt.replace(/\n/g, '\n\n');
+				checkText(txtForChek, CurLang);
+			}
+			else {
+			    $('#result').empty();
+			    canAddText = true;
+			}
+		});
+		$('#clear').click(function() {
+		    savedDismiss = [];
+		    canAddText = true;
+		    $("#result").empty();
+		    $('#textarea').empty();
+
+		    // disable buttons
+		    if ($('#check').hasClass('disabled') === false)
+	            $('#check').toggleClass('disabled');
+	        if ($('#replace').hasClass('disabled') === false)
+	            $('#replace').toggleClass('disabled');
+
+            if (!isLangChangedManually){
+                $('#language_id').val(0);
+                $('#language_id').trigger('change');
+                CurLang = 'auto';
+            }
+
+		    updateScroll();
 		});
 		$('#replace').click(function () {
-		    if (!paste_done)
+		    if (!paste_done || $('#replace').hasClass('disabled'))
 		        return;
 		    else
 		        paste_done = false;
 
-            Asc.scope.arr = ParseText(document.getElementById("textarea").innerText);
+            Asc.scope.arr = document.getElementById("textarea").innerText.split(/\n/);
             window.Asc.plugin.info.recalculate = true;
 
             // for usual paste
@@ -142,6 +231,9 @@ function checkInternetExplorer(){
                 else
                     strResult += Asc.scope.arr[Item];
             }
+
+            if (strResult === "")
+                return;
 
             window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
                 if (version === undefined) {
@@ -160,7 +252,7 @@ function checkInternetExplorer(){
                                 break;
                             case "text":
                                 window.Asc.plugin.callCommand(function() {
-                                    Api.ReplaceTextSmart(Asc.scope.arr);
+                                    Api.ReplaceTextSmart(Asc.scope.arr, String.fromCharCode(160));
                                 }, undefined, undefined, function(result) {
                                     paste_done = true;
                                 });
@@ -171,32 +263,26 @@ function checkInternetExplorer(){
             });
         });
         $('#textarea').keyup(function(e) {
+            if (document.getElementById("textarea").innerText.trim() !== "") {
+                if ($('#check').hasClass('disabled') === true)
+                    $('#check').toggleClass('disabled');
+                if ($('#replace').hasClass('disabled') === true)
+                    $('#replace').toggleClass('disabled');
+            }
+            else {
+				canAddText = true;
+                $('#result').empty();
+                if ($('#check').hasClass('disabled') === false)
+	                $('#check').toggleClass('disabled');
+	            if ($('#replace').hasClass('disabled') === false)
+	                $('#replace').toggleClass('disabled');
+            }
             updateScroll();
         });
         $("#enter_container").click(function() {
             $("#textarea").focus();
         });
 	});
-
-
-    function ParseText(sText) {
-        var allParasInSelection = sText.split(/\n/);
-        var allParsedParas = [];
-
-        for (var nStr = 0; nStr < allParasInSelection.length; nStr++) {
-            if (allParasInSelection[nStr].search(/	/) === 0) {
-                allParsedParas.push("");
-                allParasInSelection[nStr] = allParasInSelection[nStr].replace(/	/, "");
-            }
-            var sSplited = allParasInSelection[nStr].split(/	/);
-
-            sSplited.forEach(function(item, i, sSplited) {
-                allParsedParas.push(item);
-            });
-        }
-
-        return allParsedParas;
-    };
 
 	function getLanguages() {
 		var url = "https://languagetool.org/api/v2/languages";
@@ -212,7 +298,8 @@ function checkInternetExplorer(){
 		var data = {
 			text : txt,
 			language : lang,
-			enabledOnly : false
+			enabledOnly : false//,
+			//disabledRules: "WORD_REPEAT_RULE"
 		}
 
 		$.ajax({
@@ -241,24 +328,57 @@ function checkInternetExplorer(){
 		});
 	};
 
+    function changeLangInSelect(sLangName){
+        if (languages[$('#language_id').val()].text === sLangName)
+            return;
+
+        for (var nLang = 0; nLang < languages.length; nLang++){
+            if (sLangName === languages[nLang].text){
+                $('#language_id').val(languages[nLang].id);
+                $('#language_id').trigger('change');
+                CurLang = languages[nLang].longcode;
+            }
+        }
+    };
 	function parseResult (oResponse) {
         $('#result').empty();
 		var data = oResponse.matches.map(function (el) {
 			return {
 				shortMessage : el.shortMessage,
 				message : el.message,
-				replacements : el.replacements,
+				replacements : el.replacements.slice(0, 5),
 				context : el.context
 			}
 		});
 
+        var nStartPos       = 0;
+
         if (data.length === 0) {
+            document.getElementById("textarea").innerText = txt;
+            canAddText = true;
+            sTextForDisplay = "";
             $('<div>', {
                 id: "no_mistakes",
                 text: "No possible mistakes found"
             }).appendTo('#result');
         }
         else {
+            canAddText = false;
+            changeLangInSelect(oResponse.language.name);
+
+			// чтобы сервис различал параграфы необходимо разделять их двумя "\n" во время отправки,
+			// поэтому после получения ответа нужно поправить позиции, чтобы в исходном тексте верно делать исправления
+            correctMistakesPosition(matches);
+            
+            sTextForDisplay = txt;
+            tempMatches = [];
+            for (var nElm = 0; nElm < matches.length; nElm++) {
+                tempMatches.push({
+                    length: matches[nElm].length,
+                    offset: matches[nElm].offset,
+                    index:  matches[nElm].index
+                });
+            }
             $('<div>', {
                 id: "yes_mistakes",
                 text: "Possible mistakes found: " + data.length
@@ -266,11 +386,20 @@ function checkInternetExplorer(){
         }
 
 		data.forEach(function(el, ind) {
-//		    if (el.replacements.length === 0) {
-//		        var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-//			    $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-//			    return;
-//		    }
+            // remember skipped words
+            var bSkipped = false;
+            for (var nSavedDismiss = 0; nSavedDismiss < savedDismiss.length; nSavedDismiss++) {
+                if (savedDismiss[nSavedDismiss].offset === matches[ind].offset && savedDismiss[nSavedDismiss].length === matches[ind].length)
+                    bSkipped = true;
+            }
+
+            if (bSkipped !== true)
+                setTextWithErrors(txt.slice(matches[ind].offset, matches[ind].offset + matches[ind].length), ind);
+            else {
+                var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
+                $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+                return;
+            }
 
 			$('<div>', {
 				id : "div_" + ind,
@@ -283,6 +412,8 @@ function checkInternetExplorer(){
                         });
                         $(this).find(".arrow").toggleClass("down");
                         $(this).find(".arrow").toggleClass("up");
+                        $(this).find(".caption_text").toggleClass("display-none");
+                        $(this).find(".miniText").toggleClass("display-none");
                     }
 			}).appendTo('#result');
 
@@ -293,8 +424,8 @@ function checkInternetExplorer(){
                 "class": "arrow_container"
             });
             var caption_text = $('<span>', {
-				"class": 'caption_text',
-				text : el.message
+				"class": 'caption_text display-none unselectable',
+				text : el.message.slice(0, el.message.length - 1)
 			});
             var caption = $('<div>', {
 				"class": 'caption',
@@ -302,6 +433,16 @@ function checkInternetExplorer(){
             var separateLine = $('<div>', {
 				"class": 'separator horizontal display-none',
 			});
+
+            var context = $('<div>', {
+				html : el.context.text.slice(0, el.context.offset)
+					+ '<span style="color:#f62211; font-weight: bold;">'
+					+ el.context.text.slice(el.context.offset,el.context.offset + el.context.length)
+					+ '</span>'
+					+ el.context.text.slice(el.context.offset + el.context.length),
+				class: 'miniText unselectable'
+			});
+			context.appendTo(caption);
 
             img_arrow.appendTo(img_container);
             caption_text.appendTo(caption);
@@ -343,31 +484,55 @@ function checkInternetExplorer(){
 			$('<button>', {
 			    text: "Dismiss",
 			    click: function () {
-					$('#div_'+$(this).data().index).remove();
-					var ind = matches.findIndex(function(el) {
+			        var ind = $(this).data().index;
+
+			        // remove highlight of word
+			        var DisplayedSpanWord = $('#' + ind)[0];
+					DisplayedSpanWord.outerHTML = DisplayedSpanWord.innerText;
+
+                    var ind = matches.findIndex(function(el) {
 						if (el.index === ind) {
 							return true;
 						}
 					});
+
+					savedDismiss.push({
+					    offset: matches[ind].offset,
+					    length: matches[ind].length
+					});
+
+					matches.splice(ind, 1);
+
+					$('#div_'+$(this).data().index).remove();
 					var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
 					$('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
-					matches.splice(ind, 1);
 				},
-			    "class": "dismiss btn-text-default"
+			    "class": "dismiss btn-text-default i18n"
 			}).data({ index : ind }).appendTo(dismiss_buttons);
 
-			$('<button>', {
-			    text: "Dismiss all",
-			    click: function () {
-					$('.dismiss').each(function() {
-					     $(this).trigger("click");
-					});
-				},
-			    "class": "dismiss_all btn-text-default"
-			}).appendTo(dismiss_buttons);
+//			$('<button>', {
+//			    text: "Dismiss all",
+//			    click: function () {
+//					$('.dismiss').each(function() {
+//					     $(this).trigger("click");
+//					});
+//				},
+//			    "class": "dismiss_all btn-text-default"
+//			}).appendTo(dismiss_buttons);
 			dismiss_buttons.appendTo(div_details);
 		});
+
+        if (sTextForDisplay !== "") {
+            sTextForDisplay = sTextForDisplay.replace(/\n/g, '<br>');
+            $('#textarea').empty();
+            var context = $('<div>', {
+                    html : sTextForDisplay
+                });
+            context.appendTo('#textarea');
+        }
+
 		updateScroll();
+        window.Asc.plugin.onTranslate();
 	};
 
 	function correctText(data) {
@@ -389,17 +554,64 @@ function checkInternetExplorer(){
 		document.getElementById("textarea").innerText = txt;
 		for (var i = ind; i < matches.length; i++) {
 			matches[i].offset -= count;
+			if (savedDismiss[i] && savedDismiss[i].offset > 0)
+			    savedDismiss[i].offset -= count;
 		}
 		$('#div_'+data.data().index).remove();
-		if (!matches.length) {
-			$('#check').trigger("click");
-		}
+        $('#check').trigger("click");
 		updateScroll();
+	};
+
+    function correctMistakesPosition(matches) {
+        var aPosWithAddedBreaks = [];
+        for (var nChar = 0; nChar < txtForChek.length; nChar++) {
+            if (txtForChek[nChar] === '\n')
+            {
+                aPosWithAddedBreaks.push(nChar);
+                nChar++;
+            }
+        }
+        for (var nMatch = 0; nMatch < matches.length; nMatch++)
+        {
+            var nOffset = 0;
+            for (var nPosWithBreak = 0; nPosWithBreak < aPosWithAddedBreaks.length; nPosWithBreak++)
+            {
+                if (matches[nMatch].offset > aPosWithAddedBreaks[nPosWithBreak])
+                    nOffset++;
+            }
+
+            matches[nMatch].offset -= nOffset;
+        }
+    };
+	function setTextWithErrors(sWord, nInd) {
+		var ind = nInd;
+		ind = tempMatches.findIndex(function(el) {
+			if (el.index === ind) {
+				return true;
+			}
+		});
+		var end = tempMatches[ind].offset + tempMatches[ind].length;
+		var temp = sTextForDisplay.slice(0, tempMatches[ind].offset) + '<span id="' + ind + '" style="color:#f62211; font-weight: bold;">' + sWord + '</span>' + sTextForDisplay.slice(end);
+		var count = sTextForDisplay.length - temp.length;
+		for (var i = ind; i < tempMatches.length; i++) {
+			tempMatches[i].offset -= count;
+		}
+
+		sTextForDisplay = temp;
 	};
 
 	function init() {
 		getLanguages().then(function(oResponse) {
-			var languages = oResponse.map(function(el, ind) {
+		    for (var nLang1 = 0; nLang1 < oResponse.length; nLang1++) {
+			    for (var nLang2 = nLang1 + 1; nLang2 < oResponse.length; nLang2++) {
+                    if (oResponse[nLang1].name === oResponse[nLang2].name)
+                    {
+                        oResponse.splice(nLang2, 1);
+                        nLang2--;
+                    }
+			    }
+			}
+			languages = oResponse.map(function(el, ind) {
 				return {
 					id : ind + 1,
 					text : el.name,
@@ -407,12 +619,16 @@ function checkInternetExplorer(){
 					longcode : el.longCode
 				};
 			});
+
 			languages.unshift({id : 0, text:"Auto", code : "auto", longcode : "auto"});
 			$('#language_id').select2({
 				data : languages
 			}).on('select2:select', function (e) {
 				CurLang = e.params.data.longcode;
-				// console.log(e.params.data);
+				if (e.params.data.longcode === "auto")
+				    isLangChangedManually = false;
+				else
+				    isLangChangedManually = true;
 			});
 		}, function(err) {console.log("ouch" +err)});
 
