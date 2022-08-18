@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Translator",
+            "description": "Quickly translate words and sentences using Apertium.",
             "descriptionLocale": {
-                "ru": "Apertium",
-                "fr": "Apertium",
-                "es": "Apertium",
-                "de": "Apertium"
+                "ru": "Быстро переводите слова и предложения с помощью сервиса Apertium.",
+                "fr": "Traduisez rapidement des mots et des phrases avec Apertium.",
+                "es": "Traduzca rápidamente palabras y frases con Apertium.",
+                "de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium."
             },
             "url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
