@@ -68,7 +68,18 @@
         "isModal": false,
         "isInsideMode": true,
         "isUpdateOleOnResize": false,
-        "initOnSelectionChanged": false
+        "initOnSelectionChanged": false,
+		"store": {
+			"background": {
+				"light" : "#2D3037",
+				"dark" : "#2D3037"
+			},
+			"screenshots" : ["resources/store/screenshots/screen_1.png"],
+			"icons"       : {
+				"light" : "resources/store/icons",
+				"dark"  : "resources/store/icons"
+			}
+		}
       }
     ]
 }
