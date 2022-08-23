@@ -268,7 +268,11 @@ label.header {
 .div_selected_main {
 	margin: 0 20px;
 	position: absolute;
-	inset: 130px 0px 0px;
+	top: 130px;
+	right: 0px;
+	left: 0px;
+	bottom: 0px;
+	/* inset: 130px 0px 0px; */
 }
 
 .div_selected_preview {
