@@ -556,7 +556,7 @@ function createPluginDiv(plugin, bInstalled) {
 						+
 					'</div>';
 	div.innerHTML = template;
-	elements.divMain.append(div);
+	elements.divMain.appendChild(div);
 	Ps.update();
 };
 
@@ -741,8 +741,8 @@ function createNotification(text) {
 	let span = document.createElement('span');
 	span.className = 'span_notification';
 	span.innerHTML = translate[text] || text;
-	div.append(span);
-	elements.divMain.append(div);
+	div.appendChild(span);
+	elements.divMain.appendChild(div);
 };
 
 function createError(err) {
@@ -753,8 +753,8 @@ function createError(err) {
 	let span = document.createElement('span');
 	span.className = 'error_caption';
 	span.innerHTML = err.message;
-	background.append(span);
-	document.getElementById('div_error').append(background);
+	background.appendChild(span);
+	document.getElementById('div_error').appendChild(background);
 	document.getElementById('div_error').classList.remove('hidden');
 	setTimeout(function() {
 		// remove error after 5 seconds
