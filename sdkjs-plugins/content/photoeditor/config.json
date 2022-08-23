@@ -12,12 +12,12 @@
 
     "variations": [
         {
-            "description": "Photo Editor",
+            "description": "Edit images, screenshots, and photos right in your documents: crop, resize, apply effects.",
             "descriptionLocale": {
-                "ru": "Фоторедактор",
-                "fr": "Photo Editor",
-                "es": "Editor de Fotos",
-                "de": "Foto-Editor"
+                "ru": "Обрабатывайте картинки, скриншоты и фотографии прямо в документе: обрезайте, изменяйте размер, применяйте различные эффекты.",
+                "fr": "Modifiez des images, des captures d’écran et des photos directement dans vos documents : coupez, ajustez, appliquez des effets.",
+                "es": "Edite imágenes, capturas de pantalla y fotos directamente en sus documentos: recorte, cambie el tamaño y aplique efectos.",
+                "de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden."
             },
             "url": "index.html",
 
@@ -90,7 +90,18 @@
                 }
             ],
 
-            "size": [ 10000, 10000 ]
+            "size": [ 10000, 10000 ],
+            "store": {
+                "background": {
+                    "light" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)",
+                    "dark" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }
+            }
         },
         {
             "description": "About",
