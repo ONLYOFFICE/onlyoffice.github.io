@@ -18,7 +18,7 @@
 
 let start = Date.now();
 let allPlugins;                                                      // list of all plugins from config
-let installedPlugins = [];                                           // list of intalled plugins
+let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
