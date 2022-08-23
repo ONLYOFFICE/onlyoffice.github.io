@@ -1041,6 +1041,8 @@ function createDefaultTranslations() {
 		"Install": "Install",
 		"Remove": "Remove",
 		"Update": "Update",
+		"Problem with loading plugins." : "Problem with loading plugins.",
+		"No installed plugins." : "No installed plugins."
 	};
 	isTranslationLoading = false;
 	showMarketplace();
