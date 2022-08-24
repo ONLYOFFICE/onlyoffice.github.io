@@ -641,15 +641,12 @@ function onClickItem() {
 	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		if (isIE) {
-			let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + "px";
-			elements.divScreen.style.height = height;
-			elements.divScreen.style.maxHeight = height;
-			elements.imgScreenshot.style.maxHeight = height;
-		}
 		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
 		elements.imgScreenshot.setAttribute('src', url);
-		elements.imgScreenshot.classList.remove('hidden');
+		elements.imgScreenshot.onload = function() {
+			elements.imgScreenshot.classList.remove('hidden');
+			setDivHeight();
+		}
 	} else {
 		elements.imgScreenshot.classList.add('hidden');
 	}
@@ -709,8 +706,6 @@ function onClickItem() {
 		elements.btnRemove.classList.add('hidden');
 		elements.btnInstall.classList.remove('hidden');
 	}
-
-	setDivHeight();
 
 	// TODO Fix problem with loading screenshots
 	elements.divSelected.classList.remove('hidden');
