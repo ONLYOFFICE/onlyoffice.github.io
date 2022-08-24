@@ -53,7 +53,10 @@ const languages = [                                                  // list of 
 	['pt-PT', 'pt', 'Portuguese'],
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
-]
+];
+const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
+				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
+				navigator.userAgent.toLowerCase().indexOf("edge") > -1);
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -97,6 +100,9 @@ window.onload = function() {
 	document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	// init element
 	initElemnts();
+	if (isIE)
+		elements.imgScreenshot.classList.remove('image_preview');
+
 	isFrameLoading = false;
 
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
