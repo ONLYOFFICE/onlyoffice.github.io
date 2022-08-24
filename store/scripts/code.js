@@ -478,7 +478,7 @@ function getAllPluginsData() {
 
 function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
-	elements.divMain.innerHTML = "";
+	$('.div_item').remove();
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
 	if (arr.length) {
 		arr.forEach(function(plugin) {
@@ -492,7 +492,7 @@ function showListofPlugins(bAll, sortedArr) {
 		createNotification(translate[notification]);
 	}
 	if (!Ps) {
-		Ps = new PerfectScrollbar("#div_main", {});
+		Ps = new PerfectScrollbar('#div_main', {});
 		Ps.update();
 	}
 };
