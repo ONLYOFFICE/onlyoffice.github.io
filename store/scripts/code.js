@@ -124,7 +124,6 @@ window.onload = function() {
 	if (isPluginLoading || isTranslationLoading) {
 		toogleLoader(true, "Loading");
 	}
-	Ps = new PerfectScrollbar("#div_main", {});
 };
 
 window.addEventListener('message', function(message) {
@@ -479,6 +478,9 @@ function getAllPluginsData() {
 
 function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
+	if (!Ps)
+		Ps = new PerfectScrollbar("#div_main", {});
+
 	elements.divMain.innerHTML = "";
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
 	if (arr.length) {
