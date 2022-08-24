@@ -774,6 +774,7 @@ function setDivHeight() {
 		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + "px";
 		elements.divScreen.style.height = height;
 		elements.divScreen.style.maxHeight = height;
+		elements.imgScreenshot.maxHeight = height;
 	}
 };
 
