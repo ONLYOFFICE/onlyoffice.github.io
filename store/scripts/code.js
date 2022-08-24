@@ -96,7 +96,6 @@ window.onload = function() {
 	styleTheme.innerHTML = rule;
 	document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	// init element
-	Ps = new PerfectScrollbar('#' + "div_main", {});
 	initElemnts();
 	isFrameLoading = false;
 
@@ -125,6 +124,7 @@ window.onload = function() {
 	if (isPluginLoading || isTranslationLoading) {
 		toogleLoader(true, "Loading");
 	}
+	Ps = new PerfectScrollbar("#div_main", {});
 };
 
 window.addEventListener('message', function(message) {
