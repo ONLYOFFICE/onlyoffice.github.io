@@ -283,6 +283,9 @@ label.header {
 
 .div_selected_image {
 	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .image_preview {
