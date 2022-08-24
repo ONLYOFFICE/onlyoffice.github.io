@@ -100,8 +100,13 @@ window.onload = function() {
 	document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	// init element
 	initElemnts();
-	if (isIE)
+	if (isIE) {
 		elements.imgScreenshot.classList.remove('image_preview');
+		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + "px";
+		elements.divScreen.style.height = height;
+		elements.divScreen.style.maxHeight = height;
+		elements.imgScreenshot.style.maxHeight = height;
+	}
 
 	isFrameLoading = false;
 
