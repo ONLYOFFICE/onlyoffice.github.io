@@ -492,9 +492,6 @@ function getAllPluginsData() {
 
 function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
-	if (!Ps)
-		Ps = new PerfectScrollbar("#div_main", {});
-
 	elements.divMain.innerHTML = "";
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
 	if (arr.length) {
@@ -502,11 +499,15 @@ function showListofPlugins(bAll, sortedArr) {
 			if (plugin && plugin.guid)
 				createPluginDiv(plugin, !bAll);
 		});
-		setTimeout(function(){Ps.update()});
+		setTimeout(function(){if (Ps) Ps.update()});
 	} else {
 		// if no istalled plugins and my plugins button was clicked
 		let notification = bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(translate[notification]);
+	}
+	if (!Ps) {
+		Ps = new PerfectScrollbar("#div_main", {});
+		Ps.update();
 	}
 };
 
@@ -573,7 +574,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>';
 	div.innerHTML = template;
 	elements.divMain.appendChild(div);
-	Ps.update();
+	if (Ps) Ps.update();
 };
 
 function onClickInstall(target, event) {
@@ -730,7 +731,7 @@ function onClickBack() {
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
 	// elements.arrow.classList.add('hidden');
-	Ps.update();
+	if(Ps) Ps.update();
 };
 
 function onSelectPreview(target, isOverview) {
