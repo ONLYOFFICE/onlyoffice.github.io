@@ -348,3 +348,8 @@ label.header {
 .div_plugin_info {
 	margin-bottom: 25px;
 }
+
+.btn_toolbar_active {
+	background-color: #c0c0c0;
+	color: #000;
+}
