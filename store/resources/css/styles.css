@@ -98,7 +98,12 @@ label.header {
 
 .main_content {
 	position: absolute;
-	inset: 60px 0px 5px;
+	top: 60px;
+	bottom: 5px;
+	right: 0px;
+	left: 0px;
+	-ms-flex-wrap: wrap;
+	/* inset: 60px 0px 5px; */
 	overflow: hidden;
 	display: flex;
 	flex-wrap: wrap;
@@ -263,7 +268,11 @@ label.header {
 .div_selected_main {
 	margin: 0 20px;
 	position: absolute;
-	inset: 130px 0px 0px;
+	top: 130px;
+	right: 0px;
+	left: 0px;
+	bottom: 0px;
+	/* inset: 130px 0px 0px; */
 }
 
 .div_selected_preview {
@@ -274,6 +283,9 @@ label.header {
 
 .div_selected_image {
 	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .image_preview {
@@ -335,4 +347,16 @@ label.header {
 
 .div_plugin_info {
 	margin-bottom: 25px;
+}
+
+.btn_toolbar_active {
+	background-color: #c0c0c0 !important;
+	color: #000 !important;
+}
+
+.div_icon_info {
+	width: 56px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
