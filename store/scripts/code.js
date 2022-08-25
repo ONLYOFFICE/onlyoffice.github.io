@@ -274,14 +274,12 @@ window.addEventListener('message', function(message) {
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
-				rule += '.btn_toolbar_active{background-color: #c0c0c0 !important; color: #000 !important}\n';
 				rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
 				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
 			} else {
-				rule += '.btn_toolbar_active{background-color: #fff !important; color: #000 !important}\n';
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
@@ -937,7 +935,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 			iconScale = '/icon@2x.png'
 			break;
 	}
-	let curIcon = './resources/img/defaults/' + iconScale;
+	let curIcon = './resources/img/defaults' + iconScale;
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
