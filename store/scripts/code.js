@@ -829,7 +829,7 @@ function changeIcons() {
 		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
 	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true, 'img_icon'));
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
 };
 
 function getTranslation() {
