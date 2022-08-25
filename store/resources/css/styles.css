@@ -353,3 +353,10 @@ label.header {
 	background-color: #c0c0c0 !important;
 	color: #000 !important;
 }
+
+.div_icon_info {
+	width: 56px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
