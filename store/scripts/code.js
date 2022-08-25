@@ -53,7 +53,10 @@ const languages = [                                                  // list of 
 	['pt-PT', 'pt', 'Portuguese'],
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
-]
+];
+const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
+				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
+				navigator.userAgent.toLowerCase().indexOf("edge") > -1);
 
 // it's necessary because we show loader before all (and getting translations too)
 switch (shortLang) {
@@ -96,8 +99,10 @@ window.onload = function() {
 	styleTheme.innerHTML = rule;
 	document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	// init element
-	Ps = new PerfectScrollbar('#' + "div_main", {});
 	initElemnts();
+	if (isIE)
+		elements.imgScreenshot.classList.remove('image_preview');
+
 	isFrameLoading = false;
 
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
@@ -269,14 +274,12 @@ window.addEventListener('message', function(message) {
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
-				rule += '.btn_toolbar_active{background-color: #c0c0c0 !important; color: #000 !important}\n';
 				rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
 				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
 			} else {
-				rule += '.btn_toolbar_active{background-color: #fff !important; color: #000 !important}\n';
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
@@ -479,18 +482,22 @@ function getAllPluginsData() {
 
 function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
-	elements.divMain.innerHTML = "";
+	$('.div_item').remove();
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
 	if (arr.length) {
 		arr.forEach(function(plugin) {
 			if (plugin && plugin.guid)
 				createPluginDiv(plugin, !bAll);
 		});
-		setTimeout(function(){Ps.update()});
+		setTimeout(function(){if (Ps) Ps.update()});
 	} else {
 		// if no istalled plugins and my plugins button was clicked
 		let notification = bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(translate[notification]);
+	}
+	if (!Ps) {
+		Ps = new PerfectScrollbar('#div_main', {});
+		Ps.update();
 	}
 };
 
@@ -538,7 +545,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -556,8 +563,8 @@ function createPluginDiv(plugin, bInstalled) {
 						+
 					'</div>';
 	div.innerHTML = template;
-	elements.divMain.append(div);
-	Ps.update();
+	elements.divMain.appendChild(div);
+	if (Ps) Ps.update();
 };
 
 function onClickInstall(target, event) {
@@ -634,7 +641,10 @@ function onClickItem() {
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
 		elements.imgScreenshot.setAttribute('src', url);
-		elements.imgScreenshot.classList.remove('hidden');
+		elements.imgScreenshot.onload = function() {
+			elements.imgScreenshot.classList.remove('hidden');
+			setDivHeight();
+		}
 	} else {
 		elements.imgScreenshot.classList.add('hidden');
 	}
@@ -670,7 +680,7 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
-	let tmp = getImageUrl(guid, true, false);
+	let tmp = getImageUrl(guid, true, true, 'img_icon');
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
@@ -695,8 +705,6 @@ function onClickItem() {
 		elements.btnInstall.classList.remove('hidden');
 	}
 
-	setDivHeight();
-
 	// TODO Fix problem with loading screenshots
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
@@ -708,13 +716,14 @@ function onClickItem() {
 function onClickBack() {
 	// click on left arrow in preview mode
 	// TODO Fix problem with loading screenshots
+	elements.imgIcon.style.display = 'none';
 	elements.imgScreenshot.setAttribute('src','')
 	document.getElementById('span_overview').click();
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
 	// elements.arrow.classList.add('hidden');
-	Ps.update();
+	if(Ps) Ps.update();
 };
 
 function onSelectPreview(target, isOverview) {
@@ -741,8 +750,8 @@ function createNotification(text) {
 	let span = document.createElement('span');
 	span.className = 'span_notification';
 	span.innerHTML = translate[text] || text;
-	div.append(span);
-	elements.divMain.append(div);
+	div.appendChild(span);
+	elements.divMain.appendChild(div);
 };
 
 function createError(err) {
@@ -753,8 +762,8 @@ function createError(err) {
 	let span = document.createElement('span');
 	span.className = 'error_caption';
 	span.innerHTML = err.message;
-	background.append(span);
-	document.getElementById('div_error').append(background);
+	background.appendChild(span);
+	document.getElementById('div_error').appendChild(background);
 	document.getElementById('div_error').classList.remove('hidden');
 	setTimeout(function() {
 		// remove error after 5 seconds
@@ -768,9 +777,13 @@ function setDivHeight() {
 	if (Ps) Ps.update();
 	// console.log(Math.round(window.devicePixelRatio * 100));
 	if (elements.divScreen) {
-		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + "px";
+		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + 'px';
 		elements.divScreen.style.height = height;
 		elements.divScreen.style.maxHeight = height;
+		if (isIE) {
+			elements.imgScreenshot.style.maxHeight = height;
+			elements.imgScreenshot.style.maxWidth = elements.divScreen.clientWidth + 'px';
+		}
 	}
 };
 
@@ -813,11 +826,11 @@ window.onresize = function() {
 function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
-		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ), false, false );
+		let guid = arr[i].getAttribute('data-guid');
+		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
-	// временно пришлось сделать так, потому что некоторые иконки плагинов слишком большие для этого окна и пока используем всегда одну
-	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	// elements.imgIcon.setAttribute('src', getImageUrl());
+	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
 };
 
 function getTranslation() {
@@ -903,7 +916,7 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(guid, bNotForStore, bSetSize) {
+function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	let iconScale = '/icon.png';
@@ -921,7 +934,7 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 			iconScale = '/icon@2x.png'
 			break;
 	}
-	let curIcon = './resources/img/defaults/' + themeType + '/icon@2x.png'; // iconScale временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
+	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
@@ -943,7 +956,7 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 					break;
 				}
 			}
-			curIcon = plugin.baseUrl + icon['200%'].normal // icon[scale.percent].normal; временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов)
+			curIcon = plugin.baseUrl + icon[scale.percent].normal;
 		} else if (variation.icons) {
 			// тут может быть как старая так и новая схема
 			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
@@ -962,37 +975,37 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 							break;
 						}
 					}
-					curIcon = plugin.baseUrl + icon['200%'].normal // icon[scale.percent].normal; временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
+					curIcon = plugin.baseUrl + icon[scale.percent].normal;
 				} else {
 					// старая схема и icons это массив со строками
-					curIcon = plugin.baseUrl + variation.icons[1] // (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]); временно сделано так, потому что не пока нет подходящих дефолтных иконок (используются от плагинов);
+					curIcon = plugin.baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
 				}
 			}
 		}	
-		
-		if (bSetSize) {
-			makeRequest(curIcon, 'blob').then(
-				function (res) {
-					let reader = new FileReader();
-					reader.onloadend = function() {
-						let imageUrl = reader.result;		
-						let img = document.createElement('img');
-						img.setAttribute('src', imageUrl);
-						img.onload = function () {
-							let icon = document.getElementById('img_' + guid);
-							icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
-							icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
-							icon.style.display = '';
-						}
-						
+	}
+
+	if (bSetSize) {
+		makeRequest(curIcon, 'blob').then(
+			function (res) {
+				let reader = new FileReader();
+				reader.onloadend = function() {
+					let imageUrl = reader.result;		
+					let img = document.createElement('img');
+					img.setAttribute('src', imageUrl);
+					img.onload = function () {
+						let icon = document.getElementById(id);
+						icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
+						icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
+						icon.style.display = '';
 					}
-					reader.readAsDataURL(res);
-				},
-				function(error) {
-					createError(error);
+					
 				}
-			);
-		}
+				reader.readAsDataURL(res);
+			},
+			function(error) {
+				createError(error);
+			}
+		);
 	}
 	
 	return curIcon;
@@ -1041,6 +1054,8 @@ function createDefaultTranslations() {
 		"Install": "Install",
 		"Remove": "Remove",
 		"Update": "Update",
+		"Problem with loading plugins." : "Problem with loading plugins.",
+		"No installed plugins." : "No installed plugins."
 	};
 	isTranslationLoading = false;
 	showMarketplace();
