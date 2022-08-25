@@ -547,7 +547,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -682,8 +682,10 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
-	let tmp = this.children[0].children[0].src; // getImageUrl(guid, true, false); (потом надо будет удалить notforstore из этой функции)
-	elements.imgIcon.setAttribute('src', tmp);
+	let tmp = this.children[0].children[0]; // getImageUrl(guid, true, false); (потом надо будет удалить notforstore из этой функции)
+	elements.imgIcon.setAttribute('src', tmp.src);
+	elements.imgIcon.style.height = tmp.clientHeight + 'px';
+	elements.imgIcon.style.width = tmp.clientWidth + 'px';
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
@@ -827,10 +829,11 @@ window.onresize = function() {
 function changeIcons() {
 	let arr = document.getElementsByClassName('plugin_icon');
 	for (let i = 0; i < arr.length; i++) {
-		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ), false, false );
+		let guid = arr[i].getAttribute('data-guid');
+		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
-	guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true));
+	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true, 'img_icon'));
 };
 
 function getTranslation() {
@@ -916,7 +919,7 @@ function showMarketplace() {
 	}
 };
 
-function getImageUrl(guid, bNotForStore, bSetSize) {
+function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	// get icon url for current plugin (according to theme and scale)
 	// TODO change it when we will be able show icons for installed plugins
 	let iconScale = '/icon.png';
@@ -993,7 +996,7 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 					let img = document.createElement('img');
 					img.setAttribute('src', imageUrl);
 					img.onload = function () {
-						let icon = document.getElementById('img_' + guid);
+						let icon = document.getElementById(id);
 						icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
 						icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
 						icon.style.display = '';
