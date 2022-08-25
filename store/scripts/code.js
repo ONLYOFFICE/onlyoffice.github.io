@@ -716,6 +716,7 @@ function onClickItem() {
 function onClickBack() {
 	// click on left arrow in preview mode
 	// TODO Fix problem with loading screenshots
+	elements.imgIcon.style.display = 'none';
 	elements.imgScreenshot.setAttribute('src','')
 	document.getElementById('span_overview').click();
 	elements.divSelected.classList.add('hidden');
