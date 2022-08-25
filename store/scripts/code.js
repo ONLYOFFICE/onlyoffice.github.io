@@ -933,7 +933,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 			iconScale = '/icon@2x.png'
 			break;
 	}
-	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info' + themeType) : 'card') + iconScale;
+	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
