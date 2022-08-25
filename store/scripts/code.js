@@ -682,7 +682,7 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
-	let tmp = getImageUrl(guid, true, false);
+	let tmp = this.children[0].children[0].src; // getImageUrl(guid, true, false); (потом надо будет удалить notforstore из этой функции)
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
