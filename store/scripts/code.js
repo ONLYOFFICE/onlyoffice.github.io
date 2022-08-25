@@ -681,7 +681,7 @@ function onClickItem() {
 	elements.divSelected.setAttribute('data-guid', guid);
 	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
 	let tmp = getImageUrl(guid, true, true, 'img_icon');
-	elements.imgIcon.setAttribute('src', tmp.src);
+	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
