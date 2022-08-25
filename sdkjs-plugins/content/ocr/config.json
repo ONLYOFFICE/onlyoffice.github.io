@@ -96,8 +96,8 @@
             "size": [ 592, 100 ],
             "store": {
                 "background": {
-                    "light" : "#000000",
-                    "dark" : "#000000"
+                    "light" : "#444444",
+                    "dark" : "#444444"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
