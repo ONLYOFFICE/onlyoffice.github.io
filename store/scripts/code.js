@@ -829,9 +829,8 @@ function changeIcons() {
 	for (let i = 0; i < arr.length; i++) {
 		arr[i].setAttribute('src', getImageUrl( arr[i].getAttribute('data-guid') ), false, false );
 	}
-	// временно пришлось сделать так, потому что некоторые иконки плагинов слишком большие для этого окна и пока используем всегда одну
-	// guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	// elements.imgIcon.setAttribute('src', getImageUrl());
+	guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true));
 };
 
 function getTranslation() {
