@@ -983,30 +983,30 @@ function getImageUrl(guid, bNotForStore, bSetSize) {
 				}
 			}
 		}	
-		
-		if (bSetSize) {
-			makeRequest(curIcon, 'blob').then(
-				function (res) {
-					let reader = new FileReader();
-					reader.onloadend = function() {
-						let imageUrl = reader.result;		
-						let img = document.createElement('img');
-						img.setAttribute('src', imageUrl);
-						img.onload = function () {
-							let icon = document.getElementById('img_' + guid);
-							icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
-							icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
-							icon.style.display = '';
-						}
-						
+	}
+
+	if (bSetSize) {
+		makeRequest(curIcon, 'blob').then(
+			function (res) {
+				let reader = new FileReader();
+				reader.onloadend = function() {
+					let imageUrl = reader.result;		
+					let img = document.createElement('img');
+					img.setAttribute('src', imageUrl);
+					img.onload = function () {
+						let icon = document.getElementById('img_' + guid);
+						icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
+						icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
+						icon.style.display = '';
 					}
-					reader.readAsDataURL(res);
-				},
-				function(error) {
-					createError(error);
+					
 				}
-			);
-		}
+				reader.readAsDataURL(res);
+			},
+			function(error) {
+				createError(error);
+			}
+		);
 	}
 	
 	return curIcon;
