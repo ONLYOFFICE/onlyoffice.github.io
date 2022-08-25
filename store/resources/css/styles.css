@@ -350,6 +350,6 @@ label.header {
 }
 
 .btn_toolbar_active {
-	background-color: #c0c0c0;
-	color: #000;
+	background-color: #c0c0c0 !important;
+	color: #000 !important;
 }
