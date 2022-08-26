@@ -116,7 +116,18 @@
                 }
             ],
 
-            "size": [ 392, 147 ]
+            "size": [ 392, 147 ],
+            "store": {
+                "background": {
+                    "light" : "#57B057",
+                    "dark" : "#57B057"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }
+            }
         }
     ]
 }
