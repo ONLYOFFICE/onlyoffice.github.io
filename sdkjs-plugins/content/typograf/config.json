@@ -1,0 +1,50 @@
+{
+    "name": "Typograf",
+    "nameLocale": {
+        "ru": "Типограф",
+        "fr": "Typograf",
+        "es": "Typograf",
+        "de": "Typograf"
+    },
+    "guid": "asc.{55159EC6-C91A-4DDB-8E1E-558454666461}",
+    "version": "1.0.0",
+
+    "variations": [
+        {
+            "description": "Typograf",
+            "descriptionLocale": {
+                "ru": "Типограф",
+                "fr": "Typograf",
+                "es": "Typograf",
+                "de": "Typograf"
+            },
+            "url": "index.html",
+
+            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+            "icons2": [
+			{
+				"100%": { "normal": "resources/img/icon.png" },
+				"125%": { "normal": "resources/img/icon@1.25x.png" },
+				"150%": { "normal": "resources/img/icon@1.5x.png" },
+				"175%": { "normal": "resources/img/icon@1.75x.png" },
+				"200%": { "normal": "resources/img/icon@2x.png" }
+			}
+			],
+            "isViewer": true,
+            "EditorsSupport": [ "word", "slide", "cell" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+
+            "buttons": [],
+
+            "initOnSelectionChanged": true
+        }
+    ]
+}
