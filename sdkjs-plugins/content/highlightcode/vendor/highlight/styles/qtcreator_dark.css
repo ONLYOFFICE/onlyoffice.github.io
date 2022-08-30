@@ -87,3 +87,19 @@ p {
 .hljs-deletion {
   color: #55ffff;
 }
+
+.content::selection {
+  background: #1d6bb9;
+}
+  
+.content::-moz-selection {
+  background: #1d6bb9;
+}
+  
+span::selection {
+  background: #1d6bb9;
+}
+  
+span::-moz-selection {
+  background: #1d6bb9;
+}
