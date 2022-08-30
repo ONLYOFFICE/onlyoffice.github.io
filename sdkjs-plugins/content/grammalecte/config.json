@@ -69,8 +69,8 @@
             "buttons": [],
 
             "initOnSelectionChanged": true,
-			
-			"store": {
+
+            "store": {
                 "background": {
                     "light" : "#F5F5F5",
                     "dark" : "#444444"
