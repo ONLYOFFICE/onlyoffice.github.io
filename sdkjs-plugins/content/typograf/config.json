@@ -44,7 +44,18 @@
 
             "buttons": [],
 
-            "initOnSelectionChanged": true
+            "initOnSelectionChanged": true,
+            "store": {
+                "background": {
+                    "light" : "#AE1717",
+                    "dark" : "#AE1717"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }
+            }
         }
     ]
 }
