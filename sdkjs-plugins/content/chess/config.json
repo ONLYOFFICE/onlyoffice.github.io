@@ -61,7 +61,19 @@
             "isUpdateOleOnResize" : true,
 
             "buttons"         : [ { "text": "Ok", "primary": true },
-                                { "text": "Cancel", "primary": false } ]
+                                { "text": "Cancel", "primary": false } ],
+
+            "store": {
+                "background": {
+                    "light" : "#444444",
+                    "dark" : "#444444;"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }               
+            }
         },
         {
             "description" : "About",
@@ -82,18 +94,7 @@
 
             "buttons"         : [ { "text": "Ok", "primary": true } ],
 
-            "size" : [392, 147],
-            "store": {
-                "background": {
-                    "light" : "#444444",
-                    "dark" : "#444444;"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                }               
-            }
+            "size" : [392, 147]            
         }
     ]
 }
