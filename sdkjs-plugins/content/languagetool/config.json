@@ -1,11 +1,23 @@
 {
     "name": "LanguageTool",
+	 "nameLocale": {
+        "ru": "LanguageTool",
+        "fr": "LanguageTool",
+        "es": "LanguageTool",
+        "de": "LanguageTool"
+    },
     "guid": "asc.{7CDB02C9-A0BF-4B56-9A1A-71C860B8498F}",
     "version": "1.0.0",
 
     "variations": [
         {
-            "description": "LanguageTool",
+            "description": "Improve spelling, grammar, and style in your texts.",
+			"descriptionLocale": {
+                "ru": "Исправляйте орфографические, грамматические и стилистические ошибки в ваших документах.",
+                "fr": "Améliorez l'orthographe, la grammaire et le style de vos textes.",
+                "es": "Mejore la ortografía, la gramática y el estilo de sus textos.",
+                "de": "Verbessern Sie Rechtschreibung, Grammatik und Stil in Ihren Texten."
+            },
             "url": "index.html",
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
@@ -63,7 +75,19 @@
 
             "buttons": [],
 
-            "initOnSelectionChanged": true
+            "initOnSelectionChanged": true,
+
+            "store": {
+                "background": {
+                    "light" : "#357EE5",
+                    "dark" : "#357EE5"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                }
+            }
         },
         {
             "description": "About",
@@ -95,7 +119,7 @@
                 }
             ],
 
-            "size": [ 400, 50 ]
+            "size": [ 400, 50 ]            
         }
     ]
 }
