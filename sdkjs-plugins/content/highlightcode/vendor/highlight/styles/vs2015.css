@@ -119,3 +119,19 @@ p {
   display: inline-block;
   width: 100%;
 }
+
+.content::selection {
+  background: #264f78;
+}
+  
+.content::-moz-selection {
+  background: #264f78;
+}
+  
+span::selection {
+  background: #264f78;
+}
+  
+span::-moz-selection {
+  background: #264f78;
+}
