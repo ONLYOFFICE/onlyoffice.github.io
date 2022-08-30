@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Typograf",
+            "description": "Prepare your texts for publishing by correcting typography.",
             "descriptionLocale": {
-                "ru": "Типограф",
-                "fr": "Typograf",
-                "es": "Typograf",
-                "de": "Typograf"
+                "ru": "Подготовьте свои тексты к публикации, исправив типографические ошибки.",
+                "fr": "Préparez vos textes pour la publication en corrigeant la typographie.",
+                "es": "Prepare sus textos para la publicación corrigiendo la tipografía.",
+                "de": "Bereiten Sie Ihre Texte für die Veröffentlichung vor, indem Sie Typografie korrigieren."
             },
             "url": "index.html",
 
