@@ -2,7 +2,6 @@
 	"apertium",
 	"deepl",
 	"doc2md",
-	"glavred",
 	"rainbow",
 	"photoeditor",
 	"speech",
@@ -16,10 +15,13 @@
 	"jitsi",
 	"macros",
 	"mendeley",
+	"grammalecte",
 	"ocr",
 	"thesaurus",
 	"translator",
 	"youtube",
 	"wordscounter",
+	"typograf",
+	"glavred",
 	"zotero"
 ]
