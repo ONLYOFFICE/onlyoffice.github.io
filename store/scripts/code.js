@@ -939,6 +939,11 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	let plugin = allPlugins.find(function(el){
 		return el.guid === guid
 	});
+	if (!plugin) {
+		plugin = installedPlugins.find(function(el){
+			return el.guid === guid
+		});
+	}
 
 	if ( plugin && ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') ) ) {
 		let variation = plugin.variations[0];
