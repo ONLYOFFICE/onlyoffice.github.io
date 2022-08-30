@@ -75,3 +75,19 @@ p {
 .hljs-emphasis {
   font-style: italic;
 }
+
+.content::selection {
+  background: #343434;
+}
+  
+.content::-moz-selection {
+  background: #343434;
+}
+  
+span::selection {
+  background: #343434;
+}
+  
+span::-moz-selection {
+  background: #343434;
+}
