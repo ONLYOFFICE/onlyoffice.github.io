@@ -84,6 +84,21 @@
             rateValue.textContent = rate_default;
     });
 
+    function getMessage(key) {
+        return window.Asc.plugin.tr(key.trim());
+    }
+
+    window.Asc.plugin.onTranslate = function()
+	{
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.innerText) el.innerText = getMessage(el.innerText);
+        }
+    };
+
     window.Asc.plugin.init = function()
     {
         $('#voice-lang').select2({
