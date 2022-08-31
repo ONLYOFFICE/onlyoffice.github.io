@@ -2,9 +2,15 @@
     "name": "Speech",
     "nameLocale": {
         "ru": "Речь",
-        "fr": "Parole",
+        "cs": "Řeč",
+        "de": "Rede",
         "es": "Habla",
-        "de": "Rede"
+        "fr": "Parole",
+        "it": "Discorso",
+        "ja": "スピーチ",
+        "nl": "Spraak",
+        "pt": "Discurso",
+        "zh": "讲话"
     },
     "guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
     "version" : "2.0.0",
@@ -86,9 +92,16 @@
             "description": "Settings",
             "descriptionLocale": {
                 "ru": "Настройки",
-                "fr": "Paramètres",
+                "cs": "Nastavení",
+                "de": "Einstellungen",
                 "es": "Configuración",
-                "de": "Einstellungen"
+                "fr": "Paramètres",
+                "it": "Impostazioni",
+                "ja": "設定",
+                "nl": "Instellingen",
+                "pt": "Definições",
+                "zh": "设置"
+                
             },
             "url": "settings.html",
 
