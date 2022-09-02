@@ -16,12 +16,16 @@
         rateValue   = document.querySelector('.rate-value');
         voices      = [];
         function initVoices() {
-            voices = synth.getVoices().sort(function (a, b) {
-                const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
-                if ( aname < bname ) return -1;
-                else if ( aname == bname ) return 0;
-                else return +1;
-            });
+            if (synth) {
+                voices = synth.getVoices().sort(function (a, b) {
+                    const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+                    if ( aname < bname ) return -1;
+                    else if ( aname == bname ) return 0;
+                    else return +1;
+                });
+            }
+            else
+                voices = [];
 
             var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
             voiceSelect.innerHTML = '';
@@ -56,8 +60,8 @@
         };
 
         initVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = initVoices;
+        if (synth && synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = initVoices;
         }
 
         pitch.onchange = function() {
@@ -84,6 +88,21 @@
             rateValue.textContent = rate_default;
     });
 
+    function getMessage(key) {
+        return window.Asc.plugin.tr(key.trim());
+    }
+
+    window.Asc.plugin.onTranslate = function()
+	{
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.innerText) el.innerText = getMessage(el.innerText);
+        }
+    };
+
     window.Asc.plugin.init = function()
     {
         $('#voice-lang').select2({
@@ -93,10 +112,12 @@
     };
     window.Asc.plugin.button = function(id)
     {
-        localStorage.setItem("plugin-speech-pitch", pitch.value);
-        localStorage.setItem("plugin-speech-rate", rate.value);
-        localStorage.setItem("plugin-speech-voice-name", voiceSelect.selectedOptions[0].getAttribute('data-name'));
-        localStorage.setItem("plugin-speech-lang-val", $(voiceSelect).val());
+        if (synth && voiceSelect.selectedOptions[0]) {
+            localStorage.setItem("plugin-speech-pitch", pitch.value);
+            localStorage.setItem("plugin-speech-rate", rate.value);
+            localStorage.setItem("plugin-speech-voice-name", voiceSelect.selectedOptions[0].getAttribute('data-name'));
+            localStorage.setItem("plugin-speech-lang-val", $(voiceSelect).val());
+        }
 
         this.executeCommand("close", "");
     };
