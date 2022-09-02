@@ -60,6 +60,7 @@
     var voices    = [];
     var bDefaultLang = false;
     var aAllUtterance = [];
+    var synth = window.speechSynthesis;
     var langsMap = {
         "ab": "ab",
         "af": "af-ZA",
@@ -175,8 +176,9 @@
 		}
 		text_init = text;
 
-		if (!window.speechSynthesis || voices.length === 0)
+		if (!synth || voices.length === 0)
         {
+            synth != null && voices.length === 0 && console.log("No voices for web speech api!");
             window.Asc.plugin.executeCommand("close", "");
             return;
         }
@@ -254,6 +256,8 @@
         FindVoice(lang, true);
         if (!oMainVoice)
             FindVoice(lang, false);
+        if (oMainVoice == null && voices.length > 0)
+            oMainVoice = voices[0];
         if (!oMainVoice) {
             window.Asc.plugin.executeCommand("close", "");
             return false;
@@ -265,7 +269,7 @@
     }
 
     function initVoices() {
-        voices = window.speechSynthesis.getVoices().sort(function (a, b) {
+        voices = synth.getVoices().sort(function (a, b) {
             const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
             if ( aname < bname ) return -1;
             else if ( aname == bname ) return 0;
@@ -314,8 +318,8 @@
     }
 
     function resumeInfinity() {
-        speechSynthesis.pause();
-        speechSynthesis.resume();
+        synth.pause();
+        synth.resume();
         timer = setTimeout(function () {
             resumeInfinity()
         }, 3000)
@@ -347,7 +351,7 @@
     function onEnd() {
         console.log('SpeechSynthesisUtterance.onend');
         if (this.idx === aAllUtterance.length - 1) {
-            speechSynthesis.cancel();
+            synth.cancel();
             window.Asc.plugin.executeCommand("close", "");
         }
         else if (this.idx === curTextIdx + 9 && isChrome && !oMainVoice.localService) {
@@ -359,17 +363,17 @@
     function onError (oError) {
         console.error('SpeechSynthesisUtterance.onerror');
         console.log(oError);
-        speechSynthesis.cancel();
+        synth.cancel();
         window.Asc.plugin.executeCommand("close", "");
     }
 
 	function speak() {
         var utterThis;
-        speechSynthesis.cancel();
+        synth.cancel();
 
-        if (window.speechSynthesis.speaking) {
+        if (synth.speaking) {
             console.error('speechSynthesis.speaking');
-            speechSynthesis.cancel();
+            synth.cancel();
             window.Asc.plugin.executeCommand("close", "");
             return;
         }
@@ -378,22 +382,27 @@
         
         if (isChrome && !oMainVoice.localService) {
             for (var nUtter = curTextIdx; nUtter < curTextIdx + 10 && nUtter < aAllUtterance.length; nUtter++) {
-                window.speechSynthesis.speak(aAllUtterance[nUtter]);
+                synth.speak(aAllUtterance[nUtter]);
             }
 
             resumeInfinity();
         }
         else {
             for (var nUtter = curTextIdx; nUtter < aAllUtterance.length; nUtter++) {
-                window.speechSynthesis.speak(aAllUtterance[nUtter]);
+                synth.speak(aAllUtterance[nUtter]);
             }
         }
     }
 
     $(document).ready(function () {
+        if (!synth) {
+            console.error('Web speech api is not supported in this browser!');
+            return;
+        }
+        
         initVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = initVoices;
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = initVoices;
         }
 
         var saved_pitch = localStorage.getItem("plugin-speech-pitch");
@@ -411,12 +420,12 @@
     
 	window.Asc.plugin.button = function(id)
 	{
-        speechSynthesis.cancel();
+        synth && synth.cancel();
 		this.executeCommand("close", "");
 	};
 
     window.onunload = function()
     {
-        speechSynthesis.cancel();
+        synth && synth.cancel();
     };
 })(window, undefined);
