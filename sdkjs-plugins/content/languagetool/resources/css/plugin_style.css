@@ -16,7 +16,6 @@ html, body {
 #no_mistakes {
     font-size: 12px;
     font-weight: 700 !important;
-    margin-top: 16px;
 }
 .replacment_space {
     border: 1px solid #40865C;
@@ -30,9 +29,7 @@ html, body {
 #yes_mistakes {
     font-size: 11px;
     font-weight: 700 !important;
-    margin-top: 16px;
 }
-
 
 .caption {
   margin-top: 19px;
