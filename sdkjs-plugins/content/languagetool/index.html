@@ -70,14 +70,14 @@
 		#check {
         	width:40%;
         	margin-left: 12px;
-        	margin-top: 16px;
+        	margin-top: 12px;
         	text-align: center;
         }
 		#replace {
 			float: right;
 			width:40%;
         	margin-right: 12px;
-        	margin-top: 16px;
+        	margin-top: 12px;
         	text-align: center;
         }
         .replacment {
@@ -119,14 +119,31 @@
 			content:attr(data-text);
 			color: gray;
 		}
+		#flex-loader-container {
+		    display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 50px;
+            border: none;
+            background-image: none;
+            background-color: rgba(68, 68, 68, 0.95);
+            color: #f1f1f1;
+            border-radius: 6px;
+		}
+
 	</style>
 	<body class='body' style="margin: 0; display: flex; flex-direction: column;">
 		<div id="loader-container" class="asc-plugin-loader display-none">
-			<div class="asc-loader-image">
-				<div class="asc-loader-title"></div>
-			</div>
-			<div class="asc-loader-title  i18n">
-				Checking...
+			<div id="flex-loader-container">
+				<div>
+					<div class="asc-loader-image">
+						<div class="asc-loader-title"></div>
+					</div>
+					<div class="asc-loader-title  i18n">
+						Checking...
+					</div>
+				</div>
 			</div>
     	</div>
 		<div id="div_language" style="margin: 0px 12px 0px 12px;">
@@ -145,6 +162,7 @@
 			<div onсlick="" id="check" class="noselect btn-text-default i18n" style="height: auto; min-height: 20px;">Check</div>
 			<div onсlick="" id="replace" class="noselect btn-text-default i18n" style="height: fit-content; min-height: 20px;">Insert to document</div>
 		</div>
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 12px 0 12px 12px;"></div>
 		<div id="scrollable-container-id" style="position: relative; width: 100%; height: 70%; overflow: hidden ">
 			<div id="result" style="width: calc(100% - 24px); margin: 0px 12px 0px 12px; word-break: break-word; display: flex; flex-flow: column;"></div>
 		</div>
