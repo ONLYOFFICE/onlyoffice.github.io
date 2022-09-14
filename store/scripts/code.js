@@ -1037,6 +1037,7 @@ function toogleView(current, oldEl, text, bAll) {
 		oldEl.classList.remove('btn_toolbar_active');
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = translate[text] || text;
+		elements.linkNewPlugin.href = bAll ? "https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls" : "https://api.onlyoffice.com/plugin/installation";
 		showListofPlugins(bAll);
 	}
 };
