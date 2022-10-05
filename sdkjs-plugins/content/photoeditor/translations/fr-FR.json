@@ -2,7 +2,7 @@
   "Photo Editor": "Photo Editor",
   "Close": "Fermer",
   "Image Editor Add-on": "Extension Image Editor",
-  "<a href=\"https://creativesdk.adobe.com/docs/web/#/articles/imageeditorui/index.html\" target=\"_blank\">The Creative SDK Image Editing component</a> can be embedded in any website with just a few lines of Javascript, adding simple yet powerful image editing to an existing workflow.": "<a href=\\\"https://creativesdk.adobe.com/docs/web/#/articles/imageeditorui/index.html\\\" target=\\\"_blank\\\">Le composant créatif SDK Image Editing </a> peut être intégré  dans tous les sites juste quelques lignes de Javascript, ajoutant simple mais puissante édition  d'image au flux de travail existant.",
+  "<a href=\"https://creativesdk.adobe.com/docs/web/#/articles/imageeditorui/index.html\" target=\"_blank\">The Creative SDK Image Editing component</a> can be embedded in any website with just a few lines of Javascript, adding simple yet powerful image editing to an existing workflow.": "<a href=\\\"https://creativesdk.adobe.com/docs/web/#/articles/imageeditorui/index.html\\\" target=\\\"_blank\\\">Le composant créatif SDK Image Editing </a> peut être intégré dans tous les sites avec seulement quelques lignes de Javascript, en ajoutant une édition d'image simple mais puissante à un flux de travail existant.",
   "Source code": "Code source",
   "Sepia": "Sépia",
   "Blur": "Flou",
