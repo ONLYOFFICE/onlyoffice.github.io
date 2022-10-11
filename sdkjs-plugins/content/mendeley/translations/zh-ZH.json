@@ -19,8 +19,8 @@
   "Copy Link and Open Form": "复制链接并打开表单",
   "Application ID": "应用ID",
   "Reconfigure": "重新配置",
-  "To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "Mendeley を使用するには、このエディターをアプリとして登録します。このリンクをコピーして、フォームで URL リダイレクトとして使用すると、ページが開きます。",
-  "In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "フォームが開いたら、任意のアプリと説明を入力し、利用規約に同意し、パスワードを生成します下の欄にアプリ ID を入力して、保存してください。",
-  "Learn more here.": "もっとここで知る。",
-  "Save": "セーブ"
+  "To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "如需使用Mendeley，请将该编辑器注册为应用。复制链接并在即将打开的表单中将其作为重定向URL填入。",
+  "In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "在表单中输入任意应用名称与描述，接受《条件与条款》并生成Secret。在下方输入应用ID并保存。",
+  "Learn more here.": "在此了解更多。",
+  "Save": ""
 }
