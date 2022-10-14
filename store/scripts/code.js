@@ -42,6 +42,7 @@ let scale = {                                                        // current 
 	value    : 1,                                                    // current scale value
 	devicePR : 1                                                     // device pixel ratio
 };
+calculateScale();
 const languages = [                                                  // list of languages
 	['cs-CZ', 'cs', 'Czech'],
 	['de-DE', 'de', 'German'],
@@ -798,29 +799,34 @@ window.onresize = function() {
 			if (scale.devicePR < 1)
 				return;
 
-			let bestIndex = 0;
-			let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
-			let currentDistance = 0;
-			for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
-				if (true) {
-					if (Math.abs(supportedScaleValues[i] - scale.devicePR) > 0.0001) {
-						if ( (supportedScaleValues[i] - 0.0501) > (scale.devicePR - 0.0001))
-							break;
-					}
-				}
-	
-				currentDistance = Math.abs(supportedScaleValues[i] - scale.devicePR);
-				if (currentDistance < (bestDistance - 0.0001)) {
-					bestDistance = currentDistance;
-					bestIndex = i;
-				}
-			}
-			scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
-			scale.value = supportedScaleValues[bestIndex];
+			calculateScale();
+
 			if (scale.value !== oldScale)
 				changeIcons();
 		}
 	}
+};
+
+function calculateScale() {
+	let bestIndex = 0;
+	let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
+	let currentDistance = 0;
+	for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
+		if (true) {
+			if (Math.abs(supportedScaleValues[i] - scale.devicePR) > 0.0001) {
+				if ( (supportedScaleValues[i] - 0.0501) > (scale.devicePR - 0.0001))
+					break;
+			}
+		}
+
+		currentDistance = Math.abs(supportedScaleValues[i] - scale.devicePR);
+		if (currentDistance < (bestDistance - 0.0001)) {
+			bestDistance = currentDistance;
+			bestIndex = i;
+		}
+	}
+	scale.percent = supportedScaleValues[bestIndex] * 100 + '%';
+	scale.value = supportedScaleValues[bestIndex];
 };
 
 function changeIcons() {
@@ -935,11 +941,14 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 			break;
 	}
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
+	let plugin;
+	if (allPlugins) {
+		plugin = allPlugins.find(function(el){
+			return el.guid === guid
+		});
+	}
 
-	let plugin = allPlugins.find(function(el){
-		return el.guid === guid
-	});
-	if (!plugin) {
+	if (!plugin && installedPlugins) {
 		plugin = installedPlugins.find(function(el){
 			return el.guid === guid
 		});
