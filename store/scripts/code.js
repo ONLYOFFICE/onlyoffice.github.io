@@ -809,6 +809,7 @@ window.onresize = function() {
 
 function calculateScale() {
 	let bestIndex = 0;
+	scale.devicePR = window.devicePixelRatio;
 	let bestDistance = Math.abs(supportedScaleValues[0] - scale.devicePR);
 	let currentDistance = 0;
 	for (let i = 1, len = supportedScaleValues.length; i < len; i++) {
