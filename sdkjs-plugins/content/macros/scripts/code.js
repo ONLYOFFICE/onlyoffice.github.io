@@ -327,7 +327,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
     window.Asc.plugin.init = function(text)
 	{
-        window.Asc.plugin.resizeWindow(800, 600, 800, 600, 0, 0);
         on_init_server(2);
         this.executeMethod("GetMacros", [JSON.stringify(Content)], function(data) {
             
@@ -481,7 +480,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('background', window.Asc.plugin.theme["background-toolbar"]);
         $('.ace_layer.ace_gutter-layer.ace_folding-enabled').css('color', window.Asc.plugin.theme["text-normal"]);
         $('#menu, .divFooter').css('border-color', window.Asc.plugin.theme["border-divider"]);
-        $('.ace_scroller').css('border-left', 'solid 1px ' + window.Asc.plugin.theme["border-divider"]);
+        $('.ace_scroller').css('border-left', 'solid 0.73px ' + window.Asc.plugin.theme["border-divider"]);
         $('.ace_cursor').css('color', window.Asc.plugin.theme["text-normal"]);
         $('#menu').css('background-color', window.Asc.plugin.theme["background-normal"]);
         $('#idRename').css('background-color', window.Asc.plugin.theme["background-toolbar"]);
@@ -490,6 +489,10 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         var rules = '.macros { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
         rules += '.macros:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
         rules += '.macrosSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
+        if (theme.type === 'dark')
+            rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }'
+        else
+            rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }'
         var styleTheme = document.createElement('style');
         styleTheme.type = 'text/css';
         styleTheme.innerHTML = rules;
