@@ -15,5 +15,6 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 ## Configuration
 
-1. Create a JWT application at https://marketplace.zoom.us/develop/create. Fill the all necessary fields and activate the app.
-2. Copy API Key, API Secret and JWT Token from your app credentials and paste it to specified fields in plugin, click Save.
+1. To use the meeting schedule create a JWT app at https://marketplace.zoom.us/develop/create. Fill the all necessary fields and activate the app.
+2. To join to meetings create a Meeting SDK app at https://marketplace.zoom.us/develop/create. Fill the all necessary fields and activate the app.
+2. Copy SDK Key, SDK Secret and JWT Token from your JWT and SDK apps credentials and paste it to specified fields in plugin, click Save.

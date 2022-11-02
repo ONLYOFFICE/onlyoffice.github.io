@@ -93,6 +93,7 @@
         .form-group {
             display: flex;
             flex-direction: column;
+            margin-bottom: 12px !important;
         }
         label {
             font-size: 11px;
@@ -274,8 +275,21 @@
 
                     rule += "*::-webkit-scrollbar-track { background : " + oTheme["background-normal"] + ";}\n";
                     rule += "*::-webkit-scrollbar-track:hover { background : " + oTheme["background-toolbar-additional"] + ";}\n";
-                    rule += "*::-webkit-scrollbar-thumb { background-color : " + oTheme["background-toolbar"] + "; border-color : " + oTheme["border-regular-control"] + ";}\n";
+                    rule += "*::-webkit-scrollbar-thumb { background-color : " + oTheme["background-toolbar"] + "!important; border-color : " + oTheme["border-regular-control"] + ";}\n";
                     rule += "*::-webkit-scrollbar-thumb:hover { background-color : " + oTheme["canvas-scroll-thumb-hover"] + ";}\n";
+
+                    rule += ".select2-search__field { height: 20px; }\n";
+                    rule += "*::-webkit-scrollbar { width: 9px !important; }\n";
+                    rule += "*::-webkit-scrollbar-thumb { border-radius: 2px; background: no-repeat;}\n";
+                    
+                    rule += `::selection {\
+                                background-color: ${oTheme["highlight-text-select"]};\
+                                color: ${oTheme["text-inverse"]};\
+                                }`;
+
+                    rule += "input::placeholder {\
+                        font-size: 11px !important;\
+                    }";
 
                     $('#nav-tool').css('background-color', oTheme["background-toolbar"]);
                     $("label").css('color', oTheme["text-normal"]);
@@ -289,12 +303,12 @@
         });
     </script>
 
-    <script src="https://source.zoom.us/2.2.0/lib/vendor/react.min.js"></script>
-    <script src="https://source.zoom.us/2.2.0/lib/vendor/react-dom.min.js"></script>
-    <script src="https://source.zoom.us/2.2.0/lib/vendor/redux.min.js"></script>
-    <script src="https://source.zoom.us/2.2.0/lib/vendor/redux-thunk.min.js"></script>
-    <script src="https://source.zoom.us/2.2.0/lib/vendor/lodash.min.js"></script>
-    <script src="https://source.zoom.us/zoom-meeting-2.2.0.min.js"></script>
+    <script src="https://source.zoom.us/2.8.0/lib/vendor/react.min.js"></script>
+    <script src="https://source.zoom.us/2.8.0/lib/vendor/react-dom.min.js"></script>
+    <script src="https://source.zoom.us/2.8.0/lib/vendor/redux.min.js"></script>
+    <script src="https://source.zoom.us/2.8.0/lib/vendor/redux-thunk.min.js"></script>
+    <script src="https://source.zoom.us/2.8.0/lib/vendor/lodash.min.js"></script>
+    <script src="https://source.zoom.us/zoom-meeting-2.8.0.min.js"></script>
     <script src="vendor/zoom-sdk/tool.js"></script>
     <script src="vendor/zoom-sdk/meeting.js"></script>
     <script src="vendor/zoom-sdk/vconsole.min.js"></script>
