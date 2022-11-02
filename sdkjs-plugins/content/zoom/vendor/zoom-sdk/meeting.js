@@ -3,13 +3,12 @@ window.addEventListener('DOMContentLoaded', function(event) {
   websdkready();
 });
 
-console.log("!!!");
 function websdkready() {
   var testTool = window.testTool;
   // get meeting args from url
   var tmpArgs = testTool.parseQuery();
   var meetingConfig = {
-    apiKey: tmpArgs.apiKey,
+    sdkKey: tmpArgs.sdkKey,
     meetingNumber: tmpArgs.mn,
     userName: (function () {
       if (tmpArgs.name) {
@@ -68,7 +67,7 @@ function websdkready() {
           meetingNumber: meetingConfig.meetingNumber,
           userName: meetingConfig.userName,
           signature: signature,
-          apiKey: meetingConfig.apiKey,
+          sdkKey: meetingConfig.sdkKey,
           userEmail: meetingConfig.userEmail,
           passWord: meetingConfig.passWord,
           success: function (res) {
@@ -110,3 +109,6 @@ function websdkready() {
 
   beginJoin(meetingConfig.signature);
 };
+window.onunload = function() {
+  document.exitFullscreen();
+}
