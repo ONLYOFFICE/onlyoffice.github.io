@@ -130,6 +130,7 @@ var Ps;
             }
 
     };
+
     window.switchForms = function(elmToHide, elmToShow) {
         $(elmToHide).toggleClass('display-none');
         $(elmToShow).toggleClass('display-none');
@@ -221,6 +222,12 @@ var Ps;
             $('#configState').toggleClass('display-none');
         });
         $('#switch').click(function() {
+            if (apiKey == "" || secretKey == "") {
+                alert("SDK Key or Secret are empty. Check your credentials.");
+                $('#reconf').trigger("click");
+                return;
+            }
+
             $('#create-meeting-container').toggleClass('display-none');
             $('#iframe_join').toggleClass('display-none');
 
@@ -336,6 +343,31 @@ var Ps;
             localStorage.setItem($('#secretKeyField').attr("data-id"), secretKey);
             localStorage.setItem($('#tokenKeyField').attr("data-id"), tokenKey);
 
+            if (email !== "") {
+                if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
+                    if (oResponse.timezone != "") {
+                        localStorage.setItem($('#timezone').attr('data-id'), oResponse.timezone);
+                        $('#timezone').val(oResponse.timezone);
+                        $('#timezone').trigger('change');
+                    }
+                }
+            }
+            else {
+                if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
+                    if (oResponse.users[0].timezone != "") {
+                        localStorage.setItem($('#timezone').attr('data-id'), oResponse.users[0].timezone);
+                        $('#timezone').val(oResponse.users[0].timezone);
+                        $('#timezone').trigger('change');
+                    }
+                    if (oResponse.users[0].email) {
+                        email = oResponse.users[0].email;
+                        $('#emailField').val(email);
+                        localStorage.setItem($('#emailField').attr("data-id"), email);
+                    }
+                }
+            }
+            
+
             $('#configState').toggleClass('display-none');
             $('#create-meeting-container').toggleClass('display-none');
 
@@ -422,6 +454,31 @@ var Ps;
         return isEmpty;
     }
 
+    function CheckValidDate(aDateFromPicker, hour, min, timezone) {
+
+        let [year, month, day] = [parseInt(aDateFromPicker[2]), parseInt(aDateFromPicker[0]) - 1, parseInt(aDateFromPicker[1])];
+        hour = parseInt(hour);
+        min = parseInt(min);
+
+        let timezoneOffset = parseInt(timezone[4] + String(parseInt(timezone.slice(5,7)) * 60 + parseInt(timezone.slice(8,10))));
+        let curDate = new Date(Date.now());
+        
+        let scheduleDate = new Date();
+        scheduleDate.setUTCFullYear(year);
+        scheduleDate.setUTCMonth(month);
+        scheduleDate.setUTCDate(day);
+        scheduleDate.setUTCHours(hour);
+        scheduleDate.setUTCMinutes(min);
+
+        scheduleDate.setUTCMinutes(scheduleDate.getUTCMinutes() - timezoneOffset);
+        
+        if (curDate.getTime() > scheduleDate.getTime()) {
+            return false;
+        }
+
+        return true;
+    }
+
     function CreateMeeting(isNowMeeting) {
         if ($('#duration-hour').val() === "0" && $('#duration-min').val() === "0")
         {
@@ -474,6 +531,12 @@ var Ps;
             sTime = String(Number(arrSplittedTime[0]) + 12) + ':' + arrSplittedTime[1];
         }
         sResultTime = sDate + 'T' + sTime + ':00';
+
+        if (CheckValidDate(arrSplittedDate, sTime.split(":")[0], sTime.split(":")[1], $('#timezone').find(":selected").text().trim()) == false) {
+            alert("Specify a start time and an end time that must be later than the current time.");
+            showLoader(elements, false);
+            return;
+        }
 
         // calc duration in minutes
         var sResultDuration = String(Number(sDurationHour) * 60 + Number(sDurationMin));
@@ -528,6 +591,13 @@ var Ps;
             showLoader(elements, false);
         }).error(function(e) {
             alert('Meeting was not created');
+            if (e.responseJSON && e.responseJSON.message) {
+                console.log(e.responseJSON.message);
+                if (e.responseJSON.message.search("Invalid access token.") != -1) {
+                    alert("Invalid access (JWT) token.")
+                    $('#reconf').trigger("click");
+                }
+            }
             showLoader(elements, false);
         });
     }

@@ -1,4 +1,4 @@
-SIGNATURE_SERVER = "https://onlyofficezoom.herokuapp.com/";
+SIGNATURE_SERVER = "https://onlyoffice-zoom-sdk-signature.herokuapp.com/";
 
 window.addEventListener('DOMContentLoaded', function(event) {
   console.log('DOM fully loaded and parsed');
@@ -28,7 +28,7 @@ function websdkready() {
   // ZoomMtg.setZoomJSLib('http://localhost:9999/node_modules/@zoomus/websdk/dist/lib', '/av'); // Local version default, Angular Project change to use cdn version
   ZoomMtg.preLoadWasm(); // pre download wasm file to save time.
 
-  var API_KEY, API_SECRET;
+  var SDK_KEY, SDK_SECRET;
 
   /**
    * NEVER PUT YOUR ACTUAL API SECRET IN CLIENT SIDE CODE, THIS IS JUST FOR QUICK PROTOTYPING
@@ -83,8 +83,8 @@ function websdkready() {
 
   // click join meeting button
   window.joinMeeting = function () {
-      API_KEY = localStorage.getItem('zoom-client-key') || "";
-      API_SECRET = API_SECRET = localStorage.getItem('zoom-secret-key') || "";
+      SDK_KEY = localStorage.getItem('zoom-client-key') || "";
+      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-secret-key') || "";
 
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
@@ -106,14 +106,14 @@ function websdkready() {
 			data: {
                 'meet_number': meetingConfig.mn,
                 'role_id': meetingConfig.role,
-                'api_key': API_KEY,
-                'api_secret': API_SECRET
+                'sdk_key': SDK_KEY,
+                'sdk_secret': SDK_SECRET
 			},
 			url: SIGNATURE_SERVER
 
         }).success(function (oResponse) {
             meetingConfig.signature = oResponse;
-            meetingConfig.apiKey = API_KEY;
+            meetingConfig.sdkKey = SDK_KEY;
             var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
             window.parent.openMeeting(joinUrl);
         }).error(function(oResponse) {
@@ -132,26 +132,44 @@ function websdkready() {
     
   // click copy jon link button
   window.copyJoinLink = function (element) {
-    var meetingConfig = testTool.getMeetingConfig();
-    if (!meetingConfig.mn || !meetingConfig.name) {
-      alert("Meeting number or username is empty");
-      return false;
-    }
-    var signature = ZoomMtg.generateSignature({
-      meetingNumber: meetingConfig.mn,
-      apiKey: API_KEY,
-      apiSecret: API_SECRET,
-      role: meetingConfig.role,
-      success: function (res) {
-        console.log(res.result);
-        meetingConfig.signature = res.result;
-        meetingConfig.apiKey = API_KEY;
-        var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
-        document.getElementById('copy_link_value').setAttribute('link', joinUrl);
-        copyToClipboard('copy_link_value');
-        
-      },
-    });
-  };
+    SDK_KEY = localStorage.getItem('zoom-client-key') || "";
+      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-secret-key') || "";
 
+      var meetingConfig = testTool.getMeetingConfig();
+      if (!meetingConfig.mn || !meetingConfig.name) {
+        alert("Meeting number or username is empty");
+        return false;
+      }
+
+      localStorage.setItem($('#display_name').attr('data-id'), $('#display_name').val());
+      localStorage.setItem($('#display_name').attr('data-id'), $('#display_name').val())
+      if ($('#meeting_email').val().trim() !== "")
+        localStorage.setItem($('#meeting_email').attr('data-id'), $('#meeting_email').val());
+      localStorage.setItem($('#display_name').attr('data-id'), $('#display_name').val())
+
+      testTool.setCookie("meeting_number", meetingConfig.mn);
+      testTool.setCookie("meeting_pwd", meetingConfig.pwd);
+
+      $.ajax({
+            method: 'POST',
+			data: {
+                'meet_number': meetingConfig.mn,
+                'role_id': meetingConfig.role,
+                'sdk_key': SDK_KEY,
+                'sdk_secret': SDK_SECRET
+			},
+			url: SIGNATURE_SERVER
+
+        }).success(function (oResponse) {
+            meetingConfig.signature = oResponse;
+            meetingConfig.sdkKey = SDK_KEY;
+            var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
+            document.getElementById('copy_link_value').setAttribute('link', joinUrl);
+            copyToClipboard('copy_link_value');
+            alert('Copy link was copied to clipboard')
+        }).error(function(oResponse) {
+            console.log(oResponse)
+        })
+  };
+  
 }
