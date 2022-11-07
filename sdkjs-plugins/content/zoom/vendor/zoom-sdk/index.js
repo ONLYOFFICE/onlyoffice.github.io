@@ -83,8 +83,8 @@ function websdkready() {
 
   // click join meeting button
   window.joinMeeting = function () {
-      SDK_KEY = localStorage.getItem('zoom-client-key') || "";
-      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-secret-key') || "";
+      SDK_KEY = localStorage.getItem('zoom-sdk-key') || "";
+      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-sdk-secret') || "";
 
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
@@ -132,8 +132,8 @@ function websdkready() {
     
   // click copy jon link button
   window.copyJoinLink = function (element) {
-    SDK_KEY = localStorage.getItem('zoom-client-key') || "";
-      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-secret-key') || "";
+    SDK_KEY = localStorage.getItem('zoom-sdk-key') || "";
+      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-sdk-secret') || "";
 
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {

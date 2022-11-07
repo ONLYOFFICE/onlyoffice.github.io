@@ -29,11 +29,10 @@ var Ps;
     "13 hour","14 hour","15 hour","16 hour","17 hour","18 hour","19 hour","20 hour","21 hour","22 hour","23 hour","24 hour"];
     var minutes = ["0 minutes","15 minutes","30 minutes","45 minutes"];
     var elements = { };
-    var proxyUrl = "https://proxy-zoom.herokuapp.com/"
-    var zoomApiUrl = "https://api.zoom.us/v2/users/";
+    var zoomServerUrl = "https://proxy-zoom.herokuapp.com/";
     var email = '';
-    var apiKey = '';
-    var secretKey = '';
+    var sdkKey = '';
+    var sdkSecret = '';
     var tokenKey = '';
     var oTheme;
     for (var nTime = 0; nTime < times.length; nTime++) {
@@ -60,6 +59,7 @@ var Ps;
     function showLoader(elements, bShow) {
        switchClass(elements.loader, displayNoneClass, !bShow);
     };
+    
     function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
@@ -190,21 +190,21 @@ var Ps;
                 this.select();
             }
         });
-        $('#apiKeyField').focus(function() {
+        $('#sdkKeyField').focus(function() {
             if(this.value !== this.defaultValue){
                 this.select();
             }
         });
-        $('#apiKeyField').change(function() {
+        $('#sdkKeyField').change(function() {
             if ($(this).hasClass('error_border'))
                 $(this).toggleClass('error_border');
         });
-        $('#secretKeyField').focus(function() {
+        $('#sdkSecretField').focus(function() {
             if(this.value !== this.defaultValue){
                 this.select();
             }
         });
-        $('#secretKeyField').change(function() {
+        $('#sdkSecretField').change(function() {
             if ($(this).hasClass('error_border'))
                 $(this).toggleClass('error_border');
         });
@@ -222,7 +222,7 @@ var Ps;
             $('#configState').toggleClass('display-none');
         });
         $('#switch').click(function() {
-            if (apiKey == "" || secretKey == "") {
+            if (sdkKey == "" || sdkSecret == "") {
                 alert("SDK Key or Secret are empty. Check your credentials.");
                 $('#reconf').trigger("click");
                 return;
@@ -267,8 +267,8 @@ var Ps;
 		Ps = new PerfectScrollbar("#create-meeting-container", {suppressScrollX: true});
 
         document.getElementById('emailField').value = localStorage.getItem($('#emailField').attr("data-id")) || "";
-		document.getElementById('apiKeyField').value = localStorage.getItem($('#apiKeyField').attr("data-id")) || "";
-		document.getElementById('secretKeyField').value = localStorage.getItem($('#secretKeyField').attr("data-id")) || "";
+		document.getElementById('sdkKeyField').value = localStorage.getItem($('#sdkKeyField').attr("data-id")) || "";
+		document.getElementById('sdkSecretField').value = localStorage.getItem($('#sdkSecretField').attr("data-id")) || "";
 		document.getElementById('tokenKeyField').value = localStorage.getItem($('#tokenKeyField').attr("data-id")) || "";
 
 		SaveCredentials(false);
@@ -329,18 +329,19 @@ var Ps;
     async function IsValidConfigData() {
         showLoader(elements, true);
         $.ajax({
-            type: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + tokenKey,
-            },
+            method: 'POST',
             dataType: 'json',
             json: true,
-            data: JSON.stringify(jsonData),
-            url: proxyUrl + zoomApiUrl + email
+            data: {
+                'Authorization': 'Bearer ' + tokenKey,
+                'endPoint': email,
+                "method": "GET"
+            },
+            url: zoomServerUrl
         }).success(function (oResponse) {
             localStorage.setItem($('#emailField').attr("data-id"), email);
-            localStorage.setItem($('#apiKeyField').attr("data-id"), apiKey);
-            localStorage.setItem($('#secretKeyField').attr("data-id"), secretKey);
+            localStorage.setItem($('#sdkKeyField').attr("data-id"), sdkKey);
+            localStorage.setItem($('#sdkSecretField').attr("data-id"), sdkSecret);
             localStorage.setItem($('#tokenKeyField').attr("data-id"), tokenKey);
 
             if (email !== "") {
@@ -381,8 +382,8 @@ var Ps;
     async function SaveCredentials(bShowError) {
         if (!IsEmptyFields(bShowError)) {
             email = $('#emailField').val().trim();
-            apiKey = $('#apiKeyField').val().trim();
-            secretKey = $('#secretKeyField').val().trim();
+            sdkKey = $('#sdkKeyField').val().trim();
+            sdkSecret = $('#sdkSecretField').val().trim();
             tokenKey = $('#tokenKeyField').val().trim();
 
             await IsValidConfigData();
@@ -406,34 +407,34 @@ var Ps;
                 if ($('#emailField').hasClass('error_border'))
                     $('#emailField').toggleClass('error_border');
         }
-        if ($('#apiKeyField').val() === '') {
+        if ($('#sdkKeyField').val() === '') {
             isEmpty = true;
 
             if (bShowError)
-                if (!$('#apiKeyField').hasClass('error_border'))
-                    $('#apiKeyField').toggleClass('error_border');
+                if (!$('#sdkKeyField').hasClass('error_border'))
+                    $('#sdkKeyField').toggleClass('error_border');
         }
         else {
             isEmpty = false;
 
             if (bShowError)
-                if ($('#apiKeyField').hasClass('error_border'))
-                    $('#apiKeyField').toggleClass('error_border');
+                if ($('#sdkKeyField').hasClass('error_border'))
+                    $('#sdkKeyField').toggleClass('error_border');
         }
 
-        if ($('#secretKeyField').val() === '') {
+        if ($('#sdkSecretField').val() === '') {
             isEmpty = isEmpty && true;
 
             if (bShowError)
-                if (!$('#secretKeyField').hasClass('error_border'))
-                    $('#secretKeyField').toggleClass('error_border');
+                if (!$('#sdkSecretField').hasClass('error_border'))
+                    $('#sdkSecretField').toggleClass('error_border');
         }
         else {
             isEmpty = isEmpty && false;
 
             if (bShowError)
-                if ($('#secretKeyField').hasClass('error_border'))
-                    $('#secretKeyField').toggleClass('error_border');
+                if ($('#sdkSecretField').hasClass('error_border'))
+                    $('#sdkSecretField').toggleClass('error_border');
         }
 
         if ($('#tokenKeyField').val() === '') {
@@ -561,16 +562,16 @@ var Ps;
             jsonData["type"]         = 1;
         }
 
+        jsonData['Authorization'] = 'Bearer ' + tokenKey;
+        jsonData['method'] = 'POST';
+        jsonData['endPoint'] = email + '/meetings';
+
         $.ajax({
             type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'Authorization': 'Bearer ' + tokenKey,
-            },
             dataType: 'json',
             json: true,
-            data: JSON.stringify(jsonData),
-            url: proxyUrl + zoomApiUrl + email + '/meetings'
+            data: jsonData,
+            url: zoomServerUrl
         }).success(function (oResponse) {
             var sTopic    = 'Topic: ' + oResponse.topic;
             var sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + oResponse["timezone"];
