@@ -344,13 +344,11 @@ var Ps;
         showLoader(elements, true);
         $.ajax({
             method: 'POST',
-            dataType: 'json',
-            json: true,
-            data: {
+            data: JSON.stringify({
                 'Authorization': 'Bearer ' + tokenKey,
                 'endPoint': email,
                 "method": "GET"
-            },
+            }),
             url: zoomServerUrl
         }).success(function (oResponse) {
             localStorage.setItem($('#emailField').attr("data-id"), email);
@@ -547,7 +545,7 @@ var Ps;
         }
         sResultTime = sDate + 'T' + sTime + ':00';
 
-        if (CheckValidDate(arrSplittedDate, sTime.split(":")[0], sTime.split(":")[1], $('#timezone').find(":selected").text().trim()) == false) {
+        if (isNowMeeting == false && CheckValidDate(arrSplittedDate, sTime.split(":")[0], sTime.split(":")[1], $('#timezone').find(":selected").text().trim()) == false) {
             alert("Specify a start time and an end time that must be later than the current time.");
             showLoader(elements, false);
             return;
@@ -582,9 +580,7 @@ var Ps;
 
         $.ajax({
             type: 'POST',
-            dataType: 'json',
-            json: true,
-            data: jsonData,
+            data: JSON.stringify(jsonData),
             url: zoomServerUrl
         }).success(function (oResponse) {
             var sTopic    = 'Topic: ' + oResponse.topic;
