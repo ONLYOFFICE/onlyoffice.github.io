@@ -531,7 +531,7 @@ var Ps;
         }
         sResultTime = sDate + 'T' + sTime + ':00';
 
-        if (isNowMeeting == false && CheckValidDate(arrSplittedDate, sTime.split(":")[0], sTime.split(":")[1], $('#timezone').find(":selected").text().trim()) == false) {
+        if (!isNowMeeting && CheckValidDate(arrSplittedDate, sTime.split(":")[0], sTime.split(":")[1], $('#timezone').find(":selected").text().trim()) == false) {
             alert("Specify a start time and an end time that must be later than the current time.");
             showLoader(elements, false);
             return;
