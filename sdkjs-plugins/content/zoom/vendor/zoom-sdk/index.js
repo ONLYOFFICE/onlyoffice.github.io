@@ -81,13 +81,27 @@ function websdkready() {
       );
     });
 
+  var displayNoneClass = "display-none";
+  function switchClass(el, className, add) {
+    if (add) {
+        el.classList.add(className);
+    } else {
+        el.classList.remove(className);
+    }
+  };
+  function showLoader(bShow) {
+    switchClass(document.getElementById("loader-container"), displayNoneClass, !bShow);
+  };
+
   // click join meeting button
   window.joinMeeting = function () {
+      showLoader(true);
       SDK_KEY = localStorage.getItem('zoom-sdk-key') || "";
       SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-sdk-secret') || "";
 
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
+        showLoader(false);
         alert("Meeting number or username is empty");
         return false;
       }
@@ -116,8 +130,10 @@ function websdkready() {
             meetingConfig.sdkKey = SDK_KEY;
             var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
             window.parent.openMeeting(joinUrl);
+            showLoader(false);
         }).error(function(oResponse) {
-            console.log(oResponse)
+            showLoader(false);
+            console.log(oResponse);
         })
   };
 
