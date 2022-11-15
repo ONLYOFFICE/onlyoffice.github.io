@@ -67,7 +67,7 @@ var Ps;
             el.classList.remove(className);
         }
     };
-
+    
 	window.Asc.plugin.init = function () {
 	    $('#topic-value').val(window.Asc.plugin.info.documentTitle);
 

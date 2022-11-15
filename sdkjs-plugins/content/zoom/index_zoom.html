@@ -30,6 +30,16 @@
 </head>
 
 <body id="body">
+    <div id="loader-container" class="asc-plugin-loader display-none">
+		<div id="flex-loader-container">
+			<div>
+				<div class="asc-loader-image">
+					<div class="asc-loader-title"></div>
+				</div>
+				<div class="asc-loader-title"> Loading... </div>
+			</div>
+		</div>
+	</div>
     <style>
         body, html {
             font-size: 11px !important;
@@ -39,6 +49,27 @@
             width: 100%;
             font-family: "Arial" !important;
             line-height: normal !important;
+        }
+
+        .display-none {
+            display: none !important;
+        }
+
+        #flex-loader-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 50px;
+            border: none;
+            background-image: none;
+            background-color: rgba(68, 68, 68, 0.95);
+            color: #f1f1f1;
+            border-radius: 6px;
+        }
+			
+        .asc-plugin-loader .asc-loader-image {
+            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;
         }
 
         .sdk-select {
@@ -252,9 +283,9 @@
                     rule += ".select2-container--default .select2-selection--single { color : " + oTheme["text-normal"] + " !important; background-color : " + oTheme["background-normal"] + " !important;}\n";
                     rule += ".select2-container--default .select2-selection--single .select2-selection__rendered { color : " + oTheme["text-normal"] + " !important;}\n";
                     rule += ".select2-results { background-color : " + oTheme["background-normal"] + ";}\n";
-                    rule += ".select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : " + oTheme["border-regular-control"] + " !important;}\n";
-                    rule += ".select2-container--default .select2-results__option[aria-selected=true] { color: " + oTheme["text-contrast-background"] + "!important; background-color : " + oTheme["border-regular-control"] + " !important;}\n";
-                    rule += ".select2-dropdown, .select2-container--default .select2-selection--single { border-color : " + oTheme["border-regular-control"] + " !important;}\n";
+                    rule += ".select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : " + oTheme["highlight-button-hover"] + " !important;}\n";
+                    rule += ".select2-container--default .select2-results__option[aria-selected=true] { color: " + oTheme["text-contrast-background"] + "!important; background-color : " + oTheme["highlight-button-pressed"] + " !important;}\n";
+                    rule += ".select2-dropdown, .select2-container--default .select2-selection--single { border: 0.5px solid " + oTheme["border-regular-control"] + " !important;}\n";
                     rule += ".select2-container--default.select2-container--open .select2-selection--single { border-color : " + oTheme["border-control-focus"] + " !important;}\n";
                     rule += ".select2-container--default.select2-container--focus:not(.select2-container--open) .select2-selection--single { border-color : " + oTheme["border-regular-control"] + " !important;}\n";
                     rule += ".select2-container--default.select2-container--open.select2-container--focus .select2-selection--single { border-color : " + oTheme["border-control-focus"] + " !important;}\n";
@@ -264,7 +295,7 @@
                     rule += ".select2-container--default .select2-selection--single .select2-selection__arrow b { border-color : " + oTheme["text-normal"] + " !important" + ";}\n";
                     rule += ".select2-results__option { color : " + oTheme["text-normal"] + " !important" + ";}\n";
 
-                    rule += ".ps .ps__rail-y:hover { background-color : " + oTheme["background-toolbar"] + ";}\n";
+                    rule += ".ps .ps__rail-y:hover { background-color : " + oTheme["background-toolbar"] + "!important;}\n";
                     rule += ".ps .ps__rail-y.ps--clicking { background-color : " + oTheme["background-toolbar"] + ";}\n";
                     rule += ".ps__thumb-y { background-color : " + oTheme["background-normal"] + "; border-color:" + oTheme["Border"] + " !important" + ";}\n";
                     rule += ".ps__rail-y:hover > .ps__thumb-y { border-color : " + oTheme["canvas-scroll-thumb-hover"] + "; background-color : " + oTheme["canvas-scroll-thumb-hover"] + " !important" + ";}\n";
@@ -274,13 +305,16 @@
                     rule += ".ps__rail-x:hover > .ps__thumb-x { border-color : " + oTheme["canvas-scroll-thumb-hover"] + ";}\n";
 
                     rule += "*::-webkit-scrollbar-track { background : " + oTheme["background-normal"] + ";}\n";
-                    rule += "*::-webkit-scrollbar-track:hover { background : " + oTheme["background-toolbar-additional"] + ";}\n";
+                    rule += "*::-webkit-scrollbar-track:hover { border-radius: 2px; background : " + oTheme["background-toolbar-additional"] + ";}\n";
                     rule += "*::-webkit-scrollbar-thumb { background-color : " + oTheme["background-toolbar"] + "!important; border-color : " + oTheme["border-regular-control"] + ";}\n";
-                    rule += "*::-webkit-scrollbar-thumb:hover { background-color : " + oTheme["canvas-scroll-thumb-hover"] + ";}\n";
+                    rule += "*::-webkit-scrollbar-thumb:hover { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAQAAAAz1Zf0AAAAIUlEQVR42mNgAILz/0GQAQo+/gdBBqLAqE5ydH5k+sgEANHgUH2JtDRHAAAAAElFTkSuQmCC) !important; background: no-repeat; border-radius: 2px; background-color : " + oTheme["canvas-scroll-thumb-hover"] + " !important;}\n";
 
+                    if (oTheme['type'] == 'light') {
+                        rule+= '*::-webkit-scrollbar-thumb:hover { background-position: -7px center !important;}';
+                    }
                     rule += ".select2-search__field { height: 20px; }\n";
                     rule += "*::-webkit-scrollbar { width: 9px !important; }\n";
-                    rule += "*::-webkit-scrollbar-thumb { border-radius: 2px; background: no-repeat;}\n";
+                    rule += "*::-webkit-scrollbar-thumb { border: 1px solid " + oTheme['border-regular-control'] + " !important; border-radius: 2px; background: no-repeat;}\n";
                     
                     rule += `::selection {\
                                 background-color: ${oTheme["highlight-text-select"]};\
