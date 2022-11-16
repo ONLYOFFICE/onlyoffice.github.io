@@ -705,21 +705,21 @@
 			</div>
 		</div>
 	</div>
-	<div id="configState">
+	<div id="configState" style="height: 100%; display: flex; flex-direction: column; position: relative;">
 		<div>
-			<div style="margin:12px;"> <span class="i18n">To use Zoom plugin, register this editor as a JWT app.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/content/zoom#readme" class="link i18n">Learn more here.</a> </div>
-			<div style="margin:12px;"> In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Client ID, Secret ID, JWT token below and save it. </div>
+			<div style="margin: 12px 12px 0 12px;"> <span class="i18n">To use Zoom plugin, register this editor as a JWT app.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/content/zoom#readme" class="link i18n">Learn more here.</a> </div>
+			<div style="margin: 12px 12px 0 12px;"> In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Client ID, Secret ID, JWT token below and save it. </div>
 		</div>
-		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>Email</span>
+		<div style="display: flex; flex-direction: column; margin: 12px 12px 0 12px;"> <span>Email</span>
 			<input id="emailField" autocomplete="new-password" class="form-control" data-id="zoom-email-value" type="text" placeholder="Email" /> </div>
-		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>SDK Key</span>
+		<div style="display: flex; flex-direction: column; margin: 12px 12px 0 12px;"> <span>SDK Key</span>
 			<input id="sdkKeyField" autocomplete="new-password" class="form-control" data-id="zoom-sdk-key" type="text" placeholder="SDK Key" /> </div>
-		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>SDK Secret</span>
+		<div style="display: flex; flex-direction: column; margin: 12px 12px 0 12px;"> <span>SDK Secret</span>
 			<input id="sdkSecretField" autocomplete="new-password" class="form-control" data-id="zoom-sdk-secret" type="password" placeholder="SDK Secret" /> </div>
-		<div style="display: flex; flex-direction: column; margin: 12px;"> <span>JWT Token</span>
+		<div style="display: flex; flex-direction: column; margin: 12px 12px 0 12px;"> <span>JWT Token</span>
 			<input id="tokenKeyField" autocomplete="new-password" class="form-control" data-id="zoom-jwt-token" type="text" placeholder="JWT Token" /> </div>
-		<div id="saveConfigBtn" class="button wide control i18n">
-			<button class="btn-text-default" style="width:calc(100% - 24px); margin: 0 12px 0px 12px; height: 30px;">Save</button>
+		<div id="saveConfigBtn" style="margin: 16px 12px 12px 12px;" class="button wide control i18n">
+			<button class="btn-text-default" style="width:100%; height: 30px;">Save</button>
 		</div>
 	</div>
 </body>

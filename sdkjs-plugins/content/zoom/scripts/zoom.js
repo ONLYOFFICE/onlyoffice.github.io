@@ -265,7 +265,8 @@ var Ps;
         SetSavedFromLocalStorage();
 
 		Ps = new PerfectScrollbar("#create-meeting-container", {suppressScrollX: true});
-
+		Ps1 = new PerfectScrollbar("#configState", {suppressScrollX: true});
+        
         document.getElementById('emailField').value = localStorage.getItem($('#emailField').attr("data-id")) || "";
 		document.getElementById('sdkKeyField').value = localStorage.getItem($('#sdkKeyField').attr("data-id")) || "";
 		document.getElementById('sdkSecretField').value = localStorage.getItem($('#sdkSecretField').attr("data-id")) || "";
@@ -578,12 +579,23 @@ var Ps;
 
             Asc.scope.meeting_info = sResult;
 
-            window.Asc.plugin.executeMethod('CoAuthoringChatSendMessage', [Asc.scope.meeting_info], function(isTrue) {
-                if (isTrue)
-                    alert('Meeting was created');
-                else
-                    alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
-            });
+            // for desktop
+            if (document.location.href.indexOf('file://') == 0) {
+                window.Asc.plugin.executeMethod("AddComment", [{
+                    UserName: Asc.plugin.info.userName,
+                    Text: sResult,
+                    Time: Date.now(),
+                    Solver: false
+                }]);
+            }
+            else {
+                window.Asc.plugin.executeMethod('CoAuthoringChatSendMessage', [Asc.scope.meeting_info], function(isTrue) {
+                    if (isTrue)
+                        alert('Meeting was created');
+                    else
+                        alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
+                });
+            }
 
             showLoader(elements, false);
         }).error(function(e) {
@@ -607,6 +619,7 @@ var Ps;
     function updateScroll()
 	{
 		Ps && Ps.update();
+		Ps1 && Ps1.update();
 	}
 
 	window.Asc.plugin.onExternalMouseUp = function()
