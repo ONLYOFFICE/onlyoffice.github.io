@@ -9,30 +9,19 @@ var Api = new ApiInterface();
 
 
 /**
+ * Class representing a container for paragraphs and tables.
+ * @param Document
+ * @constructor
+ */
+function ApiDocumentContent(Document){}
+
+/**
  * Class representing the Markdown conversion processing.
  * Each Range object is determined by the position of the start and end characters.
  * @constructor
  */
 function CMarkdownConverter(oConfig){}
 CMarkdownConverter.prototype.constructor = CMarkdownConverter;
-
-/**
- * Class representing a continuous region in a document. 
- * Each Range object is determined by the position of the start and end characters.
- * @param oElement - The document element that may be Document, Table, Paragraph, Run or Hyperlink.
- * @param {Number} Start - The start element of Range in the current Element.
- * @param {Number} End - The end element of Range in the current Element.
- * @constructor
- */
-function ApiRange(oElement, Start, End){}
-ApiRange.prototype.constructor = ApiRange;
-
-/**
- * Returns a paragraph from all the paragraphs that are in the range.
- * @param {Number} nPos - The paragraph position in the range.
- * @returns {ApiParagraph | null} - returns null if position is invalid.
- */
-ApiRange.prototype.GetParagraph = function(nPos){ return new ApiParagraph(); };
 
 /**
  * Class representing a document.
@@ -44,6 +33,18 @@ ApiDocument.prototype = Object.create(ApiDocumentContent.prototype);
 ApiDocument.prototype.constructor = ApiDocument;
 
 /**
+ * Class representing the paragraph properties.
+ * @constructor
+ */
+function ApiParaPr(Parent, ParaPr){}
+
+/**
+ * Class representing a paragraph bullet.
+ * @constructor
+ */
+function ApiBullet(Bullet){}
+
+/**
  * Class representing a paragraph.
  * @constructor
  * @extends {ApiParaPr}
@@ -51,6 +52,18 @@ ApiDocument.prototype.constructor = ApiDocument;
 function ApiParagraph(Paragraph){}
 ApiParagraph.prototype = Object.create(ApiParaPr.prototype);
 ApiParagraph.prototype.constructor = ApiParagraph;
+
+/**
+ * Class representing the table properties.
+ * @constructor
+ */
+function ApiTablePr(Parent, TablePr){}
+
+/**
+ * Class representing the text properties.
+ * @constructor
+ */
+function ApiTextPr(Parent, TextPr){}
 
 /**
  * Class representing a small text block called 'run'.
@@ -67,6 +80,16 @@ ApiRun.prototype.constructor = ApiRun;
  */
 function ApiHyperlink(ParaHyperlink){}
 ApiHyperlink.prototype.constructor = ApiHyperlink;
+
+/**
+ * Class representing a document form base.
+ * @constructor
+ * @property {string} key - Form key.
+ * @property {string} tip - Form tip text.
+ * @property {boolean} required - Specifies if the form is required or not.
+ * @property {string} placeholder - Form placeholder text.
+ */
+function ApiFormBase(oSdt){}
 
 /**
  * Class representing a document text form.
@@ -138,22 +161,59 @@ ApiComplexForm.prototype = Object.create(ApiFormBase.prototype);
 ApiComplexForm.prototype.constructor = ApiComplexForm;
 
 /**
- * Class representing a table row.
+ * Class representing a style.
  * @constructor
- * @extends {ApiTableRowPr}
  */
-function ApiTableRow(Row){}
-ApiTableRow.prototype = Object.create(ApiTableRowPr.prototype);
-ApiTableRow.prototype.constructor = ApiTableRow;
+function ApiStyle(Style){}
 
 /**
- * Class representing a table cell.
+ * Class representing a document section.
  * @constructor
- * @extends {ApiTableCellPr}
  */
-function ApiTableCell(Cell){}
-ApiTableCell.prototype = Object.create(ApiTableCellPr.prototype);
-ApiTableCell.prototype.constructor = ApiTableCell;
+function ApiSection(Section){}
+
+/**
+ * Class representing the table row properties.
+ * @constructor
+ */
+function ApiTableRowPr(Parent, RowPr){}
+
+/**
+ * Class representing the table cell properties.
+ * @constructor
+ */
+function ApiTableCellPr(Parent, CellPr){}
+
+/**
+ * Class representing the numbering properties.
+ * @constructor
+ */
+function ApiNumbering(Num){}
+
+/**
+ * Class representing a reference to a specified level of the numbering.
+ * @constructor
+ */
+function ApiNumberingLevel(Num, Lvl){}
+
+/**
+ * Class representing a set of formatting properties which shall be conditionally applied to the parts of a table
+ * which match the requirement specified on the <code>Type</code>.
+ * @constructor
+ */
+function ApiTableStylePr(Type, Parent, TableStylePr){}
+
+/**
+ * Class representing an unsupported element.
+ * @constructor
+ */
+function ApiUnsupported(){}
+
+/**
+ * Class representing a base class for color types.
+ * @constructor
+ */
+function ApiUniColor(Unicolor){}
 
 /**
  * Class representing an RGB Color.
@@ -178,6 +238,369 @@ ApiSchemeColor.prototype.constructor = ApiSchemeColor;
 function ApiPresetColor(sPresetColor){}
 ApiPresetColor.prototype = Object.create(ApiUniColor.prototype);
 ApiPresetColor.prototype.constructor = ApiPresetColor;
+
+/**
+ * Class representing a base class for fill.
+ * @constructor
+ * */
+function ApiFill(UniFill){}
+
+/**
+ * Class representing a stroke.
+ * @constructor
+ */
+function ApiStroke(oLn){}
+
+/**
+ * Class representing gradient stop.
+ * @constructor
+ * */
+function ApiGradientStop(oApiUniColor, pos){}
+
+/**
+ * Class representing a container for the paragraph elements.
+ * @constructor
+ */
+function ApiInlineLvlSdt(Sdt){}
+
+/**
+ * Class representing a container for the document content.
+ * @constructor
+ */
+function ApiBlockLvlSdt(Sdt){}
+
+/**
+ * Twentieths of a point (equivalent to 1/1440th of an inch).
+ * @typedef {number} twips
+ */
+
+/**
+ * Any valid element which can be added to the document structure.
+ * @typedef {(ApiParagraph | ApiTable | ApiBlockLvlSdt)} DocumentElement
+ */
+
+/**
+ * The style type used for the document element.
+ * @typedef {("paragraph" | "table" | "run" | "numbering")} StyleType
+ */
+
+/**
+ * 240ths of a line.
+ * @typedef {number} line240
+ */
+
+/**
+ * Half-points (2 half-points = 1 point).
+ * @typedef {number} hps
+ */
+
+/**
+ * A numeric value from 0 to 255.
+ * @typedef {number} byte
+ */
+
+/**
+ * 60000th of a degree (5400000 = 90 degrees).
+ * @typedef {number} PositiveFixedAngle
+ * */
+
+/**
+ * A border type which will be added to the document element.
+ * * **"none"** - no border will be added to the created element or the selected element side.
+ * * **"single"** - a single border will be added to the created element or the selected element side.
+ * @typedef {("none" | "single")} BorderType
+ */
+
+/**
+ * A shade type which can be added to the document element.
+ * @typedef {("nil" | "clear")} ShdType
+ */
+
+/**
+ * Custom tab types.
+ * @typedef {("clear" | "left" | "right" | "center")} TabJc
+ */
+
+/**
+ * Eighths of a point (24 eighths of a point = 3 points).
+ * @typedef {number} pt_8
+ */
+
+/**
+ * A point.
+ * @typedef {number} pt
+ */
+
+/**
+ * Header and footer types which can be applied to the document sections.
+ * * **"default"** - a header or footer which can be applied to any default page.
+ * * **"title"** - a header or footer which is applied to the title page.
+ * * **"even"** - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).
+ * @typedef {("default" | "title" | "even")} HdrFtrType
+ */
+
+/**
+ * The possible values for the units of the width property are defined by a specific table or table cell width property.
+ * * **"auto"** - sets the table or table cell width to auto width.
+ * * **"twips"** - sets the table or table cell width to be measured in twentieths of a point.
+ * * **"nul"** - sets the table or table cell width to be of a zero value.
+ * * **"percent"** - sets the table or table cell width to be measured in percent to the parent container.
+ * @typedef {("auto" | "twips" | "nul" | "percent")} TableWidth
+ */
+
+/**
+ * This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.
+ * * **"topLeftCell"** - specifies that the table formatting is applied to the top left cell.
+ * * **"topRightCell"** - specifies that the table formatting is applied to the top right cell.
+ * * **"bottomLeftCell"** - specifies that the table formatting is applied to the bottom left cell.
+ * * **"bottomRightCell"** - specifies that the table formatting is applied to the bottom right cell.
+ * * **"firstRow"** - specifies that the table formatting is applied to the first row.
+ * * **"lastRow"** - specifies that the table formatting is applied to the last row.
+ * * **"firstColumn"** - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.
+ * * **"lastColumn"** - specifies that the table formatting is applied to the last column.
+ * * **"bandedColumn"** - specifies that the table formatting is applied to odd numbered groupings of rows.
+ * * **"bandedColumnEven"** - specifies that the table formatting is applied to even numbered groupings of rows.
+ * * **"bandedRow"** - specifies that the table formatting is applied to odd numbered groupings of columns.
+ * * **"bandedRowEven"** - specifies that the table formatting is applied to even numbered groupings of columns.
+ * * **"wholeTable"** - specifies that the conditional formatting is applied to the whole table.
+ * @typedef {("topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" |
+ *     "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" |
+ *     "wholeTable")} TableStyleOverrideType
+ */
+
+/**
+ * The types of elements that can be added to the paragraph structure.
+ * @typedef {(ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase)} ParagraphContent
+ */
+
+/**
+ * The possible values for the base which the relative horizontal positioning of an object will be calculated from.
+ * @typedef {("character" | "column" | "leftMargin" | "rightMargin" | "margin" | "page")} RelFromH
+ */
+
+/**
+ * The possible values for the base which the relative vertical positioning of an object will be calculated from.
+ * @typedef {("bottomMargin" | "topMargin" | "margin" | "page" | "line" | "paragraph")} RelFromV
+ */
+
+/**
+ * English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs.
+ * @typedef {number} EMU
+ */
+
+/**
+ * This type specifies the preset shape geometry that will be used for a shape.
+ * @typedef {("accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" |
+ *     "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" |
+ *     "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" |
+ *     "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" |
+ *     "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" |
+ *     "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" |
+ *     "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" |
+ *     "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" |
+ *     "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" |
+ *     "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" |
+ *     "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout")} ShapeType
+ */
+
+/**
+ * This type specifies the available chart types which can be used to create a new chart.
+ * @typedef {("bar" | "barStacked" | "barStackedPercent" | "bar3D" | "barStacked3D" | "barStackedPercent3D" |
+ *     "barStackedPercent3DPerspective" | "horizontalBar" | "horizontalBarStacked" | "horizontalBarStackedPercent"
+ *     | "horizontalBar3D" | "horizontalBarStacked3D" | "horizontalBarStackedPercent3D" | "lineNormal" |
+ *     "lineStacked" | "lineStackedPercent" | "line3D" | "pie" | "pie3D" | "doughnut" | "scatter" | "stock" |
+ *     "area" | "areaStacked" | "areaStackedPercent")} ChartType
+ */
+
+/**
+ * The available text vertical alignment (used to align text in a shape with a placement for text inside it).
+ * @typedef {("top" | "center" | "bottom")} VerticalTextAlign
+ * */
+
+/**
+ * The available color scheme identifiers.
+ * @typedef {("accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2"
+ *     | "lt1" | "lt2" | "tx1" | "tx2")} SchemeColorId
+ * */
+
+/**
+ * The available preset color names.
+ * @typedef {("aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" |
+ *     "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate"
+ *     | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" |
+ *     "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" |
+ *     "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" |
+ *     "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" |
+ *     "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" |
+ *     "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" |
+ *     "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" |
+ *     "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" |
+ *     "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen")} PresetColor
+ * */
+
+/**
+ * Possible values for the position of chart tick labels (either horizontal or vertical).
+ * * **"none"** - not display the selected tick labels.
+ * * **"nextTo"** - sets the position of the selected tick labels next to the main label.
+ * * **"low"** - sets the position of the selected tick labels in the part of the chart with lower values.
+ * * **"high"** - sets the position of the selected tick labels in the part of the chart with higher values.
+ * @typedef {("none" | "nextTo" | "low" | "high")} TickLabelPosition
+ * **/
+
+/**
+ * The type of a fill which uses an image as a background.
+ * * **"tile"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.
+ * * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.
+ * @typedef {"tile" | "stretch"} BlipFillType
+ * */
+
+/**
+ * The available preset patterns which can be used for the fill.
+ * @typedef {"cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot"
+ *     | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" |
+ *     "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert"
+ *     | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" |
+ *     "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" |
+ *     "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag"}
+ *     PatternType
+ * */
+
+/**
+ *
+ * The lock type of the content control.
+ * @typedef {"unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked"} SdtLock
+ */
+
+/**
+ * Text transform type.
+ * @typedef {("textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown"
+ * | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour"
+ * | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop"
+ * | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop"
+ * | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted"
+ * | "textWave1" | "textWave2" | "textWave4" | "textNoShape")} TextTransform
+ * */
+
+/**
+ * Form type.
+ * The available form types.
+ * @typedef {"textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm"} FormType
+ */
+
+/**
+ * 1 millimetre equals 1/10th of a centimetre.
+ * @typedef {number} mm
+ */
+
+/**
+ * The condition to scale an image in the picture form.
+ * @typedef {"always" | "never" | "tooBig" | "tooSmall"} ScaleFlag
+ */
+
+/**
+ * Value from 0 to 100.
+ * @typedef {number} percentage
+ */
+
+/**
+ * Available highlight colors.
+ * @typedef {"black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" |
+ * "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none"} highlightColor
+ */
+
+/**
+ * Available values of the "numbered" reference type.
+ * * **"pageNum"** - the page number of the numbered item.
+ * * **"paraNum"** - the paragraph number of the numbered item.
+ * * **"noCtxParaNum"** - an abbreviated paragraph number (the specific item of the numbered list only, e.g., instead of "4.1.1" you refer to "1" only).
+ * * **"fullCtxParaNum"** - a full paragraph number, e.g., "4.1.1".
+ * * **"text"** - the text value of the paragraph, e.g., if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only.
+ * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * @typedef {"pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow"} numberedRefTo
+ */
+
+/**
+ * Available values of the "heading" reference type.
+ * * **"text"** - the entire text of the heading.
+ * * **"pageNum"** - the page number of the heading.
+ * * **"headingNum"** - the sequence number of the heading.
+ * * **"noCtxHeadingNum"** - an abbreviated heading number. Make sure the cursor point is in the section you are referencing to, e.g., you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only.
+ * * **"fullCtxHeadingNum"** - a full heading number even if the cursor point is in the same section.
+ * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * @typedef {"text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow"} headingRefTo
+ */
+
+/**
+ * Available values of the "bookmark" reference type.
+ * * **"text"** - the entire text of the bookmark.
+ * * **"pageNum"** - the page number of the bookmark.
+ * * **"paraNum"** - the paragraph number of the bookmark.
+ * * **"noCtxParaNum"** - an abbreviated paragraph number (the specific item only, e.g., instead of "4.1.1" you refer to "1" only).
+ * * **"fullCtxParaNum"** - a full paragraph number, e.g., "4.1.1".
+ * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * @typedef {"text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow"} bookmarkRefTo
+ */
+
+/**
+ * Available values of the "footnote" reference type.
+ * * **"footnoteNum"** - the footnote number.
+ * * **"pageNum"** - the page number of the footnote.
+ * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * * **"formFootnoteNum"** - the number of the footnote formatted as a footnote. The numbering of the actual footnotes is not affected.
+ * @typedef {"footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum"} footnoteRefTo
+ */
+
+/**
+ * Available values of the "endnote" reference type.
+ * * **"endnoteNum"** - the endnote number.
+ * * **"pageNum"** - the page number of the endnote.
+ * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * * **"formEndnoteNum"** - the number of the endnote formatted as an endnote. The numbering of the actual endnotes is not affected.
+ * @typedef {"endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum"} endnoteRefTo
+ */
+
+/**
+ * Available values of the "equation"/"figure"/"table" reference type.
+ * * **"entireCaption"** - the full text of the caption.
+ * * **"labelNumber"** - the label and object number only, e.g., "Table 1.1".
+ * * **"captionText"** - the text of the caption only.
+ * * **"pageNum"** - the page number containing the referenced object.
+ * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * @typedef {"entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow"} captionRefTo
+ */
+
+/**
+ * Available caption labels.
+ * @typedef {"Equation" | "Figure" | "Table"} CaptionLabel
+ */
+
+/**
+ * Axis position in the chart.
+ * @typedef {("top" | "bottom" | "right" | "left")} AxisPos
+ */
+
+/**
+ * Standard numeric format.
+ * @typedef {("General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" |
+ * "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" |
+ * "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | 
+ * "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@")} NumFormat
+ */
+
+/**
+ * Types of all supported forms.
+ * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiComplexForm} ApiForm
+ */
+
+/**
+ * The 1000th of a percent (100000 = 100%).
+ * @typedef {number} PositivePercentage
+ * */
+
+/**
+ * The type of tick mark appearance.
+ * @typedef {("cross" | "in" | "none" | "out")} TickMark
+ * */
 
 /**
  * Creates a new paragraph.
@@ -361,7 +784,7 @@ ApiDocumentContent.prototype.AddElement = function(nPos, oElement){};
  * @param {DocumentElement} oElement - The element type which will be pushed to the document.
  * @returns {boolean} - returns false if oElement is unsupported.
  */
-ApiDocumentContent.prototype.Push = function(oElement){ return new boolean(); };
+ApiDocumentContent.prototype.Push = function(oElement){ return true; };
 
 /**
  * Removes all the elements from the current document or from the current document element.
@@ -462,7 +885,7 @@ ApiParagraph.prototype.RemoveAllElements = function(){};
  * @typeofeditors ["CDE", "CSE", "CPE"]
  * @returns {boolean} - returns false if paragraph haven't parent.
  */
-ApiParagraph.prototype.Delete = function(){ return new boolean(); };
+ApiParagraph.prototype.Delete = function(){ return true; };
 
 /**
  * Returns the next paragraph.
@@ -499,7 +922,7 @@ ApiParagraph.prototype.Copy = function(){ return new ApiParagraph(); };
  * @returns {boolean} Returns <code>false</code> if the type of <code>oElement</code> is not supported by paragraph
  * content.
  */
-ApiParagraph.prototype.AddElement = function(oElement, nPos){ return new boolean(); };
+ApiParagraph.prototype.AddElement = function(oElement, nPos){ return true; };
 
 /**
  * Adds a tab stop to the current paragraph.
@@ -627,7 +1050,7 @@ ApiRun.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new Ap
 /**
  * Sets the text color to the current text run.
  * @memberof ApiRun
- * @typeofeditors ["CSE", "CPE"]
+ * @typeofeditors ["CDE", "CSE", "CPE"]
  * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
  * @returns {ApiTextPr}
  */
@@ -885,7 +1308,7 @@ ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr()
 /**
  * Sets the text color to the current text run.
  * @memberof ApiTextPr
- * @typeofeditors ["CSE", "CPE"]
+ * @typeofeditors ["CDE", "CPE", "CSE"]
  * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
  * @returns {ApiTextPr} - this text properties.
  */
@@ -894,7 +1317,7 @@ ApiTextPr.prototype.SetFill = function(oApiFill){ return new ApiTextPr(); };
 /**
  * Sets the text fill to the current text run.
  * @memberof ApiTextPr
- * @typeofeditors ["CSE", "CPE", "CSE"]
+ * @typeofeditors ["CDE", "CPE", "CSE"]
  * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
  * @returns {ApiTextPr} - this text properties.
  */
@@ -903,7 +1326,7 @@ ApiTextPr.prototype.SetTextFill = function(oApiFill){ return new ApiTextPr(); };
 /**
  * Sets the text outline to the current text run.
  * @memberof ApiTextPr
- * @typeofeditors ["CSE", "CPE", "CSE"]
+ * @typeofeditors ["CDE", "CPE", "CSE"]
  * @param {ApiStroke} oStroke - The stroke used to create the text outline.
  * @returns {ApiTextPr} - this text properties.
  */
@@ -1069,22 +1492,6 @@ ApiParaPr.prototype.SetTabs = function(aPos, aVal){};
 ApiParaPr.prototype.SetBullet = function(oBullet){};
 
 /**
- * Returns the width of the current drawing.
- * @memberof ApiDrawing
- * @typeofeditors ["CDE", "CPE", "CSE"]
- * @returns {EMU}
- */
-ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
-
-/**
- * Returns the height of the current drawing.
- * @memberof ApiDrawing
- * @typeofeditors ["CDE", "CPE", "CSE"]
- * @returns {EMU}
- */
-ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
-
-/**
  * Returns a type of the ApiFill class.
  * @memberof ApiFill
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1174,6 +1581,60 @@ ApiInterface.prototype.CreateTextPr = function () { return new ApiTextPr(); };
 function private_getHighlightColorByName(sColor){ return null; }
 
 /**
+ * Class representing a presentation.
+ * @constructor
+ */
+function ApiPresentation(oPresentation){}
+
+/**
+ * Class representing a slide master.
+ * @constructor
+ */
+function ApiMaster(oMaster){}
+
+/**
+ * Class representing a slide layout.
+ * @constructor
+ */
+function ApiLayout(oLayout){}
+
+/**
+ * Class representing a placeholder.
+ * @constructor
+ */
+function ApiPlaceholder(oPh){}
+
+/**
+ * Class representing a presentation theme.
+ * @constructor
+ */
+function ApiTheme(oThemeInfo){}
+
+/**
+ * Class representing a theme color scheme.
+ * @constructor
+ */
+function ApiThemeColorScheme(oClrScheme){}
+
+/**
+ * Class representing a theme format scheme.
+ * @constructor
+ */
+function ApiThemeFormatScheme(ofmtScheme){}
+
+/**
+ * Class representing a theme font scheme.
+ * @constructor
+ */
+function ApiThemeFontScheme(ofontScheme){}
+
+/**
+ * Class representing a slide.
+ * @constructor
+ */
+function ApiSlide(oSlide){}
+
+/**
  * Class representing a group of drawings.
  * @constructor
  */
@@ -1189,6 +1650,154 @@ ApiGroup.prototype.constructor = ApiGroup;
 function ApiTable(oGraphicFrame){}
 ApiTable.prototype = Object.create(ApiDrawing.prototype);
 ApiTable.prototype.constructor = ApiTable;
+
+/**
+ * Class representing a table row.
+ * @param oTableRow
+ * @constructor
+ */
+function ApiTableRow(oTableRow){}
+
+/**
+ * Class representing a table cell.
+ * @param oCell
+ * @constructor
+ */
+function ApiTableCell(oCell){}
+
+/**
+ * Twentieths of a point (equivalent to 1/1440th of an inch).
+ * @typedef {number} twips
+ */
+
+/**
+ * 240ths of a line.
+ * @typedef {number} line240
+ */
+
+/**
+ * Half-points (2 half-points = 1 point).
+ * @typedef {number} hps
+ */
+
+/**
+ * A numeric value from 0 to 255.
+ * @typedef {number} byte
+ */
+
+/**
+ * 60000th of a degree (5400000 = 90 degrees).
+ * @typedef {number} PositiveFixedAngle
+ * */
+
+/**
+ * A border type.
+ * @typedef {("none" | "single")} BorderType
+ */
+
+/**
+ * Types of custom tab.
+ * @typedef {("clear" | "left" | "right" | "center")} TabJc
+ */
+
+/**
+ * Eighths of a point (24 eighths of a point = 3 points).
+ * @typedef {number} pt_8
+ */
+
+/**
+ * A point.
+ * @typedef {number} pt
+ */
+
+/**
+ * English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs.
+ * @typedef {number} EMU
+ */
+
+/**
+ * This type specifies the preset shape geometry that will be used for a shape.
+ * @typedef {("accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout")} ShapeType
+ */
+
+/**
+* A bullet type which will be added to the paragraph in spreadsheet or presentation.
+* @typedef {("None" | "ArabicPeriod"  | "ArabicParenR"  | "RomanUcPeriod" | "RomanLcPeriod" | "AlphaLcParenR" | "AlphaLcPeriod" | "AlphaUcParenR" | "AlphaUcPeriod")} BulletType
+*/
+
+/**
+ * This type specifies the available chart types which can be used to create a new chart.
+ * @typedef {("bar" | "barStacked" | "barStackedPercent" | "bar3D" | "barStacked3D" | "barStackedPercent3D" | "barStackedPercent3DPerspective" | "horizontalBar" | "horizontalBarStacked" | "horizontalBarStackedPercent" | "horizontalBar3D" | "horizontalBarStacked3D" | "horizontalBarStackedPercent3D" | "lineNormal" | "lineStacked" | "lineStackedPercent" | "line3D" | "pie" | "pie3D" | "doughnut" | "scatter" | "stock" | "area" | "areaStacked" | "areaStackedPercent")} ChartType
+ */
+
+/**
+ * The available text vertical alignment (used to align text in a shape with a placement for text inside it).
+ * @typedef {("top" | "center" | "bottom")} VerticalTextAlign
+ * */
+
+/**
+ * The available color scheme identifiers.
+ * @typedef {("accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2")} SchemeColorId
+ * */
+
+/**
+ * The available preset color names.
+ * @typedef {("aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen")} PresetColor
+ * */
+
+/**
+ * Possible values for the position of chart tick labels (either horizontal or vertical).
+ * * **"none"** - not display the selected tick labels.
+ * * **"nextTo"** - set the position of the selected tick labels next to the main label.
+ * * **"low"** - set the position of the selected tick labels in the part of the chart with lower values.
+ * * **"high"** - set the position of the selected tick labels in the part of the chart with higher values.
+ * @typedef {("none" | "nextTo" | "low" | "high")} TickLabelPosition
+ * **/
+
+/**
+ * The type of a fill which uses an image as a background.
+ * * **"tile"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.
+ * * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.
+ * @typedef {"tile" | "stretch"} BlipFillType
+ * */
+
+/**
+ * The available preset patterns which can be used for the fill.
+ * @typedef {"cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag"} PatternType
+ * */
+
+/**
+ * The available types of tick mark appearance.
+ * @typedef {("cross" | "in" | "none" | "out")} TickMark
+ * */
+
+/**
+ * Text transform type.
+ * @typedef {("textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown"
+ * | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour"
+ * | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop"
+ * | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop"
+ * | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted"
+ * | "textWave1" | "textWave2" | "textWave4" | "textNoShape")} TextTransform
+ * */
+
+/**
+ * Axis position in the chart.
+ * @typedef {("top" | "bottom" | "right" | "left")} AxisPos
+ */
+
+/**
+ * Standard numeric format.
+ * @typedef {("General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" |
+ * "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" |
+ * "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | 
+ * "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@")} NumFormat
+ */
+
+/**
+ * The 1000th of a percent (100000 = 100%).
+ * @typedef {number} PositivePercentage
+ * */
 
 /**
  * Creates a group of drawings.
@@ -1213,42 +1822,6 @@ ApiInterface.prototype.CreateTable = function(nCols, nRows){ return new ApiTable
  * @returns {ApiSlide}
  */
 ApiPresentation.prototype.GetSlideByIndex = function(nIndex){ return new ApiSlide(); };
-
-/**
- * Returns the type of the ApiDrawing class.
- * @returns {"drawing"}
- */
-ApiDrawing.prototype.GetClassType = function(){ return ""; };
-
-/**
- * Sets the size of the object (image, shape, chart) bounding box.
- * @param {EMU} nWidth - The object width measured in English measure units.
- * @param {EMU} nHeight - The object height measured in English measure units.
- */
-ApiDrawing.prototype.SetSize = function(nWidth, nHeight){};
-
-/**
- * Sets the position of the drawing on the slide.
- * @param {EMU} nPosX - The distance from the left side of the slide to the left side of the drawing measured in English measure units.
- * @param {EMU} nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English measure units.
- */
-ApiDrawing.prototype.SetPosition = function(nPosX, nPosY){};
-
-/**
- * Returns the width of the current drawing.
- * @memberof ApiDrawing
- * @typeofeditors ["CDE", "CPE", "CSE"]
- * @returns {EMU}
- */
-ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
-
-/**
- * Returns the height of the current drawing.
- * @memberof ApiDrawing
- * @typeofeditors ["CDE", "CPE", "CSE"]
- * @returns {EMU}
- */
-ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
 
 /**
  * Returns the type of the ApiTable object.
@@ -1314,14 +1887,14 @@ ApiTable.prototype.AddColumn = function(oCell, isBefore){};
  * @param {ApiTableCell} oCell - The table cell from the row which will be removed.
  * @returns {boolean} - defines if the table is empty after removing or not.
  */
-ApiTable.prototype.RemoveRow = function(oCell){ return new boolean(); };
+ApiTable.prototype.RemoveRow = function(oCell){ return true; };
 
 /**
  * Removes a table column with the specified cell.
  * @param {ApiTableCell} oCell - The table cell from the column which will be removed.
  * @returns {boolean} - defines if the table is empty after removing or not.
  */
-ApiTable.prototype.RemoveColumn = function(oCell){ return new boolean(); };
+ApiTable.prototype.RemoveColumn = function(oCell){ return true; };
 
 /**
  * Returns the type of the ApiTableRow class.
@@ -1427,6 +2000,84 @@ ApiTableCell.prototype.SetCellBorderTop = function(fSize, oApiFill){};
 ApiTableCell.prototype.SetVerticalAlign = function(sType){};
 
 /**
+ * The callback function which is called when the specified range of the current sheet changes.
+ * <note>Please note that the event is not called for the undo/redo operations.</note>
+* @event Api#onWorksheetChange
+* @property {ApiRange} range - The modified range represented as the ApiRange object.
+ */
+
+/**
+ * Class representing a sheet.
+ * @constructor
+ * @property {boolean} Visible - Returns or sets the state of sheet visibility.
+ * @property {number} Active - Makes the current sheet active.
+ * @property {ApiRange} ActiveCell - Returns an object that represents an active cell.
+ * @property {ApiRange} Selection - Returns an object that represents the selected range.
+ * @property {ApiRange} Cells - Returns ApiRange that represents all the cells on the worksheet (not just the cells that are currently in use).
+ * @property {ApiRange} Rows - Returns ApiRange that represents all the cells of the rows range.
+ * @property {ApiRange} Cols - Returns ApiRange that represents all the cells of the columns range.
+ * @property {ApiRange} UsedRange - Returns ApiRange that represents the used range on the specified worksheet.
+ * @property {string} Name - Returns or sets a name of the active sheet.
+ * @property {number} Index - Returns a sheet index.
+ * @property {number} LeftMargin - Returns or sets the size of the sheet left margin measured in points.
+ * @property {number} RightMargin - Returns or sets the size of the sheet right margin measured in points.
+ * @property {number} TopMargin - Returns or sets the size of the sheet top margin measured in points.
+ * @property {number} BottomMargin - Returns or sets the size of the sheet bottom margin measured in points.
+ * @property {PageOrientation} PageOrientation - Returns or sets the page orientation.
+ * @property {boolean} PrintHeadings - Returns or sets the page PrintHeadings property.
+ * @property {boolean} PrintGridlines - Returns or sets the page PrintGridlines property.
+ * @property {Array} Defnames - Returns an array of the ApiName objects.
+ * @property {Array} Comments - Returns an array of the ApiComment objects.
+ */
+function ApiWorksheet(worksheet) {}
+
+/**
+ * Class representing a range.
+ * @constructor
+ * @property {number} Row - Returns the row number for the selected cell.
+ * @property {number} Col - Returns the column number for the selected cell.
+ * @property {ApiRange} Rows - Returns the ApiRange object that represents the rows of the specified range.
+ * @property {ApiRange} Cols - Returns the ApiRange object that represents the columns of the specified range.
+ * @property {ApiRange} Cells - Returns a Range object that represents all the cells in the specified range or a specified cell.
+ * @property {number} Count - Returns the rows or columns count.
+ * @property {string} Address - Returns the range address.
+ * @property {string} Value - Returns a value from the first cell of the specified range or sets it to this cell.
+ * @property {string} Formula - Returns a formula from the first cell of the specified range or sets it to this cell.
+ * @property {string} Value2 - Returns the value2 (value without format) from the first cell of the specified range or sets it to this cell.
+ * @property {string} Text - Returns the text from the first cell of the specified range or sets it to this cell.
+ * @property {ApiColor} FontColor - Sets the text color to the current cell range with the previously created color object.
+ * @property {boolean} Hidden - Returns or sets the value hiding property.
+ * @property {number} ColumnWidth - Returns or sets the width of all the columns in the specified range measured in points.
+ * @property {number} Width - Returns a value that represents the range width measured in points.
+ * @property {number} RowHeight - Returns or sets the height of the first row in the specified range measured in points.
+ * @property {number} Height - Returns a value that represents the range height measured in points.
+ * @property {number} FontSize - Sets the font size to the characters of the current cell range.
+ * @property {string} FontName - Sets the specified font family as the font name for the current cell range.
+ * @property {'center' | 'bottom' | 'top' | 'distributed' | 'justify'} AlignVertical - Sets the text vertical alignment to the current cell range.
+ * @property {'left' | 'right' | 'center' | 'justify'} AlignHorizontal - Sets the text horizontal alignment to the current cell range.
+ * @property {boolean} Bold - Sets the bold property to the text characters from the current cell or cell range.
+ * @property {boolean} Italic - Sets the italic property to the text characters in the current cell or cell range.
+ * @property {'none' | 'single' | 'singleAccounting' | 'double' | 'doubleAccounting'} Underline - Sets the type of underline applied to the font.
+ * @property {boolean} Strikeout - Sets a value that indicates whether the contents of the current cell or cell range are displayed struck through.
+ * @property {boolean} WrapText - Returns the information about the wrapping cell style or specifies whether the words in the cell must be wrapped to fit the cell size or not.
+ * @property {ApiColor|'No Fill'} FillColor - Returns or sets the background color of the current cell range.
+ * @property {string} NumberFormat - Sets a value that represents the format code for the object.
+ * @property {ApiRange} MergeArea - Returns the cell or cell range from the merge area.
+ * @property {ApiWorksheet} Worksheet - Returns the ApiWorksheet object that represents the worksheet containing the specified range.
+ * @property {ApiName} DefName - Returns the ApiName object.
+ * @property {ApiComment | null} Comments - Returns the ApiComment collection that represents all the comments from the specified worksheet.
+ * @property {'xlDownward' | 'xlHorizontal' | 'xlUpward' | 'xlVertical'} Orientation - Sets an angle to the current cell range.
+ * @property {ApiAreas} Areas - Returns a collection of the areas.
+ */
+function ApiRange(range, areas) {}
+
+/**
+ * Class representing a graphical object.
+ * @constructor
+ */
+function ApiDrawing(Drawing){}
+
+/**
  * Class representing a shape.
  * @constructor
  */
@@ -1457,6 +2108,109 @@ ApiChart.prototype.constructor = ApiChart;
 function ApiOleObject(OleObject){}
 ApiOleObject.prototype = Object.create(ApiDrawing.prototype);
 ApiOleObject.prototype.constructor = ApiOleObject;
+
+/**
+ * The available preset color names.
+ * @typedef {("aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" |
+ *     "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate"
+ *     | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" |
+ *     "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" |
+ *     "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" |
+ *     "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" |
+ *     "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" |
+ *     "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" |
+ *     "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" |
+ *     "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" |
+ *     "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" |
+ *     "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" |
+ *     "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" |
+ *     "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" |
+ *     "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" |
+ *     "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey"|
+ *     "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" |
+ *     "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" |
+ *     "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" |
+ *     "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" |
+ *     "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" |
+ *     "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip"|
+ *     "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" |
+ *     "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" |
+ *     "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" |
+ *     "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" |
+ *     "yellowGreen")} PresetColor
+ * */
+
+/**
+ * Possible values for the position of chart tick labels (either horizontal or vertical).
+ * * **"none"** - does not display the selected tick labels.
+ * * **"nextTo"** - sets the position of the selected tick labels next to the main label.
+ * * **"low"** - sets the position of the selected tick labels in the part of the chart with lower values.
+ * * **"high"** - sets the position of the selected tick labels in the part of the chart with higher values.
+ * @typedef {("none" | "nextTo" | "low" | "high")} TickLabelPosition
+ * **/
+
+/**
+ * The page orientation type.
+ * @typedef {("xlLandscape" | "xlPortrait")} PageOrientation
+ * */
+
+/**
+ * The type of tick mark appearance.
+ * @typedef {("cross" | "in" | "none" | "out")} TickMark
+ * */
+
+/**
+ * Text transform type.
+ * @typedef {("textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown"
+ * | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour"
+ * | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop"
+ * | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop"
+ * | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted"
+ * | "textWave1" | "textWave2" | "textWave4" | "textNoShape")} TextTransform
+ * */
+
+/**
+ * Axis position in the chart.
+ * @typedef {("top" | "bottom" | "right" | "left")} AxisPos
+ */
+
+/**
+ * Standard numeric format.
+ * @typedef {("General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" |
+ * "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" |
+ * "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | 
+ * "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@")} NumFormat
+ */
+
+/**
+ * Class representing a base class for the color types.
+ * @constructor
+ */
+function ApiColor(color) {}
+
+/**
+ * Class representing a name.
+ * @constructor
+ * @property {string} Name - Sets a name to the active sheet.
+ * @property {string} RefersTo - Returns or sets a formula that the name is defined to refer to.
+ * @property {ApiRange} RefersToRange - Returns the ApiRange object by reference.
+ */
+function ApiName(DefName) {}
+
+/**
+ * Class representing a comment.
+ * @constructor
+ * @property {string} Text - Returns the text from the first cell in range.
+ */
+function ApiComment(comment, ws) {}
+
+/**
+ * Class representing the areas.
+ * @constructor
+ * @property {number} Count - Returns a value that represents the number of objects in the collection.
+ * @property {ApiRange} Parent - Returns the parent object for the specified collection.
+ */
+function ApiAreas(items, parent) {}
 
 /**
  * Returns a class formatted according to the instructions contained in the format expression.
@@ -1547,7 +2301,7 @@ ApiInterface.prototype.GetThemesColors = function () { return [""]; };
  * @param {string} sTheme - The color scheme that will be set to the current spreadsheet.
  * @returns {boolean} - returns false if sTheme isn't a string.
  */
-ApiInterface.prototype.SetThemeColors = function (sTheme) { return new boolean(); };
+ApiInterface.prototype.SetThemeColors = function (sTheme) { return true; };
 
 /**
  * Creates a new history point.
@@ -1612,7 +2366,7 @@ ApiInterface.prototype.Selection = ApiInterface.prototype.GetSelection ();
  * @param {boolean} isHidden - Defines if the range name is hidden or not.
  * @returns {Error | true} - returns error if sName or sRef are invalid.
  */
-ApiInterface.prototype.AddDefName = function (sName, sRef, isHidden) { return new Error(); };
+ApiInterface.prototype.AddDefName = function (sName, sRef, isHidden) { return undefined; };
 
 /**
  * Returns the ApiName object by the range name.
@@ -1670,7 +2424,7 @@ ApiInterface.prototype.GetMailMergeData = function(nSheet, bWithFormat) { return
  * @param {Function} fLogger - A function which specifies the logger object for checking recalculation of formulas.
  * @returns {boolean}
  */
-ApiInterface.prototype.RecalculateAllFormulas = function(fLogger) { return new boolean(); };
+ApiInterface.prototype.RecalculateAllFormulas = function(fLogger) { return true; };
 
 /**
  * Subscribes to the specified event and calls the callback function when the event fires.
@@ -1697,7 +2451,7 @@ ApiInterface.prototype["detachEvent"] = ApiInterface.prototype.detachEvent;{};
  * @typeofeditors ["CSE"]
  * @returns {boolean}
  */
-ApiWorksheet.prototype.GetVisible = function () { return new boolean(); };
+ApiWorksheet.prototype.GetVisible = function () { return true; };
 
 /**
  * Sets the state of sheet visibility.
@@ -2056,7 +2810,7 @@ ApiWorksheet.prototype.PageOrientation = ApiWorksheet.prototype.GetPageOrientati
  * @typeofeditors ["CSE"]
  * @returns {boolean} - Specifies whether the current sheet row/column headings must be printed or not.
  * */
-ApiWorksheet.prototype.GetPrintHeadings = function (){ return new boolean(); };
+ApiWorksheet.prototype.GetPrintHeadings = function (){ return true; };
 
 /**
  * Specifies whether the current sheet row/column headers must be printed or not.
@@ -2080,7 +2834,7 @@ ApiWorksheet.prototype.PrintHeadings = ApiWorksheet.prototype.SetPrintHeadings (
  * @typeofeditors ["CSE"]
  * @returns {boolean} - True if cell gridlines are printed on this page.
  * */
-ApiWorksheet.prototype.GetPrintGridlines = function (){ return new boolean(); };
+ApiWorksheet.prototype.GetPrintGridlines = function (){ return true; };
 
 /**
  * Specifies whether the current sheet gridlines must be printed or not.
@@ -2125,7 +2879,7 @@ ApiWorksheet.prototype.GetDefName = function (defName) { return new ApiName(); }
  * @param {boolean} isHidden - Defines if the range name is hidden or not.
  * @returns {Error | true} - returns error if sName or sRef are invalid.
  */
-ApiWorksheet.prototype.AddDefName = function (sName, sRef, isHidden) { return new Error(); };
+ApiWorksheet.prototype.AddDefName = function (sName, sRef, isHidden) { return undefined; };
 
 /**
  * Adds a new name to the current worksheet.
@@ -2191,7 +2945,7 @@ ApiWorksheet.prototype.SetHyperlink = function (sRange, sAddress, sScreenTip, sT
  * @param {EMU} nRowOffset - The offset from the nFromRow row to the upper part of the chart measured in English measure units.
  * @returns {ApiChart}
  */
-ApiWorksheet.prototype.AddChart ={ return new ApiChart(); };
+ApiWorksheet.prototype.AddChart = function (sDataRange, bInRows, sType, nStyleIndex, nExtX, nExtY, nFromCol, nColOffset,  nFromRow, nRowOffset) { return new ApiChart(); };
 
 /**
  * Adds a shape to the current sheet with the parameters specified.
@@ -2314,6 +3068,41 @@ ApiWorksheet.prototype.GetAllCharts = function(){ return [new ApiChart()]; };
  * @returns {ApiOleObject[]}.
 */
 ApiWorksheet.prototype.GetAllOleObjects = function(){ return [new ApiOleObject()]; };
+
+/**
+ * Specifies the cell border position.
+ * @typedef {("DiagonalDown" | "DiagonalUp" | "Bottom" | "Left" | "Right" | "Top" | "InsideHorizontal" | "InsideVertical")} BordersIndex
+ */
+
+/**
+ * Specifies the line style used to form the cell border.
+ * @typedef {("None" | "Double" | "Hair" | "DashDotDot" | "DashDot" | "Dotted" | "Dashed" | "Thin" | "MediumDashDotDot" | "SlantDashDot" | "MediumDashDot" | "MediumDashed" | "Medium" | "Thick")} LineStyle
+ */
+
+/**
+ * Specifies the sort order.
+ * @typedef {("xlAscending" | "xlDescending")}  SortOrder
+ * */
+
+/**
+ * Specifies whether the first row of the sort range contains the header information.
+ * @typedef {("xlNo" | "xlYes")} SortHeader
+ * */
+
+/**
+ * Specifies if the sort should be by row or column.
+ * @typedef {("xlSortColumns" | "xlSortRows")} SortOrientation
+ * */
+
+/**
+ * Specifies the range angle.
+ * @typedef {("xlDownward" | "xlHorizontal" | "xlUpward" | "xlVertical")} Angle
+ */
+
+/**
+ * Specifies the direction of end in the specified range.
+ * @typedef {("xlUp" | "xlDown" | "xlToRight" | "xlToLeft")} Direction
+ */
 
 /**
  * Returns a type of the ApiRange class.
@@ -2493,7 +3282,7 @@ ApiRange.prototype.GetValue = function () { return [""]; };
  * @param {string | bool | number | Array[] | Array[][]} data - The general value for the cell or cell range.
  * @returns {boolean} - returns false if such a range does not exist.
  */
-ApiRange.prototype.SetValue = function (data) { return new boolean(); };
+ApiRange.prototype.SetValue = function (data) { return true; };
 
 /**
  * Sets a value to the current cell or cell range.
@@ -2574,7 +3363,7 @@ ApiRange.prototype.FontColor = ApiRange.prototype.SetFontColor ();
  * @typeofeditors ["CSE"]
  * @returns {boolean} - returns true if the values in the range specified are hidden.
  */
-ApiRange.prototype.GetHidden = function () { return new boolean(); };
+ApiRange.prototype.GetHidden = function () { return true; };
 
 /**
  * Sets the value hiding property. The specified range must span an entire column or row.
@@ -2683,7 +3472,7 @@ ApiRange.prototype.FontName = ApiRange.prototype.SetFontName ();
  * @param {'center' | 'bottom' | 'top' | 'distributed' | 'justify'} sAligment - The vertical alignment that will be applied to the cell contents.
  * @returns {boolean} - return false if sAligment doesn't exist.
  */
-ApiRange.prototype.SetAlignVertical = function (sAligment) { return new boolean(); };
+ApiRange.prototype.SetAlignVertical = function (sAligment) { return true; };
 
 /**
  * Sets the vertical alignment of the text in the current cell range.
@@ -2701,7 +3490,7 @@ ApiRange.prototype.AlignVertical = ApiRange.prototype.SetAlignVertical ();
  * @param {'left' | 'right' | 'center' | 'justify'} sAlignment - The horizontal alignment that will be applied to the cell contents.
  * @returns {boolean} - return false if sAligment doesn't exist.
  */
-ApiRange.prototype.SetAlignHorizontal = function (sAlignment) { return new boolean(); };
+ApiRange.prototype.SetAlignHorizontal = function (sAlignment) { return true; };
 
 /**
  * Sets the horizontal alignment of the text in the current cell range.
@@ -2802,7 +3591,7 @@ ApiRange.prototype.SetWrap = function (isWrap) {};
  * @typeofeditors ["CSE"]
  * @returns {boolean}
  */
-ApiRange.prototype.GetWrapText = function () { return new boolean(); };
+ApiRange.prototype.GetWrapText = function () { return true; };
 
 /**
  * Returns the information about the wrapping cell style.
@@ -2885,6 +3674,14 @@ ApiRange.prototype.UnMerge = function () {};
  * @typeofeditors ["CSE"]
  * @returns {ApiRange}
  */
+return new ApiRange((bb) ? AscCommonExcel.Range.prototype.createFromBBox(this.range.worksheet, bb) : this.range);{ return new ApiRange(); };
+
+/**
+ * Returns one cell or cells from the merge area.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @returns {ApiRange}
+ */
 ApiRange.prototype.MergeArea = new ApiRange();
 
 /**
@@ -2902,7 +3699,7 @@ ApiRange.prototype.ForEach = function (fCallback) {};
  * @param {string} sText - The comment text.
  * @returns {boolean} - returns false if comment can't be added.
  */
-ApiRange.prototype.AddComment = function (sText) { return new boolean(); };
+ApiRange.prototype.AddComment = function (sText) { return true; };
 
 /**
  * Returns the Worksheet object that represents the worksheet containing the specified range. It will be available in the read-only mode.
@@ -3117,6 +3914,25 @@ ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
 ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
 
 /**
+ * Returns the lock value for the specified lock type of the current drawing.
+ * @typeofeditors ["CSE"]
+ * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
+ * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
+ * @returns {bool}
+ */
+ApiDrawing.prototype.GetLockValue = function(sType){ return true; };
+
+/**
+ * Sets the lock value to the specified lock type of the current drawing.
+ * @typeofeditors ["CSE"]
+ * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
+ * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
+ * @param {bool} bValue - Specifies if the specified lock is applied to the current drawing.
+ * @returns {bool}
+ */
+ApiDrawing.prototype.SetLockValue = function(sType, bValue){ return true; };
+
+/**
  * Returns a type of the ApiImage class.
  * @memberof ApiImage
  * @typeofeditors ["CDE", "CSE"]
@@ -3155,7 +3971,7 @@ ApiShape.prototype.GetDocContent = function(){ return new ApiDocumentContent(); 
  * @param {"top" | "center" | "bottom" } sVerticalAlign - The vertical alignment type for the shape inner contents.
  * @returns {boolean} - returns false if shape or aligment doesn't exist.
  */
-ApiShape.prototype.SetVerticalTextAlign = function(sVerticalAlign){ return new boolean(); };
+ApiShape.prototype.SetVerticalTextAlign = function(sVerticalAlign){ return true; };
 
 /**
  * Returns a type of the ApiChart class.
@@ -3356,7 +4172,7 @@ ApiChart.prototype.SetVertAxisLablesFontSize = function(nFontSize){};
  * @param nStyleId - One of the styles available in the editor.
  * @returns {boolean}
 */
-ApiChart.prototype.ApplyChartStyle = function(nStyleId){ return new boolean(); };
+ApiChart.prototype.ApplyChartStyle = function(nStyleId){ return true; };
 
 /**
  * Sets values from the specified range to the specified series.
@@ -3369,7 +4185,7 @@ ApiChart.prototype.ApplyChartStyle = function(nStyleId){ return new boolean(); }
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriaValues = function(sRange, nSeria){ return new boolean(); };
+ApiChart.prototype.SetSeriaValues = function(sRange, nSeria){ return true; };
 
 /**
  * Sets the x-axis values from the specified range to the specified series. It is used with the scatter charts only.
@@ -3382,7 +4198,7 @@ ApiChart.prototype.SetSeriaValues = function(sRange, nSeria){ return new boolean
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriaXValues = function(sRange, nSeria){ return new boolean(); };
+ApiChart.prototype.SetSeriaXValues = function(sRange, nSeria){ return true; };
 
 /**
  * Sets a name to the specified series.
@@ -3395,7 +4211,7 @@ ApiChart.prototype.SetSeriaXValues = function(sRange, nSeria){ return new boolea
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriaName = function(sNameRange, nSeria){ return new boolean(); };
+ApiChart.prototype.SetSeriaName = function(sNameRange, nSeria){ return true; };
 
 /**
  * Sets a range with the category values to the current chart.
@@ -3431,7 +4247,7 @@ ApiChart.prototype.AddSeria = function(sNameRange, sValuesRange, sXValuesRange){
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.RemoveSeria = function(nSeria){ return new boolean(); };
+ApiChart.prototype.RemoveSeria = function(nSeria){ return true; };
 
 /**
  * Sets the fill to the chart plot area.
@@ -3440,7 +4256,7 @@ ApiChart.prototype.RemoveSeria = function(nSeria){ return new boolean(); };
  * @param {ApiFill} oFill - The fill type used to fill the plot area.
  * @returns {boolean}
  */
-ApiChart.prototype.SetPlotAreaFill = function(oFill){ return new boolean(); };
+ApiChart.prototype.SetPlotAreaFill = function(oFill){ return true; };
 
 /**
  * Sets the outline to the chart plot area.
@@ -3449,7 +4265,7 @@ ApiChart.prototype.SetPlotAreaFill = function(oFill){ return new boolean(); };
  * @param {ApiStroke} oStroke - The stroke used to create the plot area outline.
  * @returns {boolean}
  */
-ApiChart.prototype.SetPlotAreaOutLine = function(oStroke){ return new boolean(); };
+ApiChart.prototype.SetPlotAreaOutLine = function(oStroke){ return true; };
 
 /**
  * Sets the fill to the specified chart series.
@@ -3460,7 +4276,7 @@ ApiChart.prototype.SetPlotAreaOutLine = function(oStroke){ return new boolean();
  * @param {boolean} [bAll=false] - Specifies if the fill will be applied to all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriesFill = function(oFill, nSeries, bAll){ return new boolean(); };
+ApiChart.prototype.SetSeriesFill = function(oFill, nSeries, bAll){ return true; };
 
 /**
  * Sets the outline to the specified chart series.
@@ -3471,7 +4287,7 @@ ApiChart.prototype.SetSeriesFill = function(oFill, nSeries, bAll){ return new bo
  * @param {boolean} [bAll=false] - Specifies if the outline will be applied to all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriesOutLine = function(oStroke, nSeries, bAll){ return new boolean(); };
+ApiChart.prototype.SetSeriesOutLine = function(oStroke, nSeries, bAll){ return true; };
 
 /**
  * Sets the fill to the data point in the specified chart series.
@@ -3483,7 +4299,7 @@ ApiChart.prototype.SetSeriesOutLine = function(oStroke, nSeries, bAll){ return n
  * @param {boolean} [bAllSeries=false] - Specifies if the fill will be applied to the specified data point in all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetDataPointFill = function(oFill, nSeries, nDataPoint, bAllSeries){ return new boolean(); };
+ApiChart.prototype.SetDataPointFill = function(oFill, nSeries, nDataPoint, bAllSeries){ return true; };
 
 /**
  * Sets the outline to the data point in the specified chart series.
@@ -3495,7 +4311,7 @@ ApiChart.prototype.SetDataPointFill = function(oFill, nSeries, nDataPoint, bAllS
  * @param {boolean} bAllSeries - Specifies if the outline will be applied to the specified data point in all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetDataPointOutLine = function(oStroke, nSeries, nDataPoint, bAllSeries){ return new boolean(); };
+ApiChart.prototype.SetDataPointOutLine = function(oStroke, nSeries, nDataPoint, bAllSeries){ return true; };
 
 /**
  * Sets the fill to the marker in the specified chart series.
@@ -3507,7 +4323,7 @@ ApiChart.prototype.SetDataPointOutLine = function(oStroke, nSeries, nDataPoint, 
  * @param {boolean} [bAllMarkers=false] - Specifies if the fill will be applied to all markers in the specified chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetMarkerFill = function(oFill, nSeries, nMarker, bAllMarkers){ return new boolean(); };
+ApiChart.prototype.SetMarkerFill = function(oFill, nSeries, nMarker, bAllMarkers){ return true; };
 
 /**
  * Sets the outline to the marker in the specified chart series.
@@ -3519,7 +4335,7 @@ ApiChart.prototype.SetMarkerFill = function(oFill, nSeries, nMarker, bAllMarkers
  * @param {boolean} [bAllMarkers=false] - Specifies if the outline will be applied to all markers in the specified chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetMarkerOutLine = function(oStroke, nSeries, nMarker, bAllMarkers){ return new boolean(); };
+ApiChart.prototype.SetMarkerOutLine = function(oStroke, nSeries, nMarker, bAllMarkers){ return true; };
 
 /**
  * Sets the fill to the chart title.
@@ -3528,7 +4344,7 @@ ApiChart.prototype.SetMarkerOutLine = function(oStroke, nSeries, nMarker, bAllMa
  * @param {ApiFill} oFill - The fill type used to fill the title.
  * @returns {boolean}
  */
-ApiChart.prototype.SetTitleFill = function(oFill){ return new boolean(); };
+ApiChart.prototype.SetTitleFill = function(oFill){ return true; };
 
 /**
  * Sets the outline to the chart title.
@@ -3537,7 +4353,7 @@ ApiChart.prototype.SetTitleFill = function(oFill){ return new boolean(); };
  * @param {ApiStroke} oStroke - The stroke used to create the title outline.
  * @returns {boolean}
  */
-ApiChart.prototype.SetTitleOutLine = function(oStroke){ return new boolean(); };
+ApiChart.prototype.SetTitleOutLine = function(oStroke){ return true; };
 
 /**
  * Sets the fill to the chart legend.
@@ -3546,7 +4362,7 @@ ApiChart.prototype.SetTitleOutLine = function(oStroke){ return new boolean(); };
  * @param {ApiFill} oFill - The fill type used to fill the legend.
  * @returns {boolean}
  */
-ApiChart.prototype.SetLegendFill = function(oFill){ return new boolean(); };
+ApiChart.prototype.SetLegendFill = function(oFill){ return true; };
 
 /**
  * Sets the outline to the chart legend.
@@ -3555,7 +4371,7 @@ ApiChart.prototype.SetLegendFill = function(oFill){ return new boolean(); };
  * @param {ApiStroke} oStroke - The stroke used to create the legend outline.
  * @returns {boolean}
  */
-ApiChart.prototype.SetLegendOutLine = function(oStroke){ return new boolean(); };
+ApiChart.prototype.SetLegendOutLine = function(oStroke){ return true; };
 
 /**
  * Sets the specified numeric format to the axis values.
@@ -3565,7 +4381,7 @@ ApiChart.prototype.SetLegendOutLine = function(oStroke){ return new boolean(); }
  * @param {AxisPos} - Axis position.
  * @returns {boolean}
  */
-ApiChart.prototype.SetAxieNumFormat = function(sFormat, sAxiePos){ return new boolean(); };
+ApiChart.prototype.SetAxieNumFormat = function(sFormat, sAxiePos){ return true; };
 
 /**
  * Returns a type of the ApiOleObject class.
@@ -3582,7 +4398,7 @@ ApiOleObject.prototype.GetClassType = function(){ return ""; };
  * @param {string} sData - The OLE object string data.
  * @returns {boolean}
  */
-ApiOleObject.prototype.SetData = function(sData){ return new boolean(); };
+ApiOleObject.prototype.SetData = function(sData){ return true; };
 
 /**
  * Returns the string data from the current OLE object.
@@ -3599,7 +4415,7 @@ ApiOleObject.prototype.GetData = function(){ return ""; };
  * @param {string} sAppId - The application ID associated with the current OLE object.
  * @returns {boolean}
  */
-ApiOleObject.prototype.SetApplicationId = function(sAppId){ return new boolean(); };
+ApiOleObject.prototype.SetApplicationId = function(sAppId){ return true; };
 
 /**
  * Returns the application ID from the current OLE object.
@@ -3632,7 +4448,7 @@ ApiName.prototype.GetName = function () { return ""; };
  * @param {string} sName - New name for the range.
  * @returns {Error | true} - returns error if sName is invalid.
  */
-ApiName.prototype.SetName = function (sName) { return new Error(); };
+ApiName.prototype.SetName = function (sName) { return undefined; };
 
 /**
  * Sets a string value representing the object name.
