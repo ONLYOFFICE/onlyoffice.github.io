@@ -21,3 +21,6 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 ## Note
 For desktop infromation about created meeting will be add to comments of the document, however in web version it will be send to the chat.
+
+## Known issues
+A black window may appear in the safari browser when joining a meeting. In order for the problem to disappear, you need to resize the plugin window or zoom in on the browser.
