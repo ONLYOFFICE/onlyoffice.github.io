@@ -378,8 +378,6 @@ label.header {
 
 .arrow_common {
   display: block;
-  width: 20px;
-  height: 20px;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
 }
@@ -396,12 +394,30 @@ label.header {
 
 .arrow_conteiner {
 	margin: 30px;
-	width: 40px;
-	height: 40px;
 	border-radius: 96px;
 	background: #000;
 	margin: 30px;
 	display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.arrow_conteiner_small {
+	width: 22px;
+	height: 22px;
+}
+
+.arrow_conteiner_big {
+	width: 40px;
+	height: 40px;
+}
+
+.arrow_small {
+	width: 9px;
+	height: 9px;
+}
+
+.arrow_big {
+	width: 15px;
+	height: 15px;
 }
