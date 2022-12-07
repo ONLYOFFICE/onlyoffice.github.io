@@ -125,11 +125,24 @@ window.onload = function() {
 	// elements.arrow.onclick = onClickBack;
 
 	elements.imgScreenshot.onclick = onClickScreenshot;
-
-	elements.close.onclick = function() {
-		// click on close button
-		console.log('close window');
+	elements.arrowPrev.onclick = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log('onclick prev');
 	};
+	elements.arrowNext.onclick = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log('onclick next');
+	};
+	elements.divArrow.onclick = function(event) {
+		console.log('onclick divArrow');
+	};
+
+	// elements.close.onclick = function() {
+	// 	// click on close button
+	// 	console.log('close window');
+	// };
 
 	if (isPluginLoading || isTranslationLoading) {
 		toogleLoader(true, "Loading");
@@ -389,7 +402,7 @@ function initElemnts() {
 	elements.divBody = document.getElementById('div_body');
 	elements.divMain = document.getElementById('div_main');
 	// elements.arrow = document.getElementById('arrow');
-	elements.close = document.getElementById('close');
+	// elements.close = document.getElementById('close');
 	elements.divHeader = document.getElementById('div_header');
 	elements.divSelected = document.getElementById('div_selected_toolbar');
 	elements.divSelectedMain = document.getElementById('div_selected_main');
@@ -409,6 +422,8 @@ function initElemnts() {
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
 	elements.divArrow = document.getElementById('div_arrows');
+	elements.arrowPrev = document.getElementById('arrow_prev');
+	elements.arrowNext = document.getElementById('arrow_next');
 };
 
 function toogleLoader(show, text) {
