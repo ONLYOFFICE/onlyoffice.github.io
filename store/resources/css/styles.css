@@ -361,13 +361,21 @@ label.header {
 	align-items: center;
 }
 
+
+
+
+
+
+
+
+
 .div_arrows {
 	position: absolute;
 	display: flex;
 	justify-content: space-between;
 }
 
-.arrow {
+.arrow_img {
 	cursor: pointer;
 	height: 120px;
 	transform: translateX(-50%) translateY(-50%);
