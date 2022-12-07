@@ -408,7 +408,7 @@ function initElemnts() {
 	elements.divVersion = document.getElementById('div_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
-	elements.divArrow = document.getElementById('div_arrows')
+	elements.divArrow = document.getElementById('div_arrows');
 };
 
 function toogleLoader(show, text) {
