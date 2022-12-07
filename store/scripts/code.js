@@ -408,6 +408,7 @@ function initElemnts() {
 	elements.divVersion = document.getElementById('div_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
+	elements.divArrow = document.getElementById('div_arrows')
 };
 
 function toogleLoader(show, text) {
@@ -648,10 +649,12 @@ function onClickItem() {
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.onload = function() {
 			elements.imgScreenshot.classList.remove('hidden');
+			elements.divArrow.classList.remove('hidden');
 			setDivHeight();
 		}
 	} else {
 		elements.imgScreenshot.classList.add('hidden');
+		elements.divArrow.classList.add('hidden');
 	}
 
 	let bHasUpdate = false;
@@ -727,6 +730,7 @@ function onClickBack() {
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
+	elements.divArrow.classList.add('hidden');
 	console.log('current', current);
 	current = null;
 	// elements.arrow.classList.add('hidden');
@@ -735,6 +739,11 @@ function onClickBack() {
 
 function onClickScreenshot() {
 	console.log('current', current);
+	$(".arrow_conteiner_small").addClass("arrow_conteiner_big");
+	$(".arrow_small").removeClass("arrow_big");
+	$(".arrow_conteiner_small").removeClass(".arrow_conteiner_small");
+	$(".arrow_small").removeClass(".arrow_small");
+
 };
 
 function onSelectPreview(target, isOverview) {
