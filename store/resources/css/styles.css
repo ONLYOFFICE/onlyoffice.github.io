@@ -374,52 +374,20 @@ label.header {
 	width: 100%;
 }
 
-.arrow_img {
-	cursor: pointer;
-	height: 120px;
-	transform: translateX(-50%) translateY(-50%);
-	transition: transform .1s;
-	width: 80px;
+.arrow_right,
+.arrow_left {
+  display: block;
+  margin: 30px auto;
+  width: 25px;
+  height: 25px;
+  border-top: 2px solid #000;
+  border-left: 2px solid #000;
 }
 
-.top,
-.bottom {
-	background-color: #666;
-	height: 4px;
-	left: -5px;
-	position: absolute;
-	top: 50%;
-	width: 100%;
-}
-
-.conL {
-position: absolute;
-top:50%;
-left:30%;
-}
-
-.leftT {
-	transform: rotate(45deg);
-	transform-origin: bottom right;
-}
-
-.leftB {
-	transform: rotate(-45deg);
-	transform-origin: top right;
-}
-
-.conR {
-position: absolute;
-top:50%;
-right:30%;
-}
-
-.rightT {
-	transform: rotate(-45deg);
-	transform-origin: bottom left;
-}
-
-.rightB {
-	transform: rotate(45deg);
-	transform-origin: top left;
+.arrow_conteiner {
+	margin: 30px;
+	width: 40px;
+	height: 40px;
+	border-radius: 96px;
+	background: red;
 }
