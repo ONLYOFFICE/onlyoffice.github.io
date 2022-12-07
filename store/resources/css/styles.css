@@ -372,6 +372,8 @@ label.header {
 .div_arrows {
 	position: absolute;
 	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
 
 .arrow_common {
@@ -380,7 +382,6 @@ label.header {
   height: 20px;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
-  margin-left: 5px;
 }
 
 .arrow_right {
