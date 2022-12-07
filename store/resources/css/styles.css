@@ -374,14 +374,23 @@ label.header {
 	width: 100%;
 }
 
-.arrow_right,
-.arrow_left {
+.arrow_common {
   display: block;
-  margin: 30px auto;
-  width: 25px;
-  height: 25px;
-  border-top: 2px solid #000;
-  border-left: 2px solid #000;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  margin-left: 5px;
+}
+
+.arrow_right {
+	transform: rotate(135deg);
+	margin-right: 5px;
+}
+
+.arrow_left {
+	transform: rotate(-45deg);
+	margin-left: 5px;
 }
 
 .arrow_conteiner {
@@ -389,5 +398,9 @@ label.header {
 	width: 40px;
 	height: 40px;
 	border-radius: 96px;
-	background: red;
+	background: #000;
+	margin: 30px;
+	display: flex;
+    justify-content: center;
+    align-items: center;
 }
