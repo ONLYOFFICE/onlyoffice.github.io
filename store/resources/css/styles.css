@@ -370,17 +370,19 @@ label.header {
 
 
 .div_arrows {
+	width: 100%;
 	position: absolute;
-	display: flex;
-	justify-content: space-between;
 }
 
 .arrow_img {
 	cursor: pointer;
-	height: 120px;
+	position: absolute;
+    top: 50%;
+    left: 6%;
 	transform: translateX(-50%) translateY(-50%);
 	transition: transform .1s;
-	width: 80px;
+	height: 40px;
+	width: 20px;
 }
 
 .top,
@@ -393,34 +395,39 @@ label.header {
 	width: 100%;
 }
 
-.conL {
-position: absolute;
-top:50%;
-left:30%;
+.conteiner {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    background: red;
+    border-radius: 96px;
 }
 
-.leftT {
+.conteiner_L {
+    left: 30px;
+}
+
+.conteiner_R {
+    right: 30px;
+}
+
+.top_left {
 	transform: rotate(45deg);
 	transform-origin: bottom right;
 }
 
-.leftB {
+.bottom_left {
 	transform: rotate(-45deg);
 	transform-origin: top right;
 }
 
-.conR {
-position: absolute;
-top:50%;
-right:30%;
-}
-
-.rightT {
+.top_right {
 	transform: rotate(-45deg);
 	transform-origin: bottom left;
 }
 
-.rightB {
+.bottom_right {
 	transform: rotate(45deg);
 	transform-origin: top left;
 }
