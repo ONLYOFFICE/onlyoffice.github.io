@@ -31,6 +31,7 @@
  */
 
 let start = Date.now();
+let current = null;
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -136,6 +137,8 @@ window.onload = function() {
 	};
 
 	// elements.arrow.onclick = onClickBack;
+
+	elements.imgScreenshot.onclick = onClickScreenshot;
 
 	elements.close.onclick = function() {
 		// click on close button
@@ -650,7 +653,8 @@ function onClickItem() {
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
-	
+	console.log('current', current);
+	current = plugin;	
 	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
@@ -737,8 +741,14 @@ function onClickBack() {
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
+	console.log('current', current);
+	current = null;
 	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
+};
+
+function onClickScreenshot() {
+	console.log('current', current);
 };
 
 function onSelectPreview(target, isOverview) {
