@@ -373,20 +373,18 @@ label.header {
 	transform: translateX(-50%) translateY(-50%);
 	transition: transform .1s;
 	width: 80px;
-	
-	$transition-time: .15s;
-	
-	&-top,
-	&-bottom {
-	  background-color: #666;
-	  height: 4px;
-	  left: -5px;
-	  position: absolute;
-	  top: 50%;
-	  width: 100%;
-	}
 }
-  
+
+.top,
+.bottom {
+	background-color: #666;
+	height: 4px;
+	left: -5px;
+	position: absolute;
+	top: 50%;
+	width: 100%;
+}
+
 .conL {
 position: absolute;
 top:50%;
