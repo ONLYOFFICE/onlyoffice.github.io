@@ -17,7 +17,7 @@
  */
 
 let start = Date.now();
-let current = {index: 0, screenshots: []};
+let current = {index: 0, screenshots: [], url: ''};
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -131,7 +131,7 @@ window.onload = function() {
 		console.log('onclick prev');
 		if (current.index > 0) {
 			current.index--;
-			let url = current.screenshots[current.index];
+			let url = current.url + current.screenshots[current.index];
 			elements.imgScreenshot.setAttribute('src', url);
 			elements.imgScreenshot.onload = function() {
 				elements.imgScreenshot.classList.remove('hidden');
@@ -149,7 +149,7 @@ window.onload = function() {
 		console.log('onclick next');
 		if (current.index < current.screenshots.length - 1) {
 			current.index++;
-			let url = current.screenshots[current.index];
+			let url = current.url + current.screenshots[current.index];
 			elements.imgScreenshot.setAttribute('src', url);
 			elements.imgScreenshot.onload = function() {
 				elements.imgScreenshot.classList.remove('hidden');
@@ -686,7 +686,8 @@ function onClickItem() {
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		current.screenshots = plugin.variations[0].store.screenshots;
 		current.index = 0;
-		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[current.index];
+		current.url = plugin.baseUrl;
+		let url = current.url + current.screenshots[current.index];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.onload = function() {
 			elements.imgScreenshot.classList.remove('hidden');
@@ -775,6 +776,7 @@ function onClickBack() {
 	elements.divArrow.classList.add('hidden');
 	current.index = 0;
 	current.screenshots = [];
+	current.url = '';
 	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
 };
