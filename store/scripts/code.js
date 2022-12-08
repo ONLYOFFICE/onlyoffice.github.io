@@ -134,13 +134,10 @@ window.onload = function() {
 			let url = current.url + current.screenshots[current.index];
 			elements.imgScreenshot.setAttribute('src', url);
 			elements.imgScreenshot.onload = function() {
-				elements.imgScreenshot.classList.remove('hidden');
-				if (current.screenshots.length > 1)
-					elements.divArrow.classList.remove('hidden');
-				setDivHeight();
+				elements.arrowNext.classList.remove('hidden');
 			}
-		} else {
-			// todo change or disable arrow icon
+			if (!current.index)
+				elements.arrowPrev.classList.add('hidden');
 		}
 	};
 	elements.arrowNext.onclick = function(event) {
@@ -152,15 +149,11 @@ window.onload = function() {
 			let url = current.url + current.screenshots[current.index];
 			elements.imgScreenshot.setAttribute('src', url);
 			elements.imgScreenshot.onload = function() {
-				elements.imgScreenshot.classList.remove('hidden');
-				if (current.screenshots.length > 1)
-					elements.divArrow.classList.remove('hidden');
-				setDivHeight();
+				elements.arrowPrev.classList.remove('hidden');
 			}
-		} else {
-			// todo change or disable arrow icon
-		}
-		
+			if (current.index == current.screenshots.length - 1)
+				elements.arrowNext.classList.add('hidden');
+		} 
 	};
 	elements.divArrow.onclick = onClickScreenshot;
 
