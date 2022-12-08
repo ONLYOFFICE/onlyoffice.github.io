@@ -165,13 +165,13 @@ window.onload = function() {
 
 	$('#select_categories').select2({
 		minimumResultsForSearch: Infinity
-	}).on('select2:select', function(e) {
+	}).on('change', function(e) {
 		console.log(e);
 	});
 
 	$('#select_sortBy').select2({
 		minimumResultsForSearch: Infinity
-	}).on('select2:select', function(e) {
+	}).on('change', function(e) {
 		console.log(e);
 	});
 	// elements.close.onclick = function() {
