@@ -142,6 +142,7 @@ window.onload = function() {
 				elements.arrowPrev.classList.add('hidden');
 		}
 	};
+
 	elements.arrowNext.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
@@ -159,8 +160,20 @@ window.onload = function() {
 				elements.arrowNext.classList.add('hidden');
 		} 
 	};
+
 	elements.divArrow.onclick = onClickScreenshot;
 
+	$('#select_categories').select2({
+		minimumResultsForSearch: Infinity
+	}).on('select2:select', function(e) {
+		console.log(e);
+	});
+
+	$('#select_sortBy').select2({
+		minimumResultsForSearch: Infinity
+	}).on('select2:select', function(e) {
+		console.log(e);
+	});
 	// elements.close.onclick = function() {
 	// 	// click on close button
 	// 	console.log('close window');
