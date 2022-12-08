@@ -190,13 +190,15 @@ window.onload = function() {
 		{id: 2, text:'Instalations'}
 	];
 	$('#select_categories').select2({
-		minimumResultsForSearch: Infinity
+		minimumResultsForSearch: Infinity,
+		with: "100%"
 	}).on('change', function(e) {
 		console.log(e);
 	});
 
 	$('#select_sortBy').select2({
-		minimumResultsForSearch: Infinity
+		minimumResultsForSearch: Infinity,
+		with: "100%"
 	}).on('change', function(e) {
 		console.log(e);
 	});
