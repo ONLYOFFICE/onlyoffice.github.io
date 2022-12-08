@@ -130,11 +130,13 @@ window.onload = function() {
 		event.stopPropagation();
 		console.log('onclick prev');
 		if (current.index > 0) {
+			// todo maybe show loader
 			current.index--;
 			let url = current.url + current.screenshots[current.index];
 			elements.imgScreenshot.setAttribute('src', url);
 			elements.imgScreenshot.onload = function() {
 				elements.arrowNext.classList.remove('hidden');
+				// todo maybe hide loader
 			}
 			if (!current.index)
 				elements.arrowPrev.classList.add('hidden');
@@ -145,11 +147,13 @@ window.onload = function() {
 		event.stopPropagation();
 		console.log('onclick next');
 		if (current.index < current.screenshots.length - 1) {
+			// todo maybe show loader
 			current.index++;
 			let url = current.url + current.screenshots[current.index];
 			elements.imgScreenshot.setAttribute('src', url);
 			elements.imgScreenshot.onload = function() {
 				elements.arrowPrev.classList.remove('hidden');
+				// todo maybe hide loader
 			}
 			if (current.index == current.screenshots.length - 1)
 				elements.arrowNext.classList.add('hidden');
@@ -652,6 +656,11 @@ function onClickRemove(target, event) {
 		guid : guid
 	};
 	sendMessage(message);
+};
+
+function onClickUpdateAll() {
+	//todo
+	console.log('onClickUpdateAll')
 };
 
 function onClickItem() {
