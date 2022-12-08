@@ -129,11 +129,38 @@ window.onload = function() {
 		event.preventDefault();
 		event.stopPropagation();
 		console.log('onclick prev');
+		if (current.index > 0) {
+			current.index--;
+			let url = current.screenshots[current.index];
+			elements.imgScreenshot.setAttribute('src', url);
+			elements.imgScreenshot.onload = function() {
+				elements.imgScreenshot.classList.remove('hidden');
+				if (current.screenshots.length > 1)
+					elements.divArrow.classList.remove('hidden');
+				setDivHeight();
+			}
+		} else {
+			// todo change or disable arrow icon
+		}
 	};
 	elements.arrowNext.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		console.log('onclick next');
+		if (current.index < current.screenshots.length - 1) {
+			current.index++;
+			let url = current.screenshots[current.index];
+			elements.imgScreenshot.setAttribute('src', url);
+			elements.imgScreenshot.onload = function() {
+				elements.imgScreenshot.classList.remove('hidden');
+				if (current.screenshots.length > 1)
+					elements.divArrow.classList.remove('hidden');
+				setDivHeight();
+			}
+		} else {
+			// todo change or disable arrow icon
+		}
+		
 	};
 	elements.divArrow.onclick = onClickScreenshot;
 
