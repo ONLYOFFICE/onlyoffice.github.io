@@ -104,6 +104,12 @@ label.header {
 	display: flex;
 }
 
+.toolbar_tools {
+	display: flex;
+	justify-content: space-between;
+	margin: 15px 0px;
+}
+
 .main_content {
 	position: absolute;
 	top: 100px;
@@ -396,8 +402,8 @@ label.header {
 	background: #000;
 	position: absolute;
 	display: flex;
-    justify-content: center;
-    align-items: center;
+	justify-content: center;
+	align-items: center;
 }
 
 .arrow_conteiner_left {
