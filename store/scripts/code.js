@@ -163,14 +163,28 @@ window.onload = function() {
 
 	elements.divArrow.onclick = onClickScreenshot;
 
+	let arr_categories = [
+		{id: 0, text:'All'},
+		{id: 1, text:'Recommended'},
+		{id: 2, text:'Developer tools'},
+		{id: 3, text:'Entertainment'},
+		{id: 4, text:'Special abilities'},
+	];
+	let arr_sortBy = [
+		{id: 0, text:'Name'},
+		{id: 1, text:'Raiting'},
+		{id: 2, text:'Instalations'}
+	];
 	$('#select_categories').select2({
-		minimumResultsForSearch: Infinity
+		minimumResultsForSearch: Infinity,
+		data: arr_categories
 	}).on('change', function(e) {
 		console.log(e);
 	});
 
 	$('#select_sortBy').select2({
-		minimumResultsForSearch: Infinity
+		minimumResultsForSearch: Infinity,
+		data: arr_sortBy
 	}).on('change', function(e) {
 		console.log(e);
 	});
