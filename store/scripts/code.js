@@ -17,7 +17,7 @@
  */
 
 let start = Date.now();
-let current = null;
+let current = {index: 0, screenshots: []};
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -135,9 +135,7 @@ window.onload = function() {
 		event.stopPropagation();
 		console.log('onclick next');
 	};
-	elements.divArrow.onclick = function(event) {
-		console.log('onclick divArrow');
-	};
+	elements.divArrow.onclick = onClickScreenshot;
 
 	// elements.close.onclick = function() {
 	// 	// click on close button
@@ -655,17 +653,17 @@ function onClickItem() {
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
-	console.log('current', current);
-	current = plugin;	
+
 	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		current = plugin.variations[0].store.screenshots;
-		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
+		current.screenshots = plugin.variations[0].store.screenshots;
+		current.index = 0;
+		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[current.index];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.onload = function() {
 			elements.imgScreenshot.classList.remove('hidden');
-			if (current.length > 1)
+			if (current.screenshots.length > 1)
 				elements.divArrow.classList.remove('hidden');
 			setDivHeight();
 		}
@@ -748,19 +746,18 @@ function onClickBack() {
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
 	elements.divArrow.classList.add('hidden');
-	console.log('current', current);
-	current = null;
+	current.index = 0;
+	current.screenshots = [];
 	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
 };
 
 function onClickScreenshot() {
-	console.log('current', current);
-	$(".arrow_conteiner_small").addClass("arrow_conteiner_big");
-	$(".arrow_small").removeClass("arrow_big");
-	$(".arrow_conteiner_small").removeClass(".arrow_conteiner_small");
-	$(".arrow_small").removeClass(".arrow_small");
-
+	// todo create a modal with the big screenshot and exit from this mode
+	// $(".arrow_conteiner_small").addClass("arrow_conteiner_big");
+	// $(".arrow_small").removeClass("arrow_big");
+	// $(".arrow_conteiner_small").removeClass(".arrow_conteiner_small");
+	// $(".arrow_small").removeClass(".arrow_small");
 };
 
 function onSelectPreview(target, isOverview) {
