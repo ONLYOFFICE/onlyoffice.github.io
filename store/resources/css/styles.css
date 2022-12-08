@@ -39,6 +39,11 @@ label.header {
 	padding-right: 12px;
 }
 
+.btn_update {
+	height: 22px !important;
+	padding: 0px 5px;
+}
+
 .btn_menu_right {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
