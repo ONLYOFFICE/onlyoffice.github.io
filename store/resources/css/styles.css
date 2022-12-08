@@ -81,9 +81,12 @@ label.header {
 }
 
 .toolbar {
+	margin: 20px 20px 0px 20px;
+}
+
+.toolbar_top {
 	display: flex;
 	justify-content: space-between;
-	margin: 20px 20px 0px 20px;
 }
 
 .toolbar_link {
@@ -98,7 +101,7 @@ label.header {
 
 .main_content {
 	position: absolute;
-	top: 60px;
+	top: 100px;
 	bottom: 5px;
 	right: 0px;
 	left: 0px;
