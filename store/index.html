@@ -19,10 +19,12 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<link rel="stylesheet" href="./resources/css/styles.css">
+	<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<script type="text/javascript" src="scripts/polyfill.js"></script>
 	<script type="text/javascript" src="scripts/code.js"></script>
+	<script src="vendor/select2-4.0.13/js/select2.js"></script>
 </head>
 	<body class="noselect">
 		<div id="div_header" class="header hidden">
@@ -39,6 +41,28 @@
 				<div class="toolbar_link">
 					<!-- TODO think about how to open the form for uploading -->
 					<a id="link_newPlugin" class="link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+				</div>
+				<div class="toolbar_tools">
+					<button id="btn_remove" class="btn-text-default" onclick="onClickRemove(event.target.parentNode, event)">Update All</button>
+					<div>
+						<span id="span_categories">Categories</span>
+						<select id="select_categories">
+							<option value="all">All</option>
+							<option value="recommended">Recommended</option>
+							<option value="devTools">Developer tools</option>
+							<option value="entertainment">Entertainment</option>
+							<option value="specAbil">Special abilities</option>
+						</select>
+					</div>
+					<div>
+						<span id="span_sort">Sort by</span>
+						<select id="select_categories">
+							<option value="name">Name</option>
+							<option value="rating">Raiting</option>
+							<option value="instalations">Instalations</option>
+						</select>
+					</div>
+					<input id="inp_search" type="search" class="form-control" placeholder="Search plugins...">
 				</div>
 			</div>
 			<div id="div_main" class="main_content"></div>
