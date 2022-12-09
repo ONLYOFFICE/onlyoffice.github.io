@@ -100,13 +100,15 @@ window.onload = function() {
 	styleTheme.type = 'text/css';
 	styleTheme.innerHTML = rule;
 	document.getElementsByTagName('head')[0].appendChild(styleTheme);
+	if (isPluginLoading || isTranslationLoading) {
+		toogleLoader(true, "Loading");
+	}
 	// init element
 	initElemnts();
 	if (isIE)
 		elements.imgScreenshot.classList.remove('image_preview');
 
 	isFrameLoading = false;
-
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
 		// if nothing to translate
 		showMarketplace();
@@ -163,26 +165,25 @@ window.onload = function() {
 
 	elements.divArrow.onclick = onClickScreenshot;
 
-	// let arr_categories = [
-	// 	{id: 0, text:'All'},
-	// 	{id: 1, text:'Recommended'},
-	// 	{id: 2, text:'Developer tools'},
-	// 	{id: 3, text:'Entertainment'},
-	// 	{id: 4, text:'Special abilities'},
-	// ];
-	// let arr_sortBy = [
-	// 	{id: 0, text:'Name'},
-	// 	{id: 1, text:'Raiting'},
-	// 	{id: 2, text:'Instalations'}
-	// ];
+	$('#select_categories').select2({
+		minimumResultsForSearch: Infinity
+		// data: arr_categories,
+	}).on('change', function(e) {
+		console.log(e);
+	});
+
+	$('#select_sortBy').select2({
+		minimumResultsForSearch: Infinity
+		// data: arr_sortBy,
+	}).on('change', function(e) {
+		console.log(e);
+	});
 	// elements.close.onclick = function() {
 	// 	// click on close button
 	// 	console.log('close window');
 	// };
 
-	if (isPluginLoading || isTranslationLoading) {
-		toogleLoader(true, "Loading");
-	}
+
 };
 
 window.addEventListener('message', function(message) {
@@ -990,24 +991,13 @@ function onTranslate() {
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
-		$('#select_categories').select2({
-			minimumResultsForSearch: Infinity
-			// data: arr_categories,
-		}).on('change', function(e) {
-			console.log(e);
-		});
-	
-		$('#select_sortBy').select2({
-			minimumResultsForSearch: Infinity
-			// data: arr_sortBy,
-		}).on('change', function(e) {
-			console.log(e);
-		});
 		showListofPlugins(true);
 		toogleLoader(false);
-
 	
-		elements.divBody.classList.remove('hidden');
+		// elements.divBody.classList.remove('hidden');
+		elements.divBody.classList.remove('transparent');
+
+		
 		// console.log('showMarketplace: ' + (Date.now() - start));
 		// we are removing the header for now, since the plugin has its own
 		// elements.divHeader.classList.remove('hidden');

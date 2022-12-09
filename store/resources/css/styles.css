@@ -269,6 +269,11 @@ label.header {
 	display: none !important;
 }
 
+.transparent {
+	opacity: 0;
+	z-index: -1;
+}
+
 .div_selected_toolbar {
 	display: flex;
 	margin: 20px;
