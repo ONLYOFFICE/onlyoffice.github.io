@@ -1167,7 +1167,7 @@ function sortPlugins(bAll, bInst, type) {
 function makeSearch(val) {
 	clearTimeout(searchTimeout);
 	searchTimeout = setTimeout(function() {
-		let plugins = catFiltred;// elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+		let plugins = catFiltred;
 		let bUpdate = false;
 		let arr = plugins.filter(function(el) {
 			let plugin = el.obj || el;
@@ -1187,9 +1187,9 @@ function makeSearch(val) {
 
 		if (founded.length) {
 			if (bUpdate)
-				showListofPlugins(true, founded);
+				showListofPlugins(elements.btnMarketplace.classList.contains('btn_toolbar_active'), founded);
 		} else {
-			showListofPlugins(true, []);
+			showListofPlugins(elements.btnMarketplace.classList.contains('btn_toolbar_active'), []);
 		}
 	}, 100);
 };
@@ -1208,7 +1208,7 @@ function filterByCategory(category) {
 	}
 	catFiltred = arr;
 	if (elements.inpSearch.value.trim() == '')
-		showListofPlugins(true, arr);
+		showListofPlugins(elements.btnMarketplace.classList.contains('btn_toolbar_active'), arr);
 	else
 		makeSearch(elements.inpSearch.value.trim().toLowerCase());
 };
