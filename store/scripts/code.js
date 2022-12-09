@@ -18,6 +18,7 @@
 
 let start = Date.now();
 let current = {index: 0, screenshots: [], url: ''};
+let searchTimeout = null;
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -1140,8 +1141,15 @@ function sortPlugins(bAll, bInst) {
 	}
 };
 
-function makeSearch (event) {
-	console.log('search = ', event.target.value);
+function makeSearch(event) {
+	clearTimeout(searchTimeout);
+	let val = event.target.value;
+	searchTimeout = setTimeout(function() {
+		let founded = allPlugins.filter(function(plugin) {
+			return plugin.name.includes(val);
+		});
+		console.log(founded);
+	}, 100);
 };
 
 function createDefaultTranslations() {
