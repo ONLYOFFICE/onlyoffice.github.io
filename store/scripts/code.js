@@ -1178,8 +1178,9 @@ function makeSearch(event) {
 			bUpdate = true;
 		}
 
-		if (bUpdate && founded.length) {
-			showListofPlugins(null, founded);
+		if (founded.length) {
+			if (bUpdate)
+				showListofPlugins(null, founded);
 		} else {
 			showListofPlugins(null, []);
 		}
