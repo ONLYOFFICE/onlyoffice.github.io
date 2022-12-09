@@ -19,7 +19,8 @@
 let start = Date.now();
 let current = {index: 0, screenshots: [], url: ''};
 let searchTimeout = null;
-let founded = null;
+let founded = [];
+let catFiltred = []
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -991,7 +992,7 @@ function showMarketplace() {
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
 		showListofPlugins(true);
 		toogleLoader(false);
-	
+		catFiltred = allPlugins;
 		// elements.divBody.classList.remove('hidden');
 		elements.divBody.classList.remove('transparent');
 
@@ -1159,7 +1160,7 @@ function makeSearch(event) {
 	clearTimeout(searchTimeout);
 	let val = event.target.value.trim().toLowerCase();
 	searchTimeout = setTimeout(function() {
-		let plugins = founded ? founded : elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+		let plugins = catFiltred;// elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 		let bUpdate = false;
 		let arr = plugins.filter(function(el) {
 			let plugin = el.obj || el;
@@ -1188,12 +1189,17 @@ function makeSearch(event) {
 
 function filterByCategory(category) {
 	let plugins = founded ? founded : elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
-	let arr = plugins.filter(function(plugin) {
-		let variation = plugin.variations[0] || plugin.obj.variations[0];
-		let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
-		return arrCat.includes(category);
-	});
-
+	let arr;
+	if (category != "all") {
+		arr = plugins.filter(function(plugin) {
+			let variation = plugin.variations[0] || plugin.obj.variations[0];
+			let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
+			return arrCat.includes(category);
+		});
+	} else {
+		arr = plugins;
+	}
+	catFiltred = arr;
 	showListofPlugins(null, arr);
 };
 
