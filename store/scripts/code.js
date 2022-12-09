@@ -170,7 +170,7 @@ window.onload = function() {
 	$('#select_categories').select2({
 		minimumResultsForSearch: Infinity
 	}).on('change', function(event) {
-		console.log(event.currentTarget.value);
+		filterByCategory(event.currentTarget.value);
 	});
 
 	$('#select_sortBy').select2({
@@ -194,7 +194,7 @@ window.addEventListener('message', function(message) {
 				installedPlugins = message.data.filter(function(el) {
 					return (el.guid !== guidMarkeplace && el.guid !== guidSettings);
 				});
-				sortPlugins(false, true);
+				sortPlugins(false, true, 'name');
 			} else {
 				installedPlugins = [];
 			}
@@ -222,7 +222,7 @@ window.addEventListener('message', function(message) {
 						removed: false
 					}
 				);
-				sortPlugins(false, true);
+				sortPlugins(false, true, 'name');
 			} else if (installed) {
 				installed.removed = false;
 			}
@@ -495,7 +495,7 @@ function getAllPluginsData() {
 				if (!count) {
 					// console.log('getAllPluginsData: ' + (Date.now() - start));
 					removeUnloaded(Unloaded);
-					sortPlugins(true, false);
+					sortPlugins(true, false, 'name');
 					isPluginLoading = false;
 					showMarketplace();
 				}
@@ -525,7 +525,7 @@ function getAllPluginsData() {
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
 				if (!count) {
 					removeUnloaded(Unloaded);
-					sortPlugins(true, false);
+					sortPlugins(true, false, 'name');
 					isPluginLoading = false;
 					showMarketplace();
 				}
@@ -1131,16 +1131,27 @@ function toogleView(current, oldEl, text, bAll) {
 	}
 };
 
-function sortPlugins(bAll, bInst) {
-	if (bAll) {
-		allPlugins.sort(function(a, b) {
-			return a.name.localeCompare(b.name);
-		});
-	}
-	if (bInst) {
-		installedPlugins.sort(function(a, b) {
-			return a.obj.name.localeCompare(b.obj.name);
-		});
+function sortPlugins(bAll, bInst, type) {
+	switch (type) {
+		case 'raiting':
+			// todo
+			break;
+		case 'instalations':
+			// todo
+			break;
+	
+		default:
+			if (bAll) {
+				allPlugins.sort(function(a, b) {
+					return a.name.localeCompare(b.name);
+				});
+			}
+			if (bInst) {
+				installedPlugins.sort(function(a, b) {
+					return a.obj.name.localeCompare(b.obj.name);
+				});
+			}
+			break;
 	}
 };
 
@@ -1173,6 +1184,17 @@ function makeSearch(event) {
 			showListofPlugins(null, []);
 		}
 	}, 100);
+};
+
+function filterByCategory(category) {
+	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+	let arr = plugins.filter(function(plugin) {
+		let variation = plugin.obj.variations[0] || plugin.variations[0];
+		let arrCat = (variation.store && variation.store.categories) ? pvariation.store.categories : [];
+		return arrCat.includes(category);
+	});
+
+	showListofPlugins(null, arr);
 };
 
 function createDefaultTranslations() {
