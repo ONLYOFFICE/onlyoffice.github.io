@@ -1148,8 +1148,9 @@ function makeSearch(event) {
 	searchTimeout = setTimeout(function() {
 		let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 		let bUpdate = false;
-		let arr = plugins.filter(function(plugin) {
-			let name = plugin.nameLocale ? plugin.nameLocale[shortLang] : plugin.obj.nameLocale[shortLang];
+		let arr = plugins.filter(function(el) {
+			let plugin = el.obj || el;
+			let name = (plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 			return name.toLowerCase().includes(val);
 		});
 
