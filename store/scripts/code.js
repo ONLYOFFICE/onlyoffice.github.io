@@ -1199,9 +1199,9 @@ function makeSearch(val) {
 
 		if (founded.length) {
 			if (bUpdate)
-				showListofPlugins(null, founded);
+				showListofPlugins(true, founded);
 		} else {
-			showListofPlugins(null, []);
+			showListofPlugins(true, []);
 		}
 	}, 100);
 };
@@ -1220,7 +1220,7 @@ function filterByCategory(category) {
 	}
 	catFiltred = arr;
 	if (elements.inpSearch.value.trim() == '')
-		showListofPlugins(null, arr);
+		showListofPlugins(true, arr);
 	else
 		makeSearch(elements.inpSearch.value.trim().toLowerCase());
 };
