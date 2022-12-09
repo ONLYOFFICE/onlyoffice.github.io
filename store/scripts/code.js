@@ -1127,12 +1127,13 @@ function getUrlSearchValue(key) {
 function toogleView(current, oldEl, text, bAll) {
 	if ( !current.classList.contains('btn_toolbar_active') ) {
 		elements.inpSearch.value = '';
-		founded = []
+		founded = [];
 		oldEl.classList.remove('btn_toolbar_active');
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = translate[text] || text;
 		if (document.getElementById('select_categories').value == 'all') {
 			showListofPlugins(bAll);
+			catFiltred = bAll ? allPlugins : installedPlugins;
 		} else {
 			filterByCategory(document.getElementById('select_categories').value);
 		}
