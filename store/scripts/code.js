@@ -547,7 +547,7 @@ function showListofPlugins(bAll, sortedArr) {
 		setTimeout(function(){if (Ps) Ps.update()});
 	} else {
 		// if no istalled plugins and my plugins button was clicked
-		let notification = Array.isArray(sortPlugins) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
+		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(translate[notification]);
 	}
 	if (!Ps) {
