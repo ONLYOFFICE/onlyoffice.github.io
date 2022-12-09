@@ -536,6 +536,7 @@ function getAllPluginsData() {
 
 function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
+	$('.div_notification').remove();
 	$('.div_item').remove();
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
 	if (arr.length) {
