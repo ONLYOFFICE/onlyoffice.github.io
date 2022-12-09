@@ -19,6 +19,7 @@
 let start = Date.now();
 let current = {index: 0, screenshots: [], url: ''};
 let searchTimeout = null;
+let founded = [];
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -1146,17 +1147,17 @@ function makeSearch(event) {
 	let val = event.target.value.trim().toLowerCase();
 	searchTimeout = setTimeout(function() {
 		let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
-		let founded = plugins.filter(function(plugin) {
+		let arr = plugins.filter(function(plugin) {
 			let name = plugin.nameLocale ? plugin.nameLocale[shortLang] : plugin.obj.nameLocale[shortLang];
 			return name.toLowerCase().includes(val);
 		});
-		console.log('search = ',val);
+		founded = arr;
 		if (founded.length) {
 			showListofPlugins(null, founded);
 		} else {
 			// todo make "no found"
 		}
-	}, 1000);
+	}, 100);
 };
 
 function createDefaultTranslations() {
