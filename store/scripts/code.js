@@ -19,7 +19,7 @@
 let start = Date.now();
 let current = {index: 0, screenshots: [], url: ''};
 let searchTimeout = null;
-let founded = [];
+let founded = null;
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -539,6 +539,7 @@ function showListofPlugins(bAll, sortedArr) {
 	$('.div_notification').remove();
 	$('.div_item').remove();
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
+	founded = arr;
 	if (arr.length) {
 		arr.forEach(function(plugin) {
 			if (plugin && plugin.guid)
@@ -1159,7 +1160,7 @@ function makeSearch(event) {
 	clearTimeout(searchTimeout);
 	let val = event.target.value.trim().toLowerCase();
 	searchTimeout = setTimeout(function() {
-		let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+		let plugins = founded ? founded : elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 		let bUpdate = false;
 		let arr = plugins.filter(function(el) {
 			let plugin = el.obj || el;
@@ -1169,17 +1170,15 @@ function makeSearch(event) {
 
 		if (founded.length == arr.length) {
 			if (JSON.stringify(founded) != JSON.stringify(arr)) {
-				founded = arr;
 				bUpdate = true;
 			}
 		} else {
-			founded = arr;
 			bUpdate = true;
 		}
 
-		if (founded.length) {
+		if (arr.length) {
 			if (bUpdate)
-				showListofPlugins(null, founded);
+				showListofPlugins(null, arr);
 		} else {
 			showListofPlugins(null, []);
 		}
@@ -1187,7 +1186,7 @@ function makeSearch(event) {
 };
 
 function filterByCategory(category) {
-	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+	let plugins = founded ? founded : elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 	let arr = plugins.filter(function(plugin) {
 		let variation = plugin.variations[0] || plugin.obj.variations[0];
 		let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
