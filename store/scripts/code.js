@@ -600,7 +600,7 @@ function createPluginDiv(plugin, bInstalled) {
 		});
 	}
 	let bHasUpdate = false;
-	if (/*isDesktop &&*/ installed) {
+	if (/*isDesktop &&*/ installed && plugin) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
@@ -732,7 +732,7 @@ function onClickItem() {
 	}
 
 	let bHasUpdate = false;
-	if (/*isDesktop &&*/ installed) {
+	if (/*isDesktop &&*/ installed && plugin) {
 		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
 		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
