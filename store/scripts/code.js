@@ -546,7 +546,7 @@ function showListofPlugins(bAll, sortedArr) {
 		setTimeout(function(){if (Ps) Ps.update()});
 	} else {
 		// if no istalled plugins and my plugins button was clicked
-		let notification = bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
+		let notification = Array.isArray(sortPlugins) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(translate[notification]);
 	}
 	if (!Ps) {
@@ -1166,7 +1166,7 @@ function makeSearch(event) {
 		if (bUpdate && founded.length) {
 			showListofPlugins(null, founded);
 		} else {
-			// todo make "no found"
+			showListofPlugins(null, []);
 		}
 	}, 100);
 };
