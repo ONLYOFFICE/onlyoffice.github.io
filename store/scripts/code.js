@@ -579,6 +579,12 @@ function createPluginDiv(plugin, bInstalled) {
 
 	div.onclick = onClickItem;
 
+	if (bInstalled) {
+		plugin = allPlugins.find(function(el){
+			return el.guid === plugin.guid;
+		});
+	}
+
 	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
 	if (/*isDesktop &&*/ installed) {
@@ -586,12 +592,6 @@ function createPluginDiv(plugin, bInstalled) {
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
 			bHasUpdate = true;
-	}
-
-	if (bInstalled) {
-		plugin = allPlugins.find(function(el){
-			return el.guid === plugin.guid;
-		});
 	}
 		
 	if (!plugin) {
