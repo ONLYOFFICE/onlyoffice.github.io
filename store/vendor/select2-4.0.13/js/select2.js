@@ -3479,7 +3479,7 @@
 	  this._dataToConvert = options.get('data') || [];
   
 	  ArrayAdapter.__super__.constructor.call(this, $element, options);
-	  this.addOptions(this.convertToOptions(this._dataToConvert));
+	//   this.addOptions(this.convertToOptions(this._dataToConvert));
 	}
   
 	Utils.Extend(ArrayAdapter, SelectAdapter);
