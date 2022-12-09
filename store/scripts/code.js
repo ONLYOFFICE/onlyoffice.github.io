@@ -1147,12 +1147,23 @@ function makeSearch(event) {
 	let val = event.target.value.trim().toLowerCase();
 	searchTimeout = setTimeout(function() {
 		let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+		let bUpdate = false;
 		let arr = plugins.filter(function(plugin) {
 			let name = plugin.nameLocale ? plugin.nameLocale[shortLang] : plugin.obj.nameLocale[shortLang];
 			return name.toLowerCase().includes(val);
 		});
-		founded = arr;
-		if (founded.length) {
+
+		if (founded.length == arr.length) {
+			if (JSON.stringify(founded) != JSON.stringify(arr)) {
+				founded = arr;
+				bUpdate = true;
+			}
+		} else {
+			founded = arr;
+			bUpdate = true;
+		}
+
+		if (bUpdate && founded.length) {
 			showListofPlugins(null, founded);
 		} else {
 			// todo make "no found"
