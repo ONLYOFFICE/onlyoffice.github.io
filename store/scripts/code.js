@@ -1190,7 +1190,7 @@ function filterByCategory(category) {
 	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 	let arr = plugins.filter(function(plugin) {
 		let variation = plugin.variations[0] || plugin.obj.variations[0];
-		let arrCat = (variation.store && variation.store.categories) ? pvariation.store.categories : [];
+		let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
 		return arrCat.includes(category);
 	});
 
