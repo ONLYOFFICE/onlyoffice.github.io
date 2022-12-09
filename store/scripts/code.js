@@ -176,17 +176,15 @@ window.onload = function() {
 		{id: 2, text:'Instalations'}
 	];
 	$('#select_categories').select2({
-		minimumResultsForSearch: Infinity,
+		minimumResultsForSearch: Infinity
 		// data: arr_categories,
-		width: '100%'
 	}).on('change', function(e) {
 		console.log(e);
 	});
 
 	$('#select_sortBy').select2({
 		minimumResultsForSearch: Infinity,
-		// data: arr_sortBy,
-		width: 'element'
+		data: arr_sortBy,
 	}).on('change', function(e) {
 		console.log(e);
 	});

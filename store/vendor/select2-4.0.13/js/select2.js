@@ -3479,7 +3479,7 @@
 	  this._dataToConvert = options.get('data') || [];
   
 	  ArrayAdapter.__super__.constructor.call(this, $element, options);
-	//   this.addOptions(this.convertToOptions(this._dataToConvert));
+	  this.addOptions(this.convertToOptions(this._dataToConvert));
 	}
   
 	Utils.Extend(ArrayAdapter, SelectAdapter);
@@ -3487,7 +3487,7 @@
 	ArrayAdapter.prototype.bind = function (container, $container) {
 	  ArrayAdapter.__super__.bind.call(this, container, $container);
   
-	   this.addOptions(this.convertToOptions(this._dataToConvert));
+	//    this.addOptions(this.convertToOptions(this._dataToConvert));
 	};
   
 	ArrayAdapter.prototype.select = function (data) {
