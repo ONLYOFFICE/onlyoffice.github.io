@@ -1150,7 +1150,11 @@ function makeSearch(event) {
 			let name = plugin.nameLocale ? plugin.nameLocale[shortLang] : plugin.obj.nameLocale[shortLang];
 			return name.toLowerCase().includes(val);
 		});
-		console.log(founded);
+		if (founded.length) {
+			showListofPlugins(null, founded);
+		} else {
+			// todo make "no found"
+		}
 	}, 100);
 };
 
