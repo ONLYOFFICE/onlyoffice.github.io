@@ -1150,12 +1150,13 @@ function makeSearch(event) {
 			let name = plugin.nameLocale ? plugin.nameLocale[shortLang] : plugin.obj.nameLocale[shortLang];
 			return name.toLowerCase().includes(val);
 		});
+		console.log('search = ',val);
 		if (founded.length) {
 			showListofPlugins(null, founded);
 		} else {
 			// todo make "no found"
 		}
-	}, 100);
+	}, 1000);
 };
 
 function createDefaultTranslations() {
