@@ -178,7 +178,7 @@ window.onload = function() {
 	$('#select_categories').select2({
 		minimumResultsForSearch: Infinity,
 		// data: arr_categories,
-		width: 'resolve'
+		width: '100%'
 	}).on('change', function(e) {
 		console.log(e);
 	});
@@ -186,7 +186,7 @@ window.onload = function() {
 	$('#select_sortBy').select2({
 		minimumResultsForSearch: Infinity,
 		// data: arr_sortBy,
-		width: 'resolve'
+		width: 'element'
 	}).on('change', function(e) {
 		console.log(e);
 	});
