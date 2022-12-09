@@ -539,7 +539,6 @@ function showListofPlugins(bAll, sortedArr) {
 	$('.div_notification').remove();
 	$('.div_item').remove();
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
-	founded = arr;
 	if (arr.length) {
 		arr.forEach(function(plugin) {
 			if (plugin && plugin.guid)
@@ -1170,15 +1169,17 @@ function makeSearch(event) {
 
 		if (founded.length == arr.length) {
 			if (JSON.stringify(founded) != JSON.stringify(arr)) {
+				founded = arr;
 				bUpdate = true;
 			}
 		} else {
+			founded = arr;
 			bUpdate = true;
 		}
 
-		if (arr.length) {
+		if (founded.length) {
 			if (bUpdate)
-				showListofPlugins(null, arr);
+				showListofPlugins(null, founded);
 		} else {
 			showListofPlugins(null, []);
 		}
