@@ -1143,12 +1143,12 @@ function sortPlugins(bAll, bInst) {
 
 function makeSearch(event) {
 	clearTimeout(searchTimeout);
-	let val = event.target.value;
+	let val = event.target.value.trim().toLowerCase();
 	searchTimeout = setTimeout(function() {
 		let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 		let founded = plugins.filter(function(plugin) {
 			let name = plugin.nameLocale ? plugin.nameLocale[shortLang] : plugin.obj.nameLocale[shortLang];
-			return name.includes(val);
+			return name.toLowerCase().includes(val);
 		});
 		console.log(founded);
 	}, 100);
