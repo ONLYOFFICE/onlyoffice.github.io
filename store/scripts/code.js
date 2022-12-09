@@ -1145,8 +1145,9 @@ function makeSearch(event) {
 	clearTimeout(searchTimeout);
 	let val = event.target.value;
 	searchTimeout = setTimeout(function() {
-		let founded = allPlugins.filter(function(plugin) {
-			return plugin.name.includes(val);
+		let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+		let founded = plugins.filter(function(plugin) {
+			return plugin.nameLocale[shortLang].includes(val);
 		});
 		console.log(founded);
 	}, 100);
