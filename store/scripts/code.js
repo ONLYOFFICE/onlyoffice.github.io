@@ -579,13 +579,12 @@ function createPluginDiv(plugin, bInstalled) {
 
 	div.onclick = onClickItem;
 
+	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	if (bInstalled) {
 		plugin = allPlugins.find(function(el){
 			return el.guid === plugin.guid;
 		});
 	}
-
-	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
 	if (/*isDesktop &&*/ installed) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
