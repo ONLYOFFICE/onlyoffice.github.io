@@ -1188,7 +1188,7 @@ function makeSearch(event) {
 };
 
 function filterByCategory(category) {
-	let plugins = founded ? founded : elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 	let arr;
 	if (category != "all") {
 		arr = plugins.filter(function(plugin) {
