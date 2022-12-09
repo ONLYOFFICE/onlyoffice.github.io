@@ -1123,6 +1123,7 @@ function getUrlSearchValue(key) {
 
 function toogleView(current, oldEl, text, bAll) {
 	if ( !current.classList.contains('btn_toolbar_active') ) {
+		elements.inpSearch.value = '';
 		oldEl.classList.remove('btn_toolbar_active');
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = translate[text] || text;
