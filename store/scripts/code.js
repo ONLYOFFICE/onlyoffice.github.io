@@ -548,7 +548,7 @@ function showListofPlugins(bAll, sortedArr) {
 	} else {
 		// if no istalled plugins and my plugins button was clicked
 		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
-		createNotification(translate[notification]);
+		createNotification(notification);
 	}
 	if (!Ps) {
 		Ps = new PerfectScrollbar('#div_main', {});
