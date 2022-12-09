@@ -194,7 +194,9 @@ window.onload = function() {
 		console.log(event.currentTarget.value);
 	});
 
-	elements.inpSearch.addEventListener('input', makeSearch);
+	elements.inpSearch.addEventListener('input', function(event) {
+		makeSearch(event.target.value.trim().toLowerCase());
+	});
 };
 
 window.addEventListener('message', function(message) {
@@ -1170,9 +1172,9 @@ function sortPlugins(bAll, bInst, type) {
 	}
 };
 
-function makeSearch(event) {
+function makeSearch(val) {
+	console.log('search');
 	clearTimeout(searchTimeout);
-	let val = event.target.value.trim().toLowerCase();
 	searchTimeout = setTimeout(function() {
 		let plugins = catFiltred;// elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 		let bUpdate = false;
@@ -1202,6 +1204,7 @@ function makeSearch(event) {
 };
 
 function filterByCategory(category) {
+	console.log('filter');
 	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 	let arr;
 	if (category != "all") {
@@ -1214,7 +1217,10 @@ function filterByCategory(category) {
 		arr = plugins;
 	}
 	catFiltred = arr;
-	showListofPlugins(null, arr);
+	if (elements.inpSearch.value.trim() == '')
+		showListofPlugins(null, arr);
+	else
+		makeSearch(elements.inpSearch.value.trim().toLowerCase());
 };
 
 function createDefaultTranslations() {
