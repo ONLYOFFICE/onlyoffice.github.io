@@ -17,10 +17,10 @@
  */
 
 let start = Date.now();
-let current = {index: 0, screenshots: [], url: ''};
-let searchTimeout = null;
-let founded = [];
-let catFiltred = []
+let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
+let searchTimeout = null;                                            // timeot for search
+let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
+let catFiltred = []                                                  // plugins are filtred by caterogy (used for search)
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -581,7 +581,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
 	let bHasUpdate = false;
-	if (isDesktop && installed) {
+	if (/*isDesktop &&*/ installed) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
@@ -719,7 +719,7 @@ function onClickItem() {
 	}
 
 	let bHasUpdate = false;
-	if (isDesktop && installed) {
+	if (/*isDesktop &&*/ installed) {
 		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
 		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
