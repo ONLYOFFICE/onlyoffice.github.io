@@ -183,7 +183,7 @@ label.header {
 
 .span_description {
 	margin: 0px 10px 0px;
-	max-height: 80px;
+	max-height: 60px;
 	overflow: auto;
 }
 
@@ -340,7 +340,7 @@ label.header {
 	padding: 1px 5px;
 	border: 1px solid #009900;
 	border-radius: 12px;
-	margin: 10px;
+	margin: 0px 10px 5px 10px;
 }
 
 .error_main {
