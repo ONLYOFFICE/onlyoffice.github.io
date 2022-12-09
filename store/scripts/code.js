@@ -998,8 +998,8 @@ function showMarketplace() {
 		});
 	
 		$('#select_sortBy').select2({
-			minimumResultsForSearch: Infinity,
-			data: arr_sortBy,
+			minimumResultsForSearch: Infinity
+			// data: arr_sortBy,
 		}).on('change', function(e) {
 			console.log(e);
 		});
