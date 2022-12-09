@@ -1197,7 +1197,7 @@ function filterByCategory(category) {
 	let arr;
 	if (category != "all") {
 		arr = plugins.filter(function(plugin) {
-			let variation = plugin.variations[0] || plugin.obj.variations[0];
+			let variation = plugin.variations ? plugin.variations[0] : plugin.obj.variations[0];
 			let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
 			return arrCat.includes(category);
 		});
