@@ -1130,7 +1130,11 @@ function toogleView(current, oldEl, text, bAll) {
 		oldEl.classList.remove('btn_toolbar_active');
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = translate[text] || text;
-		showListofPlugins(bAll);
+		if (document.getElementById('select_categories').value == 'all') {
+			showListofPlugins(bAll);
+		} else {
+			filterByCategory(document.getElementById('select_categories').value);
+		}
 	}
 };
 
@@ -1159,7 +1163,6 @@ function sortPlugins(bAll, bInst, type) {
 };
 
 function makeSearch(val) {
-	console.log('search');
 	clearTimeout(searchTimeout);
 	searchTimeout = setTimeout(function() {
 		let plugins = catFiltred;// elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
@@ -1190,7 +1193,6 @@ function makeSearch(val) {
 };
 
 function filterByCategory(category) {
-	console.log('filter');
 	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
 	let arr;
 	if (category != "all") {
