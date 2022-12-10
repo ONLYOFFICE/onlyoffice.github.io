@@ -586,7 +586,7 @@ function createPluginDiv(plugin, bInstalled) {
 		});
 	}
 	let bHasUpdate = false;
-	if (/*isDesktop &&*/ installed && plugin) {
+	if (installed && plugin) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
 		if (lastV > installedV)
@@ -602,7 +602,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -674,7 +674,7 @@ function onClickRemove(target, event) {
 };
 
 function onClickUpdateAll() {
-	//todo
+	// todo в либо в цикле посылать для каждого update, либо сделать чтобы метод update мог принимать массив плагинов для обновления
 	console.log('onClickUpdateAll')
 };
 
@@ -718,7 +718,7 @@ function onClickItem() {
 	}
 
 	let bHasUpdate = false;
-	if (/*isDesktop &&*/ installed && plugin) {
+	if (installed && plugin) {
 		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
 		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
