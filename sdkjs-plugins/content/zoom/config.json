@@ -84,7 +84,19 @@
                         "de": "Schließen"
                     }
                 }
-            ]
+            ],
+			"store": {
+                "background": {
+                    "light" : "#008DFF",
+                    "dark" : "#008DFF"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                },
+                "categories": ["specAbilities", "entertainment", "communication"]
+            }
         },
         {
             "description": "About",
@@ -116,19 +128,7 @@
                 }
             ],
 
-            "size": [ 392, 147 ],
-            "store": {
-                "background": {
-                    "light" : "#008DFF",
-                    "dark" : "#008DFF"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "entertainment", "communication"]
-            }
+            "size": [ 392, 147 ]
         }
     ]
 }
