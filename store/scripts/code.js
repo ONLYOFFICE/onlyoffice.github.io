@@ -252,7 +252,10 @@ window.addEventListener('message', function(message) {
 				this.document.getElementById('btn_update').classList.add('hidden');
 			}
 
-			this.document.getElementById(message.guid).lastChild.firstChild.remove();
+			let pluginDiv = this.document.getElementById(message.guid);
+			if (pluginDiv)
+				pluginDiv.lastChild.firstChild.remove();
+
 			if (!updateCount)
 				toogleLoader(false);
 			break;
