@@ -1001,23 +1001,13 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
 	document.getElementById('opt_com').innerHTML = translate['Communication'];
 	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
-	$('#select_categories').select2({
-		minimumResultsForSearch: Infinity
-	}).on('change', function(event) {
-		filterByCategory(event.currentTarget.value);
-	});
-
-	// $('#select_sortBy').select2({
-	// 	minimumResultsForSearch: Infinity
-	// }).on('change', function(event) {
-	// 	console.log(event.currentTarget.value);
-	// });
 	showMarketplace();
 };
 
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
+		createSelect();
 		showListofPlugins(true);
 		toogleLoader(false);
 		catFiltred = allPlugins;
@@ -1029,6 +1019,20 @@ function showMarketplace() {
 		// we are removing the header for now, since the plugin has its own
 		// elements.divHeader.classList.remove('hidden');
 	}
+};
+
+function createSelect() {
+	$('#select_categories').select2({
+		minimumResultsForSearch: Infinity
+	}).on('change', function(event) {
+		filterByCategory(event.currentTarget.value);
+	});
+
+	// $('#select_sortBy').select2({
+	// 	minimumResultsForSearch: Infinity
+	// }).on('change', function(event) {
+	// 	console.log(event.currentTarget.value);
+	// });
 };
 
 function getImageUrl(guid, bNotForStore, bSetSize, id) {
