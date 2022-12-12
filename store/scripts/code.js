@@ -465,6 +465,7 @@ function initElemnts() {
 	elements.arrowPrev = document.getElementById('arrow_prev');
 	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
+	elements.btnUpdateAll = document.getElementById('btn_updateAll');
 };
 
 function toogleLoader(show, text) {
@@ -591,8 +592,10 @@ function createPluginDiv(plugin, bInstalled) {
 	if (installed && plugin) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
-		if (lastV > installedV)
+		if (lastV > installedV) {
 			bHasUpdate = true;
+			elements.btnUpdateAll.classList.remove('hidden');
+		}
 	}
 		
 	if (!plugin) {
@@ -680,6 +683,7 @@ function onClickUpdateAll() {
 	// todo в либо в цикле посылать для каждого update, либо сделать чтобы метод update мог принимать массив плагинов для обновления
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	elements.btnUpdateAll.classList.add('hidden');
 	let tempArr = document.getElementsByClassName('span_update');
 	updateCount = tempArr.length;
 	for (let i = 0; i < updateCount; i++) {
@@ -982,12 +986,14 @@ function getTranslation() {
 function onTranslate() {
 	isTranslationLoading = false;
 	// translates elements on current language
-	elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
-	elements.btnMyPlugins.innerHTML = translate["My plugins"];
-	elements.btnMarketplace.innerHTML = translate["Marketplace"];
+	elements.linkNewPlugin.innerHTML = translate['Submit your own plugin'];
+	elements.btnMyPlugins.innerHTML = translate['My plugins'];
+	elements.btnMarketplace.innerHTML = translate['Marketplace'];
 	elements.btnInstall.innerHTML = translate['Install'];
-	elements.btnRemove.innerHTML = translate["Remove"];
-	elements.btnUpdate.innerHTML = translate["Update"];
+	elements.btnRemove.innerHTML = translate['Remove'];
+	elements.btnUpdate.innerHTML = translate['Update'];
+	elements.btnUpdateAll.innerHTML = translate['Update All'];
+	elements.inpSearch.placeholder = translate['Search plugins'] + '...';
 	document.getElementById('lbl_header').innerHTML = translate['Manage plugins'];
 	document.getElementById('span_offered_caption').innerHTML = translate['Offered by'] + ': ';
 	document.getElementById('span_overview').innerHTML = translate['Overview'];
@@ -1001,6 +1007,14 @@ function onTranslate() {
 	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
 	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
 	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
+	document.getElementById('span_categories').innerHTML = translate['Categories'];
+	document.getElementById('opt_all').innerHTML = translate['All'];
+	document.getElementById('opt_rec').innerHTML = translate['Recommended'];
+	document.getElementById('opt_dev').innerHTML = translate['Developer tools'];
+	document.getElementById('opt_work').innerHTML = translate['Work'];
+	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
+	document.getElementById('opt_com').innerHTML = translate['Communication'];
+	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
 	showMarketplace();
 };
 
