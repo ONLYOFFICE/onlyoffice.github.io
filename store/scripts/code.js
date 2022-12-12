@@ -20,7 +20,8 @@ let start = Date.now();
 let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
-let catFiltred = []                                                  // plugins are filtred by caterogy (used for search)
+let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
+let updateCount = 0;
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -213,8 +214,8 @@ window.addEventListener('message', function(message) {
 				toogleLoader(false);
 				return;
 			}
-			plugin = allPlugins.find(function(el){return el.guid === message.guid});
-			installed = installedPlugins.find(function(el){return el.guid === message.guid});
+			plugin = findPlugin(true, message.guid);
+			installed = findPlugin(false, message.guid);
 			if (!installed && plugin) {
 				installedPlugins.push(
 					{
@@ -246,13 +247,15 @@ window.addEventListener('message', function(message) {
 			toogleLoader(false);
 			break;
 		case 'Updated':
+			updateCount--;
 			if (!message.guid) {
 				// somethimes we can receive such message
-				toogleLoader(false);
+				if (!updateCount)
+					toogleLoader(false);
 				return;
 			}
-			installed = installedPlugins.find(function(el){return el.guid == message.guid});
-			plugin = allPlugins.find(function(el){return el.guid === message.guid});
+			installed = findPlugin(false, message.guid);
+			plugin = findPlugin(true, message.guid);
 
 			installed.obj.version = plugin.version;
 
@@ -261,7 +264,8 @@ window.addEventListener('message', function(message) {
 			}
 
 			this.document.getElementById(message.guid).lastChild.firstChild.remove();
-			toogleLoader(false);
+			if (!updateCount)
+				toogleLoader(false);
 			break;
 		case 'Removed':
 			if (!message.guid) {
@@ -269,8 +273,8 @@ window.addEventListener('message', function(message) {
 				toogleLoader(false);
 				return;
 			}
-			plugin = allPlugins.find(function(el) {return el.guid === message.guid});
-			installed = installedPlugins.find(function(el){return el.guid === message.guid});
+			plugin = findPlugin(true, message.guid);
+			installed = findPlugin(false, message.guid);
 			let bUpdate = false;
 			if (installed) {
 				if (plugin && installed.obj.baseUrl.includes('onlyoffice.github.io')) {
@@ -579,11 +583,9 @@ function createPluginDiv(plugin, bInstalled) {
 
 	div.onclick = onClickItem;
 
-	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
+	let installed = bInstalled ? plugin : findPlugin(false, plugin.guid);
 	if (bInstalled) {
-		plugin = allPlugins.find(function(el){
-			return el.guid === plugin.guid;
-		});
+		plugin = findPlugin(true, plugin.guid);
 	}
 	let bHasUpdate = false;
 	if (installed && plugin) {
@@ -631,8 +633,8 @@ function onClickInstall(target, event) {
 	timeout = setTimeout(toogleLoader, 200, true, "Installation");
 	// toogleLoader(true, "Installation");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
-	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
-	let installed = installedPlugins.find( function(el) { return el.guid === guid; } );
+	let plugin = findPlugin(true, guid);
+	let installed = findPlugin(false, guid);
 	let message = {
 		type : 'install',
 		url : (installed ? installed.baseUrl : plugin.url),
@@ -648,7 +650,8 @@ function onClickUpdate(target) {
 	timeout = setTimeout(toogleLoader, 200, true, "Updating");
 	// toogleLoader(true, "Updating");
 	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
-	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
+	let plugin = findPlugin(true, guid);
+	updateCount++;
 	let message = {
 		type : 'update',
 		url : plugin.url,
@@ -675,7 +678,21 @@ function onClickRemove(target, event) {
 
 function onClickUpdateAll() {
 	// todo в либо в цикле посылать для каждого update, либо сделать чтобы метод update мог принимать массив плагинов для обновления
-	console.log('onClickUpdateAll')
+	clearTimeout(timeout);
+	timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	let tempArr = document.getElementsByClassName('span_update');
+	updateCount = tempArr.length;
+	for (let i = 0; i < updateCount; i++) {
+		let guid = tempArr[i].parentNode.parentElement.id;
+		let plugin = findPlugin(true, guid);
+		let message = {
+			type : 'update',
+			url : plugin.url,
+			guid : guid,
+			config : plugin
+		};
+		sendMessage(message);
+	}
 };
 
 function onClickItem() {
@@ -688,9 +705,8 @@ function onClickItem() {
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
 
-	let installed = installedPlugins.find(function(el){return(el.guid===guid);});
-	let plugin = allPlugins.find(function(el){return (el.guid == guid);});
-
+	let installed = findPlugin(false, guid);
+	let plugin = findPlugin(true, guid);
 	if (!plugin) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
@@ -1025,15 +1041,11 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 	let plugin;
 	if (allPlugins) {
-		plugin = allPlugins.find(function(el){
-			return el.guid === guid
-		});
+		plugin = findPlugin(true, guid);
 	}
 
 	if (!plugin && installedPlugins) {
-		plugin = installedPlugins.find(function(el){
-			return el.guid === guid
-		});
+		plugin = findPlugin(false, guid);
 		if (plugin)
 			plugin = plugin.obj;
 	}
@@ -1230,4 +1242,11 @@ function removeUnloaded(unloaded) {
 	unloaded.forEach(function(el){
 		allPlugins.splice(el, 1);
 	})
+};
+
+function findPlugin(bAll, guid) {
+	let res = bAll
+			? allPlugins.find(function(el){return el.guid === guid})
+			: installedPlugins.find(function(el){return el.guid === guid});
+	return res;
 };
