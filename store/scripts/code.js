@@ -246,6 +246,7 @@ window.addEventListener('message', function(message) {
 			plugin = findPlugin(true, message.guid);
 
 			installed.obj.version = plugin.version;
+			plugin.bHasUpdate = false;
 
 			if (!elements.divSelected.classList.contains('hidden')) {
 				this.document.getElementById('btn_update').classList.add('hidden');
@@ -583,6 +584,7 @@ function createPluginDiv(plugin, bInstalled) {
 		if (lastV > installedV) {
 			bHasUpdate = true;
 			elements.btnUpdateAll.classList.remove('hidden');
+			plugin.bHasUpdate = true;
 		}
 	}
 		
@@ -671,19 +673,19 @@ function onClickUpdateAll() {
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Updating");
 	elements.btnUpdateAll.classList.add('hidden');
-	let tempArr = document.getElementsByClassName('span_update');
-	updateCount = tempArr.length;
-	for (let i = 0; i < updateCount; i++) {
-		let guid = tempArr[i].parentNode.parentElement.id;
-		let plugin = findPlugin(true, guid);
+	let arr = allPlugins.filter(function(el) {
+		return el.bHasUpdate;
+	});
+	updateCount = arr.length;
+	arr.forEach(function(plugin){
 		let message = {
 			type : 'update',
 			url : plugin.url,
-			guid : guid,
+			guid : plugin.guid,
 			config : plugin
 		};
 		sendMessage(message);
-	}
+	});
 };
 
 function onClickItem() {
