@@ -130,7 +130,7 @@ window.onload = function() {
 
 	// elements.arrow.onclick = onClickBack;
 
-	elements.imgScreenshot.onclick = onClickScreenshot;
+	// elements.imgScreenshot.onclick = onClickScreenshot;
 	elements.arrowPrev.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
@@ -167,19 +167,7 @@ window.onload = function() {
 		} 
 	};
 
-	elements.divArrow.onclick = onClickScreenshot;
-
-	$('#select_categories').select2({
-		minimumResultsForSearch: Infinity
-	}).on('change', function(event) {
-		filterByCategory(event.currentTarget.value);
-	});
-
-	$('#select_sortBy').select2({
-		minimumResultsForSearch: Infinity
-	}).on('change', function(event) {
-		console.log(event.currentTarget.value);
-	});
+	// elements.divArrow.onclick = onClickScreenshot;
 
 	elements.inpSearch.addEventListener('input', function(event) {
 		makeSearch(event.target.value.trim().toLowerCase());
@@ -680,7 +668,6 @@ function onClickRemove(target, event) {
 };
 
 function onClickUpdateAll() {
-	// todo в либо в цикле посылать для каждого update, либо сделать чтобы метод update мог принимать массив плагинов для обновления
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Updating");
 	elements.btnUpdateAll.classList.add('hidden');
@@ -701,7 +688,6 @@ function onClickUpdateAll() {
 
 function onClickItem() {
 	// There we will make preview for selected plugin
-	// TODO think about where we will get "offered by" and text for this block (maybe from config) (also we should add translate for it)
 	let offered = " Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
@@ -793,7 +779,6 @@ function onClickItem() {
 		elements.btnInstall.classList.remove('hidden');
 	}
 
-	// TODO Fix problem with loading screenshots
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
@@ -803,7 +788,6 @@ function onClickItem() {
 
 function onClickBack() {
 	// click on left arrow in preview mode
-	// TODO Fix problem with loading screenshots
 	elements.imgIcon.style.display = 'none';
 	elements.imgScreenshot.setAttribute('src','')
 	document.getElementById('span_overview').click();
@@ -1015,6 +999,17 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
 	document.getElementById('opt_com').innerHTML = translate['Communication'];
 	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
+	$('#select_categories').select2({
+		minimumResultsForSearch: Infinity
+	}).on('change', function(event) {
+		filterByCategory(event.currentTarget.value);
+	});
+
+	// $('#select_sortBy').select2({
+	// 	minimumResultsForSearch: Infinity
+	// }).on('change', function(event) {
+	// 	console.log(event.currentTarget.value);
+	// });
 	showMarketplace();
 };
 
