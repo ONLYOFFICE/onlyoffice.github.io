@@ -16,7 +16,7 @@
             "isVisual": false,
             "initDataType": "none",
             "initData": "",
-            "isUpdateOleOnResize": true,
+            "isUpdateOleOnResize": true
         }
     ]
 
