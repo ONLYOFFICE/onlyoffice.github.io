@@ -10,6 +10,7 @@
         "ja": "スピーチ",
         "nl": "Spraak",
         "pt": "Discurso",
+        "uk": "Читати",
         "zh": "讲话"
     },
     "guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
@@ -22,7 +23,8 @@
                 "ru": "Преобразуйте выделенный текст в речь.",
                 "fr": "Convertissez le texte sélectionné en parole.",
                 "es": "Convierta el texto seleccionado en voz.",
-                "de": "Konvertieren Sie den ausgewählten Text in die Rede."
+                "de": "Konvertieren Sie den ausgewählten Text in die Rede.",
+                "uk": "Прочитайте виділений текст."
             },
             "url": "index.html",
 
@@ -100,6 +102,7 @@
                 "ja": "設定",
                 "nl": "Instellingen",
                 "pt": "Definições",
+                "uk": "Налаштування",
                 "zh": "设置"
                 
             },
