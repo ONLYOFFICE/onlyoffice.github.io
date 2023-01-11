@@ -29,7 +29,7 @@ var Ps;
     "13 hour","14 hour","15 hour","16 hour","17 hour","18 hour","19 hour","20 hour","21 hour","22 hour","23 hour","24 hour"];
     var minutes = ["0 minutes","15 minutes","30 minutes","45 minutes"];
     var elements = { };
-    var zoomServerUrl = "https://proxy-zoom.herokuapp.com/";
+    var zoomProxyUrl = "https://zoom.onlyoffice.com/proxy";
     var email = '';
     var sdkKey = '';
     var sdkSecret = '';
@@ -60,6 +60,10 @@ var Ps;
        switchClass(elements.loader, displayNoneClass, !bShow);
     };
     
+    window.Asc.plugin.onFocusContentControl = function() {
+        console.log('1111');
+    }
+
     function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
@@ -331,17 +335,24 @@ var Ps;
         showLoader(elements, true);
         $.ajax({
             method: 'POST',
+            contentType: "text/plain",
             data: JSON.stringify({
                 'Authorization': 'Bearer ' + tokenKey,
                 'endPoint': email,
                 "method": "GET"
             }),
-            url: zoomServerUrl
+            url: zoomProxyUrl
         }).success(function (oResponse) {
             localStorage.setItem($('#emailField').attr("data-id"), email);
             localStorage.setItem($('#sdkKeyField').attr("data-id"), sdkKey);
             localStorage.setItem($('#sdkSecretField').attr("data-id"), sdkSecret);
             localStorage.setItem($('#tokenKeyField').attr("data-id"), tokenKey);
+
+            if (oResponse.message && oResponse.message.search("Invalid") != -1) {
+                alert('Invalid access (JWT) token!');
+                showLoader(elements, false);
+                return;
+            }
 
             if (email !== "") {
                 if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
@@ -373,7 +384,7 @@ var Ps;
 
             showLoader(elements, false);
         }).error(function(e){
-            alert('Check your details');
+            alert('Server error. Contact to support.');
             showLoader(elements, false);
         });
     };
@@ -567,9 +578,17 @@ var Ps;
 
         $.ajax({
             type: 'POST',
+            contentType: "text/plain",
             data: JSON.stringify(jsonData),
-            url: zoomServerUrl
+            url: zoomProxyUrl
         }).success(function (oResponse) {
+            if (oResponse.message && oResponse.message.search("Invalid") != -1) {
+                alert("Invalid access (JWT) token.");
+                showLoader(elements, false);
+                $('#reconf').trigger("click");
+                return;
+            }
+
             var sTopic    = 'Topic: ' + oResponse.topic;
             var sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + oResponse["timezone"];
             var sJoinUrl  = 'Join URL: ' + oResponse.join_url;
@@ -599,14 +618,7 @@ var Ps;
 
             showLoader(elements, false);
         }).error(function(e) {
-            alert('Meeting was not created');
-            if (e.responseJSON && e.responseJSON.message) {
-                console.log(e.responseJSON.message);
-                if (e.responseJSON.message.search("Invalid access token.") != -1) {
-                    alert("Invalid access (JWT) token.")
-                    $('#reconf').trigger("click");
-                }
-            }
+            alert('Server error. Contact to support.');
             showLoader(elements, false);
         });
     }

@@ -1,4 +1,4 @@
-SIGNATURE_SERVER = "https://onlyoffice-zoom-sdk-signature.herokuapp.com/";
+SIGNATURE_SERVER = "https://zoom.onlyoffice.com/sign";
 
 window.addEventListener('DOMContentLoaded', function(event) {
   console.log('DOM fully loaded and parsed');
@@ -116,25 +116,27 @@ function websdkready() {
       testTool.setCookie("meeting_pwd", meetingConfig.pwd);
 
       $.ajax({
-            method: 'POST',
-			data: {
-                'meet_number': meetingConfig.mn,
-                'role_id': meetingConfig.role,
-                'sdk_key': SDK_KEY,
-                'sdk_secret': SDK_SECRET
-			},
-			url: SIGNATURE_SERVER
+          method: 'POST',
+          contentType: "text/plain",
+          dataType: "text",
+          data: JSON.stringify({
+            'meet_number': meetingConfig.mn,
+            'role_id': meetingConfig.role,
+            'sdk_key': SDK_KEY,
+            'sdk_secret': SDK_SECRET
+          }),
+          url: SIGNATURE_SERVER
 
-        }).success(function (oResponse) {
-            meetingConfig.signature = oResponse;
-            meetingConfig.sdkKey = SDK_KEY;
-            var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
-            window.parent.openMeeting(joinUrl);
-            showLoader(false);
-        }).error(function(oResponse) {
-            showLoader(false);
-            console.log(oResponse);
-        })
+      }).success(function (oResponse) {
+          meetingConfig.signature = oResponse;
+          meetingConfig.sdkKey = SDK_KEY;
+          var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
+          window.parent.openMeeting(joinUrl);
+          showLoader(false);
+      }).error(function(oResponse) {
+          alert('Server error. Contact to support.');
+          showLoader(false);
+      })
   };
 
   function copyToClipboard(elementId) {
@@ -167,25 +169,28 @@ function websdkready() {
       testTool.setCookie("meeting_pwd", meetingConfig.pwd);
 
       $.ajax({
-            method: 'POST',
-			data: {
-                'meet_number': meetingConfig.mn,
-                'role_id': meetingConfig.role,
-                'sdk_key': SDK_KEY,
-                'sdk_secret': SDK_SECRET
-			},
-			url: SIGNATURE_SERVER
+          method: 'POST',
+          contentType: "text/plain",
+          dataType: "text",
+          data: JSON.stringify({
+              'meet_number': meetingConfig.mn,
+              'role_id': meetingConfig.role,
+              'sdk_key': SDK_KEY,
+              'sdk_secret': SDK_SECRET
+          }),
+			    url: SIGNATURE_SERVER
 
-        }).success(function (oResponse) {
-            meetingConfig.signature = oResponse;
-            meetingConfig.sdkKey = SDK_KEY;
-            var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
-            document.getElementById('copy_link_value').setAttribute('link', joinUrl);
-            copyToClipboard('copy_link_value');
-            alert('Copy link was copied to clipboard')
-        }).error(function(oResponse) {
-            console.log(oResponse)
-        })
+      }).success(function (oResponse) {
+          meetingConfig.signature = oResponse;
+          meetingConfig.sdkKey = SDK_KEY;
+          var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
+          document.getElementById('copy_link_value').setAttribute('link', joinUrl);
+          copyToClipboard('copy_link_value');
+          alert('Copy link was copied to clipboard')
+      }).error(function(oResponse) {
+          alert('Server error. Contact to support.');
+          showLoader(false);
+      })
   };
   
 }
