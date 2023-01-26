@@ -4044,7 +4044,7 @@
 	Dropdown.prototype.render = function () {
 	  var $dropdown = $(
 		'<span class="select2-dropdown">' +
-		  '<span class="select2-results"></span>' +
+		  '<span class="select2-results skiptranslate"></span>' +
 		'</span>'
 	  );
   
