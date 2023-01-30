@@ -354,7 +354,7 @@ var Ps;
                 return;
             }
             else if (oResponse.message && oResponse.message.search("Access token is expired") != -1) {
-                alert("Access token is expired.");
+                alert("Access token (JWT) is expired.");
                 showLoader(elements, false);
                 return;
             }
@@ -594,7 +594,7 @@ var Ps;
                 return;
             }
             else if (oResponse.message && oResponse.message.search("Access token is expired") != -1) {
-                alert("Access token is expired.");
+                alert("Access token (JWT) is expired.");
                 showLoader(elements, false);
                 $('#reconf').trigger("click");
                 return;
