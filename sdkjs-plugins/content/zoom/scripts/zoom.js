@@ -353,6 +353,11 @@ var Ps;
                 showLoader(elements, false);
                 return;
             }
+            else if (oResponse.message && oResponse.message.search("Access token is expired") != -1) {
+                alert("Access token is expired.");
+                showLoader(elements, false);
+                return;
+            }
 
             if (email !== "") {
                 if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
@@ -584,6 +589,12 @@ var Ps;
         }).success(function (oResponse) {
             if (oResponse.message && oResponse.message.search("Invalid") != -1) {
                 alert("Invalid access (JWT) token.");
+                showLoader(elements, false);
+                $('#reconf').trigger("click");
+                return;
+            }
+            else if (oResponse.message && oResponse.message.search("Access token is expired") != -1) {
+                alert("Access token is expired.");
                 showLoader(elements, false);
                 $('#reconf').trigger("click");
                 return;
