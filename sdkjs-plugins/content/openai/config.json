@@ -11,56 +11,57 @@
 
     "variations": [
         {
-            "description": "OpenAI",
+            "description": "The Openal API can be applied to virtually any task that involves understanding or generating natural language or code.",
             "descriptionLocale": {
-                "ru": "OpenAI",
-                "fr": "OpenAI",
-                "es": "OpenAI",
-                "de": "OpenAI"
+                "ru": "Openal API может быть применен практически к любой задаче, которая включает в себя понимание или генерацию естественного языка или кода.",
+                "fr": "L'API Openal peut être appliquée à pratiquement toutes les tâches impliquant la compréhension ou la génération de langage naturel ou de code.",
+                "es": "La API de Openal se puede aplicar a prácticamente cualquier tarea que implique comprender o generar código o lenguaje natural.",
+                "de": "Die Openal-API kann auf praktisch jede Aufgabe angewendet werden, bei der natürliche Sprache oder Code verstanden oder generiert werden.",
+                "cs": "OpenAL API lze použít prakticky na jakýkoli úkol, který zahrnuje porozumění nebo generování přirozeného jazyka nebo kódu."
             },
             "url": "index.html",
 
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
             "icons2": [
-				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/light/icon@2x.png"
-					}
-				},
-				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "resources/dark/icon@2x.png"
-					}
-				}
-			],
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
             "isViewer": false,
             "EditorsSupport": [ "word", "cell", "slide" ],
 
@@ -72,9 +73,9 @@
             "initData": "",
 
             "isUpdateOleOnResize": false,
-			"buttons": [],
+            "buttons": [],
             "initOnSelectionChanged": false,
-			"store": {
+            "store": {
                 "background": {
                     "light" : "linear-gradient(136.1deg, #FF8E3D -1.99%, #FF6F3D 100%)",
                     "dark" : "linear-gradient(136.1deg, #FF8E3D -1.99%, #FF6F3D 100%)"
