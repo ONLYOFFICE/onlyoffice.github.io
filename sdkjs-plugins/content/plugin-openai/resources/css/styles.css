@@ -1,0 +1,90 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0px !important;
+}
+
+.div_content {
+	padding: 15px;
+	height: 100%;
+	display: flex;
+	flex-flow: column;
+}
+
+.div_config {
+	padding: 15px;
+	height: 100%;
+}
+
+.mrtop {
+    margin-top: 8px;
+}
+
+textarea {
+	height: 100px !important;
+}
+
+textarea::selection {
+	background: #D8DADC; /* WebKit/Blink Browsers */
+	color: #444444;
+}
+
+input::selection {
+	background: #D8DADC; /* WebKit/Blink Browsers */
+	color: #444444;
+}
+
+.div_form {
+	display: flex;
+	flex-flow: column;
+}
+
+.btn_req {
+	margin: 10px 4px;
+}
+
+.div_req_btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.div_parametr {
+	display: flex;
+	flex-flow: column;
+	margin: 10px 0px;
+}
+
+.div_param_name {
+	display: flex;
+	justify-content: space-between;
+}
+
+.inp_value {
+	max-width: 35px;
+}
+
+
+#footerCont {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+.loader {
+	margin: 0 !important;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100% !important;
+	background-color: rgba(128, 128, 128, 0.5);
+}
+
+.hidden {
+	display: none;
+}
+
+.api_key_error {
+	border: 1px solid red !important;
+}
