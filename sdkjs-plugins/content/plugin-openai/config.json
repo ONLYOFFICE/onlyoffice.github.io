@@ -1,0 +1,91 @@
+{
+    "name": "OpenAI",
+    "nameLocale": {
+        "ru": "OpenAI",
+        "fr": "OpenAI",
+        "es": "OpenAI",
+        "de": "OpenAI"
+    },
+    "guid": "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
+    "version": "1.0.0",
+
+    "variations": [
+        {
+            "description": "OpenAI",
+            "descriptionLocale": {
+                "ru": "OpenAI",
+                "fr": "OpenAI",
+                "es": "OpenAI",
+                "de": "OpenAI"
+            },
+            "url": "index.html",
+
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+			"buttons": [],
+            "initOnSelectionChanged": false,
+			"store": {
+                "background": {
+                    "light" : "linear-gradient(136.1deg, #FF8E3D -1.99%, #FF6F3D 100%)",
+                    "dark" : "linear-gradient(136.1deg, #FF8E3D -1.99%, #FF6F3D 100%)"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                },
+                "categories": ["specAbilities", "work", "recommended"]
+            }
+        }
+    ]
+}
