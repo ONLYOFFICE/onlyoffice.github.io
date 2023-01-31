@@ -1,0 +1,15 @@
+{
+	"The model which will generate the completion. Some models are suitable for natural language tasks, others specialize in code." : "Модель, которая будет генерировать завершение. Некоторые модели подходят для задач на естественном языке, другие специализируются на коде.",
+	"Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the node will become deterministic and repetitive." : "Контролирует случайность: снижение приводит к менее случайным завершениям. Когда температура приблизится к нулю, узел станет детерминированным и повторяющимся.",
+	"The maximum number of tokens to generate in the completion." : "Максимальное количество токенов для генерации при завершении.",
+	"Up to four sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence." : "До четырех последовательностей, в которых API перестанет генерировать дальнейшие токены. Возвращаемый текст не будет содержать стоп-последовательность.",
+	"An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass.": "Альтернатива выборке с температурой, называемая выборкой ядра, где модель учитывает результаты токенов с вероятностной массой top_p.",
+	"To use OpenAI you should get an API key." : "Для использования OpenAI необходимо получить API ключ.",
+	"Create and copy API key into the field below." : "Создайте ключ API и скопируйте его в поле ниже.",
+	"Navigate to" : "Перейти к",
+	"Make request" : "Сделать запрос",
+	"Clear field" : "Очистить поле",
+	"Reconfigure" : "Перенастроить",
+	"Save" : "Сохранить",
+	"Loading..." : "Загрузка..."
+}
