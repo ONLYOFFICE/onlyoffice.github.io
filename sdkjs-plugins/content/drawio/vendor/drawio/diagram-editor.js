@@ -305,7 +305,6 @@ DiagramEditor.prototype.getTitle = function()
  */
 DiagramEditor.prototype.getFrameStyle = function()
 {
-	// if we use document.body.scrollLeft, we have bug 55144  https://bugzilla.onlyoffice.com/show_bug.cgi?id=55141
 	return this.frameStyle + ';left:' +	5 /*document.body.scrollLeft*/ + 'px;' +
 		'top:' + document.body.scrollTop + 'px;';
 };
