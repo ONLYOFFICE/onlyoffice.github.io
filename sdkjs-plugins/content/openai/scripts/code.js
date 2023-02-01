@@ -35,6 +35,7 @@
 	let elements = {};
 	let apiKey = null;
 	let timeout = null;
+	let bCreateLoader = true;
 
 	window.Asc.plugin.init = function() {
 		apiKey = localStorage.getItem('OpenAiApiKey') || null;
@@ -43,6 +44,7 @@
 			fetchModels();
 		} else {
 			elements.divConfig.classList.remove('hidden');
+			bCreateLoader = false;
 			destroyLoader();
 		}
 
@@ -234,9 +236,12 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
-		createLoader();
+		if (bCreateLoader)
+			createLoader();
+
 		let elements = document.getElementsByClassName('i18n');
 		let titles = document.getElementsByClassName('div_parametr');
+		bCreateLoader = true;
 
 		for (let i = 0; i < elements.length; i++)
 			elements[i].innerText = getMessage(elements[i].innerText);
