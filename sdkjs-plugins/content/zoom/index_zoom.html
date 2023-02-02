@@ -133,6 +133,7 @@
         }
         .form-control {
             outline:0 !important;
+            width: 100% !important;
         }
         input[type=text]:focus {
             outline: 0 !important;
@@ -172,15 +173,15 @@
                     <form class="navbar-form navbar-right" id="meeting_form" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
                         <div>
                             <div class="form-group">
-                                <label>Name</label>
+                                <label>Your Name*</label>
                                 <input type="text" name="display_name" id="display_name" data-id="zoom-display-name-id" value="" maxLength="100" placeholder="Name" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Meeting ID</label>
+                                <label>Meeting ID*</label>
                                 <input type="text" name="meeting_number" id="meeting_number" value="" maxLength="200" style="width:150px" placeholder="Meeting Number" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Meeting password</label>
+                                <label>Password</label>
                                 <input type="text" name="meeting_pwd" id="meeting_pwd" value="" style="width:150px" maxLength="32" placeholder="Meeting Password" class="form-control">
                             </div>
                             <div class="form-group">
@@ -223,13 +224,13 @@
     
                             <input type="hidden" value="" id="copy_link_value" />
                             <div id="button_wrapper" style="display: flex; justify-content: space-between;">
-                                <div type="submit" class="btn-text-default" id="join_meeting" onclick="window.joinMeeting('#joinMeeting')">Join</div>
-                                <div type="button" link="" onclick="window.copyJoinLink('#copy_join_link')" class="btn-text-default" id="copy_join_link">Copy Direct join link</div>
+                                <div style="width: 100%; margin-right: 5px;" type="submit" class="btn-text-default" id="join_meeting" onclick="window.joinMeeting('#joinMeeting')">Join</div>
+                                <div style="width: 100%;" type="button" link="" onclick="window.copyJoinLink('#copy_join_link')" class="btn-text-default" id="copy_join_link">Copy Direct join link</div>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-top: 16px;">
                             <div id="switch" style="z-index: 9999;">
-                                <label class="switch-label noselect" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; z-index: 9999;">Schedule mode</label>
+                                <label class="switch-label noselect" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; z-index: 9999;">Go to Creating meeting</label>
                             </div>
                             <div id="reconf" style="z-index: 9999;">
                                 <label class="reconf-label noselect" style="cursor:pointer; border-bottom: 1px dashed #f1f1f1; z-index: 9999;">Reconfigure</label>
