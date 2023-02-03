@@ -25,6 +25,7 @@
 
 	window.Asc.plugin.init = function() {
 		apiKey = localStorage.getItem('OpenAiApiKey') || null;
+		addSlidersListeners();
 		initElements();
 		if (apiKey) {
 			fetchModels();
@@ -37,9 +38,6 @@
 		elements.inpLenSl.oninput = onSlInput;
 		elements.inpTempSl.oninput = onSlInput;
 		elements.inpTopSl.oninput = onSlInput;
-		elements.inpLen.oninput = onValInput;
-		elements.inpTemp.oninput = onValInput;
-		elements.inpTop.oninput = onValInput;
 
 		elements.btnSaveConfig.onclick = function() {
 			elements.apiKeyField.classList.remove('api_key_error');
@@ -59,8 +57,8 @@
 				clearMainError();
 			}
 			localStorage.removeItem('OpenAiApiKey');
+			elements.apiKeyField.value = apiKey;
 			apiKey = '';
-			elements.apiKeyField.value = '';
 			elements.divContent.classList.add('hidden');
 			elements.divConfig.classList.remove('hidden');
 		};
@@ -106,35 +104,48 @@
 	};
 
 	function initElements() {
-		elements.inpLen		= document.getElementById('inp_len');
-		elements.inpLenSl	  = document.getElementById('inp_len_sl');
-		elements.inpTemp	   = document.getElementById('inp_temp');
-		elements.inpTempSl	 = document.getElementById('inp_temp_sl');
-		elements.inpTop		= document.getElementById('inp_top');
-		elements.inpTopSl	  = document.getElementById('inp_top_sl');
+		elements.inpLenSl	   = document.getElementById('inp_len_sl');
+		elements.inpTempSl	   = document.getElementById('inp_temp_sl');
+		elements.inpTopSl	   = document.getElementById('inp_top_sl');
 		elements.inpStop	   = document.getElementById('inp_stop');
-		elements.textArea	  = document.getElementById('textarea');
-		elements.btnReq		= document.getElementById('btn_req');
-		elements.btnClear	  = document.getElementById('btn_clear');
-		elements.btnLogout	 = document.getElementById('logoutLink');
+		elements.textArea	   = document.getElementById('textarea');
+		elements.btnReq		   = document.getElementById('btn_req');
+		elements.btnClear	   = document.getElementById('btn_clear');
+		elements.btnLogout	   = document.getElementById('logoutLink');
 		elements.btnSaveConfig = document.getElementById('btn_saveConfig');
 		elements.apiKeyField   = document.getElementById('apiKeyField');
-		elements.divContent	= document.getElementById('div_content');
-		elements.divConfig	 = document.getElementById('div_config');
+		elements.divContent	   = document.getElementById('div_content');
+		elements.divConfig	   = document.getElementById('div_config');
 		elements.reconfigure   = document.getElementById('logoutLink');
-		elements.mainError	 = document.getElementById('div_err');
+		elements.mainError	   = document.getElementById('div_err');
 		elements.mainErrorLb   = document.getElementById('lb_err');
-		elements.keyError	  = document.getElementById('apiKeyError');
-		elements.keyErrorLb	= document.getElementById('lb_key_err');
+		elements.keyError	   = document.getElementById('apiKeyError');
+		elements.keyErrorLb	   = document.getElementById('lb_key_err');
 		elements.keyErrorMes   = document.getElementById('lb_key_err_mes');
 	};
 
-	function onSlInput(e) {
-		e.target.previousElementSibling.children[1].value = e.target.value;
+	function addSlidersListeners() {
+		const rangeInputs = document.querySelectorAll('input[type="range"]');
+
+		function handleInputChange(e) {
+			let target = e.target
+			if (e.target.type !== 'range') {
+				target = document.getElementById('range')
+			} 
+			const min = target.min
+			const max = target.max
+			const val = target.value
+			
+			target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%'
+		}
+
+		rangeInputs.forEach(function(input) {
+			input.addEventListener('input', handleInputChange)
+		});
 	};
 
-	function onValInput(e) {
-		e.target.parentElement.nextElementSibling.value = Number(e.target.value.trim());
+	function onSlInput(e) {
+		e.target.nextElementSibling.innerText = e.target.value;
 	};
 
 	function fetchModels() {
@@ -235,6 +246,29 @@
 		for (let j = 0; j < titles.length; j++)
 			titles[j].attributes["title"].value = getMessage(titles[j].attributes["title"].value);
 	};
+
+	window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+
+        let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+		let sliderBG, thumbBG;
+		if (theme.type.includes("dark")) {
+			sliderBG = '#ссс';
+			thumbBG = '#7d858c'
+		} else {
+			sliderBG = '#ссс';
+			thumbBG = '#444';
+		}
+		rule += '\n input[type="range"] { background-color: '+sliderBG+' !important; background-image: linear-gradient('+thumbBG+', '+thumbBG+') !important; }\n';
+		rule += '\n input[type="range"]::-webkit-slider-thumb { background: '+thumbBG+' !important; }\n';
+		rule += '\n input[type="range"]::-moz-range-thumb { background: '+thumbBG+' !important; }\n';
+		rule += '\n input[type="range"]::-ms-thumb { background: '+thumbBG+' !important; }\n';
+        let styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rule;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+    };
 
 	window.Asc.plugin.button = function(id) {
 		window.Asc.plugin.executeCommand("close", "");
