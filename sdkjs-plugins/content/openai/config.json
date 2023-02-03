@@ -77,8 +77,8 @@
             "initOnSelectionChanged": false,
             "store": {
                 "background": {
-                    "light" : "linear-gradient(136.1deg, #FF8E3D -1.99%, #FF6F3D 100%)",
-                    "dark" : "linear-gradient(136.1deg, #FF8E3D -1.99%, #FF6F3D 100%)"
+                    "light" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
+                    "dark" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
