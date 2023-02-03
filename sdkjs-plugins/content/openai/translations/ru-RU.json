@@ -4,12 +4,17 @@
 	"The maximum number of tokens to generate in the completion." : "Максимальное количество токенов для генерации при завершении.",
 	"Up to four sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence." : "До четырех последовательностей, в которых API перестанет генерировать дальнейшие токены. Возвращаемый текст не будет содержать стоп-последовательность.",
 	"An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass.": "Альтернатива выборке с температурой, называемая выборкой ядра, где модель учитывает результаты токенов с вероятностной массой top_p.",
-	"To use OpenAI you should get an API key." : "Для использования OpenAI необходимо получить API ключ.",
-	"Create and copy API key into the field below." : "Создайте ключ API и скопируйте его в поле ниже.",
-	"Navigate to" : "Перейти к",
-	"Make request" : "Сделать запрос",
-	"Clear field" : "Очистить поле",
+	"For using ChatGPT you should get an API key." : "Для использования ChatGPT вы должны получить ключ API.",
+	"Create API keys and copy in this field." : "Создайте ключи API и скопируйте в это поле.",
+	"ChatGPT: Optimizing Language Models for Dialogue" : "ChatGPT: Оптимизация языковых моделей для диалога",
+	"Go to" : "Перейти к",
+	"Submit" : "Отправить",
+	"Clear" : "Очистить",
 	"Reconfigure" : "Перенастроить",
 	"Save" : "Сохранить",
-	"Loading..." : "Загрузка..."
+	"Loading..." : "Загрузка...",
+	"Model" : "Модель",
+	"Maximum length" : "Максимальная длинна",
+	"Temperature" : "Температура",
+	"Stop sequences" : "Стоп последовательности"
 }

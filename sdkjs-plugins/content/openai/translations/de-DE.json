@@ -4,12 +4,17 @@
 	"The maximum number of tokens to generate in the completion." : "Die maximale Anzahl von Token, die bei der Fertigstellung generiert werden sollen.",
 	"Up to four sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence." : "Bis zu vier Sequenzen, in denen die API keine weiteren Token mehr generiert. Der zurückgegebene Text enthält die Stoppsequenz nicht.",
 	"An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass.": "Eine Alternative zur Probenahme mit Temperatur, genannt Kernprobenahme, bei der das Modell die Ergebnisse der Token mit top_p Wahrscheinlichkeitsmasse berücksichtigt.",
-	"To use OpenAI you should get an API key." : "Um OpenAI zu verwenden, sollten Sie einen API-Schlüssel erhalten.",
-	"Create and copy API key into the field below." : "Erstellen und kopieren Sie den API-Schlüssel in das Feld unten.",
-	"Navigate to" : "Navigieren Sie zu",
-	"Make request" : "Anfrage stellen",
-	"Clear field" : "Feld löschen",
+	"For using ChatGPT you should get an API key." : "Für die Verwendung von ChatGPT sollten Sie einen API-Schlüssel erhalten.",
+	"Create API keys and copy in this field." : "Erstellen Sie API-Schlüssel und kopieren Sie sie in dieses Feld.",
+	"ChatGPT: Optimizing Language Models for Dialogue" : "ChatGPT: Optimierung von Sprachmodellen für den Dialog",
+	"Go to" : "Navigieren Sie zu",
+	"Submit" : "Senden",
+	"Clear" : "Reinigen",
 	"Reconfigure" : "Rekonfiguriert",
 	"Save" : "Speichern",
-	"Loading..." : "Laden..."
+	"Loading..." : "Laden...",
+	"Model" : "Modell",
+	"Maximum length" : "Maximallänge",
+	"Temperature" : "Temperatur",
+	"Stop sequences" : "Stoppsequenzen"
 }

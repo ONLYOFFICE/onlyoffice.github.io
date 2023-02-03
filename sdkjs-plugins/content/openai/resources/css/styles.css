@@ -5,14 +5,14 @@ html, body {
 }
 
 .div_content {
-	padding: 15px;
+	padding: 12px;
 	height: 100%;
 	display: flex;
 	flex-flow: column;
 }
 
 .div_config {
-	padding: 15px;
+	padding: 12px;
 	height: 100%;
 }
 
@@ -21,7 +21,7 @@ html, body {
 }
 
 textarea {
-	height: 100px !important;
+	height: 236px !important;
 }
 
 textarea::selection {
@@ -39,14 +39,21 @@ input::selection {
 	flex-flow: column;
 }
 
-.btn_req {
-	margin: 10px 4px;
+.btn_submit {
+	flex: 0.8;
+	margin-right: 5px;
+}
+
+.btn_clear {
+	flex: 0.2;
+	margin-left: 5px;
 }
 
 .div_req_btn {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin-top: 18px;
 }
 
 .div_parametr {
@@ -55,9 +62,16 @@ input::selection {
 	margin: 10px 0px;
 }
 
-.div_param_name {
+.div_param_val {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	margin-top: 5px;
+}
+
+.lbl_param_val {
+	margin-left: 10px;
+	min-width: 30px;
 }
 
 .inp_value {
@@ -67,8 +81,8 @@ input::selection {
 
 #footerCont {
 	position: absolute;
-	right: 10px;
-	bottom: 10px;
+	left: 12px;
+	bottom: 12px;
 }
 
 .loader {
@@ -88,3 +102,172 @@ input::selection {
 .api_key_error {
 	border: 1px solid red !important;
 }
+
+input[type="range"] {
+	-webkit-appearance: none;
+	margin-right: 15px;
+	height: 4px;
+	background-color: #ccc;
+	border-radius: 5px;
+	background-image: linear-gradient(#444, #444);
+	background-repeat: no-repeat;
+}
+  
+
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	height: 12px;
+	width: 12px;
+	border-radius: 50%;
+	background: #444;
+	cursor: pointer;
+	transition: background .3s ease-in-out;
+}
+
+input[type="range"]::-moz-range-thumb {
+	-webkit-appearance: none;
+	height: 12px;
+	width: 12px;
+	border-radius: 50%;
+	background: #444;
+	border: none;
+	cursor: pointer;
+	transition: background .3s ease-in-out;
+}
+
+input[type="range"]::-ms-thumb {
+	-webkit-appearance: none;
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	background: #444;
+	cursor: pointer;
+	transition: background .3s ease-in-out;
+}
+
+/* input[type="range"]::-webkit-slider-thumb:hover {
+	background: #444;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+	background: #444;
+}
+
+input[type="range"]::-ms-thumb:hover {
+	background: #444;
+} */
+
+input[type=range]::-webkit-slider-runnable-track  {
+	-webkit-appearance: none;
+	box-shadow: none;
+	border: none;
+	background: transparent;
+}
+
+input[type=range]::-moz-range-track {
+	-webkit-appearance: none;
+	box-shadow: none;
+	border: none;
+	background: transparent;
+}
+
+input[type="range"]::-ms-track {
+	-webkit-appearance: none;
+	box-shadow: none;
+	border: none;
+	background: transparent;
+}
+
+
+
+
+
+/* 
+input[type=range] {
+	width: 100%;
+	-webkit-appearance: none;
+	margin: 6px 0;
+	background-color: transparent !important;
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+	height: 4px;
+	-webkit-appearance: none;
+	cursor: pointer;
+	background: #ccc;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+}
+
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	height: 12px;
+	width: 12px;
+	border-radius: 8px;
+	background: #444444;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -5px;
+}
+
+input[type=range]::-moz-range-track {
+	width: 100%;
+	cursor: pointer;
+	background: #ccc;
+	border: 1px solid #ccc;
+	height: 4px;
+	border-radius: 8px;
+}
+
+input[type="range"]::-moz-range-progress {
+	background-color: #444444;
+	border: 1px solid #444444;
+	border-radius: 8px;
+	height: 4px;
+}
+
+input[type=range]::-moz-range-thumb {
+	height: 12px;
+	width: 12px;
+	border: 1px solid #444444;
+	border-radius: 8px;
+	background: #444444;
+	cursor: pointer;
+	-webkit-appearance: none;
+}
+
+input[type=range]::-ms-track {
+	width: 100%;
+	cursor: pointer;
+	background: transparent;
+	border-color: transparent;
+	color: transparent;
+	height: 4px;
+}
+
+input[type=range]::-ms-fill-lower {
+	height: 4px;
+	background: #444444;
+	border: 1px solid #444444;
+	border-radius: 8px;
+}
+
+input[type=range]::-ms-fill-upper {
+	height: 4px;
+	background: #ccc;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+}
+
+input[type=range]::-ms-thumb {
+	height: 12px;
+	width: 12px;
+	border: 1px solid #444444;
+	border-radius: 8px;
+	background: #444444;
+	cursor: pointer;
+} */
