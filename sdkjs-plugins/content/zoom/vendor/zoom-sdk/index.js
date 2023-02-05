@@ -102,7 +102,7 @@ function websdkready() {
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
         showLoader(false);
-        alert("Meeting number or username is empty");
+        alert("Meeting ID or Your Name is empty");
         return false;
       }
 
@@ -155,7 +155,7 @@ function websdkready() {
 
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
-        alert("Meeting number or username is empty");
+        alert("Meeting ID or Your Name is empty");
         return false;
       }
 

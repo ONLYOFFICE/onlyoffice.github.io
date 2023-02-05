@@ -241,9 +241,11 @@ var Ps;
             });
         });
         $('#create_meeting').click(function() {
+            isNowMeeting = false;
             CreateMeeting();
         });
         $('#start-meeting').click(function() {
+            isNowMeeting = true;
             CreateMeeting(true);
         });
         $('#schedule-meeting').click(function() {
@@ -495,7 +497,8 @@ var Ps;
         return true;
     }
 
-    function CreateMeeting(isNowMeeting) {
+    var isNowMeeting = false;
+    function CreateMeeting() {
         if ($('#duration-hour').val() === "0" && $('#duration-min').val() === "0")
         {
             alert("Duration can't be 0");
@@ -570,13 +573,13 @@ var Ps;
             jsonData["settings"]     = meetingSettings;
             if (sMeetPasswd !== "")
                 jsonData["password"] = sMeetPasswd;
-            jsonData["timezone"]     = sTimeZone;
             jsonData["recurrence"]   = sRecurringConf;
         }
         else {
             jsonData["type"]         = 1;
         }
 
+        jsonData["timezone"]     = sTimeZone;
         jsonData['Authorization'] = 'Bearer ' + tokenKey;
         jsonData['method'] = 'POST';
         jsonData['endPoint'] = email + '/meetings';
@@ -601,7 +604,25 @@ var Ps;
             }
 
             var sTopic    = 'Topic: ' + oResponse.topic;
-            var sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + oResponse["timezone"];
+            var sTime;
+            if (isNowMeeting) {
+                let timezone = $('#timezone').find(":selected").text().trim();
+                let timezoneOffset = parseInt(timezone[4] + String(parseInt(timezone.slice(5,7)) * 60 + parseInt(timezone.slice(8,10))));
+                let curDate = new Date(Date.now());
+                curDate.setUTCMinutes(curDate.getUTCMinutes() + timezoneOffset);
+
+                let curHour = curDate.getUTCHours();
+                let sAmPm = curHour - 12 > 0 ? "PM" : "AM";
+                let sCurHoursAmPm = curHour - 12 > 0 ? curHour - 12 : curHour;
+                sCurHoursAmPm = sCurHoursAmPm < 10 ? "0" + sCurHoursAmPm : sCurHoursAmPm;
+                let curMinutes = curDate.getUTCMinutes() < 10 ? "0" + curDate.getUTCMinutes() : curDate.getUTCMinutes()
+                let curDay = curDate.getUTCDate() < 10 ? "0" + curDate.getUTCDate() : curDate.getUTCDate();
+                let curMonth = curDate.getUTCMonth() < 10 ? "0" + (curDate.getUTCMonth() + 1) : (curDate.getUTCMonth() + 1);
+
+                sTime = `Time: ${curMonth}/${curDay}/${curDate.getUTCFullYear()} ${sCurHoursAmPm}:${curMinutes} ${sAmPm} ${oResponse["timezone"]}`;
+            }
+            else
+                sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + oResponse["timezone"];
             var sJoinUrl  = 'Join URL: ' + oResponse.join_url;
             var sConfId   = 'Conference ID: ' + oResponse.id;
             var sPassword = 'Password: ' + oResponse.password;
@@ -632,6 +653,11 @@ var Ps;
             alert('Server error. Contact to support.');
             showLoader(elements, false);
         });
+    }
+
+    function formatDate(sDate, timezone) {
+        
+        return;
     }
 
     window.Asc.plugin.button = function(id)
