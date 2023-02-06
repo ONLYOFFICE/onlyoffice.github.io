@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="./resources/css/styles.css">
 </head>
 <body>
-	<div id="div_config" class="div_config hidden">
+	<div id="div_config" class="div_content hidden">
 		<label class="header i18n">ChatGPT: Optimizing Language Models for Dialogue</label>
 		<div style="margin-top: 13px;">
 			<span class="i18n">For using ChatGPT you should get an API key.</span> <span class="i18n">Go to</span> <a target="_blank" href="https://beta.openai.com/account/api-keys">OpenAI API keys</a>. <span class="i18n">Create API keys and copy in this field.</span>
@@ -43,10 +43,10 @@
 		<div id="apiKeyError" class="hidden" style="padding-top: 15px;">
 			<label id="lb_key_err" style="color:red"></label>
 			<br>
-			<label id="lb_key_err_mes"></label>
+			<label id="lb_key_err_mes" style="overflow-wrap: anywhere;"></label>
 		</div>
 	</div>
-	<div id="div_content" class="div_content hidden">
+	<div id="div_content" class="div_main div_content hidden">
 		<div class="div_form">
 			<textarea id="textarea" class="form-control"></textarea>
 		</div>
@@ -85,7 +85,7 @@
 				<button id="btn_clear" class="btn-text-default btn_clear i18n">Clear</button>
 			</div>
 		</div>
-		<div id="div_err" class="hidden">
+		<div id="div_err" class="hidden" style="margin-top: 10px;">
 			<label style="color: red;">Error:</label>
 			<br>
 			<label id="lb_err"></label>
