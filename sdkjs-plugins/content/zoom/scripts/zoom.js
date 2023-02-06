@@ -546,8 +546,16 @@ var Ps;
         sDate += arrSplittedDate[2] + '-' + arrSplittedDate[0] + '-' + arrSplittedDate[1];
 
         if (sAmPmTime == 'pm') {
-            var arrSplittedTime = sTime.split(':');
-            sTime = String(Number(arrSplittedTime[0]) + 12) + ':' + arrSplittedTime[1];
+            if (sTime != "12:00" && sTime != "12:30") {
+                var arrSplittedTime = sTime.split(':');
+                sTime = String(Number(arrSplittedTime[0]) + 12) + ':' + arrSplittedTime[1];
+            }
+        }
+        else if (sAmPmTime == 'am') {
+            if (sTime == "12:00")
+                sTime = "0:00";
+            else if (sTime == "12:30")
+                sTime = "0:30";
         }
         sResultTime = sDate + 'T' + sTime + ':00';
 
