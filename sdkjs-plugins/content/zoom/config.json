@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "Zoom",
+            "description": "Schedule and hold video meetings right in the editors using Zoom.",
             "descriptionLocale": {
-                "ru": "Zoom",
-                "fr": "Zoom",
-                "es": "Zoom",
-                "de": "Zoom"
+                "ru": "Планируйте и проводите видеовстречи прямо в редакторах с помощью Zoom.",
+                "fr": "Planifiez et organisez des réunions vidéo directement dans les éditeurs avec Zoom.",
+                "es": "Planifique y celebre reuniones de vídeo directamente en los editores con Zoom.",
+                "de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren."
             },
             "url": "index.html",
 
