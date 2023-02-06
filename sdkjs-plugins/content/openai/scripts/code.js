@@ -22,6 +22,21 @@
 	let apiKey = null;
 	let timeout = null;
 	let bCreateLoader = true;
+	const AllowedModels = {
+		'text-ada-001' : true,
+
+		'text-babbage-001' : true,
+
+		'curie-instruct-beta' : true,
+		'text-curie-001' : true,
+
+
+		'text-davinci-003' : true,
+		'text-davinci-002' : true,
+		'text-davinci-001' : true,
+		'davinchi-instruct-beta' : true,
+		'davinchi:2020-05-03' : true
+	};
 
 	window.Asc.plugin.init = function() {
 		apiKey = localStorage.getItem('OpenAiApiKey') || null;
@@ -86,7 +101,12 @@
 				if (data.error)
 					throw data.error
 
-				window.Asc.plugin.executeMethod('PasteHtml', ['<div>'+data.choices[0].text+'</div>']);
+				let text = data.choices[0].text;
+				if (text.startsWith('\n'))
+					text = text.replace('\n\n', '\n').replace('\n', '<br>');
+					
+				text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
+				window.Asc.plugin.executeMethod('PasteHtml', ['<div>'+text+'</div>']);
 			})
 			.catch(function(error) {
 				elements.mainError.classList.remove('hidden');
@@ -140,7 +160,7 @@
 		}
 
 		rangeInputs.forEach(function(input) {
-			input.addEventListener('input', handleInputChange)
+			input.addEventListener('input', handleInputChange);
 		});
 	};
 
@@ -162,9 +182,13 @@
 			if (data.error)
 				throw data.error;
 
-			let arrModels = data.data.map(function(el) {
-				return { id: el.id, text: el.id};
-			});
+			let arrModels = [];
+			
+			for (let index = 0; index < data.data.length; index++) {
+				let model = data.data[index];
+				if (AllowedModels[model.id])
+					arrModels.push( { id: model.id, text: model.id } );
+			};
 
 			$('#sel_models').select2({
 				data : arrModels
