@@ -5,15 +5,20 @@ html, body {
 }
 
 .div_content {
-	padding: 12px;
-	height: 100%;
-	display: flex;
-	flex-flow: column;
+	position: relative;
+	margin: 15px 0px 15px 15px;
+	padding-right: 15px;
+	height: calc(100% - 20px);
+	overflow: hidden;
 }
 
-.div_config {
-	padding: 12px;
-	height: 100%;
+.ps__rail-y {
+	margin-top: 0px !important;
+}
+
+.div_main {
+	display: flex;
+	flex-flow: column;
 }
 
 .mrtop {
@@ -82,9 +87,11 @@ input::selection {
 
 
 #footerCont {
-	position: absolute;
-	left: 12px;
-	bottom: 12px;
+	margin: 5px 0px;
+}
+
+.div_settings {
+	flex: 1;
 }
 
 .loader {
