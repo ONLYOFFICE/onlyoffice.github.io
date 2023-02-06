@@ -248,27 +248,29 @@
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
-    {
-        window.Asc.plugin.onThemeChangedBase(theme);
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
 
-        let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 		let sliderBG, thumbBG;
 		if (theme.type.includes("dark")) {
-			sliderBG = '#ссс';
-			thumbBG = '#7d858c'
+			sliderBG = theme.Border || '#757575';
+			// for dark '#757575';
+			// for contrast dark #616161
+			thumbBG = '#fcfcfc';
 		} else {
-			sliderBG = '#ссс';
+			sliderBG = '#ccc';
 			thumbBG = '#444';
 		}
 		rule += '\n input[type="range"] { background-color: '+sliderBG+' !important; background-image: linear-gradient('+thumbBG+', '+thumbBG+') !important; }\n';
 		rule += '\n input[type="range"]::-webkit-slider-thumb { background: '+thumbBG+' !important; }\n';
 		rule += '\n input[type="range"]::-moz-range-thumb { background: '+thumbBG+' !important; }\n';
 		rule += '\n input[type="range"]::-ms-thumb { background: '+thumbBG+' !important; }\n';
-        let styleTheme = document.createElement('style');
-        styleTheme.type = 'text/css';
-        styleTheme.innerHTML = rule;
-        document.getElementsByTagName('head')[0].appendChild(styleTheme);
-    };
+		let styleTheme = document.createElement('style');
+		styleTheme.type = 'text/css';
+		styleTheme.innerHTML = rule;
+		document.getElementsByTagName('head')[0].appendChild(styleTheme);
+	};
 
 	window.Asc.plugin.button = function(id) {
 		window.Asc.plugin.executeCommand("close", "");
