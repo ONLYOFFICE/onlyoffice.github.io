@@ -103,10 +103,10 @@
 					throw data.error
 
 				let text = data.choices[0].text;
-				if (text.startsWith('\n'))
-					text = text.replace('\n\n', '\n').replace('\n', '<br>');
+				// if (text.startsWith('\n'))
+				// 	text = text.replace('\n\n', '\n').replace('\n', '<br>');
 					
-				text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
+				// text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
 				window.Asc.plugin.executeMethod('PasteHtml', ['<div>'+text+'</div>']);
 			})
 			.catch(function(error) {
