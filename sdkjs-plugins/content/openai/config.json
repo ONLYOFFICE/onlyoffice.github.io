@@ -11,12 +11,12 @@
 
     "variations": [
         {
-            "description": "The Openal API can be applied to virtually any task that involves understanding or generating natural language or code.",
+            "description": "Use the OpenAI chatbot to perform tasks which involve understanding or generating natural language or code.",
             "descriptionLocale": {
-                "ru": "Openal API может быть применен практически к любой задаче, которая включает в себя понимание или генерацию естественного языка или кода.",
-                "fr": "L'API Openal peut être appliquée à pratiquement toutes les tâches impliquant la compréhension ou la génération de langage naturel ou de code.",
-                "es": "La API de Openal se puede aplicar a prácticamente cualquier tarea que implique comprender o generar código o lenguaje natural.",
-                "de": "Die Openal-API kann auf praktisch jede Aufgabe angewendet werden, bei der natürliche Sprache oder Code verstanden oder generiert werden.",
+                "ru": "Используйте чат-бот OpenAI для выполнения задач, связанных с пониманием или генерацией естественного языка или кода.",
+                "fr": "Utilisez le chatbot OpenAI pour effectuer des tâches qui impliquent la compréhension ou la génération de langage naturel ou de code.",
+                "es": "Utilice el chatbot OpenAI para realizar tareas que impliquen la comprensión o generación de lenguaje natural o de código.",
+                "de": "Verwenden Sie den OpenAI-Chatbot, um Aufgaben auszuführen, die das Verstehen oder Generieren von natürlicher Sprache oder Code beinhalten.",
                 "cs": "OpenAL API lze použít prakticky na jakýkoli úkol, který zahrnuje porozumění nebo generování přirozeného jazyka nebo kódu."
             },
             "url": "index.html",
