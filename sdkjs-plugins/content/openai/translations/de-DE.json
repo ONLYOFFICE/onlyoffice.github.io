@@ -17,6 +17,7 @@
 	"Maximum length" : "Maximallänge",
 	"Temperature" : "Temperatur",
 	"Stop sequences" : "Stoppsequenzen",
+	"This plugin doesn't work in Internet Explorer." : "Dieses Plugin funktioniert nicht im Internet Explorer.",
 	"This model's maximum context length is" : "Die maximale Kontextlänge dieses Modells beträgt",
 	"tokens, however you requested" : "Token, Sie haben jedoch",
 	"tokens (" : "Token angefordert (",

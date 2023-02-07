@@ -17,6 +17,7 @@
 	"Maximum length" : "Максимальная длина",
 	"Temperature" : "Температура",
 	"Stop sequences" : "Стоп последовательности",
+	"This plugin doesn't work in Internet Explorer." : "Этот плагин не работает в Internet Explorer.",
 	"This model's maximum context length is" : "Максимальная длина контекста этой модели составляет",
 	"tokens, however you requested" : "токенов, однако вы запросили",
 	"tokens (" : "токенов (",

@@ -21,8 +21,9 @@
 	let elements = {};
 	let apiKey = null;
 	let timeout = null;
-	let bCreateLoader = true;
+	let bCreateLoader = false;
 	let maxTokens = 4000;
+	const isIE = checkInternetExplorer();
 	const AllowedModels = {
 		'text-ada-001' : true,
 
@@ -39,7 +40,14 @@
 		'davinchi:2020-05-03' : true
 	};
 
-	window.Asc.plugin.init = function() {			
+	window.Asc.plugin.init = function() {
+		if (isIE) {
+			bCreateLoader = false;
+			document.getElementById('div_ie_error').classList.remove('hidden');
+			return;
+		} else {
+			bCreateLoader = true;
+		};
 		apiKey = localStorage.getItem('OpenAiApiKey') || null;
 		addSlidersListeners();
 		initElements();
@@ -287,6 +295,25 @@
 	function updateScroll() {
 		PsMain && PsMain.update();
 		PsConf && PsConf.update();
+	};
+
+	function checkInternetExplorer() {
+		let rv = -1;
+		if (window.navigator.appName == 'Microsoft Internet Explorer') {
+			const ua = window.navigator.userAgent;
+			const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
+			if (re.exec(ua) != null) {
+				rv = parseFloat(RegExp.$1);
+			}
+		} else if (window.navigator.appName == 'Netscape') {
+			const ua = window.navigator.userAgent;
+			const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
+
+			if (re.exec(ua) != null) {
+				rv = parseFloat(RegExp.$1);
+			}
+		}
+		return rv !== -1;
 	};
 
 	window.Asc.plugin.onTranslate = function() {

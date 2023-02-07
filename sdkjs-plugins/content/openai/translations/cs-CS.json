@@ -17,6 +17,7 @@
 	"Maximum length" : "Maximální délka",
 	"Temperature" : "Teplota",
 	"Stop sequences" : "Stop sekvence",
+	"This plugin doesn't work in Internet Explorer." : "Tento plugin nefunguje v aplikaci Internet Explorer.",
 	"This model's maximum context length is" : "Maximální délka kontextu tohoto modelu je",
 	"tokens, however you requested" : "tokenů, nicméně jste požadovali",
 	"tokens (" : "tokenů (",
