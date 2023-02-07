@@ -22,6 +22,7 @@
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	<script src="vendor/select2-4.0.13/js/select2.js"></script>
+    <script type="text/javascript" src="vendor/GPT-3-Encoder/encoder.js"></script>
     <script type="text/javascript" src="scripts/code.js"></script>
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
@@ -58,7 +59,7 @@
 			<div class="div_parametr noselect" title="The maximum number of tokens to generate in the completion.">
 				<label class="header i18n">Maximum length</label>
 				<div class="div_param_val">
-					<input id="inp_len_sl" type="range" min="1" max="4096" step="1" value="256" style="width: 100%; background-size: 6.2% 100%;">
+					<input id="inp_len_sl" type="range" min="1" max="4000" step="1" value="256" style="width: 100%; background-size: 6.2% 100%;">
 					<label id="lb_len" class="lbl_param_val">256</label>
 				</div>
 			</div>
@@ -81,7 +82,7 @@
 				<input id="inp_stop" type="text" class="form-control">
 			</div>
 			<div class="div_req_btn">
-				<button id="btn_req" class="btn-text-default btn_submit i18n">Submit</button>
+				<button id="btn_submit" class="btn-text-default btn_submit i18n">Submit</button>
 				<button id="btn_clear" class="btn-text-default btn_clear i18n">Clear</button>
 			</div>
 		</div>
