@@ -108,7 +108,7 @@ input::selection {
 	display: none;
 }
 
-.api_key_error {
+.error_border {
 	border: 1px solid red !important;
 }
 

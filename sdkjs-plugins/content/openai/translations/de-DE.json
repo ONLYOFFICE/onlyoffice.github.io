@@ -16,5 +16,10 @@
 	"Model" : "Modell",
 	"Maximum length" : "Maximallänge",
 	"Temperature" : "Temperatur",
-	"Stop sequences" : "Stoppsequenzen"
+	"Stop sequences" : "Stoppsequenzen",
+	"This model's maximum context length is" : "Die maximale Kontextlänge dieses Modells beträgt",
+	"tokens, however you requested" : "Token, Sie haben jedoch",
+	"tokens (" : "Token angefordert (",
+	"in your prompt;" : "in Ihrer Eingabeaufforderung;",
+	"for the completion). Please reduce your prompt; or completion length." : "für die Vervollständigung). Bitte reduzieren Sie Ihre Aufforderung; oder Abschlusslänge."
 }
