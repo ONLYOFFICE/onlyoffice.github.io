@@ -334,6 +334,7 @@
 	window.Asc.plugin.onThemeChanged = function(theme)
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
+		if (isIE) return;
 
 		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 		let sliderBG, thumbBG;
