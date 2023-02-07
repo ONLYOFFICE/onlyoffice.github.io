@@ -122,10 +122,15 @@
 					throw data.error
 
 				let text = data.choices[0].text;
-				// if (text.startsWith('\n'))
-				// 	text = text.replace('\n\n', '\n').replace('\n', '<br>');
+				if (!text.includes('</')) {
+					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
 					
-				// text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
+					if (text.startsWith('\n'))
+						text = text.replace('\n\n', '\n').replace('\n', '');
+					
+					text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
+				}
+				
 				window.Asc.plugin.executeMethod('PasteHtml', ['<div>'+text+'</div>']);
 			})
 			.catch(function(error) {
