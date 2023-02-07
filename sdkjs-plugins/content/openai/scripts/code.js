@@ -22,6 +22,7 @@
 	let apiKey = null;
 	let timeout = null;
 	let bCreateLoader = true;
+	let maxTokens = 4000;
 	const AllowedModels = {
 		'text-ada-001' : true,
 
@@ -56,7 +57,8 @@
 		elements.inpTopSl.oninput = onSlInput;
 
 		elements.btnSaveConfig.onclick = function() {
-			elements.apiKeyField.classList.remove('api_key_error');
+			elements.apiKeyField.classList.remove('error_border');
+			elements.textArea.classList.remove('error_border');
 			document.getElementById('apiKeyError').classList.add('hidden');
 			document.getElementById('lb_key_err').innerHTML = '';
 			document.getElementById('lb_key_err_mes').innerHTML = '';
@@ -84,9 +86,18 @@
 			elements.textArea.focus();
 		};
 
-		elements.btnReq.onclick = function() {
-			createLoader();
+		elements.textArea.oninput = function() {
+			elements.textArea.classList.remove('error_border');
+		};
+
+		elements.btnSubmit.onclick = function() {
 			let settings = getSettings();
+			if (!settings.prompt.length) {
+				elements.textArea.classList.add('error_border');
+				return;
+			};
+			createLoader();
+
 			fetch('https://api.openai.com/v1/completions', {
 				method: 'POST',
 				headers: {
@@ -130,7 +141,7 @@
 		elements.inpTopSl	   = document.getElementById('inp_top_sl');
 		elements.inpStop	   = document.getElementById('inp_stop');
 		elements.textArea	   = document.getElementById('textarea');
-		elements.btnReq		   = document.getElementById('btn_req');
+		elements.btnSubmit	   = document.getElementById('btn_submit');
 		elements.btnClear	   = document.getElementById('btn_clear');
 		elements.btnLogout	   = document.getElementById('logoutLink');
 		elements.btnSaveConfig = document.getElementById('btn_saveConfig');
@@ -154,16 +165,16 @@
 		const rangeInputs = document.querySelectorAll('input[type="range"]');
 
 		function handleInputChange(e) {
-			let target = e.target
+			let target = e.target;
 			if (e.target.type !== 'range') {
-				target = document.getElementById('range')
+				target = document.getElementById('range');
 			} 
-			const min = target.min
-			const max = target.max
-			const val = target.value
+			const min = target.min;
+			const max = target.max;
+			const val = target.value;
 			
-			target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%'
-		}
+			target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
+		};
 
 		rangeInputs.forEach(function(input) {
 			input.addEventListener('input', handleInputChange);
@@ -199,7 +210,17 @@
 			$('#sel_models').select2({
 				data : arrModels
 			}).on('select2:select', function(e) {
-				//
+				// e.currentTarget.value
+				let curVal = Number(elements.inpLenSl.value);
+				maxTokens = e.params.data.id.includes('text-davinci-003') ? 4000: 2000;
+				if (curVal > maxTokens)
+					curVal = maxTokens;
+
+				elements.inpLenSl.setAttribute('max', maxTokens);
+				elements.inpLenSl.value = curVal;
+				let event = document.createEvent('Event');
+				event.initEvent('input', true, true);
+				elements.inpLenSl.dispatchEvent(event);
 			});
 
 			if ($('#sel_models').find('option[value=text-davinci-003]').length) {
@@ -215,7 +236,7 @@
 			elements.keyError.classList.remove('hidden');
 			elements.keyErrorLb.innerHTML = error.code || 'Error:';
 			elements.keyErrorMes.innerHTML = error.message;
-			elements.apiKeyField.classList.add('api_key_error');
+			elements.apiKeyField.classList.add('error_border');
 			elements.divConfig.classList.remove('hidden');
 			console.error(error);
 		}).finally(function() {
@@ -232,7 +253,7 @@
 		let temp = Number(elements.inpTempSl.value);
 		obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
 		let len = Number(elements.inpLenSl.value);
-		obj.max_tokens = ( len < 0 ? 0 : ( len > 4096 ? 4096 : len ) );
+		obj.max_tokens = ( len < 0 ? 0 : ( len > maxTokens ? maxTokens : len ) );
 		let topP = Number(elements.inpTopSl.value);
 		obj.top_p = ( topP < 0 ? 0 : ( topP > 1 ? 1 : topP ) );
 		let stop = elements.inpStop.value;

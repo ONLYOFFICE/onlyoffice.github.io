@@ -16,5 +16,10 @@
 	"Model" : "Модель",
 	"Maximum length" : "Максимальная длина",
 	"Temperature" : "Температура",
-	"Stop sequences" : "Стоп последовательности"
+	"Stop sequences" : "Стоп последовательности",
+	"This model's maximum context length is" : "Максимальная длина контекста этой модели составляет",
+	"tokens, however you requested" : "токенов, однако вы запросили",
+	"tokens (" : "токенов (",
+	"in your prompt;" : "в вашем запросе",
+	"for the completion). Please reduce your prompt; or completion length." : " для максимального количества). Пожалуйста, сократите ваш запрос или максимальное количество токенов."
 }

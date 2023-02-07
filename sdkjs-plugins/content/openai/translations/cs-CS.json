@@ -16,5 +16,10 @@
 	"Model" : "Model",
 	"Maximum length" : "Maximální délka",
 	"Temperature" : "Teplota",
-	"Stop sequences" : "Stop sekvence"
+	"Stop sequences" : "Stop sekvence",
+	"This model's maximum context length is" : "Maximální délka kontextu tohoto modelu je",
+	"tokens, however you requested" : "tokenů, nicméně jste požadovali",
+	"tokens (" : "tokenů (",
+	"in your prompt;" : "ve vaší výzvě;",
+	"for the completion). Please reduce your prompt; or completion length." : "pro dokončení). Zkraťte prosím svou výzvu; nebo délka dokončení."
 }
