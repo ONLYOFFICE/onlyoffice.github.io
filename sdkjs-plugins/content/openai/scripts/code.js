@@ -18,11 +18,12 @@
 
 (function (window, undefined) {
 	let loader;
+	let isDarkTheme = false;
 	let elements = {};
 	let apiKey = null;
 	let errTimeout = null;
 	let tokenTimeot = null;
-	let bCreateLoader = false;
+	let bCreateLoader = true;
 	let maxTokens = 4000;
 	const isIE = checkInternetExplorer();
 	const AllowedModels = {
@@ -44,6 +45,7 @@
 	window.Asc.plugin.init = function() {
 		if (isIE) {
 			bCreateLoader = false;
+			destroyLoader();
 			document.getElementById('div_ie_error').classList.remove('hidden');
 			return;
 		} else {
@@ -146,6 +148,7 @@
 					throw data.error
 
 				let text = data.choices[0].text;
+				let textColor = '';
 				if (!text.includes('</')) {
 					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
 					
@@ -153,9 +156,14 @@
 						text = text.replace('\n\n', '\n').replace('\n', '');
 					
 					text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
+
+					if (window.Asc.plugin.info.editorType == 'cell' && isDarkTheme) {
+						// it's temporarily. remove it after fixing bug https://bugzilla.onlyoffice.com/show_bug.cgi?id=61095
+						textColor = ' style="color:#000;"';
+					}
 				}
 				
-				window.Asc.plugin.executeMethod('PasteHtml', ['<div>'+text+'</div>']);
+				window.Asc.plugin.executeMethod('PasteHtml', ['<div'+textColor+'>'+text+'</div>']);
 			})
 			.catch(function(error) {
 				elements.mainError.classList.remove('hidden');
@@ -392,11 +400,13 @@
 		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 		let sliderBG, thumbBG;
 		if (theme.type.includes("dark")) {
+			isDarkTheme = true;
 			sliderBG = theme.Border || '#757575';
 			// for dark '#757575';
 			// for contrast dark #616161
 			thumbBG = '#fcfcfc';
 		} else {
+			isDarkTheme = false;
 			sliderBG = '#ccc';
 			thumbBG = '#444';
 		}
