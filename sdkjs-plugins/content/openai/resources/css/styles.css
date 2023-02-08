@@ -127,6 +127,8 @@ input::selection {
     height: fit-content;
     padding: 8px 5px;
     right: 15px;
+	left: 0px;
+	overflow-wrap: anywhere;
 }
 
 .title_model {
@@ -136,22 +138,22 @@ input::selection {
 
 .title_len {
 	/* top: 280px; */
-	top: 360px;
+	top: 365px;
 }
 
 .title_temp {
 	/* top: 298px; */
-	top: 400px;
+	top: 405px;
 }
 
 .title_topP {
 	/* top: 340px; */
-	top: 440px;
+	top: 445px;
 }
 
 .title_stopS {
 	/* top: 390px; */
-	top: 485px;
+	top: 490px;
 }
 
 .arrow {
