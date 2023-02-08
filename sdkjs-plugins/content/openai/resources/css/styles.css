@@ -88,10 +88,37 @@ input::selection {
 
 #footerCont {
 	margin: 5px 0px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .div_settings {
 	flex: 1;
+}
+
+.div_tokens {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 12px;
+}
+
+.div_row {
+	margin: 5px;
+}
+
+.lb_err {
+	color: red;
+}
+
+.div_modal {
+	display: flex;
+	flex-flow: column;
+	position: fixed;
+    bottom: 40px;
+    right: 15px;
+	left: 12px;
+	height: fit-content;
 }
 
 .loader {

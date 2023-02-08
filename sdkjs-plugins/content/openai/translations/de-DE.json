@@ -18,9 +18,9 @@
 	"Temperature" : "Temperatur",
 	"Stop sequences" : "Stoppsequenzen",
 	"This plugin doesn't work in Internet Explorer." : "Dieses Plugin funktioniert nicht im Internet Explorer.",
-	"This model's maximum context length is" : "Die maximale Kontextlänge dieses Modells beträgt",
-	"tokens, however you requested" : "Token, Sie haben jedoch",
-	"tokens (" : "Token angefordert (",
-	"in your prompt;" : "in Ihrer Eingabeaufforderung;",
-	"for the completion). Please reduce your prompt; or completion length." : "für die Vervollständigung). Bitte reduzieren Sie Ihre Aufforderung; oder Abschlusslänge."
+	"tokens in request." : "Token auf Anfrage.",
+	"Up to" : "Bis zu",
+	"tokens in response." : "Token als Antwort.",
+	"This model can only process maximum of" : "Dieses Modell kann nur maximal",
+	"tokens in a single request, please reduce your prompt or response length." : "Token in einer einzigen Anfrage verarbeiten.Bitte reduzieren Sie Ihre Aufforderungs- oder Antwortlänge."
 }

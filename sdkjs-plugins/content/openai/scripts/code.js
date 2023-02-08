@@ -20,7 +20,8 @@
 	let loader;
 	let elements = {};
 	let apiKey = null;
-	let timeout = null;
+	let errTimeout = null;
+	let tokenTimeot = null;
 	let bCreateLoader = false;
 	let maxTokens = 4000;
 	const isIE = checkInternetExplorer();
@@ -77,9 +78,9 @@
 		};
 
 		elements.reconfigure.onclick = function() {
-			if (timeout) {
-				clearTimeout(timeout);
-				timeout = null;
+			if (errTimeout) {
+				clearTimeout(errTimeout);
+				errTimeout = null;
 				clearMainError();
 			}
 			localStorage.removeItem('OpenAiApiKey');
@@ -94,8 +95,28 @@
 			elements.textArea.focus();
 		};
 
-		elements.textArea.oninput = function() {
+		elements.textArea.oninput = function(event) {
 			elements.textArea.classList.remove('error_border');
+			if (tokenTimeot) {
+				clearTimeout(tokenTimeot);
+				tokenTimeot = null;
+			}
+			tokenTimeot = setTimeout(function() {
+				let text = event.target.value.trim();
+				let tokens = window.Asc.OpenAIEncode(text);
+				elements.lbTokens.innerText = tokens.length;
+				elements.lbModalTokens.innerText = tokens.length;
+				checkLen();
+			}, 250);
+
+		};
+
+		elements.divTokens.onmouseenter = function(e) {
+			elements.modal.classList.remove('hidden');
+		};
+
+		elements.divTokens.onmouseleave = function(e) {
+			elements.modal.classList.add('hidden');
 		};
 
 		elements.btnSubmit.onclick = function() {
@@ -104,6 +125,9 @@
 				elements.textArea.classList.add('error_border');
 				return;
 			};
+			if (!elements.modalError.classList.contains('hidden')) {
+				return;
+			}
 			createLoader();
 
 			fetch('https://api.openai.com/v1/completions', {
@@ -136,11 +160,11 @@
 			.catch(function(error) {
 				elements.mainError.classList.remove('hidden');
 				elements.mainErrorLb.innerHTML = error.message;
-				if (timeout) {
-					clearTimeout(timeout);
-					timeout = null;
+				if (errTimeout) {
+					clearTimeout(errTimeout);
+					errTimeout = null;
 				}
-				timeout = setTimeout(clearMainError, 10000);
+				errTimeout = setTimeout(clearMainError, 10000);
 				console.error('Error:', error);
 			}).finally(function(){
 				destroyLoader();
@@ -167,6 +191,13 @@
 		elements.keyError	   = document.getElementById('apiKeyError');
 		elements.keyErrorLb	   = document.getElementById('lb_key_err');
 		elements.keyErrorMes   = document.getElementById('lb_key_err_mes');
+		elements.lbTokens      = document.getElementById('lb_tokens');
+		elements.divTokens     = document.getElementById('div_tokens');
+		elements.modal         = document.getElementById('div_modal');
+		elements.lbModalTokens = document.getElementById('lb_modal_tokens');
+		elements.lbModalLen    = document.getElementById('lb_modal_length');
+		elements.modalErrLen   = document.getElementById('modal_err_len');
+		elements.modalError    = document.getElementById('modal_error');
 	};
 
 	function initScrolls() {
@@ -196,6 +227,10 @@
 
 	function onSlInput(e) {
 		e.target.nextElementSibling.innerText = e.target.value;
+		if (e.target.id == elements.inpLenSl.id) {
+			elements.lbModalLen.innerText = e.target.value;
+			checkLen();
+		}
 	};
 
 	function fetchModels() {
@@ -234,6 +269,7 @@
 				let event = document.createEvent('Event');
 				event.initEvent('input', true, true);
 				elements.inpLenSl.dispatchEvent(event);
+				elements.modalErrLen.innerText = maxTokens;
 			});
 
 			if ($('#sel_models').find('option[value=text-davinci-003]').length) {
@@ -319,6 +355,18 @@
 			}
 		}
 		return rv !== -1;
+	};
+
+	function checkLen() {
+		let cur = new Number(elements.lbTokens.innerText);
+		let maxLen = new Number(elements.inpLenSl.value);
+		if (cur + maxLen > maxTokens) {
+			elements.modalError.classList.remove('hidden');
+			elements.lbTokens.classList.add('lb_err');
+		} else {
+			elements.modalError.classList.add('hidden');
+			elements.lbTokens.classList.remove('lb_err');
+		}
 	};
 
 	window.Asc.plugin.onTranslate = function() {
