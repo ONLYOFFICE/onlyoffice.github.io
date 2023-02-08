@@ -18,9 +18,11 @@
 	"Temperature" : "Температура",
 	"Stop sequences" : "Стоп последовательности",
 	"This plugin doesn't work in Internet Explorer." : "Этот плагин не работает в Internet Explorer.",
-	"tokens in request." : "токенов в запросе.",
+	"Tokens: " : "Токенов: ",
+	"Learn More" : "Узнать подробнее",
+	"Show advanced settings" : "Показать расширенные настройки",
 	"Up to" : "Вплоть до",
 	"tokens in response." : "токенов в ответе.",
 	"This model can only process maximum of" : "Эта модель может обрабатывать только",
-	"tokens in a single request, please reduce your prompt or response length." : "токенов в одном запросе, пожалуйста уменьшите запрос или максисальное количество токенов."
+	"tokens in a single request, please reduce your prompt or response length." : "токенов в одном запросе, пожалуйста уменьшите запрос или максимальное количество токенов."
 }

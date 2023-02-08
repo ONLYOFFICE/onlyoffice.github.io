@@ -26,7 +26,7 @@ html, body {
 }
 
 textarea {
-	height: 236px !important;
+	height: 240px !important;
 }
 
 textarea::selection {
@@ -88,8 +88,6 @@ input::selection {
 
 #footerCont {
 	margin: 5px 0px;
-	display: flex;
-	justify-content: space-between;
 }
 
 .div_settings {
@@ -98,7 +96,7 @@ input::selection {
 
 .div_tokens {
 	display: flex;
-	justify-content: center;
+	justify-content: end;
 	align-items: center;
 	border-radius: 12px;
 }
@@ -111,14 +109,49 @@ input::selection {
 	color: red;
 }
 
+.div_show_settings {
+	display: flex;
+	width: fit-content;
+	cursor: pointer;
+}
+
+.div_arrow {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.arrow {
+	display: block;
+	width: 4px !important;
+    height: 4px !important;
+    margin: -1px 1px !important;
+    border: solid 1px rgba(0, 0, 0, 0.8);
+    border-bottom: none !important;
+    border-right: none !important;
+    background-image: none;
+    box-sizing: border-box;
+    transition: transform 0.2s ease;
+}
+
+.arrow_down {
+    transform: rotate(-135deg) translate(1px,1px);
+}
+
+.arrow_up {
+	transform: rotate(45deg);
+}
+
 .div_modal {
 	display: flex;
 	flex-flow: column;
-	position: fixed;
-    bottom: 40px;
+	position: absolute;
+    top: 260px;
     right: 15px;
-	left: 12px;
+	left: 0px;
 	height: fit-content;
+	z-index: 1;
 }
 
 .loader {
