@@ -22,5 +22,5 @@
 	"Up to" : "Bis zu",
 	"tokens in response." : "Token als Antwort.",
 	"This model can only process maximum of" : "Dieses Modell kann nur maximal",
-	"tokens in a single request, please reduce your prompt or response length." : "Token in einer einzigen Anfrage verarbeiten.Bitte reduzieren Sie Ihre Aufforderungs- oder Antwortlänge."
+	"tokens in a single request, please reduce your prompt or maximum length." : "Token in einer einzigen Anfrage verarbeiten.Bitte reduzieren Sie Ihre Aufforderung oder maximale Länge."
 }
