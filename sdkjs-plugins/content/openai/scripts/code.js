@@ -54,6 +54,7 @@
 		};
 		apiKey = localStorage.getItem('OpenAiApiKey') || null;
 		addSlidersListeners();
+		addTitlelisteners();
 		initElements();
 		initScrolls();
 		if (apiKey) {
@@ -146,8 +147,6 @@
 			elements.divParams.classList.toggle('hidden');
 			elements.arrow.classList.toggle('arrow_down');
 			elements.arrow.classList.toggle('arrow_up');
-
-			
 		};
 
 		elements.btnSubmit.onclick = function() {
@@ -263,6 +262,19 @@
 
 		rangeInputs.forEach(function(input) {
 			input.addEventListener('input', handleInputChange);
+		});
+	};
+
+	function addTitlelisteners() {
+		let divs = document.querySelectorAll('.div_parametr');
+		divs.forEach(function(div) {
+			div.addEventListener('mouseenter', function handleClick(event) {
+				event.target.children[0].classList.remove('hidden');
+			});
+
+			div.addEventListener('mouseleave', function handleClick(event) {
+				event.target.children[0].classList.add('hidden');
+			});
 		});
 	};
 
@@ -416,15 +428,12 @@
 		if (bCreateLoader)
 			createLoader();
 
-		let elements = document.getElementsByClassName('i18n');
-		let titles = document.getElementsByClassName('div_parametr');
+		let elements = document.querySelectorAll('.i18n');
 		bCreateLoader = true;
 
-		for (let i = 0; i < elements.length; i++)
-			elements[i].innerText = getMessage(elements[i].innerText);
-
-		for (let j = 0; j < titles.length; j++)
-			titles[j].attributes["title"].value = getMessage(titles[j].attributes["title"].value);
+		elements.forEach(function(element) {
+			element.innerText = getMessage(element.innerText);
+		})
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
