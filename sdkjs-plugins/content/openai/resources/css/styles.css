@@ -97,8 +97,7 @@ input::selection {
 .div_tokens {
 	display: flex;
 	justify-content: end;
-	align-items: center;
-	border-radius: 12px;
+	margin-top: 7px;
 }
 
 .div_row {
@@ -120,6 +119,39 @@ input::selection {
     justify-content: center;
     align-items: center;
     margin-left: 5px;
+}
+
+.div_title {
+	position: absolute;
+    z-index: 1;
+    height: fit-content;
+    padding: 8px 5px;
+    right: 15px;
+}
+
+.title_model {
+	/* top: 215px; */
+	top: 325px;
+}
+
+.title_len {
+	/* top: 280px; */
+	top: 360px;
+}
+
+.title_temp {
+	/* top: 298px; */
+	top: 400px;
+}
+
+.title_topP {
+	/* top: 340px; */
+	top: 440px;
+}
+
+.title_stopS {
+	/* top: 390px; */
+	top: 485px;
 }
 
 .arrow {
@@ -147,7 +179,7 @@ input::selection {
 	display: flex;
 	flex-flow: column;
 	position: absolute;
-    top: 260px;
+    top: 262px;
     right: 15px;
 	left: 0px;
 	height: fit-content;
