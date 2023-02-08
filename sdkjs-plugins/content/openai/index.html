@@ -54,7 +54,7 @@
 		<div class="div_settings">
 			<div class="div_parametr" title="The model which will generate the completion. Some models are suitable for natural language tasks, others specialize in code.">
 				<label class="header i18n" style="margin-bottom: 2px;">Model</label>
-				<select id="sel_models" class="form_control"></select>
+				<select id="sel_models" class="form-control"></select>
 			</div>
 			<div class="div_parametr noselect" title="The maximum number of tokens to generate in the completion.">
 				<label class="header i18n">Maximum length</label>
@@ -87,12 +87,35 @@
 			</div>
 		</div>
 		<div id="div_err" class="hidden" style="margin-top: 10px;">
-			<label style="color: red;">Error:</label>
+			<label class="lb_err">Error:</label>
 			<br>
 			<label id="lb_err"></label>
 		</div>
 		<div id="footerCont">
-			<label id="logoutLink" class="link i18n">Reconfigure</label>
+			<div>
+				<label id="logoutLink" class="link i18n">Reconfigure</label>
+			</div>
+			<div >
+				<div id="div_modal" class="div_modal hidden form-control">
+					<div class="div_row">
+						<label id="lb_modal_tokens">0</label>
+						<label class="i18n">tokens in request.</label>
+					</div>
+					<div class="div_row">
+						<label class="i18n">Up to</label>
+						<label id="lb_modal_length">256</label>
+						<label class="i18n">tokens in response.</label>
+					</div>
+					<div id="modal_error" class="div_row hidden lb_err">
+						<label class="i18n">This model can only process maximum of</label>
+						<label id="modal_err_len">4000</label>
+						<label class="i18n">tokens in a single request, please reduce your prompt or response length.</label>
+					</div>
+				</div>
+				<div id="div_tokens" class="form-control div_tokens">
+					<label id="lb_tokens">0</label>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="loader-container" class="asc-loader-container loader hidden"></div>
