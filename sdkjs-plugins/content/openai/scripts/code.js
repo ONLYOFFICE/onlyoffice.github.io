@@ -23,6 +23,7 @@
 	let apiKey = null;
 	let errTimeout = null;
 	let tokenTimeot = null;
+	let modalTimeout = null;
 	let bCreateLoader = true;
 	let maxTokens = 4000;
 	const isIE = checkInternetExplorer();
@@ -107,18 +108,46 @@
 				let text = event.target.value.trim();
 				let tokens = window.Asc.OpenAIEncode(text);
 				elements.lbTokens.innerText = tokens.length;
-				elements.lbModalTokens.innerText = tokens.length;
 				checkLen();
 			}, 250);
 
 		};
 
-		elements.divTokens.onmouseenter = function(e) {
+		elements.divTokens.onmouseenter = function() {
 			elements.modal.classList.remove('hidden');
+			if (modalTimeout) {
+				clearTimeout(modalTimeout);
+				modalTimeout = null;
+			}
 		};
 
-		elements.divTokens.onmouseleave = function(e) {
+		elements.divTokens.onmouseleave = function() {
+			modalTimeout = setTimeout(function() {
+				elements.modal.classList.add('hidden');
+			},100)
+		};
+
+		elements.modal.onmouseenter = function() {
+			if (modalTimeout) {
+				clearTimeout(modalTimeout);
+				modalTimeout = null;
+			}
+		};
+
+		elements.modal.onmouseleave = function() {
 			elements.modal.classList.add('hidden');
+		};
+
+		elements.labelMore.onclick = function() {
+			elements.linkMore.click();
+		};
+
+		elements.btnShowSettins.onclick = function() {
+			elements.divParams.classList.toggle('hidden');
+			elements.arrow.classList.toggle('arrow_down');
+			elements.arrow.classList.toggle('arrow_up');
+
+			
 		};
 
 		elements.btnSubmit.onclick = function() {
@@ -181,31 +210,35 @@
 	};
 
 	function initElements() {
-		elements.inpLenSl	   = document.getElementById('inp_len_sl');
-		elements.inpTempSl	   = document.getElementById('inp_temp_sl');
-		elements.inpTopSl	   = document.getElementById('inp_top_sl');
-		elements.inpStop	   = document.getElementById('inp_stop');
-		elements.textArea	   = document.getElementById('textarea');
-		elements.btnSubmit	   = document.getElementById('btn_submit');
-		elements.btnClear	   = document.getElementById('btn_clear');
-		elements.btnLogout	   = document.getElementById('logoutLink');
-		elements.btnSaveConfig = document.getElementById('btn_saveConfig');
-		elements.apiKeyField   = document.getElementById('apiKeyField');
-		elements.divContent	   = document.getElementById('div_content');
-		elements.divConfig	   = document.getElementById('div_config');
-		elements.reconfigure   = document.getElementById('logoutLink');
-		elements.mainError	   = document.getElementById('div_err');
-		elements.mainErrorLb   = document.getElementById('lb_err');
-		elements.keyError	   = document.getElementById('apiKeyError');
-		elements.keyErrorLb	   = document.getElementById('lb_key_err');
-		elements.keyErrorMes   = document.getElementById('lb_key_err_mes');
-		elements.lbTokens      = document.getElementById('lb_tokens');
-		elements.divTokens     = document.getElementById('div_tokens');
-		elements.modal         = document.getElementById('div_modal');
-		elements.lbModalTokens = document.getElementById('lb_modal_tokens');
-		elements.lbModalLen    = document.getElementById('lb_modal_length');
-		elements.modalErrLen   = document.getElementById('modal_err_len');
-		elements.modalError    = document.getElementById('modal_error');
+		elements.inpLenSl       = document.getElementById('inp_len_sl');
+		elements.inpTempSl      = document.getElementById('inp_temp_sl');
+		elements.inpTopSl       = document.getElementById('inp_top_sl');
+		elements.inpStop        = document.getElementById('inp_stop');
+		elements.textArea       = document.getElementById('textarea');
+		elements.btnSubmit      = document.getElementById('btn_submit');
+		elements.btnClear       = document.getElementById('btn_clear');
+		elements.btnSaveConfig  = document.getElementById('btn_saveConfig');
+		elements.apiKeyField    = document.getElementById('apiKeyField');
+		elements.divContent     = document.getElementById('div_content');
+		elements.divConfig      = document.getElementById('div_config');
+		elements.reconfigure    = document.getElementById('logoutLink');
+		elements.mainError      = document.getElementById('div_err');
+		elements.mainErrorLb    = document.getElementById('lb_err');
+		elements.keyError       = document.getElementById('apiKeyError');
+		elements.keyErrorLb     = document.getElementById('lb_key_err');
+		elements.keyErrorMes    = document.getElementById('lb_key_err_mes');
+		elements.lbTokens       = document.getElementById('lb_tokens');
+		elements.divTokens      = document.getElementById('div_tokens');
+		elements.modal          = document.getElementById('div_modal');
+		elements.lbModalLen     = document.getElementById('lb_modal_length');
+		elements.modalErrLen    = document.getElementById('modal_err_len');
+		elements.modalError     = document.getElementById('modal_error');
+		elements.modalLink      = document.getElementById('modal_link');
+		elements.labelMore      = document.getElementById('lb_more');
+		elements.linkMore       = document.getElementById('link_more');
+		elements.btnShowSettins = document.getElementById('div_show_settings');
+		elements.divParams      = document.getElementById('div_parametrs');
+		elements.arrow          = document.getElementById('arrow');
 	};
 
 	function initScrolls() {
@@ -370,10 +403,12 @@
 		let maxLen = new Number(elements.inpLenSl.value);
 		if (cur + maxLen > maxTokens) {
 			elements.modalError.classList.remove('hidden');
-			elements.lbTokens.classList.add('lb_err');
+			elements.modalLink.classList.remove('hidden');
+			elements.lbTokens.parentNode.classList.add('lb_err');
 		} else {
 			elements.modalError.classList.add('hidden');
-			elements.lbTokens.classList.remove('lb_err');
+			elements.modalLink.classList.add('hidden');
+			elements.lbTokens.parentNode.classList.remove('lb_err');
 		}
 	};
 
@@ -398,7 +433,7 @@
 		if (isIE) return;
 
 		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
-		let sliderBG, thumbBG;
+		let sliderBG, thumbBG
 		if (theme.type.includes("dark")) {
 			isDarkTheme = true;
 			sliderBG = theme.Border || '#757575';
@@ -410,10 +445,12 @@
 			sliderBG = '#ccc';
 			thumbBG = '#444';
 		}
-		rule += '\n input[type="range"] { background-color: '+sliderBG+' !important; background-image: linear-gradient('+thumbBG+', '+thumbBG+') !important; }\n';
-		rule += '\n input[type="range"]::-webkit-slider-thumb { background: '+thumbBG+' !important; }\n';
-		rule += '\n input[type="range"]::-moz-range-thumb { background: '+thumbBG+' !important; }\n';
-		rule += '\n input[type="range"]::-ms-thumb { background: '+thumbBG+' !important; }\n';
+		rule += '\n input[type="range"] { background-color: '+sliderBG+' !important; background-image: linear-gradient('+thumbBG+', '+thumbBG+') !important; }';
+		rule += '\n input[type="range"]::-webkit-slider-thumb { background: '+thumbBG+' !important; }';
+		rule += '\n input[type="range"]::-moz-range-thumb { background: '+thumbBG+' !important; }';
+		rule += '\n input[type="range"]::-ms-thumb { background: '+thumbBG+' !important; }';
+		rule += "\n .arrow { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+		
 		let styleTheme = document.createElement('style');
 		styleTheme.type = 'text/css';
 		styleTheme.innerHTML = rule;
