@@ -425,6 +425,9 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
+		if (isIE)
+			return;
+
 		if (bCreateLoader)
 			createLoader();
 
@@ -443,7 +446,7 @@
 
 		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 		let sliderBG, thumbBG
-		if (theme.type.includes("dark")) {
+		if (theme.type.indexOf('dark')) {
 			isDarkTheme = true;
 			sliderBG = theme.Border || '#757575';
 			// for dark '#757575';
