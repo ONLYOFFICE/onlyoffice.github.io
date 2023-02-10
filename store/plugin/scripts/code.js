@@ -24,7 +24,6 @@
 
 	document.addEventListener("DOMContentLoaded", function() {
 		let pageUrl = "https://onlyoffice.github.io/store/index.html";
-		iframe.style = "width:100%; border:none;";
 		iframe.src = pageUrl + window.location.search;
 		document.body.appendChild(iframe);
 		iframe.onload = function() {
