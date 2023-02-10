@@ -17,21 +17,41 @@
  */
 (function(window, undefined) {
 
+	// create iframe
+	const iframe = document.createElement("iframe");
+	let BFrameReady = false;
+	let BPluginReady = false;
+
+	document.addEventListener("DOMContentLoaded", function() {
+		let pageUrl = "https://onlyoffice.github.io/store/index.html";
+		iframe.style = "width:100%; border:none;";
+		iframe.src = pageUrl + window.location.search;
+		document.body.appendChild(iframe);
+		iframe.onload = function() {
+			BFrameReady = true;
+			if (BPluginReady)
+				postMessage( JSON.stringify( { type: 'PluginReady' } ) );
+		};
+	});			
+	
+
     window.Asc.plugin.init = function() {
 		// resize window
-		window.Asc.plugin.resizeWindow(660, 570, 648, 570, 0, 0);
-		// identify iframe
-		let ifr = document.getElementsByTagName('iframe')[0];
-		// send message that plugin is ready
-		ifr.contentWindow.postMessage(JSON.stringify({type: 'PluginReady'}), "*");
+		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
+		BPluginReady = true;
+		if (BFrameReady)
+			postMessage( JSON.stringify( { type: 'PluginReady' } ) );
     };
+
+	function postMessage(message) {
+		iframe.contentWindow.postMessage(message, "*");
+	};
 
     window.Asc.plugin.button = function(id) {
 		if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
-			let ifr = document.getElementsByTagName('iframe')[0];
-			if (ifr && ifr.contentWindow)
-				ifr.contentWindow.postMessage(JSON.stringify({ type: 'onClickBack'}), "*");
+			if (iframe && iframe.contentWindow)
+				postMessage( JSON.stringify( { type: 'onClickBack' } ) );
 		} else {
 			this.executeCommand("close", "");
 		}
@@ -44,22 +64,22 @@
 		switch (data.type) {
 			case 'getInstalled':
 				window.Asc.plugin.executeMethod("GetInstalledPlugins", null, function(result) {
-					message.source.postMessage(JSON.stringify({type: 'InstalledPlugins', data: result}), "*");
+					postMessage( JSON.stringify( { type: 'InstalledPlugins', data: result } ) );
 				});
 				break;
 			case 'install':
 				window.Asc.plugin.executeMethod("InstallPlugin", [data.config, data.guid], function(result) {
-					message.source.postMessage(JSON.stringify(result), "*");
+					postMessage( JSON.stringify(result) );
 				});
 				break;
 			case 'remove':
 				window.Asc.plugin.executeMethod("RemovePlugin", [data.guid], function(result) {
-					message.source.postMessage(JSON.stringify(result), "*");
+					postMessage( JSON.stringify(result) );
 				});
 				break;
 			case 'update':
 				window.Asc.plugin.executeMethod("UpdatePlugin", [data.config, data.guid], function(result) {
-					message.source.postMessage(JSON.stringify(result), "*");
+					postMessage( JSON.stringify(result) );
 				});
 				break;
 			case 'showButton' :
@@ -71,18 +91,17 @@
 
 	window.Asc.plugin.onExternalMouseUp = function() {
 		// mouse up event outside the plugin window
-		let ifr = document.getElementsByTagName('iframe')[0];
-		if (ifr && ifr.contentWindow)
-			ifr.contentWindow.postMessage(JSON.stringify({ type: 'onExternalMouseUp'}), "*");
+		if (iframe && iframe.contentWindow) {
+			postMessage( JSON.stringify( { type: 'onExternalMouseUp' } ) );
+		}
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		// theme changed event
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let style = document.getElementsByTagName('head')[0].lastChild;
-		let ifr = document.getElementsByTagName('iframe')[0];
-		if (ifr && ifr.contentWindow)
-			ifr.contentWindow.postMessage(JSON.stringify({ type: 'Theme', theme: theme, style : style.innerHTML}), "*");
+		if (iframe && iframe.contentWindow)
+			postMessage( JSON.stringify( { type: 'Theme', theme: theme, style : style.innerHTML } ) );
 	};
 
 })(window, undefined);
