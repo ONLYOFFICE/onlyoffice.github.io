@@ -425,18 +425,16 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
-		if (isIE)
-			return;
-
 		if (bCreateLoader)
 			createLoader();
 
 		let elements = document.querySelectorAll('.i18n');
 		bCreateLoader = true;
 
-		elements.forEach(function(element) {
+		for (let index = 0; index < elements.length; index++) {
+			let element = elements[index];
 			element.innerText = getMessage(element.innerText);
-		})
+		}
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
