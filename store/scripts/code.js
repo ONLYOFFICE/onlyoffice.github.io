@@ -1180,6 +1180,7 @@ function toogleView(current, oldEl, text, bAll) {
 		} else {
 			filterByCategory(document.getElementById('select_categories').value);
 		}
+		elements.linkNewPlugin.href = bAll ? "https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls" : "https://api.onlyoffice.com/plugin/installation";
 	}
 };
 
