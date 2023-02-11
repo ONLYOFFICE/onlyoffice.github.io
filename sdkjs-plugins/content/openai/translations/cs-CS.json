@@ -24,5 +24,5 @@
 	"Up to" : "Až",
 	"tokens in response." : "tokenů v reakci.",
 	"This model can only process maximum of" : "Tento model může zpracovat maximálně",
-	"tokens in a single request, please reduce your prompt or response length." : "tokenů v jednom požadavku, zkraťte prosím délku výzvy nebo odpovědi."
+	"tokens in a single request, please reduce your prompt or maximum length." : "tokenů v jednom požadavku, prosím snížit výzvu nebo maximální délku."
 }
