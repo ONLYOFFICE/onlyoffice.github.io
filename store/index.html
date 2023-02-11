@@ -19,26 +19,54 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<link rel="stylesheet" href="./resources/css/styles.css">
+	<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<script type="text/javascript" src="scripts/polyfill.js"></script>
 	<script type="text/javascript" src="scripts/code.js"></script>
+	<script src="vendor/select2-4.0.13/js/select2.js"></script>
 </head>
 	<body class="noselect">
 		<div id="div_header" class="header hidden">
 			<!-- <span id="arrow" class="arrow hidden">&#8592;</span> -->
 			<label id="lbl_header" class="aboutlable header">Manage plugins</label>
-			<span id="close" class="close">&times;</span>
+			<!-- <span id="close" class="close">&times;</span> -->
 		</div>
-		<div id="div_body" class="div_body hidden">
+		<div id="div_body" class="div_body transparent">
 			<div id="toolbar" class="toolbar">
-				<div class="toolbar_buttons">
-					<button id="btn_myPlugins" class="btn_menu btn_menu_left btn-text-default">My plugins</button>
-					<button id="btn_marketplace" class="btn_menu btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
+				<div class="toolbar_top">
+					<div class="toolbar_buttons">
+						<button id="btn_myPlugins" class="btn_menu btn_menu_left btn-text-default">My plugins</button>
+						<button id="btn_marketplace" class="btn_menu btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
+					</div>
+					<div class="toolbar_link">
+						<!-- TODO think about how to open the form for uploading -->
+						<a id="link_newPlugin" class="link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+					</div>
 				</div>
-				<div class="toolbar_link">
-					<!-- TODO think about how to open the form for uploading -->
-					<a id="link_newPlugin" class="link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+				<div class="toolbar_tools">
+					<button id="btn_updateAll" class="btn-text-default btn_update hidden" onclick="onClickUpdateAll()">Update All</button>
+					<div>
+						<span id="span_categories">Categories</span>
+						<select id="select_categories">
+							<option id="opt_all" value="all">All</option>
+							<option id="opt_rec" value="recommended">Recommended</option>
+							<option id="opt_dev" value="devTools">Developer tools</option>
+							<option id="opt_work" value="work">Work</option>
+							<option id="opt_enter" value="entertainment">Entertainment</option>
+							<option id="opt_com" value="communication">Communication</option>
+							<option id="opt_spec" value="specAbilities">Special abilities</option>
+						</select>
+					</div>
+					<div class="hidden">
+						<span id="span_sort">Sort by</span>
+						<select id="select_sortBy">
+							<option value="name">Name</option>
+							<option value="raiting">Raiting</option>
+							<option value="instalations">Instalations</option>
+						</select>
+					</div>
+					<input id="inp_search" type="text" spellcheck="false" class="form-control" placeholder="Search plugins...">
 				</div>
 			</div>
 			<div id="div_main" class="main_content"></div>
@@ -74,6 +102,14 @@
 						<span id="span_selected_description"></span>
 					</div>
 					<div id="div_selected_image" class="div_selected_image">
+						<div id ="div_arrows" class="div_arrows hidden">
+							<div id="arrow_prev" class="arrow_conteiner arrow_conteiner_small arrow_conteiner_left hidden">
+								<div class="arrow_left arrow_common arrow_small"></div>
+							</div>
+							<div id="arrow_next" class="arrow_conteiner arrow_conteiner_small arrow_conteiner_right">
+								<div class="arrow_right arrow_common arrow_small"></div>
+							</div>
+						</div>
 						<img id="image_screenshot" class="image_preview hidden">
 					</div>
 				</div>
