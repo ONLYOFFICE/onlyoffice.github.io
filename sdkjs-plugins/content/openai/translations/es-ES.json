@@ -24,5 +24,5 @@
 	"Up to" : "Hasta",
 	"tokens in response." : "fichas en respuesta.",
 	"This model can only process maximum of" : "Este modelo solo puede procesar un máximo de",
-	"tokens in a single request, please reduce your prompt or response length." : "tokens en una sola solicitud, reduzca la duración de su solicitud o respuesta."
+	"tokens in a single request, please reduce your prompt or maximum length." : "tokens en una sola solicitud, reduzca su solicitud o la longitud máxima."
 }
