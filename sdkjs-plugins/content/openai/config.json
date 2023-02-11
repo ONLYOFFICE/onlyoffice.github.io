@@ -1,0 +1,92 @@
+{
+    "name": "ChatGPT",
+    "nameLocale": {
+        "ru": "ChatGPT",
+        "fr": "ChatGPT",
+        "es": "ChatGPT",
+        "de": "ChatGPT"
+    },
+    "guid": "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
+    "version": "1.0.0",
+
+    "variations": [
+        {
+            "description": "Use the OpenAI chatbot to perform tasks which involve understanding or generating natural language or code.",
+            "descriptionLocale": {
+                "ru": "Используйте чат-бот OpenAI для выполнения задач, связанных с пониманием или генерацией естественного языка или кода.",
+                "fr": "Utilisez le chatbot OpenAI pour effectuer des tâches qui impliquent la compréhension ou la génération de langage naturel ou de code.",
+                "es": "Utilice el chatbot OpenAI para realizar tareas que impliquen la comprensión o generación de lenguaje natural o de código.",
+                "de": "Verwenden Sie den OpenAI-Chatbot, um Aufgaben auszuführen, die das Verstehen oder Generieren von natürlicher Sprache oder Code beinhalten.",
+                "cs": "OpenAL API lze použít prakticky na jakýkoli úkol, který zahrnuje porozumění nebo generování přirozeného jazyka nebo kódu."
+            },
+            "url": "index.html",
+
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "isViewer": false,
+            "EditorsSupport": [ "word", "cell", "slide" ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "",
+            "initData": "",
+
+            "isUpdateOleOnResize": false,
+            "buttons": [],
+            "initOnSelectionChanged": false,
+            "store": {
+                "background": {
+                    "light" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
+                    "dark" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
+                },
+                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                },
+                "categories": ["specAbilities", "work", "recommended"]
+            }
+        }
+    ]
+}

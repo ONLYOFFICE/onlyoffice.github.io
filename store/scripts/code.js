@@ -17,6 +17,11 @@
  */
 
 let start = Date.now();
+let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
+let searchTimeout = null;                                            // timeot for search
+let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
+let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
+let updateCount = 0;
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -99,13 +104,15 @@ window.onload = function() {
 	styleTheme.type = 'text/css';
 	styleTheme.innerHTML = rule;
 	document.getElementsByTagName('head')[0].appendChild(styleTheme);
+	if (isPluginLoading || isTranslationLoading) {
+		toogleLoader(true, "Loading");
+	}
 	// init element
 	initElemnts();
 	if (isIE)
 		elements.imgScreenshot.classList.remove('image_preview');
 
 	isFrameLoading = false;
-
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
 		// if nothing to translate
 		showMarketplace();
@@ -123,14 +130,48 @@ window.onload = function() {
 
 	// elements.arrow.onclick = onClickBack;
 
-	elements.close.onclick = function() {
-		// click on close button
-		console.log('close window');
+	// elements.imgScreenshot.onclick = onClickScreenshot;
+	elements.arrowPrev.onclick = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log('onclick prev');
+		if (current.index > 0) {
+			// todo maybe show loader
+			current.index--;
+			let url = current.url + current.screenshots[current.index];
+			elements.imgScreenshot.setAttribute('src', url);
+			elements.imgScreenshot.onload = function() {
+				elements.arrowNext.classList.remove('hidden');
+				// todo maybe hide loader
+			}
+			if (!current.index)
+				elements.arrowPrev.classList.add('hidden');
+		}
 	};
 
-	if (isPluginLoading || isTranslationLoading) {
-		toogleLoader(true, "Loading");
-	}
+	elements.arrowNext.onclick = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log('onclick next');
+		if (current.index < current.screenshots.length - 1) {
+			// todo maybe show loader
+			current.index++;
+			let url = current.url + current.screenshots[current.index];
+			elements.imgScreenshot.setAttribute('src', url);
+			elements.imgScreenshot.onload = function() {
+				elements.arrowPrev.classList.remove('hidden');
+				// todo maybe hide loader
+			}
+			if (current.index == current.screenshots.length - 1)
+				elements.arrowNext.classList.add('hidden');
+		} 
+	};
+
+	// elements.divArrow.onclick = onClickScreenshot;
+
+	elements.inpSearch.addEventListener('input', function(event) {
+		makeSearch(event.target.value.trim().toLowerCase());
+	});
 };
 
 window.addEventListener('message', function(message) {
@@ -145,7 +186,7 @@ window.addEventListener('message', function(message) {
 				installedPlugins = message.data.filter(function(el) {
 					return (el.guid !== guidMarkeplace && el.guid !== guidSettings);
 				});
-				sortPlugins(false, true);
+				sortPlugins(false, true, 'name');
 			} else {
 				installedPlugins = [];
 			}
@@ -161,8 +202,8 @@ window.addEventListener('message', function(message) {
 				toogleLoader(false);
 				return;
 			}
-			plugin = allPlugins.find(function(el){return el.guid === message.guid});
-			installed = installedPlugins.find(function(el){return el.guid === message.guid});
+			plugin = findPlugin(true, message.guid);
+			installed = findPlugin(false, message.guid);
 			if (!installed && plugin) {
 				installedPlugins.push(
 					{
@@ -173,7 +214,7 @@ window.addEventListener('message', function(message) {
 						removed: false
 					}
 				);
-				sortPlugins(false, true);
+				sortPlugins(false, true, 'name');
 			} else if (installed) {
 				installed.removed = false;
 			}
@@ -194,22 +235,29 @@ window.addEventListener('message', function(message) {
 			toogleLoader(false);
 			break;
 		case 'Updated':
+			updateCount--;
 			if (!message.guid) {
 				// somethimes we can receive such message
-				toogleLoader(false);
+				if (!updateCount)
+					toogleLoader(false);
 				return;
 			}
-			installed = installedPlugins.find(function(el){return el.guid == message.guid});
-			plugin = allPlugins.find(function(el){return el.guid === message.guid});
+			installed = findPlugin(false, message.guid);
+			plugin = findPlugin(true, message.guid);
 
 			installed.obj.version = plugin.version;
+			plugin.bHasUpdate = false;
 
 			if (!elements.divSelected.classList.contains('hidden')) {
 				this.document.getElementById('btn_update').classList.add('hidden');
 			}
 
-			this.document.getElementById(message.guid).lastChild.firstChild.remove();
-			toogleLoader(false);
+			let pluginDiv = this.document.getElementById(message.guid);
+			if (pluginDiv)
+				pluginDiv.lastChild.firstChild.remove();
+
+			if (!updateCount)
+				toogleLoader(false);
 			break;
 		case 'Removed':
 			if (!message.guid) {
@@ -217,8 +265,8 @@ window.addEventListener('message', function(message) {
 				toogleLoader(false);
 				return;
 			}
-			plugin = allPlugins.find(function(el) {return el.guid === message.guid});
-			installed = installedPlugins.find(function(el){return el.guid === message.guid});
+			plugin = findPlugin(true, message.guid);
+			installed = findPlugin(false, message.guid);
 			let bUpdate = false;
 			if (installed) {
 				if (plugin && installed.obj.baseUrl.includes('onlyoffice.github.io')) {
@@ -386,7 +434,7 @@ function initElemnts() {
 	elements.divBody = document.getElementById('div_body');
 	elements.divMain = document.getElementById('div_main');
 	// elements.arrow = document.getElementById('arrow');
-	elements.close = document.getElementById('close');
+	// elements.close = document.getElementById('close');
 	elements.divHeader = document.getElementById('div_header');
 	elements.divSelected = document.getElementById('div_selected_toolbar');
 	elements.divSelectedMain = document.getElementById('div_selected_main');
@@ -405,6 +453,11 @@ function initElemnts() {
 	elements.divVersion = document.getElementById('div_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
+	elements.divArrow = document.getElementById('div_arrows');
+	elements.arrowPrev = document.getElementById('arrow_prev');
+	elements.arrowNext = document.getElementById('arrow_next');
+	elements.inpSearch = document.getElementById('inp_search');
+	elements.btnUpdateAll = document.getElementById('btn_updateAll');
 };
 
 function toogleLoader(show, text) {
@@ -442,7 +495,7 @@ function getAllPluginsData() {
 				if (!count) {
 					// console.log('getAllPluginsData: ' + (Date.now() - start));
 					removeUnloaded(Unloaded);
-					sortPlugins(true, false);
+					sortPlugins(true, false, 'name');
 					isPluginLoading = false;
 					showMarketplace();
 				}
@@ -472,7 +525,7 @@ function getAllPluginsData() {
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
 				if (!count) {
 					removeUnloaded(Unloaded);
-					sortPlugins(true, false);
+					sortPlugins(true, false, 'name');
 					isPluginLoading = false;
 					showMarketplace();
 				}
@@ -483,6 +536,7 @@ function getAllPluginsData() {
 
 function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
+	$('.div_notification').remove();
 	$('.div_item').remove();
 	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
 	if (arr.length) {
@@ -493,8 +547,8 @@ function showListofPlugins(bAll, sortedArr) {
 		setTimeout(function(){if (Ps) Ps.update()});
 	} else {
 		// if no istalled plugins and my plugins button was clicked
-		let notification = bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
-		createNotification(translate[notification]);
+		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
+		createNotification(notification);
 	}
 	if (!Ps) {
 		Ps = new PerfectScrollbar('#div_main', {});
@@ -522,19 +576,19 @@ function createPluginDiv(plugin, bInstalled) {
 
 	div.onclick = onClickItem;
 
-	let installed = bInstalled ? plugin : installedPlugins.find(function(el){return(el.guid===plugin.guid)});
+	let installed = bInstalled ? plugin : findPlugin(false, plugin.guid);
+	if (bInstalled) {
+		plugin = findPlugin(true, plugin.guid);
+	}
 	let bHasUpdate = false;
-	if (isDesktop && installed) {
+	if (installed && plugin) {
 		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
 		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
-		if (lastV > installedV)
+		if (lastV > installedV) {
 			bHasUpdate = true;
-	}
-
-	if (bInstalled) {
-		plugin = allPlugins.find(function(el){
-			return el.guid === plugin.guid;
-		});
+			elements.btnUpdateAll.classList.remove('hidden');
+			plugin.bHasUpdate = true;
+		}
 	}
 		
 	if (!plugin) {
@@ -546,7 +600,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
-						'<img id="img_'+plugin.guid+'" class="plugin_icon" ' + (!bInstalled ? 'style="display:none"' : '' ) + ' data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
+						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
 					'<div class="div_description">'+
 						'<span class="span_name">' + name + '</span>' +
@@ -575,8 +629,8 @@ function onClickInstall(target, event) {
 	timeout = setTimeout(toogleLoader, 200, true, "Installation");
 	// toogleLoader(true, "Installation");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
-	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
-	let installed = installedPlugins.find( function(el) { return el.guid === guid; } );
+	let plugin = findPlugin(true, guid);
+	let installed = findPlugin(false, guid);
 	let message = {
 		type : 'install',
 		url : (installed ? installed.baseUrl : plugin.url),
@@ -592,7 +646,8 @@ function onClickUpdate(target) {
 	timeout = setTimeout(toogleLoader, 200, true, "Updating");
 	// toogleLoader(true, "Updating");
 	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
-	let plugin = allPlugins.find( function(el) { return el.guid === guid; } );
+	let plugin = findPlugin(true, guid);
+	updateCount++;
 	let message = {
 		type : 'update',
 		url : plugin.url,
@@ -617,9 +672,27 @@ function onClickRemove(target, event) {
 	sendMessage(message);
 };
 
+function onClickUpdateAll() {
+	clearTimeout(timeout);
+	timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	elements.btnUpdateAll.classList.add('hidden');
+	let arr = allPlugins.filter(function(el) {
+		return el.bHasUpdate;
+	});
+	updateCount = arr.length;
+	arr.forEach(function(plugin){
+		let message = {
+			type : 'update',
+			url : plugin.url,
+			guid : plugin.guid,
+			config : plugin
+		};
+		sendMessage(message);
+	});
+};
+
 function onClickItem() {
 	// There we will make preview for selected plugin
-	// TODO think about where we will get "offered by" and text for this block (maybe from config) (also we should add translate for it)
 	let offered = " Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
@@ -627,31 +700,36 @@ function onClickItem() {
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
 
-	let installed = installedPlugins.find(function(el){return(el.guid===guid);});
-	let plugin = allPlugins.find(function(el){return (el.guid == guid);});
-
+	let installed = findPlugin(false, guid);
+	let plugin = findPlugin(true, guid);
 	if (!plugin) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
-	
+
 	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		let url = plugin.baseUrl + plugin.variations[0].store.screenshots[0];
+		current.screenshots = plugin.variations[0].store.screenshots;
+		current.index = 0;
+		current.url = plugin.baseUrl;
+		let url = current.url + current.screenshots[current.index];
 		elements.imgScreenshot.setAttribute('src', url);
 		elements.imgScreenshot.onload = function() {
 			elements.imgScreenshot.classList.remove('hidden');
+			if (current.screenshots.length > 1)
+				elements.divArrow.classList.remove('hidden');
 			setDivHeight();
 		}
 	} else {
 		elements.imgScreenshot.classList.add('hidden');
+		elements.divArrow.classList.add('hidden');
 	}
 
 	let bHasUpdate = false;
-	if (isDesktop && installed) {
+	if (installed && plugin) {
 		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
 		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
 		if (lastV > installedV)
@@ -706,7 +784,6 @@ function onClickItem() {
 		elements.btnInstall.classList.remove('hidden');
 	}
 
-	// TODO Fix problem with loading screenshots
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
@@ -716,15 +793,26 @@ function onClickItem() {
 
 function onClickBack() {
 	// click on left arrow in preview mode
-	// TODO Fix problem with loading screenshots
 	elements.imgIcon.style.display = 'none';
 	elements.imgScreenshot.setAttribute('src','')
 	document.getElementById('span_overview').click();
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
+	elements.divArrow.classList.add('hidden');
+	current.index = 0;
+	current.screenshots = [];
+	current.url = '';
 	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
+};
+
+function onClickScreenshot() {
+	// todo create a modal with the big screenshot and exit from this mode
+	// $(".arrow_conteiner_small").addClass("arrow_conteiner_big");
+	// $(".arrow_small").removeClass("arrow_big");
+	// $(".arrow_conteiner_small").removeClass(".arrow_conteiner_small");
+	// $(".arrow_small").removeClass(".arrow_small");
 };
 
 function onSelectPreview(target, isOverview) {
@@ -887,12 +975,14 @@ function getTranslation() {
 function onTranslate() {
 	isTranslationLoading = false;
 	// translates elements on current language
-	elements.linkNewPlugin.innerHTML = translate["Submit your own plugin"];
-	elements.btnMyPlugins.innerHTML = translate["My plugins"];
-	elements.btnMarketplace.innerHTML = translate["Marketplace"];
+	elements.linkNewPlugin.innerHTML = translate['Submit your own plugin'];
+	elements.btnMyPlugins.innerHTML = translate['My plugins'];
+	elements.btnMarketplace.innerHTML = translate['Marketplace'];
 	elements.btnInstall.innerHTML = translate['Install'];
-	elements.btnRemove.innerHTML = translate["Remove"];
-	elements.btnUpdate.innerHTML = translate["Update"];
+	elements.btnRemove.innerHTML = translate['Remove'];
+	elements.btnUpdate.innerHTML = translate['Update'];
+	elements.btnUpdateAll.innerHTML = translate['Update All'];
+	elements.inpSearch.placeholder = translate['Search plugins'] + '...';
 	document.getElementById('lbl_header').innerHTML = translate['Manage plugins'];
 	document.getElementById('span_offered_caption').innerHTML = translate['Offered by'] + ': ';
 	document.getElementById('span_overview').innerHTML = translate['Overview'];
@@ -906,21 +996,46 @@ function onTranslate() {
 	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
 	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
 	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
+	document.getElementById('span_categories').innerHTML = translate['Categories'];
+	document.getElementById('opt_all').innerHTML = translate['All'];
+	document.getElementById('opt_rec').innerHTML = translate['Recommended'];
+	document.getElementById('opt_dev').innerHTML = translate['Developer tools'];
+	document.getElementById('opt_work').innerHTML = translate['Work'];
+	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
+	document.getElementById('opt_com').innerHTML = translate['Communication'];
+	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
 	showMarketplace();
 };
 
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
+		createSelect();
 		showListofPlugins(true);
 		toogleLoader(false);
+		catFiltred = allPlugins;
+		// elements.divBody.classList.remove('hidden');
+		elements.divBody.classList.remove('transparent');
 
-	
-		elements.divBody.classList.remove('hidden');
+		
 		// console.log('showMarketplace: ' + (Date.now() - start));
 		// we are removing the header for now, since the plugin has its own
 		// elements.divHeader.classList.remove('hidden');
 	}
+};
+
+function createSelect() {
+	$('#select_categories').select2({
+		minimumResultsForSearch: Infinity
+	}).on('change', function(event) {
+		filterByCategory(event.currentTarget.value);
+	});
+
+	// $('#select_sortBy').select2({
+	// 	minimumResultsForSearch: Infinity
+	// }).on('change', function(event) {
+	// 	console.log(event.currentTarget.value);
+	// });
 };
 
 function getImageUrl(guid, bNotForStore, bSetSize, id) {
@@ -944,15 +1059,11 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 	let plugin;
 	if (allPlugins) {
-		plugin = allPlugins.find(function(el){
-			return el.guid === guid
-		});
+		plugin = findPlugin(true, guid);
 	}
 
 	if (!plugin && installedPlugins) {
-		plugin = installedPlugins.find(function(el){
-			return el.guid === guid
-		});
+		plugin = findPlugin(false, guid);
 		if (plugin)
 			plugin = plugin.obj;
 	}
@@ -1044,25 +1155,92 @@ function getUrlSearchValue(key) {
 
 function toogleView(current, oldEl, text, bAll) {
 	if ( !current.classList.contains('btn_toolbar_active') ) {
+		elements.inpSearch.value = '';
+		founded = [];
 		oldEl.classList.remove('btn_toolbar_active');
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = translate[text] || text;
+		if (document.getElementById('select_categories').value == 'all') {
+			showListofPlugins(bAll);
+			catFiltred = bAll ? allPlugins : installedPlugins;
+		} else {
+			filterByCategory(document.getElementById('select_categories').value);
+		}
 		elements.linkNewPlugin.href = bAll ? "https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls" : "https://api.onlyoffice.com/plugin/installation";
-		showListofPlugins(bAll);
 	}
 };
 
-function sortPlugins(bAll, bInst) {
-	if (bAll) {
-		allPlugins.sort(function(a, b) {
-			return a.name.localeCompare(b.name);
-		});
+function sortPlugins(bAll, bInst, type) {
+	switch (type) {
+		case 'raiting':
+			// todo
+			break;
+		case 'instalations':
+			// todo
+			break;
+	
+		default:
+			if (bAll) {
+				allPlugins.sort(function(a, b) {
+					return a.name.localeCompare(b.name);
+				});
+			}
+			if (bInst) {
+				installedPlugins.sort(function(a, b) {
+					return a.obj.name.localeCompare(b.obj.name);
+				});
+			}
+			break;
 	}
-	if (bInst) {
-		installedPlugins.sort(function(a, b) {
-			return a.obj.name.localeCompare(b.obj.name);
+};
+
+function makeSearch(val) {
+	clearTimeout(searchTimeout);
+	searchTimeout = setTimeout(function() {
+		let plugins = catFiltred;
+		let bUpdate = false;
+		let arr = plugins.filter(function(el) {
+			let plugin = el.obj || el;
+			let name = (plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
+			return name.toLowerCase().includes(val);
 		});
+
+		if (founded.length == arr.length) {
+			if (JSON.stringify(founded) != JSON.stringify(arr)) {
+				founded = arr;
+				bUpdate = true;
+			}
+		} else {
+			founded = arr;
+			bUpdate = true;
+		}
+
+		if (founded.length) {
+			if (bUpdate)
+				showListofPlugins(elements.btnMarketplace.classList.contains('btn_toolbar_active'), founded);
+		} else {
+			showListofPlugins(elements.btnMarketplace.classList.contains('btn_toolbar_active'), []);
+		}
+	}, 100);
+};
+
+function filterByCategory(category) {
+	let plugins = elements.btnMarketplace.classList.contains('btn_toolbar_active') ? allPlugins : installedPlugins;
+	let arr;
+	if (category != "all") {
+		arr = plugins.filter(function(plugin) {
+			let variation = plugin.variations ? plugin.variations[0] : plugin.obj.variations[0];
+			let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
+			return arrCat.includes(category);
+		});
+	} else {
+		arr = plugins;
 	}
+	catFiltred = arr;
+	if (elements.inpSearch.value.trim() == '')
+		showListofPlugins(elements.btnMarketplace.classList.contains('btn_toolbar_active'), arr);
+	else
+		makeSearch(elements.inpSearch.value.trim().toLowerCase());
 };
 
 function createDefaultTranslations() {
@@ -1083,4 +1261,11 @@ function removeUnloaded(unloaded) {
 	unloaded.forEach(function(el){
 		allPlugins.splice(el, 1);
 	})
+};
+
+function findPlugin(bAll, guid) {
+	let res = bAll
+			? allPlugins.find(function(el){return el.guid === guid})
+			: installedPlugins.find(function(el){return el.guid === guid});
+	return res;
 };
