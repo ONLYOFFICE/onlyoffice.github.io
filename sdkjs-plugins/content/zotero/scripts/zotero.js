@@ -49,7 +49,8 @@
         function items(search) {
             return new Promise(function (resolve, reject) {
                 parseItemsResponse(buildGetRequest("users/" + userId + "/items", {
-                    q: search
+                    q: search,
+					format: "csljson"
                 }), resolve, reject);
             });
         }
@@ -57,7 +58,8 @@
 		function groups(search, groupId) {
             return new Promise(function (resolve, reject) {
 				parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", {
-					q: search
+					q: search,
+					format: "csljson"
 				}), resolve, reject);
             });
         }

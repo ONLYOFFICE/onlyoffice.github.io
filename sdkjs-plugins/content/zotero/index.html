@@ -27,8 +27,12 @@
     <script src="scripts/thirdparty/fetch.umd.js"></script>
     <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
     <script src="scripts/thirdparty/url-polyfill.min.js"></script>
+    <script src="scripts/citeproc/citeproc_commonjs.js"></script>
 </head>
 <body id="body" spellcheck="false" class="noselect">
+	<div id="loader" class="cssload-container display-none">
+        <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
+    </div>
     <div id="errorWrapper" class="errorMsg display-none"></div>
 
     <div id="content">
@@ -42,6 +46,7 @@
                     <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" style="width: 100%;"/>
                 </div>
                 <button id="saveConfigBtn" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Save</button>
+                <button id="saveAsTextBtn" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Save as text</button>
             </div>
 
             <div id="mainState" class="flexCol flexSize display-none">
@@ -65,10 +70,14 @@
                     <div id="docsThumb" class="scrollThumb display-none"></div>
                 </div>
                 <div id="controlsHolder" class="flexCol">
-                    <div id="buttonsWrapper" class="flex display-none" style="justify-content: space-between;">
-                        <div id="insertBibBtn" class="btn-text-default i18n" style="width: 45%">Insert Bibliography</div>
-                        <div id="cancelBtn" class="btn-text-default i18n" style="width: 45%">Cancel</div>
+					<div id="buttonsWrapper" class="flex " style="justify-content: space-between;">
+						<button id="insertLinkBtn" class="button control i18n btn-text-default" disabled>Insert Link</button>
+                        <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
                     </div>
+					<div id="insertBibDiv" class="flex">
+						<button id="insertBibBtn" class="button control i18n btn-text-default">Insert Bibliography</button>
+						<button id="refreshBtn" class="button control btn-text-default i18n">Refresh</button>
+					</div>
                     <div id="styleWrapper">
                         <div class="label">
                             <span class="i18n">Style</span>
@@ -76,9 +85,10 @@
                                 <input id="styleSelect" class="control select text i18n" type="text" placeholder="Enter style name">
                                 <div id="styleSelectList" class="selectList display-none">
                                 </div>
+                                <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
                             </div>
                         </div>
-                        <div class="label">
+                        <div class="label styleWrapperSecond">
                             <span class="i18n">Language</span>
                             <div class="selectHolder">
                                 <input id="styleLang" readonly class="control select" type="text">
@@ -95,7 +105,7 @@
                                     <span data-value="de-DE">German (Germany)</span>
                                     <span data-value="el-GR">Greek</span>
                                     <span data-value="en-GB">English (UK)</span>
-                                    <span selected data-value="en-US">English (US)</span>
+                                    <span data-value="en-US">English (US)</span>
                                     <span data-value="es-CL">Spanish (Chile)</span>
                                     <span data-value="es-ES">Spanish (Spain)</span>
                                     <span data-value="es-MX">Spanish (Mexico)</span>
@@ -151,6 +161,7 @@
         </div>
 
     </div>
+	<div id="div_temp" class="hidden"></div>
 
     <script src="scripts/zotero.js"></script>
     <script src="scripts/code.js"></script>

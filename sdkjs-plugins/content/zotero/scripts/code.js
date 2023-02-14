@@ -16,9 +16,22 @@
  *
  */
 (function () {
+	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
-    var waitForLoad = false;
+	var formatter = null;
+	var cslItems = {count: 0};
+	var citPrefix = "ZOTERO_CITATION ";
+	var bibPrefix = "ZOTERO_BIBLIOGRAPHY";
+    var repeatTimeout;
+	var loadingStyle = false;
+	var loadingLocale = false;
+	var bNumFormat = false;
+	// TODO добавить варианты сохранения для совместимости с другими редакторами (ms, libre, google, мой офис), пока есть вариант сохранить как текст
+	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять из библиографии автоматически (это делать только при обновлении библиографии или refresh), но их точно нужно удалить из formatter!
+	// TODO добавить ещё обработку события (изменения линков), предлать пользователю обновить их или сохранить ручное форматирование (при ручном форматировании не меняем внешний вид цитаты при refresh (да и вообще не меняем))
+	// TODO сейчас всегда делаем полный refresh при каждом действии (обновлении, вставке линков, вставке библиографии), потому что мы не знаем что поменялось без событий (потом добавить ещё сравнение контента)
+	// TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку как документе (для этого нужно знать где именно в документе мы вставляем цитату, какая цитата сверху и снизу от текущего курсора)
 
     var selected = {
         items: {},
@@ -31,6 +44,17 @@
         }
     };
 
+	var defaultStyles = 
+    {
+        "American Medical Association 11th edition" : 1, "American Political Science Association" : 1,
+        "American Psychological Association 7th edition" : 1, "American Sociological Association 6th edition" : 1,
+        "Chicago Manual of Style 17th edition (author-date)" : 1, "Cite Them Right 10th edition - Harvard" : 1,
+        "IEEE" : 1, "Modern Humanities Research Association 3rd edition (note with bibliography)" : 1,
+        "Modern Language Association 8th edition" : 1, "Nature" : 1
+    };
+
+	var locales = {};
+    var styles = {};
     var selectedLocale;
     var selectedStyle;
 
@@ -42,6 +66,7 @@
 		groups: []
     };
     var elements = {
+        loader: document.getElementById("loader"),
         libLoader: document.getElementById("libLoader"),
         error: document.getElementById("errorWrapper"),
 
@@ -67,17 +92,25 @@
 
         styleWrapper: document.getElementById("styleWrapper"),
         styleSelectList: document.getElementById("styleSelectList"),
+        styleSelectListOther: document.getElementById("styleSelectedListOther"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
 
         insertBibBtn: document.getElementById("insertBibBtn"),
+        insertLinkBtn: document.getElementById("insertLinkBtn"),
         cancelBtn: document.getElementById("cancelBtn"),
+		tempDiv: document.getElementById('div_temp'),
+		refreshBtn: document.getElementById('refreshBtn'),
+		saveAsTextBtn: document.getElementById('saveAsTextBtn')
+		
     };
 
     var selectedScroller;
     var docsScroller;
 
     window.Asc.plugin.init = function () {
+		showLoader(true);
+		updateCslItems(true, false, false, false);
         sdk = window.Asc.plugin.zotero.api({});
 
         window.Asc.plugin.onTranslate = applyTranslations;
@@ -94,16 +127,14 @@
             if (!text) return;
             if (text == lastSearch.text) return;
             lastSearch.text = text;
-            lastSearch.catObj = null;
-            lastSearch.ownObj = null;
-
+			lastSearch.obj = null;
+			lastSearch.groups = [];
             clearLibrary();
-
-            loadLibrary(sdk.items(text), true, true, false);
 			var groups = sdk.getUserGropus();
+            loadLibrary(sdk.items(text), true, true, !groups.length, false, true);
 			if (groups.length) {
 				for (var i = 0; i < groups.length; i++) {
-					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true );
+					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
 				}
 			}
         };
@@ -148,7 +179,27 @@
             }
         };
 
-        elements.insertBibBtn.onclick = formatInsertBibliography;
+		elements.refreshBtn.onclick = function() {
+			showLoader(true);
+			updateCslItems(true, true, false, false);
+		};
+
+        elements.insertBibBtn.onclick = function() { 
+			showLoader(true);
+			// TODO #there
+			// updateCslItems(true, false, true, false);
+			updateCslItems(true, true, true, false);
+		};
+
+		elements.insertLinkBtn.onclick = function() {
+			showLoader(true);
+			updateCslItems(true, false, false, true);
+		};
+
+		elements.saveAsTextBtn.onclick = function() {
+			showLoader(true);
+			saveAs();
+		}
 
         selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
         docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
@@ -165,7 +216,35 @@
                         saveLastUsedStyle(sel);
                         f(ev);
                     }
-                }
+                };
+
+				var openOtherStyleList = function (list) {
+                    return function (ev) {
+                        elements.styleSelectListOther.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+                        ev.stopPropagation();
+                        openList(list);
+                    }
+                };
+
+				var onStyleSelectOther = function (list, other) {
+                    return function (ev) {
+                        var tmpEl = list.removeChild(list.children[list.children.length - 2]);
+                        var newEl = document.createElement("span");
+                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                        newEl.textContent = tmpEl.textContent;
+                        other.appendChild(newEl);
+                        newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                        tmpEl = other.removeChild(ev.target);
+                        newEl = document.createElement("span");
+                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                        newEl.textContent = tmpEl.textContent;
+                        list.insertBefore(newEl, list.firstElementChild);
+                        newEl.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                        var event = new Event("click");
+                        newEl.dispatchEvent(event);
+                        openList(null);
+                    }
+                };
 
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].dependent != 0) continue;
@@ -173,19 +252,33 @@
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-                    elements.styleSelectList.appendChild(el);
-                    el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+					if (defaultStyles[json[i].title] || json[i].name == lastStyle) {
+                        if (json[i].name == lastStyle)
+                            elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
+                        else
+                            elements.styleSelectList.appendChild(el);
+
+                        el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                    } else {
+                        elements.styleSelectListOther.appendChild(el);
+                        el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                    }
                     if (json[i].name == lastStyle) {
                         el.setAttribute("selected", "");
-                        selectInput(elements.styleSelect, el, elements.styleSelectList);
+                        selectInput(elements.styleSelect, el, elements.styleSelectList, false);
                         found = true;
                     }
                 }
 
+				var other = document.createElement("span");
+                other.textContent = "More Styles...";
+                elements.styleSelectList.appendChild(other);
+                other.onclick = openOtherStyleList(elements.styleSelectListOther);
+
                 if (!found) {
                     var first = elements.styleSelectList.children[0];
                     first.setAttribute("selected", "");
-                    selectInput(elements.styleSelect, first, elements.styleSelectList);
+                    selectInput(elements.styleSelect, first, elements.styleSelectList, false);
                 }
             })
             .catch(function (err) { });
@@ -193,7 +286,7 @@
         elements.styleSelect.onkeyup = function () {
             var input = elements.styleSelect;
             var filter = input.value.toLowerCase();
-            var list = elements.styleSelectList;
+            var list = (elements.styleSelectList.classList.contains(displayNoneClass)) ? elements.styleSelectListOther : elements.styleSelectList;
 
             for (var i = 0; i < list.children.length; i++) {
                 var text = list.children[i].textContent || list.children[i].innerText;
@@ -203,12 +296,35 @@
                 }
                 switchClass(list.children[i], displayNoneClass, hide);
             }
-        }
+        };
 
-        elements.styleSelect.onselectchange = function (inp, val) {
+        elements.styleSelect.onselectchange = function (inp, val, isClick) {
+			showLoader(true);
+            getStyle(val)
+			.then(function(style) {
+				bNumFormat = style.includes('citation-format="numeric"');
+				if (isClick)
+					updateCslItems(true, true, false, false);
+			})
+			.catch(function () { })
+			.finally(function() {
+				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
+			});
             selectedStyle = val;
         };
-        elements.styleLang.onselectchange = function (inp, val) {
+
+        elements.styleLang.onselectchange = function (inp, val, isClick) {
+			showLoader(true);
+			saveLanguage(val);
+            getLocale(val)
+			.then(function() {
+				if (isClick)
+					updateCslItems(true, true, false, false);
+			})
+			.catch(function () { })
+			.finally(function() {
+				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
+			});
             selectedLocale = val;
         };
 
@@ -223,6 +339,7 @@
             switchAuthState('config');
         }
     };
+
     window.Asc.plugin.onThemeChanged = function(theme)
     {
         window.Asc.plugin.onThemeChangedBase(theme);
@@ -239,6 +356,7 @@
         styleTheme.innerHTML = rules;
         document.getElementsByTagName('head')[0].appendChild(styleTheme);
     };
+
     var scrollBoxes = [];
     function initScrollBox(holder, thumb, onscroll) {
         var scroller = {};
@@ -284,6 +402,7 @@
     var selectLists = [];
     function initSelectBoxes() {
         var select = document.getElementsByClassName("control select");
+		var savedLang = restoreLanguage();
         for (var i = 0; i < select.length; i++) {
             var input = select[i];
             var holder = input.parentElement;
@@ -293,45 +412,53 @@
             arrow.appendChild(document.createElement("span"));
             holder.appendChild(arrow);
 
-            var list = holder.getElementsByClassName("selectList")[0];
-            if (list.children.length > 0) {
-                var def = false;
-                for (var j = 0; j < list.children.length; j++) {
-                    if (list.children[j].hasAttribute("selected")) {
-                        selectInput(input, list.children[j], list);
-                        def = true;
-                    }
+            for (var k = 0; k < holder.getElementsByClassName("selectList").length; k++) {
+                var list = holder.getElementsByClassName("selectList")[k];
+                if (list.children.length > 0) {
+                    var def = false;
+                    for (var j = 0; j < list.children.length; j++) {
+                        if (list.children[j].getAttribute("data-value") == savedLang) {
+							list.children[j].setAttribute("selected", "");
+                            selectInput(input, list.children[j], list, false);
+                            def = true;
+                        }
 
-                    list.children[j].onclick = onClickListElement(list, input);
+                        list.children[j].onclick = onClickListElement(list, input);
+                    }
+                    if (!def) {
+                        selectInput(input, list.children[0], list, false);
+                    }
                 }
-                if (!def) {
-                    selectInput(input, list.children[0], list);
-                }
-            }
 
-            var f = function (list, input) {
-                return function (ev) {
-                    ev.stopPropagation();
-                    if (list.onopen) {
-                        list.onopen();
-                    }
-                    if (!input.hasAttribute("readonly")) {
-                        input.select();
-                    }
-                    openList(list);
-                    return true;
+                var f = function (list, input) {
+                    return function (ev) {
+                        ev.stopPropagation();
+                        if (!elements.styleSelectListOther.classList.contains(displayNoneClass))
+                        return true;
+
+                        if (list.onopen) {
+                            list.onopen();
+                        }
+                        if (!input.hasAttribute("readonly")) {
+                            input.select();
+                        }
+                        openList(list);
+                        return true;
+                    };
                 };
-            };
 
-            input.onclick = f(list, input);
-            arrow.onclick = f(list, input);
-            selectLists.push(list);
+                if (k !== 1) {
+                    input.onclick = f(list, input);
+                    arrow.onclick = f(list, input);
+                }
+                selectLists.push(list);
+            }
         }
 
         window.onclick = function () {
             openList(null);
         }
-    }
+    };
 
     function openList(el) {
         for (var i = 0; i < selectLists.length; i++) {
@@ -341,15 +468,15 @@
             }
             switchClass(selectLists[i], displayNoneClass, close);
         }
-    }
+    };
 
-    function selectInput(input, el, list) {
+    function selectInput(input, el, list, isClick) {
         input.value = el.textContent;
         var val = el.getAttribute("data-value");
         input.setAttribute("data-value", val);
         input.setAttribute("title", el.textContent);
         if (input.onselectchange) {
-            input.onselectchange(input, val);
+            input.onselectchange(input, val, isClick);
         }
         switchClass(list, displayNoneClass, true);
     };
@@ -360,7 +487,7 @@
             for (var i = 0; i < list.children.length; i++) {
                 if (list.children[i].getAttribute("data-value") == sel) {
                     list.children[i].setAttribute("selected", "");
-                    selectInput(input, list.children[i], list);
+                    selectInput(input, list.children[i], list, true);
                 } else {
                     if (list.children[i].hasAttribute("selected")) {
                         list.children[i].attributes.removeNamedItem("selected");
@@ -378,19 +505,27 @@
             if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
             if (el.innerText) el.innerText = getMessage(el.innerText);
         }
-    }
+    };
 
     function getMessage(key) {
         return window.Asc.plugin.tr(key);
-    }
+    };
 
     function saveLastUsedStyle(id) {
         localStorage.setItem("zoteroStyleId", id);
-    }
+    };
 
     function getLastUsedStyle() {
         return localStorage.getItem("zoteroStyleId");
-    }
+    };
+
+	function saveLanguage(id) {
+		localStorage.setItem("zoteroLang", id);
+	};
+
+	function restoreLanguage() {
+		return localStorage.getItem("zoteroLang") || "en-US";
+	};
 
     function showError(message) {
         if (message) {
@@ -402,11 +537,16 @@
             elements.error.textContent = "";
             window.onclick = null;
         }
-    }
+    };
+
+	function showLoader(show) {
+        switchClass(elements.loader, displayNoneClass, !show);
+        switchClass(elements.contentHolder, blurClass, show);
+    };
 
     function showLibLoader(show) {
         switchClass(elements.libLoader, displayNoneClass, !show);
-    }
+    };
 
     function switchClass(el, className, add) {
         if (add) {
@@ -414,16 +554,16 @@
         } else {
             el.classList.remove(className);
         }
-    }
+    };
 
     function configState(hide) {
         switchClass(elements.configState, displayNoneClass, hide);
-    }
+    };
 
     function mainState(hide) {
         switchClass(elements.mainState, displayNoneClass, hide);
         switchClass(elements.logoutLink, displayNoneClass, hide);
-    }
+    };
 
     var currentAuthState;
     function switchAuthState(state) {
@@ -438,7 +578,7 @@
                 mainState(false);
                 break;
         }
-    }
+    };
 
     function checkScroll(holder, thumb, func) {
         return function () {
@@ -459,7 +599,7 @@
 
             if (func) func(holder, thumb);
         }
-    }
+    };
 
     var loadTimeout = null;
     function checkDocsScroll(holder) {
@@ -471,20 +611,18 @@
 
             if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
 
-            waitForLoad = true;
             loadTimeout = setTimeout(function () {
                 if (shouldLoadMore(holder)) {
-                    loadLibrary(lastSearch.obj.next(), true, true, lastSearch.groups.length);
+                    loadLibrary(lastSearch.obj.next(), true, true, !lastSearch.groups.length, false, false);
 					for (var i = 0; (i < lastSearch.groups.length && lastSearch.groups[i].next); i++) {
-						loadLibrary(sdk.groups(lastSearch.groups[i].next()), true, false, (i == lastSearch.groups.length -1), true );
+						loadLibrary(sdk.groups(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false );
 					}
                 } else {
-                    waitForLoad = false;
                 }
             }, 500);
 
         }
-    }
+    };
 
     function shouldLoadMore(holder) {
         if (currentAuthState != "main") return false;
@@ -496,7 +634,7 @@
         if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
 
         return true;
-    }
+    };
 
     function clearLibrary() {
         var holder = elements.docsHolder;
@@ -504,29 +642,57 @@
             holder.removeChild(holder.lastChild);
         }
         holder.scrollTop = 0;
-        lastSearch.catObj = null;
-        lastSearch.ownObj = null;
         docsScroller.onscroll();
-    }
+    };
 
-    function loadLibrary(promise, append, showLoader, hideLoader, isGroup) {
+    function loadLibrary(promise, append, showLoader, hideLoader, isGroup, bCount) {
 		if (showLoader) showLibLoader(true);
+		if (bCount) counter++;
         promise
             .then(function (res) {
-                displaySearchItems(append, res, null, hideLoader, isGroup);
+				if (bCount) counter--;
+                displaySearchItems(append, res, null, hideLoader, isGroup, (bCount && !counter) );
             })
             .catch(function (err) {
-                displaySearchItems(append, null, err.message, hideLoader, isGroup);
+				if (bCount) counter--;
+                displaySearchItems(append, {}, err.message, hideLoader, isGroup, (bCount && !counter) );
             })
-            .finally(function () {
+            .finally(function () {	
 				if (hideLoader) {
 					showLibLoader(false);
-					waitForLoad = false;
 				}
             });
-    }
+    };
 
-    function displaySearchItems(append, res, err, showNotFound, isGroup) {
+    function getStyle(styleName) {
+        return new Promise(function (res, rej) {
+            if (styles[styleName] != null) {
+                res(styles[styleName]);
+            } else {
+                loadingStyle = true;
+                fetch("https://www.zotero.org/styles/" + styleName)
+                    .then(function (resp) { return resp.text(); })
+                    .then(function (text) { styles[styleName] = text; res(text); loadingStyle = false; })
+                    .catch(function (err) { rej(err); loadingStyle = false; });
+            }
+        });
+    };
+
+    function getLocale(langTag) {
+        return new Promise(function (res, rej) {
+            if (locales[langTag] != null) {
+                res(locales[langTag]);
+            } else {
+                loadingLocale = true;
+                fetch("https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-" + langTag + ".xml")
+                    .then(function (resp) { return resp.text(); })
+                    .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
+                    .catch(function (err) { rej(err); loadingLocale = false; });
+            }
+        });
+    };
+
+    function displaySearchItems(append, res, err, hideLoader, isGroup, showNotFound) {
         var holder = elements.docsHolder;
 
         if (!append) {
@@ -534,25 +700,25 @@
         }
 
         var first = false;
-        if (!lastSearch.obj && (res.items && !res.items.length) ) first = true;
+        if (!lastSearch.obj && (res && res.items.items && !res.items.items.length) ) first = true;
         if (err) {
             if (first) {
-				lastSearch.obj = {};
+				lastSearch.obj = null;
 				lastSearch.groups = [];
 			} 
             lastSearch.obj.next = null;
         } else {
-			if (isGroup)
+			if (isGroup && res && res.next)
 				lastSearch.groups.push(res);
 			else
-            	lastSearch.obj = res;
+            	lastSearch.obj = (res && res.items.items.length ? res : null);
         }
 
         var page = document.createElement("div");
         page.classList.add("page" + holder.children.length);
-        if (res && res.items.length > 0) {
-            for (var i in res.items) {
-                page.appendChild(buildDocElement(res.items[i]));
+        if (res && res.items.items.length > 0) {
+            for (var i in res.items.items) {
+                page.appendChild(buildDocElement(res.items.items[i]));
             }
         } else if (err || first) {
             if (err) {
@@ -567,7 +733,7 @@
         holder.appendChild(page);
 
         docsScroller.onscroll();
-    }
+    };
 
     function buildDocElement(item) {
         var root = document.createElement("div");
@@ -578,9 +744,9 @@
         checkWrapper.classList.add("checkbox");
         var check = document.createElement("input");
         check.setAttribute("type", "checkbox");
-        if (selected.items[item.key]) {
+        if (selected.items[item.id]) {
             check.checked = true;
-            selected.checks[item.key] = check;
+            selected.checks[item.id] = check;
         }
         checkWrapper.appendChild(check);
         checkWrapper.appendChild(document.createElement("span"));
@@ -590,16 +756,15 @@
         docInfo.classList.add("docInfo");
 
         var title = document.createElement("div");
-        title.textContent = item.data.title;
+        title.textContent = item.title;
         title.classList.add("truncate-text");
         docInfo.appendChild(title);
 
-        if (item.data.creators && item.data.creators.length > 0) {
+        if (item.author && item.author.length > 0) {
             var authors = document.createElement("div");
-            authors.textContent = item.data.creators
+            authors.textContent = item.author
                 .map(function (a) {
-                    if (a.name) return a.name;
-                    return a.lastName + ", " + a.firstName;
+                    return a.family + ", " + a.given;
                 })
                 .join("; ");
             authors.setAttribute("title", authors.textContent);
@@ -610,14 +775,15 @@
         }
 
         var source = document.createElement("div");
-        if (item.data.publisher || item.data.place) {
-            source.textContent = item.data.publisher || item.data.place;
+        if (item.publisher || item["publisher-place"]) {
+            source.textContent = item.publisher || item["publisher-place"];
         }
-        if (item.data.date) {
+        if (item.issued && item.issued['date-parts']) {
+			var date = item.issued['date-parts'][0];
             if (source.textContent) {
-                source.textContent += " (" + item.data.date + ")";
+                source.textContent += " (" + date.join("-") + ")";
             } else {
-                source.textContent = item.data.date;
+                source.textContent = date.join("-");
             }
         }
         source.setAttribute("title", source.textContent);
@@ -635,7 +801,7 @@
                 if (input.checked) {
                     addSelected(item, input);
                 } else {
-                    removeSelected(item.key);
+                    removeSelected(item.id);
                 }
             };
         }
@@ -645,49 +811,49 @@
         docInfo.onclick = f;
 
         return root;
-    }
+    };
 
     function addSelected(item, input) {
         var el = buildSelectedElement(item);
-        selected.items[item.key] = item;
-        selected.html[item.key] = el;
-        selected.checks[item.key] = input;
+        selected.items[item.id] = item;
+        selected.html[item.id] = el;
+        selected.checks[item.id] = input;
         elements.selectedHolder.appendChild(el);
         docsScroller.onscroll();
         selectedScroller.onscroll();
         checkSelected();
-    }
+    };
 
-    function removeSelected(key) {
-        var el = selected.html[key];
-        delete selected.items[key];
-        delete selected.html[key];
-        if (selected.checks[key]) {
-            selected.checks[key].checked = false;
-            delete selected.checks[key];
+    function removeSelected(id) {
+        var el = selected.html[id];
+        delete selected.items[id];
+        delete selected.html[id];
+        if (selected.checks[id]) {
+            selected.checks[id].checked = false;
+            delete selected.checks[id];
         }
         elements.selectedHolder.removeChild(el);
         docsScroller.onscroll();
         selectedScroller.onscroll();
         checkSelected();
-    }
+    };
 
     function buildSelectedElement(item) {
         var root = document.createElement("div");
         root.classList.add("selDoc");
 
         var name = document.createElement("span");
-        name.textContent = item.data.title;
-        name.setAttribute("title", item.data.title);
+        name.textContent = item.title;
+        name.setAttribute("title", item.title);
 
         var year = document.createElement("span");
-        if (item.data.date) {
-            year.textContent = item.data.date;
+        if (item.issued && item.issued['date-parts']) {
+            year.textContent = item.issued['date-parts'][0].join("-");
         }
 
         var remove = document.createElement("span");
         remove.onclick = function () {
-            removeSelected(item.key);
+            removeSelected(item.id);
         };
         remove.textContent = '×';
 
@@ -696,13 +862,148 @@
         root.appendChild(remove);
 
         return root;
-    }
+    };
 
     function checkSelected() {
-        switchClass(elements.buttonsWrapper, displayNoneClass, selected.count() <= 0);
-    }
+		if (selected.count() <= 0) {
+			elements.insertLinkBtn.setAttribute('disabled', '');
+			elements.cancelBtn.setAttribute('disabled', '');
+		} else {
+			elements.insertLinkBtn.removeAttribute('disabled', '');
+			elements.cancelBtn.removeAttribute('disabled', '');
+		}
+    };
 
-    function formatInsertBibliography() {
+	function updateAllOrAddBib(bUpadteAll, bPastBib) {
+		if (!selectedStyle) {
+            showError(getMessage("Style is not selected"));
+            return;
+        }
+        if (!selectedLocale) {
+            showError(getMessage("Language is not selected"));
+            return;
+        }
+		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
+			if (arrFields.length) {
+				var updatedFields = [];
+				var bibField = null;
+				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join();
+				var bibliography = elements.tempDiv.innerText;
+				arrFields.forEach(function(field) {
+					if (bUpadteAll && field.Value.includes(citPrefix)) {
+						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
+						var keysL = [];
+						citationItems.forEach(function(item) {
+							keysL.push({id:item.id});
+						});
+						elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
+						field["Content"] = elements.tempDiv.innerText;
+						updatedFields.push(field);
+					} else if (field.Value.includes(bibPrefix)) {
+						bibField = field;
+					}
+				});
+				if (bibField) {
+					bibField["Content"] = bibliography;
+					updatedFields.push(bibField);
+				} else if (bPastBib) {
+					bibField = {
+						"Value" : bibPrefix,
+						"Content" : bibliography
+					};
+					window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
+						if (!updatedFields.length) {
+							showLoader(false);
+						}
+					});
+				}
+				
+				if (updatedFields.length) {
+					window.Asc.plugin.executeMethod("UpdateAddinFields", [updatedFields], function() {
+						showLoader(false);
+					});
+				}
+			}
+		});
+	};
+
+	function updateFormatter(bUpadteAll, bPastBib, bPastLink) {
+		clearTimeout(repeatTimeout);
+        if (loadingStyle || loadingLocale || !styles[selectedStyle] || !locales[selectedLocale]) {
+            repeatTimeout = setTimeout( function() {
+				updateFormatter(bUpadteAll, bPastBib);
+			}, 100);
+            return;
+        }
+
+		var arrItems = [];
+		for (var item in cslItems) {
+			if (item !== "count")
+				arrItems.push(item);
+		}
+
+		formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return cslItems[id]; } }, styles[selectedStyle], selectedLocale, true);
+		if (arrItems.length) {
+			formatter.updateItems(arrItems);
+		}
+		if (bUpadteAll || bPastBib)
+			updateAllOrAddBib(bUpadteAll, bPastBib);
+		
+		if (bPastLink) {
+			formatInsertLink();
+		}
+	};
+
+	function updateCslItems(bUpdadeFormatter, bUpadteAll, bPastBib, bPastLink) {
+		cslItems = {count: 0};
+		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
+			if (arrFields.length) {
+				var arrItems = [];
+				var tmpObj = {};
+				var bibField = null;
+				arrFields.forEach(function(field) {
+					if (field.Value.includes(citPrefix)) {
+						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
+						citationItems.forEach(function(item) {
+							if (!tmpObj[item.id]) {
+								tmpObj[item.id] = 1;
+								arrItems.push(item);
+							}
+						});
+					} else if(field.Value.includes(bibPrefix)) {
+						bibField = field;
+					}
+				});
+
+				if (arrItems.length) {
+					arrItems.sort( function(itemA, itemB) { return (itemA.index > itemB.index ? 1 : -1) } );
+					arrItems.forEach(function(item) {
+						item.index = ++cslItems.count;
+						cslItems[item.id] = item;
+					});
+				} else if (bUpdadeFormatter && bibField && bUpadteAll) {
+					// нет смысла ещё раз искать поле библиографии
+					bUpdadeFormatter = false;
+					bibField["Content"] = "Please insert some citate into the document.";
+					window.Asc.plugin.executeMethod("UpdateAddinFields", [[bibField]], function() {
+						showLoader(false);
+					});
+				}
+			} else if (bUpdadeFormatter && bPastBib) {
+				bibField = {
+					"Value" : bibPrefix,
+					"Content" : "Please insert some citate into the document."
+				};
+				window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
+					showLoader(false);
+				});
+			}
+			if (bUpdadeFormatter)
+				updateFormatter(bUpadteAll, bPastBib, bPastLink);
+		});
+	};
+
+	function formatInsertLink() {
         if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
             return;
@@ -712,63 +1013,77 @@
             return;
         }
 
-		var obj = {
-			users: {
-				keys : [],
-			},
-			groups: {}
-		};
-		for (const key in selected.items) {
-			if (Object.hasOwnProperty.call(selected.items, key)) {
-				const el = selected.items[key];
-				if (el.library.type == "user") {
-					obj.users.keys.push(key);
-				} else if (el.library.type == "group") {
-					if (obj.groups[el.library.id]) {
-						obj.groups[el.library.id].keys.push(key);
-					} else {
-						obj.groups[el.library.id] = {
-							keys: [key]
-						};
-					}
-				}
+		var bUpdateItems = false;
+        var keys = [];
+        var keysL = [];
+        for (var item in selected.items) {
+			if (!cslItems[item]) {
+				cslItems.count++;
+				cslItems[item] = convertToCSL(selected.items[item]);
+				bUpdateItems = true;
 			}
-		}
-        
-		if (obj.users.keys.length) {
-			sdk.format(obj.users.keys, null, selectedStyle, selectedLocale)
-				.then(function (res) {
-					insertInDocument(res);
-				})
-				.catch(function (err) {
-					showError(err);
-				});
-		}
-		
-		if (Object.keys(obj.groups).length != 0) {
-			for (const key in obj.groups) {
-				if (Object.hasOwnProperty.call(obj.groups, key)) {
-					const element = obj.groups[key];
-					sdk.format(element.keys, key, selectedStyle, selectedLocale)
-						.then(function (res) {
-							insertInDocument(res);
-						})
-						.catch(function (err) {
-							showError(err);
-						});
+            keys.push(item);
+            keysL.push({id:item});
+        }
+
+        try {
+			if (bUpdateItems) {
+				var arrItems = [];
+				for (var item in cslItems) {
+					if (item !== "count")
+						arrItems.push(item);
 				}
+				formatter.updateItems(arrItems);
 			}
-		}
 
-        
-    }
-
-    function insertInDocument(html) {
-        if (html) {
-            window.Asc.plugin.executeMethod("PasteHtml", [html]);
-        } else {
-            showError(getMessage("Bibliography cannot be created with selected style"));
+			var obj = {
+				citationItems : []
+			};
+			keys.forEach(function(element) {
+				removeSelected(element);
+				obj.citationItems.push(cslItems[element]);
+			});
+			// TODO может ещё очистить поиск (подумать над этим)
+			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
+			var field = {
+				"Value" : citPrefix + JSON.stringify(obj),
+				"Content" : elements.tempDiv.innerText
+			};
+			window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
+				showLoader(false);
+				// TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
+				// но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходитсяя в конце
+				// такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
+				updateCslItems(true, true, false, false);
+			});
+        } catch (e) {
+            showError(e);
         }
     };
 
+    function convertToCSL(item) {
+        var cslData = item;
+		cslData.index = cslItems.count;
+		cslData["short-title"] = item.shortTitle;
+		cslData["title-short"] = item.shortTitle;
+
+        return cslData;
+    };
+
+	function saveAs() {
+		// TODO потом добавить ещё форматы, пока только как текст
+		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
+			let count = 0;
+			arrFields.forEach(function(field) {
+				if ( field.Value.includes(bibPrefix) || field.Value.includes(citPrefix) ) {
+					count++;
+					window.Asc.plugin.executeMethod("RemoveFieldWrapper", [field.FieldId], function() {
+						count--;
+						if (!count)
+							window.Asc.plugin.executeCommand("close", "");
+					});
+				}
+			});
+		});
+	};
 })();
