@@ -24,3 +24,5 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 - The plugin does not work for the desktop version yet
 
+- The plugin doesn't work with http (it works only with https).
+
