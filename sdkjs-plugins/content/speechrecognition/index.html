@@ -1,0 +1,69 @@
+<!--
+ (c) Copyright Ascensio System SIA 2010
+
+ This program is a free software product. You can redistribute it and/or
+ modify it under the terms of the GNU Affero General Public License (AGPL)
+ version 3 as published by the Free Software Foundation. In accordance with
+ Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ that Ascensio System SIA expressly excludes the warranty of non-infringement
+ of any third-party rights.
+
+ This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+
+ You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ street, Riga, Latvia, EU, LV-1050.
+
+ The  interactive user interfaces in modified source and object code versions
+ of the Program must display Appropriate Legal Notices, as required under
+ Section 5 of the GNU AGPL version 3.
+
+ Pursuant to Section 7(b) of the License you must retain the original Product
+ logo when distributing the program. Pursuant to Section 7(e) we decline to
+ grant you any rights under trademark law for use of our trademarks.
+
+ All the Product's GUI elements, including illustrations and icon sets, as
+ well as technical writing content are licensed under the terms of the
+ Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Speech input</title>
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<link rel="stylesheet" href="resources/css/plugin_style.css">
+
+		<script src="scripts/code.js"></script>
+	</head>
+	<style>
+		.select2-container--default .select2-results > .select2-results__options {
+			max-height: 130px;
+		}
+	</style>
+	<body spellcheck="false" class="noselect">	
+		<div id="div_main" style="display:flex;flex-flow:column;">
+			<div class="div_start" style="display:flex; flex-direction:column;">
+				<select id="custom_menu" data-id="speech-input-language" style="width: 100%;"></select>
+				<div id="start_button" class='img_btn'>
+					<svg id="img_micro" class="start_img" width="56" height="56" style="margin-top: -7px;" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path id="micro_img_path" d="M28 8C31.5194 8 34 10.4806 34 14V28C34 31.5194 31.5194 34 28 34C24.4806 34 22 31.5194 22 28V14C22 10.4806 24.4806 8 28 8ZM44 28C44 36 38 43 30 44V50H26V44C18 43 12 36 12 28H16C16 34 21 40 28 40C35 40 40 34 40 28H44Z" fill="#444444"/>
+					</svg>
+					<span id="start_info" style="text-align:center; margin-top: 2px;">Start dictation</span>
+					<span id="speak_info" style="text-align:center; display:none; margin-top: 2px;">Speak now</span>
+				</div>
+			</div>
+			<div id="results" style="margin-top:10px; display:none;">
+				<span class="interim" id="interim_span"></span> 
+			</div>
+		</div>
+	</body>
+</html>	
