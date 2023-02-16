@@ -27,6 +27,7 @@
 	var loadingStyle = false;
 	var loadingLocale = false;
 	var bNumFormat = false;
+	let bibPlaceholder = "Please insert some citation into the document.";
 	// TODO добавить варианты сохранения для совместимости с другими редакторами (ms, libre, google, мой офис), пока есть вариант сохранить как текст
 	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять из библиографии автоматически (это делать только при обновлении библиографии или refresh), но их точно нужно удалить из formatter!
 	// TODO добавить ещё обработку события (изменения линков), предлать пользователю обновить их или сохранить ручное форматирование (при ручном форматировании не меняем внешний вид цитаты при refresh (да и вообще не меняем))
@@ -923,6 +924,8 @@
 						showLoader(false);
 					});
 				}
+			} else {
+				showLoader(false);
 			}
 		});
 	};
@@ -984,7 +987,7 @@
 				} else if (bUpdadeFormatter && bibField && bUpadteAll) {
 					// нет смысла ещё раз искать поле библиографии
 					bUpdadeFormatter = false;
-					bibField["Content"] = "Please insert some citate into the document.";
+					bibField["Content"] = getMessage(bibPlaceholder);
 					window.Asc.plugin.executeMethod("UpdateAddinFields", [[bibField]], function() {
 						showLoader(false);
 					});
@@ -992,7 +995,7 @@
 			} else if (bUpdadeFormatter && bPastBib) {
 				bibField = {
 					"Value" : bibPrefix,
-					"Content" : "Please insert some citate into the document."
+					"Content" : getMessage(bibPlaceholder)
 				};
 				window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
 					showLoader(false);

@@ -18,8 +18,9 @@
   "Reconfigure": "Перенастроить",
   "Learn more here.": "Подробности здесь.",
   "Save": "Сохранить",
-  "Insert Link": "Вставить ссылку",
+  "Insert Citation": "Вставить цитату",
   "Cancel select": "Отменить выделение",
   "Refresh": "Обновить",
-  "Save as text": "Сохранить как текс"
+  "Save as text": "Сохранить как текс",
+  "Please insert some citation into the document." : "Пожалуйста вставьте цитату в документ."
 }

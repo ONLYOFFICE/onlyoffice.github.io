@@ -17,5 +17,10 @@
   "Language": "Sprache",
   "Reconfigure": "Neu konfigurieren",
   "Learn more here.": "Erfahren Sie mehr hier.",
-  "Save": "Speichern"
+  "Save": "Speichern",
+  "Insert Citation": "Zitat einfügen",
+  "Cancel select": "Abbrechen auswählen",
+  "Refresh": "Aktualisieren",
+  "Save as text": "Als Text speichern",
+  "Please insert some citation into the document." : "Bitte fügen Sie ein Zitat in das Dokument ein."
 }
