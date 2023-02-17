@@ -709,7 +709,7 @@ function onClickItem() {
 	let offered = " Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
-	let pluginDiv = elements.getElementById(guid);
+	let pluginDiv = document.getElementById(guid);
 	let divPreview = document.createElement('div');
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
