@@ -21,7 +21,7 @@ let current = {index: 0, screenshots: [], url: ''};                  // selected
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
-let updateCount = 0;
+let updateCount = 0;                                                 // counter for plugins in updating process
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -29,6 +29,7 @@ const elements = {};                                                 // all elem
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
+let editorVersion = null;                                            // edior current version
 let isPluginLoading = false;                                         // flag plugins loading
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
@@ -348,6 +349,8 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
+			editorVersion = message.version;
+			console.log('editorVersion = ', editorVersion);
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
