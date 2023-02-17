@@ -301,6 +301,11 @@ window.addEventListener('message', function(message) {
 				btn.onclick = function(e) {
 					onClickInstall(e.target, e);
 				};
+
+				if ( btn.hasAttribute('data') ) {
+					btn.setAttribute('title', versionWarning);
+					btn.setAttribute('disabled');
+				}
 				
 				if (btn.parentNode.childElementCount > 1) {
 					btn.parentNode.firstChild.remove();
