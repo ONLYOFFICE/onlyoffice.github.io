@@ -45,5 +45,6 @@
 	"Work": "Arbeit",
 	"Entertainment": "Unterhaltung",
 	"Communication": "Kommunikation",
-	"Special abilities": "Spezialfähigkeiten"
+	"Special abilities": "Spezialfähigkeiten",
+	"The minimum supported editors version" : "Die minimal unterstützte Editorversion"
 }
