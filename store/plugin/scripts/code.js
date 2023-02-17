@@ -22,9 +22,16 @@
 	let BFrameReady = false;
 	let BPluginReady = false;
 	let editorVersion = null;
+	let marketplaceURl = null;
+	try {
+		// for incognito mode
+		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || 'https://onlyoffice.github.io/store/index.html';
+	} catch {
+		marketplaceURl = 'https://onlyoffice.github.io/store/index.html';
+	}
 
 	document.addEventListener("DOMContentLoaded", function() {
-		let pageUrl = "https://k0r0l.github.io/onlyoffice.github.io/store/index.html";
+		let pageUrl = marketplaceURl;
 		iframe.src = pageUrl + window.location.search;
 		document.body.appendChild(iframe);
 		iframe.onload = function() {
