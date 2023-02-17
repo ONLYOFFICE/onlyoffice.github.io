@@ -349,7 +349,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : editorVersion = 1e8 );
+			editorVersion = ( message.version ? ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : 1e8 ) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
