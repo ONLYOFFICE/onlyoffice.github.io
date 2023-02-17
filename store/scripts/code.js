@@ -319,6 +319,7 @@ window.addEventListener('message', function(message) {
 				if ( btn.hasAttribute('data') ) {
 					btn.setAttribute('title', versionWarning);
 					btn.setAttribute('disabled', '');
+					btn.removeAttribute(data);
 				}
 				
 				if (btn.parentNode.childElementCount > 1) {
@@ -825,7 +826,7 @@ function onClickItem() {
 		elements.btnInstall.classList.remove('hidden');
 	}
 
-	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {
+	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled') || pluginDiv.lastChild.lastChild.hasAttribute('data')) {
 		elements.btnInstall.setAttribute('disabled','');
 		elements.btnInstall.setAttribute('title', versionWarning);
 	}
