@@ -451,6 +451,8 @@ function initElemnts() {
 	elements.divGitLink = document.getElementById('div_github_link');
 	elements.spanVersion = document.getElementById('span_ver');
 	elements.divVersion = document.getElementById('div_version');
+	elements.spanMinVersion = document.getElementById('span_min_ver');
+	elements.divMinVersion = document.getElementById('div_min_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
 	elements.divArrow = document.getElementById('div_arrows');
@@ -744,6 +746,14 @@ function onClickItem() {
 		elements.divVersion.classList.add('hidden');
 	}
 
+	if ( (installed && installed.obj.minVersion) || plugin.minVersion ) {
+		elements.spanMinVersion.innerText = (installed && installed.obj.minVersion ? installed.obj.minVersion : plugin.minVersion);
+		elements.divMinVersion.classList.remove('hidden');
+	} else {
+		elements.spanMinVersion.innerText = '';
+		elements.divMinVersion.classList.add('hidden');
+	}
+
 	if (plugin.languages) {
 		elements.spanLanguages.innerText = plugin.languages.join(', ') + '.';
 		elements.divLanguages.classList.remove('hidden');
@@ -995,6 +1005,7 @@ function onTranslate() {
 	document.getElementById('span_help_end').innerHTML = translate['with the plugin functionality on our forum.'];
 	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
 	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
+	document.getElementById('span_min_ver_caption').innerHTML = translate['The minimum supported editors version'] + ': ';
 	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
 	document.getElementById('span_categories').innerHTML = translate['Categories'];
 	document.getElementById('opt_all').innerHTML = translate['All'];
