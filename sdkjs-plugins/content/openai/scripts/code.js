@@ -114,6 +114,12 @@
 
 		};
 
+		elements.textArea.onkeydown = function(e) {
+			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+				elements.btnSubmit.click();
+			}
+		};
+
 		elements.divTokens.onmouseenter = function() {
 			elements.modal.classList.remove('hidden');
 			if (modalTimeout) {
