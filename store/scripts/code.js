@@ -617,7 +617,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
-	let additional = bNotAvailable ? 'title:"' + versionWarning + '; "disabled' : '';
+	let additional = bNotAvailable ? 'title:"' + versionWarning + '"; disabled' : '';
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
