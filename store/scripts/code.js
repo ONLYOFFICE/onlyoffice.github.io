@@ -624,7 +624,7 @@ function createPluginDiv(plugin, bInstalled) {
 						)+''+
 						( (installed && !installed.removed)
 							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event)"' + (bNotAvailable ? "disabled" : "") + '>'  + translate["Install"] + '</button>'
+							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + (bNotAvailable ? "disabled" : "") + '>'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
