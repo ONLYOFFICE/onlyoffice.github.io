@@ -347,7 +347,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : editorVersion = 0 );
+			editorVersion = ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : editorVersion = 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -624,7 +624,7 @@ function createPluginDiv(plugin, bInstalled) {
 						)+''+
 						( (installed && !installed.removed)
 							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event) ' + (bNotAvailable ? "disabled" : "") + '">'  + translate["Install"] + '</button>'
+							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event)"' + (bNotAvailable ? "disabled" : "") + '>'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
