@@ -581,25 +581,29 @@ function createPluginDiv(plugin, bInstalled) {
 	if (bInstalled) {
 		plugin = findPlugin(true, plugin.guid);
 	}
-	let bHasUpdate = false;
-	let bNotAvailable = false;
-	if (installed && plugin) {
-		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
-		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
-		const minV =  (plugin.minVersion ? Number( plugin.minVersion.split('.').join('') ) : -1);
-		if (editorVersion > minV) {
-			if (lastV > installedV) {
-				bHasUpdate = true;
-				elements.btnUpdateAll.classList.remove('hidden');
-				plugin.bHasUpdate = true;
-			}
-		} else {
-			bNotAvailable = true
-		}
-	}
-		
+
+	let bCheckUpdate = true;
 	if (!plugin) {
 		plugin = installed.obj;
+		bCheckUpdate = false;
+	}
+
+	let bNotAvailable = false;
+	const minV = (plugin.minVersion ? Number( plugin.minVersion.split('.').join('') ) : -1);
+	if (minV > editorVersion) {
+		bCheckUpdate = false;
+		bNotAvailable = true;
+	}
+
+	let bHasUpdate = false;
+	if (bCheckUpdate && installed && plugin) {
+		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
+		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
+		if (lastV > installedV) {
+			bHasUpdate = true;
+			elements.btnUpdateAll.classList.remove('hidden');
+			plugin.bHasUpdate = true;
+		}
 	}
 	
 	let variation = plugin.variations[0];
