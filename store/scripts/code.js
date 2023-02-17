@@ -709,6 +709,7 @@ function onClickItem() {
 	let offered = " Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
+	let pluginDiv = elements.getElementById(guid);
 	let divPreview = document.createElement('div');
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
@@ -741,14 +742,14 @@ function onClickItem() {
 		elements.divArrow.classList.add('hidden');
 	}
 
-	let bHasUpdate = false;
-	if (installed && plugin) {
-		// todo может убрать эту проверку и смотеть на то есть ли значек о наличии обновлений
-		let installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : '100');
-		let lastV = (plugin.version ? Number ( plugin.version.split('.').join('') ) : '100');
-		if (lastV > installedV)
-			bHasUpdate = true;
-	}
+	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN');
+	// if (bCheckUpdate && installed && plugin) {
+	// 	// todo может убрать эту проверку и смотеть на то есть ли значек о наличии обновлений
+	// 	let installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : '100');
+	// 	let lastV = (plugin.version ? Number ( plugin.version.split('.').join('') ) : '100');
+	// 	if (lastV > installedV)
+	// 		bHasUpdate = true;
+	// }
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
@@ -805,6 +806,11 @@ function onClickItem() {
 		elements.btnRemove.classList.add('hidden');
 		elements.btnInstall.classList.remove('hidden');
 	}
+
+	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled'))
+		elements.btnInstall.setAttribute('disabled','');
+	else
+		elements.btnInstall.removeAttribute('disabled');
 
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
