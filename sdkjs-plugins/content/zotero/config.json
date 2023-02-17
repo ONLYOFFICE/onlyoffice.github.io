@@ -6,8 +6,9 @@
         "es": "Zotero",
         "de": "Zotero"
     },
-    "guid" : "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
+    "guid": "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
 	"version": "1.0.1",
+	"minVersion": "7.3.3",
 
     "variations" : [
       {
