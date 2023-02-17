@@ -626,7 +626,7 @@ function createPluginDiv(plugin, bInstalled) {
 						)+''+
 						( (installed && !installed.removed)
 							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + (bNotAvailable ? "disabled" : "") + '>'  + translate["Install"] + '</button>'
+							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + (bNotAvailable ? "title='problem with version'disabled" : "") + '>'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -743,13 +743,6 @@ function onClickItem() {
 	}
 
 	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN');
-	// if (bCheckUpdate && installed && plugin) {
-	// 	// todo может убрать эту проверку и смотеть на то есть ли значек о наличии обновлений
-	// 	let installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : '100');
-	// 	let lastV = (plugin.version ? Number ( plugin.version.split('.').join('') ) : '100');
-	// 	if (lastV > installedV)
-	// 		bHasUpdate = true;
-	// }
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
@@ -807,10 +800,12 @@ function onClickItem() {
 		elements.btnInstall.classList.remove('hidden');
 	}
 
-	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled'))
+	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {
 		elements.btnInstall.setAttribute('disabled','');
-	else
+	}
+	else {
 		elements.btnInstall.removeAttribute('disabled');
+	}
 
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
