@@ -204,22 +204,6 @@ label.header {
 	height: 24px !important;
 }
 
-.btn_item[disabled]:hover,
-.btn_item.disabled:hover,
-.btn_item[disabled]:active,
-.btn_item[disabled].active,
-.btn_item.disabled:active,
-.btn_item.disabled.active {
-	background-color: #f00 !important;
-	color: #0f0 !important;
-	cursor: default !important;
-}
-
-.btn_item[disabled],
-.btn_item.disabled {
-	opacity: 0.65;
-}
-
 .btn_preview {
 	margin: 10px 0px 10px 10px;
 	width: fit-content;
