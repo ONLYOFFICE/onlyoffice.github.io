@@ -373,5 +373,25 @@
 
         $('#micro_img_path').css('fill', theme["text-normal"]);
     };
+	function getMessage(key) {
+        return window.Asc.plugin.tr(key.trim());
+    };
+	window.Asc.plugin.onTranslate = function()
+    {
+        var elements = document.getElementsByClassName("i18n");
+
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            let isRussianRule = el.innerText.slice(el.innerText.length - 2, el.innerText.length) === "ru";
+            let textWithourRuMark = isRussianRule ? el.innerText.slice(0, el.innerText.length - 2) : "";
+            if (el.innerText && isRussianRule)
+            {
+                el.outerHTML = el.outerHTML.replace(textWithourRuMark, getMessage(textWithourRuMark));
+            }
+            else
+                el.innerText = getMessage(el.innerText);
+        }
+    };
 
 })(window, undefined);
