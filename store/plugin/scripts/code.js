@@ -21,15 +21,16 @@
 	const iframe = document.createElement("iframe");
 	let BFrameReady = false;
 	let BPluginReady = false;
+	let editorVersion = null;
 
 	document.addEventListener("DOMContentLoaded", function() {
-		let pageUrl = "https://onlyoffice.github.io/store/index.html";
+		let pageUrl = "https://k0r0l.github.io/onlyoffice.github.io/store/index.html";
 		iframe.src = pageUrl + window.location.search;
 		document.body.appendChild(iframe);
 		iframe.onload = function() {
 			BFrameReady = true;
 			if (BPluginReady)
-				postMessage( JSON.stringify( { type: 'PluginReady' } ) );
+				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
 		};
 	});			
 	
@@ -37,9 +38,13 @@
     window.Asc.plugin.init = function() {
 		// resize window
 		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
-		BPluginReady = true;
-		if (BFrameReady)
-			postMessage( JSON.stringify( { type: 'PluginReady' } ) );
+		window.Asc.plugin.executeMethod ("GetVersion", null, function(version) {
+			editorVersion = version;
+			BPluginReady = true;
+			if (BFrameReady)
+				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
+		});
+
     };
 
 	function postMessage(message) {
