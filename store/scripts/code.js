@@ -149,7 +149,6 @@ window.onload = function() {
 	elements.arrowPrev.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log('onclick prev');
 		if (current.index > 0) {
 			// todo maybe show loader
 			current.index--;
@@ -167,7 +166,6 @@ window.onload = function() {
 	elements.arrowNext.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log('onclick next');
 		if (current.index < current.screenshots.length - 1) {
 			// todo maybe show loader
 			current.index++;
@@ -363,8 +361,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = message.version;
-			console.log('editorVersion = ', editorVersion);
+			editorVersion = ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : editorVersion = -1 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -576,7 +573,6 @@ function showListofPlugins(bAll, sortedArr) {
 };
 
 function createPluginDiv(plugin, bInstalled) {
-	// console.log('createPluginDiv');
 	// this function creates div (preview) for plugins
 
 	let div = document.createElement('div');
@@ -600,13 +596,18 @@ function createPluginDiv(plugin, bInstalled) {
 		plugin = findPlugin(true, plugin.guid);
 	}
 	let bHasUpdate = false;
+	let bNotAvailable = false;
 	if (installed && plugin) {
-		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
-		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
-		if (lastV > installedV) {
-			bHasUpdate = true;
-			elements.btnUpdateAll.classList.remove('hidden');
-			plugin.bHasUpdate = true;
+		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
+		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
+		if (lastV > editorVersion) {
+			if (lastV > installedV) {
+				bHasUpdate = true;
+				elements.btnUpdateAll.classList.remove('hidden');
+				plugin.bHasUpdate = true;
+			}
+		} else {
+			bNotAvailable = true
 		}
 	}
 		
@@ -632,7 +633,7 @@ function createPluginDiv(plugin, bInstalled) {
 						)+''+
 						( (installed && !installed.removed)
 							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event)">'  + translate["Install"] + '</button>'
+							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event) ' + (bNotAvailable ? "disabled" : "") + '">'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -749,8 +750,9 @@ function onClickItem() {
 
 	let bHasUpdate = false;
 	if (installed && plugin) {
-		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
-		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
+		// todo может убрать эту проверку и смотеть на то есть ли значек о наличии обновлений
+		let installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : '100');
+		let lastV = (plugin.version ? Number ( plugin.version.split('.').join('') ) : '100');
 		if (lastV > installedV)
 			bHasUpdate = true;
 	}
