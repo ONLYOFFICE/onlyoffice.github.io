@@ -290,7 +290,7 @@ window.addEventListener('message', function(message) {
 					};
 					if ( btn.hasAttribute('data') ) {
 						btn.setAttribute('title', versionWarning);
-						btn.setAttribute('disabled');
+						btn.setAttribute('disabled', '');
 					}
 				}
 			} else {
@@ -304,7 +304,7 @@ window.addEventListener('message', function(message) {
 
 				if ( btn.hasAttribute('data') ) {
 					btn.setAttribute('title', versionWarning);
-					btn.setAttribute('disabled');
+					btn.setAttribute('disabled', '');
 				}
 				
 				if (btn.parentNode.childElementCount > 1) {
