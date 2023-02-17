@@ -327,14 +327,14 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
 				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
-				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:none !important;}\n';
+				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
 			} else {
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 				rule += '.div_offered{color: rgba(255,255,255,0.8); !important;}\n';
-				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:none !important;}\n';
+				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 			}
 
 			let styleTheme = document.createElement('style');
