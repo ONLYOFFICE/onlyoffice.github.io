@@ -319,7 +319,7 @@ window.addEventListener('message', function(message) {
 				if ( btn.hasAttribute('data') ) {
 					btn.setAttribute('title', versionWarning);
 					btn.setAttribute('disabled', '');
-					btn.removeAttribute(data);
+					btn.removeAttribute('data');
 				}
 				
 				if (btn.parentNode.childElementCount > 1) {
