@@ -61,6 +61,7 @@ const languages = [                                                  // list of 
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
+let versionWarning = "This plugin will only work in a newer version of the editor.";
 const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("edge") > -1);
@@ -287,6 +288,10 @@ window.addEventListener('message', function(message) {
 					btn.onclick = function(e) {
 						onClickInstall(e.target, e);
 					};
+					if ( btn.hasAttribute('data') ) {
+						btn.setAttribute('title', versionWarning);
+						btn.setAttribute('disabled');
+					}
 				}
 			} else {
 				let btn = this.document.getElementById(message.guid).lastChild.lastChild;
@@ -349,7 +354,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = ( message.version ? ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : 1e8 ) : 1e8 );
+			editorVersion = ( message.version && message.version.includes('.') ? Number( message.version.split('.').join('') ) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -612,6 +617,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
+	let additional = bNotAvailable ? 'title:"' + versionWarning + '; "disabled' : '';
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
@@ -625,8 +631,8 @@ function createPluginDiv(plugin, bInstalled) {
 							: ''
 						)+''+
 						( (installed && !installed.removed)
-							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + (bNotAvailable ? "title='problem with version'disabled" : "") + '>'  + translate["Install"] + '</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)" ' + (bNotAvailable ? "data=\"disabled\"" : "") +'>' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + additional + '>'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -802,9 +808,11 @@ function onClickItem() {
 
 	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {
 		elements.btnInstall.setAttribute('disabled','');
+		elements.btnInstall.setAttribute('title', versionWarning);
 	}
 	else {
 		elements.btnInstall.removeAttribute('disabled');
+		elements.btnInstall.removeAttribute('title');
 	}
 
 	elements.divSelected.classList.remove('hidden');
@@ -1028,6 +1036,7 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
 	document.getElementById('opt_com').innerHTML = translate['Communication'];
 	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
+	versionWarning = translate[versionWarning];
 	showMarketplace();
 };
 

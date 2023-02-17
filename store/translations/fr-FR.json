@@ -46,5 +46,6 @@
 	"Entertainment": "Divertissement",
 	"Communication": "Communication",
 	"Special abilities": "Capacités spéciales",
-	"The minimum supported editors version" : "La version minimale des éditeurs pris en charge"
+	"The minimum supported editors version" : "La version minimale des éditeurs pris en charge",
+	"This plugin will only work in a newer version of the editor.": "Ce plugin ne fonctionnera que dans une version plus récente de l'éditeur."
 }

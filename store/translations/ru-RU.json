@@ -46,5 +46,6 @@
 	"Entertainment": "Развлечения",
 	"Communication": "Коммуникация",
 	"Special abilities": "Специальные возможности",
-	"The minimum supported editors version" : "Минимальная поддерживаемая версия редактора"
+	"The minimum supported editors version" : "Минимальная поддерживаемая версия редактора",
+	"This plugin will only work in a newer version of the editor.": "Этот плагин будет работать только в более новой версии редактора."
 }
