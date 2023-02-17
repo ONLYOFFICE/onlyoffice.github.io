@@ -347,7 +347,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : editorVersion = -1 );
+			editorVersion = ( message.version.includes('.') ? Number( message.version.split('.').join('') ) : editorVersion = 0 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -586,7 +586,8 @@ function createPluginDiv(plugin, bInstalled) {
 	if (installed && plugin) {
 		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
 		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
-		if (lastV > editorVersion) {
+		const minV =  (plugin.minVersion ? Number( plugin.minVersion.split('.').join('') ) : -1);
+		if (editorVersion > minV) {
 			if (lastV > installedV) {
 				bHasUpdate = true;
 				elements.btnUpdateAll.classList.remove('hidden');
