@@ -108,6 +108,9 @@ window.Asc = {
 	}
 };
 
+const pos = location.href.indexOf('store/index.html');
+const ioUrl = location.href.substring(0, pos);
+
 // get translation file
 getTranslation();
 // fetch all plugins from config
@@ -283,7 +286,7 @@ window.addEventListener('message', function(message) {
 			installed = findPlugin(false, message.guid);
 			let bUpdate = false;
 			if (installed) {
-				if (plugin && installed.obj.baseUrl.includes('onlyoffice.github.io')) {
+				if (plugin && installed.obj.baseUrl.includes(ioUrl)) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
@@ -294,6 +297,10 @@ window.addEventListener('message', function(message) {
 			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
 				if (bUpdate) {
 					showListofPlugins(false);
+					catFiltred = installedPlugins;
+					let searchVal = elements.inpSearch.value.trim();
+					if (searchVal !== '')
+						makeSearch(searchVal.toLowerCase());
 				} else {
 					let btn = this.document.getElementById(message.guid).lastChild.lastChild;
 					btn.innerHTML = translate['Install'];
@@ -508,11 +515,9 @@ function getAllPluginsData() {
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
-	let pos = location.href.indexOf('store/index.html');
-	let ioUrl = location.href.substring(0, pos) + 'sdkjs-plugins/content/';
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? ioUrl + pluginUrl + '/' : pluginUrl;
+		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? ioUrl + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
@@ -1064,8 +1069,6 @@ function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
 		// filter installed plugins (delete removed, that are in store)
-		let pos = location.href.indexOf('store/index.html');
-		let ioUrl = location.href.substring(0, pos);
 		installedPlugins = installedPlugins.filter(function(plugin) {
 			return !( plugin.removed && plugin.obj.baseUrl.includes(ioUrl) );
 		});
