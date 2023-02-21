@@ -498,7 +498,7 @@ function getAllPluginsData() {
 	let ioUrl = location.href.substring(0, pos) + 'sdkjs-plugins/content/';
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + pluginUrl + '/' : pluginUrl;
+		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? ioUrl + pluginUrl + '/' : pluginUrl;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
@@ -1050,12 +1050,10 @@ function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
 		// filter installed plugins (delete removed, that are in store)
+		let pos = location.href.indexOf('store/index.html');
+		let ioUrl = location.href.substring(0, pos);
 		installedPlugins = installedPlugins.filter(function(plugin) {
-			if (plugin.removed)
-				if ( findPlugin(true, plugin.guid) )
-					return false;
-
-			return true;
+			return !( plugin.removed && plugin.obj.baseUrl.includes(ioUrl) );
 		});
 		createSelect();
 		showListofPlugins(true);
