@@ -1063,6 +1063,14 @@ function onTranslate() {
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
+		// filter installed plugins (delete removed, that are in store)
+		installedPlugins.filter(function(plugin) {
+			if (plugin.removed)
+				if ( findPlugin(true, plugin.guid) )
+					return false;
+
+			return true;
+		});
 		createSelect();
 		showListofPlugins(true);
 		toogleLoader(false);
