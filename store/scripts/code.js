@@ -282,11 +282,12 @@ window.addEventListener('message', function(message) {
 
 			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
 				if (bUpdate) {
-					showListofPlugins(false);
 					catFiltred = installedPlugins;
 					let searchVal = elements.inpSearch.value.trim();
 					if (searchVal !== '')
 						makeSearch(searchVal.toLowerCase());
+					else
+						showListofPlugins(false);
 				} else {
 					let btn = this.document.getElementById(message.guid).lastChild.lastChild;
 					btn.innerHTML = translate['Install'];
