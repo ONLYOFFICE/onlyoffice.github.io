@@ -23,9 +23,10 @@
 	let BPluginReady = false;
 	let editorVersion = null;
 	let marketplaceURl = null;
+	const OOMarketplaceUrl = 'https://onlyoffice.github.io/store/index.html';
 	try {
 		// for incognito mode
-		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || 'https://onlyoffice.github.io/store/index.html';
+		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
 	} catch {
 		marketplaceURl = 'https://onlyoffice.github.io/store/index.html';
 	}
@@ -44,6 +45,9 @@
 
     window.Asc.plugin.init = function() {
 		// resize window
+		if (marketplaceURl !== OOMarketplaceUrl)
+			document.getElementById('notification').classList.remove('hidden');
+
 		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
 		window.Asc.plugin.executeMethod ("GetVersion", null, function(version) {
 			editorVersion = version;
@@ -109,10 +113,20 @@
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		// theme changed event
+		if ( theme.type.indexOf('light') !== -1 ) {
+			theme['background-toolbar'] = '#fff';
+		}
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let style = document.getElementsByTagName('head')[0].lastChild;
 		if (iframe && iframe.contentWindow)
 			postMessage( JSON.stringify( { type: 'Theme', theme: theme, style : style.innerHTML } ) );
+	};
+
+	window.Asc.plugin.onTranslate = function()
+	{
+		let label = document.getElementById('lb_notification');
+		if (label)
+			label.innerHTML = window.Asc.plugin.tr('This version of "Plugin Manager" is not official.');
 	};
 
 })(window, undefined);
