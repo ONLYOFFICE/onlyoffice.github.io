@@ -49,7 +49,7 @@
 			document.getElementById('notification').classList.remove('hidden');
 
 		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
-		window.Asc.plugin.executeMethod ("GetVersion", null, function(version) {
+		window.Asc.plugin.executeMethod("GetVersion", null, function(version) {
 			editorVersion = version;
 			BPluginReady = true;
 			if (BFrameReady)
