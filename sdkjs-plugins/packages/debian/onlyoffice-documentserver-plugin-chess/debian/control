@@ -1,0 +1,15 @@
+Source: onlyoffice-documentserver-plugin-chess
+Section: web
+Priority: optional
+Maintainer: Ascensio System SIA <support@onlyoffice.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.0
+Homepage: https://www.onlyoffice.com/
+Rules-Requires-Root: no
+
+Package: onlyoffice-documentserver-plugin-chess
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ONLYOFFICE Documentserver chess plugin
+ ONLYOFFICE Documentserver Chess plugin allows you to easily add
+ a chess arrangement to your text file if needed.

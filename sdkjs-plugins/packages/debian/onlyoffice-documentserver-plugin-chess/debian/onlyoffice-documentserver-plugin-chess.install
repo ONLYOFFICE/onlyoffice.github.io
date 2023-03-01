@@ -1,0 +1,10 @@
+chess/config.json	var/www/onlyoffice/documentserver/sdkjs-plugins/chess/
+chess/index_about.html var/www/onlyoffice/documentserver/sdkjs-plugins/chess
+chess/index.html var/www/onlyoffice/documentserver/sdkjs-plugins/chess
+chess/README.md var/www/onlyoffice/documentserver/sdkjs-plugins/chess
+chess/resources/dark/* var/www/onlyoffice/documentserver/sdkjs-plugins/chess/resources/dark
+chess/resources/light/* var/www/onlyoffice/documentserver/sdkjs-plugins/chess/resources/light
+chess/resources/store/icons/* var/www/onlyoffice/documentserver/sdkjs-plugins/chess/resources/store/icons
+chess/resources/store/screenshots/* var/www/onlyoffice/documentserver/sdkjs-plugins/chess/resources/store/screenshots
+chess/scripts/chess.js var/www/onlyoffice/documentserver/sdkjs-plugins/chess/scripts/
+chess/translations/langs.json var/www/onlyoffice/documentserver/sdkjs-plugins/chess/translations/langs.json
