@@ -1101,6 +1101,9 @@
 					});
 				}
 			});
+
+			if (!arrFields.length)
+				window.Asc.plugin.executeCommand("close", "");
 		});
 	};
 })();
