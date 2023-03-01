@@ -24,20 +24,13 @@
 	let editorVersion = null;
 	let marketplaceURl = null;
 	const OOMarketplaceUrl = 'https://onlyoffice.github.io/store/index.html';
-	const _userAgent = navigator.userAgent.toLowerCase();
-	const isIE = (_userAgent.indexOf("msie") > -1 || _userAgent.indexOf("trident") > -1 ||	_userAgent.indexOf("edge") > -1);
-	
-	if (isIE) {
+	try {
+		// for incognito mode
 		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
-	} else {
-		try {
-			// for incognito mode
-			marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
-		} catch {
-			marketplaceURl = 'https://onlyoffice.github.io/store/index.html';
-		}	
+	} catch (err) {
+		marketplaceURl = 'https://onlyoffice.github.io/store/index.html';
 	}
-	
+
 	document.addEventListener("DOMContentLoaded", function() {
 		let pageUrl = marketplaceURl;
 		iframe.src = pageUrl + window.location.search;
