@@ -298,9 +298,9 @@
             })
             .catch(function (err) { });
 
-        elements.styleSelect.onkeyup = function () {
+        elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
-            var filter = input.value.toLowerCase();
+            var filter = filter !== undefined ? filter : input.value.toLowerCase();
             var list = (elements.styleSelectList.classList.contains(displayNoneClass)) ? elements.styleSelectListOther : elements.styleSelectList;
 
             for (var i = 0; i < list.children.length; i++) {
@@ -326,6 +326,7 @@
 				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
 			});
             selectedStyle = val;
+			elements.styleSelect.oninput(null, '');
         };
 
         elements.styleLang.onselectchange = function (inp, val, isClick) {
@@ -481,6 +482,9 @@
             if (selectLists[i] === el) {
                 close = false;
             }
+			if (close && selectLists[i] === elements.styleSelectList)
+				elements.styleSelect.oninput(null, '');
+
             switchClass(selectLists[i], displayNoneClass, close);
         }
     };
