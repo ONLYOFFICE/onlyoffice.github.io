@@ -243,6 +243,7 @@ window.addEventListener('message', function(message) {
 				this.document.getElementById('btn_update').classList.add('hidden');
 			}
 
+			elements.spanVersion.innerText = plugin.version;
 			let pluginDiv = this.document.getElementById(message.guid);
 			if (pluginDiv)
 				pluginDiv.lastChild.firstChild.remove();
