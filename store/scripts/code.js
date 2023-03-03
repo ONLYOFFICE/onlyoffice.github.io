@@ -261,8 +261,8 @@ window.addEventListener('message', function(message) {
 			let bUpdate = false;
 			let bHasLocal = false;
 			if (installed) {
-				bHasLocal = installed.obj.baseUrl.includes(ioUrl);
-				if (plugin && bHasLocal) {
+				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
+				if (plugin && !bHasLocal) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
@@ -572,13 +572,15 @@ function createPluginDiv(plugin, bInstalled) {
 	}
 
 	let bHasUpdate = false;
+	let bRemoved = (installed && !installed.removed);
 	if (bCheckUpdate && installed && plugin) {
 		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
 		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
 		if (lastV > installedV) {
 			bHasUpdate = true;
-			elements.btnUpdateAll.classList.remove('hidden');
 			plugin.bHasUpdate = true;
+			if (!bRemoved)
+				elements.btnUpdateAll.classList.remove('hidden');
 		}
 	}
 	
@@ -596,10 +598,10 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						(bHasUpdate
-							? '<span class="span_update ' + (installed ? "" : "hidden") + '">' + translate["Update"] + '</span>'
+							? '<span class="span_update ' + (bRemoved ? "" : "hidden") + '">' + translate["Update"] + '</span>'
 							: ''
 						)+''+
-						( (installed && !installed.removed)
+						( (bRemoved)
 							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)" ' + (bNotAvailable ? "dataDisabled=\"disabled\"" : "") +'>' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
 							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + additional + '>'  + translate["Install"] + '</button>'
 						)
