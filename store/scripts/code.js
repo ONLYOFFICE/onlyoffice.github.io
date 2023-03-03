@@ -718,7 +718,7 @@ function onClickItem() {
 		elements.divArrow.classList.add('hidden');
 	}
 
-	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN');
+	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.classList.contains('hidden'));
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
