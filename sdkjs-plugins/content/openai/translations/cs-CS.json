@@ -18,11 +18,13 @@
 	"Temperature" : "Teplota",
 	"Stop sequences" : "Stop sekvence",
 	"This plugin doesn't work in Internet Explorer." : "Tento plugin nefunguje v aplikaci Internet Explorer.",
-	"Tokens: " : "Žeton: ",
+	"Tokens: " : "Tokenů: ",
 	"Learn More" : "Další Informace",
 	"Show advanced settings" : "Zobrazit pokročilá nastavení",
 	"Up to" : "Až",
 	"tokens in response." : "tokenů v reakci.",
-	"This model can only process maximum of" : "Tento model může zpracovat maximálně",
-	"tokens in a single request, please reduce your prompt or maximum length." : "tokenů v jednom požadavku, prosím snížit výzvu nebo maximální délku."
+	"Maximum " : "Maximální ",
+	"tokens are available." : "tokenů jsou k dispozici.",
+	"Because you are using: " : "Protože používáte: ",
+	"tokens in your request." : "tokenů ve vaší žádosti."
 }
