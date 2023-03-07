@@ -23,6 +23,8 @@
 	"Show advanced settings" : "Mostrar configuración avanzada",
 	"Up to" : "Hasta",
 	"tokens in response." : "fichas en respuesta.",
-	"This model can only process maximum of" : "Este modelo solo puede procesar un máximo de",
-	"tokens in a single request, please reduce your prompt or maximum length." : "tokens en una sola solicitud, reduzca su solicitud o la longitud máxima."
+	"Maximum " : "Máximo ",
+	"tokens are available." : "los tokens están disponibles.",
+	"Because you are using: " : "Porque estás usando: ",
+	"tokens in your request." : "tokens en su solicitud."
 }
