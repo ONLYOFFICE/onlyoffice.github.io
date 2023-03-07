@@ -161,9 +161,6 @@
 				elements.textArea.classList.add('error_border');
 				return;
 			};
-			if (!elements.modalError.classList.contains('hidden')) {
-				return;
-			}
 			createLoader();
 
 			fetch('https://api.openai.com/v1/completions', {
@@ -236,14 +233,13 @@
 		elements.divTokens      = document.getElementById('div_tokens');
 		elements.modal          = document.getElementById('div_modal');
 		elements.lbModalLen     = document.getElementById('lb_modal_length');
-		elements.modalErrLen    = document.getElementById('modal_err_len');
-		elements.modalError     = document.getElementById('modal_error');
-		elements.modalLink      = document.getElementById('modal_link');
 		elements.labelMore      = document.getElementById('lb_more');
 		elements.linkMore       = document.getElementById('link_more');
 		elements.btnShowSettins = document.getElementById('div_show_settings');
 		elements.divParams      = document.getElementById('div_parametrs');
 		elements.arrow          = document.getElementById('arrow');
+		elements.lbAvalTokens   = document.getElementById('lbl_avliable_tokens');
+		elements.lbUsedTokens   = document.getElementById('lbl_used_tokens');
 	};
 
 	function initScrolls() {
@@ -286,10 +282,8 @@
 
 	function onSlInput(e) {
 		e.target.nextElementSibling.innerText = e.target.value;
-		if (e.target.id == elements.inpLenSl.id) {
+		if (e.target.id == elements.inpLenSl.id)
 			elements.lbModalLen.innerText = e.target.value;
-			checkLen();
-		}
 	};
 
 	function fetchModels() {
@@ -317,18 +311,8 @@
 			$('#sel_models').select2({
 				data : arrModels
 			}).on('select2:select', function(e) {
-				// e.currentTarget.value
-				let curVal = Number(elements.inpLenSl.value);
 				maxTokens = e.params.data.id.includes('text-davinci-003') ? 4000: 2000;
-				if (curVal > maxTokens)
-					curVal = maxTokens;
-
-				elements.inpLenSl.setAttribute('max', maxTokens);
-				elements.inpLenSl.value = curVal;
-				let event = document.createEvent('Event');
-				event.initEvent('input', true, true);
-				elements.inpLenSl.dispatchEvent(event);
-				elements.modalErrLen.innerText = maxTokens;
+				checkLen();
 			});
 
 			if ($('#sel_models').find('option[value=text-davinci-003]').length) {
@@ -417,17 +401,24 @@
 	};
 
 	function checkLen() {
-		let cur = new Number(elements.lbTokens.innerText);
-		let maxLen = new Number(elements.inpLenSl.value);
+		let cur = Number(elements.lbTokens.innerText);
+		let maxLen = Number(elements.inpLenSl.value);
+		let newValue = maxTokens - cur;
 		if (cur + maxLen > maxTokens) {
-			elements.modalError.classList.remove('hidden');
-			elements.modalLink.classList.remove('hidden');
-			elements.lbTokens.parentNode.classList.add('lb_err');
+			setTokensLenght(newValue, newValue);
 		} else {
-			elements.modalError.classList.add('hidden');
-			elements.modalLink.classList.add('hidden');
-			elements.lbTokens.parentNode.classList.remove('lb_err');
+			setTokensLenght(maxLen, newValue);
 		}
+	};
+
+	function setTokensLenght(val, max) {
+		elements.inpLenSl.setAttribute('max', max);
+		elements.inpLenSl.value = val;
+		let event = document.createEvent('Event');
+		event.initEvent('input', true, true);
+		elements.inpLenSl.dispatchEvent(event);
+		elements.lbAvalTokens.innerText = elements.inpLenSl.getAttribute('max');
+		elements.lbUsedTokens.innerText = elements.lbTokens.innerText;
 	};
 
 	window.Asc.plugin.onTranslate = function() {
@@ -443,14 +434,13 @@
 		}
 	};
 
-	window.Asc.plugin.onThemeChanged = function(theme)
-	{
+	window.Asc.plugin.onThemeChanged = function(theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);
 		if (isIE) return;
 
 		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 		let sliderBG, thumbBG
-		if (theme.type.indexOf('dark')) {
+		if (theme.type.indexOf('dark') !== -1) {
 			isDarkTheme = true;
 			sliderBG = theme.Border || '#757575';
 			// for dark '#757575';
