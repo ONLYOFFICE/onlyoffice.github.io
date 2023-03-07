@@ -37,11 +37,14 @@
 	var cslItems = {count: 0};
 	var citPrefix = "ZOTERO_CITATION ";
 	var bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-    var repeatTimeout;
+    var repeatTimeout = null;
+    var loadTimeout = null;
 	var loadingStyle = false;
 	var loadingLocale = false;
 	var bNumFormat = false;
 	let bibPlaceholder = "Please insert some citation into the document.";
+	var bUserItemsUpdated = false;
+	var bGroupsItemsUpdated = false;
 	// TODO добавить варианты сохранения для совместимости с другими редакторами (ms, libre, google, мой офис), пока есть вариант сохранить как текст
 	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять из библиографии автоматически (это делать только при обновлении библиографии или refresh), но их точно нужно удалить из formatter!
 	// TODO добавить ещё обработку события (изменения линков), предлать пользователю обновить их или сохранить ручное форматирование (при ручном форматировании не меняем внешний вид цитаты при refresh (да и вообще не меняем))
@@ -116,8 +119,8 @@
         cancelBtn: document.getElementById("cancelBtn"),
 		tempDiv: document.getElementById('div_temp'),
 		refreshBtn: document.getElementById('refreshBtn'),
-		saveAsTextBtn: document.getElementById('saveAsTextBtn')
-		
+		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
+		synchronizeBtn: document.getElementById('synchronizeBtn')
     };
 
     var selectedScroller;
@@ -197,6 +200,10 @@
 		elements.refreshBtn.onclick = function() {
 			showLoader(true);
 			updateCslItems(true, true, false, false);
+		};
+
+		elements.synchronizeBtn.onclick = function() {
+			synchronizeData();
 		};
 
         elements.insertBibBtn.onclick = function() { 
@@ -620,7 +627,6 @@
         }
     };
 
-    var loadTimeout = null;
     function checkDocsScroll(holder) {
         if (shouldLoadMore(holder)) {
 
@@ -634,7 +640,7 @@
                 if (shouldLoadMore(holder)) {
                     loadLibrary(lastSearch.obj.next(), true, true, !lastSearch.groups.length, false, false);
 					for (var i = 0; (i < lastSearch.groups.length && lastSearch.groups[i].next); i++) {
-						loadLibrary(sdk.groups(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false );
+						loadLibrary(sdk.groups(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false, lastSearch.groups[i] );
 					}
                 } else {
                 }
@@ -736,8 +742,13 @@
         var page = document.createElement("div");
         page.classList.add("page" + holder.children.length);
         if (res && res.items.items.length > 0) {
-            for (var i in res.items.items) {
-                page.appendChild(buildDocElement(res.items.items[i]));
+            for (var item of res.items.items) {
+				item[ (isGroup ? "groupID" : "userID") ] = res.id;
+				var pos = item.id.indexOf("/") + 1;
+				if (pos)
+					item.id = item.id.substring(pos)
+
+                page.appendChild(buildDocElement(item));
             }
         } else if (err || first) {
             if (err) {
@@ -893,7 +904,7 @@
 		}
     };
 
-	function updateAllOrAddBib(bUpadteAll, bPastBib) {
+	function updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize) {
 		if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
             return;
@@ -912,11 +923,16 @@
 					if (bUpadteAll && field.Value.includes(citPrefix)) {
 						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
 						var keysL = [];
-						citationItems.forEach(function(item) {
+						citationItems = citationItems.map(function(item) {
 							keysL.push({id:item.id});
+							return cslItems[item.id];
 						});
 						elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
 						field["Content"] = elements.tempDiv.innerText;
+						if (bSyncronize) {
+							// if we make synchronization we must update value too
+							field['Value'] = citPrefix + JSON.stringify( { citationItems } );
+						}
 						updatedFields.push(field);
 					} else if (field.Value.includes(bibPrefix)) {
 						bibField = field;
@@ -948,11 +964,11 @@
 		});
 	};
 
-	function updateFormatter(bUpadteAll, bPastBib, bPastLink) {
+	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize) {
 		clearTimeout(repeatTimeout);
         if (loadingStyle || loadingLocale || !styles[selectedStyle] || !locales[selectedLocale]) {
             repeatTimeout = setTimeout( function() {
-				updateFormatter(bUpadteAll, bPastBib);
+				updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize);
 			}, 100);
             return;
         }
@@ -968,7 +984,7 @@
 			formatter.updateItems(arrItems);
 		}
 		if (bUpadteAll || bPastBib)
-			updateAllOrAddBib(bUpadteAll, bPastBib);
+			updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize);
 		
 		if (bPastLink) {
 			formatInsertLink();
@@ -1020,7 +1036,7 @@
 				});
 			}
 			if (bUpdadeFormatter)
-				updateFormatter(bUpadteAll, bPastBib, bPastLink);
+				updateFormatter(bUpadteAll, bPastBib, bPastLink, false);
 		});
 	};
 
@@ -1091,6 +1107,22 @@
         return cslData;
     };
 
+	function syncronizeCSLItem(item) {
+		var pos = item.id.indexOf("/") + 1;
+		if (pos)
+			item.id = item.id.substring(pos);
+		
+		var cslItem = cslItems[item.id];
+		item["short-title"] = item.shortTitle;
+		item["title-short"] = item.shortTitle;
+
+		for (var key in item) {
+			if (Object.hasOwnProperty.call(item, key)) {
+				cslItem[key] = item[key];
+			}
+		}
+    };
+
 	function saveAs() {
 		// TODO потом добавить ещё форматы, пока только как текст
 		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
@@ -1109,5 +1141,84 @@
 			if (!arrFields.length)
 				window.Asc.plugin.executeCommand("close", "");
 		});
+	};
+
+	function synchronizeData() {
+		// form an array for request (one array for user and other for groups)
+		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
+		if (!cslItems.count)
+			return;
+
+		showLoader(true);
+		bGroupsItemsUpdated = false;
+		bUserItemsUpdated = false;
+		var bHasGroupsItems = false;
+		var arrUsrItems = [];
+		var arrGroupsItems = {};
+		for (var id in cslItems) {
+			if (Object.hasOwnProperty.call(cslItems, id)) {
+				if (id !== 'count') {
+					var item = cslItems[id];
+					if (item.userID) {
+						arrUsrItems.push(item.id)
+					} else if (item.groupID) {
+						if (!arrGroupsItems[item.groupID])
+							arrGroupsItems[item.groupID] = [];
+						
+						arrGroupsItems[item.groupID].push(item.id);
+					}
+				}
+			}
+		}
+		if (arrUsrItems.length) {
+			sdk.items(null, arrUsrItems)
+			.then(function(res) {
+				var items = ( (res.items ? res.items.items : []) || [] );
+				items.forEach(function(item) {
+					syncronizeCSLItem(item);
+				});
+			})
+			.catch(function(err) {
+				console.error(err);
+			})
+			.finally(function() {
+				bUserItemsUpdated = true;
+				if (bGroupsItemsUpdated)
+					updateAfterSync();
+			});
+		} else {
+			bUserItemsUpdated = true;
+		}
+		
+		for (var groupID in arrGroupsItems) {
+			if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
+				bHasGroupsItems = true;
+				sdk.groups(null, groupID, arrGroupsItems[groupID])
+				.then(function(res) {
+					var items = ( (res.items ? res.items.items : []) || [] );
+					items.forEach(function(item) {
+						syncronizeCSLItem(item);
+					})
+				})
+				.catch(function(err) {
+					console.error(err);
+				})
+				.finally(function() {
+					bGroupsItemsUpdated = true;
+					if (bUserItemsUpdated)
+						updateAfterSync();
+				});
+			}
+		}
+		if (!bHasGroupsItems) {
+			bGroupsItemsUpdated = true;
+		}
+		if (bGroupsItemsUpdated && bUserItemsUpdated)
+			updateAfterSync();
+	};
+
+	function updateAfterSync() {
+		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
+		updateFormatter(true, false, false, true);
 	};
 })();

@@ -22,5 +22,6 @@
   "Cancel select": "キャンセル選択",
   "Refresh": "リフレッシュ",
   "Save as text": "テキストとして保存",
-  "Please insert some citation into the document." : "文書にいくつかの引用を挿入してください。"
+  "Please insert some citation into the document." : "文書にいくつかの引用を挿入してください。",
+  "Synchronize" : "同期"
 }
