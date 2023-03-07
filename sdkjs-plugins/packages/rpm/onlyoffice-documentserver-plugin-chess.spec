@@ -12,7 +12,7 @@ ONLYOFFICE Documentserver Chess plugin allows you to easily add
 a chess arrangement to your text file if needed.
 
 %files
-var/www/onlyoffice/documentserver/sdkjs-plugins/chess/config.json
+/var/www/onlyoffice/documentserver/sdkjs-plugins/chess/config.json
 # /var/www/dir1/fileB2.txt
 
 %prep
@@ -23,7 +23,7 @@ var/www/onlyoffice/documentserver/sdkjs-plugins/chess/config.json
 
 %install
 mkdir -p %{buildroot}/var/www/onlyoffice/documentserver/sdkjs-plugins/chess/
-cp ../../content/chess/config.json %{buildroot}/var/www/onlyoffice/documentserver/sdkjs-plugins/chess/
+cp /onlyoffice.github.io/sdkjs-plugins/content/chess/config.json %{buildroot}/var/www/onlyoffice/documentserver/sdkjs-plugins/chess
 # cp /fileA1.txt %{buildroot}/var/www/dir1/mae
 # cp /fileB2.txt %{buildroot}/var/www/dir1
 
