@@ -46,26 +46,40 @@
             return getRequest(url);
         }
 
-        function items(search) {
+        function items(search, itemsID) {
             return new Promise(function (resolve, reject) {
-                parseItemsResponse(buildGetRequest("users/" + userId + "/items", {
-                    q: search,
+				var props = {
 					format: "csljson"
-                }), resolve, reject);
+                };
+				if (search) {
+					props.q = search;
+				} else if (itemsID) {
+					props.itemKey = itemsID.join(',');
+				}
+                parseItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
             });
         }
 
-		function groups(search, groupId) {
+		function groups(search, groupId, itemsID) {
             return new Promise(function (resolve, reject) {
-				parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", {
-					q: search,
+				var props = {
 					format: "csljson"
-				}), resolve, reject);
+                };
+				if (search) {
+					props.q = search;
+				} else if (itemsID) {
+					props.itemKey = itemsID.join(',');
+				}
+				parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
             });
         }
 
 		function getUserGropus() {
 			return userGroups;
+		}
+
+		function getUserId() {
+			return userId;
 		}
 
         function format(ids, key, style, locale) {
@@ -94,7 +108,7 @@
             });
         }
 
-        function getUserId(key) {
+        function setApiKey(key) {
             return new Promise(function (resolve, reject) {
                 buildGetRequest("keys/" + key)
                     .then(function (res) {
@@ -151,17 +165,18 @@
 			userGroups = [];
         }
 
-        function parseItemsResponse(promise, resolve, reject) {
+        function parseItemsResponse(promise, resolve, reject, id) {
             promise.then(function (res) {
                 res.json().then(function (json) {
                     var links = parseLinkHeader(res.headers.get("Link"));
                     var obj = {
-                        items: json
+                        items: json,
+						id: id
                     };
                     if (links.next) {
                         obj.next = function () {
                             return new Promise(function (rs, rj) {
-                                parseItemsResponse(getRequest(links.next), rs, rj);
+                                parseItemsResponse(getRequest(links.next), rs, rj, id);
                             });
                         }
                     }
@@ -194,7 +209,8 @@
             format: format,
             hasSettings: getSettings,
             clearSettings: clearSettings,
-            setApiKey: getUserId
+            setApiKey: setApiKey,
+			getUserId: getUserId
         }
     }
 })();
