@@ -149,6 +149,21 @@
     else
         window.attachEvent("onmessage", onMessage);
 
+    window.Asc.plugin.attachContextMenuClickEvent = function(id, action)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (!pluginObj.contextMenuEvents)
+            pluginObj.contextMenuEvents = {};
+
+        pluginObj.contextMenuEvents[id] = action;
+    };
+    window.Asc.plugin.event_onContextMenuClick = function(id)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (pluginObj.contextMenuEvents && pluginObj.contextMenuEvents[id])
+            pluginObj.contextMenuEvents[id]();
+    };
+
     window.onunload = function() {
         if (window.addEventListener)
             window.removeEventListener("message", onMessage, false);
