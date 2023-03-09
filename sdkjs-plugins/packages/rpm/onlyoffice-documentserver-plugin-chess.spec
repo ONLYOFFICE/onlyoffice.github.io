@@ -1,10 +1,12 @@
-%define only_path /var/www/onlyoffice/documentserver/sdkjs-plugins/chess
+%define source_dir ../../../onlyoffice.github.io/sdkjs-plugins/content/chess
+%define dest_dir /var/www/onlyoffice/documentserver/sdkjs-plugins/chess
 
 Name:           onlyoffice-documentserver-plugin-chess
 Summary:        Business productivity tools
 Group:          Applications/Internet
 Version:        1
 Release:        2
+# Requires:	onlyoffice-documentserver
 URL:            http://onlyoffice.com
 Vendor:         Ascensio System SIA
 License:        AGPLv3
@@ -14,7 +16,8 @@ ONLYOFFICE Documentserver Chess plugin allows you to easily add
 a chess arrangement to your text file if needed.
 
 %files
-%{only_path}/*
+%defattr(744, root, root)
+%{dest_dir}/*
 
 %prep
 # nothing to do here - no source
@@ -23,12 +26,8 @@ a chess arrangement to your text file if needed.
 # noting to do
 
 %install
-mkdir -p %{buildroot}/%{only_path}/{resources/{dark,light,store},scripts,translations}
-
-cp -r /onlyoffice.github.io/sdkjs-plugins/content/chess/* %{buildroot}/%{only_path}/
+mkdir -p %{buildroot}%{dest_dir}/
+cp -r %{source_dir}/* %{buildroot}%{dest_dir}/
 
 %changelog
 # * Mon Mar 06 2023 root
- 
-%postun
-rm -rf %{only_path}
