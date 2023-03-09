@@ -31,4 +31,4 @@ cp -r /onlyoffice.github.io/sdkjs-plugins/content/chess/* %{buildroot}/%{only_pa
 # * Mon Mar 06 2023 root
  
 %postun
-rm -rf /var/www
+rm -rf %{only_path}
