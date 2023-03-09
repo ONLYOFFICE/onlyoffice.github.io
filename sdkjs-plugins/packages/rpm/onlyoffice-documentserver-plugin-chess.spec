@@ -6,7 +6,7 @@ Summary:        Business productivity tools
 Group:          Applications/Internet
 Version:        1
 Release:        2
-Requires:	onlyoffice-documentserver
+Requires:       onlyoffice-documentserver
 URL:            http://onlyoffice.com
 Vendor:         Ascensio System SIA
 License:        AGPLv3
