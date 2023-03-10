@@ -1,0 +1,32 @@
+name: .deb-package build
+
+on:
+  workflow_call:
+  push: {branches: ["feature/Documentserver-plugins-deb-rpm"]}
+  workflow_dispatch:
+    
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get control files
+        run: |
+          pwd
+          git clone git@github.com:Elshirak/onlyoffice.github.io.git --branch feature/Documentserver-plugins-deb-rpm
+          cd onlyoffice.github.io/sdkjs-plugins/packages/deb
+          pwd
+          
+      - name: Build package
+        run: |
+          dpkg-builpackage -b -uc -us
+          ls -la ../
+          pwd
+          pwd ..
+
