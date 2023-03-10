@@ -164,6 +164,27 @@
             pluginObj.contextMenuEvents[id]();
     };
 
+    window.Asc.plugin.attachEvent = function(id, action)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (!pluginObj._events)
+            pluginObj._events = {};
+
+        pluginObj._events[id] = action;
+    };
+    window.Asc.plugin.detachEvent = function(id)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (pluginObj._events && pluginObj._events[id])
+            delete pluginObj._events[id];
+    };
+    window.Asc.plugin.onEvent = function(id, data)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (pluginObj._events && pluginObj._events[id])
+            pluginObj._events[id](data);
+    };
+
     window.onunload = function() {
         if (window.addEventListener)
             window.removeEventListener("message", onMessage, false);
