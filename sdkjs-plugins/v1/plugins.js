@@ -175,7 +175,7 @@
     {
         var pluginObj = window.Asc.plugin;
         if (pluginObj.contextMenuEvents && pluginObj.contextMenuEvents[id])
-            pluginObj.contextMenuEvents[id]();
+            pluginObj.contextMenuEvents[id].call(pluginObj);
     };
 
     window.Asc.plugin.attachEvent = function(id, action)
@@ -196,7 +196,7 @@
     {
         var pluginObj = window.Asc.plugin;
         if (pluginObj._events && pluginObj._events[id])
-            pluginObj._events[id](data);
+            pluginObj._events[id].call(pluginObj, data);
     };
 
     window.onunload = function() {
