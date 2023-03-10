@@ -16,7 +16,7 @@ ONLYOFFICE Documentserver Chess plugin allows you to easily add
 a chess arrangement to your text file if needed.
 
 %files
-%defattr((-, onlyoffice, onlyoffice, -))
+%defattr(-, onlyoffice, onlyoffice, -)
 %{dest_dir}/*
 
 %prep
