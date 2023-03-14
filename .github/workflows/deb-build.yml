@@ -14,7 +14,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get control files
-        run: cat onlyoffice.github.io/sdkjs-plugins/packages/deb/copyright
+        run: |
+          pwd
+          ls -la
 
         shell: bash
           
