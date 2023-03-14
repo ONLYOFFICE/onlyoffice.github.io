@@ -27,9 +27,12 @@ a chess arrangement to your text file if needed.
 
 %install
 mkdir -p %{buildroot}%{dest_dir}/
-ls -la 
 pwd
+ls -la
 ls -la /
+ls -la /home
+ls -la /github
+ls -la /github/home
 cp -r %{source_dir}/* %{buildroot}%{dest_dir}/
 
 %changelog
