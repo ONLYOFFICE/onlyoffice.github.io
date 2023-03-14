@@ -30,18 +30,19 @@ jobs:
         
 
   build_rpm:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+    name: Build .rpm package
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
     
-    - name: Check
-      run: pwd 
+      - name: Check
+        run: pwd 
 
-    - name: build RPM package
-      id: rpm
-      uses: naveenrajm7/rpmbuild@master
-      with:
-        spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
+      - name: build RPM package
+        id: rpm
+        uses: naveenrajm7/rpmbuild@master
+        with:
+          spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
 
 
 
