@@ -33,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Check
+      run: pwd 
 
     - name: build RPM package
       id: rpm
