@@ -27,6 +27,7 @@ a chess arrangement to your text file if needed.
 
 %install
 mkdir -p %{buildroot}%{dest_dir}/
+pwd
 cp -r %{source_dir}/* %{buildroot}%{dest_dir}/
 
 %changelog
