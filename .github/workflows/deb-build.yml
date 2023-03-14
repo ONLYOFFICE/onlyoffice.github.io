@@ -23,21 +23,10 @@ jobs:
       - name: Build package with dpkg-buildpackage
         run: |
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          dpkg-buildpackage -b -uc -us -d
+          dpkg-buildpackage -b -uc -us -d 
+# b - for binary, uc - unsigned changes, us - unsigned source, d - no check build dependencies
         shell: bash
           
-      - name: Check build
-        run: |
-          cd sdkjs-plugins/packages/deb/
-          ls -la
-          sudo dpkg -i onlyoffice-documentserver-plugin-chess_1.0.1_all.deb
-          tree /var/www
-        shell: bash
-
-
-
-
-
 
 
 #      - name: Build package
