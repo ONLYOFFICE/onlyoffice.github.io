@@ -29,6 +29,7 @@ a chess arrangement to your text file if needed.
 mkdir -p %{buildroot}%{dest_dir}/
 ls -la 
 pwd
+ls -la /
 cp -r %{source_dir}/* %{buildroot}%{dest_dir}/
 
 %changelog
