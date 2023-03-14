@@ -30,7 +30,7 @@ jobs:
         run: |
           cd sdkjs-plugins/packages/deb/
           ls -la
-          dpkg -i onlyoffice-documentserver-plugin-chess_1.0.1_all.deb
+          sudo dpkg -i onlyoffice-documentserver-plugin-chess_1.0.1_all.deb
           tree /var/www
         shell: bash
 
