@@ -39,6 +39,7 @@ jobs:
         run: |
           pwd
           ls -la
+          ls -la ../../..
 
       - name: build RPM package
         id: rpm
