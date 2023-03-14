@@ -20,11 +20,17 @@ jobs:
         shell: bash
       
       - name: Build package with dpkg-buildpackage
+        id: deb
         run: |
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
 # b - for binary, uc - unsigned changes, us - unsigned source, d - no check build dependencies
         shell: bash
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+            name: Binary DEB
+            path: ${{ steps.deb.outputs }}
           
 
   build_rpm:
@@ -38,11 +44,6 @@ jobs:
       with:
         spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: Binary RPM
-        path: ${{ steps.rpm.outputs.rpm_dir_path }}
 
 
 
