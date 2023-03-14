@@ -36,7 +36,9 @@ jobs:
       - uses: actions/checkout@v2
     
       - name: Check
-        run: pwd 
+        run: |
+          pwd
+          ls -la
 
       - name: build RPM package
         id: rpm
