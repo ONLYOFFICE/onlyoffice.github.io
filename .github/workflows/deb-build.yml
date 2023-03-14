@@ -26,12 +26,8 @@ jobs:
           dpkg-buildpackage -b -uc -us -d 
 # b - for binary, uc - unsigned changes, us - unsigned source, d - no check build dependencies
         shell: bash
-      - name: Upload artifact
-        uses: actions/upload-artifact@v1.0.0
-        with:
-            name: Binary DEB
-            path: ${{ steps.deb.outputs }}
-          
+        
+        
 
   build_rpm:
     runs-on: ubuntu-latest
