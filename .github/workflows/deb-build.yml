@@ -1,4 +1,4 @@
-name: .deb-package build
+name: Packages build
 
 on:
   workflow_call:
@@ -7,15 +7,15 @@ on:
     
 jobs:
   build:
-    name: Build package
+    name: Build .deb package
     runs-on: ubuntu-latest
     steps:
-      - name: Get files from repository path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
+      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
         uses: actions/checkout@v2
 
-      - name: Get control files
+      - name: Build package with dpkg-buildpackage
         run: |
-          cd sdkjs-plugins/packages/
+          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us
 
         shell: bash
