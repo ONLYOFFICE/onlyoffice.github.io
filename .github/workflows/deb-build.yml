@@ -32,11 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-      - name: Check directory
-        run: |
-          ls -la 
-          pwd
-    
       - name: Get files from repository
         uses: actions/checkout@v2
         
