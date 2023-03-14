@@ -10,13 +10,13 @@ jobs:
     name: Build package
     runs-on: ubuntu-latest
     steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
+      - name: Get files from repository path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
+        uses: actions/checkout@v2
 
       - name: Get control files
         run: |
-          pwd
-          ls -la
+          cd sdkjs-plugins/packages/
+          dpkg-buildpackage -b -uc -us
 
         shell: bash
           
