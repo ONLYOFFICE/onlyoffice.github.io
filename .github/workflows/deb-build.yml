@@ -31,8 +31,8 @@ jobs:
 
   build_rpm:
     name: Build .rpm package
-      runs-on: ubuntu-latest
-      steps:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
     
       - name: Check
