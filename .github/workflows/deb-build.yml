@@ -15,7 +15,7 @@ jobs:
 
       - name: Build package with dpkg-buildpackage
         run: |
-          apt-get install dh-make build-essentials descripts
+          sudo apt-get install dh-make build-essentials descripts
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d
 
