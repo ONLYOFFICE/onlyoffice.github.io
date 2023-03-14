@@ -28,18 +28,21 @@ jobs:
           
 
   build_rpm:
-    name: Build .rpm package
     runs-on: ubuntu-latest
     steps:
-    
-      - name: Get files from repository
-        uses: actions/checkout@v2
-        
-      - name: Build RPM package
-        id: rpm
-        uses: naveenrajm7/rpmbuild@master
-        with:
-          spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
+    - uses: actions/checkout@v2
+
+    - name: build RPM package
+      id: rpm
+      uses: naveenrajm7/rpmbuild@master
+      with:
+        spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: Binary RPM
+        path: ${{ steps.rpm.outputs.rpm_dir_path }}
 
 
 
