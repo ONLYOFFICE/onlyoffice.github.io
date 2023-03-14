@@ -16,7 +16,7 @@ jobs:
       - name: Build package with dpkg-buildpackage
         run: |
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          dpkg-buildpackage -b -uc -us
+          dpkg-buildpackage -b -uc -us -d
 
         shell: bash
           
