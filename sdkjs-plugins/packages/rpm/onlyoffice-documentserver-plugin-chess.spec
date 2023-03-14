@@ -1,4 +1,4 @@
-%define source_dir ../../runner/work/onlyoffice.github.io/sdkjs-plugins/content/chess
+%define source_dir ../../onlyoffice.github.io/sdkjs-plugins/content/chess
 %define dest_dir /var/www/onlyoffice/documentserver/sdkjs-plugins/chess
 
 Name:           onlyoffice-documentserver-plugin-chess
