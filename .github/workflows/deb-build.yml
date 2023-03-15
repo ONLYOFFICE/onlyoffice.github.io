@@ -42,9 +42,6 @@ jobs:
         with:
           spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
      
-      - name: Check package
-        run: |
-          ls -la /github/home/rpmbuild/RPMS/x86_64
 
 
 
