@@ -28,6 +28,12 @@ jobs:
 # b - for binary, uc - unsigned changes, us - unsigned source, d - no check build dependencies
         shell: bash
         
+      - name: Upload artifact .deb
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: Binary DEB
+          path: ${{ steps.deb.outputs."sdkjs-plugins/packages/deb/" }}
+        
         
 
   build_rpm:
@@ -42,7 +48,7 @@ jobs:
         with:
           spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
           
-      - name: Upload artifact
+      - name: Upload artifact .rpm
         uses: actions/upload-artifact@v1.0.0
         with:
           name: Binary RPM
