@@ -24,6 +24,7 @@ jobs:
         run: |
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
+          ls -la ../
 # b - for binary, uc - unsigned changes, us - unsigned source, d - no check build dependencies
         shell: bash
         
@@ -34,18 +35,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-    
-      - name: Check
-        run: |
-          pwd
-          ls -la
-          ls -la ../../..
 
       - name: build RPM package
         id: rpm
         uses: naveenrajm7/rpmbuild@master
         with:
           spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
+     
+      - name: Check package
+        run: |
+          ls -la /github/home/rpmbuild/RPMS/x86_64
 
 
 
