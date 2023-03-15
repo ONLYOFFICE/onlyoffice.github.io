@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: Binary DEB
-          path: sdkjs-plugins/packages/deb/
+          path: sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess_1.0.1_all.deb
         
         
 
