@@ -4,7 +4,6 @@ on:
   push: 
     branches: ["feature/Documentserver-plugins-deb-rpm"]
 
-name: Release DEB RPM
     
 jobs:
   build_deb:
