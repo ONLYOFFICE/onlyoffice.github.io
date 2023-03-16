@@ -6,7 +6,7 @@ on:
   push: 
     branches: ["feature/Documentserver-plugins-deb-rpm"]
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*'
     
 jobs:
   build_deb:
@@ -41,9 +41,11 @@ jobs:
         
 
   build_rpm:
-    name: Build .rpm package
+    name: Create .rpm package
     runs-on: ubuntu-latest
+    
     steps:
+      - name: Checkout code
       - uses: actions/checkout@v2
 
       - name: Create Release-rpm
@@ -62,7 +64,7 @@ jobs:
           prerelease: false
 
       - name: build RPM package
-        id: rpm
+        id: rpm_build
         uses: naveenrajm7/rpmbuild@master
         with:
           spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
