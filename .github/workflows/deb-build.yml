@@ -2,9 +2,11 @@ name: Release RPM DEB
 on:
   workflow_call:
   workflow_dispatch:
-  push: { branches: ["feature/Documentserver-plugins-deb-rpm"] }
+  push: 
+    branches: ["feature/Documentserver-plugins-deb-rpm"]
+    tags: 
+      - 'v*'
 
-    
 jobs:
 
 
@@ -26,7 +28,22 @@ jobs:
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
           ls -la ../
-        
+          
+      - name: Create Release-deb
+        id: create_release_deb
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - Create DEB
+            - Upload Source DEB
+          draft: false
+          prerelease: false 
+
       
   build_rpm:
     name: Create .rpm package
