@@ -48,6 +48,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
+      - name: Check 
+        run: |
+          ls -la 
+          pwd 
+        
       - name: Build RPM package
         id: rpm
         uses: AnjaloHettiarachchi/rpmbuild@v1.0.0
