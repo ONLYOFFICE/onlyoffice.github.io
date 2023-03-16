@@ -3,7 +3,10 @@ name: Packages build
 on:
   workflow_call:
   workflow_dispatch:
-  push: {branches: ["feature/Documentserver-plugins-deb-rpm"]}
+  push: 
+    branches: ["feature/Documentserver-plugins-deb-rpm"]
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
     
 jobs:
   build_deb:
