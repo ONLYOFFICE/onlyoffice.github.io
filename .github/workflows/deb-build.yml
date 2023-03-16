@@ -9,34 +9,34 @@ on:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
     
 jobs:
-  build_deb:
-    name: Build .deb package
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
-        uses: actions/checkout@v2
+#  build_deb:
+#    name: Build .deb package
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
+#        uses: actions/checkout@v2
         
-      - name: Install required tools
-        run: |
-          sudo apt-get install dh-make 
+#      - name: Install required tools
+#        run: |
+#          sudo apt-get install dh-make 
 #         sudo apt-get install build-essentials descripts
-        shell: bash
-      
-      - name: Build package with dpkg-buildpackage
-        id: deb
-        run: |
-          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          dpkg-buildpackage -b -uc -us -d 
-          pwd
-          ls -la ../
+#        shell: bash
+#      
+#      - name: Build package with dpkg-buildpackage
+#        id: deb
+#        run: |
+#          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
+#          dpkg-buildpackage -b -uc -us -d 
+#         pwd
+#         ls -la ../
 # b - for binary, uc - unsigned changes, us - unsigned source, d - no check build dependencies
-        shell: bash
+#        shell: bash
         
-      - name: Upload artifact .deb
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: Binary DEB
-          path: sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess_1.0.1_all.deb
+#      - name: Upload artifact .deb
+#        uses: actions/upload-artifact@v1.0.0
+#        with:
+#          name: Binary DEB
+#         path: sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess_1.0.1_all.deb
         
         
 
@@ -52,7 +52,7 @@ jobs:
         id: rpm
         uses: AnjaloHettiarachchi/rpmbuild@v1.0.0
         with:
-          spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
+          spec_file: "onlyoffice-documentserver-plugin-chess.spec"
 
       - name: Create Release-rpm
         id: create_release
