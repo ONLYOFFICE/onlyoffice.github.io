@@ -1,11 +1,13 @@
+name: Release RPM DEB
 on:
   workflow_call:
   workflow_dispatch:
-  push: 
-    branches: ["feature/Documentserver-plugins-deb-rpm"]
+  push: { branches: ["feature/Documentserver-plugins-deb-rpm"] }
 
     
 jobs:
+
+
   build_deb:
     name: Build .deb package
     runs-on: ubuntu-latest
@@ -17,7 +19,6 @@ jobs:
       - name: Install required tools
         run: |
           sudo apt-get install dh-make 
-        shell: bash
       
       - name: Build package with dpkg-buildpackage
         id: deb
@@ -25,8 +26,6 @@ jobs:
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
           ls -la ../
-        shell: bash
-      
         
       
   build_rpm:
