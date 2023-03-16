@@ -1,4 +1,4 @@
-name: Packages build
+name: Release DEB RPM
 
 on:
   workflow_call:
