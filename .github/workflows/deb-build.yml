@@ -57,7 +57,7 @@ jobs:
         id: rpm
         uses: AnjaloHettiarachchi/rpmbuild@v1.0.0
         with:
-          spec_file: "onlyoffice-documentserver-plugin-chess.spec"
+          spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
 
       - name: Create Release-rpm
         id: create_release
