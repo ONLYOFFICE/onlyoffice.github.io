@@ -54,8 +54,8 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        #env:
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
@@ -76,7 +76,7 @@ jobs:
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
             asset_path: ${{ steps.rpm_build.outputs.source_rpm_path }}
