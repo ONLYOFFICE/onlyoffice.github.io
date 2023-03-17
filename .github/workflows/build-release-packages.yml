@@ -26,7 +26,7 @@ jobs:
         
       - name: INSTALL required tools & BUILD .deb package
         run: |
-          sudo apt-get install dh-make 
+          sudo apt-get install dh-make rpmbuild
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
           
