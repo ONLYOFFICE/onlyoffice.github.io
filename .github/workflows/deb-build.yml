@@ -11,7 +11,7 @@ jobs:
 
 
   build_deb:
-    name: Build .deb package
+    name: Build & Release .deb package
     runs-on: ubuntu-latest
     
     steps:
@@ -29,20 +29,16 @@ jobs:
           dpkg-buildpackage -b -uc -us -d 
           ls -la ../
           
-      - name: Create Release-deb
-        id: create_release_deb
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+      - name: Release .deb
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - Create DEB
-            - Upload Source DEB
-          draft: false
-          prerelease: false 
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "v-${{ github.ref }}"
+          title: "${{ github.ref }}"
+          prerelease: false
+          files: "onlyoffice-documentserver-plugin-chess_1.0.1_all.deb"
+        env: 
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
 
       
   build_rpm:
