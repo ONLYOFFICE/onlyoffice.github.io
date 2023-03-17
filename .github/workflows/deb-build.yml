@@ -7,6 +7,10 @@ on:
     tags: 
       - '*'
 
+env:
+  REPOS_NAME: ${{ github.event.repository.name }}
+  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+
 jobs:
 
 
@@ -32,14 +36,24 @@ jobs:
           ls -la ../
           pwd ../
           
+      - name: Get Tag Name
+        id: tag_name
+        run: |
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          
       - name: Create release 
         uses: ncipollo/release-action@v1
         with:
           artifacts: "sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess_1.0.1_all.deb"
-          body: Try it!
-            - First 
-            - Second
 
+      - name: Release package
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          title: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          prerelease: false
+          files: "*.deb"
       
   build_rpm:
     name: Create .rpm package
