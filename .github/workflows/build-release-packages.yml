@@ -43,7 +43,7 @@ jobs:
       - name: Create release 
         uses: ncipollo/release-action@v1
         with:
-          # token: ${{ secrets.MY_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           name: Release v-${{ github.run_number }}
           artifacts: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,${{ steps.rpm_build.outputs.source_rpm_path }}"
           tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
