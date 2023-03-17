@@ -17,8 +17,8 @@ jobs:
   build_deb:
     name: Build & Release .deb package
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    #permissions:
+      #contents: write
     
     steps:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
@@ -29,23 +29,11 @@ jobs:
           sudo apt-get install dh-make 
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
-          cd ..
-          ls -la 
-          pwd 
-      
-     # - name: Build package with dpkg-buildpackage
-        # id: deb
-      #  run: |
-       #   cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-        #  dpkg-buildpackage -b -uc -us -d 
-        #  cd ..
-        #  ls -la 
-        #  pwd 
           
       - name: Get Tag Name
         id: tag_name
         run: |
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/ | awk -F 'Docserver' '{$2}'}
           
       - name: Release package
         uses: "marvinpinto/action-automatic-releases@latest"
