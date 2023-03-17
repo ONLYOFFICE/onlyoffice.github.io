@@ -33,7 +33,7 @@ jobs:
       - name: Get Tag Name
         id: tag_name
         run: | 
-          NAME=$(echo ${{ GITHUB_REF#refs/tags/ }} | sed 's/.*feature//g')
+          NAME=$(echo ${ GITHUB_REF#refs/tags/ } | sed 's/.*feature//g')
           echo ::set-output name=SOURCE_TAG::${{ NAME }}
           
       - name: Release package
