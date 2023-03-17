@@ -54,7 +54,7 @@ jobs:
           automatic_release_tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
           title: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
           prerelease: false
-          files: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess/onlyoffice-documentserver-plugin-chess_1.0.1_all.deb"
+          files: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb"
       
   build_rpm:
     name: Create .rpm package
