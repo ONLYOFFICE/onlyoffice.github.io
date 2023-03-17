@@ -43,15 +43,8 @@ jobs:
           prerelease: false
           files: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb"
       
-  build_rpm:
-    name: Create .rpm package
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Create Release
+      - name: Create RPM Release
         id: create_release
         uses: actions/create-release@latest
         env:
