@@ -40,7 +40,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
-          # title: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          title: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
           prerelease: false
           files: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb"
       
