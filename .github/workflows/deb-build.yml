@@ -24,17 +24,23 @@ jobs:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
         uses: actions/checkout@v2
         
-      - name: Install required tools
+      - name: Install required tools & Build package
         run: |
           sudo apt-get install dh-make 
-      
-      - name: Build package with dpkg-buildpackage
-        id: deb
-        run: |
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
-          ls -la ../
-          pwd ../
+          cd ..
+          ls -la 
+          pwd 
+      
+     # - name: Build package with dpkg-buildpackage
+        # id: deb
+      #  run: |
+       #   cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
+        #  dpkg-buildpackage -b -uc -us -d 
+        #  cd ..
+        #  ls -la 
+        #  pwd 
           
       - name: Get Tag Name
         id: tag_name
