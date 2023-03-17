@@ -33,7 +33,9 @@ jobs:
       - name: Get Tag Name
         id: tag_name
         run: |
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
+        # echo ::set-output name={name}::{value}
+        # echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
           
       - name: Release package
         uses: "marvinpinto/action-automatic-releases@latest"
