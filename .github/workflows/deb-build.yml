@@ -13,6 +13,8 @@ jobs:
   build_deb:
     name: Build & Release .deb package
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
@@ -28,17 +30,15 @@ jobs:
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
           ls -la ../
+          pwd ../
           
-      - name: Release .deb
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Create release 
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "v-${{ github.ref }}"
-          title: "${{ github.ref }}"
-          prerelease: false
-          files: "onlyoffice-documentserver-plugin-chess_1.0.1_all.deb"
-        env: 
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+          artifacts: "sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess_1.0.1_all.deb"
+          body: Try it!
+            - First 
+            - Second
 
       
   build_rpm:
