@@ -17,8 +17,8 @@ jobs:
   build_deb:
     name: Build & Release .deb package
     runs-on: ubuntu-latest
-    #permissions:
-      #contents: write
+    permissions:
+      contents: write
     
     steps:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
