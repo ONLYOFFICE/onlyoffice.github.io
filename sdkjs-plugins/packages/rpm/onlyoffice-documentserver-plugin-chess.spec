@@ -10,6 +10,7 @@ Requires:       onlyoffice-documentserver
 URL:            http://onlyoffice.com
 Vendor:         Ascensio System SIA
 License:        AGPLv3
+BuildArch:      noarch
 
 %description
 ONLYOFFICE Documentserver Chess plugin allows you to easily add
