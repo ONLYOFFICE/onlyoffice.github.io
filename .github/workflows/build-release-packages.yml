@@ -46,7 +46,7 @@ jobs:
             /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
           tag_name: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
           body: Release packages
-          
+                           
             - .deb
             - .rpm
           draft: false
