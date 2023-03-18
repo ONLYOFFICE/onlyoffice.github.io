@@ -29,7 +29,7 @@ jobs:
         run: |
           sudo apt-get install dh-make rpm
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          # dpkg-buildpackage -b -uc -us -d 
+          dpkg-buildpackage -b -uc -us -d 
           rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
           
       - name: Get Tag Name
@@ -41,11 +41,12 @@ jobs:
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: Release v-${{ github.run_number }}
-          files: /home/runner/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm
-           # ~/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
-           # ~/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm
+          files: |
+            /home/runner/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm
+            /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
           tag_name: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
           body: Release packages
+          
             - .deb
             - .rpm
           draft: false
