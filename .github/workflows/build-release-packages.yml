@@ -31,7 +31,7 @@ jobs:
           sudo apt-get install dh-make rpm
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
-          cd sdkjs-plugins/packages/rpm
+          cd ../../../packages/rpm
           rpmbuild -bb onlyoffice-documentserver-plugin-chess.spec
           ls -la
           pwd
