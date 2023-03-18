@@ -38,7 +38,7 @@ jobs:
       - name: Create release 
         uses: ncipollo/release-action@v1
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          token: "${{ secrets.MY_TOKEN }}"
           name: Release v-${{ github.run_number }}
           artifacts: "~/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,~/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm"
           tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
