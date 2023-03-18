@@ -31,28 +31,32 @@ jobs:
           sudo apt-get install dh-make rpm
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
+          cd sdkjs-plugins/packages/rpm
+          rpmbuild -bb onlyoffice-documentserver-plugin-chess.spec
+          ls -la
+          pwd
           
-      - name: build RPM package
-        id: rpm_build
-        uses: naveenrajm7/rpmbuild@master
-        with:
-          spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
+#      - name: build RPM package
+#        id: rpm_build
+#        uses: naveenrajm7/rpmbuild@master
+#        with:
+#          spec_file: "sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec"
 
       - name: Get Tag Name
         id: tag_name
         run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
 
-      - name: Create release 
-        uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.MY_TOKEN }}
-          name: Release v-${{ github.run_number }}
-          artifacts: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,${ steps.rpm_build.outputs.rpm_dir_path }#x86_64/*.rpm"
-          tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
-          body: Release packages
-            - .deb
-            - .rpm
-          draft: false
+#      - name: Create release 
+#        uses: ncipollo/release-action@v1
+#        with:
+#          token: ${{ secrets.MY_TOKEN }}
+#          name: Release v-${{ github.run_number }}
+#          artifacts: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,${ steps.rpm_build.outputs.rpm_dir_path }#x86_64/*.rpm"
+#          tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+#          body: Release packages
+#            - .deb
+#            - .rpm
+#          draft: false
 
 
 
