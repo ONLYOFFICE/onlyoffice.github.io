@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo apt-get update 
           sudo apt-get upgrade
-          sudo apt-get install dh-make rpmbuild
+          sudo apt-get install dh-make rpm
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
           
