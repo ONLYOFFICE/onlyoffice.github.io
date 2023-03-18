@@ -27,9 +27,6 @@ a chess arrangement to your text file if needed.
 
 %install
 mkdir -p %{buildroot}%{dest_dir}/
-pwd
-ls -la 
-ls -la /github/workspace
 cp -r %{source_dir}/* %{buildroot}%{dest_dir}/
 
 %changelog
