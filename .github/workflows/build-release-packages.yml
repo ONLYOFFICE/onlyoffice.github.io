@@ -22,15 +22,15 @@ jobs:
       contents: write
     
     steps:
-      #- name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
-       # uses: actions/checkout@v2
+      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
+        uses: actions/checkout@v2
         
-      #- name: INSTALL required tools & BUILD packages
-        #run: |
-          #sudo apt-get install dh-make rpm
-          #cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          #dpkg-buildpackage -b -uc -us -d 
-          #rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
+      - name: INSTALL required tools & BUILD packages
+        run: |
+          sudo apt-get install dh-make rpm
+          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
+          dpkg-buildpackage -b -uc -us -d 
+          rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
       - name: Get Tag Name
         id: tag_name
         run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
