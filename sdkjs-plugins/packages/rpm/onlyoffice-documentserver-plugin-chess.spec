@@ -21,7 +21,7 @@ a chess arrangement to your text file if needed.
 %{dest_dir}/*
 
 %prep
-# nothing to do here - no source
+# nothing to do here
 
 %build
 # noting to do
