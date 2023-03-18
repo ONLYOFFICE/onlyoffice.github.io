@@ -9,7 +9,7 @@ on:
 
 env:
   REPOS_NAME: ${{ github.event.repository.name }}
-  # GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
 
 jobs:
 
@@ -26,14 +26,13 @@ jobs:
         
       - name: INSTALL required tools & BUILD .deb package
         run: |
-          # sudo apt-get update 
           sudo apt-get install dh-make rpm
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          # dpkg-buildpackage -b -uc -us -d 
+          dpkg-buildpackage -b -uc -us -d 
           rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
-          ls -la
+          cd ~
           pwd
-          ls -la ~/rpmbuild/RPMS/x86_64
+         
           
           
 #      - name: build RPM package
@@ -46,17 +45,17 @@ jobs:
         id: tag_name
         run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
 
-#      - name: Create release 
-#        uses: ncipollo/release-action@v1
-#        with:
-#          token: ${{ secrets.MY_TOKEN }}
-#          name: Release v-${{ github.run_number }}
-#          artifacts: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,${ steps.rpm_build.outputs.rpm_dir_path }#x86_64/*.rpm"
-#          tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
-#          body: Release packages
-#            - .deb
-#            - .rpm
-#          draft: false
+      - name: Create release 
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.MY_TOKEN }}
+          name: Release v-${{ github.run_number }}
+          artifacts: "/home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,~/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm"
+          tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          body: Release packages
+            - .deb
+            - .rpm
+          draft: false
 
 
 
