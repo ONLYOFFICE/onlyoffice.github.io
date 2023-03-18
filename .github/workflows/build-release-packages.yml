@@ -31,10 +31,6 @@ jobs:
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           # dpkg-buildpackage -b -uc -us -d 
           rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
-          cd ~
-          ls -la
-          ls -la home/runner/
-          pwd
           
       - name: Get Tag Name
         id: tag_name
