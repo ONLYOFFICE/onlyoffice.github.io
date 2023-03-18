@@ -35,17 +35,27 @@ jobs:
         id: tag_name
         run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
 
-      - name: Create release 
-        uses: ncipollo/release-action@v1
+      - name: Release package
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          name: Release v-${{ github.run_number }}
-          artifacts: "~/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,~/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm"
-          tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
-          body: Release packages
-            - .deb
-            - .rpm
-          draft: false
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          title: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          prerelease: false
+          files: "~/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,~/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm"
+
+
+#      - name: Create release 
+#        uses: ncipollo/release-action@v1
+#        with:
+#         token: "${{ secrets.GITHUB_TOKEN }}"
+#          name: Release v-${{ github.run_number }}
+#          artifacts: "~/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb,~/rpmbuild/RPMS/x86_64/onlyoffice-documentserver-plugin-chess-1-2.x86_64.rpm"
+#          tag: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+#          body: Release packages
+#            - .deb
+#           - .rpm
+#         draft: false
 
        
           
