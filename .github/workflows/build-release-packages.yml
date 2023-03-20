@@ -44,6 +44,7 @@ jobs:
       # - name: Get Tag Name
       #  id: tag_name
       #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
+      # needs: [ build_deb,build_rpm ]
 
   build_rpm:
     name: Build .rpm package
