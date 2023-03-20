@@ -29,9 +29,9 @@ jobs:
           dpkg-buildpackage -b -uc -us -d 
           rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
           
-      - name: Get Tag Name
-        id: tag_name
-        run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
+      # - name: Get Tag Name
+      #  id: tag_name
+      #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
 
       - name: Create release 
         uses: softprops/action-gh-release@v1
@@ -41,7 +41,7 @@ jobs:
           files: |
             /home/runner/rpmbuild/RPMS/noarch/*.rpm
             /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
-          tag_name: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
+          tag_name: "${{ github.event.release.tag_name }}"
           body: |
             Release plugin packages for ONLYOFFICE Document Server:           
             - .deb
