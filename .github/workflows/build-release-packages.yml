@@ -40,7 +40,7 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: Release v-${{ github.run_number }}
           files: |
-            /home/runner/rpmbuild/RPMS/noarch/onlyoffice-documentserver-plugin-chess-1-2.noarch.rpm
+            /home/runner/rpmbuild/RPMS/noarch/*.rpm
             /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
           tag_name: "${{ steps.tag_name.outputs.SOURCE_TAG }}"
           body: |
