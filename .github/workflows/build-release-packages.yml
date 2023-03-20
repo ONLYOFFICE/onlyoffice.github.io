@@ -12,8 +12,41 @@ env:
 
 jobs:
 
-  build_release:
-    name: Build & Release packages
+  build_deb:
+    name: Build .deb package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
+        uses: actions/checkout@v2
+        
+      - name: INSTALL tools & BUILD package DEB
+        run: |
+          sudo apt-get install dh-make
+          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
+          dpkg-buildpackage -b -uc -us -d 
+
+      - name: Create release 
+        uses: softprops/action-gh-release@v1
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: Release v-${{ github.run_number }}
+          files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
+          tag_name: "${{ github.event.release.tag_name }}"
+          body: |
+            Release plugin packages for ONLYOFFICE Document Server:           
+            - .deb
+            - .rpm
+          draft: false
+          
+      # - name: Get Tag Name
+      #  id: tag_name
+      #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
+
+  build_rpm:
+    name: Build .rpm package
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,25 +55,17 @@ jobs:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
         uses: actions/checkout@v2
         
-      - name: INSTALL required tools & BUILD packages
+      - name: INSTALL tools & BUILD package RPM
         run: |
-          sudo apt-get install dh-make rpm
-          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          dpkg-buildpackage -b -uc -us -d 
-          rpmbuild -bb ../../../packages/rpm/onlyoffice-documentserver-plugin-chess.spec
-          
-      # - name: Get Tag Name
-      #  id: tag_name
-      #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
-
+          sudo apt-get install rpm
+          rpmbuild -bb sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec
+  
       - name: Create release 
         uses: softprops/action-gh-release@v1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: Release v-${{ github.run_number }}
-          files: |
-            /home/runner/rpmbuild/RPMS/noarch/*.rpm
-            /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
+          files: /home/runner/rpmbuild/RPMS/noarch/*.rpm
           tag_name: "${{ github.event.release.tag_name }}"
           body: |
             Release plugin packages for ONLYOFFICE Document Server:           
