@@ -19,8 +19,13 @@ jobs:
       - name: INSTALL tools & BUILD package DEB
         run: |
           sudo apt-get install dh-make
-          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-          dpkg-buildpackage -b -uc -us -d 
+          cd sdkjs-plugins/packages/deb/
+          mkdir -p onlyoffice-documentserver-plugin-chess/debian
+          cp onlyoffice-documentserver-plugin-chess* onlyoffice-documentserver-plugin-chess/debian
+          cp copyright onlyoffice-documentserver-plugin-chess/debian
+          pwd 
+          ls -la onlyoffice-documentserver-plugin-chess/debian
+          # dpkg-buildpackage -b -uc -us -d 
 
       - name: Create release 
         uses: softprops/action-gh-release@v1
