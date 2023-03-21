@@ -24,7 +24,7 @@ jobs:
         
       - name: INSTALL tools & BUILD package DEB
         run: |
-          sudo apt-get install dh-make
+          # sudo apt-get install dh-make
           cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
           dpkg-buildpackage -b -uc -us -d 
 
