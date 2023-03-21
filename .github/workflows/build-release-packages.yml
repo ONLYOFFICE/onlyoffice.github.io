@@ -42,15 +42,30 @@ jobs:
           mkdir -p onlyoffice-documentserver-plugin-chess/debian
           cp onlyoffice-documentserver-plugin-chess.* onlyoffice-documentserver-plugin-chess/debian
           cp copyright onlyoffice-documentserver-plugin-chess/debian
+          
           pwd 
-          ls -la onlyoffice-documentserver-plugin-chess/debian
-          cd onlyoffice-documentserver-plugin-chess/debian
+          ls -la
+          
+          cd ./onlyoffice-documentserver-plugin-chess/debian
+          
+          pwd
+          ls -la
+          
+          mv onlyoffice-documentserver-plugin-chess.changelog changelog
+          mv onlyoffice-documentserver-plugin-chess.control control
+          mv onlyoffice-documentserver-plugin-chess.install install
+          mv onlyoffice-documentserver-plugin-chess.rules rules 
+
+          ls -la 
+          cd ..
+          pwd 
+          
           dpkg-buildpackage -b -uc -us -d 
 
       - name: Upload assets DEB
         uses: softprops/action-gh-release@v1
         with:
-          files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess/*.deb
+          files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/*.deb
           
 
   build_rpm:
