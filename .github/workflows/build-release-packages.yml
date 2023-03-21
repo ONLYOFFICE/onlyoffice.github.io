@@ -50,7 +50,7 @@ jobs:
           mv onlyoffice-documentserver-plugin-chess.install install
           mv onlyoffice-documentserver-plugin-chess.rules rules 
           cd ..        
-          dpkg-buildpackage -b -uc -us -d 
+          dpkg-buildpackage -b -uc -us -d -j4
         
       - name: Upload assets DEB
         uses: softprops/action-gh-release@v1
