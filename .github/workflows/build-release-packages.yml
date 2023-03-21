@@ -63,7 +63,7 @@ jobs:
       contents: write
     strategy:
       matrix:
-        package: ["onlyoffice-documentserver-plugin-chess"]    
+        package: ["onlyoffice-documentserver-plugin-chess", "package-name-only"]    
     steps:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
         uses: actions/checkout@v2
