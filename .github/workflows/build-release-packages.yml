@@ -12,43 +12,44 @@ env:
 
 jobs:
 
-#  build_deb:
-#    name: Build .deb package
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: write
-#      
-#    steps:
-#      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
-#        uses: actions/checkout@v2
-#        
-#      - name: INSTALL tools & BUILD package DEB
-#        run: |
-#          sudo apt-get install dh-make
-#         cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
-#          dpkg-buildpackage -b -uc -us -d 
-#
-#      - name: Create release 
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          token: "${{ secrets.GITHUB_TOKEN }}"
-#          name: Release v-${{ github.run_number }}
-#         files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
-#         tag_name: "${{ github.event.release.tag_name }}"
-#          body: |
-#            Release plugin packages for ONLYOFFICE Document Server:           
-#            - .deb
-#            - .rpm
-#          draft: false
+  build_deb:
+    name: Build .deb package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
+        uses: actions/checkout@v2
+        
+      - name: INSTALL tools & BUILD package DEB
+        run: |
+          sudo apt-get install dh-make
+          cd sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess
+          dpkg-buildpackage -b -uc -us -d 
+
+      - name: Create release 
+        uses: softprops/action-gh-release@v1
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: Release v-${{ github.run_number }}
+          files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/*.deb
+          tag_name: "${{ github.event.release.tag_name }}"
+          body: |
+            Release plugin packages for ONLYOFFICE Document Server:           
+            - .deb
+            - .rpm
+          draft: false
           
       # - name: Get Tag Name
       #  id: tag_name
       #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
       # needs: [ build_deb,build_rpm ]
+      # stratagy matrix 
 
   build_rpm:
     name: Build .rpm package
-    runs-on: centos-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     
@@ -58,7 +59,7 @@ jobs:
         
       - name: INSTALL tools & BUILD package RPM
         run: |
-          # sudo apt-get install rpm
+          sudo apt-get install rpm
           rpmbuild -bb sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec
   
       - name: Create release 
