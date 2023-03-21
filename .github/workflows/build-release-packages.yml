@@ -7,7 +7,7 @@ on:
 
 env:
   REPOS_NAME: ${{ github.event.repository.name }}
-  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.TOKEN_for_release }}
 
 
 jobs:
