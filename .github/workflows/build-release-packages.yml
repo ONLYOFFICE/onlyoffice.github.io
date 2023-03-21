@@ -42,24 +42,12 @@ jobs:
           mkdir -p onlyoffice-documentserver-plugin-chess/debian
           cp onlyoffice-documentserver-plugin-chess.* onlyoffice-documentserver-plugin-chess/debian
           cp copyright onlyoffice-documentserver-plugin-chess/debian
-          
-          pwd 
-          ls -la
-          
           cd ./onlyoffice-documentserver-plugin-chess/debian
-          
-          pwd
-          ls -la
-          
-          mv onlyoffice-documentserver-plugin-chess.changelog changelog
+          mv onlyoffice-documentserver-plugin-chess.changelog changelog 
           mv onlyoffice-documentserver-plugin-chess.control control
           mv onlyoffice-documentserver-plugin-chess.install install
           mv onlyoffice-documentserver-plugin-chess.rules rules 
-
-          ls -la 
-          cd ..
-          pwd 
-          
+          cd ..        
           dpkg-buildpackage -b -uc -us -d 
 
       - name: Upload assets DEB
