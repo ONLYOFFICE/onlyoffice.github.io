@@ -63,7 +63,7 @@ jobs:
       contents: write
     strategy:
       matrix:
-        package: ["onlyoffice-documentserver-plugin-chess", "package-name-only"]    
+        plug_name: ["-chess"]    
     steps:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
         uses: actions/checkout@v2
@@ -71,12 +71,12 @@ jobs:
       - name: INSTALL tools & BUILD package RPM
         run: |
           sudo apt-get install rpm
-          rpmbuild -bb sdkjs-plugins/packages/rpm/${{ matrix.package }}.spec
+          rpmbuild -bb sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin${{ matrix.plug_name }}.spec
   
       - name: Upload assets RPM 
         uses: softprops/action-gh-release@v1
         with:
-          files: /home/runner/rpmbuild/RPMS/noarch/${{ matrix.package }}*.rpm
+          files: /home/runner/rpmbuild/RPMS/noarch/onlyoffice-documentserver-plugin${{ matrix.plug_name }}*.rpm
 
 
 
