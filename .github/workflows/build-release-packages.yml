@@ -47,18 +47,11 @@ jobs:
           cd onlyoffice-documentserver-plugin-chess/debian
           dpkg-buildpackage -b -uc -us -d 
 
-      - name: Create release 
+      - name: Upload assets DEB
         uses: softprops/action-gh-release@v1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          name: Release v-${{ github.run_number }}
           files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess/*.deb
-          tag_name: "${{ github.event.release.tag_name }}"
-          body: |
-            Release plugin packages for ONLYOFFICE Document Server:           
-            - .deb
-            - .rpm
-          draft: false
           
 
   build_rpm:
@@ -76,13 +69,11 @@ jobs:
           sudo apt-get install rpm
           rpmbuild -bb sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec
   
-      - name: Create release 
+      - name: Upload assets RPM 
         uses: softprops/action-gh-release@v1
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          #name: Release v-${{ github.run_number }}
+          #token: "${{ secrets.GITHUB_TOKEN }}"
           files: /home/runner/rpmbuild/RPMS/noarch/*.rpm
-          #tag_name: "${{ github.event.release.tag_name }}"
 
 
 
