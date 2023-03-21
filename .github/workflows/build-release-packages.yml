@@ -35,9 +35,11 @@ jobs:
       - name: Get files from repository. Path /home/runner/work/onlyoffice.github.io/onlyoffice.github.io
         uses: actions/checkout@v2
         
-      - name: INSTALL tools & BUILD package DEB
+      - name: INSTALL tools
+        run: sudo apt-get install dh-make
+        
+      - name: BUILD package DEB
         run: |
-          sudo apt-get install dh-make
           cd sdkjs-plugins/packages/deb/
           mkdir -p onlyoffice-documentserver-plugin-chess/debian
           cp onlyoffice-documentserver-plugin-chess.* onlyoffice-documentserver-plugin-chess/debian
@@ -49,7 +51,7 @@ jobs:
           mv onlyoffice-documentserver-plugin-chess.rules rules 
           cd ..        
           dpkg-buildpackage -b -uc -us -d 
-
+        
       - name: Upload assets DEB
         uses: softprops/action-gh-release@v1
         with:
