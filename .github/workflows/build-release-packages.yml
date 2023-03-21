@@ -48,7 +48,7 @@ jobs:
 
   build_rpm:
     name: Build .rpm package
-    runs-on: ubuntu-latest
+    runs-on: centos-latest
     permissions:
       contents: write
     
@@ -58,7 +58,7 @@ jobs:
         
       - name: INSTALL tools & BUILD package RPM
         run: |
-          sudo apt-get install rpm
+          # sudo apt-get install rpm
           rpmbuild -bb sdkjs-plugins/packages/rpm/onlyoffice-documentserver-plugin-chess.spec
   
       - name: Create release 
