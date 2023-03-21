@@ -9,7 +9,7 @@ Rules-Requires-Root: no
 
 Package: onlyoffice-documentserver-plugin-chess
 Architecture: all
-Depends: onlyoffice-documentserver, ${shlibs:Depends}, ${misc:Depends}
+Depends: onlyoffice-documentserver, ${misc:Depends}
 Description: ONLYOFFICE Documentserver chess plugin
  ONLYOFFICE Documentserver Chess plugin allows you to easily add
  a chess arrangement to your text file if needed.
