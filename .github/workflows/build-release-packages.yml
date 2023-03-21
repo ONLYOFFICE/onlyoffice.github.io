@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: INSTALL tools
-        run: sudo apt-get install dh-make
+        run: sudo apt install dh-make
         
       - name: BUILD package DEB
         run: |
@@ -50,7 +50,7 @@ jobs:
           mv onlyoffice-documentserver-plugin-chess.install install
           mv onlyoffice-documentserver-plugin-chess.rules rules 
           cd ..        
-          dpkg-buildpackage -b -uc -us -d -j4 --no-act
+          dpkg-buildpackage -b -uc -us -d -j4
         
       - name: Upload assets DEB
         uses: softprops/action-gh-release@v1
