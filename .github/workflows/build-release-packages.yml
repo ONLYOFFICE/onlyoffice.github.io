@@ -5,7 +5,7 @@ on:
       - '*'
 
 
-env:
+#env:
 #  REPOS_NAME: ${{ github.event.repository.name }}
 # GITHUB_TOKEN: ${{ secrets.TOKEN_for_release }}
 
