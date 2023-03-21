@@ -4,12 +4,6 @@ on:
     tags: 
       - '*'
 
-
-#env:
-#  REPOS_NAME: ${{ github.event.repository.name }}
-# GITHUB_TOKEN: ${{ secrets.TOKEN_for_release }}
-
-
 jobs:
 
   build_deb:
@@ -41,11 +35,6 @@ jobs:
             - .rpm
           draft: false
           
-      # - name: Get Tag Name
-      #  id: tag_name
-      #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
-      # needs: [ build_deb,build_rpm ]
-      # stratagy matrix 
 
   build_rpm:
     name: Build .rpm package
@@ -74,3 +63,16 @@ jobs:
             - .deb
             - .rpm
           draft: false
+
+
+
+
+#env:
+#  REPOS_NAME: ${{ github.event.repository.name }}
+# GITHUB_TOKEN: ${{ secrets.TOKEN_for_release }}
+
+      # - name: Get Tag Name
+      #  id: tag_name
+      #  run: echo SOURCE_TAG=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
+      # needs: [ build_deb,build_rpm ]
+      # stratagy matrix 
