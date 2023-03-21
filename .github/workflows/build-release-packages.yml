@@ -17,7 +17,6 @@ jobs:
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: Release v-${{ github.run_number }}
-          # files: /home/runner/work/onlyoffice.github.io/onlyoffice.github.io/sdkjs-plugins/packages/deb/onlyoffice-documentserver-plugin-chess/*.deb
           tag_name: "${{ github.event.release.tag_name }}"
           body: |
             Release plugin packages for ONLYOFFICE Document Server:           
@@ -81,14 +80,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          name: Release v-${{ github.run_number }}
+          #name: Release v-${{ github.run_number }}
           files: /home/runner/rpmbuild/RPMS/noarch/*.rpm
-          tag_name: "${{ github.event.release.tag_name }}"
-          #body: |
-            #Release plugin packages for ONLYOFFICE Document Server:           
-            #- .deb
-            #- .rpm
-          #draft: false
+          #tag_name: "${{ github.event.release.tag_name }}"
 
 
 
