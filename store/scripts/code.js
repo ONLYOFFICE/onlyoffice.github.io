@@ -21,7 +21,7 @@ let current = {index: 0, screenshots: [], url: ''};                  // selected
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
-let updateCount = 0;
+let updateCount = 0;                                                 // counter for plugins in updating process
 let allPlugins;                                                      // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -29,6 +29,7 @@ const elements = {};                                                 // all elem
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
+let editorVersion = null;                                            // edior current version
 let isPluginLoading = false;                                         // flag plugins loading
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
@@ -60,6 +61,7 @@ const languages = [                                                  // list of 
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
+let versionWarning = "This plugin will only work in a newer version of the editor.";
 const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("edge") > -1);
@@ -91,6 +93,9 @@ window.Asc = {
 		}
 	}
 };
+
+const pos = location.href.indexOf('store/index.html');
+const ioUrl = location.href.substring(0, pos);
 
 // get translation file
 getTranslation();
@@ -134,7 +139,6 @@ window.onload = function() {
 	elements.arrowPrev.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log('onclick prev');
 		if (current.index > 0) {
 			// todo maybe show loader
 			current.index--;
@@ -152,7 +156,6 @@ window.onload = function() {
 	elements.arrowNext.onclick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log('onclick next');
 		if (current.index < current.screenshots.length - 1) {
 			// todo maybe show loader
 			current.index++;
@@ -219,19 +222,7 @@ window.addEventListener('message', function(message) {
 				installed.removed = false;
 			}
 
-			let btn = this.document.getElementById(message.guid).lastChild.lastChild;
-			btn.innerHTML = translate['Remove'];
-			btn.classList.remove('btn_install');
-			btn.classList.add('btn_remove');
-			btn.onclick = function(e) {
-				onClickRemove(e.target, e);
-			};
-
-			if (!elements.divSelected.classList.contains('hidden')) {
-				this.document.getElementById('btn_install').classList.add('hidden');
-				this.document.getElementById('btn_remove').classList.remove('hidden');
-			}
-
+			changeAfterInstallOrRemove(true, message.guid);
 			toogleLoader(false);
 			break;
 		case 'Updated':
@@ -252,6 +243,7 @@ window.addEventListener('message', function(message) {
 				this.document.getElementById('btn_update').classList.add('hidden');
 			}
 
+			elements.spanVersion.innerText = plugin.version;
 			let pluginDiv = this.document.getElementById(message.guid);
 			if (pluginDiv)
 				pluginDiv.lastChild.firstChild.remove();
@@ -268,8 +260,10 @@ window.addEventListener('message', function(message) {
 			plugin = findPlugin(true, message.guid);
 			installed = findPlugin(false, message.guid);
 			let bUpdate = false;
+			let bHasLocal = false;
 			if (installed) {
-				if (plugin && installed.obj.baseUrl.includes('onlyoffice.github.io')) {
+				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
+				if (plugin && !bHasLocal) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
@@ -279,34 +273,17 @@ window.addEventListener('message', function(message) {
 
 			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
 				if (bUpdate) {
-					showListofPlugins(false);
+					catFiltred = installedPlugins;
+					let searchVal = elements.inpSearch.value.trim();
+					if (searchVal !== '')
+						makeSearch(searchVal.toLowerCase());
+					else
+						showListofPlugins(false);
 				} else {
-					let btn = this.document.getElementById(message.guid).lastChild.lastChild;
-					btn.innerHTML = translate['Install'];
-					btn.classList.add('btn_install');
-					btn.classList.remove('btn_remove');
-					btn.onclick = function(e) {
-						onClickInstall(e.target, e);
-					};
+					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
 				}
 			} else {
-				let btn = this.document.getElementById(message.guid).lastChild.lastChild;
-				btn.innerHTML = translate['Install'];
-				btn.classList.add('btn_install');
-				btn.classList.remove('btn_remove');
-				btn.onclick = function(e) {
-					onClickInstall(e.target, e);
-				};
-				
-				if (btn.parentNode.childElementCount > 1) {
-					btn.parentNode.firstChild.remove();
-				}
-			}
-
-			if (!elements.divSelected.classList.contains('hidden')) {
-				this.document.getElementById('btn_remove').classList.add('hidden');
-				this.document.getElementById('btn_install').classList.remove('hidden');
-				this.document.getElementById('btn_update').classList.add('hidden');
+				changeAfterInstallOrRemove(false, message.guid, bHasLocal);				
 			}
 
 			toogleLoader(false);
@@ -328,12 +305,14 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
 				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
+				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
 			} else {
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 				rule += '.div_offered{color: rgba(255,255,255,0.8); !important;}\n';
+				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 			}
 
 			let styleTheme = document.createElement('style');
@@ -348,6 +327,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
+			editorVersion = ( message.version && message.version.includes('.') ? Number( message.version.split('.').join('') ) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -451,6 +431,8 @@ function initElemnts() {
 	elements.divGitLink = document.getElementById('div_github_link');
 	elements.spanVersion = document.getElementById('span_ver');
 	elements.divVersion = document.getElementById('div_version');
+	elements.spanMinVersion = document.getElementById('span_min_ver');
+	elements.divMinVersion = document.getElementById('div_min_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
 	elements.divArrow = document.getElementById('div_arrows');
@@ -479,11 +461,9 @@ function getAllPluginsData() {
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
-	let pos = location.href.indexOf('store/index.html');
-	let ioUrl = location.href.substring(0, pos) + 'sdkjs-plugins/content/';
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? pluginUrl = ioUrl + pluginUrl + '/' : pluginUrl;
+		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? ioUrl + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
@@ -557,9 +537,7 @@ function showListofPlugins(bAll, sortedArr) {
 };
 
 function createPluginDiv(plugin, bInstalled) {
-	// console.log('createPluginDiv');
 	// this function creates div (preview) for plugins
-
 	let div = document.createElement('div');
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
@@ -580,25 +558,38 @@ function createPluginDiv(plugin, bInstalled) {
 	if (bInstalled) {
 		plugin = findPlugin(true, plugin.guid);
 	}
-	let bHasUpdate = false;
-	if (installed && plugin) {
-		const installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : 1);
-		const lastV = (plugin.version ? plugin.version.split('.').join('') : installedV);
-		if (lastV > installedV) {
-			bHasUpdate = true;
-			elements.btnUpdateAll.classList.remove('hidden');
-			plugin.bHasUpdate = true;
-		}
-	}
-		
+
+	let bCheckUpdate = true;
 	if (!plugin) {
 		plugin = installed.obj;
+		bCheckUpdate = false;
+	}
+
+	let bNotAvailable = false;
+	const minV = (plugin.minVersion ? Number( plugin.minVersion.split('.').join('') ) : -1);
+	if (minV > editorVersion) {
+		bCheckUpdate = false;
+		bNotAvailable = true;
+	}
+
+	let bHasUpdate = false;
+	let bRemoved = (installed && !installed.removed);
+	if (bCheckUpdate && installed && plugin) {
+		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
+		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
+		if (lastV > installedV) {
+			bHasUpdate = true;
+			plugin.bHasUpdate = true;
+			if (!bRemoved)
+				elements.btnUpdateAll.classList.remove('hidden');
+		}
 	}
 	
 	let variation = plugin.variations[0];
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
+	let additional = bNotAvailable ? 'disabled title="' + versionWarning + '"'  : '';
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
@@ -608,12 +599,12 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						(bHasUpdate
-							? '<span class="span_update">' + translate["Update"] + '</span>'
+							? '<span class="span_update ' + (bRemoved ? "" : "hidden") + '">' + translate["Update"] + '</span>'
 							: ''
 						)+''+
-						( (installed && !installed.removed)
-							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)">' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn-text-default btn_item btn_install" onclick="onClickInstall(event.target, event)">'  + translate["Install"] + '</button>'
+						( (bRemoved)
+							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)" ' + (bNotAvailable ? "dataDisabled=\"disabled\"" : "") +'>' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + additional + '>'  + translate["Install"] + '</button>'
 						)
 						+
 					'</div>';
@@ -633,7 +624,7 @@ function onClickInstall(target, event) {
 	let installed = findPlugin(false, guid);
 	let message = {
 		type : 'install',
-		url : (installed ? installed.baseUrl : plugin.url),
+		url : (installed ? installed.obj.baseUrl : plugin.url),
 		guid : guid,
 		config : (installed ? installed.obj : plugin)
 	};
@@ -656,7 +647,6 @@ function onClickUpdate(target) {
 	};
 	sendMessage(message);
 };
-
 
 function onClickRemove(target, event) {
 	event.stopImmediatePropagation();
@@ -696,6 +686,7 @@ function onClickItem() {
 	let offered = " Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
+	let pluginDiv = document.getElementById(guid);
 	let divPreview = document.createElement('div');
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
@@ -728,13 +719,7 @@ function onClickItem() {
 		elements.divArrow.classList.add('hidden');
 	}
 
-	let bHasUpdate = false;
-	if (installed && plugin) {
-		let installedV = (installed.obj.version ? installed.obj.version.split('.').join('') : '100');
-		let lastV = (plugin.version ? plugin.version.split('.').join('') : '100');
-		if (lastV > installedV)
-			bHasUpdate = true;
-	}
+	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.classList.contains('hidden'));
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
@@ -742,6 +727,14 @@ function onClickItem() {
 	} else {
 		elements.spanVersion.innerText = '';
 		elements.divVersion.classList.add('hidden');
+	}
+
+	if ( (installed && installed.obj.minVersion) || plugin.minVersion ) {
+		elements.spanMinVersion.innerText = (installed && installed.obj.minVersion ? installed.obj.minVersion : plugin.minVersion);
+		elements.divMinVersion.classList.remove('hidden');
+	} else {
+		elements.spanMinVersion.innerText = '';
+		elements.divMinVersion.classList.add('hidden');
 	}
 
 	if (plugin.languages) {
@@ -782,6 +775,15 @@ function onClickItem() {
 	} else {
 		elements.btnRemove.classList.add('hidden');
 		elements.btnInstall.classList.remove('hidden');
+	}
+
+	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {// || pluginDiv.lastChild.lastChild.hasAttribute('dataDisabled')) {
+		elements.btnInstall.setAttribute('disabled','');
+		elements.btnInstall.setAttribute('title', versionWarning);
+	}
+	else {
+		elements.btnInstall.removeAttribute('disabled');
+		elements.btnInstall.removeAttribute('title');
 	}
 
 	elements.divSelected.classList.remove('hidden');
@@ -995,6 +997,7 @@ function onTranslate() {
 	document.getElementById('span_help_end').innerHTML = translate['with the plugin functionality on our forum.'];
 	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
 	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
+	document.getElementById('span_min_ver_caption').innerHTML = translate['The minimum supported editors version'] + ': ';
 	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
 	document.getElementById('span_categories').innerHTML = translate['Categories'];
 	document.getElementById('opt_all').innerHTML = translate['All'];
@@ -1004,12 +1007,17 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
 	document.getElementById('opt_com').innerHTML = translate['Communication'];
 	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
+	versionWarning = translate[versionWarning];
 	showMarketplace();
 };
 
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
+		// filter installed plugins (delete removed, that are in store)
+		installedPlugins = installedPlugins.filter(function(plugin) {
+			return !( plugin.removed && plugin.obj.baseUrl.includes(ioUrl) );
+		});
 		createSelect();
 		showListofPlugins(true);
 		toogleLoader(false);
@@ -1017,7 +1025,6 @@ function showMarketplace() {
 		// elements.divBody.classList.remove('hidden');
 		elements.divBody.classList.remove('transparent');
 
-		
 		// console.log('showMarketplace: ' + (Date.now() - start));
 		// we are removing the header for now, since the plugin has its own
 		// elements.divHeader.classList.remove('hidden');
@@ -1268,4 +1275,39 @@ function findPlugin(bAll, guid) {
 			? allPlugins.find(function(el){return el.guid === guid})
 			: installedPlugins.find(function(el){return el.guid === guid});
 	return res;
+};
+
+function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
+	let btn = this.document.getElementById(guid).lastChild.lastChild;
+	btn.innerHTML = translate[ ( bInstall ? 'Remove' : 'Install' ) ];
+	btn.classList.add( ( bInstall ? 'btn_remove' : 'btn_install' ) );
+	btn.classList.remove( ( bInstall ? 'btn_install' : 'btn_remove' ) );
+	btn.onclick = function(e) {
+		if (bInstall)
+			onClickRemove(e.target, e);
+		else
+			onClickInstall(e.target, e);
+	};
+	// We need to keep the ability to install the local version that has been removed (maybe we should change the button)
+	if ( !bInstall && btn.hasAttribute('dataDisabled') && !bHasLocal ) {
+		btn.setAttribute('title', versionWarning);
+		btn.setAttribute('disabled', '');
+	}
+
+	let bHasUpdate = (btn.parentNode.childElementCount > 1);
+	if (bHasUpdate) {
+		if (bInstall)
+			btn.parentNode.firstChild.classList.remove('hidden');
+		else
+			btn.parentNode.firstChild.classList.add('hidden');
+	}
+
+	if (!elements.divSelected.classList.contains('hidden')) {
+		this.document.getElementById( ( bInstall ? 'btn_install' : 'btn_remove' ) ).classList.add('hidden');
+		this.document.getElementById( ( bInstall ? 'btn_remove' : 'btn_install' ) ).classList.remove('hidden');
+		if (bInstall && bHasUpdate)
+			this.document.getElementById('btn_update').classList.remove('hidden');
+		else
+			this.document.getElementById('btn_update').classList.add('hidden');
+	}
 };
