@@ -27,5 +27,6 @@
 	"languagetool",
 	"chess",
 	"zoom",
-	"openai"
+	"openai",
+	"speechrecognition"
 ]
