@@ -179,11 +179,14 @@ input[type="text"] {
     overflow-y: visible;
 }
 
-#buttonsWrapper {
-    flex-direction: row-reverse;
+#buttonsWrapper, #insertBibDiv {
+    flex-direction: column;
 }
 
     #buttonsWrapper > .button {
+        margin: 0px 0px 15px 8px;
+    }
+    #insertBibDiv > .button {
         margin: 0px 0px 15px 8px;
     }
 
@@ -194,7 +197,7 @@ input[type="text"] {
 }
 
     #styleWrapper .label {
-        margin-bottom: 15px;
+        /* margin-bottom: 15px; */
     }
 
         #styleWrapper .label:first-of-type {
@@ -202,9 +205,10 @@ input[type="text"] {
             margin-right: 4px;
         }
 
-        #styleWrapper .label:last-of-type {
+        .styleWrapperSecond {
             flex: 4;
             margin-left: 4px;
+            margin-right: 4px;
         }
 
         #styleWrapper .label > span {
@@ -215,6 +219,12 @@ input[type="text"] {
         #styleWrapper .label input {
             width: 100%;
             padding-right: 18px;
+            font-size: 11px;
+        }
+
+		#styleWrapper > button {
+            flex: 1;
+            margin-left: 4px;
         }
 
 .selectHolder {
@@ -259,7 +269,8 @@ input[type="text"] {
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
     background: #ffffff;
     bottom: 22px;
-    max-height: 158px;
+    max-height: 158px !important;
+	min-height: 158px !important;
     overflow-x: hidden;
     overflow-y: auto;
 }

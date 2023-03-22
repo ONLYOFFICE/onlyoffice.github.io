@@ -21,25 +21,41 @@
 	const iframe = document.createElement("iframe");
 	let BFrameReady = false;
 	let BPluginReady = false;
+	let editorVersion = null;
+	let marketplaceURl = null;
+	const OOMarketplaceUrl = 'https://onlyoffice.github.io/store/index.html';
+	try {
+		// for incognito mode
+		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
+	} catch (err) {
+		marketplaceURl = 'https://onlyoffice.github.io/store/index.html';
+	}
 
 	document.addEventListener("DOMContentLoaded", function() {
-		let pageUrl = "https://onlyoffice.github.io/store/index.html";
+		let pageUrl = marketplaceURl;
 		iframe.src = pageUrl + window.location.search;
 		document.body.appendChild(iframe);
 		iframe.onload = function() {
 			BFrameReady = true;
 			if (BPluginReady)
-				postMessage( JSON.stringify( { type: 'PluginReady' } ) );
+				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
 		};
 	});			
 	
 
     window.Asc.plugin.init = function() {
 		// resize window
+		if (marketplaceURl !== OOMarketplaceUrl)
+			document.getElementById('notification').classList.remove('hidden');
+
 		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
-		BPluginReady = true;
-		if (BFrameReady)
-			postMessage( JSON.stringify( { type: 'PluginReady' } ) );
+		window.Asc.plugin.executeMethod("GetVersion", null, function(version) {
+			editorVersion = version;
+			BPluginReady = true;
+			if (BFrameReady)
+				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
+		});
+
     };
 
 	function postMessage(message) {
@@ -97,10 +113,20 @@
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		// theme changed event
+		if ( theme.type.indexOf('light') !== -1 ) {
+			theme['background-toolbar'] = '#fff';
+		}
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let style = document.getElementsByTagName('head')[0].lastChild;
 		if (iframe && iframe.contentWindow)
 			postMessage( JSON.stringify( { type: 'Theme', theme: theme, style : style.innerHTML } ) );
+	};
+
+	window.Asc.plugin.onTranslate = function()
+	{
+		let label = document.getElementById('lb_notification');
+		if (label)
+			label.innerHTML = window.Asc.plugin.tr('This version of "Plugin Manager" is not official.');
 	};
 
 })(window, undefined);

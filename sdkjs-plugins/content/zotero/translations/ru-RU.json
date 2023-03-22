@@ -17,5 +17,11 @@
   "Language": "Язык",
   "Reconfigure": "Перенастроить",
   "Learn more here.": "Подробности здесь.",
-  "Save": "Сохранить"
+  "Save": "Сохранить",
+  "Insert Citation": "Вставить цитату",
+  "Cancel select": "Отменить выделение",
+  "Refresh": "Обновить",
+  "Save as text": "Сохранить как текст",
+  "Please insert some citation into the document." : "Пожалуйста вставьте цитату в документ.",
+  "Synchronize" : "Синхронизировать"
 }

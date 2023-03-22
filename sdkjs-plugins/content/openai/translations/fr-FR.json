@@ -23,6 +23,9 @@
 	"Show advanced settings" : "Afficher les paramètres avancés",
 	"Up to" : "Jusqu'à",
 	"tokens in response." : "jetons en réponse.",
-	"This model can only process maximum of" : "Ce modèle ne peut traiter qu'un maximum de",
-	"tokens in a single request, please reduce your prompt or maximum length." : "jetons dans une seule demande, veuillez réduire la longueur de votre invite ou longueur maximale."
+	"Maximum " : "Maximal ",
+	"tokens are available." : "des jetons sont disponibles.",
+	"Because you are using: " : "Parce que vous utilisez: ",
+	"tokens in your request." : "jetons dans votre demande."
+	
 }
