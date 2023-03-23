@@ -91,8 +91,8 @@
                         if (e && e.preventDefault)
                             e.preventDefault();
                         return false;
-                	};
-                	_body.ondragover = function(e) {
+                    };
+                    _body.ondragover = function(e) {
                         if (e && e.preventDefault)
                             e.preventDefault();
                         if (e && e.dataTransfer)
@@ -103,7 +103,20 @@
 
                 // ie11 not support message from another domain
                 window.Asc.plugin._initInternal = true;
-			
+
+                var _windowSearch = window.location.search;
+                var _pos1 = _windowSearch.indexOf("windowID=");
+                if (_pos1 >= 0)
+                {
+                    _pos1 += 9;
+                    var _pos2 = _windowSearch.indexOf("&", _pos1);
+                    if (_pos2 < 0)
+                        _pos2 = _windowSearch.length;
+
+                    window.Asc.plugin.windowID = _windowSearch.substring(_pos1, _pos2);
+                    obj.windowID = window.Asc.plugin.windowID;
+                }
+
                 window.parent.postMessage(JSON.stringify(obj), "*");
             }
         };
@@ -111,7 +124,7 @@
     };
 
     window.Asc.supportOrigins = {};
-	window.Asc.supportOrigins[window.origin] = true;
+    window.Asc.supportOrigins[window.origin] = true;
 
     function onMessage(event) {
         if (!window.Asc || !window.Asc.plugin)
@@ -138,7 +151,7 @@
 
             if (pluginData.type == "plugin_init") {
                 window.Asc.supportOrigins[event.origin] = true;
-				window.Asc.plugin.ie_channel_check(event);
+                window.Asc.plugin.ie_channel_check(event);
                 eval(pluginData.data);
             }
         }
