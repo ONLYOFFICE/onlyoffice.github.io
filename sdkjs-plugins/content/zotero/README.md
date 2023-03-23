@@ -14,6 +14,14 @@ The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Communi
 
 4. Press `Insert citation`.
 
+5. Press the button `Isert bibliography` to add or refresh a bibliography.
+
+6. Press the button `Refresh` to refresh all citations and a bibliography fields into the document.
+
+7. Press the button `Synchronize` to synchronize data with zotero service and update data into the document.
+
+8. If you want to open this document in other editors, you should convert all fields to text. Press the button `Save as text` for it.
+
 Please note that Zotero works only with user’s personal library associated with the your account. The desired sources must be added to your library in Zotero before you can search and add them to your bibliography via plugin.
 
 ## How to install to server
