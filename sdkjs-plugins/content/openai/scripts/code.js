@@ -40,7 +40,8 @@
 		'text-davinci-002' : true,
 		'text-davinci-001' : true,
 		'davinchi-instruct-beta' : true,
-		'davinchi:2020-05-03' : true
+		'davinchi:2020-05-03' : true,
+		'gpt3.5-turbo' : true
 	};
 
 	window.Asc.plugin.init = function() {
@@ -162,8 +163,15 @@
 				return;
 			};
 			createLoader();
-
-			fetch('https://api.openai.com/v1/completions', {
+			let endpoint
+			if (settings.model == 'gpt-3.5-turbo') {
+				endpoint = 'https://api.openai.com/v1/chat/completions'
+				settings.messages = [{ 'role': 'user', 'content': settings.prompt }];
+				delete settings.prompt
+			} else {
+				endpoint = 'https://api.openai.com/v1/completions'
+			}
+			fetch(endpoint, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -177,8 +185,12 @@
 			.then(function(data) {
 				if (data.error)
 					throw data.error
-
-				let text = data.choices[0].text;
+				let text
+				if (settings.model == 'gpt-3.5-turbo') {
+					text = data.choices[0].message.content
+				} else {
+					text = data.choices[0].text
+				}
 				let textColor = '';
 				if (!text.includes('</')) {
 					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
@@ -307,11 +319,17 @@
 				if (AllowedModels[model.id])
 					arrModels.push( { id: model.id, text: model.id } );
 			};
+			arrModels.push( { id: "gpt-3.5-turbo", text: "gpt-3.5-turbo" } );
 
 			$('#sel_models').select2({
 				data : arrModels
-			}).on('select2:select', function(e) {
-				maxTokens = e.params.data.id.includes('text-davinci-003') ? 4000: 2000;
+			}).on('select2:select', function (e) {
+				let model = e.params.data.id
+				if (model == 'text-davinci-003' || model == 'gpt-3.5-turbo') {
+					maxTokens = 4000;
+				} else {
+					maxTokens = 2000;
+				}
 				checkLen();
 			});
 
