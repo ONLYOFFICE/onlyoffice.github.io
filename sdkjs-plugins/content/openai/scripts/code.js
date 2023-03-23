@@ -40,8 +40,7 @@
 		'text-davinci-002' : true,
 		'text-davinci-001' : true,
 		'davinchi-instruct-beta' : true,
-		'davinchi:2020-05-03' : true,
-		'gpt3.5-turbo' : true
+		'davinchi:2020-05-03' : true
 	};
 
 	window.Asc.plugin.init = function() {
