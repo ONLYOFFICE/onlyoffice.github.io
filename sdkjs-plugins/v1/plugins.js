@@ -160,8 +160,17 @@
     window.Asc.plugin.event_onContextMenuClick = function(id)
     {
         var pluginObj = window.Asc.plugin;
-        if (pluginObj.contextMenuEvents && pluginObj.contextMenuEvents[id])
-            pluginObj.contextMenuEvents[id].call(pluginObj);
+        var itemId = id;
+        var itemData = undefined;
+        var itemPos = itemId.indexOf("_oo_sep_");
+        if (-1 !== itemPos)
+        {
+            itemData = itemId.substring(itemPos + 8);
+            itemId = itemId.substring(0, itemPos);
+        }
+
+        if (pluginObj.contextMenuEvents && pluginObj.contextMenuEvents[itemId])
+            pluginObj.contextMenuEvents[itemId].call(pluginObj, itemData);
     };
 
     window.Asc.plugin.attachEvent = function(id, action)
