@@ -40,16 +40,7 @@ jobs:
         
       - name: BUILD package DEB
         run: |
-          cd sdkjs-plugins/packages/deb/
-          mkdir -p onlyoffice-documentserver-plugin-chess/debian
-          cp onlyoffice-documentserver-plugin-chess.* onlyoffice-documentserver-plugin-chess/debian
-          cp copyright onlyoffice-documentserver-plugin-chess/debian
-          cd ./onlyoffice-documentserver-plugin-chess/debian
-          mv onlyoffice-documentserver-plugin-chess.changelog changelog 
-          mv onlyoffice-documentserver-plugin-chess.control control
-          mv onlyoffice-documentserver-plugin-chess.install install
-          mv onlyoffice-documentserver-plugin-chess.rules rules 
-          cd ..        
+          cd sdkjs-plugins/packages/deb/     
           dpkg-buildpackage -b -uc -us -d -j4
         
       - name: Upload assets DEB
