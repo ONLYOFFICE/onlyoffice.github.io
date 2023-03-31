@@ -25,11 +25,11 @@ html, body {
     margin-top: 8px;
 }
 
-textarea {
+.prompt {
 	height: 240px !important;
 }
 
-textarea::selection {
+.prompt::selection {
 	background: #D8DADC; /* WebKit/Blink Browsers */
 	color: #444444;
 }

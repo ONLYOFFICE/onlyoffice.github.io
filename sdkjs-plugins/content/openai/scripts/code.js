@@ -40,8 +40,12 @@
 		'text-davinci-002' : true,
 		'text-davinci-001' : true,
 		'davinchi-instruct-beta' : true,
-		'davinchi:2020-05-03' : true
+		'davinchi:2020-05-03' : true,
+
+		'gpt-3.5-turbo': true
 	};
+
+	// let arr = [];
 
 	window.Asc.plugin.init = function() {
 		if (isIE) {
@@ -52,7 +56,7 @@
 		} else {
 			bCreateLoader = true;
 		};
-		apiKey = localStorage.getItem('OpenAiApiKey') || null;
+		apiKey = localStorage.getItem('OpenAIApiKey') || null;
 		addSlidersListeners();
 		addTitlelisteners();
 		initElements();
@@ -87,7 +91,7 @@
 				errTimeout = null;
 				clearMainError();
 			}
-			localStorage.removeItem('OpenAiApiKey');
+			localStorage.removeItem('OpenAIApiKey');
 			elements.apiKeyField.value = apiKey;
 			apiKey = '';
 			elements.divContent.classList.add('hidden');
@@ -157,13 +161,19 @@
 
 		elements.btnSubmit.onclick = function() {
 			let settings = getSettings();
-			if (!settings.prompt.length) {
+			if (!settings.prompt.length && !settings.messages.length) {
 				elements.textArea.classList.add('error_border');
 				return;
 			};
 			createLoader();
+			let url = 'https://api.openai.com/v1/completions'
+			if (settings.messages) {
+				url = 'https://api.openai.com/v1/chat/completions'
+				// arr.push(...settings.messages);
+				// settings.messages = arr;
+			}
 
-			fetch('https://api.openai.com/v1/completions', {
+			fetch(url, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -178,7 +188,9 @@
 				if (data.error)
 					throw data.error
 
-				let text = data.choices[0].text;
+				let text = data.choices[0].text || data.choices[0].message.content;
+				// if (data.choices[0].message)
+				// 	arr.push({role: data.choices[0].message.role, content: text});
 				let textColor = '';
 				if (!text.includes('</')) {
 					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
@@ -270,11 +282,11 @@
 	function addTitlelisteners() {
 		let divs = document.querySelectorAll('.div_parametr');
 		divs.forEach(function(div) {
-			div.addEventListener('mouseenter', function handleClick(event) {
+			div.addEventListener('mouseenter', function (event) {
 				event.target.children[0].classList.remove('hidden');
 			});
 
-			div.addEventListener('mouseleave', function handleClick(event) {
+			div.addEventListener('mouseleave', function (event) {
 				event.target.children[0].classList.add('hidden');
 			});
 		});
@@ -311,7 +323,8 @@
 			$('#sel_models').select2({
 				data : arrModels
 			}).on('select2:select', function(e) {
-				maxTokens = e.params.data.id.includes('text-davinci-003') ? 4000: 2000;
+				let model = $('#sel_models').val();
+				maxTokens = (model === 'gpt-3.5-turbo' || model === 'text-davinci-003') ? 4000 : 2000;
 				checkLen();
 			});
 
@@ -321,7 +334,7 @@
 				var newOption = new Option('text-davinci-003', 'text-davinci-003', true, true);
 				$('#sel_models').append(newOption).trigger('change');
 			}
-			localStorage.setItem('OpenAiApiKey', apiKey);
+			localStorage.setItem('OpenAIApiKey', apiKey);
 			elements.divContent.classList.remove('hidden');
 		})
 		.catch(function(error) {
@@ -340,8 +353,12 @@
 	function getSettings() {
 		let obj = {
 			model : $('#sel_models').val(),
-			prompt : elements.textArea.value.trim(),
 		};
+		if (obj.model.includes('turbo')) {
+			obj.messages = [{role: "user", content: elements.textArea.value.trim()}]
+		} else {
+			obj.prompt = elements.textArea.value.trim()
+		}
 		let temp = Number(elements.inpTempSl.value);
 		obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
 		let len = Number(elements.inpLenSl.value);
