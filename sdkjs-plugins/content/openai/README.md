@@ -4,7 +4,7 @@ The ChatGPT API can be applied to virtually any task that involves understanding
 
 The plugin uses the [OpenAI](https://openai.com/) engine. 
 
-It is called "ChatGPT " in the interface and isn't installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
+It is called "ChatGPT" in the interface and isn't installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 
 ## How to use
 
