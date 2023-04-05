@@ -17,7 +17,7 @@ def pack_plugins():
     for plugin_name in os.listdir(content_dir):
         
         plugin_name_path = content_dir + plugin_name
-        plugin_release_path = plugin_name_path + "/release/"
+        plugin_release_path = plugin_name_path + "/pack/"
         plugin_release_src_path = plugin_release_path + plugin_name
         
         if base.is_exist(plugin_release_path):
