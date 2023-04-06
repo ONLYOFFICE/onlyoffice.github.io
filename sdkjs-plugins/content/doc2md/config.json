@@ -16,7 +16,8 @@
                 "ru": "Преобразуйте отформатированные документы в Markdown или HTML.",
                 "fr": "Convertissez votre document mis en forme en Markdown ou HTML.",
                 "es": "Convierta sus documentos formateados a Markdown o HTML.",
-                "de": "Konvertieren Sie formatierte Dokumente in Markdown oder HTML."
+                "de": "Konvertieren Sie formatierte Dokumente in Markdown oder HTML.",
+                "cs": "Převeďte své formátované dokumenty na Markdown nebo HTML."
             },
             "url": "index.html",
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
@@ -82,6 +83,67 @@
                 },
                 "categories": ["specAbilities", "work"]
             }
+        },
+        {
+            "description": "Add in context menu",
+            "descriptionLocale": {
+                "ru": "Добавить в контекстное меню",
+                "fr": "Ajouter dans le menu contextuel",
+                "es": "Agregar en el menú contextual",
+                "de": "Im Kontextmenü hinzufügen",
+                "cs": "Přidat do kontextového menu"
+            },
+            "url": "2var.html",
+            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "isViewer": true,
+            "EditorsSupport": [ "word" ],
+            "isVisual": false,
+            "isModal": false,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "isUpdateOleOnResize": false,
+            "initOnSelectionChanged": false,
+            "events": ["onContextMenuShow", "onContextMenuClick"]
         },
         {
             "description": "About",
