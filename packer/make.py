@@ -16,17 +16,17 @@ def pack_plugins():
 
     for plugin_name in os.listdir(content_dir):
         
-        plugin_name_path = content_dir + plugin_name
-        plugin_pack_path = plugin_name_path + "/pack/"
-        plugin_release_src_path = plugin_pack_path + plugin_name
+        plugin_path = content_dir + plugin_name
+        plugin_deploy_path = plugin_path + "/deploy/"
+        plugin_deploy_src_path = plugin_deploy_path + plugin_name
 
-        if base.is_exist(plugin_pack_path):
-            base.delete_dir(plugin_pack_path)
+        if base.is_exist(plugin_deploy_path):
+            base.delete_dir(plugin_deploy_path)
 
-        base.copy_dir(plugin_name_path, plugin_release_src_path)
-        base.archive_folder(plugin_release_src_path + "/*", plugin_pack_path + plugin_name + ".zip")
-        base.move_file(plugin_pack_path + plugin_name + ".zip", plugin_pack_path + plugin_name + ".plugin")
-        base.delete_dir(plugin_release_src_path)        
+        base.copy_dir(plugin_path, plugin_deploy_src_path)
+        base.archive_folder(plugin_deploy_src_path + "/*", plugin_deploy_path + plugin_name + ".zip")
+        base.move_file(plugin_deploy_path + plugin_name + ".zip", plugin_deploy_path + plugin_name + ".plugin")
+        base.delete_dir(plugin_deploy_src_path)        
       
     return
 
