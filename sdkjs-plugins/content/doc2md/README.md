@@ -8,7 +8,7 @@ It is is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentSer
 
 ## How to use
 
-1. Find the plugin on the Plugins tab and click it.
+1. Find the plugin on the Plugins tab and click it or click add to context menu.
 2. Use the Markdown or HTML buttons in the sidebar window to convert your document to either Markdown or HTML.
 3. If you select part of the document, Docs to Markdown will convert only the selection. Otherwise, it will convert the entire document.
 
