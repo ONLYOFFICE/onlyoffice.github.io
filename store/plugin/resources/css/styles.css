@@ -20,3 +20,8 @@ html, body {
 .hidden {
 	display: none !important;
 }
+.lab{
+	border: none !important;
+	background-color: transparent !important;
+	font-size: 15px !important;
+}

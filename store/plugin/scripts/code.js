@@ -17,6 +17,11 @@
  */
 (function(window, undefined) {
 
+	let isOnline = null;
+	let isInit = false;
+	let interval = null;
+	checkInternet();
+
 	// create iframe
 	const iframe = document.createElement("iframe");
 	let BFrameReady = false;
@@ -28,27 +33,28 @@
 		// for incognito mode
 		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
 	} catch (err) {
-		marketplaceURl = 'https://onlyoffice.github.io/store/index.html';
+		marketplaceURl = OOMarketplaceUrl;
 	}
-
-	document.addEventListener("DOMContentLoaded", function() {
-		let pageUrl = marketplaceURl;
-		iframe.src = pageUrl + window.location.search;
-		document.body.appendChild(iframe);
-		iframe.onload = function() {
-			BFrameReady = true;
-			if (BPluginReady)
-				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
-		};
-	});			
 	
-
     window.Asc.plugin.init = function() {
+		isInit = true;
+		if (typeof isOnline === 'boolean') {
+			initPlugin();
+		}
+    };
+
+	function postMessage(message) {
+		iframe.contentWindow.postMessage(message, "*");
+	};
+
+	function initPlugin() {
+		document.body.appendChild(iframe);
 		// resize window
 		if (marketplaceURl !== OOMarketplaceUrl)
 			document.getElementById('notification').classList.remove('hidden');
 
 		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
+		// todo возможно это надо перенести в проверкку на сеть
 		window.Asc.plugin.executeMethod("GetVersion", null, function(version) {
 			editorVersion = version;
 			BPluginReady = true;
@@ -56,10 +62,32 @@
 				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
 		});
 
-    };
-
-	function postMessage(message) {
-		iframe.contentWindow.postMessage(message, "*");
+		let divNoInt = document.getElementById('div_noIternet');
+		// send message that plugin is ready
+		if (isOnline) {
+			let style = document.getElementsByTagName('head')[0].lastChild;
+			let pageUrl = marketplaceURl;
+			iframe.src = pageUrl + window.location.search;
+			iframe.onload = function() {
+				BFrameReady = true;
+				if (BPluginReady) {
+					if (!divNoInt.classList.contains('hidden')) {
+						divNoInt.classList.add('hidden');
+						clearInterval(interval);
+						interval = null;
+					}
+					postMessage( JSON.stringify( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } ) );
+					postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
+				}
+			};
+		} else {
+			divNoInt.classList.remove('hidden');
+			if (!interval) {
+				interval = setInterval(function() {
+					checkInternet();
+				}, 5000);
+			}
+		}
 	};
 
     window.Asc.plugin.button = function(id) {
@@ -122,11 +150,44 @@
 			postMessage( JSON.stringify( { type: 'Theme', theme: theme, style : style.innerHTML } ) );
 	};
 
-	window.Asc.plugin.onTranslate = function()
-	{
+	window.Asc.plugin.onTranslate = function() {
 		let label = document.getElementById('lb_notification');
 		if (label)
-			label.innerHTML = window.Asc.plugin.tr('This version of "Plugin Manager" is not official.');
+			label.innerHTML = window.Asc.plugin.tr(label.innerHTML);
+		
+		label = document.getElementById('lb_noInternet');
+		if (label)
+			label.innerHTML = window.Asc.plugin.tr(label.innerHTML);
+	};
+
+	function checkInternet() {
+		try {
+			let xhr = new XMLHttpRequest();
+			let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
+			xhr.open('GET', url, true);
+			
+			xhr.onload = function () {
+				if (this.readyState == 4) {
+					if (this.status >= 200 && this.status < 300) {
+						isOnline = true;
+						if (isInit)
+							initPlugin();
+					}
+				}
+			};
+
+			xhr.onerror = function (err) {
+				isOnline = false;
+				if (isInit)
+					initPlugin();
+			};
+
+			xhr.send(null);
+		} catch (error) {
+			isOnline = false;
+			if (isInit)
+				initPlugin();
+		}
 	};
 
 })(window, undefined);
