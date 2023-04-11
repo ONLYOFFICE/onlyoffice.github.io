@@ -1,4 +1,9 @@
 {
 	"This version of \"Plugin Manager\" is not official." : "Esta versión de \"Plugin Manager\" no es oficial.",
-	"No Internet Connection.": "Sin Conexión a Internet."
+	"No Internet Connection.": "Sin Conexión a Internet.",
+	"Warning" : "Advertencia",
+	"Yes" : "Sí",
+	"No" : "No",
+	"Do you want to completely remove this plugin?" : "¿Quieres eliminar por completo este plugin?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Si elige \"No\", podrá restaurar este complemento más adelante en el Administrador de Complementos."
 }

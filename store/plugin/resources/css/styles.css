@@ -25,3 +25,22 @@ html, body {
 	background-color: transparent !important;
 	font-size: 15px !important;
 }
+.img_warning {
+	background: url(../img/warnings_s.svg) no-repeat center;
+	width: 40px;
+	height: 40px;
+}
+.modal {
+	margin: 10px;
+}
+.warning {
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+}
+.question {
+	margin-left: 5px;
+}
+.info {
+	margin-top: 10px;
+}
