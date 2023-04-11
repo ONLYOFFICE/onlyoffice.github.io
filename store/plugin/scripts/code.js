@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *	 http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,9 +21,10 @@
 	let isInit = false;
 	let interval = null;
 	checkInternet();
-
 	// create iframe
 	const iframe = document.createElement("iframe");
+	let modalWindow = null;
+	let removeGuid = null;
 	let BFrameReady = false;
 	let BPluginReady = false;
 	let editorVersion = null;
@@ -36,15 +37,15 @@
 		marketplaceURl = OOMarketplaceUrl;
 	}
 	
-    window.Asc.plugin.init = function() {
+	window.Asc.plugin.init = function() {
 		isInit = true;
 		if (typeof isOnline === 'boolean') {
 			initPlugin();
 		}
-    };
+	};
 
 	function postMessage(message) {
-		iframe.contentWindow.postMessage(message, "*");
+		iframe.contentWindow.postMessage(JSON.stringify(message), "*");
 	};
 
 	function initPlugin() {
@@ -58,7 +59,7 @@
 			editorVersion = version;
 			BPluginReady = true;
 			if (BFrameReady)
-				postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
+				postMessage( { type: 'PluginReady', version: editorVersion } );
 		});
 
 		let divNoInt = document.getElementById('div_noIternet');
@@ -75,8 +76,8 @@
 						clearInterval(interval);
 						interval = null;
 					}
-					postMessage( JSON.stringify( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } ) );
-					postMessage( JSON.stringify( { type: 'PluginReady', version: editorVersion } ) );
+					postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
+					postMessage( { type: 'PluginReady', version: editorVersion } );
 				}
 			};
 		} else {
@@ -89,15 +90,28 @@
 		}
 	};
 
-    window.Asc.plugin.button = function(id) {
-		if (id == 'back') {
+	window.Asc.plugin.button = function(id, windowID) {
+		if (modalWindow && windowID) {
+			switch (id) {
+				case 0:
+					removePlugin(true);
+					break;
+				case 1:
+					removePlugin(false);
+					break;
+				default:
+					postMessage( {type: 'Removed', guid: ''} );
+					break;
+			}
+			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
-				postMessage( JSON.stringify( { type: 'onClickBack' } ) );
+				postMessage( { type: 'onClickBack' } );
 		} else {
-			this.executeCommand("close", "");
+			this.executeCommand('close', '');
 		}
-    };
+	};
 
 	window.addEventListener("message", function(message) {
 		// getting messages from marketplace
@@ -106,22 +120,24 @@
 		switch (data.type) {
 			case 'getInstalled':
 				window.Asc.plugin.executeMethod("GetInstalledPlugins", null, function(result) {
-					postMessage( JSON.stringify( { type: 'InstalledPlugins', data: result } ) );
+					postMessage( { type: 'InstalledPlugins', data: result } );
 				});
 				break;
 			case 'install':
 				window.Asc.plugin.executeMethod("InstallPlugin", [data.config, data.guid], function(result) {
-					postMessage( JSON.stringify(result) );
+					postMessage(result);
 				});
 				break;
 			case 'remove':
-				window.Asc.plugin.executeMethod("RemovePlugin", [data.guid], function(result) {
-					postMessage( JSON.stringify(result) );
-				});
+				removeGuid = data.guid;
+				if (window.AscDesktopEditor === undefined)
+					removePlugin(false);
+				else
+					createWindow();
 				break;
 			case 'update':
 				window.Asc.plugin.executeMethod("UpdatePlugin", [data.config, data.guid], function(result) {
-					postMessage( JSON.stringify(result) );
+					postMessage(result);
 				});
 				break;
 			case 'showButton' :
@@ -134,7 +150,7 @@
 	window.Asc.plugin.onExternalMouseUp = function() {
 		// mouse up event outside the plugin window
 		if (iframe && iframe.contentWindow) {
-			postMessage( JSON.stringify( { type: 'onExternalMouseUp' } ) );
+			postMessage( { type: 'onExternalMouseUp' } );
 		}
 	};
 
@@ -146,7 +162,7 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let style = document.getElementsByTagName('head')[0].lastChild;
 		if (iframe && iframe.contentWindow)
-			postMessage( JSON.stringify( { type: 'Theme', theme: theme, style : style.innerHTML } ) );
+			postMessage( { type: 'Theme', theme: theme, style : style.innerHTML } );
 	};
 
 	window.Asc.plugin.onTranslate = function() {
@@ -187,6 +203,51 @@
 			if (isInit)
 				initPlugin();
 		}
+	};
+
+	function createWindow() {
+		let location  = window.location;
+		let start = location.pathname.lastIndexOf('/') + 1;
+		let file = location.pathname.substring(start);
+		
+		let variation = {
+			url : location.href.replace(file, 'modal.html'),
+			description : window.Asc.plugin.tr('Warning'),
+			isVisual : true,
+			isModal : true,
+			EditorsSupport : ['word', 'cell', 'slide'],
+			size : [350, 100],
+			buttons : [
+				{
+					'text': window.Asc.plugin.tr('Yes'),
+					'primary': true
+				},
+				{
+					'text': window.Asc.plugin.tr('No'),
+					'primary': false
+				}
+			]
+		};
+		
+		if (!modalWindow) {
+			modalWindow = new window.Asc.PluginWindow();
+			modalWindow.attachEvent('onWindowMessage', function(data){
+				let oConfig = data.config;
+				window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
+					modalWindow.command('onConverted', sOutput);
+				});
+			});
+		}
+		modalWindow.show(variation);
+	};
+
+	function removePlugin(bCompletely) {
+		if (removeGuid)
+			window.Asc.plugin.executeMethod('RemovePlugin', [removeGuid, bCompletely], function(result) {
+				postMessage(result);
+			});
+		
+		removeGuid = null;
 	};
 
 })(window, undefined);

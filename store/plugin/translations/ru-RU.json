@@ -1,4 +1,9 @@
 {
 	"This version of \"Plugin Manager\" is not official." : "Эта версия \"Менеджера Плагинов\" не является официальной.",
-	"No Internet Connection.": "Отсутствует соединение с интернетом."
+	"No Internet Connection.": "Отсутствует соединение с интернетом.",
+	"Warning" : "Предупреждение",
+	"Yes" : "Да",
+	"No" : "Нет",
+	"Do you want to completely remove this plugin?" : "Вы хотите полность удалить этот плагин?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Если вы выберете \"Нет\", вы сможете восстановить этот плагин позже в Менеджере плагинов."
 }
