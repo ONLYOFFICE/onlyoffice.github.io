@@ -1062,6 +1062,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 	let plugin;
+	// todo и возможно на вкладке мои плагины и плагины из стора показывать разные иконки
 	// todo подумать над тем как здесь показывать url
 	// для десктопа нужны точно локальные пути, для веба мы тоже можем попробовать сделать локльные но ввиде ссылки на сервер
 	let baseUrl;
@@ -1084,7 +1085,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 		baseUrl = plugin.baseUrl;
 	}
 	console.log("baseUrl = ", baseUrl);
-	if (plugin && plugin.baseUrl.includes('https://')) {
+	if (plugin) {// && plugin.baseUrl.includes('https://')) {
 		let variation = plugin.variations[0];
 		
 		if (!bNotForStore && variation.store && variation.store.icons) {
