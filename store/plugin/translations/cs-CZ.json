@@ -1,4 +1,9 @@
 {
 	"This version of \"Plugin Manager\" is not official." : "Tato verze \"Správce pluginů\" není oficiální.",
-	"No Internet Connection.": "Žádné Připojení K Internetu."
+	"No Internet Connection.": "Žádné Připojení K Internetu.",
+	"Warning" : "Varování",
+	"Yes" : "Ano",
+	"No" : "Ne",
+	"Do you want to completely remove this plugin?" : "Chcete tento plugin úplně odstranit?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Pokud zvolíte \"Ne\", budete moci tento plugin obnovit později na Správce Pluginů."
 }
