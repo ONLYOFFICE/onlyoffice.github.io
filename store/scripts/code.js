@@ -1069,7 +1069,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	if (installedPlugins) {
 		plugin = findPlugin(false, guid);
 		if (plugin) {
-			baseUrl = plugin.obj.baseUrl;
+			baseUrl = plugin.baseUrl;
 			let start = baseUrl.indexOf('web-apps');
 			baseUrl = baseUrl.substring(0, start);
 			start = plugin.obj.baseUrl.indexOf('sdkjs-plugins');
