@@ -1062,23 +1062,35 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 	let plugin;
-	if (allPlugins) {
-		plugin = findPlugin(true, guid);
-	}
+	// todo подумать над тем как здесь показывать url
+	// для десктопа нужны точно локальные пути, для веба мы тоже можем попробовать сделать локльные но ввиде ссылки на сервер
+	let baseUrl;
 
-	if (!plugin && installedPlugins) {
+	if (installedPlugins) {
 		plugin = findPlugin(false, guid);
-		if (plugin)
+		if (plugin) {
+			baseUrl = plugin.obj.baseUrl;
+			let start = baseUrl.indexOf('web-apps');
+			baseUrl = baseUrl.substring(0, start);
+			start = plugin.obj.baseUrl.indexOf('sdkjs-plugins');
+			baseUrl += plugin.obj.baseUrl.substring(start);
 			plugin = plugin.obj;
+			
+		}
 	}
 
+	if (!plugin && allPlugins) {
+		plugin = findPlugin(true, guid);
+		baseUrl = plugin.baseUrl;
+	}
+	console.log("baseUrl = ", baseUrl);
 	if (plugin && plugin.baseUrl.includes('https://')) {
 		let variation = plugin.variations[0];
 		
 		if (!bNotForStore && variation.store && variation.store.icons) {
 			// иконки в конфиге у объекта стор (работаем только по новой схеме)
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
-			curIcon = plugin.baseUrl + variation.store.icons[themeType] + iconScale;
+			curIcon = baseUrl + variation.store.icons[themeType] + iconScale;
 		} else if (variation.icons2) {
 			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
 			let icon = variation.icons2[0];
@@ -1088,14 +1100,14 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 					break;
 				}
 			}
-			curIcon = plugin.baseUrl + icon[scale.percent].normal;
+			curIcon = baseUrl + icon[scale.percent].normal;
 		} else if (variation.icons) {
 			// тут может быть как старая так и новая схема
 			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
 			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
 			if (!Array.isArray(variation.icons)) {
 				// новая схема
-				curIcon = plugin.baseUrl + variation.icons[themeType] + iconScale;
+				curIcon = baseUrl + variation.icons[themeType] + iconScale;
 			} else {
 				// старая схема
 				if (typeof(variation.icons[0]) == 'object' ) {
@@ -1107,10 +1119,10 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 							break;
 						}
 					}
-					curIcon = plugin.baseUrl + icon[scale.percent].normal;
+					curIcon = baseUrl + icon[scale.percent].normal;
 				} else {
 					// старая схема и icons это массив со строками
-					curIcon = plugin.baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
+					curIcon = baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
 				}
 			}
 		}	
