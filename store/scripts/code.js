@@ -186,10 +186,11 @@ window.addEventListener('message', function(message) {
 		case 'InstalledPlugins':
 			// TODO maybe we should get images as base64 in this method (but we should support theme and scale, maybe send array)
 			if (message.data) {
+				// filter installed plugins (delete removed, that are in store and some system plugins)
 				installedPlugins = message.data.filter(function(el) {
-					return (el.guid !== guidMarkeplace && el.guid !== guidSettings);
+					return (el.guid !== guidMarkeplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
 				});
-				sortPlugins(false, true, 'name');
+				sortPlugins(false, true, 'start');
 			} else {
 				installedPlugins = [];
 			}
@@ -217,7 +218,7 @@ window.addEventListener('message', function(message) {
 						removed: false
 					}
 				);
-				sortPlugins(false, true, 'name');
+				// sortPlugins(false, true, 'name');
 			} else if (installed) {
 				installed.removed = false;
 			}
@@ -1014,10 +1015,6 @@ function onTranslate() {
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
-		// filter installed plugins (delete removed, that are in store)
-		installedPlugins = installedPlugins.filter(function(plugin) {
-			return !( plugin.removed && plugin.obj.baseUrl.includes(ioUrl) );
-		});
 		createSelect();
 		showListofPlugins(true);
 		toogleLoader(false);
@@ -1184,6 +1181,22 @@ function sortPlugins(bAll, bInst, type) {
 			break;
 		case 'instalations':
 			// todo
+			break;
+		case 'start':
+			if (bInst) {
+				let protected = [];
+				let removed = [];
+				let arr = [];
+				installedPlugins.forEach(function(pl){
+					if (!pl.canRemoved)
+						protected.push(pl);
+					else if (pl.removed)
+						removed.push(pl);
+					else
+						arr.push(pl);
+				});
+				installedPlugins = protected.concat(arr, removed);
+			}
 			break;
 	
 		default:
