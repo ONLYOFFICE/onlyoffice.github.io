@@ -1090,8 +1090,6 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 			let start;
 			if (isDesktop) {
 				baseUrl = plugin.obj.baseUrl;
-				start = baseUrl.indexOf('sdkjs-plugins');
-				baseUrl = '../../../' + baseUrl.substring(start);
 			} else {
 				baseUrl = plugin.baseUrl;
 				start = baseUrl.indexOf('web-apps');
