@@ -515,6 +515,12 @@ function getAllPluginsData() {
 			}
 		);
 	});
+
+	if (isDesktop)
+		getInstalledLanguages();
+};
+
+function getInstalledLanguages(){
 	installedPlugins.forEach(function(pl) {
 		makeRequest(pl.obj.baseUrl + 'translations/langs.json').then(
 			function(response) {
