@@ -17,6 +17,7 @@
  */
 
 let start = Date.now();
+const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desctop)
 let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
@@ -462,9 +463,10 @@ function getAllPluginsData() {
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
+	let url = isDesktop ? OOMarketplaceUrl : ioUrl;
 	allPlugins.forEach(function(pluginUrl, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? ioUrl + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
+		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
@@ -1062,6 +1064,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 	let plugin;
+	// todo проблема с иконками через http, поэтому наверно имеет смысл локальные иконки делать только для десктопа
 	// todo и возможно на вкладке мои плагины и плагины из стора показывать разные иконки
 	// todo подумать над тем как здесь показывать url
 	// для десктопа нужны точно локальные пути, для веба мы тоже можем попробовать сделать локльные но ввиде ссылки на сервер
@@ -1070,22 +1073,30 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	if (installedPlugins) {
 		plugin = findPlugin(false, guid);
 		if (plugin) {
-			baseUrl = plugin.baseUrl;
-			let start = baseUrl.indexOf('web-apps');
-			baseUrl = baseUrl.substring(0, start);
-			start = plugin.obj.baseUrl.indexOf('sdkjs-plugins');
-			baseUrl += plugin.obj.baseUrl.substring(start);
+			let start;
+			if (isDesktop) {
+				baseUrl = plugin.obj.baseUrl;
+				start = baseUrl.indexOf('sdkjs-plugins');
+				baseUrl = '../../../' + baseUrl.substring(start);
+			} else {
+				baseUrl = plugin.baseUrl;
+				start = baseUrl.indexOf('web-apps');
+				baseUrl = baseUrl.substring(0, start);
+				start = plugin.obj.baseUrl.indexOf('sdkjs-plugins');
+				baseUrl += plugin.obj.baseUrl.substring(start);
+			}
 			plugin = plugin.obj;
-			
 		}
 	}
 
-	if (!plugin && allPlugins) {
+	if ( ( !plugin || ( !baseUrl.includes('https://') && !isDesktop ) ) && allPlugins) {
 		plugin = findPlugin(true, guid);
-		baseUrl = plugin.baseUrl;
+		if (plugin)
+			baseUrl = plugin.baseUrl;
 	}
 	console.log("baseUrl = ", baseUrl);
-	if (plugin) {// && plugin.baseUrl.includes('https://')) {
+	// github doesn't allow to use http or file as the URL for an image
+	if ( plugin && ( baseUrl.includes('https://') || isDesktop) ) {
 		let variation = plugin.variations[0];
 		
 		if (!bNotForStore && variation.store && variation.store.icons) {
