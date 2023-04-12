@@ -648,7 +648,6 @@ function onClickInstall(target, event) {
 	// click install button
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Installation");
-	// toogleLoader(true, "Installation");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	let installed = findPlugin(false, guid);
@@ -665,7 +664,6 @@ function onClickUpdate(target) {
 	// click update button
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Updating");
-	// toogleLoader(true, "Updating");
 	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	updateCount++;
@@ -683,7 +681,6 @@ function onClickRemove(target, event) {
 	// click remove button
 	clearTimeout(timeout);
 	timeout = setTimeout(toogleLoader, 200, true, "Removal");
-	// toogleLoader(true, "Removal");
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message = {
 		type : 'remove',
@@ -774,14 +771,12 @@ function onClickItem() {
 		elements.spanLanguages.innerText = '';
 		elements.divLanguages.classList.add('hidden');
 	}
-	// TODO добаить здесь языки (при получении информации о плагинах, надо смотреть на то есть ли файл langs.json и из него брать информацию о языках
-	// если этого файла нет, то поле языки не показывается.
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
 	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
-	// пришлось временно сделать так: потому что некоторые новые иконки для стора слишком больше для этого метса
+	// we do this, because new icons for store are too big for use it in this window.
 	let tmp = getImageUrl(guid, true, true, 'img_icon');
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
@@ -1091,10 +1086,8 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
 	let plugin;
-	// todo проблема с иконками через http, поэтому наверно имеет смысл локальные иконки делать только для десктопа
-	// todo и возможно на вкладке мои плагины и плагины из стора показывать разные иконки
-	// todo подумать над тем как здесь показывать url
-	// для десктопа нужны точно локальные пути, для веба мы тоже можем попробовать сделать локльные но ввиде ссылки на сервер
+	// We have a problem with "http" and "file" routes.
+	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
 	let baseUrl;
 
 	if (installedPlugins) {
@@ -1119,16 +1112,16 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 		if (plugin)
 			baseUrl = plugin.baseUrl;
 	}
-	// github doesn't allow to use http or file as the URL for an image
+	// github doesn't allow to use "http" or "file" as the URL for an image
 	if ( plugin && ( baseUrl.includes('https://') || isDesktop) ) {
 		let variation = plugin.variations[0];
 		
 		if (!bNotForStore && variation.store && variation.store.icons) {
-			// иконки в конфиге у объекта стор (работаем только по новой схеме)
-			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконки
+			// icons are in config of store field (work only with new scheme)
+			// it's an object with 2 fields (for dark and light theme), which contain route to icons folder
 			curIcon = baseUrl + variation.store.icons[themeType] + iconScale;
 		} else if (variation.icons2) {
-			// это старая схема и тут может быть массив с объектами у которых есть поле темы, так и массив из одного объекта у которого нет поля темы
+			// it's old scheme. There could be an array with objects which have theme field or an array from one object without theme field
 			let icon = variation.icons2[0];
 			for (let i = 1; i < variation.icons2.length; i++) {
 				if ( themeType.includes(variation.icons2[i].style) ) {
@@ -1138,16 +1131,16 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 			}
 			curIcon = baseUrl + icon[scale.percent].normal;
 		} else if (variation.icons) {
-			// тут может быть как старая так и новая схема
-			// в старой схеме это будет массив со строками или объект по типу icons2 из блока выше
-			// это будет объект с двумя полями для темной и светлой темы, которые будут указывать путь до папки в которой хранятся иконкио 
+			// there could be old and new scheme
+			// there will be a string array or object like icons2 above (old scheme)
+			// there will be a object with 2 fields (for dark and light theme), which contain route to icons folder (new scheme)
 			if (!Array.isArray(variation.icons)) {
-				// новая схема
+				// new scheme
 				curIcon = baseUrl + variation.icons[themeType] + iconScale;
 			} else {
-				// старая схема
+				// old scheme
 				if (typeof(variation.icons[0]) == 'object' ) {
-					// старая схема и icons это объект как icons2 в блоке выше
+					// old scheme and icons like icons2 above
 					let icon = variation.icons[0];
 					for (let i = 1; i < variation.icons.length; i++) {
 						if ( themeType.includes(variation.icons[i].style) ) {
@@ -1157,7 +1150,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 					}
 					curIcon = baseUrl + icon[scale.percent].normal;
 				} else {
-					// старая схема и icons это массив со строками
+					// old scheme and icons is a string array
 					curIcon = baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
 				}
 			}
