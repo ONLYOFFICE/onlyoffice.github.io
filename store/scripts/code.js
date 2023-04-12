@@ -514,7 +514,28 @@ function getAllPluginsData() {
 				}
 			}
 		);
-	})
+	});
+	installedPlugins.forEach(function(pl) {
+		makeRequest(pl.obj.baseUrl + 'translations/langs.json').then(
+			function(response) {
+				let supportedLangs = [ ( translate['English'] || 'English' ) ];
+				let arr = JSON.parse(response);
+				arr.forEach(function(full) {
+					let short = full.split('-')[0];
+					for (let i = 0; i < languages.length; i++) {
+						if (languages[i][0] == short || languages[i][1] == short) {
+							supportedLangs.push( ( translate[languages[i][2]] || languages[i][2] ) );
+						}
+					}
+				});
+				if (supportedLangs.length > 1)
+					pl.obj.languages = supportedLangs;
+			},
+			function(error) {
+				// nothing to do
+			}
+		)
+	});
 };
 
 function showListofPlugins(bAll, sortedArr) {
@@ -1092,7 +1113,6 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 		if (plugin)
 			baseUrl = plugin.baseUrl;
 	}
-	console.log("baseUrl = ", baseUrl);
 	// github doesn't allow to use http or file as the URL for an image
 	if ( plugin && ( baseUrl.includes('https://') || isDesktop) ) {
 		let variation = plugin.variations[0];
