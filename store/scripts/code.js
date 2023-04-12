@@ -696,14 +696,14 @@ function onClickItem() {
 
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
-	if (!plugin) {
+	if ( !plugin || ( isDesktop && installed ) ) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	let bCorrectUrl = ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') );
+	let bCorrectUrl = isDesktop || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		current.screenshots = plugin.variations[0].store.screenshots;
