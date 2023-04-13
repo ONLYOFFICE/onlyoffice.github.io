@@ -197,7 +197,10 @@ window.addEventListener('message', function(message) {
 			}
 
 			// console.log('getInstalledPlugins: ' + (Date.now() - start));
-			if (allPlugins)
+
+			if (message.updateInstalled)
+				showListofPlugins(false);
+			else if (allPlugins)
 				getAllPluginsData();
 			
 			break;
@@ -221,7 +224,12 @@ window.addEventListener('message', function(message) {
 				);
 				// sortPlugins(false, true, 'name');
 			} else if (installed) {
-				installed.removed = false;
+				if (installed.obj.backup) {
+					// нужно обновить список установленных плагинов, чтобы ссылки на ресурсы были правильными
+					sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+				}
+				else
+					installed.removed = false;
 			}
 
 			changeAfterInstallOrRemove(true, message.guid);
@@ -259,17 +267,24 @@ window.addEventListener('message', function(message) {
 				toogleLoader(false);
 				return;
 			}
-			plugin = findPlugin(true, message.guid);
-			installed = findPlugin(false, message.guid);
+
 			let bUpdate = false;
 			let bHasLocal = false;
+			let needBackup = message.backup;
+
+			plugin = findPlugin(true, message.guid);
+			installed = findPlugin(false, message.guid);
+			
 			if (installed) {
 				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
-				if (plugin && !bHasLocal) {
+				if (plugin && (!bHasLocal || !needBackup) ) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
 					installed.removed = true;
+
+					// нужно обновить список установленных плагинов, чтобы ссылки на ресурсы были правильными
+					sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
 				}
 			}
 
@@ -548,7 +563,33 @@ function showListofPlugins(bAll, sortedArr) {
 	// show list of plugins
 	$('.div_notification').remove();
 	$('.div_item').remove();
-	let arr = ( sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins) );
+	let arr = (sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins));
+
+	// получаем список backup плагинов
+	if (!bAll && isDesktop) {
+		var _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
+
+		if (_pluginsTmp.length) {
+			var len = _pluginsTmp[0]["pluginsData"].length;
+			for (var i = 0; i < len; i++) {
+				let plugin = _pluginsTmp[0]["pluginsData"][i];
+				plugin.baseUrl = _pluginsTmp[0]["url"] + plugin.guid.replace('asc.', '') + '/';
+
+				installed = findPlugin(false, plugin.guid);
+
+				if (!installed) {
+					installedPlugins.push({
+						"baseUrl": _pluginsTmp[0]["url"],
+						"guid": plugin.guid,
+						"canRemoved": true,
+						"obj": plugin,
+						"removed": true
+					});
+				}
+			}
+		}
+	}
+
 	if (arr.length) {
 		arr.forEach(function(plugin) {
 			if (plugin && plugin.guid)
@@ -684,10 +725,19 @@ function onClickRemove(target, event) {
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message = {
 		type : 'remove',
-		guid : guid
+		guid : guid,
+		backup : needBackupPlugin(guid)
 	};
 	sendMessage(message);
 };
+
+function needBackupPlugin(guid) {
+	// проверяем установленный плагин:
+	// если плагин есть в стор ( и его версия <= ? ), то можем удалить, пользователь сможет поставить актуальную версию
+	// если плагина нет в стор, нужно его хранить у пользователя с возможностью восстановления
+
+	return isDesktop ? findPlugin(true, guid) == undefined : false;
+}
 
 function onClickUpdateAll() {
 	clearTimeout(timeout);
@@ -1212,7 +1262,29 @@ function toogleView(current, oldEl, text, bAll) {
 			filterByCategory(document.getElementById('select_categories').value);
 		}
 		elements.linkNewPlugin.href = bAll ? "https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls" : "https://api.onlyoffice.com/plugin/installation";
+
+		if (isDesktop && !bAll) {
+			elements.linkNewPlugin.href = "#";
+			elements.linkNewPlugin.onclick = function (e) {
+				e.preventDefault();
+				installPluginManually();
+			}
+		}
 	}
+};
+
+function installPluginManually() {
+	window["AscDesktopEditor"]["OpenFilenameDialog"]("plugin", false, function (_file) {
+		var file = _file;
+		if (Array.isArray(file))
+			file = file[0];
+
+		let result = window["AscDesktopEditor"]["PluginInstall"](file);
+		if (result) {
+			// нужно обновить список установленных плагинов
+			sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+		}
+	});
 };
 
 function sortPlugins(bAll, bInst, type) {
