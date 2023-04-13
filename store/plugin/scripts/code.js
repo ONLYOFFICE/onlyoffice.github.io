@@ -21,8 +21,11 @@
 	let isInit = false;
 	let interval = null;
 	checkInternet();
+
 	// create iframe
 	const iframe = document.createElement("iframe");
+	const isDesktop = window.AscDesktopEditor !== undefined;
+
 	let modalWindow = null;
 	let removeGuid = null;
 	let BFrameReady = false;
@@ -94,10 +97,10 @@
 		if (modalWindow && windowID) {
 			switch (id) {
 				case 0:
-					removePlugin(true);
+					removePlugin(false);
 					break;
 				case 1:
-					removePlugin(false);
+					removePlugin(true);
 					break;
 				default:
 					postMessage( {type: 'Removed', guid: ''} );
@@ -119,8 +122,11 @@
 			
 		switch (data.type) {
 			case 'getInstalled':
+				// данное сообщение используется только при инициализации плагина и по умолчанию идёт парсинг и отрисовка плагинов из стора
+				// добавлен флаг updateInstalled - в этом случае не загружаем плагины из стора повторно, работаем только с установленными
+				
 				window.Asc.plugin.executeMethod("GetInstalledPlugins", null, function(result) {
-					postMessage( { type: 'InstalledPlugins', data: result } );
+					postMessage({ type: 'InstalledPlugins', data: result, updateInstalled: data.updateInstalled } );
 				});
 				break;
 			case 'install':
@@ -130,8 +136,8 @@
 				break;
 			case 'remove':
 				removeGuid = data.guid;
-				if (window.AscDesktopEditor === undefined)
-					removePlugin(false);
+				if ( !data.backup )
+					removePlugin(data.backup);
 				else
 					createWindow();
 				break;
@@ -241,9 +247,9 @@
 		modalWindow.show(variation);
 	};
 
-	function removePlugin(bCompletely) {
+	function removePlugin(backup) {
 		if (removeGuid)
-			window.Asc.plugin.executeMethod('RemovePlugin', [removeGuid, bCompletely], function(result) {
+			window.Asc.plugin.executeMethod('RemovePlugin', [removeGuid, backup], function(result) {
 				postMessage(result);
 			});
 		
