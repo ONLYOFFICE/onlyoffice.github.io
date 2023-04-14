@@ -47,5 +47,8 @@
 	"Communication": "Komunikace",
 	"Special abilities": "Speciální schopnosti",
 	"The minimum supported editors version" : "Minimální podporovaná verze editorů",
-	"This plugin will only work in a newer version of the editor.": "Dieses Plugin funktioniert nur in einer neueren Version des Editors."
+	"This plugin will only work in a newer version of the editor.": "Dieses Plugin funktioniert nur in einer neueren Version des Editors.",
+	"Nothing was found for this query.": "Pro tento dotaz nebylo nic nalezeno.",
+	"No Internet Connection.": "Žádné Připojení K Internetu.",
+	"Problem with loading plugin config.\nConfig: " : "Problém s načítáním plugin config.\nConfig:"
 }
