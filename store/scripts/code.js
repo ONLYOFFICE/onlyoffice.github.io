@@ -291,7 +291,8 @@ window.addEventListener('message', function(message) {
 					installed.removed = true;
 
 					// нужно обновить список установленных плагинов, чтобы ссылки на ресурсы были правильными
-					sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+					if (isDesktop)
+						sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
 				}
 			}
 
