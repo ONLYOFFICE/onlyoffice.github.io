@@ -17,7 +17,12 @@
  */
 
 let start = Date.now();
-const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desctop)
+let isPluginLoading = false;                                         // flag plugins loading
+const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
+let isOnline = null;                                                 // flag internet connection
+if (isDesktop) checkInternet();                                      // check internet connection (only for desktop)
+let interval = null;                                                 // interval for checking internet connection (if it doesn't work on launch)
+const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desktop)
 let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
@@ -27,11 +32,9 @@ let allPlugins;                                                      // list of 
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
-const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 let editorVersion = null;                                            // edior current version
-let isPluginLoading = false;                                         // flag plugins loading
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
 const lang = detectLanguage();                                       // current language
@@ -62,7 +65,11 @@ const languages = [                                                  // list of 
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
-let versionWarning = "This plugin will only work in a newer version of the editor.";
+const messages = {
+	versionWarning: 'This plugin will only work in a newer version of the editor.',
+	linkManually: 'Install plugin manually',
+	linkPR: 'Submit your own plugin',
+};
 const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("edge") > -1);
@@ -101,7 +108,8 @@ const ioUrl = location.href.substring(0, pos);
 // get translation file
 getTranslation();
 // fetch all plugins from config
-fetchAllPlugins();
+if (!isDesktop)
+	fetchAllPlugins(true, false);
 
 window.onload = function() {
 	let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
@@ -126,12 +134,12 @@ window.onload = function() {
 
 	elements.btnMyPlugins.onclick = function(event) {
 		// click on my plugins button
-		toogleView(event.target, elements.btnMarketplace, 'Install plugin manually', false);
+		toogleView(event.target, elements.btnMarketplace, messages.linkManually, false, false);
 	};
 
 	elements.btnMarketplace.onclick = function(event) {
 		// click on marketplace button
-		toogleView(event.target, elements.btnMyPlugins, 'Submit your own plugin', true);
+		toogleView(event.target, elements.btnMyPlugins, messages.linkPR, true, false);
 	};
 
 	// elements.arrow.onclick = onClickBack;
@@ -185,7 +193,6 @@ window.addEventListener('message', function(message) {
 	let installed;
 	switch (message.type) {
 		case 'InstalledPlugins':
-			// TODO maybe we should get images as base64 in this method (but we should support theme and scale, maybe send array)
 			if (message.data) {
 				// filter installed plugins (delete removed, that are in store and some system plugins)
 				installedPlugins = message.data.filter(function(el) {
@@ -200,8 +207,8 @@ window.addEventListener('message', function(message) {
 
 			if (message.updateInstalled)
 				showListofPlugins(false);
-			else if (allPlugins)
-				getAllPluginsData();
+			else if ( allPlugins || (isDesktop && !isOnline) )
+				getAllPluginsData(true, false);
 			
 			break;
 		case 'Installed':
@@ -353,17 +360,19 @@ window.addEventListener('message', function(message) {
 	};
 }, false);
 
-function fetchAllPlugins() {
+function fetchAllPlugins(bFirstRender, bConnectionRestored) {
 	// function for fetching all plugins from config
+	clearInterval(interval);
+	interval = null;
 	isPluginLoading = true;
 	makeRequest(configUrl).then(
 		function(response) {
 			allPlugins = JSON.parse(response);
 			if (installedPlugins)
-				getAllPluginsData();
+				getAllPluginsData(bFirstRender, bConnectionRestored);
 		},
 		function(err) {
-			createError(new Error('Problem with loading markeplace config.'));
+			createError( new Error( getTranslated( 'Problem with loading markeplace config.' ) ) );
 			isPluginLoading = false;
 			allPlugins = [];
 			showMarketplace();
@@ -469,11 +478,11 @@ function toogleLoader(show, text) {
 	} else if(!loader) {
 		document.getElementById('loader-container').classList.remove('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
-		loader = showLoader($('#loader-container')[0], (translate[text] || text) + '...');
+		loader = showLoader($('#loader-container')[0], ( getTranslated(text) ) + '...');
 	}
 };
 
-function getAllPluginsData() {
+function getAllPluginsData(bFirstRender, bConnectionRestored) {
 	// get config file for each item in config.json
 	isPluginLoading = true;
 	let count = 0;
@@ -495,17 +504,20 @@ function getAllPluginsData() {
 					removeUnloaded(Unloaded);
 					sortPlugins(true, false, 'name');
 					isPluginLoading = false;
-					showMarketplace();
+					if (bFirstRender)
+						showMarketplace();
+					else if (bConnectionRestored)
+						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
 				makeRequest(pluginUrl + 'translations/langs.json').then(
 					function(response) {
-						let supportedLangs = [ ( translate['English'] || 'English' ) ];
+						let supportedLangs = [ getTranslated('English') ];
 						let arr = JSON.parse(response);
 						arr.forEach(function(full) {
 							let short = full.split('-')[0];
 							for (let i = 0; i < languages.length; i++) {
 								if (languages[i][0] == short || languages[i][1] == short) {
-									supportedLangs.push( ( translate[languages[i][2]] || languages[i][2] ) );
+									supportedLangs.push( getTranslated( languages[i][2] ) );
 								}
 							}
 						});
@@ -513,7 +525,7 @@ function getAllPluginsData() {
 							config.languages = supportedLangs;
 					},
 					function(error) {
-						// nothing to do
+						config.languages = [ getTranslated('English') ];
 					}
 				)
 			},
@@ -525,27 +537,33 @@ function getAllPluginsData() {
 					removeUnloaded(Unloaded);
 					sortPlugins(true, false, 'name');
 					isPluginLoading = false;
-					showMarketplace();
+					if (bFirstRender)
+						showMarketplace();
+					else if (bConnectionRestored)
+						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
 			}
 		);
 	});
 
-	if (isDesktop)
+	if (isDesktop && installedPlugins && bFirstRender) {
+		isPluginLoading = false;
 		getInstalledLanguages();
+		showMarketplace();
+	}
 };
 
-function getInstalledLanguages(){
+function getInstalledLanguages() {
 	installedPlugins.forEach(function(pl) {
 		makeRequest(pl.obj.baseUrl + 'translations/langs.json').then(
 			function(response) {
-				let supportedLangs = [ ( translate['English'] || 'English' ) ];
+				let supportedLangs = [ getTranslated('English') ];
 				let arr = JSON.parse(response);
 				arr.forEach(function(full) {
 					let short = full.split('-')[0];
 					for (let i = 0; i < languages.length; i++) {
 						if (languages[i][0] == short || languages[i][1] == short) {
-							supportedLangs.push( ( translate[languages[i][2]] || languages[i][2] ) );
+							supportedLangs.push( getTranslated( languages[i][2] ) );
 						}
 					}
 				});
@@ -553,7 +571,7 @@ function getInstalledLanguages(){
 					pl.obj.languages = supportedLangs;
 			},
 			function(error) {
-				// nothing to do
+				pl.obj.languages = [ getTranslated('English') ];
 			}
 		)
 	});
@@ -660,7 +678,7 @@ function createPluginDiv(plugin, bInstalled) {
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
 	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
-	let additional = bNotAvailable ? 'disabled title="' + versionWarning + '"'  : '';
+	let additional = bNotAvailable ? 'disabled title="' + getTranslated(messages.versionWarning) + '"'  : '';
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
 						'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
 					'</div>' +
@@ -670,12 +688,12 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						(bHasUpdate
-							? '<span class="span_update ' + (bRemoved ? "" : "hidden") + '">' + translate["Update"] + '</span>'
+							? '<span class="span_update ' + (bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
 							: ''
 						)+''+
 						( (bRemoved)
-							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)" ' + (bNotAvailable ? "dataDisabled=\"disabled\"" : "") +'>' + translate["Remove"] + '</button>' : '<div style="height:20px"></div>')
-							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + additional + '>'  + translate["Install"] + '</button>'
+							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)" ' + (bNotAvailable ? "dataDisabled=\"disabled\"" : "") +'>' + getTranslated("Remove") + '</button>' : '<div style="height:20px"></div>')
+							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + additional + '>'  + getTranslated("Install") + '</button>'
 						)
 						+
 					'</div>';
@@ -830,7 +848,7 @@ function onClickItem() {
 	let tmp = getImageUrl(guid, true, true, 'img_icon');
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
-	elements.spanOffered.innerHTML = offered;
+	elements.spanOffered.innerHTML = plugin.offered || offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
 
@@ -854,7 +872,7 @@ function onClickItem() {
 
 	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {// || pluginDiv.lastChild.lastChild.hasAttribute('dataDisabled')) {
 		elements.btnInstall.setAttribute('disabled','');
-		elements.btnInstall.setAttribute('title', versionWarning);
+		elements.btnInstall.setAttribute('title', getTranslated(messages.versionWarning));
 	}
 	else {
 		elements.btnInstall.removeAttribute('disabled');
@@ -915,7 +933,7 @@ function createNotification(text) {
 	div.className = 'div_notification';
 	let span = document.createElement('span');
 	span.className = 'span_notification';
-	span.innerHTML = translate[text] || text;
+	span.innerHTML = getTranslated(text);
 	div.appendChild(span);
 	elements.divMain.appendChild(div);
 };
@@ -1031,66 +1049,73 @@ function getTranslation() {
 							onTranslate();
 						},
 						function(err) {
-							createError(new Error('Cannot load translation for current language.'));
-							createDefaultTranslations();
+							createError( new Error( getTranslated( 'Cannot load translation for current language.' ) ) );
+							isTranslationLoading = false;
+							showMarketplace();
 						}
 					);
 				} else {
-					createDefaultTranslations();
+					isTranslationLoading = false;
+					showMarketplace();
 				}	
 			},
 			function(err) {
-				createError(new Error('Cannot load translations list file.'));
-				createDefaultTranslations();
+				createError( new Error( getTranslated( 'Cannot load translations list file.' ) ) );
+				isTranslationLoading = false;
+				showMarketplace();
 			}
 		);
 	} else {
-		createDefaultTranslations();
+		isTranslationLoading = false;
+		showMarketplace();
 	}
 };
 
 function onTranslate() {
 	isTranslationLoading = false;
 	// translates elements on current language
-	elements.linkNewPlugin.innerHTML = translate['Submit your own plugin'];
-	elements.btnMyPlugins.innerHTML = translate['My plugins'];
-	elements.btnMarketplace.innerHTML = translate['Marketplace'];
-	elements.btnInstall.innerHTML = translate['Install'];
-	elements.btnRemove.innerHTML = translate['Remove'];
-	elements.btnUpdate.innerHTML = translate['Update'];
-	elements.btnUpdateAll.innerHTML = translate['Update All'];
-	elements.inpSearch.placeholder = translate['Search plugins'] + '...';
-	document.getElementById('lbl_header').innerHTML = translate['Manage plugins'];
-	document.getElementById('span_offered_caption').innerHTML = translate['Offered by'] + ': ';
-	document.getElementById('span_overview').innerHTML = translate['Overview'];
-	document.getElementById('span_info').innerHTML = translate['Info & Support'];
-	document.getElementById('span_lern').innerHTML = translate['Learn how to use'] + ' ';
-	document.getElementById('span_lern_plugin').innerHTML = translate['the plugin in'] + ' ';
-	document.getElementById('span_contribute').innerHTML = translate['Contribute'] + ' ';
-	document.getElementById('span_contribute_end').innerHTML = translate['to the plugin developmen or report an issue on'] + ' ';
-	document.getElementById('span_help').innerHTML = translate['Get help'] + ' ';
-	document.getElementById('span_help_end').innerHTML = translate['with the plugin functionality on our forum.'];
-	document.getElementById('span_create').innerHTML = translate['Create a new plugin using'] + ' ';
-	document.getElementById('span_ver_caption').innerHTML = translate['Version'] + ': ';
-	document.getElementById('span_min_ver_caption').innerHTML = translate['The minimum supported editors version'] + ': ';
-	document.getElementById('span_langs_caption').innerHTML = translate['Languages'] + ': ';
-	document.getElementById('span_categories').innerHTML = translate['Categories'];
-	document.getElementById('opt_all').innerHTML = translate['All'];
-	document.getElementById('opt_rec').innerHTML = translate['Recommended'];
-	document.getElementById('opt_dev').innerHTML = translate['Developer tools'];
-	document.getElementById('opt_work').innerHTML = translate['Work'];
-	document.getElementById('opt_enter').innerHTML = translate['Entertainment'];
-	document.getElementById('opt_com').innerHTML = translate['Communication'];
-	document.getElementById('opt_spec').innerHTML = translate['Special abilities'];
-	versionWarning = translate[versionWarning];
+	elements.linkNewPlugin.innerHTML = getTranslated(messages.linkPR);
+	elements.btnMyPlugins.innerHTML = getTranslated('My plugins');
+	elements.btnMarketplace.innerHTML = getTranslated('Marketplace');
+	elements.btnInstall.innerHTML = getTranslated('Install');
+	elements.btnRemove.innerHTML = getTranslated('Remove');
+	elements.btnUpdate.innerHTML = getTranslated('Update');
+	elements.btnUpdateAll.innerHTML = getTranslated('Update All');
+	elements.inpSearch.placeholder = getTranslated('Search plugins') + '...';
+	document.getElementById('lbl_header').innerHTML = getTranslated('Manage plugins');
+	document.getElementById('span_offered_caption').innerHTML = getTranslated('Offered by') + ': ';
+	document.getElementById('span_overview').innerHTML = getTranslated('Overview');
+	document.getElementById('span_info').innerHTML = getTranslated('Info & Support');
+	document.getElementById('span_lern').innerHTML = getTranslated('Learn how to use') + ' ';
+	document.getElementById('span_lern_plugin').innerHTML = getTranslated('the plugin in') + ' ';
+	document.getElementById('span_contribute').innerHTML = getTranslated('Contribute') + ' ';
+	document.getElementById('span_contribute_end').innerHTML = getTranslated('to the plugin developmen or report an issue on') + ' ';
+	document.getElementById('span_help').innerHTML = getTranslated('Get help') + ' ';
+	document.getElementById('span_help_end').innerHTML = getTranslated('with the plugin functionality on our forum.');
+	document.getElementById('span_create').innerHTML = getTranslated('Create a new plugin using') + ' ';
+	document.getElementById('span_ver_caption').innerHTML = getTranslated('Version') + ': ';
+	document.getElementById('span_min_ver_caption').innerHTML = getTranslated('The minimum supported editors version') + ': ';
+	document.getElementById('span_langs_caption').innerHTML = getTranslated('Languages') + ': ';
+	document.getElementById('span_categories').innerHTML = getTranslated('Categories');
+	document.getElementById('opt_all').innerHTML = getTranslated('All');
+	document.getElementById('opt_rec').innerHTML = getTranslated('Recommended');
+	document.getElementById('opt_dev').innerHTML = getTranslated('Developer tools');
+	document.getElementById('opt_work').innerHTML = getTranslated('Work');
+	document.getElementById('opt_enter').innerHTML = getTranslated('Entertainment');
+	document.getElementById('opt_com').innerHTML = getTranslated('Communication');
+	document.getElementById('opt_spec').innerHTML = getTranslated('Special abilities');
 	showMarketplace();
 };
 
 function showMarketplace() {
 	// show main window to user
-	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading) {
+	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && installedPlugins) {
 		createSelect();
-		showListofPlugins(true);
+		if (isOnline)
+			showListofPlugins(isOnline);
+		else
+			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, false);
+			
 		toogleLoader(false);
 		catFiltred = allPlugins;
 		// elements.divBody.classList.remove('hidden');
@@ -1118,7 +1143,6 @@ function createSelect() {
 
 function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	// get icon url for current plugin (according to theme and scale)
-	// TODO change it when we will be able show icons for installed plugins
 	let iconScale = '/icon.png';
 	switch (scale.percent) {
 		case '125%':
@@ -1248,18 +1272,28 @@ function getUrlSearchValue(key) {
 	return res;
 };
 
-function toogleView(current, oldEl, text, bAll) {
-	if ( !current.classList.contains('btn_toolbar_active') ) {
+function toogleView(current, oldEl, text, bAll, bForce) {
+	if ( !current.classList.contains('btn_toolbar_active') || bForce ) {
 		elements.inpSearch.value = '';
 		founded = [];
 		oldEl.classList.remove('btn_toolbar_active');
 		current.classList.add('btn_toolbar_active');
-		elements.linkNewPlugin.innerHTML = translate[text] || text;
-		if (document.getElementById('select_categories').value == 'all') {
-			showListofPlugins(bAll);
-			catFiltred = bAll ? allPlugins : installedPlugins;
+		elements.linkNewPlugin.innerHTML = getTranslated(text);
+		let toolbar = document.getElementById('toolbar_tools');
+		if (bAll (!isOnline || isPluginLoading) ) {
+			$('.div_notification').remove();
+			$('.div_item').remove();
+			setTimeout(function(){if (Ps) Ps.update()});
+			toolbar.classList.add('hidden');
+			createNotification('No Internet Connection.')
 		} else {
-			filterByCategory(document.getElementById('select_categories').value);
+			toolbar.classList.remove('hidden');
+			if (document.getElementById('select_categories').value == 'all') {
+				showListofPlugins(bAll);
+				catFiltred = bAll ? allPlugins : installedPlugins;
+			} else {
+				filterByCategory(document.getElementById('select_categories').value);
+			}
 		}
 		elements.linkNewPlugin.href = bAll ? "https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls" : "https://api.onlyoffice.com/plugin/installation";
 
@@ -1376,20 +1410,6 @@ function filterByCategory(category) {
 		makeSearch(elements.inpSearch.value.trim().toLowerCase());
 };
 
-function createDefaultTranslations() {
-	translate = {
-		"Submit your own plugin": "Submit your own plugin",
-		"Install plugin manually": "Install plugin manually",
-		"Install": "Install",
-		"Remove": "Remove",
-		"Update": "Update",
-		"Problem with loading plugins." : "Problem with loading plugins.",
-		"No installed plugins." : "No installed plugins."
-	};
-	isTranslationLoading = false;
-	showMarketplace();
-};
-
 function removeUnloaded(unloaded) {
 	unloaded.forEach(function(el){
 		allPlugins.splice(el, 1);
@@ -1405,7 +1425,7 @@ function findPlugin(bAll, guid) {
 
 function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 	let btn = this.document.getElementById(guid).lastChild.lastChild;
-	btn.innerHTML = translate[ ( bInstall ? 'Remove' : 'Install' ) ];
+	btn.innerHTML = getTranslated( ( bInstall ? 'Remove' : 'Install' ) );
 	btn.classList.add( ( bInstall ? 'btn_remove' : 'btn_install' ) );
 	btn.classList.remove( ( bInstall ? 'btn_install' : 'btn_remove' ) );
 	btn.onclick = function(e) {
@@ -1416,7 +1436,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 	};
 	// We need to keep the ability to install the local version that has been removed (maybe we should change the button)
 	if ( !bInstall && btn.hasAttribute('dataDisabled') && !bHasLocal ) {
-		btn.setAttribute('title', versionWarning);
+		btn.setAttribute('title', getTranslated(messages.versionWarning));
 		btn.setAttribute('disabled', '');
 	}
 
@@ -1436,4 +1456,43 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		else
 			this.document.getElementById('btn_update').classList.add('hidden');
 	}
+};
+
+function checkInternet() {
+	try {
+		let xhr = new XMLHttpRequest();
+		let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
+		xhr.open('GET', url, true);
+		
+		xhr.onload = function () {
+			if (this.readyState == 4) {
+				if (this.status >= 200 && this.status < 300) {
+					isOnline = true;
+					fetchAllPlugins(interval === null, elements.btnMarketplace.classList.contains('btn_toolbar_active'));
+				}
+			}
+		};
+
+		xhr.onerror = function (err) {
+			handeNoInternet();
+		};
+
+		xhr.send(null);
+	} catch (error) {
+		handeNoInternet();
+	}
+};
+
+function handeNoInternet() {
+	isOnline = false;
+	allPlugins = [];
+	if (!interval) {
+		interval = setInterval(function() {
+			checkInternet();
+		}, 5000);
+	}
+};
+
+function getTranslated(text) {
+	return translate[text] || text;
 };

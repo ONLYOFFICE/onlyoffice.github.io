@@ -47,5 +47,8 @@
 	"Communication": "Kommunikation",
 	"Special abilities": "Spezialfähigkeiten",
 	"The minimum supported editors version" : "Die minimal unterstützte Editorversion",
-	"This plugin will only work in a newer version of the editor.": "Dieses Plugin funktioniert nur in einer neueren Version des Editors."
+	"This plugin will only work in a newer version of the editor.": "Dieses Plugin funktioniert nur in einer neueren Version des Editors.",
+	"Nothing was found for this query.": "Für diese Abfrage wurde nichts gefunden.",
+	"No Internet Connection.": "Keine Internetverbindung.",
+	"Problem with loading plugin config.\nConfig: " : "Problem beim Laden der Plugin-Konfiguration.\nKonfiguration:"
 }
