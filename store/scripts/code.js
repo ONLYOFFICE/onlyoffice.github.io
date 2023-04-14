@@ -628,6 +628,7 @@ function showListofPlugins(bAll, sortedArr) {
 
 function createPluginDiv(plugin, bInstalled) {
 	// this function creates div (preview) for plugins
+	if(bAppDirectory) bInstalled = false;
 	let div = document.createElement('div');
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
@@ -787,7 +788,7 @@ function onClickItem() {
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
 
-	let installed = findPlugin(false, guid);
+	let installed = bAppDirectory ? null : findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
 	if ( !plugin || ( isDesktop && installed ) ) {
 		elements.divGitLink.classList.add('hidden');
@@ -1418,7 +1419,8 @@ function removeUnloaded(unloaded) {
 };
 
 function findPlugin(bAll, guid) {
-	let res = bAll || bAppDirectory
+	// todo поправить везде где есть поиск, чтобы поиск запускался, если только есть такая группа плагинов
+	let res = bAll
 			? allPlugins.find(function(el){return el.guid === guid})
 			: installedPlugins.find(function(el){return el.guid === guid});
 	return res;
