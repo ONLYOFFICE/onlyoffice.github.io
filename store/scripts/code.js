@@ -1280,7 +1280,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = getTranslated(text);
 		let toolbar = document.getElementById('toolbar_tools');
-		if (bAll (!isOnline || isPluginLoading) ) {
+		if (bAll && (!isOnline || isPluginLoading) ) {
 			$('.div_notification').remove();
 			$('.div_item').remove();
 			setTimeout(function(){if (Ps) Ps.update()});
