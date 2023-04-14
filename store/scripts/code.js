@@ -157,7 +157,7 @@ window.onload = function() {
 		toogleView(event.target, elements.btnMyPlugins, messages.linkPR, true, false);
 	};
 
-	// elements.arrow.onclick = onClickBack;
+	elements.arrow.onclick = onClickBack;
 
 	// elements.imgScreenshot.onclick = onClickScreenshot;
 	elements.arrowPrev.onclick = function(event) {
@@ -454,7 +454,7 @@ function initElemnts() {
 	elements.linkNewPlugin = document.getElementById('link_newPlugin');
 	elements.divBody = document.getElementById('div_body');
 	elements.divMain = document.getElementById('div_main');
-	// elements.arrow = document.getElementById('arrow');
+	elements.arrow = document.getElementById('arrow');
 	// elements.close = document.getElementById('close');
 	elements.divHeader = document.getElementById('div_header');
 	elements.divSelected = document.getElementById('div_selected_toolbar');
@@ -899,7 +899,7 @@ function onClickItem() {
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
 	sendMessage( { type : "showButton" } );
-	// elements.arrow.classList.remove('hidden');
+	elements.arrow.classList.remove('hidden');
 };
 
 function onClickBack() {
@@ -914,7 +914,7 @@ function onClickBack() {
 	current.index = 0;
 	current.screenshots = [];
 	current.url = '';
-	// elements.arrow.classList.add('hidden');
+	elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
 };
 
