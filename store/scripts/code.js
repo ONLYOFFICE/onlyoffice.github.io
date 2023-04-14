@@ -1432,7 +1432,7 @@ function removeUnloaded(unloaded) {
 };
 
 function findPlugin(bAll, guid) {
-	let res = bAll
+	let res = bAll || bAppDirectory
 			? allPlugins.find(function(el){return el.guid === guid})
 			: installedPlugins.find(function(el){return el.guid === guid});
 	return res;
