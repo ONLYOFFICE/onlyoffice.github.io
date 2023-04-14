@@ -20,7 +20,7 @@ let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 let isOnline = null;                                                 // flag internet connection
-if (isDesktop) checkInternet();                                      // check internet connection (only for desktop)
+checkInternet();                                                     // check internet connection (only for desktop)
 let interval = null;                                                 // interval for checking internet connection (if it doesn't work on launch)
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desktop)
 let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
@@ -1459,6 +1459,10 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 };
 
 function checkInternet() {
+	if (!isDesktop) {
+		isOnline = true;
+		return;
+	}
 	try {
 		let xhr = new XMLHttpRequest();
 		let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
