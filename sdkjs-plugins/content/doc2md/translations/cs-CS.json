@@ -7,5 +7,7 @@
   "HTML headings/IDs": "Nadpisy/ID HTML",
   "Create base64 images": "Vytvoření obrázků base64",
   "Suppress top comment": "Potlačit horní komentář",
-  "Help": "Vyberte Markdown nebo HTML.\n* Výchozí: převod celého dokumentu.\n* Vyberte text pro omezení rozsahu."
+  "Help": "Vyberte Markdown nebo HTML.\n* Výchozí: převod celého dokumentu.\n* Vyberte text pro omezení rozsahu.",
+  "Text was copied to buffer!": "Text byl zkopírován do vyrovnávací paměti!",
+  "Convert to Markdown or HTML": "Převést na Markdown nebo HTML"
 }
