@@ -136,7 +136,9 @@
 				break;
 			case 'remove':
 				removeGuid = data.guid;
-				if ( !data.backup )
+				if ( Number( editorVersion.split('.').join('') < 740) )
+					removePlugin(true);
+				else if ( !data.backup )
 					removePlugin(data.backup);
 				else
 					createWindow();
