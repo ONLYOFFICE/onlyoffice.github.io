@@ -1112,6 +1112,8 @@ function onTranslate() {
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && (installedPlugins || bAppDirectory)) {
+		if(bAppDirectory)
+			installedPlugins = [];
 		createSelect();
 		if (isOnline)
 			showListofPlugins(isOnline);
