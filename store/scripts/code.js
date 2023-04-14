@@ -105,7 +105,7 @@ window.Asc = {
 const pos = location.href.indexOf('store/index.html');
 const ioUrl = location.href.substring(0, pos);
 const type = getUrlSearchValue('type');                              // if we have type, the we work in appdirectory
-if (type.length) getAllPluginsData(true, false);
+if (type.length) fetchAllPlugins(true, false);
 
 // get translation file
 getTranslation();
