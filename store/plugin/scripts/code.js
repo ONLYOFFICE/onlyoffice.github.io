@@ -16,15 +16,15 @@
  *
  */
 (function(window, undefined) {
-
-	let isOnline = null;
+	const isDesktop = window.AscDesktopEditor !== undefined;
+	let isOnline = isDesktop ? true : null;
 	let isInit = false;
 	let interval = null;
-	checkInternet();
+	if (!isDesktop)
+		checkInternet();
 
 	// create iframe
 	const iframe = document.createElement("iframe");
-	const isDesktop = window.AscDesktopEditor !== undefined;
 
 	let modalWindow = null;
 	let removeGuid = null;
@@ -32,7 +32,7 @@
 	let BPluginReady = false;
 	let editorVersion = null;
 	let marketplaceURl = null;
-	const OOMarketplaceUrl = 'https://onlyoffice.github.io/store/index.html';
+	const OOMarketplaceUrl = isDesktop ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
 	try {
 		// for incognito mode
 		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
