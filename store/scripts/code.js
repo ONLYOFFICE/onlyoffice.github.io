@@ -45,8 +45,6 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-const type = getUrlSearchValue('type');                              // if we have type, the we work in appdirectory
-if (type.length) getAllPluginsData(true, false);
 let isResizeOnStart = true;                                          // flag for firs resize on start
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -106,6 +104,8 @@ window.Asc = {
 
 const pos = location.href.indexOf('store/index.html');
 const ioUrl = location.href.substring(0, pos);
+const type = getUrlSearchValue('type');                              // if we have type, the we work in appdirectory
+if (type.length) getAllPluginsData(true, false);
 
 // get translation file
 getTranslation();
