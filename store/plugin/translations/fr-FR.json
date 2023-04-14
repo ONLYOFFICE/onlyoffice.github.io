@@ -1,3 +1,9 @@
 {
-	"This version of \"Plugin Manager\" is not official." : "Cette version de \"Plugin Manager\" n'est pas officielle.."
+	"This version of \"Plugin Manager\" is not official." : "Cette version de \"Plugin Manager\" n'est pas officielle.",
+	"No Internet Connection.": "Pas De Connexion Internet.",
+	"Warning" : "Avertissement",
+	"Yes" : "Oui",
+	"No" : "Aucun",
+	"Do you want to completely remove this plugin?" : "Voulez-vous supprimer complètement ce plugin?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Si vous choisissez \"Aucun\", vous pourrez restaurer ce plugin plus tard sur le Gestionnaire de Plugins."
 }
