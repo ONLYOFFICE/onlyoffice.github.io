@@ -104,8 +104,7 @@ window.Asc = {
 
 const pos = location.href.indexOf('store/index.html');
 const ioUrl = location.href.substring(0, pos);
-const type = getUrlSearchValue('type');                              // if we have type, the we work in appdirectory
-if (type.length) fetchAllPlugins(true, false);
+const bAppDirectory = getUrlSearchValue('type').length !== 0;                              // if we have type, the we work in appdirectory
 
 // get translation file
 getTranslation();
@@ -370,7 +369,7 @@ function fetchAllPlugins(bFirstRender, bConnectionRestored) {
 	makeRequest(configUrl).then(
 		function(response) {
 			allPlugins = JSON.parse(response);
-			if (installedPlugins)
+			if (installedPlugins || bAppDirectory)
 				getAllPluginsData(bFirstRender, bConnectionRestored);
 		},
 		function(err) {
@@ -1111,7 +1110,7 @@ function onTranslate() {
 
 function showMarketplace() {
 	// show main window to user
-	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && installedPlugins) {
+	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && (installedPlugins || bAppDirectory)) {
 		createSelect();
 		if (isOnline)
 			showListofPlugins(isOnline);
