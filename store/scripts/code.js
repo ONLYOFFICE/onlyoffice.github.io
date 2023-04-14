@@ -628,7 +628,6 @@ function showListofPlugins(bAll, sortedArr) {
 
 function createPluginDiv(plugin, bInstalled) {
 	// this function creates div (preview) for plugins
-	if(bAppDirectory) bInstalled = false;
 	let div = document.createElement('div');
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
@@ -645,8 +644,9 @@ function createPluginDiv(plugin, bInstalled) {
 
 	div.onclick = onClickItem;
 
-	let installed = bInstalled ? plugin : findPlugin(false, plugin.guid);
-	if (bInstalled) {
+	// todo поправить
+	let installed = bAppDirectory ? null : bInstalled ? plugin : findPlugin(false, plugin.guid);
+	if (bInstalled || bAppDirectory) {
 		plugin = findPlugin(true, plugin.guid);
 	}
 
