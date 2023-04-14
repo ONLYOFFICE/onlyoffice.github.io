@@ -46,7 +46,7 @@ let translate = {'Loading': 'Loading'};                              // translat
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 const type = getUrlSearchValue('type');                              // if we have type, the we work in appdirectory
-console.log('type', type);
+if (type.length) getAllPluginsData(true, false);
 let isResizeOnStart = true;                                          // flag for firs resize on start
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
