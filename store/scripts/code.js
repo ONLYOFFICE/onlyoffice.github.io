@@ -626,6 +626,25 @@ function showListofPlugins(bAll, sortedArr) {
 	}
 };
 
+function getPluginVersion(text)
+{
+	let factor = 1000;
+	let major = 1;
+	let minor = 0;
+	let build = 0;
+
+	if (text && text.split)
+	{
+		let arValues = text.split('.');
+		let count = arValues.length;
+		if (count > 0) major = parseInt(arValues[0]);
+		if (count > 1) minor = parseInt(arValues[1]);
+		if (count > 2) build = parseInt(arValues[2]);
+	}
+
+	return major * factor * factor + minor * factor + build;
+}
+
 function createPluginDiv(plugin, bInstalled) {
 	// this function creates div (preview) for plugins
 	let div = document.createElement('div');
@@ -665,8 +684,8 @@ function createPluginDiv(plugin, bInstalled) {
 	let bHasUpdate = false;
 	let bRemoved = (installed && installed.removed);
 	if (bCheckUpdate && installed && plugin) {
-		const installedV = (installed.obj.version ? Number( installed.obj.version.split('.').join('') ) : 1);
-		const lastV = (plugin.version ? Number( plugin.version.split('.').join('') ) : installedV);
+		const installedV = getPluginVersion(installed.obj.version);
+		const lastV = getPluginVersion(plugin.version);
 		if (lastV > installedV) {
 			bHasUpdate = true;
 			plugin.bHasUpdate = true;
