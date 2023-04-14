@@ -1112,8 +1112,10 @@ function onTranslate() {
 function showMarketplace() {
 	// show main window to user
 	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && (installedPlugins || bAppDirectory)) {
-		if(bAppDirectory)
+		if(bAppDirectory) {
 			installedPlugins = [];
+			document.getElementsByClassName('toolbar_top')[0].classList.add('hidden');
+		}
 		createSelect();
 		if (isOnline)
 			showListofPlugins(isOnline);
