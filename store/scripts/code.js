@@ -318,7 +318,6 @@ window.addEventListener('message', function(message) {
 						makeSearch(searchVal.toLowerCase());
 					else
 						this.document.getElementById(message.guid).remove();
-						// showListofPlugins(false);
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
 				}
