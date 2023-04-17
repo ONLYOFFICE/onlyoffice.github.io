@@ -303,7 +303,8 @@ window.addEventListener('message', function(message) {
 					if (searchVal !== '')
 						makeSearch(searchVal.toLowerCase());
 					else
-						showListofPlugins(false);
+						this.document.getElementById(guid).remove();
+						// showListofPlugins(false);
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
 				}
