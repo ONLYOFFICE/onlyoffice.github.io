@@ -284,7 +284,7 @@ window.addEventListener('message', function(message) {
 			
 			if (installed) {
 				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
-				if (plugin && (!bHasLocal || !needBackup) ) {
+				if (plugin && ( isDesktop && (!bHasLocal || !needBackup) ) ) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
