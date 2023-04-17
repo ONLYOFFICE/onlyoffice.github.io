@@ -1184,24 +1184,17 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
 	let baseUrl;
 
-	if (installedPlugins) {
+	if (installedPlugins && isDesktop) {
+		// it doesn't work when we use icons from other resource (cors problems)
+		// it's why we use local icons only for desktop
 		plugin = findPlugin(false, guid);
 		if (plugin) {
-			let start;
-			if (isDesktop) {
-				baseUrl = plugin.obj.baseUrl;
-			} else {
-				baseUrl = plugin.baseUrl;
-				start = baseUrl.indexOf('web-apps');
-				baseUrl = baseUrl.substring(0, start);
-				start = plugin.obj.baseUrl.indexOf('sdkjs-plugins');
-				baseUrl += plugin.obj.baseUrl.substring(start);
-			}
 			plugin = plugin.obj;
+			baseUrl = plugin.baseUrl;
 		}
 	}
 
-	if ( ( !plugin || ( !baseUrl.includes('https://') && !isDesktop ) ) && allPlugins) {
+	if ( ( !plugin || !isDesktop ) && allPlugins) {
 		plugin = findPlugin(true, guid);
 		if (plugin)
 			baseUrl = plugin.baseUrl;
