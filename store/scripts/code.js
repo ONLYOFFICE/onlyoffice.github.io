@@ -375,7 +375,7 @@ window.addEventListener('message', function(message) {
 	};
 }, false);
 
-function fetchAllPlugins(bFirstRender, bConnectionRestored) {
+function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	// function for fetching all plugins from config
 	clearInterval(interval);
 	interval = null;
@@ -384,7 +384,7 @@ function fetchAllPlugins(bFirstRender, bConnectionRestored) {
 		function(response) {
 			allPlugins = JSON.parse(response);
 			if (installedPlugins)
-				getAllPluginsData(bFirstRender, bConnectionRestored);
+				getAllPluginsData(bFirstRender, bshowMarketplace);
 		},
 		function(err) {
 			createError( new Error( getTranslated( 'Problem with loading markeplace config.' ) ) );
@@ -497,7 +497,7 @@ function toogleLoader(show, text) {
 	}
 };
 
-function getAllPluginsData(bFirstRender, bConnectionRestored) {
+function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	// get config file for each item in config.json
 	isPluginLoading = true;
 	let count = 0;
@@ -521,7 +521,7 @@ function getAllPluginsData(bFirstRender, bConnectionRestored) {
 					isPluginLoading = false;
 					if (bFirstRender)
 						showMarketplace();
-					else if (bConnectionRestored)
+					else if (bshowMarketplace)
 						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
 				makeRequest(pluginUrl + 'translations/langs.json').then(
@@ -554,7 +554,7 @@ function getAllPluginsData(bFirstRender, bConnectionRestored) {
 					isPluginLoading = false;
 					if (bFirstRender)
 						showMarketplace();
-					else if (bConnectionRestored)
+					else if (bshowMarketplace)
 						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
 			}
@@ -1502,7 +1502,8 @@ function checkInternet() {
 			if (this.readyState == 4) {
 				if (this.status >= 200 && this.status < 300) {
 					isOnline = true;
-					fetchAllPlugins(interval === null, elements.btnMarketplace.classList.contains('btn_toolbar_active'));
+					let bshowMarketplace = ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false;
+					fetchAllPlugins(interval === null, bshowMarketplace);
 				}
 			}
 		};
