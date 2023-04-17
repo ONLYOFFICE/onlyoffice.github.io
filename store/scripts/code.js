@@ -118,7 +118,6 @@ window.Asc = {
 
 const pos = location.href.indexOf('store/index.html');
 const ioUrl = location.href.substring(0, pos);
-const bAppDirectory = getUrlSearchValue('type').length !== 0;                              // if we have type, the we work in appdirectory
 
 // get translation file
 getTranslation();
@@ -157,7 +156,7 @@ window.onload = function() {
 		toogleView(event.target, elements.btnMyPlugins, messages.linkPR, true, false);
 	};
 
-	elements.arrow.onclick = onClickBack;
+	// elements.arrow.onclick = onClickBack;
 
 	// elements.imgScreenshot.onclick = onClickScreenshot;
 	elements.arrowPrev.onclick = function(event) {
@@ -384,7 +383,7 @@ function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	makeRequest(configUrl).then(
 		function(response) {
 			allPlugins = JSON.parse(response);
-			if (installedPlugins || bAppDirectory)
+			if (installedPlugins)
 				getAllPluginsData(bFirstRender, bshowMarketplace);
 		},
 		function(err) {
@@ -455,7 +454,7 @@ function initElemnts() {
 	elements.linkNewPlugin = document.getElementById('link_newPlugin');
 	elements.divBody = document.getElementById('div_body');
 	elements.divMain = document.getElementById('div_main');
-	elements.arrow = document.getElementById('arrow');
+	// elements.arrow = document.getElementById('arrow');
 	// elements.close = document.getElementById('close');
 	elements.divHeader = document.getElementById('div_header');
 	elements.divSelected = document.getElementById('div_selected_toolbar');
@@ -678,10 +677,8 @@ function createPluginDiv(plugin, bInstalled) {
 
 	div.onclick = onClickItem;
 
-	// todo поправить
-	let installed = 
-  ? null : bInstalled ? plugin : findPlugin(false, plugin.guid);
-	if (bInstalled || bAppDirectory) {
+	let installed = bInstalled ? plugin : findPlugin(false, plugin.guid);
+	if (bInstalled) {
 		plugin = findPlugin(true, plugin.guid);
 	}
 
@@ -823,7 +820,7 @@ function onClickItem() {
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
 
-	let installed = bAppDirectory ? null : findPlugin(false, guid);
+	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
 	if ( !plugin || ( isDesktop && installed ) ) {
 		elements.divGitLink.classList.add('hidden');
@@ -920,7 +917,7 @@ function onClickItem() {
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
 	sendMessage( { type : "showButton" } );
-	elements.arrow.classList.remove('hidden');
+	// elements.arrow.classList.remove('hidden');
 };
 
 function onClickBack() {
@@ -935,7 +932,7 @@ function onClickBack() {
 	current.index = 0;
 	current.screenshots = [];
 	current.url = '';
-	elements.arrow.classList.add('hidden');
+	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
 };
 
@@ -1146,11 +1143,7 @@ function onTranslate() {
 
 function showMarketplace() {
 	// show main window to user
-	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && (installedPlugins || bAppDirectory)) {
-		if(bAppDirectory) {
-			installedPlugins = [];
-			document.getElementsByClassName('toolbar_top')[0].classList.add('hidden');
-		}
+	if (!isPluginLoading && !isTranslationLoading && !isFrameLoading && installedPlugins) {
 		createSelect();
 		if (isOnline)
 			showListofPlugins(isOnline);
@@ -1451,7 +1444,6 @@ function removeUnloaded(unloaded) {
 };
 
 function findPlugin(bAll, guid) {
-	// todo поправить везде где есть поиск, чтобы поиск запускался, если только есть такая группа плагинов
 	let res = bAll
 			? allPlugins.find(function(el){return el.guid === guid})
 			: installedPlugins.find(function(el){return el.guid === guid});
