@@ -284,7 +284,7 @@ window.addEventListener('message', function(message) {
 			
 			if (installed) {
 				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
-				if (plugin && (!bHasLocal || !needBackup) ) {
+				if (plugin && (!bHasLocal || (isDesktop && !needBackup) ) ) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
@@ -303,7 +303,7 @@ window.addEventListener('message', function(message) {
 					if (searchVal !== '')
 						makeSearch(searchVal.toLowerCase());
 					else
-						showListofPlugins(false);
+						this.document.getElementById(message.guid).remove();
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
 				}
@@ -361,7 +361,7 @@ window.addEventListener('message', function(message) {
 	};
 }, false);
 
-function fetchAllPlugins(bFirstRender, bConnectionRestored) {
+function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	// function for fetching all plugins from config
 	clearInterval(interval);
 	interval = null;
@@ -370,7 +370,7 @@ function fetchAllPlugins(bFirstRender, bConnectionRestored) {
 		function(response) {
 			allPlugins = JSON.parse(response);
 			if (installedPlugins)
-				getAllPluginsData(bFirstRender, bConnectionRestored);
+				getAllPluginsData(bFirstRender, bshowMarketplace);
 		},
 		function(err) {
 			createError( new Error( getTranslated( 'Problem with loading markeplace config.' ) ) );
@@ -483,7 +483,7 @@ function toogleLoader(show, text) {
 	}
 };
 
-function getAllPluginsData(bFirstRender, bConnectionRestored) {
+function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	// get config file for each item in config.json
 	isPluginLoading = true;
 	let count = 0;
@@ -507,7 +507,7 @@ function getAllPluginsData(bFirstRender, bConnectionRestored) {
 					isPluginLoading = false;
 					if (bFirstRender)
 						showMarketplace();
-					else if (bConnectionRestored)
+					else if (bshowMarketplace)
 						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
 				makeRequest(pluginUrl + 'translations/langs.json').then(
@@ -540,7 +540,7 @@ function getAllPluginsData(bFirstRender, bConnectionRestored) {
 					isPluginLoading = false;
 					if (bFirstRender)
 						showMarketplace();
-					else if (bConnectionRestored)
+					else if (bshowMarketplace)
 						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
 			}
@@ -1184,24 +1184,17 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
 	let baseUrl;
 
-	if (installedPlugins) {
+	if (installedPlugins && isDesktop) {
+		// it doesn't work when we use icons from other resource (cors problems)
+		// it's why we use local icons only for desktop
 		plugin = findPlugin(false, guid);
 		if (plugin) {
-			let start;
-			if (isDesktop) {
-				baseUrl = plugin.obj.baseUrl;
-			} else {
-				baseUrl = plugin.baseUrl;
-				start = baseUrl.indexOf('web-apps');
-				baseUrl = baseUrl.substring(0, start);
-				start = plugin.obj.baseUrl.indexOf('sdkjs-plugins');
-				baseUrl += plugin.obj.baseUrl.substring(start);
-			}
 			plugin = plugin.obj;
+			baseUrl = plugin.baseUrl;
 		}
 	}
 
-	if ( ( !plugin || ( !baseUrl.includes('https://') && !isDesktop ) ) && allPlugins) {
+	if ( ( !plugin || !isDesktop ) && allPlugins) {
 		plugin = findPlugin(true, guid);
 		if (plugin)
 			baseUrl = plugin.baseUrl;
@@ -1488,7 +1481,8 @@ function checkInternet() {
 			if (this.readyState == 4) {
 				if (this.status >= 200 && this.status < 300) {
 					isOnline = true;
-					fetchAllPlugins(interval === null, elements.btnMarketplace.classList.contains('btn_toolbar_active'));
+					let bshowMarketplace = ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false;
+					fetchAllPlugins(interval === null, bshowMarketplace);
 				}
 			}
 		};
