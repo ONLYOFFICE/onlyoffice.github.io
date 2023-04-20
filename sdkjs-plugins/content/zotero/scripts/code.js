@@ -903,7 +903,7 @@
 			if (arrFields.length) {
 				var updatedFields = [];
 				var bibField = null;
-				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join();
+				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
 				var bibliography = elements.tempDiv.innerText;
 				arrFields.forEach(function(field) {
 					if (bUpadteAll && field.Value.includes(citPrefix)) {
