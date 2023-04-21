@@ -23,5 +23,6 @@
   "Refresh": "Aktualizovat",
   "Save as text": "Uložit jako text",
   "Please insert some citation into the document." : "Vložte prosím do dokumentu nějakou citaci.",
-  "Synchronize" : "Synchronizovat"
+  "Synchronize" : "Synchronizovat",
+  "Omit Author" : "Vynechat Autora"
 }
