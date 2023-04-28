@@ -30,6 +30,7 @@
  *
  */
 
+// todo поправить с ошибкой, что у нее нет поля message (может её тогда совсем не выводить или показать просто error)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
@@ -979,7 +980,7 @@ function createError(err) {
 	background.className = 'asc-plugin-loader';
 	let span = document.createElement('span');
 	span.className = 'error_caption';
-	span.innerHTML = err.message;
+	span.innerHTML = err.message || 'Error';
 	background.appendChild(span);
 	document.getElementById('div_error').appendChild(background);
 	document.getElementById('div_error').classList.remove('hidden');
