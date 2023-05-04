@@ -1508,10 +1508,12 @@ function handeNoInternet() {
 		}, 5000);
 	}
 
-	if (!elements.divSelected.classList.contains('hidden'))
+	let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
+	
+	if (bshowMarketplace && elements.divSelected && !elements.divSelected.classList.contains('hidden'))
 		onClickBack();
 
-	if (( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ))
+	if (bshowMarketplace)
 		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 };
 
