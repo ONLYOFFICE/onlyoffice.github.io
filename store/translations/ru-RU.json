@@ -50,5 +50,8 @@
 	"This plugin will only work in a newer version of the editor.": "Этот плагин будет работать только в более новой версии редактора.",
 	"Nothing was found for this query.": "По этому запросу ничего не найдено.",
 	"No Internet Connection.": "Нет подключения к Интернету.",
-	"Problem with loading plugin config.\nConfig: " : "Проблема с загрузкой конфигурации плагина.\nКонфиг: "
+	"Problem with loading plugin config.\nConfig: " : "Проблема с загрузкой конфигурации плагина.\nКонфиг: ",
+	"Problem with loading some resources." : "Проблема с загрузкой ресурсов.",
+	"File not found." : "Файл не найден.",
+	"Network problem." : "Проблемы с сетью."
 }

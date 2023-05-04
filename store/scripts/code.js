@@ -29,7 +29,7 @@ let searchTimeout = null;                                            // timeot f
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
 let updateCount = 0;                                                 // counter for plugins in updating process
-let allPlugins;                                                      // list of all plugins from config
+let allPlugins = [];                                                 // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
@@ -69,7 +69,7 @@ const languages = [                                                  // list of 
 const messages = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
 	linkManually: 'Install plugin manually',
-	linkPR: 'Submit your own plugin',
+	linkPR: 'Submit your own plugin'
 };
 const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
@@ -208,7 +208,7 @@ window.addEventListener('message', function(message) {
 
 			if (message.updateInstalled)
 				showListofPlugins(false);
-			else if ( allPlugins || (isDesktop && !isOnline) )
+			else if ( allPlugins.length || (isDesktop && !isOnline) )
 				getAllPluginsData(true, false);
 			
 			break;
@@ -353,7 +353,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = ( message.version && message.version.includes('.') ? Number( message.version.split('.').join('') ) : 1e8 );
+			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -364,8 +364,6 @@ window.addEventListener('message', function(message) {
 
 function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	// function for fetching all plugins from config
-	clearInterval(interval);
-	interval = null;
 	isPluginLoading = true;
 	makeRequest(configUrl).then(
 		function(response) {
@@ -376,7 +374,6 @@ function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 		function(err) {
 			createError( new Error( getTranslated( 'Problem with loading markeplace config.' ) ) );
 			isPluginLoading = false;
-			allPlugins = [];
 			showMarketplace();
 		}
 	);
@@ -395,17 +392,20 @@ function makeRequest(url, responseType) {
 			
 			xhr.onload = function () {
 				if (this.readyState == 4) {
-					if (this.status == 200 || location.href.indexOf("file:") == 0) {
+					if (this.status !== 404 && (this.status == 200 || location.href.indexOf("file:") == 0)) {
 						resolve(this.response);
 					}
 					if (this.status >= 400) {
-						reject(new Error(this.response));
+						let errorText = this.status === 404 ? 'File not found.' : 'Network problem.';
+						reject( new Error( getTranslated(errorText) ) );
 					}
 				}
 			};
 
 			xhr.onerror = function (err) {
 				reject(err);
+				if (url.includes('https'))
+					handeNoInternet();
 			};
 
 			xhr.send(null);
@@ -676,7 +676,7 @@ function createPluginDiv(plugin, bInstalled) {
 	}
 
 	let bNotAvailable = false;
-	const minV = (plugin.minVersion ? Number( plugin.minVersion.split('.').join('') ) : -1);
+	const minV = (plugin.minVersion ? getPluginVersion(plugin.minVersion) : -1);
 	if (minV > editorVersion) {
 		bCheckUpdate = false;
 		bNotAvailable = true;
@@ -799,7 +799,7 @@ function onClickUpdateAll() {
 
 function onClickItem() {
 	// There we will make preview for selected plugin
-	let offered = " Ascensio System SIA";
+	let offered = "Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
 	let pluginDiv = document.getElementById(guid);
@@ -962,18 +962,22 @@ function createNotification(text) {
 function createError(err) {
 	// creates a modal window with error message for user and error in console
 	console.error(err);
+	let divErr = document.getElementById('div_error');
+	// we don't show a new error if we have previous one
+	if (!divErr.classList.contains('hidden'))
+		return;
 	let background = document.createElement('div');
 	background.className = 'asc-plugin-loader';
 	let span = document.createElement('span');
 	span.className = 'error_caption';
-	span.innerHTML = err.message || 'Error';
+	span.innerHTML = err.message || getTranslated('Problem with loading some resources.');
 	background.appendChild(span);
-	document.getElementById('div_error').appendChild(background);
-	document.getElementById('div_error').classList.remove('hidden');
+	divErr.appendChild(background);
+	divErr.classList.remove('hidden');
 	setTimeout(function() {
 		// remove error after 5 seconds
 		background.remove();
-		document.getElementById('div_error').classList.add('hidden');
+		divErr.classList.add('hidden');
 	}, 5000);
 };
 
@@ -1473,39 +1477,42 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 };
 
 function checkInternet() {
-	try {
-		let xhr = new XMLHttpRequest();
-		let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
-		xhr.open('GET', url, true);
-		
-		xhr.onload = function () {
-			if (this.readyState == 4) {
-				if (this.status >= 200 && this.status < 300) {
-					isOnline = true;
-					let bshowMarketplace = ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false;
-					fetchAllPlugins(interval === null, bshowMarketplace);
-				}
+	// url for check internet connection
+	let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
+	makeRequest(url).then(
+		function() {
+			isOnline = true;
+			let bShowSelected = !elements.divSelected.classList.contains('hidden');
+			let bshowMarketplace = bShowSelected ? false : ( ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false );
+			if (!allPlugins.length) {
+				fetchAllPlugins(interval === null, bshowMarketplace);
+			} else if (bShowSelected) {
+				let guid = elements.divSelected.getAttribute('data-guid');
+				let div = document.getElementById(guid);
+				if (div)
+					div.onclick();
+			} else if (bshowMarketplace) {
+				toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 			}
-		};
-
-		xhr.onerror = function (err) {
-			handeNoInternet();
-		};
-
-		xhr.send(null);
-	} catch (error) {
-		handeNoInternet();
-	}
+			clearInterval(interval);
+			interval = null;
+		}
+	);
 };
 
 function handeNoInternet() {
 	isOnline = false;
-	allPlugins = [];
 	if (!interval) {
 		interval = setInterval(function() {
 			checkInternet();
 		}, 5000);
 	}
+
+	if (!elements.divSelected.classList.contains('hidden'))
+		onClickBack();
+
+	if (( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ))
+		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 };
 
 function getTranslated(text) {
