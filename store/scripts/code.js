@@ -903,7 +903,7 @@ function onClickItem() {
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
-	sendMessage( { type : "showButton" } );
+	sendMessage( { type : "showButton", show : true } );
 	// elements.arrow.classList.remove('hidden');
 };
 
@@ -1510,8 +1510,10 @@ function handeNoInternet() {
 
 	let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
 	
-	if (bshowMarketplace && elements.divSelected && !elements.divSelected.classList.contains('hidden'))
+	if (bshowMarketplace && elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
+		sendMessage( { type : "showButton", show : false } );
 		onClickBack();
+	}
 
 	if (bshowMarketplace)
 		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);

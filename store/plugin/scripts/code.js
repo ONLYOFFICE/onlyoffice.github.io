@@ -149,7 +149,7 @@
 				});
 				break;
 			case 'showButton' :
-				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
+				window.Asc.plugin.executeMethod('ShowButton',['back', data.show]);
 				break;
 		}
 		
