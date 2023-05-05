@@ -754,8 +754,13 @@ function onClickInstall(target, event) {
 
 function onClickUpdate(target) {
 	// click update button
-	clearTimeout(timeout);
-	timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	// we should do that because we have some problem when desctop is loading plugin
+	if (isDesktop) {
+		toogleLoader(true, 'Installation');
+	} else {
+		clearTimeout(timeout);
+		timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	}
 	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	updateCount++;
@@ -765,7 +770,14 @@ function onClickUpdate(target) {
 		guid : guid,
 		config : plugin
 	};
-	sendMessage(message);
+	// we should do that because we have some problem when desctop is loading plugin
+	if (isDesktop) {
+		setTimeout(function(){
+			sendMessage(message);
+		}, 200);
+	} else {
+		sendMessage(message);
+	}
 };
 
 function onClickRemove(target, event) {
