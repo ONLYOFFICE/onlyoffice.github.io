@@ -1533,6 +1533,8 @@ function checkInternet() {
 					div.onclick();
 			} else if (bshowMarketplace) {
 				toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+			} else if (!isDesktop) {
+				toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
 			}
 			clearInterval(interval);
 			interval = null;
