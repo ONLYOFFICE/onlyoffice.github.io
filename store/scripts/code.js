@@ -726,8 +726,13 @@ function createPluginDiv(plugin, bInstalled) {
 function onClickInstall(target, event) {
 	event.stopImmediatePropagation();
 	// click install button
-	clearTimeout(timeout);
-	timeout = setTimeout(toogleLoader, 200, true, "Installation");
+	// we should do that because we have some problem when desctop is loading plugin
+	if (isDesktop) {
+		toogleLoader(true, 'Installation');
+	} else {
+		clearTimeout(timeout);
+		timeout = setTimeout(toogleLoader, 200, true, "Installation");
+	}
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	let installed = findPlugin(false, guid);
@@ -737,7 +742,14 @@ function onClickInstall(target, event) {
 		guid : guid,
 		config : (installed ? installed.obj : plugin)
 	};
-	sendMessage(message);
+	// we should do that because we have some problem when desctop is loading plugin
+	if (isDesktop) {
+		setTimeout(function(){
+			sendMessage(message);
+		}, 200);
+	} else {
+		sendMessage(message);
+	}
 };
 
 function onClickUpdate(target) {
@@ -1482,7 +1494,7 @@ function checkInternet() {
 	makeRequest(url).then(
 		function() {
 			isOnline = true;
-			let bShowSelected = !elements.divSelected.classList.contains('hidden');
+			let bShowSelected = elements.divSelected && !elements.divSelected.classList.contains('hidden');
 			let bshowMarketplace = bShowSelected ? false : ( ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false );
 			if (!allPlugins.length) {
 				fetchAllPlugins(interval === null, bshowMarketplace);
@@ -1509,7 +1521,7 @@ function handeNoInternet() {
 	}
 
 	let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
-	
+
 	if (bshowMarketplace && elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
 		sendMessage( { type : "showButton", show : false } );
 		onClickBack();
