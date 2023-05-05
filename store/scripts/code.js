@@ -698,7 +698,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	let bHasUpdate = false;
 	let bRemoved = (installed && installed.removed);
-	if (bCheckUpdate && installed && plugin) {
+	if (bCheckUpdate && installed && installed.canRemoved && plugin) {
 		const installedV = getPluginVersion(installed.obj.version);
 		const lastV = getPluginVersion(plugin.version);
 		if (lastV > installedV) {
@@ -738,6 +738,7 @@ function createPluginDiv(plugin, bInstalled) {
 };
 
 function onClickInstall(target, event) {
+	// click install button
 	event.stopImmediatePropagation();
 	// click install button
 	// we should do that because we have some problem when desctop is loading plugin
