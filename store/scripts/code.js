@@ -1538,13 +1538,15 @@ function handeNoInternet() {
 
 	let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
 
-	if (bshowMarketplace && elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
+	if ( (bshowMarketplace || !isDesktop) && elements.divSelected && !elements.divSelected.classList.contains('hidden') ) {
 		sendMessage( { type : "showButton", show : false } );
 		onClickBack();
 	}
 
 	if (bshowMarketplace)
 		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+	else if (!isDesktop)
+		toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
 };
 
 function getTranslated(text) {
