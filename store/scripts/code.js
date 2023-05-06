@@ -698,7 +698,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	let bHasUpdate = false;
 	let bRemoved = (installed && installed.removed);
-	if (bCheckUpdate && installed && installed.canRemoved && plugin) {
+	if (bCheckUpdate && installed && plugin) {
 		const installedV = getPluginVersion(installed.obj.version);
 		const lastV = getPluginVersion(plugin.version);
 		if (lastV > installedV) {
@@ -741,7 +741,7 @@ function onClickInstall(target, event) {
 	// click install button
 	event.stopImmediatePropagation();
 	// click install button
-	// we should do that because we have some problem when desctop is loading plugin
+	// we should do that because we have some problem when desktop is loading plugin
 	if (isDesktop) {
 		toogleLoader(true, 'Installation');
 	} else {
@@ -757,7 +757,7 @@ function onClickInstall(target, event) {
 		guid : guid,
 		config : (installed ? installed.obj : plugin)
 	};
-	// we should do that because we have some problem when desctop is loading plugin
+	// we should do that because we have some problem when desktop is loading plugin
 	if (isDesktop) {
 		setTimeout(function(){
 			sendMessage(message);
@@ -769,9 +769,9 @@ function onClickInstall(target, event) {
 
 function onClickUpdate(target) {
 	// click update button
-	// we should do that because we have some problem when desctop is loading plugin
+	// we should do that because we have some problem when desktop is loading plugin
 	if (isDesktop) {
-		toogleLoader(true, 'Installation');
+		toogleLoader(true, 'Updating');
 	} else {
 		clearTimeout(timeout);
 		timeout = setTimeout(toogleLoader, 200, true, "Updating");
@@ -785,7 +785,7 @@ function onClickUpdate(target) {
 		guid : guid,
 		config : plugin
 	};
-	// we should do that because we have some problem when desctop is loading plugin
+	// we should do that because we have some problem when desktop is loading plugin
 	if (isDesktop) {
 		setTimeout(function(){
 			sendMessage(message);
@@ -798,8 +798,12 @@ function onClickUpdate(target) {
 function onClickRemove(target, event) {
 	event.stopImmediatePropagation();
 	// click remove button
-	clearTimeout(timeout);
-	timeout = setTimeout(toogleLoader, 200, true, "Removal");
+	if (isDesktop) {
+		toogleLoader(true, 'Removal');
+	} else {
+		clearTimeout(timeout);
+		timeout = setTimeout(toogleLoader, 200, true, "Removal");
+	}
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message = {
 		type : 'remove',
