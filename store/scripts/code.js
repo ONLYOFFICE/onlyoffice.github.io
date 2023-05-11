@@ -737,6 +737,12 @@ function onClickInstall(target, event) {
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	let installed = findPlugin(false, guid);
+	if (!plugin && !installed) {
+		// if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
+		sendMessage( { type : "showButton", show : false } );
+		onClickBack();
+		toogleLoader(false);
+	}
 	let message = {
 		type : 'install',
 		url : (installed ? installed.obj.baseUrl : plugin.url),
