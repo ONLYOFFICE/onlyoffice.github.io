@@ -1560,10 +1560,12 @@ function handeNoInternet() {
 		onClickBack();
 	}
 
-	if (bshowMarketplace && !document.getElementsByClassName('div_notification')[0])
-		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
-	else if (!isDesktop)
-		toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+	if (!document.getElementsByClassName('div_notification')[0]) {
+		if (bshowMarketplace)
+			toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+		else if (!isDesktop)
+			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+	}
 };
 
 function getTranslated(text) {
