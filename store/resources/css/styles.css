@@ -217,10 +217,11 @@ label.header {
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+	flex-flow: column;
 }
 
 .span_notification {
-	font-size: 15px;
+	font-size: 12px;
 }
 
 .div_loader {
@@ -353,8 +354,9 @@ label.header {
 }
 
 .error_caption {
-	font-size: 15px;
+	font-size: 14px;
 	color: red;
+	font-weight: bold;
 }
 
 .div_description_selected {

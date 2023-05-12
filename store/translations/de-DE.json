@@ -53,5 +53,6 @@
 	"Problem with loading plugin config.\nConfig: " : "Problem beim Laden der Plugin-Konfiguration.\nKonfiguration:",
 	"Problem with loading some resources." : "Problem beim Laden einiger Ressourcen.",
 	"File not found." : "Datei nicht gefunden.",
-	"Network problem." : "Netzwerkprobleme."
+	"Network problem." : "Netzwerkprobleme.",
+	"Problem with loading some resources" : "Problem beim Laden einiger Ressourcen"
 }

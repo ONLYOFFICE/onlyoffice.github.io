@@ -983,29 +983,35 @@ function onSelectPreview(target, isOverview) {
 	}
 };
 
-function createNotification(text) {
+function createNotification(text, err) {
 	// creates any notification for user inside elements.divMain window (you should clear this element before making notification)
 	let div = document.createElement('div');
 	div.className = 'div_notification';
-	let span = document.createElement('span');
-	span.className = 'span_notification';
-	span.innerHTML = getTranslated(text);
-	div.appendChild(span);
+	if (err) {
+		let spanErr = document.createElement('span');
+		spanErr.className = 'error_caption';
+		spanErr.innerHTML = getTranslated(err);
+		div.appendChild(spanErr);
+	}
+	let spanNot = document.createElement('span');
+	spanNot.className = 'span_notification';
+	spanNot.innerHTML = getTranslated(text);
+	div.appendChild(spanNot);
 	elements.divMain.appendChild(div);
 };
 
-function createError(err) {
+function createError(err, bDontShow) {
 	// creates a modal window with error message for user and error in console
 	console.error(err);
 	let divErr = document.getElementById('div_error');
 	// we don't show a new error if we have previous one
-	if (!divErr.classList.contains('hidden'))
+	if (!divErr.classList.contains('hidden') || bDontShow)
 		return;
 	let background = document.createElement('div');
 	background.className = 'asc-plugin-loader';
 	let span = document.createElement('span');
 	span.className = 'error_caption';
-	span.innerHTML = err.message || getTranslated('Problem with loading some resources.');
+	span.innerHTML = err.message || getTranslated('Problem with loading some resources');
 	background.appendChild(span);
 	divErr.appendChild(background);
 	divErr.classList.remove('hidden');
@@ -1303,7 +1309,8 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 				reader.readAsDataURL(res);
 			},
 			function(error) {
-				createError(error);
+				// it's because we have a new maket for error messages
+				createError(error, true);
 			}
 		);
 	}
@@ -1339,7 +1346,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 			$('.div_item').remove();
 			setTimeout(function(){if (Ps) Ps.update()});
 			toolbar.classList.add('hidden');
-			createNotification('No Internet Connection.')
+			createNotification('No Internet Connection.', 'Problem with loading some resources')
 		} else {
 			toolbar.classList.remove('hidden');
 			if (document.getElementById('select_categories').value == 'all') {
@@ -1553,7 +1560,7 @@ function handeNoInternet() {
 		onClickBack();
 	}
 
-	if (bshowMarketplace)
+	if (bshowMarketplace && !document.getElementsByClassName('div_notification')[0])
 		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 	else if (!isDesktop)
 		toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
