@@ -53,5 +53,6 @@
 	"Problem with loading plugin config.\nConfig: " : "Problém s načítáním plugin config.\nConfig:",
 	"Problem with loading some resources." : "Problém s načítáním některých zdrojů.",
 	"File not found." : "Soubor nebyl nalezen.",
-	"Network problem." : "Problém se sítí."
+	"Network problem." : "Problém se sítí.",
+	"Problem with loading some resources" : "Problém s načítáním některých zdrojů"
 }

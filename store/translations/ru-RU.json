@@ -53,5 +53,6 @@
 	"Problem with loading plugin config.\nConfig: " : "Проблема с загрузкой конфигурации плагина.\nКонфиг: ",
 	"Problem with loading some resources." : "Проблема с загрузкой ресурсов.",
 	"File not found." : "Файл не найден.",
-	"Network problem." : "Проблемы с сетью."
+	"Network problem." : "Проблемы с сетью.",
+	"Problem with loading some resources" : "Проблема с загрузкой некоторых ресурсов"
 }
