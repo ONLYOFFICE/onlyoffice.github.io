@@ -220,6 +220,12 @@ label.header {
 	flex-flow: column;
 }
 
+.icon_notification {
+	background: url(../img/warnings/warnings_s.svg) no-repeat center;
+	width: 40px;
+	height: 40px;
+}
+
 .span_notification {
 	font-size: 12px;
 }
@@ -355,7 +361,7 @@ label.header {
 
 .error_caption {
 	font-size: 14px;
-	color: red;
+	/* color: red; */
 	font-weight: bold;
 }
 

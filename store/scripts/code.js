@@ -322,7 +322,7 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n';
+			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n.text-secondary{color:'+message.theme["text-secondary"]+';}\n';
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
@@ -988,13 +988,16 @@ function createNotification(text, err) {
 	let div = document.createElement('div');
 	div.className = 'div_notification';
 	if (err) {
+		let icon = document.createElement('div');
+		icon.className = 'icon_notification';
+		div.appendChild(icon);
 		let spanErr = document.createElement('span');
 		spanErr.className = 'error_caption';
 		spanErr.innerHTML = getTranslated(err);
 		div.appendChild(spanErr);
 	}
 	let spanNot = document.createElement('span');
-	spanNot.className = 'span_notification';
+	spanNot.className = 'span_notification text-secondary';
 	spanNot.innerHTML = getTranslated(text);
 	div.appendChild(spanNot);
 	elements.divMain.appendChild(div);
