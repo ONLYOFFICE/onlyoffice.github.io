@@ -185,6 +185,10 @@ window.onload = function() {
 	elements.inpSearch.addEventListener('input', function(event) {
 		makeSearch(event.target.value.trim().toLowerCase());
 	});
+
+	elements.divRatingLink.onclick = function(event) {
+		console.log('click', event);
+	};
 };
 
 window.addEventListener('message', function(message) {
@@ -476,6 +480,7 @@ function initElemnts() {
 	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
+	elements.divRatingLink = document.getElementById('')
 };
 
 function toogleLoader(show, text) {
@@ -720,7 +725,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
-							'<div id="div_raiting" class="div_raiting">★★★✩✩</div>' +
+							'<div id="div_rating" class="div_rating">★★★✩✩</div>' +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
 								: ''
@@ -1401,7 +1406,7 @@ function installPluginManually() {
 
 function sortPlugins(bAll, bInst, type) {
 	switch (type) {
-		case 'raiting':
+		case 'rating':
 			// todo
 			break;
 		case 'instalations':
