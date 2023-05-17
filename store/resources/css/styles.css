@@ -447,7 +447,7 @@ label.header {
 	height: 15px;
 }
 
-.div_raiting {
+.div_rating {
 	color: #FF6F3D;
 	font-size: 14px;
 }
@@ -466,5 +466,5 @@ label.header {
 }
 
 .div_link {
-	cursor: pointer;
+	cursor: pointer !important;
 }
