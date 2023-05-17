@@ -201,7 +201,7 @@ window.onload = function() {
 	});
 
 	elements.divRatingLink.onclick = function(event) {
-		console.log('click', event);
+		console.log('click', event.target.value.getAttribute('data-link'));
 	};
 };
 
@@ -530,6 +530,9 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
+				if (plugin.discussion)
+					config.discussionUrl = plugin.discussion;
+
 				arr[i] = config;
 				if (!count) {
 					// console.log('getAllPluginsData: ' + (Date.now() - start));
@@ -940,6 +943,10 @@ function onClickItem() {
 	elements.spanOffered.innerHTML = plugin.offered || offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
+	if (plugin.discussionUrl)
+		elements.divRatingLink.setAttribute('data-link', plugin.discussionUrl);
+	else
+		elements.divRatingLink.removeAttribute('data-link');
 
 	if (bHasUpdate) {
 		elements.btnUpdate.classList.remove('hidden');
