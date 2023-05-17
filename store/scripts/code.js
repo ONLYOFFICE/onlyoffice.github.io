@@ -480,7 +480,7 @@ function initElemnts() {
 	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
-	elements.divRatingLink = document.getElementById('')
+	elements.divRatingLink = document.getElementById('div_rating_link');
 };
 
 function toogleLoader(show, text) {
