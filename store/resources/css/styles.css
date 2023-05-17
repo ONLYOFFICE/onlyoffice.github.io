@@ -458,9 +458,13 @@ label.header {
 	margin: 0px 10px 5px 10px;
 }
 
-.div_info_raiting_and_icon {
+.div_info_column {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-flow: column;
+}
+
+.div_link {
+	cursor: pointer;
 }
