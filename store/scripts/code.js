@@ -490,9 +490,12 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	let count = 0;
 	let Unloaded = [];
 	let url = isDesktop ? OOMarketplaceUrl : ioUrl;
-	allPlugins.forEach(function(pluginUrl, i, arr) {
+	allPlugins.forEach(function(plugin, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
+		if (typeof plugin !== 'object') {
+			plugin.name = plugin;
+		}
+		let pluginUrl = (plugin.name.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + plugin.name + '/' : plugin.name;
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl).then(
 			function(response) {
