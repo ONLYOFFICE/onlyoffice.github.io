@@ -187,7 +187,7 @@ window.onload = function() {
 	});
 
 	elements.divRatingLink.onclick = function(event) {
-		console.log('click', event.target.value.getAttribute('data-link'));
+		console.log('click', elements.divRatingLink.getAttribute('data-link'));
 	};
 };
 
