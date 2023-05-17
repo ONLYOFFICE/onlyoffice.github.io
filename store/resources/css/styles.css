@@ -457,3 +457,10 @@ label.header {
 	justify-content: space-between;
 	margin: 0px 10px 5px 10px;
 }
+
+.div_info_raiting_and_icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: column;
+}
