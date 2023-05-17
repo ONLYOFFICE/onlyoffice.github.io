@@ -118,7 +118,14 @@
 
 	window.addEventListener("message", function(message) {
 		// getting messages from marketplace
-		let data = JSON.parse(message.data);
+		let data;
+		// try to parse message
+		try {
+			data = JSON.parse(message.data);
+		} catch (error) {
+			// if we have a problem, don't process this message
+			return;
+		}
 			
 		switch (data.type) {
 			case 'getInstalled':
