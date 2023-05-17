@@ -347,7 +347,7 @@ label.header {
 	padding: 1px 5px;
 	border: 1px solid #009900;
 	border-radius: 12px;
-	margin: 0px 10px 5px 10px;
+	/* margin: 0px 10px 5px 10px; */
 }
 
 .error_main {
@@ -445,4 +445,14 @@ label.header {
 .arrow_big {
 	width: 15px;
 	height: 15px;
+}
+
+.div_raiting {
+	color: #FF6F3D;
+}
+
+.advanced_info {
+	display: flex;
+	justify-content: space-between;
+	margin: 0px 10px 5px 10px;
 }
