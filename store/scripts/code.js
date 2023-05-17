@@ -189,7 +189,15 @@ window.onload = function() {
 
 window.addEventListener('message', function(message) {
 	// getting messages from editor or plugin
-	message = JSON.parse(message.data);
+
+	// try to parse message
+	try {
+		message = JSON.parse(message.data);
+	} catch (error) {
+		// if we have a problem, don't process this message
+		return;
+	}
+
 	let plugin;
 	let installed;
 	switch (message.type) {
