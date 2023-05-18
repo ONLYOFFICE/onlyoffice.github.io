@@ -6,8 +6,8 @@ Welcome to the onlyoffice.github.io repository! This repository contains the nec
 
 ## Repository Structure
 
-* **sdkjs-plugins/**: This directory contains the stylesheets and CSS files used for plugin customization and styling. Also it contains the code and resourses of all plugins in store.
-* **store/**: This directory contains the code and resources for the Plugins Manager. It includes the necessary scripts and configurations to manage plugins within ONLYOFFICE.
+* [**sdkjs-plugins**](sdkjs-plugins): This directory contains the stylesheets and CSS files used for plugin customization and styling. Also it contains the code and resourses of all plugins in store.
+* [**store**](store): This directory contains the code and resources for the Plugins Manager. It includes the necessary scripts and configurations to manage plugins within ONLYOFFICE.
 
 ## Contributing
 
