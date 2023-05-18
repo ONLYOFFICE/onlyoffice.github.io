@@ -1020,7 +1020,7 @@ function onClickItem() {
 
 	document.getElementById('div_rating_page').innerText = rating;
 	if (plugin.rating) {
-		document.getElementById('div_votes').innerText = 'votes' + plugin.rating.total
+		document.getElementById('div_votes').innerText = plugin.rating.total
 	}
 	
 	// TODO problem with plugins icons (different margin from top)
