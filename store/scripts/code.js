@@ -589,6 +589,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					}).catch(function(err){
 						console.error(err);
 						count--;
+					}).finally(function(){
 						if (!count)
 							test(bFirstRender, bshowMarketplace);
 					});
