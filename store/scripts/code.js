@@ -558,9 +558,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				if (plugin.discussion) {
 					config.discussionUrl = plugin.discussion;
 					let body = { target: plugin.discussion };
-					makeRequest(proxyUrl, 'POST', null, body).then(function(res) {
-						return res.json();
-					}).then(function(data) {
+					makeRequest(proxyUrl, 'POST', null, body).then(function(data) {
 						let start = data.indexOf('<head>');
 						let end = data.indexOf('</head>') + 7;
 						let tmp = data.substring(0, start) + data.substring(end);
