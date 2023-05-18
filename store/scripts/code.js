@@ -379,7 +379,7 @@ window.addEventListener('message', function(message) {
 function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	// function for fetching all plugins from config
 	isPluginLoading = true;
-	makeRequest(configUrl, 'GET', null, null).then(
+	makeRequest(configUrl, 'GET', null, null, true).then(
 		function(response) {
 			allPlugins = JSON.parse(response);
 			if (installedPlugins)
@@ -393,7 +393,7 @@ function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	);
 };
 
-function makeRequest(url, method, responseType, body) {
+function makeRequest(url, method, responseType, body, bHandeNoInternet) {
 	// this function makes GET request and return promise
 	// maybe use fetch to in this function
 	if (!method)
@@ -423,7 +423,7 @@ function makeRequest(url, method, responseType, body) {
 
 			xhr.onerror = function (err) {
 				reject(err);
-				if (url.includes('https'))
+				if (url.includes('https') && bHandeNoInternet)
 					handeNoInternet();
 			};
 
@@ -518,7 +518,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		}
 		let pluginUrl = (plugin.name.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + plugin.name + '/' : plugin.name;
 		let confUrl = pluginUrl + 'config.json';
-		makeRequest(confUrl, 'GET', null, null).then(
+		makeRequest(confUrl, 'GET', null, null, true).then(
 			function(response) {
 				let config = JSON.parse(response);
 				config.url = confUrl;
@@ -526,7 +526,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 
 				arr[i] = config;
 				
-				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null).then(
+				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, true).then(
 					function(response) {
 						let supportedLangs = [ getTranslated('English') ];
 						let arr = JSON.parse(response);
@@ -548,7 +548,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				if (plugin.discussion) {
 					config.discussionUrl = plugin.discussion;
 					let body = { target: plugin.discussion };
-					makeRequest(proxyUrl, 'POST', null, body).then(function(data) {
+					makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
 						data = JSON.parse(data);
 						if (data !== 'Not Found') {
 							let start = data.indexOf('<head>');
@@ -621,7 +621,7 @@ function test(bFirstRender, bshowMarketplace, Unloaded) {
 
 function getInstalledLanguages() {
 	installedPlugins.forEach(function(pl) {
-		makeRequest(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null).then(
+		makeRequest(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null, true).then(
 			function(response) {
 				let supportedLangs = [ getTranslated('English') ];
 				let arr = JSON.parse(response);
@@ -1167,7 +1167,7 @@ function getTranslation() {
 	// gets translation for current language
 	if (shortLang != "en") {
 		isTranslationLoading = true
-		makeRequest('./translations/langs.json', 'GET', null, null).then(
+		makeRequest('./translations/langs.json', 'GET', null, null, true).then(
 			function(response) {
 				let arr = JSON.parse(response);
 				let fullName, shortName;
@@ -1182,7 +1182,7 @@ function getTranslation() {
 				}
 				if (fullName || shortName) {
 					bTranslate = true;
-					makeRequest('./translations/' + (fullName || shortName) + '.json', 'GET', null, null).then(
+					makeRequest('./translations/' + (fullName || shortName) + '.json', 'GET', null, null, true).then(
 						function(res) {
 							// console.log('getTranslation: ' + (Date.now() - start));
 							translate = JSON.parse(res);
@@ -1365,7 +1365,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 
 	if (bSetSize) {
-		makeRequest(curIcon, 'GET', 'blob', null).then(
+		makeRequest(curIcon, 'GET', 'blob', null, true).then(
 			function (res) {
 				let reader = new FileReader();
 				reader.onloadend = function() {
@@ -1596,7 +1596,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 function checkInternet() {
 	// url for check internet connection
 	let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
-	makeRequest(url, 'GET', null, null).then(
+	makeRequest(url, 'GET', null, null, true).then(
 		function() {
 			isOnline = true;
 			let bShowSelected = elements.divSelected && !elements.divSelected.classList.contains('hidden');
