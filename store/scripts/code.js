@@ -560,7 +560,8 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 						config.languages = [ getTranslated('English') ];
 					}
 				);
-				if (plugin.discussion) {
+				// we have some problem with proxy server in desktop yet
+				if (plugin.discussion && !isDesktop) {
 					// get discussion page
 					config.discussionUrl = plugin.discussion;
 					let body = { target: plugin.discussion };
