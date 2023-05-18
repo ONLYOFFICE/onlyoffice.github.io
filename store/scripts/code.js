@@ -1021,7 +1021,10 @@ function onClickItem() {
 
 	document.getElementById('div_rating_page').innerText = rating;
 	if (plugin.rating) {
-		document.getElementById('div_votes').innerText = plugin.rating.total
+		document.getElementById('span_votes').innerText = plugin.rating.total;
+		document.getElementById('div_votes').classList.remove('hidden');
+	} else {
+		document.getElementById('div_votes').classList.add('hidden');
 	}
 	
 	// TODO problem with plugins icons (different margin from top)
