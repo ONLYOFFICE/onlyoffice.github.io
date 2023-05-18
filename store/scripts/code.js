@@ -550,27 +550,29 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					let body = { target: plugin.discussion };
 					makeRequest(proxyUrl, 'POST', null, body).then(function(data) {
 						data = JSON.parse(data);
-						let start = data.indexOf('<head>');
-						let end = data.indexOf('</head>') + 7;
-						let tmp = data.substring(0, start) + data.substring(end);
-						document.getElementById('test_git').innerHTML = tmp;
-						let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-						let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-						let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-						let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-						let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-						let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
-						first = Math.ceil(total * first / 100);
-						second = Math.ceil(total * second / 100);
-						third = Math.ceil(total * third / 100);
-						fourth = Math.ceil(total * fourth / 100);
-						fifth = Math.ceil(total * fifth / 100);
-						console.log('★★★★★', first);
-						console.log('★★★★', second);
-						console.log('★★★', third);
-						console.log('★★', fourth);
-						console.log('★', fifth);
-						console.log('total votes', total);
+						if (data !== 'Not Found') {
+							let start = data.indexOf('<head>');
+							let end = data.indexOf('</head>') + 7;
+							let tmp = data.substring(0, start) + data.substring(end);
+							document.getElementById('test_git').innerHTML = tmp;
+							let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+							let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+							let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+							let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+							let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+							let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
+							first = Math.ceil(total * first / 100);
+							second = Math.ceil(total * second / 100);
+							third = Math.ceil(total * third / 100);
+							fourth = Math.ceil(total * fourth / 100);
+							fifth = Math.ceil(total * fifth / 100);
+							console.log('★★★★★', first);
+							console.log('★★★★', second);
+							console.log('★★★', third);
+							console.log('★★', fourth);
+							console.log('★', fifth);
+							console.log('total votes', total);
+						}
 						count--;
 					}).catch(function(err){
 						console.error(err);
