@@ -576,7 +576,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 							let value = total === 0 ? 0 : Math.ceil( (first + second + third + fourth + fifth) / total );
 							config.rating = {
 								total: total,
-								value : rating
+								value : value
 							};
 						}
 					}).catch(function(err){
