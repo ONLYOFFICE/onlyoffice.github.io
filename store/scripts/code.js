@@ -571,9 +571,9 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 							fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
 							fifth = Math.ceil(total * fifth / 100);       // it's 1 star
 							let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
-							let tmp = value | 0;
+							let tmp = average | 0;
 							// if we have an average value less than 0.5, we round down, if more than 0.5, then up
-							average = ( (value - tmp) >= 0.5) ? value | 1 : tmpVal;
+							average = ( (average - tmp) >= 0.5) ? average | 1 : tmpVal;
 							config.rating = {
 								total: total,
 								average: average,
