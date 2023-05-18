@@ -573,10 +573,10 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 							console.log('★', fifth);
 							console.log('total votes', total);
 							// todo change rating counting
-							let rating = Math.ceil( (first + second + third + fourth + fifth) / total );
+							let value = total === 0 ? 0 : Math.ceil( (first + second + third + fourth + fifth) / total );
 							config.rating = {
 								total: total,
-								rating : rating
+								value : rating
 							};
 						}
 					}).catch(function(err){
@@ -764,7 +764,7 @@ function createPluginDiv(plugin, bInstalled) {
 
 	let rating = '';
 	if (plugin.rating) {
-		switch (plugin.rating) {
+		switch (plugin.rating.value) {
 			case 5:
 				rating = '★★★★★';
 				break;
@@ -992,6 +992,36 @@ function onClickItem() {
 	}
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
+
+	let rating = '';
+	if (plugin.rating) {
+		switch (plugin.rating.value) {
+			case 5:
+				rating = '★★★★★';
+				break;
+			case 4:
+				rating = '★★★★✩';
+				break;
+			case 3:
+				rating = '★★★✩✩';
+				break;
+			case 2:
+				rating = '★★✩✩✩';
+				break;
+			case 1:
+				rating = '★✩✩✩✩';
+				break;
+		
+			default:
+				rating = '✩✩✩✩✩';
+				break;
+		}
+	}
+
+	document.getElementById('div_rating_page').innerText = rating;
+	if (plugin.rating) {
+		document.getElementById('div_votes').innerText = 'votes' + plugin.rating.total
+	}
 	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
