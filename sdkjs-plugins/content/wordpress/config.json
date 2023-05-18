@@ -69,8 +69,8 @@
             "isUpdateOleOnResize" : false,
             "store": {
                 "background": {
-                    "light" : "#117AC9",
-                    "dark" : "#117AC9"
+                    "light" : "#464646",
+                    "dark" : "#464646"
                 },
                 "screenshots" : ["resources/store/screenshots/screen_1.png"],
                 "icons"       : {
