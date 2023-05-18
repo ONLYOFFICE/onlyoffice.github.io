@@ -55,5 +55,5 @@
 	"File not found." : "Archivo no encontrado.",
 	"Network problem." : "Problema de red.",
 	"Problem with loading some resources" : "Problema al cargar algunos recursos",
-	"votes": "votaciones"
+	"votes:": "votaciones:"
 }
