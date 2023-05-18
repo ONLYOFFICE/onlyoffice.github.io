@@ -520,22 +520,12 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		let confUrl = pluginUrl + 'config.json';
 		makeRequest(confUrl, 'GET', null, null).then(
 			function(response) {
-				count--;
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
 
 				arr[i] = config;
-				if (!count) {
-					// console.log('getAllPluginsData: ' + (Date.now() - start));
-					removeUnloaded(Unloaded);
-					sortPlugins(true, false, 'name');
-					isPluginLoading = false;
-					if (bFirstRender)
-						showMarketplace();
-					else if (bshowMarketplace)
-						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
-				}
+				
 				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null).then(
 					function(response) {
 						let supportedLangs = [ getTranslated('English') ];
@@ -581,10 +571,26 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 						console.log('★★', fourth);
 						console.log('★', fifth);
 						console.log('total votes', total);
+						count--;
 					}).catch(function(err){
 						console.error(err);
+						count--;
 					});
-				}	
+				} else {
+					count--;
+				}
+
+				if (!count) {
+					console.log('all are loaded');
+					// console.log('getAllPluginsData: ' + (Date.now() - start));
+					removeUnloaded(Unloaded);
+					sortPlugins(true, false, 'name');
+					isPluginLoading = false;
+					if (bFirstRender)
+						showMarketplace();
+					else if (bshowMarketplace)
+						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+				}
 			},
 			function(err) {
 				count--;
