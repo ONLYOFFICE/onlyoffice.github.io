@@ -491,18 +491,17 @@ function initElemnts() {
 	elements.ratingStars = document.getElementById('div_rating_stars');
 	elements.totalVotes = document.getElementById('total_votes');
 	elements.divVotes = document.getElementById('div_votes');
-	elements.loader = document.getElementById('loader-container');
 };
 
 function toogleLoader(show, text) {
-	// show or hide loader
+	// show or hide loader (don't use elements for this function)
 	if (!show) {
 		clearTimeout(timeout);
-		elements.loader.classList.add('hidden');
+		document.getElementById('loader-container').classList.add('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;	
 	} else if(!loader) {
-		elements.loader.classList.remove('hidden');
+		document.getElementById('loader-container').classList.remove('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], ( getTranslated(text) ) + '...');
 	}
