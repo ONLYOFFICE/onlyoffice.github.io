@@ -47,7 +47,7 @@ let translate = {'Loading': 'Loading'};                              // translat
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = true;                                          // flag for firs resize on start
-const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
+const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy22';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
