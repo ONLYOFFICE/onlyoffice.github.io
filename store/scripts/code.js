@@ -565,15 +565,15 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 							let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
-							first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
-							second = Math.ceil(total * second / 100) * 4; // it's 4 stars
-							third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
-							fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
-							fifth = Math.ceil(total * fifth / 100);       // it's 1 star
+							first = ( (total * first / 100) | 1) * 5;   // it's 5 stars
+							second = ( (total * second / 100) | 1) * 4; // it's 4 stars
+							third = ( (total * third / 100) | 1) * 3;   // it's 3 stars
+							fourth = ( (total * fourth / 100) | 1) * 2; // it's 2 stars
+							fifth = (total * fifth / 100) | 1;          // it's 1 star
 							let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
 							let tmp = average | 0;
 							// if we have an average value less than 0.5, we round down, if more than 0.5, then up
-							average = ( (average - tmp) >= 0.5) ? average | 1 : tmpVal;
+							average = ( (average - tmp) >= 0.5) ? average | 1 : tmp;
 							config.rating = {
 								total: total,
 								average: average,
