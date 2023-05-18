@@ -19,8 +19,8 @@ onlyoffice.github.io is licensed under the Apache License, version 2.0. See [LIC
 
 ## User Feedback and Support
 
-If you have any problems with or questions about ONLYOFFICE Plugins and Plugins Manager, please visit our official forum to find answers to your questions: [forum.onlyoffice.com](https://forum.onlyoffice.com) or you can ask and answer ONLYOFFICE development questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/onlyoffice).
-If you encounter any issues or have any questions regarding the ONLYOFFICE Plugins and Plugins Manager, please open an issue in the repository. We'll be glad to assist you.
+If you have any problems with or questions about ONLYOFFICE Plugins and Plugin Marketplace, please visit our official forum to find answers to your questions: [forum.onlyoffice.com](https://forum.onlyoffice.com) or you can ask and answer ONLYOFFICE development questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/onlyoffice).
+If you encounter any issues or have any questions regarding the ONLYOFFICE Plugins and Plugin Marketplace, please open an issue in the repository. We'll be glad to assist you.
 
 ## Acknowledgments
 
