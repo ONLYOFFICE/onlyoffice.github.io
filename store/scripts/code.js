@@ -47,7 +47,7 @@ let translate = {'Loading': 'Loading'};                              // translat
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = true;                                          // flag for firs resize on start
-const proxyUrl = 'https://wrongurlfjsdhfkjdsh.com';    // url to proxy for getting rating
+const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
@@ -572,30 +572,33 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 							console.log('★★', fourth);
 							console.log('★', fifth);
 							console.log('total votes', total);
+							// todo change rating counting
+							let rating = Math.ceil( (first + second + third + fourth + fifth) / total );
+							config.rating = {
+								total: total,
+								rating : rating
+							};
 						}
-						count--;
 					}).catch(function(err){
-						console.error(err);
-						count--;
+						createError('Problem with loading rating', true);
 					}).finally(function(){
+						count--;
 						if (!count)
-							test(bFirstRender, bshowMarketplace, Unloaded);
+							endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 					});
 				} else {
 					count--;
 				}
 
-				if (!count) {
-					test(bFirstRender, bshowMarketplace, Unloaded);
-				}
+				if (!count)
+					endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 			},
 			function(err) {
 				count--;
 				Unloaded.push(i);
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
-				if (!count) {
-					test(bFirstRender, bshowMarketplace, Unloaded);
-				}
+				if (!count)
+					endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 			}
 		);
 	});
@@ -607,7 +610,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	}
 };
 
-function test(bFirstRender, bshowMarketplace, Unloaded) {
+function endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded) {
 	console.log('all are loaded');
 	// console.log('getAllPluginsData: ' + (Date.now() - start));
 	removeUnloaded(Unloaded);
@@ -758,6 +761,31 @@ function createPluginDiv(plugin, bInstalled) {
 				elements.btnUpdateAll.classList.remove('hidden');
 		}
 	}
+
+	let rating = '';
+	if (plugin.rating) {
+		switch (plugin.rating) {
+			case 5:
+				rating = '★★★★★';
+				break;
+			case 4:
+				rating = '★★★★✩';
+				break;
+			case 3:
+				rating = '★★★✩✩';
+				break;
+			case 2:
+				rating = '★★✩✩✩';
+				break;
+			case 1:
+				rating = '★✩✩✩✩';
+				break;
+		
+			default:
+				rating = '✩✩✩✩✩';
+				break;
+		}
+	}
 	
 	let variation = plugin.variations[0];
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
@@ -773,7 +801,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
-							'<div id="div_rating" class="div_rating">★★★✩✩</div>' +
+							'<div id="div_rating" class="div_rating">'+rating+'</div>' +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
 								: ''
