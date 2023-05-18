@@ -577,14 +577,14 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 						count--;
 					}).finally(function(){
 						if (!count)
-							test(bFirstRender, bshowMarketplace);
+							test(bFirstRender, bshowMarketplace, Unloaded);
 					});
 				} else {
 					count--;
 				}
 
 				if (!count) {
-					test(bFirstRender, bshowMarketplace);
+					test(bFirstRender, bshowMarketplace, Unloaded);
 				}
 			},
 			function(err) {
@@ -592,7 +592,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				Unloaded.push(i);
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
 				if (!count) {
-					test(bFirstRender, bshowMarketplace);
+					test(bFirstRender, bshowMarketplace, Unloaded);
 				}
 			}
 		);
@@ -605,7 +605,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	}
 };
 
-function test(bFirstRender, bshowMarketplace) {
+function test(bFirstRender, bshowMarketplace, Unloaded) {
 	console.log('all are loaded');
 	// console.log('getAllPluginsData: ' + (Date.now() - start));
 	removeUnloaded(Unloaded);
