@@ -187,7 +187,8 @@ window.onload = function() {
 	});
 
 	elements.divRatingLink.onclick = function(event) {
-		console.log('click', elements.divRatingLink.getAttribute('data-link'));
+		console.log('click');
+		elements.discussionLink.click();
 	};
 };
 
@@ -481,6 +482,7 @@ function initElemnts() {
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
 	elements.divRatingLink = document.getElementById('div_rating_link');
+	elements.discussionLink = document.getElementById('discussion_link');
 };
 
 function toogleLoader(show, text) {
@@ -930,9 +932,9 @@ function onClickItem() {
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
 	if (plugin.discussionUrl)
-		elements.divRatingLink.setAttribute('data-link', plugin.discussionUrl);
+		elements.discussionLink.setAttribute('href', plugin.discussionUrl);
 	else
-		elements.divRatingLink.removeAttribute('data-link');
+		elements.discussionLink.removeAttribute('href');
 
 	if (bHasUpdate) {
 		elements.btnUpdate.classList.remove('hidden');
