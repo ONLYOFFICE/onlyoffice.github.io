@@ -559,9 +559,10 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					config.discussionUrl = plugin.discussion;
 					let body = { target: plugin.discussion };
 					makeRequest(proxyUrl, 'POST', null, body).then(function(data) {
+						data = JSON.parse(data);
 						let start = data.indexOf('<head>');
 						let end = data.indexOf('</head>') + 7;
-						let tmp = data.substring(0, start) + data.substring(end).replace(/[\\n,\\]/g,'');
+						let tmp = data.substring(0, start) + data.substring(end);
 						document.getElementById('test_git').innerHTML = tmp;
 						let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 						let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
