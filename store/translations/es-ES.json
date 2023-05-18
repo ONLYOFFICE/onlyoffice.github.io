@@ -54,5 +54,6 @@
 	"Problem with loading some resources." : "Problema con la carga de algunos recursos.",
 	"File not found." : "Archivo no encontrado.",
 	"Network problem." : "Problema de red.",
-	"Problem with loading some resources" : "Problema al cargar algunos recursos"
+	"Problem with loading some resources" : "Problema al cargar algunos recursos",
+	"votes": "votaciones"
 }
