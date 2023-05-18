@@ -55,5 +55,5 @@
 	"File not found." : "Soubor nebyl nalezen.",
 	"Network problem." : "Problém se sítí.",
 	"Problem with loading some resources" : "Problém s načítáním některých zdrojů",
-	"votes": "hlasovat"
+	"votes:": "hlasovat:"
 }
