@@ -434,6 +434,33 @@ function makeRequest(url, method, responseType, body, bHandeNoInternet) {
 	});
 };
 
+function makeDesktopRequest(_url) {
+	// function for getting rating page in desktop
+	return new Promise((resolve, reject) => {
+		if ( !_url.startsWith('http') ) {
+			resolve({status:'skipped', response: {statusText: _url}});
+		} else {
+			window.AscSimpleRequest.createRequest({
+				url: _url,
+				crossOrigin: true,
+				crossDomain: true,
+				timeout: 10000,
+				headers: '',
+				complete: function(e, status) {
+					if ( status == 'success' ) {
+						resolve({status:status, response:e});
+					} else {
+						reject({status:status, response:e});
+					}
+				},
+				error: function(e, status, error) {
+					reject({status:status, response:e});
+				}
+			});
+		}
+	});
+};
+
 function sendMessage(message) {
 	// this function sends message to editor
 	parent.postMessage(JSON.stringify(message), '*');
@@ -546,48 +573,40 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 						config.languages = [ getTranslated('English') ];
 					}
 				);
-				// we have some problem with proxy server in desktop yet
-				if (plugin.discussion && !isDesktop) {
+				if (plugin.discussion) {
 					// get discussion page
 					config.discussionUrl = plugin.discussion;
-					let body = { target: plugin.discussion };
-					makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
-						data = JSON.parse(data);
-						if (data !== 'Not Found') {
-							// if we load this page, parse it
-							// remove head, because it can brake our styles
-							let start = data.indexOf('<head>');
-							let end = data.indexOf('</head>') + 7;
-							document.getElementById('div_rating_git').innerHTML = data.substring(0, start) + data.substring(end);
-							// we will have a problem if github change their page
-							let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-							let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-							let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-							let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-							let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-							let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
-							first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
-							second = Math.ceil(total * second / 100) * 4; // it's 4 stars
-							third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
-							fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
-							fifth = Math.ceil(total * fifth / 100);       // it's 1 star
-							let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
-							let tmp = average | 0;
-							// if we have an average value less than 0.5, we round down, if more than 0.5, then up
-							average = ( (average - tmp) >= 0.5) ? average | 1 : tmp;
-							config.rating = {
-								total: total,
-								average: average,
-								string: getStringRating(average)
-							};
-						}
-					}).catch(function(err){
-						createError('Problem with loading rating', true);
-					}).finally(function(){
-						count--;
-						if (!count)
-							endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
-					});
+					if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
+						makeDesktopRequest(plugin.discussion).then(
+							function(data) {
+								if (data.status == 'success') {
+									config.rating = parseRatingPage(data.response.responseText);
+								}
+							},
+							function(err) {
+								createError(err.response, false);
+							}
+						).catch(function(err) {
+							createError(err, false)
+						}).finally(function() {
+							count--;
+							if (!count)
+								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+						});
+					} else {
+						let body = { target: plugin.discussion };
+						makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
+							data = JSON.parse(data);
+							config.rating = parseRatingPage(data);
+						}).catch(function(err){
+							createError('Problem with loading rating', true);
+						}).finally(function(){
+							count--;
+							if (!count)
+								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+						});
+					}
+	
 				} else {
 					count--;
 				}
@@ -915,6 +934,16 @@ function onClickItem() {
 
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
+	let discussionUrl = plugin.discussionUrl;
+	elements.ratingStars.innerText = plugin.rating ? plugin.rating.string : '';
+	
+	if (plugin.rating) {
+		elements.totalVotes.innerText = plugin.rating.total;
+		elements.divVotes.classList.remove('hidden');
+	} else {
+		elements.divVotes.classList.add('hidden');
+	}
+
 	if ( !plugin || ( isDesktop && installed ) ) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
@@ -968,14 +997,6 @@ function onClickItem() {
 	}
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
-
-	elements.ratingStars.innerText = plugin.rating ? plugin.rating.string : '';
-	if (plugin.rating) {
-		elements.totalVotes.innerText = plugin.rating.total;
-		elements.divVotes.classList.remove('hidden');
-	} else {
-		elements.divVotes.classList.add('hidden');
-	}
 	
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
@@ -986,8 +1007,8 @@ function onClickItem() {
 	elements.spanOffered.innerHTML = plugin.offered || offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
-	if (plugin.discussionUrl)
-		elements.discussionLink.setAttribute('href', plugin.discussionUrl);
+	if (discussionUrl)
+		elements.discussionLink.setAttribute('href', discussionUrl);
 	else
 		elements.discussionLink.removeAttribute('href');
 
@@ -1683,4 +1704,37 @@ function getStringRating(value) {
 			break;
 	}
 	return rating;
+};
+
+function parseRatingPage(data) {
+	// if we load this page, parse it
+	// remove head, because it can brake our styles
+	if (data !== 'Not Found') {
+		let start = data.indexOf('<head>');
+		let end = data.indexOf('</head>') + 7;
+		document.getElementById('div_rating_git').innerHTML = data.substring(0, start) + data.substring(end);
+		// we will have a problem if github change their page
+		let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
+		first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
+		second = Math.ceil(total * second / 100) * 4; // it's 4 stars
+		third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
+		fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
+		fifth = Math.ceil(total * fifth / 100);       // it's 1 star
+		let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
+		let tmp = average | 0;
+		// if we have an average value less than 0.5, we round down, if more than 0.5, then up
+		average = ( (average - tmp) >= 0.5) ? average | 1 : tmp;
+		return {
+			total: total,
+			average: average,
+			string: getStringRating(average)
+		};
+	} else {
+		return null;
+	}
 };
