@@ -1256,7 +1256,7 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = getTranslated('Entertainment');
 	document.getElementById('opt_com').innerHTML = getTranslated('Communication');
 	document.getElementById('opt_spec').innerHTML = getTranslated('Special abilities');
-	document.getElementById('votes_caption').innerHTML = getTranslated('votes');
+	document.getElementById('votes_caption').innerHTML = getTranslated('votes:');
 	showMarketplace();
 };
 
