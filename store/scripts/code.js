@@ -572,8 +572,9 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 							console.log('★★', fourth);
 							console.log('★', fifth);
 							console.log('total votes', total);
-							// todo change rating counting
-							let value = total === 0 ? 0 : Math.ceil( (first*5 + second*4 + third*3 + fourth*2 + fifth*1) / total );
+							let value = total === 0 ? 0 : (first*5 + second*4 + third*3 + fourth*2 + fifth*1) / total;
+							let tmpVal = value | 0;
+							value = ((value - tmpVal) >= 0.5) ? value | 1 : tmpVal;
 							config.rating = {
 								total: total,
 								value : value
