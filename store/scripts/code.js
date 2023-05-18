@@ -575,21 +575,15 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					}).catch(function(err){
 						console.error(err);
 						count--;
+						if (!count)
+							test(bFirstRender, bshowMarketplace);
 					});
 				} else {
 					count--;
 				}
 
 				if (!count) {
-					console.log('all are loaded');
-					// console.log('getAllPluginsData: ' + (Date.now() - start));
-					removeUnloaded(Unloaded);
-					sortPlugins(true, false, 'name');
-					isPluginLoading = false;
-					if (bFirstRender)
-						showMarketplace();
-					else if (bshowMarketplace)
-						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+					test(bFirstRender, bshowMarketplace);
 				}
 			},
 			function(err) {
@@ -597,13 +591,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				Unloaded.push(i);
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
 				if (!count) {
-					removeUnloaded(Unloaded);
-					sortPlugins(true, false, 'name');
-					isPluginLoading = false;
-					if (bFirstRender)
-						showMarketplace();
-					else if (bshowMarketplace)
-						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+					test(bFirstRender, bshowMarketplace);
 				}
 			}
 		);
@@ -614,6 +602,18 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		getInstalledLanguages();
 		showMarketplace();
 	}
+};
+
+function test(bFirstRender, bshowMarketplace) {
+	console.log('all are loaded');
+	// console.log('getAllPluginsData: ' + (Date.now() - start));
+	removeUnloaded(Unloaded);
+	sortPlugins(true, false, 'name');
+	isPluginLoading = false;
+	if (bFirstRender)
+		showMarketplace();
+	else if (bshowMarketplace)
+		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 };
 
 function getInstalledLanguages() {
