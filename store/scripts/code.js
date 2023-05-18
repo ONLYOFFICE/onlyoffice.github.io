@@ -47,6 +47,7 @@ let translate = {'Loading': 'Loading'};                              // translat
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = true;                                          // flag for firs resize on start
+const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
@@ -378,7 +379,7 @@ window.addEventListener('message', function(message) {
 function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	// function for fetching all plugins from config
 	isPluginLoading = true;
-	makeRequest(configUrl).then(
+	makeRequest(configUrl, 'GET', null, null).then(
 		function(response) {
 			allPlugins = JSON.parse(response);
 			if (installedPlugins)
@@ -392,14 +393,19 @@ function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	);
 };
 
-function makeRequest(url, responseType) {
+function makeRequest(url, method, responseType, body) {
 	// this function makes GET request and return promise
 	// maybe use fetch to in this function
-	// isLoading = true;
+	if (!method)
+		method = 'GET';
+	
+	if (body)
+		body = JSON.stringify(body);
+
 	return new Promise(function (resolve, reject) {
 		try {
 			let xhr = new XMLHttpRequest();
-			xhr.open('GET', url, true);
+			xhr.open(method, url, true);
 			if (responseType)
 				xhr.responseType = responseType;
 			
@@ -421,7 +427,7 @@ function makeRequest(url, responseType) {
 					handeNoInternet();
 			};
 
-			xhr.send(null);
+			xhr.send(body);
 		} catch (error) {
 			reject(error);
 		}
@@ -512,14 +518,12 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		}
 		let pluginUrl = (plugin.name.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + plugin.name + '/' : plugin.name;
 		let confUrl = pluginUrl + 'config.json';
-		makeRequest(confUrl).then(
+		makeRequest(confUrl, 'GET', null, null).then(
 			function(response) {
 				count--;
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
-				if (plugin.discussion)
-					config.discussionUrl = plugin.discussion;
 
 				arr[i] = config;
 				if (!count) {
@@ -532,7 +536,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					else if (bshowMarketplace)
 						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
 				}
-				makeRequest(pluginUrl + 'translations/langs.json').then(
+				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null).then(
 					function(response) {
 						let supportedLangs = [ getTranslated('English') ];
 						let arr = JSON.parse(response);
@@ -550,7 +554,38 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					function(error) {
 						config.languages = [ getTranslated('English') ];
 					}
-				)
+				);
+				if (plugin.discussion) {
+					config.discussionUrl = plugin.discussion;
+					let body = { target: plugin.discussion };
+					makeRequest(proxyUrl, 'POST', null, body).then(function(res) {
+						return res.json();
+					}).then(function(data) {
+						let start = data.indexOf('<head>');
+						let end = data.indexOf('</head>') + 7;
+						let tmp = data.substring(0, start) + data.substring(end);
+						document.getElementById('test_git').innerHTML = tmp;
+						let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+						let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+						let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+						let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+						let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+						let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
+						first = Math.ceil(total * first / 100);
+						second = Math.ceil(total * second / 100);
+						third = Math.ceil(total * third / 100);
+						fourth = Math.ceil(total * fourth / 100);
+						fifth = Math.ceil(total * fifth / 100);
+						console.log('★★★★★', first);
+						console.log('★★★★', second);
+						console.log('★★★', third);
+						console.log('★★', fourth);
+						console.log('★', fifth);
+						console.log('total votes', total);
+					}).catch(function(err){
+						console.error(err);
+					});
+				}	
 			},
 			function(err) {
 				count--;
@@ -578,7 +613,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 
 function getInstalledLanguages() {
 	installedPlugins.forEach(function(pl) {
-		makeRequest(pl.obj.baseUrl + 'translations/langs.json').then(
+		makeRequest(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null).then(
 			function(response) {
 				let supportedLangs = [ getTranslated('English') ];
 				let arr = JSON.parse(response);
@@ -1124,7 +1159,7 @@ function getTranslation() {
 	// gets translation for current language
 	if (shortLang != "en") {
 		isTranslationLoading = true
-		makeRequest('./translations/langs.json').then(
+		makeRequest('./translations/langs.json', 'GET', null, null).then(
 			function(response) {
 				let arr = JSON.parse(response);
 				let fullName, shortName;
@@ -1139,7 +1174,7 @@ function getTranslation() {
 				}
 				if (fullName || shortName) {
 					bTranslate = true;
-					makeRequest('./translations/' + (fullName || shortName) + '.json').then(
+					makeRequest('./translations/' + (fullName || shortName) + '.json', 'GET', null, null).then(
 						function(res) {
 							// console.log('getTranslation: ' + (Date.now() - start));
 							translate = JSON.parse(res);
@@ -1322,7 +1357,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 
 	if (bSetSize) {
-		makeRequest(curIcon, 'blob').then(
+		makeRequest(curIcon, 'GET', 'blob', null).then(
 			function (res) {
 				let reader = new FileReader();
 				reader.onloadend = function() {
@@ -1553,7 +1588,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 function checkInternet() {
 	// url for check internet connection
 	let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
-	makeRequest(url).then(
+	makeRequest(url, 'GET', null, null).then(
 		function() {
 			isOnline = true;
 			let bShowSelected = elements.divSelected && !elements.divSelected.classList.contains('hidden');
