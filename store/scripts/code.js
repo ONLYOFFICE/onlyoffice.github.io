@@ -187,8 +187,7 @@ window.onload = function() {
 		makeSearch(event.target.value.trim().toLowerCase());
 	});
 
-	elements.divRatingLink.onclick = function(event) {
-		console.log('click');
+	elements.divRatingLink.onclick = function() {
 		elements.discussionLink.click();
 	};
 };
@@ -489,17 +488,21 @@ function initElemnts() {
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
 	elements.divRatingLink = document.getElementById('div_rating_link');
 	elements.discussionLink = document.getElementById('discussion_link');
+	elements.ratingStars = document.getElementById('div_rating_stars');
+	elements.totalVotes = document.getElementById('total_votes');
+	elements.divVotes = document.getElementById('div_votes');
+	elements.loader = document.getElementById('loader-container');
 };
 
 function toogleLoader(show, text) {
 	// show or hide loader
 	if (!show) {
 		clearTimeout(timeout);
-		document.getElementById('loader-container').classList.add('hidden');
+		elements.loader.classList.add('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;	
 	} else if(!loader) {
-		document.getElementById('loader-container').classList.remove('hidden');
+		elements.loader.classList.remove('hidden');
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], ( getTranslated(text) ) + '...');
 	}
@@ -523,7 +526,6 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
-
 				arr[i] = config;
 				
 				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, true).then(
@@ -546,38 +548,37 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					}
 				);
 				if (plugin.discussion) {
+					// get discussion page
 					config.discussionUrl = plugin.discussion;
 					let body = { target: plugin.discussion };
 					makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
 						data = JSON.parse(data);
 						if (data !== 'Not Found') {
+							// if we load this page, parse it
+							// remove head, because it can brake our styles
 							let start = data.indexOf('<head>');
 							let end = data.indexOf('</head>') + 7;
-							let tmp = data.substring(0, start) + data.substring(end);
-							document.getElementById('test_git').innerHTML = tmp;
+							document.getElementById('div_rating_git').innerHTML = data.substring(0, start) + data.substring(end);
+							// we will have a problem if github change their page
 							let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 							let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
-							first = Math.ceil(total * first / 100);
-							second = Math.ceil(total * second / 100);
-							third = Math.ceil(total * third / 100);
-							fourth = Math.ceil(total * fourth / 100);
-							fifth = Math.ceil(total * fifth / 100);
-							console.log('★★★★★', first);
-							console.log('★★★★', second);
-							console.log('★★★', third);
-							console.log('★★', fourth);
-							console.log('★', fifth);
-							console.log('total votes', total);
-							let value = total === 0 ? 0 : (first*5 + second*4 + third*3 + fourth*2 + fifth*1) / total;
-							let tmpVal = value | 0;
-							value = ((value - tmpVal) >= 0.5) ? value | 1 : tmpVal;
+							first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
+							second = Math.ceil(total * second / 100) * 4; // it's 4 stars
+							third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
+							fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
+							fifth = Math.ceil(total * fifth / 100);       // it's 1 star
+							let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
+							let tmp = value | 0;
+							// if we have an average value less than 0.5, we round down, if more than 0.5, then up
+							average = ( (value - tmp) >= 0.5) ? value | 1 : tmpVal;
 							config.rating = {
 								total: total,
-								value : value
+								average: average,
+								string: getStringRating(average)
 							};
 						}
 					}).catch(function(err){
@@ -612,7 +613,6 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 };
 
 function endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded) {
-	console.log('all are loaded');
 	// console.log('getAllPluginsData: ' + (Date.now() - start));
 	removeUnloaded(Unloaded);
 	sortPlugins(true, false, 'name');
@@ -762,31 +762,6 @@ function createPluginDiv(plugin, bInstalled) {
 				elements.btnUpdateAll.classList.remove('hidden');
 		}
 	}
-
-	let rating = '';
-	if (plugin.rating) {
-		switch (plugin.rating.value) {
-			case 5:
-				rating = '★★★★★';
-				break;
-			case 4:
-				rating = '★★★★✩';
-				break;
-			case 3:
-				rating = '★★★✩✩';
-				break;
-			case 2:
-				rating = '★★✩✩✩';
-				break;
-			case 1:
-				rating = '★✩✩✩✩';
-				break;
-		
-			default:
-				rating = '✩✩✩✩✩';
-				break;
-		}
-	}
 	
 	let variation = plugin.variations[0];
 	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
@@ -802,7 +777,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
-							'<div id="div_rating" class="div_rating">'+rating+'</div>' +
+							'<div id="div_rating" class="div_rating">'+ (plugin.rating ? plugin.rating.string : '') +'</div>' +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
 								: ''
@@ -994,37 +969,12 @@ function onClickItem() {
 
 	let pluginUrl = plugin.baseUrl.replace('https://onlyoffice.github.io/', 'https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/');
 
-	let rating = '';
+	elements.ratingStars.innerText = plugin.rating ? plugin.rating.string : '';
 	if (plugin.rating) {
-		switch (plugin.rating.value) {
-			case 5:
-				rating = '★★★★★';
-				break;
-			case 4:
-				rating = '★★★★✩';
-				break;
-			case 3:
-				rating = '★★★✩✩';
-				break;
-			case 2:
-				rating = '★★✩✩✩';
-				break;
-			case 1:
-				rating = '★✩✩✩✩';
-				break;
-		
-			default:
-				rating = '✩✩✩✩✩';
-				break;
-		}
-	}
-
-	document.getElementById('div_rating_page').innerText = rating;
-	if (plugin.rating) {
-		document.getElementById('span_votes').innerText = plugin.rating.total;
-		document.getElementById('div_votes').classList.remove('hidden');
+		elements.totalVotes.innerText = plugin.rating.total;
+		elements.divVotes.classList.remove('hidden');
 	} else {
-		document.getElementById('div_votes').classList.add('hidden');
+		elements.divVotes.classList.add('hidden');
 	}
 	
 	// TODO problem with plugins icons (different margin from top)
@@ -1306,6 +1256,7 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = getTranslated('Entertainment');
 	document.getElementById('opt_com').innerHTML = getTranslated('Communication');
 	document.getElementById('opt_spec').innerHTML = getTranslated('Special abilities');
+	document.getElementById('votes_caption').innerHTML = getTranslated('votes');
 	showMarketplace();
 };
 
@@ -1706,4 +1657,30 @@ function handeNoInternet() {
 
 function getTranslated(text) {
 	return translate[text] || text;
+};
+
+function getStringRating(value) {
+	let rating = '';
+	switch (value) {
+		case 5:
+			rating = '★★★★★';
+			break;
+		case 4:
+			rating = '★★★★✩';
+			break;
+		case 3:
+			rating = '★★★✩✩';
+			break;
+		case 2:
+			rating = '★★✩✩✩';
+			break;
+		case 1:
+			rating = '★✩✩✩✩';
+			break;
+	
+		default:
+			rating = '✩✩✩✩✩';
+			break;
+	}
+	return rating;
 };
