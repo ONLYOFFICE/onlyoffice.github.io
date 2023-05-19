@@ -1,10 +1,6 @@
-# sdkjs-plugins
-
-This repository comprises plugin styles for [ONLYOFFICE plugins](https://api.onlyoffice.com/plugin/basic).
-
 ## Description
 
-ONLYOFFICE provides a style sheet for different interface elements. To adjust your plugin interface to the ONLYOFFICE style, connect the [plugin.css](https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css) to the [index.html](https://api.onlyoffice.com/plugin/indexhtml) file with the following link:
+ONLYOFFICE provides a style sheet for different interface elements. To adjust your plugin interface to the ONLYOFFICE style, connect the [plugin.css](v1/plugins.css) to your plugin's [index.html](https://api.onlyoffice.com/plugin/indexhtml) file with the following link:
 
 `<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">`
 
@@ -16,13 +12,12 @@ Plugin styles (controls) include:
 * Combo box
 * Loader
 
-For more details and examples, please refer to the [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/styles).
+For more details and examples, please refer to the [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/basic).
 
-## Project information
+# Structure
 
-Official website: [www.onlyoffice.com](https://www.onlyoffice.com/)
-
-Repository: [github.com/ONLYOFFICE/onlyoffice.github.io](https://github.com/ONLYOFFICE/onlyoffice.github.io) 
+* [v1](v1): This directory contains the stylesheets and CSS files used for plugin customization and styling.
+* [content](content): This directory contains the code and resourses of all plugins in store. How to add your own plugin read [here](../store/).
 
 ## User feedback and support
 
