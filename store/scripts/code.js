@@ -1182,6 +1182,7 @@ window.onresize = function(force) {
 };
 
 if (scale.devicePR < 1 || scale.devicePR > 2) {
+	isResizeOnStart = false;
 	window.onresize(true);
 }
 
