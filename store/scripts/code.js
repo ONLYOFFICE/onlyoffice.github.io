@@ -277,7 +277,7 @@ window.addEventListener('message', function(message) {
 			elements.spanVersion.innerText = plugin.version;
 			let pluginDiv = this.document.getElementById(message.guid);
 			if (pluginDiv)
-				pluginDiv.lastChild.firstChild.remove();
+				pluginDiv.lastChild.firstChild.lastChild.remove();
 
 			if (!updateCount)
 				toogleLoader(false);
@@ -934,10 +934,10 @@ function onClickItem() {
 
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
-	let discussionUrl = plugin.discussionUrl;
-	elements.ratingStars.innerText = plugin.rating ? plugin.rating.string : '';
+	let discussionUrl = plugin ? plugin.discussionUrl : null;
+	elements.ratingStars.innerText = plugin && plugin.rating ? plugin.rating.string : '';
 	
-	if (plugin.rating) {
+	if (plugin && plugin.rating) {
 		elements.totalVotes.innerText = plugin.rating.total;
 		elements.divVotes.classList.remove('hidden');
 	} else {
@@ -970,7 +970,7 @@ function onClickItem() {
 		elements.divArrow.classList.add('hidden');
 	}
 
-	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.classList.contains('hidden'));
+	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
@@ -1609,12 +1609,12 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		btn.setAttribute('disabled', '');
 	}
 
-	let bHasUpdate = (btn.parentNode.childElementCount > 1);
+	let bHasUpdate = (btn.parentNode.firstChild.lastChild.tagName === 'SPAN');
 	if (bHasUpdate) {
 		if (bInstall)
-			btn.parentNode.firstChild.classList.remove('hidden');
+			btn.parentNode.firstChild.lastChild.classList.remove('hidden');
 		else
-			btn.parentNode.firstChild.classList.add('hidden');
+			btn.parentNode.firstChild.lastChild.classList.add('hidden');
 	}
 
 	if (!elements.divSelected.classList.contains('hidden')) {
