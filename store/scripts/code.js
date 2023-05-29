@@ -1629,7 +1629,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		else
 			this.document.getElementById('btn_update').classList.add('hidden');
 	}
-	checkNoUpdated(bInstall);
+	checkNoUpdated(!bInstall);
 };
 
 function checkInternet() {
