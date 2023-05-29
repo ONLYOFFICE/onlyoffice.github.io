@@ -1154,6 +1154,7 @@ function setDivHeight() {
 
 window.onresize = function(force) {
 	if (scale.devicePR !== window.devicePixelRatio || force) {
+		let html = document.getElementsByTagName('html')[0];
 		scale.devicePR = window.devicePixelRatio;
 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			setDivHeight();
@@ -1164,7 +1165,7 @@ window.onresize = function(force) {
 				return;
 
 			calculateScale();
-			elements.divBody.setAttribute('style', '');
+			html.setAttribute('style', '');
 
 			if (scale.value !== oldScale)
 				changeIcons();
@@ -1174,8 +1175,8 @@ window.onresize = function(force) {
 				zoom = (1 / devicePixelRatio);
 			if (scale.devicePR > 2)
 				zoom = (1 / devicePixelRatio) * 2;
-			elements.divBody.style.zoom = zoom;
-			elements.divBody.style['-moz-transform'] = 'scale('+ zoom +')';
+			html.style.zoom = zoom;
+			html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
 		
 	}
