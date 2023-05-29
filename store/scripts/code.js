@@ -1164,6 +1164,7 @@ window.onresize = function() {
 				return;
 
 			calculateScale();
+			elements.divBody.setAttribute('style', '');
 
 			if (scale.value !== oldScale)
 				changeIcons();
