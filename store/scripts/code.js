@@ -1155,8 +1155,12 @@ function setDivHeight() {
 window.onresize = function(force) {
 	if (scale.devicePR !== window.devicePixelRatio || force) {
 		let html = document.getElementsByTagName('html')[0];
-		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		scale.devicePR = window.devicePixelRatio;
+		let zoom;
+			if (scale.devicePR < 1)
+				zoom = (1 / devicePixelRatio);
+			if (scale.devicePR > 2)
+				zoom = (1 / devicePixelRatio) * 2;
 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			setDivHeight();
 			let oldScale = scale.value;
@@ -1170,14 +1174,10 @@ window.onresize = function(force) {
 			if (scale.value !== oldScale)
 				changeIcons();
 		} else {
-			let zoom;
-			if (scale.devicePR < 1)
-				zoom = (1 / devicePixelRatio);
-			if (scale.devicePR > 2)
-				zoom = (1 / devicePixelRatio) * 2;
 			html.style.zoom = zoom;
 			html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
+		$('.div_item').css('border', ((zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		
 	}
 };
