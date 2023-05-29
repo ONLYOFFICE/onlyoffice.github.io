@@ -1172,7 +1172,7 @@ window.onresize = function() {
 			if (scale.devicePR < 1)
 				zoom = (1 / devicePixelRatio);
 			if (scale.devicePR > 2)
-				zoom = 2;
+				zoom = (1 / devicePixelRatio) * 2;
 			elements.divBody.style.zoom = zoom;
 			elements.divBody.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
