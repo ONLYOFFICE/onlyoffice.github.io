@@ -23,5 +23,6 @@
   "Refresh": "Actualizar",
   "Save as text": "Guardar como texto",
   "Please insert some citation into the document." : "Por favor, insira alguma citação no documento.",
-  "Synchronize" : "Sincronizar"
+  "Synchronize" : "Sincronizar",
+  "Omit Author" : "Omitir Autor"
 }
