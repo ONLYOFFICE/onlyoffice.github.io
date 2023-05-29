@@ -260,8 +260,10 @@ window.addEventListener('message', function(message) {
 			updateCount--;
 			if (!message.guid) {
 				// somethimes we can receive such message
-				if (!updateCount)
+				if (!updateCount) {
+					checkNoUpdated();
 					toogleLoader(false);
+				}
 				return;
 			}
 			installed = findPlugin(false, message.guid);
@@ -279,8 +281,10 @@ window.addEventListener('message', function(message) {
 			if (pluginDiv)
 				pluginDiv.lastChild.firstChild.lastChild.remove();
 
-			if (!updateCount)
+			if (!updateCount) {
+				checkNoUpdated();
 				toogleLoader(false);
+			}
 			break;
 		case 'Removed':
 			if (!message.guid) {
@@ -1736,5 +1740,22 @@ function parseRatingPage(data) {
 		};
 	} else {
 		return null;
+	}
+};
+
+function checkNoUpdated() {
+	// todo it's a temp solution. We will change a work with updation in the feature.
+	if (!elements.btnUpdateAll.classList.contains('hidden')) {
+		let arr = document.getElementsByClassName('span_update');
+		let bHasNoUpdated = false;
+		for (let index = 0; index < arr.length; index++) {
+			if (!arr[index].classList.contains('hidden')) {
+				bHasNoUpdated = true;
+				break;
+			}
+		}
+		if (!bHasNoUpdated) {
+			elements.btnUpdateAll.classList.add('hidden');
+		}
 	}
 };
