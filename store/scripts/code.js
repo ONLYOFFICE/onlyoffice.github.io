@@ -1155,10 +1155,10 @@ function setDivHeight() {
 window.onresize = function(force) {
 	if (scale.devicePR !== window.devicePixelRatio || force) {
 		let html = document.getElementsByTagName('html')[0];
+		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		scale.devicePR = window.devicePixelRatio;
 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			setDivHeight();
-			$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
