@@ -729,6 +729,8 @@ function showListofPlugins(bAll, sortedArr) {
 	if (!Ps) {
 		Ps = new PerfectScrollbar('#div_main', {});
 		Ps.update();
+	} else {
+		Ps.update();
 	}
 };
 
