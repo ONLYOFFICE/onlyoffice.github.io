@@ -260,8 +260,10 @@ window.addEventListener('message', function(message) {
 			updateCount--;
 			if (!message.guid) {
 				// somethimes we can receive such message
-				if (!updateCount)
+				if (!updateCount) {
+					checkNoUpdated(true);
 					toogleLoader(false);
+				}
 				return;
 			}
 			installed = findPlugin(false, message.guid);
@@ -277,10 +279,12 @@ window.addEventListener('message', function(message) {
 			elements.spanVersion.innerText = plugin.version;
 			let pluginDiv = this.document.getElementById(message.guid);
 			if (pluginDiv)
-				pluginDiv.lastChild.firstChild.remove();
+				pluginDiv.lastChild.firstChild.lastChild.remove();
 
-			if (!updateCount)
+			if (!updateCount) {
+				checkNoUpdated(true);
 				toogleLoader(false);
+			}
 			break;
 		case 'Removed':
 			if (!message.guid) {
@@ -314,10 +318,12 @@ window.addEventListener('message', function(message) {
 				if (bUpdate) {
 					catFiltred = installedPlugins;
 					let searchVal = elements.inpSearch.value.trim();
-					if (searchVal !== '')
+					if (searchVal !== '') {
 						makeSearch(searchVal.toLowerCase());
-					else
+					} else {
 						this.document.getElementById(message.guid).remove();
+						Ps.update();
+					}
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
 				}
@@ -711,6 +717,8 @@ function showListofPlugins(bAll, sortedArr) {
 	if (!Ps) {
 		Ps = new PerfectScrollbar('#div_main', {});
 		Ps.update();
+	} else {
+		Ps.update();
 	}
 };
 
@@ -934,10 +942,10 @@ function onClickItem() {
 
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
-	let discussionUrl = plugin.discussionUrl;
-	elements.ratingStars.innerText = plugin.rating ? plugin.rating.string : '';
+	let discussionUrl = plugin ? plugin.discussionUrl : null;
+	elements.ratingStars.innerText = plugin && plugin.rating ? plugin.rating.string : '';
 	
-	if (plugin.rating) {
+	if (plugin && plugin.rating) {
 		elements.totalVotes.innerText = plugin.rating.total;
 		elements.divVotes.classList.remove('hidden');
 	} else {
@@ -970,7 +978,7 @@ function onClickItem() {
 		elements.divArrow.classList.add('hidden');
 	}
 
-	let bHasUpdate = (pluginDiv.lastChild.firstChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.classList.contains('hidden'));
+	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
 		elements.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
@@ -1609,12 +1617,12 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		btn.setAttribute('disabled', '');
 	}
 
-	let bHasUpdate = (btn.parentNode.childElementCount > 1);
+	let bHasUpdate = (btn.parentNode.firstChild.lastChild.tagName === 'SPAN');
 	if (bHasUpdate) {
 		if (bInstall)
-			btn.parentNode.firstChild.classList.remove('hidden');
+			btn.parentNode.firstChild.lastChild.classList.remove('hidden');
 		else
-			btn.parentNode.firstChild.classList.add('hidden');
+			btn.parentNode.firstChild.lastChild.classList.add('hidden');
 	}
 
 	if (!elements.divSelected.classList.contains('hidden')) {
@@ -1625,6 +1633,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		else
 			this.document.getElementById('btn_update').classList.add('hidden');
 	}
+	checkNoUpdated(!bInstall);
 };
 
 function checkInternet() {
@@ -1736,5 +1745,24 @@ function parseRatingPage(data) {
 		};
 	} else {
 		return null;
+	}
+};
+
+function checkNoUpdated(bRemove) {
+	// todo it's a temp solution. We will change a work with updation in the feature.
+	if ( (!elements.btnUpdateAll.classList.contains('hidden') && bRemove) || (elements.btnUpdateAll.classList.contains('hidden') && !bRemove) ) {
+		let arr = document.getElementsByClassName('span_update');
+		let bHasNoUpdated = false;
+		for (let index = 0; index < arr.length; index++) {
+			if (!arr[index].classList.contains('hidden')) {
+				bHasNoUpdated = true;
+				break;
+			}
+		}
+		if (bHasNoUpdated) {
+			elements.btnUpdateAll.classList.remove('hidden');
+		} else {
+			elements.btnUpdateAll.classList.add('hidden');
+		}
 	}
 };
