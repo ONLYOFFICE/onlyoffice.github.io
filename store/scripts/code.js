@@ -261,7 +261,7 @@ window.addEventListener('message', function(message) {
 			if (!message.guid) {
 				// somethimes we can receive such message
 				if (!updateCount) {
-					checkNoUpdated(false);
+					checkNoUpdated(true);
 					toogleLoader(false);
 				}
 				return;
@@ -282,7 +282,7 @@ window.addEventListener('message', function(message) {
 				pluginDiv.lastChild.firstChild.lastChild.remove();
 
 			if (!updateCount) {
-				checkNoUpdated(false);
+				checkNoUpdated(true);
 				toogleLoader(false);
 			}
 			break;
