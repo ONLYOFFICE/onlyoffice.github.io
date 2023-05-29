@@ -55,6 +55,9 @@ let scale = {                                                        // current 
 	devicePR : 1                                                     // device pixel ratio
 };
 calculateScale();
+if (scale.devicePR < 1 || scale.devicePR) {
+	window.onresize();
+}
 const languages = [                                                  // list of languages
 	['cs-CZ', 'cs', 'Czech'],
 	['de-DE', 'de', 'German'],
