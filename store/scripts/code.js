@@ -1164,7 +1164,7 @@ function setDivHeight() {
 	}
 };
 
-window.onresize = function() {
+window.onresize = function(event) {
 	setDivHeight();
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
