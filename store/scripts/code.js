@@ -1177,7 +1177,7 @@ window.onresize = function(force) {
 			html.style.zoom = zoom;
 			html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
-		$('.div_item').css('border', ((zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		
 	}
 };
