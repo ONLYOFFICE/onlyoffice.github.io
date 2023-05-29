@@ -114,6 +114,10 @@ if (!isDesktop)
 	fetchAllPlugins(true, false);
 
 window.onload = function() {
+	if (scale.devicePR < 1 || scale.devicePR > 2) {
+		isResizeOnStart = false;
+		window.onresize(true);
+	}
 	let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
 	rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
 	let styleTheme = document.createElement('style');
@@ -1178,14 +1182,8 @@ window.onresize = function(force) {
 			html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
 		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		
 	}
 };
-
-if (scale.devicePR < 1 || scale.devicePR > 2) {
-	isResizeOnStart = false;
-	window.onresize(true);
-}
 
 function calculateScale() {
 	let bestIndex = 0;
