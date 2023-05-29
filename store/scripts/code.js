@@ -1166,8 +1166,8 @@ function setDivHeight() {
 	}
 };
 
-window.onresize = function() {
-	if (scale.devicePR !== window.devicePixelRatio) {
+window.onresize = function(force) {
+	if (scale.devicePR !== window.devicePixelRatio || force) {
 		scale.devicePR = window.devicePixelRatio;
 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			setDivHeight();
@@ -1196,7 +1196,7 @@ window.onresize = function() {
 };
 
 if (scale.devicePR < 1 || scale.devicePR > 2) {
-	window.onresize();
+	window.onresize(true);
 }
 
 function calculateScale() {
