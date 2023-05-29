@@ -1643,6 +1643,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		else
 			this.document.getElementById('btn_update').classList.add('hidden');
 	}
+	checkNoUpdated();
 };
 
 function checkInternet() {
@@ -1757,9 +1758,9 @@ function parseRatingPage(data) {
 	}
 };
 
-function checkNoUpdated() {
+function checkNoUpdated(bRemoved) {
 	// todo it's a temp solution. We will change a work with updation in the feature.
-	if (!elements.btnUpdateAll.classList.contains('hidden')) {
+	if ( (!elements.btnUpdateAll.classList.contains('hidden') && bRemoved) || (elements.btnUpdateAll.classList.contains('hidden') && !bRemoved) ) {
 		let arr = document.getElementsByClassName('span_update');
 		let bHasNoUpdated = false;
 		for (let index = 0; index < arr.length; index++) {
@@ -1768,7 +1769,9 @@ function checkNoUpdated() {
 				break;
 			}
 		}
-		if (!bHasNoUpdated) {
+		if (bHasNoUpdated) {
+			elements.btnUpdateAll.classList.remove('hidden');
+		} else {
 			elements.btnUpdateAll.classList.add('hidden');
 		}
 	}
