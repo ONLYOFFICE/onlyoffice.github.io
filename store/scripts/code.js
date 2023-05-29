@@ -318,10 +318,13 @@ window.addEventListener('message', function(message) {
 				if (bUpdate) {
 					catFiltred = installedPlugins;
 					let searchVal = elements.inpSearch.value.trim();
-					if (searchVal !== '')
+					if (searchVal !== '') {
 						makeSearch(searchVal.toLowerCase());
-					else
+					}
+					else {
 						this.document.getElementById(message.guid).remove();
+						Ps.update();
+					}
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
 				}
