@@ -1152,12 +1152,12 @@ function setDivHeight() {
 	}
 };
 
-window.onresize = function(event) {
-	setDivHeight();
+window.onresize = function() {
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
-		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			setDivHeight();
+			$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
@@ -1167,7 +1167,12 @@ window.onresize = function(event) {
 
 			if (scale.value !== oldScale)
 				changeIcons();
+		} else {
+			let zoom = (1 / devicePixelRatio).toFixed(1)
+			elements.divBody.style.zoom = zoom;
+			elements.divBody.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
+		
 	}
 };
 
