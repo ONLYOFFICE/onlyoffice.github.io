@@ -161,7 +161,7 @@
 
 		elements.btnSubmit.onclick = function() {
 			let settings = getSettings();
-			if (!settings.prompt.length && !settings.messages.length) {
+			if (settings.error) {
 				elements.textArea.classList.add('error_border');
 				return;
 			};
@@ -351,24 +351,28 @@
 	};
 
 	function getSettings() {
+		let value = elements.textArea.value.trim();
 		let obj = {
 			model : $('#sel_models').val(),
 		};
-		if (obj.model.includes('turbo')) {
-			obj.messages = [{role: "user", content: elements.textArea.value.trim()}]
+		if (!value.length) {
+			obj.error = true;
 		} else {
-			obj.prompt = elements.textArea.value.trim()
+			if (obj.model.includes('turbo')) {
+				obj.messages = [{role: "user", content: value}]
+			} else {
+				obj.prompt = value
+			}
+			let temp = Number(elements.inpTempSl.value);
+			obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
+			let len = Number(elements.inpLenSl.value);
+			obj.max_tokens = ( len < 0 ? 0 : ( len > maxTokens ? maxTokens : len ) );
+			let topP = Number(elements.inpTopSl.value);
+			obj.top_p = ( topP < 0 ? 0 : ( topP > 1 ? 1 : topP ) );
+			let stop = elements.inpStop.value;
+			if (stop.length)
+				obj.stop = stop;
 		}
-		let temp = Number(elements.inpTempSl.value);
-		obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
-		let len = Number(elements.inpLenSl.value);
-		obj.max_tokens = ( len < 0 ? 0 : ( len > maxTokens ? maxTokens : len ) );
-		let topP = Number(elements.inpTopSl.value);
-		obj.top_p = ( topP < 0 ? 0 : ( topP > 1 ? 1 : topP ) );
-		let stop = elements.inpStop.value;
-		if (stop.length)
-			obj.stop = stop;
-
 		return obj;
 	};
 

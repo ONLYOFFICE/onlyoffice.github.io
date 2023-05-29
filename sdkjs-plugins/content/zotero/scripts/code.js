@@ -106,7 +106,8 @@
 		tempDiv: document.getElementById('div_temp'),
 		refreshBtn: document.getElementById('refreshBtn'),
 		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
-		synchronizeBtn: document.getElementById('synchronizeBtn')
+		synchronizeBtn: document.getElementById('synchronizeBtn'),
+		checkOmitAuthor: document.getElementById('omitAuthor')
     };
 
     var selectedScroller;
@@ -515,6 +516,7 @@
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
             if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+            if (el.attributes["title"]) el.attributes["title"].value = getMessage(el.attributes["title"].value);
             if (el.innerText) el.innerText = getMessage(el.innerText);
         }
     };
@@ -903,14 +905,14 @@
 			if (arrFields.length) {
 				var updatedFields = [];
 				var bibField = null;
-				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join();
+				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
 				var bibliography = elements.tempDiv.innerText;
 				arrFields.forEach(function(field) {
 					if (bUpadteAll && field.Value.includes(citPrefix)) {
 						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
 						var keysL = [];
 						citationItems = citationItems.map(function(item) {
-							keysL.push({id:item.id});
+							keysL.push({id:item.id, "suppress-author":item["suppress-author"]});
 							return cslItems[item.id];
 						});
 						elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
@@ -1046,7 +1048,7 @@
 				bUpdateItems = true;
 			}
             keys.push(item);
-            keysL.push({id:item});
+			keysL.push({id:item, "suppress-author": cslItems[item]["suppress-author"]});
         }
 
         try {
@@ -1089,6 +1091,7 @@
 		cslData.index = cslItems.count;
 		cslData["short-title"] = item.shortTitle;
 		cslData["title-short"] = item.shortTitle;
+		cslData["suppress-author"] = elements.checkOmitAuthor.checked;
 
         return cslData;
     };

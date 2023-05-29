@@ -16,7 +16,7 @@
  *
  */
 
-var urlProxy         = 'https://onlyoffice-proxy.herokuapp.com/';
+var urlProxy         = 'https://plugins-services.onlyoffice.com/proxy';
 var searchBookUrl    = "https://worldcat.citation-api.com/query?search=",
     searchJournalUrl = "https://crossref.citation-api.com/query?search=",
     searchWebSiteUrl = "https://web.citation-api.com/query?search=",
@@ -27,17 +27,18 @@ var EasyBibHelper = function(sApiKey) {
 };
 
 async function PerformRequest(sUrl, sMethod, oHeaders, sData) {
-    var oParams = {};
-    if (oHeaders.length !== 0)
-        oParams['headers'] = oHeaders;
-    if (sData !== '')
-        oParams['data'] = sData;
-    oParams['method'] = sMethod;
-    oParams['url'] = urlProxy + sUrl;
-
     var promise = new Promise(function (resolve, reject) {
-        $.ajax(oParams
-        ).success(function (oResponse) {
+        $.ajax({
+            method: 'POST',
+            contentType: "text/plain",
+            data: JSON.stringify({
+                "headers": oHeaders,
+                "data": sData,
+                "method": sMethod,
+                "target": sUrl
+            }),
+            url: urlProxy
+        }).success(function (oResponse) {
             resolve(oResponse);
         })
         .error(function(error) {

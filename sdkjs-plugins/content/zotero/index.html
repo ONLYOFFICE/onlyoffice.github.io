@@ -70,8 +70,11 @@
                     <div id="docsThumb" class="scrollThumb display-none"></div>
                 </div>
                 <div id="controlsHolder" class="flexCol">
-					<div id="buttonsWrapper" class="flex " style="justify-content: space-between;">
-						<button id="insertLinkBtn" class="button control i18n btn-text-default" disabled>Insert Citation</button>
+					<div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
+						<div class="flex" style="align-items: center;">
+							<button id="insertLinkBtn" class="button control i18n btn-text-default" style="flex: 1; margin-left: 8px;" disabled>Insert Citation</button>
+							<input id="omitAuthor" type="checkbox" class="form-control i18n hidden" title="Omit Author">
+						</div>
                         <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
                     </div>
 					<div id="insertBibDiv" class="flex">

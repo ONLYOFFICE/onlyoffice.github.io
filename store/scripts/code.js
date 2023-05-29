@@ -16,6 +16,7 @@
  *
  */
 
+// todo поправить с ошибкой, что у нее нет поля message (может её тогда совсем не выводить или показать просто error)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
@@ -28,7 +29,7 @@ let searchTimeout = null;                                            // timeot f
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
 let updateCount = 0;                                                 // counter for plugins in updating process
-let allPlugins;                                                      // list of all plugins from config
+let allPlugins = [];                                                 // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
@@ -46,6 +47,7 @@ let translate = {'Loading': 'Loading'};                              // translat
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = true;                                          // flag for firs resize on start
+const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
@@ -68,7 +70,7 @@ const languages = [                                                  // list of 
 const messages = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
 	linkManually: 'Install plugin manually',
-	linkPR: 'Submit your own plugin',
+	linkPR: 'Submit your own plugin'
 };
 const isIE = (navigator.userAgent.toLowerCase().indexOf("msie") > -1 ||
 				navigator.userAgent.toLowerCase().indexOf("trident") > -1 ||
@@ -184,11 +186,23 @@ window.onload = function() {
 	elements.inpSearch.addEventListener('input', function(event) {
 		makeSearch(event.target.value.trim().toLowerCase());
 	});
+
+	elements.divRatingLink.onclick = function() {
+		elements.discussionLink.click();
+	};
 };
 
 window.addEventListener('message', function(message) {
 	// getting messages from editor or plugin
-	message = JSON.parse(message.data);
+
+	// try to parse message
+	try {
+		message = JSON.parse(message.data);
+	} catch (error) {
+		// if we have a problem, don't process this message
+		return;
+	}
+
 	let plugin;
 	let installed;
 	switch (message.type) {
@@ -207,7 +221,7 @@ window.addEventListener('message', function(message) {
 
 			if (message.updateInstalled)
 				showListofPlugins(false);
-			else if ( allPlugins || (isDesktop && !isOnline) )
+			else if ( allPlugins.length || (isDesktop && !isOnline) )
 				getAllPluginsData(true, false);
 			
 			break;
@@ -321,7 +335,7 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n';
+			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n.text-secondary{color:'+message.theme["text-secondary"]+';}\n';
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
@@ -352,7 +366,7 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'PluginReady':
 			// get all installed plugins
-			editorVersion = ( message.version && message.version.includes('.') ? Number( message.version.split('.').join('') ) : 1e8 );
+			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
 			break;
 		case 'onClickBack':
@@ -363,10 +377,8 @@ window.addEventListener('message', function(message) {
 
 function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 	// function for fetching all plugins from config
-	clearInterval(interval);
-	interval = null;
 	isPluginLoading = true;
-	makeRequest(configUrl).then(
+	makeRequest(configUrl, 'GET', null, null, true).then(
 		function(response) {
 			allPlugins = JSON.parse(response);
 			if (installedPlugins)
@@ -375,43 +387,77 @@ function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 		function(err) {
 			createError( new Error( getTranslated( 'Problem with loading markeplace config.' ) ) );
 			isPluginLoading = false;
-			allPlugins = [];
 			showMarketplace();
 		}
 	);
 };
 
-function makeRequest(url, responseType) {
+function makeRequest(url, method, responseType, body, bHandeNoInternet) {
 	// this function makes GET request and return promise
 	// maybe use fetch to in this function
-	// isLoading = true;
+	if (!method)
+		method = 'GET';
+	
+	if (body)
+		body = JSON.stringify(body);
+
 	return new Promise(function (resolve, reject) {
 		try {
 			let xhr = new XMLHttpRequest();
-			xhr.open('GET', url, true);
+			xhr.open(method, url, true);
 			if (responseType)
 				xhr.responseType = responseType;
 			
 			xhr.onload = function () {
 				if (this.readyState == 4) {
-					if (this.status == 200 || location.href.indexOf("file:") == 0) {
+					if (this.status !== 404 && (this.status == 200 || location.href.indexOf("file:") == 0)) {
 						resolve(this.response);
 					}
 					if (this.status >= 400) {
-						reject(new Error(this.response));
+						let errorText = this.status === 404 ? 'File not found.' : 'Network problem.';
+						reject( new Error( getTranslated(errorText) ) );
 					}
 				}
 			};
 
 			xhr.onerror = function (err) {
 				reject(err);
+				if (url.includes('https') && bHandeNoInternet)
+					handeNoInternet();
 			};
 
-			xhr.send(null);
+			xhr.send(body);
 		} catch (error) {
 			reject(error);
 		}
 		
+	});
+};
+
+function makeDesktopRequest(_url) {
+	// function for getting rating page in desktop
+	return new Promise((resolve, reject) => {
+		if ( !_url.startsWith('http') ) {
+			resolve({status:'skipped', response: {statusText: _url}});
+		} else {
+			window.AscSimpleRequest.createRequest({
+				url: _url,
+				crossOrigin: true,
+				crossDomain: true,
+				timeout: 10000,
+				headers: '',
+				complete: function(e, status) {
+					if ( status == 'success' ) {
+						resolve({status:status, response:e});
+					} else {
+						reject({status:status, response:e});
+					}
+				},
+				error: function(e, status, error) {
+					reject({status:status, response:e});
+				}
+			});
+		}
 	});
 };
 
@@ -467,10 +513,15 @@ function initElemnts() {
 	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
+	elements.divRatingLink = document.getElementById('div_rating_link');
+	elements.discussionLink = document.getElementById('discussion_link');
+	elements.ratingStars = document.getElementById('div_rating_stars');
+	elements.totalVotes = document.getElementById('total_votes');
+	elements.divVotes = document.getElementById('div_votes');
 };
 
 function toogleLoader(show, text) {
-	// show or hide loader
+	// show or hide loader (don't use elements for this function)
 	if (!show) {
 		clearTimeout(timeout);
 		document.getElementById('loader-container').classList.add('hidden');
@@ -489,28 +540,21 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	let count = 0;
 	let Unloaded = [];
 	let url = isDesktop ? OOMarketplaceUrl : ioUrl;
-	allPlugins.forEach(function(pluginUrl, i, arr) {
+	allPlugins.forEach(function(plugin, i, arr) {
 		count++;
-		pluginUrl = (pluginUrl.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + pluginUrl + '/' : pluginUrl;
+		if (typeof plugin !== 'object') {
+			plugin.name = plugin;
+		}
+		let pluginUrl = (plugin.name.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + plugin.name + '/' : plugin.name;
 		let confUrl = pluginUrl + 'config.json';
-		makeRequest(confUrl).then(
+		makeRequest(confUrl, 'GET', null, null, true).then(
 			function(response) {
-				count--;
 				let config = JSON.parse(response);
 				config.url = confUrl;
 				config.baseUrl = pluginUrl;
 				arr[i] = config;
-				if (!count) {
-					// console.log('getAllPluginsData: ' + (Date.now() - start));
-					removeUnloaded(Unloaded);
-					sortPlugins(true, false, 'name');
-					isPluginLoading = false;
-					if (bFirstRender)
-						showMarketplace();
-					else if (bshowMarketplace)
-						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
-				}
-				makeRequest(pluginUrl + 'translations/langs.json').then(
+				
+				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, true).then(
 					function(response) {
 						let supportedLangs = [ getTranslated('English') ];
 						let arr = JSON.parse(response);
@@ -528,21 +572,54 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					function(error) {
 						config.languages = [ getTranslated('English') ];
 					}
-				)
+				);
+				if (plugin.discussion) {
+					// get discussion page
+					config.discussionUrl = plugin.discussion;
+					if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
+						makeDesktopRequest(plugin.discussion).then(
+							function(data) {
+								if (data.status == 'success') {
+									config.rating = parseRatingPage(data.response.responseText);
+								}
+							},
+							function(err) {
+								createError(err.response, false);
+							}
+						).catch(function(err) {
+							createError(err, false)
+						}).finally(function() {
+							count--;
+							if (!count)
+								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+						});
+					} else {
+						let body = { target: plugin.discussion };
+						makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
+							data = JSON.parse(data);
+							config.rating = parseRatingPage(data);
+						}).catch(function(err){
+							createError('Problem with loading rating', true);
+						}).finally(function(){
+							count--;
+							if (!count)
+								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+						});
+					}
+	
+				} else {
+					count--;
+				}
+
+				if (!count)
+					endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 			},
 			function(err) {
 				count--;
 				Unloaded.push(i);
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
-				if (!count) {
-					removeUnloaded(Unloaded);
-					sortPlugins(true, false, 'name');
-					isPluginLoading = false;
-					if (bFirstRender)
-						showMarketplace();
-					else if (bshowMarketplace)
-						toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
-				}
+				if (!count)
+					endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 			}
 		);
 	});
@@ -554,9 +631,20 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	}
 };
 
+function endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded) {
+	// console.log('getAllPluginsData: ' + (Date.now() - start));
+	removeUnloaded(Unloaded);
+	sortPlugins(true, false, 'name');
+	isPluginLoading = false;
+	if (bFirstRender)
+		showMarketplace();
+	else if (bshowMarketplace)
+		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+};
+
 function getInstalledLanguages() {
 	installedPlugins.forEach(function(pl) {
-		makeRequest(pl.obj.baseUrl + 'translations/langs.json').then(
+		makeRequest(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null, true).then(
 			function(response) {
 				let supportedLangs = [ getTranslated('English') ];
 				let arr = JSON.parse(response);
@@ -675,7 +763,7 @@ function createPluginDiv(plugin, bInstalled) {
 	}
 
 	let bNotAvailable = false;
-	const minV = (plugin.minVersion ? Number( plugin.minVersion.split('.').join('') ) : -1);
+	const minV = (plugin.minVersion ? getPluginVersion(plugin.minVersion) : -1);
 	if (minV > editorVersion) {
 		bCheckUpdate = false;
 		bNotAvailable = true;
@@ -707,10 +795,13 @@ function createPluginDiv(plugin, bInstalled) {
 						'<span class="span_description">' + description + '</span>' +
 					'</div>' +
 					'<div class="div_footer">' +
-						(bHasUpdate
-							? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
-							: ''
-						)+''+
+						'<div class="advanced_info">' +
+							'<div id="div_rating" class="div_rating">'+ (plugin.rating ? plugin.rating.string : '') +'</div>' +
+							(bHasUpdate
+								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
+								: ''
+							) +
+						'</div>' +
 						( (installed && !bRemoved)
 							? (installed.canRemoved ? '<button class="btn-text-default btn_item btn_remove" onclick="onClickRemove(event.target, event)" ' + (bNotAvailable ? "dataDisabled=\"disabled\"" : "") +'>' + getTranslated("Remove") + '</button>' : '<div style="height:20px"></div>')
 							: '<button class="btn_item btn-text-default btn_install" onclick="onClickInstall(event.target, event)"' + additional + '>'  + getTranslated("Install") + '</button>'
@@ -723,26 +814,50 @@ function createPluginDiv(plugin, bInstalled) {
 };
 
 function onClickInstall(target, event) {
+	// click install button
 	event.stopImmediatePropagation();
 	// click install button
-	clearTimeout(timeout);
-	timeout = setTimeout(toogleLoader, 200, true, "Installation");
+	// we should do that because we have some problem when desktop is loading plugin
+	if (isDesktop) {
+		toogleLoader(true, 'Installation');
+	} else {
+		clearTimeout(timeout);
+		timeout = setTimeout(toogleLoader, 200, true, "Installation");
+	}
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	let installed = findPlugin(false, guid);
+	if (!plugin && !installed) {
+		// if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
+		sendMessage( { type : "showButton", show : false } );
+		onClickBack();
+		toogleLoader(false);
+	}
 	let message = {
 		type : 'install',
 		url : (installed ? installed.obj.baseUrl : plugin.url),
 		guid : guid,
 		config : (installed ? installed.obj : plugin)
 	};
-	sendMessage(message);
+	// we should do that because we have some problem when desktop is loading plugin
+	if (isDesktop) {
+		setTimeout(function(){
+			sendMessage(message);
+		}, 200);
+	} else {
+		sendMessage(message);
+	}
 };
 
 function onClickUpdate(target) {
 	// click update button
-	clearTimeout(timeout);
-	timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	// we should do that because we have some problem when desktop is loading plugin
+	if (isDesktop) {
+		toogleLoader(true, 'Updating');
+	} else {
+		clearTimeout(timeout);
+		timeout = setTimeout(toogleLoader, 200, true, "Updating");
+	}
 	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
 	let plugin = findPlugin(true, guid);
 	updateCount++;
@@ -752,14 +867,25 @@ function onClickUpdate(target) {
 		guid : guid,
 		config : plugin
 	};
-	sendMessage(message);
+	// we should do that because we have some problem when desktop is loading plugin
+	if (isDesktop) {
+		setTimeout(function(){
+			sendMessage(message);
+		}, 200);
+	} else {
+		sendMessage(message);
+	}
 };
 
 function onClickRemove(target, event) {
 	event.stopImmediatePropagation();
 	// click remove button
-	clearTimeout(timeout);
-	timeout = setTimeout(toogleLoader, 200, true, "Removal");
+	if (isDesktop) {
+		toogleLoader(true, 'Removal');
+	} else {
+		clearTimeout(timeout);
+		timeout = setTimeout(toogleLoader, 200, true, "Removal");
+	}
 	let guid = target.parentNode.parentNode.getAttribute('data-guid');
 	let message = {
 		type : 'remove',
@@ -798,7 +924,7 @@ function onClickUpdateAll() {
 
 function onClickItem() {
 	// There we will make preview for selected plugin
-	let offered = " Ascensio System SIA";
+	let offered = "Ascensio System SIA";
 	
 	let guid = this.getAttribute('data-guid');
 	let pluginDiv = document.getElementById(guid);
@@ -808,6 +934,16 @@ function onClickItem() {
 
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
+	let discussionUrl = plugin.discussionUrl;
+	elements.ratingStars.innerText = plugin.rating ? plugin.rating.string : '';
+	
+	if (plugin.rating) {
+		elements.totalVotes.innerText = plugin.rating.total;
+		elements.divVotes.classList.remove('hidden');
+	} else {
+		elements.divVotes.classList.add('hidden');
+	}
+
 	if ( !plugin || ( isDesktop && installed ) ) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
@@ -871,6 +1007,10 @@ function onClickItem() {
 	elements.spanOffered.innerHTML = plugin.offered || offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
 	elements.linkPlugin.setAttribute('href', pluginUrl);
+	if (discussionUrl)
+		elements.discussionLink.setAttribute('href', discussionUrl);
+	else
+		elements.discussionLink.removeAttribute('href');
 
 	if (bHasUpdate) {
 		elements.btnUpdate.classList.remove('hidden');
@@ -902,7 +1042,7 @@ function onClickItem() {
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
-	sendMessage( { type : "showButton" } );
+	sendMessage( { type : "showButton", show : true } );
 	// elements.arrow.classList.remove('hidden');
 };
 
@@ -947,32 +1087,45 @@ function onSelectPreview(target, isOverview) {
 	}
 };
 
-function createNotification(text) {
+function createNotification(text, err) {
 	// creates any notification for user inside elements.divMain window (you should clear this element before making notification)
 	let div = document.createElement('div');
 	div.className = 'div_notification';
-	let span = document.createElement('span');
-	span.className = 'span_notification';
-	span.innerHTML = getTranslated(text);
-	div.appendChild(span);
+	if (err) {
+		let icon = document.createElement('div');
+		icon.className = 'icon_notification';
+		div.appendChild(icon);
+		let spanErr = document.createElement('span');
+		spanErr.className = 'error_caption';
+		spanErr.innerHTML = getTranslated(err);
+		div.appendChild(spanErr);
+	}
+	let spanNot = document.createElement('span');
+	spanNot.className = 'span_notification text-secondary';
+	spanNot.innerHTML = getTranslated(text);
+	div.appendChild(spanNot);
 	elements.divMain.appendChild(div);
 };
 
-function createError(err) {
+function createError(err, bDontShow) {
 	// creates a modal window with error message for user and error in console
 	console.error(err);
+	let divErr = document.getElementById('div_error');
+	// we don't show a new error if we have previous one
+	if (!divErr.classList.contains('hidden') || bDontShow)
+		return;
 	let background = document.createElement('div');
 	background.className = 'asc-plugin-loader';
 	let span = document.createElement('span');
 	span.className = 'error_caption';
-	span.innerHTML = err.message;
+	span.innerHTML = err.message || getTranslated('Problem with loading some resources');
 	background.appendChild(span);
-	document.getElementById('div_error').appendChild(background);
-	document.getElementById('div_error').classList.remove('hidden');
+	divErr.appendChild(background);
+	divErr.classList.remove('hidden');
 	setTimeout(function() {
 		// remove error after 5 seconds
 		background.remove();
-		document.getElementById('div_error').classList.add('hidden');
+		divErr.classList.add('hidden');
 	}, 5000);
 };
 
@@ -1047,7 +1200,7 @@ function getTranslation() {
 	// gets translation for current language
 	if (shortLang != "en") {
 		isTranslationLoading = true
-		makeRequest('./translations/langs.json').then(
+		makeRequest('./translations/langs.json', 'GET', null, null, true).then(
 			function(response) {
 				let arr = JSON.parse(response);
 				let fullName, shortName;
@@ -1062,7 +1215,7 @@ function getTranslation() {
 				}
 				if (fullName || shortName) {
 					bTranslate = true;
-					makeRequest('./translations/' + (fullName || shortName) + '.json').then(
+					makeRequest('./translations/' + (fullName || shortName) + '.json', 'GET', null, null, true).then(
 						function(res) {
 							// console.log('getTranslation: ' + (Date.now() - start));
 							translate = JSON.parse(res);
@@ -1124,6 +1277,7 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = getTranslated('Entertainment');
 	document.getElementById('opt_com').innerHTML = getTranslated('Communication');
 	document.getElementById('opt_spec').innerHTML = getTranslated('Special abilities');
+	document.getElementById('votes_caption').innerHTML = getTranslated('votes:');
 	showMarketplace();
 };
 
@@ -1245,7 +1399,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	}
 
 	if (bSetSize) {
-		makeRequest(curIcon, 'blob').then(
+		makeRequest(curIcon, 'GET', 'blob', null, true).then(
 			function (res) {
 				let reader = new FileReader();
 				reader.onloadend = function() {
@@ -1263,7 +1417,8 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 				reader.readAsDataURL(res);
 			},
 			function(error) {
-				createError(error);
+				// it's because we have a new maket for error messages
+				createError(error, true);
 			}
 		);
 	}
@@ -1293,12 +1448,13 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = getTranslated(text);
 		let toolbar = document.getElementById('toolbar_tools');
-		if (bAll && (!isOnline || isPluginLoading) ) {
+		let flag = !isDesktop && !isOnline;
+		if ( ( bAll && (!isOnline || isPluginLoading) ) || flag) {
 			$('.div_notification').remove();
 			$('.div_item').remove();
 			setTimeout(function(){if (Ps) Ps.update()});
 			toolbar.classList.add('hidden');
-			createNotification('No Internet Connection.')
+			createNotification('No Internet Connection.', 'Problem with loading some resources')
 		} else {
 			toolbar.classList.remove('hidden');
 			if (document.getElementById('select_categories').value == 'all') {
@@ -1336,7 +1492,7 @@ function installPluginManually() {
 
 function sortPlugins(bAll, bInst, type) {
 	switch (type) {
-		case 'raiting':
+		case 'rating':
 			// todo
 			break;
 		case 'instalations':
@@ -1472,41 +1628,113 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 };
 
 function checkInternet() {
-	try {
-		let xhr = new XMLHttpRequest();
-		let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
-		xhr.open('GET', url, true);
-		
-		xhr.onload = function () {
-			if (this.readyState == 4) {
-				if (this.status >= 200 && this.status < 300) {
-					isOnline = true;
-					let bshowMarketplace = ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false;
-					fetchAllPlugins(interval === null, bshowMarketplace);
-				}
+	// url for check internet connection
+	let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
+	makeRequest(url, 'GET', null, null, true).then(
+		function() {
+			isOnline = true;
+			let bShowSelected = elements.divSelected && !elements.divSelected.classList.contains('hidden');
+			let bshowMarketplace = bShowSelected ? false : ( ( elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active') ) ? true : false );
+			if (!allPlugins.length) {
+				fetchAllPlugins(interval === null, bshowMarketplace);
+			} else if (bShowSelected) {
+				let guid = elements.divSelected.getAttribute('data-guid');
+				let div = document.getElementById(guid);
+				if (div)
+					div.onclick();
+			} else if (bshowMarketplace) {
+				toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+			} else if (!isDesktop) {
+				toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
 			}
-		};
-
-		xhr.onerror = function (err) {
-			handeNoInternet();
-		};
-
-		xhr.send(null);
-	} catch (error) {
-		handeNoInternet();
-	}
+			clearInterval(interval);
+			interval = null;
+		}
+	);
 };
 
 function handeNoInternet() {
 	isOnline = false;
-	allPlugins = [];
 	if (!interval) {
 		interval = setInterval(function() {
 			checkInternet();
 		}, 5000);
 	}
+
+	let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
+
+	if ( (bshowMarketplace || !isDesktop) && elements.divSelected && !elements.divSelected.classList.contains('hidden') ) {
+		sendMessage( { type : "showButton", show : false } );
+		onClickBack();
+	}
+
+	if (!document.getElementsByClassName('div_notification')[0]) {
+		if (bshowMarketplace)
+			toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+		else if (!isDesktop)
+			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+	}
 };
 
 function getTranslated(text) {
 	return translate[text] || text;
+};
+
+function getStringRating(value) {
+	let rating = '';
+	switch (value) {
+		case 5:
+			rating = '★★★★★';
+			break;
+		case 4:
+			rating = '★★★★✩';
+			break;
+		case 3:
+			rating = '★★★✩✩';
+			break;
+		case 2:
+			rating = '★★✩✩✩';
+			break;
+		case 1:
+			rating = '★✩✩✩✩';
+			break;
+	
+		default:
+			rating = '✩✩✩✩✩';
+			break;
+	}
+	return rating;
+};
+
+function parseRatingPage(data) {
+	// if we load this page, parse it
+	// remove head, because it can brake our styles
+	if (data !== 'Not Found') {
+		let start = data.indexOf('<head>');
+		let end = data.indexOf('</head>') + 7;
+		document.getElementById('div_rating_git').innerHTML = data.substring(0, start) + data.substring(end);
+		// we will have a problem if github change their page
+		let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+		let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
+		first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
+		second = Math.ceil(total * second / 100) * 4; // it's 4 stars
+		third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
+		fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
+		fifth = Math.ceil(total * fifth / 100);       // it's 1 star
+		let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
+		let tmp = average | 0;
+		// if we have an average value less than 0.5, we round down, if more than 0.5, then up
+		average = ( (average - tmp) >= 0.5) ? average | 1 : tmp;
+		return {
+			total: total,
+			average: average,
+			string: getStringRating(average)
+		};
+	} else {
+		return null;
+	}
 };
