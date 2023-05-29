@@ -320,8 +320,7 @@ window.addEventListener('message', function(message) {
 					let searchVal = elements.inpSearch.value.trim();
 					if (searchVal !== '') {
 						makeSearch(searchVal.toLowerCase());
-					}
-					else {
+					} else {
 						this.document.getElementById(message.guid).remove();
 						Ps.update();
 					}
