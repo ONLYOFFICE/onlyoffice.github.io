@@ -1155,7 +1155,7 @@ function setDivHeight() {
 window.onresize = function() {
 	if (scale.devicePR !== window.devicePixelRatio) {
 		scale.devicePR = window.devicePixelRatio;
-		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			setDivHeight();
 			$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 			let oldScale = scale.value;
