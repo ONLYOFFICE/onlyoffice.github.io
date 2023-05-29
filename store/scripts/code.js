@@ -261,7 +261,7 @@ window.addEventListener('message', function(message) {
 			if (!message.guid) {
 				// somethimes we can receive such message
 				if (!updateCount) {
-					checkNoUpdated();
+					checkNoUpdated(false);
 					toogleLoader(false);
 				}
 				return;
@@ -282,7 +282,7 @@ window.addEventListener('message', function(message) {
 				pluginDiv.lastChild.firstChild.lastChild.remove();
 
 			if (!updateCount) {
-				checkNoUpdated();
+				checkNoUpdated(false);
 				toogleLoader(false);
 			}
 			break;
@@ -1629,7 +1629,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		else
 			this.document.getElementById('btn_update').classList.add('hidden');
 	}
-	checkNoUpdated();
+	checkNoUpdated(bInstall);
 };
 
 function checkInternet() {
@@ -1744,9 +1744,9 @@ function parseRatingPage(data) {
 	}
 };
 
-function checkNoUpdated(bRemoved) {
+function checkNoUpdated(bRemove) {
 	// todo it's a temp solution. We will change a work with updation in the feature.
-	if ( (!elements.btnUpdateAll.classList.contains('hidden') && bRemoved) || (elements.btnUpdateAll.classList.contains('hidden') && !bRemoved) ) {
+	if ( (!elements.btnUpdateAll.classList.contains('hidden') && bRemove) || (elements.btnUpdateAll.classList.contains('hidden') && !bRemove) ) {
 		let arr = document.getElementsByClassName('span_update');
 		let bHasNoUpdated = false;
 		for (let index = 0; index < arr.length; index++) {
