@@ -1212,11 +1212,11 @@ window.onresize = function(bForce) {
 			if (scale.value !== oldScale)
 				changeIcons();
 		} else if (scale.devicePR < 1) {
-			html.style.zoom = zoom;
-			// html.style['-moz-transform'] = 'scale('+ zoom +')';
+			html.style.revZoom = revZoom;
+			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
 		}
 		// todo problem with this border
-		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
+		$('.div_item').css('border', ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
 };
 
