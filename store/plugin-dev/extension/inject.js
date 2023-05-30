@@ -1,5 +1,5 @@
 (function(window, undefined) {
-	var URL_TO_PLUGIN = "https://github.com/Serg-Kv/onlyoffice.github.io/tree/master/sdkjs-plugins/content/chatgpt";
+	var URL_TO_PLUGIN = "https://Serg-Kv.github.io/onlyoffice.github.io/sdkjs-plugins/content/chatgpt/";
 	
 	var xhrObj = new XMLHttpRequest();
 	xhrObj.open('GET', URL_TO_PLUGIN + "config.json", false);
