@@ -1212,7 +1212,7 @@ window.onresize = function(bForce) {
 			if (scale.value !== oldScale)
 				changeIcons();
 		} else if (scale.devicePR < 1) {
-			html.style.revZoom = revZoom;
+			html.style.zoom = revZoom;
 			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
 		}
 		// todo problem with this border
