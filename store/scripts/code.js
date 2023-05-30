@@ -352,6 +352,7 @@ window.addEventListener('message', function(message) {
 				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
 			} else {
+				this.document.getElementsByTagName('body')[0].classList.remove('white_bg');
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
@@ -360,10 +361,43 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 			}
 
-			let styleTheme = document.createElement('style');
-			styleTheme.type = 'text/css';
+			let styleTheme = document.getElementById('theme_style');
+			if (!styleTheme) {
+				styleTheme = document.createElement('style');
+				styleTheme.id = 'theme_style';
+				styleTheme.type = 'text/css';
+				document.getElementsByTagName('head')[0].appendChild(styleTheme);
+				console.log('First message with theme');
+			} else {
+				console.log('Not the first message');
+				defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';
+				let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
+				let arrPl = bshowMarketplace ? allPlugins : installedPlugins;
+				arrPl.forEach(function(pl) {
+					let div = document.getElementById(pl.guid);
+					if (div) {
+						let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
+						console.log(pl.name || pl.obj.name);
+						let bg = defaultBG;
+						if (variation.store) {
+							if (variation.store.background)
+								bg = variation.store.background[themeType]
+						} else {
+							// todo now we have one icon for all theme for plugins in store. change it when we will have different icons for different theme (now it's not necessary). use for all icons 'changeIcons'
+							// It's why we should change icons only for plugins with default icon or plugins icon (which don't have 'store' field in config)
+							div.firstChild.firstChild.setAttribute( 'src', getImageUrl( pl.guid, false, false, ('img_' + pl.guid) ) );
+						}
+						div.firstChild.setAttribute('style', ('background:' + bg) );
+					}
+				});
+				let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
+				if (guid)
+					elements.imgIcon.setAttribute('src', getImageUrl(guid, true, false, 'img_icon'));
+
+				// todo перерисовать цвет шапки ещё у плагинов и сменить иконки (так же в окне плагина)
+			}
+
 			styleTheme.innerHTML = message.style + rule;
-			document.getElementsByTagName('head')[0].appendChild(styleTheme);
 			break;
 		case 'onExternalMouseUp':
 			let evt = document.createEvent("MouseEvents");
@@ -1200,8 +1234,9 @@ function changeIcons() {
 		let guid = arr[i].getAttribute('data-guid');
 		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
-	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
+	let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
+	if (guid)
+		elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
 };
 
 function getTranslation() {
