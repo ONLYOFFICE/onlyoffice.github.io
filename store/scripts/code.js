@@ -46,7 +46,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let isResizeOnStart = true;                                          // flag for firs resize on start
+let isResizeOnStart = false;                                          // flag for firs resize on start
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -1215,13 +1215,13 @@ window.onresize = function(bForce) {
 			html.style.zoom = revZoom;
 			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
 		}
-		// todo problem with this border
 		$('.div_item').css('border', ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
 };
 
 // zoom on start if we start with a non 100% zoom
 if (scale.devicePR < 1) {
+	// maybe remove this flag
 	isResizeOnStart = false;
 	window.onresize(true);
 }
