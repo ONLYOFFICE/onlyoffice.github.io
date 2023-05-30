@@ -1192,6 +1192,7 @@ function setDivHeight() {
 };
 
 window.onresize = function(force) {
+	// todo переделть зум (может вообще перенести его в плагин стора, чтобы тут меньше кода было и уведомление нормально показывалось
 	if (scale.devicePR !== window.devicePixelRatio || force) {
 		let html = document.getElementsByTagName('html')[0];
 		scale.devicePR = window.devicePixelRatio;
@@ -1213,8 +1214,8 @@ window.onresize = function(force) {
 			if (scale.value !== oldScale)
 				changeIcons();
 		} else {
-			html.style.zoom = zoom;
-			html.style['-moz-transform'] = 'scale('+ zoom +')';
+			// html.style.zoom = zoom;
+			// html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
 		// todo problem with this border
 		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
