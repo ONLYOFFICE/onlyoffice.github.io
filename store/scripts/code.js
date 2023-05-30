@@ -1191,66 +1191,40 @@ function setDivHeight() {
 	}
 };
 
-window.onresize = function() {
-	setDivHeight();
-	if (scale.devicePR !== window.devicePixelRatio) {
+window.onresize = function(bForce) {
+	if (scale.devicePR !== window.devicePixelRatio || bForce) {
+		let html = document.getElementsByTagName('html')[0];
 		scale.devicePR = window.devicePixelRatio;
-		let zoom;
-		if (scale.devicePR < 1)
-			zoom = (1 / devicePixelRatio);
+		let revZoom = 1 / scale.devicePR;
 		if (scale.devicePR > 2)
-			zoom = (1 / devicePixelRatio) * 2;
-		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			revZoom *= 2;
+
+		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			setDivHeight();
 			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
 
 			calculateScale();
+			html.setAttribute('style', '');
 
 			if (scale.value !== oldScale)
 				changeIcons();
+		} else if (scale.devicePR < 1) {
+			html.style.zoom = zoom;
+			// html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
+		// todo problem with this border
+		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
 };
 
-// window.onresize = function(force) {
-// 	// todo переделть зум (может вообще перенести его в плагин стора, чтобы тут меньше кода было и уведомление нормально показывалось
-// 	if (scale.devicePR !== window.devicePixelRatio || force) {
-// 		let html = document.getElementsByTagName('html')[0];
-// 		scale.devicePR = window.devicePixelRatio;
-// 		let zoom;
-// 			if (scale.devicePR < 1)
-// 				zoom = (1 / devicePixelRatio);
-// 			if (scale.devicePR > 2)
-// 				zoom = (1 / devicePixelRatio) * 2;
-// 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
-// 			setDivHeight();
-// 			let oldScale = scale.value;
-// 			isResizeOnStart = false;
-// 			if (scale.devicePR < 1)
-// 				return;
-
-// 			calculateScale();
-// 			html.setAttribute('style', '');
-
-// 			if (scale.value !== oldScale)
-// 				changeIcons();
-// 		} else {
-// 			// html.style.zoom = zoom;
-// 			// html.style['-moz-transform'] = 'scale('+ zoom +')';
-// 		}
-// 		// todo problem with this border
-// 		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-// 	}
-// };
-
-	// todo zoom надо делать уже после отрисовки карточек плагинов иначе проблема с бордерами
-	// if (scale.devicePR < 1 || scale.devicePR > 2) {
-	// 	isResizeOnStart = false;
-	// 	window.onresize(true);
-	// }
+// zoom on start if we start with a non 100% zoom
+if (scale.devicePR < 1) {
+	isResizeOnStart = false;
+	window.onresize(true);
+}
 
 function calculateScale() {
 	let bestIndex = 0;
