@@ -114,11 +114,6 @@ if (!isDesktop)
 	fetchAllPlugins(true, false);
 
 window.onload = function() {
-	// todo zoom надо делать уже после отрисовки карточек плагинов иначе проблема с бордерами
-	if (scale.devicePR < 1 || scale.devicePR > 2) {
-		isResizeOnStart = false;
-		window.onresize(true);
-	}
 	let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
 	rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
 	let styleTheme = document.createElement('style');
@@ -786,7 +781,12 @@ function createPluginDiv(plugin, bInstalled) {
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item form-control noselect';
-	div.style.border = (1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
+	let zoom;
+	if (scale.devicePR < 1)
+		zoom = (1 / devicePixelRatio);
+	if (scale.devicePR > 2)
+		zoom = (1 / devicePixelRatio) * 2;
+	div.style.border = ((zoom > 1 ? 1 : zoom)) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
 	
 	div.onmouseenter = function(event) {
 		event.target.classList.add('div_item_hovered');
@@ -1220,6 +1220,12 @@ window.onresize = function(force) {
 		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
 };
+
+	// todo zoom надо делать уже после отрисовки карточек плагинов иначе проблема с бордерами
+	if (scale.devicePR < 1 || scale.devicePR > 2) {
+		isResizeOnStart = false;
+		window.onresize(true);
+	}
 
 function calculateScale() {
 	let bestIndex = 0;
