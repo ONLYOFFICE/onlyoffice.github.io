@@ -1,0 +1,72 @@
+{
+    "name"       : "ChatGPT",
+    "guid"       : "asc.{FE8A04AC-D8C2-4DE9-9C03-3DD5E831721E}",
+    "variations" : [
+        {
+            "description"         : "ChatGPT",
+            "url"                 : "index.html",
+            "icons"               : [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+            "icons2": [
+                {
+                    "style" : "light",
+                    
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "isViewer"            : false,
+            "EditorsSupport"      : ["word"],
+            "isVisual"            : false,
+            "isModal"             : false,
+            "isInsideMode"        : false,
+            "isSystem"            : true,
+            "initDataType"        : "none",
+            "isUpdateOleOnResize" : false,
+            "events": ["onContextMenuShow", "onContextMenuClick"],
+            "store": {
+                "background": {
+                    "light" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
+                    "dark" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
+                },
+                "screenshots" : [],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                },
+                "categories": ["specAbilities", "work", "recommended"]
+            }
+        }
+    ]
+}
