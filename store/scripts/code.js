@@ -114,6 +114,11 @@ if (!isDesktop)
 	fetchAllPlugins(true, false);
 
 window.onload = function() {
+	// todo zoom надо делать уже после отрисовки карточек плагинов иначе проблема с бордерами
+	if (scale.devicePR < 1 || scale.devicePR > 2) {
+		isResizeOnStart = false;
+		window.onresize(true);
+	}
 	let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
 	rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
 	let styleTheme = document.createElement('style');
@@ -1186,22 +1191,33 @@ function setDivHeight() {
 	}
 };
 
-window.onresize = function() {
-	setDivHeight();
-	if (scale.devicePR !== window.devicePixelRatio) {
+window.onresize = function(force) {
+	if (scale.devicePR !== window.devicePixelRatio || force) {
+		let html = document.getElementsByTagName('html')[0];
 		scale.devicePR = window.devicePixelRatio;
-		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+		let zoom;
+			if (scale.devicePR < 1)
+				zoom = (1 / devicePixelRatio);
+			if (scale.devicePR > 2)
+				zoom = (1 / devicePixelRatio) * 2;
+		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			setDivHeight();
 			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
 
 			calculateScale();
+			html.setAttribute('style', '');
 
 			if (scale.value !== oldScale)
 				changeIcons();
+		} else {
+			html.style.zoom = zoom;
+			html.style['-moz-transform'] = 'scale('+ zoom +')';
 		}
+		// todo problem with this border
+		$('.div_item').css('border', ((zoom > 1 ? 1 : zoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
 };
 
@@ -1234,9 +1250,8 @@ function changeIcons() {
 		let guid = arr[i].getAttribute('data-guid');
 		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
-	let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
-	if (guid)
-		elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
+	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
 };
 
 function getTranslation() {
