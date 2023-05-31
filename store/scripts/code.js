@@ -1270,7 +1270,7 @@ function onTranslate() {
 	document.getElementById('span_lern').innerHTML = getTranslated('Learn how to use') + ' ';
 	document.getElementById('span_lern_plugin').innerHTML = getTranslated('the plugin in') + ' ';
 	document.getElementById('span_contribute').innerHTML = getTranslated('Contribute') + ' ';
-	document.getElementById('span_contribute_end').innerHTML = getTranslated('to the plugin developmen or report an issue on') + ' ';
+	document.getElementById('span_contribute_end').innerHTML = getTranslated('to the plugin development or report an issue on') + ' ';
 	document.getElementById('span_help').innerHTML = getTranslated('Get help') + ' ';
 	document.getElementById('span_help_end').innerHTML = getTranslated('with the plugin functionality on our forum.');
 	document.getElementById('span_create').innerHTML = getTranslated('Create a new plugin using') + ' ';
