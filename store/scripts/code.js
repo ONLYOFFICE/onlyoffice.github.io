@@ -349,7 +349,7 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
-				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
+				rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
 			} else {
 				this.document.getElementsByTagName('body')[0].classList.remove('white_bg');
@@ -357,7 +357,7 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
-				rule += '.div_offered{color: rgba(255,255,255,0.8); !important;}\n';
+				rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 			}
 
@@ -843,10 +843,13 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
-							'<div id="div_rating" class="div_rating">'+ (plugin.rating ? plugin.rating.string : '') +'</div>' +
+							(plugin.rating
+								? '<div id="div_rating"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> </div>'
+								: '<div></div>'
+							) +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
-								: ''
+								: '<div></div>'
 							) +
 						'</div>' +
 						( (installed && !bRemoved)
@@ -982,12 +985,15 @@ function onClickItem() {
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
 	let discussionUrl = plugin ? plugin.discussionUrl : null;
-	elements.ratingStars.innerText = plugin && plugin.rating ? plugin.rating.string : '';
 	
 	if (plugin && plugin.rating) {
 		elements.totalVotes.innerText = plugin.rating.total;
+		document.getElementById('stars_colored').style.width = plugin.rating.percent;
+		document.getElementById('votes_average').innerText = plugin.rating.average;
+		elements.divRatingLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
+		elements.divRatingLink.classList.add('hidden');
 		elements.divVotes.classList.add('hidden');
 	}
 
@@ -1744,32 +1750,6 @@ function getTranslated(text) {
 	return translate[text] || text;
 };
 
-function getStringRating(value) {
-	let rating = '';
-	switch (value) {
-		case 5:
-			rating = '★★★★★';
-			break;
-		case 4:
-			rating = '★★★★✩';
-			break;
-		case 3:
-			rating = '★★★✩✩';
-			break;
-		case 2:
-			rating = '★★✩✩✩';
-			break;
-		case 1:
-			rating = '★✩✩✩✩';
-			break;
-	
-		default:
-			rating = '✩✩✩✩✩';
-			break;
-	}
-	return rating;
-};
-
 function parseRatingPage(data) {
 	// if we load this page, parse it
 	// remove head, because it can brake our styles
@@ -1790,13 +1770,11 @@ function parseRatingPage(data) {
 		fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
 		fifth = Math.ceil(total * fifth / 100);       // it's 1 star
 		let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
-		let tmp = average | 0;
-		// if we have an average value less than 0.5, we round down, if more than 0.5, then up
-		average = ( (average - tmp) >= 0.5) ? average | 1 : tmp;
+		let percent = average / 5 * 100 + '%';
 		return {
 			total: total,
 			average: average,
-			string: getStringRating(average)
+			percent: percent
 		};
 	} else {
 		return null;

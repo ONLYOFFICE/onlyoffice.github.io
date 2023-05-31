@@ -335,7 +335,7 @@ label.header {
 	padding-bottom: 4px;
 }
 
-.span_info {
+.font_bold {
 	font-weight: bold;
 }
 
@@ -448,8 +448,15 @@ label.header {
 }
 
 .div_rating {
-	color: #FF6F3D;
-	font-size: 14px;
+	position: relative;
+	height: 15px;
+	width: 76px;
+}
+
+.div_votes {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
 }
 
 .advanced_info {
@@ -467,4 +474,34 @@ label.header {
 
 .div_link {
 	cursor: pointer !important;
+	margin-top: 5px;
+}
+
+.stars_grey {
+	position: absolute;
+	background-image: url(../img/stars/rating-stars.svg);
+	background-repeat: no-repeat;
+	background-size: 76px;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+}
+
+.stars_orange {
+	position: absolute;
+	background-image: url(../img/stars/rating-stars-colored.svg);
+	z-index: 2;
+	left: 0;
+	height: 100%;
+	width: 0%;
+	background-repeat: no-repeat;
+	background-size: 76px;
+}
+
+.stars_plugin_window {
+	background-size: 64px !important;
+}
+
+.div_rating_window {
+	width: 64px !important;
 }
