@@ -367,9 +367,7 @@ window.addEventListener('message', function(message) {
 				styleTheme.id = 'theme_style';
 				styleTheme.type = 'text/css';
 				document.getElementsByTagName('head')[0].appendChild(styleTheme);
-				console.log('First message with theme');
 			} else {
-				console.log('Not the first message');
 				defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';
 				let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
 				let arrPl = bshowMarketplace ? allPlugins : installedPlugins;
@@ -377,7 +375,6 @@ window.addEventListener('message', function(message) {
 					let div = document.getElementById(pl.guid);
 					if (div) {
 						let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
-						console.log(pl.name || pl.obj.name);
 						let bg = defaultBG;
 						if (variation.store) {
 							if (variation.store.background)
