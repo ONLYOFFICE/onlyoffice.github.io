@@ -661,7 +661,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		);
 	});
 
-	if (isDesktop && installedPlugins && bFirstRender) {
+	if (isDesktop && installedPlugins && bFirstRender && !isOnline) {
 		isPluginLoading = false;
 		getInstalledLanguages();
 		showMarketplace();
