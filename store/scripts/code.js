@@ -1508,18 +1508,18 @@ function sortPlugins(bAll, bInst, type) {
 			break;
 		case 'start':
 			if (bInst) {
-				let protected = [];
+				let guarded = [];
 				let removed = [];
 				let arr = [];
 				installedPlugins.forEach(function(pl){
 					if (!pl.canRemoved)
-						protected.push(pl);
+						guarded.push(pl);
 					else if (pl.removed)
 						removed.push(pl);
 					else
 						arr.push(pl);
 				});
-				installedPlugins = protected.concat(arr, removed);
+				installedPlugins = guarded.concat(arr, removed);
 			}
 			break;
 	
