@@ -19,7 +19,7 @@
 // Example insert text into editors (different implementations)
 (function(window, undefined){
     
-    var text = "Hello world!";
+    var text = "Hello propact!";
 
     window.Asc.plugin.init = function()
     {
@@ -32,7 +32,7 @@
                 // serialize command as text
                 var sScript = "var oDocument = Api.GetDocument();";
                 sScript += "oParagraph = Api.CreateParagraph();";
-                sScript += "oParagraph.AddText('Hello world!');";
+                sScript += "oParagraph.AddText('Hello propact!');";
                 sScript += "oDocument.InsertContent([oParagraph]);";
                 this.info.recalculate = true;
                 this.executeCommand("close", sScript);
@@ -44,7 +44,7 @@
                 this.callCommand(function() {
                     var oDocument = Api.GetDocument();
                     var oParagraph = Api.CreateParagraph();
-                    oParagraph.AddText("Hello world!");
+                    oParagraph.AddText("Hello propact!");
                     oDocument.InsertContent([oParagraph]);
                 }, true);
                 break;
