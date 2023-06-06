@@ -15,189 +15,92 @@
  -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-		<title>Extended comments</title>
-        
-		<style type="text/css">
-			html, body {
-				margin: 0px;
-				padding: 0px;
-				/* overflow: hidden; */
-				width:100%;
-				height:100%;
-			}
-			body {
-				display: flex;
-				flex-direction: column;
-			}
-			input {
-				width: 10px;
-			}
-			textarea {
-				resize: none;
-			}
-			.comments{
-				display: flex;
-				justify-content: space-between;
-			}
-			.comments-param {
-				width: 35%;
-			}
-			.comments-check {
-				width: 10%;
-			}
-			.comments-text {
-				cursor: pointer;
-			}
-			.div-hovered	{
-				background: rgba(200, 200, 200, 0.5);
-			}
-			.div-selected	{
-				background: #aaa;
-			}
-			.div-info {
-				overflow: hidden;
-				cursor: pointer;
-				white-space: nowrap;
-			}
-			.div-check {
-				height: 18px;
-			}
-			.border-bottom {
-				border-bottom: 1px solid;
-			}
-			.noselect {
-			-khtml-user-select: none;
-			user-select: none;
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			}
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Example search and change background text</title>
 
-			.combo {
-				background: #fff;
-				border: 1px solid #cfcfcf;
-				border-radius: 2px;
-				color: #444444;
-				font-size: 11px;
-				font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-				height: 20px;
-				cursor: pointer;
-				margin: 0px 0px 10px 0px;
-				box-sizing: border-box;
-			}
-			.div-user-data {
-				display: flex;
-				flex-flow: column; margin-top: 10px;
-				justify-content: space-between;
-			}
-
-			/* Style the tab */
-			.tab {
+	<style type="text/css">
+		html, body {
+			margin: 0px;
+			padding: 0px;
 			overflow: hidden;
-			border: 1px solid #ccc;
-			background-color: #f1f1f1;
-			}
+			width:100%;
+			height:100%;
+		}
+		.search {
+			/* outline-color: #7d858c; */
+			width: calc(100% - 20px);
+			margin : 5px;
+			/* border: 1px solid #cfcfcf; */
 
-			/* Style the buttons that are used to open the tab content */
-			.tab button {
-			background-color: inherit;
-			float: left;
-			border: none;
+		}
+		.search::selection {
+			background: #D8DADC; /* WebKit/Blink Browsers */
+		}
+		.search::-moz-selection {
+			background: #D8DADC; /* Gecko Browsers */
+		}
+		.buttons {
+			display: flex;
+			flex-flow: column;
+		}
+		div {
+			margin : 5px;
+		}
+		.navigation {
+			display: flex;
+			justify-content: flex-end;
+		}
+		button {
+			color: #fff;
+			background-color: #7d858c;
+			border: 1px solid #cfcfcf;
+			border-radius: 2px;
 			outline: none;
+			font-size: 13px;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			height: 27px !important;
 			cursor: pointer;
-			padding: 14px 16px;
-			transition: 0.3s;
-			}
+			margin-left : 3px;
+		}
+		label {
+			font-size: 13px;
+			margin: 5px;
+		}
+		.color {
+			border: 1px solid;
+			border-color: #7d858c;
+			display: flex;
+			flex-flow: column;
+		}
+	</style>
 
-			/* Change background color of buttons on hover */
-			.tab button:hover {
-			background-color: #ddd;
-			}
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<script type="text/javascript" src="scripts/code.js"></script>
 
-			/* Create an active/current tablink class */
-			.tab button.active {
-			background-color: #ccc;
-			}
+</head>
+<body>
+<div>
+	<input placeholder="Enter your text here" id="inp_search" class="search form-control">
+</div>
+<div class="buttons">
+	<!-- <div class="navigation">
+        <button id="btn_prev" title="Previous result of search">Prev</button>
+        <button id="btn_next" title="Next result of search">Next</button>
+    </div> -->
 
-			/* Style the tab content */
-			.tabcontent {
-			display: none;
-			padding: 6px 12px;
-			border: 1px solid #ccc;
-			border-top: none;
-			}
-		</style>
-
-		<script>
-			function openCity(evt, cityName) {
-				var i, tabcontent, tablinks;
-				tabcontent = document.getElementsByClassName("tabcontent");
-				for (i = 0; i < tabcontent.length; i++) {
-					tabcontent[i].style.display = "none";
-				}
-				tablinks = document.getElementsByClassName("tablinks");
-				for (i = 0; i < tablinks.length; i++) {
-					tablinks[i].className = tablinks[i].className.replace(" active", "");
-				}
-				document.getElementById(cityName).style.display = "block";
-				evt.currentTarget.className += " active";
-			}
-		</script>
-
-		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
-		<script type="text/javascript" src="scripts/code.js"></script>
-		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
-		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
-
-    </head>
-    <body>
-		<div >
-			<!-- Tab links -->
-			<div class="tab">
-				<button class="tablinks" onclick="openCity(event, 'London')">London</button>
-				<button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-				<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-			</div>
-
-			<!-- Tab content -->
-			<div id="London" class="tabcontent">
-				<h3>London</h3>
-				<p>London is the capital city of England.</p>
-			</div>
-
-			<div id="Paris" class="tabcontent">
-				<h3>Paris</h3>
-				<p>Paris is the capital of France.</p>
-			</div>
-
-			<div id="Tokyo" class="tabcontent">
-				<h3>Tokyo</h3>
-				<p>Tokyo is the capital of Japan.</p>
-			</div>
+	<div class="color">
+		<label class="header">Color block</label>
+		<div style="display: flex; justify-content: center;">
+			<input type="color" title="Choose background color" name="background" id="inp_color">
+			<button id="btn_resetColor" class="btn-text-default" title="Reset background for setected text to default">Reset</button>
+			<button id="btn_bg" class="btn-text-default" title="Set background for selected text">Color</button>
+			<button id="btn_bgAll" class="btn-text-default" title="Set backgound for all searched results">Color all</button>
 		</div>
-		<div>
-			<input placeholder="Enter your text here" id="inp_search" class="search form-control">
-		</div>
-		<div class="buttons">
-			<!-- <div class="navigation">
-				<button id="btn_prev" title="Previous result of search">Prev</button>
-				<button id="btn_next" title="Next result of search">Next</button>
-			</div> -->
-
-			<div class="color">
-				<label class="header">Color block</label>
-				<div style="display: flex; justify-content: center;">
-					<input type="color" title="Choose background color" name="background" id="inp_color">
-					<button id="btn_resetColor" class="btn-text-default" title="Reset background for setected text to default">Reset</button>
-					<button id="btn_bg" class="btn-text-default" title="Set background for selected text">Color</button>
-					<button id="btn_bgAll" class="btn-text-default" title="Set backgound for all searched results">Color all</button>
-				</div>
-			</div>
-		</div>
-    </body>
+	</div>
+</div>
+</body>
 </html>
