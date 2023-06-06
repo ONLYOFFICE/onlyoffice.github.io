@@ -130,6 +130,22 @@
 			}
 		</style>
 
+		<script>
+			function openCity(evt, cityName) {
+				var i, tabcontent, tablinks;
+				tabcontent = document.getElementsByClassName("tabcontent");
+				for (i = 0; i < tabcontent.length; i++) {
+					tabcontent[i].style.display = "none";
+				}
+				tablinks = document.getElementsByClassName("tablinks");
+				for (i = 0; i < tablinks.length; i++) {
+					tablinks[i].className = tablinks[i].className.replace(" active", "");
+				}
+				document.getElementById(cityName).style.display = "block";
+				evt.currentTarget.className += " active";
+			}
+		</script>
+
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
@@ -140,6 +156,30 @@
 
     </head>
     <body>
+		<div >
+			<!-- Tab links -->
+			<div class="tab">
+				<button class="tablinks" onclick="openCity(event, 'London')">London</button>
+				<button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+				<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+			</div>
+
+			<!-- Tab content -->
+			<div id="London" class="tabcontent">
+				<h3>London</h3>
+				<p>London is the capital city of England.</p>
+			</div>
+
+			<div id="Paris" class="tabcontent">
+				<h3>Paris</h3>
+				<p>Paris is the capital of France.</p>
+			</div>
+
+			<div id="Tokyo" class="tabcontent">
+				<h3>Tokyo</h3>
+				<p>Tokyo is the capital of Japan.</p>
+			</div>
+		</div>
 		<div style="margin:10px; display: flex; flex-flow: column; height: 200px; justify-content: space-between;">
 			<textarea id="textarea_Comment" style="height:72px;" class="form-control" placeholder="Select the text and enter your comment here"></textarea>
 			<div id = "div_Edit" style=" display: flex; flex-flow: column; justify-content: space-between;">
@@ -175,27 +215,6 @@
 				<button class="btn-text-default submit" style="width:90px;margin-top: 10px;" id="btn_Delete">Delete</button>
 			</div>
 		</div>
-		<!-- Tab links -->
-		<div class="tab">
-			<button class="tablinks" onclick="openCity(event, 'London')">London</button>
-			<button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-			<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-		</div>
-		
-		<!-- Tab content -->
-		<div id="London" class="tabcontent">
-			<h3>London</h3>
-			<p>London is the capital city of England.</p>
-		</div>
-		
-		<div id="Paris" class="tabcontent">
-			<h3>Paris</h3>
-			<p>Paris is the capital of France.</p>
-		</div>
-		
-		<div id="Tokyo" class="tabcontent">
-			<h3>Tokyo</h3>
-			<p>Tokyo is the capital of Japan.</p>
-		</div>
+
     </body>
 </html>
