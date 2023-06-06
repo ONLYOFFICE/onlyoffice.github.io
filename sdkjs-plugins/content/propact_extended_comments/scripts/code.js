@@ -68,13 +68,18 @@
 			clearFields();
 			window.Asc.plugin.executeMethod("AddComment",[{Text: comment, UserName: author, UserId: userId, UserData : JSON.stringify(userData)}], function(comment) {
 				console.log(comment)
+				var oDocument = Api.GetDocument();
+				console.log('oDocument', oDocument);
+				var range = oDocument.GetRangeBySelect();
+				console.log('range', range);
+				range.SetHighlight(204,0,0, false);
 			});
 
-			window.Asc.plugin.callCommand(function() {
-				var oDocument = Api.GetDocument();
-				var range = oDocument.GetRangeBySelect();
-				range.SetHighlight(204,0,0, false);
-			}, false, true);
+			// window.Asc.plugin.callCommand(function() {
+			// 	var oDocument = Api.GetDocument();
+			// 	var range = oDocument.GetRangeBySelect();
+			// 	range.SetHighlight(204,0,0, false);
+			// }, false, true);
 		});
 
 		$('#btn_Cancel').on('click', function() {
