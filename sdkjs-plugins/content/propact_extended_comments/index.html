@@ -180,41 +180,24 @@
 				<p>Tokyo is the capital of Japan.</p>
 			</div>
 		</div>
-		<div style="margin:10px; display: flex; flex-flow: column; height: 200px; justify-content: space-between;">
-			<textarea id="textarea_Comment" style="height:72px;" class="form-control" placeholder="Select the text and enter your comment here"></textarea>
-			<div id = "div_Edit" style=" display: flex; flex-flow: column; justify-content: space-between;">
-				<div class="div-user-data">
-					<div style="display: flex; margin-bottom: 5px;">
-						<label class="for-combo" style="flex-grow: 1;">Problem Category</label>
-						<div><select id="select_Category" class="noselect combo" ></select></div>
-					</div>
-					<div style="display: flex; margin-bottom: 5px;">
-						<label class="for-combo" style="flex-grow: 1;">Severity</label>
-						<div><select id="select_Severity" class="noselect combo"></select></div>
-					</div>
-					<div style="display: flex; margin-bottom: 5px;">
-						<label class="for-combo" style="flex-grow: 1;">Submitted by</label>
-						<div><select id="select_Submit" class="noselect combo"></select></div>
-					</div>
-					<div style="display: flex; margin-bottom: 5px;">
-						<label class="for-combo" style="flex-grow: 1;">Author</label>
-						<div><input id="inp_author" class="form-control" placeholder="Author name" style="width: 120px;" type="text"></div>
-					</div>
+		<div>
+			<input placeholder="Enter your text here" id="inp_search" class="search form-control">
+		</div>
+		<div class="buttons">
+			<!-- <div class="navigation">
+				<button id="btn_prev" title="Previous result of search">Prev</button>
+				<button id="btn_next" title="Next result of search">Next</button>
+			</div> -->
+
+			<div class="color">
+				<label class="header">Color block</label>
+				<div style="display: flex; justify-content: center;">
+					<input type="color" title="Choose background color" name="background" id="inp_color">
+					<button id="btn_resetColor" class="btn-text-default" title="Reset background for setected text to default">Reset</button>
+					<button id="btn_bg" class="btn-text-default" title="Set background for selected text">Color</button>
+					<button id="btn_bgAll" class="btn-text-default" title="Set backgound for all searched results">Color all</button>
 				</div>
 			</div>
-			<div>
-				<button class="btn-text-default submit primary" style="width:90px;" id="btn_Submit">Comment</button>
-				<button class="btn-text-default submit" style="margin-left:5px; width:90px;" id="btn_Cancel">Cancel</button>
-			</div>
 		</div>
-		<div class="separator horizontal"></div>
-		<div style="margin:10px; flex-grow: 1; display: flex; flex-flow: column;overflow: hidden;">
-			<div id="scrollable-container-id" style="display: flex; flex-direction: column; overflow: auto;">
-			</div>
-			<div>
-				<button class="btn-text-default submit" style="width:90px;margin-top: 10px;" id="btn_Delete">Delete</button>
-			</div>
-		</div>
-
     </body>
 </html>
