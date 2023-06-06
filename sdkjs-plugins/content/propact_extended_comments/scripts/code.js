@@ -43,7 +43,9 @@
 			};
 			window.Asc.plugin.callCommand(function() {
 				var oDocument = Api.GetDocument();
+				console.log('oDocument', oDocument);
 				var range = oDocument.GetRangeBySelect();
+				console.log('range', range);
 				range.SetHighlight(Asc.scope.color.r, Asc.scope.color.g, Asc.scope.color.b, Asc.scope.color.isNone);
 			}, false, true);
 		}
