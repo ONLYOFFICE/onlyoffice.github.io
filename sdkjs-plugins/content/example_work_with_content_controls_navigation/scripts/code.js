@@ -39,7 +39,7 @@
 				G : 0,
 				B : 0,
 			};
-			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 1, color}]);
+			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 1, "Color": color}]);
 		}
 
 		document.getElementById("buttonIDGetAll").onclick = function() {
