@@ -35,11 +35,11 @@
 		document.getElementById("createContentBlock").onclick = function() {
 			var nContentControlType = 2;
 			color = {
-				r : 200,
-				g : 0,
-				b : 0,
+				R : 200,
+				G : 0,
+				B : 0,
 			};
-			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 0, color}]);
+			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 1, color}]);
 		}
 
 		document.getElementById("buttonIDGetAll").onclick = function() {
