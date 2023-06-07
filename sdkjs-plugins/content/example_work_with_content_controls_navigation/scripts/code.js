@@ -34,7 +34,12 @@
 
 		document.getElementById("createContentBlock").onclick = function() {
 			var nContentControlType = 2;
-			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 0}]);
+			color = {
+				r : 200,
+				g : 0,
+				b : 0,
+			};
+			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 0, color}]);
 		}
 
 		document.getElementById("buttonIDGetAll").onclick = function() {
