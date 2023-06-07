@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+ // todo поправить readme  и собранный плагин и с синонимами поправить тоже
 (function(window, undefined){
 	let ApiKey = '';
 	let bHasKey = false;
@@ -49,7 +50,7 @@
 			items: [
 				{
 					id : 'ChatGPT',
-					text : generatText('ChatGPT'),
+					text : generateText('ChatGPT'),
 					items : []
 				}
 			]
@@ -63,7 +64,7 @@
 				{
 					settings.items[0].items.push({
 						id : 'onMeaningT',
-						text : generatText('Explain text in comment')
+						text : generateText('Explain text in comment')
 					});
 
 					break;
@@ -73,61 +74,66 @@
 					settings.items[0].items.push(
 						{
 							id : 'TextAnalysis',
-							text : generatText('Text analysis'),
+							text : generateText('Text analysis'),
 							items : [
 								{
 									id : 'onSummarize',
-									text : generatText('Summarize')
+									text : generateText('Summarize')
 								},
 								{
 									id : 'onKeyWords',
-									text : generatText('Keywords')
+									text : generateText('Keywords')
 								},
 							]
 						},
 						{
 							id : 'Tex Meaning',
-							text : generatText('Word analysis'),
+							text : generateText('Word analysis'),
 							items : [
 								{
 									id : 'onMeaningS',
-									text : generatText('Explain text in comment')
+									text : generateText('Explain text in comment'),
 								},
 								{
 									id : 'onMeaningLinkS',
-									text : generatText('Explain text in hyperlink')
+									text : generateText('Explain text in hyperlink')
 								}
 							]
 						},
 						{
 							id : 'TranslateText',
-							text : generatText('Translate'),
+							text : generateText('Translate'),
 							items : [
 								{
-									id : 'onFrenchTr',
-									text : generatText('Translate to French')
+									id : 'onTranslate',
+									text : generateText('Translate to French'),
+									data : 'French'
 								},
 								{
-									id : 'onGermanTr',
-									text : generatText('Translate to German')
+									id : 'onTranslate',
+									text : generateText('Translate to German'),
+									data : 'German'
 								}
 							]
 						},
 						{
-							id : 'OnGenerateImage',
-							text : generatText('Generate image from text'),
+							id : 'OnGenerateImageList',
+							text : generateText('Generate image from text'),
 							items : [
 								{
-									id : 'OnGenerateImage_256',
-									text : generatText('256x256')
+									id : 'OnGenerateImage',
+									text : generateText('256x256'),
+									data : 256
 								},
 								{
-									id : 'OnGenerateImage_512',
-									text : generatText('512x512')
+									id : 'OnGenerateImage',
+									text : generateText('512x512'),
+									data : 512
 								},
 								{
-									id : 'OnGenerateImage_1024',
-									text : generatText('1024x1024')
+									id : 'OnGenerateImage',
+									text : generateText('1024x1024'),
+									data : 1024
 								}
 							]
 						}
@@ -139,7 +145,7 @@
 					{
 						settings.items[0].items.push({
 							id : 'onImgVar',
-							text : generatText('Generate image varion')
+							text : generateText('Generate image variation')
 						});
 	
 						break;
@@ -148,10 +154,9 @@
 					{
 						settings.items[0].items.push({
 							id : 'onHyperlink',
-							text : generatText('Show hyperlink content')
+							text : generateText('Show hyperlink content')
 						});
 						link = options.value;
-						// console.log(link);
 						break;
 					}
 
@@ -162,19 +167,19 @@
 			settings.items[0].items.push(
 				{
 					id : 'onChat',
-					text : generatText('Chat'),
+					text : generateText('Chat'),
 					separator: true
 				},
 				{
 					id : 'onCustomReq',
-					text : generatText('Custom request')
+					text : generateText('Custom request')
 				}
 			);
 		}
 		
 		settings.items[0].items.push({
 				id : 'onSettings',
-				text : generatText('Settings'),
+				text : generateText('Settings'),
 				separator: true
 		});
 
@@ -194,13 +199,13 @@
 				if (text && text.length > 1) {
 					thesaurusCounter++;
 					let tokens = window.Asc.OpenAIEncode(text);
-					createSettings(text, tokens, 10, true);
+					createSettings(text, tokens, 9, true);
 				}
 			});
 		}
 	});
 
-	function generatText(text) {
+	function generateText(text) {
 		let lang = window.Asc.plugin.info.lang.substring(0,2);
 		return {
 			en: text,
@@ -226,6 +231,9 @@
 		
 		if (!settingsWindow) {
 			settingsWindow = new window.Asc.PluginWindow();
+			settingsWindow.attachEvent("onWindowMessage", function(message) {
+				messageHandler(settingsWindow, message);
+			});
 		}
 		settingsWindow.show(variation);
 	});
@@ -248,10 +256,8 @@
 		
 		if (!customReqWindow) {
 			customReqWindow = new window.Asc.PluginWindow();
-			customReqWindow.attachEvent("onWindowMessage", function(message){
-				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
-					window.Asc.plugin.executeMethod('CloseWindow', [customReqWindow.id]);
-				})
+			customReqWindow.attachEvent("onWindowMessage", function(message) {
+				messageHandler(customReqWindow, message);
 			});
 		}
 		customReqWindow.show(variation);
@@ -275,15 +281,14 @@
 		
 		if (!chatWindow) {
 			chatWindow = new window.Asc.PluginWindow();
-			// if we will do something with messages from chat
-			// chatWindow.attachEvent("onWindowMessage", function(data){
-			// 	console.log(data);
-			// });
+			chatWindow.attachEvent("onWindowMessage", function(message){
+				messageHandler(chatWindow, message);
+			});
 		}
 		chatWindow.show(variation);
 	});
 
-	window.Asc.plugin.attachContextMenuClickEvent('onHyperlink', function() {
+	window.Asc.plugin.attachContextMenuClickEvent('onHyperlink', function(data) {
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
@@ -301,11 +306,13 @@
 		
 		if (!linkWindow) {
 			linkWindow = new window.Asc.PluginWindow();
+			linkWindow.attachEvent("onWindowMessage", function(message){
+				messageHandler(linkWindow, message);
+			});
 		}
 		linkWindow.show(variation);
 		setTimeout(()=> {
 			linkWindow.command('onTest', link);
-			// console.log('time');
 		},500)
 	});
 
@@ -315,7 +322,7 @@
 				console.error('No word in this position.')
 			} else {
 				let tokens = window.Asc.OpenAIEncode(text);
-				createSettings(text, tokens, 9);
+				createSettings(text, tokens, 8);
 			}
 		});
 	});
@@ -348,47 +355,22 @@
 		});
 	});
 
-	window.Asc.plugin.attachContextMenuClickEvent('onFrenchTr', function() {
+	window.Asc.plugin.attachContextMenuClickEvent('onTranslate', function(data) {
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
 			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 6);
+			let prompt = 'Translate to ' + data + ': ' + text;
+			createSettings(prompt, tokens, 6);
 		});
 	});
 
-	window.Asc.plugin.attachContextMenuClickEvent('onGermanTr', function() {
+	window.Asc.plugin.attachContextMenuClickEvent('OnGenerateImage', function(data) {
+		let size = Number(data);
+		imgsize = {width: size, height: size};
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
 			let tokens = window.Asc.OpenAIEncode(text);
 			createSettings(text, tokens, 7);
 		});
 	});
-
-	window.Asc.plugin.attachContextMenuClickEvent('onRandomImage', function() {
-		let text = 'Get a random image as html tag.';
-		let tokens = window.Asc.OpenAIEncode(text);
-		createSettings(text, tokens, 5);
-	});
-
-	window.Asc.plugin.attachContextMenuClickEvent('OnGenerateImage_256', function() {
-		imgsize = {width: 256, height: 256};
-		onGenerateImage();
-	});
-
-	window.Asc.plugin.attachContextMenuClickEvent('OnGenerateImage_512', function() {
-		imgsize = {width: 512, height: 512};
-		onGenerateImage();
-	});
-
-	window.Asc.plugin.attachContextMenuClickEvent('OnGenerateImage_1024', function() {
-		imgsize = {width: 1024, height: 1024};
-		onGenerateImage();
-	});
-
-	function onGenerateImage() {
-		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 8);
-		});
-	};
 
 	window.Asc.plugin.attachContextMenuClickEvent('onThesaurus', function(data) {
 		window.Asc.plugin.executeMethod('ReplaceCurrentWord', [data]);
@@ -396,7 +378,7 @@
 
 	window.Asc.plugin.attachContextMenuClickEvent('onImgVar', function() {
 		window.Asc.plugin.executeMethod('GetImageDataFromSelection', null, function(data) {
-			createSettings(data, 0, 11);
+			createSettings(data, 0, 10);
 		});
 	});
 
@@ -441,16 +423,11 @@
 				break;
 
 			case 6:
-				settings.prompt = `Translate in to Franch: '${text}'`;
+				settings.prompt = text;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 7:
-				settings.prompt = `Translate in to German: '${text}'`;
-				url = 'https://api.openai.com/v1/completions';
-				break;
-
-			case 8:
 				delete settings.model;
 				delete settings.max_tokens;
 				settings.prompt = `Generate image: '${text}'`;
@@ -460,19 +437,18 @@
 				url = 'https://api.openai.com/v1/images/generations';
 				break;
 			
-			case 9:
+			case 8:
 				settings.prompt = `What does it mean '${text}' ?`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
-			case 10:
+			case 9:
 				settings.prompt = `Give synonyms for the word '${text}' as javascript array`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
-			case 11:
+			case 10:
 				imageToBlob(text).then(function(obj) {
 					url = 'https://api.openai.com/v1/images/variations';
-					console.log(obj);
 					const formdata = new FormData();
 					formdata.append('image', obj.blob);
 					formdata.append('size', obj.size.str);
@@ -482,7 +458,7 @@
 				});
 				break;
 		}
-		if (type !== 11)
+		if (type !== 10)
 			fetchData(settings, url, type, isNoBlockedAction);
 	};
 
@@ -490,13 +466,13 @@
 		let header = {
 			'Authorization': 'Bearer ' + ApiKey
 		};
-		if (type < 11) {
+		if (type < 10) {
 			header['Content-Type'] = 'application/json';
 		}
 		fetch(url, {
 				method: 'POST',
 				headers: header,
-				body: (type < 11 ? JSON.stringify(settings) : settings),
+				body: (type < 10 ? JSON.stringify(settings) : settings),
 			})
 			.then(function(response) {
 				return response.json()
@@ -585,9 +561,9 @@
 				if (end == -1) {
 					end = text.length;
 				}
-				let link =  text.slice(start, end);
-				if (link) {
-					window.Asc.plugin.executeMethod('PasteHtml', [link])
+				let imgUrl = text.slice(start, end);
+				if (imgUrl) {
+					window.Asc.plugin.executeMethod('PasteHtml', [imgUrl])
 				}
 				break;
 
@@ -597,11 +573,6 @@
 				break;
 
 			case 7:
-				text = data.choices[0].text.startsWith('\n\n') ? data.choices[0].text.substring(2) : data.choices[0].text;
-				window.Asc.plugin.executeMethod('PasteText', [text]);
-				break;
-
-			case 8:
 				let url = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (url) {
 					let oImageData = {
@@ -614,7 +585,7 @@
 				}
 				break;
 
-			case 9:
+			case 8:
 				text = data.choices[0].text;
 				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
 				window.Asc.plugin.callCommand(function() {
@@ -623,7 +594,7 @@
 				}, false);
 				break;
 
-			case 10:
+			case 9:
 				thesaurusCounter--;
 				if (0 < thesaurusCounter)
 					return;
@@ -642,7 +613,7 @@
 
 				let itemNew = {
 					id : "onThesaurusList",
-					text : generatText("Thesaurus"),
+					text : generateText("Thesaurus"),
 					items : []
 				};
 
@@ -659,7 +630,7 @@
 				items.items[0].items.unshift(itemNew);
 				window.Asc.plugin.executeMethod('UpdateContextMenuItem', [items]);
 				break;
-			case 11:
+			case 10:
 				img = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (img) {
 					let sImageSrc = /^data\:image\/png\;base64/.test(img) ? img : `data:image/png;base64,${img}`;
@@ -681,18 +652,11 @@
 			return;
 
 		if (windowId) {
-
-			switch (id)
-			{
-			case -1:
-			default:
-				// if we use close, it is unregister this window and we won't be able to receive messages from this window
-				// window.Asc.plugin.init();
-				// settingsWindow.close();
-				// settingsWindow = null;
-				window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
+			switch (id) {
+				case -1:
+				default:
+					window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
 			}
-
 		}
 
 	};
@@ -728,6 +692,33 @@
 		else width = height = 256;
 
 		return {width: width, height: height, str: `${width}x${height}`}
+	};
+
+	function messageHandler(modal, message) {
+		switch (message.type) {
+			case 'onWindowReady':
+				modal.command('onApiKey', ApiKey)
+				break;
+
+			case 'onRemoveApiKey':
+				localStorage.removeItem('OpenAIApiKey');
+				break;
+
+			case 'onAddApiKey':
+				localStorage.setItem('OpenAIApiKey', message.key);
+				window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
+				break;
+		
+			case 'onExecuteMethod':
+				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
+					window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
+				});
+				break;
+
+			case 'onGetLink':
+				modal.command('onSetLink', link);
+				break;
+		}
 	};
 
 })(window, undefined);

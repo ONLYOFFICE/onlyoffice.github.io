@@ -17,18 +17,19 @@
  */
 (function(window, undefined) {
 	const url = 'https://api.openai.com/v1/chat/completions';
-	const apiKey = localStorage.getItem('OpenAIApiKey');
 	const maxTokens = 4000;
 	const settings = {
 		model: 'gpt-3.5-turbo',
 		messages: []
 	};
+	let apiKey = '';
 	let interval = null;
 	let tokenTimeot = null;
 	let errTimeout = null;
 	let modalTimeout = null;
 
 	window.Asc.plugin.init = function() {
+		sendPluginMessage({type: 'onWindowReady'});
 		document.getElementById('message').onkeydown = function(e) {
 			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
 				if (document.getElementById('message').classList.contains('error_border')){
@@ -89,15 +90,16 @@
 		let textMes = document.createElement('span');
 		textMes.classList.add('form-control', 'span_message');
 		textMes.innerText = text;
-		message.appendChild(textMes);
 		chat.scrollTop = chat.scrollHeight;
-		chat.appendChild(message);
 		if (type) {
 			message.classList.add('user_message');
+			chat.appendChild(message);
 			sendMessage(text);
 		} else {
 			message.id = '';
+			message.innerText = '';
 		}
+		message.appendChild(textMes);
 	};
 
 	function sendMessage(text) {
@@ -120,9 +122,8 @@
 
 			let text = data.choices[0].message.content;
 			settings.messages.push({role: data.choices[0].message.role, content: text});
-			destroyLoader();
-			// to to add check for max tokens length
 			createMessage(text, 0);
+			destroyLoader();
 			document.getElementById('total_tokens').innerText = data.usage.total_tokens;
 			if (data.usage.total_tokens >= maxTokens)
 				document.getElementById('total_tokens').classList.add('err-message');
@@ -154,7 +155,8 @@
 	function destroyLoader() {
 		clearInterval(interval);
 		interval = null;
-		document.getElementById('loading').remove();
+		let element = document.getElementById('loading');
+		element && element.remove();
 		return;
 	};
 
@@ -173,6 +175,10 @@
 		document.getElementById('lb_err').innerHTML = '';
 	};
 
+	function sendPluginMessage(message) {
+		window.Asc.plugin.sendToPlugin("onWindowMessage", message);
+	};
+
 	window.Asc.plugin.onTranslate = function() {
 		let elements = document.querySelectorAll('.i18n');
 
@@ -189,5 +195,9 @@
 		styleTheme.innerHTML = rule;
 		document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	};
+
+	window.Asc.plugin.attachEvent("onApiKey", function(key) {
+		apiKey = key;
+	});
 
 })(window, undefined);

@@ -19,21 +19,15 @@
 	let loader = null;
 	let errMessage = 'Invalid Api key.';
 	let loadMessage = 'Loading...';
-	let isInited = false;
 
-	window.addEventListener("DOMContentLoaded", init);
-	window.Asc.plugin.init = init;
-
-	function init() {
-		if (isInited)
-			return;
+	window.Asc.plugin.init = function() {
+		createLoader();
+		sendPluginMessage({type: 'onWindowReady'});
 		
-		isInited = true;
-		document.getElementById('inp_key').value = localStorage.getItem('OpenAIApiKey') || '';
 		document.getElementById('btn_save').onclick = function() {
 			document.getElementById('err_message').innerText = '';
 			document.getElementById('success_message').classList.add('hidden');
-			localStorage.removeItem('OpenAIApiKey');
+			sendPluginMessage({type: 'onRemoveApiKey'});
 			let key = document.getElementById('inp_key').value.trim();
 			if (key.length) {
 				createLoader();
@@ -46,7 +40,7 @@
 				}).
 				then(function(response) {
 					if (response.ok) {
-						localStorage.setItem('OpenAIApiKey', key);
+						sendPluginMessage({type: 'onAddApiKey', key: key});
 						document.getElementById('success_message').classList.remove('hidden');
 					} else {
 						createError(new Error(errMessage));
@@ -83,8 +77,8 @@
 		loader = null;
 	};
 
-	window.Asc.plugin.button = function(id) {
-		this.executeCommand("close", "");
+	function sendPluginMessage(message) {
+		window.Asc.plugin.sendToPlugin("onWindowMessage", message);
 	};
 
 	window.Asc.plugin.onTranslate = function() {
@@ -95,5 +89,10 @@
 			element.innerText = window.Asc.plugin.tr(element.innerText);
 		})
 	};
+
+	window.Asc.plugin.attachEvent("onApiKey", function(key) {
+		document.getElementById('inp_key').value = key;
+		destroyLoader();
+	});
 
 })(window, undefined);

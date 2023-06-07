@@ -48,5 +48,8 @@
 	"Custom request": "Kundenspezifische Anfrage",
 	"You exceeded your current quota, please check your plan and billing details." : "Sie haben Ihr aktuelles Kontingent überschritten.Bitte überprüfen Sie Ihren Plan und Ihre Rechnungsdetails.",
 	"Too many tokens in your request.": "Zu viele Token in Ihrer Anfrage.",
-	"Error:" : "Fehlermeldung:"
+	"Error:" : "Fehlermeldung:",
+	"Generate image variation" : "Bildvariation erzeugen",
+	"Thesaurus" : "Thesaurus",
+	"Show hyperlink content" : "Hyperlink-Inhalt anzeigen"
 }
