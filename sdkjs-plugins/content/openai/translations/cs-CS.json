@@ -48,5 +48,8 @@
 	"Custom request": "Vlastní požadavek",
 	"You exceeded your current quota, please check your plan and billing details." : "Překročili jste svou aktuální kvótu, zkontrolujte prosím svůj plán a fakturační údaje.",
 	"Too many tokens in your request.": "Příliš mnoho tokenů ve vaší žádosti.",
-	"Error:" : "Chyba:"
+	"Error:" : "Chyba:",
+	"Generate image variation" : "Generování variace obrazu",
+	"Thesaurus" : "Tezaurus",
+	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки"
 }

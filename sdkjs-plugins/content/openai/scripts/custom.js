@@ -29,12 +29,11 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
- (function (window, undefined) {
+(function (window, undefined) {
 	let loader;
 	let isDarkTheme = false;
 	let elements = {};
-	let apiKey = null;
+	let apiKey = '';
 	let errTimeout = null;
 	let tokenTimeot = null;
 	let modalTimeout = null;
@@ -58,6 +57,7 @@
 	};
 
 	window.Asc.plugin.init = function() {
+		sendPluginMessage({type: 'onWindowReady'});
 		if (isIE) {
 			bCreateLoader = false;
 			destroyLoader();
@@ -187,8 +187,7 @@
 					}
 				}
 				
-				// window.Asc.plugin.executeMethod('PasteHtml', ['<div'+textColor+'>'+text+'</div>']);
-				window.Asc.plugin.sendToPlugin("onWindowMessage", {method:"PasteHtml", data: '<div'+textColor+'>'+text+'</div>'});
+				sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div'+textColor+'>'+text+'</div>'});
 			})
 			.catch(function(error) {
 				setError(error.message)
@@ -325,11 +324,7 @@
 		if (!value.length) {
 			obj.error = true;
 		} else {
-			if (obj.model.includes('turbo')) {
-				obj.messages = [{role: "user", content: value}]
-			} else {
-				obj.prompt = value
-			}
+			obj.prompt = value
 			let temp = Number(elements.inpTempSl.value);
 			obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
 			let len = Number(elements.inpLenSl.value);
@@ -346,7 +341,7 @@
 	function createLoader() {
 		$('#loader-container').removeClass( "hidden" );
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
-		loader = showLoader($('#loader-container')[0], getMessage('Loading...'));
+		loader = showLoader($('#loader-container')[0], getTranslated('Loading...'));
 	};
 
 	function destroyLoader() {
@@ -370,7 +365,7 @@
 		elements.mainErrorLb.innerHTML = '';
 	};
 
-	function getMessage(key) {
+	function getTranslated(key) {
 		return window.Asc.plugin.tr(key);
 	};
 
@@ -425,6 +420,10 @@
 		elements.lbUsedTokens.innerText = elements.lbTokens.innerText;
 	};
 
+	function sendPluginMessage(message) {
+		window.Asc.plugin.sendToPlugin("onWindowMessage", message);
+	};
+
 	window.Asc.plugin.onTranslate = function() {
 		if (bCreateLoader)
 			createLoader();
@@ -434,13 +433,12 @@
 
 		for (let index = 0; index < elements.length; index++) {
 			let element = elements[index];
-			element.innerText = getMessage(element.innerText);
+			element.innerText = getTranslated(element.innerText);
 		}
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);
-		console.log(theme);
 		if (isIE) return;
 
 		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
@@ -474,8 +472,8 @@
 		updateScroll();
 	};
 
-	window.Asc.plugin.button = function(id) {
-		window.Asc.plugin.executeCommand("close", "");
-	};
+	window.Asc.plugin.attachEvent("onApiKey", function(key) {
+		apiKey = key;
+	});
 
 })(window, undefined);

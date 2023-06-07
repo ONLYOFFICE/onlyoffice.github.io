@@ -48,5 +48,8 @@
 	"Custom request" : "Demande personnalisée",
 	"You exceeded your current quota, please check your plan and billing details." : "Vous avez dépassé votre quota actuel, veuillez vérifier les détails de votre forfait et de votre facturation.",
 	"Too many tokens in your request.": "Trop de jetons dans votre demande.",
-	"Error:" : "Erreur:"
+	"Error:" : "Erreur:",
+	"Generate image variation" : "Générer une variation d'image",
+	"Thesaurus" : "Thésaurus",
+	"Show hyperlink content" : "Afficher le contenu du lien hypertexte"
 }
