@@ -1,5 +1,5 @@
 (function(window, undefined) {
-	var URL_TO_PLUGIN = "https://chiragencodedots.github.io/onlyoffice.github.io/sdkjs-plugins/content/propact_extended_comments/";
+	var URL_TO_PLUGIN = "https://chiragencodedots.github.io/onlyoffice.github.io/sdkjs-plugins/content/example_work_with_content_controls_navigation/";
 	
 	var xhrObj = new XMLHttpRequest();
 	xhrObj.open('GET', URL_TO_PLUGIN + "config.json", false);

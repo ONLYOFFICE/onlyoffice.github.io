@@ -1,0 +1,66 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<title>Example work with content controls</title>
+        
+		<style type="text/css">
+			html, body {
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+				width:100%;
+				height:100%;
+			}
+			.label-hovered	{
+				background: rgba(200, 200, 200, 0.5);
+			}
+			.label-selected	{
+				background: #aaa;
+			}
+			.label-info {
+				cursor: pointer;
+			}
+		</style>
+
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<script type="text/javascript" src="scripts/code.js"></script>
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		
+    </head>
+    <body>
+		<div style="box-sizing: border-box; border:1px solid; margin:5px; max-height: 240px; height: 240px; display: flex; flex-flow: column; justify-content: space-between;">
+			<div id="divG" style="display:flex; flex-flow:column; max-height: 200px; height: 200px; border-bottom: 1px solid black; overflow: auto;"></div>
+			<div style="display:flex; justify-content:center;">
+				<button class="btn-text-default primary" style="margin:5px; min-height: 30px; width: fit-content" id="buttonIDPaste">Past "Test paste for document"</button>
+			</div>
+		</div>
+		<label style="margin:5px">Selected:</label>
+		<div id="divS" style="box-sizing: border-box; border:1px solid; margin:5px; max-height: 100px; height: 100px; overflow: auto;"></div>
+		<div style="box-sizing: border-box; border:1px solid; margin:5px; max-height: 240px; height: 240px; display: flex; flex-flow: column; justify-content: space-between;">
+			<div id="divP" style="display:flex; flex-flow:column; max-height: 200px; height: 200px; border-bottom: 1px solid black; overflow: auto;"></div>
+			<div style="display:flex; justify-content:center;">
+				<button class="btn-text-default primary" style="margin:5px; min-height: 30px; width:fit-content" id="buttonIDGetAll">Get All Content Controls</button>
+				<button class="btn-text-default primary" style="margin:5px; min-height: 30px; width: fit-content" id="buttonIDShowCurrent">Select Current Content Control</button>
+			</div>
+		</div>
+    </body>
+</html>
