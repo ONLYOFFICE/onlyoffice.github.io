@@ -246,8 +246,11 @@
 			});
 		});
 
-		document.getElementById('title_model').addEventListener('mouseenter', function (event) {
-			event.target.classList.add('hidden');
+		let modals = document.querySelectorAll('.div_title');
+		modals.forEach(function(modal) {
+			modal.addEventListener('mouseenter', function (event) {
+				event.target.classList.add('hidden');
+			});
 		});
 	};
 
