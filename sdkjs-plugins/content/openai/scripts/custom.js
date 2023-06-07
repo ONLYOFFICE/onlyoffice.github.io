@@ -237,6 +237,8 @@
 		divs.forEach(function(div) {
 			div.addEventListener('mouseenter', function (event) {
 				event.target.children[0].classList.remove('hidden');
+				let top = event.target.offsetTop - event.target.clientHeight - 25 + 'px;';
+				event.target.children[0].setAttribute('style', 'top: '+top+'');
 			});
 
 			div.addEventListener('mouseleave', function (event) {
