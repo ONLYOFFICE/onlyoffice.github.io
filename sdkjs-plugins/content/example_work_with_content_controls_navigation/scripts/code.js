@@ -108,7 +108,7 @@
 		if (_plugin.info.methodName == "GetAllContentControls")
 		{
 			if (fBtnGetAll) {
-				document.getElementById("divP").innerHTML = "";
+				// document.getElementById("divP").innerHTML = "";
 				fBtnGetAll = false;
 				for (var i = 0; i < returnValue.length; i++) {	
 					addLabel(returnValue[i], "#divP");
