@@ -107,21 +107,21 @@
 		var _plugin = window.Asc.plugin;
 		if (_plugin.info.methodName == "GetAllContentControls")
 		{
-			if (fBtnGetAll) {
-				// document.getElementById("divP").innerHTML = "";
-				fBtnGetAll = false;
-				for (var i = 0; i < returnValue.length; i++) {	
-					// addLabel(returnValue[i], "#divP");
-					$('.label-selected').removeClass('label-selected');
-					addLabel({InternalId: returnValue[i].InternalId},"#divG");
-					$('#' + returnValue).addClass('label-selected');
-				}
-			} else {
+			// if (fBtnGetAll) {
+			// 	// document.getElementById("divP").innerHTML = "";
+			// 	fBtnGetAll = false;
+			// 	for (var i = 0; i < returnValue.length; i++) {
+			// 		addLabel(returnValue[i], "#divG");
+			// 		// $('.label-selected').removeClass('label-selected');
+			// 		// addLabel({InternalId: returnValue[i].InternalId},"#divG");
+			// 		// $('#' + returnValue).addClass('label-selected');
+			// 	}
+			// } else {
 				document.getElementById("divG").innerHTML = "";
 				for (var i = 0; i < returnValue.length; i++) {	
 					addLabel(returnValue[i], "#divG");
 				}
-			}
+			// }
 			
 
 		} else if (_plugin.info.methodName == "GetCurrentContentControl") {
