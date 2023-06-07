@@ -65,9 +65,11 @@ input {
 
 .tokens_info {
 	margin: 5px 0;
+	width: fit-content;
+	align-self: end;
 }
 
-.div_tokens_info {
+.text_align_end {
 	text-align: end;
 }
 

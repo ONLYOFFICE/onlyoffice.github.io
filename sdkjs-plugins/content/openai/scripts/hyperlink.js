@@ -18,25 +18,21 @@
 (function(window, undefined) {
 	
 	window.Asc.plugin.init = function() {
+		sendPluginMessage({type: 'onGetLink'});
 	};
 
-	window.Asc.plugin.onTranslate = function() {
-	};
+	window.Asc.plugin.onTranslate = function() {};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);
 	};
-	window.Asc.plugin.attachEvent("onTest", function(data){
-		// console.log(data);
+	
+	window.Asc.plugin.attachEvent("onSetLink", function(data){
 		document.getElementById('iframe').src = data;
 	});
 
-
-	/* EXAMPLE:
-	window.Asc.plugin.attachEvent("onPluginMessage", function(data) {
-		console.log(data);
-	});
-	window.Asc.plugin.sendToPlugin("onWindowMessage", {});
-	*/
+	function sendPluginMessage(message) {
+		window.Asc.plugin.sendToPlugin("onWindowMessage", message);
+	};
 
 })(window, undefined);

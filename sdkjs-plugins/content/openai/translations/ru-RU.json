@@ -48,5 +48,8 @@
 	"Custom request": "Пользовательский запрос",
 	"You exceeded your current quota, please check your plan and billing details." : "Вы превысили свою текущую квоту, пожалуйста, проверьте свой тарифный план и платежные реквизиты.",
 	"Too many tokens in your request.": "Слишком много токенов в вашем запросе.",
-	"Error:" : "Ошибка:"
+	"Error:" : "Ошибка:",
+	"Generate image variation" : "Генерировать вариацию изображения",
+	"Thesaurus" : "Синонимы",
+	"Show hyperlink content" : "Показать содержимое гиперссылки"
 }
