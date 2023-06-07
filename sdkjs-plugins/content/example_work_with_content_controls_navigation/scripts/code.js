@@ -33,7 +33,7 @@
 		};
 
 		document.getElementById("createContentBlock").onclick = function() {
-			var nContentControlType = 1;
+			var nContentControlType = 2;
 			window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 0}]);
 		}
 
