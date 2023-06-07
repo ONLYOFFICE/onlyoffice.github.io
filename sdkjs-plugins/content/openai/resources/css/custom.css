@@ -134,27 +134,27 @@ input::selection {
 }
 
 .title_model {
-	top: 260px;
+	/* top: 260px; */
 	/* top: 355px; */
 }
 
 .title_len {
-	top: 300px;
+	/* top: 300px; */
 	/* top: 395px; */
 }
 
 .title_temp {
-	top: 340px;
+	/* top: 340px; */
 	/* top: 435px; */
 }
 
 .title_topP {
-	top: 380px;
+	/* top: 380px; */
 	/* top: 475px; */
 }
 
 .title_stopS {
-	top: 420px;
+	/* top: 420px; */
 	/* top: 520px; */
 }
 
