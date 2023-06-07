@@ -70,7 +70,9 @@
 
 		elements.btnClear.onclick = function() {
 			elements.textArea.value = '';
+			elements.lbTokens.innerText = 0;
 			elements.textArea.focus();
+			checkLen();
 		};
 
 		elements.textArea.oninput = function(event) {

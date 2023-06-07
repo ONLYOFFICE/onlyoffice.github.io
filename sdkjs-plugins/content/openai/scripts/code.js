@@ -484,6 +484,9 @@
 				processResult(data, type, isNoBlockedAction);
 			})
 			.catch(function(error) {
+				if (type == 9)
+					thesaurusCounter--;
+
 				console.error(error);
 				window.Asc.plugin.executeMethod('EndAction', [isNoBlockedAction ? 'Information' : 'Block', 'ChatGPT: ' + loadingPhrase]);
 			});
