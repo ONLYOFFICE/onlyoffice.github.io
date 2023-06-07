@@ -45,7 +45,7 @@
 		document.getElementById("buttonIDGetAll").onclick = function() {
 			//method for get all content controls
 			window.Asc.plugin.executeMethod("GetAllContentControls");
-			fBtnGetAll = true;					
+			fBtnGetAll = true;
 
 		};
 
@@ -57,12 +57,12 @@
 
 		};
 
-		if (!flagInit) {
-			flagInit = true;
+		// if (!flagInit) {
+		// 	flagInit = true;
 			//method for get all content controls
 			window.Asc.plugin.executeMethod("GetAllContentControls");
 			// document.getElementById("buttonIDGetAll").click();
-		}
+		// }
 	};
 	
 	addLabel = (returnValue, element) => {
