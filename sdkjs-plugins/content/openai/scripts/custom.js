@@ -237,7 +237,8 @@
 		divs.forEach(function(div) {
 			div.addEventListener('mouseenter', function (event) {
 				event.target.children[0].classList.remove('hidden');
-				let top = event.target.offsetTop - event.target.clientHeight - 25 + 'px;';
+				let top = event.target.offsetTop - event.target.children[0].clientHeight - 5 + 'px;';
+				// let top = event.target.lastElementChild.offsetTop - event.target.lastElementChild.clientHeight - event.target.firstElementChild.clientHeight - (6 *devicePixelRatio) + 'px';
 				event.target.children[0].setAttribute('style', 'top: '+top+'');
 			});
 
@@ -247,11 +248,11 @@
 		});
 
 		let modals = document.querySelectorAll('.div_title');
-		modals.forEach(function(modal) {
-			modal.addEventListener('mouseenter', function (event) {
-				event.target.classList.add('hidden');
-			});
-		});
+		// modals.forEach(function(modal) {
+		// 	modal.addEventListener('mouseenter', function (event) {
+		// 		event.target.classList.add('hidden');
+		// 	});
+		// });
 	};
 
 	function onSlInput(e) {
