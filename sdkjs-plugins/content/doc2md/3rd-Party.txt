@@ -5,3 +5,8 @@ This plugin uses code from the following 3rd party projects.
 
 License:        MIT License
 License File:   jQuery.license
+
+1. marked - low-level compiler for parsing markdown without caching or blocking for long periods of time. (https://github.com/markedjs/marked)
+
+License:        MIT License
+License File:   marked.license
