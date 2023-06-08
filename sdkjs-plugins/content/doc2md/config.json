@@ -7,8 +7,8 @@
         "de": "Doc2md"
     },
     "guid": "asc.{5aff455d-96c4-4bd8-9658-16e5bc143738}",
-    "version": "1.0.0",
-    "minVersion" : "6.4.0",
+    "version": "1.0.1",
+    "minVersion" : "7.4.0",
     "variations": [
         {
             "description": "Convert your formatted documents to Markdown or HTML.",
@@ -83,67 +83,6 @@
                 },
                 "categories": ["specAbilities", "work"]
             }
-        },
-        {
-            "description": "Add in context menu",
-            "descriptionLocale": {
-                "ru": "Добавить в контекстное меню",
-                "fr": "Ajouter dans le menu contextuel",
-                "es": "Agregar en el menú contextual",
-                "de": "Im Kontextmenü hinzufügen",
-                "cs": "Přidat do kontextového menu"
-            },
-            "url": "2var.html",
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer": true,
-            "EditorsSupport": [ "word" ],
-            "isVisual": false,
-            "isModal": false,
-            "isInsideMode": false,
-            "initDataType": "none",
-            "isUpdateOleOnResize": false,
-            "initOnSelectionChanged": false,
-            "events": ["onContextMenuShow", "onContextMenuClick"]
         },
         {
             "description": "About",
