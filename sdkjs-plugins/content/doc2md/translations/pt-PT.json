@@ -9,5 +9,6 @@
   "Suppress top comment": "Suprimir comentário de topo",
   "Help": "Escolha Markdown ou HTML.\n* Predefinição: converter todo o doc.\n* Seleccionar texto para limitar o âmbito.",
   "Text was copied to buffer!": "O texto foi copiado para o buffer!",
-  "Convert to Markdown or HTML": "Converter para Markdown ou HTML"
+  "Convert to Markdown or HTML": "Converter para Markdown ou HTML",
+  "Preview": "Antevisão"
 }
