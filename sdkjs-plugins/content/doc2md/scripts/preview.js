@@ -77,7 +77,7 @@
 		if (message.type = 'markdown') {
 			const options = mergeOptions({pedantic: true});
 			const lexed = marked.lexer(message.data, options);
-			result = marked.parser(lexed, options);
+			result = marked.parser(lexed, options).replace(/\n/g, '<br>');
 		}
 		document.getElementById('preview').innerHTML = result;
 		Ps && Ps.update();
