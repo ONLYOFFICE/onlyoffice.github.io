@@ -9,5 +9,6 @@
   "Suppress top comment": "Supprimer le commentaire supérieur",
   "Help": "Choisissez le format Markdown ou HTML.\n* Par défaut : convertissez tout le document.\n* Sélectionnez le texte pour limiter la portée.",
   "Text was copied to buffer!": "Le texte a été copié dans buffer!",
-  "Convert to Markdown or HTML": "Convertir en démarque ou HTML"
+  "Convert to Markdown or HTML": "Convertir en démarque ou HTML",
+  "Preview": "Aperçu"
 }

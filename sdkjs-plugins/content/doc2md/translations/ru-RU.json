@@ -9,5 +9,6 @@
   "Suppress top comment": "Убрать верхний комментарий",
   "Help": "Выберите Markdown или HTML.\n* По умолчанию: преобразовать весь документ.\n* Выберите текст, чтобы ограничить область применения.",
   "Text was copied to buffer!": "Текст был скопирован в буфер!",
-  "Convert to Markdown or HTML": "Преобразовать в Markdown или HTML"
+  "Convert to Markdown or HTML": "Преобразовать в Markdown или HTML",
+  "Preview": "Предварительный просмотр"
 }
