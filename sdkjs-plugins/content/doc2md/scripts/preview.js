@@ -75,7 +75,8 @@
 	window.Asc.plugin.attachEvent("onDoc2MdData", function(message) {
 		let result = message.data;
 		if (message.type = 'markdown') {
-			const options = mergeOptions({pedantic: true});
+			// pedantic: true
+			const options = mergeOptions({});
 			const lexed = marked.lexer(message.data, options);
 			result = marked.parser(lexed, options).replace(/\n/g, '<br>');
 		}
