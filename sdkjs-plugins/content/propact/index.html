@@ -13,17 +13,399 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
- <!DOCTYPE html>
- <html>
- <head>
-     <meta charset="UTF-8" />
-     <title>Hello Propact</title>
-     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-     <script type="text/javascript" src="scripts/propact.js"></script>
- </head>
- <body>
- </body>
- </html>
- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Propact</title>
+
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="styles/plugins.css">
+	<script type="text/javascript" src="scripts/code.js"></script>
+	<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+
+</head>
+<body>
+<div class="main">
+	<div id="cluaseLists" class="">
+		<div class="tab">
+			<button class="tablinks" onclick="openCity(event, 'ccc')" id="defaultOpen">Customer Chat</button>
+			<button class="tablinks" onclick="openCity(event, 'cpc')">Counterparty Chat</button>
+			<button class="tablinks" onclick="openCity(event, 'all')">All</button>
+		</div>
+
+		<div id="ccc" class="tabcontent">
+			<h3>Customer Chat</h3>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et feugiat nunc. Nullam fermentum
+						elementum arcu, eu lacinia sem sodales sit amet. Pellentesque vel justo sit amet dui mattis
+						vehicula ultrices eu erat. Ut tempor malesuada maximus. Etiam dignissim ornare libero eu
+						blandit. Vestibulum neque urna, bibendum ut risus ac, tempus mollis diam. Suspendisse pretium
+						consequat elit non pharetra. Proin lacinia velit in massa vehicula...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et feugiat nunc. Nullam fermentum
+						elementum arcu, eu lacinia sem sodales sit amet. Pellentesque vel justo sit amet dui mattis
+						vehicula ultrices eu erat. Ut tempor malesuada maximus. Etiam dignissim ornare libero eu
+						blandit. Vestibulum neque urna, bibendum ut risus ac, tempus mollis diam. Suspendisse pretium
+						consequat elit non pharetra. Proin lacinia velit in massa vehicula...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et feugiat nunc. Nullam fermentum
+						elementum arcu, eu lacinia sem sodales sit amet. Pellentesque vel justo sit amet dui mattis
+						vehicula ultrices eu erat. Ut tempor malesuada maximus. Etiam dignissim ornare libero eu
+						blandit. Vestibulum neque urna, bibendum ut risus ac, tempus mollis diam. Suspendisse pretium
+						consequat elit non pharetra. Proin lacinia velit in massa vehicula...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="cpc" class="tabcontent">
+			<h3>Counterparty Chat</h3>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+						the
+						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+						type and
+						scrambled it to make a type specimen book...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+						the
+						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+						type and
+						scrambled it to make a type specimen book...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+						the
+						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+						type and
+						scrambled it to make a type specimen book...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="all" class="tabcontent">
+			<h3>All</h3>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+						the
+						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+						type and
+						scrambled it to make a type specimen book...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+						the
+						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+						type and
+						scrambled it to make a type specimen book...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+			<div class="chat-box">
+				<div class="chat-text">
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+						the
+						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+						type and
+						scrambled it to make a type specimen book...</p>
+				</div>
+				<div class="chat-icon">
+					<!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
+					<button type="button" class="open-chat-board">
+						<img src="images/open.png" alt="open">
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="bottom-btn">
+			<button class="btn btn-create-thread" type="button">Create Thread</button>
+		</div>
+	</div>
+	<div id="createCluase" class="display-none">
+		<div class="chat-wrapper">
+			<div class="chat-inner">
+				<div class="close-btn">
+					<button type="button" class="btn-close">
+						<img class="" src="images/close.png" alt="close">
+					</button>
+				</div>
+				<div class="chat-header">
+					<div class="chat-profile">
+                        <span class="profile-image">
+                            <img class="" src="images/profile.png" alt="profile">
+                        </span>
+						<span class="profile-details">
+							<h5 class="title"><a class="" href="">Jane Nelson</a></h5>
+							<p class="designation">Lawyer</p>
+							</span>
+					</div>
+					<div class="chat-actions">
+						<ul>
+							<li><a target="" href="" title=""><img src="images/user.png" alt="user"></a></li>
+							<li><a target="" href="" title=""><img src="images/check.png" alt="check"></a></li>
+							<li><a target="" href="" title=""><img src="images/video.png" alt="video"></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="chat-contract-section">
+					<div class="contract-form">
+						<form action="#" class="" onsubmit="event.preventDefault();">
+							<div class="input-group-form">
+								<label for="fname" class="form-label">Contract Section:</label>
+								<input class="form-control" type="text" id="fname" name="fname"
+									   placeholder="Sed Diam Nonumy Eirmod Tempor.">
+							</div>
+							<div class="input-group-form">
+								<label for="fname" class="form-label">Clause Description</label>
+								<textarea class="form-control address" id="w3review" name="w3review" placeholder="">Hi guys Please review this clause and let me know your thoughts. I’m concerned about the “terms and conditions reasonably acceptable to the Buyer” in sub (b).</textarea>
+							</div>
+							<div class="input-group-form">
+								<label for="fname" class="form-label">Add User and Team</label>
+								<select name="cars" id="cars" class="form-control">
+									<option value="Select users and teams">Select users and teams</option>
+									<option value="saab">Saab</option>
+									<option value="opel">Opel</option>
+									<option value="audi">Audi</option>
+								</select>
+							</div>
+							<div class="input-group-form submit">
+								<input class="review-btn btn" type="submit" value="Submit">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="openCluase" class="display-none">
+		<div class="chat-wrapper">
+			<div class="chat-inner">
+				<div class="close-btn">
+					<button type="button" class="btn-close">
+						<img class="" src="images/close.png" alt="close">
+					</button>
+				</div>
+				<div class="chat-header">
+					<div class="chat-profile">
+                        <span class="profile-image">
+                            <img class="" src="images/profile.png" alt="profile">
+                        </span>
+						<span class="profile-details">
+							<h5 class="title"><a class="" href="">Jane Nelson</a></h5>
+							<p class="designation">Lawyer</p>
+							</span>
+					</div>
+					<div class="chat-actions">
+						<ul>
+							<li><a target="" href="" title=""><img src="images/user.png" alt="user"></a></li>
+							<li><a target="" href="" title=""><img src="images/check.png" alt="check"></a></li>
+							<li><a target="" href="" title=""><img src="images/video.png" alt="video"></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="chat-message-section">
+					<div class="chat-message-inner">
+						<span class="activity-label">today</span>
+						<!-- sender s-->
+						<div class="message-box">
+							<div class="message-description">
+								<p>Hello</p>
+								<p>How are you</p>
+								<p>Hi guys Please review this clause and let me know your thoughts.</p>
+							</div>
+							<div class="message-log">
+								<span class="message-time">10:00 am</span>
+								<span class="user-name">Jane Nelson</span>
+								<span class="user-image"><img src="images/user-profile.png" alt="user-profile"></span>
+							</div>
+						</div>
+						<!-- sender e-->
+						<!-- receiver s-->
+						<div class="message-box">
+							<div class="message-description">
+								<p>Hello</p>
+								<p>How are you</p>
+								<p>Hi guys Please review this clause and let me know your thoughts.</p>
+							</div>
+							<div class="message-log">
+								<span class="message-time">10:00 am</span>
+								<span class="user-name">Jane Nelson</span>
+								<span class="user-image"><img src="images/user-profile.png" alt="user-profile"></span>
+							</div>
+						</div>
+						<!-- receiver e-->
+						<!-- sender s-->
+						<div class="message-box">
+							<div class="message-description">
+								<p>Hello</p>
+								<p>How are you</p>
+								<p>Hi guys Please review this clause and let me know your thoughts.</p>
+							</div>
+							<div class="message-log">
+								<span class="message-time">10:00 am</span>
+								<span class="user-name">Jane Nelson</span>
+								<span class="user-image"><img src="images/user-profile.png" alt="user-profile"></span>
+							</div>
+						</div>
+						<!-- sender e-->
+						<!-- receiver s-->
+						<div class="message-box">
+							<div class="message-description">
+								<p>Hello</p>
+								<p>How are you</p>
+								<p>Hi guys Please review this clause and let me know your thoughts.</p>
+							</div>
+							<div class="message-log">
+								<span class="message-time">10:00 am</span>
+								<span class="user-name">Jane Nelson</span>
+								<span class="user-image"><img src="images/user-profile.png" alt="user-profile"></span>
+							</div>
+						</div>
+						<!-- receiver e-->
+						<!-- request-box s-->
+						<div class="request-box">
+							<div class="message-description">
+								<h4 class="request-title">Sent a position confirmation request</h4>
+								<p class="request-box-details">Lorem Ipsum is simply dummy text of the printing and
+									typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+									since the 1500s, when an unknown printer took a galley of type and scrambled it to
+									make a type specimen book.</p>
+							</div>
+						</div>
+						<div class="request-btn">
+							<button class="review-btn btn" type="submit" value="Submit">Approve</button>
+							<button class="review-btn btn red" type="button" value="Submit">Reject</button>
+						</div>
+						<!-- request-box s-->
+						<div class="message-write-box">
+							<!--							<span class="activity-label">Bob Miller is Typing...</span>-->
+							<div class="text-form">
+								<form action="" class="">
+									<div class="input-group-form">
+                                        <textarea class="form-control address" name="w3review"
+												  placeholder="">Hi guys Please review this clause and let me know your thoughts. I’m concerned about the “terms and conditions reasonably acceptable to the Buyer” in sub (b).</textarea>
+									</div>
+									<div class="input-group-form submit">
+										<button class="review-btn btn" type="submit" value="Submit">
+											<img src="images/attach-file.png" alt="attach-file">
+										</button>
+										<button class="review-btn btn" type="submit" value="Submit">
+											<img src="images/send.png" alt="send"><span>Send</span>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<!-- request-box s-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function openCity(evt, cityName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		}
+		document.getElementById(cityName).style.display = "block";
+		evt.currentTarget.className += " active";
+	}
+
+	// Get the element with id="defaultOpen" and click on it
+	document.getElementById("defaultOpen").click();
+
+	$('.open-chat-board').click(function () {
+		$('#cluaseLists').addClass('display-none');
+		$('#openCluase').removeClass('display-none');
+	});
+
+	$('.btn-close').click(function () {
+		if (!$('#openCluase').hasClass('display-none')) {
+			$('#openCluase').addClass('display-none')
+		}
+		if (!$('#createCluase').hasClass('display-none')) {
+			$('#createCluase').addClass('display-none')
+		}
+		$('#cluaseLists').removeClass('display-none');
+	});
+
+	$('.btn-create-thread').click(function () {
+		$('#cluaseLists').addClass('display-none');
+		$('#createCluase').removeClass('display-none');
+	})
+
+</script>
+</body>
+</html>
