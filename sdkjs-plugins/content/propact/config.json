@@ -1,12 +1,11 @@
 {
-    "name" : "Propact",
+    "name" : "ProPact",
     "guid" : "asc.{C36DDFB5-08F0-4A68-B829-5FB1F7D49728}",
 
     "variations" : [
         {
-            "description" : "Propact",
+            "description" : "ProPact",
             "url"         : "index.html",
-
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
 			"icons2": [
 				{

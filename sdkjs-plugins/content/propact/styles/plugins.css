@@ -108,7 +108,7 @@ html, body {
     letter-spacing: 0px;
     line-height: 18px;
     margin: 0 0 5px 0;
-    text-transform: capitalize;
+    /*text-transform: capitalize;*/
 }
 .chat-box .chat-text .user-details:last-child{margin: 0;}
 .chat-box .chat-text .user-details strong {
