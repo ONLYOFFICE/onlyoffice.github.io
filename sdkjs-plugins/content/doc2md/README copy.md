@@ -27,6 +27,7 @@ col2
 </td>
   </tr>
 </table>
+
 ## **Options**
 * Demote headings (H1 → H2, etc.): If you have used multiple Heading 1 headings in your Doc, choose this option to demote all heading levels to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.
 * Create base64 images: Select this option if you want images to be created in base64 format.
