@@ -1,9 +1,11 @@
+
 html, body {
     margin: 0px;
     padding: 0px;
     overflow: hidden;
     width: 100%;
     height: 100%;
+    font-family: 'Poppins', sans-serif;
 }
 
 .label-hovered {
@@ -46,7 +48,9 @@ html, body {
 .tab button.active {
     background-color: #ccc;
 }
-
+.tablinks{
+    font-weight: 600;
+}
 /* Style the tab content */
 .tabcontent {
     display: none;
@@ -56,7 +60,8 @@ html, body {
     -webkit-animation: fadeEffect 1s;
     animation: fadeEffect 1s;
     border-bottom: none;
-    height: 800px;
+    height: 100vh;
+    max-height: calc(100vh - 150px);
     overflow-y: auto;
 }
 
@@ -81,12 +86,38 @@ html, body {
     padding: 15px 15px 15px 0;
     margin: 0;
 }
-.chat-box .chat-text p{
+
+/* .chat-box .chat-text p{
     font-size: 16px;
     line-height: 22px;
     font-weight: 500;
     margin: 0;
+} */
+.chat-box .chat-text .user-name{
+    margin: 0 0 5px 0;
+    display: block;
+    font-size: 16px;
 }
+
+.chat-box .chat-text .user-details {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 18px;
+    margin: 0 0 5px 0;
+    text-transform: capitalize;
+}
+.chat-box .chat-text .user-details:last-child{margin: 0;}
+.chat-box .chat-text .user-details strong {
+    margin: 0 5px 0 0px;
+}
+.chat-box .chat-text .user-details .user-time strong {
+    margin: 0 5px 0 5px;
+}
+
 .chat-box .chat-icon{width: calc(100% - 95%);display: flex;align-items: center;justify-content: center;}
 .chat-box .chat-icon img{max-width: 24px;}
 .chat-box .chat-icon button{background: transparent;border: none;padding: 0;cursor: pointer;}
@@ -241,6 +272,7 @@ html, body {
     background-color: #282756;
     color: #fff;
     cursor: pointer;
+    height: 50px;
 }
 .input-group-form.submit .review-btn.btn {
     font-size: 16px;
@@ -310,15 +342,17 @@ html, body {
     margin: 0 auto 20px 0;
 }
 .chat-message-section .chat-message-inner .message-box .message-description{
-    border-radius: 5px;
+    /* border-radius: 5px; */
     padding: 10px;
     margin: 0 0 10px 0;
 }
 .chat-message-section .chat-message-inner .message-box:nth-child(even) .message-description{
     background: #e9e9ee;
+    border-radius: 10px 10px 10px 0;
 }
 .chat-message-section .chat-message-inner .message-box:nth-child(odd) .message-description{
     background: #e1f8fc;
+    border-radius: 10px 10px 0px 10px;
 }
 .chat-message-section .chat-message-inner .message-box .message-description p{
     margin: 0;
@@ -485,6 +519,135 @@ html, body {
         opacity: 1;
     }
 }
+
+/* responsive css s */
+@media only screen and (max-width: 767px) {
+    .chat-box .chat-text {
+        width: 90%;
+    }
+    .chat-box .chat-icon{
+        width: calc(100% - 90%);
+    }
+}
+@media only screen and (max-width: 479px) {
+    .chat-wrapper .chat-inner .chat-header .chat-profile img {
+        max-width: 40px;
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-profile .profile-image{
+        width: 40px;
+        margin: 0 10px 0 0;
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-profile{
+        padding: 15px 10px;
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-profile {
+        width: calc(100% - 60%);
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-actions {
+        width: 40%;
+        /* justify-content: center; */
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-actions img {
+        max-width: 20px;
+    }
+}
+@media only screen and (max-width: 379px) {
+    .chat-box .chat-text .user-details{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .chat-box .chat-text .user-details .user-time strong{
+        margin-left: 0;
+    }
+    .chat-message-section .chat-message-inner .message-box{
+        width: 90%;
+    }
+}
+@media only screen and (max-width: 300px) {
+    .chat-wrapper .chat-inner .chat-header .chat-profile .profile-details .title{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-profile .profile-details .designation{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-profile{
+        padding: 0;
+    }
+    .tabcontent{
+        max-height: calc(100vh - 190px);
+    }
+    .tabcontent h3{
+        font-size: 16px;
+        margin: 10px 0 5px 0;
+    }
+    .chat-box .chat-text .user-name{
+        font-size: 14px;
+    }
+    .chat-box .chat-icon img{
+        max-width: 20px;
+    }
+    .review-btn.btn{
+        font-size: 14px;
+        line-height: 19px;
+        height: 40px;
+    }
+    .tablinks{
+        font-size: 14px!important;
+        line-height: 19px;
+        padding: 14px 10px!important;
+    }
+    .chat-message-section .chat-message-inner .message-box .message-log .user-name{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .chat-message-section .chat-message-inner .message-box .message-log .user-image img{
+        max-width: 20px;
+    }
+    .chat-message-section .chat-message-inner .message-box .message-description p{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .request-box .message-description .request-title{
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .request-box .message-description .request-box-details, .activity-label{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .message-write-box .text-form .input-group-form textarea{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .input-group-form.submit .review-btn.btn{
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .chat-message-section .chat-message-inner{
+        max-height: calc(100vh - 335px);
+        padding: 10px 15px;
+    }
+    .chat-message-section .chat-message-inner .message-box .message-description{
+        margin: 0 0 5px 0;
+    }
+}
+@media only screen and (max-width: 260px) {
+    .chat-message-section .chat-message-inner{
+        max-height: calc(100vh - 310px);
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-actions ul li + li{
+        margin: 0 0 0 5px;
+    }
+    .chat-wrapper .chat-inner .chat-header .chat-profile .profile-details .title{
+        margin: 0 0 0px 0;
+    }
+    .tabcontent{
+        max-height: calc(100vh - 140px);
+    }
+}
+/* responsive css e */
 .display-none {
     display: none;
 }
