@@ -59,6 +59,7 @@ html, body {
     height: 800px;
     overflow-y: auto;
 }
+
 /* chat css S*/
 .main{
     position: relative;
@@ -277,7 +278,8 @@ html, body {
 }
 .chat-message-section .chat-message-inner{
     padding: 20px 15px;
-    max-height: calc(100vh - 130px);
+    /* max-height: calc(100vh - 130px); */
+    max-height: calc(100vh - 375px);
     overflow-y: auto;
 }
 .chat-message-section .chat-message-inner .activity-label {
@@ -360,6 +362,28 @@ html, body {
 .chat-message-section .chat-message-inner .message-box:nth-child(even) .message-log span + span{
     margin: 0 10px 0 0px;
 }
+.message-write-box{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    flex-direction: column;
+    width: calc(100% - 30px);
+    padding: 0 15px;
+}
+.message-write-box .activity-label{display: block;margin: 0 0 5px 0;}
+.message-write-box .text-form{
+    width: 100%;
+    display: block;
+    margin: 0 0 15px 0;
+}
+.message-write-box .text-form .input-group-form {
+    display: flex;
+
+}
 .message-write-box .text-form .input-group-form textarea{
     height: 86px;
     overflow-y: auto;
@@ -371,6 +395,7 @@ html, body {
     font-weight: 500;
     border: 1px solid #48566633;
     padding: 5px;
+    margin: 0 0 10px 0px;
 }
 .message-write-box .text-form .input-group-form.submit{
     display: flex;
