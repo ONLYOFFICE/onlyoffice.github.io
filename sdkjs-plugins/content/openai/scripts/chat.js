@@ -43,6 +43,7 @@
 	let modalTimeout = null;
 
 	window.Asc.plugin.init = function() {
+		document.getElementById('message').focus();
 		sendPluginMessage({type: 'onWindowReady'});
 		document.getElementById('message').onkeydown = function(e) {
 			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
