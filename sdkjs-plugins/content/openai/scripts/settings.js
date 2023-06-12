@@ -57,7 +57,10 @@
 						sendPluginMessage({type: 'onAddApiKey', key: key});
 						document.getElementById('success_message').classList.remove('hidden');
 					} else {
-						createError(new Error(errMessage));
+						response.json().then(function(data) {
+							let message = data.error && data.error.message ? data.error.message : errMessage;
+							createError(new Error(message));
+						});
 					}
 				})
 				.catch(function(error) {
@@ -73,8 +76,8 @@
 	};
 
 	function createError(error) {
-		document.getElementById('err_message').innerText = error.message;
-		console.error(error);
+		document.getElementById('err_message').innerText = errMessage;
+		console.error(error.message || errMessage);
 	};
 
 	function createLoader() {
