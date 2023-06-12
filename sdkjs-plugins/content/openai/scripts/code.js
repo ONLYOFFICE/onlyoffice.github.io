@@ -213,7 +213,7 @@
 		if (bHasKey && options.type === "Target")
 		{
 			window.Asc.plugin.executeMethod('GetCurrentWord', null, function(text) {
-				if (!isEmpyText(text)) {
+				if (!isEmpyText(text, true)) {
 					thesaurusCounter++;
 					let tokens = window.Asc.OpenAIEncode(text);
 					createSettings(text, tokens, 9, true);
@@ -617,6 +617,14 @@
 						oParagraph.AddDrawing(oDrawing);
 						oDocument.Push(oParagraph);
 					}, false);
+
+					// let oImageData = {
+					// 	"src": /^data\:image\/png\;base64/.test(url) ? url : `data:image/png;base64,${url}`,
+					// 	"width": imgsize.width,
+					// 	"height": imgsize.height
+					// };
+					// imgsize = null;
+					// window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
 				}
 				break;
 
@@ -756,9 +764,11 @@
 		}
 	};
 
-	function isEmpyText(text) {
+	function isEmpyText(text, bDonShowErr) {
 		if (text.trim() === '') {
-			console.error('No word in this position or nothing is selected.');
+			if (!bDonShowErr)
+				console.error('No word in this position or nothing is selected.');
+
 			return true;
 		}
 		return false;
