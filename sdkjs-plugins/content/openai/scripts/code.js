@@ -35,7 +35,6 @@
 	function checkApiKey() {
 		ApiKey = localStorage.getItem('OpenAIApiKey') || '';
 		if (!ApiKey.length) {
-			console.error(new Error('Please enter Api key!'));
 			bHasKey = false;
 		} else {
 			bHasKey = true;
@@ -62,82 +61,86 @@
 			{
 				case 'Target':
 				{
-					settings.items[0].items.push({
-						id : 'onMeaningT',
-						text : generateText('Explain text in comment')
-					});
-
+					if (Asc.plugin.info.editorType === 'word') {
+						settings.items[0].items.push({
+							id : 'onMeaningT',
+							text : generateText('Explain text in comment')
+						});
+					}
+					
 					break;
 				}
 				case 'Selection':
 				{
-					settings.items[0].items.push(
-						{
-							id : 'TextAnalysis',
-							text : generateText('Text analysis'),
-							items : [
-								{
-									id : 'onSummarize',
-									text : generateText('Summarize')
-								},
-								{
-									id : 'onKeyWords',
-									text : generateText('Keywords')
-								},
-							]
-						},
-						{
-							id : 'Tex Meaning',
-							text : generateText('Word analysis'),
-							items : [
-								{
-									id : 'onMeaningS',
-									text : generateText('Explain text in comment'),
-								},
-								{
-									id : 'onMeaningLinkS',
-									text : generateText('Explain text in hyperlink')
-								}
-							]
-						},
-						{
-							id : 'TranslateText',
-							text : generateText('Translate'),
-							items : [
-								{
-									id : 'onTranslate',
-									text : generateText('Translate to French'),
-									data : 'French'
-								},
-								{
-									id : 'onTranslate',
-									text : generateText('Translate to German'),
-									data : 'German'
-								}
-							]
-						},
-						{
-							id : 'OnGenerateImageList',
-							text : generateText('Generate image from text'),
-							items : [
-								{
-									id : 'OnGenerateImage',
-									text : generateText('256x256'),
-									data : 256
-								},
-								{
-									id : 'OnGenerateImage',
-									text : generateText('512x512'),
-									data : 512
-								},
-								{
-									id : 'OnGenerateImage',
-									text : generateText('1024x1024'),
-									data : 1024
-								}
-							]
-						}
-					);
+					if (Asc.plugin.info.editorType === 'word') {
+						settings.items[0].items.push(
+							{
+								id : 'TextAnalysis',
+								text : generateText('Text analysis'),
+								items : [
+									{
+										id : 'onSummarize',
+										text : generateText('Summarize')
+									},
+									{
+										id : 'onKeyWords',
+										text : generateText('Keywords')
+									},
+								]
+							},
+							{
+								id : 'Tex Meaning',
+								text : generateText('Word analysis'),
+								items : [
+									{
+										id : 'onMeaningS',
+										text : generateText('Explain text in comment'),
+									},
+									{
+										id : 'onMeaningLinkS',
+										text : generateText('Explain text in hyperlink')
+									}
+								]
+							},
+							{
+								id : 'TranslateText',
+								text : generateText('Translate'),
+								items : [
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to French'),
+										data : 'French'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to German'),
+										data : 'German'
+									}
+								]
+							},
+							{
+								id : 'OnGenerateImageList',
+								text : generateText('Generate image from text'),
+								items : [
+									{
+										id : 'OnGenerateImage',
+										text : generateText('256x256'),
+										data : 256
+									},
+									{
+										id : 'OnGenerateImage',
+										text : generateText('512x512'),
+										data : 512
+									},
+									{
+										id : 'OnGenerateImage',
+										text : generateText('1024x1024'),
+										data : 1024
+									}
+								]
+							}
+						);
+					}
 					break;
 				}
 				case 'Image':
@@ -196,7 +199,7 @@
 		if (bHasKey && options.type === "Target")
 		{
 			window.Asc.plugin.executeMethod('GetCurrentWord', null, function(text) {
-				if (text && text.length > 1) {
+				if (!isEmpyText(text)) {
 					thesaurusCounter++;
 					let tokens = window.Asc.OpenAIEncode(text);
 					createSettings(text, tokens, 9, true);
@@ -225,7 +228,7 @@
 			isVisual : true,
 			buttons : [],
 			isModal : true,
-			EditorsSupport : ["word"],
+			EditorsSupport : ["word", "slide", "cell"],
 			size : [ 592, 100 ]
 		};
 		
@@ -250,7 +253,7 @@
 			isVisual : true,
 			buttons : [],
 			isModal : true,
-			EditorsSupport : ["word"],
+			EditorsSupport : ["word", "slide", "cell"],
 			size : [ 400, 400 ]
 		};
 		
@@ -275,7 +278,7 @@
 			isVisual : true,
 			buttons : [],
 			isModal : true,
-			EditorsSupport : ["word"],
+			EditorsSupport : ["word", "slide", "cell"],
 			size : [ 400, 400 ]
 		};
 		
@@ -318,9 +321,7 @@
 
 	window.Asc.plugin.attachContextMenuClickEvent('onMeaningT', function() {
 		window.Asc.plugin.executeMethod('GetCurrentWord', null, function(text) {
-			if (text === '') {
-				console.error('No word in this position.')
-			} else {
+			if (!isEmpyText(text)) {
 				let tokens = window.Asc.OpenAIEncode(text);
 				createSettings(text, tokens, 8);
 			}
@@ -329,37 +330,47 @@
 
 	window.Asc.plugin.attachContextMenuClickEvent('onSummarize', function() {
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 1);
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 1);
+			}
 		});
 	});
 
 	window.Asc.plugin.attachContextMenuClickEvent('onKeyWords', function() {
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 2);
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 2);
+			}
 		});
 	});
 
 	window.Asc.plugin.attachContextMenuClickEvent('onMeaningS', function() {
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 3);
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 3);
+			}
 		});
 	});
 
 	window.Asc.plugin.attachContextMenuClickEvent('onMeaningLinkS', function() {
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 4);
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 4);
+			}
 		});
 	});
 
 	window.Asc.plugin.attachContextMenuClickEvent('onTranslate', function(data) {
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			let prompt = 'Translate to ' + data + ': ' + text;
-			createSettings(prompt, tokens, 6);
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				let prompt = 'Translate to ' + data + ': ' + text;
+				createSettings(prompt, tokens, 6);
+			}
 		});
 	});
 
@@ -367,8 +378,10 @@
 		let size = Number(data);
 		imgsize = {width: size, height: size};
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
-			let tokens = window.Asc.OpenAIEncode(text);
-			createSettings(text, tokens, 7);
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 7);
+			}
 		});
 	});
 
@@ -578,13 +591,18 @@
 			case 7:
 				let url = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (url) {
-					let oImageData = {
-						"src": /^data\:image\/png\;base64/.test(url) ? url : `data:image/png;base64,${url}`,
-						"width": imgsize.width,
-						"height": imgsize.height
-					};
+					Asc.scope.url = /^data\:image\/png\;base64/.test(url) ? url : `data:image/png;base64,${url}`;
+					Asc.scope.imgsize = imgsize;
 					imgsize = null;
-					window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+					window.Asc.plugin.callCommand(function() {
+						let oDocument = Api.GetDocument();
+						let oParagraph = Api.CreateParagraph();
+						let width = Asc.scope.imgsize.width * (25.4 / 96.0) * 36000;
+						let height = Asc.scope.imgsize.height * (25.4 / 96.0) * 36000;
+						let oDrawing = Api.CreateImage(Asc.scope.url, width, height);
+						oParagraph.AddDrawing(oDrawing);
+						oDocument.Push(oParagraph);
+					}, false);
 				}
 				break;
 
@@ -722,6 +740,14 @@
 				modal.command('onSetLink', link);
 				break;
 		}
+	};
+
+	function isEmpyText(text) {
+		if (text.trim() === '') {
+			console.error('No word in this position or nothing is selected.');
+			return true;
+		}
+		return false;
 	};
 
 })(window, undefined);
