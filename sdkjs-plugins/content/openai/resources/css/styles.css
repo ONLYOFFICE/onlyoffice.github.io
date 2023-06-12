@@ -80,7 +80,7 @@ input {
     padding: 8px 5px;
     right: 5px;
 	left: 5px;
-	top: 245px;
+	top: 225px;
 	overflow-wrap: anywhere;
 }
 
@@ -107,4 +107,8 @@ input {
 
 .hidden {
 	display: none !important;
+}
+
+.input_message {
+	height: 44px;
 }

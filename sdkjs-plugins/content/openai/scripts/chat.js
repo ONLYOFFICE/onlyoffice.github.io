@@ -32,6 +32,10 @@
 		sendPluginMessage({type: 'onWindowReady'});
 		document.getElementById('message').onkeydown = function(e) {
 			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+				e.target.value += '\n';
+			} else if (e.key === 'Enter') {
+				e.preventDefault();
+				e.stopPropagation();
 				if (document.getElementById('message').classList.contains('error_border')){
 					setError('Too many tokens in your request.');
 					return;
