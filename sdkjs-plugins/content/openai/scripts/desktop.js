@@ -9,15 +9,27 @@
 		return false;
 	}
 
-	if (internal_isLocal())
+	if (internal_isLocal)
 	{
 		window.fetch = function(url, obj) {
 
-			function TextResponse(text) {
-				this.textResponse = text;
+			function TextResponse(text, isOk) {
+				if (isOk)
+					this.textResponse = text;
+				else
+					this.message = text;
 
-				this.text = function() { return this.textResponse; };
-				this.json = function() { return JSON.parse(this.textResponse); };
+				this.text = function() { return new Promise(function(resolve) {
+					resolve(text)
+				})};
+				this.json = function() { return new Promise(function(resolve, reject) {
+					try {
+						resolve(JSON.parse(text));
+					} catch (error) {
+						reject(error);
+					}
+				})};
+				this.ok = isOk;
 			};
 
 			return new Promise(function (resolve, reject) {
@@ -31,11 +43,13 @@
 				xhr.onload = function ()
 				{
 					if (this.status == 200 || this.status == 0)
-						resolve(new TextResponse(this.response));
+						resolve(new TextResponse(this.response, true));
+					else
+						resolve(new TextResponse(this.response, false));
 				};
 				xhr.onerror = function ()
 				{
-					reject(new TextResponse(this.response));
+					reject(new TextResponse(this.response, false));
 				};
 
 				xhr.send(obj.body);
