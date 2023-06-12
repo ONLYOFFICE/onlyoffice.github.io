@@ -28,7 +28,7 @@ limitations under the License.
     <link rel="stylesheet" href="./resources/css/styles.css">
 </head>
 <body style="display: flex;">
-	<div class="chat_window">
+	<div id="chat_window" class="chat_window hidden">
 		<div class="form-control messages" id="chat"></div>
 		<div id="tokens_info" class="tokens_info">
 			<div class="form-control div_title_chat hidden">
@@ -53,6 +53,7 @@ limitations under the License.
 		</div>
 		<textarea id="message" class="form-control input_message" spellcheck="false"></textarea>
 	</div>
+	<div id="loader-container" class="loader hidden"></div>
 	<div id="div_err" class="hidden div_error err_background">
 		<label class="lb_err i18n" style="font-weight: bold;">Error:</label>
 		<label id="lb_err" class="lb_err"></label>

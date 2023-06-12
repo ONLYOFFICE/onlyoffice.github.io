@@ -27,8 +27,10 @@
 	let tokenTimeot = null;
 	let errTimeout = null;
 	let modalTimeout = null;
+	let loader = null;
 
 	window.Asc.plugin.init = function() {
+		destroyLoader();
 		document.getElementById('message').focus();
 		sendPluginMessage({type: 'onWindowReady'});
 		document.getElementById('message').onkeydown = function(e) {
@@ -108,7 +110,7 @@
 	};
 
 	function sendMessage(text) {
-		createLoader();
+		createTyping();
 		settings.messages.push({role: 'user', content: text});
 		fetch(url, {
 			method: 'POST',
@@ -128,7 +130,7 @@
 			let text = data.choices[0].message.content;
 			settings.messages.push({role: data.choices[0].message.role, content: text});
 			createMessage(text, 0);
-			destroyLoader();
+			removeTyping();
 			document.getElementById('total_tokens').innerText = data.usage.total_tokens;
 			if (data.usage.total_tokens >= maxTokens)
 				document.getElementById('total_tokens').classList.add('err-message');
@@ -136,11 +138,11 @@
 		.catch(function(error) {
 			console.error('Error:', error);
 			setError(error.message)
-			destroyLoader();
+			removeTyping();
 		});
 	};
 
-	function createLoader() {
+	function createTyping() {
 		let chat = document.getElementById('chat');
 		let message = document.createElement('div');
 		let loading = document.createElement('span');
@@ -157,12 +159,25 @@
 		}, 500);
 	};
 
-	function destroyLoader() {
+	function removeTyping() {
 		clearInterval(interval);
 		interval = null;
 		let element = document.getElementById('loading');
 		element && element.remove();
 		return;
+	};
+
+	function createLoader() {
+		$('#loader-container').removeClass( "hidden" );
+		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
+		loader = showLoader($('#loader-container')[0], window.Asc.plugin.tr('Loading...'));
+	};
+
+	function destroyLoader() {
+		document.getElementById('chat_window').classList.remove('hidden');
+		$('#loader-container').addClass( "hidden" )
+		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
+		loader = undefined;
 	};
 
 	function setError(error) {
@@ -185,6 +200,7 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
+		createLoader();
 		let elements = document.querySelectorAll('.i18n');
 
 		elements.forEach(function(element) {
