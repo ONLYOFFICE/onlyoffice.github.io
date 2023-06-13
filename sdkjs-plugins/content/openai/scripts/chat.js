@@ -42,8 +42,10 @@
 	let errTimeout = null;
 	let modalTimeout = null;
 	let loader = null;
+	let bCreateLoader = true;
 
 	window.Asc.plugin.init = function() {
+		bCreateLoader = false;
 		destroyLoader();
 		document.getElementById('message').focus();
 		sendPluginMessage({type: 'onWindowReady'});
@@ -214,7 +216,8 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
-		createLoader();
+		if (bCreateLoader)
+			createLoader();
 		let elements = document.querySelectorAll('.i18n');
 
 		elements.forEach(function(element) {
@@ -223,6 +226,7 @@
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
+		bCreateLoader = false;
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let rule = '\n .err_background { background: ' + theme['background-toolbar'] + ' !important; }';
 		let styleTheme = document.createElement('style');
