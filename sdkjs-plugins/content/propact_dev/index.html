@@ -24,8 +24,10 @@
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
     <link rel="stylesheet" href="styles/plugins.css">
+    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
     <script type="text/javascript" src="scripts/code.js"></script>
     <script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
@@ -44,7 +46,7 @@
         </div>
         <!-- Tab Header - E -->
         <!-- Tab Body - S -->
-        <div id="all" class="tabcontent" style="display: none;">
+        <div id="all" class="tabcontent">
             <h3>All Contract Sections</h3>
             <div class="chat-box">
                 <div class="chat-text">
@@ -86,7 +88,7 @@
                 </div>
             </div>
         </div>
-        <div id="ccc" class="tabcontent" style="display: none;">
+        <div id="ccc" class="tabcontent">
             <h3>Same Side Contract Sections </h3>
             <div class="chat-box">
                 <div class="chat-text">
@@ -245,7 +247,7 @@
                 </div>
             </div>
         </div>
-        <div id="cpc" class="tabcontent" style="display: none;">
+        <div id="cpc" class="tabcontent">
             <h3>Counterparty Contract Sections</h3>
             <div class="chat-box">
                 <div class="chat-text">
@@ -348,8 +350,7 @@
                             </div>
                             <div class="input-group-form">
                                 <label for="fname" class="form-label">Add User and Team</label>
-                                <select name="cars" id="cars" class="form-control">
-                                    <option value="Select users and teams">Select users and teams</option>
+                                <select name="cars" id="userDropdown" class="form-control" placeholder="Select Users and teams" multiple>
                                     <option value="saab">Saab</option>
                                     <option value="opel">Opel</option>
                                     <option value="audi">Audi</option>
@@ -481,8 +482,77 @@
     </div>
 </div>
 <script>
+    // View related javascript code - S
+    /* Tabing click events - S */
+    // Get all the button elements with the specified class
+    const buttonsTabLinks = document.querySelectorAll('.tablinks');
 
+    // Add a click event listener to each button element
+    buttonsTabLinks.forEach(function(button) {
+        button.addEventListener('click', function() {
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(button.getAttribute('data-attr-tab')).style.display = "block";
+            button.className += " active";
+        });
+    });
 
+    // Get the element with id="allClause" and click on it
+    document.getElementById("allClause").click();
+    /* Tabing click events - E */
+
+    /* Button: OpenClause Event - S */
+    // Get all the button elements with the specified class
+    const buttonsOpenChatBoard = document.querySelectorAll('.open-chat-board');
+
+    // Add a click event listener to each button element
+    buttonsOpenChatBoard.forEach(function(button) {
+        button.addEventListener('click', function () {
+            document.getElementById('cluaseLists').classList.add('display-none');
+            document.getElementById('openCluase').classList.remove('display-none');
+        });
+    });
+    /* Button: OpenClause Event - E */
+
+    /* Button: CloseEvent - S */
+    // Get all the button elements with the specified class
+    const buttonsClose = document.querySelectorAll('.btn-close');
+
+    // Add a click event listener to each button element
+    buttonsClose.forEach(function(button) {
+        button.addEventListener('click', function () {
+            document.getElementById('openCluase').classList.add('display-none');
+            document.getElementById('createCluase').classList.add('display-none');
+            document.getElementById('cluaseLists').classList.remove('display-none');
+        });
+    });
+    /* Button: Close Event - E */
+
+    /* Button: CreateThread - S */
+    // Get all the button elements with the specified class
+    const buttonsCreateThread = document.querySelectorAll('.btn-create-thread');
+
+    // Add a click event listener to each button element
+    buttonsCreateThread.forEach(function(button) {
+        button.addEventListener('click', function () {
+            document.getElementById('cluaseLists').classList.add('display-none');
+            document.getElementById('createCluase').classList.remove('display-none');
+        });
+    });
+    /* Button: CreateThread - E */
+
+    $('#userDropdown').select2({
+        placeholder: "Select users and teams",
+        width: '100%',
+        allowClear: true
+    });
+    // View related javascript code - E
 </script>
 </body>
 </html>

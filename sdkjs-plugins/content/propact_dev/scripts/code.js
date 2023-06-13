@@ -23,6 +23,7 @@
 
     window.Asc.plugin.init = function(text)
     {
+    	// View related javascript code - S
 		/* Tabing click events - S */
 		// Get all the button elements with the specified class
 		const buttonsTabLinks = document.querySelectorAll('.tablinks');
@@ -86,6 +87,15 @@
 			});
 		});
 		/* Button: CreateThread - E */
+
+		$('#userDropdown').select2({
+			placeholder: "Select users and teams",
+			width: '100%',
+			allowClear: true
+		});
+		// View related javascript code - E
+
+
 	};
 
 })(window, undefined);
