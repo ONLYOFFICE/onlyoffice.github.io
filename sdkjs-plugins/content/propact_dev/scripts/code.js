@@ -95,6 +95,9 @@
 		});
 		// View related javascript code - E
 
+		document.getElementById('btnCreateThread').onclick = function () {
+			window.Asc.plugin.executeMethod ("AddContentControl", [1, {"Id" : 7, "Tag" : "{tag}", "Lock" : 0}]);
+		}
 
 	};
 
