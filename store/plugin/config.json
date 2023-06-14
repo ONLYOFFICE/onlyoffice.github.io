@@ -8,6 +8,7 @@
         "cs" : "Správce Pluginů"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
+    "version": "1.0.0",
     "group" : {
         "name" : "Plugin Manager",
         "rank" : 1

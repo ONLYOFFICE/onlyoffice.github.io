@@ -16,7 +16,7 @@
  *
  */
 
-// todo поправить с ошибкой, что у нее нет поля message (может её тогда совсем не выводить или показать просто error)
+const version = '1.0.0';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
@@ -391,7 +391,7 @@ window.addEventListener('message', function(message) {
 				if (guid)
 					elements.imgIcon.setAttribute('src', getImageUrl(guid, true, false, 'img_icon'));
 
-				// todo перерисовать цвет шапки ещё у плагинов и сменить иконки (так же в окне плагина)
+				// todo change header background color and change icons for plugin cards and for plugin window
 			}
 
 			styleTheme.innerHTML = message.style + rule;
