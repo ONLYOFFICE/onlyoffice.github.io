@@ -30,17 +30,48 @@
 
 -->
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8" />
-    <title>OpenAI</title>
-    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-    <script type="text/javascript" src="scripts/desktop.js"></script>
-    <script type="text/javascript" src="vendor/GPT-3-Encoder/encoder.js"></script>
-    <script type="text/javascript" src="scripts/code.js"></script>
-</head>
-<body>
-</body>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Preview</title>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		<script src="./vendor/marked/marked.min.js"></script>
+		<script src="scripts/preview.js"></script>
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+			}
+			#preview {
+				border: none !important;
+				height: fit-content;
+			}
+			#container {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				border: none !important;
+				position: relative;
+			}
+			.loader {
+				margin: 0 !important;
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: 100%;
+				height: 100% !important;
+				background-color: rgba(128, 128, 128, 0.5);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container" class="form-control">
+			<div id="preview" class="form-control"></div>
+		</div>
+		<div id="loader-container" class="asc-loader-container loader hidden"></div>
+	</body>
 </html>

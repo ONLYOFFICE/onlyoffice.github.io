@@ -132,14 +132,7 @@
 
 	window.addEventListener("message", function(message) {
 		// getting messages from marketplace
-		let data;
-		// try to parse message
-		try {
-			data = JSON.parse(message.data);
-		} catch (error) {
-			// if we have a problem, don't process this message
-			return;
-		}
+		let data = JSON.parse(message.data);
 			
 		switch (data.type) {
 			case 'getInstalled':
@@ -170,7 +163,7 @@
 				});
 				break;
 			case 'showButton' :
-				window.Asc.plugin.executeMethod('ShowButton',['back', data.show]);
+				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
 				break;
 		}
 		
@@ -277,6 +270,15 @@
 			});
 		
 		removeGuid = null;
+	};
+
+	window.onresize = function() {
+		// zoom for all elements in plugin window
+		let zoom = 1;
+		if (window.devicePixelRatio < 1)
+			zoom = 1 / window.devicePixelRatio;
+		
+		document.getElementsByTagName('html')[0].style.zoom = zoom;
 	};
 
 })(window, undefined);
