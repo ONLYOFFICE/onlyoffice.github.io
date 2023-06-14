@@ -78,18 +78,26 @@
 				<div class="div_icon_info">
 					<img id="img_icon">
 				</div>
-				<div id="div_rating_link" class="div_info_column div_link">
-					<div id="div_rating_stars" class="div_rating"></div>
-					<div id="div_votes" class="hidden">
-						<span id="votes_caption" class="defaultlable">votes:</span>
-						<span id="total_votes" class="defaultlable"></span>
+				<div id="div_rating_link" class="div_info_column div_link hidden">
+					<div id="div_rating_stars" >
+						<div class="div_rating div_rating_window">
+							<div class="stars_grey stars_plugin_window"></div>
+							<div id="stars_colored" class="stars_orange stars_plugin_window"></div>
+						</div>
+					</div>
+				</div>
+				<div id="div_votes" class="div_votes hidden">
+					<span id="votes_average" class="defaultlable font_bold"></span>
+					<div class="div_offered_votes">
+						<span id="votes_caption">votes:</span>
+						<span id="total_votes"></span>
 					</div>
 				</div>
 				<a id="discussion_link" target="blank" class="hidden"></a>
 			</div>
 			<div class="div_selected_description">
 				<span id="span_name" class="span_name_selected"></span>
-				<div class="div_offered">
+				<div class="div_offered_votes">
 					<span id="span_offered_caption" class="span_description">Offered by:</span>
 					<span id="span_offered"></span>
 				</div>
@@ -126,30 +134,30 @@
 				<div id="div_selected_info" class="div_selected_preview hidden">
 					<div id="div_plugin_info" class="div_plugin_info">
 						<div id="div_version" class="div_selected_info hidden">
-							<span id="span_ver_caption" class="span_info">Version: </span>
+							<span id="span_ver_caption" class="font_bold">Version: </span>
 							<span id="span_ver"></span>
 						</div>
 						<div id="div_min_version" class="div_selected_info hidden">
-							<span id="span_min_ver_caption" class="span_info">The minimum supported editors version: </span>
+							<span id="span_min_ver_caption" class="font_bold">The minimum supported editors version: </span>
 							<span id="span_min_ver"></span>
 						</div>
 						<div id="div_languages" class="div_selected_info hidden">
-							<span id="span_langs_caption" class="span_info">Languges: </span>
+							<span id="span_langs_caption" class="font_bold">Languges: </span>
 							<span id="span_langs"></span>
 						</div>
 					</div>
 					<div class="div_selected_info">
-						<span id="span_lern" class="span_info">Learn how to use </span>
+						<span id="span_lern" class="font_bold">Learn how to use </span>
 						<span id="span_lern_plugin">the plugin in </span>
 						<a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">Help Center.</a>
 					</div>
 					<div id="div_github_link" class="div_selected_info">
-						<span id="span_contribute" class="span_info">Contribute </span>
-						<span id="span_contribute_end">to the plugin developmen or report an issue on </span>
+						<span id="span_contribute" class="font_bold">Contribute </span>
+						<span id="span_contribute_end">to the plugin development or report an issue on </span>
 						<a id="link_plugin" class="aboutlink link_info" target="blank">Github.</a>
 					</div>
 					<div class="div_selected_info">
-						<span id="span_help" class="span_info">Get help </span>
+						<span id="span_help" class="font_bold">Get help </span>
 						<span id="span_help_end">with the plugin functionality on our forum.</span>
 					</div>
 					<div class="div_selected_info">
