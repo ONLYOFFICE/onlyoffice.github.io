@@ -109,6 +109,19 @@
 
 		});
 
+		window.Asc.plugin.executeMethod("GetAllContentControls");
+
+		window.Asc.plugin.onMethodReturn = function(returnValue) {
+			//evend return for completed methods
+			var _plugin = window.Asc.plugin;
+			if (_plugin.info.methodName == "GetAllContentControls") {
+				for (var i = 0; i < returnValue.length; i++) {
+					// addLabel(returnValue[i], "#divP");
+					console.log('returnValue[i]', returnValue[i]);
+				}
+			}
+		}
+
 	};
 
 })(window, undefined);
