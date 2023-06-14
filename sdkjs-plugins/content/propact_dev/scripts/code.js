@@ -103,7 +103,7 @@
 			const formData = new FormData(formElem);
 			var contractSectionName = formData.get('contractsection');
 			var contractDescription = formData.get('contractdescription');
-			window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Title": contractSectionName, "Description": contractDescription, "Tag" : contractDescription, "Lock" : 1}]);
+			window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Description": contractDescription, "Tag" : contractSectionName, "Lock" : 0, "Color" : { "R" : 0, "G" : 255, "B" : 0 }}]);
 		});
 
 	};
