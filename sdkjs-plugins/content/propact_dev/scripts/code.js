@@ -95,9 +95,16 @@
 		});
 		// View related javascript code - E
 
-		document.getElementById('btnCreateThread').onclick = function () {
-			window.Asc.plugin.executeMethod ("AddContentControl", [1, {"Id" : 7, "Tag" : "{tag}", "Lock" : 0}]);
-		}
+		const formElem = document.getElementById("contractForm");
+		formElem.addEventListener("submit", (e) => {
+			// on form submission, prevent default
+			e.preventDefault();
+
+			const formData = new FormData(formElem);
+			var contractSectionName = formData.get('contractsection');
+			var contractDescription = formData.get('contractdescription');
+			window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Title": contractSectionName, "Description": contractDescription, "Tag" : contractDescription, "Lock" : 1}]);
+		});
 
 	};
 

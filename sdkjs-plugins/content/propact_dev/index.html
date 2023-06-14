@@ -338,19 +338,21 @@
                 </div>
                 <div class="chat-contract-section">
                     <div class="contract-form">
-                        <form action="#" class="" onsubmit="event.preventDefault();">
+                        <form id="contractForm">
                             <div class="input-group-form">
-                                <label for="fname" class="form-label">Contract Section:</label>
-                                <input class="form-control" type="text" id="fname" name="fname"
-                                       placeholder="Sed Diam Nonumy Eirmod Tempor.">
+                                <label for="contractsection" class="form-label">Contract Section:</label>
+                                <input class="form-control" type="text" id="contractsection" name="contractsection"
+                                       placeholder="">
                             </div>
                             <div class="input-group-form">
-                                <label for="fname" class="form-label">Clause Description</label>
-                                <textarea class="form-control address" id="w3review" name="w3review" placeholder="">Hi guys Please review this clause and let me know your thoughts. I’m concerned about the “terms and conditions reasonably acceptable to the Buyer” in sub (b).</textarea>
+                                <label for="contractdescription" class="form-label">Clause Description</label>
+                                <textarea class="form-control address" id="contractdescription"
+                                          name="contractdescription" placeholder=""></textarea>
                             </div>
                             <div class="input-group-form">
-                                <label for="fname" class="form-label">Add User and Team</label>
-                                <select name="cars" id="userDropdown" class="form-control" placeholder="Select Users and teams" multiple>
+                                <label for="userteam" class="form-label">Add User and Team</label>
+                                <select name="cars" id="userDropdown" name="userteam" class="form-control"
+                                        placeholder="Select Users and teams" multiple>
                                     <option value="saab">Saab</option>
                                     <option value="opel">Opel</option>
                                     <option value="audi">Audi</option>
@@ -464,8 +466,7 @@
             <div class="text-form">
                 <form action="" class="">
                     <div class="input-group-form">
-                                        <textarea class="form-control address" name="w3review"
-                                                  placeholder="">Thanks Bob. That make sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days...</textarea>
+                        <textarea class="form-control address" name="w3review" placeholder="">Thanks Bob. That make sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days...</textarea>
                     </div>
                     <div class="input-group-form submit">
                         <button class="review-btn btn" type="submit" value="Submit">
@@ -482,7 +483,88 @@
     </div>
 </div>
 <script>
+    /*// View related javascript code - S
+    /!* Tabing click events - S *!/
+    // Get all the button elements with the specified class
+    const buttonsTabLinks = document.querySelectorAll('.tablinks');
 
+    // Add a click event listener to each button element
+    buttonsTabLinks.forEach(function (button) {
+        button.addEventListener('click', function () {
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(button.getAttribute('data-attr-tab')).style.display = "block";
+            button.className += " active";
+        });
+    });
+
+    // Get the element with id="allClause" and click on it
+    document.getElementById("allClause").click();
+    /!* Tabing click events - E *!/
+
+    /!* Button: OpenClause Event - S *!/
+    // Get all the button elements with the specified class
+    const buttonsOpenChatBoard = document.querySelectorAll('.open-chat-board');
+
+    // Add a click event listener to each button element
+    buttonsOpenChatBoard.forEach(function (button) {
+        button.addEventListener('click', function () {
+            document.getElementById('cluaseLists').classList.add('display-none');
+            document.getElementById('openCluase').classList.remove('display-none');
+        });
+    });
+    /!* Button: OpenClause Event - E *!/
+
+    /!* Button: CloseEvent - S *!/
+    // Get all the button elements with the specified class
+    const buttonsClose = document.querySelectorAll('.btn-close');
+
+    // Add a click event listener to each button element
+    buttonsClose.forEach(function (button) {
+        button.addEventListener('click', function () {
+            document.getElementById('openCluase').classList.add('display-none');
+            document.getElementById('createCluase').classList.add('display-none');
+            document.getElementById('cluaseLists').classList.remove('display-none');
+        });
+    });
+    /!* Button: Close Event - E *!/
+
+    /!* Button: CreateThread - S *!/
+    // Get all the button elements with the specified class
+    const buttonsCreateThread = document.querySelectorAll('.btn-create-thread');
+
+    // Add a click event listener to each button element
+    buttonsCreateThread.forEach(function (button) {
+        button.addEventListener('click', function () {
+            document.getElementById('cluaseLists').classList.add('display-none');
+            document.getElementById('createCluase').classList.remove('display-none');
+        });
+    });
+    /!* Button: CreateThread - E *!/
+
+    $('#userDropdown').select2({
+        placeholder: "Select users and teams",
+        width: '100%',
+        allowClear: true
+    });
+    // View related javascript code - E
+
+    const formElem = document.getElementById("contractForm");
+    formElem.addEventListener("submit", (e) => {
+        // on form submission, prevent default
+        e.preventDefault();
+
+        const formData = new FormData(formElem);
+        var contractSectionName = formData.get('contractsection');
+        var contractDescription = formData.get('contractdescription');
+        window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Title": contractSectionName, "Description": contractDescription, "Tag" : contractDescription, "Lock" : 1}]);
+    });*/
 </script>
 </body>
 </html>
