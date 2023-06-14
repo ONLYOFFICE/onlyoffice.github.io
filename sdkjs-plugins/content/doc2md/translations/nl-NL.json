@@ -9,5 +9,6 @@
   "Suppress top comment": "Onderdruk commentaar bovenaan",
   "Help": "Kies Markdown of HTML.\n* Standaard: converteer hele doc.\n* Selecteer tekst om het bereik te beperken.",
   "Text was copied to buffer!": "Tekst is gekopieerd naar buffer!",
-  "Convert to Markdown or HTML": "Converteren naar Markdown of HTML"
+  "Convert to Markdown or HTML": "Converteren naar Markdown of HTML",
+  "Preview": "Preview"
 }
