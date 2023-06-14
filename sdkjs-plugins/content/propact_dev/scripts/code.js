@@ -105,13 +105,8 @@
 			var contractDescription = formData.get('contractdescription');
 
 			var selectedText = "";
-			if (window.getSelection) {
-				selectedText = window.getSelection().toString();
-			} else if (document.selection && document.selection.type != "Control") {
-				selectedText = document.selection.createRange().text;
-			}
-			console.log('selectedText', selectedText);
-
+			window.Asc.plugin.executeMethod("GetSelectedText");
+			console.log('text', text);
 			// window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Description": contractDescription, "Tag" : contractSectionName, "Lock" : 0, "Color" : { "R" : 0, "G" : 255, "B" : 0 }}]);
 
 		});
