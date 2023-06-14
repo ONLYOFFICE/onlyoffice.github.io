@@ -112,8 +112,8 @@
 			}
 			console.log('selectedText', selectedText);
 
+			// window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Description": contractDescription, "Tag" : contractSectionName, "Lock" : 0, "Color" : { "R" : 0, "G" : 255, "B" : 0 }}]);
 
-			window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Description": contractDescription, "Tag" : contractSectionName, "Lock" : 0, "Color" : { "R" : 0, "G" : 255, "B" : 0 }}]);
 		});
 
 	};
