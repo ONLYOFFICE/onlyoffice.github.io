@@ -9,5 +9,6 @@
   "Suppress top comment": "トップコメントの抑制",
   "Help": "MarkdownまたはHTMLを選択します。\n* デフォルト：文書全体を変換します。\n* 範囲を限定するためにテキストを選択します。",
   "Text was copied to buffer!": "テキストがバッファにコピーされました！",
-  "Convert to Markdown or HTML": "MarkdownまたはHTMLに変換する"
+  "Convert to Markdown or HTML": "MarkdownまたはHTMLに変換する",
+  "Preview": "プレビュー"
 }
