@@ -46,7 +46,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let isResizeOnStart = true;                                          // flag for firs resize on start
+let isResizeOnStart = false;                                          // flag for firs resize on start
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -349,21 +349,52 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
 				rule += '.btn_install:active{background-color: #446995 !important;}\n';
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
-				rule += '.div_offered{color: rgba(0,0,0,0.45); !important;}\n';
+				rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
 			} else {
+				this.document.getElementsByTagName('body')[0].classList.remove('white_bg');
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
-				rule += '.div_offered{color: rgba(255,255,255,0.8); !important;}\n';
+				rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 			}
 
-			let styleTheme = document.createElement('style');
-			styleTheme.type = 'text/css';
+			let styleTheme = document.getElementById('theme_style');
+			if (!styleTheme) {
+				styleTheme = document.createElement('style');
+				styleTheme.id = 'theme_style';
+				styleTheme.type = 'text/css';
+				document.getElementsByTagName('head')[0].appendChild(styleTheme);
+			} else {
+				defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';
+				let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
+				let arrPl = bshowMarketplace ? allPlugins : installedPlugins;
+				arrPl.forEach(function(pl) {
+					let div = document.getElementById(pl.guid);
+					if (div) {
+						let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
+						let bg = defaultBG;
+						if (variation.store) {
+							if (variation.store.background)
+								bg = variation.store.background[themeType]
+						} else {
+							// todo now we have one icon for all theme for plugins in store. change it when we will have different icons for different theme (now it's not necessary). use for all icons 'changeIcons'
+							// It's why we should change icons only for plugins with default icon or plugins icon (which don't have 'store' field in config)
+							div.firstChild.firstChild.setAttribute( 'src', getImageUrl( pl.guid, false, false, ('img_' + pl.guid) ) );
+						}
+						div.firstChild.setAttribute('style', ('background:' + bg) );
+					}
+				});
+				let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
+				if (guid)
+					elements.imgIcon.setAttribute('src', getImageUrl(guid, true, false, 'img_icon'));
+
+				// todo перерисовать цвет шапки ещё у плагинов и сменить иконки (так же в окне плагина)
+			}
+
 			styleTheme.innerHTML = message.style + rule;
-			document.getElementsByTagName('head')[0].appendChild(styleTheme);
 			break;
 		case 'onExternalMouseUp':
 			let evt = document.createEvent("MouseEvents");
@@ -630,7 +661,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		);
 	});
 
-	if (isDesktop && installedPlugins && bFirstRender) {
+	if (isDesktop && installedPlugins && bFirstRender && !isOnline) {
 		isPluginLoading = false;
 		getInstalledLanguages();
 		showMarketplace();
@@ -747,7 +778,12 @@ function createPluginDiv(plugin, bInstalled) {
 	div.id = plugin.guid;
 	div.setAttribute('data-guid', plugin.guid);
 	div.className = 'div_item form-control noselect';
-	div.style.border = (1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
+	let zoom;
+	if (scale.devicePR < 1)
+		zoom = (1 / devicePixelRatio);
+	if (scale.devicePR > 2)
+		zoom = (1 / devicePixelRatio) * 2;
+	div.style.border = ((zoom > 1 ? 1 : zoom)) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666');
 	
 	div.onmouseenter = function(event) {
 		event.target.classList.add('div_item_hovered');
@@ -804,10 +840,13 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>' +
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
-							'<div id="div_rating" class="div_rating">'+ (plugin.rating ? plugin.rating.string : '') +'</div>' +
+							(plugin.rating
+								? '<div id="div_rating"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> </div>'
+								: '<div></div>'
+							) +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
-								: ''
+								: '<div></div>'
 							) +
 						'</div>' +
 						( (installed && !bRemoved)
@@ -943,12 +982,15 @@ function onClickItem() {
 	let installed = findPlugin(false, guid);
 	let plugin = findPlugin(true, guid);
 	let discussionUrl = plugin ? plugin.discussionUrl : null;
-	elements.ratingStars.innerText = plugin && plugin.rating ? plugin.rating.string : '';
 	
 	if (plugin && plugin.rating) {
 		elements.totalVotes.innerText = plugin.rating.total;
+		document.getElementById('stars_colored').style.width = plugin.rating.percent;
+		document.getElementById('votes_average').innerText = plugin.rating.average;
+		elements.divRatingLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
+		elements.divRatingLink.classList.add('hidden');
 		elements.divVotes.classList.add('hidden');
 	}
 
@@ -1152,24 +1194,40 @@ function setDivHeight() {
 	}
 };
 
-window.onresize = function() {
-	setDivHeight();
-	if (scale.devicePR !== window.devicePixelRatio) {
+window.onresize = function(bForce) {
+	if (scale.devicePR !== window.devicePixelRatio || bForce) {
+		let html = document.getElementsByTagName('html')[0];
 		scale.devicePR = window.devicePixelRatio;
-		$('.div_item').css('border', ((1 / scale.devicePR) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
-		if (1 < scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+		let revZoom = 1 / scale.devicePR;
+		if (scale.devicePR > 2)
+			revZoom *= 2;
+
+		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+			setDivHeight();
 			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
 
 			calculateScale();
+			html.setAttribute('style', '');
 
 			if (scale.value !== oldScale)
 				changeIcons();
+		} else if (scale.devicePR < 1) {
+			html.style.zoom = revZoom;
+			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
 		}
+		$('.div_item').css('border', ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
 };
+
+// zoom on start if we start with a non 100% zoom
+if (scale.devicePR < 1) {
+	// maybe remove this flag
+	isResizeOnStart = false;
+	window.onresize(true);
+}
 
 function calculateScale() {
 	let bestIndex = 0;
@@ -1689,32 +1747,6 @@ function getTranslated(text) {
 	return translate[text] || text;
 };
 
-function getStringRating(value) {
-	let rating = '';
-	switch (value) {
-		case 5:
-			rating = '★★★★★';
-			break;
-		case 4:
-			rating = '★★★★✩';
-			break;
-		case 3:
-			rating = '★★★✩✩';
-			break;
-		case 2:
-			rating = '★★✩✩✩';
-			break;
-		case 1:
-			rating = '★✩✩✩✩';
-			break;
-	
-		default:
-			rating = '✩✩✩✩✩';
-			break;
-	}
-	return rating;
-};
-
 function parseRatingPage(data) {
 	// if we load this page, parse it
 	// remove head, because it can brake our styles
@@ -1735,13 +1767,11 @@ function parseRatingPage(data) {
 		fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
 		fifth = Math.ceil(total * fifth / 100);       // it's 1 star
 		let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
-		let tmp = average | 0;
-		// if we have an average value less than 0.5, we round down, if more than 0.5, then up
-		average = ( (average - tmp) >= 0.5) ? average | 1 : tmp;
+		let percent = average / 5 * 100 + '%';
 		return {
 			total: total,
 			average: average,
-			string: getStringRating(average)
+			percent: percent
 		};
 	} else {
 		return null;
