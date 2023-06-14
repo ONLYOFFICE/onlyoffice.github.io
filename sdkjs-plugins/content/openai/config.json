@@ -8,7 +8,7 @@
     },
     "guid": "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
     "version"    : "1.1.0",
-	"minVersion" : "7.4.0",
+    "minVersion" : "7.4.0",
 
 
     "variations" : [
@@ -77,7 +77,18 @@
                     "light" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
                     "dark" : "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
                 },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "screenshots" : [
+                                    "resources/store/screenshots/screen_1.png",
+                                    "resources/store/screenshots/screen_2.png",
+                                    "resources/store/screenshots/screen_3.png",
+                                    "resources/store/screenshots/screen_4.png",
+                                    "resources/store/screenshots/screen_5.png",
+                                    "resources/store/screenshots/screen_6.png",
+                                    "resources/store/screenshots/screen_7.png",
+                                    "resources/store/screenshots/screen_8.png",
+                                    "resources/store/screenshots/screen_9.png",
+                                    "resources/store/screenshots/screen_10.png"
+                                ],
                 "icons"       : {
                     "light" : "resources/store/icons",
                     "dark"  : "resources/store/icons"
