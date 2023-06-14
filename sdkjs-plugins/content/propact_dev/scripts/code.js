@@ -105,6 +105,7 @@
 			var contractDescription = formData.get('contractdescription');
 
 			window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : Math.floor((Math.random() * 10000) + 1), "Description": contractDescription, "Tag" : text, "Lock" : 0, "Color" : { "R" : 0, "G" : 255, "B" : 0 }}]);
+			formElem.reset();
 
 		});
 
