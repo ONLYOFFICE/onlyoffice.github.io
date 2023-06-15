@@ -182,13 +182,16 @@ label.header {
 }
 
 .span_description {
-	margin: 0px 10px 0px;
 	max-height: 60px;
 	overflow: hidden;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 4;
 	hyphens: auto;
+}
+
+.div_offered {
+	margin-left: 10px;
 }
 
 .div_footer {
