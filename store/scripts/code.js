@@ -1771,7 +1771,7 @@ function parseRatingPage(data) {
 		let percent = average / 5 * 100 + '%';
 		return {
 			total: total,
-			average: average,
+			average: average.toFixed(1),
 			percent: percent
 		};
 	} else {
