@@ -67,7 +67,7 @@ const languages = [                                                  // list of 
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
-const discussionsUrl = 'https://github.com/AlexeyMatveev686/onlyoffice.github.io/discussions'; // discussions url
+const discussionsUrl = 'https://github.com/AlexeyMatveev686/onlyoffice.github.io/discussions/'; // discussions url
 const messages = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
 	linkManually: 'Install plugin manually',
@@ -615,7 +615,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					// get discussion page
 					config.discussionUrl = discussionsUrl + plugin.discussion;
 					if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
-						makeDesktopRequest(plugin.discussion).then(
+						makeDesktopRequest(config.discussionUrl).then(
 							function(data) {
 								if (data.status == 'success') {
 									config.rating = parseRatingPage(data.response.responseText);
@@ -632,7 +632,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 						});
 					} else {
-						let body = { target: plugin.discussion };
+						let body = { target: config.discussionUrl };
 						makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
 							data = JSON.parse(data);
 							config.rating = parseRatingPage(data);
