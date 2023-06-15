@@ -46,7 +46,7 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let isResizeOnStart = false;                                          // flag for firs resize on start
+let isResizeOnStart = false;                                         // flag for firs resize on start
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -67,6 +67,7 @@ const languages = [                                                  // list of 
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
+const discussionsUrl = 'https://github.com/AlexeyMatveev686/onlyoffice.github.io/discussions'; // discussions url
 const messages = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
 	linkManually: 'Install plugin manually',
@@ -612,7 +613,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				);
 				if (plugin.discussion) {
 					// get discussion page
-					config.discussionUrl = plugin.discussion;
+					config.discussionUrl = discussionsUrl + plugin.discussion;
 					if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
 						makeDesktopRequest(plugin.discussion).then(
 							function(data) {
