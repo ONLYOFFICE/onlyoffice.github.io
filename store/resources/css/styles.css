@@ -467,8 +467,12 @@ label.header {
 
 .div_rating {
 	position: relative;
-	height: 12px;
+	height: 15px;
 	width: 68px;
+}
+
+.div_rating_window {
+	height: 12px !important;
 }
 
 .div_votes {
