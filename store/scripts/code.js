@@ -187,10 +187,6 @@ window.onload = function() {
 	elements.inpSearch.addEventListener('input', function(event) {
 		makeSearch(event.target.value.trim().toLowerCase());
 	});
-
-	elements.divRatingLink.onclick = function() {
-		elements.discussionLink.click();
-	};
 };
 
 window.addEventListener('message', function(message) {
@@ -551,7 +547,6 @@ function initElemnts() {
 	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
-	elements.divRatingLink = document.getElementById('div_rating_link');
 	elements.discussionLink = document.getElementById('discussion_link');
 	elements.ratingStars = document.getElementById('div_rating_stars');
 	elements.totalVotes = document.getElementById('total_votes');
@@ -987,11 +982,8 @@ function onClickItem() {
 	if (plugin && plugin.rating) {
 		elements.totalVotes.innerText = plugin.rating.total;
 		document.getElementById('stars_colored').style.width = plugin.rating.percent;
-		document.getElementById('votes_average').innerText = plugin.rating.average;
-		elements.divRatingLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
-		elements.divRatingLink.classList.add('hidden');
 		elements.divVotes.classList.add('hidden');
 	}
 

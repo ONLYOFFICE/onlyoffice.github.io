@@ -492,10 +492,6 @@ label.header {
 	flex-flow: column;
 }
 
-.div_link {
-	cursor: pointer !important;
-}
-
 .stars_grey {
 	position: absolute;
 	background-image: url(../img/stars/rating-stars.svg);
