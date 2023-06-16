@@ -42,6 +42,7 @@ label.header {
 .btn_update {
 	height: 22px !important;
 	padding: 0px 5px;
+	margin-left: 8px;
 }
 
 .btn_menu_right {
