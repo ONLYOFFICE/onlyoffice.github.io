@@ -348,7 +348,7 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
 				rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
-				rele += '.select2-container--default .select2-results__option[aria-selected=true] { color: black;}\n'
+				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: black;}\n'
 			} else {
 				this.document.getElementsByTagName('body')[0].classList.remove('white_bg');
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
@@ -357,7 +357,7 @@ window.addEventListener('message', function(message) {
 				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 				rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
-				rele += '.select2-container--default .select2-results__option[aria-selected=true] { color: white;}\n'
+				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: white;}\n'
 			}
 
 			let styleTheme = document.getElementById('theme_style');
