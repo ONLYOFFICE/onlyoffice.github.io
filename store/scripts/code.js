@@ -359,7 +359,7 @@ window.addEventListener('message', function(message) {
 				rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: white;}\n';
-				message.style.replace('.select2-container--default .select2-results__option--highlighted[aria-selected] {background-color : #555 !important; }','.select2-container--default .select2-results__option--highlighted[aria-selected] { color: white !important;}');
+				message.style = message.style.replace('.select2-container--default .select2-results__option--highlighted[aria-selected] {background-color : #555 !important; }','.select2-container--default .select2-results__option--highlighted[aria-selected] { color: white !important;}');
 			}
 
 			let styleTheme = document.getElementById('theme_style');
