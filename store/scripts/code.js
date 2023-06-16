@@ -1255,7 +1255,7 @@ function changeIcons() {
 		let guid = arr[i].getAttribute('data-guid');
 		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
-	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
+	let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
 	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true, 'img_icon'));
 };
 
