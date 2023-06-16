@@ -16,7 +16,7 @@
  *
  */
 
-const version = '1.0.0';                                             // version of store (will change it when update something in store)
+const version = '1.0.1';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
