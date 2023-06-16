@@ -269,6 +269,7 @@ label.header {
 
 .link_submit {
 	text-decoration: underline dotted !important;
+	text-underline-offset: 4px;
 }
 
 .link_submit:hover {
@@ -277,12 +278,6 @@ label.header {
 
 .link_info {
 	border-bottom: 1px solid;
-	text-decoration: none !important;
-}
-
-.link_rate {
-	border-bottom: 1px solid;
-	border-style: dotted;
 	text-decoration: none !important;
 }
 
