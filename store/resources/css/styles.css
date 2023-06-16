@@ -87,7 +87,7 @@ label.header {
 }
 
 .toolbar {
-	margin: 20px 20px 0px 20px;
+	margin: 20px 27px 0px 20px;
 }
 
 .toolbar_top {
@@ -98,7 +98,6 @@ label.header {
 .toolbar_link {
 	display: flex;
 	align-items: center;
-	margin-right: 5px;
 }
 
 .toolbar_buttons {
