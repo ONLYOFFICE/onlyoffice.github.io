@@ -291,6 +291,7 @@ label.header {
 
 .div_selected_toolbar {
 	display: flex;
+	justify-content: space-between;
 	margin: 20px;
 }
 
@@ -455,6 +456,11 @@ label.header {
 	height: 15px;
 }
 
+.div_rating_general {
+	display: flex;
+	margin-top: 6px;
+}
+
 .div_rating {
 	position: relative;
 	height: 15px;
@@ -463,8 +469,8 @@ label.header {
 
 .div_votes {
 	display: flex;
-	flex-flow: column;
 	align-items: center;
+	margin: 0px 10px;
 }
 
 .advanced_info {
@@ -482,7 +488,6 @@ label.header {
 
 .div_link {
 	cursor: pointer !important;
-	margin-top: 5px;
 }
 
 .stars_grey {
@@ -504,12 +509,4 @@ label.header {
 	width: 0%;
 	background-repeat: no-repeat;
 	background-size: 76px;
-}
-
-.stars_plugin_window {
-	background-size: 64px !important;
-}
-
-.div_rating_window {
-	width: 64px !important;
 }
