@@ -74,9 +74,11 @@
 		<div id="div_selected_toolbar" class="div_selected_toolbar hidden">
 			<!-- TODO temporarily, I added an arrow here so that I could go back -->
 			<span id="arrow" class="arrow hidden">&#8592;</span>
-			<div class="div_info_column">
-				<div class="div_icon_info">
-					<img id="img_icon">
+			<div class="div_selected_description">
+				<span id="span_name" class="span_name_selected"></span>
+				<div class="div_offered_votes">
+					<span id="span_offered_caption" class="span_description">Offered by:</span>
+					<span id="span_offered" class="span_description"></span>
 				</div>
 				<div id="div_rating_link" class="div_info_column div_link hidden">
 					<div id="div_rating_stars" >
@@ -94,17 +96,15 @@
 					</div>
 				</div>
 				<a id="discussion_link" target="blank" class="hidden"></a>
-			</div>
-			<div class="div_selected_description">
-				<span id="span_name" class="span_name_selected"></span>
-				<div class="div_offered_votes">
-					<span id="span_offered_caption" class="span_description">Offered by:</span>
-					<span id="span_offered" class="span_description"></span>
-				</div>
 				<div>
 					<button id="btn_update" class="btn-text-default btn_preview btn_install" onclick="onClickUpdate(event.target)">Update</button>
 					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
 					<button id="btn_install" class="btn-text-default btn_preview btn_install" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
+				</div>
+			</div>
+			<div class="div_info_column">
+				<div class="div_icon_info">
+					<img id="img_icon">
 				</div>
 			</div>
 		</div>
