@@ -77,25 +77,27 @@
 			<div class="div_selected_description">
 				<span id="span_name" class="span_name_selected"></span>
 				<div class="div_offered_votes">
-					<span id="span_offered_caption" class="span_description">Offered by:</span>
-					<span id="span_offered" class="span_description"></span>
+					<span id="span_offered_caption" class="span_offered">Offered by:</span>
+					<span id="span_offered" class="span_offered"></span>
 				</div>
-				<div id="div_rating_link" class="div_info_column div_link hidden">
-					<div id="div_rating_stars" >
-						<div class="div_rating div_rating_window">
-							<div class="stars_grey stars_plugin_window"></div>
-							<div id="stars_colored" class="stars_orange stars_plugin_window"></div>
+				<div>
+					<div id="div_rating_link" class="div_info_column div_link hidden">
+						<div id="div_rating_stars" >
+							<div class="div_rating div_rating_window">
+								<div class="stars_grey stars_plugin_window"></div>
+								<div id="stars_colored" class="stars_orange stars_plugin_window"></div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="div_votes" class="div_votes hidden">
-					<span id="votes_average" class="defaultlable font_bold"></span>
-					<div class="div_offered_votes">
-						<span id="votes_caption">votes:</span>
-						<span id="total_votes"></span>
+					<div id="div_votes" class="div_votes hidden">
+						<span id="votes_average" class="defaultlable font_bold"></span>
+						<div class="div_offered_votes">
+							<span id="votes_caption">votes:</span>
+							<span id="total_votes"></span>
+						</div>
 					</div>
+					<a id="discussion_link" class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">Click to rate</a>
 				</div>
-				<a id="discussion_link" target="blank" class="hidden"></a>
 				<div>
 					<button id="btn_update" class="btn-text-default btn_preview btn_install" onclick="onClickUpdate(event.target)">Update</button>
 					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>

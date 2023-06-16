@@ -176,7 +176,7 @@ label.header {
 }
 
 .span_name_selected {
-	margin: 10px;
+	margin-bottom: 5px;
 	font-weight: bold;
 	font-size: 14px;
 }
@@ -189,6 +189,10 @@ label.header {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 4;
 	hyphens: auto;
+}
+
+.span_offered {
+	margin-right: 5px;
 }
 
 .div_footer {
