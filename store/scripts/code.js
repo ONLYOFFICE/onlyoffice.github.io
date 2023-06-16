@@ -842,7 +842,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
 							(plugin.rating
-								? '<div id="div_rating"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> <span>' + plugin.rating.total + '</span> </div>'
+								? '<div id="div_rating" class="flex"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> <span style="margin-left: 5px;">' + plugin.rating.total + '</span> </div>'
 								: '<div></div>'
 							) +
 							(bHasUpdate
