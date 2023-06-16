@@ -135,14 +135,14 @@ window.onload = function() {
 		showMarketplace();
 	}
 
-	elements.btnMyPlugins.onclick = function(event) {
-		// click on my plugins button
+	elements.btnAvailablePl.onclick = function(event) {
+		// click on available plugins button
 		toogleView(event.target, elements.btnMarketplace, messages.linkManually, false, false);
 	};
 
 	elements.btnMarketplace.onclick = function(event) {
 		// click on marketplace button
-		toogleView(event.target, elements.btnMyPlugins, messages.linkPR, true, false);
+		toogleView(event.target, elements.btnAvailablePl, messages.linkPR, true, false);
 	};
 
 	// elements.arrow.onclick = onClickBack;
@@ -311,7 +311,7 @@ window.addEventListener('message', function(message) {
 				}
 			}
 
-			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
+			if (elements.btnAvailablePl.classList.contains('btn_toolbar_active')) {
 				if (bUpdate) {
 					catFiltred = installedPlugins;
 					let searchVal = elements.inpSearch.value.trim();
@@ -515,7 +515,7 @@ function detectThemeType() {
 };
 
 function initElemnts() {
-	elements.btnMyPlugins = document.getElementById('btn_myPlugins');
+	elements.btnAvailablePl = document.getElementById('btn_AvailablePlugins');
 	elements.btnMarketplace = document.getElementById('btn_marketplace');
 	elements.linkNewPlugin = document.getElementById('link_newPlugin');
 	elements.divBody = document.getElementById('div_body');
@@ -673,7 +673,7 @@ function endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded) {
 	if (bFirstRender)
 		showMarketplace();
 	else if (bshowMarketplace)
-		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+		toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
 };
 
 function getInstalledLanguages() {
@@ -738,7 +738,7 @@ function showListofPlugins(bAll, sortedArr) {
 		});
 		setTimeout(function(){if (Ps) Ps.update()});
 	} else {
-		// if no istalled plugins and my plugins button was clicked
+		// if no istalled plugins and available plugins button was clicked
 		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(notification);
 	}
@@ -1311,7 +1311,7 @@ function onTranslate() {
 	isTranslationLoading = false;
 	// translates elements on current language
 	elements.linkNewPlugin.innerHTML = getTranslated(messages.linkPR);
-	elements.btnMyPlugins.innerHTML = getTranslated('My plugins');
+	elements.btnAvailablePl.innerHTML = getTranslated('Available plugins');
 	elements.btnMarketplace.innerHTML = getTranslated('Marketplace');
 	elements.btnInstall.innerHTML = getTranslated('Install');
 	elements.btnRemove.innerHTML = getTranslated('Remove');
@@ -1351,7 +1351,7 @@ function showMarketplace() {
 		if (isOnline)
 			showListofPlugins(isOnline);
 		else
-			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, false);
+			toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, false);
 			
 		toogleLoader(false);
 		catFiltred = allPlugins;
@@ -1707,9 +1707,9 @@ function checkInternet() {
 				if (div)
 					div.onclick();
 			} else if (bshowMarketplace) {
-				toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+				toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
 			} else if (!isDesktop) {
-				toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+				toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, true);
 			}
 			clearInterval(interval);
 			interval = null;
@@ -1734,9 +1734,9 @@ function handeNoInternet() {
 
 	if (!document.getElementsByClassName('div_notification')[0]) {
 		if (bshowMarketplace)
-			toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+			toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
 		else if (!isDesktop)
-			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+			toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, true);
 	}
 };
 
