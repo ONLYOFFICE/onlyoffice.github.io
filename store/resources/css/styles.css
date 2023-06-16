@@ -189,6 +189,7 @@ label.header {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 4;
 	hyphens: auto;
+	line-height: 16px;
 }
 
 .span_offered {
