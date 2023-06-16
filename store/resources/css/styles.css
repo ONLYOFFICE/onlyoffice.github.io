@@ -510,3 +510,7 @@ label.header {
 	background-repeat: no-repeat;
 	background-size: 68px;
 }
+
+.flex {
+	display: flex;
+}
