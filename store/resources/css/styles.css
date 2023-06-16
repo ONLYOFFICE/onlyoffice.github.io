@@ -205,7 +205,7 @@ label.header {
 }
 
 .btn_item {
-	margin: 0px 10px 10px;;
+	margin: 0px 10px 10px;
 	width: calc(100% - 20px);
 	border-radius: 3px !important;
 	font-weight: bold !important;
@@ -213,7 +213,7 @@ label.header {
 }
 
 .btn_preview {
-	margin: 10px 0px 10px 10px;
+	margin: 10px 10px 0px 0px;
 	width: fit-content;
 	min-width: 109px;
 	height: 24px !important;
@@ -393,7 +393,8 @@ label.header {
 }
 
 .div_icon_info {
-	width: 56px;
+	width: 171px;
+	height: 84px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

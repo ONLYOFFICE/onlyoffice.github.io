@@ -386,7 +386,7 @@ window.addEventListener('message', function(message) {
 				});
 				let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
 				if (guid)
-					elements.imgIcon.setAttribute('src', getImageUrl(guid, true, false, 'img_icon'));
+					elements.imgIcon.setAttribute('src', getImageUrl(guid, false, false, 'img_icon'));
 
 				// todo change header background color and change icons for plugin cards and for plugin window
 			}
@@ -1047,7 +1047,8 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// we do this, because new icons for store are too big for use it in this window.
-	let tmp = getImageUrl(guid, true, true, 'img_icon');
+	let tmp = getImageUrl(guid, false, true, 'img_icon');
+	document.getElementById('div_icon_info').style.background = this.firstChild.style.background;
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = plugin.offered || offered;
@@ -1255,7 +1256,7 @@ function changeIcons() {
 		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
 	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true, 'img_icon'));
 };
 
 function getTranslation() {
@@ -1318,7 +1319,7 @@ function onTranslate() {
 	elements.btnUpdateAll.innerHTML = getTranslated('Update All');
 	elements.inpSearch.placeholder = getTranslated('Search plugins') + '...';
 	document.getElementById('lbl_header').innerHTML = getTranslated('Manage plugins');
-	document.getElementById('span_offered_caption').innerHTML = getTranslated('Offered by') + ': ';
+	document.getElementById('span_offered_caption').innerHTML = getTranslated('Offered by') + ' ';
 	document.getElementById('span_overview').innerHTML = getTranslated('Overview');
 	document.getElementById('span_info').innerHTML = getTranslated('Info & Support');
 	document.getElementById('span_lern').innerHTML = getTranslated('Learn how to use') + ' ';
