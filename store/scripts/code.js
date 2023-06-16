@@ -335,7 +335,7 @@ window.addEventListener('message', function(message) {
 			toogleLoader(false);
 			break;
 		case 'Theme':
-			console.log(theme);
+			console.log(message.theme);
 			if (message.theme.type)
 				themeType = message.theme.type;
 
