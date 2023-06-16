@@ -471,10 +471,6 @@ label.header {
 	width: 68px;
 }
 
-.div_rating_window {
-	height: 12px !important;
-}
-
 .div_votes {
 	display: flex;
 	align-items: center;
@@ -517,4 +513,9 @@ label.header {
 
 .flex {
 	display: flex;
+}
+
+.div_rating_card {
+	height: 15px;
+    align-items: center;
 }
