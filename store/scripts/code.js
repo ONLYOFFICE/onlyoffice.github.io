@@ -612,43 +612,10 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					}
 				);
 				if (plugin.discussion) {
-					// get discussion page
 					config.discussionUrl = discussionsUrl + plugin.discussion;
-					if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
-						makeDesktopRequest(config.discussionUrl).then(
-							function(data) {
-								if (data.status == 'success') {
-									config.rating = parseRatingPage(data.response.responseText);
-								}
-							},
-							function(err) {
-								createError(err.response, false);
-							}
-						).catch(function(err) {
-							createError(err, false)
-						}).finally(function() {
-							count--;
-							if (!count)
-								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
-						});
-					} else {
-						let body = { target: config.discussionUrl };
-						makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
-							data = JSON.parse(data);
-							config.rating = parseRatingPage(data);
-						}).catch(function(err){
-							createError('Problem with loading rating', true);
-						}).finally(function(){
-							count--;
-							if (!count)
-								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
-						});
-					}
-	
-				} else {
-					count--;
+					getDiscussion(config);
 				}
-
+				count--;
 				if (!count)
 					endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 			},
@@ -666,6 +633,41 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		isPluginLoading = false;
 		getInstalledLanguages();
 		showMarketplace();
+	}
+};
+
+function getDiscussion(config) {
+	console.log('getDiscussion');
+	// get discussion page
+	if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
+		makeDesktopRequest(config.discussionUrl).then(
+			function(data) {
+				if (data.status == 'success') {
+					config.rating = parseRatingPage(data.response.responseText);
+				}
+			},
+			function(err) {
+				createError(err.response, false);
+			}
+		).catch(function(err) {
+			createError(err, false)
+		}).finally(function() {
+			// count--;
+			// if (!count)
+			// 	endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+		});
+	} else {
+		let body = { target: config.discussionUrl };
+		makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
+			data = JSON.parse(data);
+			config.rating = parseRatingPage(data);
+		}).catch(function(err){
+			createError('Problem with loading rating', true);
+		}).finally(function(){
+			// count--;
+			// if (!count)
+			// 	endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+		});
 	}
 };
 
