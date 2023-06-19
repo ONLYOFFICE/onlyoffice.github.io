@@ -876,6 +876,13 @@ function showRating() {
 			console.log(div);
 		}
 	});
+
+	if (elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
+		elements.totalVotes.innerText = plugin.rating.total;
+		document.getElementById('stars_colored').style.width = plugin.rating.percent;
+		elements.divRatingLink.classList.remove('hidden');
+		elements.divVotes.classList.remove('hidden');
+	}
 };
 
 function onClickInstall(target, event) {
