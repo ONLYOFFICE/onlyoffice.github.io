@@ -866,9 +866,10 @@ function createPluginDiv(plugin, bInstalled) {
 };
 
 function showRating() {
-	allPlugins.forEach(function(plugin){
-		if (plugin.rating) {
-			let div = document.getElementById(plugin.guid).lastElementChild.firstElementChild.firstElementChild;
+	allPlugins.forEach(function(plugin) {
+		let div = document.getElementById(plugin.guid);
+		if (plugin.rating && div) {
+			div = div.lastElementChild.firstElementChild.firstElementChild;
 			div.firstElementChild.lastElementChild.style.width = plugin.rating.percent;
 			div.lastElementChild.innerText = plugin.rating.total;
 			div.classList.remove('hidden');
