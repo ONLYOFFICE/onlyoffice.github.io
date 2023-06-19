@@ -29,6 +29,7 @@ let searchTimeout = null;                                            // timeot f
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
 let updateCount = 0;                                                 // counter for plugins in updating process
+let discussionCount = 0;                                             // counter for loading plugin`s discussions
 let allPlugins = [];                                                 // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -612,6 +613,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					}
 				);
 				if (plugin.discussion) {
+					discussionCount++;
 					config.discussionUrl = discussionsUrl + plugin.discussion;
 					getDiscussion(config);
 				}
@@ -652,9 +654,9 @@ function getDiscussion(config) {
 		).catch(function(err) {
 			createError(err, false)
 		}).finally(function() {
-			// count--;
-			// if (!count)
-			// 	endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+			discussionCount--;
+			if (!discussionCount)
+				showRating();
 		});
 	} else {
 		let body = { target: config.discussionUrl };
@@ -664,9 +666,9 @@ function getDiscussion(config) {
 		}).catch(function(err){
 			createError('Problem with loading rating', true);
 		}).finally(function(){
-			// count--;
-			// if (!count)
-			// 	endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
+			discussionCount--;
+			if (!discussionCount)
+				showRating();
 		});
 	}
 };
@@ -861,6 +863,10 @@ function createPluginDiv(plugin, bInstalled) {
 	div.innerHTML = template;
 	elements.divMain.appendChild(div);
 	if (Ps) Ps.update();
+};
+
+function showRating() {
+	console.log('showRating: ' + (Date.now() - start));
 };
 
 function onClickInstall(target, event) {
@@ -1364,7 +1370,7 @@ function showMarketplace() {
 		// elements.divBody.classList.remove('hidden');
 		elements.divBody.classList.remove('transparent');
 
-		// console.log('showMarketplace: ' + (Date.now() - start));
+		console.log('showMarketplace: ' + (Date.now() - start));
 		// we are removing the header for now, since the plugin has its own
 		// elements.divHeader.classList.remove('hidden');
 	}
