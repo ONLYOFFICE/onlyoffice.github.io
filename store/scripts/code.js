@@ -878,6 +878,8 @@ function showRating() {
 	});
 
 	if (elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
+		let guid = elements.divSelected.getAttribute('data-guid');
+		let plugin = findPlugin(true, guid);
 		elements.totalVotes.innerText = plugin.rating.total;
 		document.getElementById('stars_colored').style.width = plugin.rating.percent;
 		elements.divRatingLink.classList.remove('hidden');
