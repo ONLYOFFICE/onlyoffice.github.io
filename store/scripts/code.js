@@ -1015,8 +1015,9 @@ function onClickItem() {
 		elements.divRatingLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
-		elements.divRatingLink.classList.add('hidden');
+		// elements.divRatingLink.classList.add('hidden');
 		elements.divVotes.classList.add('hidden');
+		elements.discussionLink.classList.add('hidden');
 	}
 
 	if ( !plugin || ( isDesktop && installed ) ) {
