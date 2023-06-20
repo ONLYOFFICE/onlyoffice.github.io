@@ -879,10 +879,14 @@ function showRating() {
 	if (elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
 		let guid = elements.divSelected.getAttribute('data-guid');
 		let plugin = findPlugin(true, guid);
-		elements.totalVotes.innerText = plugin.rating.total;
-		document.getElementById('stars_colored').style.width = plugin.rating.percent;
-		elements.divRatingLink.classList.remove('hidden');
-		elements.divVotes.classList.remove('hidden');
+		if (plugin) {
+			elements.totalVotes.innerText = plugin.rating.total;
+			document.getElementById('stars_colored').style.width = plugin.rating.percent;
+			// elements.divRatingLink.classList.remove('hidden');
+			elements.divRatingLink.removeAttribute('title');
+			elements.divVotes.classList.remove('hidden');
+			elements.discussionLink.classList.remove('hidden');
+		}
 	}
 };
 
@@ -1015,7 +1019,7 @@ function onClickItem() {
 		elements.divRatingLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
-		// elements.divRatingLink.classList.add('hidden');
+		elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin'));
 		elements.divVotes.classList.add('hidden');
 		elements.discussionLink.classList.add('hidden');
 	}
