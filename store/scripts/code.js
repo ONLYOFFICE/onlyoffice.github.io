@@ -845,7 +845,7 @@ function createPluginDiv(plugin, bInstalled) {
 						'<div class="advanced_info">' +
 							(plugin.rating
 								? '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> <span style="margin-left: 5px;">' + plugin.rating.total + '</span> </div>'
-								: '<div class="flex div_rating_card hidden"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:0;"></div> </div> <span style="margin-left: 5px;"></span> </div>'
+								: '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:0;"></div> </div> <span style="margin-left: 5px;"></span> </div>'
 							) +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
