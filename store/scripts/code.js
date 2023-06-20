@@ -864,7 +864,7 @@ function createPluginDiv(plugin, bInstalled) {
 };
 
 function showRating() {
-	console.log('showRating: ' + (Date.now() - start));
+	// console.log('showRating: ' + (Date.now() - start));
 	allPlugins.forEach(function(plugin) {
 		let div = document.getElementById(plugin.guid);
 		if (plugin.rating && div) {
@@ -1386,7 +1386,7 @@ function showMarketplace() {
 		// elements.divBody.classList.remove('hidden');
 		elements.divBody.classList.remove('transparent');
 
-		console.log('showMarketplace: ' + (Date.now() - start));
+		// console.log('showMarketplace: ' + (Date.now() - start));
 		// we are removing the header for now, since the plugin has its own
 		// elements.divHeader.classList.remove('hidden');
 	}
