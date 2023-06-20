@@ -336,7 +336,6 @@ window.addEventListener('message', function(message) {
 			toogleLoader(false);
 			break;
 		case 'Theme':
-			console.log(message.theme);
 			if (message.theme.type)
 				themeType = message.theme.type;
 
@@ -639,7 +638,6 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 };
 
 function getDiscussion(config) {
-	console.log('getDiscussion');
 	// get discussion page
 	if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
 		makeDesktopRequest(config.discussionUrl).then(
@@ -866,6 +864,7 @@ function createPluginDiv(plugin, bInstalled) {
 };
 
 function showRating() {
+	console.log('showRating: ' + (Date.now() - start));
 	allPlugins.forEach(function(plugin) {
 		let div = document.getElementById(plugin.guid);
 		if (plugin.rating && div) {
