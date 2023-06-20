@@ -872,7 +872,6 @@ function showRating() {
 			div.firstElementChild.lastElementChild.style.width = plugin.rating.percent;
 			div.lastElementChild.innerText = plugin.rating.total;
 			div.classList.remove('hidden');
-			console.log(div);
 		}
 	});
 
