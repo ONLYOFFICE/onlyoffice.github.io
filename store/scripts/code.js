@@ -1014,11 +1014,13 @@ function onClickItem() {
 	let discussionUrl = plugin ? plugin.discussionUrl : null;
 	
 	if (plugin && plugin.rating) {
+		elements.divRatingLink.removeAttribute('title');
 		elements.totalVotes.innerText = plugin.rating.total;
 		document.getElementById('stars_colored').style.width = plugin.rating.percent;
-		elements.divRatingLink.classList.remove('hidden');
+		elements.discussionLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
+		document.getElementById('stars_colored').style.width = 0;
 		elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin'));
 		elements.divVotes.classList.add('hidden');
 		elements.discussionLink.classList.add('hidden');
