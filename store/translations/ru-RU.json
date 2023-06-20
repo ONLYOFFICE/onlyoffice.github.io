@@ -55,5 +55,6 @@
 	"File not found." : "Файл не найден.",
 	"Network problem." : "Проблемы с сетью.",
 	"Problem with loading some resources" : "Проблема с загрузкой некоторых ресурсов",
-	"Click to rate" : "Нажмите, чтобы оценить"
+	"Click to rate" : "Нажмите, чтобы оценить",
+	"No disscussion page for this plugin." : "Нет страницы дискуссии для этого плагина."
 }

@@ -846,7 +846,7 @@ function createPluginDiv(plugin, bInstalled) {
 						'<div class="advanced_info">' +
 							(plugin.rating
 								? '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> <span style="margin-left: 5px;">' + plugin.rating.total + '</span> </div>'
-								: '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div>  <div class="stars_orange" style="width:0;"></div> </div> <span style="margin-left: 5px;"></span> </div>'
+								: '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:0;"></div> </div> <span style="margin-left: 5px;"></span> </div>'
 							) +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
@@ -886,6 +886,8 @@ function showRating() {
 			elements.divRatingLink.removeAttribute('title');
 			elements.divVotes.classList.remove('hidden');
 			elements.discussionLink.classList.remove('hidden');
+		} else {
+			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
 		}
 	}
 };
@@ -1021,9 +1023,10 @@ function onClickItem() {
 		elements.divVotes.classList.remove('hidden');
 	} else {
 		document.getElementById('stars_colored').style.width = 0;
-		elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin'));
 		elements.divVotes.classList.add('hidden');
 		elements.discussionLink.classList.add('hidden');
+		if (!discussionCount)
+			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
 	}
 
 	if ( !plugin || ( isDesktop && installed ) ) {

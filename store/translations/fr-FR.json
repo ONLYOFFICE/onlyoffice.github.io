@@ -55,5 +55,6 @@
 	"File not found." : "Fichier non trouvé.",
 	"Network problem." : "Problème de réseau.",
 	"Problem with loading some resources" : "Problème de chargement de certaines ressources",
-	"Click to rate" : "Cliquez pour évaluer"
+	"Click to rate" : "Cliquez pour évaluer",
+	"No disscussion page for this plugin." : "Pas de page de discussion pour ce plugin."
 }
