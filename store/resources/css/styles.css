@@ -492,7 +492,7 @@ label.header {
 
 .stars_grey {
 	position: absolute;
-	background-image: url(../img/stars/rating-stars.svg);
+	/* background-image: url(../img/stars/rating-stars.svg); */
 	background-repeat: no-repeat;
 	background-size: 68px;
 	z-index: 1;
