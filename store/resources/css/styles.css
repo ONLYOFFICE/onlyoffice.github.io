@@ -502,7 +502,7 @@ label.header {
 
 .stars_orange {
 	position: absolute;
-	/* background-image: url(../img/stars/rating-stars-colored.svg); */
+	background-image: url(../img/stars/rating-stars-colored.svg);
 	z-index: 2;
 	left: 0;
 	height: 100%;
