@@ -339,7 +339,7 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n.text-secondary{color:'+message.theme["text-secondary"]+';}\n';
+			let rule = '.text-secondary{color:'+message.theme["text-secondary"]+';}\n';
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
