@@ -345,23 +345,21 @@ window.addEventListener('message', function(message) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
 				rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
-				rule += '.btn_install:active{background-color: #446995 !important;}\n';
-				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
+				rule += '.btn_install:active{background-color: #1c1c1c !important;}\n';
 				rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
 				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: black;}\n'
-				message.style = message.style.replace(/'#445799'/g, 'rgba(0, 0, 0, 0.8)');
+				message.style = message.style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
 			} else {
 				this.document.getElementsByTagName('body')[0].classList.remove('white_bg');
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
-				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 				rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
 				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: white;}\n';
 				message.style = message.style.replace('.select2-container--default .select2-results__option--highlighted[aria-selected] {background-color : #555 !important; }','.select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : #555 !important; color: white !important;}');
-				message.style = message.style.replace(/'#b5e4ff'/g, 'rgba(255, 255, 255, 0.8)');
+				message.style = message.style.replace(/#b5e4ff/g, 'rgba(255, 255, 255, 0.8)');
 			}
 
 			let styleTheme = document.getElementById('theme_style');
