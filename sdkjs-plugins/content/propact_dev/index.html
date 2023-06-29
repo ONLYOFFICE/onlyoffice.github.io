@@ -15,556 +15,471 @@
  -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>ProPact</title>
-
-    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <link rel="stylesheet" href="styles/plugins.css">
-    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
-    <script type="text/javascript" src="scripts/code.js"></script>
-    <script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
-    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-<div class="main">
-    <div id="cluaseLists" class="">
-        <!-- Tab HTML - S -->
-        <!-- Tab Header - S -->
-        <div class="tab">
-            <button class="tablinks" data-attr-tab="all" id="allClause">All</button>
-            <button class="tablinks" data-attr-tab="ccc">Same Side</button>
-            <button class="tablinks" data-attr-tab="cpc">Counterparty</button>
-        </div>
-        <!-- Tab Header - E -->
-        <!-- Tab Body - S -->
-        <div id="all" class="tabcontent">
-            <h3>All Contract Sections</h3>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 1</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 2</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 3</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-        </div>
-        <div id="ccc" class="tabcontent">
-            <h3>Same Side Contract Sections </h3>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 1</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 2</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 3</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 4</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 5</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 6</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 7</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 8</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 9</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 10</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 11</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 12</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-        </div>
-        <div id="cpc" class="tabcontent">
-            <h3>Counterparty Contract Sections</h3>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 1</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 2</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-            <div class="chat-box">
-                <div class="chat-text">
-                    <span class="user-name"><strong>Clause 3</strong></span>
-                    <div class="user-details">
-                        <span class="">Created by: Jane Nelson</span>
-                        <span class="user-time">&nbsp;at 22th Nov 2022 10:00 AM</span>
-                    </div>
-                </div>
-                <div class="chat-icon">
-                    <!-- <a class="" href="" target="" title=""><img src="../html/resources/" alt=""></a> -->
-                    <button type="button" class="open-chat-board"><img src="images/view.png" alt="open"></button>
-                </div>
-            </div>
-        </div>
-        <!-- Tab Body - E -->
-        <!-- Tab HTML - E -->
-
-        <div class="bottom-btn">
-            <button class="review-btn btn btn-create-thread" id="btnCreateThread" type="button">Create Thread</button>
-        </div>
+<div class="left-sidebar">
+    <div class="invite-counterpartie" style="display: none">
+        <a href="#" class="invite-button"><img src="images/plus.svg" alt="plus">
+            Invite Counterparty
+        </a>
     </div>
-    <div id="createCluase" class="display-none">
-        <div class="chat-wrapper">
-            <div class="chat-inner">
-                <div class="close-btn">
-                    <button type="button" class="btn-close" id="btnCloseCreateCluase">
-                        <img class="" src="images/close.png" alt="close">
-                    </button>
-                </div>
-                <div class="chat-header">
-                    <div class="chat-profile">
-                        <span class="profile-image">
-                            <img class="" src="images/profile.png" alt="profile">
-                        </span>
-                        <span class="profile-details">
-							<h5 class="title"><a class="" href="">Jane Nelson</a></h5>
-							<p class="designation">Lawyer</p>
-							</span>
-                    </div>
-                    <div class="chat-actions">
-                        <ul>
-                            <li>
-                                <a target="" href="" title="">
-                                    <img src="images/user.png" alt="user">
-                                </a>
-                            </li>
-                            <li>
-                                <a target="" href="" title="" class="tooltip">
-                                    <img src="images/check.png" alt="check">
-                                    <span class="tooltiptext">Position confirmation</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="" href="" title="" class="tooltip">
-                                    <img src="images/video.png" alt="video">
-                                    <span class="tooltiptext">Discussion Required</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="chat-contract-section">
-                    <div class="contract-form">
-                        <form id="contractForm">
-                            <div class="input-group-form">
-                                <label for="contractsection" class="form-label">Contract Section:</label>
-                                <input class="form-control" type="text" id="contractsection" name="contractsection"
-                                       placeholder="">
-                            </div>
-                            <div class="input-group-form">
-                                <label for="contractdescription" class="form-label">Clause Description</label>
-                                <textarea class="form-control address" id="contractdescription"
-                                          name="contractdescription" placeholder=""></textarea>
-                            </div>
-                            <div class="input-group-form">
-                                <label for="userteam" class="form-label">Add User and Team</label>
-                                <select name="cars" id="userDropdown" name="userteam" class="form-control"
-                                        placeholder="Select Users and teams" multiple>
-                                    <option value="saab">Saab</option>
-                                    <option value="opel">Opel</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                            </div>
-                            <div class="input-group-form submit">
-                                <input class="review-btn btn" type="submit" value="Submit">
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <div class="invite-counterpartie-form" style="display: none">
+        <div class="invite-form">
+            <div class="invite-form-header">
+                <h3>Invite Counterparties</h3>
+                <a href="#" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
             </div>
-        </div>
-    </div>
-    <div id="openCluase" class="display-none">
-        <div class="chat-wrapper">
-            <div class="chat-inner">
-                <div class="close-btn">
-                    <button type="button" class="btn-close" id="btnCloseOpenClause">
-                        <img class="" src="images/close.png" alt="close">
-                    </button>
-                </div>
-                <div class="chat-header">
-                    <div class="chat-profile">
-                        <span class="profile-image">
-                            <img class="" src="images/profile.png" alt="profile">
-                        </span>
-                        <span class="profile-details">
-							<h5 class="title"><a class="" href="">Jane Nelson</a></h5>
-							<p class="designation">Lawyer</p>
-							</span>
+            <div class="form-inner">
+                <form>
+                    <div class="form-group">
+                        <label class="">First name</label>
+                        <input type="text" class="form-control" placeholder="Enter first name">
                     </div>
-                    <div class="chat-actions">
-                        <ul>
-                            <li><a target="" href="" title=""><img src="images/user.png" alt="user"></a></li>
-                            <li><a target="" href="" title=""><img src="images/check.png" alt="check"></a></li>
-                            <li><a target="" href="" title=""><img src="images/video.png" alt="video"></a></li>
-                        </ul>
+                    <div class="form-group">
+                        <label class="">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Enter last name">
                     </div>
-                </div>
-                <div class="chat-message-section">
-                    <div class="chat-message-inner">
-                        <span class="activity-label">today</span>
-                        <!-- sender s-->
-                        <div class="message-box">
-                            <div class="message-description">
-                                <p>Hi guys</p>
-                                <p>Please review this clause and let me know your throughts. I'm concerned about the
-                                    "terms and conditions reasonably acceptable to the Buyer" in sub (b).</p>
-                            </div>
-                            <div class="message-log">
-                                <div class="chat-data">
-                                    <span class="message-time">10:00 AM</span>
-                                    <span class="user-name">Jane Nelson</span>
-                                </div>
-                                <img src="images/user-profile.png" alt="user-profile">
-                            </div>
-                        </div>
-                        <!-- sender e-->
-                        <!-- receiver s-->
-                        <div class="message-box">
-                            <div class="message-description">
-                                <p>Hi @Jane Nelson</p>
-                                <p>Yep, that's concerning for us too.</p>
-                                <p>Nothing will be "reasonably acceptable" to these guys. We need to make it cleaner
-                                    than that. How about we get them to agree to all assignment terms as we go. There
-                                    are only 6 contracts to which this whill apply anyway</p>
-                            </div>
-                            <div class="message-log">
-                                <div class="chat-data">
-                                    <span class="user-name">Bob Miller</span>
-                                    <span class="message-time">10:00 AM</span>
-                                </div>
-                                <img src="images/user-profile.png" alt="user-profile">
-                            </div>
-                        </div>
-                        <!-- receiver e-->
-                        <!-- sender s-->
-                        <div class="message-box">
-                            <div class="message-description">
-                                <p>I agree with Bob. Let's remove the potential for argument down the track</p>
-                            </div>
-                            <div class="message-log">
-                                <div class="chat-data">
-                                    <span class="message-time">10:00 AM</span>
-                                    <span class="user-name">Jane Nelson</span>
-                                </div>
-                                <img src="images/user-profile.png" alt="user-profile">
-                            </div>
-                        </div>
-                        <!-- sender e-->
-                        <!-- request-box s-->
-                        <div class="request-box">
-                            <div class="message-description">
-                                <h4 class="request-title">Sent a position confirmation request</h4>
-                                <p class="request-box-details">Proposal Change to sub (b) so assignment terms must be
-                                    approved by Buyer in 14 days or they will be deemed to be approved.</p>
-                            </div>
-                        </div>
-                        <div class="request-btn">
-                            <button class="review-btn btn" type="submit" value="Submit">Approve</button>
-                            <button class="review-btn btn red" type="button" value="Submit">Reject</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- request-box s-->
-        <div class="message-write-box">
-            <!--							<span class="activity-label">Bob Miller is Typing...</span>-->
-            <div class="text-form">
-                <form action="" class="">
-                    <div class="input-group-form">
-                        <textarea class="form-control address" name="w3review" placeholder="">Thanks Bob. That make sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days...</textarea>
-                    </div>
-                    <div class="input-group-form submit">
-                        <button class="review-btn btn" type="submit" value="Submit">
-                            <img src="images/attach-file.png" alt="attach-file">
-                        </button>
-                        <button class="review-btn btn" type="submit" value="Submit">
-                            <img src="images/send.png" alt="send"><span>Send</span>
-                        </button>
+                    <div class="form-group">
+                        <label class="">Email</label>
+                        <input type="email" class="form-control" placeholder="Enter email">
                     </div>
                 </form>
+                <div class="submit-btn">
+                    <a class="btn btn-secondary" href="#">Cancel</a>
+                    <a class="btn btn-primary" href="#">Invite</a>
+                </div>
             </div>
         </div>
-        <!-- request-box s-->
+    </div>
+    <div class="invite-counterpartie-pending" style="display: none">
+        <div class="invite-form">
+            <div class="invite-form-header">
+                <h3>Invite Counterparties</h3>
+                <a href="#" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+            </div>
+            <div class="contract-section disabled">
+                <div class="intellivision-inner">
+                    <img src="images/technologent-imeg.png" alt="Technologent">
+                    <h4>Technologent</h4>
+                </div>
+                <div class="contract-user-list">
+                    <div class="contract-user-inner">
+                        <div class="contract-user-icon">
+                            <img src="images/rio-mendoza.png" alt="Rio Mendoza">
+                        </div>
+                        <div class="contract-user-name">
+                            <h4>Rio Mendoza</h4>
+                            <span>Lawyer</span>
+                        </div>
+                    </div>
+                    <p><a href="#">Click here</a> to Resend Invitation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="invite-counterpartie-pending" style="display: none">
+        <div class="invite-form">
+            <div class="invite-form-header">
+                <h3>Invite Counterparties</h3>
+                <a href="#" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+            </div>
+            <div class="contract-section disabled">
+                <div class="intellivision-inner">
+                    <img src="images/technologent-imeg.png" alt="Technologent">
+                    <h4>Technologent</h4>
+                </div>
+                <div class="contract-user-list">
+                    <div class="contract-user-inner">
+                        <div class="contract-user-icon">
+                            <img src="images/rio-mendoza.png" alt="Rio Mendoza">
+                        </div>
+                        <div class="contract-user-name">
+                            <h4>Rio Mendoza</h4>
+                            <span>Lawyer</span>
+                        </div>
+                    </div>
+                    <p><a href="#">Click here</a> to Resend Invitation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contract-lists" style="display: block">
+        <div class="contract-drafting">
+            <div class="contract-header">
+                <a href="#" class="btn">Markup Mode</a>
+                <a href="#" class="btn btn-primary">Create Clause</a>
+            </div>
+            <div class="contract-list">
+                <div class="contract-search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <button class="btn"><img src="images/icon-search.svg" alt="Icon Search"></button>
+                    </div>
+                </div>
+                <div class="contract-list-items">
+                    <div class="contract-item">
+                        <a href="#">
+                            <div class="contract-top">
+                                <h3>Clause 1.2</h3>
+                                <p>In publishing and graphic design, lorem ipsum is a placeholder text commonly used to demonstrate the visual...</p>
+                                <button class="btn brown-color">Under Negotiation</button>
+                            </div>
+                            <div class="contract-foot">
+                                <div class="contract-foot-inner">
+                                    <div class="contract-foot-item">
+                                        <h3>Created by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon.png" alt="">
+                                            <span>Me</span>
+                                        </div>
+                                    </div>
+                                    <div class="contract-foot-item">
+                                        <h3>Requires action by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon2.png" alt="">
+                                            <span>Kathryn Jackson</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="contract-item">
+                        <a href="#">
+                            <div class="contract-top">
+                                <h3>Clause 2.4</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna...</p>
+                                <button class="btn fuchsia-color">Drafting</button>
+                            </div>
+                            <div class="contract-foot">
+                                <div class="contract-foot-inner">
+                                    <div class="contract-foot-item">
+                                        <h3>Created by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon.png" alt="">
+                                            <span>Frank Schneider</span>
+                                        </div>
+                                    </div>
+                                    <div class="contract-foot-item">
+                                        <h3>Requires action by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon2.png" alt="">
+                                            <span>Me</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="contract-item">
+                        <a href="#">
+                            <div class="contract-top">
+                                <h3>Clause 3.0</h3>
+                                <p>In publishing and graphic design, lorem ipsum is a placeholder text commonly used to demonstrate the visual...</p>
+                                <button class="btn fuchsia-color">Drafting</button>
+                            </div>
+                            <div class="contract-foot">
+                                <div class="contract-foot-inner">
+                                    <div class="contract-foot-item">
+                                        <h3>Created by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon.png" alt="">
+                                            <span>Amanda Roberts</span>
+                                        </div>
+                                    </div>
+                                    <div class="contract-foot-item">
+                                        <h3>Requires action by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon2.png" alt="">
+                                            <span>Me</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="contract-item">
+                        <a href="#">
+                            <div class="contract-top">
+                                <h3>Clause 4</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna...</p>
+                                <button class="btn success-color">Completed</button>
+                            </div>
+                            <div class="contract-foot">
+                                <div class="contract-foot-inner">
+                                    <div class="contract-foot-item">
+                                        <h3>Created by</h3>
+                                        <div class="contract-user">
+                                            <img src="images/user-icon.png" alt="">
+                                            <span>Me</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contract-chat-history" style="display: none">
+        <div class="meeting-screen">
+            <div class="chat-create-header">
+                <h3>View the Conversion History</h3>
+                <a href="contract-drafting.html" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+            </div>
+            <div class="chat-body">
+                <div class="chat-area">
+                    <div class="top-bar">
+                        <span>Today</span>
+                    </div>
+                    <div class="message-wrapper reverse">
+                        <div class="profile-picture">
+                            <p class="last-seen">11:44 am</p>
+                            <p class="name">Jane Nelson</p>
+                            <img src="images/profile-image.png" alt="pp">
+                        </div>
+                        <div class="message-content">
+                            <div class="message">Hi guys <br> Please review this clause and let me <br> know your thoughts. <br> I’m concerned about the “terms and <br> conditions.</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper reverse">
+                        <div class="profile-picture">
+                            <p class="last-seen">10:39 am</p>
+                            <p class="name">Bob Miller</p>
+                            <img src="images/linkedin-sales.png" alt="pp">
+                        </div>
+                        <div class="message-content">
+                            <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than that. How <br> about we get them to agree to all <br> assignment terms as we go. There <br> are only 6 contracts to which this <br> will apply anyway</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper reverse">
+                        <div class="profile-picture">
+                            <p class="last-seen">10:52 am</p>
+                            <p class="name">Bill Andrews</p>
+                            <img src="images/linkedin-sales1.png" alt="pp">
+                        </div>
+                        <div class="message-content">
+                            <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than that. How <br> about we get them to agree to all <br> assignment terms as we go. There <br> are only 6 contracts to which this <br> will apply anyway</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper dark-gold-color">
+                        <div class="profile-picture">
+                            <img src="images/profile-image.png" alt="pp">
+                            <p class="name">Jane Nelson</p>
+                            <p class="last-seen">11:00am</p>
+                        </div>
+                        <div class="message-content">
+                            <h4>Sent a position confirmation <br> request</h4>
+                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper light-gold-color">
+                        <div class="profile-picture">
+                            <img src="images/linkedin-sales3.png" alt="pp">
+                            <p class="name">Rio Mendoza</p>
+                            <p class="last-seen">10:05 am</p>
+                        </div>
+                        <div class="message-content">
+                            <div class="message">We have got this proposal on sub <br> (b) clause 10.1 from the Seller. In my <br> view it is ok but it should be 28 days <br> not 14 and instead of “reasonable <br> endeavours” it should be “best <br> endeavours”. Your thoughts?</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper reverse dudhiya-color">
+                        <div class="profile-picture">
+                            <p class="last-seen">10:39 am</p>
+                            <p class="name">Bob Miller</p>
+                            <img src="images/linkedin-sales.png" alt="pp">
+                        </div>
+                        <div class="message-content">
+                            <h4>Sent a position confirmation <br> request</h4>
+                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
+                        </div>
+                        <strong>Position Approved By Bob Miller</strong>
+                    </div>
+                    <div class="message-wrapper reverse">
+                        <div class="profile-picture">
+                            <p class="last-seen">10:39 am</p>
+                            <p class="name">Bob Miller</p>
+                            <img src="images/linkedin-sales.png" alt="pp">
+                        </div>
+                        <div class="message-content">
+                            <div class="message">Hi @Bob Miller, They have rejected <br> our proposal and send an counter <br> proposal with condition "Proposal <br> agree to change to sub (b) as <br> proposed above but with <br> “reasonable endeavours” becoming <br> “best endeavours”". What is your <br> thoughts on this?</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper red-color">
+                        <div class="profile-picture">
+                            <img src="images/profile-image.png" alt="pp">
+                            <p class="name">Rio Mendoza</p>
+                            <p class="last-seen">11:00am</p>
+                        </div>
+                        <div class="message-content">
+                            <h4>Position confirmation rejected</h4>
+                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
+                        </div>
+                        <strong>Position Rejected by Rio Mendoza</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-create-footer">
+                <div class="chat-footer-inner">
+                    <button class="btn">Go to same side</button>
+                    <button class="btn">Go to counterparty</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contract-sameside-chat" style="display: none">
+        <div class="meeting-screen conversion-history">
+            <div class="chat-create-header">
+                <div class="conversation-left">
+                    <span class="user-icon">
+                        <img src="images/profile-image.png" alt="">
+                    </span>
+                    <div class="user-inner">
+                        <span class="user-name">Jane Nelson</span>
+                        <p>Lawyer</p>
+                    </div>
+                </div>
+                <div class="conversation-right">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <img src="images/chat-header-icon1.svg" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/chat-header-icon2.svg" alt="">
+                            </a>
+                            <div class="invite-user-tabs active">
+                                <div class="invite-user-tabs-header">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#users-tabs">Users</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#user-teams">Teams</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="invite-user-tabs-body">
+                                    <div class="tab-content">
+                                        <div id="users-tabs" class="tab-pane active">
+                                            <div class="invite-user-list">
+                                                <ul>
+                                                    <li>
+                                                        <div class="invite-user-inner">
+                                                            <div class="invite-user-icon">
+                                                                <img src="images/henderson.png" alt="">
+                                                            </div>
+                                                            <div class="invite-user-name">
+                                                                <h3>Johnny Henderson</h3>
+                                                                <span>Legal Adviser</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="invite-user-inner">
+                                                            <div class="invite-user-icon">
+                                                                <img src="images/henderson.png" alt="">
+                                                            </div>
+                                                            <div class="invite-user-name">
+                                                                <h3>Johnny Henderson</h3>
+                                                                <span>Legal Adviser</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="invite-btn">
+                                                    <button class="btn btn-primary">
+                                                        <img src="images/invite-user-btn-icon.svg " alt="invite user btn icon"> Invite</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="user-teams" class="tab-pane">
+                                            <div class="user-teams-list">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/chat-header-icon3.svg" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/chat-header-icon4.svg" alt="">
+                            </a>
+                        </li>
+
+                    </ul>
+                    <a href="contract-drafting.html" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="chat-area">
+                    <div class="top-bar">
+                        <span>Today</span>
+                    </div>
+                    <div class="message-wrapper reverse">
+                        <div class="profile-picture">
+                            <p class="last-seen">10:37 am</p>
+                            <p class="name">Jane Nelson</p>
+                            <img src="images/profile-image.png" alt="pp">
+                        </div>
+                        <div class="message-content">
+                            <div class="message">Hi guys <br>Please review this clause and let me <br>know your thoughts. <br>I’m concerned about the “terms and <br>conditions</div>
+                        </div>
+                    </div>
+                    <div class="message-wrapper grey-color">
+                        <div class="profile-picture">
+                            <img src="images/linkedin-sales3.png" alt="pp">
+                            <p class="name">Bob Miller</p>
+                            <p class="last-seen">11:00 am</p>
+                        </div>
+                        <div class="message-content">
+                            <div class="message">Hi <b>@Jane Nelson</b> <br>Yep, that's concerning for us too. <br>Nothing will be "reasonably <br>acceptable" to these guys. We need <br>to make it cleaner than that.</div>
+                            <a href="#" class="delete-icon"><img src="images/delete-icon.svg" alt=""></a>
+                        </div>
+                        <div class="request-row">
+                            <div class="request-content">
+                                <h4>Sent a position confirmation <br> request</h4>
+                                <div class="content-message">
+                                    Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.
+                                </div>
+                            </div>
+                            <div class="request-btn">
+                                <button class="btn btn-primary">Approve</button>
+                                <button class="btn reject-btn">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-create-footer">
+                <div class="form-group">
+                    <textarea type="textarea" placeholder="Thanks Bill and Bob. That makes sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days..." class="form-control"></textarea>
+                </div>
+                <div class="chat-footer-inner">
+                    <button class="btn">Go to counterparty</button>
+                    <div class="send-btn">
+                        <button class="btn-primary attach"><img src="images/attach-icon.svg" alt=""></button>
+                        <button class="btn-primary"><img src="images/send-icon.svg" alt=""> Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<script>
-    /*// View related javascript code - S
-    /!* Tabing click events - S *!/
-    // Get all the button elements with the specified class
-    const buttonsTabLinks = document.querySelectorAll('.tablinks');
-
-    // Add a click event listener to each button element
-    buttonsTabLinks.forEach(function (button) {
-        button.addEventListener('click', function () {
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(button.getAttribute('data-attr-tab')).style.display = "block";
-            button.className += " active";
-        });
-    });
-
-    // Get the element with id="allClause" and click on it
-    document.getElementById("allClause").click();
-    /!* Tabing click events - E *!/
-
-    /!* Button: OpenClause Event - S *!/
-    // Get all the button elements with the specified class
-    const buttonsOpenChatBoard = document.querySelectorAll('.open-chat-board');
-
-    // Add a click event listener to each button element
-    buttonsOpenChatBoard.forEach(function (button) {
-        button.addEventListener('click', function () {
-            document.getElementById('cluaseLists').classList.add('display-none');
-            document.getElementById('openCluase').classList.remove('display-none');
-        });
-    });
-    /!* Button: OpenClause Event - E *!/
-
-    /!* Button: CloseEvent - S *!/
-    // Get all the button elements with the specified class
-    const buttonsClose = document.querySelectorAll('.btn-close');
-
-    // Add a click event listener to each button element
-    buttonsClose.forEach(function (button) {
-        button.addEventListener('click', function () {
-            document.getElementById('openCluase').classList.add('display-none');
-            document.getElementById('createCluase').classList.add('display-none');
-            document.getElementById('cluaseLists').classList.remove('display-none');
-        });
-    });
-    /!* Button: Close Event - E *!/
-
-    /!* Button: CreateThread - S *!/
-    // Get all the button elements with the specified class
-    const buttonsCreateThread = document.querySelectorAll('.btn-create-thread');
-
-    // Add a click event listener to each button element
-    buttonsCreateThread.forEach(function (button) {
-        button.addEventListener('click', function () {
-            document.getElementById('cluaseLists').classList.add('display-none');
-            document.getElementById('createCluase').classList.remove('display-none');
-        });
-    });
-    /!* Button: CreateThread - E *!/
-
-    $('#userDropdown').select2({
-        placeholder: "Select users and teams",
-        width: '100%',
-        allowClear: true
-    });
-    // View related javascript code - E
-
-    const formElem = document.getElementById("contractForm");
-    formElem.addEventListener("submit", (e) => {
-        // on form submission, prevent default
-        e.preventDefault();
-
-        const formData = new FormData(formElem);
-        var contractSectionName = formData.get('contractsection');
-        var contractDescription = formData.get('contractdescription');
-        window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Title": contractSectionName, "Description": contractDescription, "Tag" : contractDescription, "Lock" : 1}]);
-    });*/
-</script>
 </body>
 </html>
