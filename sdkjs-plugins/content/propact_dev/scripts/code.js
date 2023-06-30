@@ -23,8 +23,15 @@
 
     window.Asc.plugin.init = function(text)
     {
-    	// View related javascript code - S
-		/* Tabing click events - S */
+    	// Markup Mode Editor - Start
+		const btnMarkupMode = document.getElementById('btnMarkupMode');
+		btnMarkupMode.addEventListener('click', function () {
+			console.log('URL', window.location.href);
+		})
+		// Markup Mode Editor - End
+
+    	/*// View related javascript code - S
+		/!* Tabing click events - S *!/
 		// Get all the button elements with the specified class
 		const buttonsTabLinks = document.querySelectorAll('.tablinks');
 
@@ -46,9 +53,9 @@
 
 		// Get the element with id="allClause" and click on it
 		document.getElementById("allClause").click();
-		/* Tabing click events - E */
+		/!* Tabing click events - E *!/
 
-		/* Button: OpenClause Event - S */
+		/!* Button: OpenClause Event - S *!/
 		// Get all the button elements with the specified class
 		const buttonsOpenChatBoard = document.querySelectorAll('.open-chat-board');
 
@@ -59,9 +66,9 @@
 				document.getElementById('openCluase').classList.remove('display-none');
 			});
 		});
-		/* Button: OpenClause Event - E */
+		/!* Button: OpenClause Event - E *!/
 
-		/* Button: CloseEvent - S */
+		/!* Button: CloseEvent - S *!/
 		// Get all the button elements with the specified class
 		const buttonsClose = document.querySelectorAll('.btn-close');
 
@@ -73,9 +80,9 @@
 				document.getElementById('cluaseLists').classList.remove('display-none');
 			});
 		});
-		/* Button: Close Event - E */
+		/!* Button: Close Event - E *!/
 
-		/* Button: CreateThread - S */
+		/!* Button: CreateThread - S *!/
 		// Get all the button elements with the specified class
 		const buttonsCreateThread = document.querySelectorAll('.btn-create-thread');
 
@@ -86,7 +93,7 @@
 				document.getElementById('createCluase').classList.remove('display-none');
 			});
 		});
-		/* Button: CreateThread - E */
+		/!* Button: CreateThread - E *!/
 
 		$('#userDropdown').select2({
 			placeholder: "Select users and teams",
@@ -120,7 +127,7 @@
 					console.log('returnValue[i]', returnValue[i]);
 				}
 			}
-		}
+		}*/
 
 	};
 
