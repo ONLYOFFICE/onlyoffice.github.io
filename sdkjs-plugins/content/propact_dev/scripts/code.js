@@ -26,7 +26,7 @@
 
 		const btnMarkupMode = document.getElementById('btnMarkupMode');
 		btnMarkupMode.addEventListener('click', function () {
-			var url = (window.location != window.parent.location) ? document.referrer : document.location.href;
+			var url = (window.location != window.parent.location) ? window.parent.location.href : document.location.href;
 			alert(url);
 			console.log(url);
 		})
