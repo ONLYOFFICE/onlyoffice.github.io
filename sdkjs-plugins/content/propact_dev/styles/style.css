@@ -197,5 +197,6 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
     .chat-body .chat-area .message-wrapper .message-content .delete-icon {right: -20px;}
 
 }
+.btn-markup { border: 1px solid }
 /* ======================================= Editor Css ======================================= */
 
