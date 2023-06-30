@@ -26,9 +26,16 @@
 
 		const btnMarkupMode = document.getElementById('btnMarkupMode');
 		btnMarkupMode.addEventListener('click', function () {
-			var url = (window.location != window.parent.location) ? window.parent.location.href : document.location.href;
-			alert(url);
-			console.log(url);
+			// Retrieve data from LocalStorage
+			var myData = localStorage.getItem('applicationAccessToken');
+
+			if (myData) {
+				// Data exists in LocalStorage
+				console.log('Data retrieved:', myData);
+			} else {
+				// Data doesn't exist in LocalStorage
+				console.log('No data found');
+			}
 		})
 
     	// View related javascript code - S
