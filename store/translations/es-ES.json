@@ -55,5 +55,6 @@
 	"File not found." : "Archivo no encontrado.",
 	"Network problem." : "Problema de red.",
 	"Problem with loading some resources" : "Problema al cargar algunos recursos",
-	"votes:": "votaciones:"
+	"Click to rate" : "Haga clic para calificar",
+	"No disscussion page for this plugin." : "No hay página de discusión para este complemento."
 }
