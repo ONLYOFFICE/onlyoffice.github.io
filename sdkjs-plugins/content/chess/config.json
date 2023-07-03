@@ -81,11 +81,7 @@
                     "light" : "#444444",
                     "dark" : "#444444;"
                 },
-                "screenshots" : [
-                                    "resources/store/screenshots/screen_1.png",
-                                    "resources/store/screenshots/screen_2.png",
-                                    "resources/store/screenshots/screen_3.png"
-                                ],
+                "screenshots" : [ "resources/store/screenshots/screen_1.png" ],
                 "icons"       : {
                     "light" : "resources/store/icons",
                     "dark"  : "resources/store/icons"
