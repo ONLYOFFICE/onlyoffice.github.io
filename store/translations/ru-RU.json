@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "Управление плагинами",
-	"My plugins": "Мои плагины",
+	"Available plugins": "Мои плагины",
 	"Marketplace": "Магазин",
 	"Submit your own plugin": "Отправить свой плагин",
 	"Install plugin manually": "Установить плагин вручную",
@@ -55,5 +55,6 @@
 	"File not found." : "Файл не найден.",
 	"Network problem." : "Проблемы с сетью.",
 	"Problem with loading some resources" : "Проблема с загрузкой некоторых ресурсов",
-	"votes:": "голосов:"
+	"Click to rate" : "Нажмите, чтобы оценить",
+	"No disscussion page for this plugin." : "Нет страницы дискуссии для этого плагина."
 }

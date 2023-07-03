@@ -55,5 +55,6 @@
 	"File not found." : "Soubor nebyl nalezen.",
 	"Network problem." : "Problém se sítí.",
 	"Problem with loading some resources" : "Problém s načítáním některých zdrojů",
-	"votes:": "hlasovat:"
+	"Click to rate" : "Klikněte pro ohodnocení",
+	"No disscussion page for this plugin." : "Žádná diskusní stránka pro tento plugin."
 }
