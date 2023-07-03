@@ -30,7 +30,7 @@
  *
  */
 
-// todo поправить с ошибкой, что у нее нет поля message (может её тогда совсем не выводить или показать просто error)
+const version = '1.0.2';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
@@ -38,11 +38,11 @@ let isOnline = true;                                                 // flag int
 isDesktop && checkInternet();                                        // check internet connection (only for desktop)
 let interval = null;                                                 // interval for checking internet connection (if it doesn't work on launch)
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desktop)
-let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
 let updateCount = 0;                                                 // counter for plugins in updating process
+let discussionCount = 0;                                             // counter for loading plugin`s discussions
 let allPlugins = [];                                                 // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
 const configUrl = './config.json';                                   // url to config.json
@@ -60,7 +60,8 @@ let isFrameLoading = true;                                           // flag win
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get tranlation file)
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
-let isResizeOnStart = false;                                          // flag for firs resize on start
+let isResizeOnStart = false;                                         // flag for firs resize on start
+let slideIndex = 1;                                                  // index for slides
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -81,6 +82,7 @@ const languages = [                                                  // list of 
 	['ru-RU', 'ru', 'Russian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
+const discussionsUrl = 'https://github.com/AlexeyMatveev686/onlyoffice.github.io/discussions/'; // discussions url
 const messages = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
 	linkManually: 'Install plugin manually',
@@ -139,8 +141,6 @@ window.onload = function() {
 	}
 	// init element
 	initElemnts();
-	if (isIE)
-		elements.imgScreenshot.classList.remove('image_preview');
 
 	isFrameLoading = false;
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
@@ -148,62 +148,19 @@ window.onload = function() {
 		showMarketplace();
 	}
 
-	elements.btnMyPlugins.onclick = function(event) {
-		// click on my plugins button
+	elements.btnAvailablePl.onclick = function(event) {
+		// click on available plugins button
 		toogleView(event.target, elements.btnMarketplace, messages.linkManually, false, false);
 	};
 
 	elements.btnMarketplace.onclick = function(event) {
 		// click on marketplace button
-		toogleView(event.target, elements.btnMyPlugins, messages.linkPR, true, false);
+		toogleView(event.target, elements.btnAvailablePl, messages.linkPR, true, false);
 	};
-
-	// elements.arrow.onclick = onClickBack;
-
-	// elements.imgScreenshot.onclick = onClickScreenshot;
-	elements.arrowPrev.onclick = function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		if (current.index > 0) {
-			// todo maybe show loader
-			current.index--;
-			let url = current.url + current.screenshots[current.index];
-			elements.imgScreenshot.setAttribute('src', url);
-			elements.imgScreenshot.onload = function() {
-				elements.arrowNext.classList.remove('hidden');
-				// todo maybe hide loader
-			}
-			if (!current.index)
-				elements.arrowPrev.classList.add('hidden');
-		}
-	};
-
-	elements.arrowNext.onclick = function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		if (current.index < current.screenshots.length - 1) {
-			// todo maybe show loader
-			current.index++;
-			let url = current.url + current.screenshots[current.index];
-			elements.imgScreenshot.setAttribute('src', url);
-			elements.imgScreenshot.onload = function() {
-				elements.arrowPrev.classList.remove('hidden');
-				// todo maybe hide loader
-			}
-			if (current.index == current.screenshots.length - 1)
-				elements.arrowNext.classList.add('hidden');
-		} 
-	};
-
-	// elements.divArrow.onclick = onClickScreenshot;
 
 	elements.inpSearch.addEventListener('input', function(event) {
 		makeSearch(event.target.value.trim().toLowerCase());
 	});
-
-	elements.divRatingLink.onclick = function() {
-		elements.discussionLink.click();
-	};
 };
 
 window.addEventListener('message', function(message) {
@@ -328,7 +285,7 @@ window.addEventListener('message', function(message) {
 				}
 			}
 
-			if (elements.btnMyPlugins.classList.contains('btn_toolbar_active')) {
+			if (elements.btnAvailablePl.classList.contains('btn_toolbar_active')) {
 				if (bUpdate) {
 					catFiltred = installedPlugins;
 					let searchVal = elements.inpSearch.value.trim();
@@ -355,24 +312,27 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let rule = 'a{color:'+message.theme.DemTextColor+'!important;}\na:hover{color:'+message.theme.DemTextColor+'!important;}\na:active{color:'+message.theme.DemTextColor+'!important;}\na:visited{color:'+message.theme.DemTextColor+'!important;}\n.text-secondary{color:'+message.theme["text-secondary"]+';}\n';
+			let rule = '.text-secondary{color:'+message.theme["text-secondary"]+';}\n';
 
 			if (themeType.includes('light')) {
 				this.document.getElementsByTagName('body')[0].classList.add('white_bg');
 				rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
 				rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
-				rule += '.btn_install:active{background-color: #446995 !important;}\n';
-				rule += '.btn_remove:active{background-color: #293f59 !important; color: #fff !important}\n';
+				rule += '.btn_install:active{background-color: #1c1c1c !important;}\n';
 				rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
+				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: black;}\n'
+				message.style = message.style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
 			} else {
 				this.document.getElementsByTagName('body')[0].classList.remove('white_bg');
 				rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
 				rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
 				rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
-				rule += '.btn_remove:active{background-color: #555 !important; color: rgb(255,255,255,0.8) !important}\n';
 				rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
 				rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
+				rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: white;}\n';
+				message.style = message.style.replace('.select2-container--default .select2-results__option--highlighted[aria-selected] {background-color : #555 !important; }','.select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : #555 !important; color: white !important;}');
+				message.style = message.style.replace(/#b5e4ff/g, 'rgba(255, 255, 255, 0.8)');
 			}
 
 			let styleTheme = document.getElementById('theme_style');
@@ -403,9 +363,9 @@ window.addEventListener('message', function(message) {
 				});
 				let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
 				if (guid)
-					elements.imgIcon.setAttribute('src', getImageUrl(guid, true, false, 'img_icon'));
+					elements.imgIcon.setAttribute('src', getImageUrl(guid, false, false, 'img_icon'));
 
-				// todo перерисовать цвет шапки ещё у плагинов и сменить иконки (так же в окне плагина)
+				// todo change header background color and change icons for plugin cards and for plugin window
 			}
 
 			styleTheme.innerHTML = message.style + rule;
@@ -419,7 +379,7 @@ window.addEventListener('message', function(message) {
 			// get all installed plugins
 			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
-			break;
+			break;makeRequestre
 		case 'onClickBack':
 			onClickBack();
 			break;
@@ -487,7 +447,7 @@ function makeRequest(url, method, responseType, body, bHandeNoInternet) {
 
 function makeDesktopRequest(_url) {
 	// function for getting rating page in desktop
-	return new Promise((resolve, reject) => {
+	return new Promise(function(resolve, reject) {
 		if ( !_url.startsWith('http') ) {
 			resolve({status:'skipped', response: {statusText: _url}});
 		} else {
@@ -532,7 +492,7 @@ function detectThemeType() {
 };
 
 function initElemnts() {
-	elements.btnMyPlugins = document.getElementById('btn_myPlugins');
+	elements.btnAvailablePl = document.getElementById('btn_AvailablePlugins');
 	elements.btnMarketplace = document.getElementById('btn_marketplace');
 	elements.linkNewPlugin = document.getElementById('link_newPlugin');
 	elements.divBody = document.getElementById('div_body');
@@ -549,7 +509,6 @@ function initElemnts() {
 	elements.btnRemove = document.getElementById('btn_remove');
 	elements.btnInstall = document.getElementById('btn_install');
 	elements.spanSelectedDescr = document.getElementById('span_selected_description');
-	elements.imgScreenshot = document.getElementById('image_screenshot');
 	elements.linkPlugin = document.getElementById('link_plugin');
 	elements.divScreen = document.getElementById("div_selected_image");
 	elements.divGitLink = document.getElementById('div_github_link');
@@ -559,9 +518,6 @@ function initElemnts() {
 	elements.divMinVersion = document.getElementById('div_min_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
-	elements.divArrow = document.getElementById('div_arrows');
-	elements.arrowPrev = document.getElementById('arrow_prev');
-	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
 	elements.divRatingLink = document.getElementById('div_rating_link');
@@ -569,6 +525,9 @@ function initElemnts() {
 	elements.ratingStars = document.getElementById('div_rating_stars');
 	elements.totalVotes = document.getElementById('total_votes');
 	elements.divVotes = document.getElementById('div_votes');
+	elements.arrowPrev = document.getElementById('prev_arrow');
+	elements.arrowNext = document.getElementById('next_arrow');
+
 };
 
 function toogleLoader(show, text) {
@@ -625,43 +584,11 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					}
 				);
 				if (plugin.discussion) {
-					// get discussion page
-					config.discussionUrl = plugin.discussion;
-					if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
-						makeDesktopRequest(plugin.discussion).then(
-							function(data) {
-								if (data.status == 'success') {
-									config.rating = parseRatingPage(data.response.responseText);
-								}
-							},
-							function(err) {
-								createError(err.response, false);
-							}
-						).catch(function(err) {
-							createError(err, false)
-						}).finally(function() {
-							count--;
-							if (!count)
-								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
-						});
-					} else {
-						let body = { target: plugin.discussion };
-						makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
-							data = JSON.parse(data);
-							config.rating = parseRatingPage(data);
-						}).catch(function(err){
-							createError('Problem with loading rating', true);
-						}).finally(function(){
-							count--;
-							if (!count)
-								endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
-						});
-					}
-	
-				} else {
-					count--;
+					discussionCount++;
+					config.discussionUrl = discussionsUrl + plugin.discussion;
+					getDiscussion(config);
 				}
-
+				count--;
 				if (!count)
 					endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded);
 			},
@@ -682,6 +609,40 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	}
 };
 
+function getDiscussion(config) {
+	// get discussion page
+	if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
+		makeDesktopRequest(config.discussionUrl).then(
+			function(data) {
+				if (data.status == 'success') {
+					config.rating = parseRatingPage(data.response.responseText);
+				}
+			},
+			function(err) {
+				createError(err.response, false);
+			}
+		).catch(function(err) {
+			createError(err, false)
+		}).finally(function() {
+			discussionCount--;
+			if (!discussionCount)
+				showRating();
+		});
+	} else {
+		let body = { target: config.discussionUrl };
+		makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
+			data = JSON.parse(data);
+			config.rating = parseRatingPage(data);
+		}).catch(function(err){
+			createError('Problem with loading rating', true);
+		}).finally(function(){
+			discussionCount--;
+			if (!discussionCount)
+				showRating();
+		});
+	}
+};
+
 function endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded) {
 	// console.log('getAllPluginsData: ' + (Date.now() - start));
 	removeUnloaded(Unloaded);
@@ -690,7 +651,7 @@ function endPluginsDataLoading(bFirstRender, bshowMarketplace, Unloaded) {
 	if (bFirstRender)
 		showMarketplace();
 	else if (bshowMarketplace)
-		toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+		toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
 };
 
 function getInstalledLanguages() {
@@ -753,11 +714,12 @@ function showListofPlugins(bAll, sortedArr) {
 			if (plugin && plugin.guid)
 				createPluginDiv(plugin, !bAll);
 		});
-		setTimeout(function(){if (Ps) Ps.update()});
+		setTimeout(function(){if (Ps) Ps.update(); toogleLoader(false);});
 	} else {
-		// if no istalled plugins and my plugins button was clicked
+		// if no istalled plugins and available plugins button was clicked
 		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(notification);
+		toogleLoader(false);
 	}
 	if (!Ps) {
 		Ps = new PerfectScrollbar('#div_main', {});
@@ -855,8 +817,8 @@ function createPluginDiv(plugin, bInstalled) {
 					'<div class="div_footer">' +
 						'<div class="advanced_info">' +
 							(plugin.rating
-								? '<div id="div_rating"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> </div>'
-								: '<div></div>'
+								? '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:' + plugin.rating.percent + ';"></div> </div> <span style="margin-left: 5px;">' + plugin.rating.total + '</span> </div>'
+								: '<div class="flex div_rating_card"> <div class="div_rating"> <div class="stars_grey"></div> <div class="stars_orange" style="width:0;"></div> </div> <span style="margin-left: 5px;"></span> </div>'
 							) +
 							(bHasUpdate
 								? '<span class="span_update ' + (!bRemoved ? "" : "hidden") + '">' + getTranslated("Update") + '</span>'
@@ -872,6 +834,34 @@ function createPluginDiv(plugin, bInstalled) {
 	div.innerHTML = template;
 	elements.divMain.appendChild(div);
 	if (Ps) Ps.update();
+};
+
+function showRating() {
+	// console.log('showRating: ' + (Date.now() - start));
+	allPlugins.forEach(function(plugin) {
+		let div = document.getElementById(plugin.guid);
+		if (plugin.rating && div) {
+			div = div.lastElementChild.firstElementChild.firstElementChild;
+			div.firstElementChild.lastElementChild.style.width = plugin.rating.percent;
+			div.lastElementChild.innerText = plugin.rating.total;
+			div.classList.remove('hidden');
+		}
+	});
+
+	if (elements.divSelected && !elements.divSelected.classList.contains('hidden')) {
+		let guid = elements.divSelected.getAttribute('data-guid');
+		let plugin = findPlugin(true, guid);
+		if (plugin) {
+			elements.totalVotes.innerText = plugin.rating.total;
+			document.getElementById('stars_colored').style.width = plugin.rating.percent;
+			// elements.divRatingLink.classList.remove('hidden');
+			elements.divRatingLink.removeAttribute('title');
+			elements.divVotes.classList.remove('hidden');
+			elements.discussionLink.classList.remove('hidden');
+		} else {
+			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
+		}
+	}
 };
 
 function onClickInstall(target, event) {
@@ -998,14 +988,17 @@ function onClickItem() {
 	let discussionUrl = plugin ? plugin.discussionUrl : null;
 	
 	if (plugin && plugin.rating) {
+		elements.divRatingLink.removeAttribute('title');
 		elements.totalVotes.innerText = plugin.rating.total;
 		document.getElementById('stars_colored').style.width = plugin.rating.percent;
-		document.getElementById('votes_average').innerText = plugin.rating.average;
-		elements.divRatingLink.classList.remove('hidden');
+		elements.discussionLink.classList.remove('hidden');
 		elements.divVotes.classList.remove('hidden');
 	} else {
-		elements.divRatingLink.classList.add('hidden');
+		document.getElementById('stars_colored').style.width = 0;
 		elements.divVotes.classList.add('hidden');
+		elements.discussionLink.classList.add('hidden');
+		if (!discussionCount)
+			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
 	}
 
 	if ( !plugin || ( isDesktop && installed ) ) {
@@ -1018,20 +1011,34 @@ function onClickItem() {
 	let bCorrectUrl = isDesktop || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		current.screenshots = plugin.variations[0].store.screenshots;
-		current.index = 0;
-		current.url = plugin.baseUrl;
-		let url = current.url + current.screenshots[current.index];
-		elements.imgScreenshot.setAttribute('src', url);
-		elements.imgScreenshot.onload = function() {
-			elements.imgScreenshot.classList.remove('hidden');
-			if (current.screenshots.length > 1)
-				elements.divArrow.classList.remove('hidden');
-			setDivHeight();
+		let arrScreens = plugin.variations[0].store.screenshots;
+		arrScreens.forEach(function(screenUrl, ind) {
+			let url = plugin.baseUrl + screenUrl;
+			let container = document.createElement('div');
+			container.className = 'mySlides fade';
+			let screen = document.createElement('img');
+			screen.className = 'screen';
+			screen.setAttribute('src', url);
+			container.appendChild(screen);
+			document.getElementById('div_selected_container').insertBefore(container, elements.arrowPrev);
+			if (arrScreens.length > 1) {
+				let point = document.createElement('span');
+				point.className = 'dot';
+				point.onclick = function() {
+					currentSlide(ind+1);
+				};
+				document.getElementById('points_container').appendChild(point);
+			}
+		});
+		if (arrScreens.length > 1) {
+			elements.arrowPrev.classList.remove('hidden');
+			elements.arrowNext.classList.remove('hidden');
 		}
+		slideIndex = 1;
+		showSlides(1);
 	} else {
-		elements.imgScreenshot.classList.add('hidden');
-		elements.divArrow.classList.add('hidden');
+		elements.arrowPrev.classList.remove('hidden');
+		elements.arrowNext.classList.remove('hidden');
 	}
 
 	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
@@ -1065,7 +1072,8 @@ function onClickItem() {
 	// TODO problem with plugins icons (different margin from top)
 	elements.divSelected.setAttribute('data-guid', guid);
 	// we do this, because new icons for store are too big for use it in this window.
-	let tmp = getImageUrl(guid, true, true, 'img_icon');
+	let tmp = getImageUrl(guid, false, true, 'img_icon');
+	document.getElementById('div_icon_info').style.background = this.firstChild.style.background;
 	elements.imgIcon.setAttribute('src', tmp);
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = plugin.offered || offered;
@@ -1106,6 +1114,7 @@ function onClickItem() {
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
+	setDivHeight();
 	sendMessage( { type : "showButton", show : true } );
 	// elements.arrow.classList.remove('hidden');
 };
@@ -1113,25 +1122,15 @@ function onClickItem() {
 function onClickBack() {
 	// click on left arrow in preview mode
 	elements.imgIcon.style.display = 'none';
-	elements.imgScreenshot.setAttribute('src','')
+	$('.dot').remove();
+	$('.mySlides').remove();
+	elements.arrowPrev.classList.add('hidden');
+	elements.arrowNext.classList.add('hidden');
 	document.getElementById('span_overview').click();
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
-	elements.divArrow.classList.add('hidden');
-	current.index = 0;
-	current.screenshots = [];
-	current.url = '';
-	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
-};
-
-function onClickScreenshot() {
-	// todo create a modal with the big screenshot and exit from this mode
-	// $(".arrow_conteiner_small").addClass("arrow_conteiner_big");
-	// $(".arrow_small").removeClass("arrow_big");
-	// $(".arrow_conteiner_small").removeClass(".arrow_conteiner_small");
-	// $(".arrow_small").removeClass(".arrow_small");
 };
 
 function onSelectPreview(target, isOverview) {
@@ -1198,12 +1197,12 @@ function setDivHeight() {
 	if (Ps) Ps.update();
 	// console.log(Math.round(window.devicePixelRatio * 100));
 	if (elements.divScreen) {
-		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + 'px';
+		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 70 + 'px';
 		elements.divScreen.style.height = height;
 		elements.divScreen.style.maxHeight = height;
 		if (isIE) {
-			elements.imgScreenshot.style.maxHeight = height;
-			elements.imgScreenshot.style.maxWidth = elements.divScreen.clientWidth + 'px';
+			// elements.imgScreenshot.style.maxHeight = height;
+			// elements.imgScreenshot.style.maxWidth = elements.divScreen.clientWidth + 'px';
 		}
 	}
 };
@@ -1272,8 +1271,8 @@ function changeIcons() {
 		let guid = arr[i].getAttribute('data-guid');
 		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
 	}
-	let guid = elements.imgIcon.parentNode.parentNode.getAttribute('data-guid');
-	elements.imgIcon.setAttribute('src', getImageUrl(guid, true, true, 'img_icon'));
+	let guid = elements.imgIcon.parentNode.parentNode.parentNode.getAttribute('data-guid');
+	elements.imgIcon.setAttribute('src', getImageUrl(guid, false, true, 'img_icon'));
 };
 
 function getTranslation() {
@@ -1328,7 +1327,7 @@ function onTranslate() {
 	isTranslationLoading = false;
 	// translates elements on current language
 	elements.linkNewPlugin.innerHTML = getTranslated(messages.linkPR);
-	elements.btnMyPlugins.innerHTML = getTranslated('My plugins');
+	elements.btnAvailablePl.innerHTML = getTranslated('Available plugins');
 	elements.btnMarketplace.innerHTML = getTranslated('Marketplace');
 	elements.btnInstall.innerHTML = getTranslated('Install');
 	elements.btnRemove.innerHTML = getTranslated('Remove');
@@ -1336,7 +1335,7 @@ function onTranslate() {
 	elements.btnUpdateAll.innerHTML = getTranslated('Update All');
 	elements.inpSearch.placeholder = getTranslated('Search plugins') + '...';
 	document.getElementById('lbl_header').innerHTML = getTranslated('Manage plugins');
-	document.getElementById('span_offered_caption').innerHTML = getTranslated('Offered by') + ': ';
+	document.getElementById('span_offered_caption').innerHTML = getTranslated('Offered by') + ' ';
 	document.getElementById('span_overview').innerHTML = getTranslated('Overview');
 	document.getElementById('span_info').innerHTML = getTranslated('Info & Support');
 	document.getElementById('span_lern').innerHTML = getTranslated('Learn how to use') + ' ';
@@ -1357,7 +1356,7 @@ function onTranslate() {
 	document.getElementById('opt_enter').innerHTML = getTranslated('Entertainment');
 	document.getElementById('opt_com').innerHTML = getTranslated('Communication');
 	document.getElementById('opt_spec').innerHTML = getTranslated('Special abilities');
-	document.getElementById('votes_caption').innerHTML = getTranslated('votes:');
+	document.getElementById('discussion_link').innerHTML = getTranslated('Click to rate');
 	showMarketplace();
 };
 
@@ -1367,10 +1366,11 @@ function showMarketplace() {
 		createSelect();
 		if (isOnline)
 			showListofPlugins(isOnline);
-		else
-			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, false);
+		else {
+			toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, false);
+			toogleLoader(false);
+		}
 			
-		toogleLoader(false);
 		catFiltred = allPlugins;
 		// elements.divBody.classList.remove('hidden');
 		elements.divBody.classList.remove('transparent');
@@ -1724,9 +1724,9 @@ function checkInternet() {
 				if (div)
 					div.onclick();
 			} else if (bshowMarketplace) {
-				toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+				toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
 			} else if (!isDesktop) {
-				toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+				toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, true);
 			}
 			clearInterval(interval);
 			interval = null;
@@ -1751,9 +1751,9 @@ function handeNoInternet() {
 
 	if (!document.getElementsByClassName('div_notification')[0]) {
 		if (bshowMarketplace)
-			toogleView(elements.btnMarketplace, elements.btnMyPlugins, messages.linkPR, true, true);
+			toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
 		else if (!isDesktop)
-			toogleView(elements.btnMyPlugins, elements.btnMarketplace, messages.linkManually, false, true);
+			toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, true);
 	}
 };
 
@@ -1784,7 +1784,7 @@ function parseRatingPage(data) {
 		let percent = average / 5 * 100 + '%';
 		return {
 			total: total,
-			average: average,
+			average: average.toFixed(1),
 			percent: percent
 		};
 	} else {
@@ -1809,4 +1809,31 @@ function checkNoUpdated(bRemove) {
 			elements.btnUpdateAll.classList.add('hidden');
 		}
 	}
+};
+
+function plusSlides(n) {
+	showSlides(slideIndex += n);
+};
+
+function currentSlide(n) {
+	showSlides(slideIndex = n);
+};
+
+function showSlides(n) {
+	let i;
+	let slides = document.getElementsByClassName('mySlides');
+	let dots = document.getElementsByClassName('dot');
+	if (n > slides.length) {slideIndex = 1}    
+	if (n < 1) {slideIndex = slides.length}
+	for (i = 0; i < slides.length; i++) {
+		slides[i].style.display = "none";  
+	}
+	for (i = 0; i < dots.length; i++) {
+		dots[i].className = dots[i].className.replace(' active', '');
+	}
+	if (slides.length)
+		slides[slideIndex-1].style.display = "block";
+
+	if(dots.length)
+		dots[slideIndex-1].className += ' active';
 };
