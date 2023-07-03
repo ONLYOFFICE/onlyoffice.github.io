@@ -145,17 +145,6 @@ label.header {
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* .div_item_hovered_light {
-	border: 1px solid #333 !important;
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-
-}
-
-.div_item_hovered_dark {
-	border: 1px solid #fff !important;
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-} */
-
 .div_description {
 	display: flex;
 	flex-flow: column;
@@ -318,20 +307,6 @@ label.header {
 	margin-top: 25px;
 }
 
-.div_selected_image {
-	margin-bottom: 10px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.image_preview {
-	width:100%;
-	height:100%;
-	object-fit:scale-down;
-	/* pointer-events: all !important; */
-}
-
 .div_selected_info {
 	margin-top: 10px;
 }
@@ -402,64 +377,6 @@ label.header {
 	border-radius: 3px;
 }
 
-.div_arrows {
-	position: absolute;
-	width: 100%;
-}
-
-.arrow_common {
-  display: block;
-  border-top: 2px solid #fff;
-  border-left: 2px solid #fff;
-}
-
-.arrow_right {
-	transform: rotate(135deg);
-	margin-right: 5px;
-}
-
-.arrow_left {
-	transform: rotate(-45deg);
-	margin-left: 5px;
-}
-
-.arrow_conteiner {
-	border-radius: 96px;
-	background: #000;
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.arrow_conteiner_left {
-	left: 3%;
-}
-
-.arrow_conteiner_right {
-	right: 3%;
-}
-
-.arrow_conteiner_small {
-	width: 22px;
-	height: 22px;
-}
-
-.arrow_conteiner_big {
-	width: 40px;
-	height: 40px;
-}
-
-.arrow_small {
-	width: 9px;
-	height: 9px;
-}
-
-.arrow_big {
-	width: 15px;
-	height: 15px;
-}
-
 .div_rating_general {
 	display: flex;
 	margin-top: 6px;
@@ -517,5 +434,116 @@ label.header {
 
 .div_rating_card {
 	height: 15px;
-    align-items: center;
+	align-items: center;
+}
+
+.mySlides {
+	display: none;
+	height: 100%;
+	width: 100%;
+}
+
+.screen {
+	vertical-align: middle;
+	width: 100%;
+	height: 100%;
+}
+
+.slideshow-container {
+	position: relative;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+}
+
+/* buttons next & previous*/
+.prev, .next {
+	cursor: pointer;
+	position: absolute;
+	top: calc(50% - 17px);
+	padding: 12px;
+	transition: 0.3s ease;
+	user-select: none;
+	background: rgba(210,210,215,.64);
+	color: rgba(0,0,0,.56);
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	line-height: 10px;
+	font-weight: 300;
+	font-size: 25px;
+	text-align: center;
+	margin: 0;
+}
+
+.next {
+	right: 5px;
+}
+
+.next::after {
+	content: "❯";
+	margin-right: -0.1em;
+}
+
+.prev {
+	left: 5px;
+}
+
+.prev:after {
+	content: "❮";
+	margin-left: -0.1em;
+}
+
+/* arrow hovered*/
+.prev:hover, .next:hover {
+	background-color: rgba(223,223,227,.6976);
+	color: rgba(0,0,0,.64);
+	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* arrow active*/
+.prev:active, .next:active {
+	background-color: rgba(193,193,198,.6544);
+	color: rgba(0,0,0,.64);
+}
+
+/* points */
+.dot {
+	cursor: pointer;
+	height: 10px;
+	width: 10px;
+	margin: 0 2px;
+	background-color: #999999;
+	border-radius: 50%;
+	display: inline-block;
+	transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+	background-color: #111111;
+}
+
+/* animation */
+.fade {
+	-webkit-animation-name: fade;
+	-webkit-animation-duration: 1.5s;
+	animation-name: fade;
+	animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+	from {opacity: .4} 
+	to {opacity: 1}
+}
+
+@keyframes fade {
+	from {opacity: .4} 
+	to {opacity: 1}
+}
+
+/* For small screens increase font size */
+@media only screen and (max-width: 300px) {
+	.prev, .next {font-size: 11px}
 }

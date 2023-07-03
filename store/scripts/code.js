@@ -16,7 +16,7 @@
  *
  */
 
-const version = '1.0.1';                                             // version of store (will change it when update something in store)
+const version = '1.0.2';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
@@ -24,7 +24,6 @@ let isOnline = true;                                                 // flag int
 isDesktop && checkInternet();                                        // check internet connection (only for desktop)
 let interval = null;                                                 // interval for checking internet connection (if it doesn't work on launch)
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desktop)
-let current = {index: 0, screenshots: [], url: ''};                  // selected plugin (for plugin view)
 let searchTimeout = null;                                            // timeot for search
 let founded = [];                                                    // last founded elemens (for not to redraw if a result is the same)
 let catFiltred = [];                                                 // plugins are filtred by caterogy (used for search)
@@ -48,6 +47,7 @@ let translate = {'Loading': 'Loading'};                              // translat
 let timeout = null;                                                  // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
+let slideIndex = 1;                                                  // index for slides
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -127,8 +127,6 @@ window.onload = function() {
 	}
 	// init element
 	initElemnts();
-	if (isIE)
-		elements.imgScreenshot.classList.remove('image_preview');
 
 	isFrameLoading = false;
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
@@ -145,45 +143,6 @@ window.onload = function() {
 		// click on marketplace button
 		toogleView(event.target, elements.btnAvailablePl, messages.linkPR, true, false);
 	};
-
-	// elements.arrow.onclick = onClickBack;
-
-	// elements.imgScreenshot.onclick = onClickScreenshot;
-	elements.arrowPrev.onclick = function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		if (current.index > 0) {
-			// todo maybe show loader
-			current.index--;
-			let url = current.url + current.screenshots[current.index];
-			elements.imgScreenshot.setAttribute('src', url);
-			elements.imgScreenshot.onload = function() {
-				elements.arrowNext.classList.remove('hidden');
-				// todo maybe hide loader
-			}
-			if (!current.index)
-				elements.arrowPrev.classList.add('hidden');
-		}
-	};
-
-	elements.arrowNext.onclick = function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		if (current.index < current.screenshots.length - 1) {
-			// todo maybe show loader
-			current.index++;
-			let url = current.url + current.screenshots[current.index];
-			elements.imgScreenshot.setAttribute('src', url);
-			elements.imgScreenshot.onload = function() {
-				elements.arrowPrev.classList.remove('hidden');
-				// todo maybe hide loader
-			}
-			if (current.index == current.screenshots.length - 1)
-				elements.arrowNext.classList.add('hidden');
-		} 
-	};
-
-	// elements.divArrow.onclick = onClickScreenshot;
 
 	elements.inpSearch.addEventListener('input', function(event) {
 		makeSearch(event.target.value.trim().toLowerCase());
@@ -406,7 +365,7 @@ window.addEventListener('message', function(message) {
 			// get all installed plugins
 			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
-			break;
+			break;makeRequestre
 		case 'onClickBack':
 			onClickBack();
 			break;
@@ -474,7 +433,7 @@ function makeRequest(url, method, responseType, body, bHandeNoInternet) {
 
 function makeDesktopRequest(_url) {
 	// function for getting rating page in desktop
-	return new Promise((resolve, reject) => {
+	return new Promise(function(resolve, reject) {
 		if ( !_url.startsWith('http') ) {
 			resolve({status:'skipped', response: {statusText: _url}});
 		} else {
@@ -536,7 +495,6 @@ function initElemnts() {
 	elements.btnRemove = document.getElementById('btn_remove');
 	elements.btnInstall = document.getElementById('btn_install');
 	elements.spanSelectedDescr = document.getElementById('span_selected_description');
-	elements.imgScreenshot = document.getElementById('image_screenshot');
 	elements.linkPlugin = document.getElementById('link_plugin');
 	elements.divScreen = document.getElementById("div_selected_image");
 	elements.divGitLink = document.getElementById('div_github_link');
@@ -546,9 +504,6 @@ function initElemnts() {
 	elements.divMinVersion = document.getElementById('div_min_version');
 	elements.spanLanguages = document.getElementById('span_langs');
 	elements.divLanguages = document.getElementById('div_languages');
-	elements.divArrow = document.getElementById('div_arrows');
-	elements.arrowPrev = document.getElementById('arrow_prev');
-	elements.arrowNext = document.getElementById('arrow_next');
 	elements.inpSearch = document.getElementById('inp_search');
 	elements.btnUpdateAll = document.getElementById('btn_updateAll');
 	elements.divRatingLink = document.getElementById('div_rating_link');
@@ -556,6 +511,9 @@ function initElemnts() {
 	elements.ratingStars = document.getElementById('div_rating_stars');
 	elements.totalVotes = document.getElementById('total_votes');
 	elements.divVotes = document.getElementById('div_votes');
+	elements.arrowPrev = document.getElementById('prev_arrow');
+	elements.arrowNext = document.getElementById('next_arrow');
+
 };
 
 function toogleLoader(show, text) {
@@ -1039,20 +997,34 @@ function onClickItem() {
 	let bCorrectUrl = isDesktop || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
-		current.screenshots = plugin.variations[0].store.screenshots;
-		current.index = 0;
-		current.url = plugin.baseUrl;
-		let url = current.url + current.screenshots[current.index];
-		elements.imgScreenshot.setAttribute('src', url);
-		elements.imgScreenshot.onload = function() {
-			elements.imgScreenshot.classList.remove('hidden');
-			if (current.screenshots.length > 1)
-				elements.divArrow.classList.remove('hidden');
-			setDivHeight();
+		let arrScreens = plugin.variations[0].store.screenshots;
+		arrScreens.forEach(function(screenUrl, ind) {
+			let url = plugin.baseUrl + screenUrl;
+			let container = document.createElement('div');
+			container.className = 'mySlides fade';
+			let screen = document.createElement('img');
+			screen.className = 'screen';
+			screen.setAttribute('src', url);
+			container.appendChild(screen);
+			document.getElementById('div_selected_container').insertBefore(container, elements.arrowPrev);
+			if (arrScreens.length > 1) {
+				let point = document.createElement('span');
+				point.className = 'dot';
+				point.onclick = function() {
+					currentSlide(ind+1);
+				};
+				document.getElementById('points_container').appendChild(point);
+			}
+		});
+		if (arrScreens.length > 1) {
+			elements.arrowPrev.classList.remove('hidden');
+			elements.arrowNext.classList.remove('hidden');
 		}
+		slideIndex = 1;
+		showSlides(1);
 	} else {
-		elements.imgScreenshot.classList.add('hidden');
-		elements.divArrow.classList.add('hidden');
+		elements.arrowPrev.classList.remove('hidden');
+		elements.arrowNext.classList.remove('hidden');
 	}
 
 	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
@@ -1128,6 +1100,7 @@ function onClickItem() {
 	elements.divSelected.classList.remove('hidden');
 	elements.divSelectedMain.classList.remove('hidden');
 	elements.divBody.classList.add('hidden');
+	setDivHeight();
 	sendMessage( { type : "showButton", show : true } );
 	// elements.arrow.classList.remove('hidden');
 };
@@ -1135,25 +1108,15 @@ function onClickItem() {
 function onClickBack() {
 	// click on left arrow in preview mode
 	elements.imgIcon.style.display = 'none';
-	elements.imgScreenshot.setAttribute('src','')
+	$('.dot').remove();
+	$('.mySlides').remove();
+	elements.arrowPrev.classList.add('hidden');
+	elements.arrowNext.classList.add('hidden');
 	document.getElementById('span_overview').click();
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
-	elements.divArrow.classList.add('hidden');
-	current.index = 0;
-	current.screenshots = [];
-	current.url = '';
-	// elements.arrow.classList.add('hidden');
 	if(Ps) Ps.update();
-};
-
-function onClickScreenshot() {
-	// todo create a modal with the big screenshot and exit from this mode
-	// $(".arrow_conteiner_small").addClass("arrow_conteiner_big");
-	// $(".arrow_small").removeClass("arrow_big");
-	// $(".arrow_conteiner_small").removeClass(".arrow_conteiner_small");
-	// $(".arrow_small").removeClass(".arrow_small");
 };
 
 function onSelectPreview(target, isOverview) {
@@ -1220,12 +1183,12 @@ function setDivHeight() {
 	if (Ps) Ps.update();
 	// console.log(Math.round(window.devicePixelRatio * 100));
 	if (elements.divScreen) {
-		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 40 + 'px';
+		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 70 + 'px';
 		elements.divScreen.style.height = height;
 		elements.divScreen.style.maxHeight = height;
 		if (isIE) {
-			elements.imgScreenshot.style.maxHeight = height;
-			elements.imgScreenshot.style.maxWidth = elements.divScreen.clientWidth + 'px';
+			// elements.imgScreenshot.style.maxHeight = height;
+			// elements.imgScreenshot.style.maxWidth = elements.divScreen.clientWidth + 'px';
 		}
 	}
 };
@@ -1832,4 +1795,31 @@ function checkNoUpdated(bRemove) {
 			elements.btnUpdateAll.classList.add('hidden');
 		}
 	}
+};
+
+function plusSlides(n) {
+	showSlides(slideIndex += n);
+};
+
+function currentSlide(n) {
+	showSlides(slideIndex = n);
+};
+
+function showSlides(n) {
+	let i;
+	let slides = document.getElementsByClassName('mySlides');
+	let dots = document.getElementsByClassName('dot');
+	if (n > slides.length) {slideIndex = 1}    
+	if (n < 1) {slideIndex = slides.length}
+	for (i = 0; i < slides.length; i++) {
+		slides[i].style.display = "none";  
+	}
+	for (i = 0; i < dots.length; i++) {
+		dots[i].className = dots[i].className.replace(' active', '');
+	}
+	if (slides.length)
+		slides[slideIndex-1].style.display = "block";
+
+	if(dots.length)
+		dots[slideIndex-1].className += ' active';
 };
