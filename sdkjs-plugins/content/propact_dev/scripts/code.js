@@ -26,6 +26,7 @@
 
 		document.addEventListener('myCustomEvent', (event) => {
 			const data = event.detail; // Retrieve the data sent from ngx-onlyoffice
+			console.log('data', data);
 			// Handle the data in your custom plugin
 		});
 
