@@ -34,9 +34,9 @@
 		const btnMarkupMode = document.getElementById('btnMarkupMode');
 		btnMarkupMode.addEventListener('click', function () {
 
-			var data = "Your data to transmit";
-			console.log('data', data);
-			window.parent.postMessage(data, "*");
+			const dataToTransmit = { key: 'value' };
+			console.log('dataToTransmit', dataToTransmit);
+			this.eventEmitter.emit('onlyOfficeData', dataToTransmit);
 
 
 			// Retrieve data from LocalStorage
