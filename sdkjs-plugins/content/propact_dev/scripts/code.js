@@ -33,6 +33,12 @@
 
 		const btnMarkupMode = document.getElementById('btnMarkupMode');
 		btnMarkupMode.addEventListener('click', function () {
+
+			var data = "Your data to transmit";
+			console.log('data', data);
+			window.parent.postMessage(data, "*");
+
+
 			// Retrieve data from LocalStorage
 			var myData = localStorage.getItem('applicationAccessToken');
 
