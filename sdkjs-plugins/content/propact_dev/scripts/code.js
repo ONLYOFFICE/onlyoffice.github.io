@@ -24,6 +24,12 @@
     window.Asc.plugin.init = function(text)
     {
 
+		document.addEventListener('myCustomEvent', (event) => {
+			const data = event.detail; // Retrieve the data sent from ngx-onlyoffice
+			// Handle the data in your custom plugin
+		});
+
+
 		const btnMarkupMode = document.getElementById('btnMarkupMode');
 		btnMarkupMode.addEventListener('click', function () {
 			// Retrieve data from LocalStorage
