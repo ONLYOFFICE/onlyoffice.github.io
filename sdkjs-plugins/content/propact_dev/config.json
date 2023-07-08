@@ -27,10 +27,10 @@
 					}
 				}
 			],
-            "isViewer"        : false,
+            "isViewer"        : true,
             "EditorsSupport"  : ["word"],
 
-            "isVisual"        : true,
+            "isVisual"        : false,
             "isModal"         : false,
             "isInsideMode"    : true,
 
