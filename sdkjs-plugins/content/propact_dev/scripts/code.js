@@ -128,7 +128,7 @@
 		const varBtnRedirectClauseListsB = document.getElementById('btnRedirectClauseListsB');
 		varBtnRedirectClauseListsB.addEventListener('click', function () {
 			document.getElementById('divContractLists').classList.remove('d-none');
-			document.getElementById('divContractChatHistory').classList.add('d-none');
+			document.getElementById('divContractSameSideChat').classList.add('d-none');
 		});
 		// Contract sameside chat screen
 		// Plugin Code - End CM //
