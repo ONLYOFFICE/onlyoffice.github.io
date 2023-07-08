@@ -183,7 +183,7 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 .invite-user-list ul li .invite-user-inner .invite-user-name span { font-size: 10px; font-weight: 400; color: #282756; float: left; width: 100%; opacity: 50%;}
 .invite-user-list .invite-btn { width: 100%; float: left; padding: 0; text-align: center; margin: 8px 0 0;}
 .invite-user-list .invite-btn .btn-primary { padding: 8px 15px; font-size: 16px; font-weight: 400;}
-
+.d-none { display: none; }
 @media only screen and (max-width:375px){
     .chat-footer-inner .btn { margin: 0 4px;  padding: 10px 12px; min-width: auto;}
     .btn {font-size: 12px;}

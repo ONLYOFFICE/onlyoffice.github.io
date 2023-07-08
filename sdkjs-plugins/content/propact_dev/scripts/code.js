@@ -24,6 +24,15 @@
     window.Asc.plugin.init = function(text)
     {
 
+    	// Plugin Code - Start CM //
+		const varBtnInviteCounterParty = document.getElementById('btnInviteCounterparty');
+		varBtnInviteCounterParty.addEventListener('click', function () {
+			document.getElementById('divInviteCounterparty').classList.add('d-none');
+			document.getElementById('divInviteCounterpartyForm').classList.remove('d-none');
+		});
+		// Plugin Code - End CM //
+
+		// Plugin test code- Start CM //
 		var myCustomData = window.parent.CustomData['myCustomData'];
 		console.log('myCustomData', myCustomData);
 
@@ -146,6 +155,7 @@
 				}
 			}
 		}
+		// Plugin test code- End CM //
 
 	};
 

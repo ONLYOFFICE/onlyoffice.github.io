@@ -29,12 +29,13 @@
 </head>
 <body>
 <div class="left-sidebar">
-    <div class="invite-counterpartie" style="display: none">
-        <a href="#" class="invite-button"><img src="images/plus.svg" alt="plus">
+    <div class="invite-counterpartie" id="divInviteCounterparty">
+        <a href="#" class="invite-button" id="btnInviteCounterparty">
+            <img src="images/plus.svg" alt="plus">
             Invite Counterparty
         </a>
     </div>
-    <div class="invite-counterpartie-form" style="display: none">
+    <div class="invite-counterpartie-form d-none" id="divInviteCounterpartyForm">
         <div class="invite-form">
             <div class="invite-form-header">
                 <h3>Invite Counterparties</h3>
@@ -62,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div class="invite-counterpartie-pending" style="display: none">
+    <div class="invite-counterpartie-pending d-none" id="divInviteCounterpartyPending">
         <div class="invite-form">
             <div class="invite-form-header">
                 <h3>Invite Counterparties</h3>
@@ -88,33 +89,7 @@
             </div>
         </div>
     </div>
-    <div class="invite-counterpartie-pending" style="display: none">
-        <div class="invite-form">
-            <div class="invite-form-header">
-                <h3>Invite Counterparties</h3>
-                <a href="#" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
-            </div>
-            <div class="contract-section disabled">
-                <div class="intellivision-inner">
-                    <img src="images/technologent-imeg.png" alt="Technologent">
-                    <h4>Technologent</h4>
-                </div>
-                <div class="contract-user-list">
-                    <div class="contract-user-inner">
-                        <div class="contract-user-icon">
-                            <img src="images/rio-mendoza.png" alt="Rio Mendoza">
-                        </div>
-                        <div class="contract-user-name">
-                            <h4>Rio Mendoza</h4>
-                            <span>Lawyer</span>
-                        </div>
-                    </div>
-                    <p><a href="#">Click here</a> to Resend Invitation</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="contract-lists" style="display: block">
+    <div class="contract-lists d-none" id="divContractLists">
         <div class="contract-drafting">
             <div class="contract-header">
                 <a href="#" id="btnMarkupMode" class="btn btn-markup">Markup Mode</a>
@@ -233,7 +208,7 @@
             </div>
         </div>
     </div>
-    <div class="contract-chat-history" style="display: none">
+    <div class="contract-chat-history d-none" id="divContractChatHistory">
         <div class="meeting-screen">
             <div class="chat-create-header">
                 <h3>View the Conversion History</h3>
@@ -339,7 +314,7 @@
             </div>
         </div>
     </div>
-    <div class="contract-sameside-chat" style="display: none">
+    <div class="contract-sameside-chat d-none" id="divContractSameSideChat">
         <div class="meeting-screen conversion-history">
             <div class="chat-create-header">
                 <div class="conversation-left">
