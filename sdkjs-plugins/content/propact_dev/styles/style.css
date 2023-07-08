@@ -13,7 +13,7 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 /* ======================================= Editor Css ======================================= */
 .btn {width: auto; display: inline-block; margin: 0; padding: 10px 18px; border: 0; font-size: 14px; color: #282756; font-weight: 400; font-family: 'Poppins', sans-serif; border-radius: 4px; min-width: 86px; text-align: center;}
 .btn-secondary {background: #E5E5E5;}
-.btn-primary { background: #282756; color: #fff; }
+.btn-primary { background: #282756; color: #fff !important; }
 .form-group {width: 100%; margin: 0 0 20px 0; padding: 0; float: left;}
 .form-group label { font-size: 12px; font-weight: 500; color: #282756; display: flex; margin: 0 0 6px 0; padding: 0; width: 100%;}
 .form-group .form-control {width: 100%; margin: 0; padding: 0 12px; border: 1px solid #DADDE0;  border-radius: 5px; height: 50px; font-size: 12px; color: #282756; font-weight: 400; font-family: 'Poppins', sans-serif; outline: none !important;}
