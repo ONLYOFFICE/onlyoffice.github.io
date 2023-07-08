@@ -135,8 +135,8 @@
 		// Plugin Code - End CM //
 
 		// Plugin test code- Start CM //
-		var myCustomData = window.parent.CustomData['myCustomData'];
-		console.log('myCustomData', myCustomData);
+		// var myCustomData = window.parent.CustomData['myCustomData'];
+		// console.log('myCustomData', myCustomData);
 
 
 		const btnMarkupMode = document.getElementById('btnMarkupMode');
