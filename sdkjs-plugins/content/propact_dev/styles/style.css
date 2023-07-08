@@ -17,13 +17,13 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 .form-group {width: 100%; margin: 0 0 20px 0; padding: 0; float: left;}
 .form-group label { font-size: 12px; font-weight: 500; color: #282756; display: flex; margin: 0 0 6px 0; padding: 0; width: 100%;}
 .form-group .form-control {width: 100%; margin: 0; padding: 0 12px; border: 1px solid #DADDE0;  border-radius: 5px; height: 50px; font-size: 12px; color: #282756; font-weight: 400; font-family: 'Poppins', sans-serif; outline: none !important;}
-.form-group select.form-control { background-image: url(../images/select_Icon.svg); background-repeat: no-repeat; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: 0.375rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; background-position: 97%; padding-right: 40px;}
+.form-group select.form-control { background-image: url(../images/select_Icon.svg); background-repeat: no-repeat; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: 0.375rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; background-position: 99.5%; padding-right: 0px;}
 
 .left-sidebar { width: 100%; margin: 0; padding: 0; display: flex; flex-wrap: wrap; background: #FFFFFF; height: 100vh; max-width: 100%; overflow: hidden;}
 .invite-counterpartie { width: 100%; margin: 0; padding: 20px; float: left; height: auto;}
 .invite-counterpartie .invite-button { display: flex; width: 100%; margin: 0; padding: 18px 18px; text-align: center; border: 1px dashed #A2A6A7; font-size: 14px; color: #282756;  font-weight: 400; line-height: normal; border-radius: 4px; justify-content: center; align-items: center;}
 .invite-counterpartie .invite-button img {margin: 0 12px 0 0;}
-.invite-counterpartie-form, .invite-counterpartie-pending, .contract-sameside-chat { width: 100%; }
+.invite-counterpartie-form, .invite-counterpartie-pending, .contract-sameside-chat, .contract-create-form, .contract-chat-history { width: 100%; }
 .invite-form{width: 100%; float: left; margin: 0; padding: 0;}
 .invite-form .invite-form-header { width: 100%; margin: 0; padding: 13px 20px; display: flex; align-items: center; justify-content: space-between; background: #F5F9FF;}
 .invite-form-header h3 {margin: 0; padding:0 15px 0 0; font-size: 14px; color: #282756; font-weight: 600; }
@@ -133,6 +133,7 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 .chat-create-footer { width: 100%; float: left; margin: 0; padding: 12px 20px 20px;}
 .chat-footer-inner { display: flex; justify-content: center; margin: 0; padding: 0; width: 100%; flex-wrap: wrap;}
 .chat-footer-inner .btn { border: 1px solid #282756; margin: 0 8px; background: transparent; color: #282756; opacity: 1; padding: 10px 12px; min-width: 157px;}
+.chat-footer-inner .btn:hover { cursor: pointer; }
 
 
 .chat-body .chat-area .grey-color .message-content {background:#F3F3F3;}

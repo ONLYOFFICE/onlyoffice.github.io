@@ -30,7 +30,7 @@
 <body>
 <div class="left-sidebar">
     <div class="invite-counterpartie" id="divInviteCounterparty">
-        <a href="#" class="invite-button" id="btnInviteCounterparty">
+        <a href="#" class="invite-button" id="btnRedirectInviteCounterpartyForm">
             <img src="images/plus.svg" alt="plus">
             Invite Counterparty
         </a>
@@ -39,7 +39,7 @@
         <div class="invite-form">
             <div class="invite-form-header">
                 <h3>Invite Counterparties</h3>
-                <a href="#" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+                <a href="#" class="close-btn" id="btnRedirectInviteCounterparty"><img src="images/close.svg" alt="Close Icon"> </a>
             </div>
             <div class="form-inner">
                 <form>
@@ -57,8 +57,8 @@
                     </div>
                 </form>
                 <div class="submit-btn">
-                    <a class="btn btn-secondary" href="#">Cancel</a>
-                    <a class="btn btn-primary" href="#">Invite</a>
+                    <a class="btn btn-secondary" href="#" id="btnRedirectInviteCounterpartyCancel">Cancel</a>
+                    <a class="btn btn-primary" href="#" id="btnRedirectInviteCounterpartySubmit">Invite</a>
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@
                             <span>Lawyer</span>
                         </div>
                     </div>
-                    <p><a href="#">Click here</a> to Resend Invitation</p>
+                    <p><a href="#" id="btnResendVerification">Click here</a> to Resend Invitation</p>
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
         <div class="contract-drafting">
             <div class="contract-header">
                 <a href="#" id="btnMarkupMode" class="btn btn-markup">Markup Mode</a>
-                <a href="#" class="btn btn-primary" style="color: #fff;">Create Clause</a>
+                <a href="#" class="btn btn-primary" id="btnCreateClause" style="color: #fff;">Create Clause</a>
             </div>
             <div class="contract-list">
                 <div class="contract-search">
@@ -208,11 +208,56 @@
             </div>
         </div>
     </div>
+    <div class="contract-create-form d-none" id="divContractCreate">
+        <div class="create-contract">
+            <div class="create-contract-header">
+                <div class="conversation-left">
+                    <span class="user-icon">
+                        <img src="images/profile-image.png" alt="">
+                    </span>
+                    <div class="user-inner">
+                        <span class="user-name">Jane Nelson</span>
+                        <p>Lawyer</p>
+                    </div>
+                </div>
+                <a href="#" class="close-btn" id="btnContractCreateClose">
+                    <img src="images/close.svg" alt="Close Icon">
+                </a>
+            </div>
+            <div class="create-contract-inner">
+                <form>
+                    <div class="form-group">
+                        <label class="">Clause</label>
+                        <input type="text" class="form-control" placeholder="Sed Diam Nonumy Eirmod Tempor.">
+                    </div>
+                    <div class="form-group">
+                        <label class="">Clause Description</label>
+                        <textarea class="form-control" placeholder="Hi guys Please review this clause and let me know your thoughts. I’m concerned about the “terms and conditions reasonably acceptable to the Buyer” in sub (b)."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Email</label>
+                        <select class="form-control">
+                            <option value="volvo">Select users and teams</option>
+                            <option value="saab">Saab</option>
+                            <option value="fiat">Fiat</option>
+                            <option value="audi">Audi</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="submit-btn">
+                    <a class="btn btn-secondary" href="#" id="btnContractCreateCancel">Cancel</a>
+                    <a class="btn btn-primary" href="#" id="btnRedirectClauseLists">Review Clause</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="contract-chat-history d-none" id="divContractChatHistory">
         <div class="meeting-screen">
             <div class="chat-create-header">
                 <h3>View the Conversion History</h3>
-                <a href="contract-drafting.html" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+                <a href="#" class="close-btn" id="btnRedirectClauseListsA">
+                    <img src="images/close.svg" alt="Close Icon">
+                </a>
             </div>
             <div class="chat-body">
                 <div class="chat-area">
@@ -229,7 +274,7 @@
                             <div class="message">Hi guys <br> Please review this clause and let me <br> know your thoughts. <br> I’m concerned about the “terms and <br> conditions.</div>
                         </div>
                     </div>
-                    <div class="message-wrapper reverse">
+                    <div class="message-wrapper reverse d-none">
                         <div class="profile-picture">
                             <p class="last-seen">10:39 am</p>
                             <p class="name">Bob Miller</p>
@@ -239,7 +284,7 @@
                             <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than that. How <br> about we get them to agree to all <br> assignment terms as we go. There <br> are only 6 contracts to which this <br> will apply anyway</div>
                         </div>
                     </div>
-                    <div class="message-wrapper reverse">
+                    <div class="message-wrapper reverse d-none">
                         <div class="profile-picture">
                             <p class="last-seen">10:52 am</p>
                             <p class="name">Bill Andrews</p>
@@ -249,7 +294,7 @@
                             <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than that. How <br> about we get them to agree to all <br> assignment terms as we go. There <br> are only 6 contracts to which this <br> will apply anyway</div>
                         </div>
                     </div>
-                    <div class="message-wrapper dark-gold-color">
+                    <div class="message-wrapper dark-gold-color d-none">
                         <div class="profile-picture">
                             <img src="images/profile-image.png" alt="pp">
                             <p class="name">Jane Nelson</p>
@@ -260,7 +305,7 @@
                             <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
                         </div>
                     </div>
-                    <div class="message-wrapper light-gold-color">
+                    <div class="message-wrapper light-gold-color d-none">
                         <div class="profile-picture">
                             <img src="images/linkedin-sales3.png" alt="pp">
                             <p class="name">Rio Mendoza</p>
@@ -270,7 +315,7 @@
                             <div class="message">We have got this proposal on sub <br> (b) clause 10.1 from the Seller. In my <br> view it is ok but it should be 28 days <br> not 14 and instead of “reasonable <br> endeavours” it should be “best <br> endeavours”. Your thoughts?</div>
                         </div>
                     </div>
-                    <div class="message-wrapper reverse dudhiya-color">
+                    <div class="message-wrapper reverse dudhiya-color d-none">
                         <div class="profile-picture">
                             <p class="last-seen">10:39 am</p>
                             <p class="name">Bob Miller</p>
@@ -308,8 +353,8 @@
             </div>
             <div class="chat-create-footer">
                 <div class="chat-footer-inner">
-                    <button class="btn">Go to same side</button>
-                    <button class="btn">Go to counterparty</button>
+                    <button class="btn" id="btnGoToSameSideChat">Go to same side</button>
+                    <button class="btn" id="btnGoToCounterparty">Go to counterparty</button>
                 </div>
             </div>
         </div>
@@ -402,7 +447,9 @@
                         </li>
 
                     </ul>
-                    <a href="contract-drafting.html" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
+                    <a href="#" class="close-btn" id="btnRedirectClauseListsB">
+                        <img src="images/close.svg" alt="Close Icon">
+                    </a>
                 </div>
             </div>
             <div class="chat-body">
@@ -450,7 +497,7 @@
                     <textarea type="textarea" placeholder="Thanks Bill and Bob. That makes sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days..." class="form-control"></textarea>
                 </div>
                 <div class="chat-footer-inner">
-                    <button class="btn">Go to counterparty</button>
+                    <button class="btn" id="btnGoToCounterpartyA">Go to counterparty</button>
                     <div class="send-btn">
                         <button class="btn-primary attach"><img src="images/attach-icon.svg" alt=""></button>
                         <button class="btn-primary"><img src="images/send-icon.svg" alt=""> Send</button>
