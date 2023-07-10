@@ -40,7 +40,9 @@
 		// Set documentID in localstorage
 
 		// Get contract details
-		getOpenContractUserDetails();
+		if (documentID) {
+			getOpenContractUserDetails();
+		}
 		// Get contract details
 
 		// Invite counterparty screen
