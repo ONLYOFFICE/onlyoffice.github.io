@@ -24,8 +24,9 @@
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
     <link rel="stylesheet" href="styles/font-awesome.min.css">
     <link rel="stylesheet" href="styles/style.css">
-    <script type="text/javascript" src="scripts/code.js"></script>
     <script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="scripts/code.js"></script>
 </head>
 <body>
 <div class="left-sidebar">
@@ -39,27 +40,34 @@
         <div class="invite-form">
             <div class="invite-form-header">
                 <h3>Invite Counterparties</h3>
-                <a href="#" class="close-btn" id="btnRedirectInviteCounterparty"><img src="images/close.svg" alt="Close Icon"> </a>
+                <a href="#" class="close-btn" id="btnRedirectInviteCounterparty"><img src="images/close.svg"
+                                                                                      alt="Close Icon"> </a>
             </div>
             <div class="form-inner">
-                <form>
+                <form id="inviteForm" method="get" action>
                     <div class="form-group">
                         <label class="">First name</label>
-                        <input type="text" class="form-control" placeholder="Enter first name">
+                        <input type="text" class="form-control" placeholder="First name" name="firstName" required>
                     </div>
                     <div class="form-group">
                         <label class="">Last Name</label>
-                        <input type="text" class="form-control" placeholder="Enter last name">
+                        <input type="text" class="form-control" placeholder="Last name" name="lastName" required>
                     </div>
                     <div class="form-group">
                         <label class="">Email</label>
-                        <input type="email" class="form-control" placeholder="Enter email">
+                        <input type="email" class="form-control" placeholder="Email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Organisation name</label>
+                        <input type="text" class="form-control" placeholder="Organisation name" name="organisationName" required>
+                    </div>
+
+                    <div class="submit-btn">
+                        <a class="btn btn-secondary" href="#" id="btnRedirectInviteCounterpartyCancel">Cancel</a>
+                        <!--                    <a class="btn btn-primary" href="#" id="btnRedirectInviteCounterpartySubmit">Invite</a>-->
+                        <button class="btn btn-primary" type="submit">Invite</button>
                     </div>
                 </form>
-                <div class="submit-btn">
-                    <a class="btn btn-secondary" href="#" id="btnRedirectInviteCounterpartyCancel">Cancel</a>
-                    <a class="btn btn-primary" href="#" id="btnRedirectInviteCounterpartySubmit">Invite</a>
-                </div>
             </div>
         </div>
     </div>
@@ -69,22 +77,22 @@
                 <h3>Invite Counterparties</h3>
                 <a href="#" class="close-btn"><img src="images/close.svg" alt="Close Icon"> </a>
             </div>
-            <div class="contract-section disabled">
+            <div class="contract-section disabled" id="contractCounterpartySection">
                 <div class="intellivision-inner">
-                    <img src="images/technologent-imeg.png" alt="Technologent">
-                    <h4>Technologent</h4>
+                    <img id="organizationImage" src="images/org-placeholder.png" alt="Organization">
+                    <h4 id="organizationName">Organization</h4>
                 </div>
                 <div class="contract-user-list">
                     <div class="contract-user-inner">
                         <div class="contract-user-icon">
-                            <img src="images/rio-mendoza.png" alt="Rio Mendoza">
+                            <img id="counterpartyImage" src="images/no-profile-image.jpg" alt="Rio Mendoza">
                         </div>
                         <div class="contract-user-name">
-                            <h4>Rio Mendoza</h4>
-                            <span>Lawyer</span>
+                            <h4 id="counterpartyName">Counterparty User</h4>
+                            <span id="counterpartyRole">Counterparty</span>
                         </div>
                     </div>
-                    <p><a href="#" id="btnResendVerification">Click here</a> to Resend Invitation</p>
+                    <p id="invitationActionPara"><a href="#" id="btnResendVerification">Click here</a> to resend invitation OR <a href="#" id="btnCancelInvitation">Cancel</a></p>
                 </div>
             </div>
         </div>
@@ -107,7 +115,8 @@
                         <a href="#">
                             <div class="contract-top">
                                 <h3>Clause 1.2</h3>
-                                <p>In publishing and graphic design, lorem ipsum is a placeholder text commonly used to demonstrate the visual...</p>
+                                <p>In publishing and graphic design, lorem ipsum is a placeholder text commonly used to
+                                    demonstrate the visual...</p>
                                 <button class="btn brown-color">Under Negotiation</button>
                             </div>
                             <div class="contract-foot">
@@ -134,7 +143,8 @@
                         <a href="#">
                             <div class="contract-top">
                                 <h3>Clause 2.4</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna...</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna...</p>
                                 <button class="btn fuchsia-color">Drafting</button>
                             </div>
                             <div class="contract-foot">
@@ -161,7 +171,8 @@
                         <a href="#">
                             <div class="contract-top">
                                 <h3>Clause 3.0</h3>
-                                <p>In publishing and graphic design, lorem ipsum is a placeholder text commonly used to demonstrate the visual...</p>
+                                <p>In publishing and graphic design, lorem ipsum is a placeholder text commonly used to
+                                    demonstrate the visual...</p>
                                 <button class="btn fuchsia-color">Drafting</button>
                             </div>
                             <div class="contract-foot">
@@ -188,7 +199,8 @@
                         <a href="#">
                             <div class="contract-top">
                                 <h3>Clause 4</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna...</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna...</p>
                                 <button class="btn success-color">Completed</button>
                             </div>
                             <div class="contract-foot">
@@ -232,7 +244,8 @@
                     </div>
                     <div class="form-group">
                         <label class="">Clause Description</label>
-                        <textarea class="form-control" placeholder="Hi guys Please review this clause and let me know your thoughts. I’m concerned about the “terms and conditions reasonably acceptable to the Buyer” in sub (b)."></textarea>
+                        <textarea class="form-control"
+                                  placeholder="Hi guys Please review this clause and let me know your thoughts. I’m concerned about the “terms and conditions reasonably acceptable to the Buyer” in sub (b)."></textarea>
                     </div>
                     <div class="form-group">
                         <label class="">Email</label>
@@ -271,7 +284,9 @@
                             <img src="images/profile-image.png" alt="pp">
                         </div>
                         <div class="message-content">
-                            <div class="message">Hi guys <br> Please review this clause and let me <br> know your thoughts. <br> I’m concerned about the “terms and <br> conditions.</div>
+                            <div class="message">Hi guys <br> Please review this clause and let me <br> know your
+                                thoughts. <br> I’m concerned about the “terms and <br> conditions.
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper reverse d-none">
@@ -281,7 +296,11 @@
                             <img src="images/linkedin-sales.png" alt="pp">
                         </div>
                         <div class="message-content">
-                            <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than that. How <br> about we get them to agree to all <br> assignment terms as we go. There <br> are only 6 contracts to which this <br> will apply anyway</div>
+                            <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing
+                                will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than
+                                that. How <br> about we get them to agree to all <br> assignment terms as we go. There
+                                <br> are only 6 contracts to which this <br> will apply anyway
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper reverse d-none">
@@ -291,7 +310,11 @@
                             <img src="images/linkedin-sales1.png" alt="pp">
                         </div>
                         <div class="message-content">
-                            <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than that. How <br> about we get them to agree to all <br> assignment terms as we go. There <br> are only 6 contracts to which this <br> will apply anyway</div>
+                            <div class="message">Hi @Jane Nelson <br>Yep, that's concerning for us too. <br> Nothing
+                                will be "reasonably <br> acceptable" to these guys. We need <br> to make it cleaner than
+                                that. How <br> about we get them to agree to all <br> assignment terms as we go. There
+                                <br> are only 6 contracts to which this <br> will apply anyway
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper dark-gold-color d-none">
@@ -302,7 +325,9 @@
                         </div>
                         <div class="message-content">
                             <h4>Sent a position confirmation <br> request</h4>
-                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
+                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br>
+                                approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper light-gold-color d-none">
@@ -312,7 +337,10 @@
                             <p class="last-seen">10:05 am</p>
                         </div>
                         <div class="message-content">
-                            <div class="message">We have got this proposal on sub <br> (b) clause 10.1 from the Seller. In my <br> view it is ok but it should be 28 days <br> not 14 and instead of “reasonable <br> endeavours” it should be “best <br> endeavours”. Your thoughts?</div>
+                            <div class="message">We have got this proposal on sub <br> (b) clause 10.1 from the Seller.
+                                In my <br> view it is ok but it should be 28 days <br> not 14 and instead of “reasonable
+                                <br> endeavours” it should be “best <br> endeavours”. Your thoughts?
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper reverse dudhiya-color d-none">
@@ -323,7 +351,9 @@
                         </div>
                         <div class="message-content">
                             <h4>Sent a position confirmation <br> request</h4>
-                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
+                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br>
+                                approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.
+                            </div>
                         </div>
                         <strong>Position Approved By Bob Miller</strong>
                     </div>
@@ -334,7 +364,11 @@
                             <img src="images/linkedin-sales.png" alt="pp">
                         </div>
                         <div class="message-content">
-                            <div class="message">Hi @Bob Miller, They have rejected <br> our proposal and send an counter <br> proposal with condition "Proposal <br> agree to change to sub (b) as <br> proposed above but with <br> “reasonable endeavours” becoming <br> “best endeavours”". What is your <br> thoughts on this?</div>
+                            <div class="message">Hi @Bob Miller, They have rejected <br> our proposal and send an
+                                counter <br> proposal with condition "Proposal <br> agree to change to sub (b) as <br>
+                                proposed above but with <br> “reasonable endeavours” becoming <br> “best endeavours”".
+                                What is your <br> thoughts on this?
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper red-color">
@@ -345,7 +379,9 @@
                         </div>
                         <div class="message-content">
                             <h4>Position confirmation rejected</h4>
-                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.</div>
+                            <div class="message">Proposal Change to sub (b) so <br> assignment terms must be <br>
+                                approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.
+                            </div>
                         </div>
                         <strong>Position Rejected by Rio Mendoza</strong>
                     </div>
@@ -423,7 +459,9 @@
                                                 </ul>
                                                 <div class="invite-btn">
                                                     <button class="btn btn-primary">
-                                                        <img src="images/invite-user-btn-icon.svg " alt="invite user btn icon"> Invite</button>
+                                                        <img src="images/invite-user-btn-icon.svg "
+                                                             alt="invite user btn icon"> Invite
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -464,7 +502,9 @@
                             <img src="images/profile-image.png" alt="pp">
                         </div>
                         <div class="message-content">
-                            <div class="message">Hi guys <br>Please review this clause and let me <br>know your thoughts. <br>I’m concerned about the “terms and <br>conditions</div>
+                            <div class="message">Hi guys <br>Please review this clause and let me <br>know your
+                                thoughts. <br>I’m concerned about the “terms and <br>conditions
+                            </div>
                         </div>
                     </div>
                     <div class="message-wrapper grey-color">
@@ -474,14 +514,18 @@
                             <p class="last-seen">11:00 am</p>
                         </div>
                         <div class="message-content">
-                            <div class="message">Hi <b>@Jane Nelson</b> <br>Yep, that's concerning for us too. <br>Nothing will be "reasonably <br>acceptable" to these guys. We need <br>to make it cleaner than that.</div>
+                            <div class="message">Hi <b>@Jane Nelson</b> <br>Yep, that's concerning for us too. <br>Nothing
+                                will be "reasonably <br>acceptable" to these guys. We need <br>to make it cleaner than
+                                that.
+                            </div>
                             <a href="#" class="delete-icon"><img src="images/delete-icon.svg" alt=""></a>
                         </div>
                         <div class="request-row">
                             <div class="request-content">
                                 <h4>Sent a position confirmation <br> request</h4>
                                 <div class="content-message">
-                                    Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer in 14 days or <br> they will be deemed to be <br> approved.
+                                    Proposal Change to sub (b) so <br> assignment terms must be <br> approved by Buyer
+                                    in 14 days or <br> they will be deemed to be <br> approved.
                                 </div>
                             </div>
                             <div class="request-btn">
@@ -494,7 +538,9 @@
             </div>
             <div class="chat-create-footer">
                 <div class="form-group">
-                    <textarea type="textarea" placeholder="Thanks Bill and Bob. That makes sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days..." class="form-control"></textarea>
+                    <textarea type="textarea"
+                              placeholder="Thanks Bill and Bob. That makes sense. I will propose a change to sub (b) so assignment terms must be approved by Buyer in 14 days..."
+                              class="form-control"></textarea>
                 </div>
                 <div class="chat-footer-inner">
                     <button class="btn" id="btnGoToCounterpartyA">Go to counterparty</button>
@@ -507,5 +553,16 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+
+
+
+
+
+
+
+    });
+</script>
 </body>
 </html>
