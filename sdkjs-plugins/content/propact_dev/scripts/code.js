@@ -24,10 +24,18 @@
 	var fClickBtnCur =  false;
 	var displayNoneClass = "d-none";
 	var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
-	var documentID = '64abb1dbfbf058519f3a8bf6';
+	var defaultID = '64abd09abcab42d30cbd9277';
+	var documentID = '';
 	var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 	$(document).ready(function () {
+
+		// Set documentID in localstorage
+		if (!localStorage.getItem('documentID')) {
+			localStorage.setItem('documentID', defaultID);
+			documentID = defaultID;
+		}
+		// Set documentID in localstorage
 
 		// Get contract details
 		getOpenContractUserDetails();
@@ -42,12 +50,6 @@
 		// Invite counterparty screen
 
 		// Invite counterparty Form screen
-		const varBtnRedirectInviteCounterparty = document.getElementById('btnRedirectInviteCounterparty');
-		varBtnRedirectInviteCounterparty.addEventListener('click', function () {
-			document.getElementById('divInviteCounterparty').classList.remove('d-none');
-			document.getElementById('divInviteCounterpartyForm').classList.add('d-none');
-		});
-
 		const varBtnRedirectInviteCounterpartyCancel = document.getElementById('btnRedirectInviteCounterpartyCancel');
 		varBtnRedirectInviteCounterpartyCancel.addEventListener('click', function () {
 			document.getElementById('divInviteCounterparty').classList.remove('d-none');
@@ -176,6 +178,8 @@
 						document.getElementById('divInviteCounterparty').classList.add('d-none');
 						document.getElementById('invitationActionPara').classList.add('d-none');
 						document.getElementById('contractCounterpartySection').classList.remove('disabled');
+						document.getElementById('counterpartyImage').src = responseData.data.oppositeUser.imageUrl;
+						document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
 						document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
 						document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
 					}
@@ -219,8 +223,12 @@
 				if (responseData && responseData.status == true && responseData.code == 200) {
 					document.getElementById('divInviteCounterpartyPending').classList.remove('d-none');
 					document.getElementById('divInviteCounterpartyForm').classList.add('d-none');
-					document.getElementById('organizationName').textContent = responseData.data.organizationName;
-					document.getElementById('counterpartyName').textContent = responseData.data.firstName + " " + responseData.data.lastName;
+					if (responseData.data && responseData.data._id) {
+						document.getElementById('organizationName').textContent = responseData.data.organizationName;
+						document.getElementById('counterpartyName').textContent = responseData.data.firstName + " " + responseData.data.lastName;
+					} else {
+						getOpenContractUserDetails();
+					}
 				}
 			})
 			.catch(error => {
