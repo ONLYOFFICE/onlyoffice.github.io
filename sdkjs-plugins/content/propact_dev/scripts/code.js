@@ -82,7 +82,7 @@
 				document.getElementById('divContractChatHistory').classList.remove('d-none');
 			});
 		});
-		// Contract clause lists screen
+		// Contract clause lists screen 
 
 		// Create contract clause screen
 		const varBtnContractCreateClose = document.getElementById('btnContractCreateClose');
