@@ -136,7 +136,7 @@
 			document.getElementById('divContractLists').classList.remove('d-none');
 			document.getElementById('divContractSameSideChat').classList.add('d-none');
 		});
-		// Contract sameside chat screen 
+		// Contract sameside chat screen
 
 		$("#inviteForm").validate({
 			submitHandler: function(form) {
@@ -445,7 +445,7 @@
 		});
 
 		// Get the element with id="allClause" and click on it
-		document.getElementById("allClause").click();
+		// document.getElementById("allClause").click();
 		/* Tabing click events - E */
 
 		/* Button: CloseEvent - S */
