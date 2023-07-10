@@ -25,7 +25,7 @@
 	var displayNoneClass = "d-none";
 	var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
 	var documentID = '64a390d5d3927f260bc633da';
-	var apiBaseUrl = 'http://192.168.1.40:3000/api/v1/app';
+	var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 	$(document).ready(function () {
 
