@@ -29,13 +29,18 @@
     	// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
 		var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
-		var documentID = '';
+		var documentID = '64abd170bcab42d30cbd9326';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 		$(document).ready(function () {
 
+			console.log('window', window);
+			console.log('window.parent', window.parent);
+			console.log('window.parent.parent', window.parent.parent);
+			console.log('window.parent.parent', window.parent.parent.document.getElementById('userAccessToken'));
+
 			// Set documentID
-			documentID = window.Asc.plugin.info.documentId;
+			// documentID = window.Asc.plugin.info.documentId;
 			// Set documentID
 
 			// Get contract details
@@ -185,6 +190,8 @@
 							document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
 							document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
 							document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
+						} else if (responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') {
+							document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
 						}
 					} else {
 
