@@ -22,9 +22,9 @@
 	var fBtnGetAll = false;
 	var fClickLabel = false;
 	var fClickBtnCur =  false;
-	/*var displayNoneClass = "d-none";
+	var displayNoneClass = "d-none";
 	var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
-	var defaultID = '64abd09abcab42d30cbd9277';
+	var defaultID = window.Asc.plugin.info.documentId;
 	var documentID = '';
 	var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
@@ -152,9 +152,9 @@
 		});
 	});
 
-	/!**
+	/**
 	 * Get contract user details when plugin init
-	 *!/
+	 */
 	function getOpenContractUserDetails() {
 		const getContractUserDetailsUrl = apiBaseUrl + '/contract/getOpenContractUserDetails/'+documentID;
 		const headers = {
@@ -197,9 +197,9 @@
 			});
 	}
 
-	/!**
+	/**
 	 * Invite counterparties
-	 *!/
+	 */
 	function inviteCounterparties() {
 		var form = document.getElementById('inviteForm');
 		var data = JSON.stringify({
@@ -241,9 +241,9 @@
 			});
 	}
 
-	/!**
+	/**
 	 * Cancel Invitation
-	 *!/
+	 */
 	function cancelInvitation() {
 		const cancelInvitationsUrl = apiBaseUrl + '/contract/cancelInvitationEmail/'+documentID;
 		const headers = {
@@ -273,9 +273,9 @@
 			});
 	}
 
-	/!**
+	/**
 	 * Resend counterparty invitation
-	 *!/
+	 */
 	function resendCounterpartyInvitation() {
 		const resendCounterpartyInvitationUrl = apiBaseUrl + '/contract/resendInvitationEmail/'+documentID;
 		const headers = {
@@ -300,7 +300,7 @@
 				// Handle any errors
 				console.error('Error:', error);
 			});
-	}*/
+	}
 
     window.Asc.plugin.init = function(text)
     {
