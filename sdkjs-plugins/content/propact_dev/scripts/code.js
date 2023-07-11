@@ -29,20 +29,14 @@
     	// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
 		var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
-		var defaultID = window.Asc.plugin.info.documentId;
 		var documentID = '';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 		$(document).ready(function () {
 
-			// Set documentID in localstorage
-			if (!localStorage.getItem('documentID')) {
-				localStorage.setItem('documentID', defaultID);
-				documentID = defaultID;
-			} else {
-				documentID = localStorage.getItem('documentID');
-			}
-			// Set documentID in localstorage
+			// Set documentID
+			documentID = window.Asc.plugin.info.documentId;
+			// Set documentID
 
 			// Get contract details
 			if (documentID) {
