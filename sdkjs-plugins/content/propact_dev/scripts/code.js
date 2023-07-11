@@ -305,6 +305,12 @@
     window.Asc.plugin.init = function(text)
     {
 
+		// Get the document key
+		const documentKey = window.Asc && window.Asc.document && window.Asc.document.key;
+
+		// Use the document key as needed within your plugin
+		console.log('Document key:', documentKey);
+
     	// Plugin Code - Start CM //
 
 		// Plugin Code - End CM //
