@@ -1,4 +1,4 @@
-SIGNATURE_SERVER = "https://plugins-services.onlyoffice.com/zoom/sign";
+SIGNATURE_SERVER = "https://zoom.onlyoffice.com/sign";
 
 window.addEventListener('DOMContentLoaded', function(event) {
   console.log('DOM fully loaded and parsed');
@@ -28,7 +28,7 @@ function websdkready() {
   // ZoomMtg.setZoomJSLib('http://localhost:9999/node_modules/@zoomus/websdk/dist/lib', '/av'); // Local version default, Angular Project change to use cdn version
   ZoomMtg.preLoadWasm(); // pre download wasm file to save time.
 
-  var CLIENT_ID = 'cJhYqnERQBSy9KxM9LGww';
+  var SDK_KEY, SDK_SECRET;
 
   /**
    * NEVER PUT YOUR ACTUAL API SECRET IN CLIENT SIDE CODE, THIS IS JUST FOR QUICK PROTOTYPING
@@ -96,6 +96,9 @@ function websdkready() {
   // click join meeting button
   window.joinMeeting = function () {
       showLoader(true);
+      SDK_KEY = localStorage.getItem('zoom-sdk-key') || "";
+      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-sdk-secret') || "";
+
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
         showLoader(false);
@@ -112,13 +115,6 @@ function websdkready() {
       testTool.setCookie("meeting_number", meetingConfig.mn);
       testTool.setCookie("meeting_pwd", meetingConfig.pwd);
 
-    //const iat = Math.round(new Date().getTime() / 1000) - (new Date()).getTimezoneOffset() * 60 - 30;
-    //const iat = 1683819574;
-    //const exp = iat + 60 * 60 * 2;
-    //const exp = 1683826774;
-    //console.log(iat);
-    //console.log(exp);
-    
       $.ajax({
           method: 'POST',
           contentType: "text/plain",
@@ -126,24 +122,22 @@ function websdkready() {
           data: JSON.stringify({
             'meet_number': meetingConfig.mn,
             'role_id': meetingConfig.role,
-            //'iat': iat,
-            //'exp': exp
+            'sdk_key': SDK_KEY,
+            'sdk_secret': SDK_SECRET
           }),
           url: SIGNATURE_SERVER
 
       }).success(function (oResponse) {
-        meetingConfig.signature = oResponse;
-        meetingConfig.sdkKey = CLIENT_ID;
-        
-        var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
-        window.parent.openMeeting(joinUrl);
-        showLoader(false);
+          meetingConfig.signature = oResponse;
+          meetingConfig.sdkKey = SDK_KEY;
+          var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
+          window.parent.openMeeting(joinUrl);
+          showLoader(false);
       }).error(function(oResponse) {
           alert('Server error. Contact to support.');
           showLoader(false);
       })
   };
-
 
   function copyToClipboard(elementId) {
     var aux = document.createElement("input");
@@ -156,6 +150,9 @@ function websdkready() {
     
   // click copy jon link button
   window.copyJoinLink = function (element) {
+    SDK_KEY = localStorage.getItem('zoom-sdk-key') || "";
+      SDK_SECRET = SDK_SECRET = localStorage.getItem('zoom-sdk-secret') || "";
+
       var meetingConfig = testTool.getMeetingConfig();
       if (!meetingConfig.mn || !meetingConfig.name) {
         alert("Meeting ID or Your Name is empty");
@@ -178,12 +175,14 @@ function websdkready() {
           data: JSON.stringify({
               'meet_number': meetingConfig.mn,
               'role_id': meetingConfig.role,
+              'sdk_key': SDK_KEY,
+              'sdk_secret': SDK_SECRET
           }),
 			    url: SIGNATURE_SERVER
 
       }).success(function (oResponse) {
           meetingConfig.signature = oResponse;
-          meetingConfig.sdkKey = CLIENT_ID;
+          meetingConfig.sdkKey = SDK_KEY;
           var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
           document.getElementById('copy_link_value').setAttribute('link', joinUrl);
           copyToClipboard('copy_link_value');

@@ -29,11 +29,11 @@ var Ps;
     "13 hour","14 hour","15 hour","16 hour","17 hour","18 hour","19 hour","20 hour","21 hour","22 hour","23 hour","24 hour"];
     var minutes = ["0 minutes","15 minutes","30 minutes","45 minutes"];
     var elements = { };
-    var sProxyURL = "https://plugins-services.onlyoffice.com/proxy";
-    var aEmails     = [];
-    var tokenKey    = '';
-    var redirect_uri = (window.document.location.origin + window.document.location.pathname).replace('index', 'oauth');
-
+    var zoomProxyUrl = "https://zoom.onlyoffice.com/proxy";
+    var email = '';
+    var sdkKey = '';
+    var sdkSecret = '';
+    var tokenKey = '';
     var oTheme;
     for (var nTime = 0; nTime < times.length; nTime++) {
         time_hour_data.push({id: times[nTime], text: times[nTime]});
@@ -135,37 +135,6 @@ var Ps;
 
     };
 
-    OAuthError = function (error) {
-        console.log(error);
-    };
-
-    OAuthCallback = function(code) {
-        GetAccessToken(code);
-    };
-
-    function GetAccessToken(authorizationCode) {
-        showLoader(elements, true);
-        $.ajax({
-            method: 'POST',
-            contentType: "text/plain",
-            data: JSON.stringify({
-                "code": authorizationCode,
-                "redirect_uri": redirect_uri
-            }),
-            url: "https://plugins-services.onlyoffice.com/zoom/oauth"
-        }).success(function (oResponse) {
-            tokenKey = oResponse["access_token"]; 
-            refresh_token = oResponse["refresh_token"];
-
-            if (tokenKey)
-                IsValidConfigData();
-
-        }).error(function(e){
-            console.log(e);
-            showLoader(elements, false);
-        });
-    }
-
     window.switchForms = function(elmToHide, elmToShow) {
         $(elmToHide).toggleClass('display-none');
         $(elmToShow).toggleClass('display-none');
@@ -201,9 +170,9 @@ var Ps;
 			width : '100%',
 		});
 
-        $('#user-select').select2({
+        $('#timezone').select2({
             minimumResultsForSearch: 0,
-            width : '100%'
+            width : 'calc(100% - 24px)'
         });
 
 		$('#adv_settings').click(function() {
@@ -213,19 +182,56 @@ var Ps;
 		});
 
         $('#saveConfigBtn').click(function() {
-            let link = `https://zoom.us/oauth/authorize?response_type=code&client_id=DolnuyZlS06lwmToTBFCQQ&redirect_uri=${redirect_uri}`;
-            window.open(link, null, "width=500,height=700");
+            SaveCredentials(true);
         });
         $('#topic-value').focus(function(){
             if(this.value !== this.defaultValue){
                 this.select();
             }
         });
+        $('#emailField').focus(function() {
+            if(this.value !== this.defaultValue){
+                this.select();
+            }
+        });
+        $('#sdkKeyField').focus(function() {
+            if(this.value !== this.defaultValue){
+                this.select();
+            }
+        });
+        $('#sdkKeyField').change(function() {
+            if ($(this).hasClass('error_border'))
+                $(this).toggleClass('error_border');
+        });
+        $('#sdkSecretField').focus(function() {
+            if(this.value !== this.defaultValue){
+                this.select();
+            }
+        });
+        $('#sdkSecretField').change(function() {
+            if ($(this).hasClass('error_border'))
+                $(this).toggleClass('error_border');
+        });
+        $('#tokenKeyField').focus(function() {
+            if(this.value !== this.defaultValue){
+                this.select();
+            }
+        });
+        $('#tokenKeyField').change(function() {
+            if ($(this).hasClass('error_border'))
+                $(this).toggleClass('error_border');
+        });
         $('#reconf').click(function() {
             $('#create-meeting-container').toggleClass('display-none');
             $('#configState').toggleClass('display-none');
         });
         $('#switch').click(function() {
+            if (sdkKey == "" || sdkSecret == "") {
+                alert("SDK Key or Secret are empty. Check your credentials.");
+                $('#reconf').trigger("click");
+                return;
+            }
+
             $('#create-meeting-container').toggleClass('display-none');
             $('#iframe_join').toggleClass('display-none');
 
@@ -266,6 +272,13 @@ var Ps;
 
 		Ps = new PerfectScrollbar("#create-meeting-container", {suppressScrollX: true});
 		Ps1 = new PerfectScrollbar("#configState", {suppressScrollX: true});
+        
+        document.getElementById('emailField').value = localStorage.getItem($('#emailField').attr("data-id")) || "";
+		document.getElementById('sdkKeyField').value = localStorage.getItem($('#sdkKeyField').attr("data-id")) || "";
+		document.getElementById('sdkSecretField').value = localStorage.getItem($('#sdkSecretField').attr("data-id")) || "";
+		document.getElementById('tokenKeyField').value = localStorage.getItem($('#tokenKeyField').attr("data-id")) || "";
+
+		SaveCredentials(false);
     });
 
     function CheckDuration()
@@ -319,52 +332,60 @@ var Ps;
             $('#recurring-conf').trigger('change');
         }
     }
-    
+
     async function IsValidConfigData() {
+        showLoader(elements, true);
         $.ajax({
             method: 'POST',
             contentType: "text/plain",
             data: JSON.stringify({
-                "headers": {
-                    'Authorization': 'Bearer ' + tokenKey,
-                },
-                "method": "GET",
-                "target": "https://api.zoom.us/v2/users/"
+                'Authorization': 'Bearer ' + tokenKey,
+                'endPoint': email,
+                "method": "GET"
             }),
-            url: sProxyURL
+            url: zoomProxyUrl
         }).success(function (oResponse) {
-			localStorage.setItem("onlyoffice-zoom-token", tokenKey);
+            localStorage.setItem($('#emailField').attr("data-id"), email);
+            localStorage.setItem($('#sdkKeyField').attr("data-id"), sdkKey);
+            localStorage.setItem($('#sdkSecretField').attr("data-id"), sdkSecret);
+            localStorage.setItem($('#tokenKeyField').attr("data-id"), tokenKey);
 
             if (oResponse.message && oResponse.message.search("Invalid") != -1) {
-                alert('Invalid access token!');
+                alert('Invalid access (JWT) token!');
                 showLoader(elements, false);
                 return;
             }
             else if (oResponse.message && oResponse.message.search("Access token is expired") != -1) {
-                alert("Need reauthorization.");
+                alert("Access token (JWT) is expired.");
                 showLoader(elements, false);
                 return;
             }
 
-            if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
-                if (oResponse.users && oResponse.users[0].timezone != "") {
-                    localStorage.setItem($('#timezone').attr('data-id'), oResponse.users[0].timezone);
-                    $('#timezone').val(oResponse.users[0].timezone);
-                    $('#timezone').trigger('change');
+            if (email !== "") {
+                if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
+                    if (oResponse.timezone != "") {
+                        localStorage.setItem($('#timezone').attr('data-id'), oResponse.timezone);
+                        $('#timezone').val(oResponse.timezone);
+                        $('#timezone').trigger('change');
+                    }
                 }
             }
-
-            aEmails = oResponse.users.map(function(user, index) {
-                return {id: index, text: user.email};
-            });
-            $('#user-select').select2({
-                data: aEmails,
-                width : '100%',
-            });
-            if (aEmails.length == 1) {
-                $('#user').hide();
+            else {
+                if (localStorage.getItem($('#timezone').attr('data-id')) === null) {
+                    if (oResponse.users[0].timezone != "") {
+                        localStorage.setItem($('#timezone').attr('data-id'), oResponse.users[0].timezone);
+                        $('#timezone').val(oResponse.users[0].timezone);
+                        $('#timezone').trigger('change');
+                    }
+                    if (oResponse.users[0].email) {
+                        email = oResponse.users[0].email;
+                        $('#emailField').val(email);
+                        localStorage.setItem($('#emailField').attr("data-id"), email);
+                    }
+                }
             }
-           
+            
+
             $('#configState').toggleClass('display-none');
             $('#create-meeting-container').toggleClass('display-none');
 
@@ -374,6 +395,82 @@ var Ps;
             showLoader(elements, false);
         });
     };
+
+    async function SaveCredentials(bShowError) {
+        if (!IsEmptyFields(bShowError)) {
+            email = $('#emailField').val().trim();
+            sdkKey = $('#sdkKeyField').val().trim();
+            sdkSecret = $('#sdkSecretField').val().trim();
+            tokenKey = $('#tokenKeyField').val().trim();
+
+            await IsValidConfigData();
+        }
+    }
+
+    function IsEmptyFields(bShowError) {
+        var isEmpty = null;
+
+        if ($('#emailField').val() === '') {
+            isEmpty = true;
+
+            if (bShowError)
+                if (!$('#emailField').hasClass('error_border'))
+                    $('#emailField').toggleClass('error_border');
+        }
+        else {
+            isEmpty = false;
+
+            if (bShowError)
+                if ($('#emailField').hasClass('error_border'))
+                    $('#emailField').toggleClass('error_border');
+        }
+        if ($('#sdkKeyField').val() === '') {
+            isEmpty = true;
+
+            if (bShowError)
+                if (!$('#sdkKeyField').hasClass('error_border'))
+                    $('#sdkKeyField').toggleClass('error_border');
+        }
+        else {
+            isEmpty = false;
+
+            if (bShowError)
+                if ($('#sdkKeyField').hasClass('error_border'))
+                    $('#sdkKeyField').toggleClass('error_border');
+        }
+
+        if ($('#sdkSecretField').val() === '') {
+            isEmpty = isEmpty && true;
+
+            if (bShowError)
+                if (!$('#sdkSecretField').hasClass('error_border'))
+                    $('#sdkSecretField').toggleClass('error_border');
+        }
+        else {
+            isEmpty = isEmpty && false;
+
+            if (bShowError)
+                if ($('#sdkSecretField').hasClass('error_border'))
+                    $('#sdkSecretField').toggleClass('error_border');
+        }
+
+        if ($('#tokenKeyField').val() === '') {
+            isEmpty = isEmpty && true;
+
+            if (bShowError)
+                if (!$('#tokenKeyField').hasClass('error_border'))
+                    $('#tokenKeyField').toggleClass('error_border');
+        }
+        else {
+            isEmpty = isEmpty && false;
+
+            if (bShowError)
+                if ($('#tokenKeyField').hasClass('error_border'))
+                    $('#tokenKeyField').toggleClass('error_border');
+        }
+
+        return isEmpty;
+    }
 
     function CheckValidDate(aDateFromPicker, hour, min, timezone) {
 
@@ -491,20 +588,15 @@ var Ps;
         }
 
         jsonData["timezone"]     = sTimeZone;
+        jsonData['Authorization'] = 'Bearer ' + tokenKey;
+        jsonData['method'] = 'POST';
+        jsonData['endPoint'] = email + '/meetings';
 
         $.ajax({
             type: 'POST',
             contentType: "text/plain",
-            data: JSON.stringify({
-                "headers": {
-                    "Authorization": 'Bearer ' + tokenKey,
-                    "Content-Type": 'application/json'
-                },
-                "data": JSON.stringify(jsonData),
-                "method": "POST",
-                "target": "https://api.zoom.us/v2/users/" + $('#user-select').select2('data')[0].text + '/meetings'
-            }),
-            url: sProxyURL
+            data: JSON.stringify(jsonData),
+            url: zoomProxyUrl
         }).success(function (oResponse) {
             if (oResponse.message && oResponse.message.search("Invalid") != -1) {
                 alert("Invalid access (JWT) token.");
@@ -541,7 +633,7 @@ var Ps;
                 sTime     = 'Time: ' + $('#date-value').val() + ' ' + $('#time-hour').val() + ' ' + $('#time-am-pm').val().toUpperCase() + ' ' + oResponse["timezone"];
             var sJoinUrl  = 'Join URL: ' + oResponse.join_url;
             var sConfId   = 'Conference ID: ' + oResponse.id;
-            var sPassword = 'Password: ' + (oResponse.password ? oResponse.password : "—");
+            var sPassword = 'Password: ' + oResponse.password;
             var sResult   = sTopic + '\r' + sTime + '\r' + sJoinUrl +'\r' + sConfId + '\r' + sPassword + '\r';
 
             Asc.scope.meeting_info = sResult;
@@ -558,7 +650,7 @@ var Ps;
             else {
                 window.Asc.plugin.executeMethod('CoAuthoringChatSendMessage', [Asc.scope.meeting_info], function(isTrue) {
                     if (isTrue)
-                        alert('Meeting was created, see info in chat');
+                        alert('Meeting was created');
                     else
                         alert('Meeting was create, please update SDK for checking info about created meeting in chat.');
                 });
@@ -609,10 +701,6 @@ var Ps;
 		$('#timezone').select2({
             minimumResultsForSearch: 0,
             width : 'calc(100% - 24px)'
-        });
-        $('#user-select').select2({
-            minimumResultsForSearch: 0,
-            width : '100%'
         });
 	};
 
