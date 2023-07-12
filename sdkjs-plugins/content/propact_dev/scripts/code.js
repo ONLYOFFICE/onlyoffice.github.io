@@ -161,7 +161,45 @@
 		});
 
 		function getLoggedInUserAccessToken() {
-			const requestAccessTokenUrl = apiBaseUrl + ''
+			const requestAccessTokenUrl = apiBaseUrl + '/auth/requestEditorNewToken';
+			var data = JSON.stringify(window.Asc.plugin.info);
+			const headers = {
+				'Content-Type': 'application/json',
+			};
+			const requestOptions = {
+				method: 'POST',
+				headers: headers,
+			};
+			fetch(requestAccessTokenUrl, requestOptions)
+				.then(response => response.json())
+				.then(data => {
+					// Handle the response data
+					console.log(data);
+					/*const responseData = data;
+					if (responseData && responseData.status == true && responseData.code == 200) {
+						if (responseData.data.invitationDetail && responseData.data.invitationDetail._id) {
+							document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
+							document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
+							document.getElementById('organizationName').textContent = responseData.data.invitationDetail.organizationName;
+							document.getElementById('counterpartyName').textContent = responseData.data.invitationDetail.firstName + " " + responseData.data.invitationDetail.lastName;
+						} else if (responseData.data.oppositeUser && responseData.data.oppositeUser._id) {
+							document.getElementById('divContractLists').classList.remove(displayNoneClass);
+							document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
+							document.getElementById('invitationActionPara').classList.add(displayNoneClass);
+							document.getElementById('contractCounterpartySection').classList.remove('disabled');
+							document.getElementById('counterpartyImage').src = responseData.data.oppositeUser.imageUrl;
+							document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
+							document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
+							document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
+						} else if (responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') {
+							document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
+						}
+					}*/
+				})
+				.catch(error => {
+					// Handle any errors
+					console.error('Error:', error);
+				});
 		}
 
 		/**
