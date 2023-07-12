@@ -26,25 +26,29 @@
 
     window.Asc.plugin.init = function(text)
     {
-    	// Plugin Code - Start CM //
+    	console.log('window.Asc.plugin.info', window.Asc.plugin.info);
+    	/*// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
 		var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
-		var documentID = '64abd170bcab42d30cbd9326';
+		// var documentID = '64abd170bcab42d30cbd9326';
+		var documentID = '';
+		var loggedInUserID = '';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 		$(document).ready(function () {
 
-			console.log('window', window);
-			console.log('window.parent', window.parent);
-			console.log('window.parent.parent', window.parent.parent);
-			console.log('window.parent.parent', window.parent.parent.document.getElementById('userAccessToken'));
 
-			// Set documentID
-			// documentID = window.Asc.plugin.info.documentId;
-			// Set documentID
+			// Get & Set documentID
+			documentID = window.Asc.plugin.info.documentId;
+			// Get & Set documentID
+
+			// Get & Set loggedin user ID
+			loggedInUserID = window.Asc.plugin.info.userId;
+			// Get & Set loggedin user ID
 
 			// Get contract details
 			if (documentID) {
+				getLoggedInUserAccessToken();
 				getOpenContractUserDetails();
 			}
 			// Get contract details
@@ -156,9 +160,13 @@
 			});
 		});
 
-		/**
+		function getLoggedInUserAccessToken() {
+			const requestAccessTokenUrl = apiBaseUrl + ''
+		}
+
+		/!**
 		 * Get contract user details when plugin init
-		 */
+		 *!/
 		function getOpenContractUserDetails() {
 			const getContractUserDetailsUrl = apiBaseUrl + '/contract/getOpenContractUserDetails/'+documentID;
 			const headers = {
@@ -203,9 +211,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Invite counterparties
-		 */
+		 *!/
 		function inviteCounterparties() {
 			var form = document.getElementById('inviteForm');
 			var data = JSON.stringify({
@@ -247,9 +255,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Cancel Invitation
-		 */
+		 *!/
 		function cancelInvitation() {
 			const cancelInvitationsUrl = apiBaseUrl + '/contract/cancelInvitationEmail/'+documentID;
 			const headers = {
@@ -279,9 +287,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Resend counterparty invitation
-		 */
+		 *!/
 		function resendCounterpartyInvitation() {
 			const resendCounterpartyInvitationUrl = apiBaseUrl + '/contract/resendInvitationEmail/'+documentID;
 			const headers = {
@@ -307,8 +315,9 @@
 					console.error('Error:', error);
 				});
 		}
-		// Plugin Code - End CM //
+		// Plugin Code - End CM //*/
 
 	};
+
 
 })(window, undefined);
