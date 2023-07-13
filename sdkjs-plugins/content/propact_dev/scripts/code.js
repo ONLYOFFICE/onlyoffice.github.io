@@ -37,12 +37,12 @@
 
 		$(document).ready(function () {
 
-			// Define a message event listener
-			window.parent.parent.addEventListener('message', event => {
-				// Access the data sent from the iframe
-				const receivedData = event.data;
-				console.log('Plugin: Message received', receivedData);
-			});
+			// // Define a message event listener
+			// window.parent.addEventListener('message', event => {
+			// 	// Access the data sent from the iframe
+			// 	const receivedData = event.data;
+			// 	console.log('Plugin: Message received', receivedData);
+			// });
 
 			// Get & Set documentID
 			// documentID = window.Asc.plugin.info.documentId;
