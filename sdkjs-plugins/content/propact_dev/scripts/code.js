@@ -24,32 +24,37 @@
 	var fClickBtnCur =  false;
 
 
-    window.Asc.plugin.init = function(text)
-    {
+    // window.Asc.plugin.init = function(text)
+    // {
     	console.log('window.Asc.plugin.info', window.Asc.plugin.info);
     	// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
-		var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODg4MDM5NjgsImV4cCI6MTY5MTM5NTk2OH0.HQBqCPZAKuLn6_7tOhsPvT1iX29Qq7dfzrhahMvuXWo';
-		// var documentID = '64abd170bcab42d30cbd9326';
-		var documentID = '';
+		var authToken = '';
+		var documentID = '64abd170bcab42d30cbd9326';
+		// var documentID = '';
 		var loggedInUserID = '';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 		$(document).ready(function () {
 
+			// Define a message event listener
+			window.parent.addEventListener('message', event => {
+				// Access the data sent from the iframe
+				const receivedData = event.data;
+				console.log('Plugin: Message received', receivedData);
+			});
 
 			// Get & Set documentID
-			documentID = window.Asc.plugin.info.documentId;
+			// documentID = window.Asc.plugin.info.documentId;
 			// Get & Set documentID
 
 			// Get & Set loggedin user ID
-			loggedInUserID = window.Asc.plugin.info.userId;
+			// loggedInUserID = window.Asc.plugin.info.userId;
 			// Get & Set loggedin user ID
 
 			// Get contract details
-			if (documentID) {
+			if (documentID || 1) {
 				getLoggedInUserAccessToken();
-				getOpenContractUserDetails();
 			}
 			// Get contract details
 
@@ -162,39 +167,30 @@
 
 		function getLoggedInUserAccessToken() {
 			const requestAccessTokenUrl = apiBaseUrl + '/auth/requestEditorNewToken';
-			var data = JSON.stringify(window.Asc.plugin.info);
+			var data = JSON.stringify({
+				"documentId": "64a26531e4cba8e0e1f01d38",
+				"documentTitle": "Test Contract KB/ADM",
+				"guid": "asc.{C36DDFB5-08F0-4A68-B829-5F1F7D488588}",
+				"userId": "6244dc6808552e4c01bd940aea76fd65",
+				"userName": "Milan Hirpara"
+			});
 			const headers = {
 				'Content-Type': 'application/json',
 			};
 			const requestOptions = {
 				method: 'POST',
 				headers: headers,
+				body: data
 			};
 			fetch(requestAccessTokenUrl, requestOptions)
 				.then(response => response.json())
 				.then(data => {
 					// Handle the response data
-					console.log(data);
-					/*const responseData = data;
-					if (responseData && responseData.status == true && responseData.code == 200) {
-						if (responseData.data.invitationDetail && responseData.data.invitationDetail._id) {
-							document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
-							document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
-							document.getElementById('organizationName').textContent = responseData.data.invitationDetail.organizationName;
-							document.getElementById('counterpartyName').textContent = responseData.data.invitationDetail.firstName + " " + responseData.data.invitationDetail.lastName;
-						} else if (responseData.data.oppositeUser && responseData.data.oppositeUser._id) {
-							document.getElementById('divContractLists').classList.remove(displayNoneClass);
-							document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
-							document.getElementById('invitationActionPara').classList.add(displayNoneClass);
-							document.getElementById('contractCounterpartySection').classList.remove('disabled');
-							document.getElementById('counterpartyImage').src = responseData.data.oppositeUser.imageUrl;
-							document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
-							document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
-							document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
-						} else if (responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') {
-							document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
-						}
-					}*/
+					const responseData = data;
+					if (responseData && responseData.data && responseData.data.token) {
+						authToken = responseData.data.token;
+						getOpenContractUserDetails();
+					}
 				})
 				.catch(error => {
 					// Handle any errors
@@ -206,7 +202,7 @@
 		 * Get contract user details when plugin init
 		 */
 		function getOpenContractUserDetails() {
-			const getContractUserDetailsUrl = apiBaseUrl + '/contract/getOpenContractUserDetails/'+documentID;
+			const getContractUserDetailsUrl = apiBaseUrl + '/contract/getSingleContractDetail/'+documentID;
 			const headers = {
 				'Content-Type': 'application/json',
 				'Authorization': 'Bearer '+authToken
@@ -222,6 +218,7 @@
 					console.log(data);
 					const responseData = data;
 					if (responseData && responseData.status == true && responseData.code == 200) {
+						debugger;
 						if (responseData.data.invitationDetail && responseData.data.invitationDetail._id) {
 							document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
 							document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
@@ -236,7 +233,7 @@
 							document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
 							document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
 							document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
-						} else if (responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') {
+						} else if ((responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') || responseData.data.counterPartyInviteStatus == 'Pending') {
 							document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
 						}
 					} else {
@@ -355,7 +352,7 @@
 		}
 		// Plugin Code - End CM //
 
-	};
+	// };
 
 
 })(window, undefined);
