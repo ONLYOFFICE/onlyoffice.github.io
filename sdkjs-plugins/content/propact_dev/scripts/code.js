@@ -35,7 +35,7 @@
 		var loggedInUserID = '';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
-		$(document).ready(function () {
+		// $(document).ready(function () {
 
 			// // Define a message event listener
 			// window.parent.addEventListener('message', event => {
