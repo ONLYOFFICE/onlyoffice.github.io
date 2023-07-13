@@ -23,6 +23,7 @@
 	var fClickLabel = false;
 	var fClickBtnCur =  false;
 
+	window.parent.postMessage('Test Message AAU', "*");
 
     window.Asc.plugin.init = function(text)
     {
