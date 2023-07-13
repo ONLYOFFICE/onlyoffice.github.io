@@ -24,8 +24,8 @@
 	var fClickBtnCur =  false;
 
 
-    // window.Asc.plugin.init = function(text)
-    // {
+    window.Asc.plugin.init = function(text)
+    {
     	console.log('window.Asc.plugin.info', window.Asc.plugin.info);
     	// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
@@ -52,7 +52,7 @@
 			// loggedInUserID = window.Asc.plugin.info.userId;
 			// Get & Set loggedin user ID
 
-			// Get contract details
+			/*// Get contract details
 			if (documentID || 1) {
 				getLoggedInUserAccessToken();
 			}
@@ -198,9 +198,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Get contract user details when plugin init
-		 */
+		 *!/
 		function getOpenContractUserDetails() {
 			const getContractUserDetailsUrl = apiBaseUrl + '/contract/getSingleContractDetail/'+documentID;
 			const headers = {
@@ -246,9 +246,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Invite counterparties
-		 */
+		 *!/
 		function inviteCounterparties() {
 			var form = document.getElementById('inviteForm');
 			var data = JSON.stringify({
@@ -290,9 +290,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Cancel Invitation
-		 */
+		 *!/
 		function cancelInvitation() {
 			const cancelInvitationsUrl = apiBaseUrl + '/contract/cancelInvitationEmail/'+documentID;
 			const headers = {
@@ -322,9 +322,9 @@
 				});
 		}
 
-		/**
+		/!**
 		 * Resend counterparty invitation
-		 */
+		 *!/
 		function resendCounterpartyInvitation() {
 			const resendCounterpartyInvitationUrl = apiBaseUrl + '/contract/resendInvitationEmail/'+documentID;
 			const headers = {
@@ -349,10 +349,10 @@
 					// Handle any errors
 					console.error('Error:', error);
 				});
-		}
+		}*/
 		// Plugin Code - End CM //
 
-	// };
+	};
 
 
 })(window, undefined);
