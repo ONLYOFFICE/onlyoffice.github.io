@@ -28,7 +28,7 @@
 	let arr = document.location.search.substr(1).split('&');
 	console.log('arr', arr);
 
-	window.parent.postMessage('Test Message AAU', "*");
+	// window.parent.postMessage('Test Message AAU', "*");
 
     window.Asc.plugin.init = function(text)
     {
