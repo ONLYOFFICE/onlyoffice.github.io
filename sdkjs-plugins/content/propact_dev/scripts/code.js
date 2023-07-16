@@ -23,6 +23,11 @@
 	var fClickLabel = false;
 	var fClickBtnCur =  false;
 
+	console.log('document.location', document.location);
+
+	let arr = document.location.search.substr(1).split('&');
+	console.log('arr', arr);
+
 	window.parent.postMessage('Test Message AAU', "*");
 
     window.Asc.plugin.init = function(text)
