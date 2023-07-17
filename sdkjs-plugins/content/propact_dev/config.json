@@ -27,7 +27,7 @@
 					}
 				}
 			],
-            "isViewer"        : true,
+            "isViewer"        : false,
             "EditorsSupport"  : ["word"],
 
             "isVisual"        : true,
@@ -43,7 +43,7 @@
             
             "initOnSelectionChanged" : true,
 			
-			"events" : ["onAddComment", "onRemoveComment", "onChangeCommentData"]
+			"events" : ["onTargetPositionChanged"]
         }
     ]
 }
