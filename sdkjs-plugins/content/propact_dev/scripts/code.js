@@ -30,7 +30,7 @@
         var authToken = '';
         var documentID = '';
         var loggedInUserID = '';
-        var apiBaseUrl = 'http://localhost:3000/api/v1/app';
+        var apiBaseUrl = '';
 
 
         // $(document).ready(function () {
