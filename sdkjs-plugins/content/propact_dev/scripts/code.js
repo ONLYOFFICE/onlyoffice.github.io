@@ -48,7 +48,7 @@
         // Get & Set AuthToken
 
         // Get & Set APIBASEURL
-        apiBaseUrl = url.split('/').slice(0, 6).join('/');
+        apiBaseUrl = window.Asc.plugin.info.documentCallbackUrl.split('/').slice(0, 6).join('/');
         // Get & Set APIBASEURL
 
         // Get contract details
