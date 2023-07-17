@@ -55,8 +55,8 @@
 			// Get & Set AuthToken
 
 			// Get contract details
-			if (documentID || 1) {
-				getLoggedInUserAccessToken();
+			if (documentID && authToken) {
+				getOpenContractUserDetails();
 			}
 			// Get contract details
 
@@ -166,39 +166,6 @@
 				}
 			});
 		// });
-
-		function getLoggedInUserAccessToken() {
-			const requestAccessTokenUrl = apiBaseUrl + '/auth/requestEditorNewToken';
-			var data = JSON.stringify({
-				"documentId": "64a26531e4cba8e0e1f01d38",
-				"documentTitle": "Test Contract KB/ADM",
-				"guid": "asc.{C36DDFB5-08F0-4A68-B829-5F1F7D488588}",
-				"userId": "6244dc6808552e4c01bd940aea76fd65",
-				"userName": "Milan Hirpara"
-			});
-			const headers = {
-				'Content-Type': 'application/json',
-			};
-			const requestOptions = {
-				method: 'POST',
-				headers: headers,
-				body: data
-			};
-			fetch(requestAccessTokenUrl, requestOptions)
-				.then(response => response.json())
-				.then(data => {
-					// Handle the response data
-					const responseData = data;
-					if (responseData && responseData.data && responseData.data.token) {
-						authToken = responseData.data.token;
-						getOpenContractUserDetails();
-					}
-				})
-				.catch(error => {
-					// Handle any errors
-					console.error('Error:', error);
-				});
-		}
 
 		/**
 		 * Get contract user details when plugin init
