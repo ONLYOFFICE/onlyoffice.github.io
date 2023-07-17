@@ -171,7 +171,7 @@
          * Get contract user details when plugin init
          */
         function getOpenContractUserDetails() {
-            const getContractUserDetailsUrl = apiBaseUrl + '/contract/getSingleContractDetail/' + documentID;
+            const getContractUserDetailsUrl = apiBaseUrl + '/contract/getOpenContractUserDetails/' + documentID;
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authToken
