@@ -30,7 +30,7 @@
         var authToken = '';
         var documentID = '';
         var loggedInUserID = '';
-        var apiBaseUrl = '';
+        var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
 
         // $(document).ready(function () {
@@ -48,7 +48,7 @@
         // Get & Set AuthToken
 
         // Get & Set APIBASEURL
-        apiBaseUrl = window.Asc.plugin.info.documentCallbackUrl.split('/').slice(0, 6).join('/');
+        // apiBaseUrl = url.split('/').slice(0, 6).join('/');
         // Get & Set APIBASEURL
 
         // Get contract details
