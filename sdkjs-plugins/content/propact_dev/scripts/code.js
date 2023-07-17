@@ -186,16 +186,9 @@
                     // Handle the response data
                     const responseData = data;
                     if (responseData && responseData.status == true && responseData.code == 200) {
-                        if (responseData.data.counterPartyInviteStatus) {
-							document.getElementById('divContractLists').classList.remove(displayNoneClass);
-							document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
-							document.getElementById('invitationActionPara').classList.add(displayNoneClass);
-							document.getElementById('contractCounterpartySection').classList.remove('disabled');
-							document.getElementById('counterpartyImage').src = responseData.data.oppositeUser.imageUrl;
-							document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
-							document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
-							document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
-                        } else {
+                        // if (responseData.data.counterPartyInviteStatus) {
+						//
+                        // } else {
                             if (responseData.data.invitationDetail && responseData.data.invitationDetail._id) {
                                 document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
                                 document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
@@ -213,7 +206,7 @@
                             } else if ((responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') || responseData.data.counterPartyInviteStatus == 'Pending') {
                                 document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
                             }
-                        }
+                        // }
                     } else {
 
                     }
