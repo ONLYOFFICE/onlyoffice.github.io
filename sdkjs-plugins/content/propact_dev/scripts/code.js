@@ -23,14 +23,8 @@
     var fClickLabel = false;
     var fClickBtnCur = false;
 
-
-    // let arr = document.location.search.substr(1).split('&');
-    // console.log('arr', arr);
-
-    // window.parent.postMessage('Test Message AAU', "*");
-
     window.Asc.plugin.init = function (text) {
-        console.log('window.Asc.plugin.info',);
+
         // Plugin Code - Start CM //
         var displayNoneClass = "d-none";
         var authToken = '';
@@ -52,6 +46,10 @@
         // Get & Set AuthToken
         authToken = window.Asc.plugin.info.documentCallbackUrl.split('/').pop();
         // Get & Set AuthToken
+
+        // Get & Set APIBASEURL
+        apiBaseUrl = url.split('/').slice(0, 6).join('/');
+        // Get & Set APIBASEURL
 
         // Get contract details
         if (documentID && authToken) {
