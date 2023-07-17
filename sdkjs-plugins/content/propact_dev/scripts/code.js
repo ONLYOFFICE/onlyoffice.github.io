@@ -23,6 +23,11 @@
 	var fClickLabel = false;
 	var fClickBtnCur =  false;
 
+	console.log('window', window);
+	console.log('window.parent', window.parent);
+	console.log(window.parent.parent.document.location, window.parent.parent.location);
+	console.log('window.parent', window.parent.parent.localStorage.getItem('applicationAccessToken'));
+
 	console.log('document.location', document.location);
 
 	let arr = document.location.search.substr(1).split('&');
