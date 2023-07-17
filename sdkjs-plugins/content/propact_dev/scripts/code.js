@@ -88,6 +88,15 @@
         // Contract clause lists screen
         const varBtnCreateClause = document.getElementById('btnCreateClause');
         varBtnCreateClause.addEventListener('click', function () {
+
+            var nContentControlType = 2;
+            color = {
+                R : 255,
+                G : 0,
+                B : 0,
+            };
+            window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 1, "Color": color}]);
+
             document.getElementById('divContractLists').classList.add(displayNoneClass);
             document.getElementById('divContractCreate').classList.remove(displayNoneClass);
         });
