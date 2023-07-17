@@ -31,12 +31,11 @@
 
     window.Asc.plugin.init = function(text)
     {
-    	console.log('window.Asc.plugin.info', window.Asc.plugin.info.documentCallbackUrl.split('/'));
+    	console.log('window.Asc.plugin.info', );
     	// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
 		var authToken = '';
-		var documentID = '64abd170bcab42d30cbd9326';
-		// var documentID = '';
+		var documentID = '';
 		var loggedInUserID = '';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
@@ -44,14 +43,18 @@
 		// $(document).ready(function () {
 
 			// Get & Set documentID
-			// documentID = window.Asc.plugin.info.documentId;
+			documentID = window.Asc.plugin.info.documentId;
 			// Get & Set documentID
 
 			// Get & Set loggedin user ID
-			// loggedInUserID = window.Asc.plugin.info.userId;
+			loggedInUserID = window.Asc.plugin.info.userId;
 			// Get & Set loggedin user ID
 
-			/*// Get contract details
+			// Get & Set AuthToken
+			authToken = window.Asc.plugin.info.documentCallbackUrl.split('/').pop();
+			// Get & Set AuthToken
+
+			// Get contract details
 			if (documentID || 1) {
 				getLoggedInUserAccessToken();
 			}
@@ -162,7 +165,7 @@
 					inviteCounterparties();
 				}
 			});
-		});
+		// });
 
 		function getLoggedInUserAccessToken() {
 			const requestAccessTokenUrl = apiBaseUrl + '/auth/requestEditorNewToken';
@@ -197,9 +200,9 @@
 				});
 		}
 
-		/!**
+		/**
 		 * Get contract user details when plugin init
-		 *!/
+		 */
 		function getOpenContractUserDetails() {
 			const getContractUserDetailsUrl = apiBaseUrl + '/contract/getSingleContractDetail/'+documentID;
 			const headers = {
@@ -245,9 +248,9 @@
 				});
 		}
 
-		/!**
+		/**
 		 * Invite counterparties
-		 *!/
+		 */
 		function inviteCounterparties() {
 			var form = document.getElementById('inviteForm');
 			var data = JSON.stringify({
@@ -289,9 +292,9 @@
 				});
 		}
 
-		/!**
+		/**
 		 * Cancel Invitation
-		 *!/
+		 */
 		function cancelInvitation() {
 			const cancelInvitationsUrl = apiBaseUrl + '/contract/cancelInvitationEmail/'+documentID;
 			const headers = {
@@ -321,9 +324,9 @@
 				});
 		}
 
-		/!**
+		/**
 		 * Resend counterparty invitation
-		 *!/
+		 */
 		function resendCounterpartyInvitation() {
 			const resendCounterpartyInvitationUrl = apiBaseUrl + '/contract/resendInvitationEmail/'+documentID;
 			const headers = {
@@ -348,7 +351,7 @@
 					// Handle any errors
 					console.error('Error:', error);
 				});
-		}*/
+		}
 		// Plugin Code - End CM //
 
 	};
