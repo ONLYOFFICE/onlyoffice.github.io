@@ -23,21 +23,15 @@
 	var fClickLabel = false;
 	var fClickBtnCur =  false;
 
-	console.log('window', window);
-	console.log('window.parent', window.parent);
-	console.log(window.parent.parent.document.location, window.parent.parent.location);
-	console.log('window.parent', window.parent.parent.localStorage.getItem('applicationAccessToken'));
 
-	console.log('document.location', document.location);
-
-	let arr = document.location.search.substr(1).split('&');
-	console.log('arr', arr);
+	// let arr = document.location.search.substr(1).split('&');
+	// console.log('arr', arr);
 
 	// window.parent.postMessage('Test Message AAU', "*");
 
     window.Asc.plugin.init = function(text)
     {
-    	console.log('window.Asc.plugin.info', window.Asc.plugin.info);
+    	console.log('window.Asc.plugin.info', window.Asc.plugin.info.documentCallbackUrl.split('/'));
     	// Plugin Code - Start CM //
 		var displayNoneClass = "d-none";
 		var authToken = '';
@@ -46,28 +40,8 @@
 		var loggedInUserID = '';
 		var apiBaseUrl = 'http://localhost:3000/api/v1/app';
 
-		// config ref
-		var config;
-		//
-		// // Get ready to receive the response from TOP
-		// window.parent.Common.Gateway.on ( 'internalcommand', ( data ) => {
-		// 	if ( data.command === 'getConfig' ) {
-		// 		config = data.data;
-		// 	}
-		// } );
-		//
-		// // Send custom config request to TOP
-		// window.parent.Common.Gateway.sendInfo ( { getConfig: true } );
-
 
 		// $(document).ready(function () {
-
-			// // Define a message event listener
-			window.parent.addEventListener('message', event => {
-				// Access the data sent from the iframe
-				const receivedData = event.data;
-				console.log('Plugin: Message received', receivedData);
-			});
 
 			// Get & Set documentID
 			// documentID = window.Asc.plugin.info.documentId;
