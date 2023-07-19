@@ -1,0 +1,76 @@
+{
+        "baseUrl": "",
+        "guid": "asc.{87043C1A-C22C-4EC9-A904-E9AE3BE2C54D}",
+        "help": "",
+        "minVersion": "6.3.0",
+        "name": "clickhouse",
+        "nameLocale": {
+            "fr": "french plugin name",
+            "es": "spanish plugin name"
+        },
+        "variations": [
+            {
+                "buttons": [
+                    { 
+                        "text": "Cancel",
+                        "primary": false,
+                        "isviewer": false,
+                        "textLocale": {
+                            "fr": "Annuler",
+                            "es": "Cancelar"
+                        }
+                    }
+                ],
+                "cryptoDisabledForExternalCloud": "true",
+                "cryptoDisabledForInternalCloud": "true",
+                "cryptoDisabledOnStart": "true",
+                "cryptoMode": "1",
+                "description": "Плагин для получения данных из БД clickhouse",
+                "descriptionLocale": {
+                    "fr": "french plugin description",
+                    "es": "spanish plugin description"
+                },
+                "EditorsSupport": ["word", "cell", "slide"],
+                "events": ["onClick"],
+                "icons": ["icon.png", "icon@2x.png"],
+                "icons2": [
+                    {
+                        "100%": { "normal": "icon.png" },
+                        "125%": { "normal": "icon@1.25.png" },
+                        "150%": { "normal": "icon@1.5x.png" },
+                        "175%": { "normal": "icon@1.75.png" },
+                        "200%": { "normal": "icon@2x.png" }
+                    },
+                    {
+                        "style": "dark"
+                    }
+                ],
+                "initData": "",
+                "initDataType": "ole",
+                "initOnSelectionChanged": true,
+                "isCustomWindow": true,
+                "isDisplayedInViewer": true,
+                "isInsideMode": false,
+                "isModal": true,
+                "isSystem": false,
+                "isUpdateOleOnResize": true,
+                "isViewer": true,
+                "isVisual": false,
+                "size": [600, 700],
+                "store": {
+                    "background": {
+                        "light": "#F5F5F5",
+                        "dark": "#444444"
+                    },
+                    "categories": ["specAbilities", "work"],
+                    "icons": {
+                        "light": "resources/store/icons",
+                        "dark" : "resources/store/icons"
+                    },
+                    "screenshots": ["resources/store/screenshots/screen_1.png"]
+                },
+                "url": "index.html"
+            }
+        ],
+        "version": "1.0"
+    };
