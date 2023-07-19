@@ -91,11 +91,16 @@
 
             var nContentControlType = 2;
             color = {
-                R : 255,
-                G : 0,
-                B : 0,
+                R: 255,
+                G: 0,
+                B: 0,
             };
-            window.Asc.plugin.executeMethod ("AddContentControl", [nContentControlType, {"Id" : 7, "Tag" : text.replace(/\n/g,"<br>"), "Lock" : 1, "Color": color}]);
+            window.Asc.plugin.executeMethod("AddContentControl", [nContentControlType, {
+                "Id": 7,
+                "Tag": text.replace(/\n/g, "<br>"),
+                "Lock": 1,
+                "Color": color
+            }]);
 
             document.getElementById('divContractLists').classList.add(displayNoneClass);
             document.getElementById('divContractCreate').classList.remove(displayNoneClass);
@@ -193,27 +198,24 @@
                     // Handle the response data
                     const responseData = data;
                     if (responseData && responseData.status == true && responseData.code == 200) {
-                        // if (responseData.data.counterPartyInviteStatus) {
-						//
-                        // } else {
-                            if (responseData.data.invitationDetail && responseData.data.invitationDetail._id) {
-                                document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
-                                document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
-                                document.getElementById('organizationName').textContent = responseData.data.invitationDetail.organizationName;
-                                document.getElementById('counterpartyName').textContent = responseData.data.invitationDetail.firstName + " " + responseData.data.invitationDetail.lastName;
-                            } else if (responseData.data.oppositeUser && responseData.data.oppositeUser._id) {
-                                document.getElementById('divContractLists').classList.remove(displayNoneClass);
-                                document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
-                                document.getElementById('invitationActionPara').classList.add(displayNoneClass);
-                                document.getElementById('contractCounterpartySection').classList.remove('disabled');
-                                document.getElementById('counterpartyImage').src = responseData.data.oppositeUser.imageUrl;
-                                document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
-                                document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
-                                document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
-                            } else if ((responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') || responseData.data.counterPartyInviteStatus == 'Pending') {
-                                document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
-                            }
-                        // }
+                        if (responseData.data.invitationDetail && responseData.data.invitationDetail._id) {
+                            document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
+                            document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
+                            document.getElementById('organizationName').textContent = responseData.data.invitationDetail.organizationName;
+                            document.getElementById('counterpartyName').textContent = responseData.data.invitationDetail.firstName + " " + responseData.data.invitationDetail.lastName;
+                        } else if (responseData.data.oppositeUser && responseData.data.oppositeUser._id) {
+                            document.getElementById('divInviteCounterpartyPending').classList.add(displayNoneClass);
+                            document.getElementById('divInviteCounterparty').classList.add(displayNoneClass);
+                            document.getElementById('invitationActionPara').classList.add(displayNoneClass);
+                            document.getElementById('divContractLists').classList.remove(displayNoneClass);
+                            document.getElementById('contractCounterpartySection').classList.remove('disabled');
+                            document.getElementById('counterpartyImage').src = responseData.data.oppositeUser.imageUrl;
+                            document.getElementById('organizationImage').src = responseData.data.oppositeUser.company.imageUrl;
+                            document.getElementById('organizationName').textContent = responseData.data.oppositeUser.company.companyName;
+                            document.getElementById('counterpartyName').textContent = responseData.data.oppositeUser.firstName + " " + responseData.data.oppositeUser.lastName;
+                        } else if ((responseData.data.openContractDetails && responseData.data.openContractDetails.counterPartyInviteStatus && responseData.data.openContractDetails.counterPartyInviteStatus == 'Pending') || responseData.data.counterPartyInviteStatus == 'Pending') {
+                            document.getElementById('divInviteCounterparty').classList.remove(displayNoneClass);
+                        }
                     } else {
 
                     }
@@ -249,8 +251,8 @@
                 .then(response => response.json())
                 .then(data => {
                     // Handle the response data
-					document.getElementById("inviteForm").reset();
-					const responseData = data;
+                    document.getElementById("inviteForm").reset();
+                    const responseData = data;
                     if (responseData && responseData.status == true && responseData.code == 200) {
                         document.getElementById('divInviteCounterpartyPending').classList.remove(displayNoneClass);
                         document.getElementById('divInviteCounterpartyForm').classList.add(displayNoneClass);
