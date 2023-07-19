@@ -24,6 +24,7 @@
     var fClickBtnCur = false;
 
     window.Asc.plugin.init = function (text) {
+        console.log('Selected Text', text);
 
         // Plugin Code - Start CM //
         var displayNoneClass = "d-none";
