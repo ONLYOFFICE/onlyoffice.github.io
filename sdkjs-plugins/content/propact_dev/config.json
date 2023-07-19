@@ -36,6 +36,7 @@
 
             "initDataType"    : "text",
             "initData"        : "",
+			"size"			  : [485, 712],
 
             "isUpdateOleOnResize" : false,
 
