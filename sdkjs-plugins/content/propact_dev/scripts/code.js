@@ -98,7 +98,7 @@
             window.Asc.plugin.executeMethod("AddContentControl", [nContentControlType, {
                 "Id": 7,
                 "Tag": text.replace(/\n/g, "<br>"),
-                "Lock": 1,
+                "Lock": 0,
                 "Color": color
             }]);
 
