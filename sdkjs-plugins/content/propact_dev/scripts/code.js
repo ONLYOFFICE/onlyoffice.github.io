@@ -24,14 +24,23 @@
     var fClickBtnCur = false;
 
     window.Asc.plugin.init = function (text) {
-        console.log('Selected Text', text);
 
         // Plugin Code - Start CM //
         var displayNoneClass = "d-none";
+        var disabledClass = "disabled";
         var authToken = '';
         var documentID = '';
         var loggedInUserID = '';
         var apiBaseUrl = 'http://localhost:3000/api/v1/app';
+
+        console.log('Selected Text', text);
+        if (text) {
+            document.getElementById('btnCreateClause').classList.remove(disabledClass);
+        } else {
+            if (!document.getElementById('btnCreateClause').classList.contains(disabledClass)) {
+                document.getElementById('btnCreateClause').classList.add(disabledClass);
+            }
+        }
 
 
         // $(document).ready(function () {
