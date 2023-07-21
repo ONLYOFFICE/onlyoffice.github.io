@@ -37,17 +37,18 @@
 	const isIE = checkInternetExplorer();											// check IE
 	const isDE = (window.AscDesktopEditor) ? true : false;							// check desktope editor
 	const isFF = (navigator.userAgent.indexOf("Firefox") > -1) ? true : false;		// check FF
+	const isOldChrome = checkOldChrome();                                           // check chrome older than 50 version
 
 	var xml_formatter = require('xml-formatter');									// object for xml formatting
 	var format_lang = {																// list of supported languages for formatting
-		xml : 1,
-		javascript : 1,
-		typescript: 1,
-		css : 1,
-		markdown : 1,
-		json : 1,
-		php : 1,
-		html : 1
+		xml : true,
+		javascript : true,
+		typescript: !isOldChrome,
+		css : true,
+		markdown : !isOldChrome,
+		json : !isOldChrome,
+		php : !isOldChrome,
+		html : true
 	};
 	var settings = {								// object with current settings for user (there are default values)
 		curLang : "Auto",							// current language (default - Auto)
@@ -63,27 +64,30 @@
 		lineSeparator: "\r\n",						// (String, default=\r\n) Specify the line separator to use
 		whiteSpaceAtEndOfSelfclosingTag: false     	// (Boolean, default=false) to either end ad self closing tag with <tag/> or <tag \r\n />
 	};
-	var prettier_settings = {						// object with settings for prettier ( https://prettier.io/docs/en/options.html )
-		arrowParens: "always",						// Include parentheses around a sole arrow function parameter. (default - always)
-		bracketSameLine: false,						// Put the closed bracket of a multi-line element at the end of the last line instead of being alone on the next line. (default - true)
-		endOfLine : "crlf",							// Type of line separating. (default - lf)
-		bracketSpacing: false,						// Print spaces between brackets in object literals. (default - true)
-		embeddedLanguageFormatting: "off",			// Control whether Prettier formats quoted code embedded in the file. (default - auto)
-		htmlWhitespaceSensitivity: "css",			// Specify the global whitespace sensitivity for HTML, Vue, Angular, and Handlebars. See whitespace-sensitive formatting for more info. (default - css)
-		jsxSingleQuote: false,						// Use single quotes instead of double quotes in JSX. (default - false)
-		printWidth: 1e+42,							// Specify the line length that the printer will wrap on. (default - 80)
-		proseWrap: "never",							// By default, Prettier will wrap markdown text as-is since some services use a linebreak-sensitive renderer, e.g. GitHub comment and BitBucket. In some cases you may want to rely on editor/viewer soft wrapping instead, so this option allows you to opt out with. (default - preserve)
-		quoteProps: "as-needed",					// Change when properties in objects are quoted. (default - as-needed)
-		semi: true,									// Print semicolons at the ends of statements. (default - true)
-		singleQuote: false,							// Use single quotes instead of double quotes. (default - false)
-		tabWidth: 4,								// Specify the number of spaces per indentation-level. (default - 2)
-		trailingComma: "all",						// Print trailing commas wherever possible in multi-line comma-separated syntactic structures. (A single-line array, for example, never gets trailing commas.) (defalut - es5)
-		useTabs: true,								// Indent lines with tabs instead of spaces. (default - false)
-		vueIndentScriptAndStyle: false,				// Whether or not to indent the code inside <script> and <style> tags in Vue files. Some people (like the creator of Vue) don’t indent to save an indentation level, but this might break code folding in your editor. (default - false)
-		jsxBracketSameLine: true,					// Put the > of a multi-line JSX element at the end of the last line instead of being alone on the next line (does not apply to self closing elements). (default - false)
-		plugins: prettierPlugins,					// list of available plugins.
-		parser: null								// type of parser for current case
-	};
+	var prettier_settings = {}						// object with settings for prettier ( https://prettier.io/docs/en/options.html )
+	if (!isOldChrome) {
+		prettier_settings = {						// object with settings for prettier ( https://prettier.io/docs/en/options.html )
+			arrowParens: "always",					// Include parentheses around a sole arrow function parameter. (default - always)
+			bracketSameLine: false,					// Put the closed bracket of a multi-line element at the end of the last line instead of being alone on the next line. (default - true)
+			endOfLine : "crlf",						// Type of line separating. (default - lf)
+			bracketSpacing: false,					// Print spaces between brackets in object literals. (default - true)
+			embeddedLanguageFormatting: "off",		// Control whether Prettier formats quoted code embedded in the file. (default - auto)
+			htmlWhitespaceSensitivity: "css",		// Specify the global whitespace sensitivity for HTML, Vue, Angular, and Handlebars. See whitespace-sensitive formatting for more info. (default - css)
+			jsxSingleQuote: false,					// Use single quotes instead of double quotes in JSX. (default - false)
+			printWidth: 1e+42,						// Specify the line length that the printer will wrap on. (default - 80)
+			proseWrap: "never",						// By default, Prettier will wrap markdown text as-is since some services use a linebreak-sensitive renderer, e.g. GitHub comment and BitBucket. In some cases you may want to rely on editor/viewer soft wrapping instead, so this option allows you to opt out with. (default - preserve)
+			quoteProps: "as-needed",				// Change when properties in objects are quoted. (default - as-needed)
+			semi: true,								// Print semicolons at the ends of statements. (default - true)
+			singleQuote: false,						// Use single quotes instead of double quotes. (default - false)
+			tabWidth: 4,							// Specify the number of spaces per indentation-level. (default - 2)
+			trailingComma: "all",					// Print trailing commas wherever possible in multi-line comma-separated syntactic structures. (A single-line array, for example, never gets trailing commas.) (defalut - es5)
+			useTabs: true,							// Indent lines with tabs instead of spaces. (default - false)
+			vueIndentScriptAndStyle: false,			// Whether or not to indent the code inside <script> and <style> tags in Vue files. Some people (like the creator of Vue) don’t indent to save an indentation level, but this might break code folding in your editor. (default - false)
+			jsxBracketSameLine: true,				// Put the > of a multi-line JSX element at the end of the last line instead of being alone on the next line (does not apply to self closing elements). (default - false)
+			plugins: prettierPlugins,				// list of available plugins.
+			parser: null							// type of parser for current case
+		};
+	}
 	var js_beautify_settings = {					// object with settings for js-beautify (https://github.com/beautify-web/js-beautify)
 		indent_size: 4,								// Indentation size (default - 4)
 		indent_char: " ",							// Indentation character (default - " ")
@@ -158,6 +162,11 @@
 		}).on('select2:select', function(e) {
 			text = code_field.innerText;
 			settings.curLang = e.params.data.text;		// change current language
+			if (format_lang[settings.curLang]) {
+				document.getElementById("btn_format").removeAttribute('disabled');
+			} else {
+				document.getElementById("btn_format").setAttribute('disabled', true);
+			}
 			ChangeCode(settings.curLang);
 			flag = true;
 		});
@@ -247,23 +256,36 @@
 							switch (settings.curLang) {
 								case "xml":
 									if (text.indexOf("<html") !== -1 || text.indexOf("<body") !== -1) {
-										prettier_settings.parser = "html";
-										text = prettier.format(text, prettier_settings);
+										if (isOldChrome) {
+											text = html_beautify(text, js_beautify_settings);
+										} else {
+											prettier_settings.parser = "html";
+											text = prettier.format(text, prettier_settings);
+										}
+									
 									} else {
 										text = xml_formatter(text, xml_formatter_settings);
 									}
 									break;
 								case "javascript":
-									prettier_settings.parser = "babel";
-									text = prettier.format(text, prettier_settings);
+									if (isOldChrome) {
+										text = js_beautify(text, js_beautify_settings);
+									} else {
+										prettier_settings.parser = "babel";
+										text = prettier.format(text, prettier_settings);
+									}
 									break;
 								case "typescript":
 									prettier_settings.parser = "typescript";
 									text = prettier.format(text, prettier_settings);
 									break;
 								case "css":
-									prettier_settings.parser = "css";
-									text = prettier.format(text, prettier_settings);
+									if (isOldChrome) {
+										text = css_beautify(text, js_beautify_settings);
+									} else {
+										prettier_settings.parser = "css";
+										text = prettier.format(text, prettier_settings);
+									}
 									break;
 								case "markdown":
 									prettier_settings.parser = "markdown"
@@ -662,6 +684,13 @@
 		return rv !== -1;
 	};
 
+	function checkOldChrome() {
+		let raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+		let version = raw ? parseInt(raw[2], 10) : -1;
+		console.log(version);
+		return version <= 49;
+	}
+
 	function cancelEvent(e) {
 		if (e && e.preventDefault) {
 			e.stopPropagation(); // DOM style (return false doesn't always work in FF)
@@ -687,9 +716,14 @@
 			'American Typewriter', 'Andale Mono', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter', 'Cochin', 'Copperplate', 'Courier', 'Didot', 'DIN Alternate', 'DIN Condensed', 'Futura', 'Geneva', 'Gill Sans', 'Helvetica', 'Helvetica Neue', 'Herculanum', 'Hoefler Text', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate', 'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Times', 'Trattatello', 'Zapfino', 'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji','Trebuchet MS', 'Verdana', 'Webdings', 'Wingdings', 'Yu Gothic'
 		].sort());
 		  
-		(async() => {
-			await document.fonts.ready;
-
+		document.fonts.ready.then(function(fontFaceSet) {
+			// Any operation that needs to be done only after all used fonts
+			// have finished loading can go here.
+			const fontFaces = [...fontFaceSet];
+			console.log(fontFaces);
+			// some fonts may still be unloaded if they aren't used on the site
+			// console.log(fontFaces.map((f) => f.status));
+			console.log(fontFaceSet);
 			for (const font of fontCheck.values()) {
 				if (document.fonts.check(`14px "${font}"`))
 					fontsAvailable.push({ id : font, text : font});
@@ -703,14 +737,18 @@
 			});
 			$('#fonts').val(settings.font).trigger("change");
 			document.getElementById('conteiner_id1').style["font-family"] = settings.font;
-
-		})();
+		});
 	};
 
 	function select_language(lang) {
 		for (var i=0; i<$('#language_id')[0].length;i++) {
 			if ($('#language_id')[0].options[i].text == lang) {
 				settings.curLang = lang;
+				if (format_lang[lang]) {
+					document.getElementById("btn_format").removeAttribute('disabled');
+				} else {
+					document.getElementById("btn_format").setAttribute('disabled', true);
+				}
 				$('#language_id').val(i).trigger("change");
 				break;
 			}	
@@ -868,18 +906,21 @@
 				case "0":
 					xml_formatter_settings.indentation = "\t";
 					prettier_settings.useTabs = true;
+					js_beautify_settings.indent_with_tabs = true;
 					settings.tab_replace = 0;
 					break;
 				case "2":
 					xml_formatter_settings.indentation = "  ";
 					prettier_settings.useTabs = false;
 					prettier_settings.tabWidth = 2;
+					js_beautify_settings.indent_size = 2;
 					settings.tab_replace = 2;
 					break;
 				case "4":
 					xml_formatter_settings.indentation = "    ";
 					prettier_settings.useTabs = false;
 					prettier_settings.tabWidth = 4;
+					js_beautify_settings.indent_size = 4;
 					settings.tab_replace = 4;
 					break;
 			}
