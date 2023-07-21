@@ -50,7 +50,7 @@ let timeout = null;                                                  // delay fo
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 let slideIndex = 1;                                                  // index for slides
-const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
+const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy2';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
