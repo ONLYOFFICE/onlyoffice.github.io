@@ -597,6 +597,8 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 };
 
 function getDiscussion(config) {
+	discussionCount = 0;
+	return;
 	// get discussion page
 	if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
 		makeDesktopRequest(config.discussionUrl).then(
