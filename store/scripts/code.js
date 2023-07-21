@@ -16,7 +16,7 @@
  *
  */
 
-const version = '1.0.2';                                             // version of store (will change it when update something in store)
+const version = '1.0.3';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 let isPluginLoading = false;                                         // flag plugins loading
 const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
@@ -366,7 +366,7 @@ window.addEventListener('message', function(message) {
 			// get all installed plugins
 			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
-			break;makeRequestre
+			break;
 		case 'onClickBack':
 			onClickBack();
 			break;
@@ -604,25 +604,27 @@ function getDiscussion(config) {
 				if (data.status == 'success') {
 					config.rating = parseRatingPage(data.response.responseText);
 				}
+				discussionCount--;
+				if (!discussionCount)
+					showRating();
 			},
 			function(err) {
 				createError(err.response, false);
+				discussionCount--;
+				if (!discussionCount)
+					showRating();
 			}
-		).catch(function(err) {
-			createError(err, false)
-		}).finally(function() {
-			discussionCount--;
-			if (!discussionCount)
-				showRating();
-		});
+		);
 	} else {
 		let body = { target: config.discussionUrl };
 		makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
 			data = JSON.parse(data);
 			config.rating = parseRatingPage(data);
-		}).catch(function(err){
+			discussionCount--;
+			if (!discussionCount)
+				showRating();
+		}, function(err){
 			createError('Problem with loading rating', true);
-		}).finally(function(){
 			discussionCount--;
 			if (!discussionCount)
 				showRating();
