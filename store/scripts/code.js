@@ -366,7 +366,7 @@ window.addEventListener('message', function(message) {
 			// get all installed plugins
 			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
 			sendMessage({type: 'getInstalled'}, '*');
-			break;makeRequestre
+			break;
 		case 'onClickBack':
 			onClickBack();
 			break;
@@ -597,8 +597,6 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 };
 
 function getDiscussion(config) {
-	discussionCount = 0;
-	return;
 	// get discussion page
 	if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
 		makeDesktopRequest(config.discussionUrl).then(
@@ -622,9 +620,11 @@ function getDiscussion(config) {
 		makeRequest(proxyUrl, 'POST', null, body, false).then(function(data) {
 			data = JSON.parse(data);
 			config.rating = parseRatingPage(data);
-		}).catch(function(err){
+			discussionCount--;
+			if (!discussionCount)
+				showRating();
+		}, function(err){
 			createError('Problem with loading rating', true);
-		}).finally(function(){
 			discussionCount--;
 			if (!discussionCount)
 				showRating();
