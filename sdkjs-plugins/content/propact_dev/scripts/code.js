@@ -103,9 +103,9 @@
                 document.getElementById('divContractCreate').classList.remove(displayNoneClass);
                 // var nContentControlType = 2;
                 // color = {
-                //     R: 255,
-                //     G: 0,
-                //     B: 0,
+                //     R: 104,
+                //     G: 215,
+                //     B: 248,
                 // };
                 // window.Asc.plugin.executeMethod("AddContentControl", [nContentControlType, {
                 //     "Id": 7,

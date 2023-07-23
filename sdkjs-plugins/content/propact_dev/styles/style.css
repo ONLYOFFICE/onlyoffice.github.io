@@ -58,7 +58,7 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 .contract-list .contract-search { width: 100%; margin: 0; padding:0 0 10px 0; float: left;}
 .contract-list .contract-search .form-group { width: 100%; margin: 0; padding: 0; float: left; position: relative;}
 .contract-list .contract-search .form-group .form-control { width: 100%; margin: 0; padding: 0 42px 0 12px; border: 1px solid #DADDE0; border-radius: 5px; height: 50px; font-size: 12px; color: #485666; font-weight: 400; font-family: 'Poppins', sans-serif;}
-.contract-list .contract-search .form-group .btn { position: absolute; right: 0; width: auto; min-width: auto; padding: 14px 12px; background: transparent;}
+.contract-list .contract-search .form-group .btn { position: absolute; right: 0; top: 0; width: auto; min-width: auto; padding: 14px 12px; background: transparent;}
 
 .contract-list-items {width: 100%; float: left; margin: 0;  padding: 2px 0 12px; height: calc(100% - 60px); overflow-y: auto; overflow-x: hidden;}
 .contract-list-items .contract-item { width: 100%; margin: 0 0 10px 0; padding: 12px; float: left; background: #F7F7F7; border-radius: 6px;}
@@ -210,3 +210,12 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 @-webkit-keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 /* ===================================== Sanckbar CSS ======================================= */
+
+.form-group .form-control.invite-users-input { background-image: url(../images/select_Icon.svg); background-repeat: no-repeat; background-position: 99.5%; padding-right: 32px; cursor: pointer; }
+.accordion-button:focus { z-index: unset; border-color: transparent; box-shadow: none; }
+.form-control:focus {
+    background-color: transparent;
+    border-color: #DADDE0;
+    outline: 0;
+    box-shadow: none;
+}
