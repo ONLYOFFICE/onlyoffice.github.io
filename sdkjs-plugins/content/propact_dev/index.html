@@ -615,8 +615,8 @@
 // Plugin Code - Start CM //
         var displayNoneClass = "d-none";
         var disabledClass = "disabled";
-        var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODkxNTQxNDAsImV4cCI6MTY5MTc0NjE0MH0.2BEj4U2GAWdIb6b1kHmVrZIKOD6_vrJ0L7AE05hwDZc';
-        var documentID = '64b766fbfe08a4a4d0c0f8c6';
+        var authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDEyYTNmODkzMWMyMTJkM2VkMDE3ZWEiLCJmaXJzdE5hbWUiOiJNaWxhbiIsImxhc3ROYW1lIjoiSGlycGFyYSIsImVtYWlsIjoibWlsYW4uZW5jb2RlZG90c0BnbWFpbC5jb20iLCJyZXF1ZXN0RnJvbSI6InVzZXIiLCJpYXQiOjE2ODgzMDAxMzEsImV4cCI6MTY5MDg5MjEzMX0.9tr0tD7YOD6j9t_syja77IlLux2eqUzZCORG_PM57lo';
+        var documentID = '64b40a6f7d52a8cfbcbf524e';
         var loggedInUserID = '';
         var apiBaseUrl = 'http://localhost:3000/api/v1/app';
         var IMAGE_USER_PATH_LINK = 'https://propact.s3.amazonaws.com/'
@@ -865,8 +865,8 @@
                             html += '<ul>\n';
                             teamLists.forEach((ele) => {
                                 html += '<li>\n' +
-                                        '<div class="form-check">\n' +
-                                            '<input type="checkbox" id="inviteteam_'+ele.itemId+'" class="form-check-input team-chkbox" >' +
+                                        '<div class="form-check" data-id="'+ele.itemId+'">\n' +
+                                            '<input type="checkbox" id="inviteteam_'+ele.itemId+'" class="form-check-input team-chkbox" />' +
                                             '<label for="inviteteam_'+ele.itemId+'" class="form-check-label">\n' +
                                                 '<div class="invite-users-inner-bar">\n' +
                                                     '<div class="invite-users-name">\n' +
@@ -891,17 +891,16 @@
                             // ' + IMAGE_USER_PATH_LINK + ele.userImage + '
                             // assets/images/no-profile-image.jpg
                             userLists.forEach((ele) => {
-                                console.log('profile', ele.userImage ? ele.userImage : 'images/no-profile-image.jpg');
                                 html += '<li>';
-                                html += '<div class="form-check">\n' +
-                                    '\t<input type="checkbox" id="inviteuser_'+ele.itemId+'" class="form-check-input user-chkbox">\n' +
+                                html += '<div class="form-check" data-id="'+ele.itemId+'">\n' +
+                                    '\t<input type="checkbox" id="inviteuser_'+ele.itemId+'" class="form-check-input user-chkbox" value="'+ele.itemId+'">\n' +
                                     '\t<label for="inviteuser_'+ele.itemId+'" class="form-check-label">\n' +
                                     '\t\t<div class="conversation-left">\n' +
                                     '\t\t\t<span class="user-icon" id="userProfileImage">\n' +
-                                    '\t\t\t\t<img src="'+(ele.userImage ? ele.userImage : 'images/no-profile-image.jpg')+'" alt="">\n' +
+                                    '\t\t\t\t<img src="'+(ele.userImage ? IMAGE_USER_PATH_LINK + ele.userImage : 'images/no-profile-image.jpg')+'" alt="">\n' +
                                     '\t\t\t</span>\n' +
                                     '\t\t\t<div class="user-inner">\n' +
-                                    '\t\t\t\t<span class="user-name" id="userProfileName">'+ele.itemName+'</span>\n' +
+                                    '\t\t\t\t<span class="user-name" id="userProfileName">' + ele.itemName + '</span>\n' +
                                     '\t\t\t\t<p id="userProfilerole">'+ele.role+'</p>\n' +
                                     '\t\t\t</div>\n' +
                                     '\t\t</div>\n' +
@@ -911,8 +910,6 @@
                             });
                             html += '</ul>';
                             html += '</div>';
-                            console.log('html', html);
-                            //accordionBodyTeams
                             document.getElementById('accordionBodyUsers').innerHTML = html;
                         }
                     }
@@ -1033,26 +1030,73 @@
 
         $(document).on('click', '#inviteteams',function () {
             $('.team-chkbox').prop('checked', this.checked);
-            updateInviteUsersPlacehoder();
+            updateInviteTeamCheckbox();
         })
 
         $(document).on('click', '.team-chkbox', function() {
-            console.log('Fn Called');
             var allChecked = $('.team-chkbox:checked').length === $('.team-chkbox').length;
             $('#inviteteams').prop('checked', allChecked);
-            updateInviteUsersPlacehoder();
+            updateInviteTeamCheckbox();
         });
 
         $(document).on('click', '#inviteusers',function () {
             $('.user-chkbox').prop('checked', this.checked);
-            updateInviteUsersPlacehoder();
+            updateInviteUserCheckbox();
         })
 
         $(document).on('click', '.user-chkbox', function() {
             var allChecked = $('.user-chkbox:checked').length === $('.user-chkbox').length;
             $('#inviteusers').prop('checked', allChecked);
-            updateInviteUsersPlacehoder();
+            updateInviteUserCheckbox();
         });
+
+        function updateInviteTeamCheckbox() {
+            console.log('selectedInvitedTeams', selectedInvitedTeams);
+            $('.team-chkbox').each(function() {
+                let isChecked = $(this).prop("checked");
+                let dataID = $(this).parent().data('id');
+                if (isChecked) {
+                    if (!selectedInvitedTeams.includes(dataID)) {
+                        selectedInvitedTeams.push(dataID);
+                    }
+                } else {
+                    if (selectedInvitedTeams.includes(dataID)) {
+                        selectedInvitedTeams = $.grep(selectedInvitedTeams, function (value) {
+                            return value != dataID;
+                        });
+                    }
+                }
+            });
+            updateInviteUsersPlacehoder();
+            console.log('selectedInvitedTeams', selectedInvitedTeams);
+        }
+
+        function updateInviteUserCheckbox() {
+            console.log('selectedInvitedUsers', selectedInvitedUsers);
+            $('.user-chkbox').each(function() {
+                let isChecked = $(this).prop("checked");
+                let dataID = $(this).parent().data('id');
+                if (isChecked) {
+                    console.log('test', selectedInvitedUsers.includes(dataID));
+                    if (!selectedInvitedUsers.includes(dataID)) {
+                        selectedInvitedUsers.push(dataID);
+                    }
+                } else {
+                    if (selectedInvitedUsers.includes(dataID)) {
+                        selectedInvitedUsers = $.grep(selectedInvitedUsers, function (value) {
+                            return value != dataID;
+                        });
+                    }
+                }
+            });
+            updateInviteUsersPlacehoder();
+            console.log('selectedInvitedUsers', selectedInvitedUsers);
+        }
+
+        function updateInviteUsersPlacehoder() {
+            console.log('selectedInvitedTeams', selectedInvitedTeams.length );
+            console.log('selectedInvitedUsers', selectedInvitedUsers);
+        }
 
         // Plugin Code - End CM //
     });
