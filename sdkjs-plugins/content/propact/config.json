@@ -1,6 +1,6 @@
 {
     "name" : "ProPact",
-    "guid" : "asc.{C36DDFB5-08F0-4A68-B829-5FB1F7D41234}",
+    "guid" : "asc.{C36DDFB5-08F0-4A68-B829-5F1F7D221122}",
 
     "variations" : [
         {
@@ -36,6 +36,7 @@
 
             "initDataType"    : "text",
             "initData"        : "",
+			"size"			  : [485, 712],
 
             "isUpdateOleOnResize" : false,
 

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="341" height="83" viewBox="0 0 341 83">
+  <defs>
+    <filter id="Union_5" x="0" y="0" width="341" height="83" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Union_5)">
+    <path id="Union_5-2" data-name="Union 5" d="M57,53a5,5,0,0,1-5-5V14a5,5,0,0,1,5-5H200l7.5-9L215,9H358a5,5,0,0,1,5,5V48a5,5,0,0,1-5,5Z" transform="translate(-37 12)" fill="#fff"/>
+  </g>
+</svg>
