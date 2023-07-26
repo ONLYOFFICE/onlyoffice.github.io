@@ -1,0 +1,3913 @@
+[{
+        "id": "f973cb04-225b-4b49-9d80-52c7a8f7b29f",
+        "name": "Freq1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "30f96b81-8180-418f-92c3-5b6e92c131da",
+        "label": "Freq1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9b8a89a8-fd33-4e80-8012-c6bc62ae6091",
+        "name": "Freq1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "eae0ae5c-b158-4eab-b645-9f6be27aa746",
+        "label": "Freq1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "80d2ca7e-7a06-42d1-a723-52e451b3f2d6",
+        "name": "Freq1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "164b1904-5372-4f78-9f4f-6da76bf76272",
+        "label": "Freq1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "ba51f65e-ae08-4d27-90a4-d23ffcd3a89e",
+        "name": "Freq1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "97627b4a-bee4-497c-9f57-778b0cb0e5f4",
+        "label": "Freq1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e19ef8f0-db98-4a27-ba6c-ff6cd0a86beb",
+        "name": "Freq1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e0910646-2fdd-47ef-b959-c859bc637886",
+        "label": "Freq1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "979cd048-c179-4368-a479-4745a74d2c80",
+        "name": "Freq2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "30f96b81-8180-418f-92c3-5b6e92c131da",
+        "label": "Freq2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5442da4d-5148-4402-8687-c7421af01064",
+        "name": "Freq2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "eae0ae5c-b158-4eab-b645-9f6be27aa746",
+        "label": "Freq2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "44c39a5d-bb0e-4063-b1b5-8631f4751bd2",
+        "name": "Freq2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "164b1904-5372-4f78-9f4f-6da76bf76272",
+        "label": "Freq2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "00a710dd-9565-4490-b95c-9e6a33f04f03",
+        "name": "Freq2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "97627b4a-bee4-497c-9f57-778b0cb0e5f4",
+        "label": "Freq2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5fd2f1fc-6949-47a3-9db7-b6ea369fa7a4",
+        "name": "Freq2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e0910646-2fdd-47ef-b959-c859bc637886",
+        "label": "Freq2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c0be11cd-e070-41f2-80c5-bddfb6a1d6db",
+        "name": "FreqSet1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "c6ab0899-1e3f-46d2-9c96-867c9762c283",
+        "label": "FreqSet1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9a301ccf-85bc-43f0-9758-622d09b105d5",
+        "name": "FreqSet1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0e21d004-b691-4bfb-9e95-dd6e4fcd32eb",
+        "label": "FreqSet1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "8893bd37-7605-4e68-97bd-81feac1ecf0b",
+        "name": "FreqSet1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "13e67909-113e-4fcb-9c72-f2c6e75e1b51",
+        "label": "FreqSet1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2a582013-58c6-46a7-9f04-f26e23efa333",
+        "name": "FreqSet1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "583de13b-7618-400e-851e-95d13c37fd04",
+        "label": "FreqSet1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3e1d666e-d87f-422d-94fb-26d619393426",
+        "name": "FreqSet1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "32705e8e-a4b7-4ee7-b832-21b2fad39d9d",
+        "label": "FreqSet1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "cad789c7-8160-4c1f-91fd-add2fa648fae",
+        "name": "FreqSet2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "c6ab0899-1e3f-46d2-9c96-867c9762c283",
+        "label": "FreqSet2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e601f174-ca2b-4bc2-bbdb-67056c6f68ec",
+        "name": "FreqSet2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0e21d004-b691-4bfb-9e95-dd6e4fcd32eb",
+        "label": "FreqSet2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1be3a007-a3ec-4120-9989-9f8d5d950fa5",
+        "name": "FreqSet2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "13e67909-113e-4fcb-9c72-f2c6e75e1b51",
+        "label": "FreqSet2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3221c27c-c3fe-4034-be46-657c2a1c75d2",
+        "name": "FreqSet2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "583de13b-7618-400e-851e-95d13c37fd04",
+        "label": "FreqSet2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "7589e0c5-ddf0-4c26-b044-a0ed3e05c61c",
+        "name": "FreqSet2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "32705e8e-a4b7-4ee7-b832-21b2fad39d9d",
+        "label": "FreqSet2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3724baec-d1e3-43c7-a552-48c0bc7b0c87",
+        "name": "Plim1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ac5594d3-0824-48d8-a1fc-c2439ad5f748",
+        "label": "Plim1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "29f93b06-47fc-48f6-95e0-527e5a32616b",
+        "name": "Plim1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "89ce2870-5f10-4c41-8e62-f68719c4c204",
+        "label": "Plim1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "deae12f0-4e09-41c7-8418-6aa848718f97",
+        "name": "Plim1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "9ce93215-67d2-4c96-b120-43bfcf4e831f",
+        "label": "Plim1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c3f576df-73e9-4b36-8093-86e1af064526",
+        "name": "Plim1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "d0fa388f-7059-4a93-8355-56b86a07bc24",
+        "label": "Plim1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2722c6d0-0fd4-456a-aec2-8954e616b8ad",
+        "name": "Plim1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "34ee3a44-64ae-4a66-8dfd-7cee3949eee5",
+        "label": "Plim1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "eafd48e7-229d-4192-a313-f38dacd7b2a3",
+        "name": "Plim2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ac5594d3-0824-48d8-a1fc-c2439ad5f748",
+        "label": "Plim2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "141ea86e-1507-480a-961a-ce9c07d80ef5",
+        "name": "Plim2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "89ce2870-5f10-4c41-8e62-f68719c4c204",
+        "label": "Plim2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "87d9b547-276e-4586-a88d-bb634f65c947",
+        "name": "Plim2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "9ce93215-67d2-4c96-b120-43bfcf4e831f",
+        "label": "Plim2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d674f7bf-7f73-404e-8ec3-3cfb3c941694",
+        "name": "Plim2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "d0fa388f-7059-4a93-8355-56b86a07bc24",
+        "label": "Plim2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "db0f2818-12f9-4fbe-b549-0b6dd6bf3564",
+        "name": "Plim2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "34ee3a44-64ae-4a66-8dfd-7cee3949eee5",
+        "label": "Plim2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "06992d2c-5a47-4c81-8000-0b99251f5d53",
+        "name": "Power1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "f1012c8a-d0d1-42ef-8c72-e20b98976cf1",
+        "label": "Power1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a7af90a5-a78a-42cc-bede-7735df9b68b9",
+        "name": "Power1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0af9a51f-800d-423e-92f8-9caf12e1c31c",
+        "label": "Power1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1e1ab7a4-b1a8-42b1-a68d-392fc7b1c01b",
+        "name": "Power1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "38733335-17a0-456e-a71a-8610927925ff",
+        "label": "Power1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e8dd1698-933d-4b84-8cee-4bab00cfd455",
+        "name": "Power1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74f88356-181c-4200-98cd-efcdc937c5ee",
+        "label": "Power1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a0e880b8-c00f-48b3-9e00-17ec0a0baadf",
+        "name": "Power1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "847c8491-78dc-4ddf-b8fb-7f3b3784e567",
+        "label": "Power1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5e2c3466-07c7-48b3-ac7e-015b8d6a515b",
+        "name": "Power2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "f1012c8a-d0d1-42ef-8c72-e20b98976cf1",
+        "label": "Power2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "90c9273d-f5b6-4666-804c-649058e4792a",
+        "name": "Power2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0af9a51f-800d-423e-92f8-9caf12e1c31c",
+        "label": "Power2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e4e85b72-27ee-4025-91b8-19ac95028b18",
+        "name": "Power2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "38733335-17a0-456e-a71a-8610927925ff",
+        "label": "Power2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "38124646-2e70-45ce-886e-60855f78e0d5",
+        "name": "Power2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74f88356-181c-4200-98cd-efcdc937c5ee",
+        "label": "Power2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "942dc50c-168f-47b7-b01e-3c000db68e35",
+        "name": "Power2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "847c8491-78dc-4ddf-b8fb-7f3b3784e567",
+        "label": "Power2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9636390c-4a01-42f2-bc30-83aeff36045b",
+        "name": "PowerMode1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "5d3e0e46-688b-47ce-b346-5576645e26d8",
+        "label": "PowerMode1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5f562ac8-b85c-46ac-b399-1372a1227ef3",
+        "name": "PowerMode1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "dce182b1-fd19-49e6-b9be-d8591274273f",
+        "label": "PowerMode1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "ab86066c-4ff5-47d3-bca6-993b4461e2e8",
+        "name": "PowerMode1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5011495-db6f-40f8-ad3a-6fc14a417e22",
+        "label": "PowerMode1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "78531b6c-1efe-4baa-a520-ce89763970a8",
+        "name": "PowerMode1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "aff8acd2-43f0-4f71-a1c8-74edba16d995",
+        "label": "PowerMode1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "ce759b23-1301-4e72-a563-0c6b66d91578",
+        "name": "PowerMode1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "de6373b5-421b-45b3-80fc-d8c1db95a1a0",
+        "label": "PowerMode1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "0d557282-28f9-479b-8d1e-8bae95f338e4",
+        "name": "PowerMode2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "5d3e0e46-688b-47ce-b346-5576645e26d8",
+        "label": "PowerMode2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "54a44e9f-b4ef-4871-9bd7-c9b0d8387a20",
+        "name": "PowerMode2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "dce182b1-fd19-49e6-b9be-d8591274273f",
+        "label": "PowerMode2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "6c26e74b-1ec8-4abb-ad3e-d046596d3f84",
+        "name": "PowerMode2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5011495-db6f-40f8-ad3a-6fc14a417e22",
+        "label": "PowerMode2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "97312a27-c5a1-4ed4-b13c-e3f2b676c0d0",
+        "name": "PowerMode2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "aff8acd2-43f0-4f71-a1c8-74edba16d995",
+        "label": "PowerMode2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "dbc7576d-f9fe-44eb-99b0-5282c9e5aa87",
+        "name": "PowerMode2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "de6373b5-421b-45b3-80fc-d8c1db95a1a0",
+        "label": "PowerMode2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "dd54a1a9-2dd7-42fa-9b67-e6cb773aef3b",
+        "name": "Pset1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "1f87a4c8-45dc-4751-a9fa-001caafe1b05",
+        "label": "Pset1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1b80d2b3-6504-4d05-8358-011e6f6aba3f",
+        "name": "Pset1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "78bd12c0-79e4-42cd-b841-59b8d0c72a9c",
+        "label": "Pset1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "58307f8b-c42e-45a6-977b-1e5d474d1c8c",
+        "name": "Pset1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "5243df00-e0d2-4f32-8237-2e56588f2020",
+        "label": "Pset1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "498a709b-1c5d-4d9d-aa0a-130b166fc58a",
+        "name": "Pset1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a6e236bd-bb7e-4ad0-84f4-747526d240f7",
+        "label": "Pset1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5eba1610-07ec-4bdb-8ee0-c29fbdf1669c",
+        "name": "Pset1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "413a2b7c-2f81-44e1-aa38-e47bd8253aba",
+        "label": "Pset1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d96e3616-866a-477a-a6b9-41f5cf40ccd5",
+        "name": "Pset2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "1f87a4c8-45dc-4751-a9fa-001caafe1b05",
+        "label": "Pset2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c7c5a3ff-ef4b-46f8-acc1-99c5f4461838",
+        "name": "Pset2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "78bd12c0-79e4-42cd-b841-59b8d0c72a9c",
+        "label": "Pset2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "80bac984-0f4a-45d1-9cd5-c26040905d00",
+        "name": "Pset2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "5243df00-e0d2-4f32-8237-2e56588f2020",
+        "label": "Pset2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1780a300-385b-4e75-9f26-db5cf9d629b0",
+        "name": "Pset2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a6e236bd-bb7e-4ad0-84f4-747526d240f7",
+        "label": "Pset2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5ca9819d-4162-4aa8-a1e5-0254cbe276df",
+        "name": "Pset2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "413a2b7c-2f81-44e1-aa38-e47bd8253aba",
+        "label": "Pset2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "4a03ee5c-28fc-42eb-80e8-807965df1e48",
+        "name": "TSAggregate",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Агрегированный ТС",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Агрегированный ТС",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d45b3f50-24b5-46ee-a3c3-93abb672b21f",
+        "name": "TSAggregate",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Агрегированный ТС",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Агрегированный ТС",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9daf2852-df2b-4283-a442-d3f1a96363c8",
+        "name": "TSAggregate",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Агрегированный ТС",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Агрегированный ТС",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "6984cf56-cff6-4734-9233-c229d11570ad",
+        "name": "TSAggregate",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Агрегированный ТС",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Агрегированный ТС",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "b7853207-c562-4b63-8294-e194f2518084",
+        "name": "TSAggregate",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Агрегированный ТС",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Агрегированный ТС",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "93825f87-c061-4a47-a6fe-42d1bbe23b9a",
+        "name": "TSAggregate",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Агрегированный ТС",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Агрегированный ТС",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f1012c8a-d0d1-42ef-8c72-e20b98976cf1",
+        "name": "Power",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Активная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Активная мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "0af9a51f-800d-423e-92f8-9caf12e1c31c",
+        "name": "Power",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Активная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Активная мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "38733335-17a0-456e-a71a-8610927925ff",
+        "name": "Power",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Активная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Активная мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "74f88356-181c-4200-98cd-efcdc937c5ee",
+        "name": "Power",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Активная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Активная мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d591a73f-2259-4578-94f7-527bf9dce0ce",
+        "name": "Power",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Активная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Активная мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "847c8491-78dc-4ddf-b8fb-7f3b3784e567",
+        "name": "Power",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Активная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Активная мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2f220e6c-b550-426a-baa5-d59479a7cd6e",
+        "name": "Power1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "d591a73f-2259-4578-94f7-527bf9dce0ce",
+        "label": "Активная мощность кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "7354e4da-f23e-4124-ae8e-1cac0c96bb8b",
+        "name": "Power2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "d591a73f-2259-4578-94f7-527bf9dce0ce",
+        "label": "Активная мощность кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "68c7b913-04a5-4003-bd08-a7e31a16e717",
+        "name": "DeltaPoprchGes",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Величина отклонения первичной мощности от потребной суммарно для станции",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Величина отклонения первичной мощности от потребной суммарно для станции, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a2dbfc10-cfd9-4aee-8acd-d26b4a4e51eb",
+        "name": "DeltaPoprch",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Величина отклонения фактической первичной мощности от потребного диапазона",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "величина отклонения фактической первичной мощности от потребного диапазона МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5020fc2a-791b-47b1-93dc-022eb70e9f97",
+        "name": "DeltaPoprch",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Величина отклонения фактической первичной мощности от потребного диапазона",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "величина отклонения фактической первичной мощности от потребного диапазона МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "fceae1e8-54b2-4534-9826-05dc0b717229",
+        "name": "DeltaPoprch",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Величина отклонения фактической первичной мощности от потребного диапазона",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "величина отклонения фактической первичной мощности от потребного диапазона МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "89ea2ae0-0791-4232-8a54-d3c5c6c69e8b",
+        "name": "DeltaPoprch",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Величина отклонения фактической первичной мощности от потребного диапазона",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "величина отклонения фактической первичной мощности от потребного диапазона МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "eb9cc44b-0baa-4703-b2ce-20bef3063e23",
+        "name": "DeltaPoprch",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Величина отклонения фактической первичной мощности от потребного диапазона",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "величина отклонения фактической первичной мощности от потребного диапазона МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3d971f22-921b-4d6f-bc4a-8fc849c50f4e",
+        "name": "DeltaPoprch",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Величина отклонения фактической первичной мощности от потребного диапазона",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "величина отклонения фактической первичной мощности от потребного диапазона МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "80bc70d1-6715-4072-9a4c-7965908badd1",
+        "name": "PoprchBoundUp",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "верхняя граница потребной первичной мощности МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a91451cb-83f0-4e38-bf03-90221fc2f3b8",
+        "name": "PoprchBoundUp",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "верхняя граница потребной первичной мощности МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "fbc45871-cc8d-436e-b766-cd060f1a3114",
+        "name": "PoprchBoundUp",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "верхняя граница потребной первичной мощности МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "153b322d-0e8c-4169-bde8-a2dd1e2d4b98",
+        "name": "PoprchBoundUp",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "верхняя граница потребной первичной мощности МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "86651e53-b29c-4702-8475-48530afd048c",
+        "name": "PoprchBoundUp",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "верхняя граница потребной первичной мощности МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d2febd93-6d3d-417d-97d0-f9d1adca0a7d",
+        "name": "PoprchBoundUp",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "верхняя граница потребной первичной мощности МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2f933077-1aea-41a5-b1f7-49e9a597ec59",
+        "name": "PoprchBoundUpGes",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Верхняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Верхняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "name": "GA01",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "9954a862-8d95-41a9-9ddd-507f813e71f8",
+                    "name": "F_dead",
+                    "label": "Зона нечувствительности по частоте",
+                    "additionalProps": "Зона нечувствительности по частоте",
+                    "entityId": "77a13551-ee67-4880-9608-5a56b6de6e37",
+                    "value": "75",
+                    "type": "int32"
+                }, {
+                    "id": "039bb664-631a-4d69-a490-00ed3c67cd05",
+                    "name": "PowerMax",
+                    "label": "Максимальная мощность",
+                    "additionalProps": "Максимальная мощность, МВт:",
+                    "entityId": "f8eba0fa-ce30-4919-a00a-c1d34ccfc778",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "b2bdd16e-c0d4-45ce-b77c-a23bfe431043",
+                    "name": "StatismMax",
+                    "label": "Максимальное значение статизма",
+                    "additionalProps": "Максимальное значение статизма, %",
+                    "entityId": "8e8de5a3-6482-4047-9713-a82ab55e7073",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "0079c961-5e41-425e-88fc-d186e8e386f6",
+                    "name": "PowerMin",
+                    "label": "Минимальная мощность",
+                    "additionalProps": "Минимальная мощность, МВт:",
+                    "entityId": "5999b725-1647-4c9e-9e84-a7ded670802c",
+                    "value": "0",
+                    "type": "float"
+                }, {
+                    "id": "14e48cfa-402b-4630-8390-8d7df2d26fd9",
+                    "name": "StatismMin",
+                    "label": "Минимальное значение статизма",
+                    "additionalProps": "Минимальное значение статизма, %",
+                    "entityId": "86686d2e-ae00-412f-91e8-05e5b42c510c",
+                    "value": "4.5",
+                    "type": "float"
+                }, {
+                    "id": "52e6b15b-2e81-47d0-ab49-6b331ce6387e",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "cdc9e8f0-2306-4d8a-b622-a80e835963e0",
+                    "value": "Гидроагрегат №1",
+                    "type": "string"
+                }, {
+                    "id": "17067d97-32b6-4f35-a2db-11e35536f0a6",
+                    "name": "UnitNumber",
+                    "label": "Номер гидроагрегата",
+                    "additionalProps": "Номер гидроагрегата",
+                    "entityId": "e34651b6-47b6-454d-bb07-bc56741dc469",
+                    "value": "1",
+                    "type": "float"
+                }, {
+                    "id": "b6f8a41e-e79e-4d83-ba2b-6b5e595434c3",
+                    "name": "Pnom",
+                    "label": "Номинальная мощность",
+                    "additionalProps": "Номинальная мощность, МВт:",
+                    "entityId": "553109e0-1bb6-499f-9e7f-5152742cfe26",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "cdce9608-c337-4ec6-86d3-2a601108905e",
+                    "name": "S",
+                    "label": "Статизм",
+                    "additionalProps": "Статизм",
+                    "entityId": "f79fcfc6-7a55-4be3-b985-21f3e1855766",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "2359ff7d-cced-4f78-b8a5-50262994be8c",
+                    "name": "Kd",
+                    "label": "Тип объекта генерации",
+                    "additionalProps": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+                    "entityId": "04f68e92-9104-478f-bcae-fdb5569c66a0",
+                    "value": "0",
+                    "type": "TypeGenerationType"
+                }
+            ],
+            "Defs": {
+                "TypeGenerationType": [{
+                        "label": "ПГУ",
+                        "value": 4
+                    }, {
+                        "label": "Гидроагрегат",
+                        "value": 0
+                    }, {
+                        "label": "Газомазутный энергоблок",
+                        "value": 1
+                    }, {
+                        "label": "ТЭС с общим паропроводом",
+                        "value": 3
+                    }, {
+                        "label": "Пылеугольный энергоблок",
+                        "value": 2
+                    }
+                ]
+            },
+            "Refs": [{
+                    "from": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+                    "property": "32d16fd4-556e-46d3-af67-389ebf2f8239",
+                    "to": "bf37c7f1-3acf-46bd-b06e-beee9c0cc3a0",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий адекватной (должной) реакции"
+                }, {
+                    "from": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+                    "property": "b625e180-5693-4a28-ac91-4bd2d63300b4",
+                    "to": "5f107d54-00ea-423f-87ec-5fa8d52bf5b1",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий непредоставления информации"
+                }, {
+                    "from": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+                    "property": "db6e0679-d620-4cbb-8ede-482fb590ee8d",
+                    "to": "e89b592b-0754-4516-bddd-cce8fec82506",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий наличие колебательного процесса"
+                }
+            ]
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "ГА-01",
+        "dataType": "",
+        "typeDefinition": "GaType",
+        "description": "Гидроагрегат №1",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "name": "GA02",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "4308a091-eab5-44d6-a03c-b4cdb1228cbe",
+                    "name": "F_dead",
+                    "label": "Зона нечувствительности по частоте",
+                    "additionalProps": "Зона нечувствительности по частоте",
+                    "entityId": "22545bbb-c7b2-41d2-b528-cdb8cf21fb5b",
+                    "value": "75",
+                    "type": "int32"
+                }, {
+                    "id": "b9a5ea38-245c-428b-8442-45fd99bb45b8",
+                    "name": "PowerMax",
+                    "label": "Максимальная мощность",
+                    "additionalProps": "Максимальная мощность, МВт:",
+                    "entityId": "12ac7ab6-1df2-45d1-b28f-e26ec5af5dac",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "1bd74de5-ea61-48ad-a5e4-ba042962062a",
+                    "name": "StatismMax",
+                    "label": "Максимальное значение статизма",
+                    "additionalProps": "Максимальное значение статизма, %",
+                    "entityId": "51085233-7f20-4129-9039-096d16834f3b",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "4c732824-23b5-4803-b8c8-ea10bb7a0471",
+                    "name": "PowerMin",
+                    "label": "Минимальная мощность",
+                    "additionalProps": "Минимальная мощность, МВт:",
+                    "entityId": "f45c88e7-7c38-43d6-8396-c6e58dd03458",
+                    "value": "0",
+                    "type": "float"
+                }, {
+                    "id": "8baac260-b102-4c76-a08a-d4df99418232",
+                    "name": "StatismMin",
+                    "label": "Минимальное значение статизма",
+                    "additionalProps": "Минимальное значение статизма, %",
+                    "entityId": "6527e71e-fd4b-4965-9cfb-577e9bee3639",
+                    "value": "4.5",
+                    "type": "float"
+                }, {
+                    "id": "63d37e98-b07b-4d60-bb0c-d07e09eb3867",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "3623d713-0549-419c-b172-2cc92d84c79e",
+                    "value": "Гидроагрегат №2",
+                    "type": "string"
+                }, {
+                    "id": "0727f9c6-fcaa-41e9-94c6-d51083ad7a38",
+                    "name": "UnitNumber",
+                    "label": "Номер гидроагрегата",
+                    "additionalProps": "Номер гидроагрегата",
+                    "entityId": "92bc9f2e-acc0-4d2c-8015-a48d9f6d4e73",
+                    "value": "2",
+                    "type": "float"
+                }, {
+                    "id": "1e987446-f608-42ed-86ff-8fb94506b7c4",
+                    "name": "Pnom",
+                    "label": "Номинальная мощность",
+                    "additionalProps": "Номинальная мощность, МВт:",
+                    "entityId": "b4e7654f-fb96-4b5b-a94e-eb2b1acbfc36",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "702bd603-f03c-4fc5-88e9-4b072056a40c",
+                    "name": "S",
+                    "label": "Статизм",
+                    "additionalProps": "Статизм",
+                    "entityId": "3b71e321-1aab-4682-8e16-edb09efd1aee",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "0180d74e-3d39-43d4-9098-eabebb3375ca",
+                    "name": "Kd",
+                    "label": "Тип объекта генерации",
+                    "additionalProps": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+                    "entityId": "721f8749-884d-49d0-93ac-a59106be381b",
+                    "value": "0",
+                    "type": "TypeGenerationType"
+                }
+            ],
+            "Defs": {
+                "TypeGenerationType": [{
+                        "label": "ПГУ",
+                        "value": 4
+                    }, {
+                        "label": "Гидроагрегат",
+                        "value": 0
+                    }, {
+                        "label": "Газомазутный энергоблок",
+                        "value": 1
+                    }, {
+                        "label": "ТЭС с общим паропроводом",
+                        "value": 3
+                    }, {
+                        "label": "Пылеугольный энергоблок",
+                        "value": 2
+                    }
+                ]
+            },
+            "Refs": [{
+                    "from": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+                    "property": "4243463a-8aba-4ddf-8a61-7b923447e897",
+                    "to": "e89b592b-0754-4516-bddd-cce8fec82506",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий наличие колебательного процесса"
+                }, {
+                    "from": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+                    "property": "da216055-85ae-42eb-92c7-6116379b030c",
+                    "to": "bf37c7f1-3acf-46bd-b06e-beee9c0cc3a0",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий адекватной (должной) реакции"
+                }, {
+                    "from": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+                    "property": "f099272c-4a77-44cc-a7cf-b4222462b4f6",
+                    "to": "5f107d54-00ea-423f-87ec-5fa8d52bf5b1",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий непредоставления информации"
+                }
+            ]
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "ГА-02",
+        "dataType": "",
+        "typeDefinition": "GaType",
+        "description": "Гидроагрегат №2",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "name": "GA03",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "6db89939-4947-4711-88cd-69d6d9f46bcd",
+                    "name": "F_dead",
+                    "label": "Зона нечувствительности по частоте",
+                    "additionalProps": "Зона нечувствительности по частоте",
+                    "entityId": "109b9cf8-2ad2-46d5-9e4d-316542b5088e",
+                    "value": "75",
+                    "type": "int32"
+                }, {
+                    "id": "56806c8c-6a69-41ee-8151-03c3dec58d1d",
+                    "name": "PowerMax",
+                    "label": "Максимальная мощность",
+                    "additionalProps": "Максимальная мощность, МВт:",
+                    "entityId": "81bd25dc-f4b3-45c5-833c-9e691495bce4",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "e817d857-d05a-4099-af19-53af7669b2a8",
+                    "name": "StatismMax",
+                    "label": "Максимальное значение статизма",
+                    "additionalProps": "Максимальное значение статизма, %",
+                    "entityId": "d26d310e-fb1b-4793-b3e3-f96b5e4e4d13",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "bf9fb70b-4783-431c-a1eb-edd8c561d2bd",
+                    "name": "PowerMin",
+                    "label": "Минимальная мощность",
+                    "additionalProps": "Минимальная мощность, МВт:",
+                    "entityId": "4a03eec1-4532-4ef9-bebc-35a47a53ac76",
+                    "value": "0",
+                    "type": "float"
+                }, {
+                    "id": "7561d5ac-7907-4605-8e6a-a2d3c68fbbcc",
+                    "name": "StatismMin",
+                    "label": "Минимальное значение статизма",
+                    "additionalProps": "Минимальное значение статизма, %",
+                    "entityId": "20fafed9-c216-4864-9caa-a6db40d6e147",
+                    "value": "4.5",
+                    "type": "float"
+                }, {
+                    "id": "ed4c456e-83aa-4e2d-8c9a-1d409d38c267",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "c1f8b742-a274-4fd4-b505-566c60e13761",
+                    "value": "Гидроагрегат №3",
+                    "type": "string"
+                }, {
+                    "id": "21c6be94-6a93-46b7-b66a-f11d257b0cda",
+                    "name": "UnitNumber",
+                    "label": "Номер гидроагрегата",
+                    "additionalProps": "Номер гидроагрегата",
+                    "entityId": "34be0a03-a166-4904-bd7d-3068cfa7a1e5",
+                    "value": "3",
+                    "type": "float"
+                }, {
+                    "id": "446f5cd7-7090-42d3-a401-c1b0c7587ffe",
+                    "name": "Pnom",
+                    "label": "Номинальная мощность",
+                    "additionalProps": "Номинальная мощность, МВт:",
+                    "entityId": "3359bfc5-2469-4079-bdf7-0781b8cecbd9",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "ed1b3e09-b9a9-464a-853f-dd8a22f800d6",
+                    "name": "S",
+                    "label": "Статизм",
+                    "additionalProps": "Статизм",
+                    "entityId": "567eee42-24db-466e-919f-f9d47c08e2b8",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "0facb5e0-6b40-4048-8cba-41b2bf114074",
+                    "name": "Kd",
+                    "label": "Тип объекта генерации",
+                    "additionalProps": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+                    "entityId": "98583f37-1a2f-47cd-8806-4a9f1161a895",
+                    "value": "0",
+                    "type": "TypeGenerationType"
+                }
+            ],
+            "Defs": {
+                "TypeGenerationType": [{
+                        "label": "ПГУ",
+                        "value": 4
+                    }, {
+                        "label": "Гидроагрегат",
+                        "value": 0
+                    }, {
+                        "label": "Газомазутный энергоблок",
+                        "value": 1
+                    }, {
+                        "label": "ТЭС с общим паропроводом",
+                        "value": 3
+                    }, {
+                        "label": "Пылеугольный энергоблок",
+                        "value": 2
+                    }
+                ]
+            },
+            "Refs": [{
+                    "from": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+                    "property": "3c19cb27-8c28-44b6-a445-c4968097ad17",
+                    "to": "e89b592b-0754-4516-bddd-cce8fec82506",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий наличие колебательного процесса"
+                }, {
+                    "from": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+                    "property": "a3901c88-ea1f-46af-a606-981d863bb0c5",
+                    "to": "5f107d54-00ea-423f-87ec-5fa8d52bf5b1",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий непредоставления информации"
+                }, {
+                    "from": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+                    "property": "ebe2d315-91ab-4783-993e-c37d9ff3dcad",
+                    "to": "bf37c7f1-3acf-46bd-b06e-beee9c0cc3a0",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий адекватной (должной) реакции"
+                }
+            ]
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "ГА-03",
+        "dataType": "",
+        "typeDefinition": "GaType",
+        "description": "Гидроагрегат №3",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "ec06c401-887d-4017-bebe-630e763c5015",
+        "name": "GA04",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "d60404e3-2df8-499b-b560-f387ca37030d",
+                    "name": "F_dead",
+                    "label": "Зона нечувствительности по частоте",
+                    "additionalProps": "Зона нечувствительности по частоте",
+                    "entityId": "b146826e-c29a-463a-9d38-48f6894971e7",
+                    "value": "75",
+                    "type": "int32"
+                }, {
+                    "id": "46833a97-0343-4d02-9cc6-b7b77750cd1d",
+                    "name": "PowerMax",
+                    "label": "Максимальная мощность",
+                    "additionalProps": "Максимальная мощность, МВт:",
+                    "entityId": "f30fe067-61b1-48c7-9cca-4596070c4d74",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "a7c939d3-9c21-4783-b4f8-422f67564412",
+                    "name": "StatismMax",
+                    "label": "Максимальное значение статизма",
+                    "additionalProps": "Максимальное значение статизма, %",
+                    "entityId": "bebcd109-defe-4915-a077-41b45fc2cbf3",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "27728b6d-c9b7-4c80-911e-a68f3ea9ba12",
+                    "name": "PowerMin",
+                    "label": "Минимальная мощность",
+                    "additionalProps": "Минимальная мощность, МВт:",
+                    "entityId": "83dc143e-da67-4ac6-a4b8-f31f160a5ade",
+                    "value": "0",
+                    "type": "float"
+                }, {
+                    "id": "42e4ac4a-02a9-4156-95cf-c921eb64a722",
+                    "name": "StatismMin",
+                    "label": "Минимальное значение статизма",
+                    "additionalProps": "Минимальное значение статизма, %",
+                    "entityId": "a3125d5d-201e-472f-abc3-8a163dfc3546",
+                    "value": "4.5",
+                    "type": "float"
+                }, {
+                    "id": "11992d24-26f4-4834-997b-5618e0e4f7b8",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "c3b21415-5f76-47a0-ae62-19e5a03c0036",
+                    "value": "Гидроагрегат №4",
+                    "type": "string"
+                }, {
+                    "id": "93669419-0591-451a-9b4f-008202c52f5a",
+                    "name": "UnitNumber",
+                    "label": "Номер гидроагрегата",
+                    "additionalProps": "Номер гидроагрегата",
+                    "entityId": "f28e94b8-b8c5-4e6d-85c9-b8bb6b8e8d62",
+                    "value": "4",
+                    "type": "float"
+                }, {
+                    "id": "f663ad0f-286e-41fd-b7ca-4f6f81d97566",
+                    "name": "Pnom",
+                    "label": "Номинальная мощность",
+                    "additionalProps": "Номинальная мощность, МВт:",
+                    "entityId": "89318d05-0b61-4765-a0ad-09c7015c0d1a",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "73ed821f-3561-4be2-a013-1f2b82a34965",
+                    "name": "S",
+                    "label": "Статизм",
+                    "additionalProps": "Статизм",
+                    "entityId": "c1739090-35ec-4f38-b006-c6056a1a98a0",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "9a482e5c-9e4b-4977-8e12-815443f81c35",
+                    "name": "Kd",
+                    "label": "Тип объекта генерации",
+                    "additionalProps": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+                    "entityId": "c9aa1f7a-2f66-42cd-9923-0930b97d4848",
+                    "value": "0",
+                    "type": "TypeGenerationType"
+                }
+            ],
+            "Defs": {
+                "TypeGenerationType": [{
+                        "label": "ПГУ",
+                        "value": 4
+                    }, {
+                        "label": "Гидроагрегат",
+                        "value": 0
+                    }, {
+                        "label": "Газомазутный энергоблок",
+                        "value": 1
+                    }, {
+                        "label": "ТЭС с общим паропроводом",
+                        "value": 3
+                    }, {
+                        "label": "Пылеугольный энергоблок",
+                        "value": 2
+                    }
+                ]
+            },
+            "Refs": [{
+                    "from": "ec06c401-887d-4017-bebe-630e763c5015",
+                    "property": "54c32928-143c-439c-a4c7-00ed7f07db66",
+                    "to": "bf37c7f1-3acf-46bd-b06e-beee9c0cc3a0",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий адекватной (должной) реакции"
+                }, {
+                    "from": "ec06c401-887d-4017-bebe-630e763c5015",
+                    "property": "7a662008-bd03-42d6-8a4c-b054c2a68920",
+                    "to": "5f107d54-00ea-423f-87ec-5fa8d52bf5b1",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий непредоставления информации"
+                }, {
+                    "from": "ec06c401-887d-4017-bebe-630e763c5015",
+                    "property": "9a514fd2-58a6-4127-bae0-ae96f610cf76",
+                    "to": "e89b592b-0754-4516-bddd-cce8fec82506",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий наличие колебательного процесса"
+                }
+            ]
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "ГА-04",
+        "dataType": "",
+        "typeDefinition": "GaType",
+        "description": "Гидроагрегат №4",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "name": "GA05",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "76ac08bd-f5d9-4db0-81d5-f4f3323ae89f",
+                    "name": "F_dead",
+                    "label": "Зона нечувствительности по частоте",
+                    "additionalProps": "Зона нечувствительности по частоте",
+                    "entityId": "05a8d3ab-4c67-4b76-9c63-18be54d77f8d",
+                    "value": "75",
+                    "type": "int32"
+                }, {
+                    "id": "a7be92f2-b6c4-4e33-80fe-20cea6d79d9f",
+                    "name": "PowerMax",
+                    "label": "Максимальная мощность",
+                    "additionalProps": "Максимальная мощность, МВт:",
+                    "entityId": "f41c976c-3361-491f-9403-eb4cd8fa6704",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "9ce7c4b4-ff51-4030-9f40-8d2efcd4e01f",
+                    "name": "StatismMax",
+                    "label": "Максимальное значение статизма",
+                    "additionalProps": "Максимальное значение статизма, %",
+                    "entityId": "bbcf7ec9-af43-4c96-8603-f9c49eb605bd",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "e341d42f-38c0-4cfa-890a-bcdb54ab7f43",
+                    "name": "PowerMin",
+                    "label": "Минимальная мощность",
+                    "additionalProps": "Минимальная мощность, МВт:",
+                    "entityId": "e233a737-96f3-457e-b86b-84efd70f7808",
+                    "value": "0",
+                    "type": "float"
+                }, {
+                    "id": "4185a737-f4da-41dd-9931-133f116a0fdc",
+                    "name": "StatismMin",
+                    "label": "Минимальное значение статизма",
+                    "additionalProps": "Минимальное значение статизма, %",
+                    "entityId": "2e2ba4f6-7f55-4147-9d08-346f254e1ca0",
+                    "value": "4.5",
+                    "type": "float"
+                }, {
+                    "id": "15512a63-135b-47b7-b675-5c8ad17de9fd",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "3d9686da-87e3-48b4-9955-214163cf7f20",
+                    "value": "Гидроагрегат №5",
+                    "type": "string"
+                }, {
+                    "id": "21fa5234-87e1-4949-9886-0d7b4e6dd65c",
+                    "name": "UnitNumber",
+                    "label": "Номер гидроагрегата",
+                    "additionalProps": "Номер гидроагрегата",
+                    "entityId": "1ae94a4d-bafa-4ce4-b288-3dc7067a2359",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "5b607772-91e8-4333-8d8b-11889ccc0547",
+                    "name": "Pnom",
+                    "label": "Номинальная мощность",
+                    "additionalProps": "Номинальная мощность, МВт:",
+                    "entityId": "d80277f9-2a1c-423e-9b06-534e800ec31f",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "f54d252e-f97d-4b8e-9f64-92738b3f9bed",
+                    "name": "S",
+                    "label": "Статизм",
+                    "additionalProps": "Статизм",
+                    "entityId": "64754d20-f779-4234-883b-8a9c5323c6ab",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "d390af40-4200-475f-83af-c0b4de0ae38c",
+                    "name": "Kd",
+                    "label": "Тип объекта генерации",
+                    "additionalProps": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+                    "entityId": "bef2fc8f-30d7-4c88-829c-45db97d7be28",
+                    "value": "0",
+                    "type": "TypeGenerationType"
+                }
+            ],
+            "Defs": {
+                "TypeGenerationType": [{
+                        "label": "ПГУ",
+                        "value": 4
+                    }, {
+                        "label": "Гидроагрегат",
+                        "value": 0
+                    }, {
+                        "label": "Газомазутный энергоблок",
+                        "value": 1
+                    }, {
+                        "label": "ТЭС с общим паропроводом",
+                        "value": 3
+                    }, {
+                        "label": "Пылеугольный энергоблок",
+                        "value": 2
+                    }
+                ]
+            },
+            "Refs": [{
+                    "from": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+                    "property": "313d4cf2-e135-4a77-abd7-2365901a35bc",
+                    "to": "5f107d54-00ea-423f-87ec-5fa8d52bf5b1",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий непредоставления информации"
+                }, {
+                    "from": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+                    "property": "37cc042e-3a33-4a80-97cc-d7e967e60fff",
+                    "to": "e89b592b-0754-4516-bddd-cce8fec82506",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий наличие колебательного процесса"
+                }, {
+                    "from": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+                    "property": "4b231217-607f-43a1-b7c7-cff5473119eb",
+                    "to": "bf37c7f1-3acf-46bd-b06e-beee9c0cc3a0",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий адекватной (должной) реакции"
+                }
+            ]
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "ГА-05",
+        "dataType": "",
+        "typeDefinition": "GaType",
+        "description": "Гидроагрегат №5",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "name": "GA06",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "dbc93345-fa1f-41e6-94f0-71ea39a9dac0",
+                    "name": "F_dead",
+                    "label": "Зона нечувствительности по частоте",
+                    "additionalProps": "Зона нечувствительности по частоте",
+                    "entityId": "abc17e5b-6ef1-44eb-a67b-d3beea17446a",
+                    "value": "75",
+                    "type": "int32"
+                }, {
+                    "id": "87c1e84d-abf4-4cd8-93ae-282501409a31",
+                    "name": "PowerMax",
+                    "label": "Максимальная мощность",
+                    "additionalProps": "Максимальная мощность, МВт:",
+                    "entityId": "b496b462-4dd2-4d6d-9b8c-4fb966972cda",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "bdd59c50-f995-4881-91bb-b697c080e419",
+                    "name": "StatismMax",
+                    "label": "Максимальное значение статизма",
+                    "additionalProps": "Максимальное значение статизма, %",
+                    "entityId": "58f69eec-6c28-49d2-b3b4-1c9f2506688a",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "43ece31f-0791-406c-b1d3-f54ca4d1a8cd",
+                    "name": "PowerMin",
+                    "label": "Минимальная мощность",
+                    "additionalProps": "Минимальная мощность, МВт:",
+                    "entityId": "35c97933-cb99-49a1-8a85-0ca0cc542c15",
+                    "value": "0",
+                    "type": "float"
+                }, {
+                    "id": "77235765-f699-43c6-8206-8607c18a48c2",
+                    "name": "StatismMin",
+                    "label": "Минимальное значение статизма",
+                    "additionalProps": "Минимальное значение статизма, %",
+                    "entityId": "9860c98e-6af2-409e-9840-f8f207b6b261",
+                    "value": "4.5",
+                    "type": "float"
+                }, {
+                    "id": "1e533348-5592-4a65-84d9-61ad058f8b47",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "436a08df-12e4-4f74-b4b9-2307b2822052",
+                    "value": "Гидроагрегат №6",
+                    "type": "string"
+                }, {
+                    "id": "8feefbf4-19d6-4559-900e-620297dee48f",
+                    "name": "UnitNumber",
+                    "label": "Номер гидроагрегата",
+                    "additionalProps": "Номер гидроагрегата",
+                    "entityId": "6aff9936-3cfa-437b-bdbc-aad1b995d4d4",
+                    "value": "6",
+                    "type": "float"
+                }, {
+                    "id": "6c7e384a-8d23-4dce-9d08-e8400a0d6ba7",
+                    "name": "Pnom",
+                    "label": "Номинальная мощность",
+                    "additionalProps": "Номинальная мощность, МВт:",
+                    "entityId": "2ea3b278-ed49-4ac6-a086-445cb67d142a",
+                    "value": "205",
+                    "type": "float"
+                }, {
+                    "id": "13397db6-42bb-4cfe-a061-bf47398cb41e",
+                    "name": "S",
+                    "label": "Статизм",
+                    "additionalProps": "Статизм",
+                    "entityId": "8dfddbd1-28c6-4446-9375-78396533d51a",
+                    "value": "5",
+                    "type": "float"
+                }, {
+                    "id": "76b37de1-177a-4ff1-82b5-3cc97e8fb625",
+                    "name": "Kd",
+                    "label": "Тип объекта генерации",
+                    "additionalProps": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+                    "entityId": "cf4ce0ff-c934-4a14-97c7-a2a61e977a97",
+                    "value": "0",
+                    "type": "TypeGenerationType"
+                }
+            ],
+            "Defs": {
+                "TypeGenerationType": [{
+                        "label": "ПГУ",
+                        "value": 4
+                    }, {
+                        "label": "Гидроагрегат",
+                        "value": 0
+                    }, {
+                        "label": "Газомазутный энергоблок",
+                        "value": 1
+                    }, {
+                        "label": "ТЭС с общим паропроводом",
+                        "value": 3
+                    }, {
+                        "label": "Пылеугольный энергоблок",
+                        "value": 2
+                    }
+                ]
+            },
+            "Refs": [{
+                    "from": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+                    "property": "120aa17d-0ac8-493e-8c3e-fe16906a4797",
+                    "to": "5f107d54-00ea-423f-87ec-5fa8d52bf5b1",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий непредоставления информации"
+                }, {
+                    "from": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+                    "property": "dabbbefc-e522-4f17-a144-d0ee81972725",
+                    "to": "e89b592b-0754-4516-bddd-cce8fec82506",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий наличие колебательного процесса"
+                }, {
+                    "from": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+                    "property": "fbbcfeaf-fd91-4608-a4fc-63432b4da9e4",
+                    "to": "bf37c7f1-3acf-46bd-b06e-beee9c0cc3a0",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Анализ ОПРЧ - Критерий адекватной (должной) реакции"
+                }
+            ]
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "ГА-06",
+        "dataType": "",
+        "typeDefinition": "GaType",
+        "description": "Гидроагрегат №6",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "name": "ZagGAES",
+        "type": "UAObject",
+        "jsonProps": {
+            "Props": [{
+                    "id": "fc2ae3e8-1285-46f8-a5ed-2bdc8e3707c1",
+                    "name": "Object_name",
+                    "label": "Наименование объекта",
+                    "additionalProps": "Полное наименование объекта",
+                    "entityId": "27964a0b-1777-4e25-b09a-0750e3dfa056",
+                    "value": "Загорская ГАЭС",
+                    "type": "string"
+                }
+            ],
+            "Defs": {},
+            "Refs": [{
+                    "from": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+                    "property": "0047e474-a4f0-4f5f-81d4-cd21cd3c7261",
+                    "to": "94ce84eb-93e5-4da6-9f02-27971776b886",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Настройка отчетов"
+                }, {
+                    "from": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+                    "property": "62b4a4ba-60ab-449f-844c-f449be691f2f",
+                    "to": "389552b4-5270-44dc-b0a1-9e4987a1aed2",
+                    "name": "FromObjectToObject",
+                    "label": " / Расчёты / Менеджер расчетов ОПРЧ"
+                }
+            ]
+        },
+        "label": "Загорская ГАЭС",
+        "dataType": "",
+        "typeDefinition": "StationType",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1f87a4c8-45dc-4751-a9fa-001caafe1b05",
+        "name": "Pset",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Задание мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Задание мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "78bd12c0-79e4-42cd-b841-59b8d0c72a9c",
+        "name": "Pset",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Задание мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Задание мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5243df00-e0d2-4f32-8237-2e56588f2020",
+        "name": "Pset",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Задание мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Задание мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a6e236bd-bb7e-4ad0-84f4-747526d240f7",
+        "name": "Pset",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Задание мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Задание мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "48c4f512-5d5e-4c3a-829d-0c857ab5e02a",
+        "name": "Pset",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Задание мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Задание мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "413a2b7c-2f81-44e1-aa38-e47bd8253aba",
+        "name": "Pset",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Задание мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Задание мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "422d0e92-4d41-48e8-af80-24022bd61953",
+        "name": "Pset1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "48c4f512-5d5e-4c3a-829d-0c857ab5e02a",
+        "label": "Задание мощности кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "340e2f90-1058-48f6-97d3-f919a3ca79ee",
+        "name": "Pset2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "48c4f512-5d5e-4c3a-829d-0c857ab5e02a",
+        "label": "Задание мощности кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "abc17e5b-6ef1-44eb-a67b-d3beea17446a",
+        "name": "F_dead",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Зона нечувствительности по частоте",
+        "dataType": "int32",
+        "typeDefinition": "PropertyType",
+        "description": "Зона нечувствительности по частоте",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "22545bbb-c7b2-41d2-b528-cdb8cf21fb5b",
+        "name": "F_dead",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Зона нечувствительности по частоте",
+        "dataType": "int32",
+        "typeDefinition": "PropertyType",
+        "description": "Зона нечувствительности по частоте",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "109b9cf8-2ad2-46d5-9e4d-316542b5088e",
+        "name": "F_dead",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Зона нечувствительности по частоте",
+        "dataType": "int32",
+        "typeDefinition": "PropertyType",
+        "description": "Зона нечувствительности по частоте",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "05a8d3ab-4c67-4b76-9c63-18be54d77f8d",
+        "name": "F_dead",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Зона нечувствительности по частоте",
+        "dataType": "int32",
+        "typeDefinition": "PropertyType",
+        "description": "Зона нечувствительности по частоте",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "77a13551-ee67-4880-9608-5a56b6de6e37",
+        "name": "F_dead",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Зона нечувствительности по частоте",
+        "dataType": "int32",
+        "typeDefinition": "PropertyType",
+        "description": "Зона нечувствительности по частоте",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "b146826e-c29a-463a-9d38-48f6894971e7",
+        "name": "F_dead",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Зона нечувствительности по частоте",
+        "dataType": "int32",
+        "typeDefinition": "PropertyType",
+        "description": "Зона нечувствительности по частоте",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "b496b462-4dd2-4d6d-9b8c-4fb966972cda",
+        "name": "PowerMax",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Максимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "12ac7ab6-1df2-45d1-b28f-e26ec5af5dac",
+        "name": "PowerMax",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Максимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "81bd25dc-f4b3-45c5-833c-9e691495bce4",
+        "name": "PowerMax",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Максимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f41c976c-3361-491f-9403-eb4cd8fa6704",
+        "name": "PowerMax",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Максимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f8eba0fa-ce30-4919-a00a-c1d34ccfc778",
+        "name": "PowerMax",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Максимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f30fe067-61b1-48c7-9cca-4596070c4d74",
+        "name": "PowerMax",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Максимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "58f69eec-6c28-49d2-b3b4-1c9f2506688a",
+        "name": "StatismMax",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Максимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "51085233-7f20-4129-9039-096d16834f3b",
+        "name": "StatismMax",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Максимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d26d310e-fb1b-4793-b3e3-f96b5e4e4d13",
+        "name": "StatismMax",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Максимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "bbcf7ec9-af43-4c96-8603-f9c49eb605bd",
+        "name": "StatismMax",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Максимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "8e8de5a3-6482-4047-9713-a82ab55e7073",
+        "name": "StatismMax",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Максимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "bebcd109-defe-4915-a077-41b45fc2cbf3",
+        "name": "StatismMax",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Максимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Максимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "35c97933-cb99-49a1-8a85-0ca0cc542c15",
+        "name": "PowerMin",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Минимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f45c88e7-7c38-43d6-8396-c6e58dd03458",
+        "name": "PowerMin",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Минимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "4a03eec1-4532-4ef9-bebc-35a47a53ac76",
+        "name": "PowerMin",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Минимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e233a737-96f3-457e-b86b-84efd70f7808",
+        "name": "PowerMin",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Минимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5999b725-1647-4c9e-9e84-a7ded670802c",
+        "name": "PowerMin",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Минимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "83dc143e-da67-4ac6-a4b8-f31f160a5ade",
+        "name": "PowerMin",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Минимальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9860c98e-6af2-409e-9840-f8f207b6b261",
+        "name": "StatismMin",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Минимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "6527e71e-fd4b-4965-9cfb-577e9bee3639",
+        "name": "StatismMin",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Минимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "20fafed9-c216-4864-9caa-a6db40d6e147",
+        "name": "StatismMin",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Минимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2e2ba4f6-7f55-4147-9d08-346f254e1ca0",
+        "name": "StatismMin",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Минимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "86686d2e-ae00-412f-91e8-05e5b42c510c",
+        "name": "StatismMin",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Минимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a3125d5d-201e-472f-abc3-8a163dfc3546",
+        "name": "StatismMin",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Минимальное значение статизма",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Минимальное значение статизма, %",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "436a08df-12e4-4f74-b4b9-2307b2822052",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3623d713-0549-419c-b172-2cc92d84c79e",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c1f8b742-a274-4fd4-b505-566c60e13761",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3d9686da-87e3-48b4-9955-214163cf7f20",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "cdc9e8f0-2306-4d8a-b622-a80e835963e0",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c3b21415-5f76-47a0-ae62-19e5a03c0036",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "27964a0b-1777-4e25-b09a-0750e3dfa056",
+        "name": "Object_name",
+        "type": "UAVariable",
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Наименование объекта",
+        "dataType": "string",
+        "typeDefinition": "PropertyType",
+        "description": "Полное наименование объекта",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "22cbeeaa-4b0a-49b5-9178-9943aa3a5054",
+        "name": "PoprchBoundDown",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "b87ad274-b9bc-4727-9247-57adfbb5a797",
+        "name": "PoprchBoundDown",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "6baeae31-9228-4787-a6aa-e8c48537dcec",
+        "name": "PoprchBoundDown",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "24a66868-b6b2-4e80-978e-8869368eb0b8",
+        "name": "PoprchBoundDown",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f4ac99f1-9fc1-484a-9e3f-1cd1b5bc68a6",
+        "name": "PoprchBoundDown",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d62e8d75-761b-427a-a837-8512108a0619",
+        "name": "PoprchBoundDown",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2bcecb5c-b486-46ca-9472-4b6df858018c",
+        "name": "PoprchBoundDownGes",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Нижняя граница потребной первичной мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Нижняя граница потребной первичной мощности, МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "6aff9936-3cfa-437b-bdbc-aad1b995d4d4",
+        "name": "UnitNumber",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Номер гидроагрегата",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номер гидроагрегата",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "92bc9f2e-acc0-4d2c-8015-a48d9f6d4e73",
+        "name": "UnitNumber",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Номер гидроагрегата",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номер гидроагрегата",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "34be0a03-a166-4904-bd7d-3068cfa7a1e5",
+        "name": "UnitNumber",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Номер гидроагрегата",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номер гидроагрегата",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1ae94a4d-bafa-4ce4-b288-3dc7067a2359",
+        "name": "UnitNumber",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Номер гидроагрегата",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номер гидроагрегата",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e34651b6-47b6-454d-bb07-bc56741dc469",
+        "name": "UnitNumber",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Номер гидроагрегата",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номер гидроагрегата",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f28e94b8-b8c5-4e6d-85c9-b8bb6b8e8d62",
+        "name": "UnitNumber",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Номер гидроагрегата",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номер гидроагрегата",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "2ea3b278-ed49-4ac6-a086-445cb67d142a",
+        "name": "Pnom",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Номинальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номинальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "b4e7654f-fb96-4b5b-a94e-eb2b1acbfc36",
+        "name": "Pnom",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Номинальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номинальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3359bfc5-2469-4079-bdf7-0781b8cecbd9",
+        "name": "Pnom",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Номинальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номинальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d80277f9-2a1c-423e-9b06-534e800ec31f",
+        "name": "Pnom",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Номинальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номинальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "553109e0-1bb6-499f-9e7f-5152742cfe26",
+        "name": "Pnom",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Номинальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номинальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "89318d05-0b61-4765-a0ad-09c7015c0d1a",
+        "name": "Pnom",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Номинальная мощность",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Номинальная мощность, МВт:",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "ac5594d3-0824-48d8-a1fc-c2439ad5f748",
+        "name": "Plim",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Ограничение по мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Исчерпание диапазона регулирования по мощности",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "89ce2870-5f10-4c41-8e62-f68719c4c204",
+        "name": "Plim",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Ограничение по мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Исчерпание диапазона регулирования по мощности",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9ce93215-67d2-4c96-b120-43bfcf4e831f",
+        "name": "Plim",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Ограничение по мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Исчерпание диапазона регулирования по мощности",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d0fa388f-7059-4a93-8355-56b86a07bc24",
+        "name": "Plim",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Ограничение по мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Исчерпание диапазона регулирования по мощности",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e521119d-3172-4b68-a0a8-1183bf70501c",
+        "name": "Plim",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Ограничение по мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Исчерпание диапазона регулирования по мощности",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "34ee3a44-64ae-4a66-8dfd-7cee3949eee5",
+        "name": "Plim",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Ограничение по мощности",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Исчерпание диапазона регулирования по мощности",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "73651af8-9dc0-4177-bc54-e404c76f0a5c",
+        "name": "Plim1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e521119d-3172-4b68-a0a8-1183bf70501c",
+        "label": "Ограничение по мощности кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "6908ffc2-e76b-4b82-bc0e-860440c18a4e",
+        "name": "Plim2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e521119d-3172-4b68-a0a8-1183bf70501c",
+        "label": "Ограничение по мощности кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1e8bd4e9-45f1-4a0f-887c-e373949a50f0",
+        "name": "DeltaFreqBus1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Отклонение частоты на шинах А от уставки ОПРЧ",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Отклонение частоты на шинах А от уставки ОПРЧ, Гц",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "cfd5424d-2c5b-45df-abb8-6efeaf2a0201",
+        "name": "DeltaFreqBus2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Отклонение частоты на шинах Б от уставки ОПРЧ",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Отклонение частоты на шинах Б от уставки ОПРЧ, Гц",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f93cf992-9f71-4e79-a2e1-e0c8c472ae2b",
+        "name": "Alarm",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Предупредительная сигнализация",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Предупредительная сигнализация",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "5d3e0e46-688b-47ce-b346-5576645e26d8",
+        "name": "PowerMode",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Режим Мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Режим Мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "dce182b1-fd19-49e6-b9be-d8591274273f",
+        "name": "PowerMode",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Режим Мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Режим Мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a5011495-db6f-40f8-ad3a-6fc14a417e22",
+        "name": "PowerMode",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Режим Мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Режим Мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "aff8acd2-43f0-4f71-a1c8-74edba16d995",
+        "name": "PowerMode",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Режим Мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Режим Мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "0232b8d6-0d87-40de-8283-a16e6e76341d",
+        "name": "PowerMode",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Режим Мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Режим Мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "de6373b5-421b-45b3-80fc-d8c1db95a1a0",
+        "name": "PowerMode",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Режим Мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Режим Мощность",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "408bb6e6-406a-4862-84ef-0eb36248450f",
+        "name": "PowerMode1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0232b8d6-0d87-40de-8283-a16e6e76341d",
+        "label": "Режим Мощность кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "778af283-1244-4f88-9c50-791685ccd091",
+        "name": "PowerMode2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0232b8d6-0d87-40de-8283-a16e6e76341d",
+        "label": "Режим Мощность кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "8dfddbd1-28c6-4446-9375-78396533d51a",
+        "name": "S",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Статизм",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Статизм",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "3b71e321-1aab-4682-8e16-edb09efd1aee",
+        "name": "S",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Статизм",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Статизм",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "567eee42-24db-466e-919f-f9d47c08e2b8",
+        "name": "S",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Статизм",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Статизм",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "64754d20-f779-4234-883b-8a9c5323c6ab",
+        "name": "S",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Статизм",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Статизм",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "f79fcfc6-7a55-4be3-b985-21f3e1855766",
+        "name": "S",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Статизм",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Статизм",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c1739090-35ec-4f38-b006-c6056a1a98a0",
+        "name": "S",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Статизм",
+        "dataType": "float",
+        "typeDefinition": "PropertyType",
+        "description": "Статизм",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "cf4ce0ff-c934-4a14-97c7-a2a61e977a97",
+        "name": "Kd",
+        "type": "UAVariable",
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Тип объекта генерации",
+        "dataType": "",
+        "typeDefinition": "PropertyType",
+        "description": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "721f8749-884d-49d0-93ac-a59106be381b",
+        "name": "Kd",
+        "type": "UAVariable",
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Тип объекта генерации",
+        "dataType": "",
+        "typeDefinition": "PropertyType",
+        "description": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "98583f37-1a2f-47cd-8806-4a9f1161a895",
+        "name": "Kd",
+        "type": "UAVariable",
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Тип объекта генерации",
+        "dataType": "",
+        "typeDefinition": "PropertyType",
+        "description": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "bef2fc8f-30d7-4c88-829c-45db97d7be28",
+        "name": "Kd",
+        "type": "UAVariable",
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Тип объекта генерации",
+        "dataType": "",
+        "typeDefinition": "PropertyType",
+        "description": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "04f68e92-9104-478f-bcae-fdb5569c66a0",
+        "name": "Kd",
+        "type": "UAVariable",
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Тип объекта генерации",
+        "dataType": "",
+        "typeDefinition": "PropertyType",
+        "description": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c9aa1f7a-2f66-42cd-9923-0930b97d4848",
+        "name": "Kd",
+        "type": "UAVariable",
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Тип объекта генерации",
+        "dataType": "",
+        "typeDefinition": "PropertyType",
+        "description": "Тип объекта генерации (0 - Гидроагрегат, 1 - Газомазутный энергоблок, 2 - пылеугольный энергоблок, 3 - ТЭС с общим паропроводом, 4 - ПГУ)",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "c6ab0899-1e3f-46d2-9c96-867c9762c283",
+        "name": "FreqSet",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Уставка частоты ЭГР",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Уставка частоты ЭГР",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "0e21d004-b691-4bfb-9e95-dd6e4fcd32eb",
+        "name": "FreqSet",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Уставка частоты ЭГР",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Уставка частоты ЭГР",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "13e67909-113e-4fcb-9c72-f2c6e75e1b51",
+        "name": "FreqSet",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Уставка частоты ЭГР",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Уставка частоты ЭГР",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "583de13b-7618-400e-851e-95d13c37fd04",
+        "name": "FreqSet",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Уставка частоты ЭГР",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Уставка частоты ЭГР",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "837ad07c-e76e-4c31-9870-c98d5393be26",
+        "name": "FreqSet",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Уставка частоты ЭГР",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Уставка частоты ЭГР",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "32705e8e-a4b7-4ee7-b832-21b2fad39d9d",
+        "name": "FreqSet",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Уставка частоты ЭГР",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Уставка частоты ЭГР",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "719526a7-d569-42ff-b1ea-37f97a5d9d79",
+        "name": "FreqSet1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "837ad07c-e76e-4c31-9870-c98d5393be26",
+        "label": "Уставка частоты ЭГР кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a8b92471-036f-494b-b20d-9f623f30a17f",
+        "name": "FreqSet2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "837ad07c-e76e-4c31-9870-c98d5393be26",
+        "label": "Уставка частоты ЭГР кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "9871f0ca-4cc8-4235-823b-c7977eb8f33b",
+        "name": "PoprchFact",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Фактическая первичная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Фактическая первичная мощность МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "7d67f48f-01fa-43d9-9c74-7b012e9d6acb",
+        "name": "PoprchFact",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Фактическая первичная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Фактическая первичная мощность МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "1d3b63de-58ee-4135-9834-43d73b5eaad6",
+        "name": "PoprchFact",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Фактическая первичная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Фактическая первичная мощность МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d6088c78-9a3a-4e06-a628-e5dc10865d79",
+        "name": "PoprchFact",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Фактическая первичная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Фактическая первичная мощность МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "43142d0a-1ec2-4fb8-a4a1-5653040a899d",
+        "name": "PoprchFact",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Фактическая первичная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Фактическая первичная мощность МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "dda81756-3020-4200-8cc9-4b90deacaf05",
+        "name": "PoprchFact",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Фактическая первичная мощность",
+        "dataType": "float",
+        "typeDefinition": "ParameterProcVarType",
+        "description": "Фактическая первичная мощность МВт",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "30f96b81-8180-418f-92c3-5b6e92c131da",
+        "name": "Freq",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "05c1e918-3f62-433e-88a5-5b3d97ec2df5",
+        "label": "Частота вращения",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Частота вращения турбины",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "eae0ae5c-b158-4eab-b645-9f6be27aa746",
+        "name": "Freq",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "0b12c81b-5f4e-482b-a15d-14dd55988adc",
+        "label": "Частота вращения",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Частота вращения турбины",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "164b1904-5372-4f78-9f4f-6da76bf76272",
+        "name": "Freq",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "58e8b010-4c9f-46c8-8ccb-6d98a6e05e3b",
+        "label": "Частота вращения",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Частота вращения турбины",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "97627b4a-bee4-497c-9f57-778b0cb0e5f4",
+        "name": "Freq",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a5bfa2a6-7d8c-4c05-9649-f28c13bc278c",
+        "label": "Частота вращения",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Частота вращения турбины",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "a6fbbbd6-f742-4c16-bd49-0bc4162b9992",
+        "name": "Freq",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "e907deff-1644-4166-8397-fd2b1fe5d0c0",
+        "label": "Частота вращения",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Частота вращения турбины",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "e0910646-2fdd-47ef-b959-c859bc637886",
+        "name": "Freq",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "ec06c401-887d-4017-bebe-630e763c5015",
+        "label": "Частота вращения",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Частота вращения турбины",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "b177d4f2-5c65-4895-a5ea-006ad20de359",
+        "name": "Freq1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a6fbbbd6-f742-4c16-bd49-0bc4162b9992",
+        "label": "Частота вращения кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "45636f0a-6271-459d-b900-c70415fb94c4",
+        "name": "Freq2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "a6fbbbd6-f742-4c16-bd49-0bc4162b9992",
+        "label": "Частота вращения кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterRawVarType",
+        "description": "Тип для сырых сигналов",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "57e8761e-ad9c-4f6f-905e-791e8cdec340",
+        "name": "FreqBus1",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Частота на СШ1",
+        "dataType": "float",
+        "typeDefinition": "ParameterTypeVar",
+        "description": "Частота на системе шин 1",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "36152113-06f2-4705-be5e-7d97dd961661",
+        "name": "FreqBus11",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "57e8761e-ad9c-4f6f-905e-791e8cdec340",
+        "label": "Частота на СШ1 кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterTypeVar",
+        "description": "Подтип для \"посекундных\" сигналов. В НСИ парсятся по слову Parameter",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "02699e75-42f4-46dd-a44e-13d1fbb16952",
+        "name": "FreqBus12",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "57e8761e-ad9c-4f6f-905e-791e8cdec340",
+        "label": "Частота на СШ1 кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterTypeVar",
+        "description": "Подтип для \"посекундных\" сигналов. В НСИ парсятся по слову Parameter",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "269bf58f-398d-454d-a6c8-3b880bb666bb",
+        "name": "FreqBus2",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "74e0ebd1-d7a9-430d-a366-2a77f603a41f",
+        "label": "Частота на СШ2",
+        "dataType": "float",
+        "typeDefinition": "ParameterTypeVar",
+        "description": "Частота на системе шин 2",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "d289a032-2de0-432a-8b71-43972492dce5",
+        "name": "FreqBus21",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "269bf58f-398d-454d-a6c8-3b880bb666bb",
+        "label": "Частота на СШ2 кан.1",
+        "dataType": "float",
+        "typeDefinition": "ParameterTypeVar",
+        "description": "Подтип для \"посекундных\" сигналов. В НСИ парсятся по слову Parameter",
+        "childEntities": [],
+        "referenceEntities": []
+    }, {
+        "id": "968125a3-e4ab-430f-89df-4d67c541d325",
+        "name": "FreqBus22",
+        "type": "UAVariable",
+        "jsonProps": {
+            "Props": [],
+            "Defs": {},
+            "Refs": []
+        },
+        "parentId": "269bf58f-398d-454d-a6c8-3b880bb666bb",
+        "label": "Частота на СШ2 кан.2",
+        "dataType": "float",
+        "typeDefinition": "ParameterTypeVar",
+        "description": "Подтип для \"посекундных\" сигналов. В НСИ парсятся по слову Parameter",
+        "childEntities": [],
+        "referenceEntities": []
+    }
+]
