@@ -41,7 +41,7 @@
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
 			editor.isChanged = true;
 		}
-		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&math=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader);
+		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader);
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 
