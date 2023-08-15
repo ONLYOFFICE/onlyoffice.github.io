@@ -1,0 +1,53 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Speech input</title>
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<link rel="stylesheet" href="resources/css/plugin_style.css">
+
+		<script src="scripts/code.js"></script>
+	</head>
+	<style>
+		.select2-container--default .select2-results > .select2-results__options {
+			max-height: 130px;
+		}
+	</style>
+	<body spellcheck="false" class="noselect">	
+		<div id="div_main" style="display:flex;flex-flow:column;">
+			<div class="div_start" style="display:flex; flex-direction:column;">
+				<select id="custom_menu" data-id="speech-input-language" style="width: 100%;"></select>
+				<div id="start_button" class='img_btn'>
+					<svg id="img_micro" class="start_img" width="56" height="56" style="margin-top: -7px;" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path id="micro_img_path" d="M28 8C31.5194 8 34 10.4806 34 14V28C34 31.5194 31.5194 34 28 34C24.4806 34 22 31.5194 22 28V14C22 10.4806 24.4806 8 28 8ZM44 28C44 36 38 43 30 44V50H26V44C18 43 12 36 12 28H16C16 34 21 40 28 40C35 40 40 34 40 28H44Z" fill="#444444"/>
+					</svg>
+					<span id="start_info" class="i18n" style="text-align:center; margin-top: 2px;">Start dictation</span>
+					<span id="speak_info" class="i18n" style="text-align:center; display:none; margin-top: 2px;">Speak now</span>
+				</div>
+			</div>
+			<div id="results" style="margin-top:10px; display:none;">
+				<span class="interim" id="interim_span"></span> 
+			</div>
+		</div>
+	</body>
+</html>	

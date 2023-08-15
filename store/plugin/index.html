@@ -21,31 +21,16 @@
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<link rel="stylesheet" href="resources/css/styles.css">
 		<script type="text/javascript" src="scripts/code.js"></script>
-		<style>
-			iframe {
-				width: 100%;
-				height: 100%;
-			}
-			html, body {
-				margin: 0px !important;
-				width: 100%;
-				height: 100%;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-		</style>
 	</head>
 	<body>
-		<script type="text/javascript">
-			document.addEventListener("DOMContentLoaded", function() {
-				let pageUrl = "https://onlyoffice.github.io/store/index.html";
-				var iframe = document.createElement("iframe");
-				iframe.style = "width:100%; border:none;";
-				iframe.src = pageUrl + window.location.search;
-				document.body.appendChild(iframe);
-			});			
-		</script>
+		<div id="notification" class="notification hidden">
+			<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACvSURBVDhPrZNRDoIwEER7COA6HgJPpAnHM4oXQdFE/VDfNrsfpQvGhkneT2dmky40rK77pq6ggx4eyhF2UGnMF4EWBvjMcIFW46nEgLcGl5BMOoSDGmR6EjZNz0GyjdbjALlfFjR5HnRajwNkSVnI5HnQaz0OkE1nIZPnwVPrxQNGrc9f4Qcnra+zxAbKP6OIg/IfyYSxhasGPcTzyyYC9pjO8IIbHGAPy4/pf4XwBSVejZ5wzd0zAAAAAElFTkSuQmCC"/>
+			<label id="lb_notification" class="header" style="margin-left: 5px;">This version of "Plugin Manager" is not official.</label>
+		</div>
+		<div id="div_noIternet" class="hidden" style="position: absolute;">
+			<label id="lb_noInternet" class="form-control lab noselect">No Internet Connection.</label>
+		</div>
 	</body>
 </html>

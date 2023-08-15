@@ -30,7 +30,7 @@
 		img = document.createElement('img');
 		img.setAttribute('title', title)
 		document.getElementById("div_preview").appendChild(img);
-		// create an empti image for editor (if data doesn't set), after export we put the result in it
+		// create an empty image for editor (if data doesn't set), after export we put the result in it
 		if (!data)
 			data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
 
@@ -41,7 +41,7 @@
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
 			editor.isChanged = true;
 		}
-		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
+		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader);
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 

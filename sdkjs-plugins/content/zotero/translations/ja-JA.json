@@ -18,4 +18,11 @@
   "Reconfigure": "再構成",
   "Learn more here.": "詳しくはこちら",
   "Save": "保存"
+  "Insert Citation": "引用を挿入",
+  "Cancel select": "キャンセル選択",
+  "Refresh": "リフレッシュ",
+  "Save as text": "テキストとして保存",
+  "Please insert some citation into the document." : "文書にいくつかの引用を挿入してください。",
+  "Synchronize" : "同期",
+  "Omit Author" : "著者を省略する"
 }

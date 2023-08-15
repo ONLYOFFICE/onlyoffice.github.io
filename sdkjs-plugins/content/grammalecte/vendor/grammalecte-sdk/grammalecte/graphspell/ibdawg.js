@@ -242,9 +242,9 @@ class IBDAWG {
             if (typeof(source) == "string") {
                 let sURL;
                 if (typeof(process) !== 'undefined') {
-                    sURL = (sPath !== "") ? sPath + "/" + source : __dirname + "/_dictionaries/"+source;
+                    sURL = (sPath !== "") ? sPath + "/" + source : __dirname + "/dictionaries/"+source;
                 } else {
-                    sURL = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk") + "/grammalecte/graphspell/_dictionaries/"+source;
+                    sURL = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "vendor/grammalecte-sdk") + "/grammalecte/graphspell/dictionaries/"+source;
                 }
                 oData = JSON.parse(helpers.loadFile(sURL));
             } else {
