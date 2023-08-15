@@ -1,83 +1,83 @@
 {
-    "name": "WordPress",
-    "nameLocale": {
-        "ru": "WordPress",
-        "fr": "WordPress",
-        "es": "WordPress",
-        "de": "WordPress"
-    },
-    "guid"       : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
-    "baseUrl"    : "",
-    "version"    : "1.0.0",
-    "variations" : [
-        {
-            "description": "Publish articles directly from the document editor on your WordPress website (compatible with ONLYOFFICE cloud).",
-            "descriptionLocale": {
-                "ru": "Публикуйте статьи прямо из редактора документов на вашем сайте WordPress (требуется облако ONLYOFFICE).",
-                "fr": "Publiez des articles directement depuis l'éditeur de documents sur votre site web WordPress (compatible avec le cloud ONLYOFFICE).",
-                "es": "Publique artículos directamente desde el editor de documentos en su sitio web de WordPress (compatible con la nube de ONLYOFFICE).",
-                "de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud)."
-            },
-            "url"         : "index.html",
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer"            : false,
-            "EditorsSupport"      : ["word"],
-            "initDataType"        : "html",
-            "isVisual"            : true,
-            "isModal"             : false,
-            "isInsideMode"        : true,
-            "isUpdateOleOnResize" : false,
-            "store": {
-                "background": {
-                    "light" : "#117AC9",
-                    "dark" : "#117AC9"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                }
-            }
-        }
-    ]
+	"name": "WordPress",
+	"nameLocale": {
+		"ru": "WordPress",
+		"fr": "WordPress",
+		"es": "WordPress",
+		"de": "WordPress"
+	},
+	"guid"    : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
+	"baseUrl" : "",
+	"version" : "1.0.0",
+	"variations" : [
+		{
+			"description": "Publish articles directly from the document editor on your WordPress website (compatible with ONLYOFFICE cloud).",
+			"descriptionLocale": {
+				"ru": "Публикуйте статьи прямо из редактора документов на вашем сайте WordPress (требуется облако ONLYOFFICE).",
+				"fr": "Publiez des articles directement depuis l'éditeur de documents sur votre site web WordPress (compatible avec le cloud ONLYOFFICE).",
+				"es": "Publique artículos directamente desde el editor de documentos en su sitio web de WordPress (compatible con la nube de ONLYOFFICE).",
+				"de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud)."
+			},
+			"url"    : "index.html",
+			"icons"  : [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2" : [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer"            : false,
+			"EditorsSupport"      : ["word"],
+			"initDataType"        : "html",
+			"isVisual"            : true,
+			"isModal"             : false,
+			"isInsideMode"        : true,
+			"isUpdateOleOnResize" : false,
+			"store": {
+				"background": {
+					"light" : "#117AC9",
+					"dark" : "#117AC9"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				}
+			}
+		}
+	]
 }

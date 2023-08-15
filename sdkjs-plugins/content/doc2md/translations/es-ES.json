@@ -1,14 +1,14 @@
 {
-  "Copy": "Copiar",
-  "Show settings": "Mostrar la configuración",
-  "Hide settings": "Ocultar la configuración",
-  "Render HTML tags": "Renderizar etiquetas HTML",
-  "Demote headings (H1 → H2, etc.)": "Desclasificar los títulos (H1 → H2, etc.)",
-  "HTML headings/IDs": "Encabezados/IDs HTML",
-  "Create base64 images": "Crear imágenes en base64",
-  "Suppress top comment": "Suprimir el comentario superior",
-  "Help": "Elija Markdown o HTML.\n* Por defecto: convertir todo el documento.\n* Seleccione el texto para limitar el alcance.",
-  "Text was copied to buffer!": "El texto se copió en el búfer!",
-  "Convert to Markdown or HTML": "Convertir a Markdown o HTML",
-  "Preview": "Vista previa"
+	"Copy": "Copiar",
+	"Show settings": "Mostrar la configuración",
+	"Hide settings": "Ocultar la configuración",
+	"Render HTML tags": "Renderizar etiquetas HTML",
+	"Demote headings (H1 → H2, etc.)": "Desclasificar los títulos (H1 → H2, etc.)",
+	"HTML headings/IDs": "Encabezados/IDs HTML",
+	"Create base64 images": "Crear imágenes en base64",
+	"Suppress top comment": "Suprimir el comentario superior",
+	"Help": "Elija Markdown o HTML.\n* Por defecto: convertir todo el documento.\n* Seleccione el texto para limitar el alcance.",
+	"Text was copied to buffer!": "El texto se copió en el búfer!",
+	"Convert to Markdown or HTML": "Convertir a Markdown o HTML",
+	"Preview": "Vista previa"
 }
