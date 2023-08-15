@@ -1,56 +1,56 @@
 {
-    "name": "Translator",
-    "nameLocale": {
-        "ru": "Переводчик",
-        "fr": "Traducteur",
-        "es": "Traductor",
-        "de": "Übersetzer"
-    },
-    "guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F6800}",
-    "version": "1.0.2",
+	"name": "Translator",
+	"nameLocale": {
+		"ru": "Переводчик",
+		"fr": "Traducteur",
+		"es": "Traductor",
+		"de": "Übersetzer"
+	},
+	"guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F6800}",
+	"version": "1.0.2",
 
-    "variations": [
-        {
-            "description": "Translate the selected text into other languages with Google Translate.",
-            "descriptionLocale": {
-                "ru": "Переводите слова, предложения и абзацы на другие языки с помощью Google Translate.",
-                "fr": "Traduisez le texte sélectionné dans d'autres langues avec Google Translate.",
-                "es": "Traduzca el texto seleccionado a otros idiomas con el Traductor de Google.",
-                "de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit Google Translate."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Translate the selected text into other languages with Google Translate.",
+			"descriptionLocale": {
+				"ru": "Переводите слова, предложения и абзацы на другие языки с помощью Google Translate.",
+				"fr": "Traduisez le texte sélectionné dans d'autres langues avec Google Translate.",
+				"es": "Traduzca el texto seleccionado a otros idiomas con el Traductor de Google.",
+				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit Google Translate."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
-            "icons2": [
-            {
-                "100%": { "normal": "resources/img/icon.png" },
-                "125%": { "normal": "resources/img/icon@1.25x.png" },
-                "150%": { "normal": "resources/img/icon@1.5x.png" },
-                "175%": { "normal": "resources/img/icon@1.75x.png" },
-                "200%": { "normal": "resources/img/icon@2x.png" }
-            }
-            ],
-            "screens": ["resources/store/screen_1.png"],
-            "isViewer": true,
-            "EditorsSupport": [ "word", "cell", "slide" ],
-            "isVisual": true,
-            "isModal": false,
-            "isInsideMode": true,
-            "initDataType": "text",
-            "isUpdateOleOnResize": false,
-            "initOnSelectionChanged": true,
-            "store": {
-                "background": {
-                    "light": "#F5F5F5",
-                    "dark": "#444444"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities"]
-            }
-        }
-    ]
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"icons2": [
+			{
+				"100%": { "normal": "resources/img/icon.png" },
+				"125%": { "normal": "resources/img/icon@1.25x.png" },
+				"150%": { "normal": "resources/img/icon@1.5x.png" },
+				"175%": { "normal": "resources/img/icon@1.75x.png" },
+				"200%": { "normal": "resources/img/icon@2x.png" }
+			}
+			],
+			"screens": ["resources/store/screen_1.png"],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "cell", "slide" ],
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"initDataType": "text",
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": true,
+			"store": {
+				"background": {
+					"light": "#F5F5F5",
+					"dark": "#444444"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities"]
+			}
+		}
+	]
 }

@@ -1,94 +1,94 @@
 {
-    "name": "DeepL",
-    "nameLocale": {
-        "ru": "DeepL",
-        "fr": "DeepL",
-        "es": "DeepL",
-        "de": "DeepL"
-    },
-    "guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
-    "version": "1.0.1",
+	"name": "DeepL",
+	"nameLocale": {
+		"ru": "DeepL",
+		"fr": "DeepL",
+		"es": "DeepL",
+		"de": "DeepL"
+	},
+	"guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
+	"version": "1.0.1",
 
-    "variations": [
-        {
-            "description": "Translate the selected text into other languages using DeepL.",
-            "descriptionLocale": {
-                "ru": "Переводите текст на другие языки с помощью сервиса DeepL.",
-                "fr": "Traduisez un texte sélectionné dans d’autres langues avec DeepL.",
-                "es": "Traduzca el texto seleccionado a otros idiomas utilizando DeepL.",
-                "de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL."
-            },
-            "url": "index.html",
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "theme" : "flat",
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    },
-                    "default": {
-                        "normal": "resources/light/icon.png"
-                    }
-                },
-                {
-                    "theme" : "flatDark",
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer": true,
-            "EditorsSupport": [ "word", "slide", "cell" ],
+	"variations": [
+		{
+			"description": "Translate the selected text into other languages using DeepL.",
+			"descriptionLocale": {
+				"ru": "Переводите текст на другие языки с помощью сервиса DeepL.",
+				"fr": "Traduisez un texte sélectionné dans d’autres langues avec DeepL.",
+				"es": "Traduzca el texto seleccionado a otros idiomas utilizando DeepL.",
+				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL."
+			},
+			"url": "index.html",
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"theme" : "flat",
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					},
+					"default": {
+						"normal": "resources/light/icon.png"
+					}
+				},
+				{
+					"theme" : "flatDark",
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "slide", "cell" ],
 
-            "isVisual": true,
-            "isModal": false,
-            "isInsideMode": true,
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
 
-            "initDataType": "text",
+			"initDataType": "text",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "initOnSelectionChanged": true,
-            "store": {
-                "background": {
-                    "light" : "#042B48",
-                    "dark" : "#042B48"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "work"]
-            }
-        }
-    ]
+			"initOnSelectionChanged": true,
+			"store": {
+				"background": {
+					"light" : "#042B48",
+					"dark" : "#042B48"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		}
+	]
 }

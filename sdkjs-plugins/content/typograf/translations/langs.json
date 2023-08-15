@@ -1,4 +1,4 @@
-[ 
+[
 	"be-BE",
 	"bg-BG",
 	"ca-CA",
@@ -10,6 +10,7 @@
 	"fr-FR",
 	"hu-HU",
 	"it-IT",
+	"ja-JA",
 	"lv-LV",
 	"nb-NB",
 	"nl-NL",
@@ -19,5 +20,6 @@
 	"sk-SK",
 	"sl-SL",
 	"sv-SV",
-	"uk-UK"
+	"uk-UK",
+	"zh-ZH"
 ]

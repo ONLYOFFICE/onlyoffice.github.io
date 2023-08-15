@@ -1,26 +1,26 @@
 {
-    "name": "Apertium",
-    "nameLocale": {
-        "ru": "Apertium",
-        "fr": "Apertium",
-        "es": "Apertium",
-        "de": "Apertium"
-    },
-    "guid": "asc.{9b224050-2354-4c1b-822b-03a97f61c79d}",
-    "version": "1.0.0",
+	"name": "Apertium",
+	"nameLocale": {
+		"ru": "Apertium",
+		"fr": "Apertium",
+		"es": "Apertium",
+		"de": "Apertium"
+	},
+	"guid": "asc.{9b224050-2354-4c1b-822b-03a97f61c79d}",
+	"version": "1.0.0",
 
-    "variations": [
-        {
-            "description": "Quickly translate words and sentences using Apertium.",
-            "descriptionLocale": {
-                "ru": "Быстро переводите слова и предложения с помощью сервиса Apertium.",
-                "fr": "Traduisez rapidement des mots et des phrases avec Apertium.",
-                "es": "Traduzca rápidamente palabras y frases con Apertium.",
-                "de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Quickly translate words and sentences using Apertium.",
+			"descriptionLocale": {
+				"ru": "Быстро переводите слова и предложения с помощью сервиса Apertium.",
+				"fr": "Traduisez rapidement des mots et des phrases avec Apertium.",
+				"es": "Traduzca rápidamente palabras y frases con Apertium.",
+				"de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium."
+			},
+			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
+			"icons2": [
 				{
 					"theme" : "flat",
 					"style" : "light",
@@ -65,34 +65,34 @@
 					}
 				}
 			],
-            "isViewer": true,
-            "EditorsSupport": [ "word", "slide", "cell" ],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "slide", "cell" ],
 
-            "isVisual": true,
-            "isModal": false,
-            "isInsideMode": true,
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
 
-            "initDataType": "text",
-            "initData": "",
+			"initDataType": "text",
+			"initData": "",
 			"isNeedNumbering": false,
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [],
+			"buttons": [],
 
-            "initOnSelectionChanged": true,
-            "store": {
-                "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#444444"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "work"]
-            }
-        }
-    ]
+			"initOnSelectionChanged": true,
+			"store": {
+				"background": {
+					"light" : "#F5F5F5",
+					"dark"  : "#444444"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons"     : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		}
+	]
 }

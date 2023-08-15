@@ -1,28 +1,28 @@
 {
-    "name": "Photo Editor",
-    "nameLocale": {
-        "ru": "Фоторедактор",
-        "fr": "Photo Editor",
-        "es": "Editor de Fotos",
-        "de": "Foto-Editor"
-    },
-    "guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
-    "version": "1.0.1",
-    "baseUrl": "",
+	"name": "Photo Editor",
+	"nameLocale": {
+		"ru": "Фоторедактор",
+		"fr": "Photo Editor",
+		"es": "Editor de Fotos",
+		"de": "Foto-Editor"
+	},
+	"guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
+	"version": "1.0.1",
+	"baseUrl": "",
 
-    "variations": [
-        {
-            "description": "Edit images, screenshots, and photos right in your documents: crop, resize, apply effects.",
-            "descriptionLocale": {
-                "ru": "Обрабатывайте картинки, скриншоты и фотографии прямо в документе: обрезайте, изменяйте размер, применяйте различные эффекты.",
-                "fr": "Modifiez des images, des captures d’écran et des photos directement dans vos documents : coupez, ajustez, appliquez des effets.",
-                "es": "Edite imágenes, capturas de pantalla y fotos directamente en sus documentos: recorte, cambie el tamaño y aplique efectos.",
-                "de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Edit images, screenshots, and photos right in your documents: crop, resize, apply effects.",
+			"descriptionLocale": {
+				"ru": "Обрабатывайте картинки, скриншоты и фотографии прямо в документе: обрезайте, изменяйте размер, применяйте различные эффекты.",
+				"fr": "Modifiez des images, des captures d’écran et des photos directement dans vos documents : coupez, ajustez, appliquez des effets.",
+				"es": "Edite imágenes, capturas de pantalla y fotos directamente en sus documentos: recorte, cambie el tamaño y aplique efectos.",
+				"de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
 				{
 					"style" : "light",
 					
@@ -62,70 +62,70 @@
 					}
 				}
 			],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"isViewer": false,
+			"EditorsSupport": [ "word", "cell", "slide" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
-           
-            "initDataType": "html",
-            "initData": "",
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
+		 
+			"initDataType": "html",
+			"initData": "",
 
-            "buttons": [
-                {
-                    "text": "Ok",
-                    "primary": true
-                },
+			"buttons": [
 				{
-                    "text": "Cancel",
-                    "primary": false,
-                    "isViewer": false,
-                    "textLocale": {
-                        "ru": "Отмена",
-                        "fr": "Annuler",
-                        "es": "Cancelar",
-                        "de": "Abbrechen"
-                    }
-                }
-            ],
+					"text": "Ok",
+					"primary": true
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"isViewer": false,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen"
+					}
+				}
+			],
 
-            "size": [ 10000, 10000 ],
-            "store": {
-                "background": {
-                    "light" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)",
-                    "dark" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "work", "recommended"]
-            }
-        },
-        {
-            "description": "About",
-            "descriptionLocale": {
-                "ru": "Справка",
-                "fr": "À propos",
-                "es": "Sobre programa",
-                "de": "Über"
-            },
-            "url": "index_about.html",
+			"size": [ 10000, 10000 ],
+			"store": {
+				"background": {
+					"light" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)",
+					"dark" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work", "recommended"]
+			}
+		},
+		{
+			"description": "About",
+			"descriptionLocale": {
+				"ru": "Справка",
+				"fr": "À propos",
+				"es": "Sobre programa",
+				"de": "Über"
+			},
+			"url": "index_about.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
+			"isViewer": false,
+			"EditorsSupport": [ "word", "cell", "slide" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
 
-            "initDataType": "none",
-            "initData": "",
+			"initDataType": "none",
+			"initData": "",
 
-            "size": [ 392, 147 ]
-        }
-    ]
+			"size": [ 392, 147 ]
+		}
+	]
 }
