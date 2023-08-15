@@ -598,6 +598,7 @@ a.aboutlink:active {
 .asc-plugin-loader .asc-loader-title {
     font-size: 13px;
     padding-left: 25px;
+	min-width: 100px;
 }
 
 /* default scroll */
