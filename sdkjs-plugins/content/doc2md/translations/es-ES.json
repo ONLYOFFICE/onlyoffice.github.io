@@ -7,5 +7,8 @@
   "HTML headings/IDs": "Encabezados/IDs HTML",
   "Create base64 images": "Crear imágenes en base64",
   "Suppress top comment": "Suprimir el comentario superior",
-  "Help": "Elija Markdown o HTML.\n* Por defecto: convertir todo el documento.\n* Seleccione el texto para limitar el alcance."
+  "Help": "Elija Markdown o HTML.\n* Por defecto: convertir todo el documento.\n* Seleccione el texto para limitar el alcance.",
+  "Text was copied to buffer!": "El texto se copió en el búfer!",
+  "Convert to Markdown or HTML": "Convertir a Markdown o HTML",
+  "Preview": "Vista previa"
 }

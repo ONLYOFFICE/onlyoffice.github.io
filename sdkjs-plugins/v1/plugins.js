@@ -91,8 +91,8 @@
                         if (e && e.preventDefault)
                             e.preventDefault();
                         return false;
-                	};
-                	_body.ondragover = function(e) {
+                    };
+                    _body.ondragover = function(e) {
                         if (e && e.preventDefault)
                             e.preventDefault();
                         if (e && e.dataTransfer)
@@ -103,7 +103,20 @@
 
                 // ie11 not support message from another domain
                 window.Asc.plugin._initInternal = true;
-			
+
+                var _windowSearch = window.location.search;
+                var _pos1 = _windowSearch.indexOf("windowID=");
+                if (_pos1 >= 0)
+                {
+                    _pos1 += 9;
+                    var _pos2 = _windowSearch.indexOf("&", _pos1);
+                    if (_pos2 < 0)
+                        _pos2 = _windowSearch.length;
+
+                    window.Asc.plugin.windowID = _windowSearch.substring(_pos1, _pos2);
+                    obj.windowID = window.Asc.plugin.windowID;
+                }
+
                 window.parent.postMessage(JSON.stringify(obj), "*");
             }
         };
@@ -111,7 +124,7 @@
     };
 
     window.Asc.supportOrigins = {};
-	window.Asc.supportOrigins[window.origin] = true;
+    window.Asc.supportOrigins[window.origin] = true;
 
     function onMessage(event) {
         if (!window.Asc || !window.Asc.plugin)
@@ -138,7 +151,7 @@
 
             if (pluginData.type == "plugin_init") {
                 window.Asc.supportOrigins[event.origin] = true;
-				window.Asc.plugin.ie_channel_check(event);
+                window.Asc.plugin.ie_channel_check(event);
                 eval(pluginData.data);
             }
         }
@@ -148,6 +161,51 @@
         window.addEventListener("message", onMessage, false);
     else
         window.attachEvent("onmessage", onMessage);
+
+    window.Asc.plugin.attachContextMenuClickEvent = function(id, action)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (!pluginObj.contextMenuEvents)
+            pluginObj.contextMenuEvents = {};
+
+        pluginObj.contextMenuEvents[id] = action;
+    };
+    window.Asc.plugin.event_onContextMenuClick = function(id)
+    {
+        var pluginObj = window.Asc.plugin;
+        var itemId = id;
+        var itemData = undefined;
+        var itemPos = itemId.indexOf("_oo_sep_");
+        if (-1 !== itemPos)
+        {
+            itemData = itemId.substring(itemPos + 8);
+            itemId = itemId.substring(0, itemPos);
+        }
+
+        if (pluginObj.contextMenuEvents && pluginObj.contextMenuEvents[itemId])
+            pluginObj.contextMenuEvents[itemId].call(pluginObj, itemData);
+    };
+
+    window.Asc.plugin.attachEvent = function(id, action)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (!pluginObj._events)
+            pluginObj._events = {};
+
+        pluginObj._events[id] = action;
+    };
+    window.Asc.plugin.detachEvent = function(id)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (pluginObj._events && pluginObj._events[id])
+            delete pluginObj._events[id];
+    };
+    window.Asc.plugin.onEvent = function(id, data)
+    {
+        var pluginObj = window.Asc.plugin;
+        if (pluginObj._events && pluginObj._events[id])
+            pluginObj._events[id].call(pluginObj, data);
+    };
 
     window.onunload = function() {
         if (window.addEventListener)

@@ -69,7 +69,7 @@ class GrammarChecker {
 
         if ( !this.isInit.Graphspell && (aInit.indexOf("Graphspell") !== false || aInit.indexOf("Lexicographer") !== false)){
             //console.log('init Graphspell');
-            this.oSpellChecker = new SpellChecker(this.sLangCode, this.sPathRoot + "/graphspell/_dictionaries");
+            this.oSpellChecker = new SpellChecker(this.sLangCode, this.sPathRoot + "/graphspell/dictionaries");
             this.isInit.Graphspell = true;
             this.oTokenizer = this.oSpellChecker.getTokenizer();
             this.isInit.Tokenizer = true;

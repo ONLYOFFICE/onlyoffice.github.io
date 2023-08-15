@@ -3,7 +3,7 @@
     "Hyphen after “кое” and “кой”": "Дефис после \"кое\" и \"кой\"",
     "Hyphen before “де”": "Дефис перед \"де\"",
     "Hyphen before “ка” and “кась”": "Дефис перед \"ка\" и \"кась\"",
-    "Hyphen before “то”, “либо”, “нибудь”": "Дефис перед «то», «либо», «нибудь",
+    "Hyphen before “то”, “либо”, “нибудь”": "Дефис перед «то», «либо», «нибудь»",
     "Hyphen between “верно-таки” and etc.": "Дефис между \"верно-таки\" и т. д.",
     "Hyphen between “из-за”": "Дефис между \"из-за\"",
     "Hyphen between “из-под”": "Дефис между \"из-под\"",
@@ -34,7 +34,7 @@
     "Non-breaking space in P. S. and P. P. S.": "Неразрывный пробел в P.S. и P.P.S.",
     "Non-breaking thin space after №": "Неразрывный пробел после №",
     "Non-breaking space between number and month": "Неразрывный пробел между числом и месяцем",
-    "Space after “...”, “!..” and “?..”": "Пробел после «...», «!..» и «?..",
+    "Space after “...”, “!..” and “?..”": "Пробел после «...», «!..» и «?..»",
     "Converting dates YYYY-MM-DD type DD.MM.YYYY": "Преобразование дат ГГГГ-ММ-ДД типа ДД.ММ.ГГГГ",
     "Currency symbol ($, €, ¥, Ұ, £ and ₤) after the number, $100 → 100 $": "Символ валюты ($, €, ¥, Ұ, £ и ₤) после числа, 100 $ → 100 $",
     "Commas in numbers": "Замена точки на запятую в числах",
@@ -94,4 +94,4 @@
     "Other": "Другое",
     "Delete character BOM (Byte Order Mark)": "Удалить символ BOM (знак порядка байтов)",
     "Removing repeat words": "Удаление повторяющихся слов"
-  }
+}
