@@ -1,14 +1,14 @@
 ﻿{
-  "Copy": "コピー元",
-  "Show settings": "表示設定",
-  "Hide settings": "設定を隠す",
-  "Render HTML tags": "HTMLタグのレンダリング",
-  "Demote headings (H1 → H2, etc.)": "見出しを降格する（H1 → H2 など）。",
-  "HTML headings/IDs": "HTMLの見出し/ID",
-  "Create base64 images": "base64イメージの作成",
-  "Suppress top comment": "トップコメントの抑制",
-  "Help": "MarkdownまたはHTMLを選択します。\n* デフォルト：文書全体を変換します。\n* 範囲を限定するためにテキストを選択します。",
-  "Text was copied to buffer!": "テキストがバッファにコピーされました！",
-  "Convert to Markdown or HTML": "MarkdownまたはHTMLに変換する",
-  "Preview": "プレビュー"
+	"Copy": "コピー元",
+	"Show settings": "表示設定",
+	"Hide settings": "設定を隠す",
+	"Render HTML tags": "HTMLタグのレンダリング",
+	"Demote headings (H1 → H2, etc.)": "見出しを降格する（H1 → H2 など）。",
+	"HTML headings/IDs": "HTMLの見出し/ID",
+	"Create base64 images": "base64イメージの作成",
+	"Suppress top comment": "トップコメントの抑制",
+	"Help": "MarkdownまたはHTMLを選択します。\n* デフォルト：文書全体を変換します。\n* 範囲を限定するためにテキストを選択します。",
+	"Text was copied to buffer!": "テキストがバッファにコピーされました！",
+	"Convert to Markdown or HTML": "MarkdownまたはHTMLに変換する",
+	"Preview": "プレビュー"
 }

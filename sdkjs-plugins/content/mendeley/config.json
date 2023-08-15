@@ -1,85 +1,85 @@
 {
-    "name" : "Mendeley",
-    "nameLocale": {
-        "ru": "Mendeley",
-        "fr": "Mendeley",
-        "es": "Mendeley",
-        "de": "Mendeley"
-    },
-    "guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
-    "version" : "1.0.1",
+	"name" : "Mendeley",
+	"nameLocale": {
+		"ru": "Mendeley",
+		"fr": "Mendeley",
+		"es": "Mendeley",
+		"de": "Mendeley"
+	},
+	"guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
+	"version" : "1.0.1",
 
-    "variations" : [
-      {
-        "description": "Create bibliographies and insert citations using the Mendeley service.",
-        "descriptionLocale": {
-                "ru": "Работайте с библиографиями и цитированием, используя сервис Mendeley.",
-                "fr": "Créez des bibliographies et insérez des citations avec Mendeley.",
-                "es": "Cree bibliografías e inserte citas utilizando el servicio Mendeley.",
-                "de": "Erstellen Sie Bibliografien und fügen Sie Zitate mit Mendeley ein."
-            },
-        "url": "index.html",
-        "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-        "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-        "isViewer": false,
-        "EditorsSupport": [ "word" ],
-        "initDataType": "text",
-        "isVisual": true,
-        "isModal": false,
-        "isInsideMode": true,
-        "isUpdateOleOnResize": false,
-        "initOnSelectionChanged": false,
-        "store": {
-            "background": {
-                "light" : "#E5222E",
-                "dark" : "#E5222E"
-            },
-            "screenshots" : ["resources/store/screenshots/screen_1.png"],
-            "icons"       : {
-                "light" : "resources/store/icons",
-                "dark"  : "resources/store/icons"
-            },
-			"categories": ["specAbilities"]
-        }
-      }
-    ]
+	"variations" : [
+		{
+			"description": "Create bibliographies and insert citations using the Mendeley service.",
+			"descriptionLocale": {
+					"ru": "Работайте с библиографиями и цитированием, используя сервис Mendeley.",
+					"fr": "Créez des bibliographies et insérez des citations avec Mendeley.",
+					"es": "Cree bibliografías e inserte citas utilizando el servicio Mendeley.",
+					"de": "Erstellen Sie Bibliografien und fügen Sie Zitate mit Mendeley ein."
+				},
+			"url": "index.html",
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+					{
+						"style" : "light",
+						
+						"100%": {
+							"normal": "resources/light/icon.png"
+						},
+						"125%": {
+							"normal": "resources/light/icon@1.25x.png"
+						},
+						"150%": {
+							"normal": "resources/light/icon@1.5x.png"
+						},
+						"175%": {
+							"normal": "resources/light/icon@1.75x.png"
+						},
+						"200%": {
+							"normal": "resources/light/icon@2x.png"
+						}
+					},
+					{
+						"style" : "dark",
+						
+						"100%": {
+							"normal": "resources/dark/icon.png"
+						},
+						"125%": {
+							"normal": "resources/dark/icon@1.25x.png"
+						},
+						"150%": {
+							"normal": "resources/dark/icon@1.5x.png"
+						},
+						"175%": {
+							"normal": "resources/dark/icon@1.75x.png"
+						},
+						"200%": {
+							"normal": "resources/dark/icon@2x.png"
+						}
+					}
+				],
+			"isViewer": false,
+			"EditorsSupport": [ "word" ],
+			"initDataType": "text",
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": false,
+			"store": {
+				"background": {
+					"light" : "#E5222E",
+					"dark" : "#E5222E"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities"]
+			}
+		}
+	]
 }

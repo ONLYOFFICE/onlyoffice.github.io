@@ -1,13 +1,13 @@
 ﻿{
-  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "DeepLを使用するには、DeepLの公式WebサイトでDeepLAPIプランに登録してください。 APIキーをコピーして、指定したフィールドに挿入します。",
-  "Learn more here.": "詳細については、こちらをご覧ください。",
-  "Save": "保存する",
-  "Target language": "目標とする言語",
-  "Enter text manually": "手動でテキストを入力する",
-  "Hide field": "フィールドを非表示",
-  "Translating...": "翻訳...",
-  "Loading languages...": "言語の読み込み",
-  "Copy": "コピー",
-  "Insert to document": "ドキュメントに挿入",
-  "Reconfigure API key": "APIキーを再構成します"
+	"To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "DeepLを使用するには、DeepLの公式WebサイトでDeepLAPIプランに登録してください。 APIキーをコピーして、指定したフィールドに挿入します。",
+	"Learn more here.": "詳細については、こちらをご覧ください。",
+	"Save": "保存する",
+	"Target language": "目標とする言語",
+	"Enter text manually": "手動でテキストを入力する",
+	"Hide field": "フィールドを非表示",
+	"Translating...": "翻訳...",
+	"Loading languages...": "言語の読み込み",
+	"Copy": "コピー",
+	"Insert to document": "ドキュメントに挿入",
+	"Reconfigure API key": "APIキーを再構成します"
 }
