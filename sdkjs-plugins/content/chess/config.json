@@ -1,17 +1,18 @@
 {
-    "name": "Сhess",
-	"nameLocale": {
+    "name": "Chess",
+    "nameLocale": {
         "ru": "Шахматы",
         "fr": "Échecs",
         "es": "Ajedrez",
         "de": "Schach"
     },
     "guid": "asc.{FFE1F462-1EA2-4391-990D-4CC84940B754}",
+    "version": "1.0.0",
 
     "variations": [
         {
             "description": "Play chess with other collaborators right in the editors. ",
-			"descriptionLocale": {
+            "descriptionLocale": {
                 "ru": "Играйте в шахматы с другими пользователями прямо в редакторах.",
                 "fr": "Jouez aux échecs avec vos collaborateurs directement dans les éditeurs.",
                 "es": "Juegue al ajedrez con otros colaboradores directamente en los editores.",
@@ -20,7 +21,7 @@
             "url"         : "index.html",
 
             "icons"           : ["resources/light/icon.png", "resources/light/icon@2x.png"],
-			"icons2": [
+            "icons2": [
                 {
                     "style" : "light",
                     
@@ -80,11 +81,12 @@
                     "light" : "#444444",
                     "dark" : "#444444;"
                 },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
+                "screenshots" : [ "resources/store/screenshots/screen_1.png" ],
                 "icons"       : {
                     "light" : "resources/store/icons",
                     "dark"  : "resources/store/icons"
-                }               
+                },
+                "categories": ["entertainment", "specAbilities"]
             }
         },
         {

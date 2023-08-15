@@ -7,5 +7,8 @@
   "HTML headings/IDs": "Intestazioni/ID HTML",
   "Create base64 images": "Creare immagini base64",
   "Suppress top comment": "Sopprimere il commento superiore",
-  "Help": "Scegliere Markdown o HTML.\n* Predefinito: convertire l'intero documento.\n* Selezionare il testo per limitare la portata."
+  "Help": "Scegliere Markdown o HTML.\n* Predefinito: convertire l'intero documento.\n* Selezionare il testo per limitare la portata.",
+  "Text was copied to buffer!": "Il testo è stato copiato nel buffer!",
+  "Convert to Markdown or HTML": "Converti in Markdown o HTML",
+  "Preview": "Anteprima"
 }
