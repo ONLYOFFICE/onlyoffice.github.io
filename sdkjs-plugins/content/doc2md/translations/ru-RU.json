@@ -1,14 +1,14 @@
 {
-  "Copy": "Копировать",
-  "Show settings": "Показать настройки",
-  "Hide settings": "Скрыть настройки",
-  "Render HTML tags": "Рендеринг HTML-тегов",
-  "Demote headings (H1 → H2, etc.)": "Демонтировать заголовки (H1 → H2 и т.д.)",
-  "HTML headings/IDs": "HTML заголовки/идентификаторы",
-  "Create base64 images": "Создание изображений base64",
-  "Suppress top comment": "Убрать верхний комментарий",
-  "Help": "Выберите Markdown или HTML.\n* По умолчанию: преобразовать весь документ.\n* Выберите текст, чтобы ограничить область применения.",
-  "Text was copied to buffer!": "Текст был скопирован в буфер!",
-  "Convert to Markdown or HTML": "Преобразовать в Markdown или HTML",
-  "Preview": "Предварительный просмотр"
+	"Copy": "Копировать",
+	"Show settings": "Показать настройки",
+	"Hide settings": "Скрыть настройки",
+	"Render HTML tags": "Рендеринг HTML-тегов",
+	"Demote headings (H1 → H2, etc.)": "Демонтировать заголовки (H1 → H2 и т.д.)",
+	"HTML headings/IDs": "HTML заголовки/идентификаторы",
+	"Create base64 images": "Создание изображений base64",
+	"Suppress top comment": "Убрать верхний комментарий",
+	"Help": "Выберите Markdown или HTML.\n* По умолчанию: преобразовать весь документ.\n* Выберите текст, чтобы ограничить область применения.",
+	"Text was copied to buffer!": "Текст был скопирован в буфер!",
+	"Convert to Markdown or HTML": "Преобразовать в Markdown или HTML",
+	"Preview": "Предварительный просмотр"
 }
