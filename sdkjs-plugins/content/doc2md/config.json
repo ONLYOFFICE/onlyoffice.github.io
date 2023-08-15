@@ -7,8 +7,8 @@
         "de": "Doc2md"
     },
     "guid": "asc.{5aff455d-96c4-4bd8-9658-16e5bc143738}",
-    "version": "1.0.0",
-    "minVersion" : "6.4.0",
+    "version": "1.0.1",
+    "minVersion" : "7.4.0",
     "variations": [
         {
             "description": "Convert your formatted documents to Markdown or HTML.",
@@ -16,7 +16,8 @@
                 "ru": "Преобразуйте отформатированные документы в Markdown или HTML.",
                 "fr": "Convertissez votre document mis en forme en Markdown ou HTML.",
                 "es": "Convierta sus documentos formateados a Markdown o HTML.",
-                "de": "Konvertieren Sie formatierte Dokumente in Markdown oder HTML."
+                "de": "Konvertieren Sie formatierte Dokumente in Markdown oder HTML.",
+                "cs": "Převeďte své formátované dokumenty na Markdown nebo HTML."
             },
             "url": "index.html",
             "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

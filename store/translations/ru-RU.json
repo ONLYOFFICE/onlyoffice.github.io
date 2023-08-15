@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "Управление плагинами",
-	"My plugins": "Мои плагины",
+	"Available plugins": "Мои плагины",
 	"Marketplace": "Магазин",
 	"Submit your own plugin": "Отправить свой плагин",
 	"Install plugin manually": "Установить плагин вручную",
@@ -13,7 +13,7 @@
 	"Learn how to use": "Узнайте как использовать",
 	"the plugin in": "плагин в",
 	"Contribute": "Внесите свой вклад",
-	"to the plugin developmen or report an issue on": "в разработку плагина или сообщите о проблеме на",
+	"to the plugin development or report an issue on": "в разработку плагина или сообщите о проблеме на",
 	"Get help": "Получите помощь",
 	"with the plugin functionality on our forum.": "с функциональностью плагина на нашем форуме.",
 	"Create a new plugin using": "Создайте новый плагин используя",
@@ -45,5 +45,16 @@
 	"Work": "Для работы",
 	"Entertainment": "Развлечения",
 	"Communication": "Коммуникация",
-	"Special abilities": "Специальные возможности"
+	"Special abilities": "Специальные возможности",
+	"The minimum supported editors version" : "Минимальная поддерживаемая версия редактора",
+	"This plugin will only work in a newer version of the editor.": "Этот плагин будет работать только в более новой версии редактора.",
+	"Nothing was found for this query.": "По этому запросу ничего не найдено.",
+	"No Internet Connection.": "Нет подключения к Интернету.",
+	"Problem with loading plugin config.\nConfig: " : "Проблема с загрузкой конфигурации плагина.\nКонфиг: ",
+	"Problem with loading some resources." : "Проблема с загрузкой ресурсов.",
+	"File not found." : "Файл не найден.",
+	"Network problem." : "Проблемы с сетью.",
+	"Problem with loading some resources" : "Проблема с загрузкой некоторых ресурсов",
+	"Click to rate" : "Нажмите, чтобы оценить",
+	"No disscussion page for this plugin." : "Нет страницы дискуссии для этого плагина."
 }

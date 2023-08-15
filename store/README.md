@@ -40,4 +40,8 @@ Please note: when you are working on your plugin, it’s important to open the P
 
 **6. When you are ready with the plugin creation**, make pull request from your fork to the [https://github.com/ONLYOFFICE/onlyoffice.github.io](https://github.com/ONLYOFFICE/onlyoffice.github.io) repository.
 
-**7. In case everything is OK and it works properly**, we will approve the PR and the plugin will appear in the marketplace. 
+**7. In case everything is OK and it works properly**, we will approve the PR and the plugin will appear in the marketplace.
+
+## How to test your own plugin manager
+
+If you want test your own plugin manager, you should create a variable in localStorage named "DeveloperMarketplaceUrl" and put the URL of your plugin manager in it. You will see a notification at the top of the plugin manager window, if you are not using the original plugin manager.

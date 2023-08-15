@@ -20,6 +20,9 @@
 	var editor;
 	window.Asc.plugin.init = function(text)
 	{
+		if (window.Asc.plugin.info.isViewMode)
+			document.getElementById("btn_paste").classList.add('hidden');
+
 		var settings = {
 			embeddedLanguageFormatting: "off",
 			htmlWhitespaceSensitivity: "ignore",
