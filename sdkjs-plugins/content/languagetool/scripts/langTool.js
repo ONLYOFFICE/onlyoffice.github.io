@@ -608,12 +608,22 @@ function checkInternetExplorer(){
 			$('#language_id').select2({
 				data : languages
 			}).on('select2:select', function (e) {
+				localStorage.setItem('langtool_lang', e.params.data.id);
+
 				CurLang = e.params.data.longcode;
 				if (e.params.data.longcode === "auto")
 				    isLangChangedManually = false;
 				else
 				    isLangChangedManually = true;
 			});
+			
+			let sSavedLang = localStorage.getItem('langtool_lang');
+			if (sSavedLang != null) {
+				$('#language_id').val(sSavedLang);
+            	$('#language_id').trigger('change');
+				isLangChangedManually = true;
+			}
+
 		}, function(err) {console.log("ouch" +err)});
 
 		var container = document.getElementById('scrollable-container-id');			

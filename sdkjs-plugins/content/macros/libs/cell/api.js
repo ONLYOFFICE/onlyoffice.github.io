@@ -75,6 +75,12 @@ ApiRun.prototype = Object.create(ApiTextPr.prototype);
 ApiRun.prototype.constructor = ApiRun;
 
 /**
+ * Class representing a comment reply.
+ * @constructor
+ */
+function ApiCommentReply(oParentComm, oCommentReply){}
+
+/**
  * Class representing a Paragraph hyperlink.
  * @constructor
  */
@@ -306,8 +312,8 @@ function ApiBlockLvlSdt(Sdt){}
 
 /**
  * A border type which will be added to the document element.
- * * **"none"** - no border will be added to the created element or the selected element side.
- * * **"single"** - a single border will be added to the created element or the selected element side.
+ * * <b>"none"</b> - no border will be added to the created element or the selected element side.
+ * * <b>"single"</b> - a single border will be added to the created element or the selected element side.
  * @typedef {("none" | "single")} BorderType
  */
 
@@ -333,36 +339,36 @@ function ApiBlockLvlSdt(Sdt){}
 
 /**
  * Header and footer types which can be applied to the document sections.
- * * **"default"** - a header or footer which can be applied to any default page.
- * * **"title"** - a header or footer which is applied to the title page.
- * * **"even"** - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).
+ * * <b>"default"</b> - a header or footer which can be applied to any default page.
+ * * <b>"title"</b> - a header or footer which is applied to the title page.
+ * * <b>"even"</b> - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).
  * @typedef {("default" | "title" | "even")} HdrFtrType
  */
 
 /**
  * The possible values for the units of the width property are defined by a specific table or table cell width property.
- * * **"auto"** - sets the table or table cell width to auto width.
- * * **"twips"** - sets the table or table cell width to be measured in twentieths of a point.
- * * **"nul"** - sets the table or table cell width to be of a zero value.
- * * **"percent"** - sets the table or table cell width to be measured in percent to the parent container.
+ * * <b>"auto"</b> - sets the table or table cell width to auto width.
+ * * <b>"twips"</b> - sets the table or table cell width to be measured in twentieths of a point.
+ * * <b>"nul"</b> - sets the table or table cell width to be of a zero value.
+ * * <b>"percent"</b> - sets the table or table cell width to be measured in percent to the parent container.
  * @typedef {("auto" | "twips" | "nul" | "percent")} TableWidth
  */
 
 /**
  * This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.
- * * **"topLeftCell"** - specifies that the table formatting is applied to the top left cell.
- * * **"topRightCell"** - specifies that the table formatting is applied to the top right cell.
- * * **"bottomLeftCell"** - specifies that the table formatting is applied to the bottom left cell.
- * * **"bottomRightCell"** - specifies that the table formatting is applied to the bottom right cell.
- * * **"firstRow"** - specifies that the table formatting is applied to the first row.
- * * **"lastRow"** - specifies that the table formatting is applied to the last row.
- * * **"firstColumn"** - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.
- * * **"lastColumn"** - specifies that the table formatting is applied to the last column.
- * * **"bandedColumn"** - specifies that the table formatting is applied to odd numbered groupings of rows.
- * * **"bandedColumnEven"** - specifies that the table formatting is applied to even numbered groupings of rows.
- * * **"bandedRow"** - specifies that the table formatting is applied to odd numbered groupings of columns.
- * * **"bandedRowEven"** - specifies that the table formatting is applied to even numbered groupings of columns.
- * * **"wholeTable"** - specifies that the conditional formatting is applied to the whole table.
+ * * <b>"topLeftCell"</b> - specifies that the table formatting is applied to the top left cell.
+ * * <b>"topRightCell"</b> - specifies that the table formatting is applied to the top right cell.
+ * * <b>"bottomLeftCell"</b> - specifies that the table formatting is applied to the bottom left cell.
+ * * <b>"bottomRightCell"</b> - specifies that the table formatting is applied to the bottom right cell.
+ * * <b>"firstRow"</b> - specifies that the table formatting is applied to the first row.
+ * * <b>"lastRow"</b> - specifies that the table formatting is applied to the last row.
+ * * <b>"firstColumn"</b> - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.
+ * * <b>"lastColumn"</b> - specifies that the table formatting is applied to the last column.
+ * * <b>"bandedColumn"</b> - specifies that the table formatting is applied to odd numbered groupings of rows.
+ * * <b>"bandedColumnEven"</b> - specifies that the table formatting is applied to even numbered groupings of rows.
+ * * <b>"bandedRow"</b> - specifies that the table formatting is applied to odd numbered groupings of columns.
+ * * <b>"bandedRowEven"</b> - specifies that the table formatting is applied to even numbered groupings of columns.
+ * * <b>"wholeTable"</b> - specifies that the conditional formatting is applied to the whole table.
  * @typedef {("topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" |
  *     "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" |
  *     "wholeTable")} TableStyleOverrideType
@@ -440,17 +446,17 @@ function ApiBlockLvlSdt(Sdt){}
 
 /**
  * Possible values for the position of chart tick labels (either horizontal or vertical).
- * * **"none"** - not display the selected tick labels.
- * * **"nextTo"** - sets the position of the selected tick labels next to the main label.
- * * **"low"** - sets the position of the selected tick labels in the part of the chart with lower values.
- * * **"high"** - sets the position of the selected tick labels in the part of the chart with higher values.
+ * * <b>"none"</b> - not display the selected tick labels.
+ * * <b>"nextTo"</b> - sets the position of the selected tick labels next to the main label.
+ * * <b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values.
+ * * <b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values.
  * @typedef {("none" | "nextTo" | "low" | "high")} TickLabelPosition
  * **/
 
 /**
  * The type of a fill which uses an image as a background.
- * * **"tile"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.
- * * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.
+ * * <b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.
+ * * <b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.
  * @typedef {"tile" | "stretch"} BlipFillType
  * */
 
@@ -509,69 +515,64 @@ function ApiBlockLvlSdt(Sdt){}
  */
 
 /**
- * Available values of the "numbered" reference type.
- * * **"pageNum"** - the page number of the numbered item.
- * * **"paraNum"** - the paragraph number of the numbered item.
- * * **"noCtxParaNum"** - an abbreviated paragraph number (the specific item of the numbered list only, e.g., instead of "4.1.1" you refer to "1" only).
- * * **"fullCtxParaNum"** - a full paragraph number, e.g., "4.1.1".
- * * **"text"** - the text value of the paragraph, e.g., if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only.
- * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * Available values of the "numbered" reference type:
+ * * <b>"pageNum"</b> - the numbered item page number;
+ * * <b>"paraNum"</b> - the numbered item paragraph number;
+ * * <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only);
+ * * <b>"fullCtxParaNum"</b> - the full paragraph number, e.g. "4.1.1";
+ * * <b>"text"</b> - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only;
+ * * <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.
  * @typedef {"pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow"} numberedRefTo
  */
 
 /**
- * Available values of the "heading" reference type.
- * * **"text"** - the entire text of the heading.
- * * **"pageNum"** - the page number of the heading.
- * * **"headingNum"** - the sequence number of the heading.
- * * **"noCtxHeadingNum"** - an abbreviated heading number. Make sure the cursor point is in the section you are referencing to, e.g., you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only.
- * * **"fullCtxHeadingNum"** - a full heading number even if the cursor point is in the same section.
- * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * Available values of the "heading" reference type:
+ * * <b>"text"</b> - the entire heading text;
+ * * <b>"pageNum"</b> - the heading page number;
+ * * <b>"headingNum"</b> - the heading sequence number;
+ * * <b>"noCtxHeadingNum"</b> - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only;
+ * * <b>"fullCtxHeadingNum"</b> - the full heading number even if the cursor pointer is in the same section;
+ * * <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.
  * @typedef {"text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow"} headingRefTo
  */
 
 /**
- * Available values of the "bookmark" reference type.
- * * **"text"** - the entire text of the bookmark.
- * * **"pageNum"** - the page number of the bookmark.
- * * **"paraNum"** - the paragraph number of the bookmark.
- * * **"noCtxParaNum"** - an abbreviated paragraph number (the specific item only, e.g., instead of "4.1.1" you refer to "1" only).
- * * **"fullCtxParaNum"** - a full paragraph number, e.g., "4.1.1".
- * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * Available values of the "bookmark" reference type:
+ * * <b>"text"</b> - the entire bookmark text;
+ * * <b>"pageNum"</b> - the bookmark page number;
+ * * <b>"paraNum"</b> - the bookmark paragraph number;
+ * * <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only);
+ * * <b>"fullCtxParaNum</b> - the full paragraph number, e.g. "4.1.1";
+ * * <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.
  * @typedef {"text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow"} bookmarkRefTo
  */
 
 /**
- * Available values of the "footnote" reference type.
- * * **"footnoteNum"** - the footnote number.
- * * **"pageNum"** - the page number of the footnote.
- * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
- * * **"formFootnoteNum"** - the number of the footnote formatted as a footnote. The numbering of the actual footnotes is not affected.
+ * Available values of the "footnote" reference type:
+ * * <b>"footnoteNum"</b> - the footnote number;
+ * * <b>"pageNum"</b> - the page number of the footnote;
+ * * <b>"aboveBelow"</b> - the words "above" or "below" depending on the position of the item;
+ * * <b>"formFootnoteNum"</b> - the form number formatted as a footnote. The numbering of the actual footnotes is not affected.
  * @typedef {"footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum"} footnoteRefTo
  */
 
 /**
- * Available values of the "endnote" reference type.
- * * **"endnoteNum"** - the endnote number.
- * * **"pageNum"** - the page number of the endnote.
- * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
- * * **"formEndnoteNum"** - the number of the endnote formatted as an endnote. The numbering of the actual endnotes is not affected.
+ * Available values of the "endnote" reference type:
+ * * <b>"endnoteNum"</b> - the endnote number;
+ * * <b>"pageNum"</b> - the endnote page number;
+ * * <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position;
+ * * <b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected.
  * @typedef {"endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum"} endnoteRefTo
  */
 
 /**
- * Available values of the "equation"/"figure"/"table" reference type.
- * * **"entireCaption"** - the full text of the caption.
- * * **"labelNumber"** - the label and object number only, e.g., "Table 1.1".
- * * **"captionText"** - the text of the caption only.
- * * **"pageNum"** - the page number containing the referenced object.
- * * **"aboveBelow"** - the words "above" or "below" depending on the position of the item.
+ * Available values of the "equation"/"figure"/"table" reference type:
+ * * <b>"entireCaption"</b>- the entire caption text;
+ * * <b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1";
+ * * <b>"captionText"</b> - the caption text only;
+ * * <b>"pageNum"</b> - the page number containing the referenced object;
+ * * <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.
  * @typedef {"entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow"} captionRefTo
- */
-
-/**
- * Available caption labels.
- * @typedef {"Equation" | "Figure" | "Table"} CaptionLabel
  */
 
 /**
@@ -591,6 +592,87 @@ function ApiBlockLvlSdt(Sdt){}
  * Types of all supported forms.
  * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiComplexForm} ApiForm
  */
+
+/**
+ * Possible values for the caption numbering format.
+ * * <b>"ALPHABETIC"</b> - upper letter.
+ * * <b>"alphabetic"</b> - lower letter.
+ * * <b>"Roman"</b> - upper Roman.
+ * * <b>"roman"</b> - lower Roman.
+ * * <b>"Arabic"</b> - arabic.
+ * @typedef {("ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic")} CaptionNumberingFormat
+ * **/
+
+/**
+ * Possible values for the caption separator.
+ * * <b>"hyphen"</b> - the "-" punctuation mark.
+ * * <b>"period"</b> - the "." punctuation mark.
+ * * <b>"colon"</b> - the ":" punctuation mark.
+ * * <b>"longDash"</b> - the "—" punctuation mark.
+ * * <b>"dash"</b> - the "-" punctuation mark.
+ * @typedef {("hyphen" | "period" | "colon" | "longDash" | "dash")} CaptionSep
+ * **/
+
+/**
+ * Possible values for the caption label.
+ * @typedef {("Table" | "Equation" | "Figure")} CaptionLabel
+ * **/
+
+/**
+ * Table of contents properties.
+ * @typedef {Object} TocPr
+ * @property {boolean} [ShowPageNums=true] - Specifies whether to show page numbers in the table of contents.
+ * @property {boolean} [RightAlgn=true] - Specifies whether to right-align page numbers in the table of contents.
+ * @property {TocLeader} [LeaderType="dot"] - The leader type in the table of contents.
+ * @property {boolean} [FormatAsLinks=true] - Specifies whether to format the table of contents as links.
+ * @property {TocBuildFromPr} [BuildFrom={OutlineLvls=9}] - Specifies whether to generate the table of contents from the outline levels or the specified styles.
+ * @property {TocStyle} [TocStyle="standard"] - The table of contents style type.
+ */
+
+/**
+ * Table of figures properties.
+ * @typedef {Object} TofPr
+ * @property {boolean} [ShowPageNums=true] - Specifies whether to show page numbers in the table of figures.
+ * @property {boolean} [RightAlgn=true] - Specifies whether to right-align page numbers in the table of figures.
+ * @property {TocLeader} [LeaderType="dot"] - The leader type in the table of figures.
+ * @property {boolean} [FormatAsLinks=true] - Specifies whether to format the table of figures as links.
+ * @property {CaptionLabel | string} [BuildFrom="Figure"] - Specifies whether to generate the table of figures based on the specified caption label or the paragraph style name used (for example, "Heading 1").
+ * @property {boolean} [LabelNumber=true] - Specifies whether to include the label and number in the table of figures.
+ * @property {TofStyle} [TofStyle="distinctive"] - The table of figures style type.
+ */
+
+/**
+ * Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles.
+ * @typedef {Object} TocBuildFromPr
+ * @property {number} [OutlineLvls=9] - Maximum number of levels in the table of contents.
+ * @property {TocStyleLvl[]} StylesLvls - Style levels (for example, [{Name: "Heading 1", Lvl: 2}, {Name: "Heading 2", Lvl: 3}]).
+ * <note>If StylesLvls.length > 0, then the OutlineLvls property will be ignored.</note>
+ */
+
+/**
+ * Table of contents style levels.
+ * @typedef {Object} TocStyleLvl
+ * @property {string} Name - Style name (for example, "Heading 1").
+ * @property {number} Lvl - Level which will be applied to the specified style in the table of contents.
+ */
+
+/**
+ * Possible values for the table of contents leader:
+ * * <b>"dot"</b> - "......."
+ * * <b>"dash"</b> - "-------"
+ * * <b>"underline"</b> - "_______"
+ * @typedef {("dot" | "dash" | "underline" | "none")} TocLeader
+ * **/
+
+/**
+ * Possible values for the table of contents style.
+ * @typedef {("simple" | "online" | "standard" | "modern" | "classic")} TocStyle
+ * **/
+
+/**
+ * Possible values for the table of figures style.
+ * @typedef {("simple" | "online" | "classic" | "distinctive" | "centered" | "formal")} TofStyle
+ * **/
 
 /**
  * The 1000th of a percent (100000 = 100%).
@@ -1050,7 +1132,7 @@ ApiRun.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new Ap
 /**
  * Sets the text color to the current text run.
  * @memberof ApiRun
- * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @typeofeditors ["CSE", "CPE"]
  * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
  * @returns {ApiTextPr}
  */
@@ -1308,7 +1390,7 @@ ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr()
 /**
  * Sets the text color to the current text run.
  * @memberof ApiTextPr
- * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @typeofeditors ["CSE", "CPE"]
  * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
  * @returns {ApiTextPr} - this text properties.
  */
@@ -1317,7 +1399,7 @@ ApiTextPr.prototype.SetFill = function(oApiFill){ return new ApiTextPr(); };
 /**
  * Sets the text fill to the current text run.
  * @memberof ApiTextPr
- * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @typeofeditors ["CSE", "CPE", "CSE"]
  * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
  * @returns {ApiTextPr} - this text properties.
  */
@@ -1326,7 +1408,7 @@ ApiTextPr.prototype.SetTextFill = function(oApiFill){ return new ApiTextPr(); };
 /**
  * Sets the text outline to the current text run.
  * @memberof ApiTextPr
- * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @typeofeditors ["CSE", "CPE", "CSE"]
  * @param {ApiStroke} oStroke - The stroke used to create the text outline.
  * @returns {ApiTextPr} - this text properties.
  */
@@ -1747,17 +1829,17 @@ function ApiTableCell(oCell){}
 
 /**
  * Possible values for the position of chart tick labels (either horizontal or vertical).
- * * **"none"** - not display the selected tick labels.
- * * **"nextTo"** - set the position of the selected tick labels next to the main label.
- * * **"low"** - set the position of the selected tick labels in the part of the chart with lower values.
- * * **"high"** - set the position of the selected tick labels in the part of the chart with higher values.
+ * * <b>"none"</b> - not display the selected tick labels.
+ * * <b>"nextTo"</b> - set the position of the selected tick labels next to the main label.
+ * * <b>"low"</b> - set the position of the selected tick labels in the part of the chart with lower values.
+ * * <b>"high"</b> - set the position of the selected tick labels in the part of the chart with higher values.
  * @typedef {("none" | "nextTo" | "low" | "high")} TickLabelPosition
  * **/
 
 /**
  * The type of a fill which uses an image as a background.
- * * **"tile"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.
- * * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.
+ * * <b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.
+ * * <b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.
  * @typedef {"tile" | "stretch"} BlipFillType
  * */
 
@@ -2003,7 +2085,7 @@ ApiTableCell.prototype.SetVerticalAlign = function(sType){};
  * The callback function which is called when the specified range of the current sheet changes.
  * <note>Please note that the event is not called for the undo/redo operations.</note>
 * @event Api#onWorksheetChange
-* @property {ApiRange} range - The modified range represented as the ApiRange object.
+* @param {ApiRange} range - The modified range represented as the ApiRange object.
  */
 
 /**
@@ -2142,10 +2224,10 @@ ApiOleObject.prototype.constructor = ApiOleObject;
 
 /**
  * Possible values for the position of chart tick labels (either horizontal or vertical).
- * * **"none"** - does not display the selected tick labels.
- * * **"nextTo"** - sets the position of the selected tick labels next to the main label.
- * * **"low"** - sets the position of the selected tick labels in the part of the chart with lower values.
- * * **"high"** - sets the position of the selected tick labels in the part of the chart with higher values.
+ * * <b>"none"</b> - does not display the selected tick labels.
+ * * <b>"nextTo"</b> - sets the position of the selected tick labels next to the main label.
+ * * <b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values.
+ * * <b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values.
  * @typedef {("none" | "nextTo" | "low" | "high")} TickLabelPosition
  * **/
 
@@ -2202,7 +2284,7 @@ function ApiName(DefName) {}
  * @constructor
  * @property {string} Text - Returns the text from the first cell in range.
  */
-function ApiComment(comment, ws) {}
+function ApiComment(comment, wb) {}
 
 /**
  * Class representing the areas.
@@ -2446,6 +2528,22 @@ ApiInterface.prototype["attachEvent"] = ApiInterface.prototype.attachEvent;{};
 ApiInterface.prototype["detachEvent"] = ApiInterface.prototype.detachEvent;{};
 
 /**
+ * Returns an array of ApiComment objects.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @returns {ApiComment[]}
+ */
+ApiInterface.prototype.GetComments = function () { return [new ApiComment()]; };
+
+/**
+ * Returns an array of ApiComment objects.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @returns {ApiComment[]}
+ */
+ApiInterface.prototype.Comments = ApiInterface.prototype.GetComments ();
+
+/**
  * Returns the state of sheet visibility.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
@@ -2623,10 +2721,11 @@ ApiWorksheet.prototype.Index = ApiWorksheet.prototype.GetIndex ();
  * from a single row - <b>A1:E1</b>, or cells from a single column - <b>A1:A10</b>, or cells from several rows and columns - <b>A1:E10</b>.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
- * @param {string} sRange - The range of cells from the current sheet.
+ * @param {string | ApiRange} Range1 - The range of cells from the current sheet.
+ * @param {string | ApiRange} Range2 - The range of cells from the current sheet.
  * @returns {ApiRange | null} - returns null if such a range does not exist.
  */
-ApiWorksheet.prototype.GetRange = function (sRange) { return new ApiRange(); };
+ApiWorksheet.prototype.GetRange = function (Range1, Range2) { return new ApiRange(); };
 
 /**
  * Returns an object that represents the selected range of the current sheet using the <b>row/column</b> coordinates for the cell selection.
@@ -2922,10 +3021,11 @@ ApiWorksheet.prototype.Delete = function () {};
  * @typeofeditors ["CSE"]
  * @param {string} sRange - The range where the hyperlink will be added to.
  * @param {string} sAddress - The link address.
+ * @param {string} subAddress - The link subaddress to insert internal sheet hyperlinks.
  * @param {string} sScreenTip - The screen tip text.
  * @param {string} sTextToDisplay - The link text that will be displayed on the sheet.
  * */
-ApiWorksheet.prototype.SetHyperlink = function (sRange, sAddress, sScreenTip, sTextToDisplay){};
+ApiWorksheet.prototype.SetHyperlink = function (sRange, sAddress, subAddress, sScreenTip, sTextToDisplay) {};
 
 /**
  * Creates a chart of the specified type from the selected data range of the current sheet.
@@ -3912,25 +4012,6 @@ ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
  * @returns {EMU}
  */
 ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
-
-/**
- * Returns the lock value for the specified lock type of the current drawing.
- * @typeofeditors ["CSE"]
- * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
- * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
- * @returns {bool}
- */
-ApiDrawing.prototype.GetLockValue = function(sType){ return true; };
-
-/**
- * Sets the lock value to the specified lock type of the current drawing.
- * @typeofeditors ["CSE"]
- * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
- * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
- * @param {bool} bValue - Specifies if the specified lock is applied to the current drawing.
- * @returns {bool}
- */
-ApiDrawing.prototype.SetLockValue = function(sType, bValue){ return true; };
 
 /**
  * Returns a type of the ApiImage class.

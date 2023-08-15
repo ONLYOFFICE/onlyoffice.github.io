@@ -17,5 +17,12 @@
   "Language": "Idioma",
   "Reconfigure": "Reconfigurar",
   "Learn more here.": "Aprenda más aquí.",
-  "Save": "Salvar"
+  "Save": "Salvar",
+  "Insert Citation": "Insertar Cita",
+  "Cancel select": "Cancelar seleccionar",
+  "Refresh": "Actualizar",
+  "Save as text": "Guardar como texto",
+  "Please insert some citation into the document." : "Por favor, inserte alguna cita en el documento",
+  "Synchronize" : "Sincronizar",
+  "Omit Author" : "Omitir Autor"
 }

@@ -13,7 +13,7 @@
 	"Learn how to use": "Apprenez à utiliser",
 	"the plugin in": "le plugin dans",
 	"Contribute": "Contribuez",
-	"to the plugin developmen or report an issue on": "aux développeurs du plugin ou signalez un problème sur",
+	"to the plugin development or report an issue on": "aux développeurs du plugin ou signalez un problème sur",
 	"Get help": "Obtenir de l'aide",
 	"with the plugin functionality on our forum.": "avec la fonctionnalité du plugin sur notre forum.",
 	"Create a new plugin using": "Créer un nouveau plugin en utilisant",
@@ -45,5 +45,16 @@
 	"Work": "Travail",
 	"Entertainment": "Divertissement",
 	"Communication": "Communication",
-	"Special abilities": "Capacités spéciales"
+	"Special abilities": "Capacités spéciales",
+	"The minimum supported editors version" : "La version minimale des éditeurs pris en charge",
+	"This plugin will only work in a newer version of the editor.": "Ce plugin ne fonctionnera que dans une version plus récente de l'éditeur.",
+	"Nothing was found for this query.": "Rien n'a été trouvé pour cette requête.",
+	"No Internet Connection.": "Pas De Connexion Internet.",
+	"Problem with loading plugin config.\nConfig: " : "Problème de chargement de la configuration du plugin.\nConfig: ",
+	"Problem with loading some resources." : "Problème de chargement de certaines ressources.",
+	"File not found." : "Fichier non trouvé.",
+	"Network problem." : "Problème de réseau.",
+	"Problem with loading some resources" : "Problème de chargement de certaines ressources",
+	"Click to rate" : "Cliquez pour évaluer",
+	"No disscussion page for this plugin." : "Pas de page de discussion pour ce plugin."
 }
