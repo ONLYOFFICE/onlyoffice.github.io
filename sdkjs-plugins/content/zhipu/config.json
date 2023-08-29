@@ -8,8 +8,8 @@
             "description": "基于智谱 AI 大模型的 OnlyOffice 文档插件",
             "url": "index.html",
             "icons": [
-                "resources/icon.png",
-                "resources/icon@2x.png"
+                "resources/light/icon.png",
+                "resources/light/icon@2x.png"
             ],
             "icons2": [
                 {
@@ -51,8 +51,8 @@
             ],
             "store": {
                 "background": {
-                    "light": "#F5F5F5",
-                    "dark": "#444444"
+                    "light": "#7c84e8",
+                    "dark": "#5f55af"
                 },
                 "screenshots": [
                     "resources/store/screenshots/screen_1.png",
@@ -63,7 +63,11 @@
                 "icons": {
                     "light": "resources/store/icons",
                     "dark": "resources/store/icons"
-                }
+                },
+                "categories": [
+                    "specAbilities",
+                    "work"
+                ]
             },
             "isViewer": true,
             "EditorsSupport": [
