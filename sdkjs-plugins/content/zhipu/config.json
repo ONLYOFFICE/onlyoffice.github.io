@@ -1,11 +1,11 @@
 {
-    "name": "智谱 AI Copilot",
+    "name": "智谱 Copilot",
     "guid": "asc.{4b5efd7f-7c8d-1ef4-feab-bfbf2e1d86ac}",
     "baseUrl": "",
     "version": "1.0",
     "variations": [
         {
-            "description": "基于智谱 AI 大模型的 OnlyOffice 文档插件",
+            "description": "基于智谱 ChatGLM 大模型的 OnlyOffice 文档 Copilot 插件",
             "url": "index.html",
             "icons": [
                 "resources/light/icon.png",
