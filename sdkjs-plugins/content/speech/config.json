@@ -1,131 +1,131 @@
 {
-    "name": "Speech",
-    "nameLocale": {
-        "ru": "Речь",
-        "cs": "Řeč",
-        "de": "Rede",
-        "es": "Habla",
-        "fr": "Parole",
-        "it": "Discorso",
-        "ja": "スピーチ",
-        "nl": "Spraak",
-        "pt": "Discurso",
-        "uk": "Читати",
-        "zh": "讲话"
-    },
-    "guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
-    "version" : "2.0.0",
+	"name": "Speech",
+	"nameLocale": {
+		"ru": "Речь",
+		"cs": "Řeč",
+		"de": "Rede",
+		"es": "Habla",
+		"fr": "Parole",
+		"it": "Discorso",
+		"ja": "スピーチ",
+		"nl": "Spraak",
+		"pt": "Discurso",
+		"uk": "Читати",
+		"zh": "讲话"
+	},
+	"guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
+	"version" : "2.0.0",
 
-    "variations": [
-        {
-            "description": "Convert the selected text into speech.",
-            "descriptionLocale": {
-                "ru": "Преобразуйте выделенный текст в речь.",
-                "fr": "Convertissez le texte sélectionné en parole.",
-                "es": "Convierta el texto seleccionado en voz.",
-                "de": "Konvertieren Sie den ausgewählten Text in die Rede.",
-                "uk": "Прочитайте виділений текст."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Convert the selected text into speech.",
+			"descriptionLocale": {
+				"ru": "Преобразуйте выделенный текст в речь.",
+				"fr": "Convertissez le texte sélectionné en parole.",
+				"es": "Convierta el texto seleccionado en voz.",
+				"de": "Konvertieren Sie den ausgewählten Text in die Rede.",
+				"uk": "Прочитайте виділений текст."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer": true,
-            "EditorsSupport": [ "word" ],
-            "isVisual": false,
-            "isModal": false,
-            "isInsideMode": false,
-            "initDataType": "text",
-            "isUpdateOleOnResize": false,
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": true,
+			"EditorsSupport": [ "word" ],
+			"isVisual": false,
+			"isModal": false,
+			"isInsideMode": false,
+			"initDataType": "text",
+			"isUpdateOleOnResize": false,
 
-            "buttons": [],
-            "store": {
-                "background": {
-                    "light": "#444444",
-                    "dark": "#444444"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities"]
-            }
-        },
-        {
-            "description": "Settings",
-            "descriptionLocale": {
-                "ru": "Настройки",
-                "cs": "Nastavení",
-                "de": "Einstellungen",
-                "es": "Configuración",
-                "fr": "Paramètres",
-                "it": "Impostazioni",
-                "ja": "設定",
-                "nl": "Instellingen",
-                "pt": "Definições",
-                "uk": "Налаштування",
-                "zh": "设置"
-                
-            },
-            "url": "settings.html",
+			"buttons": [],
+			"store": {
+				"background": {
+					"light": "#444444",
+					"dark": "#444444"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities"]
+			}
+		},
+		{
+			"description": "Settings",
+			"descriptionLocale": {
+				"ru": "Настройки",
+				"cs": "Nastavení",
+				"de": "Einstellungen",
+				"es": "Configuración",
+				"fr": "Paramètres",
+				"it": "Impostazioni",
+				"ja": "設定",
+				"nl": "Instellingen",
+				"pt": "Definições",
+				"uk": "Налаштування",
+				"zh": "设置"
+				
+			},
+			"url": "settings.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
-            "isViewer": false,
-            "EditorsSupport": [ "word" ],
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
-            "initDataType": "none",
-            "isUpdateOleOnResize": false,
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
+			"isViewer": false,
+			"EditorsSupport": [ "word" ],
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
+			"initDataType": "none",
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Ok",
-                    "primary": true
-                }
-            ],
+			"buttons": [
+				{
+					"text": "Ok",
+					"primary": true
+				}
+			],
 
-            "size": [ 300, 150 ]
-        }
-    ]
+			"size": [ 300, 150 ]
+		}
+	]
 }

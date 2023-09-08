@@ -1,27 +1,27 @@
 {
-    "name": "LanguageTool",
-	 "nameLocale": {
-        "ru": "LanguageTool",
-        "fr": "LanguageTool",
-        "es": "LanguageTool",
-        "de": "LanguageTool"
-    },
-    "guid": "asc.{7CDB02C9-A0BF-4B56-9A1A-71C860B8498F}",
-    "version": "1.0.0",
+	"name": "LanguageTool",
+	"nameLocale": {
+		"ru": "LanguageTool",
+		"fr": "LanguageTool",
+		"es": "LanguageTool",
+		"de": "LanguageTool"
+	},
+	"guid": "asc.{7CDB02C9-A0BF-4B56-9A1A-71C860B8498F}",
+	"version": "1.0.0",
 
-    "variations": [
-        {
-            "description": "Improve spelling, grammar, and style in your texts.",
+	"variations": [
+		{
+			"description": "Improve spelling, grammar, and style in your texts.",
 			"descriptionLocale": {
-                "ru": "Исправляйте орфографические, грамматические и стилистические ошибки в ваших документах.",
-                "fr": "Améliorez l'orthographe, la grammaire et le style de vos textes.",
-                "es": "Mejore la ortografía, la gramática y el estilo de sus textos.",
-                "de": "Verbessern Sie Rechtschreibung, Grammatik und Stil in Ihren Texten."
-            },
-            "url": "index.html",
+				"ru": "Исправляйте орфографические, грамматические и стилистические ошибки в ваших документах.",
+				"fr": "Améliorez l'orthographe, la grammaire et le style de vos textes.",
+				"es": "Mejore la ortografía, la gramática y el estilo de sus textos.",
+				"de": "Verbessern Sie Rechtschreibung, Grammatik und Stil in Ihren Texten."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
 				{
 					"style" : "light",
 					
@@ -61,66 +61,66 @@
 					}
 				}
 			],
-            "isViewer": true,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "cell", "slide" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": true,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": true,
 
-            "initDataType": "text",
-            "initData": "",
+			"initDataType": "text",
+			"initData": "",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [],
+			"buttons": [],
 
-            "initOnSelectionChanged": true,
+			"initOnSelectionChanged": true,
 
-            "store": {
-                "background": {
-                    "light" : "#357EE5",
-                    "dark" : "#357EE5"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "work", "recommended"]
-            }
-        },
-        {
-            "description": "About",
-            "descriptionLocale": {
-                "ru": "Справка",
-                "fr": "À propos",
-                "es": "Sobre programa",
-                "de": "Über"
-            },
-            "url": "index_about.html",
+			"store": {
+				"background": {
+					"light" : "#357EE5",
+					"dark" : "#357EE5"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons"	   : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work", "recommended"]
+			}
+		},
+		{
+			"description": "About",
+			"descriptionLocale": {
+				"ru": "Справка",
+				"fr": "À propos",
+				"es": "Sobre programa",
+				"de": "Über"
+			},
+			"url": "index_about.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"isViewer": false,
+			"EditorsSupport": [ "word", "cell", "slide" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
 
-            "initDataType": "none",
-            "initData": "",
+			"initDataType": "none",
+			"initData": "",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Ok",
-                    "primary": true
-                }
-            ],
+			"buttons": [
+				{
+					"text": "Ok",
+					"primary": true
+				}
+			],
 
-            "size": [ 400, 50 ]            
-        }
-    ]
+			"size": [ 400, 50 ]
+		}
+	]
 }
