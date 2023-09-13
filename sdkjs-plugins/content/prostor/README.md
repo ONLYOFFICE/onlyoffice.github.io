@@ -3,7 +3,7 @@
 The plugin is designed for receiving, parsing and inserting the results of a get request from a third-party site or service into spreadsheet cells.
 Arbitrary get requests are implemented, parsing using JSONPath expressions, saving previously made requests in a separate (special) sheet, updating cell values in accordance with previously generated queries on the sheet.
 
-![Example JSON API plugin](https://github.com/VyachL84/JsonAPIOnlyofficePlugin/blob/ef8da9cef4459f6786e9bdcdd471638c2ea5d85b/jsonApiPlugin.png)
+![Example JSON API plugin](https://github.com/VyachL84/onlyoffice.github.io/assets/53825838/7b5d66ac-3fc4-4676-936a-190e81e09496)
 
 ## Install
 Follow onlyoffice instructions:
