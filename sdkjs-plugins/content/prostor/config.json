@@ -1,92 +1,91 @@
 {
-    "name"       : "PROSTOR",
-    "guid"       : "asc.{795B6112-98F9-496B-B630-F7D1F787BFF5}",
-    "baseUrl"    : "",
+    "name": "JSON API",
+    "guid": "asc.{795B6112-98F9-496B-B630-F7D1F787BFF5}",
+    "baseUrl": "",
     "nameLocale": {
-        "ru": "ПРОСТОР"
+        "ru": "JSON API"
     },
-    "variations" : [
-        {
-            "description"         : "PROSTOR plugin",
-			"descriptionLocale"   : {"ru": "Плагин платформы ПРОСТОР"},
-            "url"                 : "index.html",
-            "icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
-            "isViewer"            : false,
-            "EditorsSupport"      : ["cell"],
-            "isVisual"            : false,
-            "isModal"             : true,
-            "isInsideMode"        : false,
-            "initDataType"        : "none",
-            "initData"            : "",
-            "isUpdateOleOnResize" : true,
-            "buttons"             : [
-                {
-                    "text": "Start",
+    "variations": [{
+            "description": "JSON API plugin",
+            "descriptionLocale": {
+                "ru": "Плагин JSON API"
+            },
+            "url": "index.html",
+            "icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "isViewer": false,
+            "EditorsSupport": ["cell"],
+            "isVisual": false,
+            "isModal": true,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [{
+                    "text": "Update",
                     "primary": true,
-					"textLocale": {
-                        "ru": "Выполнить"
+                    "textLocale": {
+                        "ru": "OK"
                     }
-                },
-				{
-                    "text": "Stop",
+                }, {
+                    "text": "Cancel",
                     "primary": false,
-					"textLocale": {
-                        "ru": "Остановить"
+                    "textLocale": {
+                        "ru": "Отмена"
                     }
                 }
             ]
         },
         {
-            "description"         : "About",
-			"descriptionLocale"   : {"ru": "О плагине"},
-            "url"                 : "index_about.html",
-            "icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
-            "isViewer"            : false,
-            "EditorsSupport"      : ["cell"],
-            "isVisual"            : true,
-            "isModal"             : true,
-            "isInsideMode"        : false,
-            "initDataType"        : "none",
-            "initData"            : "",
-            "isUpdateOleOnResize" : true,
-            "buttons"         : [
-                {
+            "description": "API JSON",
+            "descriptionLocale": {
+                "ru": "API JSON ПРОСТОР"
+            },
+            "url": "json_api.html",
+            "icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "isViewer": false,
+            "EditorsSupport": ["cell"],
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [{
+                    "text": "Ok",
+                    "primary": true,
+                    "textLocale": {
+                        "ru": "Выполнить"
+                    }
+                }, {
+                    "text": "Cancel",
+                    "primary": false,
+                    "textLocale": {
+                        "ru": "Отмена"
+                    }
+                }
+            ]
+        }, {
+            "description": "About",
+            "descriptionLocale": {
+                "ru": "О плагине"
+            },
+            "url": "index_about.html",
+            "icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "isViewer": false,
+            "EditorsSupport": ["cell"],
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [{
                     "text": "Ok",
                     "primary": true
                 }
             ],
 
-            "size" : [392, 147]
-        },
- {
-            "description"         : "NSI",
-			"descriptionLocale"   : {"ru": "НСИ ПРОСТОР"},
-            "url"                 : "NSI.html",
-            "icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
-            "isViewer"            : false,
-            "EditorsSupport"      : ["cell"],
-            "isVisual"            : false,
-            "isModal"             : true,
-            "isInsideMode"        : false,
-            "initDataType"        : "none",
-            "initData"            : "",
-            "isUpdateOleOnResize" : true,
-            "buttons"             : [
-                {
-                    "text": "Start",
-                    "primary": true,
-					"textLocale": {
-                        "ru": "Выполнить"
-                    }
-                },
-				{
-                    "text": "Stop",
-                    "primary": false,
-					"textLocale": {
-                        "ru": "Остановить"
-                    }
-                }
-            ]
+            "size": [392, 147]
         }
     ]
 }
