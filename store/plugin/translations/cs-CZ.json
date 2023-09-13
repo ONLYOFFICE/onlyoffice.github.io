@@ -5,5 +5,6 @@
 	"Yes" : "Ano",
 	"No" : "Ne",
 	"Do you want to completely remove this plugin?" : "Chcete tento plugin úplně odstranit?",
-	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Pokud zvolíte \"Ne\", budete moci tento plugin obnovit později na Správce Pluginů."
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Pokud zvolíte \"Ne\", budete moci tento plugin obnovit později na Správce Pluginů.",
+	"Checking internet connection..." : "Kontrola připojení k internetu..."
 }
