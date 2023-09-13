@@ -1,0 +1,7 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. jQuery - Query is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development. (http://jquery.com/)
+
+License:        MIT License
+License File:   jQuery.license
