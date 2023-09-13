@@ -16,12 +16,12 @@
  *
  */
 
-const version = '1.0.3';                                             // version of store (will change it when update something in store)
+const version = '1.0.4';                                             // version of store (will change it when update something in store)
 let start = Date.now();
+const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );             // desktop detecting
 let isPluginLoading = false;                                         // flag plugins loading
-const isDesktop = window.AscDesktopEditor !== undefined;             // desktop detecting
 let isOnline = true;                                                 // flag internet connection
-isDesktop && checkInternet();                                        // check internet connection (only for desktop)
+isLocal && checkInternet();                                        // check internet connection (only for desktop)
 let interval = null;                                                 // interval for checking internet connection (if it doesn't work on launch)
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desktop)
 const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to oficial github repository (for links and discussions)
@@ -113,7 +113,7 @@ const ioUrl = location.href.substring(0, pos);
 // get translation file
 getTranslation();
 // fetch all plugins from config
-if (!isDesktop)
+if (!isLocal)
 	fetchAllPlugins(true, false);
 
 window.onload = function() {
@@ -179,7 +179,7 @@ window.addEventListener('message', function(message) {
 
 			if (message.updateInstalled)
 				showListofPlugins(false);
-			else if ( allPlugins.length || (isDesktop && !isOnline) )
+			else if ( allPlugins.length || (isLocal && !isOnline) )
 				getAllPluginsData(true, false);
 			
 			break;
@@ -260,14 +260,14 @@ window.addEventListener('message', function(message) {
 			
 			if (installed) {
 				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
-				if (plugin && (!bHasLocal || (isDesktop && !needBackup) ) ) {
+				if (plugin && (!bHasLocal || (isLocal && !needBackup) ) ) {
 					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
 					installed.removed = true;
 
 					// нужно обновить список установленных плагинов, чтобы ссылки на ресурсы были правильными
-					if (isDesktop)
+					if (isLocal)
 						sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
 				}
 			}
@@ -536,7 +536,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 	isPluginLoading = true;
 	let count = 0;
 	let Unloaded = [];
-	let url = isDesktop ? OOMarketplaceUrl : ioUrl;
+	let url = isLocal ? OOMarketplaceUrl : ioUrl;
 	allPlugins.forEach(function(plugin, i, arr) {
 		count++;
 		if (typeof plugin !== 'object') {
@@ -589,7 +589,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 		);
 	});
 
-	if (isDesktop && installedPlugins && bFirstRender && !isOnline) {
+	if (isLocal && installedPlugins && bFirstRender && !isOnline) {
 		isPluginLoading = false;
 		getInstalledLanguages();
 		showMarketplace();
@@ -598,7 +598,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 
 function getDiscussion(config) {
 	// get discussion page
-	if (isDesktop && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
+	if (isLocal && window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
 		makeDesktopRequest(config.discussionUrl).then(
 			function(data) {
 				if (data.status == 'success') {
@@ -674,7 +674,7 @@ function showListofPlugins(bAll, sortedArr) {
 	let arr = (sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins));
 
 	// получаем список backup плагинов
-	if (!bAll && isDesktop) {
+	if (!bAll && isLocal) {
 		var _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
 
 		if (_pluginsTmp.length) {
@@ -858,7 +858,7 @@ function onClickInstall(target, event) {
 	event.stopImmediatePropagation();
 	// click install button
 	// we should do that because we have some problem when desktop is loading plugin
-	if (isDesktop) {
+	if (isLocal) {
 		toogleLoader(true, 'Installation');
 	} else {
 		clearTimeout(timeout);
@@ -880,7 +880,7 @@ function onClickInstall(target, event) {
 		config : (installed ? installed.obj : plugin)
 	};
 	// we should do that because we have some problem when desktop is loading plugin
-	if (isDesktop) {
+	if (isLocal) {
 		setTimeout(function(){
 			sendMessage(message);
 		}, 200);
@@ -892,7 +892,7 @@ function onClickInstall(target, event) {
 function onClickUpdate(target) {
 	// click update button
 	// we should do that because we have some problem when desktop is loading plugin
-	if (isDesktop) {
+	if (isLocal) {
 		toogleLoader(true, 'Updating');
 	} else {
 		clearTimeout(timeout);
@@ -908,7 +908,7 @@ function onClickUpdate(target) {
 		config : plugin
 	};
 	// we should do that because we have some problem when desktop is loading plugin
-	if (isDesktop) {
+	if (isLocal) {
 		setTimeout(function(){
 			sendMessage(message);
 		}, 200);
@@ -920,7 +920,7 @@ function onClickUpdate(target) {
 function onClickRemove(target, event) {
 	event.stopImmediatePropagation();
 	// click remove button
-	if (isDesktop) {
+	if (isLocal) {
 		toogleLoader(true, 'Removal');
 	} else {
 		clearTimeout(timeout);
@@ -940,7 +940,7 @@ function needBackupPlugin(guid) {
 	// если плагин есть в стор ( и его версия <= ? ), то можем удалить, пользователь сможет поставить актуальную версию
 	// если плагина нет в стор, нужно его хранить у пользователя с возможностью восстановления
 
-	return isDesktop ? findPlugin(true, guid) == undefined : false;
+	return isLocal ? findPlugin(true, guid) == undefined : false;
 }
 
 function onClickUpdateAll() {
@@ -990,14 +990,14 @@ function onClickItem() {
 			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
 	}
 
-	if ( !plugin || ( isDesktop && installed ) ) {
+	if ( !plugin || ( isLocal && installed ) ) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	let bCorrectUrl = isDesktop || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
+	let bCorrectUrl = isLocal || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let arrScreens = plugin.variations[0].store.screenshots;
@@ -1407,7 +1407,7 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
 	let baseUrl;
 
-	if (installedPlugins && isDesktop) {
+	if (installedPlugins && isLocal) {
 		// it doesn't work when we use icons from other resource (cors problems)
 		// it's why we use local icons only for desktop
 		plugin = findPlugin(false, guid);
@@ -1417,13 +1417,13 @@ function getImageUrl(guid, bNotForStore, bSetSize, id) {
 		}
 	}
 
-	if ( ( !plugin || !isDesktop ) && allPlugins) {
+	if ( ( !plugin || !isLocal ) && allPlugins) {
 		plugin = findPlugin(true, guid);
 		if (plugin)
 			baseUrl = plugin.baseUrl;
 	}
 	// github doesn't allow to use "http" or "file" as the URL for an image
-	if ( plugin && ( baseUrl.includes('https://') || isDesktop) ) {
+	if ( plugin && ( baseUrl.includes('https://') || isLocal) ) {
 		let variation = plugin.variations[0];
 		
 		if (!bNotForStore && variation.store && variation.store.icons) {
@@ -1517,7 +1517,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 		current.classList.add('btn_toolbar_active');
 		elements.linkNewPlugin.innerHTML = getTranslated(text);
 		let toolbar = document.getElementById('toolbar_tools');
-		let flag = !isDesktop && !isOnline;
+		let flag = !isLocal && !isOnline;
 		if ( ( bAll && (!isOnline || isPluginLoading) ) || flag) {
 			$('.div_notification').remove();
 			$('.div_item').remove();
@@ -1535,7 +1535,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 		}
 		elements.linkNewPlugin.href = bAll ? (OOIO + "pulls") : "https://api.onlyoffice.com/plugin/installation";
 
-		if (isDesktop && !bAll) {
+		if (isLocal && !bAll) {
 			elements.linkNewPlugin.href = "#";
 			elements.linkNewPlugin.onclick = function (e) {
 				e.preventDefault();
@@ -1699,7 +1699,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 
 function checkInternet() {
 	// url for check internet connection
-	let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
+	let url = 'https://onlyoffice.github.io/store/translations/langs.json';
 	makeRequest(url, 'GET', null, null, true).then(
 		function() {
 			isOnline = true;
@@ -1714,7 +1714,7 @@ function checkInternet() {
 					div.onclick();
 			} else if (bshowMarketplace) {
 				toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
-			} else if (!isDesktop) {
+			} else if (!isLocal) {
 				toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, true);
 			}
 			clearInterval(interval);
@@ -1733,7 +1733,7 @@ function handeNoInternet() {
 
 	let bshowMarketplace = elements.btnMarketplace && elements.btnMarketplace.classList.contains('btn_toolbar_active');
 
-	if ( (bshowMarketplace || !isDesktop) && elements.divSelected && !elements.divSelected.classList.contains('hidden') ) {
+	if ( (bshowMarketplace || !isLocal) && elements.divSelected && !elements.divSelected.classList.contains('hidden') ) {
 		sendMessage( { type : "showButton", show : false } );
 		onClickBack();
 	}
@@ -1741,7 +1741,7 @@ function handeNoInternet() {
 	if (!document.getElementsByClassName('div_notification')[0]) {
 		if (bshowMarketplace)
 			toogleView(elements.btnMarketplace, elements.btnAvailablePl, messages.linkPR, true, true);
-		else if (!isDesktop)
+		else if (!isLocal)
 			toogleView(elements.btnAvailablePl, elements.btnMarketplace, messages.linkManually, false, true);
 	}
 };
