@@ -12,10 +12,11 @@ https://api.onlyoffice.com/plugin/installation/onpremises#plugin-folder
 ## How to use
 
 1. Start SpreadsheetEditor
-2. Select some range of cells in whicg you want to paste your data from request
+2. Select some range of cells in which you want to paste your data from request
 3. Open the Plugins tab and press "JSON API"/ API JSON
 4. Edit "Request URL" field
 5. Edit JSON path expression field. If you want to get several rows you can provide sevevral JsonPath expressions separated by ;  
 6. Tap Ok button and enjoy with your result
+7. If you want to update values in your cells, tap JSON API/ Start
 
 If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
