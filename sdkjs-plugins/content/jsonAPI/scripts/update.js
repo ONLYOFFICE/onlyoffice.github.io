@@ -6,8 +6,8 @@
       // Чтение сохраненных ранее на скрытом листе настроек 
       var ActiveSheet = Api.GetActiveSheet();
       var ActiveSheetName = ActiveSheet.GetName();
-      // var plugin_sheet = Api.GetSheet("prostor_plugin_" + ActiveSheetName);
-      var plugin_sheet = Api.GetSheet("prostor_plugin");
+      // var plugin_sheet = Api.GetSheet("jsonAPI_plugin_" + ActiveSheetName);
+      var plugin_sheet = Api.GetSheet("jsonAPI_plugin");
 
       if (plugin_sheet) {
          var d = plugin_sheet.GetRange("A1:D100").GetValue2(); // Массив всех значений настроек запросов (история запросов задана жестко - не более 100 запросов)
