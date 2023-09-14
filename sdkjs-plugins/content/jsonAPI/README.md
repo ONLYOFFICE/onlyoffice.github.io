@@ -19,4 +19,8 @@ https://api.onlyoffice.com/plugin/installation/onpremises#plugin-folder
 6. Tap Ok button and enjoy with your result
 7. If you want to update values in your cells, tap JSON API/ Start
 
+## Using example
+
+![Start this gif](https://github.com/VyachL05/onlyoffice.github.io/blob/703ada8fd431d4a4f2c9277eccfb7626dadefb78/sdkjs-plugins/content/jsonAPI/resources/img/JSONApi.gif)
+
 If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
