@@ -99,14 +99,14 @@ function load_settings() {
     // Чтение сохраненных ранее на скрытом листе настроек 
     var ActiveSheet = Api.GetActiveSheet();
     // var ActiveSheetName = ActiveSheet.GetName();
-    // var plugin_sheet = Api.GetSheet("prostor_plugin_" + ActiveSheetName);
-    var plugin_sheet = Api.GetSheet("prostor_plugin");
+    // var plugin_sheet = Api.GetSheet("jsonAPI_plugin_" + ActiveSheetName);
+    var plugin_sheet = Api.GetSheet("jsonAPI_plugin");
 
 
     if (plugin_sheet) {
-        var IsVisPluginSheet = plugin_sheet.GetRange("K1").GetValue2();
-        console.log("Видимость страницы настроек " + IsVisPluginSheet);
-        $('#IsVisiblePluginSheet').prop('checked', IsVisPluginSheet);
+        // var IsVisPluginSheet = plugin_sheet.GetRange("K1").GetValue2();
+        // console.log("Видимость страницы настроек " + IsVisPluginSheet);
+        // $('#IsVisiblePluginSheet').prop('checked', IsVisPluginSheet);
         var d = plugin_sheet.GetRange("A1:D100").GetValue2(); // Массив всех значений настроек запросов (истрия запросов задана жестко - не более 100 запросов)
         let settings = {};
         d.forEach(el => {
@@ -125,9 +125,9 @@ function load_settings() {
     } else {
         console.log("Создаем лист")
         // var ActiveSheet = Api.GetActiveSheet();
-        // Api.AddSheet("prostor_plugin_" + ActiveSheet.GetName());
-        Api.AddSheet("prostor_plugin");
-        var plugin_sheet = Api.GetSheet("prostor_plugin");
+        // Api.AddSheet("jsonAPI_plugin_" + ActiveSheet.GetName());
+        Api.AddSheet("jsonAPI_plugin");
+        var plugin_sheet = Api.GetSheet("jsonAPI_plugin");
         // plugin_sheet.SetVisible(true);
         Api.GetSheet(ActiveSheet.GetName()).SetActive();
         Api.Save();
@@ -148,13 +148,13 @@ window.Asc.plugin.init = function (text) { // Обязательная функ�
         $('#btnCopy').click(function () {
             CopyToClipboard(JSON.stringify(jsonRes));
         });
-        $('#IsVisiblePluginSheet').change(function () {
+        // $('#IsVisiblePluginSheet').change(function () {
             // Обработка чекбокса видимости листа настроек запросов
-            var prostor_plugin_sheet = Api.GetSheet("prostor_plugin"); // Получим лист с настройками
-            var is_visible_plugin_sheet = $('#IsVisiblePluginSheet').prop('checked');
-            prostor_plugin_sheet.SetVisible(is_visible_plugin_sheet);
-            prostor_plugin_sheet.GetRange("K1").SetValue(is_visible_plugin_sheet);
-        });
+            // var jsonAPI_plugin_sheet = Api.GetSheet("jsonAPI_plugin"); // Получим лист с настройками
+            // var is_visible_plugin_sheet = $('#IsVisiblePluginSheet').prop('checked');
+            // jsonAPI_plugin_sheet.SetVisible(is_visible_plugin_sheet);
+            // jsonAPI_plugin_sheet.GetRange("K1").SetValue(is_visible_plugin_sheet);
+        // });
     });
 };
 
@@ -171,8 +171,8 @@ window.Asc.plugin.button = function (id) { // обязательная функ�
             Api.GetRange(range).Clear();
             Api.GetRange(range).SetValue(Asc.scope.result)
 
-            // var plugin_sheet = Api.GetSheet("prostor_plugin_" + Api.GetActiveSheet().GetName());
-            var plugin_sheet = Api.GetSheet("prostor_plugin");
+            // var plugin_sheet = Api.GetSheet("jsonAPI_plugin_" + Api.GetActiveSheet().GetName());
+            var plugin_sheet = Api.GetSheet("jsonAPI_plugin");
             console.log("Сохраняем в истории запросов");
             var col = plugin_sheet.GetCols("A").GetValue(); // Массив всех значений столбца A
             var dd = [];
