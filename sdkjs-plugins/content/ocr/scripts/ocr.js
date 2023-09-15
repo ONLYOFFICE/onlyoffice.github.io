@@ -105,7 +105,6 @@
         });
         this.resizeWindow(592, 100, 592, 100, 592, 100);
         var nStartFilesCount = 0, arrImages;
-
         $( window ).resize(function(){
             updateScroll();
         });
@@ -242,38 +241,144 @@
                 document.getElementById('recognize-button').setAttribute('disabled', '');
                 document.getElementById('lang-select').setAttribute('disabled', '');
                 document.getElementById('load-file-button-id').setAttribute('disabled', '');
+				
                 var fTesseractCall = function(){
-                    Tesseract.recognize(arrImagesCopy.splice(0, 1)[0], {lang: $('#lang-select option:selected')[0].value}).progress(function (progress) {
-                        if(progress && progress.status === "recognizing text"){
-                            var nPercent =  (100*(progress.progress + nStartFilesCount - arrImagesCopy.length - 1)/nStartFilesCount) >> 0;
-                            $('#status-label').text('Recognizing: '+ nPercent + '%');
-                        }
-                    }).catch(function(err){						
-                                $('#status-label').text('');
-                                document.getElementById('recognize-button').removeAttribute('disabled');
-                                document.getElementById('lang-select').removeAttribute('disabled');
-								document.getElementById('load-file-button-id').removeAttribute('disabled', '');
-						
-					}).then(function(result){						
-						 document.getElementById('text-container-div').appendChild($(result.html)[0]);
-                            arrParsedData.push(result);
-                            updateScroll();
-                            if(arrImagesCopy.length > 0){
-                                fTesseractCall();
-                            }
-							else{								
-                                $('#status-label').text('');
-                                document.getElementById('recognize-button').removeAttribute('disabled');
-                                document.getElementById('lang-select').removeAttribute('disabled');
-								document.getElementById('load-file-button-id').removeAttribute('disabled', '');
+					let sLang = $('#lang-select option:selected')[0].value;
+					let worker = null;
+					let result = null;
+					Tesseract.createWorker({
+					  logger: (progress) => {   
+						  if(progress && progress.status === "recognizing text"){
+								var nPercent =  (100*(progress.progress + nStartFilesCount - arrImagesCopy.length - 1)/nStartFilesCount) >> 0;
+								$('#status-label').text('Recognizing: '+ nPercent + '%');
 							}
+						}
+					}).then((oWorker) => {
+						worker = oWorker;
+					}).then(() => {
+						return worker.loadLanguage(sLang);
+					}).then(() => {
+						return worker.initialize(sLang);
+					}).then(() => {
+						return worker.setParameters({
+							tessedit_pageseg_mode: Tesseract.PSM.AUTO,
+						});
+					}).then(() => {
+						return worker.recognize(arrImagesCopy.splice(0, 1)[0]);
+					}).then((oResult) => {
+						result = oResult;
+						document.getElementById('text-container-div').appendChild($(generateHTMLByData(result.data))[0]);
+						arrParsedData.push(result);
+						updateScroll();
+						if(arrImagesCopy.length > 0){
+							fTesseractCall();
+						}
+						else{								
+							$('#status-label').text('');
+							document.getElementById('recognize-button').removeAttribute('disabled');
+							document.getElementById('lang-select').removeAttribute('disabled');
+							document.getElementById('load-file-button-id').removeAttribute('disabled', '');
+						}
+					}).then((oResult) => {
+						worker.terminate();
 					});
+
                 };
                 $('#status-label').text('Recognizing: 0%');
                 fTesseractCall();
             }
         );
-    };
+    
+		function generateHTMLByData(oData) {
+			let sResult = "<div>";
+			function commitSpan(sLastSpanText, oLastWord) {
+				if(sLastSpanText.length > 0 && oLastWord) {
+					let sStyle = "";
+					if(oLastWord.font_name && oLastWord.font_name.length > 0) {
+						sStyle += ("font-family:" + oLastWord.font_name + ";");
+					}
+					//if(oLastWord.font_size) {
+					//}
+					
+					sStyle += ("font-size:" + 12 + "pt;");
+					if(oLastWord.is_bold) {
+						sStyle += ("font-weight:bold;");
+					}
+					if(oLastWord.is_italic) {
+						sStyle += ("font-style:italic;");
+					}
+					if(oLastWord.is_smallcaps) {
+						sStyle += ("font-variant:small-caps;");
+					}
+					if(oLastWord.is_underlined) {
+						sStyle += ("text-decoration:underline;");
+					}
+					sResult += "<span lang=\"" + oLastWord.language +"\" style=\"" + sStyle + "\">" + sLastSpanText + "</span>";
+				}
+			}
+			
+			let aBlocks = oData.blocks;
+			for(let nBlock = 0; nBlock < aBlocks.length; ++nBlock) {
+				let oBlock = aBlocks[nBlock]; 
+				let aDataPar = oBlock.paragraphs;
+				for(let nPar = 0; nPar < aDataPar.length; ++nPar) {
+					let oDataPar = aDataPar[nPar];
+					let aLines = oDataPar.lines;
+					let nPixIndent = 0;
+					
+					let oFirstLine, oFirstWord;
+					oFirstLine = aLines[0];
+					if(oFirstLine) {
+						oFirstWord = oFirstLine.words[0];
+						if(oFirstWord) {
+							nPixIndent = oFirstWord.bbox.x0 - oBlock.bbox.x0;
+						}
+					}
+					if(Math.abs(nPixIndent) > 5) {
+						let nIndent = (nPixIndent / 72) * 25.4 + 0.5 >> 0;
+						sResult += "<p style=\"text-indent:" + nIndent + "mm;\">";
+					}
+					else {
+						sResult += "<p>";
+					}
+					
+					let oLastWord = null;
+					let sLastSpanText = "";
+					for(let nLine = 0; nLine < aLines.length; ++nLine) {
+						let oLine = aLines[nLine];
+						let aWords = oLine.words;
+						for(let nWrd = 0; nWrd < aWords.length; ++nWrd) {
+							let oWord = aWords[nWrd];
+							if(!oLastWord || 
+								oWord.font_name !== oLastWord.font_name ||
+								//Math.abs(oWord.font_size - oLastWord.font_size) > 4 ||
+								oWord.is_bold !== oLastWord.is_bold ||
+								oWord.is_italic !== oLastWord.is_italic ||
+								oWord.is_smallcaps !== oLastWord.is_smallcaps ||
+								oWord.is_underlined !== oLastWord.is_underlined ||
+								oWord.language !== oLastWord.language) {
+								commitSpan(sLastSpanText, oLastWord);
+								sLastSpanText = "";
+							}
+							if(sLastSpanText.length > 0) {
+								sLastSpanText += " ";
+							}
+							if(nLine > 0 && nWrd === 0) {
+								//sLastSpanText += "<br/>";
+							}
+							sLastSpanText += oWord.text;
+							oLastWord = oWord;
+						}
+					}
+					
+					commitSpan(sLastSpanText, oLastWord);
+					sResult += "</p>";
+				}
+			}
+			sResult += "</div>";
+			return sResult;
+		}
+	};
 
     window.Asc.plugin.onThemeChanged = function(theme)
     {
@@ -288,57 +393,8 @@
 
     window.Asc.plugin.button = function(id){
         if (id == 0){
-            var sScript = '';
-            sScript += 'var oDocument = Api.GetDocument();';
-            sScript += '\nvar oParagraph, oRun, arrInsertResult = [], oTextPr;';
-
-            for(var i = 0; i < arrParsedData.length; ++i){
-                var oCurData = arrParsedData[i];
-                for(var j = 0;  j < oCurData.paragraphs.length; ++j){
-                    var oCurParagraph = oCurData.paragraphs[j];
-                    sScript += '\noParagraph = Api.CreateParagraph();';
-                    sScript += '\narrInsertResult.push(oParagraph);';
-
-                    for(var t = 0; t < oCurParagraph.lines.length; ++t){
-                        var oCurLine = oCurParagraph.lines[t];
-                        if(t > 0 &&  t < oCurParagraph.lines.length - 1){
-                            //sScript += '\noParagraph.AddLineBreak();';
-                        }
-                        for(var k = 0; k < oCurLine.words.length; ++k){
-                            var oWord = oCurLine.words[k];
-                            var sText = oWord.text + (k < oCurLine.words.length - 1 ? ' ' : '');
-                            sText = escapeHtml(sText);
-                            sScript += '\noRun = oParagraph.AddText(\'' + sText + '\');';
-                            sScript += '\noTextPr = oRun.GetTextPr();';
-                            var arrFontName = oWord.font_name.split('_');
-                            var sFontName = '';
-                            for(var s = 0; s < arrFontName.length; ++s ){
-                                if(arrFontName[s] === 'Bold'){
-                                    sScript += '\noTextPr.SetBold(true);';
-                                }
-                                else if(arrFontName[s] === 'Italic'){
-                                    sScript += '\noTextPr.SetItalic(true);';
-                                }
-                                else if(arrFontName[s] === 'Strikeout'){
-                                    sScript += '\noTextPr.SetStrikeout(true);';
-                                }
-                                else{
-
-                                    if(sFontName != ''){
-                                        sFontName += ' ';
-                                    }
-                                    sFontName += arrFontName[s];
-                                }
-                            }
-                            sScript += '\noTextPr.SetFontFamily(\'' + sFontName + '\');';
-                            sScript += '\noTextPr.SetFontSize(' + ((oWord.font_size * 5 )>> 0) + ');';
-                        }
-                    }
-                }
-            }
-            sScript += '\noDocument.InsertContent(arrInsertResult);';
-            window.Asc.plugin.info.recalculate = true;
-            this.executeCommand("close", sScript);
+            this.executeMethod("PasteHtml", [document.getElementById('text-container-div').innerHTML]);
+            this.executeCommand("close", "");
         }
         else{
             this.executeCommand("close", "");
