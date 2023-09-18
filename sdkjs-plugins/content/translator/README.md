@@ -17,3 +17,5 @@ If you need more information about how to use or write your own plugin, please s
 ## Known issues
 
 * Doesn't work on Internet Explorer (bug #47773 in the internal bug tracker)
+* Doesn't work in China.
+* Doesn't work on XP system.

@@ -7,5 +7,4 @@
 ## 1.0.1
 
 * Add translations for Japan and Chine languages.
-* Add ability to work with fields, instead of text.
-* Add ability to update links and bibliography.
+* Add library for code autoformating.
