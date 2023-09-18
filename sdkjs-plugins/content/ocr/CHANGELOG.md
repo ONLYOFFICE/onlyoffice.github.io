@@ -4,8 +4,7 @@
 
 * Initial release.
 
-## 1.0.1
+## 2.0.0
 
-* Fix some poblems with plugin.
-* Change resources from remoute to local.
-* Add preview window.
+* Use TesserectJS v4
+* IE11 support has been discontinued
