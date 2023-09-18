@@ -78,6 +78,8 @@ After that restart the services:
 sudo supervisorctl restart ds:docservice
 ```
 
+This plugin doesn't work in desktop editor, because has problem with authorization. We know about this problem and will try to fix it in the feature.
+
 ## User feedback and support
 
 To ask questions and share feedback, use Issues in this repository.

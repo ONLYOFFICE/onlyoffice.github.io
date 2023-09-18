@@ -6,4 +6,4 @@
 
 ## 1.0.1
 
-* Plugin was improoved.
+* Add translations for Japan and Chine languages.

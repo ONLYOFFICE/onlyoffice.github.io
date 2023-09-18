@@ -7,5 +7,8 @@
 ## 1.0.1
 
 * Add translations for Japan and Chine languages.
-* Add ability to work with fields, instead of text.
-* Add ability to update links and bibliography.
+* API tips was updated.
+
+## 1.0.2
+
+* Add ability to show vba macros.
