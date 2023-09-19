@@ -579,7 +579,7 @@
 
     window.Asc.plugin.button = function(id)
     {
-        if (id == 0)
+        if (id == 0 && !window.Asc.plugin.info.isViewMode)
         {
             var _info = window.Asc.plugin.info;
 
