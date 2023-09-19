@@ -59,7 +59,7 @@
                 }
             }
             ],
-            "isViewer"            : false,
+            "isViewer"            : true,
             "EditorsSupport"      : ["word", "cell", "slide"],
             "isVisual"            : true,
             "isModal"             : true,

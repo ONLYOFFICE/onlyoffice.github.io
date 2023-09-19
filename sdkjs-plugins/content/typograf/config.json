@@ -30,7 +30,7 @@
 				"200%": { "normal": "resources/img/icon@2x.png" }
 			}
 			],
-			"isViewer": true,
+			"isViewer": false,
 			"EditorsSupport": [ "word", "slide", "cell" ],
 
 			"isVisual": true,

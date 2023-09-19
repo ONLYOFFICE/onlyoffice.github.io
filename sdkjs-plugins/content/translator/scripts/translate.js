@@ -82,7 +82,8 @@
 				select.classList.add("select-lang");
 				select.classList.add("goog-te-combo");
 				div.appendChild(btn);
-				div.appendChild(btnReplace);
+				if (!window.Asc.plugin.info.isViewMode)
+					div.appendChild(btnReplace);
 				div.id = "div_btn";
 				div.classList.add("skiptranslate");
 				div.classList.add("div_btn");
