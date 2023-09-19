@@ -25,5 +25,5 @@ When your plugin is ready and you want to submit it to the ONLYOFFICE Plugin Man
 * Add your plugin to the [sdkjs-plugins/content](https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/content) folder. It will be better if you follow our name structure.
 * Add your plugin to the Plugin Manager [config.js file](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/store/config.json). Don't worry about the "discussion" field, we will adjust it ourselves.
 * Make a deployment folder and ```plugin_name.plugin``` version for the desktop app. You can use our [packer](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/packer/make.py) or watch this [video guide](https://youtu.be/bHTia-F0K3w) and learn how to create such a version.
-* Add [CHANGLOG.md](todo_link_after_merge) for your plugin. This file is needed for updates and version history.
+* Add [CHANGLOG.md](./sdkjs-plugins/content/chess/CHANGELOG.md) for your plugin. This file is needed for updates and version history.
 * If your plugin is supposed to use any API key, leave your contacts so that we can reach you and ask the key for testing of your plugin.
