@@ -23,4 +23,8 @@ It is called "ChatGPT" and isn't installed by default in cloud, [self-hosted](ht
 4. Write an excel formula to summorize Revenue by countries which name contains "e". The revenue in column "B" from "B2" to "B11" and countries in column "A" from "A2" to "A11".
 5. Write a tagline for an ice cream shop.
 
+## Known issues
+
+* Doesn't work in China.
+
 If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
