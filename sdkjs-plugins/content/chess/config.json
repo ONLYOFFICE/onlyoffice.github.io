@@ -61,7 +61,8 @@
 					}
 				}
 			],
-			"isViewer"        : false,
+			"isViewer"        : true,
+			"isDisplayedInViewer": false,
 			"EditorsSupport"  : ["word", "cell", "slide"],
 
 			"isVisual"     : true,

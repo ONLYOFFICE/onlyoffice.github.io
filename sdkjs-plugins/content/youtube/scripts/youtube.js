@@ -199,7 +199,7 @@
 		{
 		}
 
-		if (id == 0)
+		if (id == 0 && !window.Asc.plugin.info.isViewMode)
 		{
 	        url = document.getElementById("textbox_url").value;
 
