@@ -1,18 +1,52 @@
-# 智谱AI Copilot
-## 介绍
-这是一个可以与智谱AI助手进行聊天的在线文档编辑器插件。它具有以下功能:
-- 总结选中的文本
-- 将选中的文本翻译成中文或英文
-- 根据提示自动生成文本内容
-- 与AI助手进行自然语言对话
+# ZhiPu Copilot
 
-## 使用方法
-1. 在插件设置中填入智谱AI的API Key以启用API调用
+## Introduction
+ZhiPu Copilot is an online document editor plugin that allows you to chat with the ZhiPu AI large language model ChatGLM. This plugin currently has the following features:
+- Summarize selected text
+- Explain selected text
+- Translate selected text into Chinese or English
+- Automatically generate text content based on prompts
+- Have natural language conversations with the AI assistant
+
+## Getting Started
+1. Fill in the ZhiPu API Key in the plugin settings to enable API calls
     - https://open.bigmodel.cn/overview
-    - [查看智谱API](resources/images/查看智谱API.png)
-    - 在OnlyOffice文档中，点击插件图标下方，点击设置，填入你的智谱 API Key 即可开始使用
-2. 在文档中选择文本,右键菜单选择“智谱 AI Copilot”可直接对文本进行处理
-3. 在子菜单中可以选择“总结”“翻译”等功能对选中内容进行处理
-4. 在聊天界面与AI助手对话,可以询问问题、让助手总结文本等
-5. 输入文本并点击发送或者按下Enter键来向助手发送消息
-6. 助手的回复会自动显示在对话框内
+    - [View ZhiPu API](resources/images/查看智谱API.png)
+    - In the OnlyOffice document, click on the plugin icon below, click on settings, and fill in your ZhiPu API Key to start using it.
+2. Select text in the document, right-click and select "ZhiPu Copilot" to process the text directly.
+3. In the submenu, you can select "Summary", "Translation" and other functions to process the selected content.
+4. Chat with the AI assistant in the chat interface, ask questions, and let the assistant summarize the text.
+5. Enter text and click send or press Enter to send a message to the assistant.
+6. The assistant's reply will be automatically displayed in the dialog box.
+
+## Features
+- Summarize selected text
+- Explain selected text
+- Translate selected text into Chinese or English
+- Automatically generate text content based on prompts
+- Have natural language conversations with the AI assistant
+
+## Requirements
+- OnlyOffice document editor
+- ZhiPu API Key
+
+## Installation
+1. Open the OnlyOffice document editor.
+2. Click on the "Plugins" tab in the top menu.
+3. Click on "Download Plugins".
+4. Search for "ZhiPu Copilot" and click on "Install".
+5. Fill in the ZhiPu API Key in the plugin settings to enable API calls.
+
+## Usage
+1. Fill in the ZhiPu API Key in the plugin settings to enable API calls.
+2. Select text in the document, right-click and select "ZhiPu Copilot" to process the text directly.
+3. In the submenu, you can select "Summary", "Translation" and other functions to process the selected content.
+4. Chat with the AI assistant in the chat interface, ask questions, and let the assistant summarize the text.
+5. Enter text and click send or press Enter to send a message to the assistant.
+6. The assistant's reply will be automatically displayed in the dialog box.
+
+## Support
+If you have any questions or issues, please create an issue or contact me at jianbo.lin@outlook.com.
+
+## License
+This project is licensed under the MIT License.
