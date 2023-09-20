@@ -12,7 +12,7 @@
 .message-history {
     height: 80vh;
     overflow-y: scroll;
-    border: 1px solid #ccc;
+    border: 1px solid #e1c3c3;
     padding: 5px;
     border-radius: 10px;
     background-color: #fff;
@@ -72,7 +72,8 @@
 
 .ai-message {
     align-self: flex-start;
-    background-color: #eee;
+    background-color: #d2e1f4;
+    color: black;
     padding: 10px;
     margin: 10px 0;
     border-radius: 10px;
@@ -91,34 +92,6 @@
     .chat-container {
         width: calc(100% - 40px);
     }
-}
-
-#command-dropdown {
-    position: absolute;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    z-index: 1;
-    width: 60vw;
-    max-height: 200px;
-    overflow-y: auto;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-#command-dropdown ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#command-dropdown li {
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-#command-dropdown li:hover {
-    background-color: #ddd;
 }
 
 .typing-indicator {
