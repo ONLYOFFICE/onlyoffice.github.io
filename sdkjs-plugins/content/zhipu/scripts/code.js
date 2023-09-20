@@ -14,6 +14,7 @@
         } else {
             hasKey = false;
             displayMessage(generateText('Set Your ZhiPu API Key first'), 'ai-message');
+            console.log("Set Your ZhiPu API Key first > translated", generateText('Set Your ZhiPu API Key first'))
         }
     };
 
@@ -269,18 +270,23 @@
                 displayMessage(message, 'user-message');
                 conversationHistory.push({ role: 'user', content: message });
                 messageInput.value = ''; 
-                typingIndicator.style.display = 'block'; // display the typing indicator
-                sseRequest(conversationHistory)
-                    .then(reader => {
-                        console.log("SSE请求成功");
-                        let currentDiv = null;
-                        let currentMessage = null;
-                        displaySSEMessage(reader, currentDiv, currentMessage);
-                    })
-                    .catch(error => {
-                        console.log("SSE请求失败", error);
-                    });
-                typingIndicator.style.display = 'none'; // hide the typing indicator
+                if(hasKey) {
+                    typingIndicator.style.display = 'block'; // display the typing indicator
+                    sseRequest(conversationHistory)
+                        .then(reader => {
+                            console.log("SSE请求成功");
+                            let currentDiv = null;
+                            let currentMessage = null;
+                            displaySSEMessage(reader, currentDiv, currentMessage);
+                        })
+                        .catch(error => {
+                            console.log("SSE请求失败", error);
+                        });
+                    typingIndicator.style.display = 'none'; // hide the typing indicator
+                }else {
+                    displayMessage('Set Your ZhiPu API Key first', 'ai-message');
+                    conversationHistory.push({ role: 'assistant', content: 'Set Your ZhiPu API Key first' });
+                }
             }
         }
 
