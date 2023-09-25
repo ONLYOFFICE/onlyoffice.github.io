@@ -27,6 +27,6 @@
 	{ "name": "chess", "discussion": "246" },
 	{ "name": "openai", "discussion": "248" },
 	{ "name": "speechrecognition", "discussion": "249" },
-	{ "name": "zhipu", "discussion": "250"},
-	{ "name": "glavred", "discussion": "" }
+	{ "name": "zhipu", "discussion": "273"},
+	{ "name": "glavred", "discussion": "274" }
 ]
