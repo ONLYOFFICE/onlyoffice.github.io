@@ -43,7 +43,7 @@
 
     window.Asc.plugin.init = function(text)
     {
-        text = escape(text.split("\n").join("<br>"));
+        text = text.split("\n").join("<br>");
 
         document.getElementById("id_text").innerHTML = text;
 
