@@ -43,12 +43,11 @@
 			"isUpdateOleOnResize": false,
 
 			"buttons": [],
-
 			"initOnSelectionChanged": true,
 			"store": {
 				"background": {
-					"light" : "#AE1717",
-					"dark" : "#AE1717"
+					"light" : "#00ACC7",
+					"dark" : "#00ACC7"
 				},
 				"screenshots" : ["resources/store/screenshots/screen_1.png"],
 				"icons" : {
