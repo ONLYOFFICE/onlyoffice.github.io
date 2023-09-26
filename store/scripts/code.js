@@ -32,10 +32,10 @@
 
 const version = '1.0.4';                                             // version of store (will change it when update something in store)
 let start = Date.now();
-const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );             // desktop detecting
+const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 let isPluginLoading = false;                                         // flag plugins loading
 let isOnline = true;                                                 // flag internet connection
-isLocal && checkInternet();                                        // check internet connection (only for desktop)
+isLocal && checkInternet();                                          // check internet connection (only for desktop)
 let interval = null;                                                 // interval for checking internet connection (if it doesn't work on launch)
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to oficial store (for local version store in desktop)
 const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to oficial github repository (for links and discussions)
@@ -47,6 +47,7 @@ let updateCount = 0;                                                 // counter 
 let discussionCount = 0;                                             // counter for loading plugin`s discussions
 let allPlugins = [];                                                 // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
+// todo change for always online version
 const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
@@ -528,7 +529,6 @@ function initElemnts() {
 	elements.divVotes = document.getElementById('div_votes');
 	elements.arrowPrev = document.getElementById('prev_arrow');
 	elements.arrowNext = document.getElementById('next_arrow');
-
 };
 
 function toogleLoader(show, text) {
@@ -637,7 +637,7 @@ function getDiscussion(config) {
 			discussionCount--;
 			if (!discussionCount)
 				showRating();
-		}, function(err){
+		}, function(err) {
 			createError('Problem with loading rating', true);
 			discussionCount--;
 			if (!discussionCount)
@@ -732,15 +732,13 @@ function showListofPlugins(bAll, sortedArr) {
 	}
 };
 
-function getPluginVersion(text)
-{
+function getPluginVersion(text) {
 	let factor = 1000;
 	let major = 1;
 	let minor = 0;
 	let build = 0;
 
-	if (text && text.split)
-	{
+	if (text && text.split) {
 		let arValues = text.split('.');
 		let count = arValues.length;
 		if (count > 0) major = parseInt(arValues[0]);
@@ -749,7 +747,7 @@ function getPluginVersion(text)
 	}
 
 	return major * factor * factor + minor * factor + build;
-}
+};
 
 function createPluginDiv(plugin, bInstalled) {
 	// this function creates div (preview) for plugins
@@ -895,7 +893,7 @@ function onClickInstall(target, event) {
 	};
 	// we should do that because we have some problem when desktop is loading plugin
 	if (isLocal) {
-		setTimeout(function(){
+		setTimeout(function() {
 			sendMessage(message);
 		}, 200);
 	} else {
@@ -923,7 +921,7 @@ function onClickUpdate(target) {
 	};
 	// we should do that because we have some problem when desktop is loading plugin
 	if (isLocal) {
-		setTimeout(function(){
+		setTimeout(function() {
 			sendMessage(message);
 		}, 200);
 	} else {
@@ -965,7 +963,7 @@ function onClickUpdateAll() {
 		return el.bHasUpdate;
 	});
 	updateCount = arr.length;
-	arr.forEach(function(plugin){
+	arr.forEach(function(plugin) {
 		let message = {
 			type : 'update',
 			url : plugin.url,
@@ -1586,7 +1584,7 @@ function sortPlugins(bAll, bInst, type) {
 				let guarded = [];
 				let removed = [];
 				let arr = [];
-				installedPlugins.forEach(function(pl){
+				installedPlugins.forEach(function(pl) {
 					if (!pl.canRemoved)
 						guarded.push(pl);
 					else if (pl.removed)
