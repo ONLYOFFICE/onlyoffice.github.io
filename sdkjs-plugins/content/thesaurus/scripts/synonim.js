@@ -44,7 +44,8 @@
 		});
 		//event click label
 		$('body').on('click', '.label-words', function() {
-			window.Asc.plugin.executeMethod("PasteText", [$(this).text() +" "]);	
+			if (!window.Asc.plugin.info.isViewMode)
+				window.Asc.plugin.executeMethod("PasteText", [$(this).text() +" "]);	
 		});
 		//event button click
 		btn_search = document.getElementById("btn_search");

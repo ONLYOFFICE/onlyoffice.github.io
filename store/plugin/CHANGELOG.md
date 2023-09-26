@@ -6,7 +6,9 @@
 
 ## 1.0.1
 
-* Add translations for Japan and Chine languages.
+* Add loader.
+* Fix problem with internet checking.
+* Fix problem for Windows XP.
 
 ## 1.0.2
 

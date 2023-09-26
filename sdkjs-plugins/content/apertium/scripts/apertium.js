@@ -73,6 +73,9 @@ function getMessage(key) {
 
 	window.Asc.plugin.init = function(text)
 	{
+		if (window.Asc.plugin.info.isViewMode)
+			document.getElementById("paste").classList.add('hidden');
+
 	    txt = text;
         updateScroll();
 
