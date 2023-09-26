@@ -25,7 +25,8 @@
 	// create iframe
 	const iframe = document.createElement("iframe");
 
-	let modalWindow = null;
+	let warningWindow = null;
+	let developerWindow = null;
 	let removeGuid = null;
 	let BFrameReady = false;
 	let BPluginReady = false;
@@ -40,8 +41,9 @@
 	}
 	
 	window.Asc.plugin.init = function() {
+		window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
 		// resize window
-		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
+		window.Asc.plugin.resizeWindow(608, 600, 608, 600, 0, 0);
 		if (!isLocal) {
 			checkInternet(true);
 			loaderTimeout = setTimeout(createLoader, 500);
@@ -86,7 +88,7 @@
 	};
 
 	window.Asc.plugin.button = function(id, windowID) {
-		if (modalWindow && windowID) {
+		if (warningWindow && windowID) {
 			switch (id) {
 				case 0:
 					removePlugin(false);
@@ -99,10 +101,17 @@
 					break;
 			}
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+		} else if (developerWindow && windowID) {
+			if (id == 0)
+				developerWindow.command('onClickBtn');
+			else
+				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
 				postMessage( { type: 'onClickBack' } );
+		} else if (id == 'developer') {
+			createWindow('developer');
 		} else {
 			this.executeCommand('close', '');
 		}
@@ -221,40 +230,76 @@
 		}
 	};
 
-	function createWindow() {
+	function createWindow(type) {
+		let fileName = 'warning.html';
+		let description = window.Asc.plugin.tr('Warning');
+		let size = [350, 100];
+		let buttons = [
+			{
+				'text': window.Asc.plugin.tr('Yes'),
+				'primary': true
+			},
+			{
+				'text': window.Asc.plugin.tr('No'),
+				'primary': false
+			}
+		];
+		if (type == 'developer') {
+			fileName = 'developer.html';
+			description = window.Asc.plugin.tr('Developer Mode');
+			size = [500, 150];
+			buttons = [
+				{
+					'text': window.Asc.plugin.tr('Ok'),
+					'primary': true
+				},
+				{
+					'text': window.Asc.plugin.tr('Cancel'),
+					'primary': false
+				}
+			];
+		}
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 		
 		let variation = {
-			url : location.href.replace(file, 'modal.html'),
-			description : window.Asc.plugin.tr('Warning'),
+			url : location.href.replace(file, fileName),
+			description : description,
 			isVisual : true,
 			isModal : true,
 			EditorsSupport : ['word', 'cell', 'slide'],
-			size : [350, 100],
-			buttons : [
-				{
-					'text': window.Asc.plugin.tr('Yes'),
-					'primary': true
-				},
-				{
-					'text': window.Asc.plugin.tr('No'),
-					'primary': false
-				}
-			]
+			size : size,
+			buttons : buttons
 		};
 		
-		if (!modalWindow) {
-			modalWindow = new window.Asc.PluginWindow();
-			modalWindow.attachEvent('onWindowMessage', function(data){
-				let oConfig = data.config;
-				window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
-					modalWindow.command('onConverted', sOutput);
+		if (type == 'warning') {
+			if (!warningWindow) {
+				warningWindow = new window.Asc.PluginWindow();
+			}
+			warningWindow.show(variation);
+		} else {
+			if (!developerWindow) {
+				developerWindow = new window.Asc.PluginWindow();
+				developerWindow.attachEvent("onWindowMessage", function(message) {
+					if (message.type == 'SetURL') {
+						if (message.url.length) {
+							marketplaceURl = message.url;
+							localStorage.setItem('DeveloperMarketplaceUrl', marketplaceURl);
+							document.getElementById('notification').classList.remove('hidden');
+						} else {
+							marketplaceURl = OOMarketplaceUrl;
+							localStorage.removeItem('DeveloperMarketplaceUrl');
+							document.getElementById('notification').classList.add('hidden');
+						}
+						iframe.src = marketplaceURl + window.location.search;
+					}
+					window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
 				});
-			});
+			}
+			developerWindow.show(variation);
 		}
-		modalWindow.show(variation);
+		
 	};
 
 	function removePlugin(backup) {

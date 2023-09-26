@@ -13,3 +13,5 @@
 ## 1.0.2
 
 * Enable plugin for viewer mode.
+* Add button and new window for developer mode.
+* Rename window for notification when removeing plugin into desktop.

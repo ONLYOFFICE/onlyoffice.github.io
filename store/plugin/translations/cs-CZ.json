@@ -6,5 +6,8 @@
 	"No" : "Ne",
 	"Do you want to completely remove this plugin?" : "Chcete tento plugin úplně odstranit?",
 	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Pokud zvolíte \"Ne\", budete moci tento plugin obnovit později na Správce Pluginů.",
-	"Checking internet connection..." : "Kontrola připojení k internetu..."
+	"Enter the URL for your marketplace page here" : "Zde zadejte adresu URL své stránky marketplace",
+	"Return to default settings" : "Návrat na výchozí nastavení",
+	"Enter URL" : "Zadejte URL",
+	"Cancel" : "Zrušit"
 }
