@@ -11,3 +11,7 @@
 ## 1.0.2
 
 * Add ability for plugin to work without internet connection.
+
+## 1.0.3
+
+* Change working for viewer mode.
