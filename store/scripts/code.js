@@ -550,7 +550,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				config.baseUrl = pluginUrl;
 				arr[i] = config;
 				
-				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, true).then(
+				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, false).then(
 					function(response) {
 						let supportedLangs = [ getTranslated('English') ];
 						let arr = JSON.parse(response);
@@ -567,6 +567,11 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					},
 					function(error) {
 						config.languages = [ getTranslated('English') ];
+					}
+				);
+				makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false).then(
+					function(response) {
+						config.changelog = response;
 					}
 				);
 				if (plugin.discussion) {
@@ -1053,6 +1058,14 @@ function onClickItem() {
 		elements.divLanguages.classList.add('hidden');
 	}
 
+	if (plugin.changelog) {
+		document.getElementById('div_selected_changelog').classList.remove('hidden');
+		document.getElementById('div_changelog_preview').innerHTML = plugin.changelog;
+	} else {
+		document.getElementById('div_selected_changelog').classList.add('hidden');
+		document.getElementById('div_changelog_preview').innerHTML = '';
+	}
+
 	let pluginUrl = plugin.baseUrl.replace(OOMarketplaceUrl, (OOIO + 'tree/master/') );
 	
 	// TODO problem with plugins icons (different margin from top)
@@ -1120,13 +1133,13 @@ function onClickBack() {
 };
 
 function onSelectPreview(target, type) {
-	// type: 1 - Overview; 2 - Info; 3 - Changelog;
 	// change mode of preview
 	if ( !target.classList.contains('span_selected') ) {
 		$(".span_selected").removeClass("span_selected");
 		target.classList.add("span_selected");
 		$(".div_selected_preview").addClass("hidden");
 
+		// type: 1 - Overview; 2 - Info; 3 - Changelog;
 		if (type === 1) {
 			document.getElementById('div_selected_preview').classList.remove('hidden');
 			setDivHeight();
