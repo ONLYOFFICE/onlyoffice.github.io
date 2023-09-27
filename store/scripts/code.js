@@ -1245,6 +1245,7 @@ window.onresize = function(bForce) {
 		}
 		$('.div_item').css('border', ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
+	if (PsChanglog) PsChanglog.update();
 };
 
 // zoom on start if we start with a non 100% zoom
