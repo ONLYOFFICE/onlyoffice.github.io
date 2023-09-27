@@ -33,8 +33,6 @@ let updateCount = 0;                                                 // counter 
 let discussionCount = 0;                                             // counter for loading plugin`s discussions
 let allPlugins = [];                                                 // list of all plugins from config
 let installedPlugins;                                                // list of intalled plugins
-// todo change for always online version
-const configUrl = './config.json';                                   // url to config.json
 const elements = {};                                                 // all elements
 const guidMarkeplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
@@ -108,8 +106,9 @@ window.Asc = {
 	}
 };
 
-const pos = location.href.indexOf('store/index.html');
-const ioUrl = location.href.substring(0, pos);
+const pos = location.href.indexOf('store/index.html'); // position for make substring
+const ioUrl = location.href.substring(0, pos);         // real IO URL
+const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos) ) + 'store/config.json'; // url to config.json (it's for desktop. we should use remote config)
 
 // get translation file
 getTranslation();
