@@ -1119,19 +1119,21 @@ function onClickBack() {
 	if(Ps) Ps.update();
 };
 
-function onSelectPreview(target, isOverview) {
+function onSelectPreview(target, type) {
+	// type: 1 - Overview; 2 - Info; 3 - Changelog;
 	// change mode of preview
 	if ( !target.classList.contains('span_selected') ) {
 		$(".span_selected").removeClass("span_selected");
 		target.classList.add("span_selected");
+		$(".div_selected_preview").addClass("hidden");
 
-		if (isOverview) {
-			document.getElementById('div_selected_info').classList.add('hidden');
+		if (type === 1) {
 			document.getElementById('div_selected_preview').classList.remove('hidden');
 			setDivHeight();
-		} else {
-			document.getElementById('div_selected_preview').classList.add('hidden');
+		} else if (type === 2) {
 			document.getElementById('div_selected_info').classList.remove('hidden');
+		} else {
+			document.getElementById('div_selected_changelog').classList.remove('hidden');
 		}
 	}
 };

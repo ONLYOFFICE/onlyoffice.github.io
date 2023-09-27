@@ -115,8 +115,9 @@
 		<div id="div_selected_main" class="div_selected_main hidden">
 			<div style="width:100%; height:100%">
 				<div>
-					<span id="span_overview" class="span_caption span_selected" onclick="onSelectPreview(event.target, true)">Overview</span>
-					<span id="span_info" class="span_caption" onclick="onSelectPreview(event.target, false)">Info & Support</span>
+					<span id="span_overview" class="span_caption span_selected" onclick="onSelectPreview(event.target, 1)">Overview</span>
+					<span id="span_info" class="span_caption" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
+					<span id="span_changelog" class="span_caption" onclick="onSelectPreview(event.target, 3)">Changelog</span>
 					<hr>
 				</div>
 				<div id="div_selected_preview" class="div_selected_preview">
@@ -165,6 +166,9 @@
 						<span id="span_create">Create a new plugin using </span>
 						<a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">ONLYOFFICE API.</a>
 					</div>
+				</div>
+				<div id="div_selected_changelog" class="div_selected_preview">
+					<div id="div_changelog_preview">todo_changelog</div>
 				</div>
 			</div>
 		</div>
