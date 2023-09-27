@@ -1075,7 +1075,6 @@ function onClickItem() {
 		document.getElementById('span_changelog').classList.add('hidden');
 		document.getElementById('div_changelog_preview').innerHTML = '';
 	}
-	PsChanglog.update();
 
 	let pluginUrl = plugin.baseUrl.replace(OOMarketplaceUrl, (OOIO + 'tree/master/') );
 	
@@ -1158,6 +1157,7 @@ function onSelectPreview(target, type) {
 			document.getElementById('div_selected_info').classList.remove('hidden');
 		} else {
 			document.getElementById('div_selected_changelog').classList.remove('hidden');
+			PsChanglog.update();
 		}
 	}
 };
