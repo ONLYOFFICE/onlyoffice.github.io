@@ -727,7 +727,7 @@ function showListofPlugins(bAll, sortedArr) {
 	}
 	// scroll for changelog preview
 	if (!PsChanglog) {
-		PsChanglog = new PerfectScrollbar('#div_changelog_preview', {});
+		PsChanglog = new PerfectScrollbar('#div_selected_changelog', {});
 		PsChanglog.update();
 	}
 };
