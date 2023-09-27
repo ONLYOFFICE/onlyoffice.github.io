@@ -571,7 +571,9 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				);
 				makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false).then(
 					function(response) {
-						config.changelog = response.replace(/\n/g, '<br>');
+						let settings = getMarkedSetting()
+						let lexed = marked.lexer(response, settings);
+						config.changelog = marked.parser(lexed, settings);
 					}
 				);
 				if (plugin.discussion) {
@@ -1837,4 +1839,34 @@ function showSlides(n) {
 
 	if(dots.length)
 		dots[slideIndex-1].className += ' active';
+};
+
+function getMarkedSetting() {
+	// function for marked librry
+	let defaults = {};
+	const opts = {};
+	if (typeof marked.getDefaults === 'function') {
+		defaults = marked.getDefaults();
+	} else if ('defaults' in marked) {
+		for (const prop in marked.defaults) {
+			defaults[prop] = marked.defaults[prop];
+		}
+	}
+
+	const invalidOptions = [
+		'renderer',
+		'tokenizer',
+		'walkTokens',
+		'extensions',
+		'highlight',
+		'sanitizer'
+	];
+
+	for (const prop in defaults) {
+		opts[prop] = invalidOptions.includes(prop) || !(prop in options)
+			? defaults[prop]
+			: options[prop];
+	}
+
+	return opts;
 };
