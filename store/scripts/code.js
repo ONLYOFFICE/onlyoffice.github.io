@@ -63,6 +63,8 @@ let timeout = null;                                                  // delay fo
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 let slideIndex = 1;                                                  // index for slides
+let PsMain = null;                                                   // scroll for list of plugins
+let PsChanglog = null;                                               // scroll for changlog preview
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -294,7 +296,7 @@ window.addEventListener('message', function(message) {
 						makeSearch(searchVal.toLowerCase());
 					} else {
 						this.document.getElementById(message.guid).remove();
-						Ps.update();
+						PsMain.update();
 					}
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
@@ -723,18 +725,24 @@ function showListofPlugins(bAll, sortedArr) {
 			if (plugin && plugin.guid)
 				createPluginDiv(plugin, !bAll);
 		});
-		setTimeout(function(){if (Ps) Ps.update(); toogleLoader(false);});
+		setTimeout(function(){if (PsMain) PsMain.update(); toogleLoader(false);});
 	} else {
 		// if no istalled plugins and available plugins button was clicked
 		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(notification);
 		toogleLoader(false);
 	}
-	if (!Ps) {
-		Ps = new PerfectScrollbar('#div_main', {});
-		Ps.update();
+	// scroll for list of plugins
+	if (!PsMain) {
+		PsMain = new PerfectScrollbar('#div_main', {});
+		PsMain.update();
 	} else {
-		Ps.update();
+		PsMain.update();
+	}
+	// scroll for changelog preview
+	if (!PsChanglog) {
+		PsChanglog = new PerfectScrollbar('#div_changelog_preview', {});
+		PsChanglog.update();
 	}
 };
 
@@ -840,7 +848,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>';
 	div.innerHTML = template;
 	elements.divMain.appendChild(div);
-	if (Ps) Ps.update();
+	if (PsMain) PsMain.update();
 };
 
 function showRating() {
@@ -1081,6 +1089,7 @@ function onClickItem() {
 		document.getElementById('span_changelog').classList.add('hidden');
 		document.getElementById('div_changelog_preview').innerHTML = '';
 	}
+	PsChanglog.update();
 
 	let pluginUrl = plugin.baseUrl.replace(OOMarketplaceUrl, (OOIO + 'tree/master/') );
 	
@@ -1145,7 +1154,7 @@ function onClickBack() {
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
-	if(Ps) Ps.update();
+	if(PsMain) PsMain.update();
 };
 
 function onSelectPreview(target, type) {
@@ -1211,7 +1220,7 @@ function createError(err, bDontShow) {
 
 function setDivHeight() {
 	// set height for div with image in preview mode
-	if (Ps) Ps.update();
+	if (PsMain) PsMain.update();
 	// console.log(Math.round(window.devicePixelRatio * 100));
 	if (elements.divScreen) {
 		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 70 + 'px';
@@ -1549,7 +1558,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 		if ( ( bAll && (!isOnline || isPluginLoading) ) || flag) {
 			$('.div_notification').remove();
 			$('.div_item').remove();
-			setTimeout(function(){if (Ps) Ps.update()});
+			setTimeout(function(){if (PsMain) PsMain.update()});
 			toolbar.classList.add('hidden');
 			createNotification('No Internet Connection.', 'Problem with loading some resources')
 		} else {
