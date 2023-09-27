@@ -585,7 +585,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				);
 				makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false).then(
 					function(response) {
-						config.changelog = response;
+						config.changelog = response.replace(/\n/g, '<br>');
 					}
 				);
 				if (plugin.discussion) {
@@ -1073,10 +1073,10 @@ function onClickItem() {
 	}
 
 	if (plugin.changelog) {
-		document.getElementById('div_selected_changelog').classList.remove('hidden');
+		document.getElementById('span_changelog').classList.remove('hidden');
 		document.getElementById('div_changelog_preview').innerHTML = plugin.changelog;
 	} else {
-		document.getElementById('div_selected_changelog').classList.add('hidden');
+		document.getElementById('span_changelog').classList.add('hidden');
 		document.getElementById('div_changelog_preview').innerHTML = '';
 	}
 
