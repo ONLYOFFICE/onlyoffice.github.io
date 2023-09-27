@@ -11,7 +11,7 @@ ZhiPu Copilot is an online document editor plugin that allows you to chat with t
 ## Getting Started
 1. Fill in the ZhiPu API Key in the plugin settings to enable API calls
     - https://open.bigmodel.cn/overview
-    - [View ZhiPu API](resources/images/查看智谱API.png)
+    - [View ZhiPu API](resources/images/View_Zhipu_API.png)
     - In the OnlyOffice document, click on the plugin icon below, click on settings, and fill in your ZhiPu API Key to start using it.
 2. Select text in the document, right-click and select "ZhiPu Copilot" to process the text directly.
 3. In the submenu, you can select "Summary", "Translation" and other functions to process the selected content.
