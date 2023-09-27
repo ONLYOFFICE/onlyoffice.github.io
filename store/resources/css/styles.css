@@ -303,8 +303,10 @@ label.header {
 
 .div_selected_preview {
 	width: 100%;
-	height: calc(100% - 25px);
+	height: calc(100% - 60px);
 	margin-top: 25px;
+	margin-top: 20px;
+	position: absolute;
 }
 
 .div_selected_info {
