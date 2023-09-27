@@ -1844,7 +1844,7 @@ function showSlides(n) {
 function getMarkedSetting() {
 	// function for marked librry
 	let defaults = {};
-	const opts = {};
+	const settings = {};
 	if (typeof marked.getDefaults === 'function') {
 		defaults = marked.getDefaults();
 	} else if ('defaults' in marked) {
@@ -1863,10 +1863,9 @@ function getMarkedSetting() {
 	];
 
 	for (const prop in defaults) {
-		opts[prop] = invalidOptions.includes(prop) || !(prop in options)
-			? defaults[prop]
-			: options[prop];
+		if (!invalidOptions.includes(prop))
+		settings[prop] = defaults[prop]
 	}
 
-	return opts;
+	return settings;
 };
