@@ -574,7 +574,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false).then(
 					function(response) {
 						let settings = getMarkedSetting()
-						let lexed = marked.lexer(response.replace('Change Log \n\n', ''), settings);
+						let lexed = marked.lexer(response.replace('# Change Log\n\n', ''), settings);
 						config.changelog = marked.parser(lexed, settings);
 					}
 				);
