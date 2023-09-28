@@ -42,12 +42,13 @@
 			"buttons": [
 				{
 					"text": "Ok",
-					"primary": true
+					"primary": true,
+					"isViewer": false
 				},
 				{
 					"text": "Cancel",
 					"primary": false,
-					"isViewer": false,
+					"isViewer": true,
 					"textLocale": {
 						"ru": "Отмена",
 						"fr": "Annuler",

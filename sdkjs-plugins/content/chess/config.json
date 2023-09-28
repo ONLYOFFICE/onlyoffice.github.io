@@ -112,7 +112,7 @@
 
 			"isUpdateOleOnResize" : false,
 
-			"buttons" : [ { "text": "Ok", "primary": true } ],
+			"buttons" : [ { "text": "Ok", "primary": true, "isViewer": false } ],
 
 			"size" : [392, 147]
 		}
