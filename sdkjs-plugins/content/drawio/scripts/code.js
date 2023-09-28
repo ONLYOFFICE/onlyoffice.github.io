@@ -47,7 +47,7 @@
 
 	window.Asc.plugin.button = function(id)
 	{
-		if (id == 0 && !window.Asc.plugin.info.isViewMode) {
+		if (id == 0) {
 			if (editor.frame) {
 				// if editor is opened
 				editor.closePlugin(true);
