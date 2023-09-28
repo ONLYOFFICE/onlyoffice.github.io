@@ -114,7 +114,7 @@
 			"url": "settings.html",
 
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
-			"isViewer": false,
+			"isViewer": true,
 			"EditorsSupport": [ "word" ],
 			"isVisual": true,
 			"isModal": true,

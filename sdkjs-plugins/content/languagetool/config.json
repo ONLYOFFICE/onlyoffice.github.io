@@ -106,7 +106,7 @@
 			"url": "index_about.html",
 
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
-			"isViewer": false,
+			"isViewer": true,
 			"EditorsSupport": [ "word", "cell", "slide" ],
 
 			"isVisual": true,
