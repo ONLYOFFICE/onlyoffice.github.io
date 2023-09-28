@@ -236,6 +236,7 @@
                 var oTextContainer = document.getElementById('text-container-div');
                 while (oTextContainer.firstChild) {
                     oTextContainer.removeChild(oTextContainer.firstChild);
+					updateScroll();
                 }
                 arrParsedData.length = 0;
                 document.getElementById('recognize-button').setAttribute('disabled', '');
@@ -300,7 +301,7 @@
 					//if(oLastWord.font_size) {
 					//}
 					
-					sStyle += ("font-size:" + 12 + "pt;");
+					sStyle += ("font-size:" + 11 + "pt;");
 					if(oLastWord.is_bold) {
 						sStyle += ("font-weight:bold;");
 					}
