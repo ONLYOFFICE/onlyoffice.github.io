@@ -83,7 +83,8 @@
 						"es": "Insertar",
 						"de": "Einfügen",
 						"cs": "Vložit"
-					}
+					},
+					"isViewer": false
 				},
 				{
 					"text": "Cancel",
