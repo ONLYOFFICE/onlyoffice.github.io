@@ -1,11 +1,48 @@
 // an Chat plugin of AI
 (function (window, undefined) {
+
+    // define prompts for multiple languages
+    const prompts = {
+        en: {
+            'summarize': 'summarize the text in up to 10 concise bullet points in English',
+            'explain': 'explain the key concepts by bullet points and then summarize in simple words',
+            'generate': 'using English to ',
+        },
+        de: {
+            'summarize': 'fassen Sie den Text in bis zu 10 prägnanten Stichpunkten auf Deutsch zusammen',
+            'explain': 'erklären Sie die Schlüsselkonzepte in Stichpunkten und fassen Sie sie dann in einfachen Worten zusammen',
+            'generate': 'Deutschland nutzen, um ',
+        },
+        es: {
+            'summary': 'resuma el texto en hasta 10 puntos concisos en español',
+            'explain': 'explique los conceptos clave en puntos y luego resuma en palabras sencillas',
+            'generate': 'usando español para ',
+        },
+        ru: {
+            'summarize': 'суммируйте текст вплоть до 10 кратких пунктов на русском языке',
+            'explain': 'объясните ключевые концепции пунктами, а затем суммируйте простыми словами',
+            'generate': 'используя русский язык для ',
+        },
+        fr: {
+            'summarize': 'résumer le texte en 10 points concis en français',
+            'explain': 'expliquer les concepts clés par des points, puis résumer en termes simples',
+            'generate': 'utiliser le français pour ',
+        },
+        zh: {
+            'summarize': '用要点来总结文本',
+            'explain': '用要点来解释涉及的关键概念，然后用简单的话总结',
+            'generate': '用中文来',
+        }
+    }
+
+
     let ApiKey = '';
     let hasKey = false;
     let messageHistory = null; // a reference to the message history DOM element
     let conversationHistory = null; // a list of all the messages in the conversation
     let messageInput = null;
     let typingIndicator = null;
+    let lang = '';
 
     function checkApiKey() {
         ApiKey = localStorage.getItem('apikey');
@@ -20,6 +57,9 @@
 
 
     window.Asc.plugin.init = function () {
+        lang = window.Asc.plugin.info.lang.substring(0, 2);
+        console.log("current lang: ", lang)
+        console.log("test translate: " + prompts[lang]['summarize']);
         messageHistory = document.querySelector('.message-history');
         conversationHistory = [];
         typingIndicator = document.querySelector('.typing-indicator');
@@ -128,18 +168,19 @@
     };
 
 
-
-    // summarize
+    //summarize
     window.Asc.plugin.attachContextMenuClickEvent('summarize', function () {
         window.Asc.plugin.executeMethod('GetSelectedText', null, function (text) {
-            conversationHistory.push({ role: 'user', content: '总结下面的文本' + text });
-            generateResponse()
-                .then(function (res) {
-                    displayMessage(res, 'ai-message');
-                    conversationHistory.push({ role: 'assistant', content: res });
+            conversationHistory.push({ role: 'user', content: prompts[lang]['summarize'] + text });
+            sseRequest(conversationHistory)
+                .then(reader => {
+                    console.log("SSE请求成功");
+                    let currentDiv = null;
+                    let currentMessage = null;
+                    displaySSEMessage(reader, currentDiv, currentMessage);
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(error => {
+                    console.log("SSE请求失败", error);
                 });
         });
     });
@@ -147,29 +188,34 @@
     // explain 
     window.Asc.plugin.attachContextMenuClickEvent('explain', function () {
         window.Asc.plugin.executeMethod('GetSelectedText', null, function (text) {
-            conversationHistory.push({ role: 'user', content: '解释下面的文本' + text });
-            generateResponse()
-                .then(function (res) {
-                    displayMessage(res, 'ai-message');
-                    conversationHistory.push({ role: 'assistant', content: res });
+            conversationHistory.push({ role: 'user', content: prompts[lang]['explain'] + text });
+            sseRequest(conversationHistory)
+                .then(reader => {
+                    console.log("SSE请求成功");
+                    let currentDiv = null;
+                    let currentMessage = null;
+                    displaySSEMessage(reader, currentDiv, currentMessage);
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(error => {
+                    console.log("SSE请求失败", error);
                 });
+            typingIndicator.style.display = 'none'; // hide the typing indicator
         });
     });
 
     const translateHelper = function (text, targetLanguage) {
-        console.log(`将下面的文本翻译为${targetLanguage}：`, text);
-        conversationHistory.push({ role: 'user', content: `将下面的文本翻译为${targetLanguage}：` + text });
-        generateResponse()
-            .then(function (res) {
-                displayMessage(res, 'ai-message');
-                conversationHistory.push({ role: 'assistant', content: res });
+        conversationHistory.push({ role: 'user', content: `翻译为${targetLanguage}: ` + text });
+        sseRequest(conversationHistory)
+            .then(reader => {
+                console.log("SSE请求成功");
+                let currentDiv = null;
+                let currentMessage = null;
+                displaySSEMessage(reader, currentDiv, currentMessage);
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch(error => {
+                console.log("SSE请求失败", error);
             });
+        typingIndicator.style.display = 'none'; // hide the typing indicator
     }
 
     // translate into Chinese
@@ -214,29 +260,51 @@
         });
     });
 
-    // generate content directly in document
+    // generate content in document using sse
     window.Asc.plugin.attachContextMenuClickEvent('generate', function () {
         window.Asc.plugin.executeMethod('GetSelectedText', null, function (text) {
-            conversationHistory.push({ role: 'user', content: '请根据指令生成对应文本：' + text });
-            generateResponse()
-                .then(function (res) {
-                    conversationHistory.push({ role: 'assistant', content: res });
-                    Asc.scope.paragraphs = res.slice(1, -1).split('\\n');
-                    Asc.scope.st = Asc.scope.paragraphs;
-                    Asc.plugin.callCommand(function () {
-                        var oDocument = Api.GetDocument();
-                        for (var i = 0; i < Asc.scope.st.length; i++) {
-                            var oParagraph = Api.CreateParagraph();
-                            oParagraph.AddText(Asc.scope.st[i]);
-                            oDocument.InsertContent([oParagraph]);
-                        }
-                    }, false);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        });
+            let prompt = ({ role: 'user', content: prompts[lang]['generate'] + text });
+            typingIndicator.style.display = 'block'; // display the typing indicator
+            let currentMessage = '';
+            sseRequest(prompt)
+                .then(reader => {
+                    console.log("SSE请求成功");
+                    Asc.scope.reader = reader;
 
+                    reader.read().then(function processText({ done, value }) {
+                        if (done) {
+                            console.log("stream done");
+                            return;
+                        }
+                        let lines = value.split('\n');
+                        lines.forEach(line => {
+                            if (line.includes('data')) {
+                                const fragment = line.split(':')[1];
+                                currentMessage += fragment;
+                                if (fragment.length === 0 ) {
+                                    console.log("currentMessage2: ", currentMessage)
+                                    Asc.scope.p = currentMessage;
+                                    Asc.plugin.callCommand(function () {
+                                        let oDocument = Api.GetDocument();
+                                        let oParagraph = Api.CreateParagraph();
+                                        oParagraph.AddText(Asc.scope.p);
+                                        oDocument.InsertContent([oParagraph]);
+                                    })
+                                    currentMessage = '';
+                                }
+                            }
+                        });
+
+                        // recursively call processResult() to continue reading data from the stream
+                        reader.read().then(processText);
+                    });
+                })
+                .catch(error => {
+                    console.log("SSE请求失败", error);
+                });
+            });
+            typingIndicator.style.display = 'none'; // hide the typing indicator
+            console.log("hide typing indicator")
     });
 
     // generate async request (for in-doc function)
@@ -256,7 +324,7 @@
         });
     }
 
-    // Make sure the DOM is fully loaded before running the following code
+    // Make sure the DOM is fully loaded before querying the DOM elements
     document.addEventListener("DOMContentLoaded", function () {
         // get references to the DOM elements
         messageInput = document.querySelector('.message-input');
@@ -269,8 +337,8 @@
             if (message.trim() !== '') {
                 displayMessage(message, 'user-message');
                 conversationHistory.push({ role: 'user', content: message });
-                messageInput.value = ''; 
-                if(hasKey) {
+                messageInput.value = '';
+                if (hasKey) {
                     typingIndicator.style.display = 'block'; // display the typing indicator
                     sseRequest(conversationHistory)
                         .then(reader => {
@@ -283,7 +351,7 @@
                             console.log("SSE请求失败", error);
                         });
                     typingIndicator.style.display = 'none'; // hide the typing indicator
-                }else {
+                } else {
                     displayMessage('Set Your ZhiPu API Key first', 'ai-message');
                     conversationHistory.push({ role: 'assistant', content: 'Set Your ZhiPu API Key first' });
                 }
@@ -385,7 +453,6 @@
 
     function generateText(text) {
         let lang = window.Asc.plugin.info.lang.substring(0, 2);
-        console.log("current lang: ", lang);
         return {
             en: text,
             [lang]: window.Asc.plugin.tr(text)
