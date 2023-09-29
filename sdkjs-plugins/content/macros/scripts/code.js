@@ -323,6 +323,17 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
                     break;
             }
         }
+		if ( (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's')
+		{
+			e.preventDefault();
+			e.stopPropagation();
+			if (!isShowRename)
+			{
+				window.Asc.plugin.executeMethod("SetMacros", [JSON.stringify(Content)], function() {
+					// console.log('saved');
+				});
+			}
+		}
     }
 
     window.Asc.plugin.init = function(text)
