@@ -16,128 +16,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<meta charset="UTF-8">
+	<title>Title</title>
 	<link rel="stylesheet" href="plugin_style.css">
-    <script src="./vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+	<script src="./vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
-    <script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
-    <script src="./scripts/pixabay.js"></script>
-    <style>
-        td{
-            padding: 0;
-            border-spacing:0;
-            vertical-align: middle;
-            margin: 0;
-        }
-        table{
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
-        #main-container-id{
-            height: 100%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        html, body {
-            min-height: 100% !important;
-            height: 100%;
-            overflow-y:hidden;
-            font-weight: normal !important;
-        }
-        #main-search-container-id{
-            margin-bottom: 16px;
-        }
-        #preview-images-container-id{
-            width: calc(100% - 24px);
-            margin: 0 12px 0 12px;
-        }
-        #pagination-container-id{
-            height: 50px;
-            position: relative;
-        }
-        .pagination-button-div{
-            display: table-cell;
-            font-size: 11px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            height: 22px;
-            cursor: pointer;
-            vertical-align: middle;
-            text-align: center;
-        }
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+	<script src="./scripts/pixabay.js"></script>
+	<style>
+		td{
+			padding: 0;
+			border-spacing:0;
+			vertical-align: middle;
+			margin: 0;
+		}
+		table{
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+		#main-container-id{
+			height: 100%;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+		}
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			overflow-y:hidden;
+			font-weight: normal !important;
+		}
+		#main-search-container-id{
+			margin-bottom: 16px;
+		}
+		#preview-images-container-id{
+			width: calc(100% - 24px);
+			margin: 0 12px 0 12px;
+		}
+		#pagination-container-id{
+			height: 50px;
+			position: relative;
+		}
+		.pagination-button-div{
+			display: table-cell;
+			font-size: 11px;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			height: 22px;
+			cursor: pointer;
+			vertical-align: middle;
+			text-align: center;
+		}
 
-        .pagination-button-div p{
-            display: inline-block;
-            vertical-align: middle;
-        }
+		.pagination-button-div p{
+			display: inline-block;
+			vertical-align: middle;
+		}
 
-        .noselect{
-            -khtml-user-select: none;
-            user-select: none;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-        }
+		.noselect{
+			-khtml-user-select: none;
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+		}
 
-        .pagination-button-div:hover {
-            background-color: #d8dadc !important;
-        }
-        .pagination-button-div-selected{
-            background-color: #7d858c !important;
-        }
-        .pagination-button-div-selected:hover{
-            background-color: #7d858c !important;
-        }
+		.pagination-button-div:hover {
+			background-color: #d8dadc !important;
+		}
+		.pagination-button-div-selected{
+			background-color: #7d858c !important;
+		}
+		.pagination-button-div-selected:hover{
+			background-color: #7d858c !important;
+		}
 
-        .pagination-button-div-selected p{
-            color: #ffffff;
-        }
+		.pagination-button-div-selected p{
+			color: #ffffff;
+		}
 
-        #search-button-id:focus{
-            outline: none;
-        }
+		#search-button-id:focus{
+			outline: none;
+		}
 
-        p {
-            margin: 0 !important;
-        }
+		p {
+			margin: 0 !important;
+		}
 
-        #button-search-id {
-        	width: calc(100% - 24px);
-        	margin: 16px 12px 0 12px;
-        }
+		#button-search-id {
+			width: calc(100% - 24px);
+			margin: 16px 12px 0 12px;
+		}
 
-        #hide_show_reconf {
-            width: calc(100% - 24px);
-            margin: 16px 12px 16px 12px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .opened, .hidden, #reconf{
-            cursor:pointer;
-            border-bottom: 1px dashed #444444;
-        }
-        .rule-checkbox {
-            margin-left: 12px !important;
-        }
-        .header {
-            margin-bottom: 4px;
-        }
-        .input_container {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        .checkbox {
-            margin: 1px 0 0 4px;
-        }
+		#hide_show_reconf {
+			width: calc(100% - 24px);
+			margin: 16px 12px 16px 12px;
+			display: flex;
+			justify-content: space-between;
+		}
+		.opened, .hidden, #reconf{
+			cursor:pointer;
+			border-bottom: 1px dashed #444444;
+		}
+		.rule-checkbox {
+			margin-left: 12px !important;
+		}
+		.header {
+			margin-bottom: 4px;
+		}
+		.input_container {
+			display: flex;
+			margin-bottom: 10px;
+		}
+		.checkbox {
+			margin: 1px 0 0 4px;
+		}
 		.error_color {
-        	color: #D9534F;
-        	font-size: 13px;
-        }
+			color: #D9534F;
+			font-size: 13px;
+		}
 		.error_api {
-        	border: 1px solid #D9534F !important;
-        }
+			border: 1px solid #D9534F !important;
+		}
 		.api_empty {
 			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEDSURBVHgBnVLRTcMwEH1nIFKrfhiJIj7NBozgTcgGhAmqTFAyAWETqwvABvQTESTyUQoqbY5zlJSqTaukT7J8su/5ne8eYQNstZ4jiCS8BbOpjl/8UnQS99zbtM6lOpjZYUiMsYQazciZOB64j4c1cWYvImIaowUUI+xNsif6tlem4NXztlLfvZf73F7uKC/o91oVWI2wv7wm6ACndwqMG3QFU6hk604EjMKRoC87fJVyTRcS+7nKJ9OmS9/VurM7ap74g2UicY72an4ccWWA0jWPbYiSF/UnWVI2Z+CyVOx0f0jZKykuQk+qyv3Hp9UmwNmomm09pqkYPl2oZXLu8vXDf54ZXXDvkOajAAAAAElFTkSuQmCC);
 			background-repeat: no-repeat;
@@ -145,263 +145,263 @@
 			background-position-x: 98%;
 		}
 		#save {
-        	width: calc(100% - 24px);
-        	margin: 16px 12px 0 12px;
-        }
-        #flex-loader-container {
-		    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 150px;
-            height: 50px;
-            border: none;
-            background-image: none;
-            background-color: rgba(68, 68, 68, 0.95);
-            color: #f1f1f1;
-            border-radius: 6px;
+			width: calc(100% - 24px);
+			margin: 16px 12px 0 12px;
+		}
+		#flex-loader-container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 150px;
+			height: 50px;
+			border: none;
+			background-image: none;
+			background-color: rgba(68, 68, 68, 0.95);
+			color: #f1f1f1;
+			border-radius: 6px;
 		}
 		.no-results {
-		    font-size: 13px;
+			font-size: 13px;
 		}
 
-    </style>
-    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	</style>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 </head>
 <body id="body" style="width: 100%;height: 100%; margin: 0;">
 	<div id="loader-container" class="asc-plugin-loader display-none">
-        <div id="flex-loader-container">
-            <div>
-                <div class="asc-loader-image">
-                    <div class="asc-loader-title"></div>
-                </div>
-                <div class="asc-loader-title">
-                    Loading...
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="main-container-id" >
-        <div id="api" style="margin-bottom: 16px;">
-            <div style="margin: 12px"><span>To use Pixabay, create Pixabay account, then copy the API key and insert it in the specified field.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-pixabay/tree/develop#configuration">Learn more here.</a></div>
+		<div id="flex-loader-container">
+			<div>
+				<div class="asc-loader-image">
+					<div class="asc-loader-title"></div>
+				</div>
+				<div class="asc-loader-title">
+					Loading...
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="main-container-id" >
+		<div id="api" style="margin-bottom: 16px;">
+			<div style="margin: 12px"><span>To use Pixabay, create Pixabay account, then copy the API key and insert it in the specified field.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-pixabay/tree/develop#configuration">Learn more here.</a></div>
 			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
 				<label style="margin-left:12px;">API key</label>
 			</div>
 			<input type="text" id="api-value" class="form-control" data-id="pixabay-api-value-id" placeholder="Enter your Pixabay API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
 			<button onсlick="" id="save" class="btn-text-default">Save</button>
 		</div>
-        <div id="main-search-container-id" style="display:none;">
-            <input type="text" id="search-phrase" class="form-control" placeholder="Enter search phrase" data-id="search-phrase-id" style="width: calc(100% - 24px); margin: 16px 12px 0 12px; text-align: left;">
-            <button onсlick="" id="button-search-id" class="btn-text-default">Search</button>
-            <div id="hide_show_reconf"><label class="hidden">Hide advanced settings</label><label class="opened">Show advanced settings</label><label id="reconf">Reconfigure API key</label></div>
-            <div id="first-separator" class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px; display:none;"></div>
-            <div id="settings" style="position: relative; height: 88%; display:none;">
-                <div id="locale-container" style="margin: 0 12px 16px 12px;">
-                    <span class="locale" style="display: flex; flex-direction: column;"><label class="header" style="font-weight: normal !important;">Language</label> <select id="pixabay-locale" class="select_example" data-id="pixabay-locale" title="Locale">
-                        <option value="cs" data-text-id="locale-cs">
-                            Czech
-                        </option>
-                        <option value="da" data-text-id="locale-da">
-                            Danish
-                        </option>
-                        <option value="de" data-text-id="locale-de">
-                            German
-                        </option>
-                        <option selected="selected" value="en" data-text-id="locale-en">
-                            English
-                        </option>
-                        <option value="es" data-text-id="locale-es">
-                            Spanish
-                        </option>
-                        <option value="fr" data-text-id="locale-fr">
-                            French
-                        </option>
-                        <option value="id" data-text-id="locale-id">
-                            Indonesian
-                        </option>
-                        <option value="it" data-text-id="locale-it">
-                            Italian
-                        </option>
-                        <option value="hu" data-text-id="locale-hu">
-                            Hungarian
-                        </option>
-                        <option value="nl" data-text-id="locale-nl">
-                            Dutch
-                        </option>
-                        <option value="no" data-text-id="locale-no">
-                            Norwegian
-                        </option>
-                        <option value="pl" data-text-id="locale-pl">
-                            Polish
-                        </option>
-                        <option value="pt" data-text-id="locale-pt">
-                            Portuguese
-                        </option>
-                        <option value="ro" data-text-id="locale-ro">
-                            Romanian
-                        </option>
-                        <option value="sk" data-text-id="locale-sk">
-                            Slovak
-                        </option>
-                        <option value="fi" data-text-id="locale-fi">
-                            Finnish
-                        </option>
-                        <option value="sv" data-text-id="locale-sv">
-                            Swedish
-                        </option>
-                        <option value="tr" data-text-id="locale-tr">
-                            Turkish
-                        </option>
-                        <option value="vi" data-text-id="locale-vi">
-                            Vietnamese
-                        </option>
-                        <option value="th" data-text-id="locale-th">
-                            Thai
-                        </option>
-                        <option value="bg" data-text-id="locale-bg">
-                            Bulgarian
-                        </option>
-                        <option value="ru" data-text-id="locale-ru">
-                            Russian
-                        </option>
-                        <option value="el" data-text-id="locale-el">
-                            Greek
-                        </option>
-                        <option value="ja" data-text-id="locale-ja">
-                            Japanese
-                        </option>
-                        <option value="ko" data-text-id="locale-ko">
-                            Korean
-                        </option>
-                        <option value="zh" data-text-id="locale-zh">
-                            Chinese
-                        </option>
+		<div id="main-search-container-id" style="display:none;">
+			<input type="text" id="search-phrase" class="form-control" placeholder="Enter search phrase" data-id="search-phrase-id" style="width: calc(100% - 24px); margin: 16px 12px 0 12px; text-align: left;">
+			<button onсlick="" id="button-search-id" class="btn-text-default">Search</button>
+			<div id="hide_show_reconf"><label class="hidden">Hide advanced settings</label><label class="opened">Show advanced settings</label><label id="reconf">Reconfigure API key</label></div>
+			<div id="first-separator" class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px; display:none;"></div>
+			<div id="settings" style="position: relative; height: 88%; display:none;">
+				<div id="locale-container" style="margin: 0 12px 16px 12px;">
+					<span class="locale" style="display: flex; flex-direction: column;"><label class="header" style="font-weight: normal !important;">Language</label> <select id="pixabay-locale" class="select_example" data-id="pixabay-locale" title="Locale">
+						<option value="cs" data-text-id="locale-cs">
+							Czech
+						</option>
+						<option value="da" data-text-id="locale-da">
+							Danish
+						</option>
+						<option value="de" data-text-id="locale-de">
+							German
+						</option>
+						<option selected="selected" value="en" data-text-id="locale-en">
+							English
+						</option>
+						<option value="es" data-text-id="locale-es">
+							Spanish
+						</option>
+						<option value="fr" data-text-id="locale-fr">
+							French
+						</option>
+						<option value="id" data-text-id="locale-id">
+							Indonesian
+						</option>
+						<option value="it" data-text-id="locale-it">
+							Italian
+						</option>
+						<option value="hu" data-text-id="locale-hu">
+							Hungarian
+						</option>
+						<option value="nl" data-text-id="locale-nl">
+							Dutch
+						</option>
+						<option value="no" data-text-id="locale-no">
+							Norwegian
+						</option>
+						<option value="pl" data-text-id="locale-pl">
+							Polish
+						</option>
+						<option value="pt" data-text-id="locale-pt">
+							Portuguese
+						</option>
+						<option value="ro" data-text-id="locale-ro">
+							Romanian
+						</option>
+						<option value="sk" data-text-id="locale-sk">
+							Slovak
+						</option>
+						<option value="fi" data-text-id="locale-fi">
+							Finnish
+						</option>
+						<option value="sv" data-text-id="locale-sv">
+							Swedish
+						</option>
+						<option value="tr" data-text-id="locale-tr">
+							Turkish
+						</option>
+						<option value="vi" data-text-id="locale-vi">
+							Vietnamese
+						</option>
+						<option value="th" data-text-id="locale-th">
+							Thai
+						</option>
+						<option value="bg" data-text-id="locale-bg">
+							Bulgarian
+						</option>
+						<option value="ru" data-text-id="locale-ru">
+							Russian
+						</option>
+						<option value="el" data-text-id="locale-el">
+							Greek
+						</option>
+						<option value="ja" data-text-id="locale-ja">
+							Japanese
+						</option>
+						<option value="ko" data-text-id="locale-ko">
+							Korean
+						</option>
+						<option value="zh" data-text-id="locale-zh">
+							Chinese
+						</option>
 
 
-                        </select>
-                    </span>
-                </div>
-                <div id="img_type_container" style="margin-bottom: 16px;">
-                    <div id="img_type-header" style="margin-bottom: 8px">
-                        <label class="header" style="margin-left: 12px;">Image type</label>
-                    </div>
-                    <div class="img_type input_container">
-                          <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-all" data-id="type-all-id"> <label class="checkbox" for="type-all">All</label>
-                    </div>
-                    <div class="img_type input_container">
-                          <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-photo" data-id="type-photo-id"> <label class="checkbox" for="type-photo">Photo</label>
-                    </div>
-                    <div class="img_type input_container">
-                          <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-illustration" data-id="type-illustration-id"> <label class="checkbox" for="type-illustration">Illustration</label>
-                    </div>
-                    <div class="img_type input_container">
-                          <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vector" data-id="type-vector-id"> <label class="checkbox" for="type-vector">Vector</label>
-                    </div>
-                </div>
-                <div id="orientation_type_container" style="margin-bottom: 16px;">
-                    <div id="orientation_type-header" style="margin-bottom: 8px">
-                        <label class="header" style="margin-left: 12px; font-weight: normal !important;">Orientation</label>
-                    </div>
-                    <div class="orientation_type input_container">
-                          <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vertical" data-id="type-vertical-id"> <label class="checkbox" for="type-vertical">Vertical</label>
-                    </div>
-                    <div class="orientation_type input_container">
-                          <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-horizontal" data-id="type-horizontal-id"> <label class="checkbox" for="type-horizontal">Horizontal</label>
-                    </div>
-                </div>
-                <div id="category-container" style="margin: 0 12px 16px 12px;">
-                  <span class="locale" style="display: flex; flex-direction: column;"><label class="header" style="font-weight: normal !important;">Category</label> <select id="pixabay-category" class="select_example" data-id="pixabay-category">
-                      <option selected="selected" value="all" data-text-id="category-all">
-                        All
-                      </option>
-                      <option value="backgrounds" data-text-id="category-backgrounds">
-                        Backgrounds
-                      </option>
-                      <option value="fashion" data-text-id="category-fashion">
-                        Fashion
-                      </option>
-                      <option value="nature" data-text-id="category-nature">
-                        Nature
-                      </option>
-                      <option value="science" data-text-id="category-science">
-                        Science
-                      </option>
-                      <option value="education" data-text-id="category-education">
-                        Education
-                      </option>
-                      <option  value="feelings" data-text-id="category-feelings">
-                        Feelings
-                      </option>
-                      <option value="health" data-text-id="category-health">
-                        Health
-                      </option>
-                      <option value="people" data-text-id="category-people">
-                        People
-                      </option>
-                      <option value="religion" data-text-id="category-religion">
-                        Religion
-                      </option>
-                      <option value="places" data-text-id="category-places">
-                        Places
-                      </option>
-                      <option value="animals" data-text-id="category-animals">
-                        Animals
-                      </option>
-                      <option value="industry" data-text-id="category-industry">
-                        Industry
-                      </option>
-                      <option value="computer" data-text-id="category-computer">
-                        Computer
-                      </option>
-                      <option value="food" data-text-id="category-food">
-                        Food
-                      </option>
-                      <option value="sports" data-text-id="category-sports">
-                        Sports
-                      </option>
-                      <option value="transportations" data-text-id="category-transportations">
-                        Transportations
-                      </option>
-                      <option value="travel" data-text-id="category-travel">
-                        Travel
-                      </option>
-                      <option value="buildings" data-text-id="category-buildings">
-                        Buildings
-                      </option>
-                      <option value="business" data-text-id="category-business">
-                        Business
-                      </option>
-                      <option value="music" data-text-id="category-music">
-                        Music
-                      </option>
-              </select>
-                  </span>
-                </div>
-                <div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
-            </div>
-        </div>
-        <div id="scrollable-container-id" style="position: relative; height: calc(100% - 100px); overflow: hidden; min-height: 200px;">
-            <div id="preview-images-container-id" style="display: block; position: absolute;">
-            </div>
-        </div>
-        <div id="pagination-container-id" style="display: table; width: 100%; text-align: center; ">
-            <div id="pagination-table-container-id" style="display:table-cell; vertical-align: middle; text-align: center;  ">
-                <table style="margin:auto; display: none" id="pagination-table-id">
-                    <tr>
-                        <td style="height: auto; vertical-align: middle">
-                            <div class="pagination-button-div noselect" id="navigation-first-page-id" style="width:22px; height:22px;"><p><<</p></div>
-                            <div class="pagination-button-div noselect" id="navigation-prev-page-id" style="width:22px; height:22px;"><p><</p></div>
-                        </td>
-                        <td style="height: auto; vertical-align: middle" id="pages-cell-id">
+						</select>
+					</span>
+				</div>
+				<div id="img_type_container" style="margin-bottom: 16px;">
+					<div id="img_type-header" style="margin-bottom: 8px">
+						<label class="header" style="margin-left: 12px;">Image type</label>
+					</div>
+					<div class="img_type input_container">
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-all" data-id="type-all-id"> <label class="checkbox" for="type-all">All</label>
+					</div>
+					<div class="img_type input_container">
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-photo" data-id="type-photo-id"> <label class="checkbox" for="type-photo">Photo</label>
+					</div>
+					<div class="img_type input_container">
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-illustration" data-id="type-illustration-id"> <label class="checkbox" for="type-illustration">Illustration</label>
+					</div>
+					<div class="img_type input_container">
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vector" data-id="type-vector-id"> <label class="checkbox" for="type-vector">Vector</label>
+					</div>
+				</div>
+				<div id="orientation_type_container" style="margin-bottom: 16px;">
+					<div id="orientation_type-header" style="margin-bottom: 8px">
+						<label class="header" style="margin-left: 12px; font-weight: normal !important;">Orientation</label>
+					</div>
+					<div class="orientation_type input_container">
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vertical" data-id="type-vertical-id"> <label class="checkbox" for="type-vertical">Vertical</label>
+					</div>
+					<div class="orientation_type input_container">
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-horizontal" data-id="type-horizontal-id"> <label class="checkbox" for="type-horizontal">Horizontal</label>
+					</div>
+				</div>
+				<div id="category-container" style="margin: 0 12px 16px 12px;">
+				  <span class="locale" style="display: flex; flex-direction: column;"><label class="header" style="font-weight: normal !important;">Category</label> <select id="pixabay-category" class="select_example" data-id="pixabay-category">
+					  <option selected="selected" value="all" data-text-id="category-all">
+						All
+					  </option>
+					  <option value="backgrounds" data-text-id="category-backgrounds">
+						Backgrounds
+					  </option>
+					  <option value="fashion" data-text-id="category-fashion">
+						Fashion
+					  </option>
+					  <option value="nature" data-text-id="category-nature">
+						Nature
+					  </option>
+					  <option value="science" data-text-id="category-science">
+						Science
+					  </option>
+					  <option value="education" data-text-id="category-education">
+						Education
+					  </option>
+					  <option  value="feelings" data-text-id="category-feelings">
+						Feelings
+					  </option>
+					  <option value="health" data-text-id="category-health">
+						Health
+					  </option>
+					  <option value="people" data-text-id="category-people">
+						People
+					  </option>
+					  <option value="religion" data-text-id="category-religion">
+						Religion
+					  </option>
+					  <option value="places" data-text-id="category-places">
+						Places
+					  </option>
+					  <option value="animals" data-text-id="category-animals">
+						Animals
+					  </option>
+					  <option value="industry" data-text-id="category-industry">
+						Industry
+					  </option>
+					  <option value="computer" data-text-id="category-computer">
+						Computer
+					  </option>
+					  <option value="food" data-text-id="category-food">
+						Food
+					  </option>
+					  <option value="sports" data-text-id="category-sports">
+						Sports
+					  </option>
+					  <option value="transportations" data-text-id="category-transportations">
+						Transportations
+					  </option>
+					  <option value="travel" data-text-id="category-travel">
+						Travel
+					  </option>
+					  <option value="buildings" data-text-id="category-buildings">
+						Buildings
+					  </option>
+					  <option value="business" data-text-id="category-business">
+						Business
+					  </option>
+					  <option value="music" data-text-id="category-music">
+						Music
+					  </option>
+			  </select>
+				  </span>
+				</div>
+				<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
+			</div>
+		</div>
+		<div id="scrollable-container-id" style="position: relative; height: calc(100% - 100px); overflow: hidden; min-height: 200px;">
+			<div id="preview-images-container-id" style="display: block; position: absolute;">
+			</div>
+		</div>
+		<div id="pagination-container-id" style="display: table; width: 100%; text-align: center; ">
+			<div id="pagination-table-container-id" style="display:table-cell; vertical-align: middle; text-align: center;  ">
+				<table style="margin:auto; display: none" id="pagination-table-id">
+					<tr>
+						<td style="height: auto; vertical-align: middle">
+							<div class="pagination-button-div noselect" id="navigation-first-page-id" style="width:22px; height:22px;"><p><<</p></div>
+							<div class="pagination-button-div noselect" id="navigation-prev-page-id" style="width:22px; height:22px;"><p><</p></div>
+						</td>
+						<td style="height: auto; vertical-align: middle" id="pages-cell-id">
 
-                        </td>
-                        <td style="height: auto; vertical-align: middle">
-                            <div class="pagination-button-div noselect" id="navigation-next-page-id" style="width:22px; height:22px;"><p>></p></div>
-                            <div class="pagination-button-div noselect" id="navigation-last-page-id" style="width:22px; height:22px;"><p>>></p></div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
+						</td>
+						<td style="height: auto; vertical-align: middle">
+							<div class="pagination-button-div noselect" id="navigation-next-page-id" style="width:22px; height:22px;"><p>></p></div>
+							<div class="pagination-button-div noselect" id="navigation-last-page-id" style="width:22px; height:22px;"><p>>></p></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
