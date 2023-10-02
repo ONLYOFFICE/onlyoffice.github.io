@@ -27,5 +27,6 @@
 	{ "name": "chess", "discussion": "246" },
 	{ "name": "zoom", "discussion": "247" },
 	{ "name": "openai", "discussion": "248" },
-	{ "name": "speechrecognition", "discussion": "249" }
+	{ "name": "speechrecognition", "discussion": "249" },
+	{ "name": "pixabay", "discussion": "" }
 ]
