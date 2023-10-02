@@ -1,3 +1,34 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
 (function(window, undefined){
 	var oElements, oPs, sText;
 	var aPropsToPaste = [];
@@ -20,7 +51,7 @@
 	$(document).ready(function () {
 		oElements = {
 			loader:        document.getElementById("loader-container"),
-            contentHolder: document.getElementById("mainContainer")
+			contentHolder: document.getElementById("mainContainer")
 		}
 
 		oPs = new PerfectScrollbar("#scrollable", {suppressScrollX: true});
@@ -204,8 +235,8 @@
 	function GetDefinitions(sText){
 		showLoader(oElements, true);
 		$.ajax({
-            method: 'PUT',
-            beforeSend: function(request) {
+			method: 'PUT',
+			beforeSend: function(request) {
 				request.setRequestHeader("Content-Type", 'application/json');
 			},
 			data: JSON.stringify({
@@ -214,15 +245,15 @@
 				langDisplay: "FR",
 				langs: "FR"
 			}),
-            url: 'https://terminologie.finances.gouv.fr/search'
+			url: 'https://terminologie.finances.gouv.fr/search'
 
-        }).success(function (oResponse) {
+		}).success(function (oResponse) {
 			ParseResults(oResponse.items);
 			showLoader(false);
-        }).error(function(error) {
-            console.log(error);
+		}).error(function(error) {
+			console.log(error);
 			showLoader(false);
-        });
+		});
 	}
 
 
@@ -236,14 +267,14 @@
 	}
 
 	function ParseResults(aItems) {
-        if (aItems.length === 0) {
-            $('<div>', {
-                id: "no_results",
-                text: "Aucun résultat."
-            }).appendTo('#results');
+		if (aItems.length === 0) {
+			$('<div>', {
+				id: "no_results",
+				text: "Aucun résultat."
+			}).appendTo('#results');
 			updateScroll();
 			return;
-        }
+		}
 
 		aItems.forEach(function(el, ind) {
 			if (!el.fields["rdfs:label"] || !el.fields["rdfs:label"][0] || !el.fields["skos:definition"] || !el.fields["skos:definition"][0])
@@ -252,9 +283,9 @@
 			var oResult = $('<div>', {
 				"class": 'result_div',
 				click: function () {
-			        var uri = $(this).data().uri;
+					var uri = $(this).data().uri;
 					showLoader(oElements, true);
-			        
+
 					$.ajax({
 						method: 'GET',
 						beforeSend: function(request) {
@@ -470,41 +501,41 @@
 		switchClass(oElements.loader, "display-none", !show);
 	}
 	function switchClass(el, className, add) {
-        if (add) {
-            el.classList.add(className);
-        } else {
-            el.classList.remove(className);
-        }
-    }
+		if (add) {
+			el.classList.add(className);
+		} else {
+			el.classList.remove(className);
+		}
+	}
 
 	window.Asc.plugin.onThemeChanged = function(theme)
-    {
-        window.Asc.plugin.onThemeChangedBase(theme);
-        var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}\n'
-        if (theme.type == 'dark') {
-            rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;}\n';
-        }
-        else if (theme.type == 'light') {
-            rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDQ0IiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iNy4yNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTYwJSwgNDAlIiAvPjwvc3ZnPg==) !important;}\n';
-        }
-        rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
+		var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}\n'
+		if (theme.type == 'dark') {
+			rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;}\n';
+		}
+		else if (theme.type == 'light') {
+			rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDQ0IiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iNy4yNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTYwJSwgNDAlIiAvPjwvc3ZnPg==) !important;}\n';
+		}
+		rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 
-        var styleTheme = document.createElement('style');
-        styleTheme.type = 'text/css';
-        styleTheme.innerHTML = rule;
-        document.getElementsByTagName('head')[0].appendChild(styleTheme);
-        $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+		var styleTheme = document.createElement('style');
+		styleTheme.type = 'text/css';
+		styleTheme.innerHTML = rule;
+		document.getElementsByTagName('head')[0].appendChild(styleTheme);
+		$('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
 
-        // if (!isIE) {
-        //     $('#clear').css('border-bottom', 'var(--scaled-one-pixel, 1px) dotted ' + window.Asc.plugin.theme["text-normal"]);
-        //     $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
-        //     $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
-        //     $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
-        //     $('#arrow-svg-path').css('fill', theme["text-normal"]);
-        // }
-        // else
-        //     $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
-    };
+		// if (!isIE) {
+		//     $('#clear').css('border-bottom', 'var(--scaled-one-pixel, 1px) dotted ' + window.Asc.plugin.theme["text-normal"]);
+		//     $('#enter_container').css('background-color', window.Asc.plugin.theme["background-normal"]);
+		//     $('.asc-loader-title').css('color', window.Asc.plugin.theme["text-normal"]);
+		//     $('#show_manually, #hide_manually').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme["text-normal"]);
+		//     $('#arrow-svg-path').css('fill', theme["text-normal"]);
+		// }
+		// else
+		//     $('#enter_container').css('background-color', window.Asc.plugin.theme["RulerLight"]);
+	};
 
 	window.Asc.plugin.button = function(id)
 	{
