@@ -1,27 +1,27 @@
 {
-    "name": "Pixabay",
-    "nameLocale": {
-        "ru": "Pixabay",
-        "fr": "Pixabay",
-        "es": "Pixabay",
-        "de": "Pixabay"
-    },
-    "guid": "asc.{1f6b80f3-8b3c-41c7-96a1-4b4386a6bd4c}",
-    "version": "1.0.0",
+	"name": "Pixabay",
+	"nameLocale": {
+		"ru": "Pixabay",
+		"fr": "Pixabay",
+		"es": "Pixabay",
+		"de": "Pixabay"
+	},
+	"guid": "asc.{1f6b80f3-8b3c-41c7-96a1-4b4386a6bd4c}",
+	"version": "1.0.0",
 
-    "variations": [
-        {
-            "description": "Pixabay",
-            "descriptionLocale": {
-                "ru": "Pixabay",
-                "fr": "Pixabay",
-                "es": "Pixabay",
-                "de": "Pixabay"
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Pixabay",
+			"descriptionLocale": {
+				"ru": "Pixabay",
+				"fr": "Pixabay",
+				"es": "Pixabay",
+				"de": "Pixabay"
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
 				{
 					"style" : "light",
 					
@@ -61,73 +61,73 @@
 					}
 				}
 			],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "slide", "cell" ],
+			"isViewer": false,
+			"EditorsSupport": [ "word", "slide", "cell" ],
 
-            "isVisual": true,
-            "isModal": false,
-            "isInsideMode": true,
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
 
-            "initDataType": "none",
-            "initData": "",
+			"initDataType": "none",
+			"initData": "",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Close",
-                    "primary": true,
-                    "textLocale": {
-                        "ru": "Закрыть",
-                        "fr": "Fermer",
-                        "es": "Cerrar",
-                        "de": "Schließen"
-                    }
-                }
-            ]
-        },
-        {
-            "description": "About",
-            "descriptionLocale": {
-                "ru": "Справка",
-                "fr": "À propos",
-                "es": "Sobre programa",
-                "de": "Über"
-            },
-            "url": "index_about.html",
+			"buttons": [
+				{
+					"text": "Close",
+					"primary": true,
+					"textLocale": {
+						"ru": "Закрыть",
+						"fr": "Fermer",
+						"es": "Cerrar",
+						"de": "Schließen"
+					}
+				}
+			],
+			"store": {
+				"background": {
+					"light" : "#57B057",
+					"dark"  : "#57B057"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons"     : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				}
+			}
+		},
+		{
+			"description": "About",
+			"descriptionLocale": {
+				"ru": "Справка",
+				"fr": "À propos",
+				"es": "Sobre programa",
+				"de": "Über"
+			},
+			"url": "index_about.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "slide", "cell" ],
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
+			"isViewer": false,
+			"EditorsSupport": [ "word", "slide", "cell" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
 
-            "initDataType": "none",
-            "initData": "",
+			"initDataType": "none",
+			"initData": "",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Ok",
-                    "primary": true
-                }
-            ],
+			"buttons": [
+				{
+					"text": "Ok",
+					"primary": true
+				}
+			],
 
-            "size": [ 392, 147 ],
-            "store": {
-                "background": {
-                    "light" : "#57B057",
-                    "dark" : "#57B057"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                }
-            }
-        }
-    ]
+			"size": [ 392, 147 ]
+		}
+	]
 }
