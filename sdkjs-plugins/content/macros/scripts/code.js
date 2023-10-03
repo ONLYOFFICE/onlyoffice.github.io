@@ -241,15 +241,25 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	{
 		if ( (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's')
 		{
-		  event.preventDefault();
-		  if (!isShowRename)
+			event.preventDefault();
+			event.stopPropagation();
+			if (!isShowRename)
 			{
 				window.Asc.plugin.executeMethod("SetMacros", [JSON.stringify(Content)], function() {
 					// console.log('saved');
 				});
 			}
 		}
-	  }, false);
+	}, false);
+
+	document.addEventListener("keyup", function(event)
+	{
+		if ( (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's')
+		{
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}, false);
 
 	Ps = new PerfectScrollbar("#menu", {});
     updateScrollMenu();
