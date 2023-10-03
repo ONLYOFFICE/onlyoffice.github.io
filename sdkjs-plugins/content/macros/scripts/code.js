@@ -237,6 +237,20 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         unShowRename(false);
     };
 
+	document.addEventListener("keydown", function(event)
+	{
+		if ( (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's')
+		{
+		  event.preventDefault();
+		  if (!isShowRename)
+			{
+				window.Asc.plugin.executeMethod("SetMacros", [JSON.stringify(Content)], function() {
+					// console.log('saved');
+				});
+			}
+		}
+	  }, false);
+
 	Ps = new PerfectScrollbar("#menu", {});
     updateScrollMenu();
 
@@ -323,17 +337,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
                     break;
             }
         }
-		if ( (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's')
-		{
-			e.preventDefault();
-			e.stopPropagation();
-			if (!isShowRename)
-			{
-				window.Asc.plugin.executeMethod("SetMacros", [JSON.stringify(Content)], function() {
-					// console.log('saved');
-				});
-			}
-		}
     }
 
     window.Asc.plugin.init = function(text)
