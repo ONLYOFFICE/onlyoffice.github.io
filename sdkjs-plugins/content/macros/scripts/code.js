@@ -414,8 +414,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
                 window.CustomContextMenu.init();
                 if (Content.current === -1)
                 {
-                    var event = new CustomEvent("click");
-                    document.getElementById("button_new").dispatchEvent(event);
+                    document.getElementById("button_new").onclick();
                 }
             });
         });
