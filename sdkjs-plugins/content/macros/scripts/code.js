@@ -133,7 +133,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         
         onItemClick(Content.current, true);
         updateScrollMenu();
-		updateScrollMenu();
+		setTimeout(updateScrollMenu, 0);
     }
 
     function onItemClick(index, isAttack)
