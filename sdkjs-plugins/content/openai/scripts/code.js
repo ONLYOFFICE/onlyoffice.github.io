@@ -67,7 +67,7 @@
 							text : generateText('Explain text in comment')
 						});
 					}
-					
+
 					break;
 				}
 				case 'Selection':
@@ -108,13 +108,48 @@
 								items : [
 									{
 										id : 'onTranslate',
-										text : generateText('Translate to French'),
+										text : ( generateText('Translate') + ' ' + generateText('to English') ),
+										data : 'English'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to French') ),
 										data : 'French'
 									},
 									{
 										id : 'onTranslate',
-										text : generateText('Translate to German'),
+										text : ( generateText('Translate') + ' ' + generateText('to German') ),
 										data : 'German'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to Chinise') ),
+										data : 'Chinise'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to Japanese') ),
+										data : 'Japanese'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to Japanese') ),
+										data : 'Japanese'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to Korean') ),
+										data : 'Korean'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to Spanish') ),
+										data : 'Spanish'
+									},
+									{
+										id : 'onTranslate',
+										text : ( generateText('Translate') + ' ' + generateText('to Italian') ),
+										data : 'Italian'
 									}
 								]
 							},
@@ -150,7 +185,7 @@
 							id : 'onImgVar',
 							text : generateText('Generate image variation')
 						});
-	
+
 						break;
 					}
 				case 'Hyperlink':
@@ -179,7 +214,7 @@
 				}
 			);
 		}
-		
+
 		settings.items[0].items.push({
 				id : 'onSettings',
 				text : generateText('Settings'),
@@ -231,7 +266,7 @@
 			EditorsSupport : ["word", "slide", "cell"],
 			size : [ 592, 100 ]
 		};
-		
+
 		if (!settingsWindow) {
 			settingsWindow = new window.Asc.PluginWindow();
 			settingsWindow.attachEvent("onWindowMessage", function(message) {
@@ -256,7 +291,7 @@
 			EditorsSupport : ["word", "slide", "cell"],
 			size : [ 400, 400 ]
 		};
-		
+
 		if (!customReqWindow) {
 			customReqWindow = new window.Asc.PluginWindow();
 			customReqWindow.attachEvent("onWindowMessage", function(message) {
@@ -270,18 +305,18 @@
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
-		
+
 		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
 		let variation = {
 			url : location.href.replace(file, 'chat.html'),
 			description : window.Asc.plugin.tr('ChatGPT'),
 			isVisual : true,
 			buttons : [],
-			isModal : true,
+			isModal : false,
 			EditorsSupport : ["word", "slide", "cell"],
 			size : [ 400, 400 ]
 		};
-		
+
 		if (!chatWindow) {
 			chatWindow = new window.Asc.PluginWindow();
 			chatWindow.attachEvent("onWindowMessage", function(message){
@@ -295,7 +330,7 @@
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
-		
+
 		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
 		let variation = {
 			url : location.href.replace(file, 'hyperlink.html'),
@@ -306,7 +341,7 @@
 			EditorsSupport : ["word"],
 			size : [ 1000, 1000 ]
 		};
-		
+
 		if (!linkWindow) {
 			linkWindow = new window.Asc.PluginWindow();
 			linkWindow.attachEvent("onWindowMessage", function(message){
@@ -424,7 +459,7 @@
 				settings.prompt = `What does it mean '${text}' ?`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
-			
+
 			case 4:
 				settings.prompt = `Give a link to the explanation of the word '${text}'`;
 				url = 'https://api.openai.com/v1/completions';
@@ -449,7 +484,7 @@
 				settings.response_format = 'b64_json';
 				url = 'https://api.openai.com/v1/images/generations';
 				break;
-			
+
 			case 8:
 				settings.prompt = `What does it mean '${text}' ?`;
 				url = 'https://api.openai.com/v1/completions';
@@ -459,6 +494,7 @@
 				settings.prompt = `Give synonyms for the word '${text}' as javascript array`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
+
 			case 10:
 				imageToBlob(text).then(function(obj) {
 					url = 'https://api.openai.com/v1/images/variations';
@@ -527,7 +563,7 @@
 					}
 				}, false);
 				break;
-			
+
 			case 2:
 				Asc.scope.data = data.choices[0].text.split('\n\n');
 				window.Asc.plugin.callCommand(function() {
@@ -672,7 +708,7 @@
 					window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
 				}
 				break;
-		}		
+		}
 	};
 
 	window.Asc.plugin.button = function(id, windowId) {
@@ -737,7 +773,7 @@
 				localStorage.setItem('OpenAIApiKey', message.key);
 				window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
 				break;
-		
+
 			case 'onExecuteMethod':
 				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
 					window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
