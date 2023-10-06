@@ -108,47 +108,47 @@
 								items : [
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to English') ),
+										text : generateText('Translate to English'),
 										data : 'English'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to French') ),
+										text : generateText('Translate to French'),
 										data : 'French'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to German') ),
+										text : generateText('Translate to German'),
 										data : 'German'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to Chinise') ),
+										text : generateText('Translate to Chinese'),
 										data : 'Chinise'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to Japanese') ),
+										text : generateText('Translate to Japanese'),
 										data : 'Japanese'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to Japanese') ),
+										text : generateText('Translate to Japanese'),
 										data : 'Japanese'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to Korean') ),
+										text : generateText('Translate to Korean'),
 										data : 'Korean'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to Spanish') ),
+										text : generateText('Translate to Spanish'),
 										data : 'Spanish'
 									},
 									{
 										id : 'onTranslate',
-										text : ( generateText('Translate') + ' ' + generateText('to Italian') ),
+										text : generateText('Translate to Italian'),
 										data : 'Italian'
 									}
 								]
@@ -244,7 +244,11 @@
 	});
 
 	function generateText(text) {
-		return window.Asc.plugin.tr(text) || text;
+		let lang = window.Asc.plugin.info.lang.substring(0,2);
+		return {
+			en: text,
+			[lang]: window.Asc.plugin.tr(text)
+		}
 	};
 
 	window.Asc.plugin.attachContextMenuClickEvent('onSettings', function() {
