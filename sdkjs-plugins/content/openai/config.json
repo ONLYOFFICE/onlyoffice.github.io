@@ -7,8 +7,8 @@
 		"de": "ChatGPT"
 	},
 	"guid": "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
-	"version"    : "1.1.0",
-	"minVersion" : "7.4.0",
+	"version"    : "1.1.1",
+	"minVersion" : "7.5.0",
 
 	"variations" : [
 		{
@@ -25,7 +25,7 @@
 			"icons2": [
 				{
 					"style" : "light",
-					
+
 					"100%": {
 						"normal": "resources/light/icon.png"
 					},
@@ -44,7 +44,7 @@
 				},
 				{
 					"style" : "dark",
-					
+
 					"100%": {
 						"normal": "resources/dark/icon.png"
 					},
@@ -67,7 +67,7 @@
 			"isVisual"            : false,
 			"isModal"             : false,
 			"isInsideMode"        : false,
-			"isSystem"            : true,
+			"type"                : "background",
 			"initDataType"        : "none",
 			"isUpdateOleOnResize" : false,
 			"events": ["onContextMenuShow", "onContextMenuClick"],
