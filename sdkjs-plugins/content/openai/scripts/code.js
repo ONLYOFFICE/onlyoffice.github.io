@@ -244,11 +244,7 @@
 	});
 
 	function generateText(text) {
-		let lang = window.Asc.plugin.info.lang.substring(0,2);
-		return {
-			en: text,
-			[lang]: window.Asc.plugin.tr(text)
-		}
+		return window.Asc.plugin.tr(text) || text;
 	};
 
 	window.Asc.plugin.attachContextMenuClickEvent('onSettings', function() {
