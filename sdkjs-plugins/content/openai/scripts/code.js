@@ -147,8 +147,8 @@
 									},
 									{
 										id : 'onTranslate',
-										text : generateText('Translate to Japanese'),
-										data : 'Japanese'
+										text : generateText('Translate to Russian'),
+										data : 'Russian'
 									},
 									{
 										id : 'onTranslate',
