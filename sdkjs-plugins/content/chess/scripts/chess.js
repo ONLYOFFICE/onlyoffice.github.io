@@ -369,7 +369,13 @@
                 }
             }
 
-            return { image: canvas.toDataURL("image/png"), data: this.fen };
+			var result = '';
+			try {
+				result = { image: canvas.toDataURL("image/png"), data: this.fen };
+			} catch (error) {
+				result = '';
+			}
+			return result;
         },
 
 		getData: function()
