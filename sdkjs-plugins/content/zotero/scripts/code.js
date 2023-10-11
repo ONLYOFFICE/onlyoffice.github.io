@@ -730,7 +730,8 @@
         var page = document.createElement("div");
         page.classList.add("page" + holder.children.length);
         if (res && res.items.items.length > 0) {
-            for (var item of res.items.items) {
+			for (let index = 0; index < res.items.items.length; index++) {
+				let item = res.items.items[index];
 				item[ (isGroup ? "groupID" : "userID") ] = res.id;
 				var pos = item.id.indexOf("/") + 1;
 				if (pos)
