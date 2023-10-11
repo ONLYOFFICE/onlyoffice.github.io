@@ -28,7 +28,7 @@
 	
 
 	window.Asc.plugin.init = function() {
-		document.getElementsByTagName('body')[0].innerHTML = "<div class='div_message'><p id='message' style='text-align:center; font-size:20pt;'>" + message + "<\/p><\/div>"
+		document.getElementsByTagName('body')[0].innerHTML = "<div class='div_message'><p id='message' style='text-align:center; font-size:12pt;'>" + message + "<\/p><\/div>"
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
