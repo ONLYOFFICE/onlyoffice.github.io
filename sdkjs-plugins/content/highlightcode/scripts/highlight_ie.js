@@ -28,7 +28,7 @@
 	
 
 	window.Asc.plugin.init = function() {
-		document.getElementById('div_settings').classList.add('hidden');
+		document.getElementById('div_settings').style.display = "none";
 		let div = document.createElement("div");
 		div.classList.add('div_message')
 		div.innerHTML = "<p id='message' style='text-align:center; font-size:20pt;'>" + message + "<\/p>";
