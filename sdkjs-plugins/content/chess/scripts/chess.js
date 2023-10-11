@@ -371,11 +371,11 @@
 
 			var result = '';
 			try {
-				result = { image: canvas.toDataURL("image/png"), data: this.fen };
+				result = canvas.toDataURL("image/png");
 			} catch (error) {
 				result = '';
 			}
-			return result;
+			return { image: result, data: this.fen };
         },
 
 		getData: function()
