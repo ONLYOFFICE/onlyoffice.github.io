@@ -279,7 +279,8 @@ window.addEventListener('message', function(message) {
 					if (searchVal !== '') {
 						makeSearch(searchVal.toLowerCase());
 					} else {
-						$('#' + message.guid).remove();
+						let pluginDiv = this.document.getElementById(message.guid)
+						$(pluginDiv).remove();
 						Ps.update();
 					}
 				} else {
