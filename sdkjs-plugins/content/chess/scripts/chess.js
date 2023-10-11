@@ -371,7 +371,7 @@
 
 			var result = '';
 			try {
-				result = canvas.toDataURL("image/png");
+				result = canvas.toDataURL();
 			} catch (error) {
 				result = '';
 			}
