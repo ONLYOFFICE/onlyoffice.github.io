@@ -21,6 +21,10 @@
 
 	window.Asc.plugin.init = function(text)
 	{
+		if(/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+			document.getElementsByTagName('body')[0].innerHTML = "<p id='message' style='text-align:center; font-size:20pt;'>This plugin is not supported by IE<\/p>";
+			return;
+		}
 		isInit = true;
 		var str = text
 		var REGEX_CHINESE = /[\u3131-\uD79D]|[\u3000-\u303f]|[\u3040-\u309f]|[\u30a0-\u30ff]|[\uff00-\uff9f]|[\u4e00-\u9faf]|[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
@@ -84,6 +88,11 @@
 		var spanL = document.getElementById("spanL");
 		if (spanL)
 			spanL.innerHTML = window.Asc.plugin.tr("Paragraphs");
+
+		var elem = document.getElementById("message");
+		if (elem){
+			elem.innerHTML = window.Asc.plugin.tr("This plugin is not supported by IE");
+		}
 	};
 
 })(window, undefined);
