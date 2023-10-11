@@ -279,7 +279,7 @@ window.addEventListener('message', function(message) {
 					if (searchVal !== '') {
 						makeSearch(searchVal.toLowerCase());
 					} else {
-						this.document.getElementById(message.guid).remove();
+						$('#' + message.guid).remove();
 						Ps.update();
 					}
 				} else {
@@ -1173,7 +1173,7 @@ function createError(err, bDontShow) {
 	divErr.classList.remove('hidden');
 	setTimeout(function() {
 		// remove error after 5 seconds
-		background.remove();
+		$(background).remove();
 		divErr.classList.add('hidden');
 	}, 5000);
 };
