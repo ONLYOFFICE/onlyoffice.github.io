@@ -214,7 +214,7 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 		var style = document.getElementsByTagName('head')[0].lastChild;
 		if (ifr && ifr.contentWindow)
-			setTimeout(()=>ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*'),600);
+			setTimeout( function() { ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*' ) } ,600 );
 	};
 
 })(window, undefined);
