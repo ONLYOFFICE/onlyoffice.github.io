@@ -920,7 +920,7 @@
 						field["Content"] = elements.tempDiv.innerText;
 						if (bSyncronize) {
 							// if we make synchronization we must update value too
-							field['Value'] = citPrefix + JSON.stringify( { citationItems } );
+							field['Value'] = citPrefix + JSON.stringify( { citationItems: citationItems } );
 						}
 						updatedFields.push(field);
 					} else if (field.Value.includes(bibPrefix)) {
