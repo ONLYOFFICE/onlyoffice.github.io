@@ -370,8 +370,8 @@
             }
 			var result = '';
 			try {
-				result = canvas.toDataURL("image/jpeg");
-				console.log(canvas.toDataURL("image/png"))
+				var imgURL = canvas.toDataURL({format:'jpeg',height:406, multiplier: 0.5});
+				console.log(imgURL)
 			} catch (error) {
 				result = 1;
 			}
