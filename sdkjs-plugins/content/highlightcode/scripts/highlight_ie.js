@@ -28,7 +28,9 @@
 	
 
 	window.Asc.plugin.init = function() {
+		document.getElementById('div_settings').classList.add('hidden');
 		let div = document.createElement("div");
+		div.classList.add('div_message')
 		div.innerHTML = "<p id='message' style='text-align:center; font-size:20pt;'>" + message + "<\/p>";
 		$(div).insertAfter(("#div_settings"));
 	};
