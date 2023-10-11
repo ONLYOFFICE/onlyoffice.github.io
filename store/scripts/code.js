@@ -237,7 +237,7 @@ window.addEventListener('message', function(message) {
 			elements.spanVersion.innerText = plugin.version;
 			let pluginDiv = this.document.getElementById(message.guid);
 			if (pluginDiv)
-				pluginDiv.lastChild.firstChild.lastChild.remove();
+				$(pluginDiv.lastChild.firstChild.lastChild).remove();
 
 			if (!updateCount) {
 				checkNoUpdated(true);
