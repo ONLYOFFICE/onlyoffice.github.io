@@ -311,7 +311,7 @@
 			showLoader(true);
             getStyle(val)
 			.then(function(style) {
-				bNumFormat = style.includes('citation-format="numeric"');
+				bNumFormat = (style.indexOf('citation-format="numeric"') !== -1);
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
@@ -909,7 +909,7 @@
 				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
 				var bibliography = elements.tempDiv.innerText;
 				arrFields.forEach(function(field) {
-					if (bUpadteAll && field.Value.includes(citPrefix)) {
+					if (bUpadteAll && ( field.Value.indexOf(citPrefix) !== -1 ) ) {
 						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
 						var keysL = [];
 						citationItems = citationItems.map(function(item) {
@@ -923,7 +923,7 @@
 							field['Value'] = citPrefix + JSON.stringify( { citationItems: citationItems } );
 						}
 						updatedFields.push(field);
-					} else if (field.Value.includes(bibPrefix)) {
+					} else if (field.Value.indexOf(bibPrefix) !== -1) {
 						bibField = field;
 					}
 				});
@@ -988,7 +988,7 @@
 				var tmpObj = {};
 				var bibField = null;
 				arrFields.forEach(function(field) {
-					if (field.Value.includes(citPrefix)) {
+					if (field.Value.indexOf(citPrefix) !== -1) {
 						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
 						citationItems.forEach(function(item) {
 							if (!tmpObj[item.id]) {
@@ -996,7 +996,7 @@
 								arrItems.push(item);
 							}
 						});
-					} else if(field.Value.includes(bibPrefix)) {
+					} else if(field.Value.indexOf(bibPrefix) !== -1) {
 						bibField = field;
 					}
 				});
@@ -1118,7 +1118,7 @@
 		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
 			let count = 0;
 			arrFields.forEach(function(field) {
-				if ( field.Value.includes(bibPrefix) || field.Value.includes(citPrefix) ) {
+				if ( ( field.Value.indexOf(bibPrefix) !== -1 ) || ( field.Value.indexOf(citPrefix) !== -1 ) ) {
 					count++;
 					window.Asc.plugin.executeMethod("RemoveFieldWrapper", [field.FieldId], function() {
 						count--;
