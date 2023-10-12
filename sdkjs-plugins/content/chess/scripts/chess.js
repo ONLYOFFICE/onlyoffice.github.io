@@ -368,8 +368,15 @@
                         ctx.drawImage(this.images[this.images_type[_type]], x, y, _size_square, _size_square);
                 }
             }
+			var result = '';
+			try {
+				var imgURL = canvas.toDataURL({format:'jpeg',height:406, multiplier: 0.5});
+				console.log(imgURL)
+			} catch (error) {
+				result = 1;
+			}
 
-            return { image: canvas.toDataURL("image/png"), data: this.fen };
+            return { image: result, data: this.fen };
         },
 
 		getData: function()
