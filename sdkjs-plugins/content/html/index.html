@@ -21,8 +21,12 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="vendor/prettier/standalone@2.3.2.js"></script>
-	<script src="vendor/prettier/parser-html@2.3.2.js"></script>
+	<script type="text/javascript">
+		if (!/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+			document.write("<script type='text\/javascript' src='vendor\/prettier\/standalone@2.3.2.js'><\/script>");
+			document.write("<script type='text\/javascript' src='vendor\/prettier\/parser-html@2.3.2.js'><\/script>");
+		}
+	</script>
 	<script src="vendor/codemirror/codemirror.js"></script>
 	<script src="vendor/codemirror/xml.js"></script>
 	<link rel="stylesheet" href="vendor/codemirror/codemirror.css">
