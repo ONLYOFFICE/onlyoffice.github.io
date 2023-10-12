@@ -251,7 +251,7 @@ window.addEventListener('message', function(message) {
 			elements.spanVersion.innerText = plugin.version;
 			let pluginDiv = this.document.getElementById(message.guid);
 			if (pluginDiv)
-				pluginDiv.lastChild.firstChild.lastChild.remove();
+				$(pluginDiv.lastChild.firstChild.lastChild).remove();
 
 			if (!updateCount) {
 				checkNoUpdated(true);
@@ -293,7 +293,8 @@ window.addEventListener('message', function(message) {
 					if (searchVal !== '') {
 						makeSearch(searchVal.toLowerCase());
 					} else {
-						this.document.getElementById(message.guid).remove();
+						let pluginDiv = this.document.getElementById(message.guid)
+						$(pluginDiv).remove();
 						Ps.update();
 					}
 				} else {
@@ -1187,7 +1188,7 @@ function createError(err, bDontShow) {
 	divErr.classList.remove('hidden');
 	setTimeout(function() {
 		// remove error after 5 seconds
-		background.remove();
+		$(background).remove();
 		divErr.classList.add('hidden');
 	}, 5000);
 };

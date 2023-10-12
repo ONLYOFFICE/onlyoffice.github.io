@@ -3,5 +3,6 @@
 	"Characters" : "Caracteres",
 	"Words" : "Palabras",
 	"Paragraphs" : "Párrafos",
-	"Select part of the text or the whole text to count words and characters." : "Seleccione parte del texto o todo el texto para contar palabras y caracteres."
+	"Select part of the text or the whole text to count words and characters." : "Seleccione parte del texto o todo el texto para contar palabras y caracteres.",
+	"This plugin is not supported by IE": "Este complemento no es compatible con IE"
 }

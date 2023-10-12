@@ -3,5 +3,6 @@
 	"Characters" : "Символов",
 	"Words" : "Слов",
 	"Paragraphs" : "Параграфов",
-	"Select part of the text or the whole text to count words and characters." : "Выберите часть текста или весь текст, чтобы подсчитать слова и символы."
+	"Select part of the text or the whole text to count words and characters." : "Выберите часть текста или весь текст, чтобы подсчитать слова и символы.",
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
 }
