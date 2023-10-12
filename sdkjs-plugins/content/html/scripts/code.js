@@ -24,7 +24,9 @@
 		if (window.Asc.plugin.info.isViewMode)
 			document.getElementById("btn_paste").classList.add('hidden');
 
-		var settings = {
+		var settings = isIE
+		? {}
+		: {
 			embeddedLanguageFormatting: "off",
 			htmlWhitespaceSensitivity: "ignore",
 			insertPragma: false,
@@ -115,9 +117,9 @@
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
 		if (theme.type.indexOf("dark") !== -1)
-			setTimeout(function(){editor.setOption("theme", "bespin")});
+			setTimeout(function(){editor && editor.setOption("theme", "bespin")});
 		else
-			setTimeout(function(){editor.setOption("theme", "default")});
+			setTimeout(function(){editor && editor.setOption("theme", "default")});
 	};
 
 })(window, undefined);
