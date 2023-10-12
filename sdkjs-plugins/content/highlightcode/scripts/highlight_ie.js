@@ -61,7 +61,7 @@
 
 	window.Asc.plugin.onTranslate = function(){
 		var elem = document.getElementById("message");
-		if (elem){
+		if (elem) {
 			elem.innerHTML = message = window.Asc.plugin.tr(message);
 		}
 	};

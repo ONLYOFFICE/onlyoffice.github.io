@@ -42,7 +42,7 @@
 	
 
 	window.Asc.plugin.init = function() {
-		document.getElementsByTagName('body')[0].innerHTML = "<div class='div_message'><p id='message' style='text-align:center; font-size:12pt;'>" + message + "<\/p><\/div>"
+		document.getElementsByTagName('body')[0].innerHTML = "<div class='div_message'><p id='message' style='text-align:center; font-size:12pt;'>" + message + "<\/p><\/div>";
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
@@ -57,7 +57,7 @@
 
 	window.Asc.plugin.onTranslate = function(){
 		var elem = document.getElementById("message");
-		if (elem){
+		if (elem) {
 			elem.innerHTML = message = window.Asc.plugin.tr(message);
 		}
 	};
