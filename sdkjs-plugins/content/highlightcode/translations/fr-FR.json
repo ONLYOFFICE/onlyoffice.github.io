@@ -10,5 +10,6 @@
 	"Background": "Arrière-plan",
 	"Font settings": "Paramètres de police",
 	"Format": "Format",
-	"Available only for the following languages": "Disponible uniquement pour les langues suivantes"
+	"Available only for the following languages": "Disponible uniquement pour les langues suivantes",
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
 }

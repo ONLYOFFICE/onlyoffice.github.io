@@ -23,6 +23,28 @@
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+
+		<script type="text/javascript">
+			if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+				document.write("<script type='text\/javascript' src='scripts\/highlight_ie.js'><\/script>");
+			} else {
+				document.write("<script type='text\/javascript' src='vendor\/highlight\/highlight.min.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/js-beautify-1.14.0\/beautify-css.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/js-beautify-1.14.0\/beautify-html.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/js-beautify-1.14.0\/beautify.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/standalone@2.3.2.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/parser-babel@2.3.2.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/parser-html@2.3.2.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/parser-markdown@2.3.2.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/parser-postcss@2.3.2.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/parser-typescript@2.3.2.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/prettier\/plugin-php\/plugin-php.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/xml-formatter\/xml-formatter.js'><\/script>");
+				document.write("<script type='text\/javascript' src='scripts\/highlight.js'><\/script>");
+				document.write("<script type='text\/javascript' src='vendor\/spectrum\/spectrum.js'><\/script>");
+
+			}
+		</script>
 		
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link id = "style" rel="stylesheet" href="vendor/highlight/styles/googlecode.css">
@@ -30,25 +52,7 @@
 		<link rel="stylesheet" href="resources/css/plugin_style.css">
 		<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
 
-		<script src="vendor/highlight/highlight.min.js"></script>
-		
-		<script src="vendor/js-beautify-1.14.0/beautify-css.js"></script>
-		<script src="vendor/js-beautify-1.14.0/beautify-html.js"></script>
-		<script src="vendor/js-beautify-1.14.0/beautify.js"></script>
-
-		<script src="vendor/prettier/standalone@2.3.2.js"></script>
-		<script src="vendor/prettier/parser-babel@2.3.2.js"></script>
-		<script src="vendor/prettier/parser-html@2.3.2.js"></script>
-		<script src="vendor/prettier/parser-markdown@2.3.2.js"></script>
-		<script src="vendor/prettier/parser-postcss@2.3.2.js"></script>
-		<script src="vendor/prettier/parser-typescript@2.3.2.js"></script>
-		<script src="vendor/prettier/plugin-php/plugin-php.js"></script>
-
-		<script src="vendor/xml-formatter/xml-formatter.js"></script>
-
-		<script src="scripts/code.js"></script>
 		<script src="scripts/scrollable_div.js"></script>
-		<script type="text/javascript" src="vendor/spectrum/spectrum.js"></script>
 	</head>
 	<body spellcheck="false">
 		<div id="div_settings" class="settings noselect">
