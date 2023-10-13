@@ -61,7 +61,7 @@
 
 	function showFrame() {
 		let frame = document.getElementById("iframe");
-		frame.src = "https://evgeny-nadymov.github.io/telegram-react/";
+		// frame.src = "https://evgeny-nadymov.github.io/telegram-react/";
 		frame.style.display = "block";
 	}
 
