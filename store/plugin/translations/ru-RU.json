@@ -4,7 +4,7 @@
 	"Warning" : "Предупреждение",
 	"Yes" : "Да",
 	"No" : "Нет",
-	"Do you want to completely remove this plugin?" : "Вы хотите полность удалить этот плагин?",
+	"Do you want to completely remove this plugin?" : "Вы хотите полностью удалить этот плагин?",
 	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Если вы выберете \"Нет\", вы сможете восстановить этот плагин позже в Менеджере плагинов.",
 	"Checking internet connection..." : "Проверка интернет соединения..."
 }
