@@ -41,13 +41,14 @@
 	function createMessage(message) {
 		document.getElementById("iframe").style.display = "none";
 		let divMessage = document.getElementById("div_message");
+		divMessage.style.display = "flex";
 		divMessage.innerHTML = "<p id='message' style='text-align:center; font-size:12pt;'>" + message + "<\/p>";
 		divMessage.style.display = "block";
 	};
 
 	function showFrame() {
 		let frame = document.getElementById("iframe");
-		// frame.src = "https://evgeny-nadymov.github.io/telegram-react/";
+		frame.src = "https://evgeny-nadymov.github.io/telegram-react/";
 		frame.style.display = "block";
 	}
 
