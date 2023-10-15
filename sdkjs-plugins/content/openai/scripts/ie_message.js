@@ -37,6 +37,7 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
+		console.log('onTranslate')
 		var elem = document.getElementById("message");
 		if (elem) {
 			elem.innerHTML = window.Asc.plugin.tr(elem.innerHTML);
