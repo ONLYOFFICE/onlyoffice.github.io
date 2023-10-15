@@ -26,7 +26,22 @@
 		return false;
 	};
 
-	window.Asc.plugin.init = function() {
+	window.Asc.plugin.init = function() {};
+
+	window.Asc.plugin.onThemeChanged = function(theme)
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
+	};
+
+	window.Asc.plugin.button = function(id, windowId) {
+		if (windowId) {
+			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
+				window.Asc.plugin.executeCommand("close", "");
+			})
+		}
+	};
+
+	window.Asc.plugin.onTranslate = function() {
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
@@ -46,26 +61,6 @@
 			messageWindow = new window.Asc.PluginWindow();
 		}
 		messageWindow.show(variation);
-	};
-
-	window.Asc.plugin.onThemeChanged = function(theme)
-	{
-		window.Asc.plugin.onThemeChangedBase(theme);
-	};
-
-	window.Asc.plugin.button = function(id, windowId) {
-		if (windowId) {
-			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
-				window.Asc.plugin.executeCommand("close", "");
-			})
-		}
-	};
-
-	window.Asc.plugin.onTranslate = function() {
-		var elem = document.getElementById("message");
-		if (elem) {
-			elem.innerHTML = window.Asc.plugin.tr(elem.innerHTML);
-		}
 	};
 	
 })(window, undefined);
