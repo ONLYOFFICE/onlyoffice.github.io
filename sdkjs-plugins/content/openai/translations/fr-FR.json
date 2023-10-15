@@ -58,5 +58,7 @@
 	"Error:" : "Erreur:",
 	"Generate image variation" : "Générer une variation d'image",
 	"Thesaurus" : "Thésaurus",
-	"Show hyperlink content" : "Afficher le contenu du lien hypertexte"
+	"Show hyperlink content" : "Afficher le contenu du lien hypertexte",
+	"Warning" : "Avertissement",
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
 }

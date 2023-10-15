@@ -58,5 +58,7 @@
 	"Error:" : "Chyba:",
 	"Generate image variation" : "Generování variace obrazu",
 	"Thesaurus" : "Tezaurus",
-	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки"
+	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки",
+	"Warning" : "Varování",
+	"This plugin is not supported by IE": "Tento plugin není podporován IE"
 }
