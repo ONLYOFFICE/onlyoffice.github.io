@@ -350,7 +350,7 @@
 			});
 		}
 		linkWindow.show(variation);
-		setTimeout(()=> {
+		setTimeout(function() {
 			linkWindow.command('onTest', link);
 		},500)
 	});
