@@ -245,10 +245,11 @@
 
 	function generateText(text) {
 		let lang = window.Asc.plugin.info.lang.substring(0,2);
-		return {
-			en: text,
-			[lang]: window.Asc.plugin.tr(text)
-		}
+		let result = { "en": text	};
+		if (lang !== "en")
+			result[lang] = window.Asc.plugin.tr(text);
+
+		return result;
 	};
 
 	window.Asc.plugin.attachContextMenuClickEvent('onSettings', function() {
