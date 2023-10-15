@@ -447,22 +447,22 @@
 
 		switch (type) {
 			case 1:
-				settings.prompt	= `Summarize this text: '${text}'`;
+				settings.prompt	= 'Summarize this text: "' + text + '"';
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 2:
-				settings.prompt = `Get Key words from this text: '${text}'`;
+				settings.prompt = 'Get Key words from this text: "' + text + '"';
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 3:
-				settings.prompt = `What does it mean '${text}' ?`;
+				settings.prompt = 'What does it mean "' + text + '" ?';
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 4:
-				settings.prompt = `Give a link to the explanation of the word '${text}'`;
+				settings.prompt = 'Give a link to the explanation of the word "' + text + '"';
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
@@ -479,7 +479,7 @@
 			case 7:
 				delete settings.model;
 				delete settings.max_tokens;
-				settings.prompt = `Generate image: '${text}'`;
+				settings.prompt = 'Generate image: "' + text + '"';
 				settings.n = 1;
 				settings.size = imgsize.width + 'x' + imgsize.height;
 				settings.response_format = 'b64_json';
@@ -487,12 +487,12 @@
 				break;
 
 			case 8:
-				settings.prompt = `What does it mean '${text}' ?`;
+				settings.prompt = 'What does it mean "' + text + '" ?';
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 9:
-				settings.prompt = `Give synonyms for the word '${text}' as javascript array`;
+				settings.prompt = 'Give synonyms for the word  "' + text + '" as javascript array';
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
@@ -628,7 +628,7 @@
 			case 7:
 				let url = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (url) {
-					Asc.scope.url = /^data\:image\/png\;base64/.test(url) ? url : `data:image/png;base64,${url}`;
+					Asc.scope.url = /^data\:image\/png\;base64/.test(url) ? url : 'data:image/png;base64,' + url + '';
 					Asc.scope.imgsize = imgsize;
 					imgsize = null;
 					window.Asc.plugin.callCommand(function() {
@@ -699,7 +699,7 @@
 			case 10:
 				img = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (img) {
-					let sImageSrc = /^data\:image\/png\;base64/.test(img) ? img : `data:image/png;base64,${img}`;
+					let sImageSrc = /^data\:image\/png\;base64/.test(img) ? img : 'data:image/png;base64,' + img + '';
 					let oImageData = {
 						"src": sImageSrc,
 						"width": imgsize.width,
@@ -757,7 +757,7 @@
 			width = height = 512;
 		else width = height = 256;
 
-		return {width: width, height: height, str: `${width}x${height}`}
+		return {width: width, height: height, str: width + 'x' + height}
 	};
 
 	function messageHandler(modal, message) {
