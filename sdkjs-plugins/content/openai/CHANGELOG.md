@@ -12,3 +12,18 @@
 
 * Change plugin structure. Now it's non visual plugin and it can work by context menu.
 * Add new model for chat variation.
+
+## 1.1.0
+
+* Commont improvements.
+
+## 1.1.1
+
+* Add new languages for translating and add translations for it.
+* Change plugin type from "system" to "background".
+* Increase minimal editor version to "7.5.0".
+* Change type for chat window (now it's not a modal window).
+
+## 1.1.2
+
+* Enable plugin for IE.

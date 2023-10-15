@@ -12,8 +12,15 @@
 	"Explain text in comment": "Text im Kommentar erklären",
 	"Explain text in hyperlink": "Text im Hyperlink erklären",
 	"Translate": "Übersetzen",
-	"Translate to French": "Ins Französische übersetzen",
-	"Translate to German": "Ins Deutsche übersetzen",
+	"Translate to English" : "Übersetzen Ins Englische übersetzen",
+	"Translate to French" : "Übersetzen Ins Französische übersetzen",
+	"Translate to German" : "Übersetzen Ins Deutsche übersetzen",
+	"Translate to Chinese" : "Übersetzen Ins Chinesische übersetzen",
+	"Translate to Japanese" : "Übersetzen Ins Japanische übersetzen",
+	"Translate to Russian" : "Übersetzen Ins Russische übersetzen",
+	"Translate to Korean" : "Übersetzen Ins Koreanische übersetzen",
+	"Translate to Spanish" : "Übersetzen Ins Spanische übersetzen",
+	"Translate to Italian" : "Übersetzen Ins Italienisch übersetzen",
 	"Generate image from text": "Bild aus Text generieren",
 	"Settings": "Einstellungen",
 	"Maximum 4000 tokens are available." : "Maximal 4000 Token sind verfügbar.",
@@ -51,5 +58,7 @@
 	"Error:" : "Fehlermeldung:",
 	"Generate image variation" : "Bildvariation erzeugen",
 	"Thesaurus" : "Thesaurus",
-	"Show hyperlink content" : "Hyperlink-Inhalt anzeigen"
+	"Show hyperlink content" : "Hyperlink-Inhalt anzeigen",
+	"Warning" : "Warnung",
+	"This plugin is not supported by IE": "Dieses Plugin wird vom IE nicht unterstützt"
 }

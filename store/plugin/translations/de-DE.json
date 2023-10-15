@@ -6,5 +6,8 @@
 	"No" : "Nein",
 	"Do you want to completely remove this plugin?" : "Möchten Sie dieses Plugin vollständig entfernen?",
 	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Wenn Sie \"Nein\" wählen, können Sie dieses Plugin später auf dem Plugin-Verwaltung wiederherstellen.",
-	"Checking internet connection..." : "Internetverbindung prüfen..."
+	"Enter the URL for your marketplace page here" : "Geben Sie hier die URL für Ihre Marktplatz-Seite ein",
+	"Return to default settings" : "Zu den Standardeinstellungen zurückkehren",
+	"Enter URL" : "URL eingeben",
+	"Cancel" : "Stornieren"
 }
