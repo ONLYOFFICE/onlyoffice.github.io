@@ -17,6 +17,7 @@
  */
 (function(window, undefined) {
 	let messageWindow = null;
+	let timeot = null;
 
 	window.oncontextmenu = function(e) {
 		if (e.preventDefault)
@@ -26,7 +27,11 @@
 		return false;
 	};
 
-	window.Asc.plugin.init = function() {};
+	window.Asc.plugin.init = function() {
+		clearTimeout(timeot);
+		timeot = null;
+		setTimeout(createWindow, 500);
+	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
 	{
@@ -42,6 +47,12 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
+		clearTimeout(timeot);
+		timeot = null;
+		setTimeout(createWindow, 500);
+	};
+
+	function createWindow() {
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
@@ -49,7 +60,7 @@
 		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
 		let variation = {
 			url : location.href.replace(file, 'ie_message.html'),
-			description : window.Asc.plugin.tr('Warning'),
+			description : (window.Asc.plugin.tr('Warning') || 'Warning'),
 			isVisual : true,
 			buttons : [],
 			isModal : true,
@@ -61,6 +72,6 @@
 			messageWindow = new window.Asc.PluginWindow();
 		}
 		messageWindow.show(variation);
-	};
+	}
 	
 })(window, undefined);
