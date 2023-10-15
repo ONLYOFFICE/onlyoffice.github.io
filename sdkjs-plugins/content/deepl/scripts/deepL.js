@@ -71,6 +71,9 @@ function getMessage(key) {
 
     window.Asc.plugin.init = function(text)
     {
+		if (window.Asc.plugin.info.isViewMode)
+			document.getElementById("paste").classList.add('hidden');
+
         $('#select_example').select2({
             minimumResultsForSearch: Infinity,
         });

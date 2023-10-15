@@ -160,6 +160,7 @@
 				description : window.Asc.plugin.tr('Preview'),
 				isVisual : true,
 				isModal : true,
+				isViewer : true,
 				EditorsSupport : ["word"],
 				buttons : [],
 				size : [600, 600]

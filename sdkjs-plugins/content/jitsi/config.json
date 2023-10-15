@@ -7,7 +7,7 @@
 		"de": "Jitsi"
 	},
 	"guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
-	"version": "1.0.1",
+	"version": "1.0.2",
 
 	"variations" : [
 		{
@@ -61,7 +61,7 @@
 					}
 				}
 			],
-			"isViewer"            : false,
+			"isViewer"            : true,
 			"EditorsSupport"      : ["word", "cell", "slide"],
 			"isVisual"            : true,
 			"isModal"             : false,
@@ -71,10 +71,13 @@
 
 			"store" : {
 				"background" : {
-					"light" : "#2AA0D8",
-					"dark"  : "#2AA0D8"
+					"light" : "#2179BD",
+					"dark"  : "#2179BD"
 				},
-				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
 				"icons" : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"

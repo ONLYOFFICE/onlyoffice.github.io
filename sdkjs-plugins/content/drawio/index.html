@@ -22,8 +22,14 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="vendor/drawio/diagram-editor.js"></script>
-	<script src="scripts/code.js"></script>
+	<script type="text/javascript">
+		if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+			document.write("<script type='text\/javascript' src='scripts\/drawio_ie.js'><\/script>");
+		} else {
+			document.write("<script type='text\/javascript' src='vendor\/drawio\/diagram-editor.js'><\/script>");
+			document.write("<script type='text\/javascript' src='scripts\/drawio.js'><\/script>");
+		}
+	</script>
 	<style>
 		html, body {
 			width: 100%;
@@ -49,6 +55,13 @@
 			top: 50%;
 			right: 50%;
 			position: absolute;
+		}
+		.div_message {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 	</style>
 </head>

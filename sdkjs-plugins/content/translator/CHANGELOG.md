@@ -15,3 +15,8 @@
 ## 1.0.3
 
 * Fix problem with google services.
+
+## 1.0.4
+
+* Change working for viewer mode.
+* Enable plugin for IE.

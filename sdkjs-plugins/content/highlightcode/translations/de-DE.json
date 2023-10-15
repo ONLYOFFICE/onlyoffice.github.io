@@ -10,5 +10,6 @@
 	"Background": "Hintergrund",
 	"Font settings": "Schrifteinstellungen",
 	"Format": "Formatierung",
-	"Available only for the following languages": "Nur für folgende Sprachen verfügbar"
+	"Available only for the following languages": "Nur für folgende Sprachen verfügbar",
+	"This plugin is not supported by IE": "Dieses Plugin wird vom IE nicht unterstützt"
 }

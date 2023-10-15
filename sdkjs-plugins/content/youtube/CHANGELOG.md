@@ -11,3 +11,7 @@
 ## 1.0.2
 
 * Othet improvements.
+
+## 1.0.3
+
+* Change working for viewer mode.
