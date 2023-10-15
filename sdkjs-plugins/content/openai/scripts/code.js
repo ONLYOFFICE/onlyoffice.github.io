@@ -245,7 +245,7 @@
 
 	function generateText(text) {
 		let lang = window.Asc.plugin.info.lang.substring(0,2);
-		let result = { "en": text	};
+		let result = { en: text	};
 		if (lang !== "en")
 			result[lang] = window.Asc.plugin.tr(text);
 
@@ -743,7 +743,7 @@
 				canvas.height = canvas_size.height;
 				canvas.getContext('2d').drawImage(image, 0, 0, draw_size.width, draw_size.height*image.height/image.width);
 				imgsize = img_size;
-				canvas.toBlob(function(blob) {resolve({blob, size: canvas_size})}, 'image/png');
+				canvas.toBlob(function(blob) {resolve({blob: blob, size: canvas_size})}, 'image/png');
 			};
 			image.src = img.src;
 		});
