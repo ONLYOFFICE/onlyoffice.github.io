@@ -73,7 +73,10 @@
 					"light" : "#E5222E",
 					"dark" : "#E5222E"
 				},
-				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
 				"icons" : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
