@@ -33,7 +33,7 @@
 
 		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
 		let variation = {
-			url : location.href.replace(file, 'ie_messagge.html'),
+			url : location.href.replace(file, 'ie_message.html'),
 			description : window.Asc.plugin.tr('Warning'),
 			isVisual : true,
 			buttons : [],
