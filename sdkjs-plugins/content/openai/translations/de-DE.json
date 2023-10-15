@@ -58,5 +58,7 @@
 	"Error:" : "Fehlermeldung:",
 	"Generate image variation" : "Bildvariation erzeugen",
 	"Thesaurus" : "Thesaurus",
-	"Show hyperlink content" : "Hyperlink-Inhalt anzeigen"
+	"Show hyperlink content" : "Hyperlink-Inhalt anzeigen",
+	"Warning" : "Warnung",
+	"This plugin is not supported by IE": "Dieses Plugin wird vom IE nicht unterstützt"
 }

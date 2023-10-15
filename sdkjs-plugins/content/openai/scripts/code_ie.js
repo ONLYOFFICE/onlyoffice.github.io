@@ -53,8 +53,12 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 	};
 
-	window.Asc.plugin.button = function() {
-		this.executeCommand("close", "");
+	window.Asc.plugin.button = function(id, windowId) {
+		if (windowId) {
+			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
+				window.Asc.plugin.executeCommand("close", "");
+			})
+		}
 	};
 
 	window.Asc.plugin.onTranslate = function() {

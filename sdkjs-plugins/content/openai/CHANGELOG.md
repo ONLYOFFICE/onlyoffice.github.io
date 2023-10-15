@@ -23,3 +23,7 @@
 * Change plugin type from "system" to "background".
 * Increase minimal editor version to "7.5.0".
 * Change type for chat window (now it's not a modal window).
+
+## 1.1.2
+
+* Enable plugin for IE.
