@@ -17,7 +17,8 @@
  */
 (function(window, undefined) {
 	let messageWindow = null;
-	let timeot = null;
+	let bTranslation = false;
+	let bInit = false
 
 	window.oncontextmenu = function(e) {
 		if (e.preventDefault)
@@ -28,9 +29,9 @@
 	};
 
 	window.Asc.plugin.init = function() {
-		clearTimeout(timeot);
-		timeot = null;
-		setTimeout(createWindow, 500);
+		bInit = true;
+		if (bTranslation)
+			createWindow();
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme)
@@ -47,9 +48,8 @@
 	};
 
 	window.Asc.plugin.onTranslate = function() {
-		clearTimeout(timeot);
-		timeot = null;
-		setTimeout(createWindow, 500);
+		bTranslation = true;
+		if (bInit) createWindow();
 	};
 
 	function createWindow() {
