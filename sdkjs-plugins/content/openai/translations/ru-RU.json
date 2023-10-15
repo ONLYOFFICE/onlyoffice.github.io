@@ -58,5 +58,7 @@
 	"Error:" : "Ошибка:",
 	"Generate image variation" : "Генерировать вариацию изображения",
 	"Thesaurus" : "Синонимы",
-	"Show hyperlink content" : "Показать содержимое гиперссылки"
+	"Show hyperlink content" : "Показать содержимое гиперссылки",
+	"Warning" : "Предупреждение",
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
 }
