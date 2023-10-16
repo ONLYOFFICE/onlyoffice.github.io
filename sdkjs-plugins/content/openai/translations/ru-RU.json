@@ -13,7 +13,14 @@
 	"Explain text in hyperlink" : "Ссылка на значение",
 	"Translate" : "Перевести",
 	"Translate to French" : "Перевести на Французский",
+	"Translate to English" : "Перевести на Англйский",
 	"Translate to German" : "Перевести на Немецкий",
+	"Translate to Chinese" : "Перевести на Китайский",
+	"Translate to Japanese" : "Перевести на Японский",
+	"Translate to Russian" : "Перевести на Русский",
+	"Translate to Korean" : "Перевести на Корейский",
+	"Translate to Spanish" : "Перевести на Испанский",
+	"Translate to Italian" : "Перевести на Итальянский",
 	"Generate image from text" : "Создать картинку по тексту",
 	"Settings" : "Настройки",
 	"Maximum 4000 tokens are available." : "Максимум 4000 токенов доступно.",
@@ -51,5 +58,7 @@
 	"Error:" : "Ошибка:",
 	"Generate image variation" : "Генерировать вариацию изображения",
 	"Thesaurus" : "Синонимы",
-	"Show hyperlink content" : "Показать содержимое гиперссылки"
+	"Show hyperlink content" : "Показать содержимое гиперссылки",
+	"Warning" : "Предупреждение",
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
 }

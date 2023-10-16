@@ -154,7 +154,7 @@
 		message.appendChild(loading);
 		chat.appendChild(message);
 		chat.scrollTop = chat.scrollHeight;
-		interval = setInterval(() => {
+		interval = setInterval(function() {
 			let text = loading.innerText;
 			text = text.length > 5 ? '.' : text + '.';
 			loading.innerText = text;

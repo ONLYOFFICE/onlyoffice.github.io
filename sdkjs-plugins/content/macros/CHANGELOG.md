@@ -12,3 +12,7 @@
 ## 1.0.2
 
 * Add ability to show vba macros.
+
+## 1.0.3
+
+* Add combination Ctrl/Cmd + S to save macros.

@@ -82,7 +82,8 @@
 				select.classList.add("select-lang");
 				select.classList.add("goog-te-combo");
 				div.appendChild(btn);
-				div.appendChild(btnReplace);
+				if (!window.Asc.plugin.info.isViewMode)
+					div.appendChild(btnReplace);
 				div.id = "div_btn";
 				div.classList.add("skiptranslate");
 				div.classList.add("div_btn");
@@ -213,7 +214,7 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 		var style = document.getElementsByTagName('head')[0].lastChild;
 		if (ifr && ifr.contentWindow)
-			setTimeout(()=>ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*'),600);
+			setTimeout( function() { ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*' ) } ,600 );
 	};
 
 })(window, undefined);
