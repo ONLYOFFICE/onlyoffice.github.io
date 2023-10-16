@@ -83,7 +83,11 @@
 					"light": "#444444",
 					"dark": "#444444"
 				},
-				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+				],
 				"icons" : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
@@ -110,7 +114,7 @@
 			"url": "settings.html",
 
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
-			"isViewer": false,
+			"isViewer": true,
 			"EditorsSupport": [ "word" ],
 			"isVisual": true,
 			"isModal": true,

@@ -10,5 +10,6 @@
 	"4 spaces": "空白 4 個",
 	"Background": "背景",
 	"Format": "フォーマット",
-	"Available only for the following languages": "次の言語で利用可能"
+	"Available only for the following languages": "次の言語で利用可能",
+	"This plugin is not supported by IE": "このプラグインはIEではサポートされていません"
 }

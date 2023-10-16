@@ -80,6 +80,9 @@ function checkInternetExplorer(){
     };
 
 	window.Asc.plugin.init = function(text)	{
+		if (window.Asc.plugin.info.isViewMode)
+			document.getElementById("replace").classList.add('hidden');
+		
 	    if (!canAddText) {
 	        return;
 	    }

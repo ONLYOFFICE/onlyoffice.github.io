@@ -25,4 +25,5 @@
 * Fix problem with checking internet connection.
 * Fix problem with cloud version.
 * Remove plugin Zoom from plugin manager.
-* Fix problem with.
+* Fix problem in Windows XP.
+* Change content justify for plugins card from center to left side.

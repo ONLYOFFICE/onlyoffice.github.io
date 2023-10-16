@@ -59,7 +59,7 @@
                 }
             }
             ],
-            "isViewer"            : false,
+            "isViewer"            : true,
             "EditorsSupport"      : ["word", "cell", "slide"],
             "isVisual"            : true,
             "isModal"             : true,
@@ -67,7 +67,7 @@
             "isSystem"            : false,
             "initDataType"        : "none",
             "isUpdateOleOnResize" : false,
-            "size"                : [608, 570],
+            "size"                : [608, 600],
             "buttons"             : []
         }
     ]
