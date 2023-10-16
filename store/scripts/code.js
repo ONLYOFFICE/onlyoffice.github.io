@@ -63,6 +63,8 @@ let timeout = null;                                                  // delay fo
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 let slideIndex = 1;                                                  // index for slides
+let PsMain = null;                                                   // scroll for list of plugins
+let PsChanglog = null;                                               // scroll for changlog preview
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -565,7 +567,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				config.baseUrl = pluginUrl;
 				arr[i] = config;
 				
-				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, true).then(
+				makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, false).then(
 					function(response) {
 						let supportedLangs = [ getTranslated('English') ];
 						let arr = JSON.parse(response);
@@ -582,6 +584,13 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 					},
 					function(error) {
 						config.languages = [ getTranslated('English') ];
+					}
+				);
+				makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false).then(
+					function(response) {
+						let settings = getMarkedSetting()
+						let lexed = marked.lexer(response.replace('# Change Log\n\n', ''), settings);
+						config.changelog = marked.parser(lexed, settings);
 					}
 				);
 				if (plugin.discussion) {
@@ -717,18 +726,24 @@ function showListofPlugins(bAll, sortedArr) {
 			if (plugin && plugin.guid)
 				createPluginDiv(plugin, !bAll);
 		});
-		setTimeout(function(){if (Ps) Ps.update(); toogleLoader(false);});
+		setTimeout(function(){if (PsMain) PsMain.update(); toogleLoader(false);});
 	} else {
 		// if no istalled plugins and available plugins button was clicked
 		let notification = Array.isArray(sortedArr) ? 'Nothing was found for this query.' : bAll ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(notification);
 		toogleLoader(false);
 	}
-	if (!Ps) {
-		Ps = new PerfectScrollbar('#div_main', {});
-		Ps.update();
+	// scroll for list of plugins
+	if (!PsMain) {
+		PsMain = new PerfectScrollbar('#div_main', {});
+		PsMain.update();
 	} else {
-		Ps.update();
+		PsMain.update();
+	}
+	// scroll for changelog preview
+	if (!PsChanglog) {
+		PsChanglog = new PerfectScrollbar('#div_selected_changelog', {});
+		PsChanglog.update();
 	}
 };
 
@@ -834,7 +849,7 @@ function createPluginDiv(plugin, bInstalled) {
 					'</div>';
 	div.innerHTML = template;
 	elements.divMain.appendChild(div);
-	if (Ps) Ps.update();
+	if (PsMain) PsMain.update();
 };
 
 function showRating() {
@@ -1068,6 +1083,14 @@ function onClickItem() {
 		elements.divLanguages.classList.add('hidden');
 	}
 
+	if (plugin.changelog) {
+		document.getElementById('span_changelog').classList.remove('hidden');
+		document.getElementById('div_changelog_preview').innerHTML = plugin.changelog;
+	} else {
+		document.getElementById('span_changelog').classList.add('hidden');
+		document.getElementById('div_changelog_preview').innerHTML = '';
+	}
+
 	let pluginUrl = plugin.baseUrl.replace(OOMarketplaceUrl, (OOIO + 'tree/master/') );
 	
 	// TODO problem with plugins icons (different margin from top)
@@ -1131,22 +1154,25 @@ function onClickBack() {
 	elements.divSelected.classList.add('hidden');
 	elements.divSelectedMain.classList.add('hidden');
 	elements.divBody.classList.remove('hidden');
-	if(Ps) Ps.update();
+	if(PsMain) PsMain.update();
 };
 
-function onSelectPreview(target, isOverview) {
+function onSelectPreview(target, type) {
 	// change mode of preview
 	if ( !target.classList.contains('span_selected') ) {
 		$(".span_selected").removeClass("span_selected");
 		target.classList.add("span_selected");
+		$(".div_selected_preview").addClass("hidden");
 
-		if (isOverview) {
-			document.getElementById('div_selected_info').classList.add('hidden');
+		// type: 1 - Overview; 2 - Info; 3 - Changelog;
+		if (type === 1) {
 			document.getElementById('div_selected_preview').classList.remove('hidden');
 			setDivHeight();
-		} else {
-			document.getElementById('div_selected_preview').classList.add('hidden');
+		} else if (type === 2) {
 			document.getElementById('div_selected_info').classList.remove('hidden');
+		} else {
+			document.getElementById('div_selected_changelog').classList.remove('hidden');
+			PsChanglog.update();
 		}
 	}
 };
@@ -1195,7 +1221,7 @@ function createError(err, bDontShow) {
 
 function setDivHeight() {
 	// set height for div with image in preview mode
-	if (Ps) Ps.update();
+	if (PsMain) PsMain.update();
 	// console.log(Math.round(window.devicePixelRatio * 100));
 	if (elements.divScreen) {
 		let height = elements.divScreen.parentNode.clientHeight - elements.divScreen.previousElementSibling.clientHeight - 70 + 'px';
@@ -1234,6 +1260,7 @@ window.onresize = function(bForce) {
 		}
 		$('.div_item').css('border', ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
+	if (PsChanglog) PsChanglog.update();
 };
 
 // zoom on start if we start with a non 100% zoom
@@ -1533,7 +1560,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 		if ( ( bAll && (!isOnline || isPluginLoading) ) || flag) {
 			$('.div_notification').remove();
 			$('.div_item').remove();
-			setTimeout(function(){if (Ps) Ps.update()});
+			setTimeout(function(){if (PsMain) PsMain.update()});
 			toolbar.classList.add('hidden');
 			createNotification('No Internet Connection.', 'Problem with loading some resources')
 		} else {
@@ -1837,4 +1864,33 @@ function showSlides(n) {
 
 	if(dots.length)
 		dots[slideIndex-1].className += ' active';
+};
+
+function getMarkedSetting() {
+	// function for marked librry
+	let defaults = {};
+	const settings = {};
+	if (typeof marked.getDefaults === 'function') {
+		defaults = marked.getDefaults();
+	} else if ('defaults' in marked) {
+		for (const prop in marked.defaults) {
+			defaults[prop] = marked.defaults[prop];
+		}
+	}
+
+	const invalidOptions = [
+		'renderer',
+		'tokenizer',
+		'walkTokens',
+		'extensions',
+		'highlight',
+		'sanitizer'
+	];
+
+	for (const prop in defaults) {
+		if (!invalidOptions.includes(prop))
+		settings[prop] = defaults[prop]
+	}
+
+	return settings;
 };
