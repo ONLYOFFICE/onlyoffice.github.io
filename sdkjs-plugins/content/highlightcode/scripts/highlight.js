@@ -52,7 +52,7 @@
 	const isDE = (window.AscDesktopEditor) ? true : false;							// check desktope editor
 	const isFF = (navigator.userAgent.indexOf("Firefox") > -1) ? true : false;		// check FF
 	const isOldChrome = checkOldChrome();                                           // check chrome older than 50 version
-
+	var message = "This plugin doesn't work in Internet Explorer."                  // message for IE
 	var xml_formatter = require('xml-formatter');									// object for xml formatting
 	var format_lang = {																// list of supported languages for formatting
 		xml : true,
@@ -138,6 +138,7 @@
 	var myscroll = window.Asc.ScrollableDiv;
 
 	window.Asc.plugin.init = function(text) {
+
 		get_supported_fonts();
 		$('#style_id').select2({
 			minimumResultsForSearch: Infinity
@@ -165,11 +166,6 @@
 			document.getElementById('conteiner_id1').style["font-size"] = this.value + "pt";
 			settings.font_size = this.value;
 		};
-		if (isIE) {
-			document.getElementById("btn_highlight").style.display ="inline";
-			document.getElementById("tabselect").style.display ="none";
-			document.getElementById("language_id").style.width ="88%";
-		}
 		$('#language_id').select2({
 			data : createLangForSelect(),
 			minimumResultsForSearch: Infinity
@@ -340,7 +336,7 @@
 		};
 
 		$("#conteiner_id1").keydown(function(event) {
-			if ( (event.keyCode == 13) && !isIE ) {	
+			if ( event.keyCode == 13 ) {	
 				cancelEvent(event);
 				var range = $("#conteiner_id1").get_selection_range();
 				if (range.end == code_field.innerText.length)
@@ -352,7 +348,7 @@
 				myscroll.updateScroll(code_field);
 				$("#conteiner_id1").set_selection(range.start + 1, range.start + 1);
 			}
-			if ( (event.keyCode == 9) && !isIE ) { 
+			if ( event.keyCode == 9 ) { 
 				cancelEvent(event);
 				tab_untab(event);
 				myscroll.updateScroll(code_field);
@@ -457,8 +453,7 @@
 				return;
 			}
 			clearTimeout(timer);
-			if (!isIE)
-				timer = setTimeout(grab,1000);
+			timer = setTimeout(grab,1000);
 		});
 
 		function grab() {
@@ -578,14 +573,10 @@
 	function createPreview(code) {
 		var range = (need_formatting) ? null : $("#conteiner_id1").get_selection_range();
 		code_field.innerHTML = code.value;   // paste the value
-		if (isIE) {
-			document.getElementById("btn_highlight").focus();
-		} else {
-			if (range) {
-				$("#conteiner_id1").set_selection(range.start, range.end);
-			} else if (need_formatting) {
-				$("#conteiner_id1").set_selection($("#conteiner_id1").text().length, $("#conteiner_id1").text().length);
-			}
+		if (range) {
+			$("#conteiner_id1").set_selection(range.start, range.end);
+		} else if (need_formatting) {
+			$("#conteiner_id1").set_selection($("#conteiner_id1").text().length, $("#conteiner_id1").text().length);
 		}
 			
 		select_language(code.language);

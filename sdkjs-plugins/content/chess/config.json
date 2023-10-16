@@ -7,7 +7,7 @@
 		"de": "Schach"
 	},
 	"guid": "asc.{FFE1F462-1EA2-4391-990D-4CC84940B754}",
-	"version": "1.0.0",
+	"version": "1.0.1",
 
 	"variations": [
 		{
@@ -62,6 +62,7 @@
 				}
 			],
 			"isViewer"        : true,
+			"isDisplayedInViewer": false,
 			"EditorsSupport"  : ["word", "cell", "slide"],
 
 			"isVisual"     : true,
@@ -74,7 +75,7 @@
 			"isUpdateOleOnResize" : true,
 
 			"buttons" : [
-				{ "text": "Ok", "primary": true },
+				{ "text": "Ok", "primary": true, "isViewer": false },
 				{ "text": "Cancel", "primary": false } 
 			],
 
@@ -83,8 +84,11 @@
 					"light" : "#444444",
 					"dark" : "#444444;"
 				},
-				"screenshots" : [ "resources/store/screenshots/screen_1.png" ],
-				"icons" : {
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
+				"icons"       : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
 				},

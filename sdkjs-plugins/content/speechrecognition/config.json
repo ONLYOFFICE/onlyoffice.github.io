@@ -7,7 +7,7 @@
 		"de": "Spracheingabe"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
-	"version" : "1.0.0",
+	"version" : "1.0.1",
 
 	"variations": [
 		{
@@ -61,7 +61,7 @@
 					}
 				}
 			],
-			"isViewer": true,
+			"isViewer": false,
 			"EditorsSupport": [ "word" ],
 
 			"isVisual": true,
@@ -77,10 +77,13 @@
 			"size": [ 130, 170 ],
 			"store": {
 				"background": {
-					"light" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)",
-					"dark" : "linear-gradient(180deg, #FF8E3D 0%, #FF6F3D 100%)"
+					"light" : "#F5F5F5",
+					"dark" : "#444444"
 				},
-				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
 				"icons" : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"

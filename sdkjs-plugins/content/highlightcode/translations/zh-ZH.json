@@ -10,5 +10,6 @@
 	"4 spaces": "4 空格",
 	"Background": "背景",
 	"Format": "格式",
-	"Available only for the following languages": "仅对以下语言可用"
+	"Available only for the following languages": "仅对以下语言可用",
+	"This plugin is not supported by IE": "IE不支持此插件"
 }

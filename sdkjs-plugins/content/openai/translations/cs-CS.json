@@ -12,8 +12,15 @@
 	"Explain text in comment": "Vysvětlení v komentáři",
 	"Explain text in hyperlink": "Vysvětlení v hypertextovém odkazu",
 	"Translate": "Přeložit",
-	"Translate to French": "Přeložit do francouzštiny",
-	"Translate to German": "Přeložit do němčiny",
+	"Translate to English" : "Přeložit do češtiny",
+	"Translate to French" : "Přeložit do francouzštiny",
+	"Translate to German" : "Přeložit do němčiny",
+	"Translate to Chinese" : "Přeložit do čínštiny",
+	"Translate to Japanese" : "Přeložit do japonštiny",
+	"Translate to Russian" : "Přeložit do ruštiny",
+	"Translate to Korean" : "Přeložit do korejština",
+	"Translate to Spanish" : "Přeložit do španělštiny",
+	"Translate to Italian" : "Přeložit do češtiny",
 	"Generate image from text": "Generovat obrázek z textu",
 	"Settings": "Nastavení",
 	"Maximum 4000 tokens are available." : "K dispozici je maximálně 4000 žetonů.",
@@ -51,5 +58,7 @@
 	"Error:" : "Chyba:",
 	"Generate image variation" : "Generování variace obrazu",
 	"Thesaurus" : "Tezaurus",
-	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки"
+	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки",
+	"Warning" : "Varování",
+	"This plugin is not supported by IE": "Tento plugin není podporován IE"
 }

@@ -7,7 +7,7 @@
 		"de": "draw.io"
 	},
 	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
-	"version": "1.0.2",
+	"version": "1.0.3",
 
 	"variations": [
 		{
@@ -61,7 +61,8 @@
 					}
 				}
 			],
-			"isViewer": false,
+			"isViewer": true,
+			"isDisplayedInViewer": false,
 			"EditorsSupport": [ "word", "cell", "slide" ],
 
 			"isVisual": true,
@@ -82,7 +83,8 @@
 						"es": "Insertar",
 						"de": "Einfügen",
 						"cs": "Vložit"
-					}
+					},
+					"isViewer": false
 				},
 				{
 					"text": "Cancel",
@@ -100,10 +102,16 @@
 			"size": [ 1200, 1000 ],
 			"store": {
 				"background": {
-					"light" : "#F5F5F5",
-					"dark" : "#444444;"
+					"light" : "#FFF3E7",
+					"dark" : "#FFF3E7;"
 				},
-				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png",
+					"resources/store/screenshots/screen_4.png",
+					"resources/store/screenshots/screen_5.png"
+				],
 				"icons" : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
