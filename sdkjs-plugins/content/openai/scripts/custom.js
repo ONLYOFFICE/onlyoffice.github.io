@@ -118,6 +118,7 @@
 		};
 
 		elements.btnSubmit.onclick = function() {
+			sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div'+textColor+'>2</div>'});
 			let settings = getSettings();
 			if (settings.error || elements.textArea.classList.contains('error_border')) {
 				if (Number(elements.lbAvalTokens.innerText) < 0) {
