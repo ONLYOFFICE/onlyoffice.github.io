@@ -128,6 +128,7 @@
 			};
 			createLoader();
 			let url = `https://api.openai.com/v1${ (settings.isChat ? '/chat' : '') }/completions`;
+			delete settings.isChat;
 
 			fetch(url, {
 				method: 'POST',
