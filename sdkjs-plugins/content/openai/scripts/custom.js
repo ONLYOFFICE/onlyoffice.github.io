@@ -24,23 +24,8 @@
 	let tokenTimeot = null;
 	let modalTimeout = null;
 	let bCreateLoader = true;
-	let maxTokens = 4000;
+	let maxTokens = 8000;
 	const isIE = checkInternetExplorer();
-	const AllowedModels = {
-		'text-ada-001' : true,
-
-		'text-babbage-001' : true,
-
-		'curie-instruct-beta' : true,
-		'text-curie-001' : true,
-
-
-		'text-davinci-003' : true,
-		'text-davinci-002' : true,
-		'text-davinci-001' : true,
-		'davinchi-instruct-beta' : true,
-		'davinchi:2020-05-03' : true
-	};
 
 	window.Asc.plugin.init = function() {
 		sendPluginMessage({type: 'onWindowReady'});
@@ -280,15 +265,14 @@
 			
 			for (let index = 0; index < data.data.length; index++) {
 				let model = data.data[index];
-				if (AllowedModels[model.id])
-					arrModels.push( { id: model.id, text: model.id } );
+				arrModels.push( { id: model.id, text: model.id } );
 			};
 
 			$('#sel_models').select2({
 				data : arrModels
 			}).on('select2:select', function(e) {
 				let model = $('#sel_models').val();
-				maxTokens = (model === 'gpt-3.5-turbo' || model === 'text-davinci-003') ? 4000 : 2000;
+				maxTokens = ( model === 'gpt-4' ) ? 8000 : ( ( model === 'gpt-3.5-turbo' || model === 'text-davinci-003' ) ? 4000 : 2000 );
 				checkLen();
 			});
 
