@@ -883,9 +883,8 @@
 				break;
 
 			case 'onExecuteMethod':
-				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
-					setTimeout(function(){window.Asc.plugin.executeMethod('CloseWindow', [modal.id])},3000);
-				});
+				window.Asc.plugin.executeMethod(message.method, [message.data]);
+				window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
 				break;
 
 			case 'onGetLink':
