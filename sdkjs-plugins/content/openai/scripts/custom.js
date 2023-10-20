@@ -276,10 +276,10 @@
 				checkLen();
 			});
 
-			if ($('#sel_models').find('option[value=text-davinci-003]').length) {
-				$('#sel_models').val('text-davinci-003').trigger('change');
+			if ($('#sel_models').find('option[value=gpt-4]').length) {
+				$('#sel_models').val('gpt-4').trigger('change');
 			} else { 
-				var newOption = new Option('text-davinci-003', 'text-davinci-003', true, true);
+				var newOption = new Option('gpt-4', 'gpt-4', true, true);
 				$('#sel_models').append(newOption).trigger('change');
 			}
 			localStorage.setItem('OpenAIApiKey', apiKey);
