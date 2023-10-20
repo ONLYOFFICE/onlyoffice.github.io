@@ -318,7 +318,7 @@
 			obj.error = true;
 		} else {
 			if (obj.isChat)
-				obj.messages = [{role: 'user', message: value}];
+				obj.messages = [{role: 'user', content: value}];
 			else
 				obj.prompt = value;
 
