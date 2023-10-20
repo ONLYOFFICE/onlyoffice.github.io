@@ -621,7 +621,7 @@
 		let header = {
 			'Authorization': 'Bearer ' + ApiKey
 		};
-		if (type < 10) {
+		if (type !== 10) {
 			header['Content-Type'] = 'application/json';
 		}
 		fetch(url, {
