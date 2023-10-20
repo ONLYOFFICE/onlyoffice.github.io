@@ -804,7 +804,8 @@
 				break;
 
 			case 11:
-				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
+				text = data.choices[0].message.content;
+				text = text.substring(1, text.length-1).split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.executeMethod('ReplaceTextSmart', [text]);
 				break;
 
