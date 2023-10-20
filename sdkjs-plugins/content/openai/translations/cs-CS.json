@@ -23,7 +23,7 @@
 	"Translate to Italian" : "Přeložit do češtiny",
 	"Generate image from text": "Generovat obrázek z textu",
 	"Settings": "Nastavení",
-	"Maximum 4000 tokens are available." : "K dispozici je maximálně 4000 žetonů.",
+	"Maximum 8000 tokens are available." : "K dispozici je maximálně 8000 žetonů.",
 	"For work with this model we should save chat history and sent it into a request." : "Pro práci s tímto modelem bychom měli uložit historii chatu a odeslat ji do požadavku.",
 	"But we have a limit on the number of tokens in the request." : "Ale máme limit na počet žetonů v žádosti.",
 	"That's why sometimes you should clear your chat history." : "Proto byste někdy měli vymazat historii chatu.",
