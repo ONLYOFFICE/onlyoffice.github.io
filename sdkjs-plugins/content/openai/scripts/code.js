@@ -613,7 +613,7 @@
 		fetch(url, {
 				method: 'POST',
 				headers: header,
-				body: (type < 10 ? JSON.stringify(settings) : settings),
+				body: (type !== 10 ? JSON.stringify(settings) : settings),
 			})
 			.then(function(response) {
 				return response.json()
