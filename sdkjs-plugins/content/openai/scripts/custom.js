@@ -145,7 +145,7 @@
 				if (data.error)
 					throw data.error
 
-				let text = data.choices[0].text;
+				let text = data.choices[0].text || data.choices[0].message.content;
 				let textColor = '';
 				if (!text.includes('</')) {
 					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
