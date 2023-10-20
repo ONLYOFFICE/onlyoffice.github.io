@@ -805,7 +805,7 @@
 
 			case 11:
 				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
-				window.Asc.plugin.executeMethod('ReplaceTextSmart', text);
+				window.Asc.plugin.executeMethod('ReplaceTextSmart', [text]);
 				break;
 
 			case 12:
@@ -813,7 +813,7 @@
 			case 14:
 			case 15:
 				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
-				window.Asc.plugin.executeMethod('PasteText',result);
+				window.Asc.plugin.executeMethod('PasteText', [result]);
 				break;
 		}
 	};
