@@ -898,7 +898,7 @@
 
 			case 'onExecuteMethod':
 				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
-					window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
+					setTimeout(function(){window.Asc.plugin.executeMethod('CloseWindow', [modal.id])},0);
 				});
 				break;
 
