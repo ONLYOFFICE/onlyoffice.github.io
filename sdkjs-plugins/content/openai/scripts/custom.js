@@ -127,8 +127,7 @@
 				return;
 			};
 			createLoader();
-			let isChat = settings.model.includes('-3.5') || settings.model.includes('-4')
-			let url = `https://api.openai.com/v1${ (isChat ? '/chat' : '') }/completions`;
+			let url = `https://api.openai.com/v1${ (settings.isChat ? '/chat' : '') }/completions`;
 
 			fetch(url, {
 				method: 'POST',
@@ -295,14 +294,20 @@
 	};
 
 	function getSettings() {
+		let model = $('#sel_models').val();
 		let value = elements.textArea.value.trim();
 		let obj = {
-			model : $('#sel_models').val(),
+			model : model,
+			isChat: (model.includes('-3.5') && !model.includes('-3.5-turbo-instruct')) || model.includes('-4')
 		};
 		if (!value.length) {
 			obj.error = true;
 		} else {
-			obj.prompt = value
+			if (obj.isChat)
+				obj.message = {role: 'user', message: value};
+			else
+				obj.prompt = value;
+
 			let temp = Number(elements.inpTempSl.value);
 			obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
 			let len = Number(elements.inpLenSl.value);
