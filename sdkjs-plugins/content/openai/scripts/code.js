@@ -514,32 +514,32 @@
 		switch (type) {
 			case 1:
 				settings.prompt	= `Summarize this text: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 2:
 				settings.prompt = `Get Key words from this text: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 3:
 				settings.prompt = `What does it mean "${text}"?`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 4:
 				settings.prompt = `Give a link to the explanation of the word "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 5:
 				settings.prompt = text;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 6:
 				settings.prompt = text;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 7:
@@ -554,12 +554,12 @@
 
 			case 8:
 				settings.prompt = `What does it mean "${text}"?`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 9:
 				settings.prompt = `Give synonyms for the word "${text}" as javascript array`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 10:
@@ -576,27 +576,27 @@
 
 			case 11:
 				settings.prompt	= `Сorrect the errors in this text: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 12:
 				settings.prompt	= `Rewrite differently: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 			
 			case 13:
 				settings.prompt	= `Make this text longer: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 14:
 				settings.prompt	= `Make this text simpler: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 15:
 				settings.prompt	= `Make this text shorter: "${text}"`;
-				url = 'https://api.openai.com/v1/completions';
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 		}
 		if (type !== 10)
@@ -639,7 +639,7 @@
 		Asc.scope = {};
 		switch (type) {
 			case 1:
-				Asc.scope.data = data.choices[0].text.split('\n\n');
+				Asc.scope.data = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.callCommand(function() {
 					let oDocument = Api.GetDocument();
 					let sumPar = Api.CreateParagraph();
@@ -657,7 +657,7 @@
 				break;
 
 			case 2:
-				Asc.scope.data = data.choices[0].text.split('\n\n');
+				Asc.scope.data = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.callCommand(function() {
 					let oDocument = Api.GetDocument();
 					for(let ind = 0; ind < Asc.scope.data.length; ind++) {
@@ -672,7 +672,7 @@
 				break;
 
 			case 3:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
 				window.Asc.plugin.callCommand(function() {
 					let oDocument = Api.GetDocument();
@@ -682,7 +682,7 @@
 				break;
 
 			case 4:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				start = text.indexOf('htt');
 				end = text.indexOf(' ', start);
 				if (end == -1) {
@@ -699,7 +699,7 @@
 				break;
 
 			case 5:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				start = text.indexOf('<img');
 				end = text.indexOf('/>', start);
 				if (end == -1) {
@@ -712,7 +712,8 @@
 				break;
 
 			case 6:
-				text = data.choices[0].text.startsWith('\n\n') ? data.choices[0].text.substring(2) : data.choices[0].text;
+				text = data.choices[0].message.content.startsWith('\n\n') ? data.choices[0].message.content.substring(2) : data.choices[0].message.content;
+				// text = data.choices[0].text.startsWith('\n\n') ? data.choices[0].text.substring(2) : data.choices[0].text;
 				window.Asc.plugin.executeMethod('PasteText', [text]);
 				break;
 
@@ -743,7 +744,7 @@
 				break;
 
 			case 8:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
 				window.Asc.plugin.callCommand(function() {
 					var oDocument = Api.GetDocument();
@@ -756,7 +757,7 @@
 				if (0 < thesaurusCounter)
 					return;
 
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				let startPos = text.indexOf("[");
 				let endPos = text.indexOf("]");
 
@@ -803,7 +804,7 @@
 				break;
 
 			case 11:
-				text = data.choices[0].text.split('\n\n');
+				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.executeMethod('ReplaceTextSmart', text);
 				break;
 
@@ -811,7 +812,7 @@
 			case 13:
 			case 14:
 			case 15:
-				text = data.choices[0].text.split('\n\n');
+				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.executeMethod('PasteText',result);
 				break;
 		}

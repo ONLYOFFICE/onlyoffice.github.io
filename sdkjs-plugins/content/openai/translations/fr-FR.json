@@ -23,7 +23,7 @@
 	"Translate to Italian" : "Traduire en Italien",
 	"Generate image from text": "Générer une image à partir de texte",
 	"Settings": "Réglages",
-	"Maximum 4000 tokens are available." : "Un maximum de 4000 jetons sont disponibles.",
+	"Maximum 8000 tokens are available." : "Un maximum de 8000 jetons sont disponibles.",
 	"For work with this model we should save chat history and sent it into a request." : "Pour travailler avec ce modèle, nous devons enregistrer l'historique des discussions et l'envoyer dans une demande.",
 	"But we have a limit on the number of tokens in the request." : "Mais nous avons une limite sur le nombre de jetons dans la demande.",
 	"That's why sometimes you should clear your chat history." : "C'est pourquoi vous devez parfois effacer votre historique de discussion.",
