@@ -127,7 +127,8 @@
 				return;
 			};
 			createLoader();
-			let url = 'https://api.openai.com/v1/completions'
+			let isChat = settings.model.includes('-3.5') || settings.model.includes('-4')
+			let url = `https://api.openai.com/v1${ (isChat ? '/chat' : '') }/completions`;
 
 			fetch(url, {
 				method: 'POST',
