@@ -513,39 +513,39 @@
 
 		switch (type) {
 			case 1:
-				settings.prompt	= `Summarize this text: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Summarize this text: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 2:
-				settings.prompt = `Get Key words from this text: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Get Key words from this text: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 3:
-				settings.prompt = `What does it mean "${text}"?`;
+				settings.messages = [ { role: 'user', content: `What does it mean "${text}"?` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 4:
-				settings.prompt = `Give a link to the explanation of the word "${text}"`;
+				settings.messages = [ { role: 'user', content: `Give a link to the explanation of the word "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 5:
-				settings.prompt = text;
+				settings.messages = [ { role: 'user', text];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 6:
-				settings.prompt = text;
+				settings.messages = [ { role: 'user', text];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 7:
 				delete settings.model;
 				delete settings.max_tokens;
-				settings.prompt = `Generate image:"${text}"`;
+				settings.messages = [ { role: 'user', content: `Generate image:"${text}"` } ];
 				settings.n = 1;
 				settings.size = `${imgsize.width}x${imgsize.height}`;
 				settings.response_format = 'b64_json';
@@ -553,12 +553,12 @@
 				break;
 
 			case 8:
-				settings.prompt = `What does it mean "${text}"?`;
+				settings.messages = [ { role: 'user', content: `What does it mean "${text}"?` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 9:
-				settings.prompt = `Give synonyms for the word "${text}" as javascript array`;
+				settings.messages = [ { role: 'user', content: `Give synonyms for the word "${text}" as javascript array` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
@@ -575,27 +575,27 @@
 				break;
 
 			case 11:
-				settings.prompt	= `Сorrect the errors in this text: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Сorrect the errors in this text: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 12:
-				settings.prompt	= `Rewrite differently: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Rewrite differently: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 			
 			case 13:
-				settings.prompt	= `Make this text longer: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Make this text longer: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 14:
-				settings.prompt	= `Make this text simpler: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Make this text simpler: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 15:
-				settings.prompt	= `Make this text shorter: "${text}"`;
+				settings.messages = [ { role: 'user', content: `Make this text shorter: "${text}"` } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 		}
