@@ -19,8 +19,8 @@
 (function(window, undefined){
 	let ApiKey = '';
 	let bHasKey = false;
-	const model = 'text-davinci-003';
-	const maxLen = 4000;
+	const model = 'gpt-4';
+	const maxLen = 8000;
 	let loadingPhrase = 'Loading...';
 	let thesaurusCounter = 0;
 	let settingsWindow = null;
@@ -75,8 +75,29 @@
 					if (Asc.plugin.info.editorType === 'word') {
 						settings.items[0].items.push(
 							{
+								id : 'onFixSpelling',
+								text : generateText('Fix spelling & grammar')
+							},
+							{
+								id : 'onRewrite',
+								text : generateText('Rewrite differently')
+							},
+							{
+								id : 'onMakeLonger',
+								text : generateText('Make longer')
+							},
+							{
+								id : 'onMakeShorter',
+								text : generateText('Make shorter')
+							},
+							{
+								id : 'onMakeSimple',
+								text : generateText('Make simple')
+							},
+							{
 								id : 'TextAnalysis',
 								text : generateText('Text analysis'),
+								separator: true,
 								items : [
 									{
 										id : 'onSummarize',
@@ -431,6 +452,51 @@
 		});
 	});
 
+	window.Asc.plugin.attachContextMenuClickEvent('onFixSpelling', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 11);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onRewrite', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 12);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMakeLonger', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 13);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMakeShorter', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 14);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMakeSimple', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 15);
+			}
+		});
+	});
+
 	function createSettings(text, tokens, type, isNoBlockedAction) {
 		let url;
 		let settings = {
@@ -447,22 +513,22 @@
 
 		switch (type) {
 			case 1:
-				settings.prompt	= 'Summarize this text: "' + text + '"';
+				settings.prompt	= `Summarize this text: "${text}"`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 2:
-				settings.prompt = 'Get Key words from this text: "' + text + '"';
+				settings.prompt = `Get Key words from this text: "${text}"`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 3:
-				settings.prompt = 'What does it mean "' + text + '" ?';
+				settings.prompt = `What does it mean "${text}"?`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 4:
-				settings.prompt = 'Give a link to the explanation of the word "' + text + '"';
+				settings.prompt = `Give a link to the explanation of the word "${text}"`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
@@ -479,20 +545,20 @@
 			case 7:
 				delete settings.model;
 				delete settings.max_tokens;
-				settings.prompt = 'Generate image: "' + text + '"';
+				settings.prompt = `Generate image:"${text}"`;
 				settings.n = 1;
-				settings.size = imgsize.width + 'x' + imgsize.height;
+				settings.size = `${imgsize.width}x${imgsize.height}`;
 				settings.response_format = 'b64_json';
 				url = 'https://api.openai.com/v1/images/generations';
 				break;
 
 			case 8:
-				settings.prompt = 'What does it mean "' + text + '" ?';
+				settings.prompt = `What does it mean "${text}"?`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
 			case 9:
-				settings.prompt = 'Give synonyms for the word  "' + text + '" as javascript array';
+				settings.prompt = `Give synonyms for the word "${text}" as javascript array`;
 				url = 'https://api.openai.com/v1/completions';
 				break;
 
@@ -506,6 +572,31 @@
 					formdata.append('response_format', "b64_json");
 					fetchData(formdata, url, type, isNoBlockedAction);
 				});
+				break;
+
+			case 11:
+				settings.prompt	= `Сorrect the errors in this text: "${text}"`;
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 12:
+				settings.prompt	= `Rewrite differently: "${text}"`;
+				url = 'https://api.openai.com/v1/completions';
+				break;
+			
+			case 13:
+				settings.prompt	= `Make this text longer: "${text}"`;
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 14:
+				settings.prompt	= `Make this text simpler: "${text}"`;
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 15:
+				settings.prompt	= `Make this text shorter: "${text}"`;
+				url = 'https://api.openai.com/v1/completions';
 				break;
 		}
 		if (type !== 10)
@@ -696,6 +787,7 @@
 				items.items[0].items.unshift(itemNew);
 				window.Asc.plugin.executeMethod('UpdateContextMenuItem', [items]);
 				break;
+
 			case 10:
 				img = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (img) {
@@ -706,8 +798,21 @@
 						"height": imgsize.height
 					};
 					imgsize = null;
-					window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+					window.Asc.plugin.executeMethod("PutImageDataToSelection", [oImageData]);
 				}
+				break;
+
+			case 11:
+				text = data.choices[0].text.split('\n\n');
+				window.Asc.plugin.executeMethod('ReplaceTextSmart', text);
+				break;
+
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+				text = data.choices[0].text.split('\n\n');
+				window.Asc.plugin.executeMethod('PasteText',result);
 				break;
 		}
 	};
