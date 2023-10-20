@@ -547,12 +547,12 @@
 				break;
 
 			case 5:
-				settings.messages = [ { role: 'user', text];
+				settings.messages = [ { role: 'user', content: text } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 6:
-				settings.messages = [ { role: 'user', text];
+				settings.messages = [ { role: 'user', content: text } ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
