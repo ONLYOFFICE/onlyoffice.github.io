@@ -312,6 +312,10 @@ label.header {
 	margin-top: 10px;
 }
 
+.margin_0 {
+	margin-top: 0 !important;
+}
+
 .span_caption {
 	margin-right: 16px;
 	cursor: pointer;
