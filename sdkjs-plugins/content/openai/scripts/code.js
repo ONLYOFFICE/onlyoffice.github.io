@@ -580,17 +580,17 @@
 				break;
 
 			case 12:
-				settings.messages = [ { role: 'user', content: `Rewrite differently and save language: ${text}`} ];
+				settings.messages = [ { role: 'user', content: `Rewrite differently and give result on the same language: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 			
 			case 13:
-				settings.messages = [ { role: 'user', content: `Make this text longer and save language: ${text}`} ];
+				settings.messages = [ { role: 'user', content: `Make this text longer and give result on the same language: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 14:
-				settings.messages = [ { role: 'user', content: `Make this text simpler and save language: ${text}`} ];
+				settings.messages = [ { role: 'user', content: `Make this text simpler and give result on the same language: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
