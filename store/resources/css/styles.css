@@ -309,7 +309,7 @@ label.header {
 }
 
 .div_selected_preview_chanelog {
-	height: calc(100% - 60px) !important;
+	margin-top: 12px !important;
 }
 
 .div_selected_info {
