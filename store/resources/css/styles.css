@@ -308,6 +308,10 @@ label.header {
 	position: absolute;
 }
 
+.div_selected_preview_chanelog {
+	height: calc(100% - 60px) !important;
+}
+
 .div_selected_info {
 	margin-top: 10px;
 }
