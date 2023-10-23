@@ -575,27 +575,27 @@
 				break;
 
 			case 11:
-				settings.messages = [ { role: 'user', content: `Сorrect the errors in this text: "${text}"` } ];
+				settings.messages = [ { role: 'user', content: `Сorrect the errors in this text: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 12:
-				settings.messages = [ { role: 'user', content: `Rewrite differently: "${text}"` } ];
+				settings.messages = [ { role: 'user', content: `Rewrite differently: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 			
 			case 13:
-				settings.messages = [ { role: 'user', content: `Make this text longer: "${text}"` } ];
+				settings.messages = [ { role: 'user', content: `Make this text longer: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 14:
-				settings.messages = [ { role: 'user', content: `Make this text simpler: "${text}"` } ];
+				settings.messages = [ { role: 'user', content: `Make this text simpler: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 15:
-				settings.messages = [ { role: 'user', content: `Make this text shorter: "${text}"` } ];
+				settings.messages = [ { role: 'user', content: `Make this text shorter: ${text}`} ];
 				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 		}
@@ -885,6 +885,7 @@
 			case 'onExecuteMethod':
 				window.Asc.plugin.executeMethod('CloseWindow', [modal.id], function(){
 					window.Asc.plugin.executeMethod(message.method, [message.data]);
+					customReqWindow = null;
 				});
 				break;
 
