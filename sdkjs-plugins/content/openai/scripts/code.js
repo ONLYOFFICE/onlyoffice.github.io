@@ -812,8 +812,8 @@
 			case 13:
 			case 14:
 			case 15:
-				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
-				window.Asc.plugin.executeMethod('PasteText', [result]);
+				text = data.choices[0].message.content.replace(/\n\n/g, '\n'); //data.choices[0].text.split('\n\n');
+				window.Asc.plugin.executeMethod('PasteText', [text]);
 				break;
 		}
 	};
