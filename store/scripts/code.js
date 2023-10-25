@@ -1859,7 +1859,7 @@ function getMarkedSetting() {
 	if (typeof marked.getDefaults === 'function') {
 		defaults = marked.getDefaults();
 	} else if ('defaults' in marked) {
-		for (const prop in marked.defaults) {
+		for (let prop in marked.defaults) {
 			defaults[prop] = marked.defaults[prop];
 		}
 	}
@@ -1873,7 +1873,7 @@ function getMarkedSetting() {
 		'sanitizer'
 	];
 
-	for (const prop in defaults) {
+	for (let prop in defaults) {
 		if (!invalidOptions.includes(prop))
 		settings[prop] = defaults[prop]
 	}
