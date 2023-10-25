@@ -27,3 +27,9 @@
 ## 1.1.2
 
 * Disable plugin for IE.
+
+## 1.1.3
+
+* Change list of models (add new models).
+* Change default model for request by context menu (now we use gpt-4 model).
+* Add new functions: "Fix spelling & grammar", "Rewrite differently", "Make longer", "Make shorter", "Make simpler".
