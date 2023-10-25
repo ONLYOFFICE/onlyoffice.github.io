@@ -60,5 +60,10 @@
 	"Thesaurus" : "Tezaurus",
 	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки",
 	"Warning" : "Varování",
-	"This plugin is not supported by IE": "Tento plugin není podporován IE"
+	"This plugin is not supported by IE": "Tento plugin není podporován IE",
+	"Fix spelling & grammar": "Opravit pravopis a gramatiku",
+	"Rewrite differently": "Přepište jinak",
+	"Make longer": "Udělejte déle",
+	"Make shorter": "Udělat kratší",
+	"Make simpler": "Zjednodušte"
 }
