@@ -26,4 +26,4 @@
 
 ## 1.1.2
 
-* Enable plugin for IE.
+* Disable plugin for IE.
