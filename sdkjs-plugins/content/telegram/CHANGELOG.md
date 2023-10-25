@@ -6,4 +6,4 @@
 
 ## 1.0.1
 
-* Enable plugin for IE.
+* Disable plugin for IE.

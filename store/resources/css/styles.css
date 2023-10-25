@@ -303,12 +303,21 @@ label.header {
 
 .div_selected_preview {
 	width: 100%;
-	height: calc(100% - 25px);
+	height: calc(100% - 60px);
 	margin-top: 25px;
+	position: absolute;
+}
+
+.div_selected_preview_chanelog {
+	margin-top: 12px !important;
 }
 
 .div_selected_info {
 	margin-top: 10px;
+}
+
+.margin_0 {
+	margin-top: 0 !important;
 }
 
 .span_caption {
