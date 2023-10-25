@@ -92,7 +92,7 @@
 							},
 							{
 								id : 'onMakeSimple',
-								text : generateText('Make simple')
+								text : generateText('Make simpler')
 							},
 							{
 								id : 'TextAnalysis',

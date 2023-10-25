@@ -60,5 +60,10 @@
 	"Thesaurus" : "Thésaurus",
 	"Show hyperlink content" : "Afficher le contenu du lien hypertexte",
 	"Warning" : "Avertissement",
-	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE",
+	"Fix spelling & grammar": "Correction de l'orthographe et de la grammaire",
+	"Rewrite differently": "Réécrire différemment",
+	"Make longer": "Faire plus longtemps",
+	"Make shorter": "Rendre plus court",
+	"Make simpler": "Rendre plus simple"
 }
