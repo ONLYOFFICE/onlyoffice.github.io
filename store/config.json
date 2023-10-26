@@ -25,8 +25,9 @@
 	{ "name": "zotero", "discussion": "244" },
 	{ "name": "languagetool", "discussion": "245" },
 	{ "name": "chess", "discussion": "246" },
-	{ "name": "zoom", "discussion": "247" },
 	{ "name": "openai", "discussion": "248" },
 	{ "name": "speechrecognition", "discussion": "249" },
+	{ "name": "zhipu", "discussion": "273"},
+	{ "name": "glavred", "discussion": "274" },
 	{ "name": "pixabay", "discussion": "" }
 ]

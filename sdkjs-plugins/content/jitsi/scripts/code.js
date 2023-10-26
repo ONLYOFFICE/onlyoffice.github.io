@@ -19,10 +19,16 @@
 
 	var iframe,
 		isInit = false,
-		api;
+		api,
+		message = "This plugin is not supported by IE";
+	
 	
 	window.Asc.plugin.init = function () {
 		//event "init" for plugin
+		if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+			document.getElementsByTagName('body')[0].innerHTML = "<div class='div_message'><p id='message' style='text-align:center; font-size:12pt;'>" + message + "<\/p><\/div>";
+			return;
+		}
 		document.getElementById("btn_start").onclick = function() {
 			if (!isInit) {
 				document.getElementById('inp_room').classList.remove('inp_error');
@@ -105,6 +111,10 @@
 		var inp_domain = document.getElementById("inp_domain");
 		if (inp_domain)
 			inp_domain.placeholder = window.Asc.plugin.tr("Domain");
+
+		var elem = document.getElementById("message");
+		if (elem)
+			elem.innerHTML = message = window.Asc.plugin.tr(message);
 	};
 
 })(window, undefined);
