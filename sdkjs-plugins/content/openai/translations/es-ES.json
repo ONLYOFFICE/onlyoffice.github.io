@@ -12,8 +12,15 @@
 	"Explain text in comment": "Explicar el texto en el comentario",
 	"Explain text in hyperlink": "Explicar texto en hipervínculo",
 	"Translate": "Traducir",
-	"Translate to French": "Traducir al Francés",
-	"Translate to German": "Traducir al Alemán",
+	"Translate to English" : "Traducir al Inglés",
+	"Translate to French" : "Traducir al Francés",
+	"Translate to German" : "Traducir al Alemán",
+	"Translate to Chinese" : "Traducir al Chino",
+	"Translate to Japanese" : "Traducir al Japonés",
+	"Translate to Russian" : "Traducir al Ruso",
+	"Translate to Korean" : "Traducir al Coreano",
+	"Translate to Spanish" : "Traducir al Español",
+	"Translate to Italian" : "Traducir al Italiano",
 	"Generate image from text": "Generar imagen a partir de texto",
 	"Settings": "Ajustes",
 	"Maximum 4000 tokens are available." : "Hay un máximo de 4000 fichas disponibles.",
@@ -51,5 +58,7 @@
 	"Error:" : "Error:",
 	"Generate image variation" : "Generar variación de imagen",
 	"Thesaurus" : "Tesauro",
-	"Show hyperlink content" : "Mostrar contenido de hipervínculo"
+	"Show hyperlink content" : "Mostrar contenido de hipervínculo",
+	"Warning" : "Advertencia",
+	"This plugin is not supported by IE": "Este complemento no es compatible con IE"
 }
