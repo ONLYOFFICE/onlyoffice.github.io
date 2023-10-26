@@ -11,3 +11,9 @@ License File:   Select2.license
 
 License:        MIT License
 License File:   jQuery.license
+
+
+3. marked - low-level compiler for parsing markdown without caching or blocking for long periods of time. (https://github.com/markedjs/marked)
+
+License:        MIT License
+License File:   marked.license

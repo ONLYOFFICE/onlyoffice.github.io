@@ -1,0 +1,135 @@
+{
+    "name": "ZhiPu Copilot",
+    "nameLocale": {
+        "zh": "智谱 Copilot",
+        "de": "ZhiPu Copilot",
+        "ru": "ZhiPu Copilot",
+        "fr": "ZhiPu Copilot",
+        "es": "ZhiPu Copilot"
+    },
+    "guid": "asc.{4b5efd7f-7c8d-1ef4-feab-bfbf2e1d86ac}",
+    "baseUrl": "",
+    "version": "1.0.1",
+    "offered": "Jianbo Lin",
+    "variations": [
+        {
+            "description": "A copilot plugin for OnlyOffice Document based on ZhiPu ChatGLM model.",
+            "descriptionLocale": {
+                "zh": "基于智谱 ChatGLM 大模型的 OnlyOffice 文档 Copilot 插件",
+                "de": "Ein Copilot-Plugin für OnlyOffice-Dokumente basierend auf dem ZhiPu ChatGLM-Modell.",
+                "ru": "Плагин Copilot для документов OnlyOffice на основе модели ZhiPu ChatGLM.",
+                "fr": "Un plugin copilote pour les documents OnlyOffice basé sur le modèle ZhiPu ChatGLM.",
+                "es": "Un complemento de copiloto para documentos de OnlyOffice basado en el modelo ZhiPu ChatGLM."
+            },
+            "url": "index.html",
+            "icons": [
+                "resources/light/icon.png",
+                "resources/light/icon@2x.png"
+            ],
+            "icons2": [
+                {
+                    "style": "light",
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/light/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/light/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/light/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon@2x.png"
+                    }
+                },
+                {
+                    "style": "dark",
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "125%": {
+                        "normal": "resources/dark/icon@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/dark/icon@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/dark/icon@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon@2x.png"
+                    }
+                }
+            ],
+            "store": {
+                "background": {
+                    "light": "#7c84e8",
+                    "dark": "#5f55af"
+                },
+                "screenshots": [
+                    "resources/store/screenshots/screen_1.png",
+                    "resources/store/screenshots/screen_2.png",
+                    "resources/store/screenshots/screen_3.png",
+                    "resources/store/screenshots/screen_4.png"
+                ],
+                "icons": {
+                    "light": "resources/store/icons",
+                    "dark": "resources/store/icons"
+                },
+                "categories": [
+                    "specAbilities",
+                    "work"
+                ]
+            },
+            "isViewer": true,
+            "EditorsSupport": [
+                "word"
+            ],
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": true,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [],
+            "events": [
+                "onContextMenuShow",
+                "onContextMenuClick"
+            ]
+        },
+        {
+            "description": "setting",
+            "url": "index_setting.html",
+            "isViewer": false,
+            "EditorsSupport": [
+                "word"
+            ],
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "textLocale": {
+                        "zh": "确定",
+                        "de": "Ok",
+                        "ru": "Ok",
+                        "fr": "Ok",
+                        "es": "Ok"
+                    },
+                    "primary": true
+                }
+            ],
+            "size": [
+                392,
+                147
+            ]
+        }
+    ]
+}

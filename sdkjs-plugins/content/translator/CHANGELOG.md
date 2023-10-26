@@ -19,3 +19,4 @@
 ## 1.0.4
 
 * Change working for viewer mode.
+* Enable plugin for IE.

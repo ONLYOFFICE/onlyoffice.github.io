@@ -1,0 +1,102 @@
+.chat-container {
+    width: calc(100% - 40px);
+    max-width: 400px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.message-history {
+    height: 80vh;
+    overflow-y: scroll;
+    border: 1px solid #e1c3c3;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #fff;
+    resize: vertical; /* Allow user to vertically resize textarea */
+}
+
+.message-history::-webkit-scrollbar {
+    width: 6px;
+}
+
+.message-history::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.message-input-area {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;  /* Allow flex items to wrap onto next line */
+    justify-content: space-between;
+    align-items: flex-end; /* Aligns items to the bottom of the container */
+}
+
+.message-input {
+    flex-grow: 1;  /* Allow this item to take up remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px; /* Add some margin to avoid input touching the button */
+    resize: vertical; /* Allow user to vertically resize input */
+}
+
+.send-button {
+    padding: 5px 5px;
+    background-color: #ffffff00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevents the text in the button from breaking into new line */
+}
+
+.send-button:hover {
+    background-color: #caced250;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background-color: #d2e1f4;
+    color: black;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.typing-indicator {
+    display: none;
+    margin-top: 10px;
+    color: #888;
+}
+
+/* Media query for small screens */
+@media (max-width: 600px) {
+    .chat-container {
+        width: calc(100% - 40px);
+    }
+}
+
+.typing-indicator {
+    display: none; /* 默认隐藏 */
+    margin-top: 10px;
+    color: #888;
+    font-style: italic; /* 斜体文本 */
+}

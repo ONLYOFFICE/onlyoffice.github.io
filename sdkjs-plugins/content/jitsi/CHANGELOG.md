@@ -11,3 +11,4 @@
 ## 1.0.2
 
 * Enable plugin for viewer mode.
+* Disable plugin for IE.

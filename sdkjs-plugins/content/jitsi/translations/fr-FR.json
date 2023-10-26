@@ -2,5 +2,6 @@
 	"Start": "Commencer",
 	"Stop" : "Arrêter",
 	"Room name" : "Nom de la chambre",
-	"Domain" : "Domaine"
+	"Domain" : "Domaine",
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
 }
