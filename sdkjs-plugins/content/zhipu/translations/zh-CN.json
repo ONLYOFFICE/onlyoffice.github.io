@@ -1,0 +1,17 @@
+{
+    "setting": "设置",
+    "Set Your ZhiPu API Key first": "请先设置智谱API Key",
+    "ZhiPu Copilot": "智谱 Copilot",
+    "generate": "生成",
+    "summarize": "总结",
+    "explain": "解释",
+    "translate": "翻译",
+    "translate to English": "翻译成英文",
+    "translate to Chinese": "翻译成中文",
+    "translate to Spanish": "翻译成西班牙文",
+    "translate to French": "翻译成法文",
+    "translate to German": "翻译成德文",
+    "translate to Russian": "翻译成俄文",
+    "clear chat history": "清除对话历史",
+    "Choose a model": "选择模型"
+}
