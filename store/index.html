@@ -25,6 +25,7 @@
 	<script type="text/javascript" src="scripts/polyfill.js"></script>
 	<script type="text/javascript" src="scripts/code.js"></script>
 	<script src="vendor/select2-4.0.13/js/select2.js"></script>
+	<script src="vendor/marked/marked.min.js"></script>
 </head>
 	<body class="noselect">
 		<img class="stars_grey" style="opacity: 0; z-index: -1000;" src="./resources/img/stars/rating-stars.svg"/>
@@ -115,8 +116,9 @@
 		<div id="div_selected_main" class="div_selected_main hidden">
 			<div style="width:100%; height:100%">
 				<div>
-					<span id="span_overview" class="span_caption span_selected" onclick="onSelectPreview(event.target, true)">Overview</span>
-					<span id="span_info" class="span_caption" onclick="onSelectPreview(event.target, false)">Info & Support</span>
+					<span id="span_overview" class="span_caption span_selected" onclick="onSelectPreview(event.target, 1)">Overview</span>
+					<span id="span_info" class="span_caption" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
+					<span id="span_changelog" class="span_caption" onclick="onSelectPreview(event.target, 3)">Changelog</span>
 					<hr>
 				</div>
 				<div id="div_selected_preview" class="div_selected_preview">
@@ -134,7 +136,7 @@
 				</div>
 				<div id="div_selected_info" class="div_selected_preview hidden">
 					<div id="div_plugin_info" class="div_plugin_info">
-						<div id="div_version" class="div_selected_info hidden">
+						<div id="div_version" class="div_selected_info margin_0 hidden">
 							<span id="span_ver_caption" class="font_bold">Version: </span>
 							<span id="span_ver"></span>
 						</div>
@@ -165,6 +167,9 @@
 						<span id="span_create">Create a new plugin using </span>
 						<a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/plugin/basic">ONLYOFFICE API.</a>
 					</div>
+				</div>
+				<div id="div_selected_changelog" class="div_selected_preview div_selected_preview_chanelog hidden">
+					<div id="div_changelog_preview"></div>
 				</div>
 			</div>
 		</div>

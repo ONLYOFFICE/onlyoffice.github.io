@@ -36,7 +36,8 @@ button {
 }
 .input-synonim {
   outline-color: #7d858c;
-  width: calc(100% - 10px);
+  /* width: calc(100% - 10px); */
+  flex: 1;
   border: 1px solid #cfcfcf;
 }
 input::selection {

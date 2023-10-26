@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setting</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script type="text/javascript">
+        window.Asc.plugin.init = function()
+        {
+            this.resizeWindow(392, 200, 392, 147, 392, 147);
+
+            let apikey = localStorage.getItem('apikey');
+            document.getElementById('tokenInput').value = apikey;
+        };
+
+        window.Asc.plugin.button = function(id)
+        {
+            let model = document.getElementById('modelSelection').value;
+            let apikey = document.getElementById('tokenInput').value;
+
+            localStorage.setItem('model', model);
+            localStorage.setItem('apikey', apikey);
+
+            this.executeCommand("close", "");
+        };
+    </script>
+</head>
+<body>
+    <div>
+        <label for="modelSelection" id="label_chooseModel">Choose a model</label>
+        <select id="modelSelection">
+            <option value="chatglm_lite">ZhiPu AI ChatGLM-Lite</option>
+            <option value="chatglm_std">ZhiPu AI ChatGLM-Std</option>
+            <option value="chatglm_pro">ZhiPu AI ChatGLM-Pro</option>
+        </select>
+    </div>
+    <div>
+        <label for="tokenInput">ZhiPu AI API:</label>
+        <input type="text" id="tokenInput" placeholder="Set ZhiPu API KEY">
+    </div>
+</body>
+</html>

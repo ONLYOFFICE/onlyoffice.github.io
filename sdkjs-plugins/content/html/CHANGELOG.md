@@ -8,3 +8,7 @@
 
 * Add translations for Japan and Chine languages.
 * Add library for code autoformating.
+
+## 1.0.2
+
+* Fix problem with IE (enabla library for autofomating into this browser).
