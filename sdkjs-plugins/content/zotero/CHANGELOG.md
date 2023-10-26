@@ -9,3 +9,7 @@
 * Add translations for Japan and Chine languages.
 * Add ability to work with fields, instead of text.
 * Add ability to update links and bibliography.
+
+## 1.0.2
+
+* Fix problem with IE.
