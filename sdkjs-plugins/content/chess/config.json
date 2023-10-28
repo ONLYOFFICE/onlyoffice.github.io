@@ -61,9 +61,9 @@
 					}
 				}
 			],
-			"isViewer"        : true,
-			"isDisplayedInViewer": false,
-			"EditorsSupport"  : ["word", "cell", "slide"],
+			"isViewer"            : true,
+			"isDisplayedInViewer" : false,
+			"EditorsSupport"      : ["word", "cell", "slide"],
 
 			"isVisual"     : true,
 			"isModal"      : true,
@@ -99,9 +99,10 @@
 			"description" : "About",
 			"url"         : "index_about.html",
 
-			"icons"           : ["resources/light/icon.png", "resources/light/icon@2x.png"],
-			"isViewer"        : true,
-			"EditorsSupport"  : ["word", "cell", "slide"],
+			"icons"               : ["resources/light/icon.png", "resources/light/icon@2x.png"],
+			"isViewer"            : true,
+			"isDisplayedInViewer" : false,
+			"EditorsSupport"      : ["word", "cell", "slide"],
 
 			"isVisual"     : true,
 			"isModal"      : true,
