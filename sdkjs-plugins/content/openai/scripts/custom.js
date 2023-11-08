@@ -147,7 +147,6 @@
 					throw data.error
 
 				let text = data.choices[0].text || data.choices[0].message.content;
-				let textColor = '';
 				if (!text.includes('</')) {
 					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
 					
@@ -155,14 +154,9 @@
 						text = text.replace('\n\n', '\n').replace('\n', '');
 					
 					text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
-
-					if (window.Asc.plugin.info.editorType == 'cell' && isDarkTheme) {
-						// it's temporarily. remove it after fixing bug https://bugzilla.onlyoffice.com/show_bug.cgi?id=61095
-						textColor = ' style="color:#000;"';
-					}
 				}
 				
-				sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div'+textColor+'>'+text+'</div>'});
+				sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div>'+text+'</div>'});
 			})
 			.catch(function(error) {
 				setError(error.message)
