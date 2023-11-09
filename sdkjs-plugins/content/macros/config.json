@@ -4,7 +4,8 @@
 		"ru": "Макросы",
 		"fr": "Macros",
 		"es": "Macros",
-		"de": "Makros"
+		"de": "Makros",
+		"si": "සාර්ව"
 	},
 	"guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
 	"version": "1.0.3",
@@ -20,7 +21,8 @@
 				"ru": "Автоматизируйте рутинные задачи и стандартизируйте документы с помощью макросов (работает на синтаксисе JavaScript).",
 				"fr": "Automatisez vos tâches de routine et standardisez vos documents à l’aide des macros (la syntaxe du langage JavaScript est utilisée).",
 				"es": "Automatice sus tareas rutinarias y estandarice los documentos mediante macros (se utiliza la sintaxis del lenguaje JavaScript).",
-				"de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet)."
+				"de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet).",
+				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ)."
 			},
 			"url": "index.html",
 			"help" : " https://api.onlyoffice.com/plugin/macros",

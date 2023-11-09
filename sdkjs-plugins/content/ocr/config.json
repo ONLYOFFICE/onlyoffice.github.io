@@ -4,7 +4,8 @@
 		"ru": "Распознавание текста",
 		"fr": "Reconnaissance optique de caractères",
 		"es": "Reconocimiento óptico de caracteres",
-		"de": "OCR"
+		"de": "OCR",
+		"si": "OCR"
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.0",
@@ -16,7 +17,8 @@
 				"ru": "Распознавайте текст с фотографий и скриншотов и вставляйте его в документы.",
 				"fr": "Reconnaissez le texte des images et des captures d'écran et insérez-le dans vos documents.",
 				"es": "Reconozca el texto de imágenes y capturas de pantalla e insértelo en sus documentos.",
-				"de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein."
+				"de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein.",
+				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න."
 			},
 			"url": "index.html",
 
@@ -78,7 +80,8 @@
 						"ru": "Вставить текст",
 						"fr": "Insérer le texte",
 						"es": "Insertar texto",
-						"de": "Text einfügen"
+						"de": "Text einfügen",
+						"si": "පෙළ ඇතුළු කරන්න"
 					}
 				},
 				{
@@ -88,7 +91,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"si": "අවලංගු"
 					}
 				}
 			],
@@ -117,7 +121,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"si": "පිළිබඳව"
 			},
 
 			"url": "index_about.html",
