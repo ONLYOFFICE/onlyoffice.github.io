@@ -4,7 +4,8 @@
 		"ru": "YouTube",
 		"fr": "YouTube",
 		"es": "YouTube",
-		"de": "YouTube"
+		"de": "YouTube",
+		"si": "YouTube"
 	},
 	"guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
 	"version": "1.0.3",
@@ -13,10 +14,11 @@
 		{
 			"description": "Easily embed YouTube videos into your documents.",
 			"descriptionLocale": {
-				"ru": "Легко встраивайте  YouTube-видео в документы.",
+				"ru": "Легко встраивайте YouTube-видео в документы.",
 				"fr": "Insérez facilement des vidéos YouTube dans vos documents.",
 				"es": "Inserte fácilmente vídeos de YouTube en sus documentos.",
-				"de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein."
+				"de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein.",
+				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න."
 			},
 			"url": "index.html",
 
@@ -53,7 +55,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"si": "අවලංගු"
 					}
 				}
 			],
