@@ -126,7 +126,7 @@
 			var sSelectedText = window.getSelection().toString();
 			var sSelectedHTML = prepareHtmlToPaste(getSelectionHtml());
 			
-			sSelectedHTML += `<p><strong>Source:</strong> ${sText} - <a href="https://terminologie.finances.gouv.fr/">https://terminologie.finances.gouv.fr/</a></p>`;
+			sSelectedHTML += "<p><strong>Source:</strong> " + sText +" - <a href=\"https://terminologie.finances.gouv.fr/\">https://terminologie.finances.gouv.fr/</a></p>";
 
 			e.originalEvent.clipboardData.setData('text/html', sSelectedHTML);
 			e.originalEvent.clipboardData.setData('text/plain', sSelectedText);
@@ -183,7 +183,7 @@
 					var aGroupElms = aChilds[nChild].childNodes;
 					for (var nElm = 0; nElm < aGroupElms.length; nElm++) {
 						if ($(aGroupElms[nElm]).hasClass('span-link')) {
-							sHtml += `<a href="${aGroupElms[nElm].getAttribute('href')}">` + aGroupElms[nElm].textContent + '</a>';
+							sHtml += '<a href="' + aGroupElms[nElm].getAttribute('href') +'">' + aGroupElms[nElm].textContent + '</a>';
 						}
 						if ($(aGroupElms[nElm]).hasClass('span-sep')) {
 							sHtml += aGroupElms[nElm].textContent;
@@ -193,7 +193,7 @@
 				}
 				// link
 				else if ($(aChilds[nChild]).hasClass('span-link')) {
-					sHtml += `<a href="${aChilds[nChild].getAttribute('href')}">` + aChilds[nChild].textContent + '</a>';
+					sHtml += '<a href="' + aChilds[nChild].getAttribute('href') + '">' + aChilds[nChild].textContent + '</a>';
 				}
 				else {
 					sHtml += '<span>' + aChilds[nChild].textContent + '</span>';
