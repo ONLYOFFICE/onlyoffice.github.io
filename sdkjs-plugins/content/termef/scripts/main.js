@@ -272,6 +272,7 @@
 
 	function ParseResults(aItems) {
 		if (aItems.length === 0) {
+			$('#results').empty();
 			$('<div>', {
 				id: "no_results",
 				text: "Aucun résultat."
