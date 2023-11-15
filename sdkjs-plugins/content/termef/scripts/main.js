@@ -22,16 +22,20 @@
 
 	window.Asc.plugin.init = function(text)
 	{
-		if (text.trim() !== "" && $('#props').hasClass('display-none') == true)
-		{
-			sText = text.trim();
+		window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
+			text = (data === undefined) ? "" : data.replace(/\n/g, ' ');
+			if (text.trim() !== "" && $('#props').hasClass('display-none') == true) {
+				sText = text.trim();
 
-			$('#info').hide();
-			$('#mainContainer').show();
-			$('input').val(sText);
-			$('#results').empty();
-			GetDefinitions(sText);
-		}
+				$('#info').hide();
+				$('#mainContainer').show();
+				$('input').val(sText);
+				$('#results').empty();
+				GetDefinitions(sText);
+			}
+		});
+
+		
 	};
 
 	$(document).ready(function () {
