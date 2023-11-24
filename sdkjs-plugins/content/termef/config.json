@@ -1,0 +1,148 @@
+{
+	"name": "TerMef",
+	"nameLocale": {
+		"ru": "TerMef",
+		"fr": "TerMef",
+		"es": "TerMef",
+		"de": "TerMef"
+	},
+	"guid": "asc.{4571a69c-7ae5-4f2c-98fd-97614ba7bf3d}",
+	"version": "1.0.0",
+	
+	"variations": [
+		{
+			"description": "TerMef",
+			"descriptionLocale": {
+				"ru": "TerMef",
+				"fr": "TerMef",
+				"es": "TerMef",
+				"de": "TerMef"
+			},
+			"url": "index.html",
+
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"icons2": [
+				{
+					"theme" : "flat",
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					},
+					"default": {
+						"normal": "resources/light/icon.png"
+					}
+				},
+				{
+					"theme" : "flatDark",
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": false,
+			"EditorsSupport": ["word"],
+
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+
+			"initDataType": "text",
+			"initData": "",
+
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": true,
+			
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"isViewer": false,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen"
+					}
+				}
+			],
+			"store": {
+				"background": {
+					"light" : "#1E7ED7",
+					"dark"  : "#1E7ED7"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons"     : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				}
+			}
+		},
+		{
+			"description": "About",
+			"descriptionLocale": {
+				"ru": "Информация",
+				"fr": "À propos de",
+				"es": "Acerca de",
+				"de": "Über"
+			},
+			"url": "index_about.html",
+			"isViewer": false,
+			"EditorsSupport": ["word"],
+
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": false,
+
+			"initDataType": "none",
+			"initData": "",
+
+			"isUpdateOleOnResize": false,
+
+			"buttons": [
+				{
+					"text": "Cancel",
+					"primary": false,
+					"isViewer": false,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen"
+					}
+				}
+			],
+			"size": [400, 130]
+		}
+	]
+}
