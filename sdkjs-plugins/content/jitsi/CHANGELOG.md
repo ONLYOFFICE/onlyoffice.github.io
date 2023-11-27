@@ -12,3 +12,7 @@
 
 * Enable plugin for viewer mode.
 * Disable plugin for IE.
+
+## 1.0.3
+
+* Add "pdf" to the supported editors.
