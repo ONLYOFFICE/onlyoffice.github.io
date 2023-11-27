@@ -9,7 +9,7 @@
         "si": "පේනු කළමනාකරු"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "group" : {
         "name" : "Plugin Manager",
         "rank" : 1
@@ -61,7 +61,7 @@
             }
             ],
             "isViewer"            : true,
-            "EditorsSupport"      : ["word", "cell", "slide"],
+            "EditorsSupport"      : ["word", "cell", "slide", "pdf"],
             "isVisual"            : true,
             "isModal"             : true,
             "isInsideMode"        : false,
