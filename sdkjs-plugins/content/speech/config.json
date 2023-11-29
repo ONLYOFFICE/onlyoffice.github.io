@@ -14,7 +14,7 @@
 		"zh": "讲话"
 	},
 	"guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
-	"version" : "2.0.0",
+	"version" : "2.0.1",
 
 	"variations": [
 		{
@@ -70,7 +70,7 @@
 				}
 			],
 			"isViewer": true,
-			"EditorsSupport": [ "word" ],
+			"EditorsSupport": [ "word", "pdf" ],
 			"isVisual": false,
 			"isModal": false,
 			"isInsideMode": false,
@@ -115,7 +115,7 @@
 
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon2.png", "resources/img/icon2@2x.png" ],
 			"isViewer": true,
-			"EditorsSupport": [ "word" ],
+			"EditorsSupport": [ "word", "pdf" ],
 			"isVisual": true,
 			"isModal": true,
 			"isInsideMode": false,
