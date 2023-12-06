@@ -68,6 +68,12 @@
 						}, 500);
 
 					var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
+					if (selectElement) {
+						console.log('success_1');
+					} else {
+						console.log('fail_1')
+						return;
+					}
 					selectElement.addEventListener('change', function(event) {
 						if (txt || ifr.contentDocument.getElementById("google_translate_element").innerHTML) {
 							ifr.contentWindow.postMessage("onchange_goog-te-combo", '*');

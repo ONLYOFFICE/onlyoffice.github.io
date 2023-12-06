@@ -19,6 +19,12 @@ try {
 	window.onload = function () {
 		var textShower = document.getElementById('google_translate_element');
 		select = document.getElementsByClassName("goog-te-combo")[0];
+		if (select) {
+			console.log('success');
+		} else {
+			console.log('fail')
+			return;
+		}
 		select.classList.add("hidden");
 		textShower.addEventListener('copy', function(event) {
 			const selection = document.getSelection();
