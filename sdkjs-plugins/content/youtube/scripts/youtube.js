@@ -88,6 +88,11 @@
 
 		window.Asc.plugin.init = function(text)
 		{
+			if (YT) {
+				console.log('success')
+			} else {
+				console.log('fail')
+			}
 			var _textbox = document.getElementById("textbox_url");
 
 			// disable input and button elements in view mode
