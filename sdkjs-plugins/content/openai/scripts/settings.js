@@ -17,7 +17,7 @@
  */
 (function(window, undefined) {
 	let loader = null;
-	let errMessage = 'Invalid Api key.';
+	let errMessage = 'Invalid Api key or this service doesn\'t work in your region.';
 	let loadMessage = 'Loading...';
 
 	window.Asc.plugin.init = function() {
