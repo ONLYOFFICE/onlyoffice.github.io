@@ -190,7 +190,7 @@
 			{
 			}
 
-			if (id == 0)
+			if (id == 0 && YT)
 			{
 				url = document.getElementById("textbox_url").value;
 
