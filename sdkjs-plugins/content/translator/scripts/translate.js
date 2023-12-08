@@ -71,6 +71,7 @@
 				var selectElement = ifr.contentDocument.getElementsByClassName('goog-te-combo')[0];
 				if (!selectElement) {
 					// in this case plugin won't work (it can be problem with region)
+					console.log('fail')
 					showMessage(window.Asc.plugin.tr("This plugin doesn't work in your region."));
 					return;
 				}
