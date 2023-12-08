@@ -60,5 +60,6 @@
 	"Thesaurus" : "Синонимы",
 	"Show hyperlink content" : "Показать содержимое гиперссылки",
 	"Warning" : "Предупреждение",
-	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE",
+	"Invalid Api key or this service doesn't work in your region." : "Некорректный Api ключ или этот сервис не работает в вашем регионе."
 }

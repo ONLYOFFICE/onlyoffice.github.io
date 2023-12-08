@@ -27,3 +27,7 @@
 ## 1.1.2
 
 * Disable plugin for IE.
+
+## 1.1.3
+
+* Add notification, that service isn't enable in user region (if we can't load list of models).
