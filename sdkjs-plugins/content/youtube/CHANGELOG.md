@@ -15,3 +15,7 @@
 ## 1.0.3
 
 * Change working for viewer mode.
+
+## 1.0.4
+
+* Add message that service isn't available in user region (if we have problem with loading necessary data).

@@ -74,10 +74,8 @@
 
 		window.Asc.plugin.init = function(text)
 		{
-			if (YT) {
-				console.log('success')
-			} else {
-				console.log('fail')
+			if (!YT) {
+				document.getElementsByTagName('body')[0].innerHTML = "<p id='message' style='text-align:center; font-size:20pt;'>" + window.Asc.plugin.tr("This service isn't available in your region.") + "<\/p>";
 			}
 			var _textbox = document.getElementById("textbox_url");
 
