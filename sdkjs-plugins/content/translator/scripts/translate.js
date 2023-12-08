@@ -60,7 +60,7 @@
 				if (ifr.contentWindow.document.readyState == 'complete')
 					window.Asc.plugin.onThemeChanged(Asc.plugin.theme);
 					setTimeout(function() {
-						let element = ifr.contentDocument.getElementById("google_translate_element");
+						let element = ifr.contentDocument ? ifr.contentDocument.getElementById("google_translate_element") : null;
 						if (element) {
 							element.innerHTML = escape(txt);
 							if (txt.length)
@@ -225,7 +225,7 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 		var style = document.getElementsByTagName('head')[0].lastChild;
 		if (ifr && ifr.contentWindow)
-			setTimeout( function() { ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*' ) } ,600 );
+			setTimeout( function() { ifr.contentDocument && ifr.contentWindow.postMessage({type: 'themeChanged', theme: theme, style: style.innerHTML}, '*' ) } ,600 );
 	};
 	
 })(window, undefined);
