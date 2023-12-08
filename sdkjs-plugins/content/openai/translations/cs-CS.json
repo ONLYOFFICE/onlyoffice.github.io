@@ -60,5 +60,6 @@
 	"Thesaurus" : "Tezaurus",
 	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки",
 	"Warning" : "Varování",
-	"This plugin is not supported by IE": "Tento plugin není podporován IE"
+	"This plugin is not supported by IE": "Tento plugin není podporován IE",
+	"Invalid Api key or this service doesn't work in your region." : "Neplatný klíč Api nebo tato služba ve vaší oblasti nefunguje."
 }

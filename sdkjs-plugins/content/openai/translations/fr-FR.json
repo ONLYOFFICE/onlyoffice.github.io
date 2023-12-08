@@ -60,5 +60,6 @@
 	"Thesaurus" : "Thésaurus",
 	"Show hyperlink content" : "Afficher le contenu du lien hypertexte",
 	"Warning" : "Avertissement",
-	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE",
+	"Invalid Api key or this service doesn't work in your region." : "Clé API non valide ou ce service ne fonctionne pas dans votre région."
 }
