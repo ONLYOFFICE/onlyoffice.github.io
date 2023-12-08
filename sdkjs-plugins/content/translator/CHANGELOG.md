@@ -20,3 +20,7 @@
 
 * Change working for viewer mode.
 * Enable plugin for IE.
+
+## 1.0.5
+
+* Add message, that plugin doesn't work in user region (if we have some problems with loading necessary data).
