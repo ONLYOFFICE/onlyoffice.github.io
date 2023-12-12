@@ -517,6 +517,9 @@ function initElemnts() {
 	elements.divVotes = document.getElementById('div_votes');
 	elements.arrowPrev = document.getElementById('prev_arrow');
 	elements.arrowNext = document.getElementById('next_arrow');
+	elements.linkReadme = document.getElementById('link_readme');
+	elements.divReadme = document.getElementById('div_readme_link');
+	elements.linkReadme = document.getElementById('link_readme');
 };
 
 function toogleLoader(show, text) {
@@ -1003,14 +1006,15 @@ function onClickItem() {
 			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
 	}
 
-	if ( !plugin || ( isLocal && installed ) ) {
+	if ( !plugin || ( isLocal && installed && plugin.baseUrl.includes('file:') ) ) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	let bCorrectUrl = isLocal || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
+	let bWebUrl = !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../');
+	let bCorrectUrl = isLocal || bWebUrl;
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let arrScreens = plugin.variations[0].store.screenshots;
@@ -1088,7 +1092,16 @@ function onClickItem() {
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = plugin.offered || offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
-	elements.linkPlugin.setAttribute('href', pluginUrl);
+	if (bWebUrl) {
+		elements.linkPlugin.setAttribute('href', pluginUrl);
+		elements.linkReadme.setAttribute('href', pluginUrl + 'README.md');
+		elements.divReadme.classList.remove('hidden');
+	} else {
+		elements.linkPlugin.setAttribute('href', '');
+		elements.linkReadme.setAttribute('href', '');
+		elements.divReadme.classList.add('hidden');
+	}
+	
 	if (discussionUrl)
 		elements.discussionLink.setAttribute('href', discussionUrl);
 	else
