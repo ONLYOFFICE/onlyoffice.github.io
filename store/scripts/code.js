@@ -981,7 +981,7 @@ function onClickUpdateAll() {
 function onClickItem() {
 	// There we will make preview for selected plugin
 	let offered = "Ascensio System SIA";
-	
+	let hiddenCounter = 0;
 	let guid = this.getAttribute('data-guid');
 	let pluginDiv = document.getElementById(guid);
 	let divPreview = document.createElement('div');
@@ -1043,8 +1043,8 @@ function onClickItem() {
 		slideIndex = 1;
 		showSlides(1);
 	} else {
-		elements.arrowPrev.classList.remove('hidden');
-		elements.arrowNext.classList.remove('hidden');
+		elements.arrowPrev.classList.add('hidden');
+		elements.arrowNext.classList.add('hidden');
 	}
 
 	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
@@ -1055,6 +1055,7 @@ function onClickItem() {
 	} else {
 		elements.spanVersion.innerText = '';
 		elements.divVersion.classList.add('hidden');
+		hiddenCounter++;
 	}
 
 	if ( (installed && installed.obj.minVersion) || plugin.minVersion ) {
@@ -1063,11 +1064,13 @@ function onClickItem() {
 	} else {
 		elements.spanMinVersion.innerText = '';
 		elements.divMinVersion.classList.add('hidden');
-	}
+		hiddenCounter++;
+	}	
 
 	if (plugin.languages) {
 		elements.spanLanguages.innerText = plugin.languages.join(', ') + '.';
 		elements.divLanguages.classList.remove('hidden');
+		hiddenCounter++;
 	} else {
 		elements.spanLanguages.innerText = '';
 		elements.divLanguages.classList.add('hidden');
@@ -1128,10 +1131,16 @@ function onClickItem() {
 	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {// || pluginDiv.lastChild.lastChild.hasAttribute('dataDisabled')) {
 		elements.btnInstall.setAttribute('disabled','');
 		elements.btnInstall.setAttribute('title', getTranslated(messages.versionWarning));
-	}
-	else {
+	} else {
 		elements.btnInstall.removeAttribute('disabled');
 		elements.btnInstall.removeAttribute('title');
+	}
+
+	if (hiddenCounter == 3) {
+		// if versions and languages fields are hidden, we should hide this div
+		document.getElementById('div_plugin_info').classList.add('hidden');
+	} else {
+		document.getElementById('div_plugin_info').classList.remove('hidden');
 	}
 
 	elements.divSelected.classList.remove('hidden');
