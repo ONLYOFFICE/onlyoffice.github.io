@@ -1084,10 +1084,10 @@ function onClickItem() {
 	if (plugin.languages) {
 		elements.spanLanguages.innerText = plugin.languages.join(', ') + '.';
 		elements.divLanguages.classList.remove('hidden');
-		hiddenCounter++;
 	} else {
 		elements.spanLanguages.innerText = '';
 		elements.divLanguages.classList.add('hidden');
+		hiddenCounter++;
 	}
 
 	if (plugin.changelog) {
