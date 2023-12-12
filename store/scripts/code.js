@@ -30,7 +30,7 @@
  *
  */
 
-const version = '1.0.4';                                             // version of store (will change it when update something in store)
+const version = '1.0.5';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 let isPluginLoading = false;                                         // flag plugins loading
@@ -531,7 +531,6 @@ function initElemnts() {
 	elements.divVotes = document.getElementById('div_votes');
 	elements.arrowPrev = document.getElementById('prev_arrow');
 	elements.arrowNext = document.getElementById('next_arrow');
-	elements.linkReadme = document.getElementById('link_readme');
 	elements.divReadme = document.getElementById('div_readme_link');
 	elements.linkReadme = document.getElementById('link_readme');
 };
