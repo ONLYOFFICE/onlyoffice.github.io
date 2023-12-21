@@ -32,7 +32,7 @@
 			],
 			"screens": ["resources/store/screen_1.png"],
 			"isViewer": true,
-			"EditorsSupport": [ "word", "cell", "slide" ],
+			"EditorsSupport": [ "word", "cell", "slide", "pdf" ],
 			"isVisual": true,
 			"isModal": false,
 			"isInsideMode": true,
