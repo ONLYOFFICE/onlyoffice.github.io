@@ -23,7 +23,7 @@
 
 ## 1.0.5
 
-* Bug fix.
+* Add "pdf" to the supported editors.
 
 ## 1.0.6
 
