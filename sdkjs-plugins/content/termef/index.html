@@ -1,0 +1,138 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="./scripts/main.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+<style>
+	html, body {
+		min-height: 100% !important;
+		height: 100%;
+		font-family: "Arial";
+		font-size: 11px;
+		font-weight: normal !important;
+		margin: 0;
+	}
+
+	.display-none {
+		display: none !important;   
+	}
+	#no_results {
+		font-size: 13px;
+	}
+
+	.result_div {
+		min-height: 49px;
+		border-radius: 3px;
+		margin-top: 16px;
+		display: flex;
+		flex-direction: column;
+		cursor: pointer;
+	}
+	.result_div .header {
+		font-size: 13px;
+		cursor: pointer;
+	}
+	.prop-label {
+		font-size: 13px;
+		margin-left: 5px;
+	}
+	.grp-wrap {
+		margin-top: 2px;
+		color: #999999
+	}
+	.prop-head {
+		display: flex;
+	}
+	.prop-value {
+		color: #999999;
+		margin-top: 3px;
+	}
+	#main-label {
+		font-size: 14px;
+	}
+	.descr {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: #999999
+	}
+
+	.prop {
+		min-height: 49px;
+		border-radius: 3px;
+		margin-top: 16px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.span-link {
+		cursor: pointer;
+		border-bottom: 1px solid;
+	}
+	.btn-text-default {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.scrollable-props {
+		max-height: calc(100% - 70px) !important;
+	}
+	.ps__rail-y {
+		left: unset !important;
+	}
+</style>
+</head>
+	<body>
+		<div id="loader-container" class="asc-plugin-loader display-none">
+			<div class="asc-loader-image">
+				<div class="asc-loader-title"></div>
+			</div>
+			<div class="asc-loader-title">
+				Loading...
+			</div>
+		</div>
+		<div id="mainContainer" style="display: none; height: calc(100% - 24px);">
+			<div id="scrollable" style="padding:12px; height: 100%; position: relative;">
+				<div id="head" style="display: flex; flex-direction: column">
+					<label class="header" style="margin-bottom: 2px;">Champ de recherche</label>
+					<input id="search-fld" type="text" style="width: 100%;" class="form-control" placeholder="Insérer la phrase de recherche">
+					<div class="separator horizontal" style="width: 100%; margin: 12px 0 12px 0;"></div>
+				</div>
+				<div id="results">
+
+				</div>
+				<div id="props" style="display: flex; flex-direction: column" class="display-none">
+					<div id="props-container">
+
+					</div>
+				</div>
+			</div>
+			<div id="button_wrapper" class="display-none" style="display: flex; flex-direction: column; margin: 12px;">
+				<div onсlick="" id="insert" class="noselect btn-text-default i18n" style="height: auto; min-height: 20px;">Note de bas de page</div>
+				<div onсlick="" id="back" class="noselect btn-text-default i18n" style="height: auto; min-height: 20px; margin-top: 5px;">Retour</div>
+			</div>
+		</div>
+		<p id="info" style="font-size: 13px; padding: 12px;">TerMef recherche et affiche automatiquement dans un volet de tâches, par simple mise en surbrillance d’un terme dans un texte, les concepts référencés dans les différents vocabulaires présents dans la base.</p>
+	</body>
+</html>
