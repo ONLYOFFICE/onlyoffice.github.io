@@ -4,7 +4,8 @@
 		"ru": "Фоторедактор",
 		"fr": "Photo Editor",
 		"es": "Editor de Fotos",
-		"de": "Foto-Editor"
+		"de": "Foto-Editor",
+		"si": "ඡායාරූප සංස්කරකය"
 	},
 	"guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
 	"version": "1.0.1",
@@ -17,7 +18,8 @@
 				"ru": "Обрабатывайте картинки, скриншоты и фотографии прямо в документе: обрезайте, изменяйте размер, применяйте различные эффекты.",
 				"fr": "Modifiez des images, des captures d’écran et des photos directement dans vos documents : coupez, ajustez, appliquez des effets.",
 				"es": "Edite imágenes, capturas de pantalla y fotos directamente en sus documentos: recorte, cambie el tamaño y aplique efectos.",
-				"de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden."
+				"de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden.",
+				"si": "ඔබගේ ලේඛනවල අඩංගු රූප, තිරසේයා සහ ඡායාරූප සංස්කරණය කරන්න. කප්පාදුව, යළි ප්‍රමාණනය, ආචරණ යෙදීම ආදිය ඇතුළත්ය."
 			},
 			"url": "index.html",
 
@@ -85,7 +87,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"si": "අවලංගු"
 					}
 				}
 			],
@@ -113,7 +116,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"si": "පිළිබඳව"
 			},
 			"url": "index_about.html",
 
