@@ -7,95 +7,95 @@
 		"de": "Grammalecte"
 	},
 	"guid": "asc.{6ef67492-a111-4ca5-bd4f-bf02645afc61}",
-	"version": "1.0.1",
+	"version": "1.0.2",
 
 	"variations": [
 		{
-				"description": "Quickly correct grammar and style mistakes in French texts.",
-				"descriptionLocale": {
-					"ru": "Быстро исправляйте грамматические и стилистические ошибки в текстах на французском языке.",
-					"fr": "Corrigez rapidement les fautes de grammaire et de style dans les textes en français.",
-					"es": "Corrija rápidamente los errores gramaticales y de estilo de los textos en francés.",
-					"de": "Korrigieren Sie schnell Grammatik- und Stilfehler in französischen Texten."
-				},
-				"url": "index.html",
-				"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
-				"icons2": [
-					{
-						"theme" : "flat",
-						"style" : "light",
-						
-						"100%": {
-							"normal": "resources/light/icon.png"
-						},
-						"125%": {
-							"normal": "resources/light/icon@1.25x.png"
-						},
-						"150%": {
-							"normal": "resources/light/icon@1.5x.png"
-						},
-						"175%": {
-							"normal": "resources/light/icon@1.75x.png"
-						},
-						"200%": {
-							"normal": "resources/light/icon@2x.png"
-						},
-						"default": {
-							"normal": "resources/light/icon.png"
-						}
+			"description": "Quickly correct grammar and style mistakes in French texts.",
+			"descriptionLocale": {
+				"ru": "Быстро исправляйте грамматические и стилистические ошибки в текстах на французском языке.",
+				"fr": "Corrigez rapidement les fautes de grammaire et de style dans les textes en français.",
+				"es": "Corrija rápidamente los errores gramaticales y de estilo de los textos en francés.",
+				"de": "Korrigieren Sie schnell Grammatik- und Stilfehler in französischen Texten."
+			},
+			"url": "index.html",
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"icons2": [
+				{
+					"theme" : "flat",
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
 					},
-					{
-						"theme" : "flatDark",
-						"style" : "dark",
-						
-						"100%": {
-							"normal": "resources/dark/icon.png"
-						},
-						"125%": {
-							"normal": "resources/dark/icon@1.25x.png"
-						},
-						"150%": {
-							"normal": "resources/dark/icon@1.5x.png"
-						},
-						"175%": {
-							"normal": "resources/dark/icon@1.75x.png"
-						},
-						"200%": {
-							"normal": "resources/dark/icon@2x.png"
-						}
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					},
+					"default": {
+						"normal": "resources/light/icon.png"
 					}
-				],
-				"isViewer": true,
-				"EditorsSupport": [ "word", "cell", "slide" ],
-
-				"isVisual": true,
-				"isModal": true,
-				"isInsideMode": true,
-
-				"initDataType": "text",
-				"initData": "",
-
-				"isUpdateOleOnResize": false,
-
-				"buttons": [],
-
-				"initOnSelectionChanged": true,
-
-				"store": {
-					"background": {
-						"light" : "#F5F5F5",
-						"dark" : "#444444"
+				},
+				{
+					"theme" : "flatDark",
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
 					},
-					"screenshots" : [
-						"resources/store/screenshots/screen_1.png",
-						"resources/store/screenshots/screen_2.png"
-					],
-					"icons" : {
-						"light" : "resources/store/icons",
-						"dark"  : "resources/store/icons"
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
 					},
-					"categories": ["specAbilities", "work"]
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
 				}
+			],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "cell", "slide", "pdf" ],
+
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": true,
+
+			"initDataType": "text",
+			"initData": "",
+
+			"isUpdateOleOnResize": false,
+
+			"buttons": [],
+
+			"initOnSelectionChanged": true,
+
+			"store": {
+				"background": {
+					"light" : "#F5F5F5",
+					"dark" : "#444444"
+				},
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
 		},
 		{
 			"description": "About",

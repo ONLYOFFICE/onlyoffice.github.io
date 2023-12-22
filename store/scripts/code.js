@@ -30,7 +30,7 @@
  *
  */
 
-const version = '1.0.4';                                             // version of store (will change it when update something in store)
+const version = '1.0.5';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 let isPluginLoading = false;                                         // flag plugins loading
@@ -531,6 +531,8 @@ function initElemnts() {
 	elements.divVotes = document.getElementById('div_votes');
 	elements.arrowPrev = document.getElementById('prev_arrow');
 	elements.arrowNext = document.getElementById('next_arrow');
+	elements.divReadme = document.getElementById('div_readme_link');
+	elements.linkReadme = document.getElementById('link_readme');
 };
 
 function toogleLoader(show, text) {
@@ -992,7 +994,7 @@ function onClickUpdateAll() {
 function onClickItem() {
 	// There we will make preview for selected plugin
 	let offered = "Ascensio System SIA";
-	
+	let hiddenCounter = 0;
 	let guid = this.getAttribute('data-guid');
 	let pluginDiv = document.getElementById(guid);
 	let divPreview = document.createElement('div');
@@ -1017,14 +1019,15 @@ function onClickItem() {
 			elements.divRatingLink.setAttribute('title', getTranslated('No disscussion page for this plugin.'));
 	}
 
-	if ( !plugin || ( isLocal && installed ) ) {
+	if ( !plugin || ( isLocal && installed && plugin.baseUrl.includes('file:') ) ) {
 		elements.divGitLink.classList.add('hidden');
 		plugin = installed.obj;
 	} else {
 		elements.divGitLink.classList.remove('hidden');
 	}
 
-	let bCorrectUrl = isLocal || ( !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../'));
+	let bWebUrl = !plugin.baseUrl.includes('http://') && !plugin.baseUrl.includes('file:') && !plugin.baseUrl.includes('../');
+	let bCorrectUrl = isLocal || bWebUrl;
 
 	if (bCorrectUrl && plugin.variations[0].store && plugin.variations[0].store.screenshots && plugin.variations[0].store.screenshots.length) {
 		let arrScreens = plugin.variations[0].store.screenshots;
@@ -1053,8 +1056,8 @@ function onClickItem() {
 		slideIndex = 1;
 		showSlides(1);
 	} else {
-		elements.arrowPrev.classList.remove('hidden');
-		elements.arrowNext.classList.remove('hidden');
+		elements.arrowPrev.classList.add('hidden');
+		elements.arrowNext.classList.add('hidden');
 	}
 
 	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
@@ -1065,6 +1068,7 @@ function onClickItem() {
 	} else {
 		elements.spanVersion.innerText = '';
 		elements.divVersion.classList.add('hidden');
+		hiddenCounter++;
 	}
 
 	if ( (installed && installed.obj.minVersion) || plugin.minVersion ) {
@@ -1073,7 +1077,8 @@ function onClickItem() {
 	} else {
 		elements.spanMinVersion.innerText = '';
 		elements.divMinVersion.classList.add('hidden');
-	}
+		hiddenCounter++;
+	}	
 
 	if (plugin.languages) {
 		elements.spanLanguages.innerText = plugin.languages.join(', ') + '.';
@@ -1081,6 +1086,7 @@ function onClickItem() {
 	} else {
 		elements.spanLanguages.innerText = '';
 		elements.divLanguages.classList.add('hidden');
+		hiddenCounter++;
 	}
 
 	if (plugin.changelog) {
@@ -1102,7 +1108,16 @@ function onClickItem() {
 	elements.spanName.innerHTML = this.children[1].children[0].innerText;
 	elements.spanOffered.innerHTML = plugin.offered || offered;
 	elements.spanSelectedDescr.innerHTML = this.children[1].children[1].innerText;
-	elements.linkPlugin.setAttribute('href', pluginUrl);
+	if (bWebUrl) {
+		elements.linkPlugin.setAttribute('href', pluginUrl);
+		elements.linkReadme.setAttribute('href', pluginUrl + 'README.md');
+		elements.divReadme.classList.remove('hidden');
+	} else {
+		elements.linkPlugin.setAttribute('href', '');
+		elements.linkReadme.setAttribute('href', '');
+		elements.divReadme.classList.add('hidden');
+	}
+	
 	if (discussionUrl)
 		elements.discussionLink.setAttribute('href', discussionUrl);
 	else
@@ -1129,10 +1144,16 @@ function onClickItem() {
 	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {// || pluginDiv.lastChild.lastChild.hasAttribute('dataDisabled')) {
 		elements.btnInstall.setAttribute('disabled','');
 		elements.btnInstall.setAttribute('title', getTranslated(messages.versionWarning));
-	}
-	else {
+	} else {
 		elements.btnInstall.removeAttribute('disabled');
 		elements.btnInstall.removeAttribute('title');
+	}
+
+	if (hiddenCounter == 3) {
+		// if versions and languages fields are hidden, we should hide this div
+		document.getElementById('div_plugin_info').classList.add('hidden');
+	} else {
+		document.getElementById('div_plugin_info').classList.remove('hidden');
 	}
 
 	elements.divSelected.classList.remove('hidden');
@@ -1873,7 +1894,7 @@ function getMarkedSetting() {
 	if (typeof marked.getDefaults === 'function') {
 		defaults = marked.getDefaults();
 	} else if ('defaults' in marked) {
-		for (const prop in marked.defaults) {
+		for (let prop in marked.defaults) {
 			defaults[prop] = marked.defaults[prop];
 		}
 	}
@@ -1887,7 +1908,7 @@ function getMarkedSetting() {
 		'sanitizer'
 	];
 
-	for (const prop in defaults) {
+	for (let prop in defaults) {
 		if (!invalidOptions.includes(prop))
 		settings[prop] = defaults[prop]
 	}

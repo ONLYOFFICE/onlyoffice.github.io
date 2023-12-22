@@ -19,4 +19,9 @@
 ## 1.0.4
 
 * Change working for viewer mode.
-* Enable plugin for IE.
+* Disable plugin for IE.
+* Bug Fix
+
+## 1.0.5
+
+* Add "pdf" to the supported editors.
