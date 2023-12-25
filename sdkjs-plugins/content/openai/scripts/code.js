@@ -425,8 +425,8 @@
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
 			if (!isEmpyText(text)) {
 				let tokens = window.Asc.OpenAIEncode(text);
-				let prompt = 'Translate to ' + data + ': ' + text;
-				createSettings(prompt, tokens, 6);
+				let text = `Translate to ${data}: ${text}`;
+				createSettings(text, tokens, 6);
 			}
 		});
 	});
@@ -545,7 +545,7 @@
 			case 7:
 				delete settings.model;
 				delete settings.max_tokens;
-				settings.messages = [ { role: 'user', content: `Generate image:"${text}"` } ];
+				settings.prompt = `Generate image:"${text}"`;
 				settings.n = 1;
 				settings.size = `${imgsize.width}x${imgsize.height}`;
 				settings.response_format = 'b64_json';
@@ -805,7 +805,10 @@
 
 			case 11:
 				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
-				window.Asc.plugin.executeMethod('ReplaceTextSmart', [text]);
+				if (text !== 'The text is correct, there are no errors in it.')
+					window.Asc.plugin.executeMethod('ReplaceTextSmart', [text]);
+				else
+					console.log('The text is correct, there are no errors in it.');
 				break;
 
 			case 12:
