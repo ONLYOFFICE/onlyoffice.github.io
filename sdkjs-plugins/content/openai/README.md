@@ -23,6 +23,9 @@ It is called "ChatGPT" and isn't installed by default in cloud, [self-hosted](ht
 4. Write an excel formula to summorize Revenue by countries which name contains "e". The revenue in column "B" from "B2" to "B11" and countries in column "A" from "A2" to "A11".
 5. Write a tagline for an ice cream shop.
 
+## Warning
+* For request from context menu it has restriction by gpt-4 model: 8k tokens.
+
 ## Known issues
 
 * Doesn't work in China.
