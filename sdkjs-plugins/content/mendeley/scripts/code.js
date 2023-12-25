@@ -534,7 +534,9 @@
                 res(locales[langTag]);
             } else {
                 loadingLocale = true;
-                fetch("https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-" + langTag + ".xml")
+				// https://raw.githubusercontent.com/citation-style-language/locales/master/locales-
+				// https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
+                fetch("https://raw.githubusercontent.com/citation-style-language/locales/master/locales-" + langTag + ".xml")
                     .then(function (resp) { return resp.text(); })
                     .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
                     .catch(function (err) { rej(err); loadingLocale = false; });

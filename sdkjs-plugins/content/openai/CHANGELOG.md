@@ -30,6 +30,9 @@
 
 ## 1.1.3
 
-* Change list of models (add new models).
-* Change default model for request by context menu (now we use gpt-4 model).
-* Add new functions: "Fix spelling & grammar", "Rewrite differently", "Make longer", "Make shorter", "Make simpler".
+* Add notification, that service isn't enable in user region (if we can't load list of models).
+
+## 1.1.4
+* Change list of models for custom requests (add new models and remove old).
+* Change default model for request by context menu (now we use gpt-3.5-turbo-16k model for chat and gpt-4 for other request).
+* Add new functions: "Fix spelling & grammar", "Rewrite differently", "Make longer", "Make shorter", "Make simpler" (it has restriction by gpt-4 model: 8k tokens)
