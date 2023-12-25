@@ -25,6 +25,7 @@
 	let modalTimeout = null;
 	let bCreateLoader = true;
 	let maxTokens = 8000;
+	let prefix = { previous: 'gpt-3.5', last: 'gpt-4'};
 	const isIE = checkInternetExplorer();
 
 	window.Asc.plugin.init = function() {
@@ -118,7 +119,6 @@
 		};
 
 		elements.btnSubmit.onclick = function() {
-			sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div>2</div>'});
 			let settings = getSettings();
 			if (settings.error || elements.textArea.classList.contains('error_border')) {
 				if (Number(elements.lbAvalTokens.innerText) < 0) {
@@ -260,15 +260,16 @@
 			let arrModels = [];
 			
 			for (let index = 0; index < data.data.length; index++) {
-				let model = data.data[index];
-				arrModels.push( { id: model.id, text: model.id } );
+				let model = data.data[index].id;
+				if (model.includes(prefix.previous) || model.includes(prefix.last))
+					arrModels.push( { id: model, text: model } );
 			};
 
 			$('#sel_models').select2({
 				data : arrModels
 			}).on('select2:select', function(e) {
 				let model = $('#sel_models').val();
-				maxTokens = ( model === 'gpt-4' ) ? 8000 : ( ( model === 'gpt-3.5-turbo' || model === 'text-davinci-003' ) ? 4000 : 2000 );
+				maxTokens = ( model === 'gpt-4' ) ? 8000 : ( model.includes('16k') ? 16000 : 4000 );
 				checkLen();
 			});
 
