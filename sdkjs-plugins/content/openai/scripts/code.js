@@ -425,8 +425,8 @@
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
 			if (!isEmpyText(text)) {
 				let tokens = window.Asc.OpenAIEncode(text);
-				let text = `Translate to ${data}: ${text}`;
-				createSettings(text, tokens, 6);
+				let message = `Translate to ${data}: ${text}`;
+				createSettings(message, tokens, 6);
 			}
 		});
 	});
