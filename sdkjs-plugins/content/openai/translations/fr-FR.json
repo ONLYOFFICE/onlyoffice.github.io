@@ -65,5 +65,6 @@
 	"Rewrite differently": "Réécrire différemment",
 	"Make longer": "Faire plus longtemps",
 	"Make shorter": "Rendre plus court",
-	"Make simpler": "Rendre plus simple"
+	"Make simpler": "Rendre plus simple",
+	"Invalid Api key or this service doesn't work in your region." : "Clé API non valide ou ce service ne fonctionne pas dans votre région."
 }

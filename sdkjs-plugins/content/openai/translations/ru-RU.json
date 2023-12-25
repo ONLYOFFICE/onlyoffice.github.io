@@ -65,5 +65,6 @@
 	"Rewrite differently": "Переписать по-другому",
 	"Make longer": "Сделать длиннее",
 	"Make shorter": "Сделать короче",
-	"Make simpler": "Сделать проще"
+	"Make simpler": "Сделать проще",
+	"Invalid Api key or this service doesn't work in your region." : "Некорректный Api ключ или этот сервис не работает в вашем регионе."
 }
