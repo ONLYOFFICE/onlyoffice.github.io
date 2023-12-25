@@ -65,5 +65,6 @@
 	"Rewrite differently": "Přepište jinak",
 	"Make longer": "Udělejte déle",
 	"Make shorter": "Udělat kratší",
-	"Make simpler": "Zjednodušte"
+	"Make simpler": "Zjednodušte",
+	"Invalid Api key or this service doesn't work in your region." : "Neplatný klíč Api nebo tato služba ve vaší oblasti nefunguje."
 }
