@@ -275,9 +275,6 @@
 
 			if ($('#sel_models').find('option[value=gpt-4]').length) {
 				$('#sel_models').val('gpt-4').trigger('change');
-			} else { 
-				var newOption = new Option('gpt-4', 'gpt-4', true, true);
-				$('#sel_models').append(newOption).trigger('change');
 			}
 			localStorage.setItem('OpenAIApiKey', apiKey);
 			elements.divContent.classList.remove('hidden');
