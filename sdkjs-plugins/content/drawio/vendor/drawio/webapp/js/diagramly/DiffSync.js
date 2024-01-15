@@ -20,7 +20,7 @@ EditorUi.DIFF_UPDATE = 'u';
 /**
  * Shared codec.
  */
-EditorUi.transientViewStateProperties =['defaultParent', 'currentRoot', 'scrollLeft',
+EditorUi.transientViewStateProperties = ['defaultParent', 'currentRoot', 'scrollLeft',
 	'scrollTop', 'scale', 'translate', 'lastPasteXml', 'pasteCounter'];
 
 /**
@@ -773,7 +773,10 @@ EditorUi.prototype.diffPages = function(oldPages, newPages)
 			}
 			else
 			{
-				var temp = this.diffPage(oldPages[i], newPage.page);
+				this.updatePageRoot(oldPages[i]);
+				this.updatePageRoot(newPage.page);
+
+				var temp = this.diffCells(oldPages[i].root, newPage.page.root);
 				var pageDiff = {};
 
 				if (!mxUtils.isEmptyObject(temp))
@@ -816,7 +819,8 @@ EditorUi.prototype.diffPages = function(oldPages, newPages)
 		for (var id in lookup)
 		{
 			var newPage = lookup[id];
-			inserted.push({data: mxUtils.getXml(newPage.page.node),
+			inserted.push({id: newPage.page.getId(),
+				data: mxUtils.getXml(newPage.page.node),
 				previous: (newPage.prev != null) ?
 				newPage.prev.getId() : ''});
 		}
@@ -908,17 +912,14 @@ EditorUi.prototype.diffCellRecursive = function(cell, prev, lookup, diff, remove
 /**
  * Removes all labels, user objects and styles from the given node in-place.
  */
-EditorUi.prototype.diffPage = function(oldPage, newPage)
+EditorUi.prototype.diffCells = function(oldRoot, newRoot)
 {
 	var inserted = [];
 	var removed = [];
 	var result = {};
-
-	this.updatePageRoot(oldPage);
-	this.updatePageRoot(newPage);
-
-	var lookup = this.createCellLookup(newPage.root);
-	var diff = this.diffCellRecursive(oldPage.root, null, lookup, diff, removed);
+	
+	var lookup = this.createCellLookup(newRoot);
+	var diff = this.diffCellRecursive(oldRoot, null, lookup, null, removed);
 
 	for (var id in lookup)
 	{
@@ -952,6 +953,11 @@ EditorUi.prototype.diffViewState = function(oldPage, newPage)
 	var source = oldPage.viewState;
 	var target = newPage.viewState;
 	var result = {};
+
+	if (oldPage == this.currentPage)
+	{
+		source = this.editor.graph.getViewState();
+	}
 	
 	if (newPage == this.currentPage)
 	{
@@ -995,7 +1001,7 @@ EditorUi.prototype.getViewStateProperty = function(viewState, key)
 	if (key == 'backgroundImage' && result != null &&
 		result.originalSrc != null)
 	{
-		delete result.src;
+		result = {originalSrc: result.originalSrc};
 	}
 	else if (key == 'extFonts' && result == null)
 	{
@@ -1243,6 +1249,256 @@ EditorUi.prototype.diffCell = function(oldCell, newCell)
 	}
 	
 	return diff;
+};
+
+/**
+ * Creates a patch that inserts pages and cells that are modified or referenced
+ * as parents or terminals in the given diff but have not been saved yet by the
+ * remote collaborator. These pages and cells are "adopted" by the local user.
+ */
+EditorUi.prototype.resolveCrossReferences = function(ownDiff, theirDiff)
+{
+	var resolve = {};
+
+	if (!mxUtils.isEmptyObject(theirDiff))
+	{
+		this.adoptTheirPages(ownDiff, theirDiff, resolve);
+		this.adoptTheirCells(ownDiff, theirDiff, resolve);
+	}
+
+	EditorUi.debug('EditorUi.resolveCrossReferences', [this],
+		'ownDiff', ownDiff, 'theirDiff', theirDiff,
+		'resolve', resolve);
+
+	return resolve;
+};
+
+/**
+ * Computes and sends the local changes if the file was changed.
+ */
+EditorUi.prototype.adoptTheirPages = function(ownDiff, theirDiff, resolve)
+{
+	var theirInsertedPages = {};
+
+	if (theirDiff[EditorUi.DIFF_INSERT] != null)
+	{
+		for (var i = 0; i < theirDiff[EditorUi.DIFF_INSERT].length; i++)
+		{
+			theirInsertedPages[theirDiff[EditorUi.DIFF_INSERT][i].id] =
+				theirDiff[EditorUi.DIFF_INSERT][i];
+		}
+	}
+
+	for (var id in ownDiff[EditorUi.DIFF_UPDATE])
+	{
+		if (theirInsertedPages[id] != null)
+		{
+			if (resolve[EditorUi.DIFF_INSERT] == null)
+			{
+				resolve[EditorUi.DIFF_INSERT] = [];
+			}
+
+			if (resolve[EditorUi.DIFF_UPDATE] == null)
+			{
+				resolve[EditorUi.DIFF_UPDATE] = {};
+			}
+
+			// Adds changed page to own pages
+			resolve[EditorUi.DIFF_INSERT].push(
+				theirInsertedPages[id]);
+			resolve[EditorUi.DIFF_UPDATE][id] =
+				ownDiff[EditorUi.DIFF_UPDATE][id];
+			delete ownDiff[EditorUi.DIFF_UPDATE][id];
+		}
+	}
+};
+
+/**
+ * Computes and sends the local changes if the file was changed.
+ */
+EditorUi.prototype.adoptTheirCells = function(ownDiff, theirDiff, resolve)
+{
+	for (var id in ownDiff[EditorUi.DIFF_UPDATE])
+	{
+		var ownPageUpdate = ownDiff[EditorUi.DIFF_UPDATE][id];
+
+		if (ownPageUpdate.cells != null)
+		{
+			this.adoptTheirCellsFromPage(ownPageUpdate, theirDiff, id, resolve);
+		}
+	}
+};
+
+/**
+ * Computes and sends the local changes if the file was changed.
+ */
+EditorUi.prototype.adoptTheirCellsFromPage = function(ownPageUpdate, theirDiff, pageId, resolve)
+{
+	var theirPageUpdate = theirDiff[EditorUi.DIFF_UPDATE] != null ?
+		theirDiff[EditorUi.DIFF_UPDATE][pageId] : null;
+
+	if (theirPageUpdate != null && theirPageUpdate.cells != null &&
+		theirPageUpdate.cells[EditorUi.DIFF_INSERT] != null)
+	{
+		var theirUpdatedCells = theirPageUpdate.cells[EditorUi.DIFF_UPDATE];
+		var theirInsertedCells = {};
+
+		for (var i = 0; i < theirPageUpdate.cells[EditorUi.DIFF_INSERT].length; i++)
+		{
+			var entry = theirPageUpdate.cells[EditorUi.DIFF_INSERT][i];
+			theirInsertedCells[entry.id] = entry;
+		}
+		
+		var pageDiff = {};
+		pageDiff.cells = {};
+		pageDiff.cells[EditorUi.DIFF_INSERT] = [];
+		pageDiff.cells[EditorUi.DIFF_UPDATE] = {};
+
+		// Blocks duplicate inserts, deleted below for result
+		pageDiff.inserted = {};
+
+		this.resolveOwnInsertedCells(
+			ownPageUpdate.cells[EditorUi.DIFF_INSERT],
+			theirInsertedCells, pageDiff);
+		this.resolveOwnUpdatedCells(
+			ownPageUpdate.cells[EditorUi.DIFF_UPDATE],
+			theirInsertedCells, theirUpdatedCells,
+			pageDiff);
+		
+		if (resolve[EditorUi.DIFF_UPDATE] == null)
+		{
+			resolve[EditorUi.DIFF_UPDATE] = {};
+		}
+		
+		delete pageDiff.inserted;
+		resolve[EditorUi.DIFF_UPDATE][pageId] = pageDiff;
+	}
+};
+
+/**
+ * Computes and sends the local changes if the file was changed.
+ */
+EditorUi.prototype.resolveOwnInsertedCells = function(ownInsertedCells, theirInsertedCells, pageDiff)
+{
+	if (ownInsertedCells != null)
+	{
+		for (var i = 0; i < ownInsertedCells.length; i++)
+		{
+			var cell = ownInsertedCells[i];
+
+			if (cell != null)
+			{
+				this.adoptParentCell(cell.id, null,
+					theirInsertedCells, pageDiff);
+				this.adoptTerminalCell(cell.id, cell,
+					theirInsertedCells, true, pageDiff);
+				this.adoptTerminalCell(cell.id, cell,
+					theirInsertedCells, false, pageDiff);
+			}
+		}
+	}
+};
+
+/**
+ * Computes and sends the local changes if the file was changed.
+ */
+EditorUi.prototype.resolveOwnUpdatedCells = function(ownUpdatedCells, theirInsertedCells, theirUpdatedCells, pageDiff)
+{
+	if (ownUpdatedCells != null)
+	{
+		for (var id in ownUpdatedCells)
+		{
+			// Adds changed cell to own cells
+			var cell = theirInsertedCells[id];
+
+			if (cell != null)
+			{
+				if (!pageDiff.inserted[id])
+				{
+					pageDiff.cells[EditorUi.DIFF_INSERT].push(cell);
+					pageDiff.inserted[id] = true;
+				}
+
+				pageDiff.cells[EditorUi.DIFF_UPDATE][id] =
+					ownUpdatedCells[id];
+			}
+			else if (theirUpdatedCells != null)
+			{
+				// Adds their referenced terminals
+				// and parents to own cells
+				var theirCell = theirUpdatedCells[id];
+				
+				if (theirCell != null)
+				{
+					this.adoptParentCell(id, theirCell,
+						theirInsertedCells, pageDiff);
+					this.adoptTerminalCell(id, theirCell,
+						theirInsertedCells, true, pageDiff, id);
+					this.adoptTerminalCell(id, theirCell,
+						theirInsertedCells, false, pageDiff, id);
+				}
+			}
+		}
+	}
+};
+
+/**
+ * Adds unsaved remote parents to the patch.
+ */
+EditorUi.prototype.adoptParentCell = function(cellId, cellDiff, theirInsertedCells, pageDiff)
+{
+	var cell = theirInsertedCells[cellId];
+	var parentId = (cellDiff != null) ? cellDiff.parent :
+		((cell != null) ? cell.parent : null);
+
+	if (parentId != null)
+	{
+		this.adoptParentCell(parentId, null, theirInsertedCells, pageDiff);
+	}
+
+	if (cell != null)
+	{
+		if (!pageDiff.inserted[cellId])
+		{
+			pageDiff.cells[EditorUi.DIFF_INSERT].push(cell);
+			pageDiff.inserted[cellId] = true;
+		}
+	}
+	else if (cellDiff != null)
+	{
+		if (pageDiff.cells[EditorUi.DIFF_UPDATE][cellId] == null)
+		{
+			pageDiff.cells[EditorUi.DIFF_UPDATE][cellId] = {};
+		}
+
+		pageDiff.cells[EditorUi.DIFF_UPDATE][cellId] = cellDiff;
+	}
+};
+
+/**
+ * Computes and sends the local changes if the file was changed.
+ */
+EditorUi.prototype.adoptTerminalCell = function(cellId, cell, theirInsertedCells, source, pageDiff)
+{
+	var terminalId = (source) ? cell.source : cell.target;
+	var terminal = theirInsertedCells[terminalId];
+
+	if (terminal != null)
+	{
+		if (!pageDiff.inserted[terminalId])
+		{
+			pageDiff.cells[EditorUi.DIFF_INSERT].push(terminal);
+			pageDiff.inserted[terminalId] = true;
+		}
+		
+		if (pageDiff.cells[EditorUi.DIFF_UPDATE][cellId] == null)
+		{
+			pageDiff.cells[EditorUi.DIFF_UPDATE][cellId] = {};
+		}
+
+		pageDiff.cells[EditorUi.DIFF_UPDATE][cellId]
+			[(source) ? 'source' : 'target'] = terminalId;
+	}
 };
 
 /**
