@@ -16,42 +16,45 @@ window.mxLoadSettings = window.mxLoadSettings || urlParams['configure'] != '1';
 window.isSvgBrowser = true;
 
 // CUSTOM_PARAMETERS - URLs for save and export
+// Base URL defines cases where an absolute URL is needed (eg. embedding)
 window.DRAWIO_BASE_URL = window.DRAWIO_BASE_URL || ((/.*\.draw\.io$/.test(window.location.hostname)) || (/.*\.diagrams\.net$/.test(window.location.hostname)) ?
 	window.location.protocol + '//' + window.location.hostname : 'https://app.diagrams.net');
+window.DRAWIO_SERVER_URL = window.DRAWIO_SERVER_URL || (window.location.hostname == 'test.draw.io' ? 'https://ac.draw.io/' : '');
 window.DRAWIO_LIGHTBOX_URL = window.DRAWIO_LIGHTBOX_URL || 'https://viewer.diagrams.net';
 window.EXPORT_URL = window.EXPORT_URL || 'https://convert.diagrams.net/node/export';
 window.PLANT_URL = window.PLANT_URL || 'https://plant-aws.diagrams.net';
-window.DRAW_MATH_URL = window.DRAW_MATH_URL || window.DRAWIO_BASE_URL + '/math/es5';
+window.DRAW_MATH_URL = window.DRAW_MATH_URL || 'math/es5';
 window.VSD_CONVERT_URL = window.VSD_CONVERT_URL || 'https://convert.diagrams.net/VsdConverter/api/converter';
 window.EMF_CONVERT_URL = window.EMF_CONVERT_URL || 'https://convert.diagrams.net/emf2png/convertEMF';
-window.REALTIME_URL = window.REALTIME_URL || ((window.location.hostname == 'test.draw.io' &&
-	urlParams['cache'] != 'local') ? 'https://app.diagrams.net/cache' : 'cache');
+window.REALTIME_URL = window.REALTIME_URL || window.DRAWIO_SERVER_URL + 'cache';
 window.DRAWIO_GITLAB_URL = window.DRAWIO_GITLAB_URL || 'https://gitlab.com';
 window.DRAWIO_GITLAB_ID = window.DRAWIO_GITLAB_ID || '2b14debc5feeb18ba65358d863ec870e4cc9294b28c3c941cb3014eb4af9a9b4';
 window.DRAWIO_GITHUB_URL = window.DRAWIO_GITHUB_URL || 'https://github.com';
 window.DRAWIO_GITHUB_API_URL = window.DRAWIO_GITHUB_API_URL || 'https://api.github.com';
 window.DRAWIO_GITHUB_ID = window.DRAWIO_GITHUB_ID || 'Iv1.98d62f0431e40543';
 window.DRAWIO_DROPBOX_ID = window.DRAWIO_DROPBOX_ID || 'jg02tc0onwmhlgm';
-window.SAVE_URL = window.SAVE_URL || 'save';
-window.OPEN_URL = window.OPEN_URL || 'import';
-window.PROXY_URL = window.PROXY_URL || 'proxy';
+window.SAVE_URL = window.SAVE_URL || window.DRAWIO_SERVER_URL + 'save';
+window.OPEN_URL = window.OPEN_URL || window.DRAWIO_SERVER_URL + 'import';
+window.PROXY_URL = window.PROXY_URL || window.DRAWIO_SERVER_URL + 'proxy';
 window.DRAWIO_VIEWER_URL = window.DRAWIO_VIEWER_URL || null;
-window.NOTIFICATIONS_URL = window.NOTIFICATIONS_URL || 'https://www.draw.io/notifications';
+window.NOTIFICATIONS_URL = window.NOTIFICATIONS_URL || window.DRAWIO_SERVER_URL + 'notifications';
 window.RT_WEBSOCKET_URL = window.RT_WEBSOCKET_URL || ('wss://' + ((window.location.hostname == 'test.draw.io') ?
 	'app.diagrams.net' : window.location.hostname) + '/rt');
 
 // Paths and files
-window.SHAPES_PATH = window.SHAPES_PATH || window.DRAWIO_BASE_URL + '/shapes';
+window.SHAPES_PATH = window.SHAPES_PATH || 'shapes';
 // Path for images inside the diagram
-window.GRAPH_IMAGE_PATH = window.GRAPH_IMAGE_PATH || window.DRAWIO_BASE_URL + '/img';
-window.ICONSEARCH_PATH = window.ICONSEARCH_PATH || (((navigator.userAgent != null && navigator.userAgent.indexOf('MSIE') >= 0) ||
-	urlParams['dev']) && window.location.protocol != 'file:' ? 'iconSearch' : window.DRAWIO_BASE_URL + '/iconSearch');
-window.TEMPLATE_PATH = window.TEMPLATE_PATH || window.DRAWIO_BASE_URL + 'templates';
-window.NEW_DIAGRAM_CATS_PATH = window.NEW_DIAGRAM_CATS_PATH || window.DRAWIO_BASE_URL + '/newDiagramCats';
-window.PLUGINS_BASE_PATH = window.PLUGINS_BASE_PATH || window.DRAWIO_BASE_URL + '/plugins';
+window.GRAPH_IMAGE_PATH = window.GRAPH_IMAGE_PATH || 'img';
+window.ICONSEARCH_PATH = window.ICONSEARCH_PATH || (urlParams['dev'] && window.location.protocol != 'file:' ? 'iconSearch' : window.DRAWIO_SERVER_URL + 'iconSearch');
+window.TEMPLATE_PATH = window.TEMPLATE_PATH || 'templates';
+window.NEW_DIAGRAM_CATS_PATH = window.NEW_DIAGRAM_CATS_PATH || 'newDiagramCats';
+window.PLUGINS_BASE_PATH = window.PLUGINS_BASE_PATH || '';
+
+// Allows third-party plugins to run
+window.ALLOW_CUSTOM_PLUGINS = window.ALLOW_CUSTOM_PLUGINS || false;
 
 // Directory for i18 files and basename for main i18n file
-window.RESOURCES_PATH = window.RESOURCES_PATH || window.DRAWIO_BASE_URL + '/resources';
+window.RESOURCES_PATH = window.RESOURCES_PATH || 'resources';
 window.RESOURCE_BASE = window.RESOURCE_BASE || RESOURCES_PATH + '/dia';
 
 // Specifies global configuration via variable
@@ -227,7 +230,7 @@ if (urlParams['extAuth'] == '1' && /((iPhone|iPod|iPad).*AppleWebKit(?!.*Version
 }
 
 // Uses lightbox mode on viewer domain
-if (window.location.hostname == DRAWIO_LIGHTBOX_URL.substring(DRAWIO_LIGHTBOX_URL.indexOf('//') + 2))
+if (window.location.hostname == 'viewer.diagrams.net')
 {
 	urlParams['lightbox'] = '1';
 }	
@@ -292,21 +295,25 @@ window.uiTheme = window.uiTheme || (function()
 		}
 	}
 	
-	// Uses minimal theme on small screens
+	// Uses simple theme on small screens in own domain standalone app
 	try
 	{
-		if (ui == null)
+		if (ui == null && urlParams['embed'] != '1' &&
+			(urlParams['dev'] == 1 || urlParams['test'] == 1 ||
+			window.location.hostname === 'test.draw.io' ||
+			window.location.hostname === 'www.draw.io' ||
+			window.location.hostname === 'preprod.diagrams.net' ||
+			window.location.hostname === 'app.diagrams.net' ||
+			window.location.hostname === 'jgraph.github.io'))
 		{
 			var iw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+			var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-			if (iw <= 768)
+			if (iw <= 1024 ||  /android/i.test(userAgent) || (/iPad|iPhone|iPod/.test(userAgent) &&
+				!window.MSStream) || (navigator.userAgent.match(/Mac/) &&
+				navigator.maxTouchPoints && navigator.maxTouchPoints > 2))
 			{
-				if (urlParams['pages'] == null)
-				{
-					urlParams['pages'] = '1';
-				}
-
-				ui = 'sketch';
+				ui = 'simple';
 			}
 		}
 	}
@@ -315,11 +322,11 @@ window.uiTheme = window.uiTheme || (function()
 		// ignore
 	}
 
-	// Redirects sketch UI to min UI with sketch URL parameter
-	if (ui == 'sketch')
+	// Activates sketch mode in Confluence Cloud sketch theme
+	if (ui == 'sketch' && urlParams['sketch'] == null &&
+		window.location.hostname === 'ac.draw.io')
 	{
 		urlParams['sketch'] = '1';
-		ui = 'min';
 	}
 	else if (urlParams['dark'] == '1' && (ui == '' || ui == 'kennedy'))
 	{
@@ -434,7 +441,8 @@ window.uiTheme = window.uiTheme || (function()
 
 // Enables offline mode
 if (urlParams['offline'] == '1' || urlParams['demo'] == '1' || 
-		urlParams['stealth'] == '1' || urlParams['local'] == '1' || urlParams['lockdown'] == '1')
+	urlParams['stealth'] == '1' || urlParams['local'] == '1' ||
+	urlParams['lockdown'] == '1')
 {
 	urlParams['picker'] = '0';
 	urlParams['gapi'] = '0';
