@@ -1,4 +1,5 @@
 {
 	"Loading" : "Chargement",
-	"Click on diagram to edit." : "Cliquez sur le diagramme pour le modifier."
+	"Click on diagram to edit." : "Cliquez sur le diagramme pour le modifier.",
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
 }

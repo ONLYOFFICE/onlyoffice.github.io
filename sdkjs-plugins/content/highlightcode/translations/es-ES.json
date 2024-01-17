@@ -1,15 +1,15 @@
 {
-    "Auto": "Auto",
-    "Language": "Idioma",
-    "Highlight": "Resaltado",
-    "Style": "Estilo",
-    "Tab replace": "Tabulación",
-    "Use tabs": "No sustituir",
-    "2 spaces": "2 espacios",
-    "4 spaces": "4 espacios",
-    "Background": "Fondo",
+	"Auto": "Auto",
+	"Language": "Idioma",
+	"Highlight": "Resaltado",
+	"Style": "Estilo",
+	"Tab replace": "Tabulación",
+	"Use tabs": "No sustituir",
+	"2 spaces": "2 espacios",
+	"4 spaces": "4 espacios",
+	"Background": "Fondo",
 	"Font settings": "Preferencias de fuente",
 	"Format": "Formato",
-	"Available only for the following languages": "Disponible solo para los siguientes idiomas"
-
+	"Available only for the following languages": "Disponible solo para los siguientes idiomas",
+	"This plugin is not supported by IE": "Este complemento no es compatible con IE"
 }

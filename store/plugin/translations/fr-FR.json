@@ -5,5 +5,9 @@
 	"Yes" : "Oui",
 	"No" : "Aucun",
 	"Do you want to completely remove this plugin?" : "Voulez-vous supprimer complètement ce plugin?",
-	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Si vous choisissez \"Aucun\", vous pourrez restaurer ce plugin plus tard sur le Gestionnaire de Plugins."
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Si vous choisissez \"Aucun\", vous pourrez restaurer ce plugin plus tard sur le Gestionnaire de Plugins.",
+	"Enter the URL for your marketplace page here" : "Entrez l'URL de votre page marketplace ici",
+	"Return to default settings" : "Retour aux paramètres par défaut",
+	"Enter URL" : "Entrez l'URL",
+	"Cancel" : "Annuler"
 }

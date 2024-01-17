@@ -13,7 +13,7 @@
 	"Learn how to use": "Erfahren Sie, wie Sie es verwenden",
 	"the plugin in": "das Plugin in",
 	"Contribute": "Beitragen",
-	"to the plugin developmen or report an issue on": "an die Plugin-Entwickler oder melden Sie ein Problem auf",
+	"to the plugin development or report an issue on": "an die Plugin-Entwickler oder melden Sie ein Problem auf",
 	"Get help": "Hilfe erhalten",
 	"with the plugin functionality on our forum.": "mit der Plugin-Funktionalität in unserem Forum.",
 	"Create a new plugin using": "Erstellen Sie ein neues Plugin mit",
@@ -55,5 +55,6 @@
 	"File not found." : "Datei nicht gefunden.",
 	"Network problem." : "Netzwerkprobleme.",
 	"Problem with loading some resources" : "Problem beim Laden einiger Ressourcen",
-	"votes:": "stimme:"
+	"Click to rate" : "Klicken Sie, um zu bewerten",
+	"No disscussion page for this plugin." : "Keine Diskussionsseite für dieses Plugin."
 }

@@ -1,13 +1,14 @@
 {
-  "Copy": "Copia",
-  "Show settings": "Mostra le impostazioni",
-  "Hide settings": "Nascondere le impostazioni",
-  "Render HTML tags": "Rendering dei tag HTML",
-  "Demote headings (H1 → H2, etc.)": "Declassare i titoli (H1 → H2, ecc.)",
-  "HTML headings/IDs": "Intestazioni/ID HTML",
-  "Create base64 images": "Creare immagini base64",
-  "Suppress top comment": "Sopprimere il commento superiore",
-  "Help": "Scegliere Markdown o HTML.\n* Predefinito: convertire l'intero documento.\n* Selezionare il testo per limitare la portata.",
-  "Text was copied to buffer!": "Il testo è stato copiato nel buffer!",
-  "Convert to Markdown or HTML": "Converti in Markdown o HTML"
+	"Copy": "Copia",
+	"Show settings": "Mostra le impostazioni",
+	"Hide settings": "Nascondere le impostazioni",
+	"Render HTML tags": "Rendering dei tag HTML",
+	"Demote headings (H1 → H2, etc.)": "Declassare i titoli (H1 → H2, ecc.)",
+	"HTML headings/IDs": "Intestazioni/ID HTML",
+	"Create base64 images": "Creare immagini base64",
+	"Suppress top comment": "Sopprimere il commento superiore",
+	"Help": "Scegliere Markdown o HTML.\n* Predefinito: convertire l'intero documento.\n* Selezionare il testo per limitare la portata.",
+	"Text was copied to buffer!": "Il testo è stato copiato nel buffer!",
+	"Convert to Markdown or HTML": "Converti in Markdown o HTML",
+	"Preview": "Anteprima"
 }

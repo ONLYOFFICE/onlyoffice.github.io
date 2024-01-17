@@ -32,9 +32,15 @@
 (function(window, undefined){
 
 	var editor;
+	const isIE = (/MSIE \d|Trident.*rv:/.test(navigator.userAgent));
 	window.Asc.plugin.init = function(text)
 	{
-		var settings = {
+		if (window.Asc.plugin.info.isViewMode)
+			document.getElementById("btn_paste").classList.add('hidden');
+
+		var settings = isIE
+		? {}
+		: {
 			embeddedLanguageFormatting: "off",
 			htmlWhitespaceSensitivity: "ignore",
 			insertPragma: false,
@@ -52,7 +58,10 @@
 		text = text.replace(/class="[a-zA-Z0-9-:;+"\/=]*/g,"");
 		var temp = (text.indexOf("<p") === -1) ? "\r\n" : ""
 		if (text !== "")
-			text =  prettier.format("<html><body>" + temp + text + "</body></html>", settings)  ;
+			text = "<html><body>" + temp + text + "</body></html>";
+
+		if (!isIE)
+			text = prettier.format(text, settings);
 
 		// document.getElementById("div_main").style.width = document.getElementById("body").clientWidth- 20 +"px";
 		if (editor) {
@@ -122,9 +131,9 @@
 	{
 		window.Asc.plugin.onThemeChangedBase(theme);
 		if (theme.type.indexOf("dark") !== -1)
-			setTimeout(()=>editor.setOption("theme", "bespin"));
+			setTimeout(function(){editor && editor.setOption("theme", "bespin")});
 		else
-			setTimeout(()=>editor.setOption("theme", "default"));
+			setTimeout(function(){editor && editor.setOption("theme", "default")});
 	};
 
 })(window, undefined);

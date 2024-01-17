@@ -1,13 +1,13 @@
 {
-  "To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Pour utiliser DeepL, abonnez-vous au plan API DeepL sur le site Web officiel de DeepL. Copiez la clé API et insérez-la dans le champ spécifié.",
-  "Learn more here.": "En savoir plus ici.",
-  "Save": "Sauver",
-  "Target language": "Langue cible",
-  "Enter text manually": "Saisir du texte manuellement",
-  "Hide field": "Masquer le champ",
-  "Translating...": "Traduction en cours...",
-  "Loading languages...": "Chargement des langues",
-  "Copy": "Copie",
-  "Insert to document": "Insérer dans le document",
-  "Reconfigure API key": "Reconfigurer la clé API"
+	"To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Pour utiliser DeepL, abonnez-vous au plan API DeepL sur le site Web officiel de DeepL. Copiez la clé API et insérez-la dans le champ spécifié.",
+	"Learn more here.": "En savoir plus ici.",
+	"Save": "Sauver",
+	"Target language": "Langue cible",
+	"Enter text manually": "Saisir du texte manuellement",
+	"Hide field": "Masquer le champ",
+	"Translating...": "Traduction en cours...",
+	"Loading languages...": "Chargement des langues",
+	"Copy": "Copie",
+	"Insert to document": "Insérer dans le document",
+	"Reconfigure API key": "Reconfigurer la clé API"
 }
