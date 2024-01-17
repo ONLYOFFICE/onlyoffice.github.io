@@ -1,6 +1,7 @@
 {
-    "Start": "Старт",
+	"Start": "Старт",
 	"Stop" : "Стоп",
 	"Room name" : "Имя комнаты",
-	"Domain" : "Домен"
+	"Domain" : "Домен",
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
 }

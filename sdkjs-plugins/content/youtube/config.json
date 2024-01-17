@@ -1,75 +1,82 @@
 {
-    "name": "YouTube",
-    "nameLocale": {
-        "ru": "YouTube",
-        "fr": "YouTube",
-        "es": "YouTube",
-        "de": "YouTube"
-    },
-    "guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
-    "version": "1.0.2",
+	"name": "YouTube",
+	"nameLocale": {
+		"ru": "YouTube",
+		"fr": "YouTube",
+		"es": "YouTube",
+		"de": "YouTube",
+		"si": "YouTube"
+	},
+	"guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
+	"version": "1.0.4",
 
-    "variations": [
-        {
-            "description": "Easily embed YouTube videos into your documents.",
-            "descriptionLocale": {
-                "ru": "Легко встраивайте  YouTube-видео в документы.",
-                "fr": "Insérez facilement des vidéos YouTube dans vos documents.",
-                "es": "Inserte fácilmente vídeos de YouTube en sus documentos.",
-                "de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Easily embed YouTube videos into your documents.",
+			"descriptionLocale": {
+				"ru": "Легко встраивайте YouTube-видео в документы.",
+				"fr": "Insérez facilement des vidéos YouTube dans vos documents.",
+				"es": "Inserte fácilmente vídeos de YouTube en sus documentos.",
+				"de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein.",
+				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
-            "icons2": [
-            {
-                "100%": { "normal": "resources/img/icon.png" },
-                "125%": { "normal": "resources/img/icon@1.25x.png" },
-                "150%": { "normal": "resources/img/icon@1.5x.png" },
-                "175%": { "normal": "resources/img/icon@1.75x.png" },
-                "200%": { "normal": "resources/img/icon@2x.png" }
-            }
-            ],
-            "isViewer": true,
-            "isDisplayedInViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
-            "initDataType": "ole",
-            "isUpdateOleOnResize": false,
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"icons2": [
+			{
+				"100%": { "normal": "resources/img/icon.png" },
+				"125%": { "normal": "resources/img/icon@1.25x.png" },
+				"150%": { "normal": "resources/img/icon@1.5x.png" },
+				"175%": { "normal": "resources/img/icon@1.75x.png" },
+				"200%": { "normal": "resources/img/icon@2x.png" }
+			}
+			],
+			"isViewer": true,
+			"isDisplayedInViewer": false,
+			"EditorsSupport": [ "word", "cell", "slide" ],
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
+			"initDataType": "ole",
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Ok",
-                    "primary": true
-                },
-                {
-                    "text": "Cancel",
-                    "primary": false,
-                    "isViewer": false,
-                    "textLocale": {
-                        "ru": "Отмена",
-                        "fr": "Annuler",
-                        "es": "Cancelar",
-                        "de": "Abbrechen"
-                    }
-                }
-            ],
+			"buttons": [
+				{
+					"text": "Ok",
+					"primary": true,
+					"isViewer": false
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"isViewer": true,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen",
+						"si": "අවලංගු"
+					}
+				}
+			],
 
-            "size": [ 350, 90 ],
-            "store": {
-                "background": {
-                    "light" : "#ED3323",
-                    "dark" : "#ED3323"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "entertainment", "recommended"]
-            }
-        }
-    ]
+			"size": [ 350, 90 ],
+			"store": {
+				"background": {
+					"light" : "#ED3323",
+					"dark" : "#ED3323"
+				},
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "entertainment", "recommended"]
+			}
+		}
+	]
 }

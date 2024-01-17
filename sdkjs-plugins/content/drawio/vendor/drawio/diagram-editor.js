@@ -75,7 +75,12 @@ DiagramEditor.prototype.config = null;
 /**
  * Protocol and domain to use.
  */
-DiagramEditor.prototype.drawDomain = 'https://embed.diagrams.net/';
+
+var url = window.location.href;
+
+DiagramEditor.prototype.drawDomain = url.substring(0, url.lastIndexOf("/")) + '/vendor/drawio/webapp/index.html';
+//DiagramEditor.prototype.drawDomain = AscDesktopEditor._getCurrentUrl().substring(0, AscDesktopEditor._getCurrentUrl().lastIndexOf("/")) + '/vendor/drawio/webapp/index.html';
+//DiagramEditor.prototype.drawDomain = 'https://embed.diagrams.net/';
 
 /**
  * UI theme to be use.
@@ -315,7 +320,7 @@ DiagramEditor.prototype.getFrameStyle = function()
  */
 DiagramEditor.prototype.getFrameUrl = function()
 {
-	var url = this.drawDomain + '?proto=json&spin=1';
+	var url = this.drawDomain + '?proto=json&spin=0&gapi=0&embed=1&dev=1';
 
 	if (this.ui != null)
 	{
