@@ -1,0 +1,10 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. Bootstrap, a popular front-end framework for web development.
+
+License:        MIT
+https://github.com/twbs/bootstrap/blob/master/LICENSE
+
+2. QRCode API by API Ninjas generates custom QR codes for any content.
+Terms of Service: https://api-ninjas.com/tos
