@@ -33,8 +33,8 @@
 (function(window, undefined){
 	let ApiKey = '';
 	let bHasKey = false;
-	const model = 'gpt-4';
-	const maxLen = 8000;
+	let model = 'gpt-3.5-turbo';
+	let maxLen = 4000;
 	let loadingPhrase = 'Loading...';
 	let thesaurusCounter = 0;
 	let settingsWindow = null;
@@ -895,6 +895,8 @@
 
 			case 'onAddApiKey':
 				localStorage.setItem('OpenAIApiKey', message.key);
+				model = message.model;
+				maxLen = message.maxTokens
 				window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
 				break;
 
