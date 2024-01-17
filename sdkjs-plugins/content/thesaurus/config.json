@@ -1,87 +1,89 @@
 {
-    "name": "Thesaurus",
-    "nameLocale": {
-        "ru": "Синонимы",
-        "fr": "Thésaurus",
-        "es": "Tesauro",
-        "de": "Thesaurus"
-    },
-    "guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9840}",
-    "version": "1.0.0",
+	"name": "Thesaurus",
+	"nameLocale": {
+		"ru": "Синонимы",
+		"fr": "Thésaurus",
+		"es": "Tesauro",
+		"de": "Thesaurus",
+		"si": "පර්යාය කෝෂය"
+	},
+	"guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9840}",
+	"version": "1.0.2",
 
-    "variations": [
-        {
-            "description": "Search for synonyms and antonyms of a word and replace it with the selected one.",
-            "descriptionLocale": {
-                "ru": "Находите синонимы и антонимы для выбранного слова.",
-                "fr": "Recherchez les synonymes et les antonymes d'un mot et remplacez-le par le mot sélectionné.",
-                "es": "Busque sinónimos y antónimos de una palabra y sustitúyala por la seleccionada.",
-                "de": "Finden Sie Synonyme und Antonyme eines Wortes und ersetzen Sie es durch die ausgewählte Variante."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Search for synonyms and antonyms of a word and replace it with the selected one.",
+			"descriptionLocale": {
+				"ru": "Находите синонимы и антонимы для выбранного слова.",
+				"fr": "Recherchez les synonymes et les antonymes d'un mot et remplacez-le par le mot sélectionné.",
+				"es": "Busque sinónimos y antónimos de una palabra y sustitúyala por la seleccionada.",
+				"de": "Finden Sie Synonyme und Antonyme eines Wortes und ersetzen Sie es durch die ausgewählte Variante.",
+				"si": "වචනයක සමාන පද සහ විරුද්ධ පද සොයා තෝරාගත් වචනයකට ප්‍රතිස්ථාපනය කරන්න."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer": true,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "cell", "slide", "pdf" ],
 
-            "isVisual": true,
-            "isModal": false,
-            "isInsideMode": true,
-            "initDataType": "text",
-            "isUpdateOleOnResize": false,
-            "initOnSelectionChanged": true,
-            "store": {
-                "background": {
-                    "light": "#F44725",
-                    "dark": "#F44725"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities"]
-            }
-        }
-    ]
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"initDataType": "text",
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": true,
+			"store": {
+				"background": {
+					"light": "#F44725",
+					"dark": "#F44725"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities"]
+			}
+		}
+	]
 }

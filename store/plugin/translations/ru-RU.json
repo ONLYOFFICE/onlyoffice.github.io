@@ -4,6 +4,10 @@
 	"Warning" : "Предупреждение",
 	"Yes" : "Да",
 	"No" : "Нет",
-	"Do you want to completely remove this plugin?" : "Вы хотите полность удалить этот плагин?",
-	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Если вы выберете \"Нет\", вы сможете восстановить этот плагин позже в Менеджере плагинов."
+	"Do you want to completely remove this plugin?" : "Вы хотите полностью удалить этот плагин?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Если вы выберете \"Нет\", вы сможете восстановить этот плагин позже в Менеджере плагинов.",
+	"Enter the URL for your marketplace page here" : "Введите URL для вашей страницы менеджера плагинов здесь",
+	"Return to default settings" : "Вернуть настройки по умолчанию",
+	"Enter URL" : "Введите URL",
+	"Cancel" : "Отмена"
 }

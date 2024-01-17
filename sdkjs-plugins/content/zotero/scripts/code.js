@@ -311,7 +311,7 @@
 			showLoader(true);
             getStyle(val)
 			.then(function(style) {
-				bNumFormat = style.includes('citation-format="numeric"');
+				bNumFormat = (style.indexOf('citation-format="numeric"') !== -1);
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
@@ -697,7 +697,9 @@
                 res(locales[langTag]);
             } else {
                 loadingLocale = true;
-                fetch("https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-" + langTag + ".xml")
+				// https://raw.githubusercontent.com/citation-style-language/locales/master/locales-af-ZA.xml
+				// https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
+                fetch("https://raw.githubusercontent.com/citation-style-language/locales/master/locales-" + langTag + ".xml")
                     .then(function (resp) { return resp.text(); })
                     .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
                     .catch(function (err) { rej(err); loadingLocale = false; });
@@ -730,7 +732,8 @@
         var page = document.createElement("div");
         page.classList.add("page" + holder.children.length);
         if (res && res.items.items.length > 0) {
-            for (var item of res.items.items) {
+			for (let index = 0; index < res.items.items.length; index++) {
+				let item = res.items.items[index];
 				item[ (isGroup ? "groupID" : "userID") ] = res.id;
 				var pos = item.id.indexOf("/") + 1;
 				if (pos)
@@ -908,7 +911,7 @@
 				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
 				var bibliography = elements.tempDiv.innerText;
 				arrFields.forEach(function(field) {
-					if (bUpadteAll && field.Value.includes(citPrefix)) {
+					if (bUpadteAll && ( field.Value.indexOf(citPrefix) !== -1 ) ) {
 						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
 						var keysL = [];
 						citationItems = citationItems.map(function(item) {
@@ -919,10 +922,10 @@
 						field["Content"] = elements.tempDiv.innerText;
 						if (bSyncronize) {
 							// if we make synchronization we must update value too
-							field['Value'] = citPrefix + JSON.stringify( { citationItems } );
+							field['Value'] = citPrefix + JSON.stringify( { citationItems: citationItems } );
 						}
 						updatedFields.push(field);
-					} else if (field.Value.includes(bibPrefix)) {
+					} else if (field.Value.indexOf(bibPrefix) !== -1) {
 						bibField = field;
 					}
 				});
@@ -987,7 +990,7 @@
 				var tmpObj = {};
 				var bibField = null;
 				arrFields.forEach(function(field) {
-					if (field.Value.includes(citPrefix)) {
+					if (field.Value.indexOf(citPrefix) !== -1) {
 						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
 						citationItems.forEach(function(item) {
 							if (!tmpObj[item.id]) {
@@ -995,7 +998,7 @@
 								arrItems.push(item);
 							}
 						});
-					} else if(field.Value.includes(bibPrefix)) {
+					} else if(field.Value.indexOf(bibPrefix) !== -1) {
 						bibField = field;
 					}
 				});
@@ -1117,7 +1120,7 @@
 		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
 			let count = 0;
 			arrFields.forEach(function(field) {
-				if ( field.Value.includes(bibPrefix) || field.Value.includes(citPrefix) ) {
+				if ( ( field.Value.indexOf(bibPrefix) !== -1 ) || ( field.Value.indexOf(citPrefix) !== -1 ) ) {
 					count++;
 					window.Asc.plugin.executeMethod("RemoveFieldWrapper", [field.FieldId], function() {
 						count--;

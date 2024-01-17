@@ -1,86 +1,89 @@
 {
-    "name" : "Jitsi",
-    "nameLocale": {
-        "ru": "Jitsi",
-        "fr": "Jitsi",
-        "es": "Jitsi",
-        "de": "Jitsi"
-    },
-    "guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
-    "version": "1.0.1",
+	"name" : "Jitsi",
+	"nameLocale": {
+		"ru": "Jitsi",
+		"fr": "Jitsi",
+		"es": "Jitsi",
+		"de": "Jitsi"
+	},
+	"guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
+	"version": "1.0.3",
 
-    "variations" : [
-        {
-            "description" : "Make audio and video calls right in the editors using Jitsi.",
-            "descriptionLocale": {
-                "ru": "Совершайте аудио- и видеозвонки прямо в редакторах с помощью Jitsi.",
-                "fr": "Organisez des appels audio et vidéo dans les éditeurs avec Jitsi.",
-                "es": "Realice llamadas de audio y vídeo directamente en los editores utilizando Jitsi.",
-                "de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi."
-            },
-            "url"         : "index.html",
+	"variations" : [
+		{
+			"description" : "Make audio and video calls right in the editors using Jitsi.",
+			"descriptionLocale": {
+				"ru": "Совершайте аудио- и видеозвонки прямо в редакторах с помощью Jitsi.",
+				"fr": "Organisez des appels audio et vidéo dans les éditeurs avec Jitsi.",
+				"es": "Realice llamadas de audio y vídeo directamente en los editores utilizando Jitsi.",
+				"de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi."
+			},
+			"url" : "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer"        : false,
-            "EditorsSupport"  : ["word", "cell", "slide"],
-            "isVisual"        : true,
-            "isModal"         : false,
-            "isInsideMode"    : true,
-            "initDataType"    : "none",
-            "isUpdateOleOnResize" : false,
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer"            : true,
+			"EditorsSupport"      : ["word", "cell", "slide", "pdf"],
+			"isVisual"            : true,
+			"isModal"             : false,
+			"isInsideMode"        : true,
+			"initDataType"        : "none",
+			"isUpdateOleOnResize" : false,
 
-            "store" : {
-                "background" : {
-                    "light" : "#2AA0D8",
-                    "dark"  : "#2AA0D8"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "communication"]
-            }
-        }
-    ]
+			"store" : {
+				"background" : {
+					"light" : "#2179BD",
+					"dark"  : "#2179BD"
+				},
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "communication"]
+			}
+		}
+	]
 }

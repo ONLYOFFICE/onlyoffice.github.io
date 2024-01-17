@@ -1,0 +1,45 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Settings</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="./vendor/jquery-v2.2.2-min.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <link rel="stylesheet" href="resources/css/styles.css">
+    <script type="text/javascript" src="scripts/desktop.js"></script>
+    <script type="text/javascript" src="scripts/settings.js"></script>
+</head>
+<body>
+	<div class="info">
+		<span class="i18n">For using ChatGPT you should get an API key.</span>
+		<span class="i18n">Go to</span> <a target="_blank" href="https://beta.openai.com/account/api-keys">OpenAI API keys</a><span>.</span>
+		<span class="i18n">Create API keys and copy in this field.</span>
+	</div>
+	<div class="form">
+		<input id="inp_key" class="form-control" placeholder="Api key">
+		<button class="btn-text-default i18n" id="btn_save">Save</button>
+	</div>
+	<div class="info">
+		<span id="err_message" class="err-message"></span>
+		<span id="success_message" class="header hidden i18n">Api key saved successfully.</span>
+	</div>
+	<div id="loader-container" class="asc-loader-container loader hidden"></div>
+</body>
+</html>

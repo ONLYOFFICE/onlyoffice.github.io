@@ -1,115 +1,123 @@
 {
-    "name": "draw.io",
-    "nameLocale": {
-        "ru": "draw.io",
-        "fr": "draw.io",
-        "es": "draw.io",
-        "de": "draw.io"
-    },
-    "guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
-    "version": "1.0.1",
+	"name": "draw.io",
+	"nameLocale": {
+		"ru": "draw.io",
+		"fr": "draw.io",
+		"es": "draw.io",
+		"de": "draw.io"
+	},
+	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
+	"version": "1.0.3",
 
-    "variations": [
-        {
-            "description": "Create, edit, and insert professional-looking diagrams into your documents.",
-            "descriptionLocale": {
-                "ru": "Создавайте, редактируйте и добавляйте в документы различные диаграммы.",
-                "fr": "Créez, modifiez et insérez des diagrammes professionnels dans vos documents.",
-                "es": "Cree, edite e inserte diagramas de aspecto profesional en sus documentos.",
-                "de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein."
-            },
-            "url": "index.html",
+	"variations": [
+		{
+			"description": "Create, edit, and insert professional-looking diagrams into your documents.",
+			"descriptionLocale": {
+				"ru": "Создавайте, редактируйте и добавляйте в документы различные диаграммы.",
+				"fr": "Créez, modifiez et insérez des diagrammes professionnels dans vos documents.",
+				"es": "Cree, edite e inserte diagramas de aspecto profesional en sus documentos.",
+				"de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein."
+			},
+			"url": "index.html",
 
-            "icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
-            "icons2": [
-                {
-                    "style" : "light",
-                    
-                    "100%": {
-                        "normal": "resources/light/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/light/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/light/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/light/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/light/icon@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    
-                    "100%": {
-                        "normal": "resources/dark/icon.png"
-                    },
-                    "125%": {
-                        "normal": "resources/dark/icon@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/dark/icon@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/dark/icon@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/dark/icon@2x.png"
-                    }
-                }
-            ],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"style" : "light",
+					
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style" : "dark",
+					
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": true,
+			"isDisplayedInViewer": false,
+			"EditorsSupport": [ "word", "cell", "slide" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
 
-            "initDataType": "ole",
+			"initDataType": "ole",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Insert",
-                    "primary": true,
-                    "textLocale": {
-                        "ru": "Вставить",
-                        "fr": "Insérer",
-                        "es": "Insertar",
-                        "de": "Einfügen",
-                        "cs": "Vložit"
-                    }
-                },
-                {
-                    "text": "Cancel",
-                    "primary": false,
-                    "textLocale": {
-                        "ru": "Отмена",
-                        "fr": "Annuler",
-                        "es": "Cancelar",
-                        "de": "Abbrechen",
-                        "cs": "Zrušit"
-                    }
-                }
-            ],
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true,
+					"textLocale": {
+						"ru": "Вставить",
+						"fr": "Insérer",
+						"es": "Insertar",
+						"de": "Einfügen",
+						"cs": "Vložit"
+					},
+					"isViewer": false
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen",
+						"cs": "Zrušit"
+					}
+				}
+			],
 
-            "size": [ 1200, 1000 ],
-            "store": {
-                "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#444444;"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "work", "recommended"]
-            }
-        }
-    ]
+			"size": [ 1200, 1000 ],
+			"store": {
+				"background": {
+					"light" : "#FFF3E7",
+					"dark" : "#FFF3E7;"
+				},
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png",
+					"resources/store/screenshots/screen_4.png",
+					"resources/store/screenshots/screen_5.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work", "recommended"]
+			}
+		}
+	]
 }

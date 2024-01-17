@@ -2,184 +2,527 @@
  *
  * (c) Copyright Ascensio System SIA 2020
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *	 http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
  */
+ // todo поправить readme  и собранный плагин и с синонимами поправить тоже
+(function(window, undefined){
+	let ApiKey = '';
+	let bHasKey = false;
+	const model = 'text-davinci-003';
+	const maxLen = 4000;
+	let loadingPhrase = 'Loading...';
+	let thesaurusCounter = 0;
+	let settingsWindow = null;
+	let chatWindow = null;
+	let customReqWindow = null;
+	let imgsize = null;
+	let link = null;
+	let linkWindow = null;
 
-(function (window, undefined) {
-	let loader;
-	let isDarkTheme = false;
-	let elements = {};
-	let apiKey = null;
-	let errTimeout = null;
-	let tokenTimeot = null;
-	let modalTimeout = null;
-	let bCreateLoader = true;
-	let maxTokens = 4000;
-	const isIE = checkInternetExplorer();
-	const AllowedModels = {
-		'text-ada-001' : true,
+	window.Asc.plugin.init = function() {};
 
-		'text-babbage-001' : true,
-
-		'curie-instruct-beta' : true,
-		'text-curie-001' : true,
-
-
-		'text-davinci-003' : true,
-		'text-davinci-002' : true,
-		'text-davinci-001' : true,
-		'davinchi-instruct-beta' : true,
-		'davinchi:2020-05-03' : true,
-
-		'gpt-3.5-turbo': true
+	function checkApiKey() {
+		ApiKey = localStorage.getItem('OpenAIApiKey') || '';
+		if (!ApiKey.length) {
+			bHasKey = false;
+		} else {
+			bHasKey = true;
+		}
 	};
 
-	// let arr = [];
-
-	window.Asc.plugin.init = function() {
-		if (isIE) {
-			bCreateLoader = false;
-			destroyLoader();
-			document.getElementById('div_ie_error').classList.remove('hidden');
-			return;
-		} else {
-			bCreateLoader = true;
+	function getContextMenuItems(options) {
+		link = null;
+		checkApiKey();
+		let settings = {
+			guid: window.Asc.plugin.guid,
+			items: [
+				{
+					id : 'ChatGPT',
+					text : generateText('ChatGPT'),
+					items : []
+				}
+			]
 		};
-		apiKey = localStorage.getItem('OpenAIApiKey') || null;
-		addSlidersListeners();
-		addTitlelisteners();
-		initElements();
-		initScrolls();
-		if (apiKey) {
-			fetchModels();
-		} else {
-			elements.divConfig.classList.remove('hidden');
-			bCreateLoader = false;
-			destroyLoader();
+
+		if (bHasKey)
+		{
+			switch (options.type)
+			{
+				case 'Target':
+				{
+					if (Asc.plugin.info.editorType === 'word') {
+						settings.items[0].items.push({
+							id : 'onMeaningT',
+							text : generateText('Explain text in comment')
+						});
+					}
+
+					break;
+				}
+				case 'Selection':
+				{
+					if (Asc.plugin.info.editorType === 'word') {
+						settings.items[0].items.push(
+							{
+								id : 'TextAnalysis',
+								text : generateText('Text analysis'),
+								items : [
+									{
+										id : 'onSummarize',
+										text : generateText('Summarize')
+									},
+									{
+										id : 'onKeyWords',
+										text : generateText('Keywords')
+									},
+								]
+							},
+							{
+								id : 'Tex Meaning',
+								text : generateText('Word analysis'),
+								items : [
+									{
+										id : 'onMeaningS',
+										text : generateText('Explain text in comment'),
+									},
+									{
+										id : 'onMeaningLinkS',
+										text : generateText('Explain text in hyperlink')
+									}
+								]
+							},
+							{
+								id : 'TranslateText',
+								text : generateText('Translate'),
+								items : [
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to English'),
+										data : 'English'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to French'),
+										data : 'French'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to German'),
+										data : 'German'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to Chinese'),
+										data : 'Chinise'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to Japanese'),
+										data : 'Japanese'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to Russian'),
+										data : 'Russian'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to Korean'),
+										data : 'Korean'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to Spanish'),
+										data : 'Spanish'
+									},
+									{
+										id : 'onTranslate',
+										text : generateText('Translate to Italian'),
+										data : 'Italian'
+									}
+								]
+							},
+							{
+								id : 'OnGenerateImageList',
+								text : generateText('Generate image from text'),
+								items : [
+									{
+										id : 'OnGenerateImage',
+										text : generateText('256x256'),
+										data : 256
+									},
+									{
+										id : 'OnGenerateImage',
+										text : generateText('512x512'),
+										data : 512
+									},
+									{
+										id : 'OnGenerateImage',
+										text : generateText('1024x1024'),
+										data : 1024
+									}
+								]
+							}
+						);
+					}
+					break;
+				}
+				case 'Image':
+				case 'Shape':
+					{
+						settings.items[0].items.push({
+							id : 'onImgVar',
+							text : generateText('Generate image variation')
+						});
+
+						break;
+					}
+				case 'Hyperlink':
+					{
+						settings.items[0].items.push({
+							id : 'onHyperlink',
+							text : generateText('Show hyperlink content')
+						});
+						link = options.value;
+						break;
+					}
+
+				default:
+					break;
+			}
+
+			settings.items[0].items.push(
+				{
+					id : 'onChat',
+					text : generateText('Chat'),
+					separator: true
+				},
+				{
+					id : 'onCustomReq',
+					text : generateText('Custom request')
+				}
+			);
 		}
 
-		elements.inpLenSl.oninput = onSlInput;
-		elements.inpTempSl.oninput = onSlInput;
-		elements.inpTopSl.oninput = onSlInput;
+		settings.items[0].items.push({
+				id : 'onSettings',
+				text : generateText('Settings'),
+				separator: true
+		});
 
-		elements.btnSaveConfig.onclick = function() {
-			elements.apiKeyField.classList.remove('error_border');
-			elements.textArea.classList.remove('error_border');
-			document.getElementById('apiKeyError').classList.add('hidden');
-			document.getElementById('lb_key_err').innerHTML = '';
-			document.getElementById('lb_key_err_mes').innerHTML = '';
-			createLoader();
-			elements.divConfig.classList.add('hidden');
-			apiKey = elements.apiKeyField.value.trim();
-			fetchModels();
+		return settings;
+	}
+
+	window.Asc.plugin.attachEvent('onContextMenuShow', function(options) {
+		// todo: change key validation
+		if (!options)
+			return;
+
+		this.executeMethod('AddContextMenuItem', [getContextMenuItems(options)]);
+
+		if (bHasKey && options.type === "Target")
+		{
+			window.Asc.plugin.executeMethod('GetCurrentWord', null, function(text) {
+				if (!isEmpyText(text, true)) {
+					thesaurusCounter++;
+					let tokens = window.Asc.OpenAIEncode(text);
+					createSettings(text, tokens, 9, true);
+				}
+			});
+		}
+	});
+
+	function generateText(text) {
+		let lang = window.Asc.plugin.info.lang.substring(0,2);
+		let result = { en: text	};
+		if (lang !== "en")
+			result[lang] = window.Asc.plugin.tr(text);
+
+		return result;
+	};
+
+	window.Asc.plugin.attachContextMenuClickEvent('onSettings', function() {
+		let location  = window.location;
+		let start = location.pathname.lastIndexOf('/') + 1;
+		let file = location.pathname.substring(start);
+
+		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
+		let variation = {
+			url : location.href.replace(file, 'settings.html'),
+			description : window.Asc.plugin.tr('Settings'),
+			isVisual : true,
+			buttons : [],
+			isModal : true,
+			EditorsSupport : ["word", "slide", "cell"],
+			size : [ 592, 100 ]
 		};
 
-		elements.reconfigure.onclick = function() {
-			if (errTimeout) {
-				clearTimeout(errTimeout);
-				errTimeout = null;
-				clearMainError();
-			}
-			localStorage.removeItem('OpenAIApiKey');
-			elements.apiKeyField.value = apiKey;
-			apiKey = '';
-			elements.divContent.classList.add('hidden');
-			elements.divConfig.classList.remove('hidden');
+		if (!settingsWindow) {
+			settingsWindow = new window.Asc.PluginWindow();
+			settingsWindow.attachEvent("onWindowMessage", function(message) {
+				messageHandler(settingsWindow, message);
+			});
+		}
+		settingsWindow.show(variation);
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onCustomReq', function() {
+		let location  = window.location;
+		let start = location.pathname.lastIndexOf('/') + 1;
+		let file = location.pathname.substring(start);
+
+		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
+		let variation = {
+			url : location.href.replace(file, 'custom.html'),
+			description : window.Asc.plugin.tr('OpenAI'),
+			isVisual : true,
+			buttons : [],
+			isModal : true,
+			EditorsSupport : ["word", "slide", "cell"],
+			size : [ 400, 400 ]
 		};
 
-		elements.btnClear.onclick = function() {
-			elements.textArea.value = '';
-			elements.textArea.focus();
+		if (!customReqWindow) {
+			customReqWindow = new window.Asc.PluginWindow();
+			customReqWindow.attachEvent("onWindowMessage", function(message) {
+				messageHandler(customReqWindow, message);
+			});
+		}
+		customReqWindow.show(variation);
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onChat', function() {
+		let location  = window.location;
+		let start = location.pathname.lastIndexOf('/') + 1;
+		let file = location.pathname.substring(start);
+
+		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
+		let variation = {
+			url : location.href.replace(file, 'chat.html'),
+			description : window.Asc.plugin.tr('ChatGPT'),
+			isVisual : true,
+			buttons : [],
+			isModal : false,
+			EditorsSupport : ["word", "slide", "cell"],
+			size : [ 400, 400 ]
 		};
 
-		elements.textArea.oninput = function(event) {
-			elements.textArea.classList.remove('error_border');
-			if (tokenTimeot) {
-				clearTimeout(tokenTimeot);
-				tokenTimeot = null;
-			}
-			tokenTimeot = setTimeout(function() {
-				let text = event.target.value.trim();
+		if (!chatWindow) {
+			chatWindow = new window.Asc.PluginWindow();
+			chatWindow.attachEvent("onWindowMessage", function(message){
+				messageHandler(chatWindow, message);
+			});
+		}
+		chatWindow.show(variation);
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onHyperlink', function(data) {
+		let location  = window.location;
+		let start = location.pathname.lastIndexOf('/') + 1;
+		let file = location.pathname.substring(start);
+
+		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
+		let variation = {
+			url : location.href.replace(file, 'hyperlink.html'),
+			description : window.Asc.plugin.tr('Hyperlink'),
+			isVisual : true,
+			buttons : [],
+			isModal : false,
+			EditorsSupport : ["word"],
+			size : [ 1000, 1000 ]
+		};
+
+		if (!linkWindow) {
+			linkWindow = new window.Asc.PluginWindow();
+			linkWindow.attachEvent("onWindowMessage", function(message){
+				messageHandler(linkWindow, message);
+			});
+		}
+		linkWindow.show(variation);
+		setTimeout(function() {
+			linkWindow.command('onTest', link);
+		},500)
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMeaningT', function() {
+		window.Asc.plugin.executeMethod('GetCurrentWord', null, function(text) {
+			if (!isEmpyText(text)) {
 				let tokens = window.Asc.OpenAIEncode(text);
-				elements.lbTokens.innerText = tokens.length;
-				checkLen();
-			}, 250);
-
-		};
-
-		elements.textArea.onkeydown = function(e) {
-			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-				elements.btnSubmit.click();
+				createSettings(text, tokens, 8);
 			}
-		};
+		});
+	});
 
-		elements.divTokens.onmouseenter = function() {
-			elements.modal.classList.remove('hidden');
-			if (modalTimeout) {
-				clearTimeout(modalTimeout);
-				modalTimeout = null;
+	window.Asc.plugin.attachContextMenuClickEvent('onSummarize', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 1);
 			}
-		};
+		});
+	});
 
-		elements.divTokens.onmouseleave = function() {
-			modalTimeout = setTimeout(function() {
-				elements.modal.classList.add('hidden');
-			},100)
-		};
-
-		elements.modal.onmouseenter = function() {
-			if (modalTimeout) {
-				clearTimeout(modalTimeout);
-				modalTimeout = null;
+	window.Asc.plugin.attachContextMenuClickEvent('onKeyWords', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 2);
 			}
-		};
+		});
+	});
 
-		elements.modal.onmouseleave = function() {
-			elements.modal.classList.add('hidden');
-		};
-
-		elements.labelMore.onclick = function() {
-			elements.linkMore.click();
-		};
-
-		elements.btnShowSettins.onclick = function() {
-			elements.divParams.classList.toggle('hidden');
-			elements.arrow.classList.toggle('arrow_down');
-			elements.arrow.classList.toggle('arrow_up');
-		};
-
-		elements.btnSubmit.onclick = function() {
-			let settings = getSettings();
-			if (settings.error) {
-				elements.textArea.classList.add('error_border');
-				return;
-			};
-			createLoader();
-			let url = 'https://api.openai.com/v1/completions'
-			if (settings.messages) {
-				url = 'https://api.openai.com/v1/chat/completions'
-				// arr.push(...settings.messages);
-				// settings.messages = arr;
+	window.Asc.plugin.attachContextMenuClickEvent('onMeaningS', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 3);
 			}
+		});
+	});
 
-			fetch(url, {
+	window.Asc.plugin.attachContextMenuClickEvent('onMeaningLinkS', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 4);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onTranslate', function(data) {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				let prompt = 'Translate to ' + data + ': ' + text;
+				createSettings(prompt, tokens, 6);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('OnGenerateImage', function(data) {
+		let size = Number(data);
+		imgsize = {width: size, height: size};
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 7);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onThesaurus', function(data) {
+		window.Asc.plugin.executeMethod('ReplaceCurrentWord', [data]);
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onImgVar', function() {
+		window.Asc.plugin.executeMethod('GetImageDataFromSelection', null, function(data) {
+			createSettings(data, 0, 10);
+		});
+	});
+
+	function createSettings(text, tokens, type, isNoBlockedAction) {
+		let url;
+		let settings = {
+			model : model,
+			max_tokens : maxLen - tokens.length
+		};
+
+		if (settings.max_tokens < 100) {
+			console.error(new Error('This request is too big!'));
+			return;
+		}
+
+		window.Asc.plugin.executeMethod('StartAction', [isNoBlockedAction ? 'Information' : 'Block', 'ChatGPT: ' + loadingPhrase]);
+
+		switch (type) {
+			case 1:
+				settings.prompt	= 'Summarize this text: "' + text + '"';
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 2:
+				settings.prompt = 'Get Key words from this text: "' + text + '"';
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 3:
+				settings.prompt = 'What does it mean "' + text + '" ?';
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 4:
+				settings.prompt = 'Give a link to the explanation of the word "' + text + '"';
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 5:
+				settings.prompt = text;
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 6:
+				settings.prompt = text;
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 7:
+				delete settings.model;
+				delete settings.max_tokens;
+				settings.prompt = 'Generate image: "' + text + '"';
+				settings.n = 1;
+				settings.size = imgsize.width + 'x' + imgsize.height;
+				settings.response_format = 'b64_json';
+				url = 'https://api.openai.com/v1/images/generations';
+				break;
+
+			case 8:
+				settings.prompt = 'What does it mean "' + text + '" ?';
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 9:
+				settings.prompt = 'Give synonyms for the word  "' + text + '" as javascript array';
+				url = 'https://api.openai.com/v1/completions';
+				break;
+
+			case 10:
+				imageToBlob(text).then(function(obj) {
+					url = 'https://api.openai.com/v1/images/variations';
+					const formdata = new FormData();
+					formdata.append('image', obj.blob);
+					formdata.append('size', obj.size.str);
+					formdata.append('n', 1);// Number.parseInt(elements.inpTopSl.value));
+					formdata.append('response_format', "b64_json");
+					fetchData(formdata, url, type, isNoBlockedAction);
+				});
+				break;
+		}
+		if (type !== 10)
+			fetchData(settings, url, type, isNoBlockedAction);
+	};
+
+	function fetchData(settings, url, type, isNoBlockedAction) {
+		let header = {
+			'Authorization': 'Bearer ' + ApiKey
+		};
+		if (type < 10) {
+			header['Content-Type'] = 'application/json';
+		}
+		fetch(url, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + apiKey,
-				},
-				body: JSON.stringify(settings),
+				headers: header,
+				body: (type < 10 ? JSON.stringify(settings) : settings),
 			})
 			.then(function(response) {
 				return response.json()
@@ -188,309 +531,270 @@
 				if (data.error)
 					throw data.error
 
-				let text = data.choices[0].text || data.choices[0].message.content;
-				// if (data.choices[0].message)
-				// 	arr.push({role: data.choices[0].message.role, content: text});
-				let textColor = '';
-				if (!text.includes('</')) {
-					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
-					
-					if (text.startsWith('\n'))
-						text = text.replace('\n\n', '\n').replace('\n', '');
-					
-					text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
-
-					if (window.Asc.plugin.info.editorType == 'cell' && isDarkTheme) {
-						// it's temporarily. remove it after fixing bug https://bugzilla.onlyoffice.com/show_bug.cgi?id=61095
-						textColor = ' style="color:#000;"';
-					}
-				}
-				
-				window.Asc.plugin.executeMethod('PasteHtml', ['<div'+textColor+'>'+text+'</div>']);
+				processResult(data, type, isNoBlockedAction);
 			})
 			.catch(function(error) {
-				elements.mainError.classList.remove('hidden');
-				elements.mainErrorLb.innerHTML = error.message;
-				if (errTimeout) {
-					clearTimeout(errTimeout);
-					errTimeout = null;
+				if (type == 9)
+					thesaurusCounter--;
+
+				console.error(error);
+				window.Asc.plugin.executeMethod('EndAction', [isNoBlockedAction ? 'Information' : 'Block', 'ChatGPT: ' + loadingPhrase]);
+			});
+	};
+
+	function processResult(data, type, isNoBlockedAction) {
+		window.Asc.plugin.executeMethod('EndAction', [isNoBlockedAction ? 'Information' : 'Block', 'ChatGPT: ' + loadingPhrase]);
+		let text, start, end, img;
+		Asc.scope = {};
+		switch (type) {
+			case 1:
+				Asc.scope.data = data.choices[0].text.split('\n\n');
+				window.Asc.plugin.callCommand(function() {
+					let oDocument = Api.GetDocument();
+					let sumPar = Api.CreateParagraph();
+					sumPar.AddText('Summarize selected text: ');
+					oDocument.Push(sumPar);
+					for(let ind = 0; ind < Asc.scope.data.length; ind++) {
+						let text = Asc.scope.data[ind];
+						if (text.length) {
+							let oParagraph = Api.CreateParagraph();
+							oParagraph.AddText(text);
+							oDocument.Push(oParagraph);
+						}
+					}
+				}, false);
+				break;
+
+			case 2:
+				Asc.scope.data = data.choices[0].text.split('\n\n');
+				window.Asc.plugin.callCommand(function() {
+					let oDocument = Api.GetDocument();
+					for(let ind = 0; ind < Asc.scope.data.length; ind++) {
+						let text = Asc.scope.data[ind];
+						if (text.length) {
+							let oParagraph = Api.CreateParagraph();
+							oParagraph.AddText(text);
+							oDocument.Push(oParagraph);
+						}
+					}
+				}, false);
+				break;
+
+			case 3:
+				text = data.choices[0].text;
+				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
+				window.Asc.plugin.callCommand(function() {
+					let oDocument = Api.GetDocument();
+					let oRange = oDocument.GetRangeBySelect();
+					oRange.AddComment(Asc.scope.comment, 'OpenAI');
+				}, false);
+				break;
+
+			case 4:
+				text = data.choices[0].text;
+				start = text.indexOf('htt');
+				end = text.indexOf(' ', start);
+				if (end == -1) {
+					end = text.length;
 				}
-				errTimeout = setTimeout(clearMainError, 10000);
-				console.error('Error:', error);
-			}).finally(function(){
-				destroyLoader();
-			});
-		};
-	};
+				Asc.scope.link = text.slice(start, end);
+				if (Asc.scope.link) {
+					window.Asc.plugin.callCommand(function() {
+						let oDocument = Api.GetDocument();
+						let oRange = oDocument.GetRangeBySelect();
+						oRange.AddHyperlink(Asc.scope.link, 'Meaning of the word');
+					}, false);
+				}
+				break;
 
-	function initElements() {
-		elements.inpLenSl       = document.getElementById('inp_len_sl');
-		elements.inpTempSl      = document.getElementById('inp_temp_sl');
-		elements.inpTopSl       = document.getElementById('inp_top_sl');
-		elements.inpStop        = document.getElementById('inp_stop');
-		elements.textArea       = document.getElementById('textarea');
-		elements.btnSubmit      = document.getElementById('btn_submit');
-		elements.btnClear       = document.getElementById('btn_clear');
-		elements.btnSaveConfig  = document.getElementById('btn_saveConfig');
-		elements.apiKeyField    = document.getElementById('apiKeyField');
-		elements.divContent     = document.getElementById('div_content');
-		elements.divConfig      = document.getElementById('div_config');
-		elements.reconfigure    = document.getElementById('logoutLink');
-		elements.mainError      = document.getElementById('div_err');
-		elements.mainErrorLb    = document.getElementById('lb_err');
-		elements.keyError       = document.getElementById('apiKeyError');
-		elements.keyErrorLb     = document.getElementById('lb_key_err');
-		elements.keyErrorMes    = document.getElementById('lb_key_err_mes');
-		elements.lbTokens       = document.getElementById('lb_tokens');
-		elements.divTokens      = document.getElementById('div_tokens');
-		elements.modal          = document.getElementById('div_modal');
-		elements.lbModalLen     = document.getElementById('lb_modal_length');
-		elements.labelMore      = document.getElementById('lb_more');
-		elements.linkMore       = document.getElementById('link_more');
-		elements.btnShowSettins = document.getElementById('div_show_settings');
-		elements.divParams      = document.getElementById('div_parametrs');
-		elements.arrow          = document.getElementById('arrow');
-		elements.lbAvalTokens   = document.getElementById('lbl_avliable_tokens');
-		elements.lbUsedTokens   = document.getElementById('lbl_used_tokens');
-	};
+			case 5:
+				text = data.choices[0].text;
+				start = text.indexOf('<img');
+				end = text.indexOf('/>', start);
+				if (end == -1) {
+					end = text.length;
+				}
+				let imgUrl = text.slice(start, end);
+				if (imgUrl) {
+					window.Asc.plugin.executeMethod('PasteHtml', [imgUrl])
+				}
+				break;
 
-	function initScrolls() {
-		PsMain = new PerfectScrollbar('#div_content', {});
-		PsConf = new PerfectScrollbar('#div_config', {});
-	};
+			case 6:
+				text = data.choices[0].text.startsWith('\n\n') ? data.choices[0].text.substring(2) : data.choices[0].text;
+				window.Asc.plugin.executeMethod('PasteText', [text]);
+				break;
 
-	function addSlidersListeners() {
-		const rangeInputs = document.querySelectorAll('input[type="range"]');
+			case 7:
+				let url = (data.data && data.data[0]) ? data.data[0].b64_json : null;
+				if (url) {
+					Asc.scope.url = /^data\:image\/png\;base64/.test(url) ? url : 'data:image/png;base64,' + url + '';
+					Asc.scope.imgsize = imgsize;
+					imgsize = null;
+					window.Asc.plugin.callCommand(function() {
+						let oDocument = Api.GetDocument();
+						let oParagraph = Api.CreateParagraph();
+						let width = Asc.scope.imgsize.width * (25.4 / 96.0) * 36000;
+						let height = Asc.scope.imgsize.height * (25.4 / 96.0) * 36000;
+						let oDrawing = Api.CreateImage(Asc.scope.url, width, height);
+						oParagraph.AddDrawing(oDrawing);
+						oDocument.Push(oParagraph);
+					}, false);
 
-		function handleInputChange(e) {
-			let target = e.target;
-			if (e.target.type !== 'range') {
-				target = document.getElementById('range');
-			} 
-			const min = target.min;
-			const max = target.max;
-			const val = target.value;
-			
-			target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
-		};
+					// let oImageData = {
+					// 	"src": /^data\:image\/png\;base64/.test(url) ? url : `data:image/png;base64,${url}`,
+					// 	"width": imgsize.width,
+					// 	"height": imgsize.height
+					// };
+					// imgsize = null;
+					// window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+				}
+				break;
 
-		rangeInputs.forEach(function(input) {
-			input.addEventListener('input', handleInputChange);
-		});
-	};
+			case 8:
+				text = data.choices[0].text;
+				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
+				window.Asc.plugin.callCommand(function() {
+					var oDocument = Api.GetDocument();
+					Api.AddComment(oDocument, Asc.scope.comment, 'OpenAI');
+				}, false);
+				break;
 
-	function addTitlelisteners() {
-		let divs = document.querySelectorAll('.div_parametr');
-		divs.forEach(function(div) {
-			div.addEventListener('mouseenter', function (event) {
-				event.target.children[0].classList.remove('hidden');
-			});
+			case 9:
+				thesaurusCounter--;
+				if (0 < thesaurusCounter)
+					return;
 
-			div.addEventListener('mouseleave', function (event) {
-				event.target.children[0].classList.add('hidden');
-			});
-		});
-	};
+				text = data.choices[0].text;
+				let startPos = text.indexOf("[");
+				let endPos = text.indexOf("]");
 
-	function onSlInput(e) {
-		e.target.nextElementSibling.innerText = e.target.value;
-		if (e.target.id == elements.inpLenSl.id)
-			elements.lbModalLen.innerText = e.target.value;
-	};
+				if (-1 === startPos || -1 === endPos || startPos > endPos)
+					return;
 
-	function fetchModels() {
-		fetch('https://api.openai.com/v1/models', {
-			method: 'GET',
-			headers: {
-				'Authorization': 'Bearer ' + apiKey
-			}
-		})
-		.then(function(response) {
-			return response.json();
-		})
-		.then(function(data) {
-			if (data.error)
-				throw data.error;
+				text = text.substring(startPos, endPos + 1);
+				let arrayWords = eval(text);
 
-			let arrModels = [];
-			
-			for (let index = 0; index < data.data.length; index++) {
-				let model = data.data[index];
-				if (AllowedModels[model.id])
-					arrModels.push( { id: model.id, text: model.id } );
-			};
+				let items = getContextMenuItems({ type : "Target" });
 
-			$('#sel_models').select2({
-				data : arrModels
-			}).on('select2:select', function(e) {
-				let model = $('#sel_models').val();
-				maxTokens = (model === 'gpt-3.5-turbo' || model === 'text-davinci-003') ? 4000 : 2000;
-				checkLen();
-			});
+				let itemNew = {
+					id : "onThesaurusList",
+					text : generateText("Thesaurus"),
+					items : []
+				};
 
-			if ($('#sel_models').find('option[value=text-davinci-003]').length) {
-				$('#sel_models').val('text-davinci-003').trigger('change');
-			} else { 
-				var newOption = new Option('text-davinci-003', 'text-davinci-003', true, true);
-				$('#sel_models').append(newOption).trigger('change');
-			}
-			localStorage.setItem('OpenAIApiKey', apiKey);
-			elements.divContent.classList.remove('hidden');
-		})
-		.catch(function(error) {
-			elements.keyError.classList.remove('hidden');
-			elements.keyErrorLb.innerHTML = error.code || 'Error:';
-			elements.keyErrorMes.innerHTML = error.message;
-			elements.apiKeyField.classList.add('error_border');
-			elements.divConfig.classList.remove('hidden');
-			console.error(error);
-		}).finally(function() {
-			updateScroll();
-			destroyLoader();
-		});
-	};
+				for (let i = 0; i < arrayWords.length; i++)
+				{
+					itemNew.items.push({
+							id : 'onThesaurus',
+							data : arrayWords[i],
+							text : arrayWords[i]
+						}
+					);
+				}
 
-	function getSettings() {
-		let value = elements.textArea.value.trim();
-		let obj = {
-			model : $('#sel_models').val(),
-		};
-		if (!value.length) {
-			obj.error = true;
-		} else {
-			if (obj.model.includes('turbo')) {
-				obj.messages = [{role: "user", content: value}]
-			} else {
-				obj.prompt = value
-			}
-			let temp = Number(elements.inpTempSl.value);
-			obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
-			let len = Number(elements.inpLenSl.value);
-			obj.max_tokens = ( len < 0 ? 0 : ( len > maxTokens ? maxTokens : len ) );
-			let topP = Number(elements.inpTopSl.value);
-			obj.top_p = ( topP < 0 ? 0 : ( topP > 1 ? 1 : topP ) );
-			let stop = elements.inpStop.value;
-			if (stop.length)
-				obj.stop = stop;
-		}
-		return obj;
-	};
-
-	function createLoader() {
-		$('#loader-container').removeClass( "hidden" );
-		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
-		loader = showLoader($('#loader-container')[0], getMessage('Loading...'));
-	};
-
-	function destroyLoader() {
-		$('#loader-container').addClass( "hidden" )
-		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
-		loader = undefined;
-	};
-
-	function clearMainError() {
-		elements.mainError.classList.add('hidden');
-		elements.mainErrorLb.innerHTML = '';
-	};
-
-	function getMessage(key) {
-		return window.Asc.plugin.tr(key);
-	};
-
-	function updateScroll() {
-		PsMain && PsMain.update();
-		PsConf && PsConf.update();
-	};
-
-	function checkInternetExplorer() {
-		let rv = -1;
-		if (window.navigator.appName == 'Microsoft Internet Explorer') {
-			const ua = window.navigator.userAgent;
-			const re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
-			if (re.exec(ua) != null) {
-				rv = parseFloat(RegExp.$1);
-			}
-		} else if (window.navigator.appName == 'Netscape') {
-			const ua = window.navigator.userAgent;
-			const re = new RegExp('Trident/.*rv:([0-9]{1,}[\.0-9]{0,})');
-
-			if (re.exec(ua) != null) {
-				rv = parseFloat(RegExp.$1);
-			}
-		}
-		return rv !== -1;
-	};
-
-	function checkLen() {
-		let cur = Number(elements.lbTokens.innerText);
-		let maxLen = Number(elements.inpLenSl.value);
-		let newValue = maxTokens - cur;
-		if (cur + maxLen > maxTokens) {
-			setTokensLenght(newValue, newValue);
-		} else {
-			setTokensLenght(maxLen, newValue);
+				items.items[0].items.unshift(itemNew);
+				window.Asc.plugin.executeMethod('UpdateContextMenuItem', [items]);
+				break;
+			case 10:
+				img = (data.data && data.data[0]) ? data.data[0].b64_json : null;
+				if (img) {
+					let sImageSrc = /^data\:image\/png\;base64/.test(img) ? img : 'data:image/png;base64,' + img + '';
+					let oImageData = {
+						"src": sImageSrc,
+						"width": imgsize.width,
+						"height": imgsize.height
+					};
+					imgsize = null;
+					window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+				}
+				break;
 		}
 	};
 
-	function setTokensLenght(val, max) {
-		elements.inpLenSl.setAttribute('max', max);
-		elements.inpLenSl.value = val;
-		let event = document.createEvent('Event');
-		event.initEvent('input', true, true);
-		elements.inpLenSl.dispatchEvent(event);
-		elements.lbAvalTokens.innerText = elements.inpLenSl.getAttribute('max');
-		elements.lbUsedTokens.innerText = elements.lbTokens.innerText;
+	window.Asc.plugin.button = function(id, windowId) {
+
+		if (!settingsWindow && !chatWindow && !linkWindow && !customReqWindow)
+			return;
+
+		if (windowId) {
+			switch (id) {
+				case -1:
+				default:
+					window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
+			}
+		}
+
 	};
 
 	window.Asc.plugin.onTranslate = function() {
-		if (bCreateLoader)
-			createLoader();
+		loadingPhrase = window.Asc.plugin.tr(loadingPhrase);
+	};
 
-		let elements = document.querySelectorAll('.i18n');
-		bCreateLoader = true;
+	function imageToBlob(img) {
+		return new Promise(function(resolve) {
+			const image = new Image();
+			image.onload = function() {
+				const img_size = {width: image.width, height: image.height};
+				const canvas_size = normalizeImageSize(img_size);
+				const draw_size = canvas_size.width > image.width ? img_size : canvas_size;
+				let canvas = document.createElement('canvas');
+				canvas.width = canvas_size.width;
+				canvas.height = canvas_size.height;
+				canvas.getContext('2d').drawImage(image, 0, 0, draw_size.width, draw_size.height*image.height/image.width);
+				imgsize = img_size;
+				canvas.toBlob(function(blob) {resolve({blob: blob, size: canvas_size})}, 'image/png');
+			};
+			image.src = img.src;
+		});
+	};
 
-		for (let index = 0; index < elements.length; index++) {
-			let element = elements[index];
-			element.innerText = getMessage(element.innerText);
+	function normalizeImageSize (size) {
+		let width = 0, height = 0;
+		if ( size.width > 750 || size.height > 750 )
+			width = height = 1024;
+		else if ( size.width > 375 || size.height > 350 )
+			width = height = 512;
+		else width = height = 256;
+
+		return {width: width, height: height, str: width + 'x' + height}
+	};
+
+	function messageHandler(modal, message) {
+		switch (message.type) {
+			case 'onWindowReady':
+				modal.command('onApiKey', ApiKey)
+				break;
+
+			case 'onRemoveApiKey':
+				localStorage.removeItem('OpenAIApiKey');
+				break;
+
+			case 'onAddApiKey':
+				localStorage.setItem('OpenAIApiKey', message.key);
+				window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
+				break;
+
+			case 'onExecuteMethod':
+				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
+					window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
+				});
+				break;
+
+			case 'onGetLink':
+				modal.command('onSetLink', link);
+				break;
 		}
 	};
 
-	window.Asc.plugin.onThemeChanged = function(theme) {
-		window.Asc.plugin.onThemeChangedBase(theme);
-		if (isIE) return;
+	function isEmpyText(text, bDonShowErr) {
+		if (text.trim() === '') {
+			if (!bDonShowErr)
+				console.error('No word in this position or nothing is selected.');
 
-		let rule = ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
-		let sliderBG, thumbBG
-		if (theme.type.indexOf('dark') !== -1) {
-			isDarkTheme = true;
-			sliderBG = theme.Border || '#757575';
-			// for dark '#757575';
-			// for contrast dark #616161
-			thumbBG = '#fcfcfc';
-		} else {
-			isDarkTheme = false;
-			sliderBG = '#ccc';
-			thumbBG = '#444';
+			return true;
 		}
-		rule += '\n input[type="range"] { background-color: '+sliderBG+' !important; background-image: linear-gradient('+thumbBG+', '+thumbBG+') !important; }';
-		rule += '\n input[type="range"]::-webkit-slider-thumb { background: '+thumbBG+' !important; }';
-		rule += '\n input[type="range"]::-moz-range-thumb { background: '+thumbBG+' !important; }';
-		rule += '\n input[type="range"]::-ms-thumb { background: '+thumbBG+' !important; }';
-		rule += "\n .arrow { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
-		
-		let styleTheme = document.createElement('style');
-		styleTheme.type = 'text/css';
-		styleTheme.innerHTML = rule;
-		document.getElementsByTagName('head')[0].appendChild(styleTheme);
-	};
-
-	window.onresize = function() {
-		updateScroll();
-		updateScroll();
-	};
-
-	window.Asc.plugin.button = function(id) {
-		window.Asc.plugin.executeCommand("close", "");
+		return false;
 	};
 
 })(window, undefined);

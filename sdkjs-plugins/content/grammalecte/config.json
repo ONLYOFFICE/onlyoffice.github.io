@@ -1,27 +1,26 @@
 {
-    "name": "Grammalecte",
+	"name": "Grammalecte",
 	"nameLocale": {
-        "ru": "Grammalecte",
-        "fr": "Grammalecte",
-        "es": "Grammalecte",
-        "de": "Grammalecte"
-    },
-    "guid": "asc.{6ef67492-a111-4ca5-bd4f-bf02645afc61}",
-    "version": "1.0.0",
+		"ru": "Grammalecte",
+		"fr": "Grammalecte",
+		"es": "Grammalecte",
+		"de": "Grammalecte"
+	},
+	"guid": "asc.{6ef67492-a111-4ca5-bd4f-bf02645afc61}",
+	"version": "1.0.2",
 
-    "variations": [
-        {
-            "description": "Quickly correct grammar and style mistakes in French texts.",
+	"variations": [
+		{
+			"description": "Quickly correct grammar and style mistakes in French texts.",
 			"descriptionLocale": {
-                "ru": "Быстро исправляйте грамматические и стилистические ошибки в текстах на французском языке.",
-                "fr": "Corrigez rapidement les fautes de grammaire et de style dans les textes en français.",
-                "es": "Corrija rápidamente los errores gramaticales y de estilo de los textos en francés.",
-                "de": "Korrigieren Sie schnell Grammatik- und Stilfehler in französischen Texten."
-            },
-            "url": "index.html",
-
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
-            "icons2": [
+				"ru": "Быстро исправляйте грамматические и стилистические ошибки в текстах на французском языке.",
+				"fr": "Corrigez rapidement les fautes de grammaire et de style dans les textes en français.",
+				"es": "Corrija rápidamente los errores gramaticales y de estilo de los textos en francés.",
+				"de": "Korrigieren Sie schnell Grammatik- und Stilfehler in französischen Texten."
+			},
+			"url": "index.html",
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"icons2": [
 				{
 					"theme" : "flat",
 					"style" : "light",
@@ -66,66 +65,69 @@
 					}
 				}
 			],
-            "isViewer": true,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "cell", "slide", "pdf" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": true,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": true,
 
-            "initDataType": "text",
-            "initData": "",
+			"initDataType": "text",
+			"initData": "",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [],
+			"buttons": [],
 
-            "initOnSelectionChanged": true,
+			"initOnSelectionChanged": true,
 
-            "store": {
-                "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#444444"
-                },
-                "screenshots" : ["resources/store/screenshots/screen_1.png"],
-                "icons"       : {
-                    "light" : "resources/store/icons",
-                    "dark"  : "resources/store/icons"
-                },
-                "categories": ["specAbilities", "work"]
-            }
-        },
-        {
-            "description": "About",
-            "descriptionLocale": {
-                "ru": "Справка",
-                "fr": "À propos",
-                "es": "Sobre programa",
-                "de": "Über"
-            },
-            "url": "index_about.html",
+			"store": {
+				"background": {
+					"light" : "#F5F5F5",
+					"dark" : "#444444"
+				},
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		},
+		{
+			"description": "About",
+			"descriptionLocale": {
+				"ru": "Справка",
+				"fr": "À propos",
+				"es": "Sobre programa",
+				"de": "Über"
+			},
+			"url": "index_about.html",
 
-            "icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
-            "isViewer": false,
-            "EditorsSupport": [ "word", "cell", "slide" ],
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png", "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "cell", "slide" ],
 
-            "isVisual": true,
-            "isModal": true,
-            "isInsideMode": false,
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
 
-            "initDataType": "none",
-            "initData": "",
+			"initDataType": "none",
+			"initData": "",
 
-            "isUpdateOleOnResize": false,
+			"isUpdateOleOnResize": false,
 
-            "buttons": [
-                {
-                    "text": "Ok",
-                    "primary": true
-                }
-            ],
+			"buttons": [
+				{
+					"text": "Ok",
+					"primary": true
+				}
+			],
 
-            "size": [ 400, 50 ]            
-        }
-    ]
+			"size": [ 400, 50 ]
+		}
+	]
 }

@@ -16,7 +16,7 @@
  *
  */
 (function(window, undefined){
-	let sHelpText		= 'Choose Markdown or HTML. \r* Default: convert entire doc. \r* Select text to limit scope. \rFor more details, click the Docs link above.'
+	let sHelpText = 'Choose Markdown or HTML. \r* Default: convert entire doc. \r* Select text to limit scope. \rFor more details, click the Docs link above.'
 	let oConfig = {
 		convertType : '',
 		htmlHeadings : false,
@@ -24,6 +24,7 @@
 		demoteHeadings : false,
 		renderHTMLTags : false
 	};
+	let previewWindow = null;
 
 	window.Asc.plugin.init = function() {
 		SetSavedFromLocalStorage();
@@ -86,11 +87,11 @@
 
 	function SetConfig(sConvertType) {
 		oConfig.htmlHeadings   = false;
-		oConfig.base64img	  = false;
+		oConfig.base64img      = false;
 		oConfig.demoteHeadings = false;
 		oConfig.renderHTMLTags = false;
 		oConfig.suppressInfo   = false;
-		oConfig.convertType = sConvertType;
+		oConfig.convertType    = sConvertType;
 
 		if (document.getElementById('demote_headings').checked) {
 			oConfig.demoteHeadings = true;
@@ -146,7 +147,34 @@
 			let sTemp = oTextArea.value;
 			oTextArea.value = '';
 			oTextArea.value = sTemp;
-		}
+		};
+
+		document.getElementById("btn-preview").onclick = function() {
+			let location  = window.location;
+			let start = location.pathname.lastIndexOf('/') + 1;
+			let file = location.pathname.substring(start);
+			
+			// default settings for modal window
+			let variation = {
+				url : location.href.replace(file, 'preview.html'),
+				description : window.Asc.plugin.tr('Preview'),
+				isVisual : true,
+				isModal : true,
+				isViewer : true,
+				EditorsSupport : ["word"],
+				buttons : [],
+				size : [600, 600]
+			};
+			
+			if (!previewWindow) {
+				previewWindow = new window.Asc.PluginWindow();
+				previewWindow.attachEvent("onDoc2MdMessage", function() {
+					let data = document.getElementById('text-area').value;
+					previewWindow.command('onDoc2MdData', {type: oConfig.convertType ,data:data});
+				});
+			}
+			previewWindow.show(variation);
+		};
 	});
 
 	function selectText(id) {
@@ -160,8 +188,12 @@
 		}
 	};
 
-	window.Asc.plugin.button = function() {
-		this.executeCommand("close", "");
+	window.Asc.plugin.button = function(id, windowID) {
+		if (previewWindow && windowID) {
+			this.executeMethod('CloseWindow', [windowID]);
+		} else {
+			this.executeCommand("close", "");
+		}
 	};
 
 	function getMessage(key) {

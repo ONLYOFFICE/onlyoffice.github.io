@@ -1,13 +1,15 @@
 {
     "name"       : "Plugin Manager",
-    "nameLocale" : {
-        "ru" : "Менеджер плагинов",
-        "fr" : "Gestionnaire de Plugins",
-        "es" : "Administrador de Complementos",
-        "de" : "Plugin-Verwaltung",
-        "cs" : "Správce Pluginů"
+    "nameLocale": {
+        "ru": "Менеджер плагинов",
+        "fr": "Gestionnaire de Plugins",
+        "es": "Administrador de Complementos",
+        "de": "Plugin-Verwaltung",
+        "cs": "Správce Pluginů",
+        "si": "පේනු කළමනාකරු"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
+    "version": "1.0.3",
     "group" : {
         "name" : "Plugin Manager",
         "rank" : 1
@@ -58,15 +60,15 @@
                 }
             }
             ],
-            "isViewer"            : false,
-            "EditorsSupport"      : ["word", "cell", "slide"],
+            "isViewer"            : true,
+            "EditorsSupport"      : ["word", "cell", "slide", "pdf"],
             "isVisual"            : true,
             "isModal"             : true,
             "isInsideMode"        : false,
             "isSystem"            : false,
             "initDataType"        : "none",
             "isUpdateOleOnResize" : false,
-            "size"                : [608, 570],
+            "size"                : [608, 600],
             "buttons"             : []
         }
     ]

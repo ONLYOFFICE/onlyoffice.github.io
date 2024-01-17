@@ -44,3 +44,30 @@ html, body {
 .info {
 	margin-top: 10px;
 }
+.loader {
+	margin: 0 !important;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100% !important;
+	background-color: rgba(128, 128, 128, 0.5);
+}
+.div_developer {
+	display: flex;
+	flex-flow: column;
+	width: calc(100% - 40px);
+	margin: 20px;
+}
+.link_submit {
+	text-decoration: underline dotted !important;
+	text-underline-offset: 4px;
+	margin-top: 15px;
+	cursor: pointer;
+}
+.link_submit:hover {
+	text-decoration: underline dotted !important;
+}
+.lab_developer {
+	margin-bottom: 5px;
+}

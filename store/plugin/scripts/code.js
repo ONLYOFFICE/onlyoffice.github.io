@@ -16,23 +16,23 @@
  *
  */
 (function(window, undefined) {
-	const isDesktop = window.AscDesktopEditor !== undefined;
-	let isOnline = isDesktop ? true : null;
-	let isInit = false;
+	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
 	let interval = null;
-	if (!isDesktop)
-		checkInternet();
+	let errTimeout = null;
+	let loader = null;
+	let loaderTimeout = null;
 
 	// create iframe
 	const iframe = document.createElement("iframe");
 
-	let modalWindow = null;
+	let warningWindow = null;
+	let developerWindow = null;
 	let removeGuid = null;
 	let BFrameReady = false;
 	let BPluginReady = false;
 	let editorVersion = null;
 	let marketplaceURl = null;
-	const OOMarketplaceUrl = isDesktop ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
+	const OOMarketplaceUrl = isLocal ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
 	try {
 		// for incognito mode
 		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
@@ -41,8 +41,13 @@
 	}
 	
 	window.Asc.plugin.init = function() {
-		isInit = true;
-		if (typeof isOnline === 'boolean') {
+		window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
+		// resize window
+		window.Asc.plugin.resizeWindow(608, 600, 608, 600, 0, 0);
+		if (!isLocal) {
+			checkInternet(true);
+			loaderTimeout = setTimeout(createLoader, 500);
+		} else {
 			initPlugin();
 		}
 	};
@@ -53,11 +58,10 @@
 
 	function initPlugin() {
 		document.body.appendChild(iframe);
-		// resize window
 		if (marketplaceURl !== OOMarketplaceUrl)
 			document.getElementById('notification').classList.remove('hidden');
 
-		window.Asc.plugin.resizeWindow(608, 570, 608, 570, 0, 0);
+		// send message that plugin is ready
 		window.Asc.plugin.executeMethod("GetVersion", null, function(version) {
 			editorVersion = version;
 			BPluginReady = true;
@@ -66,35 +70,25 @@
 		});
 
 		let divNoInt = document.getElementById('div_noIternet');
-		// send message that plugin is ready
-		if (isOnline) {
-			let style = document.getElementsByTagName('head')[0].lastChild;
-			let pageUrl = marketplaceURl;
-			iframe.src = pageUrl + window.location.search;
-			iframe.onload = function() {
-				BFrameReady = true;
-				if (BPluginReady) {
-					if (!divNoInt.classList.contains('hidden')) {
-						divNoInt.classList.add('hidden');
-						clearInterval(interval);
-						interval = null;
-					}
-					postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
-					postMessage( { type: 'PluginReady', version: editorVersion } );
+		let style = document.getElementsByTagName('head')[0].lastChild;
+		let pageUrl = marketplaceURl;
+		iframe.src = pageUrl + window.location.search;
+		iframe.onload = function() {
+			BFrameReady = true;
+			if (BPluginReady) {
+				if (!divNoInt.classList.contains('hidden')) {
+					divNoInt.classList.add('hidden');
+					clearInterval(interval);
+					interval = null;
 				}
-			};
-		} else {
-			divNoInt.classList.remove('hidden');
-			if (!interval) {
-				interval = setInterval(function() {
-					checkInternet();
-				}, 5000);
+				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
+				postMessage( { type: 'PluginReady', version: editorVersion } );
 			}
-		}
+		};
 	};
 
 	window.Asc.plugin.button = function(id, windowID) {
-		if (modalWindow && windowID) {
+		if (warningWindow && windowID) {
 			switch (id) {
 				case 0:
 					removePlugin(false);
@@ -107,10 +101,17 @@
 					break;
 			}
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+		} else if (developerWindow && windowID) {
+			if (id == 0)
+				developerWindow.command('onClickBtn');
+			else
+				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
 				postMessage( { type: 'onClickBack' } );
+		} else if (id == 'developer') {
+			createWindow('developer');
 		} else {
 			this.executeCommand('close', '');
 		}
@@ -118,14 +119,7 @@
 
 	window.addEventListener("message", function(message) {
 		// getting messages from marketplace
-		let data;
-		// try to parse message
-		try {
-			data = JSON.parse(message.data);
-		} catch (error) {
-			// if we have a problem, don't process this message
-			return;
-		}
+		let data = JSON.parse(message.data);
 			
 		switch (data.type) {
 			case 'getInstalled':
@@ -156,7 +150,7 @@
 				});
 				break;
 			case 'showButton' :
-				window.Asc.plugin.executeMethod('ShowButton',['back', data.show]);
+				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
 				break;
 		}
 		
@@ -190,70 +184,122 @@
 			label.innerHTML = window.Asc.plugin.tr(label.innerHTML);
 	};
 
-	function checkInternet() {
+	function checkInternet(bSetTimeout) {
 		try {
 			let xhr = new XMLHttpRequest();
-			let url = 'https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/store/translations/langs.json';
+			let url = 'https://onlyoffice.github.io/store/translations/langs.json';
 			xhr.open('GET', url, true);
 			
 			xhr.onload = function () {
 				if (this.readyState == 4) {
 					if (this.status >= 200 && this.status < 300) {
-						isOnline = true;
-						if (isInit)
-							initPlugin();
+						endInternetChecking(true);
 					}
 				}
 			};
 
 			xhr.onerror = function (err) {
-				isOnline = false;
-				if (isInit)
-					initPlugin();
+				endInternetChecking(false);
 			};
 
 			xhr.send(null);
 		} catch (error) {
-			isOnline = false;
-			if (isInit)
-				initPlugin();
+			endInternetChecking(false);
+		}
+		if (bSetTimeout) {
+			errTimeout = setTimeout(function() {
+				// if loading is too long show the error (because sometimes requests can not send error)
+				endInternetChecking(false);
+			}, 15000);
 		}
 	};
 
-	function createWindow() {
+	function endInternetChecking(isOnline) {
+		clearTimeout(errTimeout);
+		errTimeout = null;
+		destroyLoader();
+		if (isOnline) {
+			initPlugin();
+		} else {
+			document.getElementById('div_noIternet').classList.remove('hidden');
+			if (!interval) {
+				interval = setInterval(function() {
+					checkInternet(false);
+				}, 5000);
+			}
+		}
+	};
+
+	function createWindow(type) {
+		let fileName = 'warning.html';
+		let description = window.Asc.plugin.tr('Warning');
+		let size = [350, 100];
+		let buttons = [
+			{
+				'text': window.Asc.plugin.tr('Yes'),
+				'primary': true
+			},
+			{
+				'text': window.Asc.plugin.tr('No'),
+				'primary': false
+			}
+		];
+		if (type == 'developer') {
+			fileName = 'developer.html';
+			description = window.Asc.plugin.tr('Developer Mode');
+			size = [500, 150];
+			buttons = [
+				{
+					'text': window.Asc.plugin.tr('Ok'),
+					'primary': true
+				},
+				{
+					'text': window.Asc.plugin.tr('Cancel'),
+					'primary': false
+				}
+			];
+		}
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 		
 		let variation = {
-			url : location.href.replace(file, 'modal.html'),
-			description : window.Asc.plugin.tr('Warning'),
+			url : location.href.replace(file, fileName),
+			description : description,
 			isVisual : true,
 			isModal : true,
 			EditorsSupport : ['word', 'cell', 'slide'],
-			size : [350, 100],
-			buttons : [
-				{
-					'text': window.Asc.plugin.tr('Yes'),
-					'primary': true
-				},
-				{
-					'text': window.Asc.plugin.tr('No'),
-					'primary': false
-				}
-			]
+			size : size,
+			buttons : buttons
 		};
 		
-		if (!modalWindow) {
-			modalWindow = new window.Asc.PluginWindow();
-			modalWindow.attachEvent('onWindowMessage', function(data){
-				let oConfig = data.config;
-				window.Asc.plugin.executeMethod('ConvertDocument', [oConfig.convertType, oConfig.htmlHeadings, oConfig.base64img, oConfig.demoteHeadings, oConfig.renderHTMLTags], function(sOutput) {
-					modalWindow.command('onConverted', sOutput);
+		if (type == 'warning') {
+			if (!warningWindow) {
+				warningWindow = new window.Asc.PluginWindow();
+			}
+			warningWindow.show(variation);
+		} else {
+			if (!developerWindow) {
+				developerWindow = new window.Asc.PluginWindow();
+				developerWindow.attachEvent("onWindowMessage", function(message) {
+					if (message.type == 'SetURL') {
+						if (message.url.length) {
+							marketplaceURl = message.url;
+							localStorage.setItem('DeveloperMarketplaceUrl', marketplaceURl);
+							document.getElementById('notification').classList.remove('hidden');
+						} else {
+							marketplaceURl = OOMarketplaceUrl;
+							localStorage.removeItem('DeveloperMarketplaceUrl');
+							document.getElementById('notification').classList.add('hidden');
+						}
+						iframe.src = marketplaceURl + window.location.search;
+					}
+					window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
 				});
-			});
+			}
+			developerWindow.show(variation);
 		}
-		modalWindow.show(variation);
+		
 	};
 
 	function removePlugin(backup) {
@@ -263,6 +309,29 @@
 			});
 		
 		removeGuid = null;
+	};
+
+	window.onresize = function() {
+		// zoom for all elements in plugin window
+		let zoom = 1;
+		if (window.devicePixelRatio < 1)
+			zoom = 1 / window.devicePixelRatio;
+		
+		document.getElementsByTagName('html')[0].style.zoom = zoom;
+	};
+
+	function createLoader() {
+		$('#loader-container').removeClass( "hidden" );
+		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
+		loader = showLoader($('#loader-container')[0], window.Asc.plugin.tr('Checking internet connection...'));
+	};
+
+	function destroyLoader() {
+		clearTimeout(loaderTimeout);
+		loaderTimeout = null;
+		$('#loader-container').addClass( "hidden" )
+		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
+		loader = undefined;
 	};
 
 })(window, undefined);

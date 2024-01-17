@@ -1,0 +1,10 @@
+{
+	"This version of \"Plugin Manager\" is not official." : "මෙය නිල නොවන \"පේනු කළමනාකරු\" අනුවාදයකි.",
+	"No Internet Connection.": "අන්තර්ජාල සම්බන්ධතාවයක් නැත.",
+	"Warning" : "අවවාදයයි",
+	"Yes" : "ඔව්",
+	"No" : "නැහැ",
+	"Do you want to completely remove this plugin?" : "ඔබට මෙම පේනුව සම්පූර්ණයෙන්ම ඉවත් කිරීමට වුවමනා ද?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "ඔබ \"නැත\" තෝරන්නේ නම්, මෙම පේනුව පසුව වෙළඳපොළෙන් ප්‍රත්‍යර්පණයට හැකි වනු ඇත.",
+	"Checking internet connection..." : "සම්බන්ධතාවය පරීක්‍ෂා වෙමින්..."
+}
