@@ -25,6 +25,7 @@ It is called "ChatGPT" and isn't installed by default in cloud, [self-hosted](ht
 
 ## Warning
 * For request from context menu it has restriction by gpt-4 model: 8k tokens.
+* If you don't have a subscription on "gtp-4" model, plugin will use one of "gpt-3.5" models. In this case restriction could be from 4k to 16k (depends from model).
 
 ## Known issues
 
