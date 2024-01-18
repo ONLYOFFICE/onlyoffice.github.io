@@ -9,7 +9,7 @@
 		return false;
 	}
 
-	if (internal_isLocal)
+	if (internal_isLocal())
 	{
 		window.fetch = function(url, obj) {
 
