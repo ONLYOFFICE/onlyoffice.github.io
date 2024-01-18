@@ -23,7 +23,7 @@
 	"Translate to Italian" : "Přeložit do češtiny",
 	"Generate image from text": "Generovat obrázek z textu",
 	"Settings": "Nastavení",
-	"Maximum 4000 tokens are available." : "K dispozici je maximálně 4000 žetonů.",
+	"Maximum 8000 tokens are available." : "K dispozici je maximálně 8000 žetonů.",
 	"For work with this model we should save chat history and sent it into a request." : "Pro práci s tímto modelem bychom měli uložit historii chatu a odeslat ji do požadavku.",
 	"But we have a limit on the number of tokens in the request." : "Ale máme limit na počet žetonů v žádosti.",
 	"That's why sometimes you should clear your chat history." : "Proto byste někdy měli vymazat historii chatu.",
@@ -61,5 +61,10 @@
 	"Zobrazit obsah hypertextových odkazů" : "Показать содержимое гиперссылки",
 	"Warning" : "Varování",
 	"This plugin is not supported by IE": "Tento plugin není podporován IE",
+	"Fix spelling & grammar": "Opravit pravopis a gramatiku",
+	"Rewrite differently": "Přepište jinak",
+	"Make longer": "Udělejte déle",
+	"Make shorter": "Udělat kratší",
+	"Make simpler": "Zjednodušte",
 	"Invalid Api key or this service doesn't work in your region." : "Neplatný klíč Api nebo tato služba ve vaší oblasti nefunguje."
 }
