@@ -24,7 +24,7 @@
 	let tokenTimeot = null;
 	let modalTimeout = null;
 	let bCreateLoader = true;
-	let maxTokens = 8000;
+	let maxTokens = 4000;
 	let prefix = { previous: 'gpt-3.5', last: 'gpt-4'};
 	const isIE = checkInternetExplorer();
 
