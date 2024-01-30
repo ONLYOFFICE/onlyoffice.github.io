@@ -23,3 +23,5 @@ window.mxImageBasePath = window.DRAWIO_BASE_URL + "/mxgraph/images";
 window.EMF_CONVERT_URL = window.EMF_CONVERT_URL || "internal"
 
 urlParams['sync'] = 'manual';
+urlParams['local'] = '1';
+urlParams['offline'] = '1';
