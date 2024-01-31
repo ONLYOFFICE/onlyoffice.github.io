@@ -19,16 +19,26 @@
 	<meta charset="UTF-8">
 	<title>About</title>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-	<script type="text/javascript">
-		window.Asc.plugin.init = function()
-		{
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script type="text/javascript">
+       	window.Asc.plugin.init = function() {
 			this.resizeWindow(400, 130, 400, 130, 400, 130);
 		};
-		window.Asc.plugin.button = function(id)
-		{
+		window.Asc.plugin.button = function(id) {
 			this.executeCommand("close", "");
 		};
-	</script>
+		
+		window.Asc.plugin.onTranslate = function() {
+			var elements = document.getElementsByClassName("i18n");
+			for (var i = 0; i < elements.length; i++) {
+				var el = elements[i];
+				if (el.attributes["placeholder"]) el.attributes["placeholder"].value = window.Asc.plugin.tr(el.attributes["placeholder"].value);
+				if (el.innerText) el.innerText = window.Asc.plugin.tr(el.innerText);
+			}
+		};
+
+    </script>
 	<style>
 		p, a{
 			font-size: 12px;
@@ -56,8 +66,7 @@
 	</style>
 </head>
 <body style="padding-left: 20px; padding-right: 20px">
-	<p style="font-size: 15px" id="p1">This plugin use:</p>
-	<p style="font-size: 12px" id="p2"><a href="https://pixabay.com/ru/" target="_blank">Pixabay</a> is a website for sharing photos, illustrations, vector graphics.</p>
-	<p>Version: 1.0.0</p>
+	<p class="i18n" style="font-size: 15px" id="p1">This plugin use:</p>
+	<p style="font-size: 12px" id="p2"><a href="https://pixabay.com" target="_blank">Pixabay</a> <span class="i18n">is a website for sharing photos, illustrations, vector graphics.</span></p>
 </body>
 </html>

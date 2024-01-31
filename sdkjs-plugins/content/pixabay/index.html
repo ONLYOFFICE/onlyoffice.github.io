@@ -139,7 +139,7 @@
 			border: 1px solid #D9534F !important;
 		}
 		.api_empty {
-			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEDSURBVHgBnVLRTcMwEH1nIFKrfhiJIj7NBozgTcgGhAmqTFAyAWETqwvABvQTESTyUQoqbY5zlJSqTaukT7J8su/5ne8eYQNstZ4jiCS8BbOpjl/8UnQS99zbtM6lOpjZYUiMsYQazciZOB64j4c1cWYvImIaowUUI+xNsif6tlem4NXztlLfvZf73F7uKC/o91oVWI2wv7wm6ACndwqMG3QFU6hk604EjMKRoC87fJVyTRcS+7nKJ9OmS9/VurM7ap74g2UicY72an4ccWWA0jWPbYiSF/UnWVI2Z+CyVOx0f0jZKykuQk+qyv3Hp9UmwNmomm09pqkYPl2oZXLu8vXDf54ZXXDvkOajAAAAAElFTkSuQmCC);
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEDSURBVHgBnVLRTcMwEH1nIFKrfhiJIj7NBozgTcgGhAmqTFAyAWETqwvABvQTESTyUQoqbY5zlJSqTaukT7J8su/5ne8eYQNstZ4jiCS8BbOpjl/8UnQS99zbtM6lOpjZYUiMsYQazciZOB64j4c1cWYvImIaowUUI+xNsif6tlem4NXztlLfvZf73F7uKC/o91oVWI2wv7wm6ACndwqMG3QFU6hk604EjMKRoC87fJVyTRcS+7nKJ9OmS9/VurM7ap74g2UicY72an4ccWWA0jWPbYiSF/UnWVI2Z+CyVOx0f0jZKykuQk+qyv3Hp9UmwNmomm09pqkYPl2oZXLu8vXDf54ZXXDvkOajAAAAAElFTkSuQmCC) !important;
 			background-repeat: no-repeat;
 			background-position: right;
 			background-position-x: 98%;
@@ -164,6 +164,14 @@
 			font-size: 13px;
 		}
 
+		/* todo change chrome autofill styles */
+		/* input:-webkit-autofill,
+		input:-webkit-autofill:hover,
+		input:-webkit-autofill:focus,
+		input:-webkit-autofill:active {
+			transition: background-color 5000000s ease-in-out 0s;
+		} */
+
 	</style>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 </head>
@@ -174,206 +182,111 @@
 				<div class="asc-loader-image">
 					<div class="asc-loader-title"></div>
 				</div>
-				<div class="asc-loader-title">
-					Loading...
-				</div>
+				<div class="asc-loader-title i18n">Loading...</div>
 			</div>
 		</div>
 	</div>
 	<div id="main-container-id" >
 		<div id="api" style="margin-bottom: 16px;">
-			<div style="margin: 12px"><span>To use Pixabay, create Pixabay account, then copy the API key and insert it in the specified field.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-pixabay/tree/develop#configuration">Learn more here.</a></div>
+			<!-- todo change link -->
+			<div style="margin: 12px"><span class="i18n">To use Pixabay, create Pixabay account, then copy the API key and insert it in the specified field.</span> <a id="link-readme" class="i18n" target="_blank" href="https://github.com/ONLYOFFICE/plugin-pixabay/tree/develop#configuration">Learn more here.</a></div>
 			<div style="margin: 16px 0 4px 0; font-weight: normal !important;">
-				<label style="margin-left:12px;">API key</label>
+				<label class="i18n" style="margin-left:12px;">API key</label>
 			</div>
-			<input type="text" id="api-value" class="form-control" data-id="pixabay-api-value-id" placeholder="Enter your Pixabay API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
-			<button onсlick="" id="save" class="btn-text-default">Save</button>
+			<input type="text" id="api-value" class="form-control i18n" data-id="pixabay-api-key" placeholder="Enter your Pixabay API key" style="width: calc(100% - 24px); margin: 0 12px 0 12px; text-align: left;">
+			<button id="save" class="btn-text-default i18n">Save</button>
 		</div>
 		<div id="main-search-container-id" style="display:none;">
-			<input type="text" id="search-phrase" class="form-control" placeholder="Enter search phrase" data-id="search-phrase-id" style="width: calc(100% - 24px); margin: 16px 12px 0 12px; text-align: left;">
-			<button onсlick="" id="button-search-id" class="btn-text-default">Search</button>
-			<div id="hide_show_reconf"><label class="hidden">Hide advanced settings</label><label class="opened">Show advanced settings</label><label id="reconf">Reconfigure API key</label></div>
+			<input type="text" id="search-phrase" class="form-control i18n" placeholder="Enter search phrase" data-id="search-phrase-id" style="width: calc(100% - 24px); margin: 16px 12px 0 12px; text-align: left;">
+			<button id="button-search-id" class="btn-text-default i18n">Search</button>
+			<div id="hide_show_reconf"><label class="hidden i18n">Hide advanced settings</label><label class="opened i18n">Show advanced settings</label><label id="reconf" class="i18n">Reconfigure API key</label></div>
 			<div id="first-separator" class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px; display:none;"></div>
 			<div id="settings" style="position: relative; height: 88%; display:none;">
 				<div id="locale-container" style="margin: 0 12px 16px 12px;">
-					<span class="locale" style="display: flex; flex-direction: column;"><label class="header" style="font-weight: normal !important;">Language</label> <select id="pixabay-locale" class="select_example" data-id="pixabay-locale" title="Locale">
-						<option value="cs" data-text-id="locale-cs">
-							Czech
-						</option>
-						<option value="da" data-text-id="locale-da">
-							Danish
-						</option>
-						<option value="de" data-text-id="locale-de">
-							German
-						</option>
-						<option selected="selected" value="en" data-text-id="locale-en">
-							English
-						</option>
-						<option value="es" data-text-id="locale-es">
-							Spanish
-						</option>
-						<option value="fr" data-text-id="locale-fr">
-							French
-						</option>
-						<option value="id" data-text-id="locale-id">
-							Indonesian
-						</option>
-						<option value="it" data-text-id="locale-it">
-							Italian
-						</option>
-						<option value="hu" data-text-id="locale-hu">
-							Hungarian
-						</option>
-						<option value="nl" data-text-id="locale-nl">
-							Dutch
-						</option>
-						<option value="no" data-text-id="locale-no">
-							Norwegian
-						</option>
-						<option value="pl" data-text-id="locale-pl">
-							Polish
-						</option>
-						<option value="pt" data-text-id="locale-pt">
-							Portuguese
-						</option>
-						<option value="ro" data-text-id="locale-ro">
-							Romanian
-						</option>
-						<option value="sk" data-text-id="locale-sk">
-							Slovak
-						</option>
-						<option value="fi" data-text-id="locale-fi">
-							Finnish
-						</option>
-						<option value="sv" data-text-id="locale-sv">
-							Swedish
-						</option>
-						<option value="tr" data-text-id="locale-tr">
-							Turkish
-						</option>
-						<option value="vi" data-text-id="locale-vi">
-							Vietnamese
-						</option>
-						<option value="th" data-text-id="locale-th">
-							Thai
-						</option>
-						<option value="bg" data-text-id="locale-bg">
-							Bulgarian
-						</option>
-						<option value="ru" data-text-id="locale-ru">
-							Russian
-						</option>
-						<option value="el" data-text-id="locale-el">
-							Greek
-						</option>
-						<option value="ja" data-text-id="locale-ja">
-							Japanese
-						</option>
-						<option value="ko" data-text-id="locale-ko">
-							Korean
-						</option>
-						<option value="zh" data-text-id="locale-zh">
-							Chinese
-						</option>
-
-
+					<span class="locale" style="display: flex; flex-direction: column;"><label class="header i18n" style="font-weight: normal !important;">Language</label>
+						<select id="pixabay-locale" class="select_example" data-id="pixabay-locale" title="Locale">
+							<option value="cs" class="i18n" data-text-id="locale-cs">Czech</option>
+							<option value="da" class="i18n" data-text-id="locale-da">Danish</option>
+							<option value="de" class="i18n" data-text-id="locale-de">German</option>
+							<option selected="selected" value="en" class="i18n" data-text-id="locale-en">English</option>
+							<option value="es" class="i18n" data-text-id="locale-es">Spanish</option>
+							<option value="fr" class="i18n" data-text-id="locale-fr">French</option>
+							<option value="id" class="i18n" data-text-id="locale-id">Indonesian</option>
+							<option value="it" class="i18n" data-text-id="locale-it">Italian</option>
+							<option value="hu" class="i18n" data-text-id="locale-hu">Hungarian</option>
+							<option value="nl" class="i18n" data-text-id="locale-nl">Dutch</option>
+							<option value="no" class="i18n" data-text-id="locale-no">Norwegian</option>
+							<option value="pl" class="i18n" data-text-id="locale-pl">Polish</option>
+							<option value="pt" class="i18n" data-text-id="locale-pt">Portuguese</option>
+							<option value="ro" class="i18n" data-text-id="locale-ro">Romanian</option>
+							<option value="sk" class="i18n" data-text-id="locale-sk">Slovak</option>
+							<option value="fi" class="i18n" data-text-id="locale-fi">Finnish</option>
+							<option value="sv" class="i18n" data-text-id="locale-sv">Swedish</option>
+							<option value="tr" class="i18n" data-text-id="locale-tr">Turkish</option>
+							<option value="vi" class="i18n" data-text-id="locale-vi">Vietnamese</option>
+							<option value="th" class="i18n" data-text-id="locale-th">Thai</option>
+							<option value="bg" class="i18n" data-text-id="locale-bg">Bulgarian</option>
+							<option value="ru" class="i18n" data-text-id="locale-ru">Russian</option>
+							<option value="el" class="i18n" data-text-id="locale-el">Greek</option>
+							<option value="ja" class="i18n" data-text-id="locale-ja">Japanese</option>
+							<option value="ko" class="i18n" data-text-id="locale-ko">Korean</option>
+							<option value="zh" class="i18n" data-text-id="locale-zh">Chinese</option>
 						</select>
 					</span>
 				</div>
 				<div id="img_type_container" style="margin-bottom: 16px;">
 					<div id="img_type-header" style="margin-bottom: 8px">
-						<label class="header" style="margin-left: 12px;">Image type</label>
+						<label class="header i18n" style="margin-left: 12px;">Image type</label>
 					</div>
 					<div class="img_type input_container">
-						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-all" data-id="type-all-id"> <label class="checkbox" for="type-all">All</label>
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-all" data-id="type-all-id"> <label class="checkbox i18n" for="type-all">All</label>
 					</div>
 					<div class="img_type input_container">
-						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-photo" data-id="type-photo-id"> <label class="checkbox" for="type-photo">Photo</label>
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-photo" data-id="type-photo-id"> <label class="checkbox i18n" for="type-photo">Photo</label>
 					</div>
 					<div class="img_type input_container">
-						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-illustration" data-id="type-illustration-id"> <label class="checkbox" for="type-illustration">Illustration</label>
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-illustration" data-id="type-illustration-id"> <label class="checkbox i18n" for="type-illustration">Illustration</label>
 					</div>
 					<div class="img_type input_container">
-						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vector" data-id="type-vector-id"> <label class="checkbox" for="type-vector">Vector</label>
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vector" data-id="type-vector-id"> <label class="checkbox i18n" for="type-vector">Vector</label>
 					</div>
 				</div>
 				<div id="orientation_type_container" style="margin-bottom: 16px;">
 					<div id="orientation_type-header" style="margin-bottom: 8px">
-						<label class="header" style="margin-left: 12px; font-weight: normal !important;">Orientation</label>
+						<label class="header i18n" style="margin-left: 12px; font-weight: normal !important;">Orientation</label>
 					</div>
 					<div class="orientation_type input_container">
-						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vertical" data-id="type-vertical-id"> <label class="checkbox" for="type-vertical">Vertical</label>
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-vertical" data-id="type-vertical-id"> <label class="checkbox i18n" for="type-vertical">Vertical</label>
 					</div>
 					<div class="orientation_type input_container">
-						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-horizontal" data-id="type-horizontal-id"> <label class="checkbox" for="type-horizontal">Horizontal</label>
+						  <input type="checkbox" class="rule-checkbox form-control" checked="checked" id="type-horizontal" data-id="type-horizontal-id"> <label class="checkbox i18n" for="type-horizontal">Horizontal</label>
 					</div>
 				</div>
 				<div id="category-container" style="margin: 0 12px 16px 12px;">
-				  <span class="locale" style="display: flex; flex-direction: column;"><label class="header" style="font-weight: normal !important;">Category</label> <select id="pixabay-category" class="select_example" data-id="pixabay-category">
-					  <option selected="selected" value="all" data-text-id="category-all">
-						All
-					  </option>
-					  <option value="backgrounds" data-text-id="category-backgrounds">
-						Backgrounds
-					  </option>
-					  <option value="fashion" data-text-id="category-fashion">
-						Fashion
-					  </option>
-					  <option value="nature" data-text-id="category-nature">
-						Nature
-					  </option>
-					  <option value="science" data-text-id="category-science">
-						Science
-					  </option>
-					  <option value="education" data-text-id="category-education">
-						Education
-					  </option>
-					  <option  value="feelings" data-text-id="category-feelings">
-						Feelings
-					  </option>
-					  <option value="health" data-text-id="category-health">
-						Health
-					  </option>
-					  <option value="people" data-text-id="category-people">
-						People
-					  </option>
-					  <option value="religion" data-text-id="category-religion">
-						Religion
-					  </option>
-					  <option value="places" data-text-id="category-places">
-						Places
-					  </option>
-					  <option value="animals" data-text-id="category-animals">
-						Animals
-					  </option>
-					  <option value="industry" data-text-id="category-industry">
-						Industry
-					  </option>
-					  <option value="computer" data-text-id="category-computer">
-						Computer
-					  </option>
-					  <option value="food" data-text-id="category-food">
-						Food
-					  </option>
-					  <option value="sports" data-text-id="category-sports">
-						Sports
-					  </option>
-					  <option value="transportations" data-text-id="category-transportations">
-						Transportations
-					  </option>
-					  <option value="travel" data-text-id="category-travel">
-						Travel
-					  </option>
-					  <option value="buildings" data-text-id="category-buildings">
-						Buildings
-					  </option>
-					  <option value="business" data-text-id="category-business">
-						Business
-					  </option>
-					  <option value="music" data-text-id="category-music">
-						Music
-					  </option>
-			  </select>
+				  <span class="locale" style="display: flex; flex-direction: column;"><label class="header i18n" style="font-weight: normal !important;">Category</label>
+					<select id="pixabay-category" class="select_example" data-id="pixabay-category">
+						<option selected="selected" value="all" class="i18n" data-text-id="category-all">All</option>
+						<option value="backgrounds" class="i18n" data-text-id="category-backgrounds">Backgrounds</option>
+						<option value="fashion" class="i18n" data-text-id="category-fashion">Fashion</option>
+						<option value="nature" class="i18n" data-text-id="category-nature">Nature</option>
+						<option value="science" class="i18n" data-text-id="category-science">Science</option>
+						<option value="education" class="i18n" data-text-id="category-education">Education</option>
+						<option  value="feelings" class="i18n" data-text-id="category-feelings">Feelings</option>
+						<option value="health" class="i18n" data-text-id="category-health">Health</option>
+						<option value="people" class="i18n" data-text-id="category-people">People</option>
+						<option value="religion" class="i18n" data-text-id="category-religion">Religion</option>
+						<option value="places" class="i18n" data-text-id="category-places">Places</option>
+						<option value="animals" class="i18n" data-text-id="category-animals">Animals</option>
+						<option value="industry" class="i18n" data-text-id="category-industry">Industry</option>
+						<option value="computer" class="i18n" data-text-id="category-computer">Computer</option>
+						<option value="food" class="i18n" data-text-id="category-food">Food</option>
+						<option value="sports" class="i18n" data-text-id="category-sports">Sports</option>
+						<option value="transportations" class="i18n" data-text-id="category-transportations">Transportation</option>
+						<option value="travel" class="i18n" data-text-id="category-travel">Travel</option>
+						<option value="buildings" class="i18n" data-text-id="category-buildings">Buildings</option>
+						<option value="business" class="i18n" data-text-id="category-business">Business</option>
+						<option value="music" class="i18n" data-text-id="category-music">Music</option>
+			  		</select>
 				  </span>
 				</div>
 				<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
