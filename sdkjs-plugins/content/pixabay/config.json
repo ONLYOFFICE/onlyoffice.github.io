@@ -1,23 +1,11 @@
 {
 	"name": "Pixabay",
-	"nameLocale": {
-		"ru": "Pixabay",
-		"fr": "Pixabay",
-		"es": "Pixabay",
-		"de": "Pixabay"
-	},
 	"guid": "asc.{1f6b80f3-8b3c-41c7-96a1-4b4386a6bd4c}",
 	"version": "1.0.0",
 
 	"variations": [
 		{
 			"description": "Pixabay",
-			"descriptionLocale": {
-				"ru": "Pixabay",
-				"fr": "Pixabay",
-				"es": "Pixabay",
-				"de": "Pixabay"
-			},
 			"url": "index.html",
 
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
@@ -81,7 +69,8 @@
 						"ru": "Закрыть",
 						"fr": "Fermer",
 						"es": "Cerrar",
-						"de": "Schließen"
+						"de": "Schließen",
+						"cs": "Uzavřít"
 					}
 				}
 			],
@@ -103,7 +92,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"cs": "ohledně"
 			},
 			"url": "index_about.html",
 
