@@ -112,7 +112,7 @@ var  Ps1, Ps2;
 					var sSrc = oElement.Src;
 					var nEmuWidth = ((w / 96) * 914400) >> 0;
 					var nEmuHeight = ((h / 96) * 914400) >> 0;
-					sScript += '\n oImage = Api.CreateImage(\'' + sSrc + '\', ' + nEmuWidth + ', ' + nEmuHeight + ');';
+					sScript += '\n var oImage = Api.CreateImage(\'' + sSrc + '\', ' + nEmuWidth + ', ' + nEmuHeight + ');';
 					sScript += '\n oImage.SetPosition((fSlideWidth -' + nEmuWidth +  ')/2, (fSlideHeight -' + nEmuHeight +  ')/2);';
 					sScript += '\n oSlide.AddObject(oImage);';
 					sScript += '\n}'
@@ -126,7 +126,7 @@ var  Ps1, Ps2;
 					var sSrc = oElement.Src;
 					var nEmuWidth = ((w / 96) * 914400) >> 0;
 					var nEmuHeight = ((h / 96) * 914400) >> 0;
-					sScript += '\n oImage = oWorksheet.AddImage(\'' + sSrc + '\', ' + nEmuWidth + ', ' + nEmuHeight + ', nCol, 0, nRow, 0);';
+					sScript += '\n oWorksheet.AddImage(\'' + sSrc + '\', ' + nEmuWidth + ', ' + nEmuHeight + ', nCol, 0, nRow, 0);';
 					sScript += '\n}';
 					break;
 				}
