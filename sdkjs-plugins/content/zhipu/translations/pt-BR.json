@@ -1,0 +1,17 @@
+ {
+        "setting": "configuração",
+        "Set Your ZhiPu API Key first": "Configure primeiro sua chave API do ZhiPu",
+        "ZhiPu Copilot": "ZhiPu Copiloto",
+        "generate": "gerar",
+        "summarize": "resumir",
+        "explain": "explicar",
+        "translate": "traduzir",
+        "translate to English": "traduzir para Inglês",
+        "translate to Chinese": "traduzir para Chinês",
+        "translate to French": "traduzir para Francês",
+        "translate to German": "traduzir para Alemão",
+        "translate to Russian": "traduzir para Russo",
+        "translate to Spanish": "traduzir para Espanhol",
+        "clear chat history": "limpar histórico do chat",
+        "Choose a model": "Escolha um modelo"
+    }

@@ -5,7 +5,8 @@
 		"fr": "YouTube",
 		"es": "YouTube",
 		"de": "YouTube",
-		"si": "YouTube"
+		"si": "YouTube",
+		"pt": "YouTube"
 	},
 	"guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
 	"version": "1.0.4",
@@ -18,7 +19,8 @@
 				"fr": "Insérez facilement des vidéos YouTube dans vos documents.",
 				"es": "Inserte fácilmente vídeos de YouTube en sus documentos.",
 				"de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein.",
-				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න."
+				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න.",
+				"pt": "Incorpore facilmente vídeos do YouTube em seus documentos." 
 			},
 			"url": "index.html",
 
@@ -56,7 +58,8 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"pt": "Cancelar"
 					}
 				}
 			],

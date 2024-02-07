@@ -4,7 +4,8 @@
 		"ru": "LanguageTool",
 		"fr": "LanguageTool",
 		"es": "LanguageTool",
-		"de": "LanguageTool"
+		"de": "LanguageTool",
+		"pt": "LanguageTool"
 	},
 	"guid": "asc.{7CDB02C9-A0BF-4B56-9A1A-71C860B8498F}",
 	"version": "1.0.2",
@@ -16,7 +17,8 @@
 				"ru": "Исправляйте орфографические, грамматические и стилистические ошибки в ваших документах.",
 				"fr": "Améliorez l'orthographe, la grammaire et le style de vos textes.",
 				"es": "Mejore la ortografía, la gramática y el estilo de sus textos.",
-				"de": "Verbessern Sie Rechtschreibung, Grammatik und Stil in Ihren Texten."
+				"de": "Verbessern Sie Rechtschreibung, Grammatik und Stil in Ihren Texten.",
+				"pt": "Melhorar a ortografia, a gramática e o estilo de seus textos."
 			},
 			"url": "index.html",
 
@@ -100,7 +102,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"pt": "Sobre"
 			},
 			"url": "index_about.html",
 

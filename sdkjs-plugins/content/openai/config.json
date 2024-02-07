@@ -4,7 +4,8 @@
 		"ru": "ChatGPT",
 		"fr": "ChatGPT",
 		"es": "ChatGPT",
-		"de": "ChatGPT"
+		"de": "ChatGPT",
+		"pt": "ChatGPT"
 	},
 	"guid": "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
 	"version"    : "1.1.4",
@@ -18,7 +19,8 @@
 				"fr": "Utilisez le chatbot OpenAI pour effectuer des tâches qui impliquent la compréhension ou la génération de langage naturel ou de code.",
 				"es": "Utilice el chatbot OpenAI para realizar tareas que impliquen la comprensión o generación de lenguaje natural o de código.",
 				"de": "Verwenden Sie den OpenAI-Chatbot, um Aufgaben auszuführen, die das Verstehen oder Generieren von natürlicher Sprache oder Code beinhalten.",
-				"cs": "OpenAL API lze použít prakticky na jakýkoli úkol, který zahrnuje porozumění nebo generování přirozeného jazyka nebo kódu."
+				"cs": "OpenAL API lze použít prakticky na jakýkoli úkol, který zahrnuje porozumění nebo generování přirozeného jazyka nebo kódu.",
+				"pt": "Use o chatbot da OpenAI para executar tarefas que envolvam a compreensão ou a geração de linguagem natural ou código."
 			},
 			"url"   : "index.html",
 			"icons" : [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

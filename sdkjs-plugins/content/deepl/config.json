@@ -4,7 +4,8 @@
 		"ru": "DeepL",
 		"fr": "DeepL",
 		"es": "DeepL",
-		"de": "DeepL"
+		"de": "DeepL",
+		"pt": "DeePL"
 	},
 	"guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
 	"version": "1.0.2",
@@ -16,7 +17,8 @@
 				"ru": "Переводите текст на другие языки с помощью сервиса DeepL.",
 				"fr": "Traduisez un texte sélectionné dans d’autres langues avec DeepL.",
 				"es": "Traduzca el texto seleccionado a otros idiomas utilizando DeepL.",
-				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL."
+				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL.",
+				"pt": "Traduza o texto selecionado para outros idiomas usando DeepL."
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

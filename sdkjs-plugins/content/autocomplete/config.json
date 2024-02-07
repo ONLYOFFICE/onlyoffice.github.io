@@ -4,7 +4,8 @@
 		"ru": "Autocomplete",
 		"fr": "Autocomplete",
 		"es": "Autocomplete",
-		"de": "Autocomplete"
+		"de": "Autocomplete",
+		"pt": "Autocomplete"
 	},
 	"guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
 	"version" : "1.0.0",
@@ -16,7 +17,8 @@
 				"ru": "Используйте ассистент набора текста при работе в редакторе.",
 				"fr": "Utilisez un assistant de saisie pendant que vous tapez dans les éditeurs.",
 				"es": "Utilice un asistente de entrada mientras escribe en los editores.",
-				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren."
+				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren.",
+				"pt": "Use um assistente de teclado ao digitar nos editores."
 			},
 			"url"                 : "index.html",
 			"icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],

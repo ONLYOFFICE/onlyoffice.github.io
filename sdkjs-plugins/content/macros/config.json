@@ -5,6 +5,7 @@
 		"fr": "Macros",
 		"es": "Macros",
 		"de": "Makros",
+		"pt": "Macros",
 		"si": "සාර්ව"
 	},
 	"guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
@@ -22,6 +23,7 @@
 				"fr": "Automatisez vos tâches de routine et standardisez vos documents à l’aide des macros (la syntaxe du langage JavaScript est utilisée).",
 				"es": "Automatice sus tareas rutinarias y estandarice los documentos mediante macros (se utiliza la sintaxis del lenguaje JavaScript).",
 				"de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet).",
+				"pt": "Automatize suas tarefas de rotina e padronize documentos usando macros (é usada a sintaxe da linguagem JavaScript).",
 				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ)."
 			},
 			"url": "index.html",
@@ -88,7 +90,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"pt": "Cancelar"
 					}
 				}
 			],

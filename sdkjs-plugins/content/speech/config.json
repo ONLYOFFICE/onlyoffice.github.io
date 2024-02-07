@@ -24,7 +24,8 @@
 				"fr": "Convertissez le texte sélectionné en parole.",
 				"es": "Convierta el texto seleccionado en voz.",
 				"de": "Konvertieren Sie den ausgewählten Text in die Rede.",
-				"uk": "Прочитайте виділений текст."
+				"uk": "Прочитайте виділений текст.",
+				"pt": "Converta o texto selecionado em voz."
 			},
 			"url": "index.html",
 

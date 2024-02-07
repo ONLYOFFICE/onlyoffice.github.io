@@ -4,7 +4,8 @@
 		"ru": "Голосовой ввод",
 		"fr": "Saisie vocale",
 		"es": "Entrada de voz",
-		"de": "Spracheingabe"
+		"de": "Spracheingabe",
+		"pt": "Entrada de voz"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
 	"version" : "1.0.1",
@@ -16,7 +17,8 @@
 				"ru": "Используйте распознавание речи и голосовой набор текста.",
 				"fr": "Écrivez facilement avec votre voix en convertissant les mots prononcés en texte.",
 				"es": "Escriba fácilmente con su voz convirtiendo las palabras habladas en texto.",
-				"de": "Tippen Sie ganz einfach mit Ihrer Stimme, indem gesprochene Wörter in Text umgewandelt werden."
+				"de": "Tippen Sie ganz einfach mit Ihrer Stimme, indem gesprochene Wörter in Text umgewandelt werden.",
+				"pt": "Digite facilmente com sua voz convertendo palavras faladas em texto."
 			},
 			"url": "index.html",
 
@@ -96,7 +98,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"pt": "Sobre"
 			},
 			"url": "index_about.html",
 

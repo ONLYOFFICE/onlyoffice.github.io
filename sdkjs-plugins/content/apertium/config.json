@@ -4,7 +4,8 @@
 		"ru": "Apertium",
 		"fr": "Apertium",
 		"es": "Apertium",
-		"de": "Apertium"
+		"de": "Apertium",
+		"pt": "Apertium"
 	},
 	"guid": "asc.{9b224050-2354-4c1b-822b-03a97f61c79d}",
 	"version": "1.0.2",
@@ -16,7 +17,8 @@
 				"ru": "Быстро переводите слова и предложения с помощью сервиса Apertium.",
 				"fr": "Traduisez rapidement des mots et des phrases avec Apertium.",
 				"es": "Traduzca rápidamente palabras y frases con Apertium.",
-				"de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium."
+				"de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium.",
+				"pt": "Traduza rapidamente palavras e frases usando o Apertium."
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
