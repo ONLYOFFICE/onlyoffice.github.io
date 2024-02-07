@@ -84,7 +84,8 @@
 						"fr": "Insérer",
 						"es": "Insertar",
 						"de": "Einfügen",
-						"cs": "Vložit"
+						"cs": "Vložit",
+						"pt": "Inserir"
 					},
 					"isViewer": false
 				},
@@ -96,7 +97,8 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"cs": "Zrušit"
+						"cs": "Zrušit",
+						"pt": "Cancelar"
 					}
 				}
 			],

@@ -1,0 +1,13 @@
+{
+    "This version of \"Plugin Manager\" is not official." : "Esta versão do \"Gerenciador de Plugins\" não é oficial.",
+    "No Internet Connection.": "Sem conexão com a Internet.",
+    "Warning" : "Aviso",
+    "Yes" : "Sim",
+    "No" : "Não",
+    "Do you want to completely remove this plugin?" : "Deseja remover completamente este plugin?",
+    "If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Se escolher \"Não\", poderá restaurar este plugin posteriormente no marketplace.",
+    "Enter the URL for your marketplace page here" : "Digite a URL da sua página do marketplace aqui",
+    "Return to default settings" : "Voltar para as configurações padrão",
+    "Enter URL" : "Digite a URL",
+    "Cancel" : "Cancelar"
+}

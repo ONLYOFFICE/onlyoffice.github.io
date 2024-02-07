@@ -18,7 +18,7 @@
 				"fr": "Traduisez rapidement des mots et des phrases avec Apertium.",
 				"es": "Traduzca rápidamente palabras y frases con Apertium.",
 				"de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium.",
-				"pt": "Traduza rapidamente palavras e frases usando o Apertium."
+				"pt": "Traduza rapidamente palavras e frases usando Apertium."
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

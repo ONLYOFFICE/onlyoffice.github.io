@@ -20,7 +20,7 @@
 	"Translate to Spanish" : "Traduzir para Espanhol",
 	"Translate to Italian" : "Traduzir para Italiano",
 	"Generate image from text": "Gerar imagem a partir do texto",
-	"Settings": "Ajustes",
+	"Settings": "Configurações",
 	"Maximum 8000 tokens are available." : "Somente 8.000 tokens estão disponíveis.",
 	"For work with this model we should save chat history and sent it into a request." : "Para trabalhar com esse modelo, devemos salvar o histórico de bate-papo e enviá-lo para uma solicitação.",
 	"But we have a limit on the number of tokens in the request." : "Mas temos um limite para o número de tokens na solicitação.",
