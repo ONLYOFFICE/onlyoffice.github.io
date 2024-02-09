@@ -33,8 +33,8 @@
 (function(window, undefined){
 	let ApiKey = '';
 	let bHasKey = false;
-	const model = 'text-davinci-003';
-	const maxLen = 4000;
+	let model = 'gpt-3.5-turbo';
+	let maxLen = 4000;
 	let loadingPhrase = 'Loading...';
 	let thesaurusCounter = 0;
 	let settingsWindow = null;
@@ -89,8 +89,29 @@
 					if (Asc.plugin.info.editorType === 'word') {
 						settings.items[0].items.push(
 							{
+								id : 'onFixSpelling',
+								text : generateText('Fix spelling & grammar')
+							},
+							{
+								id : 'onRewrite',
+								text : generateText('Rewrite differently')
+							},
+							{
+								id : 'onMakeLonger',
+								text : generateText('Make longer')
+							},
+							{
+								id : 'onMakeShorter',
+								text : generateText('Make shorter')
+							},
+							{
+								id : 'onMakeSimple',
+								text : generateText('Make simpler')
+							},
+							{
 								id : 'TextAnalysis',
 								text : generateText('Text analysis'),
+								separator: true,
 								items : [
 									{
 										id : 'onSummarize',
@@ -418,8 +439,8 @@
 		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
 			if (!isEmpyText(text)) {
 				let tokens = window.Asc.OpenAIEncode(text);
-				let prompt = 'Translate to ' + data + ': ' + text;
-				createSettings(prompt, tokens, 6);
+				let message = `Translate to ${data}: ${text}`;
+				createSettings(message, tokens, 6);
 			}
 		});
 	});
@@ -445,6 +466,51 @@
 		});
 	});
 
+	window.Asc.plugin.attachContextMenuClickEvent('onFixSpelling', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 11);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onRewrite', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 12);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMakeLonger', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 13);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMakeShorter', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 14);
+			}
+		});
+	});
+
+	window.Asc.plugin.attachContextMenuClickEvent('onMakeSimple', function() {
+		window.Asc.plugin.executeMethod('GetSelectedText', null, function(text) {
+			if (!isEmpyText(text)) {
+				let tokens = window.Asc.OpenAIEncode(text);
+				createSettings(text, tokens, 15);
+			}
+		});
+	});
+
 	function createSettings(text, tokens, type, isNoBlockedAction) {
 		let url;
 		let settings = {
@@ -461,53 +527,53 @@
 
 		switch (type) {
 			case 1:
-				settings.prompt	= 'Summarize this text: "' + text + '"';
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: `Summarize this text: "${text}"` } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 2:
-				settings.prompt = 'Get Key words from this text: "' + text + '"';
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: `Get Key words from this text: "${text}"` } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 3:
-				settings.prompt = 'What does it mean "' + text + '" ?';
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: `What does it mean "${text}"?` } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 4:
-				settings.prompt = 'Give a link to the explanation of the word "' + text + '"';
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: `Give a link to the explanation of the word "${text}"` } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 5:
-				settings.prompt = text;
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: text } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 6:
-				settings.prompt = text;
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: text } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 7:
 				delete settings.model;
 				delete settings.max_tokens;
-				settings.prompt = 'Generate image: "' + text + '"';
+				settings.prompt = `Generate image:"${text}"`;
 				settings.n = 1;
-				settings.size = imgsize.width + 'x' + imgsize.height;
+				settings.size = `${imgsize.width}x${imgsize.height}`;
 				settings.response_format = 'b64_json';
 				url = 'https://api.openai.com/v1/images/generations';
 				break;
 
 			case 8:
-				settings.prompt = 'What does it mean "' + text + '" ?';
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: `What does it mean "${text}"?` } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 9:
-				settings.prompt = 'Give synonyms for the word  "' + text + '" as javascript array';
-				url = 'https://api.openai.com/v1/completions';
+				settings.messages = [ { role: 'user', content: `Give synonyms for the word "${text}" as javascript array` } ];
+				url = 'https://api.openai.com/v1/chat/completions';
 				break;
 
 			case 10:
@@ -521,6 +587,31 @@
 					fetchData(formdata, url, type, isNoBlockedAction);
 				});
 				break;
+
+			case 11:
+				settings.messages = [ { role: 'user', content: `Сorrect the errors in this text: ${text}`} ];
+				url = 'https://api.openai.com/v1/chat/completions';
+				break;
+
+			case 12:
+				settings.messages = [ { role: 'user', content: `Rewrite differently and give result on the same language: ${text}`} ];
+				url = 'https://api.openai.com/v1/chat/completions';
+				break;
+			
+			case 13:
+				settings.messages = [ { role: 'user', content: `Make this text longer and give result on the same language: ${text}`} ];
+				url = 'https://api.openai.com/v1/chat/completions';
+				break;
+
+			case 14:
+				settings.messages = [ { role: 'user', content: `Make this text simpler and give result on the same language: ${text}`} ];
+				url = 'https://api.openai.com/v1/chat/completions';
+				break;
+
+			case 15:
+				settings.messages = [ { role: 'user', content: `Make this text shorter and save language: ${text}`} ];
+				url = 'https://api.openai.com/v1/chat/completions';
+				break;
 		}
 		if (type !== 10)
 			fetchData(settings, url, type, isNoBlockedAction);
@@ -530,13 +621,13 @@
 		let header = {
 			'Authorization': 'Bearer ' + ApiKey
 		};
-		if (type < 10) {
+		if (type !== 10) {
 			header['Content-Type'] = 'application/json';
 		}
 		fetch(url, {
 				method: 'POST',
 				headers: header,
-				body: (type < 10 ? JSON.stringify(settings) : settings),
+				body: (type !== 10 ? JSON.stringify(settings) : settings),
 			})
 			.then(function(response) {
 				return response.json()
@@ -562,7 +653,7 @@
 		Asc.scope = {};
 		switch (type) {
 			case 1:
-				Asc.scope.data = data.choices[0].text.split('\n\n');
+				Asc.scope.data = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.callCommand(function() {
 					let oDocument = Api.GetDocument();
 					let sumPar = Api.CreateParagraph();
@@ -580,7 +671,7 @@
 				break;
 
 			case 2:
-				Asc.scope.data = data.choices[0].text.split('\n\n');
+				Asc.scope.data = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
 				window.Asc.plugin.callCommand(function() {
 					let oDocument = Api.GetDocument();
 					for(let ind = 0; ind < Asc.scope.data.length; ind++) {
@@ -595,7 +686,7 @@
 				break;
 
 			case 3:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
 				window.Asc.plugin.callCommand(function() {
 					let oDocument = Api.GetDocument();
@@ -605,7 +696,7 @@
 				break;
 
 			case 4:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				start = text.indexOf('htt');
 				end = text.indexOf(' ', start);
 				if (end == -1) {
@@ -622,7 +713,7 @@
 				break;
 
 			case 5:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				start = text.indexOf('<img');
 				end = text.indexOf('/>', start);
 				if (end == -1) {
@@ -635,7 +726,8 @@
 				break;
 
 			case 6:
-				text = data.choices[0].text.startsWith('\n\n') ? data.choices[0].text.substring(2) : data.choices[0].text;
+				text = data.choices[0].message.content.startsWith('\n\n') ? data.choices[0].message.content.substring(2) : data.choices[0].message.content;
+				// text = data.choices[0].text.startsWith('\n\n') ? data.choices[0].text.substring(2) : data.choices[0].text;
 				window.Asc.plugin.executeMethod('PasteText', [text]);
 				break;
 
@@ -666,7 +758,7 @@
 				break;
 
 			case 8:
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				Asc.scope.comment = text.startsWith('\n\n') ? text.substring(2) : text;
 				window.Asc.plugin.callCommand(function() {
 					var oDocument = Api.GetDocument();
@@ -679,7 +771,7 @@
 				if (0 < thesaurusCounter)
 					return;
 
-				text = data.choices[0].text;
+				text = data.choices[0].message.content; //data.choices[0].text;
 				let startPos = text.indexOf("[");
 				let endPos = text.indexOf("]");
 
@@ -710,6 +802,7 @@
 				items.items[0].items.unshift(itemNew);
 				window.Asc.plugin.executeMethod('UpdateContextMenuItem', [items]);
 				break;
+
 			case 10:
 				img = (data.data && data.data[0]) ? data.data[0].b64_json : null;
 				if (img) {
@@ -720,8 +813,24 @@
 						"height": imgsize.height
 					};
 					imgsize = null;
-					window.Asc.plugin.executeMethod ("PutImageDataToSelection", [oImageData]);
+					window.Asc.plugin.executeMethod("PutImageDataToSelection", [oImageData]);
 				}
+				break;
+
+			case 11:
+				text = data.choices[0].message.content.split('\n\n'); //data.choices[0].text.split('\n\n');
+				if (text !== 'The text is correct, there are no errors in it.')
+					window.Asc.plugin.executeMethod('ReplaceTextSmart', [text]);
+				else
+					console.log('The text is correct, there are no errors in it.');
+				break;
+
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+				text = data.choices[0].message.content.replace(/\n\n/g, '\n'); //data.choices[0].text.split('\n\n');
+				window.Asc.plugin.executeMethod('PasteText', [text]);
 				break;
 		}
 	};
@@ -786,12 +895,15 @@
 
 			case 'onAddApiKey':
 				localStorage.setItem('OpenAIApiKey', message.key);
+				model = message.model;
+				maxLen = message.maxTokens
 				window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
 				break;
 
 			case 'onExecuteMethod':
-				window.Asc.plugin.executeMethod(message.method, [message.data], function() {
-					window.Asc.plugin.executeMethod('CloseWindow', [modal.id]);
+				window.Asc.plugin.executeMethod('CloseWindow', [modal.id], function(){
+					window.Asc.plugin.executeMethod(message.method, [message.data]);
+					customReqWindow = null;
 				});
 				break;
 
