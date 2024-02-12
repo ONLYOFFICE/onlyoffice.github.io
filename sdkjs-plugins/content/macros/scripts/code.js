@@ -113,7 +113,8 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
         for (var i = 0; i < Content.macrosArray.length; i++)
         {
             var cl = (i == Content.current) ? "macrosSelected" : "macros";
-            var item = "<div class=\"" + cl + "\" id=\"item" + i + "\" onclick=\"window.onItemClick(" + i + ");\">" + Content.macrosArray[i].name;
+			var name = $('<div/>').text(Content.macrosArray[i].name).html();
+            var item = "<div class=\"" + cl + "\" id=\"item" + i + "\" onclick=\"window.onItemClick(" + i + ");\">" + name;
             if (true === Content.macrosArray[i].autostart) {
                 var PropForMac = "";
                 if (navigator.userAgent.indexOf('Macintosh') != -1) {
@@ -305,13 +306,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
         if (isOK && value)
         {
-
-            value = value.replace(/&/g,'&amp;');
-            value = value.replace(/</g,'&lt;');
-            value = value.replace(/>/g,'&gt;');
-            value = value.replace(/'/g,'&apos;');
-            value = value.replace(/"/g,'&quot;');
-
             Content.macrosArray[Content.current].name = value;
             updateMenu();
         } else if (isOK && !value) {
@@ -363,12 +357,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
                     var value = Content.macrosArray[i].name;
                     if (undefined === value)
                         value = "";
-
-                    value = value.replace(/&/g,'&amp;');
-                    value = value.replace(/</g,'&lt;');
-                    value = value.replace(/>/g,'&gt;');
-                    value = value.replace(/'/g,'&apos;');
-                    value = value.replace(/"/g,'&quot;');
 
                     Content.macrosArray[i].name = value;
                 }
