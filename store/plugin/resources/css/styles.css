@@ -38,8 +38,12 @@ html, body {
 	/* justify-content: center; */
 	align-items: center;
 }
+.developer_warning {
+	justify-content: center;
+}
 .question {
 	margin-left: 5px;
+	color: red;
 }
 .info {
 	margin-top: 10px;
