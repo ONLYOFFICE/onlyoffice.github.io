@@ -16,7 +16,7 @@
  *
  */
 
-const version = '1.0.5';                                             // version of store (will change it when update something in store)
+const version = '1.0.6';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 let isPluginLoading = false;                                         // flag plugins loading
@@ -1798,33 +1798,35 @@ function getTranslated(text) {
 
 function parseRatingPage(data) {
 	// if we load this page, parse it
-	// remove head, because it can brake our styles
+	let result = null;
 	if (data !== 'Not Found') {
-		let start = data.indexOf('<head>');
-		let end = data.indexOf('</head>') + 7;
-		document.getElementById('div_rating_git').innerHTML = data.substring(0, start) + data.substring(end);
-		// we will have a problem if github change their page
-		let first = Number(document.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-		let second = Number(document.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-		let third = Number(document.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-		let fourth = Number(document.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-		let fifth = Number(document.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-		let total = Number(document.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
-		first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
-		second = Math.ceil(total * second / 100) * 4; // it's 4 stars
-		third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
-		fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
-		fifth = Math.ceil(total * fifth / 100);       // it's 1 star
-		let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
-		let percent = average / 5 * 100 + '%';
-		return {
-			total: total,
-			average: average.toFixed(1),
-			percent: percent
-		};
-	} else {
-		return null;
+		try {
+			let parser = new DOMParser();
+			let doc = parser.parseFromString(JSON.parse(data), "text/html");
+			// we will have a problem if github change their page
+			let first = Number(doc.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+			let second = Number(doc.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+			let third = Number(doc.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+			let fourth = Number(doc.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+			let fifth = Number(doc.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+			let total = Number(doc.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
+			first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
+			second = Math.ceil(total * second / 100) * 4; // it's 4 stars
+			third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
+			fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
+			fifth = Math.ceil(total * fifth / 100);       // it's 1 star
+			let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
+			let percent = average / 5 * 100 + '%';
+			result = {
+				total: total,
+				average: average.toFixed(1),
+				percent: percent
+			};
+		} catch (error) {
+			// nothing to do
+		}
 	}
+	return result;
 };
 
 function checkNoUpdated(bRemove) {
