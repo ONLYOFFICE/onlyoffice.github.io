@@ -15,3 +15,7 @@
 ## 1.0.3
 
 * Change working for viewer mode.
+
+## 1.0.4
+
+* Bug fix.
