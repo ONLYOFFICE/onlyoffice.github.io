@@ -50,7 +50,7 @@ let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';        // default 
 let isResizeOnStart = false;                                         // flag for firs resize on start
 let slideIndex = 1;                                                  // index for slides
 let PsMain = null;                                                   // scroll for list of plugins
-let PsChanglog = null;                                               // scroll for changlog preview
+let PsChangelog = null;                                               // scroll for changelog preview
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -130,8 +130,9 @@ window.onload = function() {
 	}
 	// init element
 	initElemnts();
-
 	isFrameLoading = false;
+	onTranslate();
+
 	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
 		// if nothing to translate
 		showMarketplace();
@@ -576,8 +577,9 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 				);
 				makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false).then(
 					function(response) {
-						let settings = getMarkedSetting()
-						let lexed = marked.lexer(response.replace('# Change Log\n\n', ''), settings);
+						let settings = getMarkedSetting();
+						let value = parseChangelog(response);
+						let lexed = marked.lexer(value, settings);
 						config.changelog = marked.parser(lexed, settings);
 					}
 				);
@@ -729,9 +731,9 @@ function showListofPlugins(bAll, sortedArr) {
 		PsMain.update();
 	}
 	// scroll for changelog preview
-	if (!PsChanglog) {
-		PsChanglog = new PerfectScrollbar('#div_selected_changelog', {});
-		PsChanglog.update();
+	if (!PsChangelog) {
+		PsChangelog = new PerfectScrollbar('#div_selected_changelog', {});
+		PsChangelog.update();
 	}
 };
 
@@ -1179,7 +1181,7 @@ function onSelectPreview(target, type) {
 			document.getElementById('div_selected_info').classList.remove('hidden');
 		} else {
 			document.getElementById('div_selected_changelog').classList.remove('hidden');
-			PsChanglog.update();
+			PsChangelog.update();
 		}
 	}
 };
@@ -1267,7 +1269,7 @@ window.onresize = function(bForce) {
 		}
 		$('.div_item').css('border', ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'ligh' ? '#c0c0c0' : '#666666')));
 	}
-	if (PsChanglog) PsChanglog.update();
+	if (PsChangelog) PsChangelog.update();
 };
 
 // zoom on start if we start with a non 100% zoom
@@ -1333,6 +1335,7 @@ function getTranslation() {
 						function(res) {
 							// console.log('getTranslation: ' + (Date.now() - start));
 							translate = JSON.parse(res);
+							isTranslationLoading = false;
 							onTranslate();
 						},
 						function(err) {
@@ -1359,8 +1362,10 @@ function getTranslation() {
 };
 
 function onTranslate() {
-	isTranslationLoading = false;
 	// translates elements on current language
+	if (isFrameLoading || isTranslationLoading)
+		return;
+
 	elements.linkNewPlugin.innerHTML = getTranslated(messages.linkPR);
 	elements.btnAvailablePl.innerHTML = getTranslated('Available plugins');
 	elements.btnMarketplace.innerHTML = getTranslated('Marketplace');
@@ -1827,6 +1832,22 @@ function parseRatingPage(data) {
 		}
 	}
 	return result;
+};
+
+function parseChangelog(data) {
+	let arr = data.replace('# Change Log', '').split('\n\n## ');
+	if (arr[0] == '')
+		arr.shift();
+
+	let indLast = arr.length - 1;
+	let end = arr[0].indexOf('\n\n');
+	let firstVersion = getPluginVersion( arr[0].slice(0, end) );
+	end = arr[indLast].indexOf('\n\n');
+	let lastVersion = getPluginVersion( arr[indLast].slice(0, end) );
+	if (lastVersion > firstVersion)
+		arr = arr.reverse();
+
+	return ( '## ' + arr.join('\n\n## ') );
 };
 
 function checkNoUpdated(bRemove) {
