@@ -448,6 +448,55 @@
 
 	mxCellRenderer.registerShape('isoRectangle', IsoRectangleShape);
 	
+	// Wire Shape
+	function WireShape()
+	{
+		mxConnector.call(this);
+	};
+
+	mxUtils.extend(WireShape, mxConnector);
+
+	WireShape.prototype.paintEdgeShape = function(c, pts)
+	{
+		// The indirection via functions for markers is needed in
+		// order to apply the offsets before painting the line and
+		// paint the markers after painting the line.
+		var sourceMarker = this.createMarker(c, pts, true);
+		var targetMarker = this.createMarker(c, pts, false);
+
+		// Paints base line without dash pattern
+		c.setDashed(false);
+		mxPolyline.prototype.paintEdgeShape.apply(this, arguments);
+		
+		// Paints dashed line with dash pattern and fill color
+		if (this.isDashed != null)
+		{
+			c.setDashed(this.isDashed, (this.style != null) ?
+				mxUtils.getValue(this.style, mxConstants.STYLE_FIX_DASH, false) == 1 : false);
+		}
+
+		c.setShadow(false);
+		c.setStrokeColor(this.fill);
+		mxPolyline.prototype.paintEdgeShape.apply(this, arguments);
+
+		// Paints markers with stroke color
+		c.setStrokeColor(this.stroke);
+		c.setFillColor(this.stroke);
+		c.setDashed(false);
+		
+		if (sourceMarker != null)
+		{
+			sourceMarker();
+		}
+		
+		if (targetMarker != null)
+		{
+			targetMarker();
+		}
+	};
+
+	mxCellRenderer.registerShape('wire', WireShape);
+	
 	// Cube Shape, supports size style
 	function WaypointShape()
 	{
@@ -1580,8 +1629,6 @@
 	};
 	
 	// Installs hand jiggle for comic and sketch style
-	mxShape.prototype.defaultJiggle = 1.5;	
-
 	var shapeBeforePaint = mxShape.prototype.beforePaint;
 	mxShape.prototype.beforePaint = function(c)
 	{
@@ -1608,7 +1655,7 @@
 	// Returns a new HandJiggle canvas
 	mxShape.prototype.createComicCanvas = function(c)
 	{
-		return new HandJiggle(c, mxUtils.getValue(this.style, 'jiggle', this.defaultJiggle));
+		return new HandJiggle(c, mxUtils.getValue(this.style, 'jiggle', Editor.sketchDefaultJiggle));
 	};
 	
 	// Overrides to avoid call to rect
@@ -1622,9 +1669,6 @@
 		return null;
 	};
 	
-	// Sets default jiggle for diamond
-	mxRhombus.prototype.defaultJiggle = 2;
-
 	// Overrides to avoid call to rect
 	var mxRectangleShapeIsHtmlAllowed0 = mxRectangleShape.prototype.isHtmlAllowed;
 	mxRectangleShape.prototype.isHtmlAllowed = function()
@@ -2360,12 +2404,25 @@
 	};
 
 	mxUtils.extend(UmlFrame, mxShape);
-
+	
 	UmlFrame.prototype.width = 60;
 
 	UmlFrame.prototype.height = 30;
 
 	UmlFrame.prototype.corner = 10;
+
+	UmlFrame.prototype.configurePointerEvents = function(c)
+	{
+		var bg = mxUtils.getValue(this.style, mxConstants.STYLE_SWIMLANE_FILLCOLOR, mxConstants.NONE);
+
+		if (this.style != null && (bg == null ||
+			bg == mxConstants.NONE || this.opacity == 0 ||
+			this.fillOpacity == 0) && mxUtils.getValue(this.style,
+			mxConstants.STYLE_POINTER_EVENTS, '1') == '0')
+		{
+			c.pointerEvents = false;
+		}
+	};
 
 	UmlFrame.prototype.getLabelMargins = function(rect)
 	{
@@ -2398,6 +2455,9 @@
 			c.setFillColor(this.fill);
 		}
 
+		// Label part handles events
+		c.pointerEvents = true;
+
 		c.begin();
 		c.moveTo(x, y);
 		c.lineTo(x + w0, y);
@@ -2406,6 +2466,8 @@
 		c.lineTo(x, y + h0);
 		c.close();
 		c.fillAndStroke();
+
+		this.configurePointerEvents(c);
 		
 		c.begin();
 		c.moveTo(x + w0, y);
@@ -5877,21 +5939,29 @@
 			return createHandle(state, keys, function(bounds)
 			{
 				var pts = state.absolutePoints;
-				var n = pts.length - 1;
-				
-				var tr = state.view.translate;
-				var s = state.view.scale;
-				
-				var p0 = (start) ? pts[0] : pts[n];
-				var p1 = (start) ? pts[1] : pts[n - 1];
-				var dx = (start) ? p1.x - p0.x : p1.x - p0.x;
-				var dy = (start) ? p1.y - p0.y : p1.y - p0.y;
 
-				var dist = Math.sqrt(dx * dx + dy * dy);
-				
-				var pt = getPosition.call(this, dist, dx / dist, dy / dist, p0, p1);
-				
-				return new mxPoint(pt.x / s - tr.x, pt.y / s - tr.y);
+				if (pts != null && pts.length > 0)
+				{
+					var n = pts.length - 1;
+					
+					var tr = state.view.translate;
+					var s = state.view.scale;
+					
+					var p0 = (start) ? pts[0] : pts[n];
+					var p1 = (start) ? pts[1] : pts[n - 1];
+					var dx = (start) ? p1.x - p0.x : p1.x - p0.x;
+					var dy = (start) ? p1.y - p0.y : p1.y - p0.y;
+
+					var dist = Math.sqrt(dx * dx + dy * dy);
+					
+					var pt = getPosition.call(this, dist, dx / dist, dy / dist, p0, p1);
+					
+					return new mxPoint(pt.x / s - tr.x, pt.y / s - tr.y);
+				}
+				else
+				{
+					return null;
+				}
 			}, function(bounds, pt, me)
 			{
 				var pts = state.absolutePoints;
