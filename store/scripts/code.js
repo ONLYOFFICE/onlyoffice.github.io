@@ -1807,7 +1807,7 @@ function parseRatingPage(data) {
 	if (data !== 'Not Found') {
 		try {
 			let parser = new DOMParser();
-			let doc = parser.parseFromString(JSON.parse(data), "text/html");
+			let doc = parser.parseFromString(data, "text/html");
 			// we will have a problem if github change their page
 			let first = Number(doc.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
 			let second = Number(doc.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
