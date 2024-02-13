@@ -1,0 +1,51 @@
+{
+	"name": "Autocomplete",
+	"nameLocale": {
+		"ru": "Autocomplete",
+		"fr": "Autocomplete",
+		"es": "Autocomplete",
+		"de": "Autocomplete"
+	},
+	"guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
+	"version" : "1.0.0",
+
+	"variations" : [
+		{
+			"description": "Use an input assistant while typing in the editors.",
+			"descriptionLocale": {
+				"ru": "Используйте ассистент набора текста при работе в редакторе.",
+				"fr": "Utilisez un assistant de saisie pendant que vous tapez dans les éditeurs.",
+				"es": "Utilice un asistente de entrada mientras escribe en los editores.",
+				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren."
+			},
+			"url"                 : "index.html",
+			"icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
+			"screens"             : ["resources/store/screen_1.png"],
+			"isViewer"            : false,
+			"EditorsSupport"      : ["word", "slide", "cell"],
+			"isVisual"            : false,
+			"isModal"             : false,
+			"isInsideMode"        : false,
+			"isSystem"            : true,
+			"initDataType"        : "none",
+			"isUpdateOleOnResize" : false,
+			
+			"events" : [
+				"onInputHelperClear",
+				"onInputHelperInput"
+			],
+			"store": {
+				"background": {
+					"light" : "#F9F9F9",
+					"dark" : "#444444"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work", "recommended"]
+			}
+		}
+	]
+}
