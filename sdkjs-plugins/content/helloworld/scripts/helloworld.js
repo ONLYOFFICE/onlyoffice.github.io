@@ -19,7 +19,7 @@
 // Example insert text into editors (different implementations)
 (function(window, undefined){
     
-    var text = "Hello world!";
+    var text = "Hello world";
 
     window.Asc.plugin.init = function()
     {
