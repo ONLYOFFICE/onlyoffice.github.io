@@ -284,7 +284,7 @@ window.addEventListener('message', function(message) {
 					} else {
 						let pluginDiv = this.document.getElementById(message.guid)
 						$(pluginDiv).remove();
-						Ps.update();
+						PsMain.update();
 					}
 				} else {
 					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
