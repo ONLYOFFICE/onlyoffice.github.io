@@ -1,4 +1,4 @@
-Access-Control-Allow-Origin: *
+Access-Control-Allow-Origin: *;
 (function(window, undefined) {
 	
 	var URL_TO_PLUGIN ="https://github.com/sanjeevareddynagireddy/onlyoffice.github.io/tree/master/sdkjs-plugins/content/helloworld/";
