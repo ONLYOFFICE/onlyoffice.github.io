@@ -1,3 +1,4 @@
+Access-Control-Allow-Origin: *
 (function(window, undefined) {
 	
 	var URL_TO_PLUGIN ="https://github.com/sanjeevareddynagireddy/onlyoffice.github.io/tree/master/sdkjs-plugins/content/helloworld/";
@@ -9,7 +10,6 @@
 
 	var configObj = JSON.parse(xhrObj.responseText);
 	configObj.baseUrl = URL_TO_PLUGIN;
-		configObj.setHeader("Access-Control-Allow-Origin", "*");
 	window.Asc = window.Asc ? window.Asc : {};
 	window.Asc.extensionPlugins = window.Asc.extensionPlugins ? window.Asc.extensionPlugins : [];
 	window.Asc.extensionPlugins.push(configObj);
