@@ -1,8 +1,9 @@
 (function(window, undefined) {
-	response.setHeader("Access-Control-Allow-Origin", "*");
+	
 	var URL_TO_PLUGIN ="https://github.com/sanjeevareddynagireddy/onlyoffice.github.io/tree/master/sdkjs-plugins/content/helloworld/";
 	
 	var xhrObj = new XMLHttpRequest();
+xhrObj.setHeader("Access-Control-Allow-Origin", "*");
 	xhrObj.open('GET', URL_TO_PLUGIN + "config.json", false);
 	xhrObj.send('');
 
