@@ -44,7 +44,7 @@
                 this.callCommand(function() {
                     var oDocument = Api.GetDocument();
                     var oParagraph = Api.CreateParagraph();
-                    oParagraph.AddText("Hello world!");
+                    oParagraph.AddText("Hello world this is updated 2nd time!");
                     oDocument.InsertContent([oParagraph]);
                 }, true);
                 break;
