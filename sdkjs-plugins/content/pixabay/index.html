@@ -199,7 +199,11 @@
 		<div id="main-search-container-id" style="display:none;">
 			<input type="text" id="search-phrase" class="form-control i18n" placeholder="Enter search phrase" data-id="search-phrase-id" style="width: calc(100% - 24px); margin: 16px 12px 0 12px; text-align: left;">
 			<button id="button-search-id" class="btn-text-default i18n">Search</button>
-			<div id="hide_show_reconf"><label class="hidden i18n">Hide advanced settings</label><label class="opened i18n">Show advanced settings</label><label id="reconf" class="i18n">Reconfigure API key</label></div>
+			<div id="hide_show_reconf">
+				<label class="hidden i18n">Hide settings</label>
+				<label class="opened i18n">Show settings</label>
+				<label id="reconf" class="i18n">API key</label>
+			</div>
 			<div id="first-separator" class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px; display:none;"></div>
 			<div id="settings" style="position: relative; height: 88%; display:none;">
 				<div id="locale-container" style="margin: 0 12px 16px 12px;">
@@ -293,7 +297,7 @@
 			</div>
 		</div>
 		<div id="scrollable-container-id" style="position: relative; height: calc(100% - 100px); overflow: hidden; min-height: 200px;">
-			<div id="preview-images-container-id" style="display: block; position: absolute;">
+			<div id="preview-images-container-id" style="display: flex; position: absolute; flex-flow: wrap; align-items: center; justify-content: center;">
 			</div>
 		</div>
 		<div id="pagination-container-id" style="display: table; width: 100%; text-align: center; ">
