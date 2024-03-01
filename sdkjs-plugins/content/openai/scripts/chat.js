@@ -17,9 +17,9 @@
  */
 (function(window, undefined) {
 	const url = 'https://api.openai.com/v1/chat/completions';
-	const maxTokens = 4000;
+	const maxTokens = 16000;
 	const settings = {
-		model: 'gpt-3.5-turbo',
+		model: 'gpt-3.5-turbo-16k',
 		messages: []
 	};
 	let apiKey = '';

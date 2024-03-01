@@ -19,3 +19,7 @@
 ## 1.0.3
 
 * Add "pdf" to the supported editors.
+
+## 1.0.4
+
+* Change developer window (add warnign - bug 66451).

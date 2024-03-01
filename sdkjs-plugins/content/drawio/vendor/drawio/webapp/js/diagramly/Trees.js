@@ -4,11 +4,7 @@
  */
 (function()
 {
-	/**
-	 * Defines resources.
-	 */
-	EditorUi.prototype.altShiftActions[68] = 'selectDescendants'; // Alt+Shift+D
-	
+
 	/**
 	 * Overrides folding based on treeFolding style.
 	 */
@@ -29,7 +25,6 @@
 		try
 		{
 			var newCells = cells.slice();
-			var tmp = [];
 			
 			for (var i = 0; i < cells.length; i++)
 			{
@@ -119,7 +114,7 @@
 	{
 		return this.getTreeEdges(cell, parent, true, false, false);
 	};
-		
+
 	/**
 	 * Returns all outgoing tree edges for the given cell.
 	 */
@@ -240,16 +235,17 @@
 				}
 			}
 		};
-		
+
 		// Adds actions
-		ui.actions.addAction('selectChildren', function()
+		ui.actions.addAction('selectChildren', function(evt)
 		{
 			if (graph.isEnabled() && graph.getSelectionCount() == 1)
 			{
 				var cell = graph.getSelectionCell();
-				var sib = graph.getOutgoingTreeEdges(cell);
+				var sib = mxEvent.isControlDown(evt) ? null :
+					graph.getOutgoingTreeEdges(cell);
 				
-				if (sib != null)
+				if (sib != null && sib.length > 0)
 				{
 					var tmp = [];
 					
@@ -260,16 +256,81 @@
 					
 					graph.setSelectionCells(tmp);
 				}
+				else
+				{
+					graph.setSelectionCells(graph.model.getChildren(cell));
+				}
+			}
+		}, null, null, 'Alt+Shift+C');
+		
+		ui.actions.addAction('selectDescendants', function(evt)
+		{
+			var cell = graph.getSelectionCell();
+			
+			if (graph.isEnabled() && cell != null)
+			{
+				var tmp = [];
+
+				if (!mxEvent.isControlDown(evt))
+				{
+					graph.traverse(cell, true, function(vertex, edge)
+					{
+						var treeEdge = edge != null && graph.isTreeEdge(edge);
+				
+						if (treeEdge && mxEvent.isControlDown(evt))
+						{
+							tmp.push(edge);
+						}
+						
+						if (edge == null || treeEdge)
+						{
+							tmp.push(vertex);
+						}
+						
+						return edge == null || treeEdge;
+					});
+				}
+				
+				if (tmp.length == 0 || (tmp.length == 1 &&
+					tmp[0] == cell))
+				{
+					tmp = graph.model.getDescendants(cell);
+				}
+				
+				graph.setSelectionCells(tmp);
 			}
 		}, null, null, 'Alt+Shift+X');
 		
 		// Adds actions
-		ui.actions.addAction('selectSiblings', function()
+		ui.actions.addAction('selectParent', function(evt)
+		{
+			var cell = graph.getSelectionCell();
+
+			if (graph.isEnabled() && cell != null)
+			{
+				var edges = mxEvent.isControlDown(evt) ? null :
+					graph.getIncomingTreeEdges(cell);
+	
+				if (edges != null && edges.length > 0)
+				{
+					graph.setSelectionCell(graph.model.getTerminal(edges[0], true));
+				}
+				else
+				{
+					graph.selectParentCell();
+				}
+			}
+		}, null, null, 'Alt+Shift+P');
+		
+		// Adds actions
+		ui.actions.addAction('selectSiblings', function(evt)
 		{
 			if (graph.isEnabled() && graph.getSelectionCount() == 1)
 			{
 				var cell = graph.getSelectionCell();
-				var edges = graph.getIncomingTreeEdges(cell);
+				var edges = mxEvent.isControlDown(evt) ? null :
+					graph.getIncomingTreeEdges(cell);
+				var tmp = [];
 	
 				if (edges != null && edges.length > 0)
 				{
@@ -277,72 +338,21 @@
 					
 					if (sib != null)
 					{
-						var tmp = [];
-						
 						for (var i = 0; i < sib.length; i++)
 						{
 							tmp.push(graph.model.getTerminal(sib[i], false));
 						}
-						
-						graph.setSelectionCells(tmp);
 					}
 				}
+
+				if (tmp.length == 0)
+				{
+					tmp = graph.model.getChildren(graph.model.getParent(cell));
+				}
+
+				graph.setSelectionCells(tmp);
 			}
 		}, null, null, 'Alt+Shift+S');
-		
-		// Adds actions
-		ui.actions.addAction('selectParent', function()
-		{
-			if (graph.isEnabled() && graph.getSelectionCount() == 1)
-			{
-				var cell = graph.getSelectionCell();
-				var edges = graph.getIncomingTreeEdges(cell);
-	
-				if (edges != null && edges.length > 0)
-				{
-					graph.setSelectionCell(graph.model.getTerminal(edges[0], true));
-				}
-			}
-		}, null, null, 'Alt+Shift+P');
-		
-		ui.actions.addAction('selectDescendants', function(trigger, evt)
-		{
-			var cell = graph.getSelectionCell();
-			
-			if (graph.isEnabled() && graph.model.isVertex(cell))
-			{
-				if (evt != null && mxEvent.isAltDown(evt))
-				{
-					graph.setSelectionCells(graph.model.getTreeEdges(cell,
-						evt == null || !mxEvent.isShiftDown(evt),
-						evt == null || !mxEvent.isControlDown(evt)));
-				}
-				else
-				{
-					var subtree = [];
-					
-					graph.traverse(cell, true, function(vertex, edge)
-					{
-						var treeEdge = edge != null && graph.isTreeEdge(edge);
-				
-						if (treeEdge)
-						{
-							subtree.push(edge);
-						}
-						
-						if ((edge == null || treeEdge) &&
-							(evt == null || !mxEvent.isShiftDown(evt)))
-						{
-							subtree.push(vertex);
-						}
-						
-						return edge == null || treeEdge;
-					});
-				}
-				
-				graph.setSelectionCells(subtree);
-			}
-		}, null, null, 'Alt+Shift+D');
 		
 		/**
 		 * Overriddes
@@ -911,34 +921,7 @@
 				if (graph.model.getTerminal(clones[0], false) == null)
 				{
 					graph.model.setTerminal(clones[0], clones[1], false);
-					
-					var style = graph.getCellStyle(clones[1]);
-					var temp = style['newEdgeStyle'];
-					
-					if (temp != null)
-					{
-						try
-						{
-							var styles = JSON.parse(temp);
-							
-							for (var key in styles)
-							{
-								graph.setCellStyles(key, styles[key], [clones[0]]);
-								
-								// Sets elbow direction
-								if (key == 'edgeStyle' && styles[key] == 'elbowEdgeStyle')
-								{
-									graph.setCellStyles('elbow', (dir == mxConstants.DIRECTION_SOUTH ||
-										dir == mxConstants.DIRECTION_NOTH) ? 'vertical' : 'horizontal',
-										[clones[0]]);
-								}
-							}
-						}
-						catch (e)
-						{
-							// ignore
-						}
-					}
+					graph.applyNewEdgeStyle(clones[1], [clones[0]], dir);
 				}
 				
 				// Finds free space
@@ -1078,92 +1061,91 @@
 				}	
 			}
 		};
-	
+			
 		// Overrides keyboard shortcuts inside tree containers
-		var altShiftActions = {88: ui.actions.get('selectChildren'), // Alt+Shift+X
-				84: ui.actions.get('selectSubtree'), // Alt+Shift+T
+		var altShiftActions = {67: ui.actions.get('selectChildren'), // Alt+Shift+C
+				88: ui.actions.get('selectDescendants'), // Alt+Shift+X
 				80: ui.actions.get('selectParent'), // Alt+Shift+P
 				83: ui.actions.get('selectSiblings')} // Alt+Shift+S
-	
+		
+		// New keyboard shortcuts for copy-/pasteStyle
+		var altActions = {67: ui.actions.get('copyStyle'), // Alt+C
+			86: ui.actions.get('pasteStyle')}; // Alt+V
 		var editorUiOnKeyDown = ui.onKeyDown;
 		
 		ui.onKeyDown = function(evt)
 		{
 			try
 			{
-				if (graph.isEnabled() && !graph.isEditing() &&
-					isTreeVertex(graph.getSelectionCell()) &&
-					graph.getSelectionCount() == 1)
+				var cell = graph.getSelectionCell();
+
+				if (graph.isEnabled() && !graph.isEditing() && cell != null)
 				{
-					var cells = null;
-	
-					if (graph.getIncomingTreeEdges(graph.getSelectionCell()).length > 0)
+					var action = (mxEvent.isAltDown(evt) && mxEvent.isShiftDown(evt)) ? 
+						altShiftActions[evt.keyCode] : (mxEvent.isAltDown(evt) ?
+							altActions[evt.keyCode] : null);
+
+					if (action != null)
 					{
-						if (evt.which == 9) // Tab adds child
-						{
-							cells = (mxEvent.isShiftDown(evt)) ?
-								addParent(graph.getSelectionCell()) :
-								addChild(graph.getSelectionCell());
-						}
-						else if (evt.which == 13) // Enter adds sibling
-						{
-							cells = addSibling(graph.getSelectionCell(), !mxEvent.isShiftDown(evt));
-						}
-					}
-					
-					if (cells != null && cells.length > 0)
-					{
-						if (cells.length == 1 && graph.model.isEdge(cells[0]))
-						{
-							graph.setSelectionCell(graph.model.getTerminal(cells[0], false));
-						}
-						else
-						{
-							graph.setSelectionCell(cells[cells.length - 1]);
-						}
-						
-						if (ui.hoverIcons != null)
-						{
-							ui.hoverIcons.update(graph.view.getState(graph.getSelectionCell()));
-						}
-						
-						graph.startEditingAtCell(graph.getSelectionCell());
+						action.funct(evt);
 						mxEvent.consume(evt);
 					}
-					else
+					else if (isTreeVertex(cell))
 					{
-						if (mxEvent.isAltDown(evt) && mxEvent.isShiftDown(evt))
+						var cells = null;
+		
+						if (graph.getIncomingTreeEdges(cell).length > 0)
 						{
-							var action = altShiftActions[evt.keyCode];
-	
-							if (action != null)
+							if (evt.which == 9) // Tab adds child
 							{
-								action.funct(evt);
-								mxEvent.consume(evt);
+								cells = (mxEvent.isShiftDown(evt)) ?
+									addParent(cell) :
+									addChild(cell);
+							}
+							else if (evt.which == 13) // Enter adds sibling
+							{
+								cells = addSibling(cell, !mxEvent.isShiftDown(evt));
 							}
 						}
-						else
+						
+						if (cells != null && cells.length > 0)
 						{
-							if (evt.keyCode == 37) // left
+							if (cells.length == 1 && graph.model.isEdge(cells[0]))
 							{
-								selectCell(graph.getSelectionCell(), mxConstants.DIRECTION_WEST);
-								mxEvent.consume(evt);
+								graph.setSelectionCell(graph.model.getTerminal(cells[0], false));
 							}
-							else if (evt.keyCode == 38) // up
+							else
 							{
-								selectCell(graph.getSelectionCell(), mxConstants.DIRECTION_NORTH);
-								mxEvent.consume(evt);
+								graph.setSelectionCell(cells[cells.length - 1]);
 							}
-							else if (evt.keyCode == 39) // right
+							
+							if (ui.hoverIcons != null)
 							{
-								selectCell(graph.getSelectionCell(), mxConstants.DIRECTION_EAST);
-								mxEvent.consume(evt);
+								ui.hoverIcons.update(graph.view.getState(cell));
 							}
-							else if (evt.keyCode == 40) // down
-							{
-								selectCell(graph.getSelectionCell(), mxConstants.DIRECTION_SOUTH);
-								mxEvent.consume(evt);
-							}
+							
+							graph.startEditingAtCell(cell);
+							mxEvent.consume(evt);
+						}
+						else if (evt.keyCode == 37) // left
+						{
+							selectCell(cell, mxConstants.DIRECTION_WEST);
+							mxEvent.consume(evt);
+						}
+						else if (evt.keyCode == 38) // up
+						{
+							selectCell(cell, mxConstants.DIRECTION_NORTH);
+							mxEvent.consume(evt);
+						}
+						else if (evt.keyCode == 39) // right
+						{
+							selectCell(cell, mxConstants.DIRECTION_EAST);
+							mxEvent.consume(evt);
+						}
+						else if (evt.keyCode == 40) // down
+						{
+							selectCell(cell, mxConstants.DIRECTION_SOUTH);
+							mxEvent.consume(evt);
 						}
 					}
 				}
@@ -1327,7 +1309,10 @@
 			var graph = this.graph;
 			
 			// Style that defines the key, value pairs to be used for creating styles of new connections if no incoming edge exists
-			var mmEdgeStyle = 'newEdgeStyle={"edgeStyle":"entityRelationEdgeStyle","startArrow":"none","endArrow":"none","segment":10,"curved":1};';
+			var orgEdgeStyle = 'edgeStyle=elbowEdgeStyle;elbow=vertical;sourcePerimeterSpacing=0;' +
+				'targetPerimeterSpacing=0;startArrow=none;endArrow=none;rounded=0;curved=0;';
+			var mmEdgeStyle = 'newEdgeStyle={"edgeStyle":"entityRelationEdgeStyle","startArrow":"none","endArrow":"none",' +
+				'"segment":10,"curved":1,"sourcePerimeterSpacing":0,"targetPerimeterSpacing":0};';
 			var treeEdgeStyle = 'newEdgeStyle={"edgeStyle":"elbowEdgeStyle","startArrow":"none","endArrow":"none"};';
 
 			return result.concat([
@@ -1345,9 +1330,7 @@
 			    		'whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;' + treeEdgeStyle);
 			    	cell3.vertex = true;
 	
-			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0),
-			    		'edgeStyle=elbowEdgeStyle;elbow=vertical;' +
-						'startArrow=none;endArrow=none;rounded=0;');
+			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), orgEdgeStyle);
 					edge.geometry.relative = true;
 					edge.edge = true;
 	
@@ -1378,7 +1361,8 @@
 			    	cell2.vertex = true;
 
 			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;' +
-						'startArrow=none;endArrow=none;segment=10;curved=1;');
+						'startArrow=none;endArrow=none;segment=10;curved=1;sourcePerimeterSpacing=0;' +
+						'targetPerimeterSpacing=0;');
 					edge.geometry.relative = true;
 					edge.edge = true;
 	
@@ -1391,8 +1375,7 @@
 			    		'snapToPoint=1;autosize=1;treeFolding=1;treeMoving=1;' + mmEdgeStyle);
 			    	cell3.vertex = true;
 
-			    	var edge2 = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;' +
-						'startArrow=none;endArrow=none;segment=10;curved=1;');
+			    	var edge2 = new mxCell('', new mxGeometry(0, 0, 0, 0), edge.style);
 					edge2.geometry.relative = true;
 					edge2.edge = true;
 	
@@ -1404,8 +1387,7 @@
 		    			'strokeWidth=1;autosize=1;spacing=4;treeFolding=1;treeMoving=1;' + mmEdgeStyle);
 			    	cell4.vertex = true;
 	
-			    	var edge3 = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;' +
-						'startArrow=none;endArrow=none;segment=10;curved=1;');
+			    	var edge3 = new mxCell('', new mxGeometry(0, 0, 0, 0), edge.style);
 					edge3.geometry.relative = true;
 					edge3.edge = true;
 		
@@ -1418,8 +1400,7 @@
 			    		'snapToPoint=1;autosize=1;treeFolding=1;treeMoving=1;' + mmEdgeStyle);
 			    	cell5.vertex = true;
 	
-			    	var edge4 = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;' +
-						'startArrow=none;endArrow=none;segment=10;curved=1;');
+			    	var edge4 = new mxCell('', new mxGeometry(0, 0, 0, 0), edge.style);
 					edge4.geometry.relative = true;
 					edge4.edge = true;
 	
@@ -1458,7 +1439,8 @@
 			    	cell.vertex = true;
 	
 			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;' +
-						'startArrow=none;endArrow=none;segment=10;curved=1;');
+						'startArrow=none;endArrow=none;segment=10;curved=1;sourcePerimeterSpacing=0;' +
+						'targetPerimeterSpacing=0;');
 					edge.geometry.setTerminalPoint(new mxPoint(-40, 40), true);
 					edge.geometry.relative = true;
 					edge.edge = true;
@@ -1470,13 +1452,14 @@
 				}),
 				this.addEntry('tree mindmap mindmaps sub topic', function()
 				{
-			   		var cell = new mxCell('Sub Topic', new mxGeometry(0, 0, 72, 26),
+			   		var cell = new mxCell('Sub Topic', new mxGeometry(0, 0, 80, 26),
 			    		'whiteSpace=wrap;html=1;rounded=1;arcSize=50;align=center;verticalAlign=middle;' +
 			    		'strokeWidth=1;autosize=1;spacing=4;treeFolding=1;treeMoving=1;' + mmEdgeStyle);
 			    	cell.vertex = true;
 	
-			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;' +
-			    		'startArrow=none;endArrow=none;segment=10;curved=1;');
+			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=entityRelationEdgeStyle;startArrow=none;' +
+			    		'endArrow=none;segment=10;curved=1;sourcePerimeterSpacing=0;' +
+						'targetPerimeterSpacing=0;');
 					edge.geometry.setTerminalPoint(new mxPoint(-40, 40), true);
 					edge.geometry.relative = true;
 					edge.edge = true;
@@ -1501,9 +1484,7 @@
 			    		'whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;' + treeEdgeStyle);
 			    	cell2.vertex = true;
 	
-			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0),
-			    		'edgeStyle=elbowEdgeStyle;elbow=vertical;' +
-						'startArrow=none;endArrow=none;rounded=0;');
+			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), orgEdgeStyle);
 					edge.geometry.relative = true;
 					edge.edge = true;
 	
@@ -1514,9 +1495,7 @@
 			    		'whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;' + treeEdgeStyle);
 			    	cell3.vertex = true;
 	
-			    	var edge2 = new mxCell('', new mxGeometry(0, 0, 0, 0),
-			    		'edgeStyle=elbowEdgeStyle;elbow=vertical;' +
-						'startArrow=none;endArrow=none;rounded=0;');
+			    	var edge2 = new mxCell('', new mxGeometry(0, 0, 0, 0), orgEdgeStyle);
 					edge2.geometry.relative = true;
 					edge2.edge = true;
 	
@@ -1548,9 +1527,7 @@
 			    		'whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;' + treeEdgeStyle);
 			    	cell.vertex = true;
 			    	
-			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0),
-			    		'edgeStyle=elbowEdgeStyle;elbow=vertical;' +
-						'startArrow=none;endArrow=none;rounded=0;');
+			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), orgEdgeStyle);
 			    	edge.geometry.setTerminalPoint(new mxPoint(0, 0), true);
 					edge.geometry.relative = true;
 					edge.edge = true;
@@ -1566,8 +1543,8 @@
 			    		'whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;');
 			    	cell.vertex = true;
 	
-			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=orthogonalEdgeStyle;' +
-						'startArrow=none;endArrow=none;rounded=0;targetPortConstraint=eastwest;sourcePortConstraint=northsouth;');
+			    	var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=orthogonalEdgeStyle;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;' +
+						'startArrow=none;endArrow=none;rounded=0;targetPortConstraint=eastwest;sourcePortConstraint=northsouth;curved=0;rounded=0;');
 					edge.geometry.setTerminalPoint(new mxPoint(110, -40), true);
 					edge.geometry.relative = true;
 					edge.edge = true;
@@ -1578,8 +1555,7 @@
 			    		'whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;');
 			    	cell2.vertex = true;
 	
-			    	var edge2 = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=orthogonalEdgeStyle;' +
-						'startArrow=none;endArrow=none;rounded=0;targetPortConstraint=eastwest;sourcePortConstraint=northsouth;');
+			    	var edge2 = new mxCell('', new mxGeometry(0, 0, 0, 0), edge.style);
 					edge2.geometry.setTerminalPoint(new mxPoint(110, -40), true);
 					edge2.geometry.relative = true;
 					edge2.edge = true;

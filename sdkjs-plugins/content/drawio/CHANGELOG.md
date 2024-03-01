@@ -15,3 +15,11 @@
 ## 1.0.3
 
 * Change working for viewer mode.
+
+## 1.0.4
+
+* Bug fix.
+
+## 1.0.5
+
+* Update draw.io version to 22.1.18
