@@ -8,7 +8,7 @@
 			"description": "Pixabay",
 			"url": "index.html",
 
-			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",
 			"icons2": [
 				{
 					"style" : "light",
