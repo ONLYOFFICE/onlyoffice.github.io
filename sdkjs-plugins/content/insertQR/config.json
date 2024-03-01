@@ -1,104 +1,72 @@
 {
-    "name" : "Insert QR",
+	"name": "Insert QR",
 	"nameLocale": {
 		"ru": "Вставка QR-кода",
 		"fr": "Insérer un code QR",
 		"es": "Insertar QR",
 		"de": "QR-Code einfügen",
-		"pt-BR": "Inserir QR"
+		"br": "Inserir QR"
 	},
-    "guid" : "asc.{BBF949B2709AD000-34E836B1-49B77-8EC06-2BA704B9AC3F2000}",
-	"version"    : "1.0.0",
-	"minVersion" : "7.4.0",
-
-    "variations" : [
-        {
-            "description" : "Harness the power of API Ninjas to generate QR codes in the Presentation Editor.",
+	"guid": "asc.{E5DD8D78-92F4-43B4-825B-E963D5CE8AC9}",
+	"version": "1.0.0",
+	"minVersion": "7.4.0",
+	"variations": [
+		{
+			"description": "Effortlessly generate QR codes in the Presentation and Text Editors.",
 			"descriptionLocale": {
-				"ru": "Генерируйте QR-коды в редакторе презентаций, используя функционал API Ninjas.",
-				"fr": "Exploitez la puissance d'API Ninjas pour générer des codes QR dans l'éditeur de présentation.",
-				"es": "Aprovecha el poder de API Ninjas para generar códigos QR en el Editor de Presentaciones.",
-				"de": "Nutzen Sie die Kraft von API Ninjas, um QR-Codes im Präsentationseditor zu generieren.",
-				"pt-BR": "Aproveite o poder do API Ninjas para gerar códigos QR no Editor de Apresentações."
+			  "ru": "Без труда создавайте QR-коды в редакторах презентаций и текста.",
+			  "fr": "Générez facilement des codes QR dans les éditeurs de présentation et de texte.",
+			  "es": "Genere fácilmente códigos QR en los editores de presentaciones y texto.",
+			  "de": "Generieren Sie mühelos QR-Codes in den Präsentations- und Texteditoren.",
+			  "br": "Gere facilmente códigos QR nos Editores de Apresentação e Texto."
 			},
-            "url"         : "index.html",
-
-            "icons": [ "assets/resources/light/icon.png", "assets/resources/light/icon@2x.png" ],
+			"url": "index.html",
+			"icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
 			"icons2": [
 				{
-					"style" : "light",
-					
-					"100%": {
-						"normal": "assets/resources/light/icon.png"
-					},
-					"125%": {
-						"normal": "assets/resources/light/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "assets/resources/light/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "assets/resources/light/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "assets/resources/light/icon@2x.png"
-					}
+					"style": "light",
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
 				},
 				{
-					"style" : "dark",
-					
-					"100%": {
-						"normal": "assets/resources/dark/icon.png"
-					},
-					"125%": {
-						"normal": "assets/resources/dark/icon@1.25x.png"
-					},
-					"150%": {
-						"normal": "assets/resources/dark/icon@1.5x.png"
-					},
-					"175%": {
-						"normal": "assets/resources/dark/icon@1.75x.png"
-					},
-					"200%": {
-						"normal": "assets/resources/dark/icon@2x.png"
-					}
+					"style": "dark",
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
 				}
 			],
-            "isViewer"        : false,
-            "EditorsSupport"  : ["slide"],
-
-            "isVisual"        : false,
-            "isModal"         : true,
-            "isInsideMode"    : false,
-			"type"            : "system",
-		
-            "initDataType"    : "",
-            "initData"        : "",
-
-            "isUpdateOleOnResize" : true,
-
+			"isViewer": false,
+			"EditorsSupport": ["word", "slide"],
+			"isVisual": false,
+			"isModal": false,
+			"isInsideMode": false,
+			"type": "background",
+			"initDataType": "none",
+			"isUpdateOleOnResize": false,
 			"events": ["onContextMenuShow", "onContextMenuClick"],
 			"store": {
 				"background": {
-					"light" : "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)",
-					"dark" : "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)"
+					"light": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)",
+					"dark": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)"
 				},
-				"screenshots" :
-				[
-					"assets/resources/store/screenshots/screenshot.png",
-					"assets/resources/store/screenshots/screenshot1.png",
-					"assets/resources/store/screenshots/screenshot2.png",
-					"assets/resources/store/screenshots/screenshot3.png",
-					"assets/resources/store/screenshots/screenshot4.png",
-					"assets/resources/store/screenshots/screenshot4.png"
+				"screenshots": [
+					"resources/store/screenshots/screenshot.png",
+					"resources/store/screenshots/screenshot1.png",
+					"resources/store/screenshots/screenshot2.png",
+					"resources/store/screenshots/screenshot3.png",
+					"resources/store/screenshots/screenshot4.png"
 				],
-				"icons" : {
-					"light" : "assets/resources/store/icons",
-					"dark"  : "assets/resources/store/icons"
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
 				},
-				"categories": ["specAbilities", "work", "recommended"]
+				"categories": ["specAbilities", "work"]
 			}
-            
-        }
-    ]
+		}
+	]
 }

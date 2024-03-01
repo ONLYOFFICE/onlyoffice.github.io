@@ -1,22 +1,20 @@
 ## Overview
 
-The Insert QR plugin enables users to effortlessly insert a QR code, generated from selected text in the Presentation Editor.
+The Insert QR plugin allows users to effortlessly insert a QR code generated from selected text in the Presentation and Text Editor.
 
-The plugin uses the [QRCode API](https://api-ninjas.com/api/qrcode) by API Ninjas.
+The plugin uses:
 
+[Bootstrap Colorpicker](https://github.com/itsjavi/bootstrap-colorpicker) by [Javi Aguilar](https://github.com/itsjavi).
+[QRCode.js](https://github.com/davidshimjs/qrcodejs) by [Sangmin, Shim](https://github.com/davidshimjs)
 
-## How to set up
 
 1. Install the plugin.
-2. Right-click anywhere on the slide.
-3. Choose "Insert QR settings" from the context menu.
-4. In the popup modal window, insert your API key obtained from API Ninjas.
-
-## How to use
-
-1. Right-click on the selected text.
-2. Choose "Insert QR" from the context menu.
-3. Select a QR color from the context window.
-4. Choose a background color from the Input Helper window.
+2. Activate the Insert QR plugin in the plugin tab.
+3. Right-click on the selected text.
+4. Click the "Set QR Color" radiobutton and select the color in the color picker.
+5. Click the "Set Background Color" radiobutton and select the color in the color picker.
+6. Set QR width and height if necessary (150 px is default value)
+7. Click the "Insert QR" button
 
 If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+

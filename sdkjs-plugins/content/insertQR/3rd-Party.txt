@@ -1,4 +1,5 @@
-This plugin uses code from the following 3rd party projects.
+This plugin uses code from the following 3rd party projects:
+
 
 
 1. Bootstrap, a popular front-end framework for web development.
@@ -6,5 +7,17 @@ This plugin uses code from the following 3rd party projects.
 License:        MIT
 https://github.com/twbs/bootstrap/blob/master/LICENSE
 
-2. QRCode API by API Ninjas generates custom QR codes for any content.
-Terms of Service: https://api-ninjas.com/tos
+
+
+2. QRCode for JavaScript is a local library for generating QR codes.
+
+License:        MIT
+http://www.opensource.org/licenses/mit-license.php
+
+
+
+3. Bootstrap Colorpicker v2.5.2 is a is a modular color picker plugin for Bootstrap 4
+
+License:        Apache License v2.0
+http://www.apache.org/licenses/LICENSE-2.0.txt
+
