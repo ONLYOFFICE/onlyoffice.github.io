@@ -21,7 +21,7 @@ let  Ps1, Ps2;
 (function(window) {
 
 	const displayNoneClass = "display-none";
-	let borderColor = '#cbcbcb';
+	const borderColor = '#cbcbcb';
 
 	function showLoader(show) {
 		switchClass(elements.loader, displayNoneClass, !show);
@@ -393,9 +393,6 @@ let  Ps1, Ps2;
 		window.Asc.plugin.onThemeChangedBase(theme);
 		$('#body').css('color', window.Asc.plugin.theme.Color);
 		$('.hidden, .opened, #reconf').css('border-bottom', '1px dashed ' + window.Asc.plugin.theme.Color);
-		if (theme.EditorBorder) {
-			borderColor = theme.borderColor;
-		}
 	};
 
 	function loadClipArtPage(nIndex, sQuery) {
