@@ -18,7 +18,7 @@ function P2PCollab(ui, sync, channelId)
 	var myClientId, newClients = {}, p2pClients = {}, useSocket = true, fileJoined = false, destroyed = false;
 	var INACTIVE_TIMEOUT = 120000; //2 min
 	var SELECTION_OPACITY = 70; //The default opacity of 30 is not visible enough with all colors
-	var cursorDelay = 200;
+	var cursorDelay = 300;
 	// TODO: Avoid negation, move to Editor.ENABLE_P2P and use p2p=1 URL parameter
 	// add to Editor.configure
 	var NO_P2P = urlParams['no-p2p'] != '0';
@@ -66,7 +66,7 @@ function P2PCollab(ui, sync, channelId)
 
 			var user = sync.file.getCurrentUser();
 
-			if (!fileJoined || user == null || user.email == null) return;
+			if (!fileJoined || user == null || user.displayName == null) return;
 			
 			//Converting to a string such that webRTC works also
 			var msg = {from: myClientId, id: messageId,
@@ -109,7 +109,7 @@ function P2PCollab(ui, sync, channelId)
 		{
 			if (window.console != null)
 			{
-				console.log('Error:', e);
+				console.error(e, type, data);
 			}
 		}
 	};
@@ -120,6 +120,13 @@ function P2PCollab(ui, sync, channelId)
 	{
 		this.sendMessage('diff', (encrypted) ?
 			{diff: msg} : {patch: encodeURIComponent(
+				sync.objectToString(msg))});
+	};
+
+	this.sendNotification = function(msg)
+	{
+		this.sendMessage('notify', (encrypted) ?
+			{msg: msg} : {data: encodeURIComponent(
 				sync.objectToString(msg))});
 	};
 
@@ -204,6 +211,11 @@ function P2PCollab(ui, sync, channelId)
 	};
 
 	ui.addListener('shareCursorPositionChanged', this.shareCursorPositionListener);
+
+	// Clears remote selection state for large selections
+	var selectionLimit = mxGraphHandler.prototype.maxCells;
+	var updateThread = null;
+	var lastSelection = {};
 	
 	this.selectionChangeListener = function(sender, evt)
 	{
@@ -211,17 +223,51 @@ function P2PCollab(ui, sync, channelId)
 		{
 			return (c != null) ? c.id : null;
 		};
+		
+		if (updateThread != null)
+		{
+			window.clearTimeout(updateThread);
+		}
 
-		var pageId = (ui.currentPage != null) ?
-			ui.currentPage.getId() : null;
-		var added = evt.getProperty('added');
-		var removed = evt.getProperty('removed');
+		updateThread = window.setTimeout(function()
+		{
+			var selection = (graph.getSelectionCount() > selectionLimit) ?
+				[] : graph.getSelectionCells().map(mapToIds)
+			var pageId = (ui.currentPage != null) ?
+				ui.currentPage.getId() : null;
 
-		// Added/removed are inverted
-		sendMessage('selectionChange', {pageId: pageId,
-			removed: added? added.map(mapToIds) : [],
-			added: removed? removed.map(mapToIds) : []
-		});
+			// Computes diff between last and current selection
+			var newSelection = {};
+			var removed = [];
+			var added = [];
+
+			for (var i = 0; i < selection.length; i++)
+			{
+				var id = selection[i];
+
+				if (id != null)
+				{
+					newSelection[id] = true;
+
+					if (lastSelection[id] == null)
+					{
+						added.push(id);
+					}
+				}
+			}
+
+			for (var id in lastSelection)
+			{
+				if (!newSelection[id])
+				{
+					removed.push(id);
+				}
+			}
+			
+			lastSelection = newSelection;
+			sendMessage('selectionChange', {pageId: pageId,
+				removed: removed, added: added});
+		}, 300);
 	};
 
 	graph.getSelectionModel().addListener(mxEvent.CHANGE, this.selectionChangeListener);
@@ -471,6 +517,18 @@ function P2PCollab(ui, sync, channelId)
 						}
 					}
 				break;
+				case 'notify':
+					if (msgData.data != null)
+					{
+						msg = sync.stringToObject(decodeURIComponent(msgData.data));
+					}
+					else
+					{
+						msg = msgData.msg;
+					}
+
+					sync.handleMessageData(msg.d);
+				break;
 			}
 
 			sync.file.fireEvent(new mxEventObject('realtimeMessage', 'message', msg));
@@ -479,7 +537,7 @@ function P2PCollab(ui, sync, channelId)
 		{
 			if (window.console != null)
 			{
-				console.log('Error:', e);
+				console.warn(e, msg, fromCId);
 			}
 		}
 	};
@@ -627,7 +685,7 @@ function P2PCollab(ui, sync, channelId)
 			
 			try
 			{
-				if (socket != null)
+				if (socket != null && socket.readyState == 1)
 				{
 					EditorUi.debug('P2PCollab: force closing socket on', socket.joinId)
 					socket.close(1000);
@@ -640,6 +698,11 @@ function P2PCollab(ui, sync, channelId)
 			} //Ignore
 			
 			var ws = new WebSocket(window.RT_WEBSOCKET_URL + '?id=' + channelId);
+
+			if (socket == null)
+			{
+				socket = ws;
+			}
 			
 			ws.addEventListener('open', function(event)
 			{
@@ -649,48 +712,69 @@ function P2PCollab(ui, sync, channelId)
 				sync.file.fireEvent(new mxEventObject('realtimeStateChanged'));
 				EditorUi.debug('P2PCollab: open socket', socket.joinId);
 
+				// Send join message
+				if (!Editor.enableRealtimeCache)
+				{
+					window.setTimeout(function()
+					{
+						sync.sendJoinMessage();
+					}, 0);
+				}
+
 				if (check)
 				{
 					sync.scheduleCleanup();
 				}
 			});
-		
-			ws.addEventListener('message', mxUtils.bind(this, function(event)
+
+			function messageListener(event)
 			{
-				if (!NO_P2P)
+				try
 				{
-					EditorUi.debug('P2PCollab: msg received', [event]);
-				}
+					if (!NO_P2P)
+					{
+						EditorUi.debug('P2PCollab: msg received', [event]);
+					}
 
-				var data = JSON.parse(event.data);
-				
-				if (NO_P2P && data.action != 'message')
-				{
-					EditorUi.debug('P2PCollab: msg received', [event]);
-				}
+					var data = JSON.parse(event.data);
+					
+					if (NO_P2P && data.action != 'message')
+					{
+						EditorUi.debug('P2PCollab: msg received', [event]);
+					}
 
-				switch (data.action)
-				{
-					case 'message':
-						processMsg(data.msg, data.from);
-					break;
-					case 'clientsList':
-						clientsList(data.msg);
-					break;
-					case 'signal':
-						signal(data.msg);
-					break;
-					case 'newClient':
-						newClient(data.msg);
-					break;
-					case 'clientLeft':
-						clientLeft(data.msg);
-					break;
-					case 'sendSignalFailed':
-						sendSignalFailed(data.msg);
-					break;
+					switch (data.action)
+					{
+						case 'message':
+							processMsg(data.msg, data.from);
+						break;
+						case 'clientsList':
+							clientsList(data.msg);
+						break;
+						case 'signal':
+							signal(data.msg);
+						break;
+						case 'newClient':
+							newClient(data.msg);
+						break;
+						case 'clientLeft':
+							clientLeft(data.msg);
+						break;
+						case 'sendSignalFailed':
+							sendSignalFailed(data.msg);
+						break;
+					}
 				}
-			}));
+				catch (e)
+				{
+					if (window.console != null)
+					{
+						console.warn(e, event);
+					}
+				}
+			};
+		
+			ws.addEventListener('message', messageListener);
 
 			var rejoinCalled = false;
 				
@@ -815,8 +899,8 @@ function P2PCollab(ui, sync, channelId)
 			ui.removeListener(this.cursorHandler);
 		}
 
-		//Close the socket
-		if (socket != null)
+		// Close the socket
+		if (socket != null && socket.readyState >= 1)
 		{
 			socket.close(1000);
 			socket = null;
