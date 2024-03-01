@@ -25,22 +25,8 @@
 	let modalTimeout = null;
 	let bCreateLoader = true;
 	let maxTokens = 4000;
+	let prefix = { previous: 'gpt-3.5', last: 'gpt-4'};
 	const isIE = checkInternetExplorer();
-	const AllowedModels = {
-		'text-ada-001' : true,
-
-		'text-babbage-001' : true,
-
-		'curie-instruct-beta' : true,
-		'text-curie-001' : true,
-
-
-		'text-davinci-003' : true,
-		'text-davinci-002' : true,
-		'text-davinci-001' : true,
-		'davinchi-instruct-beta' : true,
-		'davinchi:2020-05-03' : true
-	};
 
 	window.Asc.plugin.init = function() {
 		sendPluginMessage({type: 'onWindowReady'});
@@ -142,7 +128,8 @@
 				return;
 			};
 			createLoader();
-			let url = 'https://api.openai.com/v1/completions'
+			let url = `https://api.openai.com/v1${ (settings.isChat ? '/chat' : '') }/completions`;
+			delete settings.isChat;
 
 			fetch(url, {
 				method: 'POST',
@@ -159,8 +146,7 @@
 				if (data.error)
 					throw data.error
 
-				let text = data.choices[0].text;
-				let textColor = '';
+				let text = data.choices[0].text || data.choices[0].message.content;
 				if (!text.includes('</')) {
 					// it's necessary because "PasteHtml" method ignores "\n" and we are trying to replace it on "<br>" when we don't have a html code in answer
 					
@@ -168,14 +154,9 @@
 						text = text.replace('\n\n', '\n').replace('\n', '');
 					
 					text = text.replace(/\n\n/g,'\n').replace(/\n/g,'<br>');
-
-					if (window.Asc.plugin.info.editorType == 'cell' && isDarkTheme) {
-						// it's temporarily. remove it after fixing bug https://bugzilla.onlyoffice.com/show_bug.cgi?id=61095
-						textColor = ' style="color:#000;"';
-					}
 				}
 				
-				sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div'+textColor+'>'+text+'</div>'});
+				sendPluginMessage({type: 'onExecuteMethod', method: 'PasteHtml', data: '<div>'+text+'</div>'});
 			})
 			.catch(function(error) {
 				setError(error.message)
@@ -279,24 +260,21 @@
 			let arrModels = [];
 			
 			for (let index = 0; index < data.data.length; index++) {
-				let model = data.data[index];
-				if (AllowedModels[model.id])
-					arrModels.push( { id: model.id, text: model.id } );
+				let model = data.data[index].id;
+				if (model.includes(prefix.previous) || model.includes(prefix.last))
+					arrModels.push( { id: model, text: model } );
 			};
 
 			$('#sel_models').select2({
 				data : arrModels
 			}).on('select2:select', function(e) {
 				let model = $('#sel_models').val();
-				maxTokens = (model === 'gpt-3.5-turbo' || model === 'text-davinci-003') ? 4000 : 2000;
+				maxTokens = ( model === 'gpt-4' ) ? 8000 : ( model.includes('16k') ? 16000 : 4000 );
 				checkLen();
 			});
 
-			if ($('#sel_models').find('option[value=text-davinci-003]').length) {
-				$('#sel_models').val('text-davinci-003').trigger('change');
-			} else { 
-				var newOption = new Option('text-davinci-003', 'text-davinci-003', true, true);
-				$('#sel_models').append(newOption).trigger('change');
+			if ($('#sel_models').find('option[value=gpt-4]').length) {
+				$('#sel_models').val('gpt-4').trigger('change');
 			}
 			localStorage.setItem('OpenAIApiKey', apiKey);
 			elements.divContent.classList.remove('hidden');
@@ -310,14 +288,20 @@
 	};
 
 	function getSettings() {
+		let model = $('#sel_models').val();
 		let value = elements.textArea.value.trim();
 		let obj = {
-			model : $('#sel_models').val(),
+			model : model,
+			isChat: (model.includes('-3.5') && !model.includes('-3.5-turbo-instruct')) || model.includes('-4')
 		};
 		if (!value.length) {
 			obj.error = true;
 		} else {
-			obj.prompt = value
+			if (obj.isChat)
+				obj.messages = [{role: 'user', content: value}];
+			else
+				obj.prompt = value;
+
 			let temp = Number(elements.inpTempSl.value);
 			obj.temperature = ( temp < 0 ? 0 : ( temp > 1 ? 1 : temp ) );
 			let len = Number(elements.inpLenSl.value);

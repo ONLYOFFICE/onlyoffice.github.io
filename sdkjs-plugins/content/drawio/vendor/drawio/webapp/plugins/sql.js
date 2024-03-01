@@ -580,7 +580,7 @@ Draw.loadPlugin(function(ui) {
             var graph = ui.editor.graph;
             var view = graph.view;
             var bds = graph.getGraphBounds();
-
+            
             // Computes unscaled, untranslated graph bounds
             var x = Math.ceil(Math.max(0, bds.x / view.scale - view.translate.x) + 4 * graph.gridSize);
             var y = Math.ceil(Math.max(0, (bds.y + bds.height) / view.scale - view.translate.y) + 4 * graph.gridSize);
@@ -594,7 +594,8 @@ Draw.loadPlugin(function(ui) {
 
     mxUtils.br(div);
 
-    var resetBtn = mxUtils.button(mxResources.get('reset'), function() {
+    var resetBtn = mxUtils.button(mxResources.get('reset'), function()
+    {
         sqlInput.value = '';
     });
 
@@ -603,16 +604,32 @@ Draw.loadPlugin(function(ui) {
     resetBtn.style.padding = '4px';
     div.appendChild(resetBtn);
 
-    var btn = mxUtils.button('Insert MySQL', function() {
-        parseSql(sqlInput.value);
+    var btn = mxUtils.button('Insert MySQL', function()
+    {
+        try
+        {
+            parseSql(sqlInput.value);
+        }
+        catch (e)
+        {
+            ui.handleError(e);
+        }
     });
 
     btn.style.marginTop = '8px';
     btn.style.padding = '4px';
     div.appendChild(btn);
 
-    var btn = mxUtils.button('Insert SQL Server', function() {
-        parseSql(sqlInput.value, 'sqlserver');
+    var btn = mxUtils.button('Insert SQL Server', function()
+    {
+        try
+        {
+            parseSql(sqlInput.value, 'sqlserver');
+        }
+        catch (e)
+        {
+            ui.handleError(e);
+        }
     });
 
     btn.style.marginTop = '8px';

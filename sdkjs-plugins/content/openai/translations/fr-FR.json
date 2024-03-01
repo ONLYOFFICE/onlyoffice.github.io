@@ -23,7 +23,7 @@
 	"Translate to Italian" : "Traduire en Italien",
 	"Generate image from text": "Générer une image à partir de texte",
 	"Settings": "Réglages",
-	"Maximum 4000 tokens are available." : "Un maximum de 4000 jetons sont disponibles.",
+	"Maximum 8000 tokens are available." : "Un maximum de 8000 jetons sont disponibles.",
 	"For work with this model we should save chat history and sent it into a request." : "Pour travailler avec ce modèle, nous devons enregistrer l'historique des discussions et l'envoyer dans une demande.",
 	"But we have a limit on the number of tokens in the request." : "Mais nous avons une limite sur le nombre de jetons dans la demande.",
 	"That's why sometimes you should clear your chat history." : "C'est pourquoi vous devez parfois effacer votre historique de discussion.",
@@ -61,5 +61,10 @@
 	"Show hyperlink content" : "Afficher le contenu du lien hypertexte",
 	"Warning" : "Avertissement",
 	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE",
+	"Fix spelling & grammar": "Correction de l'orthographe et de la grammaire",
+	"Rewrite differently": "Réécrire différemment",
+	"Make longer": "Faire plus longtemps",
+	"Make shorter": "Rendre plus court",
+	"Make simpler": "Rendre plus simple",
 	"Invalid Api key or this service doesn't work in your region." : "Clé API non valide ou ce service ne fonctionne pas dans votre région."
 }

@@ -268,7 +268,8 @@
 			description : description,
 			isVisual : true,
 			isModal : true,
-			EditorsSupport : ['word', 'cell', 'slide'],
+			isViewer: true,
+			EditorsSupport : ['word', 'cell', 'slide', 'pdf'],
 			size : size,
 			buttons : buttons
 		};
