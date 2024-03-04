@@ -7,6 +7,7 @@
     "Minimum QR size is 50px": "Минимальный размер QR-кода 50 пикселей",
     "Submit": "Отправить",
     "Warning": "Предупреждение",
-    "Insert QR": "Вставить QR"
+    "Insert QR": "Вставить QR",
+    "The plugin is not supported in the Internet Explorer":"Плагин не поддерживается в Internet Explorer"
     }
     
