@@ -7,5 +7,6 @@
 "Minimum QR size is 50px": "El tamaño mínimo de QR es de 50 píxeles",
 "Submit": "Enviar",
 "Warning": "Advertencia",
-"Insert QR": "Insertar QR"
+"Insert QR": "Insertar QR",
+"The plugin is not supported in the Internet Explorer": "El complemento no es compatible con Internet Explorer."
 }

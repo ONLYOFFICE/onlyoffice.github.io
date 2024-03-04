@@ -7,5 +7,6 @@
     "Minimum QR size is 50px": "Die minimale QR-Größe beträgt 50 Pixel",
     "Submit": "Senden",
     "Warning": "Warnung",
-    "Insert QR": "QR einfügen"
+    "Insert QR": "QR einfügen",
+    "The plugin is not supported in the Internet Explorer": "Das Plugin wird nicht im Internet Explorer unterstützt"
 }
