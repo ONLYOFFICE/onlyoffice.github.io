@@ -453,7 +453,7 @@ let  Ps1, Ps2;
 				showLoader(false);
 				$('#preview-images-container-id').empty();
 				$('<div>', {
-					"class": "no-results",
+					"class": "no-results i18n",
 					text: window.Asc.plugin.tr("No results.")
 				}).appendTo('#preview-images-container-id');
 				updateScroll();
