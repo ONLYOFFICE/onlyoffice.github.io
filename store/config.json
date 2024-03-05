@@ -29,5 +29,6 @@
 	{ "name": "speechrecognition", "discussion": "249" },
 	{ "name": "zhipu", "discussion": "273"},
 	{ "name": "glavred", "discussion": "274" },
-	{ "name": "termef", "discussion": "295" }
+	{ "name": "termef", "discussion": "295" },
+	{ "name": "insertqr", "discussion": "295" }
 ]
