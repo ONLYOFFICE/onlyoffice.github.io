@@ -36,10 +36,10 @@
 		createWindow();
 	};
 
-	// window.Asc.plugin.onThemeChanged = function(theme)
-	// {
-	// 	window.Asc.plugin.onThemeChangedBase(theme);
-	// };
+	window.Asc.plugin.onThemeChanged = function(theme)
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
+	};
 
 	window.Asc.plugin.button = function(id, windowId) {
 		if (windowId) {
