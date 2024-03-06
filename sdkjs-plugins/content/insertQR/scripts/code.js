@@ -27,21 +27,6 @@
   let qrHeight;
   let qrColor;
   let bgColor;
-  // Define flags for displaying modal windows
-  let isIE = 'isIE';
-  let displaySettings = 'displaySettings';
-
-  // // Function to check if the browser is Internet Explorer
-  // function isInternetExplorer() {
-  //   if (navigator && navigator.userAgent) {
-  //     return navigator.userAgent.indexOf('MSIE') !== -1 || navigator.userAgent.indexOf('Trident') !== -1;
-  //   }
-  //   return false; // Return false if navigator or navigator.userAgent is undefined
-  // }
-
-  // if (isInternetExplorer()) {
-  //   displayModalWindow(isIE);
-  // }
 
   window.Asc.plugin.init = function () { };
 
@@ -72,7 +57,7 @@
           // Attach event for context menu click on GenerateQR
           window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
             console.log("GenerateQR clicked");
-            displayModalWindow(displaySettings);
+            displaySettings();
           });
         }
       });
@@ -113,38 +98,20 @@
   }
 
   // Function to display message in modal window
-  function displayModalWindow(type) {
+  function displaySettings() {
     let location = window.location;
     let start = location.pathname.lastIndexOf('/') + 1;
     let file = location.pathname.substring(start);
-    let variation;
+    const variation = {
+      url: location.href.replace(file, 'settings.html'),
+      description: generateText('Settings'),
+      isVisual: true,
+      isModal: true,
+      buttons: [],
+      EditorsSupport: ['slide', 'word'],
+      size: [400, 500]
+    };
 
-    switch (type) {
-      case 'isIE':
-        variation = {
-          url: location.href.replace(file, 'ie_warning.html'),
-          description: generateText('IE Warning'),
-          isVisual: true,
-          isModal: true,
-          buttons: [],
-          EditorsSupport: ['slide', 'word'],
-          size: [400, 500]
-        };
-        break;
-      case 'displaySettings':
-        variation = {
-          url: location.href.replace(file, 'settings.html'),
-          description: generateText('Settings'),
-          isVisual: true,
-          isModal: true,
-          buttons: [],
-          EditorsSupport: ['slide', 'word'],
-          size: [400, 500]
-        };
-        break;
-      default:
-        break;
-    }
     // Create and display the modal window
     modalWindow = new window.Asc.PluginWindow();
     modalWindow.show(variation);
