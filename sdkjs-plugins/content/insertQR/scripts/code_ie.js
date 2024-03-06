@@ -78,8 +78,8 @@
 			isVisual : true,
 			buttons : [],
 			isModal : true,
-			EditorsSupport : ["word", "slide", "cell"],
-			size : [ 592, 100 ]
+			EditorsSupport : ["word", "slide"],
+			size : [ 592, 300 ]
 		};
 
 		if (!messageWindow) {
