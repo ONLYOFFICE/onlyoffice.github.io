@@ -89,6 +89,18 @@ let  Ps1, Ps2;
 	function createScript(oElement, w, h) {
 		let sScript = '';
 
+		// set a common size for each image if their size is bigger the 300px (saving proportions)
+		if (w > 300 || h > 300) {
+			const coef = w / h;
+			if (coef > 1) {
+				w = 300;
+				h = w / coef;
+			} else {
+				h = 300;
+				w = h * coef;
+			}
+		}
+
 		if (oElement) {
 			switch (window.Asc.plugin.info.editorType) {
 				case 'word': {
