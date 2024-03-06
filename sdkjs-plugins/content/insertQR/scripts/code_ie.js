@@ -16,7 +16,7 @@
  *
  */
 (function(window, undefined) {
-	// let messageWindow = null;
+	   let messageWindow = null;
 	// let bTranslation = false;
 	// let bInit = false
 
