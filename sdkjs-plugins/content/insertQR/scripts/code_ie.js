@@ -29,13 +29,10 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-(function(window, undefined) {
-	   let messageWindow = null;
-	   let varia
-	// let bTranslation = false;
-	// let bInit = false
+(function (window, undefined) {
+	let messageWindow = null;
 
-	window.oncontextmenu = function(e) {
+	window.oncontextmenu = function (e) {
 		if (e.preventDefault)
 			e.preventDefault();
 		if (e.stopPropagation)
@@ -43,44 +40,31 @@
 		return false;
 	};
 
-	window.Asc.plugin.init = function() {
-		// bInit = true;
-		// if (bTranslation)
-		// 	createWindow();
+	window.Asc.plugin.init = function () {
 		createWindow();
 	};
 
-	window.Asc.plugin.onThemeChanged = function(theme)
-	{
-		window.Asc.plugin.onThemeChangedBase(theme);
-	};
-
-	window.Asc.plugin.button = function(id, windowId) {
+	window.Asc.plugin.button = function (id, windowId) {
 		if (windowId) {
-			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
+			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
 				window.Asc.plugin.executeCommand("close", "");
 			})
 		}
 	};
 
-	// window.Asc.plugin.onTranslate = function() {
-	// 	bTranslation = true;
-	// 	if (bInit) createWindow();
-	// };
-
 	function createWindow() {
-		let location  = window.location;
+		let location = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 
-		 variation = {
-			url : location.href.replace(file, 'ie_warning.html'),
-			description : (window.Asc.plugin.tr('Warning') || 'Warning'),
-			isVisual : true,
-			buttons : [],
-			isModal : true,
-			EditorsSupport : ["word", "slide"],
-			size : [ 500, 170 ]
+		variation = {
+			url: location.href.replace(file, 'ie_warning.html'),
+			description: (window.Asc.plugin.tr('Warning') || 'Warning'),
+			isVisual: true,
+			buttons: [],
+			isModal: true,
+			EditorsSupport: ["word", "slide"],
+			size: [500, 170]
 		};
 
 		if (!messageWindow) {
@@ -88,5 +72,5 @@
 		}
 		messageWindow.show(variation);
 	}
-	
+
 })(window, undefined);
