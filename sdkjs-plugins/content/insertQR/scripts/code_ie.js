@@ -31,7 +31,7 @@
  */
 (function(window, undefined) {
 	   let messageWindow = null;
-	   let variation;
+	   let varia
 	// let bTranslation = false;
 	// let bInit = false
 
@@ -55,13 +55,13 @@
 	// 	window.Asc.plugin.onThemeChangedBase(theme);
 	// };
 
-	// window.Asc.plugin.button = function(id, windowId) {
-	// 	if (windowId) {
-	// 		window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
-	// 			window.Asc.plugin.executeCommand("close", "");
-	// 		})
-	// 	}
-	// };
+	window.Asc.plugin.button = function(id, windowId) {
+		if (windowId) {
+			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
+				window.Asc.plugin.executeCommand("close", "");
+			})
+		}
+	};
 
 	// window.Asc.plugin.onTranslate = function() {
 	// 	bTranslation = true;
@@ -82,12 +82,11 @@
 			EditorsSupport : ["word", "slide"],
 			size : [ 592, 170 ]
 		};
-	}
 
 		if (!messageWindow) {
 			messageWindow = new window.Asc.PluginWindow();
 		}
 		messageWindow.show(variation);
-
+	}
 	
 })(window, undefined);
