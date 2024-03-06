@@ -16,9 +16,9 @@
  *
  */
 (function(window, undefined) {
-	let messageWindow = null;
-	let bTranslation = false;
-	let bInit = false
+	// let messageWindow = null;
+	// let bTranslation = false;
+	// let bInit = false
 
 	window.oncontextmenu = function(e) {
 		if (e.preventDefault)
@@ -29,35 +29,35 @@
 	};
 
 	window.Asc.plugin.init = function() {
-		bInit = true;
-		if (bTranslation)
-			createWindow();
+		// bInit = true;
+		// if (bTranslation)
+		// 	createWindow();
+		createWindow();
 	};
 
-	window.Asc.plugin.onThemeChanged = function(theme)
-	{
-		window.Asc.plugin.onThemeChangedBase(theme);
-	};
+	// window.Asc.plugin.onThemeChanged = function(theme)
+	// {
+	// 	window.Asc.plugin.onThemeChangedBase(theme);
+	// };
 
-	window.Asc.plugin.button = function(id, windowId) {
-		if (windowId) {
-			window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
-				window.Asc.plugin.executeCommand("close", "");
-			})
-		}
-	};
+	// window.Asc.plugin.button = function(id, windowId) {
+	// 	if (windowId) {
+	// 		window.Asc.plugin.executeMethod('CloseWindow', [windowId], function() {
+	// 			window.Asc.plugin.executeCommand("close", "");
+	// 		})
+	// 	}
+	// };
 
-	window.Asc.plugin.onTranslate = function() {
-		bTranslation = true;
-		if (bInit) createWindow();
-	};
+	// window.Asc.plugin.onTranslate = function() {
+	// 	bTranslation = true;
+	// 	if (bInit) createWindow();
+	// };
 
 	function createWindow() {
 		let location  = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 
-		// default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
 		let variation = {
 			url : location.href.replace(file, 'ie_warning.html'),
 			description : (window.Asc.plugin.tr('Warning') || 'Warning'),
