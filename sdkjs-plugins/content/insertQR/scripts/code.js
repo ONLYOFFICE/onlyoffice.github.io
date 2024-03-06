@@ -32,16 +32,16 @@
   let displaySettings = 'displaySettings';
 
   // Function to check if the browser is Internet Explorer
-  // function isInternetExplorer() {
-  //   if (navigator && navigator.userAgent) {
-  //     return navigator.userAgent.indexOf('MSIE') !== -1 || navigator.userAgent.indexOf('Trident') !== -1;
-  //   }
-  //   return false; // Return false if navigator or navigator.userAgent is undefined
-  // }
+  function isInternetExplorer() {
+    if (navigator && navigator.userAgent) {
+      return navigator.userAgent.indexOf('MSIE') !== -1 || navigator.userAgent.indexOf('Trident') !== -1;
+    }
+    return false; // Return false if navigator or navigator.userAgent is undefined
+  }
 
-  // if (isInternetExplorer()) {
-  //   displayModalWindow(isIE);
-  // }
+  if (isInternetExplorer()) {
+    displayModalWindow(isIE);
+  }
 
   window.Asc.plugin.init = function () { };
 
