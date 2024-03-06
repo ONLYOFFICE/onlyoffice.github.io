@@ -66,7 +66,7 @@
 			buttons : [],
 			isModal : true,
 			EditorsSupport : ["word", "slide"],
-			size : [ 592, 170 ]
+			size : [ 500, 170 ]
 		};
 
 		if (!messageWindow) {
