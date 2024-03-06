@@ -31,6 +31,7 @@
  */
 (function(window, undefined) {
 	   let messageWindow = null;
+	   let variation;
 	// let bTranslation = false;
 	// let bInit = false
 
@@ -72,7 +73,7 @@
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 
-		let variation = {
+		 variation = {
 			url : location.href.replace(file, 'ie_warning.html'),
 			description : (window.Asc.plugin.tr('Warning') || 'Warning'),
 			isVisual : true,
@@ -81,11 +82,12 @@
 			EditorsSupport : ["word", "slide"],
 			size : [ 592, 170 ]
 		};
+	}
 
 		if (!messageWindow) {
 			messageWindow = new window.Asc.PluginWindow();
 		}
 		messageWindow.show(variation);
-	}
+
 	
 })(window, undefined);
