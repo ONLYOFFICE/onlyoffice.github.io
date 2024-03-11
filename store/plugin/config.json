@@ -3,6 +3,8 @@
     "nameLocale": {
         "ru": "Менеджер плагинов",
         "fr": "Gestionnaire de Plugins",
+        "it": "Plugin Manager",
+        "ja": "プラグインマネージャー",
         "es": "Administrador de Complementos",
         "de": "Plugin-Verwaltung",
         "cs": "Správce Pluginů",
