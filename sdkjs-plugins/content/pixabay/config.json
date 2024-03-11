@@ -5,7 +5,14 @@
 
 	"variations": [
 		{
-			"description": "Pixabay",
+			"description": "Pixabay is a vibrant community of creatives, sharing royalty-free images, videos, audio and other media. All content is released by Pixabay under the Content License, which makes it safe to use without asking for permission or giving credit to the artist - even for certain commercial purposes.",
+			"descriptionLocale": {
+				"ru": "Pixabay - это динамичное сообщество креативщиков, делящихся изображениями, видео, аудио и другими медиа без роялти. Весь контент выпущен Pixabay по лицензии на контент, что делает его безопасным для использования без запроса разрешения или указания автора - даже в определенных коммерческих целях.",
+				"fr": "Pixabay est une communauté dynamique de créatifs, partageant des images, des vidéos, du son et d'autres médias libres de droits. Tout le contenu est publié par Pixabay sous la Licence de contenu, ce qui le rend sûr à utiliser sans demander la permission ou sans créditer l'artiste - même à certaines fins commerciales.",
+				"es": "Pixabay es una vibrante comunidad de creativos que comparte imágenes, videos, audio y otros medios libres de regalías. Pixabay publica todo el contenido bajo la Licencia de Contenido, lo que hace que sea seguro usarlo sin pedir permiso ni dar crédito al artista, incluso para ciertos fines comerciales.",
+				"de": "Pixabay ist eine lebendige Community von Kreativen, die lizenzfreie Bilder, Videos, Audiodateien und andere Medien teilt. Alle Inhalte werden von Pixabay unter der Inhaltslizenz veröffentlicht, die eine sichere Verwendung ohne Erlaubnis oder Nennung des Künstlers ermöglicht - auch für bestimmte kommerzielle Zwecke.",
+				"cs": "Pixabay je živá komunita kreativ, sdílení obrázků, videí, zvuku a dalších médií bez licenčních poplatků. Veškerý obsah je uvolňován společností Pixabay pod licencí na obsah, což umožňuje bezpečné použití bez žádosti o povolení nebo poskytnutí kreditu umělci - dokonce i pro určité komerční účely."
+			},
 			"url": "index.html",
 
 			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",
