@@ -27,3 +27,16 @@
 * Remove plugin Zoom from plugin manager.
 * Fix problem in Windows XP.
 * Change content justify for plugins card from center to left side.
+
+## 1.0.5
+
+* Fix problem with arrows without screenshots into a plugin window.
+* Fix problem with github link into desktop for installed plugins.
+* Fix problem with empty space into a plugin window when we don't have information about version and languages.
+* Change "Help Center" link to "README" plugin link.
+
+## 1.0.6
+
+* Change parsing rating page (fix problem with console errors into the desktop).
+* Fix problem with translations.
+* Add parsing changlog files. Now the last version should be on the top (it works only with ONLYOFFICE CHANGELOG files format).

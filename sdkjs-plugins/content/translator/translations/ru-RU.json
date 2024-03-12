@@ -2,5 +2,6 @@
 	"Copy" : "Копировать",
 	"Insert": "Вставить",
 	"Select Language": "Выберите язык",
-	"This plugin doesn't work in Internet Explorer." : "Этот плагин не работает в Internet Explorer."
+	"This plugin doesn't work in Internet Explorer." : "Этот плагин не работает в Internet Explorer.",
+	"This plugin doesn't work in your region." : "Этот плагин не работает в вашем регионе."
 }

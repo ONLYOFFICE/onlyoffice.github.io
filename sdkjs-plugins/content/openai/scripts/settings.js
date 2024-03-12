@@ -17,7 +17,7 @@
  */
 (function(window, undefined) {
 	let loader = null;
-	let errMessage = 'Invalid Api key.';
+	let errMessage = 'Invalid Api key or this service doesn\'t work in your region.';
 	let loadMessage = 'Loading...';
 
 	window.Asc.plugin.init = function() {
@@ -40,8 +40,41 @@
 				}).
 				then(function(response) {
 					if (response.ok) {
-						sendPluginMessage({type: 'onAddApiKey', key: key});
-						document.getElementById('success_message').classList.remove('hidden');
+						response.json().then(function(data) {
+							let firsVar = {model: null, maxTokens: 0};
+							let secondVar = {model: null, maxTokens: 0};
+							let thirdVar = {model: null, maxTokens: 0};
+							let fourthVar = {model: null, maxTokens: 0};
+							for (let index = 0; index < data.data.length; index++) {
+								let cur = data.data[index].id;
+								if (cur === 'gpt-4') {
+									firsVar.model = cur;
+									firsVar.maxTokens = 8000;
+								}
+								
+								if (cur.includes('gpt-4')) {
+									secondVar.model = cur;
+									secondVar.maxTokens = getMaxTokens(cur);
+								}
+
+								if (cur === 'gpt-3.5-turbo-16k') {
+									thirdVar.model = cur;
+									thirdVar.maxTokens = 16000;
+								}
+
+								if (cur.includes('gpt-3.5')) {
+									fourthVar.model = cur;
+									fourthVar.maxTokens = getMaxTokens(cur);
+								}
+							}
+							let model = (firsVar.model || secondVar.model || thirdVar.model || fourthVar.model);
+							let maxTokens = (firsVar.maxTokens || secondVar.maxTokens || thirdVar.maxTokens  || fourthVar.maxTokens);
+							if (model) {
+								sendPluginMessage({type: 'onAddApiKey', key: key, model: model, maxTokens: maxTokens});
+							} else {
+								document.getElementById('success_message').classList.remove('hidden');
+							}
+						});
 					} else {
 						response.json().then(function(data) {
 							let message = data.error && data.error.message ? data.error.message : errMessage;
@@ -82,6 +115,16 @@
 
 	function sendPluginMessage(message) {
 		window.Asc.plugin.sendToPlugin("onWindowMessage", message);
+	};
+
+	function getMaxTokens(model) {
+		let result = 4000;
+		let arr = model.split('-');
+		let length = arr.find(function(el){return (el.slice(-1) == 'k' && el.length <= 3)});
+		if (length) {
+			result = Number(length.slice(0,-1)) * 1000;
+		}
+		return result;
 	};
 
 	window.Asc.plugin.onTranslate = function() {
