@@ -41,6 +41,11 @@ Menus.prototype.defaultFonts = ['Helvetica', 'Verdana', 'Times New Roman', 'Gara
 /**
  * Adds the label menu items to the given menu and parent.
  */
+Menus.prototype.autoPopup = true;
+
+/**
+ * Adds the label menu items to the given menu and parent.
+ */
 Menus.prototype.init = function()
 {
 	var ui = this.editorUi;
@@ -49,7 +54,7 @@ Menus.prototype.init = function()
 
 	this.customFonts = [];
 	this.customFontSizes = [];
-
+	
 	this.put('fontFamily', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
 		var addItem = mxUtils.bind(this, function(fontFamily)
@@ -273,6 +278,13 @@ Menus.prototype.init = function()
 	{
 		menu.addItem(mxResources.get('horizontal'), null, function() { graph.distributeCells(true); }, parent);
 		menu.addItem(mxResources.get('vertical'), null, function() { graph.distributeCells(false); }, parent);
+		menu.addSeparator(parent);
+		this.addSubmenu('distributeSpacing', menu, parent, mxResources.get('spacing'));
+	})));
+	this.put('distributeSpacing', new Menu(mxUtils.bind(this, function(menu, parent)
+	{
+		menu.addItem(mxResources.get('horizontal'), null, function() { graph.distributeCells(true, null, true); }, parent);
+		menu.addItem(mxResources.get('vertical'), null, function() { graph.distributeCells(false, null, true); }, parent);
 	})));
 	this.put('line', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
@@ -310,13 +322,13 @@ Menus.prototype.init = function()
 			menu.addSeparator(parent);
 
 			this.styleChange(menu, '', [mxConstants.STYLE_SHAPE, mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE, 'width'],
-				[null, null, null, null], 'geIcon geSprite geSprite-connection', parent, true, null, true).setAttribute('title', mxResources.get('line'));
+				[null, null, null, null], 'geIcon geSprite geSprite-connection', parent, null, null, true).setAttribute('title', mxResources.get('line'));
 			this.styleChange(menu, '', [mxConstants.STYLE_SHAPE, mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE, 'width'],
-				['link', null, null, null], 'geIcon geSprite geSprite-linkedge', parent, true, null, true).setAttribute('title', mxResources.get('link'));
+				['link', null, null, null], 'geIcon geSprite geSprite-linkedge', parent, null, null, true).setAttribute('title', mxResources.get('link'));
 			this.styleChange(menu, '', [mxConstants.STYLE_SHAPE, mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE, 'width'],
-				['flexArrow', null, null, null], 'geIcon geSprite geSprite-arrow', parent, true, null, true).setAttribute('title', mxResources.get('arrow'));
+				['flexArrow', null, null, null], 'geIcon geSprite geSprite-arrow', parent, null, null, true).setAttribute('title', mxResources.get('arrow'));
 			this.styleChange(menu, '', [mxConstants.STYLE_SHAPE, mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE, 'width'],
-				['arrow', null, null, null], 'geIcon geSprite geSprite-simplearrow', parent, true, null, true).setAttribute('title', mxResources.get('simpleArrow'));
+				['arrow', null, null, null], 'geIcon geSprite geSprite-simplearrow', parent, null, null, true).setAttribute('title', mxResources.get('simpleArrow'));
 		}
 	})));
 	this.put('layout', new Menu(mxUtils.bind(this, function(menu, parent)
@@ -328,64 +340,73 @@ Menus.prototype.init = function()
 
 		var runTreeLayout = mxUtils.bind(this, function(layout)
 		{
-			var tmp = graph.getSelectionCell();
-			var roots = null;
-			
-			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
+			this.editorUi.tryAndHandle(mxUtils.bind(this, function()
 			{
-				if (graph.getModel().getEdgeCount(tmp) == 0)
+				var tmp = graph.getSelectionCell();
+				var roots = null;
+				
+				if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
 				{
-					roots = graph.findTreeRoots(graph.getDefaultParent());
-				}
-			}
-			else
-			{
-				roots = graph.findTreeRoots(tmp);
-			}
-
-			if (roots != null && roots.length > 0)
-			{
-				tmp = roots[0];
-			}
-			
-			if (tmp != null)
-			{
-				this.editorUi.executeLayout(function()
-				{
-					layout.execute(graph.getDefaultParent(), tmp);
-
-					if (!graph.isSelectionEmpty())
+					if (graph.getModel().getEdgeCount(tmp) == 0)
 					{
-						tmp = graph.getModel().getParent(tmp);
-						
-						if (graph.getModel().isVertex(tmp))
-						{
-							graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
-						}
+						roots = graph.findTreeRoots(graph.getDefaultParent());
 					}
-				}, true);
-			}
+				}
+				else
+				{
+					roots = graph.findTreeRoots(tmp);
+				}
+	
+				if (roots != null && roots.length > 0)
+				{
+					tmp = roots[0];
+				}
+				
+				if (tmp != null)
+				{
+					this.editorUi.executeLayout(function()
+					{
+						layout.execute(graph.getDefaultParent(), tmp);
+
+						if (!graph.isSelectionEmpty())
+						{
+							tmp = graph.getModel().getParent(tmp);
+							
+							if (graph.getModel().isVertex(tmp))
+							{
+								graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
+							}
+						}
+					}, true);
+				}
+			}));
 		});
 
 		menu.addItem(mxResources.get('horizontalFlow'), null, mxUtils.bind(this, function()
 		{
-			var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_WEST);
-			
-    		this.editorUi.executeLayout(function()
-    		{
-    			var selectionCells = graph.getSelectionCells();
-    			layout.execute(graph.getDefaultParent(), selectionCells.length == 0 ? null : selectionCells);
-    		}, true);
+			this.editorUi.tryAndHandle(mxUtils.bind(this, function()
+			{
+				var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_WEST);
+
+				this.editorUi.executeLayout(function()
+				{
+					var selectionCells = graph.getSelectionCells();
+					layout.execute(graph.getDefaultParent(), selectionCells.length == 0 ? null : selectionCells);
+				}, true);
+			}));
 		}), parent);
 		menu.addItem(mxResources.get('verticalFlow'), null, mxUtils.bind(this, function()
 		{
-			var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_NORTH);
-			
-    		this.editorUi.executeLayout(function()
-    		{
-    			var selectionCells = graph.getSelectionCells();
-    			layout.execute(graph.getDefaultParent(), selectionCells.length == 0 ? null : selectionCells);
-    		}, true);
+			this.editorUi.tryAndHandle(mxUtils.bind(this, function()
+			{
+				var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_NORTH);
+				
+				this.editorUi.executeLayout(function()
+				{
+					var selectionCells = graph.getSelectionCells();
+					layout.execute(graph.getDefaultParent(), selectionCells.length == 0 ? null : selectionCells);
+				}, true);
+			}));
 		}), parent);
 		menu.addSeparator(parent);
 		menu.addItem(mxResources.get('horizontalTree'), null, mxUtils.bind(this, function()
@@ -440,46 +461,52 @@ Menus.prototype.init = function()
 			
 			promptSpacing(layout.forceConstant, mxUtils.bind(this, function(newValue)
 			{
-				layout.forceConstant = newValue;
-				
-	    		this.editorUi.executeLayout(function()
-	    		{
-	    			var tmp = graph.getSelectionCell();
-	    			
-	    			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
-	    			{
-	    				tmp = graph.getDefaultParent();
-	    			}
-	    			
-	    			layout.execute(tmp);
-	    			
-	    			if (graph.getModel().isVertex(tmp))
-	    			{
-	    				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
-	    			}
-	    		}, true);
+				this.editorUi.tryAndHandle(mxUtils.bind(this, function()
+				{
+					layout.forceConstant = newValue;
+					
+					this.editorUi.executeLayout(function()
+					{
+						var tmp = graph.getSelectionCell();
+						
+						if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
+						{
+							tmp = graph.getDefaultParent();
+						}
+						
+						layout.execute(tmp);
+						
+						if (graph.getModel().isVertex(tmp))
+						{
+							graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
+						}
+					}, true);
+				}));
 			}));
 		}), parent);
 		menu.addItem(mxResources.get('circle'), null, mxUtils.bind(this, function()
 		{
-			var layout = new mxCircleLayout(graph);
-			
-    		this.editorUi.executeLayout(function()
-    		{
-    			var tmp = graph.getSelectionCell();
-    			
-    			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
-    			{
-    				tmp = graph.getDefaultParent();
-    			}
-    			
-    			layout.execute(tmp);
-    			
-    			if (graph.getModel().isVertex(tmp))
-    			{
-    				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
-    			}
-    		}, true);
+			this.editorUi.tryAndHandle(mxUtils.bind(this, function()
+			{
+				var layout = new mxCircleLayout(graph);
+				
+				this.editorUi.executeLayout(function()
+				{
+					var tmp = graph.getSelectionCell();
+					
+					if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
+					{
+						tmp = graph.getDefaultParent();
+					}
+					
+					layout.execute(tmp);
+					
+					if (graph.getModel().isVertex(tmp))
+					{
+						graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
+					}
+				}, true);
+			}));
 		}), parent);
 	})));
 	this.put('navigation', new Menu(mxUtils.bind(this, function(menu, parent)
@@ -505,8 +532,8 @@ Menus.prototype.init = function()
 	})));
 	this.put('view', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
-		this.addMenuItems(menu, ((this.editorUi.format != null) ? ['formatPanel'] : []).
-			concat(['outline', 'layers', '-', 'pageView', 'pageScale', '-', 'scrollbars', 'tooltips', '-',
+		this.addMenuItems(menu, ((this.editorUi.format != null) ? ['format'] : []).
+			concat(['outline', 'layers', '-', 'pageView', 'pageScale', '-', 'tooltips',
 			        'grid', 'guides', '-', 'connectionArrows', 'connectionPoints', '-',
 			        'resetView', 'zoomIn', 'zoomOut'], parent));
 	})));
@@ -515,14 +542,14 @@ Menus.prototype.init = function()
 	{
 		if (this.editorUi.format != null)
 		{
-			this.addMenuItems(menu, ['formatPanel'], parent);
+			this.addMenuItems(menu, ['format'], parent);
 		}
 		
 		this.addMenuItems(menu, ['outline', 'layers'], parent);
 	})));
 	this.put('viewZoom', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
-		this.addMenuItems(menu, ['resetView', '-'], parent);
+		this.addMenuItems(menu, ['smartFit', '-'], parent);
 		var scales = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 		
 		for (var i = 0; i < scales.length; i++)
@@ -582,6 +609,7 @@ Menus.prototype.get = function(name)
 Menus.prototype.addSubmenu = function(name, menu, parent, label)
 {
 	var entry = this.get(name);
+	var submenu = null;
 	
 	if (entry != null)
 	{
@@ -589,10 +617,13 @@ Menus.prototype.addSubmenu = function(name, menu, parent, label)
 	
 		if (menu.showDisabled || enabled)
 		{
-			var submenu = menu.addItem(label || mxResources.get(name), null, null, parent, null, enabled);
+			submenu = menu.addItem(label || mxResources.get(name),
+				null, null, parent, null, enabled);
 			this.addMenu(name, menu, submenu);
 		}
 	}
+
+	return submenu;
 };
 
 /**
@@ -604,7 +635,7 @@ Menus.prototype.addMenu = function(name, popupMenu, parent)
 	
 	if (menu != null && (popupMenu.showDisabled || menu.isEnabled()))
 	{
-		this.get(name).execute(popupMenu, parent);
+		menu.execute(popupMenu, parent);
 	}
 };
 
@@ -917,9 +948,12 @@ Menus.prototype.addInsertTableItem = function(menu, insertFn, parent, showOption
 	function createPicker(rows, cols)
 	{
 		var table2 = document.createElement('table');
+		table2.className = 'geInsertTablePicker';
 		table2.setAttribute('border', '1');
 		table2.style.borderCollapse = 'collapse';
 		table2.style.borderStyle = 'solid';
+		table2.style.marginBottom = '4px';
+		table2.style.marginTop = '8px';
 		table2.setAttribute('cellPadding', '8');
 		
 		for (var i = 0; i < rows; i++)
@@ -963,10 +997,12 @@ Menus.prototype.addInsertTableItem = function(menu, insertFn, parent, showOption
 	var titleOption = document.createElement('input');
 	titleOption.setAttribute('id', 'geTitleOption');
 	titleOption.setAttribute('type', 'checkbox');
+	titleOption.style.verticalAlign = 'middle';
 
 	var titleLbl = document.createElement('label');
 	mxUtils.write(titleLbl, mxResources.get('title'));
 	titleLbl.setAttribute('for', 'geTitleOption');
+	titleLbl.style.verticalAlign = 'middle';
 
 	mxEvent.addGestureListeners(titleLbl, null, null, mxUtils.bind(this, function(e)
 	{
@@ -981,10 +1017,12 @@ Menus.prototype.addInsertTableItem = function(menu, insertFn, parent, showOption
 	var containerOption = document.createElement('input');
 	containerOption.setAttribute('id', 'geContainerOption');
 	containerOption.setAttribute('type', 'checkbox');
+	containerOption.style.verticalAlign = 'middle';
 	
 	var containerLbl = document.createElement('label');
 	mxUtils.write(containerLbl, mxResources.get('container'));
 	containerLbl.setAttribute('for', 'geContainerOption');
+	containerLbl.style.verticalAlign = 'middle';
 
 	mxEvent.addGestureListeners(containerLbl, null, null, mxUtils.bind(this, function(e)
 	{
@@ -1004,14 +1042,15 @@ Menus.prototype.addInsertTableItem = function(menu, insertFn, parent, showOption
 		elt2.firstChild.appendChild(containerOption);
 		elt2.firstChild.appendChild(containerLbl);
 		mxUtils.br(elt2.firstChild);
-		mxUtils.br(elt2.firstChild);
 	}
 	
 	var picker = createPicker(5, 5);
 	elt2.firstChild.appendChild(picker);
 	
 	var label = document.createElement('div');
+	label.style.textAlign = 'center';
 	label.style.padding = '4px';
+	label.style.width = '100%';
 	label.innerHTML = '1x1';
 	elt2.firstChild.appendChild(label);
 	
@@ -1123,8 +1162,9 @@ Menus.prototype.edgeStyleChange = function(menu, label, keys, values, sprite, pa
 			}
 			
 			this.editorUi.fireEvent(new mxEventObject(
-				'styleChanged', 'keys', keys,
-				'values', values, 'cells', edges));
+				'styleChanged', 'cells', edges,
+				'keys', keys, 'values', values,
+				'force', cells.length == 0));
 		}
 		finally
 		{
@@ -1262,7 +1302,8 @@ Menus.prototype.promptChange = function(menu, label, hint, defaultValue, key, pa
 
 		var doStopEditing = (beforeFn != null) ? beforeFn() : true;
     	
-		var dlg = new FilenameDialog(this.editorUi, value, mxResources.get('apply'), mxUtils.bind(this, function(newValue)
+		var dlg = new FilenameDialog(this.editorUi, value, mxResources.get('apply'),
+			mxUtils.bind(this, function(newValue)
 		{
 			if (newValue != null && newValue.length > 0)
 			{
@@ -1301,74 +1342,91 @@ Menus.prototype.promptChange = function(menu, label, hint, defaultValue, key, pa
 /**
  * Adds a handler for showing a menu in the given element.
  */
-Menus.prototype.pickColor = function(key, cmd, defaultValue)
+Menus.prototype.pickColor = function(key, cmd, defaultValue, defaultColor, defaultColorValue)
 {
 	var ui = this.editorUi;
-	var graph = ui.editor.graph;
-	var h = 226 + ((Math.ceil(ColorDialog.prototype.presetColors.length / 12) +
-			Math.ceil(ColorDialog.prototype.defaultColors.length / 12)) * 17);
 	
-	if (cmd != null && graph.cellEditor.isContentEditing())
+	ui.tryAndHandle(mxUtils.bind(this, function()
 	{
-		// Saves and restores text selection for in-place editor
-		var selState = graph.cellEditor.saveSelection();
+		var graph = ui.editor.graph;
+		var h = 226 + ((Math.ceil(ColorDialog.prototype.presetColors.length / 12) +
+				Math.ceil(ColorDialog.prototype.defaultColors.length / 12)) * 17);
 		
-		var dlg = new ColorDialog(this.editorUi, defaultValue || graph.shapeForegroundColor, mxUtils.bind(this, function(color)
+		if (cmd != null && graph.cellEditor.isContentEditing())
 		{
-			graph.cellEditor.restoreSelection(selState);
-			document.execCommand(cmd, false, (color != mxConstants.NONE) ? color : 'transparent');
-
-			var cmdMapping = {
-				'forecolor': mxConstants.STYLE_FONTCOLOR,
-				'backcolor': mxConstants.STYLE_LABEL_BACKGROUNDCOLOR
-			};
-
-			var style = cmdMapping[cmd];
-
-			if (style != null)
+			// Saves and restores text selection for in-place editor
+			var selState = graph.cellEditor.saveSelection();
+			
+			var dlg = new ColorDialog(this.editorUi, defaultValue || graph.shapeForegroundColor,
+				mxUtils.bind(this, function(color)
 			{
-				ui.fireEvent(new mxEventObject('styleChanged',
-					'keys', [style], 'values', [color],
-					'cells', [graph.cellEditor.getEditingCell()]));
-			}
-		}), function()
-		{
-			graph.cellEditor.restoreSelection(selState);
-		});
+				graph.cellEditor.restoreSelection(selState);
+				document.execCommand(cmd, false, (color != mxConstants.NONE) ? color : 'transparent');
 
-		this.editorUi.showDialog(dlg.container, 230, h, true, true);
-		dlg.init();
-	}
-	else
-	{
-		if (this.colorDialog == null)
-		{
-			this.colorDialog = new ColorDialog(this.editorUi);
-		}
-	
-		this.colorDialog.currentColorKey = key;
-		var state = graph.getView().getState(graph.getSelectionCell());
-		var color = mxConstants.NONE;
-		
-		if (state != null)
-		{
-			color = state.style[key] || color;
-		}
-		
-		if (color == mxConstants.NONE)
-		{
-			color = graph.shapeBackgroundColor.substring(1);
-			this.colorDialog.picker.fromString(color);
-			this.colorDialog.colorInput.value = mxConstants.NONE;
+				var cmdMapping = {
+					'forecolor': mxConstants.STYLE_FONTCOLOR,
+					'backcolor': mxConstants.STYLE_LABEL_BACKGROUNDCOLOR
+				};
+
+				var style = cmdMapping[cmd];
+
+				if (style != null)
+				{
+					ui.fireEvent(new mxEventObject('styleChanged',
+						'keys', [style], 'values', [color],
+						'cells', [graph.cellEditor.getEditingCell()]));
+				}
+			}), function()
+			{
+				graph.cellEditor.restoreSelection(selState);
+			});
+
+			this.editorUi.showDialog(dlg.container, 230, h, true, true);
+			dlg.init();
 		}
 		else
 		{
-			this.colorDialog.picker.fromString(mxUtils.rgba2hex(color));
+			var state = graph.getView().getState(graph.getSelectionCell());
+			var color = mxConstants.NONE;
+			
+			if (state != null)
+			{
+				color = state.style[key] || color;
+			}
+			
+			if (defaultColor != null)
+			{
+				color = (/(^#?[a-zA-Z0-9]*$)/.test(color)) ? color : defaultColor;
+
+				this.editorUi.pickColor(color, ColorDialog.createApplyFunction(
+					this.editorUi, key), defaultColor, defaultColorValue);
+			}
+			else
+			{
+				if (this.colorDialog == null)
+				{
+					this.colorDialog = new ColorDialog(this.editorUi);
+				}
+			
+				this.colorDialog.currentColorKey = key;
+
+				
+				if (color == mxConstants.NONE)
+				{
+					color = graph.shapeBackgroundColor.substring(1);
+					this.colorDialog.picker.fromString(color);
+					this.colorDialog.colorInput.value = mxConstants.NONE;
+				}
+				else
+				{
+					this.colorDialog.picker.fromString(mxUtils.rgba2hex(color));
+				}
+			
+				this.editorUi.showDialog(this.colorDialog.container, 230, h, true, true);
+				this.colorDialog.init();
+			}
 		}
-	
-		this.editorUi.showDialog(this.colorDialog.container, 230, h, true, true);
-		this.colorDialog.init();
-	}
+	}));
 };
 
 /**
@@ -1391,10 +1449,17 @@ Menus.prototype.addMenuItem = function(menu, key, parent, trigger, sprite, label
 
 	if (action != null && (menu.showDisabled || action.isEnabled()) && action.visible)
 	{
-		var item = menu.addItem(label || action.label, null, function(evt)
+		var item = menu.addItem(label || action.label, null, mxUtils.bind(this, function(evt)
 		{
-			action.funct(trigger, evt);
-		}, parent, sprite, action.isEnabled());
+			try
+			{
+				action.funct(trigger, evt);
+			}
+			catch (e)
+			{
+				this.editorUi.handleError(e);
+			}
+		}), parent, sprite, action.isEnabled());
 		
 		// Adds checkmark image
 		if (action.toggleAction && action.isSelected())
@@ -1402,7 +1467,7 @@ Menus.prototype.addMenuItem = function(menu, key, parent, trigger, sprite, label
 			menu.addCheckmark(item, Editor.checkmarkImage);
 		}
 
-		this.addShortcut(item, action);
+		this.addShortcut(item, action, menu.hideShortcuts);
 		
 		return item;
 	}
@@ -1413,15 +1478,22 @@ Menus.prototype.addMenuItem = function(menu, key, parent, trigger, sprite, label
 /**
  * Adds a checkmark to the given menuitem.
  */
-Menus.prototype.addShortcut = function(item, action)
+Menus.prototype.addShortcut = function(item, action, asTooltip)
 {
 	if (action.shortcut != null)
 	{
-		var td = item.firstChild.nextSibling.nextSibling;
-		var span = document.createElement('span');
-		span.style.color = 'gray';
-		mxUtils.write(span, action.shortcut);
-		td.appendChild(span);
+		if (asTooltip)
+		{
+			item.setAttribute('title', action.shortcut);
+		}
+		else
+		{
+			var td = item.firstChild.nextSibling.nextSibling;	
+			var span = document.createElement('span');
+			span.style.color = 'gray';
+			mxUtils.write(span, action.shortcut);
+			td.appendChild(span);
+		}
 	}
 };
 
@@ -1449,13 +1521,42 @@ Menus.prototype.addMenuItems = function(menu, keys, parent, trigger, sprites)
 Menus.prototype.createPopupMenu = function(menu, cell, evt)
 {
 	menu.smartSeparators = true;
-	
-	this.addPopupMenuHistoryItems(menu, cell, evt);
+	menu.hideShortcuts = true;
+	this.addPopupMenuItems(menu, cell, evt);
+};
+
+/**
+ * Creates the keyboard event handler for the current graph and history.
+ */
+Menus.prototype.addPopupMenuItems = function(menu, cell, evt)
+{
+	if (this.isShowHistoryItems())
+	{
+		this.addPopupMenuHistoryItems(menu, cell, evt);	
+	}
+
 	this.addPopupMenuEditItems(menu, cell, evt);
-	this.addPopupMenuStyleItems(menu, cell, evt);
-	this.addPopupMenuArrangeItems(menu, cell, evt);
+
+	if (this.isShowStyleItems())
+	{
+		this.addPopupMenuStyleItems(menu, cell, evt);
+	}
+
+	if (this.isShowArrangeItems())
+	{
+		this.addPopupMenuArrangeItems(menu, cell, evt);
+	}
+
 	this.addPopupMenuCellItems(menu, cell, evt);
 	this.addPopupMenuSelectionItems(menu, cell, evt);
+};
+
+/**
+ * Creates the keyboard event handler for the current graph and history.
+ */
+Menus.prototype.isShowHistoryItems = function()
+{
+	return true;
 };
 
 /**
@@ -1472,6 +1573,28 @@ Menus.prototype.addPopupMenuHistoryItems = function(menu, cell, evt)
 /**
  * Creates the keyboard event handler for the current graph and history.
  */
+Menus.prototype.addPopupDeleteItem = function(menu, cell, evt)
+{
+	var item = this.addMenuItem(menu, 'delete');
+
+	if (item != null && item.firstChild != null &&
+		item.firstChild.nextSibling != null)
+	{
+		item.firstChild.nextSibling.style.color = 'red';
+		var graph = this.editorUi.editor.graph;
+
+		if (graph.getSelectionCount() > 1)
+		{
+			item.firstChild.nextSibling.innerHTML =
+				mxUtils.htmlEntities(mxResources.get('delete') +
+				' (' + graph.getSelectionCount() + ')');
+		}
+	}
+};
+
+/**
+ * Creates the keyboard event handler for the current graph and history.
+ */
 Menus.prototype.addPopupMenuEditItems = function(menu, cell, evt)
 {
 	if (this.editorUi.editor.graph.isSelectionEmpty())
@@ -1480,8 +1603,17 @@ Menus.prototype.addPopupMenuEditItems = function(menu, cell, evt)
 	}
 	else
 	{
-		this.addMenuItems(menu, ['delete', '-', 'cut', 'copy', '-', 'duplicate'], null, evt);
+		this.addMenuItems(menu, ['cut', 'copy', 'duplicate',
+			'-', 'delete', 'lockUnlock'], null, evt);
 	}
+};
+
+/**
+ * Creates the keyboard event handler for the current graph and history.
+ */
+Menus.prototype.isShowStyleItems = function()
+{
+	return true;
 };
 
 /**
@@ -1502,29 +1634,43 @@ Menus.prototype.addPopupMenuStyleItems = function(menu, cell, evt)
 /**
  * Creates the keyboard event handler for the current graph and history.
  */
+Menus.prototype.isShowArrangeItems = function()
+{
+	return true;
+};
+
+/**
+ * Creates the keyboard event handler for the current graph and history.
+ */
 Menus.prototype.addPopupMenuArrangeItems = function(menu, cell, evt)
 {
 	var graph = this.editorUi.editor.graph;
 	
-	if (graph.getEditableCells(graph.getSelectionCells()).length > 0)
+	// Shows group actions
+	if (graph.getSelectionCount() > 1 || (graph.getSelectionCount() > 0 &&
+		!graph.getModel().isEdge(cell) && !graph.isSwimlane(cell) &&
+		graph.getModel().getChildCount(cell) > 0 && graph.isCellEditable(cell)))
+	{
+		this.addMenuItems(menu, ['group', 'ungroup'], null, evt);
+	}
+
+	var count = graph.getEditableCells(graph.getSelectionCells()).length;
+
+	if (count > 1)
+	{
+		menu.addSeparator();
+		this.addSubmenu('align', menu);
+		this.addSubmenu('distribute', menu);
+	}
+
+	if (count >= 1)
 	{
 		this.addMenuItems(menu, ['-', 'toFront', 'toBack'], null, evt);
 		
-		if (graph.getSelectionCount() == 1)
+		if (this.isShowCellEditItems() && graph.getSelectionCount() == 1)
 		{
 			this.addMenuItems(menu, ['bringForward', 'sendBackward'], null, evt);
 		}
-	}	
-
-	if (graph.getSelectionCount() > 1)	
-	{
-		this.addMenuItems(menu, ['-', 'group'], null, evt);
-	}
-	else if (graph.getSelectionCount() == 1 && !graph.getModel().isEdge(cell) &&
-		!graph.isSwimlane(cell) && graph.getModel().getChildCount(cell) > 0 &&
-		graph.isCellEditable(cell))
-	{
-		this.addMenuItems(menu, ['-', 'ungroup'], null, evt);
 	}
 };
 
@@ -1535,13 +1681,15 @@ Menus.prototype.addPopupMenuCellItems = function(menu, cell, evt)
 {
 	var graph = this.editorUi.editor.graph;
 	var state = graph.view.getState(cell);
-	menu.addSeparator();
 	
 	if (state != null)
 	{
-		var hasWaypoints = false;
+		// Adds reset waypoints option if waypoints exist
+		var geo = graph.getModel().getGeometry(cell);
+		var hasWaypoints = geo != null && geo.points != null && geo.points.length > 0;
 		
-		if (graph.getSelectionCount() == 1 && graph.getModel().isEdge(cell))
+		if (this.isShowStyleItems() && graph.getSelectionCount() == 1 &&
+			graph.getModel().isEdge(cell))
 		{
 			menu.addSeparator();
 			this.addSubmenu('line', menu);
@@ -1553,7 +1701,7 @@ Menus.prototype.addPopupMenuCellItems = function(menu, cell, evt)
 			var handler = graph.selectionCellsHandler.getHandler(cell);
 			var isWaypoint = false;
 			
-			if (handler instanceof mxEdgeHandler && handler.bends != null && handler.bends.length > 2)
+			if (hasWaypoints && handler instanceof mxEdgeHandler && handler.bends != null && handler.bends.length > 2)
 			{
 				var index = handler.getHandleForEvent(graph.updateMouseEvent(new mxMouseEvent(evt)));
 
@@ -1573,26 +1721,36 @@ Menus.prototype.addPopupMenuCellItems = function(menu, cell, evt)
 				}
 			}
 			
-			menu.addSeparator();
-			this.addMenuItem(menu, 'turn', null, evt, null, mxResources.get('reverse'));
-			this.addMenuItems(menu, [(isWaypoint) ? 'removeWaypoint' : 'addWaypoint'], null, evt);
+			if (this.isShowCellEditItems())
+			{
+				this.addMenuItem(menu, 'turn', null, evt, null, mxResources.get('reverse'));
+			}
 			
-			// Adds reset waypoints option if waypoints exist
-			var geo = graph.getModel().getGeometry(cell);
-			hasWaypoints = geo != null && geo.points != null && geo.points.length > 0;
+			this.addMenuItems(menu, [(isWaypoint) ? 'removeWaypoint' : 'addWaypoint'], null, evt);
 		}
 
-		if (graph.getSelectionCount() == 1 && (hasWaypoints || (graph.getModel().isVertex(cell) &&
+		if (graph.getSelectionCount() == 1 && this.isShowCellEditItems() && 
+			(hasWaypoints || (graph.getModel().isVertex(cell) &&
 			graph.getModel().getEdgeCount(cell) > 0)))
 		{
-			this.addMenuItems(menu, ['-', 'clearWaypoints'], null, evt);
+			this.addMenuItems(menu, ['clearWaypoints'], null, evt);
 		}
-	
-		if (graph.getSelectionCount() == 1 && graph.isCellEditable(cell))
+		
+		if (this.isShowCellEditItems() &&
+			graph.getSelectionCount() == 1 &&
+			graph.isCellEditable(cell))
 		{
 			this.addPopupMenuCellEditItems(menu, cell, evt);
 		}
 	}
+};
+
+/**
+ * Creates the keyboard event handler for the current graph and history.
+ */
+Menus.prototype.isShowCellEditItems = function()
+{
+	return true;
 };
 
 /**
@@ -1612,13 +1770,12 @@ Menus.prototype.addPopupMenuCellEditItems = function(menu, cell, evt, parent)
 		this.addMenuItem(menu, 'crop', parent, evt);
 	}
 
-	if ((graph.getModel().isVertex(cell) && graph.getModel().getChildCount(cell) == 0)
-			|| graph.isContainer(cell)) //Allow vertex only excluding group (but allowing container [e.g, swimlanes])
+	if (graph.getModel().isVertex(cell) && graph.isCellConnectable(cell))
 	{
 		this.addMenuItem(menu, 'editConnectionPoints', parent, evt);
 	}
 };
- 
+
 /**
  * Creates the keyboard event handler for the current graph and history.
  */
@@ -1626,7 +1783,7 @@ Menus.prototype.addPopupMenuSelectionItems = function(menu, cell, evt)
 {
 	if (this.editorUi.editor.graph.isSelectionEmpty())
 	{
-		this.addMenuItems(menu, ['-', 'selectVertices', 'selectEdges', 'selectAll'], null, evt);
+		this.addMenuItems(menu, ['-', 'selectAll', 'selectVertices', 'selectEdges'], null, evt);
 	}
 };
 
@@ -1663,6 +1820,7 @@ Menus.prototype.menuCreated = function(menu, elt, className)
 	if (elt != null)
 	{
 		className = (className != null) ? className : 'geItem';
+		elt.className = className;
 		
 		menu.addListener('stateChanged', function()
 		{
@@ -1710,12 +1868,12 @@ Menubar.prototype.hideMenu = function()
 /**
  * Adds a submenu to this menubar.
  */
-Menubar.prototype.addMenu = function(label, funct, before)
+Menubar.prototype.addMenu = function(label, funct, before, clickFn)
 {
 	var elt = document.createElement('a');
 	elt.className = 'geItem';
 	mxUtils.write(elt, label);
-	this.addMenuHandler(elt, funct);
+	this.addMenuHandler(elt, funct, clickFn);
 	
     if (before != null)
     {
@@ -1732,7 +1890,7 @@ Menubar.prototype.addMenu = function(label, funct, before)
 /**
  * Adds a handler for showing a menu in the given element.
  */
-Menubar.prototype.addMenuHandler = function(elt, funct)
+Menubar.prototype.addMenuHandler = function(elt, funct, clickFn)
 {
 	if (funct != null)
 	{
@@ -1740,7 +1898,13 @@ Menubar.prototype.addMenuHandler = function(elt, funct)
 		
 		var clickHandler = mxUtils.bind(this, function(evt)
 		{
-			if (show && (elt.enabled == null || elt.enabled))
+			if (clickFn != null)
+			{
+				clickFn(evt);
+			}
+
+			if (!mxEvent.isConsumed(evt) && show &&
+				(elt.enabled == null || elt.enabled))
 			{
 				this.editorUi.editor.graph.popupMenuHandler.hideMenu();
 				var menu = new mxPopupMenu(funct);
@@ -1768,7 +1932,8 @@ Menubar.prototype.addMenuHandler = function(elt, funct)
 		// Shows menu automatically while in expanded state
 		mxEvent.addListener(elt, 'mousemove', mxUtils.bind(this, function(evt)
 		{
-			if (this.editorUi.currentMenu != null && this.editorUi.currentMenuElt != elt)
+			if (this.editorUi.menus.autoPopup && this.editorUi.currentMenu != null &&
+				this.editorUi.currentMenuElt != elt)
 			{
 				this.editorUi.hideCurrentMenu();
 				clickHandler(evt);
@@ -1779,6 +1944,12 @@ Menubar.prototype.addMenuHandler = function(elt, funct)
         mxEvent.addListener(elt, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown',
         	mxUtils.bind(this, function(evt)
 		{
+			if (!this.editorUi.menus.autoPopup && this.editorUi.currentMenu != null &&
+				this.editorUi.currentMenuElt != elt && mxEvent.isMouseEvent(evt))
+			{
+				this.editorUi.hideCurrentMenu();
+			}
+
 			show = this.editorUi.currentMenu == null;
 			evt.preventDefault();
 		}));
