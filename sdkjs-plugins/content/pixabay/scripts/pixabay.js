@@ -56,7 +56,8 @@ let  Ps1, Ps2;
 			$('#pixabay-locale').trigger('change');
 		}
 
-		if (localStorage.getItem('pixabay-category') !== null) {
+		const category_saved = localStorage.getItem('pixabay-category');
+		if (category_saved !== null) {
 			$('#pixabay-category').val(category_saved);
 			$('#pixabay-category').trigger('change');
 		}
