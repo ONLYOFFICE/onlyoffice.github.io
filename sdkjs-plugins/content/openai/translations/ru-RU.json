@@ -23,7 +23,7 @@
 	"Translate to Italian" : "Перевести на Итальянский",
 	"Generate image from text" : "Создать картинку по тексту",
 	"Settings" : "Настройки",
-	"Maximum 4000 tokens are available." : "Максимум 4000 токенов доступно.",
+	"Maximum 8000 tokens are available." : "Максимум 8000 токенов доступно.",
 	"For work with this model we should save chat history and sent it into a request." : "Для работы с этой моделью мы должны сохранять историю диалога и посылать её в запросе.",
 	"But we have a limit on the number of tokens in the request." : "Но мы имеем ограничение на количество токенов в запросе.",
 	"That's why sometimes you should clear your chat history." : "Поэтому иногда вам следует очищать историю чата.",
@@ -60,5 +60,11 @@
 	"Thesaurus" : "Синонимы",
 	"Show hyperlink content" : "Показать содержимое гиперссылки",
 	"Warning" : "Предупреждение",
-	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE",
+	"Fix spelling & grammar": "Исправить орфографию и грамматику",
+	"Rewrite differently": "Переписать по-другому",
+	"Make longer": "Сделать длиннее",
+	"Make shorter": "Сделать короче",
+	"Make simpler": "Сделать проще",
+	"Invalid Api key or this service doesn't work in your region." : "Некорректный Api ключ или этот сервис не работает в вашем регионе."
 }

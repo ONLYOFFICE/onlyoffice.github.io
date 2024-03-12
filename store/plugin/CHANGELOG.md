@@ -15,3 +15,11 @@
 * Enable plugin for viewer mode.
 * Add button and new window for developer mode.
 * Rename window for notification when removeing plugin into desktop.
+
+## 1.0.3
+
+* Add "pdf" to the supported editors.
+
+## 1.0.4
+
+* Change developer window (add warnign - bug 66451).

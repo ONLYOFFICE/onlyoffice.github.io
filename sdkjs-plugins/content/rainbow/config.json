@@ -7,7 +7,7 @@
 		"de": "Rainbow"
 	},
 	"guid": "asc.{0743b63f-cb32-438c-b46b-81ce182ff4f7}",
-	"version": "1.0.0",
+	"version": "1.0.1",
 
 	"variations": [
 		{
@@ -61,8 +61,8 @@
 					}
 				}
 			],
-			"isViewer": false,
-			"EditorsSupport": [ "word", "slide", "cell" ],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "slide", "cell", "pdf" ],
 			"isVisual": true,
 			"isModal": false,
 			"isInsideMode": true,
