@@ -133,7 +133,10 @@ LocalFile.prototype.getLatestVersion = function(success, error)
 {
 	if (this.fileHandle == null)
 	{
-		success(null);
+		if (error != null)
+		{
+			error({message: mxResources.get('cannotOpenFile')});
+		}
 	}
 	else
 	{
@@ -317,14 +320,4 @@ LocalFile.prototype.rename = function(title, success, error)
 	{
 		success();
 	}
-};
-
-/**
- * Returns the location as a new object.
- * @type mx.Point
- */
-LocalFile.prototype.open = function()
-{
-	this.ui.setFileData(this.getData());
-	this.installListeners();
 };

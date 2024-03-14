@@ -9,5 +9,6 @@
 	"Enter the URL for your marketplace page here" : "Zde zadejte adresu URL své stránky marketplace",
 	"Return to default settings" : "Návrat na výchozí nastavení",
 	"Enter URL" : "Zadejte URL",
-	"Cancel" : "Zrušit"
+	"Cancel" : "Zrušit",
+	"Be careful! Avoid using the untrusted URLs." : "Buď opatrný! Nepoužívejte nedůvěryhodné adresy URL."
 }
