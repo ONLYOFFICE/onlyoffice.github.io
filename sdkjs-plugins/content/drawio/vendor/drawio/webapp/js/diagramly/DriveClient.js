@@ -128,7 +128,7 @@ DriveClient.prototype.libraryMimeType = 'application/vnd.jgraph.mxlibrary';
 /**
  * Contains the hostname of the new app.
  */
-DriveClient.prototype.newAppHostname = 'www.draw.io';
+DriveClient.prototype.newAppHostname = 'app.diagrams.net';
 
 /**
  * Executes the first step for connecting to Google Drive.
@@ -252,7 +252,7 @@ DriveClient.prototype.getUsersList = function()
 DriveClient.prototype.logout = function()
 {
 	//Send to server to clear refresh token cookie
-	this.ui.editor.loadUrl(this.redirectUri + '?doLogout=1&userId=' + this.userId + '&state=' + encodeURIComponent('cId=' + this.clientId + '&domain=' + window.location.hostname));
+	this.ui.editor.loadUrl(this.redirectUri + '?doLogout=1&userId=' + this.userId + '&state=' + encodeURIComponent('cId=' + this.clientId + '&domain=' + window.location.host));
 	this.clearPersistentToken();
 	this.setUser(null);
 	_token = null;
@@ -299,7 +299,7 @@ DriveClient.prototype.execute = function(fn)
 				
 				this.ui.showError(mxResources.get('error'), msg, mxResources.get('help'), mxUtils.bind(this, function()
 				{
-					this.ui.openLink('https://www.diagrams.net/doc/faq/gsuite-authorisation-troubleshoot');
+					this.ui.openLink('https://www.drawio.com/doc/faq/gsuite-authorisation-troubleshoot');
 				}), null, mxResources.get('ok'));
 			}), remember);
 		}));
@@ -520,6 +520,9 @@ DriveClient.prototype.executeRequest = function(reqObj, success, error)
 	}
 };
 
+/**
+ * Executes the given request.
+ */
 DriveClient.prototype.createAuthWin = function(url)
 {
 	var width = 525,
@@ -569,6 +572,9 @@ DriveClient.prototype.authorize = function(immediate, success, error, remember, 
 	}), error);
 };
 
+/**
+ * Executes the given request.
+ */
 DriveClient.prototype.updateAuthInfo = function (newAuthInfo, remember, forceUserUpdate, success, error)
 {
 	_token = newAuthInfo.access_token;
@@ -604,7 +610,10 @@ DriveClient.prototype.updateAuthInfo = function (newAuthInfo, remember, forceUse
 		success();
 	}
 };
-	
+
+/**
+ * Executes the given request.
+ */
 DriveClient.prototype.authorizeStep2 = function(state, immediate, success, error, remember, popup)
 {
 	try
@@ -644,28 +653,46 @@ DriveClient.prototype.authorizeStep2 = function(state, immediate, success, error
 			if (immediate) //Note, we checked refresh token is not null above
 			{
 				//state is used to identify which app/domain is used
-				var req = new mxXmlRequest(this.redirectUri + '?state=' + encodeURIComponent('cId=' + this.clientId + '&domain=' + window.location.hostname + '&token=' + state)
-						+ '&userId=' + this.userId
-						, null, 'GET');
+				var req = new mxXmlRequest(this.redirectUri + '?state=' + encodeURIComponent('cId=' + this.clientId +
+					'&domain=' + window.location.host + '&token=' + state) + '&userId=' + this.userId, null, 'GET');
 				
 				req.send(mxUtils.bind(this, function(req)
 				{
-					if (req.getStatus() >= 200 && req.getStatus() <= 299)
+					try
 					{
-						var newAuthInfo = JSON.parse(req.getText());
-						this.updateAuthInfo(newAuthInfo, true, false, success, error); //We set remember to true since we can only have a refresh token if user initially selected remember
-					}
-					else 
-					{
-						//When the request fails (e.g, Hibernate on Windows), the status is 0, this doesn't mean the token is invalid
-						if (req.getStatus() != 0) 
+						if (req.getStatus() >= 200 && req.getStatus() <= 299)
 						{
-							this.logout();
+							var newAuthInfo = JSON.parse(req.getText());
+							this.updateAuthInfo(newAuthInfo, true, false, success, error); //We set remember to true since we can only have a refresh token if user initially selected remember
+						}
+						else 
+						{
+							//When the request fails (e.g, Hibernate on Windows), the status is 0, this doesn't mean the token is invalid
+							if (req.getStatus() != 0)
+							{
+								this.logout();
+							}
+
+							if (error != null)
+							{
+								error(req); //TODO review this code path and how error is handled
+							}
+						}
+					}
+					catch (e)
+					{
+						if (window.console != null)
+						{
+							console.log('DriveClient.authorizeStep2', e);
 						}
 
 						if (error != null)
 						{
-							error(req); //TODO review this code path and how error is handled
+							error(e);
+						}
+						else
+						{
+							throw e;
 						}
 					}
 				}), error);
@@ -677,7 +704,7 @@ DriveClient.prototype.authorizeStep2 = function(state, immediate, success, error
 						'&response_type=code&include_granted_scopes=true' +
 						(remember? '&access_type=offline&prompt=consent%20select_account' : '') + //Ask for consent again to get a new refresh token
 						'&scope=' + encodeURIComponent(this.scopes.join(' ')) +
-						'&state=' + encodeURIComponent('cId=' + this.clientId + '&domain=' + window.location.hostname + '&token=' + state + //To identify which app/domain is used
+						'&state=' + encodeURIComponent('cId=' + this.clientId + '&domain=' + window.location.host + '&token=' + state + //To identify which app/domain is used
 						(this.sameWinRedirectUrl? '&redirect=' + this.sameWinRedirectUrl : '')); 
 				
 				if (this.sameWinAuthMode)
@@ -821,30 +848,40 @@ DriveClient.prototype.updateUser = function(success, error)
 		
 		this.ui.editor.loadUrl(url, mxUtils.bind(this, function(data)
 		{
-	    	var info = JSON.parse(data);
-	    	
-	    	// Requests more information about the user (email address is sometimes not in info)
-	    	this.executeRequest({url: '/about'}, mxUtils.bind(this, function(resp)
-	    	{
-	    		var email = mxResources.get('notAvailable');
-	    		var name = email;
-	    		var pic = null;
-	    		
-	    		if (resp != null && resp.user != null)
-	    		{
-	    			email = resp.user.emailAddress;
-	    			name = resp.user.displayName;
-	    			pic = (resp.user.picture != null) ? resp.user.picture.url : null;
-	    		}
-	    		
-	    		this.setUser(new DrawioUser(info.id, email, name, pic, info.locale));
-	    		this.userId = info.id;
-	
-	    		if (success != null)
+			try
+			{
+				var info = JSON.parse(data);
+				
+				// Requests more information about the user (email address is sometimes not in info)
+				this.executeRequest({url: '/about'}, mxUtils.bind(this, function(resp)
 				{
-					success();
+					var email = mxResources.get('notAvailable');
+					var name = email;
+					var pic = null;
+					
+					if (resp != null && resp.user != null)
+					{
+						email = resp.user.emailAddress;
+						name = resp.user.displayName;
+						pic = (resp.user.picture != null) ? resp.user.picture.url : null;
+					}
+					
+					this.setUser(new DrawioUser(info.id, email, name, pic, info.locale));
+					this.userId = info.id;
+		
+					if (success != null)
+					{
+						success();
+					}
+				}), error);
+			}
+			catch (e)
+			{
+				if (error != null)
+				{
+					error(e);
 				}
-	    	}), error);
+			}
 		}), error, null, null, null, null, headers);
 	}
 	catch (e)
@@ -1329,7 +1366,7 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 	
 			try
 			{
-				EditorUi.logError(e.message, null, null, e);
+				EditorUi.logError(e.message, null, null, null, e);
 				
 //				EditorUi.sendReport('Critical error in DriveClient.saveFile ' +
 //					new Date().toISOString() + ':' +
@@ -1405,6 +1442,10 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 				{
 					file.saveLevel = 3;
 
+					var savedData = file.getData();
+					var checksum = null;
+					var pages = null;
+					
 					if (file.constructor == DriveFile)
 					{
 						if (properties == null)
@@ -1425,7 +1466,16 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 						}
 						
 						// Pass to access cache for each etag
-						properties.push({'key': 'secret', 'value': (secret != null) ? secret : Editor.guid(32)});
+						secret = (secret != null) ? secret : Editor.guid(32);
+						properties.push({'key': 'secret', 'value': secret});
+
+						pages = this.ui.getPagesForXml(savedData)
+						checksum = this.ui.getHashValueForPages(pages);
+
+						// Writes checksum with secret to file properties
+						// The secret is required to check if the checksum is updated
+						// with the last write as old clients keep existing entries
+						properties.push({'key': 'checksum', 'value': secret + ':' + checksum});
 					}
 					
 					// Specifies that no thumbnail should be uploaded in which case the existing thumbnail is used
@@ -1450,8 +1500,6 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 							};
 						}
 					}
-		
-					var savedData = file.getData();
 					
 					// Updates saveDelay on drive file
 					var wrapper = mxUtils.bind(this, function(resp)
@@ -1459,120 +1507,67 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 						try
 						{
 							file.saveDelay = new Date().getTime() - t0;
-							file.saveLevel = 11;
-							
-							if (resp == null)
+							file.saveLevel = null;
+							success(resp, savedData, pages, checksum);
+	
+							if (prevDesc != null)
 							{
-								error({message: mxResources.get('errorSavingFile') + ': Empty response'});
-							}
-							else
-							{
-								// Checks if modified time is in the future and head revision has changed
-								var delta = new Date(resp.modifiedDate).getTime() - new Date(mod0).getTime();
+								// Pins previous revision
+								this.executeRequest({
+									url: '/files/' + prevDesc.id + '/revisions/' + prevDesc.headRevisionId + '?supportsAllDrives=true'
+								}, mxUtils.bind(this, mxUtils.bind(this, function(resp)
+								{
+									resp.pinned = true;
+									
+									this.executeRequest({
+										url: '/files/' + prevDesc.id + '/revisions/' + prevDesc.headRevisionId,
+										method: 'PUT',
+										params: resp
+									});
+								})));
 								
-								if (delta <= 0 || etag0 == resp.etag || (revision && head0 == resp.headRevisionId))
+								// Logs conversion
+								try
 								{
-									file.saveLevel = 12;
-									var reasons = [];
-									
-									if (delta <= 0)
-									{
-										reasons.push('invalid modified time');
-									}
-									
-									if (etag0 == resp.etag)
-									{
-										reasons.push('stale etag');
-									}
-									
-									if (revision && head0 == resp.headRevisionId)
-									{
-										reasons.push('stale revision');
-									}
-									
-									var temp = reasons.join(', ');
-									error({message: mxResources.get('errorSavingFile') + ': ' + temp}, resp);
-									
-									// Logs failed save
-									try
-									{
-										EditorUi.logError('Critical: Error saving to Google Drive ' + file.desc.id,
-											null, 'from-' + head0 + '.' + mod0 + '-' + this.ui.hashValue(etag0) +
-											'-to-' + resp.headRevisionId + '.' + resp.modifiedDate + '-' +
-											this.ui.hashValue(resp.etag) + ((temp.length > 0) ? '-errors-' + temp : ''),
-											'user-' + ((this.user != null) ? this.user.id : 'nouser') +
-										 	((file.sync != null) ? '-client_' + file.sync.clientId : '-nosync'));
-									}
-									catch (e)
-									{
-										// ignore
-									}
+									EditorUi.logEvent({category: file.convertedFrom + '-CONVERT-FILE-' + file.getHash(),
+										action: 'from_' + prevDesc.id + '.' + prevDesc.headRevisionId +
+										'-to_' + file.desc.id + '.' + file.desc.headRevisionId,
+										label: (this.user != null) ? ('user_' + this.user.id) : 'nouser' +
+										((file.sync != null) ? '-client_' + file.sync.clientId : 'nosync')});
 								}
-								else
+								catch (e)
 								{
-									file.saveLevel = null;
-							    	success(resp, savedData);
-			
-							    	if (prevDesc != null)
-									{
-							    		// Pins previous revision
-										this.executeRequest({
-											url: '/files/' + prevDesc.id + '/revisions/' + prevDesc.headRevisionId + '?supportsAllDrives=true'
-										}, mxUtils.bind(this, mxUtils.bind(this, function(resp)
-										{
-											resp.pinned = true;
-											
-											this.executeRequest({
-												url: '/files/' + prevDesc.id + '/revisions/' + prevDesc.headRevisionId,
-												method: 'PUT',
-												params: resp
-											});
-										})));
-										
-										// Logs conversion
-										try
-										{
-											EditorUi.logEvent({category: file.convertedFrom + '-CONVERT-FILE-' + file.getHash(),
-												action: 'from_' + prevDesc.id + '.' + prevDesc.headRevisionId +
-												'-to_' + file.desc.id + '.' + file.desc.headRevisionId,
-												label: (this.user != null) ? ('user_' + this.user.id) : 'nouser' +
-												((file.sync != null) ? '-client_' + file.sync.clientId : 'nosync')});
-										}
-										catch (e)
-										{
-											// ignore
-										}
-									}
-							    	
-									// Logs successful save
-//									try
-//									{
-//										EditorUi.logEvent({category: 'SUCCESS-SAVE-FILE-' + file.getHash() +
-//											'-rev0_' + head0 + '-mod0_' + mod0,
-//											action: 'rev-' + resp.headRevisionId +
-//											'-mod_' + resp.modifiedDate + '-size_' + file.getSize() +
-//											'-mime_' + file.desc.mimeType +
-//											((this.ui.editor.autosave) ? '' : '-nosave') +
-//											((file.isAutosave()) ? '' : '-noauto') +
-//											((file.changeListenerEnabled) ? '' : '-nolisten') +
-//											((file.inConflictState) ? '-conflict' : '') +
-//											((file.invalidChecksum) ? '-invalid' : ''),
-//											label: ((this.user != null) ? ('user_' + this.user.id) : 'nouser') +
-//											((file.sync != null) ? ('-client_' + file.sync.clientId) : '-nosync')});
-//									}
-//									catch (e)
-//									{
-//										// ignore
-//									}
+									// ignore
 								}
 							}
+							
+							// Logs successful save
+							// try
+							// {
+							// 	EditorUi.logEvent({category: 'SUCCESS-SAVE-FILE-' + file.getHash() +
+							// 		'-rev0_' + head0 + '-mod0_' + mod0,
+							// 		action: 'rev-' + resp.headRevisionId +
+							// 		'-mod_' + resp.modifiedDate + '-size_' + file.getSize() +
+							// 		'-mime_' + file.desc.mimeType +
+							// 		((this.ui.editor.autosave) ? '' : '-nosave') +
+							// 		((file.isAutosave()) ? '' : '-noauto') +
+							// 		((file.changeListenerEnabled) ? '' : '-nolisten') +
+							// 		((file.inConflictState) ? '-conflict' : '') +
+							// 		((file.invalidChecksum) ? '-invalid' : ''),
+							// 		label: ((this.user != null) ? ('user_' + this.user.id) : 'nouser') +
+							// 		((file.sync != null) ? ('-client_' + file.sync.clientId) : '-nosync')});
+							// }
+							// catch (e)
+							// {
+							// 	// ignore
+							// }
 						}
 						catch (e)
 						{
 							criticalError(e);
 						}
 					});
-					
+
 					var doExecuteRequest = mxUtils.bind(this, function(data, binary)
 					{
 						file.saveLevel = 4;
@@ -1622,7 +1617,81 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 										
 										if (acceptResponse)
 										{
-											wrapper(resp);
+											// Checks if modified time is in the future and etag and head revision have changed
+											var delta = (resp != null) ? new Date(resp.modifiedDate).getTime() - new Date(mod0).getTime() : 0;
+											
+											if (delta <= 0 || etag0 == resp.etag || (revision && head0 == resp.headRevisionId))
+											{
+												var reasons = [];
+
+												if (resp == null)
+												{
+													reasons.push('Empty response');
+												}
+												else
+												{
+													if (delta <= 0)
+													{
+														reasons.push('Invalid modified time');
+													}
+													
+													if (etag0 == resp.etag)
+													{
+														reasons.push('Stale etag');
+													}
+													
+													if (revision && head0 == resp.headRevisionId)
+													{
+														reasons.push('Stale revision');
+													}
+
+													// Updates etag for retry
+													etag = resp.etag;
+												}
+
+												var temp = reasons.join(', ');
+
+												if (retryCount < this.staleEtagMaxRetries)
+												{
+													retryCount++;
+													var jitter = 1 + 0.1 * (Math.random() - 0.5);
+													var delay = Math.round(retryCount * 2 * this.coolOff * jitter);
+													window.setTimeout(doExecuteSave, delay);
+
+													if (urlParams['test'] == '1')
+													{
+														EditorUi.debug('DriveClient: Invalid response',
+															'retry', retryCount, 'delay', delay, 'rev',
+															(resp != null) ? resp.headRevisionId : 'null',
+															'errors', temp);
+													}
+												}
+												else
+												{
+													file.saveLevel = 12;
+													error({message: mxResources.get('error') + ': ' + temp}, resp);
+
+													// Logs failed save
+													try
+													{
+														EditorUi.logError('Critical: Saving to Google Drive failed ' + file.desc.id,
+															null, 'from-' + head0 + '.' + mod0 + '-' + this.ui.hashValue(etag0) +
+															'-to-' + resp.headRevisionId + '.' + resp.modifiedDate + '-' +
+															this.ui.hashValue(resp.etag) + ((temp.length > 0) ? '-errors-' + temp : ''),
+															'user-' + ((this.user != null) ? this.user.id : 'nouser') +
+															((file.sync != null) ? '-client_' + file.sync.clientId : '-nosync') +
+															'-retries-' + retryCount);
+													}
+													catch (e)
+													{
+														// ignore
+													}
+												}
+											}
+											else
+											{
+												wrapper(resp);
+											}
 										}
 									}), mxUtils.bind(this, function(err)
 									{
@@ -1657,7 +1726,7 @@ DriveClient.prototype.saveFile = function(file, revision, success, errFn, noChec
 																{
 																	retryCount++;
 																	var jitter = 1 + 0.1 * (Math.random() - 0.5);
-																	var delay = retryCount * 2 * this.coolOff * jitter;
+																	var delay = Math.round(retryCount * 2 * this.coolOff * jitter);
 																	window.setTimeout(executeSave, delay);
 																	
 																	if (urlParams['test'] == '1')
@@ -2352,16 +2421,28 @@ DriveClient.prototype.pickFolder = function(fn, force)
 	{
 		showPicker();
 	}
-	else
+	else if (this.ui.spinner.spin(document.body, mxResources.get('authorizing')))
 	{
-		this.ui.confirm(mxResources.get('useRootFolder'), mxUtils.bind(this, function()
+		this.execute(mxUtils.bind(this, function()
 		{
-			this.folderPickerCallback({action: google.picker.Action.PICKED,
-				docs: [{type: 'folder', id: 'root'}]});
-		}), mxUtils.bind(this, function()
-		{
-			showPicker();
-		}), mxResources.get('yes'), mxResources.get('noPickFolder') + '...', true);
+			try
+			{
+				this.ui.spinner.stop();
+
+				this.ui.confirm(mxResources.get('useRootFolder'), mxUtils.bind(this, function()
+				{
+					this.folderPickerCallback({action: google.picker.Action.PICKED,
+						docs: [{type: 'folder', id: 'root'}]});
+				}), mxUtils.bind(this, function()
+				{
+					showPicker();
+				}), mxResources.get('yes'), mxResources.get('noPickFolder') + '...', true);
+			}
+			catch (e)
+			{
+				this.ui.handleError(e);
+			}
+		}));
 	}
 };
 
@@ -2494,15 +2575,16 @@ DriveClient.prototype.pickLibrary = function(fn)
  * @param {number} dx X-coordinate of the translation.
  * @param {number} dy Y-coordinate of the translation.
  */
-DriveClient.prototype.showPermissions = function(id)
+DriveClient.prototype.showPermissions = function(id, file)
 {
 	var fallback = mxUtils.bind(this, function()
 	{
 		var dlg = new ConfirmDialog(this.ui, mxResources.get('googleSharingNotAvailable'), mxUtils.bind(this, function()
 		{
-			this.ui.editor.graph.openLink('https://drive.google.com/open?id=' + id);
+			var url = (file != null) ? file.getFolderUrl() : 'https://drive.google.com/open?id=' + id;
+			this.ui.editor.graph.openLink(url);
 		}), null, mxResources.get('open'), null, null, null, null, IMAGE_PATH + '/google-share.png');
-		this.ui.showDialog(dlg.container, 360, 190, true, true);
+		this.ui.showDialog(dlg.container, 400, 150, true, true);
 		dlg.init();
 	});
 	

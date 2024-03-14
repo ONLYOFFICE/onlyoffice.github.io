@@ -53,6 +53,9 @@ TrelloClient.prototype.authenticate = function(fn, error, force)
 			expiration: remember ? 'never' : '1hour',
 			success: function()
 			{
+				// backup from the token since viewer removes it for some reason
+				localStorage.setItem('drawio_trello_token', localStorage['trello_token']);
+
 				if (success != null)
 				{
 					success();
@@ -609,16 +612,19 @@ TrelloClient.prototype.showTrelloDialog = function(showFiles, fn)
 				{
 					if (page == 1)
 					{
-						div.appendChild(createLink(mxResources.get('filterCards') + '...', mxUtils.bind(this, function()
+						div.appendChild(createLink(mxResources.get('filterCards') + '...',
+							mxUtils.bind(this, function()
 						{
-							var dlg = new FilenameDialog(this.ui, filter, mxResources.get('ok'), mxUtils.bind(this, function(value)
+							var dlg = new FilenameDialog(this.ui, filter, mxResources.get('ok'),
+								mxUtils.bind(this, function(value)
 							{
 								if (value != null)
 								{
 									filter = value;
 									selectCard();
 								}
-							}), mxResources.get('filterCards'), null, null, 'http://help.trello.com/article/808-searching-for-cards-all-boards');
+							}), mxResources.get('filterCards'), null, null,
+								'http://help.trello.com/article/808-searching-for-cards-all-boards');
 							this.ui.showDialog(dlg.container, 300, 80, true, false);
 							dlg.init();
 						})));
@@ -689,7 +695,21 @@ TrelloClient.prototype.isAuthorized = function()
 	//TODO this may break if Trello client.js is changed
 	try
 	{
-		return localStorage['trello_token'] != null; //Trello.authorized(); doesn't work unless authorize is called first
+		var token = localStorage['trello_token']; //Trello.authorized(); doesn't work unless authorize is called first
+
+		if (token == null)
+		{
+			token = localStorage['drawio_trello_token'];
+
+			// Restores token from backup
+			if (token != null)
+			{
+				localStorage.setItem('trello_token', token);
+			}
+			
+		}
+
+		return token != null;
 	}
 	catch (e)
 	{
@@ -705,6 +725,6 @@ TrelloClient.prototype.isAuthorized = function()
  */
 TrelloClient.prototype.logout = function()
 {
-	localStorage.removeItem('trello_token');
+	localStorage.removeItem('drawio_trello_token');
 	Trello.deauthorize();
 };
