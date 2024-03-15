@@ -4,7 +4,8 @@
 		"ru": "HTML",
 		"fr": "HTML",
 		"es": "HTML",
-		"de": "HTML"
+		"de": "HTML",
+		"pt": "HTML"
 	},
 	"guid": "asc.{E581C417-3C80-4BC2-B42D-502850FDC1E7}",
 	"version": "1.0.3",
@@ -16,7 +17,8 @@
 				"ru": "Получите содержимое документа в виде HTML-кода с возможностью отредактировать полученный результат.",
 				"fr": "Obtenez le contenu de votre document sous forme de code HTML, modifiez-le et collez-le dans le document.",
 				"es": "Obtenga el contenido de su documento como código HTML, modifíquelo y péguelo de nuevo en el documento.",
-				"de": "Erhalten Sie den Inhalt Ihres Dokuments als HTML-Code, modifizieren und fügen Sie ihn wieder ins Dokument ein."
+				"de": "Erhalten Sie den Inhalt Ihres Dokuments als HTML-Code, modifizieren und fügen Sie ihn wieder ins Dokument ein.",
+				"pt": "Obtenha o conteúdo de seu documento como código HTML, modifique-o e cole-o novamente no documento."
 			},
 			"url": "index.html",
 

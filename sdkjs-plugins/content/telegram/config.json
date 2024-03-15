@@ -4,7 +4,9 @@
 		"ru": "Telegram",
 		"fr": "Telegram",
 		"es": "Telegram",
-		"de": "Telegram"
+		"de": "Telegram",
+		"pt": "Telegram"
+
 	},
 	"guid" : "asc.{E5773A43-F9B3-4E81-81D9-CE0A132470E7}",
 	"version" : "1.0.2",
@@ -16,7 +18,8 @@
 				"ru": "Общайтесь с другими авторами в режиме реального времени в Telegram.",
 				"fr": "Chattez avec vos co-auteurs en temps réel grâce au client Telegram intégré.",
 				"es": "Chatee con los coautores en tiempo real utilizando el cliente integrado de Telegram.",
-				"de": "Unterhalten Sie sich mit Mitautoren in Echtzeit über den integrierten Telegram-Client."
+				"de": "Unterhalten Sie sich mit Mitautoren in Echtzeit über den integrierten Telegram-Client.",
+				"pt": "Converse com colaboradores em tempo real usando o cliente Telegram integrado."
 			},
 			"url" : "index.html",
 

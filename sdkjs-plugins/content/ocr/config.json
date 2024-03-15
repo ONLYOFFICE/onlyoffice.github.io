@@ -5,7 +5,9 @@
 		"fr": "Reconnaissance optique de caractères",
 		"es": "Reconocimiento óptico de caracteres",
 		"de": "OCR",
+		"pt": "OCR",
 		"si": "OCR"
+		
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.0",
@@ -18,6 +20,7 @@
 				"fr": "Reconnaissez le texte des images et des captures d'écran et insérez-le dans vos documents.",
 				"es": "Reconozca el texto de imágenes y capturas de pantalla e insértelo en sus documentos.",
 				"de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein.",
+				"pt": "Reconheça o texto de imagens e capturas de tela e insira-o em seus documentos.",
 				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න."
 			},
 			"url": "index.html",
@@ -81,6 +84,7 @@
 						"fr": "Insérer le texte",
 						"es": "Insertar texto",
 						"de": "Text einfügen",
+						"pt": "Inserir texto",
 						"si": "පෙළ ඇතුළු කරන්න"
 					}
 				},
@@ -92,6 +96,7 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
+						"pt": "Cancelar",
 						"si": "අවලංගු"
 					}
 				}
@@ -122,6 +127,7 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
+				"pt": "Sobre",
 				"si": "පිළිබඳව"
 			},
 

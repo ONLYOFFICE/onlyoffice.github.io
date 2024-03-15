@@ -4,7 +4,8 @@
 		"ru": "Zoom",
 		"fr": "Zoom",
 		"es": "Zoom",
-		"de": "Zoom"
+		"de": "Zoom",
+		"pt": "Zoom"
 	},
 	"guid": "asc.{3f15a9bc-51d3-4b59-b32f-75cfe2f07f54}",
 	"version": "1.0.0",
@@ -16,7 +17,8 @@
 				"ru": "Планируйте и проводите видеовстречи прямо в редакторах с помощью Zoom.",
 				"fr": "Planifiez et organisez des réunions vidéo directement dans les éditeurs avec Zoom.",
 				"es": "Planifique y celebre reuniones de vídeo directamente en los editores con Zoom.",
-				"de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren."
+				"de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren.",
+				"pt": "Agende e realize videoconferências diretamente nos editores utilizando Zoom."
 			},
 			"url": "index.html",
 
@@ -81,7 +83,8 @@
 						"ru": "Закрыть",
 						"fr": "Fermer",
 						"es": "Cerrar",
-						"de": "Schließen"
+						"de": "Schließen",
+						"pt": "Fechar"
 					}
 				}
 			],
@@ -107,7 +110,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"pt": "Sobre"
 			},
 			"url": "index_about.html",
 

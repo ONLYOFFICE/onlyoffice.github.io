@@ -5,7 +5,8 @@
 		"fr": "Traducteur",
 		"es": "Traductor",
 		"de": "Übersetzer",
-		"si": "පරිවර්තකය"
+		"si": "පරිවර්තකය",
+		"pt": "Tradutor"
 	},
 	"guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F6800}",
 	"version": "1.0.6",
@@ -18,7 +19,8 @@
 				"fr": "Traduisez le texte sélectionné dans d'autres langues avec Google Translate.",
 				"es": "Traduzca el texto seleccionado a otros idiomas con el Traductor de Google.",
 				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit Google Translate.",
-				"si": "වචනයක සමාන පද සහ විරුද්ධ පද සොයා තෝරාගත් වචනයකට ප්‍රතිස්ථාපනය කරන්න."
+				"si": "වචනයක සමාන පද සහ විරුද්ධ පද සොයා තෝරාගත් වචනයකට ප්‍රතිස්ථාපනය කරන්න.",
+				"pt": "Traduza o texto selecionado para outros idiomas com Google Tradutor."
 			},
 			"url": "index.html",
 

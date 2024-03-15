@@ -4,7 +4,8 @@
 		"ru": "Mendeley",
 		"fr": "Mendeley",
 		"es": "Mendeley",
-		"de": "Mendeley"
+		"de": "Mendeley",
+		"pt": "Mendeley"
 	},
 	"guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
 	"version" : "1.0.2",
@@ -16,7 +17,8 @@
 					"ru": "Работайте с библиографиями и цитированием, используя сервис Mendeley.",
 					"fr": "Créez des bibliographies et insérez des citations avec Mendeley.",
 					"es": "Cree bibliografías e inserte citas utilizando el servicio Mendeley.",
-					"de": "Erstellen Sie Bibliografien und fügen Sie Zitate mit Mendeley ein."
+					"de": "Erstellen Sie Bibliografien und fügen Sie Zitate mit Mendeley ein.",
+					"pt": "Criar bibliografias e inserir citações usando Mendeley."
 				},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
