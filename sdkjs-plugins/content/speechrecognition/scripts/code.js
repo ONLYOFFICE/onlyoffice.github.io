@@ -34,6 +34,7 @@
 	var curLang;
 	var oTheme = null;
 	var defaultLang = "en-US";
+	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 	
 	// If you modify this array, also update default language / dialect below.
 	var langs =
@@ -185,7 +186,7 @@
 			}
 		}
 
-		if (typeof(webkitSpeechRecognition) == "undefined") {
+		if (typeof(SpeechRecognition) == "undefined") {
 			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
 			document.getElementById("div_main").style.display = "none";
 			return;
@@ -230,11 +231,11 @@
 		recognizing = false,
 		start_timestamp;
 
-		if (!('webkitSpeechRecognition' in window)) {
+		if ( !('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window) ) {
 			upgrade();
 		} else {
 			start_button.style.display = 'inline-block';
-			var recognition = new webkitSpeechRecognition();
+			var recognition = new SpeechRecognition();
 			recognition.continuous = true;
 			recognition.interimResults = true;
 
@@ -272,7 +273,13 @@
 						alert('Permission to use microphone was denied.');
 					}
 				}
+				console.error(error);
 			};
+
+			recognition.onnomatch = function(event) {
+				console.log('no much recognition');
+				console.log(event);
+			}
 
 			recognition.onend = function() {
 				if (!ignore_onend) {
