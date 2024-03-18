@@ -273,7 +273,7 @@
 						alert('Permission to use microphone was denied.');
 					}
 				}
-				console.error(error);
+				console.error(event);
 			};
 
 			recognition.onnomatch = function(event) {
