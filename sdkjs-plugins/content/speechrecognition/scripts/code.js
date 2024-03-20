@@ -222,8 +222,9 @@
 		} else {
 			start_button.style.display = 'inline-block';
 			var recognition = new SpeechRecognition();
-			recognition.continuous = true;
-			recognition.interimResults = true;
+			recognition.continuous = false;// true;
+			recognition.interimResults = false; // true;
+			recognition.maxAlternatives = 1;
 
 			recognition.onstart = function() {
 				recognizing = true;
@@ -267,7 +268,7 @@
 				console.log(event);
 			}
 
-			recognition.onend = function() {
+			recognition.onspeechend = function() {
 				if (!ignore_onend) {
 					recognizing = false;
 					if (!final_transcript) {
