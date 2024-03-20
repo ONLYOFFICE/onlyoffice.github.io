@@ -236,11 +236,12 @@
 		} else {
 			start_button.style.display = 'inline-block';
 			var recognition = new SpeechRecognition();
-			recognition.continuous = false;// true;
-			recognition.interimResults = false; // true;
+			recognition.continuous = true;
+			recognition.interimResults = false // true;
 			recognition.maxAlternatives = 1;
 
 			recognition.onstart = function() {
+				console.log('onstart');
 				recognizing = true;
 			};
 
@@ -282,7 +283,10 @@
 				console.log(event);
 			}
 
-			recognition.onspeechend = function() {
+			// onspeechend
+			// onend
+			recognition.onend = function() {
+				console.log('onend');
 				if (!ignore_onend) {
 					recognizing = false;
 					if (!final_transcript) {
@@ -298,8 +302,13 @@
 					start_timestamp = event.timeStamp;
 				}
 			};
+			
+			recognition.onspeechend = function() {
+				console.log('onspeechend');
+			};
 
 			recognition.onresult = function(event) {
+				console.log('onresult = ', event.results.length);
 				var interim_transcript = '';
 				final_transcript = '';
 				if (typeof(event.results) == 'undefined') {
