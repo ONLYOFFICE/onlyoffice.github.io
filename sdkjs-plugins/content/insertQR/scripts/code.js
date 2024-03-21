@@ -27,6 +27,9 @@
   let qrHeight;
   let qrColor;
   let bgColor;
+  let qr;
+  let displaySettings = 'displaySettings';
+  let exceedsMaxLength = 'exceedsMaxLength';
 
   window.Asc.plugin.init = function () { };
 
@@ -57,7 +60,7 @@
           // Attach event for context menu click on GenerateQR
           window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
             console.log("GenerateQR clicked");
-            displaySettings();
+            displayFunction(displaySettings);
           });
         }
       });
@@ -70,47 +73,82 @@
     return result;
   }
 
+
   // Function to insert QR code
   function insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor) {
-    var qr = new QRCode(document.createElement('div'), {
-      text: qrText,
-      width: qrWidth,
-      height: qrHeight,
-      colorDark: qrColor,
-      colorLight: bgColor,
-      correctLevel: QRCode.CorrectLevel.H
-    });
-
+    try {
+      qr = new QRCode(document.createElement('div'), {
+        text: qrText,
+        width: qrWidth,
+        height: qrHeight,
+        colorDark: qrColor,
+        colorLight: bgColor,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    } catch (error) {
+      if (error.message.includes("reading '3'")) {
+        displayFunction(exceedsMaxLength);
+      }
+    }
     // Get the canvas element from QRCode library
-    var canvas = qr._el.querySelector('canvas');
-
+    const canvas = qr._el.querySelector('canvas');
     // Get the data URL of the canvas
-    var qrImageURI = canvas.toDataURL("image/png");
+    const qrImageURI = canvas.toDataURL("image/png")
+    const _info = window.Asc.plugin.info
 
     // Prepare image data object
     let oImageData = {
-      "src": qrImageURI,
-      "replaceMode": "original"
+      guid: _info.guid,
+      widthPix: qrWidth,
+      heightPix: qrHeight,
+      width: Math.round(qrWidth / _info.mmToPx),
+      height: Math.round(qrHeight / _info.mmToPx),
+      imgSrc: qrImageURI,
+      objectId: _info.objectId,
+      data: qrImageURI,
+      resize: true,
+      recalculate: true
     };
 
-    // Execute method to put image data to selection
-    window.Asc.plugin.executeMethod("PutImageDataToSelection", [oImageData]);
+    window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
   }
 
+
   // Function to display message in modal window
-  function displaySettings() {
+  function displayFunction(option) {
     let location = window.location;
     let start = location.pathname.lastIndexOf('/') + 1;
     let file = location.pathname.substring(start);
-    const variation = {
-      url: location.href.replace(file, 'settings.html'),
-      description: generateText('Settings'),
-      isVisual: true,
-      isModal: true,
-      buttons: [],
-      EditorsSupport: ['slide', 'word'],
-      size: [400, 500]
-    };
+    let variation = {};
+
+    switch (option) {
+      case 'displaySettings':
+        variation = {
+          url: location.href.replace(file, 'settings.html'),
+          description: generateText('Settings'),
+          isVisual: true,
+          isModal: true,
+          buttons: [],
+          EditorsSupport: ['slide', 'word'],
+          size: [400, 500]
+        };
+        break;
+      case 'exceedsMaxLength':
+        variation = {
+          url: location.href.replace(file, 'textLength_warning.html'),
+          description: generateText('Warning'),
+          isVisual: true,
+          isModal: true,
+          buttons: [],
+          EditorsSupport: ['slide', 'word'],
+          size: [400, 200]
+        };
+        break;
+      default:
+        break;
+
+    }
+
 
     // Create and display the modal window
     modalWindow = new window.Asc.PluginWindow();

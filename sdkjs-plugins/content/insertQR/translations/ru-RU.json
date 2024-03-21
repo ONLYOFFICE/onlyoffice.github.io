@@ -1,13 +1,12 @@
 {
-    "Settings": "Настройки",
-    "Set QR Color":  "Цвет QR",
-    "Set Background Color": "Цвет фона",
-    "Width": "Ширина",
-    "Height": "Высота",
-    "Minimum QR size is 50px": "Минимальный размер QR-кода 50 пикселей",
-    "Submit": "Отправить",
-    "Warning": "Предупреждение",
-    "Insert QR": "Вставить QR",
-    "The plugin is not supported in the Internet Explorer":"Плагин не поддерживается в Internet Explorer"
-    }
-    
+"Settings": "Настройки",
+"Set QR Color": "Цвет QR",
+"Set Background Color": "Цвет фона",
+"Width": "Ширина",
+"Height": "Высота",
+"Minimum QR size is 50px": "Минимальный размер QR-кода 50 пикселей",
+"Warning": "Предупреждение",
+"Insert QR": "Вставить QR",
+"The selected text is too long": "Выбранный текст слишком длинный.",
+"The plugin is not supported in the Internet Explorer": "Плагин не поддерживается в Internet Explorer"
+}
