@@ -14,4 +14,4 @@
 
 ## 1.0.3
 
-* Bug fix (67037)
+* Bug fix (fix problem with XSS).
