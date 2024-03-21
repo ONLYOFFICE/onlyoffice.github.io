@@ -5,7 +5,10 @@
 		"fr": "Insérer un code QR",
 		"es": "Insertar QR",
 		"de": "QR-Code einfügen",
-		"br": "Inserir QR"
+		"br": "Inserir QR",
+		"it": "Inserisci il codice QR",
+		"ja": "QRの挿入",
+		"zh": "插入二维码"
 	},
 	"guid": "asc.{E5DD8D78-92F4-43B4-825B-E963D5CE8AC9}",
 	"version": "1.0.0",
@@ -14,11 +17,14 @@
 		{
 			"description": "Effortlessly generate QR codes in the Presentation and Text Editors.",
 			"descriptionLocale": {
-			  "ru": "Без труда создавайте QR-коды в редакторах презентаций и текста.",
-			  "fr": "Générez facilement des codes QR dans les éditeurs de présentation et de texte.",
-			  "es": "Genere fácilmente códigos QR en los editores de presentaciones y texto.",
-			  "de": "Generieren Sie mühelos QR-Codes in den Präsentations- und Texteditoren.",
-			  "br": "Gere facilmente códigos QR nos Editores de Apresentação e Texto."
+				"ru": "Без труда создавайте QR-коды в текстовых документах и презентациях",
+				"fr": "Générez facilement des codes QR dans les éditeurs de présentation et de texte.",
+				"es": "Genere fácilmente códigos QR en los editores de presentaciones y texto.",
+				"de": "Generieren Sie mühelos QR-Codes in den Präsentations- und Texteditoren.",
+				"br": "Gere facilmente códigos QR nos Editores de Apresentação e Texto.",
+				"it": "Genera facilmente codici QR negli editori di presentazioni e di testo.",
+				"zh": "在演示文稿和文本编辑器中轻松生成QR码。",
+				"ja": "プレゼンテーションおよびテキストエディターで簡単にQRコードを生成します。"
 			},
 			"url": "index.html",
 			"icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
@@ -46,7 +52,7 @@
 			"isModal": false,
 			"isInsideMode": false,
 			"type": "background",
-			"initDataType": "none",
+			"initDataType": "ole",
 			"isUpdateOleOnResize": false,
 			"events": ["onContextMenuShow", "onContextMenuClick"],
 			"store": {

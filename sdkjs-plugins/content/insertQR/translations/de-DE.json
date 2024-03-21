@@ -1,12 +1,12 @@
 {
-    "Settings": "Einstellungen",
-    "Set QR Color": "QR-Farbe festlegen",
-    "Set Background Color": "Hintergrundfarbe festlegen",
-    "Width": "Breite",
-    "Height": "Höhe",
-    "Minimum QR size is 50px": "Die minimale QR-Größe beträgt 50 Pixel",
-    "Submit": "Senden",
-    "Warning": "Warnung",
-    "Insert QR": "QR einfügen",
-    "The plugin is not supported in the Internet Explorer": "Das Plugin wird nicht im Internet Explorer unterstützt"
+"Settings": "Einstellungen",
+"Set QR Color": "QR-Farbe festlegen",
+"Set Background Color": "Hintergrundfarbe festlegen",
+"Width": "Breite",
+"Height": "Höhe",
+"Minimum QR size is 50px": "Die minimale QR-Größe beträgt 50 Pixel",
+"Warning": "Warnung",
+"Insert QR": "QR einfügen",
+"The plugin is not supported in the Internet Explorer": "Das Plugin wird im Internet Explorer nicht unterstützt",
+"The selected text is too long": "Der ausgewählte Text ist zu lang."
 }
