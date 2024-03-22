@@ -27,7 +27,7 @@
 				"ja": "プレゼンテーションおよびテキストエディターで簡単にQRコードを生成します。"
 			},
 			"url": "index.html",
-			"icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
+			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",
 			"icons2": [
 				{
 					"style": "light",

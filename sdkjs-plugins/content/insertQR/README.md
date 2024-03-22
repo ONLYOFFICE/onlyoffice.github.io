@@ -13,8 +13,8 @@ The plugin uses:
 3. Right-click on the selected text.
 4. Click the "Set QR Color" radiobutton and select the color in the color picker.
 5. Click the "Set Background Color" radiobutton and select the color in the color picker.
-6. Set QR width and height if necessary (150 px is default value)
-7. Click the "Insert QR" button
+6. Set QR width and height if necessary.
+7. Click the "Insert QR" button.
 
 If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
 
