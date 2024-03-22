@@ -49,6 +49,11 @@
 
   //  Display context menu if the text is selected
   window.Asc.plugin.event_onContextMenuShow = function (options) {
+    // Attach event for context menu click on GenerateQR
+    window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
+      console.log("GenerateQR clicked");
+      displayFunction(displaySettings);
+    });
     if (options.type === "Selection") { // Check if the text is selected
       // Execute method to get selected text
       window.Asc.plugin.executeMethod("GetSelectedText", [{
@@ -70,12 +75,6 @@
               text: generateText('Insert QR')
             }]
           }]);
-
-          // Attach event for context menu click on GenerateQR
-          window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
-            console.log("GenerateQR clicked");
-            displayFunction(displaySettings);
-          });
         }
       });
     }
