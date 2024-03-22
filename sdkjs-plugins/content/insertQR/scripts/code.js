@@ -47,13 +47,14 @@
 
   window.Asc.plugin.init = function () { };
 
+  // Attach event for context menu click on GenerateQR
+  window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
+    console.log("GenerateQR clicked");
+    displayFunction(displaySettings);
+  });
+
   //  Display context menu if the text is selected
   window.Asc.plugin.event_onContextMenuShow = function (options) {
-    // Attach event for context menu click on GenerateQR
-    window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
-      console.log("GenerateQR clicked");
-      displayFunction(displaySettings);
-    });
     if (options.type === "Selection") { // Check if the text is selected
       // Execute method to get selected text
       window.Asc.plugin.executeMethod("GetSelectedText", [{
@@ -126,7 +127,6 @@
     window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
   }
 
-
   // Function to display message in modal window
   function displayFunction(option) {
     let location = window.location;
@@ -161,7 +161,6 @@
         break;
 
     }
-
 
     // Create and display the modal window
     modalWindow = new window.Asc.PluginWindow();
