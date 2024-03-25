@@ -16,6 +16,7 @@
  *
  */
 (function () {
+	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
     var displayNoneClass = "display-none";
     var blurClass = "blur";
     var waitForLoad = false;
@@ -131,6 +132,10 @@
     var docsScroller;
 
     window.Asc.plugin.init = function () {
+		if (isLocal) {
+			document.getElementById('content').innerHTML = "<p id='message' style='text-align:center; font-size:20pt;' class='i18n';>This plugin doesn't work into Desktop.<\/p>";
+			return;
+		}
         sdk = MendeleySDK({
             authFlow: authFlow
         });
