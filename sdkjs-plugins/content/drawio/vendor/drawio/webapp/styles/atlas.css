@@ -1,4 +1,4 @@
-.geToolbarContainer .geButton, .geToolbarContainer .geLabel {
+html body .geToolbarContainer .geButton, html body .geToolbarContainer .geLabel {
 	padding:3px 5px 5px 5px;
 	position: relative;
 	text-align: center;
@@ -56,7 +56,6 @@ html body .geStatus .geStatusAlert {
 	-webkit-box-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
 	-moz-box-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
 	box-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
-	margin-top:-5px;
 }
 html body .geStatus .geStatusAlert:hover {
     background-color: #2d6ca2;
@@ -73,7 +72,6 @@ html body .geStatus .geStatusMessage {
 	-webkit-box-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
 	-moz-box-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
 	box-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
-	margin-top:-5px;
 }
 html body .geStatus .geStatusMessage:hover {
     background-color: #2d6ca2;
@@ -135,7 +133,7 @@ html body .geMenubarContainer * {
 html body .geMenubarContainer .geStatus {
 	color: rgb(179, 179, 179);
 }
-.geMenubarContainer .geItem:hover {
+.geMenubarContainer .geItem:hover:not(.geStatus) {
 	background-color: rgba(9, 30, 66, 0.48) !important;
 }
 html body .geToolbarContainer .geLabel {
@@ -156,7 +154,6 @@ html body .geMenubarContainer {
 	background-color: #0049B0;
 	color: #ffffff;
 	font-size: 14px;
-	padding-top:6px;
 }
 html body .geMenubar > .geItem {
 	padding-left:14px;
@@ -188,6 +185,9 @@ html body .geMenubarContainer .mxDisabled {
 	opacity: 1;
 	color: rgb(179, 179, 179);
 }
+html .geButtonContainer {
+	padding-right:10px;
+}
 .geDialogTitle {
 	box-sizing:border-box;
 	white-space:nowrap;
@@ -206,48 +206,10 @@ html body .geMenubarContainer .mxDisabled {
 	border-top:1px solid #e5e5e5;
 	color:darkGray;
 }
-
-.geNotification-box {
-  width: 50px;
-  height: 30px;
-  text-align: center;
-  float: left;
-  position: relative;
-  top: 1px !important;
-  cursor: pointer;
+html .geNotification-bell {
+  opacity: 1;
 }
-
-.geNotification-bell {
-  animation: geBellAnim 1s 1s both;
-  opacity: 0.75;
-}
-
-.geNotification-bell * {
-  display: block;
-  margin: 0 auto;
-  background-color: #DEEBFF !important;
-  box-shadow: 0px 0px 10px #DEEBFF !important;
-}
-
-.geNotification-count {
-  position: absolute;
-  z-index: 1;
-  top: -5px;
-  right: 7px;
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
-  font-size: 10px;
-  border-radius: 50%;
-  background-color: #ff4927;
-  color: #DEEBFF !important;
-  animation: geZoomAnim 1s 1s both;
-}
-
-.geNotifPanel .header {
-  height: 30px;
-  width: 100%;
-  background: #0049B0 !important;
-  color: #DEEBFF !important;
-  font-size: 15px;
+html .geNotification-bell * {
+  background-color: #DEEBFF;
+  box-shadow: 0px 0px 10px #DEEBFF;
 }

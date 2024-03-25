@@ -9,5 +9,6 @@
 	"Enter the URL for your marketplace page here" : "Введите URL для вашей страницы менеджера плагинов здесь",
 	"Return to default settings" : "Вернуть настройки по умолчанию",
 	"Enter URL" : "Введите URL",
-	"Cancel" : "Отмена"
+	"Cancel" : "Отмена",
+	"Be careful! Avoid using the untrusted URLs." : "Будьте осторожны! Избегайте использования ненадежных URL-адресов."
 }
