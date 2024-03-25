@@ -10,4 +10,6 @@
 
 ## 1.0.2
 
-* Fix bug (66747). Now plugin will paste text with current cursor position formatting.
+* Bug fix. Now plugin will paste text with current cursor position formatting.
+* Add notification that plugin doesn't work into desktop.
+* Add check for safari browser (plugin works only in Chrome).

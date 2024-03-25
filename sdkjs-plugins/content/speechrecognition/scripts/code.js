@@ -33,6 +33,8 @@
 
 	var curLang;
 	var oTheme = null;
+	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
+	const isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") > -1);
 	var defaultLang = "en-US";
 	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 	
@@ -148,6 +150,11 @@
 	}
 
 	window.Asc.plugin.init = function() {
+		if (isLocal) {
+			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work into Desktop.<\/p>";
+			return;
+		}
+		
 		switch (window.Asc.plugin.info.editorType) {
 			case 'word':
 			case 'slide': {
@@ -186,7 +193,7 @@
 			}
 		}
 
-		if (typeof(SpeechRecognition) == "undefined") {
+		if ( !isAllowed() ) {
 			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
 			document.getElementById("div_main").style.display = "none";
 			return;
@@ -231,17 +238,15 @@
 		recognizing = false,
 		start_timestamp;
 
-		if ( !('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window) ) {
+		if ( !isAllowed() ) {
 			upgrade();
 		} else {
 			start_button.style.display = 'inline-block';
 			var recognition = new SpeechRecognition();
 			recognition.continuous = true;
-			recognition.interimResults = false // true;
-			recognition.maxAlternatives = 1;
+			recognition.interimResults = true;
 
 			recognition.onstart = function() {
-				console.log('onstart');
 				recognizing = true;
 			};
 
@@ -275,18 +280,9 @@
 						alert('Permission to use microphone was denied.');
 					}
 				}
-				console.error(event);
 			};
 
-			recognition.onnomatch = function(event) {
-				console.log('no much recognition');
-				console.log(event);
-			}
-
-			// onspeechend
-			// onend
 			recognition.onend = function() {
-				console.log('onend');
 				if (!ignore_onend) {
 					recognizing = false;
 					if (!final_transcript) {
@@ -303,12 +299,17 @@
 				}
 			};
 			
+			
+			recognition.onspeechend = function() {
+				console.log('onspeechend');
+			};
+
+
 			recognition.onspeechend = function() {
 				console.log('onspeechend');
 			};
 
 			recognition.onresult = function(event) {
-				console.log('onresult = ', event.results.length);
 				var interim_transcript = '';
 				final_transcript = '';
 				if (typeof(event.results) == 'undefined') {
@@ -415,6 +416,11 @@
 	};
 	function getMessage(key) {
 		return window.Asc.plugin.tr(key.trim());
+	};
+	function isAllowed() {
+		var firsCheck = ( typeof(webkitSpeechRecognition) !== "undefined" );
+		var secondCheck = ( ('webkitSpeechRecognition' in window) && ('SpeechRecognition' in window) );
+		return !isSafari && firsCheck && secondCheck;
 	};
 	window.Asc.plugin.onTranslate = function()
 	{
