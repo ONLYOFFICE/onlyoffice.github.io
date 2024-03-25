@@ -5,13 +5,14 @@
 		"cs": "Řeč",
 		"de": "Rede",
 		"es": "Habla",
+		"pt-BR": "Fala",
 		"fr": "Parole",
 		"it": "Discorso",
 		"ja": "スピーチ",
 		"nl": "Spraak",
 		"pt": "Discurso",
 		"uk": "Читати",
-		"zh": "讲话"
+		"zh": "朗读"
 	},
 	"guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
 	"version" : "2.0.1",
@@ -22,9 +23,13 @@
 			"descriptionLocale": {
 				"ru": "Преобразуйте выделенный текст в речь.",
 				"fr": "Convertissez le texte sélectionné en parole.",
+				"it": "Converti il testo selezionato in voce parlata.",
+				"ja": "選択したテキストを音声に変換します。",
 				"es": "Convierta el texto seleccionado en voz.",
+				"pt-BR": "Converta o texto selecionado em fala.",
 				"de": "Konvertieren Sie den ausgewählten Text in die Rede.",
-				"uk": "Прочитайте виділений текст."
+				"uk": "Прочитайте виділений текст.",
+				"zh": "朗读所选的文本。"
 			},
 			"url": "index.html",
 
