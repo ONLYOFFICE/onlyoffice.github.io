@@ -5,6 +5,7 @@
 		"cs": "Řeč",
 		"de": "Rede",
 		"es": "Habla",
+		"pt-BR": "Fala",
 		"fr": "Parole",
 		"it": "Discorso",
 		"ja": "スピーチ",
@@ -25,6 +26,7 @@
 				"it": "Converti il testo selezionato in voce parlata.",
 				"ja": "選択したテキストを音声に変換します。",
 				"es": "Convierta el texto seleccionado en voz.",
+				"pt-BR": "Converta o texto selecionado em fala.",
 				"de": "Konvertieren Sie den ausgewählten Text in die Rede.",
 				"uk": "Прочитайте виділений текст.",
 				"zh": "朗读所选的文本。"
