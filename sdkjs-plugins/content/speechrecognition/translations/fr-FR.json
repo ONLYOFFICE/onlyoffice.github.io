@@ -1,5 +1,6 @@
 {
 	"Start dictation": "Commencer la dictée",
 	"Speak now": "Parlez maintenant",
-	"This plugin doesn't work into Desktop.": "Ce plugin ne fonctionne pas sur le bureau."
+	"This plugin doesn't work into Desktop.": "Ce plugin ne fonctionne pas sur le bureau.",
+	"This plugin doesn't work into this browser.": "Ce plugin ne fonctionne pas dans ce navigateur."
 }
