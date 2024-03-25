@@ -1,0 +1,14 @@
+{
+	"Copy": "Copiar",
+	"Show settings": "Exibir configurações",
+	"Hide settings": "Ocultar configurações",
+	"Render HTML tags": "Renderizar tags HTML",
+	"Demote headings (H1 → H2, etc.)": "Rebaixar títulos (H1 → H2, etc.)",
+	"HTML headings/IDs": "Títulos/IDs HTML",
+	"Create base64 images": "Criar imagens base64",
+	"Suppress top comment": "Suprimir comentário principal",
+	"Help": "Escolha Markdown ou HTML.\n* Padrão: converter o documento inteiro.\n* Selecione o texto para limitar o escopo.",
+	"Text was copied to buffer!": "O texto foi copiado para o buffer!",
+	"Convert to Markdown or HTML": "Converter para Markdown ou HTML",
+	"Preview": "Pré-visualização"
+}
