@@ -28,8 +28,9 @@ function mxFreehand(graph)
 	var openFill = true;
 	var buffer = []; // Contains the last positions of the mouse cursor
 	var enabled = false;
-	var stopClickEnabled = true;
+	var stopClickEnabled = false;
 	var selectInserted = false;
+	var currentStrokeColor = 'default';
 	var perfectFreehandOptions = {
 		size: 5,
 		thinning: 0.5,
@@ -139,7 +140,7 @@ function mxFreehand(graph)
 	    	// Click stops drawing
 	    	var doStop = stopClickEnabled && drawPoints.length > 0 &&
 	    		lastPart != null && lastPart.length < 2;
-	    	
+			
 			if (!doStop)
 			{
 				drawPoints.push.apply(drawPoints, lastPart);
@@ -155,7 +156,7 @@ function mxFreehand(graph)
 				this.stopDrawing();
 			}
 			
-			if (autoInsert && lastLength >= 2)
+			if (autoInsert && (!doStop || lastLength >= 2))
 			{
 				this.startDrawing();
 			}
@@ -168,18 +169,24 @@ function mxFreehand(graph)
 	var edge = new mxCell();
 	edge.edge = true;
 
-	var getStrokeColor = function()
+	this.getStrokeColor = function(allowDefault)
 	{
-		var defaultStyle = graph.getCurrentCellStyle(edge);
-		var strokeColor = mxUtils.getValue(graph.currentVertexStyle, mxConstants.STYLE_STROKECOLOR,
-			mxUtils.getValue(defaultStyle, mxConstants.STYLE_STROKECOLOR, '#000'))
+		var strokeColor = (currentStrokeColor != null) ? currentStrokeColor :
+			mxUtils.getValue(graph.currentVertexStyle, mxConstants.STYLE_STROKECOLOR,
+			mxUtils.getValue(graph.getCurrentCellStyle(edge),
+			mxConstants.STYLE_STROKECOLOR, '#000'))
 
-		if (strokeColor == 'default')
+		if (strokeColor == 'default' && !allowDefault)
 		{
 			strokeColor = graph.shapeForegroundColor;
 		}
 
 		return strokeColor;
+	};
+
+	this.setStrokeColor = function(value)
+	{
+		currentStrokeColor = value;
 	};
 
 	this.createStyle = function(stencil)
@@ -190,6 +197,8 @@ function mxFreehand(graph)
 		{
 			style = ';lineShape=1;';
 		}
+
+		style += 'strokeColor=' + this.getStrokeColor(true) + ';';
 
 		return mxConstants.STYLE_SHAPE + '=' + stencil + style;
 	};
@@ -366,7 +375,7 @@ function mxFreehand(graph)
 				
 				var strokeWidth = parseFloat(graph.currentVertexStyle[mxConstants.STYLE_STROKEWIDTH] || 1);
 				strokeWidth = Math.max(1, strokeWidth * graph.view.scale);
-				var strokeColor = getStrokeColor();
+				var strokeColor = this.getStrokeColor();
 
 			    path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 			    path.setAttribute('fill', perfectFreehandMode? strokeColor : 'none');

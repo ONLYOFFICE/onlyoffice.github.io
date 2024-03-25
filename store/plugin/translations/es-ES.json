@@ -9,5 +9,6 @@
 	"Enter the URL for your marketplace page here" : "Ingrese la URL de su página de mercado aquí",
 	"Return to default settings" : "Volver a la configuración predeterminada",
 	"Enter URL" : "Introduzca la URL",
-	"Cancel" : "Cancelar"
+	"Cancel" : "Cancelar",
+	"Be careful! Avoid using the untrusted URLs." : "¡Ten cuidado! Evite usar URL que no sean de confianza."
 }

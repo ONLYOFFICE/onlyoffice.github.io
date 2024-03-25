@@ -116,14 +116,26 @@ StorageFile.prototype.saveAs = function(title, success, error)
  * @param {number} dx X-coordinate of the translation.
  * @param {number} dy Y-coordinate of the translation.
  */
-StorageFile.insertFile = function(ui, title, data, success, error)
+StorageFile.insertFile = function(ui, title, data, success, error, file)
 {
+	StorageFile.doInsertFile(new StorageFile(ui, data, title), success, error);
+};
+
+/**
+ * Translates this point by the given vector.
+ * 
+ * @param {number} dx X-coordinate of the translation.
+ * @param {number} dy Y-coordinate of the translation.
+ */
+StorageFile.doInsertFile = function(file, success, error)
+{
+	var title = file.getTitle();
+	var ui = file.getUi();
+
 	var createStorageFile = mxUtils.bind(this, function(exists)
 	{
 		var fn = function()
 		{
-			var file = new StorageFile(ui, data, title);
-			
 			// Inserts data into local storage
 			file.saveFile(title, false, function()
 			{
@@ -255,7 +267,17 @@ StorageFile.prototype.saveFile = function(title, revision, success, error)
 					{
 						if (this.ui.database == null) //fallback to localstorage
 						{
-							this.ui.setLocalData(this.title, data, saveDone);
+							try
+							{
+								this.ui.setLocalData(this.title, data, saveDone);
+							}
+							catch (e)
+							{
+								if (error != null)
+								{
+									error(e);
+								}
+							}
 						}
 						else if (error != null)
 						{

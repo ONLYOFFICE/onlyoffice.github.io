@@ -5,6 +5,7 @@
 		"de": "Code hervorheben",
 		"es": "Resaltar el código",
 		"fr": "Code en surbrillance",
+		"pt-BR": "Highlight code",
 		"ru": "Подсветка кода",
 		"si": "පර්යාය කෝෂය"
 	},
@@ -38,6 +39,7 @@
 				"de": "Heben Sie die Codesyntax hervor, indem Sie die gewünschte Sprache, den Stil und die Hintergrundfarbe auswählen.",
 				"es": "Resalte la sintaxis del código seleccionando el idioma, el estilo y el color de fondo necesarios.",
 				"fr": "Mettez en évidence la syntaxe du code en sélectionnant la langue, le style et la couleur de l'arrière-plan.",
+				"pt-BR": "Destaque a sintaxe do código selecionando o idioma, estilo e cor de fundo necessários.",
 				"ru": "Оформите синтаксис кода, выбрав необходимый язык, стиль и цвет фона.",
 				"si": "වුවමනා භාෂාව, මෝස්තරය සහ පසුබිමේ වර්ණය තේරීමෙන් කේතයේ පදඝටනාව (පද ගැළපුම) උද්දීපනය කරන්න."
 			},
