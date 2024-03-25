@@ -20,7 +20,7 @@
 	var curLang;
 	var oTheme = null;
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
-	const isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") > -1);
+	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 	var defaultLang = "en-US";
 	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 	
