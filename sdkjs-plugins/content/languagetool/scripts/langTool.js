@@ -100,13 +100,13 @@ function checkInternetExplorer(){
 	            $('#replace').toggleClass('disabled');
         }
 
-		txt = text;
+		txt = replaceDangerousText(text);
 		savedDismiss = [];
 		switch (window.Asc.plugin.info.editorType) {
             case 'word':
             case 'slide': {
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
-                    txt = (data === undefined) ? "" : data.replace(/\r/g, ' ');
+                    txt = replaceDangerousText((data === undefined) ? "" : data.replace(/\r/g, ' '));
                     ExecPlugin();
                 });
                 break;
@@ -114,9 +114,9 @@ function checkInternetExplorer(){
             case 'cell':
                 window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n', TabSymbol: String.fromCharCode(160)}], function(data) {
                     if (data == '')
-                        txt = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                        txt = replaceDangerousText(txt.replace(/\r/g, ' ').replace(/\t/g, '\n'));
                     else if (data !== undefined) {
-                        txt = data.replace(/\r/g, ' ');
+                        txt = replaceDangerousText(data.replace(/\r/g, ' '));
                     }
                     ExecPlugin();
                 });
@@ -177,7 +177,7 @@ function checkInternetExplorer(){
 		$('#check').on('click', function(){
 			if ($('#check').hasClass('disabled'))
                 return;
-			txt = document.getElementById("textarea").innerText;
+			txt = replaceDangerousText(document.getElementById("textarea").innerText);
 			if (txt !== "") {
 				$("#result").empty();
 				txtForChek = txt.replace(/\n/g, '\n\n');
@@ -537,7 +537,7 @@ function checkInternetExplorer(){
 		var temp = txt.slice(0, matches[ind].offset) + data.text() + txt.slice(end);
 		var count = txt.length - temp.length;
 		matches.splice(ind, 1);
-		txt = temp;
+		txt = replaceDangerousText(temp);
 		document.getElementById("textarea").innerText = txt;
 		for (var i = ind; i < matches.length; i++) {
 			matches[i].offset -= count;
@@ -631,6 +631,10 @@ function checkInternetExplorer(){
 
 		var container = document.getElementById('scrollable-container-id');			
         Ps = new PerfectScrollbar('#' + container.id, { minScrollbarLength: 20 });
+	};
+
+	function replaceDangerousText(text) {
+		return text.replace(/\x3C/g,'<').replace(/</g,'&lt').replace(/>/g,'&gt');
 	};
 	
 	window.Asc.plugin.button = function(id)
