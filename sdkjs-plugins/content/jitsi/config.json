@@ -4,6 +4,7 @@
 		"ru": "Jitsi",
 		"fr": "Jitsi",
 		"es": "Jitsi",
+		"pt-BR": "Jitsi",
 		"de": "Jitsi"
 	},
 	"guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
@@ -16,6 +17,7 @@
 				"ru": "Совершайте аудио- и видеозвонки прямо в редакторах с помощью Jitsi.",
 				"fr": "Organisez des appels audio et vidéo dans les éditeurs avec Jitsi.",
 				"es": "Realice llamadas de audio y vídeo directamente en los editores utilizando Jitsi.",
+				"pt-BR": "Faça chamadas de áudio e vídeo diretamente nos editores usando Jitsi.",
 				"de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi."
 			},
 			"url" : "index.html",
