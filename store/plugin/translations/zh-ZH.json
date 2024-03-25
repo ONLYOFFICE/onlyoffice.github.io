@@ -1,0 +1,14 @@
+{
+	"This version of \"Plugin Manager\" is not official." : "此版本的\"插件管理器\"不是官方的。",
+	"No Internet Connection.": "没有网络连接。",
+	"Warning" : "警告",
+	"Yes" : "是",
+	"No" : "否",
+	"Do you want to completely remove this plugin?" : "您想彻底删除这个插件吗？",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "如果您选择\"否\"，稍后可以在市场中恢复此插件。",
+	"Enter the URL for your marketplace page here" : "在此处输入市场页面的网址",
+	"Return to default settings" : "返回默认设置",
+	"Enter URL" : "输入网址",
+	"Cancel" : "取消",
+	"Be careful! Avoid using the untrusted URLs." : "当心！避免使用不受信任的网址"
+}
