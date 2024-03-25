@@ -181,7 +181,8 @@
 
 		if ( !isAllowed() ) {
 			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
-			document.getElementById("div_main").style.display = "none";
+			// document.getElementById("div_main").style.display = "none";
+			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work into this browser.<\/p>";
 			return;
 		}
 		var languages = langs.map(function(el, ind) {
@@ -405,7 +406,7 @@
 	};
 	function isAllowed() {
 		var firsCheck = ( typeof(webkitSpeechRecognition) !== "undefined" );
-		var secondCheck = ( ('webkitSpeechRecognition' in window) && ('SpeechRecognition' in window) );
+		var secondCheck = ( ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window) );
 		return !isSafari && firsCheck && secondCheck;
 	};
 	window.Asc.plugin.onTranslate = function()
