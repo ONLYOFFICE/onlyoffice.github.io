@@ -167,9 +167,7 @@
         break;
       default:
         break;
-
     }
-
 
     // Create and display the modal window
     modalWindow = new window.Asc.PluginWindow();
