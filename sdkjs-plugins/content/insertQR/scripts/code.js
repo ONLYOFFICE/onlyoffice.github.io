@@ -33,13 +33,15 @@
 
   window.Asc.plugin.init = function () { };
 
+
+  // Attach event for context menu click on GenerateQR
+  window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
+    console.log("GenerateQR clicked");
+    displayFunction(displaySettings);
+  });
   //  Display context menu if the text is selected
   window.Asc.plugin.event_onContextMenuShow = function (options) {
-    // Attach event for context menu click on GenerateQR
-    window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
-      console.log("GenerateQR clicked");
-      displayFunction(displaySettings);
-    });
+
     if (options.type === "Selection") { // Check if the text is selected
       // Execute method to get selected text
       window.Asc.plugin.executeMethod("GetSelectedText", [{
@@ -63,6 +65,12 @@
           }]);
         }
       });
+    } else {
+      // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
+      window.Asc.plugin.executeMethod("AddContextMenuItem", [{
+        guid: window.Asc.plugin.guid,
+        items: []
+      }]);
     }
   };
 
