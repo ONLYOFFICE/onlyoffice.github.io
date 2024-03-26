@@ -23,5 +23,5 @@
 	"In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "Voer in het formulier de naam en beschrijving van een aanvraag in, accepteer Algemene voorwaarden en genereer een geheim. Voer hieronder de applicatie ID in en sla deze op.",
 	"Learn more here.": "Lees hier meer.",
 	"Save": "Opslaan",
-	"This plugin doesn't work into Desktop.": "Deze plugin werkt niet op de Desktop."
+	"This plugin doesn't work into Desktop Editors.": "Deze plugin werkt niet in Desktop Editors."
 }
