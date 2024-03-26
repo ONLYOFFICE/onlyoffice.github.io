@@ -47,7 +47,6 @@
 
   window.Asc.plugin.init = function () { };
 
-
   // Attach event for context menu click on GenerateQR
   window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
     console.log("GenerateQR clicked");
@@ -94,7 +93,6 @@
     return result;
   }
 
-
   // Function to insert QR code
   function insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor) {
     try {
@@ -133,7 +131,6 @@
 
     window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
   }
-
 
   // Function to display message in modal window
   function displayFunction(option) {
