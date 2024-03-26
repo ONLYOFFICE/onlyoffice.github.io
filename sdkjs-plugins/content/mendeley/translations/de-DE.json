@@ -23,5 +23,5 @@
 	"In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "Geben Sie einen Namen und eine Beschreibung der App in der Form ein, akzeptieren Sie die Bedingungen und generieren Sie einen Geheimschlüssel. Geben Sie die App-ID unten ein und speichern Sie diese.",
 	"Learn more here.": "Erfahren Sie mehr hier.",
 	"Save": "Speichern",
-	"This plugin doesn't work into Desktop.": "Dieses Plugin funktioniert nicht auf dem Desktop."
+	"This plugin doesn't work into Desktop Editors.": "Dieses Plugin funktioniert nicht in Desktop-Editoren."
 }
