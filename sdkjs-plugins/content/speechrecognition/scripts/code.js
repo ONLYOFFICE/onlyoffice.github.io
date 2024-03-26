@@ -151,7 +151,7 @@
 
 	window.Asc.plugin.init = function() {
 		if (isLocal) {
-			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work into Desktop.<\/p>";
+			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work in Desktop Editors.<\/p>";
 			return;
 		}
 		
@@ -194,9 +194,9 @@
 		}
 
 		if ( !isAllowed() ) {
-			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
 			// document.getElementById("div_main").style.display = "none";
 			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work into this browser.<\/p>";
+			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
 			return;
 		}
 		var languages = langs.map(function(el, ind) {
