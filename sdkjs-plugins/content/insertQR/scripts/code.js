@@ -63,12 +63,12 @@
             }]
           }]);
         } else {
-      // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
-      window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-        guid: window.Asc.plugin.guid,
-        items: []
-      }]);
-    }
+          // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
+          window.Asc.plugin.executeMethod("AddContextMenuItem", [{
+            guid: window.Asc.plugin.guid,
+            items: []
+          }]);
+        }
       });
     } else {
       // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
