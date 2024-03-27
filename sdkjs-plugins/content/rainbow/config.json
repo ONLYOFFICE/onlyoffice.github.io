@@ -4,6 +4,7 @@
 		"ru": "Rainbow",
 		"fr": "Rainbow",
 		"es": "Rainbow",
+		"pt-BR": "Rainbow",
 		"de": "Rainbow"
 	},
 	"guid": "asc.{0743b63f-cb32-438c-b46b-81ce182ff4f7}",
@@ -16,6 +17,7 @@
 				"ru": "Общайтесь в чате и совершайте звонки с помощью Rainbow.",
 				"fr": "Communiquez via chat ou passez des appels avec Rainbow.",
 				"es": "Intercambie mensajes instantáneos y realice llamadas con Rainbow.",
+				"pt-BR": "Troque mensagens instantâneas e faça chamadas usando Rainbow.",
 				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow."
 			},
 			"url": "index.html",
