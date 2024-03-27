@@ -4,6 +4,7 @@
 		"ru": "Главред",
 		"fr": "Glavred",
 		"es": "Glavred",
+		"pt-BR": "Glavred",
 		"de": "Glavred"
 	},
 	"guid" : "asc.{B631E142-E40B-4B4C-90B9-2D00222A286E}",
@@ -17,6 +18,7 @@
 				"ru": "Очистите текст от словесного мусора и проверьте его на соответствие информационному стилю.",
 				"fr": "Rendez votre texte plus informatif et clair (convient pour les textes en russe).",
 				"es": "Haga que su texto sea más informativo y claro (adecuado cuando trabaje con textos en ruso).",
+				"pt-BR": "Torne seu texto mais informativo e claro (adequado ao trabalhar com textos em russo).",
 				"de": "Machen Sie Ihren Text informativer und deutlicher (geeignet für die Arbeit mit Texten auf Russisch)."
 			},
 			"url" : "index.html",

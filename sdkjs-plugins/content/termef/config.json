@@ -4,6 +4,7 @@
 		"ru": "TerMef",
 		"fr": "TerMef",
 		"es": "TerMef",
+		"pt-BR": "TerMef",
 		"de": "TerMef"
 	},
 	"guid": "asc.{4571a69c-7ae5-4f2c-98fd-97614ba7bf3d}",
@@ -16,6 +17,7 @@
 				"ru": "TerMef",
 				"fr": "TerMef",
 				"es": "TerMef",
+				"pt-BR": "TerMef",
 				"de": "TerMef"
 			},
 			"url": "index.html",

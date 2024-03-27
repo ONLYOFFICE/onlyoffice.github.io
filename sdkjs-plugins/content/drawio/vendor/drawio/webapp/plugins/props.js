@@ -22,7 +22,7 @@ Draw.loadPlugin(function(ui) {
 
 		var iiw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 		
-		var dataWindow = new mxWindow('Data', div, iiw - 320, 60, 200, 130, true, true);
+		var dataWindow = new mxWindow('Data', div, iiw - 320, 60, 240, 220, true, true);
 		dataWindow.destroyOnClose = false;
 		dataWindow.setMaximizable(false);
 		dataWindow.setResizable(true);
@@ -69,11 +69,11 @@ Draw.loadPlugin(function(ui) {
 
 		if (mxEvent.isShiftDown(evt))
 		{
-			console.log(result);
+			console.log(JSON.stringify(result, null, '  '));
 		}
 		else
 		{
-			console.log(JSON.stringify(result, null, '  '));
+			console.log(result);
 		}
 	};
 
@@ -82,12 +82,6 @@ Draw.loadPlugin(function(ui) {
 	 */
 	function cellClicked(cell)
 	{
-		// Forces focusout in IE
-		if (!ui.editor.isChromelessView())
-		{
-			graph.container.focus();
-		}
-
 		// Gets the selection cell
 		if (cell == null)
 		{
@@ -105,7 +99,7 @@ Draw.loadPlugin(function(ui) {
 	
 			if (attrs != null)
 			{
-				var label = graph.sanitizeHtml(graph.getLabel(cell));
+				var label = Graph.sanitizeHtml(graph.getLabel(cell));
 				
 				if (label != null && label.length > 0)
 				{
@@ -137,7 +131,7 @@ Draw.loadPlugin(function(ui) {
 				
 				if (label != '')
 				{
-					div.innerHTML = '<h1>' + graph.sanitizeHtml(label) + '</h1>';
+					div.innerHTML = '<h1>' + Graph.sanitizeHtml(label) + '</h1>';
 				}
 				else
 				{

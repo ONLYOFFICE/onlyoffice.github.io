@@ -1,0 +1,14 @@
+{
+	"This version of \"Plugin Manager\" is not official." : "この\"Plugin Manager\"のバージョンは正式なものではありません。",
+	"No Internet Connection.": "インターネットに接続されていません。",
+	"Warning" : "注意",
+	"Yes" : "はい",
+	"No" : "いいえ",
+	"Do you want to completely remove this plugin?" : "このプラグインを完全に削除しますか？",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "\"No\" を選んでも、後でマーケットプレイスでこのプラグインを復元できます。",
+	"Enter the URL for your marketplace page here" : "マーケットプレイスページのURLをここに入力してください",
+	"Return to default settings" : "デフォルト設定に戻す",
+	"Enter URL" : "URLを入力する",
+	"Cancel" : "キャンセル",
+	"Be careful! Avoid using the untrusted URLs." : "ご注意！信頼できないURLの使用は避けてください。"
+}

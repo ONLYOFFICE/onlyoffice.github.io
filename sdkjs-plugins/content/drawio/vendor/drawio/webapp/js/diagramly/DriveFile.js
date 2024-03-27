@@ -35,8 +35,8 @@ DriveFile.prototype.getSize = function()
  */
 DriveFile.prototype.isRestricted = function()
 {
-	return this.desc.userPermission != null && this.desc.labels != null &&
-		this.desc.userPermission.role == 'reader' && this.desc.labels.restricted;
+	return DrawioFile.RESTRICT_EXPORT || (this.desc.userPermission != null && this.desc.labels != null &&
+		this.desc.userPermission.role == 'reader' && this.desc.labels.restricted);
 };
 
 /**
@@ -64,6 +64,31 @@ DriveFile.prototype.getCurrentUser = function()
 DriveFile.prototype.getMode = function()
 {
 	return App.MODE_GOOGLE;
+};
+
+/**
+ * Returns true if copy, export and print are not allowed for this file.
+ */
+DriveFile.prototype.getFileUrl = function()
+{
+	return 'https://drive.google.com/open?authuser=0&id=' + this.getId();
+};
+
+/**
+ * Returns true if copy, export and print are not allowed for this file.
+ */
+DriveFile.prototype.getFolderUrl = function()
+{
+	if (this.desc.labels != null && this.desc.labels.trashed)
+	{
+		return 'https://drive.google.com/drive/trash';
+	}
+	else
+	{
+		return (this.desc.parents != null && this.desc.parents.length > 0) ?
+			'https://drive.google.com/drive/folders/' +
+			this.desc.parents[0].id : null;
+	}
 };
 
 /**
@@ -190,7 +215,7 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 							this.sync.fileSaving();
 						}
 	
-						this.ui.drive.saveFile(this, realRevision, mxUtils.bind(this, function(resp, savedData)
+						this.ui.drive.saveFile(this, realRevision, mxUtils.bind(this, function(resp, savedData, pages, checksum)
 						{
 							try
 							{
@@ -216,7 +241,7 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 									
 									// Shows possible errors but keeps the modified flag as the
 									// file was saved but the cache entry could not be written
-									if (token != null)
+									if (token != null || !Editor.enableRealtimeCache)
 									{
 										this.fileSaved(savedData, lastDesc, mxUtils.bind(this, function()
 										{
@@ -226,10 +251,11 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 											{
 												success(resp);
 											}
-										}), error, token);
+										}), error, token, pages, checksum);
 									}
 									else if (success != null)
 									{
+										// TODO: Fix possible saving state never being reset
 										success(resp);
 									}
 								}
@@ -483,7 +509,7 @@ DriveFile.prototype.move = function(folderId, success, error)
  */
 DriveFile.prototype.share = function()
 {
-	this.ui.drive.showPermissions(this.getId());
+	this.ui.drive.showPermissions(this.getId(), this);
 };
 
 /**
@@ -710,7 +736,30 @@ DriveFile.prototype.setDescriptor = function(desc)
 };
 
 /**
- * Returns the etag from the given descriptor.
+ * Returns the checksum from the given descriptor.
+ */
+DriveFile.prototype.getDescriptorChecksum = function(desc)
+{
+	var value = this.ui.drive.getCustomProperty(desc, 'checksum');
+	var secret = this.getDescriptorSecret(desc);
+	var result = null;
+
+	if (value != null && secret != null)
+	{
+		tokens = value.split(':');
+
+		// Checks if checksum matches current secret
+		if (tokens.length == 2 && tokens[0] == secret)
+		{
+			result = tokens[1];
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Returns the secret from the given descriptor.
  */
 DriveFile.prototype.getDescriptorSecret = function(desc)
 {

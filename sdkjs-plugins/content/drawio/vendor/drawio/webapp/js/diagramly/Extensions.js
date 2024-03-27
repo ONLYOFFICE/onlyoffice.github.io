@@ -26,7 +26,7 @@ LucidImporter = {};
 	var ss = 'strokeColor=none;shape=mxgraph.';
 	var ssAzure = 'verticalLabelPosition=bottom;verticalAlign=top;' + ss;
 	var cs = 'mxCompositeShape';
-	var azur19 = 'aspect=fixed;html=1;points=[];align=center;verticalAlign=top;image;image=img/lib/mscae/';
+	var azur19 = 'image;aspect=fixed;html=1;points=[];align=center;verticalAlign=top;image=img/lib/mscae/';
 	var gcpIcon = 'html=1;verticalLabelPosition=bottom;verticalAlign=top;strokeColor=none;shape=mxgraph.gcp2.';
 	var kupIcon = 'html=1;verticalLabelPosition=bottom;verticalAlign=top;strokeColor=none;shape=mxgraph.kubernetes.icon;prIcon=';
 	
@@ -2144,7 +2144,7 @@ LucidImporter = {};
 			'QuotaKub19' : kupIcon + 'quota',
 			'CrbLabeledKub19' : kupIcon + 'crb',
 			'CrbKub19' : kupIcon + 'crb',
-			'LogoKub19' : 'aspect=fixed;html=1;align=center;image;image=img/lib/mscae/Kubernetes.svg',
+			'LogoKub19' : 'image;aspect=fixed;html=1;align=center;image=img/lib/mscae/Kubernetes.svg',
 			'NsLabeledKub19' : kupIcon + 'ns',
 			'NsKub19' : kupIcon + 'ns',
 			'PspLabeledKub19' : kupIcon + 'psp',
@@ -5553,6 +5553,11 @@ LucidImporter = {};
 			graph.setAttributeForCell(cell, 'link', getLink(p.Link[0]));
 		}
 		
+		if (p.NoteHint != null && p.NoteHint.t)
+		{
+			graph.setAttributeForCell(cell, 'Notes', p.NoteHint.t);
+		}
+
 		replacePlaceholders(cell, graph);
 		
 		for (var property in p)
@@ -5900,7 +5905,7 @@ LucidImporter = {};
 		
 		if (obj.id != null)
 		{
-			setAttributeForCell(cell, 'lucidchartObjectId', obj.id, graph);
+			cell.style += ';lucidId=' + obj.id + ';';
 		}
 
 		cell.lucidchartObject = obj;

@@ -162,17 +162,16 @@
     else
         window.attachEvent("onmessage", onMessage);
 
-    window.Asc.plugin.attachContextMenuClickEvent = function(id, action)
+    window.Asc.plugin._attachCustomMenuClickEvent = function(type, id, action)
     {
-        var pluginObj = window.Asc.plugin;
-        if (!pluginObj.contextMenuEvents)
-            pluginObj.contextMenuEvents = {};
+        if (!this[type])
+            this[type] = {};
 
-        pluginObj.contextMenuEvents[id] = action;
+        this[type][id] = action;
     };
-    window.Asc.plugin.event_onContextMenuClick = function(id)
+    window.Asc.plugin._onCustomMenuClick = function(type, id)
     {
-        var pluginObj = window.Asc.plugin;
+        // parse data from id: text from item.
         var itemId = id;
         var itemData = undefined;
         var itemPos = itemId.indexOf("_oo_sep_");
@@ -182,8 +181,26 @@
             itemId = itemId.substring(0, itemPos);
         }
 
-        if (pluginObj.contextMenuEvents && pluginObj.contextMenuEvents[itemId])
-            pluginObj.contextMenuEvents[itemId].call(pluginObj, itemData);
+        if (this[type] && this[type][itemId])
+           this[type][itemId].call(this, itemData);
+    };
+
+    window.Asc.plugin.attachContextMenuClickEvent = function(id, action)
+    {
+        this._attachCustomMenuClickEvent("contextMenuEvents", id, action);
+    };
+    window.Asc.plugin.event_onContextMenuClick = function(id)
+    {
+        this._onCustomMenuClick("contextMenuEvents", id);
+    };
+
+    window.Asc.plugin.attachToolbarMenuClickEvent = function(id, action)
+    {
+        this._attachCustomMenuClickEvent("toolbarMenuEvents", id, action);
+    };
+    window.Asc.plugin.event_onToolbarMenuClick = function(id)
+    {
+        this._onCustomMenuClick("toolbarMenuEvents", id);
     };
 
     window.Asc.plugin.attachEvent = function(id, action)
