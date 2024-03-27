@@ -182,7 +182,9 @@
 		if ( !isAllowed() ) {
 			// document.getElementById("div_main").style.display = "none";
 			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work into this browser.<\/p>";
-			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
+			setTimeout(function(){
+				alert(getMessage('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.'));
+			}, 50);
 			return;
 		}
 		var languages = langs.map(function(el, ind) {
@@ -245,7 +247,7 @@
 						return;
 					}
 					else {
-						alert('Error with connection to recognition service of this browser, please use the Chrome browser');
+						alert(getMessage('Error with connection to recognition service of this browser, please use the Chrome browser.'));
 						window.Asc.plugin.executeCommand("close", "");
 					}
 				}
@@ -255,16 +257,16 @@
 				$('#speak_info').hide();
 
 				if (event.error == 'no-speech') {
-					alert('No speech was detected. You may need to adjust your microphone settings.');
+					alert(getMessage('No speech was detected. You may need to adjust your microphone settings.'));
 				}
 				if (event.error == 'audio-capture') {
-					alert('No microphone was found. Ensure that a microphone is installed and that	microphone settings are configured correctly.');
+					alert(getMessage('No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.'));
 				}
 				if (event.error == 'not-allowed') {
 					if (event.timeStamp - start_timestamp < 100) {
-						alert('Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone');
+						alert(getMessage('Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone'));
 					} else {
-						alert('Permission to use microphone was denied.');
+						alert(getMessage('Permission to use microphone was denied.'));
 					}
 				}
 			};
@@ -342,7 +344,7 @@
 
 		function upgrade() {
 			start_button.style.visibility = 'hidden';
-			alert('Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.');
+			alert(getMessage('Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.'));
 		};
 
 		const paragraph = '<!--StartFragment--><p style="margin-top:0pt;margin-bottom:9.999977952755906pt;border:none;mso-border-left-alt:none;mso-border-top-alt:none;mso-border-right-alt:none;mso-border-bottom-alt:none;mso-border-between:none" class="docData;DOCY;v5;1177;BAiAAgAABoQCAAAD3AIAAAXqAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABUAAAAAE8AAAABGAAAAAEGAAAAAAkGAAAAABoGAAAAABsGAAAAAAItAAAABQoAAAABAAAAAAgAAAAABQoAAAABAAAAAAgAAAAABQoAAAABAAAAAAgAAAAACgAAAAAAAAAAEQAAAACrAQAAAOIAAAAAAQABBhIAAAACBQAAAAADBQAAAAAEBQAAAAAFAQEGAQAHAQAIAQAJBhsAAAAKBTfBAQALAQEcAQAMBQAAAAAdAQANBQliBQAOBg4AAAAAAQEBA////wIGAAAAABkBARsGfQAAAAAUAAAAAAMAAAABBQAAAAACBeZEAAADAQABFAAAAAADAAAAAQUAAAAAAgXmRAAAAwEAAhQAAAAAAwAAAAEFAAAAAAIF5kQAAAMBAAMUAAAAAAMAAAABBQAAAAACBeZEAAADAQALFAAAAAADAAAAAQUAAAAAAgXmRAAAAwEAAboAAAAAAQABAQACAQADAQAEBgoAAABBAHIAaQBhAGwABQYKAAAAQQByAGkAYQBsAAcGCgAAAEEAcgBpAGEAbAAGBgoAAABBAHIAaQBhAGwACAQWAAAACgEADAEADgUAAAAADwEAEAEAEQEAEgUAAAAAFAEAFQEAFgQWAAAAFwEAGAEAGQYKAAAAZQBuAC0AVQBTABoGCgAAAGEAcgAtAFMAQQAbBgoAAABlAG4ALQBVAFMAHAYCAAAAAAAeAQACAAAAAA==">&nbsp;</p><!--EndFragment-->'; 
