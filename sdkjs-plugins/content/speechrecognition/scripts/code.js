@@ -288,16 +288,6 @@
 					start_timestamp = event.timeStamp;
 				}
 			};
-			
-			
-			recognition.onspeechend = function() {
-				console.log('onspeechend');
-			};
-
-
-			recognition.onspeechend = function() {
-				console.log('onspeechend');
-			};
 
 			recognition.onresult = function(event) {
 				var interim_transcript = '';
