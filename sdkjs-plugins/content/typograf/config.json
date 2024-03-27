@@ -4,6 +4,7 @@
 		"ru": "Типограф",
 		"fr": "Typograf",
 		"es": "Typograf",
+		"pt-BR": "Typograf",
 		"de": "Typograf"
 	},
 	"guid": "asc.{55159EC6-C91A-4DDB-8E1E-558454666461}",
@@ -16,6 +17,7 @@
 				"ru": "Подготовьте свои тексты к публикации, исправив типографические ошибки.",
 				"fr": "Préparez vos textes pour la publication en corrigeant la typographie.",
 				"es": "Prepare sus textos para la publicación corrigiendo la tipografía.",
+				"pt-BR": "Prepare seus textos para publicação corrigindo a tipografia.",
 				"de": "Bereiten Sie Ihre Texte für die Veröffentlichung vor, indem Sie Typografie korrigieren."
 			},
 			"url": "index.html",

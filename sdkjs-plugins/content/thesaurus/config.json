@@ -4,6 +4,7 @@
 		"ru": "Синонимы",
 		"fr": "Thésaurus",
 		"es": "Tesauro",
+		"pt-BR": "Thesaurus",
 		"de": "Thesaurus",
 		"si": "පර්යාය කෝෂය"
 	},
@@ -17,6 +18,7 @@
 				"ru": "Находите синонимы и антонимы для выбранного слова.",
 				"fr": "Recherchez les synonymes et les antonymes d'un mot et remplacez-le par le mot sélectionné.",
 				"es": "Busque sinónimos y antónimos de una palabra y sustitúyala por la seleccionada.",
+				"pt-BR": "Pesquise sinônimos e antônimos de uma palavra e substitua pela selecionada.",
 				"de": "Finden Sie Synonyme und Antonyme eines Wortes und ersetzen Sie es durch die ausgewählte Variante.",
 				"si": "වචනයක සමාන පද සහ විරුද්ධ පද සොයා තෝරාගත් වචනයකට ප්‍රතිස්ථාපනය කරන්න."
 			},

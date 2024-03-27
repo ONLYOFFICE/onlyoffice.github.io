@@ -4,10 +4,11 @@
 		"ru": "draw.io",
 		"fr": "draw.io",
 		"es": "draw.io",
+		"pt-BR": "draw.io",
 		"de": "draw.io"
 	},
 	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
-	"version": "1.0.3",
+	"version": "1.0.5",
 
 	"variations": [
 		{
@@ -16,6 +17,7 @@
 				"ru": "Создавайте, редактируйте и добавляйте в документы различные диаграммы.",
 				"fr": "Créez, modifiez et insérez des diagrammes professionnels dans vos documents.",
 				"es": "Cree, edite e inserte diagramas de aspecto profesional en sus documentos.",
+				"pt-BR": "Crie, edite e insira diagramas com aparência profissional em seus documentos.",
 				"de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein."
 			},
 			"url": "index.html",
