@@ -3,13 +3,17 @@
     "nameLocale": {
         "ru": "Менеджер плагинов",
         "fr": "Gestionnaire de Plugins",
+        "it": "Plugin Manager",
+        "ja": "プラグインマネージャー",
         "es": "Administrador de Complementos",
         "de": "Plugin-Verwaltung",
         "cs": "Správce Pluginů",
-        "si": "පේනු කළමනාකරු"
+        "si": "පේනු කළමනාකරු",
+        "zh": "插件管理器",
+        "pt-BR": "Gerenciador de plug-ins"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "group" : {
         "name" : "Plugin Manager",
         "rank" : 1

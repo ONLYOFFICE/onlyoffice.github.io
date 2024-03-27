@@ -4,6 +4,7 @@
 		"ru": "Zotero",
 		"fr": "Zotero",
 		"es": "Zotero",
+		"pt-BR": "Zotero",
 		"de": "Zotero"
 	},
 	"guid": "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
@@ -17,6 +18,7 @@
 					"ru": "Оформляйте библиографические списки в нужном стиле с помощью Zotero.",
 					"fr": "Créez des bibliographies dans le style nécessaire avec Zotero.",
 					"es": "Cree bibliografías en el estilo requerido utilizando el servicio Zotero.",
+					"pt-BR": "Crie bibliografias no estilo desejado usando o serviço Zotero.",
 					"de": "Erstellen Sie Literaturverzeichnisse im gewünschten Stil mittels Zotero."
 				},
 			"url": "index.html",
