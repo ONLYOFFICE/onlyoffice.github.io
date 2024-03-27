@@ -22,7 +22,7 @@
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
 	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 	var defaultLang = "en-US";
-	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+	var SpeechRecognition = null;
 	
 	// If you modify this array, also update default language / dialect below.
 	var langs =
@@ -231,6 +231,7 @@
 			upgrade();
 		} else {
 			start_button.style.display = 'inline-block';
+			SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 			var recognition = new SpeechRecognition();
 			recognition.continuous = true;
 			recognition.interimResults = true;
