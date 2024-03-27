@@ -6,12 +6,12 @@
     "summarize": "суммировать",
     "explain": "объяснять",
     "translate": "переводить",
-    "translate to English": "перевести на английский",
-    "translate to Chinese": "перевести на китайский",
-    "translate to Russian": "перевести на русский",
-    "translate to German": "перевести на немецкий",
-    "translate to French": "перевести на французский",
-    "translate to Spanish": "перевести на испанский",
+    "translate to English": "перевести на английский язык",
+    "translate to Chinese": "перевести на китайский язык",
+    "translate to Russian": "перевести на русский язык",
+    "translate to German": "перевести на немецкий язык",
+    "translate to French": "перевести на французский язык",
+    "translate to Spanish": "перевести на испанский язык",
     "clear chat history": "очистить историю чата",
     "Choose a model": "Выберите модель"
 }
