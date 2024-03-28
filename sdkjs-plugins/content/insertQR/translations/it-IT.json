@@ -5,6 +5,7 @@
 "Width": "Larghezza",
 "Height": "Altezza",
 "Minimum QR size is 50px": "La dimensione minima del QR è 50px",
+"Maximum QR size is 2000px": "La dimensione massima del QR è di 2000px",
 "Warning": "Avviso",
 "Insert QR": "Inserisci il codice QR",
 "The plugin is not supported in the Internet Explorer": "Il plugin non è supportato in Internet Explorer.",

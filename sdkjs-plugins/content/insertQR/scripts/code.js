@@ -148,12 +148,12 @@
     switch (option) {
       case 'displaySettings':
         variation = {
-          url: location.href.replace(file, 'settings.html'),
+          url: location.href.replace(file, 'settingsQR.html'),
           description: generateText('Settings'),
           isVisual: true,
           isModal: true,
           buttons: [],
-          EditorsSupport: ['slide', 'word'],
+          EditorsSupport: ['slide', 'word', 'cell'],
           size: [400, 500]
         };
         break;
@@ -164,7 +164,7 @@
           isVisual: true,
           isModal: true,
           buttons: [],
-          EditorsSupport: ['slide', 'word'],
+          EditorsSupport: ['slide', 'word', 'cell'],
           size: [400, 200]
         };
         break;

@@ -47,7 +47,7 @@
 				}
 			],
 			"isViewer": false,
-			"EditorsSupport": ["word", "slide"],
+			"EditorsSupport": ["word", "slide", "cell"],
 			"isVisual": false,
 			"isModal": false,
 			"isInsideMode": false,
