@@ -22,5 +22,6 @@
 	"To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "Para usar Mendeley, registre este editor como una aplicación. Copie el enlace e introdúzcalo como URL de Redireccionamiento en formulario que se abrirá.",
 	"In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "En el formulario, introduzca cualquier nombre de aplicación y su descripción; luego acepte los Términos y Condiciones y genere el secreto. Introduzca ID de Aplicación de abajo y guárdelo.",
 	"Learn more here.": "Aprenda más aquí.",
-	"Save": "Salvar"
+	"Save": "Salvar",
+	"This plugin doesn't work into Desktop Editors.": "Este complemento no funciona en Editores de escritorio."
 }
