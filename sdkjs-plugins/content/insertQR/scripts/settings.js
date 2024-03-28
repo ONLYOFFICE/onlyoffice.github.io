@@ -30,7 +30,8 @@
   const qrColorElement = document.getElementById('qrColor')
   const bgColorElement = document.getElementById('bgColor');
   const errSpan = document.getElementById('error-msg');
-  let spanMssg = "";
+  let spanMssgMinErr = "";
+  let spanMssgMaxErr = "";
   // Define a global variable to store QR parameters
   let storedSettings = {};
 
@@ -44,7 +45,8 @@
     activateBGlabel.innerText = window.Asc.plugin.tr('Set Background Color');
     qrWidth.innerText = window.Asc.plugin.tr('Width');
     qrHeight.innerText = window.Asc.plugin.tr('Height');
-    spanMssg = window.Asc.plugin.tr('Minimum QR size is 50px');
+    spanMssgMinErr = window.Asc.plugin.tr('Minimum QR size is 50px');
+    spanMssgMaxErr = window.Asc.plugin.tr('Maximum QR size is 2000px');
   };
 
   // Function to send message to plugin
@@ -162,24 +164,40 @@
         bgColorElement.style.borderColor = 'red';
         return; // Exit the function to prevent further execution
 
+      case qrColor === bgColor:
+        event.preventDefault();
+        qrColorElement.style.borderColor = 'red';
+        bgColorElement.style.borderColor = 'red';
+        return;
+
       case parseInt(qrWidthValue, 10) < 50:
         event.preventDefault();
-        errSpan.innerText = spanMssg;
+        errSpan.innerText = spanMssgMinErr;
         return; // Exit the function to prevent further execution
 
       case parseInt(qrHeightValue, 10) < 50:
         event.preventDefault();
-        errSpan.innerText = spanMssg;
+        errSpan.innerText = spanMssgMinErr;
+        return; // Exit the function to prevent further execution
+
+      case parseInt(qrWidthValue, 10) > 2000:
+        event.preventDefault();
+        errSpan.innerText = spanMssgMaxErr;
+        return; // Exit the function to prevent further execution
+
+      case parseInt(qrHeightValue, 10) > 2000:
+        event.preventDefault();
+        errSpan.innerText = spanMssgMaxErr;
         return; // Exit the function to prevent further execution
 
       case qrWidthValue === "":
         event.preventDefault();
-        errSpan.innerText = spanMssg;
+        errSpan.innerText = spanMssgMinErr;
         return; // Exit the function to prevent further execution
 
       case qrHeightValue === "":
         event.preventDefault();
-        errSpan.innerText = spanMssg;
+        errSpan.innerText = spanMssgMinErr;
         return; // Exit the function to prevent further execution
 
       default:
