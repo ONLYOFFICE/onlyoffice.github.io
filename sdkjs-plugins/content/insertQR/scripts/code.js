@@ -61,6 +61,7 @@
         switch (sType) {
 
           case "none":
+            console.log('switch returned none")
             // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
             window.Asc.plugin.executeMethod("AddContextMenuItem", [{
               guid: window.Asc.plugin.guid,
@@ -69,6 +70,7 @@
             break;
 
           case "text":
+            console.log('switch returned text")
             // Execute method to get selected text
             window.Asc.plugin.executeMethod("GetSelectedText", [{
               Numbering: false,
@@ -90,6 +92,7 @@
                   }]
                 }]);
               } else {
+                  console.log('switch not executed, executed else statement")
                 // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
                 window.Asc.plugin.executeMethod("AddContextMenuItem", [{
                   guid: window.Asc.plugin.guid,
