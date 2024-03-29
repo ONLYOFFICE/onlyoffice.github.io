@@ -154,8 +154,6 @@
             authFlow: authFlow
         });
 
-        window.Asc.plugin.onTranslate = applyTranslations;
-
         redirectUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index.html", "oauth.html");
         elements.redirectConfigUrl.value = redirectUrl;
 
@@ -509,7 +507,7 @@
         };
     };
 
-    function applyTranslations() {
+    window.Asc.plugin.onTranslate = function() {
         var elements = document.getElementsByClassName("i18n");
 
         for (var i = 0; i < elements.length; i++) {
@@ -517,7 +515,7 @@
             if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
             if (el.innerText) el.innerText = getMessage(el.innerText);
         }
-    }
+    };
 
     function saveLastUsedStyle(id) {
         localStorage.setItem("mendStyleId", id);
