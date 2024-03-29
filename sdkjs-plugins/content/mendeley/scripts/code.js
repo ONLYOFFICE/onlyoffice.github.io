@@ -133,7 +133,7 @@
 
     window.Asc.plugin.init = function () {
 		if (isLocal) {
-			document.getElementById('content').innerHTML = "<p id='message' style='text-align:center; font-size:14pt;' class='i18n';>This plugin doesn't work into Desktop.<\/p>";
+			document.getElementById('content').innerHTML = "<p id='message' style='text-align:center; font-size:14pt;' class='i18n';>This plugin doesn't work into Desktop Editors.<\/p>";
 			return;
 		}
         sdk = MendeleySDK({
