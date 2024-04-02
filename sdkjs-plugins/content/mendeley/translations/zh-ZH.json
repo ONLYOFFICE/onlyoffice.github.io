@@ -22,5 +22,6 @@
 	"To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "如需使用 Mendeley，请将该编辑器注册为应用。复制链接并在即将打开的表单中将其作为重定向 URL 填入。",
 	"In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "在表单中输入任意应用名称与描述，接受《条件与条款》并生成 Secret。在下方输入应用 ID 并保存。",
 	"Learn more here.": "在此了解更多信息。",
-	"Save": "保存"
+	"Save": "保存",
+	"This plugin doesn't work into Desktop Editors.": "此插件不适用于桌面编辑器。"
 }
