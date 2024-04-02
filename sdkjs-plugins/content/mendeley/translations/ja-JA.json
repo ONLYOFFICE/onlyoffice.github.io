@@ -22,5 +22,6 @@
 	"To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "Mendeley を使用するには、このエディタをアプリとして登録してください。リンクをコピーして、開かれるフォームにリダイレクトURLとして挿入してください。",
 	"In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "フォームに任意のアプリケーション名と説明を入力し、利用規約に同意の上、シークレットを生成してください。以下にアプリケーションIDを入力し、保存してください。",
 	"Learn more here.": "詳しくはこちら",
-	"Save": "保存"
+	"Save": "保存",
+	"This plugin doesn't work into Desktop Editors.": "このプラグインは、デスクトップエディタには動作しません。"
 }
