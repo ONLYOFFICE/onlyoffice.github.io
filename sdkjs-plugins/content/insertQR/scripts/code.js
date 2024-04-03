@@ -38,10 +38,12 @@
     console.log("GenerateQR clicked");
     displayFunction(displaySettings);
   });
+
   //  Display context menu if the text is selected
   window.Asc.plugin.event_onContextMenuShow = function (options) {
 
     if (options.type === "Selection") { // Check if the text is selected
+
       // Execute method to get selected text
       window.Asc.plugin.executeMethod("GetSelectedText", [{
         Numbering: false,
@@ -50,8 +52,14 @@
         ParaSeparator: "\n",
         TabSymbol: String.fromCharCode(9),
       }], function (data) {
-        selectedText = data.trim();
-        console.log("the selected text is" + selectedText);
+        const selection = data.trim()
+        if (selection === "○" || selection === "☐") { // exclude radio buttons and check boxes from the selection
+          selectedText = "";
+          console.log("the selected text has been reset to an empty string");
+        } else {
+          selectedText = selection;
+          console.log(selectedText)
+        }
 
         if (selectedText !== "") {
           // If text is selected and it is not an empty string, add the context menu item for generating QR code
@@ -112,8 +120,8 @@
       guid: _info.guid,
       widthPix: qrWidth,
       heightPix: qrHeight,
-      width: Math.round(qrWidth / _info.mmToPx),
-      height: Math.round(qrHeight / _info.mmToPx),
+      width: qrWidth / _info.mmToPx,
+      height: qrHeight / _info.mmToPx,
       imgSrc: qrImageURI,
       objectId: _info.objectId,
       data: qrImageURI,
