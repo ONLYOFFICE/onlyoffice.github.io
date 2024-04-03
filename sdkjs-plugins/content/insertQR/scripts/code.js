@@ -52,7 +52,7 @@
         ParaSeparator: "\n",
         TabSymbol: String.fromCharCode(9),
       }], function (data) {
-        const selection = data.trim()
+        const selection = data.trim().replace(/\n/g, '');
         if (selection === "○" || selection === "☐") { // exclude radio buttons and check boxes from the selection
           selectedText = "";
           console.log("the selected text has been reset to an empty string");
@@ -105,8 +105,10 @@
         correctLevel: QRCode.CorrectLevel.H
       });
     } catch (error) {
-      if (error.message.includes("reading '3'")) {
+      if (error.message.includes("reading '3'") || error.message.includes("code length overflow")) {
         displayFunction(exceedsMaxLength);
+      } else {
+        console.error("QR code generation failed:", error);
       }
     }
     // Get the canvas element from QRCode library
