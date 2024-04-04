@@ -4,6 +4,7 @@
 		"ru": "Doc2md",
 		"fr": "Doc2md",
 		"es": "Doc2md",
+		"pt-BR": "Doc2md",
 		"de": "Doc2md"
 	},
 	"guid": "asc.{5aff455d-96c4-4bd8-9658-16e5bc143738}",
@@ -16,6 +17,7 @@
 				"ru": "Преобразуйте отформатированные документы в Markdown или HTML.",
 				"fr": "Convertissez votre document mis en forme en Markdown ou HTML.",
 				"es": "Convierta sus documentos formateados a Markdown o HTML.",
+				"pt-BR": "Converta seus documentos formatados para Markdown ou HTML.",
 				"de": "Konvertieren Sie formatierte Dokumente in Markdown oder HTML.",
 				"cs": "Převeďte své formátované dokumenty na Markdown nebo HTML."
 			},
