@@ -163,7 +163,7 @@
       case 'displaySettings':
         variation = {
           url: location.href.replace(file, 'settingsQR.html'),
-          description: generateText('Settings'),
+          description: generateText('QR Settings'),
           isVisual: true,
           isModal: true,
           buttons: [],
