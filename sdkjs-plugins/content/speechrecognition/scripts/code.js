@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *	 http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,8 +18,11 @@
 (function(window, undefined){
 
 	var curLang;
-    var oTheme = null;
+	var oTheme = null;
+	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
+	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 	var defaultLang = "en-US";
+	var SpeechRecognition = null;
 	
 	// If you modify this array, also update default language / dialect below.
 	var langs =
@@ -27,7 +30,7 @@
 		['አማርኛ',           [['am-ET']]],
 		['Azərbaycanca',    [['az-AZ']]],
 		['বাংলা',            [['bn-BD', 'বাংলাদেশ'],
-							['bn-IN', 'ভারত']]],
+                            ['bn-IN', 'ভারত']]],
 		['Bahasa Indonesia',[['id-ID']]],
 		['Bahasa Melayu',   [['ms-MY']]],
 		['Català',          [['ca-ES']]],
@@ -35,18 +38,18 @@
 		['Dansk',           [['da-DK']]],
 		['Deutsch',         [['de-DE']]],
 		['English',         [['en-AU', 'Australia'],
-							['en-CA', 'Canada'],
-							['en-IN', 'India'],
-							['en-KE', 'Kenya'],
-							['en-TZ', 'Tanzania'],
-							['en-GH', 'Ghana'],
-							['en-NZ', 'New Zealand'],
-							['en-NG', 'Nigeria'],
-							['en-ZA', 'South Africa'],
-							['en-PH', 'Philippines'],
-							['en-GB', 'United Kingdom'],
-							['en-US', 'United States']]],
-		['Español',         [['es-AR', 'Argentina'],
+                            ['en-CA', 'Canada'],
+                            ['en-IN', 'India'],
+                            ['en-KE', 'Kenya'],
+                            ['en-TZ', 'Tanzania'],
+                            ['en-GH', 'Ghana'],
+                            ['en-NZ', 'New Zealand'],
+                            ['en-NG', 'Nigeria'],
+                            ['en-ZA', 'South Africa'],
+                            ['en-PH', 'Philippines'],
+                            ['en-GB', 'United Kingdom'],
+                            ['en-US', 'United States']]],
+		['Español',		 [['es-AR', 'Argentina'],
 							['es-BO', 'Bolivia'],
 							['es-CL', 'Chile'],
 							['es-CO', 'Colombia'],
@@ -71,73 +74,78 @@
 		['Français',        [['fr-FR']]],
 		['Basa Jawa',       [['jv-ID']]],
 		['Galego',          [['gl-ES']]],
-		['ગુજરાતી',           [['gu-IN']]],
+		['ગુજરાતી',          [['gu-IN']]],
 		['Hrvatski',        [['hr-HR']]],
 		['IsiZulu',         [['zu-ZA']]],
 		['Íslenska',        [['is-IS']]],
 		['Italiano',        [['it-IT', 'Italia'],
-							['it-CH', 'Svizzera']]],
-		['ಕನ್ನಡ',             [['kn-IN']]],
-		['ភាសាខ្មែរ',          [['km-KH']]],
+                            ['it-CH', 'Svizzera']]],
+		['ಕನ್ನಡ',           [['kn-IN']]],
+		['ភាសាខ្មែរ',         [['km-KH']]],
 		['Latviešu',        [['lv-LV']]],
 		['Lietuvių',        [['lt-LT']]],
-		['മലയാളം',          [['ml-IN']]],
+		['മലയാളം',       [['ml-IN']]],
 		['मराठी',            [['mr-IN']]],
 		['Magyar',          [['hu-HU']]],
 		['ລາວ',             [['lo-LA']]],
 		['Nederlands',      [['nl-NL']]],
-		['नेपाली भाषा',         [['ne-NP']]],
+		['नेपाली भाषा',       [['ne-NP']]],
 		['Norsk bokmål',    [['nb-NO']]],
 		['Polski',          [['pl-PL']]],
 		['Português',       [['pt-BR', 'Brasil'],
-							['pt-PT', 'Portugal']]],
+                            ['pt-PT', 'Portugal']]],
 		['Română',          [['ro-RO']]],
-		['සිංහල',            [['si-LK']]],
+		['සිංහල',          [['si-LK']]],
 		['Slovenščina',     [['sl-SI']]],
 		['Basa Sunda',      [['su-ID']]],
 		['Slovenčina',      [['sk-SK']]],
 		['Suomi',           [['fi-FI']]],
 		['Svenska',         [['sv-SE']]],
 		['Kiswahili',       [['sw-TZ', 'Tanzania'],
-							['sw-KE', 'Kenya']]],
-		['ქართული',         [['ka-GE']]],
+                            ['sw-KE', 'Kenya']]],
+		['ქართული',        [['ka-GE']]],
 		['Հայերեն',         [['hy-AM']]],
-		['தமிழ்',            [['ta-IN', 'இந்தியா'],
-						    ['ta-SG', 'சிங்கப்பூர்'],
-							['ta-LK', 'இலங்கை'],
-							['ta-MY', 'மலேசியா']]],
-		['తెలుగు',           [['te-IN']]],
+		['தமிழ்',           [['ta-IN', 'இந்தியா'],
+                            ['ta-SG', 'சிங்கப்பூர்'],
+                            ['ta-LK', 'இலங்கை'],
+                            ['ta-MY', 'மலேசியா']]],
+		['తెలుగు',          [['te-IN']]],
 		['Tiếng Việt',      [['vi-VN']]],
 		['Türkçe',          [['tr-TR']]],
 		['اُردُو',            [['ur-PK', 'پاکستان'],
-							['ur-IN', 'بھارت']]],
+                            ['ur-IN', 'بھارت']]],
 		['Ελληνικά',        [['el-GR']]],
 		['български',       [['bg-BG']]],
 		['Русский',         [['ru-RU']]],
 		['Српски',          [['sr-RS']]],
 		['Українська',      [['uk-UA']]],
-		['한국어',            [['ko-KR']]],
-		['中文',             [['cmn-Hans-CN', '普通话 (中国大陆)'],
-							['cmn-Hans-HK', '普通话 (香港)'],
-							['cmn-Hant-TW', '中文 (台灣)'],
-							['yue-Hant-HK', '粵語 (香港)']]],
-		['日本語',           [['ja-JP']]],
-		['हिन्दी',             [['hi-IN']]],
-		['ภาษาไทย',         [['th-TH']]]];
+		['한국어',           [['ko-KR']]],
+		['中文',            [['cmn-Hans-CN', '普通话 (中国大陆)'],
+                            ['cmn-Hans-HK', '普通话 (香港)'],
+                            ['cmn-Hant-TW', '中文 (台灣)'],
+                            ['yue-Hant-HK', '粵語 (香港)']]],
+		['日本語',          [['ja-JP']]],
+		['हिन्दी',            [['hi-IN']]],
+		['ภาษาไทย',        [['th-TH']]]];
 
 	var	ignore_onend = true;
-    var sLastResult = '';
+	var sLastResult = '';
 
-    String.prototype.replaceAt = function(nIndex, sReplacement) {
-      return this.substr(0, nIndex) + sReplacement + this.substr(nIndex + sReplacement.length);
-    }
+	String.prototype.replaceAt = function(nIndex, sReplacement) {
+	  return this.substr(0, nIndex) + sReplacement + this.substr(nIndex + sReplacement.length);
+	}
 
 	window.Asc.plugin.init = function() {
+		if (isLocal) {
+			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work in Desktop Editors.<\/p>";
+			return;
+		}
+		
 		switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                window.Asc.plugin.executeMethod("GetDocumentLang", [], function(lang) {
-                    let documentLang = lang || defaultLang;
+			case 'word':
+			case 'slide': {
+				window.Asc.plugin.executeMethod("GetDocumentLang", [], function(lang) {
+					let documentLang = lang || defaultLang;
 
 					let aOptions = Array.from($('#custom_menu option'));
 					let oDefaultOption = aOptions.find(function(item) {
@@ -166,14 +174,17 @@
 						$('#custom_menu').val(oMatchOption.value);
 						$('#custom_menu').trigger('change');
 					}
-                });
-                break;
-            }
-        }
+				});
+				break;
+			}
+		}
 
-		if (typeof(webkitSpeechRecognition) == "undefined") {
-			alert('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.');
-			document.getElementById("div_main").style.display = "none";
+		if ( !isAllowed() ) {
+			// document.getElementById("div_main").style.display = "none";
+			document.getElementById('div_main').innerHTML = "<p id='message' style='text-align:center;' class='i18n';>This plugin doesn't work into this browser.<\/p>";
+			setTimeout(function(){
+				alert(getMessage('Web Speech API is not supported by this browser. Please open it in Google Chrome browser.'));
+			}, 50);
 			return;
 		}
 		var languages = langs.map(function(el, ind) {
@@ -186,41 +197,42 @@
 		curLang = languages[0].code[0][0];
 
 		for (var nLang = 0; nLang < languages.length; nLang++) {
-            if (languages[nLang].code.length > 1) {
-                for (var nDialect = 0; nDialect < languages[nLang].code.length; nDialect++) {
-                    $("#custom_menu").append($("<option>", {
-                        value: languages[nLang].code[nDialect][0],
-                        text: languages[nLang].text + ' (' + languages[nLang].code[nDialect][1] + ')'
-                    }));
-                }
-            }
-            else {
-                $("#custom_menu").append($("<option>", {
-                    value: languages[nLang].code[0][0],
-                    text: languages[nLang].text
-                }));
-            }
+			if (languages[nLang].code.length > 1) {
+				for (var nDialect = 0; nDialect < languages[nLang].code.length; nDialect++) {
+					$("#custom_menu").append($("<option>", {
+						value: languages[nLang].code[nDialect][0],
+						text: languages[nLang].text + ' (' + languages[nLang].code[nDialect][1] + ')'
+					}));
+				}
+			}
+			else {
+				$("#custom_menu").append($("<option>", {
+					value: languages[nLang].code[0][0],
+					text: languages[nLang].text
+				}));
+			}
 		}
 		$('#custom_menu').select2({});
 		$('#custom_menu').on('change', function() {
-            localStorage.setItem($(this).attr('data-id'), $(this).val());
-            curLang = document.getElementById("custom_menu").value;
-        });
-        var savedLang = localStorage.getItem($('#custom_menu').attr('data-id'));
-        if (savedLang !== null) {
-            $('#custom_menu').val(savedLang);
-            $('#custom_menu').trigger('change');
-        }
+			localStorage.setItem($(this).attr('data-id'), $(this).val());
+			curLang = document.getElementById("custom_menu").value;
+		});
+		var savedLang = localStorage.getItem($('#custom_menu').attr('data-id'));
+		if (savedLang !== null) {
+			$('#custom_menu').val(savedLang);
+			$('#custom_menu').trigger('change');
+		}
 
 		var final_transcript = '',
 		recognizing = false,
 		start_timestamp;
 
-		if (!('webkitSpeechRecognition' in window)) {
+		if ( !isAllowed() ) {
 			upgrade();
 		} else {
 			start_button.style.display = 'inline-block';
-			var recognition = new webkitSpeechRecognition();
+			SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+			var recognition = new SpeechRecognition();
 			recognition.continuous = true;
 			recognition.interimResults = true;
 
@@ -229,14 +241,14 @@
 			};
 
 			recognition.onerror = function(event) {
-			    ignore_onend = false;
-			    if (event.error == 'network') {
+				ignore_onend = false;
+				if (event.error == 'network') {
 					if (event.message == "") {
 						ignore_onend = true;
 						return;
 					}
 					else {
-						alert('Error with connection to recognition service of this browser, please use the Chrome browser');
+						alert(getMessage('Error with connection to recognition service of this browser, please use the Chrome browser.'));
 						window.Asc.plugin.executeCommand("close", "");
 					}
 				}
@@ -246,35 +258,35 @@
 				$('#speak_info').hide();
 
 				if (event.error == 'no-speech') {
-					alert('No speech was detected. You may need to adjust your microphone settings.');
+					alert(getMessage('No speech was detected. You may need to adjust your microphone settings.'));
 				}
 				if (event.error == 'audio-capture') {
-					alert('No microphone was found. Ensure that a microphone is installed and that	microphone settings are configured correctly.');
+					alert(getMessage('No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.'));
 				}
 				if (event.error == 'not-allowed') {
 					if (event.timeStamp - start_timestamp < 100) {
-						alert('Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone');
+						alert(getMessage('Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone'));
 					} else {
-						alert('Permission to use microphone was denied.');
+						alert(getMessage('Permission to use microphone was denied.'));
 					}
 				}
 			};
 
 			recognition.onend = function() {
-			    if (!ignore_onend) {
-			        recognizing = false;
-                    if (!final_transcript) {
-                        return;
-                    }
-			    }
+				if (!ignore_onend) {
+					recognizing = false;
+					if (!final_transcript) {
+						return;
+					}
+				}
 				else {
-                    final_transcript = '';
-                    recognition.lang = curLang;
-                    recognition.start();
-                    ignore_onend = true;
-                    interim_span.innerHTML = '';
-                    start_timestamp = event.timeStamp;
-                }
+					final_transcript = '';
+					recognition.lang = curLang;
+					recognition.start();
+					ignore_onend = true;
+					interim_span.innerHTML = '';
+					start_timestamp = event.timeStamp;
+				}
 			};
 
 			recognition.onresult = function(event) {
@@ -295,25 +307,27 @@
 				}
 				final_transcript = capitalize(final_transcript);
 				if (event.results[0].isFinal && final_transcript !== '') {
-				    if (sLastResult[sLastResult.length - 1] === '.' || sLastResult === '')
-				        for (var nChar = 0; nChar < final_transcript.length; nChar++) {
-				            if (final_transcript[nChar] !== ' ') {
-				                final_transcript = final_transcript.replaceAt(nChar, final_transcript[nChar].toUpperCase());
-				                break;
-				            }
-				        }
-				    else {
-				        for (var nChar = 0; nChar < final_transcript.length; nChar++) {
-				            if (final_transcript[nChar] !== ' ') {
-				                final_transcript = final_transcript.replaceAt(nChar, final_transcript[nChar].toLowerCase());
-				                break;
-				            }
-				        }
-				    }
-				    if (sLastResult === '')
-				        final_transcript = final_transcript.trim();
-				    sLastResult = final_transcript;
-					window.Asc.plugin.executeMethod("PasteHtml",[linebreak(final_transcript)]);
+					if (sLastResult[sLastResult.length - 1] === '.' || sLastResult === '')
+						for (var nChar = 0; nChar < final_transcript.length; nChar++) {
+							if (final_transcript[nChar] !== ' ') {
+								final_transcript = final_transcript.replaceAt(nChar, final_transcript[nChar].toUpperCase());
+								break;
+							}
+						}
+					else {
+						for (var nChar = 0; nChar < final_transcript.length; nChar++) {
+							if (final_transcript[nChar] !== ' ') {
+								final_transcript = final_transcript.replaceAt(nChar, final_transcript[nChar].toLowerCase());
+								break;
+							}
+						}
+					}
+					if (sLastResult === '')
+						final_transcript = final_transcript.trim();
+					sLastResult = final_transcript;
+					window.Asc.plugin.executeMethod("PasteText",[linebreak(final_transcript)]);
+					// now we will paste result as text (bug #66747).
+					// window.Asc.plugin.executeMethod("PasteHtml",[linebreak(final_transcript)]);
 				}
 				interim_span.innerHTML = linebreak(interim_transcript);
 			};
@@ -321,7 +335,7 @@
 
 		function upgrade() {
 			start_button.style.visibility = 'hidden';
-			alert('Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.');
+			alert(getMessage('Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.'));
 		};
 
 		const paragraph = '<!--StartFragment--><p style="margin-top:0pt;margin-bottom:9.999977952755906pt;border:none;mso-border-left-alt:none;mso-border-top-alt:none;mso-border-right-alt:none;mso-border-bottom-alt:none;mso-border-between:none" class="docData;DOCY;v5;1177;BAiAAgAABoQCAAAD3AIAAAXqAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABUAAAAAE8AAAABGAAAAAEGAAAAAAkGAAAAABoGAAAAABsGAAAAAAItAAAABQoAAAABAAAAAAgAAAAABQoAAAABAAAAAAgAAAAABQoAAAABAAAAAAgAAAAACgAAAAAAAAAAEQAAAACrAQAAAOIAAAAAAQABBhIAAAACBQAAAAADBQAAAAAEBQAAAAAFAQEGAQAHAQAIAQAJBhsAAAAKBTfBAQALAQEcAQAMBQAAAAAdAQANBQliBQAOBg4AAAAAAQEBA////wIGAAAAABkBARsGfQAAAAAUAAAAAAMAAAABBQAAAAACBeZEAAADAQABFAAAAAADAAAAAQUAAAAAAgXmRAAAAwEAAhQAAAAAAwAAAAEFAAAAAAIF5kQAAAMBAAMUAAAAAAMAAAABBQAAAAACBeZEAAADAQALFAAAAAADAAAAAQUAAAAAAgXmRAAAAwEAAboAAAAAAQABAQACAQADAQAEBgoAAABBAHIAaQBhAGwABQYKAAAAQQByAGkAYQBsAAcGCgAAAEEAcgBpAGEAbAAGBgoAAABBAHIAaQBhAGwACAQWAAAACgEADAEADgUAAAAADwEAEAEAEQEAEgUAAAAAFAEAFQEAFgQWAAAAFwEAGAEAGQYKAAAAZQBuAC0AVQBTABoGCgAAAGEAcgAtAFMAQQAbBgoAAABlAG4ALQBVAFMAHAYCAAAAAAAeAQACAAAAAA==">&nbsp;</p><!--EndFragment-->'; 
@@ -338,9 +352,9 @@
 		function capitalize(s) {
 			return s.replace(first_char, function(m) { return m.toUpperCase(); });
 		};
-        start_button.onclick = function(event) {
+		start_button.onclick = function(event) {
 			if (recognizing) {
-			    ignore_onend = false;
+				ignore_onend = false;
 				recognition.stop();
 				$('#micro_img_path').toggleClass('recording_color');
 				$('#start_info').show();
@@ -349,8 +363,8 @@
 			}
 
 			$('#start_info').hide();
-            $('#speak_info').show();
-            $('#micro_img_path').toggleClass('recording_color');
+			$('#speak_info').show();
+			$('#micro_img_path').toggleClass('recording_color');
 
 			ignore_onend = true;
 			final_transcript = '';
@@ -361,44 +375,49 @@
 		};
 	};
 	window.Asc.plugin.onThemeChanged = function(theme)
-    {
-        window.Asc.plugin.onThemeChangedBase(theme);
+	{
+		window.Asc.plugin.onThemeChangedBase(theme);
 
-        var sRecordingColor = theme.type === 'dark' ? '#EE5959' : '#EC4949';
-        var rule = '.recording_color { fill: ' + sRecordingColor + ' !important;}\n';
-        rule += '.btn-text-default:hover { background-color : ' + theme["highlight-button-pressed"] + ' !important;}\n';
-        rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+		var sRecordingColor = theme.type === 'dark' ? '#EE5959' : '#EC4949';
+		var rule = '.recording_color { fill: ' + sRecordingColor + ' !important;}\n';
+		rule += '.btn-text-default:hover { background-color : ' + theme["highlight-button-pressed"] + ' !important;}\n';
+		rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
 
-        var styleTheme = document.createElement('style');
-        styleTheme.type = 'text/css';
-        styleTheme.innerHTML = rule;
-        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+		var styleTheme = document.createElement('style');
+		styleTheme.type = 'text/css';
+		styleTheme.innerHTML = rule;
+		document.getElementsByTagName('head')[0].appendChild(styleTheme);
 
-        $('.btn-text-default').css('border-color', theme["background-toolbar"]);
-        $('.btn-text-default').css('background-color', theme["background-toolbar"]);
-        $('.btn-text-default:hover').css('background-color', "#fff !important");
+		$('.btn-text-default').css('border-color', theme["background-toolbar"]);
+		$('.btn-text-default').css('background-color', theme["background-toolbar"]);
+		$('.btn-text-default:hover').css('background-color', "#fff !important");
 
-        $('#micro_img_path').css('fill', theme["text-normal"]);
-    };
+		$('#micro_img_path').css('fill', theme["text-normal"]);
+	};
 	function getMessage(key) {
-        return window.Asc.plugin.tr(key.trim());
-    };
+		return window.Asc.plugin.tr(key.trim());
+	};
+	function isAllowed() {
+		var firsCheck = ( typeof(webkitSpeechRecognition) !== "undefined" );
+		var secondCheck = ( ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window) );
+		return !isSafari && firsCheck && secondCheck;
+	};
 	window.Asc.plugin.onTranslate = function()
-    {
-        var elements = document.getElementsByClassName("i18n");
+	{
+		var elements = document.getElementsByClassName("i18n");
 
-        for (var i = 0; i < elements.length; i++) {
-            var el = elements[i];
-            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
-            let isRussianRule = el.innerText.slice(el.innerText.length - 2, el.innerText.length) === "ru";
-            let textWithourRuMark = isRussianRule ? el.innerText.slice(0, el.innerText.length - 2) : "";
-            if (el.innerText && isRussianRule)
-            {
-                el.outerHTML = el.outerHTML.replace(textWithourRuMark, getMessage(textWithourRuMark));
-            }
-            else
-                el.innerText = getMessage(el.innerText);
-        }
-    };
+		for (var i = 0; i < elements.length; i++) {
+			var el = elements[i];
+			if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
+			let isRussianRule = el.innerText.slice(el.innerText.length - 2, el.innerText.length) === "ru";
+			let textWithourRuMark = isRussianRule ? el.innerText.slice(0, el.innerText.length - 2) : "";
+			if (el.innerText && isRussianRule)
+			{
+				el.outerHTML = el.outerHTML.replace(textWithourRuMark, getMessage(textWithourRuMark));
+			}
+			else
+				el.innerText = getMessage(el.innerText);
+		}
+	};
 
 })(window, undefined);

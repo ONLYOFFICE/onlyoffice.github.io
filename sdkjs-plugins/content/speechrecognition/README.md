@@ -22,7 +22,7 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 - This plugin works in Google Chrome only. To use it in FireFox, enable recognition via `media.webspeech.recognition.enable` and `media.webspeech.recognition.force_enable` flags in `about:config` synthesis is switched on by default. More information [here](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API). 
 
-- The plugin does not work for the desktop version yet
+- The plugin does not work for the desktop version yet.
 
 - The plugin doesn't work with http (it works only with https).
 

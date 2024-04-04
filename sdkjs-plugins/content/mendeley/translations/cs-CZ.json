@@ -22,5 +22,6 @@
 	"To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.": "Chcete-li použít Mendeley, zaregistrujte tento editor jako aplikaci. Zkopírujte níže uvedený odkaz a zadejte jej jako přesměrovanou adresu URL ve formuláři, který se otevře.",
 	"In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.": "Do formuláře zadejte jakýkoli název a popis aplikace, přijměte smluvní podmínky a vygenerujte tajemství. Níže zadejte ID aplikace a uložte jej.",
 	"Learn more here.": "Více informací se dozvíte zde.",
-	"Save": "Uložit"
+	"Save": "Uložit",
+	"This plugin doesn't work into Desktop Editors.": "Tento plugin nefunguje do desktopových editorů."
 }
