@@ -584,7 +584,8 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 						arr.forEach(function(full) {
 							let short = full.split('-')[0];
 							for (let i = 0; i < languages.length; i++) {
-								if (languages[i][0] == full || languages[i][1] == short) {
+								// detect only full language (because we can make mistake with some langs. for instance: "pt-PT" and "pt-BR")
+								if (languages[i][0] == full /*|| languages[i][1] == short*/) {
 									supportedLangs.push( getTranslated( languages[i][2] ) );
 								}
 							}
