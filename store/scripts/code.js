@@ -97,6 +97,24 @@ switch (shortLang) {
 	case 'cs':
 		translate["Loading"] = "Načítání"
 		break;
+	case 'it':
+		translate["Loading"] = "Caricamento"
+		break;
+	case 'ja':
+		translate["Loading"] = "積み込み"
+		break;
+	case 'pt':
+		translate["Loading"] = "Carregamento"
+		break;
+	case 'si':
+		translate["Loading"] = "පැටවීම"
+		break;
+	case 'uk':
+		translate["Loading"] = "Вантаження"
+		break;
+	case 'zh':
+		translate["Loading"] = "装载量"
+		break;
 }
 
 // it's necessary for loader (because it detects theme by this object)
@@ -809,8 +827,8 @@ function createPluginDiv(plugin, bInstalled) {
 	}
 	
 	let variation = plugin.variations[0];
-	let name = (bTranslate && plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
-	let description = (bTranslate && variation.descriptionLocale && variation.descriptionLocale[shortLang]) ? variation.descriptionLocale[shortLang] : variation.description;
+	let name = ( bTranslate && plugin.nameLocale && ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) ) ? ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) : plugin.name;
+	let description = ( bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] ) ) ? ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] ) : variation.description;
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let additional = bNotAvailable ? 'disabled title="' + getTranslated(messages.versionWarning) + '"'  : '';
 	let template = '<div class="div_image" style="background: ' + bg + '">' +
@@ -1657,7 +1675,7 @@ function makeSearch(val) {
 		let bUpdate = false;
 		let arr = plugins.filter(function(el) {
 			let plugin = el.obj || el;
-			let name = (plugin.nameLocale && plugin.nameLocale[shortLang]) ? plugin.nameLocale[shortLang] : plugin.name;
+			let name = (plugin.nameLocale && ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) ) ? ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) : plugin.name;
 			return name.toLowerCase().includes(val);
 		});
 
