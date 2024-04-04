@@ -68,7 +68,10 @@ const languages = [                                                  // list of 
 	['ja-JA', 'ja', 'Japanese'],
 	['nl-NL', 'nl', 'Dutch'],
 	['pt-PT', 'pt', 'Portuguese'],
+	['pt-BR', 'pt', 'Brazilian'],
 	['ru-RU', 'ru', 'Russian'],
+	['si-SI', 'si', 'Sinhala'],
+	['uk-UA', 'uk', 'Ukrainian'],
 	['zh-ZH', 'zh', 'Chinese']
 ];
 const messages = {
@@ -581,7 +584,7 @@ function getAllPluginsData(bFirstRender, bshowMarketplace) {
 						arr.forEach(function(full) {
 							let short = full.split('-')[0];
 							for (let i = 0; i < languages.length; i++) {
-								if (languages[i][0] == short || languages[i][1] == short) {
+								if (languages[i][0] == full || languages[i][1] == short) {
 									supportedLangs.push( getTranslated( languages[i][2] ) );
 								}
 							}
