@@ -4,6 +4,7 @@
 		"ru": "Zoom",
 		"fr": "Zoom",
 		"es": "Zoom",
+		"pt-BR": "Zoom",
 		"de": "Zoom"
 	},
 	"guid": "asc.{3f15a9bc-51d3-4b59-b32f-75cfe2f07f54}",
@@ -16,6 +17,7 @@
 				"ru": "Планируйте и проводите видеовстречи прямо в редакторах с помощью Zoom.",
 				"fr": "Planifiez et organisez des réunions vidéo directement dans les éditeurs avec Zoom.",
 				"es": "Planifique y celebre reuniones de vídeo directamente en los editores con Zoom.",
+				"pt-BR": "Agende e realize videoconferências diretamente nos editores usando o Zoom.",
 				"de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren."
 			},
 			"url": "index.html",
