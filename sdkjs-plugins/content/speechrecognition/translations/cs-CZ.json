@@ -1,4 +1,13 @@
 {
 	"Start dictation": "Zahájení diktování",
-	"Speak now": "Mluvte nyní"
+	"Speak now": "Mluvte nyní",
+	"This plugin doesn't work in Desktop Editors.": "Tento plugin nefunguje v editorech pro stolní počítače.",
+	"This plugin doesn't work into this browser.": "Tento plugin nefunguje do tohoto prohlížeče.",
+	"Web Speech API is not supported by this browser. Please open it in Google Chrome browser.": "Web Speech API není tímto prohlížečem podporováno. Otevřete jej v prohlížeči Google Chrome.",
+	"Error with connection to recognition service of this browser, please use the Chrome browser.": "Chyba při připojení k rozpoznávací službě tohoto prohlížeče použijte prohlížeč Chrome.",
+	"No speech was detected. You may need to adjust your microphone settings.": "Nebyla zjištěna žádná řeč. Možná budete muset upravit nastavení mikrofonu.",
+	"No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.": "Nebyl nalezen žádný mikrofon. Ujistěte se, že je nainstalován mikrofon a že nastavení mikrofonu je správně nakonfigurováno.",
+	"Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone": "Povolení k použití mikrofonu je blokováno. Chcete-li změnit, přejděte na chrome://settings/content/microphone",
+	"Permission to use microphone was denied.": "Povolení k použití mikrofonu bylo zamítnuto.",
+	"Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.": "Web Speech API není tímto prohlížečem podporováno. Upgradujte na Chrome verze 25 nebo novější."
 }

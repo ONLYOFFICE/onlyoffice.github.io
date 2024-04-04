@@ -1,4 +1,13 @@
 {
 	"Start dictation": "Начать диктовку",
-	"Speak now": "Говорите"
+	"Speak now": "Говорите",
+	"This plugin doesn't work in Desktop Editors.": "Этот плагин не работает в настольных редакторах.",
+	"This plugin doesn't work into this browser.": "Этот плагин не работает в данном браузере.",
+	"Web Speech API is not supported by this browser. Please open it in Google Chrome browser.": "Web Speech API не поддерживается этим браузером. Пожалуйста, откройте его в браузере Google Chrome.",
+	"Error with connection to recognition service of this browser, please use the Chrome browser.": "Ошибка при подключении к службе распознавания этого браузера, пожалуйста, используйте браузер Chrome.",
+	"No speech was detected. You may need to adjust your microphone settings.": "Речь не была обнаружена. Возможно, вам потребуется изменить настройки микрофона.",
+	"No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.": "Микрофон не найден. Убедитесь, что микрофон установлен и что параметры микрофона настроены правильно.",
+	"Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone": "Разрешение на использование микрофона заблокировано. Чтобы изменить, перейдите в chrome://settings/content/microphone",
+	"Permission to use microphone was denied.": "В разрешении на использование микрофона было отказано.",
+	"Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.": "Web Speech API не поддерживается этим браузером. Обновите Chrome до версии 25 или более поздней."
 }
