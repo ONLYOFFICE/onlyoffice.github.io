@@ -44,6 +44,8 @@
   let qr;
   let displaySettings = 'displaySettings';
   let exceedsMaxLength = 'exceedsMaxLength';
+  let clearQR = false; // set a flag to clear qr in case of an error
+
 
   window.Asc.plugin.init = function () { };
 
@@ -108,7 +110,7 @@
   }
 
   // Function to insert QR code
-  function insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor) {
+  function insertQR(qr, qrText, qrWidth, qrHeight, qrColor, bgColor) {
     try {
       qr = new QRCode(document.createElement('div'), {
         text: qrText,
@@ -119,6 +121,7 @@
         correctLevel: QRCode.CorrectLevel.H
       });
     } catch (error) {
+      // handle errors when selected data exceeds the limit
       if (error.message.includes("reading '3'") || error.message.includes("code length overflow")) {
         displayFunction(exceedsMaxLength);
       } else {
@@ -146,6 +149,7 @@
     };
 
     window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
+
   }
 
   // Function to display message in modal window
@@ -195,7 +199,7 @@
       bgColor = message.bgColor;
 
       // Insert QR code
-      insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor);
+      insertQR(qr, qrText, qrWidth, qrHeight, qrColor, bgColor);
       modalWindow.close();
     });
   }
