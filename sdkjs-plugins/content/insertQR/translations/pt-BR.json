@@ -9,5 +9,6 @@
 "Warning": "Aviso",
 "Insert QR": "Inserir QR",
 "The plugin is not supported in the Internet Explorer": "O plugin não é suportado no Internet Explorer",
-"The selected text is too long": "O texto selecionado é muito longo."
+"The selected text сannot be used": "O texto selecionado não pode ser usado",
+"The colors must be different": "As cores devem ser diferentes"
 }

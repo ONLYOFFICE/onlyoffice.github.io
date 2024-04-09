@@ -32,6 +32,7 @@
   const errSpan = document.getElementById('error-msg');
   let spanMssgMinErr = "";
   let spanMssgMaxErr = "";
+  let spanMssgSameClr = "";
   // Define a global variable to store QR parameters
   let storedSettings = {};
 
@@ -47,6 +48,7 @@
     qrHeight.innerText = window.Asc.plugin.tr('Height');
     spanMssgMinErr = window.Asc.plugin.tr('Minimum QR size is 50px');
     spanMssgMaxErr = window.Asc.plugin.tr('Maximum QR size is 2000px');
+    spanMssgSameClr = window.Asc.plugin.tr('The colors must be different');
   };
 
   // Function to send message to plugin
@@ -168,6 +170,7 @@
         event.preventDefault();
         qrColorElement.style.borderColor = 'red';
         bgColorElement.style.borderColor = 'red';
+        errSpan.innerText = spanMssgSameClr;
         return;
 
       case parseInt(qrWidthValue, 10) < 50:

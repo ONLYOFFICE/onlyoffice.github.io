@@ -9,5 +9,6 @@
 "Warning": "警告",
 "Insert QR": "插入二维码",
 "The plugin is not supported in the Internet Explorer": "该插件不支持 Internet Explorer 浏览器",
-"The selected text is too long": "所选文本过长"
+"The selected text сannot be used": "无法使用所选文本",
+"The colors must be different": "颜色必须不同"
 }
