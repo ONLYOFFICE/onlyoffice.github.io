@@ -36,7 +36,7 @@
   const textElement = document.getElementById("text");
 
   window.Asc.plugin.onTranslate = function () {
-    textElement.innerText = window.Asc.plugin.tr("The selected text is too long");
+    textElement.innerText = window.Asc.plugin.tr("The selected text сannot be used");
   }
 
 })(window, undefined);
