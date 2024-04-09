@@ -9,5 +9,6 @@
 "Warning": "警告",
 "Insert QR": "QRの挿入",
 "The plugin is not supported in the Internet Explorer": "このプラグインはInternet Explorerには対応していません",    
-"The selected text is too long": "選択したテキストが長すぎます"
+"The selected text сannot be used": "選択されたテキストは使用できません",
+"The colors must be different": "色は異なる必要があります"
 }
