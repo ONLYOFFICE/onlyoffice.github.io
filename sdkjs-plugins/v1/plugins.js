@@ -56,6 +56,34 @@
         return dst;
     }
 
+    function getSearchParam(name) {
+        var _windowSearch = window.location.search;
+        var _nameSearch = name + "=";
+        var _pos1 = _windowSearch.indexOf(_nameSearch);
+        if (_pos1 >= 0)
+        {
+            _pos1 += _nameSearch.length;
+            var _pos2 = _windowSearch.indexOf("&", _pos1);
+            if (_pos2 < 0)
+                _pos2 = _windowSearch.length;
+
+            return _windowSearch.substring(_pos1, _pos2);
+        }
+        return undefined;
+    }
+
+    function checkPluginWindow() {
+        var windowID = getSearchParam("windowID");
+        if (windowID) {
+            window.Asc.plugin.windowID = windowID;
+
+            if (!window.Asc.plugin.guid)
+                window.Asc.plugin.guid = decodeURIComponent(getSearchParam("guid"));
+        }
+
+        return (undefined !== windowID) ? true : false;
+    }
+
     window.onload = function()
     {
         if (!window.Asc || !window.Asc.plugin)
@@ -67,6 +95,9 @@
         xhr.onload = function() {
             if (!window.Asc || !window.Asc.plugin)
                 return;
+            
+            if (xhr.status === 404)
+                return xhr.onerror();
 
             if (xhr.status == 200 || (xhr.status == 0 && xhr.readyState == 4)) {
                 var objConfig = xhr.response;
@@ -79,6 +110,10 @@
                     type : "initialize",
                     guid : window.Asc.plugin.guid
                 };
+
+                if (checkPluginWindow()) {
+                    obj.windowID = window.Asc.plugin.windowID;
+                }
 
                 var _body = document.body;
                 if (_body && true !== window.Asc.plugin.enableDrops) {
@@ -103,23 +138,25 @@
 
                 // ie11 not support message from another domain
                 window.Asc.plugin._initInternal = true;
-
-                var _windowSearch = window.location.search;
-                var _pos1 = _windowSearch.indexOf("windowID=");
-                if (_pos1 >= 0)
-                {
-                    _pos1 += 9;
-                    var _pos2 = _windowSearch.indexOf("&", _pos1);
-                    if (_pos2 < 0)
-                        _pos2 = _windowSearch.length;
-
-                    window.Asc.plugin.windowID = _windowSearch.substring(_pos1, _pos2);
-                    obj.windowID = window.Asc.plugin.windowID;
-                }
-
                 window.parent.postMessage(JSON.stringify(obj), "*");
             }
         };
+        xhr.onerror = function() {
+            if (!window.Asc || !window.Asc.plugin)
+                return;
+
+            if (checkPluginWindow()) {
+                var obj = {
+                    type : "initialize",
+                    guid : window.Asc.plugin.guid
+                };
+                obj.windowID = window.Asc.plugin.windowID;
+
+                // ie11 not support message from another domain
+                window.Asc.plugin._initInternal = true;
+                window.parent.postMessage(JSON.stringify(obj), "*");
+            }
+        }
         xhr.send();
     };
 
