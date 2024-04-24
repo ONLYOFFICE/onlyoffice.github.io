@@ -10,5 +10,6 @@
 "Insert QR": "插入二维码",
 "The plugin is not supported in the Internet Explorer": "该插件不支持 Internet Explorer 浏览器",
 "The selected text сannot be used": "无法使用所选文本",
-"The colors must be different": "颜色必须不同"
+"The colors must be different": "颜色必须不同",
+"Insert QR: info": "插入二维码：信息"
 }
