@@ -36,7 +36,9 @@
   // Define a global variable to store QR parameters
   let storedSettings = {};
 
-  // Plugin initialization function
+  // Call the handleResize function initially to set the initial state
+  handleResize();
+
   window.Asc.plugin.init = function () { };
 
   // Translation function for plugin
@@ -67,7 +69,7 @@
     });
 
     // Attach the 'changeColor' event handler during color picker initialization
-    colorpicker.on('changeColor', function (e) {
+    colorpicker.on('colorpickerChange', function (e) {
       if (selectedInput === 'qrColor' || selectedInput === 'bgColor') {
         // Check if e.color is an object, if so, extract the color value
         const colorValue = typeof e.color === 'object' ? e.color.toString() : e.color;
@@ -114,6 +116,9 @@
 
   // Set the initial color picker values
   colorpicker.colorpicker('setValue', storedSettings.qrColor || $('#qrColor').val());
+
+  // Add event listener for window resize event
+  window.addEventListener('resize', handleResize);
 
   // Event listener to prevent form submission on Enter key press in  the QR width field
   qrWidthField.addEventListener('keydown', function (event) {
@@ -240,7 +245,6 @@
     colorpicker.colorpicker('setValue', $('#qrColor').val());
   });
 
-
   // Event listener for changing background color activation
   $('#activateBG').change(function () {
     $('#qrColor').prop('disabled', true);
@@ -287,5 +291,19 @@
     // Attach event listener for input events
     $(this).on('input', delayedValidation);
   });
+
+  // Function to handle window resize event
+  function handleResize() {
+    const windowHeight = window.innerHeight;
+    const bodyHeight = document.body.offsetHeight;
+
+    // Check if body height exceeds window height
+    if (bodyHeight > windowHeight) {
+      document.body.style.overflowY = 'scroll'; // Add vertical scroll
+    } else {
+      document.body.style.overflowY = 'auto'; // Remove vertical scroll
+    }
+  }
+
 
 })(window, undefined);

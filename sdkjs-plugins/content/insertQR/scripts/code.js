@@ -30,7 +30,7 @@
   let qr;
   // Define flags to display modal windows
   let displaySettings = 'displaySettings';
-  let exceedsMaxLength = 'exceedsMaxLength';
+  let textWarning = 'textWarning';
 
 
   window.Asc.plugin.init = function () { };
@@ -41,13 +41,18 @@
     displayFunction(displaySettings);
   });
 
+  window.Asc.plugin.attachContextMenuClickEvent('GenerateQR_info', function () {
+    console.log("GenerateQR clicked");
+    displayFunction(textWarning);
+  });
+
   //  Display context menu if the text is selected
   window.Asc.plugin.event_onContextMenuShow = function (options) {
 
     if (options.type === "Selection") { // Check if the text is selected
       // Execute method to get selected text
       window.Asc.plugin.executeMethod("GetSelectedText", [{
-        Numbering: false,
+        Numbering: true,
         Math: false,
         TableCellSeparator: "\n",
         ParaSeparator: "\n",
@@ -56,6 +61,7 @@
         const selection = data.trim().replace(/\n/g, '');
         const editorType = window.Asc.plugin.info.editorType // retrieve the editor type
         switch (editorType) {
+
           case "word":
             if (selection === "○" || selection === "☐" || (selection.includes("○") && selection.includes("☐"))) { // exclude radio buttons and check boxes from the selection
               textQR = "";
@@ -82,6 +88,7 @@
               }]);
             }
             break;
+
           case "slide":
             if (selection !== "") {
               // If text is selected and it is not an empty string, add the context menu item for generating QR code
@@ -92,7 +99,6 @@
                   text: generateText('Insert QR')
                 }]
               }]);
-
               textQR = selection;
             } else {
               // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
@@ -102,14 +108,35 @@
               }]);
             }
             break;
+            
           case "cell":
-            if (selection.startsWith("=")) { // exclude formulas from the selection
-              textQR = "";
-              console.log("the selected text has been reset to an empty string");
-            } else {
-              textQR = selection;
-              console.log(textQR)
+            const hasCapitals = selection.split('').filter(char => char === char.toUpperCase()); // filter out capital letters from the selection
+            let haslink = false;
+
+            if (selection.includes('http') || selection.includes('https')) { // set the flag if the selection contains 'http' or 'https'
+              haslink = true;
             }
+            console.log(hasCapitals)
+
+            // exclude formulas from the selection
+            if (hasCapitals.length !== 0 && !haslink) { // Check if the filtered array is not empty and the selection does not contain 'http' or 'https'
+              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
+                guid: window.Asc.plugin.guid,
+                items: [{
+                  id: 'GenerateQR_info',
+                  text: generateText('Insert QR: info')
+                }]
+              }]);
+            }
+
+            if (haslink) { // Check if selection contains 'http' or 'https'
+              textQR = selection;
+              console.log(textQR);
+            } else if (hasCapitals.length === 0) { // Check if the filtered array is empty to allow generating QR code from single Lowercase phrases
+              textQR = selection;
+              console.log(textQR);
+            }
+
             if (textQR !== "") {
               // If text is selected and it is not an empty string, add the context menu item for generating QR code
               window.Asc.plugin.executeMethod("AddContextMenuItem", [{
@@ -162,7 +189,7 @@
     } catch (error) {
       // handle errors when selected data exceeds the limit
       if (error.message.includes("reading '3'") || error.message.includes("code length overflow")) {
-        displayFunction(exceedsMaxLength);
+        displayFunction(textWarning);
       } else {
         console.error("QR code generation failed:", error);
       }
@@ -207,12 +234,12 @@
           isModal: true,
           buttons: [],
           EditorsSupport: ['slide', 'word', 'cell'],
-          size: [400, 500]
+          size: [400, 550]
         };
         break;
-      case 'exceedsMaxLength':
+      case 'textWarning':
         variation = {
-          url: location.href.replace(file, 'textLength_warning.html'),
+          url: location.href.replace(file, 'text_warning.html'),
           description: generateText('Warning'),
           isVisual: true,
           isModal: true,
