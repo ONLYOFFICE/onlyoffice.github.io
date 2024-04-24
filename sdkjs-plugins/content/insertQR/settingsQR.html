@@ -1,66 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <link href="resources/style.css" rel="stylesheet">
-  <link href="resources/bootstrap.min.css" rel="stylesheet">
-  <link href="resources/vendor/css/bootstrap-colorpicker.css" rel="stylesheet">
-  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-  <script src="scripts/vendor/jquery-3.4.1.js"></script>
-  <script src="scripts/vendor/bootstrap-colorpicker.js"></script>
+    <meta charset="utf-8">
+    <link href="resources/style.css" rel="stylesheet">
+    <link href="resources/bootstrap.min.css" rel="stylesheet">
+    <link href="resources/vendor/css/bootstrap-colorpicker.css" rel="stylesheet">
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script src="scripts/vendor/jquery-3.4.1.js"></script>
+    <script src="scripts/vendor/bootstrap-colorpicker.js"></script>
 </head>
 
 <body class="text-center">
-  <form class="form" id="SubmitForm">
-    <div class="row">
-        <div class="col-md-6 mb-3 d-flex justify-content-center align-items-center" >
-            <div id="qrColorContainer"></div>
-        </div>
-
-        <div class="col-md-6 mb-3 d-flex flex-column align-items-center" >
-
-            <div class="d-flex align-items-center mb-3"style="margin-top: 20px;">
-                <input type="radio" id="activateQR" name="activation" style="width: 20px; height: 20px;" checked>
-                <label for="activateQR" style="margin-left: 5px; font-size: 14px;" id="activateQRlabel">Set QR Color</label>
-                <input type="radio" id="activateBG" name="activation" style="margin-left: 20px; width: 20px; height: 20px;">
-                <label for="activateBG" style="margin-left: 5px; font-size: 14px;" id="activateBGlabel">Set Background Color</label>
-            </div>
-
-            <div class="d-flex align-items-center mb-3">
-                <input type="text" id="qrColor" class="form-control custom-input" style="width: 50%; margin-right: 10px;" value="#000000"/>
-                <input type="text" id="bgColor" class="form-control custom-input" style="width: 50%; margin-left: 10px;" value="#ffffff" disabled/>
-            </div>
-
-            <!-- Elements row -->
-            <div class="col-md-6 mb-3 d-flex justify-content-center" style="margin-top: 20px;">
-                <div style="margin-right: 5px;">
-                    <label for="qrWidth" id="widthLabel" style="font-size: 14px;">Width:</label>
-                    <div class="input-group">
-                        <input type="number" id="qrWidth" class="form-control" style="width: 50%;" value="150" />
-                        <span class="input-group-text">px</span>
-                    </div>
+    <div class="container">
+        <form class="form" id="SubmitForm">
+            <div class="row">
+                <div class="col-md-6 mb-3 d-flex justify-content-center align-items-center">
+                    <div id="qrColorContainer"></div>
                 </div>
-                <div style="margin-left: 5px;">
-                    <label for="qrHeight" id="heightLabel" style="font-size: 14px;">Height:</label>
-                    <div class="input-group">
-                        <input type="number" id="qrHeight" class="form-control" style="width: 50%;" value="150" />
-                        <span class="input-group-text">px</span>
+
+                <div class="col-md-6 mb-3 d-flex flex-column align-items-center">
+
+                    <div class="d-flex align-items-center mb-3" style="margin-top: 20px;">
+                        <input type="radio" id="activateQR" name="activation" style="width: 20px; height: 20px;"
+                            checked>
+                        <label for="activateQR" style="margin-left: 5px; font-size: 14px;" id="activateQRlabel">Set QR
+                            Color</label>
+                        <input type="radio" id="activateBG" name="activation"
+                            style="margin-left: 20px; width: 20px; height: 20px;">
+                        <label for="activateBG" style="margin-left: 5px; font-size: 14px;" id="activateBGlabel">Set
+                            Background Color</label>
                     </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <input type="text" id="qrColor" class="form-control custom-input"
+                            style="width: 50%; margin-right: 10px;" value="#000000" />
+                        <input type="text" id="bgColor" class="form-control custom-input"
+                            style="width: 50%; margin-left: 10px;" value="#ffffff" disabled />
+                    </div>
+
+                    <!-- Elements row -->
+                    <div class="col-md-6 mb-3 d-flex justify-content-center" style="margin-top: 20px;">
+                        <div style="margin-right: 5px;">
+                            <label for="qrWidth" id="widthLabel" style="font-size: 14px;">Width:</label>
+                            <div class="input-group">
+                                <input type="number" id="qrWidth" class="form-control" style="width: 50%;"
+                                    value="150" />
+                                <span class="input-group-text">px</span>
+                            </div>
+                        </div>
+                        <div style="margin-left: 5px;">
+                            <label for="qrHeight" id="heightLabel" style="font-size: 14px;">Height:</label>
+                            <div class="input-group">
+                                <input type="number" id="qrHeight" class="form-control" style="width: 50%;"
+                                    value="150" />
+                                <span class="input-group-text">px</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="error-msg" style="color: red; font-size: 15px;"></span>
+
                 </div>
             </div>
-            <span id="error-msg" style="color: red; font-size: 15px;"></span>      
 
-        </div>
+            <div class="col-md-12 mb-3 d-flex justify-content-center">
+                <button class="btn btn-lg btn-primary btn-block" id="submitButton" type="submit">Insert QR</button>
+            </div>
+        </form>
     </div>
 
-    <div class="col-md-12 mb-3 d-flex justify-content-center">
-        <button class="btn btn-lg btn-primary btn-block" id="submitButton" type="submit">Insert QR</button>
-    </div>
-  </form>
-
-  <!-- JavaScript moved to the end -->
-  <script src="scripts/settings.js"></script>
+    <script src="scripts/settings.js"></script>
 </body>
+
 </html>

@@ -10,5 +10,6 @@
 "Insert QR": "QRの挿入",
 "The plugin is not supported in the Internet Explorer": "このプラグインはInternet Explorerには対応していません",    
 "The selected text сannot be used": "選択されたテキストは使用できません",
-"The colors must be different": "色は異なる必要があります"
+"The colors must be different": "色は異なる必要があります",
+"Insert QR: info": "QRの挿入: 情報 "
 }
