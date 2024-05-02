@@ -16,7 +16,7 @@
  *
  */
 
-const version = '1.0.7';                                             // version of store (will change it when update something in store)
+const version = '1.0.8';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 let isPluginLoading = false;                                         // flag plugins loading
@@ -1628,6 +1628,8 @@ function installPluginManually() {
 		if (result) {
 			// нужно обновить список установленных плагинов
 			sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+		} else {
+			createError(new Error('Problem with plugin installation.'), false);
 		}
 	});
 };
