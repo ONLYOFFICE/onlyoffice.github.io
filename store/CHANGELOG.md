@@ -44,3 +44,7 @@
 ## 1.0.7
 
 * Add new language for translations.
+
+## 1.0.8
+
+* Add logs and notification if we have problem with manually plugins intalling.
