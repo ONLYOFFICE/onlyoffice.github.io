@@ -40,3 +40,7 @@
 * Change parsing rating page (fix problem with console errors into the desktop).
 * Fix problem with translations.
 * Add parsing changlog files. Now the last version should be on the top (it works only with ONLYOFFICE CHANGELOG files format).
+
+## 1.0.7
+
+* Add new language for translations.
