@@ -422,7 +422,7 @@ function fetchAllPlugins(bFirstRender, bshowMarketplace) {
 				getAllPluginsData(bFirstRender, bshowMarketplace);
 		},
 		function(err) {
-			createError( new Error( getTranslated( 'Problem with loading markeplace config.' ) ) );
+			createError( new Error('Problem with loading markeplace config.') );
 			isPluginLoading = false;
 			showMarketplace();
 		}
@@ -673,7 +673,7 @@ function getDiscussion(config) {
 			if (!discussionCount)
 				showRating();
 		}, function(err) {
-			createError('Problem with loading rating', true);
+			createError( new Error('Problem with loading rating'), true);
 			discussionCount--;
 			if (!discussionCount)
 				showRating();
@@ -1253,7 +1253,8 @@ function createError(err, bDontShow) {
 	background.className = 'asc-plugin-loader';
 	let span = document.createElement('span');
 	span.className = 'error_caption';
-	span.innerHTML = err.message || getTranslated('Problem with loading some resources');
+	let message = err.message || 'Problem with loading some resources';
+	span.innerHTML = getTranslated(message);
 	background.appendChild(span);
 	divErr.appendChild(background);
 	divErr.classList.remove('hidden');
@@ -1375,7 +1376,7 @@ function getTranslation() {
 							onTranslate();
 						},
 						function(err) {
-							createError( new Error( getTranslated( 'Cannot load translation for current language.' ) ) );
+							createError( new Error('Cannot load translation for current language.') );
 							isTranslationLoading = false;
 							showMarketplace();
 						}
@@ -1386,7 +1387,7 @@ function getTranslation() {
 				}	
 			},
 			function(err) {
-				createError( new Error( getTranslated( 'Cannot load translations list file.' ) ) );
+				createError( new Error('Cannot load translations list file.') );
 				isTranslationLoading = false;
 				showMarketplace();
 			}
