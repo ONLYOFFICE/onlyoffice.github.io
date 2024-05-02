@@ -23,3 +23,7 @@
 ## 1.0.4
 
 * Change developer window (add warnign - bug 66451).
+
+## 1.0.5
+
+* Fix problem into desktop with deletting manually installed plugins.

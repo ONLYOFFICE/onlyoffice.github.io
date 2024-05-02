@@ -13,7 +13,7 @@
         "pt-BR": "Gerenciador de plug-ins"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "group" : {
         "name" : "Plugin Manager",
         "rank" : 1
