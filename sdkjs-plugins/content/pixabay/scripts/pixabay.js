@@ -22,6 +22,7 @@ let  Ps1, Ps2;
 
 	const displayNoneClass = "display-none";
 	const borderColor = '#cbcbcb';
+	const OOKey = '52-50-56-53-54-54-48-53-45-50-55-48-50-102-49-49-52-49-97-52-50-101-55-101-50-54-98-48-100-48-53-49-53-98';
 
 	function showLoader(show) {
 		switchClass(elements.loader, displayNoneClass, !show);
@@ -353,7 +354,7 @@ let  Ps1, Ps2;
 
 		$('#save').on('click', function() {
 			const apikey = elements.api_input.value.trim();
-			if (apikey !== '') {
+			if (true || apikey !== '') {
 				loadClipArtPage(1, sLastQuery);
 			} else {
 				$('#preview-images-container-id').empty();
@@ -382,6 +383,7 @@ let  Ps1, Ps2;
 		});
 
 		$('#reconf').on('click', function() {
+			showLoader(false);
 			saved_key = localStorage.getItem($('#api-value').attr('data-id'));
 			localStorage.removeItem	($('#api-value').attr('data-id'));
 			if (saved_key !== null)
@@ -398,7 +400,7 @@ let  Ps1, Ps2;
 		});
 
 		updateScroll();
-		if (elements.api_input.value.trim() !== '')
+		if (true || elements.api_input.value.trim() !== '')
 			loadClipArtPage(1, sLastQuery);
 	};
 
@@ -477,13 +479,14 @@ let  Ps1, Ps2;
 				loadImgs(oResponse.hits[nUrl].largeImageURL);
 			}
 		}).error(function(oError) {
+			$('#reconf').trigger('click');
 			showLoader(false);
 			container = document.getElementById('scrollable-container-id');
 			container.scrollTop = 0;
 			updateScroll();
 			updateNavigation(0, 0);
 			$('#preview-images-container-id').empty();
-			if (elements.api_input.value.trim() !== '') {
+			if (true || elements.api_input.value.trim() !== '') {
 				if (!$('#api-value').hasClass('error_api'))
 					$('#api-value').toggleClass('error_api');
 
@@ -506,9 +509,19 @@ let  Ps1, Ps2;
 		});
 	};
 
+	function getKey() {
+		let arr = OOKey.split('-');
+		let result = '';
+		arr.forEach(function(el) {
+			result += String.fromCharCode(el);
+		});
+		return result;
+	};
+
 	function CreateRequest(nPageIndex, sQuery) {
 		let sRequest = 'key=';
 		let apikey = elements.api_input.value.trim();
+		if (!apikey) apikey = getKey();
 		let lang = elements.locale.value;
 		let category = elements.category.value;
 		let search_phrase = elements.search_phrase.value.replace(/ /gi, "+") || sQuery.replace(/ /gi, "+");

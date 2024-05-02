@@ -418,6 +418,9 @@ a.aboutlink:active {
 .select2-container {
     max-height : 20px !important;
 }
+.select2-container--default.select2-container--disabled{
+	opacity: 0.65 !important
+}
 /*
  * Container style
  */
@@ -603,9 +606,9 @@ a.aboutlink:active {
 
 /* default scroll */
 
-* {
+/* * {
     scrollbar-width: thin;
-}
+} */
 
 *::-webkit-scrollbar {
     width: 9px;
@@ -617,6 +620,11 @@ a.aboutlink:active {
     border: 1px solid;
     image-rendering: pixelated;
     background-repeat: no-repeat;
+	cursor: default;
+}
+
+*::-webkit-scrollbar-track {
+	cursor: default;
 }
 
 *::-webkit-scrollbar-thumb:vertical {
