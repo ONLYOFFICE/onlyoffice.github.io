@@ -60,5 +60,6 @@
 	"Network problem." : "Проблема з мережею.",
 	"Problem with loading some resources" : "Проблема із завантаженням деяких ресурсів",
 	"Click to rate" : "Натисніть, щоб оцінити",
-	"No disscussion page for this plugin." : "Для цього плагіна немає сторінки обговорення."
+	"No disscussion page for this plugin." : "Для цього плагіна немає сторінки обговорення.",
+	"Problem with plugin installation." : "Проблема з установкою плагіна."
 }
