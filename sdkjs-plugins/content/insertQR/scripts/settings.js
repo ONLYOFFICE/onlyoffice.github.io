@@ -89,6 +89,8 @@
 
   // Initialize color picker
   let colorpicker = initializeColorPicker();
+  colorpicker.colorpicker('disable') // Disable the colorpicker to prevent unexpected behavior
+
 
 
   // Retrieve values from localStorage and set default values
@@ -238,6 +240,7 @@
   $('#activateQR').change(function () {
     $('#bgColor').prop('disabled', true);
     $('#qrColor').prop('disabled', false);
+    colorpicker.colorpicker('enable')
     selectedInput = 'qrColor';
     // Reinitialize color picker
     colorpicker = initializeColorPicker();
@@ -249,6 +252,7 @@
   $('#activateBG').change(function () {
     $('#qrColor').prop('disabled', true);
     $('#bgColor').prop('disabled', false);
+    colorpicker.colorpicker('enable')
     selectedInput = 'bgColor';
     // Reinitialize color picker
     colorpicker = initializeColorPicker();
@@ -291,6 +295,27 @@
     // Attach event listener for input events
     $(this).on('input', delayedValidation);
   });
+
+  $('#qrColorContainer').on('mouseleave', function () {
+    // Your code to trigger when the mouse leaves $('#qrColorContainer') goes here
+    // For example:
+    console.log("Mouse left the #qrColorContainer");
+    colorpicker.colorpicker('disable')
+    // Or you can call a specific function:
+    // yourFunction();
+  });
+
+  // Enable the colorpicker when the #qrColorContainer' is clciked
+  $('#qrColorContainer').on('click', function () {
+    colorpicker.colorpicker('enable')
+  });
+
+  // Enable the colorpicker when the '#qrColor, #bgColor' are clciked
+  $('#qrColor, #bgColor').on('click', function () {
+    colorpicker.colorpicker('enable')
+
+  });
+
 
   // Function to handle window resize event
   function handleResize() {
