@@ -4,17 +4,41 @@ The Insert QR plugin allows users to effortlessly insert a QR code generated fro
 
 The plugin uses:
 
-[Bootstrap Colorpicker](https://github.com/itsjavi/bootstrap-colorpicker) by [Javi Aguilar](https://github.com/itsjavi).
-[QRCode.js](https://github.com/davidshimjs/qrcodejs) by [Sangmin, Shim](https://github.com/davidshimjs)
+- [Bootstrap Colorpicker](https://github.com/itsjavi/bootstrap-colorpicker) by [Javi Aguilar](https://github.com/itsjavi).
+- [QRCode.js](https://github.com/davidshimjs/qrcodejs) by [Sangmin, Shim](https://github.com/davidshimjs)
 
+## Installation
 
-1. Install the plugin.
-2. Activate the Insert QR plugin in the plugin tab.
-3. Right-click on the selected text.
-4. Click the "Set QR Color" radiobutton and select the color in the color picker.
-5. Click the "Set Background Color" radiobutton and select the color in the color picker.
-6. Set QR width and height if necessary.
-7. Click the "Insert QR" button.
+1. Install the Insert QR Plugin from the plugin marketplace.
 
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+## Usage
 
+1. Activate the Insert QR Plugin:
+   - Go to the plugin tab.
+   - Activate the Insert QR Plugin.
+
+2. Select Text:
+   - Right-click on the text where you want to insert the QR code.
+
+3. Set QR Color:
+   - Click the "Set QR Color" radio button to choose the color of the QR code.
+   - Click on the color picker to activate it and select the desired color.
+   - Alternatively, input a custom hexadecimal color code into the text box below the "Set QR Color" option.
+
+4. Set Background Color:
+   - Click the "Set Background Color" radio button to choose the background color of the QR code.
+   - Click on the color picker to activate it and select the desired background color.
+   - Alternatively, input a custom hexadecimal color code into the text box below the "Set Background Color" option.
+
+5. Set QR Width and Height:
+   - Optionally, adjust the width and height of the QR code if necessary.
+
+6. Insert QR:
+   - Click the "Insert QR" button to generate and insert the QR code into the selected text.
+
+## Note for Spreadsheet Editor
+QR code generation is restricted to:
+- Links.
+- Single phrases without capital letters and symbols present in formulas.
+
+If you need more information about how to use or write your own plugin, please see this [link](https://api.onlyoffice.com/plugin/basic).
