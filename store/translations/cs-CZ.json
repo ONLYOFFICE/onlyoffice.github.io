@@ -59,5 +59,6 @@
 	"Network problem." : "Problém se sítí.",
 	"Problem with loading some resources" : "Problém s načítáním některých zdrojů",
 	"Click to rate" : "Klikněte pro ohodnocení",
-	"No disscussion page for this plugin." : "Žádná diskusní stránka pro tento plugin."
+	"No disscussion page for this plugin." : "Žádná diskusní stránka pro tento plugin.",
+	"Problem with plugin installation." : "Problém s instalací pluginu."
 }
