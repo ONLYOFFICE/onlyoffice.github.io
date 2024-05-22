@@ -59,5 +59,6 @@
 	"Network problem." : "Netzwerkprobleme.",
 	"Problem with loading some resources" : "Problem beim Laden einiger Ressourcen",
 	"Click to rate" : "Klicken Sie, um zu bewerten",
-	"No disscussion page for this plugin." : "Keine Diskussionsseite für dieses Plugin."
+	"No disscussion page for this plugin." : "Keine Diskussionsseite für dieses Plugin.",
+	"Problem with plugin installation." : "Problem mit der Plugin-Installation."
 }
