@@ -23,7 +23,7 @@
 	let loaderTimeout = null;
 
 	// create iframe
-	const iframe = document.createElement("iframe");
+	const iframe = document.createElement('iframe');
 
 	let warningWindow = null;
 	let developerWindow = null;
@@ -53,7 +53,7 @@
 	};
 
 	function postMessage(message) {
-		iframe.contentWindow.postMessage(JSON.stringify(message), "*");
+		iframe.contentWindow.postMessage(JSON.stringify(message), '*');
 	};
 
 	function initPlugin() {
@@ -62,7 +62,7 @@
 			document.getElementById('notification').classList.remove('hidden');
 
 		// send message that plugin is ready
-		window.Asc.plugin.executeMethod("GetVersion", null, function(version) {
+		window.Asc.plugin.executeMethod('GetVersion', null, function(version) {
 			editorVersion = version;
 			BPluginReady = true;
 			if (BFrameReady)
@@ -88,7 +88,7 @@
 	};
 
 	window.Asc.plugin.button = function(id, windowID) {
-		if (warningWindow && windowID) {
+		if (warningWindow && warningWindow.id == windowID) {
 			switch (id) {
 				case 0:
 					removePlugin(false);
@@ -101,7 +101,7 @@
 					break;
 			}
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
-		} else if (developerWindow && windowID) {
+		} else if (developerWindow && developerWindow.id == windowID) {
 			if (id == 0)
 				developerWindow.command('onClickBtn');
 			else
@@ -117,7 +117,7 @@
 		}
 	};
 
-	window.addEventListener("message", function(message) {
+	window.addEventListener('message', function(message) {
 		// getting messages from marketplace
 		let data = JSON.parse(message.data);
 			
@@ -126,12 +126,12 @@
 				// данное сообщение используется только при инициализации плагина и по умолчанию идёт парсинг и отрисовка плагинов из стора
 				// добавлен флаг updateInstalled - в этом случае не загружаем плагины из стора повторно, работаем только с установленными
 				
-				window.Asc.plugin.executeMethod("GetInstalledPlugins", null, function(result) {
+				window.Asc.plugin.executeMethod('GetInstalledPlugins', null, function(result) {
 					postMessage({ type: 'InstalledPlugins', data: result, updateInstalled: data.updateInstalled } );
 				});
 				break;
 			case 'install':
-				window.Asc.plugin.executeMethod("InstallPlugin", [data.config, data.guid], function(result) {
+				window.Asc.plugin.executeMethod('InstallPlugin', [data.config, data.guid], function(result) {
 					postMessage(result);
 				});
 				break;
@@ -142,10 +142,10 @@
 				else if ( !data.backup )
 					removePlugin(data.backup);
 				else
-					createWindow();
+					createWindow('warning');
 				break;
 			case 'update':
-				window.Asc.plugin.executeMethod("UpdatePlugin", [data.config, data.guid], function(result) {
+				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config, data.guid], function(result) {
 					postMessage(result);
 				});
 				break;
@@ -231,7 +231,7 @@
 	};
 
 	function createWindow(type) {
-		let fileName = 'warning.html';
+		let fileName = type + '.html';
 		let description = window.Asc.plugin.tr('Warning');
 		let size = [350, 100];
 		let buttons = [
@@ -259,7 +259,7 @@
 				}
 			];
 		}
-		let location  = window.location;
+		let location = window.location;
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 		
@@ -282,7 +282,7 @@
 		} else {
 			if (!developerWindow) {
 				developerWindow = new window.Asc.PluginWindow();
-				developerWindow.attachEvent("onWindowMessage", function(message) {
+				developerWindow.attachEvent('onWindowMessage', function(message) {
 					if (message.type == 'SetURL') {
 						if (message.url.length) {
 							marketplaceURl = message.url;
@@ -322,7 +322,7 @@
 	};
 
 	function createLoader() {
-		$('#loader-container').removeClass( "hidden" );
+		$('#loader-container').removeClass( 'hidden' );
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = showLoader($('#loader-container')[0], window.Asc.plugin.tr('Checking internet connection...'));
 	};
@@ -330,7 +330,7 @@
 	function destroyLoader() {
 		clearTimeout(loaderTimeout);
 		loaderTimeout = null;
-		$('#loader-container').addClass( "hidden" )
+		$('#loader-container').addClass( 'hidden' )
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;
 	};
