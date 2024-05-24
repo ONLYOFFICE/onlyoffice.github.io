@@ -6,5 +6,8 @@
 	"Run" : "运行",
 	"Cancel" : "取消",
 	"Macros" : "宏",
-	"Title" : "名称不得为空"
+	"Title" : "名称不得为空",
+	"Copy": "副本",
+	"Make autostart": "自动启动",
+	"Unmake autostart": "取消自动启动"
 }

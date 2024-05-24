@@ -6,5 +6,8 @@
 	"Run": "Spustit",
 	"Cancel" : "Storno",
 	"Macros" : "Makra",
-	"Title" : "Jméno nesmí být prázdné"
+	"Title" : "Jméno nesmí být prázdné",
+	"Copy": "Kopie",
+	"Make autostart": "Udělat autostart",
+	"Unmake autostart": "Zrušit automatické spuštění"
 }
