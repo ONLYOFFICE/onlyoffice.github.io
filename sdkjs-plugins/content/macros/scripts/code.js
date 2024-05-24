@@ -147,7 +147,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		{
 			var cl = (i == Content.current) ? "macrosSelected" : "macros";
 			var name = $('<div/>').text(Content.macrosArray[i].name).html();
-			var item = "<div class=\"draggable " + cl + "\" id=\"macros" + i + "\" onclick=\"window.onItemClick(" + i + ", true);\" draggable=\"true\">" + name;
+			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"macros" + i + "\" onclick=\"window.onItemClick(" + i + ", true);\" draggable=\"true\">" + name;
 			if (true === Content.macrosArray[i].autostart) {
 				let prop = "";
 				if (navigator.userAgent.indexOf('Macintosh') != -1) {
@@ -185,7 +185,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		{
 			var cl = (i == CustomFunctions.current) ? "functionSelected" : "function";
 			var name = $('<div/>').text(CustomFunctions.macrosArray[i].name).html();
-			var item = "<div class=\"draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
+			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
 			item += "</div>";
 			menuContent += item;
 
