@@ -44,11 +44,11 @@
         left: 0;
         right: 0;
     }
-	#menu {
+	/* #menu {
 		margin: 0;
         position: absolute;
-        top: 0;
-        bottom: 42px;
+        bottom: 0;
+        top: 42px;
         left: 0;
         right: 70%;
 		background-color: #F1F1F1;
@@ -59,12 +59,38 @@
 		border-right-width: 1px; 
 
 		padding-right: 10px;
+	} */
+	.menu_padding {
+		position: relative;
+		padding-right: 10px;
+	}
+	.common_menu {
+		margin: 0;
+        position: absolute;
+        bottom: 0;
+        top: 42px;
+        left: 0;
+        right: 70%;
+		background-color: #F1F1F1;
+		overflow: hidden;
+
+		border-right-color: #CBCBCB;
+		border-right-style: solid; 
+		border-right-width: 1px; 
+	}
+
+	.menu_header {
+		height: 26px;
+		padding: 16px 11px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 	#editorWrapper {
 		margin: 0;
         position: absolute;
-        top: 0;
-        bottom: 42px;
+        bottom: 0;
+        top: 42px;
         left: 30%;
         right: 0;
 	}
@@ -125,7 +151,21 @@
 		padding-right: 10px;
 		padding-top: 4px;
 		user-select: none;
-		margin: 5px 0px 5px 5px;
+		margin: 2px 0px 2px 5px;
+	}
+
+	.functionSelected {
+		position: relative;
+		background-color: #7D858C;
+		color: #FFFFFF;
+		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+		font-size: 13px;
+		padding-bottom: 3px;
+		padding-left: 20px;
+		padding-right: 10px;
+		padding-top: 4px;
+		user-select: none;
+		margin: 2px 0px 2px 5px;
 	}
 	
 	.macros {
@@ -139,25 +179,59 @@
 		padding-right: 10px;
 		padding-top: 4px;
 		user-select: none;
-		margin: 5px 0px 5px 5px;
+		margin: 2px 0px 2px 5px;
+		overflow-wrap: break-word;
 	}
 	.macros:hover {
 		background-color: #D8DADC;
 	}
 
-	.divFooter {
+	.function {
+		position: relative;
+		background-color: #F1F1F1;
+		color: #000000;
+		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+		font-size: 13px;
+		padding-bottom: 3px;
+		padding-left: 20px;
+		padding-right: 10px;
+		padding-top: 4px;
+		user-select: none;
+		margin: 2px 0px 4px 5px;
+		overflow-wrap: break-word;
+	}
+	.function:hover {
+		background-color: #D8DADC;
+	}
+
+	.divHeader {
 		position: absolute; 
 		margin: 0px; 
 		padding: 0px; 
 		width: 100%; 
 		height: 42px; 
 		left: 0px; 
-		bottom: 0px; 
+		top: 0px; 
+		box-sizing: border-box;
+		border-bottom-color: #CBCBCB;
+		border-bottom-style: solid; 
+		border-bottom-width: 1px; 
+		user-select:none;
+	}
+
+	.divFooter {
+		position: absolute;
+		margin: 0px;
+		padding: 0px;
+		width: 100%;
+		height: 42px;
+		left: 0px;
+		bottom: 0px;
 		box-sizing: border-box;
 		border-top-color: #CBCBCB;
-		border-top-style: solid; 
-		border-top-width: 1px; 
-		user-select:none;
+		border-top-style: solid;
+		border-top-width: 1px;
+		user-select: none;
 	}
 
 	.divRename {
@@ -177,6 +251,7 @@
 	.textSelect::selection {
 		background: #D8DADC; /* WebKit/Blink Browsers */
 	}
+
 	.textSelect::-moz-selection {
   		background: #D8DADC; /* Gecko Browsers */
 	}
@@ -207,24 +282,64 @@
 		height: 16px;
 		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACvSURBVDhPrZNRDoIwEER7COA6HgJPpAnHM4oXQdFE/VDfNrsfpQvGhkneT2dmky40rK77pq6ggx4eyhF2UGnMF4EWBvjMcIFW46nEgLcGl5BMOoSDGmR6EjZNz0GyjdbjALlfFjR5HnRajwNkSVnI5HnQaz0OkE1nIZPnwVPrxQNGrc9f4Qcnra+zxAbKP6OIg/IfyYSxhasGPcTzyyYC9pjO8IIbHGAPy4/pf4XwBSVejZ5wzd0zAAAAAElFTkSuQmCC);
 	}
+	.dragged {
+		opacity: 0.6;
+	}
 
+	.ace_active-line {
+		background: transparent !important;
+		border-bottom: 2px solid #eee;
+		border-top: 2px solid #eee;
+	}
+	#menu_content_macros {
+		height: calc(100% - 57px);;
+		max-height: calc(100% - 57px);
+	}
+	.menu_macros_short {
+		max-height: 50%;
+		height: 50%;
+	}
+	.menu_macros_long {
+		max-height: 100%;
+		height: 100%;
+	}
+	#menu_content_functions {
+		height: calc(100% - 62px);;
+		max-height: calc(100% - 62px);
+	}
+	#menu_functions{
+		max-height: calc(50% - 10px);
+		height: calc(50% - 10px);
+	}
   </style>
 </head>
 <body>
 
-	<div id="menu">
-		<div id="menu_content" style="position:absolute;left:0px;top:0px;width:100%;height:100%;margin:0;padding:0;border:none;"></div>
+	<div class="common_menu">
+		<div id="menu_macros" class="menu_macros_long">
+			<div class="menu_header">
+				<label class="i18n header">Macros</label>
+				<button id="create_macros" class="btn-text-default" style="border: none !important;">+</button>
+			</div>
+			<div id="menu_content_macros" class="menu_padding"></div>
+		</div>
+		<hr id="hr_separator" style="display: none;">
+		<div id="menu_functions" style="display: none;">
+			<div class="menu_header">
+				<label class="i18n header">Custom Functions</label>
+				<button id="create_functions" class="btn-text-default" style="border: none !important;">+</button>
+			</div>
+			<div id="menu_content_functions" class="menu_padding"></div>
+		</div>
 	</div>
+	
 	
 	<div id="editorWrapper">
-	
-	<pre id="editor"></pre>
-	
+		<pre id="editor"></pre>
 	</div>
 	
-	<div class="divFooter">
+	<div class="divHeader">
 		<div style="position:absolute;margin:0;padding:0;left:10px;top:10px;right: 10px;bottom: 10px;" id="menu_footer">
-			<button class="btn-text-default" style="left: 0px; top: 0px; position:relative; bottom: 0px;" id="button_new">New</button>
 			<button class="btn-text-default" style="left: 10px; top: 0px; position:relative; bottom: 0px;" id="button_delete">Delete</button>
 			<button class="btn-text-default" style="left: 20px; top: 0px; position:relative; bottom: 0px;" id="button_rename">Rename</button>
 			<button class="btn-text-default" style="left: 30px; top: 0px; position:relative; bottom: 0px; display:none" id="button_autostart">Autostart</button>
@@ -232,7 +347,7 @@
 		<button class="btn-text-default primary" style="right: 10px; top: 10px; position:absolute; bottom: 10px;" id="button_run">Run</button>
 	</div>
 
-	<div class="divRenameMask" id="idRenameMask" style="display: none">		
+	<div class="divRenameMask" id="idRenameMask" style="display: none">	
 	</div>
 	<div class="divRename" id="idRename" style="display: none">
 		<input type="text" class="form-control textSelect" style="top:18px;margin: 0px;width:260px;left:20px;position:absolute;" id="rename_text"/>
@@ -249,6 +364,14 @@
 	<!-- code -->
 	<script src="scripts/code.js"></script>
 
-	<div id="context-menu-id" class="context-menu"><ul class="context-menu-options"><li id="menu_autostart_id" class="context-menu-option" onclick="window.CustomContextMenu.onAutostartClick();">Make autostart</li></ul></div>
+	<div id="context-menu-id" class="context-menu">
+		<ul class="context-menu-options">
+			<li id="menu_run_id" class="context-menu-option" onclick="window.CustomContextMenu.onRunClick();">Run</li>
+			<li id="menu_autostart_id" class="context-menu-option" onclick="window.CustomContextMenu.onAutostartClick();">Make autostart</li>
+			<li id="menu_rename_id" class="context-menu-option" onclick="window.CustomContextMenu.onRenameClick();">Rename</li>
+			<li id="menu_delete_id" class="context-menu-option" onclick="window.CustomContextMenu.onDeleteClick();">Delete</li>
+			<li id="menu_copy_id" class="context-menu-option" onclick="window.CustomContextMenu.onCopyClick();">Copy</li>
+		</ul>
+	</div>
 </body>
 </html>

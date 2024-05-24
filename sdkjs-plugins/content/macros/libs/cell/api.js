@@ -75,96 +75,11 @@ ApiRun.prototype = Object.create(ApiTextPr.prototype);
 ApiRun.prototype.constructor = ApiRun;
 
 /**
- * Class representing a comment reply.
- * @constructor
- */
-function ApiCommentReply(oParentComm, oCommentReply){}
-
-/**
  * Class representing a Paragraph hyperlink.
  * @constructor
  */
 function ApiHyperlink(ParaHyperlink){}
 ApiHyperlink.prototype.constructor = ApiHyperlink;
-
-/**
- * Class representing a document form base.
- * @constructor
- * @property {string} key - Form key.
- * @property {string} tip - Form tip text.
- * @property {boolean} required - Specifies if the form is required or not.
- * @property {string} placeholder - Form placeholder text.
- */
-function ApiFormBase(oSdt){}
-
-/**
- * Class representing a document text form.
- * @constructor
- * @property {boolean} comb - Specifies if the text form should be a comb of characters with the same cell width. The maximum number of characters must be set to a positive value.
- * @property {number} maxCharacters - The maximum number of characters in the text form.
- * @property {number} cellWidth - The cell width for each character measured in millimeters. If this parameter is not specified or equal to 0 or less, then the width will be set automatically.
- * @property {boolean} multiLine - Specifies if the current fixed size text form is multiline or not.
- * @property {boolean} autoFit - Specifies if the text form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
- * @extends {ApiFormBase}
- */
-function ApiTextForm(oSdt){}
-ApiTextForm.prototype = Object.create(ApiFormBase.prototype);
-ApiTextForm.prototype.constructor = ApiTextForm;
-
-/**
- * Class representing a document combo box form.
- * @constructor
- * @property {boolean} editable - Specifies if the combo box text can be edited.
- * @property {boolean} autoFit - Specifies if the combo box form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
- * @property {Array.<string | Array.<string>>} items - The combo box items.
-     * This array consists of strings or arrays of two strings where the first string is the displayed value and the second one is its meaning.
-     * If the array consists of single strings, then the displayed value and its meaning are the same.
-     * Example: ["First", ["Second", "2"], ["Third", "3"], "Fourth"].
- * @extends {ApiFormBase}
- */
-function ApiComboBoxForm(oSdt){}
-ApiComboBoxForm.prototype = Object.create(ApiFormBase.prototype);
-ApiComboBoxForm.prototype.constructor = ApiComboBoxForm;
-
-/**
- * Class representing a document checkbox form.
- * @constructor
- * @property {boolean} radio - Specifies if the current checkbox is a radio button. In this case, the key parameter is considered as an identifier for the group of radio buttons.
- * @extends {ApiFormBase}
- */
-function ApiCheckBoxForm(oSdt){}
-ApiCheckBoxForm.prototype = Object.create(ApiFormBase.prototype);
-ApiCheckBoxForm.prototype.constructor = ApiCheckBoxForm;
-
-/**
- * Class representing a document picture form.
- * @constructor
- * @property {ScaleFlag} scaleFlag - The condition to scale an image in the picture form: "always", "never", "tooBig" or "tooSmall".
- * @property {boolean} lockAspectRatio - Specifies if the aspect ratio of the picture form is locked or not.
- * @property {boolean} respectBorders - Specifies if the form border width is respected or not when scaling the image.
- * @property {percentage} shiftX - Horizontal picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on the left;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the right.
- * @property {percentage} shiftY - Vertical picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on top;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the bottom.
- * @extends {ApiFormBase}
- */
-function ApiPictureForm(oSdt){}
-ApiPictureForm.prototype = Object.create(ApiFormBase.prototype);
-ApiPictureForm.prototype.constructor = ApiPictureForm;
-
-/**
- * Class representing a complex form.
- * @param oSdt
- * @constructor
- * @extends {ApiFormBase}
- */
-function ApiComplexForm(oSdt){}
-ApiComplexForm.prototype = Object.create(ApiFormBase.prototype);
-ApiComplexForm.prototype.constructor = ApiComplexForm;
 
 /**
  * Class representing a style.
@@ -270,10 +185,28 @@ function ApiGradientStop(oApiUniColor, pos){}
 function ApiInlineLvlSdt(Sdt){}
 
 /**
+ * Class representing a list of values of the combo box / dropdown list content control.
+ * @constructor
+ */
+function ApiContentControlList(Parent){}
+
+/**
+ * Class representing an entry of the combo box / dropdown list content control.
+ * @constructor
+ */
+function ApiContentControlListEntry(Sdt, Parent, Text, Value){}
+
+/**
  * Class representing a container for the document content.
  * @constructor
  */
 function ApiBlockLvlSdt(Sdt){}
+
+/**
+ * Class representing the settings which are used to create a watermark.
+ * @constructor
+ */
+function ApiWatermarkSettings(oSettings){}
 
 /**
  * Twentieths of a point (equivalent to 1/1440th of an inch).
@@ -685,6 +618,16 @@ function ApiBlockLvlSdt(Sdt){}
  * */
 
 /**
+ * The watermark type.
+ * @typedef {("none" | "text" | "image")} WatermarkType
+ */
+
+/**
+ * The watermark direction.
+ * @typedef {("horizontal" | "clockwise45" | "counterclockwise45")} WatermarkDirection
+ */
+
+/**
  * Creates a new paragraph.
  * @memberof ApiInterface
  * @typeofeditors ["CDE", "CSE"]
@@ -890,6 +833,77 @@ ApiDocumentContent.prototype.RemoveElement = function(nPos){};
  * @memberof ApiDocument
  */
 ApiDocument.prototype.CreateNewHistoryPoint = function(){};
+
+/**
+ * Record of one comment.
+ * @typedef {Object} CommentReportRecord
+ * @property {boolean} [IsAnswer=false] - Specifies whether this is an initial comment or a reply to another comment.
+ * @property {string} CommentMessage - The text of the current comment.
+ * @property {number} Date - The time when this change was made in local time.
+ * @property {number} DateUTC - The time when this change was made in UTC.
+ * @property {string} [QuoteText=undefined] - The text to which this comment is related.
+ */
+
+/**
+ * Report on all comments.
+ * This is a dictionary where the keys are usernames.
+ * @typedef {Object.<string, Array.<CommentReportRecord>>} CommentReport
+ * @example
+ *  {
+ *    "John Smith" : [{IsAnswer: false, CommentMessage: 'Good text', Date: 1688588002698, DateUTC: 1688570002698, QuoteText: 'Some text'},
+ *      {IsAnswer: true, CommentMessage: "I don't think so", Date: 1688588012661, DateUTC: 1688570012661}],
+ *
+ *    "Mark Pottato" : [{IsAnswer: false, CommentMessage: 'Need to change this part', Date: 1688587967245, DateUTC: 1688569967245, QuoteText: 'The quick brown fox jumps over the lazy dog'},
+ *      {IsAnswer: false, CommentMessage: 'We need to add a link', Date: 1688587967245, DateUTC: 1688569967245, QuoteText: 'OnlyOffice'}]
+ *  }
+ */
+
+/**
+ * Review record type.
+ * @typedef {("TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown")} ReviewReportRecordType
+ */
+
+/**
+ * Record of one review change.
+ * @typedef {Object} ReviewReportRecord
+ * @property {ReviewReportRecordType} Type - Review record type.
+ * @property {string} [Value=undefined] - Review change value that is set for the "TextAdd" and "TextRem" types only.
+ * @property {number} Date - The time when this change was made.
+ */
+
+/**
+ * Report on all review changes.
+ * This is a dictionary where the keys are usernames.
+ * @typedef {Object.<string, Array.<ReviewReportRecord>>} ReviewReport
+ * @example
+ * {
+ *   "John Smith" : [{Type: 'TextRem', Value: 'Hello, Mark!', Date: 1679941734161},
+ *                 {Type: 'TextAdd', Value: 'Dear Mr. Pottato.', Date: 1679941736189}],
+ *   "Mark Pottato" : [{Type: 'ParaRem', Date: 1679941755942},
+ *                   {Type: 'TextPr', Date: 1679941757832}]
+ * }
+ */
+
+/**
+ * The specific form type.
+ * @typedef {("text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio")} FormSpecificType
+ */
+
+/**
+ * Form data.
+ * @typedef {Object} FormData
+ * @property {string} key - The form key. If the current form is a radio button, then this field contains the group key.
+ * @property {string | boolean} value - The current field value.
+ * @property {string} tag - The form tag.
+ * @property {FormSpecificType} type - The form type.
+ * @example
+ * {
+ *   "key" : "CompanyName",
+ *   "tag" : "companyName",
+ *   "value" : "ONLYOFFICE",
+ *   "type" : "text"
+ * }
+ */
 
 /**
  * Returns a type of the ApiParagraph class.
@@ -1656,6 +1670,22 @@ ApiInterface.prototype.ReplaceTextSmart = function(arrString, sParaTab, sParaNew
 ApiInterface.prototype.CreateTextPr = function () { return new ApiTextPr(); };
 
 /**
+ * Returns the full name of the currently opened file.
+ * @memberof ApiInterface
+ * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @returns {string}
+ */
+ApiInterface.prototype.GetFullName = function () { return ""; };
+
+/**
+ * Returns the full name of the currently opened file.
+ * @memberof ApiInterface
+ * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @returns {string}
+ */
+ApiInterface.prototype.FullName = ApiInterface.prototype.GetFullName ();
+
+/**
  * Gets a document color object by color name.
  * @param {highlightColor} - available highlight color
  * @returns {object}
@@ -2084,8 +2114,8 @@ ApiTableCell.prototype.SetVerticalAlign = function(sType){};
 /**
  * The callback function which is called when the specified range of the current sheet changes.
  * <note>Please note that the event is not called for the undo/redo operations.</note>
-* @event Api#onWorksheetChange
-* @param {ApiRange} range - The modified range represented as the ApiRange object.
+ * @event Api#onWorksheetChange
+ * @param {ApiRange} range - The modified range represented as the ApiRange object.
  */
 
 /**
@@ -2109,7 +2139,8 @@ ApiTableCell.prototype.SetVerticalAlign = function(sType){};
  * @property {boolean} PrintHeadings - Returns or sets the page PrintHeadings property.
  * @property {boolean} PrintGridlines - Returns or sets the page PrintGridlines property.
  * @property {Array} Defnames - Returns an array of the ApiName objects.
- * @property {Array} Comments - Returns an array of the ApiComment objects.
+ * @property {Array} Comments - Returns all comments from the current worksheet.
+ * @property {ApiFreezePanes} FreezePanes - Returns the freeze panes for the current worksheet.
  */
 function ApiWorksheet(worksheet) {}
 
@@ -2150,6 +2181,7 @@ function ApiWorksheet(worksheet) {}
  * @property {ApiComment | null} Comments - Returns the ApiComment collection that represents all the comments from the specified worksheet.
  * @property {'xlDownward' | 'xlHorizontal' | 'xlUpward' | 'xlVertical'} Orientation - Sets an angle to the current cell range.
  * @property {ApiAreas} Areas - Returns a collection of the areas.
+ * @property {ApiCharacters} Characters - Returns the ApiCharacters object that represents a range of characters within the object text. Use the ApiCharacters object to format characters within a text string.
  */
 function ApiRange(range, areas) {}
 
@@ -2157,13 +2189,13 @@ function ApiRange(range, areas) {}
  * Class representing a graphical object.
  * @constructor
  */
-function ApiDrawing(Drawing){}
+function ApiDrawing(Drawing) {}
 
 /**
  * Class representing a shape.
  * @constructor
  */
-function ApiShape(oShape){}
+function ApiShape(oShape) {}
 ApiShape.prototype = Object.create(ApiDrawing.prototype);
 ApiShape.prototype.constructor = ApiShape;
 
@@ -2171,7 +2203,7 @@ ApiShape.prototype.constructor = ApiShape;
  * Class representing an image.
  * @constructor
  */
-function ApiImage(oImage){}
+function ApiImage(oImage) {}
 ApiImage.prototype = Object.create(ApiDrawing.prototype);
 ApiImage.prototype.constructor = ApiImage;
 
@@ -2179,7 +2211,7 @@ ApiImage.prototype.constructor = ApiImage;
  * Class representing a chart.
  * @constructor
  */
-function ApiChart(oChart){}
+function ApiChart(oChart) {}
 ApiChart.prototype = Object.create(ApiDrawing.prototype);
 ApiChart.prototype.constructor = ApiChart;
 
@@ -2187,7 +2219,7 @@ ApiChart.prototype.constructor = ApiChart;
  * Class representing an OLE object.
  * @constructor
  */
-function ApiOleObject(OleObject){}
+function ApiOleObject(OleObject) {}
 ApiOleObject.prototype = Object.create(ApiDrawing.prototype);
 ApiOleObject.prototype.constructor = ApiOleObject;
 
@@ -2282,9 +2314,28 @@ function ApiName(DefName) {}
 /**
  * Class representing a comment.
  * @constructor
- * @property {string} Text - Returns the text from the first cell in range.
+ * @property {string} Text - Returns or sets the comment text.
+ * @property {string} Id - Returns the current comment ID.
+ * @property {string} AuthorName - Returns or sets the comment author's name.
+ * @property {string} UserId - Returns or sets the user ID of the comment author.
+ * @property {boolean} Solved - Checks if a comment is solved or not or marks a comment as solved.
+ * @property {number | string} TimeUTC - Returns or sets the timestamp of the comment creation in UTC format.
+ * @property {number | string} Time - Returns or sets the timestamp of the comment creation in the current time zone format.
+ * @property {string} QuoteText - Returns the quote text of the current comment.
+ * @property {Number} RepliesCount - Returns a number of the comment replies.
  */
 function ApiComment(comment, wb) {}
+
+/**
+ * Class representing a comment reply.
+ * @constructor
+ * @property {string} Text - Returns or sets the comment reply text.
+ * @property {string} AuthorName - Returns or sets the comment reply author's name.
+ * @property {string} UserId - Returns or sets the user ID of the comment reply author.
+ * @property {number | string} TimeUTC - Returns or sets the timestamp of the comment reply creation in UTC format.
+ * @property {number | string} Time - Returns or sets the timestamp of the comment reply creation in the current time zone format.
+ */
+function ApiCommentReply(oParentComm, oCommentReply) {}
 
 /**
  * Class representing the areas.
@@ -2293,6 +2344,39 @@ function ApiComment(comment, wb) {}
  * @property {ApiRange} Parent - Returns the parent object for the specified collection.
  */
 function ApiAreas(items, parent) {}
+
+/**
+ * Class representing characters in an object that contains text.
+ * @constructor
+ * @property {number} Count - The number of characters in the collection.
+ * @property {ApiRange} Parent - The parent object of the specified characters.
+ * @property {string} Caption - The text of the specified range of characters.
+ * @property {string} Text - The string value representing the text of the specified range of characters.
+ * @property {ApiFont} Font - The font of the specified characters.
+ */
+function ApiCharacters(options, parent) {}
+
+/**
+ * Class that contains the font attributes (font name, font size, color, and so on).
+ * @constructor
+ * @property {ApiCharacters} Parent - The parent object of the specified font object.
+ * @property {boolean | null} Bold - The font bold property.
+ * @property {boolean | null} Italic - The font italic property.
+ * @property {number | null} Size - The font size property.
+ * @property {boolean | null} Strikethrough - The font strikethrough property.
+ * @property {string | null} Underline - The font type of underline.
+ * @property {boolean | null} Subscript - The font subscript property.
+ * @property {boolean | null} Superscript - The font superscript property.
+ * @property {string | null} Name - The font name.
+ * @property {ApiColor | null} Color - The font color property.
+ */
+function ApiFont(object) {}
+
+/**
+ * Class representing freeze panes.
+ * @constructor
+ */
+function ApiFreezePanes(ws) {}
 
 /**
  * Returns a class formatted according to the instructions contained in the format expression.
@@ -2333,7 +2417,7 @@ ApiInterface.prototype.Sheets = ApiInterface.prototype.GetSheets ();
  * @typeofeditors ["CSE"]
  * @param {number} LCID - The locale specified.
  */
-ApiInterface.prototype.SetLocale = function(LCID) {};
+ApiInterface.prototype.SetLocale = function (LCID) {};
 
 /**
  * Returns the current locale ID.
@@ -2341,7 +2425,7 @@ ApiInterface.prototype.SetLocale = function(LCID) {};
  * @typeofeditors ["CSE"]
  * @returns {number}
  */
-ApiInterface.prototype.GetLocale = function() { return 0; };
+ApiInterface.prototype.GetLocale = function () { return 0; };
 
 /**
  * Returns an object that represents the active sheet.
@@ -2390,7 +2474,7 @@ ApiInterface.prototype.SetThemeColors = function (sTheme) { return true; };
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
  */
-ApiInterface.prototype.CreateNewHistoryPoint = function(){};
+ApiInterface.prototype.CreateNewHistoryPoint = function () {};
 
 /**
  * Creates an RGB color setting the appropriate values for the red, green and blue color components.
@@ -2418,9 +2502,9 @@ ApiInterface.prototype.CreateColorByName = function (sPresetColor) { return new 
  * @typeofeditors ["CSE"]
  * @param {ApiRange} Range1 - One of the intersecting ranges. At least two Range objects must be specified.
  * @param {ApiRange} Range2 - One of the intersecting ranges. At least two Range objects must be specified.
- * @returns {ApiRange | Error}
+ * @returns {ApiRange | null}
  */
-ApiInterface.prototype.Intersect  = function (Range1, Range2) { return new ApiRange(); };
+ApiInterface.prototype.Intersect = function (Range1, Range2) { return new ApiRange(); };
 
 /**
  * Returns an object that represents the selected range.
@@ -2443,12 +2527,12 @@ ApiInterface.prototype.Selection = ApiInterface.prototype.GetSelection ();
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
  * @param {string} sName - The range name.
- * @param {string} sRef - The reference to the specified range. It must contain the sheet name, followed by sign ! and a range of cells. 
- * Example: "Sheet1!$A$1:$B$2".  
+ * @param {string} sRef - The reference to the specified range. It must contain the sheet name, followed by sign ! and a range of cells.
+ * Example: "Sheet1!$A$1:$B$2".
  * @param {boolean} isHidden - Defines if the range name is hidden or not.
- * @returns {Error | true} - returns error if sName or sRef are invalid.
+ * @returns {boolean} - returns false if sName or sRef are invalid.
  */
-ApiInterface.prototype.AddDefName = function (sName, sRef, isHidden) { return undefined; };
+ApiInterface.prototype.AddDefName = function (sName, sRef, isHidden) { return true; };
 
 /**
  * Returns the ApiName object by the range name.
@@ -2473,21 +2557,7 @@ ApiInterface.prototype.Save = function () {};
  * @param {string} sRange - The range of cells from the current sheet.
  * @returns {ApiRange}
  */
-ApiInterface.prototype.GetRange = function(sRange) { return new ApiRange(); };
-
-/**
- * Returns an object that represents the range of the specified sheet using the maximum and minimum row/column coordinates.
- * @memberof ApiInterface
- * @typeofeditors ["CSE"]
- * @param {ApiWorksheet} ws - The sheet where the specified range is represented.
- * @param {number} r1 - The minimum row number of the specified range.
- * @param {number} c1 - The minimum column number of the specified range.
- * @param {number} r2 - The maximum row number of the specified range.
- * @param {number} c2 - The maximum column number of the specified range.
- * @param {ApiAreas} areas - A collection of the ranges from the specified range.
- * @returns {ApiRange}
- */
-ApiInterface.prototype.GetRangeByNumber = function(ws, r1, c1, r2, c2, areas) { return new ApiRange(); };
+ApiInterface.prototype.GetRange = function (sRange) { return new ApiRange(); };
 
 /**
  * Returns the mail merge data.
@@ -2495,9 +2565,9 @@ ApiInterface.prototype.GetRangeByNumber = function(ws, r1, c1, r2, c2, areas) { 
  * @typeofeditors ["CSE"]
  * @param {number} nSheet - The sheet index.
  * @param {boolean} [bWithFormat=false] - Specifies that the data will be received with the format.
- * @returns {string[][]} 
+ * @returns {string[][]}
  */
-ApiInterface.prototype.GetMailMergeData = function(nSheet, bWithFormat) { return [""]; };
+ApiInterface.prototype.GetMailMergeData = function (nSheet, bWithFormat) { return [""]; };
 
 /**
  * Recalculates all formulas in the active workbook.
@@ -2506,10 +2576,11 @@ ApiInterface.prototype.GetMailMergeData = function(nSheet, bWithFormat) { return
  * @param {Function} fLogger - A function which specifies the logger object for checking recalculation of formulas.
  * @returns {boolean}
  */
-ApiInterface.prototype.RecalculateAllFormulas = function(fLogger) { return true; };
+ApiInterface.prototype.RecalculateAllFormulas = function (fLogger) { return true; };
 
 /**
  * Subscribes to the specified event and calls the callback function when the event fires.
+ * @function
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
  * @param {string} eventName - The event name.
@@ -2520,6 +2591,7 @@ ApiInterface.prototype["attachEvent"] = ApiInterface.prototype.attachEvent;{};
 
 /**
  * Unsubscribes from the specified event.
+ * @function
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
  * @param {string} eventName - The event name.
@@ -2531,17 +2603,85 @@ ApiInterface.prototype["detachEvent"] = ApiInterface.prototype.detachEvent;{};
  * Returns an array of ApiComment objects.
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
+ * @param {string} sText - The comment text.
+ * @param {string} sAuthor - The author's name (optional).
+ * @returns {ApiComment | null}
+ * @since 7.5.0
+ */
+ApiInterface.prototype.AddComment = function (sText, sAuthor) { return new ApiComment(); };
+
+/**
+ * Returns a comment from the current document by its ID.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @param {string} sId - The comment ID.
+ * @returns {ApiComment}
+ */
+ApiInterface.prototype.GetCommentById = function (sId) { return new ApiComment(); };
+
+/**
+ * Returns all comments related to the whole workbook.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
  * @returns {ApiComment[]}
  */
 ApiInterface.prototype.GetComments = function () { return [new ApiComment()]; };
 
 /**
- * Returns an array of ApiComment objects.
+ * Returns all comments related to the whole workbook.
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
  * @returns {ApiComment[]}
  */
 ApiInterface.prototype.Comments = ApiInterface.prototype.GetComments ();
+
+/**
+ * Returns all comments from the current workbook including comments from all worksheets.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @returns {ApiComment[]}
+ */
+ApiInterface.prototype.GetAllComments = function () { return [new ApiComment()]; };
+
+/**
+ * Returns all comments from the current workbook including comments from all worksheets.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @returns {ApiComment[]}
+ */
+ApiInterface.prototype.AllComments = ApiInterface.prototype.GetAllComments ();
+
+/**
+ * Specifies a type of freeze panes.
+ * @typedef {("row" | "column" | "cell" | null )} FreezePaneType
+ */
+
+/**
+ * Sets a type to the freeze panes.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @param {FreezePaneType} FreezePaneType - The freeze panes type ("null" to unfreeze).
+ * @since 8.0.0
+ */
+ApiInterface.prototype.SetFreezePanesType = function (FreezePaneType) {};
+
+/**
+ * Returns the freeze panes type.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @returns {FreezePaneType} FreezePaneType - The freeze panes type ("null" if there are no freeze panes).
+ * @since 8.0.0
+ */
+ApiInterface.prototype.GetFreezePanesType = function () { return new FreezePaneType(); };
+
+/**
+ * Returns the freeze panes type.
+ * @memberof ApiInterface
+ * @typeofeditors ["CSE"]
+ * @returns {FreezePaneType} FreezePaneType - The freeze panes type ("null" if there are no freeze panes).
+ * @since 8.0.0
+ */
+ApiInterface.prototype.FreezePanes = ApiInterface.prototype.GetFreezePanesType ();
 
 /**
  * Returns the state of sheet visibility.
@@ -2619,7 +2759,7 @@ ApiWorksheet.prototype.Selection = ApiWorksheet.prototype.GetSelection ();
  * @typeofeditors ["CSE"]
  * @param {number} row - The row number or the cell number (if only row is defined).
  * @param {number} col - The column number.
- * @returns {ApiRange}
+ * @returns {ApiRange | null}
  */
 ApiWorksheet.prototype.GetCells = function (row, col) { return new ApiRange(); };
 
@@ -2629,7 +2769,7 @@ ApiWorksheet.prototype.GetCells = function (row, col) { return new ApiRange(); }
  * @typeofeditors ["CSE"]
  * @param {number} row - The row number or the cell number (if only row is defined).
  * @param {number} col - The column number.
- * @returns {ApiRange}
+ * @returns {ApiRange | null}
  */
 ApiWorksheet.prototype.Cells = ApiWorksheet.prototype.GetCells ();
 
@@ -2638,7 +2778,7 @@ ApiWorksheet.prototype.Cells = ApiWorksheet.prototype.GetCells ();
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @param {string | number} value - Specifies the rows range in the string or number format.
- * @returns {ApiRange | Error}
+ * @returns {ApiRange | null}
  */
 ApiWorksheet.prototype.GetRows = function (value) { return new ApiRange(); };
 
@@ -2748,17 +2888,18 @@ ApiWorksheet.prototype.FormatAsTable = function (sRange) {};
 
 /**
  * Sets the width of the specified column.
- * One unit of column width is equal to the width of one character in the Normal style. 
+ * One unit of column width is equal to the width of one character in the Normal style.
  * For proportional fonts, the width of the character 0 (zero) is used.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @param {number} nColumn - The number of the column to set the width to.
  * @param {number} nWidth - The width of the column divided by 7 pixels.
+ * @param {boolean} [bWithotPaddings=false] - Specifies whether nWidth will be set without standard paddings.
  */
-ApiWorksheet.prototype.SetColumnWidth = function (nColumn, nWidth) {};
+ApiWorksheet.prototype.SetColumnWidth = function (nColumn, nWidth, bWithotPaddings) {};
 
 /**
- * Sets the height of the specified row measured in points. 
+ * Sets the height of the specified row measured in points.
  * A point is 1/72 inch.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
@@ -2893,7 +3034,7 @@ ApiWorksheet.prototype.SetPageOrientation = function (sPageOrientation) {};
  * @typeofeditors ["CSE"]
  * @returns {PageOrientation}
  * */
-ApiWorksheet.prototype.GetPageOrientation = function (){ return new PageOrientation(); };
+ApiWorksheet.prototype.GetPageOrientation = function () { return new PageOrientation(); };
 
 /**
  * Returns the page orientation.
@@ -2909,7 +3050,7 @@ ApiWorksheet.prototype.PageOrientation = ApiWorksheet.prototype.GetPageOrientati
  * @typeofeditors ["CSE"]
  * @returns {boolean} - Specifies whether the current sheet row/column headings must be printed or not.
  * */
-ApiWorksheet.prototype.GetPrintHeadings = function (){ return true; };
+ApiWorksheet.prototype.GetPrintHeadings = function () { return true; };
 
 /**
  * Specifies whether the current sheet row/column headers must be printed or not.
@@ -2917,7 +3058,7 @@ ApiWorksheet.prototype.GetPrintHeadings = function (){ return true; };
  * @typeofeditors ["CSE"]
  * @param {boolean} bPrint - Specifies whether the current sheet row/column headers must be printed or not.
  * */
-ApiWorksheet.prototype.SetPrintHeadings = function (bPrint){};
+ApiWorksheet.prototype.SetPrintHeadings = function (bPrint) {};
 
 /**
  * Specifies whether the current sheet row/column headers must be printed or not.
@@ -2933,7 +3074,7 @@ ApiWorksheet.prototype.PrintHeadings = ApiWorksheet.prototype.SetPrintHeadings (
  * @typeofeditors ["CSE"]
  * @returns {boolean} - True if cell gridlines are printed on this page.
  * */
-ApiWorksheet.prototype.GetPrintGridlines = function (){ return true; };
+ApiWorksheet.prototype.GetPrintGridlines = function () { return true; };
 
 /**
  * Specifies whether the current sheet gridlines must be printed or not.
@@ -2941,7 +3082,7 @@ ApiWorksheet.prototype.GetPrintGridlines = function (){ return true; };
  * @typeofeditors ["CSE"]
  * @param {boolean} bPrint - Defines if cell gridlines are printed on this page or not.
  * */
-ApiWorksheet.prototype.SetPrintGridlines = function (bPrint){};
+ApiWorksheet.prototype.SetPrintGridlines = function (bPrint) {};
 
 /**
  * Specifies whether the current sheet gridlines must be printed or not.
@@ -2973,27 +3114,27 @@ ApiWorksheet.prototype.GetDefName = function (defName) { return new ApiName(); }
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @param {string} sName - The range name.
- * @param {string} sRef  - Must contain the sheet name, followed by sign ! and a range of cells. 
- * Example: "Sheet1!$A$1:$B$2".  
+ * @param {string} sRef  - Must contain the sheet name, followed by sign ! and a range of cells.
+ * Example: "Sheet1!$A$1:$B$2".
  * @param {boolean} isHidden - Defines if the range name is hidden or not.
- * @returns {Error | true} - returns error if sName or sRef are invalid.
+ * @returns {boolean} - returns false if sName or sRef are invalid.
  */
-ApiWorksheet.prototype.AddDefName = function (sName, sRef, isHidden) { return undefined; };
+ApiWorksheet.prototype.AddDefName = function (sName, sRef, isHidden) { return true; };
 
 /**
  * Adds a new name to the current worksheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @param {string} sName - The range name.
- * @param {string} sRef  - Must contain the sheet name, followed by sign ! and a range of cells. 
- * Example: "Sheet1!$A$1:$B$2".  
+ * @param {string} sRef  - Must contain the sheet name, followed by sign ! and a range of cells.
+ * Example: "Sheet1!$A$1:$B$2".
  * @param {boolean} isHidden - Defines if the range name is hidden or not.
- * @returns {Error | true} - returns error if sName or sRef are invalid.
+ * @returns {boolean} - returns false if sName or sRef are invalid.
  */
 ApiWorksheet.prototype.DefNames = ApiWorksheet.prototype.AddDefName ();
 
 /**
- * Returns an array of ApiComment objects.
+ * Returns all comments from the current worksheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiComment[]}
@@ -3001,7 +3142,7 @@ ApiWorksheet.prototype.DefNames = ApiWorksheet.prototype.AddDefName ();
 ApiWorksheet.prototype.GetComments = function () { return [new ApiComment()]; };
 
 /**
- * Returns an array of ApiComment objects.
+ * Returns all comments from the current worksheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiComment[]}
@@ -3045,7 +3186,7 @@ ApiWorksheet.prototype.SetHyperlink = function (sRange, sAddress, subAddress, sS
  * @param {EMU} nRowOffset - The offset from the nFromRow row to the upper part of the chart measured in English measure units.
  * @returns {ApiChart}
  */
-ApiWorksheet.prototype.AddChart = function (sDataRange, bInRows, sType, nStyleIndex, nExtX, nExtY, nFromCol, nColOffset,  nFromRow, nRowOffset) { return new ApiChart(); };
+ApiWorksheet.prototype.AddChart = function (sDataRange, bInRows, sType, nStyleIndex, nExtX, nExtY, nFromCol, nColOffset, nFromRow, nRowOffset) { return new ApiChart(); };
 
 /**
  * Adds a shape to the current sheet with the parameters specified.
@@ -3065,7 +3206,7 @@ ApiWorksheet.prototype.AddChart = function (sDataRange, bInRows, sType, nStyleIn
  * @param {EMU} nRowOffset - The offset from the nFromRow row to the upper part of the shape measured in English measure units.
  * @returns {ApiShape}
  * */
-ApiWorksheet.prototype.AddShape = function(sType, nWidth, nHeight, oFill, oStroke, nFromCol, nColOffset, nFromRow, nRowOffset){ return new ApiShape(); };
+ApiWorksheet.prototype.AddShape = function (sType, nWidth, nHeight, oFill, oStroke, nFromCol, nColOffset, nFromRow, nRowOffset) { return new ApiShape(); };
 
 /**
  * Adds an image to the current sheet with the parameters specified.
@@ -3080,7 +3221,7 @@ ApiWorksheet.prototype.AddShape = function(sType, nWidth, nHeight, oFill, oStrok
  * @param {EMU} nRowOffset - The offset from the nFromRow row to the upper part of the image measured in English measure units.
  * @returns {ApiImage}
  */
-ApiWorksheet.prototype.AddImage = function(sImageSrc, nWidth, nHeight, nFromCol, nColOffset, nFromRow, nRowOffset){ return new ApiImage(); };
+ApiWorksheet.prototype.AddImage = function (sImageSrc, nWidth, nHeight, nFromCol, nColOffset, nFromRow, nRowOffset) { return new ApiImage(); };
 
 /**
  * Adds a Text Art object to the current sheet with the parameters specified.
@@ -3100,7 +3241,7 @@ ApiWorksheet.prototype.AddImage = function(sImageSrc, nWidth, nHeight, nFromCol,
  * @param {EMU} [nRowOffset=0] - The offset from the nFromRow row to the upper part of the Text Art object measured in English measure units.
  * @returns {ApiDrawing}
  */
-ApiWorksheet.prototype.AddWordArt = function(oTextPr, sText, sTransform, oFill, oStroke, nRotAngle, nWidth, nHeight, nFromCol, nFromRow, nColOffset, nRowOffset) { return new ApiDrawing(); };
+ApiWorksheet.prototype.AddWordArt = function (oTextPr, sText, sTransform, oFill, oStroke, nRotAngle, nWidth, nHeight, nFromCol, nFromRow, nColOffset, nRowOffset) { return new ApiDrawing(); };
 
 /**
  * Adds an OLE object to the current sheet with the parameters specified.
@@ -3117,7 +3258,7 @@ ApiWorksheet.prototype.AddWordArt = function(oTextPr, sText, sTransform, oFill, 
  * @param {EMU} nRowOffset - The offset from the nFromRow row to the upper part of the OLE object measured in English measure units.
  * @returns {ApiOleObject}
  */
-ApiWorksheet.prototype.AddOleObject = function(sImageSrc, nWidth, nHeight, sData, sAppId, nFromCol, nColOffset, nFromRow, nRowOffset){ return new ApiOleObject(); };
+ApiWorksheet.prototype.AddOleObject = function (sImageSrc, nWidth, nHeight, sData, sAppId, nFromCol, nColOffset, nFromRow, nRowOffset) { return new ApiOleObject(); };
 
 /**
  * Replaces the current image with a new one.
@@ -3127,47 +3268,74 @@ ApiWorksheet.prototype.AddOleObject = function(sImageSrc, nWidth, nHeight, sData
  * @param {EMU} nWidth - The image width in English measure units.
  * @param {EMU} nHeight - The image height in English measure units.
  */
-ApiWorksheet.prototype.ReplaceCurrentImage = function(sImageUrl, nWidth, nHeight){};
+ApiWorksheet.prototype.ReplaceCurrentImage = function (sImageUrl, nWidth, nHeight) {};
 
 /**
  * Returns all drawings from the current sheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiDrawing[]}.
-*/
-ApiWorksheet.prototype.GetAllDrawings = function(){ return [new ApiDrawing()]; };
+ */
+ApiWorksheet.prototype.GetAllDrawings = function () { return [new ApiDrawing()]; };
 
 /**
  * Returns all images from the current sheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiImage[]}.
-*/
-ApiWorksheet.prototype.GetAllImages = function(){ return [new ApiImage()]; };
+ */
+ApiWorksheet.prototype.GetAllImages = function () { return [new ApiImage()]; };
 
 /**
  * Returns all shapes from the current sheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiShape[]}.
-*/
-ApiWorksheet.prototype.GetAllShapes = function(){ return [new ApiShape()]; };
+ */
+ApiWorksheet.prototype.GetAllShapes = function () { return [new ApiShape()]; };
 
 /**
  * Returns all charts from the current sheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiChart[]}.
-*/
-ApiWorksheet.prototype.GetAllCharts = function(){ return [new ApiChart()]; };
+ */
+ApiWorksheet.prototype.GetAllCharts = function () { return [new ApiChart()]; };
 
 /**
  * Returns all OLE objects from the current sheet.
  * @memberof ApiWorksheet
  * @typeofeditors ["CSE"]
  * @returns {ApiOleObject[]}.
-*/
-ApiWorksheet.prototype.GetAllOleObjects = function(){ return [new ApiOleObject()]; };
+ */
+ApiWorksheet.prototype.GetAllOleObjects = function () { return [new ApiOleObject()]; };
+
+/**
+ * Moves the current sheet to another location in the workbook.
+ * @memberof ApiWorksheet
+ * @typeofeditors ["CSE"]
+ * @param {ApiWorksheet} before - The sheet before which the current sheet will be placed. You cannot specify "before" if you specify "after".
+ * @param {ApiWorksheet} after - The sheet after which the current sheet will be placed. You cannot specify "after" if you specify "before".
+ */
+ApiWorksheet.prototype.Move = function (before, after) {};
+
+/**
+ * Returns the freeze panes from the current worksheet.
+ * @memberof ApiWorksheet
+ * @typeofeditors ["CSE"]
+ * @returns {ApiFreezePanes}
+ * @since 8.0.0
+ */
+ApiWorksheet.prototype.GetFreezePanes = function () { return new ApiFreezePanes(); };
+
+/**
+ * Returns the freeze panes from the current worksheet.
+ * @memberof ApiWorksheet
+ * @typeofeditors ["CSE"]
+ * @returns {ApiFreezePanes}
+ * @since 8.0.0
+ */
+ApiWorksheet.prototype.FreezePanes = ApiWorksheet.prototype.GetFreezePanes ();
 
 /**
  * Specifies the cell border position.
@@ -3210,7 +3378,7 @@ ApiWorksheet.prototype.GetAllOleObjects = function(){ return [new ApiOleObject()
  * @typeofeditors ["CSE"]
  * @returns {"range"}
  */
-ApiRange.prototype.GetClassType = function(){ return ""; };
+ApiRange.prototype.GetClassType = function () { return ""; };
 
 /**
  * Returns a row number for the selected cell.
@@ -3256,7 +3424,7 @@ ApiRange.prototype.Clear = function () {};
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
  * @param {number} nRow - The row number (starts counting from 1, the 0 value returns an error).
- * @returns {ApiRange | Error}
+ * @returns {ApiRange | null}
  */
 ApiRange.prototype.GetRows = function (nRow) { return new ApiRange(); };
 
@@ -3265,7 +3433,7 @@ ApiRange.prototype.GetRows = function (nRow) { return new ApiRange(); };
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
  * @param {number} nRow - The row number (starts counting from 1, the 0 value returns an error).
- * @returns {ApiRange | Error}
+ * @returns {ApiRange | null}
  */
 ApiRange.prototype.Rows = ApiRange.prototype.GetRows ();
 
@@ -3273,8 +3441,8 @@ ApiRange.prototype.Rows = ApiRange.prototype.GetRows ();
  * Returns a Range object that represents the columns in the specified range.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
- * @param {number} nCol - The column number. * 
- * @returns {ApiRange | Error}
+ * @param {number} nCol - The column number. *
+ * @returns {ApiRange | null}
  */
 ApiRange.prototype.GetCols = function (nCol) { return new ApiRange(); };
 
@@ -3282,8 +3450,8 @@ ApiRange.prototype.GetCols = function (nCol) { return new ApiRange(); };
  * Returns a Range object that represents the columns in the specified range.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
- * @param {number} nCol - The column number. * 
- * @returns {ApiRange | Error}
+ * @param {number} nCol - The column number. *
+ * @returns {ApiRange | null}
  */
 ApiRange.prototype.Cols = ApiRange.prototype.GetCols ();
 
@@ -3334,7 +3502,7 @@ ApiRange.prototype.SetOffset = function (nRow, nCol) {};
  * @param {string} RefStyle - The reference style.
  * @param {boolean} External - Defines if the range is in the current file or not.
  * @param {range} RelativeTo - The range which the current range is relative to.
- * @returns {string | null} - returns address of range as string. 
+ * @returns {string | null} - returns address of range as string.
  */
 ApiRange.prototype.GetAddress = function (RowAbs, ColAbs, RefStyle, External, RelativeTo) { return ""; };
 
@@ -3347,7 +3515,7 @@ ApiRange.prototype.GetAddress = function (RowAbs, ColAbs, RefStyle, External, Re
  * @param {string} RefStyle - The reference style.
  * @param {boolean} External - Defines if the range is in the current file or not.
  * @param {range} RelativeTo - The range which the current range is relative to.
- * @returns {string | null} - returns address of range as string. 
+ * @returns {string | null} - returns address of range as string.
  */
 ApiRange.prototype.Address = ApiRange.prototype.GetAddress ();
 
@@ -3491,8 +3659,8 @@ ApiRange.prototype.GetColumnWidth = function () { return 0; };
 
 /**
  * Sets the width of all the columns in the current range.
- * One unit of column width is equal to the width of one character in the Normal style. 
- * For proportional fonts, the width of the character 0 (zero) is used. 
+ * One unit of column width is equal to the width of one character in the Normal style.
+ * For proportional fonts, the width of the character 0 (zero) is used.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
  * @param {number} nWidth - The width of the column divided by 7 pixels.
@@ -3501,8 +3669,8 @@ ApiRange.prototype.SetColumnWidth = function (nWidth) {};
 
 /**
  * Sets the width of all the columns in the current range.
- * One unit of column width is equal to the width of one character in the Normal style. 
- * For proportional fonts, the width of the character 0 (zero) is used. 
+ * One unit of column width is equal to the width of one character in the Normal style.
+ * For proportional fonts, the width of the character 0 (zero) is used.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
  * @param {number} nWidth - The width of the column divided by 7 pixels.
@@ -3518,18 +3686,18 @@ ApiRange.prototype.ColumnWidth = ApiRange.prototype.SetColumnWidth ();
 ApiRange.prototype.GetRowHeight = function () { return new pt(); };
 
 /**
-* Sets the row height value.
-* @memberof ApiRange
-* @typeofeditors ["CSE"]
-* @param {pt} nHeight - The row height in the current range measured in points.
+ * Sets the row height value.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {pt} nHeight - The row height in the current range measured in points.
  */
 ApiRange.prototype.SetRowHeight = function (nHeight) {};
 
 /**
-* Sets the row height value.
-* @memberof ApiRange
-* @typeofeditors ["CSE"]
-* @param {pt} nHeight - The row height in the current range measured in points.
+ * Sets the row height value.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {pt} nHeight - The row height in the current range measured in points.
  */
 ApiRange.prototype.RowHeight = ApiRange.prototype.SetRowHeight ();
 
@@ -3727,6 +3895,14 @@ ApiRange.prototype.GetFillColor = function () { return new ApiColor(); };
 ApiRange.prototype.FillColor = ApiRange.prototype.GetFillColor ();
 
 /**
+ * Returns a value that represents the format code for the current range.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @returns {string | null} This property returns null if all cells in the specified range don't have the same number format.
+ */
+ApiRange.prototype.GetNumberFormat = function () { return ""; };
+
+/**
  * Specifies whether a number in the cell should be treated like number, currency, date, time, etc. or just like text.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
@@ -3772,15 +3948,15 @@ ApiRange.prototype.UnMerge = function () {};
  * Returns one cell or cells from the merge area.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
- * @returns {ApiRange}
+ * @returns {ApiRange | null} - returns null if range isn't one cell
  */
-return new ApiRange((bb) ? AscCommonExcel.Range.prototype.createFromBBox(this.range.worksheet, bb) : this.range);{ return new ApiRange(); };
+result = new ApiRange((bb) ? AscCommonExcel.Range.prototype.createFromBBox(this.range.worksheet, bb) : this.range);{ return new ApiRange(); };
 
 /**
  * Returns one cell or cells from the merge area.
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
- * @returns {ApiRange}
+ * @returns {ApiRange | null} - returns null if range isn't one cell
  */
 ApiRange.prototype.MergeArea = new ApiRange();
 
@@ -3797,9 +3973,10 @@ ApiRange.prototype.ForEach = function (fCallback) {};
  * @memberof ApiRange
  * @typeofeditors ["CSE"]
  * @param {string} sText - The comment text.
- * @returns {boolean} - returns false if comment can't be added.
+ * @param {string} sAuthor - The author's name (optional).
+ * @returns {ApiComment | null} - returns false if comment can't be added.
  */
-ApiRange.prototype.AddComment = function (sText) { return true; };
+ApiRange.prototype.AddComment = function (sText, sAuthor) { return new ApiComment(); };
 
 /**
  * Returns the Worksheet object that represents the worksheet containing the specified range. It will be available in the read-only mode.
@@ -3862,7 +4039,7 @@ ApiRange.prototype.Select = function () {};
  * @typeofeditors ["CSE"]
  * @returns {Angle}
  */
-ApiRange.prototype.GetOrientation = function() { return new Angle(); };
+ApiRange.prototype.GetOrientation = function () { return new Angle(); };
 
 /**
  * Sets an angle to the current cell range.
@@ -3870,7 +4047,7 @@ ApiRange.prototype.GetOrientation = function() { return new Angle(); };
  * @typeofeditors ["CSE"]
  * @param {Angle} angle - Specifies the range angle.
  */
-ApiRange.prototype.SetOrientation = function(angle) {};
+ApiRange.prototype.SetOrientation = function (angle) {};
 
 /**
  * Sets an angle to the current cell range.
@@ -3916,7 +4093,7 @@ ApiRange.prototype.Sort = ApiRange.prototype.SetSort ();
  * @typeofeditors ["CSE"]
  * @param {?string} shift - Specifies how to shift cells to replace the deleted cells ("up", "left").
  */
-ApiRange.prototype.Delete = function(shift) {};
+ApiRange.prototype.Delete = function (shift) {};
 
 /**
  * Inserts a cell or a range of cells into the worksheet or macro sheet and shifts other cells away to make space.
@@ -3924,7 +4101,7 @@ ApiRange.prototype.Delete = function(shift) {};
  * @typeofeditors ["CSE"]
  * @param {?string} shift - Specifies which way to shift the cells ("right", "down").
  */
-ApiRange.prototype.Insert = function(shift) {};
+ApiRange.prototype.Insert = function (shift) {};
 
 /**
  * Changes the width of the columns or the height of the rows in the range to achieve the best fit.
@@ -3933,7 +4110,7 @@ ApiRange.prototype.Insert = function(shift) {};
  * @param {?bool} bRows - Specifies if the width of the columns will be autofit.
  * @param {?bool} bCols - Specifies if the height of the rows will be autofit.
  */
-ApiRange.prototype.AutoFit = function(bRows, bCols) {};
+ApiRange.prototype.AutoFit = function (bRows, bCols) {};
 
 /**
  * Returns a collection of the ranges.
@@ -3941,7 +4118,7 @@ ApiRange.prototype.AutoFit = function(bRows, bCols) {};
  * @typeofeditors ["CSE"]
  * @returns {ApiAreas}
  */
-ApiRange.prototype.GetAreas = function() { return new ApiAreas(); };
+ApiRange.prototype.GetAreas = function () { return new ApiAreas(); };
 
 /**
  * Returns a collection of the ranges.
@@ -3957,7 +4134,7 @@ ApiRange.prototype.Areas = ApiRange.prototype.GetAreas ();
  * @typeofeditors ["CSE"]
  * @param {ApiRange} destination - Specifies a new range to which the specified range will be copied.
  */
-ApiRange.prototype.Copy = function(destination) {};
+ApiRange.prototype.Copy = function (destination) {};
 
 /**
  * Pastes the Range object to the specified range.
@@ -3965,7 +4142,134 @@ ApiRange.prototype.Copy = function(destination) {};
  * @typeofeditors ["CSE"]
  * @param {ApiRange} rangeFrom - Specifies the range to be pasted to the current range
  */
-ApiRange.prototype.Paste = function(rangeFrom) {};
+ApiRange.prototype.Paste = function (rangeFrom) {};
+
+/**
+ * Search data type (formulas or values).
+ * @typedef {("xlFormulas" | "xlValues")} XlFindLookIn
+ */
+
+/**
+ * Specifies whether the whole search text or any part of the search text is matched.
+ * @typedef {("xlWhole" | "xlPart")} XlLookAt
+ */
+
+/**
+ * Range search order - by rows or by columns.
+ * @typedef {("xlByRows" | "xlByColumns")} XlSearchOrder
+ */
+
+/**
+ * Range search direction - next match or previous match.
+ * @typedef {("xlNext" | "xlPrevious")} XlSearchDirection
+ */
+
+/**
+ * Properties to make search.
+ * @typedef {Object} SearchData
+ * @property {string | undefined} What - The data to search for.
+ * @property {ApiRange} After - The cell after which you want the search to begin. If this argument is not specified, the search starts after the cell in the upper-left corner of the range.
+ * @property {XlFindLookIn} LookIn - Search data type (formulas or values).
+ * @property {XlLookAt} LookAt - Specifies whether the whole search text or any part of the search text is matched.
+ * @property {XlSearchOrder} SearchOrder - Range search order - by rows or by columns.
+ * @property {XlSearchDirection} SearchDirection - Range search direction - next match or previous match.
+ * @property {boolean} MatchCase - Case sensitive or not. The default value is "false".
+ */
+
+/**
+ * Properties to make search and replace.
+ * @typedef {Object} ReplaceData
+ * @property {string | undefined} What - The data to search for.
+ * @property {string} Replacement - The replacement string.
+ * @property {XlLookAt} LookAt - Specifies whether the whole search text or any part of the search text is matched.
+ * @property {XlSearchOrder} SearchOrder - Range search order - by rows or by columns.
+ * @property {XlSearchDirection} SearchDirection - Range search direction - next match or previous match.
+ * @property {boolean} MatchCase - Case sensitive or not. The default value is "false".
+ * @property {boolean} ReplaceAll - Specifies if all the found data will be replaced or not. The default value is "true".
+ */
+
+/**
+ * Finds specific information in the current range.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {SearchData} oSearchData - The search data used to make search.
+ * @returns {ApiRange | null} - Returns null if the current range does not contain such text.
+ * @also
+ * Finds specific information in the current range.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {string | undefined} What - The data to search for.
+ * @param {ApiRange} After - The cell after which you want the search to begin. If this argument is not specified, the search starts after the cell in the upper-left corner of the range.
+ * @param {XlFindLookIn} LookIn - Search data type (formulas or values).
+ * @param {XlLookAt} LookAt - Specifies whether the whole search text or any part of the search text is matched.
+ * @param {XlSearchOrder} SearchOrder - Range search order - by rows or by columns.
+ * @param {XlSearchDirection} SearchDirection - Range search direction - next match or previous match.
+ * @param {boolean} MatchCase - Case sensitive or not. The default value is "false".
+ * @returns {ApiRange | null} - Returns null if the current range does not contain such text.
+ */
+ApiRange.prototype.Find = function (oSearchData) { return new ApiRange(); };
+
+/**
+ * Continues a search that was begun with the {@link ApiRange#Find} method. Finds the next cell that matches those same conditions and returns the ApiRange object that represents that cell. This does not affect the selection or the active cell.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {ApiRange} After - The cell after which the search will start. If this argument is not specified, the search starts from the last cell found.
+ * @returns {ApiRange | null} - Returns null if the range does not contain such text.
+ *
+ */
+ApiRange.prototype.FindNext = function (After) { return new ApiRange(); };
+
+/**
+ * Continues a search that was begun with the {@link ApiRange#Find} method. Finds the previous cell that matches those same conditions and returns the ApiRange object that represents that cell. This does not affect the selection or the active cell.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {ApiRange} Before - The cell before which the search will start. If this argument is not specified, the search starts from the last cell found.
+ * @returns {ApiRange | null} - Returns null if the range does not contain such text.
+ *
+ */
+ApiRange.prototype.FindPrevious = function (Before) { return new ApiRange(); };
+
+/**
+ * Replaces specific information to another one in a range.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {ReplaceData} oReplaceData - The data used to make search and replace.
+ * @returns {ApiRange | null} - Returns null if the current range does not contain such text.
+ * @also
+ * Replaces specific information to another one in a range.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {string | undefined} What - The data to search for.
+ * @param {string} Replacement - The replacement string.
+ * @param {XlLookAt} LookAt - Specifies whether the whole search text or any part of the search text is matched.
+ * @param {XlSearchOrder} SearchOrder - Range search order - by rows or by columns.
+ * @param {XlSearchDirection} SearchDirection - Range search direction - next match or previous match.
+ * @param {boolean} MatchCase - Case sensitive or not. The default value is "false".
+ * @param {boolean} ReplaceAll - Specifies if all the found data will be replaced or not. The default value is "true".
+ */
+ApiRange.prototype.Replace = function (oReplaceData) { return new ApiRange(); };
+
+/**
+ * Returns the ApiCharacters object that represents a range of characters within the object text. Use the ApiCharacters object to format characters within a text string.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {number} Start - The first character to be returned. If this argument is either 1 or omitted, this property returns a range of characters starting with the first character.
+ * @param {number} Length - The number of characters to be returned. If this argument is omitted, this property returns the remainder of the string (everything after the Start character).
+ * @returns {ApiCharacters}
+ * @since 7.4.0
+ */
+ApiRange.prototype.GetCharacters = function (Start, Length) { return new ApiCharacters(); };
+
+/**
+ * Returns the ApiCharacters object that represents a range of characters within the object text. Use the ApiCharacters object to format characters within a text string.
+ * @memberof ApiRange
+ * @typeofeditors ["CSE"]
+ * @param {number} Start - The first character to be returned. If this argument is either 1 or omitted, this property returns a range of characters starting with the first character.
+ * @param {number} Length - The number of characters to be returned. If this argument is omitted, this property returns the remainder of the string (everything after the Start character).
+ * @returns {ApiCharacters}
+ * @since 7.4.0
+ */
+ApiRange.prototype.Characters = ApiRange.prototype.GetCharacters ();
 
 /**
  * Returns a type of the ApiDrawing class.
@@ -3973,7 +4277,7 @@ ApiRange.prototype.Paste = function(rangeFrom) {};
  * @typeofeditors ["CSE"]
  * @returns {"drawing"}
  */
-ApiDrawing.prototype.GetClassType = function(){ return ""; };
+ApiDrawing.prototype.GetClassType = function () { return ""; };
 
 /**
  * Sets a size of the object (image, shape, chart) bounding box.
@@ -3982,7 +4286,7 @@ ApiDrawing.prototype.GetClassType = function(){ return ""; };
  * @param {EMU} nWidth - The object width measured in English measure units.
  * @param {EMU} nHeight - The object height measured in English measure units.
  */
-ApiDrawing.prototype.SetSize = function(nWidth, nHeight){};
+ApiDrawing.prototype.SetSize = function (nWidth, nHeight) {};
 
 /**
  * Changes the position for the drawing object.
@@ -3994,8 +4298,8 @@ ApiDrawing.prototype.SetSize = function(nWidth, nHeight){};
  * @param {EMU} nColOffset - The offset from the nFromCol column to the left part of the drawing object measured in English measure units.
  * @param {number} nFromRow - The number of the row where the beginning of the drawing object will be placed.
  * @param {EMU} nRowOffset - The offset from the nFromRow row to the upper part of the drawing object measured in English measure units.
-* */
-ApiDrawing.prototype.SetPosition = function(nFromCol, nColOffset, nFromRow, nRowOffset){};
+ * */
+ApiDrawing.prototype.SetPosition = function (nFromCol, nColOffset, nFromRow, nRowOffset) {};
 
 /**
  * Returns the width of the current drawing.
@@ -4003,7 +4307,7 @@ ApiDrawing.prototype.SetPosition = function(nFromCol, nColOffset, nFromRow, nRow
  * @typeofeditors ["CDE", "CPE", "CSE"]
  * @returns {EMU}
  */
-ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
+ApiDrawing.prototype.GetWidth = function () { return new EMU(); };
 
 /**
  * Returns the height of the current drawing.
@@ -4011,7 +4315,26 @@ ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
  * @typeofeditors ["CDE", "CPE", "CSE"]
  * @returns {EMU}
  */
-ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
+ApiDrawing.prototype.GetHeight = function () { return new EMU(); };
+
+/**
+ * Returns the lock value for the specified lock type of the current drawing.
+ * @typeofeditors ["CSE"]
+ * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
+ * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
+ * @returns {bool}
+ */
+ApiDrawing.prototype.GetLockValue = function (sType) { return true; };
+
+/**
+ * Sets the lock value to the specified lock type of the current drawing.
+ * @typeofeditors ["CSE"]
+ * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
+ * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
+ * @param {bool} bValue - Specifies if the specified lock is applied to the current drawing.
+ * @returns {bool}
+ */
+ApiDrawing.prototype.SetLockValue = function (sType, bValue) { return true; };
 
 /**
  * Returns a type of the ApiImage class.
@@ -4019,7 +4342,7 @@ ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
  * @typeofeditors ["CDE", "CSE"]
  * @returns {"image"}
  */
-ApiImage.prototype.GetClassType = function(){ return ""; };
+ApiImage.prototype.GetClassType = function () { return ""; };
 
 /**
  * Returns a type of the ApiShape class.
@@ -4027,23 +4350,23 @@ ApiImage.prototype.GetClassType = function(){ return ""; };
  * @typeofeditors ["CSE"]
  * @returns {"shape"}
  */
-ApiShape.prototype.GetClassType = function(){ return ""; };
+ApiShape.prototype.GetClassType = function () { return ""; };
 
 /**
- * Returns the shape inner contents where a paragraph or text runs can be inserted. 
+ * Returns the shape inner contents where a paragraph or text runs can be inserted.
  * @memberof ApiShape
  * @typeofeditors ["CSE"]
  * @returns {ApiDocumentContent}
  */
-ApiShape.prototype.GetContent = function(){ return new ApiDocumentContent(); };
+ApiShape.prototype.GetContent = function () { return new ApiDocumentContent(); };
 
 /**
- * Returns the shape inner contents where a paragraph or text runs can be inserted. 
+ * Returns the shape inner contents where a paragraph or text runs can be inserted.
  * @memberof ApiShape
  * @typeofeditors ["CSE"]
  * @returns {ApiDocumentContent}
  */
-ApiShape.prototype.GetDocContent = function(){ return new ApiDocumentContent(); };
+ApiShape.prototype.GetDocContent = function () { return new ApiDocumentContent(); };
 
 /**
  * Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.
@@ -4052,7 +4375,7 @@ ApiShape.prototype.GetDocContent = function(){ return new ApiDocumentContent(); 
  * @param {"top" | "center" | "bottom" } sVerticalAlign - The vertical alignment type for the shape inner contents.
  * @returns {boolean} - returns false if shape or aligment doesn't exist.
  */
-ApiShape.prototype.SetVerticalTextAlign = function(sVerticalAlign){ return true; };
+ApiShape.prototype.SetVerticalTextAlign = function (sVerticalAlign) { return true; };
 
 /**
  * Returns a type of the ApiChart class.
@@ -4060,7 +4383,7 @@ ApiShape.prototype.SetVerticalTextAlign = function(sVerticalAlign){ return true;
  * @typeofeditors ["CSE"]
  * @returns {"chart"}
  */
-ApiChart.prototype.GetClassType = function(){ return ""; };
+ApiChart.prototype.GetClassType = function () { return ""; };
 
 /**
  *  Specifies the chart title with the specified parameters.
@@ -4070,7 +4393,7 @@ ApiChart.prototype.GetClassType = function(){ return ""; };
  *  @param {pt} nFontSize - The text size value measured in points.
  *  @param {?bool} bIsBold - Specifies if the chart title is written in bold font or not.
  */
-ApiChart.prototype.SetTitle = function (sTitle, nFontSize, bIsBold){};
+ApiChart.prototype.SetTitle = function (sTitle, nFontSize, bIsBold) {};
 
 /**
  *  Specifies the chart horizontal axis title.
@@ -4080,7 +4403,7 @@ ApiChart.prototype.SetTitle = function (sTitle, nFontSize, bIsBold){};
  *  @param {pt} nFontSize - The text size value measured in points.
  *  @param {?bool} bIsBold - Specifies if the horizontal axis title is written in bold font or not.
  * */
-ApiChart.prototype.SetHorAxisTitle = function (sTitle, nFontSize, bIsBold){};
+ApiChart.prototype.SetHorAxisTitle = function (sTitle, nFontSize, bIsBold) {};
 
 /**
  *  Specifies the chart vertical axis title.
@@ -4090,7 +4413,7 @@ ApiChart.prototype.SetHorAxisTitle = function (sTitle, nFontSize, bIsBold){};
  *  @param {pt} nFontSize - The text size value measured in points.
  *  @param {?bool} bIsBold - Specifies if the vertical axis title is written in bold font or not.
  * */
-ApiChart.prototype.SetVerAxisTitle = function (sTitle, nFontSize, bIsBold){};
+ApiChart.prototype.SetVerAxisTitle = function (sTitle, nFontSize, bIsBold) {};
 
 /**
  * Specifies the direction of the data displayed on the vertical axis.
@@ -4099,7 +4422,7 @@ ApiChart.prototype.SetVerAxisTitle = function (sTitle, nFontSize, bIsBold){};
  * @param {boolean} bIsMinMax - The <code>true</code> value sets the normal data direction for the vertical axis (from minimum to maximum).
  * The <code>false</code> value sets the inverted data direction for the vertical axis (from maximum to minimum).
  * */
-ApiChart.prototype.SetVerAxisOrientation = function(bIsMinMax){};
+ApiChart.prototype.SetVerAxisOrientation = function (bIsMinMax) {};
 
 /**
  * Specifies the major tick mark for the horizontal axis.
@@ -4107,7 +4430,7 @@ ApiChart.prototype.SetVerAxisOrientation = function(bIsMinMax){};
  * @typeofeditors ["CSE"]
  * @param {TickMark} sTickMark - The type of tick mark appearance.
  * */
-ApiChart.prototype.SetHorAxisMajorTickMark = function(sTickMark){};
+ApiChart.prototype.SetHorAxisMajorTickMark = function (sTickMark) {};
 
 /**
  * Specifies the minor tick mark for the horizontal axis.
@@ -4115,7 +4438,7 @@ ApiChart.prototype.SetHorAxisMajorTickMark = function(sTickMark){};
  * @typeofeditors ["CSE"]
  * @param {TickMark} sTickMark - The type of tick mark appearance.
  * */
-ApiChart.prototype.SetHorAxisMinorTickMark = function(sTickMark){};
+ApiChart.prototype.SetHorAxisMinorTickMark = function (sTickMark) {};
 
 /**
  * Specifies the major tick mark for the vertical axis.
@@ -4123,7 +4446,7 @@ ApiChart.prototype.SetHorAxisMinorTickMark = function(sTickMark){};
  * @typeofeditors ["CSE"]
  * @param {TickMark} sTickMark - The type of tick mark appearance.
  * */
-ApiChart.prototype.SetVertAxisMajorTickMark = function(sTickMark){};
+ApiChart.prototype.SetVertAxisMajorTickMark = function (sTickMark) {};
 
 /**
  * Specifies the minor tick mark for the vertical axis.
@@ -4131,7 +4454,7 @@ ApiChart.prototype.SetVertAxisMajorTickMark = function(sTickMark){};
  * @typeofeditors ["CSE"]
  * @param {TickMark} sTickMark - The type of tick mark appearance.
  * */
-ApiChart.prototype.SetVertAxisMinorTickMark = function(sTickMark){};
+ApiChart.prototype.SetVertAxisMinorTickMark = function (sTickMark) {};
 
 /**
  * Specifies the direction of the data displayed on the horizontal axis.
@@ -4140,7 +4463,7 @@ ApiChart.prototype.SetVertAxisMinorTickMark = function(sTickMark){};
  * @param {boolean} bIsMinMax - The <code>true</code> value sets the normal data direction for the horizontal axis
  * (from minimum to maximum). The <code>false</code> value sets the inverted data direction for the horizontal axis (from maximum to minimum).
  * */
-ApiChart.prototype.SetHorAxisOrientation = function(bIsMinMax){};
+ApiChart.prototype.SetHorAxisOrientation = function (bIsMinMax) {};
 
 /**
  * Specifies the chart legend position.
@@ -4148,7 +4471,7 @@ ApiChart.prototype.SetHorAxisOrientation = function(bIsMinMax){};
  * @typeofeditors ["CSE"]
  * @param {"left" | "top" | "right" | "bottom" | "none"} sLegendPos - The position of the chart legend inside the chart window.
  * */
-ApiChart.prototype.SetLegendPos = function(sLegendPos){};
+ApiChart.prototype.SetLegendPos = function (sLegendPos) {};
 
 /**
  * Specifies the legend font size.
@@ -4156,7 +4479,7 @@ ApiChart.prototype.SetLegendPos = function(sLegendPos){};
  * @typeofeditors ["CSE"]
  * @param {pt} nFontSize - The text size value measured in points.
  * */
-ApiChart.prototype.SetLegendFontSize = function(nFontSize){};
+ApiChart.prototype.SetLegendFontSize = function (nFontSize) {};
 
 /**
  * Specifies which chart data labels are shown for the chart.
@@ -4167,7 +4490,7 @@ ApiChart.prototype.SetLegendFontSize = function(nFontSize){};
  * @param {boolean} bShowVal - Whether to show or hide the chart data values.
  * @param {boolean} bShowPercent - Whether to show or hide the percent for the data values (works with stacked chart types).
  * */
-ApiChart.prototype.SetShowDataLabels = function(bShowSerName, bShowCatName, bShowVal, bShowPercent){};
+ApiChart.prototype.SetShowDataLabels = function (bShowSerName, bShowCatName, bShowVal, bShowPercent) {};
 
 /**
  * Spicifies the show options for the data labels.
@@ -4180,7 +4503,7 @@ ApiChart.prototype.SetShowDataLabels = function(bShowSerName, bShowCatName, bSho
  * @param {boolean} bShowVal - Whether to show or hide the chart data values.
  * @param {boolean} bShowPercent - Whether to show or hide the percent for the data values (works with stacked chart types).
  * */
-ApiChart.prototype.SetShowPointDataLabel = function(nSeriesIndex, nPointIndex, bShowSerName, bShowCatName, bShowVal, bShowPercent){};
+ApiChart.prototype.SetShowPointDataLabel = function (nSeriesIndex, nPointIndex, bShowSerName, bShowCatName, bShowVal, bShowPercent) {};
 
 /**
  * Sets the possible values for the position of the chart tick labels in relation to the main vertical label or the chart data values.
@@ -4188,7 +4511,7 @@ ApiChart.prototype.SetShowPointDataLabel = function(nSeriesIndex, nPointIndex, b
  * @typeofeditors ["CSE"]
  * @param {TickLabelPosition} sTickLabelPosition - The type for the position of chart vertical tick labels.
  * */
-ApiChart.prototype.SetVertAxisTickLabelPosition = function(sTickLabelPosition){};
+ApiChart.prototype.SetVertAxisTickLabelPosition = function (sTickLabelPosition) {};
 
 /**
  * Sets the possible values for the position of the chart tick labels in relation to the main horizontal label or the chart data values.
@@ -4196,7 +4519,7 @@ ApiChart.prototype.SetVertAxisTickLabelPosition = function(sTickLabelPosition){}
  * @typeofeditors ["CSE"]
  * @param {TickLabelPosition} sTickLabelPosition - The type for the position of chart horizontal tick labels.
  * */
-ApiChart.prototype.SetHorAxisTickLabelPosition = function(sTickLabelPosition){};
+ApiChart.prototype.SetHorAxisTickLabelPosition = function (sTickLabelPosition) {};
 
 /**
  * Specifies the visual properties of the major vertical gridline.
@@ -4204,7 +4527,7 @@ ApiChart.prototype.SetHorAxisTickLabelPosition = function(sTickLabelPosition){};
  * @typeofeditors ["CSE"]
  * @param {?ApiStroke} oStroke - The stroke used to create the element shadow.
  * */
-ApiChart.prototype.SetMajorVerticalGridlines = function(oStroke){};
+ApiChart.prototype.SetMajorVerticalGridlines = function (oStroke) {};
 
 /**
  * Specifies the visual properties of the minor vertical gridline.
@@ -4212,7 +4535,7 @@ ApiChart.prototype.SetMajorVerticalGridlines = function(oStroke){};
  * @typeofeditors ["CSE"]
  * @param {?ApiStroke} oStroke - The stroke used to create the element shadow.
  * */
-ApiChart.prototype.SetMinorVerticalGridlines = function(oStroke){};
+ApiChart.prototype.SetMinorVerticalGridlines = function (oStroke) {};
 
 /**
  * Specifies the visual properties of the major horizontal gridline.
@@ -4220,7 +4543,7 @@ ApiChart.prototype.SetMinorVerticalGridlines = function(oStroke){};
  * @typeofeditors ["CSE"]
  * @param {?ApiStroke} oStroke - The stroke used to create the element shadow.
  * */
-ApiChart.prototype.SetMajorHorizontalGridlines = function(oStroke){};
+ApiChart.prototype.SetMajorHorizontalGridlines = function (oStroke) {};
 
 /**
  * Specifies the visual properties of the minor vertical gridline.
@@ -4228,23 +4551,23 @@ ApiChart.prototype.SetMajorHorizontalGridlines = function(oStroke){};
  * @typeofeditors ["CSE"]
  * @param {?ApiStroke} oStroke - The stroke used to create the element shadow.
  */
-ApiChart.prototype.SetMinorHorizontalGridlines = function(oStroke){};
+ApiChart.prototype.SetMinorHorizontalGridlines = function (oStroke) {};
 
 /**
  * Specifies the font size to the horizontal axis labels.
  * @memberof ApiChart
  * @typeofeditors ["CSE"]
  * @param {pt} nFontSize - The text size value measured in points.
-*/
-ApiChart.prototype.SetHorAxisLablesFontSize = function(nFontSize){};
+ */
+ApiChart.prototype.SetHorAxisLablesFontSize = function (nFontSize) {};
 
 /**
  * Specifies the font size to the vertical axis labels.
  * @memberof ApiChart
  * @typeofeditors ["CSE"]
  * @param {pt} nFontSize - The text size value measured in points.
-*/
-ApiChart.prototype.SetVertAxisLablesFontSize = function(nFontSize){};
+ */
+ApiChart.prototype.SetVertAxisLablesFontSize = function (nFontSize) {};
 
 /**
  * Sets a style to the current chart by style ID.
@@ -4252,8 +4575,8 @@ ApiChart.prototype.SetVertAxisLablesFontSize = function(nFontSize){};
  * @typeofeditors ["CDE", "CPE", "CSE"]
  * @param nStyleId - One of the styles available in the editor.
  * @returns {boolean}
-*/
-ApiChart.prototype.ApplyChartStyle = function(nStyleId){ return true; };
+ */
+ApiChart.prototype.ApplyChartStyle = function (nStyleId) { return true; };
 
 /**
  * Sets values from the specified range to the specified series.
@@ -4266,7 +4589,7 @@ ApiChart.prototype.ApplyChartStyle = function(nStyleId){ return true; };
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriaValues = function(sRange, nSeria){ return true; };
+ApiChart.prototype.SetSeriaValues = function (sRange, nSeria) { return true; };
 
 /**
  * Sets the x-axis values from the specified range to the specified series. It is used with the scatter charts only.
@@ -4279,7 +4602,7 @@ ApiChart.prototype.SetSeriaValues = function(sRange, nSeria){ return true; };
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriaXValues = function(sRange, nSeria){ return true; };
+ApiChart.prototype.SetSeriaXValues = function (sRange, nSeria) { return true; };
 
 /**
  * Sets a name to the specified series.
@@ -4292,7 +4615,7 @@ ApiChart.prototype.SetSeriaXValues = function(sRange, nSeria){ return true; };
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriaName = function(sNameRange, nSeria){ return true; };
+ApiChart.prototype.SetSeriaName = function (sNameRange, nSeria) { return true; };
 
 /**
  * Sets a range with the category values to the current chart.
@@ -4302,7 +4625,7 @@ ApiChart.prototype.SetSeriaName = function(sNameRange, nSeria){ return true; };
  * * "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
  * * "A1:A5" - must be a single cell, row or column.
  */
-ApiChart.prototype.SetCatFormula = function(sRange){};
+ApiChart.prototype.SetCatFormula = function (sRange) {};
 
 /**
  * Adds a new series to the current chart.
@@ -4319,7 +4642,7 @@ ApiChart.prototype.SetCatFormula = function(sRange){};
  * * "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
  * * "A1:A5" - must be a single cell, row or column.
  */
-ApiChart.prototype.AddSeria = function(sNameRange, sValuesRange, sXValuesRange){};
+ApiChart.prototype.AddSeria = function (sNameRange, sValuesRange, sXValuesRange) {};
 
 /**
  * Removes the specified series from the current chart.
@@ -4328,7 +4651,7 @@ ApiChart.prototype.AddSeria = function(sNameRange, sValuesRange, sXValuesRange){
  * @param {number} nSeria - The index of the chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.RemoveSeria = function(nSeria){ return true; };
+ApiChart.prototype.RemoveSeria = function (nSeria) { return true; };
 
 /**
  * Sets the fill to the chart plot area.
@@ -4337,7 +4660,7 @@ ApiChart.prototype.RemoveSeria = function(nSeria){ return true; };
  * @param {ApiFill} oFill - The fill type used to fill the plot area.
  * @returns {boolean}
  */
-ApiChart.prototype.SetPlotAreaFill = function(oFill){ return true; };
+ApiChart.prototype.SetPlotAreaFill = function (oFill) { return true; };
 
 /**
  * Sets the outline to the chart plot area.
@@ -4346,7 +4669,7 @@ ApiChart.prototype.SetPlotAreaFill = function(oFill){ return true; };
  * @param {ApiStroke} oStroke - The stroke used to create the plot area outline.
  * @returns {boolean}
  */
-ApiChart.prototype.SetPlotAreaOutLine = function(oStroke){ return true; };
+ApiChart.prototype.SetPlotAreaOutLine = function (oStroke) { return true; };
 
 /**
  * Sets the fill to the specified chart series.
@@ -4357,7 +4680,7 @@ ApiChart.prototype.SetPlotAreaOutLine = function(oStroke){ return true; };
  * @param {boolean} [bAll=false] - Specifies if the fill will be applied to all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriesFill = function(oFill, nSeries, bAll){ return true; };
+ApiChart.prototype.SetSeriesFill = function (oFill, nSeries, bAll) { return true; };
 
 /**
  * Sets the outline to the specified chart series.
@@ -4368,7 +4691,7 @@ ApiChart.prototype.SetSeriesFill = function(oFill, nSeries, bAll){ return true; 
  * @param {boolean} [bAll=false] - Specifies if the outline will be applied to all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetSeriesOutLine = function(oStroke, nSeries, bAll){ return true; };
+ApiChart.prototype.SetSeriesOutLine = function (oStroke, nSeries, bAll) { return true; };
 
 /**
  * Sets the fill to the data point in the specified chart series.
@@ -4380,7 +4703,7 @@ ApiChart.prototype.SetSeriesOutLine = function(oStroke, nSeries, bAll){ return t
  * @param {boolean} [bAllSeries=false] - Specifies if the fill will be applied to the specified data point in all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetDataPointFill = function(oFill, nSeries, nDataPoint, bAllSeries){ return true; };
+ApiChart.prototype.SetDataPointFill = function (oFill, nSeries, nDataPoint, bAllSeries) { return true; };
 
 /**
  * Sets the outline to the data point in the specified chart series.
@@ -4392,7 +4715,7 @@ ApiChart.prototype.SetDataPointFill = function(oFill, nSeries, nDataPoint, bAllS
  * @param {boolean} bAllSeries - Specifies if the outline will be applied to the specified data point in all series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetDataPointOutLine = function(oStroke, nSeries, nDataPoint, bAllSeries){ return true; };
+ApiChart.prototype.SetDataPointOutLine = function (oStroke, nSeries, nDataPoint, bAllSeries) { return true; };
 
 /**
  * Sets the fill to the marker in the specified chart series.
@@ -4404,7 +4727,7 @@ ApiChart.prototype.SetDataPointOutLine = function(oStroke, nSeries, nDataPoint, 
  * @param {boolean} [bAllMarkers=false] - Specifies if the fill will be applied to all markers in the specified chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetMarkerFill = function(oFill, nSeries, nMarker, bAllMarkers){ return true; };
+ApiChart.prototype.SetMarkerFill = function (oFill, nSeries, nMarker, bAllMarkers) { return true; };
 
 /**
  * Sets the outline to the marker in the specified chart series.
@@ -4416,7 +4739,7 @@ ApiChart.prototype.SetMarkerFill = function(oFill, nSeries, nMarker, bAllMarkers
  * @param {boolean} [bAllMarkers=false] - Specifies if the outline will be applied to all markers in the specified chart series.
  * @returns {boolean}
  */
-ApiChart.prototype.SetMarkerOutLine = function(oStroke, nSeries, nMarker, bAllMarkers){ return true; };
+ApiChart.prototype.SetMarkerOutLine = function (oStroke, nSeries, nMarker, bAllMarkers) { return true; };
 
 /**
  * Sets the fill to the chart title.
@@ -4425,7 +4748,7 @@ ApiChart.prototype.SetMarkerOutLine = function(oStroke, nSeries, nMarker, bAllMa
  * @param {ApiFill} oFill - The fill type used to fill the title.
  * @returns {boolean}
  */
-ApiChart.prototype.SetTitleFill = function(oFill){ return true; };
+ApiChart.prototype.SetTitleFill = function (oFill) { return true; };
 
 /**
  * Sets the outline to the chart title.
@@ -4434,7 +4757,7 @@ ApiChart.prototype.SetTitleFill = function(oFill){ return true; };
  * @param {ApiStroke} oStroke - The stroke used to create the title outline.
  * @returns {boolean}
  */
-ApiChart.prototype.SetTitleOutLine = function(oStroke){ return true; };
+ApiChart.prototype.SetTitleOutLine = function (oStroke) { return true; };
 
 /**
  * Sets the fill to the chart legend.
@@ -4443,7 +4766,7 @@ ApiChart.prototype.SetTitleOutLine = function(oStroke){ return true; };
  * @param {ApiFill} oFill - The fill type used to fill the legend.
  * @returns {boolean}
  */
-ApiChart.prototype.SetLegendFill = function(oFill){ return true; };
+ApiChart.prototype.SetLegendFill = function (oFill) { return true; };
 
 /**
  * Sets the outline to the chart legend.
@@ -4452,7 +4775,7 @@ ApiChart.prototype.SetLegendFill = function(oFill){ return true; };
  * @param {ApiStroke} oStroke - The stroke used to create the legend outline.
  * @returns {boolean}
  */
-ApiChart.prototype.SetLegendOutLine = function(oStroke){ return true; };
+ApiChart.prototype.SetLegendOutLine = function (oStroke) { return true; };
 
 /**
  * Sets the specified numeric format to the axis values.
@@ -4462,7 +4785,7 @@ ApiChart.prototype.SetLegendOutLine = function(oStroke){ return true; };
  * @param {AxisPos} - Axis position.
  * @returns {boolean}
  */
-ApiChart.prototype.SetAxieNumFormat = function(sFormat, sAxiePos){ return true; };
+ApiChart.prototype.SetAxieNumFormat = function (sFormat, sAxiePos) { return true; };
 
 /**
  * Returns a type of the ApiOleObject class.
@@ -4470,7 +4793,7 @@ ApiChart.prototype.SetAxieNumFormat = function(sFormat, sAxiePos){ return true; 
  * @typeofeditors ["CDE", "CPE", "CSE"]
  * @returns {"oleObject"}
  */
-ApiOleObject.prototype.GetClassType = function(){ return ""; };
+ApiOleObject.prototype.GetClassType = function () { return ""; };
 
 /**
  * Sets the data to the current OLE object.
@@ -4479,7 +4802,7 @@ ApiOleObject.prototype.GetClassType = function(){ return ""; };
  * @param {string} sData - The OLE object string data.
  * @returns {boolean}
  */
-ApiOleObject.prototype.SetData = function(sData){ return true; };
+ApiOleObject.prototype.SetData = function (sData) { return true; };
 
 /**
  * Returns the string data from the current OLE object.
@@ -4487,7 +4810,7 @@ ApiOleObject.prototype.SetData = function(sData){ return true; };
  * @typeofeditors ["CDE", "CPE", "CSE"]
  * @returns {string}
  */
-ApiOleObject.prototype.GetData = function(){ return ""; };
+ApiOleObject.prototype.GetData = function () { return ""; };
 
 /**
  * Sets the application ID to the current OLE object.
@@ -4496,7 +4819,7 @@ ApiOleObject.prototype.GetData = function(){ return ""; };
  * @param {string} sAppId - The application ID associated with the current OLE object.
  * @returns {boolean}
  */
-ApiOleObject.prototype.SetApplicationId = function(sAppId){ return true; };
+ApiOleObject.prototype.SetApplicationId = function (sAppId) { return true; };
 
 /**
  * Returns the application ID from the current OLE object.
@@ -4504,7 +4827,7 @@ ApiOleObject.prototype.SetApplicationId = function(sAppId){ return true; };
  * @typeofeditors ["CDE", "CPE", "CSE"]
  * @returns {string}
  */
-ApiOleObject.prototype.GetApplicationId = function(){ return ""; };
+ApiOleObject.prototype.GetApplicationId = function () { return ""; };
 
 /**
  * Returns a type of the ApiColor class.
@@ -4518,7 +4841,7 @@ ApiColor.prototype.GetClassType = function () { return ""; };
  * Returns a type of the ApiName class.
  * @memberof ApiName
  * @typeofeditors ["CSE"]
- * @returns {string} 
+ * @returns {string}
  */
 ApiName.prototype.GetName = function () { return ""; };
 
@@ -4527,16 +4850,16 @@ ApiName.prototype.GetName = function () { return ""; };
  * @memberof ApiName
  * @typeofeditors ["CSE"]
  * @param {string} sName - New name for the range.
- * @returns {Error | true} - returns error if sName is invalid.
+ * @returns {boolean} - returns false if sName is invalid.
  */
-ApiName.prototype.SetName = function (sName) { return undefined; };
+ApiName.prototype.SetName = function (sName) { return true; };
 
 /**
  * Sets a string value representing the object name.
  * @memberof ApiName
  * @typeofeditors ["CSE"]
  * @param {string} sName - New name for the range.
- * @returns {Error | true} - returns error if sName is invalid.
+ * @returns {boolean} - returns false if sName is invalid.
  */
 ApiName.prototype.Name = ApiName.prototype.SetName ();
 
@@ -4551,7 +4874,7 @@ ApiName.prototype.Delete = function () {};
  * Sets a formula that the name is defined to refer to.
  * @memberof ApiName
  * @typeofeditors ["CSE"]
- * @param {string} sRef- The range reference which must contain the sheet name, followed by sign ! and a range of cells. 
+ * @param {string} sRef    - The range reference which must contain the sheet name, followed by sign ! and a range of cells.
  * Example: "Sheet1!$A$1:$B$2".
  */
 ApiName.prototype.SetRefersTo = function (sRef) {};
@@ -4560,7 +4883,7 @@ ApiName.prototype.SetRefersTo = function (sRef) {};
  * Returns a formula that the name is defined to refer to.
  * @memberof ApiName
  * @typeofeditors ["CSE"]
- * @returns {string} 
+ * @returns {string}
  */
 ApiName.prototype.GetRefersTo = function () { return ""; };
 
@@ -4568,7 +4891,7 @@ ApiName.prototype.GetRefersTo = function () { return ""; };
  * Returns a formula that the name is defined to refer to.
  * @memberof ApiName
  * @typeofeditors ["CSE"]
- * @returns {string} 
+ * @returns {string}
  */
 ApiName.prototype.RefersTo = ApiName.prototype.GetRefersTo ();
 
@@ -4589,6 +4912,14 @@ ApiName.prototype.GetRefersToRange = function () { return new ApiRange(); };
 ApiName.prototype.RefersToRange = ApiName.prototype.GetRefersToRange ();
 
 /**
+ * Returns a type of the ApiComment class.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {"comment"}
+ */
+ApiComment.prototype.GetClassType = function () { return ""; };
+
+/**
  * Returns the comment text.
  * @memberof ApiComment
  * @typeofeditors ["CSE"]
@@ -4597,12 +4928,244 @@ ApiName.prototype.RefersToRange = ApiName.prototype.GetRefersToRange ();
 ApiComment.prototype.GetText = function () { return ""; };
 
 /**
- * Returns the comment text.
+ * Sets the comment text.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {string} text - New text for comment.
+ * @since 7.5.0
+ */
+ApiComment.prototype.SetText = function (text) {};
+
+/**
+ * Sets the comment text.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {string} text - New text for comment.
+ * @since 7.5.0
+ */
+ApiComment.prototype.Text = ApiComment.prototype.SetText ();
+
+/**
+ * Returns the current comment ID.
  * @memberof ApiComment
  * @typeofeditors ["CSE"]
  * @returns {string}
+ * @since 7.5.0
  */
-ApiComment.prototype.Text = ApiComment.prototype.GetText ();
+ApiComment.prototype.GetId = function () { return ""; };
+
+/**
+ * Returns the current comment ID.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {string}
+ * @since 7.5.0
+ */
+ApiComment.prototype.Id = ApiComment.prototype.GetId ();
+
+/**
+ * Returns the comment author's name.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {string}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetAuthorName = function () { return ""; };
+
+/**
+ * Sets the comment author's name.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {string} sAuthorName - The comment author's name.
+ * @since 7.5.0
+ */
+ApiComment.prototype.SetAuthorName = function (sAuthorName) {};
+
+/**
+ * Sets the comment author's name.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {string} sAuthorName - The comment author's name.
+ * @since 7.5.0
+ */
+ApiComment.prototype.AuthorName = ApiComment.prototype.SetAuthorName ();
+
+/**
+ * Returns the user ID of the comment author.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {string}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetUserId = function () { return ""; };
+
+/**
+ * Sets the user ID to the comment author.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {string} sUserId - The user ID of the comment author.
+ * @since 7.5.0
+ */
+ApiComment.prototype.SetUserId = function (sUserId) {};
+
+/**
+ * Sets the user ID to the comment author.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {string} sUserId - The user ID of the comment author.
+ * @since 7.5.0
+ */
+ApiComment.prototype.UserId = ApiComment.prototype.SetUserId ();
+
+/**
+ * Checks if a comment is solved or not.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {boolean}
+ * @since 7.5.0
+ */
+ApiComment.prototype.IsSolved = function () { return true; };
+
+/**
+ * Marks a comment as solved.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {boolean} bSolved - Specifies if a comment is solved or not.
+ * @since 7.5.0
+ */
+ApiComment.prototype.SetSolved = function (bSolved) {};
+
+/**
+ * Marks a comment as solved.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {boolean} bSolved - Specifies if a comment is solved or not.
+ * @since 7.5.0
+ */
+ApiComment.prototype.Solved = ApiComment.prototype.SetSolved ();
+
+/**
+ * Returns the timestamp of the comment creation in UTC format.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {Number}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetTimeUTC = function () { return 0; };
+
+/**
+ * Sets the timestamp of the comment creation in UTC format.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment creation in UTC format.
+ * @since 7.5.0
+ */
+ApiComment.prototype.SetTimeUTC = function (timeStamp) {};
+
+/**
+ * Sets the timestamp of the comment creation in UTC format.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment creation in UTC format.
+ * @since 7.5.0
+ */
+ApiComment.prototype.TimeUTC = ApiComment.prototype.SetTimeUTC ();
+
+/**
+ * Returns the timestamp of the comment creation in the current time zone format.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {Number}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetTime = function () { return 0; };
+
+/**
+ * Sets the timestamp of the comment creation in the current time zone format.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment creation in the current time zone format.
+ * @since 7.5.0
+ */
+ApiComment.prototype.SetTime = function (timeStamp) {};
+
+/**
+ * Sets the timestamp of the comment creation in the current time zone format.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment creation in the current time zone format.
+ * @since 7.5.0
+ */
+ApiComment.prototype.Time = ApiComment.prototype.SetTime ();
+
+/**
+ * Returns the quote text of the current comment.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {String | null}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetQuoteText = function () { return ""; };
+
+/**
+ * Returns the quote text of the current comment.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {String | null}
+ * @since 7.5.0
+ */
+ApiComment.prototype.QuoteText = ApiComment.prototype.GetQuoteText ();
+
+/**
+ * Returns a number of the comment replies.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {Number}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetRepliesCount = function () { return 0; };
+
+/**
+ * Returns a number of the comment replies.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @returns {Number}
+ * @since 7.5.0
+ */
+ApiComment.prototype.RepliesCount = ApiComment.prototype.GetRepliesCount ();
+
+/**
+ * Returns the specified comment reply.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {Number} [nIndex = 0] - The comment reply index.
+ * @returns {ApiCommentReply}
+ * @since 7.5.0
+ */
+ApiComment.prototype.GetReply = function (nIndex) { return new ApiCommentReply(); };
+
+/**
+ * Adds a reply to a comment.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {String} sText - The comment reply text (required).
+ * @param {String} sAuthorName - The name of the comment reply author (optional).
+ * @param {String} sUserId - The user ID of the comment reply author (optional).
+ * @param {Number} [nPos=this.GetRepliesCount()] - The comment reply position.
+ * @since 7.5.0
+ */
+ApiComment.prototype.AddReply = function (sText, sAuthorName, sUserId, nPos) {};
+
+/**
+ * Removes the specified comment replies.
+ * @memberof ApiComment
+ * @typeofeditors ["CSE"]
+ * @param {Number} [nPos = 0] - The position of the first comment reply to remove.
+ * @param {Number} [nCount = 1] - A number of comment replies to remove.
+ * @param {boolean} [bRemoveAll = false] - Specifies whether to remove all comment replies or not.
+ * @since 7.5.0
+ */
+ApiComment.prototype.RemoveReplies = function (nPos, nCount, bRemoveAll) {};
 
 /**
  * Deletes the ApiComment object.
@@ -4612,12 +5175,148 @@ ApiComment.prototype.Text = ApiComment.prototype.GetText ();
 ApiComment.prototype.Delete = function () {};
 
 /**
- * Returns a type of the ApiComment class.
- * @memberof ApiComment
+ * Returns a type of the ApiCommentReply class.
+ * @memberof ApiCommentReply
  * @typeofeditors ["CSE"]
- * @returns {"comment"}
+ * @returns {"commentReply"}
+ * @since 7.5.0
  */
-ApiComment.prototype.GetClassType = function () { return ""; };
+ApiCommentReply.prototype.GetClassType = function () { return ""; };
+
+/**
+ * Returns the comment reply text.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @returns {string}
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.GetText = function () { return ""; };
+
+/**
+ * Sets the comment reply text.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {string} sText - The comment reply text.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.SetText = function (sText) {};
+
+/**
+ * Sets the comment reply text.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {string} sText - The comment reply text.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.Text = ApiCommentReply.prototype.SetText ();
+
+/**
+ * Returns the comment reply author's name.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @returns {string}
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.GetAuthorName = function () { return ""; };
+
+/**
+ * Sets the comment reply author's name.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {string} sAuthorName - The comment reply author's name.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.SetAuthorName = function (sAuthorName) {};
+
+/**
+ * Sets the comment reply author's name.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {string} sAuthorName - The comment reply author's name.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.AuthorName = ApiCommentReply.prototype.SetAuthorName ();
+
+/**
+ * Returns the user ID of the comment reply author.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @returns {string}
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.GetUserId = function () { return ""; };
+
+/**
+ * Sets the user ID to the comment reply author.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {string} sUserId - The user ID of the comment reply author.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.SetUserId = function (sUserId) {};
+
+/**
+ * Sets the user ID to the comment reply author.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {string} sUserId - The user ID of the comment reply author.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.UserId = ApiCommentReply.prototype.SetUserId ();
+
+/**
+ * Returns the timestamp of the comment reply creation in UTC format.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @returns {Number}
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.GetTimeUTC = function () { return 0; };
+
+/**
+ * Sets the timestamp of the comment reply creation in UTC format.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment reply creation in UTC format.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.SetTimeUTC = function (timeStamp) {};
+
+/**
+ * Sets the timestamp of the comment reply creation in UTC format.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment reply creation in UTC format.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.TimeUTC = ApiCommentReply.prototype.SetTimeUTC ();
+
+/**
+ * Returns the timestamp of the comment reply creation in the current time zone format.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @returns {Number}
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.GetTime = function () { return 0; };
+
+/**
+ * Sets the timestamp of the comment reply creation in the current time zone format.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment reply creation in the current time zone format.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.SetTime = function (timeStamp) {};
+
+/**
+ * Sets the timestamp of the comment reply creation in the current time zone format.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CSE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment reply creation in the current time zone format.
+ * @since 7.5.0
+ */
+ApiCommentReply.prototype.Time = ApiCommentReply.prototype.SetTime ();
 
 /**
  * Returns a value that represents the number of objects in the collection.
@@ -4643,5 +5342,465 @@ ApiAreas.prototype.Count = ApiAreas.prototype.GetCount ();
  * @returns {ApiRange}
  */
 ApiAreas.prototype.GetItem = function (ind) { return new ApiRange(); };
+
+/**
+ * Returns the parent object for the specified collection.
+ * @memberof ApiAreas
+ * @typeofeditors ["CSE"]
+ * @returns {number}
+ */
+ApiAreas.prototype.GetParent = function () { return 0; };
+
+/**
+ * Returns the parent object for the specified collection.
+ * @memberof ApiAreas
+ * @typeofeditors ["CSE"]
+ * @returns {number}
+ */
+ApiAreas.prototype.Parent = ApiAreas.prototype.GetParent ();
+
+/**
+ * Returns a value that represents a number of objects in the collection.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {number}
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.GetCount = function () { return 0; };
+
+/**
+ * Returns a value that represents a number of objects in the collection.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {number}
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Count = ApiCharacters.prototype.GetCount ();
+
+/**
+ * Returns the parent object of the specified characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {ApiRange}
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.GetParent = function () { return new ApiRange(); };
+
+/**
+ * Returns the parent object of the specified characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {ApiRange}
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Parent = ApiCharacters.prototype.GetParent ();
+
+/**
+ * Deletes the ApiCharacters object.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Delete = function () {};
+
+/**
+ * Inserts a string replacing the specified characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @param {string} String - The string to insert.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Insert = function (String) {};
+
+/**
+ * Sets a string value that represents the text of the specified range of characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @param {string} Caption - A string value that represents the text of the specified range of characters.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.SetCaption = function (Caption) {};
+
+/**
+ * Returns a string value that represents the text of the specified range of characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {string} - A string value that represents the text of the specified range of characters.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.GetCaption = function () { return ""; };
+
+/**
+ * Returns a string value that represents the text of the specified range of characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {string} - A string value that represents the text of the specified range of characters.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Caption = ApiCharacters.prototype.GetCaption ();
+
+/**
+ * Sets the text for the specified characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @param {string} Text - The text to be set.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.SetText = function (Text) {};
+
+/**
+ * Returns the text of the specified range of characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {string} - The text of the specified range of characters.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.GetText = function () { return ""; };
+
+/**
+ * Returns the text of the specified range of characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {string} - The text of the specified range of characters.
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Text = ApiCharacters.prototype.GetText ();
+
+/**
+ * Returns the ApiFont object that represents the font of the specified characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {ApiFont}
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.GetFont = function () { return new ApiFont(); };
+
+/**
+ * Returns the ApiFont object that represents the font of the specified characters.
+ * @memberof ApiCharacters
+ * @typeofeditors ["CSE"]
+ * @returns {ApiFont}
+ * @since 7.4.0
+ */
+ApiCharacters.prototype.Font = ApiCharacters.prototype.GetFont ();
+
+/**
+ * Returns the parent ApiCharacters object of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {ApiCharacters} - The parent ApiCharacters object.
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetParent = function () { return new ApiCharacters(); };
+
+/**
+ * Returns the parent ApiCharacters object of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {ApiCharacters} - The parent ApiCharacters object.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Parent = ApiFont.prototype.GetParent ();
+
+/**
+ * Returns the bold property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {boolean | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetBold = function () { return true; };
+
+/**
+ * Sets the bold property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isBold - Specifies that the text characters are displayed bold.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetBold = function (isBold) {};
+
+/**
+ * Sets the bold property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isBold - Specifies that the text characters are displayed bold.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Bold = ApiFont.prototype.SetBold ();
+
+/**
+ * Returns the italic property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {boolean | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetItalic = function () { return true; };
+
+/**
+ * Sets the italic property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isItalic - Specifies that the text characters are displayed italic.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetItalic = function (isItalic) {};
+
+/**
+ * Sets the italic property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isItalic - Specifies that the text characters are displayed italic.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Italic = ApiFont.prototype.SetItalic ();
+
+/**
+ * Returns the font size property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {number | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetSize = function () { return 0; };
+
+/**
+ * Sets the font size property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {number} Size - Font size.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetSize = function (Size) {};
+
+/**
+ * Sets the font size property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {number} Size - Font size.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Size = ApiFont.prototype.SetSize ();
+
+/**
+ * Returns the strikethrough property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {boolean | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetStrikethrough = function () { return true; };
+
+/**
+ * Sets the strikethrough property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isStrikethrough - Specifies that the text characters are displayed strikethrough.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetStrikethrough = function (isStrikethrough) {};
+
+/**
+ * Sets the strikethrough property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isStrikethrough - Specifies that the text characters are displayed strikethrough.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Strikethrough = ApiFont.prototype.SetStrikethrough ();
+
+/**
+ * Underline type.
+ * @typedef {("xlUnderlineStyleDouble" | "xlUnderlineStyleDoubleAccounting" | "xlUnderlineStyleNone" | "xlUnderlineStyleSingle" | "xlUnderlineStyleSingleAccounting")} XlUnderlineStyle
+ */
+
+/**
+ * Returns the type of underline applied to the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {XlUnderlineStyle | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetUnderline = function () { return new XlUnderlineStyle(); };
+
+/**
+ * Sets an underline of the type specified in the request to the current font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {XlUnderlineStyle} Underline - Underline type.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetUnderline = function (Underline) {};
+
+/**
+ * Sets an underline of the type specified in the request to the current font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {XlUnderlineStyle} Underline - Underline type.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Underline = ApiFont.prototype.SetUnderline ();
+
+/**
+ * Returns the subscript property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {boolean | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetSubscript = function () { return true; };
+
+/**
+ * Sets the subscript property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isSubscript - Specifies that the text characters are displayed subscript.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetSubscript = function (isSubscript) {};
+
+/**
+ * Sets the subscript property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isSubscript - Specifies that the text characters are displayed subscript.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Subscript = ApiFont.prototype.SetSubscript ();
+
+/**
+ * Returns the superscript property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {boolean | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetSuperscript = function () { return true; };
+
+/**
+ * Sets the superscript property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isSuperscript - Specifies that the text characters are displayed superscript.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetSuperscript = function (isSuperscript) {};
+
+/**
+ * Sets the superscript property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {boolean} isSuperscript - Specifies that the text characters are displayed superscript.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Superscript = ApiFont.prototype.SetSuperscript ();
+
+/**
+ * Returns the font name property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {string | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetName = function () { return ""; };
+
+/**
+ * Sets the font name property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {string} FontName - Font name.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetName = function (FontName) {};
+
+/**
+ * Sets the font name property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {string} FontName - Font name.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Name = ApiFont.prototype.SetName ();
+
+/**
+ * Returns the font color property of the specified font.
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @returns {ApiColor | null}
+ * @since 7.4.0
+ */
+ApiFont.prototype.GetColor = function () { return new ApiColor(); };
+
+/**
+ * Sets the font color property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {ApiColor} Color - Font color.
+ * @since 7.4.0
+ */
+ApiFont.prototype.SetColor = function (Color) {};
+
+/**
+ * Sets the font color property to the specified font.
+ * <note>This method will work only with the text format of the cell.</note>
+ * @memberof ApiFont
+ * @typeofeditors ["CSE"]
+ * @param {ApiColor} Color - Font color.
+ * @since 7.4.0
+ */
+ApiFont.prototype.Color = ApiFont.prototype.SetColor ();
+
+/**
+ * Sets the frozen cells in the active worksheet view. The range provided corresponds to the cells that will be frozen in the top- and left-most pane.
+ * @memberof ApiFreezePanes
+ * @typeofeditors ["CSE"]
+ * @param {ApiRange | String} frozenRange - A range that represents the cells to be frozen.
+ * @since 8.0.0
+ */
+ApiFreezePanes.prototype.FreezeAt = function (frozenRange) {};
+
+/**
+ * Freezes the first column or columns of the current worksheet.
+ * @memberof ApiFreezePanes
+ * @typeofeditors ["CSE"]
+ * @param {Number} [count=0] - Optional number of columns to freeze, or zero to unfreeze all columns.
+ * @since 8.0.0
+ */
+ApiFreezePanes.prototype.FreezeColumns = function (count) {};
+
+/**
+ * Freezes the top row or rows of the current worksheet.
+ * @memberof ApiFreezePanes
+ * @typeofeditors ["CSE"]
+ * @param {Number} [count=0] - Optional number of rows to freeze, or zero to unfreeze all rows.
+ * @since 8.0.0
+ */
+ApiFreezePanes.prototype.FreezeRows = function (count) {};
+
+/**
+ * Returns a range that describes the frozen cells in the active worksheet view.
+ * @memberof ApiFreezePanes
+ * @typeofeditors ["CSE"]
+ * @returns {ApiRange | null} - Returns null if there is no frozen pane.
+ * @since 8.0.0
+ */
+ApiFreezePanes.prototype.GetLocation = function () { return new ApiRange(); };
 
 
