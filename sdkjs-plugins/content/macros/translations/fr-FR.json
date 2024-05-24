@@ -6,5 +6,8 @@
 	"Run" : "Executer",
 	"Cancel" : "Annuler",
 	"Macros" : "Macros",
-	"Title" : "Le nom ne doit pas être vide"
+	"Title" : "Le nom ne doit pas être vide",
+	"Copy": "Copier",
+	"Make autostart": "Faire démarrer automatiquement",
+	"Unmake autostart": "Annuler le démarrage automatique"
 }

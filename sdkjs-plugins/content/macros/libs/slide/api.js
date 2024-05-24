@@ -112,85 +112,6 @@ function ApiHyperlink(ParaHyperlink){}
 ApiHyperlink.prototype.constructor = ApiHyperlink;
 
 /**
- * Class representing a document form base.
- * @constructor
- * @property {string} key - Form key.
- * @property {string} tip - Form tip text.
- * @property {boolean} required - Specifies if the form is required or not.
- * @property {string} placeholder - Form placeholder text.
- */
-function ApiFormBase(oSdt){}
-
-/**
- * Class representing a document text form.
- * @constructor
- * @property {boolean} comb - Specifies if the text form should be a comb of characters with the same cell width. The maximum number of characters must be set to a positive value.
- * @property {number} maxCharacters - The maximum number of characters in the text form.
- * @property {number} cellWidth - The cell width for each character measured in millimeters. If this parameter is not specified or equal to 0 or less, then the width will be set automatically.
- * @property {boolean} multiLine - Specifies if the current fixed size text form is multiline or not.
- * @property {boolean} autoFit - Specifies if the text form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
- * @extends {ApiFormBase}
- */
-function ApiTextForm(oSdt){}
-ApiTextForm.prototype = Object.create(ApiFormBase.prototype);
-ApiTextForm.prototype.constructor = ApiTextForm;
-
-/**
- * Class representing a document combo box form.
- * @constructor
- * @property {boolean} editable - Specifies if the combo box text can be edited.
- * @property {boolean} autoFit - Specifies if the combo box form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
- * @property {Array.<string | Array.<string>>} items - The combo box items.
-     * This array consists of strings or arrays of two strings where the first string is the displayed value and the second one is its meaning.
-     * If the array consists of single strings, then the displayed value and its meaning are the same.
-     * Example: ["First", ["Second", "2"], ["Third", "3"], "Fourth"].
- * @extends {ApiFormBase}
- */
-function ApiComboBoxForm(oSdt){}
-ApiComboBoxForm.prototype = Object.create(ApiFormBase.prototype);
-ApiComboBoxForm.prototype.constructor = ApiComboBoxForm;
-
-/**
- * Class representing a document checkbox form.
- * @constructor
- * @property {boolean} radio - Specifies if the current checkbox is a radio button. In this case, the key parameter is considered as an identifier for the group of radio buttons.
- * @extends {ApiFormBase}
- */
-function ApiCheckBoxForm(oSdt){}
-ApiCheckBoxForm.prototype = Object.create(ApiFormBase.prototype);
-ApiCheckBoxForm.prototype.constructor = ApiCheckBoxForm;
-
-/**
- * Class representing a document picture form.
- * @constructor
- * @property {ScaleFlag} scaleFlag - The condition to scale an image in the picture form: "always", "never", "tooBig" or "tooSmall".
- * @property {boolean} lockAspectRatio - Specifies if the aspect ratio of the picture form is locked or not.
- * @property {boolean} respectBorders - Specifies if the form border width is respected or not when scaling the image.
- * @property {percentage} shiftX - Horizontal picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on the left;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the right.
- * @property {percentage} shiftY - Vertical picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on top;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the bottom.
- * @extends {ApiFormBase}
- */
-function ApiPictureForm(oSdt){}
-ApiPictureForm.prototype = Object.create(ApiFormBase.prototype);
-ApiPictureForm.prototype.constructor = ApiPictureForm;
-
-/**
- * Class representing a complex form.
- * @param oSdt
- * @constructor
- * @extends {ApiFormBase}
- */
-function ApiComplexForm(oSdt){}
-ApiComplexForm.prototype = Object.create(ApiFormBase.prototype);
-ApiComplexForm.prototype.constructor = ApiComplexForm;
-
-/**
  * Class representing a style.
  * @constructor
  */
@@ -294,10 +215,28 @@ function ApiGradientStop(oApiUniColor, pos){}
 function ApiInlineLvlSdt(Sdt){}
 
 /**
+ * Class representing a list of values of the combo box / dropdown list content control.
+ * @constructor
+ */
+function ApiContentControlList(Parent){}
+
+/**
+ * Class representing an entry of the combo box / dropdown list content control.
+ * @constructor
+ */
+function ApiContentControlListEntry(Sdt, Parent, Text, Value){}
+
+/**
  * Class representing a container for the document content.
  * @constructor
  */
 function ApiBlockLvlSdt(Sdt){}
+
+/**
+ * Class representing the settings which are used to create a watermark.
+ * @constructor
+ */
+function ApiWatermarkSettings(oSettings){}
 
 /**
  * Twentieths of a point (equivalent to 1/1440th of an inch).
@@ -709,6 +648,16 @@ function ApiBlockLvlSdt(Sdt){}
  * */
 
 /**
+ * The watermark type.
+ * @typedef {("none" | "text" | "image")} WatermarkType
+ */
+
+/**
+ * The watermark direction.
+ * @typedef {("horizontal" | "clockwise45" | "counterclockwise45")} WatermarkDirection
+ */
+
+/**
  * Creates a new smaller text block to be inserted to the current paragraph or table.
  * @memberof ApiInterface
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -906,6 +855,77 @@ ApiDocumentContent.prototype.RemoveElement = function(nPos){};
  * @memberof ApiDocument
  */
 ApiDocument.prototype.CreateNewHistoryPoint = function(){};
+
+/**
+ * Record of one comment.
+ * @typedef {Object} CommentReportRecord
+ * @property {boolean} [IsAnswer=false] - Specifies whether this is an initial comment or a reply to another comment.
+ * @property {string} CommentMessage - The text of the current comment.
+ * @property {number} Date - The time when this change was made in local time.
+ * @property {number} DateUTC - The time when this change was made in UTC.
+ * @property {string} [QuoteText=undefined] - The text to which this comment is related.
+ */
+
+/**
+ * Report on all comments.
+ * This is a dictionary where the keys are usernames.
+ * @typedef {Object.<string, Array.<CommentReportRecord>>} CommentReport
+ * @example
+ *  {
+ *    "John Smith" : [{IsAnswer: false, CommentMessage: 'Good text', Date: 1688588002698, DateUTC: 1688570002698, QuoteText: 'Some text'},
+ *      {IsAnswer: true, CommentMessage: "I don't think so", Date: 1688588012661, DateUTC: 1688570012661}],
+ *
+ *    "Mark Pottato" : [{IsAnswer: false, CommentMessage: 'Need to change this part', Date: 1688587967245, DateUTC: 1688569967245, QuoteText: 'The quick brown fox jumps over the lazy dog'},
+ *      {IsAnswer: false, CommentMessage: 'We need to add a link', Date: 1688587967245, DateUTC: 1688569967245, QuoteText: 'OnlyOffice'}]
+ *  }
+ */
+
+/**
+ * Review record type.
+ * @typedef {("TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown")} ReviewReportRecordType
+ */
+
+/**
+ * Record of one review change.
+ * @typedef {Object} ReviewReportRecord
+ * @property {ReviewReportRecordType} Type - Review record type.
+ * @property {string} [Value=undefined] - Review change value that is set for the "TextAdd" and "TextRem" types only.
+ * @property {number} Date - The time when this change was made.
+ */
+
+/**
+ * Report on all review changes.
+ * This is a dictionary where the keys are usernames.
+ * @typedef {Object.<string, Array.<ReviewReportRecord>>} ReviewReport
+ * @example
+ * {
+ *   "John Smith" : [{Type: 'TextRem', Value: 'Hello, Mark!', Date: 1679941734161},
+ *                 {Type: 'TextAdd', Value: 'Dear Mr. Pottato.', Date: 1679941736189}],
+ *   "Mark Pottato" : [{Type: 'ParaRem', Date: 1679941755942},
+ *                   {Type: 'TextPr', Date: 1679941757832}]
+ * }
+ */
+
+/**
+ * The specific form type.
+ * @typedef {("text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio")} FormSpecificType
+ */
+
+/**
+ * Form data.
+ * @typedef {Object} FormData
+ * @property {string} key - The form key. If the current form is a radio button, then this field contains the group key.
+ * @property {string | boolean} value - The current field value.
+ * @property {string} tag - The form tag.
+ * @property {FormSpecificType} type - The form type.
+ * @example
+ * {
+ *   "key" : "CompanyName",
+ *   "tag" : "companyName",
+ *   "value" : "ONLYOFFICE",
+ *   "type" : "text"
+ * }
+ */
 
 /**
  * Returns a type of the ApiParagraph class.
@@ -1690,6 +1710,222 @@ ApiInterface.prototype.ReplaceTextSmart = function(arrString, sParaTab, sParaNew
 ApiInterface.prototype.CreateTextPr = function () { return new ApiTextPr(); };
 
 /**
+ * Returns the full name of the currently opened file.
+ * @memberof ApiInterface
+ * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @returns {string}
+ */
+ApiInterface.prototype.GetFullName = function () { return ""; };
+
+/**
+ * Returns the full name of the currently opened file.
+ * @memberof ApiInterface
+ * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @returns {string}
+ */
+ApiInterface.prototype.FullName = ApiInterface.prototype.GetFullName ();
+
+/**
+ * Returns a type of the ApiComment class.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {"comment"}
+ */
+ApiComment.prototype.GetClassType = function (){ return ""; };
+
+/**
+ * Returns the comment text.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ */
+ApiComment.prototype.GetText = function () { return ""; };
+
+/**
+ * Sets the comment text.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sText - The comment text.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.SetText = function (sText) { return new ApiComment(); };
+
+/**
+ * Returns the comment author's name.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ */
+ApiComment.prototype.GetAuthorName = function () { return ""; };
+
+/**
+ * Sets the comment author's name.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sAuthorName - The comment author's name.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.SetAuthorName = function (sAuthorName) { return new ApiComment(); };
+
+/**
+ * Sets the user ID to the comment author.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sUserId - The user ID of the comment author.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.SetUserId = function (sUserId) { return new ApiComment(); };
+
+/**
+ * Checks if a comment is solved or not.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {boolean}
+ */
+ApiComment.prototype.IsSolved = function () { return true; };
+
+/**
+ * Marks a comment as solved.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {boolean} bSolved - Specifies if a comment is solved or not.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.SetSolved = function (bSolved) { return new ApiComment(); };
+
+/**
+ * Returns the timestamp of the comment creation in UTC format.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {Number}
+ */
+ApiComment.prototype.GetTimeUTC = function () { return 0; };
+
+/**
+ * Sets the timestamp of the comment creation in UTC format.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment creation in UTC format.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.SetTimeUTC = function (timeStamp) { return new ApiComment(); };
+
+/**
+ * Returns the timestamp of the comment creation in the current time zone format.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {Number}
+ */
+ApiComment.prototype.GetTime = function () { return 0; };
+
+/**
+ * Sets the timestamp of the comment creation in the current time zone format.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {Number | String} nTimeStamp - The timestamp of the comment creation in the current time zone format.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.SetTime = function (timeStamp) { return new ApiComment(); };
+
+/**
+ * Returns the quote text of the current comment.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {Number}
+ */
+ApiComment.prototype.GetQuoteText = function () { return 0; };
+
+/**
+ * Returns a number of the comment replies.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {Number}
+ */
+ApiComment.prototype.GetRepliesCount = function () { return 0; };
+
+/**
+ * Adds a reply to a comment.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {String} sText - The comment reply text (required).
+ * @param {String} sAuthorName - The name of the comment reply author (optional).
+ * @param {String} sUserId - The user ID of the comment reply author (optional).
+ * @param {Number} [nPos=this.GetRepliesCount()] - The comment reply position.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.AddReply = function (sText, sAuthorName, sUserId, nPos) { return new ApiComment(); };
+
+/**
+ * Removes the specified comment replies.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {Number} [nPos = 0] - The position of the first comment reply to remove.
+ * @param {Number} [nCount = 1] - A number of comment replies to remove.
+ * @param {boolean} [bRemoveAll = false] - Specifies whether to remove all comment replies or not.
+ * @returns {ApiComment} - this
+ */
+ApiComment.prototype.RemoveReplies = function (nPos, nCount, bRemoveAll) { return new ApiComment(); };
+
+/**
+ * Deletes the current comment from the document.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {boolean}
+ */
+ApiComment.prototype.Delete = function (){ return true; };
+
+/**
+ * Returns a type of the ApiCommentReply class.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {"commentReply"}
+ */
+ApiCommentReply.prototype.GetClassType = function () { return ""; };
+
+/**
+ * Returns the comment reply text.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ */
+ApiCommentReply.prototype.GetText = function () { return ""; };
+
+/**
+ * Sets the comment reply text.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sText - The comment reply text.
+ * @returns {ApiCommentReply} - this
+ */
+ApiCommentReply.prototype.SetText = function (sText) { return new ApiCommentReply(); };
+
+/**
+ * Returns the comment reply author's name.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ */
+ApiCommentReply.prototype.GetAuthorName = function () { return ""; };
+
+/**
+ * Sets the comment reply author's name.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sAuthorName - The comment reply author's name.
+ * @returns {ApiCommentReply} - this
+ */
+ApiCommentReply.prototype.SetAuthorName = function (sAuthorName) { return new ApiCommentReply(); };
+
+/**
+ * Sets the user ID to the comment reply author.
+ * @memberof ApiCommentReply
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sUserId - The user ID of the comment reply author.
+ * @returns {ApiCommentReply} - this
+ */
+ApiCommentReply.prototype.SetUserId = function (sUserId) { return new ApiCommentReply(); };
+
+/**
  * Gets a document color object by color name.
  * @param {highlightColor} - available highlight color
  * @returns {object}
@@ -2153,7 +2389,16 @@ ApiInterface.prototype.Save = function () {};
 ApiInterface.prototype.CreateWordArt = function(oTextPr, sText, sTransform, oFill, oStroke, nRotAngle, nWidth, nHeight, nIndLeft, nIndTop) { return new ApiDrawing(); };
 
 /**
+ * Converts the specified JSON object into the Document Builder object of the corresponding type.
+ * @memberof ApiInterface
+ * @param {JSON} sMessage - The JSON object to convert.
+ * @typeofeditors ["CPE"]
+ */
+ApiInterface.prototype.FromJSON = function(sMessage){};
+
+/**
  * Subscribes to the specified event and calls the callback function when the event fires.
+ * @function
  * @memberof ApiInterface
  * @typeofeditors ["CPE"]
  * @param {string} eventName - The event name.
@@ -2163,6 +2408,7 @@ ApiInterface.prototype["attachEvent"] = ApiInterface.prototype.attachEvent;{};
 
 /**
  * Unsubscribes from the specified event.
+ * @function
  * @memberof ApiInterface
  * @typeofeditors ["CPE"]
  * @param {string} eventName - The event name.
@@ -2332,6 +2578,14 @@ ApiPresentation.prototype.ToJSON = function(bWriteTableStyles){ return new JSON(
  * @returns {JSON[]}
  */
 ApiPresentation.prototype.SlidesToJSON = function(nStart, nEnd, bWriteLayout, bWriteMaster, bWriteAllMasLayouts, bWriteTableStyles){ return [new JSON()]; };
+
+/**
+ * Returns all comments from the current presentation.
+ * @memberof ApiPresentation
+ * @typeofeditors ["CPE"]
+ * @returns {ApiComment[]}
+ */
+ApiPresentation.prototype.GetAllComments = function(){ return [new ApiComment()]; };
 
 /**
  * Returns the type of the ApiMaster class.
@@ -2895,6 +3149,23 @@ ApiSlide.prototype.RemoveObject = function(nPos, nCount){ return true; };
  * @returns {boolean}
  * */
 ApiSlide.prototype.SetBackground = function(oApiFill){ return true; };
+
+/**
+ * Returns the visibility of the current presentation slide.
+ * @memberOf ApiSlide
+ * @typeofeditors ["CPE"]
+ * @returns {boolean}
+ * */
+ApiSlide.prototype.GetVisible = function(){ return true; };
+
+/**
+ * Sets the visibility to the current presentation slide.
+ * @memberOf ApiSlide
+ * @typeofeditors ["CPE"]
+ * @param {boolean} value - Slide visibility.
+ * @returns {boolean}
+ * */
+ApiSlide.prototype.SetVisible = function(value){ return true; };
 
 /**
  * Returns the slide width in English measure units.
