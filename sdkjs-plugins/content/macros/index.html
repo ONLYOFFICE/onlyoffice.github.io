@@ -68,7 +68,7 @@
 		margin: 0;
         position: absolute;
         bottom: 0;
-        top: 42px;
+        top: 0;
         left: 0;
         right: 70%;
 		background-color: #F1F1F1;
@@ -90,7 +90,7 @@
 		margin: 0;
         position: absolute;
         bottom: 0;
-        top: 42px;
+        top: 0;
         left: 30%;
         right: 0;
 	}
@@ -214,6 +214,7 @@
 		display: -webkit-box;
 	}
 
+/*
 	.divHeader {
 		position: absolute; 
 		margin: 0px; 
@@ -228,15 +229,15 @@
 		border-bottom-width: 1px; 
 		user-select:none;
 	}
-
+*/
 	.divFooter {
 		position: absolute;
 		margin: 0px;
 		padding: 0px;
 		width: 100%;
-		height: 42px;
+		height: 0px;
 		left: 0px;
-		bottom: 0px;
+		bottom: 40px;
 		box-sizing: border-box;
 		border-top-color: #CBCBCB;
 		border-top-style: solid;
@@ -298,8 +299,8 @@
 
 	.ace_active-line {
 		background: transparent !important;
-		border-bottom: 2px solid #eee;
-		border-top: 2px solid #eee;
+		border-bottom: 1px solid;
+		border-top: 1px solid;
 	}
 	#menu_content_macros {
 		height: calc(100% - 57px);;
@@ -321,6 +322,23 @@
 		max-height: calc(50% - 10px);
 		height: calc(50% - 10px);
 	}
+	.header_btn {
+		width: 22px !important;
+		height: 22px !important;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.div_buttons {
+		display: flex;
+		justify-content: center;
+	}
+	.cc_btn {
+		position: absolute;
+		right: 10px;
+		top: 1px;
+		background: transparent !important;
+	}
   </style>
 </head>
 <body>
@@ -329,7 +347,14 @@
 		<div id="menu_macros" class="menu_macros_long">
 			<div class="menu_header">
 				<label class="i18n header">Macros</label>
-				<button id="create_macros" class="btn-text-default" style="border: none !important;">+</button>
+				<div class="div_buttons noselect">
+					<div id="button_run" class="btn-text-default header_btn" style="border: none !important;">
+						<img src="./resources/img/play.png" style="width: 10px; height: 11px;" />
+					</div>
+					<div id="create_macros" class="btn-text-default header_btn" style="border: none !important;">
+						<img src="./resources/img/plus.png" style="width: 12px; height: 12px;" />
+					</div>
+				</div>
 			</div>
 			<div id="menu_content_macros" class="menu_padding"></div>
 		</div>
@@ -337,7 +362,9 @@
 		<div id="menu_functions" style="display: none;">
 			<div class="menu_header">
 				<label class="i18n header">Custom Functions</label>
-				<button id="create_functions" class="btn-text-default" style="border: none !important;">+</button>
+				<button id="create_functions" class="btn-text-default btn_create" style="border: none !important;">
+					<img src="./resources/img/plus.png" style="width: 12px; height: 12px;" />
+				</button>
 			</div>
 			<div id="menu_content_functions" class="menu_padding"></div>
 		</div>
@@ -348,14 +375,14 @@
 		<pre id="editor"></pre>
 	</div>
 	
-	<div class="divHeader">
+	<!-- <div class="divHeader">
 		<div style="position:absolute;margin:0;padding:0;left:10px;top:10px;right: 10px;bottom: 10px;" id="menu_footer">
 			<button class="btn-text-default" style="left: 10px; top: 0px; position:relative; bottom: 0px;" id="button_delete">Delete</button>
 			<button class="btn-text-default" style="left: 20px; top: 0px; position:relative; bottom: 0px;" id="button_rename">Rename</button>
 			<button class="btn-text-default" style="left: 30px; top: 0px; position:relative; bottom: 0px; display:none" id="button_autostart">Autostart</button>
 		</div>
 		<button class="btn-text-default primary" style="right: 10px; top: 10px; position:absolute; bottom: 10px;" id="button_run">Run</button>
-	</div>
+	</div> -->
 
 	<div class="divRenameMask" id="idRenameMask" style="display: none">	
 	</div>

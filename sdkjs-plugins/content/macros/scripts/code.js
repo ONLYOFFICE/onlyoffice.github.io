@@ -155,8 +155,8 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				} else if (navigator.userAgent.indexOf('Linux') != -1) {
 					prop = "style = \"top : calc(50% - 4px) !important\"";
 				}
-				item += ("<div class=\"macrosAutostart\"" + prop + ">(A)</div>");
 			}
+			item += '<div id="mac_bt' + i + '" class="btn-text-default header_btn cc_btn macros_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="img_macros" id="mac_im' + i + '" onclick="onClickCC(event)" src="./resources/img/dots.png" style="width: 2px; height: 10px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 
@@ -186,6 +186,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			var cl = (i == CustomFunctions.current) ? "functionSelected" : "function";
 			var name = $('<div/>').text(CustomFunctions.macrosArray[i].name).html();
 			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
+			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="im_function"' + i + ' onclick="onClickCC(event)" src="./resources/img/dots.png" style="width: 2px; height: 10px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 
@@ -193,6 +194,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				CustomFunctions.macrosArray[i]["guid"] = create_guid();
 		}
 		
+
 		var elem = document.getElementById("menu_content_functions");
 		elem.innerHTML = menuContent;
 		
@@ -293,7 +295,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 		macrosList.addEventListener('dragover', function(evt) {
 			currentElement = evt.target;
-			let bDragAllowed = !!(mode && currentElement.id.includes('macros'));
+			let bDragAllowed = !!(mode && currentElement.id.includes('mac'));
 			evt.preventDefault();
 			evt.dataTransfer.dropEffect = bDragAllowed ? "move" : "none";
 			const isMoveable = currentElement.classList.contains('draggable');
@@ -374,7 +376,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		// 	obj.current = index;
 		// }
 
-		var buttonAutoStart = document.getElementById("button_autostart");
+		// var buttonAutoStart = document.getElementById("button_autostart");
 		var buttonRun = document.getElementById("button_run");
 		if (-1 == obj.current)
 		{
@@ -382,7 +384,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			editor.setValue('');
 			editor.setReadOnly(true);
 			window.isDisable = false;
-			buttonAutoStart.style.display = "none";
+			// buttonAutoStart.style.display = "none";
 		}
 		else
 		{
@@ -390,25 +392,62 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			editor.setValue(obj.macrosArray[index].value);
 			editor.setReadOnly(false);
 			window.isDisable = false;
-			buttonAutoStart.style.display = "inline-block";
+			// buttonAutoStart.style.display = "inline-block";
 			editor.focus();
 			if (isMacros) {
-				buttonRun.style.display = "inline-block";
-				if (obj.macrosArray[obj.current].autostart)
-					buttonAutoStart.classList.add("primary");
-				else
-					buttonAutoStart.classList.remove("primary");
+				buttonRun.style.opacity = 1;
+				// if (obj.macrosArray[obj.current].autostart)
+				// 	buttonAutoStart.classList.add("primary");
+				// else
+				// 	buttonAutoStart.classList.remove("primary");
 			} else {
-				buttonAutoStart.style.display = "none";
-				buttonRun.style.display = "none";
+				// buttonAutoStart.style.display = "none";
+				buttonRun.style.opacity = 0.6;
 			}
 			
 		}
 			
 		editor.selection.clearSelection();
 		editor.scrollToRow(0);
-	}
+	};
 	window.onItemClick = onItemClick;
+
+	function onClickCC(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		var className = event.srcElement.getAttribute("class");
+		if (className && (-1 != className.indexOf("mac") || -1 != className.indexOf("fun")))
+		{
+			window.CustomContextMenu.mode = event.srcElement.id.includes('mac') ? 1 : 0;
+			let len = window.CustomContextMenu.mode ? 6 : 8;
+			window.CustomContextMenu.macrosIndex = parseInt(event.srcElement.id.substr(len));
+			let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
+			console.log(window.CustomContextMenu.macrosIndex);
+			if (window.CustomContextMenu.mode)
+				document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
+
+			let buttonRun = this.document.getElementById('menu_run_id');
+			let buttonAutoStart = this.document.getElementById('menu_autostart_id');
+			if (window.CustomContextMenu.mode) {
+				buttonRun.style.display = "block";
+				buttonAutoStart.style.display = "block";
+
+			} else {
+				buttonRun.style.display = "none";
+				buttonAutoStart.style.display = "none";
+			}
+			window.CustomContextMenu.position(event.pageX, event.pageY);
+			onItemClick(window.CustomContextMenu.macrosIndex, window.CustomContextMenu.mode);
+			return;
+		}
+		if (event.srcElement.id && (0 == event.srcElement.id.indexOf("menu_") || 0 == event.srcElement.id.indexOf("button")))
+		{
+			event.preventDefault();
+		}
+		if (window.CustomContextMenu.visible)
+			window.CustomContextMenu.hide();
+	};
+	window.onClickCC = onClickCC;
 
 	document.getElementById("create_macros").onclick = function() {
 		var indexMax = 0;
@@ -460,24 +499,24 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		updateFunctionsMenu();
 		editor.focus();
 	};
-	document.getElementById("button_delete").onclick = function() {
-		if (mode && Content.current != -1)
-		{
-			Content.macrosArray.splice(Content.current, 1);
-			updateMacrosMenu();
-		} else if (!mode && CustomFunctions.current != -1) {
-			CustomFunctions.macrosArray.splice(CustomFunctions.current, 1);
-			updateFunctionsMenu();
-		}
-	};
-	document.getElementById("button_rename").onclick = function() {
-		showRename();
-	};
-	document.getElementById("button_autostart").onclick = function() {
-		Content.macrosArray[Content.current].autostart = Content.macrosArray[Content.current].autostart ? false : true;
-		onItemClick(Content.current, true);
-		updateMacrosMenu();
-	};
+	// document.getElementById("button_delete").onclick = function() {
+	// 	if (mode && Content.current != -1)
+	// 	{
+	// 		Content.macrosArray.splice(Content.current, 1);
+	// 		updateMacrosMenu();
+	// 	} else if (!mode && CustomFunctions.current != -1) {
+	// 		CustomFunctions.macrosArray.splice(CustomFunctions.current, 1);
+	// 		updateFunctionsMenu();
+	// 	}
+	// };
+	// document.getElementById("button_rename").onclick = function() {
+	// 	showRename();
+	// };
+	// document.getElementById("button_autostart").onclick = function() {
+	// 	Content.macrosArray[Content.current].autostart = Content.macrosArray[Content.current].autostart ? false : true;
+	// 	onItemClick(Content.current, true);
+	// 	updateMacrosMenu();
+	// };
 	document.getElementById("button_run").onclick = function() {
 		if (Content.current != -1)
 		{
@@ -838,10 +877,10 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 	window.Asc.plugin.onTranslate = function()
 	{
-		document.getElementById("button_delete").innerHTML = window.Asc.plugin.tr("Delete");
-		document.getElementById("button_rename").innerHTML = window.Asc.plugin.tr("Rename");
-		document.getElementById("button_autostart").innerHTML = window.Asc.plugin.tr("Autostart");
-		document.getElementById("button_run").innerHTML = window.Asc.plugin.tr("Run");
+		// document.getElementById("button_delete").innerHTML = window.Asc.plugin.tr("Delete");
+		// document.getElementById("button_rename").innerHTML = window.Asc.plugin.tr("Rename");
+		// document.getElementById("button_autostart").innerHTML = window.Asc.plugin.tr("Autostart");
+		// document.getElementById("button_run").innerHTML = window.Asc.plugin.tr("Run");
 		document.getElementById("rename_ok").innerHTML = window.Asc.plugin.tr("Ok");
 		document.getElementById("rename_cancel").innerHTML = window.Asc.plugin.tr("Cancel");
 		document.getElementById("input_error_id").title = window.Asc.plugin.tr("Title");
@@ -885,14 +924,16 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			});
 			window.addEventListener("contextmenu", function(e) {
 				var className = e.srcElement.getAttribute("class");
-				if (className && (-1 != className.indexOf("macros") || -1 != className.indexOf("function")))
+				if (className && (-1 != className.indexOf("mac") || -1 != className.indexOf("fun")))
 				{
 					e.preventDefault();
-					window.CustomContextMenu.mode = e.srcElement.id.includes('macros') ? 1 : 0;
+					window.CustomContextMenu.mode = e.srcElement.id.includes('mac') ? 1 : 0;
 					let len = window.CustomContextMenu.mode ? 6 : 8;
 					window.CustomContextMenu.macrosIndex = parseInt(e.srcElement.id.substr(len));
 					let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
-					document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
+					if (window.CustomContextMenu.mode)
+						document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
+
 					let buttonRun = this.document.getElementById('menu_run_id');
 					let buttonAutoStart = this.document.getElementById('menu_autostart_id');
 					if (window.CustomContextMenu.mode) {
@@ -903,6 +944,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 						buttonAutoStart.style.display = "none";
 					}
 					window.CustomContextMenu.position(e.pageX, e.pageY);
+					onItemClick(window.CustomContextMenu.macrosIndex, window.CustomContextMenu.mode);
 					return;
 				}
 				if (e.srcElement.id && (0 == e.srcElement.id.indexOf("menu_") || 0 == e.srcElement.id.indexOf("button")))
@@ -986,15 +1028,19 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		var rules = '.macros { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
 		rules += '.macros:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
 		// rules += '.macrosSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
-		var rules = '.function { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
+		rules += '.function { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
 		rules += '.function:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
 		// rules += '.functionSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.dragHovered { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.context-menu-option:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
-		if (theme.type === 'dark')
+		if (theme.type === 'dark') {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }'
-		else
+			rules += '.ace_active-line { border-color: #555 !important;}'
+		} else {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }'
+			rules += '.ace_active-line { border-color: #eee !important;}'
+
+		}
 		var styleTheme = document.createElement('style');
 		styleTheme.type = 'text/css';
 		styleTheme.innerHTML = rules;
