@@ -186,7 +186,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			var cl = (i == CustomFunctions.current) ? "functionSelected" : "function";
 			var name = $('<div/>').text(CustomFunctions.macrosArray[i].name).html();
 			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
-			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="im_function"' + i + ' onclick="onClickCC(event)" src="./resources/img/dots.png" style="width: 2px; height: 10px;" /></div>';
+			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img"' + i + ' onclick="onClickCC(event)" src="./resources/img/dots.png" style="width: 2px; height: 10px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 
@@ -1025,7 +1025,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		$('#idRename').css('border-color', window.Asc.plugin.theme["border-toolbar-button-hover"]);
 		$('.context-menu-options').css('background', window.Asc.plugin.theme["background-normal"]);
 
-		var rules = '.macros { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
+		var rules = '.macros, .ace_content, .Ace-Tern-tooltip, .Ace-Tern-jsdoc-param-description { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
 		rules += '.macros:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
 		// rules += '.macrosSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.function { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
