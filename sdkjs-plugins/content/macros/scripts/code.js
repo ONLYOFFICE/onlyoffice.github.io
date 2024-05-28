@@ -1034,11 +1034,18 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		rules += '.dragHovered { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.context-menu-option:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
 		if (theme.type === 'dark') {
-			rules += ' .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }\n';
+			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }\n';
 			rules += '.ace_active-line { border-color: #555 !important;}\n';
+			rules += '.oo_highlight { background-color: #555 !important;}\n';
+			rules += '.ace_line-hover { background-color: #333 !important; border-color: #555 !important;}\n';
+			rules += '.ace_completion-highlight {color: #4FC1FF; text-shadow: 0 0 0.01em;\}\n';
+
 		} else {
-			rules += '.ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }\n';
+			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }\n';
 			rules += '.ace_active-line { border-color: #eee !important;}\n';
+			rules += '.oo_highlight { background-color: #ccc !important;}\n';
+			rules += '.ace_line-hover { background-color: #aaa !important; border-color: #eee !important;}\n';
+			rules += '.ace_completion-highlight {color: #0000ff; text-shadow: 0 0 0.01em;\}\n';
 		}
 		var styleTheme = document.createElement('style');
 		styleTheme.type = 'text/css';
