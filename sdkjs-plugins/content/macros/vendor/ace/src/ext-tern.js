@@ -1016,8 +1016,8 @@ var AcePopup = function(parentNode) {
     var lastMouseEvent;
     var hoverMarker = new Range(-1,0,-1,Infinity);
     var selectionMarker = new Range(-1,0,-1,Infinity);
-    // here we can add our class for active line in aoutocomplete modal
-    selectionMarker.id = popup.session.addMarker(selectionMarker, "ace_active-line", "fullLine");
+    // there we can add our class for active line in aoutocomplete modal
+    selectionMarker.id = popup.session.addMarker(selectionMarker, "ace_active-line oo_highlight", "fullLine");
     popup.setSelectOnHover = function(val) {
         if (!val) {
             hoverMarker.id = popup.session.addMarker(hoverMarker, "ace_line-hover", "fullLine");
@@ -1057,8 +1057,9 @@ var AcePopup = function(parentNode) {
         var row = popup.getRow();
         var t = popup.renderer.$textLayer;
         var selected = t.element.childNodes[row - t.config.firstRow];
-        if (selected == t.selectedNode)
-            return;
+		// sometimes it works not correct
+        // if (selected == t.selectedNode)
+        //     return;
         if (t.selectedNode)
             dom.removeCssClass(t.selectedNode, "ace_selected");
         t.selectedNode = selected;
@@ -1227,11 +1228,9 @@ var AcePopup = function(parentNode) {
 
 dom.importCssString("\
 .ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {\
-    background-color: #CAD6FA !important;\
     z-index: 1;\
 }\
 .ace_editor.ace_autocomplete .ace_line-hover {\
-    border: 1px solid #abbffe;\
     margin-top: -1px;\
     background: rgba(233,233,253,0.4);\
 }\
@@ -1252,7 +1251,7 @@ dom.importCssString("\
     text-align: right;\
     z-index: -1;\
 }\
-.ace_editor.ace_autocomplete .ace_completion-highlight{\
+.ace_editor.ace_autocomplete {\
     color: #000;\
     text-shadow: 0 0 0.01em;\
 }\
