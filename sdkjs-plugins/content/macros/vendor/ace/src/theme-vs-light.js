@@ -84,6 +84,7 @@ border: 1px solid rgb(192, 192, 192);\
 }\
 .ace-chrome .ace_marker-layer .ace_active-line {\
 background: rgba(0, 0, 0, 0.07);\
+border-color: #eee;\
 }\
 .ace-chrome .ace_gutter-active-line {\
 background-color : #dcdcdc;\

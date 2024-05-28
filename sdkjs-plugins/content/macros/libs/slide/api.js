@@ -553,7 +553,7 @@ function ApiWatermarkSettings(oSettings){}
 
 /**
  * Types of all supported forms.
- * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiComplexForm} ApiForm
+ * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm} ApiForm
  */
 
 /**
@@ -1338,6 +1338,15 @@ ApiTextPr.prototype.GetClassType = function(){ return ""; };
 ApiTextPr.prototype.SetBold = function(isBold){ return new ApiTextPr(); };
 
 /**
+ * Gets the bold property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetBold = function(){ return true; };
+
+/**
  * Sets the italic property to the text character.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1347,6 +1356,15 @@ ApiTextPr.prototype.SetBold = function(isBold){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetItalic = function(isItalic){ return new ApiTextPr(); };
 
 /**
+ * Gets the italic property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetItalic = function(){ return true; };
+
+/**
  * Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1354,6 +1372,15 @@ ApiTextPr.prototype.SetItalic = function(isItalic){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetStrikeout = function(isStrikeout){ return new ApiTextPr(); };
+
+/**
+ * Gets the strikeout property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetStrikeout = function(){ return true; };
 
 /**
  * Specifies that the contents of the run are displayed along with a line appearing directly below the character
@@ -1366,6 +1393,15 @@ ApiTextPr.prototype.SetStrikeout = function(isStrikeout){ return new ApiTextPr()
 ApiTextPr.prototype.SetUnderline = function(isUnderline){ return new ApiTextPr(); };
 
 /**
+ * Gets the underline property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetUnderline = function(){ return true; };
+
+/**
  * Sets all 4 font slots with the specified font family.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1375,6 +1411,15 @@ ApiTextPr.prototype.SetUnderline = function(isUnderline){ return new ApiTextPr()
 ApiTextPr.prototype.SetFontFamily = function(sFontFamily){ return new ApiTextPr(); };
 
 /**
+ * Gets the font family from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFontFamily = function(){ return ""; };
+
+/**
  * Sets the font size to the characters of the current text run.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1382,6 +1427,15 @@ ApiTextPr.prototype.SetFontFamily = function(sFontFamily){ return new ApiTextPr(
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetFontSize = function(nSize){ return new ApiTextPr(); };
+
+/**
+ * Gets the font size from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {hps}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFontSize = function(){ return new hps(); };
 
 /**
  * Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:
@@ -1405,6 +1459,15 @@ ApiTextPr.prototype.SetVertAlign = function(sType){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetHighlight = function(sColor){ return new ApiTextPr(); };
 
 /**
+ * Gets the highlight property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetHighlight = function(){ return ""; };
+
+/**
  * Sets the text spacing measured in twentieths of a point.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1412,6 +1475,15 @@ ApiTextPr.prototype.SetHighlight = function(sColor){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetSpacing = function(nSpacing){ return new ApiTextPr(); };
+
+/**
+ * Gets the text spacing from the current text properties measured in twentieths of a point.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {twips}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetSpacing = function(){ return new twips(); };
 
 /**
  * Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.
@@ -1423,6 +1495,15 @@ ApiTextPr.prototype.SetSpacing = function(nSpacing){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new ApiTextPr(); };
 
 /**
+ * Gets the double strikeout property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetDoubleStrikeout = function(){ return true; };
+
+/**
  * Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -1430,6 +1511,15 @@ ApiTextPr.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetCaps = function(isCaps){ return new ApiTextPr(); };
+
+/**
+ * Specifies whether the text with the current text properties are capitalized.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetCaps = function(){ return true; };
 
 /**
  * Specifies that all the small letter characters in the text run are formatted for display only as their capital
@@ -1442,6 +1532,15 @@ ApiTextPr.prototype.SetCaps = function(isCaps){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr(); };
 
 /**
+ * Specifies whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetSmallCaps = function(){ return true; };
+
+/**
  * Sets the text color to the current text run.
  * @memberof ApiTextPr
  * @typeofeditors ["CSE", "CPE"]
@@ -1449,6 +1548,15 @@ ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr()
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetFill = function(oApiFill){ return new ApiTextPr(); };
+
+/**
+ * Gets the text color from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CSE", "CPE"]
+ * @returns {ApiFill}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFill = function(){ return new ApiFill(); };
 
 /**
  * Sets the text fill to the current text run.
@@ -1460,6 +1568,15 @@ ApiTextPr.prototype.SetFill = function(oApiFill){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetTextFill = function(oApiFill){ return new ApiTextPr(); };
 
 /**
+ * Gets the text fill from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CSE", "CPE"]
+ * @returns {ApiFill}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetTextFill = function(){ return new ApiFill(); };
+
+/**
  * Sets the text outline to the current text run.
  * @memberof ApiTextPr
  * @typeofeditors ["CSE", "CPE", "CSE"]
@@ -1467,6 +1584,15 @@ ApiTextPr.prototype.SetTextFill = function(oApiFill){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetOutLine = function(oStroke){ return new ApiTextPr(); };
+
+/**
+ * Gets the text outline from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CSE", "CPE"]
+ * @returns {ApiStroke}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetOutLine = function(){ return new ApiStroke(); };
 
 /**
  * Returns a type of the ApiParaPr class.
@@ -1926,11 +2052,27 @@ ApiCommentReply.prototype.SetAuthorName = function (sAuthorName) { return new Ap
 ApiCommentReply.prototype.SetUserId = function (sUserId) { return new ApiCommentReply(); };
 
 /**
+ * В проверке на лок, которую мы делаем после выполнения скрипта, нужно различать действия сделанные через
+ * разрешенные методы, и действия, которые пользователь пытался сам сделать с формами
+ * @param fn
+ * @param t
+ * @returns {*}
+ */
+function executeNoFormLockCheck(fn, t){ return null; }
+
+/**
  * Gets a document color object by color name.
- * @param {highlightColor} - available highlight color
+ * @param {highlightColor} sColor - available highlight color
  * @returns {object}
  */
 function private_getHighlightColorByName(sColor){ return null; }
+
+/**
+ * Gets a document highlight name by color object.
+ * @param {object} oColor - available highlight color
+ * @returns {highlightColor}
+ */
+function private_getHighlightNameByColor(oColor){ return null; }
 
 /**
  * Class representing a presentation.

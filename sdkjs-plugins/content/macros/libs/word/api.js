@@ -440,10 +440,6 @@ ApiHyperlink.prototype.GetClassType = function(){ return ""; };
  * Class representing a document form base.
  * @constructor
  * @typeofeditors ["CDE", "CFE"]
- * @property {string} key - Form key.
- * @property {string} tip - Form tip text.
- * @property {boolean} required - Specifies if the form is required or not.
- * @property {string} placeholder - Form placeholder text.
  */
 function ApiFormBase(oSdt){}
 
@@ -451,11 +447,6 @@ function ApiFormBase(oSdt){}
  * Class representing a document text field.
  * @constructor
  * @typeofeditors ["CDE", "CFE"]
- * @property {boolean} comb - Specifies if the text field should be a comb of characters with the same cell width. The maximum number of characters must be set to a positive value.
- * @property {number} maxCharacters - The maximum number of characters in the text field.
- * @property {number} cellWidth - The cell width for each character measured in millimeters. If this parameter is not specified or equal to 0 or less, then the width will be set automatically.
- * @property {boolean} multiLine - Specifies if the current fixed size text field is multiline or not.
- * @property {boolean} autoFit - Specifies if the text field content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
  * @extends {ApiFormBase}
  */
 function ApiTextForm(oSdt){}
@@ -466,12 +457,6 @@ ApiTextForm.prototype.constructor = ApiTextForm;
  * Class representing a document combo box / dropdown list.
  * @constructor
  * @typeofeditors ["CDE", "CFE"]
- * @property {boolean} editable - Specifies if the combo box text can be edited.
- * @property {boolean} autoFit - Specifies if the combo box form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
- * @property {Array.<string | Array.<string>>} items - The combo box items.
-     * This array consists of strings or arrays of two strings where the first string is the displayed value and the second one is its meaning.
-     * If the array consists of single strings, then the displayed value and its meaning are the same.
-     * Example: ["First", ["Second", "2"], ["Third", "3"], "Fourth"].
  * @extends {ApiFormBase}
  */
 function ApiComboBoxForm(oSdt){}
@@ -482,7 +467,6 @@ ApiComboBoxForm.prototype.constructor = ApiComboBoxForm;
  * Class representing a document checkbox / radio button.
  * @constructor
  * @typeofeditors ["CDE", "CFE"]
- * @property {boolean} radio - Specifies if the current checkbox is a radio button. In this case, the key parameter is considered as an identifier for the group of radio buttons.
  * @extends {ApiFormBase}
  */
 function ApiCheckBoxForm(oSdt){}
@@ -493,22 +477,21 @@ ApiCheckBoxForm.prototype.constructor = ApiCheckBoxForm;
  * Class representing a document picture form.
  * @constructor
  * @typeofeditors ["CDE", "CFE"]
- * @property {ScaleFlag} scaleFlag - The condition to scale an image in the picture form: "always", "never", "tooBig" or "tooSmall".
- * @property {boolean} lockAspectRatio - Specifies if the aspect ratio of the picture form is locked or not.
- * @property {boolean} respectBorders - Specifies if the form border width is respected or not when scaling the image.
- * @property {percentage} shiftX - Horizontal picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on the left;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the right.
- * @property {percentage} shiftY - Vertical picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on top;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the bottom.
  * @extends {ApiFormBase}
  */
 function ApiPictureForm(oSdt){}
 ApiPictureForm.prototype = Object.create(ApiFormBase.prototype);
 ApiPictureForm.prototype.constructor = ApiPictureForm;
+
+/**
+ * Class representing a document date field.
+ * @constructor
+ * @typeofeditors ["CDE", "CFE"]
+ * @extends {ApiFormBase}
+ */
+function ApiDateForm(oSdt){}
+ApiDateForm.prototype = Object.create(ApiFormBase.prototype);
+ApiDateForm.prototype.constructor = ApiDateForm;
 
 /**
  * Class representing a complex field.
@@ -1105,7 +1088,7 @@ function ApiWatermarkSettings(oSettings){}
 
 /**
  * Types of all supported forms.
- * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiComplexForm} ApiForm
+ * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm} ApiForm
  */
 
 /**
@@ -4415,6 +4398,15 @@ ApiTextPr.prototype.GetClassType = function(){ return ""; };
 ApiTextPr.prototype.SetStyle = function(oStyle){ return new ApiTextPr(); };
 
 /**
+ * Gets the style of the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {ApiStyle} - The used style.
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetStyle = function(){ return new ApiStyle(); };
+
+/**
  * Sets the bold property to the text character.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4422,6 +4414,15 @@ ApiTextPr.prototype.SetStyle = function(oStyle){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetBold = function(isBold){ return new ApiTextPr(); };
+
+/**
+ * Gets the bold property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetBold = function(){ return true; };
 
 /**
  * Sets the italic property to the text character.
@@ -4433,6 +4434,15 @@ ApiTextPr.prototype.SetBold = function(isBold){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetItalic = function(isItalic){ return new ApiTextPr(); };
 
 /**
+ * Gets the italic property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetItalic = function(){ return true; };
+
+/**
  * Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4440,6 +4450,15 @@ ApiTextPr.prototype.SetItalic = function(isItalic){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetStrikeout = function(isStrikeout){ return new ApiTextPr(); };
+
+/**
+ * Gets the strikeout property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetStrikeout = function(){ return true; };
 
 /**
  * Specifies that the contents of the run are displayed along with a line appearing directly below the character
@@ -4452,6 +4471,15 @@ ApiTextPr.prototype.SetStrikeout = function(isStrikeout){ return new ApiTextPr()
 ApiTextPr.prototype.SetUnderline = function(isUnderline){ return new ApiTextPr(); };
 
 /**
+ * Gets the underline property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetUnderline = function(){ return true; };
+
+/**
  * Sets all 4 font slots with the specified font family.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4461,6 +4489,15 @@ ApiTextPr.prototype.SetUnderline = function(isUnderline){ return new ApiTextPr()
 ApiTextPr.prototype.SetFontFamily = function(sFontFamily){ return new ApiTextPr(); };
 
 /**
+ * Gets the font family from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFontFamily = function(){ return ""; };
+
+/**
  * Sets the font size to the characters of the current text run.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4468,6 +4505,15 @@ ApiTextPr.prototype.SetFontFamily = function(sFontFamily){ return new ApiTextPr(
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetFontSize = function(nSize){ return new ApiTextPr(); };
+
+/**
+ * Gets the font size from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {hps}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFontSize = function(){ return new hps(); };
 
 /**
  * Sets the text color to the current text run in the RGB format.
@@ -4482,6 +4528,15 @@ ApiTextPr.prototype.SetFontSize = function(nSize){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetColor = function(r, g, b, isAuto){ return new ApiTextPr(); };
 
 /**
+ * Gets the RGB color from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {ApiRGBColor}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetColor = function(){ return new ApiRGBColor(); };
+
+/**
  * Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:
  * * <b>"baseline"</b> - the characters in the current text run will be aligned by the default text baseline.
  * * <b>"subscript"</b> - the characters in the current text run will be aligned below the default text baseline.
@@ -4494,6 +4549,15 @@ ApiTextPr.prototype.SetColor = function(r, g, b, isAuto){ return new ApiTextPr()
 ApiTextPr.prototype.SetVertAlign = function(sType){ return new ApiTextPr(); };
 
 /**
+ * Gets the vertical alignment type from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetVertAlign = function(){ return ""; };
+
+/**
  * Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CPE"]
@@ -4501,6 +4565,15 @@ ApiTextPr.prototype.SetVertAlign = function(sType){ return new ApiTextPr(); };
  * @returns {ApiTextPr}
  */
 ApiTextPr.prototype.SetHighlight = function(sColor){ return new ApiTextPr(); };
+
+/**
+ * Gets the highlight property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetHighlight = function(){ return ""; };
 
 /**
  * Sets the text spacing measured in twentieths of a point.
@@ -4512,6 +4585,15 @@ ApiTextPr.prototype.SetHighlight = function(sColor){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetSpacing = function(nSpacing){ return new ApiTextPr(); };
 
 /**
+ * Gets the text spacing from the current text properties measured in twentieths of a point.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {twips}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetSpacing = function(){ return new twips(); };
+
+/**
  * Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4519,6 +4601,15 @@ ApiTextPr.prototype.SetSpacing = function(nSpacing){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new ApiTextPr(); };
+
+/**
+ * Gets the double strikeout property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetDoubleStrikeout = function(){ return true; };
 
 /**
  * Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.
@@ -4530,6 +4621,15 @@ ApiTextPr.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new
 ApiTextPr.prototype.SetCaps = function(isCaps){ return new ApiTextPr(); };
 
 /**
+ * Specifies whether the text with the current text properties are capitalized.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetCaps = function(){ return true; };
+
+/**
  * Specifies that all the small letter characters in the text run are formatted for display only as their capital
  * letter character equivalents which are two points smaller than the actual font size specified for this text.
  * @memberof ApiTextPr
@@ -4538,6 +4638,15 @@ ApiTextPr.prototype.SetCaps = function(isCaps){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr(); };
+
+/**
+ * Specifies whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetSmallCaps = function(){ return true; };
 
 /**
  * Specifies an amount by which text is raised or lowered for this run in relation to the default
@@ -4551,6 +4660,15 @@ ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr()
 ApiTextPr.prototype.SetPosition = function(nPosition){ return new ApiTextPr(); };
 
 /**
+ * Gets the text position from the current text properties measured in half-points (1/144 of an inch).
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {hps}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetPosition = function(){ return new hps(); };
+
+/**
  * Specifies the languages which will be used to check spelling and grammar (if requested) when processing
  * the contents of the text run.
  * @memberof ApiTextPr
@@ -4560,6 +4678,15 @@ ApiTextPr.prototype.SetPosition = function(nPosition){ return new ApiTextPr(); }
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetLanguage = function(sLangId){ return new ApiTextPr(); };
+
+/**
+ * Gets the language from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetLanguage = function(){ return ""; };
 
 /**
  * Specifies the shading applied to the contents of the current text run.
@@ -4572,6 +4699,15 @@ ApiTextPr.prototype.SetLanguage = function(sLangId){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetShd = function(sType, r, g, b){ return new ApiTextPr(); };
+
+/**
+ * Gets the text shading from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {ApiRGBColor}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetShd = function(){ return new ApiRGBColor(); };
 
 /**
  * Converts the ApiTextPr object into the JSON object.
@@ -6710,6 +6846,14 @@ ApiInlineLvlSdt.prototype.IsForm = function(){ return true; };
 ApiInlineLvlSdt.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
 
 /**
+ * Place cursor before/after the current content control
+ * @param {boolean} [isAfter=true]
+ * @memberof ApiInlineLvlSdt
+ * @typeofeditors ["CDE"]
+ */
+ApiInlineLvlSdt.prototype.MoveCursorOutside = function(isAfter){};
+
+/**
  * Returns a list of values of the combo box / dropdown list content control.
  * @memberof ApiInlineLvlSdt
  * @typeofeditors ["CDE"]
@@ -7170,6 +7314,14 @@ ApiBlockLvlSdt.prototype.AddCaption = function(sAdditional, sLabel, bExludeLabel
 ApiBlockLvlSdt.prototype.GetDropdownList = function(){ return new ApiContentControlList(); };
 
 /**
+ * Place cursor before/after the current content control
+ * @param {boolean} [isAfter=true]
+ * @memberof ApiBlockLvlSdt
+ * @typeofeditors ["CDE"]
+ */
+ApiBlockLvlSdt.prototype.MoveCursorOutside = function(isAfter){};
+
+/**
  * Returns a type of the ApiFormBase class.
  * @memberof ApiFormBase
  * @typeofeditors ["CDE", "CFE"]
@@ -7289,7 +7441,7 @@ ApiFormBase.prototype.SetBackgroundColor = function(r, g, b, bNone){ return true
 
 /**
  * Returns the text from the current form.
- * *This method is used only for text and combo box forms.*
+ * *Returns the value as a string if possible for the given form type*
  * @memberof ApiFormBase
  * @typeofeditors ["CDE", "CFE"]
  * @returns {string}
@@ -7324,7 +7476,7 @@ ApiFormBase.prototype.SetPlaceholderText = function(sText){ return true; };
 
 /**
  * Sets the text properties to the current form.
- * *This method is used only for text and combo box forms.*
+ * *Used if possible for this type of form*
  * @memberof ApiFormBase
  * @typeofeditors ["CDE", "CFE"]
  * @param {ApiTextPr} oTextPr - The text properties that will be set to the current form.
@@ -7334,12 +7486,20 @@ ApiFormBase.prototype.SetTextPr = function(oTextPr){ return true; };
 
 /**
  * Returns the text properties from the current form.
- * *This method is used only for text and combo box forms.*
+ * *Used if possible for this type of form*
  * @memberof ApiFormBase
  * @typeofeditors ["CDE", "CFE"]
  * @returns {ApiTextPr}  
  */
 ApiFormBase.prototype.GetTextPr = function(){ return new ApiTextPr(); };
+
+/**
+ * Place cursor before/after the current form.
+ * @param {boolean} [isAfter=true]
+ * @memberof ApiFormBase
+ * @typeofeditors ["CDE"]
+ */
+ApiFormBase.prototype.MoveCursorOutside = function(isAfter){};
 
 /**
  * Copies the current form (copies with the shape if it exists).
@@ -7523,10 +7683,12 @@ ApiPictureForm.prototype.GetImage = function(){ return base64img; };
  * Sets an image to the current picture form.
  * @memberof ApiPictureForm
  * @param {string} sImageSrc - The image source where the image to be inserted should be taken from (currently, only internet URL or base64 encoded images are supported).
+ * @param {EMU} nWidth - The image width in English measure units.
+ * @param {EMU} nHeight - The image height in English measure units.
  * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
-ApiPictureForm.prototype.SetImage = function(sImageSrc){ return true; };
+ApiPictureForm.prototype.SetImage = function(sImageSrc, nWidth, nHeight){ return true; };
 
 /**
  * Returns the list values from the current combo box.
@@ -7612,6 +7774,64 @@ ApiCheckBoxForm.prototype.GetRadioGroup = function(){ return ""; };
  * @typeofeditors ["CDE", "CFE"]
  */
 ApiCheckBoxForm.prototype.SetRadioGroup = function(sKey){};
+
+/**
+ * Gets the date format of the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.GetFormat = function() { return ""; };
+
+/**
+ * Sets the date format to the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @param {string} sFormat - The date format. For example, mm.dd.yyyy
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.SetFormat = function(sFormat){ return true; };
+
+/**
+ * Gets the used date language of the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.GetLanguage = function() { return ""; };
+
+/**
+ * Sets the date language to the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @param {string} sLangId - The date language. The possible value for this parameter is a language identifier as defined in
+ * RFC 4646/BCP 47. Example: "en-CA".
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.SetLanguage = function(sLangId){ return true; };
+
+/**
+ * Returns the timestamp of the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {number}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.GetTime = function(){ return 0; };
+
+/**
+ * Sets the timestamp to the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @param {number} nTimeStamp The timestamp that will be set to the current date form.
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.SetTime = function(nTimeStamp){ return true; };
 
 /**
  * Converts the ApiBlockLvlSdt object into the JSON object.
@@ -8050,10 +8270,26 @@ ApiWatermarkSettings.prototype.GetImageHeight = function (){ return new EMU(); }
 ApiWatermarkSettings.prototype.SetImageSize = function (nWidth, nHeight){};
 
 /**
+ * В проверке на лок, которую мы делаем после выполнения скрипта, нужно различать действия сделанные через
+ * разрешенные методы, и действия, которые пользователь пытался сам сделать с формами
+ * @param fn
+ * @param t
+ * @returns {*}
+ */
+function executeNoFormLockCheck(fn, t){ return null; }
+
+/**
  * Gets a document color object by color name.
- * @param {highlightColor} - available highlight color
+ * @param {highlightColor} sColor - available highlight color
  * @returns {object}
  */
 function private_getHighlightColorByName(sColor){ return null; }
+
+/**
+ * Gets a document highlight name by color object.
+ * @param {object} oColor - available highlight color
+ * @returns {highlightColor}
+ */
+function private_getHighlightNameByColor(oColor){ return null; }
 
 
