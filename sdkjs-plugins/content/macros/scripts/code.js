@@ -156,7 +156,8 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 					prop = "style = \"top : calc(50% - 4px) !important\"";
 				}
 			}
-			item += '<div id="mac_bt' + i + '" class="btn-text-default header_btn cc_btn macros_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="img_macros" id="mac_im' + i + '" onclick="onClickCC(event)" src="./resources/img/dots.png" style="width: 2px; height: 10px;" /></div>';
+			let imgSrc = './resources/img/dots_' + (window.Asc.plugin.theme.type.includes('dark') ? 'white': 'dark') + '.svg'
+			item += '<div id="mac_bt' + i + '" class="btn-text-default header_btn cc_btn macros_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="img_macros" id="mac_im' + i + '" onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 
@@ -185,8 +186,9 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		{
 			var cl = (i == CustomFunctions.current) ? "functionSelected" : "function";
 			var name = $('<div/>').text(CustomFunctions.macrosArray[i].name).html();
+			let imgSrc = './resources/img/dots_' + (window.Asc.plugin.theme.type.includes('dark') ? 'white': 'dark') + '.svg'
 			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
-			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img"' + i + ' onclick="onClickCC(event)" src="./resources/img/dots.png" style="width: 2px; height: 10px;" /></div>';
+			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img"' + i + ' onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 
@@ -261,7 +263,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		});
 
 		functionList.addEventListener('dragend', function(evt) {
-			console.log('dragend_func');
 			evt.target.classList.remove('dragged');
 			$('.dragHovered').removeClass("dragHovered");
 
@@ -422,7 +423,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			let len = window.CustomContextMenu.mode ? 6 : 8;
 			window.CustomContextMenu.macrosIndex = parseInt(event.srcElement.id.substr(len));
 			let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
-			console.log(window.CustomContextMenu.macrosIndex);
 			if (window.CustomContextMenu.mode)
 				document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
 
@@ -493,7 +493,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			}
 		}
 		indexMax++;
-		CustomFunctions.macrosArray.push({ name : (nameTranslated + " " + indexMax), value : "(function()\n{\n	/**\n	 * Function description\n	 * @customfunction\n	*/\n	Api.AddCustomFunction(CustomFunction);\n})();" });
+		CustomFunctions.macrosArray.push({ name : (nameTranslated + " " + indexMax), value : '(function()\n{\n\t/**\n\t * Function that returns the argument\n\t * @customfunction\n\t * @param {any} arg Any data.\n     * @returns {any} The argumet of the function.\n\t*/\n\tfunction customFunction(arg) {\n\t    return arg;\n\t}\n\tApi.AddCustomFunction(customFunction);\n})();' });
 		CustomFunctions.current = CustomFunctions.macrosArray.length - 1;
 		mode = 0;
 		updateFunctionsMenu();
@@ -728,13 +728,11 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				let end = value.indexOf(')', start);
 				let funcName = value.substring(start, end);
 				let code = '(function(){Api.RemoveCustomFunction("' + funcName + '")})();'
-				console.log(code);
 				window.Asc.plugin.executeCommand("command", code);
 			}
 			
 		});
 		curMacrosArr.forEach(function(func) {
-			console.log(func.value);
 			window.Asc.plugin.executeCommand("command", func.value);
 		});
 	};
@@ -1033,20 +1031,26 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		// rules += '.functionSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.dragHovered { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.context-menu-option:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
+		let imgSrc = './resources/img/plus';
 		if (theme.type === 'dark') {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }\n';
 			rules += '.ace_active-line { border-color: #555 !important;}\n';
 			rules += '.oo_highlight { background-color: #555 !important;}\n';
 			rules += '.ace_line-hover { background-color: #333 !important; border-color: #555 !important;}\n';
 			rules += '.ace_completion-highlight {color: #4FC1FF; text-shadow: 0 0 0.01em;\}\n';
-
+			imgSrc += '_white.svg'
 		} else {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }\n';
 			rules += '.ace_active-line { border-color: #eee !important;}\n';
 			rules += '.oo_highlight { background-color: #ccc !important;}\n';
 			rules += '.ace_line-hover { background-color: #aaa !important; border-color: #eee !important;}\n';
 			rules += '.ace_completion-highlight {color: #0000ff; text-shadow: 0 0 0.01em;\}\n';
+			imgSrc += '_dark.svg'
 		}
+		let imgArr = document.querySelectorAll('.img_plus');
+		imgArr.forEach(function(img){
+			img.setAttribute('src', imgSrc);
+		});
 		var styleTheme = document.createElement('style');
 		styleTheme.type = 'text/css';
 		styleTheme.innerHTML = rules;
