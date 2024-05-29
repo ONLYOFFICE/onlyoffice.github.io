@@ -2548,6 +2548,11 @@ ApiInterface.prototype.Format = function (expression, format) { return ""; };
  * @memberof ApiInterface
  * @typeofeditors ["CSE"]
  * @param {Function} fCustom - A new function for calculating.
+ * @example
+ *   function add(first, second) {
+ *       return first + second;
+ *   };
+ *   Api.AddCustomFunction(add);
  */
 ApiInterface.prototype.AddCustomFunction = function (fCustom) {};
 
@@ -2747,10 +2752,6 @@ ApiInterface.prototype.GetWorksheetFunction = function () { return new ApiWorksh
  * @returns {ApiWorksheetFunction}
  */
 ApiInterface.prototype.WorksheetFunction = ApiInterface.prototype.GetWorksheetFunction ();
-
-/**\n" + "\t * Returns the result of calculating the function.\n" + "\t * @memberof ApiWorksheetFunction\n" + "\t * @typeofeditors [\"CSE\"]\n" + test1
-// + "\t * @returns {number | string | boolean}\n" + "\t */
-\n" + "\tApiWorksheetFunction.prototype." + i.replaceAll(".","_")  + "= function (" + test2 + ") \n" + "\t\tthis.private_calculateFunction(\"" + i + "\", arguments);\n" + "\t;"{ return 0; };
 
 /**
  * Returns the result of calculating the function.
