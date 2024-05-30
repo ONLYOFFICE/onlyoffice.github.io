@@ -1036,6 +1036,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		$('#idRename').css('border-color', window.Asc.plugin.theme["border-toolbar-button-hover"]);
 		$('.context-menu-options').css('background', window.Asc.plugin.theme["background-normal"]);
 
+		
 		var rules = '.macros, .ace_content, .Ace-Tern-tooltip, .Ace-Tern-jsdoc-param-description { color: ' + window.Asc.plugin.theme["text-normal"] + '; background-color: ' + window.Asc.plugin.theme['background-toolbar'] + '}\n';
 		rules += '.macros:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
 		// rules += '.macrosSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
@@ -1048,23 +1049,27 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		let imgSrc = './resources/img/plus';
 		if (theme.type === 'dark') {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }\n';
-			rules += '.ace_active-line { border-color: #555 !important;}\n';
-			rules += '.oo_highlight { background-color: #555 !important;}\n';
+			rules += '.ace_active-line, { border-color: #333 !important;}\n';
+			rules += '.ace_active-line, .ace_gutter-active-line-bg { border-color: #555 !important; background-color: #333 !important;}\n';
+			rules += '.oo_highlight, { background-color: #555 !important;}\n';
 			rules += '.ace_line-hover { background-color: #333 !important; border-color: #555 !important;}\n';
 			rules += '.ace_completion-highlight {color: #4FC1FF !important; text-shadow: 0 0 0.01em;\}\n';
 			rules += '.Ace-Tern-farg { color: #d900ff; }\n';
 			rules += '.Ace-Tern-farg-current { color: #d900ff; }\n';
 			rules += '.Ace-Tern-jsdoc-param-name { color: #d900ff; }\n';
+			rules += '.gutter_bg {background-color: #333 !important}\n';
 			imgSrc += '_white.svg'
 		} else {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }\n';
-			rules += '.ace_active-line { border-color: #eee !important;}\n';
+			rules += '.ace_active-line, { border-color: #eee !important;}\n';
+			rules += '.ace_active-line, .ace_gutter-active-line-bg { border-color: #eee !important; background-color: #fff !important;}\n';
 			rules += '.oo_highlight { background-color: #ccc !important;}\n';
 			rules += '.ace_line-hover { background-color: #aaa !important; border-color: #eee !important;}\n';
 			rules += '.ace_completion-highlight {color: #0000ff !important; text-shadow: 0 0 0.01em;\}\n';
 			rules += '.Ace-Tern-farg { color: #70a; }\n';
 			rules += '.Ace-Tern-farg-current { color: #70a; }\n';
 			rules += '.Ace-Tern-jsdoc-param-name { color: #70a; }\n';
+			rules += '.gutter_bg {background-color: #fff !important}\n';
 			imgSrc += '_dark.svg'
 		}
 		let imgArr = document.querySelectorAll('.img_plus');
