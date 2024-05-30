@@ -1045,7 +1045,7 @@ var AcePopup = /** @class */ (function () {
         var lastMouseEvent;
         var hoverMarker = new Range(-1, 0, -1, Infinity);
         var selectionMarker = new Range(-1, 0, -1, Infinity);
-        selectionMarker.id = popup.session.addMarker(selectionMarker, "ace_active-line", "fullLine");
+		selectionMarker.id = popup.session.addMarker(selectionMarker, "ace_active-line oo_highlight", "fullLine");
         popup.setSelectOnHover = function (val) {
             if (!val) {
                 hoverMarker.id = popup.session.addMarker(hoverMarker, "ace_line-hover", "fullLine");
@@ -1488,7 +1488,7 @@ exports.getCompletionPrefix = function (editor) {
     var line = editor.session.getLine(pos.row);
     var prefix;
     editor.completers.forEach(function (completer) {
-        if (completer.identifierRegexps) {
+        if (completer && completer.identifierRegexps) {
             completer.identifierRegexps.forEach(function (identifierRegex) {
                 if (!prefix && identifierRegex)
                     prefix = this.retrievePrecedingIdentifier(line, pos.column, identifierRegex);
@@ -1502,7 +1502,7 @@ exports.triggerAutocomplete = function (editor, previousChar) {
         ? editor.session.getPrecedingCharacter()
         : previousChar;
     return editor.completers.some(function (completer) {
-        if (completer.triggerCharacters && Array.isArray(completer.triggerCharacters)) {
+        if (completer && completer.triggerCharacters && Array.isArray(completer.triggerCharacters)) {
             return completer.triggerCharacters.includes(previousChar);
         }
     });
@@ -2174,7 +2174,7 @@ var CompletionProvider = /** @class */ (function () {
         this.completers = editor.completers;
         var total = editor.completers.length;
         editor.completers.forEach(function (completer, i) {
-            completer.getCompletions(editor, session, pos, prefix, function (err, results) {
+            completer && completer.getCompletions(editor, session, pos, prefix, function (err, results) {
                 if (completer.hideInlinePreview)
                     results = results.map(function (result) {
                         return Object.assign(result, { hideInlinePreview: completer.hideInlinePreview });
@@ -2232,7 +2232,7 @@ var CompletionProvider = /** @class */ (function () {
     CompletionProvider.prototype.detach = function () {
         this.active = false;
         this.completers && this.completers.forEach(function (completer) {
-            if (typeof completer.cancel === "function") {
+            if (completer && typeof completer.cancel === "function") {
                 completer.cancel();
             }
         });
