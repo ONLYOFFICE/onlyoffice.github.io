@@ -118,7 +118,6 @@
 		padding: 5px 20px;
 		white-space: nowrap;
 		cursor: pointer;
-		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		font-size: 11px;
 		line-height: 1.5;
 	}        
@@ -133,7 +132,6 @@
         left: 0;
         top: calc(50% - 5px);
         position: absolute;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
         font-size: 10px;
 		pointer-events: none;
 		box-sizing: border-box;
@@ -141,64 +139,26 @@
 	}
 	
 	.macrosSelected {
-		position: relative;
 		background-color: #7D858C;
 		color: #FFFFFF;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-		font-size: 13px;
-		padding-bottom: 3px;
-		padding-left: 20px;
-		padding-right: 10px;
-		padding-top: 4px;
-		user-select: none;
-		margin: 2px 0px 2px 5px;
 	}
 
 	.functionSelected {
-		position: relative;
 		background-color: #7D858C;
 		color: #FFFFFF;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-		font-size: 13px;
-		padding-bottom: 3px;
-		padding-left: 20px;
-		padding-right: 10px;
-		padding-top: 4px;
-		user-select: none;
-		margin: 2px 0px 2px 5px;
 	}
 	
 	.macros {
-		position: relative;
 		background-color: #F1F1F1;
 		color: #000000;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-		font-size: 13px;
-		padding-bottom: 3px;
-		padding-left: 20px;
-		padding-right: 10px;
-		padding-top: 4px;
-		user-select: none;
-		margin: 2px 0px 2px 5px;
-		overflow-wrap: break-word;
 	}
 	.macros:hover {
 		background-color: #D8DADC;
 	}
 
 	.function {
-		position: relative;
 		background-color: #F1F1F1;
 		color: #000000;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-		font-size: 13px;
-		padding-bottom: 3px;
-		padding-left: 20px;
-		padding-right: 10px;
-		padding-top: 4px;
-		user-select: none;
-		margin: 2px 0px 2px 5px;
-		overflow-wrap: break-word;
 	}
 	
 	.function:hover {
@@ -212,6 +172,13 @@
 		overflow: hidden;
 		max-height: 22px;
 		display: -webkit-box;
+		padding: 4px 10px 3px 20px;
+		margin: 2px 0px 2px 5px;
+		font-size: 11px;
+		user-select: none;
+		position: relative;
+		overflow-wrap: break-word;
+		line-height: 16px;
 	}
 
 /*
@@ -344,6 +311,11 @@
 		top: 1px;
 		background: transparent !important;
 	}
+	#hr_separator{
+		height: 1px;
+		border-bottom: 1px solid;
+		margin: 6px 0;
+	}
 
   </style>
 </head>
@@ -364,7 +336,7 @@
 			</div>
 			<div id="menu_content_macros" class="menu_padding"></div>
 		</div>
-		<hr id="hr_separator" style="display: none;">
+		<div id="hr_separator" class="sep_border" style="display: none;"></div>
 		<div id="menu_functions" style="display: none;">
 			<div class="menu_header">
 				<label class="i18n header">Custom Functions</label>
@@ -407,7 +379,7 @@
 	<!-- code -->
 	<script src="scripts/code.js"></script>
 
-	<div id="context-menu-id" class="context-menu">
+	<div id="context-menu-id" class="context-menu noselect">
 		<ul class="context-menu-options">
 			<li id="menu_run_id" class="context-menu-option" onclick="window.CustomContextMenu.onRunClick();">Run</li>
 			<li id="menu_autostart_id" class="context-menu-option" onclick="window.CustomContextMenu.onAutostartClick();">Make autostart</li>
