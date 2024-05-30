@@ -93,10 +93,16 @@ ace.config.loadModule('ace/ext/tern', function () {
 				on_init_server(1);
 			},
 		}, 
-		enableSnippets: false,
-		enableBasicAutocompletion: true,
+		enableSnippets: false
 	});
 });
+ace.config.loadModule('ace/ext/language_tools', function () {
+	editor.setOptions({
+		enableBasicAutocompletion: false,
+		enableLiveAutocompletion: true
+	});
+});
+
 
 ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	editor.setOptions({
@@ -344,17 +350,22 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			let macrosSelected = arr[0];
 			macrosSelected.classList.remove('macrosSelected');
 			macrosSelected.classList.add('macros');
+			if (window.Asc.plugin.theme.type == 'light')
+				macrosSelected.lastChild.lastChild.setAttribute('src' ,'./resources/img/dots_dark.svg');
 		}
 		arr = document.getElementsByClassName('functionSelected');
 		if (arr.length) {
 			let functionSelected = arr[0];
 			functionSelected.classList.remove('functionSelected');
 			functionSelected.classList.add('function');
+			if (window.Asc.plugin.theme.type == 'light')
+				functionSelected.lastChild.lastChild.setAttribute('src' ,'./resources/img/dots_dark.svg');
 		}
 		let elSelected = document.getElementById(normalClass + index);
 		if (elSelected) {
 			elSelected.classList.remove(normalClass);
 			elSelected.classList.add(selectedClass);
+			elSelected.lastChild.lastChild.setAttribute('src' ,'./resources/img/dots_white.svg');
 		}
 		obj.current = index;
 
@@ -493,7 +504,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			}
 		}
 		indexMax++;
-		CustomFunctions.macrosArray.push({ name : (nameTranslated + " " + indexMax), value : '(function()\n{\n\t/**\n\t * Function that returns the argument\n\t * @customfunction\n\t * @param {any} arg Any data.\n     * @returns {any} The argumet of the function.\n\t*/\n\tfunction customFunction(arg) {\n\t    return arg;\n\t}\n\tApi.AddCustomFunction(customFunction);\n})();' });
+		CustomFunctions.macrosArray.push({ name : (nameTranslated + " " + indexMax), value : '(function()\n{\n\t/**\n\t * Function that returns the argument\n\t * @customfunction\n\t * @param {any} arg Any data.\n     * @returns {any} The argumet of the function.\n\t*/\n\tfunction myFunction(arg) {\n\t    return arg;\n\t}\n\tApi.AddCustomFunction(myFunction);\n})();' });
 		CustomFunctions.current = CustomFunctions.macrosArray.length - 1;
 		mode = 0;
 		updateFunctionsMenu();
@@ -738,11 +749,13 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	};
 
 	function checkShowCustomFunctions() {
-		if (window.Asc.plugin.info.editorType === 'cell') {
+		let bCustom = window.Asc.plugin.info.editorType === 'cell';
+		if (bCustom) {
 			document.getElementById('hr_separator').style.display = 'block';
 			document.getElementById('menu_functions').style.display = 'block';
 			document.getElementById('menu_macros').className = 'menu_macros_short';
 		}
+		return bCustom;
 	};
 
 	window.onresize = function()
@@ -774,7 +787,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 	window.Asc.plugin.init = function() {
 		window.Asc.plugin.resizeWindow(800, 600, 800, 600, 0, 0);
-		checkShowCustomFunctions();
+		let bCellEditor = checkShowCustomFunctions();
 		zoom = document.getElementsByTagName('html')[0].style.zoom || 1;
 		setStyles();
 		on_init_server(2);
@@ -782,7 +795,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			Content = parseData(data);
 			CustomFunctions = parseData(localStorage.getItem(localStorageKey));
 			functionsOnStart = JSON.parse(JSON.stringify(CustomFunctions));
-			mode = CustomFunctions.current != -1 ? 0 : 1;
+			mode = bCellEditor && CustomFunctions.current != -1 ? 0 : 1;
 
 			window.Asc.plugin.executeMethod("GetVBAMacros", null, function(data) {
 				if (data && typeof data === 'string' && data.includes('<Module')) {
@@ -1031,20 +1044,27 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		// rules += '.functionSelected { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.dragHovered { background-color: ' + window.Asc.plugin.theme['highlight-button-pressed'] + '}\n';
 		rules += '.context-menu-option:hover { background-color: ' + window.Asc.plugin.theme['highlight-button-hover'] + '}\n';
+		rules += '.sep_border { border-color: ' + window.Asc.plugin.theme['border-toolbar'] + '!important}\n';
 		let imgSrc = './resources/img/plus';
 		if (theme.type === 'dark') {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(250, 250, 255, 0.3) !important; border: 1px solid rgb(200, 200, 250); }\n';
 			rules += '.ace_active-line { border-color: #555 !important;}\n';
 			rules += '.oo_highlight { background-color: #555 !important;}\n';
 			rules += '.ace_line-hover { background-color: #333 !important; border-color: #555 !important;}\n';
-			rules += '.ace_completion-highlight {color: #4FC1FF; text-shadow: 0 0 0.01em;\}\n';
+			rules += '.ace_completion-highlight {color: #4FC1FF !important; text-shadow: 0 0 0.01em;\}\n';
+			rules += '.Ace-Tern-farg { color: #d900ff; }\n';
+			rules += '.Ace-Tern-farg-current { color: #d900ff; }\n';
+			rules += '.Ace-Tern-jsdoc-param-name { color: #d900ff; }\n';
 			imgSrc += '_white.svg'
 		} else {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }\n';
 			rules += '.ace_active-line { border-color: #eee !important;}\n';
 			rules += '.oo_highlight { background-color: #ccc !important;}\n';
 			rules += '.ace_line-hover { background-color: #aaa !important; border-color: #eee !important;}\n';
-			rules += '.ace_completion-highlight {color: #0000ff; text-shadow: 0 0 0.01em;\}\n';
+			rules += '.ace_completion-highlight {color: #0000ff !important; text-shadow: 0 0 0.01em;\}\n';
+			rules += '.Ace-Tern-farg { color: #70a; }\n';
+			rules += '.Ace-Tern-farg-current { color: #70a; }\n';
+			rules += '.Ace-Tern-jsdoc-param-name { color: #70a; }\n';
 			imgSrc += '_dark.svg'
 		}
 		let imgArr = document.querySelectorAll('.img_plus');
