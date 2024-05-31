@@ -1,8 +1,8 @@
 function sendRequest(prompt) {
     const token = window.Asc.JWT;
     const model = localStorage.getItem('model');
-    const async_url = `https://open.bigmodel.cn/api/paas/v3/model-api/${model}/async-invoke`;
-    console.log("请求url：", async_url)
+    const async_url = `https://open.bigmodel.cn/api/paas/v4/async/chat/completions`;
+    console.log("Request url：", async_url)
     return new Promise((resolve, reject) => {
         try {
             fetch(async_url, {
@@ -11,7 +11,10 @@ function sendRequest(prompt) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(prompt),
+                body: JSON.stringify({
+                    model: model,
+                    messages: prompt,
+                }),
             })
             .then(res => res.json())
             .then(data => {
