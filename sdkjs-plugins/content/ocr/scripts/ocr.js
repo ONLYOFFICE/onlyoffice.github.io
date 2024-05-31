@@ -17,69 +17,6 @@
  */
 (function(window, undefined){
 
-	var oLangMap = {};    
-    oLangMap['eng'] = "English";
-    oLangMap['chi_sim'] = "Chinese";
-    oLangMap['rus'] = "Russian";
-    oLangMap['meme'] = "Meme";
-    oLangMap['tha'] = "Thai";
-    oLangMap['deu'] = "German";
-    oLangMap['jpn'] = "Japanese";
-    oLangMap['spa'] = "Spanish";
-    oLangMap['fra'] = "French";
-    oLangMap['por'] = "Portuguese";
-    oLangMap['ita'] = "Italian";
-    oLangMap['pol'] = "Polish";
-    oLangMap['tur'] = "Turkish";
-    oLangMap['nld'] = "Dutch";
-    oLangMap['ara'] = "Arabic";
-    oLangMap['ces'] = "Czech";
-    oLangMap['kor'] = "Korean";
-    oLangMap['swe'] = "Swedish";
-    oLangMap['vie'] = "Vietnamese";
-    oLangMap['ron'] = "Romanian";
-    oLangMap['ell'] = "Greek";
-    oLangMap['ind'] = "Indonesian";
-    oLangMap['hun'] = "Hungarian";
-    oLangMap['dan'] = "Danish";
-    oLangMap['bul'] = "Bulgarian";
-    oLangMap['fin'] = "Finnish";
-    oLangMap['nor'] = "Norwegian";
-    oLangMap['ukr'] = "Ukrainian";
-    oLangMap['cat'] = "Catalan";
-    oLangMap['hrv'] = "Croatian";
-    oLangMap['heb'] = "Hebrew";
-    oLangMap['lit'] = "Lithuanian";
-    oLangMap['slv'] = "Slovenian";
-    oLangMap['hin'] = "Hindi";
-    oLangMap['ben'] = "Bengali";
-    oLangMap['tel'] = "Telugu";
-    oLangMap['tam'] = "Tamil";
-    oLangMap['kan'] = "Kannada";
-    oLangMap['mal'] = "Malayalam";
-    oLangMap['tgl'] = "Tagalog";
-    oLangMap['swa'] = "Swahili";
-    oLangMap['aze'] = "Azerbaijani";
-    oLangMap['bel'] = "Belarusian";
-    oLangMap['afr'] = "Afrikaans";
-    oLangMap['sqi'] = "Albanian";
-    oLangMap['eus'] = "Basque";
-    oLangMap['epo'] = "Esperanto";
-    oLangMap['est'] = "Estonian";
-    oLangMap['glg'] = "Galician";
-    oLangMap['isl'] = "Icelandic";
-    oLangMap['lav'] = "Latvian";
-    oLangMap['mkd'] = "Macedonian";
-    oLangMap['msa'] = "Malay";
-    oLangMap['mlt'] = "Maltese";
-    oLangMap['grc'] = "Ancient Greek";
-    oLangMap['chr'] = "Cherokee";
-    oLangMap['enm'] = "English (Old)";
-    oLangMap['frk'] = "Frankish";
-    oLangMap['equ'] = "Math";
-    oLangMap['srp'] = "Serbian (Latin)";
-    oLangMap['slk'] = "Slovak";
-
     window.oncontextmenu = function(e)
 	{
 		if (e.preventDefault)
@@ -100,9 +37,6 @@
     var arrParsedData = [];
 
     window.Asc.plugin.init = function(){
-        $('#lang-select').select2({
-            minimumResultsForSearch: Infinity
-        });
         this.resizeWindow(592, 100, 592, 100, 592, 100);
         var nStartFilesCount = 0, arrImages;
         $( window ).resize(function(){
@@ -402,6 +336,12 @@
         }
     };
 
+	function initSelect() {
+		$('#lang-select').select2({
+            minimumResultsForSearch: Infinity,
+			sorter: function(data){ return data.sort(function(a, b){ return a.text.localeCompare(b.text)})}
+        });
+	};
 
 	window.Asc.plugin.onTranslate = function(){
 		var elem = document.getElementById("label1");
@@ -420,16 +360,13 @@
 		if (elem){
 			elem.innerHTML = window.Asc.plugin.tr("Recognize");
 		}
-		elem = document.getElementById("lang-select");
-		if(elem){
-			var sInnerHtml = "";
-			for(var key in oLangMap){
-				if(oLangMap.hasOwnProperty(key)){
-					sInnerHtml += "<option value = \'" + key + "'>" + window.Asc.plugin.tr(oLangMap[key]) + "</option>";
-				}
+		var arrOptions = document.getElementsByTagName('option');
+		if(arrOptions.length){
+			for (let i = 0; i < arrOptions.length; i++){
+				arrOptions[i].text = window.Asc.plugin.tr(arrOptions[i].text)
 			}
-			elem.innerHTML = sInnerHtml;
 		}
+		initSelect();
 	};
 	
 	})(window, undefined);
