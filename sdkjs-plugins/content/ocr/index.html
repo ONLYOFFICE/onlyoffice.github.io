@@ -60,9 +60,8 @@
         cursor: pointer;
     }
 
-    #lang-select[disabled],
-    #lang-select.disabled {
-        opacity: 0.65;
+    .select2-container--default.select2-container--disabled{
+        opacity: 0.65 !important
     }
 
 </style>
@@ -80,67 +79,67 @@
             <div class="noselect" style="margin-right: 22px">
                 <label class="defaultlable" id="label2">Choose language</label>
                 <select name = 'lang_combo' disabled  class="noselect" id='lang-select' style="width: 125px">
-                    <option value = 'eng'>English</option>
-                    <option value = 'chi_sim'>Chinese</option>
-                    <option value = 'rus'>Russian</option>
-                    <option value = 'meme'>Meme</option>
-                    <option value = 'tha'>Thai</option>
-                    <option value = 'deu'>German</option>
-                    <option value = 'jpn'>Japanese</option>
-                    <option value = 'spa'>Spanish</option>
-                    <option value = 'fra'>French</option>
-                    <option value = 'por'>Portuguese</option>
-                    <option value = 'ita'>Italian</option>
-                    <option value = 'pol'>Polish</option>
-                    <option value = 'tur'>Turkish</option>
-                    <option value = 'nld'>Dutch</option>
-                    <option value = 'ara'>Arabic</option>
-                    <option value = 'ces'>Czech</option>
-                    <option value = 'kor'>Korean</option>
-                    <option value = 'swe'>Swedish</option>
-                    <option value = 'vie'>Vietnamese</option>
-                    <option value = 'ron'>Romanian</option>
-                    <option value = 'ell'>Greek</option>
-                    <option value = 'ind'>Indonesian</option>
-                    <option value = 'hun'>Hungarian</option>
-                    <option value = 'dan'>Danish</option>
-                    <option value = 'bul'>Bulgarian</option>
-                    <option value = 'fin'>Finnish</option>
-                    <option value = 'nor'>Norwegian</option>
-                    <option value = 'ukr'>Ukrainian</option>
-                    <option value = 'cat'>Catalan</option>
-                    <option value = 'hrv'>Croatian</option>
-                    <option value = 'heb'>Hebrew</option>
-                    <option value = 'lit'>Lithuanian</option>
-                    <option value = 'slv'>Slovenian</option>
-                    <option value = 'hin'>Hindi</option>
-                    <option value = 'ben'>Bengali</option>
-                    <option value = 'tel'>Telugu</option>
-                    <option value = 'tam'>Tamil</option>
-                    <option value = 'kan'>Kannada</option>
-                    <option value = 'mal'>Malayalam</option>
-                    <option value = 'tgl'>Tagalog</option>
-                    <option value = 'swa'>Swahili</option>
-                    <option value = 'aze'>Azerbaijani</option>
-                    <option value = 'bel'>Belarusian</option>
                     <option value = 'afr'>Afrikaans</option>
                     <option value = 'sqi'>Albanian</option>
+                    <option value = 'grc'>Ancient Greek</option>
+                    <option value = 'ara'>Arabic</option>
+                    <option value = 'aze'>Azerbaijani</option>
                     <option value = 'eus'>Basque</option>
+                    <option value = 'bel'>Belarusian</option>
+                    <option value = 'ben'>Bengali</option>
+                    <option value = 'bul'>Bulgarian</option>
+                    <option value = 'cat'>Catalan</option>
+                    <option value = 'chr'>Cherokee</option>
+                    <option value = 'chi_sim'>Chinese</option>
+                    <option value = 'hrv'>Croatian</option>
+                    <option value = 'ces'>Czech</option>
+                    <option value = 'dan'>Danish</option>
+                    <option value = 'nld'>Dutch</option>
+					<option value = 'eng' selected>English</option>
+                    <option value = 'enm'>English (Old)</option>
                     <option value = 'epo'>Esperanto</option>
                     <option value = 'est'>Estonian</option>
+                    <option value = 'fin'>Finnish</option>
+                    <option value = 'frk'>Frankish</option>
+                    <option value = 'fra'>French</option>
                     <option value = 'glg'>Galician</option>
+                    <option value = 'deu'>German</option>
+                    <option value = 'ell'>Greek</option>
+                    <option value = 'heb'>Hebrew</option>
+                    <option value = 'hin'>Hindi</option>
+                    <option value = 'hun'>Hungarian</option>
                     <option value = 'isl'>Icelandic</option>
+                    <option value = 'ind'>Indonesian</option>
+                    <option value = 'ita'>Italian</option>
+                    <option value = 'jpn'>Japanese</option>
+                    <option value = 'kan'>Kannada</option>
+                    <option value = 'kor'>Korean</option>
                     <option value = 'lav'>Latvian</option>
+                    <option value = 'lit'>Lithuanian</option>
                     <option value = 'mkd'>Macedonian</option>
                     <option value = 'msa'>Malay</option>
+                    <option value = 'mal'>Malayalam</option>
                     <option value = 'mlt'>Maltese</option>
-                    <option value = 'grc'>Ancient Greek</option>
-                    <option value = 'chr'>Cherokee</option>
-                    <option value = 'enm'>English (Old)</option>
-                    <option value = 'frk'>Frankish</option>
                     <option value = 'equ'>Math</option>
+                    <option value = 'meme'>Meme</option>
+                    <option value = 'nor'>Norwegian</option>
+                    <option value = 'pol'>Polish</option>
+                    <option value = 'por'>Portuguese</option>
+                    <option value = 'ron'>Romanian</option>
+                    <option value = 'rus'>Russian</option>
                     <option value = 'srp'>Serbian (Latin)</option>
                     <option value = 'slk'>Slovak</option>
+                    <option value = 'slv'>Slovenian</option>
+                    <option value = 'spa'>Spanish</option>
+                    <option value = 'swa'>Swahili</option>
+                    <option value = 'swe'>Swedish</option>
+                    <option value = 'tgl'>Tagalog</option>
+                    <option value = 'tam'>Tamil</option>
+                    <option value = 'tel'>Telugu</option>
+                    <option value = 'tha'>Thai</option>
+                    <option value = 'tur'>Turkish</option>
+                    <option value = 'ukr'>Ukrainian</option>
+                    <option value = 'vie'>Vietnamese</option>
                 </select>
             </div>
             <div  class="noselect">
