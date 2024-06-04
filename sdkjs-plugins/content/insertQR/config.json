@@ -15,16 +15,16 @@
 	"minVersion": "7.4.0",
 	"variations": [
 		{
-			"description": "Effortlessly generate QR codes in the Presentation and Text Editors.",
+			"description": "Effortlessly generate QR codes in the Presentation, Text and Spreadsheet Editors.",
 			"descriptionLocale": {
-				"ru": "Без труда создавайте QR-коды в текстовых документах и презентациях",
-				"fr": "Générez facilement des codes QR dans les éditeurs de présentation et de texte.",
-				"es": "Genere fácilmente códigos QR en los editores de presentaciones y texto.",
-				"de": "Generieren Sie mühelos QR-Codes in den Präsentations- und Texteditoren.",
-				"br": "Gere facilmente códigos QR nos Editores de Apresentação e Texto.",
-				"it": "Genera facilmente codici QR negli editori di presentazioni e di testo.",
-				"zh": "在演示文稿和文本编辑器中轻松生成QR码。",
-				"ja": "プレゼンテーションおよびテキストエディターで簡単にQRコードを生成します。"
+				"ru": "Без труда создавайте QR-коды в презентациях, текстовых документах и таблицах",
+				"fr": "Générez facilement des codes QR dans les éditeurs de présentations, de documents texte et de feuilles de calcul.",
+				"es": "Genere fácilmente códigos QR en los editores de presentaciones, texto y hojas de cálculo.",
+				"de": "Generieren Sie mühelos QR-Codes in den Editoren für Dokumente, Präsentationen und Tabellenkalkulationen.",
+				"br": "Gere facilmente códigos QR nos Editores de Apresentação, Texto e Planilhas.",
+				"it": "Genera facilmente i codici QR negli editor di presentazioni, testo e fogli di calcolo.",
+				"zh": "在文本文档、电子表格和演示文稿编辑器中轻松生成二维码。",
+				"ja": "プレゼンテーション、テキスト、スプレッドシートエディタで簡単にQRコードが生成できます。"
 			},
 			"url": "index.html",
 			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",

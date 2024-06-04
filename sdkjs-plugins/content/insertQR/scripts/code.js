@@ -184,7 +184,7 @@
         height: qrHeight,
         colorDark: qrColor,
         colorLight: bgColor,
-        correctLevel: QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.L
       });
     } catch (error) {
       // handle errors when selected data exceeds the limit
