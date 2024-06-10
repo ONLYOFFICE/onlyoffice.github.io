@@ -195,7 +195,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			var name = $('<div/>').text(CustomFunctions.macrosArray[i].name).html();
 			let imgSrc = './resources/img/dots_' + (window.Asc.plugin.theme.type.includes('dark') ? 'white': 'dark') + '.svg'
 			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
-			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img"' + i + ' onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
+			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img' + i + '" onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 
