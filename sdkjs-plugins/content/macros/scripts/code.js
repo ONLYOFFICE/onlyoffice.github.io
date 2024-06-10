@@ -161,6 +161,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				} else if (navigator.userAgent.indexOf('Linux') != -1) {
 					prop = "style = \"top : calc(50% - 4px) !important\"";
 				}
+				item += ("<div class=\"macrosAutostart\"" + prop + ">(A)</div>");
 			}
 			let imgSrc = './resources/img/dots_' + (window.Asc.plugin.theme.type.includes('dark') ? 'white': 'dark') + '.svg'
 			item += '<div id="mac_bt' + i + '" class="btn-text-default header_btn cc_btn macros_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="img_macros" id="mac_im' + i + '" onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
@@ -194,7 +195,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			var name = $('<div/>').text(CustomFunctions.macrosArray[i].name).html();
 			let imgSrc = './resources/img/dots_' + (window.Asc.plugin.theme.type.includes('dark') ? 'white': 'dark') + '.svg'
 			var item = "<div class=\"common_punct draggable " + cl + "\" id=\"function" + i + "\" onclick=\"window.onItemClick(" + i + ", false);\" draggable=\"true\">" + name;
-			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img"' + i + ' onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
+			item += '<div id="func_btn' + i + '" class="btn-text-default header_btn cc_btn function_btn" style="border: none !important;" onclick="onClickCC(event)""><img class="func_img" id="func_img' + i + '" onclick="onClickCC(event)" src="' + imgSrc + '" style="width: 20px; height: 20px;" /></div>';
 			item += "</div>";
 			menuContent += item;
 

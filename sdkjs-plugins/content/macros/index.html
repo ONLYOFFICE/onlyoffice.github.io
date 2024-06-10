@@ -127,10 +127,10 @@
 	}
 
 	.macrosAutostart {	
-        width: 100%;
-        height: 100%;
+		/* width: 100%; */
+		/* height: 100%; */
         left: 0;
-        top: calc(50% - 5px);
+		top: calc(50% - 8px);
         position: absolute;
         font-size: 10px;
 		pointer-events: none;
@@ -326,10 +326,10 @@
 			<div class="menu_header">
 				<label class="i18n header">Macros</label>
 				<div class="div_buttons">
-					<div id="button_run" class="btn-text-default header_btn" style="border: none !important;">
+					<div id="button_run" title="Run" class="btn-text-default header_btn" style="border: none !important;">
 						<img src="./resources/img/play.svg" style="width: 20px; height: 20px;" />
 					</div>
-					<div id="create_macros" class="btn-text-default header_btn" style="border: none !important;">
+					<div id="create_macros" title="Add macros" class="btn-text-default header_btn" style="border: none !important;">
 						<img class="img_plus" src="./resources/img/plus_dark.svg" style="width: 20px; height: 20px;" />
 					</div>
 				</div>
@@ -340,7 +340,7 @@
 		<div id="menu_functions" style="display: none;">
 			<div class="menu_header">
 				<label class="i18n header">Custom Functions</label>
-				<button id="create_functions" class="btn-text-default header_btn" style="border: none !important;">
+				<button id="create_functions" title="Add custom function" class="btn-text-default header_btn" style="border: none !important;">
 					<img class="img_plus" src="./resources/img/plus_dark.svg" style="width: 20px; height: 20px;" />
 				</button>
 			</div>
