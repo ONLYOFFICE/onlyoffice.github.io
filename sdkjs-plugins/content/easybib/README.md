@@ -6,7 +6,8 @@ The plugin is pre-installed in ONLYOFFICE Workspace (Enterprise and Community Ed
 
 ## Important
 
-Easybib will no longer issue an access key to its API and will close support after 5/31/2021.
+~~Easybib will no longer issue an access key to its API and will close support after 5/31/2021.~~  
+**The EasyBib plugin is no longer functional due to the discontinued support of the API.**
 
 *Citation:*
 >Please be advised advised that the EasyBib Public Citation API will no longer be available after 5/31/2021.
