@@ -1,8 +1,16 @@
 window.initCounter = 0;
-let mode = 1; // 1 - macros; 0 - custom functions
-const localStorageKey = 'custom_functions';
-let macrosOnStart = ''; // copy of macros object on start (for comparison on save)
-let functionsOnStart = ''; // copy of custom functions object on start (for comparison on save)
+
+var CurrentElementModeType = {
+	CustomFunction  : 0,
+	Macros 			: 1
+};
+var CurrentElementMode = CurrentElementModeType.Macros;
+
+var macrosOnStart = {};
+var functionsOnStart = {};
+
+var bIsCustomFunctionsSupport = false;
+
 function on_init_server(type)
 {
 	if (type === (window.initCounter & type))
@@ -76,7 +84,6 @@ editor.session.setMode("ace/mode/javascript");
 editor.container.style.lineHeight = "20px";
 editor.setValue("");
 
-
 editor.getSession().setUseWrapMode(true);
 editor.getSession().setWrapLimitRange(null, null);
 editor.setShowPrintMargin(false);
@@ -96,13 +103,13 @@ ace.config.loadModule('ace/ext/tern', function () {
 		enableSnippets: false
 	});
 });
+
 ace.config.loadModule('ace/ext/language_tools', function () {
 	editor.setOptions({
 		enableBasicAutocompletion: false,
 		enableLiveAutocompletion: true
 	});
 });
-
 
 ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	editor.setOptions({
@@ -118,7 +125,6 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		macrosArray : [],
 		current : -1
 	};
-	// make this object as a macros object (because we don't want to make some extra code and can use the same one)
 	var CustomFunctions = {
 		macrosArray: [],
 		current: -1
@@ -126,13 +132,12 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	let zoom = 1;
 
 	editor.getSession().on('change', function() {
-		let current = mode ? Content.current : CustomFunctions.current;
-		let obj = mode ? Content : CustomFunctions;
-		
-		if (current == -1 || window.isDisable)
+		let obj = (CurrentElementModeType.Macros === CurrentElementMode) ? Content : CustomFunctions;
+
+		if (obj.current == -1 || window.isDisable)
 			return;
 
-		obj.macrosArray[current].value = editor.getValue();
+		obj.macrosArray[obj.current].value = editor.getValue();
 	});
 
 	function create_guid(a,b)
@@ -143,11 +148,15 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 	function updateMacrosMenu()
 	{
-		if (mode && Content.current < 0)
-			Content.current = 0;
-		if (mode && Content.current >= Content.macrosArray.length)
-			Content.current = Content.macrosArray.length - 1;
-			
+		if (CurrentElementModeType.Macros === CurrentElementMode)
+		{
+			if (Content.current < 0)
+				Content.current = 0;
+
+			if (Content.current >= Content.macrosArray.length)
+				Content.current = Content.macrosArray.length - 1;
+		}
+					
 		var menuContent = "";
 		for (var i = 0; i < Content.macrosArray.length; i++)
 		{
@@ -175,7 +184,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		var elem = document.getElementById("menu_content_macros");
 		elem.innerHTML = menuContent;
 		
-		if (mode)
+		if (CurrentElementModeType.Macros === CurrentElementMode)
 			onItemClick(Content.current, true);
 
 		updateScrollMenu();
@@ -183,11 +192,14 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 	function updateFunctionsMenu()
 	{
-		if (!mode && CustomFunctions.current < 0)
-			CustomFunctions.current = 0;
-		if (!mode && CustomFunctions.current >= CustomFunctions.macrosArray.length)
-			CustomFunctions.current = CustomFunctions.macrosArray.length - 1;
-			
+		if (CurrentElementModeType.CustomFunction === CurrentElementMode)
+		{
+			if (CustomFunctions.current < 0)
+				CustomFunctions.current = 0;
+			if (CustomFunctions.current >= CustomFunctions.macrosArray.length)
+				CustomFunctions.current = CustomFunctions.macrosArray.length - 1;
+		}
+		
 		var menuContent = "";
 		for (var i = 0; i < CustomFunctions.macrosArray.length; i++)
 		{
@@ -201,13 +213,12 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 			if (!CustomFunctions.macrosArray[i]["guid"])
 				CustomFunctions.macrosArray[i]["guid"] = create_guid();
-		}
-		
+		}		
 
 		var elem = document.getElementById("menu_content_functions");
 		elem.innerHTML = menuContent;
 		
-		if (!mode)
+		if (CurrentElementModeType.CustomFunction === CurrentElementMode)
 			onItemClick(CustomFunctions.current, false);
 
 		updateScrollMenu();
@@ -303,7 +314,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 		macrosList.addEventListener('dragover', function(evt) {
 			currentElement = evt.target;
-			let bDragAllowed = !!(mode && currentElement.id.includes('mac'));
+			let bDragAllowed = !!((CurrentElementModeType.Macros === CurrentElementMode) && currentElement.id.includes('mac'));
 			evt.preventDefault();
 			evt.dataTransfer.dropEffect = bDragAllowed ? "move" : "none";
 			const isMoveable = currentElement.classList.contains('draggable');
@@ -318,7 +329,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		
 		functionList.addEventListener('dragover', function(evt) {
 			currentElement = evt.target;
-			let bDragAllowed = !!(!mode && currentElement.id.includes('function'));
+			let bDragAllowed = !!((CurrentElementModeType.CustomFunction === CurrentElementMode) && currentElement.id.includes('function'));
 			evt.preventDefault();
 			evt.dataTransfer.dropEffect = bDragAllowed ? "move" : "none";
 			const isMoveable = currentElement.classList.contains('draggable');
@@ -339,10 +350,10 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			selectedClass = isMacros ? 'macrosSelected' : 'functionSelected';
 
 		if (isMacros) {
-			mode = 1;
+			CurrentElementMode = CurrentElementModeType.Macros;
 			CustomFunctions.current = -1;
 		} else {
-			mode = 0;
+			CurrentElementMode = CurrentElementModeType.CustomFunction;
 			Content.current = -1;
 		}
 
@@ -431,16 +442,16 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		var className = event.srcElement.getAttribute("class");
 		if (className && (-1 != className.indexOf("mac") || -1 != className.indexOf("fun")))
 		{
-			window.CustomContextMenu.mode = event.srcElement.id.includes('mac') ? 1 : 0;
-			let len = window.CustomContextMenu.mode ? 6 : 8;
+			window.CustomContextMenu.mode = event.srcElement.id.includes('mac') ? CurrentElementModeType.Macros : CurrentElementModeType.CustomFunction;
+			let len = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? 6 : 8;
 			window.CustomContextMenu.macrosIndex = parseInt(event.srcElement.id.substr(len));
-			let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
-			if (window.CustomContextMenu.mode)
+			let obj = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? Content : CustomFunctions;
+			if (window.CustomContextMenu.mode === CurrentElementModeType.Macros)
 				document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
 
 			let buttonRun = this.document.getElementById('menu_run_id');
 			let buttonAutoStart = this.document.getElementById('menu_autostart_id');
-			if (window.CustomContextMenu.mode) {
+			if (window.CustomContextMenu.mode === CurrentElementModeType.Macros) {
 				buttonRun.style.display = "block";
 				buttonAutoStart.style.display = "block";
 
@@ -449,7 +460,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				buttonAutoStart.style.display = "none";
 			}
 			window.CustomContextMenu.position(event.pageX, event.pageY);
-			onItemClick(window.CustomContextMenu.macrosIndex, window.CustomContextMenu.mode);
+			onItemClick(window.CustomContextMenu.macrosIndex, (window.CustomContextMenu.mode === CurrentElementModeType.Macros));
 			return;
 		}
 		if (event.srcElement.id && (0 == event.srcElement.id.indexOf("menu_") || 0 == event.srcElement.id.indexOf("button")))
@@ -482,7 +493,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		indexMax++;
 		Content.macrosArray.push({ name : (macrosTranslate + " " + indexMax), value : "(function()\n{\n})();" });
 		Content.current = Content.macrosArray.length - 1;
-		mode = 1;
+		CurrentElementMode = CurrentElementModeType.Macros;
 		updateMacrosMenu();
 		editor.focus();
 	};
@@ -507,16 +518,16 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		indexMax++;
 		CustomFunctions.macrosArray.push({ name : (nameTranslated + " " + indexMax), value : '(function()\n{\n\t/**\n\t * Function that returns the argument\n\t * @customfunction\n\t * @param {any} arg Any data.\n     * @returns {any} The argumet of the function.\n\t*/\n\tfunction myFunction(arg) {\n\t    return arg;\n\t}\n\tApi.AddCustomFunction(myFunction);\n})();' });
 		CustomFunctions.current = CustomFunctions.macrosArray.length - 1;
-		mode = 0;
+		CurrentElementMode = CurrentElementModeType.CustomFunction;
 		updateFunctionsMenu();
 		editor.focus();
 	};
 	// document.getElementById("button_delete").onclick = function() {
-	// 	if (mode && Content.current != -1)
+	// 	if ((CurrentElementModeType.Macros === CurrentElementMode) && Content.current != -1)
 	// 	{
 	// 		Content.macrosArray.splice(Content.current, 1);
 	// 		updateMacrosMenu();
-	// 	} else if (!mode && CustomFunctions.current != -1) {
+	// 	} else if ((CurrentElementModeType.CustomFunction === CurrentElementMode) && CustomFunctions.current != -1) {
 	// 		CustomFunctions.macrosArray.splice(CustomFunctions.current, 1);
 	// 		updateFunctionsMenu();
 	// 	}
@@ -585,7 +596,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	var isShowRename = false;
 	function showRename()
 	{
-		let obj = mode ? Content : CustomFunctions;
+		let obj = (CurrentElementModeType.Macros === CurrentElementMode) ? Content : CustomFunctions;
 		if (obj.current < 0)
 			return;
 
@@ -602,7 +613,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	function unShowRename(isOK)
 	{
 		var value = document.getElementById("rename_text").value;
-		let obj = mode ? Content : CustomFunctions;
+		let obj = (CurrentElementModeType.Macros === CurrentElementMode) ? Content : CustomFunctions;
 
 		if ((isOK && value) || !isOK) {
 			var _elem1 = document.getElementById("idRenameMask");
@@ -612,8 +623,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			document.getElementById("input_error_id").style.display = "none";
 			document.getElementById("rename_text").style.borderColor = "#cfcfcf";
 			isShowRename = false;
-		}
-		
+		}		
 
 		if (obj.current < 0)
 			return;
@@ -621,7 +631,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		if (isOK && value)
 		{
 			obj.macrosArray[obj.current].name = value;
-			if (mode)
+			if (CurrentElementModeType.Macros === CurrentElementMode)
 				updateMacrosMenu();
 			else
 				updateFunctionsMenu();
@@ -652,111 +662,43 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		return obj;
 	};
 
-	function compareMacros() {
-		// function for compare macros (not make a history point if nothing is change)
-		// here is simple comparison, because we save it as a string
-		let result = false;
-		if (macrosOnStart.current !== Content.current) {
-			// if we change current macros we should update macros
-			result = true;
-		} else if (macrosOnStart.macrosArray.length !== Content.macrosArray.length) {
-			// if we add or delete some macros we should update macros
-			result = true;
-		} else {
-			// compare each macros for changes (compare it as a string)
-			for (let index = 0; index < Content.macrosArray.length; index++) {
-				let onStart = JSON.stringify(macrosOnStart.macrosArray[index]);
-				let curVariant = JSON.stringify(Content.macrosArray[index]);
-				if (onStart !== curVariant) {
-					result = true;
-					break;
-				}
-			}
-		}
-		return result;
-	};
-
-	function compareFunctions() {
-		// function for compare custom functions (for add, update or delete functions that have been changed)
+	function compareMacros() 
+	{
+		if (macrosOnStart.current !== Content.current) 
+			return true;
 		
-		let result = false;
-		if (functionsOnStart.current !== CustomFunctions.current) {
-			// if we change current function we should update functions
-			result = true;
-		} else if (functionsOnStart.macrosArray.length !== CustomFunctions.macrosArray.length) {
-			// if we add or delete some function we should update functions
-			result = true;
-		} else {
-			// compare each macros for changes (compare it as a string)
-			for (let index = 0; index < CustomFunctions.macrosArray.length; index++) {
-				let onStart = JSON.stringify(functionsOnStart.macrosArray[index]);
-				let curVariant = JSON.stringify(CustomFunctions.macrosArray[index]);
-				if (onStart !== curVariant) {
-					result = true;
-					break;
-				}
+		if (macrosOnStart.macrosArray.length !== Content.macrosArray.length) 
+			return true;
+
+		let names = ["name", "guid", "value"];
+		for (let index = 0; index < Content.macrosArray.length; index++) 
+		{
+			for (let prop in names)
+			{
+				if (macrosOnStart.macrosArray[index][names[prop]] != Content.macrosArray[index][names[prop]])
+					return true;
 			}
 		}
-		
-		if (result) {
-			// check where is changes and update custom functions in editor (if it's necessary)
-			updateCustomFunctions();
-		}
-		return result;
+
+		return false;
 	};
 
-	function updateCustomFunctions() {
-		// compare each function for changes (compare it as a string by value)
-		// if changes in name of function we just update it in localStorage
-		let curMacrosArr = JSON.parse(JSON.stringify(CustomFunctions.macrosArray)); // copy of current array of custom functions
-		let length = functionsOnStart.macrosArray.length - 1; // length of custom functions array
-		for (let index = length; index >= 0; index--) {
-			let onStart = JSON.stringify(functionsOnStart.macrosArray[index].value);
-			let foundIndex = curMacrosArr.findIndex(function(func){
-				return onStart === JSON.stringify(func.value);
-			});
-			if (foundIndex !== -1) {
-				curMacrosArr.splice(foundIndex, 1);
-				functionsOnStart.macrosArray.splice(foundIndex, 1);
+	function compareFunctions() 
+	{
+		if (functionsOnStart.macrosArray.length !== CustomFunctions.macrosArray.length) 
+			return true;
+
+		let names = ["name", "guid", "value"];
+		for (let index = 0; index < CustomFunctions.macrosArray.length; index++) 
+		{
+			for (let prop in names)
+			{
+				if (functionsOnStart.macrosArray[index][names[prop]] != CustomFunctions.macrosArray[index][names[prop]])
+					return true;
 			}
 		}
-		// functions that we should delete are in functionsOnStart.macrosArray
-		// functions that we should add in curMacrosArr 
-		// now we should run each new function
-		// and create a new macros for each function that should be removed and run it too (we should parse macros and get functuion name for remove it)
-		// todo может добавить промис на каждую команду и когда они закончатся (через Promise.all) мы уже закрываем плагин (проверить не будет ли что-то не выполнено, если сразу закрывать плагин)
-		functionsOnStart.macrosArray.forEach(function(func) {
-			let value = func.value;
-			const searchStr = 'AddCustomFunction(';
-			let start = 0;
-			// in one script could be more than one function. we should unregister all.
-			while (true) {
-				start = value.indexOf(searchStr, start);
-				if (start == -1)
-					break;
-				else
-					start += searchStr.length;
 
-				let end = value.indexOf(')', start);
-				let funcName = value.substring(start, end);
-				let code = '(function(){Api.RemoveCustomFunction("' + funcName + '")})();'
-				window.Asc.plugin.executeCommand("command", code);
-			}
-			
-		});
-		curMacrosArr.forEach(function(func) {
-			window.Asc.plugin.executeCommand("command", func.value);
-		});
-	};
-
-	function checkShowCustomFunctions() {
-		let bCustom = window.Asc.plugin.info.editorType === 'cell';
-		if (bCustom) {
-			document.getElementById('hr_separator').style.display = 'block';
-			document.getElementById('menu_functions').style.display = 'block';
-			document.getElementById('menu_macros').className = 'menu_macros_short';
-		}
-		return bCustom;
+		return false;
 	};
 
 	window.onresize = function()
@@ -786,17 +728,49 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		}
 	};
 
-	window.Asc.plugin.init = function() {
+	window.Asc.plugin.init = function() 
+	{
 		window.Asc.plugin.resizeWindow(800, 600, 800, 600, 0, 0);
-		let bCellEditor = checkShowCustomFunctions();
+
+		if (window.Asc.plugin.info.editorType === "cell")
+		{
+			this.executeMethod("GetVersion", [], function(version) {
+				if ("develop" === version)
+					bIsCustomFunctionsSupport = true;
+				else
+				{
+					let arrVer = version.split(".");
+					while (3 > arrVer.length)
+						arrVer.push("0");
+
+					let ver = 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+					if (ver >= 8001000)
+						bIsCustomFunctionsSupport = true;
+				}
+
+				if (bIsCustomFunctionsSupport)
+				{
+					document.getElementById('hr_separator').style.display = 'block';
+					document.getElementById('menu_functions').style.display = 'block';
+					document.getElementById('menu_macros').className = 'menu_macros_short';
+
+					window.Asc.plugin.executeMethod("GetCustomFunctions", [], function(data) {
+						CustomFunctions = parseData(data);
+						functionsOnStart = JSON.parse(JSON.stringify(CustomFunctions));
+
+						updateFunctionsMenu();
+					});
+				}
+			});
+		}
+
 		zoom = document.getElementsByTagName('html')[0].style.zoom || 1;
 		setStyles();
 		on_init_server(2);
-		this.executeMethod("GetMacros", [JSON.stringify(Content)], function(data) {
+
+		this.executeMethod("GetMacros", [], function(data) {
 			Content = parseData(data);
-			CustomFunctions = parseData(localStorage.getItem(localStorageKey));
-			functionsOnStart = JSON.parse(JSON.stringify(CustomFunctions));
-			mode = bCellEditor && CustomFunctions.current != -1 ? 0 : 1;
+			CurrentElementMode = CurrentElementModeType.Macros;
 
 			window.Asc.plugin.executeMethod("GetVBAMacros", null, function(data) {
 				if (data && typeof data === 'string' && data.includes('<Module')) {
@@ -828,14 +802,13 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 					});
 				}
 				macrosOnStart = JSON.parse(JSON.stringify(Content));
+				
 				updateMacrosMenu();
-				updateFunctionsMenu();
 				window.CustomContextMenu.init();
 				makeDragable();
-				if (mode && Content.current === -1)
-				{
+
+				if (Content.current === -1)
 					document.getElementById("create_macros").onclick();
-				}
 			});
 		});
 
@@ -856,23 +829,33 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 
 	window.Asc.plugin.button = function(id) {
 		if (id == 0) {
-			/*
-				there we check macros and custom functions for changes
-				macros we save in the document
-				custom functions we save in localStorage
-				also we should register and unregister custom functions on save
-			*/
-			if (compareFunctions()) {
-				localStorage.setItem(localStorageKey, JSON.stringify(CustomFunctions));
-			}
 
-			if (compareMacros()) {
-				this.executeMethod("SetMacros", [JSON.stringify(Content)], function(){
-					window.Asc.plugin.executeCommand("close", "");
+ 			window.Asc.plugin.exitChecker = 0;
+ 			function incrementExitChecker() {
+ 				++window.Asc.plugin.exitChecker;
+ 				if (3 == window.Asc.plugin.exitChecker)
+ 					window.Asc.plugin.executeCommand("close", "");
+ 			}
+
+ 			if (!compareMacros())
+ 				++window.Asc.plugin.exitChecker;
+ 			else
+ 			{
+ 				this.executeMethod("SetMacros", [JSON.stringify(Content)], function(){
+ 					incrementExitChecker();
 				});
-			} else {
-				window.Asc.plugin.executeCommand("close", "");
-			}
+ 			}
+
+ 			if (!bIsCustomFunctionsSupport || !compareFunctions())
+ 				++window.Asc.plugin.exitChecker;
+ 			else
+ 			{
+ 				this.executeMethod("SetCustomFunctions", [JSON.stringify(CustomFunctions)], function(){
+ 					incrementExitChecker();
+				});
+ 			}
+
+ 			incrementExitChecker();			
 		} else {
 			this.executeCommand("close", "");
 		}
@@ -907,7 +890,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		element: null,
 		visible: false,
 		macrosIndex: 0,
-		mode: 1, // 1 - macros; 0 - function
+		mode: CurrentElementModeType.Macros,
 		position: function(x, y) {
 			if (!this.element)
 				return;
@@ -939,16 +922,16 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				if (className && (-1 != className.indexOf("mac") || -1 != className.indexOf("fun")))
 				{
 					e.preventDefault();
-					window.CustomContextMenu.mode = e.srcElement.id.includes('mac') ? 1 : 0;
-					let len = window.CustomContextMenu.mode ? 6 : 8;
+					window.CustomContextMenu.mode = e.srcElement.id.includes('mac') ? CurrentElementModeType.Macros : CurrentElementModeType.CustomFunction;
+					let len = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? 6 : 8;
 					window.CustomContextMenu.macrosIndex = parseInt(e.srcElement.id.substr(len));
-					let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
-					if (window.CustomContextMenu.mode)
+					let obj = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? Content : CustomFunctions;
+					if (window.CustomContextMenu.mode === CurrentElementModeType.Macros)
 						document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
 
 					let buttonRun = this.document.getElementById('menu_run_id');
 					let buttonAutoStart = this.document.getElementById('menu_autostart_id');
-					if (window.CustomContextMenu.mode) {
+					if (window.CustomContextMenu.mode === CurrentElementModeType.Macros) {
 						buttonRun.style.display = "block";
 						buttonAutoStart.style.display = "block";
 					} else {
@@ -956,7 +939,7 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 						buttonAutoStart.style.display = "none";
 					}
 					window.CustomContextMenu.position(e.pageX, e.pageY);
-					onItemClick(window.CustomContextMenu.macrosIndex, window.CustomContextMenu.mode);
+					onItemClick(window.CustomContextMenu.macrosIndex, (window.CustomContextMenu.mode === CurrentElementModeType.Macros));
 					return;
 				}
 				if (e.srcElement.id && (0 == e.srcElement.id.indexOf("menu_") || 0 == e.srcElement.id.indexOf("button")))
@@ -987,34 +970,34 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		},
 		onRenameClick: function()
 		{
-			let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
+			let obj = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? Content : CustomFunctions;
 			if (!obj.macrosArray[window.CustomContextMenu.macrosIndex])
 				return;
 
-			onItemClick(window.CustomContextMenu.macrosIndex, window.CustomContextMenu.mode);
+			onItemClick(window.CustomContextMenu.macrosIndex, (window.CustomContextMenu.mode === CurrentElementModeType.Macros));
 			showRename();
 		},
 		onDeleteClick: function()
 		{
-			let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
+			let obj = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? Content : CustomFunctions;
 			if (!obj.macrosArray[window.CustomContextMenu.macrosIndex])
 				return;
 			
 			obj.macrosArray.splice(window.CustomContextMenu.macrosIndex, 1);
-			if (window.CustomContextMenu.mode)
+			if (window.CustomContextMenu.mode === CurrentElementModeType.Macros)
 				updateMacrosMenu();
 			else
 				updateFunctionsMenu();
 		},
 		onCopyClick: function()
 		{
-			let obj = window.CustomContextMenu.mode ? Content : CustomFunctions;
+			let obj = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? Content : CustomFunctions;
 			if (!obj.macrosArray[window.CustomContextMenu.macrosIndex])
 				return;
 
 			obj.macrosArray.push({ name : (obj.macrosArray[window.CustomContextMenu.macrosIndex].name + "_copy"), value : obj.macrosArray[window.CustomContextMenu.macrosIndex].value });
 			obj.current = obj.macrosArray.length - 1;
-			if (window.CustomContextMenu.mode)
+			if (window.CustomContextMenu.mode === CurrentElementModeType.Macros)
 				updateMacrosMenu();
 			else
 				updateFunctionsMenu();
@@ -1055,10 +1038,14 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			rules += '.oo_highlight, { background-color: #555 !important;}\n';
 			rules += '.ace_line-hover { background-color: #333 !important; border-color: #555 !important;}\n';
 			rules += '.ace_completion-highlight {color: #4FC1FF !important; text-shadow: 0 0 0.01em;\}\n';
-			rules += '.Ace-Tern-farg { color: #d900ff; }\n';
-			rules += '.Ace-Tern-farg-current { color: #d900ff; }\n';
-			rules += '.Ace-Tern-jsdoc-param-name { color: #d900ff; }\n';
+			rules += '.Ace-Tern-farg { color: gray; }\n';
+			rules += '.Ace-Tern-farg-current { color: gray; }\n';
+			rules += '.Ace-Tern-type { color: #569CD6; }\n';
+			rules += '.Ace-Tern-jsdoc-param-name { color: gray; }\n';
 			rules += '.gutter_bg {background-color: #333 !important}\n';
+			rules += '.Ace-Tern-jsdoc-tag { color: #FF5E5C; }\n';
+			rules += '.Ace-Tern-farg-current-description { color : #FFFFFF; }\n';
+			rules += '.Ace-Tern-farg-current-name { color : white; }\n';			
 			imgSrc += '_white.svg'
 		} else {
 			rules += '.ace-chrome .ace_marker-layer .ace_selected-word { background: rgb(255, 255, 255); border: 1px solid rgb(200, 200, 250); }\n';
@@ -1069,8 +1056,11 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			rules += '.ace_completion-highlight {color: #0000ff !important; text-shadow: 0 0 0.01em;\}\n';
 			rules += '.Ace-Tern-farg { color: #70a; }\n';
 			rules += '.Ace-Tern-farg-current { color: #70a; }\n';
-			rules += '.Ace-Tern-jsdoc-param-name { color: #70a; }\n';
+			rules += '.Ace-Tern-jsdoc-param-name { color: gray; }\n';
 			rules += '.gutter_bg {background-color: #fff !important}\n';
+			rules += '.Ace-Tern-farg { color: gray; }\n';
+			rules += '.Ace-Tern-farg-current { color: gray; }\n';
+			rules += '.Ace-Tern-jsdoc-param-name { color: gray; }\n';
 			imgSrc += '_dark.svg'
 		}
 		let imgArr = document.querySelectorAll('.img_plus');
