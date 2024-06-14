@@ -317,9 +317,20 @@
 		margin: 6px 0;
 	}
 
+	.theme-type-dark .ace_content, .theme-type-dark .common_menu,
+		.theme-type-dark .ace_layer.ace_gutter-layer
+	{
+		background-color: #333;
+	}
+
   </style>
 </head>
 <body>
+	<script>
+		if ( /theme-type=dark/.test(window.location.href) ) {
+			document.body.classList.add('theme-type-dark');
+		}
+	</script>
 
 	<div class="common_menu noselect">
 		<div id="menu_macros" class="menu_macros_long">
