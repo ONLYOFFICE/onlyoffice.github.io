@@ -439,12 +439,13 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	function onClickCC(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		var className = event.srcElement.getAttribute("class");
+		const srcElement = event.srcElement;
+		var className = srcElement.getAttribute("class");
 		if (className && (-1 != className.indexOf("mac") || -1 != className.indexOf("fun")))
 		{
-			window.CustomContextMenu.mode = event.srcElement.id.includes('mac') ? CurrentElementModeType.Macros : CurrentElementModeType.CustomFunction;
+			window.CustomContextMenu.mode = srcElement.id.includes('mac') ? CurrentElementModeType.Macros : CurrentElementModeType.CustomFunction;
 			let len = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? 6 : 8;
-			window.CustomContextMenu.macrosIndex = parseInt(event.srcElement.id.substr(len));
+			window.CustomContextMenu.macrosIndex = parseInt(srcElement.id.substr(len));
 			let obj = (window.CustomContextMenu.mode === CurrentElementModeType.Macros) ? Content : CustomFunctions;
 			if (window.CustomContextMenu.mode === CurrentElementModeType.Macros)
 				document.getElementById("menu_autostart_id").innerHTML = window.Asc.plugin.tr(obj.macrosArray[window.CustomContextMenu.macrosIndex].autostart ? "Unmake autostart" : "Make autostart");
@@ -459,8 +460,16 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 				buttonRun.style.display = "none";
 				buttonAutoStart.style.display = "none";
 			}
-			window.CustomContextMenu.position(event.pageX, event.pageY);
-			onItemClick(window.CustomContextMenu.macrosIndex, (window.CustomContextMenu.mode === CurrentElementModeType.Macros));
+
+			let curObj = window.CustomContextMenu.mode ? Content : CustomFunctions;
+			if ( curObj.current != window.CustomContextMenu.macrosIndex || !window.CustomContextMenu.visible) {
+				const parentRect = (!srcElement.classList.contains('macros_btn') ? srcElement.parentNode : srcElement).getBoundingClientRect();
+				window.CustomContextMenu.position(parentRect.left, parentRect.top + parentRect.height + 2);
+				onItemClick(window.CustomContextMenu.macrosIndex, window.CustomContextMenu.mode);
+			} else {
+				window.CustomContextMenu.hide();
+			}
+
 			return;
 		}
 		if (event.srcElement.id && (0 == event.srcElement.id.indexOf("menu_") || 0 == event.srcElement.id.indexOf("button")))
