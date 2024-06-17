@@ -9,5 +9,8 @@
 	"Title" : "Der Name darf nicht leer sein",
 	"Copy": "Kopieren",
 	"Make autostart": "Autostart durchführen",
-	"Unmake autostart": "Autostart aufheben"
+	"Unmake autostart": "Autostart aufheben",
+	"Custom function": "Benutzerdefinierte Funktion",
+	"Custom functions": "Benutzerdefinierte Funktionen",
+	"Ok": "OK"
 }

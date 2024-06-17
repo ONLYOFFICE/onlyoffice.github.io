@@ -9,5 +9,8 @@
 	"Title" : "名称不得为空",
 	"Copy": "副本",
 	"Make autostart": "自动启动",
-	"Unmake autostart": "取消自动启动"
+	"Unmake autostart": "取消自动启动",
+	"Custom function": "自定义功能",
+	"Custom functions": "自定义功能",
+	"Ok": "确定"
 }
