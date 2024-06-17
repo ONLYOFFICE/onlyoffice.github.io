@@ -12,5 +12,7 @@
 	"Unmake autostart": "Annuler le démarrage automatique",
 	"Custom function": "Fonction personnalisée",
 	"Custom functions": "Fonctions personnalisées",
-	"Ok": "OK"
+	"Ok": "OK",
+	"Add macros": "Ajouter des macros",
+	"Add custom function": "Ajouter une fonction personnalisée"
 }
