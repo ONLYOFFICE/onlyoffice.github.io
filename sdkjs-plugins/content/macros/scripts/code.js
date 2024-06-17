@@ -884,7 +884,9 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		// document.getElementById("button_delete").innerHTML = window.Asc.plugin.tr("Delete");
 		// document.getElementById("button_rename").innerHTML = window.Asc.plugin.tr("Rename");
 		// document.getElementById("button_autostart").innerHTML = window.Asc.plugin.tr("Autostart");
-		// document.getElementById("button_run").innerHTML = window.Asc.plugin.tr("Run");
+		document.getElementById("button_run").title = window.Asc.plugin.tr("Run");
+		document.getElementById("create_macros").title = window.Asc.plugin.tr("Add macros");
+		document.getElementById("create_functions").title = window.Asc.plugin.tr("Add custom function");
 		document.getElementById("rename_ok").innerHTML = window.Asc.plugin.tr("Ok");
 		document.getElementById("rename_cancel").innerHTML = window.Asc.plugin.tr("Cancel");
 		document.getElementById("input_error_id").title = window.Asc.plugin.tr("Title");
@@ -892,6 +894,8 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 		document.getElementById("menu_rename_id").innerHTML = window.Asc.plugin.tr("Rename");
 		document.getElementById("menu_delete_id").innerHTML = window.Asc.plugin.tr("Delete");
 		document.getElementById("menu_copy_id").innerHTML = window.Asc.plugin.tr("Copy");
+		document.querySelector('#menu_macros .header').innerHTML = window.Asc.plugin.tr("Macros");
+		document.querySelector('#menu_functions .header').innerHTML = window.Asc.plugin.tr("Custom functions");
 	};
 
 	// context menu
