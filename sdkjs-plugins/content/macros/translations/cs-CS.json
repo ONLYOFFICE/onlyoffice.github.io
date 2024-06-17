@@ -4,10 +4,13 @@
 	"Rename": "Přejmenovat",
 	"Autostart" : "Autostart",
 	"Run": "Spustit",
-	"Cancel" : "Storno",
+	"Cancel" : "Zrušit",
 	"Macros" : "Makra",
 	"Title" : "Jméno nesmí být prázdné",
-	"Copy": "Kopie",
-	"Make autostart": "Udělat autostart",
-	"Unmake autostart": "Zrušit automatické spuštění"
+	"Copy": "Zkopírovat",
+	"Make autostart": "Udělat automatické spuštění",
+	"Unmake autostart": "Zrušit automatické spuštění",
+	"Custom function": "Vlastní funkce",
+	"Custom functions": "Vlastní funkce",
+	"Ok": "OK"
 }

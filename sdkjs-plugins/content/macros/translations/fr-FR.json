@@ -9,5 +9,8 @@
 	"Title" : "Le nom ne doit pas être vide",
 	"Copy": "Copier",
 	"Make autostart": "Faire démarrer automatiquement",
-	"Unmake autostart": "Annuler le démarrage automatique"
+	"Unmake autostart": "Annuler le démarrage automatique",
+	"Custom function": "Fonction personnalisée",
+	"Custom functions": "Fonctions personnalisées",
+	"Ok": "OK"
 }
