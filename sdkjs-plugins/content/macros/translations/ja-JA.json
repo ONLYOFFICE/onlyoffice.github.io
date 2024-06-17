@@ -6,5 +6,11 @@
 	"Run" : "実行",
 	"Cancel" : "キャンセル",
 	"Macros" : "マクロ",
-	"Title" : "タイトル"
+	"Title" : "タイトル",
+	"Copy": "コピー",
+	"Make autostart": "自動起動を行う",
+	"Unmake autostart": "自動起動を解除する",
+	"Custom function": "カスタム関数",
+	"Custom functions": "カスタム関数",
+	"Ok": "OK"
 }

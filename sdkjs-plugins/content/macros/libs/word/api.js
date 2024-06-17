@@ -98,10 +98,19 @@ ApiRange.prototype.AddHyperlink = function(sLink, sScreenTipText){ return new Ap
 /**
  * Returns a text from the specified range.
  * @memberof ApiRange
+ * @param {object} oPr - The resulting string display properties.
+ * @param {boolean} [oPr.NewLineParagraph=false] - Defines if the resulting string will include paragraph line boundaries or not.
+ * @param {boolean} [oPr.Numbering=false] - Defines if the resulting string will include numbering or not.
+ * @param {boolean} [oPr.Math=false] - Defines if the resulting string will include mathematical expressions or not.
+ * @param {string} [oPr.NewLineSeparator='\r'] - Defines how the line separator will be specified in the resulting string.
+ * @param {string} [oPr.TableCellSeparator='\t'] - Defines how the table cell separator will be specified in the resulting string.
+ * @param {string} [oPr.TableRowSeparator='\r\n'] - Defines how the table row separator will be specified in the resulting string.
+ * @param {string} [oPr.ParaSeparator='\r\n'] - Defines how the paragraph separator will be specified in the resulting string.
+ * @param {string} [oPr.TabSymbol='\t'] - Defines how the tab will be specified in the resulting string (does not apply to numbering)
  * @typeofeditors ["CDE"]
  * @returns {String} - returns "" if range is empty.
  */
-ApiRange.prototype.GetText = function(){ return ""; };
+ApiRange.prototype.GetText = function(oPr){ return ""; };
 
 /**
  * Returns a collection of paragraphs that represents all the paragraphs in the specified range.
@@ -325,10 +334,11 @@ ApiRange.prototype.ToJSON = function(bWriteNumberings, bWriteStyles){ return new
  * @memberof ApiRange
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiRange.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiRange.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
 
 /**
  * Returns a Range object that represents the document part contained in the specified range.
@@ -429,21 +439,14 @@ ApiHyperlink.prototype.GetClassType = function(){ return ""; };
 /**
  * Class representing a document form base.
  * @constructor
- * @property {string} key - Form key.
- * @property {string} tip - Form tip text.
- * @property {boolean} required - Specifies if the form is required or not.
- * @property {string} placeholder - Form placeholder text.
+ * @typeofeditors ["CDE", "CFE"]
  */
 function ApiFormBase(oSdt){}
 
 /**
- * Class representing a document text form.
+ * Class representing a document text field.
  * @constructor
- * @property {boolean} comb - Specifies if the text form should be a comb of characters with the same cell width. The maximum number of characters must be set to a positive value.
- * @property {number} maxCharacters - The maximum number of characters in the text form.
- * @property {number} cellWidth - The cell width for each character measured in millimeters. If this parameter is not specified or equal to 0 or less, then the width will be set automatically.
- * @property {boolean} multiLine - Specifies if the current fixed size text form is multiline or not.
- * @property {boolean} autoFit - Specifies if the text form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
+ * @typeofeditors ["CDE", "CFE"]
  * @extends {ApiFormBase}
  */
 function ApiTextForm(oSdt){}
@@ -451,14 +454,9 @@ ApiTextForm.prototype = Object.create(ApiFormBase.prototype);
 ApiTextForm.prototype.constructor = ApiTextForm;
 
 /**
- * Class representing a document combo box form.
+ * Class representing a document combo box / dropdown list.
  * @constructor
- * @property {boolean} editable - Specifies if the combo box text can be edited.
- * @property {boolean} autoFit - Specifies if the combo box form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
- * @property {Array.<string | Array.<string>>} items - The combo box items.
-     * This array consists of strings or arrays of two strings where the first string is the displayed value and the second one is its meaning.
-     * If the array consists of single strings, then the displayed value and its meaning are the same.
-     * Example: ["First", ["Second", "2"], ["Third", "3"], "Fourth"].
+ * @typeofeditors ["CDE", "CFE"]
  * @extends {ApiFormBase}
  */
 function ApiComboBoxForm(oSdt){}
@@ -466,9 +464,9 @@ ApiComboBoxForm.prototype = Object.create(ApiFormBase.prototype);
 ApiComboBoxForm.prototype.constructor = ApiComboBoxForm;
 
 /**
- * Class representing a document checkbox form.
+ * Class representing a document checkbox / radio button.
  * @constructor
- * @property {boolean} radio - Specifies if the current checkbox is a radio button. In this case, the key parameter is considered as an identifier for the group of radio buttons.
+ * @typeofeditors ["CDE", "CFE"]
  * @extends {ApiFormBase}
  */
 function ApiCheckBoxForm(oSdt){}
@@ -478,17 +476,7 @@ ApiCheckBoxForm.prototype.constructor = ApiCheckBoxForm;
 /**
  * Class representing a document picture form.
  * @constructor
- * @property {ScaleFlag} scaleFlag - The condition to scale an image in the picture form: "always", "never", "tooBig" or "tooSmall".
- * @property {boolean} lockAspectRatio - Specifies if the aspect ratio of the picture form is locked or not.
- * @property {boolean} respectBorders - Specifies if the form border width is respected or not when scaling the image.
- * @property {percentage} shiftX - Horizontal picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on the left;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the right.
- * @property {percentage} shiftY - Vertical picture position inside the picture form measured in percent:
- * * <b>0</b> - the picture is placed on top;
- * * <b>50</b> - the picture is placed in the center;
- * * <b>100</b> - the picture is placed on the bottom.
+ * @typeofeditors ["CDE", "CFE"]
  * @extends {ApiFormBase}
  */
 function ApiPictureForm(oSdt){}
@@ -496,9 +484,20 @@ ApiPictureForm.prototype = Object.create(ApiFormBase.prototype);
 ApiPictureForm.prototype.constructor = ApiPictureForm;
 
 /**
- * Class representing a complex form.
+ * Class representing a document date field.
+ * @constructor
+ * @typeofeditors ["CDE", "CFE"]
+ * @extends {ApiFormBase}
+ */
+function ApiDateForm(oSdt){}
+ApiDateForm.prototype = Object.create(ApiFormBase.prototype);
+ApiDateForm.prototype.constructor = ApiDateForm;
+
+/**
+ * Class representing a complex field.
  * @param oSdt
  * @constructor
+ * @typeofeditors ["CDE", "CFE"]
  * @extends {ApiFormBase}
  */
 function ApiComplexForm(oSdt){}
@@ -672,7 +671,7 @@ ApiImage.prototype = Object.create(ApiDrawing.prototype);
 ApiImage.prototype.constructor = ApiImage;
 
 /**
- * Class representing an Ole-object.
+ * Class representing an Ole object.
  * @constructor
  */
 function ApiOleObject(OleObject){}
@@ -751,10 +750,28 @@ function ApiGradientStop(oApiUniColor, pos){}
 function ApiInlineLvlSdt(Sdt){}
 
 /**
+ * Class representing a list of values of the combo box / dropdown list content control.
+ * @constructor
+ */
+function ApiContentControlList(Parent){}
+
+/**
+ * Class representing an entry of the combo box / dropdown list content control.
+ * @constructor
+ */
+function ApiContentControlListEntry(Sdt, Parent, Text, Value){}
+
+/**
  * Class representing a container for the document content.
  * @constructor
  */
 function ApiBlockLvlSdt(Sdt){}
+
+/**
+ * Class representing the settings which are used to create a watermark.
+ * @constructor
+ */
+function ApiWatermarkSettings(oSettings){}
 
 /**
  * Twentieths of a point (equivalent to 1/1440th of an inch).
@@ -1071,7 +1088,7 @@ function ApiBlockLvlSdt(Sdt){}
 
 /**
  * Types of all supported forms.
- * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiComplexForm} ApiForm
+ * @typedef {ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm} ApiForm
  */
 
 /**
@@ -1164,6 +1181,16 @@ function ApiBlockLvlSdt(Sdt){}
  * The type of tick mark appearance.
  * @typedef {("cross" | "in" | "none" | "out")} TickMark
  * */
+
+/**
+ * The watermark type.
+ * @typedef {("none" | "text" | "image")} WatermarkType
+ */
+
+/**
+ * The watermark direction.
+ * @typedef {("horizontal" | "clockwise45" | "counterclockwise45")} WatermarkDirection
+ */
 
 /**
  * Returns the main document.
@@ -1471,13 +1498,15 @@ ApiUnsupported.prototype.GetClassType = function(){ return ""; };
  * @typeofeditors ["CDE"]
  * @param {ApiRun[] | DocumentElement} oElement - The element where the comment will be added. It may be applied to any element which has the *AddComment* method.
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiInterface.prototype.AddComment = function(oElement, sText, sAutor){ return new ApiComment(); };
+ApiInterface.prototype.AddComment = function(oElement, sText, sAuthor, sUserId){ return new ApiComment(); };
 
 /**
  * Subscribes to the specified event and calls the callback function when the event fires.
+ * @function
  * @memberof ApiInterface
  * @typeofeditors ["CDE"]
  * @param {string} eventName - The event name.
@@ -1487,6 +1516,7 @@ ApiInterface.prototype["attachEvent"] = ApiInterface.prototype.attachEvent;{};
 
 /**
  * Unsubscribes from the specified event.
+ * @function
  * @memberof ApiInterface
  * @typeofeditors ["CDE"]
  * @param {string} eventName - The event name.
@@ -1623,7 +1653,7 @@ ApiDocumentContent.prototype.GetAllCharts = function(){ return [new ApiChart()];
 ApiDocumentContent.prototype.GetAllOleObjects = function(){ return [new ApiOleObject()]; };
 
 /**
- * Returns an array of all paragraphs from the current document content
+ * Returns an array of all paragraphs from the current document content.
  * @memberof ApiDocumentContent
  * @typeofeditors ["CDE"]
  * @returns {ApiParagraph[]}
@@ -1631,7 +1661,7 @@ ApiDocumentContent.prototype.GetAllOleObjects = function(){ return [new ApiOleOb
 ApiDocumentContent.prototype.GetAllParagraphs = function(){ return [new ApiParagraph()]; };
 
 /**
- * Returns an array of all tables from the current document content
+ * Returns an array of all tables from the current document content.
  * @memberof ApiDocumentContent
  * @typeofeditors ["CDE"]
  * @returns {ApiParagraph[]}
@@ -1711,7 +1741,7 @@ ApiDocument.prototype.GetFinalSection = function(){ return new ApiSection(); };
  * @typeofeditors ["CDE"]
  * @param {ApiParagraph} oParagraph - The paragraph after which a new document section will be inserted.
  * Paragraph must be in a document.
- * @returns {ApiSection}
+ * @returns {ApiSection | null} Returns null if parametr is invalid.
  */
 ApiDocument.prototype.CreateSection = function(oParagraph){ return new ApiSection(); };
 
@@ -1746,20 +1776,70 @@ ApiDocument.prototype.CreateNumbering = function(sType){ return new ApiNumbering
 ApiDocument.prototype.InsertContent = function(arrContent, isInline, oPr){ return true; };
 
 /**
+ * Record of one comment.
+ * @typedef {Object} CommentReportRecord
+ * @property {boolean} [IsAnswer=false] - Specifies whether this is an initial comment or a reply to another comment.
+ * @property {string} CommentMessage - The text of the current comment.
+ * @property {number} Date - The time when this change was made in local time.
+ * @property {number} DateUTC - The time when this change was made in UTC.
+ * @property {string} [QuoteText=undefined] - The text to which this comment is related.
+ */
+
+/**
+ * Report on all comments.
+ * This is a dictionary where the keys are usernames.
+ * @typedef {Object.<string, Array.<CommentReportRecord>>} CommentReport
+ * @example
+ *  {
+ *    "John Smith" : [{IsAnswer: false, CommentMessage: 'Good text', Date: 1688588002698, DateUTC: 1688570002698, QuoteText: 'Some text'},
+ *      {IsAnswer: true, CommentMessage: "I don't think so", Date: 1688588012661, DateUTC: 1688570012661}],
+ *
+ *    "Mark Pottato" : [{IsAnswer: false, CommentMessage: 'Need to change this part', Date: 1688587967245, DateUTC: 1688569967245, QuoteText: 'The quick brown fox jumps over the lazy dog'},
+ *      {IsAnswer: false, CommentMessage: 'We need to add a link', Date: 1688587967245, DateUTC: 1688569967245, QuoteText: 'OnlyOffice'}]
+ *  }
+ */
+
+/**
  * Returns a report about all the comments added to the document.
  * @memberof ApiDocument
  * @typeofeditors ["CDE"]
- * @returns {object}
+ * @returns {CommentReport}
  */
-ApiDocument.prototype.GetCommentsReport = function(){ return new object(); };
+ApiDocument.prototype.GetCommentsReport = function(){ return new CommentReport(); };
+
+/**
+ * Review record type.
+ * @typedef {("TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown")} ReviewReportRecordType
+ */
+
+/**
+ * Record of one review change.
+ * @typedef {Object} ReviewReportRecord
+ * @property {ReviewReportRecordType} Type - Review record type.
+ * @property {string} [Value=undefined] - Review change value that is set for the "TextAdd" and "TextRem" types only.
+ * @property {number} Date - The time when this change was made.
+ */
+
+/**
+ * Report on all review changes.
+ * This is a dictionary where the keys are usernames.
+ * @typedef {Object.<string, Array.<ReviewReportRecord>>} ReviewReport
+ * @example
+ * {
+ *   "John Smith" : [{Type: 'TextRem', Value: 'Hello, Mark!', Date: 1679941734161},
+ *                 {Type: 'TextAdd', Value: 'Dear Mr. Pottato.', Date: 1679941736189}],
+ *   "Mark Pottato" : [{Type: 'ParaRem', Date: 1679941755942},
+ *                   {Type: 'TextPr', Date: 1679941757832}]
+ * }
+ */
 
 /**
  * Returns a report about every change which was made to the document in the review mode.
  * @memberof ApiDocument
  * @typeofeditors ["CDE"]
- * @returns {object}
+ * @returns {ReviewReport}
  */
-ApiDocument.prototype.GetReviewReport = function(){ return new object(); };
+ApiDocument.prototype.GetReviewReport = function(){ return new ReviewReport(); };
 
 /**
  * Finds and replaces the text.
@@ -1814,6 +1894,46 @@ ApiDocument.prototype.GetContentControlsByTag = function(sTag){ return [new ApiB
  * @returns {ApiBlockLvlSdt[] | ApiInlineLvlSdt[]}
  */
 ApiDocument.prototype.GetFormsByTag = function(sTag){ return [new ApiBlockLvlSdt()]; };
+
+/**
+ * The specific form type.
+ * @typedef {("text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio")} FormSpecificType
+ */
+
+/**
+ * Form data.
+ * @typedef {Object} FormData
+ * @property {string} key - The form key. If the current form is a radio button, then this field contains the group key.
+ * @property {string | boolean} value - The current field value.
+ * @property {string} tag - The form tag.
+ * @property {FormSpecificType} type - The form type.
+ * @example
+ * {
+ *   "key" : "CompanyName",
+ *   "tag" : "companyName",
+ *   "value" : "ONLYOFFICE",
+ *   "type" : "text"
+ * }
+ */
+
+/**
+ * Returns the data from all forms present in the current document.
+ * If a form was created and not assigned to any part of the document, it won't appear in this list.
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ * @returns {Array.<FormData>}
+ * @since 8.0.0
+ */
+ApiDocument.prototype.GetFormsData = function(){ return []; };
+
+/**
+ * Sets the data to the specified forms.
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ * @param {Array.<FormData>} arrData - An array of form data to set to the specified forms.
+ * @since 8.0.0
+ */
+ApiDocument.prototype.SetFormsData = function(arrData){};
 
 /**
  * Sets the change tracking mode.
@@ -1871,10 +1991,11 @@ ApiDocument.prototype.DeleteBookmark = function(sName){ return true; };
  * @memberof ApiDocument
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiDocument.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiDocument.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
 
 /**
  * Returns a bookmark range.
@@ -1903,6 +2024,20 @@ ApiDocument.prototype.GetSections = function(){ return [new ApiSection()]; };
  * @returns {ApiTable[]}
  */
 ApiDocument.prototype.GetAllTablesOnPage = function(nPage){ return [new ApiTable()]; };
+
+/**
+ * Adds a shape to the specified page.
+ * <note>This method can be a little bit slow, because it runs the document calculation
+ * process to arrange tables on the specified page.</note>
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ * @param oDrawing {ApiDrawing} - A shape to add to the page.
+ * @param nPage {number} - The page number.
+ * @param x {EMU} - The X coordinate in English measure units.
+ * @param y {EMU} - The Y coordinate in English measure units.
+ * @returns {boolean}
+ */
+ApiDocument.prototype.AddDrawingToPage = function(oDrawing, nPage, x, y){ return true; };
 
 /**
  * Removes the current selection.
@@ -1952,9 +2087,34 @@ ApiDocument.prototype.ToHtml = function(bHtmlHeadings, bBase64img, bDemoteHeadin
  * @memberof ApiDocument
  * @typeofeditors ["CDE"]
  * @param {?string} [sText="WATERMARK"] - Watermark text.
- * @param {?boolean} [bIsDiagonal=true] - Specifies if the watermark is placed diagonally (true) or horizontally (false).
+ * @param {?boolean} [bIsDiagonal=false] - Specifies if the watermark is placed diagonally (true) or horizontally (false).
+ * @returns {ApiDrawing} - The object which represents the inserted watermark. Returns null if the watermark type is "none".
  */
-ApiDocument.prototype.InsertWatermark = function(sText, bIsDiagonal){};
+ApiDocument.prototype.InsertWatermark = function(sText, bIsDiagonal){ return new ApiDrawing(); };
+
+/**
+ * Returns the watermark settings in the current document.
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ * @returns {ApiWatermarkSettings} - The object which represents the watermark settings.
+ */
+ApiDocument.prototype.GetWatermarkSettings = function(){ return new ApiWatermarkSettings(); };
+
+/**
+ * Sets the watermark settings in the current document.
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ * @param {ApiWatermarkSettings} Settings - The object which represents the watermark settings.
+ * @returns {ApiDrawing} - The object which represents the watermark drawing if the watermark type in Settings is not "none".
+ */
+ApiDocument.prototype.SetWatermarkSettings = function(Settings){ return new ApiDrawing(); };
+
+/**
+ * Removes a watermark from the current document.
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ */
+ApiDocument.prototype.RemoveWatermark = function(){};
 
 /**
  * Updates all tables of contents in the current document.
@@ -2182,14 +2342,22 @@ ApiDocument.prototype.AddTableOfFigures = function(oTofPr, bReplace){ return tru
 ApiDocument.prototype.GetStatistics = function(){ return new object(); };
 
 /**
- * Returns the number of pages in a document
- * <note>This method can be slow for large documents, because it runs the document calculation
+ * Returns a number of pages in the current document.
+ * <note>This method can be slow for large documents because it runs the document calculation
  * process before the full recalculation.</note>
  * @memberof ApiDocument
  * @typeofeditors ["CDE"]
  * @returns {number}
  */
 ApiDocument.prototype.GetPageCount = function(){ return 0; };
+
+/**
+ * Returns all styles of the current document.
+ * @memberof ApiDocument
+ * @typeofeditors ["CDE"]
+ * @returns {ApiStyle[]}
+ */
+ApiDocument.prototype.GetAllStyles = function(){ return [new ApiStyle()]; };
 
 /**
  * Returns a type of the ApiParagraph class.
@@ -2234,7 +2402,6 @@ ApiParagraph.prototype.AddColumnBreak = function(){ return new ApiRun(); };
 
 /**
  * Inserts a number of the current document page into the paragraph.
- * <note>This method works for the paragraphs in the document header/footer only.</note>
  * @memberof ApiParagraph
  * @typeofeditors ["CDE"]
  * @returns {ApiRun}
@@ -2243,7 +2410,6 @@ ApiParagraph.prototype.AddPageNumber = function(){ return new ApiRun(); };
 
 /**
  * Inserts a number of pages in the current document into the paragraph.
- * <note>This method works for the paragraphs in the document header/footer only.</note>
  * @memberof ApiParagraph
  * @typeofeditors ["CDE"]
  * @returns {ApiRun}
@@ -2398,10 +2564,11 @@ ApiParagraph.prototype.AddInlineLvlSdt = function(oSdt){ return new ApiInlineLvl
  * @memberof ApiParagraph
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiParagraph.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiParagraph.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
 
 /**
  * Adds a hyperlink to a paragraph. 
@@ -2669,10 +2836,15 @@ ApiParagraph.prototype.GetParentTableCell = function(){ return new ApiTableCell(
 /**
  * Returns the paragraph text.
  * @memberof ApiParagraph
+ * @param {object} oPr - The resulting string display properties.
+ * @param {boolean} [oPr.Numbering=false] - Defines if the resulting string will include numbering or not.
+ * @param {boolean} [oPr.Math=false] - Defines if the resulting string will include mathematical expressions or not.
+ * @param {string} [oPr.NewLineSeparator='\r'] - Defines how the line separator will be specified in the resulting string.
+ * @param {string} [oPr.TabSymbol='\t'] - Defines how the tab will be specified in the resulting string (does not apply to numbering).
  * @typeofeditors ["CDE"]
- * @returns {string}  
+ * @returns {string}
  */
-ApiParagraph.prototype.GetText = function(){ return ""; };
+ApiParagraph.prototype.GetText = function(oPr){ return ""; };
 
 /**
  * Returns the paragraph text properties.
@@ -2861,6 +3033,23 @@ ApiParagraph.prototype.ReplaceByElement = function(oElement){ return true; };
  * @returns {boolean}
  */
 ApiParagraph.prototype.AddCaption = function(sAdditional, sLabel, bExludeLabel, sNumberingFormat, bBefore, nHeadingLvl, sCaptionSep){ return true; };
+
+/**
+ * Returns the paragraph section.
+ * @memberof ApiParagraph
+ * @typeofeditors ["CDE"]
+ * @returns {ApiSection}
+ */
+ApiParagraph.prototype.GetSection = function(){ return new ApiSection(); };
+
+/**
+ * Sets the specified section to the current paragraph.
+ * @memberof ApiParagraph
+ * @typeofeditors ["CDE"]
+ * @param {ApiSection} oSection - The section which will be set to the paragraph.
+ * @returns {boolean}
+ */
+ApiParagraph.prototype.SetSection = function(oSection){ return true; };
 
 /**
  * Returns a type of the ApiRun class.
@@ -3211,10 +3400,22 @@ ApiRun.prototype.ToJSON = function(bWriteStyles){ return new JSON(); };
  * @memberof ApiRun
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiRun.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiRun.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
+
+/**
+ * Returns a text from the text run.
+ * @memberof ApiRun
+ * @param {object} oPr - The resulting string display properties.
+ * @param {string} [oPr.NewLineSeparator='\r'] - Defines how the line separator will be specified in the resulting string.
+ * @param {string} [oPr.TabSymbol='\t'] - Defines how the tab will be specified in the resulting string.
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ */
+ApiRun.prototype.GetText = function(oPr){ return ""; };
 
 /**
  * Returns a type of the ApiSection class.
@@ -3271,6 +3472,22 @@ ApiSection.prototype.SetNotEqualColumns = function(aWidths, aSpaces){};
  * @param {boolean} [isPortrait=false] - Specifies the orientation of all the pages in this section (if set to true, then the portrait orientation is chosen).
  */
 ApiSection.prototype.SetPageSize = function(nWidth, nHeight, isPortrait){};
+
+/**
+ * Gets page height for current section.
+ * @memberof ApiSection
+ * @typeofeditors ["CDE"]
+ * @returns {twips}
+ */
+ApiSection.prototype.GetPageHeight = function(){ return new twips(); };
+
+/**
+ * Gets page width for current section.
+ * @memberof ApiSection
+ * @typeofeditors ["CDE"]
+ * @returns {twips}
+ */
+ApiSection.prototype.GetPageWidth = function(){ return new twips(); };
 
 /**
  * Specifies the page margins for all the pages in this section.
@@ -3734,10 +3951,29 @@ ApiTable.prototype.ReplaceByElement = function(oElement){ return true; };
  * @memberof ApiTable
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiTable.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiTable.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
+
+/**
+ * Adds a caption paragraph after (or before) the current table.
+ * <note>Please note that the current table must be in the document (not in the footer/header).
+ * And if the current table is placed in a shape, then a caption is added after (or before) the parent shape.</note>
+ * @memberof ApiTable
+ * @typeofeditors ["CDE"]
+ * @param {string} sAdditional - The additional text.
+ * @param {CaptionLabel | String} [sLabel="Table"] - The caption label.
+ * @param {boolean} [bExludeLabel=false] - Specifies whether to exclude the label from the caption.
+ * @param {CaptionNumberingFormat} [sNumberingFormat="Arabic"] - The possible caption numbering format.
+ * @param {boolean} [bBefore=false] - Specifies whether to insert the caption before the current table (true) or after (false) (after/before the shape if it is placed in the shape).
+ * @param {Number} [nHeadingLvl=undefined] - The heading level (used if you want to specify the chapter number).
+ * <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+ * @param {CaptionSep} [sCaptionSep="hyphen"] - The caption separator (used if you want to specify the chapter number).
+ * @returns {boolean}
+ */
+ApiTable.prototype.AddCaption = function(sAdditional, sLabel, bExludeLabel, sNumberingFormat, bBefore, nHeadingLvl, sCaptionSep){ return true; };
 
 /**
  * Returns a type of the ApiTableRow class.
@@ -4162,6 +4398,15 @@ ApiTextPr.prototype.GetClassType = function(){ return ""; };
 ApiTextPr.prototype.SetStyle = function(oStyle){ return new ApiTextPr(); };
 
 /**
+ * Gets the style of the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {ApiStyle} - The used style.
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetStyle = function(){ return new ApiStyle(); };
+
+/**
  * Sets the bold property to the text character.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4169,6 +4414,15 @@ ApiTextPr.prototype.SetStyle = function(oStyle){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetBold = function(isBold){ return new ApiTextPr(); };
+
+/**
+ * Gets the bold property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetBold = function(){ return true; };
 
 /**
  * Sets the italic property to the text character.
@@ -4180,6 +4434,15 @@ ApiTextPr.prototype.SetBold = function(isBold){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetItalic = function(isItalic){ return new ApiTextPr(); };
 
 /**
+ * Gets the italic property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetItalic = function(){ return true; };
+
+/**
  * Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4187,6 +4450,15 @@ ApiTextPr.prototype.SetItalic = function(isItalic){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetStrikeout = function(isStrikeout){ return new ApiTextPr(); };
+
+/**
+ * Gets the strikeout property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetStrikeout = function(){ return true; };
 
 /**
  * Specifies that the contents of the run are displayed along with a line appearing directly below the character
@@ -4199,6 +4471,15 @@ ApiTextPr.prototype.SetStrikeout = function(isStrikeout){ return new ApiTextPr()
 ApiTextPr.prototype.SetUnderline = function(isUnderline){ return new ApiTextPr(); };
 
 /**
+ * Gets the underline property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetUnderline = function(){ return true; };
+
+/**
  * Sets all 4 font slots with the specified font family.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4208,6 +4489,15 @@ ApiTextPr.prototype.SetUnderline = function(isUnderline){ return new ApiTextPr()
 ApiTextPr.prototype.SetFontFamily = function(sFontFamily){ return new ApiTextPr(); };
 
 /**
+ * Gets the font family from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFontFamily = function(){ return ""; };
+
+/**
  * Sets the font size to the characters of the current text run.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4215,6 +4505,15 @@ ApiTextPr.prototype.SetFontFamily = function(sFontFamily){ return new ApiTextPr(
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetFontSize = function(nSize){ return new ApiTextPr(); };
+
+/**
+ * Gets the font size from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {hps}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetFontSize = function(){ return new hps(); };
 
 /**
  * Sets the text color to the current text run in the RGB format.
@@ -4229,6 +4528,15 @@ ApiTextPr.prototype.SetFontSize = function(nSize){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetColor = function(r, g, b, isAuto){ return new ApiTextPr(); };
 
 /**
+ * Gets the RGB color from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {ApiRGBColor}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetColor = function(){ return new ApiRGBColor(); };
+
+/**
  * Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:
  * * <b>"baseline"</b> - the characters in the current text run will be aligned by the default text baseline.
  * * <b>"subscript"</b> - the characters in the current text run will be aligned below the default text baseline.
@@ -4241,6 +4549,15 @@ ApiTextPr.prototype.SetColor = function(r, g, b, isAuto){ return new ApiTextPr()
 ApiTextPr.prototype.SetVertAlign = function(sType){ return new ApiTextPr(); };
 
 /**
+ * Gets the vertical alignment type from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetVertAlign = function(){ return ""; };
+
+/**
  * Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CPE"]
@@ -4248,6 +4565,15 @@ ApiTextPr.prototype.SetVertAlign = function(sType){ return new ApiTextPr(); };
  * @returns {ApiTextPr}
  */
 ApiTextPr.prototype.SetHighlight = function(sColor){ return new ApiTextPr(); };
+
+/**
+ * Gets the highlight property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CPE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetHighlight = function(){ return ""; };
 
 /**
  * Sets the text spacing measured in twentieths of a point.
@@ -4259,6 +4585,15 @@ ApiTextPr.prototype.SetHighlight = function(sColor){ return new ApiTextPr(); };
 ApiTextPr.prototype.SetSpacing = function(nSpacing){ return new ApiTextPr(); };
 
 /**
+ * Gets the text spacing from the current text properties measured in twentieths of a point.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {twips}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetSpacing = function(){ return new twips(); };
+
+/**
  * Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.
  * @memberof ApiTextPr
  * @typeofeditors ["CDE", "CSE", "CPE"]
@@ -4266,6 +4601,15 @@ ApiTextPr.prototype.SetSpacing = function(nSpacing){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new ApiTextPr(); };
+
+/**
+ * Gets the double strikeout property from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetDoubleStrikeout = function(){ return true; };
 
 /**
  * Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.
@@ -4277,6 +4621,15 @@ ApiTextPr.prototype.SetDoubleStrikeout = function(isDoubleStrikeout){ return new
 ApiTextPr.prototype.SetCaps = function(isCaps){ return new ApiTextPr(); };
 
 /**
+ * Specifies whether the text with the current text properties are capitalized.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetCaps = function(){ return true; };
+
+/**
  * Specifies that all the small letter characters in the text run are formatted for display only as their capital
  * letter character equivalents which are two points smaller than the actual font size specified for this text.
  * @memberof ApiTextPr
@@ -4285,6 +4638,15 @@ ApiTextPr.prototype.SetCaps = function(isCaps){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr(); };
+
+/**
+ * Specifies whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE", "CSE", "CPE"]
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetSmallCaps = function(){ return true; };
 
 /**
  * Specifies an amount by which text is raised or lowered for this run in relation to the default
@@ -4298,6 +4660,15 @@ ApiTextPr.prototype.SetSmallCaps = function(isSmallCaps){ return new ApiTextPr()
 ApiTextPr.prototype.SetPosition = function(nPosition){ return new ApiTextPr(); };
 
 /**
+ * Gets the text position from the current text properties measured in half-points (1/144 of an inch).
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {hps}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetPosition = function(){ return new hps(); };
+
+/**
  * Specifies the languages which will be used to check spelling and grammar (if requested) when processing
  * the contents of the text run.
  * @memberof ApiTextPr
@@ -4307,6 +4678,15 @@ ApiTextPr.prototype.SetPosition = function(nPosition){ return new ApiTextPr(); }
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetLanguage = function(sLangId){ return new ApiTextPr(); };
+
+/**
+ * Gets the language from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetLanguage = function(){ return ""; };
 
 /**
  * Specifies the shading applied to the contents of the current text run.
@@ -4319,6 +4699,15 @@ ApiTextPr.prototype.SetLanguage = function(sLangId){ return new ApiTextPr(); };
  * @returns {ApiTextPr} - this text properties.
  */
 ApiTextPr.prototype.SetShd = function(sType, r, g, b){ return new ApiTextPr(); };
+
+/**
+ * Gets the text shading from the current text properties.
+ * @memberof ApiTextPr
+ * @typeofeditors ["CDE"]
+ * @returns {ApiRGBColor}
+ * @since 8.1.0
+ */
+ApiTextPr.prototype.GetShd = function(){ return new ApiRGBColor(); };
 
 /**
  * Converts the ApiTextPr object into the JSON object.
@@ -5518,6 +5907,25 @@ ApiDrawing.prototype.GetWidth = function(){ return new EMU(); };
 ApiDrawing.prototype.GetHeight = function(){ return new EMU(); };
 
 /**
+ * Returns the lock value for the specified lock type of the current drawing.
+ * @typeofeditors ["CDE"]
+ * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
+ * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
+ * @returns {bool}
+ */
+ApiDrawing.prototype.GetLockValue = function(sType){ return true; };
+
+/**
+ * Sets the lock value to the specified lock type of the current drawing.
+ * @typeofeditors ["CDE"]
+ * @param {"noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles"
+ * | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox"} sType - Lock type in the string format.
+ * @param {bool} bValue - Specifies if the specified lock is applied to the current drawing.
+ * @returns {bool}
+ */
+ApiDrawing.prototype.SetLockValue = function(sType, bValue){ return true; };
+
+/**
  * Sets the properties from another drawing to the current drawing.
  * The following properties will be copied: horizontal and vertical alignment, distance between the edges of the current drawing object and any subsequent text, wrapping style, drawing name, title and description.
  * @memberof ApiDrawing
@@ -6431,10 +6839,185 @@ ApiInlineLvlSdt.prototype.IsForm = function(){ return true; };
  * @memberof ApiInlineLvlSdt
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiInlineLvlSdt.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiInlineLvlSdt.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
+
+/**
+ * Place cursor before/after the current content control
+ * @param {boolean} [isAfter=true]
+ * @memberof ApiInlineLvlSdt
+ * @typeofeditors ["CDE"]
+ */
+ApiInlineLvlSdt.prototype.MoveCursorOutside = function(isAfter){};
+
+/**
+ * Returns a list of values of the combo box / dropdown list content control.
+ * @memberof ApiInlineLvlSdt
+ * @typeofeditors ["CDE"]
+ * @returns {ApiContentControlList}
+ */
+ApiInlineLvlSdt.prototype.GetDropdownList = function(){ return new ApiContentControlList(); };
+
+/**
+ * Returns a type of the ApiContentControlList class.
+ * @memberof ApiContentControlList
+ * @typeofeditors ["CDE"]
+ * @returns {"contentControlList"}
+ */
+ApiContentControlList.prototype.GetClassType = function(){ return ""; };
+
+/**
+ * Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / dropdown list content control.
+ * @memberof ApiContentControlList
+ * @typeofeditors ["CDE"]
+ * @returns {ApiContentControlListEntry[]}
+ */
+ApiContentControlList.prototype.GetAllItems = function(){ return [new ApiContentControlListEntry()]; };
+
+/**
+ * Returns a number of items of the combo box / dropdown list content control.
+ * @memberof ApiContentControlList
+ * @typeofeditors ["CDE"]
+ * @returns {number}
+ */
+ApiContentControlList.prototype.GetElementsCount = function(){ return 0; };
+
+/**
+ * Returns a parent of the combo box / dropdown list content control.
+ * @memberof ApiContentControlList
+ * @typeofeditors ["CDE"]
+ * @returns {ApiInlineLvlSdt | ApiBlockLvlSdt}
+ */
+ApiContentControlList.prototype.GetParent = function(){ return new ApiInlineLvlSdt(); };
+
+/**
+ * Adds a new value to the combo box / dropdown list content control.
+ * @memberof ApiContentControlList
+ * @param {string} sText - The display text for the list item.
+ * @param {string} [sValue=sText] - The list item value.
+ * @param {number} [nIndex=this.GetElementsCount()] - A position where a new value will be added.
+ * @typeofeditors ["CDE"]
+ * @returns {boolean}
+ */
+ApiContentControlList.prototype.Add = function(sText, sValue, nIndex){ return true; };
+
+/**
+ * Clears a list of values of the combo box / dropdown list content control.
+ * @memberof ApiContentControlList
+ * @typeofeditors ["CDE"]
+ */
+ApiContentControlList.prototype.Clear = function(){};
+
+/**
+ * Returns an item of the combo box / dropdown list content control by the position specified in the request.
+ * @memberof ApiContentControlList
+ * @param {number} nIndex - Item position.
+ * @typeofeditors ["CDE"]
+ * @returns {ApiContentControlListEntry}
+ */
+ApiContentControlList.prototype.GetItem = function(nIndex){ return new ApiContentControlListEntry(); };
+
+/**
+ * Returns a type of the ApiContentControlListEntry class.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {"contentControlList"}
+ */
+ApiContentControlListEntry.prototype.GetClassType = function(){ return ""; };
+
+/**
+ * Returns a parent of the content control list item in the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {ApiContentControlList}
+ */
+ApiContentControlListEntry.prototype.GetParent = function(){ return new ApiContentControlList(); };
+
+/**
+ * Selects the list entry in the combo box / dropdown list content control and sets the text of the content control to the selected item value.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.Select = function(){ return true; };
+
+/**
+ * Moves the current item in the parent combo box / dropdown list content control up one element.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.MoveUp = function(){ return true; };
+
+/**
+ * Moves the current item in the parent combo box / dropdown list content control down one element, so that it is after the item that originally followed it.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.MoveDown = function(){ return true; };
+
+/**
+ * Returns an index of the content control list item in the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {number}
+ */
+ApiContentControlListEntry.prototype.GetIndex = function(){ return 0; };
+
+/**
+ * Sets an index to the content control list item in the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @param {number} nIndex - An index of the content control list item.
+ * @typeofeditors ["CDE"]
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.SetIndex = function(nIndex){ return true; };
+
+/**
+ * Deletes the specified item in the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.Delete = function(){ return true; };
+
+/**
+ * Returns a String that represents the display text of a list item for the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ */
+ApiContentControlListEntry.prototype.GetText = function(){ return ""; };
+
+/**
+ * Sets a String that represents the display text of a list item for the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @param {string} sText - The display text of a list item.
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.SetText = function(sText){ return true; };
+
+/**
+ * Returns a String that represents the value of a list item for the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ */
+ApiContentControlListEntry.prototype.GetValue = function(){ return ""; };
+
+/**
+ * Sets a String that represents the value of a list item for the combo box / dropdown list content control.
+ * @memberof ApiContentControlListEntry
+ * @typeofeditors ["CDE"]
+ * @param {string} sValue - The value of a list item.
+ * @returns {boolean}
+ */
+ApiContentControlListEntry.prototype.SetValue = function(sValue){ return true; };
 
 /**
  * Returns a type of the ApiBlockLvlSdt class.
@@ -6698,27 +7281,50 @@ ApiBlockLvlSdt.prototype.ReplaceByElement = function(oElement){ return true; };
  * @memberof ApiBlockLvlSdt
  * @typeofeditors ["CDE"]
  * @param {string} sText - The comment text (required).
- * @param {string} sAutor - The author's name (optional).
+ * @param {string} sAuthor - The author's name (optional).
+ * @param {string} sUserId - The user ID of the comment author (optional).
  * @returns {ApiComment} - Returns null if the comment was not added.
  */
-ApiBlockLvlSdt.prototype.AddComment = function(sText, sAutor){ return new ApiComment(); };
+ApiBlockLvlSdt.prototype.AddComment = function(sText, sAuthor, sUserId){ return new ApiComment(); };
 
 /**
- * Sets the background color to the current block content control.
+ * Adds a caption paragraph after (or before) the current content control.
+ * <note>Please note that the current content control must be in the document (not in the footer/header).
+ * And if the current content control is placed in a shape, then a caption is added after (or before) the parent shape.</note>
  * @memberof ApiBlockLvlSdt
- * @param {byte} r - Red color component value.
- * @param {byte} g - Green color component value.
- * @param {byte} b - Blue color component value.
- * @param {boolean} bNone - Defines that background color will not be set.
  * @typeofeditors ["CDE"]
+ * @param {string} sAdditional - The additional text.
+ * @param {CaptionLabel | String} [sLabel="Table"] - The caption label.
+ * @param {boolean} [bExludeLabel=false] - Specifies whether to exclude the label from the caption.
+ * @param {CaptionNumberingFormat} [sNumberingFormat="Arabic"] - The possible caption numbering format.
+ * @param {boolean} [bBefore=false] - Specifies whether to insert the caption before the current content control (true) or after (false) (after/before the shape if it is placed in the shape).
+ * @param {Number} [nHeadingLvl=undefined] - The heading level (used if you want to specify the chapter number).
+ * <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+ * @param {CaptionSep} [sCaptionSep="hyphen"] - The caption separator (used if you want to specify the chapter number).
  * @returns {boolean}
  */
-ApiBlockLvlSdt.prototype.SetBackgroundColor = function(r, g, b, bNone){ return true; };
+ApiBlockLvlSdt.prototype.AddCaption = function(sAdditional, sLabel, bExludeLabel, sNumberingFormat, bBefore, nHeadingLvl, sCaptionSep){ return true; };
+
+/**
+ * Returns a list of values of the combo box / dropdown list content control.
+ * @memberof ApiBlockLvlSdt
+ * @typeofeditors ["CDE"]
+ * @returns {ApiContentControlList}
+ */
+ApiBlockLvlSdt.prototype.GetDropdownList = function(){ return new ApiContentControlList(); };
+
+/**
+ * Place cursor before/after the current content control
+ * @param {boolean} [isAfter=true]
+ * @memberof ApiBlockLvlSdt
+ * @typeofeditors ["CDE"]
+ */
+ApiBlockLvlSdt.prototype.MoveCursorOutside = function(isAfter){};
 
 /**
  * Returns a type of the ApiFormBase class.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {"form"}
  */
 ApiFormBase.prototype.GetClassType = function(){ return ""; };
@@ -6726,7 +7332,7 @@ ApiFormBase.prototype.GetClassType = function(){ return ""; };
 /**
  * Returns a type of the current form.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {FormType}
  */
 ApiFormBase.prototype.GetFormType = function(){ return new FormType(); };
@@ -6734,7 +7340,7 @@ ApiFormBase.prototype.GetFormType = function(){ return new FormType(); };
 /**
  * Returns the current form key.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {string}
  */
 ApiFormBase.prototype.GetFormKey = function(){ return ""; };
@@ -6742,7 +7348,7 @@ ApiFormBase.prototype.GetFormKey = function(){ return ""; };
 /**
  * Sets a key to the current form.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @param {string} sKey - Form key.
  * @returns {boolean}
  */
@@ -6751,7 +7357,7 @@ ApiFormBase.prototype.SetFormKey = function(sKey){ return true; };
 /**
  * Returns the tip text of the current form.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {string}
  */
 ApiFormBase.prototype.GetTipText = function(){ return ""; };
@@ -6759,7 +7365,7 @@ ApiFormBase.prototype.GetTipText = function(){ return ""; };
 /**
  * Sets the tip text to the current form.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @param {string} sText - Tip text.
  * @returns {boolean}
  */
@@ -6768,7 +7374,7 @@ ApiFormBase.prototype.SetTipText = function(sText){ return true; };
 /**
  * Checks if the current form is required.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.IsRequired = function(){ return true; };
@@ -6776,7 +7382,7 @@ ApiFormBase.prototype.IsRequired = function(){ return true; };
 /**
  * Specifies if the current form should be required.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @param {boolean} bRequired - Defines if the current form is required (true) or not (false).
  * @returns {boolean}
  */
@@ -6785,7 +7391,7 @@ ApiFormBase.prototype.SetRequired = function(bRequired){ return true; };
 /**
  * Checks if the current form is fixed size.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.IsFixed = function(){ return true; };
@@ -6795,7 +7401,7 @@ ApiFormBase.prototype.IsFixed = function(){ return true; };
  * @memberof ApiFormBase
  * @param {twips} nWidth - The wrapper shape width measured in twentieths of a point (1/1440 of an inch).
  * @param {twips} nHeight - The wrapper shape height measured in twentieths of a point (1/1440 of an inch).
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.ToFixed = function(nWidth, nHeight){ return true; };
@@ -6804,7 +7410,7 @@ ApiFormBase.prototype.ToFixed = function(nWidth, nHeight){ return true; };
  * Converts the current form to an inline form.
  * *Picture form can't be converted to an inline form, it's always a fixed size object.*
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.ToInline = function(){ return true; };
@@ -6816,7 +7422,7 @@ ApiFormBase.prototype.ToInline = function(){ return true; };
  * @param {byte} g - Green color component value.
  * @param {byte} b - Blue color component value.
  * @param {boolean} bNone - Defines that border color will not be set.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.SetBorderColor = function(r, g, b, bNone){ return true; };
@@ -6828,16 +7434,16 @@ ApiFormBase.prototype.SetBorderColor = function(r, g, b, bNone){ return true; };
  * @param {byte} g - Green color component value.
  * @param {byte} b - Blue color component value.
  * @param {boolean} bNone - Defines that background color will not be set.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.SetBackgroundColor = function(r, g, b, bNone){ return true; };
 
 /**
  * Returns the text from the current form.
- * *This method is used only for text and combo box forms.*
+ * *Returns the value as a string if possible for the given form type*
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {string}
  */
 ApiFormBase.prototype.GetText = function(){ return ""; };
@@ -6845,7 +7451,7 @@ ApiFormBase.prototype.GetText = function(){ return ""; };
 /**
  * Clears the current form.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  */
 ApiFormBase.prototype.Clear = function(){};
 
@@ -6853,7 +7459,7 @@ ApiFormBase.prototype.Clear = function(){};
  * Returns a shape in which the form is placed to control the position and size of the fixed size form frame.
  * The null value will be returned for the inline forms.
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {ApiShape} - returns the shape in which the form is placed.
  */
 ApiFormBase.prototype.GetWrapperShape = function(){ return new ApiShape(); };
@@ -6863,16 +7469,16 @@ ApiFormBase.prototype.GetWrapperShape = function(){ return new ApiShape(); };
  * *Can't be set to checkbox or radio button.*
  * @memberof ApiFormBase
  * @param {string} sText - The text that will be set to the current form.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiFormBase.prototype.SetPlaceholderText = function(sText){ return true; };
 
 /**
  * Sets the text properties to the current form.
- * *This method is used only for text and combo box forms.*
+ * *Used if possible for this type of form*
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @param {ApiTextPr} oTextPr - The text properties that will be set to the current form.
  * @returns {boolean}  
  */
@@ -6880,88 +7486,96 @@ ApiFormBase.prototype.SetTextPr = function(oTextPr){ return true; };
 
 /**
  * Returns the text properties from the current form.
- * *This method is used only for text and combo box forms.*
+ * *Used if possible for this type of form*
  * @memberof ApiFormBase
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {ApiTextPr}  
  */
 ApiFormBase.prototype.GetTextPr = function(){ return new ApiTextPr(); };
 
 /**
- * Copies the current form (copies with the shape if it exists).
+ * Place cursor before/after the current form.
+ * @param {boolean} [isAfter=true]
  * @memberof ApiFormBase
  * @typeofeditors ["CDE"]
+ */
+ApiFormBase.prototype.MoveCursorOutside = function(isAfter){};
+
+/**
+ * Copies the current form (copies with the shape if it exists).
+ * @memberof ApiFormBase
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {ApiForm}
  */
 ApiFormBase.prototype.Copy = function(){ return new ApiForm(); };
 
 /**
- * Checks if the text form content is autofit, i.e. whether the font size adjusts to the size of the fixed size form.
+ * Checks if the text field content is autofit, i.e. whether the font size adjusts to the size of the fixed size form.
  * @memberof ApiTextForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.IsAutoFit = function(){ return true; };
 
 /**
- * Specifies if the text form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
+ * Specifies if the text field content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.
  * @memberof ApiTextForm
- * @param {boolean} bAutoFit - Defines if the text form content is autofit (true) or not (false).
- * @typeofeditors ["CDE"]
+ * @param {boolean} bAutoFit - Defines if the text field content is autofit (true) or not (false).
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.SetAutoFit = function(bAutoFit){ return true; };
 
 /**
- * Checks if the current text form is multiline.
+ * Checks if the current text field is multiline.
  * @memberof ApiTextForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.IsMultiline = function(){ return true; };
 
 /**
- * Specifies if the current text form should be miltiline.
+ * Specifies if the current text field should be miltiline.
  * @memberof ApiTextForm
- * @param {boolean} bMultiline - Defines if the current text form is multiline (true) or not (false).
- * @typeofeditors ["CDE"]
- * @returns {boolean} - return false, if the text form is not fixed size.
+ * @param {boolean} bMultiline - Defines if the current text field is multiline (true) or not (false).
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {boolean} - return false, if the text field is not fixed size.
  */
 ApiTextForm.prototype.SetMultiline = function(bMultiline){ return true; };
 
 /**
- * Returns a limit of the text form characters.
+ * Returns a limit of the text field characters.
  * @memberof ApiTextForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {number} - if this method returns -1 -> the form has no limit for characters
  */
 ApiTextForm.prototype.GetCharactersLimit = function(){ return 0; };
 
 /**
- * Sets a limit to the text form characters.
+ * Sets a limit to the text field characters.
  * @memberof ApiTextForm
- * @param {number} nChars - The maximum number of characters in the text form. If this parameter is equal to -1, no limit will be set.
+ * @param {number} nChars - The maximum number of characters in the text field. If this parameter is equal to -1, no limit will be set.
  * A limit is required to be set if a comb of characters is applied.
  * Maximum value for this parameter is 1000000.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.SetCharactersLimit = function(nChars){ return true; };
 
 /**
- * Checks if the text form is a comb of characters with the same cell width.
+ * Checks if the text field is a comb of characters with the same cell width.
  * @memberof ApiTextForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.IsComb = function(){ return true; };
 
 /**
- * Specifies if the text form should be a comb of characters with the same cell width.
+ * Specifies if the text field should be a comb of characters with the same cell width.
  * The maximum number of characters must be set to a positive value.
  * @memberof ApiTextForm
- * @param {boolean} bComb - Defines if the text form is a comb of characters (true) or not (false).
- * @typeofeditors ["CDE"]
+ * @param {boolean} bComb - Defines if the text field is a comb of characters (true) or not (false).
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.SetComb = function(bComb){ return true; };
@@ -6971,16 +7585,16 @@ ApiTextForm.prototype.SetComb = function(bComb){ return true; };
  * @memberof ApiTextForm
  * @param {mm} [nCellWidth=0] - The cell width measured in millimeters.
  * If this parameter is not specified or equal to 0 or less, then the width will be set automatically. Must be >= 1 and <= 558.8.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.SetCellWidth = function(nCellWidth){ return true; };
 
 /**
- * Sets the text to the current text form.
+ * Sets the text to the current text field.
  * @memberof ApiTextForm
- * @param {string} sText - The text that will be set to the current text form.
- * @typeofeditors ["CDE"]
+ * @param {string} sText - The text that will be set to the current text field.
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiTextForm.prototype.SetText = function(sText){ return true; };
@@ -6988,7 +7602,7 @@ ApiTextForm.prototype.SetText = function(sText){ return true; };
 /**
  * Returns the current scaling condition of the picture form.
  * @memberof ApiPictureForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {ScaleFlag}
  */
 ApiPictureForm.prototype.GetScaleFlag = function(){ return new ScaleFlag(); };
@@ -6997,7 +7611,7 @@ ApiPictureForm.prototype.GetScaleFlag = function(){ return new ScaleFlag(); };
  * Sets the scaling condition to the current picture form.
  * @memberof ApiPictureForm
  * @param {ScaleFlag} sScaleFlag - Picture scaling condition: "always", "never", "tooBig" or "tooSmall".
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiPictureForm.prototype.SetScaleFlag = function(sScaleFlag){ return true; };
@@ -7006,7 +7620,7 @@ ApiPictureForm.prototype.SetScaleFlag = function(sScaleFlag){ return true; };
  * Locks the aspect ratio of the current picture form.
  * @memberof ApiPictureForm
  * @param {boolean} [isLock=true] - Specifies if the aspect ratio of the current picture form will be locked (true) or not (false).
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiPictureForm.prototype.SetLockAspectRatio = function(isLock){ return true; };
@@ -7014,7 +7628,7 @@ ApiPictureForm.prototype.SetLockAspectRatio = function(isLock){ return true; };
 /**
  * Checks if the aspect ratio of the current picture form is locked or not.
  * @memberof ApiPictureForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiPictureForm.prototype.IsLockAspectRatio = function(){ return true; };
@@ -7027,7 +7641,7 @@ ApiPictureForm.prototype.IsLockAspectRatio = function(){ return true; };
  * @memberof ApiPictureForm
  * @param {percentage} nShiftX - Horizontal position measured in percent.
  * @param {percentage} nShiftY - Vertical position measured in percent.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiPictureForm.prototype.SetPicturePosition = function(nShiftX, nShiftY){ return true; };
@@ -7035,7 +7649,7 @@ ApiPictureForm.prototype.SetPicturePosition = function(nShiftX, nShiftY){ return
 /**
  * Returns the picture position inside the current form.
  * @memberof ApiPictureForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {Array.<percentage>} Array of two numbers [shiftX, shiftY]
  */
 ApiPictureForm.prototype.GetPicturePosition = function(){ return []; };
@@ -7044,7 +7658,7 @@ ApiPictureForm.prototype.GetPicturePosition = function(){ return []; };
  * Respects the form border width when scaling the image.
  * @memberof ApiPictureForm
  * @param {boolean} [isRespect=true] - Specifies if the form border width will be respected (true) or not (false).
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiPictureForm.prototype.SetRespectBorders = function(isRespect){ return true; };
@@ -7052,7 +7666,7 @@ ApiPictureForm.prototype.SetRespectBorders = function(isRespect){ return true; }
 /**
  * Checks if the form border width is respected or not.
  * @memberof ApiPictureForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiPictureForm.prototype.IsRespectBorders = function(){ return true; };
@@ -7060,7 +7674,7 @@ ApiPictureForm.prototype.IsRespectBorders = function(){ return true; };
 /**
  * Returns an image in the base64 format from the current picture form.
  * @memberof ApiPictureForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {base64img}
  */
 ApiPictureForm.prototype.GetImage = function(){ return base64img; };
@@ -7069,15 +7683,17 @@ ApiPictureForm.prototype.GetImage = function(){ return base64img; };
  * Sets an image to the current picture form.
  * @memberof ApiPictureForm
  * @param {string} sImageSrc - The image source where the image to be inserted should be taken from (currently, only internet URL or base64 encoded images are supported).
- * @typeofeditors ["CDE"]
+ * @param {EMU} nWidth - The image width in English measure units.
+ * @param {EMU} nHeight - The image height in English measure units.
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
-ApiPictureForm.prototype.SetImage = function(sImageSrc){ return true; };
+ApiPictureForm.prototype.SetImage = function(sImageSrc, nWidth, nHeight){ return true; };
 
 /**
  * Returns the list values from the current combo box.
  * @memberof ApiComboBoxForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {string[]}
  */
 ApiComboBoxForm.prototype.GetListValues = function(){ return [""]; };
@@ -7086,7 +7702,7 @@ ApiComboBoxForm.prototype.GetListValues = function(){ return [""]; };
  * Sets the list values to the current combo box.
  * @memberof ApiComboBoxForm
  * @param {string[]} aListString - The combo box list values.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiComboBoxForm.prototype.SetListValues = function(aListString){ return true; };
@@ -7095,7 +7711,7 @@ ApiComboBoxForm.prototype.SetListValues = function(aListString){ return true; };
  * Selects the specified value from the combo box list values. 
  * @memberof ApiComboBoxForm
  * @param {string} sValue - The combo box list value that will be selected.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiComboBoxForm.prototype.SelectListValue = function(sValue){ return true; };
@@ -7105,15 +7721,15 @@ ApiComboBoxForm.prototype.SelectListValue = function(sValue){ return true; };
  * *Available only for editable combo box forms.*
  * @memberof ApiComboBoxForm
  * @param {string} sText - The combo box text.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiComboBoxForm.prototype.SetText = function(sText){ return true; };
 
 /**
- * Checks if the combo box text can be edited.
+ * Checks if the combo box text can be edited. If it is not editable, then this form is a dropdown list.
  * @memberof ApiComboBoxForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiComboBoxForm.prototype.IsEditable = function(){ return true; };
@@ -7122,7 +7738,7 @@ ApiComboBoxForm.prototype.IsEditable = function(){ return true; };
  * Checks the current checkbox.
  * @memberof ApiCheckBoxForm
  * @param {boolean} isChecked - Specifies if the current checkbox will be checked (true) or not (false).
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiCheckBoxForm.prototype.SetChecked = function(isChecked){ return true; };
@@ -7130,7 +7746,7 @@ ApiCheckBoxForm.prototype.SetChecked = function(isChecked){ return true; };
 /**
  * Returns the state of the current checkbox (checked or not).
  * @memberof ApiCheckBoxForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiCheckBoxForm.prototype.IsChecked = function(){ return true; };
@@ -7138,7 +7754,7 @@ ApiCheckBoxForm.prototype.IsChecked = function(){ return true; };
 /**
  * Checks if the current checkbox is a radio button. 
  * @memberof ApiCheckBoxForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {boolean}
  */
 ApiCheckBoxForm.prototype.IsRadioButton = function(){ return true; };
@@ -7146,18 +7762,76 @@ ApiCheckBoxForm.prototype.IsRadioButton = function(){ return true; };
 /**
  * Returns the radio group key if the current checkbox is a radio button.
  * @memberof ApiCheckBoxForm
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  * @returns {string}
  */
 ApiCheckBoxForm.prototype.GetRadioGroup = function(){ return ""; };
 
 /**
- * Sets the radio group key to the current checkbox.
+ * Sets the radio group key to the current radio button.
  * @memberof ApiCheckBoxForm
  * @param {string} sKey - Radio group key.
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CFE"]
  */
 ApiCheckBoxForm.prototype.SetRadioGroup = function(sKey){};
+
+/**
+ * Gets the date format of the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.GetFormat = function() { return ""; };
+
+/**
+ * Sets the date format to the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @param {string} sFormat - The date format. For example, mm.dd.yyyy
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.SetFormat = function(sFormat){ return true; };
+
+/**
+ * Gets the used date language of the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {string}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.GetLanguage = function() { return ""; };
+
+/**
+ * Sets the date language to the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @param {string} sLangId - The date language. The possible value for this parameter is a language identifier as defined in
+ * RFC 4646/BCP 47. Example: "en-CA".
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.SetLanguage = function(sLangId){ return true; };
+
+/**
+ * Returns the timestamp of the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @returns {number}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.GetTime = function(){ return 0; };
+
+/**
+ * Sets the timestamp to the current form.
+ * @memberof ApiDateForm
+ * @typeofeditors ["CDE", "CFE"]
+ * @param {number} nTimeStamp The timestamp that will be set to the current date form.
+ * @returns {boolean}
+ * @since 8.1.0
+ */
+ApiDateForm.prototype.SetTime = function(nTimeStamp){ return true; };
 
 /**
  * Converts the ApiBlockLvlSdt object into the JSON object.
@@ -7218,17 +7892,41 @@ ApiInterface.prototype.CreateTextPr = function () { return new ApiTextPr(); };
 ApiInterface.prototype.CreateWordArt = function(oTextPr, sText, sTransform, oFill, oStroke, nRotAngle, nWidth, nHeight) { return new ApiDrawing(); };
 
 /**
+ * Returns the full name of the currently opened file.
+ * @memberof ApiInterface
+ * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @returns {string}
+ */
+ApiInterface.prototype.GetFullName = function () { return ""; };
+
+/**
+ * Returns the full name of the currently opened file.
+ * @memberof ApiInterface
+ * @typeofeditors ["CDE", "CPE", "CSE"]
+ * @returns {string}
+ */
+ApiInterface.prototype.FullName = ApiInterface.prototype.GetFullName ();
+
+/**
  * Returns a type of the ApiComment class.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {"comment"}
  */
-ApiComment.prototype.GetClassType = function () { return ""; };
+ApiComment.prototype.GetClassType = function (){ return ""; };
+
+/**
+ * Returns the current comment ID. If the comment doesn't have an ID, null is returned.
+ * @memberof ApiComment
+ * @typeofeditors ["CDE"]
+ * @returns {string}
+ */
+ApiComment.prototype.GetId = function (){ return ""; };
 
 /**
  * Returns the comment text.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {string}
  */
 ApiComment.prototype.GetText = function () { return ""; };
@@ -7236,7 +7934,7 @@ ApiComment.prototype.GetText = function () { return ""; };
 /**
  * Sets the comment text.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {string} sText - The comment text.
  * @returns {ApiComment} - this
  */
@@ -7245,19 +7943,19 @@ ApiComment.prototype.SetText = function (sText) { return new ApiComment(); };
 /**
  * Returns the comment author's name.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {string}
  */
-ApiComment.prototype.GetAutorName = function () { return ""; };
+ApiComment.prototype.GetAuthorName = function () { return ""; };
 
 /**
  * Sets the comment author's name.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
- * @param {string} sAutorName - The comment author's name.
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sAuthorName - The comment author's name.
  * @returns {ApiComment} - this
  */
-ApiComment.prototype.SetAutorName = function (sAutorName) { return new ApiComment(); };
+ApiComment.prototype.SetAuthorName = function (sAuthorName) { return new ApiComment(); };
 
 /**
  * Returns the user ID of the comment author.
@@ -7270,7 +7968,7 @@ ApiComment.prototype.GetUserId = function () { return ""; };
 /**
  * Sets the user ID to the comment author.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {string} sUserId - The user ID of the comment author.
  * @returns {ApiComment} - this
  */
@@ -7279,7 +7977,7 @@ ApiComment.prototype.SetUserId = function (sUserId) { return new ApiComment(); }
 /**
  * Checks if a comment is solved or not.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {boolean}
  */
 ApiComment.prototype.IsSolved = function () { return true; };
@@ -7287,7 +7985,7 @@ ApiComment.prototype.IsSolved = function () { return true; };
 /**
  * Marks a comment as solved.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {boolean} bSolved - Specifies if a comment is solved or not.
  * @returns {ApiComment} - this
  */
@@ -7296,7 +7994,7 @@ ApiComment.prototype.SetSolved = function (bSolved) { return new ApiComment(); }
 /**
  * Returns the timestamp of the comment creation in UTC format.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {Number}
  */
 ApiComment.prototype.GetTimeUTC = function () { return 0; };
@@ -7304,7 +8002,7 @@ ApiComment.prototype.GetTimeUTC = function () { return 0; };
 /**
  * Sets the timestamp of the comment creation in UTC format.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {Number | String} nTimeStamp - The timestamp of the comment creation in UTC format.
  * @returns {ApiComment} - this
  */
@@ -7313,7 +8011,7 @@ ApiComment.prototype.SetTimeUTC = function (timeStamp) { return new ApiComment()
 /**
  * Returns the timestamp of the comment creation in the current time zone format.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {Number}
  */
 ApiComment.prototype.GetTime = function () { return 0; };
@@ -7321,7 +8019,7 @@ ApiComment.prototype.GetTime = function () { return 0; };
 /**
  * Sets the timestamp of the comment creation in the current time zone format.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {Number | String} nTimeStamp - The timestamp of the comment creation in the current time zone format.
  * @returns {ApiComment} - this
  */
@@ -7330,7 +8028,7 @@ ApiComment.prototype.SetTime = function (timeStamp) { return new ApiComment(); }
 /**
  * Returns the quote text of the current comment.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {Number}
  */
 ApiComment.prototype.GetQuoteText = function () { return 0; };
@@ -7338,7 +8036,7 @@ ApiComment.prototype.GetQuoteText = function () { return 0; };
 /**
  * Returns a number of the comment replies.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {Number}
  */
 ApiComment.prototype.GetRepliesCount = function () { return 0; };
@@ -7355,19 +8053,19 @@ ApiComment.prototype.GetReply = function (nIndex) { return new ApiCommentReply()
 /**
  * Adds a reply to a comment.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {String} sText - The comment reply text (required).
- * @param {String} sAutorName - The name of the comment reply author (optional).
+ * @param {String} sAuthorName - The name of the comment reply author (optional).
  * @param {String} sUserId - The user ID of the comment reply author (optional).
  * @param {Number} [nPos=this.GetRepliesCount()] - The comment reply position.
  * @returns {ApiComment} - this
  */
-ApiComment.prototype.AddReply = function (sText, sAutorName, sUserId, nPos) { return new ApiComment(); };
+ApiComment.prototype.AddReply = function (sText, sAuthorName, sUserId, nPos) { return new ApiComment(); };
 
 /**
  * Removes the specified comment replies.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {Number} [nPos = 0] - The position of the first comment reply to remove.
  * @param {Number} [nCount = 1] - A number of comment replies to remove.
  * @param {boolean} [bRemoveAll = false] - Specifies whether to remove all comment replies or not.
@@ -7378,15 +8076,15 @@ ApiComment.prototype.RemoveReplies = function (nPos, nCount, bRemoveAll) { retur
 /**
  * Deletes the current comment from the document.
  * @memberof ApiComment
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {boolean}
  */
-ApiComment.prototype.Delete = function () { return true; };
+ApiComment.prototype.Delete = function (){ return true; };
 
 /**
  * Returns a type of the ApiCommentReply class.
  * @memberof ApiCommentReply
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {"commentReply"}
  */
 ApiCommentReply.prototype.GetClassType = function () { return ""; };
@@ -7394,7 +8092,7 @@ ApiCommentReply.prototype.GetClassType = function () { return ""; };
 /**
  * Returns the comment reply text.
  * @memberof ApiCommentReply
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {string}
  */
 ApiCommentReply.prototype.GetText = function () { return ""; };
@@ -7402,7 +8100,7 @@ ApiCommentReply.prototype.GetText = function () { return ""; };
 /**
  * Sets the comment reply text.
  * @memberof ApiCommentReply
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {string} sText - The comment reply text.
  * @returns {ApiCommentReply} - this
  */
@@ -7411,19 +8109,19 @@ ApiCommentReply.prototype.SetText = function (sText) { return new ApiCommentRepl
 /**
  * Returns the comment reply author's name.
  * @memberof ApiCommentReply
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @returns {string}
  */
-ApiCommentReply.prototype.GetAutorName = function () { return ""; };
+ApiCommentReply.prototype.GetAuthorName = function () { return ""; };
 
 /**
  * Sets the comment reply author's name.
  * @memberof ApiCommentReply
- * @typeofeditors ["CDE"]
- * @param {string} sAutorName - The comment reply author's name.
+ * @typeofeditors ["CDE", "CPE"]
+ * @param {string} sAuthorName - The comment reply author's name.
  * @returns {ApiCommentReply} - this
  */
-ApiCommentReply.prototype.SetAutorName = function (sAutorName) { return new ApiCommentReply(); };
+ApiCommentReply.prototype.SetAuthorName = function (sAuthorName) { return new ApiCommentReply(); };
 
 /**
  * Returns the user ID of the comment reply author.
@@ -7436,17 +8134,162 @@ ApiCommentReply.prototype.GetUserId = function () { return ""; };
 /**
  * Sets the user ID to the comment reply author.
  * @memberof ApiCommentReply
- * @typeofeditors ["CDE"]
+ * @typeofeditors ["CDE", "CPE"]
  * @param {string} sUserId - The user ID of the comment reply author.
  * @returns {ApiCommentReply} - this
  */
 ApiCommentReply.prototype.SetUserId = function (sUserId) { return new ApiCommentReply(); };
 
 /**
+ * Returns a type of the ApiWatermarkSettings class.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {"watermarkSettings"}
+ */
+ApiWatermarkSettings.prototype.GetClassType = function(){ return ""; };
+
+/**
+ * Sets the type of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {WatermarkType} sType - The watermark type.
+ */
+ApiWatermarkSettings.prototype.SetType = function (sType){};
+
+/**
+ * Returns the type of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {WatermarkType}
+ */
+ApiWatermarkSettings.prototype.GetType = function (){ return new WatermarkType(); };
+
+/**
+ * Sets the text of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {string} sText - The watermark text.
+ */
+ApiWatermarkSettings.prototype.SetText = function (sText){};
+
+/**
+ * Returns the text of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {string | null}
+ */
+ApiWatermarkSettings.prototype.GetText = function (){ return ""; };
+
+/**
+ * Sets the text properties of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {ApiTextPr} oTextPr - The watermark text properties.
+ */
+ApiWatermarkSettings.prototype.SetTextPr = function (oTextPr){};
+
+/**
+ * Returns the text properties of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {ApiTextPr}
+ */
+ApiWatermarkSettings.prototype.GetTextPr = function (){ return new ApiTextPr(); };
+
+/**
+ * Sets the opacity of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {number} nOpacity - The watermark opacity. This value must be from 0 to 255.
+ */
+ApiWatermarkSettings.prototype.SetOpacity = function (nOpacity){};
+
+/**
+ * Returns the opacity of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {number} - The watermark opacity. This value must be from 0 to 255.
+ */
+ApiWatermarkSettings.prototype.GetOpacity = function (){ return 0; };
+
+/**
+ * Sets the direction of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {WatermarkDirection} sDirection - The watermark direction.
+ */
+ApiWatermarkSettings.prototype.SetDirection = function (sDirection){};
+
+/**
+ * Returns the direction of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {WatermarkDirection} - The watermark direction.
+ */
+ApiWatermarkSettings.prototype.GetDirection = function (){ return new WatermarkDirection(); };
+
+/**
+ * Sets the image URL of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {string} sURL - The watermark image URL.
+ */
+ApiWatermarkSettings.prototype.SetImageURL = function (sURL){};
+
+/**
+ * Returns the image URL of the watermark in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {string | null} - The watermark image URL.
+ */
+ApiWatermarkSettings.prototype.GetImageURL = function (){ return ""; };
+
+/**
+ * Returns the width of the watermark image in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {EMU | null} - The watermark image width in EMU.
+ */
+ApiWatermarkSettings.prototype.GetImageWidth = function (){ return new EMU(); };
+
+/**
+ * Returns the height of the watermark image in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @returns {EMU | null} - The watermark image height in EMU.
+ */
+ApiWatermarkSettings.prototype.GetImageHeight = function (){ return new EMU(); };
+
+/**
+ * Sets the size (width and height) of the watermark image in the document.
+ * @memberof ApiWatermarkSettings
+ * @typeofeditors ["CDE"]
+ * @param {EMU} nWidth - The watermark image width.
+ * @param {EMU} nHeight - The watermark image height.
+ */
+ApiWatermarkSettings.prototype.SetImageSize = function (nWidth, nHeight){};
+
+/**
+ * В проверке на лок, которую мы делаем после выполнения скрипта, нужно различать действия сделанные через
+ * разрешенные методы, и действия, которые пользователь пытался сам сделать с формами
+ * @param fn
+ * @param t
+ * @returns {*}
+ */
+function executeNoFormLockCheck(fn, t){ return null; }
+
+/**
  * Gets a document color object by color name.
- * @param {highlightColor} - available highlight color
+ * @param {highlightColor} sColor - available highlight color
  * @returns {object}
  */
 function private_getHighlightColorByName(sColor){ return null; }
+
+/**
+ * Gets a document highlight name by color object.
+ * @param {object} oColor - available highlight color
+ * @returns {highlightColor}
+ */
+function private_getHighlightNameByColor(oColor){ return null; }
 
 

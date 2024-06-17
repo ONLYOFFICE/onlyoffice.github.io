@@ -1016,7 +1016,8 @@ var AcePopup = function(parentNode) {
     var lastMouseEvent;
     var hoverMarker = new Range(-1,0,-1,Infinity);
     var selectionMarker = new Range(-1,0,-1,Infinity);
-    selectionMarker.id = popup.session.addMarker(selectionMarker, "ace_active-line", "fullLine");
+    // there we can add our class for active line in aoutocomplete modal
+    selectionMarker.id = popup.session.addMarker(selectionMarker, "ace_active-line oo_highlight", "fullLine");
     popup.setSelectOnHover = function(val) {
         if (!val) {
             hoverMarker.id = popup.session.addMarker(hoverMarker, "ace_line-hover", "fullLine");
@@ -1056,8 +1057,9 @@ var AcePopup = function(parentNode) {
         var row = popup.getRow();
         var t = popup.renderer.$textLayer;
         var selected = t.element.childNodes[row - t.config.firstRow];
-        if (selected == t.selectedNode)
-            return;
+		// sometimes it works not correct
+        // if (selected == t.selectedNode)
+        //     return;
         if (t.selectedNode)
             dom.removeCssClass(t.selectedNode, "ace_selected");
         t.selectedNode = selected;
@@ -1226,11 +1228,9 @@ var AcePopup = function(parentNode) {
 
 dom.importCssString("\
 .ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {\
-    background-color: #CAD6FA;\
     z-index: 1;\
 }\
 .ace_editor.ace_autocomplete .ace_line-hover {\
-    border: 1px solid #abbffe;\
     margin-top: -1px;\
     background: rgba(233,233,253,0.4);\
 }\
@@ -1251,7 +1251,7 @@ dom.importCssString("\
     text-align: right;\
     z-index: -1;\
 }\
-.ace_editor.ace_autocomplete .ace_completion-highlight{\
+.ace_editor.ace_autocomplete {\
     color: #000;\
     text-shadow: 0 0 0.01em;\
 }\
@@ -1944,7 +1944,7 @@ ace.define("ace/tern/tern_server",["require","exports","module","ace/range","ace
 
             var doc = findDoc(this, editor);
             sendDoc(this, doc);
-            showTip('Tern document refreshed <div style="color:gray; font-size:smaller;">(press hotkey twice in  &lt; 1 second to do a full reload including refs)</div>');
+            showTip('Tern document refreshed <div style="color:gray;">(press hotkey twice in  &lt; 1 second to do a full reload including refs)</div>');
         },
         getCompletions: function (editor, session, pos, prefix, callback) {
             getCompletions(this, editor, session, pos, prefix, callback);
@@ -2351,6 +2351,8 @@ ace.define("ace/tern/tern_server",["require","exports","module","ace/range","ace
                 }
                 function popupSelectionChanged() {
                     closeAllTips(); //remove(tooltip); //using close all , but its slower, comeback and remove single if its working right
+                    if (!editor.completer.popup)
+                        return;
                     var data = editor.completer.popup.getData(editor.completer.popup.getRow());
                     if (!data || !data.doc) { //no comments
                         return;
@@ -3268,6 +3270,7 @@ ace.define("ace/tern/tern_server",["require","exports","module","ace/range","ace
         return makeTooltip(location.left, location.top, content, editor, true, timeout);
     }
     function makeTooltip(x, y, content, editor, closeOnCusorActivity, fadeOutDuration) {
+		closeAllTips();
         if (x === null || y === null) {
             var location = getCusorPosForTooltip(editor);
             x = location.left;
@@ -3643,7 +3646,7 @@ ace.define("ace/tern/tern_server",["require","exports","module","ace/range","ace
             addFileDoneCountCompleted++;
         
             var el = document.createElement('div');
-            el.setAttribute('style', 'font-size:smaller; font-style:italic; color:' + (isErr ? 'red' : 'gray'));
+            el.setAttribute('style', 'font-style:italic; color:' + (isErr ? 'red' : 'gray'));
             el.textContent = msg;
         
             resultMsgEl.appendChild(el);
@@ -3792,7 +3795,7 @@ ace.define("ace/tern/tern_server",["require","exports","module","ace/range","ace
         };
     }
     var dom = require("ace/lib/dom");
-    dom.importCssString(".Ace-Tern-tooltip { border: 1px solid silver; border-radius: 3px; color: #444; padding: 2px 5px; padding-right:15px; font-size: 90%; font-family: monospace; background-color: white; white-space: pre-wrap; max-width: 50em; max-height:30em; overflow-y:auto; position: absolute; z-index: 10; -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2); -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2); box-shadow: 2px 3px 5px rgba(0, 0, 0, .2); transition: opacity 1s; -moz-transition: opacity 1s; -webkit-transition: opacity 1s; -o-transition: opacity 1s; -ms-transition: opacity 1s; } .Ace-Tern-tooltip-boxclose { position:absolute; top:0; right:3px; color:red; } .Ace-Tern-tooltip-boxclose:hover { background-color:yellow; } .Ace-Tern-tooltip-boxclose:before { content:'×'; cursor:pointer; font-weight:bold; font-size:larger; } .Ace-Tern-completion { padding-left: 12px; position: relative; } .Ace-Tern-completion:before { position: absolute; left: 0; bottom: 0; border-radius: 50%; font-weight: bold; height: 13px; width: 13px; font-size:11px; line-height: 14px; text-align: center; color: white; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; } .Ace-Tern-completion-unknown:before { content:'?'; background: #4bb; } .Ace-Tern-completion-object:before { content:'O'; background: #77c; } .Ace-Tern-completion-fn:before { content:'F'; background: #7c7; } .Ace-Tern-completion-array:before { content:'A'; background: #c66; } .Ace-Tern-completion-number:before { content:'1'; background: #999; } .Ace-Tern-completion-string:before { content:'S'; background: #999; } .Ace-Tern-completion-bool:before { content:'B'; background: #999; } .Ace-Tern-completion-guess { color: #999; } .Ace-Tern-hint-doc { max-width: 35em; } .Ace-Tern-fhint-guess { opacity: .7; } .Ace-Tern-fname { color: black; } .Ace-Tern-farg { color: #70a; } .Ace-Tern-farg-current { color: #70a; font-weight:bold; font-size:larger; text-decoration:underline; } .Ace-Tern-farg-current-description { font-style:italic; margin-top:2px; color:black; } .Ace-Tern-farg-current-name { font-weight:bold; } .Ace-Tern-type { color: #07c; font-size:smaller; } .Ace-Tern-jsdoc-tag { color: #B93A38; text-transform: lowercase; font-size:smaller; font-weight:600; } .Ace-Tern-jsdoc-param-wrapper{ /*background-color: #FFFFE3; padding:3px;*/ } .Ace-Tern-jsdoc-tag-param-child{ display:inline-block; width:0px; } .Ace-Tern-jsdoc-param-optionalWrapper { font-style:italic; } .Ace-Tern-jsdoc-param-optionalBracket { color:grey; font-weight:bold; } .Ace-Tern-jsdoc-param-name { color: #70a; font-weight:bold; } .Ace-Tern-jsdoc-param-defaultValue { color:grey; } .Ace-Tern-jsdoc-param-description { color:black; } .Ace-Tern-typeHeader-simple{ font-size:smaller; font-weight:bold; display:block; font-style:italic; margin-bottom:3px; color:grey; } .Ace-Tern-typeHeader{ display:block; font-style:italic; margin-bottom:3px; } .Ace-Tern-tooltip-link{font-size:smaller; color:blue;} .ace_autocomplete {width: 400px !important;}", "ace_tern");
+    dom.importCssString(".Ace-Tern-tooltip { border: 1px solid silver; border-radius: 3px; color: #444; padding: 2px 5px; padding-right:15px; font-family: monospace; background-color: white; white-space: pre-wrap; max-width: 50em; max-height:30em; overflow-y:auto; position: absolute; z-index: 10; -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2); -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2); box-shadow: 2px 3px 5px rgba(0, 0, 0, .2); transition: opacity 1s; -moz-transition: opacity 1s; -webkit-transition: opacity 1s; -o-transition: opacity 1s; -ms-transition: opacity 1s; } .Ace-Tern-tooltip-boxclose { position:absolute; top:0; right:3px; color: #07c !important; } .Ace-Tern-tooltip-boxclose:hover { background-color:yellow; } .Ace-Tern-tooltip-boxclose:before { content:'×'; cursor:pointer; font-weight:bold; font-size:larger; } .Ace-Tern-completion { padding-left: 12px; position: relative; } .Ace-Tern-completion:before { position: absolute; left: 0; bottom: 0; border-radius: 50%; font-weight: bold; height: 13px; width: 13px; font-size:11px; line-height: 14px; text-align: center; color: white; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; } .Ace-Tern-completion-unknown:before { content:'?'; background: #4bb; } .Ace-Tern-completion-object:before { content:'O'; background: #77c; } .Ace-Tern-completion-fn:before { content:'F'; background: #7c7; } .Ace-Tern-completion-array:before { content:'A'; background: #c66; } .Ace-Tern-completion-number:before { content:'1'; background: #999; } .Ace-Tern-completion-string:before { content:'S'; background: #999; } .Ace-Tern-completion-bool:before { content:'B'; background: #999; } .Ace-Tern-completion-guess { color: #999; } .Ace-Tern-hint-doc { max-width: 35em; } .Ace-Tern-fhint-guess { opacity: .7; } .Ace-Tern-fname { color: black; } .Ace-Tern-farg-current { font-weight:bold; font-size:larger; text-decoration:underline; } .Ace-Tern-farg-current-description { font-style:italic; margin-top:2px; color:black; } .Ace-Tern-farg-current-name { font-weight:bold; } .Ace-Tern-type { color: #07c; } .Ace-Tern-jsdoc-tag { color: #B93A38; text-transform: lowercase; font-weight:600; } .Ace-Tern-jsdoc-param-wrapper{ /*background-color: #FFFFE3; padding:3px;*/ } .Ace-Tern-jsdoc-tag-param-child{ display:inline-block; width:0px; } .Ace-Tern-jsdoc-param-optionalWrapper { font-style:italic; } .Ace-Tern-jsdoc-param-optionalBracket { color:grey; font-weight:bold; } .Ace-Tern-jsdoc-param-name { font-weight:bold; } .Ace-Tern-jsdoc-param-defaultValue { color:grey; } .Ace-Tern-jsdoc-param-description { color:black; } .Ace-Tern-typeHeader-simple{ font-weight:bold; display:block; font-style:italic; margin-bottom:3px; color:grey; } .Ace-Tern-typeHeader{ display:block; font-style:italic; margin-bottom:3px; } .Ace-Tern-tooltip-link{font-size:smaller; color:blue;} .ace_autocomplete {width: 400px !important;}", "ace_tern");
 
 });
 
@@ -3909,23 +3912,21 @@ ace.define("ace/tern/tern",["require","exports","module","ace/config","ace/lib/l
     }
 
     var doLiveAutocomplete = function(e) {
-        var editor = e.editor;
-        var text = e.args || "";
-        var hasCompleter = editor.completer && editor.completer.activated;
-        if (e.command.name === "backspace") {
-            if (hasCompleter && !getCompletionPrefix(editor))
-                editor.completer.detach();
-        }
-        else if (e.command.name === "insertstring") {
-            var prefix = getCompletionPrefix(editor);
-            if (prefix && !hasCompleter) {
-                if (!editor.completer) {
-                    editor.completer = new Autocomplete();
-                }
-                editor.completer.autoInsert = false;
-                editor.completer.showPopup(editor);
-            }
-        }
+		// custom realisation of autocomplete.
+		// try it if default works bad
+		// it calls base autocomplete if is inplut and not this letters
+		// and uncomment calling this function (row 4075)
+		let letters = {
+			'\n'  : 1, '\t'  : 1, ' '   : 1, '{'   : 1, '}'   : 1, '['   : 1, ']'   : 1, '('   : 1, ')'   : 1, '"'   : 1, '\''  : 1, '{'   : 1,
+			'`'   : 1, '!'   : 1, '@'   : 1, '#'   : 1, '$'   : 1, '%'   : 1, '^'   : 1, '&'   : 1, '*'   : 1, '+'   : 1, '='   : 1, '-'   : 1,
+			'/'   : 1, '\\'  : 1, ';'   : 1, ':'   : 1, '<'   : 1, '>'   : 1, '|'   : 1
+		};
+		if (e.command.name == 'insertstring' && !letters[e.args]) {
+			// try one of this variants
+			// Autocomplete.startCommand.exec(e.editor);
+			// e.editor.execCommand("startAutocomplete");
+		}
+		return;
     };
     var Autocomplete = require("../autocomplete").Autocomplete;
     Autocomplete.startCommand = {
@@ -4013,9 +4014,11 @@ ace.define("ace/tern/tern",["require","exports","module","ace/config","ace/lib/l
             }
         }
     };
+	if (aceTs) {
+		completers.push(aceTs);
+		exports.server = aceTs;
+	}
 
-    completers.push(aceTs);
-    exports.server = aceTs;
 
     var Editor = require("../editor").Editor;
     config.defineOptions(Editor.prototype, "editor", {
@@ -4029,6 +4032,8 @@ ace.define("ace/tern/tern",["require","exports","module","ace/config","ace/lib/l
                 if (val) {
                     editor_for_OnCusorChange = self; //hack
                     createTernServer(function() {
+						completers.push(aceTs);
+						exports.server = aceTs;
                         self.completers = completers;
                         self.ternServer = aceTs;
                         self.commands.addCommand(Autocomplete.startCommand);
@@ -4063,6 +4068,19 @@ ace.define("ace/tern/tern",["require","exports","module","ace/config","ace/lib/l
             },
             value: false
         },
+		// enableLiveAutocompletion: {
+		// 	set: function (val) {
+		// 		if (val) {
+		// 			if (!this.completers)
+		// 				this.completers = Array.isArray(val) ? val : completers;
+		// 			this.commands.on('afterExec', doLiveAutocomplete);
+		// 		}
+		// 		else {
+		// 			this.commands.off('afterExec', doLiveAutocomplete);
+		// 		}
+		// 	},
+		// 	value: false
+		// },
         enableSnippets: {
             set: function(val) {
                 if (val) {

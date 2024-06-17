@@ -6,5 +6,13 @@
 	"Run" : "运行",
 	"Cancel" : "取消",
 	"Macros" : "宏",
-	"Title" : "名称不得为空"
+	"Title" : "名称不得为空",
+	"Copy": "副本",
+	"Make autostart": "自动启动",
+	"Unmake autostart": "取消自动启动",
+	"Custom function": "自定义函数",
+	"Custom functions": "自定义函数",
+	"Ok": "确定",
+	"Add macros": "添加宏",
+	"Add custom function": "添加自定义函数"
 }
