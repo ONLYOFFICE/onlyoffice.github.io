@@ -44,11 +44,11 @@
         left: 0;
         right: 0;
     }
-	#menu {
+	/* #menu {
 		margin: 0;
         position: absolute;
-        top: 0;
-        bottom: 42px;
+        bottom: 0;
+        top: 42px;
         left: 0;
         right: 70%;
 		background-color: #F1F1F1;
@@ -59,12 +59,38 @@
 		border-right-width: 1px; 
 
 		padding-right: 10px;
+	} */
+	.menu_padding {
+		position: relative;
+		padding-right: 10px;
+	}
+	.common_menu {
+		margin: 0;
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 70%;
+		background-color: #F1F1F1;
+		overflow: hidden;
+
+		border-right-color: #CBCBCB;
+		border-right-style: solid; 
+		border-right-width: 1px; 
+	}
+
+	.menu_header {
+		height: 26px;
+		padding: 16px 11px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 	#editorWrapper {
 		margin: 0;
         position: absolute;
+        bottom: 0;
         top: 0;
-        bottom: 42px;
         left: 30%;
         right: 0;
 	}
@@ -92,7 +118,6 @@
 		padding: 5px 20px;
 		white-space: nowrap;
 		cursor: pointer;
-		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		font-size: 11px;
 		line-height: 1.5;
 	}        
@@ -102,12 +127,11 @@
 	}
 
 	.macrosAutostart {	
-        width: 100%;
-        height: 100%;
+		/* width: 100%; */
+		/* height: 100%; */
         left: 0;
-        top: calc(50% - 5px);
+		top: calc(50% - 8px);
         position: absolute;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
         font-size: 10px;
 		pointer-events: none;
 		box-sizing: border-box;
@@ -115,49 +139,77 @@
 	}
 	
 	.macrosSelected {
-		position: relative;
 		background-color: #7D858C;
 		color: #FFFFFF;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-		font-size: 13px;
-		padding-bottom: 3px;
-		padding-left: 20px;
-		padding-right: 10px;
-		padding-top: 4px;
-		user-select: none;
-		margin: 5px 0px 5px 5px;
+	}
+
+	.functionSelected {
+		background-color: #7D858C;
+		color: #FFFFFF;
 	}
 	
 	.macros {
-		position: relative;
 		background-color: #F1F1F1;
 		color: #000000;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-		font-size: 13px;
-		padding-bottom: 3px;
-		padding-left: 20px;
-		padding-right: 10px;
-		padding-top: 4px;
-		user-select: none;
-		margin: 5px 0px 5px 5px;
 	}
 	.macros:hover {
 		background-color: #D8DADC;
 	}
 
-	.divFooter {
+	.function {
+		background-color: #F1F1F1;
+		color: #000000;
+	}
+	
+	.function:hover {
+		background-color: #D8DADC;
+	}
+
+	.common_punct {
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		hyphens: auto;
+		overflow: hidden;
+		max-height: 22px;
+		display: -webkit-box;
+		padding: 4px 35px 3px 20px;
+		margin: 2px 0px 2px 5px;
+		font-size: 11px;
+		user-select: none;
+		position: relative;
+		overflow-wrap: break-word;
+		line-height: 16px;
+	}
+
+/*
+	.divHeader {
 		position: absolute; 
 		margin: 0px; 
 		padding: 0px; 
 		width: 100%; 
 		height: 42px; 
 		left: 0px; 
-		bottom: 0px; 
+		top: 0px; 
+		box-sizing: border-box;
+		border-bottom-color: #CBCBCB;
+		border-bottom-style: solid; 
+		border-bottom-width: 1px; 
+		user-select:none;
+	}
+*/
+	.divFooter {
+		position: absolute;
+		margin: 0px;
+		padding: 0px;
+		width: 100%;
+		height: 0px;
+		left: 0px;
+		bottom: 40px;
 		box-sizing: border-box;
 		border-top-color: #CBCBCB;
-		border-top-style: solid; 
-		border-top-width: 1px; 
-		user-select:none;
+		border-top-style: solid;
+		border-top-width: 1px;
+		user-select: none;
 	}
 
 	.divRename {
@@ -177,6 +229,7 @@
 	.textSelect::selection {
 		background: #D8DADC; /* WebKit/Blink Browsers */
 	}
+
 	.textSelect::-moz-selection {
   		background: #D8DADC; /* Gecko Browsers */
 	}
@@ -207,32 +260,120 @@
 		height: 16px;
 		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACvSURBVDhPrZNRDoIwEER7COA6HgJPpAnHM4oXQdFE/VDfNrsfpQvGhkneT2dmky40rK77pq6ggx4eyhF2UGnMF4EWBvjMcIFW46nEgLcGl5BMOoSDGmR6EjZNz0GyjdbjALlfFjR5HnRajwNkSVnI5HnQaz0OkE1nIZPnwVPrxQNGrc9f4Qcnra+zxAbKP6OIg/IfyYSxhasGPcTzyyYC9pjO8IIbHGAPy4/pf4XwBSVejZ5wzd0zAAAAAElFTkSuQmCC);
 	}
+	.dragged {
+		opacity: 0.6;
+	}
+
+	.ace_active-line {
+		background: transparent !important;
+		border-bottom: 1px solid;
+		border-top: 1px solid;
+	}
+	.ace_line-hover {
+		border-bottom: 1px solid;
+		border-top: 1px solid;
+		padding: 1px 0px 1px 0px;
+	}
+	#menu_content_macros {
+		height: calc(100% - 57px);;
+		max-height: calc(100% - 57px);
+	}
+	.menu_macros_short {
+		max-height: 50%;
+		height: 50%;
+	}
+	.menu_macros_long {
+		max-height: 100%;
+		height: 100%;
+	}
+	#menu_content_functions {
+		height: calc(100% - 62px);;
+		max-height: calc(100% - 62px);
+	}
+	#menu_functions{
+		max-height: calc(50% - 10px);
+		height: calc(50% - 10px);
+	}
+	.header_btn {
+		width: 22px !important;
+		height: 22px !important;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.div_buttons {
+		display: flex;
+		justify-content: center;
+	}
+	.cc_btn {
+		position: absolute;
+		right: 10px;
+		top: 1px;
+		background: transparent !important;
+	}
+	#hr_separator{
+		height: 1px;
+		border-bottom: 1px solid;
+		margin: 6px 0;
+	}
+
+	.theme-type-dark .ace_content, .theme-type-dark .common_menu,
+		.theme-type-dark .ace_layer.ace_gutter-layer
+	{
+		background-color: #333;
+	}
 
   </style>
 </head>
 <body>
+	<script>
+		if ( /theme-type=dark/.test(window.location.href) ) {
+			document.body.classList.add('theme-type-dark');
+		}
+	</script>
 
-	<div id="menu">
-		<div id="menu_content" style="position:absolute;left:0px;top:0px;width:100%;height:100%;margin:0;padding:0;border:none;"></div>
+	<div class="common_menu noselect">
+		<div id="menu_macros" class="menu_macros_long">
+			<div class="menu_header">
+				<label class="i18n header">Macros</label>
+				<div class="div_buttons">
+					<div id="button_run" title="Run" class="btn-text-default header_btn" style="border: none !important;">
+						<img src="./resources/img/play.svg" style="width: 20px; height: 20px;" />
+					</div>
+					<div id="create_macros" title="Add macros" class="btn-text-default header_btn" style="border: none !important;">
+						<img class="img_plus" src="./resources/img/plus_dark.svg" style="width: 20px; height: 20px;" />
+					</div>
+				</div>
+			</div>
+			<div id="menu_content_macros" class="menu_padding"></div>
+		</div>
+		<div id="hr_separator" class="sep_border" style="display: none;"></div>
+		<div id="menu_functions" style="display: none;">
+			<div class="menu_header">
+				<label class="i18n header">Custom Functions</label>
+				<button id="create_functions" title="Add custom function" class="btn-text-default header_btn" style="border: none !important;">
+					<img class="img_plus" src="./resources/img/plus_dark.svg" style="width: 20px; height: 20px;" />
+				</button>
+			</div>
+			<div id="menu_content_functions" class="menu_padding"></div>
+		</div>
 	</div>
+	
 	
 	<div id="editorWrapper">
-	
-	<pre id="editor"></pre>
-	
+		<pre id="editor"></pre>
 	</div>
 	
-	<div class="divFooter">
+	<!-- <div class="divHeader">
 		<div style="position:absolute;margin:0;padding:0;left:10px;top:10px;right: 10px;bottom: 10px;" id="menu_footer">
-			<button class="btn-text-default" style="left: 0px; top: 0px; position:relative; bottom: 0px;" id="button_new">New</button>
 			<button class="btn-text-default" style="left: 10px; top: 0px; position:relative; bottom: 0px;" id="button_delete">Delete</button>
 			<button class="btn-text-default" style="left: 20px; top: 0px; position:relative; bottom: 0px;" id="button_rename">Rename</button>
 			<button class="btn-text-default" style="left: 30px; top: 0px; position:relative; bottom: 0px; display:none" id="button_autostart">Autostart</button>
 		</div>
 		<button class="btn-text-default primary" style="right: 10px; top: 10px; position:absolute; bottom: 10px;" id="button_run">Run</button>
-	</div>
+	</div> -->
 
-	<div class="divRenameMask" id="idRenameMask" style="display: none">		
+	<div class="divRenameMask" id="idRenameMask" style="display: none">	
 	</div>
 	<div class="divRename" id="idRename" style="display: none">
 		<input type="text" class="form-control textSelect" style="top:18px;margin: 0px;width:260px;left:20px;position:absolute;" id="rename_text"/>
@@ -245,10 +386,19 @@
 	</div>
 
 	<script src="vendor/ace/src/ace.js"></script>
+	<script src="vendor/ace/src/ext-language_tools.js"></script>
 
 	<!-- code -->
 	<script src="scripts/code.js"></script>
 
-	<div id="context-menu-id" class="context-menu"><ul class="context-menu-options"><li id="menu_autostart_id" class="context-menu-option" onclick="window.CustomContextMenu.onAutostartClick();">Make autostart</li></ul></div>
+	<div id="context-menu-id" class="context-menu noselect">
+		<ul class="context-menu-options">
+			<li id="menu_run_id" class="context-menu-option" onclick="window.CustomContextMenu.onRunClick();">Run</li>
+			<li id="menu_autostart_id" class="context-menu-option" onclick="window.CustomContextMenu.onAutostartClick();">Make autostart</li>
+			<li id="menu_rename_id" class="context-menu-option" onclick="window.CustomContextMenu.onRenameClick();">Rename</li>
+			<li id="menu_delete_id" class="context-menu-option" onclick="window.CustomContextMenu.onDeleteClick();">Delete</li>
+			<li id="menu_copy_id" class="context-menu-option" onclick="window.CustomContextMenu.onCopyClick();">Copy</li>
+		</ul>
+	</div>
 </body>
 </html>

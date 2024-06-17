@@ -93,6 +93,7 @@ border: 1px solid rgb(192, 192, 192);\
 }\
 .ace-chrome .ace_marker-layer .ace_active-line {\
 background: rgba(0, 0, 0, 0.07);\
+border-color: #555;\
 }\
 .ace-chrome .ace_gutter-active-line {\
 background-color : #dcdcdc;\
@@ -108,6 +109,9 @@ color: #4FC1FF;\
 }\
 .ace-chrome .ace_keyword {\
 color : #C586C0; \
+}\
+.ace_gutter-active-line {\
+background : #303030 !important\
 }\
 .ace-chrome .ace_string.ace_regex, \
 .ace-chrome .ace_string {\
