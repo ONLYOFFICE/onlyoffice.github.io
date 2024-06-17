@@ -6,5 +6,11 @@
 	"Run" : "Correr",
 	"Cancel" : "Cancelar",
 	"Macros" : "Macros",
-	"Title" : "O nome não deve ser nulo"
+	"Title" : "O nome não deve ser nulo",
+	"Copy": "Copiar",
+	"Make autostart": "Desativar o início automático",
+	"Unmake autostart": "Ativar o início automático",
+	"Custom function": "Função personalizada",
+	"Custom functions": "Funções personalizadas",
+	"Ok": "OK"
 }
