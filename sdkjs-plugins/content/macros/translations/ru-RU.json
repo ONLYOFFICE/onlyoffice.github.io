@@ -12,5 +12,7 @@
 	"Unmake autostart": "Отменить автозапуск",
 	"Custom function": "Пользовательская функция",
 	"Custom functions": "Пользовательские функции",
-	"Ok": "OK"
+	"Ok": "OK",
+	"Add macros": "Добавить макросы",
+	"Add custom function": "Добавить пользовательскую функцию"
 }

@@ -10,7 +10,9 @@
 	"Copy": "副本",
 	"Make autostart": "自动启动",
 	"Unmake autostart": "取消自动启动",
-	"Custom function": "自定义功能",
-	"Custom functions": "自定义功能",
-	"Ok": "确定"
+	"Custom function": "自定义函数",
+	"Custom functions": "自定义函数",
+	"Ok": "确定",
+	"Add macros": "添加宏",
+	"Add custom function": "添加自定义函数"
 }

@@ -263,7 +263,11 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			if (currentElement === activeElement)
 				return;
 
-			macrosList.insertBefore(activeElement, nextElement);
+			try {
+				macrosList.insertBefore(activeElement, nextElement);
+			} catch (err) {
+				return;				
+			}			
 			let indNext = Content.macrosArray.findIndex(function(el) {
 				return (nextElement && el.name == nextElement.innerText)
 			})
@@ -287,7 +291,11 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			if (currentElement === activeElement)
 				return;
 
-			functionList.insertBefore(activeElement, nextElement);
+			try {
+				functionList.insertBefore(activeElement, nextElement);
+			} catch (err) {
+				return;				
+			}
 			let indNext = CustomFunctions.macrosArray.findIndex(function(el) {
 				return (nextElement && el.name == nextElement.innerText)
 			})
@@ -437,6 +445,8 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	window.onItemClick = onItemClick;
 
 	function onClickCC(event) {
+		if (!event)
+			return;
 		event.preventDefault();
 		event.stopPropagation();
 		const srcElement = event.srcElement;
