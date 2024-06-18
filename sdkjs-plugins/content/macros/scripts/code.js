@@ -104,12 +104,14 @@ ace.config.loadModule('ace/ext/tern', function () {
 	});
 });
 
-ace.config.loadModule('ace/ext/language_tools', function () {
-	editor.setOptions({
-		enableBasicAutocompletion: false,
-		enableLiveAutocompletion: true
+if (!window.isIE) {
+	ace.config.loadModule('ace/ext/language_tools', function () {
+		editor.setOptions({
+			enableBasicAutocompletion: false,
+			enableLiveAutocompletion: true
+		});
 	});
-});
+}
 
 ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 	editor.setOptions({

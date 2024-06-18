@@ -59,5 +59,6 @@
 	"Network problem." : "ネットワークの問題。",
 	"Problem with loading some resources" : "リソースの読み込みに関する問題",
 	"Click to rate" : "クリックで評価",
-	"No disscussion page for this plugin." : "このプラグインのディスカッションページはありません。"
+	"No disscussion page for this plugin." : "このプラグインのディスカッションページはありません。",
+	"Problem with plugin installation." : "プラグインのインストールに問題があります。"
 }
