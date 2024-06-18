@@ -1089,9 +1089,9 @@ ace.config.loadModule('ace/ext/html_beautify', function (beautify) {
 			imgSrc += '_dark.svg'
 		}
 		let imgArr = document.querySelectorAll('.img_plus');
-		imgArr.forEach(function(img){
-			img.setAttribute('src', imgSrc);
-		});
+		for (let i = 0; i < imgArr.length; i++) {
+			imgArr[i].setAttribute('src', imgSrc);
+		}
 		var styleTheme = document.createElement('style');
 		styleTheme.type = 'text/css';
 		styleTheme.innerHTML = rules;
