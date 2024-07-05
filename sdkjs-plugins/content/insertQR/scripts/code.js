@@ -1,35 +1,3 @@
-/*
- * (c) Copyright Ascensio System SIA 2010
- *
- * This program is a free software product. You can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License (AGPL)
- * version 3 as published by the Free Software Foundation. In accordance with
- * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement
- * of any third-party rights.
- *
- * This program is distributed WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
- *
- * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
- * street, Riga, Latvia, EU, LV-1050.
- *
- * The  interactive user interfaces in modified source and object code versions
- * of the Program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU AGPL version 3.
- *
- * Pursuant to Section 7(b) of the License you must retain the original Product
- * logo when distributing the program. Pursuant to Section 7(e) we decline to
- * grant you any rights under trademark law for use of our trademarks.
- *
- * All the Product's GUI elements, including illustrations and icon sets, as
- * well as technical writing content are licensed under the terms of the
- * Creative Commons Attribution-ShareAlike 4.0 International. See the License
- * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
- *
- */
-
 (function (window, undefined) {
 
   // Initialize global variables
@@ -122,18 +90,22 @@
               }]);
             }
             break;
-            
+
           case "cell":
-            const hasCapitals = selection.split('').filter(char => char === char.toUpperCase()); // filter out capital letters from the selection
+            // Filter out capital letters from the selection
+            const hasCapitals = selection.split('').filter(char => char === char.toUpperCase() && isNaN(char));
             let haslink = false;
 
-            if (selection.includes('http') || selection.includes('https')) { // set the flag if the selection contains 'http' or 'https'
+            // Check if the selection contains only digits
+            const hasdigits = /^\d+$/.test(selection);
+
+            // Check if the selection contains 'http' or 'https'
+            if (selection.includes('http') || selection.includes('https')) {
               haslink = true;
             }
-            console.log(hasCapitals)
 
-            // exclude formulas from the selection
-            if (hasCapitals.length !== 0 && !haslink) { // Check if the filtered array is not empty and the selection does not contain 'http' or 'https'
+            // Exclude formulas from the selection and set context menu item
+            if ((hasCapitals.length !== 0 && !haslink) || (hasCapitals.length !== 0 && !haslink && !hasdigits)) {
               window.Asc.plugin.executeMethod("AddContextMenuItem", [{
                 guid: window.Asc.plugin.guid,
                 items: [{
@@ -143,31 +115,35 @@
               }]);
             }
 
-            if (haslink) { // Check if selection contains 'http' or 'https'
+            // Allow generating QR code from single lowercase phrases or digits
+            if (haslink || hasCapitals.length === 0 || hasdigits) {
               textQR = selection;
-              console.log(textQR);
-            } else if (hasCapitals.length === 0) { // Check if the filtered array is empty to allow generating QR code from single Lowercase phrases
-              textQR = selection;
-              console.log(textQR);
-            }
 
-            if (textQR !== "") {
-              // If text is selected and it is not an empty string, add the context menu item for generating QR code
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: [{
-                  id: 'GenerateQR',
-                  text: generateText('Insert QR')
-                }]
-              }]);
+              if (textQR !== "") {
+                window.Asc.plugin.executeMethod("AddContextMenuItem", [{
+                  guid: window.Asc.plugin.guid,
+                  items: [{
+                    id: 'GenerateQR',
+                    text: generateText('Insert QR')
+                  }]
+                }]);
+              } else {
+                window.Asc.plugin.executeMethod("AddContextMenuItem", [{
+                  guid: window.Asc.plugin.guid,
+                  items: []
+                }]);
+              }
             } else {
-              // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
+              // If none of the conditions are met, add empty items array
               window.Asc.plugin.executeMethod("AddContextMenuItem", [{
                 guid: window.Asc.plugin.guid,
                 items: []
               }]);
             }
 
+            function generateText(text) {
+              return text;
+            }
             break;
           default:
             break
@@ -190,46 +166,65 @@
   }
 
   // Function to insert QR code
-  function insertQR(qr, qrText, qrWidth, qrHeight, qrColor, bgColor) {
+  function insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor) {
+    console.log("insertQR called with qrWidth:", qrWidth);
+
     try {
-      qr = new QRCode(document.createElement('div'), {
-        text: qrText,
-        width: qrWidth,
-        height: qrHeight,
-        colorDark: qrColor,
-        colorLight: bgColor,
-        correctLevel: QRCode.CorrectLevel.L
-      });
-    } catch (error) {
-      // handle errors when selected data exceeds the limit
-      if (error.message.includes("reading '3'") || error.message.includes("code length overflow")) {
-        displayFunction(textWarning);
-      } else {
-        console.error("QR code generation failed:", error);
+      const qrCode = qrcodegen.QrCode.encodeText(qrText, qrcodegen.QrCode.Ecc.LOW);
+      const size = qrCode.size;
+      const scale = qrWidth / size || 1; // Graceful fallback to avoid zero divisions or NaN
+      console.log("QR code width:", qrWidth, "Scale:", scale);
+
+      // Set adequate canvas dimensions
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = size * scale;
+      canvas.height = size * scale;
+
+      // Verify canvas setup
+      console.log("Canvas initialized with dimensions: ", canvas.width, canvas.height);
+
+      // Fill background
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      console.log("Canvas background filled");
+
+      // Draw QR code modules
+      ctx.fillStyle = qrColor;
+      console.log("QR code size:", size, "Scale:", scale);
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (qrCode.getModule(x, y)) {
+            ctx.fillRect(x * scale, y * scale, scale, scale);
+            //console.log(`Drawing module at (${x * scale}, ${y * scale})`);
+          }
+        }
       }
+
+      const qrImageURI = canvas.toDataURL("image/png");
+      console.log("Generated Image URI:", qrImageURI);
+
+      if (qrImageURI === "data:,") throw new Error("Canvas didn't draw correctly, check SVG conversion.");
+
+      const _info = window.Asc.plugin.info;
+      const oImageData = {
+        guid: _info.guid,
+        widthPix: qrWidth,
+        heightPix: qrHeight,
+        width: qrWidth / _info.mmToPx,
+        height: qrHeight / _info.mmToPx,
+        imgSrc: qrImageURI,
+        objectId: _info.objectId,
+        data: qrImageURI,
+        resize: true,
+        recalculate: true
+      };
+
+      window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
+
+    } catch (error) {
+      console.error("QR code generation failed:", error);
     }
-    // Get the canvas element from QRCode library
-    const canvas = qr._el.querySelector('canvas');
-    // Get the data URL of the canvas
-    const qrImageURI = canvas.toDataURL("image/png")
-    const _info = window.Asc.plugin.info
-
-    // Prepare image data object
-    let oImageData = {
-      guid: _info.guid,
-      widthPix: qrWidth,
-      heightPix: qrHeight,
-      width: qrWidth / _info.mmToPx,
-      height: qrHeight / _info.mmToPx,
-      imgSrc: qrImageURI,
-      objectId: _info.objectId,
-      data: qrImageURI,
-      resize: true,
-      recalculate: true
-    };
-
-    window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
-
   }
 
   // Function to display message in modal window
@@ -272,14 +267,18 @@
 
     // Get the QR parameters from the message
     modalWindow.attachEvent("onWindowMessage", function (message) {
+      console.log("Received message:", message);
+
       qrText = textQR;
       qrWidth = message.qrWidth;
       qrHeight = message.qrHeight;
       qrColor = message.qrColor;
       bgColor = message.bgColor;
 
+      console.log("Parameters received: ", { qrText, qrWidth, qrHeight, qrColor, bgColor });
+
       // Insert QR code
-      insertQR(qr, qrText, qrWidth, qrHeight, qrColor, bgColor);
+      insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor);
       modalWindow.close();
     });
   }
