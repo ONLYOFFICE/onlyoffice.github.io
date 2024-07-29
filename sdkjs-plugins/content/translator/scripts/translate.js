@@ -20,6 +20,7 @@
 	var isInit = false;
 	var ifr;
 	const isIE = checkInternetExplorer();	//check IE
+	var prevTxt;
 	var txt;
 	var paste_done  = true;
 	var translated = '';
@@ -32,10 +33,12 @@
 		}
 		if (window.Asc.plugin.info.editorType === 'word') {
 			window.Asc.plugin.executeMethod("GetSelectedText", [{Numbering:false}], function(data) {
+				prevTxt = txt;
 				txt = (!data) ? "" : ProcessText(data);
 				ExecPlugin();
 			});
 		} else {
+			prevTxt = txt;
 			txt = ProcessText(text);
 			ExecPlugin();
 		}
@@ -160,7 +163,7 @@
 				ifr.contentWindow.postMessage("update_scroll", '*');
 				ifr.contentWindow.postMessage({type: 'translate', text: translated}, '*')
 			}
-		} else {
+		} else if(prevTxt != txt) {
 			ifr.contentWindow.postMessage(txt, '*');
 			ifr.contentDocument.getElementById("google_translate_element").style.opacity = 0;
 		}
