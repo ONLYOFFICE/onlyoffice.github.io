@@ -29,3 +29,7 @@
 ## 1.0.6
 
 * Add message, that plugin doesn't work in user region (if we have some problems with loading necessary data).
+
+## 1.0.7
+
+* Fix problem of repeated translation of the same text.
