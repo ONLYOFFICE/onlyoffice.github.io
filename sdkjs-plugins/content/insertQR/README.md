@@ -4,8 +4,8 @@ The Insert QR plugin allows users to effortlessly insert a QR code generated fro
 
 The plugin uses:
 
-- [Bootstrap Colorpicker](https://github.com/itsjavi/bootstrap-colorpicker) by [Javi Aguilar](https://github.com/itsjavi).
-- [QRCode.js](https://github.com/davidshimjs/qrcodejs) by [Sangmin, Shim](https://github.com/davidshimjs)
+- [Bootstrap Colorpicker](https://github.com/itsjavi/bootstrap-colorpicker) by [Nayuki](https://github.com/nayuki).
+- [QRCode.js](https://www.nayuki.io/page/qr-code-generator-library) by [Sangmin, Shim](https://github.com/davidshimjs)
 
 ## Installation
 
@@ -15,7 +15,7 @@ The plugin uses:
 
 1. Activate the Insert QR Plugin:
    - Go to the plugin tab.
-   - Activate the Insert QR Plugin.
+   - Activate the Insert QR plugin in the "Background Plugins" section
 
 2. Select Text:
    - Right-click on the text where you want to insert the QR code.

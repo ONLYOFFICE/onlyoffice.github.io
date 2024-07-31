@@ -9,14 +9,14 @@ https://github.com/twbs/bootstrap/blob/master/LICENSE
 
 
 
-2. QRCode for JavaScript is a local library for generating QR codes.
+2.QR Code generator is a local library for generating QR codes.
 
 License:        MIT
 http://www.opensource.org/licenses/mit-license.php
 
 
 
-3. Bootstrap Colorpicker v2.5.2 is a is a modular color picker plugin for Bootstrap 4
+3. Bootstrap Colorpicker v3.4.0 a is a modular color picker plugin for Bootstrap 4
 
 License:        Apache License v2.0
 http://www.apache.org/licenses/LICENSE-2.0.txt
