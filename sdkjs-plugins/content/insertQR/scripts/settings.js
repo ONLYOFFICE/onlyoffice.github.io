@@ -100,12 +100,8 @@
     return colorpicker;
   }
 
-
   // Initialize color picker
   let colorpicker = initializeColorPicker();
-  colorpicker.colorpicker('disable') // Disable the colorpicker to prevent unexpected behavior
-
-
 
   // Retrieve values from localStorage and set default values
   try {
@@ -133,6 +129,9 @@
   // Set the initial color picker values
   colorpicker.colorpicker('setValue', storedSettings.qrColor || $('#qrColor').val());
 
+  // Disable the colorpicker to prevent unexpected behavior
+  colorpicker.colorpicker('disable');
+
   // Add event listener for window resize event
   window.addEventListener('resize', handleResize);
 
@@ -149,7 +148,6 @@
       event.preventDefault();
     }
   });
-
 
   // Event listener for form submission
   document.getElementById('SubmitForm').addEventListener('submit', function (event) {
@@ -311,12 +309,7 @@
   });
 
   $('#qrColorContainer').on('mouseleave', function () {
-    // Your code to trigger when the mouse leaves $('#qrColorContainer') goes here
-    // For example:
-    console.log("Mouse left the #qrColorContainer");
-    colorpicker.colorpicker('disable')
-    // Or you can call a specific function:
-    // yourFunction();
+    colorpicker.colorpicker('disable') 
   });
 
   // Enable the colorpicker when the #qrColorContainer' is clciked
@@ -343,6 +336,5 @@
       document.body.style.overflowY = 'auto'; // Remove vertical scroll
     }
   }
-
 
 })(window, undefined);
