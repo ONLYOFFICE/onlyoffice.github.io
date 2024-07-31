@@ -1,3 +1,20 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2020
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *	 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 (function (window, undefined) {
 
   // Initialize global variables
@@ -19,12 +36,10 @@
 
   // Attach event for context menu click on GenerateQR
   window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
-    console.log("GenerateQR clicked");
     displayFunction(displaySettings);
   });
 
   window.Asc.plugin.attachContextMenuClickEvent('GenerateQR_info', function () {
-    console.log("GenerateQR clicked");
     displayFunction(textWarning);
   });
 
@@ -47,10 +62,8 @@
           case "word":
             if (selection === "○" || selection === "☐" || (selection.includes("○") && selection.includes("☐"))) { // exclude radio buttons and check boxes from the selection
               textQR = "";
-              console.log("the selected text has been reset to an empty string");
             } else {
               textQR = selection;
-              console.log(textQR)
             }
 
             if (textQR !== "") {
@@ -167,13 +180,11 @@
 
   // Function to insert QR code
   function insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor) {
-    console.log("insertQR called with qrWidth:", qrWidth);
 
     try {
       const qrCode = qrcodegen.QrCode.encodeText(qrText, qrcodegen.QrCode.Ecc.LOW);
       const size = qrCode.size;
       const scale = qrWidth / size || 1; // Graceful fallback to avoid zero divisions or NaN
-      console.log("QR code width:", qrWidth, "Scale:", scale);
 
       // Set adequate canvas dimensions
       const canvas = document.createElement('canvas');
@@ -181,28 +192,21 @@
       canvas.width = size * scale;
       canvas.height = size * scale;
 
-      // Verify canvas setup
-      console.log("Canvas initialized with dimensions: ", canvas.width, canvas.height);
-
       // Fill background
       ctx.fillStyle = bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      console.log("Canvas background filled");
 
       // Draw QR code modules
       ctx.fillStyle = qrColor;
-      console.log("QR code size:", size, "Scale:", scale);
       for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
           if (qrCode.getModule(x, y)) {
             ctx.fillRect(x * scale, y * scale, scale, scale);
-            //console.log(`Drawing module at (${x * scale}, ${y * scale})`);
           }
         }
       }
 
       const qrImageURI = canvas.toDataURL("image/png");
-      console.log("Generated Image URI:", qrImageURI);
 
       if (qrImageURI === "data:,") throw new Error("Canvas didn't draw correctly, check SVG conversion.");
 
@@ -267,15 +271,11 @@
 
     // Get the QR parameters from the message
     modalWindow.attachEvent("onWindowMessage", function (message) {
-      console.log("Received message:", message);
-
       qrText = textQR;
       qrWidth = message.qrWidth;
       qrHeight = message.qrHeight;
       qrColor = message.qrColor;
       bgColor = message.bgColor;
-
-      console.log("Parameters received: ", { qrText, qrWidth, qrHeight, qrColor, bgColor });
 
       // Insert QR code
       insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor);

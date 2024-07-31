@@ -64,9 +64,7 @@
 					"resources/store/screenshots/screenshot.png",
 					"resources/store/screenshots/screenshot1.png",
 					"resources/store/screenshots/screenshot2.png",
-					"resources/store/screenshots/screenshot3.png",
-					"resources/store/screenshots/screenshot4.png",
-					"resources/store/screenshots/screenshot5.png"
+					"resources/store/screenshots/screenshot3.png"
 				],
 				"icons": {
 					"light": "resources/store/icons",
