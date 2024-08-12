@@ -275,7 +275,7 @@
         _sendMessageToParent({
             "guid" : window.Asc.plugin.guid,
             "type" : "attachEvent",
-            "name" : id
+            "data" : id
         });
     };
     window.Asc.plugin.detachEditorEvent = function(id)
@@ -286,7 +286,7 @@
         _sendMessageToParent({
             "guid" : window.Asc.plugin.guid,
             "type" : "detachEvent",
-            "name" : id
+            "data" : id
         });
     };
 
