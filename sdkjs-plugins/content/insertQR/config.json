@@ -1,0 +1,77 @@
+{
+	"name": "Insert QR",
+	"nameLocale": {
+		"ru": "Вставка QR-кода",
+		"fr": "Insérer un code QR",
+		"es": "Insertar QR",
+		"de": "QR-Code einfügen",
+		"br": "Inserir QR",
+		"it": "Inserisci il codice QR",
+		"ja": "QRの挿入",
+		"zh": "插入二维码"
+	},
+	"guid": "asc.{E5DD8D78-92F4-43B4-825B-E963D5CE8AC9}",
+	"version": "1.0.0",
+	"minVersion": "7.4.0",
+	"variations": [
+		{
+			"description": "Effortlessly generate QR codes in the Presentation, Text and Spreadsheet Editors.",
+			"descriptionLocale": {
+				"ru": "Без труда создавайте QR-коды в текстовых документах и презентациях",
+				"fr": "Générez facilement des codes QR dans les éditeurs de présentations, de documents texte et de feuilles de calcul.",
+				"es": "Genere fácilmente códigos QR en los editores de presentaciones, texto y hojas de cálculo.",
+				"de": "Generieren Sie mühelos QR-Codes in den Editoren für Dokumente, Präsentationen und Tabellenkalkulationen.",
+				"br": "Gere facilmente códigos QR nos Editores de Apresentação, Texto e Planilhas.",
+				"it": "Genera facilmente i codici QR negli editor di presentazioni, testo e fogli di calcolo.",
+				"zh": "在文本文档、电子表格和演示文稿编辑器中轻松生成二维码。",
+				"ja": "プレゼンテーション、テキスト、スプレッドシートエディタで簡単にQRコードが生成できます。"
+			},
+			"url": "index.html",
+			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",
+			"icons2": [
+				{
+					"style": "light",
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
+				},
+				{
+					"style": "dark",
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
+				}
+			],
+			"isViewer": false,
+			"EditorsSupport": ["word", "slide", "cell"],
+			"isVisual": false,
+			"isModal": false,
+			"isInsideMode": false,
+			"type": "background",
+			"initDataType": "ole",
+			"isUpdateOleOnResize": false,
+			"events": ["onContextMenuShow", "onContextMenuClick"],
+			"store": {
+				"background": {
+					"light": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)",
+					"dark": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)"
+				},
+				"screenshots": [
+					"resources/store/screenshots/screenshot.png",
+					"resources/store/screenshots/screenshot1.png",
+					"resources/store/screenshots/screenshot2.png",
+					"resources/store/screenshots/screenshot3.png"
+				],
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		}
+	]
+}
