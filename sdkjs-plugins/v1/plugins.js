@@ -32,6 +32,13 @@
         }
     };
 
+    function _sendMessageToParent(data) {
+        if (window.Asc.plugin.ie_channel)
+            window.Asc.plugin.ie_channel.postMessage(data);
+        else
+            window.parent.postMessage(data, "*");
+    }
+
     window.Asc.plugin.tr_init = false;
     window.Asc.plugin.tr = function(val) { return val; }
 
@@ -261,10 +268,33 @@
             pluginObj._events[id].call(pluginObj, data);
     };
 
+    window.Asc.plugin.attachEditorEvent = function(id, action)
+    {
+        window.Asc.plugin["event_" + id] = action.bind(window.Asc.plugin);
+
+        _sendMessageToParent({
+            "guid" : window.Asc.plugin.guid,
+            "type" : "attachEvent",
+            "name" : id
+        });
+    };
+    window.Asc.plugin.detachEditorEvent = function(id)
+    {
+        if (window.Asc.plugin["event_" + id])
+            delete window.Asc.plugin["event_" + id];
+
+        _sendMessageToParent({
+            "guid" : window.Asc.plugin.guid,
+            "type" : "detachEvent",
+            "name" : id
+        });
+    };
+
     window.onunload = function() {
         if (window.addEventListener)
             window.removeEventListener("message", onMessage, false);
         else
             window.detachEvent("onmessage", onMessage);
     };
+
 })(window, undefined);
