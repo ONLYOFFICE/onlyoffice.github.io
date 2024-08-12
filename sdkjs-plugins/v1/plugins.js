@@ -272,22 +272,22 @@
     {
         window.Asc.plugin["event_" + id] = action.bind(window.Asc.plugin);
 
-        _sendMessageToParent({
+        _sendMessageToParent(JSON.stringify({
             "guid" : window.Asc.plugin.guid,
             "type" : "attachEvent",
-            "data" : id
-        });
+            "name" : id
+        }));
     };
     window.Asc.plugin.detachEditorEvent = function(id)
     {
         if (window.Asc.plugin["event_" + id])
             delete window.Asc.plugin["event_" + id];
 
-        _sendMessageToParent({
+        _sendMessageToParent(JSON.stringify({
             "guid" : window.Asc.plugin.guid,
             "type" : "detachEvent",
-            "data" : id
-        });
+            "name" : id
+        }));
     };
 
     window.onunload = function() {
