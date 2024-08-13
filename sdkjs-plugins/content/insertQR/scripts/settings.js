@@ -22,7 +22,6 @@
   // Get the HTML elements
   const activateQRlabel = document.getElementById('activateQRlabel');
   const activateBGlabel = document.getElementById('activateBGlabel');
-  const submitButton = document.getElementById('submitButton');
   const qrWidth = document.getElementById('widthLabel');
   const qrHeight = document.getElementById('heightLabel');
   const qrWidthField = document.getElementById('qrWidth');
@@ -43,7 +42,6 @@
 
   // Translation function for plugin
   window.Asc.plugin.onTranslate = function () {
-    submitButton.innerText = window.Asc.plugin.tr('Insert QR');
     activateQRlabel.innerText = window.Asc.plugin.tr('Set QR Color');
     activateBGlabel.innerText = window.Asc.plugin.tr('Set Background Color');
     qrWidth.innerText = window.Asc.plugin.tr('Width');
@@ -52,6 +50,94 @@
     spanMssgMaxErr = window.Asc.plugin.tr('Maximum QR size is 2000px');
     spanMssgSameClr = window.Asc.plugin.tr('The colors must be different');
   };
+
+  window.Asc.plugin.attachEvent("onWindowMessage", function (message) {
+    //Submit in parent modal
+    if(message == 'submit') {
+      // Get the values from the form elements
+      const qrWidthValue = qrWidthField.value;
+      const qrHeightValue = qrHeightField.value;
+      const qrColor = qrColorElement.value;
+      const bgColor = bgColorElement.value;
+
+      // Validate the input fields and prevent form submission if the input is incorrect
+      switch (true) {
+        case qrColor === '#aN' && bgColor === '#aN':
+          qrColorElement.classList.add('error');
+          bgColorElement.classList.add('error');
+          return;// Exit the function to prevent further execution
+
+        case qrColor === '#aN':
+          qrColorElement.classList.add('error');
+          return; // Exit the function to prevent further execution
+
+        case qrColor.length < 7:
+          qrColorElement.classList.add('error');
+          return; // Exit the function to prevent further execution
+
+        case bgColor === '#aN':
+          bgColorElement.classList.add('error');
+          return; // Exit the function to prevent further execution
+
+        case bgColor.length < 7:
+          bgColorElement.classList.add('error');
+          return; // Exit the function to prevent further execution
+
+        case qrColor === bgColor:
+          qrColorElement.classList.add('error');
+          bgColorElement.classList.add('error');
+          errSpan.innerText = spanMssgSameClr;
+          return;
+
+        case parseInt(qrWidthValue, 10) < 50:
+          errSpan.innerText = spanMssgMinErr;
+          return; // Exit the function to prevent further execution
+
+        case parseInt(qrHeightValue, 10) < 50:
+          errSpan.innerText = spanMssgMinErr;
+          return; // Exit the function to prevent further execution
+
+        case parseInt(qrWidthValue, 10) > 2000:
+          errSpan.innerText = spanMssgMaxErr;
+          return; // Exit the function to prevent further execution
+
+        case parseInt(qrHeightValue, 10) > 2000:
+          errSpan.innerText = spanMssgMaxErr;
+          return; // Exit the function to prevent further execution
+
+        case qrWidthValue === "":
+          errSpan.innerText = spanMssgMinErr;
+          return; // Exit the function to prevent further execution
+
+        case qrHeightValue === "":
+          errSpan.innerText = spanMssgMinErr;
+          return; // Exit the function to prevent further execution
+
+        default:
+          break;
+      }
+
+      // Save values to localStorage
+      let settings = {
+        qrWidth: qrWidthValue,
+        qrHeight: qrHeightValue,
+        qrColor: qrColor,
+        bgColor: bgColor
+      };
+      localStorage.setItem('InsertQR_settings', JSON.stringify(settings));
+
+      // Create message object
+      const message = {
+        qrWidth: qrWidthValue || '150',
+        qrHeight: qrHeightValue || '150',
+        qrColor: qrColor || '#000000',
+        bgColor: bgColor || '#ffffff'
+      };
+
+      // Send message to plugin
+      sendPluginMessage(message);
+    }
+  });
 
   // Function to send message to plugin
   function sendPluginMessage(message) {
@@ -76,9 +162,9 @@
         $('#' + selectedInput).val(colorValue);
         // Reset border color
         if (selectedInput === 'qrColor') {
-          qrColorElement.style.borderColor = null;
+          qrColorElement.classList.remove('error');
         } else if (selectedInput === 'bgColor') {
-          bgColorElement.style.borderColor = null;
+          bgColorElement.classList.remove('error');
         }
       }
     });
@@ -135,105 +221,6 @@
     }
   });
 
-  // Event listener for form submission
-  document.getElementById('SubmitForm').addEventListener('submit', function (event) {
-    // Get the values from the form elements
-    const qrWidthValue = qrWidthField.value;
-    const qrHeightValue = qrHeightField.value;
-    const qrColor = qrColorElement.value;
-    const bgColor = bgColorElement.value;
-
-    // Validate the input fields and prevent form submission if the input is incorrect
-    switch (true) {
-      case qrColor === '#aN' && bgColor === '#aN':
-        event.preventDefault();
-        qrColorElement.style.borderColor = 'red';
-        bgColorElement.style.borderColor = 'red';
-        return;// Exit the function to prevent further execution
-
-      case qrColor === '#aN':
-        event.preventDefault();
-        qrColorElement.style.borderColor = 'red';
-        return; // Exit the function to prevent further execution
-
-      case qrColor.length < 7:
-        event.preventDefault();
-        qrColorElement.style.borderColor = 'red';
-        return; // Exit the function to prevent further execution
-
-      case bgColor === '#aN':
-        event.preventDefault();
-        bgColorElement.style.borderColor = 'red';
-        return; // Exit the function to prevent further execution
-
-      case bgColor.length < 7:
-        event.preventDefault();
-        bgColorElement.style.borderColor = 'red';
-        return; // Exit the function to prevent further execution
-
-      case qrColor === bgColor:
-        event.preventDefault();
-        qrColorElement.style.borderColor = 'red';
-        bgColorElement.style.borderColor = 'red';
-        errSpan.innerText = spanMssgSameClr;
-        return;
-
-      case parseInt(qrWidthValue, 10) < 50:
-        event.preventDefault();
-        errSpan.innerText = spanMssgMinErr;
-        return; // Exit the function to prevent further execution
-
-      case parseInt(qrHeightValue, 10) < 50:
-        event.preventDefault();
-        errSpan.innerText = spanMssgMinErr;
-        return; // Exit the function to prevent further execution
-
-      case parseInt(qrWidthValue, 10) > 2000:
-        event.preventDefault();
-        errSpan.innerText = spanMssgMaxErr;
-        return; // Exit the function to prevent further execution
-
-      case parseInt(qrHeightValue, 10) > 2000:
-        event.preventDefault();
-        errSpan.innerText = spanMssgMaxErr;
-        return; // Exit the function to prevent further execution
-
-      case qrWidthValue === "":
-        event.preventDefault();
-        errSpan.innerText = spanMssgMinErr;
-        return; // Exit the function to prevent further execution
-
-      case qrHeightValue === "":
-        event.preventDefault();
-        errSpan.innerText = spanMssgMinErr;
-        return; // Exit the function to prevent further execution
-
-      default:
-        break;
-    }
-
-    // Save values to localStorage
-    let settings = {
-      qrWidth: qrWidthValue,
-      qrHeight: qrHeightValue,
-      qrColor: qrColor,
-      bgColor: bgColor
-    };
-    localStorage.setItem('InsertQR_settings', JSON.stringify(settings));
-
-    // Create message object
-    const message = {
-      qrWidth: qrWidthValue || '150',
-      qrHeight: qrHeightValue || '150',
-      qrColor: qrColor || '#000000',
-      bgColor: bgColor || '#ffffff'
-    };
-
-    // Send message to plugin
-    sendPluginMessage(message);
-
-    event.preventDefault(); // Prevent the default form submission behavior
-  });
   // Event listener for changing QR color activation
   $('#activateQR').change(function () {
     $('#bgColor').prop('disabled', true);
@@ -309,6 +296,20 @@
 
   });
 
+  // Radio logic for checkbox inputs
+  $('input[type="checkbox"][name="activation"]').each(function(i, checkbox) {
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        $('input[type="checkbox"][name="activation"]').each(function(j, otherCheckbox) {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.checked = false;
+          }
+        });
+      }else {
+        this.checked = true;
+      }
+    });
+  });
 
   // Function to handle window resize event
   function handleResize() {
