@@ -20,6 +20,7 @@
   // Initialize global variables
   let textQR = ""; // Initialize selected text variable
   let modalWindow; // Declare modalWindow at the top level
+  let warningModalWindow;
   // Define global variables to store QR parameters
   let qrText;
   let qrWidth;
@@ -45,6 +46,24 @@
 
   //  Display context menu if the text is selected
   window.Asc.plugin.event_onContextMenuShow = function (options) {
+    function addContextMenuItem(type) {
+      let items = [];
+      if(type == 'normal') {
+        items = [{
+          id: 'GenerateQR',
+          text: generateText('Insert QR')
+        }];
+      } else if(type == 'warning') {
+        items = [{
+          id: 'GenerateQR_info',
+          text: generateText('Insert QR: info')
+        }];
+      }
+      window.Asc.plugin.executeMethod("AddContextMenuItem", [{
+        guid: window.Asc.plugin.guid,
+        items: items
+      }]);
+    }
 
     if (options.type === "Selection") { // Check if the text is selected
       // Execute method to get selected text
@@ -56,9 +75,10 @@
         TabSymbol: String.fromCharCode(9),
       }], function (data) {
         const selection = data.trim().replace(/\n/g, '');
+        const selectionMaxLength = 1900;
         const editorType = window.Asc.plugin.info.editorType // retrieve the editor type
-        switch (editorType) {
 
+        switch (editorType) {
           case "word":
             if (selection === "○" || selection === "☐" || (selection.includes("○") && selection.includes("☐"))) { // exclude radio buttons and check boxes from the selection
               textQR = "";
@@ -66,41 +86,30 @@
               textQR = selection;
             }
 
-            if (textQR !== "") {
-              // If text is selected and it is not an empty string, add the context menu item for generating QR code
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: [{
-                  id: 'GenerateQR',
-                  text: generateText('Insert QR')
-                }]
-              }]);
+            if(textQR.length <= selectionMaxLength) {
+              if (textQR !== "") {
+                // If text is selected and it is not an empty string, add the context menu item for generating QR code
+                addContextMenuItem('normal');
+              } else {
+                // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
+                addContextMenuItem();
+              }
             } else {
-              // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: []
-              }]);
+              addContextMenuItem('warning');
             }
             break;
 
           case "slide":
-            if (selection !== "") {
-              // If text is selected and it is not an empty string, add the context menu item for generating QR code
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: [{
-                  id: 'GenerateQR',
-                  text: generateText('Insert QR')
-                }]
-              }]);
-              textQR = selection;
+            if(selection.length <= selectionMaxLength) {
+              if (selection !== "") {
+                // If text is selected and it is not an empty string, add the context menu item for generating QR code
+                addContextMenuItem('normal');
+              } else {
+                // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
+                addContextMenuItem();
+              }
             } else {
-              // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: []
-              }]);
+              addContextMenuItem('warning');
             }
             break;
 
@@ -119,13 +128,7 @@
 
             // Exclude formulas from the selection and set context menu item
             if ((hasCapitals.length !== 0 && !haslink) || (hasCapitals.length !== 0 && !haslink && !hasdigits)) {
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: [{
-                  id: 'GenerateQR_info',
-                  text: generateText('Insert QR: info')
-                }]
-              }]);
+              addContextMenuItem('warning');
             }
 
             // Allow generating QR code from single lowercase phrases or digits
@@ -133,29 +136,13 @@
               textQR = selection;
 
               if (textQR !== "") {
-                window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                  guid: window.Asc.plugin.guid,
-                  items: [{
-                    id: 'GenerateQR',
-                    text: generateText('Insert QR')
-                  }]
-                }]);
+                addContextMenuItem('normal');
               } else {
-                window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                  guid: window.Asc.plugin.guid,
-                  items: []
-                }]);
+                addContextMenuItem();
               }
             } else {
               // If none of the conditions are met, add empty items array
-              window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-                guid: window.Asc.plugin.guid,
-                items: []
-              }]);
-            }
-
-            function generateText(text) {
-              return text;
+              addContextMenuItem();
             }
             break;
           default:
@@ -165,10 +152,7 @@
       });
     } else {
       // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
-      window.Asc.plugin.executeMethod("AddContextMenuItem", [{
-        guid: window.Asc.plugin.guid,
-        items: []
-      }]);
+      addContextMenuItem();
     }
   };
 
@@ -180,7 +164,6 @@
 
   // Function to insert QR code
   function insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor) {
-
     try {
       const qrCode = qrcodegen.QrCode.encodeText(qrText, qrcodegen.QrCode.Ecc.LOW);
       const size = qrCode.size;
@@ -228,6 +211,7 @@
 
     } catch (error) {
       console.error("QR code generation failed:", error);
+      displayFunction(textWarning);
     }
   }
 
@@ -240,15 +224,50 @@
 
     switch (option) {
       case 'displaySettings':
+        const langCode = window.Asc.plugin.info;
+        const widthDict = {
+          'de-DE': 350,
+          'es-ES': 360,
+          'fr-FR': 330,
+          'it-IT': 350,
+        };
+        const windowWidth = widthDict[langCode] || 310;
+        
         variation = {
           url: location.href.replace(file, 'settingsQR.html'),
           description: generateText('QR Settings'),
           isVisual: true,
           isModal: true,
-          buttons: [],
+          buttons: [
+            {
+                text: generateText('Insert QR'),
+                primary: true
+            },
+            {
+                text: generateText('Cancel'),
+                primary: false
+            }
+          ],
           EditorsSupport: ['slide', 'word', 'cell'],
-          size: [400, 550]
+          size: [windowWidth, 330]
         };
+
+        // Create and display the modal window
+        modalWindow = new window.Asc.PluginWindow();
+        modalWindow.show(variation);
+
+        // Get the QR parameters from the message
+        modalWindow.attachEvent("onWindowMessage", function (message) {
+          qrText = textQR;
+          qrWidth = message.qrWidth;
+          qrHeight = message.qrHeight;
+          qrColor = message.qrColor;
+          bgColor = message.bgColor;
+
+          // Insert QR code
+          insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor);
+          modalWindow.close();
+        });
         break;
       case 'textWarning':
         variation = {
@@ -256,48 +275,42 @@
           description: generateText('Warning'),
           isVisual: true,
           isModal: true,
-          buttons: [],
+          buttons: [
+            {
+              text: 'OK',
+              primary: true
+            }
+          ],
           EditorsSupport: ['slide', 'word', 'cell'],
-          size: [400, 200]
+          size: [350, 80]
         };
+
+        warningModalWindow = new window.Asc.PluginWindow();
+        warningModalWindow.show(variation);
         break;
       default:
         break;
     }
-
-    // Create and display the modal window
-    modalWindow = new window.Asc.PluginWindow();
-    modalWindow.show(variation);
-
-    // Get the QR parameters from the message
-    modalWindow.attachEvent("onWindowMessage", function (message) {
-      qrText = textQR;
-      qrWidth = message.qrWidth;
-      qrHeight = message.qrHeight;
-      qrColor = message.qrColor;
-      bgColor = message.bgColor;
-
-      // Insert QR code
-      insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor);
-      modalWindow.close();
-    });
   }
 
   console.log("Plugin initialized"); // Check if this log appears in the console
 
   // Handle button click events to close the modal window
   window.Asc.plugin.button = function (id, windowId) {
-    if (!modalWindow) {
-      return;
-    }
-
-    if (windowId) {
-      switch (id) {
-        case -1:
-        default:
-          window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
-          break;
+    if(modalWindow && windowId == modalWindow.id) {
+      if(id == 0 && modalWindow.id == windowId) {
+        // Send event submit in iframe modal content
+        // (Then iframe logic sends a data event here)
+        window.Asc.plugin.executeMethod ("SendToWindow", [
+          windowId,
+          "onWindowMessage",
+          'submit'
+        ]);
+      } else {
+        window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
       }
+    } else {
+      window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
     }
   };
 

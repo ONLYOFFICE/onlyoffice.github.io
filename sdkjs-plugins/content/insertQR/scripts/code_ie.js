@@ -47,10 +47,15 @@
 			url: location.href.replace(file, 'ie_warning.html'),
 			description: (window.Asc.plugin.tr('Warning') || 'Warning'),
 			isVisual: true,
-			buttons: [],
+			buttons: [
+				{
+				  text: 'OK',
+				  primary: true
+				}
+			],
 			isModal: true,
 			EditorsSupport: ["word", "slide"],
-			size: [500, 170]
+			size: [400, 80]
 		};
 
 		if (!messageWindow) {
