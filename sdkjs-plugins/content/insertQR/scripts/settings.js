@@ -298,15 +298,12 @@
 
   // Function to handle window resize event
   function handleResize() {
-    const windowHeight = window.innerHeight;
-    const bodyHeight = document.body.offsetHeight;
-
-    // Check if body height exceeds window height
-    if (bodyHeight > windowHeight) {
-      document.body.style.overflowY = 'scroll'; // Add vertical scroll
-    } else {
-      document.body.style.overflowY = 'auto'; // Remove vertical scroll
+    let zoom = 1;
+    if(window.devicePixelRatio < 1.25) {
+      zoom = 1 / window.devicePixelRatio;
     }
+    document.getElementsByClassName('container')[0].style.height = 'calc(' + 100 * 1 / zoom + 'vh - 30px)';
+    document.getElementsByTagName('html')[0].style.zoom = zoom;
   }
 
 })(window, undefined);

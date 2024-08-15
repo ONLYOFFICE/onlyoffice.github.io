@@ -1,6 +1,11 @@
 body {
     margin: 0;
+}
+
+.container {
     padding: 15px;
+    height: calc(100vh - 30px);
+    overflow-y: auto;
 }
 
 label {
