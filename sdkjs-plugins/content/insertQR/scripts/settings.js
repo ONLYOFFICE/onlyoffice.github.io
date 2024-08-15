@@ -296,21 +296,6 @@
 
   });
 
-  // Radio logic for checkbox inputs
-  $('input[type="checkbox"][name="activation"]').each(function(i, checkbox) {
-    checkbox.addEventListener('change', function() {
-      if (this.checked) {
-        $('input[type="checkbox"][name="activation"]').each(function(j, otherCheckbox) {
-          if (otherCheckbox !== checkbox) {
-            otherCheckbox.checked = false;
-          }
-        });
-      }else {
-        this.checked = true;
-      }
-    });
-  });
-
   // Function to handle window resize event
   function handleResize() {
     const windowHeight = window.innerHeight;

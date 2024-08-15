@@ -35,13 +35,13 @@ input.error {
     color: #7b7b7b;
 }
 
-#row-checkbox {
+#row-radio {
     margin-bottom: 4px;
 }
-#row-checkbox .cell {
+#row-radio .cell {
     align-items: center;
 }
-#row-checkbox .cell label {
+#row-radio .cell label {
     margin-left: 4px;
 }
 
