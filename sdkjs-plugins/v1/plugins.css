@@ -165,6 +165,26 @@ input[type='checkbox'].form-control {
     input[type='checkbox'].form-control:disabled {
         opacity: .5;
     }
+
+    input[type='radio'].form-control {
+        appearance: none;
+        -webkit-appearance: none;
+        border: 2px solid #fff;
+        border-radius: 100%;
+        box-shadow: 0 0 0 1px #cfcfcf;
+        height: 12px;
+        width: 12px;
+        accent-color: #444;
+        margin: 0 0 1px;
+    }
+    
+    input[type='radio'].form-control:checked {
+        background-color: #444;
+    }
+    
+    input[type='radio'].form-control:disabled {
+        opacity: .5;
+    }
 }
 /* label */
 
