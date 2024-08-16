@@ -50,6 +50,7 @@
       qrColor = data.substring(posQrColor + 2, posBgColor);
       bgColor = data.substring(posBgColor + 2, posText);
       qrText = data.substring(posText + 2);
+      textQR = qrText;
 
       if (window.Asc.plugin.info.objectId)
         currentObjectId = window.Asc.plugin.info.objectId;
@@ -71,7 +72,7 @@
     window.Asc.plugin.executeMethod("GetSelectedOleObjects", [], function(objects) {
       if (!objects || objects.length !== 1 || objects[0].guid !== window.Asc.plugin.info.guid)
         return;
-      currentObjectId = objects[0].objectId;
+      window.Asc.plugin.info.objectId = objects[0].objectId;
       window.Asc.plugin.init(objects[0].data);      
     });
   });
