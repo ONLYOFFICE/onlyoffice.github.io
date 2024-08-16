@@ -38,7 +38,10 @@
   // Call the handleResize function initially to set the initial state
   handleResize();
 
-  window.Asc.plugin.init = function () { };
+  window.Asc.plugin.init = function () 
+  {
+    window.Asc.plugin.sendToPlugin("onWindowReady");
+  };
 
   // Translation function for plugin
   window.Asc.plugin.onTranslate = function () {
@@ -50,6 +53,12 @@
     spanMssgMaxErr = window.Asc.plugin.tr('Maximum QR size is 2000px');
     spanMssgSameClr = window.Asc.plugin.tr('The colors must be different');
   };
+
+  window.Asc.plugin.attachEvent("onWindowSettings", function (message) {
+    qrColorElement.value = message.qrColor;
+    bgColorElement.value = message.bgColor;
+    colorpicker.colorpicker('setValue', $('#qrColor').val());
+  });
 
   window.Asc.plugin.attachEvent("onWindowMessage", function (message) {
     //Submit in parent modal

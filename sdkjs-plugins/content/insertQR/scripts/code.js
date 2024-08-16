@@ -32,8 +32,31 @@
   let displaySettings = 'displaySettings';
   let textWarning = 'textWarning';
 
+  let currentObjectId = undefined;
 
-  window.Asc.plugin.init = function () { };
+  window.Asc.plugin.init = function(data) 
+  {
+    if (data) {
+      let sep = ";;";
+      let posQrColor = data.indexOf(sep);
+      if (-1 == posQrColor)
+        return;
+      let posBgColor = data.indexOf(sep, posQrColor + 2);
+      if (-1 == posBgColor)
+        return;
+      let posText = data.indexOf(sep, posBgColor + 2);
+      if (-1 == posText)
+        return;
+      qrColor = data.substring(posQrColor + 2, posBgColor);
+      bgColor = data.substring(posBgColor + 2, posText);
+      qrText = data.substring(posText + 2);
+
+      if (window.Asc.plugin.info.objectId)
+        currentObjectId = window.Asc.plugin.info.objectId;
+
+      displayFunction(displaySettings);
+    }
+  };
 
   // Attach event for context menu click on GenerateQR
   window.Asc.plugin.attachContextMenuClickEvent('GenerateQR', function () {
@@ -42,6 +65,15 @@
 
   window.Asc.plugin.attachContextMenuClickEvent('GenerateQR_info', function () {
     displayFunction(textWarning);
+  });
+
+  window.Asc.plugin.attachContextMenuClickEvent('ChangeQR', function () {
+    window.Asc.plugin.executeMethod("GetSelectedOleObjects", [], function(objects) {
+      if (!objects || objects.length !== 1 || objects[0].guid !== window.Asc.plugin.info.guid)
+        return;
+      currentObjectId = objects[0].objectId;
+      window.Asc.plugin.init(objects[0].data);      
+    });
   });
 
   //  Display context menu if the text is selected
@@ -58,6 +90,11 @@
           id: 'GenerateQR_info',
           text: generateText('Insert QR: info')
         }];
+      } else if(type == 'change') {
+        items = [{
+          id: 'ChangeQR',
+          text: generateText('QR Settings')
+        }];        
       }
       window.Asc.plugin.executeMethod("AddContextMenuItem", [{
         guid: window.Asc.plugin.guid,
@@ -150,6 +187,8 @@
         }
 
       });
+    } else if (options.type === "OleObject" && options.guid === window.Asc.plugin.info.guid) {
+      addContextMenuItem('change');
     } else {
       // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
       addContextMenuItem();
@@ -201,13 +240,13 @@
         width: qrWidth / _info.mmToPx,
         height: qrHeight / _info.mmToPx,
         imgSrc: qrImageURI,
-        objectId: _info.objectId,
-        data: qrImageURI,
+        objectId: currentObjectId,
+        data: (qrImageURI + ";;" + qrColor + ";;" + bgColor + ";;" + qrText),
         resize: true,
         recalculate: true
       };
 
-      window.Asc.plugin.executeMethod("AddOleObject", [oImageData]);
+      window.Asc.plugin.executeMethod(!currentObjectId ? "AddOleObject" : "EditOleObject", [oImageData]);
 
     } catch (error) {
       console.error("QR code generation failed:", error);
@@ -256,6 +295,15 @@
         modalWindow = new window.Asc.PluginWindow();
         modalWindow.show(variation);
 
+        modalWindow.attachEvent("onWindowReady", function(){
+          if (!currentObjectId)
+            return;
+          modalWindow.command("onWindowSettings", {
+            qrColor : qrColor,
+            bgColor : bgColor
+          });
+        });
+
         // Get the QR parameters from the message
         modalWindow.attachEvent("onWindowMessage", function (message) {
           qrText = textQR;
@@ -266,7 +314,9 @@
 
           // Insert QR code
           insertQR(qrText, qrWidth, qrHeight, qrColor, bgColor);
+          currentObjectId = undefined;
           modalWindow.close();
+          modalWindow = null;
         });
         break;
       case 'textWarning':
@@ -297,21 +347,19 @@
 
   // Handle button click events to close the modal window
   window.Asc.plugin.button = function (id, windowId) {
-    if(modalWindow && windowId == modalWindow.id) {
-      if(id == 0 && modalWindow.id == windowId) {
-        // Send event submit in iframe modal content
-        // (Then iframe logic sends a data event here)
-        window.Asc.plugin.executeMethod ("SendToWindow", [
-          windowId,
-          "onWindowMessage",
-          'submit'
-        ]);
-      } else {
-        window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
+    if (modalWindow) {
+      if (windowId == modalWindow.id) {
+        if (id === 0) {
+          modalWindow.command("onWindowMessage", "submit");
+        } else {
+          currentObjectId = undefined;
+          modalWindow.close();
+          modalWindow = null;
+        }
       }
-    } else {
-      window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
     }
+    if (undefined === windowId && -1 === id)
+      this.executeCommand("close", "");
   };
 
 })(window);
