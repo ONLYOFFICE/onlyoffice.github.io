@@ -372,6 +372,8 @@
           modalWindow = null;
         }
       }
+    } else if (windowId) {
+      window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
     }
     if (undefined === windowId && -1 === id)
       this.executeCommand("close", "");
