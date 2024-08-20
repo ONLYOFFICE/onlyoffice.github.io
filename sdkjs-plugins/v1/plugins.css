@@ -176,6 +176,7 @@ input[type='checkbox'].form-control {
         width: 12px;
         accent-color: #444;
         margin: 0 0 1px;
+        background-color: #fff;
     }
     
     input[type='radio'].form-control:checked {
