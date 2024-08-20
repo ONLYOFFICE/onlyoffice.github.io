@@ -1,14 +1,14 @@
 {
-	"name": "Insert QR",
+	"name": "QR Code Generator",
 	"nameLocale": {
-		"ru": "Вставка QR-кода",
-		"fr": "Insérer un code QR",
-		"es": "Insertar QR",
-		"de": "QR-Code einfügen",
-		"br": "Inserir QR",
-		"it": "Inserisci il codice QR",
-		"ja": "QRの挿入",
-		"zh": "插入二维码"
+		"ru": "Генератор QR-кода",
+		"fr": "Générateur de code QR",
+		"es": "Generador de códigos QR",
+		"de": "QR-Code-Generator",
+		"br": "Gerador de códigos QR",
+		"it": "Generatore di codici QR",
+		"ja": "QRコード作成",
+		"zh": "二维码生成器"
 	},
 	"guid": "asc.{E5DD8D78-92F4-43B4-825B-E963D5CE8AC9}",
 	"version": "1.0.0",
@@ -17,7 +17,7 @@
 		{
 			"description": "Effortlessly generate QR codes in the Presentation, Text and Spreadsheet Editors.",
 			"descriptionLocale": {
-				"ru": "Без труда создавайте QR-коды в текстовых документах и презентациях",
+				"ru": "Без труда создавайте QR-коды в текстовых документах, таблицах и презентациях",
 				"fr": "Générez facilement des codes QR dans les éditeurs de présentations, de documents texte et de feuilles de calcul.",
 				"es": "Genere fácilmente códigos QR en los editores de presentaciones, texto y hojas de cálculo.",
 				"de": "Generieren Sie mühelos QR-Codes in den Editoren für Dokumente, Präsentationen und Tabellenkalkulationen.",
