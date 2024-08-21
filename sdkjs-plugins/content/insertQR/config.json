@@ -61,10 +61,11 @@
 					"dark": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)"
 				},
 				"screenshots": [
-					"resources/store/screenshots/screenshot.png",
 					"resources/store/screenshots/screenshot1.png",
 					"resources/store/screenshots/screenshot2.png",
-					"resources/store/screenshots/screenshot3.png"
+					"resources/store/screenshots/screenshot3.png",
+					"resources/store/screenshots/screenshot4.png",
+					"resources/store/screenshots/screenshot5.png"
 				],
 				"icons": {
 					"light": "resources/store/icons",
