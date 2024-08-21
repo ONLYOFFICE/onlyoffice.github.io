@@ -1,0 +1,16 @@
+{
+    "QR Settings": "QR設定",
+    "Set QR Color": "QR色の設定",
+    "Set Background Color": "背景色の設定",
+    "Width": "幅",
+    "Height": "高さ",
+    "Minimum QR size is 50px": "最小QRサイズは50px",
+    "Maximum QR size is 2000px": "QRの最大サイズは2000pxです",
+    "Warning": "警告",
+    "Insert QR": "QRの挿入",
+    "The plugin is not supported in the Internet Explorer": "このプラグインはInternet Explorerには対応していません.",    
+    "The selected text сannot be used": "選択されたテキストは使用できません.",
+    "The colors must be different": "色は異なる必要があります",
+    "Insert QR: info": "QRの挿入: 情報 ",
+    "Cancel": "キャンセル"
+}

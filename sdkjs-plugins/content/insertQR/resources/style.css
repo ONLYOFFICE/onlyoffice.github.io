@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+}
+
+.container {
+    padding: 15px;
+    height: calc(100vh - 30px);
+    overflow-y: auto;
+}
+
+label {
+    line-height: 15px;
+}
+
+input.error {
+    border-color: #f62211 !important;
+}
+
+#qrColorContainerWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.row {
+    display: flex; 
+    gap: 10px;
+}
+
+.cell {
+    display: flex;
+    width: 100%;
+}
+
+.label-suffix {
+    color: #7b7b7b;
+}
+
+#row-radio {
+    margin-bottom: 4px;
+}
+#row-radio .cell {
+    align-items: center;
+}
+#row-radio .cell label {
+    margin-left: 4px;
+}
+
+#row-input-colors, #row-input-size {
+    margin-bottom: 8px;
+}
+
+#row-input-size .cell {
+    flex-direction: column;
+}
+
+#error-msg {
+    color: #f62211;
+    font-size: 11px;
+}
