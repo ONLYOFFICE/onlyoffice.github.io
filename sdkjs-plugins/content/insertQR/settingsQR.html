@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link href="resources/style.css" rel="stylesheet">
+    <link href="resources/vendor/css/bootstrap-colorpicker.css" rel="stylesheet">
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script src="scripts/vendor/jquery-3.4.1.js"></script>
+    <script src="scripts/vendor/bootstrap-colorpicker.js"></script>
+</head>
+
+<body class="noselect">
+    <div class="container">
+        <form class="form" id="SubmitForm">
+            <!-- Color Picker -->
+            <div id="qrColorContainerWrapper">
+                <div id="qrColorContainer"></div>
+            </div>
+            <!-- Row radio -->
+            <div id="row-radio" class="row">
+                <div class="cell">
+                    <input type="radio" class="form-control" id="activateQR" name="activation" checked/>
+                    <label for="activateQR" id="activateQRlabel">
+                        Set QR Color
+                    </label>
+                </div>
+                <div class="cell">
+                    <input type="radio" class="form-control" id="activateBG" name="activation" />
+                    <label for="activateBG" id="activateBGlabel">
+                        Set Background Color
+                    </label>
+                </div>
+            </div>
+            <!-- Row input colors -->
+            <div id="row-input-colors" class="row">
+                <input type="text" id="qrColor" value="#000000" class="form-control custom-input w-100"/>
+                <input type="text" id="bgColor" value="#FFFFFF" class="form-control custom-input w-100" disabled/>
+            </div>
+            <!-- Row input size -->
+            <div id="row-input-size" class="row">
+                <div class="cell">
+                    <div>
+                        <label id="widthLabel">Width</label>
+                        <span class="label-suffix">(px)</span>
+                    </div>
+                    <input 
+                        id="qrWidth" 
+                        type="number" 
+                        class="form-control w-100" 
+                        placeholder="" 
+                        value="150" 
+                    />
+                </div>
+                <div class="cell">
+                    <div>
+                        <label id="heightLabel">Height</label>
+                        <span class="label-suffix">(px)</span>
+                    </div>
+                    <input 
+                        id="qrHeight" 
+                        type="number" 
+                        class="form-control w-100" 
+                        placeholder="" 
+                        value="150" 
+                    />
+                </div>
+            </div>
+            <!-- Error message -->
+            <span id="error-msg"></span>
+        </form>
+    </div>
+    <script src="scripts/settings.js"></script>
+</div>
+</html>

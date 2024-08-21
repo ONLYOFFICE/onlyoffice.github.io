@@ -1,0 +1,16 @@
+{
+    "QR Settings": "Configurações de QR",
+    "Set QR Color": "Definir Cor do QR",
+    "Set Background Color": "Definir Cor de Fundo",
+    "Width": "Largura",
+    "Height": "Altura",
+    "Minimum QR size is 50px": "O tamanho mínimo do QR é de 50 pixels",
+    "Maximum QR size is 2000px": "O tamanho máximo do QR é de 2000px",
+    "Warning": "Aviso",
+    "Insert QR": "Inserir QR",
+    "The plugin is not supported in the Internet Explorer": "O plugin não é suportado no Internet Explorer.",
+    "The selected text сannot be used": "O texto selecionado não pode ser usado.",
+    "The colors must be different": "As cores devem ser diferentes",
+    "Insert QR: info": "Inserir QR: info",
+    "Cancel": "Cancelar"
+}

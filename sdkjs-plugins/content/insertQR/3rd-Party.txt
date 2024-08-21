@@ -1,0 +1,16 @@
+This plugin uses code from the following 3rd party projects:
+
+
+
+1.QR Code generator is a local library for generating QR codes.
+
+License:        MIT
+http://www.opensource.org/licenses/mit-license.php
+
+
+
+2. Bootstrap Colorpicker v3.4.0 a is a modular color picker plugin for Bootstrap 4
+
+License:        Apache License v2.0
+http://www.apache.org/licenses/LICENSE-2.0.txt
+

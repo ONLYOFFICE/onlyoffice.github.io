@@ -1,0 +1,16 @@
+{
+    "QR Settings": "二维码设置",
+    "Set QR Color": "设置二维码颜色",
+    "Set Background Color": "设置背景颜色",
+    "Width": "宽度",
+    "Height": "高度",
+    "Minimum QR size is 50px": "最小二维码尺寸为 50px",
+    "Maximum QR size is 2000px": "二维码最大的尺寸为 2000px",
+    "Warning": "警告",
+    "Insert QR": "插入二维码",
+    "The plugin is not supported in the Internet Explorer": "该插件不支持 Internet Explorer 浏览器.",
+    "The selected text сannot be used": "无法使用所选文本.",
+    "The colors must be different": "颜色必须不同",
+    "Insert QR: info": "插入二维码：信息",
+    "Cancel": "取消"
+}
