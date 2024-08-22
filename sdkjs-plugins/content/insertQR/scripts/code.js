@@ -142,6 +142,7 @@
               if (selection !== "") {
                 // If text is selected and it is not an empty string, add the context menu item for generating QR code
                 addContextMenuItem('normal');
+                textQR = selection;
               } else {
                 // if the text is not selected, add empty items array. This allows initializing the plugin in any scenario
                 addContextMenuItem();
