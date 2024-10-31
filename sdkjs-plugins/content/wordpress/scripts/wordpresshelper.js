@@ -16,6 +16,7 @@
  *
  */
 
+    var urlProxy = 'https://plugins-services.onlyoffice.com/proxy';
     var WordpressMeInfoUrl = "https://public-api.wordpress.com/rest/v1/me",
         WordpressSites     = "https://public-api.wordpress.com/rest/v1.2/sites/",
         CodeUrl            = "https://public-api.wordpress.com/oauth2/authorize",
@@ -29,23 +30,22 @@
     };
 
     async function PerformRequest(sUrl, sMethod, oHeaders, sData) {
-        var oParams = {};
-        if (oHeaders.length !== 0)
-            oParams['headers'] = oHeaders;
-        if (sData !== '')
-            oParams['data'] = sData;
-        oParams['method'] = sMethod;
-        oParams['url'] = sUrl;
-
-
         var promise = new Promise(function (resolve, reject) {
-            $.ajax(oParams
-            ).success(function (oResponse) {
+            $.ajax({
+                method: 'POST',
+                contentType: "text/plain",
+                data: JSON.stringify({
+                    "headers": oHeaders,
+                    "data": sData,
+                    "method": sMethod,
+                    "target": sUrl
+                }),
+                url: urlProxy
+            }).success(function (oResponse) {
                 resolve(oResponse);
             })
             .error(function(error) {
                 reject(error);
-                alert('Please try relogin');
             });
         });
         var result = await promise;
