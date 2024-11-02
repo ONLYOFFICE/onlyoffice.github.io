@@ -1,0 +1,389 @@
+<!--
+(c) Copyright Ascensio System SIA 2020
+Licensed under the Apache License, Version 2#0 (the "License");
+you may not use this file except in compliance with the License#
+You may obtain a copy of the License at
+    http://www#apache#org/licenses/LICENSE-2#0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied#
+See the License for the specific language governing permissions and
+limitations under the License#
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>简历模板</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
+    <script type="text/javascript" src="scripts/index.js"></script>
+</head>
+
+<style lang="scss">
+    * {
+        padding: 0;
+        margin: 0;
+        user-select: none;
+    }
+
+    #container {
+        width: 1180px;
+        height: 600px;
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        background-color: green;
+    }
+
+    #left {
+        flex: 2;
+        height: 100%;
+        background-color: pink;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #filter {
+        flex: 0.5;
+        background-color: #f3f3f3;
+        display: flex;
+        flex-direction: row;
+        align-content: space-around;
+    }
+
+    #title {
+        font-size: 15px;
+        font-weight: bold;
+        margin-right: 10px;
+        padding-left: 30px;
+        color: #000;
+    }
+
+    #industrySelect {
+        width: 120px;
+        height: 30px;
+        padding: 5px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        background-color: white;
+        color: #333;
+        outline: none;
+        transition: border-color 0.3s ease-in-out;
+        /* appearance: none; */
+        /* 移除默认的箭头样式 */
+    }
+
+    #industrySelect:hover {
+        border-color: #45a049;
+    }
+
+    #industrySelect:focus {
+        /* border-color: #3e8e41; */
+        box-shadow: 0 0 5px #c1c1c1;
+    }
+
+    #styleSelect {
+        width: 120px;
+        height: 30px;
+        padding: 5px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        background-color: white;
+        color: #333;
+        outline: none;
+        transition: border-color 0.3s ease-in-out;
+        /* appearance: none; */
+        /* 移除默认的箭头样式 */
+    }
+
+    #styleSelect:hover {
+        border-color: #45a049;
+    }
+
+    #styleSelect:focus {
+        /* border-color: #3e8e41; */
+        box-shadow: 0 0 5px #c1c1c1;
+    }
+
+    #industry {
+        padding-top: 10px;
+        flex: 1;
+        /* background-color: purple; */
+    }
+
+    #style {
+        padding-top: 10px;
+        flex: 1;
+        /* background-color: rgb(195, 66, 195); */
+    }
+
+    #color {
+        flex: 1;
+        display: flex;
+        padding-top: 10px;
+        flex-direction: row;
+    }
+
+    #search {
+        padding-top: 15px;
+        flex: 0.5;
+        /* background-color: red; */
+    }
+
+    #searchButton {
+        width: 60px;
+        height: 40px;
+        margin: 0 auto;
+        background-color: #dddddd;
+        text-align: center;
+        line-height: 40px;
+        border-radius: 15px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 16px;
+        color: #000;
+    }
+
+    #searchButton:hover {
+        background-color: #d0d0d0;
+        box-shadow: 0 0 3px #c1c1c1;
+    }
+
+    #title {
+        flex: 0.5;
+        line-height: 50px;
+    }
+
+    #colorList {
+        flex: 2;
+        display: flex;
+        flex-direction: row;
+        /* justify-content: center; */
+        align-items: center;
+        width: 180px;
+        height: 50px;
+    }
+
+    #colorBox {
+        width: 20px;
+        height: 20px;
+        float: right;
+        /* margin-left: 10px; */
+        list-style: none;
+        margin-left: 10px;
+        border-radius: 50%;
+    }
+
+    #colorBox:hover {
+        width: 25px;
+        height: 25px;
+        box-shadow: 0 0 5px #c1c1c1;
+    }
+
+    .activeColorBox {
+        width: 25px !important;
+        height: 25px !important;
+        box-shadow: 0 0 5px #c1c1c1;
+    }
+
+    #colorBox:nth-child(1) {
+        background-color: #A9A9A9;
+    }
+
+    #colorBox:nth-child(2) {
+        background-color: #D3D3D3;
+    }
+
+    #colorBox:nth-child(3) {
+        background-color: #D6D6F5;
+    }
+
+    #colorBox:nth-child(4) {
+        background-color: #C1D8C7;
+    }
+
+    #colorBox:nth-child(5) {
+        background-color: #B0C4DE;
+    }
+
+    #description {
+        padding-left: 30px;
+        line-height: 50px;
+        font-size: 15px;
+        flex: 0.5;
+        color: #959595;
+        background-color: #f3f3f3;
+    }
+
+    #scrollBox {
+        flex: 5;
+        display: flex;
+        flex-direction: row;
+        background-color: #e0e0e0;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        overflow-y: scroll
+        /* scrollbar-width: none; */
+        /* scrollbar-color: transparent transparent; */
+    }
+
+    /* 隐藏垂直滚动条 */
+    /* #scrollBox::-webkit-scrollbar {
+        width: 0;
+    } */
+
+    /* 隐藏水平滚动条 */
+    /* #scrollBox::-webkit-scrollbar {
+        height: 0;
+    } */
+
+    #cv {
+        width: 160px;
+        height: 260px;
+        /* background-color: #cfcfcf; */
+        margin-top: 35px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #cv:hover {
+        width: 161px;
+        height: 261px;
+        margin-top: 34px;
+        box-shadow: 0 0 10px #656565;
+    }
+
+    .activeCv {
+        /* width: 162px !important;
+        height: 233px !important; */
+        box-shadow: 0 0 10px #656565;
+    }
+
+    #sampleElement {
+        width: 160px;
+    }
+
+    #divImg {
+        width: 160px;
+        flex: 6;
+        overflow: hidden;
+    }
+
+
+    #divTitle {
+        width: 160px;
+        margin-top: 5px;
+        flex: 0.8;
+        font-size: 14px;
+        text-align: center;
+        font-weight: 550;
+        color: rgb(106, 106, 106);
+    }
+
+    #right {
+        flex: 1;
+        background-color: #c9c9c9;
+    }
+
+    #content {
+        display: block;
+        height: 100%;
+        text-align: center;
+        line-height: 550px;
+        letter-spacing: 1px;
+        font-weight: bold;
+        color: #eaeaea;
+        font-size: 16px;
+    }
+
+    #img {
+        width: 100%;
+        height: 93%;
+        overflow: hidden;
+    }
+
+    #cvTitle {
+        margin-top: 10px;
+        text-align: center;
+        letter-spacing: 1px;
+        font-weight: bold;
+        color: #eaeaea;
+        font-size: 16px;
+    }
+
+    #viewElement {
+        display: none;
+        width: 100%;
+        /* margin-top: 32px; */
+    }
+</style>
+
+<body>
+    <div id="container">
+        <div id="left">
+            <div id="filter">
+                <div id="industry">
+                    <span id="title">行业</span>
+                    <select id="industrySelect">
+                        <option value="0" selected>全部</option>
+                        <option value="1">通用</option>
+                        <option value="2">学生求职</option>
+                        <option value="3">申请研究生</option>
+                        <option value="4">投行咨询</option>
+                        <option value="5">产品经理</option>
+                        <option value="6">程序员</option>
+                    </select>
+                </div>
+                <div id="style">
+                    <span id="title">风格</span>
+                    <select id="styleSelect">
+                        <option value="0" selected>全部</option>
+                        <option value="1">普通</option>
+                        <option value="2">正式</option>
+                        <option value="3">商务</option>
+                        <option value="4">简约</option>
+                        <!-- <option value="5">沉稳</option>
+                        <option value="6">精简</option> -->
+                    </select>
+                </div>
+                <div id="color">
+                    <span id="title">颜色</span>
+                    <div id="colorList">
+                        <div id="colorBox"></div>
+                        <div id="colorBox"></div>
+                        <div id="colorBox"></div>
+                        <div id="colorBox"></div>
+                        <div id="colorBox"></div>
+                    </div>
+                </div>
+                <div id="search">
+                    <div id="searchButton">筛选</div>
+                </div>
+            </div>
+            <div id="description">
+                快来选择合适的模板，创建属于你的第一份简历吧！（暂不支持同一文档插入多份简历）
+            </div>
+            <div id="scrollBox">
+            </div>
+        </div>
+
+        <div id="right">
+            <div id="content">
+                预览区，点击简历以查看
+            </div>
+            <div id="img">
+                <img id="viewElement" src="" alt="" />
+            </div>
+
+            <div id="cvTitle"></div>
+        </div>
+        <script type="text/javascript" src="./index.js"></script>
+</body>
+
+</html>
