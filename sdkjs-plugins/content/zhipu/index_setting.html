@@ -29,38 +29,76 @@
         }
     </style>
     <script type="text/javascript">
-        window.Asc.plugin.init = function()
-        {
-            this.resizeWindow(392, 200, 392, 147, 392, 147);
+        (function (window, undefined){
+            window.Asc.plugin.init = function()
+            {
+                this.resizeWindow(392, 200, 392, 147, 392, 147);
 
-            let apikey = localStorage.getItem('apikey');
-            document.getElementById('tokenInput').value = apikey;
-        };
+                let apikey = localStorage.getItem('apikey');
+                let model = localStorage.getItem('model');
+                if (model === null) {
+                    model = 'glm-4-plus';
+                }
+                document.getElementById('tokenInput').value = apikey;
+                document.getElementById('modelSelection').value = model;
 
-        window.Asc.plugin.button = function(id)
-        {
-            let model = document.getElementById('modelSelection').value;
-            let apikey = document.getElementById('tokenInput').value;
+            };
+            window.Asc.plugin.button = function(id)
+            {
+                let model = document.getElementById('modelSelection').value;
+                let apikey = document.getElementById('tokenInput').value;
 
-            localStorage.setItem('model', model);
-            localStorage.setItem('apikey', apikey);
+                localStorage.setItem('model', model);
+                localStorage.setItem('apikey', apikey);
 
-            this.executeCommand("close", "");
-        };
+                this.executeCommand("close", "");
+            };
+
+            window.Asc.plugin.onTranslate = function (){
+                document.getElementById('tokenInput').innerText = window.Asc.plugin.tr("Set ZhiPu API KEY");
+                document.getElementById('label_chooseModel').placeholder = window.Asc.plugin.tr("Choose a model");
+                document.getElementById('APILabel').innerText = window.Asc.plugin.tr("ZhiPu AI API Key");
+            };
+        })(window, undefined);
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputField = document.getElementById('tokenInput');
+            const validationMessage = document.createElement('div');
+            validationMessage.style.color = 'red';
+            inputField.parentNode.appendChild(validationMessage);
+
+            inputField.addEventListener('input', function() {
+                const value = inputField.value;
+                if (validateInput(value)) {
+                    validationMessage.textContent = '';
+                } else {
+                    validationMessage.textContent = window.Asc.plugin.tr("Invalid format");
+                }
+            });
+
+            function validateInput(value) {
+                // Example: Validate if the input is a valid API key ({id}.{secret})
+                const apiKeyPattern = /^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+                return apiKeyPattern.test(value);
+            }
+        });
     </script>
 </head>
 <body>
-    <div>
-        <label for="modelSelection" id="label_chooseModel">Choose a model</label>
-        <select id="modelSelection">
-            <option value="chatglm_lite">ZhiPu AI ChatGLM-Lite</option>
-            <option value="chatglm_std">ZhiPu AI ChatGLM-Std</option>
-            <option value="chatglm_pro">ZhiPu AI ChatGLM-Pro</option>
-        </select>
-    </div>
-    <div>
-        <label for="tokenInput">ZhiPu AI API:</label>
-        <input type="text" id="tokenInput" placeholder="Set ZhiPu API KEY">
-    </div>
+<div>
+    <label for="modelSelection" id="label_chooseModel">Choose a model</label>
+    <select id="modelSelection">
+        <option value="glm-4-plus">GLM-4-PLUS</option>
+        <option value="glm-4">ChatGLM-4</option>
+        <option value="glm-4-0520">GLM-4-0520</option>
+        <option value="glm-4-air">GLM-4-AIR</option>
+        <option value="glm-4-flash">GLM-4-FLASH</option>
+    </select>
+</div>
+<div>
+    <label id="APILabel" for="tokenInput">ZhiPu AI API Key:</label>
+    <input type="text" id="tokenInput" placeholder="Set ZhiPu API KEY">
+</div>
+<script>
+</script>
 </body>
 </html>
