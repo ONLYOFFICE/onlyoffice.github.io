@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Request</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+    <script type="text/javascript" src="scripts/jwt.js"></script>
+    <script type="text/javascript" src="scripts/zhipu_ai.js"></script>
+    <script type="text/javascript" src="scripts/custom.js"></script>
+    <script src="vendor/select2-4.0.13/js/select2.js"></script>
+    <script type="text/javascript" src="vendor/GPT-3-Encoder/encoder.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
+    <link rel="stylesheet" href="styles/custom.css">
+</head>
+<body>
+    <div id="div_content" class="div_main div_content hidden">
+        <div class="div_form">
+            <div>
+                <textarea id="textarea" class="form-control prompt" style="width: 100%;"></textarea>
+            </div>
+            <div >
+                <div id="div_modal" class="div_modal hidden form-control">
+                    <div class="div_row">
+                        <label class="i18n">Up to</label>
+                        <label id="lb_modal_length">4000</label>
+                        <label class="i18n">tokens in response.</label>
+                    </div>
+                    <div id="modal_link" class="div_row">
+                        <label id="lb_more" class="link i18n">Learn More</label>
+                        <a id="link_more" href="https://openai.com/api/pricing/" target="_blank" class="hidden"></a>
+                    </div>
+                </div>
+                <div class="div_tokens">
+                    <div id="div_tokens">
+                        <label class="i18n">Tokens: </label>
+                        <label id="lb_tokens">0</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="div_settings">
+            <div id="div_show_settings" class="div_show_settings">
+                <label class="link i18n">Show advanced settings</label>
+                <div class="div_arrow">
+                    <b id="arrow" class="arrow arrow_down"></b>
+                </div>
+            </div>
+            <div id="div_parametrs" class="hidden">
+                <div class="div_parametr">
+                    <div class="form-control div_title hidden">
+                        <label class="i18n">The model which will generate the completion. Some models are suitable for natural language tasks, others specialize in code.</label>
+                    </div>
+                    <label class="header i18n" style="margin-bottom: 2px;">Model</label>
+                    <select id="sel_models" class="form-control"></select>
+                </div>
+                <div class="div_parametr noselect">
+                    <div class="form-control div_title hidden">
+                        <label class="i18n">The maximum number of tokens to generate in the completion.</label>
+                        <br>
+                        <label class="i18n">Maximum </label><label id="lbl_avliable_tokens">4000</label> <label class="i18n">tokens are available.</label>
+                        <label class="i18n">Because you are using: </label><label id="lbl_used_tokens">0</label> <label class="i18n">tokens in your request.</label>
+                    </div>
+                    <label class="header i18n">Maximum length</label>
+                    <div class="div_param_val">
+                        <input id="inp_len_sl" type="range" min="1" max="4000" step="1" value="4000" style="width: 100%; background-size: 100% 100%;">
+                        <label id="lb_len" class="lbl_param_val">4000</label>
+                    </div>
+                </div>
+                <div class="div_parametr noselect">
+                    <div class="form-control div_title hidden">
+                        <label class="i18n">Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the node will become deterministic and repetitive.</label>
+                    </div>
+                    <label class="header i18n">Temperature</label>
+                    <div class="div_param_val">
+                        <input id="inp_temp_sl" type="range" min="0" max="1" step="0.01" value="0" style="width: 100%; background-size: 0% 100%;">
+                        <label id="lb_temp" class="lbl_param_val">0</label>
+                    </div>
+                </div>
+                <div class="div_parametr noselect">
+                    <div class="form-control div_title hidden">
+                        <label class="i18n">An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass.</label>
+                    </div>
+                    <label class="header">Top P</label>
+                    <div class="div_param_val">
+                        <input id="inp_top_sl" type="range" min="0" max="1" step="0.01" value="1" style="width: 100%; background-size: 100% 100%;">
+                        <label id="lb_top" class="lbl_param_val">1</label>
+                    </div>
+                </div>
+                <div class="div_parametr">
+                    <div class="form-control div_title hidden">
+                        <label class="i18n">Up to four sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.</label>
+                    </div>
+                    <label class="header i18n" style="margin-bottom: 2px;">Stop sequences</label>
+                    <input id="inp_stop" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="div_req_btn">
+                <button id="btn_submit" class="btn-text-default btn_submit i18n">Submit</button>
+                <button id="btn_clear" class="btn-text-default btn_clear i18n">Clear</button>
+            </div>
+            <div id="response" class="response"></div>
+        </div>
+        <div id="div_ie_error" class="hidden" style="margin: 12px;">
+            <label class=" header i18n">This plugin doesn't work in Internet Explorer.</label>
+        </div>
+    </div>
+
+    <div id="loader-container" class="loader hidden"></div>
+
+    <div id="div_err" class="hidden div_error err_background">
+        <label class="lb_err i18n" style="font-weight: bold;">Error:</label>
+        <label id="lb_err" class="lb_err"></label>
+    </div>
+</body>
+</html>

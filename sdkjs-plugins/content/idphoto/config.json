@@ -1,0 +1,74 @@
+{
+    "name": "ID Photo Convertor",
+    "nameLocale": {
+        "zh": "证件照转换器"
+    },
+    "guid": "asc.{7877CD2F-A977-4ED8-8CB7-32008278DDFC}",
+    "baseUrl": "",
+    "variations": [{
+        "description": "This plugin is used to convert captured photos into the format of ID photos. Since the plugin uses image algorithms and neural network models, you may need to wait a while to download the plugin and process images.",
+        "descriptionLocale": {
+            "zh": "本插件用于将拍摄的照片转为证件照的格式。于在插件中使用了图像算法和神经网络模型，你也许需要相对较长的时间等待下载插件以及处理图像。"
+        },
+        "url": "index.html",
+        "icons": [{
+            "style": "light",
+            "100%": {
+                "normal": "resources/img/main.png"
+            },
+            "125%": {
+                "normal": "resources/img/main.png"
+            },
+            "150%": {
+                "normal": "resources/img/main.png"
+            },
+            "175%": {
+                "normal": "resources/img/main.png"
+            },
+            "200%": {
+                "normal": "resources/img/main.png"
+            }
+        }, {
+            "style": "dark",
+            "100%": {
+                "normal": "resources/img/main-dark.png"
+            },
+            "125%": {
+                "normal": "resources/img/main-dark.png"
+            },
+            "150%": {
+                "normal": "resources/img/main-dark.png"
+            },
+            "175%": {
+                "normal": "resources/img/main-dark.png"
+            },
+            "200%": {
+                "normal": "resources/img/main-dark.png"
+            }
+        }],
+        "store": {
+            "screenshots": ["resources/img/screenshot.png"],
+            "icons": {
+                "light": "resources/img/light",
+                "dark": "resources/img/dark"
+            }
+        },
+        "isViewer": false,
+        "EditorsSupport": ["word", "cell", "slide", "pdf"],
+        "isVisual": true,
+        "isModal": true,
+        "isInsideMode": false,
+        "initDataType": "none",
+        "initData": "",
+        "isUpdateOleOnResize": true,
+        "buttons": [{
+            "text": "close",
+            "textLocale": {
+                "zh": "关闭"
+            },
+            "primary": true
+        }],
+        "size": [1200, 800]
+    }],
+    "offered": "LLYBL"
+}
