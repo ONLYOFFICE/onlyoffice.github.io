@@ -3,34 +3,61 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Hello world</title>
+    <title>Chat</title>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <link rel="stylesheet" href="styles/style.css">
     <script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
-    <script type="text/javascript" src="scripts/jwt.js"></script>
-    <script type="text/javascript" src="scripts/zhipu_ai.js"></script>
-    <script type="text/javascript" src="scripts/code.js"></script>
-
-
+    <script type="text/javascript">
+        if (!/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+            document.write("<script type='text\/javascript' src='vendor\/GPT-3-Encoder\/encoder.js'><\/script>");
+            document.write("<script type='text\/javascript' src='scripts\/main.js'><\/script>");
+            document.write("<script type='text\/javascript' src='scripts\/jwt.js'><\/script>");
+            document.write("<script type='text\/javascript' src='scripts\/zhipu_ai.js'><\/script>");
+            document.write("<script type='text\/javascript' src='scripts\/prompt.js'><\/script>");
+        } else {
+            document.write("<script type='text\/javascript' src='scripts\/code_ie.js'><\/script>");
+        }
+    </script>
 </head>
 
 <body>
-    <div class="chat-container">
-        <div class="message-history">
+<div class="chat-container">
+    <div class="chat-header">
+        <span id="chat-title">智谱 Copilot Chat</span>
+        <button class="clear-button" id="clear-button">
+            &#x1F5D1; <!-- Trash icon -->
+        </button>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="message-history" >
             <!-- Historical messages are displayed here -->
+            <div class="message ai-message">
+                <div class="avatar">
+                    <img src="resources/zhipu-avatar.png">
+<!--                    <div class="load-icon">&#x1F504;</div>-->
+                </div>
+                <div class="bubble">
+                    <div class="message-content" id="greeting"></div>
+                    <div class="actions">
+                        <button type="button" id="first-insert" title="insert document" onclick="" >&#x2398;</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="message-input-area">
-            <textarea type="text" class="message-input" placeholder="Type your message"></textarea>
-            <button class="send-button">
+        <div class="chat-footer">
+            <button class="stop-button" id="stop-button"><span>&#x25A0;</span>stop</button>
+            <button class="regenerate-button" id="regenerate-button"><span>&#x21BA;</span>regenerate</button>
+            <textarea id="userInput" placeholder="Type a message..."></textarea>
+            <button class="send-button" id="send-button">
                 <img src="resources/send.png" alt="Send" width="20px" height="20px">
             </button>
         </div>
-        <div class="typing-indicator" style="display: none;">
-            AI is thinking ...
-        </div>
     </div>
+</div>
 </body>
+
 
 </html>
