@@ -26,8 +26,9 @@ function onClickSettings() {
 
     if (!settingsWindow) {
         settingsWindow = new window.Asc.PluginWindow();
-        settingsWindow.attachEvent("requestActions", function() {
-            window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'responseActions', actionsList])
+        settingsWindow.attachEvent("init", function() {
+            window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'onGetAiModels', aiModelsList]);
+            window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'onGetActions', actionsList]);
         });
     }
     settingsWindow.show(variation);
@@ -77,5 +78,10 @@ function getActions() {
 }
 
 function getAiModels() {
-    
+    aiModelsList = [
+        {name: 'Chat GPT', aiModel: 'Chat GPT'},
+        {name: 'Yandex GPT', aiModel: 'Yandex GPT'},
+        {name: 'Ollama', aiModel: 'Ollama'},
+        {name: 'DeepSeek', aiModel: 'DeepSeek'}
+    ];
 }
