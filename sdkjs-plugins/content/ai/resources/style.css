@@ -1,0 +1,45 @@
+html, body {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    width:100%;
+    height:100%;
+}
+body {
+    padding: 15px;
+    background-color: #fff !important;
+}
+textarea {
+    resize: none;
+}
+
+#description {
+    font-weight: 700;
+    line-height: 16px;
+}
+
+#actions-list {
+    margin-top: 16px;
+}
+
+#actions-list .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+}
+
+#actions-list .item .label {
+    display: flex;
+    align-items: center;
+}
+
+#actions-list .item .label img{
+    margin-right: 10px;
+}
+
+#actions-list .item .ai-model {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-underline-offset: 4px;
+}
