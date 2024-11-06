@@ -38,8 +38,17 @@ textarea {
     margin-right: 10px;
 }
 
-#actions-list .item .ai-model {
-    cursor: pointer;
+
+/* #actions-list .select2-selection{
+    border: none !important;
+}
+
+#actions-list .select2-selection__rendered {
+    padding: 0 6px;
     text-decoration: underline dotted;
     text-underline-offset: 4px;
 }
+
+#actions-list .select2-selection__arrow {
+    display: none;
+} */
