@@ -23,6 +23,13 @@ window.Asc.plugin.button = function(id, windowId) {
 	}
 };
 
+window.Asc.plugin.onThemeChanged = function(theme) {
+	window.Asc.plugin.onThemeChangedBase(theme);
+    if(settingsWindow) {
+        window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'onThemeChanged', theme]);
+    }
+}
+
 function addActionButtons() {
     actionsList.forEach(function(action, index) {
         toolbarMenuMainItem["tabs"][0]["items"].push({ 
@@ -49,7 +56,6 @@ function onClickSettingButton() {
     let start = location.pathname.lastIndexOf('/') + 1;
     let file = location.pathname.substring(start);
 
-    // default settings for modal window (I created separate settings, because we have many unnecessary field in plugin variations)
     let variation = {
         url : location.href.replace(file, 'settings.html'),
         description : window.Asc.plugin.tr('Set up AI actions'),
@@ -57,7 +63,7 @@ function onClickSettingButton() {
         buttons : [],
         isModal : true,
         EditorsSupport : ["word", "slide", "cell"],
-        size : [375, 465]
+        size : [320, 330]
     };
 
     if (!settingsWindow) {
@@ -73,17 +79,17 @@ function onClickSettingButton() {
 // Method from SDK
 function getActions() {
     actionsList = [
-        {name: 'Ask AI', aiModel: 'Chat GPT', icon: 'ask-ai'},
-        {name: 'Summarization', aiModel: 'Chat GPT', icon: 'summarization'},
-        {name: 'Text to image', aiModel: 'Ollama', icon: 'text-to-image'},
-        {name: 'Translation', aiModel: 'Chat GPT', icon: 'translation'}
+        { id: 1, name: 'Ask AI', aiModel: 'Chat GPT', icon: 'ask-ai'},
+        { id: 2, name: 'Summarization', aiModel: 'Chat GPT', icon: 'summarization'},
+        { id: 3, name: 'Text to image', aiModel: 'Ollama', icon: 'text-to-image'},
+        { id: 4, name: 'Translation', aiModel: 'Chat GPT', icon: 'translation'}
     ];
 }
 function getAiModels() {
     aiModelsList = [
-        {name: 'Chat GPT', aiModel: 'Chat GPT'},
-        {name: 'Yandex GPT', aiModel: 'Yandex GPT'},
-        {name: 'Ollama', aiModel: 'Ollama'},
-        {name: 'DeepSeek', aiModel: 'DeepSeek'}
+        { id: 1, name: 'Chat GPT', aiModel: 'Chat GPT'},
+        { id: 2, name: 'Yandex GPT', aiModel: 'Yandex GPT'},
+        { id: 3, name: 'Ollama', aiModel: 'Ollama'},
+        { id: 4, name: 'DeepSeek', aiModel: 'DeepSeek'}
     ];
 }

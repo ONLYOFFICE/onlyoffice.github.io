@@ -1,5 +1,7 @@
+var themeType = 'light';
 var actionsList = [];
-let aiModelsList = [];
+var aiModelsList = [];
+
 
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
@@ -10,6 +12,27 @@ window.Asc.plugin.init = function() {
 	window.Asc.plugin.attachEvent("onGetAiModels", function(list) {
 		aiModelsList = list;
 	});
+	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+}
+window.Asc.plugin.onThemeChanged = onThemeChanged;
+
+function onThemeChanged(theme) {
+	window.Asc.plugin.onThemeChangedBase(theme);
+	themeType = theme.Type;
+	
+	var classes = document.body.className.split(' ');
+	classes.forEach(function(className) {
+		if (className.indexOf('theme-') != -1) {
+			document.body.classList.remove(className);
+		}
+	});
+	document.body.classList.add(theme.name);
+	document.body.classList.add('theme-type-' + theme.Type);
+	$('#actions-list img').each(function() {
+		var src = $(this).attr('src');
+		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + theme.Type + '$3');
+		$(this).attr('src', newSrc);
+	});
 }
 
 function renderActionsList() {
@@ -19,7 +42,7 @@ function renderActionsList() {
 		createdEl.classList.add('item');
 		createdEl.innerHTML =
 			'<div class="label">' +
-				'<img src="resources/icons/light/' + action.icon + '.png"/>' +
+				'<img src="resources/icons/' + themeType + '/' + action.icon + '.png"/>' +
 				'<div>' + action.name + '</div>' +
 			'</div>' +
 			'<select class="ai-model-select" class="" value="test"></select>';
@@ -29,7 +52,8 @@ function renderActionsList() {
 			data : aiModelsList.map(function(model) {
 				return {
 					id: model.aiModel,
-					text: model.name
+					text: model.name,
+					action: action.name
 				}
 			}),
 			minimumResultsForSearch: Infinity,
@@ -39,7 +63,7 @@ function renderActionsList() {
 		test.val(action.aiModel);
 		test.trigger('change');
 		test.on('select2:select', function (e) {
-			console.log(e);
+			console.log(e.params.data.action + ' > ' + e.params.data.id);
 		});
 	});
 }
