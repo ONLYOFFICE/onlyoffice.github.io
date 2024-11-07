@@ -2,7 +2,7 @@ var actionsList = [];
 let aiModelsList = [];
 
 window.Asc.plugin.init = function() {
-	window.Asc.plugin.sendToPlugin("init");
+	window.Asc.plugin.sendToPlugin("onInit");
 	window.Asc.plugin.attachEvent("onGetActions", function(list) {
 		actionsList = list;
 		renderActionsList();

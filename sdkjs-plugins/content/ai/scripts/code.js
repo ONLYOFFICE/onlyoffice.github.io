@@ -5,10 +5,46 @@ let aiModelsList = [];
 window.Asc.plugin.init = function() {
     getActions();
     getAiModels();
-    window.Asc.plugin.attachToolbarMenuClickEvent('ai-btn-settings', onClickSettings);
+    addActionButtons();
+    window.Asc.plugin.attachToolbarMenuClickEvent('ai-btn-settings', onClickSettingButton);
+    window.Asc.plugin.attachToolbarMenuClickEvent("ai-action-button", onClickActionButton);
 };
 
-function onClickSettings() {
+window.Asc.plugin.button = function(id, windowId) {
+	if (!settingsWindow)
+		return;
+
+	if (windowId) {
+		switch (id) {
+			case -1:
+			default:
+				window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
+		}
+	}
+};
+
+function addActionButtons() {
+    actionsList.forEach(function(action, index) {
+        toolbarMenuMainItem["tabs"][0]["items"].push({ 
+            id: "ai-action-button",
+            type: "big-button",
+            text: action.name,
+            hint: action.name,
+            icons: "resources/icons/%theme-type%(light|dark)/big/" + action.icon + "%scale%(default|*).png",
+            data: action.name,
+            lockInViewMode: true,
+            enableToggle: false,
+            separator: index == 0
+        });
+    });
+    Asc.plugin.executeMethod("AddToolbarMenuItem", [toolbarMenuMainItem]);
+};
+
+function onClickActionButton(action) {
+    console.log(action);
+}
+
+function onClickSettingButton() {
     let location  = window.location;
     let start = location.pathname.lastIndexOf('/') + 1;
     let file = location.pathname.substring(start);
@@ -26,30 +62,12 @@ function onClickSettings() {
 
     if (!settingsWindow) {
         settingsWindow = new window.Asc.PluginWindow();
-        settingsWindow.attachEvent("init", function() {
+        settingsWindow.attachEvent("onInit", function() {
             window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'onGetAiModels', aiModelsList]);
             window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'onGetActions', actionsList]);
         });
     }
     settingsWindow.show(variation);
-}
-
-window.Asc.plugin.button = function(id, windowId) {
-	if (!settingsWindow)
-		return;
-
-	if (windowId) {
-		switch (id) {
-			case -1:
-			default:
-				window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
-		}
-	}
-};
-
-function methodName() {
-    console.log('test');
-    return 'leha';
 }
 
 // Method from SDK
@@ -60,23 +78,7 @@ function getActions() {
         {name: 'Text to image', aiModel: 'Ollama', icon: 'text-to-image'},
         {name: 'Translation', aiModel: 'Chat GPT', icon: 'translation'}
     ];
-
-    actionsList.forEach(function(action, index) {
-        toolbarMenuMainItem["tabs"][0]["items"].push({ 
-            id: "ai-action-button",
-            type: "big-button",
-            text: action.name,
-            hint: action.name,
-            icons: "resources/icons/%theme-type%(light|dark)/big/" + action.icon + "%scale%(default|*).png",
-            data: null,
-            lockInViewMode: true,
-            enableToggle: false,
-            separator: index == 0
-        });
-    });
-    Asc.plugin.executeMethod("AddToolbarMenuItem", [toolbarMenuMainItem]);
 }
-
 function getAiModels() {
     aiModelsList = [
         {name: 'Chat GPT', aiModel: 'Chat GPT'},
