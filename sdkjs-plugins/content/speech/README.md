@@ -21,7 +21,7 @@ So to use new languages you need to add them to your system.
 
 * The plugin doesn't work on Safari 15.3 (17612.4.9.1.8). Problem fixed on Safari 15.4 (17614.1.7.7)
 
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/
 
   [1]: https://richtr.github.io/guessLanguage.js/
   [2]: https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis

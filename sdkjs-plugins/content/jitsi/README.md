@@ -15,7 +15,7 @@ The plugin is compatible with the [self-hosted](https://github.com/ONLYOFFICE/Do
 
 ## How to install
 
-Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/).
 
 ## Known issues
 
@@ -25,5 +25,5 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 To ask questions and share feedback, use Issues in this repository.
 
-If you need more information about how to use or write your own plugin, please visit our [API documentation](https://api.onlyoffice.com/plugin/basic).
+If you need more information about how to use or write your own plugin, please visit our [API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/).
 
