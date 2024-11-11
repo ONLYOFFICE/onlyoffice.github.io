@@ -18,28 +18,24 @@
     <head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>Settings</title>
+		<title>AI Models list</title>
 
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
-		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 		<link rel="stylesheet" href="./resources/styles/common.css">
-		<link rel="stylesheet" href="./resources/styles/settings.css">
+		<link rel="stylesheet" href="./resources/styles/aiModelsList.css">
     </head>
     <body class="noselect">
-		<div>
-			<label id="description">Here, you can set up plugins to get started with AI and create or customize your own AI plugins</label>
-			<div id="actions-list">
-				<!-- Dynamic render items -->
-			</div>
+		<div id="ai-models-list">
+			<!-- Dynamic render items -->
 		</div>
-		<div id="edit-ai-models">
-			<label>Edit AI models</label>
+		<div id="buttons-block">
+			<button id="add-btn" class="btn-text-default">Add</button>
+			<button id="edit-btn" class="btn-text-default">Edit</button>
+			<button id="delete-btn" class="btn-text-default">Delete</button>
 		</div>
-		<script type="text/javascript" src="scripts/settings.js"></script>
+		<script type="text/javascript" src="scripts/aiModelsList.js"></script>
     </body>
 </html>
