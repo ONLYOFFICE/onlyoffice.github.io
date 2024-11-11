@@ -44,7 +44,7 @@
     oParagraph.SetSpacingAfter(0);
     oParagraph.SetFontFamily("Consolas");
     oDocument.Push(oParagraph);
-    var oDrawing =Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/api-word.jpg", 22 * 36000, 35 * 36000);
+    var oDrawing =Api.CreateImage("https://legacy-api.onlyoffice.com/content/img/docbuilder/examples/api-word.jpg", 22 * 36000, 35 * 36000);
     oDrawing.SetWrappingStyle("behind");
     oDrawing.SetHorPosition("leftMargin", 6000000);
     oDrawing.SetVerPosition("topMargin", 200000);
