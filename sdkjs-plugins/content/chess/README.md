@@ -8,4 +8,4 @@ It is called Chess in the interface and isn't installed by default in cloud, [se
 
 1. Open the Plugins tab and press Chess.
 
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/
