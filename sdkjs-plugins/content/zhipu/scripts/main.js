@@ -371,7 +371,7 @@
     //             oParagraph.SetJc(js)
     //         }
     //
-    //         var image_url = "https://api.onlyoffice.com/content/img/docbuilder/examples/presentation_gun.png";
+    //         var image_url = "https://legacy-api.onlyoffice.com/content/img/docbuilder/examples/presentation_gun.png";
     //         var oSlide = createSlide(oPresentation, image_url);
     //         oPresentation.GetSlideByIndex(0).Delete();
     //
@@ -386,7 +386,7 @@
     //
     //         oSlide = Api.CreateSlide();
     //         oPresentation.AddSlide(oSlide);
-    //         var oFill = Api.CreateBlipFill('https://api.onlyoffice.com/content/img/docbuilder/examples/presentation_axe.png', 'stretch');
+    //         var oFill = Api.CreateBlipFill('https://legacy-api.onlyoffice.com/content/img/docbuilder/examples/presentation_axe.png', 'stretch');
     //         oSlide.SetBackground(oFill);
     //         oSlide.RemoveAllObjects();
     //
@@ -408,7 +408,7 @@
     //
     //         oSlide = Api.CreateSlide();
     //         oPresentation.AddSlide(oSlide);
-    //         oFill = Api.CreateBlipFill('https://api.onlyoffice.com/content/img/docbuilder/examples/presentation_knight.png', 'stretch');
+    //         oFill = Api.CreateBlipFill('https://legacy-api.onlyoffice.com/content/img/docbuilder/examples/presentation_knight.png', 'stretch');
     //         oSlide.SetBackground(oFill);
     //         oSlide.RemoveAllObjects();
     //
@@ -430,7 +430,7 @@
     //
     //         oSlide = Api.CreateSlide();
     //         oPresentation.AddSlide(oSlide);
-    //         oFill = Api.CreateBlipFill('https://api.onlyoffice.com/content/img/docbuilder/examples/presentation_sky.png', 'stretch');
+    //         oFill = Api.CreateBlipFill('https://legacy-api.onlyoffice.com/content/img/docbuilder/examples/presentation_sky.png', 'stretch');
     //         oSlide.SetBackground(oFill);
     //         oSlide.RemoveAllObjects();
     //

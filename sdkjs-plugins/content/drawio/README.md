@@ -16,10 +16,10 @@ The plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/Docume
 
 ## How to install
 
-Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/).
 
 ## User feedback and support
 
 To ask questions and share feedback, use Issues in this repository or visit [our forum](https://forum.onlyoffice.com/c/plugins/38).
 
-If you need more information about how to use or build your own plugin, please visit our [API documentation](https://api.onlyoffice.com/plugin/basic).
+If you need more information about how to use or build your own plugin, please visit our [API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/).
