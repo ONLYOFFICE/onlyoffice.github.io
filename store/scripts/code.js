@@ -1607,7 +1607,7 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 				filterByCategory(document.getElementById('select_categories').value);
 			}
 		}
-		elements.linkNewPlugin.href = bAll ? (OOIO + "pulls") : "https://api.onlyoffice.com/plugin/installation";
+		elements.linkNewPlugin.href = bAll ? (OOIO + "pulls") : "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/";
 
 		if (isLocal && !bAll) {
 			elements.linkNewPlugin.href = "#";
