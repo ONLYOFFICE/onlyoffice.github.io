@@ -6,7 +6,7 @@
 
 ## 参考资料
 
-* ONLYOFFICE插件配置：https://api.onlyoffice.com/plugin/config#descriptionLocale
+* ONLYOFFICE插件配置：https://api.onlyoffice.com/docs/plugin-and-macros/structure/manifest/#variationsdescriptionlocale
 * opencv.js：https://docs.opencv.org/4.x/d5/d10/tutorial_js_root.html
 * konva.js：https://konvajs.org/
 * onnxruntime web：https://onnxruntime.ai/docs/api/js/index.html
