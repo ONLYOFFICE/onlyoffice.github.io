@@ -2,17 +2,21 @@ var themeType = 'light';
 var actionsList = [];
 var aiModelsList = [];
 
-
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
 	window.Asc.plugin.attachEvent("onGetActions", function(list) {
 		actionsList = list;
 		renderActionsList();
 	});
-	window.Asc.plugin.attachEvent("onGetAiModels", function(list) {
+	window.Asc.plugin.attachEvent("onResetAiModels", function(list) {
 		aiModelsList = list;
+		updatedComboBoxes();
 	});
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+
+	$('#edit-ai-models label').click(function(e) {
+		window.Asc.plugin.sendToPlugin("onOpenAiModelsModal");
+	});
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
@@ -37,6 +41,7 @@ function onThemeChanged(theme) {
 
 function renderActionsList() {
 	var actionsListEl = document.getElementById('actions-list');
+	actionsListEl.innerHTML = '';
 	actionsList.forEach(function(action) {
 		var createdEl = document.createElement('div');
 		createdEl.classList.add('item');
@@ -45,25 +50,37 @@ function renderActionsList() {
 				'<img src="resources/icons/' + themeType + '/' + action.icon + '.png"/>' +
 				'<div>' + action.name + '</div>' +
 			'</div>' +
-			'<select class="ai-model-select" class="" value="test"></select>';
+			'<select class="ai-model-select" class=""></select>';
 		actionsListEl.appendChild(createdEl);
-		const test = $(createdEl).find('.ai-model-select')
-		test.select2({
+		var selectEl = $(createdEl).find('.ai-model-select');
+		selectEl.on('select2:select', function (e) {
+			window.Asc.plugin.sendToPlugin("onChangeAction", { 
+				actionId: e.params.data.actionId,
+				aiModelId: e.params.data.id 
+			});
+		});
+	});
+}
+
+function updatedComboBoxes() {
+	$('#actions-list .item .ai-model-select').each(function(index) {
+		var selectEl = $(this);
+		var action = actionsList[index];
+		selectEl.select2().empty();
+		selectEl.select2({
 			data : aiModelsList.map(function(model) {
 				return {
-					id: model.aiModel,
+					id: model.id,
 					text: model.name,
-					action: action.name
+					actionId: action.id
 				}
 			}),
 			minimumResultsForSearch: Infinity,
 			dropdownAutoWidth: true,
 			width : 95
 		});
-		test.val(action.aiModel);
-		test.trigger('change');
-		test.on('select2:select', function (e) {
-			console.log(e.params.data.action + ' > ' + e.params.data.id);
-		});
+		// TODO: Если активной модели больше нету в списке, ставить null и тригерить событие на изменение модели
+		selectEl.val(action.aiModelId);
+		selectEl.trigger('change');
 	});
 }

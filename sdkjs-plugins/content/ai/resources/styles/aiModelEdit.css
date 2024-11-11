@@ -1,0 +1,15 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+}
+.form-row label{
+    margin-bottom: 4px;
+}
+.form-row input{
+    margin-bottom: 12px;
+}
