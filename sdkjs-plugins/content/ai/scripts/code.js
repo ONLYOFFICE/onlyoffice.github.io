@@ -9,7 +9,7 @@ window.Asc.plugin.init = function() {
     getActions();
     getAiModels();
     addActionButtons();
-    window.Asc.plugin.attachToolbarMenuClickEvent('ai-btn-settings', onClickSettingButton);
+    window.Asc.plugin.attachToolbarMenuClickEvent('ai-btn-settings', onOpenSettingsModal);
     window.Asc.plugin.attachToolbarMenuClickEvent("ai-action-button", onClickActionButton);
 };
 
@@ -22,6 +22,7 @@ window.Asc.plugin.button = function(id, windowId) {
         window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
     } else if(windowId == aiModelsListWindow.id) {
         window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
+        onOpenSettingsModal();
     } else if(windowId == aiModelEditWindow.id) {
         if(id == 0) {
             window.Asc.plugin.executeMethod('SendToWindow', [windowId, 'onSubmit']); 
@@ -69,7 +70,7 @@ function onClickActionButton(actionId) {
     console.log(findedAction);
 }
 
-function onClickSettingButton() {
+function onOpenSettingsModal() {
     let location  = window.location;
     let start = location.pathname.lastIndexOf('/') + 1;
     let file = location.pathname.substring(start);
@@ -109,6 +110,10 @@ function onChangeAction(data) {
 }
 
 function onOpenAiModelsModal() {
+    if(settingsWindow) {
+        window.Asc.plugin.executeMethod('CloseWindow', [settingsWindow.id]);
+    }
+
     let location  = window.location;
     let start = location.pathname.lastIndexOf('/') + 1;
     let file = location.pathname.substring(start);
