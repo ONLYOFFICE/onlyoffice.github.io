@@ -22,23 +22,50 @@
 
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 		<link rel="stylesheet" href="./resources/styles/common.css">
 		<link rel="stylesheet" href="./resources/styles/aiModelEdit.css">
     </head>
     <body class="noselect">
-		<div class="form-row">
-			<label>Name</label>
-			<input id="name-input" type="text" class="form-control">
+		<div class="section">
+			<div class="form-vertical-item">
+				<div class="section-label">
+					<label>Name</label>
+				</div>
+				<input id="name-input" type="text" class="form-control">
+			</div>
 		</div>
-		<div class="form-row">
-			<label>URL</label>
-			<input id="url-input" type="text" class="form-control">
+
+		<div class="section">
+			<div class="section-label">
+				<label>Provider</label>
+			</div>
+			<div class="form-horizontal-item">
+				<label>Name</label>
+				<select id="provider-name-cmb" class="form-control">
+			</div>
+			<div class="form-horizontal-item">
+				<label>URL</label>
+				<input id="provider-url-input" type="text" class="form-control">
+			</div>
+			<div class="form-horizontal-item">
+				<label>Key</label>
+				<input id="provider-key-input" type="text" class="form-control">
+			</div>
 		</div>
-		<div class="form-row">
-			<label>Token</label>
-			<input id="token-input" type="text" class="form-control">
+
+		<div class="section">
+			<div class="form-vertical-item">
+				<div class="section-label">
+					<label>Model</label>
+					<button id="update-models-btn" class="action-btn">Update models list</button>
+				</div>
+				<select id="model-name-cmb" type="text" class="form-control">
+			</div>
 		</div>
 		<script type="text/javascript" src="scripts/aiModelEdit.js"></script>
     </body>
