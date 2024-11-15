@@ -62,7 +62,7 @@ function onGetOptions(options) {
 }
 
 function onSubmit() {
-	var isCustomProvider = !providerModelsList.some(function(provider) { return provider.id == providerNameCmbEl.value });
+	var isCustomProvider = !providersList.some(function(provider) { return provider.id == providerNameCmbEl.value });
 	
 	if(isCustomProvider) {
 		window.Asc.plugin.sendToPlugin("onAddProvider", {
