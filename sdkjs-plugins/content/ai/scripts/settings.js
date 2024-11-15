@@ -77,7 +77,7 @@ function updatedComboBoxes() {
 			}),
 			minimumResultsForSearch: Infinity,
 			dropdownAutoWidth: true,
-			width : 95
+			width : 150
 		});
 		// TODO: Если активной модели больше нету в списке, ставить null и тригерить событие на изменение модели
 		selectEl.val(action.aiModelId);

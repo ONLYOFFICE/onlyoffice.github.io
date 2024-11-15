@@ -3,10 +3,12 @@ let aiModelsListWindow = null;
 let aiModelEditWindow = null;
 
 let actionsList = [];
+let providersList = [];
 let aiModelsList = [];
 
 window.Asc.plugin.init = function() {
     getActions();
+    getProviders();
     getAiModels();
     addActionButtons();
     window.Asc.plugin.attachToolbarMenuClickEvent('ai-btn-settings', onOpenSettingsModal);
@@ -153,16 +155,18 @@ function onOpenEditModal(data) {
         ],
         isModal : true,
         EditorsSupport : ["word", "slide", "cell"],
-        size : [320, 180]
+        size : [320, 280]
     };
 
     if (!aiModelEditWindow) {
         aiModelEditWindow = new window.Asc.PluginWindow();
         aiModelEditWindow.attachEvent("onAddAiModel", onAddAiModel);
         aiModelEditWindow.attachEvent("onEditAiModel", onEditAiModel);
+        aiModelEditWindow.attachEvent("onAddProvider", onAddProvider);
     }
     aiModelEditWindow.attachEvent("onInit", function() {
-        window.Asc.plugin.executeMethod('SendToWindow', [aiModelEditWindow.id, 'onSetOptions', {
+        window.Asc.plugin.executeMethod('SendToWindow', [aiModelEditWindow.id, 'onGetProviders', providersList]);
+        window.Asc.plugin.executeMethod('SendToWindow', [aiModelEditWindow.id, 'onGetOptions', {
             type: data.type,
             aiModel: data.aiModel || null
         }]);     
@@ -183,8 +187,9 @@ function onAddAiModel(data) {
     var addedModel = {
         id: createGuid(),
         name: data.name,
-        url: data.url,
-        token: data.token
+        provider: data.provider,
+        key: data.key,
+        model: data.model
     };
     aiModelsList.push(addedModel);
     window.Asc.plugin.executeMethod('SendToWindow', [settingsWindow.id, 'onResetAiModels', aiModelsList]);
@@ -213,6 +218,17 @@ function onEditAiModel(aiModel) {
     console.log(aiModel);
 }
 
+function onAddProvider(provider) {
+    var addedProvider = {
+        id: provider.name,
+        name: provider.name,
+        url: provider.url
+    };
+    providersList.push(addedProvider);
+    console.log('Add Provider:');
+    console.log(addedProvider);
+}
+
 function createGuid(a,b) {
     for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');
     return b
@@ -228,11 +244,19 @@ function getActions() {
         { id: '20186033ce444321b3603afd6c0aae91', name: 'Translation', aiModelId: '0e9c01f4901c42a4857fe721a10d2a3a', icon: 'translation'}
     ];
 }
+function getProviders() {
+    providersList = [
+        { id: '1e4b4bc60ee841d982877a00028b4196', name: 'Chat GPT', url: 'https://chatgpt.com'},
+        { id: '2fba24f503ee4097a82271763cf22a2a', name: 'Yandex GPT', url: 'https://ya.ru/ai/gpt-3'},
+        { id: '8bd7e5903807436290bf3273126b5df1', name: 'Ollama', url: 'https://ollama.com'},
+        { id: '264033a11758423d94a536ec1bf85156', name: 'DeepSeek', url: 'https://www.deepseek.com'}
+    ];
+}
 function getAiModels() {
     aiModelsList = [
-        { id: 'e41183e0b42547d4810b60ad0138bfaf', name: 'Chat GPT', url: 'https://chatgpt.com', token: 'token-for-chatgpt'},
-        { id: '0bb492078d9e4eb2b1b99d349bb6d6b7', name: 'Yandex GPT', url: 'https://ya.ru/ai/gpt-3', token: 'token-for-yandexpgt'},
-        { id: '826043bb87584e5194b2aac7436cd387', name: 'Ollama', url: 'https://ollama.com', token: 'token-for-ollama'},
-        { id: '0e9c01f4901c42a4857fe721a10d2a3a', name: 'DeepSeek', url: 'https://www.deepseek.com', token: 'token-for-deepseek'}
+        { id: 'e41183e0b42547d4810b60ad0138bfaf', name: 'Chat GPT', provider: '1e4b4bc60ee841d982877a00028b4196', model: 'gpt-3.5-turbo', key: 'key-for-chatgpt'},
+        { id: '0bb492078d9e4eb2b1b99d349bb6d6b7', name: 'Yandex GPT', provider: '2fba24f503ee4097a82271763cf22a2a', model: 'gpt 2', key: 'key-for-yandexpgt'},
+        { id: '826043bb87584e5194b2aac7436cd387', name: 'Ollama', provider: '8bd7e5903807436290bf3273126b5df1', model: 'Gemma 2', key: 'key-for-ollama'},
+        { id: '0e9c01f4901c42a4857fe721a10d2a3a', name: 'DeepSeek', provider: '264033a11758423d94a536ec1bf85156', model: 'Coder-V2', key: 'key-for-deepseek'}
     ];
 }
