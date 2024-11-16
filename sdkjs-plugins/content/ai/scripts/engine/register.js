@@ -166,14 +166,14 @@
         button1.addCheckers("Selection");
 
         let button2 = new Asc.ButtonContextMenu(button1);
-        button2.text = "Transate to English";
+        button2.text = "Translate to English";
         button2.editors = ["word"];
         button2.addCheckers("Selection");
         button2.data = "English";
         button2.attachOnClick(async function(data){
             let lang = data;
             let content = await Asc.Library.GetSelectedText();
-            let result = await AI.getActionEngine(AI.ActionType.Transtation).chatRequest(`Translate to ${lang}: ${content}`);
+            let result = await AI.getActionEngine(AI.ActionType.Translation).chatRequest(`Translate to ${lang}: ${content}`);
             if (!result) return;
             await Asc.Library.PasteText(result);
         });
@@ -363,7 +363,7 @@
         button4.attachOnClick(async function(){
             let lang = "english";
             let content = await Asc.Library.GetSelectedText();
-            let result = await AI.getActionEngine(AI.ActionType.Transtation).chatRequest(`Translate to ${lang}: ${content}`);
+            let result = await AI.getActionEngine(AI.ActionType.Translation).chatRequest(`Translate to ${lang}: ${content}`);
             if (!result) return;
             await Asc.Library.PasteText(result);
         });
@@ -377,7 +377,7 @@
         Chat             : "Chat",
         Summarization    : "Summarization",
         //Text2Image       : "Text2Image",
-        Transtation      : "Transtation",
+        Translation      : "Translation",
         TextAnalyze      : "TextAnalyze"
     };
 
@@ -386,7 +386,7 @@
     AI.Actions[AI.ActionType.Chat]           = { name : "Ask AI",        icon : "ask-ai",        model : "ChatGPT [gpt-3.5-turbo]" };
     AI.Actions[AI.ActionType.Summarization]  = { name : "Summarization", icon : "summarization", model : "" };
     //AI.Actions[AI.ActionType.Text2Image]     = { name : "Text to image", icon : "text-to-image", model : "" };
-    AI.Actions[AI.ActionType.Transtation]    = { name : "Translation",   icon : "translation",   model : "" };
+    AI.Actions[AI.ActionType.Translation]    = { name : "Translation",   icon : "translation",   model : "" };
     AI.Actions[AI.ActionType.TextAnalyze]    = { name : "Text analysis",   icon : "",   model : "" };
 
     AI.getActionEngine = function(type)
@@ -400,7 +400,7 @@
             AI.ActionType.Chat,
             AI.ActionType.Summarization,
             //AI.ActionType.Text2Image,
-            AI.ActionType.Transtation,
+            AI.ActionType.Translation,
             AI.ActionType.TextAnalyze
         ];
     };
