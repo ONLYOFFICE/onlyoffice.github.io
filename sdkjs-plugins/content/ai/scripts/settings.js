@@ -22,7 +22,7 @@ window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
-	themeType = theme.Type;
+	themeType = theme.type;
 	
 	var classes = document.body.className.split(' ');
 	classes.forEach(function(className) {
@@ -31,10 +31,10 @@ function onThemeChanged(theme) {
 		}
 	});
 	document.body.classList.add(theme.name);
-	document.body.classList.add('theme-type-' + theme.Type);
+	document.body.classList.add('theme-type-' + theme.type);
 	$('#actions-list img').each(function() {
 		var src = $(this).attr('src');
-		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + theme.Type + '$3');
+		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + theme.type + '$3');
 		$(this).attr('src', newSrc);
 	});
 }
