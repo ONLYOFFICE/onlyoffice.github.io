@@ -136,6 +136,9 @@
         if (this.separator)
             item.separator = true;
 
+        if (this.data)
+            item.data = this.data;
+
         if (this.lockInViewMode)
             item.lockInViewMode = true;
 
@@ -185,6 +188,7 @@
         ret.lockInViewMode = this.lockInViewMode;
         ret.enableToggle = this.enableToggle;
         ret.disabled = this.disabled;
+        ret.showOnOptionsType = this.showOnOptionsType.slice();
 
         return ret;
     };
@@ -205,6 +209,10 @@
     ButtonContextMenu.prototype.onContextMenuShowAnalyze = function(options, parent)
     {        
         return false;
+    };
+
+    ButtonContextMenu.prototype.onContextMenuShowExtendItem = function(options, item)
+    {        
     };
 
     ButtonContextMenu.prototype.onContextMenuShow = function(options, parent) 
@@ -232,7 +240,8 @@
                 if (!parent.items)
                     parent.items = [];
 
-                let curItem = this.toItem();               
+                let curItem = this.toItem();   
+                this.onContextMenuShowExtendItem(options, curItem);                           
                 
                 if (this.childs)
                 {

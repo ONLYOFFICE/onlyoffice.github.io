@@ -69,7 +69,8 @@ function onModelInfo(info) {
 
 		aiModel = {
 			name : info.model.name,
-			provider : info.model.provider
+			nameOrigin : info.model.nameOrigin,
+			provider : info.model.provider			
 		};
 
 		if (info.providers[aiModel.provider])
@@ -81,7 +82,7 @@ function onModelInfo(info) {
 		nameInputEl.value = aiModel.name;
 
 		$(providerNameCmbEl).val(aiModel.provider);
-
+		
 		providerKeyInputEl.value = aiModel.key;
 	}
 	updateProviderComboBox(!!aiModel);
@@ -94,12 +95,14 @@ function onSubmit() {
 			url : providerUrlInputEl.value,
 			key : providerKeyInputEl.value
 		},
-		name : nameInputEl.value
+		name : nameInputEl.value,
+		nameOrigin : modelNameCmbEl.value
 	};
 
 	if (!model.provider.name ||
 		!model.provider.url ||
-		!model.name)
+		!model.name ||
+		!model.nameOrigin)
 		return;
 
 	window.Asc.plugin.sendToPlugin("onChangeModel", model);
@@ -206,7 +209,7 @@ function updateModelComboBox() {
 	cmbEl.on('select2:select', onChangeModelComboBox);
 
 	if(isModelCmbInit && aiModel) {
-		cmbEl.val(aiModel.model);
+		cmbEl.val(aiModel.nameOrigin);
 	} else {
 		cmbEl.val(providerModelsList[0] ? providerModelsList[0].name : null);
 	}
