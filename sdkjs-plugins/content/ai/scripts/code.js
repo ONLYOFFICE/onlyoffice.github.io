@@ -2,12 +2,21 @@ let settingsWindow = null;
 let aiModelsListWindow = null; 
 let aiModelEditWindow = null;
 
+let initCounter = 0;
+function initWithTranslate() {
+    initCounter++;
+    if (2 === initCounter) {
+        Asc.Buttons.registerContextMenu();
+        Asc.Buttons.registerToolbarMenu();    
+    }
+}
+
 window.Asc.plugin.init = function() {
+    initWithTranslate();
 };
 
 window.Asc.plugin.onTranslate = function() {
-    Asc.Buttons.registerContextMenu();
-    Asc.Buttons.registerToolbarMenu();
+    initWithTranslate();
 };
 
 window.Asc.plugin.button = function(id, windowId) {
