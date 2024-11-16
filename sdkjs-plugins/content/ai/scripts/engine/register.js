@@ -383,7 +383,7 @@
 
     AI.Actions = {};
 
-    AI.Actions[AI.ActionType.Chat]           = { name : "Ask AI",        icon : "ask-ai",        model : "ChatGPT [gpt-3.5-turbo]" };
+    AI.Actions[AI.ActionType.Chat]           = { name : "Ask AI",        icon : "ask-ai",        model : "" };
     AI.Actions[AI.ActionType.Summarization]  = { name : "Summarization", icon : "summarization", model : "" };
     //AI.Actions[AI.ActionType.Text2Image]     = { name : "Text to image", icon : "text-to-image", model : "" };
     AI.Actions[AI.ActionType.Translation]    = { name : "Translation",   icon : "translation",   model : "" };
