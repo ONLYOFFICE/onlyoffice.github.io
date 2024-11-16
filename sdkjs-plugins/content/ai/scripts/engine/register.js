@@ -4,14 +4,40 @@
     let buttonMain = new Asc.ButtonContextMenu();
     buttonMain.text = "AI";
     buttonMain.addCheckers("All");
+
+    function chatWindowShow()
+    {
+        let variation = {
+            url : "chat.html",
+            description : window.Asc.plugin.tr("AI"),
+            isVisual : true,
+            buttons : [],
+            isModal : false,
+            EditorsSupport : ["word", "cell", "slide"],
+            size : [ 400, 400 ]
+        };
+
+        var chatWindow = new window.Asc.PluginWindow();
+        chatWindow.attachEvent("onChatMessage", async function(message) {
+            let result = await AI.getActionEngine(AI.ActionType.Chat).chatRequest(message);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            chatWindow.command("onChatReply", result);
+        });
+        chatWindow.show(variation);
+    }
     
     if (true)
     {
         let button1 = new Asc.ButtonContextMenu(buttonMain);
         button1.text = "Explain text in comment";
         button1.addCheckers("Target");
-        button1.attachOnClick(function(data){
-            console.log(data);
+        button1.attachOnClick(async function(){
+            let content = await Asc.Library.GetCurrentWord();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`What does it mean "${content}"?`);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            await Asc.Library.InsertAsComment(result);
         });
     }
 
@@ -21,32 +47,50 @@
         button1.text = "Fix spelling & grammar";
         button1.editors = ["word"];
         button1.addCheckers("Selection");
-        button1.attachOnClick(function(data){
-            console.log(data);
+        button1.attachOnClick(async function(){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Сorrect the errors in this text: ${content}`);
+            if (!result) return;
+            if (result !== 'The text is correct, there are no errors in it.')
+               await Asc.Library.ReplaceTextSmart(result);
+            else
+                console.log('The text is correct, there are no errors in it.');
         });
 
         let button2 = new Asc.ButtonContextMenu(buttonMain);
         button2.text = "Rewrite differently";
         button2.editors = ["word"];
         button2.addCheckers("Selection");
-        button2.attachOnClick(function(data){
-            console.log(data);
+        button2.attachOnClick(async function(){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Rewrite differently and give result on the same language: ${content}`);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            await Asc.Library.PasteText(result);
         });
 
         let button3 = new Asc.ButtonContextMenu(buttonMain);
         button3.text = "Make longer";
         button3.editors = ["word"];
         button3.addCheckers("Selection");
-        button3.attachOnClick(function(data){
-            console.log(data);
+        button3.attachOnClick(async function(data){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Make this text longer and give result on the same language: ${content}`);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            await Asc.Library.PasteText(result);
         });
 
         let button4 = new Asc.ButtonContextMenu(buttonMain);
         button4.text = "Make shorter";
         button4.editors = ["word"];
         button4.addCheckers("Selection");
-        button4.attachOnClick(function(data){
-            console.log(data);
+        button4.attachOnClick(async function(data){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Make this text simpler and give result on the same language: ${content}`);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            await Asc.Library.PasteText(result);
         });
     }
 
@@ -61,16 +105,23 @@
         button2.text = "Summarize";
         button2.editors = ["word"];
         button2.addCheckers("Selection");
-        button2.attachOnClick(function(data){
-            console.log(data);
+        button2.attachOnClick(async function(data){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.Summarization).chatRequest(`Summarize this text: "${content}"`);
+            if (!result) return;
+            result = "Summarize selected text:\n\n" + result;
+            await Asc.Library.InsertAsText(result);
         });
 
         let button3 = new Asc.ButtonContextMenu(button1);
         button3.text = "Keywords";
         button3.editors = ["word"];
         button3.addCheckers("Selection");
-        button3.attachOnClick(function(data){
-            console.log(data);
+        button3.attachOnClick(async function(){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Get Key words from this text: "${content}"`);
+            if (!result) return;
+            await Asc.Library.InsertAsText(result);
         });
     }
 
@@ -86,16 +137,24 @@
         button2.text = "Explain text in comment";
         button2.editors = ["word"];
         button2.addCheckers("Selection");
-        button2.attachOnClick(function(data){
-            console.log(data);
+        button2.attachOnClick(async function(){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`What does it mean "${content}"?`);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            await Asc.Library.InsertAsComment(result);
         });
 
         let button3 = new Asc.ButtonContextMenu(button1);
         button3.text = "Explain text in hyperlink";
         button3.editors = ["word"];
         button3.addCheckers("Selection");
-        button3.attachOnClick(function(data){
-            console.log(data);
+        button3.attachOnClick(async function(){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Give a link to the explanation of the word "${content}"`);
+            if (!result) return;
+            result = result.replace(/\n\n/g, '\n');
+            await Asc.Library.InsertAsHyperlink(result);
         });
     }
 
@@ -111,8 +170,12 @@
         button2.editors = ["word"];
         button2.addCheckers("Selection");
         button2.data = "English";
-        button2.attachOnClick(function(data){
-            console.log(data);
+        button2.attachOnClick(async function(data){
+            let lang = data;
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.Transtation).chatRequest(`Translate to ${lang}: ${content}`);
+            if (!result) return;
+            await Asc.Library.PasteText(result);
         });
 
         let button3 = button2.copy();
@@ -148,8 +211,9 @@
         button10.data = "Italian";
     }
 
-    if (true)
+    if (false)
     {
+        // TODO:
         let button1 = new Asc.ButtonContextMenu(buttonMain);
         button1.text = "Generate image from text";
         button1.editors = ["word"];
@@ -173,8 +237,9 @@
         button4.data = "1024";        
     }
 
-    if (true)
+    if (false)
     {
+        // TODO:
         let button1 = new Asc.ButtonContextMenu(buttonMain);
         button1.text = "Generate image variation";
         button1.addCheckers("Shape", "Image");
@@ -187,9 +252,34 @@
     {
         let button1 = new Asc.ButtonContextMenu(buttonMain);
         button1.text = "Show hyperlink content";
-        button1.addCheckers("Hyperlink");
+        button1.addCheckers("Hyperlink", "Selection");
+
+        button1.onContextMenuShowExtendItem = function(options, item)
+        {
+            item.data = options.value;
+        };
+
         button1.attachOnClick(function(data){
-            console.log(data);
+            let variation = {
+                url : "hyperlink.html",
+                description : window.Asc.plugin.tr("Hyperlink"),
+                isVisual : true,
+                buttons : [],
+                isModal : false,
+                EditorsSupport : ["word", "cell", "slide"],
+                size : [ 1000, 1000 ]
+            };
+
+            var linkWindow = new window.Asc.PluginWindow();
+            linkWindow.attachEvent("onGetLink", async function(){
+                let link = data;
+                if (!link)
+                    link = await Asc.Library.GetSelectedText();
+                link = link.replace(/\n/g, '');
+                link = link.replace(/\r/g, '');
+                linkWindow.command("onSetLink", link);
+            });
+            linkWindow.show(variation);
         });
     }
 
@@ -199,15 +289,8 @@
         button1.text = "Chat";
         button1.separator = true;
         button1.addCheckers("All");
-        button1.attachOnClick(function(data){
-            console.log(data);
-        });
-
-        let button2 = new Asc.ButtonContextMenu(buttonMain);
-        button2.text = "Custom request";
-        button2.addCheckers("All");
-        button2.attachOnClick(function(data){
-            console.log(data);
+        button1.attachOnClick(function(){
+            chatWindowShow();
         });
     }
 
@@ -217,8 +300,8 @@
         button1.text = "Settings";
         button1.separator = true;
         button1.addCheckers("All");
-        button1.attachOnClick(function(data){
-            console.log(data);
+        button1.attachOnClick(function(){
+            onOpenSettingsModal();
         });
     }
 
@@ -247,28 +330,42 @@
         button1.text = "Ask AI";
         button1.icons = getToolBarButtonIcons("ask-ai");
         button1.attachOnClick(function(data){
-            console.log(data);
+            chatWindowShow();
         });
 
         let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
         button2.text = "Summarization";
         button2.icons = getToolBarButtonIcons("summarization");
-        button2.attachOnClick(function(data){
-            console.log(data);
+        button2.attachOnClick(async function(data){
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.Summarization).chatRequest(`Summarize this text: "${content}"`);
+            result = "Summarize selected text:\n\n" + result;
+            if (!result) return;
+            if (Asc.plugin.info.editorType === "word")
+                await Asc.Library.InsertAsText(result);
+            else
+                await Asc.Library.PasteText(result);
         });
 
+        /*
+        // TODO:
         let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
         button3.text = "Text to image";
         button3.icons = getToolBarButtonIcons("text-to-image");
         button3.attachOnClick(function(data){
             console.log(data);
         });
+        */
 
         let button4 = new Asc.ButtonToolbar(buttonMainToolbar);
         button4.text = "Translation";
         button4.icons = getToolBarButtonIcons("translation");
-        button4.attachOnClick(function(data){
-            console.log(data);
+        button4.attachOnClick(async function(){
+            let lang = "english";
+            let content = await Asc.Library.GetSelectedText();
+            let result = await AI.getActionEngine(AI.ActionType.Transtation).chatRequest(`Translate to ${lang}: ${content}`);
+            if (!result) return;
+            await Asc.Library.PasteText(result);
         });
     }
 
@@ -279,24 +376,32 @@
     AI.ActionType = {
         Chat             : "Chat",
         Summarization    : "Summarization",
-        Text2Image       : "Text2Image",
-        Transtation      : "Transtation"
+        //Text2Image       : "Text2Image",
+        Transtation      : "Transtation",
+        TextAnalyze      : "TextAnalyze"
     };
 
     AI.Actions = {};
 
     AI.Actions[AI.ActionType.Chat]           = { name : "Ask AI",        icon : "ask-ai",        model : "ChatGPT [gpt-3.5-turbo]" };
     AI.Actions[AI.ActionType.Summarization]  = { name : "Summarization", icon : "summarization", model : "" };
-    AI.Actions[AI.ActionType.Text2Image]     = { name : "Text to image", icon : "text-to-image", model : "" };
+    //AI.Actions[AI.ActionType.Text2Image]     = { name : "Text to image", icon : "text-to-image", model : "" };
     AI.Actions[AI.ActionType.Transtation]    = { name : "Translation",   icon : "translation",   model : "" };
+    AI.Actions[AI.ActionType.TextAnalyze]    = { name : "Text analysis",   icon : "",   model : "" };
+
+    AI.getActionEngine = function(type)
+    {
+        return AI.getRequestModel(AI.Actions[type].model);
+    };
 
     AI.ActionsGetKeys = function()
     {
         return [
             AI.ActionType.Chat,
             AI.ActionType.Summarization,
-            AI.ActionType.Text2Image,
-            AI.ActionType.Transtation
+            //AI.ActionType.Text2Image,
+            AI.ActionType.Transtation,
+            AI.ActionType.TextAnalyze
         ];
     };
 
@@ -310,7 +415,7 @@
             let src = AI.Actions[keys[i]];
             actions[i] = {
                 id : keys[i],
-                name : src.name,
+                name : Asc.plugin.tr(src.name),
                 icon : src.icon,
                 model : src.model
             }
