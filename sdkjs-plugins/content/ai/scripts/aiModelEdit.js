@@ -19,13 +19,20 @@ providerUrlInputEl.addEventListener('change', onChangeProviderUrlInput);
 providerKeyInputEl.addEventListener('change', onChangeProviderKeyInput)
 updateModelsBtnEl.addEventListener('click', updateModelsList);
 
-
+var resolveModels = null;
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");	
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
-	window.Asc.plugin.attachEvent("onGetProviders", onGetProviders);
-	window.Asc.plugin.attachEvent("onGetOptions", onGetOptions);
+	window.Asc.plugin.attachEvent("onModelInfo", onModelInfo);
 	window.Asc.plugin.attachEvent("onSubmit", onSubmit);
+	window.Asc.plugin.attachEvent("onGetModels", function(models) {
+		let resCount = models.length;
+		let res = new Array(resCount);
+		for (let i = 0, len = models.length; i < len; i++)
+			res[i] = { name : models[i] };
+		if (resolveModels)
+			resolveModels(res);
+	});
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
@@ -43,15 +50,34 @@ function onThemeChanged(theme) {
 	document.body.classList.add('theme-type-' + theme.Type);
 }
 
-function onGetProviders(providers) {
-	providersList = providers;
-}
+function onModelInfo(info) {
+	providersList = [];
+	
+	for (let prKey in info.providers) {
+		let prValue = info.providers[prKey];
+		providersList.push({
+			id : prKey,
+			name : prKey,
+			url : prValue.url ? prValue.url : "",
+			key : prValue.key ? prValue.key : "",
+			models : prValue.models ? prValue.models : [],
+		});
+	}
 
-function onGetOptions(options) {
-	type = options.type;
-	aiModel = options.aiModel;
-	if(aiModel) {
+	if(info.model) {
 		isCustomName = true;
+
+		aiModel = {
+			name : info.model.name,
+			provider : info.model.provider
+		};
+
+		if (info.providers[aiModel.provider])
+			aiModel.key = info.providers[aiModel.provider].key;
+
+		if (undefined == aiModel.key)
+			aiModel.key = "";
+
 		nameInputEl.value = aiModel.name;
 
 		$(providerNameCmbEl).val(aiModel.provider);
@@ -62,28 +88,21 @@ function onGetOptions(options) {
 }
 
 function onSubmit() {
-	var isCustomProvider = !providersList.some(function(provider) { return provider.id == providerNameCmbEl.value });
-	
-	if(isCustomProvider) {
-		window.Asc.plugin.sendToPlugin("onAddProvider", {
-			name: providerNameCmbEl.value,
-			url: providerUrlInputEl.value
-		});
-	}
-	if(type == 'add') {
-		window.Asc.plugin.sendToPlugin("onAddAiModel", {
-			name: nameInputEl.value,
-			provider: providerNameCmbEl.value,
-			key: providerKeyInputEl.value,
-			model: modelNameCmbEl.value
-		});
-	} else {
-		aiModel.name = nameInputEl.value;
-		aiModel.provider = providerNameCmbEl.value;
-		aiModel.key = providerKeyInputEl.value;
-		aiModel.model = modelNameCmbEl.value;
-		window.Asc.plugin.sendToPlugin("onEditAiModel", aiModel);
-	}
+	let model = {
+		provider : {
+			name : providerNameCmbEl.value,
+			url : providerUrlInputEl.value,
+			key : providerKeyInputEl.value
+		},
+		name : nameInputEl.value
+	};
+
+	if (!model.provider.name ||
+		!model.provider.url ||
+		!model.name)
+		return;
+
+	window.Asc.plugin.sendToPlugin("onChangeModel", model);
 }
 
 function onChangeNameInput() {
@@ -113,7 +132,7 @@ function onChangeModelComboBox() {
 		var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
 
 		if(providerObj && modelObj) {
-			nameInputEl.value = providerObj.name + '[' + modelObj.name + ']';
+			nameInputEl.value = providerObj.name + ' [' + modelObj.name + ']';
 		} else {
 			nameInputEl.value = '';
 		}
@@ -129,7 +148,11 @@ function updateModelsList() {
 
 	modelNameCmbEl.setAttribute('disabled', true);
 	updateModelsBtnEl.setAttribute('disabled', true);
-	fetchModelsForProvider(providerUrlInputEl.value, providerKeyInputEl.value).then(function(data) {
+	fetchModelsForProvider({
+		name : providerNameCmbEl.value, 
+		url : providerUrlInputEl.value, 
+		key: providerKeyInputEl.value
+	}).then(function(data) {
 		providerModelsList = data;
 		updateHtmlElements();
 	}).catch(function(error) {
@@ -156,6 +179,7 @@ function updateProviderComboBox(isInit) {
 		cmbEl.val(aiModel.provider);
 	} else if(providersList.length > 0) {
 		cmbEl.val(providersList[0].id);
+		providerKeyInputEl.value = providersList[0].key;		
 	}
 	cmbEl.trigger('select2:select');
 	cmbEl.trigger('change');
@@ -191,38 +215,11 @@ function updateModelComboBox() {
 	cmbEl.trigger('change');
 }
 
-function fetchModelsForProvider(url, key) {
+function fetchModelsForProvider(provider) {
 	return new Promise(function(resolve, reject) {
-		setTimeout(() => {
-			if(url == 'https://chatgpt.com' && key) {
-				resolve([
-					{ name: 'gpt-3.5' },
-					{ name: 'gpt-3.5-turbo' },
-					{ name: 'gpt-4' }
-				]);
-			} if(url == 'https://ya.ru/ai/gpt-3' && key) {
-				resolve([
-					{ name: 'gpt 2' },
-					{ name: 'gpt 4 pro' }
-				]);
-			} if(url == 'https://ollama.com') {
-				resolve([
-					{ name: 'Llama 3.2' },
-					{ name: 'Gemma 2' }
-				]);
-			} if(url == 'https://www.deepseek.com') {
-				resolve([
-					{ name: 'V2' },
-					{ name: 'Coder-V2' }
-				]);
-			} if(url == 'http://localhost:3000') {
-				resolve([
-					{ name: 'Model v-1' },
-					{ name: 'Model v-2' }
-				]);
-			} else {
-				resolve([]);
-			}
-		}, 200);
+
+		resolveModels = resolve;
+		window.Asc.plugin.sendToPlugin("onGetModels", provider);
+
 	});
 }
