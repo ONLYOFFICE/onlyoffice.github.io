@@ -1,6 +1,9 @@
 (function(window, undefined)
-    {
-    function internal_isLocal() {
+{
+    window.AI = window.AI || {};
+    var AI = window.AI;
+
+    AI.isLocalDesktop = (function(){
         if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
             return false;
         if (window.location && window.location.protocol == "file:")
@@ -8,9 +11,9 @@
         if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
             return true;
         return false;
-    }
+    })();
 
-    if (internal_isLocal())
+    if (AI.isLocalDesktop)
     {
         window.fetch = function(url, obj) {
 
@@ -352,7 +355,7 @@
     function requestWrapper(message)
     {
         return new Promise(function (resolve, reject) {
-            if (window["AscDesktopEditor"] && window["AscDesktopEditor"]["IsLocalFile"]())
+            if (AI.isLocalDesktop)
             {
                 window.AscSimpleRequest.createRequest({
                     url: message.url,
