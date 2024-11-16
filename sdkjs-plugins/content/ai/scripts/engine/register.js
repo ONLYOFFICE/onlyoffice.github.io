@@ -252,7 +252,7 @@
     {
         let button1 = new Asc.ButtonContextMenu(buttonMain);
         button1.text = "Show hyperlink content";
-        button1.addCheckers("Hyperlink", "Selection");
+        button1.addCheckers("Hyperlink");
 
         button1.onContextMenuShowExtendItem = function(options, item)
         {
