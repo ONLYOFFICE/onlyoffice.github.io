@@ -44,10 +44,11 @@ function renderActionsList() {
 	actionsListEl.innerHTML = '';
 	actionsList.forEach(function(action) {
 		var createdEl = document.createElement('div');
+		var icon = action.icon || 'default';
 		createdEl.classList.add('item');
 		createdEl.innerHTML =
 			'<div class="label">' +
-				'<img src="resources/icons/' + themeType + '/' + action.icon + '.png"/>' +
+				'<img src="resources/icons/' + themeType + '/' + icon + '.png"/>' +
 				'<div>' + action.name + '</div>' +
 			'</div>' +
 			'<select class="ai-model-select" class=""></select>';
