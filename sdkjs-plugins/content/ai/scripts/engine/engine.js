@@ -352,10 +352,22 @@
         });
     };    
 
+    function isLocalUrl(url)
+    {
+        let filter = ["localhost", "127.0.0.1"];
+        for (let i = 0, len = filter.length; i < len; i++)
+        {
+            let pos = url.indexOf(filter[i]);
+            if (pos >= 0 && pos < 10)
+                return true;
+        }
+        return false;
+    }
+
     function requestWrapper(message)
     {
         return new Promise(function (resolve, reject) {
-            if (AI.isLocalDesktop)
+            if (AI.isLocalDesktop && isLocalUrl(message.url))
             {
                 window.AscSimpleRequest.createRequest({
                     url: message.url,
