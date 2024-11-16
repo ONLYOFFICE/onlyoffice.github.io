@@ -6,11 +6,11 @@ var scrollbarList = new PerfectScrollbar("#actions-list", {});
 
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
-	window.Asc.plugin.attachEvent("onGetActions", function(list) {
+	window.Asc.plugin.attachEvent("onUpdateActions", function(list) {
 		actionsList = list;
 		renderActionsList();
 	});
-	window.Asc.plugin.attachEvent("onResetAiModels", function(list) {
+	window.Asc.plugin.attachEvent("onUpdateModels", function(list) {
 		aiModelsList = list;
 		updatedComboBoxes();
 	});
@@ -63,8 +63,8 @@ function renderActionsList() {
 		var selectEl = $(createdEl).find('.ai-model-select');
 		selectEl.on('select2:select', function (e) {
 			window.Asc.plugin.sendToPlugin("onChangeAction", { 
-				actionId: e.params.data.actionId,
-				aiModelId: e.params.data.id 
+				id: e.params.data.actionId,
+				model: e.params.data.id 
 			});
 		});
 	});
@@ -100,7 +100,7 @@ function updatedComboBoxes() {
 			width : 150
 		});
 		// TODO: Если активной модели больше нету в списке, ставить null и тригерить событие на изменение модели
-		selectEl.val(action.aiModelId);
+		selectEl.val(action.model);
 		selectEl.trigger('change');
 	});
 }

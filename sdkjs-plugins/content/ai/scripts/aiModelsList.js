@@ -119,7 +119,7 @@ var editBtnEl = document.getElementById('edit-btn');
 editBtnEl.addEventListener('click', function() {
 	window.Asc.plugin.sendToPlugin("onOpenEditModal", {
 		type: 'edit', 
-		aiModel: aiModelsList.getSelected()
+		model: aiModelsList.getSelected()
 	});
 });
 
@@ -135,16 +135,9 @@ var scrollbarList = new PerfectScrollbar("#ai-models-list", {});
 
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
-	window.Asc.plugin.attachEvent("onResetAiModels", function(list) {
+	window.Asc.plugin.attachEvent("onUpdateModels", function(list) {
 		aiModelsList.set(list);
 	});
-	window.Asc.plugin.attachEvent("onAddAiModel", function(model) {
-		aiModelsList.add(model);
-	});
-	window.Asc.plugin.attachEvent("onEditAiModel", function(model) {
-		aiModelsList.edit(model);
-	});
-
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
