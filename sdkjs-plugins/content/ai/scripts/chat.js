@@ -19,7 +19,6 @@
 	const url = 'https://api.openai.com/v1/chat/completions';
 	const maxTokens = 16000;
 	const settings = {
-		model: 'gpt-3.5-turbo-16k',
 		messages: []
 	};
 	let apiKey = '';
@@ -70,6 +69,12 @@
 				document.getElementById('cur_tokens').innerText = tokens.length;
 			}, 250);
 		};
+		
+		// TODO:
+		if (true)
+		{
+			document.getElementById('tokens_info').style.display = "none";
+		}
 
 		document.getElementById('tokens_info').addEventListener('mouseenter', function (event) {
 			event.target.children[0].classList.remove('hidden');
@@ -113,35 +118,8 @@
 
 	function sendMessage(text) {
 		createTyping();
-		settings.messages.push({role: 'user', content: text});
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'Bearer ' + apiKey
-			},
-			body: JSON.stringify(settings),
-		})
-		.then(function(response) {
-			return response.json()
-		})
-		.then(function(data) {
-			if (data.error)
-				throw data.error
-
-			let text = data.choices[0].message.content;
-			settings.messages.push({role: data.choices[0].message.role, content: text});
-			createMessage(text, 0);
-			removeTyping();
-			document.getElementById('total_tokens').innerText = data.usage.total_tokens;
-			if (data.usage.total_tokens >= maxTokens)
-				document.getElementById('total_tokens').classList.add('err-message');
-		})
-		.catch(function(error) {
-			console.error('Error:', error);
-			setError(error.message)
-			removeTyping();
-		});
+		window.Asc.plugin.sendToPlugin("onChatMessage", text);
+		settings.messages.push({role: 'Me', content: text});
 	};
 
 	function createTyping() {
@@ -221,8 +199,10 @@
 		document.getElementsByTagName('head')[0].appendChild(styleTheme);
 	};
 
-	window.Asc.plugin.attachEvent("onApiKey", function(key) {
-		apiKey = key;
+	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
+		settings.messages.push({role: "AI", content: reply});
+		createMessage(reply, 0);
+		removeTyping();
 	});
 
 })(window, undefined);

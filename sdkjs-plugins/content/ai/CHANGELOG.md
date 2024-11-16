@@ -36,3 +36,6 @@
 * Change list of models for custom requests (add new models and remove old).
 * Change default model for request by context menu (now we use gpt-3.5-turbo-16k model for chat and gpt-4 for other request).
 * Add new functions: "Fix spelling & grammar", "Rewrite differently", "Make longer", "Make shorter", "Make simpler" (it has restriction by gpt-4 model: 8k tokens)
+
+## 2.0.0
+* The plugin has been completely redesigned.

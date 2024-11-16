@@ -3,6 +3,9 @@ let aiModelsListWindow = null;
 let aiModelEditWindow = null;
 
 window.Asc.plugin.init = function() {
+};
+
+window.Asc.plugin.onTranslate = function() {
     Asc.Buttons.registerContextMenu();
     Asc.Buttons.registerToolbarMenu();
 };
@@ -26,6 +29,8 @@ window.Asc.plugin.button = function(id, windowId) {
             aiModelEditWindow.close();
             aiModelEditWindow = null;
         }
+    } else {
+        window.Asc.plugin.executeMethod("CloseWindow", [windowId]);
     }
 };
 
