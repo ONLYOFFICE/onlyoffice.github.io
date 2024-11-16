@@ -49,12 +49,13 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 
 function addActionButtons() {
     actionsList.forEach(function(action, index) {
+        var icon = action.icon || 'default';
         toolbarMenuMainItem["tabs"][0]["items"].push({ 
             id: "ai-action-button",
             type: "big-button",
             text: action.name,
             hint: action.name,
-            icons: "resources/icons/%theme-type%(light|dark)/big/" + action.icon + "%scale%(default|*).png",
+            icons: "resources/icons/%theme-type%(light|dark)/big/" + icon + "%scale%(default|*).png",
             data: action.id,
             lockInViewMode: true,
             enableToggle: false,
