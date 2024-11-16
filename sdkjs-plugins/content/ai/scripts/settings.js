@@ -2,6 +2,8 @@ var themeType = 'light';
 var actionsList = [];
 var aiModelsList = [];
 
+var scrollbarList = new PerfectScrollbar("#actions-list", {});
+
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
 	window.Asc.plugin.attachEvent("onGetActions", function(list) {
@@ -42,10 +44,15 @@ function onThemeChanged(theme) {
 function renderActionsList() {
 	var actionsListEl = document.getElementById('actions-list');
 	actionsListEl.innerHTML = '';
-	actionsList.forEach(function(action) {
+	actionsList.forEach(function(action, index) {
 		var createdEl = document.createElement('div');
 		var icon = action.icon || 'default';
 		createdEl.classList.add('item');
+		if(index == 0) {
+			createdEl.classList.add('first');
+		} else if(index == actionsList.length - 1) {
+			createdEl.classList.add('last');
+		}
 		createdEl.innerHTML =
 			'<div class="label">' +
 				'<img src="resources/icons/' + themeType + '/' + icon + '.png"/>' +
@@ -61,6 +68,18 @@ function renderActionsList() {
 			});
 		});
 	});
+	toggleScrollbarPadding();
+	scrollbarList.update();
+}
+
+function toggleScrollbarPadding() {
+	var actionsListEl = document.getElementById('actions-list');
+	// Проверяем, есть ли скроллбар
+	if (actionsListEl.scrollHeight > actionsListEl.clientHeight) {
+		actionsListEl.classList.add('with-scrollbar');
+	} else {
+		actionsListEl.classList.remove('with-scrollbar');
+	}
 }
 
 function updatedComboBoxes() {

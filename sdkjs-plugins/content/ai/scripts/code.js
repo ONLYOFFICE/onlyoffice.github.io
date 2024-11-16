@@ -85,7 +85,7 @@ function onOpenSettingsModal() {
         buttons : [],
         isModal : true,
         EditorsSupport : ["word", "slide", "cell"],
-        size : [320, 330]
+        size : [320, 350]
     };
 
     if (!settingsWindow) {

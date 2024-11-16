@@ -20,13 +20,27 @@ body {
 }
 
 #actions-list {
-    margin-top: 16px;
+    position: relative;
+    height: 230px;
+    margin-top: 32px;
 }
 
 #actions-list .item {
     display: flex;
     justify-content: space-between;
     padding: 16px 0;
+}
+
+#actions-list.with-scrollbar .item{
+    padding-right: 11px;
+}
+
+#actions-list .item.first {
+    padding-top: 0 !important;
+}
+
+#actions-list .item.last {
+    padding-bottom: 0 !important;
 }
 
 #actions-list .item .label {
@@ -36,6 +50,11 @@ body {
 
 #actions-list .item .label img{
     margin-right: 10px;
+}
+
+#actions-list .ps__rail-y {
+    margin: 0 !important;
+    right: 0 !important;
 }
 
 
