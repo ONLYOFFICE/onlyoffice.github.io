@@ -84,6 +84,13 @@
             models : []
         },
 
+        "Together AI" : 
+        {
+            url : "https://api.together.xyz/v1/",
+
+            models : []
+        },
+
         "Mistral" : 
         {
             url : "https://api.mistral.ai/v1/",
@@ -147,7 +154,14 @@
                 
                 if (obj)
                 {
+                    let oldProviders = AI.providers;
                     AI.providers = obj.providers;
+                    for (let pr in oldProviders)
+                    {
+                        if (!AI.providers[pr])
+                            AI.providers[pr] = oldProviders[pr];
+                    }
+
                     AI.models = obj.models;
                 }
 
@@ -401,7 +415,7 @@
                         if (data.error)
                             resolve({error: 1, data: null});
                         else
-                            resolve({error: 0, data: data});
+                            resolve({error: 0, data: data.data ? data.data : data});
                     })
                     .catch(function(error) {
                         resolve({error: 1, data: null});                        

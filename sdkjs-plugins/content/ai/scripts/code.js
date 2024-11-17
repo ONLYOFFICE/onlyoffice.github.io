@@ -154,10 +154,10 @@ function onOpenEditModal(data) {
     aiModelEditWindow.attachEvent("onGetModels", function(provider){
         AI.getModels(provider).then(function(data){
             let models = [];
-            if (data.error === 0 && data.data && data.data.data)
-                models = new Array(data.data.data.length);
+            if (data.error === 0 && data.data)
+                models = new Array(data.data.length);
             for (let i = 0, len = models.length; i < len; i++)
-                models[i] = data.data.data[i].id;
+                models[i] = data.data[i].id;
             aiModelEditWindow.command("onGetModels", models);
         });
     });
