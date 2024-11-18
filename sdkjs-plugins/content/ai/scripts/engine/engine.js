@@ -389,7 +389,8 @@
                     headers: message.headers,
                     body: message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : ""),
                     complete: function(e, status) {
-                        resolve({error: 0, data: JSON.parse(e.responseText)});
+                        let data = JSON.parse(e.responseText);
+                        resolve({error: 0, data: data.data ? data.data : data});
                     },
                     error: function(e, status, error) {
                         if ( e.statusCode == -102 ) e.statusCode = 404;
