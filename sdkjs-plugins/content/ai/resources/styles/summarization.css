@@ -1,0 +1,104 @@
+
+.content {
+    display: flex;
+}
+
+.column {
+    flex: 1;
+    max-width: 50%;
+}
+
+.column:not(:last-child) {
+    margin-right: 12px;
+}
+.column:not(:first-child) {
+    margin-left: 12px;
+}
+
+.row-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+textarea {
+    margin-bottom: 8px;
+    height: 200px !important;
+}
+
+.button-block {
+    display: flex;
+}
+
+.button-block button {
+    display: block;
+    flex: 1;
+    margin-left: 8px;
+}
+
+/* Базовый стиль кнопки */
+#copy-btn {
+    background-color: transparent; /* Прозрачный фон */
+    border: none;                 /* Убираем границы */
+    cursor: pointer;              /* Курсор в виде руки */
+    border-radius: 2px;
+    padding: 0;
+    transition: background-color 0.1s ease; /* Анимация изменения цвета */
+}
+
+
+/* Иконка внутри кнопки */
+#copy-btn div {
+    height: 20px;
+    width: 20px;
+    background-image: url('../icons/light/ask-ai.png');
+}
+
+/* При наведении */
+#copy-btn:hover {
+    background-color: #007bff;    /* Цвет фона при наведении */
+}
+
+#copy-btn:hover .icon {
+    color: #fff;                  /* Цвет иконки при наведении */
+}
+
+/* Состояние нажатия */
+#copy-btn:active {
+    background-color: #0056b3;    /* Более темный фон при клике */
+}
+
+.summary-wrapper {
+    position: relative;
+}
+
+.error {
+    display: none;
+    top: 0;
+    position: absolute;
+    padding: 8px;
+}
+
+.error-icon {
+    width: 12px;
+    height: 12px;
+    background: url('../icons/warnings_s.svg#info') no-repeat center;
+}
+
+.error-title-block {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.error-description {
+    line-height: 14px;
+}
