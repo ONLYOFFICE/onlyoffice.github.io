@@ -1,6 +1,7 @@
 let settingsWindow = null;
 let aiModelsListWindow = null; 
 let aiModelEditWindow = null;
+let summarizationWindow = null;
 
 let initCounter = 0;
 function initWithTranslate() {
@@ -49,6 +50,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
     settingsWindow && settingsWindow.command('onThemeChanged', theme);
     aiModelsListWindow && aiModelsListWindow.command('onThemeChanged', theme);
     aiModelEditWindow && aiModelEditWindow.command('onThemeChanged', theme);
+    summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
 };
 
 /**
@@ -170,6 +172,35 @@ function onOpenEditModal(data) {
     });
     aiModelEditWindow.show(variation);
 }
+
+
+/**
+ * SUMMARIZATION WINDOW
+ */
+function onOpenSummarizationModal() {
+    let variation = {
+        url : 'summarization.html',
+        description : window.Asc.plugin.tr('Summarization'),
+        isVisual : true,
+        buttons : [],
+        isModal : true,
+        EditorsSupport : ["word", "slide", "cell"],
+        size : [720, 310]
+    };
+
+    summarizationWindow = new window.Asc.PluginWindow();
+    summarizationWindow.attachEvent("onInit", function() {
+        summarizationWindow.command('onUpdateLangList', [
+            {name: 'English', value: 'en'},
+            {name: 'Russian', value: 'ru'}
+        ]);
+        summarizationWindow.command('onUpdateInsertAsList', [
+            {name: 'Review', value: 'review'}
+        ]);
+    });
+    summarizationWindow.show(variation);
+}
+
 
 function onChangeModel(model) {
     /**
