@@ -336,15 +336,16 @@
         let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
         button2.text = "Summarization";
         button2.icons = getToolBarButtonIcons("summarization");
-        button2.attachOnClick(async function(data){
-            let content = await Asc.Library.GetSelectedText();
-            let result = await AI.getActionEngine(AI.ActionType.Summarization).chatRequest(`Summarize this text: "${content}"`);
-            result = "Summarize selected text:\n\n" + result;
-            if (!result) return;
-            if (Asc.plugin.info.editorType === "word")
-                await Asc.Library.InsertAsText(result);
-            else
-                await Asc.Library.PasteText(result);
+        button2.attachOnClick(async function(data) {
+            onOpenSummarizationModal();
+            // let content = await Asc.Library.GetSelectedText();
+            // let result = await AI.getActionEngine(AI.ActionType.Summarization).chatRequest(`Summarize this text: "${content}"`);
+            // result = "Summarize selected text:\n\n" + result;
+            // if (!result) return;
+            // if (Asc.plugin.info.editorType === "word")
+            //     await Asc.Library.InsertAsText(result);
+            // else
+            //     await Asc.Library.PasteText(result);
         });
 
         /*
