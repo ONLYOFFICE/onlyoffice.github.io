@@ -1,73 +1,95 @@
-(function(window, undefined)
+(function(exports, undefined)
 {
-    
-    function Library()
-    {
-    }
+	function Editor() {}
+	
+	Editor.callMethod = async function(name, args)
+	{
+		return new Promise(resolve => (function(){
+			Asc.plugin.executeMethod(name, args || [], function(returnValue){
+				resolve(returnValue);
+			});
+		})());
+	};
 
-    Library.prototype.GetCurrentWord = async function()
-    {
-        return await AI.callMethod("GetCurrentWord");
-    };
+	Editor.callCommand = async function(func)
+	{
+		return new Promise(resolve => (function(){
+			Asc.plugin.callCommand(func, false, true, function(returnValue){
+				resolve(returnValue);
+			});
+		})());
+	};
 
-    Library.prototype.GetSelectedText = async function()
-    {
-        return await AI.callMethod("GetSelectedText");
-    };
+	var EditorInstance = new Editor();
 
-    Library.prototype.ReplaceTextSmart = async function(text)
-    {
-        return await AI.callMethod("ReplaceTextSmart", [text]);
-    };
+	exports.Asc = exports.Asc || {};
+	exports.Asc.Editor = EditorInstance;
 
-    Library.prototype.InsertAsText = async function(text)
-    {
-        Asc.scope.data = (text || "").split("\n\n");
-        return await AI.callCommand(function() {
-            let oDocument = Api.GetDocument();
-            for (let ind = 0; ind < Asc.scope.data.length; ind++) {
-                let text = Asc.scope.data[ind];
-                if (text.length) {
-                    let oParagraph = Api.CreateParagraph();
-                    oParagraph.AddText(text);
-                    oDocument.Push(oParagraph);
-                }
-            }
-        });
-    };
+	function Library() {}
 
-    Library.prototype.InsertAsComment = async function(text)
-    {
-        return await AI.callMethod("AddComment", [{
-            Username : "AI",
-            Text : text,
-            Time: Date.now(),
-            Solver: false
-        }]);
-    };
+	Library.prototype.GetCurrentWord = async function()
+	{
+		return await EditorInstance.callMethod("GetCurrentWord");
+	};
 
-    Library.prototype.InsertAsHyperlink = async function(content, hint)
-    {
-        let text = content;
-        start = text.indexOf('htt');
-        end = text.indexOf(' ', start);
-        if (end == -1)
-            end = text.length;
+	Library.prototype.GetSelectedText = async function()
+	{
+		return await EditorInstance.callMethod("GetSelectedText");
+	};
 
-        Asc.scope.link = text.slice(start, end);
-        return await AI.callCommand(function(){
-            let oDocument = Api.GetDocument();
-            let oRange = oDocument.GetRangeBySelect();
-            oRange.AddHyperlink(Asc.scope.link, "Meaning of the word");
-        });
-    };
+	Library.prototype.ReplaceTextSmart = async function(text)
+	{
+		return await EditorInstance.callMethod("ReplaceTextSmart", [text]);
+	};
 
-    Library.prototype.PasteText = async function(text)
-    {
-        return await AI.callMethod("PasteText", [text]);
-    };
+	Library.prototype.InsertAsText = async function(text)
+	{
+		Asc.scope.data = (text || "").split("\n\n");
+		return await EditorInstance.callCommand(function() {
+			let oDocument = Api.GetDocument();
+			for (let ind = 0; ind < Asc.scope.data.length; ind++) {
+				let text = Asc.scope.data[ind];
+				if (text.length) {
+					let oParagraph = Api.CreateParagraph();
+					oParagraph.AddText(text);
+					oDocument.Push(oParagraph);
+				}
+			}
+		});
+	};
 
-    window.Asc = window.Asc || {};
-    window.Asc.Library = new Library();
+	Library.prototype.InsertAsComment = async function(text)
+	{
+		return await EditorInstance.callMethod("AddComment", [{
+			Username : "AI",
+			Text : text,
+			Time: Date.now(),
+			Solver: false
+		}]);
+	};
+
+	Library.prototype.InsertAsHyperlink = async function(content, hint)
+	{
+		let text = content;
+		start = text.indexOf('htt');
+		end = text.indexOf(' ', start);
+		if (end == -1)
+			end = text.length;
+
+		Asc.scope.link = text.slice(start, end);
+		return await EditorInstance.callCommand(function(){
+			let oDocument = Api.GetDocument();
+			let oRange = oDocument.GetRangeBySelect();
+			oRange.AddHyperlink(Asc.scope.link, "Meaning of the word");
+		});
+	};
+
+	Library.prototype.PasteText = async function(text)
+	{
+		return await EditorInstance.callMethod("PasteText", [text]);
+	};
+
+	exports.Asc = exports.Asc || {};
+	exports.Asc.Library = new Library();
 
 })(window);
