@@ -19,17 +19,28 @@ providerUrlInputEl.addEventListener('change', onChangeProviderUrlInput);
 providerKeyInputEl.addEventListener('change', onChangeProviderKeyInput)
 updateModelsBtnEl.addEventListener('click', updateModelsList);
 
+var modelsList = [];
+function getModelById(id) {
+	for (let i = 0, len = modelsList.length; i < len; i++) {
+		if (modelsList[i].id === id)
+			return modelsList[i];
+	}
+	return null;
+}
+
 var resolveModels = null;
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");	
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 	window.Asc.plugin.attachEvent("onModelInfo", onModelInfo);
 	window.Asc.plugin.attachEvent("onSubmit", onSubmit);
-	window.Asc.plugin.attachEvent("onGetModels", function(models) {
-		let resCount = models.length;
+	window.Asc.plugin.attachEvent("onGetModels", function(data) {
+		modelsList = data.models;
+		let resCount = data.models.length;
 		let res = new Array(resCount);
-		for (let i = 0, len = models.length; i < len; i++)
-			res[i] = { name : models[i] };
+		for (let i = 0, len = resCount; i < len; i++)
+			res[i] = { name : data.models[i].name };
+		res.sort(function(a,b){ return (a.name < b.name) ? -1 : ((a.name === b.name) ? 0 : 1); });
 		if (resolveModels)
 			resolveModels(res);
 	});
@@ -52,24 +63,23 @@ function onThemeChanged(theme) {
 
 function onModelInfo(info) {
 	providersList = [];
-	
-	for (let prKey in info.providers) {
-		let prValue = info.providers[prKey];
+
+	for (let i = 0, len = info.providers.length; i < len; i++) {
+		let srcProvider = info.providers[i];
 		providersList.push({
-			id : prKey,
-			name : prKey,
-			url : prValue.url ? prValue.url : "",
-			key : prValue.key ? prValue.key : "",
-			models : prValue.models ? prValue.models : [],
+			id : srcProvider.name,
+			name : srcProvider.name,
+			url : srcProvider.url,
+			key : srcProvider.key,
 		});
 	}
-
+	
 	if(info.model) {
 		isCustomName = true;
 
 		aiModel = {
 			name : info.model.name,
-			nameOrigin : info.model.nameOrigin,
+			id : info.model.id,
 			provider : info.model.provider			
 		};
 
@@ -96,14 +106,18 @@ function onSubmit() {
 			key : providerKeyInputEl.value
 		},
 		name : nameInputEl.value,
-		nameOrigin : modelNameCmbEl.value
+		id : modelNameCmbEl.value
 	};
 
 	if (!model.provider.name ||
 		!model.provider.url ||
 		!model.name ||
-		!model.nameOrigin)
+		!model.id)
 		return;
+
+	let modelInfo = getModelById(model.id);
+	if (modelInfo)
+		model.capabilities = modelInfo.capabilities;
 
 	window.Asc.plugin.sendToPlugin("onChangeModel", model);
 }
@@ -209,7 +223,7 @@ function updateModelComboBox() {
 	cmbEl.on('select2:select', onChangeModelComboBox);
 
 	if(isModelCmbInit && aiModel) {
-		cmbEl.val(aiModel.nameOrigin);
+		cmbEl.val(aiModel.id);
 	} else {
 		cmbEl.val(providerModelsList[0] ? providerModelsList[0].name : null);
 	}
