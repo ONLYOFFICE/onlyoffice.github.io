@@ -100,15 +100,15 @@
 		{
 			if (AI.Models[i].id === model.id)
 			{
-				AI.models[i].provider = model.provider.name;
-				AI.models[i].name = model.name;
-				AI.models[i].capabilities = model.capabilities;
+				AI.Models[i].provider = model.provider.name;
+				AI.Models[i].name = model.name;
+				AI.Models[i].capabilities = model.capabilities;
 				isFoundModel = true;
 			}
 		}
 
 		if (!isFoundModel)
-			AI.Models.push(new AI.UI.Model(model.name, model.id, model.provider, 
+			AI.Models.push(new AI.UI.Model(model.name, model.id, model.provider.name, 
 				model.capabilities === undefined ? AI.CapabilitiesUI.All : model.capabilities));
 
 		this.save();
