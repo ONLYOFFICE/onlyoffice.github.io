@@ -1,6 +1,11 @@
 var themeType = 'light';
 var actionsList = [];
 var aiModelsList = [];
+var capabilitiesList = {
+	[AI.CapabilitiesUI.Chat]: {name: 'Text-Based', icon: 'ai-texts.png'},
+	[AI.CapabilitiesUI.Image]: {name: 'Images', icon: 'ai-images.png'},
+	[AI.CapabilitiesUI.Vision]: {name: 'Vision', icon: 'ai-visual-analysis.png'},
+};
 
 var scrollbarList = new PerfectScrollbar("#actions-list", {});
 
@@ -86,15 +91,37 @@ function updatedComboBoxes() {
 	$('#actions-list .item .ai-model-select').each(function(index) {
 		var selectEl = $(this);
 		var action = actionsList[index];
+		var options = aiModelsList.filter(function(model) {
+			return (action.capabilities & model.capabilities) !== 0;
+		}).map(function(model) {
+			return {
+				id: model.id,
+				text: model.name,
+				actionId: action.id
+			}
+		});
+
 		selectEl.select2().empty();
 		selectEl.select2({
-			data : aiModelsList.map(function(model) {
-				return {
-					id: model.id,
-					text: model.name,
-					actionId: action.id
+			data : [{
+				text: 'Text-Based Models',
+				children: options
+			}],
+			templateResult: function (data) {
+				if(!data.children) {
+					return data.text;
 				}
-			}),
+
+				var capability = capabilitiesList[action.capabilities + 100];
+				if(!capability) {
+					return 'Available models';
+				}
+
+				var src = 'resources/icons/light/' + capability.icon;
+				var result ='<img src="' + src + '"/>';
+				result += '<div>' + capability.name + ' Models</div>';
+				return $(result);
+			},
 			minimumResultsForSearch: Infinity,
 			dropdownAutoWidth: true,
 			width : 150

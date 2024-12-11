@@ -201,7 +201,7 @@ function onChangeModelComboBox() {
 	if(!isCustomName) {
 		var providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
 
-		if(providerObj && modelObj) {
+		if(providerObj && modelObj) { 
 			nameInputEl.value = providerObj.name + ' [' + modelObj.name + ']';
 		} else {
 			nameInputEl.value = '';
