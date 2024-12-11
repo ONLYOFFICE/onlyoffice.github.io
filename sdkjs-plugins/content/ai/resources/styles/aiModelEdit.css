@@ -6,7 +6,7 @@ body {
 .section {
     display: flex;
     flex-direction: column;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
     /* border-bottom: 1px solid #cbcbcb; */
 }
 
@@ -19,10 +19,16 @@ body {
     font-weight: bold;
 }
 
+#provider-section-label {
+    margin-bottom: 12px;
+}
+
 .action-btn {
     all: unset;
     cursor: pointer;
-    border-bottom: 1px dotted;
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-decoration-thickness: 1px; 
 }
 
 .action-btn[disabled] {
@@ -30,6 +36,30 @@ body {
     opacity: 0.7;
 }
 
+#update-models-row {
+	display: flex;
+	align-items: center;
+}
+
+#update-models-loader-container {
+	height: 100%;
+    width: 70px;
+}
+
+#update-models-error {
+	cursor: pointer;
+	color: red;
+	margin-left: 6px;
+}
+
+.asc-plugin-loader {
+	width: 100%;
+	z-index: 1;
+}
+
+.asc-loader-title {
+	font-size: 11px !important;
+}
 
 .form-vertical-item{
     display: flex;
@@ -49,8 +79,42 @@ body {
 
 .form-vertical-item, 
 .form-horizontal-item{
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
-.form-vertical-item label {
-    margin-bottom: 4px;
+
+#block-use-for > :not(:first-child){
+    margin-left: 4px;
+}
+
+.tooltip {
+    line-height: 12px;
+    position: absolute;
+    z-index: 10;
+    padding: 4px 8px;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #c0c0c0;
+	white-space: nowrap;
+	/* max-width: 200px; */
+}
+
+.toggle-button {
+    all: unset;
+    display: inline-block;
+    padding: 4px;
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+}
+
+.toggle-button:hover:not([disabled]) {
+    cursor: pointer;
+    background-color: #bababa;
+}
+
+.toggle-button.active {
+    background-color: #cbcbcb;
+}
+
+.toggle-button[disabled] {
+    opacity: 0.4;
 }
