@@ -11,8 +11,10 @@ var providerUrlInputEl = document.getElementById('provider-url-input');
 var providerKeyInputEl = document.getElementById('provider-key-input');
 var modelNameCmbEl = document.getElementById('model-name-cmb');
 var updateModelsBtnEl = document.getElementById('update-models-btn');
+var updateModelsErrorEl = document.getElementById('update-models-error');
 
 var isCustomName = false;
+var isFirstLoadOfModels = true;
 
 nameInputEl.addEventListener('change', onChangeNameInput);
 providerUrlInputEl.addEventListener('change', onChangeProviderUrlInput);
@@ -28,21 +30,61 @@ function getModelById(id) {
 	return null;
 }
 
+
+var updateModelsLoader = null;
+var updateModelsErrorTip = new Tooltip(updateModelsErrorEl, {
+	xAnchor: 'right',
+	align: 'right'
+});
+
+var useForTextBtn = new ToggleButton({
+	id: 'use-for-text',
+	icon: 'resources/icons/light/ai-texts.png'
+});
+var useForTextTip = new Tooltip(document.getElementById('use-for-text'), {
+	text: 'Texts',
+	yAnchor: 'top'
+}); 
+
+var useForImageBtn = new ToggleButton({
+	id: 'use-for-image',
+	icon: 'resources/icons/light/ai-images.png'
+});
+var useForImageTip = new Tooltip(document.getElementById('use-for-image'), {
+	text: 'Images',
+	yAnchor: 'top'
+}); 
+
+var useForVisionBtn = new ToggleButton({
+	id: 'use-for-vision',
+	icon: 'resources/icons/light/ai-visual-analysis.png'
+});
+var useForVisionTip = new Tooltip(document.getElementById('use-for-vision'), {
+	text: 'Visual Analysis',
+	yAnchor: 'top'
+}); 
+
 var resolveModels = null;
+var rejectModels = null;
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");	
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 	window.Asc.plugin.attachEvent("onModelInfo", onModelInfo);
 	window.Asc.plugin.attachEvent("onSubmit", onSubmit);
 	window.Asc.plugin.attachEvent("onGetModels", function(data) {
-		modelsList = data.models;
-		let resCount = data.models.length;
-		let res = new Array(resCount);
-		for (let i = 0, len = resCount; i < len; i++)
-			res[i] = { name : data.models[i].name };
-		res.sort(function(a,b){ return (a.name < b.name) ? -1 : ((a.name === b.name) ? 0 : 1); });
-		if (resolveModels)
-			resolveModels(res);
+		if(data.error == 1) {
+			rejectModels && rejectModels(data.message);
+		} else {
+			modelsList = data.models;
+			let res = data.models.map(function(model) {
+				return {
+					name: model.name,
+					capabilities: model.capabilities
+				}
+			});
+			res.sort(function(a,b){ return (a.name < b.name) ? -1 : ((a.name === b.name) ? 0 : 1); });
+			resolveModels && resolveModels(res);
+		}
 	});
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
@@ -75,6 +117,7 @@ function onModelInfo(info) {
 	}
 	
 	if(info.model) {
+		var key = '';
 		isCustomName = true;
 
 		aiModel = {
@@ -83,19 +126,20 @@ function onModelInfo(info) {
 			provider : info.model.provider			
 		};
 
-		if (info.providers[aiModel.provider])
-			aiModel.key = info.providers[aiModel.provider].key;
-
-		if (undefined == aiModel.key)
-			aiModel.key = "";
+		var findedProvider = info.providers.find(function(provider) {
+			return provider.name == aiModel.provider;
+		});
+		if (findedProvider) {
+			key = findedProvider.key;
+		}
 
 		nameInputEl.value = aiModel.name;
 
 		$(providerNameCmbEl).val(aiModel.provider);
-		
-		providerKeyInputEl.value = aiModel.key;
+		providerKeyInputEl.value = key;
 	}
 	updateProviderComboBox(!!aiModel);
+	updateCapabilitiesBtns(info.model.capabilities);
 }
 
 function onSubmit() {
@@ -106,7 +150,8 @@ function onSubmit() {
 			key : providerKeyInputEl.value
 		},
 		name : nameInputEl.value,
-		id : modelNameCmbEl.value
+		id : modelNameCmbEl.value,
+		capabilities: getCapabilities()
 	};
 
 	if (!model.provider.name ||
@@ -114,10 +159,11 @@ function onSubmit() {
 		!model.name ||
 		!model.id)
 		return;
+	
 
-	let modelInfo = getModelById(model.id);
-	if (modelInfo)
-		model.capabilities = modelInfo.capabilities;
+	// let modelInfo = getModelById(model.id);
+	// if (modelInfo)
+	// 	model.capabilities = modelInfo.capabilities;
 
 	window.Asc.plugin.sendToPlugin("onChangeModel", model);
 }
@@ -130,6 +176,7 @@ function onChangeProviderComboBox() {
 	var provider = providersList.filter(function(el) { return el.id == providerNameCmbEl.value })[0] || null;
 
 	providerUrlInputEl.value = provider ? provider.url : '';
+	providerKeyInputEl.value = provider ? provider.key : '';
 	if(providerUrlInputEl) {
 		updateModelsList();
 	}
@@ -144,9 +191,15 @@ function onChangeProviderKeyInput() {
 }
 
 function onChangeModelComboBox() {
+	var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
+	if(modelObj && !isFirstLoadOfModels) {
+		updateCapabilitiesBtns(modelObj.capabilities);
+	}
+	isFirstLoadOfModels = false;
+
+	//Change nameInputEl value
 	if(!isCustomName) {
 		var providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
-		var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
 
 		if(providerObj && modelObj) {
 			nameInputEl.value = providerObj.name + ' [' + modelObj.name + ']';
@@ -156,15 +209,49 @@ function onChangeModelComboBox() {
 	}
 }
 
+function getCapabilities() {
+	var result = 0;
+	useForTextBtn.getValue() && (result += AI.CapabilitiesUI.Chat);
+	useForImageBtn.getValue() && (result += AI.CapabilitiesUI.Image);
+	useForVisionBtn.getValue() && (result += AI.CapabilitiesUI.Vision);
+	return result;
+}
+
+function updateCapabilitiesBtns(capabilities) {
+	if(capabilities === undefined) return;
+	useForTextBtn.setValue((capabilities & AI.CapabilitiesUI.Chat) !== 0);
+	useForImageBtn.setValue((capabilities & AI.CapabilitiesUI.Image) !== 0);
+	useForVisionBtn.setValue((capabilities & AI.CapabilitiesUI.Vision) !== 0);
+}
+
 function updateModelsList() {
 	var updateHtmlElements = function() {
 		modelNameCmbEl.removeAttribute('disabled');
-		updateModelsBtnEl.removeAttribute('disabled');
 		updateModelComboBox();
 	};
 
+	var startLoader = function() {
+		updateModelsLoader && (updateModelsLoader.remove ? updateModelsLoader.remove() : $('#update-models-loader-container')[0].removeChild(updateModelsLoader));
+		updateModelsLoader = showLoader($('#update-models-loader-container')[0], 'Updating');
+		$(updateModelsBtnEl).hide();
+		$(updateModelsErrorEl).hide();
+	};
+	var endLoader = function(errorText) {
+		updateModelsLoader && (updateModelsLoader.remove ? updateModelsLoader.remove() : $('#update-models-loader-container')[0].removeChild(updateModelsLoader));
+		updateModelsLoader = null;
+
+		$(updateModelsBtnEl).show();
+		if(errorText) {
+			$(updateModelsErrorEl).show();
+			updateModelsErrorTip.setText(errorText);
+		} else {
+			$(updateModelsErrorEl).hide();
+		}
+	};
+
+	startLoader();
+	$(updateModelsBtnEl).hide();
 	modelNameCmbEl.setAttribute('disabled', true);
-	updateModelsBtnEl.setAttribute('disabled', true);
 	fetchModelsForProvider({
 		name : providerNameCmbEl.value, 
 		url : providerUrlInputEl.value, 
@@ -172,10 +259,11 @@ function updateModelsList() {
 	}).then(function(data) {
 		providerModelsList = data;
 		updateHtmlElements();
+		endLoader();
 	}).catch(function(error) {
-		console.log(error);
 		providerModelsList = [];
 		updateHtmlElements();
+		endLoader(error);
 	});
 }
 
@@ -236,7 +324,144 @@ function fetchModelsForProvider(provider) {
 	return new Promise(function(resolve, reject) {
 
 		resolveModels = resolve;
+		rejectModels = reject;
 		window.Asc.plugin.sendToPlugin("onGetModels", provider);
 
 	});
+}
+
+//Tooltip component
+function Tooltip(targetEl, options) {
+	this._init = function() {
+		var self = this;
+		var defaults = {
+			text: '',
+			xAnchor: 'center',
+			yAnchor: 'bottom',
+			align: 'center'
+		};
+		this.options = Object.assign({}, defaults, options);
+
+		this.tooltipEl = document.createElement("div");
+		this.tooltipEl.className = "tooltip";
+		this.tooltipEl.innerText = this.options.text;
+		document.body.appendChild(this.tooltipEl);
+		$(this.tooltipEl).hide();
+
+		targetEl.addEventListener('mouseover', function(e) {
+			$(self.tooltipEl).show();
+			self._updatePosition();
+		});
+		targetEl.addEventListener('mouseleave', function(e) {
+			$(self.tooltipEl).hide();
+		});
+	};
+
+	this._updatePosition = function() {
+		var rectTooltip = this.tooltipEl.getBoundingClientRect();
+		var rectEl = targetEl.getBoundingClientRect();
+		var yOffset = 3;
+		var xOffset = 0;
+		if(this.options.align == 'right') {
+			xOffset = -rectTooltip.width;
+		} else if(this.options.align == 'center') {
+			xOffset = -rectTooltip.width / 2;
+		}
+
+
+		if(this.options.xAnchor == 'right') {
+			this.tooltipEl.style.left = rectEl.right + xOffset + 'px';
+		} else if(this.options.xAnchor == 'center') {
+			this.tooltipEl.style.left = rectEl.left + rectEl.width/2 + xOffset + 'px';
+		}
+
+
+		if(this.options.yAnchor == 'bottom') {
+			this.tooltipEl.style.top = rectEl.bottom  + yOffset + 'px';
+		} else if(this.options.yAnchor == 'top') {
+			this.tooltipEl.style.top = rectEl.top  - yOffset - rectTooltip.height + 'px';
+		}
+	};
+
+	this.setText = function(text) {
+		this.options.text = text;
+		this.tooltipEl.innerText = text;
+		this._updatePosition();
+	};
+
+	this._init();
+}
+
+
+//Toggle button component
+function ToggleButton(options) {
+	this._init = function() {
+		// Default parameters
+		var defaults = {
+			id: '',
+			icon: '',
+			value: false,
+			disabled: false,
+			onToggle: function (state) {}
+		};
+
+		// Merge user options with defaults
+		this.options = Object.assign({}, defaults, options);
+
+		// Button state
+		this.value = false;
+		this.disabled = false;
+
+		this.buttonEl = document.createElement("button");
+		this.buttonEl.className = "toggle-button";
+
+		this.iconEl = document.createElement("img");
+		this.iconEl.src = this.options.icon;
+
+		this.buttonEl.appendChild(this.iconEl);
+
+		this.setValue(this.options.value);
+		this.setDisabled(this.options.disabled);
+
+		// Add click event listener
+		var self = this; // To preserve context
+		this.buttonEl.addEventListener("click", function () {
+			self.setValue(!self.value);
+			self.options.onToggle && self.options.onToggle(self.value); // Call the callback
+		});
+
+		// Add button to the container
+		var container = document.getElementById(this.options.id);
+		if (container) {
+			container.appendChild(this.buttonEl);
+		} else {
+			console.error("Container with ID '" + this.options.id + "' not found.");
+		}
+	};
+
+	this.setValue = function(value) {
+		this.value = value;
+		if(value) {
+			this.buttonEl.classList.add('active');
+		} else {
+			this.buttonEl.classList.remove('active');
+		}
+	};
+	this.getValue = function() {
+		return this.value;
+	};
+
+	this.setDisabled = function(value) {
+		this.disabled = value;
+		if(value) {
+			this.buttonEl.setAttribute('disabled', true);
+		} else {
+			this.buttonEl.removeAttribute('disabled');
+		}
+	};
+	this.getDisabled = function() {
+		return this.disabled;
+	};
+
+	this._init();
 }

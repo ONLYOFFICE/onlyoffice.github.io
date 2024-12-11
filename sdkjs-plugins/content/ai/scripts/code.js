@@ -124,7 +124,7 @@ function onOpenAiModelsModal() {
 		});
 		aiModelsListWindow.attachEvent("onOpenEditModal", onOpenEditModal);
 		aiModelsListWindow.attachEvent("onDeleteAiModel", function(data) {
-			AI.storage.removeModel(data.name);
+			AI.Storage.removeModel(data.id);
 		});
 	}
 	aiModelsListWindow.show(variation);
@@ -144,7 +144,7 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 350]
+		size : [320, 325]
 	};
 
 	aiModelEditWindow = new window.Asc.PluginWindow();
