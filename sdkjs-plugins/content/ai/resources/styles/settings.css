@@ -27,6 +27,7 @@ body {
 
 #actions-list .item {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 16px 0;
 }
@@ -57,6 +58,18 @@ body {
     right: 0 !important;
 }
 
+.select2-results__group {
+    display: flex !important;
+    align-items: center;
+}
+.select2-results__group img {
+    margin-right: 4px;
+}
+
+.select2-results__option[role=treeitem] {
+    line-height: 16px;
+    padding-left: 30px !important;
+}
 
 /* #actions-list .select2-selection{
     border: none !important;
