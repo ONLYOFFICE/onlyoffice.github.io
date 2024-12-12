@@ -45,12 +45,8 @@ textarea {
 
 /* Базовый стиль кнопки */
 #copy-btn {
-    background-color: transparent; /* Прозрачный фон */
-    border: none;                 /* Убираем границы */
-    cursor: pointer;              /* Курсор в виде руки */
-    border-radius: 2px;
-    padding: 0;
-    transition: background-color 0.1s ease; /* Анимация изменения цвета */
+    padding: 0; 
+    border: none;
 }
 
 
@@ -58,21 +54,12 @@ textarea {
 #copy-btn div {
     height: 20px;
     width: 20px;
-    background-image: url('../icons/light/ask-ai.png');
+    background-image: url('../icons/light/copy.png');
 }
 
-/* При наведении */
-#copy-btn:hover {
-    background-color: #007bff;    /* Цвет фона при наведении */
-}
-
-#copy-btn:hover .icon {
-    color: #fff;                  /* Цвет иконки при наведении */
-}
-
-/* Состояние нажатия */
-#copy-btn:active {
-    background-color: #0056b3;    /* Более темный фон при клике */
+body.theme-type-dark #copy-btn div,
+body.theme-classic-light #copy-btn:active div{
+    background-image: url('../icons/dark/copy.png');
 }
 
 .summary-wrapper {
@@ -89,7 +76,8 @@ textarea {
 .error-icon {
     width: 12px;
     height: 12px;
-    background: url('../icons/warnings_s.svg#info') no-repeat center;
+    background: url('../icons/error-small/error.png') no-repeat center;
+    margin-right: 8px;
 }
 
 .error-title-block {
@@ -101,4 +89,41 @@ textarea {
 
 .error-description {
     line-height: 14px;
+}
+
+#loader-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loader-block {
+    background-color: rgba(0, 0, 0, 0.65);
+    padding: 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+#loader-spinner {
+    animation-duration: 0.8s;
+    animation-name: rotation;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=);
+    height: 28px;
+    width: 28px;
+    float: left;
+}
+
+#loader-title {
+    font-size: 13px;
+    color: #fff;
+    margin-left: 8px;
 }
