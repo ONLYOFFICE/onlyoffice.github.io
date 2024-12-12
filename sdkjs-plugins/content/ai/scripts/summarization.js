@@ -58,13 +58,10 @@ window.Asc.plugin.init = function() {
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 window.Asc.plugin.onTranslate = function () {
-    $('#original-label').text(window.Asc.plugin.tr('Your text'));
-    $('#lang-label').text(window.Asc.plugin.tr('Target language'));
-	$('#summariaze-btn').text(window.Asc.plugin.tr('Summariaze'));
-	$('#result-label').text(window.Asc.plugin.tr('Summary result'));
-	$('#insert-label').text(window.Asc.plugin.tr('Insert result as'));
-	$('#insert-btn').text(window.Asc.plugin.tr('Insert'));
-	$('#error-alert .error-title').text(window.Asc.plugin.tr('Error'));
+	let elements = document.querySelectorAll('.i18n');
+	elements.forEach(function(element) {
+		element.innerText = window.Asc.plugin.tr(element.innerText);
+	});
 };
 
 function onThemeChanged(theme) {

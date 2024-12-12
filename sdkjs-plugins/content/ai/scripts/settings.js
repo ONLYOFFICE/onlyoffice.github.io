@@ -2,14 +2,14 @@ var themeType = 'light';
 var actionsList = [];
 var aiModelsList = [];
 var capabilitiesList = {
-	[AI.CapabilitiesUI.Chat]: {name: 'Text-Based', icon: 'ai-texts.png'},
-	[AI.CapabilitiesUI.Image]: {name: 'Images', icon: 'ai-images.png'},
-	[AI.CapabilitiesUI.Embeddings]: {name: 'Embeddings', icon: 'ai-embeddings.png'},
-	[AI.CapabilitiesUI.Audio]: {name: 'Audio', icon: 'ai-audio.png'},
-	[AI.CapabilitiesUI.Moderations]: {name: 'Moderations', icon: 'ai-moderations.png'},
-	[AI.CapabilitiesUI.Realtime]: {name: 'Realtime', icon: 'ai-realtime.png'},
-	[AI.CapabilitiesUI.Code]: {name: 'Code', icon: 'ai-code.png'},
-	[AI.CapabilitiesUI.Vision]: {name: 'Vision', icon: 'ai-visual-analysis.png'}
+	[AI.CapabilitiesUI.Chat]: {name: window.Asc.plugin.tr('Text-Based'), icon: 'ai-texts.png'},
+	[AI.CapabilitiesUI.Image]: {name: window.Asc.plugin.tr('Images'), icon: 'ai-images.png'},
+	[AI.CapabilitiesUI.Embeddings]: {name: window.Asc.plugin.tr('Embeddings'), icon: 'ai-embeddings.png'},
+	[AI.CapabilitiesUI.Audio]: {name: window.Asc.plugin.tr('Audio'), icon: 'ai-audio.png'},
+	[AI.CapabilitiesUI.Moderations]: {name: window.Asc.plugin.tr('Moderations'), icon: 'ai-moderations.png'},
+	[AI.CapabilitiesUI.Realtime]: {name: window.Asc.plugin.tr('Realtime'), icon: 'ai-realtime.png'},
+	[AI.CapabilitiesUI.Code]: {name: window.Asc.plugin.tr('Code'), icon: 'ai-code.png'},
+	[AI.CapabilitiesUI.Vision]: {name: window.Asc.plugin.tr('Vision'), icon: 'ai-visual-analysis.png'}
 };
 
 var scrollbarList = new PerfectScrollbar("#actions-list", {});
@@ -31,6 +31,13 @@ window.Asc.plugin.init = function() {
 	});
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
+
+window.Asc.plugin.onTranslate = function () {
+	let elements = document.querySelectorAll('.i18n');
+	elements.forEach(function(element) {
+		element.innerText = window.Asc.plugin.tr(element.innerText);
+	});
+};
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
@@ -124,7 +131,7 @@ function updatedComboBoxes() {
 
 				var src = 'resources/icons/light/' + capability.icon;
 				var result ='<img src="' + src + '"/>';
-				result += '<div>' + capability.name + ' Models</div>';
+				result += '<div>' + capability.name + ' ' + window.Asc.plugin.tr('Models') + '</div>';
 				return $(result);
 			},
 			minimumResultsForSearch: Infinity,

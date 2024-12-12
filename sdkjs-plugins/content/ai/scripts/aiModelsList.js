@@ -142,6 +142,13 @@ window.Asc.plugin.init = function() {
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
+window.Asc.plugin.onTranslate = function () {
+	let elements = document.querySelectorAll('.i18n');
+	elements.forEach(function(element) {
+		element.innerText = window.Asc.plugin.tr(element.innerText);
+	});
+};
+
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	themeType = theme.Type;
