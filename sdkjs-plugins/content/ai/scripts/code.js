@@ -155,7 +155,7 @@ function onOpenEditModal(data) {
 	});
 	aiModelEditWindow.attachEvent("onGetModels", async function(provider){
 		let models = await AI.getModels(provider);
-		aiModelEditWindow.command("onGetModels", models);
+		aiModelEditWindow && aiModelEditWindow.command("onGetModels", models);
 	});
 
 	aiModelEditWindow.attachEvent("onInit", function() {

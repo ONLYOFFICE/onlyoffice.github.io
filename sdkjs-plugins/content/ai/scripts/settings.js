@@ -4,7 +4,12 @@ var aiModelsList = [];
 var capabilitiesList = {
 	[AI.CapabilitiesUI.Chat]: {name: 'Text-Based', icon: 'ai-texts.png'},
 	[AI.CapabilitiesUI.Image]: {name: 'Images', icon: 'ai-images.png'},
-	[AI.CapabilitiesUI.Vision]: {name: 'Vision', icon: 'ai-visual-analysis.png'},
+	[AI.CapabilitiesUI.Embeddings]: {name: 'Embeddings', icon: 'ai-embeddings.png'},
+	[AI.CapabilitiesUI.Audio]: {name: 'Audio', icon: 'ai-audio.png'},
+	[AI.CapabilitiesUI.Moderations]: {name: 'Moderations', icon: 'ai-moderations.png'},
+	[AI.CapabilitiesUI.Realtime]: {name: 'Realtime', icon: 'ai-realtime.png'},
+	[AI.CapabilitiesUI.Code]: {name: 'Code', icon: 'ai-code.png'},
+	[AI.CapabilitiesUI.Vision]: {name: 'Vision', icon: 'ai-visual-analysis.png'}
 };
 
 var scrollbarList = new PerfectScrollbar("#actions-list", {});
@@ -112,7 +117,7 @@ function updatedComboBoxes() {
 					return data.text;
 				}
 
-				var capability = capabilitiesList[action.capabilities + 100];
+				var capability = capabilitiesList[action.capabilities];
 				if(!capability) {
 					return 'Available models';
 				}
