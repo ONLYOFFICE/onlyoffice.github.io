@@ -77,7 +77,7 @@ function updateActions() {
 function onOpenSettingsModal() {
 	let variation = {
 		url : 'settings.html',
-		description : window.Asc.plugin.tr('Set up AI actions'),
+		description : window.Asc.plugin.tr('AI configuration'),
 		isVisual : true,
 		buttons : [],
 		isModal : true,
@@ -139,8 +139,8 @@ function onOpenEditModal(data) {
 		description : data.type == 'add' ? window.Asc.plugin.tr('Add AI Model') : window.Asc.plugin.tr('Edit AI Model'),
 		isVisual : true,
 		buttons : [ 
-			{ text: "OK", primary: true },
-			{ text: "Cancel", primary: false },
+			{ text: window.Asc.plugin.tr('OK'), primary: true },
+			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
