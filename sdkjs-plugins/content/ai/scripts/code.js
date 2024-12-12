@@ -183,13 +183,7 @@ function onOpenSummarizationModal() {
 
     summarizationWindow = new window.Asc.PluginWindow();
     summarizationWindow.attachEvent("onInit", function() {
-        summarizationWindow.command('onUpdateLangList', [
-            {name: 'English', value: 'en'},
-            {name: 'Russian', value: 'ru'}
-        ]);
-        summarizationWindow.command('onUpdateInsertAsList', [
-            {name: 'Review', value: 'review'}
-        ]);
+
     });
     summarizationWindow.show(variation);
 }
