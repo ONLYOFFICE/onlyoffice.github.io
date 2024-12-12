@@ -45,7 +45,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-texts.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-text'), {
-			text: 'Text',
+			text: window.Asc.plugin.tr('Text'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Chat
@@ -56,7 +56,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-images.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-image'), {
-			text: 'Images',
+			text: window.Asc.plugin.tr('Images'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Image
@@ -67,7 +67,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-embeddings.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-embeddings'), {
-			text: 'Embeddings',
+			text: window.Asc.plugin.tr('Embeddings'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Embeddings
@@ -78,7 +78,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-audio.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-audio'), {
-			text: 'Audio Processing',
+			text: window.Asc.plugin.tr('Audio Processing'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Audio
@@ -89,7 +89,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-moderations.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-moderations'), {
-			text: 'Content Moderation',
+			text: window.Asc.plugin.tr('Content Moderation'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Moderations
@@ -100,7 +100,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-realtime.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-realtime'), {
-			text: 'Realtime Tasks',
+			text: window.Asc.plugin.tr('Realtime Tasks'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Realtime
@@ -111,7 +111,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-code.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-code'), {
-			text: 'Coding Help',
+			text: window.Asc.plugin.tr('Coding Help'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Code
@@ -122,7 +122,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-visual-analysis.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-vision'), {
-			text: 'Visual Analysis',
+			text: window.Asc.plugin.tr('Visual Analysis'),
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Vision
@@ -153,6 +153,13 @@ window.Asc.plugin.init = function() {
 	});
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
+
+window.Asc.plugin.onTranslate = function () {
+	let elements = document.querySelectorAll('.i18n');
+	elements.forEach(function(element) {
+		element.innerText = window.Asc.plugin.tr(element.innerText);
+	});
+};
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
