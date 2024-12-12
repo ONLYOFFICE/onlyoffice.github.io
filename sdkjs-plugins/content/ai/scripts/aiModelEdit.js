@@ -10,6 +10,7 @@ var providerNameCmbEl = document.getElementById('provider-name-cmb');
 var providerUrlInputEl = document.getElementById('provider-url-input');
 var providerKeyInputEl = document.getElementById('provider-key-input');
 var modelNameCmbEl = document.getElementById('model-name-cmb');
+$(modelNameCmbEl).select2();
 var updateModelsBtnEl = document.getElementById('update-models-btn');
 var updateModelsErrorEl = document.getElementById('update-models-error');
 
@@ -37,32 +38,96 @@ var updateModelsErrorTip = new Tooltip(updateModelsErrorEl, {
 	align: 'right'
 });
 
-var useForTextBtn = new ToggleButton({
-	id: 'use-for-text',
-	icon: 'resources/icons/light/ai-texts.png'
-});
-var useForTextTip = new Tooltip(document.getElementById('use-for-text'), {
-	text: 'Texts',
-	yAnchor: 'top'
-}); 
-
-var useForImageBtn = new ToggleButton({
-	id: 'use-for-image',
-	icon: 'resources/icons/light/ai-images.png'
-});
-var useForImageTip = new Tooltip(document.getElementById('use-for-image'), {
-	text: 'Images',
-	yAnchor: 'top'
-}); 
-
-var useForVisionBtn = new ToggleButton({
-	id: 'use-for-vision',
-	icon: 'resources/icons/light/ai-visual-analysis.png'
-});
-var useForVisionTip = new Tooltip(document.getElementById('use-for-vision'), {
-	text: 'Visual Analysis',
-	yAnchor: 'top'
-}); 
+var capabilitiesElements = {
+	text: {
+		btn: new ToggleButton({
+			id: 'use-for-text',
+			icon: 'resources/icons/light/ai-texts.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-text'), {
+			text: 'Text',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Chat
+	},
+	image: {
+		btn: new ToggleButton({
+			id: 'use-for-image',
+			icon: 'resources/icons/light/ai-images.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-image'), {
+			text: 'Images',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Image
+	},
+	embeddings: {
+		btn: new ToggleButton({
+			id: 'use-for-embeddings',
+			icon: 'resources/icons/light/ai-embeddings.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-embeddings'), {
+			text: 'Embeddings',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Embeddings
+	},
+	audio: {
+		btn: new ToggleButton({
+			id: 'use-for-audio',
+			icon: 'resources/icons/light/ai-audio.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-audio'), {
+			text: 'Audio Processing',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Audio
+	},
+	moderations: {
+		btn: new ToggleButton({
+			id: 'use-for-moderations',
+			icon: 'resources/icons/light/ai-moderations.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-moderations'), {
+			text: 'Content Moderation',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Moderations
+	},
+	realtime: {
+		btn: new ToggleButton({
+			id: 'use-for-realtime',
+			icon: 'resources/icons/light/ai-realtime.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-realtime'), {
+			text: 'Realtime Tasks',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Realtime
+	},
+	code: {
+		btn: new ToggleButton({
+			id: 'use-for-code',
+			icon: 'resources/icons/light/ai-code.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-code'), {
+			text: 'Coding Help',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Code
+	},
+	vision: {
+		btn: new ToggleButton({
+			id: 'use-for-vision',
+			icon: 'resources/icons/light/ai-visual-analysis.png'
+		}),
+		tip: new Tooltip(document.getElementById('use-for-vision'), {
+			text: 'Visual Analysis',
+			yAnchor: 'top'
+		}),
+		capabilities: AI.CapabilitiesUI.Vision
+	}
+};
 
 var resolveModels = null;
 var rejectModels = null;
@@ -211,17 +276,20 @@ function onChangeModelComboBox() {
 
 function getCapabilities() {
 	var result = 0;
-	useForTextBtn.getValue() && (result += AI.CapabilitiesUI.Chat);
-	useForImageBtn.getValue() && (result += AI.CapabilitiesUI.Image);
-	useForVisionBtn.getValue() && (result += AI.CapabilitiesUI.Vision);
+	for (const key in capabilitiesElements) {
+		var itemProps = capabilitiesElements[key];
+		itemProps.btn.getValue() && (result += itemProps.capabilities);
+	}
 	return result;
 }
 
 function updateCapabilitiesBtns(capabilities) {
 	if(capabilities === undefined) return;
-	useForTextBtn.setValue((capabilities & AI.CapabilitiesUI.Chat) !== 0);
-	useForImageBtn.setValue((capabilities & AI.CapabilitiesUI.Image) !== 0);
-	useForVisionBtn.setValue((capabilities & AI.CapabilitiesUI.Vision) !== 0);
+
+	for (const key in capabilitiesElements) {
+		var itemProps = capabilitiesElements[key];
+		itemProps.btn.setValue((capabilities & itemProps.capabilities) !== 0);
+	}
 }
 
 function updateModelsList() {
