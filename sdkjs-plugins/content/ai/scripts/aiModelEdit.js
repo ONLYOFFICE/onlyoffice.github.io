@@ -166,6 +166,11 @@ function onThemeChanged(theme) {
 	});
 	document.body.classList.add(theme.name);
 	document.body.classList.add('theme-type-' + theme.Type);
+	$('.toggle-button img').each(function() {
+		var src = $(this).attr('src');
+		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + theme.type + '$3');
+		$(this).attr('src', newSrc);
+	});
 }
 
 function onModelInfo(info) {
