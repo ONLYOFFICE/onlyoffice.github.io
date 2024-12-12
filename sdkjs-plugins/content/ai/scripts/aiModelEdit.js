@@ -174,6 +174,9 @@ function onThemeChanged(theme) {
 }
 
 function onModelInfo(info) {
+	type = (info.model ? 'edit' : 'add');
+	isFirstLoadOfModels = (type == 'edit');
+
 	providersList = [];
 
 	for (let i = 0, len = info.providers.length; i < len; i++) {
