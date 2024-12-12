@@ -33,41 +33,47 @@
 		<div class="content">
 			<div class="column">
 				<div class="row-label">
-					<label>Your text</label>
+					<label id="original-label">Your text</label>
 				</div>
-				<textarea style="height:45px;width: 100%;" class="form-control" placeholder=""></textarea>
+				<textarea id="original-textarea" style="height:45px;width: 100%;" class="form-control" placeholder=""></textarea>
 				<div class="row-label">
-					<label>Target language</label>
+					<label id="lang-label">Target language</label>
 				</div>
 				<div class="button-block">
 					<select id="target-lang-cmb" ></select>
-					<button class="btn-text-default submit primary">Summariaze</button>
+					<button id="summariaze-btn" class="btn-text-default submit primary">Summariaze</button>
 				</div>
 			</div>
 			<div class="column">
 				<div class="row-label">
-					<label>Summary result</label>
-					<!-- <button id="copy-btn">
+					<label id="result-label">Summary result</label>
+					<button id="copy-btn" class="btn-text-default">
 						<div></div>
-					</button> -->
+					</button>
 				</div>
 				<div class="summary-wrapper">
-					<textarea style="height:45px;width: 100%;" class="form-control" placeholder="" readonly></textarea>
-					<div class="error">
+					<textarea id="result-textarea" style="height:45px;width: 100%;" class="form-control" placeholder="" readonly></textarea>
+					<div id="error-alert" class="error">
 						<div class="error-title-block">
-							<!-- <div class="error-icon"></div> -->
+							<div class="error-icon"></div>
 							<div class="error-title">Error</div>
 						</div>
-						<div class="error-description">You exceeded your current quota, please check your plan and billing details.</div>
+						<div class="error-description"></div>
 					</div>
 				</div>
 				<div class="row-label">
-					<label>Insert result as</label>
+					<label id="insert-label">Insert result as</label>
 				</div>
 				<div class="button-block">
 					<select id="insert-as-cmb"></select>
-					<button class="btn-text-default">Insert</button>
+					<button id="insert-btn" class="btn-text-default">Insert</button>
 				</div>
+			</div>
+		</div>
+		<div id="loader-wrapper" style="display: none;">
+			<div id="loader-block">
+				<div id="loader-spinner"></div>
+				<div id="loader-title">Summarization...</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="scripts/summarization.js"></script>
