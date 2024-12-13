@@ -36,13 +36,18 @@
 	"Realtime Tasks": "Realtime Tasks",
 	"Coding Help": "Coding Help",
 	"Visual Analysis": "Visual Analysis",
-
+	"Updating": "Updating",
 	"Your text" : "Napište text",
 	"Target language" : "Target language",
 	"Summary result" : "Summary result",
 	"Insert result" : "Insert result",
+	"Summarize" : "Shrnout",
 	"Insert" : "Vložit",
 	"Summarization...": "Shrnout...",
+	"As review": "As review",
+	"In comment": "In comment",
+	"Replace original text": "Replace original text",
+	"To the end of document": "To the end of document",
 
 
 	"Loading..." : "Načítání...",

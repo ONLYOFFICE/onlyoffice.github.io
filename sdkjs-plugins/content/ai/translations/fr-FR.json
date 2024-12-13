@@ -36,13 +36,18 @@
 	"Realtime Tasks": "Tâches en temps réel",
 	"Coding Help": "Aide au codage",
 	"Visual Analysis": "Analyse visuelle",
-
+	"Updating": "Mise à jour",
 	"Your text" : "Votre texte",
 	"Target language" : "Langue cible",
 	"Summary result" : "Résultat du résumé",
 	"Insert result" : "Insérer le résultat",
+	"Summarize" : "Résumer",
 	"Insert" : "Insérer",
 	"Summarization...": "Résumé en cours...",
+	"As review": "Comme révision",
+	"In comment": "Dans le commentaire",
+	"Replace original text": "Remplacer le texte original",
+	"To the end of document": "À la fin du document",
 
 
 	"Loading..." : "Chargement...",
