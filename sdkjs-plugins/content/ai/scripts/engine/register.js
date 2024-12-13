@@ -19,8 +19,14 @@
 
 		var chatWindow = new window.Asc.PluginWindow();
 		chatWindow.attachEvent("onChatMessage", async function(message) {
-			let result = await AI.getActionEngine(AI.ActionType.Chat).chatRequest(message);
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			let content = await Asc.Library.GetSelectedText();
+			let result = await requestEngine.chatRequest(message);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			chatWindow.command("onChatReply", result);
 		});
@@ -33,9 +39,14 @@
 		button1.text = "Explain text in comment";
 		button1.addCheckers("Target");
 		button1.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetCurrentWord();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`What does it mean "${content}"?`);
+			let result = await requestEngine.chatRequest(`What does it mean "${content}"?`);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			await Asc.Library.InsertAsComment(result);
 		});
@@ -48,9 +59,14 @@
 		button1.editors = ["word"];
 		button1.addCheckers("Selection");
 		button1.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Сorrect the errors in this text: ${content}`);
+			let result = await requestEngine.chatRequest(`Сorrect the errors in this text: ${content}`);
 			if (!result) return;
+
 			if (result !== 'The text is correct, there are no errors in it.')
 			   await Asc.Library.ReplaceTextSmart(result);
 			else
@@ -62,9 +78,14 @@
 		button2.editors = ["word"];
 		button2.addCheckers("Selection");
 		button2.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Rewrite differently and give result on the same language: ${content}`);
+			let result = await requestEngine.chatRequest(`Rewrite differently and give result on the same language: ${content}`);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			await Asc.Library.PasteText(result);
 		});
@@ -74,9 +95,14 @@
 		button3.editors = ["word"];
 		button3.addCheckers("Selection");
 		button3.attachOnClick(async function(data){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Make this text longer and give result on the same language: ${content}`);
+			let result = await requestEngine.chatRequest(`Make this text longer and give result on the same language: ${content}`);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			await Asc.Library.PasteText(result);
 		});
@@ -86,9 +112,14 @@
 		button4.editors = ["word"];
 		button4.addCheckers("Selection");
 		button4.attachOnClick(async function(data){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Make this text simpler and give result on the same language: ${content}`);
+			let result = await requestEngine.chatRequest(`Make this text simpler and give result on the same language: ${content}`);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			await Asc.Library.PasteText(result);
 		});
@@ -106,9 +137,14 @@
 		button2.editors = ["word"];
 		button2.addCheckers("Selection");
 		button2.attachOnClick(async function(data){
+			let requestEngine = AI.Request.create(AI.ActionType.Summarization);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.Summarization).chatRequest(`Summarize this text: "${content}"`);
+			let result = await requestEngine.chatRequest(`Summarize this text: "${content}"`);
 			if (!result) return;
+
 			result = "Summarize selected text:\n\n" + result;
 			await Asc.Library.InsertAsText(result);
 		});
@@ -118,9 +154,14 @@
 		button3.editors = ["word"];
 		button3.addCheckers("Selection");
 		button3.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Get Key words from this text: "${content}"`);
+			let result = await requestEngine.chatRequest(`Get Key words from this text: "${content}"`);
 			if (!result) return;
+
 			await Asc.Library.InsertAsText(result);
 		});
 	}
@@ -138,9 +179,14 @@
 		button2.editors = ["word"];
 		button2.addCheckers("Selection");
 		button2.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`What does it mean "${content}"?`);
+			let result = await requestEngine.chatRequest(`What does it mean "${content}"?`);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			await Asc.Library.InsertAsComment(result);
 		});
@@ -150,9 +196,14 @@
 		button3.editors = ["word"];
 		button3.addCheckers("Selection");
 		button3.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.TextAnalyze).chatRequest(`Give a link to the explanation of the word "${content}"`);
+			let result = await requestEngine.chatRequest(`Give a link to the explanation of the word "${content}"`);
 			if (!result) return;
+
 			result = result.replace(/\n\n/g, '\n');
 			await Asc.Library.InsertAsHyperlink(result);
 		});
@@ -171,10 +222,15 @@
 		button2.addCheckers("Selection");
 		button2.data = "English";
 		button2.attachOnClick(async function(data){
+			let requestEngine = AI.Request.create(AI.ActionType.Translation);
+			if (!requestEngine)
+				return;
+
 			let lang = data;
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.Translation).chatRequest(`Translate to ${lang}: ${content}`);
+			let result = await requestEngine.chatRequest(`Translate to ${lang}: ${content}`);
 			if (!result) return;
+
 			await Asc.Library.PasteText(result);
 		});
 
@@ -340,10 +396,14 @@
 			onOpenSummarizationModal();
 			return;
 			// OLD VERSION:
+			let requestEngine = AI.Request.create(AI.ActionType.Translation);
+			if (!requestEngine)
+				return;
+
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.Summarization).chatRequest(`Summarize this text: "${content}"`);
-			result = "Summarize selected text:\n\n" + result;
+			let result = await requestEngine.chatRequest(`Summarize this text: "${content}"`);
 			if (!result) return;
+			
 			if (Asc.plugin.info.editorType === "word")
 				await Asc.Library.InsertAsText(result);
 			else
@@ -402,11 +462,6 @@
 	//AI.Actions[AI.ActionType.Text2Image]   = new ActionUI("Text to image", "text-to-image", "", AI.CapabilitiesUI.Image);
 	AI.Actions[AI.ActionType.Translation]    = new ActionUI("Translation", "translation");
 	AI.Actions[AI.ActionType.TextAnalyze]    = new ActionUI("Text analysis", "");
-
-	AI.getActionEngine = function(type)
-	{
-		return AI.getRequestModel(AI.Actions[type].model);
-	};
 
 	AI.ActionsGetKeys = function()
 	{

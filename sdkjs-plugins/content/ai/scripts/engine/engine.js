@@ -254,6 +254,16 @@
 		if (this.model && this.model.options && undefined !== this.model.options.max_input_tokens)
 			max_input_tokens = this.model.options.max_input_tokens;
 
+		let header_footer_overhead = 500;
+		// for test chunks:
+		if (false) {
+			max_input_tokens = 50;
+			let header_footer_overhead = 0;
+		}
+
+		if (max_input_tokens < header_footer_overhead)
+			max_input_tokens = header_footer_overhead + 1000;
+
 		let headers = {};
 		headers["Content-Type"] = "application/json";
 		if (provider.key)
@@ -263,17 +273,17 @@
 		let input_tokens = Asc.OpenAIEncode(content).length;
 
 		let messages = [];
-		if (input_tokens < max_input_tokens) {
+		if (input_tokens < max_input_tokens || isNoSplit) {
 			messages.push(content);
 		} else {
-			let chunkLen = (((max_input_tokens - 1000) / input_tokens) * input_len) >> 0;
+			let chunkLen = (((max_input_tokens - header_footer_overhead) / input_tokens) * input_len) >> 0;
 			let currentLen = 0;
 			while (currentLen != input_len) {
 				let endSymbol = currentLen + chunkLen;
 				if (endSymbol >= input_len)
 					endSymbol = undefined;
 				messages.push(content.substring(currentLen, endSymbol));
-				if (undefined !== endSymbol)
+				if (undefined === endSymbol)
 					currentLen = input_len;
 				else
 					currentLen = endSymbol;
@@ -330,6 +340,12 @@
 
 		} else {
 
+			let lastFooterForOldModels = "";
+			let indexTask = content.indexOf(": \"");
+			if (-1 != indexTask && indexTask < 100) {
+				lastFooterForOldModels = content.substring(0, indexTask);
+			}
+
 			function getHeader(part, partsCount) {
 				let header = "[START PART " + part + "/" + partsCount + "]\n";
 				if (part != partsCount) {
@@ -341,16 +357,17 @@
 			function getFooter(part, partsCount) {
 				let footer = "\n[END PART " + part + "/" + partsCount + "]\n";
 				if (part != partsCount) {
-					footer = "Remember not answering yet. Just acknowledge you received this part with the message \"Part " + part + "/" + partsCount + " received\" and wait for the next part.\n" + header;
+					footer += "Remember not answering yet. Just acknowledge you received this part with the message \"Part " + part + "/" + partsCount + " received\" and wait for the next part.";
 				} else {
-					footer += "ALL PARTS SENT. Now you can continue processing the request.\n";
+					footer += "ALL PARTS SENT. Now you can continue processing the request." + lastFooterForOldModels;
 				}
-				return header;
+				return footer;
 			}
 
+			let isBadAI = false;
 			for (let i = 0, len = messages.length; i < len; i++) {
 				
-				let message = getFooter(i + 1, len) + messages[i] + getFooter(i + 1, len);
+				let message = getHeader(i + 1, len) + messages[i] + getFooter(i + 1, len);
 				if (!isUseCompletionsInsteadChat) {
 					objRequest.body.messages = [{role:"user",content:message}];
 				} else {
@@ -366,6 +383,34 @@
 					return;
 				} else if (i === (len - 1)) {
 					return processResult(result);
+
+					let answer = processResult(result);
+
+					let indexOfBadRequest = answer.indexOf("Thank you for providing");
+					if (-1 != indexOfBadRequest && indexOfBadRequest < 30) {
+						let indexTask = content.indexOf(": \"");
+						if (-1 != indexTask && indexTask < 100) {
+							let endPrompt = content.substring(0, indexTask);
+							endPrompt = "Combine the data sent in parts earlier and process it as a single text."
+							if (!isUseCompletionsInsteadChat) {
+								objRequest.body.messages = [{role:"user",content:endPrompt}];
+							} else {
+								objRequest.body.prompt = endPrompt;				
+							}
+							let result = await requestWrapper(objRequest);
+							if (result.error) {
+								throw {
+									error : result.error, 
+									message : result.message
+								};
+								return;
+							} else {
+								return processResult(result);
+							}
+						}
+					}
+
+					return answer;
 				}
 
 			}
