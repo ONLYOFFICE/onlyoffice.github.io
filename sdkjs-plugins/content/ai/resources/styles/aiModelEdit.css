@@ -43,7 +43,6 @@ body {
 
 #update-models-loader-container {
 	height: 100%;
-    width: 70px;
 }
 
 #update-models-error {
@@ -55,12 +54,16 @@ body {
 }
 
 .asc-plugin-loader {
-	width: 100%;
-	z-index: 1;
+	position: initial;
+    display: flex;
+    align-items: center;
+    transform: translate(0px, 6px);
 }
 
 .asc-loader-title {
 	font-size: 11px !important;
+    padding-left: 4px !important;
+    min-width: auto !important;
 }
 
 .form-vertical-item{
