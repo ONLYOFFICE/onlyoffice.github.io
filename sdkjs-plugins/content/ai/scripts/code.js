@@ -171,19 +171,66 @@ function onOpenEditModal(data) {
  * SUMMARIZATION WINDOW
  */
 function onOpenSummarizationModal() {
-    let variation = {
-        url : 'summarization.html',
-        description : window.Asc.plugin.tr('Summarization'),
-        isVisual : true,
-        buttons : [],
-        isModal : true,
-        EditorsSupport : ["word", "slide", "cell"],
-        size : [720, 310]
-    };
+	let variation = {
+		url : 'summarization.html',
+		description : window.Asc.plugin.tr('Summarization'),
+		isVisual : true,
+		buttons : [],
+		isModal : true,
+		EditorsSupport : ["word", "slide", "cell"],
+		size : [720, 310]
+	};
 
-    summarizationWindow = new window.Asc.PluginWindow();
-    summarizationWindow.attachEvent("onInit", function() {
+	summarizationWindow = new window.Asc.PluginWindow();
+	summarizationWindow.attachEvent("onInit", async function() {
+		let content = await Asc.Library.GetSelectedText();
+		summarizationWindow && summarizationWindow.command("onGetSelection", content);
+	});
+	summarizationWindow.attachEvent("Summarize", async function(content) {
+		let requestEngine = AI.Request.create(AI.ActionType.Summarization);
+		if (!requestEngine)
+			return;
 
-    });
-    summarizationWindow.show(variation);
+		requestEngine.setErrorHandler(function(data){
+			summarizationWindow && summarizationWindow.command("onSummarize", data);
+		});
+
+		let result = await requestEngine.chatRequest(`Summarize and transate to ${content.lang} this text: "${content.data}"`);
+		if (!result) {
+			summarizationWindow.command("onSummarize", {
+				error : 1,
+				message : "Empty result"
+			});
+		}
+
+		summarizationWindow && summarizationWindow.command("onSummarize", {
+			error : 0,
+			data : result
+		});
+	});
+	summarizationWindow.attachEvent("onSummarize", async function(data) {
+		switch (data.type) {
+		case "review": {
+			if (Asc.plugin.info.editorType === "word")
+				await Asc.Library.InsertAsReview(data.data);
+			else
+				await Asc.Library.InsertAsComment(data.data);
+			break;
+		}
+		case "comment": {
+			await Asc.Library.InsertAsComment(data.data);
+			break;
+		}
+		case "replace": {
+			await Asc.Library.PasteText(data.data);
+			break;
+		}
+		case "end": {
+			await Asc.Library.InsertAsText(data.data);
+			break;
+		}
+		}
+	});	
+
+	summarizationWindow.show(variation);
 }

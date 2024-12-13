@@ -166,6 +166,7 @@
 	AI.Request = function(model) {
 		this.modelUI = model;
 		this.model = null;
+		this.errorHandler = null;
 
 		if ("" !== model.provider) {
 			let provider = null;
@@ -195,6 +196,10 @@
 		return new AI.Request(model);
 	};
 
+	AI.Request.prototype.setErrorHandler = function(callback) {
+		this.errorHandler = callback;
+	};
+
 	AI.Request.prototype.chatRequest = async function(content, block) {
 		return await this._wrapRequest(this._chatRequest, content, block !== false);
 	};
@@ -209,7 +214,11 @@
 			if (err.error) {
 				if (block)
 					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + this.modelUI.name + ")"]);
-				await Asc.Editor.callMethod("ShowError", [err.message, -1]);
+				if (this.errorHandler)
+					this.errorHandler(err);
+				else
+					await Asc.Editor.callMethod("ShowError", [err.message, -1]);
+				return;
 			}
 		}
 		if (block)
