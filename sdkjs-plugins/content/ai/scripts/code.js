@@ -188,8 +188,13 @@ function onOpenSummarizationModal() {
 	});
 	summarizationWindow.attachEvent("Summarize", async function(content) {
 		let requestEngine = AI.Request.create(AI.ActionType.Summarization);
-		if (!requestEngine)
+		if (!requestEngine) {
+			summarizationWindow.command("onSummarize", {
+				error : 1,
+				message : "Please, select the model for this action."
+			});
 			return;
+		}
 
 		requestEngine.setErrorHandler(function(data){
 			summarizationWindow && summarizationWindow.command("onSummarize", data);
