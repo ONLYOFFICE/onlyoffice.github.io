@@ -23,60 +23,77 @@ var loaderEl = document.getElementById('loader-wrapper');
 
 var langList = [
 	{ nameEn: 'English', nameLocale: 'English', value: 'en-US'},
-	{ nameEn: 'French', nameLocale: 'Français', value: 'en-US'},
-	{ nameEn: 'German', nameLocale: 'Deutsch', value: 'en-US'},
-	{ nameEn: 'Chinese', nameLocale: '中文', value: 'en-US'},
-	{ nameEn: 'Japanese', nameLocale: '日本語', value: 'en-US'},
+	{ nameEn: 'French', nameLocale: 'Français', value: 'fr-FR'},
+	{ nameEn: 'German', nameLocale: 'Deutsch', value: 'de-DE'},
+	{ nameEn: 'Chinese', nameLocale: '中文', value: 'zh-CN'},
+	{ nameEn: 'Japanese', nameLocale: '日本語', value: 'ja-JP'},
 	{ nameEn: 'Russian', nameLocale: 'Русский', value: 'ru-RU' },
-	{ nameEn: 'Korean', nameLocale: '한국어', value: 'en-US'},
-	{ nameEn: 'Spanish', nameLocale: 'Español', value: 'en-US'},
-	{ nameEn: 'Italian', nameLocale: 'Italiano', value: 'en-US'}
+	{ nameEn: 'Korean', nameLocale: '한국어', value: 'ko-KR'},
+	{ nameEn: 'Spanish', nameLocale: 'Español', value: 'es-ES'},
+	{ nameEn: 'Italian', nameLocale: 'Italiano', value: 'it-IT'}
 ];
+
+function insertEngine(type) {
+	return function() {
+		window.Asc.plugin.sendToPlugin("onSummarize", {
+			type : type,
+			data : resultAreaEl.value
+		});
+	}
+}
 
 var insertList = [
 	{
 		name: window.Asc.plugin.tr('As review'), 
 		value: 'review', 
-		insertCallback: function() {
-			// Here the logic of insert as review
-			console.log('review');
-		}
+		insertCallback: insertEngine("review")
 	},
 	{
 		name: window.Asc.plugin.tr('In comment'), 
-		value: 'comment', 
-		insertCallback: function() {
-			// Here the logic of insert as comment
-			console.log('comment');
-		}
+		value: 'comment',
+		insertCallback: insertEngine("comment")
 	},
 	{
 		name: window.Asc.plugin.tr('Replace original text'), 
-		value: 'replace', 
-		insertCallback: function() {
-			// Here the logic of replace original text
-			console.log('replace');
-		}
+		value: 'replace',
+		insertCallback: insertEngine("replace")
 	},
 	{
 		name: window.Asc.plugin.tr('To the end of document'), 
 		value: 'end', 
-		insertCallback: function() {
-			// Here the logic of insert end document
-			console.log('end');
-		}
+		insertCallback: insertEngine("end")
 	}
 ];
 
 
 window.Asc.plugin.init = function() {
-	window.Asc.plugin.sendToPlugin("onInit");
-	
 	updateLangList();
 	updateInsertList();
 
 	window.Asc.plugin.executeMethod("GetDocumentLang", [], setDefaultLang);
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+
+	window.Asc.plugin.attachEvent("onGetSelection", function(data) {
+		originalAreaEl.value = data;
+	});
+
+	window.Asc.plugin.attachEvent("onSummarize", function(data) {
+		$(loaderEl).hide();
+
+		if (data.error === 0) {
+			resultAreaEl.value = data.data;
+			insertBtnEl.removeAttribute('disabled');
+			copyBtnEl.removeAttribute('disabled');
+			$(errorAlertEl).hide();
+		} else {
+			resultAreaEl.value = '';
+			insertBtnEl.setAttribute('disabled', true);
+			copyBtnEl.setAttribute('disabled', true);
+			$(errorAlertEl).show().find('.error-description')[0].textContent = data.message;
+		}
+	});
+
+	window.Asc.plugin.sendToPlugin("onInit");
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
@@ -143,27 +160,21 @@ function onSummarize() {
 	var originalText = originalAreaEl.value.trim();
 	if(!originalText.length) return;
 
-	var startLoader = function() {
-		$(loaderEl).show();
-	};
-	var endLoader = function(errorText) {
-		$(loaderEl).hide();
+	let data = {
+		lang : "English",
+		data : originalAreaEl.value
 	};
 
-	startLoader();
-	fetchSummarize(originalText).then(function(data) {
-		endLoader();
-		resultAreaEl.value = data;
-		insertBtnEl.removeAttribute('disabled');
-		copyBtnEl.removeAttribute('disabled');
-		$(errorAlertEl).hide();
-	}).catch(function(error) {
-		endLoader();
-		resultAreaEl.value = '';
-		insertBtnEl.setAttribute('disabled', true);
-		copyBtnEl.setAttribute('disabled', true);
-		$(errorAlertEl).show().find('.error-description')[0].textContent = error;
-	});
+	let langId = $(langCmbEl).val();
+	for (let i = 0, len = langList.length; i < len; i++) {
+		if (langList[i].value === langId) {
+			data.lang = langList[i].nameEn;
+			break;
+		}
+	}
+
+	$(loaderEl).show();
+	window.Asc.plugin.sendToPlugin("Summarize", data);	
 }
 
 function onInsert() {
@@ -171,17 +182,4 @@ function onInsert() {
 	if(!itemInInsertLits) return;
 
 	itemInInsertLits.insertCallback();
-}
-
-function fetchSummarize(text) {
-	return new Promise(function(resolve, reject) {
-		setTimeout(function() {
-			if(text == 'error') {
-				reject('You exceeded your current quota, please check your plan and billing details.');
-			} else {
-				resolve(text);
-			}
-			
-		}, 500);
-	});
 }
