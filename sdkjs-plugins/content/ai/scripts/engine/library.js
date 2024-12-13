@@ -82,6 +82,18 @@
 		});
 	};
 
+	Library.prototype.InsertAsReview = async function(content) {
+		Asc.scope.content = content.trim();
+		return await Editor.callCommand(function(){
+			let doc = Api.GetDocument();
+			let isTrackRevisions = doc.IsTrackRevisions();
+			doc.SetTrackRevisions(true);
+			Api.pluginMethod_PasteText(Asc.scope.content);
+			if (!isTrackRevisions)
+				doc.SetTrackRevisions(false);
+		});
+	}
+
 	Library.prototype.PasteText = async function(text)
 	{
 		return await Editor.callMethod("PasteText", [text]);
