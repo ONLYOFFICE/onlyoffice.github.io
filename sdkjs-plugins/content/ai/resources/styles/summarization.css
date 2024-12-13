@@ -46,6 +46,7 @@ textarea {
 /* Базовый стиль кнопки */
 #copy-btn {
     padding: 0; 
+    height: 20px;
     border: none;
 }
 
