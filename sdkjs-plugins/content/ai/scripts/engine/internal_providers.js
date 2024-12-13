@@ -5,12 +5,16 @@
 	var AI = exports.AI;
 
 	// Together AI
-	AI.ProviderTogetherAI = function() {
-		AI.Provider.call(this, "Together AI", "https://api.together.xyz", "");
+	AI.ProviderTogetherAI = function(name, url, key) {
+		AI.Provider.call(this, name || "Together AI", url || "https://api.together.xyz", key || "");
 	};
 
 	AI.ProviderTogetherAI.prototype = Object.create(AI.Provider.prototype);
 	AI.ProviderTogetherAI.prototype.constructor = AI.ProviderTogetherAI;
+
+	AI.ProviderTogetherAI.prototype.createInstance = function(name, url, key) {
+		return new AI.ProviderTogetherAI(name, url, key);
+	};
 
 	AI.ProviderTogetherAI.prototype.checkModelCapability = function(model) {
 		if (model.context_length)
@@ -63,12 +67,16 @@
 	};
 
 	// OpenAI
-	AI.ProviderOpenAI = function() {
-		AI.Provider.call(this, "OpenAI", "https://api.openai.com", "");
+	AI.ProviderOpenAI = function(name, url, key) {
+		AI.Provider.call(this, name || "OpenAI", url || "https://api.openai.com", key || "");
 	};
 
 	AI.ProviderOpenAI.prototype = Object.create(AI.Provider.prototype);
 	AI.ProviderOpenAI.prototype.constructor = AI.ProviderOpenAI;
+
+	AI.ProviderOpenAI.prototype.createInstance = function(name, url, key) {
+		return new AI.ProviderOpenAI(name, url, key);
+	};
 
 	AI.ProviderOpenAI.prototype.checkModelCapability = function(model) {
 		if (-1 !== model.id.indexOf("whisper-1"))
@@ -133,20 +141,28 @@
 	};
 
 	// GPT4All
-	AI.ProviderGpt4All = function() {
-		AI.Provider.call(this, "GPT4All", "http://localhost:4891", "");
+	AI.ProviderGpt4All = function(name, url, key) {
+		AI.Provider.call(this, name || "GPT4All", url || "http://localhost:4891", key || "");
 	};
 
 	AI.ProviderGpt4All.prototype = Object.create(AI.Provider.prototype);
 	AI.ProviderGpt4All.prototype.constructor = AI.ProviderGpt4All;
 
+	AI.ProviderGpt4All.prototype.createInstance = function(name, url, key) {
+		return new AI.ProviderGpt4All(name, url, key);
+	};
+
 	// Mistral
-	AI.ProviderMistral = function() {
-		AI.Provider.call(this, "Mistral", "https://api.mistral.ai", "");
+	AI.ProviderMistral = function(name, url, key) {
+		AI.Provider.call(this, name || "Mistral", url || "https://api.mistral.ai", key || "");
 	};
 
 	AI.ProviderMistral.prototype = Object.create(AI.Provider.prototype);
 	AI.ProviderMistral.prototype.constructor = AI.ProviderMistral;
+
+	AI.ProviderMistral.prototype.createInstance = function(name, url, key) {
+		return new AI.ProviderMistral(name, url, key);
+	};
 
 	AI.ProviderMistral.prototype.checkModelCapability = function(model) {
 		if (-1 !== model.id.indexOf("mistral-embed"))

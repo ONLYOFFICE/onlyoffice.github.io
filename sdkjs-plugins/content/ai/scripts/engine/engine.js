@@ -113,8 +113,10 @@
 		});
 	}
 
+	AI.TmpProviderForModels = null;
 	AI.getModels = async function(provider)
 	{
+		AI.TmpProviderForModels = null;
 		return new Promise(function (resolve, reject) {
 			let headers = {};
 			headers["Content-Type"] = "application/json";
@@ -133,9 +135,7 @@
 						models : []
 					});
 				else {
-					let providerEngineCheckModel = AI.Storage.getProviderPrototypeByName(provider.name);
-					provider.models = [];
-					provider.modelsUI = [];
+					AI.TmpProviderForModels = AI.Provider.createInstance(provider.name, provider.url, provider.key);
 					for (let i = 0, len = data.data.length; i < len; i++)
 					{
 						let model = data.data[i];
@@ -148,21 +148,77 @@
 						model.options = {};
 
 						let modelUI = new AI.UI.Model(model.name, model.id, 
-							provider.name, providerEngineCheckModel(model));
-						provider.models.push(model);
-						provider.modelsUI.push(modelUI);
+							provider.name, AI.TmpProviderForModels.checkModelCapability(model));
+						AI.TmpProviderForModels.models.push(model);
+						AI.TmpProviderForModels.modelsUI.push(modelUI);
 					}
-
-					AI.Storage.setModelsToProvider(provider.models);
 
 					resolve({
 						error : 0,
 						message : "",
-						models : provider.modelsUI
+						models : AI.TmpProviderForModels.modelsUI
 					});
 				}
 			});
 		});
+	};
+
+	AI.Request = function(model) {
+		this.modelUI = model;
+		this.model = null;
+
+		if ("" !== model.provider) {
+			let provider = null;
+			for (let i in AI.Providers) {
+				if (model.provider === AI.Providers[i].name) {
+					provider = AI.Providers[i];
+					break;
+				}
+			}
+
+			if (provider) {
+				for (let i = 0, len = provider.models.length; i < len; i++) {
+					if (model.id === provider.models[i].id) {
+						this.model = provider.models[i];
+					}
+				}
+			}
+		}
+	};
+
+	AI.Request.create = function(action) {
+		let model = AI.Storage.getModelById(AI.Actions[action].model);
+		if (!model) {
+			onOpenSettingsModal();
+			return null;
+		}
+		return new AI.Request(model);
+	};
+
+	AI.Request.prototype.chatRequest = async function(content, block) {
+		return await this._wrapRequest(this._chatRequest, content, block !== false);
+	};
+
+	AI.Request.prototype._wrapRequest = async function(func, data, block) {
+		if (block)
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + this.modelUI.name + ")"]);
+		let result = undefined;
+		try {
+			result = await func.call(this, data);
+		} catch (err) {
+			if (err.error) {
+				if (block)
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + this.modelUI.name + ")"]);
+				await Asc.Editor.callMethod("ShowError", [err.message, -1]);
+			}
+		}
+		if (block)
+			await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + this.modelUI.name + ")"]);
+	};
+
+	AI.Request.prototype._chatRequest = async function(content) {
+		console.log(this);
+		throw { error : 1, message : "TODO: realize chat request" };
 	};
 
 	AI.chatRequest = async function(model, content_data)

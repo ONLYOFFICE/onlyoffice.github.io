@@ -219,7 +219,7 @@ function onModelInfo(info) {
 		providerKeyInputEl.value = key;
 	}
 	updateProviderComboBox(!!aiModel);
-	updateCapabilitiesBtns(info.model.capabilities);
+	updateCapabilitiesBtns(info.model ? info.model.capabilities : AI.CapabilitiesUI.None);
 }
 
 function onSubmit() {

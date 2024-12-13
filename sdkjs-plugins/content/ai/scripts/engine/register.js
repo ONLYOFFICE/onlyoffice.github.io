@@ -364,9 +364,13 @@
 		button4.text = "Translation";
 		button4.icons = getToolBarButtonIcons("translation");
 		button4.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.Translation);
+			if (!requestEngine)
+				return;
+
 			let lang = "english";
 			let content = await Asc.Library.GetSelectedText();
-			let result = await AI.getActionEngine(AI.ActionType.Translation).chatRequest(`Translate to ${lang}: ${content}`);
+			let result = await requestEngine.chatRequest(`Translate to ${lang}: ${content}`);
 			if (!result) return;
 			await Asc.Library.PasteText(result);
 		});

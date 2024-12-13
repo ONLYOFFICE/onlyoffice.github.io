@@ -1,6 +1,6 @@
 (function(exports, undefined)
 {
-	function Editor() {}
+	let Editor = {};
 	
 	Editor.callMethod = async function(name, args)
 	{
@@ -20,32 +20,30 @@
 		})());
 	};
 
-	var EditorInstance = new Editor();
-
 	exports.Asc = exports.Asc || {};
-	exports.Asc.Editor = EditorInstance;
+	exports.Asc.Editor = Editor;
 
 	function Library() {}
 
 	Library.prototype.GetCurrentWord = async function()
 	{
-		return await EditorInstance.callMethod("GetCurrentWord");
+		return await Editor.callMethod("GetCurrentWord");
 	};
 
 	Library.prototype.GetSelectedText = async function()
 	{
-		return await EditorInstance.callMethod("GetSelectedText");
+		return await Editor.callMethod("GetSelectedText");
 	};
 
 	Library.prototype.ReplaceTextSmart = async function(text)
 	{
-		return await EditorInstance.callMethod("ReplaceTextSmart", [text]);
+		return await Editor.callMethod("ReplaceTextSmart", [text]);
 	};
 
 	Library.prototype.InsertAsText = async function(text)
 	{
 		Asc.scope.data = (text || "").split("\n\n");
-		return await EditorInstance.callCommand(function() {
+		return await Editor.callCommand(function() {
 			let oDocument = Api.GetDocument();
 			for (let ind = 0; ind < Asc.scope.data.length; ind++) {
 				let text = Asc.scope.data[ind];
@@ -60,7 +58,7 @@
 
 	Library.prototype.InsertAsComment = async function(text)
 	{
-		return await EditorInstance.callMethod("AddComment", [{
+		return await Editor.callMethod("AddComment", [{
 			Username : "AI",
 			Text : text,
 			Time: Date.now(),
@@ -77,7 +75,7 @@
 			end = text.length;
 
 		Asc.scope.link = text.slice(start, end);
-		return await EditorInstance.callCommand(function(){
+		return await Editor.callCommand(function(){
 			let oDocument = Api.GetDocument();
 			let oRange = oDocument.GetRangeBySelect();
 			oRange.AddHyperlink(Asc.scope.link, "Meaning of the word");
@@ -86,7 +84,7 @@
 
 	Library.prototype.PasteText = async function(text)
 	{
-		return await EditorInstance.callMethod("PasteText", [text]);
+		return await Editor.callMethod("PasteText", [text]);
 	};
 
 	exports.Asc = exports.Asc || {};
