@@ -28,19 +28,35 @@ var langList = [
 
 var insertList = [
 	{
-		name: 'Review', 
+		name: 'As review', 
 		value: 'review', 
 		insertCallback: function() {
 			// Here the logic of insert as review
-			console.log('insert as review');
+			console.log('review');
 		}
 	},
 	{
-		name: 'Comment', 
+		name: 'In comment', 
 		value: 'comment', 
 		insertCallback: function() {
 			// Here the logic of insert as comment
-			console.log('insert as comment');
+			console.log('comment');
+		}
+	},
+	{
+		name: 'Replace original text', 
+		value: 'replace', 
+		insertCallback: function() {
+			// Here the logic of replace original text
+			console.log('replace');
+		}
+	},
+	{
+		name: 'To the end of document', 
+		value: 'end', 
+		insertCallback: function() {
+			// Here the logic of insert end document
+			console.log('end');
 		}
 	}
 ];
