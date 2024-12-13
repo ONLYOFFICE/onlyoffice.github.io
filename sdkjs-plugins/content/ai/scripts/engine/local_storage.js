@@ -175,6 +175,12 @@
 		return result;
 	};
 
+	AI.Storage.getProvider = function(name) {
+		if (AI.Providers[name])
+			return AI.Providers[name];
+		return null;
+	};
+
 	AI.Storage.load();
 
 })(window);
