@@ -45,8 +45,10 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-texts.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-text'), {
-			text: window.Asc.plugin.tr('Text'),
-			yAnchor: 'top'
+			text: 'Text',
+			yAnchor: 'top',
+			xAnchor: 'left',
+			align: 'left'
 		}),
 		capabilities: AI.CapabilitiesUI.Chat
 	},
@@ -56,7 +58,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-images.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-image'), {
-			text: window.Asc.plugin.tr('Images'),
+			text: 'Images',
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Image
@@ -67,7 +69,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-embeddings.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-embeddings'), {
-			text: window.Asc.plugin.tr('Embeddings'),
+			text: 'Embeddings',
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Embeddings
@@ -78,7 +80,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-audio.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-audio'), {
-			text: window.Asc.plugin.tr('Audio Processing'),
+			text: 'Audio Processing',
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Audio
@@ -89,7 +91,7 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-moderations.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-moderations'), {
-			text: window.Asc.plugin.tr('Content Moderation'),
+			text: 'Content Moderation',
 			yAnchor: 'top'
 		}),
 		capabilities: AI.CapabilitiesUI.Moderations
@@ -100,8 +102,8 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-realtime.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-realtime'), {
-			text: window.Asc.plugin.tr('Realtime Tasks'),
-			yAnchor: 'top'
+			text: 'Realtime Tasks',
+			yAnchor: 'top',
 		}),
 		capabilities: AI.CapabilitiesUI.Realtime
 	},
@@ -111,8 +113,10 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-code.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-code'), {
-			text: window.Asc.plugin.tr('Coding Help'),
-			yAnchor: 'top'
+			text: 'Coding Help',
+			yAnchor: 'top',
+			xAnchor: 'right',
+			align: 'right'
 		}),
 		capabilities: AI.CapabilitiesUI.Code
 	},
@@ -122,8 +126,10 @@ var capabilitiesElements = {
 			icon: 'resources/icons/light/ai-visual-analysis.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-vision'), {
-			text: window.Asc.plugin.tr('Visual Analysis'),
-			yAnchor: 'top'
+			text: 'Visual Analysis',
+			yAnchor: 'top',
+			xAnchor: 'right',
+			align: 'right'
 		}),
 		capabilities: AI.CapabilitiesUI.Vision
 	}
@@ -159,6 +165,11 @@ window.Asc.plugin.onTranslate = function () {
 	elements.forEach(function(element) {
 		element.innerText = window.Asc.plugin.tr(element.innerText);
 	});
+
+	for (const capability in capabilitiesElements) {
+		var item = capabilitiesElements[capability];
+		item.tip.setText(window.Asc.plugin.tr(item.tip.getText()));
+	}
 };
 
 function onThemeChanged(theme) {
@@ -315,7 +326,7 @@ function updateModelsList() {
 
 	var startLoader = function() {
 		updateModelsLoader && (updateModelsLoader.remove ? updateModelsLoader.remove() : $('#update-models-loader-container')[0].removeChild(updateModelsLoader));
-		updateModelsLoader = showLoader($('#update-models-loader-container')[0], 'Updating');
+		updateModelsLoader = showLoader($('#update-models-loader-container')[0], window.Asc.plugin.tr('Updating'));
 		$(updateModelsBtnEl).hide();
 		$(updateModelsErrorEl).hide();
 	};
@@ -464,6 +475,10 @@ function Tooltip(targetEl, options) {
 		} else if(this.options.yAnchor == 'top') {
 			this.tooltipEl.style.top = rectEl.top  - yOffset - rectTooltip.height + 'px';
 		}
+	};
+
+	this.getText = function() {
+		return this.options.text;
 	};
 
 	this.setText = function(text) {

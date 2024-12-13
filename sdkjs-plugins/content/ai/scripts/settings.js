@@ -131,7 +131,7 @@ function updatedComboBoxes() {
 
 				var src = 'resources/icons/light/' + capability.icon;
 				var result ='<img src="' + src + '"/>';
-				result += '<div>' + capability.name + ' ' + window.Asc.plugin.tr('Models') + '</div>';
+				result += '<div>' + window.Asc.plugin.tr(capability.name) + ' ' + window.Asc.plugin.tr('Models') + '</div>';
 				return $(result);
 			},
 			minimumResultsForSearch: Infinity,
