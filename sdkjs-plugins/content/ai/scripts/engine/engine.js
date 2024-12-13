@@ -383,34 +383,6 @@
 					return;
 				} else if (i === (len - 1)) {
 					return processResult(result);
-
-					let answer = processResult(result);
-
-					let indexOfBadRequest = answer.indexOf("Thank you for providing");
-					if (-1 != indexOfBadRequest && indexOfBadRequest < 30) {
-						let indexTask = content.indexOf(": \"");
-						if (-1 != indexTask && indexTask < 100) {
-							let endPrompt = content.substring(0, indexTask);
-							endPrompt = "Combine the data sent in parts earlier and process it as a single text."
-							if (!isUseCompletionsInsteadChat) {
-								objRequest.body.messages = [{role:"user",content:endPrompt}];
-							} else {
-								objRequest.body.prompt = endPrompt;				
-							}
-							let result = await requestWrapper(objRequest);
-							if (result.error) {
-								throw {
-									error : result.error, 
-									message : result.message
-								};
-								return;
-							} else {
-								return processResult(result);
-							}
-						}
-					}
-
-					return answer;
 				}
 
 			}
