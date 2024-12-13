@@ -40,10 +40,14 @@
 	"Your text" : "Your text",
 	"Target language" : "Target language",
 	"Summary result" : "Summary result",
-	"Insert result as" : "Insert result as",
+	"Insert result" : "Insert result",
 	"Summariaze" : "Summariaze",
 	"Insert" : "Insert",
 	"Summarization...": "Summarization...",
+	"As review": "As review",
+	"In comment": "In comment",
+	"Replace original text": "Replace original text",
+	"To the end of document": "To the end of document",
 
 
 	"Loading..." : "Загрузка...",
