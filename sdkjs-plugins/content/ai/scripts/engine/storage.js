@@ -128,6 +128,18 @@
 		this.models = [];
 		this.modelsUI = [];		
 	};
+
+	AI.Provider.createInstance = function(name, url, key) {
+		for (let i = 0, len = AI.Storage.InternalProviders.length; i < len; i++) {
+			if (name === AI.Storage.InternalProviders[i].name)
+				return AI.Storage.InternalProviders[i].createInstance(name, url, key);
+		}
+		return AI.Provider.prototype.createInstance(name, url, key);
+	};
+
+	AI.Provider.prototype.createInstance = function(name, url, key) {
+		return new AI.Provider(name, url, key);
+	};
 	AI.Provider.prototype.checkModelCapability = function(model) {
 		return AI.CapabilitiesUI.All;
 	};

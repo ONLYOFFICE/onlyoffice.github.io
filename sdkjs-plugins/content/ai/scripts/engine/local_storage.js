@@ -32,9 +32,18 @@
 		try {
 			let obj = {
 				version : AI.Storage.Version,
-				providers : AI.Providers,
+				providers : {},
 				models : AI.Models
 			};
+
+			for (let pr in AI.Providers)
+			{
+				obj.providers[pr] = {};
+				obj.providers[pr].name = AI.Providers[pr].name;
+				obj.providers[pr].url = AI.Providers[pr].url;
+				obj.providers[pr].key = AI.Providers[pr].key;
+				obj.providers[pr].models = AI.Providers[pr].models;
+			}
 
 			window.localStorage.setItem(localStorageKey, JSON.stringify(obj));
 
@@ -63,7 +72,14 @@
 			
 			if (obj) {
 				let oldProviders = AI.Providers;
-				AI.Providers = obj.providers;
+				AI.Providers = {};
+
+				for (let i in obj.providers) {
+					let pr = obj.providers[i];
+					AI.Providers[i] = AI.Provider.createInstance(pr.name, pr.url, pr.key);
+					AI.Providers[i].models = pr.models || [];
+				}
+
 				for (let pr in oldProviders)
 				{
 					if (!AI.Providers[pr])
@@ -87,12 +103,14 @@
 			AI.Providers[model.provider.name].url = model.provider.url;
 			AI.Providers[model.provider.name].key = model.provider.key;
 		} else {
-			AI.Providers[model.provider.name] = {
-				name : model.provider.name,
-				url : model.provider.url,
-				key : model.provider.key,
-				models : []
-			};
+			AI.Providers[model.provider.name] = 
+				AI.Provider.createInstance(model.provider.name, model.provider.url, model.provider.key);
+		}
+
+		if (AI.TmpProviderForModels && 
+			model.provider.name === AI.TmpProviderForModels.name && 
+			AI.TmpProviderForModels.models.length > 0) {
+			AI.Providers[model.provider.name].models = AI.TmpProviderForModels.models;
 		}
 
 		let isFoundModel = false;
@@ -129,12 +147,15 @@
 	AI.Storage.getModelByName = function(name) {
 		for (let i in AI.Models) {
 			if (AI.Models[i].name === name)
-				return {
-					name : AI.Models[i].name,
-					id : AI.Models[i].id,
-					provider : AI.Models[i].provider,
-					capabilities : AI.Models[i].capabilities,
-				};
+				return AI.Models[i];
+		}
+		return null;
+	};
+
+	AI.Storage.getModelById = function(id) {
+		for (let i in AI.Models) {
+			if (AI.Models[i].id === id)
+				return AI.Models[i];
 		}
 		return null;
 	};
@@ -152,21 +173,6 @@
 			}
 		}
 		return result;
-	};
-
-	AI.Storage.getProviderPrototypeByName = function(name) {
-		for (let i = 0, len = AI.Storage.InternalProviders.length; i < len; i++) {
-			if (name === AI.Storage.InternalProviders[i].name)
-				return AI.Storage.InternalProviders[i].checkModelCapability;			
-		}
-		return AI.Provider.prototype.checkModelCapability;
-	};
-
-	AI.Storage.setModelsToProvider = function(provider) {
-		if (!provider.models || 0 === provider.models.length)
-			return;
-		for (let i = 0, len = AI.Providers.length; i < len; i++)
-			AI.Providers[i].models = provider.models;
 	};
 
 	AI.Storage.load();
