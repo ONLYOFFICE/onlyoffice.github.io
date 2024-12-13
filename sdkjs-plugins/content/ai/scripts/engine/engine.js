@@ -71,7 +71,7 @@
 
 (function(window, undefined)
 {
-	function requestWrapper(message) {
+	async function requestWrapper(message) {
 		return new Promise(function (resolve, reject) {
 			if (AI.isLocalDesktop && AI.isLocalUrl(message.url)) {
 				window.AscSimpleRequest.createRequest({
@@ -214,75 +214,163 @@
 		}
 		if (block)
 			await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + this.modelUI.name + ")"]);
+		return result;
 	};
 
 	AI.Request.prototype._chatRequest = async function(content) {
-		console.log(this);
-		throw { error : 1, message : "TODO: realize chat request" };
-	};
+		let provider = null;
+		if (this.modelUI)
+			provider = AI.Storage.getProvider(this.modelUI.provider);
 
-	AI.chatRequest = async function(model, content_data)
-	{
-		return new Promise(function (resolve, reject) {
-			let max_tokens = 0;
+		if (!provider) {
+			throw { 
+				error : 1, 
+				message : "Please select the correct model for action." 
+			};
+			return;
+		}
 
-			// TODO: get max tokens for each model
-			let max_model_tokens = 4000;
-			if (model.options && model.options.max_tokens)
-				max_model_tokens = model.options.max_tokens;
-
-			if (max_model_tokens != 0)
-			{
-				let tokens_content = window.Asc.OpenAIEncode(content_data);
-				max_tokens = max_model_tokens - tokens_content.length;
-			}
-
-			let provider = AI.storage.getProvider(model.provider);
-			if (!provider)
-			{
-				resolve("");
-				return;
-			}
-
-			let headers = {};
-			headers["Content-Type"] = "application/json";
-			if (provider.key)
-				headers["Authorization"] = "Bearer " + provider.key;
-
-			return requestWrapper({
-				url : provider.url + "chat/completions",
-				headers : headers,
-				method : "POST",
-				body: {
-					max_tokens : max_tokens,
-					model : model.nameOrigin,
-					messages:[{role:"user",content:content_data}]
+		let isUseCompletionsInsteadChat = false;
+		if (this.model) {
+			let isFoundChatCompletions = false;
+			let isFoundCompletions = false;
+			for (let i = 0, len = this.model.endpoints.length; i < len; i++) {
+				if (this.model.endpoints[i] === AI.Endpoints.Types.v1.Chat_Completions) {
+					isFoundChatCompletions = true;
+					break;
 				}
-			}).then(function(data){
-					if (data.error)
-						resolve("");
-					else
-					{
-						let choice = data.data.choices[0];
-						let text = "";
-						if (choice.message)
-							text = choice.message.content;
-						if (choice.text)
-							text = choice.text;
+				if (this.model.endpoints[i] === AI.Endpoints.Types.v1.Completions) {
+					isFoundCompletions = true;
+					break;
+				}
+			}
 
-						let i = 0; let trimStartCh = "\n".charCodeAt(0);
-						while (text.charCodeAt(i) === trimStartCh)
-							i++;
-						if (i > 0)
-							text = text.substring(i);
-						resolve(text);
-					}
-				});
-		});
-	};    
+			if (isFoundCompletions && !isFoundChatCompletions)
+				isUseCompletionsInsteadChat = true;
+		}
 
-	
+		let isNoSplit = false;
+		let max_input_tokens = AI.InputMaxTokens["32k"];
+		if (this.model && this.model.options && undefined !== this.model.options.max_input_tokens)
+			max_input_tokens = this.model.options.max_input_tokens;
 
+		let headers = {};
+		headers["Content-Type"] = "application/json";
+		if (provider.key)
+			headers["Authorization"] = "Bearer " + provider.key;
+
+		let input_len = content.length;
+		let input_tokens = Asc.OpenAIEncode(content).length;
+
+		let messages = [];
+		if (input_tokens < max_input_tokens) {
+			messages.push(content);
+		} else {
+			let chunkLen = (((max_input_tokens - 1000) / input_tokens) * input_len) >> 0;
+			let currentLen = 0;
+			while (currentLen != input_len) {
+				let endSymbol = currentLen + chunkLen;
+				if (endSymbol >= input_len)
+					endSymbol = undefined;
+				messages.push(content.substring(currentLen, endSymbol));
+				if (undefined !== endSymbol)
+					currentLen = input_len;
+				else
+					currentLen = endSymbol;
+			}
+		}
+
+		let objRequest = {
+			headers : headers,
+			method : "POST"
+		};
+
+		if (!isUseCompletionsInsteadChat)
+			objRequest.url = provider.url + AI.Endpoints.getUrl(AI.Endpoints.Types.v1.Chat_Completions);
+		else
+			objRequest.url = provider.url + AI.Endpoints.getUrl(AI.Endpoints.Types.v1.Completions);
+
+		objRequest.body = {
+			model : this.modelUI.id
+		};
+
+		let processResult = function(data) {
+			let choice = data.data.choices[0];
+			let text = "";
+			if (choice.message)
+				text = choice.message.content;
+			if (choice.text)
+				text = choice.text;
+
+			let i = 0; let trimStartCh = "\n".charCodeAt(0);
+			while (text.charCodeAt(i) === trimStartCh)
+				i++;
+			if (i > 0)
+				text = text.substring(i);
+			return text; 
+		};
+
+		if (1 === messages.length) {
+			if (!isUseCompletionsInsteadChat) {
+				objRequest.body.messages = [{role:"user",content:messages[0]}];
+			} else {
+				objRequest.body.prompt = messages[0];				
+			}
+
+			let result = await requestWrapper(objRequest);
+			if (result.error) {
+				throw {
+					error : result.error, 
+					message : result.message
+				};
+				return;
+			} else {
+				return processResult(result);
+			}
+
+		} else {
+
+			function getHeader(part, partsCount) {
+				let header = "[START PART " + part + "/" + partsCount + "]\n";
+				if (part != partsCount) {
+					header = "Do not answer yet. This is just another part of the text I want to send you. Just receive and acknowledge as \"Part " + part + "/" + partsCount + " received\" and wait for the next part.\n" + header;
+				}
+				return header;
+			}
+
+			function getFooter(part, partsCount) {
+				let footer = "\n[END PART " + part + "/" + partsCount + "]\n";
+				if (part != partsCount) {
+					footer = "Remember not answering yet. Just acknowledge you received this part with the message \"Part " + part + "/" + partsCount + " received\" and wait for the next part.\n" + header;
+				} else {
+					footer += "ALL PARTS SENT. Now you can continue processing the request.\n";
+				}
+				return header;
+			}
+
+			for (let i = 0, len = messages.length; i < len; i++) {
+				
+				let message = getFooter(i + 1, len) + messages[i] + getFooter(i + 1, len);
+				if (!isUseCompletionsInsteadChat) {
+					objRequest.body.messages = [{role:"user",content:message}];
+				} else {
+					objRequest.body.prompt = message;				
+				}
+
+				let result = await requestWrapper(objRequest);
+				if (result.error) {
+					throw {
+						error : result.error, 
+						message : result.message
+					};
+					return;
+				} else if (i === (len - 1)) {
+					return processResult(result);
+				}
+
+			}
+		}
+	};
 	
 	function normalizeImageSize(size) {
 		let width = 0, height = 0;
@@ -313,45 +401,5 @@
 			image.src = img.src;
 		});
 	}
-
-	AI.getRequestModel = function(name)
-	{
-		let model = AI.storage.getModel(name);
-		if (!model || !model.provider)
-		{
-			return {
-				chatRequest : async function(data) {
-					onOpenSettingsModal();                    
-				},
-				imageGenerateRequest : async function(data) {
-					onOpenSettingsModal();                    
-				},
-				imageVariationRequest : async function(data) {
-					onOpenSettingsModal();                    
-				}
-			};
-		}
-
-		return {
-			chatRequest : async function(data, block) {
-				if (block !== false) 
-				{
-					await AI.callMethod("StartAction", ["Block", "AI (" + model.name + ")"]);
-					let result = await AI.chatRequest(model, data);
-					await AI.callMethod("EndAction", ["Block", "AI (" + model.name + ")"]);
-					return result;
-				}
-				return AI.chatRequest(model, data); 
-			},
-			imageGenerateRequest : async function(data, block) {
-				// TODO:
-				//return AI.imageGenerateRequest(model, data); 
-			},
-			imageVariationRequest : async function(data, block) {
-				// TODO:
-				//return AI.imageVariationRequest(model, data); 
-			},
-		}
-	};
 
 })(window);
