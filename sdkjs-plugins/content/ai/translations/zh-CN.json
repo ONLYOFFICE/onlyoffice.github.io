@@ -36,13 +36,18 @@
 	"Realtime Tasks": "处理实时任务",
 	"Coding Help": "处理代码",
 	"Visual Analysis": "进行视觉分析",
-
+	"Updating": "正在更新",
 	"Your text" : "您的文本",
 	"Target language" : "目标语言",
 	"Summary result" : "总结结果",
 	"Insert result" : "插入结果",
+	"Summarize" : "总结",
 	"Insert" : "插入",
 	"Summarization...": "总结...",
+	"As review": "以审阅方式插入",
+	"In comment": "插入到批注",
+	"Replace original text": "替换原文内容",
+	"To the end of document": "插入到文档末尾",
 
 
 	"Loading..." : "加载中...",

@@ -36,14 +36,18 @@
 	"Realtime Tasks": "Задачи в режиме реального времени",
 	"Coding Help": "Помощь в кодировании",
 	"Visual Analysis": "Визуальный анализ",
-	"Updating": "Updating",
-
+	"Updating": "Обновление",
 	"Your text" : "Ваш текст",
 	"Target language" : "Язык перевода",
 	"Summary result" : "Итоговый результат",
 	"Insert result" : "Вставить результат",
+	"Summarize" : "Резюмировать",
 	"Insert" : "Вставить",
 	"Summarization...": "Резюмирование...",
+	"As review": "В качестве рецензирования",
+	"In comment": "В комментарии",
+	"Replace original text": "Заменить исходный текст",
+	"To the end of document": "В конец документа",
 
 
 	"Loading..." : "Загрузка...",
