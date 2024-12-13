@@ -4,8 +4,8 @@ var insertCmbEl = document.getElementById('insert-as-cmb');
 var originalAreaEl = document.getElementById('original-textarea');
 var resultAreaEl = document.getElementById('result-textarea');
 
-var summariazeBtnEl = document.getElementById('summariaze-btn');
-summariazeBtnEl.addEventListener('click', onSummariaze);
+var summarizeBtnEl = document.getElementById('summarize-btn');
+summarizeBtnEl.addEventListener('click', onSummarize);
 
 var insertBtnEl = document.getElementById('insert-btn');
 insertBtnEl.setAttribute('disabled', true);
@@ -139,7 +139,7 @@ function updateInsertList() {
 	});
 }
 
-function onSummariaze() {
+function onSummarize() {
 	var originalText = originalAreaEl.value.trim();
 	if(!originalText.length) return;
 
@@ -151,7 +151,7 @@ function onSummariaze() {
 	};
 
 	startLoader();
-	fetchSummariaze(originalText).then(function(data) {
+	fetchSummarize(originalText).then(function(data) {
 		endLoader();
 		resultAreaEl.value = data;
 		insertBtnEl.removeAttribute('disabled');
@@ -173,7 +173,7 @@ function onInsert() {
 	itemInInsertLits.insertCallback();
 }
 
-function fetchSummariaze(text) {
+function fetchSummarize(text) {
 	return new Promise(function(resolve, reject) {
 		setTimeout(function() {
 			if(text == 'error') {
