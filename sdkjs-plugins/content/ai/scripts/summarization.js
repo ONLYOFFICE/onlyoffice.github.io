@@ -22,13 +22,20 @@ var errorAlertEl = document.getElementById('error-alert');
 var loaderEl = document.getElementById('loader-wrapper');
 
 var langList = [
-	{name: 'English', value: 'en-US'},
-	{name: 'Russian', value: 'ru-RU'}
+	{ nameEn: 'English', nameLocale: 'English', value: 'en-US'},
+	{ nameEn: 'French', nameLocale: 'Français', value: 'en-US'},
+	{ nameEn: 'German', nameLocale: 'Deutsch', value: 'en-US'},
+	{ nameEn: 'Chinese', nameLocale: '中文', value: 'en-US'},
+	{ nameEn: 'Japanese', nameLocale: '日本語', value: 'en-US'},
+	{ nameEn: 'Russian', nameLocale: 'Русский', value: 'ru-RU' },
+	{ nameEn: 'Korean', nameLocale: '한국어', value: 'en-US'},
+	{ nameEn: 'Spanish', nameLocale: 'Español', value: 'en-US'},
+	{ nameEn: 'Italian', nameLocale: 'Italiano', value: 'en-US'}
 ];
 
 var insertList = [
 	{
-		name: 'As review', 
+		name: window.Asc.plugin.tr('As review'), 
 		value: 'review', 
 		insertCallback: function() {
 			// Here the logic of insert as review
@@ -36,7 +43,7 @@ var insertList = [
 		}
 	},
 	{
-		name: 'In comment', 
+		name: window.Asc.plugin.tr('In comment'), 
 		value: 'comment', 
 		insertCallback: function() {
 			// Here the logic of insert as comment
@@ -44,7 +51,7 @@ var insertList = [
 		}
 	},
 	{
-		name: 'Replace original text', 
+		name: window.Asc.plugin.tr('Replace original text'), 
 		value: 'replace', 
 		insertCallback: function() {
 			// Here the logic of replace original text
@@ -52,7 +59,7 @@ var insertList = [
 		}
 	},
 	{
-		name: 'To the end of document', 
+		name: window.Asc.plugin.tr('To the end of document'), 
 		value: 'end', 
 		insertCallback: function() {
 			// Here the logic of insert end document
@@ -108,7 +115,7 @@ function updateLangList() {
 		data : langList.map(function(item) {
 			return {
 				id: item.value,
-				text: item.name
+				text: item.nameLocale + ' – ' + item.nameEn
 			}
 		}),
 		minimumResultsForSearch: Infinity,
