@@ -216,8 +216,14 @@
 					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + this.modelUI.name + ")"]);
 				if (this.errorHandler)
 					this.errorHandler(err);
-				else
-					await Asc.Editor.callMethod("ShowError", [err.message, -1]);
+				else {
+					if (true) {
+						await Asc.Library.SendError(err.message, -1);
+					} else {
+						// since 8.3.0!!!
+						await Asc.Editor.callMethod("ShowError", [err.message, -1]);
+					}
+				}
 				return;
 			}
 		}

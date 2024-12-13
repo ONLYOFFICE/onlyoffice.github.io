@@ -99,6 +99,15 @@
 		return await Editor.callMethod("PasteText", [text]);
 	};
 
+	Library.prototype.SendError = async function(text, errorLevel)
+	{
+		Asc.scope.errorText = text;
+		Asc.scope.errorLevel = errorLevel;
+		return await Editor.callCommand(function(){
+			Api.sendEvent("asc_onError", Asc.scope.errorText, Asc.scope.errorLevel);
+		});
+	};
+
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Library = new Library();
 
