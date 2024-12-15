@@ -63,9 +63,10 @@
 			switch (obj.version)
 			{
 			case undefined:
+			case 1:
 				obj = null;
 				break;
-			case 1:
+			case 2:
 			default:
 				break;
 			}

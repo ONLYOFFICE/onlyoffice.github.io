@@ -4,7 +4,7 @@
 	var AI = exports.AI;
 	AI.UI = AI.UI || {};
 	AI.Storage = AI.Storage || {};
-	AI.Storage.Version = 1;
+	AI.Storage.Version = 2;
 
 	AI.Endpoints = {
 
@@ -139,6 +139,9 @@
 
 	AI.Provider.prototype.createInstance = function(name, url, key) {
 		return new AI.Provider(name, url, key);
+	};
+	AI.Provider.prototype.checkExcludeModel = function(model) {
+		return false;
 	};
 	AI.Provider.prototype.checkModelCapability = function(model) {
 		return AI.CapabilitiesUI.All;
