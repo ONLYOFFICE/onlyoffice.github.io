@@ -59,7 +59,7 @@
 	Library.prototype.InsertAsComment = async function(text)
 	{
 		return await Editor.callMethod("AddComment", [{
-			Username : "AI",
+			UserName : "AI",
 			Text : text,
 			Time: Date.now(),
 			Solver: false
