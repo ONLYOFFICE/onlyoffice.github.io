@@ -67,6 +67,10 @@ var insertList = [
 
 
 window.Asc.plugin.init = function() {
+	if (Asc.plugin.info.editorType !== "word") {
+		insertList = insertList.slice(1, 3);
+	}
+
 	updateLangList();
 	updateInsertList();
 
@@ -141,7 +145,7 @@ function updateLangList() {
 	});
 }
 
-function updateInsertList() {	
+function updateInsertList() {
 	var cmbEl = $(insertCmbEl);
 	cmbEl.select2({
 		data : insertList.map(function(item) {

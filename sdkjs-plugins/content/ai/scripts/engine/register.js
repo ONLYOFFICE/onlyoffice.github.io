@@ -7,6 +7,10 @@
 
 	function chatWindowShow()
 	{
+		let requestEngine = AI.Request.create(AI.ActionType.Chat);
+		if (!requestEngine)
+			return;
+
 		let variation = {
 			url : "chat.html",
 			description : window.Asc.plugin.tr("AI"),
@@ -25,7 +29,7 @@
 
 			let content = await Asc.Library.GetSelectedText();
 			let result = await requestEngine.chatRequest(message);
-			if (!result) return;
+			if (!result) result = "";
 
 			result = result.replace(/\n\n/g, '\n');
 			chatWindow.command("onChatReply", result);
@@ -393,10 +397,15 @@
 		button2.text = "Summarization";
 		button2.icons = getToolBarButtonIcons("summarization");
 		button2.attachOnClick(async function(data){
+			let requestEngine = AI.Request.create(AI.ActionType.Summarization);
+			if (!requestEngine)
+				return;
+
 			onOpenSummarizationModal();
 			return;
 			// OLD VERSION:
-			let requestEngine = AI.Request.create(AI.ActionType.Translation);
+			/*
+			let requestEngine = AI.Request.create(AI.ActionType.Summarization);
 			if (!requestEngine)
 				return;
 
@@ -408,6 +417,7 @@
 				await Asc.Library.InsertAsText(result);
 			else
 				await Asc.Library.PasteText(result);
+			*/
 		});
 
 		/*
