@@ -147,6 +147,9 @@
 						model.endpoints = [];
 						model.options = {};
 
+						if (AI.TmpProviderForModels.checkExcludeModel(model))
+							continue;
+
 						let modelUI = new AI.UI.Model(model.name, model.id, 
 							provider.name, AI.TmpProviderForModels.checkModelCapability(model));
 						AI.TmpProviderForModels.models.push(model);

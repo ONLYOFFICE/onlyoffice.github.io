@@ -78,6 +78,13 @@
 		return new AI.ProviderOpenAI(name, url, key);
 	};
 
+	AI.Provider.prototype.checkExcludeModel = function(model) {
+		if (-1 !== model.id.indexOf("babbage-002") ||
+			-1 !== model.id.indexOf("davinci-002"))
+			return true;
+		return false;
+	};
+
 	AI.ProviderOpenAI.prototype.checkModelCapability = function(model) {
 		if (-1 !== model.id.indexOf("whisper-1"))
 		{
@@ -131,8 +138,11 @@
 			model.options.max_input_tokens = AI.InputMaxTokens["128k"];
 		else if (0 === model.id.indexOf("gpt-4"))
 			model.options.max_input_tokens = AI.InputMaxTokens["8k"];
-		else if ("gpt-3.5-turbo-instruct" === model.id)
+		else if (-1 != model.id.indexOf("gpt-3.5-turbo-instruct")) {
 			model.options.max_input_tokens = AI.InputMaxTokens["4k"];
+			model.endpoints.push(AI.Endpoints.Types.v1.Completions);
+			return AI.CapabilitiesUI.Chat;
+		}
 		else if (0 === model.id.indexOf("gpt-3.5-turbo"))
 			model.options.max_input_tokens = AI.InputMaxTokens["16k"];
 
