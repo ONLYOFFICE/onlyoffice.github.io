@@ -39,6 +39,9 @@
 		};
 
 		var chatWindow = new window.Asc.PluginWindow();
+		chatWindow.attachEvent("onWindowReady", function() {
+			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]])
+		});
 		chatWindow.attachEvent("onChatMessage", async function(message) {
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
@@ -48,7 +51,7 @@
 			let result = await requestEngine.chatRequest(message);
 			if (!result) result = "";
 
-			result = result.replace(/\n\n/g, '\n');
+			//result = result.replace(/\n\n/g, '\n');
 			chatWindow.command("onChatReply", result);
 		});
 		chatWindow.show(variation);

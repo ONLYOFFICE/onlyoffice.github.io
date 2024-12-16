@@ -4,6 +4,18 @@ html, body {
 	margin: 0px !important;
 }
 
+p {
+	margin: 5px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 10px;
+}
+
+ul, ol {
+	margin: 10px;
+}
+
 .loader {
 	margin: 0 !important;
 	position: absolute;
@@ -47,6 +59,7 @@ input {
 	display: flex;
 	flex-direction: column;
 	overflow: auto;
+	background: #ffffff;
 }
 
 .span_message {
@@ -56,6 +69,7 @@ input {
 	margin: 5px 10px;
 	width: fit-content;
 	height: fit-content;
+	white-space: normal;
 }
 
 .user_message {
@@ -111,4 +125,5 @@ input {
 
 .input_message {
 	height: 44px;
+	background: #ffffff;
 }
