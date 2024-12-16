@@ -1,0 +1,193 @@
+body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+    /* border-bottom: 1px solid #cbcbcb; */
+}
+
+.section-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+.section-label label{
+    font-weight: bold;
+}
+
+#provider-section-label {
+    margin-bottom: 12px;
+}
+
+.action-btn {
+    all: unset;
+    cursor: pointer;
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-decoration-thickness: 1px; 
+}
+
+.action-btn[disabled] {
+    cursor: default;
+    opacity: 0.7;
+}
+
+#update-models-row {
+	display: flex;
+	align-items: center;
+}
+
+#update-models-loader-container {
+	height: 100%;
+}
+
+#update-models-error {
+	cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin: -4px;
+    margin-left: 2px;
+}
+
+.asc-plugin-loader {
+	position: initial;
+    display: flex;
+    align-items: center;
+    transform: translate(0px, 6px);
+}
+
+.asc-loader-title {
+	font-size: 11px !important;
+    padding-left: 4px !important;
+    min-width: auto !important;
+}
+
+.form-vertical-item{
+    display: flex;
+    flex-direction: column;
+}
+.form-horizontal-item{
+    display: flex;
+    align-items: center;
+}
+.form-horizontal-item label {
+    width: 50px;
+}
+.form-horizontal-item input,
+.form-horizontal-item .select2{
+    flex: 1;
+}
+
+.form-vertical-item, 
+.form-horizontal-item{
+    margin-bottom: 6px;
+}
+
+#block-use-for > :not(:first-child){
+    margin-left: 4px;
+}
+
+
+.tooltip {
+    line-height: 12px;
+    position: absolute;
+    z-index: 10;
+    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: 4px;
+	white-space: nowrap;
+	/* max-width: 200px; */
+}
+body.theme-light .tooltip,
+body.theme-gray .tooltip {
+    background-color: #fff;
+    border-color: #c0c0c0;
+}
+body.theme-classic-light .tooltip {
+    background-color: #fff;
+    border-color: #cfcfcf;
+}
+body.theme-dark .tooltip {
+    background-color: #333;
+    border-color: #666;
+}
+body.theme-contrast-dark .tooltip {
+    background-color: #1e1e1e;
+    border-color: #696969;
+}
+
+
+.toggle-button {
+    all: unset;
+    display: inline-block;
+    padding: 4px;
+    height: 20px;
+    border: 1px solid;
+    border-radius: 2px;
+}
+.toggle-button:hover:not([disabled]) {
+    cursor: pointer;
+}
+.toggle-button[disabled] {
+    opacity: 0.4;
+}
+
+.toggle-button img {
+    width: 20px;
+    height: 20px;
+}
+
+body.theme-light .toggle-button,
+body.theme-gray .toggle-button {
+    border-color: #c0c0c0;
+}
+body.theme-light .toggle-button:hover:not([disabled]),
+body.theme-gray .toggle-button:hover:not([disabled]) {
+    background-color: #e0e0e0;
+}
+body.theme-light .toggle-button.active,
+body.theme-gray .toggle-button.active {
+    background-color: #cbcbcb;
+}
+
+body.theme-classic-light .toggle-button {
+    border-color: #cfcfcf;
+}
+body.theme-classic-light .toggle-button:hover:not([disabled]) {
+    background-color: #d8dadc;
+}
+body.theme-classic-light .toggle-button.active {
+    background-color: #7d858c !important;
+}
+body.theme-classic-light .toggle-button.active img{
+    filter: invert(1);
+}
+
+body.theme-dark .toggle-button {
+    border-color: #666;
+}
+body.theme-dark .toggle-button:hover:not([disabled]) {
+    background-color: #555;
+}
+body.theme-dark .toggle-button.active {
+    background-color: #707070 !important;
+}
+
+body.theme-contrast-dark .toggle-button {
+    border-color: #696969;
+}
+body.theme-contrast-dark .toggle-button:hover:not([disabled]) {
+    background-color: #424242;
+}
+body.theme-contrast-dark .toggle-button.active {
+    background-color: #666666 !important;
+}
+
+.select2-container {
+    max-height: none !important;
+}

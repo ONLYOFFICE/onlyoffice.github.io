@@ -1,0 +1,96 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Edit action</title>
+
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
+		<script type="text/javascript" src="scripts/engine/storage.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+		<link rel="stylesheet" href="./resources/styles/common.css">
+		<link rel="stylesheet" href="./resources/styles/aiModelEdit.css">
+    </head>
+    <body class="noselect">
+		<div class="section">
+			<div class="form-vertical-item">
+				<div class="section-label">
+					<label class="i18n">Model name</label>
+				</div>
+				<input id="name-input" type="text" class="form-control"/>
+			</div>
+		</div>
+
+		<div class="section">
+			<div class="section-label" id="provider-section-label">
+				<label class="i18n">Provider</label>
+			</div>
+			<div class="form-horizontal-item">
+				<label class="i18n">Name</label>
+				<select id="provider-name-cmb" class="form-control"></select>
+			</div>
+			<div class="form-horizontal-item">
+				<label class="i18n">URL</label>
+				<input id="provider-url-input" type="text" class="form-control"/>
+			</div>
+			<div class="form-horizontal-item">
+				<label class="i18n">Key</label>
+				<input id="provider-key-input" type="text" class="form-control"/>
+			</div>
+		</div>
+
+		<div class="section">
+			<div class="form-vertical-item">
+				<div class="section-label">
+					<label class="i18n">Model</label>
+					<div id="update-models-row">
+						<div id="update-models-loader-container" class="asc-loader-container"></div>
+						<button id="update-models-btn" class="action-btn i18n">Update models list</button>
+						<img id="update-models-error" src="resources/icons/error-small/error.png"/>
+					</div>
+				</div>
+				<select id="model-name-cmb" class="form-control"></select>
+			</div>
+		</div>
+
+		<div class="section" style="margin-bottom: 0;">
+			<div class="form-vertical-item">
+				<div class="section-label">
+					<label class="i18n">Use model for</label>
+				</div>
+			</div>
+			<div class="form-horizontal-item" id="block-use-for" style="margin-bottom: 0;">
+				<div id="use-for-text"></div>
+				<div id="use-for-image"></div>
+				<div id="use-for-embeddings"></div>
+				<div id="use-for-audio"></div>
+				<div id="use-for-moderations"></div>
+				<div id="use-for-realtime"></div>
+				<div id="use-for-code"></div>
+				<div id="use-for-vision"></div>
+
+			</div>
+		</div>
+		<script type="text/javascript" src="scripts/aiModelEdit.js"></script>
+    </body>
+</html>
