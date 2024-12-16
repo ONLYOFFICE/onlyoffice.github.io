@@ -2,6 +2,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow-y: auto;
 }
 
 #description {
@@ -84,3 +85,7 @@ body {
 #actions-list .select2-selection__arrow {
     display: none;
 } */
+
+.select2-container--default .select2-results > #select2-ai-model-select-2-results {
+    max-height: 160px;
+}
