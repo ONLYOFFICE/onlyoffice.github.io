@@ -64,7 +64,7 @@
 
 	let capabilitiesAll = 0;
 	for (let item in AI.CapabilitiesUI)
-		capabilitiesAll = AI.CapabilitiesUI[item];
+		capabilitiesAll |= AI.CapabilitiesUI[item];
 	AI.CapabilitiesUI.All = capabilitiesAll;
 
 	AI.Endpoints.getUrl = function(type) {
