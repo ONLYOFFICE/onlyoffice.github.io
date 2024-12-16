@@ -42,7 +42,7 @@ var capabilitiesElements = {
 	text: {
 		btn: new ToggleButton({
 			id: 'use-for-text',
-			icon: 'resources/icons/light/ai-texts.png'
+			icon: 'resources/icons/light/ai-texts' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-text'), {
 			text: 'Text',
@@ -55,7 +55,7 @@ var capabilitiesElements = {
 	image: {
 		btn: new ToggleButton({
 			id: 'use-for-image',
-			icon: 'resources/icons/light/ai-images.png'
+			icon: 'resources/icons/light/ai-images' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-image'), {
 			text: 'Images',
@@ -66,7 +66,7 @@ var capabilitiesElements = {
 	embeddings: {
 		btn: new ToggleButton({
 			id: 'use-for-embeddings',
-			icon: 'resources/icons/light/ai-embeddings.png'
+			icon: 'resources/icons/light/ai-embeddings' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-embeddings'), {
 			text: 'Embeddings',
@@ -77,7 +77,7 @@ var capabilitiesElements = {
 	audio: {
 		btn: new ToggleButton({
 			id: 'use-for-audio',
-			icon: 'resources/icons/light/ai-audio.png'
+			icon: 'resources/icons/light/ai-audio' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-audio'), {
 			text: 'Audio Processing',
@@ -88,7 +88,7 @@ var capabilitiesElements = {
 	moderations: {
 		btn: new ToggleButton({
 			id: 'use-for-moderations',
-			icon: 'resources/icons/light/ai-moderations.png'
+			icon: 'resources/icons/light/ai-moderations' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-moderations'), {
 			text: 'Content Moderation',
@@ -99,7 +99,7 @@ var capabilitiesElements = {
 	realtime: {
 		btn: new ToggleButton({
 			id: 'use-for-realtime',
-			icon: 'resources/icons/light/ai-realtime.png'
+			icon: 'resources/icons/light/ai-realtime' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-realtime'), {
 			text: 'Realtime Tasks',
@@ -110,7 +110,7 @@ var capabilitiesElements = {
 	code: {
 		btn: new ToggleButton({
 			id: 'use-for-code',
-			icon: 'resources/icons/light/ai-code.png'
+			icon: 'resources/icons/light/ai-code' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-code'), {
 			text: 'Coding Help',
@@ -123,7 +123,7 @@ var capabilitiesElements = {
 	vision: {
 		btn: new ToggleButton({
 			id: 'use-for-vision',
-			icon: 'resources/icons/light/ai-visual-analysis.png'
+			icon: 'resources/icons/light/ai-visual-analysis' + getZoomSuffixForImage() + '.png'
 		}),
 		tip: new Tooltip(document.getElementById('use-for-vision'), {
 			text: 'Visual Analysis',
@@ -172,6 +172,9 @@ window.Asc.plugin.onTranslate = function () {
 	}
 };
 
+window.addEventListener("resize", onResize);
+onResize();
+
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	themeType = theme.Type;
@@ -188,6 +191,32 @@ function onThemeChanged(theme) {
 		var src = $(this).attr('src');
 		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + theme.type + '$3');
 		$(this).attr('src', newSrc);
+	});
+}
+
+function getZoomSuffixForImage() {
+	var ratio = Math.round(window.devicePixelRatio / 0.25) * 0.25;
+	ratio = Math.max(ratio, 1);
+	ratio = Math.min(ratio, 2);
+	if(ratio == 1) return ''
+	else {
+		return '@' + ratio + 'x';
+	}
+}
+
+function onResize () {
+	$('img').each(function() {
+		var el = $(this);
+		var src = $(el).attr('src');
+		if(!src.includes('resources/icons/')) return;
+
+		var srcParts = src.split('/');
+		var fileNameWithRatio = srcParts.pop();
+		var clearFileName = fileNameWithRatio.replace(/@\d+(\.\d+)?x/, '');
+		var newFileName = clearFileName;
+		newFileName = clearFileName.replace(/(\.[^/.]+)$/, getZoomSuffixForImage() + '$1');
+		srcParts.push(newFileName);
+		el.attr('src', srcParts.join('/'));
 	});
 }
 

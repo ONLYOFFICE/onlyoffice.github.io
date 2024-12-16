@@ -48,10 +48,10 @@ body {
 
 #update-models-error {
 	cursor: pointer;
-	margin-left: 6px;
-    width: 12px;
-    height: 12px;
-    background: url('../icons/error-small/error.png') no-repeat center;
+    width: 20px;
+    height: 20px;
+    margin: -4px;
+    margin-left: 2px;
 }
 
 .asc-plugin-loader {
@@ -126,6 +126,7 @@ body.theme-contrast-dark .tooltip {
     all: unset;
     display: inline-block;
     padding: 4px;
+    height: 20px;
     border: 1px solid;
     border-radius: 2px;
 }
@@ -134,6 +135,11 @@ body.theme-contrast-dark .tooltip {
 }
 .toggle-button[disabled] {
     opacity: 0.4;
+}
+
+.toggle-button img {
+    width: 20px;
+    height: 20px;
 }
 
 body.theme-light .toggle-button,
