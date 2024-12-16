@@ -70,7 +70,7 @@
 					lastElement.MoveCursorToPos(100000);
 				}
 			}
-		};
+		});
 		return await Editor.callMethod("PasteHtml", [data]);
 	};
 
