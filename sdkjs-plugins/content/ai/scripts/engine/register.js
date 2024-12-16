@@ -65,7 +65,8 @@
 				return;
 
 			let content = await Asc.Library.GetCurrentWord();
-			let result = await requestEngine.chatRequest(`What does it mean "${content}"?`);
+			let prompt = Asc.Prompts.getExplainPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			result = result.replace(/\n\n/g, '\n');
@@ -106,7 +107,8 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Rewrite differently and give result on the same language: ${content}`);
+			let prompt = Asc.Prompts.getTextRewritePrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			result = result.replace(/\n\n/g, '\n');
@@ -123,7 +125,8 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Make this text longer and give result on the same language: ${content}`);
+			let prompt = Asc.Prompts.getTextLongerPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			result = result.replace(/\n\n/g, '\n');
@@ -140,7 +143,8 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Make this text simpler and give result on the same language: ${content}`);
+			let prompt = Asc.Prompts.getTextShorterPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			result = result.replace(/\n\n/g, '\n');
@@ -183,7 +187,8 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Get Key words from this text: "${content}"`);
+			let prompt = Asc.Prompts.getTextKeywordsPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			await Asc.Library.InsertAsText(result);
@@ -208,7 +213,8 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`What does it mean "${content}"?`);
+			let prompt = Asc.Prompts.getExplainPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			result = result.replace(/\n\n/g, '\n');
@@ -225,7 +231,8 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Give a link to the explanation of the word "${content}"`);
+			let prompt = Asc.Prompts.getExplainAsLinkPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			result = result.replace(/\n\n/g, '\n');
@@ -252,7 +259,8 @@
 
 			let lang = data;
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Translate to ${lang}: ${content}`);
+			let prompt = Asc.Prompts.getTranslatePrompt(content, lang);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			await Asc.Library.PasteText(result);
@@ -422,22 +430,6 @@
 				return;
 
 			onOpenSummarizationModal();
-			return;
-			// OLD VERSION:
-			/*
-			let requestEngine = AI.Request.create(AI.ActionType.Summarization);
-			if (!requestEngine)
-				return;
-
-			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Summarize this text: "${content}"`);
-			if (!result) return;
-			
-			if (Asc.plugin.info.editorType === "word")
-				await Asc.Library.InsertAsText(result);
-			else
-				await Asc.Library.PasteText(result);
-			*/
 		});
 
 		/*
@@ -460,7 +452,8 @@
 
 			let lang = "english";
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Translate to ${lang}: ${content}`);
+			let prompt = Asc.Prompts.getTranslatePrompt(content, lang);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 			await Asc.Library.PasteText(result);
 		});
