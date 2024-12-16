@@ -61,6 +61,10 @@ body {
     right: 0 !important;
 }
 
+.select2-container {
+    max-height: none !important;
+}
+
 .select2-results__group {
     display: flex !important;
     align-items: center;
