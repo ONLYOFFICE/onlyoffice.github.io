@@ -33,7 +33,7 @@
 		bCreateLoader = false;
 		destroyLoader();
 		document.getElementById('message').focus();
-		sendPluginMessage({type: 'onWindowReady'});
+		window.Asc.plugin.sendToPlugin("onWindowReady", {});
 		document.getElementById('message').onkeydown = function(e) {
 			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
 				e.target.value += '\n';
@@ -103,7 +103,16 @@
 		let message = type ? document.createElement('div') : document.getElementById('loading');
 		let textMes = document.createElement('span');
 		textMes.classList.add('form-control', 'span_message');
-		textMes.innerText = text;
+
+		if (false) {
+			textMes.innerText = text;
+		} else {
+			let c = window.markdownit();
+			let htmlContent = c.render(text);
+			textMes.style.display = "block";
+			textMes.innerHTML = htmlContent;
+		}
+
 		chat.scrollTop = chat.scrollHeight;
 		if (type) {
 			message.classList.add('user_message');
@@ -173,10 +182,6 @@
 	function clearError() {
 		document.getElementById('div_err').classList.add('hidden');
 		document.getElementById('lb_err').innerHTML = '';
-	};
-
-	function sendPluginMessage(message) {
-		window.Asc.plugin.sendToPlugin("onWindowMessage", message);
 	};
 
 	window.Asc.plugin.onTranslate = function() {

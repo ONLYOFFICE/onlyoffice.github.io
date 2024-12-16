@@ -20,6 +20,15 @@
 		})());
 	};
 
+	Editor.pause = async function(msec)
+	{
+		return new Promise(resolve => (function(){
+			setTimeout(function(){
+				resolve();				
+			}, msec);
+		})());
+	};
+
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Editor = Editor;
 
@@ -101,19 +110,23 @@
 	};
 
 	Library.prototype.InsertAsReview = async function(content, isHtml) {
-		Asc.scope.content = content.trim();
 		Asc.scope.isHtml = !!isHtml;
-		return await Editor.callCommand(function(){
+		let isTrackRevisions = await Editor.callCommand(function(){
 			let doc = Api.GetDocument();
-			let isTrackRevisions = doc.IsTrackRevisions();
-			doc.SetTrackRevisions(true);
-			if (Asc.scope.isHtml)
-				Api.pluginMethod_PasteHtml(Asc.scope.content);
-			else
-				Api.pluginMethod_PasteText(Asc.scope.content);
-			if (!isTrackRevisions)
-				doc.SetTrackRevisions(false);
+			let res = doc.IsTrackRevisions();
+			//doc.SetTrackRevisions(true);
+			Api.asc_SetLocalTrackRevisions(true);
+			return res;
 		});
+
+		await Editor.callMethod(isHtml ? "PasteHtml" : "PasteText", [content.trim()]);
+		
+		if (!isTrackRevisions) {
+			await Editor.callCommand(function(){
+				//return Api.GetDocument().SetTrackRevisions(false);
+				Api.asc_SetLocalTrackRevisions(false);
+			});
+		}
 	}
 
 	Library.prototype.PasteText = async function(text)
