@@ -75,7 +75,7 @@ function renderActionsList() {
 				'<img src="resources/icons/' + themeType + '/' + icon + '.png"/>' +
 				'<div>' + action.name + '</div>' +
 			'</div>' +
-			'<select class="ai-model-select" class=""></select>';
+			'<select class="ai-model-select" id="ai-model-select-' + (index) + '"></select>';
 		actionsListEl.appendChild(createdEl);
 		var selectEl = $(createdEl).find('.ai-model-select');
 		selectEl.on('select2:select', function (e) {
@@ -129,7 +129,7 @@ function updatedComboBoxes() {
 					return 'Available models';
 				}
 
-				var src = 'resources/icons/light/' + capability.icon;
+				var src = 'resources/icons/'+ themeType +'/' + capability.icon;
 				var result ='<img src="' + src + '"/>';
 				result += '<div>' + window.Asc.plugin.tr(capability.name) + ' ' + window.Asc.plugin.tr('Models') + '</div>';
 				return $(result);
