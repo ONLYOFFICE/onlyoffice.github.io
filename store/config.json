@@ -33,5 +33,6 @@
 	{ "name": "insertQR", "discussion": "" },
 	{ "name": "idphoto", "discussion": "" },
 	{ "name": "cvbuilder", "discussion": "" },
-	{ "name": "onlydraw", "discussion": "" }
+	{ "name": "onlydraw", "discussion": "" },
+	{ "name": "pomodoro", "discussion": "" }
 ]
