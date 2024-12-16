@@ -50,7 +50,11 @@
 					"resources/store/screenshots/screen_3.png",
 					"resources/store/screenshots/screen_4.png",
 					"resources/store/screenshots/screen_5.png",
-					"resources/store/screenshots/screen_6.png"
+					"resources/store/screenshots/screen_6.png",
+					"resources/store/screenshots/screen_7.png",
+					"resources/store/screenshots/screen_8.png",
+					"resources/store/screenshots/screen_9.png",
+					"resources/store/screenshots/screen_10.png"
 				],
 				"icons" : {
 					"light" : "resources/store/icons",
