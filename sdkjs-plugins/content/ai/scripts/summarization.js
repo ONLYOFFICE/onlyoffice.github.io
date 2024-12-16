@@ -123,6 +123,14 @@ function onThemeChanged(theme) {
 	});
 	document.body.classList.add(theme.name);
 	document.body.classList.add('theme-type-' + theme.Type);
+	$('img').each(function() {
+		var el = $(this);
+		var src = $(el).attr('src');
+		if(!src.includes('resources/icons/')) return;
+
+		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
+		el.attr('src', newSrc);
+	});
 }
 
 function getZoomSuffixForImage() {
