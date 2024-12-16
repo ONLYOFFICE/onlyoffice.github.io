@@ -59,7 +59,7 @@ textarea {
 }
 
 body.theme-type-dark #copy-btn div,
-body.theme-classic-light #copy-btn:active div{
+body.theme-classic-light #copy-btn:active:not([disabled]) div{
     background-image: url('../icons/dark/copy.png');
 }
 
