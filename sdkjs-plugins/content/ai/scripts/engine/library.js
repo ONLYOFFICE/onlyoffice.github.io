@@ -56,6 +56,14 @@
 		});
 	};
 
+	Library.prototype.InsertAsHTML = async function(data)
+	{
+		await Editor.callCommand(function() {
+			Api.GetDocument().MoveCursorToEndPos();
+		});
+		return await Editor.callMethod("PasteHtml", [data]);
+	};
+
 	Library.prototype.InsertAsComment = async function(text)
 	{
 		return await Editor.callMethod("AddComment", [{
@@ -82,13 +90,17 @@
 		});
 	};
 
-	Library.prototype.InsertAsReview = async function(content) {
+	Library.prototype.InsertAsReview = async function(content, isHtml) {
 		Asc.scope.content = content.trim();
+		Asc.scope.isHtml = !!isHtml;
 		return await Editor.callCommand(function(){
 			let doc = Api.GetDocument();
 			let isTrackRevisions = doc.IsTrackRevisions();
 			doc.SetTrackRevisions(true);
-			Api.pluginMethod_PasteText(Asc.scope.content);
+			if (Asc.scope.isHtml)
+				Api.pluginMethod_PasteHtml(Asc.scope.content);
+			else
+				Api.pluginMethod_PasteText(Asc.scope.content);
 			if (!isTrackRevisions)
 				doc.SetTrackRevisions(false);
 		});

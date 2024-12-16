@@ -82,7 +82,7 @@ window.Asc.plugin.init = function() {
 	});
 
 	window.Asc.plugin.attachEvent("onSummarize", function(data) {
-		$(loaderEl).hide();
+		//$(loaderEl).hide();
 
 		if (data.error === 0) {
 			resultAreaEl.value = data.data;
@@ -177,7 +177,7 @@ function onSummarize() {
 		}
 	}
 
-	$(loaderEl).show();
+	//$(loaderEl).show();
 	window.Asc.plugin.sendToPlugin("Summarize", data);	
 }
 
