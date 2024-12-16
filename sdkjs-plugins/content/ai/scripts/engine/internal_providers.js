@@ -225,6 +225,8 @@
 	AI.Storage.InternalProviders.push(new AI.ProviderOpenAI());
 	AI.Storage.InternalProviders.push(new AI.ProviderTogetherAI());
 	AI.Storage.InternalProviders.push(new AI.ProviderMistral());
-	AI.Storage.InternalProviders.push(new AI.ProviderGpt4All());
+
+	if (window["AscDesktopEditor"])
+		AI.Storage.InternalProviders.push(new AI.ProviderGpt4All());
 
 })(window);
