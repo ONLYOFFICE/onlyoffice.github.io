@@ -85,13 +85,7 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-
-			let prompt = `I want you to act as an editor and proofreader. \
-I will provide you with some text that needs to be checked for spelling and grammar errors. \
-Your task is to carefully review the text and correct any mistakes, \
-ensuring that the corrected text is free of errors and maintains the original meaning. \
-Only return the corrected text. \
-Here is the text that needs revision: \"${content}\"`;
+			let prompt = Asc.Prompts.getFixAndSpellPrompt(content);
 
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
@@ -171,10 +165,11 @@ Here is the text that needs revision: \"${content}\"`;
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Summarize this text: "${content}"`);
+			let prompt = Asc.Prompts.getSummarizationPrompt(content);
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
-			result = "Summarize selected text:\n\n" + result;
+			result = "Summary:\n\n" + result;
 			await Asc.Library.InsertAsText(result);
 		});
 

@@ -1,7 +1,7 @@
 body {
     display: flex;
     flex-direction: column;
-    /*overflow-y: auto;*/
+    overflow-y: auto;
 }
 
 .section {
@@ -186,4 +186,8 @@ body.theme-contrast-dark .toggle-button:hover:not([disabled]) {
 }
 body.theme-contrast-dark .toggle-button.active {
     background-color: #666666 !important;
+}
+
+.select2-container {
+    max-height: none !important;
 }
