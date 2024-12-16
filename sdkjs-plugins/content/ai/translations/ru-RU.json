@@ -15,6 +15,7 @@
 	"Code": "Код",
 	"Vision": "Вид",
 	"Models": "Модели",
+	"Models not found": "Модели не найдены",
 
 	"AI Models list" : "Список ИИ-моделей",
 	"Add" : "Добавить",

@@ -396,7 +396,7 @@ function updateModelComboBox() {
 		}),
 		language: {
 			noResults: function() {
-				return "Models not found";
+				return window.Asc.plugin.tr("Models not found");
 		   }
 	   	},
 		minimumResultsForSearch: Infinity,
