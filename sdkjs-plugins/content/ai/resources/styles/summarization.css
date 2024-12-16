@@ -43,7 +43,6 @@ textarea {
     margin-left: 8px;
 }
 
-/* Базовый стиль кнопки */
 #copy-btn {
     padding: 0; 
     height: 20px;
@@ -51,16 +50,9 @@ textarea {
 }
 
 
-/* Иконка внутри кнопки */
-#copy-btn div {
+#copy-btn img {
     height: 20px;
     width: 20px;
-    background-image: url('../icons/light/copy.png');
-}
-
-body.theme-type-dark #copy-btn div,
-body.theme-classic-light #copy-btn:active:not([disabled]) div{
-    background-image: url('../icons/dark/copy.png');
 }
 
 .summary-wrapper {

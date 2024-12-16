@@ -39,6 +39,9 @@ window.Asc.plugin.onTranslate = function () {
 	});
 };
 
+window.addEventListener("resize", onResize);
+onResize();
+
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	themeType = theme.type;
@@ -58,6 +61,32 @@ function onThemeChanged(theme) {
 	});
 }
 
+function getZoomSuffixForImage() {
+	var ratio = Math.round(window.devicePixelRatio / 0.25) * 0.25;
+	ratio = Math.max(ratio, 1);
+	ratio = Math.min(ratio, 2);
+	if(ratio == 1) return ''
+	else {
+		return '@' + ratio + 'x';
+	}
+}
+
+function onResize () {
+	$('img').each(function() {
+		var el = $(this);
+		var src = $(el).attr('src');
+		if(!src.includes('resources/icons/')) return;
+
+		var srcParts = src.split('/');
+		var fileNameWithRatio = srcParts.pop();
+		var clearFileName = fileNameWithRatio.replace(/@\d+(\.\d+)?x/, '');
+		var newFileName = clearFileName;
+		newFileName = clearFileName.replace(/(\.[^/.]+)$/, getZoomSuffixForImage() + '$1');
+		srcParts.push(newFileName);
+		el.attr('src', srcParts.join('/'));
+	});
+}
+
 function renderActionsList() {
 	var actionsListEl = document.getElementById('actions-list');
 	actionsListEl.innerHTML = '';
@@ -72,7 +101,7 @@ function renderActionsList() {
 		}
 		createdEl.innerHTML =
 			'<div class="label">' +
-				'<img src="resources/icons/' + themeType + '/' + icon + '.png"/>' +
+				'<img src="resources/icons/' + themeType + '/' + icon + getZoomSuffixForImage() + '.png"/>' +
 				'<div>' + action.name + '</div>' +
 			'</div>' +
 			'<select class="ai-model-select" id="ai-model-select-' + (index) + '"></select>';
@@ -91,7 +120,7 @@ function renderActionsList() {
 
 function toggleScrollbarPadding() {
 	var actionsListEl = document.getElementById('actions-list');
-	// Проверяем, есть ли скроллбар
+	// Check if there is a scroll bar
 	if (actionsListEl.scrollHeight > actionsListEl.clientHeight) {
 		actionsListEl.classList.add('with-scrollbar');
 	} else {
@@ -125,7 +154,7 @@ function updatedComboBoxes() {
 			dropdownAutoWidth: true,
 			width : 150
 		});
-		// TODO: Если активной модели больше нету в списке, ставить null и тригерить событие на изменение модели
+		// TODO: If the active model is no longer in the list, set null and trigger an event to change the model.
 		selectEl.val(action.model);
 		selectEl.trigger('change');
 	});
