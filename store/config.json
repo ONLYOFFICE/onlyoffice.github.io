@@ -34,5 +34,6 @@
 	{ "name": "idphoto", "discussion": "" },
 	{ "name": "cvbuilder", "discussion": "" },
 	{ "name": "onlydraw", "discussion": "" },
-	{ "name": "pomodoro", "discussion": "" }
+	{ "name": "pomodoro", "discussion": "" },
+	{ "name": "videoembedder", "discussion": "" }
 ]
