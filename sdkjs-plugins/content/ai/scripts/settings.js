@@ -115,24 +115,11 @@ function updatedComboBoxes() {
 
 		selectEl.select2().empty();
 		selectEl.select2({
-			data : [{
-				text: 'Text-Based Models',
-				children: options
-			}],
-			templateResult: function (data) {
-				if(!data.children) {
-					return data.text;
+			data: options,
+			language: {
+				noResults: function() {
+					return window.Asc.plugin.tr("Models not found");
 				}
-
-				var capability = capabilitiesList[action.capabilities];
-				if(!capability) {
-					return 'Available models';
-				}
-
-				var src = 'resources/icons/'+ themeType +'/' + capability.icon;
-				var result ='<img src="' + src + '"/>';
-				result += '<div>' + window.Asc.plugin.tr(capability.name) + ' ' + window.Asc.plugin.tr('Models') + '</div>';
-				return $(result);
 			},
 			minimumResultsForSearch: Infinity,
 			dropdownAutoWidth: true,
