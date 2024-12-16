@@ -85,7 +85,7 @@
 					},
 					error: function(e, status, error) {
 						if ( e.statusCode == -102 ) e.statusCode = 404;
-						resolve({error: e.statusCode, message: ""});
+						resolve({error: e.statusCode, message: "Internal error"});
 					}
 				});
 			} else {
