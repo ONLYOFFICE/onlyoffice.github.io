@@ -200,7 +200,8 @@ function onOpenSummarizationModal() {
 			summarizationWindow && summarizationWindow.command("onSummarize", data);
 		});
 
-		let result = await requestEngine.chatRequest(`Summarize and transate to ${content.lang} this text: "${content.data}"`);
+		let prompt = Asc.Prompts.getSummarizationPrompt(content.data, content.lang);
+		let result = await requestEngine.chatRequest(prompt);
 		if (!result) {
 			summarizationWindow.command("onSummarize", {
 				error : 1,
