@@ -144,7 +144,7 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 325]
+		size : [320, 330]
 	};
 
 	aiModelEditWindow = new window.Asc.PluginWindow();
