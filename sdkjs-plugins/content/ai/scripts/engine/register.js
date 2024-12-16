@@ -1,5 +1,22 @@
 (function(window, undefined)
 {
+	function trimResult(data, posStart) {
+		let pos = posStart || 0;
+		if (-1 != pos) {
+			let trimC = ["\"", "'", "\n", "\r"];
+			while (pos < data.length && trimC.includes(data[pos]))
+				pos++;
+
+			let posEnd = data.length - 1;
+			while (posEnd > 0 && trimC.includes(data[posEnd]))
+				posEnd--;
+
+			if (posEnd > pos)
+				return data.substring(pos, posEnd + 1);				
+		}
+		return data;
+	}
+
 	// register contextmenu buttons
 	let buttonMain = new Asc.ButtonContextMenu();
 	buttonMain.text = "AI";
@@ -68,11 +85,19 @@
 				return;
 
 			let content = await Asc.Library.GetSelectedText();
-			let result = await requestEngine.chatRequest(`Сorrect the errors in this text: ${content}`);
+
+			let prompt = `I want you to act as an editor and proofreader. \
+I will provide you with some text that needs to be checked for spelling and grammar errors. \
+Your task is to carefully review the text and correct any mistakes, \
+ensuring that the corrected text is free of errors and maintains the original meaning. \
+Only return the corrected text. \
+Here is the text that needs revision: \"${content}\"`;
+
+			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
 			if (result !== 'The text is correct, there are no errors in it.')
-			   await Asc.Library.ReplaceTextSmart(result);
+			   await Asc.Library.ReplaceTextSmart([result]);
 			else
 				console.log('The text is correct, there are no errors in it.');
 		});

@@ -214,10 +214,36 @@ function onOpenSummarizationModal() {
 		});
 	});
 	summarizationWindow.attachEvent("onSummarize", async function(data) {
+		let htmlContent = undefined;
+
+		if (data.data) {
+			let testMD = [
+				"**",
+				"============",
+				"------------",
+				"~~~",
+				"###"
+			];
+
+			let isHtml = false;
+			for (let i = 0, len = testMD.length; i < len; i++) {
+				let pos = data.data.indexOf(testMD[i]);
+				if (-1 != pos && pos < 100) {
+					isHtml = true;
+					break;
+				}
+			}
+
+			if (isHtml) {
+				let c = new showdown.Converter();
+				htmlContent = c.makeHtml(data.data);
+			}
+		}
+
 		switch (data.type) {
 		case "review": {
 			if (Asc.plugin.info.editorType === "word")
-				await Asc.Library.InsertAsReview(data.data);
+				await Asc.Library.InsertAsReview(htmlContent ? htmlContent : data.data, htmlContent !== undefined);
 			else
 				await Asc.Library.InsertAsComment(data.data);
 			break;
@@ -227,11 +253,17 @@ function onOpenSummarizationModal() {
 			break;
 		}
 		case "replace": {
-			await Asc.Library.PasteText(data.data);
+			if (htmlContent !== undefined)
+				await Asc.Library.InsertAsHTML(htmlContent);
+			else
+				await Asc.Library.PasteText(data.data);
 			break;
 		}
 		case "end": {
-			await Asc.Library.InsertAsText(data.data);
+			if (htmlContent !== undefined)
+				await Asc.Library.InsertAsHTML(htmlContent);
+			else
+				await Asc.Library.InsertAsText(data.data);
 			break;
 		}
 		}
