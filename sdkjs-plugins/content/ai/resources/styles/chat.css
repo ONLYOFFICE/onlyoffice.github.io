@@ -37,7 +37,7 @@ input {
 .chat_window {
 	display: flex;
 	flex-direction: column;
-	margin: 5px;
+	margin: 12px;
 	flex: 1;
 }
 
