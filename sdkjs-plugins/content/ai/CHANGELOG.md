@@ -39,3 +39,6 @@
 
 ## 2.0.0
 * The plugin has been completely redesigned.
+
+## 2.1.0
+* Bug fix.
