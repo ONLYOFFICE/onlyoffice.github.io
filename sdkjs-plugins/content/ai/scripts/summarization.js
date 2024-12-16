@@ -113,7 +113,7 @@ onResize();
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
-	themeType = theme.Type;
+	themeType = theme.type || 'light';
 	
 	var classes = document.body.className.split(' ');
 	classes.forEach(function(className) {
@@ -122,7 +122,7 @@ function onThemeChanged(theme) {
 		}
 	});
 	document.body.classList.add(theme.name);
-	document.body.classList.add('theme-type-' + theme.Type);
+	document.body.classList.add('theme-type-' + themeType);
 	$('img').each(function() {
 		var el = $(this);
 		var src = $(el).attr('src');

@@ -177,7 +177,7 @@ onResize();
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
-	themeType = theme.Type;
+	themeType = theme.type || 'light';
 	
 	var classes = document.body.className.split(' ');
 	classes.forEach(function(className) {
@@ -186,10 +186,10 @@ function onThemeChanged(theme) {
 		}
 	});
 	document.body.classList.add(theme.name);
-	document.body.classList.add('theme-type-' + theme.Type);
+	document.body.classList.add('theme-type-' + themeType);
 	$('.toggle-button img').each(function() {
 		var src = $(this).attr('src');
-		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + theme.type + '$3');
+		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
 		$(this).attr('src', newSrc);
 	});
 }
