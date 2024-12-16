@@ -59,8 +59,18 @@
 	Library.prototype.InsertAsHTML = async function(data)
 	{
 		await Editor.callCommand(function() {
-			Api.GetDocument().MoveCursorToEndPos();
-		});
+			let doc = Api.GetDocument();
+			let paras = doc.GetAllParagraphs();
+			if (paras.length)
+			{
+				let lastPara = paras[paras.length - 1];
+				let lastElement = lastPara.GetElement(lastPara.GetElementsCount() - 1);
+				if (lastElement && lastElement.MoveCursorToPos)
+				{
+					lastElement.MoveCursorToPos(100000);
+				}
+			}
+		};
 		return await Editor.callMethod("PasteHtml", [data]);
 	};
 
@@ -139,13 +149,60 @@ Here is the text that needs revision: \"${content}\"`;
 				prompt += "and translate the result to " + language;
 				prompt += "Return only the resulting translated text.";
 			} else {
-				prompt += "Return only the resulting text";
+				prompt += "Return only the resulting text.";
 			}
 			prompt += "Text: \"\"\"\n";
 			prompt += content;
 			prompt += "\n\"\"\"";
 			return prompt;
 		},
+		getTranslatePrompt(content, language) {
+			let prompt = "Translate the following text to " + language;
+			prompt += ". Return only the resulting text.";
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		},
+		getExplainPrompt(content) {
+			let prompt = "Explain what the following text means. Return only the resulting text.";
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		},
+		getTextLongerPrompt(content) {
+			let prompt = "Make the following text longer. Return only the resulting text.";
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		},
+		getTextShorterPrompt(content) {
+			let prompt = "Make the following text simpler. Return only the resulting text.";
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		},
+		getTextRewritePrompt(content) {
+			let prompt = "Rewrite the following text differently. Return only the resulting text.";
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		},
+		getTextKeywordsPrompt(content) {
+			let prompt = `Get Key words from this text: "${content}"`;
+			return prompt;
+		},
+		getExplainAsLinkPrompt(content) {
+			let prompt = "Give a link to the explanation of the following text. Return only the resulting link.";
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		}
 	};
 
 })(window);
