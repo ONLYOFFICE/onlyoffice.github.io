@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>OnlyDraw</title>
+        <!-- <link rel="stylesheet" href="style.css"> -->
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                width: 450px;
+            }
+
+            .button-container {
+                margin: 10px;
+            }
+            button {
+                margin: 5px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .drawContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #f9f9f9;
+                height: 350px;  /* 添加固定高度 */
+                width: 100%;    /* 确保宽度占满容器 */            
+            }
+
+            .groupContaine {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #f9f9f9;
+                height: 350px;  /* 添加固定高度 */
+                width: 100%;    /* 确保宽度占满容器 */  
+                overflow-y: auto;  /* 添加垂直滚动 */          
+            }
+
+            .image-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #f9f9f9;            
+            }
+            .nav {
+                display: flex; /* 添加此行以使按钮在一排显示 */
+                align-items: center; /* 垂直居中对齐 */
+                margin: 0px 0;
+                border: 2px solid #ccc; /* 添加边框 */
+                padding: 10px; /* 添加内边距 */
+                background-color: #f9f9f9; /* 设置背景颜色 */
+                border-radius: 5px; /* 添加圆角*/
+                white-space: nowrap;
+            }
+            .nav button {
+                margin: 0 5px;
+                border: none; /* 去掉按钮的边框 */
+                background: none; /* 去掉按钮的背景 */
+                padding: 5px 5px; /*添加内边距以增加点击区域 */
+                cursor: pointer; /* 鼠标悬停时显示为手型 */
+                color: #ccc; /* 添加默认文字颜色 */
+            }
+            .nav button.selected {
+                color: black; /* 点击后变为灰色 */
+            }
+            .nav button + button::before { /* 添加竖杆 */
+                content: '|'; /* 竖杆的内容 */
+                margin: 0 10px; /* 竖杆的左右间距 */
+                color: #ccc; /* 竖杆的颜色 */
+            }
+            .nav button:first-child::before { /* 确保第一个按钮前面有竖杆 */
+                content: '|'; /* 显示竖杆 */
+                margin: 0 10px; /* 竖杆的左右间距 */
+                color: #ccc; /* 竖杆的颜色 */    
+            }
+            .nav button.selected::before { /* 选中按钮的竖杆变成黑色 */
+                content: '|'; /* 竖杆的内容 */
+                margin: 0 10px; /* 竖杆的左右间距 */
+                color: black; /* 竖杆的颜色变为黑色 */
+            }
+            /* 呈现图片 */
+            .images {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .images img {
+                margin: 10px;
+                width: auto; /* 设置图片宽度 */
+                height: 50px; /* 自适应高度 */
+            }
+
+             /* 简单的模态框样式 */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgb(0,0,0);
+                background-color: rgba(0,0,0,0.4);
+                padding-top: 60px;
+            }
+            .modal-content {
+                background-color: #fefefe;
+                margin: 5% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+            }
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+
+        </style>
+    </head>
+
+    <body>
+        <div class="button-container"></div>
+            <button id="select-file">Upload Pictures</button>
+            <button id="emoji">Emote</button>
+            <button id="free-draw">Free drawing</button>
+            <!-- <button id="insert">插入</button> -->
+        </div>
+
+        <div style="margin:1px; ">
+            <p id="textElement3" style="display: block; margin:1px 1px 5px 1px;">
+                Please double click to insert picture
+            </p> <!-- 添加虚线边框 -->
+
+        </div>        
+        
+         <!-- 图片将动态加载到这里 -->
+        <div class="image-container" id="imagecontainers">
+            <div class="nav" style="overflow-x: auto; white-space: nowrap; max-width: 100%;"> <!-- 修改为垂直排列 -->
+                <div style="display: flex; "> <!-- 修改为水平排列 -->
+                    <button id="Technology" onclick="loadImages('emjoy')">Technology</button>
+                    <button id="People" onclick="loadImages('person')">People</button>
+                    <button id="Nature" onclick="loadImages('nuture')">Nature</button>
+                    <button id="Foods" onclick="loadImages('food')">Foods</button>
+                    <button id="Hand-drawn" onclick="loadImages('draw')">Hand drawn</button>
+                    <button id="Goods" onclick="loadImages('goods')">Goods</button>
+                    <button id="Myself" onclick="loadImages_myself('myself')">Myself</button>
+                </div>
+            </div>
+
+            <span id="textElement1" style="display: none;">
+                textElement1.innerText = 'Double click to insert picture';       
+            </span>
+            <span id="textElement2" style="display: none;">
+                textElement2.innerText = 'Double-click the drawn image to insert the document';       
+            </span>
+            <span id="textlabel" style="display: none;">
+                textlabel.innerText = 'Please enter file path';       
+            </span>
+            <span id="textsave" style="display: none;">
+                textsave.innerText = 'Saved successfully';       
+            </span>
+            <span id="textConfirm" style="display: none;">
+                textConfirm.innerText = 'Confirm';       
+            </span>
+            <span id="textsave2" style="display: none;">
+                textsave2.innerText = 'Download';       
+            </span>
+            <span id="textsave3" style="display: none;">
+                textsave3.innerText = 'Insert';       
+            </span>
+            <!-- <span id="textsave4" style="display: none;">
+                textsave4.innerText = '添加';        -->
+            </span>
+            <span id="textclean" style="display: none;">
+                textclean.innerText = 'Clear screen';       
+            </span>
+
+            <span id="text" style="display: none;">
+                text.innerText = 'Please choose the face and the expression you want.';       
+            </span>
+
+
+            <!-- 显示图像的 -->
+            <div class="images" id="images"></div>
+            <!-- 自由绘画 -->
+            <div class="drawContainer" id="drawContainer"></div>
+
+            <!-- 表情包 -->
+            <div class="groupContaine" id="groupContainer"></div>
+        </div>
+
+
+    </body>
+
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+
+    <!-- <script type="text/javascript" src="./scripts/plugin.js"></script>
+    <script type="text/javascript" src="./scripts/plugins-ui.js"></script>
+    <script type="text/javascript" src="./scripts/plugins.css"></script> -->
+    <script type="text/javascript" src="./scripts/code.js"></script>
+
+
+
+    <!-- 竖杆变色 -->
+    <script type="text/javascript">
+        // 添加事件监听器以处理按钮点击
+        document.querySelectorAll('.nav button').forEach(button => {
+            button.addEventListener('click', function() {
+                // 移除所有按钮的选中状态
+                document.querySelectorAll('.nav button').forEach(btn => btn.classList.remove('selected'));
+                // 为当前按钮添加选中状态
+                this.classList.add('selected');
+            });
+        });
+    </script>
+    
+
+    <script>
+        // 在其他脚本之前添加
+        window.localStorage.setItem('debug', 'false');
+        window.Asc = window.Asc || {};
+        window.Asc.plugin = window.Asc.plugin || {};
+
+        window.Asc.plugin.init = function() {
+            // 插件初始化代码
+            document.getElementById("Technology").click();
+        };
+
+        // 页面加载时自动点击科技按钮
+        // document.getElementById("Technology").click();  
+        window.Asc.plugin.onTranslate = () => {
+                document.getElementById("select-file").innerText = window.Asc.plugin.tr("Upload Pictures");
+                document.getElementById("emoji").innerText = window.Asc.plugin.tr("Emote");
+                document.getElementById("free-draw").innerText = window.Asc.plugin.tr("Free drawing");
+                document.getElementById("Technology").innerText = window.Asc.plugin.tr("Technology");
+                document.getElementById("People").innerText = window.Asc.plugin.tr("People");
+                document.getElementById("Nature").innerText = window.Asc.plugin.tr("Nature");
+                document.getElementById("Foods").innerText = window.Asc.plugin.tr("Foods");
+                document.getElementById("Hand-drawn").innerText = window.Asc.plugin.tr("Hand drawn");
+                document.getElementById("Goods").innerText = window.Asc.plugin.tr("Goods");
+                document.getElementById("Myself").innerText = window.Asc.plugin.tr("Myself");
+                document.getElementById("textElement1").innerText = window.Asc.plugin.tr("Double click to insert picture");
+                document.getElementById("textElement2").innerText = window.Asc.plugin.tr("Double-click the drawn image to insert the document");
+                document.getElementById("textElement3").innerText = window.Asc.plugin.tr("Please double click to insert picture");
+                document.getElementById("textlabel").innerText = window.Asc.plugin.tr("Double-click the drawn image to insert the document");
+                document.getElementById("textsave").innerText = window.Asc.plugin.tr("Saved successfully");
+                document.getElementById("textConfirm").innerText = window.Asc.plugin.tr("Confirm");
+                document.getElementById("textsave2").innerText = window.Asc.plugin.tr("Download");
+                document.getElementById("textclean").innerText = window.Asc.plugin.tr("Clear screen");
+                document.getElementById("text").innerText = window.Asc.plugin.tr("Please choose the face and the expression you want.");
+                document.getElementById("textsave3").innerText = window.Asc.plugin.tr("Insert");
+            }
+    </script>
+
+
+        
+    <body style="width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;">
+        <div id="plugin name" style="margin: 0; padding: 0;"></div>
+    </body>
+
+</html>
