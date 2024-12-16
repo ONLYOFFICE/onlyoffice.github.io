@@ -123,4 +123,29 @@
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Library = new Library();
 
+	exports.Asc.Prompts = {
+		getFixAndSpellPrompt(content) {
+			let prompt = `I want you to act as an editor and proofreader. \
+I will provide you with some text that needs to be checked for spelling and grammar errors. \
+Your task is to carefully review the text and correct any mistakes, \
+ensuring that the corrected text is free of errors and maintains the original meaning. \
+Only return the corrected text. \
+Here is the text that needs revision: \"${content}\"`;
+			return prompt;
+		},
+		getSummarizationPrompt(content, language) {
+			let prompt = "Summarize the following text. ";
+			if (language) {
+				prompt += "and translate the result to " + language;
+				prompt += "Return only the resulting translated text.";
+			} else {
+				prompt += "Return only the resulting text";
+			}
+			prompt += "Text: \"\"\"\n";
+			prompt += content;
+			prompt += "\n\"\"\"";
+			return prompt;
+		},
+	};
+
 })(window);
