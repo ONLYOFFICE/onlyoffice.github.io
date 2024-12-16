@@ -187,6 +187,9 @@
 		elements.forEach(function(element) {
 			element.innerText = window.Asc.plugin.tr(element.innerText);
 		});
+
+		// Textarea
+		document.getElementById('message').setAttribute('placeholder', window.Asc.plugin.tr('Ask AI a question about something...'));
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
@@ -203,6 +206,7 @@
 		settings.messages.push({role: "AI", content: reply});
 		createMessage(reply, 0);
 		removeTyping();
+		document.getElementById('message').focus();
 	});
 
 })(window, undefined);
