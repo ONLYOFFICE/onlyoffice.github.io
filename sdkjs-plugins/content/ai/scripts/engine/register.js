@@ -30,7 +30,7 @@
 
 		let variation = {
 			url : "chat.html",
-			description : window.Asc.plugin.tr("AI"),
+			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
 			isModal : false,
