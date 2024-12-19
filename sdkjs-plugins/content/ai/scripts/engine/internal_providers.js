@@ -164,7 +164,7 @@
 
 	AI.ProviderGpt4All.prototype.getRequestBodyOptions = function() {
 		return {
-			max_tokens : 0
+			max_tokens : 4096
 		};
 	};
 
@@ -241,6 +241,26 @@
 		return new AI.ProviderAnthropic(name, url, key);
 	};
 
+	AI.ProviderAnthropic.prototype.checkModelCapability = function(model) {
+		if (0 == model.id.indexOf("claude-2"))
+		{
+			model.options.max_input_tokens = AI.InputMaxTokens["100k"];
+			model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
+			return AI.CapabilitiesUI.Chat;
+		}
+
+		if (0 == model.id.indexOf("claude-3-5-haiku"))
+		{
+			model.options.max_input_tokens = AI.InputMaxTokens["200k"];
+			model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
+			return AI.CapabilitiesUI.Chat;
+		}
+		
+		model.options.max_input_tokens = AI.InputMaxTokens["200k"];
+		model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
+		return AI.CapabilitiesUI.Chat | AI.CapabilitiesUI.Vision;
+	};
+
 	AI.ProviderAnthropic.prototype.overrideEndpointUrl = function(endpoint) {
 		if (AI.Endpoints.Types.v1.Chat_Completions === endpoint)
 			return "/v1/messages";
@@ -249,7 +269,7 @@
 
 	AI.ProviderAnthropic.prototype.getRequestBodyOptions = function() {
 		return {
-			"max_tokens": 1024
+			"max_tokens": 4096
 		};
 	};
 
