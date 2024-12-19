@@ -196,17 +196,24 @@ function onOpenSummarizationModal() {
 			return;
 		}
 
+		let isError = false;
 		requestEngine.setErrorHandler(function(data){
 			summarizationWindow && summarizationWindow.command("onSummarize", data);
+			isError = true;
 		});
 
 		let prompt = Asc.Prompts.getSummarizationPrompt(content.data, content.lang);
 		let result = await requestEngine.chatRequest(prompt);
+
+		if (isError)
+			return;
+
 		if (!result) {
 			summarizationWindow.command("onSummarize", {
 				error : 1,
 				message : "Empty result"
 			});
+			return;
 		}
 
 		summarizationWindow && summarizationWindow.command("onSummarize", {

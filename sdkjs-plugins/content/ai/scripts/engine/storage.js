@@ -155,6 +155,22 @@
 		}
 	};
 
+	AI.Provider.prototype.overrideEndpointUrl = function(endpoint) {
+		return undefined;
+	};
+
+	AI.Provider.prototype.getRequestBodyOptions = function() {
+		return {};
+	};
+	AI.Provider.prototype.getRequestHeaderOptions = function(key) {
+		let headers = {
+			"Content-Type" : "application/json"
+		};
+		if (key)
+			headers["Authorization"] = "Bearer " + key;
+		return headers;
+	};
+
 	AI.InputMaxTokens = {
 		"4k" : 4096,
 		"8k" : 8192,
