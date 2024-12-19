@@ -114,15 +114,37 @@
 	}
 
 	AI.TmpProviderForModels = null;
+
+	AI._getHeaders = function(_provider) {
+		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
+		return provider.getRequestHeaderOptions(_provider.key);
+	};
+
+	AI._extendBody = function(_provider, body) {
+		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
+
+		let bodyPr = provider.getRequestBodyOptions();
+
+		for (let i in bodyPr) {
+			if (!body[i])
+				body[i] = bodyPr[i];
+		}
+
+		return;
+	};
+
+	AI._getEndpointUrl = function(_provider, endpoint) {
+		let override = _provider.overrideEndpointUrl(endpoint);
+		if (undefined !== override)
+			return override;
+		return AI.Endpoints.getUrl(endpoint);
+	};
+
 	AI.getModels = async function(provider)
 	{
 		AI.TmpProviderForModels = null;
 		return new Promise(function (resolve, reject) {
-			let headers = {};
-			headers["Content-Type"] = "application/json";
-			if (provider.key)
-				headers["Authorization"] = "Bearer " + provider.key;
-
+			let headers = AI._getHeaders(provider);
 			requestWrapper({
 				url : provider.url + AI.Endpoints.getUrl(AI.Endpoints.Types.v1.Models),
 				headers : headers,
@@ -142,8 +164,7 @@
 						if (!model.id)
 							continue;
 
-						if (!model.name)
-							model.name = model.id;
+						model.name = model.id;
 						model.endpoints = [];
 						model.options = {};
 
@@ -282,10 +303,7 @@
 		if (max_input_tokens < header_footer_overhead)
 			max_input_tokens = header_footer_overhead + 1000;
 
-		let headers = {};
-		headers["Content-Type"] = "application/json";
-		if (provider.key)
-			headers["Authorization"] = "Bearer " + provider.key;
+		let headers = AI._getHeaders(provider);
 
 		let input_len = content.length;
 		let input_tokens = Asc.OpenAIEncode(content).length;
@@ -313,17 +331,23 @@
 			method : "POST"
 		};
 
-		if (!isUseCompletionsInsteadChat)
-			objRequest.url = provider.url + AI.Endpoints.getUrl(AI.Endpoints.Types.v1.Chat_Completions);
-		else
-			objRequest.url = provider.url + AI.Endpoints.getUrl(AI.Endpoints.Types.v1.Completions);
+		let endpointType = isUseCompletionsInsteadChat ? AI.Endpoints.Types.v1.Completions :
+			AI.Endpoints.Types.v1.Chat_Completions;
+		objRequest.url = provider.url + AI._getEndpointUrl(provider, endpointType);
 
 		objRequest.body = {
 			model : this.modelUI.id
 		};
 
+		AI._extendBody(provider, objRequest.body);
+
 		let processResult = function(data) {
-			let choice = data.data.choices[0];
+			let arrResult = data.data.choices || data.data.content;
+			if (!arrResult)
+				return "";
+			let choice = arrResult[0];
+			if (!choice)
+				return "";
 			let text = "";
 			if (choice.message)
 				text = choice.message.content;
