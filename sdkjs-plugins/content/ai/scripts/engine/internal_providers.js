@@ -78,7 +78,7 @@
 		return new AI.ProviderOpenAI(name, url, key);
 	};
 
-	AI.Provider.prototype.checkExcludeModel = function(model) {
+	AI.ProviderOpenAI.prototype.checkExcludeModel = function(model) {
 		if (-1 !== model.id.indexOf("babbage-002") ||
 			-1 !== model.id.indexOf("davinci-002"))
 			return true;
@@ -162,6 +162,12 @@
 		return new AI.ProviderGpt4All(name, url, key);
 	};
 
+	AI.ProviderGpt4All.prototype.getRequestBodyOptions = function() {
+		return {
+			max_tokens : 0
+		};
+	};
+
 	// Mistral
 	AI.ProviderMistral = function(name, url, key) {
 		AI.Provider.call(this, name || "Mistral", url || "https://api.mistral.ai", key || "");
@@ -216,7 +222,46 @@
 
 		model.options.max_input_tokens = AI.InputMaxTokens["128k"];
 		model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
-		return AI.CapabilitiesUI.Chat | AI.CapabilitiesUI.Vision;
+
+		let capUI = AI.CapabilitiesUI.Chat;
+		if (model.capabilities && model.capabilities.vision)
+			capUI = AI.CapabilitiesUI.Vision;
+		return capUI;
+	};
+
+	// Anthropic
+	AI.ProviderAnthropic = function(name, url, key) {
+		AI.Provider.call(this, name || "Anthropic", url || "https://api.anthropic.com", key || "");
+	};
+
+	AI.ProviderAnthropic.prototype = Object.create(AI.Provider.prototype);
+	AI.ProviderAnthropic.prototype.constructor = AI.ProviderAnthropic;
+
+	AI.ProviderAnthropic.prototype.createInstance = function(name, url, key) {
+		return new AI.ProviderAnthropic(name, url, key);
+	};
+
+	AI.ProviderAnthropic.prototype.overrideEndpointUrl = function(endpoint) {
+		if (AI.Endpoints.Types.v1.Chat_Completions === endpoint)
+			return "/v1/messages";
+		return undefined;
+	};
+
+	AI.ProviderAnthropic.prototype.getRequestBodyOptions = function() {
+		return {
+			"max_tokens": 1024
+		};
+	};
+
+	AI.ProviderAnthropic.prototype.getRequestHeaderOptions = function(key) {
+		let headers = {
+			"Content-Type" : "application/json",
+			"anthropic-version" : "2023-06-01",
+			"anthropic-dangerous-direct-browser-access": "true"
+		};
+		if (key)
+			headers["x-api-key"] = key;
+		return headers;
 	};
 
 	// Register internal providers
@@ -225,6 +270,7 @@
 	AI.Storage.InternalProviders.push(new AI.ProviderOpenAI());
 	AI.Storage.InternalProviders.push(new AI.ProviderTogetherAI());
 	AI.Storage.InternalProviders.push(new AI.ProviderMistral());
+	AI.Storage.InternalProviders.push(new AI.ProviderAnthropic());
 
 	if (window["AscDesktopEditor"])
 		AI.Storage.InternalProviders.push(new AI.ProviderGpt4All());
