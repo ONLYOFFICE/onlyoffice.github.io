@@ -6,6 +6,43 @@
 	AI.Storage = AI.Storage || {};
 	AI.Storage.Version = 2;
 
+	AI.isLocalDesktop = (function(){
+		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
+			return false;
+		if (window.location && window.location.protocol == "file:")
+			return true;
+		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
+			return true;
+		return false;
+	})();
+
+	AI.isLocalUrl = function(url) {
+		let filter = ["localhost", "127.0.0.1"];
+		for (let i = 0, len = filter.length; i < len; i++) {
+			let pos = url.indexOf(filter[i]);
+			if (pos >= 0 && pos < 10)
+				return true;
+		}
+		return false;
+	};
+
+	AI.getDesktopLocalVersion = function() {
+		let ret = 99 * 1000000 + 99 * 1000 + 99;
+		if (!AI.isLocalDesktop)
+			return ret;
+		let pos = window.navigator.userAgent.indexOf("AscDesktopEditor/");
+		let pos2 = window.navigator.userAgent.indexOf(" ", pos);
+		if (pos === -1 || pos2 === -1)
+			return ret;
+		try {
+			let tokens = window.navigator.userAgent.substring(pos + 17, pos2).split(".");
+			return parseInt(tokens[0]) * 1000000 + parseInt(tokens[1]) * 1000 + parseInt(tokens[2]);
+		} catch (e) {			
+		}
+
+		return ret;
+	};
+
 	AI.Endpoints = {
 
 		Types : {
@@ -155,6 +192,22 @@
 		}
 	};
 
+	AI.Provider.prototype.overrideEndpointUrl = function(endpoint) {
+		return undefined;
+	};
+
+	AI.Provider.prototype.getRequestBodyOptions = function() {
+		return {};
+	};
+	AI.Provider.prototype.getRequestHeaderOptions = function(key) {
+		let headers = {
+			"Content-Type" : "application/json"
+		};
+		if (key)
+			headers["Authorization"] = "Bearer " + key;
+		return headers;
+	};
+
 	AI.InputMaxTokens = {
 		"4k" : 4096,
 		"8k" : 8192,
@@ -162,6 +215,7 @@
 		"32k" : 32768,
 		"64k" : 65536,
 		"128k" : 131072,
+		"200k" : 204800,
 		"256k" : 262144
 	};
 
