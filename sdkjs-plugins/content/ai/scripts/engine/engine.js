@@ -3,26 +3,6 @@
 	window.AI = window.AI || {};
 	var AI = window.AI;
 
-	AI.isLocalDesktop = (function(){
-		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
-			return false;
-		if (window.location && window.location.protocol == "file:")
-			return true;
-		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
-			return true;
-		return false;
-	})();
-
-	AI.isLocalUrl = function(url) {
-		let filter = ["localhost", "127.0.0.1"];
-		for (let i = 0, len = filter.length; i < len; i++) {
-			let pos = url.indexOf(filter[i]);
-			if (pos >= 0 && pos < 10)
-				return true;
-		}
-		return false;
-	};
-
 	if (!AI.isLocalDesktop)
 		return;
 
