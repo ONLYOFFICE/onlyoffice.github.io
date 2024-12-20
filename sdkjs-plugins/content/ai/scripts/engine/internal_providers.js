@@ -290,7 +290,10 @@
 	AI.Storage.InternalProviders.push(new AI.ProviderOpenAI());
 	AI.Storage.InternalProviders.push(new AI.ProviderTogetherAI());
 	AI.Storage.InternalProviders.push(new AI.ProviderMistral());
-	AI.Storage.InternalProviders.push(new AI.ProviderAnthropic());
+
+	// bug in desktop with simple request
+	if (!AI.isLocalDesktop || AI.getDesktopLocalVersion() >= 8003000)
+		AI.Storage.InternalProviders.push(new AI.ProviderAnthropic());
 
 	if (window["AscDesktopEditor"])
 		AI.Storage.InternalProviders.push(new AI.ProviderGpt4All());
