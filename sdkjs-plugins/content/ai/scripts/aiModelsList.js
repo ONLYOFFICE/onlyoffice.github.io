@@ -12,7 +12,7 @@ var aiModelsList = {
 			if(me._selected && me._selected.id == model.id) {
 				createdEl.classList.add('selected');
 			}
-			createdEl.innerHTML = model.name;
+			createdEl.innerText = model.name;
 			createdEl.addEventListener('click', function() {
 				me.setSelected(index);
 			});
