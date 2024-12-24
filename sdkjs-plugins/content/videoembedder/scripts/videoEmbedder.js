@@ -160,4 +160,5 @@
   } catch (error) {
     console.log("Some problem:", error);
   }
+  
 })(window, undefined);
