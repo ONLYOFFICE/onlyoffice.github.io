@@ -153,7 +153,7 @@
       var label = document.getElementById("td_labelUrl");
       var platformsText = document.getElementById("support-platforms-text");
       var previewBtn = document.getElementById("textbox_button");
-      if (label) label.innerHTML = window.Asc.plugin.tr(`Paste Video URL`);
+      if (label) label.innerHTML = window.Asc.plugin.tr("Paste video URL");
       if (previewBtn) previewBtn.innerHTML = window.Asc.plugin.tr("Preview");
       if (platformsText) platformsText.innerHTML = window.Asc.plugin.tr("Currently Supported platforms: Bilibili, QQ, Ixigua, Youku and IQIYI");
     };
