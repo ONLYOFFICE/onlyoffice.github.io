@@ -45,3 +45,6 @@
 
 ## 2.1.1
 * Bug fix.
+
+## 2.1.2
+* Fix add provider.
