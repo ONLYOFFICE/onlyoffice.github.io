@@ -6,7 +6,7 @@
 
 	// Together AI
 	AI.ProviderTogetherAI = function(name, url, key) {
-		AI.Provider.call(this, name || "Together AI", url || "https://api.together.xyz", key || "");
+		AI.Provider.call(this, name || "Together AI", url || "https://api.together.xyz", key || "", "v1");
 	};
 
 	AI.ProviderTogetherAI.prototype = Object.create(AI.Provider.prototype);
@@ -14,6 +14,10 @@
 
 	AI.ProviderTogetherAI.prototype.createInstance = function(name, url, key) {
 		return new AI.ProviderTogetherAI(name, url, key);
+	};
+
+	AI.ProviderTogetherAI.prototype.getUrlAddon = function(endpoint) {
+		return undefined;
 	};
 
 	AI.ProviderTogetherAI.prototype.checkModelCapability = function(model) {
@@ -68,7 +72,7 @@
 
 	// OpenAI
 	AI.ProviderOpenAI = function(name, url, key) {
-		AI.Provider.call(this, name || "OpenAI", url || "https://api.openai.com", key || "");
+		AI.Provider.call(this, name || "OpenAI", url || "https://api.openai.com", key || "", "v1");
 	};
 
 	AI.ProviderOpenAI.prototype = Object.create(AI.Provider.prototype);
@@ -152,7 +156,7 @@
 
 	// GPT4All
 	AI.ProviderGpt4All = function(name, url, key) {
-		AI.Provider.call(this, name || "GPT4All", url || "http://localhost:4891", key || "");
+		AI.Provider.call(this, name || "GPT4All", url || "http://localhost:4891", key || "", "v1");
 	};
 
 	AI.ProviderGpt4All.prototype = Object.create(AI.Provider.prototype);
@@ -170,7 +174,7 @@
 
 	// Mistral
 	AI.ProviderMistral = function(name, url, key) {
-		AI.Provider.call(this, name || "Mistral", url || "https://api.mistral.ai", key || "");
+		AI.Provider.call(this, name || "Mistral", url || "https://api.mistral.ai", key || "", "v1");
 	};
 
 	AI.ProviderMistral.prototype = Object.create(AI.Provider.prototype);
@@ -231,7 +235,7 @@
 
 	// Anthropic
 	AI.ProviderAnthropic = function(name, url, key) {
-		AI.Provider.call(this, name || "Anthropic", url || "https://api.anthropic.com", key || "");
+		AI.Provider.call(this, name || "Anthropic", url || "https://api.anthropic.com", key || "", "v1");
 	};
 
 	AI.ProviderAnthropic.prototype = Object.create(AI.Provider.prototype);
@@ -263,7 +267,7 @@
 
 	AI.ProviderAnthropic.prototype.overrideEndpointUrl = function(endpoint) {
 		if (AI.Endpoints.Types.v1.Chat_Completions === endpoint)
-			return "/v1/messages";
+			return "/messages";
 		return undefined;
 	};
 
@@ -297,5 +301,13 @@
 
 	if (window["AscDesktopEditor"])
 		AI.Storage.InternalProviders.push(new AI.ProviderGpt4All());
+
+	AI.Storage.isInternalProvider = function(name) {
+		for (let i = 0, len = AI.Storage.InternalProviders.length; i < len; i++) {
+			if (name === AI.Storage.InternalProviders[i].name)
+				return true;
+		}
+		return false;
+	};
 
 })(window);
