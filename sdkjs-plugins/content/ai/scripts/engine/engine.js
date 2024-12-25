@@ -97,12 +97,13 @@
 
 	AI._getHeaders = function(_provider) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
+		if (!provider) provider = new AI.Provider();
 		return provider.getRequestHeaderOptions(_provider.key);
 	};
 
 	AI._extendBody = function(_provider, body) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
-
+		if (!provider) provider = new AI.Provider();
 		let bodyPr = provider.getRequestBodyOptions();
 
 		for (let i in bodyPr) {
@@ -114,10 +115,19 @@
 	};
 
 	AI._getEndpointUrl = function(_provider, endpoint) {
-		let override = _provider.overrideEndpointUrl(endpoint);
+		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
+		if (!provider) provider = new AI.Provider();
+
+		let url = provider.url;
+		if (url.endsWith("/"))
+			url = url.substring(0, url.length - 1);
+		if ("" !== provider.addon)
+			url += ("/" + provider.addon);
+
+		let override = provider.overrideEndpointUrl(endpoint);
 		if (undefined !== override)
 			return override;
-		return AI.Endpoints.getUrl(endpoint);
+		return url + AI.Endpoints.getUrl(endpoint);
 	};
 
 	AI.getModels = async function(provider)
@@ -126,7 +136,7 @@
 		return new Promise(function (resolve, reject) {
 			let headers = AI._getHeaders(provider);
 			requestWrapper({
-				url : provider.url + AI.Endpoints.getUrl(AI.Endpoints.Types.v1.Models),
+				url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models),
 				headers : headers,
 				method : "GET"
 			}).then(function(data) {
@@ -313,7 +323,7 @@
 
 		let endpointType = isUseCompletionsInsteadChat ? AI.Endpoints.Types.v1.Completions :
 			AI.Endpoints.Types.v1.Chat_Completions;
-		objRequest.url = provider.url + AI._getEndpointUrl(provider, endpointType);
+		objRequest.url = AI._getEndpointUrl(provider, endpointType);
 
 		objRequest.body = {
 			model : this.modelUI.id
