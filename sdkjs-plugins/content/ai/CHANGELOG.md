@@ -48,3 +48,6 @@
 
 ## 2.1.2
 * Fix add provider.
+
+## 2.1.3
+* Bug fix. Remove v1 suffix for endpoints.
