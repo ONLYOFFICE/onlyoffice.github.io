@@ -60,6 +60,7 @@
 		try {
 			let obj = JSON.parse(window.localStorage.getItem(localStorageKey));
 
+			let fixVersion2 = false;
 			switch (obj.version)
 			{
 			case undefined:
@@ -67,6 +68,10 @@
 				obj = null;
 				break;
 			case 2:
+				// redesign provider url: add /v1
+				fixVersion2 = true;
+				break;
+			case 3:
 			default:
 				break;
 			}
@@ -79,6 +84,11 @@
 					let pr = obj.providers[i];
 					AI.Providers[i] = AI.Provider.createInstance(pr.name, pr.url, pr.key);
 					AI.Providers[i].models = pr.models || [];
+
+					if (fixVersion2) {
+						if (!AI.Storage.isInternalProvider(pr.name))
+							AI.Providers[i].addon = "v1";
+					}
 				}
 
 				for (let pr in oldProviders)

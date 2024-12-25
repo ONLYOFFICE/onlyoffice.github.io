@@ -317,15 +317,13 @@ function onChangeModelComboBox() {
 	}
 	isFirstLoadOfModels = false;
 
-	//Change nameInputEl value
-	if(!isCustomName) {
-		var providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
-
-		if(providerObj && modelObj) { 
-			nameInputEl.value = providerObj.name + ' [' + modelObj.name + ']';
-		} else {
-			nameInputEl.value = '';
-		}
+	if (modelObj && modelObj.name) {
+		let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
+		let providerName = providerObj ? providerObj.name : providerNameCmbEl.value;
+		if (providerName)
+			nameInputEl.value = providerName + ' [' + modelObj.name + ']';
+		else
+			nameInputEl.value = modelObj.name;
 	}
 }
 

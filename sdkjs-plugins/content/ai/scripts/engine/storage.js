@@ -4,7 +4,7 @@
 	var AI = exports.AI;
 	AI.UI = AI.UI || {};
 	AI.Storage = AI.Storage || {};
-	AI.Storage.Version = 2;
+	AI.Storage.Version = 3;
 
 	AI.isLocalDesktop = (function(){
 		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
@@ -110,40 +110,40 @@
 		switch (type)
 		{
 		case Types.v1.Models:
-			return "/v1/models";
+			return "/models";
 
 		case Types.v1.Chat_Completions:
-			return "/v1/chat/completions";
+			return "/chat/completions";
 		case Types.v1.Completions:
-			return "/v1/completions";
+			return "/completions";
 
 		case Types.v1.Images_Generations:
-			return "/v1/images/generations";
+			return "/images/generations";
 		case Types.v1.Images_Edits:
-			return "/v1/images/edits";
+			return "/images/edits";
 		case Types.v1.Images_Variarions:
-			return "/v1/images/variations";
+			return "/images/variations";
 
 		case Types.v1.Embeddings:
-			return "/v1/embeddings";
+			return "/embeddings";
 
 		case Types.v1.Audio_Transcriptions:
-			return "/v1/audio/transcriptions";
+			return "/audio/transcriptions";
 		case Types.v1.Audio_Translations:
-			return "/v1/audio/translations";
+			return "/audio/translations";
 		case Types.v1.Audio_Speech:
-			return "/v1/audio/speech";
+			return "/audio/speech";
 
 		case Types.v1.Moderations:
-			return "/v1/moderations";
+			return "/moderations";
 
 		case Types.v1.Language:
-			return "/v1/completions";
+			return "/completions";
 		case Types.v1.Code:
-			return "/v1/completions";
+			return "/completions";
 
 		case Types.v1.Realtime:
-			return "/v1/realtime";
+			return "/realtime";
 
 		default:
 			break;
@@ -157,10 +157,11 @@
 	 * PROVIDER BASE CLASS
 	 */
 
-	AI.Provider = function(name, url, key) {
+	AI.Provider = function(name, url, key, addon) {
 		this.name = name || "";
 		this.url = url || "";
 		this.key = key || "";
+		this.addon = addon || "";
 
 		this.models = [];
 		this.modelsUI = [];		
@@ -192,6 +193,9 @@
 		}
 	};
 
+	AI.Provider.prototype.getUrlAddon = function(endpoint) {
+		return undefined;
+	};
 	AI.Provider.prototype.overrideEndpointUrl = function(endpoint) {
 		return undefined;
 	};

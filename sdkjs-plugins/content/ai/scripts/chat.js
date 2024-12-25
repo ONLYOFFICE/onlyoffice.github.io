@@ -16,7 +16,6 @@
  *
  */
 (function(window, undefined) {
-	const url = 'https://api.openai.com/v1/chat/completions';
 	const maxTokens = 16000;
 	const settings = {
 		messages: []
