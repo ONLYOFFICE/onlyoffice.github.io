@@ -116,13 +116,18 @@
 
 	AI._getEndpointUrl = function(_provider, endpoint) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
-		if (!provider) provider = new AI.Provider();
+		if (!provider) provider = new AI.Provider(_provider.name, _provider.url, _provider.key);
 
 		let url = provider.url;
 		if (url.endsWith("/"))
 			url = url.substring(0, url.length - 1);
 		if ("" !== provider.addon)
-			url += ("/" + provider.addon);
+		{
+			let plus = "/" + provider.addon;
+			let pos = url.lastIndexOf(plus);
+			if (pos === -1 || pos !== (url.length - plus.length))
+				url += plus;
+		}
 
 		let override = provider.overrideEndpointUrl(endpoint);
 		if (undefined !== override)
