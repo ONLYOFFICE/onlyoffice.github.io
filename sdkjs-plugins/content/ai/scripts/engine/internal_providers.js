@@ -16,10 +16,6 @@
 		return new AI.ProviderTogetherAI(name, url, key);
 	};
 
-	AI.ProviderTogetherAI.prototype.getUrlAddon = function(endpoint) {
-		return undefined;
-	};
-
 	AI.ProviderTogetherAI.prototype.checkModelCapability = function(model) {
 		if (model.context_length)
 			model.options.max_input_tokens = AI.InputMaxTokens.getFloor(model.context_length);
@@ -68,6 +64,10 @@
 
 		model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
 		return AI.CapabilitiesUI.Chat;
+	};
+
+	AI.ProviderTogetherAI.prototype.isUseProxy = function() {
+		return true;
 	};
 
 	// OpenAI
@@ -288,6 +288,38 @@
 		return headers;
 	};
 
+	// Groq AI
+	AI.ProviderGroqAI = function(name, url, key) {
+		AI.Provider.call(this, name || "Groq", url || "https://api.groq.com/openai", key || "", "v1");
+	};
+
+	AI.ProviderGroqAI.prototype = Object.create(AI.Provider.prototype);
+	AI.ProviderGroqAI.prototype.constructor = AI.ProviderTogetherAI;
+
+	AI.ProviderGroqAI.prototype.createInstance = function(name, url, key) {
+		return new AI.ProviderGroqAI(name, url, key);
+	};
+
+	AI.ProviderGroqAI.prototype.checkModelCapability = function(model) {
+		if (model.context_length)
+			model.options.max_input_tokens = AI.InputMaxTokens.getFloor(model.context_length);
+
+		if (-1 !== model.id.toLowerCase().indexOf("vision")) {
+			model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
+			model.endpoints.push(AI.Endpoints.Types.v1.Vision);
+			return AI.CapabilitiesUI.Chat | AI.CapabilitiesUI.Vision;
+		}
+
+		if (-1 !== model.id.toLowerCase().indexOf("whisper")) {
+			model.endpoints.push(AI.Endpoints.Types.v1.Audio_Transcriptions);
+			model.endpoints.push(AI.Endpoints.Types.v1.Audio_Translations);
+			return AI.CapabilitiesUI.Audio;
+		}
+		
+		model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
+		return AI.CapabilitiesUI.Chat;
+	};
+
 	// Register internal providers
 	AI.Storage.InternalProviders = [];
 
@@ -301,6 +333,8 @@
 
 	if (window["AscDesktopEditor"])
 		AI.Storage.InternalProviders.push(new AI.ProviderGpt4All());
+
+	AI.Storage.InternalProviders.push(new AI.ProviderGroqAI());
 
 	AI.Storage.isInternalProvider = function(name) {
 		for (let i = 0, len = AI.Storage.InternalProviders.length; i < len; i++) {
