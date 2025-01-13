@@ -24,6 +24,10 @@ body {
     margin-bottom: 12px;
 }
 
+#select2-provider-name-cmb-results {
+    max-height: 180px;
+}
+
 .action-btn {
     all: unset;
     cursor: pointer;
