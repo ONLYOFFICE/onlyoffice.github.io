@@ -7,6 +7,8 @@ var providerModelsList = [];
 
 var nameInputEl = document.getElementById('name-input');
 var providerNameCmbEl = document.getElementById('provider-name-cmb');
+$(providerNameCmbEl).on('select2:open', onOpenProviderComboBox);
+
 var providerUrlInputEl = document.getElementById('provider-url-input');
 var providerKeyInputEl = document.getElementById('provider-key-input');
 var modelNameCmbEl = document.getElementById('model-name-cmb');
@@ -299,6 +301,35 @@ function onChangeProviderComboBox() {
 	providerKeyInputEl.value = provider ? provider.key : '';
 	if(providerUrlInputEl) {
 		updateModelsList();
+	}
+}
+
+function onOpenProviderComboBox() {
+	const searchField = $(providerNameCmbEl).data('select2').$dropdown.find('.select2-search__field')[0];
+	if (searchField) {
+		function onKeydownSearchInput(event) {
+			//Keydown "Tab"
+			if(event.keyCode == 9) {
+				//Blocked "keydown" handler in select2 so that the menu is not hidden
+				event.stopPropagation();
+		
+				//Triggering Enter keydown
+				var enterEvent = new KeyboardEvent('keydown', {
+					key: 'Enter',
+					code: 'Enter',
+					keyCode: 13,
+					which: 13,
+					bubbles: true,
+					cancelable: true
+				});
+				event.target.dispatchEvent(enterEvent);
+				
+				setTimeout(function() {
+					providerUrlInputEl.focus();
+				}, 0);
+			}
+		};
+		searchField.addEventListener('keydown', onKeydownSearchInput, { capture: true });
 	}
 }
 
