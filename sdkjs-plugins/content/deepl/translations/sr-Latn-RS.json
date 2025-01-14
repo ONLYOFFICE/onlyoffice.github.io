@@ -1,0 +1,13 @@
+{
+	"To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Da biste koristili DeepL, pretplatite se na DeepL API plan na zvaničnom DeepL sajtu. Kopirajte API ključ i ubacite ga u predviđeno polje.",
+	"Learn more here.": "Saznajte više ovde.",
+	"Save": "Sačuvaj",
+	"Target language": "Ciljni jezik",
+	"Enter text manually": "Unesi tekst ručno",
+	"Hide field": "Sakrij polje",
+	"Translating...": "Prevođenje...",
+	"Loading languages...": "Učitavanje jezika",
+	"Copy": "Kopiraj",
+	"Insert to document": "Ubaci u dokument",
+	"Reconfigure API key": "Ponovo konfiguriši API ključ"
+}
