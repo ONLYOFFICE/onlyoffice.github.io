@@ -41,6 +41,10 @@ body {
     opacity: 0.7;
 }
 
+#name-input {
+    width: 100%;
+}
+
 #update-models-row {
 	display: flex;
 	align-items: center;
@@ -54,8 +58,7 @@ body {
 	cursor: pointer;
     width: 20px;
     height: 20px;
-    margin: -4px;
-    margin-left: 2px;
+    margin: -4px 0px -4px 2px;
 }
 
 .asc-plugin-loader {
@@ -83,6 +86,7 @@ body {
     width: 50px;
 }
 .form-horizontal-item input,
+.form-horizontal-item div,
 .form-horizontal-item .select2{
     flex: 1;
 }
