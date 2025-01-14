@@ -10,7 +10,9 @@
         "cs": "Správce Pluginů",
         "si": "පේනු කළමනාකරු",
         "zh": "插件管理器",
-        "pt-BR": "Gerenciador de plug-ins"
+        "pt-BR": "Gerenciador de plug-ins",
+        "sr-Cyrl-RS": "Менаџер додатака",
+        "sr-Latn-RS": "Menadžer dodataka"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
     "version": "1.0.5",
