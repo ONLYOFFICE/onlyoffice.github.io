@@ -248,7 +248,6 @@ function onResize () {
 
 function onModelInfo(info) {
 	type = (info.model ? 'edit' : 'add');
-	isFirstLoadOfModels = (type == 'edit');
 
 	providersList = [];
 
@@ -322,7 +321,7 @@ function onChangeProviderComboBox() {
 
 	providerUrlInputEl.value = provider ? provider.url : '';
 	providerKeyInputEl.value = provider ? provider.key : '';
-	if(providerUrlInputEl) {
+	if(providerUrlInputEl.value) {
 		updateModelsList();
 	}
 }
@@ -369,7 +368,6 @@ function onChangeModelComboBox() {
 	if(modelObj && !isFirstLoadOfModels) {
 		updateCapabilitiesBtns(modelObj.capabilities);
 	}
-	isFirstLoadOfModels = false;
 
 	if (modelObj && modelObj.name) {
 		let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
@@ -415,13 +413,16 @@ function updateModelsList() {
 		updateModelsLoader && (updateModelsLoader.remove ? updateModelsLoader.remove() : $('#update-models-loader-container')[0].removeChild(updateModelsLoader));
 		updateModelsLoader = null;
 
+
 		$(updateModelsBtnEl).show();
-		if(errorText) {
+		if(errorText && (type == 'edit' || !isFirstLoadOfModels)) {
 			$(updateModelsErrorEl).show();
 			updateModelsErrorTip.setText(errorText);
 		} else {
 			$(updateModelsErrorEl).hide();
 		}
+
+		isFirstLoadOfModels = false;
 	};
 
 	startLoader();
