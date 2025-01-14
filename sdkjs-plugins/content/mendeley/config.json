@@ -5,7 +5,9 @@
 		"fr": "Mendeley",
 		"es": "Mendeley",
 		"pt-BR": "Mendeley",
-		"de": "Mendeley"
+		"de": "Mendeley",
+		"sr-Cyrl-RS": "Mendeley",
+		"sr-Latn-RS": "Mendeley"
 	},
 	"guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
 	"version" : "1.0.3",
@@ -18,7 +20,9 @@
 					"fr": "Créez des bibliographies et insérez des citations avec Mendeley.",
 					"es": "Cree bibliografías e inserte citas utilizando el servicio Mendeley.",
 					"pt-BR": "Criar bibliografias e inserir citações utilizando o serviço Mendeley.",
-					"de": "Erstellen Sie Bibliografien und fügen Sie Zitate mit Mendeley ein."
+					"de": "Erstellen Sie Bibliografien und fügen Sie Zitate mit Mendeley ein.",
+					"sr-Cyrl-RS": "Креирајте библиографије и убаците цитате користећи Mendeley сервис.",
+					"sr-Latn-RS": "Kreirajte bibliografije i ubacite citate koristeći Mendeley servis."
 				},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

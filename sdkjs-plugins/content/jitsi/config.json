@@ -5,7 +5,9 @@
 		"fr": "Jitsi",
 		"es": "Jitsi",
 		"pt-BR": "Jitsi",
-		"de": "Jitsi"
+		"de": "Jitsi",
+		"sr-Cyrl-RS": "Jitsi",
+		"sr-Latn-RS": "Jitsi"
 	},
 	"guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
 	"version": "1.0.3",
@@ -18,7 +20,9 @@
 				"fr": "Organisez des appels audio et vidéo dans les éditeurs avec Jitsi.",
 				"es": "Realice llamadas de audio y vídeo directamente en los editores utilizando Jitsi.",
 				"pt-BR": "Faça chamadas de áudio e vídeo diretamente nos editores usando Jitsi.",
-				"de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi."
+				"de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi.",
+				"sr-Cyrl-RS": "Обављајте аудио и видео позиве директно у уређивачима користећи Jitsi.",
+				"sr-Latn-RS": "Obavljajte audio i video pozive direktno u uređivačima koristeći Jitsi."
 			},
 			"url" : "index.html",
 

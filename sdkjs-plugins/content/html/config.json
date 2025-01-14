@@ -5,7 +5,9 @@
 		"fr": "HTML",
 		"es": "HTML",
 		"pt-BR": "HTML",
-		"de": "HTML"
+		"de": "HTML",
+		"sr-Cyrl-RS": "HTML",
+		"sr-Latn-RS": "HTML"
 	},
 	"guid": "asc.{E581C417-3C80-4BC2-B42D-502850FDC1E7}",
 	"version": "1.0.3",
@@ -18,7 +20,9 @@
 				"fr": "Obtenez le contenu de votre document sous forme de code HTML, modifiez-le et collez-le dans le document.",
 				"es": "Obtenga el contenido de su documento como código HTML, modifíquelo y péguelo de nuevo en el documento.",
 				"pt-BR": "Obtenha o conteúdo do seu documento como código HTML, modifique-o e cole-o novamente no documento.",
-				"de": "Erhalten Sie den Inhalt Ihres Dokuments als HTML-Code, modifizieren und fügen Sie ihn wieder ins Dokument ein."
+				"de": "Erhalten Sie den Inhalt Ihres Dokuments als HTML-Code, modifizieren und fügen Sie ihn wieder ins Dokument ein.",
+				"sr-Cyrl-RS": "Добијте садржај вашег документа као HTML код, измените га, и залепите назад у документ.",
+				"sr-Latn-RS": "Dobijte sadržaj vašeg dokumenta kao HTML kod, izmenite ga, i zalepite nazad u dokument."
 			},
 			"url": "index.html",
 

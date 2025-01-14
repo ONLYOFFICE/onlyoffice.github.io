@@ -5,7 +5,9 @@
 		"fr": "Rainbow",
 		"es": "Rainbow",
 		"pt-BR": "Rainbow",
-		"de": "Rainbow"
+		"de": "Rainbow",
+		"sr-Cyrl-RS": "Rainbow",
+		"sr-Latn-RS": "Rainbow"
 	},
 	"guid": "asc.{0743b63f-cb32-438c-b46b-81ce182ff4f7}",
 	"version": "1.0.1",
@@ -18,7 +20,9 @@
 				"fr": "Communiquez via chat ou passez des appels avec Rainbow.",
 				"es": "Intercambie mensajes instantáneos y realice llamadas con Rainbow.",
 				"pt-BR": "Troque mensagens instantâneas e faça chamadas usando Rainbow.",
-				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow."
+				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow.",
+				"sr-Cyrl-RS": "Размењујте инстант поруке и упућујте позиве помоћу Rainbow-а.",
+				"sr-Latn-RS": "Razmenjujte instant poruke i upućujte pozive pomoću Rainbow-a."
 			},
 			"url": "index.html",
 
