@@ -47,7 +47,6 @@
 			if (!requestEngine)
 				return;
 
-			let content = await Asc.Library.GetSelectedText();
 			let result = await requestEngine.chatRequest(message);
 			if (!result) result = "";
 
