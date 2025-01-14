@@ -51,3 +51,11 @@
 
 ## 2.1.3
 * Bug fix. Remove v1 suffix for endpoints.
+
+## 2.1.4
+* Add proxy for together.ai.
+* Add Groc as internal provider.
+* Bug fix
+
+## 2.1.5
+* Bug fix

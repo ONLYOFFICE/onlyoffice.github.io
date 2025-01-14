@@ -7,10 +7,11 @@ var providerModelsList = [];
 
 var nameInputEl = document.getElementById('name-input');
 var providerNameCmbEl = document.getElementById('provider-name-cmb');
+$(providerNameCmbEl).on('select2:open', onOpenProviderComboBox);
+
 var providerUrlInputEl = document.getElementById('provider-url-input');
 var providerKeyInputEl = document.getElementById('provider-key-input');
 var modelNameCmbEl = document.getElementById('model-name-cmb');
-$(modelNameCmbEl).select2();
 var updateModelsBtnEl = document.getElementById('update-models-btn');
 var updateModelsErrorEl = document.getElementById('update-models-error');
 
@@ -30,6 +31,31 @@ function getModelById(id) {
 	}
 	return null;
 }
+
+
+var nameInputValidator = new ValidatorWrapper({
+	fieldEl: nameInputEl
+});
+
+var providerUrlValidator = new ValidatorWrapper({
+	fieldEl: providerUrlInputEl
+});
+
+var providerNameValidator = new ValidatorWrapper({
+	fieldEl: providerNameCmbEl,
+	borderedEl: function() {
+		return providerNameValidator.containerEl.querySelector('.select2-selection');	
+	}
+});
+$(providerNameCmbEl).select2({width: '100%'});
+
+var modelNameValidator = new ValidatorWrapper({
+	fieldEl: modelNameCmbEl,
+	borderedEl: function() {
+		return modelNameValidator.containerEl.querySelector('.select2-selection');	
+	}
+});
+$(modelNameCmbEl).select2({width: '100%'});
 
 
 var updateModelsLoader = null;
@@ -222,7 +248,6 @@ function onResize () {
 
 function onModelInfo(info) {
 	type = (info.model ? 'edit' : 'add');
-	isFirstLoadOfModels = (type == 'edit');
 
 	providersList = [];
 
@@ -263,6 +288,12 @@ function onModelInfo(info) {
 }
 
 function onSubmit() {
+	var isProviderNameValid = providerNameValidator.validate();
+	var isNameInputValid = nameInputValidator.validate();
+	var isProviderUrlValid = providerUrlValidator.validate();
+	var isModelNameValid = modelNameValidator.validate();
+	if(!isProviderNameValid || !isNameInputValid || !isProviderUrlValid || !isModelNameValid) return;
+
 	let model = {
 		provider : {
 			name : providerNameCmbEl.value,
@@ -273,13 +304,6 @@ function onSubmit() {
 		id : modelNameCmbEl.value,
 		capabilities: getCapabilities()
 	};
-
-	if (!model.provider.name ||
-		!model.provider.url ||
-		!model.name ||
-		!model.id)
-		return;
-	
 
 	// let modelInfo = getModelById(model.id);
 	// if (modelInfo)
@@ -297,8 +321,37 @@ function onChangeProviderComboBox() {
 
 	providerUrlInputEl.value = provider ? provider.url : '';
 	providerKeyInputEl.value = provider ? provider.key : '';
-	if(providerUrlInputEl) {
+	if(providerUrlInputEl.value) {
 		updateModelsList();
+	}
+}
+
+function onOpenProviderComboBox() {
+	const searchField = $(providerNameCmbEl).data('select2').$dropdown.find('.select2-search__field')[0];
+	if (searchField) {
+		function onKeydownSearchInput(event) {
+			//Keydown "Tab"
+			if(event.keyCode == 9) {
+				//Blocked "keydown" handler in select2 so that the menu is not hidden
+				event.stopPropagation();
+		
+				//Triggering Enter keydown
+				var enterEvent = new KeyboardEvent('keydown', {
+					key: 'Enter',
+					code: 'Enter',
+					keyCode: 13,
+					which: 13,
+					bubbles: true,
+					cancelable: true
+				});
+				event.target.dispatchEvent(enterEvent);
+				
+				setTimeout(function() {
+					providerUrlInputEl.focus();
+				}, 0);
+			}
+		};
+		searchField.addEventListener('keydown', onKeydownSearchInput, { capture: true });
 	}
 }
 
@@ -315,7 +368,6 @@ function onChangeModelComboBox() {
 	if(modelObj && !isFirstLoadOfModels) {
 		updateCapabilitiesBtns(modelObj.capabilities);
 	}
-	isFirstLoadOfModels = false;
 
 	if (modelObj && modelObj.name) {
 		let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
@@ -361,13 +413,16 @@ function updateModelsList() {
 		updateModelsLoader && (updateModelsLoader.remove ? updateModelsLoader.remove() : $('#update-models-loader-container')[0].removeChild(updateModelsLoader));
 		updateModelsLoader = null;
 
+
 		$(updateModelsBtnEl).show();
-		if(errorText) {
+		if(errorText && (type == 'edit' || !isFirstLoadOfModels)) {
 			$(updateModelsErrorEl).show();
 			updateModelsErrorTip.setText(errorText);
 		} else {
 			$(updateModelsErrorEl).hide();
 		}
+
+		isFirstLoadOfModels = false;
 	};
 
 	startLoader();
@@ -424,12 +479,16 @@ function updateModelComboBox() {
 		language: {
 			noResults: function() {
 				return window.Asc.plugin.tr("Models not found");
-		   }
-	   	},
+			}
+		},
+		width: '100%',
 		minimumResultsForSearch: Infinity,
 		dropdownAutoWidth: true
 	});
 	cmbEl.on('select2:select', onChangeModelComboBox);
+	if(modelNameValidator.getState().value == false) {
+		modelNameValidator.validate();
+	}
 
 	if(isModelCmbInit && aiModel) {
 		cmbEl.val(aiModel.id);
@@ -449,6 +508,101 @@ function fetchModelsForProvider(provider) {
 		window.Asc.plugin.sendToPlugin("onGetModels", provider);
 
 	});
+}
+
+function ValidatorWrapper(options) {
+	this._init = function() {
+		// Default parameters
+		var defaults = {
+			fieldEl: null,		//HTML field element
+			borderedEl: null,	//HTML element with a border that will change color. For fields consisting of several HTML elements. (Example: select2)
+			getValue: function(fieldEl) {
+				return fieldEl.value;
+			},
+			validator: function(value) {
+				return value.trim().length > 1 ? '' : window.Asc.plugin.tr('This field is required');
+			}, 	
+			errorIconSrc: 'resources/icons/error-small/error.png'
+		};
+		// Merge user options with defaults
+		this.options = Object.assign({}, defaults, options);
+
+		this.state = {
+			value: true,
+			message: ''
+		}
+
+		// Create HTML elements
+		this.containerEl = document.createElement('div');
+		this.containerEl.style.display = 'flex';
+		this.containerEl.style.position = 'relative';
+		this.options.fieldEl.parentNode.insertBefore(this.containerEl, this.options.fieldEl);
+		this.containerEl.appendChild(this.options.fieldEl);
+
+		this.errorIconEl = document.createElement('img');
+		this.errorIconEl.src = this.options.errorIconSrc;
+		this.errorIconEl.style.position = 'absolute';
+		this.errorIconEl.style.top = '1px';
+		this.errorIconEl.style.right = '0px';
+		this.errorIconEl.style.display = 'none';
+
+		this.errorTooltip = new Tooltip(this.errorIconEl, {
+			xAnchor: 'right',
+			align: 'right'
+		});
+
+
+		if (this.options.fieldEl) {
+			this.containerEl.appendChild(this.errorIconEl);
+		} else {
+			console.error("Field with ID '" + this.options.id + "' not found.");
+		}
+	};
+
+	this.getState = function() {
+		return this.state;
+	};
+
+	this.validate = function() {
+		if(typeof this.options.validator != 'function') {
+			console.error("Validator is not a function");
+			return;
+		}
+
+		var validateMessage = this.options.validator(this.options.getValue(this.options.fieldEl));
+
+		if(validateMessage != null && typeof validateMessage != 'string') {
+			console.error("Validator must return a string value or null");
+			return;
+		}
+
+		this._setValidateState(validateMessage);
+		return !validateMessage;
+	};
+	this._setValidateState = function(message) {
+		this.state.value = !message;
+		this.state.message = message;
+		this.errorTooltip.setText(message);
+
+		var borderedEl = this.options.fieldEl;
+		if(this.options.borderedEl){
+			if(typeof this.options.borderedEl == 'function') {
+				borderedEl = this.options.borderedEl();
+			} else {
+				borderedEl = this.options.borderedEl;
+			}
+		}
+
+		if(this.state.value) {
+			this.errorIconEl.style.display = 'none';
+			borderedEl.style.borderColor = '';
+		} else {
+			this.errorIconEl.style.display = 'block';
+			borderedEl.style.cssText += 'border-color: #f62211 !important;';
+		}
+	};
+
+	this._init();
 }
 
 //Tooltip component

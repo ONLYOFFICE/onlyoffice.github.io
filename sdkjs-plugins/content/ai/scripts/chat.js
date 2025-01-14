@@ -126,8 +126,8 @@
 
 	function sendMessage(text) {
 		createTyping();
-		window.Asc.plugin.sendToPlugin("onChatMessage", text);
-		settings.messages.push({role: 'Me', content: text});
+		settings.messages.push({role: 'user', content: text});
+		window.Asc.plugin.sendToPlugin("onChatMessage", settings.messages);		
 	};
 
 	function createTyping() {
@@ -207,7 +207,7 @@
 	};
 
 	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
-		settings.messages.push({role: "AI", content: reply});
+		settings.messages.push({role: "assistant", content: reply});
 		createMessage(reply, 0);
 		removeTyping();
 		document.getElementById('message').focus();
