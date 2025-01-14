@@ -211,6 +211,9 @@
 			headers["Authorization"] = "Bearer " + key;
 		return headers;
 	};
+	AI.Provider.prototype.isUseProxy = function() {
+		return false;
+	};
 
 	AI.InputMaxTokens = {
 		"4k" : 4096,
