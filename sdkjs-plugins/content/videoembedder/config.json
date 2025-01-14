@@ -94,7 +94,7 @@
       "store": {
         "background": {
           "light": "#F0F0F0",
-          "dark": "#333333"
+          "dark": "#000000"
         },
         "screenshots": [
           "resources/store/screenshots/screenshot-1.png",
