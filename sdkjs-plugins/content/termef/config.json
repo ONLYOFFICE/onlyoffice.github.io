@@ -5,7 +5,9 @@
 		"fr": "TerMef",
 		"es": "TerMef",
 		"pt-BR": "TerMef",
-		"de": "TerMef"
+		"de": "TerMef",
+		"sr-Cyrl-RS": "TerMef",
+		"sr-Latn-RS": "TerMef"
 	},
 	"guid": "asc.{4571a69c-7ae5-4f2c-98fd-97614ba7bf3d}",
 	"version": "1.0.0",
@@ -18,7 +20,9 @@
 				"fr": "TerMef",
 				"es": "TerMef",
 				"pt-BR": "TerMef",
-				"de": "TerMef"
+				"de": "TerMef",
+				"sr-Cyrl-RS": "TerMef",
+				"sr-Latn-RS": "TerMef"
 			},
 			"url": "index.html",
 
@@ -94,7 +98,9 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -116,7 +122,9 @@
 				"ru": "Информация",
 				"fr": "À propos de",
 				"es": "Acerca de",
-				"de": "Über"
+				"de": "Über",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 			"isViewer": false,
@@ -140,7 +148,9 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
