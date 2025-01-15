@@ -10,9 +10,16 @@ body {
     position: relative;
 }
 #ai-models-list .item {
-    cursor: pointer;
     padding: 6px;
+    cursor: pointer;
     border-bottom: 1px solid;
+}
+#ai-models-list .item .content {
+    display: -webkit-inline-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
 }
 
 #buttons-block {
