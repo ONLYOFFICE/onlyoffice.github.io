@@ -6,7 +6,9 @@
 		"es": "YouTube",
 		"pt-BR": "YouTube",
 		"de": "YouTube",
-		"si": "YouTube"
+		"si": "YouTube",
+		"sr-Cyrl-RS": "YouTube",
+		"sr-Latn-RS": "YouTube"
 	},
 	"guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
 	"version": "1.0.4",
@@ -20,7 +22,9 @@
 				"es": "Inserte fácilmente vídeos de YouTube en sus documentos.",
 				"pt-BR": "Incorpore facilmente vídeos do YouTube em seus documentos.",
 				"de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein.",
-				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න."
+				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න.",
+				"sr-Cyrl-RS": "Једноставно убаците YouTube видео снимке у ваше документе.",
+				"sr-Latn-RS": "Jednostavno ubacite YouTube video snimke u vaše dokumente."
 			},
 			"url": "index.html",
 
@@ -58,7 +62,9 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],

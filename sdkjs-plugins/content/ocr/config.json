@@ -6,7 +6,9 @@
 		"es": "Reconocimiento óptico de caracteres",
 		"de": "OCR",
 		"pt-BR": "OCR",
-		"si": "OCR"
+		"si": "OCR",
+		"sr-Cyrl-RS": "OCR",
+		"sr-Latn-RS": "OCR"
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.1",
@@ -20,7 +22,9 @@
 				"es": "Reconozca el texto de imágenes y capturas de pantalla e insértelo en sus documentos.",
 				"de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein.",
 				"pt-BR": "Reconheça texto de imagens e capturas de tela e insira-o em seus documentos.",
-				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න."
+				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න.",
+				"sr-Cyrl-RS": "Препознајте текст са слика и снимака екрана и убаците га у ваше документе.",
+				"sr-Latn-RS": "Prepoznajte tekst sa slika i snimaka ekrana i ubacite ga u vaše dokumente."
 			},
 			"url": "index.html",
 
