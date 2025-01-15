@@ -5,7 +5,9 @@
 		"fr": "Saisie vocale",
 		"es": "Entrada de voz",
 		"pt-BR": "Entrada de fala",
-		"de": "Spracheingabe"
+		"de": "Spracheingabe",
+		"sr-Cyrl-RS": "Speech input",
+		"sr-Latn-RS": "Speech input"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
 	"version" : "1.0.2",
@@ -18,7 +20,9 @@
 				"fr": "Écrivez facilement avec votre voix en convertissant les mots prononcés en texte.",
 				"es": "Escriba fácilmente con su voz convirtiendo las palabras habladas en texto.",
 				"pt-BR": "Digite facilmente com sua voz convertendo palavras faladas em texto.",
-				"de": "Tippen Sie ganz einfach mit Ihrer Stimme, indem gesprochene Wörter in Text umgewandelt werden."
+				"de": "Tippen Sie ganz einfach mit Ihrer Stimme, indem gesprochene Wörter in Text umgewandelt werden.",
+				"sr-Cyrl-RS": "Лако куцајте вашим гласом претварањем изговорених речи у текст.",
+				"sr-Latn-RS": "Lako kucajte vašim glasom pretvaranjem izgovorenih reči u tekst."
 			},
 			"url": "index.html",
 
