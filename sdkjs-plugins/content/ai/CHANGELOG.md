@@ -56,3 +56,6 @@
 * Add proxy for together.ai.
 * Add Groc as internal provider.
 * Bug fix
+
+## 2.1.5
+* Bug fix
