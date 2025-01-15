@@ -50,7 +50,7 @@
 
 		if ("language" === model.type) {
 			model.endpoints.push(AI.Endpoints.Types.v1.Language);
-			return AI.CapabilitiesUI.Language | AI.CapabilitiesUI.Chat;
+			return AI.CapabilitiesUI.Language;
 		}
 
 		if ("code" === model.type) {
