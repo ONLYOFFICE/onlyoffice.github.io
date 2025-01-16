@@ -6,8 +6,8 @@
 		"es": "Entrada de voz",
 		"pt-BR": "Entrada de fala",
 		"de": "Spracheingabe",
-		"sr-Cyrl-RS": "Speech input",
-		"sr-Latn-RS": "Speech input"
+		"sr-Cyrl-RS": "Унос говора",
+		"sr-Latn-RS": "Unos govora"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
 	"version" : "1.0.2",
