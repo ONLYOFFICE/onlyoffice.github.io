@@ -13,8 +13,8 @@
 		"pt": "Discurso",
 		"uk": "Читати",
 		"zh": "朗读",
-		"sr-Cyrl-RS": "Speech",
-		"sr-Latn-RS": "Speech"
+		"sr-Cyrl-RS": "Говор",
+		"sr-Latn-RS": "Govor"
 	},
 	"guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
 	"version" : "2.0.1",

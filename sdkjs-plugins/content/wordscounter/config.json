@@ -6,8 +6,8 @@
 		"es": "Recuento de palabras",
 		"pt-BR": "Word counter",
 		"de": "Wortanzahl",
-		"sr-Cyrl-RS": "Word counter",
-		"sr-Latn-RS": "Word counter"
+		"sr-Cyrl-RS": "Бројач речи",
+		"sr-Latn-RS": "Brojač reči"
 	},
 	"guid" : "asc.{584EEEE8-DBF5-45C3-A4CA-F52177C82754}",
 	"version": "1.0.1",
