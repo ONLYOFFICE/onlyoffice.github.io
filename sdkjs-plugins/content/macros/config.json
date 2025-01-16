@@ -27,7 +27,7 @@
 				"pt-BR": "Automatize suas tarefas rotineiras e padronize documentos usando macros (é usada a sintaxe da linguagem JavaScript).",
 				"de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet).",
 				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ).",
-				"sr-Cyrl-RS": "Аутоматизујте своје рутинске задатке и стандардизујте документе користећи макрое (користи се синтакса језика ЈаваСцрипт).",
+				"sr-Cyrl-RS": "Аутоматизујте своје рутинске задатке и стандардизујте документе користећи макрое (користи се синтакса језика JavaScript).",
 				"sr-Latn-RS": "Automatizujte svoje rutinske zadatke i standardizujte dokumente koristeći makroe (koristi se sintaksa jezika JavaScript)."
 			},
 			"url": "index.html",
@@ -90,7 +90,9 @@
 						"ru": "Сохранить",
 						"fr": "Sauvegarder",
 						"es": "Guardar",
-						"de": "Speichern"
+						"de": "Speichern",
+						"sr-Cyrl-RS": "Сачувај",
+						"sr-Latn-RS": "Sačuvaj"
 					}
 				},
 				{
@@ -100,7 +102,9 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
