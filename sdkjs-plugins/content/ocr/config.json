@@ -87,7 +87,9 @@
 						"fr": "Insérer le texte",
 						"es": "Insertar texto",
 						"de": "Text einfügen",
-						"si": "පෙළ ඇතුළු කරන්න"
+						"si": "පෙළ ඇතුළු කරන්න",
+						"sr-Cyrl-RS": "Убаци текст",
+						"sr-Latn-RS": "Ubaci tekst"
 					}
 				},
 				{
@@ -98,7 +100,9 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -128,7 +132,9 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"si": "පිළිබඳව"
+				"si": "පිළිබඳව",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 
 			"url": "index_about.html",

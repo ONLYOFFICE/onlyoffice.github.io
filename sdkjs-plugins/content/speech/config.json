@@ -117,7 +117,9 @@
 				"nl": "Instellingen",
 				"pt": "Definições",
 				"uk": "Налаштування",
-				"zh": "设置"
+				"zh": "设置",
+				"sr-Cyrl-RS": "Подешавања",
+				"sr-Latn-RS": "Podešavanja"
 				
 			},
 			"url": "settings.html",

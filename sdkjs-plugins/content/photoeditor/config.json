@@ -94,7 +94,9 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -123,7 +125,9 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"si": "පිළිබඳව"
+				"si": "පිළිබඳව",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 

@@ -80,7 +80,9 @@
 						"fr": "Fermer",
 						"es": "Cerrar",
 						"de": "Schließen",
-						"cs": "Uzavřít"
+						"cs": "Uzavřít",
+						"sr-Cyrl-RS": "Затвори",
+						"sr-Latn-RS": "Zatvori"
 					}
 				}
 			],

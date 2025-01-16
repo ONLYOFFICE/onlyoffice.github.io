@@ -106,7 +106,9 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 

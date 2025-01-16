@@ -21,8 +21,8 @@
 				"es": "Cree, edite e inserte diagramas de aspecto profesional en sus documentos.",
 				"pt-BR": "Crie, edite e insira diagramas com aparência profissional em seus documentos.",
 				"de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein.",
-				"sr-Cyrl-RS": "Креирајте, уређујте, и убацујте дијаграме професионалног изгледа у ваше документе",
-				"sr-Latn-RS": "Kreirajte, uređujte, i ubacujte dijagrame profesionalnog izgleda u vaše dokumente"
+				"sr-Cyrl-RS": "Креирајте, уређујте, и убацујте дијаграме професионалног изгледа у ваше документе.",
+				"sr-Latn-RS": "Kreirajte, uređujte, i ubacujte dijagrame profesionalnog izgleda u vaše dokumente."
 			},
 			"url": "index.html",
 
@@ -88,7 +88,9 @@
 						"fr": "Insérer",
 						"es": "Insertar",
 						"de": "Einfügen",
-						"cs": "Vložit"
+						"cs": "Vložit",
+						"sr-Cyrl-RS": "Убаци",
+						"sr-Latn-RS": "Ubaci"
 					},
 					"isViewer": false
 				},
@@ -100,7 +102,9 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"cs": "Zrušit"
+						"cs": "Zrušit",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
