@@ -8,11 +8,11 @@
 	"Macros" : "Макрои",
 	"Title" : "Име не сме бити празно",
 	"Copy": "Копирај",
-	"Make autostart": "",
-	"Unmake autostart": "",
-	"Custom function": "",
-	"Custom functions": "",
+	"Make autostart": "Омогући аутоматско покретање",
+	"Unmake autostart": "Онемогући аутоматско покретање",
+	"Custom function": "Прилагођена функција",
+	"Custom functions": "Прилагођене функције",
 	"Ok": "OK",
-	"Add macros": "",
-	"Add custom function": ""
+	"Add macros": "Додај макрое",
+	"Add custom function": "Додај прилагођену функцију"
 }
