@@ -5,7 +5,6 @@ This plugin allows users to embed videos from various platforms directly into th
 ## Features
 - **Automatic ID Extraction:** Extracts video IDs based on platform-specific rules.
 - **Live Preview:** Provides an iframe-based preview of the video before embedding it in the document.
-- **Insert Custom Thumbnail:** Inserts a custom thumbnail in the ONLYOFFICE document. This can can be opened again to preview the video.
 
 ## Supported Platforms
 
