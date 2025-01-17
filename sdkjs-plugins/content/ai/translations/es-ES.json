@@ -90,5 +90,10 @@
 	"Fix spelling & grammar": "Corregir ortografía y gramática",
 	"Rewrite differently": "Reescribir de manera diferente",
 	"Make longer": "Hacer más largo",
-	"Make shorter": "Hacer más corto"
+	"Make shorter": "Hacer más corto",
+
+	"Chatbot": "Chatbot",
+	"Ask AI a question about something...": "Hacer una pregunta a la IA sobre algo...",
+
+	"This field is required": "Este campo es obligatorio"
 }
