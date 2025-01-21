@@ -5,7 +5,8 @@
 		"fr": "Autocomplete",
 		"es": "Autocomplete",
 		"pt-BR": "Preenchimento automático",
-		"de": "Autocomplete"
+		"de": "Autocomplete",
+		"sq-AL": "Kompletimi automatik"
 	},
 	"guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
 	"version" : "1.0.0",
@@ -18,7 +19,8 @@
 				"fr": "Utilisez un assistant de saisie pendant que vous tapez dans les éditeurs.",
 				"es": "Utilice un asistente de entrada mientras escribe en los editores.",
 				"pt-BR": "Use um assistente de entrada enquanto digita nos editores.",
-				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren."
+				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren.",
+				"sq-AL": "Përdorni një asistues hyrjeje gjatë të shkruarit në editorë."
 			},
 			"url"                 : "index.html",
 			"icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],

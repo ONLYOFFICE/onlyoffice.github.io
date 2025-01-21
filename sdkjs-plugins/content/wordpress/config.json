@@ -5,7 +5,8 @@
 		"fr": "WordPress",
 		"es": "WordPress",
 		"pt-BR": "WordPress",
-		"de": "WordPress"
+		"de": "WordPress",
+		"sq-AL": "WordPress"
 	},
 	"guid"    : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
 	"baseUrl" : "",
@@ -18,7 +19,8 @@
 				"fr": "Publiez des articles directement depuis l'éditeur de documents sur votre site web WordPress (compatible avec le cloud ONLYOFFICE).",
 				"es": "Publique artículos directamente desde el editor de documentos en su sitio web de WordPress (compatible con la nube de ONLYOFFICE).",
 				"pt-BR": "Publique artigos diretamente do editor de documentos em seu site WordPress (compatível com a nuvem ONLYOFFICE).",
-				"de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud)."
+				"de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud).",
+				"sq-AL": ""
 			},
 			"url"    : "index.html",
 			"icons"  : [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
