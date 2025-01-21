@@ -5,7 +5,8 @@
 		"fr": "Échecs",
 		"es": "Ajedrez",
 		"pt-BR": "Xadrez",
-		"de": "Schach"
+		"de": "Schach",
+		"sq-AL": "Shah"
 	},
 	"guid": "asc.{FFE1F462-1EA2-4391-990D-4CC84940B754}",
 	"version": "1.0.1",
@@ -18,7 +19,8 @@
 				"fr": "Jouez aux échecs avec vos collaborateurs directement dans les éditeurs.",
 				"es": "Juegue al ajedrez con otros colaboradores directamente en los editores.",
 				"pt-BR": "Jogue xadrez com outros colaboradores diretamente nos editores.",
-				"de": "Spielen Sie Schach mit anderen Mitautoren direkt in den Editoren."
+				"de": "Spielen Sie Schach mit anderen Mitautoren direkt in den Editoren.",
+				"sq-AL": "Luani shah me bashkëpunëtorët e tjerë drejtpërdrejt në editorë."
 			},
 			"url" : "index.html",
 

@@ -5,7 +5,8 @@
 		"fr": "DeepL",
 		"es": "DeepL",
 		"pt-BR": "DeepL",
-		"de": "DeepL"
+		"de": "DeepL",
+		"sq-AL": "DeepL"
 	},
 	"guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
 	"version": "1.0.2",
@@ -18,7 +19,8 @@
 				"fr": "Traduisez un texte sélectionné dans d’autres langues avec DeepL.",
 				"es": "Traduzca el texto seleccionado a otros idiomas utilizando DeepL.",
 				"pt-BR": "Traduza o texto selecionado para outros idiomas usando DeepL.",
-				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL."
+				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL.",
+				"sq-AL": "Përktheni tekstin e selektuar në gjuhë të tjera duke përdorur DeepL."
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
