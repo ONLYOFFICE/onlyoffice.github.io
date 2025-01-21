@@ -12,7 +12,8 @@
 				"es": "Encuentra e inserta imágenes gratuitas en tus documentos a través de Pixabay.",
 				"de": "Suchen und fügen Sie kostenlose Bilder über Pixabay in Ihre Dokumente ein.",
 				"cs": "Najděte a vložte obrázky zdarma do svých dokumentů prostřednictvím Pixabay.",
-				"pt-BR": "Encontre e insira imagens gratuitas em seus documentos via Pixabay."
+				"pt-BR": "Encontre e insira imagens gratuitas em seus documentos via Pixabay.",
+				"sq-AL": "Gjeni dhe shtoni imazhe falas në dokumentet tuaja përmes Pixabay."
 			},
 			"url": "index.html",
 
@@ -78,7 +79,8 @@
 						"fr": "Fermer",
 						"es": "Cerrar",
 						"de": "Schließen",
-						"cs": "Uzavřít"
+						"cs": "Uzavřít",
+						"sq-AL": "Mbyllni"
 					}
 				}
 			],
@@ -101,7 +103,8 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"cs": "ohledně"
+				"cs": "ohledně",
+				"sq-AL": "Rreth"
 			},
 			"url": "index_about.html",
 
