@@ -1,0 +1,17 @@
+{
+    "setting": "nastavení",
+    "Set Your ZhiPu API Key first": "Nejprve nastavte svůj klíč API ZhiPu",
+    "ZhiPu Copilot": "ZhiPu Copilot",
+    "generate": "generovat",
+    "summarize": "shrnout",
+    "explain": "vysvětlit",
+    "translate": "přeložit",
+    "translate to English": "Přeložit do češtiny",
+    "translate to Chinese": "Přeložit do čínštiny",
+    "translate to French": "Přeložit do francouzštiny",
+    "translate to German": "Přeložit do němčiny",
+    "translate to Spanish": "Přeložit do španělštiny",
+    "translate to Russian": "Přeložit do ruštiny",
+    "clear chat history": "vymazat historii chatu",
+    "Choose a model": "Vybrat model"
+}
