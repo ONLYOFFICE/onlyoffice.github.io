@@ -6,7 +6,8 @@
         "ru": "ZhiPu Copilot",
         "fr": "ZhiPu Copilot",
         "pt-BR": "ZhiPu Copilot",
-        "es": "ZhiPu Copilot"
+        "es": "ZhiPu Copilot",
+        "cs-CS": "ZhiPu Copilot"
     },
     "guid": "asc.{4b5efd7f-7c8d-1ef4-feab-bfbf2e1d86ac}",
     "baseUrl": "",
@@ -21,7 +22,8 @@
                 "ru": "Плагин Copilot для документов OnlyOffice на основе модели ZhiPu ChatGLM.",
                 "fr": "Un plugin copilote pour les documents OnlyOffice basé sur le modèle ZhiPu ChatGLM.",
                 "pt-BR": "Um plugin copiloto para OnlyOffice Document baseado no modelo ZhiPu ChatGLM.",
-                "es": "Un complemento de copiloto para documentos de OnlyOffice basado en el modelo ZhiPu ChatGLM."
+                "es": "Un complemento de copiloto para documentos de OnlyOffice basado en el modelo ZhiPu ChatGLM.",
+                "cs-CS": "Copilot plugin pro dokument OnlyOffice založený na modelu ZhiPu ChatGLM."
             },
             "url": "index.html",
             "icons": [
