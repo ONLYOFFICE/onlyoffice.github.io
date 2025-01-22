@@ -15,6 +15,7 @@
 	"Code": "Kód",
 	"Vision": "Vize",
 	"Models": "Modely",
+	"Models not found": "Modely nenalezeny",
 
 	"AI Models list" : "Seznam AI modelů",
 	"Add" : "Přidat",
@@ -88,6 +89,11 @@
 	"Show hyperlink content" : "Zobrazit obsah hypertextového odkazu",
 	"Fix spelling & grammar": "Opravit pravopis a gramatiku",
 	"Rewrite differently": "Přepište jinak",
+	"Make longer": "Udělat delší",
 	"Make shorter": "Udělat kratší",
-	"Make simpler": "Zjednodušte"
+
+	"Chatbot": "Chatbot",
+	"Ask AI a question about something...": "Zeptejte se umělé inteligence na něco...",
+
+	"This field is required": "Toto pole je povinné"
 }

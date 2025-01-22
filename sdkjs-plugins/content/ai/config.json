@@ -10,7 +10,8 @@
 		"pt-BR": "AI",
 		"sr-Cyrl-RS": "AI",
 		"sr-Latn-RS": "AI",
-		"ja-JA": "AI"
+		"ja-JA": "AI",
+		"sq-AL": "AI"
 	},
 
 	"guid" : "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
@@ -30,7 +31,8 @@
 				"zh": "使用 AI 聊天机器人完成有关理解、生成自然语言或代码的任务。",
 				"sr-Cyrl-RS": "Користите AI чет робота за обављање задатака који укључују разумевање или генерисање природног језика или кода.",
 				"sr-Latn-RS": "Koristite AI čet robota za obavljanje zadataka koji uključuju razumevanje ili generisanje prirodnog jezika ili koda.",
-				"ja-JA": "自然言語やコードの理解または生成が必要なタスクを行うには、AIチャットボットを使用できます。"
+				"ja-JA": "自然言語やコードの理解または生成が必要なタスクを行うには、AIチャットボットを使用できます。",
+				"sq-AL": "Shtoni dhe selektoni modele AI për detyra të ndryshme."
 			},
 
 			"url"         : "index.html",
