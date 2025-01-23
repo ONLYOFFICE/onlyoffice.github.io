@@ -1,0 +1,93 @@
+body {
+    display: flex;
+    justify-content: space-between;
+}
+
+#ai-models-list {
+    flex: 1;
+    border: 1px solid;
+    margin-right: 10px;
+    position: relative;
+}
+#ai-models-list .item {
+    cursor: pointer;
+    padding: 6px;
+    border-bottom: 1px solid;
+}
+
+#buttons-block {
+    width: 90px;
+}
+#buttons-block button {
+    width: 100%;
+}
+#buttons-block button:not(:first-child) {
+    margin-top: 6px;
+}
+
+/* Themes style for Models List */
+body.theme-classic-light #ai-models-list {
+    border-color: #cfcfcf;
+}
+body.theme-light #ai-models-list,
+body.theme-gray #ai-models-list {
+    border-color: #c0c0c0;
+}
+body.theme-dark #ai-models-list {
+    border-color: #666;
+}
+body.theme-contrast-dark #ai-models-list {
+    border-color: #696969;
+}
+
+/* Themes style for Item Models List */
+body.theme-classic-light #ai-models-list .item {
+    border-color: #cfcfcf;
+}
+body.theme-classic-light #ai-models-list .item:hover {
+    background-color: #d8dadc;
+    color: #444;
+}
+body.theme-classic-light #ai-models-list .item.selected {
+    background-color: #7d858c;
+    color: #fff;
+}
+
+body.theme-light #ai-models-list .item,
+body.theme-gray #ai-models-list .item {
+    border-color: #c0c0c0;
+}
+body.theme-light #ai-models-list .item:hover,
+body.theme-gray #ai-models-list .item:hover {
+    background-color: #e0e0e0;
+    color: rgba(0, 0, 0, 0.8);
+}
+body.theme-light #ai-models-list .item.selected,
+body.theme-gray #ai-models-list .item.selected {
+    background-color: #cbcbcb;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+body.theme-dark #ai-models-list .item {
+    border-color: #666;
+}
+body.theme-dark #ai-models-list .item:hover {
+    background-color: #555;
+    color: rgba(255, 255, 255, 0.8);
+}
+body.theme-dark #ai-models-list .item.selected {
+    background-color: #707070;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.theme-contrast-dark #ai-models-list .item  {
+    border-color: #696969;
+}
+body.theme-contrast-dark #ai-models-list .item:hover {
+    background-color: #424242;
+    color: #e8e8e8;
+}
+body.theme-contrast-dark #ai-models-list .item.selected {
+    background-color: #666666;
+    color: #e8e8e8;
+}
