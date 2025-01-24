@@ -32,5 +32,8 @@
 	{ "name": "pixabay", "discussion": "325" },
 	{ "name": "insertQR", "discussion": "" },
 	{ "name": "idphoto", "discussion": "" },
-	{ "name": "cvbuilder", "discussion": "" }
+	{ "name": "cvbuilder", "discussion": "" },
+	{ "name": "onlydraw", "discussion": "" },
+	{ "name": "pomodoro", "discussion": "" },
+	{ "name": "videoembedder", "discussion": "" }
 ]
