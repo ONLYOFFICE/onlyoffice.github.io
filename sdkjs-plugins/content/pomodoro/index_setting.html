@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setting</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            padding: 20px;
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 70%;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script type="text/javascript">
+        window.Asc.plugin.init = function() {
+            let focusTime = 25;
+            document.getElementById('focusTime').value = focusTime;
+            let breakTime = 5;
+            document.getElementById('breakTime').value = breakTime;
+        };
+
+        window.Asc.plugin.button = function(id) {
+            let whiteNoise = document.getElementById('whiteNoiseSelection').value;
+            let focusTime = document.getElementById('focusTime').value;
+            let breakTime = document.getElementById('breakTime').value;
+
+            localStorage.setItem('whiteNoise', whiteNoise);
+            localStorage.setItem('focusTime', focusTime);
+            localStorage.setItem('breakTime', breakTime);
+
+            this.executeCommand("close", "");
+        };
+        
+        window.Asc.plugin.onTranslate = () => {
+            document.querySelector("#label_chooseWhiteNoise").innerHTML = window.Asc.plugin.tr("Choose White Noise");
+            document.querySelector("#label_focusTime").innerHTML = window.Asc.plugin.tr("Focus Time:");
+            document.querySelector("#label_breakTime").innerHTML = window.Asc.plugin.tr("Break Time:");
+            document.querySelector("#minutes_focus").innerHTML = window.Asc.plugin.tr("minutes");
+            document.querySelector("#minutes_break").innerHTML = window.Asc.plugin.tr("minutes");
+            document.querySelector("#focusTime").placeholder = window.Asc.plugin.tr("25");
+            document.querySelector("#breakTime").placeholder = window.Asc.plugin.tr("5");
+
+            // 本地化白噪音选项
+            document.querySelector("#whiteNoiseSelection option[value='none']").textContent = window.Asc.plugin.tr("None");
+            document.querySelector("#whiteNoiseSelection option[value='flames']").textContent = window.Asc.plugin.tr("Flames");
+            document.querySelector("#whiteNoiseSelection option[value='waterflow']").textContent = window.Asc.plugin.tr("Water Flow");
+            document.querySelector("#whiteNoiseSelection option[value='rain']").textContent = window.Asc.plugin.tr("Rain");
+        };
+    </script>
+</head>
+<body>
+    <div>
+        <label for="whiteNoiseSelection" id="label_chooseWhiteNoise">Choose White Noise</label>
+        <select id="whiteNoiseSelection">
+            <option value="none">None</option>
+            <option value="flames">Flames</option>
+            <option value="waterflow">Water Flow</option>
+            <option value="rain">Rain</option>
+        </select>
+    </div>
+    <div style="margin-top: 20px;">
+    <div>
+        <label for="focusTime" id="label_focusTime">Focus Time:</label>
+        <input type="text" id="focusTime" placeholder="25">
+        <span id="minutes_focus">minutes</span>
+    </div>
+    <div>
+        <label for="breakTime" id="label_breakTime">Break Time:</label>
+        <input type="text" id="breakTime" placeholder="5">
+        <span id="minutes_break">minutes</span>
+    </div>
+</body>
+</html>

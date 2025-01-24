@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Modal Window</title>
+
+    <!-- External JavaScript and CSS files -->
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+    />
+
+    <!-- Bootstrap CSS from CDN -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <!-- Custom JavaScript file -->
+    <script type="text/javascript" src="scripts/invalidLink.js"></script>
+
+    <!-- Custom styles -->
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .form {
+        display: flex;
+        height: 214px;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 15px;
+        border: 1px solid #ced4da;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .mb-3 {
+        margin-bottom: 1rem !important;
+      }
+
+      #errorText {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="text-center">
+    <form class="form">
+      <img
+        class="mb-4"
+        src="resources/error/icon@2x.png"
+        alt=""
+        width="72"
+        height="72"
+        id="modalImg"
+      />
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <span id="invalid-link-text">
+            The link you have entered is not a valid Bilibili link. Try again
+            with the correct link.
+          </span>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
