@@ -5,7 +5,8 @@
 		"fr": "Rainbow",
 		"es": "Rainbow",
 		"pt-BR": "Rainbow",
-		"de": "Rainbow"
+		"de": "Rainbow",
+		"it": "Rainbow"
 	},
 	"guid": "asc.{0743b63f-cb32-438c-b46b-81ce182ff4f7}",
 	"version": "1.0.1",
@@ -18,7 +19,8 @@
 				"fr": "Communiquez via chat ou passez des appels avec Rainbow.",
 				"es": "Intercambie mensajes instantáneos y realice llamadas con Rainbow.",
 				"pt-BR": "Troque mensagens instantâneas e faça chamadas usando Rainbow.",
-				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow."
+				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow.",
+				"it": "Scambia messaggi istantanei ed effettua chiamate utilizzando Rainbow."
 			},
 			"url": "index.html",
 
@@ -79,7 +81,8 @@
 						"ru": "Закрыть",
 						"fr": "Fermer",
 						"es": "Cerrar",
-						"de": "Schließen"
+						"de": "Schließen",
+						"it": "Chiudi"
 					}
 				}
 			],
@@ -102,7 +105,8 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"it": "Informazioni su"
 			},
 			"url": "index_about.html",
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],

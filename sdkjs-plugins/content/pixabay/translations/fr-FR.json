@@ -18,9 +18,9 @@
 	"To use Pixabay, create Pixabay account, then copy the API key and insert it in the specified field." : "Pour utiliser Pixabay, créez un compte Pixabay, puis copiez la clé API et insérez-la dans le champ spécifié.",
 	"Learn more here." : "En savoir plus ici.",
 	"Enter your Pixabay API key" : "Entrez votre clé API Pixabay",
-	"API key is empty!" : "La clé API est vide!",
+	"API key is empty!" : "La clé API est vide !",
 	"No results." :  "Aucun résultat.",
-	"Invalid API key!" : "Clé API non valide!",
+	"Invalid API key!" : "Clé API non valide !",
 	"Loading..." : "Chargement...",
 	"Czech" : "Tchèque",
 	"Danish" : "Danois",
@@ -68,6 +68,6 @@
 	"Buildings" : "Bâtiments",
 	"Business" : "Affaires",
 	"Music" : "Musique",
-	"This plugin use:" : "Ce plugin utilise:",
+	"This plugin use:" : "Ce plugin utilise :",
 	"is a website for sharing photos, illustrations, vector graphics." : "est un site web de partage de photos, d'illustrations, de graphiques vectoriels."
 }
