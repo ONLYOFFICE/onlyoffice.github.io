@@ -6,7 +6,8 @@
 		"es": "Macros",
 		"pt-BR": "Macros",
 		"de": "Makros",
-		"si": "සාර්ව"
+		"si": "සාර්ව",
+		"it": "Macro"
 	},
 	"guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
 	"version": "2.0.0",
@@ -24,7 +25,8 @@
 				"es": "Automatice sus tareas rutinarias y estandarice los documentos mediante macros (se utiliza la sintaxis del lenguaje JavaScript).",
 				"pt-BR": "Automatize suas tarefas rotineiras e padronize documentos usando macros (é usada a sintaxe da linguagem JavaScript).",
 				"de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet).",
-				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ)."
+				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ).",
+				"it": "Automatizza i tuoi compiti di routine e rendi i tuoi documenti standard utilizzando le macro (viene utilizzata la sintassi del linguaggio JavaScript)."
 			},
 			"url": "index.html",
 			"help" : " https://api.onlyoffice.com/plugin/macros",
@@ -86,7 +88,8 @@
 						"ru": "Сохранить",
 						"fr": "Sauvegarder",
 						"es": "Guardar",
-						"de": "Speichern"
+						"de": "Speichern",
+						"it": "Salva"
 					}
 				},
 				{
@@ -96,7 +99,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"it": "Annulla"
 					}
 				}
 			],
