@@ -34,7 +34,6 @@
 			isVisual : true,
 			buttons : [],
 			isModal : false,
-			isCanDocked : true,
 			EditorsSupport : ["word", "cell", "slide"],
 			size : [ 400, 400 ]
 		};
