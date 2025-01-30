@@ -93,7 +93,7 @@
       "size": [350, 90],
       "store": {
         "background": {
-          "light": "#F0F0F0",
+          "light": "#000000",
           "dark": "#000000"
         },
         "screenshots": [
