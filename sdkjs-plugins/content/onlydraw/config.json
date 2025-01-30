@@ -30,7 +30,7 @@
 					"light" : "#F9F9F9",
 					"dark" : "#444444"
 				},
-				"screenshots" : ["resources/screen1.png","resources/screen2.png","resources/screen3.png","resources/screen4.png"],
+				"screenshots" : ["resources/store/screenshots/screen1.png","resources/store/screenshots/screen2.png","resources/store/screenshots/screen3.png","resources/store/screenshots/screen4.png"],
 				"icons" : {
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
