@@ -93,7 +93,7 @@
       "size": [350, 90],
       "store": {
         "background": {
-          "light": "#F0F0F0",
+          "light": "#000000",
           "dark": "#000000"
         },
         "screenshots": [
@@ -102,8 +102,8 @@
           "resources/store/screenshots/screenshot-3.png"
         ],
         "icons": {
-          "light": "resources/store/icons/light",
-          "dark": "resources/store/icons/dark"
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
         },
         "categories": ["specAbilities", "work"]
       }
