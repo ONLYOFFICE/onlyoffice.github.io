@@ -18,11 +18,11 @@
 	"Reconfigure": "重新配置",
 	"Learn more here.": "在此处了解更多信息。",
 	"Save": "保存",
-	"Insert Citation": "引用を挿入",
-	"Cancel select": "キャンセル選択",
-	"Refresh": "リフレッシュ",
-	"Save as text": "テキストとして保存",
-	"Please insert some citation into the document." : "文書にいくつかの引用を挿入してください。",
-	"Synchronize" : "同期",
-	"Omit Author" : "著者を省略する"
+	"Insert Citation": "插入引用",
+	"Cancel select": "取消选择",
+	"Refresh": "刷新",
+	"Save as text": "保存为文本",
+	"Please insert some citation into the document." : "请插入一些引用到文档中。",
+	"Synchronize" : "同步",
+	"Omit Author" : "省略作者"
 }
