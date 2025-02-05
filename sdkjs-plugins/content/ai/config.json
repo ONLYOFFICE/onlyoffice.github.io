@@ -11,7 +11,8 @@
 		"sr-Cyrl-RS": "AI",
 		"sr-Latn-RS": "AI",
 		"ja-JA": "AI",
-		"sq-AL": "AI"
+		"sq-AL": "AI",
+		"it": "IA"
 	},
 
 	"guid" : "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
@@ -32,7 +33,8 @@
 				"sr-Cyrl-RS": "Користите AI чет робота за обављање задатака који укључују разумевање или генерисање природног језика или кода.",
 				"sr-Latn-RS": "Koristite AI čet robota za obavljanje zadataka koji uključuju razumevanje ili generisanje prirodnog jezika ili koda.",
 				"ja-JA": "自然言語やコードの理解または生成が必要なタスクを行うには、AIチャットボットを使用できます。",
-				"sq-AL": "Shtoni dhe selektoni modele AI për detyra të ndryshme."
+				"sq-AL": "Shtoni dhe selektoni modele AI për detyra të ndryshme.",
+				"it": "Utilizza il chatbot dell'IA per eseguire attività che implicano la comprensione o la generazione di codice o linguaggio naturale."
 			},
 
 			"url"         : "index.html",
