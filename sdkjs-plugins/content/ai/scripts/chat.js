@@ -55,8 +55,6 @@
 		}
 	});
 
-	console.log(window.Asc.plugin);
-
 	window.Asc.plugin.init = function() {
 		restoreState();
 		bCreateLoader = false;
