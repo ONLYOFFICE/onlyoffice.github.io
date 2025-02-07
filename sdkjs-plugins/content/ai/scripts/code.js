@@ -12,8 +12,27 @@ function initWithTranslate() {
 	}
 }
 
+
+function clearChatState(frameId) {
+	let key = 'onlyoffice_ai_chat_state-' + frameId;
+	if(window.localStorage.getItem(key)) {
+		window.localStorage.removeItem(key);
+	}
+}
+
+function clearAllChatsState() {
+	let localStorageArr = window.localStorage;
+	for (let i = 0; i < localStorageArr.length; i++) {
+		let key = window.localStorage.key(i);
+		if(key.includes('onlyoffice_ai_chat_state')) {
+			window.localStorage.removeItem(key);
+		}
+	}
+}
+
 window.Asc.plugin.init = function() {
 	initWithTranslate();
+	clearAllChatsState();
 };
 
 window.Asc.plugin.onTranslate = function() {
@@ -41,6 +60,9 @@ window.Asc.plugin.button = function(id, windowId) {
 		}
 	} else {
 		window.Asc.plugin.executeMethod("CloseWindow", [windowId]);
+		
+		// Clear state of the AI chat
+		clearChatState(windowId);
 	}
 };
 
