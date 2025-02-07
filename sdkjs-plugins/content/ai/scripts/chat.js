@@ -27,8 +27,24 @@
 	let modalTimeout = null;
 	let loader = null;
 	let bCreateLoader = true;
+	let localStorageKey = "onlyoffice_ai_chat_state";
+
+	window.addEventListener("message", (event) => {
+		const eventData = JSON.parse(event.data);
+		if(!eventData) return;
+
+		if(eventData.type == 'plugin_docked') {
+			setState({
+				messages: settings.messages,
+				inputValue: document.getElementById('message').value
+			});
+		}
+	});
+
+	console.log(window.Asc.plugin);
 
 	window.Asc.plugin.init = function() {
+		restoreState();
 		bCreateLoader = false;
 		destroyLoader();
 		document.getElementById('message').focus();
@@ -97,9 +113,42 @@
 		};
 	};
 
+	function setState(state) {
+		window.localStorage.setItem(localStorageKey + '-' + window.Asc.plugin.windowID, JSON.stringify(state));
+	};
+
+	function getState() {
+		let state = window.localStorage.getItem(localStorageKey + '-' + window.Asc.plugin.windowID);
+		return state ? JSON.parse(state) : null;
+	};
+
+	function restoreState() {
+		let state = getState();
+		if(!state) return;
+
+		if(state.messages) {
+			settings.messages = state.messages; 
+			state.messages.forEach(function(message) {
+				renderMessage(message.content, message.role == 'user');
+			});
+		}
+		if(state.inputValue) {
+			document.getElementById('message').value = state.inputValue;
+		}
+	};
+
 	function createMessage(text, type) {
+		if (type) {
+			renderMessage(text, type);
+			sendMessage(text);
+		} else {
+			renderMessage(text, type, document.getElementById('loading'));
+		}
+	};
+
+	function renderMessage(text, type, messageEl) {
 		let chat = document.getElementById('chat');
-		let message = type ? document.createElement('div') : document.getElementById('loading');
+		let message = (messageEl || document.createElement('div'));
 		let textMes = document.createElement('span');
 		textMes.classList.add('form-control', 'span_message');
 
@@ -113,14 +162,14 @@
 		}
 
 		chat.scrollTop = chat.scrollHeight;
-		if (type) {
-			message.classList.add('user_message');
-			chat.appendChild(message);
-			sendMessage(text);
-		} else {
+		if(messageEl) {
 			message.id = '';
 			message.innerText = '';
 		}
+		if(type) {
+			message.classList.add('user_message');
+		}
+		chat.appendChild(message);
 		message.appendChild(textMes);
 	};
 
