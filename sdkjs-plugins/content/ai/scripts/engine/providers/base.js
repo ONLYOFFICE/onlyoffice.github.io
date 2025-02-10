@@ -153,6 +153,8 @@
 			}
 		} catch(err) {			
 		}
+
+		AI.onLoadInternalProviders();
 	};
 
 })();

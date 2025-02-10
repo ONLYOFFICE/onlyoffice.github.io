@@ -42,5 +42,30 @@
 
 		return ret;
 	};
-	
+
+	AI.loadResourceAsText = async function(url) {
+		return new Promise(resolve => (function(){
+			try {
+				var xhr = new XMLHttpRequest();
+				if (xhr) {
+					xhr.open('GET', url, true);
+					xhr.onload = function () {
+						var status = xhr.status;
+						if (status == 200 || location.href.indexOf("file:") == 0) {
+							resolve(xhr.responseText);
+						} else {
+							resolve("");
+						}
+					};
+					xhr.onerror = function() {
+						resolve("");
+					}
+					xhr.send('');
+				}
+			} catch (e) {
+				resolve("");
+			}
+		})());
+	};	
+
 })(window);
