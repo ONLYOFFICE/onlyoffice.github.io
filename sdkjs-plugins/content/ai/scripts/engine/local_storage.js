@@ -6,11 +6,7 @@
 	var localStorageKey = "onlyoffice_ai_plugin_storage_key";
 
 	AI.Providers = {};
-	for (let i = 0, len = AI.Storage.InternalProviders.length; i < len; i++) {
-		let pr = AI.Storage.InternalProviders[i];
-		AI.Providers[pr.name] = pr;
-	}
-
+	
 	AI.serializeProviders = function() {
 		let result = [];
 		for (let i in AI.Providers) {
@@ -192,6 +188,12 @@
 		return null;
 	};
 
-	AI.Storage.load();
+	AI.onLoadInternalProviders = function() {
+		for (let i = 0, len = AI.InternalProviders.length; i < len; i++) {
+			let pr = AI.InternalProviders[i];
+			AI.Providers[pr.name] = pr;
+		}
+		AI.Storage.load();
+	}
 
 })(window);
