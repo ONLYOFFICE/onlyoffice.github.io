@@ -114,7 +114,7 @@
 	AI._getHeaders = function(_provider) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
 		if (!provider) provider = new AI.Provider();
-		return provider.getRequestHeaderOptions(_provider.key);
+		return provider.getRequestHeaderOptions();
 	};
 
 	AI._extendBody = function(_provider, body) {
@@ -133,9 +133,12 @@
 		return provider.isUseProxy();
 	};
 
-	AI._getEndpointUrl = function(_provider, endpoint) {
+	AI._getEndpointUrl = function(_provider, endpoint, model) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
 		if (!provider) provider = new AI.Provider(_provider.name, _provider.url, _provider.key);
+
+		if (_provider.key && !provider.key)
+			provider.key = _provider.key;
 
 		let url = provider.url;
 		if (url.endsWith("/"))
@@ -148,10 +151,7 @@
 				url += plus;
 		}
 
-		let override = provider.overrideEndpointUrl(endpoint);
-		if (undefined !== override)
-			return override;
-		return url + AI.Endpoints.getUrl(endpoint);
+		return url + provider.getEndpointUrl(endpoint, model);
 	};
 
 	AI.getModels = async function(provider)
@@ -171,16 +171,20 @@
 						models : []
 					});
 				else {
-					AI.TmpProviderForModels = AI.Provider.createInstance(provider.name, provider.url, provider.key);
-					for (let i = 0, len = data.data.length; i < len; i++)
+					AI.TmpProviderForModels = AI.createProviderInstance(provider.name, provider.url, provider.key);
+					let models = data.data;
+					if (data.data.models)
+						models = data.data.models;
+					for (let i = 0, len = models.length; i < len; i++)
 					{
-						let model = data.data[i];
+						let model = models[i];
+						AI.TmpProviderForModels.correctModelInfo(model);
+						
 						if (!model.id)
 							continue;
 
-						model.name = model.id;
 						model.endpoints = [];
-						model.options = {};
+						model.options = {};						
 
 						if (AI.TmpProviderForModels.checkExcludeModel(model))
 							continue;
@@ -357,7 +361,7 @@
 
 		let endpointType = isUseCompletionsInsteadChat ? AI.Endpoints.Types.v1.Completions :
 			AI.Endpoints.Types.v1.Chat_Completions;
-		objRequest.url = AI._getEndpointUrl(provider, endpointType);
+		objRequest.url = AI._getEndpointUrl(provider, endpointType, this.model);
 
 		objRequest.body = {
 			model : this.modelUI.id
