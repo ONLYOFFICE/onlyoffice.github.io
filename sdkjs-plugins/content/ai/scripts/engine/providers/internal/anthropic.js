@@ -26,20 +26,20 @@ class Provider extends AI.Provider {
 		return AI.CapabilitiesUI.Chat | AI.CapabilitiesUI.Vision;
 	}
 
-	getEndpointUrl(endpoint) {
+	getEndpointUrl(endpoint, model) {
 		if (AI.Endpoints.Types.v1.Chat_Completions === endpoint)
 			return "/messages";
 		return super.getEndpointUrl();
 	}
 
-	getRequestHeaderOptions(key) {
+	getRequestHeaderOptions() {
 		let headers = {
 			"Content-Type" : "application/json",
 			"anthropic-version" : "2023-06-01",
 			"anthropic-dangerous-direct-browser-access": "true"
 		};
-		if (key)
-			headers["x-api-key"] = key;
+		if (this.key)
+			headers["x-api-key"] = this.key;
 		return headers;
 	}
 

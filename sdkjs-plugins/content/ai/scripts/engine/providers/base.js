@@ -119,7 +119,7 @@
 	AI.createProviderInstance = function(name, url, key) {
 		for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
 			if (name === AI.InternalProviders[i].name)
-				return AI.InternalProviders[i].createInstance(name, url, key);
+				return AI.InternalProviders[i].createInstance(name, url, key, AI.InternalProviders[i].addon);
 		}
 		return new Provider(name, url, key);
 	};

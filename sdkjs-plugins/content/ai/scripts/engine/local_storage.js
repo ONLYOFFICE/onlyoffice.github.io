@@ -78,11 +78,11 @@
 
 				for (let i in obj.providers) {
 					let pr = obj.providers[i];
-					AI.Providers[i] = AI.Provider.createInstance(pr.name, pr.url, pr.key);
+					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key);
 					AI.Providers[i].models = pr.models || [];
 
 					if (fixVersion2) {
-						if (!AI.Storage.isInternalProvider(pr.name))
+						if (!AI.isInternalProvider(pr.name))
 							AI.Providers[i].addon = "v1";
 					}
 				}
@@ -111,7 +111,7 @@
 			AI.Providers[model.provider.name].key = model.provider.key;
 		} else {
 			AI.Providers[model.provider.name] = 
-				AI.Provider.createInstance(model.provider.name, model.provider.url, model.provider.key);
+				AI.createProviderInstance(model.provider.name, model.provider.url, model.provider.key);
 		}
 
 		if (AI.TmpProviderForModels && 

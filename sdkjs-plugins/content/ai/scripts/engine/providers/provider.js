@@ -19,6 +19,13 @@
 			this.models = [];
 			this.modelsUI = [];
 		}
+
+		/**
+		 * Correct received (*models* endpoint) model object.
+		 */
+		correctModelInfo(model) {
+			model.name = model.id;
+		}
 	
 		/**
 		 * Return *true* if you do not want to work with a specific model (model.id). 
@@ -42,7 +49,7 @@
 		 * Url for a specific endpoint.
 		 * @returns {string}
 		 */
-		getEndpointUrl(endpoint) {
+		getEndpointUrl(endpoint, model) {
 			let Types = AI.Endpoints.Types;
 			switch (endpoint)
 			{
@@ -94,7 +101,7 @@
 		 * Don't override this method unless you know what you're doing.
 		 * @returns {Object}
 		 */
-		getRequestBodyOptions = function() {
+		getRequestBodyOptions() {
 			return {};
 		}
 
@@ -102,12 +109,12 @@
 		 * The returned object is an enumeration of all the headers for the requests.
 		 * @returns {Object}
 		 */
-		getRequestHeaderOptions = function(key) {
+		getRequestHeaderOptions() {
 			let headers = {
 				"Content-Type" : "application/json"
 			};
-			if (key)
-				headers["Authorization"] = "Bearer " + key;
+			if (this.key)
+				headers["Authorization"] = "Bearer " + this.key;
 			return headers;
 		}
 		
@@ -135,11 +142,12 @@
 		 * ========================================================================================
 		 */	
 		createInstance(name, url, key, addon) {
-			let inst   = Object.create(Object.getPrototypeOf(this));
+			//let inst   = Object.create(Object.getPrototypeOf(this));
+			let inst   = new this.constructor();
 			inst.name  = name;
 			inst.url   = url;
 			inst.key   = key;
-			inst.addon = addon;
+			inst.addon = addon || "";
 			return inst;
 		}
 
