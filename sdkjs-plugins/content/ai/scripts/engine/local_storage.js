@@ -2,15 +2,13 @@
 {
 	exports.AI = exports.AI || {};
 	var AI = exports.AI;
+
+	AI.DEFAULT_SERVER_SETTINGS = null;
 	
 	var localStorageKey = "onlyoffice_ai_plugin_storage_key";
 
 	AI.Providers = {};
-	for (let i = 0, len = AI.Storage.InternalProviders.length; i < len; i++) {
-		let pr = AI.Storage.InternalProviders[i];
-		AI.Providers[pr.name] = pr;
-	}
-
+	
 	AI.serializeProviders = function() {
 		let result = [];
 		for (let i in AI.Providers) {
@@ -57,9 +55,18 @@
 	};
 
 	AI.Storage.load = function() {
+		let obj = null;
 		try {
-			let obj = JSON.parse(window.localStorage.getItem(localStorageKey));
+			obj = JSON.parse(window.localStorage.getItem(localStorageKey));
+		} catch (e) {
+			obj = AI.DEFAULT_SERVER_SETTINGS;
 
+			if (obj) {
+				AI.DEFAULT_SERVER_SETTINGS.version = AI.Storage.Version;
+			}
+		}
+
+		if (obj) {
 			let fixVersion2 = false;
 			switch (obj.version)
 			{
@@ -82,11 +89,11 @@
 
 				for (let i in obj.providers) {
 					let pr = obj.providers[i];
-					AI.Providers[i] = AI.Provider.createInstance(pr.name, pr.url, pr.key);
+					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);
 					AI.Providers[i].models = pr.models || [];
 
 					if (fixVersion2) {
-						if (!AI.Storage.isInternalProvider(pr.name))
+						if (!AI.isInternalProvider(pr.name))
 							AI.Providers[i].addon = "v1";
 					}
 				}
@@ -102,8 +109,6 @@
 
 			return true;
 		}
-		catch (e) {
-		}
 		return false;
 	};
 
@@ -115,7 +120,7 @@
 			AI.Providers[model.provider.name].key = model.provider.key;
 		} else {
 			AI.Providers[model.provider.name] = 
-				AI.Provider.createInstance(model.provider.name, model.provider.url, model.provider.key);
+				AI.createProviderInstance(model.provider.name, model.provider.url, model.provider.key);
 		}
 
 		if (AI.TmpProviderForModels && 
@@ -192,6 +197,12 @@
 		return null;
 	};
 
-	AI.Storage.load();
+	AI.onLoadInternalProviders = function() {
+		for (let i = 0, len = AI.InternalProviders.length; i < len; i++) {
+			let pr = AI.InternalProviders[i];
+			AI.Providers[pr.name] = pr;
+		}
+		AI.Storage.load();
+	}
 
 })(window);
