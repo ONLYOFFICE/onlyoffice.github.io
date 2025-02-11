@@ -534,18 +534,24 @@
 
 	AI.ActionsLoad = function()
 	{
+		let obj = null;
 		try
 		{
-			let obj = JSON.parse(window.localStorage.getItem(actions_key));
+			obj = JSON.parse(window.localStorage.getItem(actions_key));
+		}
+		catch (e)
+		{
+			obj = (AI.DEFAULT_SERVER_SETTINGS && AI.DEFAULT_SERVER_SETTINGS.actions) ? AI.DEFAULT_SERVER_SETTINGS.actions : null;
+		}
+		
+		if (obj)
+		{
 			for (let i in obj)
 			{
 				if (AI.Actions[i] && obj[i].model)
 					AI.Actions[i].model = obj[i].model;
 			}
 			return true;
-		}
-		catch (e)
-		{
 		}
 		return false;
 	};

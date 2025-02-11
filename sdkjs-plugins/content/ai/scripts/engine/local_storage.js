@@ -2,6 +2,8 @@
 {
 	exports.AI = exports.AI || {};
 	var AI = exports.AI;
+
+	AI.DEFAULT_SERVER_SETTINGS = null;
 	
 	var localStorageKey = "onlyoffice_ai_plugin_storage_key";
 
@@ -53,9 +55,18 @@
 	};
 
 	AI.Storage.load = function() {
+		let obj = null;
 		try {
-			let obj = JSON.parse(window.localStorage.getItem(localStorageKey));
+			obj = JSON.parse(window.localStorage.getItem(localStorageKey));
+		} catch (e) {
+			obj = AI.DEFAULT_SERVER_SETTINGS;
 
+			if (obj) {
+				AI.DEFAULT_SERVER_SETTINGS.version = AI.Storage.Version;
+			}
+		}
+
+		if (obj) {
 			let fixVersion2 = false;
 			switch (obj.version)
 			{
@@ -97,8 +108,6 @@
 			}
 
 			return true;
-		}
-		catch (e) {
 		}
 		return false;
 	};
