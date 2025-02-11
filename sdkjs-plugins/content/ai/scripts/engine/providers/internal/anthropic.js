@@ -29,7 +29,13 @@ class Provider extends AI.Provider {
 	getEndpointUrl(endpoint, model) {
 		if (AI.Endpoints.Types.v1.Chat_Completions === endpoint)
 			return "/messages";
-		return super.getEndpointUrl();
+		return super.getEndpointUrl(endpoint, model);
+	}
+
+	getRequestBodyOptions() {
+		return {
+			max_tokens : 4096
+		};
 	}
 
 	getRequestHeaderOptions() {
