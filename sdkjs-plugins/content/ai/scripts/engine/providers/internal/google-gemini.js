@@ -73,4 +73,18 @@ class Provider extends AI.Provider {
 		return headers;
 	}
 
+	getChatCompletions(message, model) {
+		let body = { contents : [] };
+		for (let i = 0, len = message.messages.length; i < len; i++) {
+			let rec = {
+				role : message.messages[i].role,
+				parts : [ { text : message.messages[i].content } ]
+			};
+			if (rec.role === "assistant")
+				rec.role = "model";
+			body.contents.push(rec);
+		}
+		return body;
+	}
+
 }

@@ -116,10 +116,10 @@
 	AI.CapabilitiesUI.All = capabilitiesAll;
 
 	AI.InternalProviders = [];
-	AI.createProviderInstance = function(name, url, key) {
+	AI.createProviderInstance = function(name, url, key, addon) {
 		for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
 			if (name === AI.InternalProviders[i].name)
-				return AI.InternalProviders[i].createInstance(name, url, key, AI.InternalProviders[i].addon);
+				return AI.InternalProviders[i].createInstance(name, url, key, addon || AI.InternalProviders[i].addon);
 		}
 		return new Provider(name, url, key);
 	};

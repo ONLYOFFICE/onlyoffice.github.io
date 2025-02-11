@@ -21,9 +21,21 @@
 		}
 
 		/**
+		 * If you add an implementation here, then no request will be made to the service.
+		 * @returns {Object[] | undefined}
+		 */
+		getModels() {
+			return undefined;
+		}
+
+		/**
 		 * Correct received (*models* endpoint) model object.
 		 */
 		correctModelInfo(model) {
+			if (undefined === model.id && model.name) {
+				model.id = model.name;
+				return;
+			}
 			model.name = model.id;
 		}
 	
@@ -134,6 +146,94 @@
 		 */
 		isOnlyDesktop() {
 			return false;
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     messages: [
+		 *         { role: "developer", content: "You are a helpful assistant." },
+		 *         { role: "system", content: "You are a helpful assistant." },
+		 *         { role: "user", content: "Hello" },
+		 *         { role: "assistant", content: "Hey!" },
+		 *         { role: "user", content: "Hello" },
+		 *         { role: "assistant", content: "Hey again!" }
+		 *     ]
+		 * }
+		 */
+		getChatCompletions(message, model) {
+			return {
+				model : model.id,
+				messages : message.messages
+			}
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     text: "Please, calculate 2+2."
+		 * }
+		 */
+		getCompletions(message, model) {
+			return {
+				model : model.id,
+				prompt : message.text
+			}
+		}
+
+		/**
+		 * Convert *getChatCompletions* and *getCompletions* answer to result simple message.
+		 * @returns {Object} result 
+		 * *result* is in folowing format:
+		 * {
+		 *     content: ["Hello", "Hi"]
+		 * }
+		 */
+		getChatCompletionsResult(message, model) {
+			let result = {
+				content : []
+			};
+
+			let arrResult = message.data.choices || message.data.content || message.data.candidates;
+			if (!arrResult)
+				return result;
+
+			let choice = arrResult[0];
+			if (!choice)
+				return result;
+			
+			if (choice.message && choice.message.content)
+				result.content.push(choice.message.content);
+			if (choice.text)
+				result.content.push(choice.message.text);
+			if (choice.content) {
+				if (typeof(choice.content) === "string")
+					result.content.push(choice.content);
+				else if (Array.isArray(choice.content.parts)) {
+					for (let i = 0, len = choice.content.parts.length; i < len; i++) {
+						result.content.push(choice.content.parts[i].text);
+					}
+				}
+			}
+
+			let trimArray = ["\n".charCodeAt(0)];
+			for (let i = 0, len = result.content.length; i < len; i++) {
+				let iEnd = result.content[i].length - 1;
+				let iStart = 0;
+				while (iStart < iEnd && trimArray.includes(result.content[i].charCodeAt(iStart)))
+					iStart++;
+				while (iEnd > iStart && trimArray.includes(result.content[i].charCodeAt(iEnd)))
+					iEnd--;
+
+				if (iEnd > iStart && ((0 !== iStart) || ((result.content[i].length - 1) !== iEnd)))
+					result.content[i] = result.content[i].substring(iStart, iEnd + 1);				
+			}
+
+			return result;
 		}
 
 		/**

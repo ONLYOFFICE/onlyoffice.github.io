@@ -78,7 +78,7 @@
 
 				for (let i in obj.providers) {
 					let pr = obj.providers[i];
-					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key);
+					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);
 					AI.Providers[i].models = pr.models || [];
 
 					if (fixVersion2) {
