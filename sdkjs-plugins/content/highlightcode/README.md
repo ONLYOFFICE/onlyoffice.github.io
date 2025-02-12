@@ -18,4 +18,4 @@ Supported styles: Googlecode, GitHub, GitHub Gist, Android Studio, Visual Studio
 3. Set the language you use. It will be defined automatically, but you can also change it manually. 
 4. Choose style/background color and press OK to insert your code into the document. 
 
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/

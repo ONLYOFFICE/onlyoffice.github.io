@@ -13,13 +13,13 @@ Please note that it is the system plugin so that's OK that you can't see it in t
 
 ## How to install
 
-Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/).
 
 ## Documentation
 
-Plugins structure and installation https://api.onlyoffice.com/plugin/basic.
+Plugins structure and installation https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/.
 
-Plugins code and methods https://api.onlyoffice.com/docbuilder/basic.
+Plugins code and methods https://api.onlyoffice.com/docs/document-builder/get-started/overview/.
 
 ## User feedback and support
 

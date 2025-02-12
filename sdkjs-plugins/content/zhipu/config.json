@@ -10,18 +10,18 @@
     },
     "guid": "asc.{4b5efd7f-7c8d-1ef4-feab-bfbf2e1d86ac}",
     "baseUrl": "",
-    "version": "1.0.1",
-    "offered": "Jianbo Lin",
+    "version": "2.0.1",
+    "offered": "Jianbo Lin and Linji Zhang",
     "variations": [
         {
-            "description": "A copilot plugin for OnlyOffice Document based on ZhiPu ChatGLM model.",
+            "description": "Easily generate high-quality articles, interpret complex spreadsheet data, create powerpoint Outlines, and more with an AI assistant based on ChatGLM's large model.",
             "descriptionLocale": {
-                "zh": "基于智谱 ChatGLM 大模型的 OnlyOffice 文档 Copilot 插件",
-                "de": "Ein Copilot-Plugin für OnlyOffice-Dokumente basierend auf dem ZhiPu ChatGLM-Modell.",
-                "ru": "Плагин Copilot для документов OnlyOffice на основе модели ZhiPu ChatGLM.",
-                "fr": "Un plugin copilote pour les documents OnlyOffice basé sur le modèle ZhiPu ChatGLM.",
-                "pt-BR": "Um plugin copiloto para OnlyOffice Document baseado no modelo ZhiPu ChatGLM.",
-                "es": "Un complemento de copiloto para documentos de OnlyOffice basado en el modelo ZhiPu ChatGLM."
+                "zh": "使用基于智谱 ChatGLM 大模型的 AI 助手，轻松生成高质量的文章、解释复杂的电子表格数据、创建 PPT 大纲等.",
+                "de": "Erstellen Sie mühelos hochwertige Artikel, interpretieren Sie komplexe Tabellendaten, erstellen Sie PowerPoint-Outlines und mehr mit einem KI-Assistenten auf der Grundlage des großen Modells von ChatGLM.",
+                "ru": "Легко создавайте статьи высокого качества, интерпретируйте сложные данные электронных таблиц, создавайте контуры презентаций и многое другое с помощью искусственного интеллекта на основе большой модели ChatGLM.",
+                "fr": "Générez facilement des articles de haute qualité, interprétez des données de feuille de calcul complexes, créez des contours PowerPoint et plus encore avec un assistant IA basé sur le grand modèle de ChatGLM.",
+                "pt-BR": "Gere facilmente artigos de alta qualidade, interprete dados complexos de planilhas, crie contornos de PowerPoint e muito mais com um assistente de IA baseado no grande modelo de ChatGLM.",
+                "es": "Genere fácilmente artículos de alta calidad, interprete datos complejos de hojas de cálculo, cree contornos de PowerPoint y más con un asistente de IA basado en el gran modelo de ChatGLM."
             },
             "url": "index.html",
             "icons": [
@@ -75,7 +75,14 @@
                     "resources/store/screenshots/screen_1.png",
                     "resources/store/screenshots/screen_2.png",
                     "resources/store/screenshots/screen_3.png",
-                    "resources/store/screenshots/screen_4.png"
+                    "resources/store/screenshots/screen_4.png",
+                    "resources/store/screenshots/screen_5.png",
+                    "resources/store/screenshots/screen_6.png",
+                    "resources/store/screenshots/screen_7.png",
+                    "resources/store/screenshots/screen_8.png",
+                    "resources/store/screenshots/screen_9.png",
+                    "resources/store/screenshots/screen_10.png",
+                    "resources/store/screenshots/screen_11.png"
                 ],
                 "icons": {
                     "light": "resources/store/icons",
@@ -88,7 +95,7 @@
             },
             "isViewer": true,
             "EditorsSupport": [
-                "word"
+                "word","cell","slide"
             ],
             "isVisual": true,
             "isModal": true,
@@ -104,10 +111,18 @@
         },
         {
             "description": "setting",
+            "descriptionLocale": {
+                "zh": "设置",
+                "de": "Einstellung",
+                "ru": "настройка",
+                "fr": "réglage",
+                "pt-BR": "Ajuste",
+                "es": "Ajuste"
+            },
             "url": "index_setting.html",
             "isViewer": false,
             "EditorsSupport": [
-                "word"
+                "word","cell","slide"
             ],
             "isVisual": true,
             "isModal": true,
@@ -131,6 +146,33 @@
             "size": [
                 392,
                 147
+            ]
+        },
+        {
+            "description": "custom request",
+            "descriptionLocale": {
+                "zh": "自定义请求",
+                "de": "Benutzerdefinierte Anfrage",
+                "ru": "запрос настроек",
+                "fr": "demande personnalisée",
+                "pt-BR": "Solicitação personalizada",
+                "es": "Solicitud personalizada"
+            },
+            "url": "custom_req_window.html",
+            "isViewer": false,
+            "EditorsSupport": [
+                "word","cell","slide"
+            ],
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [],
+            "size": [
+                400,
+                400
             ]
         }
     ]

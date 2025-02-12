@@ -1,0 +1,43 @@
+{
+    "name": "OnlyDraw",
+    "nameLocale": {
+      "zh": "OnlyDraw",
+      "en": "OnlyDraw",
+      "ja": "OnlyDrawです"
+    },
+    "guid": "asc.{Y1234ABCD-5678-EFGH-IJKL-MNOPQRSTUVWX}",
+    "offered": "shanyu qing",
+    "version": "2.1.0",
+    "variations": [
+      {
+        "description": "OnlyDraw makes it easy to add images, create memes, customize drawings and insert documents",
+        "descriptionLocale": {
+        "zh":"OnlyDraw助您轻松添图、制表情包及自定义绘图并插入文档。",
+        "ja": "OnlyDrawは簡単にイラストを追加したり、スタンプを作成したり、カスタマイズしてファイルを挿入することができます。"
+      },
+        "type": "panel",
+        "url": "index.html",
+        "icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+        "isViewer": false,
+        "EditorsSupport": ["word", "cell", "slide", "pdf" ],
+        "isVisual": true,
+        "isModal": true,
+        "isInsideMode": false,
+        "initDataType": "none",
+        "initData": "",
+        "store": {
+				"background": {
+					"light" : "#F9F9F9",
+					"dark" : "#444444"
+				},
+				"screenshots" : ["resources/store/screenshots/screen1.png","resources/store/screenshots/screen2.png","resources/store/screenshots/screen3.png","resources/store/screenshots/screen4.png"],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work", "recommended"]
+			},
+        "events": [ "onClick"]
+      }
+    ]
+  }

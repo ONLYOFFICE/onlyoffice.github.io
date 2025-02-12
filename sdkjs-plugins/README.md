@@ -1,6 +1,6 @@
 ## Description
 
-ONLYOFFICE provides a style sheet for different interface elements. To adjust your plugin interface to the ONLYOFFICE style, connect the [plugin.css](v1/plugins.css) to your plugin's [index.html](https://api.onlyoffice.com/plugin/indexhtml) file with the following link:
+ONLYOFFICE provides a style sheet for different interface elements. To adjust your plugin interface to the ONLYOFFICE style, connect the [plugin.css](v1/plugins.css) to your plugin's [index.html](https://api.onlyoffice.com/docs/plugin-and-macros/structure/entry-point/) file with the following link:
 
 `<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">`
 
@@ -12,7 +12,7 @@ Plugin styles (controls) include:
 * Combo box
 * Loader
 
-For more details and examples, please refer to the [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/basic).
+For more details and examples, please refer to the [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/).
 
 # Structure
 

@@ -48,7 +48,7 @@ Two installation ways are available:
     });
     ```
 
-Detailed instructions can also be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/plugin/installation).
+Detailed instructions can also be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/).
 
 **Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use [special connectors](https://api.onlyoffice.com/editors/plugins) (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
 
@@ -84,4 +84,4 @@ This plugin doesn't work in desktop editor, because has problem with authorizati
 
 To ask questions and share feedback, use Issues in this repository.
 
-If you need more information about how to use or write your own plugin, please visit our [API documentation](https://api.onlyoffice.com/plugin/basic).
+If you need more information about how to use or write your own plugin, please visit our [API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/).

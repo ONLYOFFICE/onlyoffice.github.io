@@ -18,6 +18,7 @@
 (function (window, undefined) {
     var wordpress = null;
     var post = null;
+    var urlProxy = 'https://plugins-services.onlyoffice.com/proxy';
 
     OAuthError = function(error, ttt) {
         console.log(arguments);
@@ -57,9 +58,14 @@
         var data = 'code=' + sCode + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&redirect_uri=' + redirectUrl + '&grant_type=authorization_code';
         var oBlogInfo = null;
         jQuery.ajax( {
-            url: 'https://onlyoffice-proxy.herokuapp.com/https://public-api.wordpress.com/oauth2/token',
-            type: 'POST',
-            data: data,
+            method: 'POST',
+            contentType: "text/plain",
+            data: JSON.stringify({
+                "data": data,
+                "method": "POST",
+                "target": 'https://public-api.wordpress.com/oauth2/token'
+            }),
+            url: urlProxy,
             success: function( response ) {
                 document.cookie = "mendToken=" + response.access_token + "; max-age=43200";
                 wordpress = new WordpressHelper(response.access_token);
