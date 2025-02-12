@@ -13,3 +13,7 @@
 ## 1.0.2
 
 * Fix problem with preview window in viewer mode.
+
+## 1.0.3
+
+* Update jquery version.
