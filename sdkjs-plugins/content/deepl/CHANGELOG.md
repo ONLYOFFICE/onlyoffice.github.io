@@ -14,4 +14,4 @@
 
 ## 1.0.3
 
-* Add "pdf" to the supported editors.
+* Update jquery version.
