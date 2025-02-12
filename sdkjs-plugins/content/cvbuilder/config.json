@@ -1,0 +1,53 @@
+{
+    "guid"       : "asc.{9a2db794-d933-416d-91be-0b6ee35318b0}",
+    "baseUrl"    : "",
+    "name"       : "CVbuilder",
+    "nameLocale": {
+		"zh": "简历模板"
+	},
+    "version": "0.1.0",
+    "offered": "Kevin Tian",
+    "variations" : [
+        {
+            "description"         : "CVbuilder is a resume generation plugin, aiming to help users swiftly create resumes.",
+            "descriptionLocale": {
+                "zh": "简历模板是一款简历生成插件，旨在帮助用户快速创建简历。"
+            },
+            "url"                 : "index.html",
+            "icons"               : ["resources/icon.png", "resources/icon@2x.png"],
+            "isViewer"            : false,
+            "EditorsSupport"      : [ "word" ],
+            "isVisual"            : true,
+            "isModal"             : true,
+            "isInsideMode"        : false,
+            "initDataType"        : "none",
+            "isUpdateOleOnResize" : false,
+
+            "buttons"             : [
+				{
+					"text": "Insert",
+					"primary": true,
+                    "textLocale": {
+                        "zh": "插入模板"
+                    }
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+                    "textLocale": {
+                        "zh": "取消"
+                    }
+				}
+			],
+            "size": [1180, 600],
+            "store": {
+				"screenshots" : [
+					"resources/store/screenshots/image.png",
+					"resources/store/screenshots/image_1.png",
+					"resources/store/screenshots/image_2.png"
+				],
+				"categories": ["recommended", "work"]
+			}
+        }
+    ]
+}
