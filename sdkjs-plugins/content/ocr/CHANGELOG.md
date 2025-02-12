@@ -13,3 +13,7 @@
 
 * Fix problem with styles for language select.
 * Add sorting for languages in alphabetical order.
+
+## 2.0.2
+
+* Update jquery version.
