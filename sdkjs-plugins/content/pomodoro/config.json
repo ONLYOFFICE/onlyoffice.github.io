@@ -1,0 +1,111 @@
+{
+    "baseUrl": "",
+    "guid": "asc.{FFE1F463-1EA3-4392-990E-4CC84940B755}",
+    "help": "",
+    "minVersion": "6.3.0",
+    "name": "Pomodoro",
+    "nameLocale": {
+        "zh": "番茄钟"
+    },
+    "offered": "DeepPurpleApril",
+    "variations": [
+        {
+            "description"         : "Pomodoro helps you improve focus and productivity with a cyclical pattern of 25 minutes of focused work and 5 minutes of short breaks.",
+            "descriptionLocale"   : {
+					"zh": "番茄钟计时器采用番茄工作法，以25分钟专注工作和5分钟短暂休息的循环模式，帮助您提升专注力和工作效率。"
+				},
+            "url"                 : "index.html",
+            "icons"               : ["resources/store/light/icon.png", "resources/store/light/icon@2x.png"],
+            "isViewer"            : false,
+            "EditorsSupport"      :["word", "cell", "slide", "pdf"],
+            "isVisual"            : true,
+            "isModal"             : true,
+            "isInsideMode"        : true,
+            "initDataType"        : "none",
+            "initData"            : "",
+            "isUpdateOleOnResize" : true,
+            "events"              : ["onClick"],
+            "store"               : {
+                "background": {
+                    "light": "#F5F5F5",
+					"dark": "#444444"
+                },
+                "screenshots": [
+                    "resources/store/screenshots/screen_1.png"
+                ],
+                "icons": {
+                    "light": "resources/store/icons",
+                    "dark": "resources/store/icons"
+                },
+                "categories": [
+                    "specAbilities",
+                    "work"
+                ]
+            },
+            "buttons"             : [
+                { 
+                    "text": "Start",
+                    "primary": false, 
+                    "isviewer": false
+                },
+                { 
+                    "text": "Reset",
+                    "primary": false, 
+                    "isviewer": false
+                }
+            ]
+        },
+        {
+            "description"         : "About",
+            "descriptionLocale"   : {
+					"zh": "关于"
+				},
+            "url"                 : "index_about.html",
+            "isViewer"            : false,
+            "EditorsSupport"      : ["word", "cell", "slide", "pdf"],
+            "isVisual"            : true,
+            "isModal"             : true,
+            "isInsideMode"        : false,
+            "initDataType"        : "none",
+            "initData"            : "",
+            "isUpdateOleOnResize" : true,
+            "buttons"         : [
+                {
+                    "text": "Ok",
+                    "textLocale": {
+                        "zh": "确定"
+                    },
+                    "primary": true
+                }
+            ],
+
+            "size" : [392, 160]
+        },
+        {
+            "description": "Settings",
+            "descriptionLocale"   : {
+					"zh": "设置"
+				},
+            "url": "index_setting.html",
+            "isViewer": false,
+            "EditorsSupport": ["word", "cell", "slide", "pdf"],
+            "isVisual": true,
+            "isModal": true,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [
+                {
+                    "text": "Ok",
+                    "textLocale": {
+                        "zh": "确定"
+                    },
+                    "primary": true
+                }
+            ],
+            "size": [392, 250]
+        }
+    ],
+    "version": "1.0"
+}

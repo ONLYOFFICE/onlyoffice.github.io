@@ -12,7 +12,7 @@ It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE
 2. Open the Plugins tab and press Translator.
 3. Select the language you wan’t your text to be translated to.
 
-If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/plugin/basic
+If you need more information about how to use or write your own plugin, please see this https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/
 
 ## Known issues
 
