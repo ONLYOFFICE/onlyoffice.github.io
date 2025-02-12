@@ -7,3 +7,7 @@
 ## 1.0.1
 
 * Disable plugin for viewer.
+
+## 1.0.2
+
+* Update jquery version.

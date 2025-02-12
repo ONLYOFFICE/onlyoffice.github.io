@@ -13,3 +13,7 @@
 ## 1.0.2
 
 * Fix problem with IE.
+
+## 1.0.4
+
+* Update jquery version.
