@@ -183,7 +183,7 @@ function getMessage(key) {
             data: '?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
             url: curr_api_url + apikey
 
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             if ($('#txt_shower').hasClass('error'))
                 $('#txt_shower').toggleClass('error');
 
@@ -216,7 +216,7 @@ function getMessage(key) {
             showLoader(elements, false);
             updateScroll();
 
-        }).error(function(oResponse) {
+        }).fail(function(oResponse) {
             if (curr_api_url === free_api_url) {
                 curr_api_url = pro_api_url;
                 Translate(apikey, targetLanguage, sParams);

@@ -41,10 +41,10 @@
                     "target": sUrl
                 }),
                 url: urlProxy
-            }).success(function (oResponse) {
+            }).done(function (oResponse) {
                 resolve(oResponse);
             })
-            .error(function(error) {
+            .fail(function(error) {
                 reject(error);
             });
         });

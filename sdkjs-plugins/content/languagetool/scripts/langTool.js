@@ -305,7 +305,7 @@ function checkInternetExplorer(){
 			},
 			data : data,
 			url: serviceUrl
-		}).success(function (oResponse) {
+		}).done(function (oResponse) {
 			matches = oResponse.matches.map(function(el, ind) {
 				el.index = ind;
 				return el;
@@ -314,7 +314,7 @@ function checkInternetExplorer(){
 			if (window.Asc.plugin.theme)
 			    $('.result_div').css('background', window.Asc.plugin.theme["background-normal"]);
 			showLoader(elements, false);
-		}).error(function(e){
+		}).fail(function(e){
 		    $('<span>', {
 		        "class": "error",
 		        text: e.responseText
