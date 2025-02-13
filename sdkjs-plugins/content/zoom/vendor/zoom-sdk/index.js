@@ -127,13 +127,13 @@ function websdkready() {
           }),
           url: SIGNATURE_SERVER
 
-      }).success(function (oResponse) {
+      }).done(function (oResponse) {
           meetingConfig.signature = oResponse;
           meetingConfig.sdkKey = SDK_KEY;
           var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
           window.parent.openMeeting(joinUrl);
           showLoader(false);
-      }).error(function(oResponse) {
+      }).fail(function(oResponse) {
           alert('Server error. Contact to support.');
           showLoader(false);
       })
@@ -180,14 +180,14 @@ function websdkready() {
           }),
 			    url: SIGNATURE_SERVER
 
-      }).success(function (oResponse) {
+      }).done(function (oResponse) {
           meetingConfig.signature = oResponse;
           meetingConfig.sdkKey = SDK_KEY;
           var joinUrl = document.location.protocol + "//" + document.location.host + document.location.pathname.replace("index_zoom.html", "meeting.html?") + testTool.serialize(meetingConfig);
           document.getElementById('copy_link_value').setAttribute('link', joinUrl);
           copyToClipboard('copy_link_value');
           alert('Copy link was copied to clipboard')
-      }).error(function(oResponse) {
+      }).fail(function(oResponse) {
           alert('Server error. Contact to support.');
           showLoader(false);
       })
