@@ -16,4 +16,4 @@ Grammalecte is compatible with [self-hosted](https://github.com/ONLYOFFICE/Docum
 
 ## How to install
 
-Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/).
+Detailed instructions can be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/).
