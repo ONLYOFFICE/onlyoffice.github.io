@@ -48,7 +48,7 @@ Two installation ways are available:
     });
     ```
 
-Detailed instructions can also be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/).
+Detailed instructions can also be found in [ONLYOFFICE API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/).
 
 **Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use [special connectors](https://api.onlyoffice.com/editors/plugins) (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable. 
 
