@@ -55,26 +55,98 @@ input {
 
 .messages {
 	flex: 1;
-	margin-bottom: 10px;
+	padding: 10px;
+	margin-bottom: 6px;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	overflow: auto;
 	background: #ffffff;
+}
+
+.message {
+	margin-top: 10px;
+}
+
+.action_buttons_list {
+	margin-top: 4px;
+	display: flex;
+}
+.action_button {
+	padding: 0;
+	display: flex;
+	height: auto;
+}
+.action_button:not(:first-child) {
+	margin-left: 2px;
+}
+
+.action_button img {
+	margin: 2px;
+	width: 20px;
+	height: 20px;
 }
 
 .span_message {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 5px 10px;
+	padding: 6px 8px;
 	width: fit-content;
 	height: fit-content;
 	white-space: normal;
+	line-height: 16px;
+}
+
+.span_message p {
+	margin: 0;
+}
+
+#loading .span_message {
+	padding: 0;
+	color: var(--text-tertiary);
+}
+
+#welcome_text {
+	width: fit-content;
+	height: fit-content;
+	white-space: normal;
+	line-height: 16px;
+	margin-bottom: 20px;
+}
+
+#welcome_buttons_list {
+	display: flex;
+    flex-wrap: wrap;
+	margin: -2px;
+}
+
+.welcome_button {
+	cursor: pointer;
+	width: fit-content;
+	height: fit-content;
+	line-height: 16px;
+	padding: 4px 8px;
+	margin: 2px;
+	background-color: var(--highlight-button-hover) !important;	
+}
+
+.welcome_button:hover {
+	color: var(--text-normal-pressed) !important;
+	background-color: var(--highlight-button-pressed-hover) !important;	
+}
+
+.welcome_button:active {
+	color: var(--text-normal-pressed) !important;
+	background-color: var(--highlight-button-pressed) !important;	
 }
 
 .user_message {
 	display: flex;
 	justify-content: end;
+}
+
+.user_message .span_message {
+	background-color: var(--background-toolbar);
 }
 
 .tokens_info {
@@ -123,7 +195,73 @@ input {
 	display: none !important;
 }
 
-.input_message {
-	height: 44px;
-	background: #ffffff;
+#input_message_wrapper {
+	display: flex;
+	background-color: var(--background-normal);
+	border-radius: 2px;
+	border: 1px solid var(--border-regular-control);
 }
+
+#input_message {
+	flex: 1;
+	padding: 0;
+	padding: 6px 0 6px 6px;
+	margin: 2px 0 2px 2px;
+    min-height: 16px;
+    max-height: 82px;
+    overflow-y: auto;
+    resize: none;
+    line-height: 16px;
+	border: none;
+}
+
+#input_message_submit_wrapper {
+	height: 100%;
+	display: flex;
+    align-items: flex-end;
+}
+
+#input_message_submit {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 6px 6px 0px;
+	margin-left: 6px;
+}
+#input_message_submit img {
+	width: 20px;
+	height: 20px;
+}
+
+
+/* #input_message_wrapper {
+	display: flex;
+	position: relative;
+}
+
+#input_message {
+	width: 100%;
+	padding: 8px 40px 8px 8px;
+    min-height: 36px;
+    max-height: 98px;
+    overflow-y: auto;
+    resize: none;
+    line-height: 16px;
+}
+
+#input_message_submit {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	bottom: 1px;
+	right: 1px;
+	width: 34px;
+	height: 34px;
+}
+#input_message_submit img {
+	width: 20px;
+	height: 20px;
+} */

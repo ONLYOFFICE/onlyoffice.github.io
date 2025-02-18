@@ -53,6 +53,29 @@
 			//result = result.replace(/\n\n/g, '\n');
 			chatWindow.command("onChatReply", result);
 		});
+		chatWindow.attachEvent("onChatReplace", async function(data) {
+			switch (data.type) {
+				case "review": {
+					if (Asc.plugin.info.editorType === "word")
+						await Asc.Library.InsertAsReview(data.data);
+					else
+						await Asc.Library.InsertAsComment(data.data);
+					break;
+				}
+				case "comment": {
+					await Asc.Library.InsertAsComment(data.data);
+					break;
+				}
+				case "insert": {
+					await Asc.Library.PasteText(data.data);
+					break;
+				}
+				case "replace": {
+					await Asc.Library.ReplaceTextSmart([data.data]);
+					break;
+				}
+			}
+		});	
 		chatWindow.show(variation);
 	}
 	
