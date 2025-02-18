@@ -447,6 +447,13 @@
 		let button4 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button4.text = "Translation";
 		button4.icons = getToolBarButtonIcons("translation");
+		button4.menu = [{
+				text:'Set language',
+				id:'t10n-settings',
+				onclick: () => {
+					onTranslateSettings();
+				}}];
+		button4.split = true;
 		button4.attachOnClick(async function(){
 			let requestEngine = AI.Request.create(AI.ActionType.Translation);
 			if (!requestEngine)
