@@ -33,11 +33,12 @@
 		const eventData = JSON.parse(event.data);
 		if(!eventData) return;
 
-		if(eventData.type == 'plugin_docked') {
+		if(eventData.type == 'plugin_docked' && eventData.frameId === window.Asc.plugin.windowID) {
 			setState({
 				messages: settings.messages,
 				inputValue: document.getElementById('message').value
 			});
+			window.localStorage.setItem("onlyoffice_ai_chat_placement", eventData.placement);
 		}
 	});
 
