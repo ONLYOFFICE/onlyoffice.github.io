@@ -35,6 +35,7 @@
 			buttons : [],
 			isModal : false,
 			isCanDocked: true,
+			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
 			EditorsSupport : ["word", "cell", "slide"],
 			size : [ 400, 400 ]
 		};
