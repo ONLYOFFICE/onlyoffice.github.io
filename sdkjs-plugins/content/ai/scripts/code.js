@@ -109,7 +109,7 @@ function onOpenSettingsModal() {
 
 function onTranslateSettings() {
 	let variation = {
-		url : 'settranslationlang.html',
+		url : 'translationsettings.html',
 		description : window.Asc.plugin.tr('Translation settings'),
 		isVisual : true,
 		buttons : [
@@ -118,7 +118,7 @@ function onTranslateSettings() {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 150]
+		size : [320, 200]
 	};
 
 	translateSettingsWindow = new window.Asc.PluginWindow();
