@@ -7,11 +7,16 @@
 		"de": "AI",
 		"cs": "AI",
 		"zh": "AI",
-		"pt-BR": "AI"
+		"pt-BR": "AI",
+		"sr-Cyrl-RS": "AI",
+		"sr-Latn-RS": "AI",
+		"ja-JA": "AI",
+		"sq-AL": "AI",
+		"it": "IA"
 	},
 
 	"guid" : "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
-	"version": "2.1.5",
+	"version": "2.2.0",
 	"minVersion" : "8.2.0",
 
 	"variations" : [
@@ -24,7 +29,12 @@
 				"pt-BR": "Use o chatbot AI para realizar tarefas que envolvam compreensão ou geração de linguagem ou código natural.",
 				"de": "Verwenden Sie den AI-Chatbot, um Aufgaben auszuführen, die das Verstehen oder Generieren von natürlicher Sprache oder Code beinhalten.",
 				"cs": "AI API lze použít prakticky na jakýkoli úkol, který zahrnuje porozumění nebo generování přirozeného jazyka nebo kódu.",
-				"zh": "使用 AI 聊天机器人完成有关理解、生成自然语言或代码的任务。"
+				"zh": "使用 AI 聊天机器人完成有关理解、生成自然语言或代码的任务。",
+				"sr-Cyrl-RS": "Користите AI чет робота за обављање задатака који укључују разумевање или генерисање природног језика или кода.",
+				"sr-Latn-RS": "Koristite AI čet robota za obavljanje zadataka koji uključuju razumevanje ili generisanje prirodnog jezika ili koda.",
+				"ja-JA": "自然言語やコードの理解または生成が必要なタスクを行うには、AIチャットボットを使用できます。",
+				"sq-AL": "Shtoni dhe selektoni modele AI për detyra të ndryshme.",
+				"it": "Utilizza il chatbot dell'IA per eseguire attività che implicano la comprensione o la generazione di codice o linguaggio naturale."
 			},
 
 			"url"         : "index.html",

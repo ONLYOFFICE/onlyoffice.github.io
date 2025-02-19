@@ -431,7 +431,7 @@ let  Ps1, Ps2;
 			method: 'GET',
 			url: 'https://pixabay.com/api/?' + sRequest,
 			dataType: 'json'
-		}).success(function(oResponse) {
+		}).done(function(oResponse) {
 			$('#api').hide();
 			$('#main-search-container-id').show();
 			$('#scrollable-container-id').show();
@@ -492,7 +492,7 @@ let  Ps1, Ps2;
 				//loadImgs(oResponse.items[nUrl].pngurl[oResponse.items[0].pngurl.length - 1]);
 				loadImgs(oResponse.hits[nUrl].largeImageURL);
 			}
-		}).error(function(oError) {
+		}).fail(function(oError) {
 			$('#reconf').trigger('click');
 			showLoader(false);
 			container = document.getElementById('scrollable-container-id');

@@ -145,6 +145,9 @@ function updatedComboBoxes() {
 		selectEl.select2().empty();
 		selectEl.select2({
 			data: options,
+			templateResult: function(option) {
+				return $('<div class="ellipsis-content">' + option.text + '</div>');
+			},
 			language: {
 				noResults: function() {
 					return window.Asc.plugin.tr("Models not found");

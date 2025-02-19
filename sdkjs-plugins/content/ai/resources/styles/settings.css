@@ -74,7 +74,16 @@ body {
 }
 
 .select2-results__option[role=treeitem] {
+    display: flex;
     line-height: 16px;
+}
+
+.select2-results__option[role=treeitem] .ellipsis-content{
+    display: -webkit-inline-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
 }
 
 /* #actions-list .select2-selection{
