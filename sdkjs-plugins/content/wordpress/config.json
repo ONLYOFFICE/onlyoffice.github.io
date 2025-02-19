@@ -9,7 +9,7 @@
 	},
 	"guid"    : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
 	"baseUrl" : "",
-	"version" : "1.0.1",
+	"version" : "1.0.2",
 	"variations" : [
 		{
 			"description": "Publish articles directly from the document editor on your WordPress website (compatible with ONLYOFFICE cloud).",

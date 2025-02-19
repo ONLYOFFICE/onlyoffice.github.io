@@ -15,3 +15,7 @@
 ## 1.0.3
 
 * Bug fix (fix problem with XSS).
+
+## 1.0.4
+
+* Update jquery version.

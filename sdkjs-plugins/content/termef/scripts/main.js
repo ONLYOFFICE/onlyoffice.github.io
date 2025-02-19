@@ -237,10 +237,10 @@
 			}),
 			url: 'https://terminologie.finances.gouv.fr/search'
 
-		}).success(function (oResponse) {
+		}).done(function (oResponse) {
 			ParseResults(oResponse.items);
 			showLoader(false);
-		}).error(function(error) {
+		}).fail(function(error) {
 			console.log(error);
 			showLoader(false);
 		});
@@ -290,7 +290,7 @@
 						}),
 						url: 'https://terminologie.finances.gouv.fr/topics?'
 			
-					}).success(function (oResponse) {
+					}).done(function (oResponse) {
 						$('#props-container').empty();
 						$('#results').hide();
 						ParseDefinitionProps(oResponse);
@@ -304,7 +304,7 @@
 						
 						showLoader(false);
 						updateScroll();
-					}).error(function(error) {
+					}).fail(function(error) {
 						console.log(error);
 						showLoader(false);
 					});
