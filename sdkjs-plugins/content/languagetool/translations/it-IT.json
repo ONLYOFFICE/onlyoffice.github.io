@@ -4,5 +4,8 @@
 	"Insert to document": "Inserisci nel documento",
 	"Dismiss": "Salta",
 	"Clear": "Chiaro",
-	"Language": "Lingua"
+	"Language": "Lingua",
+	"Select the text to check in the document or enter it manually": "Seleziona il testo da controllare nel documento o inseriscilo manualmente",
+	"Possible mistakes found: ": "Possibili errori trovati: ",
+	"No possible mistakes found": "Nessun errore trovato"
 }

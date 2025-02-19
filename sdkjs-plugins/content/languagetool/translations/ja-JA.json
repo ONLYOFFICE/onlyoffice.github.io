@@ -4,5 +4,8 @@
 	"Insert to document": "ドキュメントに挿入",
 	"Dismiss": "スキップ",
 	"Clear": "鮮明",
-	"Language": "言語"
+	"Language": "言語",
+	"Select the text to check in the document or enter it manually": "ドキュメント内のチェック対象のテキストを選択するか、手動で入力してください",
+	"Possible mistakes found: ": "見つかった考えられるエラー： ",
+	"No possible mistakes found": "考えられるエラーが見つかりません"
 }
