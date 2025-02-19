@@ -3,6 +3,10 @@
 	"Check": "Prüfen",
 	"Insert to document": "In Dokument einfügen",
 	"Dismiss": "Überspringen",
-	"Clear": "Klar",
-	"Language": "Sprache"
+	"Clear": "Löschen",
+	"Language": "Sprache",
+	"Select the text to check in the document or enter it manually": "Wählen Sie den zu prüfenden Text im Dokument aus oder geben Sie ihn manuell ein",
+	"Possible mistakes found: ": "Mögliche Fehler gefunden: ",
+	"No possible mistakes found": "Keine möglichen Fehler gefunden"
+
 }
