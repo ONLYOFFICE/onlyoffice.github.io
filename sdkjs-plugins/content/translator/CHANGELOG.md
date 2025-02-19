@@ -33,3 +33,7 @@
 ## 1.0.7
 
 * Fix problem of repeated translation of the same text.
+
+## 1.0.8
+
+* Update jquery version.

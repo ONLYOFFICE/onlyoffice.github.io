@@ -89,5 +89,11 @@
 	"Fix spelling & grammar": "纠正拼写和语法",
 	"Rewrite differently": "换种方式重写",
 	"Make longer": "扩写",
-	"Make shorter": "缩写"
+	"Make shorter": "缩写",
+
+
+	"Chatbot": "聊天机器人",
+	"Ask AI a question about something...": "向 AI 提一个问题...",
+
+	"This field is required": "此字段为必填"
 }

@@ -59,3 +59,6 @@
 
 ## 2.1.5
 * Bug fix
+
+## 2.2.0
+* Refactoring

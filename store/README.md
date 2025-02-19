@@ -16,16 +16,16 @@ Clone the fork to your folder (e.g. *work*).
 
 **3. Create your plugin** as described in the [API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/get-started/getting-started/).  
 
-Your plugin folder must contain three main files: [config.json](https://api.onlyoffice.com/docs/plugin-and-macros/structure/manifest/), [index.html](https://api.onlyoffice.com/docs/plugin-and-macros/structure/entry-point/), [pluginCode.js](https://api.onlyoffice.com/docs/plugin-and-macros/interacting-with-editors/overview/), and [CHANGLOG.md](./sdkjs-plugins/content/chess/CHANGELOG.md) for your plugin. This file is needed for updates and version history. You also need to adjust its style, localize, add descriptions and icons.
+Your plugin folder must contain three main files: [config.json](https://api.onlyoffice.com/docs/plugin-and-macros/structure/manifest/), [index.html](https://api.onlyoffice.com/docs/plugin-and-macros/structure/entry-point/), [pluginCode.js](https://api.onlyoffice.com/docs/plugin-and-macros/interacting-with-editors/overview/), and [CHANGLOG.md](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/CHANGELOG.md) for your plugin. This file is needed for updates and version history. You also need to adjust its style, localize, add descriptions and icons.
 
 **Please note**: To publish your own plugin in the Plugin Manager, you need to add the necessary fields into the [plugin config.js file](https://api.onlyoffice.com/docs/plugin-and-macros/structure/manifest/):
-* "[version](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/3cafe43099a3768c4a2834298058b2748ac4de45/sdkjs-plugins/content/chess/config.json#L10)" – necessary for correct work with our system update. It consists of three sections: ```x.x.x```.
+* "[version](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L10)" – necessary for correct work with our system update. It consists of three sections: ```x.x.x```.
 * "offered" – your name or your organization name. By default, this field has "Ascensio System SIA" value. It can be added after the "version" field.
-* "[store](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/3cafe43099a3768c4a2834298058b2748ac4de45/sdkjs-plugins/content/chess/config.json#L81C8-L81C8)" – field for Plugin Manager which specifies how plugin should look like. We have default settings, but we recommend adjusting this field:
-   <br>- "[background](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/3cafe43099a3768c4a2834298058b2748ac4de45/sdkjs-plugins/content/chess/config.json#L82)" – specifies background for the plugin card head (for Light and Dark theme).
-   <br>- "[screentshots](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/3cafe43099a3768c4a2834298058b2748ac4de45/sdkjs-plugins/content/chess/config.json#L86)" – field for screenshots. If your plugin is non-interface, you can skip this field.
-   <br>- "[icons](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/3cafe43099a3768c4a2834298058b2748ac4de45/sdkjs-plugins/content/chess/config.json#L87C8-L87C8)" – specifies icons for the plugin card (for Light and Dark theme).
-   <br>- "[categories](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/3cafe43099a3768c4a2834298058b2748ac4de45/sdkjs-plugins/content/chess/config.json#L91)" – specifies categories of your plugin.
+* "[store](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L81C8-L81C8)" – field for Plugin Manager which specifies how plugin should look like. We have default settings, but we recommend adjusting this field:
+   <br>- "[background](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L82)" – specifies background for the plugin card head (for Light and Dark theme).
+   <br>- "[screentshots](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L86)" – field for screenshots. If your plugin is non-interface, you can skip this field.
+   <br>- "[icons](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L87C8-L87C8)" – specifies icons for the plugin card (for Light and Dark theme).
+   <br>- "[categories](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L91)" – specifies categories of your plugin.
 
 **4. Test your plugin in the desktop app.**  
 

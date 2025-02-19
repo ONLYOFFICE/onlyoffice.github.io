@@ -8,3 +8,7 @@
 
 * Enable plugin for viewer mode.
 * Add "pdf" to the supported editors.
+
+## 1.0.2
+
+* Update jquery version.

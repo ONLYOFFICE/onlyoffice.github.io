@@ -9,10 +9,15 @@ var aiModelsList = {
 		this._list.forEach(function(model, index) {
 			var createdEl = document.createElement('div');
 			createdEl.classList.add('item');
+
+			var contentEl = document.createElement('div');
+			contentEl.classList.add('content');
+
+			createdEl.appendChild(contentEl);
 			if(me._selected && me._selected.id == model.id) {
 				createdEl.classList.add('selected');
 			}
-			createdEl.innerText = model.name;
+			contentEl.innerText = model.name;
 			createdEl.addEventListener('click', function() {
 				me.setSelected(index);
 			});
