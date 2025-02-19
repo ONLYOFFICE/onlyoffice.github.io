@@ -448,7 +448,7 @@
 		button4.text = "Translation";
 		button4.icons = getToolBarButtonIcons("translation");
 		button4.menu = [{
-				text:'Set language',
+				text:'Settings',
 				id:'t10n-settings',
 				onclick: () => {
 					onTranslateSettings();
@@ -459,7 +459,10 @@
 			if (!requestEngine)
 				return;
 
-			let lang = "english";
+			const ls_lang_key = "onlyoffice_ai_plugin_translate_lang";
+			const currLang = window.localStorage.getItem(ls_lang_key);
+
+			let lang = !!currLang ? currLang : "english";
 			let content = await Asc.Library.GetSelectedText();
 			let prompt = Asc.Prompts.getTranslatePrompt(content, lang);
 			let result = await requestEngine.chatRequest(prompt);
