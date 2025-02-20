@@ -59,6 +59,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	aiModelsListWindow && aiModelsListWindow.command('onThemeChanged', theme);
 	aiModelEditWindow && aiModelEditWindow.command('onThemeChanged', theme);
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
+	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 };
 
 /**
@@ -107,7 +108,7 @@ function onOpenSettingsModal() {
 	settingsWindow.show(variation);
 }
 
-function onTranslateSettings() {
+function onTranslateSettingsModal() {
 	let variation = {
 		url : 'translationsettings.html',
 		description : window.Asc.plugin.tr('Translation settings'),

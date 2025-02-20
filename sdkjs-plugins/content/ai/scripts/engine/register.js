@@ -451,7 +451,7 @@
 				text:'Settings',
 				id:'t10n-settings',
 				onclick: () => {
-					onTranslateSettings();
+					onTranslateSettingsModal();
 				}}];
 		button4.split = true;
 		button4.attachOnClick(async function(){

@@ -132,7 +132,7 @@
 						window.localStorage.setItem(localStorageKey, newLang);
 					}
 				});
-				// window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+				window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 			}
 			window.Asc.plugin.onThemeChanged = onThemeChanged;
 
@@ -146,6 +146,7 @@
 					currLang = window.localStorage.getItem(window.localStorageKey);
 				}
 
+				let items = [], $selected = undefined;
 				array.forEach(element => {
 					const key = Object.keys(element)[0];
 					const value = Object.values(element)[0];
@@ -153,11 +154,18 @@
 										<span>${key}</span>
 										<span lang>${value}</span>
 									</div>`);
-					if ( !!currLang && currLang == value )
+					if ( !!currLang && currLang == value ) {
 						$item.addClass('selected');
+						$selected = $item;
+					}
 
-					$list.append($item);
+					items.push($item);
 				});
+				$list.append(items);
+
+				if ( !!$selected ) {
+					$list.scrollTop($selected.offset().top - $list.offset().top - 50);
+				}
 
 				$list.on('click', '.item', e => {
 					const $target = $(e.currentTarget);
