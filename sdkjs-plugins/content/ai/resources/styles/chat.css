@@ -77,7 +77,7 @@ input {
 	height: auto;
 }
 .action_button:not(:first-child) {
-	margin-left: 2px;
+	margin-left: 4px;
 }
 
 .action_button img {
@@ -200,13 +200,18 @@ input {
 	background-color: var(--background-normal);
 	border-radius: 2px;
 	border: 1px solid var(--border-regular-control);
+	position: relative;
+}
+
+#input_message_wrapper.focused {
+	border-color: var(--border-control-focus);
 }
 
 #input_message {
 	flex: 1;
 	padding: 0;
 	padding: 6px 0 6px 6px;
-	margin: 2px 0 2px 2px;
+	margin: 2px 34px 2px 2px;
     min-height: 16px;
     max-height: 82px;
     overflow-y: auto;
@@ -215,19 +220,20 @@ input {
 	border: none;
 }
 
-#input_message_submit_wrapper {
-	height: 100%;
-	display: flex;
-    align-items: flex-end;
-}
 
 #input_message_submit {
+	position: absolute;
+	right: 0;
+	bottom: 0;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 6px 6px 6px 0px;
-	margin-left: 6px;
+	padding: 7px 7px 7px 3px;
+	margin-left: 4px;
+}
+#input_message_submit:hover {
+	opacity: 0.7;
 }
 #input_message_submit img {
 	width: 20px;

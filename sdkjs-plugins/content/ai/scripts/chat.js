@@ -110,7 +110,6 @@
 	window.Asc.plugin.init = function() {
 		bCreateLoader = false;
 		destroyLoader();
-		document.getElementById('input_message').focus();
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
 
 		document.getElementById('input_message_submit').addEventListener('click', function() {
@@ -126,6 +125,14 @@
 				onSubmit();
 			}
 		};
+
+		document.getElementById('input_message').addEventListener('focus', function(event) {
+			$('#input_message_wrapper').addClass('focused');
+		});
+		document.getElementById('input_message').addEventListener('blur', function(event) {
+			$('#input_message_wrapper').removeClass('focused');
+		});
+		document.getElementById('input_message').focus();
 
 		document.getElementById('input_message').addEventListener('input', function(event) {
 			//autosize
