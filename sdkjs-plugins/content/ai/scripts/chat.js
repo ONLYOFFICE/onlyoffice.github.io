@@ -43,7 +43,7 @@
 	let bCreateLoader = true;
 	let actionButtons = [
 		{ 
-			icon: 'resources/icons/light/ai-texts.png', 
+			icon: 'resources/icons/light/btn-copy.png', 
 			tipOptions: {
 				text: 'Copy',
 				align: 'left'
@@ -57,7 +57,7 @@
 			}
 		},
 		{ 
-			icon: 'resources/icons/light/ai-texts.png', 
+			icon: 'resources/icons/light/btn-replace.png', 
 			tipOptions: {
 				text: 'Replace original text',
 				align: 'left'
@@ -65,7 +65,7 @@
 			hanlder: function(text) { insertEngine('replace', text); }
 		},
 		{ 
-			icon: 'resources/icons/light/ai-texts.png', 
+			icon: 'resources/icons/light/btn-select-tool.png', 
 			tipOptions: {
 				text: 'Insert result',
 				align: 'left'
@@ -73,7 +73,7 @@
 			hanlder: function(text) { insertEngine('insert', text); }
 		},
 		{ 
-			icon: 'resources/icons/light/ai-texts.png', 
+			icon: 'resources/icons/light/btn-menu-comments.png', 
 			tipOptions: {
 				text: 'In comment',
 				align: 'left'
@@ -81,7 +81,7 @@
 			hanlder: function(text) { insertEngine('comment', text); }
 		},
 		{ 
-			icon: 'resources/icons/light/ai-texts.png', 
+			icon: 'resources/icons/light/btn-ic-review.png', 
 			tipOptions: {
 				text: 'As review',
 				align: 'left'
