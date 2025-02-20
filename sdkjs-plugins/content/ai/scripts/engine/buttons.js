@@ -77,6 +77,14 @@
 			{
 				button.toToolbar(items);
 			}
+
+			if (!!button.menu) {
+				for (item of button.menu) {
+					if (!!item.onclick) {
+						window.Asc.plugin.attachToolbarMenuClickEvent(item.id, item.onclick);
+					}
+				}
+			}
 		}
 
 		if (items.tabs.length > 0)
@@ -153,6 +161,12 @@
 
 		if (this.itemType === ItemType.Toolbar)
 			item.type = this.type;
+
+		if (this.menu)
+			item.items = this.menu;
+
+		if (this.split)
+			item.split = true;
 
 		return item;
 	};

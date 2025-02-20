@@ -146,7 +146,9 @@ function updatedComboBoxes() {
 		selectEl.select2({
 			data: options,
 			templateResult: function(option) {
-				return $('<div class="ellipsis-content">' + option.text + '</div>');
+				var div = $('<div class="ellipsis-content"></div>');
+				div[0].innerText = option.text;
+				return div;
 			},
 			language: {
 				noResults: function() {
