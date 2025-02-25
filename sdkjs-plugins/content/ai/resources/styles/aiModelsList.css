@@ -6,7 +6,7 @@ body {
 #ai-models-list {
     flex: 1;
     border: 1px solid;
-    margin-right: 10px;
+    margin-right: 4px;
     position: relative;
 }
 #ai-models-list .item {
@@ -23,13 +23,24 @@ body {
 }
 
 #buttons-block {
-    width: 90px;
+    display: flex;
+    flex-direction: column;
 }
+
 #buttons-block button {
-    width: 100%;
+    padding: 0;
+    height: auto;
+    display: flex;
 }
+
+#buttons-block button img {
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+}
+
 #buttons-block button:not(:first-child) {
-    margin-top: 6px;
+    margin-top: 2px;
 }
 
 /* Themes style for Models List */

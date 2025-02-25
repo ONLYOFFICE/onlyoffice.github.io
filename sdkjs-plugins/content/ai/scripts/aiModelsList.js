@@ -1,117 +1,25 @@
-var aiModelsList = {
-	_listEl: document.getElementById('ai-models-list'),
-	_list: [],
-	_selected: null,
+let aiModelsList = new ListView(document.getElementById('ai-models-list'), {
+	renderItem: function(model) {
+		var createdEl = document.createElement('div');
+		createdEl.classList.add('item');
 
-	_render: function() {
-		var me = this;
-		this._listEl.innerHTML = '';
-		this._list.forEach(function(model, index) {
-			var createdEl = document.createElement('div');
-			createdEl.classList.add('item');
+		var contentEl = document.createElement('div');
+		contentEl.classList.add('content');
 
-			var contentEl = document.createElement('div');
-			contentEl.classList.add('content');
-
-			createdEl.appendChild(contentEl);
-			if(me._selected && me._selected.id == model.id) {
-				createdEl.classList.add('selected');
-			}
-			contentEl.innerText = model.name;
-			createdEl.addEventListener('click', function() {
-				me.setSelected(index);
-			});
-			me._listEl.appendChild(createdEl);
-		});
-	},
-
-	set: function(list) {
-		this._list = list;
-		this._render();
-		if(list.length > 0) {
-			this.setSelected(0);
-		} else {
-			this.deselect();
-		}
-		scrollbarList.update();
-		scrollbarList.update();
-	},
-	add: function(model) {
-		this._list.push(model);
-		this._render();
-		this.setSelected(this._list.length - 1);
-
-		var aiModelsListEl = document.getElementById('ai-models-list');
-		aiModelsListEl.scrollTop = aiModelsListEl.scrollHeight;
-		scrollbarList.update();
-		scrollbarList.update();
-	},
-	edit: function(model) {
-		var findedItem = this._list.filter(function(el) {
-			return el.id == model.id;
-		})[0];
-
-		if(!findedItem) return;
-
-		for (var key in model) {
-			if (findedItem[key]) {
-				findedItem[key] = model[key];
-			}
-		}
-		this._render();
-	},
-	delete: function(item) {
-		var indexDeletedItem = this._list.indexOf(item);
-		if(indexDeletedItem != -1) {
-			this._list = this._list.filter(function(el) {
-				return el != item;
-			});
-			this._render();
-
-			if(this._list.length == 0) {
-				this.deselect();
-			} else if(indexDeletedItem < this._list.length) {
-				this.setSelected(indexDeletedItem);
-			} else {
-				this.setSelected(this._list.length - 1);
-			}
-		}
-	},
-	deleteByIndex: function(index) {
-		if(!this._list[index]) return;
-
-		this.delete(this._list[index]);
-	},
-	setSelected: function(index) {
-		if(this._list.length == 0) return;
-	
-		if(index == -1) {
-			index = this._list.length - 1; 
-		}
-		if(!this._list[index]) return;
-
-		this.deselect();
-		this._selected = this._list[index];
-		this._listEl.children[index].classList.add('selected');
-
-		editBtnEl.removeAttribute('disabled');
-		deleteBtnEl.removeAttribute('disabled');
-	},
-	getSelected: function() {
-		return this._selected;
-	},
-	deselect: function() {
-		this._selected = null;
-
-		var itemsEl = this._listEl.getElementsByClassName('item');
-		for (var i = 0; i < itemsEl.length; i++) {
-			itemsEl[i].classList.remove('selected');
-		}
-
-		editBtnEl.setAttribute('disabled', true);
-		deleteBtnEl.setAttribute('disabled', true);
+		contentEl.innerText = model.name;
+		createdEl.appendChild(contentEl);
+		return createdEl;
 	}
-};
+});
+var scrollbarList = new PerfectScrollbar("#ai-models-list", {});
+aiModelsList.on('select', function() {
+	addBtnEl.removeAttribute('disabled');
+	deleteBtnEl.removeAttribute('disabled');
+});
+aiModelsList.on('deselect', function() {
+	addBtnEl.setAttribute('disabled', true);
+	deleteBtnEl.setAttribute('disabled', true);
+});
 
 var addBtnEl = document.getElementById('add-btn');
 addBtnEl.addEventListener('click', function() {
@@ -136,7 +44,6 @@ deleteBtnEl.addEventListener('click', function() {
 	}
 });
 
-var scrollbarList = new PerfectScrollbar("#ai-models-list", {});
 
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
@@ -166,4 +73,12 @@ function onThemeChanged(theme) {
 	});
 	document.body.classList.add(theme.name);
 	document.body.classList.add('theme-type-' + themeType);
+
+	let btnIcons = document.getElementsByClassName('icon');
+	for (let i = 0; i < btnIcons.length; i++) {
+		let icon = btnIcons[i];
+		let src = icon.getAttribute('src');
+		let newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
+		icon.setAttribute('src', newSrc);
+	}
 }

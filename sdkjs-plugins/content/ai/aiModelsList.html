@@ -22,8 +22,10 @@
 
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<script type="text/javascript" src="./components/ListView/script.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">		
 		<link rel="stylesheet" href="./resources/styles/common.css">
+		<link rel="stylesheet" href="./components/ListView/style.css">
 		<link rel="stylesheet" href="./resources/styles/aiModelsList.css">
     </head>
     <body class="noselect">
@@ -31,9 +33,15 @@
 			<!-- Dynamic render items -->
 		</div>
 		<div id="buttons-block">
-			<button id="add-btn" class="btn-text-default i18n">Add</button>
-			<button id="edit-btn" class="btn-text-default i18n">Edit</button>
-			<button id="delete-btn" class="btn-text-default i18n">Delete</button>
+			<button id="add-btn" class="btn-text-default">
+				<img src="resources/icons/light/btn-zoomup.png" class="icon"/>
+			</button>
+			<button id="edit-btn" class="btn-text-default">
+				<img src="resources/icons/light/btn-edit.png" class="icon"/>
+			</button>
+			<button id="delete-btn" class="btn-text-default">
+				<img src="resources/icons/light/btn-remove.png" class="icon"/>
+			</button>
 		</div>
 		<script type="text/javascript" src="scripts/aiModelsList.js"></script>
     </body>
