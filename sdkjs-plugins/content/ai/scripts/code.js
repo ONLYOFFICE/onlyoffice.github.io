@@ -117,6 +117,9 @@ function onOpenAiModelsModal() {
 		url : 'aiModelsList.html',
 		description : window.Asc.plugin.tr('AI Models list'),
 		isVisual : true,
+		buttons : [ 
+			{ text: window.Asc.plugin.tr('Back'), primary: false },
+		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
 		size : [320, 230]
