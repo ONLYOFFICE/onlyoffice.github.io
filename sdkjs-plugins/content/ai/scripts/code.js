@@ -1,6 +1,7 @@
 let settingsWindow = null;
 let aiModelsListWindow = null; 
 let aiModelEditWindow = null;
+let customProvidersWindow = null;
 let summarizationWindow = null;
 
 let initCounter = 0;
@@ -39,6 +40,9 @@ window.Asc.plugin.button = function(id, windowId) {
 			aiModelEditWindow.close();
 			aiModelEditWindow = null;
 		}
+	} else if (customProvidersWindow && windowId === customProvidersWindow.id) {
+		customProvidersWindow.close();
+		customProvidersWindow = null;
 	} else {
 		window.Asc.plugin.executeMethod("CloseWindow", [windowId]);
 	}
@@ -51,6 +55,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	aiModelsListWindow && aiModelsListWindow.command('onThemeChanged', theme);
 	aiModelEditWindow && aiModelEditWindow.command('onThemeChanged', theme);
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
+	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 };
 
 /**
@@ -144,27 +149,71 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 330]
+		size : [320, 370]
 	};
 
-	aiModelEditWindow = new window.Asc.PluginWindow();
-	aiModelEditWindow.attachEvent("onChangeModel", function(model){
-		AI.Storage.addModel(model);
-		aiModelEditWindow.close();
-		aiModelEditWindow = null;
-	});
-	aiModelEditWindow.attachEvent("onGetModels", async function(provider){
-		let models = await AI.getModels(provider);
-		aiModelEditWindow && aiModelEditWindow.command("onGetModels", models);
-	});
-
-	aiModelEditWindow.attachEvent("onInit", function() {
-		aiModelEditWindow.command('onModelInfo', {
-			model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
-			providers : AI.serializeProviders()
+	if (!aiModelEditWindow) {
+		aiModelEditWindow = new window.Asc.PluginWindow();
+		aiModelEditWindow.attachEvent("onChangeModel", function(model){
+			AI.Storage.addModel(model);
+			aiModelEditWindow.close();
+			aiModelEditWindow = null;
 		});
-	});
+		aiModelEditWindow.attachEvent("onGetModels", async function(provider){
+			let models = await AI.getModels(provider);
+			aiModelEditWindow && aiModelEditWindow.command("onGetModels", models);
+		});
+
+		aiModelEditWindow.attachEvent("onInit", function() {
+			aiModelEditWindow.command('onModelInfo', {
+				model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
+				providers : AI.serializeProviders()
+			});
+		});
+		aiModelEditWindow.attachEvent('onOpenCustomProvidersModal', onOpenCustomProvidersModal);
+	}
 	aiModelEditWindow.show(variation);
+}
+
+/**
+ * CUSTOM PROVIDERS WINDOW
+ */
+function onOpenCustomProvidersModal() {
+	let variation = {
+		url : 'customProviders.html',
+		description : window.Asc.plugin.tr('Custom providers'),
+		isVisual : true,
+		buttons : [ 
+			{ text: window.Asc.plugin.tr('Back'), primary: false },
+		],
+		isModal : true,
+		EditorsSupport : ["word", "slide", "cell"],
+		size : [350, 222]
+	};
+
+	if (!customProvidersWindow) {
+		customProvidersWindow = new window.Asc.PluginWindow();
+		customProvidersWindow.attachEvent("onInit", function() {
+			//TODO: Add set custom providers
+			customProvidersWindow.command('onSetCustomProvider', []);
+		});
+		customProvidersWindow.attachEvent("onAddCustomProvider", function(item) {
+			console.log('Add custom provider', item);
+
+			// If the provider addition is successful, then call "onAddCustomProvider"
+			// Else call "onErrorCustomProvider"
+			let isError = false;
+			if(isError) {
+				customProvidersWindow.command('onErrorCustomProvider');
+			} else {
+				customProvidersWindow.command('onAddCustomProvider', item);
+			}
+		});
+		customProvidersWindow.attachEvent("onDeleteCustomProvider", function(item) {
+			console.log('Delete custom provider', item);
+		});
+	}
+	customProvidersWindow.show(variation);
 }
 
 /**
