@@ -16,13 +16,24 @@ body {
 }
 
 #buttons-block {
-    width: 90px;
+    display: flex;
+    flex-direction: column;
 }
+
 #buttons-block button {
-    width: 100%;
+    padding: 0;
+    height: auto;
+    display: flex;
 }
+
+#buttons-block button img {
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+}
+
 #buttons-block button:not(:first-child) {
-    margin-top: 6px;
+    margin-top: 2px;
 }
 
 #ai-models-list {

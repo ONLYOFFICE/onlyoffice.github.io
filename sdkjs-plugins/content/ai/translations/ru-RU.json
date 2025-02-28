@@ -95,5 +95,14 @@
 	"Chatbot": "Chatbot",
 	"Ask AI a question about something...": "Ask AI a question about something...",
 
-	"This field is required": "This field is required"
+	"This field is required": "This field is required",
+
+	"Custom providers": "Custom providers",
+	"Back": "Back",
+	"Connected custom providers": "Connected custom providers",
+	"The list is empty, press + to add the file": "The list is empty, press + to add the file",
+	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.",
+	"Download template": "Download template",
+	"Invalid file format, please upload the .js file": "Invalid file format, please upload the .js file",
+	"Error adding provider from file, please try again": "Error adding provider from file, please try again"
 }

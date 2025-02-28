@@ -4,6 +4,21 @@ body {
     overflow-y: auto;
 }
 
+
+.d-flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.required-mark {
+    font-size: 13px;
+    line-height: 12px;
+    margin-left: 1px;
+    font-weight: 400;
+    /* TODO: Добавить тему */
+    color: #f62211;
+}
+
 .section {
     display: flex;
     flex-direction: column;
@@ -100,35 +115,15 @@ body {
     margin-left: 4px;
 }
 
-
-.tooltip {
-    line-height: 12px;
-    position: absolute;
-    z-index: 10;
-    padding: 4px 8px;
-    border: 1px solid;
-    border-radius: 4px;
-	white-space: nowrap;
-	/* max-width: 200px; */
+#custom-providers-button{
+    display: inline-flex;
 }
-body.theme-light .tooltip,
-body.theme-gray .tooltip {
-    background-color: #fff;
-    border-color: #c0c0c0;
+#custom-providers-button label{
+    cursor: pointer;
+    border-bottom: 1px dotted currentColor;
+    padding-bottom: 2px;
+    margin-top: 24px;
 }
-body.theme-classic-light .tooltip {
-    background-color: #fff;
-    border-color: #cfcfcf;
-}
-body.theme-dark .tooltip {
-    background-color: #333;
-    border-color: #666;
-}
-body.theme-contrast-dark .tooltip {
-    background-color: #1e1e1e;
-    border-color: #696969;
-}
-
 
 .toggle-button {
     all: unset;
