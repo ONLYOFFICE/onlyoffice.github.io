@@ -33,6 +33,7 @@
 			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
+			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
 			isCanDocked: true,
 			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
