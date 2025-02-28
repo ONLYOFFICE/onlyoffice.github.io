@@ -197,23 +197,24 @@ function onOpenCustomProvidersModal() {
 	if (!customProvidersWindow) {
 		customProvidersWindow = new window.Asc.PluginWindow();
 		customProvidersWindow.attachEvent("onInit", function() {
-			//TODO: Add set custom providers
-			customProvidersWindow.command('onSetCustomProvider', []);
+			customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
 		});
 		customProvidersWindow.attachEvent("onAddCustomProvider", function(item) {
-			console.log('Add custom provider', item);
-
-			// If the provider addition is successful, then call "onAddCustomProvider"
-			// Else call "onErrorCustomProvider"
-			let isError = false;
-			if(isError) {
+			let isError = !AI.addCustomProvider(item.content);
+			if (isError) {
 				customProvidersWindow.command('onErrorCustomProvider');
 			} else {
-				customProvidersWindow.command('onAddCustomProvider', item);
+				customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
+
+				if (aiModelEditWindow)
+					aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
 			}
 		});
 		customProvidersWindow.attachEvent("onDeleteCustomProvider", function(item) {
-			console.log('Delete custom provider', item);
+			AI.removeCustomProvider(item.name);
+
+			if (aiModelEditWindow)
+				aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
 		});
 	}
 	customProvidersWindow.show(variation);
