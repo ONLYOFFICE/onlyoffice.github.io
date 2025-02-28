@@ -3,9 +3,6 @@ body {
     justify-content: space-between;
 }
 
-#ai-models-list {
-    margin-right: 4px;
-}
 #ai-models-list .item {
     padding: 6px;
     border-bottom: 1px solid;
