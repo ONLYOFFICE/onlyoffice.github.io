@@ -117,11 +117,15 @@
 
 	AI.InternalProviders = [];
 	AI.createProviderInstance = function(name, url, key, addon) {
+		for (let i = 0, len = window.AI.InternalCustomProviders.length; i < len; i++) {
+			if (name === AI.InternalCustomProviders[i].name)
+				return AI.InternalCustomProviders[i].createInstance(name, url, key, addon || AI.InternalCustomProviders[i].addon);
+		}
 		for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
 			if (name === AI.InternalProviders[i].name)
 				return AI.InternalProviders[i].createInstance(name, url, key, addon || AI.InternalProviders[i].addon);
 		}
-		return new Provider(name, url, key);
+		return new AI.Provider(name, url, key);
 	};
 
 	AI.isInternalProvider = function(name) {
@@ -155,6 +159,87 @@
 		}
 
 		AI.onLoadInternalProviders();
+	};
+
+	AI.InternalCustomProvidersSources = {};
+	AI.InternalCustomProviders = [];
+
+	AI.loadCustomProviders = function() {
+
+		AI.InternalCustomProviders = [];
+		for (let name in AI.InternalCustomProvidersSources) {
+			AI.addCustomProvider(AI.InternalCustomProvidersSources[name], true); 
+		}
+
+	};
+
+	AI.addCustomProvider = function(providerContent, isRegister) {
+
+		try {
+			let content = "(function(){\n" + providerContent + "\nreturn new Provider();})();";
+			let provider = eval(content);
+
+			if (!provider.name)
+				return false;
+
+			if (provider.isOnlyDesktop() && (-1 === navigator.userAgent.indexOf("AscDesktopEditor")))
+				return false;
+
+			AI.InternalCustomProvidersSources[provider.name] = providerContent;
+
+			for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
+				if (AI.InternalCustomProviders[i].name === provider.name) {
+					AI.InternalCustomProviders.splice(i, 1);
+					break;
+				}
+			}
+
+			AI.InternalCustomProviders.push(provider);
+
+			if (!isRegister)
+			{
+				AI.Storage.save();
+				AI.Storage.load();
+			}
+
+			return true;
+
+		} catch(err) {			
+		}
+
+		return false;
+
+	};
+
+	AI.removeCustomProvider = function(name) {
+
+		if (AI.InternalCustomProvidersSources[name])
+			delete AI.InternalCustomProvidersSources[name];
+
+		for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
+			if (AI.InternalCustomProviders[i].name === name) {
+				AI.InternalCustomProviders.splice(i, 1);
+
+				if (!AI.isInternalProvider(name) && AI.Providers[name]) {
+					delete AI.Providers[name];
+				}
+
+				AI.Storage.save();
+				AI.Storage.load();
+				break;
+			}				
+		}
+
+	};
+
+	AI.getCustomProviders = function() {
+
+		let names = [];
+		for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
+			names.push(AI.InternalCustomProviders[i].name);
+		}
+		return names;
+
 	};
 
 })();

@@ -172,6 +172,7 @@ window.Asc.plugin.init = function() {
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 	window.Asc.plugin.attachEvent("onModelInfo", onModelInfo);
 	window.Asc.plugin.attachEvent("onSubmit", onSubmit);
+	window.Asc.plugin.attachEvent("onProvidersUpdate", onProvidersUpdate);
 	window.Asc.plugin.attachEvent("onGetModels", function(data) {
 		if(data.error == 1) {
 			rejectModels && rejectModels(data.message);
@@ -248,6 +249,22 @@ function onResize () {
 		srcParts.push(newFileName);
 		el.attr('src', srcParts.join('/'));
 	});
+}
+
+function onProvidersUpdate(info) {
+	providersList = [];
+
+	for (let i = 0, len = info.providers.length; i < len; i++) {
+		let srcProvider = info.providers[i];
+		providersList.push({
+			id : srcProvider.name,
+			name : srcProvider.name,
+			url : srcProvider.url,
+			key : srcProvider.key,
+		});
+	}
+
+	updateProviderComboBox(false);
 }
 
 function onModelInfo(info) {

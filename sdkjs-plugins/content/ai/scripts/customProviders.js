@@ -79,10 +79,13 @@ let templateFilePath = document.currentScript.src + '/../engine/providers/provid
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
 	window.Asc.plugin.attachEvent("onSetCustomProvider", function(list) {
-		providersList.set(list);
+		let items = [];
+		for (let i = 0, len = list.length; i < len; i++)
+			items.push({ name : list[i] });
+		providersList.set(items);
 	});
 	window.Asc.plugin.attachEvent("onAddCustomProvider", function(item) {
-		providersList.add({name: item.name});
+		providersList.add({name: item});
 	});
 	window.Asc.plugin.attachEvent("onErrorCustomProvider", function(item) {
 		showErrorLabel('Error adding provider from file, please try again');
