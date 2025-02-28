@@ -84,6 +84,8 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
+    word-wrap: break-word;
+    max-width: 150px;
 }
 
 /* #actions-list .select2-selection{

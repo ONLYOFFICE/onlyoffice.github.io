@@ -3,6 +3,7 @@ let aiModelsListWindow = null;
 let aiModelEditWindow = null;
 let customProvidersWindow = null;
 let summarizationWindow = null;
+let translateSettingsWindow = null;
 
 let initCounter = 0;
 function initWithTranslate() {
@@ -33,6 +34,13 @@ window.Asc.plugin.button = function(id, windowId) {
 		aiModelsListWindow.close();
 		aiModelsListWindow = null;
 		onOpenSettingsModal();
+	} else if (translateSettingsWindow && windowId === translateSettingsWindow.id) {
+		if (id == 0) {
+			translateSettingsWindow.command('onKeepLang');
+		}
+
+		translateSettingsWindow.close();
+		delete translateSettingsWindow;
 	} else if (aiModelEditWindow && windowId === aiModelEditWindow.id) {
 		if (id == 0) {
 			aiModelEditWindow.command('onSubmit');
@@ -55,6 +63,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	aiModelsListWindow && aiModelsListWindow.command('onThemeChanged', theme);
 	aiModelEditWindow && aiModelEditWindow.command('onThemeChanged', theme);
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
+	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 };
 
@@ -102,6 +111,24 @@ function onOpenSettingsModal() {
 		settingsWindow.attachEvent('onOpenAiModelsModal', onOpenAiModelsModal);
 	}
 	settingsWindow.show(variation);
+}
+
+function onTranslateSettingsModal() {
+	let variation = {
+		url : 'translationsettings.html',
+		description : window.Asc.plugin.tr('Translation settings'),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr('OK'), primary: true },
+			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
+		],
+		isModal : true,
+		EditorsSupport : ["word", "slide", "cell"],
+		size : [320, 200]
+	};
+
+	translateSettingsWindow = new window.Asc.PluginWindow();
+	translateSettingsWindow.show(variation);
 }
 
 /**
