@@ -68,6 +68,7 @@ deleteBtnEl.addEventListener('click', function() {
 let fileInputEl = document.getElementById('file-input');
 fileInputEl.addEventListener("change", function (event) {
 	handlerChangeFileInput(event.target.files);
+	event.target.value = "";
 });
 
 let errorLabelEl = document.getElementById('error-label');
@@ -115,9 +116,6 @@ window.Asc.plugin.onTranslate = function () {
 			linkEl.href = templateFilePath;
 			linkEl.download = 'providerTemplate.js';
 			linkEl.innerText = window.Asc.plugin.tr('Download template');
-			linkEl.addEventListener('click', function() {
-				console.log('Download template');
-			});
 			
 			innerEl.appendChild(textEl);
 			innerEl.appendChild(linkEl);
@@ -135,6 +133,16 @@ window.Asc.plugin.onTranslate = function () {
 };
 
 function handlerChangeFileInput(files) {
+	let pendingFiles = files.length;
+	let hasError = false;
+
+	function checkCompletion() {
+        pendingFiles--;
+        if (pendingFiles === 0 && !hasError) {
+            hideErrorLabel();
+        }
+    }
+
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i]; 
 		if (file.name.lastIndexOf(".js") == file.name.length - 3) {
@@ -146,12 +154,17 @@ function handlerChangeFileInput(files) {
 					name: file.name,
 					content: fileContent
 				});
+				checkCompletion();
 			};
 			reader.onerror = function(e) {
 				showErrorLabel('Error adding provider from file, please try again');
+				hasError = true;
+				checkCompletion();
 			};
         } else {
 			showErrorLabel('Invalid file format, please upload the .js file');
+			hasError = true;
+			checkCompletion();
 		}
     }
 }
