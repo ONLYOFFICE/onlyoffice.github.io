@@ -209,7 +209,7 @@
 			if (choice.message && choice.message.content)
 				result.content.push(choice.message.content);
 			if (choice.text)
-				result.content.push(choice.message.text);
+				result.content.push(choice.text);
 			if (choice.content) {
 				if (typeof(choice.content) === "string")
 					result.content.push(choice.content);
