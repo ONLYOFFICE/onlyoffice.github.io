@@ -62,3 +62,9 @@
 
 ## 2.2.0
 * Refactoring
+
+## 2.2.1
+* Bug fix
+
+## 2.2.2
+* Add xAI as internal provider.
