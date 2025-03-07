@@ -18,31 +18,38 @@
     <head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>AI Models list</title>
+		<title>Custom providers</title>
 
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-		<script type="text/javascript" src="./components/ListView/script.js"></script>
+		<script type="text/javascript" src="components/Tooltip/script.js"></script>
+		<script type="text/javascript" src="components/ListView/script.js"></script>
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">		
 		<link rel="stylesheet" href="./resources/styles/common.css">
-		<link rel="stylesheet" href="./components/ListView/style.css">
-		<link rel="stylesheet" href="./resources/styles/aiModelsList.css">
+		<link rel="stylesheet" href="./resources/styles/customProviders.css">
+		<link rel="stylesheet" href="components/Tooltip/style.css">
+		<link rel="stylesheet" href="components/ListView/style.css">
     </head>
     <body class="noselect">
-		<div id="ai-models-list" class="list">
-			<!-- Dynamic render items -->
+		<div id="label-row">
+			<label class="i18n">Connected custom providers</label>
+			<img id="alert-icon" src="resources/icons/error-small/error.png"/>
 		</div>
-		<div id="buttons-block">
-			<button id="add-btn" class="btn-text-default">
-				<img src="resources/icons/light/btn-zoomup.png" class="icon"/>
-			</button>
-			<button id="edit-btn" class="btn-text-default">
-				<img src="resources/icons/light/btn-edit.png" class="icon"/>
-			</button>
-			<button id="delete-btn" class="btn-text-default">
-				<img src="resources/icons/light/btn-remove.png" class="icon"/>
-			</button>
+		<div id="list-row">
+			<div id="providers-list" class="empty">
+				<!-- Dynamic render items -->
+			</div>
+			<div id="buttons-block">
+				<button id="add-btn" class="btn-text-default">
+					<img src="resources/icons/light/btn-zoomup.png" class="icon"/>
+				</button>
+				<button id="delete-btn" class="btn-text-default" disabled>
+					<img src="resources/icons/light/btn-remove.png" class="icon"/>
+				</button>
+			</div>
 		</div>
-		<script type="text/javascript" src="scripts/aiModelsList.js"></script>
+		<label id="error-label" class="hide"></label>
+		<input id="file-input" type="file" multiple accept=".js"/>
+		<script type="text/javascript" src="scripts/customProviders.js"></script>
     </body>
 </html>
