@@ -1,7 +1,9 @@
 let settingsWindow = null;
 let aiModelsListWindow = null; 
 let aiModelEditWindow = null;
+let customProvidersWindow = null;
 let summarizationWindow = null;
+let translateSettingsWindow = null;
 
 let initCounter = 0;
 function initWithTranslate() {
@@ -32,6 +34,13 @@ window.Asc.plugin.button = function(id, windowId) {
 		aiModelsListWindow.close();
 		aiModelsListWindow = null;
 		onOpenSettingsModal();
+	} else if (translateSettingsWindow && windowId === translateSettingsWindow.id) {
+		if (id == 0) {
+			translateSettingsWindow.command('onKeepLang');
+		}
+
+		translateSettingsWindow.close();
+		delete translateSettingsWindow;
 	} else if (aiModelEditWindow && windowId === aiModelEditWindow.id) {
 		if (id == 0) {
 			aiModelEditWindow.command('onSubmit');
@@ -39,6 +48,9 @@ window.Asc.plugin.button = function(id, windowId) {
 			aiModelEditWindow.close();
 			aiModelEditWindow = null;
 		}
+	} else if (customProvidersWindow && windowId === customProvidersWindow.id) {
+		customProvidersWindow.close();
+		customProvidersWindow = null;
 	} else {
 		window.Asc.plugin.executeMethod("CloseWindow", [windowId]);
 	}
@@ -51,6 +63,8 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	aiModelsListWindow && aiModelsListWindow.command('onThemeChanged', theme);
 	aiModelEditWindow && aiModelEditWindow.command('onThemeChanged', theme);
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
+	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
+	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 };
 
 /**
@@ -99,6 +113,24 @@ function onOpenSettingsModal() {
 	settingsWindow.show(variation);
 }
 
+function onTranslateSettingsModal() {
+	let variation = {
+		url : 'translationsettings.html',
+		description : window.Asc.plugin.tr('Translation settings'),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr('OK'), primary: true },
+			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
+		],
+		isModal : true,
+		EditorsSupport : ["word", "slide", "cell"],
+		size : [320, 200]
+	};
+
+	translateSettingsWindow = new window.Asc.PluginWindow();
+	translateSettingsWindow.show(variation);
+}
+
 /**
  * MODELS WINDOW
  */
@@ -112,6 +144,9 @@ function onOpenAiModelsModal() {
 		url : 'aiModelsList.html',
 		description : window.Asc.plugin.tr('AI Models list'),
 		isVisual : true,
+		buttons : [ 
+			{ text: window.Asc.plugin.tr('Back'), primary: false },
+		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
 		size : [320, 230]
@@ -144,27 +179,72 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 330]
+		size : [320, 370]
 	};
 
-	aiModelEditWindow = new window.Asc.PluginWindow();
-	aiModelEditWindow.attachEvent("onChangeModel", function(model){
-		AI.Storage.addModel(model);
-		aiModelEditWindow.close();
-		aiModelEditWindow = null;
-	});
-	aiModelEditWindow.attachEvent("onGetModels", async function(provider){
-		let models = await AI.getModels(provider);
-		aiModelEditWindow && aiModelEditWindow.command("onGetModels", models);
-	});
-
-	aiModelEditWindow.attachEvent("onInit", function() {
-		aiModelEditWindow.command('onModelInfo', {
-			model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
-			providers : AI.serializeProviders()
+	if (!aiModelEditWindow) {
+		aiModelEditWindow = new window.Asc.PluginWindow();
+		aiModelEditWindow.attachEvent("onChangeModel", function(model){
+			AI.Storage.addModel(model);
+			aiModelEditWindow.close();
+			aiModelEditWindow = null;
 		});
-	});
+		aiModelEditWindow.attachEvent("onGetModels", async function(provider){
+			let models = await AI.getModels(provider);
+			aiModelEditWindow && aiModelEditWindow.command("onGetModels", models);
+		});
+
+		aiModelEditWindow.attachEvent("onInit", function() {
+			aiModelEditWindow.command('onModelInfo', {
+				model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
+				providers : AI.serializeProviders()
+			});
+		});
+		aiModelEditWindow.attachEvent('onOpenCustomProvidersModal', onOpenCustomProvidersModal);
+	}
 	aiModelEditWindow.show(variation);
+}
+
+/**
+ * CUSTOM PROVIDERS WINDOW
+ */
+function onOpenCustomProvidersModal() {
+	let variation = {
+		url : 'customProviders.html',
+		description : window.Asc.plugin.tr('Custom providers'),
+		isVisual : true,
+		buttons : [ 
+			{ text: window.Asc.plugin.tr('Back'), primary: false },
+		],
+		isModal : true,
+		EditorsSupport : ["word", "slide", "cell"],
+		size : [350, 222]
+	};
+
+	if (!customProvidersWindow) {
+		customProvidersWindow = new window.Asc.PluginWindow();
+		customProvidersWindow.attachEvent("onInit", function() {
+			customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
+		});
+		customProvidersWindow.attachEvent("onAddCustomProvider", function(item) {
+			let isError = !AI.addCustomProvider(item.content);
+			if (isError) {
+				customProvidersWindow.command('onErrorCustomProvider');
+			} else {
+				customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
+
+				if (aiModelEditWindow)
+					aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
+			}
+		});
+		customProvidersWindow.attachEvent("onDeleteCustomProvider", function(item) {
+			AI.removeCustomProvider(item.name);
+
+			if (aiModelEditWindow)
+				aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
+		});
+	}
+	customProvidersWindow.show(variation);
 }
 
 /**

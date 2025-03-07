@@ -23,18 +23,23 @@
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 		<script type="text/javascript" src="scripts/engine/providers/base.js"></script>
+		<script type="text/javascript" src="components/Tooltip/script.js"></script>
 		<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
 		<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>		
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 		<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 		<link rel="stylesheet" href="./resources/styles/common.css">
 		<link rel="stylesheet" href="./resources/styles/aiModelEdit.css">
+		<link rel="stylesheet" href="components/Tooltip/style.css">
     </head>
     <body class="noselect">
 		<div class="section">
 			<div class="form-vertical-item">
 				<div class="section-label">
-					<label class="i18n">Model name</label>
+					<label class="d-flex-center">
+						<span class="i18n">Model name</span>
+						<span class="required-mark">*</span>
+					</label>
 				</div>
 				<input id="name-input" type="text" class="form-control"/>
 			</div>
@@ -45,11 +50,17 @@
 				<label class="i18n">Provider</label>
 			</div>
 			<div class="form-horizontal-item">
-				<label class="i18n">Name</label>
+				<label class="d-flex-center">
+					<span class="i18n">Name</span>
+					<span class="required-mark">*</span>
+				</label>
 				<select id="provider-name-cmb" class="form-control"></select>
 			</div>
 			<div class="form-horizontal-item">
-				<label class="i18n">URL</label>
+				<label class="d-flex-center">
+					<span class="i18n">URL</span>
+					<span class="required-mark">*</span>
+				</label>
 				<input id="provider-url-input" type="text" class="form-control"/>
 			</div>
 			<div class="form-horizontal-item">
@@ -61,7 +72,10 @@
 		<div class="section">
 			<div class="form-vertical-item">
 				<div class="section-label">
-					<label class="i18n">Model</label>
+					<label class="d-flex-center">
+						<span class="i18n">Model</span>
+						<span class="required-mark">*</span>
+					</label>
 					<div id="update-models-row">
 						<div id="update-models-loader-container" class="asc-loader-container"></div>
 						<button id="update-models-btn" class="action-btn i18n">Update models list</button>
@@ -87,8 +101,12 @@
 				<div id="use-for-realtime"></div>
 				<div id="use-for-code"></div>
 				<div id="use-for-vision"></div>
-
 			</div>
+		</div>
+		<div id="custom-providers-button">
+			<label class="i18n">
+				Custom providers
+			</label>
 		</div>
 		<script type="text/javascript" src="scripts/aiModelEdit.js"></script>
     </body>

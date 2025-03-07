@@ -31,7 +31,8 @@
 			let obj = {
 				version : AI.Storage.Version,
 				providers : {},
-				models : AI.Models
+				models : AI.Models,
+				customProviders : AI.InternalCustomProvidersSources
 			};
 
 			for (let pr in AI.Providers)
@@ -86,6 +87,21 @@
 			if (obj) {
 				let oldProviders = AI.Providers;
 				AI.Providers = {};
+
+				AI.InternalCustomProvidersSources = obj.customProviders || {};
+				AI.loadCustomProviders();
+
+				for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
+					let pr = AI.InternalCustomProviders[i];
+					oldProviders[pr.name] = pr;
+				}
+
+				for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
+					if (AI.InternalCustomProviders[i].name === name) {
+						AI.InternalCustomProviders.splice(i, 1);
+						break;
+					}				
+				}
 
 				for (let i in obj.providers) {
 					let pr = obj.providers[i];
@@ -203,6 +219,6 @@
 			AI.Providers[pr.name] = pr;
 		}
 		AI.Storage.load();
-	}
+	};
 
 })(window);
