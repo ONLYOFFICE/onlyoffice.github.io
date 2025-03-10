@@ -7,14 +7,16 @@
 		"pt-BR": "Xadrez",
 		"de": "Schach",
 		"it": "Scacchi",
-		"sq-AL": "Shah"
+		"sq-AL": "Shah",
+		"sr-Cyrl-RS": "Chess",
+		"sr-Latn-RS": "Chess"
 	},
 	"guid": "asc.{FFE1F462-1EA2-4391-990D-4CC84940B754}",
 	"version": "1.0.1",
 
 	"variations": [
 		{
-			"description": "Play chess with other collaborators right in the editors. ",
+			"description": "Play chess with other collaborators right in the editors.",
 			"descriptionLocale": {
 				"ru": "Играйте в шахматы с другими пользователями прямо в редакторах.",
 				"fr": "Jouez aux échecs avec vos collaborateurs directement dans les éditeurs.",
@@ -22,7 +24,9 @@
 				"pt-BR": "Jogue xadrez com outros colaboradores diretamente nos editores.",
 				"de": "Spielen Sie Schach mit anderen Mitautoren direkt in den Editoren.",
 				"it": "Gioca a scacchi con altri collaboratori direttamente negli editor.",
-				"sq-AL": "Luani shah me bashkëpunëtorët e tjerë drejtpërdrejt në editorë."
+				"sq-AL": "Luani shah me bashkëpunëtorët e tjerë drejtpërdrejt në editorë.",
+				"sr-Cyrl-RS": "Играјте шах са другим сарадницима директно у уређивачима.",
+				"sr-Latn-RS": "Igrajte šah sa drugim saradnicima direktno u uređivačima."
 			},
 			"url" : "index.html",
 

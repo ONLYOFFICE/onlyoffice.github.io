@@ -6,7 +6,9 @@
 		"es": "EasyBib",
 		"pt-BR": "EasyBib",
 		"de": "EasyBib",
-		"sq-AL": "EasyBib"
+		"sq-AL": "EasyBib",
+		"sr-Cyrl-RS": "EasyBib",
+		"sr-Latn-RS": "EasyBib"
 	},
 	"guid"       : "asc.{c9d216a5-4f1a-49f2-9ff0-67c510a73523}",
 	"version"    : "1.0.2",
@@ -19,7 +21,9 @@
 				"es": "Genere citas y cree bibliografías en sus documentos (compatible con la nube de ONLYOFFICE).",
 				"pt-BR": "Gere citações e crie bibliografias em seus documentos (compatível com a nuvem ONLYOFFICE).",
 				"de": "Generieren Sie Zitate und erstellen Sie Bibliografien in Ihren Dokumenten (kompatibel mit ONLYOFFICE in der Cloud).",
-				"sq-AL": "Krijoni citime dhe krijoni bibliografi në dokumentet tuaja (kompatibile me renë ONLYOFFICE)."
+				"sq-AL": "Krijoni citime dhe krijoni bibliografi në dokumentet tuaja (kompatibile me renë ONLYOFFICE).",
+				"sr-Cyrl-RS": "Генеришите цитате и креирајте библиографије у вашим документима (компатибилно са ONLYOFFICE облаком).",
+				"sr-Latn-RS": "Generišite citate i kreirajte bibliografije u vašim dokumentima (kompatibilno sa ONLYOFFICE oblakom)."
 			},
 			"url"    : "index.html",
 			"icons"  : [ "resources/img/icon.png", "resources/img/icon@2x.png" ],

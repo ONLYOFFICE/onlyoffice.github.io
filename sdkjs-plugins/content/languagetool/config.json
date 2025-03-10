@@ -6,7 +6,9 @@
 		"es": "LanguageTool",
 		"pt-BR": "LanguageTool",
 		"de": "LanguageTool",
-		"sq-AL": "LanguageTool"
+		"sq-AL": "LanguageTool",
+		"sr-Cyrl-RS": "LanguageTool",
+		"sr-Latn-RS": "LanguageTool"
 	},
 	"guid": "asc.{7CDB02C9-A0BF-4B56-9A1A-71C860B8498F}",
 	"version": "1.0.4",
@@ -20,7 +22,9 @@
 				"es": "Mejore la ortografía, la gramática y el estilo de sus textos.",
 				"pt-BR": "Melhore a ortografia, a gramática e o estilo dos seus textos.",
 				"de": "Verbessern Sie Rechtschreibung, Grammatik und Stil in Ihren Texten.",
-				"sq-AL": "Përmirësoni ortografinë, gramatikën dhe stilin në tekstet tuaja."
+				"sq-AL": "Përmirësoni ortografinë, gramatikën dhe stilin në tekstet tuaja.",
+				"sr-Cyrl-RS": "Побољшајте правопис, граматику и стил у својим текстовима.",
+				"sr-Latn-RS": "Poboljšajte pravopis, gramatiku i stil u svojim tekstovima."
 			},
 			"url": "index.html",
 
@@ -105,7 +109,9 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"sq-AL": "Rreth"
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 
