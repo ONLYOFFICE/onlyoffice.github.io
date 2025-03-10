@@ -7,7 +7,9 @@
 		"pt-BR": "HTML",
 		"de": "HTML",
 		"it": "HTML",
-		"sq-AL": "HTML"
+		"sq-AL": "HTML",
+		"sr-Cyrl-RS": "HTML",
+		"sr-Latn-RS": "HTML"
 	},
 	"guid": "asc.{E581C417-3C80-4BC2-B42D-502850FDC1E7}",
 	"version": "1.0.3",
@@ -22,7 +24,9 @@
 				"pt-BR": "Obtenha o conteúdo do seu documento como código HTML, modifique-o e cole-o novamente no documento.",
 				"de": "Erhalten Sie den Inhalt Ihres Dokuments als HTML-Code, modifizieren und fügen Sie ihn wieder ins Dokument ein.",
 				"it": "Ottieni il contenuto del tuo documento come codice HTML, modificalo e incollalo di nuovo nel documento.",
-				"sq-AL": "Merrni përmbajtjen e dokumentit si kod HTML, ndryshojeni dhe ngjiteni përsëri në dokument."
+				"sq-AL": "Merrni përmbajtjen e dokumentit si kod HTML, ndryshojeni dhe ngjiteni përsëri në dokument.",
+				"sr-Cyrl-RS": "Добијте садржај вашег документа као HTML код, измените га, и залепите назад у документ.",
+				"sr-Latn-RS": "Dobijte sadržaj vašeg dokumenta kao HTML kod, izmenite ga, i zalepite nazad u dokument."
 			},
 			"url": "index.html",
 

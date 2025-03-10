@@ -9,7 +9,9 @@
 		"ru": "Подсветка кода",
 		"si": "පර්යාය කෝෂය",
 		"it": "Evidenzia codice",
-		"sq-AL": "Highlight code"
+		"sq-AL": "Highlight code",
+		"sr-Cyrl-RS": "Истакни код",
+		"sr-Latn-RS": "Istakni kod"
 	},
 	"version": "1.0.3",
 	"variations": [
@@ -34,7 +36,9 @@
 						"ru": "Отмена",
 						"si": "අවලංගු",
 						"it": "Annulla",
-						"sq-AL": "Anulo"
+						"sq-AL": "Anulo",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -47,7 +51,9 @@
 				"ru": "Оформите синтаксис кода, выбрав необходимый язык, стиль и цвет фона.",
 				"si": "වුවමනා භාෂාව, මෝස්තරය සහ පසුබිමේ වර්ණය තේරීමෙන් කේතයේ පදඝටනාව (පද ගැළපුම) උද්දීපනය කරන්න.",
 				"it": "Evidenzia sintassi del codice selezionando il linguaggio, lo stile e il colore di sfondo necessari.",
-				"sq-AL": "Theksoni sintaksën e kodit duke përzgjedhur gjuhën dhe stilin e nevojshëm, në anglisht."
+				"sq-AL": "Theksoni sintaksën e kodit duke përzgjedhur gjuhën dhe stilin e nevojshëm, në anglisht.",
+				"sr-Cyrl-RS": "Истакните синтаксу кода бирајући потребни језик, стил и боју позадине.",
+				"sr-Latn-RS": "Istaknite sintaksu koda birajući potrebni jezik, stil i boju pozadine."
 			},
 			"icons": [
 				"resources/light/icon.png",

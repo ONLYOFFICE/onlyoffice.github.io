@@ -6,7 +6,9 @@
 		"es": "Doc2md",
 		"pt-BR": "Doc2md",
 		"de": "Doc2md",
-		"sq-AL": "Doc2md"
+		"sq-AL": "Doc2md",
+		"sr-Cyrl-RS": "Doc2md",
+		"sr-Latn-RS": "Doc2md"
 	},
 	"guid": "asc.{5aff455d-96c4-4bd8-9658-16e5bc143738}",
 	"version": "1.0.3",
@@ -21,7 +23,9 @@
 				"pt-BR": "Converta seus documentos formatados para Markdown ou HTML.",
 				"de": "Konvertieren Sie formatierte Dokumente in Markdown oder HTML.",
 				"cs": "Převeďte své formátované dokumenty na Markdown nebo HTML.",
-				"sq-AL": "Konvertoni dokumentet tuaja të formatizuara në Markdown ose HTML."
+				"sq-AL": "Konvertoni dokumentet tuaja të formatizuara në Markdown ose HTML.",
+				"sr-Cyrl-RS": "Конвертујте ваше форматиране документе у Markdown или HTML.",
+				"sr-Latn-RS": "Konvertujte vaše formatirane dokumente u Markdown ili HTML."
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

@@ -1,0 +1,17 @@
+{
+    "setting": "podešavanje",
+    "Set Your ZhiPu API Key first": "Prvo postavite svoj ZhiPu API Ključ",
+    "ZhiPu Copilot": "ZhiPu Copilot",
+    "generate": "generiši",
+    "summarize": "sumiraj",
+    "explain": "objasni",
+    "translate": "prevedi",
+    "translate to English": "prevedi na engleski",
+    "translate to Chinese": "prevedi na kineski",
+    "translate to French": "prevedi na francuski",
+    "translate to German": "prevedi na nemački",
+    "translate to Spanish": "prevedi na španski",
+    "translate to Russian": "prevedi na ruski",
+    "clear chat history": "očisti istoriju četa",
+    "Choose a model": "Izaberi model"
+}

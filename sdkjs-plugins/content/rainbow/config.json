@@ -7,7 +7,9 @@
 		"pt-BR": "Rainbow",
 		"de": "Rainbow",
 		"it": "Rainbow",
-		"sq-AL": "Rainbow"
+		"sq-AL": "Rainbow",
+		"sr-Cyrl-RS": "Rainbow",
+		"sr-Latn-RS": "Rainbow"
 	},
 	"guid": "asc.{0743b63f-cb32-438c-b46b-81ce182ff4f7}",
 	"version": "1.0.2",
@@ -22,7 +24,9 @@
 				"pt-BR": "Troque mensagens instantâneas e faça chamadas usando Rainbow.",
 				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow.",
 				"it": "Scambia messaggi istantanei ed effettua chiamate utilizzando Rainbow.",
-				"sq-AL": "Shërbim për dorgimin e mesazheve dhe thirrjeve telefonike në kohë reale duke përdorur Rainbow."
+				"sq-AL": "Shërbim për dorgimin e mesazheve dhe thirrjeve telefonike në kohë reale duke përdorur Rainbow.",
+				"sr-Cyrl-RS": "Размењујте инстант поруке и упућујте позиве помоћу Rainbow-а.",
+				"sr-Latn-RS": "Razmenjujte instant poruke i upućujte pozive pomoću Rainbow-a."
 			},
 			"url": "index.html",
 
@@ -85,7 +89,9 @@
 						"es": "Cerrar",
 						"de": "Schließen",
 						"it": "Chiudi",
-						"sq-AL": "Mbyllni"
+						"sq-AL": "Mbyllni",
+						"sr-Cyrl-RS": "Затвори",
+						"sr-Latn-RS": "Zatvori"
 					}
 				}
 			],
@@ -110,7 +116,9 @@
 				"es": "Sobre programa",
 				"de": "Über",
 				"it": "Informazioni su",
-				"sq-AL": "Rreth"
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],

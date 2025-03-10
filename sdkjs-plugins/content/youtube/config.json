@@ -8,7 +8,9 @@
 		"de": "YouTube",
 		"si": "YouTube",
 		"it": "YouTube",
-		"sq-AL": "YouTube"
+		"sq-AL": "YouTube",
+		"sr-Cyrl-RS": "YouTube",
+		"sr-Latn-RS": "YouTube"
 	},
 	"guid": "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}",
 	"version": "1.0.4",
@@ -24,7 +26,9 @@
 				"de": "Betten Sie ganz einfach YouTube-Videos in Ihre Dokumente ein.",
 				"si": "යූටියුබ් දෘශ්‍යක පහසුවෙන් ඔබගේ ලේඛන වලට කාවද්දන්න.",
 				"it": "Incorpora facilmente i video di YouTube nei tuoi documenti.",
-				"sq-AL": "Inkuadro videoklipe YouTube në dokumentet tuaja lehtësisht."
+				"sq-AL": "Inkuadro videoklipe YouTube në dokumentet tuaja lehtësisht.",
+				"sr-Cyrl-RS": "Једноставно убаците YouTube видео снимке у ваше документе.",
+				"sr-Latn-RS": "Jednostavno ubacite YouTube video snimke u vaše dokumente."
 			},
 			"url": "index.html",
 
@@ -64,7 +68,9 @@
 						"de": "Abbrechen",
 						"si": "අවලංගු",
 						"it": "Annulla",
-						"sq-AL": "Anuloni"
+						"sq-AL": "Anuloni",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],

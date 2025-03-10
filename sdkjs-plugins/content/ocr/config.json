@@ -8,7 +8,9 @@
 		"pt-BR": "OCR",
 		"si": "OCR",
 		"it": "OCR",
-		"sq-AL": "OCR"
+		"sq-AL": "OCR",
+		"sr-Cyrl-RS": "OCR",
+		"sr-Latn-RS": "OCR"
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.2",
@@ -24,7 +26,9 @@
 				"pt-BR": "Reconheça texto de imagens e capturas de tela e insira-o em seus documentos.",
 				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න.",
 				"it": "Riconosci il testo da immagini e screenshot e inseriscilo nei tuoi documenti.",
-				"sq-AL": "Njihni tekstin në foto dhe skrinshotet dhe futeni në dokumentet tuaja."
+				"sq-AL": "Njihni tekstin në foto dhe skrinshotet dhe futeni në dokumentet tuaja.",
+				"sr-Cyrl-RS": "Препознајте текст са слика и снимака екрана и убаците га у ваше документе.",
+				"sr-Latn-RS": "Prepoznajte tekst sa slika i snimaka ekrana i ubacite ga u vaše dokumente."
 			},
 			"url": "index.html",
 
@@ -89,7 +93,9 @@
 						"de": "Text einfügen",
 						"si": "පෙළ ඇතුළු කරන්න",
 						"it": "Inserisci testo",
-						"sq-AL": "Futni tekstin"
+						"sq-AL": "Futni tekstin",
+						"sr-Cyrl-RS": "Убаци текст",
+						"sr-Latn-RS": "Ubaci tekst"
 					}
 				},
 				{
@@ -102,7 +108,9 @@
 						"de": "Abbrechen",
 						"si": "අවලංගු",
 						"it": "Annulla",
-						"sq-AL": "Anulo"
+						"sq-AL": "Anulo",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -134,7 +142,9 @@
 				"de": "Über",
 				"si": "පිළිබඳව",
 				"it": "Informazioni su",
-				"sq-AL": "Rreth"
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 
 			"url": "index_about.html",

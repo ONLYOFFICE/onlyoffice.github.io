@@ -1,0 +1,14 @@
+{
+	"This version of \"Plugin Manager\" is not official." : "Ova verzija \"Menadžera dodataka\" nije zvanična.",
+	"No Internet Connection.": "Nema Internet konekcije.",
+	"Warning" : "Upozorenje",
+	"Yes" : "Da",
+	"No" : "Ne",
+	"Do you want to completely remove this plugin?" : "Da li želite da potpuno uklonite ovaj dodatak?",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Ako izaberete \"Ne\", moći ćete da obnovite ovaj dodatak kasnije na tržištu.",
+	"Enter the URL for your marketplace page here" : "Unesite URL za vašu stranicu tržišta ovde",
+	"Return to default settings" : "Vratite se na podrazumevana podešavanja",
+	"Enter URL" : "Unesite URL",
+	"Cancel" : "Otkaži",
+	"Be careful! Avoid using the untrusted URLs." : "Pazite! Izbegavajte da koristite nepouzdane URL-ove."
+}

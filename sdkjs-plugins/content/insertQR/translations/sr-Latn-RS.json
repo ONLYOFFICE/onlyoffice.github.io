@@ -1,0 +1,16 @@
+{
+    "QR Settings": "Podešavanja QR koda",
+    "Set QR Color": "Postavi boju QR koda",
+    "Set Background Color": "Postavi boju pozadine",
+    "Width": "Širina",
+    "Height": "Visina",
+    "Minimum QR size is 50px": "Minimalna veličina QR koda je 50px",
+    "Maximum QR size is 2000px": "Maksimalna veličina QR koda je 2000px",
+    "Warning": "Upozorenje",
+    "Insert QR": "Ubaci QR",
+    "The plugin is not supported in the Internet Explorer": "Dodatak nije podržan u Internet Explorer-u.",
+    "The selected text сannot be used": "Izabrani tekst ne može biti korišćen.",
+    "The colors must be different": "Boje moraju biti različite",
+    "Insert QR: info": "Ubaci QR: informacije",
+    "Cancel": "Otkaži"
+}

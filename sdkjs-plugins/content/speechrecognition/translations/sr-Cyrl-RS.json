@@ -1,0 +1,13 @@
+{
+	"Start dictation": "Почни диктирање",
+	"Speak now": "Причај сада",
+	"This plugin doesn't work in Desktop Editors.": "Овај додатак не ради у Desktop Уређивачима.",
+	"This plugin doesn't work into this browser.": "Овај додатак не ради у овом претраживачу.",
+	"Web Speech API is not supported by this browser. Please open it in Google Chrome browser.": "Web Speech API није подржан од стране овог претраживача. Молимо отворите га у претраживачу Google Chrome.",
+	"Error with connection to recognition service of this browser, please use the Chrome browser.": "Грешка у вези са сервисом за препознавање овог претраживача, молимо користите претраживач Chrome.",
+	"No speech was detected. You may need to adjust your microphone settings.": "Говор није детектован. Можда ћете морати да подесите поставке микрофона.",
+	"No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.": "Није пронађен микрофон. Уверите се да је микрофон инсталиран и да су поставке микрофона исправно подешене.",
+	"Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone": "Дозвола за коришћење микрофона је блокирана. Да бисте променили, идите на chrome://settings/content/microphone",
+	"Permission to use microphone was denied.": "Дозвола за коришћење микрофона је одбијена.",
+	"Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.": "Web Speech API није подржан од стране овог претраживача. Надоградите на верзију Chrome 25 или новију."
+}
