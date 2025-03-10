@@ -4,5 +4,8 @@
 	"Insert to document": "Вставить в документ",
 	"Dismiss": "Пропустить",
 	"Clear": "Очистить",
-	"Language": "Язык"
+	"Language": "Язык",
+	"Select the text to check in the document or enter it manually": "Выберите текст для проверки в документе или введите его вручную",
+	"Possible mistakes found: ": "Найдены возможные ошибки: ",
+	"No possible mistakes found": "Возможных ошибок не найдено"
 }
