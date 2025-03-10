@@ -6,7 +6,8 @@
         "ru": "ZhiPu Copilot",
         "fr": "ZhiPu Copilot",
         "pt-BR": "ZhiPu Copilot",
-        "es": "ZhiPu Copilot"
+        "es": "ZhiPu Copilot",
+        "cs-CS": "ZhiPu Copilot"
     },
     "guid": "asc.{4b5efd7f-7c8d-1ef4-feab-bfbf2e1d86ac}",
     "baseUrl": "",
@@ -16,12 +17,13 @@
         {
             "description": "Easily generate high-quality articles, interpret complex spreadsheet data, create powerpoint Outlines, and more with an AI assistant based on ChatGLM's large model.",
             "descriptionLocale": {
-                "zh": "使用基于智谱 ChatGLM 大模型的 AI 助手，轻松生成高质量的文章、解释复杂的电子表格数据、创建 PPT 大纲等.",
-                "de": "Erstellen Sie mühelos hochwertige Artikel, interpretieren Sie komplexe Tabellendaten, erstellen Sie PowerPoint-Outlines und mehr mit einem KI-Assistenten auf der Grundlage des großen Modells von ChatGLM.",
-                "ru": "Легко создавайте статьи высокого качества, интерпретируйте сложные данные электронных таблиц, создавайте контуры презентаций и многое другое с помощью искусственного интеллекта на основе большой модели ChatGLM.",
-                "fr": "Générez facilement des articles de haute qualité, interprétez des données de feuille de calcul complexes, créez des contours PowerPoint et plus encore avec un assistant IA basé sur le grand modèle de ChatGLM.",
-                "pt-BR": "Gere facilmente artigos de alta qualidade, interprete dados complexos de planilhas, crie contornos de PowerPoint e muito mais com um assistente de IA baseado no grande modelo de ChatGLM.",
-                "es": "Genere fácilmente artículos de alta calidad, interprete datos complejos de hojas de cálculo, cree contornos de PowerPoint y más con un asistente de IA basado en el gran modelo de ChatGLM."
+                "zh": "基于智谱 ChatGLM 大模型的 ONLYOFFICE 文档 Copilot 插件",
+                "de": "Ein Copilot-Plugin für ONLYOFFICE-Dokumente basierend auf dem ZhiPu ChatGLM-Modell.",
+                "ru": "Плагин Copilot для документов ONLYOFFICE на основе модели ZhiPu ChatGLM.",
+                "fr": "Un plugin copilote pour les documents ONLYOFFICE basé sur le modèle ZhiPu ChatGLM.",
+                "pt-BR": "Um plugin copiloto para ONLYOFFICE Document baseado no modelo ZhiPu ChatGLM.",
+                "es": "Un complemento de copiloto para documentos de ONLYOFFICE basado en el modelo ZhiPu ChatGLM.",
+                "cs-CS": "Copilot plugin pro dokument ONLYOFFICE založený na modelu ZhiPu ChatGLM."
             },
             "url": "index.html",
             "icons": [
