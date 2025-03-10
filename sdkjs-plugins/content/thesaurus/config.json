@@ -7,7 +7,8 @@
 		"pt-BR": "Thesaurus",
 		"de": "Thesaurus",
 		"si": "පර්යාය කෝෂය",
-		"it": "Thesaurus"
+		"it": "Thesaurus",
+		"sq-AL": "Thesaurus"
 	},
 	"guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9840}",
 	"version": "1.0.3",
@@ -22,7 +23,8 @@
 				"pt-BR": "Pesquise sinônimos e antônimos de uma palavra e substitua pela selecionada.",
 				"de": "Finden Sie Synonyme und Antonyme eines Wortes und ersetzen Sie es durch die ausgewählte Variante.",
 				"si": "වචනයක සමාන පද සහ විරුද්ධ පද සොයා තෝරාගත් වචනයකට ප්‍රතිස්ථාපනය කරන්න.",
-				"it": "Cerca sinonimi e contrari di una parola e sostituiscila con quella selezionata."
+				"it": "Cerca sinonimi e contrari di una parola e sostituiscila con quella selezionata.",
+				"sq-AL": "Kërkoni sinonime dhe antonime të një fjale dhe zëvëndësojeni atë me fjalën e zgjedhur."
 			},
 			"url": "index.html",
 

@@ -6,7 +6,8 @@
 		"es": "Recuento de palabras",
 		"pt-BR": "Word counter",
 		"de": "Wortanzahl",
-		"it": "Word counter"
+		"it": "Word counter",
+		"sq-AL": "Word counter"
 	},
 	"guid" : "asc.{584EEEE8-DBF5-45C3-A4CA-F52177C82754}",
 	"version": "1.0.1",
@@ -20,7 +21,8 @@
 				"es": "Cuente las palabras, los caracteres (con/sin espacios) y los párrafos en la parte seleccionada de su documento.",
 				"pt-BR": "Conte palavras, caracteres (com/sem espaços) e parágrafos na parte selecionada do seu documento.",
 				"de": "Zählen Sie Wörter, Zeichen (mit/ohne Leerzeichen) und Absätze im ausgewählten Teil Ihres Dokuments.",
-				"it": "Conta parole, caratteri (con o senza spazi) e paragrafi nella parte selezionata del documento."
+				"it": "Conta parole, caratteri (con o senza spazi) e paragrafi nella parte selezionata del documento.",
+				"sq-AL": "Llogaritni fjalë, karaktere (me ose pa hapësirë), dhe paragrafe në pjesën e selektuar të dokumentit tuaj."
 			},
 			"url" : "index.html",
 
