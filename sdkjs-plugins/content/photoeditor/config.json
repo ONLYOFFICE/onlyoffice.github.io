@@ -7,7 +7,8 @@
 		"pt-BR": "Editor de foto",
 		"de": "Foto-Editor",
 		"si": "ඡායාරූප සංස්කරකය",
-		"it": "Editor di foto"
+		"it": "Editor di foto",
+		"sq-AL": "Editori i fotove"
 	},
 	"guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
 	"version": "1.0.2",
@@ -23,7 +24,8 @@
 				"pt-BR": "Edite imagens, capturas de tela e fotos diretamente em seus documentos: corte, redimensione e aplique efeitos.",
 				"de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden.",
 				"si": "ඔබගේ ලේඛනවල අඩංගු රූප, තිරසේයා සහ ඡායාරූප සංස්කරණය කරන්න. කප්පාදුව, යළි ප්‍රමාණනය, ආචරණ යෙදීම ආදිය ඇතුළත්ය.",
-				"it": "Modifica immagini, screenshot e foto direttamente nei tuoi documenti: ritaglia, ridimensiona, applica effetti."
+				"it": "Modifica immagini, screenshot e foto direttamente nei tuoi documenti: ritaglia, ridimensiona, applica effetti.",
+				"sq-AL": "Editoni imazhe, foto ekrani dhe foto direkt.në dokumentet tuaja: prisni, rregulloni madhësinë, aplikoni efekte"
 			},
 			"url": "index.html",
 
@@ -93,7 +95,8 @@
 						"es": "Cancelar",
 						"de": "Abbrechen",
 						"si": "අවලංගු",
-						"it": "Annulla"
+						"it": "Annulla",
+						"sq-AL": "Anuloni"
 					}
 				}
 			],
@@ -123,7 +126,8 @@
 				"es": "Sobre programa",
 				"de": "Über",
 				"si": "පිළිබඳව",
-				"it": "Informazioni su"
+				"it": "Informazioni su",
+				"sq-AL": "Rreth"
 			},
 			"url": "index_about.html",
 

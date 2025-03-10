@@ -8,7 +8,8 @@
         "pt-BR": "ZhiPu Copilot",
         "es": "ZhiPu Copilot",
         "cs-CS": "ZhiPu Copilot",
-        "it": "ZhiPu Copilot"
+        "it": "ZhiPu Copilot",
+        "sq-AL": "ZhiPu Copilot"
     },
     "guid": "asc.{4b5efd7f-7c8d-1ef4-feab-bfbf2e1d86ac}",
     "baseUrl": "",
@@ -25,7 +26,8 @@
                 "pt-BR": "Um plugin copiloto para ONLYOFFICE Document baseado no modelo ZhiPu ChatGLM.",
                 "es": "Un complemento de copiloto para documentos de ONLYOFFICE basado en el modelo ZhiPu ChatGLM.",
                 "cs-CS": "Copilot plugin pro dokument ONLYOFFICE založený na modelu ZhiPu ChatGLM.",
-                "it": "Un plugin copilot per ONLYOFFICE basato sul modello ZhiPu ChatGLM."
+                "it": "Un plugin copilot per ONLYOFFICE basato sul modello ZhiPu ChatGLM.",
+                "sq-AL": "Një shtojcë copilot për ONLYOFFICE Document bazuar në modelin e ZhiPu ChatGLM."
             },
             "url": "index.html",
             "icons": [
@@ -143,7 +145,8 @@
                         "ru": "Ok",
                         "fr": "Ok",
                         "es": "Ok",
-                        "it": "Ok"
+                        "it": "Ok",
+                        "sq-AL": "Ok"
                     },
                     "primary": true
                 }

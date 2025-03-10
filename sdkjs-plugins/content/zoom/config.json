@@ -6,7 +6,8 @@
 		"es": "Zoom",
 		"pt-BR": "Zoom",
 		"de": "Zoom",
-		"it": "Zoom"
+		"it": "Zoom",
+		"sq-AL": "Zoom"
 	},
 	"guid": "asc.{3f15a9bc-51d3-4b59-b32f-75cfe2f07f54}",
 	"version": "1.0.1",
@@ -20,7 +21,8 @@
 				"es": "Planifique y celebre reuniones de vídeo directamente en los editores con Zoom.",
 				"pt-BR": "Agende e realize videoconferências diretamente nos editores usando o Zoom.",
 				"de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren.",
-				"it": "Pianifica e organizza riunioni video direttamente negli editor utilizzando Zoom."
+				"it": "Pianifica e organizza riunioni video direttamente negli editor utilizzando Zoom.",
+				"sq-AL": "Planifikoni dhe mbani takime video drejtpërdrejt në redaktorët duke përdorur Zoom."
 			},
 			"url": "index.html",
 
@@ -86,7 +88,8 @@
 						"fr": "Fermer",
 						"es": "Cerrar",
 						"de": "Schließen",
-						"it": "Chiudi"
+						"it": "Chiudi",
+						"sq-AL": "Mbyllni"
 					}
 				}
 			],
@@ -113,7 +116,8 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"it": "Informazioni su"
+				"it": "Informazioni su",
+				"sq-AL": "Rreth"
 			},
 			"url": "index_about.html",
 
