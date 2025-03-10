@@ -344,7 +344,7 @@ var Ps;
                 "method": "GET"
             }),
             url: zoomProxyUrl
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             localStorage.setItem($('#emailField').attr("data-id"), email);
             localStorage.setItem($('#sdkKeyField').attr("data-id"), sdkKey);
             localStorage.setItem($('#sdkSecretField').attr("data-id"), sdkSecret);
@@ -390,7 +390,7 @@ var Ps;
             $('#create-meeting-container').toggleClass('display-none');
 
             showLoader(elements, false);
-        }).error(function(e){
+        }).fail(function(e){
             alert('Server error. Contact to support.');
             showLoader(elements, false);
         });
@@ -597,7 +597,7 @@ var Ps;
             contentType: "text/plain",
             data: JSON.stringify(jsonData),
             url: zoomProxyUrl
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             if (oResponse.message && oResponse.message.search("Invalid") != -1) {
                 alert("Invalid access (JWT) token.");
                 showLoader(elements, false);
@@ -657,7 +657,7 @@ var Ps;
             }
 
             showLoader(elements, false);
-        }).error(function(e) {
+        }).fail(function(e) {
             alert('Server error. Contact to support.');
             showLoader(elements, false);
         });

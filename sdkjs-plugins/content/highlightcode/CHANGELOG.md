@@ -13,3 +13,7 @@
 # 1.0.2
 
 * Disable plugin for IE.
+
+## 1.0.3
+
+* Update jquery version.

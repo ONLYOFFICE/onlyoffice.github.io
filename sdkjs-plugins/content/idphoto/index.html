@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>ID Photo Convertor</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script type="text/javascript" src="scripts/main.js"></script>
+
+    <script src="scripts/konva.min.js"></script>
+    <script src="scripts/opencv.js"></script>
+    <script src="scripts/ort.min.js"></script>
+    <!-- 如果要在本地引入onnx runtime web，需要下载好 ort-wasm-simd-threaded.mjs 和 ort-wasm-simd-threaded.wasm -->
+
+    <style>
+        body {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        button {
+            margin-top: 10px;
+        }
+        
+        .outStyle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            width: 150px;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f7f7f7;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .radioStyle {
+            display: none;
+        }
+        
+        .outStyle span {
+            /* margin-left: 10px; */
+        }
+        
+        .outStyle.selected {
+            background-color: #56a0d5;
+            color: white;
+        }
+        
+        .outStyle:not(.selected) {
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        
+        .buttonStyle {
+            /* max-width: 400px; */
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #56a0d5;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #customInputContainer {
+            margin-top: 10px;
+        }
+        
+        label {
+            margin-right: 5px;
+        }
+        
+        input[type="number"] {
+            width: 100px;
+            margin-right: 10px;
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            margin: 10px 0;
+            background-color: transparent;
+        }
+        
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            /* width: 100%; */
+            flex-grow: 1;
+            height: 5px;
+            cursor: pointer;
+            animate: 0.2s;
+            background: #ccc;
+            border-radius: 1px;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #56a0d5;
+            -webkit-appearance: none;
+            cursor: pointer;
+            margin-top: -7.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width: 100%;display: flex;flex-direction: row;height: 100%;">
+        <div style="width: 50%;height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;background-color: #fff;position: relative;" id="picContainer">
+            <div style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;position: absolute;top: 0;left: 0;">
+                <div id="Previewtext" style="font-size: 20px;">Select a photo for preview</div>
+            </div>
+            <!-- <canvas id="pic"></canvas> -->
+        </div>
+        <div style="width: 50%;height: 100%;background-color: #e4e4e4c8;color: #000;padding: 20px;display: flex;flex-direction: column;overflow: hidden;overflow-y: scroll;box-sizing: border-box;">
+            <div style="font-size: 14px;color: #fff;">
+                <div style="display: flex;align-items: center;flex-direction: row;">
+                    <div style="cursor: pointer;display: flex;justify-content: center;padding: 10px;" id="usageGauide">Usage Guide</div>
+                    <div style="cursor: pointer;display: flex;justify-content: center;padding: 10px;" id="phrequir">Photo requirements</div>
+                    <div style="cursor: pointer;display: flex;justify-content: center;padding: 10px;" id="privacysta">Privacy Statement</div>
+                </div>
+                <div style="padding: 10px;background-color: #94b5ce;line-height: 1.8;" id="contentBox">
+                    <div id="help1">Step 1: Select a suitable picture to upload.<br>Step 2: Select the required format and size.<br>Step 3: Click the process button to preview the ID photo. You can manually adjust the size, position, and angle of the portrait. If the
+                        image is too large, you can use the mouse wheel to fully preview the photo.<br>Step 4: Click Download or Insert to finish the process.<br>Additionally, if you are not satisfied with the cutout result, you can try improving it by
+                        adjusting the cutout threshold.</div>
+                    <div id="help2">Not all photos are suitable for conversion into ID photos. The photo you use needs to be a frontal photo without a hat, dressed appropriately. Normally, the two ear contours of a person and the place corresponding to the Adam's apple
+                        of a man should be seen in the photo, and the bottom is higher than the chest position.</div>
+                    <div id="help3">After installation, this plug-in runs offline and will not upload or store any processed pictures or other user data.</div>
+                </div>
+            </div>
+            <div style="font-size: 20px;margin-bottom: 10px;margin-top: 10px;" id="hint1">Select an photo to convert:</div>
+            <div style="width: 400px;height: 40px;display: flex;justify-content: flex-start;align-items: center;flex-direction: row;margin-bottom: 14px;">
+                <label id="bt1" for="imageInput" style="width: 100px;display: flex;justify-content: center;align-items: center;padding: 10px 20px; background-color: #56a0d5; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;flex-shrink: 0;">
+                    Select Photo
+                </label>
+                <div id="fileName" style="width: 250px; margin-left: 10px; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;">
+                    No file chosen
+                </div>
+            </div>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            <div id="typeSelect" style="font-size: 20px;margin-bottom: 10px;">Select the photo type:</div>
+            <div id="sizeOptions" style="width: 100%;display: flex;flex-direction: row;font-size: 15px;flex-wrap: wrap;height: 600px;justify-content: space-between;">
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="1" /><span id="rad1" style="text-align: center;">1 inch</span><span style="font-size: 13px;">295*413px | 25*35mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="2" /><span id="rad2" style="text-align: center;">2 inches</span><span style="font-size: 13px;">413*579px | 35*49mm</span></div>
+
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="3" /><span id="rad14" style="text-align: center;">3 inches</span><span style="font-size: 13px;">649*991px | 55*84mm</span></div>
+                <!-- <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="4" /><span id="rad15" style="text-align: center;">4 inches</span><span style="font-size: 13px;">897*1205px | 76*102mm</span></div> -->
+
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="5" /><span id="rad3" style="text-align: center;">small 1 inch</span><span style="font-size: 13px;">260*378px | 22*32mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="6" /><span id="rad4" style="text-align: center;">small 2 inches</span><span style="font-size: 13px;">413*531px | 35*45mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="7" /><span id="rad5" style="text-align: center;">large 1 inch</span><span style="font-size: 13px;">390*567px | 33*48mm</span></div>
+
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="8" /><span id="rad6" style="text-align: center;">large 2 inches</span><span style="font-size: 13px;">413*626px | 35*53mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="9" /><span id="rad7" style="text-align: center;">Chinese passport</span><span style="font-size: 13px;">390*567px | 33*48mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="10" /><span id="rad8" style="text-align: center;">driving license</span><span style="font-size: 13px;">260*378px | 22*32mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="11" /><span id="rad9" style="text-align: center;">electronic driving license</span><span style="font-size: 13px;">520*756px | 44*64mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="12" /><span id="rad10" style="text-align: center;">marriage registration photo</span><span style="font-size: 13px;">579*413px | 49*35mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="13" /><span id="rad11" style="text-align: center;">second-generation identity card</span><span style="font-size: 13px;">358*441px | 26*32mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="14" /><span id="rad12" style="text-align: center;">photo information collection for college students</span><span style="font-size: 13px;">480*640px | 41*54mm</span></div>
+                <div class="outStyle"><input class="radioStyle" name="size" type="radio" value="15" /><span id="rad13" style="text-align: center;">electronic social security card</span><span style="font-size: 13px;">358*441px | 30*37mm</span></div>
+                <div class="outStyle" style="justify-content: center;">
+                    <input class="radioStyle" name="size" type="radio" value="custom" id="customSizeOption" />
+                    <span id="rad16">custom size</span>
+                </div>
+
+                <!-- 自定义尺寸输入框（初始隐藏，选择自定义时显示） -->
+                <div id="customInputContainer" class="hidden">
+                    <label for="customWidth" id="rad161">Width(px):</label>
+                    <input type="number" id="customWidth">
+
+                    <label for="customHeight" id="rad162">Height(px):</label>
+                    <input type="number" id="customHeight">
+                </div>
+            </div>
+            <div id="hint2" style="font-size: 20px;margin-top: 14px;margin-bottom: 10px;">Select the background color:</div>
+            <div id="ratioOptions" style="width: 100%;display: flex;flex-direction: row;align-items: center;font-size: 15px;margin-bottom: 14px;justify-content: space-between;">
+                <div class="outStyle" style="margin-right: 12px;max-width: 28%;"><input class="radioStyle" checked name="color" type="radio" value="1" /><span id="color1">red</span></div>
+                <div class="outStyle" style="margin-right: 12px;max-width: 28%;"><input class="radioStyle" name="color" type="radio" value="2" /><span id="color2">white</span></div>
+                <div class="outStyle" style="max-width: 28%;"><input class="radioStyle" name="color" type="radio" value="3" /><span id="color3">blue</span></div>
+            </div>
+            <div style="width: 100%;display: flex;flex-direction: row;justify-content: space-between;margin-bottom: 14px;align-items: center;">
+                <div id="threshold" style="font-size: 20px;width: 140px;">Threshold</div>
+                <input type="range" min="0" max="1" step="0.01" value="0.65" id="mySlider">
+                <span style="font-size: 20px;width: 80px;display: flex;flex-direction: row;justify-content: right;" id="sliderValue">0.65</span>
+            </div>
+
+            <div style="height: 150px;margin-bottom: 60px;">
+                <button class="buttonStyle" id="processButton">Process</button>
+                <button class="buttonStyle" id="uploadButton">Insert to Document</button>
+                <button class="buttonStyle" id="saveButton">Download and Save</button>
+            </div>
+
+
+            <!-- <button class="buttonStyle" style="background-color: #939393c7;" id="cancelButton">Cancel</button> -->
+            <!-- <div style="margin-top: 20px;">日志：</div>
+            <div id="mess" style="height: 200px;overflow-y: scroll;"></div> -->
+        </div>
+    </div>
+</body>
+
+</html>
