@@ -5,7 +5,8 @@
 		"fr": "TerMef",
 		"es": "TerMef",
 		"pt-BR": "TerMef",
-		"de": "TerMef"
+		"de": "TerMef",
+		"it": "TerMef"
 	},
 	"guid": "asc.{4571a69c-7ae5-4f2c-98fd-97614ba7bf3d}",
 	"version": "1.0.1",
@@ -18,7 +19,8 @@
 				"fr": "TerMef",
 				"es": "TerMef",
 				"pt-BR": "TerMef",
-				"de": "TerMef"
+				"de": "TerMef",
+				"it": "TerMef"
 			},
 			"url": "index.html",
 
@@ -94,7 +96,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"it": "Annulla"
 					}
 				}
 			],
@@ -116,7 +119,8 @@
 				"ru": "Информация",
 				"fr": "À propos de",
 				"es": "Acerca de",
-				"de": "Über"
+				"de": "Über",
+				"it": "Informazioni su"
 			},
 			"url": "index_about.html",
 			"isViewer": false,
@@ -140,7 +144,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"it": "Annulla"
 					}
 				}
 			],
