@@ -155,7 +155,7 @@ function getMessage(key) {
             method: 'GET',
             url: serviceUrl + 'apy/listPairs',
             dataType: 'json'
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             var maxPredicVal = 0;
             var maxPredict = null;
 
@@ -165,7 +165,7 @@ function getMessage(key) {
                     maxPredict = predict;
                 }
             }
-        }).error(function(){
+        }).fail(function(){
 
         });
     };
@@ -175,7 +175,7 @@ function getMessage(key) {
             method: 'GET',
             url: serviceUrl + 'apy/list?',
             dataType: 'json'
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             var sourceLang = oResponse.responseData[0].sourceLanguage;
             var targetLang = oResponse.responseData[0].targetLanguage;
 
@@ -193,7 +193,7 @@ function getMessage(key) {
             }
 
             AddLangOptions(allPairs);
-        }).error(function(){
+        }).fail(function(){
             showLoader2(elements, false);
         });
     };
@@ -207,7 +207,7 @@ function getMessage(key) {
             method: 'GET',
             url: serviceUrl + 'apy/' + sUrlRequest,
             dataType: 'json'
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             var sourceLang     = GetSourceLang();
 
             for (var sLang in oResponse) {
@@ -235,7 +235,7 @@ function getMessage(key) {
                 translatedParas = [];
                 RunTranslate(txt);
             });
-        }).error(function(){
+        }).fail(function(){
             showLoader2(elements, false);
         });
     };
@@ -248,7 +248,7 @@ function getMessage(key) {
             method: 'GET',
             url: serviceUrl + 'apy/translate?markUnknown=no&langpair=' + sourceLanguage + '|' + targetLanguage + '&q=' + oText.Text,
             dataType: 'json'
-        }).success(function (oResponse) {
+        }).done(function (oResponse) {
             translatedParas[oText.Index] = oResponse.responseData.translatedText;
 
             curIter++;
@@ -270,7 +270,7 @@ function getMessage(key) {
                 updateScroll();
                 showLoader(elements, false);
             }
-        }).error(function(error) {
+        }).fail(function(error) {
             if (error.readyState === 4 && error.status === 200) {
                 translatedParas[oText.Index] = oText.Text;
 

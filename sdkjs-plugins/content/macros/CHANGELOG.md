@@ -30,3 +30,7 @@
 * Chnage line height to 20px for editor and change active line highlight
 * Update ace library version to 1.33.0
 * Add custom functions for cell editor.
+
+## 2.0.1
+
+* Update jquery version.
