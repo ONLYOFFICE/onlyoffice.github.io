@@ -1,0 +1,112 @@
+{
+  "name": "Video Embedder",
+  "nameLocale": {
+    "ru": "Video Embedder",
+    "es": "Video Embedder",
+    "de": "Video Embedder",
+    "br": "Video Embedder",
+    "zh": "在线视频插入器",
+    "si": "වීඩියෝ එම්බෙඩරය"
+  },
+  "guid": "asc.{FDSTF532-69ES-436C-RMDI-XSY4DF1R96ES}",
+  "version": "1.0.0",
+  "offered": "Eeshaan Sawant",
+  "variations": [
+    {
+      "description": "Effortlessly embed videos from various streaming platforms into the document. These are the platforms that are currently supported : Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI. ",
+      "descriptionLocale": {
+        "ru": "Легко встраивайте видео из различных стриминговых платформ в документ. В настоящее время поддерживаются следующие платформы: Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI.",
+        "fr": "Intégrez facilement des vidéos de différentes plateformes de streaming dans le document. Les plateformes actuellement prises en charge sont : Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI.",
+        "es": "Incruste fácilmente videos de varias plataformas de streaming en el documento. Las plataformas actualmente compatibles son: Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI.",
+        "de": "Binden Sie Videos von verschiedenen Streaming-Plattformen mühelos in das Dokument ein. Derzeit unterstützte Plattformen: Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI.",
+        "br": "Incorpore vídeos de diversas plataformas de streaming no documento com facilidade. As plataformas atualmente suportadas são: Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI.",
+        "zh": "轻松将来自各种流媒体平台的视频嵌入文档。目前支持的平台包括:  哔哩哔哩、QQ (腾讯视频播放器)、西瓜视频、优酷、爱奇艺。",
+        "si": "වෙනත් ස්ට්‍රීම් කරන වේදිකාවලින් වීඩියෝ ලේඛනයට පහසුවෙන් ඇතුළත් කරන්න. මේ වන විට සහාය දක්වන වේදිකාවන්: Bilibili, QQ (Tencent Video Player), Ixigua, Youku, IQIYI."
+      },
+      "url": "index.html",
+      "icons": ["resources/light/icon.svg", "resources/light/icon.svg"],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/light/icon.svg"
+          },
+          "125%": {
+            "normal": "resources/light/icon.svg"
+          },
+          "150%": {
+            "normal": "resources/light/icon.svg"
+          },
+          "175%": {
+            "normal": "resources/light/icon.svg"
+          },
+          "200%": {
+            "normal": "resources/light/icon.svg"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/dark/icon.svg"
+          },
+          "125%": {
+            "normal": "resources/dark/icon.svg"
+          },
+          "150%": {
+            "normal": "resources/dark/icon.svg"
+          },
+          "175%": {
+            "normal": "resources/dark/icon.svg"
+          },
+          "200%": {
+            "normal": "resources/dark/icon.svg"
+          }
+        }
+      ],
+      "isViewer": true,
+      "isDisplayedInViewer": false,
+      "EditorsSupport": ["word", "cell", "slide"],
+      "isVisual": true,
+      "isModal": true,
+      "isInsideMode": false,
+      "initDataType": "ole",
+      "isUpdateOleOnResize": false,
+      "buttons": [
+        {
+          "text": "OK",
+          "primary": true,
+          "isViewer": false
+        },
+        {
+          "text": "Cancel",
+          "primary": false,
+          "isViewer": true,
+          "textLocale": {
+            "ru": "Отмена",
+            "fr": "Annuler",
+            "es": "Cancelar",
+            "de": "Abbrechen",
+            "si": "අවලංගු"
+          }
+        }
+      ],
+      "size": [350, 90],
+      "store": {
+        "background": {
+          "light": "#000000",
+          "dark": "#000000"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screenshot-1.png",
+					"resources/store/screenshots/screenshot-2.png",
+          "resources/store/screenshots/screenshot-3.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": ["specAbilities", "work"]
+      }
+    }
+  ]
+}

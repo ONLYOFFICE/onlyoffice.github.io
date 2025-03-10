@@ -8,7 +8,7 @@
 		"de": "EasyBib"
 	},
 	"guid"       : "asc.{c9d216a5-4f1a-49f2-9ff0-67c510a73523}",
-	"version"    : "1.0.1",
+	"version"    : "1.0.2",
 	"variations" : [
 		{
 			"description" : "Generate citations and create bibliographies in your documents (compatible with ONLYOFFICE cloud).",

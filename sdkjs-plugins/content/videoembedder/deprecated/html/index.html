@@ -1,0 +1,78 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Plugin</title>
+
+    <link rel="stylesheet" href="styles/style.css" />
+
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="input-container">
+        <input
+          id="bilibiliLink"
+          type="text"
+          placeholder="Insert Bilibili video link here..."
+        />
+        <button
+          id="embed-btn"
+          class="primary"
+          onclick="embedBilibiliVideo()"
+          disabled
+        >
+          Embed Video
+        </button>
+        <div class="resize-message">
+          <p id="short-width-message">
+            Please increase the window width to view the content.
+          </p>
+        </div>
+      </div>
+
+      <div class="player-container">
+        <iframe
+          id="bilibiliPlayer"
+          src=""
+          frameborder="no"
+          allowfullscreen="true"
+        ></iframe>
+      </div>
+    </div>
+    <div class="resize-message">
+      Please increase the window width to view the content.
+    </div>
+  </body>
+  <script type="text/javascript" src="scripts/code.js"></script>
+</html>

@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.timer-container {
+    text-align: center;
+    padding: 60px 20px; /* 增加上下的填充，使内容视觉上靠中 */
+    border-radius: 10px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* 确保元素从上到下排列 */
+    min-height: 300px; /* 设置一个最小高度，增加居中感 */
+}
+
+#timer {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-align: center; /* 确保文本居中 */
+}
+
+#notification {
+    font-size: 16px;
+    color: red;
+    height: 24px; /* 保持占位高度，避免页面跳动 */
+    min-height: 24px; 
+    text-align: center;
+}
+
+.control {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* 控制按钮间的间距 */
+}
+
+#mode {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#start-stop {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#reset {
+    background-color: #f44336;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+#white-noise-btn {
+    background-color: #f0f0f0; /* 浅灰色背景 */
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 鼠标悬停时加深颜色 */
+#white-noise-btn:hover {
+    background-color: #e0e0e0; /* 悬停时更深的灰色 */
+}
+
+/* 按下时的颜色 */
+#white-noise-btn:active {
+    background-color: #d0d0d0; /* 按下时更深的灰色 */
+}

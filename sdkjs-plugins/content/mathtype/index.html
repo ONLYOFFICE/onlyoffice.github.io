@@ -1,0 +1,54 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="vendor/jquery-v2.2.2-min.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<script type="text/javascript">
+		if(/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+			document.write("<script type='text\/javascript' src='scripts\/mathtype_ie.js'><\/script>");
+		}
+		else {
+			document.write("<script type='text\/javascript' src='vendor\/mathtype\/wirisplugin-generic.js'><\/script>");
+			document.write("<script type='text\/javascript' src='scripts\/mathtype.js'><\/script>");
+		}
+	</script>
+
+	<style>
+		html, body {
+			height: 100%;
+		}
+
+		.wrs_modal_buttons_container, .wrs_bottom_right_resizer, .wrs_bottom_left_resizer, .wrs_modal_minimize_button, .wrs_modal_maximize_button, .wrs_modal_close_button, .wrs_modal_title, .wrs_tickContainer {
+			display: none;
+		}
+		.wrs_modal_dialogContainer {
+			width: 100% !important;
+			height: 100% !important;
+		}
+
+	</style>
+</head>
+	<body>
+		<div id="toolbar"></div>
+		<div id="htmlEditor" contenteditable="true"></div>
+	</body>
+</html>

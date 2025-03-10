@@ -9,7 +9,7 @@
 		"si": "සාර්ව"
 	},
 	"guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"group": {
 		"name": "Macros",
 		"rank": 2
@@ -27,7 +27,7 @@
 				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ)."
 			},
 			"url": "index.html",
-			"help" : " https://api.onlyoffice.com/plugin/macros",
+			"help" : "https://api.onlyoffice.com/docs/plugin-and-macros/macros/getting-started/",
 
 
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

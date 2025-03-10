@@ -5,7 +5,6 @@
 	{ "name": "rainbow", "discussion": "224" },
 	{ "name": "photoeditor", "discussion": "225" },
 	{ "name": "speech", "discussion": "226" },
-	{ "name": "telegram", "discussion": "227" },
 	{ "name": "wordpress", "discussion": "228" },
 	{ "name": "autocomplete", "discussion": "229" },
 	{ "name": "drawio", "discussion": "230" },
@@ -24,11 +23,17 @@
 	{ "name": "zotero", "discussion": "244" },
 	{ "name": "languagetool", "discussion": "245" },
 	{ "name": "chess", "discussion": "246" },
-	{ "name": "openai", "discussion": "248" },
+	{ "name": "ai", "discussion": "248" },
 	{ "name": "speechrecognition", "discussion": "249" },
 	{ "name": "zhipu", "discussion": "273"},
 	{ "name": "glavred", "discussion": "274" },
 	{ "name": "termef", "discussion": "295" },
 	{ "name": "pixabay", "discussion": "325" },
-	{ "name": "insertQR", "discussion": "" }
+	{ "name": "insertQR", "discussion": "" },
+	{ "name": "idphoto", "discussion": "" },
+	{ "name": "cvbuilder", "discussion": "" },
+	{ "name": "onlydraw", "discussion": "" },
+	{ "name": "pomodoro", "discussion": "" },
+	{ "name": "videoembedder", "discussion": "" },
+	{ "name": "mathtype", "discussion": "" }
 ]
