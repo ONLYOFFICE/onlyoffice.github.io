@@ -7,7 +7,9 @@
 		"pt-BR": "draw.io",
 		"de": "draw.io",
 		"it": "draw.io",
-		"sq-AL": "draw.io"
+		"sq-AL": "draw.io",
+		"sr-Cyrl-RS": "draw.io",
+		"sr-Latn-RS": "draw.io"
 	},
 	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
 	"version": "1.0.5",
@@ -22,7 +24,9 @@
 				"pt-BR": "Crie, edite e insira diagramas com aparência profissional em seus documentos.",
 				"de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein.",
 				"it": "Crea, modifica e inserisci diagrammi dall'aspetto professionale nei tuoi documenti.",
-				"sq-AL": "Krijoni, redaktoni dhe futni diagrame me pamje profesionale në dokumentet tuaja."
+				"sq-AL": "Krijoni, redaktoni dhe futni diagrame me pamje profesionale në dokumentet tuaja.",
+				"sr-Cyrl-RS": "Креирајте, уређујте, и убацујте дијаграме професионалног изгледа у ваше документе.",
+				"sr-Latn-RS": "Kreirajte, uređujte, i ubacujte dijagrame profesionalnog izgleda u vaše dokumente."
 			},
 			"url": "index.html",
 
@@ -90,7 +94,9 @@
 						"de": "Einfügen",
 						"cs": "Vložit",
 						"it": "Inserisci",
-						"sq-AL": "Shtoni"
+						"sq-AL": "Shtoni",
+						"sr-Cyrl-RS": "Убаци",
+						"sr-Latn-RS": "Ubaci"
 					},
 					"isViewer": false
 				},
@@ -104,7 +110,9 @@
 						"de": "Abbrechen",
 						"cs": "Zrušit",
 						"it": "Annulla",
-						"sq-AL": "Anulo"
+						"sq-AL": "Anulo",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],

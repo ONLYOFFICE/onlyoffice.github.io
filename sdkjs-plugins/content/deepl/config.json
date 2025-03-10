@@ -6,7 +6,9 @@
 		"es": "DeepL",
 		"pt-BR": "DeepL",
 		"de": "DeepL",
-		"sq-AL": "DeepL"
+		"sq-AL": "DeepL",
+		"sr-Cyrl-RS": "DeepL",
+		"sr-Latn-RS": "DeepL"
 	},
 	"guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
 	"version": "1.0.3",
@@ -20,7 +22,9 @@
 				"es": "Traduzca el texto seleccionado a otros idiomas utilizando DeepL.",
 				"pt-BR": "Traduza o texto selecionado para outros idiomas usando DeepL.",
 				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL.",
-				"sq-AL": "Përktheni tekstin e selektuar në gjuhë të tjera duke përdorur DeepL."
+				"sq-AL": "Përktheni tekstin e selektuar në gjuhë të tjera duke përdorur DeepL.",
+				"sr-Cyrl-RS": "Преведите одабрани текст на друге језике користећи DeepL.",
+				"sr-Latn-RS": "Prevedite odabrani tekst na druge jezike koristeći DeepL."
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

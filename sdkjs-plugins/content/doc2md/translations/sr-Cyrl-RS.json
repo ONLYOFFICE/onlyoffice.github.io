@@ -1,0 +1,14 @@
+{
+	"Copy": "Копирај",
+	"Show settings": "Прикажи подешавања",
+	"Hide settings": "Сакриј подешавања",
+	"Render HTML tags": "Приказ HTML тагова",
+	"Demote headings (H1 → H2, etc.)": "Спусти наслове (H1 → H2 итд.)",
+	"HTML headings/IDs": "HTML наслови/ID-јеви",
+	"Create base64 images": "Направи base64 слике",
+	"Suppress top comment": "Потисни коментар на врху",
+	"Help": "Изаберите Markdown или HTML.\n* Подразумевано: Конвертујте цео документ.\n* Изаберите текст да бисте ограничили опсег.",
+	"Text was copied to buffer!": "Текст је копиран у бафер!",
+	"Convert to Markdown or HTML": "Конвертуј у Markdown или HTML",
+	"Preview": "Преглед"
+}

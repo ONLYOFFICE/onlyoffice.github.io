@@ -10,7 +10,9 @@
 		"ja": "QRコード作成",
 		"zh": "二维码生成器",
 		"cs-CS": "Generátor QR kódů",
-		"sq-AL": "QR Code Generator"
+		"sq-AL": "QR Code Generator",
+		"sr-Cyrl-RS": "Генератор QR кодова",
+		"sr-Latn-RS": "Generator QR kodova"
 	},
 	"guid": "asc.{E5DD8D78-92F4-43B4-825B-E963D5CE8AC9}",
 	"version": "1.0.1",
@@ -28,7 +30,9 @@
 				"zh": "在文本文档、电子表格和演示文稿编辑器中轻松生成二维码。",
 				"ja": "プレゼンテーション、テキスト、スプレッドシートエディタで簡単にQRコードが生成できます。",
 				"cs-CS": "Snadno generujte QR kódy v editorech prezentací, textů a tabulek.",
-				"sq-AL": "Gjeneroni pa mundim kode QR në editorin e prezantimeve, testit dhe të fletëllogaritësve."
+				"sq-AL": "Gjeneroni pa mundim kode QR në editorin e prezantimeve, testit dhe të fletëllogaritësve.",
+				"sr-Cyrl-RS": "Лако генеришете QR кодове у уређивачима презентација, текста и табела.",
+				"sr-Latn-RS": "Lako generišete QR kodove u uređivačima prezentacija, teksta i tabela."
 			},
 			"url": "index.html",
 			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",

@@ -7,7 +7,9 @@
 		"pt-BR": "TerMef",
 		"de": "TerMef",
 		"it": "TerMef",
-		"sq-AL": "TerMef"
+		"sq-AL": "TerMef",
+		"sr-Cyrl-RS": "TerMef",
+		"sr-Latn-RS": "TerMef"
 	},
 	"guid": "asc.{4571a69c-7ae5-4f2c-98fd-97614ba7bf3d}",
 	"version": "1.0.1",
@@ -22,7 +24,9 @@
 				"pt-BR": "TerMef",
 				"de": "TerMef",
 				"it": "TerMef",
-				"sq-AL": "TerMef"
+				"sq-AL": "TerMef",
+				"sr-Cyrl-RS": "TerMef",
+				"sr-Latn-RS": "TerMef"
 			},
 			"url": "index.html",
 
@@ -100,7 +104,9 @@
 						"es": "Cancelar",
 						"de": "Abbrechen",
 						"it": "Annulla",
-						"sq-AL": "Anuloni"
+						"sq-AL": "Anuloni",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -124,7 +130,9 @@
 				"es": "Acerca de",
 				"de": "Über",
 				"it": "Informazioni su",
-				"sq-AL": "Rreth"
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 			"isViewer": false,
@@ -150,7 +158,9 @@
 						"es": "Cancelar",
 						"de": "Abbrechen",
 						"it": "Annulla",
-						"sq-AL": "Anuloni"
+						"sq-AL": "Anuloni",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],

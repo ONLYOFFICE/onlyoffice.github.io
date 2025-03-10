@@ -7,7 +7,9 @@
 		"pt-BR": "Jitsi",
 		"de": "Jitsi",
 		"it": "Jitsi",
-		"sq-AL": "Jitsi"
+		"sq-AL": "Jitsi",
+		"sr-Cyrl-RS": "Jitsi",
+		"sr-Latn-RS": "Jitsi"
 	},
 	"guid" : "asc.{7645D461-84BC-4FB0-A42C-98118C14A1CD}",
 	"version": "1.0.3",
@@ -22,7 +24,9 @@
 				"pt-BR": "Faça chamadas de áudio e vídeo diretamente nos editores usando Jitsi.",
 				"de": "Machen Sie Audio- und Videoanrufe gerade in den Editoren mit Jitsi.",
 				"it": "Effettua chiamate audio e video direttamente negli editor usando Jitsi.",
-				"sq-AL": "Bëni thirrje audio dhe video direkt në editor duke përdorur Jitsi."
+				"sq-AL": "Bëni thirrje audio dhe video direkt në editor duke përdorur Jitsi.",
+				"sr-Cyrl-RS": "Обављајте аудио и видео позиве директно у уређивачима користећи Jitsi.",
+				"sr-Latn-RS": "Obavljajte audio i video pozive direktno u uređivačima koristeći Jitsi."
 			},
 			"url" : "index.html",
 

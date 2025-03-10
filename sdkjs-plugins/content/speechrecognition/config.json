@@ -7,7 +7,9 @@
 		"pt-BR": "Entrada de fala",
 		"de": "Spracheingabe",
 		"it": "Input vocale",
-		"sq-AL": "Speech input"
+		"sq-AL": "Speech input",
+		"sr-Cyrl-RS": "Унос говора",
+		"sr-Latn-RS": "Unos govora"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
 	"version" : "1.0.3",
@@ -22,7 +24,9 @@
 				"pt-BR": "Digite facilmente com sua voz convertendo palavras faladas em texto.",
 				"de": "Tippen Sie ganz einfach mit Ihrer Stimme, indem gesprochene Wörter in Text umgewandelt werden.",
 				"it": "Digita facilmente con la tua voce convertendo le parole pronunciate in testo.",
-				"sq-AL": "Shkruani lehtësisht me zë duke kthyer fjalën e folur në tekst"
+				"sq-AL": "Shkruani lehtësisht me zë duke kthyer fjalën e folur në tekst",
+				"sr-Cyrl-RS": "Лако куцајте вашим гласом претварањем изговорених речи у текст.",
+				"sr-Latn-RS": "Lako kucajte vašim glasom pretvaranjem izgovorenih reči u tekst."
 			},
 			"url": "index.html",
 
@@ -104,7 +108,9 @@
 				"es": "Sobre programa",
 				"de": "Über",
 				"it": "Informazioni su",
-				"sq-AL": "Rreth"
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 
