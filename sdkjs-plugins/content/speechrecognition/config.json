@@ -6,7 +6,8 @@
 		"es": "Entrada de voz",
 		"pt-BR": "Entrada de fala",
 		"de": "Spracheingabe",
-		"it": "Input vocale"
+		"it": "Input vocale",
+		"sq-AL": "Speech input"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
 	"version" : "1.0.3",
@@ -20,7 +21,8 @@
 				"es": "Escriba fácilmente con su voz convirtiendo las palabras habladas en texto.",
 				"pt-BR": "Digite facilmente com sua voz convertendo palavras faladas em texto.",
 				"de": "Tippen Sie ganz einfach mit Ihrer Stimme, indem gesprochene Wörter in Text umgewandelt werden.",
-				"it": "Digita facilmente con la tua voce convertendo le parole pronunciate in testo."
+				"it": "Digita facilmente con la tua voce convertendo le parole pronunciate in testo.",
+				"sq-AL": "Shkruani lehtësisht me zë duke kthyer fjalën e folur në tekst"
 			},
 			"url": "index.html",
 
@@ -101,7 +103,8 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"it": "Informazioni su"
+				"it": "Informazioni su",
+				"sq-AL": "Rreth"
 			},
 			"url": "index_about.html",
 

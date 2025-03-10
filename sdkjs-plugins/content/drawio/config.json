@@ -6,7 +6,8 @@
 		"es": "draw.io",
 		"pt-BR": "draw.io",
 		"de": "draw.io",
-		"it": "draw.io"
+		"it": "draw.io",
+		"sq-AL": "draw.io"
 	},
 	"guid": "asc.{DB38923B-A8C0-4DE9-8AEE-A61BB5C901A5}",
 	"version": "1.0.5",
@@ -20,7 +21,8 @@
 				"es": "Cree, edite e inserte diagramas de aspecto profesional en sus documentos.",
 				"pt-BR": "Crie, edite e insira diagramas com aparência profissional em seus documentos.",
 				"de": "Erstellen, bearbeiten und fügen Sie professionelle Diagramme in Ihre Dokumente ein.",
-				"it": "Crea, modifica e inserisci diagrammi dall'aspetto professionale nei tuoi documenti."
+				"it": "Crea, modifica e inserisci diagrammi dall'aspetto professionale nei tuoi documenti.",
+				"sq-AL": "Krijoni, redaktoni dhe futni diagrame me pamje profesionale në dokumentet tuaja."
 			},
 			"url": "index.html",
 
@@ -87,7 +89,8 @@
 						"es": "Insertar",
 						"de": "Einfügen",
 						"cs": "Vložit",
-						"it": "Inserisci"
+						"it": "Inserisci",
+						"sq-AL": "Shtoni"
 					},
 					"isViewer": false
 				},
@@ -100,7 +103,8 @@
 						"es": "Cancelar",
 						"de": "Abbrechen",
 						"cs": "Zrušit",
-						"it": "Annulla"
+						"it": "Annulla",
+						"sq-AL": "Anulo"
 					}
 				}
 			],

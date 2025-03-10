@@ -7,7 +7,8 @@
 		"de": "OCR",
 		"pt-BR": "OCR",
 		"si": "OCR",
-		"it": "OCR"
+		"it": "OCR",
+		"sq-AL": "OCR"
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.2",
@@ -22,7 +23,8 @@
 				"de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein.",
 				"pt-BR": "Reconheça texto de imagens e capturas de tela e insira-o em seus documentos.",
 				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න.",
-				"it": "Riconosci il testo da immagini e screenshot e inseriscilo nei tuoi documenti."
+				"it": "Riconosci il testo da immagini e screenshot e inseriscilo nei tuoi documenti.",
+				"sq-AL": "Njihni tekstin në foto dhe skrinshotet dhe futeni në dokumentet tuaja."
 			},
 			"url": "index.html",
 
@@ -86,7 +88,8 @@
 						"es": "Insertar texto",
 						"de": "Text einfügen",
 						"si": "පෙළ ඇතුළු කරන්න",
-						"it": "Inserisci testo"
+						"it": "Inserisci testo",
+						"sq-AL": "Futni tekstin"
 					}
 				},
 				{
@@ -98,7 +101,8 @@
 						"es": "Cancelar",
 						"de": "Abbrechen",
 						"si": "අවලංගු",
-						"it": "Annulla"
+						"it": "Annulla",
+						"sq-AL": "Anulo"
 					}
 				}
 			],
@@ -129,7 +133,8 @@
 				"es": "Sobre programa",
 				"de": "Über",
 				"si": "පිළිබඳව",
-				"it": "Informazioni su"
+				"it": "Informazioni su",
+				"sq-AL": "Rreth"
 			},
 
 			"url": "index_about.html",

@@ -8,7 +8,8 @@
 		"pt-BR": "Highlight code",
 		"ru": "Подсветка кода",
 		"si": "පර්යාය කෝෂය",
-		"it": "Evidenzia codice"
+		"it": "Evidenzia codice",
+		"sq-AL": "Highlight code"
 	},
 	"version": "1.0.3",
 	"variations": [
@@ -32,7 +33,8 @@
 						"fr": "Annuler",
 						"ru": "Отмена",
 						"si": "අවලංගු",
-						"it": "Annulla"
+						"it": "Annulla",
+						"sq-AL": "Anulo"
 					}
 				}
 			],
@@ -44,7 +46,8 @@
 				"pt-BR": "Destaque a sintaxe do código selecionando o idioma, estilo e cor de fundo necessários.",
 				"ru": "Оформите синтаксис кода, выбрав необходимый язык, стиль и цвет фона.",
 				"si": "වුවමනා භාෂාව, මෝස්තරය සහ පසුබිමේ වර්ණය තේරීමෙන් කේතයේ පදඝටනාව (පද ගැළපුම) උද්දීපනය කරන්න.",
-				"it": "Evidenzia sintassi del codice selezionando il linguaggio, lo stile e il colore di sfondo necessari."
+				"it": "Evidenzia sintassi del codice selezionando il linguaggio, lo stile e il colore di sfondo necessari.",
+				"sq-AL": "Theksoni sintaksën e kodit duke përzgjedhur gjuhën dhe stilin e nevojshëm, në anglisht."
 			},
 			"icons": [
 				"resources/light/icon.png",

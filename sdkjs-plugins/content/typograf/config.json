@@ -6,7 +6,8 @@
 		"es": "Typograf",
 		"pt-BR": "Typograf",
 		"de": "Typograf",
-		"cs-CS": "Typograf"
+		"cs-CS": "Typograf",
+		"sq-AL": "Typograf"
 	},
 	"guid": "asc.{55159EC6-C91A-4DDB-8E1E-558454666461}",
 	"version": "1.0.2",
@@ -20,7 +21,8 @@
 				"es": "Prepare sus textos para la publicación corrigiendo la tipografía.",
 				"pt-BR": "Prepare seus textos para publicação corrigindo a tipografia.",
 				"de": "Bereiten Sie Ihre Texte für die Veröffentlichung vor, indem Sie Typografie korrigieren.",
-				"cs-CS": "Připravte své texty k publikování opravou typografie."
+				"cs-CS": "Připravte své texty k publikování opravou typografie.",
+				"sq-AL": "Përgatitni tekstet tuaja për botim duke korrigjuar tipografinë."
 			},
 			"url": "index.html",
 

@@ -7,7 +7,8 @@
 		"pt-BR": "Tradutor",
 		"de": "Übersetzer",
 		"si": "පරිවර්තකය",
-		"it": "Traduttore"
+		"it": "Traduttore",
+		"sq-AL": "Translator"
 	},
 	"guid": "asc.{7327FC95-16DA-41D9-9AF2-0E7F449F6800}",
 	"version": "1.0.8",
@@ -22,7 +23,8 @@
 				"pt-BR": "Traduza o texto selecionado para outros idiomas com o Google Translate.",
 				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit Google Translate.",
 				"si": "වචනයක සමාන පද සහ විරුද්ධ පද සොයා තෝරාගත් වචනයකට ප්‍රතිස්ථාපනය කරන්න.",
-				"it": "Traduci il testo selezionato in altre lingue con Google Traduttore."
+				"it": "Traduci il testo selezionato in altre lingue con Google Traduttore.",
+				"sq-AL": "Përktheni tekstin e zgjedhur në gjuhë të tjera me Google Translate."
 			},
 			"url": "index.html",
 

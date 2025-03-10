@@ -5,7 +5,8 @@
 		"fr": "Glavred",
 		"es": "Glavred",
 		"pt-BR": "Glavred",
-		"de": "Glavred"
+		"de": "Glavred",
+		"sq-AL": "Glavred"
 	},
 	"guid" : "asc.{B631E142-E40B-4B4C-90B9-2D00222A286E}",
 	"version" : "1.0.1",
@@ -19,7 +20,8 @@
 				"fr": "Rendez votre texte plus informatif et clair (convient pour les textes en russe).",
 				"es": "Haga que su texto sea más informativo y claro (adecuado cuando trabaje con textos en ruso).",
 				"pt-BR": "Torne seu texto mais informativo e claro (adequado ao trabalhar com textos em russo).",
-				"de": "Machen Sie Ihren Text informativer und deutlicher (geeignet für die Arbeit mit Texten auf Russisch)."
+				"de": "Machen Sie Ihren Text informativer und deutlicher (geeignet für die Arbeit mit Texten auf Russisch).",
+				"sq-AL": "Bëni tekstin tuaj më informativ dhe të qartë (i përshtatshëm për tekstet në rusisht)."
 			},
 			"url" : "index.html",
 

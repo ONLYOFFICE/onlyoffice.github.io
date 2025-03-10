@@ -6,7 +6,8 @@
 		"es": "TerMef",
 		"pt-BR": "TerMef",
 		"de": "TerMef",
-		"it": "TerMef"
+		"it": "TerMef",
+		"sq-AL": "TerMef"
 	},
 	"guid": "asc.{4571a69c-7ae5-4f2c-98fd-97614ba7bf3d}",
 	"version": "1.0.1",
@@ -20,7 +21,8 @@
 				"es": "TerMef",
 				"pt-BR": "TerMef",
 				"de": "TerMef",
-				"it": "TerMef"
+				"it": "TerMef",
+				"sq-AL": "TerMef"
 			},
 			"url": "index.html",
 
@@ -97,7 +99,8 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"it": "Annulla"
+						"it": "Annulla",
+						"sq-AL": "Anuloni"
 					}
 				}
 			],
@@ -120,7 +123,8 @@
 				"fr": "À propos de",
 				"es": "Acerca de",
 				"de": "Über",
-				"it": "Informazioni su"
+				"it": "Informazioni su",
+				"sq-AL": "Rreth"
 			},
 			"url": "index_about.html",
 			"isViewer": false,
@@ -145,7 +149,8 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"it": "Annulla"
+						"it": "Annulla",
+						"sq-AL": "Anuloni"
 					}
 				}
 			],

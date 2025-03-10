@@ -6,7 +6,8 @@
 		"es": "Telegram",
 		"pt-BR": "Telegram",
 		"de": "Telegram",
-		"it": "Telegram"
+		"it": "Telegram",
+		"sq-AL": "Telegram"
 	},
 	"guid" : "asc.{E5773A43-F9B3-4E81-81D9-CE0A132470E7}",
 	"version" : "1.0.2",
@@ -20,7 +21,8 @@
 				"es": "Chatee con los coautores en tiempo real utilizando el cliente integrado de Telegram.",
 				"pt-BR": "Converse com coautores em tempo real usando o cliente Telegram integrado.",
 				"de": "Unterhalten Sie sich mit Mitautoren in Echtzeit über den integrierten Telegram-Client.",
-				"it": "Chatta con i co-autori in tempo reale utilizzando il client Telegram integrato."
+				"it": "Chatta con i co-autori in tempo reale utilizzando il client Telegram integrato.",
+				"sq-AL": "Bisedoni me bashkautorët në kohë reale duke përdorur klientin e integruar të Telegram"
 			},
 			"url" : "index.html",
 
