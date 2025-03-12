@@ -24,6 +24,11 @@
 
 	function chatWindowShow()
 	{
+		if (window.chatWindow) {
+			window.chatWindow.activate();
+			return;
+		}
+
 		let requestEngine = AI.Request.create(AI.ActionType.Chat);
 		if (!requestEngine)
 			return;
@@ -56,7 +61,25 @@
 			//result = result.replace(/\n\n/g, '\n');
 			chatWindow.command("onChatReply", result);
 		});
+		chatWindow.attachEvent("onDockedChanged", async function(type) {
+			window.localStorage.setItem("onlyoffice_ai_chat_placement", type);
+
+			async function waitSaveSettings()
+			{
+				return new Promise(resolve => (function(){
+					chatWindow.attachEvent("onUpdateState", function(type) {
+						resolve();
+					});
+					chatWindow.command("onUpdateState");
+				})());
+			};
+			
+			await waitSaveSettings();
+			Asc.Editor.callMethod("OnWindowDockChangedCallback", [chatWindow.id]);
+		});
 		chatWindow.show(variation);
+
+		window.chatWindow = chatWindow;
 	}
 	
 	if (true)
