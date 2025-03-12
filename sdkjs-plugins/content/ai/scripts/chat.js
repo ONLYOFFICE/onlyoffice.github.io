@@ -29,19 +29,6 @@
 	let bCreateLoader = true;
 	let localStorageKey = "onlyoffice_ai_chat_state";
 
-	window.addEventListener("message", (event) => {
-		const eventData = JSON.parse(event.data);
-		if(!eventData) return;
-
-		if(eventData.type == 'plugin_docked' && eventData.frameId === window.Asc.plugin.windowID) {
-			setState({
-				messages: settings.messages,
-				inputValue: document.getElementById('message').value
-			});
-			window.localStorage.setItem("onlyoffice_ai_chat_placement", eventData.placement);
-		}
-	});
-
 	window.Asc.plugin.init = function() {
 		restoreState();
 		bCreateLoader = false;
@@ -113,11 +100,11 @@
 	};
 
 	function setState(state) {
-		window.localStorage.setItem(localStorageKey + '-' + window.Asc.plugin.windowID, JSON.stringify(state));
+		window.localStorage.setItem(localStorageKey, JSON.stringify(state));
 	};
 
 	function getState() {
-		let state = window.localStorage.getItem(localStorageKey + '-' + window.Asc.plugin.windowID);
+		let state = window.localStorage.getItem(localStorageKey);
 		return state ? JSON.parse(state) : null;
 	};
 
@@ -259,6 +246,14 @@
 		createMessage(reply, 0);
 		removeTyping();
 		document.getElementById('message').focus();
+	});
+
+	window.Asc.plugin.attachEvent("onUpdateState", function() {
+		setState({
+			messages: settings.messages,
+			inputValue: document.getElementById('message').value
+		});
+		window.Asc.plugin.sendToPlugin("onUpdateState");
 	});
 
 })(window, undefined);
