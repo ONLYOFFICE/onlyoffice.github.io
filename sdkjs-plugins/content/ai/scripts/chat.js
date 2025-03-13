@@ -113,6 +113,12 @@
 		restoreState();
 		bCreateLoader = false;
 		destroyLoader();
+
+		if(settings.messages.length) {
+			hideStartPanel();
+		}
+		updateTextareaSize();
+
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
 
 		document.getElementById('input_message_submit').addEventListener('click', function() {
