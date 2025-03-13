@@ -41,6 +41,7 @@
 	let modalTimeout = null;
 	let loader = null;
 	let bCreateLoader = true;
+
 	let actionButtons = [
 		{ 
 			icon: 'resources/icons/light/btn-copy.png', 
@@ -106,8 +107,10 @@
 			data : text
 		});
 	}
+	let localStorageKey = "onlyoffice_ai_chat_state";
 
 	window.Asc.plugin.init = function() {
+		restoreState();
 		bCreateLoader = false;
 		destroyLoader();
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
@@ -234,6 +237,30 @@
 		let textarea = $('#input_message')[0];
 		textarea.style.height = "auto";
 		textarea.style.height = Math.min(textarea.scrollHeight, 98) +2 + "px";
+	};
+
+	function setState(state) {
+		window.localStorage.setItem(localStorageKey, JSON.stringify(state));
+	};
+
+	function getState() {
+		let state = window.localStorage.getItem(localStorageKey);
+		return state ? JSON.parse(state) : null;
+	};
+
+	function restoreState() {
+		let state = getState();
+		if(!state) return;
+
+		if(state.messages) {
+			settings.messages = state.messages; 
+			state.messages.forEach(function(message) {
+				renderMessage(message.content, message.role == 'user');
+			});
+		}
+		if(state.inputValue) {
+			document.getElementById('message').value = state.inputValue;
+		}
 	};
 
 	function createMessage(text, type) {
@@ -463,5 +490,13 @@
 	});
 
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+
+	window.Asc.plugin.attachEvent("onUpdateState", function() {
+		setState({
+			messages: settings.messages,
+			inputValue: document.getElementById('message').value
+		});
+		window.Asc.plugin.sendToPlugin("onUpdateState");
+	});
 
 })(window, undefined);

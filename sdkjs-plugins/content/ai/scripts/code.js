@@ -12,8 +12,15 @@ function initWithTranslate() {
 	}
 }
 
+function clearChatState() {
+	let key = 'onlyoffice_ai_chat_state';
+	if (window.localStorage.getItem(key))
+		window.localStorage.removeItem(key);
+}
+
 window.Asc.plugin.init = function() {
 	initWithTranslate();
+	clearChatState();
 };
 
 window.Asc.plugin.onTranslate = function() {
@@ -23,6 +30,12 @@ window.Asc.plugin.onTranslate = function() {
 window.Asc.plugin.button = function(id, windowId) {
 	if (!windowId) {
 		return
+	}
+
+	if (window.chatWindow && window.chatWindow.id === windowId)
+	{
+		clearChatState();
+		delete window.chatWindow;
 	}
 
 	if (settingsWindow && windowId === settingsWindow.id) {
