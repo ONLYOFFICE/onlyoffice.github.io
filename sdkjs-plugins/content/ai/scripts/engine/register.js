@@ -24,6 +24,11 @@
 
 	function chatWindowShow()
 	{
+		if (window.chatWindow) {
+			window.chatWindow.activate();
+			return;
+		}
+
 		let requestEngine = AI.Request.create(AI.ActionType.Chat);
 		if (!requestEngine)
 			return;
@@ -33,7 +38,10 @@
 			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
+			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
+			isCanDocked: true,
+			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
 			EditorsSupport : ["word", "cell", "slide"],
 			size : [ 400, 400 ]
 		};
@@ -76,7 +84,25 @@
 				}
 			}
 		});	
+		chatWindow.attachEvent("onDockedChanged", async function(type) {
+			window.localStorage.setItem("onlyoffice_ai_chat_placement", type);
+
+			async function waitSaveSettings()
+			{
+				return new Promise(resolve => (function(){
+					chatWindow.attachEvent("onUpdateState", function(type) {
+						resolve();
+					});
+					chatWindow.command("onUpdateState");
+				})());
+			};
+			
+			await waitSaveSettings();
+			Asc.Editor.callMethod("OnWindowDockChangedCallback", [chatWindow.id]);
+		});
 		chatWindow.show(variation);
+
+		window.chatWindow = chatWindow;
 	}
 	
 	if (true)
