@@ -259,7 +259,7 @@
 			});
 		}
 		if(state.inputValue) {
-			document.getElementById('message').value = state.inputValue;
+			document.getElementById('input_message').value = state.inputValue;
 		}
 	};
 
@@ -494,7 +494,7 @@
 	window.Asc.plugin.attachEvent("onUpdateState", function() {
 		setState({
 			messages: settings.messages,
-			inputValue: document.getElementById('message').value
+			inputValue: document.getElementById('input_message').value
 		});
 		window.Asc.plugin.sendToPlugin("onUpdateState");
 	});
