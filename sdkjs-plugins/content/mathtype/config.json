@@ -1,0 +1,194 @@
+{
+	"name": "MathType",
+	"nameLocale": {
+		"ru": "MathType",
+		"fr": "MathType",
+		"es": "MathType",
+		"de": "MathType"
+	},
+	"guid": "asc.{0a280898-66a0-4368-aaca-8cc1443d4c84}",
+	"version": "1.0.0",
+	
+	"variations": [
+		{
+			"description": "MathType",
+			"descriptionLocale": {
+				"ru": "MathType",
+				"fr": "MathType",
+				"es": "MathType",
+				"de": "MathType"
+			},
+			"url": "index.html",
+
+			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
+			"icons2": [
+			{
+				"100%": { "normal": "resources/img/icon.png" },
+				"125%": { "normal": "resources/img/icon@1.25x.png" },
+				"150%": { "normal": "resources/img/icon@1.5x.png" },
+				"175%": { "normal": "resources/img/icon@1.75x.png" },
+				"200%": { "normal": "resources/img/icon@2x.png" }
+			}
+			],
+			"isViewer": false,
+			"EditorsSupport": [ "word", "slide", "cell" ],
+
+			"type": "window",
+			"initDataType": "ole",
+			"initData": "",
+
+			"isUpdateOleOnResize": false,
+
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true,
+					"textLocale": {
+						"ca": "Insereix",
+						"zh": "插入",
+						"cs": "Vložit",
+						"da": "Indsæt",
+						"nl": "Invoegen",
+						"fi": "Lisää",
+						"el": "Εισάγετε",
+						"hu": "Beszúrás",
+						"id": "Memasukkan",
+						"it": "Inserire",
+						"ja": "入れる",
+						"ko": "끼워 넣다",
+						"nb": "Sett inn",
+						"pl": "Wstawić",
+						"pt": "Inserir",
+						"ro": "Introduce",
+						"sv": "Föra in",
+						"tr": "Sokmak",
+						"ru": "Вставить",
+						"fr": "Insérer",
+						"es": "Insertar",
+						"de": "Einfügen"
+					}
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"isViewer": false,
+					"textLocale": {
+						"ca": "Cancel · lar",
+						"zh": "取消",
+						"cs": "Zrušení",
+						"da": "Afbestille",
+						"nl": "Annuleren",
+						"fi": "Peruuttaa",
+						"el": "Ματαίωση",
+						"hu": "Megszünteti",
+						"id": "Membatalkan",
+						"it": "Annulla",
+						"ja": "キャンセル",
+						"ko": "취소",
+						"nb": "Annuleren",
+						"pl": "Anulować",
+						"pt": "Cancelar",
+						"ro": "Anulare",
+						"sv": "Avbryt",
+						"tr": "İptal",
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen"
+					}
+				}
+			],
+			"size": [600, 310],
+			"store": {
+				"background": {
+					"light" : "#F5F5F5",
+					"dark"  : "#444444"
+				},
+				"screenshots" : ["resources/store/screenshots/screen_1.png"],
+				"icons"     : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				}
+			}
+		},
+		{
+			"description": "Start ChemType",
+			"descriptionLocale": {
+				"ru": "Запустить ChemType",
+				"fr": "Démarrer ChemType",
+				"es": "Démarrer ChemType",
+				"de": "Beginnen ChemType"
+			},
+			"url": "index.html?type=chemistry",
+			"isViewer": false,
+			"EditorsSupport": [ "word", "slide", "cell" ],
+
+			"type": "window",
+			"initDataType": "ole",
+			"initData": "",
+
+			"isUpdateOleOnResize": false,
+
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true,
+					"textLocale": {
+						"ca": "Insereix",
+						"zh": "插入",
+						"cs": "Vložit",
+						"da": "Indsæt",
+						"nl": "Invoegen",
+						"fi": "Lisää",
+						"el": "Εισάγετε",
+						"hu": "Beszúrás",
+						"id": "Memasukkan",
+						"it": "Inserire",
+						"ja": "入れる",
+						"ko": "끼워 넣다",
+						"nb": "Sett inn",
+						"pl": "Wstawić",
+						"pt": "Inserir",
+						"ro": "Introduce",
+						"sv": "Föra in",
+						"tr": "Sokmak",
+						"ru": "Вставить",
+						"fr": "Insérer",
+						"es": "Insertar",
+						"de": "Einfügen"
+					}
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"isViewer": false,
+					"textLocale": {
+						"ca": "Cancel · lar",
+						"zh": "取消",
+						"cs": "Zrušení",
+						"da": "Afbestille",
+						"nl": "Annuleren",
+						"fi": "Peruuttaa",
+						"el": "Ματαίωση",
+						"hu": "Megszünteti",
+						"id": "Membatalkan",
+						"it": "Annulla",
+						"ja": "キャンセル",
+						"ko": "취소",
+						"nb": "Annuleren",
+						"pl": "Anulować",
+						"pt": "Cancelar",
+						"ro": "Anulare",
+						"sv": "Avbryt",
+						"tr": "İptal",
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen"
+					}
+				}
+			],
+			"size": [600, 310]
+		}
+	]
+}

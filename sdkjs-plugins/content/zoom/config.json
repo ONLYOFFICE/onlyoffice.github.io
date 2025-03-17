@@ -5,7 +5,11 @@
 		"fr": "Zoom",
 		"es": "Zoom",
 		"pt-BR": "Zoom",
-		"de": "Zoom"
+		"de": "Zoom",
+		"it": "Zoom",
+		"sq-AL": "Zoom",
+		"sr-Cyrl-RS": "Zoom",
+		"sr-Latn-RS": "Zoom"
 	},
 	"guid": "asc.{3f15a9bc-51d3-4b59-b32f-75cfe2f07f54}",
 	"version": "1.0.1",
@@ -18,7 +22,11 @@
 				"fr": "Planifiez et organisez des réunions vidéo directement dans les éditeurs avec Zoom.",
 				"es": "Planifique y celebre reuniones de vídeo directamente en los editores con Zoom.",
 				"pt-BR": "Agende e realize videoconferências diretamente nos editores usando o Zoom.",
-				"de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren."
+				"de": "Planen und halten Sie Videokonferenzen mit Zoom direkt in den Editoren.",
+				"it": "Pianifica e organizza riunioni video direttamente negli editor utilizzando Zoom.",
+				"sq-AL": "Planifikoni dhe mbani takime video drejtpërdrejt në redaktorët duke përdorur Zoom.",
+				"sr-Cyrl-RS": "Закажите и одржавајте видео састанке директно у уређивачима користећи Zoom.",
+				"sr-Latn-RS": "Zakažite i održavajte video sastanke direktno u uređivačima koristeći Zoom."
 			},
 			"url": "index.html",
 
@@ -83,7 +91,11 @@
 						"ru": "Закрыть",
 						"fr": "Fermer",
 						"es": "Cerrar",
-						"de": "Schließen"
+						"de": "Schließen",
+						"it": "Chiudi",
+						"sq-AL": "Mbyllni",
+						"sr-Cyrl-RS": "Затвори",
+						"sr-Latn-RS": "Zatvori"
 					}
 				}
 			],
@@ -109,7 +121,11 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"it": "Informazioni su",
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 

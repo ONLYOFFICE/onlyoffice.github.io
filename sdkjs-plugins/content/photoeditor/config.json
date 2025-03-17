@@ -6,7 +6,11 @@
 		"es": "Editor de Fotos",
 		"pt-BR": "Editor de foto",
 		"de": "Foto-Editor",
-		"si": "ඡායාරූප සංස්කරකය"
+		"si": "ඡායාරූප සංස්කරකය",
+		"it": "Editor di foto",
+		"sq-AL": "Editori i fotove",
+		"sr-Cyrl-RS": "Уређивач Фотографија",
+		"sr-Latn-RS": "Uređivač Fotografija"
 	},
 	"guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
 	"version": "1.0.2",
@@ -21,7 +25,11 @@
 				"es": "Edite imágenes, capturas de pantalla y fotos directamente en sus documentos: recorte, cambie el tamaño y aplique efectos.",
 				"pt-BR": "Edite imagens, capturas de tela e fotos diretamente em seus documentos: corte, redimensione e aplique efeitos.",
 				"de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden.",
-				"si": "ඔබගේ ලේඛනවල අඩංගු රූප, තිරසේයා සහ ඡායාරූප සංස්කරණය කරන්න. කප්පාදුව, යළි ප්‍රමාණනය, ආචරණ යෙදීම ආදිය ඇතුළත්ය."
+				"si": "ඔබගේ ලේඛනවල අඩංගු රූප, තිරසේයා සහ ඡායාරූප සංස්කරණය කරන්න. කප්පාදුව, යළි ප්‍රමාණනය, ආචරණ යෙදීම ආදිය ඇතුළත්ය.",
+				"it": "Modifica immagini, screenshot e foto direttamente nei tuoi documenti: ritaglia, ridimensiona, applica effetti.",
+				"sq-AL": "Editoni imazhe, foto ekrani dhe foto direkt.në dokumentet tuaja: prisni, rregulloni madhësinë, aplikoni efekte",
+				"sr-Cyrl-RS": "Уредите слике, снимке екрана и фотографије директно у документима: исеците, промените величину, примените ефекте.",
+				"sr-Latn-RS": "Uredite slike, snimke ekrana i fotografije direktno u dokumentima: isecite, promenite veličinu, primenite efekte."
 			},
 			"url": "index.html",
 
@@ -90,7 +98,11 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"it": "Annulla",
+						"sq-AL": "Anuloni",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži"
 					}
 				}
 			],
@@ -119,7 +131,11 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"si": "පිළිබඳව"
+				"si": "පිළිබඳව",
+				"it": "Informazioni su",
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 
