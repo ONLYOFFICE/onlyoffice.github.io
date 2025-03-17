@@ -5,7 +5,6 @@
 	{ "name": "rainbow", "discussion": "224" },
 	{ "name": "photoeditor", "discussion": "225" },
 	{ "name": "speech", "discussion": "226" },
-	{ "name": "telegram", "discussion": "227" },
 	{ "name": "wordpress", "discussion": "228" },
 	{ "name": "autocomplete", "discussion": "229" },
 	{ "name": "drawio", "discussion": "230" },
@@ -35,5 +34,6 @@
 	{ "name": "cvbuilder", "discussion": "" },
 	{ "name": "onlydraw", "discussion": "" },
 	{ "name": "pomodoro", "discussion": "" },
-	{ "name": "videoembedder", "discussion": "" }
+	{ "name": "videoembedder", "discussion": "" },
+	{ "name": "mathtype", "discussion": "" }
 ]

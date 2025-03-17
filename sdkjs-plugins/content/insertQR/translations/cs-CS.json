@@ -1,0 +1,16 @@
+{
+    "QR Settings": "Nastavení QR",
+    "Set QR Color": "Nastavit barvu QR",
+    "Set Background Color": "Nastavit barvu pozadí",
+    "Width": "Šířka",
+    "Height": "Výška",
+    "Minimum QR size is 50px": "Minimální velikost QR je 50px",
+    "Maximum QR size is 2000px": "Maximální velikost QR je 2000px",
+    "Warning": "Varování",
+    "Insert QR": "Vložit QR",
+    "The plugin is not supported in the Internet Explorer": "Zásuvný modul není podporován v prohlížeči Internet Explorer",
+    "The selected text сannot be used": "Vybraný text nelze použít",
+    "The colors must be different": "Barvy musí být jiné",
+    "Insert QR: info": "Vložit QR: informace",
+    "Cancel": "Zrušit"
+}
