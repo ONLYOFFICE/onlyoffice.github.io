@@ -5,7 +5,10 @@
 		"fr": "Grammalecte",
 		"es": "Grammalecte",
 		"pt-BR": "Grammalecte",
-		"de": "Grammalecte"
+		"de": "Grammalecte",
+		"sq-AL": "Grammalecte",
+		"sr-Cyrl-RS": "Grammalecte",
+		"sr-Latn-RS": "Grammalecte"
 	},
 	"guid": "asc.{6ef67492-a111-4ca5-bd4f-bf02645afc61}",
 	"version": "1.0.3",
@@ -18,7 +21,10 @@
 				"fr": "Corrigez rapidement les fautes de grammaire et de style dans les textes en français.",
 				"es": "Corrija rápidamente los errores gramaticales y de estilo de los textos en francés.",
 				"pt-BR": "Corrija rapidamente erros gramaticais e de estilo em textos em francês.",
-				"de": "Korrigieren Sie schnell Grammatik- und Stilfehler in französischen Texten."
+				"de": "Korrigieren Sie schnell Grammatik- und Stilfehler in französischen Texten.",
+				"sq-AL": "Korrigjim i shpejtë i gabimeve gramatikore dhe stilistike në tekstet në frengjisht.",
+				"sr-Cyrl-RS": "Брзо исправите граматичке и стилистичке грешке у француским текстовима.",
+				"sr-Latn-RS": "Brzo ispravite gramatičke i stilističke greške u francuskim tekstovima."
 			},
 			"url": "index.html",
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
@@ -105,7 +111,10 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi"
 			},
 			"url": "index_about.html",
 

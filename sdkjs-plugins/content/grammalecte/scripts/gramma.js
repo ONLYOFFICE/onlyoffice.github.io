@@ -388,7 +388,7 @@ function checkInternetExplorer(){
             canAddText = true;
             $('<div>', {
                 id: "no_mistakes",
-                text: "No possible mistakes found"
+                text: getMessage("No possible mistakes found")
             }).appendTo('#result');
         }
         else {
@@ -405,7 +405,7 @@ function checkInternetExplorer(){
             delExternalMatches(tempMatches);
             $('<div>', {
                 id: "yes_mistakes",
-                text: "Possible mistakes found: " + arrResults.length
+                text: getMessage("Possible mistakes found") + ": " + arrResults.length
             }).appendTo('#result');
             $('<div>', {
                 id: "hide_show",
@@ -450,7 +450,7 @@ function checkInternetExplorer(){
                 setTextWithErrors(sText.slice(el.nStart, el.nEnd), el.nIndex);
             else {
                 var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-                $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+                $('#yes_mistakes').text(getMessage("Possible mistakes found") + ": " + String(countMistakes - 1));
                 return;
             }
 
@@ -537,7 +537,7 @@ function checkInternetExplorer(){
 					text: elem,
 					click : function () {
 						var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-			            $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+			            $('#yes_mistakes').text(getMessage("Possible mistakes found") + ": " + String(countMistakes - 1));
 						correctText($(this));
 					}
 				}).data({ index : el.nIndex })
@@ -573,7 +573,7 @@ function checkInternetExplorer(){
                     
                     $('#div_'+$(this).data().index).remove();
 					var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-					$('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+					$('#yes_mistakes').text(getMessage("Possible mistakes found") + ": " + String(countMistakes - 1));
 
                     $('#check').trigger("click");
 				},

@@ -12,7 +12,10 @@
 		"nl": "Spraak",
 		"pt": "Discurso",
 		"uk": "Читати",
-		"zh": "朗读"
+		"zh": "朗读",
+		"sq-AL": "Speech",
+		"sr-Cyrl-RS": "Говор",
+		"sr-Latn-RS": "Govor"
 	},
 	"guid": "asc.{D71C2EF0-F15B-47C7-80E9-86D671F9C595}",
 	"version" : "2.0.2",
@@ -29,7 +32,10 @@
 				"pt-BR": "Converta o texto selecionado em fala.",
 				"de": "Konvertieren Sie den ausgewählten Text in die Rede.",
 				"uk": "Прочитайте виділений текст.",
-				"zh": "朗读所选的文本。"
+				"zh": "朗读所选的文本。",
+				"sq-AL": "Konvertoni tekstin e selektuar në zë.",
+				"sr-Cyrl-RS": "Конвертујте одабрани текст у говор.",
+				"sr-Latn-RS": "Konvertujte odabrani tekst u govor."
 			},
 			"url": "index.html",
 
@@ -113,7 +119,10 @@
 				"nl": "Instellingen",
 				"pt": "Definições",
 				"uk": "Налаштування",
-				"zh": "设置"
+				"zh": "设置",
+				"sq-AL": "Cilësimet",
+				"sr-Cyrl-RS": "Подешавања",
+				"sr-Latn-RS": "Podešavanja"
 				
 			},
 			"url": "settings.html",
