@@ -1,0 +1,13 @@
+{
+	"To use DeepL, subscribe to DeepL API plan in the official DeepL website. Copy the API key and insert it in the specified field.": "Për të përdorur DeepL, abonohuni në planin e API të DeepL në faqen e internetit zyrtare të DeepL. Kopjoni dhe shtoni çelësin e API key në fushën e caktuar.",
+	"Learn more here.": "Mësoni më shumë këtu.",
+	"Save": "Ruani",
+	"Target language": "Gjuhë e etiketuar",
+	"Enter text manually": "Futni tekst manualisht",
+	"Hide field": "Fshihni fushën",
+	"Translating...": "Duke u përkthyer...",
+	"Loading languages...": "Duke u ngarkuar gjuhët...",
+	"Copy": "Kopjoni",
+	"Insert to document": "Shtoni në dokument",
+	"Reconfigure API key": "Rikonfiguroni çelësin e API"
+}

@@ -1,0 +1,14 @@
+{
+	"This version of \"Plugin Manager\" is not official." : "Ky version i \"Menaxherit të shtojcës\" is nuk është zyrtar.",
+	"No Internet Connection.": "Nuk ka lidhje interneti.",
+	"Warning" : "Paralajmërim",
+	"Yes" : "Po",
+	"No" : "Jo",
+	"Do you want to completely remove this plugin?" : "Dëshironi që të fshini këtë shtojcë komplet.",
+	"If you choose \"No\", you will be able to restore this plugin later in the marketplace." : "Në qoftë se ju zgjidhni \"Jo\", do të mund të riktheni këtë shtojcë më vonë në marketplace.",
+	"Enter the URL for your marketplace page here" : "Futni URL-në e faqes suaj të marketplace-it këtu",
+	"Return to default settings" : "Kthehuni në cilësimet e parazgjedhura",
+	"Enter URL" : "Futni URL",
+	"Cancel" : "Anuloni",
+	"Be careful! Avoid using the untrusted URLs." : "Bëni kujdes! Shmangni përdorimin e URL-ve të pa besueshme."
+}
