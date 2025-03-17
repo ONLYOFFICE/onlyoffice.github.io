@@ -68,3 +68,6 @@
 
 ## 2.2.2
 * Add xAI as internal provider.
+
+## 2.2.3
+* Fix translations.

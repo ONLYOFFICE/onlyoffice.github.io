@@ -1,5 +1,7 @@
 {
 	"Checking...": "Examen...",
 	"Check": "Vérifier",
-	"Insert to document": "Insérer dans le document"
+	"Insert to document": "Insérer dans le document",
+	"Possible mistakes found": "Fautes possibles trouvées : ",
+	"No possible mistakes found": "Aucune faute possible n'a été trouvée"
 }
