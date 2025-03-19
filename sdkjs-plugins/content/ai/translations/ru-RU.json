@@ -116,5 +116,8 @@
 	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.",
 	"Download template": "Download template",
 	"Invalid file format, please upload the .js file": "Invalid file format, please upload the .js file",
-	"Error adding provider from file, please try again": "Error adding provider from file, please try again"
+	"Error adding provider from file, please try again": "Error adding provider from file, please try again",
+
+	"Translation settings": "Translation settings",
+	"Select language for AI translation.": "Select language for AI translation."
 }
