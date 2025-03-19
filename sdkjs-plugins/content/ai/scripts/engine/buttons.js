@@ -163,7 +163,10 @@
 			item.type = this.type;
 
 		if (this.menu)
-			item.items = this.menu;
+			item.items = this.menu.map(function(menuItem) {
+				menuItem.text = translateItem(menuItem.text);
+				return menuItem;
+			});
 
 		if (this.split)
 			item.split = true;
