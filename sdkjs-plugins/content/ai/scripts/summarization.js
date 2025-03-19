@@ -44,22 +44,22 @@ function insertEngine(type) {
 
 var insertList = [
 	{
-		name: window.Asc.plugin.tr('As review'), 
+		name: 'As review', 
 		value: 'review', 
 		insertCallback: insertEngine("review")
 	},
 	{
-		name: window.Asc.plugin.tr('In comment'), 
+		name: 'In comment', 
 		value: 'comment',
 		insertCallback: insertEngine("comment")
 	},
 	{
-		name: window.Asc.plugin.tr('Replace original text'), 
+		name: 'Replace original text', 
 		value: 'replace',
 		insertCallback: insertEngine("replace")
 	},
 	{
-		name: window.Asc.plugin.tr('To the end of document'), 
+		name: 'To the end of document', 
 		value: 'end', 
 		insertCallback: insertEngine("end")
 	}
@@ -72,7 +72,6 @@ window.Asc.plugin.init = function() {
 	}
 
 	updateLangList();
-	updateInsertList();
 
 	window.Asc.plugin.executeMethod("GetDocumentLang", [], setDefaultLang);
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
@@ -106,6 +105,12 @@ window.Asc.plugin.onTranslate = function () {
 	elements.forEach(function(element) {
 		element.innerText = window.Asc.plugin.tr(element.innerText);
 	});
+
+	//"Insert result" combobox items
+	insertList.forEach(function(item) {
+		item.name = window.Asc.plugin.tr(item.name);
+	});
+	updateInsertList();
 };
 
 window.addEventListener("resize", onResize);
