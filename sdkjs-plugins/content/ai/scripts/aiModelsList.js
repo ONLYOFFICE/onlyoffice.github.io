@@ -13,11 +13,11 @@ let aiModelsList = new ListView(document.getElementById('ai-models-list'), {
 });
 var scrollbarList = new PerfectScrollbar("#ai-models-list", {});
 aiModelsList.on('select', function() {
-	addBtnEl.removeAttribute('disabled');
+	editBtnEl.removeAttribute('disabled');
 	deleteBtnEl.removeAttribute('disabled');
 });
 aiModelsList.on('deselect', function() {
-	addBtnEl.setAttribute('disabled', true);
+	editBtnEl.setAttribute('disabled', true);
 	deleteBtnEl.setAttribute('disabled', true);
 });
 
