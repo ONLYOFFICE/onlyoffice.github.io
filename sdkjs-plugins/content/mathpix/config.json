@@ -1,0 +1,74 @@
+{
+	"name": "Mathpix",
+	"nameLocale": {
+		"ru": "Mathpix",
+		"fr": "Mathpix",
+		"es": "Mathpix",
+		"pt-BR": "Mathpix",
+		"de": "Mathpix",
+		"zh-CN": "Mathpix"
+	},
+
+	"guid": "asc.{BFC5D9C6-89DE-4F28-9A3B-ABD8D2E48711}",
+	"version": "1.0.0",
+	"offered": "Svante",
+
+	"variations" : [
+		{
+			"description": "Perform OCR on mathematical formulas and text using Mathpix service.",
+			"descriptionLocale": {
+					"ru": "Выполняйте OCR математических формул и текста с помощью сервиса Mathpix.",
+					"fr": "Effectuez l'OCR des formules mathématiques et du texte à l'aide du service Mathpix.",
+					"es": "Realice OCR en fórmulas matemáticas y texto utilizando el servicio Mathpix.",
+					"pt-BR": "Realize OCR em fórmulas matemáticas e texto usando o serviço Mathpix.",
+					"de": "Führen Sie OCR für mathematische Formeln und Text mit dem Mathpix-Dienst durch.",
+					"zh-CN": "使用Mathpix服务对数学公式和文本进行OCR识别。"
+				},
+			"url": "index.html",
+			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",
+			"icons2": [
+				{
+					"style": "light",
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
+				},
+				{
+					"style": "dark",
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
+				}
+			],
+			"isViewer": false,
+			"EditorsSupport": [ "word" ],
+			"initDataType": "text",
+			"initData": "",
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": false,
+			"size": [ 592, 100 ],
+			"store": {
+				"background": {
+					"light": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)",
+					"dark": "radial-gradient(circle, #B5BCC3 0%, #737D87 100%)"
+				},
+				"screenshots": [
+					"resources/store/screenshots/screenshot1.png",
+					"resources/store/screenshots/screenshot2.png"
+				],
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		}
+	]
+}
