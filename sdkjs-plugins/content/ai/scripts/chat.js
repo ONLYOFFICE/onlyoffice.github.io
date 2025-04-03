@@ -17,9 +17,6 @@
  */
 (function(window, undefined) {
 	const maxTokens = 16000;
-	const settings = {
-		messages: []
-	};
 	let apiKey = '';
 	let interval = null;
 	let tokenTimeot = null;
@@ -28,6 +25,103 @@
 	let loader = null;
 	let bCreateLoader = true;
 
+	let messagesList = {
+		_list: [],
+
+		_renderItem: function(item) {
+			let chatEl = $('#chat');
+			let messageEl = $('<div class="message"></div>');
+			let messageContent = $('<div class="form-control message_content"></div>');
+			let spanMessageEl = $('<span class="span_message"></span>');
+			let $attachedWrapper;
+			messageContent.append(spanMessageEl);
+			
+			let c = window.markdownit();
+			let htmlContent = c.render(item.content);
+			spanMessageEl.css('display', 'block');
+			spanMessageEl.html(htmlContent);
+
+			let plainText = htmlContent.replace(/<\/?[^>]+(>|$)/g, "").replace(/\n{3,}/g, "\n\n");
+	
+			if(item.role == 'user') {
+				messageEl.addClass('user_message');
+				if(item.attachedText) {
+					$attachedWrapper = $(
+						'<div class="message_content_attached_wrapper collapsed">' + 
+							'<div class="message_content_attached">' + 
+								item.attachedText +
+							'</div>' + 
+							'<div class="message_content_collapse_btn noselect">' +
+								'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/>' +
+							'</div>' +
+						'</div>'
+					);
+					$attachedWrapper.find('.message_content_collapse_btn').on('click', function() {
+						$attachedWrapper.toggleClass('collapsed');
+						toggleAttachedCollapseButton($attachedWrapper);
+					});
+					messageContent.prepend($attachedWrapper);
+				}
+			} else {
+				let actionButtonsEl = $('<div class="action_buttons_list"></div>');
+				actionButtons.forEach(function(button) {
+					let buttonEl = $('<button class="action_button btn-text-default"></button>');
+					buttonEl.append('<img src="' + getFormattedPathForIcon(button.icon) + '"/>');
+					buttonEl.on('click', function() {
+						button.hanlder(item.content, htmlContent, plainText);
+					});
+	
+					if(button.tipOptions) {
+						new Tooltip(buttonEl[0], button.tipOptions);
+					}
+					
+					actionButtonsEl.append(buttonEl);
+				});
+				messageEl.append(actionButtonsEl);
+			}
+			messageEl.prepend(messageContent);
+			chatEl.prepend(messageEl);
+			if($attachedWrapper) {
+				setTimeout(function() {
+					toggleAttachedCollapseButton($attachedWrapper);
+				}, 10);
+			}
+			chatEl.scrollTop(chatEl[0].scrollHeight);
+		},
+
+		set: function(array) {
+			let me = this;
+
+			array.forEach(function(item) {
+				me.add(item);
+			});
+		},
+		add: function(item) {
+			this._list.push(item)
+			this._renderItem(item);
+		},
+		get: function() {
+			return this._list;
+		}
+	};
+
+	let attachedText = {
+		set: function(text) {
+			$('#attached_text_wrapper').removeClass('hidden');
+			$('#attached_text').text(text);
+		},
+		get: function() {
+			return $('#attached_text').text().trim();
+		},
+		clear: function() {
+			$('#attached_text_wrapper').addClass('hidden', true);
+			$('#attached_text').text('');
+		},
+		hasShow: function() {
+			return !$('#attached_text_wrapper').hasClass('hidden');
+		}
+	};
+
 	let actionButtons = [
 		{ 
 			icon: 'resources/icons/light/btn-copy.png', 
@@ -35,9 +129,9 @@
 				text: 'Copy',
 				align: 'left'
 			},
-			hanlder: function(text) { 
+			hanlder: function(content) { 
 				var prevTextareaVal = $('#input_message').val();
-				$('#input_message').val(text);
+				$('#input_message').val(content);
 				$('#input_message').select();
 				document.execCommand('copy');
 				$('#input_message').val(prevTextareaVal);
@@ -49,7 +143,7 @@
 				text: 'Replace original text',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('replace', text); }
+			hanlder: function(content, htmlContent, plainText) { insertEngine('replace', plainText); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-select-tool.png', 
@@ -57,7 +151,7 @@
 				text: 'Insert result',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('insert', text); }
+			hanlder: function(content, htmlContent)  { insertEngine('insert', htmlContent); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-menu-comments.png', 
@@ -65,7 +159,7 @@
 				text: 'In comment',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('comment', text); }
+			hanlder: function(content, htmlContent, plainText) { insertEngine('comment', plainText); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-ic-review.png', 
@@ -73,17 +167,19 @@
 				text: 'As review',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('review', text);}
+			hanlder: function(content, htmlContent) { insertEngine('review', htmlContent);}
 		},
 	];
 	let welcomeButtons = [
-		{ text: 'Blog post about', prompt: 'Blog post about' },
-		{ text: 'Press release about', prompt: 'Press release about' },
-		{ text: 'Social media post about', prompt: 'Social media post about' },
-		{ text: 'Brainstorm ideas for', prompt: 'Brainstorm ideas for' },
-		{ text: 'Project proposal about', prompt: 'Project proposal about' },
-		{ text: 'An essay about', prompt: 'An essay about' },
-		{ text: 'Creative story about', prompt: 'Creative story about' }
+		{ text: 'Blog post', prompt: 'Blog post about' },
+		{ text: 'Press release', prompt: 'Press release about' },
+		{ text: 'An essay', prompt: 'An essay about' },
+		{ text: 'Social media post', prompt: 'Social media post about' },
+		{ text: 'Brainstorm', prompt: 'Brainstorm ideas for' },
+		{ text: 'Project proposal', prompt: 'Project proposal about' },
+		{ text: 'Creative story', prompt: 'Creative story about' },
+		{ text: 'Make a plan', prompt: 'Make a plan about' },
+		{ text: 'Get advice', prompt: 'Get advice about' }
 	];
 
 
@@ -100,7 +196,7 @@
 		bCreateLoader = false;
 		destroyLoader();
 
-		if(settings.messages.length) {
+		if(messagesList.get().length) {
 			hideStartPanel();
 		}
 		updateTextareaSize();
@@ -148,6 +244,10 @@
 				document.getElementById('cur_tokens').innerText = tokens.length;
 			}, 250);
 		});
+
+		document.getElementById('attached_text_close').addEventListener('click', function() {
+			attachedText.clear();
+		});
 		
 		// TODO:
 		if (true)
@@ -171,14 +271,10 @@
 
 		document.getElementById('clear_history').onclick = function() {
 			document.getElementById('chat').innerHTML = '';
-			settings.messages = [];
+			messagesList.set([]);
 			document.getElementById('total_tokens').classList.remove('err-message');
 			document.getElementById('total_tokens').innerText = 0;
 		};
-
-		window.addEventListener("resize", function() {
-			updateTextareaSize();
-		});
 	};
 
 
@@ -190,7 +286,7 @@
 		}
 		let value = textarea.value.trim();
 		if (value.length) {
-			createMessage(textarea.value.trim(), 1);
+			sendMessage(textarea.value.trim());
 			textarea.value = '';
 			updateTextareaSize();
 			document.getElementById('cur_tokens').innerText = 0;
@@ -217,9 +313,9 @@
 
 	function renderWelcomeButtons() {
 		welcomeButtons.forEach(function(button) {
-			let addedEl = $('<div class="welcome_button form-control noselect">' + button.text + '...</div>');
+			let addedEl = $('<button class="welcome_button btn-text-default noselect">' + button.text + '</button>');
 			addedEl.on('click', function() {
-				$('#input_message').val(button.prompt).focus();
+				$('#input_message').val(button.prompt + ' ').focus();
 			});
 			$('#welcome_buttons_list').append(addedEl);
 		});
@@ -227,8 +323,10 @@
 
 	function updateTextareaSize() {
 		let textarea = $('#input_message')[0];
-		textarea.style.height = "auto";
-		textarea.style.height = Math.min(textarea.scrollHeight, 98) +2 + "px";
+		if(textarea) {
+			textarea.style.height = "auto";
+			textarea.style.height = Math.min(textarea.scrollHeight, 98) +2 + "px";
+		}
 	};
 
 	function setState(state) {
@@ -245,68 +343,26 @@
 		if(!state) return;
 
 		if(state.messages) {
-			settings.messages = state.messages; 
-			state.messages.forEach(function(message) {
-				renderMessage(message.content, message.role == 'user');
-			});
+			messagesList.set(state.messages);
 		}
 		if(state.inputValue) {
 			document.getElementById('input_message').value = state.inputValue;
 		}
-	};
-
-	function createMessage(text, type) {
-		if (type) {
-			renderMessage(text, type);
-			sendMessage(text);
-		} else {
-			renderMessage(text, type);
+		if(state.attachedText) {
+			attachedText.set(state.attachedText);
 		}
-	};
-
-	function renderMessage(text, type) {
-		let chatEl = $('#chat');
-		let messageEl = $('<div class="message"></div>');
-		let spanMessageEl = $('<span class="form-control span_message"></span>');
-		
-		if (false) {
-			spanMessageEl.text(text);
-		} else {
-			let c = window.markdownit();
-			let htmlContent = c.render(text);
-			spanMessageEl.css('display', 'block');
-			spanMessageEl.html(htmlContent);
-		}
-
-		if(type) {
-			messageEl.addClass('user_message');
-		} else {
-			let actionButtonsEl = $('<div class="action_buttons_list"></div>');
-			actionButtons.forEach(function(button) {
-				let buttonEl = $('<button class="action_button btn-text-default"></button>');
-				buttonEl.append('<img src="' + getFormattedPathForIcon(button.icon) + '"/>');
-				buttonEl.on('click', function() {
-					button.hanlder(text);
-				});
-
-				if(button.tipOptions) {
-					new Tooltip(buttonEl[0], button.tipOptions);
-				}
-				
-				actionButtonsEl.append(buttonEl);
-			});
-			messageEl.append(actionButtonsEl);
-		}
-		messageEl.prepend(spanMessageEl);
-		chatEl.prepend(messageEl);
-		chatEl.scrollTop(chatEl[0].scrollHeight);
 	};
 
 	function sendMessage(text) {
+		let message = { role: 'user', content: text };
 		hideStartPanel();
+		if(attachedText.hasShow()) {
+			message.attachedText = attachedText.get();
+			attachedText.clear();
+		}
+		messagesList.add(message);
 		createTyping();
-		settings.messages.push({role: 'user', content: text});
-		window.Asc.plugin.sendToPlugin("onChatMessage", settings.messages);		
+		window.Asc.plugin.sendToPlugin("onChatMessage", messagesList.get());		
 	};
 
 	function createTyping() {
@@ -367,7 +423,22 @@
 		return path;
 	}
 
+	//Toggle the hide of the button to collapse attached text 
+	function toggleAttachedCollapseButton($wrapper) {
+		const $content = $wrapper.find('.message_content_attached');
+		const $btn = $wrapper.find('.message_content_collapse_btn');
+		const needCollapse = $content.height() < $content[0].scrollHeight;
+		const isCollapsed = $wrapper.hasClass('collapsed');
+		$btn.toggleClass('hidden', !needCollapse && isCollapsed);
+	}
+
 	function onResize () {
+		updateTextareaSize();
+
+		$('.message_content_attached_wrapper').each(function(index, el) {
+			toggleAttachedCollapseButton($(el));
+		});
+
 		$('img').each(function() {
 			var el = $(this);
 			var src = $(el).attr('src');
@@ -456,7 +527,7 @@
 		});
 
 		// Textarea
-		document.getElementById('input_message').setAttribute('placeholder', window.Asc.plugin.tr('Ask AI a question about something...'));
+		document.getElementById('input_message').setAttribute('placeholder', window.Asc.plugin.tr('Ask AI anything'));
 
 		//Action buttons
 		actionButtons.forEach(function(button) {
@@ -475,18 +546,22 @@
 	window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
-		settings.messages.push({role: "assistant", content: reply});
+		messagesList.add({role: "assistant", content: reply});
 		removeTyping();
-		createMessage(reply, 0);
 		document.getElementById('input_message').focus();
+	});
+
+	window.Asc.plugin.attachEvent("onAttachedText", function(text) {
+		attachedText.set(text);
 	});
 
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
 	window.Asc.plugin.attachEvent("onUpdateState", function() {
 		setState({
-			messages: settings.messages,
-			inputValue: document.getElementById('input_message').value
+			messages: messagesList.get(),
+			inputValue: document.getElementById('input_message').value,
+			attachedText: attachedText.hasShow() ? attachedText.get() : ''
 		});
 		window.Asc.plugin.sendToPlugin("onUpdateState");
 	});
