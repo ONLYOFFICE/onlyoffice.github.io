@@ -94,6 +94,30 @@
 
 	"Chatbot": "Chatbot",
 	"Ask AI a question about something...": "Stellen Sie der KI eine Frage über etwas...",
+	"Thinking": "Thinking",
+	"Welcome": "Welcome",
+	"I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.": "I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.",
+	"Let’s make your content shine together!": "Let’s make your content shine together!",
+	"Copy": "Copy",
+	"Blog post about": "Blog post about",
+	"Press release about": "Press release about",
+	"Social media post about": "Social media post about",
+	"Brainstorm ideas for": "Brainstorm ideas for",
+	"Project proposal about": "Project proposal about",
+	"An essay about": "An essay about",
+	"Creative story about": "Creative story about",
 
-	"This field is required": "Dieses Feld ist erforderlich"
+	"This field is required": "Dieses Feld ist erforderlich",
+
+	"Custom providers": "Benutzerdefinierte Anbieter",
+	"Back": "Zurück",
+	"Connected custom providers": "Verbundene benutzerdefinierte Anbieter",
+	"The list is empty, press + to add the file": "Die Liste ist leer. Drücken Sie +, um die Datei hinzuzufügen",
+	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Geben Sie die Konfiguration für die KI-Modell-API im JS-Format ein. Geben Sie den Modellnamen, die Endpunkt-URLs und die Header an.",
+	"Download template": "Vorlage herunterladen",
+	"Invalid file format, please upload the .js file": "Ungültiges Dateiformat, bitte laden Sie die .js-Datei hoch",
+	"Error adding provider from file, please try again": "Fehler beim Hinzufügen des Anbieters aus der Datei. Bitte versuchen Sie es erneut."
+
+	"Translation settings": "Translation settings",
+	"Select language for AI translation": "Wählen Sie die Sprache für die KI-Übersetzung aus"
 }
