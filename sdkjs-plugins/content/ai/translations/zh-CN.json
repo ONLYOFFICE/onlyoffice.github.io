@@ -94,6 +94,30 @@
 
 	"Chatbot": "聊天机器人",
 	"Ask AI a question about something...": "向 AI 提一个问题...",
+	"Thinking": "Thinking",
+	"Welcome": "Welcome",
+	"I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.": "I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.",
+	"Let’s make your content shine together!": "Let’s make your content shine together!",
+	"Copy": "Copy",
+	"Blog post about": "Blog post about",
+	"Press release about": "Press release about",
+	"Social media post about": "Social media post about",
+	"Brainstorm ideas for": "Brainstorm ideas for",
+	"Project proposal about": "Project proposal about",
+	"An essay about": "An essay about",
+	"Creative story about": "Creative story about",
 
-	"This field is required": "此字段为必填"
+	"This field is required": "此字段为必填",
+
+	"Custom providers": "自定义提供商",
+	"Back": "返回",
+	"Connected custom providers": "已连接的自定义提供商",
+	"The list is empty, press + to add the file": "列表为空，按 + 号添加文件",
+	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "以 JS 格式输入 AI 模型 API 的配置信息。请提供模型名称、端点 URL 和消息头部。",
+	"Download template": "下载模板",
+	"Invalid file format, please upload the .js file": "文件格式无效，请上传 .js 文件",
+	"Error adding provider from file, please try again": "从文件添加提供商时出错，请重试",
+
+	"Translation settings": "Translation settings",
+	"Select language for AI translation": "选择用于 AI 翻译的语言"
 }
