@@ -6,7 +6,8 @@
 		"es": "Editor de Fotos",
 		"pt-BR": "Editor de foto",
 		"de": "Foto-Editor",
-		"si": "ඡායාරූප සංස්කරකය"
+		"si": "ඡායාරූප සංස්කරකය",
+		"zh-ZH": "图片编辑器"
 	},
 	"guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC80A}",
 	"version": "1.0.2",
@@ -21,7 +22,8 @@
 				"es": "Edite imágenes, capturas de pantalla y fotos directamente en sus documentos: recorte, cambie el tamaño y aplique efectos.",
 				"pt-BR": "Edite imagens, capturas de tela e fotos diretamente em seus documentos: corte, redimensione e aplique efeitos.",
 				"de": "Bearbeiten Sie Bilder, Screenshots und Fotos direkt in Dokumenten: Zuschneiden, Größe ändern, Effekte anwenden.",
-				"si": "ඔබගේ ලේඛනවල අඩංගු රූප, තිරසේයා සහ ඡායාරූප සංස්කරණය කරන්න. කප්පාදුව, යළි ප්‍රමාණනය, ආචරණ යෙදීම ආදිය ඇතුළත්ය."
+				"si": "ඔබගේ ලේඛනවල අඩංගු රූප, තිරසේයා සහ ඡායාරූප සංස්කරණය කරන්න. කප්පාදුව, යළි ප්‍රමාණනය, ආචරණ යෙදීම ආදිය ඇතුළත්ය.",
+				"zh-ZH": "直接在文档中编辑图像、截图和照片：裁剪、调整大小、应用效果。"
 			},
 			"url": "index.html",
 
@@ -90,7 +92,8 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"zh-ZH": "取消"
 					}
 				}
 			],

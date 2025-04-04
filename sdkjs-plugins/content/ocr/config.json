@@ -6,7 +6,8 @@
 		"es": "Reconocimiento óptico de caracteres",
 		"de": "OCR",
 		"pt-BR": "OCR",
-		"si": "OCR"
+		"si": "OCR",
+		"zh-ZH": "OCR 文字识别"
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.2",
@@ -20,7 +21,8 @@
 				"es": "Reconozca el texto de imágenes y capturas de pantalla e insértelo en sus documentos.",
 				"de": "Erkennen Sie Text auf Bildern und Screenshots und fügen Sie ihn in Ihre Dokumente ein.",
 				"pt-BR": "Reconheça texto de imagens e capturas de tela e insira-o em seus documentos.",
-				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න."
+				"si": "ඡායාරූප සහ තිරසේයාවල අඩංගු පෙළ හඳුනාගෙන ඒවා ඔබගේ ලේඛන වලට ඇතුළු කරන්න.",
+				"zh-ZH": "识别图片和截图中的文本，并将其插入到文档中。"
 			},
 			"url": "index.html",
 
@@ -83,7 +85,8 @@
 						"fr": "Insérer le texte",
 						"es": "Insertar texto",
 						"de": "Text einfügen",
-						"si": "පෙළ ඇතුළු කරන්න"
+						"si": "පෙළ ඇතුළු කරන්න",
+						"zh-ZH": "插入文字"
 					}
 				},
 				{
@@ -94,7 +97,8 @@
 						"fr": "Annuler",
 						"es": "Cancelar",
 						"de": "Abbrechen",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"zh-ZH": "取消"
 					}
 				}
 			],
@@ -124,7 +128,8 @@
 				"fr": "À propos",
 				"es": "Sobre programa",
 				"de": "Über",
-				"si": "පිළිබඳව"
+				"si": "පිළිබඳව",
+				"zh-ZH": "关于"
 			},
 
 			"url": "index_about.html",
