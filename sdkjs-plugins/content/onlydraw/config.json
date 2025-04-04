@@ -3,7 +3,9 @@
     "nameLocale": {
       "zh": "OnlyDraw",
       "en": "OnlyDraw",
-      "ja": "OnlyDrawです"
+      "ja": "OnlyDrawです",
+      "de-DE": "OnlyDraw",
+      "es-ES": "OnlyDraw"
     },
     "guid": "asc.{Y1234ABCD-5678-EFGH-IJKL-MNOPQRSTUVWX}",
     "offered": "shanyu qing",
@@ -13,7 +15,9 @@
         "description": "OnlyDraw makes it easy to add images, create memes, customize drawings and insert documents",
         "descriptionLocale": {
         "zh":"OnlyDraw助您轻松添图、制表情包及自定义绘图并插入文档。",
-        "ja": "OnlyDrawは簡単にイラストを追加したり、スタンプを作成したり、カスタマイズしてファイルを挿入することができます。"
+        "ja": "OnlyDrawは簡単にイラストを追加したり、スタンプを作成したり、カスタマイズしてファイルを挿入することができます。",
+        "de-DE": "OnlyDraw macht es einfach, Bilder hinzuzufügen, Memes zu erstellen, Zeichnungen anzupassen und Dokumente einzufügen",
+        "es-ES": "OnlyDraw facilita la adición de imágenes, la creación de memes, la personalización de dibujos y su inserción en documentos"
       },
         "type": "panel",
         "url": "index.html",

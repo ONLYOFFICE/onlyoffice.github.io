@@ -7,7 +7,8 @@
 		"fr": "Code en surbrillance",
 		"pt-BR": "Highlight code",
 		"ru": "Подсветка кода",
-		"si": "පර්යාය කෝෂය"
+		"si": "පර්යාය කෝෂය",
+		"zh-ZH": "突出显示代码"
 	},
 	"version": "1.0.3",
 	"variations": [
@@ -30,7 +31,8 @@
 						"es": "Cancelar",
 						"fr": "Annuler",
 						"ru": "Отмена",
-						"si": "අවලංගු"
+						"si": "අවලංගු",
+						"zh-ZH": "取消"
 					}
 				}
 			],
@@ -41,7 +43,8 @@
 				"fr": "Mettez en évidence la syntaxe du code en sélectionnant la langue, le style et la couleur de l'arrière-plan.",
 				"pt-BR": "Destaque a sintaxe do código selecionando o idioma, estilo e cor de fundo necessários.",
 				"ru": "Оформите синтаксис кода, выбрав необходимый язык, стиль и цвет фона.",
-				"si": "වුවමනා භාෂාව, මෝස්තරය සහ පසුබිමේ වර්ණය තේරීමෙන් කේතයේ පදඝටනාව (පද ගැළපුම) උද්දීපනය කරන්න."
+				"si": "වුවමනා භාෂාව, මෝස්තරය සහ පසුබිමේ වර්ණය තේරීමෙන් කේතයේ පදඝටනාව (පද ගැළපුම) උද්දීපනය කරන්න.",
+				"zh-ZH": "选择必要的语言、样式和背景颜色来突出显示代码的语法。"
 			},
 			"icons": [
 				"resources/light/icon.png",
