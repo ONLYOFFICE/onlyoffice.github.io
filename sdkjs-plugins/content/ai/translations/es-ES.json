@@ -94,6 +94,30 @@
 
 	"Chatbot": "Chatbot",
 	"Ask AI a question about something...": "Hacer una pregunta a la IA sobre algo...",
+	"Thinking": "Thinking",
+	"Welcome": "Welcome",
+	"I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.": "I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.",
+	"Let’s make your content shine together!": "Let’s make your content shine together!",
+	"Copy": "Copy",
+	"Blog post about": "Blog post about",
+	"Press release about": "Press release about",
+	"Social media post about": "Social media post about",
+	"Brainstorm ideas for": "Brainstorm ideas for",
+	"Project proposal about": "Project proposal about",
+	"An essay about": "An essay about",
+	"Creative story about": "Creative story about",
 
-	"This field is required": "Este campo es obligatorio"
+	"This field is required": "Este campo es obligatorio",
+
+	"Custom providers": "Proveedores personalizados",
+	"Back": "Atrás",
+	"Connected custom providers": "Proveedores personalizados conectados",
+	"The list is empty, press + to add the file": "La lista está vacía, pulse + para añadir el archivo",
+	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Introduzca la configuración de la API del modelo de IA en formato JS. Proporcione el nombre del modelo, las URL de los puntos finales y los encabezados.",
+	"Download template": "Descargar plantilla",
+	"Invalid file format, please upload the .js file": "Formato de archivo no válido, por favor cargue el archivo .js",
+	"Error adding provider from file, please try again": "Error al añadir el proveedor desde el archivo, por favor inténtelo de nuevo",
+
+	"Translation settings": "Translation settings",
+	"Select language for AI translation": "Seleccionar idioma para la traducción asistida por IA"
 }
