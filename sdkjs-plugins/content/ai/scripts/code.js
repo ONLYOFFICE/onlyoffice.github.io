@@ -78,6 +78,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
 	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
+	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
 };
 
 /**
