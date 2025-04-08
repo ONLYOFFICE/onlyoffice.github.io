@@ -38,6 +38,7 @@
 	let modalTimeout = null;
 	let loader = null;
 	let bCreateLoader = true;
+	let themeType = 'light';
 	let regenerationMessageIndex = null;	//Index of the message for which a new reply is being created
 
 	const ErrorCodes = {
@@ -50,15 +51,20 @@
 		}
 	};
 
+	let scrollbarList; 
+
 	let messagesList = {
 		_list: [],
 		
-		_renderItemToList: function(item) {
+		_renderItemToList: function(item, index) {
 			let $chat = $('#chat');
-			item.$el = $('<div class="message"></div>');
+			item.$el = $('<div class="message" style="order: ' + index + ';"></div>');
 			this._renderItem(item);
 			$chat.prepend(item.$el);
 			$chat.scrollTop($chat[0].scrollHeight);
+			scrollbarList.update();
+
+			$('#chat_wrapper').removeClass('empty');
 		},
 		_renderItem: function(item) {
 			item.$el.empty();
@@ -101,7 +107,7 @@
 					const errorObj = errorsMap[item.error];
 					const $error = $(
 						'<div class="message_content_error_title">' +
-							'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/error-small/error.png') + '" />' +
+							'<img src="' + getFormattedPathForIcon('resources/icons/error-small/error.png') + '" />' +
 							'<div>' + errorObj.title + '</div>' + 
 						'</div>' +
 						'<div class="message_content_error_desc">' + errorObj.description + '</div>'
@@ -111,7 +117,7 @@
 					let $actionButtons = $('<div class="action_buttons_list"></div>');
 					actionButtons.forEach(function(button) {
 						let buttonEl = $('<button class="action_button btn-text-default"></button>');
-						buttonEl.append('<img src="' + getFormattedPathForIcon(button.icon) + '"/>');
+						buttonEl.append('<img class="icon" src="' + getFormattedPathForIcon(button.icon) + '"/>');
 						buttonEl.on('click', function() {
 							button.handler(item, activeContent, htmlContent, plainText);
 						});
@@ -158,6 +164,8 @@
 					toggleAttachedCollapseButton($attachedWrapper);
 				}, 10);
 			}
+			scrollbarList.update();
+			scrollbarList.update();
 		},
 
 		set: function(array) {
@@ -177,7 +185,7 @@
 				message.activeContentIndex = 0;
 			}
 			this._list.push(message)
-			this._renderItemToList(message);
+			this._renderItemToList(message, this._list.length - 1);
 		},
 		pushContentForAssistant: function(messageIndex, content) {
 			if(!this._list[messageIndex] || this._list[messageIndex].role != 'assistant') return;
@@ -292,13 +300,11 @@
 	let localStorageKey = "onlyoffice_ai_chat_state";
 
 	window.Asc.plugin.init = function() {
+		scrollbarList = new PerfectScrollbar("#chat", {});
 		restoreState();
 		bCreateLoader = false;
 		destroyLoader();
 
-		if(messagesList.get().length) {
-			hideStartPanel();
-		}
 		updateTextareaSize();
 
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
@@ -398,10 +404,6 @@
 		renderWelcomeButtons();
 	};
 
-	function hideStartPanel() {
-		$('#start_panel').css('display', 'none');
-	};
-
 	function updateWelcomeText() {
 		let welcomeText = window.Asc.plugin.tr('Welcome');
 		if(window.Asc.plugin.info.userName) {
@@ -457,7 +459,6 @@
 		const isRegenerating = regenerationMessageIndex !== null;
 		const message = { role: 'user', content: text };
 
-		hideStartPanel();
 		if (attachedText.hasShow()) {
 			message.attachedText = attachedText.get();
 			attachedText.clear();
@@ -480,13 +481,12 @@
 			return { role: item.role, content: item.getActiveContent() }
 		});
 
-		console.log(list);
 		window.Asc.plugin.sendToPlugin("onChatMessage", list);	
 	};
 
 	function createTyping() {
 		let chatEl = $('#chat');
-		let messageEl = $('<div id="loading" class="message"></div>');
+		let messageEl = $('<div id="loading" class="message" style="order: ' +  messagesList.get().length + ';"></div>');
 		let spanMessageEl = $('<div class="span_message"></div>');
 		spanMessageEl.text(window.Asc.plugin.tr('Thinking'));
 		messageEl.append(spanMessageEl);
@@ -536,7 +536,6 @@
 	};
 
 	function getFormattedPathForIcon(path) {
-		let themeType = window.Asc.plugin.info.theme.type || 'light';
 		path = path.replace(/\/(light|dark)\//, '/' + themeType + '/');
 		path = path.replace(/(\.\w+)$/, getZoomSuffixForImage() + '$1');
 		return path;
@@ -553,6 +552,8 @@
 
 	function onResize () {
 		updateTextareaSize();
+
+		scrollbarList && scrollbarList.update();
 
 		$('.message_content_attached_wrapper').each(function(index, el) {
 			toggleAttachedCollapseButton($(el));

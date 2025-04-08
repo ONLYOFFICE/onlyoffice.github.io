@@ -54,14 +54,25 @@ input {
 	width: calc(100% - 24px);
 }
 
-.messages {
+#chat_wrapper {
 	flex: 1;
-	padding: 10px;
+	padding: 0;
 	margin-bottom: 6px;
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+#chat_wrapper.empty {
+	justify-content: center;
+}
+
+#chat {
+	height: auto;
+	padding: 10px 13px;
+	display: flex;
+	flex-direction: column;
 	overflow: auto;
-	background: #ffffff;
+	position: relative;
 }
 
 .message {
@@ -76,7 +87,7 @@ input {
 	transition: 0.1s opacity;
 }
 .message:hover .action_buttons_list,
-.messages .message:first-child .action_buttons_list{
+#chat .message:first-child .action_buttons_list{
 	opacity: 1;
 }
 .action_button {
@@ -218,6 +229,9 @@ input {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+#chat_wrapper:not(.empty) #start_panel {
+	display: none;
 }
 
 #welcome_text {
