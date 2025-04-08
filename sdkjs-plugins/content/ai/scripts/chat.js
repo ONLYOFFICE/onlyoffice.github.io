@@ -24,27 +24,47 @@
 	let modalTimeout = null;
 	let loader = null;
 	let bCreateLoader = true;
+	let regenerationMessageIndex = null;	//Index of the message for which a new reply is being created
+
+	const ErrorCodes = {
+		UNKNOWN: 1
+	};
+	const errorsMap = {
+		[ErrorCodes.UNKNOWN]: {
+			title: 'Something went wrong',
+			description: 'Please try reloading the conversation'
+		}
+	};
 
 	let messagesList = {
 		_list: [],
-
+		
+		_renderItemToList: function(item) {
+			let $chat = $('#chat');
+			item.$el = $('<div class="message"></div>');
+			this._renderItem(item);
+			$chat.prepend(item.$el);
+			$chat.scrollTop($chat[0].scrollHeight);
+		},
 		_renderItem: function(item) {
-			let chatEl = $('#chat');
-			let messageEl = $('<div class="message"></div>');
-			let messageContent = $('<div class="form-control message_content"></div>');
-			let spanMessageEl = $('<span class="span_message"></span>');
+			item.$el.empty();
+			item.$el.toggleClass('user_message', item.role == 'user');
+
+			const me = this;
+			let $messageContent = $('<div class="form-control message_content"></div>');
+			let $spanMessage = $('<span class="span_message"></span>');
 			let $attachedWrapper;
-			messageContent.append(spanMessageEl);
+			let activeContent = item.getActiveContent();
+			$messageContent.append($spanMessage);
 			
 			let c = window.markdownit();
-			let htmlContent = c.render(item.content);
-			spanMessageEl.css('display', 'block');
-			spanMessageEl.html(htmlContent);
+			let htmlContent = c.render(activeContent);
+			$spanMessage.css('display', 'block');
+			$spanMessage.html(htmlContent);
 
 			let plainText = htmlContent.replace(/<\/?[^>]+(>|$)/g, "").replace(/\n{3,}/g, "\n\n");
 	
 			if(item.role == 'user') {
-				messageEl.addClass('user_message');
 				if(item.attachedText) {
 					$attachedWrapper = $(
 						'<div class="message_content_attached_wrapper collapsed">' + 
@@ -60,33 +80,70 @@
 						$attachedWrapper.toggleClass('collapsed');
 						toggleAttachedCollapseButton($attachedWrapper);
 					});
-					messageContent.prepend($attachedWrapper);
+					$messageContent.prepend($attachedWrapper);
 				}
 			} else {
-				let actionButtonsEl = $('<div class="action_buttons_list"></div>');
-				actionButtons.forEach(function(button) {
-					let buttonEl = $('<button class="action_button btn-text-default"></button>');
-					buttonEl.append('<img src="' + getFormattedPathForIcon(button.icon) + '"/>');
-					buttonEl.on('click', function() {
-						button.hanlder(item.content, htmlContent, plainText);
+				if(item.error) {
+					const errorObj = errorsMap[item.error];
+					const $error = $(
+						'<div class="message_content_error_title">' +
+							'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/error-small/error.png') + '" />' +
+							'<div>' + errorObj.title + '</div>' + 
+						'</div>' +
+						'<div class="message_content_error_desc">' + errorObj.description + '</div>'
+					);
+					$messageContent.append($error);
+				} else {
+					let $actionButtons = $('<div class="action_buttons_list"></div>');
+					actionButtons.forEach(function(button) {
+						let buttonEl = $('<button class="action_button btn-text-default"></button>');
+						buttonEl.append('<img src="' + getFormattedPathForIcon(button.icon) + '"/>');
+						buttonEl.on('click', function() {
+							button.handler(item, activeContent, htmlContent, plainText);
+						});
+		
+						if(button.tipOptions) {
+							new Tooltip(buttonEl[0], button.tipOptions);
+						}
+						
+						$actionButtons.append(buttonEl);
 					});
+					item.$el.append($actionButtons);
 	
-					if(button.tipOptions) {
-						new Tooltip(buttonEl[0], button.tipOptions);
+					if(item.content.length > 1) {
+						const $repliesSwitch = $(
+							'<div class="message_content_replies_switch">' + 
+								'<div>' + (item.activeContentIndex + 1) + ' / ' + (item.content.length) + '</div>' +
+							'</div>'
+						);
+	
+						const $decrementBtn = $('<button><img class="decrement icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/></button>');
+						item.activeContentIndex == 0 ? $decrementBtn.attr('disabled', 'disabled') : $decrementBtn.removeAttr('disabled');
+						$repliesSwitch.prepend($decrementBtn);
+						$decrementBtn.on('click', function() {
+							item.activeContentIndex -= 1;
+							me._renderItem(item);
+	
+						});
+						
+						const $incrementBtn = $('<button><img class="increment icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/></button>');
+						item.activeContentIndex == item.content.length - 1 ? $incrementBtn.attr('disabled', 'disabled') : $incrementBtn.removeAttr('disabled');
+						$repliesSwitch.append($incrementBtn);
+						$incrementBtn.on('click', function() {
+							item.activeContentIndex += 1;
+							me._renderItem(item);
+						});
+	
+						$messageContent.append($repliesSwitch);
 					}
-					
-					actionButtonsEl.append(buttonEl);
-				});
-				messageEl.append(actionButtonsEl);
+				}
 			}
-			messageEl.prepend(messageContent);
-			chatEl.prepend(messageEl);
+			item.$el.prepend($messageContent);
 			if($attachedWrapper) {
 				setTimeout(function() {
 					toggleAttachedCollapseButton($attachedWrapper);
 				}, 10);
 			}
-			chatEl.scrollTop(chatEl[0].scrollHeight);
 		},
 
 		set: function(array) {
@@ -97,8 +154,23 @@
 			});
 		},
 		add: function(item) {
-			this._list.push(item)
-			this._renderItem(item);
+			const message = Object.assign({}, item);
+
+			message.getActiveContent = function() {
+				return (message.role == 'user' ? message.content : message.content[message.activeContentIndex]);
+			};
+			if(message.role == 'assistant') {
+				message.activeContentIndex = 0;
+			}
+			this._list.push(message)
+			this._renderItemToList(message);
+		},
+		pushContentForAssistant: function(messageIndex, content) {
+			if(!this._list[messageIndex] || this._list[messageIndex].role != 'assistant') return;
+			const message = this._list[messageIndex];
+			message.content.push(content);
+			message.activeContentIndex = message.content.length - 1;
+			this._renderItem(message);
 		},
 		get: function() {
 			return this._list;
@@ -124,12 +196,26 @@
 
 	let actionButtons = [
 		{ 
+			icon: 'resources/icons/light/btn-update.png', 
+			tipOptions: {
+				text: 'Generate new',
+				align: 'left'
+			},
+			handler: function(message) { 
+				const messageIndex = messagesList.get().findIndex(function(item) { return item == message});
+				if(messageIndex > 0) {
+					regenerationMessageIndex = messageIndex;
+					sendMessage(messagesList.get()[messageIndex - 1].content);
+				}
+			}
+		},
+		{ 
 			icon: 'resources/icons/light/btn-copy.png', 
 			tipOptions: {
 				text: 'Copy',
 				align: 'left'
 			},
-			hanlder: function(content) { 
+			handler: function(message, content) { 
 				var prevTextareaVal = $('#input_message').val();
 				$('#input_message').val(content);
 				$('#input_message').select();
@@ -143,7 +229,7 @@
 				text: 'Replace original text',
 				align: 'left'
 			},
-			hanlder: function(content, htmlContent, plainText) { insertEngine('replace', plainText); }
+			handler: function(message, content, htmlContent, plainText) { insertEngine('replace', plainText); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-select-tool.png', 
@@ -151,7 +237,7 @@
 				text: 'Insert result',
 				align: 'left'
 			},
-			hanlder: function(content, htmlContent)  { insertEngine('insert', htmlContent); }
+			handler: function(message, content, htmlContent)  { insertEngine('insert', htmlContent); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-menu-comments.png', 
@@ -159,7 +245,7 @@
 				text: 'In comment',
 				align: 'left'
 			},
-			hanlder: function(content, htmlContent, plainText) { insertEngine('comment', plainText); }
+			handler: function(message, content, htmlContent, plainText) { insertEngine('comment', plainText); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-ic-review.png', 
@@ -167,7 +253,7 @@
 				text: 'As review',
 				align: 'left'
 			},
-			hanlder: function(content, htmlContent) { insertEngine('review', htmlContent);}
+			handler: function(message, content, htmlContent) { insertEngine('review', htmlContent);}
 		},
 	];
 	let welcomeButtons = [
@@ -354,15 +440,34 @@
 	};
 
 	function sendMessage(text) {
-		let message = { role: 'user', content: text };
+		const isRegenerating = regenerationMessageIndex !== null;
+		const message = { role: 'user', content: text };
+
 		hideStartPanel();
-		if(attachedText.hasShow()) {
+		if (attachedText.hasShow()) {
 			message.attachedText = attachedText.get();
 			attachedText.clear();
 		}
-		messagesList.add(message);
-		createTyping();
-		window.Asc.plugin.sendToPlugin("onChatMessage", messagesList.get());		
+		if (!isRegenerating) {
+			messagesList.add(message);
+			createTyping();
+		}
+
+		let list = isRegenerating 
+			? messagesList.get().slice(0, regenerationMessageIndex) 
+			: messagesList.get();
+		
+		//Remove the errors and user messages that caused the error
+		list = list.filter(function(item, index) {
+			const nextItem = list[index + 1]
+			return !item.error && !(nextItem && nextItem.error);
+		});	
+		list = list.map(function(item) {
+			return { role: item.role, content: item.getActiveContent() }
+		});
+
+		console.log(list);
+		window.Asc.plugin.sendToPlugin("onChatMessage", list);	
 	};
 
 	function createTyping() {
@@ -540,13 +645,35 @@
 			button.prompt = window.Asc.plugin.tr(button.prompt);
 		});
 
+		//Reply errors
+		for (var key in errorsMap) {
+			if (errorsMap.hasOwnProperty(key)) {
+				const errorItem = errorsMap[key];
+				errorItem.text = window.Asc.plugin.tr(errorItem.title);
+				errorItem.description = window.Asc.plugin.tr(errorItem.description);
+			}
+		}
+
 		updateStartPanel();
 	};
 
 	window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
-		messagesList.add({role: "assistant", content: reply});
+		let errorCode = null;
+		if(!reply.trim()) {
+			errorCode = ErrorCodes.UNKNOWN;
+		}
+
+		if(regenerationMessageIndex) {
+			if(!errorCode) {
+				messagesList.pushContentForAssistant(regenerationMessageIndex, reply);
+			}
+		} else {
+			messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
+		}
+		regenerationMessageIndex = null;
+		
 		removeTyping();
 		document.getElementById('input_message').focus();
 	});
