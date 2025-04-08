@@ -144,6 +144,60 @@ input {
 	transform: rotate(0deg);
 }
 
+.message_content_error_title {
+	display: flex;
+	align-items: center;
+}
+
+.message_content_error_title img {
+	width: 20px;
+	height: 20px;
+	margin: -4px 2px -4px -4px;
+}
+
+.message_content_error_title div {
+	font-weight: bold;
+}
+
+.message_content_error_desc {
+	margin-top: 4px;
+	color: var(--text-secondary);
+	line-height: 14px;
+}
+
+.message_content_replies_switch {
+	margin-top: 10px;
+	padding: 2px 0;
+	display: flex;
+	align-items: center;
+}
+
+.message_content_replies_switch button {
+	padding: 0;
+    border: none;
+    background: none;
+    display: flex;
+	cursor: pointer;
+}
+.message_content_replies_switch button[disabled]{
+	opacity: 0.5;
+	cursor: default;
+}
+
+.message_content_replies_switch button img{
+	width: 20px;
+	height: 20px;
+	flex: 1;
+}
+
+.message_content_replies_switch .decrement{
+	transform: scaleX(-1);
+}
+
+.message_content_replies_switch div{
+	padding: 0px 4px;
+}
+
 .span_message {
 	white-space: normal;
 }
