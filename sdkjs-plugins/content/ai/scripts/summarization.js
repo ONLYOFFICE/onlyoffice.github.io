@@ -10,7 +10,12 @@ summarizeBtnEl.addEventListener('click', onSummarize);
 var insertBtnEl = document.getElementById('insert-btn');
 insertBtnEl.setAttribute('disabled', true);
 insertBtnEl.addEventListener('click', onInsert);
-window.Asc.plugin.tr('Set Background Color')
+
+var clearBtnEl = document.getElementById('clear-btn');
+clearBtnEl.addEventListener('click', function() {
+	originalAreaEl.value = '';
+});
+
 var copyBtnEl = document.getElementById('copy-btn');
 copyBtnEl.setAttribute('disabled', true);
 copyBtnEl.addEventListener('click', function() {
@@ -69,6 +74,7 @@ var insertList = [
 window.Asc.plugin.init = function() {
 	if (Asc.plugin.info.editorType !== "word") {
 		insertList = insertList.slice(1, 3);
+		updateInsertList();
 	}
 
 	updateLangList();
@@ -106,6 +112,11 @@ window.Asc.plugin.onTranslate = function () {
 		element.innerText = window.Asc.plugin.tr(element.innerText);
 	});
 
+	originalAreaEl.placeholder = window.Asc.plugin.tr(originalAreaEl.placeholder);
+	resultAreaEl.placeholder = window.Asc.plugin.tr(resultAreaEl.placeholder);
+
+
+	console.log('translate');
 	//"Insert result" combobox items
 	insertList.forEach(function(item) {
 		item.name = window.Asc.plugin.tr(item.name);
@@ -190,16 +201,17 @@ function updateLangList() {
 function updateInsertList() {
 	var cmbEl = $(insertCmbEl);
 	cmbEl.select2({
-		data : insertList.map(function(item) {
-			return {
-				id: item.value,
-				text: item.name
-			}
-		}),
 		minimumResultsForSearch: Infinity,
 		dropdownAutoWidth: true,
 		width: 'auto'
 	});
+	cmbEl.empty();
+
+	insertList.forEach(function(item) {
+		const newOption = new Option(item.name, item.value, false, false);
+		cmbEl.append(newOption);
+	});
+	cmbEl.trigger('change');
 }
 
 function onSummarize() {
