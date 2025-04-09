@@ -29,7 +29,10 @@ label {
 }
 
 textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-bottom: 8px;
+    padding: 6px 8px !important;
+    line-height: 14px;
     height: 200px !important;
 }
 
@@ -41,6 +44,12 @@ textarea {
     display: block;
     flex: 1;
     margin-left: 8px;
+}
+
+#clear-btn {
+    cursor: pointer;
+    border-bottom: 1px dotted currentColor;
+    padding-bottom: 2px;
 }
 
 #copy-btn {
