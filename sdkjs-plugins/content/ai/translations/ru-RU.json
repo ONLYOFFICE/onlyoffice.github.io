@@ -49,6 +49,9 @@
 	"In comment": "В комментарии",
 	"Replace original text": "Заменить исходный текст",
 	"To the end of document": "В конец документа",
+	"Clear": "Clear",
+	"Insert your text here or select the part of the text": "Insert your text here or select the part of the text",
+	"The AI output will be shown here": "The AI output will be shown here",
 
 
 	"Loading..." : "Загрузка...",
@@ -72,6 +75,7 @@
 	"Translate to Italian" : "Перевести на итальянский язык",
 	"Generate image from text" : "Создать картинку по тексту",
 	"Settings" : "Настройки",
+	"About" : "About",
 	"For work with this model we should save chat history and sent it into a request." : "Для работы с этой моделью мы должны сохранять историю диалога и посылать её в запросе.",
 	"But we have a limit on the number of tokens in the request." : "Но мы имеем ограничение на количество токенов в запросе.",
 	"That's why sometimes you should clear your chat history." : "Поэтому иногда вам следует очищать историю чата.",
