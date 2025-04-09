@@ -61,6 +61,10 @@ window.Asc.plugin.onTranslate = function () {
 	});
 };
 
+window.addEventListener("resize", onResize);
+onResize();
+
+
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	themeType = theme.type || 'light';
@@ -81,4 +85,30 @@ function onThemeChanged(theme) {
 		let newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
 		icon.setAttribute('src', newSrc);
 	}
+}
+
+function getZoomSuffixForImage() {
+	var ratio = Math.round(window.devicePixelRatio / 0.25) * 0.25;
+	ratio = Math.max(ratio, 1);
+	ratio = Math.min(ratio, 2);
+	if(ratio == 1) return ''
+	else {
+		return '@' + ratio + 'x';
+	}
+}
+
+function onResize () {
+	$('img').each(function() {
+		var el = $(this);
+		var src = $(el).attr('src');
+		if(!src.includes('resources/icons/')) return;
+
+		var srcParts = src.split('/');
+		var fileNameWithRatio = srcParts.pop();
+		var clearFileName = fileNameWithRatio.replace(/@\d+(\.\d+)?x/, '');
+		var newFileName = clearFileName;
+		newFileName = clearFileName.replace(/(\.[^/.]+)$/, getZoomSuffixForImage() + '$1');
+		srcParts.push(newFileName);
+		el.attr('src', srcParts.join('/'));
+	});
 }
