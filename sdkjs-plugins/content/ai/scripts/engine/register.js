@@ -464,6 +464,24 @@
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button1.text = "Settings";
 		button1.icons = getToolBarButtonIcons("settings");
+		button1.split = true;
+		button1.menu = [
+			{
+				text:'Settings',
+				id:'settings-settings',
+				onclick: () => {
+					onOpenSettingsModal();
+				}
+			},
+			{
+				text:'About',
+				id:'settings-about',
+				onclick: () => {
+					// TODO: Redirect on documentation page
+					console.log('about');
+				}
+			}
+		];
 		button1.attachOnClick(function(data){
 			onOpenSettingsModal();
 		});
