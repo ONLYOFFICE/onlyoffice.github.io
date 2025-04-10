@@ -78,6 +78,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
 	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
+	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
 };
 
 /**
@@ -106,7 +107,9 @@ function onOpenSettingsModal() {
 		url : 'settings.html',
 		description : window.Asc.plugin.tr('AI configuration'),
 		isVisual : true,
-		buttons : [],
+		buttons : [
+			{ text: window.Asc.plugin.tr('OK'), primary: true }
+		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
 		size : [320, 350]
@@ -192,7 +195,7 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 370]
+		size : [320, 375]
 	};
 
 	if (!aiModelEditWindow) {

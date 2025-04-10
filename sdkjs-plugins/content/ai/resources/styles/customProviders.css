@@ -52,6 +52,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    border: none;
 }
 
 #buttons-block {

@@ -17,9 +17,6 @@
  */
 (function(window, undefined) {
 	const maxTokens = 16000;
-	const settings = {
-		messages: []
-	};
 	let apiKey = '';
 	let interval = null;
 	let tokenTimeot = null;
@@ -27,17 +24,206 @@
 	let modalTimeout = null;
 	let loader = null;
 	let bCreateLoader = true;
+	let themeType = 'light';
+	let regenerationMessageIndex = null;	//Index of the message for which a new reply is being created
+
+	const ErrorCodes = {
+		UNKNOWN: 1
+	};
+	const errorsMap = {
+		[ErrorCodes.UNKNOWN]: {
+			title: 'Something went wrong',
+			description: 'Please try reloading the conversation'
+		}
+	};
+
+	let scrollbarList; 
+
+	let messagesList = {
+		_list: [],
+		
+		_renderItemToList: function(item, index) {
+			$('#chat_wrapper').removeClass('empty');
+
+			let $chat = $('#chat');
+			item.$el = $('<div class="message" style="order: ' + index + ';"></div>');
+			$chat.prepend(item.$el);
+			this._renderItem(item);
+			$chat.scrollTop($chat[0].scrollHeight);
+		},
+		_renderItem: function(item) {
+			item.$el.empty();
+			item.$el.toggleClass('user_message', item.role == 'user');
+
+			const me = this;
+			let $messageContent = $('<div class="form-control message_content"></div>');
+			let $spanMessage = $('<span class="span_message"></span>');
+			let $attachedWrapper;
+			let activeContent = item.getActiveContent();
+			$messageContent.append($spanMessage);
+			
+			let c = window.markdownit();
+			let htmlContent = c.render(activeContent);
+			$spanMessage.css('display', 'block');
+			$spanMessage.html(htmlContent);
+
+			let plainText = htmlContent.replace(/<\/?[^>]+(>|$)/g, "").replace(/\n{3,}/g, "\n\n");
+	
+			if(item.role == 'user') {
+				if(item.attachedText) {
+					$attachedWrapper = $(
+						'<div class="message_content_attached_wrapper collapsed">' + 
+							'<div class="message_content_attached">' + 
+								item.attachedText +
+							'</div>' + 
+							'<div class="message_content_collapse_btn noselect">' +
+								'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/>' +
+							'</div>' +
+						'</div>'
+					);
+					$attachedWrapper.find('.message_content_collapse_btn').on('click', function() {
+						$attachedWrapper.toggleClass('collapsed');
+						toggleAttachedCollapseButton($attachedWrapper);
+					});
+					$messageContent.prepend($attachedWrapper);
+				}
+			} else {
+				if(item.error) {
+					const errorObj = errorsMap[item.error];
+					const $error = $(
+						'<div class="message_content_error_title">' +
+							'<img src="' + getFormattedPathForIcon('resources/icons/error-small/error.png') + '" />' +
+							'<div>' + errorObj.title + '</div>' + 
+						'</div>' +
+						'<div class="message_content_error_desc">' + errorObj.description + '</div>'
+					);
+					$messageContent.append($error);
+				} else {
+					let $actionButtons = $('<div class="action_buttons_list"></div>');
+					actionButtons.forEach(function(button) {
+						let buttonEl = $('<button class="action_button btn-text-default"></button>');
+						buttonEl.append('<img class="icon" src="' + getFormattedPathForIcon(button.icon) + '"/>');
+						buttonEl.on('click', function() {
+							button.handler(item, activeContent, htmlContent, plainText);
+						});
+		
+						if(button.tipOptions) {
+							new Tooltip(buttonEl[0], button.tipOptions);
+						}
+						
+						$actionButtons.append(buttonEl);
+					});
+					item.$el.append($actionButtons);
+	
+					if(item.content.length > 1) {
+						const $repliesSwitch = $(
+							'<div class="message_content_replies_switch">' + 
+								'<div>' + (item.activeContentIndex + 1) + ' / ' + (item.content.length) + '</div>' +
+							'</div>'
+						);
+	
+						const $decrementBtn = $('<button><img class="decrement icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/></button>');
+						item.activeContentIndex == 0 ? $decrementBtn.attr('disabled', 'disabled') : $decrementBtn.removeAttr('disabled');
+						$repliesSwitch.prepend($decrementBtn);
+						$decrementBtn.on('click', function() {
+							item.activeContentIndex -= 1;
+							me._renderItem(item);
+	
+						});
+						
+						const $incrementBtn = $('<button><img class="increment icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/></button>');
+						item.activeContentIndex == item.content.length - 1 ? $incrementBtn.attr('disabled', 'disabled') : $incrementBtn.removeAttr('disabled');
+						$repliesSwitch.append($incrementBtn);
+						$incrementBtn.on('click', function() {
+							item.activeContentIndex += 1;
+							me._renderItem(item);
+						});
+	
+						$messageContent.append($repliesSwitch);
+					}
+				}
+			}
+			item.$el.prepend($messageContent);
+			if($attachedWrapper) {
+				setTimeout(function() {
+					toggleAttachedCollapseButton($attachedWrapper);
+				}, 10);
+			}
+			scrollbarList.update();
+		},
+
+		set: function(array) {
+			let me = this;
+
+			array.forEach(function(item) {
+				me.add(item);
+			});
+		},
+		add: function(item) {
+			const message = Object.assign({}, item);
+
+			message.getActiveContent = function() {
+				return (message.role == 'user' ? message.content : message.content[message.activeContentIndex]);
+			};
+			if(message.role == 'assistant') {
+				message.activeContentIndex = 0;
+			}
+			this._list.push(message)
+			this._renderItemToList(message, this._list.length - 1);
+		},
+		pushContentForAssistant: function(messageIndex, content) {
+			if(!this._list[messageIndex] || this._list[messageIndex].role != 'assistant') return;
+			const message = this._list[messageIndex];
+			message.content.push(content);
+			message.activeContentIndex = message.content.length - 1;
+			this._renderItem(message);
+		},
+		get: function() {
+			return this._list;
+		}
+	};
+
+	let attachedText = {
+		set: function(text) {
+			$('#attached_text_wrapper').removeClass('hidden');
+			$('#attached_text').text(text);
+		},
+		get: function() {
+			return $('#attached_text').text().trim();
+		},
+		clear: function() {
+			$('#attached_text_wrapper').addClass('hidden', true);
+			$('#attached_text').text('');
+		},
+		hasShow: function() {
+			return !$('#attached_text_wrapper').hasClass('hidden');
+		}
+	};
 
 	let actionButtons = [
+		{ 
+			icon: 'resources/icons/light/btn-update.png', 
+			tipOptions: {
+				text: 'Generate new',
+				align: 'left'
+			},
+			handler: function(message) { 
+				const messageIndex = messagesList.get().findIndex(function(item) { return item == message});
+				if(messageIndex > 0) {
+					regenerationMessageIndex = messageIndex;
+					sendMessage(messagesList.get()[messageIndex - 1].content);
+				}
+			}
+		},
 		{ 
 			icon: 'resources/icons/light/btn-copy.png', 
 			tipOptions: {
 				text: 'Copy',
 				align: 'left'
 			},
-			hanlder: function(text) { 
+			handler: function(message, content) { 
 				var prevTextareaVal = $('#input_message').val();
-				$('#input_message').val(text);
+				$('#input_message').val(content);
 				$('#input_message').select();
 				document.execCommand('copy');
 				$('#input_message').val(prevTextareaVal);
@@ -49,7 +235,7 @@
 				text: 'Replace original text',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('replace', text); }
+			handler: function(message, content, htmlContent, plainText) { insertEngine('replace', plainText); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-select-tool.png', 
@@ -57,7 +243,7 @@
 				text: 'Insert result',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('insert', text); }
+			handler: function(message, content, htmlContent)  { insertEngine('insert', htmlContent); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-menu-comments.png', 
@@ -65,7 +251,7 @@
 				text: 'In comment',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('comment', text); }
+			handler: function(message, content, htmlContent, plainText) { insertEngine('comment', plainText); }
 		},
 		{ 
 			icon: 'resources/icons/light/btn-ic-review.png', 
@@ -73,17 +259,19 @@
 				text: 'As review',
 				align: 'left'
 			},
-			hanlder: function(text) { insertEngine('review', text);}
+			handler: function(message, content, htmlContent) { insertEngine('review', htmlContent);}
 		},
 	];
 	let welcomeButtons = [
-		{ text: 'Blog post about', prompt: 'Blog post about' },
-		{ text: 'Press release about', prompt: 'Press release about' },
-		{ text: 'Social media post about', prompt: 'Social media post about' },
-		{ text: 'Brainstorm ideas for', prompt: 'Brainstorm ideas for' },
-		{ text: 'Project proposal about', prompt: 'Project proposal about' },
-		{ text: 'An essay about', prompt: 'An essay about' },
-		{ text: 'Creative story about', prompt: 'Creative story about' }
+		{ text: 'Blog post', prompt: 'Blog post about' },
+		{ text: 'Press release', prompt: 'Press release about' },
+		{ text: 'An essay', prompt: 'An essay about' },
+		{ text: 'Social media post', prompt: 'Social media post about' },
+		{ text: 'Brainstorm', prompt: 'Brainstorm ideas for' },
+		{ text: 'Project proposal', prompt: 'Project proposal about' },
+		{ text: 'Creative story', prompt: 'Creative story about' },
+		{ text: 'Make a plan', prompt: 'Make a plan about' },
+		{ text: 'Get advice', prompt: 'Get advice about' }
 	];
 
 
@@ -96,13 +284,11 @@
 	let localStorageKey = "onlyoffice_ai_chat_state";
 
 	window.Asc.plugin.init = function() {
+		scrollbarList = new PerfectScrollbar("#chat", {});
 		restoreState();
 		bCreateLoader = false;
 		destroyLoader();
 
-		if(settings.messages.length) {
-			hideStartPanel();
-		}
 		updateTextareaSize();
 
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
@@ -148,6 +334,10 @@
 				document.getElementById('cur_tokens').innerText = tokens.length;
 			}, 250);
 		});
+
+		document.getElementById('attached_text_close').addEventListener('click', function() {
+			attachedText.clear();
+		});
 		
 		// TODO:
 		if (true)
@@ -171,14 +361,10 @@
 
 		document.getElementById('clear_history').onclick = function() {
 			document.getElementById('chat').innerHTML = '';
-			settings.messages = [];
+			messagesList.set([]);
 			document.getElementById('total_tokens').classList.remove('err-message');
 			document.getElementById('total_tokens').innerText = 0;
 		};
-
-		window.addEventListener("resize", function() {
-			updateTextareaSize();
-		});
 	};
 
 
@@ -190,7 +376,7 @@
 		}
 		let value = textarea.value.trim();
 		if (value.length) {
-			createMessage(textarea.value.trim(), 1);
+			sendMessage(textarea.value.trim());
 			textarea.value = '';
 			updateTextareaSize();
 			document.getElementById('cur_tokens').innerText = 0;
@@ -200,10 +386,6 @@
 	function updateStartPanel() {
 		updateWelcomeText();
 		renderWelcomeButtons();
-	};
-
-	function hideStartPanel() {
-		$('#start_panel').css('display', 'none');
 	};
 
 	function updateWelcomeText() {
@@ -217,9 +399,9 @@
 
 	function renderWelcomeButtons() {
 		welcomeButtons.forEach(function(button) {
-			let addedEl = $('<div class="welcome_button form-control noselect">' + button.text + '...</div>');
+			let addedEl = $('<button class="welcome_button btn-text-default noselect">' + button.text + '</button>');
 			addedEl.on('click', function() {
-				$('#input_message').val(button.prompt).focus();
+				$('#input_message').val(button.prompt + ' ').focus();
 			});
 			$('#welcome_buttons_list').append(addedEl);
 		});
@@ -227,8 +409,10 @@
 
 	function updateTextareaSize() {
 		let textarea = $('#input_message')[0];
-		textarea.style.height = "auto";
-		textarea.style.height = Math.min(textarea.scrollHeight, 98) +2 + "px";
+		if(textarea) {
+			textarea.style.height = "auto";
+			textarea.style.height = Math.min(textarea.scrollHeight, 98) +2 + "px";
+		}
 	};
 
 	function setState(state) {
@@ -245,73 +429,48 @@
 		if(!state) return;
 
 		if(state.messages) {
-			settings.messages = state.messages; 
-			state.messages.forEach(function(message) {
-				renderMessage(message.content, message.role == 'user');
-			});
+			messagesList.set(state.messages);
 		}
 		if(state.inputValue) {
 			document.getElementById('input_message').value = state.inputValue;
 		}
-	};
-
-	function createMessage(text, type) {
-		if (type) {
-			renderMessage(text, type);
-			sendMessage(text);
-		} else {
-			renderMessage(text, type);
+		if(state.attachedText) {
+			attachedText.set(state.attachedText);
 		}
-	};
-
-	function renderMessage(text, type) {
-		let chatEl = $('#chat');
-		let messageEl = $('<div class="message"></div>');
-		let spanMessageEl = $('<span class="form-control span_message"></span>');
-		
-		if (false) {
-			spanMessageEl.text(text);
-		} else {
-			let c = window.markdownit();
-			let htmlContent = c.render(text);
-			spanMessageEl.css('display', 'block');
-			spanMessageEl.html(htmlContent);
-		}
-
-		if(type) {
-			messageEl.addClass('user_message');
-		} else {
-			let actionButtonsEl = $('<div class="action_buttons_list"></div>');
-			actionButtons.forEach(function(button) {
-				let buttonEl = $('<button class="action_button btn-text-default"></button>');
-				buttonEl.append('<img src="' + getFormattedPathForIcon(button.icon) + '"/>');
-				buttonEl.on('click', function() {
-					button.hanlder(text);
-				});
-
-				if(button.tipOptions) {
-					new Tooltip(buttonEl[0], button.tipOptions);
-				}
-				
-				actionButtonsEl.append(buttonEl);
-			});
-			messageEl.append(actionButtonsEl);
-		}
-		messageEl.prepend(spanMessageEl);
-		chatEl.prepend(messageEl);
-		chatEl.scrollTop(chatEl[0].scrollHeight);
 	};
 
 	function sendMessage(text) {
-		hideStartPanel();
-		createTyping();
-		settings.messages.push({role: 'user', content: text});
-		window.Asc.plugin.sendToPlugin("onChatMessage", settings.messages);		
+		const isRegenerating = regenerationMessageIndex !== null;
+		const message = { role: 'user', content: text };
+
+		if (attachedText.hasShow()) {
+			message.attachedText = attachedText.get();
+			attachedText.clear();
+		}
+		if (!isRegenerating) {
+			messagesList.add(message);
+			createTyping();
+		}
+
+		let list = isRegenerating 
+			? messagesList.get().slice(0, regenerationMessageIndex) 
+			: messagesList.get();
+		
+		//Remove the errors and user messages that caused the error
+		list = list.filter(function(item, index) {
+			const nextItem = list[index + 1]
+			return !item.error && !(nextItem && nextItem.error);
+		});	
+		list = list.map(function(item) {
+			return { role: item.role, content: item.getActiveContent() }
+		});
+
+		window.Asc.plugin.sendToPlugin("onChatMessage", list);	
 	};
 
 	function createTyping() {
 		let chatEl = $('#chat');
-		let messageEl = $('<div id="loading" class="message"></div>');
+		let messageEl = $('<div id="loading" class="message" style="order: ' +  messagesList.get().length + ';"></div>');
 		let spanMessageEl = $('<div class="span_message"></div>');
 		spanMessageEl.text(window.Asc.plugin.tr('Thinking'));
 		messageEl.append(spanMessageEl);
@@ -361,13 +520,29 @@
 	};
 
 	function getFormattedPathForIcon(path) {
-		let themeType = window.Asc.plugin.info.theme.type || 'light';
 		path = path.replace(/\/(light|dark)\//, '/' + themeType + '/');
 		path = path.replace(/(\.\w+)$/, getZoomSuffixForImage() + '$1');
 		return path;
 	}
 
+	//Toggle the hide of the button to collapse attached text 
+	function toggleAttachedCollapseButton($wrapper) {
+		const $content = $wrapper.find('.message_content_attached');
+		const $btn = $wrapper.find('.message_content_collapse_btn');
+		const needCollapse = $content.height() < $content[0].scrollHeight;
+		const isCollapsed = $wrapper.hasClass('collapsed');
+		$btn.toggleClass('hidden', !needCollapse && isCollapsed);
+	}
+
 	function onResize () {
+		updateTextareaSize();
+
+		scrollbarList && scrollbarList.update();
+
+		$('.message_content_attached_wrapper').each(function(index, el) {
+			toggleAttachedCollapseButton($(el));
+		});
+
 		$('img').each(function() {
 			var el = $(this);
 			var src = $(el).attr('src');
@@ -456,7 +631,7 @@
 		});
 
 		// Textarea
-		document.getElementById('input_message').setAttribute('placeholder', window.Asc.plugin.tr('Ask AI a question about something...'));
+		document.getElementById('input_message').setAttribute('placeholder', window.Asc.plugin.tr('Ask AI anything'));
 
 		//Action buttons
 		actionButtons.forEach(function(button) {
@@ -469,24 +644,50 @@
 			button.prompt = window.Asc.plugin.tr(button.prompt);
 		});
 
+		//Reply errors
+		for (var key in errorsMap) {
+			if (errorsMap.hasOwnProperty(key)) {
+				const errorItem = errorsMap[key];
+				errorItem.text = window.Asc.plugin.tr(errorItem.title);
+				errorItem.description = window.Asc.plugin.tr(errorItem.description);
+			}
+		}
+
 		updateStartPanel();
 	};
 
 	window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
-		settings.messages.push({role: "assistant", content: reply});
+		let errorCode = null;
+		if(!reply.trim()) {
+			errorCode = ErrorCodes.UNKNOWN;
+		}
+
+		if(regenerationMessageIndex) {
+			if(!errorCode) {
+				messagesList.pushContentForAssistant(regenerationMessageIndex, reply);
+			}
+		} else {
+			messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
+		}
+		regenerationMessageIndex = null;
+		
 		removeTyping();
-		createMessage(reply, 0);
 		document.getElementById('input_message').focus();
+	});
+
+	window.Asc.plugin.attachEvent("onAttachedText", function(text) {
+		attachedText.set(text);
 	});
 
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
 	window.Asc.plugin.attachEvent("onUpdateState", function() {
 		setState({
-			messages: settings.messages,
-			inputValue: document.getElementById('input_message').value
+			messages: messagesList.get(),
+			inputValue: document.getElementById('input_message').value,
+			attachedText: attachedText.hasShow() ? attachedText.get() : ''
 		});
 		window.Asc.plugin.sendToPlugin("onUpdateState");
 	});
