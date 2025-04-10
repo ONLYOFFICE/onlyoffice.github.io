@@ -336,10 +336,6 @@ input {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
-	cursor: pointer;
-}
-#attached_text:hover {
-	text-decoration: underline;
 }
 
 #attached_text_close {
