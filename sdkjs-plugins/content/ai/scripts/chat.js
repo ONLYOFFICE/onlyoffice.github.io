@@ -43,14 +43,13 @@
 		_list: [],
 		
 		_renderItemToList: function(item, index) {
+			$('#chat_wrapper').removeClass('empty');
+
 			let $chat = $('#chat');
 			item.$el = $('<div class="message" style="order: ' + index + ';"></div>');
-			this._renderItem(item);
 			$chat.prepend(item.$el);
+			this._renderItem(item);
 			$chat.scrollTop($chat[0].scrollHeight);
-			scrollbarList.update();
-
-			$('#chat_wrapper').removeClass('empty');
 		},
 		_renderItem: function(item) {
 			item.$el.empty();
@@ -150,7 +149,6 @@
 					toggleAttachedCollapseButton($attachedWrapper);
 				}, 10);
 			}
-			scrollbarList.update();
 			scrollbarList.update();
 		},
 
