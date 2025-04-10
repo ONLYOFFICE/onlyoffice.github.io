@@ -431,7 +431,7 @@
 	if (true)
 	{
 		let button1 = new Asc.ButtonContextMenu(buttonMain);
-		button1.text = "Chat";
+		button1.text = "Chatbot";
 		button1.separator = true;
 		button1.addCheckers("All");
 		button1.attachOnClick(async function(){
@@ -491,7 +491,7 @@
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button1.separator = true;
-		button1.text = "Ask AI";
+		button1.text = "Chatbot";
 		button1.icons = getToolBarButtonIcons("ask-ai");
 		button1.attachOnClick(function(data){
 			chatWindowShow();
