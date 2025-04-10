@@ -22,7 +22,7 @@
 	buttonMain.text = "AI";
 	buttonMain.addCheckers("All");
 
-	function chatWindowShow()
+	function chatWindowShow(attachedText)
 	{
 		if (window.chatWindow) {
 			window.chatWindow.activate();
@@ -46,9 +46,15 @@
 			size : [ 400, 400 ]
 		};
 
+		let hasOpenedOnce = false;
+
 		var chatWindow = new window.Asc.PluginWindow();
 		chatWindow.attachEvent("onWindowReady", function() {
-			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]])
+			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]]);
+			if(!hasOpenedOnce && attachedText && attachedText.trim()) {
+				chatWindow.command("onAttachedText", attachedText);
+			}
+			hasOpenedOnce = true;
 		});
 		chatWindow.attachEvent("onChatMessage", async function(message) {
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
@@ -65,7 +71,7 @@
 			switch (data.type) {
 				case "review": {
 					if (Asc.plugin.info.editorType === "word")
-						await Asc.Library.InsertAsReview(data.data);
+						await Asc.Library.InsertAsReview(data.data, true);
 					else
 						await Asc.Library.InsertAsComment(data.data);
 					break;
@@ -75,7 +81,7 @@
 					break;
 				}
 				case "insert": {
-					await Asc.Library.PasteText(data.data);
+					await Asc.Library.InsertAsHTML(data.data);
 					break;
 				}
 				case "replace": {
@@ -425,11 +431,12 @@
 	if (true)
 	{
 		let button1 = new Asc.ButtonContextMenu(buttonMain);
-		button1.text = "Chat";
+		button1.text = "Chatbot";
 		button1.separator = true;
 		button1.addCheckers("All");
-		button1.attachOnClick(function(){
-			chatWindowShow();
+		button1.attachOnClick(async function(){
+			let selectedText = await Asc.Library.GetSelectedText();
+			chatWindowShow(selectedText);
 		});
 	}
 
@@ -466,7 +473,7 @@
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button1.separator = true;
-		button1.text = "Ask AI";
+		button1.text = "Chatbot";
 		button1.icons = getToolBarButtonIcons("ask-ai");
 		button1.attachOnClick(function(data){
 			chatWindowShow();

@@ -31,17 +31,19 @@ limitations under the License.
 </head>
 <body style="display: flex;">
 	<div id="chat_window" class="chat_window hidden">
-		<div class="form-control messages" id="chat">
-			<div id="start_panel">
-				<div id="welcome_text">
-					<br/>
-					<br/>
-					<span class="i18n">I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.</span>
-					<br/>
-					<br/>
-					<span class="i18n">Let’s make your content shine together!</span>
+		<div id="chat_wrapper" class="form-control empty">
+			<div id="chat" class="noselect">
+				<div id="start_panel">
+					<div id="welcome_text">
+						<br/>
+						<br/>
+						<span class="i18n">I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.</span>
+						<br/>
+						<br/>
+						<span class="i18n">Let’s make your content shine together!</span>
+					</div>
+					<div id="welcome_buttons_list"></div>
 				</div>
-				<div id="welcome_buttons_list"></div>
 			</div>
 		</div>
 		<div id="tokens_info" class="tokens_info">
@@ -64,6 +66,10 @@ limitations under the License.
 				<span id="total_tokens">0</span>
 			</div>
 
+		</div>
+		<div id="attached_text_wrapper" class="hidden">
+			<div id="attached_text"></div>
+			<img id="attached_text_close" src="resources/icons/light/btn-demote.png" class="icon"/>
 		</div>
 		<div id="input_message_wrapper">
 			<textarea id="input_message" rows="1" class="form-control" spellcheck="false"></textarea>
