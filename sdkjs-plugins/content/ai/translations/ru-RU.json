@@ -125,17 +125,17 @@
 	"Something went wrong": "Something went wrong",
 	"Please try reloading the conversation": "Please try reloading the conversation",
 
-	"This field is required": "This field is required",
+	"This field is required": "Это обязательное поле",
 
-	"Custom providers": "Custom providers",
-	"Back": "Back",
-	"Connected custom providers": "Connected custom providers",
-	"The list is empty, press + to add the file": "The list is empty, press + to add the file",
-	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.",
-	"Download template": "Download template",
-	"Invalid file format, please upload the .js file": "Invalid file format, please upload the .js file",
-	"Error adding provider from file, please try again": "Error adding provider from file, please try again",
+	"Custom providers": "Настраиваемые поставщики",
+	"Back": "Назад",
+	"Connected custom providers": "Подключенные настраиваемые поставщики",
+	"The list is empty, press + to add the file": "Список пуст, нажмите +, чтобы добавить файл",
+	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Введите настройки для API ИИ-модели в формате JS. Укажите имя модели, URL-адреса конечных точек и заголовки.",
+	"Download template": "Загрузить шаблон",
+	"Invalid file format, please upload the .js file": "Недопустимый формат файла. Загрузите файл .js.",
+	"Error adding provider from file, please try again": "Ошибка добавления поставщика из файла, попробуйте еще раз",
 
-	"Translation settings": "Translation settings",
-	"Select language for AI translation.": "Select language for AI translation."
+	"Translation settings": "Настройки перевода",
+	"Select language for AI translation.": "Выберите язык для перевода с помощью ИИ."
 }
