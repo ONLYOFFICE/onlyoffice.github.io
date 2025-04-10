@@ -4,15 +4,14 @@ body {
 }
 
 #ai-models-list .item {
-    padding: 6px;
-    border-bottom: 1px solid;
+    border-bottom: none;
 }
 #ai-models-list .item .content {
     display: -webkit-inline-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 1;
 }
 
 #buttons-block {
