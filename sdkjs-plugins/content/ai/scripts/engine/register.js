@@ -122,6 +122,8 @@
 				return;
 
 			let content = await Asc.Library.GetCurrentWord();
+			if (!content)
+				return;
 			let prompt = Asc.Prompts.getExplainPrompt(content);
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
@@ -305,7 +307,7 @@
 		button1.addCheckers("Selection");
 
 		let button2 = new Asc.ButtonContextMenu(button1);
-		button2.text = "Translate to English";
+		button2.text = "English";
 		button2.editors = ["word"];
 		button2.addCheckers("Selection");
 		button2.data = "English";
@@ -324,35 +326,35 @@
 		});
 
 		let button3 = button2.copy();
-		button3.text = "Translate to French";
+		button3.text = "French";
 		button3.data = "French";
 
 		let button4 = button2.copy();
-		button4.text = "Translate to German";
+		button4.text = "German";
 		button4.data = "German";
 
 		let button5 = button2.copy();
-		button5.text = "Translate to Chinese";
+		button5.text = "Chinese";
 		button5.data = "Chinese";
 
 		let button6 = button2.copy();
-		button6.text = "Translate to Japanese";
+		button6.text = "Japanese";
 		button6.data = "Japanese";
 
 		let button7 = button2.copy();
-		button7.text = "Translate to Russian";
+		button7.text = "Russian";
 		button7.data = "Russian";
 
 		let button8 = button2.copy();
-		button8.text = "Translate to Korean";
+		button8.text = "Korean";
 		button8.data = "Korean";
 
 		let button9 = button2.copy();
-		button9.text = "Translate to Spanish";
+		button9.text = "Spanish";
 		button9.data = "Spanish";
 
 		let button10 = button2.copy();
-		button10.text = "Translate to Italian";
+		button10.text = "Italian";
 		button10.data = "Italian";
 	}
 
@@ -520,6 +522,8 @@
 
 			let lang = !!currLang ? currLang : "english";
 			let content = await Asc.Library.GetSelectedText();
+			if (!content)
+				return;
 			let prompt = Asc.Prompts.getTranslatePrompt(content, lang);
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;

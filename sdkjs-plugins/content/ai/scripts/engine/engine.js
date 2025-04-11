@@ -391,6 +391,13 @@
 			let result = provider.getChatCompletionsResult(data, this.model);
 			if (result.content.length === 0)
 				return "";
+
+			if (0 === result.content[0].indexOf("<think>")) {
+				let end = result.content[0].indexOf("</think>");
+				if (end !== -1)
+					result.content[0] = result.content[0].substring(end + 8);
+			}
+
 			return result.content[0];
 		};
 
