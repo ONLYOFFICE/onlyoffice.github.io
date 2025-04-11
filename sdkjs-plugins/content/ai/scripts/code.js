@@ -20,9 +20,34 @@ function clearChatState() {
 		window.localStorage.removeItem(key);
 }
 
-window.Asc.plugin.init = function() {
+window.Asc.plugin.init = async function() {
 	initWithTranslate();
 	clearChatState();
+
+	let editorVersion = await Asc.Library.GetEditorVersion();
+	if (editorVersion >= 9000000) {
+		window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
+			let data = {};
+			switch (params.type) {
+				case "text":
+				{
+					let requestEngine = AI.Request.create(AI.ActionType.Chat);
+					if (requestEngine)
+					{
+						let result = await requestEngine.chatRequest(params.data);
+						if (!result) result = "";
+
+						data.type = "text";
+						data.text = result;
+					}
+				}
+				default:
+					break;
+			}
+
+			Asc.Editor.callMethod("onAIRequest", [data]);
+		});
+	}
 };
 
 window.Asc.plugin.onTranslate = function() {

@@ -34,6 +34,19 @@
 
 	function Library() {}
 
+	Library.prototype.GetEditorVersion = async function()
+	{
+		let version = await Editor.callMethod("GetVersion");
+		if ("develop" == version)
+			version = "99.99.99";
+
+		let arrVer = version.split(".");
+		while (3 > arrVer.length)
+			arrVer.push("0");
+
+		return 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+	};
+
 	Library.prototype.GetCurrentWord = async function()
 	{
 		return await Editor.callMethod("GetCurrentWord");
