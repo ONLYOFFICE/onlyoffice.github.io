@@ -30,7 +30,6 @@ label {
 
 textarea {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin-bottom: 8px;
     padding: 6px 8px !important;
     line-height: 14px;
     height: 200px !important;
@@ -64,22 +63,31 @@ textarea {
     width: 20px;
 }
 
+#original-textarea {
+    margin-bottom: 8px;
+}
+
 .summary-wrapper {
     position: relative;
+    margin-bottom: 8px;
 }
 
 .error {
     display: none;
-    top: 0;
+    height: calc(100% - 7px);
+    width: calc(100% - 4px);
+    background: var(--background-normal);
+    box-sizing: border-box;
+    top: 2px;
+    left: 2px;
     position: absolute;
     padding: 8px;
 }
 
 .error-icon {
-    width: 12px;
-    height: 12px;
-    background: url('../icons/error-small/error.png') no-repeat center;
-    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    margin: -4px 2px -4px -4px;
 }
 
 .error-title-block {
