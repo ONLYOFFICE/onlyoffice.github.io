@@ -92,7 +92,7 @@
 					const errorObj = errorsMap[item.error];
 					const $error = $(
 						'<div class="message_content_error_title">' +
-							'<img src="' + getFormattedPathForIcon('resources/icons/error-small/error.png') + '" />' +
+							'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/error.png') + '" />' +
 							'<div>' + errorObj.title + '</div>' + 
 						'</div>' +
 						'<div class="message_content_error_desc">' + errorObj.description + '</div>'
