@@ -70,7 +70,8 @@
 			let plainText = htmlContent.replace(/<\/?[^>]+(>|$)/g, "").replace(/\n{3,}/g, "\n\n");
 	
 			if(item.role == 'user') {
-				if(item.attachedText) {
+				// TODO: For a future release.
+				if(false && item.attachedText) {
 					$attachedWrapper = $(
 						'<div class="message_content_attached_wrapper collapsed">' + 
 							'<div class="message_content_attached">' + 
@@ -678,7 +679,8 @@
 	});
 
 	window.Asc.plugin.attachEvent("onAttachedText", function(text) {
-		attachedText.set(text);
+		// For a future release.
+		// attachedText.set(text);
 	});
 
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
