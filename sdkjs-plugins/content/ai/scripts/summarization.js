@@ -131,6 +131,8 @@ function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	themeType = theme.type || 'light';
 	
+	addCssVariables(theme);
+
 	var classes = document.body.className.split(' ');
 	classes.forEach(function(className) {
 		if (className.indexOf('theme-') != -1) {
@@ -139,14 +141,38 @@ function onThemeChanged(theme) {
 	});
 	document.body.classList.add(theme.name);
 	document.body.classList.add('theme-type-' + themeType);
-	$('img').each(function() {
-		var el = $(this);
-		var src = $(el).attr('src');
-		if(!src.includes('resources/icons/')) return;
-
+	$('img.icon').each(function() {
+		var src = $(this).attr('src');
 		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
-		el.attr('src', newSrc);
+		$(this).attr('src', newSrc);
 	});
+}
+
+function addCssVariables(theme) {
+	let colorRegex = /^(#([0-9a-f]{3}){1,2}|rgba?\([^\)]+\)|hsl\([^\)]+\))$/i;
+
+	let oldStyle = document.getElementById('theme-variables');
+	if (oldStyle) {
+		oldStyle.remove();
+	}
+
+	let style = document.createElement('style');
+	style.id = 'theme-variables';
+	let cssVariables = ":root {\n";
+
+	for (let key in theme) {
+		let value = theme[key];
+
+		if (colorRegex.test(value)) {
+			let cssKey = '--' + key.replace(/([A-Z])/g, "-$1").toLowerCase();
+			cssVariables += ' ' + cssKey + ': ' + value + ';\n';
+		}
+	}
+
+	cssVariables += "}";
+
+	style.textContent = cssVariables;
+	document.head.appendChild(style);
 }
 
 function getZoomSuffixForImage() {
