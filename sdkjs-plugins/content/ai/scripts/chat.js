@@ -77,7 +77,7 @@
 								item.attachedText +
 							'</div>' + 
 							'<div class="message_content_collapse_btn noselect">' +
-								'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/>' +
+								'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/>' +
 							'</div>' +
 						'</div>'
 					);
@@ -122,7 +122,7 @@
 							'</div>'
 						);
 	
-						const $decrementBtn = $('<button><img class="decrement icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/></button>');
+						const $decrementBtn = $('<button><img class="decrement icon" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/></button>');
 						item.activeContentIndex == 0 ? $decrementBtn.attr('disabled', 'disabled') : $decrementBtn.removeAttr('disabled');
 						$repliesSwitch.prepend($decrementBtn);
 						$decrementBtn.on('click', function() {
@@ -131,7 +131,7 @@
 	
 						});
 						
-						const $incrementBtn = $('<button><img class="increment icon" src="' + getFormattedPathForIcon('resources/icons/light/btn-demote.png') + '"/></button>');
+						const $incrementBtn = $('<button><img class="increment icon" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/></button>');
 						item.activeContentIndex == item.content.length - 1 ? $incrementBtn.attr('disabled', 'disabled') : $incrementBtn.removeAttr('disabled');
 						$repliesSwitch.append($incrementBtn);
 						$incrementBtn.on('click', function() {
