@@ -478,7 +478,7 @@
 		chatEl.prepend(messageEl);
 		chatEl.scrollTop(chatEl[0].scrollHeight);
 		interval = setInterval(function() {
-			let countDots = (loading.innerText.match(/\./g) || []).length;
+			let countDots = (spanMessageEl.text().match(/\./g) || []).length;
 			countDots = countDots < 3 ? countDots + 1 : 0;
 			spanMessageEl.text(window.Asc.plugin.tr('Thinking') + Array(countDots + 1).join("."));
 		}, 500);
