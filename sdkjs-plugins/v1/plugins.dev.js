@@ -331,6 +331,7 @@
 	Asc.Buttons = {};
 	Asc.Buttons.ButtonsContextMenu = [];
 	Asc.Buttons.ButtonsToolbar = [];
+	Asc.Buttons.ButtonsContentControl = [];
 
 	Asc.Buttons.registerContextMenu = function()
 	{
@@ -383,6 +384,32 @@
 			window.Asc.plugin.executeMethod("AddToolbarMenuItem", [items]);
 	};
 
+	Asc.Buttons.registerContentControl = function()
+	{
+		window.Asc.plugin.attachEvent("onShowContentControlTrack", function(contentControls) {
+
+			let buttons = {
+				guid: window.Asc.plugin.guid,
+				items : {}
+			};
+
+			let promises = [];
+
+			for (let i = 0, len = Asc.Buttons.ButtonsContentControl.length; i < len; ++i)
+			{
+				promises.push(Asc.Buttons.ButtonsContentControl[i].onShowTrack(contentControls, buttons.items));
+			}
+
+			Promise.all(promises).then(function() {
+				for (let id in buttons.items)
+				{
+					window.Asc.plugin.executeMethod("AddContentControlButtons", [buttons]);
+					break;	
+				}
+			});
+		});
+	};
+
 	var ToolbarButtonType = {
 		Button : "button",
 		BigButton : "big-button"
@@ -391,7 +418,8 @@
 	var ItemType = {
 		None : 0,
 		ContextMenu : 1,
-		Toolbar : 2
+		Toolbar : 2,
+		ContentControl : 3
 	};
 
 	function Button(parent, id)
@@ -628,8 +656,72 @@
 		}
 	};
 
+	function ButtonContentControl(parent, id)
+	{
+		Button.call(this, parent, id);
+		this.itemType = ItemType.ContentControl;
+		this.checker = null;
+		Asc.Buttons.ButtonsContentControl.push(this);
+	}
+
+	ButtonContentControl.prototype = Object.create(Button.prototype);
+	ButtonContentControl.prototype.constructor = ButtonContentControl;
+
+	ButtonContentControl.prototype.attachOnClick = function(handler)
+	{
+		//window.Asc.plugin.attachToolbarMenuClickEvent(this.id, handler);
+	};
+	ButtonContentControl.prototype.addChecker = function(checker)
+	{
+		if (!checker || typeof checker !== 'function')
+			return;
+		
+		this.checker = checker;
+	};
+	ButtonContentControl.prototype.onShowTrack = function(ccIds, items)
+	{
+		let fChecker = this.checker;
+		let promises = [];
+		let curItem = this.toItem();
+		for (let i = 0, len = ccIds.length; i < len; ++i)
+		{
+			let ccId = ccIds[i];
+			promises.push(new Promise(function(resolve) {
+
+				if (!fChecker)
+				{
+					resolve(true)
+				}
+				else
+				{
+					let result = fChecker(ccId);
+					if (result instanceof Promise)
+					{
+						result.then(function(result) {
+							resolve(result);
+						});
+					}
+					else
+					{
+						resolve(!!result)
+					}
+				}
+			}).then(function(result) {
+				if (!result)
+					return;
+
+				if (!items[ccId])
+					items[ccId] = [];
+
+				items[ccId].push(curItem);
+			}));
+		}
+		return Promise.all(promises);
+	};
+
 	Asc.ToolbarButtonType = ToolbarButtonType;
 	Asc.ButtonContextMenu = ButtonContextMenu;
 	Asc.ButtonToolbar = ButtonToolbar;
+	Asc.ButtonContentControl = ButtonContentControl;
 })(window);
 
