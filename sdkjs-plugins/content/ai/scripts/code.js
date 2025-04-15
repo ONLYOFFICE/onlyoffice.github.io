@@ -45,8 +45,53 @@ window.Asc.plugin.init = async function() {
 					break;
 			}
 
-			Asc.Editor.callMethod("onAIRequest", [data]);
+			await Asc.Editor.callMethod("onAIRequest", [data]);
 		});
+
+		if ("cell" === window.Asc.plugin.info.editorType) {
+			let CustomFunctions = {
+				current : 0,
+				macrosArray : [
+					{
+						guid : "e8ea2fb288054deaa6b82158c04dee37",
+						name : "AI",
+						value : "\
+(function()\n\
+{\n\
+    /**\n\
+     * Function that returns the AI answer.\n\
+     * @customfunction\n\
+     * @param {string} value Prompt.\n\
+     * @returns {string} Answer value.\n\
+     */\n\
+    async function AI(value) {\n\
+        let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections.\";\n\
+        return new Promise(resolve => (function(){\n\
+            Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
+                if (data.error)\n\
+                    return resolve(data.error);\n\
+                switch (data.type) {\n\
+                    case \"text\":\n\
+                    {\n\
+                        resolve(data.text);\n\
+                        break;\n\
+                    }\n\
+                    default:\n\
+                    {\n\
+                        resolve(\"#ERROR\");\n\
+                    }\n\
+                }\n\
+                resolve(data)\n\
+            });\n\
+        })());\n\
+    }\n\
+    Api.AddCustomFunction(AI);\n\
+})();"
+					}
+				]
+			};
+			await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(CustomFunctions)]);
+		}
 	}
 };
 
