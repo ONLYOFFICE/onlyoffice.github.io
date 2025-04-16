@@ -34,6 +34,29 @@
 
 	function Library() {}
 
+	function decodeHtmlText(text) {
+		return text
+			.replace(/&quot;/g, '"')
+			.replace(/&apos;/g, "'")
+			.replace(/&amp;/g, '&')
+			.replace(/&lt;/g, '<')
+			.replace(/&gt;/g, '>')			
+			.replace(/&nbsp;/g, ' ');
+	}
+
+	Library.prototype.GetEditorVersion = async function()
+	{
+		let version = await Editor.callMethod("GetVersion");
+		if ("develop" == version)
+			version = "99.99.99";
+
+		let arrVer = version.split(".");
+		while (3 > arrVer.length)
+			arrVer.push("0");
+
+		return 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+	};
+
 	Library.prototype.GetCurrentWord = async function()
 	{
 		return await Editor.callMethod("GetCurrentWord");
@@ -87,7 +110,7 @@
 	{
 		return await Editor.callMethod("AddComment", [{
 			UserName : "AI",
-			Text : text,
+			Text : decodeHtmlText(text),
 			Time: Date.now(),
 			Solver: false
 		}]);

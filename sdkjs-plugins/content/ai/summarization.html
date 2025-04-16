@@ -33,8 +33,9 @@
 			<div class="column">
 				<div class="row-label">
 					<label class="i18n">Your text</label>
+					<div id="clear-btn" class="i18n">Clear</div>
 				</div>
-				<textarea id="original-textarea" style="height:45px;width: 100%;" class="form-control" placeholder=""></textarea>
+				<textarea id="original-textarea" style="height:45px;width: 100%;" class="form-control" placeholder="Insert your text here or select the part of the text"></textarea>
 				<div class="row-label">
 					<label class="i18n">Target language</label>
 				</div>
@@ -47,14 +48,14 @@
 				<div class="row-label">
 					<label class="i18n">Summary result</label>
 					<button id="copy-btn" class="btn-text-default">
-						<img src="resources/icons/light/copy.png" />
+						<img class="icon" src="resources/icons/light/copy.png" />
 					</button>
 				</div>
 				<div class="summary-wrapper">
-					<textarea id="result-textarea" style="height:45px;width: 100%;" class="form-control" placeholder="" readonly></textarea>
+					<textarea id="result-textarea" style="height:45px;width: 100%;" class="form-control" placeholder="The AI output will be shown here" readonly></textarea>
 					<div id="error-alert" class="error">
 						<div class="error-title-block">
-							<div class="error-icon"></div>
+							<img class="error-icon icon" src="resources/icons/light/error.png" />
 							<div class="error-title i18n">Error</div>
 						</div>
 						<div class="error-description"></div>

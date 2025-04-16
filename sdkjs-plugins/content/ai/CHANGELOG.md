@@ -71,3 +71,9 @@
 
 ## 2.2.3
 * Fix translations.
+
+## 2.2.4
+* Refactoring chat. Add docked mode for chat window.
+
+## 2.2.5
+* Bug fix

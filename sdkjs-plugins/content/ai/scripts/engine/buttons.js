@@ -1,6 +1,5 @@
 (function(window, undefined)
 {
-	
 	function generateGuid()
 	{
 		if (!window.crypto || !window.crypto.getRandomValues)
@@ -23,14 +22,6 @@
 
 	function translateItem(text) {
 		return window.Asc.plugin.tr(text);
-	};
-
-	function translateItem2(text) {
-		let lang = window.Asc.plugin.info.lang.substring(0,2);
-		let result = { en: text	};
-		if (lang !== "en")
-			result[lang] = window.Asc.plugin.tr(text);
-		return result;
 	};
 
 	window.Asc = window.Asc || {};
@@ -163,7 +154,10 @@
 			item.type = this.type;
 
 		if (this.menu)
-			item.items = this.menu;
+			item.items = this.menu.map(function(menuItem) {
+				menuItem.text = translateItem(menuItem.text);
+				return menuItem;
+			});
 
 		if (this.split)
 			item.split = true;
@@ -336,5 +330,4 @@
 	Asc.ToolbarButtonType = ToolbarButtonType;
 	Asc.ButtonContextMenu = ButtonContextMenu;
 	Asc.ButtonToolbar = ButtonToolbar;
-
 })(window);

@@ -10,7 +10,12 @@ summarizeBtnEl.addEventListener('click', onSummarize);
 var insertBtnEl = document.getElementById('insert-btn');
 insertBtnEl.setAttribute('disabled', true);
 insertBtnEl.addEventListener('click', onInsert);
-window.Asc.plugin.tr('Set Background Color')
+
+var clearBtnEl = document.getElementById('clear-btn');
+clearBtnEl.addEventListener('click', function() {
+	originalAreaEl.value = '';
+});
+
 var copyBtnEl = document.getElementById('copy-btn');
 copyBtnEl.setAttribute('disabled', true);
 copyBtnEl.addEventListener('click', function() {
@@ -44,22 +49,22 @@ function insertEngine(type) {
 
 var insertList = [
 	{
-		name: window.Asc.plugin.tr('As review'), 
+		name: 'As review', 
 		value: 'review', 
 		insertCallback: insertEngine("review")
 	},
 	{
-		name: window.Asc.plugin.tr('In comment'), 
+		name: 'In comment', 
 		value: 'comment',
 		insertCallback: insertEngine("comment")
 	},
 	{
-		name: window.Asc.plugin.tr('Replace original text'), 
+		name: 'Replace original text', 
 		value: 'replace',
 		insertCallback: insertEngine("replace")
 	},
 	{
-		name: window.Asc.plugin.tr('To the end of document'), 
+		name: 'To the end of document', 
 		value: 'end', 
 		insertCallback: insertEngine("end")
 	}
@@ -69,10 +74,10 @@ var insertList = [
 window.Asc.plugin.init = function() {
 	if (Asc.plugin.info.editorType !== "word") {
 		insertList = insertList.slice(1, 3);
+		updateInsertList();
 	}
 
 	updateLangList();
-	updateInsertList();
 
 	window.Asc.plugin.executeMethod("GetDocumentLang", [], setDefaultLang);
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
@@ -106,6 +111,17 @@ window.Asc.plugin.onTranslate = function () {
 	elements.forEach(function(element) {
 		element.innerText = window.Asc.plugin.tr(element.innerText);
 	});
+
+	originalAreaEl.placeholder = window.Asc.plugin.tr(originalAreaEl.placeholder);
+	resultAreaEl.placeholder = window.Asc.plugin.tr(resultAreaEl.placeholder);
+
+
+	console.log('translate');
+	//"Insert result" combobox items
+	insertList.forEach(function(item) {
+		item.name = window.Asc.plugin.tr(item.name);
+	});
+	updateInsertList();
 };
 
 window.addEventListener("resize", onResize);
@@ -115,6 +131,8 @@ function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	themeType = theme.type || 'light';
 	
+	addCssVariables(theme);
+
 	var classes = document.body.className.split(' ');
 	classes.forEach(function(className) {
 		if (className.indexOf('theme-') != -1) {
@@ -123,14 +141,38 @@ function onThemeChanged(theme) {
 	});
 	document.body.classList.add(theme.name);
 	document.body.classList.add('theme-type-' + themeType);
-	$('img').each(function() {
-		var el = $(this);
-		var src = $(el).attr('src');
-		if(!src.includes('resources/icons/')) return;
-
+	$('img.icon').each(function() {
+		var src = $(this).attr('src');
 		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
-		el.attr('src', newSrc);
+		$(this).attr('src', newSrc);
 	});
+}
+
+function addCssVariables(theme) {
+	let colorRegex = /^(#([0-9a-f]{3}){1,2}|rgba?\([^\)]+\)|hsl\([^\)]+\))$/i;
+
+	let oldStyle = document.getElementById('theme-variables');
+	if (oldStyle) {
+		oldStyle.remove();
+	}
+
+	let style = document.createElement('style');
+	style.id = 'theme-variables';
+	let cssVariables = ":root {\n";
+
+	for (let key in theme) {
+		let value = theme[key];
+
+		if (colorRegex.test(value)) {
+			let cssKey = '--' + key.replace(/([A-Z])/g, "-$1").toLowerCase();
+			cssVariables += ' ' + cssKey + ': ' + value + ';\n';
+		}
+	}
+
+	cssVariables += "}";
+
+	style.textContent = cssVariables;
+	document.head.appendChild(style);
 }
 
 function getZoomSuffixForImage() {
@@ -185,16 +227,17 @@ function updateLangList() {
 function updateInsertList() {
 	var cmbEl = $(insertCmbEl);
 	cmbEl.select2({
-		data : insertList.map(function(item) {
-			return {
-				id: item.value,
-				text: item.name
-			}
-		}),
 		minimumResultsForSearch: Infinity,
 		dropdownAutoWidth: true,
 		width: 'auto'
 	});
+	cmbEl.empty();
+
+	insertList.forEach(function(item) {
+		const newOption = new Option(item.name, item.value, false, false);
+		cmbEl.append(newOption);
+	});
+	cmbEl.trigger('change');
 }
 
 function onSummarize() {
