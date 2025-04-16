@@ -261,7 +261,7 @@
 				align: 'left'
 			},
 			handler: function(message, content, htmlContent) { insertEngine('review', htmlContent);}
-		},
+		}
 	];
 	let welcomeButtons = [
 		{ text: 'Blog post', prompt: 'Blog post about' },
@@ -635,6 +635,16 @@
 		document.getElementById('input_message').setAttribute('placeholder', window.Asc.plugin.tr('Ask AI anything'));
 
 		//Action buttons
+		// In this method info object must be exist
+		if (this.info && this.info.editorType !== "word") {
+			for (let i = actionButtons.length - 1; i >= 0; --i) {
+				if (actionButtons[i].tipOptions.text == "As review") {
+					actionButtons.splice(i, 1);
+					break;
+				}
+			}
+		}
+
 		actionButtons.forEach(function(button) {
 			button.tipOptions.text = window.Asc.plugin.tr(button.tipOptions.text);
 		});
