@@ -218,7 +218,7 @@ function onThemeChanged(theme) {
 	});
 	document.body.classList.add(theme.name);
 	document.body.classList.add('theme-type-' + themeType);
-	$('.toggle-button img').each(function() {
+	$('img.icon').each(function() {
 		var src = $(this).attr('src');
 		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
 		$(this).attr('src', newSrc);
@@ -543,7 +543,7 @@ function ValidatorWrapper(options) {
 			validator: function(value) {
 				return value.trim().length > 1 ? '' : window.Asc.plugin.tr('This field is required');
 			}, 	
-			errorIconSrc: 'resources/icons/error-small/error.png'
+			errorIconSrc: 'resources/icons/light/error.png'
 		};
 		// Merge user options with defaults
 		this.options = Object.assign({}, defaults, options);
@@ -562,7 +562,10 @@ function ValidatorWrapper(options) {
 
 		this.errorIconEl = document.createElement('img');
 		this.errorIconEl.src = this.options.errorIconSrc;
+		this.errorIconEl.className = 'icon';
 		this.errorIconEl.style.position = 'absolute';
+		this.errorIconEl.style.width = '20px';
+		this.errorIconEl.style.height = '20px';
 		this.errorIconEl.style.top = '1px';
 		this.errorIconEl.style.right = '0px';
 		this.errorIconEl.style.display = 'none';
@@ -649,6 +652,7 @@ function ToggleButton(options) {
 		this.buttonEl.className = "toggle-button";
 
 		this.iconEl = document.createElement("img");
+		this.iconEl.className = "icon";
 		this.iconEl.src = this.options.icon;
 
 		this.buttonEl.appendChild(this.iconEl);

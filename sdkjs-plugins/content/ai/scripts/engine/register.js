@@ -1,9 +1,11 @@
 (function(window, undefined)
 {
-	function trimResult(data, posStart) {
+	function trimResult(data, posStart, isSpaces) {
 		let pos = posStart || 0;
 		if (-1 != pos) {
 			let trimC = ["\"", "'", "\n", "\r"];
+			if (true === isSpaces)
+				trimC.push(" ");
 			while (pos < data.length && trimC.includes(data[pos]))
 				pos++;
 
@@ -17,13 +19,30 @@
 		return data;
 	}
 
+	function getTranslateResult(data, dataSrc) {
+		data = trimResult(data, 0, true);
+		let trimC = ["\"", "'", "\n", "\r", " "];
+		if (dataSrc.length > 0 && trimC.includes(dataSrc[0])) {
+			data = dataSrc[0] + data;
+		}
+		if (dataSrc.length > 1 && trimC.includes(dataSrc[dataSrc.length - 1])) {
+			data = data + dataSrc[dataSrc.length - 1];
+		}
+		return data;
+	}
+
 	// register contextmenu buttons
 	let buttonMain = new Asc.ButtonContextMenu();
 	buttonMain.text = "AI";
 	buttonMain.addCheckers("All");
 
-	function chatWindowShow()
+	function chatWindowShow(attachedText)
 	{
+		if (window.chatWindow) {
+			window.chatWindow.activate();
+			return;
+		}
+
 		let requestEngine = AI.Request.create(AI.ActionType.Chat);
 		if (!requestEngine)
 			return;
@@ -33,14 +52,23 @@
 			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
+			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
+			isCanDocked: true,
+			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
 			EditorsSupport : ["word", "cell", "slide"],
 			size : [ 400, 400 ]
 		};
 
+		let hasOpenedOnce = false;
+
 		var chatWindow = new window.Asc.PluginWindow();
 		chatWindow.attachEvent("onWindowReady", function() {
-			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]])
+			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]]);
+			if(!hasOpenedOnce && attachedText && attachedText.trim()) {
+				chatWindow.command("onAttachedText", attachedText);
+			}
+			hasOpenedOnce = true;
 		});
 		chatWindow.attachEvent("onChatMessage", async function(message) {
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
@@ -53,7 +81,48 @@
 			//result = result.replace(/\n\n/g, '\n');
 			chatWindow.command("onChatReply", result);
 		});
+		chatWindow.attachEvent("onChatReplace", async function(data) {
+			switch (data.type) {
+				case "review": {
+					if (Asc.plugin.info.editorType === "word")
+						await Asc.Library.InsertAsReview(data.data, true);
+					else
+						await Asc.Library.InsertAsComment(data.data);
+					break;
+				}
+				case "comment": {
+					await Asc.Library.InsertAsComment(data.data);
+					break;
+				}
+				case "insert": {
+					await Asc.Library.InsertAsHTML(data.data);
+					break;
+				}
+				case "replace": {
+					await Asc.Library.ReplaceTextSmart([data.data]);
+					break;
+				}
+			}
+		});	
+		chatWindow.attachEvent("onDockedChanged", async function(type) {
+			window.localStorage.setItem("onlyoffice_ai_chat_placement", type);
+
+			async function waitSaveSettings()
+			{
+				return new Promise(resolve => (function(){
+					chatWindow.attachEvent("onUpdateState", function(type) {
+						resolve();
+					});
+					chatWindow.command("onUpdateState");
+				})());
+			};
+			
+			await waitSaveSettings();
+			Asc.Editor.callMethod("OnWindowDockChangedCallback", [chatWindow.id]);
+		});
 		chatWindow.show(variation);
+
+		window.chatWindow = chatWindow;
 	}
 	
 	if (true)
@@ -67,6 +136,8 @@
 				return;
 
 			let content = await Asc.Library.GetCurrentWord();
+			if (!content)
+				return;
 			let prompt = Asc.Prompts.getExplainPrompt(content);
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
@@ -250,7 +321,7 @@
 		button1.addCheckers("Selection");
 
 		let button2 = new Asc.ButtonContextMenu(button1);
-		button2.text = "Translate to English";
+		button2.text = "English";
 		button2.editors = ["word"];
 		button2.addCheckers("Selection");
 		button2.data = "English";
@@ -261,43 +332,48 @@
 
 			let lang = data;
 			let content = await Asc.Library.GetSelectedText();
+			if (!content)
+				return;
+
 			let prompt = Asc.Prompts.getTranslatePrompt(content, lang);
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
+
+			result = getTranslateResult(result, content);
 
 			await Asc.Library.PasteText(result);
 		});
 
 		let button3 = button2.copy();
-		button3.text = "Translate to French";
+		button3.text = "French";
 		button3.data = "French";
 
 		let button4 = button2.copy();
-		button4.text = "Translate to German";
+		button4.text = "German";
 		button4.data = "German";
 
 		let button5 = button2.copy();
-		button5.text = "Translate to Chinese";
+		button5.text = "Chinese";
 		button5.data = "Chinese";
 
 		let button6 = button2.copy();
-		button6.text = "Translate to Japanese";
+		button6.text = "Japanese";
 		button6.data = "Japanese";
 
 		let button7 = button2.copy();
-		button7.text = "Translate to Russian";
+		button7.text = "Russian";
 		button7.data = "Russian";
 
 		let button8 = button2.copy();
-		button8.text = "Translate to Korean";
+		button8.text = "Korean";
 		button8.data = "Korean";
 
 		let button9 = button2.copy();
-		button9.text = "Translate to Spanish";
+		button9.text = "Spanish";
 		button9.data = "Spanish";
 
 		let button10 = button2.copy();
-		button10.text = "Translate to Italian";
+		button10.text = "Italian";
 		button10.data = "Italian";
 	}
 
@@ -376,11 +452,12 @@
 	if (true)
 	{
 		let button1 = new Asc.ButtonContextMenu(buttonMain);
-		button1.text = "Chat";
+		button1.text = "Chatbot";
 		button1.separator = true;
 		button1.addCheckers("All");
-		button1.attachOnClick(function(){
-			chatWindowShow();
+		button1.attachOnClick(async function(){
+			let selectedText = await Asc.Library.GetSelectedText();
+			chatWindowShow(selectedText);
 		});
 	}
 
@@ -417,7 +494,7 @@
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button1.separator = true;
-		button1.text = "Ask AI";
+		button1.text = "Chatbot";
 		button1.icons = getToolBarButtonIcons("ask-ai");
 		button1.attachOnClick(function(data){
 			chatWindowShow();
@@ -464,9 +541,14 @@
 
 			let lang = !!currLang ? currLang : "english";
 			let content = await Asc.Library.GetSelectedText();
+			if (!content)
+				return;
+
 			let prompt = Asc.Prompts.getTranslatePrompt(content, lang);
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
+
+			result = getTranslateResult(result, content);
 			await Asc.Library.PasteText(result);
 		});
 	}
