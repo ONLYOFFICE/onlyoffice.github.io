@@ -34,6 +34,16 @@
 
 	function Library() {}
 
+	function decodeHtmlText(text) {
+		return text
+			.replace(/&quot;/g, '"')
+			.replace(/&apos;/g, "'")
+			.replace(/&amp;/g, '&')
+			.replace(/&lt;/g, '<')
+			.replace(/&gt;/g, '>')			
+			.replace(/&nbsp;/g, ' ');
+	}
+
 	Library.prototype.GetEditorVersion = async function()
 	{
 		let version = await Editor.callMethod("GetVersion");
@@ -100,7 +110,7 @@
 	{
 		return await Editor.callMethod("AddComment", [{
 			UserName : "AI",
-			Text : text,
+			Text : decodeHtmlText(text),
 			Time: Date.now(),
 			Solver: false
 		}]);
