@@ -77,3 +77,8 @@
 
 ## 2.2.5
 * Bug fix
+
+## 2.2.6
+* Add interface for system role detection.
+* Fixed the work of providers antropic and gemini when working with a system role.
+* Fix bug with custom functions in spreadsheets editor.
