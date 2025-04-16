@@ -16,6 +16,10 @@ ul, ol {
 	margin: 10px;
 }
 
+.icon {
+	-webkit-user-drag: none;
+}
+
 .loader {
 	margin: 0 !important;
 	position: absolute;
