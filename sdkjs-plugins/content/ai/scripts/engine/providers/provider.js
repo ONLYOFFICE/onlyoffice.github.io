@@ -259,6 +259,28 @@
 				this.modelsUI.push(modelUI);
 			}
 		}
+
+		getSystemMessage(message, isRemove) {
+			let messages = message.messages;
+			let isFound = false;
+			if (!messages)
+				return "";
+			let result = "";
+			for (let i = 0; i < messages.length; ++i) {
+				if (messages[i].role === "system") {
+					if (isFound) {
+						messages.splice(i, 1);
+					} else {
+						isFound = true;
+						result = messages[i].content;
+						if (isRemove === true) {
+							messages.splice(i, 1);
+						}
+					}
+				}
+			}
+			return result;
+		}
 	}
 	
 	window.AI.Provider = Provider;
