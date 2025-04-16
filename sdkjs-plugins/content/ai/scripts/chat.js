@@ -115,7 +115,7 @@
 					$messageContent.append($error);
 				} else {
 					let $actionButtons = $('<div class="action_buttons_list"></div>');
-					actionButtons.forEach(function(button) {
+					actionButtons.forEach(function(button, index) {
 						let buttonEl = $('<button class="action_button btn-text-default"></button>');
 						buttonEl.append('<img class="icon" src="' + getFormattedPathForIcon(button.icon) + '"/>');
 						buttonEl.on('click', function() {
@@ -123,7 +123,10 @@
 						});
 		
 						if(button.tipOptions) {
-							new Tooltip(buttonEl[0], button.tipOptions);
+							if(item.btnTips[index]) {
+								item.btnTips[index]._deleteTooltipElement();
+							}
+							item.btnTips[index] = new Tooltip(buttonEl[0], button.tipOptions);
 						}
 						
 						$actionButtons.append(buttonEl);
@@ -183,6 +186,7 @@
 			if(message.role == 'assistant') {
 				message.activeContentIndex = 0;
 			}
+			message.btnTips = [];
 			this._list.push(message)
 			this._renderItemToList(message, this._list.length - 1);
 		},
