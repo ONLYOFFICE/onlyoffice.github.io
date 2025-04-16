@@ -246,6 +246,28 @@
     {
         this._onCustomMenuClick("toolbarMenuEvents", id);
     };
+	window.Asc.plugin.event_onContentControlButtonClick = function(data)
+	{
+		const eventName = "ContentControlButtonEvents";
+		
+		let buttonId = (data && data["buttonId"] ? data["buttonId"] : null);
+		let ccId = (data && data["contentControlId"] ? data["contentControlId"] : null);
+		
+		if (!buttonId || !ccId)
+			return;
+		
+		if (this[eventName] && this[eventName][buttonId])
+			this[eventName][buttonId].call(this, ccId);
+	};
+	window.Asc.plugin._attachContentControlButtonClickEvent = function(buttonId, action)
+	{
+		const eventName = "ContentControlButtonEvents";
+		
+		if (!this[eventName])
+			this[eventName] = {};
+		
+		this[eventName][buttonId] = action;
+	};
 
     window.Asc.plugin.attachEvent = function(id, action)
     {
@@ -661,6 +683,11 @@
 		Button.call(this, parent, id);
 		this.itemType = ItemType.ContentControl;
 		this.checker = null;
+
+
+		if (0 === Asc.Buttons.ButtonsContentControl.length)
+			Asc.Buttons.registerContentControl();
+
 		Asc.Buttons.ButtonsContentControl.push(this);
 	}
 
@@ -669,7 +696,7 @@
 
 	ButtonContentControl.prototype.attachOnClick = function(handler)
 	{
-		//window.Asc.plugin.attachToolbarMenuClickEvent(this.id, handler);
+		window.Asc.plugin._attachContentControlButtonClickEvent(this.id, handler);
 	};
 	ButtonContentControl.prototype.addChecker = function(checker)
 	{
