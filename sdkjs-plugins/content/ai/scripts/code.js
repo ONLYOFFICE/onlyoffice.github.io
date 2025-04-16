@@ -14,8 +14,85 @@ function initWithTranslate() {
 	}
 }
 
-window.Asc.plugin.init = function() {
+function clearChatState() {
+	let key = 'onlyoffice_ai_chat_state';
+	if (window.localStorage.getItem(key))
+		window.localStorage.removeItem(key);
+}
+
+window.Asc.plugin.init = async function() {
 	initWithTranslate();
+	clearChatState();
+
+	let editorVersion = await Asc.Library.GetEditorVersion();
+	if (editorVersion >= 9000000) {
+		window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
+			let data = {};
+			switch (params.type) {
+				case "text":
+				{
+					let requestEngine = AI.Request.create(AI.ActionType.Chat);
+					if (requestEngine)
+					{
+						let result = await requestEngine.chatRequest(params.data);
+						if (!result) result = "";
+
+						data.type = "text";
+						data.text = result;
+					}
+				}
+				default:
+					break;
+			}
+
+			await Asc.Editor.callMethod("onAIRequest", [data]);
+		});
+
+		if ("cell" === window.Asc.plugin.info.editorType) {
+			let CustomFunctions = {
+				current : 0,
+				macrosArray : [
+					{
+						guid : "e8ea2fb288054deaa6b82158c04dee37",
+						name : "AI",
+						value : "\
+(function()\n\
+{\n\
+    /**\n\
+     * Function that returns the AI answer.\n\
+     * @customfunction\n\
+     * @param {string} value Prompt.\n\
+     * @returns {string} Answer value.\n\
+     */\n\
+    async function AI(value) {\n\
+        let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections.\";\n\
+        return new Promise(resolve => (function(){\n\
+            Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
+                if (data.error)\n\
+                    return resolve(data.error);\n\
+                switch (data.type) {\n\
+                    case \"text\":\n\
+                    {\n\
+                        resolve(data.text);\n\
+                        break;\n\
+                    }\n\
+                    default:\n\
+                    {\n\
+                        resolve(\"#ERROR\");\n\
+                    }\n\
+                }\n\
+                resolve(data)\n\
+            });\n\
+        })());\n\
+    }\n\
+    Api.AddCustomFunction(AI);\n\
+})();"
+					}
+				]
+			};
+			await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(CustomFunctions)]);
+		}
+	}
 };
 
 window.Asc.plugin.onTranslate = function() {
@@ -25,6 +102,12 @@ window.Asc.plugin.onTranslate = function() {
 window.Asc.plugin.button = function(id, windowId) {
 	if (!windowId) {
 		return
+	}
+
+	if (window.chatWindow && window.chatWindow.id === windowId)
+	{
+		clearChatState();
+		delete window.chatWindow;
 	}
 
 	if (settingsWindow && windowId === settingsWindow.id) {
@@ -65,6 +148,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	summarizationWindow && summarizationWindow.command('onThemeChanged', theme);
 	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
+	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
 };
 
 /**
@@ -93,7 +177,9 @@ function onOpenSettingsModal() {
 		url : 'settings.html',
 		description : window.Asc.plugin.tr('AI configuration'),
 		isVisual : true,
-		buttons : [],
+		buttons : [
+			{ text: window.Asc.plugin.tr('OK'), primary: true }
+		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
 		size : [320, 350]
@@ -179,7 +265,7 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell"],
-		size : [320, 370]
+		size : [320, 375]
 	};
 
 	if (!aiModelEditWindow) {
