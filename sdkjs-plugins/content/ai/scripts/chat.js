@@ -78,7 +78,7 @@
 								item.attachedText +
 							'</div>' + 
 							'<div class="message_content_collapse_btn noselect">' +
-								'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/>' +
+								'<img class="icon" draggable="false" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/>' +
 							'</div>' +
 						'</div>'
 					);
@@ -93,7 +93,7 @@
 					const errorObj = errorsMap[item.error];
 					const $error = $(
 						'<div class="message_content_error_title">' +
-							'<img class="icon" src="' + getFormattedPathForIcon('resources/icons/light/error.png') + '" />' +
+							'<img class="icon" draggable="false" src="' + getFormattedPathForIcon('resources/icons/light/error.png') + '" />' +
 							'<div>' + errorObj.title + '</div>' + 
 						'</div>' +
 						'<div class="message_content_error_desc">' + errorObj.description + '</div>'
@@ -103,7 +103,7 @@
 					let $actionButtons = $('<div class="action_buttons_list"></div>');
 					actionButtons.forEach(function(button, index) {
 						let buttonEl = $('<button class="action_button btn-text-default"></button>');
-						buttonEl.append('<img class="icon" src="' + getFormattedPathForIcon(button.icon) + '"/>');
+						buttonEl.append('<img class="icon" draggable="false" src="' + getFormattedPathForIcon(button.icon) + '"/>');
 						buttonEl.on('click', function() {
 							button.handler(item, activeContent, htmlContent, plainText);
 						});
