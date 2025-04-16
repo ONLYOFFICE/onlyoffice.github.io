@@ -82,6 +82,10 @@ class Provider extends AI.Provider {
 			};
 			if (rec.role === "assistant")
 				rec.role = "model";
+			else if (rec.role === "system") {
+				body.system_instruction = rec;
+				continue;
+			}
 			body.contents.push(rec);
 		}
 		return body;
