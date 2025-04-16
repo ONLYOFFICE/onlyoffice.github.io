@@ -49,4 +49,13 @@ class Provider extends AI.Provider {
 		return headers;
 	}
 
+	getChatCompletions(message, model) {
+		let systemPrompt = this.getSystemMessage(message, true);
+		let result = super.getChatCompletions(message, model);
+		if (systemPrompt !== "") {
+			result.system = systemPrompt;
+		}
+		return result;
+	}
+
 }

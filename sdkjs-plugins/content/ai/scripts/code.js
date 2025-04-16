@@ -20,6 +20,25 @@ function clearChatState() {
 		window.localStorage.removeItem(key);
 }
 
+async function GetOldCustomFunctions() {
+	let data = await Asc.Editor.callMethod("GetCustomFunctions");
+	let obj = {
+		macrosArray : [],
+		current : -1
+	};
+	if (data) {
+		try {
+			obj = JSON.parse(data);
+		} catch (err) {
+			obj = {
+				macrosArray : [],
+				current : -1
+			};
+		}
+	}
+	return obj;
+}
+
 window.Asc.plugin.init = async function() {
 	initWithTranslate();
 	clearChatState();
@@ -49,13 +68,10 @@ window.Asc.plugin.init = async function() {
 		});
 
 		if ("cell" === window.Asc.plugin.info.editorType) {
-			let CustomFunctions = {
-				current : 0,
-				macrosArray : [
-					{
-						guid : "e8ea2fb288054deaa6b82158c04dee37",
-						name : "AI",
-						value : "\
+			let AIFunc = {
+				guid : "e8ea2fb288054deaa6b82158c04dee37",
+				name : "AI",
+				value : "\
 (function()\n\
 {\n\
     /**\n\
@@ -65,7 +81,7 @@ window.Asc.plugin.init = async function() {
      * @returns {string} Answer value.\n\
      */\n\
     async function AI(value) {\n\
-        let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections.\";\n\
+        let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
         return new Promise(resolve => (function(){\n\
             Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
                 if (data.error)\n\
@@ -87,10 +103,32 @@ window.Asc.plugin.init = async function() {
     }\n\
     Api.AddCustomFunction(AI);\n\
 })();"
-					}
-				]
 			};
-			await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(CustomFunctions)]);
+
+			let oldCF = await GetOldCustomFunctions();
+			let isFound = false;
+			let isUpdate = false;
+
+			for (let i = 0, len = oldCF.macrosArray.length; i < len; i++) {
+				let item = oldCF.macrosArray[i];
+				if (item.name === AIFunc.name) {
+					isFound = true;
+
+					if (item.guid === AIFunc.guid) {
+						if (item.value !== AIFunc.value) {
+							isUpdate = true;
+							item.value = AIFunc.value;
+						}
+					}
+				}
+			}
+			if (!isFound) {
+				oldCF.macrosArray.push(AIFunc);
+				isUpdate = true;
+			}
+
+			if (isUpdate)
+				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
 		}
 	}
 };
