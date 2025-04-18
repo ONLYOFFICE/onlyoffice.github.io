@@ -246,29 +246,6 @@
 	{
 		this._onCustomMenuClick("toolbarMenuEvents", id);
 	};
-	window.Asc.plugin.event_onContentControlButtonClick = function(data)
-	{
-		const eventName = "ContentControlButtonEvents";
-		
-		let buttonId = (data && data["buttonId"] ? data["buttonId"] : null);
-		let ccId = (data && data["contentControlId"] ? data["contentControlId"] : null);
-		
-		if (!buttonId || !ccId)
-			return;
-		
-		if (this[eventName] && this[eventName][buttonId])
-			this[eventName][buttonId].call(this, ccId);
-	};
-	window.Asc.plugin._attachContentControlButtonClickEvent = function(buttonId, action)
-	{
-		const eventName = "ContentControlButtonEvents";
-		
-		if (!this[eventName])
-			this[eventName] = {};
-		
-		this[eventName][buttonId] = action;
-	};
-
 	window.Asc.plugin.attachEvent = function(id, action)
 	{
 		var pluginObj = window.Asc.plugin;
@@ -408,7 +385,7 @@
 
 	Asc.Buttons.registerContentControl = function()
 	{
-		window.Asc.plugin.attachEvent("onShowContentControlTrack", function(contentControls) {
+		window.Asc.plugin.attachEditorEvent("onShowContentControlTrack", function(contentControls) {
 
 			let buttons = {
 				guid: window.Asc.plugin.guid,
@@ -429,6 +406,30 @@
 					break;	
 				}
 			});
+		});
+
+		window.Asc.plugin._attachContentControlButtonClickEvent = function(buttonId, action)
+		{
+			const eventName = "ContentControlButtonEvents";
+			
+			if (!this[eventName])
+				this[eventName] = {};
+			
+			this[eventName][buttonId] = action;
+		};
+
+		let _plugin = window.Asc.plugin;
+		window.Asc.plugin.attachEditorEvent("onContentControlButtonClick", function(data) {
+			const eventName = "ContentControlButtonEvents";
+			
+			let buttonId = (data && data["buttonId"] ? data["buttonId"] : null);
+			let ccId = (data && data["contentControlId"] ? data["contentControlId"] : null);
+			
+			if (!buttonId || !ccId)
+				return;
+			
+			if (_plugin[eventName] && _plugin[eventName][buttonId])
+				_plugin[eventName][buttonId].call(_plugin, ccId);
 		});
 	};
 
