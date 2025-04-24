@@ -5257,7 +5257,7 @@
                                             '               <h4>' + (element.messageStatus == 'None' || element.messageStatus == 'Updated' ? 'Sent drafting for approval' : (element.messageStatus == 'Approve' ? 'Draft confirmation approved' : 'Drafting rejected')) + '</h4>\n' +
                                             '               <div class="' + (element.with == "Counterparty" ? "message" : "content-message") + '">' + (element.message ? element.message.trim().replaceAll(/\n/g, '<br>') : '') + '</div>\n' +
                                             '           </div>\n';
-                                        if (element.from != loggedInUserDetails._id && element.messageStatus == 'None' && openContractResponseData.canConfirmPosition && (openContractResponseData.userRole == 'Contract Creator' || openContractResponseData.userRole == 'Admin' || openContractResponseData.userRole == 'Counterparty')) {
+                                        if (element.from != loggedInUserDetails._id && element.companyId != loggedInCompanyDetails._id && element.messageStatus == 'None' && openContractResponseData.canConfirmPosition && (openContractResponseData.userRole == 'Contract Creator' || openContractResponseData.userRole == 'Admin' || openContractResponseData.userRole == 'Counterparty')) {
                                             renderHTML += '        <div class="request-btn">\n' +
                                                 '               <button class="btn btn-primary draft-approve" data-action="Approve" data-id="' + element._id + '" >Approve</button>\n' +
                                                 '               <button class="btn reject-btn  draft-reject " data-action="Reject"  data-id="' + element._id + '" >Reject</button>\n' +
