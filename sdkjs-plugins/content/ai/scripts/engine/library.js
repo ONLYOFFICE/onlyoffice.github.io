@@ -67,6 +67,22 @@
 		return await Editor.callMethod("GetSelectedText");
 	};
 
+	Library.prototype.GetSelectedContent = async function(type) {
+		return await Editor.callMethod("GetSelectedContent", [{ type : type }]);
+	};
+
+	Library.prototype.GetSelectedImage = async function(type) {
+		let res = await Editor.callMethod("GetSelectedContent", [{ type : "html" }]);
+		let index1 = res.indexOf("src=\"data:image/");
+		if (-1 === index1)
+			return "";
+		index1 += 5;
+		let index2 = res.indexOf("\"", index1);
+		if (-1 === index2)
+			return "";
+		return res.substring(index1, index2);
+	};
+
 	Library.prototype.ReplaceTextSmart = async function(text)
 	{
 		return await Editor.callMethod("ReplaceTextSmart", [text]);
@@ -86,6 +102,14 @@
 				}
 			}
 		});
+	};
+
+	Library.prototype.InsertAsMD = async function(data)
+	{
+		let c = window.markdownit();
+		let htmlContent = c.render(data);
+
+		return await Asc.Library.InsertAsHTML(htmlContent);
 	};
 
 	Library.prototype.InsertAsHTML = async function(data)
@@ -164,6 +188,39 @@
 		return await Editor.callCommand(function(){
 			Api.sendEvent("asc_onError", Asc.scope.errorText, Asc.scope.errorLevel);
 		});
+	};
+
+	Library.prototype.AddGeneratedImage = async function(base64) {
+		switch (window.Asc.plugin.info.editorType) {
+			case "word": {
+				Asc.scope.url = base64;
+				return await Editor.callCommand(function() {
+					let document = Api.GetDocument();
+					let paragraph = Api.CreateParagraph();
+					let drawing = Api.CreateImage(Asc.scope.url, 25.5 * 36000, 25.5 * 36000);
+					paragraph.AddDrawing(drawing);
+					document.Push(paragraph);
+				}, false);
+			}
+			case "cell": {
+				Asc.scope.url = base64;
+				return await Editor.callCommand(function() {
+					let worksheet = Api.GetActiveSheet();
+					worksheet.AddImage(Asc.scope.url, 60 * 36000, 35 * 36000, 0, 2 * 36000, 2, 3 * 36000);
+				}, false);
+			}
+			case "slide": {
+				Asc.scope.url = base64;
+				return await Editor.callCommand(function() {
+					let presentation = Api.GetPresentation();
+					let slide = presentation.GetCurrentSlide();
+					let image = Api.CreateImage(Asc.scope.url, 150 * 36000, 150 * 36000);
+					slide.AddObject(image);
+				}, false);
+			}
+			default:
+				break;
+		}
 	};
 
 	exports.Asc = exports.Asc || {};

@@ -27,8 +27,18 @@ class Provider extends AI.Provider {
 	}
 
 	getEndpointUrl(endpoint, model) {
-		if (AI.Endpoints.Types.v1.Chat_Completions === endpoint)
-			return "/messages";
+		switch (endpoint)
+		{
+			case AI.Endpoints.Types.v1.Chat_Completions:
+			case AI.Endpoints.Types.v1.Images_Generations:
+			case AI.Endpoints.Types.v1.Images_Edits:
+			case AI.Endpoints.Types.v1.Images_Variarions:
+			{
+				return "/messages";
+			}
+			default:
+				break;
+		}
 		return super.getEndpointUrl(endpoint, model);
 	}
 
@@ -56,6 +66,10 @@ class Provider extends AI.Provider {
 			result.system = systemPrompt;
 		}
 		return result;
+	}
+
+	getImageGeneration(message, model) {
+		return this.getImageGenerationWithChat(message, model, "Image must be in svg format. ");
 	}
 
 }
