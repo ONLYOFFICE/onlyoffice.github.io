@@ -451,6 +451,50 @@
 
 	if (true)
 	{
+		let buttonImages = new Asc.ButtonContextMenu(buttonMain);
+		buttonImages.text = "Image";
+		buttonImages.addCheckers("Selection", "Image");
+		buttonImages.separator = true;
+
+		let buttonGen = new Asc.ButtonContextMenu(buttonImages);
+		buttonGen.text = "Generate by selection text";
+		buttonGen.addCheckers("Selection");
+		buttonGen.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
+			if (!requestEngine)
+				return;
+
+			let content = await Asc.Library.GetSelectedText();
+			if (!content)
+				return;
+
+			let result = await requestEngine.imageGenerationRequest(content);
+			if (!result) return;
+
+			await Asc.Library.AddGeneratedImage(result);
+		});
+
+		let buttonOCR = new Asc.ButtonContextMenu(buttonImages);
+		buttonOCR.text = "OCR";
+		buttonOCR.addCheckers("Image");
+		buttonOCR.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.OCR);
+			if (!requestEngine)
+				return;
+
+			let content = await Asc.Library.GetSelectedImage();
+			if (!content)
+				return;
+
+			let result = await requestEngine.imageOCRRequest(content);
+			if (!result) return;
+
+			await Asc.Library.InsertAsMD(result);
+		});
+	}
+
+	if (true)
+	{
 		let button1 = new Asc.ButtonContextMenu(buttonMain);
 		button1.text = "Chatbot";
 		button1.separator = true;
@@ -562,7 +606,9 @@
 		Summarization    : "Summarization",
 		//Text2Image       : "Text2Image",
 		Translation      : "Translation",
-		TextAnalyze      : "TextAnalyze"
+		TextAnalyze      : "TextAnalyze",
+		ImageGeneration  : "ImageGeneration",
+		OCR              : "OCR"
 	};
 
 	AI.Actions = {};
@@ -574,11 +620,13 @@
 		this.capabilities = (capabilities === undefined) ? AI.CapabilitiesUI.Chat : capabilities;
 	}
 
-	AI.Actions[AI.ActionType.Chat]           = new ActionUI("Ask AI", "ask-ai");
-	AI.Actions[AI.ActionType.Summarization]  = new ActionUI("Summarization", "summarization");
-	//AI.Actions[AI.ActionType.Text2Image]   = new ActionUI("Text to image", "text-to-image", "", AI.CapabilitiesUI.Image);
-	AI.Actions[AI.ActionType.Translation]    = new ActionUI("Translation", "translation");
-	AI.Actions[AI.ActionType.TextAnalyze]    = new ActionUI("Text analysis", "");
+	AI.Actions[AI.ActionType.Chat]            = new ActionUI("Ask AI", "ask-ai");
+	AI.Actions[AI.ActionType.Summarization]   = new ActionUI("Summarization", "summarization");
+	//AI.Actions[AI.ActionType.Text2Image]    = new ActionUI("Text to image", "text-to-image", "", AI.CapabilitiesUI.Image);
+	AI.Actions[AI.ActionType.Translation]     = new ActionUI("Translation", "translation");
+	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "");
+	AI.Actions[AI.ActionType.ImageGeneration] = new ActionUI("Image generation", "", "", AI.CapabilitiesUI.Image);
+	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "", "", AI.CapabilitiesUI.Vision);
 
 	AI.ActionsGetKeys = function()
 	{
@@ -587,7 +635,9 @@
 			AI.ActionType.Summarization,
 			//AI.ActionType.Text2Image,
 			AI.ActionType.Translation,
-			AI.ActionType.TextAnalyze
+			AI.ActionType.TextAnalyze,
+			AI.ActionType.ImageGeneration,
+			AI.ActionType.OCR
 		];
 	};
 
