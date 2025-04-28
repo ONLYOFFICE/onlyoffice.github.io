@@ -40,7 +40,6 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
-	initWithTranslate();
 	clearChatState();
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
@@ -130,7 +129,41 @@ window.Asc.plugin.init = async function() {
 			if (isUpdate)
 				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
 		}
+
+		if (Asc.plugin.info.editorSubType === "pdf") {
+			let restriction = Asc.plugin.info.restrictions;
+			if (undefined === restriction)
+				restriction = 0;
+
+			let buttonOCRPage = new Asc.ButtonToolbar(window.buttonMainToolbar);
+			buttonOCRPage.text = "OCR";
+			buttonOCRPage.icons = window.getToolBarButtonIcons("settings");
+			buttonOCRPage.attachOnClick(async function(data){
+				let requestEngine = AI.Request.create(AI.ActionType.OCR);
+				if (!requestEngine)
+					return;
+
+				let pageIndex = await Asc.Editor.callMethod("GetCurrentPage");
+				let content = await Asc.Editor.callMethod("GetPageImage", [pageIndex, {
+					maxSize : 1024,
+					annotations : true,
+					fields : false,
+					drawings : false
+				}]);
+				if (!content)
+					return;
+
+				let result = await requestEngine.imageOCRRequest(content);
+				if (!result) return;
+
+				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
+					html : Asc.Library.ConvertMdToHTML(result)
+				}]);
+			});
+		}
 	}
+
+	initWithTranslate();
 };
 
 window.Asc.plugin.onTranslate = function() {
