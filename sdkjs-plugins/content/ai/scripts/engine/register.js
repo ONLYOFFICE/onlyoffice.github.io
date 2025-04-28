@@ -491,6 +491,27 @@
 
 			await Asc.Library.InsertAsMD(result);
 		});
+
+		let buttonExplainImage = new Asc.ButtonContextMenu(buttonImages);
+		buttonExplainImage.text = "Description";
+		buttonExplainImage.addCheckers("Image");
+		buttonExplainImage.attachOnClick(async function(){
+			let requestEngine = AI.Request.create(AI.ActionType.Vision);
+			if (!requestEngine)
+				return;
+
+			let content = await Asc.Library.GetSelectedImage();
+			if (!content)
+				return;
+
+			let result = await requestEngine.imageVisionRequest({
+				prompt : Asc.Prompts.getImageDescription(),
+				image : content
+			});
+			if (!result) return;
+
+			await Asc.Library.InsertAsMD(result);
+		});
 	}
 
 	if (true)
@@ -608,7 +629,8 @@
 		Translation      : "Translation",
 		TextAnalyze      : "TextAnalyze",
 		ImageGeneration  : "ImageGeneration",
-		OCR              : "OCR"
+		OCR              : "OCR",
+		Vision           : "Vision"
 	};
 
 	AI.Actions = {};
@@ -627,6 +649,7 @@
 	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "");
 	AI.Actions[AI.ActionType.ImageGeneration] = new ActionUI("Image generation", "", "", AI.CapabilitiesUI.Image);
 	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "", "", AI.CapabilitiesUI.Vision);
+	AI.Actions[AI.ActionType.Vision]          = new ActionUI("Vision", "", "", AI.CapabilitiesUI.Vision);
 
 	AI.ActionsGetKeys = function()
 	{
@@ -637,7 +660,8 @@
 			AI.ActionType.Translation,
 			AI.ActionType.TextAnalyze,
 			AI.ActionType.ImageGeneration,
-			AI.ActionType.OCR
+			AI.ActionType.OCR,
+			AI.ActionType.Vision
 		];
 	};
 

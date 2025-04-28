@@ -388,8 +388,9 @@
 		objRequest.url = AI._getEndpointUrl(provider, endpointType, this.model);
 
 		let requestBody = {};
+		let model = this.model;
 		let processResult = function(data) {
-			let result = provider.getChatCompletionsResult(data, this.model);
+			let result = provider.getChatCompletionsResult(data, model);
 			if (result.content.length === 0)
 				return "";
 
@@ -511,8 +512,9 @@
 			objRequest.isBlob = true;
 
 		let requestBody = {};
+		let model = this.model;
 		let processResult = function(data) {
-			return provider.getImageGenerationResult(data, this.model);			
+			return provider.getImageGenerationResult(data, model);			
 		};
 
 		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
@@ -561,15 +563,16 @@
 			headers : AI._getHeaders(provider),
 			method : "POST",
 			url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model),
-			body : provider.getImageVision(message, this.model)
+			body : await provider.getImageVision(message, this.model)
 		};
 
 		if (objRequest.body instanceof FormData)
 			objRequest.isBlob = true;
 
 		let requestBody = {};
+		let model = this.model;
 		let processResult = function(data) {
-			return provider.getImageVisionResult(data, this.model);
+			return provider.getImageVisionResult(data, model);
 		};
 
 		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
@@ -617,15 +620,16 @@
 			headers : AI._getHeaders(provider),
 			method : "POST",
 			url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.OCR, this.model),
-			body : provider.getImageOCR(message, this.model)
+			body : await provider.getImageOCR(message, this.model)
 		};
 
 		if (objRequest.body instanceof FormData)
 			objRequest.isBlob = true;
 
 		let requestBody = {};
+		let model = this.model;
 		let processResult = function(data) {
-			return provider.getImageOCRResult(data, this.model);
+			return provider.getImageOCRResult(data, model);
 		};
 
 		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
@@ -750,6 +754,16 @@
 			return "";
 
 		return AI.ImageEngine.getBase64(canvas);
+	};
+
+	AI.ImageEngine.getMimeTypeFromBase64 = async function(url) {
+		let index = url.indexOf(";");
+		return url.substring(5, index);
+	};
+
+	AI.ImageEngine.getContentFromBase64 = async function(url) {
+		let index = url.indexOf(",");
+		return url.substring(index + 1);
 	};
 
 })(window);
