@@ -112,6 +112,13 @@
 		return await Asc.Library.InsertAsHTML(htmlContent);
 	};
 
+	Library.prototype.ConvertMdToHTML = function(data)
+	{
+		let c = window.markdownit();
+		let htmlContent = c.render(data);
+		return htmlContent;
+	};
+
 	Library.prototype.InsertAsHTML = async function(data)
 	{
 		await Editor.callCommand(function() {
@@ -197,7 +204,7 @@
 				return await Editor.callCommand(function() {
 					let document = Api.GetDocument();
 					let paragraph = Api.CreateParagraph();
-					let drawing = Api.CreateImage(Asc.scope.url, 25.5 * 36000, 25.5 * 36000);
+					let drawing = Api.CreateImage(Asc.scope.url, 100 * 36000, 100 * 36000);
 					paragraph.AddDrawing(drawing);
 					document.Push(paragraph);
 				}, false);
@@ -206,7 +213,7 @@
 				Asc.scope.url = base64;
 				return await Editor.callCommand(function() {
 					let worksheet = Api.GetActiveSheet();
-					worksheet.AddImage(Asc.scope.url, 60 * 36000, 35 * 36000, 0, 2 * 36000, 2, 3 * 36000);
+					worksheet.AddImage(Asc.scope.url, 100 * 36000, 100 * 36000, 0, 2 * 36000, 2, 3 * 36000);
 				}, false);
 			}
 			case "slide": {
