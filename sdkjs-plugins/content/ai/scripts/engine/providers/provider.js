@@ -373,20 +373,71 @@
 			return await AI.ImageEngine.getBase64FromUrl(imageUrl);
 		}
 
-		async getImageVision() {
-			return {};
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     image: "base64...",
+		 *     prompt: "text"
+		 * }
+		 */
+		async getImageVision(message, model) {
+			return {
+				model : model.id,
+				messages : [
+					{
+						role: "user",
+						content: [
+							{							
+								type: "text",
+								text: message.prompt
+							},
+							{
+								type: "image_url", 
+								image_url: {
+									url: message.image
+								}
+							}
+						]
+					}
+				]
+			}
 		}
 
-		async getImageVisionResult() {
-			return {};
+		getImageVisionResult(message, model) {
+			let result = this.getChatCompletionsResult(message, model);
+
+			if (result.content.length === 0)
+				return "";
+
+			if (0 === result.content[0].indexOf("<think>")) {
+				let end = result.content[0].indexOf("</think>");
+				if (end !== -1)
+					result.content[0] = result.content[0].substring(end + 8);
+			}
+
+			return result.content[0];
+
 		}
 
-		async getImageOCR() {
-			return {};
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     image: "base64..."
+		 * }
+		 */
+		async getImageOCR(message, model) {
+			return await this.getImageVision({
+				image : message.image,
+				prompt : Asc.Prompts.getImagePromptOCR()
+			}, model);
 		}
 
-		async getImageOCRResult() {
-			return {};
+		getImageOCRResult(message, model) {
+			return this.getImageVisionResult(message, model);
 		}
 
 		/**
@@ -449,6 +500,23 @@
 					{
 						role: "user",
 						content: prompt
+					}
+				]
+			};
+
+			return this.getChatCompletions(data, model);
+		}
+
+		getImageVisionWithChat(message, model) {
+			let prompt = "Please generate image. ";
+			if (addon)
+				prompt += addon;
+		
+			let data = {
+				messages : [
+					{
+						role: "user",
+						content: message.prompt
 					}
 				]
 			};

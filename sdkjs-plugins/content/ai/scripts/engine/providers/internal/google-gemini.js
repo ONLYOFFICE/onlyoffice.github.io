@@ -118,4 +118,23 @@ class Provider extends AI.Provider {
 		return {};
 	}
 
+	async getImageVision(message, model) {
+		return {
+			contents : [
+				{
+					role: "user",
+					parts: [
+						{ text: message.prompt },
+						{ 
+							inline_data: {
+								mime_type: AI.ImageEngine.getMimeTypeFromBase64(message.image),
+								data: AI.ImageEngine.getContentFromBase64(message.image)
+							}
+						}
+					]
+				}
+			]
+		}		
+	}
+
 }

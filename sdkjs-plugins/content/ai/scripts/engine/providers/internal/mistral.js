@@ -71,7 +71,7 @@ class Provider extends AI.Provider {
 		return url;
 	}
 
-	getImageOCR(message, model) {
+	async getImageOCR(message, model) {
 		let result = {
 			model: model.id,
 			document: {
