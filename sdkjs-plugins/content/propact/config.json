@@ -1,8 +1,10 @@
 {
     "name" : "ProPact",
     "guid" : "asc.{C36NCMB5-08F0-4A68-B829-5F1F7D488588}",
-
-    "variations" : [
+	"autostart": true,
+	"isAutoStart": true,
+	"autoStart": true,
+	"variations" : [
         {
             "description" : "ProPact's agile workflow drives efficiency, accountability and trust into legal and commercial document negotiation.",
             "url"         : "index.html",
