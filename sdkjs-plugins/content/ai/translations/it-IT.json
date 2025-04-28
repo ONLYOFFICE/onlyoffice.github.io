@@ -49,6 +49,9 @@
 	"In comment": "Nel commento",
 	"Replace original text": "Sostituisci il testo originale",
 	"To the end of document": "Alla fine del documento",
+	"Clear": "Cancella",
+	"Insert your text here or select the part of the text": "Inserisci qui il tuo testo o seleziona la parte di testo",
+	"The AI output will be shown here": "L'output dell'AI verrà mostrato qui",
 
 
 	"Loading..." : "Caricamento...",
@@ -94,6 +97,45 @@
 
 	"Chatbot": "Chatbot",
 	"Ask AI a question about something...": "Fai una domanda all'IA su qualcosa...",
+	"Thinking": "Elaborazione",
+	"Welcome": "Benvenuto!",
+	"I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.": "Sono qui per aiutarti con la creazione e la modifica dei testi. Sentiti libero di chiedermi qualsiasi cosa riguardo al tuo documento o altro.",
+	"Let’s make your content shine together!": "Facciamo brillare i tuoi contenuti insieme!",
+	"Copy": "Copia",
+	"Blog post about": "Articolo del blog su",
+	"Blog post": "Articolo del blog",
+	"Press release about": "Comunicato stampa su",
+	"Press release": "Comunicato stampa",
+	"Social media post about": "Post social su",
+	"Social media post": "Post social",
+	"Brainstorm ideas for": "Idee di brainstorming per",
+	"Brainstorm ideas": "Idee di brainstorming",
+	"Project proposal about": "Proposta di progetto su",
+	"Project proposal": "Proposta di progetto",
+	"An essay about": "Saggio su",
+	"An essay": "Saggio",
+	"Creative story about": "Storia creativa su",
+	"Creative story": "Storia creativa",
+	"Make a plan about": "Crea un piano su",
+	"Make a plan": "Crea un piano",
+	"Get advice about": "Ricevi consigli su",
+	"Get advice": "Ricevi consigli",
+	"Ask AI anything": "Chiedi qualsiasi cosa all'AI",
+	"Generate new": "Genera nuovo",
+	"Something went wrong": "Qualcosa è andato storto",
+	"Please try reloading the conversation": "Prova a ricaricare la conversazione",
 
-	"This field is required": "Questo campo è obbligatorio"
+	"This field is required": "Questo campo è obbligatorio",
+
+	"Custom providers": "Provider personalizzati",
+	"Back": "Indietro",
+	"Connected custom providers": "Provider personalizzati connessi",
+	"The list is empty, press + to add the file": "L'elenco è vuoto, premi + per aggiungere un file",
+	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Inserisci la configurazione dell'API del modello AI in formato JS. Fornisci nome del modello, URL degli endpoint e intestazioni.",
+	"Download template": "Scarica modello",
+	"Invalid file format, please upload the .js file": "Formato file non valido, carica un file .js",
+	"Error adding provider from file, please try again": "Errore durante l'aggiunta del provider dal file, riprova",
+
+	"Translation settings": "Impostazioni di traduzione",
+	"Select language for AI translation.": "Seleziona la lingua per la traduzione AI."
 }
