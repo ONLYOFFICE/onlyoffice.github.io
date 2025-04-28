@@ -545,6 +545,9 @@
 		return "resources/icons/%theme-type%(light|dark)/big/" + icon + "%scale%(default).png";
 	}
 
+	window.buttonMainToolbar = buttonMainToolbar;
+	window.getToolBarButtonIcons = getToolBarButtonIcons;
+
 	if (true)
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
