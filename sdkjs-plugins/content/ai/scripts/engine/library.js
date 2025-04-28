@@ -295,6 +295,12 @@ Here is the text that needs revision: \"${content}\"`;
 			prompt += content;
 			prompt += "\n\"\"\"";
 			return prompt;
+		},
+		getImageDescription() {
+			return "Describe in detail everything you see in this image. Mention the objects, their appearance, colors, arrangement, background, and any noticeable actions or interactions. Be as specific and accurate as possible. Avoid making assumptions about things that are not clearly visible."
+		},
+		getImagePromptOCR() {
+			return "Extract all the text from this image as accurately as possible. Preserve the original reading order and formatting if possible. Do not add or remove any content. Only output the recognized text, nothing else.";
 		}
 	};
 

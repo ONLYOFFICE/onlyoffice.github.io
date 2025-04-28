@@ -72,4 +72,29 @@ class Provider extends AI.Provider {
 		return this.getImageGenerationWithChat(message, model, "Image must be in svg format. ");
 	}
 
+	async getImageVision(message, model) {
+		return {
+			model : model.id,
+			messages : [
+				{
+					role: "user",
+					content: [
+						{							
+							type: "text",
+							text: message.prompt
+						},
+						{
+							type: "image", 
+							source: {
+								type: "base64",
+								media_type: AI.ImageEngine.getMimeTypeFromBase64(message.image),
+								data: AI.ImageEngine.getContentFromBase64(message.image)
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+
 }
