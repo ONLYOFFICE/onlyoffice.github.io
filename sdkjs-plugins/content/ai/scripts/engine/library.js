@@ -227,10 +227,10 @@
 		}
 	};
 
-	Library.prototype.trimResult = function(data, posStart, isSpaces) {
+	Library.prototype.trimResult = function(data, posStart, isSpaces, extraCharacters) {
 		let pos = posStart || 0;
 		if (-1 != pos) {
-			let trimC = ["\"", "'", "\n", "\r"];
+			let trimC = ["\"", "'", "\n", "\r", "`"];
 			if (true === isSpaces)
 				trimC.push(" ");
 			while (pos < data.length && trimC.includes(data[pos]))
@@ -259,9 +259,10 @@
 	};
 
 	Library.prototype.getMarkdownResult = function(data) {
-		let result = data.replace(/```md/g, "");
-		result = result.replace(/```/g, "");
-		return this.trimResult(result);
+		let markdownEscape = data.indexOf("```md");
+		if (-1 !== markdownEscape && markdownEscape < 5)
+			data = data.substring(markdownEscape + 5);		
+		return this.trimResult(data);
 	};
 
 	exports.Asc = exports.Asc || {};
