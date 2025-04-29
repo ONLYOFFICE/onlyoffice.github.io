@@ -265,7 +265,7 @@ function onOpenSettingsModal() {
 			{ text: window.Asc.plugin.tr('OK'), primary: true }
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 350]
 	};
 
@@ -293,7 +293,7 @@ function onTranslateSettingsModal() {
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 200]
 	};
 
@@ -318,7 +318,7 @@ function onOpenAiModelsModal() {
 			{ text: window.Asc.plugin.tr('Back'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 230]
 	};
 
@@ -348,7 +348,7 @@ function onOpenEditModal(data) {
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 375]
 	};
 
@@ -387,7 +387,7 @@ function onOpenCustomProvidersModal() {
 			{ text: window.Asc.plugin.tr('Back'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [350, 222]
 	};
 
@@ -427,7 +427,7 @@ function onOpenSummarizationModal() {
 		isVisual : true,
 		buttons : [],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [720, 310]
 	};
 
