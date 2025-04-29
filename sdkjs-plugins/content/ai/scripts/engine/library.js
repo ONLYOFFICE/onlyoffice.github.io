@@ -106,17 +106,14 @@
 
 	Library.prototype.InsertAsMD = async function(data)
 	{
-		let c = window.markdownit();
-		let htmlContent = c.render(data);
-
+		let htmlContent = Asc.Library.ConvertMdToHTML(data)
 		return await Asc.Library.InsertAsHTML(htmlContent);
 	};
 
 	Library.prototype.ConvertMdToHTML = function(data)
 	{
 		let c = window.markdownit();
-		let htmlContent = c.render(data);
-		return htmlContent;
+		return c.render(this.getMarkdownResult(data));
 	};
 
 	Library.prototype.InsertAsHTML = async function(data)
@@ -230,6 +227,43 @@
 		}
 	};
 
+	Library.prototype.trimResult = function(data, posStart, isSpaces) {
+		let pos = posStart || 0;
+		if (-1 != pos) {
+			let trimC = ["\"", "'", "\n", "\r"];
+			if (true === isSpaces)
+				trimC.push(" ");
+			while (pos < data.length && trimC.includes(data[pos]))
+				pos++;
+
+			let posEnd = data.length - 1;
+			while (posEnd > 0 && trimC.includes(data[posEnd]))
+				posEnd--;
+
+			if (posEnd > pos)
+				return data.substring(pos, posEnd + 1);				
+		}
+		return data;
+	};
+
+	Library.prototype.getTranslateResult = function(data, dataSrc) {
+		data = this.trimResult(data, 0, true);
+		let trimC = ["\"", "'", "\n", "\r", " "];
+		if (dataSrc.length > 0 && trimC.includes(dataSrc[0])) {
+			data = dataSrc[0] + data;
+		}
+		if (dataSrc.length > 1 && trimC.includes(dataSrc[dataSrc.length - 1])) {
+			data = data + dataSrc[dataSrc.length - 1];
+		}
+		return data;
+	};
+
+	Library.prototype.getMarkdownResult = function(data) {
+		let result = data.replace(/```md/g, "");
+		result = result.replace(/```/g, "");
+		return this.trimResult(result);
+	};
+
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Library = new Library();
 
@@ -307,7 +341,7 @@ Here is the text that needs revision: \"${content}\"`;
 			return "Describe in detail everything you see in this image. Mention the objects, their appearance, colors, arrangement, background, and any noticeable actions or interactions. Be as specific and accurate as possible. Avoid making assumptions about things that are not clearly visible."
 		},
 		getImagePromptOCR() {
-			return "Extract all the text from this image as accurately as possible. Preserve the original reading order and formatting if possible. Do not add or remove any content. Only output the recognized text, nothing else.";
+			return "Extract all text from this image as accurately as possible. Preserve original reading order and formatting if possible. Recognize tables and images if possible. Do not add or remove any content. Output recognized objects in md format if possible. If not, return plain text.";
 		}
 	};
 
