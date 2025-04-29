@@ -167,6 +167,8 @@
 
 		if (this.disabled)
 			item.disabled = true;
+		else
+			item.disabled = false;
 
 		if (this.removed)
 			item.removed = true;

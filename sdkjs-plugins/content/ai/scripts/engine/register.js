@@ -25,7 +25,7 @@
 			isModal : false,
 			isCanDocked: true,
 			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
-			EditorsSupport : ["word", "cell", "slide"],
+			EditorsSupport : ["word", "slide", "cell", "pdf"],
 			size : [ 400, 400 ]
 		};
 
@@ -401,7 +401,7 @@
 				isVisual : true,
 				buttons : [],
 				isModal : false,
-				EditorsSupport : ["word", "cell", "slide"],
+				EditorsSupport : ["word", "slide", "cell", "pdf"],
 				size : [ 1000, 1000 ]
 			};
 
