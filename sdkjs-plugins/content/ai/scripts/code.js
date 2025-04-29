@@ -40,6 +40,7 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
+	initWithTranslate();
 	clearChatState();
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
@@ -131,13 +132,25 @@ window.Asc.plugin.init = async function() {
 		}
 
 		if (Asc.plugin.info.editorSubType === "pdf") {
+			window.Asc.plugin.attachEditorEvent("onChangeRestrictions", function(value){
+				let disabled = (value & 0x80) !== 0;
+				if (window.buttonOCRPage.disabled !== disabled)
+					window.buttonOCRPage.disabled = disabled;
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonOCRPage]);
+			});
+
 			let restriction = Asc.plugin.info.restrictions;
 			if (undefined === restriction)
 				restriction = 0;
 
-			let buttonOCRPage = new Asc.ButtonToolbar(window.buttonMainToolbar);
+			let buttonOCRPage = new Asc.ButtonToolbar(null);
 			buttonOCRPage.text = "OCR";
 			buttonOCRPage.icons = window.getToolBarButtonIcons("settings");
+			window.buttonOCRPage = buttonOCRPage;
+
+			if (0x80 & restriction)
+				buttonOCRPage.disabled = true;
+
 			buttonOCRPage.attachOnClick(async function(data){
 				let requestEngine = AI.Request.create(AI.ActionType.OCR);
 				if (!requestEngine)
@@ -160,10 +173,10 @@ window.Asc.plugin.init = async function() {
 					html : Asc.Library.ConvertMdToHTML(result)
 				}]);
 			});
-		}
-	}
 
-	initWithTranslate();
+			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
+		}
+	}	
 };
 
 window.Asc.plugin.onTranslate = function() {
