@@ -1,36 +1,5 @@
 (function(window, undefined)
 {
-	function trimResult(data, posStart, isSpaces) {
-		let pos = posStart || 0;
-		if (-1 != pos) {
-			let trimC = ["\"", "'", "\n", "\r"];
-			if (true === isSpaces)
-				trimC.push(" ");
-			while (pos < data.length && trimC.includes(data[pos]))
-				pos++;
-
-			let posEnd = data.length - 1;
-			while (posEnd > 0 && trimC.includes(data[posEnd]))
-				posEnd--;
-
-			if (posEnd > pos)
-				return data.substring(pos, posEnd + 1);				
-		}
-		return data;
-	}
-
-	function getTranslateResult(data, dataSrc) {
-		data = trimResult(data, 0, true);
-		let trimC = ["\"", "'", "\n", "\r", " "];
-		if (dataSrc.length > 0 && trimC.includes(dataSrc[0])) {
-			data = dataSrc[0] + data;
-		}
-		if (dataSrc.length > 1 && trimC.includes(dataSrc[dataSrc.length - 1])) {
-			data = data + dataSrc[dataSrc.length - 1];
-		}
-		return data;
-	}
-
 	// register contextmenu buttons
 	let buttonMain = new Asc.ButtonContextMenu();
 	buttonMain.text = "AI";
@@ -339,7 +308,7 @@
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
-			result = getTranslateResult(result, content);
+			result = Asc.Library.getTranslateResult(result, content);
 
 			await Asc.Library.PasteText(result);
 		});
@@ -616,7 +585,7 @@
 			let result = await requestEngine.chatRequest(prompt);
 			if (!result) return;
 
-			result = getTranslateResult(result, content);
+			result = Asc.Library.getTranslateResult(result, content);
 			await Asc.Library.PasteText(result);
 		});
 	}
