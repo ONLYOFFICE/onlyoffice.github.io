@@ -1,5 +1,6 @@
 .tooltip {
     line-height: 12px;
+    word-break: break-word;
     position: absolute;
     z-index: 10;
     padding: 4px 8px;
