@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96.378" height="116" viewBox="0 0 96.378 116">
+  <g id="invite-user-icon" transform="translate(-317 -42)">
+    <g id="ic_invite_user" transform="translate(305.189 40)">
+      <circle id="Ellipse_21888" data-name="Ellipse 21888" cx="24.982" cy="24.982" r="24.982" transform="translate(35.018 5)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+      <path id="Path_5872" data-name="Path 5872" d="M60,69.216a39.108,39.108,0,0,1-18.73-4.757h0a5.978,5.978,0,0,1-.832-.475,13.356,13.356,0,0,0-17.422,4.281c-5.108,7.348-8.205,19.305-8.205,34.843A11.892,11.892,0,0,0,26.7,115H55.175" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+      <line id="Line_251" data-name="Line 251" y2="40.781" transform="translate(84.799 74.219)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+      <line id="Line_252" data-name="Line 252" x1="40.781" transform="translate(64.409 94.61)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+    </g>
+  </g>
+</svg>
