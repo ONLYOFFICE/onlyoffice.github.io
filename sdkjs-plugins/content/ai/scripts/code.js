@@ -145,7 +145,7 @@ window.Asc.plugin.init = async function() {
 
 			let buttonOCRPage = new Asc.ButtonToolbar(null);
 			buttonOCRPage.text = "OCR";
-			buttonOCRPage.icons = window.getToolBarButtonIcons("settings");
+			buttonOCRPage.icons = window.getToolBarButtonIcons("ocr");
 			window.buttonOCRPage = buttonOCRPage;
 
 			if (0x80 & restriction)
