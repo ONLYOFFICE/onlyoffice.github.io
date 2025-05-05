@@ -10,7 +10,8 @@
 		"it": "OCR",
 		"sq-AL": "OCR",
 		"sr-Cyrl-RS": "OCR",
-		"sr-Latn-RS": "OCR"
+		"sr-Latn-RS": "OCR",
+		"zh-ZH": "OCR 文字识别"
 	},
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.0.2",
@@ -28,7 +29,8 @@
 				"it": "Riconosci il testo da immagini e screenshot e inseriscilo nei tuoi documenti.",
 				"sq-AL": "Njihni tekstin në foto dhe skrinshotet dhe futeni në dokumentet tuaja.",
 				"sr-Cyrl-RS": "Препознајте текст са слика и снимака екрана и убаците га у ваше документе.",
-				"sr-Latn-RS": "Prepoznajte tekst sa slika i snimaka ekrana i ubacite ga u vaše dokumente."
+				"sr-Latn-RS": "Prepoznajte tekst sa slika i snimaka ekrana i ubacite ga u vaše dokumente.",
+				"zh-ZH": "识别图片和截图中的文本，并将其插入到文档中。"
 			},
 			"url": "index.html",
 
@@ -95,7 +97,8 @@
 						"it": "Inserisci testo",
 						"sq-AL": "Futni tekstin",
 						"sr-Cyrl-RS": "Убаци текст",
-						"sr-Latn-RS": "Ubaci tekst"
+						"sr-Latn-RS": "Ubaci tekst",
+						"zh-ZH": "插入文字"
 					}
 				},
 				{
@@ -110,7 +113,8 @@
 						"it": "Annulla",
 						"sq-AL": "Anulo",
 						"sr-Cyrl-RS": "Откажи",
-						"sr-Latn-RS": "Otkaži"
+						"sr-Latn-RS": "Otkaži",
+						"zh-ZH": "取消"
 					}
 				}
 			],
@@ -144,7 +148,8 @@
 				"it": "Informazioni su",
 				"sq-AL": "Rreth",
 				"sr-Cyrl-RS": "У вези",
-				"sr-Latn-RS": "U vezi"
+				"sr-Latn-RS": "U vezi",
+				"zh-ZH": "关于"
 			},
 
 			"url": "index_about.html",

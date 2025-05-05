@@ -10,7 +10,8 @@
 		"it": "Thesaurus",
 		"sq-AL": "Thesaurus",
 		"sr-Cyrl-RS": "Thesaurus",
-		"sr-Latn-RS": "Thesaurus"
+		"sr-Latn-RS": "Thesaurus",
+		"zh-ZH": "同义词词典"
 	},
 	"guid": "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9840}",
 	"version": "1.0.3",
@@ -28,7 +29,8 @@
 				"it": "Cerca sinonimi e contrari di una parola e sostituiscila con quella selezionata.",
 				"sq-AL": "Kërkoni sinonime dhe antonime të një fjale dhe zëvëndësojeni atë me fjalën e zgjedhur.",
 				"sr-Cyrl-RS": "Пронађите синониме и антониме речи и замените је изабраном.",
-				"sr-Latn-RS": "Pronađite sinonime i antonime reči i zamenite je izabranom."
+				"sr-Latn-RS": "Pronađite sinonime i antonime reči i zamenite je izabranom.",
+				"zh-ZH": "搜索某个单词的同义词和反义词，并将其替换为所选的词汇。"
 			},
 			"url": "index.html",
 

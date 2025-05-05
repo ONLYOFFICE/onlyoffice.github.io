@@ -16,7 +16,8 @@
 				"it": "Trova e inserisci immagini gratuite nei tuoi documenti tramite Pixabay.",
 				"sq-AL": "Gjeni dhe shtoni imazhe falas në dokumentet tuaja përmes Pixabay.",
 				"sr-Cyrl-RS": "Пронађите и убаците бесплатне слике у ваше документе путем Pixabay.",
-				"sr-Latn-RS": "Pronađite i ubacite besplatne slike u vaše dokumente putem Pixabay."
+				"sr-Latn-RS": "Pronađite i ubacite besplatne slike u vaše dokumente putem Pixabay.",
+				"zh-ZH": "利用 Pixabay 在文档中查找并插入免费图片。"
 			},
 			"url": "index.html",
 
@@ -86,7 +87,8 @@
 						"it": "Chiudi",
 						"sq-AL": "Mbyllni",
 						"sr-Cyrl-RS": "Затвори",
-						"sr-Latn-RS": "Zatvori"
+						"sr-Latn-RS": "Zatvori",
+						"zh-ZH": "关闭"
 					}
 				}
 			],
@@ -111,11 +113,10 @@
 				"de": "Über",
 				"cs": "Ohledně",
 				"it": "Informazioni su",
-				"cs": "ohledně",
 				"sq-AL": "Rreth",
-				"cs": "ohledně",
 				"sr-Cyrl-RS": "У вези",
-				"sr-Latn-RS": "U vezi"
+				"sr-Latn-RS": "U vezi",
+				"zh-ZH": "关于"
 			},
 			"url": "index_about.html",
 

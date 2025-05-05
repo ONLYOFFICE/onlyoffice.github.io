@@ -9,7 +9,8 @@
 		"it": "Input vocale",
 		"sq-AL": "Speech input",
 		"sr-Cyrl-RS": "Унос говора",
-		"sr-Latn-RS": "Unos govora"
+		"sr-Latn-RS": "Unos govora",
+		"zh-ZH": "语音输入"
 	},
 	"guid": "asc.{F30BDD79-23A0-4B05-8DE3-2AB77D03A1B4}",
 	"version" : "1.0.3",
@@ -26,7 +27,8 @@
 				"it": "Digita facilmente con la tua voce convertendo le parole pronunciate in testo.",
 				"sq-AL": "Shkruani lehtësisht me zë duke kthyer fjalën e folur në tekst",
 				"sr-Cyrl-RS": "Лако куцајте вашим гласом претварањем изговорених речи у текст.",
-				"sr-Latn-RS": "Lako kucajte vašim glasom pretvaranjem izgovorenih reči u tekst."
+				"sr-Latn-RS": "Lako kucajte vašim glasom pretvaranjem izgovorenih reči u tekst.",
+				"zh-ZH": "通过语音转文本，轻松使用语音输入文字。"
 			},
 			"url": "index.html",
 
@@ -110,7 +112,8 @@
 				"it": "Informazioni su",
 				"sq-AL": "Rreth",
 				"sr-Cyrl-RS": "У вези",
-				"sr-Latn-RS": "U vezi"
+				"sr-Latn-RS": "U vezi",
+				"zh-ZH": "关于"
 			},
 			"url": "index_about.html",
 
