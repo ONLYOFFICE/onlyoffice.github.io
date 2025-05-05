@@ -4,7 +4,8 @@
 		"ru": "MathType",
 		"fr": "MathType",
 		"es": "MathType",
-		"de": "MathType"
+		"de": "MathType",
+		"zh-ZH": "MathType"
 	},
 	"guid": "asc.{0a280898-66a0-4368-aaca-8cc1443d4c84}",
 	"version": "1.0.0",
@@ -16,7 +17,8 @@
 				"ru": "MathType",
 				"fr": "MathType",
 				"es": "MathType",
-				"de": "MathType"
+				"de": "MathType",
+				"zh-ZH": "MathType"
 			},
 			"url": "index.html",
 
@@ -65,7 +67,8 @@
 						"ru": "Вставить",
 						"fr": "Insérer",
 						"es": "Insertar",
-						"de": "Einfügen"
+						"de": "Einfügen",
+						"zh-ZH": "插入"
 					}
 				},
 				{
@@ -94,7 +97,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"zh-ZH": "取消"
 					}
 				}
 			],
@@ -117,7 +121,8 @@
 				"ru": "Запустить ChemType",
 				"fr": "Démarrer ChemType",
 				"es": "Démarrer ChemType",
-				"de": "Beginnen ChemType"
+				"de": "Beginnen ChemType",
+				"zh-ZH": "启动 ChemType"
 			},
 			"url": "index.html?type=chemistry",
 			"isViewer": false,
@@ -155,7 +160,8 @@
 						"ru": "Вставить",
 						"fr": "Insérer",
 						"es": "Insertar",
-						"de": "Einfügen"
+						"de": "Einfügen",
+						"zh-ZH": "插入"
 					}
 				},
 				{
@@ -184,7 +190,8 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"zh-ZH": "取消"
 					}
 				}
 			],

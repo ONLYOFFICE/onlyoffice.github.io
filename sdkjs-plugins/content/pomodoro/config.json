@@ -5,15 +5,19 @@
     "minVersion": "6.3.0",
     "name": "Pomodoro",
     "nameLocale": {
-        "zh": "番茄钟"
+        "zh": "番茄钟",
+        "de-DE": "Pomodoro",
+        "es-ES": "Pomodoro"
     },
     "offered": "DeepPurpleApril",
     "variations": [
         {
             "description"         : "Pomodoro helps you improve focus and productivity with a cyclical pattern of 25 minutes of focused work and 5 minutes of short breaks.",
             "descriptionLocale"   : {
-					"zh": "番茄钟计时器采用番茄工作法，以25分钟专注工作和5分钟短暂休息的循环模式，帮助您提升专注力和工作效率。"
-				},
+				"zh": "番茄钟计时器采用番茄工作法，以25分钟专注工作和5分钟短暂休息的循环模式，帮助您提升专注力和工作效率。",
+				"de-DE": "Pomodoro hilft Ihnen, Konzentration und Produktivität durch ein zyklisches Muster aus 25 Minuten konzentrierter Arbeit und 5 Minuten kurzen Pausen zu verbessern.",
+				"es-ES": "Pomodoro le ayuda a mejorar la concentración y la productividad con un patrón cíclico de 25 minutos de trabajo concentrado y descansos breves de 5 minutos."
+            },
             "url"                 : "index.html",
             "icons"               : ["resources/store/light/icon.png", "resources/store/light/icon@2x.png"],
             "isViewer"            : false,
@@ -58,8 +62,10 @@
         {
             "description"         : "About",
             "descriptionLocale"   : {
-					"zh": "关于"
-				},
+					"zh": "关于",
+					"de-DE": "Über",
+					"es-ES": "Acerca de"
+			},
             "url"                 : "index_about.html",
             "isViewer"            : false,
             "EditorsSupport"      : ["word", "cell", "slide", "pdf"],
@@ -73,7 +79,9 @@
                 {
                     "text": "Ok",
                     "textLocale": {
-                        "zh": "确定"
+                        "zh": "确定",
+                        "de-DE": "Ok",
+                        "es-ES": "Ok"
                     },
                     "primary": true
                 }
@@ -84,8 +92,10 @@
         {
             "description": "Settings",
             "descriptionLocale"   : {
-					"zh": "设置"
-				},
+					"zh": "设置",
+					"de-DE": "Einstellungen",
+					"es-ES": "Ajustes"
+			},
             "url": "index_setting.html",
             "isViewer": false,
             "EditorsSupport": ["word", "cell", "slide", "pdf"],
@@ -99,7 +109,9 @@
                 {
                     "text": "Ok",
                     "textLocale": {
-                        "zh": "确定"
+                        "zh": "确定",
+                        "de-DE": "Ok",
+                        "es-ES": "Ok"
                     },
                     "primary": true
                 }

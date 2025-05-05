@@ -9,7 +9,8 @@
 		"it": "WordPress",
 		"sq-AL": "WordPress",
 		"sr-Cyrl-RS": "WordPress",
-		"sr-Latn-RS": "WordPress"
+		"sr-Latn-RS": "WordPress",
+		"zh-ZH": "WordPress"
 	},
 	"guid"    : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
 	"baseUrl" : "",
@@ -26,7 +27,8 @@
 				"it": "Pubblica articoli sul tuo sito web WordPress direttamente dall'editor di documenti (compatibile con ONLYOFFICE cloud).",
 				"sq-AL": "Publikoni artikuj drejtpërdrejt nga redaktori i dokumenteve në faqen tuaj WordPress (i pajtueshëm me renë e ONLYOFFICE).",
 				"sr-Cyrl-RS": "Објавите чланке директно из уређивача докумената на вашој WordPress веб локацији (компатибилно са ONLYOFFICE cloud-ом).",
-				"sr-Latn-RS": "Objavite članke direktno iz uređivača dokumenata na vašoj WordPress web lokaciji (kompatibilno sa ONLYOFFICE cloud-om)."
+				"sr-Latn-RS": "Objavite članke direktno iz uređivača dokumenata na vašoj WordPress web lokaciji (kompatibilno sa ONLYOFFICE cloud-om).",
+				"zh-ZH": "直接从文档编辑器将文章发布到您的 WordPress 网站（与 ONLYOFFICE 云兼容）。"
 			},
 			"url"    : "index.html",
 			"icons"  : [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
