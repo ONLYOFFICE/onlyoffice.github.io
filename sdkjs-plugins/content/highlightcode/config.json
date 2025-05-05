@@ -11,7 +11,8 @@
 		"it": "Evidenzia codice",
 		"sq-AL": "Highlight code",
 		"sr-Cyrl-RS": "Истакни код",
-		"sr-Latn-RS": "Istakni kod"
+		"sr-Latn-RS": "Istakni kod",
+		"zh-ZH": "突出显示代码"
 	},
 	"version": "1.0.3",
 	"variations": [
@@ -38,7 +39,8 @@
 						"it": "Annulla",
 						"sq-AL": "Anulo",
 						"sr-Cyrl-RS": "Откажи",
-						"sr-Latn-RS": "Otkaži"
+						"sr-Latn-RS": "Otkaži",
+						"zh-ZH": "取消"
 					}
 				}
 			],
@@ -53,7 +55,8 @@
 				"it": "Evidenzia sintassi del codice selezionando il linguaggio, lo stile e il colore di sfondo necessari.",
 				"sq-AL": "Theksoni sintaksën e kodit duke përzgjedhur gjuhën dhe stilin e nevojshëm, në anglisht.",
 				"sr-Cyrl-RS": "Истакните синтаксу кода бирајући потребни језик, стил и боју позадине.",
-				"sr-Latn-RS": "Istaknite sintaksu koda birajući potrebni jezik, stil i boju pozadine."
+				"sr-Latn-RS": "Istaknite sintaksu koda birajući potrebni jezik, stil i boju pozadine.",
+				"zh-ZH": "选择必要的语言、样式和背景颜色来突出显示代码的语法。"
 			},
 			"icons": [
 				"resources/light/icon.png",
