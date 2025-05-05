@@ -170,7 +170,11 @@ window.Asc.plugin.init = async function() {
 				if (!result) return;
 
 				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
-					html : Asc.Library.ConvertMdToHTML(result)
+					type : "html",
+					options : {
+						content : Asc.Library.ConvertMdToHTML(result),
+						separateParagraphs : false
+					}					
 				}]);
 			});
 
