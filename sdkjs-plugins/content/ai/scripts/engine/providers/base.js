@@ -82,7 +82,9 @@
 				Realtime               : 0x51,
 
 				Language               : 0x61,
-				Code                   : 0x62
+				Code                   : 0x62,
+
+				OCR                    : 0x70
 			}
 
 		}
