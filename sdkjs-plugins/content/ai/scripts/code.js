@@ -59,6 +59,12 @@ window.Asc.plugin.init = async function() {
 						data.type = "text";
 						data.text = result;
 					}
+					else
+					{
+						data.type = "undefined";
+						data.text = "";
+						data.error = "No model selected for chat action..."
+					}
 				}
 				default:
 					break;
