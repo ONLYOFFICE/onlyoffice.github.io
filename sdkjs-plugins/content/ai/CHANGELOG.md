@@ -82,3 +82,7 @@
 * Add interface for system role detection.
 * Fixed the work of providers antropic and gemini when working with a system role.
 * Fix bug with custom functions in spreadsheets editor.
+
+## 2.2.7
+* Add image actions.
+* Add Stability AI provider.
