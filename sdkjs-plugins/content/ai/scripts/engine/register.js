@@ -550,7 +550,6 @@
 	AI.ActionType = {
 		Chat             : "Chat",
 		Summarization    : "Summarization",
-		//Text2Image       : "Text2Image",
 		Translation      : "Translation",
 		TextAnalyze      : "TextAnalyze",
 		ImageGeneration  : "ImageGeneration",
@@ -569,7 +568,6 @@
 
 	AI.Actions[AI.ActionType.Chat]            = new ActionUI("Ask AI", "ask-ai");
 	AI.Actions[AI.ActionType.Summarization]   = new ActionUI("Summarization", "summarization");
-	//AI.Actions[AI.ActionType.Text2Image]    = new ActionUI("Text to image", "text-to-image", "", AI.CapabilitiesUI.Image);
 	AI.Actions[AI.ActionType.Translation]     = new ActionUI("Translation", "translation");
 	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "text-analysis-ai");
 	AI.Actions[AI.ActionType.ImageGeneration] = new ActionUI("Image generation", "image-ai", "", AI.CapabilitiesUI.Image);
@@ -581,7 +579,6 @@
 		return [
 			AI.ActionType.Chat,
 			AI.ActionType.Summarization,
-			//AI.ActionType.Text2Image,
 			AI.ActionType.Translation,
 			AI.ActionType.TextAnalyze,
 			AI.ActionType.ImageGeneration,
