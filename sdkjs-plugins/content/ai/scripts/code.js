@@ -61,7 +61,7 @@ window.Asc.plugin.init = async function() {
 					}
 					else
 					{
-						data.type = "undefined";
+						data.type = "no-engine";
 						data.text = "";
 						data.error = "No model selected for chat action..."
 					}
