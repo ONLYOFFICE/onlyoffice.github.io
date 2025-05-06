@@ -78,4 +78,12 @@ class Provider extends AI.Provider {
 		return AI.CapabilitiesUI.Chat | AI.CapabilitiesUI.Vision;
 	};
 
+	getImageGeneration(message, model) {
+		let result = super.getImageGeneration(message, model);
+		result.size = result.width + "x" + result.height;
+		delete result.width;
+		delete result.height;
+		return result;
+	}
+
 }

@@ -6,4 +6,17 @@ class Provider extends AI.Provider {
 		super("Ollama", "http://localhost:11434", "", "v1");
 	}
 
+	getImageGeneration(message, model) {
+		let result = super.getImageGeneration(message, model);
+		result.options = {};
+		if (result.width)
+			result.options.width = result.width;
+		if (result.height)
+			result.options.height = result.height;
+		delete result.width;
+		delete result.height;
+		delete result.n;
+		return result;
+	}
+
 }
