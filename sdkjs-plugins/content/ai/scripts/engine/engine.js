@@ -96,7 +96,7 @@
 					})
 					.then(function(data) {
 						if (data.error)
-							resolve({error: 1, message: data.error.message ? data.error.message : ""});
+							resolve({error: 1, message: data.error.message ? data.error.message : ((typeof data.error === "string") ? data.error : "")});
 						else
 							resolve({error: 0, data: data.data ? data.data : data});
 					})
@@ -265,10 +265,6 @@
 		this.errorHandler = callback;
 	};
 
-	AI.Request.prototype.chatRequest = async function(content, block) {
-		return await this._wrapRequest(this._chatRequest, content, block !== false);
-	};
-
 	AI.Request.prototype._wrapRequest = async function(func, data, block) {
 		if (block)
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + this.modelUI.name + ")"]);
@@ -295,6 +291,11 @@
 		if (block)
 			await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + this.modelUI.name + ")"]);
 		return result;
+	};
+
+	// CHAT REQUESTS
+	AI.Request.prototype.chatRequest = async function(content, block) {
+		return await this._wrapRequest(this._chatRequest, content, block !== false);
 	};
 
 	AI.Request.prototype._chatRequest = async function(content) {
@@ -387,8 +388,9 @@
 		objRequest.url = AI._getEndpointUrl(provider, endpointType, this.model);
 
 		let requestBody = {};
+		let model = this.model;
 		let processResult = function(data) {
-			let result = provider.getChatCompletionsResult(data, this.model);
+			let result = provider.getChatCompletionsResult(data, model);
 			if (result.content.length === 0)
 				return "";
 
@@ -476,35 +478,292 @@
 			}
 		}
 	};
-	
-	function normalizeImageSize(size) {
-		let width = 0, height = 0;
-		if (size.width > 750 || size.height > 750)
-			width = height = 1024;
-		else if (size.width > 375 || size.height > 350)
-			width = height = 512;
-		else 
-			width = height = 256;
 
-		return {width: width, height: height, str: width + 'x' + height}
+	// IMAGE REQUESTS
+	AI.Request.prototype.imageGenerationRequest = async function(data, block) {
+		return await this._wrapRequest(this._imageGenerationRequest, data, block !== false);
 	};
 
-	async function getImageBlob(base64)
-	{
-		return new Promise(function(resolve) {
-			const image = new Image();
-			image.onload = function() {
-				const img_size = {width: image.width, height: image.height};
-				const canvas_size = normalizeImageSize(img_size);
-				const draw_size = canvas_size.width > image.width ? img_size : canvas_size;
-				let canvas = document.createElement('canvas');
-				canvas.width = canvas_size.width;
-				canvas.height = canvas_size.height;
-				canvas.getContext('2d').drawImage(image, 0, 0, draw_size.width, draw_size.height*image.height/image.width);
-				canvas.toBlob(function(blob) {resolve({blob: blob, size: canvas_size, image_size :img_size})}, 'image/png');
+	AI.Request.prototype._imageGenerationRequest = async function(data) {
+		let provider = null;
+		if (this.modelUI)
+			provider = AI.Storage.getProvider(this.modelUI.provider);
+
+		if (!provider) {
+			throw { 
+				error : 1, 
+				message : "Please select the correct model for action." 
 			};
-			image.src = img.src;
+			return;
+		}
+
+		let message = {
+			prompt : data
+		};
+
+		let objRequest = {
+			headers : AI._getHeaders(provider),
+			method : "POST",
+			url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Images_Generations, this.model),
+			body : provider.getImageGeneration(message, this.model)
+		};
+
+		if (objRequest.body instanceof FormData)
+			objRequest.isBlob = true;
+
+		let requestBody = {};
+		let model = this.model;
+		let processResult = function(data) {
+			return provider.getImageGenerationResult(data, model);			
+		};
+
+		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
+
+		let result = await requestWrapper(objRequest);
+		if (result.error) {
+			throw {
+				error : result.error, 
+				message : result.message
+			};
+			return;
+		}
+		if (result.data && result.data.errors) {
+			throw {
+				error : 1, 
+				message : result.data.errors[0]
+			};
+			return;
+		}
+		return processResult(result);
+	};
+
+	AI.Request.prototype.imageVisionRequest = async function(data, block) {
+		return await this._wrapRequest(this._imageVisionRequest, data, block !== false);
+	};
+
+	AI.Request.prototype._imageVisionRequest = async function(data) {
+		let provider = null;
+		if (this.modelUI)
+			provider = AI.Storage.getProvider(this.modelUI.provider);
+
+		if (!provider) {
+			throw { 
+				error : 1, 
+				message : "Please select the correct model for action." 
+			};
+			return;
+		}
+
+		let message = {
+			prompt : data.prompt,
+			image : await AI.ImageEngine.getBase64FromAny(data.image)
+		};
+
+		let objRequest = {
+			headers : AI._getHeaders(provider),
+			method : "POST",
+			url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model),
+			body : await provider.getImageVision(message, this.model)
+		};
+
+		if (objRequest.body instanceof FormData)
+			objRequest.isBlob = true;
+
+		let requestBody = {};
+		let model = this.model;
+		let processResult = function(data) {
+			return provider.getImageVisionResult(data, model);
+		};
+
+		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
+
+		let result = await requestWrapper(objRequest);
+		if (result.error) {
+			throw {
+				error : result.error, 
+				message : result.message
+			};
+			return;
+		}
+		if (result.data && result.data.errors) {
+			throw {
+				error : 1, 
+				message : result.data.errors[0]
+			};
+			return;
+		}
+		return processResult(result);
+	};
+
+	AI.Request.prototype.imageOCRRequest = async function(data, block) {
+		return await this._wrapRequest(this._imageOCRRequest, data, block !== false);
+	};
+
+	AI.Request.prototype._imageOCRRequest = async function(data) {
+		let provider = null;
+		if (this.modelUI)
+			provider = AI.Storage.getProvider(this.modelUI.provider);
+
+		if (!provider) {
+			throw { 
+				error : 1, 
+				message : "Please select the correct model for action." 
+			};
+			return;
+		}
+
+		let message = {
+			image : await AI.ImageEngine.getBase64FromAny(data)
+		};
+
+		let objRequest = {
+			headers : AI._getHeaders(provider),
+			method : "POST",
+			url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.OCR, this.model),
+			body : await provider.getImageOCR(message, this.model)
+		};
+
+		if (objRequest.body instanceof FormData)
+			objRequest.isBlob = true;
+
+		let requestBody = {};
+		let model = this.model;
+		let processResult = function(data) {
+			return provider.getImageOCRResult(data, model);
+		};
+
+		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
+
+		let result = await requestWrapper(objRequest);
+		if (result.error) {
+			throw {
+				error : result.error, 
+				message : result.message
+			};
+			return;
+		}
+		if (result.data && result.data.errors) {
+			throw {
+				error : 1, 
+				message : result.data.errors[0]
+			};
+			return;
+		}
+		return processResult(result);
+	};
+	
+	AI.ImageEngine = {};
+
+	AI.ImageEngine.getNearestImageSize = function(w, h, sizes) {
+		if (!sizes) {
+			return {
+				w : sizes[i].w,
+				h : sizes[i].h
+			};
+		}
+
+		let dist = 100000;
+		let index = 0;
+
+		for (let i = 0, len = sizes.length; i < len; i++) {
+			let tmpDist = Math.abs(w - sizes[i].w) + Math.abs(h - sizes[i].h);
+			if (tmpDist < dist) {
+				dist = tmpDist;
+				index = i;
+			}
+		}
+
+		return {
+			w : sizes[i].w,
+			h : sizes[i].h
+		};
+	};
+
+	AI.ImageEngine.getNearestImage = async function(input, sizes) {
+		let canvas = document.createElement('canvas');
+		if (input instanceof HTMLImageElement || input instanceof HTMLCanvasElement) {
+			let dstSize = AI.ImageEngine.getNearestImageSize(input.width, input.height, sizes);
+			canvas.width  = dstSize.w;
+			canvas.height = dstSize.h;
+			canvas.getContext('2d').drawImage(input, 0, 0, canvas.width, canvas.height);
+			return canvas;
+		}
+		if (image instanceof String) {
+			return new Promise(function(resolve) {
+				let image = new Image();
+				image.onload = function() {
+					resolve(AI.ImageEngine.getNearestImage(image, sizes));
+				};
+				image.onerror = function() {
+					return resolve(null);
+				};
+				image.src = input;
+			});
+		}
+		return null;
+	};
+
+	AI.ImageEngine.getBlob = async function(canvas) {
+		return new Promise(function(resolve) {
+			var canvas_size = {
+				width: canvas.width,
+				height: canvas.height,
+				str: canvas.width + "x" + canvas.height
+			};
+			canvas.toBlob(function(blob) {resolve({blob, size: canvas_size})}, 'image/png');
 		});
-	}
+	};
+
+	AI.ImageEngine.getBase64 = function(canvas) {
+		return canvas.toDataURL("image/png");
+	};
+
+	AI.ImageEngine.getBase64FromAny = async function(image) {
+		if (image instanceof HTMLImageElement) {
+			let canvas = document.createElement('canvas');
+			canvas.width = image.width;
+			canvas.height = image.height;
+			canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+			return canvas.toDataURL("image/png");
+		} 
+		if (image instanceof HTMLCanvasElement) {
+			return canvas.toDataURL("image/png");
+		}
+		if (image.startsWith("data:image"))
+			return image;
+		
+		let canvas = await AI.ImageEngine.getNearestImage(image);
+		if (!canvas)
+			return "";
+
+		return AI.ImageEngine.getBase64(canvas);
+	};
+
+	AI.ImageEngine.getBase64FromUrl = async function(url) {
+		if (url.startsWith("data:image"))
+			return url;
+
+		if (url.startsWith("iVBOR"))
+			return "data:image/png;base64," + url;
+
+		if (url.startsWith("/9j/"))
+			return "data:image/jpeg;base64," + url;
+
+		let canvas = await AI.ImageEngine.getNearestImage(url);
+		if (!canvas)
+			return "";
+
+		return AI.ImageEngine.getBase64(canvas);
+	};
+
+	AI.ImageEngine.getMimeTypeFromBase64 = async function(url) {
+		let index = url.indexOf(";");
+		return url.substring(5, index);
+	};
+
+	AI.ImageEngine.getContentFromBase64 = async function(url) {
+		let index = url.indexOf(",");
+		return url.substring(index + 1);
+	};
 
 })(window);

@@ -67,6 +67,22 @@
 		return await Editor.callMethod("GetSelectedText");
 	};
 
+	Library.prototype.GetSelectedContent = async function(type) {
+		return await Editor.callMethod("GetSelectedContent", [{ type : type }]);
+	};
+
+	Library.prototype.GetSelectedImage = async function(type) {
+		let res = await Editor.callMethod("GetSelectedContent", [{ type : "html" }]);
+		let index1 = res.indexOf("src=\"data:image/");
+		if (-1 === index1)
+			return "";
+		index1 += 5;
+		let index2 = res.indexOf("\"", index1);
+		if (-1 === index2)
+			return "";
+		return res.substring(index1, index2);
+	};
+
 	Library.prototype.ReplaceTextSmart = async function(text)
 	{
 		return await Editor.callMethod("ReplaceTextSmart", [text]);
@@ -86,6 +102,18 @@
 				}
 			}
 		});
+	};
+
+	Library.prototype.InsertAsMD = async function(data)
+	{
+		let htmlContent = Asc.Library.ConvertMdToHTML(data)
+		return await Asc.Library.InsertAsHTML(htmlContent);
+	};
+
+	Library.prototype.ConvertMdToHTML = function(data)
+	{
+		let c = window.markdownit();
+		return c.render(this.getMarkdownResult(data));
 	};
 
 	Library.prototype.InsertAsHTML = async function(data)
@@ -166,6 +194,77 @@
 		});
 	};
 
+	Library.prototype.AddGeneratedImage = async function(base64) {
+		switch (window.Asc.plugin.info.editorType) {
+			case "word": {
+				Asc.scope.url = base64;
+				return await Editor.callCommand(function() {
+					let document = Api.GetDocument();
+					let paragraph = Api.CreateParagraph();
+					let drawing = Api.CreateImage(Asc.scope.url, 100 * 36000, 100 * 36000);
+					paragraph.AddDrawing(drawing);
+					document.Push(paragraph);
+				}, false);
+			}
+			case "cell": {
+				Asc.scope.url = base64;
+				return await Editor.callCommand(function() {
+					let worksheet = Api.GetActiveSheet();
+					worksheet.AddImage(Asc.scope.url, 100 * 36000, 100 * 36000, 0, 2 * 36000, 2, 3 * 36000);
+				}, false);
+			}
+			case "slide": {
+				Asc.scope.url = base64;
+				return await Editor.callCommand(function() {
+					let presentation = Api.GetPresentation();
+					let slide = presentation.GetCurrentSlide();
+					let image = Api.CreateImage(Asc.scope.url, 150 * 36000, 150 * 36000);
+					slide.AddObject(image);
+				}, false);
+			}
+			default:
+				break;
+		}
+	};
+
+	Library.prototype.trimResult = function(data, posStart, isSpaces, extraCharacters) {
+		let pos = posStart || 0;
+		if (-1 != pos) {
+			let trimC = ["\"", "'", "\n", "\r", "`"];
+			if (true === isSpaces)
+				trimC.push(" ");
+			while (pos < data.length && trimC.includes(data[pos]))
+				pos++;
+
+			let posEnd = data.length - 1;
+			while (posEnd > 0 && trimC.includes(data[posEnd]))
+				posEnd--;
+
+			if (posEnd > pos)
+				return data.substring(pos, posEnd + 1);				
+		}
+		return data;
+	};
+
+	Library.prototype.getTranslateResult = function(data, dataSrc) {
+		data = this.trimResult(data, 0, true);
+		let trimC = ["\"", "'", "\n", "\r", " "];
+		if (dataSrc.length > 0 && trimC.includes(dataSrc[0])) {
+			data = dataSrc[0] + data;
+		}
+		if (dataSrc.length > 1 && trimC.includes(dataSrc[dataSrc.length - 1])) {
+			data = data + dataSrc[dataSrc.length - 1];
+		}
+		return data;
+	};
+
+	Library.prototype.getMarkdownResult = function(data) {
+		let markdownEscape = data.indexOf("```md");
+		if (-1 !== markdownEscape && markdownEscape < 5)
+			data = data.substring(markdownEscape + 5);		
+		return this.trimResult(data);
+	};
+
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Library = new Library();
 
@@ -238,6 +337,12 @@ Here is the text that needs revision: \"${content}\"`;
 			prompt += content;
 			prompt += "\n\"\"\"";
 			return prompt;
+		},
+		getImageDescription() {
+			return "Describe in detail everything you see in this image. Mention the objects, their appearance, colors, arrangement, background, and any noticeable actions or interactions. Be as specific and accurate as possible. Avoid making assumptions about things that are not clearly visible."
+		},
+		getImagePromptOCR() {
+			return "Extract all text from this image as accurately as possible. Preserve original reading order and formatting if possible. Recognize tables and images if possible. Do not add or remove any content. Output recognized objects in md format if possible. If not, return plain text.";
 		}
 	};
 
