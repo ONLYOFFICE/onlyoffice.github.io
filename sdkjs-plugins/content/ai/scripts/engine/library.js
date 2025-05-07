@@ -32,7 +32,9 @@
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Editor = Editor;
 
-	function Library() {}
+	function Library() {
+		this.version = 0;
+	}
 
 	function decodeHtmlText(text) {
 		return text
@@ -46,6 +48,9 @@
 
 	Library.prototype.GetEditorVersion = async function()
 	{
+		if (this.version !== 0)
+			return this.version;
+
 		let version = await Editor.callMethod("GetVersion");
 		if ("develop" == version)
 			version = "99.99.99";
@@ -54,7 +59,8 @@
 		while (3 > arrVer.length)
 			arrVer.push("0");
 
-		return 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+		this.version = 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+		return this.version;
 	};
 
 	Library.prototype.GetCurrentWord = async function()
@@ -64,7 +70,11 @@
 
 	Library.prototype.GetSelectedText = async function()
 	{
-		return await Editor.callMethod("GetSelectedText");
+		let result = await Editor.callMethod("GetSelectedText");
+		if (result !== "")
+			return result;
+
+		return this.GetSelectedContent("text");
 	};
 
 	Library.prototype.GetSelectedContent = async function(type) {
@@ -194,27 +204,41 @@
 		});
 	};
 
+	Library.prototype.GetLocalImagePath = async function(url) {
+		return await Editor.callMethod("getLocalImagePath", [url]);
+	};
+
 	Library.prototype.AddGeneratedImage = async function(base64) {
+		let editorVersion = await Asc.Library.GetEditorVersion();
+		
+		if (editorVersion >= 9000000) {
+			let urlLocal = await this.GetLocalImagePath(base64);
+			if (urlLocal.error === true)
+				return;
+
+			Asc.scope.url = urlLocal.url;
+		} else {
+			Asc.scope.url = url;
+		}
+
 		switch (window.Asc.plugin.info.editorType) {
 			case "word": {
-				Asc.scope.url = base64;
 				return await Editor.callCommand(function() {
 					let document = Api.GetDocument();
 					let paragraph = Api.CreateParagraph();
 					let drawing = Api.CreateImage(Asc.scope.url, 100 * 36000, 100 * 36000);
 					paragraph.AddDrawing(drawing);
-					document.Push(paragraph);
+					document.RemoveSelection();
+					document.InsertContent([paragraph], true);
 				}, false);
 			}
 			case "cell": {
-				Asc.scope.url = base64;
 				return await Editor.callCommand(function() {
 					let worksheet = Api.GetActiveSheet();
 					worksheet.AddImage(Asc.scope.url, 100 * 36000, 100 * 36000, 0, 2 * 36000, 2, 3 * 36000);
 				}, false);
 			}
 			case "slide": {
-				Asc.scope.url = base64;
 				return await Editor.callCommand(function() {
 					let presentation = Api.GetPresentation();
 					let slide = presentation.GetCurrentSlide();
@@ -225,6 +249,36 @@
 			default:
 				break;
 		}
+	};
+
+	Library.prototype.AddOleObject = async function(imageUrl, data) {
+		switch (window.Asc.plugin.info.editorType) {
+			case "word": {
+				await Editor.callCommand(function(){
+					let document = Api.GetDocument();
+					document.RemoveSelection();
+				});
+				break;
+			}
+			default:
+				break;
+		}
+
+		let W = 100;
+		let H = 100;
+
+		let info = window.Asc.plugin.info;
+		var obj = {
+			guid : info.guid,
+			widthPix : info.mmToPx * W,
+			heightPix : info.mmToPx * H,
+			width : W,
+			height : H,
+			imgSrc : imageUrl,
+			data : data
+		};
+
+		return await Editor.callMethod("AddOleObject", [obj]);
 	};
 
 	Library.prototype.trimResult = function(data, posStart, isSpaces, extraCharacters) {
