@@ -379,7 +379,7 @@
 		let buttonImages = new Asc.ButtonContextMenu(buttonMain);
 		buttonImages.text = "Image";
 		buttonImages.icons = getContextMenuButtonIcons("image-ai");
-		buttonImages.addCheckers("Selection", "OleObject");
+		buttonImages.addCheckers("Selection", "Image", "OleObject");
 
 		let buttonGen = new Asc.ButtonContextMenu(buttonImages);
 		buttonGen.text = "Text to Image";
