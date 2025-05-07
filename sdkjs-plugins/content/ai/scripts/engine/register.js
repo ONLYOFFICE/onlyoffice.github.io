@@ -379,7 +379,7 @@
 		let buttonImages = new Asc.ButtonContextMenu(buttonMain);
 		buttonImages.text = "Image";
 		buttonImages.icons = getContextMenuButtonIcons("image-ai");
-		buttonImages.addCheckers("Selection", "Image");
+		buttonImages.addCheckers("Selection", "OleObject");
 
 		let buttonGen = new Asc.ButtonContextMenu(buttonImages);
 		buttonGen.text = "Text to Image";
@@ -396,12 +396,12 @@
 			let result = await requestEngine.imageGenerationRequest(content);
 			if (!result) return;
 
-			await Asc.Library.AddGeneratedImage(result);
+			await Asc.Library.AddOleObject(result, content);
 		});
 
 		let buttonOCR = new Asc.ButtonContextMenu(buttonImages);
 		buttonOCR.text = "OCR";
-		buttonOCR.addCheckers("Image");
+		buttonOCR.addCheckers("Image", "OleObject");
 		buttonOCR.attachOnClick(async function(){
 			let requestEngine = AI.Request.create(AI.ActionType.OCR);
 			if (!requestEngine)
@@ -419,7 +419,7 @@
 
 		let buttonExplainImage = new Asc.ButtonContextMenu(buttonImages);
 		buttonExplainImage.text = "Image to Text";
-		buttonExplainImage.addCheckers("Image");
+		buttonExplainImage.addCheckers("Image", "OleObject");
 		buttonExplainImage.attachOnClick(async function(){
 			let requestEngine = AI.Request.create(AI.ActionType.Vision);
 			if (!requestEngine)
@@ -566,7 +566,7 @@
 		this.capabilities = (capabilities === undefined) ? AI.CapabilitiesUI.Chat : capabilities;
 	}
 
-	AI.Actions[AI.ActionType.Chat]            = new ActionUI("Ask AI", "ask-ai");
+	AI.Actions[AI.ActionType.Chat]            = new ActionUI("Chatbot", "ask-ai");
 	AI.Actions[AI.ActionType.Summarization]   = new ActionUI("Summarization", "summarization");
 	AI.Actions[AI.ActionType.Translation]     = new ActionUI("Translation", "translation");
 	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "text-analysis-ai");
