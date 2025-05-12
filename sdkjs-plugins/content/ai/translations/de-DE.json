@@ -134,8 +134,14 @@
 	"Enter the configuration for the AI model API in JS format. Provide the model name, endpoint URLs, and headers.": "Geben Sie die Konfiguration für die KI-Modell-API im JS-Format ein. Geben Sie den Modellnamen, die Endpunkt-URLs und die Header an.",
 	"Download template": "Vorlage herunterladen",
 	"Invalid file format, please upload the .js file": "Ungültiges Dateiformat, bitte laden Sie die .js-Datei hoch",
-	"Error adding provider from file, please try again": "Fehler beim Hinzufügen des Anbieters aus der Datei. Bitte versuchen Sie es erneut."
+	"Error adding provider from file, please try again": "Fehler beim Hinzufügen des Anbieters aus der Datei. Bitte versuchen Sie es erneut.",
 
 	"Translation settings": "Einstellungen der Übersetzung",
-	"Select language for AI translation": "Wählen Sie die Sprache für die KI-Übersetzung aus"
+	"Select language for AI translation": "Wählen Sie die Sprache für die KI-Übersetzung aus",
+	"Image": "Bild",
+	"Image to Text": "Bild zu Text",
+	"Text to Image": "Text zu Bild",
+	"Image generation": "Bildgenerierung",
+	"OCR": "OCR",
+	"Vision": "Visão"
 }
