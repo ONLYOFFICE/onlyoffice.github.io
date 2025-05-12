@@ -1,0 +1,14 @@
+This plugin uses code from the following 3rd party projects:
+
+1. MathJax (https://www.mathjax.org/)
+License: Apache License 2.0
+https://github.com/mathjax/MathJax/blob/master/LICENSE
+
+2. Mathpix API (https://mathpix.com/)
+Terms of Service: https://mathpix.com/terms
+Privacy Policy: https://mathpix.com/privacy
+
+3. Mathpix Logo/Favicon (https://mathpix.com/favicon.ico)
+Copyright (c) Mathpix, Inc.
+Used with permission as part of the Mathpix API integration
+

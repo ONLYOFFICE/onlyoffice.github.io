@@ -59,6 +59,12 @@ window.Asc.plugin.init = async function() {
 						data.type = "text";
 						data.text = result;
 					}
+					else
+					{
+						data.type = "no-engine";
+						data.text = "";
+						data.error = "No model selected for chat action..."
+					}
 				}
 				default:
 					break;
@@ -130,7 +136,57 @@ window.Asc.plugin.init = async function() {
 			if (isUpdate)
 				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
 		}
-	}
+
+		if (Asc.plugin.info.editorSubType === "pdf") {
+			window.Asc.plugin.attachEditorEvent("onChangeRestrictions", function(value){
+				let disabled = (value & 0x80) !== 0;
+				if (window.buttonOCRPage.disabled !== disabled)
+					window.buttonOCRPage.disabled = disabled;
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonOCRPage]);
+			});
+
+			let restriction = Asc.plugin.info.restrictions;
+			if (undefined === restriction)
+				restriction = 0;
+
+			let buttonOCRPage = new Asc.ButtonToolbar(null);
+			buttonOCRPage.text = "OCR";
+			buttonOCRPage.icons = window.getToolBarButtonIcons("ocr");
+			window.buttonOCRPage = buttonOCRPage;
+
+			if (0x80 & restriction)
+				buttonOCRPage.disabled = true;
+
+			buttonOCRPage.attachOnClick(async function(data){
+				let requestEngine = AI.Request.create(AI.ActionType.OCR);
+				if (!requestEngine)
+					return;
+
+				let pageIndex = await Asc.Editor.callMethod("GetCurrentPage");
+				let content = await Asc.Editor.callMethod("GetPageImage", [pageIndex, {
+					maxSize : 1024,
+					annotations : true,
+					fields : false,
+					drawings : false
+				}]);
+				if (!content)
+					return;
+
+				let result = await requestEngine.imageOCRRequest(content);
+				if (!result) return;
+
+				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
+					type : "html",
+					options : {
+						content : Asc.Library.ConvertMdToHTML(result),
+						separateParagraphs : false
+					}					
+				}]);
+			});
+
+			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
+		}
+	}	
 };
 
 window.Asc.plugin.onTranslate = function() {
@@ -219,7 +275,7 @@ function onOpenSettingsModal() {
 			{ text: window.Asc.plugin.tr('OK'), primary: true }
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 350]
 	};
 
@@ -247,7 +303,7 @@ function onTranslateSettingsModal() {
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 200]
 	};
 
@@ -272,7 +328,7 @@ function onOpenAiModelsModal() {
 			{ text: window.Asc.plugin.tr('Back'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 230]
 	};
 
@@ -302,7 +358,7 @@ function onOpenEditModal(data) {
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 375]
 	};
 
@@ -341,7 +397,7 @@ function onOpenCustomProvidersModal() {
 			{ text: window.Asc.plugin.tr('Back'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [350, 222]
 	};
 
@@ -381,7 +437,7 @@ function onOpenSummarizationModal() {
 		isVisual : true,
 		buttons : [],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [720, 310]
 	};
 
