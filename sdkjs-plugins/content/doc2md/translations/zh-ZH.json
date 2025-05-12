@@ -10,5 +10,5 @@
 	"Help": "选择Markdown或HTML。\n* 默认：转换整个文档。\n* 选择文本以限制范围。",
 	"Text was copied to buffer!": "文本被复制到缓冲区!",
 	"Convert to Markdown or HTML": "转换为Markdown或HTML",
-	"Preview": "プレビュー"
+	"Preview": "预览"
 }

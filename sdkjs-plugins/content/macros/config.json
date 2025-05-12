@@ -10,7 +10,8 @@
 		"it": "Macro",
 		"sq-AL": "Makros",
 		"sr-Cyrl-RS": "Makros",
-		"sr-Latn-RS": "Makros"
+		"sr-Latn-RS": "Makros",
+		"zh-ZH": "宏"
 	},
 	"guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
 	"version": "2.0.1",
@@ -32,7 +33,8 @@
 				"it": "Automatizza i tuoi compiti di routine e rendi i tuoi documenti standard utilizzando le macro (viene utilizzata la sintassi del linguaggio JavaScript).",
 				"sq-AL": "Automatizoni detyrat tuaja të përditshme dhe standardizoni dokumentet duke përdorur makro (është përdorur sintaksa gjuhës JavaScript).",
 				"sr-Cyrl-RS": "Аутоматизујте своје рутинске задатке и стандардизујте документе користећи макрое (користи се синтакса језика JavaScript).",
-				"sr-Latn-RS": "Automatizujte svoje rutinske zadatke i standardizujte dokumente koristeći makroe (koristi se sintaksa jezika JavaScript)."
+				"sr-Latn-RS": "Automatizujte svoje rutinske zadatke i standardizujte dokumente koristeći makroe (koristi se sintaksa jezika JavaScript).",
+				"zh-ZH": "使用宏（基于JavaScript语法）实现日常任务自动化并使文档标准化。"
 			},
 			"url": "index.html",
 			"help" : "https://api.onlyoffice.com/docs/plugin-and-macros/macros/getting-started/",
@@ -98,7 +100,8 @@
 						"it": "Salva",
 						"sq-AL": "Ruaj",
 						"sr-Cyrl-RS": "Сачувај",
-						"sr-Latn-RS": "Sačuvaj"
+						"sr-Latn-RS": "Sačuvaj",
+						"zh-ZH": "保存"
 					}
 				},
 				{
@@ -112,7 +115,8 @@
 						"it": "Annulla",
 						"sq-AL": "Anulo",
 						"sr-Cyrl-RS": "Откажи",
-						"sr-Latn-RS": "Otkaži"
+						"sr-Latn-RS": "Otkaži",
+						"zh-ZH": "取消"
 					}
 				}
 			],

@@ -1,0 +1,22 @@
+{
+    "Click to upload": "Cliquez pour télécharger",
+    "Results": "Résultats",
+    "Configuration": "Configuration",
+    "Mathpix App ID:": "ID d'application Mathpix :",
+    "Mathpix APP Key:": "Clé APP Mathpix :",
+    "Enter your App ID": "Entrez votre ID d'application",
+    "Enter your APP Key": "Entrez votre clé APP",
+    "Save Credentials": "Enregistrer les identifiants",
+    "Don't have an API key?": "Vous n'avez pas de clé API ?",
+    "Register here": "Inscrivez-vous ici",
+    "Output Formats:": "Formats de sortie :",
+    "Recognize": "Reconnaître",
+    "Clear": "Effacer",
+    "Copy": "Copier",
+    "Insert": "Insérer",
+    "Image": "Image",
+    "No preview available": "Aucun aperçu disponible",
+    "Credentials saved!": "Identifiants enregistrés !",
+    "Please enter both your Mathpix App ID and APP Key in the configuration panel.": "Veuillez saisir votre ID d'application Mathpix et votre clé APP dans le panneau de configuration.",
+    "Note: Some advanced LaTeX syntax may not be compatible with Document Editor. Manual adjustment might be needed.": "Remarque : Certaines syntaxes LaTeX avancées peuvent ne pas être compatibles avec l'Éditeur de documents. Un ajustement manuel peut être nécessaire."
+} 
