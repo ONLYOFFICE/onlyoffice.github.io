@@ -95,5 +95,11 @@
 	"Chatbot": "Chatbot",
 	"Ask AI a question about something...": "Zeptejte se umělé inteligence na něco...",
 
-	"This field is required": "Toto pole je povinné"
+	"This field is required": "Toto pole je povinné",
+	"Image": "Obrázek",
+	"Image to Text": "Obrázek na text",
+	"Text to Image": "Text na obrázek",
+	"Image generation": "Generování obrázků",
+	"OCR": "OCR",
+	"Vision": "Vize"
 }

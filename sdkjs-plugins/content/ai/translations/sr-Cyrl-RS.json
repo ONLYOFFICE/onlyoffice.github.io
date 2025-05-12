@@ -137,5 +137,11 @@
 	"Error adding provider from file, please try again": "Грешка приликом додавања провајдера из фајла, покушајте поново",
 
 	"Translation settings": "Подешавања превода",
-	"Select language for AI translation.": "Изаберите језик за превод помоћу вештачке интелигенције."
+	"Select language for AI translation.": "Изаберите језик за превод помоћу вештачке интелигенције.",
+	"Image": "Слика",
+	"Image to Text": "Слика у текст",
+	"Text to Image": "Текст у слику",
+	"Image generation": "Генерисање слике",
+	"OCR": "OCR",
+	"Vision": "Визија"
 }

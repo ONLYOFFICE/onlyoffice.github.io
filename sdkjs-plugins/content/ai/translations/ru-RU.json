@@ -137,5 +137,11 @@
 	"Error adding provider from file, please try again": "Ошибка добавления поставщика из файла, попробуйте еще раз",
 
 	"Translation settings": "Настройки перевода",
-	"Select language for AI translation.": "Выберите язык для перевода с помощью ИИ."
+	"Select language for AI translation.": "Выберите язык для перевода с помощью ИИ.",
+	"Image": "Изображение",
+	"Image to Text": "Изображение в текст",
+	"Text to Image": "Текст в изображение",
+	"Image generation": "Генерирование изображений",
+	"OCR": "Оптическое распознавание символов",
+	"Vision": "Распознавание изображений"
 }
