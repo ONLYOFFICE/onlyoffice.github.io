@@ -137,5 +137,11 @@
 	"Error adding provider from file, please try again": "Errore durante l'aggiunta del provider dal file, riprova",
 
 	"Translation settings": "Impostazioni di traduzione",
-	"Select language for AI translation.": "Seleziona la lingua per la traduzione AI."
+	"Select language for AI translation.": "Seleziona la lingua per la traduzione AI.",
+	"Image": "Immagine",
+	"Image to Text": "Da immagine a testo",
+	"Text to Image": "Da testo a immagine",
+	"Image generation": "Generazione di immagini",
+	"OCR": "OCR",
+	"Vision": "Visione"
 }
