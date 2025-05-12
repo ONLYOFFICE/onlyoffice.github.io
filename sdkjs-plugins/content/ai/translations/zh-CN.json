@@ -137,5 +137,11 @@
 	"Error adding provider from file, please try again": "从文件添加提供商时出错，请重试",
 
 	"Translation settings": "翻译设置",
-	"Select language for AI translation": "选择用于 AI 翻译的语言"
+	"Select language for AI translation": "选择用于 AI 翻译的语言",
+	"Image": "图像",
+	"Image to Text": "图像转文本",
+	"Text to Image": "文本转图像",
+	"Image generation": "图像生成",
+	"OCR": "OCR文字识别",
+	"Vision": "智能视觉处理"
 }

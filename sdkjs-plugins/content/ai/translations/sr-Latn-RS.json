@@ -137,5 +137,11 @@
 	"Error adding provider from file, please try again": "Greška prilikom dodavanja provajdera iz fajla, pokušajte ponovo",
 
 	"Translation settings": "Podešavanja prevoda",
-	"Select language for AI translation.": "Izaberite jezik za prevod pomoću veštačke inteligencije."
+	"Select language for AI translation.": "Izaberite jezik za prevod pomoću veštačke inteligencije.",
+	"Image": "Slika",
+	"Image to Text": "Slika u tekst",
+	"Text to Image": "Tekst u sliku",
+	"Image generation": "Generisanje slike",
+	"OCR": "OCR",
+	"Vision": "Vizija"
 }

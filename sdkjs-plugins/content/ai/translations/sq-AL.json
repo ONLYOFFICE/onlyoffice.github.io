@@ -137,5 +137,11 @@
 	"Error adding provider from file, please try again": "Gabim gjatë shtimit të ofruesit nga sekdari, ju lutem provoni përsëri.",
 
 	"Translation settings": "Cilësimet e përkthimit",
-	"Select language for AI translation.": "Zgjidhni gjuhën për përkthimin nga IA."
+	"Select language for AI translation.": "Zgjidhni gjuhën për përkthimin nga IA.",
+	"Image": "Imazh",
+	"Image to Text": "Imazh në Tekst",
+	"Text to Image": "Tekst në Imazh",
+	"Image generation": "Gjenerim imazhi",
+	"OCR": "OCR",
+	"Vision": "Vizion"
 }
