@@ -9,7 +9,8 @@
 		"cs-CS": "Typograf",
 		"sq-AL": "Typograf",
 		"sr-Cyrl-RS": "Typograf",
-		"sr-Latn-RS": "Typograf"
+		"sr-Latn-RS": "Typograf",
+		"zh-ZH": "排版工具"
 	},
 	"guid": "asc.{55159EC6-C91A-4DDB-8E1E-558454666461}",
 	"version": "1.0.2",
@@ -26,7 +27,8 @@
 				"cs-CS": "Připravte své texty k publikování opravou typografie.",
 				"sq-AL": "Përgatitni tekstet tuaja për botim duke korrigjuar tipografinë.",
 				"sr-Cyrl-RS": "Припремите своје текстове за објављивање исправљањем типографије.",
-				"sr-Latn-RS": "Pripremite svoje tekstove za objavljivanje ispravljanjem tipografije."
+				"sr-Latn-RS": "Pripremite svoje tekstove za objavljivanje ispravljanjem tipografije.",
+				"zh-ZH": "通过校正排版，为发布您的文本做好准备。"
 			},
 			"url": "index.html",
 

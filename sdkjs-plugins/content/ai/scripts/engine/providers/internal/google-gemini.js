@@ -58,7 +58,12 @@ class Provider extends AI.Provider {
 			url = "/models";
 			break;
 		default:
-			url = "/" + model.id + ":generateContent";
+			let addon = ":generateContent";
+			if (endpoint === Types.v1.Images_Generations) {
+				if (-1 != model.id.indexOf("imagen-3"))
+					addon = ":predict";
+			}
+			url = "/" + model.id + addon;
 			break;
 		}
 		if (this.key)
@@ -89,6 +94,47 @@ class Provider extends AI.Provider {
 			body.contents.push(rec);
 		}
 		return body;
+	}
+
+	getImageGeneration(message, model) {
+		if (-1 != model.id.indexOf("flash")) {
+			let result = this.getImageGenerationWithChat(message, model);
+			result.generationConfig = {"responseModalities":["TEXT","IMAGE"]};
+			return result;
+		}
+		if (-1 != model.id.indexOf("imagen-3")) {
+			return {
+				instances: [
+					{
+						prompt: message.prompt
+					}
+				],
+				parameters: {
+					"sampleCount": 1
+				}
+			};
+		}
+
+		return {};
+	}
+
+	async getImageVision(message, model) {
+		return {
+			contents : [
+				{
+					role: "user",
+					parts: [
+						{ text: message.prompt },
+						{ 
+							inline_data: {
+								mime_type: AI.ImageEngine.getMimeTypeFromBase64(message.image),
+								data: AI.ImageEngine.getContentFromBase64(message.image)
+							}
+						}
+					]
+				}
+			]
+		}		
 	}
 
 }

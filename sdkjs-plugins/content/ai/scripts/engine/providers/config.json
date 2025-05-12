@@ -8,5 +8,6 @@
 	"ollama",
 	"mistral",
 	"gpt4all",
-	"xAI"
+	"xAI",
+	"stabilityai"
 ]
