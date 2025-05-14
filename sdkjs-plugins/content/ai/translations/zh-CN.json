@@ -13,7 +13,6 @@
 	"Moderations": "审核内容",
 	"Realtime": "实时任务",
 	"Code": "代码",
-	"Vision": "视觉",
 	"Models": "模型",
 	"Models not found": "模型未找到",
 
@@ -56,7 +55,6 @@
 
 	"Loading..." : "加载中...",
 	"Text analysis" : "文本分析",
-	"Summarize" : "摘要",
 	"Summarization" : "摘要",
 	"Keywords" : "关键词",
 	"Word analysis" : "单词分析",

@@ -13,7 +13,6 @@
 	"Moderations": "Модерација",
 	"Realtime": "У реалном времену",
 	"Code": "Код",
-	"Vision": "Визија",
 	"Models": "Модели",
 	"Models not found": "Модели нису пронађени",
 
@@ -56,7 +55,6 @@
 
 	"Loading..." : "Учитавање...",
 	"Text analysis": "Анализа текста",
-	"Summarize": "Сажети",
 	"Summarization": "Сажимање",
 	"Keywords": "Кључне речи",
 	"Word analysis": "Анализа речи",
