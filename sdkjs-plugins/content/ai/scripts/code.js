@@ -84,9 +84,10 @@ window.Asc.plugin.init = async function() {
      * Function that returns the AI answer.\n\
      * @customfunction\n\
      * @param {string} value Prompt.\n\
+     * @param {?boolean} isSaveAIFunction Indicator whether the AI function should be saved.\n\
      * @returns {string} Answer value.\n\
      */\n\
-    async function AI(value) {\n\
+    async function AI(value, isSaveAIFunction) {\n\
         let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
         return new Promise(resolve => (function(){\n\
             Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
@@ -95,7 +96,10 @@ window.Asc.plugin.init = async function() {
                 switch (data.type) {\n\
                     case \"text\":\n\
                     {\n\
-                        resolve(data.text);\n\
+                        let result = data.text.trim();\n\
+                        if (isSaveAIFunction !== true)\n\
+                            result = \"@@\" + result;\n\
+                        resolve(result);\n\
                         break;\n\
                     }\n\
                     default:\n\
