@@ -13,7 +13,6 @@
 	"Moderations": "Moderace",
 	"Realtime": "Reálný čas",
 	"Code": "Kód",
-	"Vision": "Vize",
 	"Models": "Modely",
 	"Models not found": "Modely nenalezeny",
 
@@ -56,7 +55,6 @@
 
 	"Loading..." : "Načítání...",
 	"Text analysis": "Analýza textu",
-	"Summarize": "Shrnout",
 	"Summarization": "Shrnout",
 	"Keywords": "Slovo",
 	"Word analysis": "Slovní analýza",

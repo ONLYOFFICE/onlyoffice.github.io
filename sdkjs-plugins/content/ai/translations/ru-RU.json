@@ -13,7 +13,6 @@
 	"Moderations": "Модерирование",
 	"Realtime": "В режиме реального времени",
 	"Code": "Код",
-	"Vision": "Вид",
 	"Models": "Модели",
 	"Models not found": "Модели не найдены",
 
@@ -56,7 +55,6 @@
 
 	"Loading..." : "Загрузка...",
 	"Text analysis" : "Анализ текста",
-	"Summarize" : "Резюмировать",
 	"Summarization" : "Резюмировать",
 	"Keywords" : "Ключевые слова",
 	"Word analysis" : "Анализ слова",

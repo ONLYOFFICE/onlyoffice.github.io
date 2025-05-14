@@ -13,7 +13,6 @@
 	"Moderations": "Moderaciones",
 	"Realtime": "En tiempo real",
 	"Code": "Código",
-	"Vision": "Visión",
 	"Models": "Modelos",
 	"Models not found": "No se han encontrado modelos",
 
@@ -56,7 +55,6 @@
 
 	"Loading..." : "Carga...",
 	"Text analysis": "Análisis de texto",
-	"Summarize": "Resumir",
 	"Summarization": "Resumir",
 	"Keywords": "Palabras Clave",
 	"Word analysis": "Análisis de palabras",
