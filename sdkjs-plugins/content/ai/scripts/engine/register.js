@@ -416,7 +416,7 @@ function registerButtons(window, undefined)
 			let result = await requestEngine.imageOCRRequest(content);
 			if (!result) return;
 
-			await Asc.Library.InsertAsMD(result);
+			await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
 		});
 
 		let buttonExplainImage = new Asc.ButtonContextMenu(buttonImages);
