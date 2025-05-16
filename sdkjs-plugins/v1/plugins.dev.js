@@ -383,6 +383,26 @@
 			window.Asc.plugin.executeMethod("AddToolbarMenuItem", [items]);
 	};
 
+	Asc.Buttons.updateToolbarMenu = function(id, name, buttons)
+	{
+		let buttonMainToolbar = new Asc.ButtonToolbar(null, id);
+		buttonMainToolbar.text = name;
+
+		let items = {
+			guid : window.Asc.plugin.guid,
+			tabs : []
+		};
+
+		buttonMainToolbar.childs = buttons;
+		for (let i = 0, len = buttons.length; i < len; i++)
+			buttons[i].parent = buttonMainToolbar;
+
+		buttonMainToolbar.toToolbar(items);
+
+		if (items.tabs.length > 0)
+			window.Asc.plugin.executeMethod("UpdateToolbarMenuItem", [items]);
+	};
+
 	Asc.Buttons.registerContentControl = function()
 	{
 		window.Asc.plugin.attachEditorEvent("onShowContentControlTrack", function(contentControls) {
@@ -462,6 +482,7 @@
 		this.lockInViewMode = true;
 		this.enableToggle = false;
 		this.disabled = false;
+		this.removed = false;
 
 		this.parent = parent ? parent : null;
 		this.childs = null;
@@ -498,6 +519,11 @@
 
 		if (this.disabled)
 			item.disabled = true;
+		else
+			item.disabled = false;
+
+		if (this.removed)
+			item.removed = true;
 
 		if (this.icons)
 			item.icons = this.icons;
