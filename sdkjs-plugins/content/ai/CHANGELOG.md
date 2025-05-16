@@ -86,3 +86,6 @@
 ## 2.2.7
 * Add image actions.
 * Add Stability AI provider.
+
+## 2.2.8
+* Fix image actions. Add "OCR" and "Image to text" support.
