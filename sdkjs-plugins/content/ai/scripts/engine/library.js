@@ -42,6 +42,88 @@
 		this.version = 0;
 	}
 
+	exports.Asc.PluginsMD = {
+		latex: function(md) {
+			// Inline: $...$
+			md.inline.ruler.after("escape", "latex_inline", function(state, silent) {
+				let start = state.pos;
+				if (state.src[start] !== '$')
+					return false;
+				if (state.src[start + 1] === '$')
+					return false;
+
+				let content = "";
+				let end = start + 1;
+				while ((end = state.src.indexOf('$', end)) !== -1) {
+					if (state.src.charCodeAt(end - 1) === 92/*\\*/) {
+						end++;
+						continue;
+					}
+					content = state.src.slice(start + 1, end);
+					content = content.trim();
+					break;
+				}
+
+				if (!content)
+					return false;
+
+				if (!silent) {
+					let token = state.push("latex_inline", "span", 0);
+					token.content = content;
+					token.attrs = [["class", "oo-latex-inline"]];
+				}
+			
+				state.pos = end + 1;
+				return true;
+			});
+			md.renderer.rules.latex_inline = function(tokens, idx) {
+				return `<span class="oo-latex-inline">${tokens[idx].content}</span>`;
+			};
+			
+			// Block: $$...$$  
+			md.block.ruler.before("fence", "latex_block", function(state, startLine, endLine, silent) {
+				let startPos = state.bMarks[startLine] + state.tShift[startLine];
+				let maxPos = state.eMarks[startLine];
+				let line = state.src.slice(startPos, maxPos).trim();
+				
+				if (!line.startsWith("$$"))
+					return false;
+				if (silent)
+					return true;
+				
+				let content = "";
+				let found = false;
+				
+				for (let i = startLine + 1; i < endLine; i++) {
+					let pos = state.bMarks[i] + state.tShift[i];
+					let max = state.eMarks[i];
+					let nextLine = state.src.slice(pos, max).trim();
+
+					if (nextLine === "$$") {
+						found = true;
+						state.line = i + 1;
+						break;
+					}
+
+					content += nextLine + "\n";
+				}
+				
+				if (!found) return false;
+				
+				const token = state.push("latex_block", "span", 0);
+				token.block = true;
+				token.content = content.trim();
+				token.attrs = [["class", "oo-latex"]];
+				token.map = [startLine, state.line];
+
+				return true;
+			});
+			md.renderer.rules.latex_block = function(tokens, idx) {
+				return `<span class="oo-latex">${tokens[idx].content}</span>\n`;
+			};
+		}
+	};
+
 	function decodeHtmlText(text) {
 		return text
 			.replace(/&quot;/g, '"')
@@ -120,15 +202,19 @@
 		});
 	};
 
-	Library.prototype.InsertAsMD = async function(data)
+	Library.prototype.InsertAsMD = async function(data, plugins)
 	{
-		let htmlContent = Asc.Library.ConvertMdToHTML(data)
+		let htmlContent = Asc.Library.ConvertMdToHTML(data, plugins)
 		return await Asc.Library.InsertAsHTML(htmlContent);
 	};
 
-	Library.prototype.ConvertMdToHTML = function(data)
+	Library.prototype.ConvertMdToHTML = function(data, plugins)
 	{
 		let c = window.markdownit();
+		if (plugins) {
+			for (let i = 0, len = plugins.length; i < len; i++)
+				c.use(plugins[i]);
+		}
 		return c.render(this.getMarkdownResult(data));
 	};
 

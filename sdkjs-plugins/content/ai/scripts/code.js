@@ -54,7 +54,7 @@ async function initWithTranslate() {
 				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
 					type : "html",
 					options : {
-						content : Asc.Library.ConvertMdToHTML(result),
+						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]),
 						separateParagraphs : false
 					}					
 				}]);
