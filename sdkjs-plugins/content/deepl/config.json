@@ -8,7 +8,8 @@
 		"de": "DeepL",
 		"sq-AL": "DeepL",
 		"sr-Cyrl-RS": "DeepL",
-		"sr-Latn-RS": "DeepL"
+		"sr-Latn-RS": "DeepL",
+		"zh-ZH": "DeepL"
 	},
 	"guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
 	"version": "1.0.3",
@@ -24,7 +25,8 @@
 				"de": "Übersetzen Sie den ausgewählten Text in andere Sprachen mit DeepL.",
 				"sq-AL": "Përktheni tekstin e selektuar në gjuhë të tjera duke përdorur DeepL.",
 				"sr-Cyrl-RS": "Преведите одабрани текст на друге језике користећи DeepL.",
-				"sr-Latn-RS": "Prevedite odabrani tekst na druge jezike koristeći DeepL."
+				"sr-Latn-RS": "Prevedite odabrani tekst na druge jezike koristeći DeepL.",
+				"zh-ZH": "使用 DeepL 将所选文本翻译成其他语言。"
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

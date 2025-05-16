@@ -9,7 +9,8 @@
 		"it": "HTML",
 		"sq-AL": "HTML",
 		"sr-Cyrl-RS": "HTML",
-		"sr-Latn-RS": "HTML"
+		"sr-Latn-RS": "HTML",
+		"zh-ZH": "HTML"
 	},
 	"guid": "asc.{E581C417-3C80-4BC2-B42D-502850FDC1E7}",
 	"version": "1.0.3",
@@ -26,7 +27,8 @@
 				"it": "Ottieni il contenuto del tuo documento come codice HTML, modificalo e incollalo di nuovo nel documento.",
 				"sq-AL": "Merrni përmbajtjen e dokumentit si kod HTML, ndryshojeni dhe ngjiteni përsëri në dokument.",
 				"sr-Cyrl-RS": "Добијте садржај вашег документа као HTML код, измените га, и залепите назад у документ.",
-				"sr-Latn-RS": "Dobijte sadržaj vašeg dokumenta kao HTML kod, izmenite ga, i zalepite nazad u dokument."
+				"sr-Latn-RS": "Dobijte sadržaj vašeg dokumenta kao HTML kod, izmenite ga, i zalepite nazad u dokument.",
+				"zh-ZH": "将文档内容转换为 HTML 代码，修改后再粘贴回文档中。"
 			},
 			"url": "index.html",
 

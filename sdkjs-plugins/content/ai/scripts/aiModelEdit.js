@@ -65,7 +65,9 @@ $('#custom-providers-button label').click(function(e) {
 var updateModelsLoader = null;
 var updateModelsErrorTip = new Tooltip(updateModelsErrorEl, {
 	xAnchor: 'right',
-	align: 'right'
+	align: 'right',
+	yOffset: 2,
+	width: 233,
 });
 
 var capabilitiesElements = {
