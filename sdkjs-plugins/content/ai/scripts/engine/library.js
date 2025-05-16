@@ -29,6 +29,12 @@
 		})());
 	};
 
+	Editor.getType = function() {
+		if (Asc.plugin.info.editorSubType === "pdf")
+			return "pdf";
+		return window.Asc.plugin.info.editorType;
+	};
+
 	exports.Asc = exports.Asc || {};
 	exports.Asc.Editor = Editor;
 
@@ -128,19 +134,32 @@
 
 	Library.prototype.InsertAsHTML = async function(data)
 	{
-		await Editor.callCommand(function() {
-			let doc = Api.GetDocument();
-			let paras = doc.GetAllParagraphs();
-			if (paras.length)
-			{
-				let lastPara = paras[paras.length - 1];
-				let lastElement = lastPara.GetElement(lastPara.GetElementsCount() - 1);
-				if (lastElement && lastElement.MoveCursorToPos)
-				{
-					lastElement.MoveCursorToPos(100000);
+		switch (Asc.Editor.getType()) {
+			case "word": {
+				if (true) {
+					await Editor.callCommand(function() {
+						let document = Api.GetDocument();
+						document.RemoveSelection();
+					}, false);
+				} else {
+					await Editor.callCommand(function() {
+						let doc = Api.GetDocument();
+						let paras = doc.GetAllParagraphs();
+						if (paras.length)
+						{
+							let lastPara = paras[paras.length - 1];
+							let lastElement = lastPara.GetElement(lastPara.GetElementsCount() - 1);
+							if (lastElement && lastElement.MoveCursorToPos)
+							{
+								lastElement.MoveCursorToPos(100000);
+							}
+						}
+					});
 				}
 			}
-		});
+			default:
+				break;
+		}
 		return await Editor.callMethod("PasteHtml", [data]);
 	};
 
@@ -210,6 +229,10 @@
 
 	Library.prototype.AddGeneratedImage = async function(base64) {
 		let editorVersion = await Asc.Library.GetEditorVersion();
+
+		if (Asc.Editor.getType() === "pdf") {
+			return await Editor.callMethod("PasteHtml", ["<img src=\"" + base64 + "\" />"]);
+		}
 		
 		if (editorVersion >= 9000000) {
 			let urlLocal = await this.GetLocalImagePath(base64);

@@ -104,7 +104,7 @@
 	}
 
 	// Submenu summarize:
-	if (true)
+	if (Asc.Editor.getType() !== "pdf")
 	{
 		let button = new Asc.ButtonContextMenu(buttonMain);
 		button.text = "Summarization";
@@ -396,6 +396,8 @@
 			let result = await requestEngine.imageGenerationRequest(content);
 			if (!result) return;
 
+			if (Asc.plugin.info.editorSubType === "pdf")
+				return await Asc.Library.AddGeneratedImage(result);
 			await Asc.Library.AddOleObject(result, content);
 		});
 
@@ -490,16 +492,18 @@
 			chatWindowShow();
 		});
 
-		let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button2.text = "Summarization";
-		button2.icons = getToolBarButtonIcons("summarization");
-		button2.attachOnClick(async function(data){
-			let requestEngine = AI.Request.create(AI.ActionType.Summarization);
-			if (!requestEngine)
-				return;
+		if (Asc.Editor.getType() !== "pdf") {
+			let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
+			button2.text = "Summarization";
+			button2.icons = getToolBarButtonIcons("summarization");
+			button2.attachOnClick(async function(data){
+				let requestEngine = AI.Request.create(AI.ActionType.Summarization);
+				if (!requestEngine)
+					return;
 
-			onOpenSummarizationModal();
-		});
+				onOpenSummarizationModal();
+			});
+		}
 
 		/*
 		// TODO:

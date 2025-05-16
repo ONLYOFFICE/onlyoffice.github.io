@@ -141,7 +141,7 @@ window.Asc.plugin.init = async function() {
 				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
 		}
 
-		if (Asc.plugin.info.editorSubType === "pdf") {
+		if (Asc.Editor.getType() === "pdf") {
 			window.Asc.plugin.attachEditorEvent("onChangeRestrictions", function(value){
 				let disabled = (value & 0x80) !== 0;
 				if (window.buttonOCRPage.disabled !== disabled)
