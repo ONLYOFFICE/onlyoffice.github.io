@@ -1,0 +1,13 @@
+{
+	"Start dictation": "开始听写",
+	"Speak now": "正在说话",
+	"This plugin doesn't work in Desktop Editors.": "此插件在桌面编辑器中无法使用。",
+	"This plugin doesn't work into this browser.": "此插件在该浏览器中无法使用。",
+	"Web Speech API is not supported by this browser. Please open it in Google Chrome browser.": "此浏览器不支持 Web Speech API。请在 Chrome 浏览器中打开。",
+	"Error with connection to recognition service of this browser, please use the Chrome browser.": "连接此浏览器的识别服务时出错，请使用 Chrome 浏览器。",
+	"No speech was detected. You may need to adjust your microphone settings.": "未检测到语音，您可能需要调整麦克风设置。",
+	"No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.": "未找到麦克风。请确保已安装麦克风并且设置配置正确。",
+	"Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone": "使用麦克风的权限被阻止。如要更改，请访问 chrome://settings/content/microphone",
+	"Permission to use microphone was denied.": "使用麦克风的权限被拒绝。",
+	"Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.": "此浏览器不支持 Web Speech API。请升级 Chrome 浏览器至25版本或更高版本。"
+}

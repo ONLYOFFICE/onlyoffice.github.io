@@ -13,7 +13,6 @@
 	"Moderations": "Moderaciones",
 	"Realtime": "En tiempo real",
 	"Code": "Código",
-	"Vision": "Visión",
 	"Models": "Modelos",
 	"Models not found": "No se han encontrado modelos",
 
@@ -49,11 +48,13 @@
 	"In comment": "En comentario",
 	"Replace original text": "Reemplazar texto original",
 	"To the end of document": "Al final del documento",
+	"Clear": "Borrar",
+	"Insert your text here or select the part of the text": "Inserte aquí su texto o seleccione la parte del texto que prefiera",
+	"The AI output will be shown here": "Los resultados de la IA se mostrarán aquí",
 
 
 	"Loading..." : "Carga...",
 	"Text analysis": "Análisis de texto",
-	"Summarize": "Resumir",
 	"Summarization": "Resumir",
 	"Keywords": "Palabras Clave",
 	"Word analysis": "Análisis de palabras",
@@ -100,12 +101,27 @@
 	"Let’s make your content shine together!": "¡Hagamos brillar su contenido juntos!",
 	"Copy": "Copiar",
 	"Blog post about": "Entrada de blog sobre",
+	"Blog post": "Entrada de blog",
 	"Press release about": "Nota de prensa sobre",
+	"Press release": "Nota de prensa",
 	"Social media post about": "Publicación en las redes sociales sobre",
+	"Social media post": "Publicación en las redes sociales",
 	"Brainstorm ideas for": "Lluvia de ideas para",
+	"Brainstorm ideas": "Lluvia de ideas",
 	"Project proposal about": "Propuesta de proyecto sobre",
+	"Project proposal": "Propuesta de proyecto",
 	"An essay about": "Ensayo sobre",
-	"Creative story about": "Cuento creativo sobre",
+	"An essay": "Ensayo",
+	"Creative story about": "Historia creativa sobre",
+	"Creative story": "Historia creativa",
+	"Make a plan about": "Elaborar un plan sobre",
+	"Make a plan": "Elaborar un plan",
+	"Get advice about": "Obtener consejos sobre",
+	"Get advice": "Obtener consejos",
+	"Ask AI anything": "Preguntar cualquier cosa a la IA",
+	"Generate new": "Generar nuevo",
+	"Something went wrong": "Algo ha salido mal",
+	"Please try reloading the conversation": "Por favor, intente volver a cargar la conversación",
 
 	"This field is required": "Este campo es obligatorio",
 
@@ -119,5 +135,11 @@
 	"Error adding provider from file, please try again": "Error al añadir el proveedor desde el archivo, por favor inténtelo de nuevo",
 
 	"Translation settings": "Ajustes de traducción",
-	"Select language for AI translation": "Seleccionar idioma para la traducción asistida por IA"
+	"Select language for AI translation": "Seleccionar idioma para la traducción asistida por IA",
+	"Image": "Imagen",
+	"Image to Text": "Imagen a texto",
+	"Text to Image": "Texto a imagen",
+	"Image generation": "Generación de imágenes",
+	"OCR": "OCR",
+	"Vision": "Visión"
 }

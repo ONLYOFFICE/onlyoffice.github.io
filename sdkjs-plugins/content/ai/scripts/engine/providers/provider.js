@@ -101,6 +101,9 @@
 			case Types.v1.Realtime:
 				return "/realtime";
 
+			case Types.v1.OCR:
+				return "/chat/completions";
+
 			default:
 				break;
 			}
@@ -230,10 +233,211 @@
 					iEnd--;
 
 				if (iEnd > iStart && ((0 !== iStart) || ((result.content[i].length - 1) !== iEnd)))
-					result.content[i] = result.content[i].substring(iStart, iEnd + 1);				
+					result.content[i] = result.content[i].substring(iStart, iEnd + 1);
 			}
 
 			return result;
+		}
+
+		/**
+		 * Get available sizes for input images.
+		 * @returns {Array.<Object>} sizes 
+		 */
+		getImageSizesInput(model) {
+			return [
+				{ w: 256, h: 256 },
+				{ w: 512, h: 512 },
+				{ w: 1024, h: 1024 }
+			];
+		}
+
+		/**
+		 * Get available sizes for outpit images.
+		 * @returns {Array.<Object>} sizes 
+		 */
+		getImageSizesOutput(model) {
+			return [
+				{ w: 256, h: 256 },
+				{ w: 512, h: 512 },
+				{ w: 1024, h: 1024 }
+			];
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     prompt: "",
+		 *     width:1024,
+		 *     height:1024,
+		 *     background: "transparent",
+		 *     quality: "high"
+		 * }
+		 */
+		getImageGeneration(message, model) {
+			let sizes = this.getImageSizesOutput(model);
+			let index = sizes.length - 1;
+
+			return {
+				model : model.id,
+				width : message.width || sizes[index].w,
+				height : message.width || sizes[index].h,
+				n : 1,
+				response_format : "b64_json",
+				prompt : message.prompt
+			};
+		}
+
+		/**
+		 * Convert *getImageGeneration* answer to result base64 image.
+		 * @returns {String} Image in base64 format 
+		 */
+		async getImageGenerationResult(message, model) {
+			let imageUrl = "";
+			let getProp = function(name) {
+				if (message[name])
+					return message[name];
+				if (message.data && message.data[name])
+					return message.data[name];
+				return undefined;
+			};
+
+			if (!imageUrl) {
+				let data = getProp("data");
+				if (data && data[0] && data[0].b64_json)
+					imageUrl = data[0].b64_json;
+			}
+
+			if (!imageUrl) {
+				let artifacts = getProp("artifacts");
+				if (artifacts && artifacts[0] && artifacts[0].base64)
+					imageUrl = artifacts[0].base64;
+			}
+
+			if (!imageUrl) {
+				let result = getProp("result");
+				if (result && result.imageUrl)
+					imageUrl = result.imageUrl;
+			}
+
+			if (!imageUrl) {
+				let generations = getProp("generations");
+				if (generations && generations[0] && generations[0].url)
+					imageUrl = generations[0].url;
+			}
+
+			if (!imageUrl) {
+				let candidates = getProp("candidates");
+				if (candidates && candidates[0] && candidates[0].content)
+					imageUrl = candidates[0].content;
+			}
+
+			if (!imageUrl) {
+				let image = getProp("image");
+				if (image)
+					imageUrl = image;
+			}
+
+			if (!imageUrl) {
+				let response = getProp("response");
+				if (response) {
+					let matches = response.match(/data:image\/[^;]+;base64,([^"'\s]+)/);
+					if (matches && matches[1])
+						imageUrl = matches[1];
+				}
+			}
+
+			if (!imageUrl) {
+				let content = getProp("content");
+				if (content) {
+					for (let i = 0, len = content.length; i < len; i++) {
+						if (content[i].type === 'text') {
+							let svgMatch = content[i].text.match(/<svg[\s\S]*?<\/svg>/);
+							if (svgMatch) {
+								imageUrl = svgMatch[0];
+								break;
+							}
+						}
+					}
+				}
+
+				if (imageUrl) {
+					imageUrl = "data:image/svg+xml;base64," + btoa(imageUrl);
+				}
+			}
+			
+			if (!imageUrl)
+				return "";
+
+			return await AI.ImageEngine.getBase64FromUrl(imageUrl);
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     image: "base64...",
+		 *     prompt: "text"
+		 * }
+		 */
+		async getImageVision(message, model) {
+			return {
+				model : model.id,
+				messages : [
+					{
+						role: "user",
+						content: [
+							{							
+								type: "text",
+								text: message.prompt
+							},
+							{
+								type: "image_url", 
+								image_url: {
+									url: message.image
+								}
+							}
+						]
+					}
+				]
+			}
+		}
+
+		getImageVisionResult(message, model) {
+			let result = this.getChatCompletionsResult(message, model);
+
+			if (result.content.length === 0)
+				return "";
+
+			if (0 === result.content[0].indexOf("<think>")) {
+				let end = result.content[0].indexOf("</think>");
+				if (end !== -1)
+					result.content[0] = result.content[0].substring(end + 8);
+			}
+
+			return result.content[0];
+
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     image: "base64..."
+		 * }
+		 */
+		async getImageOCR(message, model) {
+			return await this.getImageVision({
+				image : message.image,
+				prompt : Asc.Prompts.getImagePromptOCR()
+			}, model);
+		}
+
+		getImageOCRResult(message, model) {
+			return this.getImageVisionResult(message, model);
 		}
 
 		/**
@@ -281,6 +485,45 @@
 			}
 			return result;
 		}
+
+		getImageGenerationWithChat(message, model, addon) {
+			let prompt = "Please generate image. ";
+			if (addon)
+				prompt += addon;
+			// TODO: sizes
+			prompt += "Here is the description for the image content:\"";
+			prompt += message.prompt;
+			prompt += "\"";
+		
+			let data = {
+				messages : [
+					{
+						role: "user",
+						content: prompt
+					}
+				]
+			};
+
+			return this.getChatCompletions(data, model);
+		}
+
+		getImageVisionWithChat(message, model) {
+			let prompt = "Please generate image. ";
+			if (addon)
+				prompt += addon;
+		
+			let data = {
+				messages : [
+					{
+						role: "user",
+						content: message.prompt
+					}
+				]
+			};
+
+			return this.getChatCompletions(data, model);
+		}
+
 	}
 	
 	window.AI.Provider = Provider;

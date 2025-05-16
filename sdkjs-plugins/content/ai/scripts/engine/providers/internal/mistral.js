@@ -55,4 +55,61 @@ class Provider extends AI.Provider {
 		return capUI;
 	}
 
+	getEndpointUrl(endpoint, model) {
+		let Types = AI.Endpoints.Types;
+		let url = "";
+		switch (endpoint)
+		{
+		case Types.v1.OCR:
+			url = "/ocr";
+			break;
+		default:
+			break;
+		}
+		if (!url)
+			return super.getEndpointUrl(endpoint, model);
+		return url;
+	}
+
+	async getImageOCR(message, model) {
+		let result = {
+			model: model.id,
+			document: {
+				type: "image_url",
+				image_url: message.image
+			}
+		};
+		//result.output_format = "markdown";
+		result.include_image_base64 = true;
+		return result;
+	}
+
+	getImageOCRResult(messageInput, model) {
+		let message = messageInput.data ? messageInput.data : messageInput;
+		let images = [];
+		let markdownContent = "";
+		if (!message.pages)
+			return markdownContent;
+
+		for (let i = 0, len = message.pages.length; i < len; i++) {
+			let page = message.pages[i];
+
+			let images = page.images;
+			let md = page.markdown;
+
+			for (let j = 0, imagesCount = images.length; j < imagesCount; j++) {
+				let src = "](" + images[j].id + ")";
+				let dst = "](" + images[j].image_base64 + ")";
+
+				src = src.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				md = md.replace(new RegExp(src, "g"), dst);
+			}
+
+			markdownContent += md;
+			markdownContent += "\n\n";
+		}
+		
+		return markdownContent;
+	}
+
 }

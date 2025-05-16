@@ -6,11 +6,62 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 
 let initCounter = 0;
-function initWithTranslate() {
+async function initWithTranslate() {
 	initCounter++;
 	if (2 === initCounter) {
+		registerButtons(window);
 		Asc.Buttons.registerContextMenu();
-		Asc.Buttons.registerToolbarMenu();    
+		Asc.Buttons.registerToolbarMenu();
+
+		if (Asc.Editor.getType() === "pdf") {
+			window.Asc.plugin.attachEditorEvent("onChangeRestrictions", function(value){
+				let disabled = (value & 0x80) !== 0;
+				if (window.buttonOCRPage.disabled !== disabled)
+					window.buttonOCRPage.disabled = disabled;
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonOCRPage]);
+			});
+
+			let restriction = Asc.plugin.info.restrictions;
+			if (undefined === restriction)
+				restriction = 0;
+
+			let buttonOCRPage = new Asc.ButtonToolbar(null);
+			buttonOCRPage.text = "OCR";
+			buttonOCRPage.icons = window.getToolBarButtonIcons("ocr");
+			window.buttonOCRPage = buttonOCRPage;
+
+			if (0x80 & restriction)
+				buttonOCRPage.disabled = true;
+
+			buttonOCRPage.attachOnClick(async function(data){
+				let requestEngine = AI.Request.create(AI.ActionType.OCR);
+				if (!requestEngine)
+					return;
+
+				let pageIndex = await Asc.Editor.callMethod("GetCurrentPage");
+				let content = await Asc.Editor.callMethod("GetPageImage", [pageIndex, {
+					maxSize : 1024,
+					annotations : true,
+					fields : false,
+					drawings : false
+				}]);
+				if (!content)
+					return;
+
+				let result = await requestEngine.imageOCRRequest(content);
+				if (!result) return;
+
+				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
+					type : "html",
+					options : {
+						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]),
+						separateParagraphs : false
+					}					
+				}]);
+			});
+
+			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
+		}
 	}
 }
 
@@ -40,7 +91,7 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
-	initWithTranslate();
+	await initWithTranslate();
 	clearChatState();
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
@@ -58,6 +109,12 @@ window.Asc.plugin.init = async function() {
 
 						data.type = "text";
 						data.text = result;
+					}
+					else
+					{
+						data.type = "no-engine";
+						data.text = "";
+						data.error = "No model selected for chat action..."
 					}
 				}
 				default:
@@ -78,9 +135,10 @@ window.Asc.plugin.init = async function() {
      * Function that returns the AI answer.\n\
      * @customfunction\n\
      * @param {string} value Prompt.\n\
+     * @param {?boolean} isSaveAIFunction Indicator whether the AI function should be saved.\n\
      * @returns {string} Answer value.\n\
      */\n\
-    async function AI(value) {\n\
+    async function AI(value, isSaveAIFunction) {\n\
         let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
         return new Promise(resolve => (function(){\n\
             Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
@@ -89,7 +147,10 @@ window.Asc.plugin.init = async function() {
                 switch (data.type) {\n\
                     case \"text\":\n\
                     {\n\
-                        resolve(data.text);\n\
+                        let result = data.text.trim();\n\
+                        if (isSaveAIFunction !== true)\n\
+                            result = \"@@\" + result;\n\
+                        resolve(result);\n\
                         break;\n\
                     }\n\
                     default:\n\
@@ -129,12 +190,12 @@ window.Asc.plugin.init = async function() {
 
 			if (isUpdate)
 				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
-		}
-	}
+		}		
+	}	
 };
 
-window.Asc.plugin.onTranslate = function() {
-	initWithTranslate();
+window.Asc.plugin.onTranslate = async function() {
+	await initWithTranslate();
 };
 
 window.Asc.plugin.button = function(id, windowId) {
@@ -219,7 +280,7 @@ function onOpenSettingsModal() {
 			{ text: window.Asc.plugin.tr('OK'), primary: true }
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 350]
 	};
 
@@ -247,7 +308,7 @@ function onTranslateSettingsModal() {
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 200]
 	};
 
@@ -272,7 +333,7 @@ function onOpenAiModelsModal() {
 			{ text: window.Asc.plugin.tr('Back'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 230]
 	};
 
@@ -302,7 +363,7 @@ function onOpenEditModal(data) {
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [320, 375]
 	};
 
@@ -341,7 +402,7 @@ function onOpenCustomProvidersModal() {
 			{ text: window.Asc.plugin.tr('Back'), primary: false },
 		],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [350, 222]
 	};
 
@@ -381,7 +442,7 @@ function onOpenSummarizationModal() {
 		isVisual : true,
 		buttons : [],
 		isModal : true,
-		EditorsSupport : ["word", "slide", "cell"],
+		EditorsSupport : ["word", "slide", "cell", "pdf"],
 		size : [720, 310]
 	};
 
