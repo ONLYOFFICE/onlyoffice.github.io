@@ -1,14 +1,18 @@
 {
     "name": "ID Photo Converter",
     "nameLocale": {
-        "zh": "证件照转换器"
+        "zh": "证件照转换器",
+        "de-DE": "ID Photo Converter",
+        "es-ES": "ID Photo Converter"
     },
     "guid": "asc.{7877CD2F-A977-4ED8-8CB7-32008278DDFC}",
     "baseUrl": "",
     "variations": [{
         "description": "This plugin is used to convert captured photos into the format of ID photos. Since the plugin uses image algorithms and neural network models, you may need to wait a while to download the plugin and process images.",
         "descriptionLocale": {
-            "zh": "本插件用于将拍摄的照片转为证件照的格式。于在插件中使用了图像算法和神经网络模型，你也许需要相对较长的时间等待下载插件以及处理图像。"
+            "zh": "本插件用于将拍摄的照片转为证件照的格式。于在插件中使用了图像算法和神经网络模型，你也许需要相对较长的时间等待下载插件以及处理图像。",
+            "de-DE": "Dieses Plugin dient zum Konvertieren aufgenommener Fotos in das Passbildformat. Da das Plugin Bildalgorithmen und neuronale Netzwerkmodelle verwendet, kann es zu Wartezeiten beim Herunterladen und Verarbeiten der Bilder kommen.",
+            "es-ES": "Este plugin se utiliza para convertir las fotos capturadas al formato de las fotos de DNI. Dado que el plugin utiliza algoritmos de imagen y modelos de redes neuronales, es posible que tengas que esperar un poco para descargar el plugin y procesar las imágenes."
         },
         "url": "index.html",
         "icons": [{
@@ -64,7 +68,9 @@
         "buttons": [{
             "text": "close",
             "textLocale": {
-                "zh": "关闭"
+                "zh": "关闭",
+                "de-DE": "schließen",
+                "es-ES": "cerrar"
             },
             "primary": true
         }],

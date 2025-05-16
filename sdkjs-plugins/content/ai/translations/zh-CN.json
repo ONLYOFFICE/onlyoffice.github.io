@@ -13,8 +13,8 @@
 	"Moderations": "审核内容",
 	"Realtime": "实时任务",
 	"Code": "代码",
-	"Vision": "视觉",
 	"Models": "模型",
+	"Models not found": "模型未找到",
 
 	"AI Models list" : "AI 模型列表",
 	"Add" : "添加",
@@ -48,11 +48,13 @@
 	"In comment": "插入到批注",
 	"Replace original text": "替换原文内容",
 	"To the end of document": "插入到文档末尾",
+	"Clear": "清除",
+	"Insert your text here or select the part of the text": "在此处插入您的文本或选择部分文本",
+	"The AI output will be shown here": "AI输出将显示在此处",
 
 
 	"Loading..." : "加载中...",
 	"Text analysis" : "文本分析",
-	"Summarize" : "摘要",
 	"Summarization" : "摘要",
 	"Keywords" : "关键词",
 	"Word analysis" : "单词分析",
@@ -91,7 +93,6 @@
 	"Make longer": "扩写",
 	"Make shorter": "缩写",
 
-
 	"Chatbot": "聊天机器人",
 	"Ask AI a question about something...": "向 AI 提一个问题...",
 	"Thinking": "正在思考中",
@@ -100,12 +101,27 @@
 	"Let’s make your content shine together!": "让我们共同打造精彩内容！",
 	"Copy": "复制",
 	"Blog post about": "撰写博客文章",
+	"Blog post": "撰写博客文章",
 	"Press release about": "起草新闻稿",
+	"Press release": "起草新闻稿",
 	"Social media post about": "策划社交媒体帖子",
+	"Social media post": "策划社交媒体帖子",
 	"Brainstorm ideas for": "头脑风暴",
+	"Brainstorm ideas": "头脑风暴",
 	"Project proposal about": "编写项目提案",
+	"Project proposal": "编写项目提案",
 	"An essay about": "撰写论文",
+	"An essay": "撰写论文",
 	"Creative story about": "创作故事",
+	"Creative story": "创作故事",
+	"Make a plan about": "制定计划",
+	"Make a plan": "制定计划",
+	"Get advice about": "获取建议",
+	"Get advice": "获取建议",
+	"Ask AI anything": "询问AI任何问题",
+	"Generate new": "生成新内容",
+	"Something went wrong": "出现错误",
+	"Please try reloading the conversation": "请尝试重新加载对话",
 
 	"This field is required": "此字段为必填",
 
@@ -119,5 +135,11 @@
 	"Error adding provider from file, please try again": "从文件添加提供商时出错，请重试",
 
 	"Translation settings": "翻译设置",
-	"Select language for AI translation": "选择用于 AI 翻译的语言"
+	"Select language for AI translation": "选择用于 AI 翻译的语言",
+	"Image": "图像",
+	"Image to Text": "图像转文本",
+	"Text to Image": "文本转图像",
+	"Image generation": "图像生成",
+	"OCR": "OCR文字识别",
+	"Vision": "智能视觉处理"
 }
