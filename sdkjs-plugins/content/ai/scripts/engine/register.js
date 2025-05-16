@@ -1,4 +1,4 @@
-(function(window, undefined)
+function registerButtons(window, undefined)
 {
 	function getToolBarButtonIcons(icon) {
 		return "resources/icons/%theme-type%(light|dark)/big/" + icon + "%scale%(default).png";
@@ -657,6 +657,5 @@
 		}
 	};
 
-	AI.ActionsLoad();
-   
-})(window);
+	AI.ActionsLoad();  
+}

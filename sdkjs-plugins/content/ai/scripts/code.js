@@ -6,11 +6,62 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 
 let initCounter = 0;
-function initWithTranslate() {
+async function initWithTranslate() {
 	initCounter++;
 	if (2 === initCounter) {
+		registerButtons(window);
 		Asc.Buttons.registerContextMenu();
-		Asc.Buttons.registerToolbarMenu();    
+		Asc.Buttons.registerToolbarMenu();
+
+		if (Asc.Editor.getType() === "pdf") {
+			window.Asc.plugin.attachEditorEvent("onChangeRestrictions", function(value){
+				let disabled = (value & 0x80) !== 0;
+				if (window.buttonOCRPage.disabled !== disabled)
+					window.buttonOCRPage.disabled = disabled;
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonOCRPage]);
+			});
+
+			let restriction = Asc.plugin.info.restrictions;
+			if (undefined === restriction)
+				restriction = 0;
+
+			let buttonOCRPage = new Asc.ButtonToolbar(null);
+			buttonOCRPage.text = "OCR";
+			buttonOCRPage.icons = window.getToolBarButtonIcons("ocr");
+			window.buttonOCRPage = buttonOCRPage;
+
+			if (0x80 & restriction)
+				buttonOCRPage.disabled = true;
+
+			buttonOCRPage.attachOnClick(async function(data){
+				let requestEngine = AI.Request.create(AI.ActionType.OCR);
+				if (!requestEngine)
+					return;
+
+				let pageIndex = await Asc.Editor.callMethod("GetCurrentPage");
+				let content = await Asc.Editor.callMethod("GetPageImage", [pageIndex, {
+					maxSize : 1024,
+					annotations : true,
+					fields : false,
+					drawings : false
+				}]);
+				if (!content)
+					return;
+
+				let result = await requestEngine.imageOCRRequest(content);
+				if (!result) return;
+
+				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
+					type : "html",
+					options : {
+						content : Asc.Library.ConvertMdToHTML(result),
+						separateParagraphs : false
+					}					
+				}]);
+			});
+
+			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
+		}
 	}
 }
 
@@ -40,7 +91,7 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
-	initWithTranslate();
+	await initWithTranslate();
 	clearChatState();
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
@@ -139,62 +190,12 @@ window.Asc.plugin.init = async function() {
 
 			if (isUpdate)
 				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
-		}
-
-		if (Asc.Editor.getType() === "pdf") {
-			window.Asc.plugin.attachEditorEvent("onChangeRestrictions", function(value){
-				let disabled = (value & 0x80) !== 0;
-				if (window.buttonOCRPage.disabled !== disabled)
-					window.buttonOCRPage.disabled = disabled;
-				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonOCRPage]);
-			});
-
-			let restriction = Asc.plugin.info.restrictions;
-			if (undefined === restriction)
-				restriction = 0;
-
-			let buttonOCRPage = new Asc.ButtonToolbar(null);
-			buttonOCRPage.text = "OCR";
-			buttonOCRPage.icons = window.getToolBarButtonIcons("ocr");
-			window.buttonOCRPage = buttonOCRPage;
-
-			if (0x80 & restriction)
-				buttonOCRPage.disabled = true;
-
-			buttonOCRPage.attachOnClick(async function(data){
-				let requestEngine = AI.Request.create(AI.ActionType.OCR);
-				if (!requestEngine)
-					return;
-
-				let pageIndex = await Asc.Editor.callMethod("GetCurrentPage");
-				let content = await Asc.Editor.callMethod("GetPageImage", [pageIndex, {
-					maxSize : 1024,
-					annotations : true,
-					fields : false,
-					drawings : false
-				}]);
-				if (!content)
-					return;
-
-				let result = await requestEngine.imageOCRRequest(content);
-				if (!result) return;
-
-				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
-					type : "html",
-					options : {
-						content : Asc.Library.ConvertMdToHTML(result),
-						separateParagraphs : false
-					}					
-				}]);
-			});
-
-			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
-		}
+		}		
 	}	
 };
 
-window.Asc.plugin.onTranslate = function() {
-	initWithTranslate();
+window.Asc.plugin.onTranslate = async function() {
+	await initWithTranslate();
 };
 
 window.Asc.plugin.button = function(id, windowId) {
