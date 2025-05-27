@@ -370,6 +370,13 @@
 			document.getElementById('total_tokens').classList.remove('err-message');
 			document.getElementById('total_tokens').innerText = 0;
 		};
+
+		document.getElementById("chat_wrapper").addEventListener("click", function(e) {
+			if (e.target.tagName === "A") {
+				e.preventDefault();
+				window.open(e.target.href, "_blank");
+			}
+		});
 	};
 
 
