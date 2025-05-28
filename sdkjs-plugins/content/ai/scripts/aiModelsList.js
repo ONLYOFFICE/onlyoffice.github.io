@@ -67,17 +67,11 @@ onResize();
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
-	themeType = theme.type || 'light';
 	
-	var classes = document.body.className.split(' ');
-	classes.forEach(function(className) {
-		if (className.indexOf('theme-') != -1) {
-			document.body.classList.remove(className);
-		}
-	});
-	document.body.classList.add(theme.name);
-	document.body.classList.add('theme-type-' + themeType);
-
+	var themeType = theme.type || 'light';
+	updateBodyThemeClasses(theme.type, theme.name);
+	updateThemeVariables(theme);
+	
 	let btnIcons = document.getElementsByClassName('icon');
 	for (let i = 0; i < btnIcons.length; i++) {
 		let icon = btnIcons[i];
