@@ -76,6 +76,7 @@ textarea {
     display: none;
     height: calc(100% - 7px);
     width: calc(100% - 4px);
+    background: #fff;
     background: var(--background-normal);
     box-sizing: border-box;
     top: 2px;
