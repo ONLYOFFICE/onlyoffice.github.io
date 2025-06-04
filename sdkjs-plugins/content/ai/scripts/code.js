@@ -6,9 +6,9 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 
 let initCounter = 0;
-async function initWithTranslate() {
-	initCounter++;
-	if (2 === initCounter) {
+async function initWithTranslate(counter) {
+	initCounter |= counter;
+	if (3 === initCounter) {
 		registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();
@@ -91,7 +91,7 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
-	await initWithTranslate();
+	await initWithTranslate(1 << 1);
 	clearChatState();
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
@@ -195,7 +195,7 @@ window.Asc.plugin.init = async function() {
 };
 
 window.Asc.plugin.onTranslate = async function() {
-	await initWithTranslate();
+	await initWithTranslate(1);
 };
 
 window.Asc.plugin.button = function(id, windowId) {
