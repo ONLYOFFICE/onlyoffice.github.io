@@ -27,7 +27,7 @@ img {max-width: 100%;vertical-align: middle;border-style: none; height: auto;}
 .invite-counterpartie .invite-button { display: flex; width: 100%; margin: 0; padding: 18px 18px; text-align: center; border: 1px dashed #A2A6A7; font-size: 14px; color: #282756;  font-weight: 400; line-height: normal; border-radius: 4px; justify-content: center; align-items: center;}
 .invite-counterpartie .invite-button img {margin: 0 12px 0 0;}
 .invite-counterpartie-form, .invite-counterpartie-pending, .contract-sameside-chat, .contract-create-form, .contract-chat-history, .contract-lists { width: 100%; }
-.invite-form{width: 100%; float: left; margin: 0; padding: 0; overflow: auto; height: calc(100vh - 24px);}
+.invite-form{width: 100%; float: left; margin: 0; padding: 0; overflow: auto;}
 .invite-form .invite-form-header { width: 100%; margin: 0; padding: 13px 20px; display: flex; align-items: center; justify-content: space-between; background: #F5F9FF;}
 .invite-form-header h3 {margin: 0; padding:0 15px 0 0; font-size: 14px; color: #282756; font-weight: 600; }
 .form-inner { width: 100%; margin: 0; padding: 20px; float: left;}
@@ -529,4 +529,11 @@ p#txtMeetingViewOutcomes { font-size: 14px; font-weight: 400; }
 
 .btn-secondary{
     background: #69daee;
+}
+.plugin-close{
+    display: none;
+}
+
+.plugin-hide{
+    display: none;
 }

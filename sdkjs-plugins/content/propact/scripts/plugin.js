@@ -32,7 +32,7 @@
      */
     var baseUrl = 'https://api.propact.com.au';
     var apiBaseUrl = baseUrl + '/api/v1/app';
-    var IMAGE_USER_PATH_LINK = 'https://propact-production.s3.amazonaws.com/';
+    var IMAGE_USER_PATH_LINK = 'https://propact.s3.amazonaws.com/';
 
     /**
      * @constant
@@ -101,6 +101,7 @@
     let positionMessageSent = false
     let draftingMessageSent = false
     let contractSectionCompleted = false
+    let showDraftingMessage = false
     /**
      * @constant
      * @description Define the variables for socket functionality
@@ -2322,11 +2323,31 @@
 
     $(document).on('click', '.attachment', async function () {
         var data = {
-            chatRoomName: loggedInUserDetails._id + "_" + contractID,
-            documentURL: $(this).data('link'),
-            documentFileName: $(this).data('filename')
+            fileKey: $(this).data('link'),
+            fileName: $(this).data('filename') + '.' + $(this).data('extension').toLowerCase(),
         };
-        socket.emit('downloadDocument', data);
+        try {
+            var requestURL = apiBaseUrl + '/contract/download-file-from-url';
+            var headers = {
+                "Content-Type": "application/json"
+            };
+            if (authToken) headers["Authorization"] = 'Bearer ' + authToken;
+            var requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data)
+            };
+            fetch(requestURL, requestOptions)
+                .then(response => response.json())
+                .then(response => {
+                    window.location.href = response["data"];
+                })
+                .catch(error => {
+                    // Handle any errors
+                    switchClass(elements.loader, displayNoneClass, true);
+                });
+        } catch (error) {
+        }
     });
 
     /**====================== Section: Counterparty chat ======================*/
@@ -2995,7 +3016,7 @@
                     '      <p class="last-seen">' + formatDate(new Date()) + '</p>\n' +
                     '   </div>\n' +
                     '   <div class="attachment-content">' +
-                    '       <div class="attachment" data-filename="' + (data.attachmentName ? data.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (data.message ? data.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
+                    '       <div class="attachment" data-extension="' + (data.attachmentExtention ? data.attachmentExtention.trim().replaceAll(/\n/g, '<br>') : '') + '" data-filename="' + (data.attachmentName ? data.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (data.message ? data.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
                     '           <div class="icon">\n' +
                     '               <img src="images/pdf-link-icon.svg" alt="">\n' +
                     '           </div>\n' +
@@ -3277,7 +3298,7 @@
                     '      <p class="last-seen">' + formatDate(new Date()) + '</p>\n' +
                     '   </div>\n' +
                     '   <div class="attachment-content">' +
-                    '       <div class="attachment" data-filename="' + (data.attachmentName ? data.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (data.message ? data.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
+                    '       <div class="attachment" data-extension="' + (data.attachmentExtention ? data.attachmentExtention.trim().replaceAll(/\n/g, '<br>') : '') + '" data-filename="' + (data.attachmentName ? data.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (data.message ? data.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
                     '           <div class="icon">\n' +
                     '               <img src="images/pdf-link-icon.svg" alt="">\n' +
                     '           </div>\n' +
@@ -3387,11 +3408,13 @@
                         }
                         switchClass(elements.draftingMessageMySide, displayNoneClass, true);
                         switchClass(elements.draftingMessage, displayNoneClass, true);
+                        showDraftingMessage = false;
                         if (contractInformation.userWhoHasEditAccess && contractInformation.userWhoHasEditAccess == loggedInUserDetails._id && responseData.contractCurrentState == 'Edit') {
                             switchClass(elements.positionMessageMySide, displayNoneClass, true);
                             switchClass(elements.positionMessage, displayNoneClass, true);
                             switchClass(elements.draftingMessageMySide, displayNoneClass, false);
                             switchClass(elements.draftingMessage, displayNoneClass, false);
+                            showDraftingMessage = true
                             if (typeof window.Asc.plugin.executeMethod === 'function') {
                                 var sDocumentEditingRestrictions = "none";
                                 window.Asc.plugin.executeMethod("SetEditingRestrictions", [sDocumentEditingRestrictions]);
@@ -4899,7 +4922,7 @@
                                             '           <p class="last-seen">' + formatDate(element.createdAt) + '</p>\n' +
                                             '       </div>\n' +
                                             '       <div class="attachment-content">' +
-                                            '           <div class="attachment" data-filename="' + (element.attachmentName ? element.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (element.message ? element.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
+                                            '           <div class="attachment" data-extension="' + (element.attachmentExtention ? element.attachmentExtention.trim().replaceAll(/\n/g, '<br>') : '') + '" data-filename="' + (element.attachmentName ? element.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (element.message ? element.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
                                             '               <div class="icon">\n' +
                                             '                   <img src="images/pdf-link-icon.svg" alt="">\n' +
                                             '               </div>\n' +
@@ -5117,10 +5140,12 @@
                 .then(response => {
                     switchClass(elements.initialMessageMySide, displayNoneClass, true);
                     switchClass(elements.positionMessageMySide, displayNoneClass, true);
-                    switchClass(elements.draftingMessageMySide, displayNoneClass, true);
                     switchClass(elements.initialMessage, displayNoneClass, true);
                     switchClass(elements.positionMessage, displayNoneClass, true);
-                    switchClass(elements.draftingMessage, displayNoneClass, true);
+                    if(showDraftingMessage == false) {
+                        switchClass(elements.draftingMessageMySide, displayNoneClass, true);
+                        switchClass(elements.draftingMessage, displayNoneClass, true);
+                    }
                     if (response && response.status == true && response.code == 200 && response.data) {
                         let messageList = response.data.data
 
@@ -5329,7 +5354,7 @@
                                             '           <p class="last-seen">' + formatDate(element.createdAt) + '</p>\n' +
                                             '       </div>\n' +
                                             '       <div class="attachment-content">' +
-                                            '           <div class="attachment" data-filename="' + (element.attachmentName ? element.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (element.message ? element.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
+                                            '           <div class="attachment" data-extension="' + (element.attachmentExtention ? element.attachmentExtention.trim().replaceAll(/\n/g, '<br>') : '') + '" data-filename="' + (element.attachmentName ? element.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '" data-link="' + (element.message ? element.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
                                             '               <div class="icon">\n' +
                                             '                   <img src="images/pdf-link-icon.svg" alt="">\n' +
                                             '               </div>\n' +
@@ -5648,7 +5673,7 @@
                                             '      <p class="last-seen">' + formatDate(new Date()) + '</p>\n' +
                                             '   </div>\n' +
                                             '   <div class="attachment-content">' +
-                                            '       <div class="attachment" data-filename="' + (ele.attachmentName ? ele.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '"  data-link="' + (ele.message ? ele.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
+                                            '       <div class="attachment" data-extension="' + (ele.attachmentExtention ? ele.attachmentExtention.trim().replaceAll(/\n/g, '<br>') : '') + '" data-filename="' + (ele.attachmentName ? ele.attachmentName.trim().replaceAll(/\n/g, '<br>') : '') + '"  data-link="' + (ele.message ? ele.message.trim().replaceAll(/\n/g, '<br>') : '') + '">\n' +
                                             '           <div class="icon">\n' +
                                             '               <img src="images/pdf-link-icon.svg" alt="">\n' +
                                             '           </div>\n' +
