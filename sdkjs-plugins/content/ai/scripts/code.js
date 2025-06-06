@@ -290,6 +290,11 @@ function onOpenSettingsModal() {
 			updateActions();
 			updateModels();
 		});
+		settingsWindow.attachEvent("onUpdateHeight", function(height) {
+			if(height > variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [settingsWindow.id, [variation.size[0] - 2, height]]);	//2 is the border-width at the window
+			}
+		});
 		settingsWindow.attachEvent('onChangeAction', function(data){
 			AI.ActionsChange(data.id, data.model);
 		});
