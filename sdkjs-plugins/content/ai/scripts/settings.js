@@ -14,15 +14,49 @@ var capabilitiesList = {
 
 var scrollbarList = new PerfectScrollbar("#actions-list", {});
 
+var heightUpdateConditions = {
+	_updateActions: false,
+	_updateModels: false,
+	_translate: false,
+
+	_markReady: function(key) {
+		heightUpdateConditions[key] = true;
+		heightUpdateConditions.checkAllReady();
+	},
+
+	updateActionsReady: function() {
+		heightUpdateConditions._markReady('_updateActions');
+	},
+	updateModelsReady: function() {
+		heightUpdateConditions._markReady('_updateModels');
+	},
+	translateReady: function() {
+		heightUpdateConditions._markReady('_translate');
+	},
+
+	checkAllReady: function() {
+		if (
+			heightUpdateConditions._updateActions &&
+			heightUpdateConditions._updateModels &&
+			heightUpdateConditions._translate
+		) {
+			updateWindowHeight();
+		}
+	},
+};
+
+
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
 	window.Asc.plugin.attachEvent("onUpdateActions", function(list) {
 		actionsList = list;
 		renderActionsList();
+		heightUpdateConditions.updateActionsReady();
 	});
 	window.Asc.plugin.attachEvent("onUpdateModels", function(list) {
 		aiModelsList = list;
 		updatedComboBoxes();
+		heightUpdateConditions.updateModelsReady();
 	});
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
@@ -37,6 +71,8 @@ window.Asc.plugin.onTranslate = function () {
 	elements.forEach(function(element) {
 		element.innerText = window.Asc.plugin.tr(element.innerText);
 	});
+
+	heightUpdateConditions.translateReady();
 };
 
 window.addEventListener("resize", onResize);
@@ -113,6 +149,45 @@ function renderActionsList() {
 	scrollbarList.update();
 }
 
+function updateWindowHeight() {
+	var descriptionHeight = {
+		default: parseFloat($('#description').css('line-height')),
+		current: $('#description').height()
+	};
+	var listHeight = {
+		default: $('#actions-list').height(),
+		maxAllowed: 400,
+		current: 0
+	};
+	var maxVisibleItems = 5;
+	var bodyOverflow = $('body').css('overflow-y');
+	$('body').css('overflow-y', 'hidden');
+
+	var isBreak = false;
+	$('#actions-list .item').each(function(index, item) {
+		if(isBreak) return false;
+
+		var itemHeight = $(item).outerHeight();
+		if(index == maxVisibleItems-1) {
+			itemHeight -= parseFloat($(item).css('padding-bottom'));
+			isBreak = true;
+		}
+
+		if(listHeight.current + itemHeight <= listHeight.maxAllowed) {
+			listHeight.current += itemHeight;
+		} else {
+			isBreak = true;
+		}
+	});
+
+	if(listHeight.current > listHeight.default || descriptionHeight.current > descriptionHeight.default) {
+		$('#actions-list').css('height', listHeight.current + 'px');
+		scrollbarList.update();
+		window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight + 2);
+	}
+	$('body').css('overflow-y', bodyOverflow);
+}
+
 function toggleScrollbarPadding() {
 	var actionsListEl = document.getElementById('actions-list');
 	// Check if there is a scroll bar
@@ -152,7 +227,7 @@ function updatedComboBoxes() {
 			},
 			minimumResultsForSearch: Infinity,
 			dropdownAutoWidth: true,
-			width : 150
+			width : 140
 		});
 		// TODO: If the active model is no longer in the list, set null and trigger an event to change the model.
 		selectEl.val(action.model);
