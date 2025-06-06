@@ -81,7 +81,7 @@ onResize();
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 
-	var themeType = theme.type || 'light';
+	themeType = theme.type || 'light';
 	updateBodyThemeClasses(theme.type, theme.name);
 	updateThemeVariables(theme);
 
