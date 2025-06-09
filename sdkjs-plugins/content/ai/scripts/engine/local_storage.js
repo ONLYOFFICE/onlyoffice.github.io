@@ -58,7 +58,11 @@
 	AI.Storage.load = function() {
 		let obj = null;
 		try {
-			obj = JSON.parse(window.localStorage.getItem(localStorageKey));
+			if (AI.serverSettings) {
+				obj = AI.serverSettings;
+			} else {
+				obj = JSON.parse(window.localStorage.getItem(localStorageKey));
+			}
 		} catch (e) {
 			obj = AI.DEFAULT_SERVER_SETTINGS;
 

@@ -86,7 +86,14 @@
 								"data" : request.body
 							})
 						}
-						message.url = AI.PROXY_URL;					
+						if (AI.serverSettings){
+							message.url = AI.serverSettings.proxy;
+							request["headers"] = {
+								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
+							}
+						} else {
+							message.url = AI.PROXY_URL;
+						}
 					}
 				}				
 
@@ -136,7 +143,7 @@
 				body[i] = bodyPr[i];
 		}
 
-		return provider.isUseProxy();
+		return provider.isUseProxy() || AI.serverSettings;
 	};
 
 	AI._getEndpointUrl = function(_provider, endpoint, model) {

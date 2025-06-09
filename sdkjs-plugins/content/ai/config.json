@@ -46,7 +46,7 @@
 			"type"                : "background",
 			"initDataType"        : "none",
 			"buttons"             : [],
-			"events"			  : ["onContextMenuShow", "onContextMenuClick", "onToolbarMenuClick"],
+			"events"			  : ["onAIPluginSettings", "onContextMenuShow", "onContextMenuClick", "onToolbarMenuClick"],
 
 			"store": {
 				"background": {

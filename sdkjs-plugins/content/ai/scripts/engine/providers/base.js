@@ -244,4 +244,6 @@
 
 	};
 
+	AI.serverSettings = null;
+
 })();

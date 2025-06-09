@@ -91,6 +91,16 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
+	// Check server settings
+	if (window.Asc.plugin.info.aiPluginSettings) {
+		try {
+			AI.serverSettings = JSON.parse(window.Asc.plugin.info.aiPluginSettings);
+		} catch (e) {
+			AI.serverSettings = null;
+		}
+		delete window.Asc.plugin.info.aiPluginSettings;
+	}
+
 	await initWithTranslate(1 << 1);
 	clearChatState();
 
