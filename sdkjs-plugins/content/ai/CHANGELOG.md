@@ -89,3 +89,7 @@
 
 ## 2.2.8
 * Fix image actions. Add "OCR" and "Image to text" support.
+
+## 2.2.9
+* Fix image actions. Add "OCR" and "Image to text" support.
+* Bug fix
