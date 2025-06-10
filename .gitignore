@@ -1,2 +1,4 @@
 *.js.bak
 *.json.bak
+
+*node_modules*

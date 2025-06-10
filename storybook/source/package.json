@@ -1,0 +1,22 @@
+{
+  "name": "onlyoffice-storybook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o ../static"
+  },
+  "keywords": [],
+  "author": "ONLYOFFICE",
+  "license": "Apache-2.0",
+  "description": "Storybook for ONLYOFFICE plugins components",
+  "devDependencies": {
+    "@storybook/addon-docs": "^9.0.6",
+    "@storybook/html-vite": "^9.0.6",
+    "storybook": "^9.0.6"
+  },
+  "overrides": {
+    "storybook": "$storybook"
+  }
+}
