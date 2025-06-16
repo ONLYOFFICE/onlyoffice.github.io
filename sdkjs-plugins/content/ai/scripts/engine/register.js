@@ -488,7 +488,10 @@ function registerButtons(window, undefined)
 	if (true)
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button1.separator = true;
+
+		if (!AI.serverSettings)
+			button1.separator = true;
+		
 		button1.text = "Chatbot";
 		button1.icons = getToolBarButtonIcons("ask-ai");
 		button1.attachOnClick(function(data){
