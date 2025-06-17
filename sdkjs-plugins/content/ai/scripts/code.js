@@ -6,9 +6,9 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 
 let initCounter = 0;
-async function initWithTranslate() {
-	initCounter++;
-	if (2 === initCounter) {
+async function initWithTranslate(counter) {
+	initCounter |= counter;
+	if (3 === initCounter) {
 		registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();
@@ -91,7 +91,17 @@ async function GetOldCustomFunctions() {
 }
 
 window.Asc.plugin.init = async function() {
-	await initWithTranslate();
+	// Check server settings
+	if (window.Asc.plugin.info.aiPluginSettings) {
+		try {
+			AI.serverSettings = JSON.parse(window.Asc.plugin.info.aiPluginSettings);
+		} catch (e) {
+			AI.serverSettings = null;
+		}
+		delete window.Asc.plugin.info.aiPluginSettings;
+	}
+
+	await initWithTranslate(1 << 1);
 	clearChatState();
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
@@ -195,7 +205,7 @@ window.Asc.plugin.init = async function() {
 };
 
 window.Asc.plugin.onTranslate = async function() {
-	await initWithTranslate();
+	await initWithTranslate(1);
 };
 
 window.Asc.plugin.button = function(id, windowId) {
@@ -289,6 +299,11 @@ function onOpenSettingsModal() {
 		settingsWindow.attachEvent("onInit", function() {
 			updateActions();
 			updateModels();
+		});
+		settingsWindow.attachEvent("onUpdateHeight", function(height) {
+			if(height > variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [settingsWindow.id, [variation.size[0] - 2, height]]);	//2 is the border-width at the window
+			}
 		});
 		settingsWindow.attachEvent('onChangeAction', function(data){
 			AI.ActionsChange(data.id, data.model);

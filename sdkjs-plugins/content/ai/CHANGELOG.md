@@ -58,13 +58,13 @@
 * Bug fix
 
 ## 2.1.5
-* Bug fix
+* Bug fix.
 
 ## 2.2.0
 * Refactoring
 
 ## 2.2.1
-* Bug fix
+* Bug fix.
 
 ## 2.2.2
 * Add xAI as internal provider.
@@ -76,7 +76,7 @@
 * Refactoring chat. Add docked mode for chat window.
 
 ## 2.2.5
-* Bug fix
+* Bug fix.
 
 ## 2.2.6
 * Add interface for system role detection.
@@ -89,3 +89,7 @@
 
 ## 2.2.8
 * Fix image actions. Add "OCR" and "Image to text" support.
+
+## 2.2.9
+* Add support server settings.
+* Bug fix.

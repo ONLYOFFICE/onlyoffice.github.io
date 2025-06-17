@@ -86,23 +86,34 @@
 								"data" : request.body
 							})
 						}
-						message.url = AI.PROXY_URL;					
+						if (AI.serverSettings){
+							message.url = AI.serverSettings.proxy;
+							request["headers"] = {
+								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
+							}
+						} else {
+							message.url = AI.PROXY_URL;
+						}
 					}
 				}				
 
-				fetch(message.url, request)
-					.then(function(response) {
-						return response.json()
-					})
-					.then(function(data) {
-						if (data.error)
-							resolve({error: 1, message: data.error.message ? data.error.message : ((typeof data.error === "string") ? data.error : "")});
-						else
-							resolve({error: 0, data: data.data ? data.data : data});
-					})
-					.catch(function(error) {
-						resolve({error: 1, message: error.message ? error.message : ""});                        
-					});
+				try {
+					fetch(message.url, request)
+						.then(function(response) {
+							return response.json()
+						})
+						.then(function(data) {
+							if (data.error)
+								resolve({error: 1, message: data.error.message ? data.error.message : ((typeof data.error === "string") ? data.error : "")});
+							else
+								resolve({error: 0, data: data.data ? data.data : data});
+						})
+						.catch(function(error) {
+							resolve({error: 1, message: error.message ? error.message : ""});                        
+						});
+				} catch (error) {
+					resolve({error: 1, message: error.message ? error.message : ""});
+				}
 			}
 		});
 	}
@@ -136,7 +147,7 @@
 				body[i] = bodyPr[i];
 		}
 
-		return provider.isUseProxy();
+		return provider.isUseProxy() || AI.serverSettings;
 	};
 
 	AI._getEndpointUrl = function(_provider, endpoint, model) {
@@ -279,10 +290,10 @@
 					this.errorHandler(err);
 				else {
 					if (true) {
-						await Asc.Library.SendError(err.message, -1);
+						await Asc.Library.SendError(err.message, 0);
 					} else {
 						// since 8.3.0!!!
-						await Asc.Editor.callMethod("ShowError", [err.message, -1]);
+						await Asc.Editor.callMethod("ShowError", [err.message, 0]);
 					}
 				}
 				return;
