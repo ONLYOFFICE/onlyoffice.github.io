@@ -1,5 +1,8 @@
 function registerButtons(window, undefined)
 {
+	window.AI = window.AI || {};
+	var AI = window.AI;
+	
 	function getToolBarButtonIcons(icon) {
 		return "resources/icons/%theme-type%(light|dark)/big/" + icon + "%scale%(default).png";
 	}
@@ -472,7 +475,7 @@ function registerButtons(window, undefined)
 	window.buttonMainToolbar = buttonMainToolbar;
 	window.getToolBarButtonIcons = getToolBarButtonIcons;
 
-	if (true)
+	if (!AI.serverSettings)
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button1.text = "Settings";
@@ -485,7 +488,10 @@ function registerButtons(window, undefined)
 	if (true)
 	{
 		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button1.separator = true;
+
+		if (!AI.serverSettings)
+			button1.separator = true;
+		
 		button1.text = "Chatbot";
 		button1.icons = getToolBarButtonIcons("ask-ai");
 		button1.attachOnClick(function(data){
@@ -548,8 +554,6 @@ function registerButtons(window, undefined)
 	}
 
 	// register actions
-	window.AI = window.AI || {};
-	var AI = window.AI;
 
 	AI.ActionType = {
 		Chat             : "Chat",
@@ -629,7 +633,11 @@ function registerButtons(window, undefined)
 		let obj = null;
 		try
 		{
-			obj = JSON.parse(window.localStorage.getItem(actions_key));
+			if (AI.serverSettings) {
+				obj = AI.serverSettings.actions;
+			} else {
+				obj = JSON.parse(window.localStorage.getItem(actions_key));
+			}
 		}
 		catch (e)
 		{
@@ -657,5 +665,5 @@ function registerButtons(window, undefined)
 		}
 	};
 
-	AI.ActionsLoad();  
+	AI.ActionsLoad();
 }
