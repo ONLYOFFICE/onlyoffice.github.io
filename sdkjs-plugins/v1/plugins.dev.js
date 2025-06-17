@@ -371,8 +371,9 @@
 			}
 
 			if (!!button.menu) {
-				for (item of button.menu) {
-					if (!!item.onclick) {
+				for (let indexItem in button.menu) {
+					let item = button.menu.hasOwnProperty(indexItem) ? button.menu[indexItem] : null;
+					if (item && !!item.onclick) {
 						window.Asc.plugin.attachToolbarMenuClickEvent(item.id, item.onclick);
 					}
 				}
@@ -778,4 +779,3 @@
 	Asc.ButtonToolbar = ButtonToolbar;
 	Asc.ButtonContentControl = ButtonContentControl;
 })(window);
-
