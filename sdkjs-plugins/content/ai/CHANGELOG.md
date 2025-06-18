@@ -93,3 +93,6 @@
 ## 2.2.9
 * Add support server settings.
 * Bug fix.
+
+## 2.3.0
+* Add license.
