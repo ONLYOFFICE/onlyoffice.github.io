@@ -398,6 +398,12 @@
 					imageUrl = "data:image/svg+xml;base64," + btoa(imageUrl);
 				}
 			}
+
+			if (!imageUrl) {
+				let candidates = getProp("predictions");
+				if (candidates && candidates[0] && candidates[0].bytesBase64Encoded)
+					imageUrl = candidates[0].bytesBase64Encoded;
+			}
 			
 			if (!imageUrl)
 				return "";
