@@ -96,3 +96,6 @@
 
 ## 2.3.0
 * Add license.
+
+## 2.3.1
+* Bug fix.

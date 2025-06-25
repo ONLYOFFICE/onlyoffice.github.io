@@ -92,7 +92,7 @@ class Provider extends AI.Provider {
 		default:
 			let addon = ":generateContent";
 			if (endpoint === Types.v1.Images_Generations) {
-				if (-1 != model.id.indexOf("imagen-3"))
+				if (-1 != model.id.indexOf("imagen-"))
 					addon = ":predict";
 			}
 			url = "/" + model.id + addon;
@@ -134,7 +134,7 @@ class Provider extends AI.Provider {
 			result.generationConfig = {"responseModalities":["TEXT","IMAGE"]};
 			return result;
 		}
-		if (-1 != model.id.indexOf("imagen-3")) {
+		if (-1 != model.id.indexOf("imagen-")) {
 			return {
 				instances: [
 					{
