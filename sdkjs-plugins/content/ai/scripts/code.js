@@ -341,6 +341,9 @@ function onOpenSettingsModal() {
 			AI.ActionsChange(data.id, data.model);
 		});
 		settingsWindow.attachEvent('onOpenAiModelsModal', onOpenAiModelsModal);
+		settingsWindow.attachEvent('onOpenAddModal', function () {
+			onOpenEditModal({ type: 'add' })
+		});
 	}
 	settingsWindow.show(variation);
 }

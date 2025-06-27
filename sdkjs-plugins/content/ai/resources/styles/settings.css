@@ -96,6 +96,13 @@ body {
     max-width: 150px;
 }
 
+.select2-results__option .separator {
+    width: 100%;
+    padding: 0;
+    height: 1px;
+    background-color: var(--border-divider);
+}
+
 /* #actions-list .select2-selection{
     border: none !important;
 }
