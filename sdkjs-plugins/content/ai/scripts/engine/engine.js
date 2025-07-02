@@ -211,6 +211,7 @@
 			function resolveRequest(data) {
 				if (data.error)
 					resolve({
+						provider: provider.name,
 						error : 1,
 						message : data.message,
 						models : []
@@ -241,6 +242,7 @@
 					}
 
 					resolve({
+						provider: provider.name,
 						error : 0,
 						message : "",
 						models : AI.TmpProviderForModels.modelsUI
