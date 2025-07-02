@@ -99,3 +99,6 @@
 
 ## 2.3.1
 * Bug fix.
+
+## 2.3.2
+* Fix offline work.
