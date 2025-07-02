@@ -568,7 +568,7 @@ function registerButtons(window, undefined)
 
 		// TODO:
 		let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button3.text = "Text to image";
+		button3.text = "Text to Image";
 		button3.icons = getToolBarButtonIcons("text-to-image");
 		button3.attachOnClick(on_click_text_to_image);
 
