@@ -215,7 +215,7 @@ window.Asc.plugin.init = function() {
 	window.Asc.plugin.attachEvent("onProvidersUpdate", onProvidersUpdate);
 	window.Asc.plugin.attachEvent("onGetModels", function(data) {
 		if(data.error == 1) {
-			rejectModels && rejectModels(data.message);
+			rejectModels && rejectModels(data);
 		} else {
 			modelsList = data.models;
 			let res = data.models.map(function(model) {
@@ -225,7 +225,9 @@ window.Asc.plugin.init = function() {
 				}
 			});
 			res.sort(function(a,b){ return (a.name < b.name) ? -1 : ((a.name === b.name) ? 0 : 1); });
-			resolveModels && resolveModels(res);
+
+			data.models = res;
+			resolveModels && resolveModels(data);
 		}
 	});
 }
@@ -489,13 +491,17 @@ function updateModelsList() {
 		url : providerUrlInputEl.value, 
 		key: providerKeyInputEl.value
 	}).then(function(data) {
-		providerModelsList = data;
-		updateHtmlElements();
-		endLoader();
+		if (providerNameCmbEl.value == data.provider) {
+			providerModelsList = data.models;
+			updateHtmlElements();
+			endLoader();
+		}
 	}).catch(function(error) {
-		providerModelsList = [];
-		updateHtmlElements();
-		endLoader(error);
+		if (providerNameCmbEl.value == error.provider) {
+			providerModelsList = [];
+			updateHtmlElements();
+			endLoader(error.message);
+		}
 	});
 }
 
