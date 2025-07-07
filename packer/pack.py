@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import shutil
+from pathlib import Path
 
 def pack_plugins():
   content_dir = "sdkjs-plugins/content/"
@@ -18,8 +19,10 @@ def pack_plugins():
     zip_file = os.path.join(artifacts_dir, f"{plugin_name}")
     
     # Create zip
-    print(f"Created: {plugin_path}")
-    shutil.make_archive(zip_file, 'zip', plugin_path)
+    zip_path = shutil.make_archive(zip_file, 'zip', plugin_path)
+    # Rename to plugin
+    plugin_path = Path(zip_path).with_suffix(".plugin")
+    Path(zip_path).rename(plugin_path)
 
     print(f"Created: {plugin_name}")
   
