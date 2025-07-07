@@ -55,4 +55,4 @@ jobs:
         tag_name: ${{ steps.bump_tag.outputs.new_tag }}
         name: Release ${{ steps.bump_tag.outputs.new_tag }}
         body: Auto-generated release from push to `${{ github.ref_name }}`
-        files: artifacts/*.zip
+        files: artifacts/*.plugin
