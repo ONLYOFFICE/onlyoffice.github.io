@@ -1,0 +1,28 @@
+name: Pack Plugins and Create Release
+
+on:
+  push:
+    branches: [ master ]  
+
+jobs:
+  pack-plugins:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Pack plugins
+      run: |
+        python packer/pack.py
+    
+    - name: Upload plugin artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: plugin-files
+        path: artifacts/*.zip
