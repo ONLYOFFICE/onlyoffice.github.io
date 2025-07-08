@@ -31,28 +31,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>AI Constructor</title>
-  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-  
-  <script type="text/javascript" src="vendor/GPT-3-Encoder/encoder.js"></script>
-  
-  <script type="text/javascript" src="scripts/engine/storage.js"></script>
-  <script type="text/javascript" src="scripts/engine/local_storage.js"></script>
-  <script type="text/javascript" src="scripts/engine/providers/base.js"></script>
-  <script type="text/javascript" src="scripts/engine/providers/provider.js"></script>
-  <script type="text/javascript" src="scripts/engine/engine.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="./scripts/helper.js"></script>
+	<style>
+    body {
+		margin: 0;
+		padding: 0px;
+		background: transparent !important;
+    }
 
-  <script type="text/javascript" src="scripts/engine/library.js"></script>
-  <script type="text/javascript" src="scripts/engine/register.js"></script>  
-
-  <script type="text/javascript" src="scripts/helperFuncs.js"></script>
-  <script type="text/javascript" src="scripts/code.js"></script>
-
-  <script src="vendor/md/markdown-it.js"></script>
+    input {
+		width: 100%;
+		height: 100%;
+		border: none;
+		outline: none;
+		font-size: 13px;
+		font-family: "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
+		border-radius: 12px;
+		border: 1px solid #4A90E2; 
+		padding: 10px;
+		box-sizing: border-box;
+		color: #000000;
+		caret-color : #000000;
+		background-color: rgba(255, 255, 255);
+    }
+  	</style>
 </head>
 <body>
+  	<input id="input-action" autocomplete="off" type="text" placeholder="AI action..." />
 </body>
 </html>

@@ -233,7 +233,8 @@
 				content : []
 			};
 
-			let arrResult = message.data.choices || message.data.content || message.data.candidates;
+			let data = message.data || message;
+			let arrResult = data.choices || data.content || data.candidates;
 			if (!arrResult)
 				return result;
 
@@ -254,6 +255,8 @@
 					}
 				}
 			}
+			if (choice.delta && choice.delta.content)
+				result.content.push(choice.delta.content);
 
 			let trimArray = ["\n".charCodeAt(0)];
 			for (let i = 0, len = result.content.length; i < len; i++) {
