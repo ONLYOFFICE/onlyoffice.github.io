@@ -36,6 +36,7 @@ let aiModelEditWindow = null;
 let customProvidersWindow = null;
 let summarizationWindow = null;
 let translateSettingsWindow = null;
+let helperWindow = null;
 
 let initCounter = 0;
 async function initWithTranslate(counter) {
@@ -94,6 +95,116 @@ async function initWithTranslate(counter) {
 
 			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
 		}
+
+		window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
+			if (e.keyCode === 27 && helperWindow) {
+				helperWindow.close();
+				helperWindow = null;
+				Asc.Editor.callMethod("FocusEditor");
+				return;
+			}
+
+			if (e.keyCode === 32 && e.ctrlKey && !helperWindow) {
+				let variation = {
+					url : 'helper.html',
+					isVisual : true,
+					buttons : [],
+					isModal : false,
+					isCustomWindow : true,
+					EditorsSupport : ["word", "slide", "cell", "pdf"],
+					size : [500, 100],
+					isTargeted : true,
+					transparent : true
+				};
+				helperWindow = new window.Asc.PluginWindow();
+
+				helperWindow.attachEvent("onHelperShow", function() {
+					helperWindow.activate();
+				});
+
+				helperWindow.attachEvent("onHelperClose", function() {
+					helperWindow.close();
+					helperWindow = null;
+					Asc.Editor.callMethod("FocusEditor");
+				});
+
+				helperWindow.attachEvent("onHelperAction", async function(prompt) {
+					//console.log("Helper action: " + prompt);
+					
+					helperWindow.close();
+					helperWindow = null;
+					Asc.Editor.callMethod("FocusEditor");
+
+					let requestEngine = AI.Request.create(AI.ActionType.Chat);
+					if (!requestEngine)
+						return;
+
+					let isSendedEndLongAction = false;
+					async function checkEndAction() {
+						if (!isSendedEndLongAction) {
+							await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+							isSendedEndLongAction = true
+						}
+					}
+
+					await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+					let bufferWait = "[functionCalling";
+					let checkBuffer = true;
+					let buffer = "";
+					let result = await requestEngine.chatRequest([
+						{
+							role: "system", content: window.EditorHelper.getSystemPrompt()
+						}, 
+						{
+							role: "user", content: prompt
+						}
+					], false, async function(data) {
+						if (!data)
+							return;
+
+						await checkEndAction();
+						
+						let oldBuffer = buffer;
+						buffer += data;
+						if (checkBuffer && buffer.length >= bufferWait.length) {
+							if (!buffer.startsWith(bufferWait)) {
+								data = oldBuffer + data;
+								checkBuffer = false;
+							}
+						}
+
+						if (!checkBuffer)
+							await Asc.Library.PasteText(data);
+					});
+
+					if (checkBuffer && !buffer.startsWith(bufferWait)) {
+						checkBuffer = false;
+						await Asc.Library.PasteText(data);
+					}
+
+					await checkEndAction();
+
+					if (checkBuffer) {
+						await window.EditorHelper.callFunc(buffer);
+					}
+				});
+
+				helperWindow.show(variation);
+				helperWindow.isSkipClick = true;
+				setTimeout(function() {
+					if (helperWindow)
+						helperWindow.isSkipClick = false;
+				}, 500);
+			}
+		});
+		
+		window.Asc.plugin.attachEditorEvent("onClick", function(e) {
+			if (helperWindow && !helperWindow.isSkipClick) {
+				helperWindow.close();
+				helperWindow = null;
+			}
+		});
 	}
 }
 
