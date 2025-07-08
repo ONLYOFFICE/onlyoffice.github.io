@@ -308,12 +308,13 @@
 		this.errorHandler = callback;
 	};
 
-	AI.Request.prototype._wrapRequest = async function(func, data, block) {
+	AI.Request.prototype._wrapRequest = async function(func, data, block, streamFunc) {
+		let isActionRestriction = (block && (undefined !== streamFunc)) ? true : undefined;
 		if (block)
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + this.modelUI.name + ")"]);
 		let result = undefined;
 		try {
-			result = await func.call(this, data);
+			result = await func.call(this, data, streamFunc);
 		} catch (err) {
 			if (err.error) {
 				if (block)
@@ -337,11 +338,11 @@
 	};
 
 	// CHAT REQUESTS
-	AI.Request.prototype.chatRequest = async function(content, block) {
-		return await this._wrapRequest(this._chatRequest, content, block !== false);
+	AI.Request.prototype.chatRequest = async function(content, block, streamFunc) {
+		return await this._wrapRequest(this._chatRequest, content, block !== false, streamFunc);
 	};
 
-	AI.Request.prototype._chatRequest = async function(content) {
+	AI.Request.prototype._chatRequest = async function(content, streamFunc) {
 		let provider = null;
 		if (this.modelUI)
 			provider = AI.Storage.getProvider(this.modelUI.provider);
@@ -396,6 +397,8 @@
 			content = content[content.length - 1].content;
 			isMessages = false;
 		}
+
+		let isStreaming = (undefined !== streamFunc);
 
 		if (isMessages)
 			isNoSplit = true;
@@ -452,22 +455,88 @@
 					requestBody.messages = messages[0];
 				else
 					requestBody.messages = [{role:"user",content:messages[0]}];
+
 				objRequest.body = provider.getChatCompletions(requestBody, this.model);
+
+				if (isStreaming)
+					objRequest.body.stream = true;
 			} else {
-				objRequest.body = provider.getCompletions({ text : messages[0] });
+				objRequest.body = provider.getCompletions({ text : messages[0] }, model);
 			}
 
 			objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
 
-			let result = await requestWrapper(objRequest);
-			if (result.error) {
-				throw {
-					error : result.error, 
-					message : result.message
-				};
-				return;
+			if (!isStreaming) {
+				let result = await requestWrapper(objRequest);
+				if (result.error) {
+					throw {
+						error : result.error, 
+						message : result.message
+					};
+					return;
+				} else {
+					return processResult(result);
+				}
 			} else {
-				return processResult(result);
+				let request = {
+					method: objRequest.method,
+					headers: objRequest.headers
+				};
+				if (request.method != "GET") {
+					request.body = objRequest.isBlob ? objRequest.body : (objRequest.body ? JSON.stringify(objRequest.body) : "");
+
+					if (objRequest.isUseProxy) {
+						request = {
+							"method" : request.method,
+							"body" : JSON.stringify({
+								"target" : objRequest.url,
+								"method" : request.method,
+								"headers" : request.headers,
+								"data" : request.body
+							})
+						}
+						if (AI.serverSettings){
+							objRequest.url = AI.serverSettings.proxy;
+							request["headers"] = {
+								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
+							}
+						} else {
+							objRequest.url = AI.PROXY_URL;
+						}
+					}
+				}
+
+				const response = await fetch(objRequest.url, {
+					method: objRequest.method,
+					headers: objRequest.headers,
+					body: JSON.stringify(objRequest.body)
+				});
+
+				if (!response.body) throw { error: 1, message: "Streaming not supported" };
+
+				const reader = response.body.getReader();
+				let decoder = new TextDecoder();
+
+				let allChunks = "";
+				
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) break;
+					let resultText = decoder.decode(value, { stream: true });
+					let resultObj = getStreamedResult(resultText);
+					let chunks = eval(resultObj);
+
+					let dataChunk = "";
+					for (let j = 0, len = chunks.length; j < len; j++) {
+						dataChunk += processResult(chunks[j]);
+					}
+
+					allChunks += dataChunk;
+
+					if (streamFunc)
+						await streamFunc(dataChunk);
+				}
+				return allChunks;
 			}
 
 		} else {
@@ -496,13 +565,14 @@
 				return footer;
 			}
 
+			let resultText = "";
 			for (let i = 0, len = messages.length; i < len; i++) {
 				
 				let message = getHeader(i + 1, len) + messages[i] + getFooter(i + 1, len);
 				if (!isUseCompletionsInsteadChat) {
-					objRequest.body = provider.getChatCompletions({ messages : [{role:"user",content:message}] });
+					objRequest.body = provider.getChatCompletions({ messages : [{role:"user",content:message}] }, model);
 				} else {
-					objRequest.body = provider.getCompletions( { text : message });
+					objRequest.body = provider.getCompletions( { text : message }, model);
 				}
 
 				objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
@@ -513,12 +583,12 @@
 						error : result.error, 
 						message : result.message
 					};
-					return;
+					return resultText;
 				} else if (i === (len - 1)) {
-					return processResult(result);
-				}
-
+					resultText += processResult(result);
+				}				
 			}
+			return resultText;
 		}
 	};
 
@@ -808,5 +878,65 @@
 		let index = url.indexOf(",");
 		return url.substring(index + 1);
 	};
+
+	function getStreamedResult(responseText) {
+		
+		let result = "[";
+
+		let isEscaped = false;
+		let inString = false;
+		let braceCount = 0;
+		let curObjectPos = 0;
+		let firstObject = true;
+		
+		for (let i = 0, inputLen = responseText.length; i < inputLen; i++) {
+			let char = responseText[i];
+			
+			if (char === '\n') {
+				this.lineNumber++;
+			}
+			
+			if (char === '"' && !isEscaped) {
+				inString = !inString;
+			}
+			
+			isEscaped = (char === '\\' && !isEscaped);
+			
+			if (!inString) {
+				if (char === '{')
+					braceCount++;
+				else if (char === '}') {
+					braceCount--;
+
+					if (braceCount === 0) {
+						i++;
+
+						if (!firstObject)
+							result += ",";
+						firstObject = false;
+						
+						result += ("{" + responseText.substring(curObjectPos, i) + "}");
+
+						while (i < inputLen) {
+							char = responseText[i];
+							
+							if (char !== '\n' &&
+								char !== '\r' && 
+								char !== ' ' && 
+								char !== '\t') {
+								break;
+							}
+							i++;
+						}
+						
+						curObjectPos = i;
+					}
+				}				
+			}
+		}
+
+		result += "]";
+		return result;
+	}
 
 })(window);
