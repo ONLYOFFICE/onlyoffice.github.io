@@ -119,7 +119,7 @@ async function initWithTranslate(counter) {
 				helperWindow = new window.Asc.PluginWindow();
 
 				helperWindow.attachEvent("onHelperShow", function() {
-					helperWindow.activate();
+					helperWindow.activate(true);
 				});
 
 				helperWindow.attachEvent("onHelperClose", function() {
