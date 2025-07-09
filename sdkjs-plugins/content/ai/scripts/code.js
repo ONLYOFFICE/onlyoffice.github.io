@@ -112,7 +112,7 @@ async function initWithTranslate(counter) {
 					isModal : false,
 					isCustomWindow : true,
 					EditorsSupport : ["word", "slide", "cell", "pdf"],
-					size : [500, 100],
+					size : [500, 50],
 					isTargeted : true,
 					transparent : true
 				};
