@@ -1,8 +1,7 @@
 name: Pack Plugins and Create Release
 
 on:
-  push:
-    branches: [ master ]  
+  page_build:
 
 jobs:
   pack-plugins:
