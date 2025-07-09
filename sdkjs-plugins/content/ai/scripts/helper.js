@@ -66,11 +66,11 @@
 			let themeType = theme.type || "light";
 			//input.style.backgroundColor = (themeType === "light") ? "rgb(255, 255, 255)" : "rgba(64, 64, 64)";
 			input.style.backgroundColor = theme.AnimPaneBackground;
-			input.style.borderColor = theme.BorderActive;
-			
+			input.style['box-shadow'] = theme.BorderActive + ' 0 0 4px 1px';
+
 			input.style.caretColor = (themeType === "light") ? "#000000" : "#FFFFFF";
 			input.style.color = input.style.caretColor = (themeType === "light") ? "#000000" : "#FFFFFF";
-		}		
+		}
 	}
 
 	window.Asc.plugin.onTranslate = function() {

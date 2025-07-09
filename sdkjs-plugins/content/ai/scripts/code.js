@@ -401,6 +401,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
+	helperWindow && helperWindow.command('onThemeChanged', theme);
 };
 
 /**
