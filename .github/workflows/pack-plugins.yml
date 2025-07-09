@@ -10,6 +10,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.build.commit }}
 
     - name: Get latest tag
       id: get_tag
@@ -53,5 +55,5 @@ jobs:
       with:
         tag_name: ${{ steps.bump_tag.outputs.new_tag }}
         name: Release ${{ steps.bump_tag.outputs.new_tag }}
-        body: Auto-generated release from push to `${{ github.ref_name }}`
+        body: Auto‑generated release for commit `${{ github.event.build.commit }}`
         files: artifacts/*.plugin
