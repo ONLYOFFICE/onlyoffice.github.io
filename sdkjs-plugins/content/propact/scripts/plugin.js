@@ -367,10 +367,11 @@
             } else {
                 switchClass(elements.btnCreateClause, displayNoneClass, false);
             }
+            elements.btnMarkupMode.innerHTML = 'Our Working Draft';
         }
 
         switchClass(elements.btnCreateClause, disabledClass, true);
-        elements.btnMarkupMode.innerHTML = 'Our Working Draft';
+
         // $('#clauseText').val(text);
         if (text) {
             switchClass(elements.btnCreateClause, disabledClass, false);
