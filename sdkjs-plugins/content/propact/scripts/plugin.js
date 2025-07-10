@@ -367,27 +367,28 @@
             } else {
                 switchClass(elements.btnCreateClause, displayNoneClass, false);
             }
-            switchClass(elements.btnCreateClause, disabledClass, true);
-            elements.btnMarkupMode.innerHTML = 'Our Working Draft';
-            // $('#clauseText').val(text);
-            if (text) {
-                switchClass(elements.btnCreateClause, disabledClass, false);
-            } else {
-                if (!document.getElementById('btnCreateClause').classList.contains(disabledClass)) {
-                    switchClass(elements.btnCreateClause, disabledClass, true);
-                }
-            }
-            if (!flagDisableWhenPluginLoading) {
-                if (typeof window.Asc.plugin.executeMethod === 'function') {
-                    var sDocumentEditingRestrictions = "readOnly";
-                    window.Asc.plugin.executeMethod("SetEditingRestrictions", [sDocumentEditingRestrictions]);
-                }
-                flagDisableWhenPluginLoading = true;
-            }
+        }
 
-            if (contractArchieveStatus == true) {
-                switchClass(elements.btnCreateClause, displayNoneClass, true);
+        switchClass(elements.btnCreateClause, disabledClass, true);
+        elements.btnMarkupMode.innerHTML = 'Our Working Draft';
+        // $('#clauseText').val(text);
+        if (text) {
+            switchClass(elements.btnCreateClause, disabledClass, false);
+        } else {
+            if (!document.getElementById('btnCreateClause').classList.contains(disabledClass)) {
+                switchClass(elements.btnCreateClause, disabledClass, true);
             }
+        }
+        if (!flagDisableWhenPluginLoading) {
+            if (typeof window.Asc.plugin.executeMethod === 'function') {
+                var sDocumentEditingRestrictions = "readOnly";
+                window.Asc.plugin.executeMethod("SetEditingRestrictions", [sDocumentEditingRestrictions]);
+            }
+            flagDisableWhenPluginLoading = true;
+        }
+
+        if (contractArchieveStatus == true) {
+            switchClass(elements.btnCreateClause, displayNoneClass, true);
         }
 
 
