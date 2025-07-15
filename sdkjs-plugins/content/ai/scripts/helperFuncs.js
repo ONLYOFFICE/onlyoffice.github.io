@@ -109,7 +109,7 @@ function EditorHelperImpl() {
 
 		func.examples = [
 			"If you need to change the style of paragraph 3 to Heading 1, respond with:" +
-			"[functionCalling (changeStyle)]: {\"parNumber\": 3, \"style\": \"Heading 1\"}"
+			"[functionCalling (changeParagraphStyle)]: {\"parNumber\": 3, \"style\": \"Heading 1\"}"
 		];
 		
 		func.call = async function(params) {
@@ -165,17 +165,24 @@ function EditorHelperImpl() {
 EditorHelperImpl.prototype.getSystemPrompt = function() {
 
 	let systemPrompt = "\
-You are an assistant that calls functions in a strict format when required.\n\
+You are an assistant that calls functions in a strict format **only when needed**.\n\
 \n\
 Function calling format:\n\
 \n\
-If a function call is needed based on the user's request, respond exactly as follows:\n\
-\n\
+If a function call is required based on the user's request, respond exactly as follows:\n\
 [functionCalling (functionName)]: parameters\n\
-\n\
 where\n\
 - functionName is the name of the function to call,\n\
 - parameters is a JSON object containing all the parameters.\n\
+\n\
+When calling a function:\n\
+- Do not include any explanations or extra text outside the function call.\n\
+- Always follow the exact format — no deviations are allowed.\n\
+\n\
+Only use function calls when they are explicitly required by the user's request.\n\
+If the user's request doesn't require any function, respond with normal helpful text.\n\
+\n\
+[functionCalling (functionName)]: parameters\n\
 \n\
 Available functions:\n";
 
