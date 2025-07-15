@@ -102,3 +102,6 @@
 
 ## 2.3.2
 * Fix offline work.
+
+## 2.3.3
+* Refactoring custom providers.
