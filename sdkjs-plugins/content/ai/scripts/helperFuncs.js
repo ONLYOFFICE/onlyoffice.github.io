@@ -219,13 +219,24 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 	try {
 		let func = this.names2funcs[funcName];
 		if (!func) {
-			console.error("Function not found: " + funcName);
-			return;
+			let errorMsg = "Function not found: " + funcName;
+			console.error(errorMsg);
+			return {
+				error: errorMsg
+			};
 		}
 
-		await func.call(eval("(" + paramsStr + ")"));
+		let result = await func.call(eval("(" + paramsStr + ")"));
+		if (!result)
+			result = {};
+
+		result.message = "System function '" + funcName + "' executed successfully";
 	} catch (e) {
-		console.error("Error calling function: " + funcName, e);
+		let errorMsg = "Error calling function: " + funcName;
+		console.error(errorMsg);
+		return {
+			error: errorMsg
+		};
 	}
 	
 };
