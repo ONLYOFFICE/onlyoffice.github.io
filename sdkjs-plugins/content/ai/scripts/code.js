@@ -38,29 +38,10 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
 
-window.checkSupportAgentMode = function() {
-	try {
-		let storageValue = window.localStorage.getItem("onlyoffice_ai_plugin_agent_mode");
-		if ("true" === storageValue)
-			window.addSupportAgentMode(true);
-	}
-	catch (e) {
-	}
-}
-
 window.addSupportAgentMode = function() {
-	try {
-		let storageValue = window.localStorage.getItem("onlyoffice_ai_plugin_agent_mode");
-		if ("true" !== storageValue)
-			window.localStorage.setItem("onlyoffice_ai_plugin_agent_mode", "true");
-	}
-	catch (e) {
-	}
+	var agentHistory = [];
+	var agentDebug = false;
 
-	if (window.isSupportAgentMode)
-		return;
-
-	window.isSupportAgentMode = true;
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
 		if (e.keyCode === 27 && helperWindow) {
 			helperWindow.close();
@@ -73,6 +54,9 @@ window.addSupportAgentMode = function() {
 		let codeF2 = 113;
 
 		if (e.keyCode === codeF2 && !helperWindow) {
+			if (isCtrl)
+				agentHistory = [];
+
 			let variation = {
 				url : 'helper.html',
 				isVisual : true,
@@ -120,14 +104,23 @@ window.addSupportAgentMode = function() {
 				let bufferWait = "[functionCalling";
 				let checkBuffer = true;
 				let buffer = "";
-				let result = await requestEngine.chatRequest([
-					{
+
+				if (0 === agentHistory.length) {
+					agentHistory.push({
 						role: "system", content: window.EditorHelper.getSystemPrompt()
-					}, 
-					{
-						role: "user", content: prompt
-					}
-				], false, async function(data) {
+					});
+				}
+
+				if (agentHistory.length > 0 && agentHistory[agentHistory.length - 1].role === "user") {
+					agentHistory[agentHistory.length - 1].content += "\n" + prompt;
+				} else {
+					agentHistory.push({
+						role: "user",
+						content: prompt
+					});
+				}
+
+				let result = await requestEngine.chatRequest(agentHistory, false, async function(data) {
 					if (!data)
 						return;
 
@@ -154,7 +147,41 @@ window.addSupportAgentMode = function() {
 				await checkEndAction();
 
 				if (checkBuffer) {
-					await window.EditorHelper.callFunc(buffer);
+					if (agentDebug)
+						console.log(buffer);
+
+					agentHistory.push({
+						role: "assistant",
+						content: "The assistant system method named " +  + " was called"
+					});
+
+					let resultFunc = await window.EditorHelper.callFunc(buffer);
+					if (resultFunc) {
+						if (resultFunc.error) {
+							agentHistory.push({
+								role: "assistant",
+								content: resultFunc.error
+							});
+						} else if (resultFunc.message !== undefined) {
+							agentHistory.push({
+								role: "assistant", content: resultFunc.prompt
+							});
+						}
+
+						if (resultFunc.prompt !== undefined) {
+							agentHistory.push({
+								role: "user", content: resultFunc.prompt
+							});
+						}
+					}
+				} else {
+					if (agentDebug)
+						console.log(result);
+
+					agentHistory.push({
+						role: "assistant",
+						content: result
+					});
 				}
 			});
 
@@ -234,7 +261,107 @@ async function initWithTranslate(counter) {
 			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
 		}
 
-		window.checkSupportAgentMode();
+		let editorVersion = await Asc.Library.GetEditorVersion();
+		if (editorVersion >= 9000000) {
+			window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
+				let data = {};
+				switch (params.type) {
+					case "text":
+					{
+						let requestEngine = AI.Request.create(AI.ActionType.Chat);
+						if (requestEngine)
+						{
+							let result = await requestEngine.chatRequest(params.data);
+							if (!result) result = "";
+
+							data.type = "text";
+							data.text = result;
+						}
+						else
+						{
+							data.type = "no-engine";
+							data.text = "";
+							data.error = "No model selected for chat action..."
+						}
+					}
+					default:
+						break;
+				}
+
+				await Asc.Editor.callMethod("onAIRequest", [data]);
+			});
+
+			if ("cell" === window.Asc.plugin.info.editorType) {
+				let AIFunc = {
+					guid : "e8ea2fb288054deaa6b82158c04dee37",
+					name : "AI",
+					value : "\
+	(function()\n\
+	{\n\
+		/**\n\
+		 * Function that returns the AI answer.\n\
+		 * @customfunction\n\
+		 * @param {string} value Prompt.\n\
+		 * @param {?boolean} isSaveAIFunction Indicator whether the AI function should be saved.\n\
+		 * @returns {string} Answer value.\n\
+		 */\n\
+		async function AI(value, isSaveAIFunction) {\n\
+			let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
+			return new Promise(resolve => (function(){\n\
+				Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
+					if (data.error)\n\
+						return resolve(data.error);\n\
+					switch (data.type) {\n\
+						case \"text\":\n\
+						{\n\
+							let result = data.text.trim();\n\
+							if (isSaveAIFunction !== true)\n\
+								result = \"@@\" + result;\n\
+							resolve(result);\n\
+							break;\n\
+						}\n\
+						default:\n\
+						{\n\
+							resolve(\"#ERROR\");\n\
+						}\n\
+					}\n\
+					resolve(data)\n\
+				});\n\
+			})());\n\
+		}\n\
+		Api.AddCustomFunction(AI);\n\
+	})();"
+				};
+
+				let oldCF = await GetOldCustomFunctions();
+				let isFound = false;
+				let isUpdate = false;
+
+				for (let i = 0, len = oldCF.macrosArray.length; i < len; i++) {
+					let item = oldCF.macrosArray[i];
+					if (item.name === AIFunc.name) {
+						isFound = true;
+
+						if (item.guid === AIFunc.guid) {
+							if (item.value !== AIFunc.value) {
+								isUpdate = true;
+								item.value = AIFunc.value;
+							}
+						}
+					}
+				}
+				if (!isFound) {
+					oldCF.macrosArray.push(AIFunc);
+					isUpdate = true;
+				}
+
+				if (isUpdate)
+					await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
+			}
+		}
+
+		if (editorVersion >= 9000004)
+			window.addSupportAgentMode();
 	}
 }
 
@@ -275,106 +402,7 @@ window.Asc.plugin.init = async function() {
 	}
 
 	await initWithTranslate(1 << 1);
-	clearChatState();
-
-	let editorVersion = await Asc.Library.GetEditorVersion();
-	if (editorVersion >= 9000000) {
-		window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
-			let data = {};
-			switch (params.type) {
-				case "text":
-				{
-					let requestEngine = AI.Request.create(AI.ActionType.Chat);
-					if (requestEngine)
-					{
-						let result = await requestEngine.chatRequest(params.data);
-						if (!result) result = "";
-
-						data.type = "text";
-						data.text = result;
-					}
-					else
-					{
-						data.type = "no-engine";
-						data.text = "";
-						data.error = "No model selected for chat action..."
-					}
-				}
-				default:
-					break;
-			}
-
-			await Asc.Editor.callMethod("onAIRequest", [data]);
-		});
-
-		if ("cell" === window.Asc.plugin.info.editorType) {
-			let AIFunc = {
-				guid : "e8ea2fb288054deaa6b82158c04dee37",
-				name : "AI",
-				value : "\
-(function()\n\
-{\n\
-    /**\n\
-     * Function that returns the AI answer.\n\
-     * @customfunction\n\
-     * @param {string} value Prompt.\n\
-     * @param {?boolean} isSaveAIFunction Indicator whether the AI function should be saved.\n\
-     * @returns {string} Answer value.\n\
-     */\n\
-    async function AI(value, isSaveAIFunction) {\n\
-        let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
-        return new Promise(resolve => (function(){\n\
-            Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
-                if (data.error)\n\
-                    return resolve(data.error);\n\
-                switch (data.type) {\n\
-                    case \"text\":\n\
-                    {\n\
-                        let result = data.text.trim();\n\
-                        if (isSaveAIFunction !== true)\n\
-                            result = \"@@\" + result;\n\
-                        resolve(result);\n\
-                        break;\n\
-                    }\n\
-                    default:\n\
-                    {\n\
-                        resolve(\"#ERROR\");\n\
-                    }\n\
-                }\n\
-                resolve(data)\n\
-            });\n\
-        })());\n\
-    }\n\
-    Api.AddCustomFunction(AI);\n\
-})();"
-			};
-
-			let oldCF = await GetOldCustomFunctions();
-			let isFound = false;
-			let isUpdate = false;
-
-			for (let i = 0, len = oldCF.macrosArray.length; i < len; i++) {
-				let item = oldCF.macrosArray[i];
-				if (item.name === AIFunc.name) {
-					isFound = true;
-
-					if (item.guid === AIFunc.guid) {
-						if (item.value !== AIFunc.value) {
-							isUpdate = true;
-							item.value = AIFunc.value;
-						}
-					}
-				}
-			}
-			if (!isFound) {
-				oldCF.macrosArray.push(AIFunc);
-				isUpdate = true;
-			}
-
-			if (isUpdate)
-				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
-		}		
-	}	
+	clearChatState();	
 };
 
 window.Asc.plugin.onTranslate = async function() {
