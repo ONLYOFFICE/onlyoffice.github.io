@@ -93,7 +93,7 @@
 		 * Url for a specific endpoint.
 		 * @returns {string}
 		 */
-		getEndpointUrl(endpoint, model) {
+		getEndpointUrl(endpoint, model, options) {
 			let Types = AI.Endpoints.Types;
 			switch (endpoint)
 			{
@@ -234,11 +234,11 @@
 			};
 
 			let data = message.data || message;
-			let arrResult = data.choices || data.content || data.candidates;
+			let arrResult = data.choices || data.content || data.candidates || data.delta;
 			if (!arrResult)
 				return result;
 
-			let choice = arrResult[0];
+			let choice = arrResult[0] ? arrResult[0] : arrResult;
 			if (!choice)
 				return result;
 			
@@ -257,6 +257,8 @@
 			}
 			if (choice.delta && choice.delta.content)
 				result.content.push(choice.delta.content);
+			if (choice.delta && choice.delta.text)
+				result.content.push(choice.delta.text);
 
 			let trimArray = ["\n".charCodeAt(0)];
 			for (let i = 0, len = result.content.length; i < len; i++) {
