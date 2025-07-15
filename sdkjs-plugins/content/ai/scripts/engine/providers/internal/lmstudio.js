@@ -30,54 +30,25 @@
  *
  */
 
-(function(window, undefined) {
+"use strict";
 
-	window.Asc.plugin.init = function() {		
-		let input = document.getElementById("input-action");
-		if (input) {
-			input.addEventListener('keydown', function(event) {
-				if (event.keyCode === 27) {
-					window.Asc.plugin.sendToPlugin("onHelperClose");
-					return;
-				}
+class Provider extends AI.Provider {
 
-				if (event.keyCode === 13 && !event.shiftKey) {
-					window.Asc.plugin.sendToPlugin("onHelperAction", input.value);
-					input.value = '';
-					return;
-				}
-			});		
-		}
-
-		window.addEventListener("focus", function() {
-			let input = document.getElementById("input-action");
-			if (input)
-				input.focus();
-		});
-
-		window.Asc.plugin.sendToPlugin("onHelperShow", input.value);
-	};
-
-	function onThemeChanged(theme) {
-		window.Asc.plugin.onThemeChangedBase(theme);
-
-		let input = document.getElementById("input-action");
-		if (input) {
-			let themeType = theme.type || "light";
-			//input.style.backgroundColor = (themeType === "light") ? "rgb(255, 255, 255)" : "rgba(64, 64, 64)";
-			input.style.backgroundColor = theme.AnimPaneBackground;
-			input.style['box-shadow'] = theme.BorderActive + ' 0 0 4px 1px';
-
-			input.style.caretColor = (themeType === "light") ? "#000000" : "#FFFFFF";
-			input.style.color = input.style.caretColor = (themeType === "light") ? "#000000" : "#FFFFFF";
-		}
+	constructor() {
+		super("LM Studio", "http://localhost:1234", "", "v1");
 	}
 
-	window.Asc.plugin.onTranslate = function() {
-		
-	};
+	getImageGeneration(message, model) {
+		let result = super.getImageGeneration(message, model);
+		result.options = {};
+		if (result.width)
+			result.options.width = result.width;
+		if (result.height)
+			result.options.height = result.height;
+		delete result.width;
+		delete result.height;
+		delete result.n;
+		return result;
+	}
 
-	window.Asc.plugin.onThemeChanged = onThemeChanged;
-	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
-
-})(window, undefined);
+}

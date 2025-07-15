@@ -45,14 +45,32 @@
 		let result = [];
 		for (let i in AI.Providers) {
 			if (AI.Providers[i].name) {
+
+				let url = AI.Providers[i].url;
+				if (url.endsWith("/"))
+					url = url.substring(0, url.length - 1);
+				if ("" !== AI.Providers[i].addon)
+				{
+					let plus = "/" + AI.Providers[i].addon;
+					let pos = url.lastIndexOf(plus);
+					if (pos === -1 || pos !== (url.length - plus.length))
+						url += plus;
+				}
+
 				result.push({
 					name : AI.Providers[i].name,
-					url : AI.Providers[i].url,
+					url : url,
 					key : AI.Providers[i].key,
 					models : AI.Providers[i].models
 				});
 			}
 		}
+
+		result.sort(function(a, b) {
+			const weightA = AI.providersWeights[a.name] !== undefined ? AI.providersWeights[a.name] : 100000;
+			const weightB = AI.providersWeights[b.name] !== undefined ? AI.providersWeights[b.name] : 100000;
+			return weightA - weightB;
+		});
 		return result;
 	};
 
@@ -156,6 +174,24 @@
 						AI.Providers[pr] = oldProviders[pr];
 				}
 
+				// correct old models information
+				for (let pr in AI.Providers)
+				{
+					if (AI.Providers[pr] && AI.Providers[pr].name === "OpenAI")
+					{
+						let models = AI.Providers[pr].models;
+						for (let i = 0, len = models.length; i < len; i++) {
+							if (models[i].name.startsWith("gpt-4")) {
+								if (models[i].options && 
+									undefined !== models[i].options.max_input_tokens &&
+									models[i].options.max_input_tokens < AI.InputMaxTokens["128k"]) {
+									models[i].options.max_input_tokens = AI.InputMaxTokens["128k"];
+								}
+							}
+						}
+					}						
+				}
+
 				AI.Models = obj.models;
 			}
 
@@ -251,7 +287,7 @@
 
 	AI.onLoadInternalProviders = function() {
 		for (let i = 0, len = AI.InternalProviders.length; i < len; i++) {
-			let pr = AI.InternalProviders[i];
+			let pr = AI.InternalProviders[i].createDuplicate();
 			AI.Providers[pr.name] = pr;
 		}
 		AI.Storage.load();

@@ -496,6 +496,20 @@
 			return inst;
 		}
 
+		createDuplicate(overrideUrl) {
+			let inst   = new this.constructor();
+			inst.name  = this.name;
+			inst.url   = this.url;
+			inst.key   = this.key;
+			inst.addon = this.addon || "";
+
+			if (undefined !== overrideUrl && overrideUrl != this.url) {
+				this.url = overrideUrl;
+				inst.addon = "";
+			}
+			return inst;
+		}
+
 		checkModelsUI() {
 			for (let i = 0, len = this.models.length; i < len; i++) {
 				let model = this.models[i];

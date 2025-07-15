@@ -79,13 +79,122 @@
 			xhr.send(obj.body);
 		});
 	};
+
+	/*
+	window.fetchStreamed = function(url, obj) {
+		function StreamResponse(xhr) {
+			this.ok = xhr.status === 200 || xhr.status === 0;
+			this.status = xhr.status;
+			this.statusText = xhr.statusText;
+			this.url = url;
+			
+			if (false) {
+				this.headers = new Map();
+				const headerStr = xhr.getAllResponseHeaders();
+				if (headerStr) {
+					headerStr.split('\r\n').forEach(function(line) {
+						const colonIndex = line.indexOf(': ');
+						if (colonIndex > 0) {
+							const name = line.substring(0, colonIndex).toLowerCase();
+							const value = line.substring(colonIndex + 2);
+							this.headers.set(name, value);
+						}
+					});
+				}
+			}
+
+			let streamController;
+			let bufferLen = 0;
+			
+			this.body = new ReadableStream({
+				start: function(controller) {
+					streamController = controller;
+				}
+			});
+
+			const processStreamData = function() {
+				if (!xhr.response)
+					return;
+
+				let data = new Uint8Array(xhr.response);
+				if (0 === bufferLen) {
+					streamController.enqueue(data);
+				} else {
+					streamController.enqueue(data.slice(bufferLen));
+				}
+				bufferLen = data.length;
+				console.log("progress: " + bufferLen);
+			};
+
+			xhr.addEventListener('progress', function(){
+				processStreamData();
+			});
+			xhr.addEventListener('load', function() {
+				processStreamData();
+				streamController.close();
+			});
+			xhr.addEventListener('error', function() {
+				streamController.error(new Error('Stream error'));
+			});
+
+			this.text = async function() {
+				return xhr.responseText || "";
+			};
+
+			this.json = async function() {
+				let text = await this.text();
+				try {
+					return JSON.parse(text);
+				} catch (error) {
+					return {};
+				}
+			};
+		}
+
+		return new Promise(function(resolve, reject) {
+			const xhr = new XMLHttpRequest();
+			const method = obj.method || 'GET';
+		
+			xhr.open(method, url, true);
+
+			if (obj.headers) {
+				const headerKeys = Object.keys(obj.headers);
+				let i = 0;
+				while (i < headerKeys.length) {
+					const key = headerKeys[i];
+					xhr.setRequestHeader(key, obj.headers[key]);
+					i++;
+				}
+			}
+
+			xhr.responseType = "arraybuffer";
+			xhr.onreadystatechange = function() {
+				console.log("readyState: " + this.readyState);
+				if (this.readyState === 2) {
+					resolve(new StreamResponse(this, true));
+				}
+			};
+
+			xhr.onerror = function() {
+				reject(new Error('Network error'));
+			};
+
+			xhr.ontimeout = function() {
+				reject(new Error('Request timeout'));
+			};
+
+			xhr.send(obj.body || null);
+		});
+	};
+	*/
+
 })(window);
 
 (function(window, undefined)
 {
 	async function requestWrapper(message) {
 		return new Promise(function (resolve, reject) {
-			if (AI.isLocalDesktop && (AI.isLocalUrl(message.url) || message.isUseProxy)) {
+			if (AI.isLocalDesktopForNotStreamedRequests && (AI.isLocalUrl(message.url) || message.isUseProxy)) {
 				window.AscSimpleRequest.createRequest({
 					url: message.url,
 					method: message.method,
@@ -150,6 +259,150 @@
 		});
 	}
 
+	async function requestWrapperStream(message) {
+
+		function FetchReader(reader) {
+			this.reader = reader;
+			this.decoder = new TextDecoder();
+
+			this.read = async function() {
+				try {
+					const { done, value } = await this.reader.read();
+					return {
+						done: done, 
+						value: done ? "" : this.decoder.decode(value, { stream: true })
+					};
+				}
+				catch (error) {
+					return { 
+						error: 1, 
+						message: error.message ? error.message : "" 
+					};
+				}
+			};
+		}
+
+		function SimpleRequestReader() {
+			this.decoder = new TextDecoder();
+			this.isComplete = false;
+			this.error = "";
+			this.data = null;
+			this.resolver = null;
+
+			this._complete = function(data) {
+				this.isComplete = true;
+				this._resolve();
+			};
+			
+			this._progress = function(data) {
+				this.data = AscCommon.Base64.decode(data);
+				this._resolve();
+			};
+
+			this._error = function(error) {
+				this.isComplete = true;
+				this.error = error;
+				this._resolve();
+			};
+
+			this._resolve = function() {
+				if (!this.resolver)
+					return;
+
+				if (this.isComplete) {
+					if ("" == this.error) {
+						this.resolver({
+							done: true, 
+							value: ""
+						});
+					}
+					else {
+						this.resolver({
+							error: 1, 
+							message: this.error
+						});
+					}
+					this.resolver = null;
+				}
+
+				if (this.data) {
+					this.resolver({
+						done: false, 
+						value: this.decoder.decode(this.data, { stream: true }) 
+					});
+					this.resolver = null;
+					this.data = null;
+				}				
+			};
+
+			this.read = async function() {
+				return new Promise((resolve) => {
+					this.resolver = resolve;
+					this._resolve();
+				});
+			};			
+		}
+
+		return new Promise(async function (resolve, reject) {
+			if (false) {
+				var reader = new SimpleRequestReader();
+				window.AscSimpleRequest.createRequest({
+					url: message.url,
+					method: message.method + ":stream",
+					headers: message.headers,
+					body: message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : ""),
+					complete: function(e, status) {
+						let data = JSON.parse(e.responseText);
+						reader._complete(data);
+					},
+					error: function(e, status, error) {
+						reader._error(error);
+					},
+					progress: function(e, status) {
+						reader._progress(e.responseText);
+					}
+				});
+				resolve(reader);
+			} else {
+				let request = {
+					method: message.method,
+					headers: message.headers
+				};
+				if (request.method != "GET") {
+					request.body = message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : "");
+
+					if (message.isUseProxy) {
+						request = {
+							"method" : request.method,
+							"body" : JSON.stringify({
+								"target" : message.url,
+								"method" : request.method,
+								"headers" : request.headers,
+								"data" : request.body
+							})
+						}
+						if (AI.serverSettings){
+							message.url = AI.serverSettings.proxy;
+							request["headers"] = {
+								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
+							}
+						} else {
+							message.url = AI.PROXY_URL;
+						}
+					}
+				}
+				
+				try {
+					const response = await fetch(message.url, request);
+					resolve(response.body ? new FetchReader(response.body.getReader()) : null);
+				}
+				catch (error) {
+					resolve(null);
+				}
+			}
+		});
+	}
+
 	AI.TmpProviderForModels = null;
 
 	AI.PROXY_URL = "https://plugins-services.onlyoffice.com/proxy";
@@ -190,6 +443,9 @@
 			provider.key = _provider.key;
 
 		let url = provider.url;
+		if (!_provider.createInstance && _provider.url !== undefined)
+			url = _provider.url;
+
 		if (url.endsWith("/"))
 			url = url.substring(0, url.length - 1);
 		if ("" !== provider.addon)
@@ -466,7 +722,11 @@
 
 			objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
 
-			if (!isStreaming) {
+			let readerAsync = null;
+			if (isStreaming)
+				readerAsync = await requestWrapperStream(objRequest);
+
+			if (!readerAsync) {
 				let result = await requestWrapper(objRequest);
 				if (result.error) {
 					throw {
@@ -478,59 +738,33 @@
 					return processResult(result);
 				}
 			} else {
-				let request = {
-					method: objRequest.method,
-					headers: objRequest.headers
-				};
-				if (request.method != "GET") {
-					request.body = objRequest.isBlob ? objRequest.body : (objRequest.body ? JSON.stringify(objRequest.body) : "");
-
-					if (objRequest.isUseProxy) {
-						request = {
-							"method" : request.method,
-							"body" : JSON.stringify({
-								"target" : objRequest.url,
-								"method" : request.method,
-								"headers" : request.headers,
-								"data" : request.body
-							})
-						}
-						if (AI.serverSettings){
-							objRequest.url = AI.serverSettings.proxy;
-							request["headers"] = {
-								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
-							}
-						} else {
-							objRequest.url = AI.PROXY_URL;
-						}
-					}
-				}
-
-				const response = await fetch(objRequest.url, {
-					method: objRequest.method,
-					headers: objRequest.headers,
-					body: JSON.stringify(objRequest.body)
-				});
-
-				if (!response.body) throw { error: 1, message: "Streaming not supported" };
-
-				const reader = response.body.getReader();
-				let decoder = new TextDecoder();
-
+				
 				let allChunks = "";
+				let tail = "";
 				
 				while (true) {
-					const { done, value } = await reader.read();
-					if (done) break;
-					let resultText = decoder.decode(value, { stream: true });
-					let resultObj = getStreamedResult(resultText);
-					let chunks = eval(resultObj);
+					const readData = await readerAsync.read();
+					if (readData.error) {
+						throw {
+							error : readData.error, 
+							message : readData.message
+						};
+					}
+
+					if (readData.done) 
+						break;
+
+					let resultObj = getStreamedResult(tail + readData.value);
+					tail = resultObj.tail;
+
+					let chunks = eval(resultObj.result);
 
 					let dataChunk = "";
 					for (let j = 0, len = chunks.length; j < len; j++) {
 						dataChunk += processResult(chunks[j]);
 					}
 
+					//console.log(dataChunk);
 					allChunks += dataChunk;
 
 					if (streamFunc)
@@ -888,8 +1122,9 @@
 		let braceCount = 0;
 		let curObjectPos = 0;
 		let firstObject = true;
+		let inputLen = responseText.length;
 		
-		for (let i = 0, inputLen = responseText.length; i < inputLen; i++) {
+		for (let i = 0; i < inputLen; i++) {
 			let char = responseText[i];
 			
 			if (char === '\n') {
@@ -936,7 +1171,10 @@
 		}
 
 		result += "]";
-		return result;
+		return {
+			result : result,
+			tail : (curObjectPos === inputLen) ? "" : responseText.substring(curObjectPos)
+		};
 	}
 
 })(window);
