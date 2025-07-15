@@ -766,6 +766,9 @@
 					let dataChunk = "";
 					for (let j = 0, len = chunks.length; j < len; j++) {
 						dataChunk += processResult(chunks[j]);
+
+						// TODO: MD support
+						dataChunk = dataChunk.replace(/\n\n/g, '\n');
 					}
 
 					//console.log(dataChunk);
