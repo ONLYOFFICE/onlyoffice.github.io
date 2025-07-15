@@ -69,7 +69,10 @@ window.addSupportAgentMode = function() {
 			return;
 		}
 
-		if (e.keyCode === 32 && e.ctrlKey && !helperWindow) {
+		let isCtrl = e.ctrlKey || e.metaKey;
+		let codeF2 = 113;
+
+		if (e.keyCode === codeF2 && !helperWindow) {
 			let variation = {
 				url : 'helper.html',
 				isVisual : true,
