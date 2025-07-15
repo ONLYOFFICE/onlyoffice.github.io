@@ -566,11 +566,12 @@ function registerButtons(window, undefined)
 			});
 		}
 
-		// TODO:
-		let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button3.text = "Text to Image";
-		button3.icons = getToolBarButtonIcons("text-to-image");
-		button3.attachOnClick(on_click_text_to_image);
+		if (false) {
+			let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
+			button3.text = "Text to Image";
+			button3.icons = getToolBarButtonIcons("text-to-image");
+			button3.attachOnClick(on_click_text_to_image);
+		}
 
 		let button4 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button4.text = "Translation";
@@ -603,6 +604,7 @@ function registerButtons(window, undefined)
 			await Asc.Library.PasteText(result);
 		});
 
+		if (false && Asc.Editor.getType() !== "pdf")
 		{
 			let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
 			button2.text = "OCR";
@@ -637,7 +639,7 @@ function registerButtons(window, undefined)
 	AI.Actions[AI.ActionType.Translation]     = new ActionUI("Translation", "translation");
 	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "text-analysis-ai");
 	AI.Actions[AI.ActionType.ImageGeneration] = new ActionUI("Image generation", "image-ai", "", AI.CapabilitiesUI.Image);
-	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "text-analysis-ai", "", AI.CapabilitiesUI.Vision);
+	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "ocr", "", AI.CapabilitiesUI.Vision);
 	AI.Actions[AI.ActionType.Vision]          = new ActionUI("Vision", "vision-ai", "", AI.CapabilitiesUI.Vision);
 
 	AI.ActionsGetKeys = function()
