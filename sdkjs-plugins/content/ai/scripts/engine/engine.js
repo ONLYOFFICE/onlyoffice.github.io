@@ -435,7 +435,7 @@
 		return provider.isUseProxy() || AI.serverSettings;
 	};
 
-	AI._getEndpointUrl = function(_provider, endpoint, model) {
+	AI._getEndpointUrl = function(_provider, endpoint, model, options) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
 		if (!provider) provider = new AI.Provider(_provider.name, _provider.url, _provider.key);
 
@@ -456,7 +456,7 @@
 				url += plus;
 		}
 
-		return url + provider.getEndpointUrl(endpoint, model);
+		return url + provider.getEndpointUrl(endpoint, model, options);
 	};
 
 	AI.getModels = async function(provider)
@@ -687,7 +687,11 @@
 
 		let endpointType = isUseCompletionsInsteadChat ? AI.Endpoints.Types.v1.Completions :
 			AI.Endpoints.Types.v1.Chat_Completions;
-		objRequest.url = AI._getEndpointUrl(provider, endpointType, this.model);
+
+		let options = {
+			streaming : isStreaming
+		};
+		objRequest.url = AI._getEndpointUrl(provider, endpointType, this.model, options);
 
 		let requestBody = {};
 		let model = this.model;
@@ -714,7 +718,7 @@
 
 				objRequest.body = provider.getChatCompletions(requestBody, this.model);
 
-				if (isStreaming)
+				if (isStreaming && options.streamingBody !== false)
 					objRequest.body.stream = true;
 			} else {
 				objRequest.body = provider.getCompletions({ text : messages[0] }, model);
@@ -1121,6 +1125,7 @@
 		let inString = false;
 		let braceCount = 0;
 		let curObjectPos = 0;
+		let curObjectStartPos = 0;
 		let firstObject = true;
 		let inputLen = responseText.length;
 		
@@ -1138,8 +1143,12 @@
 			isEscaped = (char === '\\' && !isEscaped);
 			
 			if (!inString) {
-				if (char === '{')
+				if (char === '{') {
 					braceCount++;
+					if (braceCount === 1) {
+						curObjectStartPos = i;
+					}
+				}
 				else if (char === '}') {
 					braceCount--;
 
@@ -1150,7 +1159,8 @@
 							result += ",";
 						firstObject = false;
 						
-						result += ("{" + responseText.substring(curObjectPos, i) + "}");
+						
+						result += ("{ data : " + responseText.substring(curObjectStartPos, i) + "}");
 
 						while (i < inputLen) {
 							char = responseText[i];
