@@ -92,8 +92,6 @@ When calling a function:\n\
 Only use function calls when they are explicitly required by the user's request.\n\
 If the user's request doesn't require any function, respond with normal helpful text.\n\
 \n\
-[functionCalling (functionName)]: parameters\n\
-\n\
 Available functions:\n";
 
 	for (let i = 0; i < this.funcs.length; i++) {

@@ -59,7 +59,7 @@ window.addSupportAgentMode = function() {
 		let codeShow = 191; // '/'
 
 		if (e.keyCode === codeShow && isCtrl && !helperWindow) {
-			if (isCtrl)
+			if (isClearHistory)
 				agentHistory = [];
 
 			let variation = {
