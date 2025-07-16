@@ -65,8 +65,8 @@
 		if (input) {
 			let themeType = theme.type || "light";
 			//input.style.backgroundColor = (themeType === "light") ? "rgb(255, 255, 255)" : "rgba(64, 64, 64)";
-			input.style.backgroundColor = theme.AnimPaneBackground;
-			input.style['box-shadow'] = theme.BorderActive + ' 0 0 4px 1px';
+			input.style.backgroundColor = theme["canvas-anim-pane-background"];
+			input.style['box-shadow'] = theme["canvas-cell-title-border-selected"] + ' 0 0 4px 1px';
 
 			input.style.caretColor = (themeType === "light") ? "#000000" : "#FFFFFF";
 			input.style.color = input.style.caretColor = (themeType === "light") ? "#000000" : "#FFFFFF";
