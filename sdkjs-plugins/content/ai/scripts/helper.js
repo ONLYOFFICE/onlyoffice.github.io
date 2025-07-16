@@ -55,6 +55,12 @@
 				input.focus();
 		});
 
+		if (input) {
+			input.addEventListener("blur", function() {
+				window.Asc.plugin.sendToPlugin("onHelperClose");
+			});
+		}
+
 		window.Asc.plugin.sendToPlugin("onHelperShow", input.value);
 	};
 
