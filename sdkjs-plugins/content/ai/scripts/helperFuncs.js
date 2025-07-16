@@ -44,117 +44,25 @@ function EditorHelperImpl() {
 
 	this.funcs = [];
 	this.names2funcs = {};
-	
-	if (true) 
-	{
-		let func = new RegisteredFunction();
-		func.name = "changeParagraph";
-		func.params = [
-			"parNumber (number): the paragraph number to change",
-			"prompt (string): instructions on how to change the text"
-		];
 
-		func.examples = [
-			"if you need to change paragraph 2 to be more emotional, respond with:\n" +
-			"[functionCalling (changeParagraph)]: {\"parNumber\": 2, \"prompt\": \"make the text more emotional\"}"
-		];
-		
-		func.call = async function(params) {
-			Asc.scope.parNum = params.parNumber;
-			let parText = await Asc.Editor.callCommand(function(){
-				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNum - 1);
-				if (!par)
-					return "";
-				par.Select();
-				return par.GetText();
-			});
+	let editorType = Asc.Editor.getType();
 
-			let argPromt = params.prompt + ":\n" + parText;
-
-			let requestEngine = AI.Request.create(AI.ActionType.Chat);
-			if (!requestEngine)
-				return;
-
-			let isSendedEndLongAction = false;
-			async function checkEndAction() {
-				if (!isSendedEndLongAction) {
-					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-					isSendedEndLongAction = true
-				}
-			}
-
-			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
-				if (!data)
-					return;
-				await checkEndAction();
-				await Asc.Library.PasteText(data);
-			});
-
-			await checkEndAction();		
-		};
-
-		this.funcs.push(func);		
-	}
-
-	if (true) 
-	{
-		let func = new RegisteredFunction();
-		func.name = "changeParagraphStyle";
-		func.params = [
-			"parNumber (number): the paragraph number to apply style changes to",
-			"style (string): the style name to apply to the paragraph"
-		];
-
-		func.examples = [
-			"If you need to change the style of paragraph 3 to Heading 1, respond with:" +
-			"[functionCalling (changeParagraphStyle)]: {\"parNumber\": 3, \"style\": \"Heading 1\"}"
-		];
-		
-		func.call = async function(params) {
-			Asc.scope.parNum = params.parNumber;
-			Asc.scope.styleName = params.style;
-			await Asc.Editor.callCommand(function(){
-				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNum - 1);
-				if (!par)
-					return;
-
-				let style = doc.GetStyle(Asc.scope.styleName);
-				par.SetStyle(style);
-			});			
-		};
-
-		this.funcs.push(func);
-	}
-
-	if (true) 
-	{
-		let func = new RegisteredFunction();
-		func.name = "changeTextStyle";
-		func.params = [
-			"bold (boolean): whether to make the text bold",
-			"italic (boolean): whether to make the text italic"
-		];
-
-		func.examples = [
-			"If you need to make selected text bold and italic, respond with:" +
-			"[functionCalling (changeTextStyle)]: {\"bold\": true, \"italic\": true }"
-		];
-		
-		func.call = async function(params) {
-			Asc.scope.isBold = params.bold;
-			Asc.scope.isItalic = params.italic;
-			await Asc.Editor.callCommand(function(){
-				let doc = Api.GetDocument();
-				doc.GetRangeBySelect().SetBold(Asc.scope.isBold);
-				doc.GetRangeBySelect().SetItalic(Asc.scope.isItalic);
-			});			
-		};
-
-		this.funcs.push(func);
-	}
+	switch (editorType) {
+		case "word": {
+			this.funcs = getWordFunctions();
+			break;
+		}
+		case "cell": {
+			this.funcs = getCellFunctions();
+			break;
+		}
+		case "slide": {
+			this.funcs = getSlideFunctions();
+			break;
+		}
+		default:
+			break;
+	}	
 
 	for (let i = 0; i < this.funcs.length; i++) {
 		let func = this.funcs[i];
@@ -163,6 +71,8 @@ function EditorHelperImpl() {
 }
 
 EditorHelperImpl.prototype.getSystemPrompt = function() {
+	if (this.funcs.length === 0)
+		return "";
 
 	let systemPrompt = "\
 You are an assistant that calls functions in a strict format **only when needed**.\n\
@@ -240,5 +150,3 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 	}
 	
 };
-
-window.EditorHelper = new EditorHelperImpl();
