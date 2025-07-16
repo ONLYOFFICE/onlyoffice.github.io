@@ -105,3 +105,6 @@
 
 ## 2.3.3
 * Refactoring custom providers.
+
+## 2.3.4
+* Refactoring custom providers.
