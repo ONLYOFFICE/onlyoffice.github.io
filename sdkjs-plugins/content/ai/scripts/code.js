@@ -158,11 +158,6 @@ window.addSupportAgentMode = function() {
 					if (agentDebug)
 						console.log(buffer);
 
-					agentHistory.push({
-						role: "assistant",
-						content: "The assistant system method named " +  + " was called"
-					});
-
 					let resultFunc = await window.EditorHelper.callFunc(buffer);
 					if (resultFunc) {
 						if (resultFunc.error) {
@@ -172,7 +167,7 @@ window.addSupportAgentMode = function() {
 							});
 						} else if (resultFunc.message !== undefined) {
 							agentHistory.push({
-								role: "assistant", content: resultFunc.prompt
+								role: "assistant", content: resultFunc.message
 							});
 						}
 
