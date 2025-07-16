@@ -42,6 +42,10 @@ window.addSupportAgentMode = function() {
 	var agentHistory = [];
 	var agentDebug = false;
 
+	if (!window.EditorHelper) {
+		window.EditorHelper = new EditorHelperImpl();
+	}
+
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
 		if (e.keyCode === 27 && helperWindow) {
 			helperWindow.close();
@@ -106,9 +110,12 @@ window.addSupportAgentMode = function() {
 				let buffer = "";
 
 				if (0 === agentHistory.length) {
-					agentHistory.push({
-						role: "system", content: window.EditorHelper.getSystemPrompt()
-					});
+					let systemPrompt = window.EditorHelper.getSystemPrompt();
+					if (systemPrompt !== "") {
+						agentHistory.push({
+							role: "system", content: systemPrompt
+						});
+					}
 				}
 
 				if (agentHistory.length > 0 && agentHistory[agentHistory.length - 1].role === "user") {
@@ -513,6 +520,13 @@ function onOpenSettingsModal() {
 		settingsWindow.attachEvent('onOpenAiModelsModal', onOpenAiModelsModal);
 		settingsWindow.attachEvent('onOpenAddModal', function () {
 			onOpenEditModal({ type: 'add' })
+		});
+
+		settingsWindow.attachEvent('onClose', function(){
+			if (settingsWindow) {
+				settingsWindow.close();
+				settingsWindow = null;
+			}
 		});
 	}
 	settingsWindow.show(variation);
