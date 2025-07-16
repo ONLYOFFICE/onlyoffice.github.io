@@ -55,9 +55,10 @@ window.addSupportAgentMode = function() {
 		}
 
 		let isCtrl = e.ctrlKey || e.metaKey;
-		let codeF2 = 113;
+		let isClearHistory = isCtrl && e.altKey;
+		let codeShow = 191; // '/'
 
-		if (e.keyCode === codeF2 && !helperWindow) {
+		if (e.keyCode === codeShow && isCtrl && !helperWindow) {
 			if (isCtrl)
 				agentHistory = [];
 
