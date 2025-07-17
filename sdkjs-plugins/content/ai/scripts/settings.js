@@ -244,6 +244,7 @@ function updatedComboBoxes() {
 			}
 		});
 
+		/*
 		if(options.length == 0) {
 			options.push({
 				id: 'empty',
@@ -251,6 +252,7 @@ function updatedComboBoxes() {
 				disabled: true,
 			});
 		}
+		*/
 		options.push(
 			{
 				text: '-',
