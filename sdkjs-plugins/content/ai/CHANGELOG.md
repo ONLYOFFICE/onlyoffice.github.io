@@ -108,3 +108,9 @@
 
 ## 2.3.4
 * Refactoring custom providers.
+
+## 2.4.0
+* Bug fix.
+
+## 2.4.1
+* Bug fix.
