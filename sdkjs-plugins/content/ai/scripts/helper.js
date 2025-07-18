@@ -43,7 +43,6 @@
 
 				if (event.keyCode === 13 && !event.shiftKey) {
 					window.Asc.plugin.sendToPlugin("onHelperAction", input.value);
-					input.value = '';
 					return;
 				}
 			});		
