@@ -105,6 +105,7 @@ window.addSupportAgentMode = function() {
 				}
 
 				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
 				let bufferWait = "[functionCalling";
 				let checkBuffer = true;
@@ -186,6 +187,7 @@ window.addSupportAgentMode = function() {
 						content: result
 					});
 				}
+				await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 			});
 
 			helperWindow.show(variation);
