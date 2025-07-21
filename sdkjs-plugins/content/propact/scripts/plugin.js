@@ -368,9 +368,10 @@
                 switchClass(elements.btnCreateClause, displayNoneClass, false);
             }
             elements.btnMarkupMode.innerHTML = 'Our Working Draft';
+            switchClass(elements.btnCreateClause, disabledClass, true);
         }
 
-        switchClass(elements.btnCreateClause, disabledClass, true);
+
 
         // $('#clauseText').val(text);
         if (text) {
@@ -3368,8 +3369,10 @@
                             switchClass(elements.btnCreateClause, disabledClass, true);
                             switchClass(elements.btnAddClauseToGroup, disabledClass, true);
                         } else {
-                            switchClass(elements.btnCreateClause, displayNoneClass, (contractInformation && contractInformation.contractCurrentStatus != "Under Negotiation"));
-                        }
+                            if (contractMode != 'markup') {
+                                switchClass(elements.btnCreateClause, displayNoneClass, (contractInformation && contractInformation.contractCurrentStatus != "Under Negotiation"));
+                            }
+                            }
 
                         var clauseToolTip = document.getElementById('btnCreateClause');
 
