@@ -372,7 +372,6 @@
         }
 
 
-
         // $('#clauseText').val(text);
         if (text) {
             switchClass(elements.btnCreateClause, disabledClass, false);
@@ -3372,7 +3371,7 @@
                             if (contractMode != 'markup') {
                                 switchClass(elements.btnCreateClause, displayNoneClass, (contractInformation && contractInformation.contractCurrentStatus != "Under Negotiation"));
                             }
-                            }
+                        }
 
                         var clauseToolTip = document.getElementById('btnCreateClause');
 
@@ -5147,7 +5146,7 @@
                     switchClass(elements.positionMessageMySide, displayNoneClass, true);
                     switchClass(elements.initialMessage, displayNoneClass, true);
                     switchClass(elements.positionMessage, displayNoneClass, true);
-                    if(showDraftingMessage == false) {
+                    if (showDraftingMessage == false) {
                         switchClass(elements.draftingMessageMySide, displayNoneClass, true);
                         switchClass(elements.draftingMessage, displayNoneClass, true);
                     }
