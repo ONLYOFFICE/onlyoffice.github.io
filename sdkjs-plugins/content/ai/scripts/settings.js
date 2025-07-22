@@ -275,9 +275,12 @@ function updatedComboBoxes() {
 					$(el).addClass('separator');
 					return '';
 				} else {
-					var div = $('<div class="ellipsis-content"></div>');
-					div[0].innerText = option.text;
-					return div;
+					var $wrapper = $('<div style="display: flex"></div>');
+					var $div = $('<div class="ellipsis-content"></div>');
+					$div.text(option.text);
+					$wrapper.append($div);
+					$wrapper.prepend('<div class="check-icon"></div>');
+					return $wrapper;
 				}
 			},
 			minimumResultsForSearch: Infinity,

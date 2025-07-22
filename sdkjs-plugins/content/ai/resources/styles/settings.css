@@ -96,6 +96,35 @@ body {
     max-width: 150px;
 }
 
+.select2-results__option[role=treeitem] .check-icon {
+    margin-top: -4px;
+    min-width: 16px;
+}
+
+.select2-results__option[role=treeitem][aria-selected=true] .check-icon::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: 6px;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    transform-origin: left bottom;
+    transform: rotate(45deg);
+    opacity: 0.8;
+}
+
+.select2-container--default .select2-dropdown .select2-results__option[aria-selected] {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+.select2-container--default .select2-dropdown .select2-results__option[aria-selected].select2-results__option--highlighted {
+    background-color: #d8dadc !important;
+    background-color: var(--highlight-button-hover) !important;
+    color: #444 !important;
+    color: var(--text-normal) !important;
+}
+
 .select2-results__option .separator {
     width: 100%;
     padding: 0;
