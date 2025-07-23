@@ -107,7 +107,7 @@ let errorLabelEl = document.getElementById('error-label');
 let errorLabelTimeout = null;
 
 // TODO: Change path for template file
-let templateFilePath = document.currentScript.src + '/../engine/providers/provider.js';
+let templateFilePath = document.currentScript.src + '/../engine/providers/internal/openai.js';
 
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
