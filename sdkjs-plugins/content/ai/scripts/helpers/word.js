@@ -48,10 +48,10 @@ function getWordFunctions() {
 		];
 		
 		func.call = async function(params) {
-			Asc.scope.parNum = params.parNumber;
+			Asc.scope.parNumber = params.parNumber;
 			let parText = await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNum - 1);
+				let par = doc.GetElement(Asc.scope.parNumber - 1);
 				if (!par)
 					return "";
 				par.Select();
@@ -73,6 +73,8 @@ function getWordFunctions() {
 			}
 
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
 			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
 				if (!data)
 					return;
@@ -80,7 +82,8 @@ function getWordFunctions() {
 				await Asc.Library.PasteText(data);
 			});
 
-			await checkEndAction();		
+			await checkEndAction();
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		};
 
 		funcs.push(func);		
@@ -101,11 +104,11 @@ function getWordFunctions() {
 		];
 		
 		func.call = async function(params) {
-			Asc.scope.parNum = params.parNumber;
+			Asc.scope.parNumber = params.parNumber;
 			Asc.scope.styleName = params.style;
 			await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNum - 1);
+				let par = doc.GetElement(Asc.scope.parNumber - 1);
 				if (!par)
 					return;
 
@@ -132,12 +135,12 @@ function getWordFunctions() {
 		];
 		
 		func.call = async function(params) {
-			Asc.scope.isBold = params.bold;
-			Asc.scope.isItalic = params.italic;
+			Asc.scope.bold = params.bold;
+			Asc.scope.italic = params.italic;
 			await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
-				doc.GetRangeBySelect().SetBold(Asc.scope.isBold);
-				doc.GetRangeBySelect().SetItalic(Asc.scope.isItalic);
+				doc.GetRangeBySelect().SetBold(Asc.scope.bold);
+				doc.GetRangeBySelect().SetItalic(Asc.scope.italic);
 			});			
 		};
 
