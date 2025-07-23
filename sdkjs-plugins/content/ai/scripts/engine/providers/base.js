@@ -321,7 +321,7 @@
 				}
 			}
 
-			if (internalProvider.url !== provider.url || internalProvider.addon !== provider.addon) {
+			if (internalProvider && (internalProvider.url !== provider.url || internalProvider.addon !== provider.addon)) {
 				names.push(provider.name + "*");
 			}	
 		}
