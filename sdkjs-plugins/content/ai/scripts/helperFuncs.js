@@ -122,7 +122,7 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 	let index3 = data.indexOf("{");
 
 	let funcName = data.substring(index1 + 1, index2).trim();
-	let paramsStr = data.substring(index3).trim();
+	let paramsStr = getJsonResult(data, index3);
 
 	try {
 		let func = this.names2funcs[funcName];
@@ -149,3 +149,42 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 	}
 	
 };
+
+function getJsonResult(responseText, startPos) {
+		
+	let result = "";
+
+	let isEscaped = false;
+	let inString = false;
+	let braceCount = 0;
+	let inputLen = responseText.length;
+	
+	for (let i = startPos; i < inputLen; i++) {
+		let char = responseText[i];
+		
+		if (char === '\n') {
+			this.lineNumber++;
+		}
+		
+		if (char === '"' && !isEscaped) {
+			inString = !inString;
+		}
+		
+		isEscaped = (char === '\\' && !isEscaped);
+		
+		if (!inString) {
+			if (char === '{') {
+				braceCount++;
+			}
+			else if (char === '}') {
+				braceCount--;
+
+				if (braceCount === 0) {
+					return responseText.substring(startPos, i + 1);
+				}
+			}				
+		}
+	}
+
+	return responseText.substring(startPos);
+}
