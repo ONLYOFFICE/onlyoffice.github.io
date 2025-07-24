@@ -87,7 +87,7 @@ window.addSupportAgentMode = function() {
 
 			helperWindow.attachEvent("onHelperAction", async function(prompt) {
 				//console.log("Helper action: " + prompt);
-				
+
 				helperWindow.close();
 				helperWindow = null;
 				Asc.Editor.callMethod("FocusEditor");
@@ -129,7 +129,16 @@ window.addSupportAgentMode = function() {
 					});
 				}
 
-				let result = await requestEngine.chatRequest(agentHistory, false, async function(data) {
+				let copyMessages = [];
+				for (let i = 0, len = agentHistory.length; i < len; i++) {
+					let item = agentHistory[i];
+					copyMessages.push({
+						role: item.role,
+						content: item.content
+					});
+				}
+
+				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
 					if (!data)
 						return;
 
