@@ -33,12 +33,11 @@
 var WORD_FUNCTIONS = {};
 
 (function(){
-	function explain()
+	WORD_FUNCTIONS.explain = function()
 	{
 		let func = new RegisteredFunction();
 		func.name = "explain";
-		func.params = [
-		];
+		func.params = [];
 
 		func.examples = [
 			"If you need to explain selected text, respond with:\n" +
@@ -48,7 +47,15 @@ var WORD_FUNCTIONS = {};
 		func.call = async function(params) {
 			let text = await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
-				return doc.GetRangeBySelect().GetText();
+				let range = doc.GetRangeBySelect();
+				let text = range ? range.GetText() : "";
+				if (!text)
+				{
+					text = doc.GetCurrentWord();
+					doc.SelectCurrentWord();
+				}
+
+				return text;
 			});
 
 			let argPromt = "Explaing this text: " + ":\n" + text;
@@ -110,7 +117,79 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
-	WORD_FUNCTIONS.explain = explain;
+	WORD_FUNCTIONS.rewriteSentence = function() 
+	{
+		let func = new RegisteredFunction();
+		func.name = "rewriteSentence";
+		func.params = [
+			"prompt (string): instructions on how to change the text"
+		];
+
+		func.examples = [
+			"If you need to rewrite current sentence, respond with:\n" +
+			"[functionCalling (rewriteSentence)]: {\"prompt\": \"rephrase sentence\"}"
+		];
+		
+		func.call = async function(params) {
+			let text = await Asc.Editor.callCommand(function(){
+				return Api.GetDocument().GetCurrentSentence();
+			});
+
+			let argPromt = params.prompt + ":\n" + text + "\n Answer with only the new one sentence, no need of any explanations";
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+			let isTrackChanges = await Asc.Editor.callCommand(function(){
+				return Api.GetDocument().IsTrackRevisions();
+			});
+
+			if (!isTrackChanges)
+			{
+				await Asc.Editor.callCommand(function(){
+					Api.GetDocument().SetTrackRevisions(true);
+				});
+			}			
+
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+			let isSendedEndLongAction = false;
+			async function checkEndAction() {
+				if (!isSendedEndLongAction) {
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+					isSendedEndLongAction = true
+				}
+			}
+
+			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+				if (!data)
+					return;
+				await checkEndAction();
+				if (text)
+				{
+					Asc.scope.data = data;
+					await Asc.Editor.callCommand(function(){
+						let doc = Api.GetDocument();
+						doc.ReplaceCurrentSentence("");
+					});
+					text = null;
+				}
+
+				await Asc.Library.PasteText(data);
+			});
+
+			await checkEndAction();
+
+			if (!isTrackChanges)
+				await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(false);});
+
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		};
+
+		return func;
+	}
 })();
 
 function getWordFunctions() {
@@ -231,6 +310,7 @@ function getWordFunctions() {
 	}
 
 	funcs.push(WORD_FUNCTIONS.explain());
+	funcs.push(WORD_FUNCTIONS.rewriteSentence());
 
 	return funcs;
 
