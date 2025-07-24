@@ -33,15 +33,18 @@
 var WORD_FUNCTIONS = {};
 
 (function(){
-	WORD_FUNCTIONS.explain = function()
+	WORD_FUNCTIONS.commentText = function()
 	{
 		let func = new RegisteredFunction();
-		func.name = "explain";
+		func.name = "commentText";
 		func.params = [];
 
 		func.examples = [
 			"If you need to explain selected text, respond with:\n" +
-			"[functionCalling (explain)]: {}"
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\"}",
+
+			"If you need to comment selected text, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Comment this text\"}",
 		];
 		
 		func.call = async function(params) {
@@ -58,7 +61,7 @@ var WORD_FUNCTIONS = {};
 				return text;
 			});
 
-			let argPromt = "Explaing this text: " + ":\n" + text;
+			let argPromt = params.prompt + ":\n" + text;
 
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
@@ -117,23 +120,52 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
-	WORD_FUNCTIONS.rewriteSentence = function() 
+	WORD_FUNCTIONS.rewriteText = function() 
 	{
 		let func = new RegisteredFunction();
-		func.name = "rewriteSentence";
+		func.name = "rewriteText";
 		func.params = [
-			"prompt (string): instructions on how to change the text"
+			"parNumber (number): the paragraph number to change",
+			"prompt (string): instructions on how to change the text",
+			"showDifference (boolean): whether to show the difference between the original and new text, or just replace it",
+			"type (string): which part of the text to be rewritten (e.g., 'sentence' or 'paragraph')"
 		];
 
 		func.examples = [
-			"If you need to rewrite current sentence, respond with:\n" +
-			"[functionCalling (rewriteSentence)]: {\"prompt\": \"rephrase sentence\"}"
+			"If you need to rephrase current sentence, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"rephrase sentence\", \"type\" : \"sentence\"}",
+
+			"If you need to rephrase current sentence and show difference, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"rephrase sentence\", \"type\" : \"sentence\", \"showDifference\" : true}",
+
+			"if you need to change paragraph 2 to be more emotional, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"parNumber\": 2, \"prompt\": \"make the text more emotional\", \"type\" : \"paragraph\"}",
+
+			"if you need to rewrite the first paragraph, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"parNumber\": 1, \"prompt\": \"Rephrase \", \"type\" : \"paragraph\"}"
 		];
 		
 		func.call = async function(params) {
-			let text = await Asc.Editor.callCommand(function(){
-				return Api.GetDocument().GetCurrentSentence();
-			});
+
+			let text = "";
+			if ("paragraph" === params.type)
+			{
+				Asc.scope.parNumber = params.parNumber;
+				text = await Asc.Editor.callCommand(function(){
+					let doc = Api.GetDocument();
+					let par = doc.GetElement(Asc.scope.parNumber - 1);
+					if (!par)
+						return "";
+					par.Select();
+					return par.GetText();
+				});
+			}
+			else // if ("sentence" === params.type)
+			{
+				text = await Asc.Editor.callCommand(function(){
+					return Api.GetDocument().GetCurrentSentence();
+				});
+			}
 
 			let argPromt = params.prompt + ":\n" + text + "\n Answer with only the new one sentence, no need of any explanations";
 
@@ -142,16 +174,22 @@ var WORD_FUNCTIONS = {};
 				return;
 
 			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-			let isTrackChanges = await Asc.Editor.callCommand(function(){
-				return Api.GetDocument().IsTrackRevisions();
-			});
 
-			if (!isTrackChanges)
+			let turnOffTrackChanges = false;
+			if (params.showDifference)
 			{
-				await Asc.Editor.callCommand(function(){
-					Api.GetDocument().SetTrackRevisions(true);
+				let isTrackChanges = await Asc.Editor.callCommand(function(){
+					return Api.GetDocument().IsTrackRevisions();
 				});
-			}			
+
+				if (!isTrackChanges)
+				{
+					await Asc.Editor.callCommand(function(){
+						Api.GetDocument().SetTrackRevisions(true);
+					});
+					turnOffTrackChanges = true;
+				}
+			}
 
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 
@@ -167,7 +205,8 @@ var WORD_FUNCTIONS = {};
 				if (!data)
 					return;
 				await checkEndAction();
-				if (text)
+
+				if (text && "sentence" === params.type)
 				{
 					Asc.scope.data = data;
 					await Asc.Editor.callCommand(function(){
@@ -182,7 +221,7 @@ var WORD_FUNCTIONS = {};
 
 			await checkEndAction();
 
-			if (!isTrackChanges)
+			if (turnOffTrackChanges)
 				await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(false);});
 
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
@@ -195,62 +234,6 @@ var WORD_FUNCTIONS = {};
 function getWordFunctions() {
 
 	let funcs = [];
-	if (true) 
-	{
-		let func = new RegisteredFunction();
-		func.name = "changeParagraph";
-		func.params = [
-			"parNumber (number): the paragraph number to change",
-			"prompt (string): instructions on how to change the text"
-		];
-
-		func.examples = [
-			"if you need to change paragraph 2 to be more emotional, respond with:\n" +
-			"[functionCalling (changeParagraph)]: {\"parNumber\": 2, \"prompt\": \"make the text more emotional\"}"
-		];
-		
-		func.call = async function(params) {
-			Asc.scope.parNumber = params.parNumber;
-			let parText = await Asc.Editor.callCommand(function(){
-				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNumber - 1);
-				if (!par)
-					return "";
-				par.Select();
-				return par.GetText();
-			});
-
-			let argPromt = params.prompt + ":\n" + parText;
-
-			let requestEngine = AI.Request.create(AI.ActionType.Chat);
-			if (!requestEngine)
-				return;
-
-			let isSendedEndLongAction = false;
-			async function checkEndAction() {
-				if (!isSendedEndLongAction) {
-					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-					isSendedEndLongAction = true
-				}
-			}
-
-			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-
-			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
-				if (!data)
-					return;
-				await checkEndAction();
-				await Asc.Library.PasteText(data);
-			});
-
-			await checkEndAction();
-			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-		};
-
-		funcs.push(func);		
-	}
-
 	if (true) 
 	{
 		let func = new RegisteredFunction();
@@ -309,8 +292,8 @@ function getWordFunctions() {
 		funcs.push(func);
 	}
 
-	funcs.push(WORD_FUNCTIONS.explain());
-	funcs.push(WORD_FUNCTIONS.rewriteSentence());
+	funcs.push(WORD_FUNCTIONS.commentText());
+	funcs.push(WORD_FUNCTIONS.rewriteText());
 
 	return funcs;
 
