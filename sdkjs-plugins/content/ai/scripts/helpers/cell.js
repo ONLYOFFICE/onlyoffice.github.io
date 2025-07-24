@@ -32,6 +32,94 @@
 
 function getCellFunctions() {
 
-	return [];
+	let funcs = [];
+
+	if (true) {
+		let func = new RegisteredFunction();
+		func.name = "insertPivotTable";
+		func.params = [];
+
+		func.examples = [
+			"to create a pivot table from current selection:\n" +
+			"[functionCalling (insertPivotTable)]: {}"
+		];
+
+		/**
+		 * Inserts a pivot table based on the current selection
+		 */
+		func.call = async function() {;
+			//insert pivot table
+			let insertRes = await Asc.Editor.callCommand(function(){
+				let pivotTable = Api.InsertPivotNewWorksheet();
+
+				return [pivotTable.Source.GetValue2(), pivotTable.GetParent().Name, pivotTable.TableRange1.Address];
+			});
+			//make csv from source data
+			let parText = insertRes[0].map(function(item){
+				return item.join('\t');
+			}).join('\n');
+			let sheetName = insertRes[1];
+			let address = insertRes[2];
+			//make csv from source data
+			let argPromt = "return 2 column indexes in format '{number,number}' first number - recomended index for pivot row, second number - recomended index for pivot data:\n" + parText;
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			let isSendedEndLongAction = false;
+			async function checkEndAction() {
+				if (!isSendedEndLongAction) {
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+					isSendedEndLongAction = true
+				}
+			}
+
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+				if (!data)
+					return;
+				await checkEndAction();
+			});
+
+			await checkEndAction();
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			
+			Asc.scope.address = address;
+			Asc.scope.sheetName = sheetName;
+			Asc.scope.match = result.match(/\{(\d+),(\d+)\}/);
+			await Asc.Editor.callCommand(function(){
+				let ws = Api.GetSheet(Asc.scope.sheetName);
+				if(!ws) {
+					return;
+				}
+				let range = ws.GetRange(Asc.scope.address);
+				let pivotTable = range.PivotTable
+				if(pivotTable && Asc.scope.match.length>2){
+					let pivotFields = pivotTable.GetPivotFields();
+					let rowIndex = parseInt(Asc.scope.match[1]);
+					let dataIndex = parseInt(Asc.scope.match[2]);
+					
+					let rowName = rowIndex < pivotFields.length ? pivotFields[rowIndex].GetName() : "";
+					let dataName = dataIndex < pivotFields.length ? pivotFields[dataIndex].GetName() : "";
+					if(rowName){
+						pivotTable.AddFields({
+							rows: rowName
+						});
+					}
+					if(dataName)
+					{
+						pivotTable.AddDataField(dataName);
+					}
+				}
+			});
+		};
+
+		funcs.push(func);
+	}
+
+	return funcs;
 	
 }
