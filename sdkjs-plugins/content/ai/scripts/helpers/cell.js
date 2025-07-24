@@ -40,28 +40,76 @@ function getCellFunctions() {
 		func.params = [];
 
 		func.examples = [
-			"to create a pivot table from current selection:\n" +
+			"Create or summarize the current selection with a pivot table. Use when the user requests a pivot table or asks to summarize/group/aggregate/analyze data(selection):\n" +
 			"[functionCalling (insertPivotTable)]: {}"
 		];
 
-		/**
-		 * Inserts a pivot table based on the current selection
-		 */
 		func.call = async function() {;
+			Asc.scope.rowCountToLookup = 20;
 			//insert pivot table
 			let insertRes = await Asc.Editor.callCommand(function(){
+				function limitRangeToRows(address, maxRows) {
+					const digits = address.match(/\d+/g);
+					if (!digits || digits.length < 2) {
+						return address;
+					}
+					const startRow = parseInt(digits[0], 10);
+					const endRow = parseInt(digits[1], 10);
+					const currentRowCount = endRow - startRow + 1;
+					if (currentRowCount <= maxRows) {
+						return address;
+					}
+					const limitedEndRow = startRow + maxRows - 1;
+					return address.replace(/\d+(?=\D*$)/, limitedEndRow.toString());
+				}
 				let pivotTable = Api.InsertPivotNewWorksheet();
-
-				return [pivotTable.Source.GetValue2(), pivotTable.GetParent().Name, pivotTable.TableRange1.Address];
+				let wsSource = pivotTable.Source.Worksheet;
+				let addressSource = pivotTable.Source.Address;
+				// Apply row limitation
+				addressSource = limitRangeToRows(addressSource, Asc.scope.rowCountToLookup);
+				let rangeSource = wsSource.GetRange(addressSource);					
+				return [pivotTable.GetParent().Name, pivotTable.TableRange1.Address, rangeSource.GetValue2()];
 			});
+
 			//make csv from source data
-			let parText = insertRes[0].map(function(item){
-				return item.join('\t');
+			let colsMaxIndex = 0;
+			let sheetName = insertRes[0];
+			let address = insertRes[1];
+			let csv = insertRes[2].map(function(item){
+				return item.map(function(value) {
+					if (value == null) return '';
+					colsMaxIndex = value.length;
+					const str = String(value);
+					if (str.includes(',') || str.includes('\n') || str.includes('\r') || str.includes('"')) {
+						return '"' + str.replace(/"/g, '""') + '"';
+					}
+					return str;
+				}).join(',');
 			}).join('\n');
-			let sheetName = insertRes[1];
-			let address = insertRes[2];
-			//make csv from source data
-			let argPromt = "return 2 column indexes in format '{number,number}' first number - recomended index for pivot row, second number - recomended index for pivot data:\n" + parText;
+			
+			//make ai request for indices to aggregate
+			const argPrompt = [
+				"You are a data analyst.",
+				"Input is CSV (comma-separated, ','). Can contain empty cells. Columns are zero-based from 0 to " + colsMaxIndex + ".",
+				"Rules:",
+				"1. Choose 1–2 column indices for pivot rows (categorical/grouping).",
+				"   For ANY chosen row field (preferences, not hard requirements):",
+				"   a) Contain textual (non-numeric) data.",
+				"   b) Prefer columns with at least 2 distinct values.",
+				"   c) Prefer columns that have at least one repeated value (i.e., not all values are unique and not all identical).",
+				"   If no column fully satisfies these preferences, pick the best available textual option.",
+				"2. Choose exactly 1 column index for pivot values (numeric/aggregate). Prefer a numeric column; otherwise pick one that can be meaningfully aggregated.",
+				"3. Ordering rule: Within the rows list and within the columns list, place indices in descending order of “grouping potential” (more suitable for grouping first). Use ascending numeric order only to break ties.",
+				"   Definition of “grouping potential”: medium-to-high cardinality (not all identical, not all unique), well-distributed categories, likely to produce useful pivot groups.",
+				"4. The answer MUST start with '{' and end with '}'. Missing braces = invalid.",
+				"5. No extra text, spaces, or newlines.",
+				"Output format:",
+				"{rows|data}",
+				"- rows: one/two indices separated by comma.",
+				"- data: exactly one index.",
+				"CSV:",
+				csv
+			  ].join('\n');
 
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
@@ -71,50 +119,85 @@ function getCellFunctions() {
 			async function checkEndAction() {
 				if (!isSendedEndLongAction) {
 					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-					isSendedEndLongAction = true
+					isSendedEndLongAction = true;
 				}
 			}
 
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
-			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+			let aiResult = await requestEngine.chatRequest(argPrompt, false, async function(data) {
 				if (!data)
 					return;
-				await checkEndAction();
 			});
-
 			await checkEndAction();
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-			
+			console.log(aiResult);
+
+			//extract indices from aiResult
+			function parseAIResult(result) {
+				const match = result.match(/\{([^}]+)\}/);
+				if (!match) return null;
+				
+				const content = match[1];
+				
+				const sections = content.split('|');
+				if (sections.length !== 2) return null;
+				
+				const rowIndices = sections[0].split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+				const dataIndex = parseInt(sections[1].trim(), 10);
+				
+				if (rowIndices.length === 0 || isNaN(dataIndex)) return null;
+				return {
+					rowIndices,
+					colIndices: [],
+					dataIndex
+				};
+			}
 			Asc.scope.address = address;
 			Asc.scope.sheetName = sheetName;
-			Asc.scope.match = result.match(/\{(\d+),(\d+)\}/);
-			await Asc.Editor.callCommand(function(){
-				let ws = Api.GetSheet(Asc.scope.sheetName);
-				if(!ws) {
-					return;
-				}
-				let range = ws.GetRange(Asc.scope.address);
-				let pivotTable = range.PivotTable
-				if(pivotTable && Asc.scope.match.length>2){
-					let pivotFields = pivotTable.GetPivotFields();
-					let rowIndex = parseInt(Asc.scope.match[1]);
-					let dataIndex = parseInt(Asc.scope.match[2]);
-					
-					let rowName = rowIndex < pivotFields.length ? pivotFields[rowIndex].GetName() : "";
-					let dataName = dataIndex < pivotFields.length ? pivotFields[dataIndex].GetName() : "";
-					if(rowName){
-						pivotTable.AddFields({
-							rows: rowName
-						});
+			Asc.scope.parsedResult = parseAIResult(aiResult);
+			if (Asc.scope.parsedResult) {
+				//add pivot fields and data values
+				await Asc.Editor.callCommand(function() {
+					let ws = Api.GetSheet(Asc.scope.sheetName);
+					if (!ws) {
+						return;
 					}
-					if(dataName)
-					{
-						pivotTable.AddDataField(dataName);
+					let range = ws.GetRange(Asc.scope.address);
+					let pivotTable = range.PivotTable;
+					if (pivotTable) {
+						let pivotFields = pivotTable.GetPivotFields();
+						const parsedResult = Asc.scope.parsedResult;
+						const rowNames = [];
+						for (let i = 0; i < parsedResult.rowIndices.length; i++) {
+							const rowIndex = parsedResult.rowIndices[i];
+							if (rowIndex < pivotFields.length) {
+								rowNames.push(pivotFields[rowIndex].GetName());
+							}
+						}
+						const colNames = [];
+						for (let j = 0; j < parsedResult.colIndices.length; j++) {
+							const colIndex = parsedResult.colIndices[j];
+							if (colIndex < pivotFields.length) {
+								colNames.push(pivotFields[colIndex].GetName());
+							}
+						}
+						let dataName = "";
+						if (parsedResult.dataIndex < pivotFields.length) {
+							dataName = pivotFields[parsedResult.dataIndex].GetName();
+						}
+						
+						if (rowNames.length > 0 || colNames.length > 0) {
+							pivotTable.AddFields({rows: rowNames, columns: colNames});
+						}
+						
+						if (dataName) {
+							pivotTable.AddDataField(dataName);
+						}
 					}
-				}
-			});
+				});
+			}
 		};
 
 		funcs.push(func);
