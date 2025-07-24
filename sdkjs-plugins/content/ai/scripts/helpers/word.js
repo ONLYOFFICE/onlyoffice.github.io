@@ -30,6 +30,89 @@
  *
  */
 
+var WORD_FUNCTIONS = {};
+
+(function(){
+	function explain()
+	{
+		let func = new RegisteredFunction();
+		func.name = "explain";
+		func.params = [
+		];
+
+		func.examples = [
+			"If you need to explain selected text, respond with:\n" +
+			"[functionCalling (explain)]: {}"
+		];
+		
+		func.call = async function(params) {
+			let text = await Asc.Editor.callCommand(function(){
+				let doc = Api.GetDocument();
+				return doc.GetRangeBySelect().GetText();
+			});
+
+			let argPromt = "Explaing this text: " + ":\n" + text;
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			let isSendedEndLongAction = false;
+			async function checkEndAction() {
+				if (!isSendedEndLongAction) {
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+					isSendedEndLongAction = true
+				}
+			}
+
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			let commentId = null;
+			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+				if (!data)
+					return;
+
+				await checkEndAction();
+				Asc.scope.data = data;
+				Asc.scope.model = requestEngine.modelUI.name;
+				Asc.scope.commentId = commentId;
+
+				commentId = await Asc.Editor.callCommand(function(){
+					let doc = Api.GetDocument();
+
+					let commentId = Asc.scope.commentId;
+					if (!commentId)
+					{
+						let range = doc.GetRangeBySelect();
+						if (!range)
+							return null;
+
+						let comment = range.AddComment(Asc.scope.data, Asc.scope.model, "uid" + Asc.scope.model);
+						if (!comment)
+							return null;
+						doc.ShowComment([comment.GetId()]);
+						return comment.GetId();
+					}
+
+					let comment = doc.GetCommentById(commentId);
+					if (!comment)
+						return commentId;
+
+					comment.SetText(comment.GetText() + scope.data);
+					return commentId;
+				});
+			});
+
+			await checkEndAction();
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		};
+
+		return func;
+	}
+	WORD_FUNCTIONS.explain = explain;
+})();
+
 function getWordFunctions() {
 
 	let funcs = [];
@@ -146,6 +229,8 @@ function getWordFunctions() {
 
 		funcs.push(func);
 	}
+
+	funcs.push(WORD_FUNCTIONS.explain());
 
 	return funcs;
 
