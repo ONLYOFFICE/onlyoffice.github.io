@@ -37,14 +37,33 @@ function getCellFunctions() {
 	if (true) {
 		let func = new RegisteredFunction();
 		func.name = "insertPivotTable";
-		func.params = [];
-
-		func.examples = [
-			"Create or summarize the current selection with a pivot table. Use when the user requests a pivot table or asks to summarize/group/aggregate/analyze data(selection):\n" +
-			"[functionCalling (insertPivotTable)]: {}"
+		func.params = [
+			"range (string, optional): cell range to apply autofilter (e.g., 'A1:D10'). If omitted, uses active/selected range",
+			"columns (array, optional): array of column names to use for pivot rows (categorical/grouping)",
+			"valueColumn (string, optional): column name to use for pivot values (numeric/aggregate)",
 		];
 
-		func.call = async function() {;
+		func.examples = [
+			"Create or summarize the current selection with a pivot table."+
+			"Use when the user requests a pivot table or asks to group/aggregate/analyze data(selection):\n" +
+			"[functionCalling (insertPivotTable)]: {}",
+
+			"If you need to insert pivot table to range A1:D10, respond:" +
+			"[functionCalling (insertPivotTable)]: {\"range\": \"A1:D10\"}",
+
+			"Create or summarize the current grouping columns with a pivot table."+
+			"Use when the user requests a pivot table or asks to group/aggregate/analyze specific grouping columns:\n" +
+			"[functionCalling (insertPivotTable)]: {\"columns\": [\"Column1\", \"Column2\"]}",
+
+			"Create or summarize the numeric value columns with a pivot table."+
+			"Use when the user requests a pivot table or asks to group/aggregate/analyze numeric value columns:\n" +
+			"[functionCalling (insertPivotTable)]: {\"valueColumn\": \"Column3\"}"
+		];
+
+		func.call = async function(params) {;
+			Asc.scope.range = params.range;
+			const columns = params.columns || [];
+			const valueColumn = params.valueColumn || "";
 			Asc.scope.rowCountToLookup = 20;
 			//insert pivot table
 			let insertRes = await Asc.Editor.callCommand(function(){
@@ -62,7 +81,14 @@ function getCellFunctions() {
 					const limitedEndRow = startRow + maxRows - 1;
 					return address.replace(/\d+(?=\D*$)/, limitedEndRow.toString());
 				}
-				let pivotTable = Api.InsertPivotNewWorksheet();
+				let pivotTable;
+				if (Asc.scope.range) {
+					let ws = Api.GetActiveSheet();
+					let range = ws.GetRange(Asc.scope.range);
+					pivotTable = Api.InsertPivotNewWorksheet(range);
+				} else {
+					pivotTable = Api.InsertPivotNewWorksheet();
+				}
 				let wsSource = pivotTable.Source.Worksheet;
 				let addressSource = pivotTable.Source.Address;
 				// Apply row limitation
@@ -98,15 +124,25 @@ function getCellFunctions() {
 				"   b) Prefer columns with at least 2 distinct values.",
 				"   c) Prefer columns that have at least one repeated value (i.e., not all values are unique and not all identical).",
 				"   If no column fully satisfies these preferences, pick the best available textual option.",
-				"2. Choose exactly 1 column index for pivot values (numeric/aggregate). Prefer a numeric column; otherwise pick one that can be meaningfully aggregated.",
-				"3. Ordering rule: Within the rows list and within the columns list, place indices in descending order of “grouping potential” (more suitable for grouping first). Use ascending numeric order only to break ties.",
+				"2. Mandatory grouping columns: " + columns.join(', ') + " (comma-separated header names).",
+				"   - Use approximate (fuzzy) matching against header cells: case-insensitive, ignore spaces/punctuation.",
+				"   - If multiple headers match the same required name, pick the one with the highest similarity (tie-breaker: lowest index).",
+				"3. Choose exactly 1 column index for pivot values (numeric/aggregate). Prefer a numeric column; otherwise pick one that can be meaningfully aggregated.",
+				"3. Mandatory value column (combined with selection of the data index): " + valueColumn + " (single header name, can be empty).",
+				"   - Use the same fuzzy matching rules (case-insensitive, ignore spaces/punctuation).",
+				"   - If found, use its index as the ONLY pivot value column.",
+				"   - Fallback: If no acceptable match is found, choose the best available numeric column (or the most aggregatable one) as the value column.",
+				"   - If a fallback is used, still follow all output rules (numbers only, correct braces).",
+				"4. Ordering rule: Within the rows list and within the columns list, place indices in descending order of “grouping potential” (more suitable for grouping first). Use ascending numeric order only to break ties.",
 				"   Definition of “grouping potential”: medium-to-high cardinality (not all identical, not all unique), well-distributed categories, likely to produce useful pivot groups.",
-				"4. The answer MUST start with '{' and end with '}'. Missing braces = invalid.",
-				"5. No extra text, spaces, or newlines.",
-				"Output format:",
-				"{rows|data}",
-				"- rows: one/two indices separated by comma.",
-				"- data: exactly one index.",
+				"5. The answer MUST start with '{' and end with '}'. Missing braces = invalid.",
+				"6. No extra text, spaces, or newlines.",
+				"7. Output ONLY numbers, no labels like 'rows:' or 'data:'.",
+				"Output format examples:",
+				"- Single row field: {1|3} (row index 1, data index 3)",
+				"- Two row fields: {2,0|4} (row indices 2,0, data index 4)",
+				"Do NOT output: {rows:1|data:2} - this is wrong!",
+				"DO output: {1|2} - this is correct!",
 				"CSV:",
 				csv
 			  ].join('\n');
@@ -119,7 +155,7 @@ function getCellFunctions() {
 			async function checkEndAction() {
 				if (!isSendedEndLongAction) {
 					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-					isSendedEndLongAction = true;
+					isSendedEndLongAction = true
 				}
 			}
 
@@ -132,20 +168,30 @@ function getCellFunctions() {
 			});
 			await checkEndAction();
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-			console.log(aiResult);
 
-			//extract indices from aiResult
 			function parseAIResult(result) {
-				const match = result.match(/\{([^}]+)\}/);
-				if (!match) return null;
+				const matches = result.match(/\{([^}]+)\}/g);
+				if (!matches) return null;
 				
-				const content = match[1];
+				let content = null;
+				for (let i = 0; i < matches.length; i++) {
+					const bracesContent = matches[i].slice(1, -1);
+					if (/\d/.test(bracesContent)) { // Check if contains any digit
+						content = bracesContent;
+						break;
+					}
+				}
+				
+				if (!content) return null;
 				
 				const sections = content.split('|');
 				if (sections.length !== 2) return null;
 				
-				const rowIndices = sections[0].split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-				const dataIndex = parseInt(sections[1].trim(), 10);
+				const rowMatches = sections[0].match(/\d+/g) || [];
+				const rowIndices = rowMatches.map(s => parseInt(s, 10)).filter(n => !isNaN(n));
+				
+				const dataMatches = sections[1].match(/\d+/g) || [];
+				const dataIndex = dataMatches.length > 0 ? parseInt(dataMatches[0], 10) : NaN;
 				
 				if (rowIndices.length === 0 || isNaN(dataIndex)) return null;
 				return {
