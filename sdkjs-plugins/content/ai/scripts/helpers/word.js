@@ -89,41 +89,65 @@ var WORD_FUNCTIONS = {};
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
-			let commentId = null;
-			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
-				if (!data)
-					return;
+			if (isFootnote)
+			{
+				let addFootnote = true;
+				let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+					if (!data)
+						return;
 
-				await checkEndAction();
-				Asc.scope.data = data;
-				Asc.scope.model = requestEngine.modelUI.name;
-				Asc.scope.commentId = commentId;
+					await checkEndAction();
+					Asc.scope.data = data;
+					Asc.scope.model = requestEngine.modelUI.name;
 
-				commentId = await Asc.Editor.callCommand(function(){
-					let doc = Api.GetDocument();
-
-					let commentId = Asc.scope.commentId;
-					if (!commentId)
+					if (addFootnote)
 					{
-						let range = doc.GetRangeBySelect();
-						if (!range)
-							return null;
-
-						let comment = range.AddComment(Asc.scope.data, Asc.scope.model, "uid" + Asc.scope.model);
-						if (!comment)
-							return null;
-						doc.ShowComment([comment.GetId()]);
-						return comment.GetId();
+						await Asc.Editor.callCommand(function(){
+							Api.GetDocument().AddFootnote();
+						});
+						addFootnote = false;
 					}
-
-					let comment = doc.GetCommentById(commentId);
-					if (!comment)
-						return commentId;
-
-					comment.SetText(comment.GetText() + scope.data);
-					return commentId;
+					await Asc.Library.PasteText(data);
 				});
-			});
+			}
+			else 
+			{
+				let commentId = null;
+				let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+					if (!data)
+						return;
+
+					await checkEndAction();
+					Asc.scope.data = data;
+					Asc.scope.model = requestEngine.modelUI.name;
+					Asc.scope.commentId = commentId;
+
+					commentId = await Asc.Editor.callCommand(function(){
+						let doc = Api.GetDocument();
+
+						let commentId = Asc.scope.commentId;
+						if (!commentId)
+						{
+							let range = doc.GetRangeBySelect();
+							if (!range)
+								return null;
+
+							let comment = range.AddComment(Asc.scope.data, Asc.scope.model, "uid" + Asc.scope.model);
+							if (!comment)
+								return null;
+							doc.ShowComment([comment.GetId()]);
+							return comment.GetId();
+						}
+
+						let comment = doc.GetCommentById(commentId);
+						if (!comment)
+							return commentId;
+
+						comment.SetText(comment.GetText() + scope.data);
+						return commentId;
+					});
+				});
+			}
 
 			await checkEndAction();
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
