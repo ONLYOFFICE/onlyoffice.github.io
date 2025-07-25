@@ -60,11 +60,25 @@ function getCellFunctions() {
 			"[functionCalling (insertPivotTable)]: {\"valueColumn\": \"Column3\"}"
 		];
 
-		func.call = async function(params) {;
+		func.call = async function(params) {
 			Asc.scope.range = params.range;
 			const columns = params.columns || [];
 			const valueColumn = params.valueColumn || "";
 			Asc.scope.rowCountToLookup = 20;
+			// Generate relevant sheet name based on user params (language-neutral)
+			let nameParts = [];
+			if (columns.length > 0) {
+				nameParts = columns.slice(0, 2); // Max 2 for readability
+			}
+			if (valueColumn) {
+				nameParts.push(valueColumn);
+			}
+			let newSheetName = nameParts.length > 0 ? nameParts.join('_') : 'Pivot Analysis';
+			// Excel limit 31 (reserve space for uniqueness suffix)
+			if (newSheetName.length > 28) {
+				newSheetName = newSheetName.substring(0, 28);
+			}			
+			Asc.scope.newSheetName = newSheetName;
 			//insert pivot table
 			let insertRes = await Asc.Editor.callCommand(function(){
 				function limitRangeToRows(address, maxRows) {
@@ -81,13 +95,31 @@ function getCellFunctions() {
 					const limitedEndRow = startRow + maxRows - 1;
 					return address.replace(/\d+(?=\D*$)/, limitedEndRow.toString());
 				}
+				function createUniqueSheetName(newSheetName) {
+					let sheets = Api.Sheets;
+					let items = [];
+					for (let i = 0; i < sheets.length; i++) {
+						items.push(sheets[i].Name.toLowerCase());
+					}
+					if (items.indexOf(newSheetName.toLowerCase()) < 0) {
+						return newSheetName;
+					}
+					let index = 0, name;
+					while(++index < 1000) {
+						name = newSheetName + '_'+ index;
+						if (items.indexOf(name.toLowerCase()) < 0) break;
+					}
+		
+					newSheetName = name;
+					return newSheetName;
+				}
 				let pivotTable;
 				if (Asc.scope.range) {
 					let ws = Api.GetActiveSheet();
 					let range = ws.GetRange(Asc.scope.range);
-					pivotTable = Api.InsertPivotNewWorksheet(range);
+					pivotTable = Api.InsertPivotNewWorksheet(range, createUniqueSheetName(Asc.scope.newSheetName));
 				} else {
-					pivotTable = Api.InsertPivotNewWorksheet();
+					pivotTable = Api.InsertPivotNewWorksheet(undefined, createUniqueSheetName(Asc.scope.newSheetName));
 				}
 				let wsSource = pivotTable.Source.Worksheet;
 				let addressSource = pivotTable.Source.Address;
@@ -118,26 +150,29 @@ function getCellFunctions() {
 				"You are a data analyst.",
 				"Input is CSV (comma-separated, ','). Can contain empty cells. Columns are zero-based from 0 to " + colsMaxIndex + ".",
 				"Rules:",
-				"1. Choose 1–2 column indices for pivot rows (categorical/grouping).",
-				"   For ANY chosen row field (preferences, not hard requirements):",
+				"1. Column selection priority:",
+				"   a) If mandatory grouping columns are specified and found: use ONLY those matched columns as pivot rows.",
+				"   b) If no mandatory columns or none found: choose 1–2 best column indices for pivot rows (categorical/grouping).",
+				"2. For automatic column selection (when no mandatory columns found):",
 				"   a) Contain textual (non-numeric) data.",
 				"   b) Prefer columns with at least 2 distinct values.",
 				"   c) Prefer columns that have at least one repeated value (i.e., not all values are unique and not all identical).",
 				"   If no column fully satisfies these preferences, pick the best available textual option.",
-				"2. Mandatory grouping columns: " + columns.join(', ') + " (comma-separated header names).",
+				"3. Mandatory grouping columns: " + columns.join(', ') + " (comma-separated header names).",
 				"   - Use approximate (fuzzy) matching against header cells: case-insensitive, ignore spaces/punctuation.",
 				"   - If multiple headers match the same required name, pick the one with the highest similarity (tie-breaker: lowest index).",
-				"3. Choose exactly 1 column index for pivot values (numeric/aggregate). Prefer a numeric column; otherwise pick one that can be meaningfully aggregated.",
-				"3. Mandatory value column (combined with selection of the data index): " + valueColumn + " (single header name, can be empty).",
+				"   - IMPORTANT: If any mandatory columns are matched, use ONLY those matched columns. Do NOT add additional columns.",
+				"4. Choose exactly 1 column index for pivot values (numeric/aggregate). Prefer a numeric column; otherwise pick one that can be meaningfully aggregated.",
+				"5. Mandatory value column (combined with selection of the data index): " + valueColumn + " (single header name, can be empty).",
 				"   - Use the same fuzzy matching rules (case-insensitive, ignore spaces/punctuation).",
 				"   - If found, use its index as the ONLY pivot value column.",
 				"   - Fallback: If no acceptable match is found, choose the best available numeric column (or the most aggregatable one) as the value column.",
 				"   - If a fallback is used, still follow all output rules (numbers only, correct braces).",
-				"4. Ordering rule: Within the rows list and within the columns list, place indices in descending order of “grouping potential” (more suitable for grouping first). Use ascending numeric order only to break ties.",
+				"6. Ordering rule: Within the rows list and within the columns list, place indices in descending order of “grouping potential” (more suitable for grouping first). Use ascending numeric order only to break ties.",
 				"   Definition of “grouping potential”: medium-to-high cardinality (not all identical, not all unique), well-distributed categories, likely to produce useful pivot groups.",
-				"5. The answer MUST start with '{' and end with '}'. Missing braces = invalid.",
-				"6. No extra text, spaces, or newlines.",
-				"7. Output ONLY numbers, no labels like 'rows:' or 'data:'.",
+				"7. The answer MUST start with '{' and end with '}'. Missing braces = invalid.",
+				"8. No extra text, spaces, or newlines.",
+				"9. Output ONLY numbers, no labels like 'rows:' or 'data:'.",
 				"Output format examples:",
 				"- Single row field: {1|3} (row index 1, data index 3)",
 				"- Two row fields: {2,0|4} (row indices 2,0, data index 4)",
@@ -155,7 +190,7 @@ function getCellFunctions() {
 			async function checkEndAction() {
 				if (!isSendedEndLongAction) {
 					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-					isSendedEndLongAction = true
+					isSendedEndLongAction = true;
 				}
 			}
 
@@ -169,6 +204,7 @@ function getCellFunctions() {
 			await checkEndAction();
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 
+			//Parse AI result
 			function parseAIResult(result) {
 				const matches = result.match(/\{([^}]+)\}/g);
 				if (!matches) return null;
