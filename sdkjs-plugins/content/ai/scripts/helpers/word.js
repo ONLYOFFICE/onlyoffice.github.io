@@ -142,7 +142,10 @@ var WORD_FUNCTIONS = {};
 			"[functionCalling (rewriteText)]: {\"parNumber\": 2, \"prompt\": \"make the text more emotional\", \"type\" : \"paragraph\"}",
 
 			"if you need to rewrite the first paragraph, respond with:\n" +
-			"[functionCalling (rewriteText)]: {\"parNumber\": 1, \"prompt\": \"Rephrase \", \"type\" : \"paragraph\"}"
+			"[functionCalling (rewriteText)]: {\"parNumber\": 1, \"prompt\": \"Rephrase \", \"type\" : \"paragraph\"}",
+
+			"if you need to rewrite the current paragraph to be more official, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"Rewrite in official style\", \"type\" : \"paragraph\"}"
 		];
 		
 		func.call = async function(params) {
@@ -153,7 +156,7 @@ var WORD_FUNCTIONS = {};
 				Asc.scope.parNumber = params.parNumber;
 				text = await Asc.Editor.callCommand(function(){
 					let doc = Api.GetDocument();
-					let par = doc.GetElement(Asc.scope.parNumber - 1);
+					let par = undefined === Asc.scope.parNumber ? doc.GetCurrentParagraph() : doc.GetElement(Asc.scope.parNumber - 1);
 					if (!par)
 						return "";
 					par.Select();
@@ -229,6 +232,75 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
+	WORD_FUNCTIONS.changeTextStyle = function()
+	{
+		let func = new RegisteredFunction();
+		func.name = "changeTextStyle";
+		func.params = [
+			"bold (boolean): whether to make the text bold",
+			"italic (boolean): whether to make the text italic",
+			"underline (boolean): whether to underline the text",
+			"strikeout (boolean): whether to strike out the text",
+			"fontSize (number): font size to apply to the selected text"
+		];
+		
+		func.examples = [
+			"If you need to make selected text bold and italic, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"bold\": true, \"italic\": true }",
+		
+			"If you need to underline the selected text, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"underline\": true }",
+		
+			"If you need to strike out the selected text, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"strikeout\": true }",
+		
+			"If you need to set the font size of selected text to 18, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"fontSize\": 18 }",
+		
+			"If you need to make selected text bold, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"bold\": true }",
+		
+			"If you need to make selected text non-italic, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"italic\": false }"
+		];
+		
+		func.call = async function(params) {
+			Asc.scope.bold = params.bold;
+			Asc.scope.italic = params.italic;
+			Asc.scope.underline = params.underline;
+			Asc.scope.strikeout = params.strikeout;
+			Asc.scope.fontSize = params.fontSize;
+			await Asc.Editor.callCommand(function(){
+				let doc = Api.GetDocument();
+				let range = doc.GetRangeBySelect();
+				if (!range || "" === range.GetText())
+				{
+					doc.SelectCurrentWord();
+					range = doc.GetRangeBySelect();
+				}
+
+				if (!range)
+					return;
+
+				if (undefined !== Asc.scope.bold)
+					range.SetBold(Asc.scope.bold);
+
+				if (undefined !== Asc.scope.italic)
+					range.SetItalic(Asc.scope.italic);
+
+				if (undefined !== Asc.scope.underline)
+					range.SetUnderline(Asc.scope.underline);
+
+				if (undefined !== Asc.scope.strikeout)
+					range.SetStrikeout(Asc.scope.strikeout);
+
+				if (undefined !== Asc.scope.fontSize)
+					range.SetFontSize(Asc.scope.fontSize);
+			});
+		};
+
+		return func;
+	}
 })();
 
 function getWordFunctions() {
@@ -265,33 +337,7 @@ function getWordFunctions() {
 		funcs.push(func);
 	}
 
-	if (true) 
-	{
-		let func = new RegisteredFunction();
-		func.name = "changeTextStyle";
-		func.params = [
-			"bold (boolean): whether to make the text bold",
-			"italic (boolean): whether to make the text italic"
-		];
-
-		func.examples = [
-			"If you need to make selected text bold and italic, respond with:" +
-			"[functionCalling (changeTextStyle)]: {\"bold\": true, \"italic\": true }"
-		];
-		
-		func.call = async function(params) {
-			Asc.scope.bold = params.bold;
-			Asc.scope.italic = params.italic;
-			await Asc.Editor.callCommand(function(){
-				let doc = Api.GetDocument();
-				doc.GetRangeBySelect().SetBold(Asc.scope.bold);
-				doc.GetRangeBySelect().SetItalic(Asc.scope.italic);
-			});			
-		};
-
-		funcs.push(func);
-	}
-
+	funcs.push(WORD_FUNCTIONS.changeTextStyle());
 	funcs.push(WORD_FUNCTIONS.commentText());
 	funcs.push(WORD_FUNCTIONS.rewriteText());
 
