@@ -82,8 +82,22 @@ function getSlideFunctions() {
 		let func = new RegisteredFunction();
 		func.name = "addShapeToSlide";
 		func.description = "Adds a shape to the slide with optional text (139x42mm, centered, blue fill with dark border)";
-		func.params = ["slideNumber (number): slide number to add shape to (optional, defaults to current)", "shapeType (string): shape type - rect, roundRect, ellipse, triangle, diamond, pentagon, hexagon, star5, plus, mathMinus, mathMultiply, mathEqual, mathNotEqual, heart, cloud, leftArrow, rightArrow, upArrow, downArrow, leftRightArrow, chevron, bentArrow, curvedRightArrow, blockArc, wedgeRectCallout, cloudCallout, ribbon, wave, can, cube, pie, donut, sun, moon, smileyFace, lightningBolt, noSmoking (optional, defaults to roundRect)", "text (string): text to add to the shape (optional)"];
-		func.examples = ["if you need to add a rectangle with text on slide 2, respond with:\n" + "[functionCalling (addShapeToSlide)]: {\"slideNumber\": 2, \"shapeType\": \"rect\", \"text\": \"Important Point\"}", "if you need to add a star shape on current slide, respond with:\n" + "[functionCalling (addShapeToSlide)]: {\"shapeType\": \"star5\"}", "if you need to add a rounded rectangle with text, respond with:\n" + "[functionCalling (addShapeToSlide)]: {\"text\": \"Key Message\"}", "if you need to add a diamond shape with text, respond with:\n" + "[functionCalling (addShapeToSlide)]: {\"shapeType\": \"diamond\", \"text\": \"Decision Point\"}", "if you need to add a right arrow with text, respond with:\n" + "[functionCalling (addShapeToSlide)]: {\"shapeType\": \"rightArrow\", \"text\": \"Next Step\"}"];
+		func.params = [
+			"slideNumber (number): slide number to add shape to (optional, defaults to current)", 
+			"shapeType (string): shape type - rect, roundRect, ellipse, triangle, diamond, pentagon, hexagon, star5, plus, mathMinus, mathMultiply, mathEqual, mathNotEqual, heart, cloud, leftArrow, rightArrow, upArrow, downArrow, leftRightArrow, chevron, bentArrow, curvedRightArrow, blockArc, wedgeRectCallout, cloudCallout, ribbon, wave, can, cube, pie, donut, sun, moon, smileyFace, lightningBolt, noSmoking (optional, defaults to roundRect)", 
+			"text (string): text to add to the shape (optional)"];
+		func.examples = [
+			"if you need to add a rectangle with text on slide 2, respond with:\n" + 
+			"[functionCalling (addShapeToSlide)]: {\"slideNumber\": 2, \"shapeType\": \"rect\", \"text\": \"Important Point\"}", 
+			"if you need to add a star shape on current slide, respond with:\n" + 
+			"[functionCalling (addShapeToSlide)]: {\"shapeType\": \"star5\"}", 
+			"if you need to add a rounded rectangle with text, respond with:\n" + 
+			"[functionCalling (addShapeToSlide)]: {\"text\": \"Key Message\"}", 
+			"if you need to add a diamond shape with text, respond with:\n" + 
+			"[functionCalling (addShapeToSlide)]: {\"shapeType\": \"diamond\", \"text\": \"Decision Point\"}", 
+			"if you need to add a right arrow with text, respond with:\n" + 
+			"[functionCalling (addShapeToSlide)]: {\"shapeType\": \"rightArrow\", \"text\": \"Next Step\"}"
+		];
 
 		func.call = async function (params) {
 			Asc.scope.params = params;
@@ -136,8 +150,18 @@ function getSlideFunctions() {
 	if (true) {
 		let func = new RegisteredFunction();
 		func.name = "changeSlideBackground";
-		func.params = ["slideNumber (number): the slide number to change background", "backgroundType (string): type of background - 'solid', 'gradient'", "color (string): hex color for solid background (e.g., '#FF5733')", "gradientColors (array): array of hex colors for gradient"];
-		func.examples = ["if you need to set blue background on slide 1, respond with:\n" + "[functionCalling (changeSlideBackground)]: {\"slideNumber\": 1, \"backgroundType\": \"solid\", \"color\": \"#0066CC\"}", "if you need to set gradient background, respond with:\n" + "[functionCalling (changeSlideBackground)]: {\"slideNumber\": 2, \"backgroundType\": \"gradient\", \"gradientColors\": [\"#FF0000\", \"#0000FF\"]}"];
+		func.params = [
+			"slideNumber (number): the slide number to change background", 
+			"backgroundType (string): type of background - 'solid', 'gradient'", 
+			"color (string): hex color for solid background (e.g., '#FF5733')", 
+			"gradientColors (array): array of hex colors for gradient"
+		];
+		func.examples = [
+			"if you need to set blue background on slide 1, respond with:\n" + 
+			"[functionCalling (changeSlideBackground)]: {\"slideNumber\": 1, \"backgroundType\": \"solid\", \"color\": \"#0066CC\"}", 
+			"if you need to set gradient background, respond with:\n" + 
+			"[functionCalling (changeSlideBackground)]: {\"slideNumber\": 2, \"backgroundType\": \"gradient\", \"gradientColors\": [\"#FF0000\", \"#0000FF\"]}"
+		];
 
 		func.call = async function (params) {
 			Asc.scope.params = params;
@@ -191,8 +215,18 @@ function getSlideFunctions() {
 	if (true) {
 		let func = new RegisteredFunction();
 		func.name = "addImageByDescription";
-		func.params = ["slideNumber (number): the slide number to add generated image to (optional, defaults to current)", "description (string): text description of the image to generate", "width (number, optional): image width in mm (default: 100)", "height (number, optional): image height in mm (default: 100)", "style (string, optional): image style (realistic, cartoon, abstract, etc.)"];
-		func.examples = ["if you need to add an image of a sunset over mountains to slide 1, respond with:\n" + "[functionCalling (addImageByDescription)]: {\"slideNumber\": 1, \"description\": \"beautiful sunset over mountain range with orange and purple sky\"}", "if you need to add a cartoon style image of office workers with custom size, respond with:\n" + "[functionCalling (addImageByDescription)]: {\"slideNumber\": 2, \"description\": \"team of diverse office workers collaborating around a table\", \"style\": \"cartoon\", \"width\": 180, \"height\": 120}"];
+		func.params = [
+			"slideNumber (number): the slide number to add generated image to (optional, defaults to current)", 
+			"description (string): text description of the image to generate", 
+			"width (number, optional): image width in mm (default: 100)", 
+			"height (number, optional): image height in mm (default: 100)", 
+			"style (string, optional): image style (realistic, cartoon, abstract, etc.)"];
+		func.examples = [
+			"if you need to add an image of a sunset over mountains to slide 1, respond with:\n" + 
+			"[functionCalling (addImageByDescription)]: {\"slideNumber\": 1, \"description\": \"beautiful sunset over mountain range with orange and purple sky\"}", 
+			"if you need to add a cartoon style image of office workers with custom size, respond with:\n" + 
+			"[functionCalling (addImageByDescription)]: {\"slideNumber\": 2, \"description\": \"team of diverse office workers collaborating around a table\", \"style\": \"cartoon\", \"width\": 180, \"height\": 120}"
+		];
 
 		func.call = async function (params) {
 
@@ -289,8 +323,20 @@ function getSlideFunctions() {
 		let func = new RegisteredFunction();
 		func.name = "addTableToSlide";
 		func.description = "Adds a table to the slide (194x97mm, centered)";
-		func.params = ["slideNumber (number): slide number to add table to (optional, defaults to current)", "rows (number): number of rows (optional, defaults to 3)", "columns (number): number of columns (optional, defaults to 3)", "data (array): 2D array of cell values - rows x columns (optional)"];
-		func.examples = ["if you need to add a 3x3 table on slide 2, respond with:\n" + "[functionCalling (addTableToSlide)]: {\"slideNumber\": 2, \"rows\": 3, \"columns\": 3}", "if you need to add a table with data on current slide, respond with:\n" + "[functionCalling (addTableToSlide)]: {\"data\": [[\"Name\", \"Age\", \"City\"], [\"John\", \"30\", \"New York\"], [\"Jane\", \"25\", \"London\"]]}", "if you need to add a simple 2x4 table, respond with:\n" + "[functionCalling (addTableToSlide)]: {\"rows\": 2, \"columns\": 4}"];
+		func.params = [
+			"slideNumber (number): slide number to add table to (optional, defaults to current)", 
+			"rows (number): number of rows (optional, defaults to 3)", 
+			"columns (number): number of columns (optional, defaults to 3)", 
+			"data (array): 2D array of cell values - rows x columns (optional)"
+		];
+		func.examples = [
+			"if you need to add a 3x3 table on slide 2, respond with:\n" + 
+			"[functionCalling (addTableToSlide)]: {\"slideNumber\": 2, \"rows\": 3, \"columns\": 3}", 
+			"if you need to add a table with data on current slide, respond with:\n" + 
+			"[functionCalling (addTableToSlide)]: {\"data\": [[\"Name\", \"Age\", \"City\"], [\"John\", \"30\", \"New York\"], [\"Jane\", \"25\", \"London\"]]}", 
+			"if you need to add a simple 2x4 table, respond with:\n" + 
+			"[functionCalling (addTableToSlide)]: {\"rows\": 2, \"columns\": 4}"
+		];
 
 		func.call = async function (params) {
 			Asc.scope.params = params;
@@ -368,8 +414,12 @@ function getSlideFunctions() {
 	if (true) {
 		let func = new RegisteredFunction();
 		func.name = "deleteSlide";
-		func.params = ["slideNumber (number): the slide number to delete"];
-		func.examples = ["if you need to delete slide 5, respond with:\n" + "[functionCalling (deleteSlide)]: {\"slideNumber\": 5}"];
+		func.params = [
+			"slideNumber (number): the slide number to delete"
+		];
+		func.examples = [
+			"if you need to delete slide 5, respond with:\n" + "[functionCalling (deleteSlide)]: {\"slideNumber\": 5}"
+		];
 
 		func.call = async function (params) {
 			Asc.scope.slideNum = params.slideNumber;
@@ -388,8 +438,13 @@ function getSlideFunctions() {
 	if (true) {
 		let func = new RegisteredFunction();
 		func.name = "duplicateSlide";
-		func.params = ["slideNumber (number): the slide number to duplicate"];
-		func.examples = ["if you need to duplicate slide 3, respond with:\n" + "[functionCalling (duplicateSlide)]: {\"slideNumber\": 3}"];
+		func.params = [
+			"slideNumber (number): the slide number to duplicate"
+		];
+		func.examples = [
+			"if you need to duplicate slide 3, respond with:\n" + 
+			"[functionCalling (duplicateSlide)]: {\"slideNumber\": 3}"
+		];
 
 		func.call = async function (params) {
 			Asc.scope.slideNum = params.slideNumber;
@@ -408,8 +463,24 @@ function getSlideFunctions() {
 		let func = new RegisteredFunction();
 		func.name = "addChartToSlide";
 		func.description = "Adds a chart to the slide (152x89mm, centered)";
-		func.params = ["slideNumber (number): slide number to add chart to (optional, defaults to current)", "chartType (string): type of chart - bar, barStacked, barStackedPercent, bar3D, barStacked3D, barStackedPercent3D, barStackedPercent3DPerspective, horizontalBar, horizontalBarStacked, horizontalBarStackedPercent, horizontalBar3D, horizontalBarStacked3D, horizontalBarStackedPercent3D, lineNormal, lineStacked, lineStackedPercent, line3D, pie, pie3D, doughnut, scatter, stock, area, areaStacked, areaStackedPercent, comboBarLine, comboBarLineSecondary, comboCustom", "data (array): 2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count", "series (array): array of series names - must have same length as data arrays count", "categories (array): array of category names - must have same length as each data array", "prompt (string): description of what kind of data to generate for the chart (optional)"];
-		func.examples = ["if you need to add a bar chart showing sales data on slide 2, respond with:\n" + "[functionCalling (addChartToSlide)]: {\"slideNumber\": 2, \"chartType\": \"bar3D\", \"data\": [[100, 120, 140], [90, 110, 130]], \"series\": [\"Product A\", \"Product B\"], \"categories\": [\"Q1\", \"Q2\", \"Q3\"]}", "if you need to add a pie chart on current slide, respond with:\n" + "[functionCalling (addChartToSlide)]: {\"chartType\": \"pie\", \"data\": [[30, 25, 20, 15, 10]], \"series\": [\"Market Share\"], \"categories\": [\"Company A\", \"Company B\", \"Company C\", \"Company D\", \"Others\"]}", "if you need to add a line chart with 3 series and 4 data points, respond with:\n" + "[functionCalling (addChartToSlide)]: {\"chartType\": \"lineNormal\", \"data\": [[10, 20, 30, 40], [15, 25, 35, 45], [12, 22, 32, 42]], \"series\": [\"Series 1\", \"Series 2\", \"Series 3\"], \"categories\": [\"Jan\", \"Feb\", \"Mar\", \"Apr\"]}", "if you need AI to generate chart data, respond with:\n" + "[functionCalling (addChartToSlide)]: {\"slideNumber\": 3, \"chartType\": \"lineNormal\", \"prompt\": \"Create monthly revenue data for 2024 showing steady growth from $50k to $120k\"}"];
+		func.params = [
+			"slideNumber (number): slide number to add chart to (optional, defaults to current)", 
+			"chartType (string): type of chart - bar, barStacked, barStackedPercent, bar3D, barStacked3D, barStackedPercent3D, barStackedPercent3DPerspective, horizontalBar, horizontalBarStacked, horizontalBarStackedPercent, horizontalBar3D, horizontalBarStacked3D, horizontalBarStackedPercent3D, lineNormal, lineStacked, lineStackedPercent, line3D, pie, pie3D, doughnut, scatter, stock, area, areaStacked, areaStackedPercent, comboBarLine, comboBarLineSecondary, comboCustom", 
+			"data (array): 2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count", 
+			"series (array): array of series names - must have same length as data arrays count", 
+			"categories (array): array of category names - must have same length as each data array", 
+			"prompt (string): description of what kind of data to generate for the chart (optional)"
+		];
+		func.examples = [
+			"if you need to add a bar chart showing sales data on slide 2, respond with:\n" + 
+			"[functionCalling (addChartToSlide)]: {\"slideNumber\": 2, \"chartType\": \"bar3D\", \"data\": [[100, 120, 140], [90, 110, 130]], \"series\": [\"Product A\", \"Product B\"], \"categories\": [\"Q1\", \"Q2\", \"Q3\"]}", 
+			"if you need to add a pie chart on current slide, respond with:\n" + 
+			"[functionCalling (addChartToSlide)]: {\"chartType\": \"pie\", \"data\": [[30, 25, 20, 15, 10]], \"series\": [\"Market Share\"], \"categories\": [\"Company A\", \"Company B\", \"Company C\", \"Company D\", \"Others\"]}", 
+			"if you need to add a line chart with 3 series and 4 data points, respond with:\n" + 
+			"[functionCalling (addChartToSlide)]: {\"chartType\": \"lineNormal\", \"data\": [[10, 20, 30, 40], [15, 25, 35, 45], [12, 22, 32, 42]], \"series\": [\"Series 1\", \"Series 2\", \"Series 3\"], \"categories\": [\"Jan\", \"Feb\", \"Mar\", \"Apr\"]}", 
+			"if you need AI to generate chart data, respond with:\n" + 
+			"[functionCalling (addChartToSlide)]: {\"slideNumber\": 3, \"chartType\": \"lineNormal\", \"prompt\": \"Create monthly revenue data for 2024 showing steady growth from $50k to $120k\"}"
+		];
 
 		func.call = async function (params) {
 			Asc.scope.params = params;
