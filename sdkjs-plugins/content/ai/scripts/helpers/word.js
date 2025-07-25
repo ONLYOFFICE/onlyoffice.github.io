@@ -37,17 +37,28 @@ var WORD_FUNCTIONS = {};
 	{
 		let func = new RegisteredFunction();
 		func.name = "commentText";
-		func.params = [];
+		func.params = [
+			"type (string): whether to add as a 'comment' or as a 'footnote' (default is 'comment')"
+		];
 
 		func.examples = [
-			"If you need to explain selected text, respond with:\n" +
-			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\"}",
+			"If you need to explain selected text as a comment, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"comment\"}",
+
+			"If you need to add a footnote to selected text, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Add a footnote to this text\", \"type\": \"footnote\"}",
 
 			"If you need to comment selected text, respond with:\n" +
 			"[functionCalling (commentText)]: {\"prompt\" : \"Comment this text\"}",
+
+			"If you need to explain selected text as a footnote, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"footnote\"}"
 		];
 		
 		func.call = async function(params) {
+			let type = params.type;
+			let isFootnote = "footnote" === type;
+
 			let text = await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
 				let range = doc.GetRangeBySelect();
@@ -301,6 +312,41 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
+	WORD_FUNCTIONS.insertPage = function()
+	{
+		let func = new RegisteredFunction();
+		func.name = "insertPage";
+		func.params = [
+			"location (string): where to insert the new page ('current', 'start', or 'end')"
+		];
+
+		func.examples = [
+			"If you need to insert blank page to the current location, respond with:" +
+			"[functionCalling (insertPage)]: {\"location\": \"current\"}",
+
+			"If you need to add page to the end of the document, respond with:" +
+			"[functionCalling (insertPage)]: {\"location\": \"end\"}",
+
+			"If you need to add page to the start of the document, respond with:" +
+			"[functionCalling (insertPage)]: {\"location\": \"start\"}"
+		];
+		
+		func.call = async function(params) {
+			Asc.scope.location = params.location;
+
+			await Asc.Editor.callCommand(function(){
+				let doc = Api.GetDocument();
+				if ("start" === Asc.scope.location)
+					doc.MoveCursorToStart();
+				else if ("end" === Asc.scope.location)
+					doc.MoveCursorToEnd();
+
+				Api.GetDocument().InsertBlankPage();
+			});
+		};
+
+		return func;
+	}
 })();
 
 function getWordFunctions() {
@@ -340,6 +386,7 @@ function getWordFunctions() {
 	funcs.push(WORD_FUNCTIONS.changeTextStyle());
 	funcs.push(WORD_FUNCTIONS.commentText());
 	funcs.push(WORD_FUNCTIONS.rewriteText());
+	funcs.push(WORD_FUNCTIONS.insertPage());
 
 	return funcs;
 
