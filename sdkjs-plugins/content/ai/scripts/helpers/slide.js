@@ -133,11 +133,13 @@ function getSlideFunctions() {
 				if (Asc.scope.params.text) {
 					let docContent = shape.GetDocContent();
 					if (docContent) {
-						docContent.RemoveAllElements();
-						let paragraph = Api.CreateParagraph();
+						let paragraph = docContent.GetElement(0);
+						if (!paragraph) {
+							paragraph = Api.CreateParagraph();
+							docContent.Push(paragraph);
+						}
 						paragraph.SetJc("center");
-						let run = paragraph.AddText(Asc.scope.params.text);
-						docContent.Push(paragraph);
+						paragraph.AddText(Asc.scope.params.text);
 						shape.SetVerticalTextAlign("center");
 					}
 				}
