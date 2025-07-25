@@ -165,8 +165,12 @@ var WORD_FUNCTIONS = {};
 			"showDifference (boolean): whether to show the difference between the original and new text, or just replace it",
 			"type (string): which part of the text to be rewritten (e.g., 'sentence' or 'paragraph')"
 		];
+		func.description = "Use this function when you asked to rewrite or replace some text. If text or paragraph number is not specified assume that we are working with the current paragraph.";
 
 		func.examples = [
+			"if you need to rewrite, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"Rewrite\", \"type\" : \"paragraph\"}",
+
 			"If you need to rephrase current sentence, respond with:\n" +
 			"[functionCalling (rewriteText)]: {\"prompt\": \"rephrase sentence\", \"type\" : \"sentence\"}",
 
@@ -371,6 +375,7 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
+	
 })();
 
 function getWordFunctions() {
