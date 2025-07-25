@@ -138,11 +138,24 @@ window.addSupportAgentMode = function() {
 					});
 				}
 
+				let isSupportStreaming = window.EditorHelper.isSupportStreaming;
+				let dataStream = "";
+				async function onStreamEvent(data, end) {
+					if (isSupportStreaming)
+						await Asc.Library.PasteText(buffer);
+					dataStream += data;
+					if (true === end && "" !== dataStream) {
+						await Asc.Library.PasteText(dataStream);
+						dataStream = "";
+					}
+				}
+
 				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
 					if (!data)
 						return;
 
-					await checkEndAction();
+					if (isSupportStreaming)
+						await checkEndAction();
 					
 					let oldBuffer = buffer;
 					buffer += data;
@@ -154,12 +167,16 @@ window.addSupportAgentMode = function() {
 					}
 
 					if (!checkBuffer)
-						await Asc.Library.PasteText(data);
+						await onStreamEvent(data);
 				});
 
 				if (checkBuffer && !buffer.startsWith(bufferWait)) {
 					checkBuffer = false;
-					await Asc.Library.PasteText(buffer);
+					await onStreamEvent(buffer, true);
+				}
+
+				if (!isSupportStreaming) {
+					await onStreamEvent("", true);
 				}
 
 				await checkEndAction();
