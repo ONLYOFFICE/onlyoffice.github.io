@@ -370,11 +370,28 @@ function getCellFunctions() {
                     return _range.GetValue2();
                 });
 
-                let parText = insertRes.map(function(item){
-                    return item.join('\t');
+                let csv = insertRes.map(function(item){
+                    return item.map(function(value) {
+                        if (value == null) return '';
+                        const str = String(value);
+                        if (str.includes(',') || str.includes('\n') || str.includes('\r') || str.includes('"')) {
+                            return '"' + str.replace(/"/g, '""') + '"';
+                        }
+                        return str;
+                    }).join(',');
                 }).join('\n');
 
-                let argPromt = "Find column index for header '" + Asc.scope.fieldName + "' in the following data. Return only the column number (starting from 1) that matches the header name:\n" + parText;
+                let argPromt = "Find column index for header '" + Asc.scope.fieldName + "' in the following CSV data.\n\n" +
+                "IMPORTANT RULES:\n" +
+                "1. Return ONLY a single number (column index starting from 1). No text, no explanations, no additional characters.\n" +
+                "2. Find EXACT match first. If exact match exists, return its index.\n" +
+                "3. If no exact match, then look for partial matches.\n" +
+                "4. Case-insensitive comparison allowed.\n" +
+                "5. Data is CSV format (comma-separated). Look ONLY at the first row (header row).\n" +
+                "6. Count positions carefully: each comma marks a column boundary.\n" +
+                "7. Example: if searching for 'test2' and headers are 'test1,test2,test', return 2 (not 1 or 3).\n" +
+                "8. If the header is in the 3rd column, return only: 3\n\n" +
+                "CSV data:\n" + csv;
 
                 let requestEngine = AI.Request.create(AI.ActionType.Chat);
                 if (!requestEngine)
@@ -533,12 +550,29 @@ function getCellFunctions() {
                     return _range.GetValue2();
                 });
 
-                let parText = insertRes.map(function(item){
-                    return item.join('\t');
+                let csv = insertRes.map(function(item){
+                    return item.map(function(value) {
+                        if (value == null) return '';
+                        const str = String(value);
+                        if (str.includes(',') || str.includes('\n') || str.includes('\r') || str.includes('"')) {
+                            return '"' + str.replace(/"/g, '""') + '"';
+                        }
+                        return str;
+                    }).join(',');
                 }).join('\n');
 
-                let argPromt = "Find column index for header '" + fieldName + "' in the following data. Return only the column number (starting from 1) that matches the header name:\n" + parText;
-
+                let argPromt = "Find column index for header '" + fieldName + "' in the following CSV data.\n\n" +
+                "IMPORTANT RULES:\n" +
+                "1. Return ONLY a single number (column index starting from 1). No text, no explanations, no additional characters.\n" +
+                "2. Find EXACT match first. If exact match exists, return its index.\n" +
+                "3. If no exact match, then look for partial matches.\n" +
+                "4. Case-insensitive comparison allowed.\n" +
+                "5. Data is CSV format (comma-separated). Look ONLY at the first row (header row).\n" +
+                "6. Count positions carefully: each comma marks a column boundary.\n" +
+                "7. Example: if searching for 'test2' and headers are 'test1,test2,test', return 2 (not 1 or 3).\n" +
+                "8. If the header is in the 3rd column, return only: 3\n\n" +
+                "CSV data:\n" + csv;
+                
                 let requestEngine = AI.Request.create(AI.ActionType.Chat);
                 if (!requestEngine)
                     return null;
