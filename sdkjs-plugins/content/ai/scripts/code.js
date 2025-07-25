@@ -142,7 +142,7 @@ window.addSupportAgentMode = function() {
 				let dataStream = "";
 				async function onStreamEvent(data, end) {
 					if (isSupportStreaming)
-						await Asc.Library.PasteText(buffer);
+						await Asc.Library.PasteText(data);
 					dataStream += data;
 					if (true === end && "" !== dataStream) {
 						await Asc.Library.PasteText(dataStream);
