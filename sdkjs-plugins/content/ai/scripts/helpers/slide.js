@@ -197,8 +197,6 @@ function getSlideFunctions() {
 		func.call = async function (params) {
 
 
-
-
 			Asc.scope.description = params.description;
 
 			let widthMm = params.width || 100;
@@ -561,8 +559,7 @@ function getSlideFunctions() {
 	}
 
 
-	if (true)
-	{
+	if (true) {
 		let func = new RegisteredFunction();
 		func.name = "addTextToPlaceholder";
 		func.description = "Universal function for adding ANY text content to slides. Use this for ALL text addition requests: recipes, lists, instructions, notes, ideas, or any other text content.";
@@ -582,32 +579,32 @@ function getSlideFunctions() {
 			"[functionCalling (addTextToPlaceholder)]: {\"text\": \"Shopping List:\\n- Milk\\n- Bread\\n- Eggs\\n- Coffee\\n- Sugar\", \"textType\": \"body\"}",
 			"if user asks 'put some text' or 'add some information', respond with:\n" +
 			"[functionCalling (addTextToPlaceholder)]: {\"text\": \"[the requested information]\", \"textType\": \"body\"}",
-			"if user asks 'добавь рецепт кофе' (in any language), respond with:\n" +
-			"[functionCalling (addTextToPlaceholder)]: {\"text\": \"Рецепт кофе:\\n1. Помолоть кофейные зерна\\n2. Нагреть воду до 95°C\\n3. Залить кофе водой\\n4. Подождать 4 минуты\\n5. Наслаждаться\", \"textType\": \"body\"}",
+			"if user asks 'add meeting notes' or 'meeting agenda', respond with:\n" +
+			"[functionCalling (addTextToPlaceholder)]: {\"text\": \"Meeting Notes:\\n- Introduction\\n- Main topics\\n- Action items\\n- Next steps\", \"textType\": \"body\"}",
 			"if user asks to add title to slide 1, respond with:\n" +
 			"[functionCalling (addTextToPlaceholder)]: {\"slideNumber\": 1, \"text\": \"Introduction\", \"textType\": \"title\"}",
 			"if user asks to generate content, respond with:\n" +
 			"[functionCalling (addTextToPlaceholder)]: {\"text\": \"Topic\", \"textType\": \"body\", \"prompt\": \"generate detailed content about this topic\"}"
 		];
 
-		func.call = async function(params) {
+		func.call = async function (params) {
 			Asc.scope.slideNum = params.slideNumber;
 			Asc.scope.text = params.text;
 			Asc.scope.textType = params.textType || "body";
 			Asc.scope.prompt = params.prompt;
 
-			await Asc.Editor.callCommand(function(){
+			await Asc.Editor.callCommand(function () {
 				let presentation = Api.GetPresentation();
 				let slide;
 
 				if (Asc.scope.slideNum) {
 					slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
-				} else {
+				}
+				else {
 					slide = presentation.GetCurrentSlide();
 				}
 
-				if (!slide)
-					return;
+				if (!slide) return;
 
 				const placeholderGroups = {
 					titles: ['title', 'ctrTitle'],
@@ -634,9 +631,9 @@ function getSlideFunctions() {
 							let drawing = allDrawings[i];
 
 							let ph = drawing.GetPlaceholder();
-							if(ph) {
-								if(ph.GetType() === type) {
-									return { shape: drawing, foundType: type };
+							if (ph) {
+								if (ph.GetType() === type) {
+									return {shape: drawing, foundType: type};
 								}
 							}
 						}
@@ -663,22 +660,22 @@ function getSlideFunctions() {
 					let slideHeight = presentation.GetHeight();
 
 					let sizes = {
-						title: { width: 0.8, height: 0.1 },
-						ctrTitle: { width: 0.8, height: 0.1 },
-						subTitle: { width: 0.8, height: 0.08 },
-						body: { width: 0.8, height: 0.6 },
-						object: { width: 0.8, height: 0.6 },
-						picture: { width: 0.5, height: 0.4 },
-						chart: { width: 0.6, height: 0.5 },
-						table: { width: 0.8, height: 0.6 },
-						media: { width: 0.6, height: 0.5 },
-						clipArt: { width: 0.3, height: 0.3 },
-						diagram: { width: 0.7, height: 0.5 },
-						sldImage: { width: 0.6, height: 0.5 },
-						footer: { width: 0.8, height: 0.06 },
-						header: { width: 0.8, height: 0.06 },
-						date: { width: 0.2, height: 0.04 },
-						sldNumber: { width: 0.1, height: 0.04 }
+						title: {width: 0.8, height: 0.1},
+						ctrTitle: {width: 0.8, height: 0.1},
+						subTitle: {width: 0.8, height: 0.08},
+						body: {width: 0.8, height: 0.6},
+						object: {width: 0.8, height: 0.6},
+						picture: {width: 0.5, height: 0.4},
+						chart: {width: 0.6, height: 0.5},
+						table: {width: 0.8, height: 0.6},
+						media: {width: 0.6, height: 0.5},
+						clipArt: {width: 0.3, height: 0.3},
+						diagram: {width: 0.7, height: 0.5},
+						sldImage: {width: 0.6, height: 0.5},
+						footer: {width: 0.8, height: 0.06},
+						header: {width: 0.8, height: 0.06},
+						date: {width: 0.2, height: 0.04},
+						sldNumber: {width: 0.1, height: 0.04}
 					};
 
 					let size = sizes[Asc.scope.textType] || sizes.body;
@@ -713,12 +710,13 @@ function getSlideFunctions() {
 							paragraph.RemoveAllElements();
 							paragraph.AddText(lines[0]);
 						}
-					} else {
+					}
+					else {
 						let firstParagraph = internalContent.GetElement(0);
 						if (firstParagraph) {
 							firstParagraph.RemoveAllElements();
 							let run = firstParagraph.AddText(lines[0]);
-							if(bNewShape) {
+							if (bNewShape) {
 								run.SetFill(Api.CreateSolidFill(Api.CreateSchemeColor("tx1")));
 							}
 						}
@@ -726,7 +724,7 @@ function getSlideFunctions() {
 						for (let i = 1; i < lines.length; i++) {
 							let newParagraph = Api.CreateParagraph();
 							let run = newParagraph.AddText(lines[i]);
-							if(bNewShape) {
+							if (bNewShape) {
 								run.SetFill(Api.CreateSolidFill(Api.CreateSchemeColor("tx1")));
 							}
 							internalContent.Push(newParagraph);
