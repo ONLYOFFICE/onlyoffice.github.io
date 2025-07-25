@@ -465,7 +465,7 @@ function getSlideFunctions() {
 		func.description = "Adds a chart to the slide (152x89mm, centered)";
 		func.params = [
 			"slideNumber (number): slide number to add chart to (optional, defaults to current)", 
-			"chartType (string): type of chart - bar, barStacked, barStackedPercent, bar3D, barStacked3D, barStackedPercent3D, barStackedPercent3DPerspective, horizontalBar, horizontalBarStacked, horizontalBarStackedPercent, horizontalBar3D, horizontalBarStacked3D, horizontalBarStackedPercent3D, lineNormal, lineStacked, lineStackedPercent, line3D, pie, pie3D, doughnut, scatter, stock, area, areaStacked, areaStackedPercent, comboBarLine, comboBarLineSecondary, comboCustom", 
+			"chartType (string): type of chart - bar, barStacked, barStackedPercent, bar3D, barStacked3D, barStackedPercent3D, barStackedPercent3DPerspective, horizontalBar, horizontalBarStacked, horizontalBarStackedPercent, horizontalBar3D, horizontalBarStacked3D, horizontalBarStackedPercent3D, lineNormal, lineStacked, lineStackedPercent, line3D, pie, pie3D, doughnut, scatter, stock, area, areaStacked, areaStackedPercent",
 			"data (array): 2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count", 
 			"series (array): array of series names - must have same length as data arrays count", 
 			"categories (array): array of category names - must have same length as each data array", 

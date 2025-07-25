@@ -77,7 +77,7 @@ function getCellFunctions() {
 			// Excel limit 31 (reserve space for uniqueness suffix)
 			if (newSheetName.length > 28) {
 				newSheetName = newSheetName.substring(0, 28);
-			}			
+			}
 			Asc.scope.newSheetName = newSheetName;
 			//insert pivot table
 			let insertRes = await Asc.Editor.callCommand(function(){
@@ -109,7 +109,7 @@ function getCellFunctions() {
 						name = newSheetName + '_'+ index;
 						if (items.indexOf(name.toLowerCase()) < 0) break;
 					}
-		
+
 					newSheetName = name;
 					return newSheetName;
 				}
@@ -125,7 +125,7 @@ function getCellFunctions() {
 				let addressSource = pivotTable.Source.Address;
 				// Apply row limitation
 				addressSource = limitRangeToRows(addressSource, Asc.scope.rowCountToLookup);
-				let rangeSource = wsSource.GetRange(addressSource);					
+				let rangeSource = wsSource.GetRange(addressSource);
 				return [pivotTable.GetParent().Name, pivotTable.TableRange1.Address, rangeSource.GetValue2()];
 			});
 
@@ -144,7 +144,7 @@ function getCellFunctions() {
 					return str;
 				}).join(',');
 			}).join('\n');
-			
+
 			//make ai request for indices to aggregate
 			const argPrompt = [
 				"You are a data analyst.",
@@ -208,7 +208,7 @@ function getCellFunctions() {
 			function parseAIResult(result) {
 				const matches = result.match(/\{([^}]+)\}/g);
 				if (!matches) return null;
-				
+
 				let content = null;
 				for (let i = 0; i < matches.length; i++) {
 					const bracesContent = matches[i].slice(1, -1);
@@ -217,18 +217,18 @@ function getCellFunctions() {
 						break;
 					}
 				}
-				
+
 				if (!content) return null;
-				
+
 				const sections = content.split('|');
 				if (sections.length !== 2) return null;
-				
+
 				const rowMatches = sections[0].match(/\d+/g) || [];
 				const rowIndices = rowMatches.map(s => parseInt(s, 10)).filter(n => !isNaN(n));
-				
+
 				const dataMatches = sections[1].match(/\d+/g) || [];
 				const dataIndex = dataMatches.length > 0 ? parseInt(dataMatches[0], 10) : NaN;
-				
+
 				if (rowIndices.length === 0 || isNaN(dataIndex)) return null;
 				return {
 					rowIndices,
@@ -269,11 +269,11 @@ function getCellFunctions() {
 						if (parsedResult.dataIndex < pivotFields.length) {
 							dataName = pivotFields[parsedResult.dataIndex].GetName();
 						}
-						
+
 						if (rowNames.length > 0 || colNames.length > 0) {
 							pivotTable.AddFields({rows: rowNames, columns: colNames});
 						}
-						
+
 						if (dataName) {
 							pivotTable.AddDataField(dataName);
 						}
@@ -342,7 +342,7 @@ function getCellFunctions() {
 
             "To clear filter from specific column, respond:" +
             "[functionCalling (setAutoFilter)]: {\"range\": \"A1:D10\", \"field\": 1, \"criteria1\": null}",
-            
+
             "To filter range A1:D8 by yellow color, respond:" +
             "[functionCalling (setAutoFilter)]: {\"range\": \"A1:D8\", \"fieldName\": \"color\", \"criteria1\": {\"r\": 255, \"g\": 255, \"b\": 0}, \"operator\": \"xlFilterCellColor\"}"
         ];
@@ -405,7 +405,7 @@ function getCellFunctions() {
             await Asc.Editor.callCommand(function(){
                 let ws = Api.GetActiveSheet();
                 let range;
-                
+
                 if (!Asc.scope.range) {
                     range = Api.GetSelection();
                 } else {
@@ -630,6 +630,73 @@ function getCellFunctions() {
 
         funcs.push(func);
     }
+
+
+	if (true) {
+		let func = new RegisteredFunction();
+		func.name = "addChart";
+		func.params = [
+			"range (string, optional): cell range with data for chart (e.g., 'A1:D10'). If omitted, uses current selection",
+			"chartType (string, optional): type of chart - bar, barStacked, barStackedPercent, bar3D, barStacked3D, barStackedPercent3D, barStackedPercent3DPerspective, horizontalBar, horizontalBarStacked, horizontalBarStackedPercent, horizontalBar3D, horizontalBarStacked3D, horizontalBarStackedPercent3D, lineNormal, lineStacked, lineStackedPercent, line3D, pie, pie3D, doughnut, scatter, stock, area, areaStacked, areaStackedPercent Default: bar",
+			"title (string, optional): chart title text"
+		];
+
+		func.examples = [
+			"To create a bar chart from current selection, respond:" +
+			"[functionCalling (addChart)]: {}",
+
+			"To create a line chart from current selection, respond:" +
+			"[functionCalling (addChart)]: {\"chartType\": \"line\"}",
+
+			"To create a pie chart from specific range, respond:" +
+			"[functionCalling (addChart)]: {\"range\": \"A1:B10\", \"chartType\": \"pie\"}",
+
+			"To create a chart with title, respond:" +
+			"[functionCalling (addChart)]: {\"title\": \"Sales Overview\"}"
+		];
+
+		func.call = async function(params) {
+			Asc.scope.range = params.range;
+			Asc.scope.chartType = params.chartType || "bar";
+			Asc.scope.title = params.title;
+
+			await Asc.Editor.callCommand(function(){
+				let ws = Api.GetActiveSheet();
+				let chartRange;
+
+				if (Asc.scope.range) {
+					chartRange = Asc.scope.range;
+				} else {
+					let selection = Api.GetSelection();
+					chartRange = selection.GetAddress(true, true, "xlA1", false);
+				}
+
+				let range = ws.GetRange(chartRange);
+				let fromRow = range.GetRow() + 3;
+				let fromCol = range.GetCol();
+
+				let widthEMU = 130 * 36000;
+				let heightEMU = 80 * 36000;
+
+				let chart = ws.AddChart(
+					chartRange,
+					true,
+					Asc.scope.chartType,
+					2,
+					widthEMU,
+					heightEMU,
+					fromCol,
+					0,
+					fromRow,
+					0
+				);
+				if (chart && Asc.scope.title) {
+					chart.SetTitle(Asc.scope.title, 14);
+				}
+			});
+		};
+		funcs.push(func);
+	}
 
     return funcs;
 }
