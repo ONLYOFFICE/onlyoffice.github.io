@@ -375,7 +375,101 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
-	
+	WORD_FUNCTIONS.checkSpelling = function() 
+	{
+		let func = new RegisteredFunction();
+		func.name = "checkSpelling";
+		func.params = [
+		];
+
+		func.description = "Use this function if you asked to check spelling."
+
+		func.examples = [
+			"if you need to check spelling for the current paragraph, respond with:\n" +
+			"[functionCalling (checkSpelling)]: {}",
+		];
+		
+		func.call = async function(params) {
+
+			let text = await Asc.Editor.callCommand(function(){
+				let par = Api.GetDocument().GetCurrentParagraph();
+				if (!par)
+					return "";
+				par.Select();
+				return par.GetText();
+			});
+
+			let argPromt = "Check spelling and grammar for text:" + ":\n" + text + "\n Answer with only the new corrected text, no need of any explanations.";
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			//await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			let isTrackChanges = await Asc.Editor.callCommand(function(){
+				let isOn = Api.GetDocument().IsTrackRevisions();
+				if (isOn)
+					Api.GetDocument().SetTrackRevisions(false);
+				return isOn;
+			});
+
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+			let isSendedEndLongAction = false;
+			async function checkEndAction() {
+				if (!isSendedEndLongAction) {
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+					isSendedEndLongAction = true
+				}
+			}
+
+			let resultText = "";
+
+			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+				if (!data)
+					return;
+				await checkEndAction();
+
+				resultText += data;
+
+				await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
+				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+				Asc.scope.text = resultText;
+				await Asc.Editor.callCommand(function(){
+					let par = Api.GetDocument().GetCurrentParagraph();
+					if (!par)
+						return "";
+					par.Select();					
+					Api.ReplaceTextSmart([Asc.scope.text]);
+				});
+			});
+
+			await checkEndAction();
+
+			await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(true);});
+
+			Asc.scope.text = resultText;
+			await Asc.Editor.callCommand(function(){
+				let par = Api.GetDocument().GetCurrentParagraph();
+				if (!par)
+					return "";
+				par.Select();
+				Api.ReplaceTextSmart([Asc.scope.text]);
+			});
+
+			if (!isTrackChanges)
+				await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(false);});
+
+			//await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		};
+
+		return func;
+	}
 })();
 
 function getWordFunctions() {
@@ -416,6 +510,7 @@ function getWordFunctions() {
 	funcs.push(WORD_FUNCTIONS.commentText());
 	funcs.push(WORD_FUNCTIONS.rewriteText());
 	funcs.push(WORD_FUNCTIONS.insertPage());
+	funcs.push(WORD_FUNCTIONS.checkSpelling());
 
 	return funcs;
 
