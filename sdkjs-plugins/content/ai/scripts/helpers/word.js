@@ -37,11 +37,16 @@ var WORD_FUNCTIONS = {};
 	{
 		let func = new RegisteredFunction();
 		func.name = "commentText";
+		func.description = "Use this function if you asked to comment or explain anything. If text or paragraph number is not specified assume that we are working with the current paragraph. Specify whether the explanation should be added as a comment or as a footnote. The AI will generate the content based on your prompt and insert it in the chosen format.";
 		func.params = [
 			"type (string): whether to add as a 'comment' or as a 'footnote' (default is 'comment')"
 		];
 
+
 		func.examples = [
+			"If you need to explain something, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"comment\"}",
+
 			"If you need to explain selected text as a comment, respond with:\n" +
 			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"comment\"}",
 
@@ -382,11 +387,11 @@ var WORD_FUNCTIONS = {};
 		func.params = [
 		];
 
-		func.description = "Use this function if you asked to check spelling."
+		func.description = "Use this function if you asked to check spelling for current paragraph or fix other type of text errors in the current paragraph."
 
 		func.examples = [
 			"if you need to check spelling for the current paragraph, respond with:\n" +
-			"[functionCalling (checkSpelling)]: {}",
+			"[functionCalling (checkSpelling)]: {}"
 		];
 		
 		func.call = async function(params) {
@@ -401,18 +406,18 @@ var WORD_FUNCTIONS = {};
 
 			let argPromt = "Check spelling and grammar for text:" + ":\n" + text + "\n Answer with only the new corrected text, no need of any explanations.";
 
-			let requestEngine = AI.Request.create(AI.ActionType.Chat);
-			if (!requestEngine)
-				return;
-
-			//await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-
 			let isTrackChanges = await Asc.Editor.callCommand(function(){
 				let isOn = Api.GetDocument().IsTrackRevisions();
 				if (isOn)
 					Api.GetDocument().SetTrackRevisions(false);
 				return isOn;
 			});
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 
@@ -451,7 +456,10 @@ var WORD_FUNCTIONS = {};
 			await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
 			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
-			await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(true);});
+			Asc.scope.modelName = requestEngine.modelUI.name;
+			await Asc.Editor.callCommand(function(){
+				return Api.GetDocument().SetAssistantTrackRevisions(true, Asc.scope.modelName);
+			});
 
 			Asc.scope.text = resultText;
 			await Asc.Editor.callCommand(function(){
@@ -462,10 +470,18 @@ var WORD_FUNCTIONS = {};
 				Api.ReplaceTextSmart([Asc.scope.text]);
 			});
 
-			if (!isTrackChanges)
-				await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(false);});
+			await Asc.Editor.callCommand(function(){
+				return Api.GetDocument().SetAssistantTrackRevisions(false);
+			});
 
-			//await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			if (isTrackChanges)
+			{
+				await Asc.Editor.callCommand(function(){
+					Api.GetDocument().SetTrackRevisions(true);
+				});
+			}
+
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		};
 
 		return func;
