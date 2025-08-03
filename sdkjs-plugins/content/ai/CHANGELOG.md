@@ -114,3 +114,6 @@
 
 ## 2.4.1
 * Bug fix.
+
+## 2.4.2
+* Add agent for simple functions.
