@@ -102,6 +102,12 @@ var updateModelsErrorTip = new Tooltip(updateModelsErrorEl, {
 	width: 233,
 });
 
+const providerKeyTip = new Tooltip(providerKeyInputEl, {
+	align: 'center',
+	width: 250,
+	text: "You can obtain information about the key on the provider's website. This field is not mandatory.",
+});
+
 var capabilitiesElements = {
 	text: {
 		btn: new ToggleButton({

@@ -409,6 +409,42 @@ function registerButtons(window, undefined)
 		});
 	}
 
+	const on_click_ocr = async function () {
+		let requestEngine = AI.Request.create(AI.ActionType.OCR);
+		if (!requestEngine)
+			return;
+
+		let content = await Asc.Library.GetSelectedImage();
+		if (!content) {
+			console.log("you need to select an image to use ocr")
+			return;
+		}
+
+		let result = await requestEngine.imageOCRRequest(content);
+		if (!result) return;
+
+		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
+	}
+
+	const on_click_text_to_image = async function (params) {
+		let requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
+		if (!requestEngine)
+			return;
+
+		let content = await Asc.Library.GetSelectedText();
+		if (!content) {
+			console.log("you need to select text to generate image")
+			return;
+		}
+
+		let result = await requestEngine.imageGenerationRequest(content);
+		if (!result) return;
+
+			if (Asc.plugin.info.editorSubType === "pdf")
+				return await Asc.Library.AddGeneratedImage(result);
+			await Asc.Library.AddOleObject(result, content);
+	}
+
 	if (true)
 	{
 		let buttonImages = new Asc.ButtonContextMenu(buttonMain);
@@ -439,20 +475,7 @@ function registerButtons(window, undefined)
 		let buttonOCR = new Asc.ButtonContextMenu(buttonImages);
 		buttonOCR.text = "OCR";
 		buttonOCR.addCheckers("Image", "OleObject");
-		buttonOCR.attachOnClick(async function(){
-			let requestEngine = AI.Request.create(AI.ActionType.OCR);
-			if (!requestEngine)
-				return;
-
-			let content = await Asc.Library.GetSelectedImage();
-			if (!content)
-				return;
-
-			let result = await requestEngine.imageOCRRequest(content);
-			if (!result) return;
-
-			await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
-		});
+		buttonOCR.attachOnClick(on_click_ocr);
 
 		let buttonExplainImage = new Asc.ButtonContextMenu(buttonImages);
 		buttonExplainImage.text = "Image to Text";
@@ -543,15 +566,12 @@ function registerButtons(window, undefined)
 			});
 		}
 
-		/*
-		// TODO:
-		let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button3.text = "Text to image";
-		button3.icons = getToolBarButtonIcons("text-to-image");
-		button3.attachOnClick(function(data){
-			console.log(data);
-		});
-		*/
+		if (false) {
+			let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
+			button3.text = "Text to Image";
+			button3.icons = getToolBarButtonIcons("text-to-image");
+			button3.attachOnClick(on_click_text_to_image);
+		}
 
 		let button4 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button4.text = "Translation";
@@ -583,6 +603,14 @@ function registerButtons(window, undefined)
 			result = Asc.Library.getTranslateResult(result, content);
 			await Asc.Library.PasteText(result);
 		});
+
+		if (false && Asc.Editor.getType() !== "pdf")
+		{
+			let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
+			button2.text = "OCR";
+			button2.icons = getToolBarButtonIcons("ocr");
+			button2.attachOnClick(on_click_ocr);
+		}
 	}
 
 	// register actions
@@ -611,7 +639,7 @@ function registerButtons(window, undefined)
 	AI.Actions[AI.ActionType.Translation]     = new ActionUI("Translation", "translation");
 	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "text-analysis-ai");
 	AI.Actions[AI.ActionType.ImageGeneration] = new ActionUI("Image generation", "image-ai", "", AI.CapabilitiesUI.Image);
-	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "text-analysis-ai", "", AI.CapabilitiesUI.Vision);
+	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "ocr", "", AI.CapabilitiesUI.Vision);
 	AI.Actions[AI.ActionType.Vision]          = new ActionUI("Vision", "vision-ai", "", AI.CapabilitiesUI.Vision);
 
 	AI.ActionsGetKeys = function()

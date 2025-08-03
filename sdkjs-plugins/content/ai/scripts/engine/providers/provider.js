@@ -93,7 +93,7 @@
 		 * Url for a specific endpoint.
 		 * @returns {string}
 		 */
-		getEndpointUrl(endpoint, model) {
+		getEndpointUrl(endpoint, model, options) {
 			let Types = AI.Endpoints.Types;
 			switch (endpoint)
 			{
@@ -233,11 +233,12 @@
 				content : []
 			};
 
-			let arrResult = message.data.choices || message.data.content || message.data.candidates;
+			let data = message.data || message;
+			let arrResult = data.choices || data.content || data.candidates || data.delta;
 			if (!arrResult)
 				return result;
 
-			let choice = arrResult[0];
+			let choice = arrResult[0] ? arrResult[0] : arrResult;
 			if (!choice)
 				return result;
 			
@@ -254,6 +255,10 @@
 					}
 				}
 			}
+			if (choice.delta && choice.delta.content)
+				result.content.push(choice.delta.content);
+			if (choice.delta && choice.delta.text)
+				result.content.push(choice.delta.text);
 
 			let trimArray = ["\n".charCodeAt(0)];
 			for (let i = 0, len = result.content.length; i < len; i++) {
@@ -490,6 +495,20 @@
 			inst.url   = url;
 			inst.key   = key;
 			inst.addon = addon || "";
+			return inst;
+		}
+
+		createDuplicate(overrideUrl) {
+			let inst   = new this.constructor();
+			inst.name  = this.name;
+			inst.url   = this.url;
+			inst.key   = this.key;
+			inst.addon = this.addon || "";
+
+			if (undefined !== overrideUrl && overrideUrl != this.url) {
+				this.url = overrideUrl;
+				inst.addon = "";
+			}
 			return inst;
 		}
 
