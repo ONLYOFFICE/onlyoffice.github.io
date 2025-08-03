@@ -477,9 +477,9 @@ Here is the text that needs revision: \"${content}\"`;
 			let prompt = "Summarize the following text. ";
 			if (language) {
 				prompt += "and translate the result to " + language;
-				prompt += "Return only the resulting translated text.";
+				prompt += ". Return only the resulting translated text.";
 			} else {
-				prompt += "Return only the resulting text.";
+				prompt += ". Return only the resulting text.";
 			}
 			prompt += "Text: \"\"\"\n";
 			prompt += content;

@@ -186,6 +186,7 @@
 					if (provider.isOnlyDesktop() && (-1 === navigator.userAgent.indexOf("AscDesktopEditor")))
 						continue;
 
+					AI.providersWeights[provider.name] = provider.weight || i;
 					window.AI.InternalProviders.push(provider);
 				}
 			}
@@ -197,6 +198,7 @@
 
 	AI.InternalCustomProvidersSources = {};
 	AI.InternalCustomProviders = [];
+	AI.providersWeights = {};
 
 	AI.loadCustomProviders = function() {
 
@@ -250,6 +252,8 @@
 		if (AI.InternalCustomProvidersSources[name])
 			delete AI.InternalCustomProvidersSources[name];
 
+		let isChanged = false;
+
 		for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
 			if (AI.InternalCustomProviders[i].name === name) {
 				AI.InternalCustomProviders.splice(i, 1);
@@ -258,10 +262,41 @@
 					delete AI.Providers[name];
 				}
 
-				AI.Storage.save();
-				AI.Storage.load();
+				isChanged = true;
 				break;
 			}				
+		}
+
+		let provider = AI.Providers[name];
+		if (!provider && name.endsWith("*")) {
+			name = name.substring(0, name.length - 1);
+			provider = AI.Providers[name];
+		}
+
+		if (provider) {
+			let internalProvider = null;
+			for (let j = 0, lenCustom = AI.InternalProviders.length; j < lenCustom; j++) {
+				if (AI.InternalProviders[j].name === name) {
+					internalProvider = AI.InternalProviders[j];
+					break;
+				}
+			}
+
+			if (!internalProvider) {
+				delete AI.Providers[i];
+				isChanged = true;
+			}
+
+			if (internalProvider.url !== provider.url || internalProvider.addon !== provider.addon) {
+				isChanged = true;
+				provider.url = internalProvider.url;
+				provider.addon = internalProvider.addon;
+			}
+		}
+
+		if (isChanged) {
+			AI.Storage.save();
+			AI.Storage.load();
 		}
 
 	};
@@ -272,6 +307,25 @@
 		for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
 			names.push(AI.InternalCustomProviders[i].name);
 		}
+
+		for (let i in AI.Providers) {
+			let provider = AI.Providers[i];
+			if (!provider || !provider.name)
+				continue;
+
+			let internalProvider = null;
+			for (let j = 0, lenCustom = AI.InternalProviders.length; j < lenCustom; j++) {
+				if (AI.InternalProviders[j].name === provider.name) {
+					internalProvider = AI.InternalProviders[j];
+					break;
+				}
+			}
+
+			if (internalProvider && (internalProvider.url !== provider.url || internalProvider.addon !== provider.addon)) {
+				names.push(provider.name + "*");
+			}	
+		}
+
 		return names;
 
 	};

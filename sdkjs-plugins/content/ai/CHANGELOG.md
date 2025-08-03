@@ -102,3 +102,18 @@
 
 ## 2.3.2
 * Fix offline work.
+
+## 2.3.3
+* Refactoring custom providers.
+
+## 2.3.4
+* Refactoring custom providers.
+
+## 2.4.0
+* Bug fix.
+
+## 2.4.1
+* Bug fix.
+
+## 2.4.2
+* Add agent for simple functions.
