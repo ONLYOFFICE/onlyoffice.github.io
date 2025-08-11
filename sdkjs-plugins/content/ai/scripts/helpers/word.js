@@ -30,35 +30,54 @@
  *
  */
 
-function getWordFunctions() {
+var WORD_FUNCTIONS = {};
 
-	let funcs = [];
-	if (true) 
+(function(){
+	WORD_FUNCTIONS.commentText = function()
 	{
 		let func = new RegisteredFunction();
-		func.name = "changeParagraph";
+		func.name = "commentText";
+		func.description = "Use this function if you asked to comment or explain anything. If text or paragraph number is not specified assume that we are working with the current paragraph. Specify whether the explanation should be added as a comment or as a footnote. The AI will generate the content based on your prompt and insert it in the chosen format.";
 		func.params = [
-			"parNumber (number): the paragraph number to change",
-			"prompt (string): instructions on how to change the text"
+			"type (string): whether to add as a 'comment' or as a 'footnote' (default is 'comment')"
 		];
 
+
 		func.examples = [
-			"if you need to change paragraph 2 to be more emotional, respond with:\n" +
-			"[functionCalling (changeParagraph)]: {\"parNumber\": 2, \"prompt\": \"make the text more emotional\"}"
+			"If you need to explain something, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"comment\"}",
+
+			"If you need to explain selected text as a comment, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"comment\"}",
+
+			"If you need to add a footnote to selected text, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Add a footnote to this text\", \"type\": \"footnote\"}",
+
+			"If you need to comment selected text, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Comment this text\"}",
+
+			"If you need to explain selected text as a footnote, respond with:\n" +
+			"[functionCalling (commentText)]: {\"prompt\" : \"Explain this text\", \"type\": \"footnote\"}"
 		];
 		
 		func.call = async function(params) {
-			Asc.scope.parNum = params.parNumber;
-			let parText = await Asc.Editor.callCommand(function(){
+			let type = params.type;
+			let isFootnote = "footnote" === type;
+
+			let text = await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNum - 1);
-				if (!par)
-					return "";
-				par.Select();
-				return par.GetText();
+				let range = doc.GetRangeBySelect();
+				let text = range ? range.GetText() : "";
+				if (!text)
+				{
+					text = doc.GetCurrentWord();
+					doc.SelectCurrentWord();
+				}
+
+				return text;
 			});
 
-			let argPromt = params.prompt + ":\n" + parText;
+			let argPromt = params.prompt + ":\n" + text;
 
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
@@ -73,19 +92,405 @@ function getWordFunctions() {
 			}
 
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			if (isFootnote)
+			{
+				let addFootnote = true;
+				let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+					if (!data)
+						return;
+
+					await checkEndAction();
+					Asc.scope.data = data;
+					Asc.scope.model = requestEngine.modelUI.name;
+
+					if (addFootnote)
+					{
+						await Asc.Editor.callCommand(function(){
+							Api.GetDocument().AddFootnote();
+						});
+						addFootnote = false;
+					}
+					await Asc.Library.PasteText(data);
+				});
+			}
+			else 
+			{
+				let commentId = null;
+				let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+					if (!data)
+						return;
+
+					await checkEndAction();
+					Asc.scope.data = data;
+					Asc.scope.model = requestEngine.modelUI.name;
+					Asc.scope.commentId = commentId;
+
+					commentId = await Asc.Editor.callCommand(function(){
+						let doc = Api.GetDocument();
+
+						let commentId = Asc.scope.commentId;
+						if (!commentId)
+						{
+							let range = doc.GetRangeBySelect();
+							if (!range)
+								return null;
+
+							let comment = range.AddComment(Asc.scope.data, Asc.scope.model, "uid" + Asc.scope.model);
+							if (!comment)
+								return null;
+							doc.ShowComment([comment.GetId()]);
+							return comment.GetId();
+						}
+
+						let comment = doc.GetCommentById(commentId);
+						if (!comment)
+							return commentId;
+
+						comment.SetText(comment.GetText() + scope.data);
+						return commentId;
+					});
+				});
+			}
+
+			await checkEndAction();
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		};
+
+		return func;
+	}
+	WORD_FUNCTIONS.rewriteText = function() 
+	{
+		let func = new RegisteredFunction();
+		func.name = "rewriteText";
+		func.params = [
+			"parNumber (number): the paragraph number to change",
+			"prompt (string): instructions on how to change the text",
+			"showDifference (boolean): whether to show the difference between the original and new text, or just replace it",
+			"type (string): which part of the text to be rewritten (e.g., 'sentence' or 'paragraph')"
+		];
+		func.description = "Use this function when you asked to rewrite or replace some text. If text or paragraph number is not specified assume that we are working with the current paragraph.";
+
+		func.examples = [
+			"if you need to rewrite, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"Rewrite\", \"type\" : \"paragraph\"}",
+
+			"If you need to rephrase current sentence, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"rephrase sentence\", \"type\" : \"sentence\"}",
+
+			"If you need to rephrase current sentence and show difference, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"rephrase sentence\", \"type\" : \"sentence\", \"showDifference\" : true}",
+
+			"if you need to change paragraph 2 to be more emotional, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"parNumber\": 2, \"prompt\": \"make the text more emotional\", \"type\" : \"paragraph\"}",
+
+			"if you need to rewrite the first paragraph, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"parNumber\": 1, \"prompt\": \"Rephrase \", \"type\" : \"paragraph\"}",
+
+			"if you need to rewrite the current paragraph to be more official, respond with:\n" +
+			"[functionCalling (rewriteText)]: {\"prompt\": \"Rewrite in official style\", \"type\" : \"paragraph\"}"
+		];
+		
+		func.call = async function(params) {
+
+			let text = "";
+			if ("paragraph" === params.type)
+			{
+				Asc.scope.parNumber = params.parNumber;
+				text = await Asc.Editor.callCommand(function(){
+					let doc = Api.GetDocument();
+					let par = undefined === Asc.scope.parNumber ? doc.GetCurrentParagraph() : doc.GetElement(Asc.scope.parNumber - 1);
+					if (!par)
+						return "";
+					par.Select();
+					return par.GetText();
+				});
+			}
+			else // if ("sentence" === params.type)
+			{
+				text = await Asc.Editor.callCommand(function(){
+					return Api.GetDocument().GetCurrentSentence();
+				});
+			}
+
+			let argPromt = params.prompt + ":\n" + text + "\n Answer with only the new one sentence, no need of any explanations";
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			let turnOffTrackChanges = false;
+			if (params.showDifference)
+			{
+				let isTrackChanges = await Asc.Editor.callCommand(function(){
+					return Api.GetDocument().IsTrackRevisions();
+				});
+
+				if (!isTrackChanges)
+				{
+					await Asc.Editor.callCommand(function(){
+						Api.GetDocument().SetTrackRevisions(true);
+					});
+					turnOffTrackChanges = true;
+				}
+			}
+
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+			let isSendedEndLongAction = false;
+			async function checkEndAction() {
+				if (!isSendedEndLongAction) {
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+					isSendedEndLongAction = true
+				}
+			}
+
 			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
 				if (!data)
 					return;
 				await checkEndAction();
+
+				if (text && "sentence" === params.type)
+				{
+					Asc.scope.data = data;
+					await Asc.Editor.callCommand(function(){
+						let doc = Api.GetDocument();
+						doc.ReplaceCurrentSentence("");
+					});
+					text = null;
+				}
+
 				await Asc.Library.PasteText(data);
 			});
 
-			await checkEndAction();		
+			await checkEndAction();
+
+			if (turnOffTrackChanges)
+				await Asc.Editor.callCommand(function(){return Api.GetDocument().SetTrackRevisions(false);});
+
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		};
 
-		funcs.push(func);		
+		return func;
 	}
+	WORD_FUNCTIONS.changeTextStyle = function()
+	{
+		let func = new RegisteredFunction();
+		func.name = "changeTextStyle";
+		func.params = [
+			"bold (boolean): whether to make the text bold",
+			"italic (boolean): whether to make the text italic",
+			"underline (boolean): whether to underline the text",
+			"strikeout (boolean): whether to strike out the text",
+			"fontSize (number): font size to apply to the selected text"
+		];
+		
+		func.examples = [
+			"If you need to make selected text bold and italic, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"bold\": true, \"italic\": true }",
+		
+			"If you need to underline the selected text, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"underline\": true }",
+		
+			"If you need to strike out the selected text, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"strikeout\": true }",
+		
+			"If you need to set the font size of selected text to 18, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"fontSize\": 18 }",
+		
+			"If you need to make selected text bold, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"bold\": true }",
+		
+			"If you need to make selected text non-italic, respond with:" +
+			"[functionCalling (changeTextStyle)]: {\"italic\": false }"
+		];
+		
+		func.call = async function(params) {
+			Asc.scope.bold = params.bold;
+			Asc.scope.italic = params.italic;
+			Asc.scope.underline = params.underline;
+			Asc.scope.strikeout = params.strikeout;
+			Asc.scope.fontSize = params.fontSize;
+			await Asc.Editor.callCommand(function(){
+				let doc = Api.GetDocument();
+				let range = doc.GetRangeBySelect();
+				if (!range || "" === range.GetText())
+				{
+					doc.SelectCurrentWord();
+					range = doc.GetRangeBySelect();
+				}
 
+				if (!range)
+					return;
+
+				if (undefined !== Asc.scope.bold)
+					range.SetBold(Asc.scope.bold);
+
+				if (undefined !== Asc.scope.italic)
+					range.SetItalic(Asc.scope.italic);
+
+				if (undefined !== Asc.scope.underline)
+					range.SetUnderline(Asc.scope.underline);
+
+				if (undefined !== Asc.scope.strikeout)
+					range.SetStrikeout(Asc.scope.strikeout);
+
+				if (undefined !== Asc.scope.fontSize)
+					range.SetFontSize(Asc.scope.fontSize);
+			});
+		};
+
+		return func;
+	}
+	WORD_FUNCTIONS.insertPage = function()
+	{
+		let func = new RegisteredFunction();
+		func.name = "insertPage";
+		func.params = [
+			"location (string): where to insert the new page ('current', 'start', or 'end')"
+		];
+
+		func.examples = [
+			"If you need to insert blank page to the current location, respond with:" +
+			"[functionCalling (insertPage)]: {\"location\": \"current\"}",
+
+			"If you need to add page to the end of the document, respond with:" +
+			"[functionCalling (insertPage)]: {\"location\": \"end\"}",
+
+			"If you need to add page to the start of the document, respond with:" +
+			"[functionCalling (insertPage)]: {\"location\": \"start\"}"
+		];
+		
+		func.call = async function(params) {
+			Asc.scope.location = params.location;
+
+			await Asc.Editor.callCommand(function(){
+				let doc = Api.GetDocument();
+				if ("start" === Asc.scope.location)
+					doc.MoveCursorToStart();
+				else if ("end" === Asc.scope.location)
+					doc.MoveCursorToEnd();
+
+				Api.GetDocument().InsertBlankPage();
+			});
+		};
+
+		return func;
+	}
+	WORD_FUNCTIONS.checkSpelling = function() 
+	{
+		let func = new RegisteredFunction();
+		func.name = "checkSpelling";
+		func.params = [
+		];
+
+		func.description = "Use this function if you asked to check spelling for current paragraph or fix other type of text errors in the current paragraph."
+
+		func.examples = [
+			"if you need to check spelling for the current paragraph, respond with:\n" +
+			"[functionCalling (checkSpelling)]: {}"
+		];
+		
+		func.call = async function(params) {
+
+			let text = await Asc.Editor.callCommand(function(){
+				let par = Api.GetDocument().GetCurrentParagraph();
+				if (!par)
+					return "";
+				par.Select();
+				return par.GetText();
+			});
+
+			let argPromt = "Check spelling and grammar for text:" + ":\n" + text + "\n Answer with only the new corrected text, no need of any explanations.";
+
+			let isTrackChanges = await Asc.Editor.callCommand(function(){
+				let isOn = Api.GetDocument().IsTrackRevisions();
+				if (isOn)
+					Api.GetDocument().SetTrackRevisions(false);
+				return isOn;
+			});
+
+			let requestEngine = AI.Request.create(AI.ActionType.Chat);
+			if (!requestEngine)
+				return;
+
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+			let isSendedEndLongAction = false;
+			async function checkEndAction() {
+				if (!isSendedEndLongAction) {
+					await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+					isSendedEndLongAction = true
+				}
+			}
+
+			let resultText = "";
+
+			let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+				if (!data)
+					return;
+				await checkEndAction();
+
+				resultText += data;
+
+				await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
+				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+				Asc.scope.text = resultText;
+				await Asc.Editor.callCommand(function(){
+					let par = Api.GetDocument().GetCurrentParagraph();
+					if (!par)
+						return "";
+					par.Select();					
+					Api.ReplaceTextSmart([Asc.scope.text]);
+				});
+			});
+
+			await checkEndAction();
+
+			await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+			Asc.scope.modelName = requestEngine.modelUI.name;
+			await Asc.Editor.callCommand(function(){
+				return Api.GetDocument().SetAssistantTrackRevisions(true, Asc.scope.modelName);
+			});
+
+			Asc.scope.text = resultText;
+			await Asc.Editor.callCommand(function(){
+				let par = Api.GetDocument().GetCurrentParagraph();
+				if (!par)
+					return "";
+				par.Select();
+				Api.ReplaceTextSmart([Asc.scope.text]);
+			});
+
+			await Asc.Editor.callCommand(function(){
+				return Api.GetDocument().SetAssistantTrackRevisions(false);
+			});
+
+			if (isTrackChanges)
+			{
+				await Asc.Editor.callCommand(function(){
+					Api.GetDocument().SetTrackRevisions(true);
+				});
+			}
+
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		};
+
+		return func;
+	}
+})();
+
+function getWordFunctions() {
+
+	let funcs = [];
 	if (true) 
 	{
 		let func = new RegisteredFunction();
@@ -101,11 +506,11 @@ function getWordFunctions() {
 		];
 		
 		func.call = async function(params) {
-			Asc.scope.parNum = params.parNumber;
+			Asc.scope.parNumber = params.parNumber;
 			Asc.scope.styleName = params.style;
 			await Asc.Editor.callCommand(function(){
 				let doc = Api.GetDocument();
-				let par = doc.GetElement(Asc.scope.parNum - 1);
+				let par = doc.GetElement(Asc.scope.parNumber - 1);
 				if (!par)
 					return;
 
@@ -117,32 +522,11 @@ function getWordFunctions() {
 		funcs.push(func);
 	}
 
-	if (true) 
-	{
-		let func = new RegisteredFunction();
-		func.name = "changeTextStyle";
-		func.params = [
-			"bold (boolean): whether to make the text bold",
-			"italic (boolean): whether to make the text italic"
-		];
-
-		func.examples = [
-			"If you need to make selected text bold and italic, respond with:" +
-			"[functionCalling (changeTextStyle)]: {\"bold\": true, \"italic\": true }"
-		];
-		
-		func.call = async function(params) {
-			Asc.scope.isBold = params.bold;
-			Asc.scope.isItalic = params.italic;
-			await Asc.Editor.callCommand(function(){
-				let doc = Api.GetDocument();
-				doc.GetRangeBySelect().SetBold(Asc.scope.isBold);
-				doc.GetRangeBySelect().SetItalic(Asc.scope.isItalic);
-			});			
-		};
-
-		funcs.push(func);
-	}
+	funcs.push(WORD_FUNCTIONS.changeTextStyle());
+	funcs.push(WORD_FUNCTIONS.commentText());
+	funcs.push(WORD_FUNCTIONS.rewriteText());
+	funcs.push(WORD_FUNCTIONS.insertPage());
+	funcs.push(WORD_FUNCTIONS.checkSpelling());
 
 	return funcs;
 
