@@ -622,7 +622,7 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell", "pdf"],
-		size : [320, 375]
+		size : [365, 425]
 	};
 
 	if (!aiModelEditWindow) {
@@ -642,6 +642,11 @@ function onOpenEditModal(data) {
 				model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
 				providers : AI.serializeProviders()
 			});
+		});
+		aiModelEditWindow.attachEvent("onUpdateHeight", function(height) {
+			if(height > variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [aiModelEditWindow.id, [variation.size[0] - 2, height]]);	//2 is the border-width at the window
+			}
 		});
 		aiModelEditWindow.attachEvent('onOpenCustomProvidersModal', onOpenCustomProvidersModal);
 	}
