@@ -44,16 +44,18 @@ function EditorHelperImpl() {
 
 	this.funcs = [];
 	this.names2funcs = {};
+	this.isSupportStreaming = false;
 
 	let editorType = Asc.Editor.getType();
 
 	switch (editorType) {
 		case "word": {
 			this.funcs = getWordFunctions();
+			this.isSupportStreaming = true;
 			break;
 		}
 		case "cell": {
-			this.funcs = getCellFunctions();
+			this.funcs = getCellFunctions();			
 			break;
 		}
 		case "slide": {
@@ -76,11 +78,19 @@ EditorHelperImpl.prototype.getSystemPrompt = function() {
 
 	let systemPrompt = "\
 You are an assistant that calls functions in a strict format **only when needed**.\n\
+CRITICAL: Never add explanations, confirmations, or any text before or after function calls. Respond ONLY with the exact function call format when a function is required.\n\
 \n\
 Function calling format:\n\
 \n\
 If a function call is required based on the user's request, respond exactly as follows:\n\
 [functionCalling (functionName)]: parameters\n\
+Rules:\
+- NO explanatory text before function calls\n\
+- NO confirmations after function calls\n\
+- NO \"I will now...\", \"Let me...\", \"Here's the...\" phrases\n\
+- Follow the exact format — zero deviations allowed\n\
+- Only use function calls when explicitly required by the user's request\n\
+- If no function needed, respond with normal helpful text\n\
 where\n\
 - functionName is the name of the function to call,\n\
 - parameters is a JSON object containing all the parameters.\n\
@@ -96,7 +106,10 @@ Available functions:\n";
 
 	for (let i = 0; i < this.funcs.length; i++) {
 		let func = this.funcs[i];
-		systemPrompt += "\n- " + func.name + "\n  Parameters:\n";
+		systemPrompt += "\n- " + func.name;
+		if (func.description)
+			systemPrompt += "\n  Description: " + func.description + "\n";
+		systemPrompt += "\n  Parameters:\n";
 		for (let j = 0; j < func.params.length; j++) {
 			systemPrompt += "  - " + func.params[j] + "\n";
 		}
@@ -122,7 +135,7 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 	let index3 = data.indexOf("{");
 
 	let funcName = data.substring(index1 + 1, index2).trim();
-	let paramsStr = data.substring(index3).trim();
+	let paramsStr = getJsonResult(data, index3);
 
 	try {
 		let func = this.names2funcs[funcName];
@@ -134,7 +147,7 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 			};
 		}
 
-		let result = await func.call(eval("(" + paramsStr + ")"));
+		let result = await func.call(eval("(" + paramsStr.replaceAll("\n", "\\n") + ")"));
 		if (!result)
 			result = {};
 
@@ -149,3 +162,42 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 	}
 	
 };
+
+function getJsonResult(responseText, startPos) {
+		
+	let result = "";
+
+	let isEscaped = false;
+	let inString = false;
+	let braceCount = 0;
+	let inputLen = responseText.length;
+	
+	for (let i = startPos; i < inputLen; i++) {
+		let char = responseText[i];
+		
+		if (char === '\n') {
+			this.lineNumber++;
+		}
+		
+		if (char === '"' && !isEscaped) {
+			inString = !inString;
+		}
+		
+		isEscaped = (char === '\\' && !isEscaped);
+		
+		if (!inString) {
+			if (char === '{') {
+				braceCount++;
+			}
+			else if (char === '}') {
+				braceCount--;
+
+				if (braceCount === 0) {
+					return responseText.substring(startPos, i + 1);
+				}
+			}				
+		}
+	}
+
+	return responseText.substring(startPos);
+}
