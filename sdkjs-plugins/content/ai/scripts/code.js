@@ -87,7 +87,7 @@ window.addSupportAgentMode = function() {
 
 			helperWindow.attachEvent("onHelperAction", async function(prompt) {
 				//console.log("Helper action: " + prompt);
-				
+
 				helperWindow.close();
 				helperWindow = null;
 				Asc.Editor.callMethod("FocusEditor");
@@ -129,11 +129,33 @@ window.addSupportAgentMode = function() {
 					});
 				}
 
-				let result = await requestEngine.chatRequest(agentHistory, false, async function(data) {
+				let copyMessages = [];
+				for (let i = 0, len = agentHistory.length; i < len; i++) {
+					let item = agentHistory[i];
+					copyMessages.push({
+						role: item.role,
+						content: item.content
+					});
+				}
+
+				let isSupportStreaming = window.EditorHelper.isSupportStreaming;
+				let dataStream = "";
+				async function onStreamEvent(data, end) {
+					if (isSupportStreaming)
+						await Asc.Library.PasteText(data);
+					dataStream += data;
+					if (true === end && "" !== dataStream) {
+						await Asc.Library.PasteText(dataStream);
+						dataStream = "";
+					}
+				}
+
+				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
 					if (!data)
 						return;
 
-					await checkEndAction();
+					if (isSupportStreaming)
+						await checkEndAction();
 					
 					let oldBuffer = buffer;
 					buffer += data;
@@ -145,12 +167,16 @@ window.addSupportAgentMode = function() {
 					}
 
 					if (!checkBuffer)
-						await Asc.Library.PasteText(data);
+						await onStreamEvent(data);
 				});
 
 				if (checkBuffer && !buffer.startsWith(bufferWait)) {
 					checkBuffer = false;
-					await Asc.Library.PasteText(buffer);
+					await onStreamEvent(buffer, true);
+				}
+
+				if (!isSupportStreaming) {
+					await onStreamEvent("", true);
 				}
 
 				await checkEndAction();
