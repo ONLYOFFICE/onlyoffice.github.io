@@ -1,0 +1,504 @@
+# en-US.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Insert into document",
+  "Show/Hide preview": "Show/Hide preview",
+  "You can paste Markdown here or open a .md file": "You can paste Markdown here or open a .md file",
+  "Write Markdown here...": "Write Markdown here...",
+  "Title": "Title",
+  "Select Markdown file": "Select Markdown file"
+}
+*****
+# es-ES.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Insertar en el documento",
+  "Show/Hide preview": "Mostrar/Ocultar vista previa",
+  "You can paste Markdown here or open a .md file": "Puedes pegar Markdown aquí o abrir un archivo .md",
+  "Write Markdown here...": "Escribe Markdown aquí...",
+  "Title": "Título",
+  "Select Markdown file": "Seleccionar Archivo Markdown"
+}
+*****
+# zh-CN.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "插入文档",
+  "Show/Hide preview": "显示/隐藏预览",
+  "You can paste Markdown here or open a .md file": "你可以在此粘贴Markdown或打开.md文件",
+  "Write Markdown here...": "在此编写Markdown...",
+  "Title": "标题",
+  "Select Markdown file": "选择Markdown文件"
+}
+*****
+# fr-FR.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Insérer dans le document",
+  "Show/Hide preview": "Afficher/Masquer l'aperçu",
+  "You can paste Markdown here or open a .md file": "Vous pouvez coller Markdown ici ou ouvrir un fichier .md",
+  "Write Markdown here...": "Écrivez Markdown ici...",
+  "Title": "Titre",
+  "Select Markdown file": "Sélectionner le fichier Markdown"
+}
+*****
+# ar-SA.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "إدراج في المستند",
+  "Show/Hide preview": "إظهار/إخفاء المعاينة",
+  "You can paste Markdown here or open a .md file": "يمكنك لصق Markdown هنا أو فتح ملف .md",
+  "Write Markdown here...": "اكتب Markdown هنا...",
+  "Title": "العنوان",
+  "Select Markdown file": "اختر ملف Markdown"
+}
+*****
+# ru-RU.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Вставить в документ",
+  "Show/Hide preview": "Показать/Скрыть предварительный просмотр",
+  "You can paste Markdown here or open a .md file": "Вы можете вставить Markdown сюда или открыть файл .md",
+  "Write Markdown here...": "Пишите Markdown здесь...",
+  "Title": "Заголовок",
+  "Select Markdown file": "Выбрать файл Markdown"
+}
+*****
+# de-DE.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "In das Dokument einfügen",
+  "Show/Hide preview": "Vorschau anzeigen/verbergen",
+  "You can paste Markdown here or open a .md file": "Sie können hier Markdown einfügen oder eine .md-Datei öffnen",
+  "Write Markdown here...": "Schreiben Sie hier Markdown...",
+  "Title": "Titel",
+  "Select Markdown file": "Markdown-Datei auswählen"
+}
+*****
+# pt-BR.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Inserir no documento",
+  "Show/Hide preview": "Mostrar/Ocultar visualização",
+  "You can paste Markdown here or open a .md file": "Você pode colar Markdown aqui ou abrir um arquivo .md",
+  "Write Markdown here...": "Escreva Markdown aqui...",
+  "Title": "Título",
+  "Select Markdown file": "Selecionar arquivo Markdown"
+}
+*****
+# ja-JP.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "ドキュメントに挿入",
+  "Show/Hide preview": "プレビュー表示/非表示",
+  "You can paste Markdown here or open a .md file": "ここにMarkdownを貼り付けるか、.mdファイルを開くことができます",
+  "Write Markdown here...": "ここにMarkdownを書きます...",
+  "Title": "タイトル",
+  "Select Markdown file": "Markdownファイルを選択"
+}
+*****
+# it-IT.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Inserisci nel documento",
+  "Show/Hide preview": "Mostra/Nascondi anteprima",
+  "You can paste Markdown here or open a .md file": "Puoi incollare Markdown qui o aprire un file .md",
+  "Write Markdown here...": "Scrivi Markdown qui...",
+  "Title": "Titolo",
+  "Select Markdown file": "Seleziona file Markdown"
+}
+*****
+# nl-NL.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "In document invoegen",
+  "Show/Hide preview": "Voorbeeld tonen/verbergen",
+  "You can paste Markdown here or open a .md file": "Je kunt hier Markdown plakken of een .md-bestand openen",
+  "Write Markdown here...": "Schrijf hier Markdown...",
+  "Title": "Titel",
+  "Select Markdown file": "Selecteer Markdown-bestand"
+}
+*****
+# pl-PL.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Wstaw do dokumentu",
+  "Show/Hide preview": "Pokaż/Ukryj podgląd",
+  "You can paste Markdown here or open a .md file": "Możesz wkleić Markdown tutaj lub otworzyć plik .md",
+  "Write Markdown here...": "Napisz Markdown tutaj...",
+  "Title": "Tytuł",
+  "Select Markdown file": "Wybierz plik Markdown"
+}
+*****
+# sv-SE.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Infoga i dokument",
+  "Show/Hide preview": "Visa/Dölj förhandsgranskning",
+  "You can paste Markdown here or open a .md file": "Du kan klistra in Markdown här eller öppna en .md-fil",
+  "Write Markdown here...": "Skriv Markdown här...",
+  "Title": "Titel",
+  "Select Markdown file": "Välj Markdown-fil"
+}
+*****
+# ko-KR.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "문서에 삽입",
+  "Show/Hide preview": "미리보기 표시/숨기기",
+  "You can paste Markdown here or open a .md file": "여기에 Markdown을 붙여넣거나 .md 파일을 열 수 있습니다",
+  "Write Markdown here...": "여기에 Markdown 작성...",
+  "Title": "제목",
+  "Select Markdown file": "Markdown 파일 선택"
+}
+*****
+# tr-TR.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Belgeye ekle",
+  "Show/Hide preview": "Önizlemeyi Göster/Gizle",
+  "You can paste Markdown here or open a .md file": "Markdown'u buraya yapıştırabilir veya bir .md dosyası açabilirsiniz",
+  "Write Markdown here...": "Markdown'u buraya yazın...",
+  "Title": "Başlık",
+  "Select Markdown file": "Markdown dosyasını seç"
+}
+*****
+# vi-VN.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Chèn vào tài liệu",
+  "Show/Hide preview": "Hiển thị/Ẩn bản xem trước",
+  "You can paste Markdown here or open a .md file": "Bạn có thể dán Markdown vào đây hoặc mở tệp .md",
+  "Write Markdown here...": "Viết Markdown tại đây...",
+  "Title": "Tiêu đề",
+  "Select Markdown file": "Chọn tệp Markdown"
+}
+*****
+# hi-IN.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "दस्तावेज़ में डालें",
+  "Show/Hide preview": "पूर्वावलोकन दिखाएँ/छिपाएँ",
+  "You can paste Markdown here or open a .md file": "आप यहाँ Markdown चिपका सकते हैं या .md फ़ाइल खोल सकते हैं",
+  "Write Markdown here...": "यहाँ Markdown लिखें...",
+  "Title": "शीर्षक",
+  "Select Markdown file": "Markdown फ़ाइल चुनें"
+}
+*****
+# uk-UA.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Вставити в документ",
+  "Show/Hide preview": "Показати/Приховати попередній перегляд",
+  "You can paste Markdown here or open a .md file": "Ви можете вставити Markdown тут або відкрити файл .md",
+  "Write Markdown here...": "Напишіть Markdown тут...",
+  "Title": "Заголовок",
+  "Select Markdown file": "Виберіть файл Markdown"
+}
+*****
+# cs-CZ.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Vložit do dokumentu",
+  "Show/Hide preview": "Zobrazit/skrýt náhled",
+  "You can paste Markdown here or open a .md file": "Zde můžete vložit Markdown nebo otevřít soubor .md",
+  "Write Markdown here...": "Zde napište Markdown...",
+  "Title": "Nadpis",
+  "Select Markdown file": "Vyberte soubor Markdown"
+}
+*****
+# el-GR.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Εισαγωγή στο έγγραφο",
+  "Show/Hide preview": "Εμφάνιση/Απόκρυψη προεπισκόπησης",
+  "You can paste Markdown here or open a .md file": "Μπορείτε να επικολλήσετε Markdown εδώ ή να ανοίξετε ένα αρχείο .md",
+  "Write Markdown here...": "Γράψτε Markdown εδώ...",
+  "Title": "Τίτλος",
+  "Select Markdown file": "Επιλέξτε αρχείο Markdown"
+}
+# be-BY.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Уставіць у дакумент",
+  "Show/Hide preview": "Паказаць/Схаваць папярэдні прагляд",
+  "You can paste Markdown here or open a .md file": "Вы можаце ўставіць Markdown сюды або адкрыць файл .md",
+  "Write Markdown here...": "Пішыце Markdown тут...",
+  "Title": "Загаловак",
+  "Select Markdown file": "Выбраць файл Markdown"
+}
+*****
+# bg-BG.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Вмъкни в документа",
+  "Show/Hide preview": "Покажи/Скрий предварителен преглед",
+  "You can paste Markdown here or open a .md file": "Можете да поставите Markdown тук или да отворите .md файл",
+  "Write Markdown here...": "Пишете Markdown тук...",
+  "Title": "Заглавие",
+  "Select Markdown file": "Изберете Markdown файл"
+}
+*****
+# ca-ES.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Inserir al document",
+  "Show/Hide preview": "Mostra/Oculta vista prèvia",
+  "You can paste Markdown here or open a .md file": "Pots enganxar Markdown aquí o obrir un fitxer .md",
+  "Write Markdown here...": "Escriu Markdown aquí...",
+  "Title": "Títol",
+  "Select Markdown file": "Selecciona fitxer Markdown"
+}
+*****
+# da-DK.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Indsæt i dokumentet",
+  "Show/Hide preview": "Vis/Skjul forhåndsvisning",
+  "You can paste Markdown here or open a .md file": "Du kan indsætte Markdown her eller åbne en .md-fil",
+  "Write Markdown here...": "Skriv Markdown her...",
+  "Title": "Titel",
+  "Select Markdown file": "Vælg Markdown-fil"
+}
+*****
+# en-GB.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Insert into document",
+  "Show/Hide preview": "Show/Hide preview",
+  "You can paste Markdown here or open a .md file": "You can paste Markdown here or open a .md file",
+  "Write Markdown here...": "Write Markdown here...",
+  "Title": "Title",
+  "Select Markdown file": "Select Markdown file"
+}
+*****
+# fi-FI.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Lisää dokumenttiin",
+  "Show/Hide preview": "Näytä/Piilota esikatselu",
+  "You can paste Markdown here or open a .md file": "Voit liittää Markdownia tänne tai avata .md-tiedoston",
+  "Write Markdown here...": "Kirjoita Markdown tähän...",
+  "Title": "Otsikko",
+  "Select Markdown file": "Valitse Markdown-tiedosto"
+}
+*****
+# gl-ES.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Inserir no documento",
+  "Show/Hide preview": "Mostrar/Ocultar previsualización",
+  "You can paste Markdown here or open a .md file": "Podes pegar Markdown aquí ou abrir un arquivo .md",
+  "Write Markdown here...": "Escribe Markdown aquí...",
+  "Title": "Título",
+  "Select Markdown file": "Seleccionar arquivo Markdown"
+}
+*****
+# he-IL.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "הכנס למסמך",
+  "Show/Hide preview": "הצג/הסתר תצוגה מקדימה",
+  "You can paste Markdown here or open a .md file": "אתה יכול להדביק Markdown כאן או לפתוח קובץ .md",
+  "Write Markdown here...": "כתוב Markdown כאן...",
+  "Title": "כותרת",
+  "Select Markdown file": "בחר קובץ Markdown"
+}
+*****
+# hu-HU.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Beszúrás a dokumentumba",
+  "Show/Hide preview": "Előnézet mutatása/Elrejtése",
+  "You can paste Markdown here or open a .md file": "Ide beillesztheted a Markdown-t vagy megnyithatsz egy .md fájlt",
+  "Write Markdown here...": "Itt írj Markdown-t...",
+  "Title": "Cím",
+  "Select Markdown file": "Markdown fájl kiválasztása"
+}
+*****
+# hy-AM.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Ներմուծել փաստաթղթում",
+  "Show/Hide preview": "Ցույց/Թաքցնել նախադիտումը",
+  "You can paste Markdown here or open a .md file": "Դուք կարող եք տեղադրել Markdown այստեղ կամ բացել .md ֆայլ",
+  "Write Markdown here...": "Գրեք Markdown այստեղ...",
+  "Title": "Վերնագիր",
+  "Select Markdown file": "Ընտրեք Markdown ֆայլ"
+}
+*****
+# id-ID.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Masukkan ke dokumen",
+  "Show/Hide preview": "Tampilkan/Sembunyikan pratinjau",
+  "You can paste Markdown here or open a .md file": "Anda dapat menempelkan Markdown di sini atau membuka file .md",
+  "Write Markdown here...": "Tulis Markdown di sini...",
+  "Title": "Judul",
+  "Select Markdown file": "Pilih file Markdown"
+}
+*****
+# lo-LA.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "ແນບໃນເອກະສານ",
+  "Show/Hide preview": "ແສງ/ເຊື່ອມມິດການສະແດງ",
+  "You can paste Markdown here or open a .md file": "ທ່ານສາມາດແນບ Markdown ທີ່ນີ້ ຫຼືເປີດໄຟລ໌ .md",
+  "Write Markdown here...": "ຂຽນ Markdown ທີ່ນີ້...",
+  "Title": "ຫົວຂໍ້",
+  "Select Markdown file": "ເລືອກໄຟລ໌ Markdown"
+}
+*****
+# lv-LV.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Ievietot dokumentā",
+  "Show/Hide preview": "Rādīt/Slēpt priekšskatījumu",
+  "You can paste Markdown here or open a .md file": "Varat ielīmēt Markdown šeit vai atvērt .md failu",
+  "Write Markdown here...": "Rakstīt Markdown šeit...",
+  "Title": "Virsraksts",
+  "Select Markdown file": "Izvēlēties Markdown failu"
+}
+*****
+# no-NO.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Sett inn i dokument",
+  "Show/Hide preview": "Vis/skjul forhåndsvisning",
+  "You can paste Markdown here or open a .md file": "Du kan lime inn Markdown her eller åpne en .md-fil",
+  "Write Markdown here...": "Skriv Markdown her...",
+  "Title": "Tittel",
+  "Select Markdown file": "Velg Markdown-fil"
+}
+*****
+# pt-PT.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Inserir no documento",
+  "Show/Hide preview": "Mostrar/Ocultar pré-visualização",
+  "You can paste Markdown here or open a .md file": "Pode colar Markdown aqui ou abrir um ficheiro .md",
+  "Write Markdown here...": "Escreva Markdown aqui...",
+  "Title": "Título",
+  "Select Markdown file": "Selecionar ficheiro Markdown"
+}
+*****
+# ro-RO.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Inserare în document",
+  "Show/Hide preview": "Afișează/Ascunde previzualizare",
+  "You can paste Markdown here or open a .md file": "Puteți lipi Markdown aici sau deschide un fișier .md",
+  "Write Markdown here...": "Scrieți Markdown aici...",
+  "Title": "Titlu",
+  "Select Markdown file": "Selectați fișierul Markdown"
+}
+*****
+# si-LK.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "ලියවිල්ලට ඇතුළත් කරන්න",
+  "Show/Hide preview": "පෙරදසුන පෙන්වන්න/සඟවන්න",
+  "You can paste Markdown here or open a .md file": "ඔබට මෙහි Markdown ඇතුළත් කළ හැකිය හෝ .md ගොනුවක් විවෘත කළ හැක",
+  "Write Markdown here...": "මෙහි Markdown ලියන්න...",
+  "Title": "මාතෘකාව",
+  "Select Markdown file": "Markdown ගොනුව තෝරන්න"
+}
+*****
+# sk-SK.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Vložiť do dokumentu",
+  "Show/Hide preview": "Zobraziť/Skryť náhľad",
+  "You can paste Markdown here or open a .md file": "Tu môžete vložiť Markdown alebo otvoriť súbor .md",
+  "Write Markdown here...": "Tu napíšte Markdown...",
+  "Title": "Názov",
+  "Select Markdown file": "Vyberte súbor Markdown"
+}
+*****
+# sl-SI.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Vstavi v dokument",
+  "Show/Hide preview": "Prikaži/Skrij predogled",
+  "You can paste Markdown here or open a .md file": "Lahko prilepite Markdown sem ali odprete .md datoteko",
+  "Write Markdown here...": "Pišite Markdown tukaj...",
+  "Title": "Naslov",
+  "Select Markdown file": "Izberite datoteko Markdown"
+}
+*****
+# sq-AL.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Fut në dokument",
+  "Show/Hide preview": "Shfaq/Fsheh parashikimin",
+  "You can paste Markdown here or open a .md file": "Mund të ngjisni Markdown këtu ose të hapni një skedar .md",
+  "Write Markdown here...": "Shkruani Markdown këtu...",
+  "Title": "Titulli",
+  "Select Markdown file": "Zgjidh skedarin Markdown"
+}
+*****
+# sr-Cyrl-RS.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Уметни у документ",
+  "Show/Hide preview": "Прикажи/Сакриј преглед",
+  "You can paste Markdown here or open a .md file": "Можете да залепите Markdown овде или да отворите .md датотеку",
+  "Write Markdown here...": "Пишите Markdown овде...",
+  "Title": "Наслов",
+  "Select Markdown file": "Изаберите Markdown датотеку"
+}
+*****
+# sr-Latn-RS.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "Umetni u dokument",
+  "Show/Hide preview": "Prikaži/Sakrij pregled",
+  "You can paste Markdown here or open a .md file": "Možete zalepiti Markdown ovde ili otvoriti .md fajl",
+  "Write Markdown here...": "Pišite Markdown ovde...",
+  "Title": "Naslov",
+  "Select Markdown file": "Izaberite Markdown fajl"
+}
+*****
+# ur-PK.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "دستاویز میں شامل کریں",
+  "Show/Hide preview": "پیش نظارہ دکھائیں/چھپائیں",
+  "You can paste Markdown here or open a .md file": "آپ یہاں Markdown چسپاں کرسکتے ہیں یا .md فائل کھول سکتے ہیں",
+  "Write Markdown here...": "یہاں Markdown لکھیں...",
+  "Title": "عنوان",
+  "Select Markdown file": "Markdown فائل منتخب کریں"
+}
+*****
+# zh-TW.json
+{
+  "MDParser": "MDParser",
+  "Insert into document": "插入文件",
+  "Show/Hide preview": "顯示/隱藏預覽",
+  "You can paste Markdown here or open a .md file": "您可以在此處粘貼Markdown或打開.md文件",
+  "Write Markdown here...": "在此編寫Markdown...",
+  "Title": "標題",
+  "Select Markdown file": "選擇Markdown文件"
+}
+*****
+# el-GR.json
+{
+"MDParser": "MDParser",
+"Insert into document": "Εισαγωγή στο έγγραφο",
+"Show/Hide preview": "Εμφάνιση/Απόκρυψη προεπισκόπησης",
+"You can paste Markdown here or open a .md file": "Μπορείτε να επικολλήσετε Markdown εδώ ή να ανοίξετε ένα αρχείο .md",
+"Write Markdown here...": "Γράψτε Markdown εδώ...",
+"Title": "Τίτλος",
+"Select Markdown file": "Επιλέξτε αρχείο Markdown"
+}
+*****
+# be-BY.json
+{
+"MDParser": "MDParser",
+"Insert into document": "Уставіць у дакумент",
+"Show/Hide preview": "Паказаць/Схаваць папярэдні прагляд",
+"You can paste Markdown here or open a .md file": "Вы можаце ўставіць Markdown сюды або адкрыць файл .md",
+"Write Markdown here...": "Пішыце Markdown тут...",
+"Title": "Загаловак",
+"Select Markdown file": "Выбраць файл Markdown"
+}

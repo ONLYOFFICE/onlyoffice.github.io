@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MDParser</title>
+  <script type="text/javascript" src="../v1/plugins.js"></script>
+  <script type="text/javascript" src="../v1/plugins-ui.js"></script>
+  <link rel="stylesheet" href="../v1/plugins.css">
+  <style>
+    html {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .custom-file-button {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+
+    :root {
+      font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial;
+      --gap: 12px;
+    }
+
+    body {
+      margin: 0;
+      padding: 12px;
+      box-sizing: border-box;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      resize: vertical;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .preview {
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    .controls {
+      margin: 10px 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      cursor: pointer;
+    }
+
+    /* button.primary {
+      border-color: transparent;
+    } */
+
+    .small {
+      font-size: 12px;
+    }
+
+    #md-input {
+      box-sizing: border-box;
+    }
+
+    .controls button {
+      /* line-height: 6px; */
+      display: flex;
+      align-items: center;
+    }
+
+    textarea.fullwidth {
+      grid-column: 1 / -1;
+      /* Ocupa todas las columnas del grid */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="small" id="info-text">You can paste Markdown here or open a .md file</div>
+
+  <input type="file" id="file-md" accept=".md,text/markdown,text/plain" style="display:none;" />
+  <div class="controls">
+    <div>
+
+      <button id="file-md-button" onclick="javacript:document.querySelector('#file-md').click()" for="file-md"
+        class="btn-text-default">Select Markdown file</button>
+    </div>
+    <div>
+
+      <button id="btn-preview-toggle" class="btn-text-default">Show/Hide preview</button>
+    </div>
+    <div>
+
+      <button id="btn-insert" class="btn-text-default submit primary">Insert into document</button>
+    </div>
+  </div>
+
+
+  <div class="wrap">
+    <textarea id="md-input" class="form-control"></textarea>
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <!-- Dependencies (CDN): markdown-it, html-docx-js, FileSaver -->
+  <link rel="stylesheet" href="./resources/css/katex.min.css">
+  <link rel="stylesheet" href="./resources/css/github-markdown.css">
+
+  <!-- markdown-it -->
+  <script src="./resources/js/markdown-it.min.js"></script>
+  <!-- KaTeX core -->
+  <script src="./resources/js/katex.min.js"></script>
+  <!-- KaTeX auto-render -->
+  <script src="./resources/js/auto-render.min.js"></script>
+  <!-- markdown-it-katex plugin -->
+
+  <script src="./resources/js/html-docx.js"></script>
+
+
+  <!-- Plugin script -->
+  <script src="scripts/plugin.js"></script>
+</body>
+
+</html>
