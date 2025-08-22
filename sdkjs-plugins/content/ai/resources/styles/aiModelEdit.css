@@ -115,8 +115,9 @@ body {
 }
 #custom-providers-button label{
     cursor: pointer;
-    border-bottom: 1px dotted currentColor;
-    padding-bottom: 2px;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
     margin-top: 24px;
 }
 
