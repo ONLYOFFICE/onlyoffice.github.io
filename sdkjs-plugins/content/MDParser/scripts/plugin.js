@@ -1,6 +1,15 @@
+// scripts/plugin.js
+// Plugin para ONLYOFFICE: MD -> HTML -> insert / download DOCX
+// Requiere: markdown-it, html-docx-js, FileSaver
+
+
+
 (function () {
   'use strict';
-  var theFormulas = [];
+  window.MdParserContext = {
+    theFormulas: []
+  }
+
   // markdown-it inicial + katex
   const mdParser = window.markdownit({ html: true, linkify: true })
 
@@ -15,18 +24,7 @@
   const btnPreviewToggle = document.getElementById('btn-preview-toggle');
   const inputFile = document.getElementById('file-md');
 
-  // 👉 función para extraer fórmulas del markdown
-  function extractFormulas(markdownText) {
-    const formulas = [];
-    // Busca $$...$$ o $...$ (inline)
-    const regex = /\$\$[\s\S]*?\$\$|\$[^$]+\$/g;
-    let match;
-    while ((match = regex.exec(markdownText)) !== null) {
-      formulas.push(match[0].trim()); // match[0] incluye los $ o $$
-    }
-    theFormulas = formulas;
-    return formulas;
-  }
+
 
   preview.style.height = wrapClientHeight;
   ta.style.height = wrapClientHeight;
@@ -46,6 +44,9 @@
       preview.innerHTML = html;
 
 
+      //RESET FORMULA ARRAY
+      window.MdParserContext.theFormulas = [];
+
       // 👇 Renderiza las fórmulas con KaTeX (auto-render)
       if (window.renderMathInElement) {
         renderMathInElement(preview, {
@@ -56,9 +57,6 @@
           throwOnError: false
         });
       }
-      // 👇 extraer fórmulas
-      const formulas = extractFormulas(text);
-      console.log("📐 Fórmulas encontradas:", formulas);
 
       return html;
     } catch (err) {
@@ -99,8 +97,8 @@
   }
 
   function limpiarFormulas() {
-    theFormulas = theFormulas.map(f => {
-      let text = String(f).trim();
+    window.MdParserContext.theFormulas = window.MdParserContext.theFormulas.map(({ formula, id }) => {
+      let text = String(formula).trim();
 
       // saltos reales -> espacio
       text = text.replace(/\r/g, '').replace(/\s*\n\s*/g, ' ');
@@ -116,22 +114,39 @@
 
       // compactar
       text = text.replace(/\s{2,}/g, ' ').trim();
-      return text;
+      return {
+        formula: text,
+        id
+      }
     });
-    debugger
+
+
   }
+
 
 
   // Inserta el HTML convertido en el documento (ONLYOFFICE)
   function insertIntoDocument() {
     var html = renderPreview();
-    extractFormulas(html)
-    theFormulas.forEach((formul, i) => {
-      html = html.replace(formul, "{formula" + i + "}")
+    //LIMPIAR FORMULAS
+
+    //ADD ID TO EACH FORMULA
+    window.MdParserContext.theFormulas = window.MdParserContext.theFormulas.map(formula => {
+      return {
+        formula,
+        id: generateId(7)
+      }
     })
 
+    window.MdParserContext.theFormulas.forEach(({ formula, id }) => {
+      //IMPORT FIRST BLOCK ($$)
+      html = html.replace("$$"+formula+"$$", id);
+      html = html.replace("$"+formula+"$", id);
+    })
 
     limpiarFormulas();
+
+
     if (!html) {
       alert('Preview vacío — nada que insertar.');
       return;
@@ -150,14 +165,14 @@
 
       });
       setTimeout(() => {
-        Asc.scope.theFormulas = theFormulas;
+        Asc.scope.theFormulas = window.MdParserContext.theFormulas;
         Asc.plugin.callCommand(() => {
           const doc = Api.GetDocument();
           const formulas = Asc.scope.theFormulas;
 
-          formulas.forEach((formula, index) => {
-            const placeholder = `{formula${index}}`;
-            const matches = doc.Search(placeholder);
+          formulas.forEach(({ formula, id }) => {
+            ;
+            const matches = doc.Search(id);
 
             if (matches.length > 0) {
               const rng = matches[0];
@@ -249,6 +264,14 @@
     window.addEventListener('load', renderPreview);
   }
 
+  function generateId(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
 
 })();
-
