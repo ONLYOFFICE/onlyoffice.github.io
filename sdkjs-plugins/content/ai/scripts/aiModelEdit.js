@@ -186,6 +186,30 @@ var capabilitiesElements = {
 	}
 };
 
+var heightUpdateConditions = {
+	_init: false,
+	_translate: false,
+	_markReady: function(key) {
+		heightUpdateConditions[key] = true;
+		heightUpdateConditions._checkAllReady();
+	},
+	_checkAllReady: function() {
+		if (
+			heightUpdateConditions._init &&
+			heightUpdateConditions._translate
+		) {
+			updateWindowHeight();
+		}
+	},
+
+	initReady: function() {
+		heightUpdateConditions._markReady('_init');
+	},
+	translateReady: function() {
+		heightUpdateConditions._markReady('_translate');
+	}
+};
+
 var resolveModels = null;
 var rejectModels = null;
 window.Asc.plugin.init = function() {
@@ -209,6 +233,8 @@ window.Asc.plugin.init = function() {
 			resolveModels && resolveModels(res);
 		}
 	});
+
+	heightUpdateConditions.initReady();
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
@@ -223,7 +249,7 @@ window.Asc.plugin.onTranslate = function () {
 		item.btn.setLabel(window.Asc.plugin.tr(item.btn.getLabel()));
 	}
 
-	updateWindowHeight();
+	heightUpdateConditions.translateReady();
 };
 
 window.addEventListener("resize", onResize);
