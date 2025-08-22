@@ -197,6 +197,7 @@
     reader.onload = function (e) {
       ta.value = e.target.result || '';
       renderPreview();
+      inputFile.value = ''; 
     };
     reader.readAsText(f, 'utf-8');
   });
@@ -272,6 +273,7 @@
     }
     return result;
   }
+
 
 
 })();
