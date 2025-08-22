@@ -1,9 +1,3 @@
-// scripts/plugin.js
-// Plugin para ONLYOFFICE: MD -> HTML -> insert / download DOCX
-// Requiere: markdown-it, html-docx-js, FileSaver
-
-
-
 (function () {
   'use strict';
   var theFormulas = [];
@@ -176,10 +170,6 @@
       }, 0);
 
 
-    } else {
-      // Entorno de prueba (fuera de ONLYOFFICE) — simplemente descarga el HTML
-      const blob = new Blob([wrapped], { type: 'text/html;charset=utf-8' });
-      saveAs(blob, 'preview.html');
     }
   }
 
@@ -261,3 +251,4 @@
 
 
 })();
+
