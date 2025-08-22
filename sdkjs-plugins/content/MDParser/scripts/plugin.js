@@ -14,6 +14,8 @@
   var wrapClientHeight = (document.querySelector("body > div.wrap").clientHeight - 10) + "px";
   // elementos UI
   const ta = document.getElementById('md-input');
+  const wrap = document.querySelector('.wrap'); // ← Selección del div con clase .wrap
+
   const preview = document.getElementById('preview');
   const btnInsert = document.getElementById('btn-insert');
   const btnPreviewToggle = document.getElementById('btn-preview-toggle');
@@ -256,5 +258,6 @@
     // Si pruebas en navegador fuera de ONLYOFFICE
     window.addEventListener('load', renderPreview);
   }
+
 
 })();
