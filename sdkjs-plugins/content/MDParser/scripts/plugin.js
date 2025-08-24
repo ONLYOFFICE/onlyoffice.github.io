@@ -1,9 +1,3 @@
-// scripts/plugin.js
-// Plugin para ONLYOFFICE: MD -> HTML -> insert / download DOCX
-// Requiere: markdown-it, html-docx-js, FileSaver
-
-
-
 (function () {
   'use strict';
   window.MdParserContext = {
@@ -126,7 +120,7 @@
 
 
   // Inserta el HTML convertido en el documento (ONLYOFFICE)
-  function insertIntoDocument() {
+  async function insertIntoDocument() {
     var html = renderPreview();
     //LIMPIAR FORMULAS
 
@@ -140,8 +134,8 @@
 
     window.MdParserContext.theFormulas.forEach(({ formula, id }) => {
       //IMPORT FIRST BLOCK ($$)
-      html = html.replace("$$"+formula+"$$", id);
-      html = html.replace("$"+formula+"$", id);
+      html = html.replace("$$" + formula + "$$", id);
+      html = html.replace("$" + formula + "$", id);
     })
 
     limpiarFormulas();
@@ -164,25 +158,66 @@
 
 
       });
-      setTimeout(() => {
-        Asc.scope.theFormulas = window.MdParserContext.theFormulas;
-        Asc.plugin.callCommand(() => {
-          const doc = Api.GetDocument();
-          const formulas = Asc.scope.theFormulas;
 
-          formulas.forEach(({ formula, id }) => {
-            ;
-            const matches = doc.Search(id);
+      Asc.scope.theFormulas = window.MdParserContext.theFormulas;
 
-            if (matches.length > 0) {
-              const rng = matches[0];
-              rng.Select();         // Selecciona el placeholder
-              rng.Delete();         // Lo elimina
-              doc.AddMathEquation(formula, "latex"); // Inserta la ecuación
-            }
-          });
-        }, false);
-      }, 0);
+
+
+      if (window.MdParserContext.theFormulas.length > 0) {
+        //var start = Date.now();
+        var promise = await new Promise((resolve, reject) => {
+          var times = 0;
+          window.MdParserContext.foundFormulaId = false;
+          var intervalId = setInterval(() => {
+            //console.log("Intento" + times);
+            if (times === 5) reject(false);
+            Asc.plugin.callCommand(() => {
+              const doc = Api.GetDocument();
+              var formulas = Asc.scope.theFormulas;
+              var lastFormulaId = formulas[formulas.length - 1].id;
+              var results = doc.Search(lastFormulaId);
+              return (results.length > 0)
+
+            }, false, false, (foundFormulaId) => {
+              window.MdParserContext.foundFormulaId = foundFormulaId
+              //console.log(window.MdParserContext.foundFormulaId)
+            })
+
+            if (window.MdParserContext.foundFormulaId) {
+              clearInterval(intervalId);
+              resolve(true)
+            };
+
+            times++;
+          }, 200);
+        })
+        //console.log(Date.now() - start, promise)
+
+        if (promise) {
+          Asc.plugin.callCommand(async () => {
+            const formulas = Asc.scope.theFormulas;
+            const doc = Api.GetDocument();
+
+            formulas.forEach(({ formula, id }) => {
+
+              const matches = doc.Search(id);
+
+              if (matches.length > 0) {
+                const rng = matches[0];
+                rng.Select();         // Selecciona el placeholder
+                rng.Delete();         // Lo elimina
+                doc.AddMathEquation(formula, "latex"); // Inserta la ecuación
+              }
+            });
+
+            return "Se remplazaron " + formulas.length + " formulas"
+
+          }, false, false, (res) => console.log(res));
+        }
+
+      }
+
+
 
 
     }
@@ -197,7 +232,6 @@
     reader.onload = function (e) {
       ta.value = e.target.result || '';
       renderPreview();
-      inputFile.value = ''; 
     };
     reader.readAsText(f, 'utf-8');
   });
@@ -273,7 +307,6 @@
     }
     return result;
   }
-
 
 
 })();
