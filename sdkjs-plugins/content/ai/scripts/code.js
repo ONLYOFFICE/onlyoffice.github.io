@@ -38,13 +38,15 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
 
-window.addSupportAgentMode = function() {
+window.addSupportAgentMode = function(editorVersion) {
 	var agentHistory = [];
 	var agentDebug = false;
 
 	if (!window.EditorHelper) {
 		window.EditorHelper = new EditorHelperImpl();
 	}
+
+	var is91 = editorVersion >= 9001000;
 
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
 		if (e.keyCode === 27 && helperWindow) {
@@ -56,9 +58,21 @@ window.addSupportAgentMode = function() {
 
 		let isCtrl = e.ctrlKey || e.metaKey;
 		let isClearHistory = isCtrl && e.altKey;
-		let codeShow = 191; // '/'
 
-		if (e.keyCode === codeShow && isCtrl && !helperWindow) {
+		let isAgentShow = false;
+		if (isCtrl)
+		{
+			if (is91)
+			{
+				isAgentShow = e.key === "/";
+			}
+			else
+			{
+				isAgentShow = e.keyCode === 191 || e.keyCode === 111;
+			}
+		}		
+		
+		if (isAgentShow && isCtrl && !helperWindow) {
 			if (isClearHistory)
 				agentHistory = [];
 
@@ -392,7 +406,7 @@ async function initWithTranslate(counter) {
 		}
 
 		if (editorVersion >= 9000004)
-			window.addSupportAgentMode();
+			window.addSupportAgentMode(editorVersion);
 	}
 }
 
@@ -622,7 +636,7 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell", "pdf"],
-		size : [320, 375]
+		size : [365, 425]
 	};
 
 	if (!aiModelEditWindow) {
@@ -642,6 +656,11 @@ function onOpenEditModal(data) {
 				model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
 				providers : AI.serializeProviders()
 			});
+		});
+		aiModelEditWindow.attachEvent("onUpdateHeight", function(height) {
+			if(height > variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [aiModelEditWindow.id, [variation.size[0] - 2, height]]);	//2 is the border-width at the window
+			}
 		});
 		aiModelEditWindow.attachEvent('onOpenCustomProvidersModal', onOpenCustomProvidersModal);
 	}
