@@ -1,5 +1,18 @@
 (function(window, undefined){
 
+	window.on_update_plugin_info = function(obj)
+	{
+		if (obj["theme"])
+		{
+			console.log(JSON.parse(obj["theme"]));
+		}
+
+		if (obj["lang"])
+		{
+			console.log(obj["lang"]);
+		}
+	}
+
 	function GetSystemPrompt() {
 		let systemPrompt = "\
 You are an assistant that calls functions in a strict format **only when needed**.\n\
