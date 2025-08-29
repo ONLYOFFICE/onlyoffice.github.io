@@ -439,7 +439,7 @@ function onChangeProviderKeyInput() {
 
 function onChangeModelComboBox() {
 	var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
-	if(modelObj && !isFirstLoadOfModels) {
+	if(modelObj && (type == 'add' || !isFirstLoadOfModels)) {
 		updateCapabilitiesBtns(modelObj.capabilities);
 	}
 
