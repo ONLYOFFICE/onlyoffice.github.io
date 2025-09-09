@@ -1,3238 +1,11998 @@
-var FA_CATEGORIES = {
-  accessibility: {
-    icons: [
-      "accessible-icon",
-      "address-card",
-      "audio-description",
-      "braille",
-      "circle-info",
-      "circle-question",
-      "closed-captioning",
-      "ear-deaf",
-      "ear-listen",
-      "eye",
-      "eye-low-vision",
-      "fingerprint",
-      "hands",
-      "hands-asl-interpreting",
-      "handshake-angle",
-      "person-cane",
-      "person-walking-with-cane",
-      "phone-volume",
-      "question",
-      "tty",
-      "universal-access",
-      "wheelchair",
-      "wheelchair-move",
-    ],
+var FA_CATEGORIES = [
+  {
     label: "Accessibility",
-  },
-  alert: {
     icons: [
-      "alarm-clock",
-      "bell",
-      "bell-slash",
-      "circle-exclamation",
-      "circle-radiation",
-      "exclamation",
-      "question",
-      "radiation",
-      "skull-crossbones",
-      "triangle-exclamation",
+      {
+        name: "accessible-icon",
+        folder: "brands",
+      },
+      {
+        name: "address-card",
+        folder: "regular",
+      },
+      {
+        name: "audio-description",
+        folder: "solid",
+      },
+      {
+        name: "braille",
+        folder: "solid",
+      },
+      {
+        name: "circle-info",
+        folder: "solid",
+      },
+      {
+        name: "circle-question",
+        folder: "regular",
+      },
+      {
+        name: "closed-captioning",
+        folder: "regular",
+      },
+      {
+        name: "ear-deaf",
+        folder: "solid",
+      },
+      {
+        name: "ear-listen",
+        folder: "solid",
+      },
+      {
+        name: "eye",
+        folder: "regular",
+      },
+      {
+        name: "eye-low-vision",
+        folder: "solid",
+      },
+      {
+        name: "fingerprint",
+        folder: "solid",
+      },
+      {
+        name: "hands",
+        folder: "solid",
+      },
+      {
+        name: "hands-asl-interpreting",
+        folder: "solid",
+      },
+      {
+        name: "handshake-angle",
+        folder: "solid",
+      },
+      {
+        name: "person-cane",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-with-cane",
+        folder: "solid",
+      },
+      {
+        name: "phone-volume",
+        folder: "solid",
+      },
+      {
+        name: "question",
+        folder: "solid",
+      },
+      {
+        name: "tty",
+        folder: "solid",
+      },
+      {
+        name: "universal-access",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Alert",
-  },
-  alphabet: {
     icons: [
-      "a",
-      "address-card",
-      "b",
-      "c",
-      "circle-h",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "o",
-      "p",
-      "q",
-      "r",
-      "s",
-      "square-h",
-      "t",
-      "u",
-      "v",
-      "w",
-      "x",
-      "y",
-      "z",
+      {
+        name: "alarm-clock",
+        folder: "regular",
+      },
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "bell-slash",
+        folder: "regular",
+      },
+      {
+        name: "circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "circle-radiation",
+        folder: "solid",
+      },
+      {
+        name: "exclamation",
+        folder: "solid",
+      },
+      {
+        name: "question",
+        folder: "solid",
+      },
+      {
+        name: "radiation",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "triangle-exclamation",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Alphabet",
-  },
-  animals: {
     icons: [
-      "bugs",
-      "cat",
-      "cow",
-      "crow",
-      "dog",
-      "dove",
-      "dragon",
-      "feather",
-      "feather-pointed",
-      "fish",
-      "fish-fins",
-      "frog",
-      "hippo",
-      "horse",
-      "horse-head",
-      "kiwi-bird",
-      "locust",
-      "mosquito",
-      "otter",
-      "paw",
-      "shield-cat",
-      "shield-dog",
-      "shrimp",
-      "spider",
-      "worm",
+      {
+        name: "a",
+        folder: "solid",
+      },
+      {
+        name: "address-card",
+        folder: "regular",
+      },
+      {
+        name: "b",
+        folder: "solid",
+      },
+      {
+        name: "c",
+        folder: "solid",
+      },
+      {
+        name: "circle-h",
+        folder: "solid",
+      },
+      {
+        name: "d",
+        folder: "solid",
+      },
+      {
+        name: "e",
+        folder: "solid",
+      },
+      {
+        name: "f",
+        folder: "solid",
+      },
+      {
+        name: "g",
+        folder: "solid",
+      },
+      {
+        name: "h",
+        folder: "solid",
+      },
+      {
+        name: "i",
+        folder: "solid",
+      },
+      {
+        name: "j",
+        folder: "solid",
+      },
+      {
+        name: "k",
+        folder: "solid",
+      },
+      {
+        name: "l",
+        folder: "solid",
+      },
+      {
+        name: "m",
+        folder: "solid",
+      },
+      {
+        name: "n",
+        folder: "solid",
+      },
+      {
+        name: "o",
+        folder: "solid",
+      },
+      {
+        name: "p",
+        folder: "solid",
+      },
+      {
+        name: "q",
+        folder: "solid",
+      },
+      {
+        name: "r",
+        folder: "solid",
+      },
+      {
+        name: "s",
+        folder: "solid",
+      },
+      {
+        name: "square-h",
+        folder: "solid",
+      },
+      {
+        name: "t",
+        folder: "solid",
+      },
+      {
+        name: "u",
+        folder: "solid",
+      },
+      {
+        name: "v",
+        folder: "solid",
+      },
+      {
+        name: "w",
+        folder: "solid",
+      },
+      {
+        name: "x",
+        folder: "solid",
+      },
+      {
+        name: "y",
+        folder: "solid",
+      },
+      {
+        name: "z",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Animals",
-  },
-  arrows: {
     icons: [
-      "angle-down",
-      "angle-left",
-      "angle-right",
-      "angle-up",
-      "angles-down",
-      "angles-left",
-      "angles-right",
-      "angles-up",
-      "arrow-down",
-      "arrow-down-1-9",
-      "arrow-down-9-1",
-      "arrow-down-a-z",
-      "arrow-down-long",
-      "arrow-down-short-wide",
-      "arrow-down-up-across-line",
-      "arrow-down-up-lock",
-      "arrow-down-wide-short",
-      "arrow-down-z-a",
-      "arrow-left",
-      "arrow-left-long",
-      "arrow-pointer",
-      "arrow-right",
-      "arrow-right-arrow-left",
-      "arrow-right-from-bracket",
-      "arrow-right-long",
-      "arrow-right-to-bracket",
-      "arrow-rotate-left",
-      "arrow-rotate-right",
-      "arrow-trend-down",
-      "arrow-trend-up",
-      "arrow-turn-down",
-      "arrow-turn-up",
-      "arrow-up",
-      "arrow-up-1-9",
-      "arrow-up-9-1",
-      "arrow-up-a-z",
-      "arrow-up-from-bracket",
-      "arrow-up-long",
-      "arrow-up-right-dots",
-      "arrow-up-right-from-square",
-      "arrow-up-short-wide",
-      "arrow-up-wide-short",
-      "arrow-up-z-a",
-      "arrows-down-to-line",
-      "arrows-left-right",
-      "arrows-left-right-to-line",
-      "arrows-rotate",
-      "arrows-spin",
-      "arrows-split-up-and-left",
-      "arrows-to-circle",
-      "arrows-to-dot",
-      "arrows-to-eye",
-      "arrows-turn-right",
-      "arrows-turn-to-dots",
-      "arrows-up-down",
-      "arrows-up-down-left-right",
-      "arrows-up-to-line",
-      "caret-down",
-      "caret-left",
-      "caret-right",
-      "caret-up",
-      "chevron-down",
-      "chevron-left",
-      "chevron-right",
-      "chevron-up",
-      "circle-arrow-down",
-      "circle-arrow-left",
-      "circle-arrow-right",
-      "circle-arrow-up",
-      "circle-chevron-down",
-      "circle-chevron-left",
-      "circle-chevron-right",
-      "circle-chevron-up",
-      "circle-down",
-      "circle-left",
-      "circle-right",
-      "circle-up",
-      "clock-rotate-left",
-      "cloud-arrow-down",
-      "cloud-arrow-up",
-      "down-left-and-up-right-to-center",
-      "down-long",
-      "download",
-      "left-long",
-      "left-right",
-      "location-arrow",
-      "maximize",
-      "recycle",
-      "repeat",
-      "reply",
-      "reply-all",
-      "retweet",
-      "right-from-bracket",
-      "right-left",
-      "right-long",
-      "right-to-bracket",
-      "rotate",
-      "rotate-left",
-      "rotate-right",
-      "share",
-      "share-from-square",
-      "shuffle",
-      "sort",
-      "sort-down",
-      "sort-up",
-      "square-arrow-up-right",
-      "square-caret-down",
-      "square-caret-left",
-      "square-caret-right",
-      "square-caret-up",
-      "square-up-right",
-      "turn-down",
-      "turn-up",
-      "up-down",
-      "up-down-left-right",
-      "up-long",
-      "up-right-and-down-left-from-center",
-      "up-right-from-square",
-      "upload",
+      {
+        name: "bugs",
+        folder: "solid",
+      },
+      {
+        name: "cat",
+        folder: "solid",
+      },
+      {
+        name: "cow",
+        folder: "solid",
+      },
+      {
+        name: "crow",
+        folder: "solid",
+      },
+      {
+        name: "dog",
+        folder: "solid",
+      },
+      {
+        name: "dove",
+        folder: "solid",
+      },
+      {
+        name: "dragon",
+        folder: "solid",
+      },
+      {
+        name: "feather",
+        folder: "solid",
+      },
+      {
+        name: "feather-pointed",
+        folder: "solid",
+      },
+      {
+        name: "fish",
+        folder: "solid",
+      },
+      {
+        name: "fish-fins",
+        folder: "solid",
+      },
+      {
+        name: "frog",
+        folder: "solid",
+      },
+      {
+        name: "hippo",
+        folder: "solid",
+      },
+      {
+        name: "horse",
+        folder: "solid",
+      },
+      {
+        name: "horse-head",
+        folder: "solid",
+      },
+      {
+        name: "kiwi-bird",
+        folder: "solid",
+      },
+      {
+        name: "locust",
+        folder: "solid",
+      },
+      {
+        name: "mosquito",
+        folder: "solid",
+      },
+      {
+        name: "otter",
+        folder: "solid",
+      },
+      {
+        name: "paw",
+        folder: "solid",
+      },
+      {
+        name: "shield-cat",
+        folder: "solid",
+      },
+      {
+        name: "shield-dog",
+        folder: "solid",
+      },
+      {
+        name: "shrimp",
+        folder: "solid",
+      },
+      {
+        name: "spider",
+        folder: "solid",
+      },
+      {
+        name: "worm",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Arrows",
-  },
-  astronomy: {
     icons: [
-      "binoculars",
-      "globe",
-      "meteor",
-      "moon",
-      "satellite",
-      "satellite-dish",
-      "shuttle-space",
-      "user-astronaut",
+      {
+        name: "angle-down",
+        folder: "solid",
+      },
+      {
+        name: "angle-left",
+        folder: "solid",
+      },
+      {
+        name: "angle-right",
+        folder: "solid",
+      },
+      {
+        name: "angle-up",
+        folder: "solid",
+      },
+      {
+        name: "angles-down",
+        folder: "solid",
+      },
+      {
+        name: "angles-left",
+        folder: "solid",
+      },
+      {
+        name: "angles-right",
+        folder: "solid",
+      },
+      {
+        name: "angles-up",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-1-9",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-9-1",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-a-z",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-long",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-short-wide",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-up-across-line",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-up-lock",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-wide-short",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-z-a",
+        folder: "solid",
+      },
+      {
+        name: "arrow-left",
+        folder: "solid",
+      },
+      {
+        name: "arrow-left-long",
+        folder: "solid",
+      },
+      {
+        name: "arrow-pointer",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right-arrow-left",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right-from-bracket",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right-long",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right-to-bracket",
+        folder: "solid",
+      },
+      {
+        name: "arrow-rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "arrow-rotate-right",
+        folder: "solid",
+      },
+      {
+        name: "arrow-trend-down",
+        folder: "solid",
+      },
+      {
+        name: "arrow-trend-up",
+        folder: "solid",
+      },
+      {
+        name: "arrow-turn-down",
+        folder: "solid",
+      },
+      {
+        name: "arrow-turn-up",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-1-9",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-9-1",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-a-z",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-from-bracket",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-long",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-right-dots",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-right-from-square",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-short-wide",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-wide-short",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-z-a",
+        folder: "solid",
+      },
+      {
+        name: "arrows-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "arrows-left-right",
+        folder: "solid",
+      },
+      {
+        name: "arrows-left-right-to-line",
+        folder: "solid",
+      },
+      {
+        name: "arrows-rotate",
+        folder: "solid",
+      },
+      {
+        name: "arrows-spin",
+        folder: "solid",
+      },
+      {
+        name: "arrows-split-up-and-left",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-circle",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-dot",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-eye",
+        folder: "solid",
+      },
+      {
+        name: "arrows-turn-right",
+        folder: "solid",
+      },
+      {
+        name: "arrows-turn-to-dots",
+        folder: "solid",
+      },
+      {
+        name: "arrows-up-down",
+        folder: "solid",
+      },
+      {
+        name: "arrows-up-down-left-right",
+        folder: "solid",
+      },
+      {
+        name: "arrows-up-to-line",
+        folder: "solid",
+      },
+      {
+        name: "caret-down",
+        folder: "solid",
+      },
+      {
+        name: "caret-left",
+        folder: "solid",
+      },
+      {
+        name: "caret-right",
+        folder: "solid",
+      },
+      {
+        name: "caret-up",
+        folder: "solid",
+      },
+      {
+        name: "chevron-down",
+        folder: "solid",
+      },
+      {
+        name: "chevron-left",
+        folder: "solid",
+      },
+      {
+        name: "chevron-right",
+        folder: "solid",
+      },
+      {
+        name: "chevron-up",
+        folder: "solid",
+      },
+      {
+        name: "circle-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "circle-arrow-left",
+        folder: "solid",
+      },
+      {
+        name: "circle-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "circle-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "circle-chevron-down",
+        folder: "solid",
+      },
+      {
+        name: "circle-chevron-left",
+        folder: "solid",
+      },
+      {
+        name: "circle-chevron-right",
+        folder: "solid",
+      },
+      {
+        name: "circle-chevron-up",
+        folder: "solid",
+      },
+      {
+        name: "circle-down",
+        folder: "regular",
+      },
+      {
+        name: "circle-left",
+        folder: "regular",
+      },
+      {
+        name: "circle-right",
+        folder: "regular",
+      },
+      {
+        name: "circle-up",
+        folder: "regular",
+      },
+      {
+        name: "clock-rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "cloud-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "cloud-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "down-left-and-up-right-to-center",
+        folder: "solid",
+      },
+      {
+        name: "down-long",
+        folder: "solid",
+      },
+      {
+        name: "download",
+        folder: "solid",
+      },
+      {
+        name: "left-long",
+        folder: "solid",
+      },
+      {
+        name: "left-right",
+        folder: "solid",
+      },
+      {
+        name: "location-arrow",
+        folder: "solid",
+      },
+      {
+        name: "maximize",
+        folder: "solid",
+      },
+      {
+        name: "recycle",
+        folder: "solid",
+      },
+      {
+        name: "repeat",
+        folder: "solid",
+      },
+      {
+        name: "reply",
+        folder: "solid",
+      },
+      {
+        name: "reply-all",
+        folder: "solid",
+      },
+      {
+        name: "retweet",
+        folder: "solid",
+      },
+      {
+        name: "right-from-bracket",
+        folder: "solid",
+      },
+      {
+        name: "right-left",
+        folder: "solid",
+      },
+      {
+        name: "right-long",
+        folder: "solid",
+      },
+      {
+        name: "right-to-bracket",
+        folder: "solid",
+      },
+      {
+        name: "rotate",
+        folder: "solid",
+      },
+      {
+        name: "rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "rotate-right",
+        folder: "solid",
+      },
+      {
+        name: "share",
+        folder: "solid",
+      },
+      {
+        name: "share-from-square",
+        folder: "regular",
+      },
+      {
+        name: "shuffle",
+        folder: "solid",
+      },
+      {
+        name: "sort",
+        folder: "solid",
+      },
+      {
+        name: "sort-down",
+        folder: "solid",
+      },
+      {
+        name: "sort-up",
+        folder: "solid",
+      },
+      {
+        name: "square-arrow-up-right",
+        folder: "solid",
+      },
+      {
+        name: "square-caret-down",
+        folder: "regular",
+      },
+      {
+        name: "square-caret-left",
+        folder: "regular",
+      },
+      {
+        name: "square-caret-right",
+        folder: "regular",
+      },
+      {
+        name: "square-caret-up",
+        folder: "regular",
+      },
+      {
+        name: "square-up-right",
+        folder: "solid",
+      },
+      {
+        name: "turn-down",
+        folder: "solid",
+      },
+      {
+        name: "turn-up",
+        folder: "solid",
+      },
+      {
+        name: "up-down",
+        folder: "solid",
+      },
+      {
+        name: "up-down-left-right",
+        folder: "solid",
+      },
+      {
+        name: "up-long",
+        folder: "solid",
+      },
+      {
+        name: "up-right-and-down-left-from-center",
+        folder: "solid",
+      },
+      {
+        name: "up-right-from-square",
+        folder: "solid",
+      },
+      {
+        name: "upload",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Astronomy",
-  },
-  automotive: {
     icons: [
-      "bus",
-      "bus-side",
-      "bus-simple",
-      "car",
-      "car-battery",
-      "car-burst",
-      "car-on",
-      "car-rear",
-      "car-side",
-      "car-tunnel",
-      "caravan",
-      "charging-station",
-      "gas-pump",
-      "gauge",
-      "gauge-high",
-      "gauge-simple",
-      "gauge-simple-high",
-      "motorcycle",
-      "oil-can",
-      "spray-can-sparkles",
-      "taxi",
-      "trailer",
-      "truck",
-      "truck-field",
-      "truck-field-un",
-      "truck-medical",
-      "truck-monster",
-      "truck-pickup",
-      "van-shuttle",
+      {
+        name: "binoculars",
+        folder: "solid",
+      },
+      {
+        name: "globe",
+        folder: "solid",
+      },
+      {
+        name: "meteor",
+        folder: "solid",
+      },
+      {
+        name: "moon",
+        folder: "regular",
+      },
+      {
+        name: "satellite",
+        folder: "solid",
+      },
+      {
+        name: "satellite-dish",
+        folder: "solid",
+      },
+      {
+        name: "shuttle-space",
+        folder: "solid",
+      },
+      {
+        name: "user-astronaut",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Automotive",
-  },
-  buildings: {
     icons: [
-      "archway",
-      "arrow-right-to-city",
-      "building",
-      "building-circle-arrow-right",
-      "building-circle-check",
-      "building-circle-exclamation",
-      "building-circle-xmark",
-      "building-columns",
-      "building-flag",
-      "building-lock",
-      "building-ngo",
-      "building-shield",
-      "building-un",
-      "building-user",
-      "building-wheat",
-      "campground",
-      "church",
-      "city",
-      "dungeon",
-      "gopuram",
-      "hospital",
-      "hospital-user",
-      "hotel",
-      "house",
-      "house-chimney",
-      "house-chimney-crack",
-      "house-chimney-medical",
-      "house-chimney-window",
-      "house-circle-check",
-      "house-circle-exclamation",
-      "house-circle-xmark",
-      "house-crack",
-      "house-fire",
-      "house-flag",
-      "house-lock",
-      "house-medical",
-      "house-medical-circle-check",
-      "house-medical-circle-exclamation",
-      "house-medical-circle-xmark",
-      "house-medical-flag",
-      "igloo",
-      "industry",
-      "kaaba",
-      "landmark",
-      "landmark-dome",
-      "landmark-flag",
-      "monument",
-      "mosque",
-      "mountain-city",
-      "oil-well",
-      "place-of-worship",
-      "school",
-      "school-circle-check",
-      "school-circle-exclamation",
-      "school-circle-xmark",
-      "school-flag",
-      "school-lock",
-      "shop",
-      "shop-lock",
-      "store",
-      "synagogue",
-      "tent",
-      "tent-arrow-down-to-line",
-      "tent-arrow-left-right",
-      "tent-arrow-turn-left",
-      "tent-arrows-down",
-      "tents",
-      "toilet-portable",
-      "toilets-portable",
-      "torii-gate",
-      "tower-observation",
-      "tree-city",
-      "vihara",
-      "warehouse",
+      {
+        name: "bus",
+        folder: "solid",
+      },
+      {
+        name: "bus-side",
+        folder: "solid",
+      },
+      {
+        name: "bus-simple",
+        folder: "solid",
+      },
+      {
+        name: "car",
+        folder: "solid",
+      },
+      {
+        name: "car-battery",
+        folder: "solid",
+      },
+      {
+        name: "car-burst",
+        folder: "solid",
+      },
+      {
+        name: "car-on",
+        folder: "solid",
+      },
+      {
+        name: "car-rear",
+        folder: "solid",
+      },
+      {
+        name: "car-side",
+        folder: "solid",
+      },
+      {
+        name: "car-tunnel",
+        folder: "solid",
+      },
+      {
+        name: "caravan",
+        folder: "solid",
+      },
+      {
+        name: "charging-station",
+        folder: "solid",
+      },
+      {
+        name: "gas-pump",
+        folder: "solid",
+      },
+      {
+        name: "gauge",
+        folder: "solid",
+      },
+      {
+        name: "gauge-high",
+        folder: "solid",
+      },
+      {
+        name: "gauge-simple",
+        folder: "solid",
+      },
+      {
+        name: "gauge-simple-high",
+        folder: "solid",
+      },
+      {
+        name: "motorcycle",
+        folder: "solid",
+      },
+      {
+        name: "oil-can",
+        folder: "solid",
+      },
+      {
+        name: "spray-can-sparkles",
+        folder: "solid",
+      },
+      {
+        name: "taxi",
+        folder: "solid",
+      },
+      {
+        name: "trailer",
+        folder: "solid",
+      },
+      {
+        name: "truck",
+        folder: "regular",
+      },
+      {
+        name: "truck-field",
+        folder: "solid",
+      },
+      {
+        name: "truck-field-un",
+        folder: "solid",
+      },
+      {
+        name: "truck-medical",
+        folder: "solid",
+      },
+      {
+        name: "truck-monster",
+        folder: "solid",
+      },
+      {
+        name: "truck-pickup",
+        folder: "solid",
+      },
+      {
+        name: "van-shuttle",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Buildings",
-  },
-  business: {
     icons: [
-      "address-book",
-      "address-card",
-      "arrows-spin",
-      "arrows-to-dot",
-      "arrows-to-eye",
-      "bars-progress",
-      "bars-staggered",
-      "book",
-      "box-archive",
-      "boxes-packing",
-      "briefcase",
-      "building",
-      "bullhorn",
-      "bullseye",
-      "business-time",
-      "cake-candles",
-      "calculator",
-      "calendar",
-      "calendar-days",
-      "certificate",
-      "chart-line",
-      "chart-pie",
-      "chart-simple",
-      "city",
-      "clipboard",
-      "clipboard-check",
-      "clipboard-question",
-      "compass",
-      "copy",
-      "copyright",
-      "envelope",
-      "envelope-circle-check",
-      "envelope-open",
-      "eraser",
-      "fax",
-      "file",
-      "file-circle-plus",
-      "file-lines",
-      "floppy-disk",
-      "folder",
-      "folder-minus",
-      "folder-open",
-      "folder-plus",
-      "folder-tree",
-      "glasses",
-      "globe",
-      "highlighter",
-      "house-laptop",
-      "industry",
-      "landmark",
-      "laptop-file",
-      "list-check",
-      "magnifying-glass-arrow-right",
-      "magnifying-glass-chart",
-      "marker",
-      "mug-saucer",
-      "network-wired",
-      "note-sticky",
-      "paperclip",
-      "paste",
-      "pen",
-      "pen-clip",
-      "pen-fancy",
-      "pen-nib",
-      "pen-to-square",
-      "pencil",
-      "percent",
-      "person-chalkboard",
-      "phone",
-      "phone-flip",
-      "phone-slash",
-      "phone-volume",
-      "print",
-      "registered",
-      "scale-balanced",
-      "scale-unbalanced",
-      "scale-unbalanced-flip",
-      "scissors",
-      "signature",
-      "sitemap",
-      "socks",
-      "square-envelope",
-      "square-pen",
-      "square-phone",
-      "square-phone-flip",
-      "square-poll-horizontal",
-      "square-poll-vertical",
-      "stapler",
-      "table",
-      "table-columns",
-      "tag",
-      "tags",
-      "thumbtack",
-      "thumbtack-slash",
-      "timeline",
-      "trademark",
-      "vault",
-      "wallet",
+      {
+        name: "archway",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right-to-city",
+        folder: "solid",
+      },
+      {
+        name: "building",
+        folder: "regular",
+      },
+      {
+        name: "building-circle-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "building-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "building-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "building-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "building-columns",
+        folder: "solid",
+      },
+      {
+        name: "building-flag",
+        folder: "solid",
+      },
+      {
+        name: "building-lock",
+        folder: "solid",
+      },
+      {
+        name: "building-ngo",
+        folder: "solid",
+      },
+      {
+        name: "building-shield",
+        folder: "solid",
+      },
+      {
+        name: "building-un",
+        folder: "solid",
+      },
+      {
+        name: "building-user",
+        folder: "solid",
+      },
+      {
+        name: "building-wheat",
+        folder: "solid",
+      },
+      {
+        name: "campground",
+        folder: "solid",
+      },
+      {
+        name: "church",
+        folder: "solid",
+      },
+      {
+        name: "city",
+        folder: "solid",
+      },
+      {
+        name: "dungeon",
+        folder: "solid",
+      },
+      {
+        name: "gopuram",
+        folder: "solid",
+      },
+      {
+        name: "hospital",
+        folder: "regular",
+      },
+      {
+        name: "hospital-user",
+        folder: "solid",
+      },
+      {
+        name: "hotel",
+        folder: "solid",
+      },
+      {
+        name: "house",
+        folder: "regular",
+      },
+      {
+        name: "house-chimney",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-crack",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-medical",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-window",
+        folder: "solid",
+      },
+      {
+        name: "house-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "house-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "house-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "house-crack",
+        folder: "solid",
+      },
+      {
+        name: "house-fire",
+        folder: "solid",
+      },
+      {
+        name: "house-flag",
+        folder: "solid",
+      },
+      {
+        name: "house-lock",
+        folder: "solid",
+      },
+      {
+        name: "house-medical",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-flag",
+        folder: "solid",
+      },
+      {
+        name: "igloo",
+        folder: "solid",
+      },
+      {
+        name: "industry",
+        folder: "solid",
+      },
+      {
+        name: "kaaba",
+        folder: "solid",
+      },
+      {
+        name: "landmark",
+        folder: "solid",
+      },
+      {
+        name: "landmark-dome",
+        folder: "solid",
+      },
+      {
+        name: "landmark-flag",
+        folder: "solid",
+      },
+      {
+        name: "monument",
+        folder: "solid",
+      },
+      {
+        name: "mosque",
+        folder: "solid",
+      },
+      {
+        name: "mountain-city",
+        folder: "solid",
+      },
+      {
+        name: "oil-well",
+        folder: "solid",
+      },
+      {
+        name: "place-of-worship",
+        folder: "solid",
+      },
+      {
+        name: "school",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "school-flag",
+        folder: "solid",
+      },
+      {
+        name: "school-lock",
+        folder: "solid",
+      },
+      {
+        name: "shop",
+        folder: "solid",
+      },
+      {
+        name: "shop-lock",
+        folder: "solid",
+      },
+      {
+        name: "store",
+        folder: "solid",
+      },
+      {
+        name: "synagogue",
+        folder: "solid",
+      },
+      {
+        name: "tent",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-left-right",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-turn-left",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrows-down",
+        folder: "solid",
+      },
+      {
+        name: "tents",
+        folder: "solid",
+      },
+      {
+        name: "toilet-portable",
+        folder: "solid",
+      },
+      {
+        name: "toilets-portable",
+        folder: "solid",
+      },
+      {
+        name: "torii-gate",
+        folder: "solid",
+      },
+      {
+        name: "tower-observation",
+        folder: "solid",
+      },
+      {
+        name: "tree-city",
+        folder: "solid",
+      },
+      {
+        name: "vihara",
+        folder: "solid",
+      },
+      {
+        name: "warehouse",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Business",
-  },
-  camping: {
     icons: [
-      "binoculars",
-      "bottle-water",
-      "bucket",
-      "campground",
-      "caravan",
-      "compass",
-      "faucet",
-      "faucet-drip",
-      "fire",
-      "fire-burner",
-      "fire-flame-curved",
-      "frog",
-      "kit-medical",
-      "map",
-      "map-location",
-      "map-location-dot",
-      "mattress-pillow",
-      "mosquito",
-      "mosquito-net",
-      "mountain",
-      "mountain-sun",
-      "people-roof",
-      "person-hiking",
-      "person-shelter",
-      "route",
-      "signs-post",
-      "tarp",
-      "tarp-droplet",
-      "tent",
-      "tent-arrow-down-to-line",
-      "tent-arrow-left-right",
-      "tent-arrow-turn-left",
-      "tent-arrows-down",
-      "tents",
-      "toilet-paper",
-      "trailer",
-      "tree",
+      {
+        name: "address-book",
+        folder: "regular",
+      },
+      {
+        name: "address-card",
+        folder: "regular",
+      },
+      {
+        name: "arrows-spin",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-dot",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-eye",
+        folder: "solid",
+      },
+      {
+        name: "bars-progress",
+        folder: "solid",
+      },
+      {
+        name: "bars-staggered",
+        folder: "solid",
+      },
+      {
+        name: "book",
+        folder: "solid",
+      },
+      {
+        name: "box-archive",
+        folder: "solid",
+      },
+      {
+        name: "boxes-packing",
+        folder: "solid",
+      },
+      {
+        name: "briefcase",
+        folder: "solid",
+      },
+      {
+        name: "building",
+        folder: "regular",
+      },
+      {
+        name: "bullhorn",
+        folder: "solid",
+      },
+      {
+        name: "bullseye",
+        folder: "solid",
+      },
+      {
+        name: "business-time",
+        folder: "solid",
+      },
+      {
+        name: "cake-candles",
+        folder: "solid",
+      },
+      {
+        name: "calculator",
+        folder: "solid",
+      },
+      {
+        name: "calendar",
+        folder: "regular",
+      },
+      {
+        name: "calendar-days",
+        folder: "regular",
+      },
+      {
+        name: "certificate",
+        folder: "solid",
+      },
+      {
+        name: "chart-line",
+        folder: "solid",
+      },
+      {
+        name: "chart-pie",
+        folder: "solid",
+      },
+      {
+        name: "chart-simple",
+        folder: "solid",
+      },
+      {
+        name: "city",
+        folder: "solid",
+      },
+      {
+        name: "clipboard",
+        folder: "regular",
+      },
+      {
+        name: "clipboard-check",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-question",
+        folder: "solid",
+      },
+      {
+        name: "compass",
+        folder: "regular",
+      },
+      {
+        name: "copy",
+        folder: "regular",
+      },
+      {
+        name: "copyright",
+        folder: "regular",
+      },
+      {
+        name: "envelope",
+        folder: "regular",
+      },
+      {
+        name: "envelope-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "envelope-open",
+        folder: "regular",
+      },
+      {
+        name: "eraser",
+        folder: "solid",
+      },
+      {
+        name: "fax",
+        folder: "solid",
+      },
+      {
+        name: "file",
+        folder: "regular",
+      },
+      {
+        name: "file-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "file-lines",
+        folder: "regular",
+      },
+      {
+        name: "floppy-disk",
+        folder: "regular",
+      },
+      {
+        name: "folder",
+        folder: "regular",
+      },
+      {
+        name: "folder-minus",
+        folder: "solid",
+      },
+      {
+        name: "folder-open",
+        folder: "regular",
+      },
+      {
+        name: "folder-plus",
+        folder: "solid",
+      },
+      {
+        name: "folder-tree",
+        folder: "solid",
+      },
+      {
+        name: "glasses",
+        folder: "solid",
+      },
+      {
+        name: "globe",
+        folder: "solid",
+      },
+      {
+        name: "highlighter",
+        folder: "solid",
+      },
+      {
+        name: "house-laptop",
+        folder: "solid",
+      },
+      {
+        name: "industry",
+        folder: "solid",
+      },
+      {
+        name: "landmark",
+        folder: "solid",
+      },
+      {
+        name: "laptop-file",
+        folder: "solid",
+      },
+      {
+        name: "list-check",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-chart",
+        folder: "solid",
+      },
+      {
+        name: "marker",
+        folder: "solid",
+      },
+      {
+        name: "mug-saucer",
+        folder: "solid",
+      },
+      {
+        name: "network-wired",
+        folder: "solid",
+      },
+      {
+        name: "note-sticky",
+        folder: "regular",
+      },
+      {
+        name: "paperclip",
+        folder: "solid",
+      },
+      {
+        name: "paste",
+        folder: "regular",
+      },
+      {
+        name: "pen",
+        folder: "solid",
+      },
+      {
+        name: "pen-clip",
+        folder: "solid",
+      },
+      {
+        name: "pen-fancy",
+        folder: "solid",
+      },
+      {
+        name: "pen-nib",
+        folder: "solid",
+      },
+      {
+        name: "pen-to-square",
+        folder: "regular",
+      },
+      {
+        name: "pencil",
+        folder: "solid",
+      },
+      {
+        name: "percent",
+        folder: "solid",
+      },
+      {
+        name: "person-chalkboard",
+        folder: "solid",
+      },
+      {
+        name: "phone",
+        folder: "solid",
+      },
+      {
+        name: "phone-flip",
+        folder: "solid",
+      },
+      {
+        name: "phone-slash",
+        folder: "solid",
+      },
+      {
+        name: "phone-volume",
+        folder: "solid",
+      },
+      {
+        name: "print",
+        folder: "solid",
+      },
+      {
+        name: "registered",
+        folder: "regular",
+      },
+      {
+        name: "scale-balanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced-flip",
+        folder: "solid",
+      },
+      {
+        name: "scissors",
+        folder: "solid",
+      },
+      {
+        name: "signature",
+        folder: "solid",
+      },
+      {
+        name: "sitemap",
+        folder: "solid",
+      },
+      {
+        name: "socks",
+        folder: "solid",
+      },
+      {
+        name: "square-envelope",
+        folder: "solid",
+      },
+      {
+        name: "square-pen",
+        folder: "solid",
+      },
+      {
+        name: "square-phone",
+        folder: "solid",
+      },
+      {
+        name: "square-phone-flip",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-horizontal",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-vertical",
+        folder: "solid",
+      },
+      {
+        name: "stapler",
+        folder: "solid",
+      },
+      {
+        name: "table",
+        folder: "solid",
+      },
+      {
+        name: "table-columns",
+        folder: "solid",
+      },
+      {
+        name: "tag",
+        folder: "solid",
+      },
+      {
+        name: "tags",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack-slash",
+        folder: "solid",
+      },
+      {
+        name: "timeline",
+        folder: "solid",
+      },
+      {
+        name: "trademark",
+        folder: "solid",
+      },
+      {
+        name: "vault",
+        folder: "solid",
+      },
+      {
+        name: "wallet",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Camping",
-  },
-  charity: {
     icons: [
-      "circle-dollar-to-slot",
-      "dollar-sign",
-      "dove",
-      "gift",
-      "globe",
-      "hand-holding-dollar",
-      "hand-holding-droplet",
-      "hand-holding-hand",
-      "hand-holding-heart",
-      "hands-holding-child",
-      "hands-holding-circle",
-      "handshake",
-      "handshake-angle",
-      "heart",
-      "leaf",
-      "parachute-box",
-      "piggy-bank",
-      "ribbon",
-      "seedling",
+      {
+        name: "binoculars",
+        folder: "solid",
+      },
+      {
+        name: "bottle-water",
+        folder: "solid",
+      },
+      {
+        name: "bucket",
+        folder: "solid",
+      },
+      {
+        name: "campground",
+        folder: "solid",
+      },
+      {
+        name: "caravan",
+        folder: "solid",
+      },
+      {
+        name: "compass",
+        folder: "regular",
+      },
+      {
+        name: "faucet",
+        folder: "solid",
+      },
+      {
+        name: "faucet-drip",
+        folder: "solid",
+      },
+      {
+        name: "fire",
+        folder: "solid",
+      },
+      {
+        name: "fire-burner",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-curved",
+        folder: "solid",
+      },
+      {
+        name: "frog",
+        folder: "solid",
+      },
+      {
+        name: "kit-medical",
+        folder: "solid",
+      },
+      {
+        name: "map",
+        folder: "regular",
+      },
+      {
+        name: "map-location",
+        folder: "solid",
+      },
+      {
+        name: "map-location-dot",
+        folder: "solid",
+      },
+      {
+        name: "mattress-pillow",
+        folder: "solid",
+      },
+      {
+        name: "mosquito",
+        folder: "solid",
+      },
+      {
+        name: "mosquito-net",
+        folder: "solid",
+      },
+      {
+        name: "mountain",
+        folder: "solid",
+      },
+      {
+        name: "mountain-sun",
+        folder: "solid",
+      },
+      {
+        name: "people-roof",
+        folder: "solid",
+      },
+      {
+        name: "person-hiking",
+        folder: "solid",
+      },
+      {
+        name: "person-shelter",
+        folder: "solid",
+      },
+      {
+        name: "route",
+        folder: "solid",
+      },
+      {
+        name: "signs-post",
+        folder: "solid",
+      },
+      {
+        name: "tarp",
+        folder: "solid",
+      },
+      {
+        name: "tarp-droplet",
+        folder: "solid",
+      },
+      {
+        name: "tent",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-left-right",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-turn-left",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrows-down",
+        folder: "solid",
+      },
+      {
+        name: "tents",
+        folder: "solid",
+      },
+      {
+        name: "toilet-paper",
+        folder: "solid",
+      },
+      {
+        name: "trailer",
+        folder: "solid",
+      },
+      {
+        name: "tree",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Charity",
-  },
-  "charts-diagrams": {
     icons: [
-      "bars-progress",
-      "chart-area",
-      "chart-bar",
-      "chart-column",
-      "chart-diagram",
-      "chart-gantt",
-      "chart-line",
-      "chart-pie",
-      "chart-simple",
-      "circle-half-stroke",
-      "diagram-next",
-      "diagram-predecessor",
-      "diagram-project",
-      "diagram-successor",
-      "hexagon-nodes",
-      "hexagon-nodes-bolt",
-      "square-poll-horizontal",
-      "square-poll-vertical",
+      {
+        name: "circle-dollar-to-slot",
+        folder: "solid",
+      },
+      {
+        name: "dollar-sign",
+        folder: "solid",
+      },
+      {
+        name: "dove",
+        folder: "solid",
+      },
+      {
+        name: "gift",
+        folder: "solid",
+      },
+      {
+        name: "globe",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-dollar",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-droplet",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-hand",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-heart",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-child",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-circle",
+        folder: "solid",
+      },
+      {
+        name: "handshake",
+        folder: "regular",
+      },
+      {
+        name: "handshake-angle",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "leaf",
+        folder: "solid",
+      },
+      {
+        name: "parachute-box",
+        folder: "solid",
+      },
+      {
+        name: "piggy-bank",
+        folder: "solid",
+      },
+      {
+        name: "ribbon",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Charts + Diagrams",
-  },
-  childhood: {
     icons: [
-      "apple-whole",
-      "baby",
-      "baby-carriage",
-      "baseball-bat-ball",
-      "bath",
-      "bucket",
-      "cake-candles",
-      "child",
-      "child-dress",
-      "child-reaching",
-      "children",
-      "cookie",
-      "cookie-bite",
-      "cubes-stacked",
-      "gamepad",
-      "hands-holding-child",
-      "ice-cream",
-      "mitten",
-      "person-biking",
-      "person-breastfeeding",
-      "puzzle-piece",
-      "robot",
-      "school",
-      "shapes",
-      "snowman",
+      {
+        name: "bars-progress",
+        folder: "solid",
+      },
+      {
+        name: "chart-area",
+        folder: "solid",
+      },
+      {
+        name: "chart-bar",
+        folder: "regular",
+      },
+      {
+        name: "chart-column",
+        folder: "solid",
+      },
+      {
+        name: "chart-diagram",
+        folder: "solid",
+      },
+      {
+        name: "chart-gantt",
+        folder: "solid",
+      },
+      {
+        name: "chart-line",
+        folder: "solid",
+      },
+      {
+        name: "chart-pie",
+        folder: "solid",
+      },
+      {
+        name: "chart-simple",
+        folder: "solid",
+      },
+      {
+        name: "circle-half-stroke",
+        folder: "solid",
+      },
+      {
+        name: "diagram-next",
+        folder: "solid",
+      },
+      {
+        name: "diagram-predecessor",
+        folder: "solid",
+      },
+      {
+        name: "diagram-project",
+        folder: "solid",
+      },
+      {
+        name: "diagram-successor",
+        folder: "solid",
+      },
+      {
+        name: "hexagon-nodes",
+        folder: "solid",
+      },
+      {
+        name: "hexagon-nodes-bolt",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-horizontal",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-vertical",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Childhood",
-  },
-  "clothing-fashion": {
     icons: [
-      "glasses",
-      "graduation-cap",
-      "hat-cowboy",
-      "hat-cowboy-side",
-      "hat-wizard",
-      "mitten",
-      "shirt",
-      "shoe-prints",
-      "socks",
-      "user-tie",
-      "vest",
-      "vest-patches",
+      {
+        name: "apple-whole",
+        folder: "solid",
+      },
+      {
+        name: "baby",
+        folder: "solid",
+      },
+      {
+        name: "baby-carriage",
+        folder: "solid",
+      },
+      {
+        name: "baseball-bat-ball",
+        folder: "solid",
+      },
+      {
+        name: "bath",
+        folder: "solid",
+      },
+      {
+        name: "bucket",
+        folder: "solid",
+      },
+      {
+        name: "cake-candles",
+        folder: "solid",
+      },
+      {
+        name: "child",
+        folder: "solid",
+      },
+      {
+        name: "child-dress",
+        folder: "solid",
+      },
+      {
+        name: "child-reaching",
+        folder: "solid",
+      },
+      {
+        name: "children",
+        folder: "solid",
+      },
+      {
+        name: "cookie",
+        folder: "solid",
+      },
+      {
+        name: "cookie-bite",
+        folder: "solid",
+      },
+      {
+        name: "cubes-stacked",
+        folder: "solid",
+      },
+      {
+        name: "gamepad",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-child",
+        folder: "solid",
+      },
+      {
+        name: "ice-cream",
+        folder: "solid",
+      },
+      {
+        name: "mitten",
+        folder: "solid",
+      },
+      {
+        name: "person-biking",
+        folder: "solid",
+      },
+      {
+        name: "person-breastfeeding",
+        folder: "solid",
+      },
+      {
+        name: "puzzle-piece",
+        folder: "solid",
+      },
+      {
+        name: "robot",
+        folder: "solid",
+      },
+      {
+        name: "school",
+        folder: "solid",
+      },
+      {
+        name: "shapes",
+        folder: "solid",
+      },
+      {
+        name: "snowman",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Clothing + Fashion",
-  },
-  coding: {
     icons: [
-      "barcode",
-      "bars",
-      "bars-staggered",
-      "bath",
-      "box-archive",
-      "bug",
-      "bug-slash",
-      "chart-diagram",
-      "circle-nodes",
-      "code",
-      "code-branch",
-      "code-commit",
-      "code-compare",
-      "code-fork",
-      "code-merge",
-      "code-pull-request",
-      "comment-nodes",
-      "css",
-      "cube",
-      "cubes",
-      "diagram-project",
-      "file",
-      "file-code",
-      "file-lines",
-      "filter",
-      "fire-extinguisher",
-      "folder",
-      "folder-open",
-      "font-awesome",
-      "gear",
-      "gears",
-      "hexagon-nodes",
-      "hexagon-nodes-bolt",
-      "keyboard",
-      "laptop-code",
-      "microchip",
-      "mug-saucer",
-      "network-wired",
-      "notdef",
-      "qrcode",
-      "rectangle-xmark",
-      "shield",
-      "shield-halved",
-      "sitemap",
-      "square-binary",
-      "terminal",
-      "user-secret",
-      "web-awesome",
-      "window-maximize",
-      "window-minimize",
-      "window-restore",
+      {
+        name: "glasses",
+        folder: "solid",
+      },
+      {
+        name: "graduation-cap",
+        folder: "solid",
+      },
+      {
+        name: "hat-cowboy",
+        folder: "solid",
+      },
+      {
+        name: "hat-cowboy-side",
+        folder: "solid",
+      },
+      {
+        name: "hat-wizard",
+        folder: "solid",
+      },
+      {
+        name: "mitten",
+        folder: "solid",
+      },
+      {
+        name: "shirt",
+        folder: "solid",
+      },
+      {
+        name: "shoe-prints",
+        folder: "solid",
+      },
+      {
+        name: "socks",
+        folder: "solid",
+      },
+      {
+        name: "user-tie",
+        folder: "solid",
+      },
+      {
+        name: "vest",
+        folder: "solid",
+      },
+      {
+        name: "vest-patches",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Coding",
-  },
-  communication: {
     icons: [
-      "address-book",
-      "address-card",
-      "at",
-      "blender-phone",
-      "bluetooth-b",
-      "bullhorn",
-      "comment",
-      "comment-dots",
-      "comment-medical",
-      "comment-nodes",
-      "comment-slash",
-      "comment-sms",
-      "comments",
-      "ear-deaf",
-      "ear-listen",
-      "envelope",
-      "envelope-circle-check",
-      "envelope-open",
-      "face-frown",
-      "face-meh",
-      "face-smile",
-      "fax",
-      "hands-asl-interpreting",
-      "icons",
-      "inbox",
-      "language",
-      "message",
-      "microphone",
-      "microphone-lines",
-      "microphone-lines-slash",
-      "microphone-slash",
-      "mobile",
-      "mobile-button",
-      "mobile-retro",
-      "mobile-screen",
-      "mobile-screen-button",
-      "mobile-vibrate",
-      "paper-plane",
-      "phone",
-      "phone-flip",
-      "phone-slash",
-      "phone-volume",
-      "poo",
-      "quote-left",
-      "quote-right",
-      "single-quote-left",
-      "single-quote-right",
-      "square-envelope",
-      "square-phone",
-      "square-phone-flip",
-      "square-rss",
-      "tower-cell",
-      "tty",
-      "video",
-      "video-slash",
-      "voicemail",
-      "walkie-talkie",
+      {
+        name: "barcode",
+        folder: "solid",
+      },
+      {
+        name: "bars",
+        folder: "solid",
+      },
+      {
+        name: "bars-staggered",
+        folder: "solid",
+      },
+      {
+        name: "bath",
+        folder: "solid",
+      },
+      {
+        name: "box-archive",
+        folder: "solid",
+      },
+      {
+        name: "bug",
+        folder: "solid",
+      },
+      {
+        name: "bug-slash",
+        folder: "solid",
+      },
+      {
+        name: "chart-diagram",
+        folder: "solid",
+      },
+      {
+        name: "circle-nodes",
+        folder: "solid",
+      },
+      {
+        name: "code",
+        folder: "solid",
+      },
+      {
+        name: "code-branch",
+        folder: "solid",
+      },
+      {
+        name: "code-commit",
+        folder: "solid",
+      },
+      {
+        name: "code-compare",
+        folder: "solid",
+      },
+      {
+        name: "code-fork",
+        folder: "solid",
+      },
+      {
+        name: "code-merge",
+        folder: "solid",
+      },
+      {
+        name: "code-pull-request",
+        folder: "solid",
+      },
+      {
+        name: "comment-nodes",
+        folder: "solid",
+      },
+      {
+        name: "css",
+        folder: "brands",
+      },
+      {
+        name: "cube",
+        folder: "solid",
+      },
+      {
+        name: "cubes",
+        folder: "solid",
+      },
+      {
+        name: "diagram-project",
+        folder: "solid",
+      },
+      {
+        name: "file",
+        folder: "regular",
+      },
+      {
+        name: "file-code",
+        folder: "regular",
+      },
+      {
+        name: "file-lines",
+        folder: "regular",
+      },
+      {
+        name: "filter",
+        folder: "solid",
+      },
+      {
+        name: "fire-extinguisher",
+        folder: "solid",
+      },
+      {
+        name: "folder",
+        folder: "regular",
+      },
+      {
+        name: "folder-open",
+        folder: "regular",
+      },
+      {
+        name: "font-awesome",
+        folder: "regular",
+      },
+      {
+        name: "gear",
+        folder: "solid",
+      },
+      {
+        name: "gears",
+        folder: "solid",
+      },
+      {
+        name: "hexagon-nodes",
+        folder: "solid",
+      },
+      {
+        name: "hexagon-nodes-bolt",
+        folder: "solid",
+      },
+      {
+        name: "keyboard",
+        folder: "regular",
+      },
+      {
+        name: "laptop-code",
+        folder: "solid",
+      },
+      {
+        name: "microchip",
+        folder: "solid",
+      },
+      {
+        name: "mug-saucer",
+        folder: "solid",
+      },
+      {
+        name: "network-wired",
+        folder: "solid",
+      },
+      {
+        name: "notdef",
+        folder: "solid",
+      },
+      {
+        name: "qrcode",
+        folder: "solid",
+      },
+      {
+        name: "rectangle-xmark",
+        folder: "regular",
+      },
+      {
+        name: "shield",
+        folder: "solid",
+      },
+      {
+        name: "shield-halved",
+        folder: "solid",
+      },
+      {
+        name: "sitemap",
+        folder: "solid",
+      },
+      {
+        name: "square-binary",
+        folder: "solid",
+      },
+      {
+        name: "terminal",
+        folder: "solid",
+      },
+      {
+        name: "user-secret",
+        folder: "solid",
+      },
+      {
+        name: "web-awesome",
+        folder: "brands",
+      },
+      {
+        name: "window-maximize",
+        folder: "regular",
+      },
+      {
+        name: "window-minimize",
+        folder: "regular",
+      },
+      {
+        name: "window-restore",
+        folder: "regular",
+      },
     ],
+  },
+  {
     label: "Communication",
-  },
-  connectivity: {
     icons: [
-      "bluetooth",
-      "circle-nodes",
-      "cloud",
-      "cloud-arrow-down",
-      "cloud-arrow-up",
-      "ethernet",
-      "globe",
-      "house-signal",
-      "rss",
-      "satellite-dish",
-      "signal",
-      "tower-broadcast",
-      "tower-cell",
-      "wifi",
+      {
+        name: "address-book",
+        folder: "regular",
+      },
+      {
+        name: "address-card",
+        folder: "regular",
+      },
+      {
+        name: "at",
+        folder: "solid",
+      },
+      {
+        name: "blender-phone",
+        folder: "solid",
+      },
+      {
+        name: "bluetooth-b",
+        folder: "brands",
+      },
+      {
+        name: "bullhorn",
+        folder: "solid",
+      },
+      {
+        name: "comment",
+        folder: "regular",
+      },
+      {
+        name: "comment-dots",
+        folder: "regular",
+      },
+      {
+        name: "comment-medical",
+        folder: "solid",
+      },
+      {
+        name: "comment-nodes",
+        folder: "solid",
+      },
+      {
+        name: "comment-slash",
+        folder: "solid",
+      },
+      {
+        name: "comment-sms",
+        folder: "solid",
+      },
+      {
+        name: "comments",
+        folder: "regular",
+      },
+      {
+        name: "ear-deaf",
+        folder: "solid",
+      },
+      {
+        name: "ear-listen",
+        folder: "solid",
+      },
+      {
+        name: "envelope",
+        folder: "regular",
+      },
+      {
+        name: "envelope-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "envelope-open",
+        folder: "regular",
+      },
+      {
+        name: "face-frown",
+        folder: "regular",
+      },
+      {
+        name: "face-meh",
+        folder: "regular",
+      },
+      {
+        name: "face-smile",
+        folder: "regular",
+      },
+      {
+        name: "fax",
+        folder: "solid",
+      },
+      {
+        name: "hands-asl-interpreting",
+        folder: "solid",
+      },
+      {
+        name: "icons",
+        folder: "solid",
+      },
+      {
+        name: "inbox",
+        folder: "solid",
+      },
+      {
+        name: "language",
+        folder: "solid",
+      },
+      {
+        name: "message",
+        folder: "regular",
+      },
+      {
+        name: "microphone",
+        folder: "solid",
+      },
+      {
+        name: "microphone-lines",
+        folder: "solid",
+      },
+      {
+        name: "microphone-lines-slash",
+        folder: "solid",
+      },
+      {
+        name: "microphone-slash",
+        folder: "solid",
+      },
+      {
+        name: "mobile",
+        folder: "solid",
+      },
+      {
+        name: "mobile-button",
+        folder: "solid",
+      },
+      {
+        name: "mobile-retro",
+        folder: "solid",
+      },
+      {
+        name: "mobile-screen",
+        folder: "solid",
+      },
+      {
+        name: "mobile-screen-button",
+        folder: "solid",
+      },
+      {
+        name: "mobile-vibrate",
+        folder: "solid",
+      },
+      {
+        name: "paper-plane",
+        folder: "regular",
+      },
+      {
+        name: "phone",
+        folder: "solid",
+      },
+      {
+        name: "phone-flip",
+        folder: "solid",
+      },
+      {
+        name: "phone-slash",
+        folder: "solid",
+      },
+      {
+        name: "phone-volume",
+        folder: "solid",
+      },
+      {
+        name: "poo",
+        folder: "solid",
+      },
+      {
+        name: "quote-left",
+        folder: "solid",
+      },
+      {
+        name: "quote-right",
+        folder: "solid",
+      },
+      {
+        name: "single-quote-left",
+        folder: "solid",
+      },
+      {
+        name: "single-quote-right",
+        folder: "solid",
+      },
+      {
+        name: "square-envelope",
+        folder: "solid",
+      },
+      {
+        name: "square-phone",
+        folder: "solid",
+      },
+      {
+        name: "square-phone-flip",
+        folder: "solid",
+      },
+      {
+        name: "square-rss",
+        folder: "solid",
+      },
+      {
+        name: "tower-cell",
+        folder: "solid",
+      },
+      {
+        name: "tty",
+        folder: "solid",
+      },
+      {
+        name: "video",
+        folder: "solid",
+      },
+      {
+        name: "video-slash",
+        folder: "solid",
+      },
+      {
+        name: "voicemail",
+        folder: "solid",
+      },
+      {
+        name: "walkie-talkie",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Connectivity",
-  },
-  construction: {
     icons: [
-      "arrow-up-from-ground-water",
-      "bore-hole",
-      "brush",
-      "bucket",
-      "compass-drafting",
-      "dumpster",
-      "dumpster-fire",
-      "hammer",
-      "helmet-safety",
-      "mound",
-      "paint-roller",
-      "pen-ruler",
-      "pencil",
-      "person-digging",
-      "ruler",
-      "ruler-combined",
-      "ruler-horizontal",
-      "ruler-vertical",
-      "screwdriver",
-      "screwdriver-wrench",
-      "sheet-plastic",
-      "tarp",
-      "tarp-droplet",
-      "toilet-portable",
-      "toilets-portable",
-      "toolbox",
-      "trowel",
-      "trowel-bricks",
-      "truck-pickup",
-      "wrench",
+      {
+        name: "bluetooth",
+        folder: "brands",
+      },
+      {
+        name: "circle-nodes",
+        folder: "solid",
+      },
+      {
+        name: "cloud",
+        folder: "regular",
+      },
+      {
+        name: "cloud-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "cloud-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "ethernet",
+        folder: "solid",
+      },
+      {
+        name: "globe",
+        folder: "solid",
+      },
+      {
+        name: "house-signal",
+        folder: "solid",
+      },
+      {
+        name: "rss",
+        folder: "solid",
+      },
+      {
+        name: "satellite-dish",
+        folder: "solid",
+      },
+      {
+        name: "signal",
+        folder: "solid",
+      },
+      {
+        name: "tower-broadcast",
+        folder: "solid",
+      },
+      {
+        name: "tower-cell",
+        folder: "solid",
+      },
+      {
+        name: "wifi",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Construction",
-  },
-  design: {
     icons: [
-      "bezier-curve",
-      "brush",
-      "circle-half-stroke",
-      "circle-nodes",
-      "clone",
-      "compass-drafting",
-      "copy",
-      "crop",
-      "crop-simple",
-      "crosshairs",
-      "cube",
-      "cubes",
-      "draw-polygon",
-      "droplet",
-      "droplet-slash",
-      "eraser",
-      "eye",
-      "eye-dropper",
-      "eye-slash",
-      "fill",
-      "fill-drip",
-      "floppy-disk",
-      "font-awesome",
-      "highlighter",
-      "icons",
-      "layer-group",
-      "lines-leaning",
-      "marker",
-      "object-group",
-      "object-ungroup",
-      "paint-roller",
-      "paintbrush",
-      "palette",
-      "paste",
-      "pen",
-      "pen-clip",
-      "pen-fancy",
-      "pen-nib",
-      "pen-ruler",
-      "pen-to-square",
-      "pencil",
-      "ruler-combined",
-      "ruler-horizontal",
-      "ruler-vertical",
-      "scissors",
-      "spiral",
-      "splotch",
-      "spray-can",
-      "stamp",
-      "stapler",
-      "swatchbook",
-      "wand-magic",
-      "wand-magic-sparkles",
-      "web-awesome",
+      {
+        name: "arrow-up-from-ground-water",
+        folder: "solid",
+      },
+      {
+        name: "bore-hole",
+        folder: "solid",
+      },
+      {
+        name: "brush",
+        folder: "solid",
+      },
+      {
+        name: "bucket",
+        folder: "solid",
+      },
+      {
+        name: "compass-drafting",
+        folder: "solid",
+      },
+      {
+        name: "dumpster",
+        folder: "solid",
+      },
+      {
+        name: "dumpster-fire",
+        folder: "solid",
+      },
+      {
+        name: "hammer",
+        folder: "solid",
+      },
+      {
+        name: "helmet-safety",
+        folder: "solid",
+      },
+      {
+        name: "mound",
+        folder: "solid",
+      },
+      {
+        name: "paint-roller",
+        folder: "solid",
+      },
+      {
+        name: "pen-ruler",
+        folder: "solid",
+      },
+      {
+        name: "pencil",
+        folder: "solid",
+      },
+      {
+        name: "person-digging",
+        folder: "solid",
+      },
+      {
+        name: "ruler",
+        folder: "solid",
+      },
+      {
+        name: "ruler-combined",
+        folder: "solid",
+      },
+      {
+        name: "ruler-horizontal",
+        folder: "solid",
+      },
+      {
+        name: "ruler-vertical",
+        folder: "solid",
+      },
+      {
+        name: "screwdriver",
+        folder: "solid",
+      },
+      {
+        name: "screwdriver-wrench",
+        folder: "solid",
+      },
+      {
+        name: "sheet-plastic",
+        folder: "solid",
+      },
+      {
+        name: "tarp",
+        folder: "solid",
+      },
+      {
+        name: "tarp-droplet",
+        folder: "solid",
+      },
+      {
+        name: "toilet-portable",
+        folder: "solid",
+      },
+      {
+        name: "toilets-portable",
+        folder: "solid",
+      },
+      {
+        name: "toolbox",
+        folder: "solid",
+      },
+      {
+        name: "trowel",
+        folder: "solid",
+      },
+      {
+        name: "trowel-bricks",
+        folder: "solid",
+      },
+      {
+        name: "truck-pickup",
+        folder: "solid",
+      },
+      {
+        name: "wrench",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Design",
-  },
-  "devices-hardware": {
     icons: [
-      "blender-phone",
-      "camera",
-      "camera-retro",
-      "car-battery",
-      "compact-disc",
-      "computer",
-      "computer-mouse",
-      "database",
-      "desktop",
-      "display",
-      "download",
-      "ethernet",
-      "fax",
-      "floppy-disk",
-      "gamepad",
-      "hard-drive",
-      "headphones",
-      "house-laptop",
-      "keyboard",
-      "laptop",
-      "laptop-file",
-      "memory",
-      "microchip",
-      "mobile",
-      "mobile-button",
-      "mobile-retro",
-      "mobile-screen",
-      "mobile-screen-button",
-      "mobile-vibrate",
-      "plug",
-      "power-off",
-      "print",
-      "satellite",
-      "satellite-dish",
-      "sd-card",
-      "server",
-      "sim-card",
-      "tablet",
-      "tablet-button",
-      "tablet-screen-button",
-      "tachograph-digital",
-      "tv",
-      "upload",
-      "walkie-talkie",
+      {
+        name: "bezier-curve",
+        folder: "solid",
+      },
+      {
+        name: "brush",
+        folder: "solid",
+      },
+      {
+        name: "circle-half-stroke",
+        folder: "solid",
+      },
+      {
+        name: "circle-nodes",
+        folder: "solid",
+      },
+      {
+        name: "clone",
+        folder: "regular",
+      },
+      {
+        name: "compass-drafting",
+        folder: "solid",
+      },
+      {
+        name: "copy",
+        folder: "regular",
+      },
+      {
+        name: "crop",
+        folder: "solid",
+      },
+      {
+        name: "crop-simple",
+        folder: "solid",
+      },
+      {
+        name: "crosshairs",
+        folder: "solid",
+      },
+      {
+        name: "cube",
+        folder: "solid",
+      },
+      {
+        name: "cubes",
+        folder: "solid",
+      },
+      {
+        name: "draw-polygon",
+        folder: "solid",
+      },
+      {
+        name: "droplet",
+        folder: "solid",
+      },
+      {
+        name: "droplet-slash",
+        folder: "solid",
+      },
+      {
+        name: "eraser",
+        folder: "solid",
+      },
+      {
+        name: "eye",
+        folder: "regular",
+      },
+      {
+        name: "eye-dropper",
+        folder: "solid",
+      },
+      {
+        name: "eye-slash",
+        folder: "regular",
+      },
+      {
+        name: "fill",
+        folder: "solid",
+      },
+      {
+        name: "fill-drip",
+        folder: "solid",
+      },
+      {
+        name: "floppy-disk",
+        folder: "regular",
+      },
+      {
+        name: "font-awesome",
+        folder: "regular",
+      },
+      {
+        name: "highlighter",
+        folder: "solid",
+      },
+      {
+        name: "icons",
+        folder: "solid",
+      },
+      {
+        name: "layer-group",
+        folder: "solid",
+      },
+      {
+        name: "lines-leaning",
+        folder: "solid",
+      },
+      {
+        name: "marker",
+        folder: "solid",
+      },
+      {
+        name: "object-group",
+        folder: "regular",
+      },
+      {
+        name: "object-ungroup",
+        folder: "regular",
+      },
+      {
+        name: "paint-roller",
+        folder: "solid",
+      },
+      {
+        name: "paintbrush",
+        folder: "solid",
+      },
+      {
+        name: "palette",
+        folder: "solid",
+      },
+      {
+        name: "paste",
+        folder: "regular",
+      },
+      {
+        name: "pen",
+        folder: "solid",
+      },
+      {
+        name: "pen-clip",
+        folder: "solid",
+      },
+      {
+        name: "pen-fancy",
+        folder: "solid",
+      },
+      {
+        name: "pen-nib",
+        folder: "solid",
+      },
+      {
+        name: "pen-ruler",
+        folder: "solid",
+      },
+      {
+        name: "pen-to-square",
+        folder: "regular",
+      },
+      {
+        name: "pencil",
+        folder: "solid",
+      },
+      {
+        name: "ruler-combined",
+        folder: "solid",
+      },
+      {
+        name: "ruler-horizontal",
+        folder: "solid",
+      },
+      {
+        name: "ruler-vertical",
+        folder: "solid",
+      },
+      {
+        name: "scissors",
+        folder: "solid",
+      },
+      {
+        name: "spiral",
+        folder: "solid",
+      },
+      {
+        name: "splotch",
+        folder: "solid",
+      },
+      {
+        name: "spray-can",
+        folder: "solid",
+      },
+      {
+        name: "stamp",
+        folder: "solid",
+      },
+      {
+        name: "stapler",
+        folder: "solid",
+      },
+      {
+        name: "swatchbook",
+        folder: "solid",
+      },
+      {
+        name: "wand-magic",
+        folder: "solid",
+      },
+      {
+        name: "wand-magic-sparkles",
+        folder: "solid",
+      },
+      {
+        name: "web-awesome",
+        folder: "brands",
+      },
     ],
+  },
+  {
     label: "Devices + Hardware",
-  },
-  disaster: {
     icons: [
-      "biohazard",
-      "bugs",
-      "burst",
-      "child-combatant",
-      "circle-radiation",
-      "cloud-bolt",
-      "cloud-showers-heavy",
-      "cloud-showers-water",
-      "helmet-un",
-      "hill-avalanche",
-      "hill-rockslide",
-      "house-chimney-crack",
-      "house-crack",
-      "house-fire",
-      "house-flood-water",
-      "house-flood-water-circle-arrow-right",
-      "house-tsunami",
-      "hurricane",
-      "locust",
-      "mosquito",
-      "person-drowning",
-      "person-rifle",
-      "person-walking-arrow-loop-left",
-      "person-walking-arrow-right",
-      "person-walking-dashed-line-arrow-right",
-      "plant-wilt",
-      "radiation",
-      "snowflake",
-      "sun-plant-wilt",
-      "temperature-arrow-down",
-      "temperature-arrow-up",
-      "tornado",
-      "volcano",
-      "wheat-awn-circle-exclamation",
-      "wind",
-      "worm",
-      "xmarks-lines",
+      {
+        name: "blender-phone",
+        folder: "solid",
+      },
+      {
+        name: "camera",
+        folder: "regular",
+      },
+      {
+        name: "camera-retro",
+        folder: "solid",
+      },
+      {
+        name: "car-battery",
+        folder: "solid",
+      },
+      {
+        name: "compact-disc",
+        folder: "solid",
+      },
+      {
+        name: "computer",
+        folder: "solid",
+      },
+      {
+        name: "computer-mouse",
+        folder: "solid",
+      },
+      {
+        name: "database",
+        folder: "solid",
+      },
+      {
+        name: "desktop",
+        folder: "solid",
+      },
+      {
+        name: "display",
+        folder: "solid",
+      },
+      {
+        name: "download",
+        folder: "solid",
+      },
+      {
+        name: "ethernet",
+        folder: "solid",
+      },
+      {
+        name: "fax",
+        folder: "solid",
+      },
+      {
+        name: "floppy-disk",
+        folder: "regular",
+      },
+      {
+        name: "gamepad",
+        folder: "solid",
+      },
+      {
+        name: "hard-drive",
+        folder: "regular",
+      },
+      {
+        name: "headphones",
+        folder: "regular",
+      },
+      {
+        name: "house-laptop",
+        folder: "solid",
+      },
+      {
+        name: "keyboard",
+        folder: "regular",
+      },
+      {
+        name: "laptop",
+        folder: "solid",
+      },
+      {
+        name: "laptop-file",
+        folder: "solid",
+      },
+      {
+        name: "memory",
+        folder: "solid",
+      },
+      {
+        name: "microchip",
+        folder: "solid",
+      },
+      {
+        name: "mobile",
+        folder: "solid",
+      },
+      {
+        name: "mobile-button",
+        folder: "solid",
+      },
+      {
+        name: "mobile-retro",
+        folder: "solid",
+      },
+      {
+        name: "mobile-screen",
+        folder: "solid",
+      },
+      {
+        name: "mobile-screen-button",
+        folder: "solid",
+      },
+      {
+        name: "mobile-vibrate",
+        folder: "solid",
+      },
+      {
+        name: "plug",
+        folder: "solid",
+      },
+      {
+        name: "power-off",
+        folder: "solid",
+      },
+      {
+        name: "print",
+        folder: "solid",
+      },
+      {
+        name: "satellite",
+        folder: "solid",
+      },
+      {
+        name: "satellite-dish",
+        folder: "solid",
+      },
+      {
+        name: "sd-card",
+        folder: "solid",
+      },
+      {
+        name: "server",
+        folder: "solid",
+      },
+      {
+        name: "sim-card",
+        folder: "solid",
+      },
+      {
+        name: "tablet",
+        folder: "solid",
+      },
+      {
+        name: "tablet-button",
+        folder: "solid",
+      },
+      {
+        name: "tablet-screen-button",
+        folder: "solid",
+      },
+      {
+        name: "tachograph-digital",
+        folder: "solid",
+      },
+      {
+        name: "tv",
+        folder: "solid",
+      },
+      {
+        name: "upload",
+        folder: "solid",
+      },
+      {
+        name: "walkie-talkie",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Disaster + Crisis",
-  },
-  editing: {
     icons: [
-      "arrows-rotate",
-      "bandage",
-      "bars",
-      "brush",
-      "chart-simple",
-      "check",
-      "check-double",
-      "circle-check",
-      "circle-half-stroke",
-      "crop",
-      "crop-simple",
-      "cube",
-      "delete-left",
-      "ellipsis",
-      "ellipsis-vertical",
-      "eye-dropper",
-      "eye-slash",
-      "gear",
-      "grip",
-      "grip-lines",
-      "grip-lines-vertical",
-      "grip-vertical",
-      "link",
-      "link-slash",
-      "minus",
-      "paintbrush",
-      "pen",
-      "pen-clip",
-      "pen-fancy",
-      "pen-nib",
-      "pen-ruler",
-      "pen-to-square",
-      "pencil",
-      "plus",
-      "rotate",
-      "scissors",
-      "signature",
-      "sliders",
-      "square-check",
-      "square-pen",
-      "trash",
-      "trash-arrow-up",
-      "trash-can",
-      "trash-can-arrow-up",
-      "wand-magic",
-      "wand-magic-sparkles",
-      "xmark",
+      {
+        name: "biohazard",
+        folder: "solid",
+      },
+      {
+        name: "bugs",
+        folder: "solid",
+      },
+      {
+        name: "burst",
+        folder: "solid",
+      },
+      {
+        name: "child-combatant",
+        folder: "solid",
+      },
+      {
+        name: "circle-radiation",
+        folder: "solid",
+      },
+      {
+        name: "cloud-bolt",
+        folder: "solid",
+      },
+      {
+        name: "cloud-showers-heavy",
+        folder: "solid",
+      },
+      {
+        name: "cloud-showers-water",
+        folder: "solid",
+      },
+      {
+        name: "helmet-un",
+        folder: "solid",
+      },
+      {
+        name: "hill-avalanche",
+        folder: "solid",
+      },
+      {
+        name: "hill-rockslide",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-crack",
+        folder: "solid",
+      },
+      {
+        name: "house-crack",
+        folder: "solid",
+      },
+      {
+        name: "house-fire",
+        folder: "solid",
+      },
+      {
+        name: "house-flood-water",
+        folder: "solid",
+      },
+      {
+        name: "house-flood-water-circle-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "house-tsunami",
+        folder: "solid",
+      },
+      {
+        name: "hurricane",
+        folder: "solid",
+      },
+      {
+        name: "locust",
+        folder: "solid",
+      },
+      {
+        name: "mosquito",
+        folder: "solid",
+      },
+      {
+        name: "person-drowning",
+        folder: "solid",
+      },
+      {
+        name: "person-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-arrow-loop-left",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-dashed-line-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "plant-wilt",
+        folder: "solid",
+      },
+      {
+        name: "radiation",
+        folder: "solid",
+      },
+      {
+        name: "snowflake",
+        folder: "regular",
+      },
+      {
+        name: "sun-plant-wilt",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "tornado",
+        folder: "solid",
+      },
+      {
+        name: "volcano",
+        folder: "solid",
+      },
+      {
+        name: "wheat-awn-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "wind",
+        folder: "solid",
+      },
+      {
+        name: "worm",
+        folder: "solid",
+      },
+      {
+        name: "xmarks-lines",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Editing",
-  },
-  education: {
     icons: [
-      "apple-whole",
-      "atom",
-      "award",
-      "bell",
-      "bell-slash",
-      "book-open",
-      "book-open-reader",
-      "chalkboard",
-      "chalkboard-user",
-      "graduation-cap",
-      "laptop-code",
-      "laptop-file",
-      "masks-theater",
-      "microscope",
-      "music",
-      "person-chalkboard",
-      "school",
-      "school-circle-check",
-      "school-circle-exclamation",
-      "school-circle-xmark",
-      "school-flag",
-      "school-lock",
-      "shapes",
-      "user-graduate",
+      {
+        name: "arrows-rotate",
+        folder: "solid",
+      },
+      {
+        name: "bandage",
+        folder: "solid",
+      },
+      {
+        name: "bars",
+        folder: "solid",
+      },
+      {
+        name: "brush",
+        folder: "solid",
+      },
+      {
+        name: "chart-simple",
+        folder: "solid",
+      },
+      {
+        name: "check",
+        folder: "solid",
+      },
+      {
+        name: "check-double",
+        folder: "solid",
+      },
+      {
+        name: "circle-check",
+        folder: "regular",
+      },
+      {
+        name: "circle-half-stroke",
+        folder: "solid",
+      },
+      {
+        name: "crop",
+        folder: "solid",
+      },
+      {
+        name: "crop-simple",
+        folder: "solid",
+      },
+      {
+        name: "cube",
+        folder: "solid",
+      },
+      {
+        name: "delete-left",
+        folder: "solid",
+      },
+      {
+        name: "ellipsis",
+        folder: "solid",
+      },
+      {
+        name: "ellipsis-vertical",
+        folder: "solid",
+      },
+      {
+        name: "eye-dropper",
+        folder: "solid",
+      },
+      {
+        name: "eye-slash",
+        folder: "regular",
+      },
+      {
+        name: "gear",
+        folder: "solid",
+      },
+      {
+        name: "grip",
+        folder: "solid",
+      },
+      {
+        name: "grip-lines",
+        folder: "solid",
+      },
+      {
+        name: "grip-lines-vertical",
+        folder: "solid",
+      },
+      {
+        name: "grip-vertical",
+        folder: "solid",
+      },
+      {
+        name: "link",
+        folder: "solid",
+      },
+      {
+        name: "link-slash",
+        folder: "solid",
+      },
+      {
+        name: "minus",
+        folder: "solid",
+      },
+      {
+        name: "paintbrush",
+        folder: "solid",
+      },
+      {
+        name: "pen",
+        folder: "solid",
+      },
+      {
+        name: "pen-clip",
+        folder: "solid",
+      },
+      {
+        name: "pen-fancy",
+        folder: "solid",
+      },
+      {
+        name: "pen-nib",
+        folder: "solid",
+      },
+      {
+        name: "pen-ruler",
+        folder: "solid",
+      },
+      {
+        name: "pen-to-square",
+        folder: "regular",
+      },
+      {
+        name: "pencil",
+        folder: "solid",
+      },
+      {
+        name: "plus",
+        folder: "solid",
+      },
+      {
+        name: "rotate",
+        folder: "solid",
+      },
+      {
+        name: "scissors",
+        folder: "solid",
+      },
+      {
+        name: "signature",
+        folder: "solid",
+      },
+      {
+        name: "sliders",
+        folder: "solid",
+      },
+      {
+        name: "square-check",
+        folder: "regular",
+      },
+      {
+        name: "square-pen",
+        folder: "solid",
+      },
+      {
+        name: "trash",
+        folder: "solid",
+      },
+      {
+        name: "trash-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "trash-can",
+        folder: "regular",
+      },
+      {
+        name: "trash-can-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "wand-magic",
+        folder: "solid",
+      },
+      {
+        name: "wand-magic-sparkles",
+        folder: "solid",
+      },
+      {
+        name: "xmark",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Education",
-  },
-  emoji: {
     icons: [
-      "face-angry",
-      "face-dizzy",
-      "face-flushed",
-      "face-frown",
-      "face-frown-open",
-      "face-grimace",
-      "face-grin",
-      "face-grin-beam",
-      "face-grin-beam-sweat",
-      "face-grin-hearts",
-      "face-grin-squint",
-      "face-grin-squint-tears",
-      "face-grin-stars",
-      "face-grin-tears",
-      "face-grin-tongue",
-      "face-grin-tongue-squint",
-      "face-grin-tongue-wink",
-      "face-grin-wide",
-      "face-grin-wink",
-      "face-kiss",
-      "face-kiss-beam",
-      "face-kiss-wink-heart",
-      "face-laugh",
-      "face-laugh-beam",
-      "face-laugh-squint",
-      "face-laugh-wink",
-      "face-meh",
-      "face-meh-blank",
-      "face-rolling-eyes",
-      "face-sad-cry",
-      "face-sad-tear",
-      "face-smile",
-      "face-smile-beam",
-      "face-smile-wink",
-      "face-surprise",
-      "face-tired",
+      {
+        name: "apple-whole",
+        folder: "solid",
+      },
+      {
+        name: "atom",
+        folder: "solid",
+      },
+      {
+        name: "award",
+        folder: "solid",
+      },
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "bell-slash",
+        folder: "regular",
+      },
+      {
+        name: "book-open",
+        folder: "solid",
+      },
+      {
+        name: "book-open-reader",
+        folder: "solid",
+      },
+      {
+        name: "chalkboard",
+        folder: "solid",
+      },
+      {
+        name: "chalkboard-user",
+        folder: "solid",
+      },
+      {
+        name: "graduation-cap",
+        folder: "solid",
+      },
+      {
+        name: "laptop-code",
+        folder: "solid",
+      },
+      {
+        name: "laptop-file",
+        folder: "solid",
+      },
+      {
+        name: "masks-theater",
+        folder: "solid",
+      },
+      {
+        name: "microscope",
+        folder: "solid",
+      },
+      {
+        name: "music",
+        folder: "solid",
+      },
+      {
+        name: "person-chalkboard",
+        folder: "solid",
+      },
+      {
+        name: "school",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "school-flag",
+        folder: "solid",
+      },
+      {
+        name: "school-lock",
+        folder: "solid",
+      },
+      {
+        name: "shapes",
+        folder: "solid",
+      },
+      {
+        name: "user-graduate",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Emoji",
-  },
-  energy: {
     icons: [
-      "arrow-up-from-ground-water",
-      "atom",
-      "battery-empty",
-      "battery-full",
-      "battery-half",
-      "battery-quarter",
-      "battery-three-quarters",
-      "bolt",
-      "car-battery",
-      "charging-station",
-      "circle-radiation",
-      "explosion",
-      "fan",
-      "fire",
-      "fire-flame-curved",
-      "fire-flame-simple",
-      "gas-pump",
-      "industry",
-      "leaf",
-      "lightbulb",
-      "oil-well",
-      "plug",
-      "plug-circle-bolt",
-      "plug-circle-check",
-      "plug-circle-exclamation",
-      "plug-circle-minus",
-      "plug-circle-plus",
-      "plug-circle-xmark",
-      "poop",
-      "power-off",
-      "radiation",
-      "seedling",
-      "solar-panel",
-      "sun",
-      "tower-broadcast",
-      "water",
-      "wind",
+      {
+        name: "face-angry",
+        folder: "regular",
+      },
+      {
+        name: "face-dizzy",
+        folder: "regular",
+      },
+      {
+        name: "face-flushed",
+        folder: "regular",
+      },
+      {
+        name: "face-frown",
+        folder: "regular",
+      },
+      {
+        name: "face-frown-open",
+        folder: "regular",
+      },
+      {
+        name: "face-grimace",
+        folder: "regular",
+      },
+      {
+        name: "face-grin",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-beam",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-beam-sweat",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-hearts",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-squint",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-squint-tears",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-stars",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-tears",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-tongue",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-tongue-squint",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-tongue-wink",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-wide",
+        folder: "regular",
+      },
+      {
+        name: "face-grin-wink",
+        folder: "regular",
+      },
+      {
+        name: "face-kiss",
+        folder: "regular",
+      },
+      {
+        name: "face-kiss-beam",
+        folder: "regular",
+      },
+      {
+        name: "face-kiss-wink-heart",
+        folder: "regular",
+      },
+      {
+        name: "face-laugh",
+        folder: "regular",
+      },
+      {
+        name: "face-laugh-beam",
+        folder: "regular",
+      },
+      {
+        name: "face-laugh-squint",
+        folder: "regular",
+      },
+      {
+        name: "face-laugh-wink",
+        folder: "regular",
+      },
+      {
+        name: "face-meh",
+        folder: "regular",
+      },
+      {
+        name: "face-meh-blank",
+        folder: "regular",
+      },
+      {
+        name: "face-rolling-eyes",
+        folder: "regular",
+      },
+      {
+        name: "face-sad-cry",
+        folder: "regular",
+      },
+      {
+        name: "face-sad-tear",
+        folder: "regular",
+      },
+      {
+        name: "face-smile",
+        folder: "regular",
+      },
+      {
+        name: "face-smile-beam",
+        folder: "regular",
+      },
+      {
+        name: "face-smile-wink",
+        folder: "regular",
+      },
+      {
+        name: "face-surprise",
+        folder: "regular",
+      },
+      {
+        name: "face-tired",
+        folder: "regular",
+      },
     ],
+  },
+  {
     label: "Energy",
-  },
-  files: {
     icons: [
-      "box-archive",
-      "clone",
-      "copy",
-      "file",
-      "file-arrow-down",
-      "file-arrow-up",
-      "file-audio",
-      "file-circle-check",
-      "file-circle-exclamation",
-      "file-circle-minus",
-      "file-circle-plus",
-      "file-circle-question",
-      "file-circle-xmark",
-      "file-code",
-      "file-csv",
-      "file-excel",
-      "file-export",
-      "file-fragment",
-      "file-half-dashed",
-      "file-image",
-      "file-import",
-      "file-lines",
-      "file-pdf",
-      "file-pen",
-      "file-powerpoint",
-      "file-shield",
-      "file-video",
-      "file-word",
-      "file-zipper",
-      "floppy-disk",
-      "folder",
-      "folder-closed",
-      "folder-open",
-      "note-sticky",
-      "paste",
-      "photo-film",
-      "scissors",
+      {
+        name: "arrow-up-from-ground-water",
+        folder: "solid",
+      },
+      {
+        name: "atom",
+        folder: "solid",
+      },
+      {
+        name: "battery-empty",
+        folder: "solid",
+      },
+      {
+        name: "battery-full",
+        folder: "solid",
+      },
+      {
+        name: "battery-half",
+        folder: "solid",
+      },
+      {
+        name: "battery-quarter",
+        folder: "solid",
+      },
+      {
+        name: "battery-three-quarters",
+        folder: "solid",
+      },
+      {
+        name: "bolt",
+        folder: "solid",
+      },
+      {
+        name: "car-battery",
+        folder: "solid",
+      },
+      {
+        name: "charging-station",
+        folder: "solid",
+      },
+      {
+        name: "circle-radiation",
+        folder: "solid",
+      },
+      {
+        name: "explosion",
+        folder: "solid",
+      },
+      {
+        name: "fan",
+        folder: "solid",
+      },
+      {
+        name: "fire",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-curved",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-simple",
+        folder: "solid",
+      },
+      {
+        name: "gas-pump",
+        folder: "solid",
+      },
+      {
+        name: "industry",
+        folder: "solid",
+      },
+      {
+        name: "leaf",
+        folder: "solid",
+      },
+      {
+        name: "lightbulb",
+        folder: "regular",
+      },
+      {
+        name: "oil-well",
+        folder: "solid",
+      },
+      {
+        name: "plug",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-bolt",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "poop",
+        folder: "solid",
+      },
+      {
+        name: "power-off",
+        folder: "solid",
+      },
+      {
+        name: "radiation",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
+      {
+        name: "solar-panel",
+        folder: "solid",
+      },
+      {
+        name: "sun",
+        folder: "regular",
+      },
+      {
+        name: "tower-broadcast",
+        folder: "solid",
+      },
+      {
+        name: "water",
+        folder: "solid",
+      },
+      {
+        name: "wind",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Files",
-  },
-  "film-video": {
     icons: [
-      "audio-description",
-      "circle",
-      "clapperboard",
-      "closed-captioning",
-      "compact-disc",
-      "file-audio",
-      "file-video",
-      "film",
-      "headphones",
-      "microphone",
-      "microphone-lines",
-      "microphone-lines-slash",
-      "microphone-slash",
-      "photo-film",
-      "podcast",
-      "square-rss",
-      "ticket",
-      "tower-broadcast",
-      "tower-cell",
-      "tv",
-      "video",
-      "video-slash",
-      "youtube",
+      {
+        name: "box-archive",
+        folder: "solid",
+      },
+      {
+        name: "clone",
+        folder: "regular",
+      },
+      {
+        name: "copy",
+        folder: "regular",
+      },
+      {
+        name: "file",
+        folder: "regular",
+      },
+      {
+        name: "file-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "file-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "file-audio",
+        folder: "regular",
+      },
+      {
+        name: "file-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-question",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "file-code",
+        folder: "regular",
+      },
+      {
+        name: "file-csv",
+        folder: "solid",
+      },
+      {
+        name: "file-excel",
+        folder: "regular",
+      },
+      {
+        name: "file-export",
+        folder: "solid",
+      },
+      {
+        name: "file-fragment",
+        folder: "solid",
+      },
+      {
+        name: "file-half-dashed",
+        folder: "solid",
+      },
+      {
+        name: "file-image",
+        folder: "regular",
+      },
+      {
+        name: "file-import",
+        folder: "solid",
+      },
+      {
+        name: "file-lines",
+        folder: "regular",
+      },
+      {
+        name: "file-pdf",
+        folder: "regular",
+      },
+      {
+        name: "file-pen",
+        folder: "solid",
+      },
+      {
+        name: "file-powerpoint",
+        folder: "regular",
+      },
+      {
+        name: "file-shield",
+        folder: "solid",
+      },
+      {
+        name: "file-video",
+        folder: "regular",
+      },
+      {
+        name: "file-word",
+        folder: "regular",
+      },
+      {
+        name: "file-zipper",
+        folder: "regular",
+      },
+      {
+        name: "floppy-disk",
+        folder: "regular",
+      },
+      {
+        name: "folder",
+        folder: "regular",
+      },
+      {
+        name: "folder-closed",
+        folder: "regular",
+      },
+      {
+        name: "folder-open",
+        folder: "regular",
+      },
+      {
+        name: "note-sticky",
+        folder: "regular",
+      },
+      {
+        name: "paste",
+        folder: "regular",
+      },
+      {
+        name: "photo-film",
+        folder: "solid",
+      },
+      {
+        name: "scissors",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Film + Video",
-  },
-  "food-beverage": {
     icons: [
-      "apple-whole",
-      "bacon",
-      "beer-mug-empty",
-      "blender",
-      "bone",
-      "bottle-droplet",
-      "bottle-water",
-      "bowl-food",
-      "bowl-rice",
-      "bread-slice",
-      "burger",
-      "cake-candles",
-      "candy-cane",
-      "carrot",
-      "champagne-glasses",
-      "cheese",
-      "cloud-meatball",
-      "cookie",
-      "cubes-stacked",
-      "drumstick-bite",
-      "egg",
-      "fish",
-      "fish-fins",
-      "flask",
-      "glass-water",
-      "glass-water-droplet",
-      "hotdog",
-      "ice-cream",
-      "jar",
-      "jar-wheat",
-      "lemon",
-      "martini-glass",
-      "martini-glass-citrus",
-      "martini-glass-empty",
-      "mug-hot",
-      "mug-saucer",
-      "pepper-hot",
-      "pizza-slice",
-      "plate-wheat",
-      "seedling",
-      "shrimp",
-      "stroopwafel",
-      "wheat-awn",
-      "wheat-awn-circle-exclamation",
-      "whiskey-glass",
-      "wine-bottle",
-      "wine-glass",
-      "wine-glass-empty",
+      {
+        name: "audio-description",
+        folder: "solid",
+      },
+      {
+        name: "circle",
+        folder: "regular",
+      },
+      {
+        name: "clapperboard",
+        folder: "solid",
+      },
+      {
+        name: "closed-captioning",
+        folder: "regular",
+      },
+      {
+        name: "compact-disc",
+        folder: "solid",
+      },
+      {
+        name: "file-audio",
+        folder: "regular",
+      },
+      {
+        name: "file-video",
+        folder: "regular",
+      },
+      {
+        name: "film",
+        folder: "solid",
+      },
+      {
+        name: "headphones",
+        folder: "regular",
+      },
+      {
+        name: "microphone",
+        folder: "solid",
+      },
+      {
+        name: "microphone-lines",
+        folder: "solid",
+      },
+      {
+        name: "microphone-lines-slash",
+        folder: "solid",
+      },
+      {
+        name: "microphone-slash",
+        folder: "solid",
+      },
+      {
+        name: "photo-film",
+        folder: "solid",
+      },
+      {
+        name: "podcast",
+        folder: "solid",
+      },
+      {
+        name: "square-rss",
+        folder: "solid",
+      },
+      {
+        name: "ticket",
+        folder: "solid",
+      },
+      {
+        name: "tower-broadcast",
+        folder: "solid",
+      },
+      {
+        name: "tower-cell",
+        folder: "solid",
+      },
+      {
+        name: "tv",
+        folder: "solid",
+      },
+      {
+        name: "video",
+        folder: "solid",
+      },
+      {
+        name: "video-slash",
+        folder: "solid",
+      },
+      {
+        name: "youtube",
+        folder: "brands",
+      },
     ],
+  },
+  {
     label: "Food + Beverage",
+    icons: [
+      {
+        name: "apple-whole",
+        folder: "solid",
+      },
+      {
+        name: "bacon",
+        folder: "solid",
+      },
+      {
+        name: "beer-mug-empty",
+        folder: "solid",
+      },
+      {
+        name: "blender",
+        folder: "solid",
+      },
+      {
+        name: "bone",
+        folder: "solid",
+      },
+      {
+        name: "bottle-droplet",
+        folder: "solid",
+      },
+      {
+        name: "bottle-water",
+        folder: "solid",
+      },
+      {
+        name: "bowl-food",
+        folder: "solid",
+      },
+      {
+        name: "bowl-rice",
+        folder: "solid",
+      },
+      {
+        name: "bread-slice",
+        folder: "solid",
+      },
+      {
+        name: "burger",
+        folder: "solid",
+      },
+      {
+        name: "cake-candles",
+        folder: "solid",
+      },
+      {
+        name: "candy-cane",
+        folder: "solid",
+      },
+      {
+        name: "carrot",
+        folder: "solid",
+      },
+      {
+        name: "champagne-glasses",
+        folder: "solid",
+      },
+      {
+        name: "cheese",
+        folder: "solid",
+      },
+      {
+        name: "cloud-meatball",
+        folder: "solid",
+      },
+      {
+        name: "cookie",
+        folder: "solid",
+      },
+      {
+        name: "cubes-stacked",
+        folder: "solid",
+      },
+      {
+        name: "drumstick-bite",
+        folder: "solid",
+      },
+      {
+        name: "egg",
+        folder: "solid",
+      },
+      {
+        name: "fish",
+        folder: "solid",
+      },
+      {
+        name: "fish-fins",
+        folder: "solid",
+      },
+      {
+        name: "flask",
+        folder: "solid",
+      },
+      {
+        name: "glass-water",
+        folder: "solid",
+      },
+      {
+        name: "glass-water-droplet",
+        folder: "solid",
+      },
+      {
+        name: "hotdog",
+        folder: "solid",
+      },
+      {
+        name: "ice-cream",
+        folder: "solid",
+      },
+      {
+        name: "jar",
+        folder: "solid",
+      },
+      {
+        name: "jar-wheat",
+        folder: "solid",
+      },
+      {
+        name: "lemon",
+        folder: "regular",
+      },
+      {
+        name: "martini-glass",
+        folder: "solid",
+      },
+      {
+        name: "martini-glass-citrus",
+        folder: "solid",
+      },
+      {
+        name: "martini-glass-empty",
+        folder: "solid",
+      },
+      {
+        name: "mug-hot",
+        folder: "solid",
+      },
+      {
+        name: "mug-saucer",
+        folder: "solid",
+      },
+      {
+        name: "pepper-hot",
+        folder: "solid",
+      },
+      {
+        name: "pizza-slice",
+        folder: "solid",
+      },
+      {
+        name: "plate-wheat",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
+      {
+        name: "shrimp",
+        folder: "solid",
+      },
+      {
+        name: "stroopwafel",
+        folder: "solid",
+      },
+      {
+        name: "wheat-awn",
+        folder: "solid",
+      },
+      {
+        name: "wheat-awn-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "whiskey-glass",
+        folder: "solid",
+      },
+      {
+        name: "wine-bottle",
+        folder: "solid",
+      },
+      {
+        name: "wine-glass",
+        folder: "solid",
+      },
+      {
+        name: "wine-glass-empty",
+        folder: "solid",
+      },
+    ],
   },
-  "fruits-vegetables": {
-    icons: ["apple-whole", "carrot", "leaf", "lemon", "pepper-hot", "seedling"],
+  {
     label: "Fruits + Vegetables",
-  },
-  gaming: {
     icons: [
-      "book-skull",
-      "chess",
-      "chess-bishop",
-      "chess-board",
-      "chess-king",
-      "chess-knight",
-      "chess-pawn",
-      "chess-queen",
-      "chess-rook",
-      "critical-role",
-      "d-and-d",
-      "d-and-d-beyond",
-      "diamond",
-      "dice",
-      "dice-d20",
-      "dice-d6",
-      "dice-five",
-      "dice-four",
-      "dice-one",
-      "dice-six",
-      "dice-three",
-      "dice-two",
-      "dragon",
-      "dungeon",
-      "fantasy-flight-games",
-      "gamepad",
-      "ghost",
-      "hand-fist",
-      "hat-wizard",
-      "headset",
-      "heart",
-      "playstation",
-      "puzzle-piece",
-      "ring",
-      "scroll",
-      "shield-halved",
-      "skull-crossbones",
-      "square-full",
-      "square-steam",
-      "steam",
-      "steam-symbol",
-      "twitch",
-      "vr-cardboard",
-      "wand-sparkles",
-      "wizards-of-the-coast",
-      "xbox",
+      {
+        name: "apple-whole",
+        folder: "solid",
+      },
+      {
+        name: "carrot",
+        folder: "solid",
+      },
+      {
+        name: "leaf",
+        folder: "solid",
+      },
+      {
+        name: "lemon",
+        folder: "regular",
+      },
+      {
+        name: "pepper-hot",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Gaming",
-  },
-  gender: {
     icons: [
-      "genderless",
-      "mars",
-      "mars-and-venus",
-      "mars-double",
-      "mars-stroke",
-      "mars-stroke-right",
-      "mars-stroke-up",
-      "mercury",
-      "neuter",
-      "non-binary",
-      "person-half-dress",
-      "transgender",
-      "venus",
-      "venus-double",
-      "venus-mars",
+      {
+        name: "book-skull",
+        folder: "solid",
+      },
+      {
+        name: "chess",
+        folder: "solid",
+      },
+      {
+        name: "chess-bishop",
+        folder: "regular",
+      },
+      {
+        name: "chess-board",
+        folder: "solid",
+      },
+      {
+        name: "chess-king",
+        folder: "regular",
+      },
+      {
+        name: "chess-knight",
+        folder: "regular",
+      },
+      {
+        name: "chess-pawn",
+        folder: "regular",
+      },
+      {
+        name: "chess-queen",
+        folder: "regular",
+      },
+      {
+        name: "chess-rook",
+        folder: "regular",
+      },
+      {
+        name: "critical-role",
+        folder: "brands",
+      },
+      {
+        name: "d-and-d",
+        folder: "brands",
+      },
+      {
+        name: "d-and-d-beyond",
+        folder: "brands",
+      },
+      {
+        name: "diamond",
+        folder: "solid",
+      },
+      {
+        name: "dice",
+        folder: "solid",
+      },
+      {
+        name: "dice-d20",
+        folder: "solid",
+      },
+      {
+        name: "dice-d6",
+        folder: "solid",
+      },
+      {
+        name: "dice-five",
+        folder: "solid",
+      },
+      {
+        name: "dice-four",
+        folder: "solid",
+      },
+      {
+        name: "dice-one",
+        folder: "solid",
+      },
+      {
+        name: "dice-six",
+        folder: "solid",
+      },
+      {
+        name: "dice-three",
+        folder: "solid",
+      },
+      {
+        name: "dice-two",
+        folder: "solid",
+      },
+      {
+        name: "dragon",
+        folder: "solid",
+      },
+      {
+        name: "dungeon",
+        folder: "solid",
+      },
+      {
+        name: "fantasy-flight-games",
+        folder: "brands",
+      },
+      {
+        name: "gamepad",
+        folder: "solid",
+      },
+      {
+        name: "ghost",
+        folder: "solid",
+      },
+      {
+        name: "hand-fist",
+        folder: "solid",
+      },
+      {
+        name: "hat-wizard",
+        folder: "solid",
+      },
+      {
+        name: "headset",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "playstation",
+        folder: "brands",
+      },
+      {
+        name: "puzzle-piece",
+        folder: "solid",
+      },
+      {
+        name: "ring",
+        folder: "solid",
+      },
+      {
+        name: "scroll",
+        folder: "solid",
+      },
+      {
+        name: "shield-halved",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "square-full",
+        folder: "regular",
+      },
+      {
+        name: "square-steam",
+        folder: "brands",
+      },
+      {
+        name: "steam",
+        folder: "brands",
+      },
+      {
+        name: "steam-symbol",
+        folder: "brands",
+      },
+      {
+        name: "twitch",
+        folder: "brands",
+      },
+      {
+        name: "vr-cardboard",
+        folder: "solid",
+      },
+      {
+        name: "wand-sparkles",
+        folder: "solid",
+      },
+      {
+        name: "wizards-of-the-coast",
+        folder: "brands",
+      },
+      {
+        name: "xbox",
+        folder: "brands",
+      },
     ],
+  },
+  {
     label: "Genders",
-  },
-  halloween: {
     icons: [
-      "book-skull",
-      "broom",
-      "cat",
-      "cloud-moon",
-      "crow",
-      "ghost",
-      "hat-wizard",
-      "mask",
-      "skull",
-      "skull-crossbones",
-      "spider",
-      "toilet-paper",
-      "wand-sparkles",
+      {
+        name: "genderless",
+        folder: "solid",
+      },
+      {
+        name: "mars",
+        folder: "solid",
+      },
+      {
+        name: "mars-and-venus",
+        folder: "solid",
+      },
+      {
+        name: "mars-double",
+        folder: "solid",
+      },
+      {
+        name: "mars-stroke",
+        folder: "solid",
+      },
+      {
+        name: "mars-stroke-right",
+        folder: "solid",
+      },
+      {
+        name: "mars-stroke-up",
+        folder: "solid",
+      },
+      {
+        name: "mercury",
+        folder: "solid",
+      },
+      {
+        name: "neuter",
+        folder: "solid",
+      },
+      {
+        name: "non-binary",
+        folder: "solid",
+      },
+      {
+        name: "person-half-dress",
+        folder: "solid",
+      },
+      {
+        name: "transgender",
+        folder: "solid",
+      },
+      {
+        name: "venus",
+        folder: "solid",
+      },
+      {
+        name: "venus-double",
+        folder: "solid",
+      },
+      {
+        name: "venus-mars",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Halloween",
-  },
-  hands: {
     icons: [
-      "hand",
-      "hand-back-fist",
-      "hand-dots",
-      "hand-fist",
-      "hand-holding",
-      "hand-holding-dollar",
-      "hand-holding-droplet",
-      "hand-holding-hand",
-      "hand-holding-heart",
-      "hand-holding-medical",
-      "hand-lizard",
-      "hand-middle-finger",
-      "hand-peace",
-      "hand-point-down",
-      "hand-point-left",
-      "hand-point-right",
-      "hand-point-up",
-      "hand-pointer",
-      "hand-scissors",
-      "hand-sparkles",
-      "hand-spock",
-      "hands-bound",
-      "hands-bubbles",
-      "hands-clapping",
-      "hands-holding",
-      "hands-holding-child",
-      "hands-holding-circle",
-      "hands-praying",
-      "handshake",
-      "handshake-angle",
-      "handshake-slash",
-      "thumbs-down",
-      "thumbs-up",
+      {
+        name: "book-skull",
+        folder: "solid",
+      },
+      {
+        name: "broom",
+        folder: "solid",
+      },
+      {
+        name: "cat",
+        folder: "solid",
+      },
+      {
+        name: "cloud-moon",
+        folder: "solid",
+      },
+      {
+        name: "crow",
+        folder: "solid",
+      },
+      {
+        name: "ghost",
+        folder: "solid",
+      },
+      {
+        name: "hat-wizard",
+        folder: "solid",
+      },
+      {
+        name: "mask",
+        folder: "solid",
+      },
+      {
+        name: "skull",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "spider",
+        folder: "solid",
+      },
+      {
+        name: "toilet-paper",
+        folder: "solid",
+      },
+      {
+        name: "wand-sparkles",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Hands",
-  },
-  holidays: {
     icons: [
-      "candy-cane",
-      "carrot",
-      "champagne-glasses",
-      "cookie-bite",
-      "face-grin-hearts",
-      "face-kiss-wink-heart",
-      "gift",
-      "gifts",
-      "heart",
-      "holly-berry",
-      "menorah",
-      "mug-hot",
-      "sleigh",
-      "snowman",
+      {
+        name: "hand",
+        folder: "regular",
+      },
+      {
+        name: "hand-back-fist",
+        folder: "regular",
+      },
+      {
+        name: "hand-dots",
+        folder: "solid",
+      },
+      {
+        name: "hand-fist",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-dollar",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-droplet",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-hand",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-heart",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-medical",
+        folder: "solid",
+      },
+      {
+        name: "hand-lizard",
+        folder: "regular",
+      },
+      {
+        name: "hand-middle-finger",
+        folder: "solid",
+      },
+      {
+        name: "hand-peace",
+        folder: "regular",
+      },
+      {
+        name: "hand-point-down",
+        folder: "regular",
+      },
+      {
+        name: "hand-point-left",
+        folder: "regular",
+      },
+      {
+        name: "hand-point-right",
+        folder: "regular",
+      },
+      {
+        name: "hand-point-up",
+        folder: "regular",
+      },
+      {
+        name: "hand-pointer",
+        folder: "regular",
+      },
+      {
+        name: "hand-scissors",
+        folder: "regular",
+      },
+      {
+        name: "hand-sparkles",
+        folder: "solid",
+      },
+      {
+        name: "hand-spock",
+        folder: "regular",
+      },
+      {
+        name: "hands-bound",
+        folder: "solid",
+      },
+      {
+        name: "hands-bubbles",
+        folder: "solid",
+      },
+      {
+        name: "hands-clapping",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-child",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-circle",
+        folder: "solid",
+      },
+      {
+        name: "hands-praying",
+        folder: "solid",
+      },
+      {
+        name: "handshake",
+        folder: "regular",
+      },
+      {
+        name: "handshake-angle",
+        folder: "solid",
+      },
+      {
+        name: "handshake-slash",
+        folder: "solid",
+      },
+      {
+        name: "thumbs-down",
+        folder: "regular",
+      },
+      {
+        name: "thumbs-up",
+        folder: "regular",
+      },
     ],
+  },
+  {
     label: "Holidays",
-  },
-  household: {
     icons: [
-      "arrow-up-from-water-pump",
-      "bath",
-      "bed",
-      "bell",
-      "blender",
-      "box-tissue",
-      "chair",
-      "computer",
-      "couch",
-      "door-closed",
-      "door-open",
-      "dungeon",
-      "fan",
-      "faucet",
-      "faucet-drip",
-      "fire-burner",
-      "house-chimney-user",
-      "house-chimney-window",
-      "house-fire",
-      "house-laptop",
-      "house-lock",
-      "house-signal",
-      "house-user",
-      "jar",
-      "jar-wheat",
-      "jug-detergent",
-      "kitchen-set",
-      "lightbulb",
-      "mattress-pillow",
-      "mug-saucer",
-      "people-roof",
-      "plug",
-      "pump-soap",
-      "rug",
-      "sheet-plastic",
-      "shower",
-      "sink",
-      "snowflake",
-      "soap",
-      "spoon",
-      "stairs",
-      "temperature-arrow-down",
-      "temperature-arrow-up",
-      "toilet",
-      "toilet-paper",
-      "toilet-paper-slash",
-      "tv",
-      "utensils",
+      {
+        name: "candy-cane",
+        folder: "solid",
+      },
+      {
+        name: "carrot",
+        folder: "solid",
+      },
+      {
+        name: "champagne-glasses",
+        folder: "solid",
+      },
+      {
+        name: "cookie-bite",
+        folder: "solid",
+      },
+      {
+        name: "face-grin-hearts",
+        folder: "regular",
+      },
+      {
+        name: "face-kiss-wink-heart",
+        folder: "regular",
+      },
+      {
+        name: "gift",
+        folder: "solid",
+      },
+      {
+        name: "gifts",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "holly-berry",
+        folder: "solid",
+      },
+      {
+        name: "menorah",
+        folder: "solid",
+      },
+      {
+        name: "mug-hot",
+        folder: "solid",
+      },
+      {
+        name: "sleigh",
+        folder: "solid",
+      },
+      {
+        name: "snowman",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Household",
-  },
-  humanitarian: {
     icons: [
-      "anchor",
-      "anchor-circle-check",
-      "anchor-circle-exclamation",
-      "anchor-circle-xmark",
-      "anchor-lock",
-      "arrow-down-up-across-line",
-      "arrow-down-up-lock",
-      "arrow-right-to-city",
-      "arrow-up-from-ground-water",
-      "arrow-up-from-water-pump",
-      "arrow-up-right-dots",
-      "arrow-up-right-from-square",
-      "arrows-down-to-line",
-      "arrows-down-to-people",
-      "arrows-left-right-to-line",
-      "arrows-spin",
-      "arrows-split-up-and-left",
-      "arrows-to-circle",
-      "arrows-to-dot",
-      "arrows-to-eye",
-      "arrows-turn-right",
-      "arrows-turn-to-dots",
-      "arrows-up-to-line",
-      "baby",
-      "bacterium",
-      "ban",
-      "bed",
-      "biohazard",
-      "book-bookmark",
-      "bore-hole",
-      "bottle-droplet",
-      "bottle-water",
-      "bowl-food",
-      "bowl-rice",
-      "boxes-packing",
-      "bridge",
-      "bridge-circle-check",
-      "bridge-circle-exclamation",
-      "bridge-circle-xmark",
-      "bridge-lock",
-      "bridge-water",
-      "bucket",
-      "bugs",
-      "building",
-      "building-circle-arrow-right",
-      "building-circle-check",
-      "building-circle-exclamation",
-      "building-circle-xmark",
-      "building-columns",
-      "building-flag",
-      "building-lock",
-      "building-ngo",
-      "building-shield",
-      "building-un",
-      "building-user",
-      "building-wheat",
-      "burst",
-      "bus",
-      "bus-side",
-      "car",
-      "car-on",
-      "car-tunnel",
-      "child-combatant",
-      "children",
-      "church",
-      "circle-h",
-      "circle-nodes",
-      "clipboard-question",
-      "clipboard-user",
-      "cloud-bolt",
-      "cloud-showers-heavy",
-      "cloud-showers-water",
-      "computer",
-      "cow",
-      "cubes-stacked",
-      "display",
-      "droplet",
-      "envelope",
-      "envelope-circle-check",
-      "explosion",
-      "faucet-drip",
-      "fax",
-      "ferry",
-      "file",
-      "file-circle-check",
-      "file-circle-exclamation",
-      "file-circle-minus",
-      "file-circle-plus",
-      "file-circle-question",
-      "file-circle-xmark",
-      "file-csv",
-      "file-pdf",
-      "file-pen",
-      "file-shield",
-      "fire-burner",
-      "fire-flame-simple",
-      "fish-fins",
-      "flag",
-      "flask-vial",
-      "gas-pump",
-      "glass-water",
-      "glass-water-droplet",
-      "gopuram",
-      "group-arrows-rotate",
-      "hammer",
-      "hand-holding-hand",
-      "handcuffs",
-      "hands-bound",
-      "hands-bubbles",
-      "hands-holding-child",
-      "hands-holding-circle",
-      "handshake",
-      "headset",
-      "heart-circle-bolt",
-      "heart-circle-check",
-      "heart-circle-exclamation",
-      "heart-circle-minus",
-      "heart-circle-plus",
-      "heart-circle-xmark",
-      "helicopter",
-      "helicopter-symbol",
-      "helmet-un",
-      "hill-avalanche",
-      "hill-rockslide",
-      "hospital",
-      "hotel",
-      "house-chimney",
-      "house-chimney-crack",
-      "house-circle-check",
-      "house-circle-exclamation",
-      "house-circle-xmark",
-      "house-fire",
-      "house-flag",
-      "house-flood-water",
-      "house-flood-water-circle-arrow-right",
-      "house-lock",
-      "house-medical",
-      "house-medical-circle-check",
-      "house-medical-circle-exclamation",
-      "house-medical-circle-xmark",
-      "house-medical-flag",
-      "house-signal",
-      "house-tsunami",
-      "hurricane",
-      "id-card",
-      "jar",
-      "jar-wheat",
-      "jet-fighter-up",
-      "jug-detergent",
-      "kitchen-set",
-      "land-mine-on",
-      "landmark",
-      "landmark-dome",
-      "landmark-flag",
-      "laptop",
-      "laptop-file",
-      "life-ring",
-      "lines-leaning",
-      "location-pin-lock",
-      "locust",
-      "lungs",
-      "magnifying-glass-arrow-right",
-      "magnifying-glass-chart",
-      "mars-and-venus",
-      "mars-and-venus-burst",
-      "mask-face",
-      "mask-ventilator",
-      "mattress-pillow",
-      "microscope",
-      "mobile-retro",
-      "mobile-screen",
-      "money-bill-transfer",
-      "money-bill-trend-up",
-      "money-bill-wheat",
-      "money-bills",
-      "mosque",
-      "mosquito",
-      "mosquito-net",
-      "mound",
-      "mountain-city",
-      "mountain-sun",
-      "oil-well",
-      "parachute-box",
-      "people-arrows",
-      "people-group",
-      "people-line",
-      "people-pulling",
-      "people-robbery",
-      "people-roof",
-      "person",
-      "person-arrow-down-to-line",
-      "person-arrow-up-from-line",
-      "person-breastfeeding",
-      "person-burst",
-      "person-cane",
-      "person-chalkboard",
-      "person-circle-check",
-      "person-circle-exclamation",
-      "person-circle-minus",
-      "person-circle-plus",
-      "person-circle-question",
-      "person-circle-xmark",
-      "person-digging",
-      "person-dress",
-      "person-dress-burst",
-      "person-drowning",
-      "person-falling",
-      "person-falling-burst",
-      "person-half-dress",
-      "person-harassing",
-      "person-military-pointing",
-      "person-military-rifle",
-      "person-military-to-person",
-      "person-pregnant",
-      "person-rays",
-      "person-rifle",
-      "person-shelter",
-      "person-through-window",
-      "person-walking",
-      "person-walking-arrow-loop-left",
-      "person-walking-arrow-right",
-      "person-walking-dashed-line-arrow-right",
-      "person-walking-luggage",
-      "pills",
-      "plane-circle-check",
-      "plane-circle-exclamation",
-      "plane-circle-xmark",
-      "plane-lock",
-      "plane-up",
-      "plant-wilt",
-      "plate-wheat",
-      "plug",
-      "plug-circle-bolt",
-      "plug-circle-check",
-      "plug-circle-exclamation",
-      "plug-circle-minus",
-      "plug-circle-plus",
-      "plug-circle-xmark",
-      "pump-soap",
-      "radiation",
-      "radio",
-      "ranking-star",
-      "road",
-      "road-barrier",
-      "road-bridge",
-      "road-circle-check",
-      "road-circle-exclamation",
-      "road-circle-xmark",
-      "road-lock",
-      "road-spikes",
-      "rug",
-      "sack-dollar",
-      "sack-xmark",
-      "sailboat",
-      "satellite-dish",
-      "scale-balanced",
-      "school",
-      "school-circle-check",
-      "school-circle-exclamation",
-      "school-circle-xmark",
-      "school-flag",
-      "school-lock",
-      "seedling",
-      "sheet-plastic",
-      "shield-cat",
-      "shield-dog",
-      "shield-heart",
-      "ship",
-      "shirt",
-      "shop",
-      "shop-lock",
-      "shower",
-      "skull-crossbones",
-      "snowflake",
-      "soap",
-      "square-nfi",
-      "square-person-confined",
-      "square-virus",
-      "staff-snake",
-      "stethoscope",
-      "suitcase-medical",
-      "sun-plant-wilt",
-      "syringe",
-      "tarp",
-      "tarp-droplet",
-      "temperature-arrow-down",
-      "temperature-arrow-up",
-      "tent",
-      "tent-arrow-down-to-line",
-      "tent-arrow-left-right",
-      "tent-arrow-turn-left",
-      "tent-arrows-down",
-      "tents",
-      "toilet",
-      "toilet-portable",
-      "toilets-portable",
-      "tornado",
-      "tower-broadcast",
-      "tower-cell",
-      "tower-observation",
-      "train-subway",
-      "trash-can",
-      "tree-city",
-      "trowel",
-      "trowel-bricks",
-      "truck",
-      "truck-arrow-right",
-      "truck-droplet",
-      "truck-field",
-      "truck-field-un",
-      "truck-front",
-      "truck-medical",
-      "truck-plane",
-      "user-doctor",
-      "user-injured",
-      "users-between-lines",
-      "users-line",
-      "users-rays",
-      "users-rectangle",
-      "users-viewfinder",
-      "vial-circle-check",
-      "vial-virus",
-      "vihara",
-      "virus",
-      "virus-covid",
-      "volcano",
-      "walkie-talkie",
-      "wheat-awn",
-      "wheat-awn-circle-exclamation",
-      "wheelchair-move",
-      "wifi",
-      "wind",
-      "worm",
-      "xmarks-lines",
+      {
+        name: "arrow-up-from-water-pump",
+        folder: "solid",
+      },
+      {
+        name: "bath",
+        folder: "solid",
+      },
+      {
+        name: "bed",
+        folder: "solid",
+      },
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "blender",
+        folder: "solid",
+      },
+      {
+        name: "box-tissue",
+        folder: "solid",
+      },
+      {
+        name: "chair",
+        folder: "solid",
+      },
+      {
+        name: "computer",
+        folder: "solid",
+      },
+      {
+        name: "couch",
+        folder: "solid",
+      },
+      {
+        name: "door-closed",
+        folder: "solid",
+      },
+      {
+        name: "door-open",
+        folder: "solid",
+      },
+      {
+        name: "dungeon",
+        folder: "solid",
+      },
+      {
+        name: "fan",
+        folder: "solid",
+      },
+      {
+        name: "faucet",
+        folder: "solid",
+      },
+      {
+        name: "faucet-drip",
+        folder: "solid",
+      },
+      {
+        name: "fire-burner",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-user",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-window",
+        folder: "solid",
+      },
+      {
+        name: "house-fire",
+        folder: "solid",
+      },
+      {
+        name: "house-laptop",
+        folder: "solid",
+      },
+      {
+        name: "house-lock",
+        folder: "solid",
+      },
+      {
+        name: "house-signal",
+        folder: "solid",
+      },
+      {
+        name: "house-user",
+        folder: "solid",
+      },
+      {
+        name: "jar",
+        folder: "solid",
+      },
+      {
+        name: "jar-wheat",
+        folder: "solid",
+      },
+      {
+        name: "jug-detergent",
+        folder: "solid",
+      },
+      {
+        name: "kitchen-set",
+        folder: "solid",
+      },
+      {
+        name: "lightbulb",
+        folder: "regular",
+      },
+      {
+        name: "mattress-pillow",
+        folder: "solid",
+      },
+      {
+        name: "mug-saucer",
+        folder: "solid",
+      },
+      {
+        name: "people-roof",
+        folder: "solid",
+      },
+      {
+        name: "plug",
+        folder: "solid",
+      },
+      {
+        name: "pump-soap",
+        folder: "solid",
+      },
+      {
+        name: "rug",
+        folder: "solid",
+      },
+      {
+        name: "sheet-plastic",
+        folder: "solid",
+      },
+      {
+        name: "shower",
+        folder: "solid",
+      },
+      {
+        name: "sink",
+        folder: "solid",
+      },
+      {
+        name: "snowflake",
+        folder: "regular",
+      },
+      {
+        name: "soap",
+        folder: "solid",
+      },
+      {
+        name: "spoon",
+        folder: "solid",
+      },
+      {
+        name: "stairs",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "toilet",
+        folder: "solid",
+      },
+      {
+        name: "toilet-paper",
+        folder: "solid",
+      },
+      {
+        name: "toilet-paper-slash",
+        folder: "solid",
+      },
+      {
+        name: "tv",
+        folder: "solid",
+      },
+      {
+        name: "utensils",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Humanitarian",
-  },
-  logistics: {
     icons: [
-      "anchor",
-      "anchor-circle-check",
-      "anchor-circle-exclamation",
-      "anchor-circle-xmark",
-      "anchor-lock",
-      "box",
-      "boxes-packing",
-      "boxes-stacked",
-      "bridge",
-      "bridge-circle-check",
-      "bridge-circle-exclamation",
-      "bridge-circle-xmark",
-      "bridge-lock",
-      "bridge-water",
-      "bus",
-      "bus-side",
-      "bus-simple",
-      "car",
-      "car-tunnel",
-      "cart-flatbed",
-      "chart-simple",
-      "clipboard-check",
-      "clipboard-list",
-      "clipboard-question",
-      "clipboard-user",
-      "dolly",
-      "ferry",
-      "gas-pump",
-      "gears",
-      "helicopter",
-      "helicopter-symbol",
-      "helmet-safety",
-      "jet-fighter-up",
-      "pallet",
-      "plane-circle-check",
-      "plane-circle-exclamation",
-      "plane-circle-xmark",
-      "plane-lock",
-      "road",
-      "road-barrier",
-      "road-bridge",
-      "road-circle-check",
-      "road-circle-exclamation",
-      "road-circle-xmark",
-      "road-lock",
-      "sailboat",
-      "square-nfi",
-      "train",
-      "train-subway",
-      "truck",
-      "truck-arrow-right",
-      "truck-fast",
-      "truck-field",
-      "truck-field-un",
-      "truck-front",
-      "truck-plane",
-      "warehouse",
-      "xmarks-lines",
+      {
+        name: "anchor",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "anchor-lock",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-up-across-line",
+        folder: "solid",
+      },
+      {
+        name: "arrow-down-up-lock",
+        folder: "solid",
+      },
+      {
+        name: "arrow-right-to-city",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-from-ground-water",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-from-water-pump",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-right-dots",
+        folder: "solid",
+      },
+      {
+        name: "arrow-up-right-from-square",
+        folder: "solid",
+      },
+      {
+        name: "arrows-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "arrows-down-to-people",
+        folder: "solid",
+      },
+      {
+        name: "arrows-left-right-to-line",
+        folder: "solid",
+      },
+      {
+        name: "arrows-spin",
+        folder: "solid",
+      },
+      {
+        name: "arrows-split-up-and-left",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-circle",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-dot",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-eye",
+        folder: "solid",
+      },
+      {
+        name: "arrows-turn-right",
+        folder: "solid",
+      },
+      {
+        name: "arrows-turn-to-dots",
+        folder: "solid",
+      },
+      {
+        name: "arrows-up-to-line",
+        folder: "solid",
+      },
+      {
+        name: "baby",
+        folder: "solid",
+      },
+      {
+        name: "bacterium",
+        folder: "solid",
+      },
+      {
+        name: "ban",
+        folder: "solid",
+      },
+      {
+        name: "bed",
+        folder: "solid",
+      },
+      {
+        name: "biohazard",
+        folder: "solid",
+      },
+      {
+        name: "book-bookmark",
+        folder: "solid",
+      },
+      {
+        name: "bore-hole",
+        folder: "solid",
+      },
+      {
+        name: "bottle-droplet",
+        folder: "solid",
+      },
+      {
+        name: "bottle-water",
+        folder: "solid",
+      },
+      {
+        name: "bowl-food",
+        folder: "solid",
+      },
+      {
+        name: "bowl-rice",
+        folder: "solid",
+      },
+      {
+        name: "boxes-packing",
+        folder: "solid",
+      },
+      {
+        name: "bridge",
+        folder: "solid",
+      },
+      {
+        name: "bridge-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "bridge-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "bridge-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "bridge-lock",
+        folder: "solid",
+      },
+      {
+        name: "bridge-water",
+        folder: "solid",
+      },
+      {
+        name: "bucket",
+        folder: "solid",
+      },
+      {
+        name: "bugs",
+        folder: "solid",
+      },
+      {
+        name: "building",
+        folder: "regular",
+      },
+      {
+        name: "building-circle-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "building-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "building-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "building-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "building-columns",
+        folder: "solid",
+      },
+      {
+        name: "building-flag",
+        folder: "solid",
+      },
+      {
+        name: "building-lock",
+        folder: "solid",
+      },
+      {
+        name: "building-ngo",
+        folder: "solid",
+      },
+      {
+        name: "building-shield",
+        folder: "solid",
+      },
+      {
+        name: "building-un",
+        folder: "solid",
+      },
+      {
+        name: "building-user",
+        folder: "solid",
+      },
+      {
+        name: "building-wheat",
+        folder: "solid",
+      },
+      {
+        name: "burst",
+        folder: "solid",
+      },
+      {
+        name: "bus",
+        folder: "solid",
+      },
+      {
+        name: "bus-side",
+        folder: "solid",
+      },
+      {
+        name: "car",
+        folder: "solid",
+      },
+      {
+        name: "car-on",
+        folder: "solid",
+      },
+      {
+        name: "car-tunnel",
+        folder: "solid",
+      },
+      {
+        name: "child-combatant",
+        folder: "solid",
+      },
+      {
+        name: "children",
+        folder: "solid",
+      },
+      {
+        name: "church",
+        folder: "solid",
+      },
+      {
+        name: "circle-h",
+        folder: "solid",
+      },
+      {
+        name: "circle-nodes",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-question",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-user",
+        folder: "solid",
+      },
+      {
+        name: "cloud-bolt",
+        folder: "solid",
+      },
+      {
+        name: "cloud-showers-heavy",
+        folder: "solid",
+      },
+      {
+        name: "cloud-showers-water",
+        folder: "solid",
+      },
+      {
+        name: "computer",
+        folder: "solid",
+      },
+      {
+        name: "cow",
+        folder: "solid",
+      },
+      {
+        name: "cubes-stacked",
+        folder: "solid",
+      },
+      {
+        name: "display",
+        folder: "solid",
+      },
+      {
+        name: "droplet",
+        folder: "solid",
+      },
+      {
+        name: "envelope",
+        folder: "regular",
+      },
+      {
+        name: "envelope-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "explosion",
+        folder: "solid",
+      },
+      {
+        name: "faucet-drip",
+        folder: "solid",
+      },
+      {
+        name: "fax",
+        folder: "solid",
+      },
+      {
+        name: "ferry",
+        folder: "solid",
+      },
+      {
+        name: "file",
+        folder: "regular",
+      },
+      {
+        name: "file-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-question",
+        folder: "solid",
+      },
+      {
+        name: "file-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "file-csv",
+        folder: "solid",
+      },
+      {
+        name: "file-pdf",
+        folder: "regular",
+      },
+      {
+        name: "file-pen",
+        folder: "solid",
+      },
+      {
+        name: "file-shield",
+        folder: "solid",
+      },
+      {
+        name: "fire-burner",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-simple",
+        folder: "solid",
+      },
+      {
+        name: "fish-fins",
+        folder: "solid",
+      },
+      {
+        name: "flag",
+        folder: "regular",
+      },
+      {
+        name: "flask-vial",
+        folder: "solid",
+      },
+      {
+        name: "gas-pump",
+        folder: "solid",
+      },
+      {
+        name: "glass-water",
+        folder: "solid",
+      },
+      {
+        name: "glass-water-droplet",
+        folder: "solid",
+      },
+      {
+        name: "gopuram",
+        folder: "solid",
+      },
+      {
+        name: "group-arrows-rotate",
+        folder: "solid",
+      },
+      {
+        name: "hammer",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-hand",
+        folder: "solid",
+      },
+      {
+        name: "handcuffs",
+        folder: "solid",
+      },
+      {
+        name: "hands-bound",
+        folder: "solid",
+      },
+      {
+        name: "hands-bubbles",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-child",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-circle",
+        folder: "solid",
+      },
+      {
+        name: "handshake",
+        folder: "regular",
+      },
+      {
+        name: "headset",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-bolt",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "helicopter",
+        folder: "solid",
+      },
+      {
+        name: "helicopter-symbol",
+        folder: "solid",
+      },
+      {
+        name: "helmet-un",
+        folder: "solid",
+      },
+      {
+        name: "hill-avalanche",
+        folder: "solid",
+      },
+      {
+        name: "hill-rockslide",
+        folder: "solid",
+      },
+      {
+        name: "hospital",
+        folder: "regular",
+      },
+      {
+        name: "hotel",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-crack",
+        folder: "solid",
+      },
+      {
+        name: "house-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "house-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "house-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "house-fire",
+        folder: "solid",
+      },
+      {
+        name: "house-flag",
+        folder: "solid",
+      },
+      {
+        name: "house-flood-water",
+        folder: "solid",
+      },
+      {
+        name: "house-flood-water-circle-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "house-lock",
+        folder: "solid",
+      },
+      {
+        name: "house-medical",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-flag",
+        folder: "solid",
+      },
+      {
+        name: "house-signal",
+        folder: "solid",
+      },
+      {
+        name: "house-tsunami",
+        folder: "solid",
+      },
+      {
+        name: "hurricane",
+        folder: "solid",
+      },
+      {
+        name: "id-card",
+        folder: "regular",
+      },
+      {
+        name: "jar",
+        folder: "solid",
+      },
+      {
+        name: "jar-wheat",
+        folder: "solid",
+      },
+      {
+        name: "jet-fighter-up",
+        folder: "solid",
+      },
+      {
+        name: "jug-detergent",
+        folder: "solid",
+      },
+      {
+        name: "kitchen-set",
+        folder: "solid",
+      },
+      {
+        name: "land-mine-on",
+        folder: "solid",
+      },
+      {
+        name: "landmark",
+        folder: "solid",
+      },
+      {
+        name: "landmark-dome",
+        folder: "solid",
+      },
+      {
+        name: "landmark-flag",
+        folder: "solid",
+      },
+      {
+        name: "laptop",
+        folder: "solid",
+      },
+      {
+        name: "laptop-file",
+        folder: "solid",
+      },
+      {
+        name: "life-ring",
+        folder: "regular",
+      },
+      {
+        name: "lines-leaning",
+        folder: "solid",
+      },
+      {
+        name: "location-pin-lock",
+        folder: "solid",
+      },
+      {
+        name: "locust",
+        folder: "solid",
+      },
+      {
+        name: "lungs",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-chart",
+        folder: "solid",
+      },
+      {
+        name: "mars-and-venus",
+        folder: "solid",
+      },
+      {
+        name: "mars-and-venus-burst",
+        folder: "solid",
+      },
+      {
+        name: "mask-face",
+        folder: "solid",
+      },
+      {
+        name: "mask-ventilator",
+        folder: "solid",
+      },
+      {
+        name: "mattress-pillow",
+        folder: "solid",
+      },
+      {
+        name: "microscope",
+        folder: "solid",
+      },
+      {
+        name: "mobile-retro",
+        folder: "solid",
+      },
+      {
+        name: "mobile-screen",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-transfer",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-trend-up",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-wheat",
+        folder: "solid",
+      },
+      {
+        name: "money-bills",
+        folder: "solid",
+      },
+      {
+        name: "mosque",
+        folder: "solid",
+      },
+      {
+        name: "mosquito",
+        folder: "solid",
+      },
+      {
+        name: "mosquito-net",
+        folder: "solid",
+      },
+      {
+        name: "mound",
+        folder: "solid",
+      },
+      {
+        name: "mountain-city",
+        folder: "solid",
+      },
+      {
+        name: "mountain-sun",
+        folder: "solid",
+      },
+      {
+        name: "oil-well",
+        folder: "solid",
+      },
+      {
+        name: "parachute-box",
+        folder: "solid",
+      },
+      {
+        name: "people-arrows",
+        folder: "solid",
+      },
+      {
+        name: "people-group",
+        folder: "solid",
+      },
+      {
+        name: "people-line",
+        folder: "solid",
+      },
+      {
+        name: "people-pulling",
+        folder: "solid",
+      },
+      {
+        name: "people-robbery",
+        folder: "solid",
+      },
+      {
+        name: "people-roof",
+        folder: "solid",
+      },
+      {
+        name: "person",
+        folder: "solid",
+      },
+      {
+        name: "person-arrow-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "person-arrow-up-from-line",
+        folder: "solid",
+      },
+      {
+        name: "person-breastfeeding",
+        folder: "solid",
+      },
+      {
+        name: "person-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-cane",
+        folder: "solid",
+      },
+      {
+        name: "person-chalkboard",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-question",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "person-digging",
+        folder: "solid",
+      },
+      {
+        name: "person-dress",
+        folder: "solid",
+      },
+      {
+        name: "person-dress-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-drowning",
+        folder: "solid",
+      },
+      {
+        name: "person-falling",
+        folder: "solid",
+      },
+      {
+        name: "person-falling-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-half-dress",
+        folder: "solid",
+      },
+      {
+        name: "person-harassing",
+        folder: "solid",
+      },
+      {
+        name: "person-military-pointing",
+        folder: "solid",
+      },
+      {
+        name: "person-military-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-military-to-person",
+        folder: "solid",
+      },
+      {
+        name: "person-pregnant",
+        folder: "solid",
+      },
+      {
+        name: "person-rays",
+        folder: "solid",
+      },
+      {
+        name: "person-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-shelter",
+        folder: "solid",
+      },
+      {
+        name: "person-through-window",
+        folder: "solid",
+      },
+      {
+        name: "person-walking",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-arrow-loop-left",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-dashed-line-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-luggage",
+        folder: "solid",
+      },
+      {
+        name: "pills",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "plane-lock",
+        folder: "solid",
+      },
+      {
+        name: "plane-up",
+        folder: "solid",
+      },
+      {
+        name: "plant-wilt",
+        folder: "solid",
+      },
+      {
+        name: "plate-wheat",
+        folder: "solid",
+      },
+      {
+        name: "plug",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-bolt",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "plug-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "pump-soap",
+        folder: "solid",
+      },
+      {
+        name: "radiation",
+        folder: "solid",
+      },
+      {
+        name: "radio",
+        folder: "solid",
+      },
+      {
+        name: "ranking-star",
+        folder: "solid",
+      },
+      {
+        name: "road",
+        folder: "solid",
+      },
+      {
+        name: "road-barrier",
+        folder: "solid",
+      },
+      {
+        name: "road-bridge",
+        folder: "solid",
+      },
+      {
+        name: "road-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "road-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "road-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "road-lock",
+        folder: "solid",
+      },
+      {
+        name: "road-spikes",
+        folder: "solid",
+      },
+      {
+        name: "rug",
+        folder: "solid",
+      },
+      {
+        name: "sack-dollar",
+        folder: "solid",
+      },
+      {
+        name: "sack-xmark",
+        folder: "solid",
+      },
+      {
+        name: "sailboat",
+        folder: "solid",
+      },
+      {
+        name: "satellite-dish",
+        folder: "solid",
+      },
+      {
+        name: "scale-balanced",
+        folder: "solid",
+      },
+      {
+        name: "school",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "school-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "school-flag",
+        folder: "solid",
+      },
+      {
+        name: "school-lock",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
+      {
+        name: "sheet-plastic",
+        folder: "solid",
+      },
+      {
+        name: "shield-cat",
+        folder: "solid",
+      },
+      {
+        name: "shield-dog",
+        folder: "solid",
+      },
+      {
+        name: "shield-heart",
+        folder: "solid",
+      },
+      {
+        name: "ship",
+        folder: "solid",
+      },
+      {
+        name: "shirt",
+        folder: "solid",
+      },
+      {
+        name: "shop",
+        folder: "solid",
+      },
+      {
+        name: "shop-lock",
+        folder: "solid",
+      },
+      {
+        name: "shower",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "snowflake",
+        folder: "regular",
+      },
+      {
+        name: "soap",
+        folder: "solid",
+      },
+      {
+        name: "square-nfi",
+        folder: "solid",
+      },
+      {
+        name: "square-person-confined",
+        folder: "solid",
+      },
+      {
+        name: "square-virus",
+        folder: "solid",
+      },
+      {
+        name: "staff-snake",
+        folder: "solid",
+      },
+      {
+        name: "stethoscope",
+        folder: "solid",
+      },
+      {
+        name: "suitcase-medical",
+        folder: "solid",
+      },
+      {
+        name: "sun-plant-wilt",
+        folder: "solid",
+      },
+      {
+        name: "syringe",
+        folder: "solid",
+      },
+      {
+        name: "tarp",
+        folder: "solid",
+      },
+      {
+        name: "tarp-droplet",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "tent",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-left-right",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrow-turn-left",
+        folder: "solid",
+      },
+      {
+        name: "tent-arrows-down",
+        folder: "solid",
+      },
+      {
+        name: "tents",
+        folder: "solid",
+      },
+      {
+        name: "toilet",
+        folder: "solid",
+      },
+      {
+        name: "toilet-portable",
+        folder: "solid",
+      },
+      {
+        name: "toilets-portable",
+        folder: "solid",
+      },
+      {
+        name: "tornado",
+        folder: "solid",
+      },
+      {
+        name: "tower-broadcast",
+        folder: "solid",
+      },
+      {
+        name: "tower-cell",
+        folder: "solid",
+      },
+      {
+        name: "tower-observation",
+        folder: "solid",
+      },
+      {
+        name: "train-subway",
+        folder: "solid",
+      },
+      {
+        name: "trash-can",
+        folder: "regular",
+      },
+      {
+        name: "tree-city",
+        folder: "solid",
+      },
+      {
+        name: "trowel",
+        folder: "solid",
+      },
+      {
+        name: "trowel-bricks",
+        folder: "solid",
+      },
+      {
+        name: "truck",
+        folder: "regular",
+      },
+      {
+        name: "truck-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "truck-droplet",
+        folder: "solid",
+      },
+      {
+        name: "truck-field",
+        folder: "solid",
+      },
+      {
+        name: "truck-field-un",
+        folder: "solid",
+      },
+      {
+        name: "truck-front",
+        folder: "solid",
+      },
+      {
+        name: "truck-medical",
+        folder: "solid",
+      },
+      {
+        name: "truck-plane",
+        folder: "solid",
+      },
+      {
+        name: "user-doctor",
+        folder: "solid",
+      },
+      {
+        name: "user-injured",
+        folder: "solid",
+      },
+      {
+        name: "users-between-lines",
+        folder: "solid",
+      },
+      {
+        name: "users-line",
+        folder: "solid",
+      },
+      {
+        name: "users-rays",
+        folder: "solid",
+      },
+      {
+        name: "users-rectangle",
+        folder: "solid",
+      },
+      {
+        name: "users-viewfinder",
+        folder: "solid",
+      },
+      {
+        name: "vial-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "vial-virus",
+        folder: "solid",
+      },
+      {
+        name: "vihara",
+        folder: "solid",
+      },
+      {
+        name: "virus",
+        folder: "solid",
+      },
+      {
+        name: "virus-covid",
+        folder: "solid",
+      },
+      {
+        name: "volcano",
+        folder: "solid",
+      },
+      {
+        name: "walkie-talkie",
+        folder: "solid",
+      },
+      {
+        name: "wheat-awn",
+        folder: "solid",
+      },
+      {
+        name: "wheat-awn-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
+      {
+        name: "wifi",
+        folder: "solid",
+      },
+      {
+        name: "wind",
+        folder: "solid",
+      },
+      {
+        name: "worm",
+        folder: "solid",
+      },
+      {
+        name: "xmarks-lines",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Logistics",
-  },
-  maps: {
     icons: [
-      "anchor",
-      "bag-shopping",
-      "basket-shopping",
-      "bath",
-      "bed",
-      "beer-mug-empty",
-      "bell",
-      "bell-slash",
-      "bicycle",
-      "binoculars",
-      "bomb",
-      "book",
-      "book-atlas",
-      "bookmark",
-      "bridge",
-      "bridge-water",
-      "briefcase",
-      "building",
-      "building-columns",
-      "cake-candles",
-      "car",
-      "cart-shopping",
-      "circle-info",
-      "crosshairs",
-      "diamond-turn-right",
-      "dollar-sign",
-      "draw-polygon",
-      "droplet",
-      "eye",
-      "eye-low-vision",
-      "eye-slash",
-      "fire",
-      "fire-extinguisher",
-      "fire-flame-curved",
-      "flag",
-      "flag-checkered",
-      "flask",
-      "gamepad",
-      "gavel",
-      "gift",
-      "globe",
-      "graduation-cap",
-      "heart",
-      "heart-pulse",
-      "helicopter",
-      "helicopter-symbol",
-      "hospital",
-      "house",
-      "image",
-      "images",
-      "industry",
-      "info",
-      "jet-fighter",
-      "key",
-      "landmark",
-      "landmark-flag",
-      "layer-group",
-      "leaf",
-      "lemon",
-      "life-ring",
-      "lightbulb",
-      "location-arrow",
-      "location-crosshairs",
-      "location-dot",
-      "location-pin",
-      "location-pin-lock",
-      "magnet",
-      "magnifying-glass",
-      "magnifying-glass-location",
-      "magnifying-glass-minus",
-      "magnifying-glass-plus",
-      "map",
-      "map-pin",
-      "martini-glass-empty",
-      "money-bill",
-      "money-bill-1",
-      "monument",
-      "motorcycle",
-      "mountain-sun",
-      "mug-saucer",
-      "music",
-      "newspaper",
-      "paw",
-      "person",
-      "person-walking-with-cane",
-      "phone",
-      "phone-flip",
-      "phone-volume",
-      "plane",
-      "plug",
-      "plus",
-      "print",
-      "recycle",
-      "restroom",
-      "road",
-      "rocket",
-      "route",
-      "scale-balanced",
-      "scale-unbalanced",
-      "scale-unbalanced-flip",
-      "ship",
-      "shoe-prints",
-      "shower",
-      "signs-post",
-      "snowplow",
-      "spoon",
-      "square-h",
-      "square-parking",
-      "square-phone",
-      "square-phone-flip",
-      "square-plus",
-      "street-view",
-      "suitcase",
-      "suitcase-medical",
-      "tag",
-      "tags",
-      "taxi",
-      "thumbtack",
-      "thumbtack-slash",
-      "ticket",
-      "ticket-simple",
-      "traffic-light",
-      "train",
-      "train-subway",
-      "train-tram",
-      "tree",
-      "trophy",
-      "truck",
-      "truck-medical",
-      "tty",
-      "umbrella",
-      "utensils",
-      "vest",
-      "vest-patches",
-      "wheelchair",
-      "wheelchair-move",
-      "wifi",
-      "wine-glass",
-      "wrench",
+      {
+        name: "anchor",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "anchor-lock",
+        folder: "solid",
+      },
+      {
+        name: "box",
+        folder: "solid",
+      },
+      {
+        name: "boxes-packing",
+        folder: "solid",
+      },
+      {
+        name: "boxes-stacked",
+        folder: "solid",
+      },
+      {
+        name: "bridge",
+        folder: "solid",
+      },
+      {
+        name: "bridge-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "bridge-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "bridge-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "bridge-lock",
+        folder: "solid",
+      },
+      {
+        name: "bridge-water",
+        folder: "solid",
+      },
+      {
+        name: "bus",
+        folder: "solid",
+      },
+      {
+        name: "bus-side",
+        folder: "solid",
+      },
+      {
+        name: "bus-simple",
+        folder: "solid",
+      },
+      {
+        name: "car",
+        folder: "solid",
+      },
+      {
+        name: "car-tunnel",
+        folder: "solid",
+      },
+      {
+        name: "cart-flatbed",
+        folder: "solid",
+      },
+      {
+        name: "chart-simple",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-check",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-list",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-question",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-user",
+        folder: "solid",
+      },
+      {
+        name: "dolly",
+        folder: "solid",
+      },
+      {
+        name: "ferry",
+        folder: "solid",
+      },
+      {
+        name: "gas-pump",
+        folder: "solid",
+      },
+      {
+        name: "gears",
+        folder: "solid",
+      },
+      {
+        name: "helicopter",
+        folder: "solid",
+      },
+      {
+        name: "helicopter-symbol",
+        folder: "solid",
+      },
+      {
+        name: "helmet-safety",
+        folder: "solid",
+      },
+      {
+        name: "jet-fighter-up",
+        folder: "solid",
+      },
+      {
+        name: "pallet",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "plane-lock",
+        folder: "solid",
+      },
+      {
+        name: "road",
+        folder: "solid",
+      },
+      {
+        name: "road-barrier",
+        folder: "solid",
+      },
+      {
+        name: "road-bridge",
+        folder: "solid",
+      },
+      {
+        name: "road-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "road-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "road-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "road-lock",
+        folder: "solid",
+      },
+      {
+        name: "sailboat",
+        folder: "solid",
+      },
+      {
+        name: "square-nfi",
+        folder: "solid",
+      },
+      {
+        name: "train",
+        folder: "solid",
+      },
+      {
+        name: "train-subway",
+        folder: "solid",
+      },
+      {
+        name: "truck",
+        folder: "regular",
+      },
+      {
+        name: "truck-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "truck-fast",
+        folder: "solid",
+      },
+      {
+        name: "truck-field",
+        folder: "solid",
+      },
+      {
+        name: "truck-field-un",
+        folder: "solid",
+      },
+      {
+        name: "truck-front",
+        folder: "solid",
+      },
+      {
+        name: "truck-plane",
+        folder: "solid",
+      },
+      {
+        name: "warehouse",
+        folder: "solid",
+      },
+      {
+        name: "xmarks-lines",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Maps",
-  },
-  maritime: {
     icons: [
-      "anchor",
-      "anchor-circle-check",
-      "anchor-circle-exclamation",
-      "anchor-circle-xmark",
-      "anchor-lock",
-      "ferry",
-      "fish",
-      "fish-fins",
-      "otter",
-      "person-swimming",
-      "sailboat",
-      "ship",
-      "shrimp",
-      "water",
+      {
+        name: "anchor",
+        folder: "solid",
+      },
+      {
+        name: "bag-shopping",
+        folder: "solid",
+      },
+      {
+        name: "basket-shopping",
+        folder: "solid",
+      },
+      {
+        name: "bath",
+        folder: "solid",
+      },
+      {
+        name: "bed",
+        folder: "solid",
+      },
+      {
+        name: "beer-mug-empty",
+        folder: "solid",
+      },
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "bell-slash",
+        folder: "regular",
+      },
+      {
+        name: "bicycle",
+        folder: "solid",
+      },
+      {
+        name: "binoculars",
+        folder: "solid",
+      },
+      {
+        name: "bomb",
+        folder: "solid",
+      },
+      {
+        name: "book",
+        folder: "solid",
+      },
+      {
+        name: "book-atlas",
+        folder: "solid",
+      },
+      {
+        name: "bookmark",
+        folder: "regular",
+      },
+      {
+        name: "bridge",
+        folder: "solid",
+      },
+      {
+        name: "bridge-water",
+        folder: "solid",
+      },
+      {
+        name: "briefcase",
+        folder: "solid",
+      },
+      {
+        name: "building",
+        folder: "regular",
+      },
+      {
+        name: "building-columns",
+        folder: "solid",
+      },
+      {
+        name: "cake-candles",
+        folder: "solid",
+      },
+      {
+        name: "car",
+        folder: "solid",
+      },
+      {
+        name: "cart-shopping",
+        folder: "solid",
+      },
+      {
+        name: "circle-info",
+        folder: "solid",
+      },
+      {
+        name: "crosshairs",
+        folder: "solid",
+      },
+      {
+        name: "diamond-turn-right",
+        folder: "solid",
+      },
+      {
+        name: "dollar-sign",
+        folder: "solid",
+      },
+      {
+        name: "draw-polygon",
+        folder: "solid",
+      },
+      {
+        name: "droplet",
+        folder: "solid",
+      },
+      {
+        name: "eye",
+        folder: "regular",
+      },
+      {
+        name: "eye-low-vision",
+        folder: "solid",
+      },
+      {
+        name: "eye-slash",
+        folder: "regular",
+      },
+      {
+        name: "fire",
+        folder: "solid",
+      },
+      {
+        name: "fire-extinguisher",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-curved",
+        folder: "solid",
+      },
+      {
+        name: "flag",
+        folder: "regular",
+      },
+      {
+        name: "flag-checkered",
+        folder: "solid",
+      },
+      {
+        name: "flask",
+        folder: "solid",
+      },
+      {
+        name: "gamepad",
+        folder: "solid",
+      },
+      {
+        name: "gavel",
+        folder: "solid",
+      },
+      {
+        name: "gift",
+        folder: "solid",
+      },
+      {
+        name: "globe",
+        folder: "solid",
+      },
+      {
+        name: "graduation-cap",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "heart-pulse",
+        folder: "solid",
+      },
+      {
+        name: "helicopter",
+        folder: "solid",
+      },
+      {
+        name: "helicopter-symbol",
+        folder: "solid",
+      },
+      {
+        name: "hospital",
+        folder: "regular",
+      },
+      {
+        name: "house",
+        folder: "regular",
+      },
+      {
+        name: "image",
+        folder: "regular",
+      },
+      {
+        name: "images",
+        folder: "regular",
+      },
+      {
+        name: "industry",
+        folder: "solid",
+      },
+      {
+        name: "info",
+        folder: "solid",
+      },
+      {
+        name: "jet-fighter",
+        folder: "solid",
+      },
+      {
+        name: "key",
+        folder: "solid",
+      },
+      {
+        name: "landmark",
+        folder: "solid",
+      },
+      {
+        name: "landmark-flag",
+        folder: "solid",
+      },
+      {
+        name: "layer-group",
+        folder: "solid",
+      },
+      {
+        name: "leaf",
+        folder: "solid",
+      },
+      {
+        name: "lemon",
+        folder: "regular",
+      },
+      {
+        name: "life-ring",
+        folder: "regular",
+      },
+      {
+        name: "lightbulb",
+        folder: "regular",
+      },
+      {
+        name: "location-arrow",
+        folder: "solid",
+      },
+      {
+        name: "location-crosshairs",
+        folder: "solid",
+      },
+      {
+        name: "location-dot",
+        folder: "solid",
+      },
+      {
+        name: "location-pin",
+        folder: "solid",
+      },
+      {
+        name: "location-pin-lock",
+        folder: "solid",
+      },
+      {
+        name: "magnet",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-location",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-minus",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-plus",
+        folder: "solid",
+      },
+      {
+        name: "map",
+        folder: "regular",
+      },
+      {
+        name: "map-pin",
+        folder: "solid",
+      },
+      {
+        name: "martini-glass-empty",
+        folder: "solid",
+      },
+      {
+        name: "money-bill",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-1",
+        folder: "regular",
+      },
+      {
+        name: "monument",
+        folder: "solid",
+      },
+      {
+        name: "motorcycle",
+        folder: "solid",
+      },
+      {
+        name: "mountain-sun",
+        folder: "solid",
+      },
+      {
+        name: "mug-saucer",
+        folder: "solid",
+      },
+      {
+        name: "music",
+        folder: "solid",
+      },
+      {
+        name: "newspaper",
+        folder: "regular",
+      },
+      {
+        name: "paw",
+        folder: "solid",
+      },
+      {
+        name: "person",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-with-cane",
+        folder: "solid",
+      },
+      {
+        name: "phone",
+        folder: "solid",
+      },
+      {
+        name: "phone-flip",
+        folder: "solid",
+      },
+      {
+        name: "phone-volume",
+        folder: "solid",
+      },
+      {
+        name: "plane",
+        folder: "solid",
+      },
+      {
+        name: "plug",
+        folder: "solid",
+      },
+      {
+        name: "plus",
+        folder: "solid",
+      },
+      {
+        name: "print",
+        folder: "solid",
+      },
+      {
+        name: "recycle",
+        folder: "solid",
+      },
+      {
+        name: "restroom",
+        folder: "solid",
+      },
+      {
+        name: "road",
+        folder: "solid",
+      },
+      {
+        name: "rocket",
+        folder: "solid",
+      },
+      {
+        name: "route",
+        folder: "solid",
+      },
+      {
+        name: "scale-balanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced-flip",
+        folder: "solid",
+      },
+      {
+        name: "ship",
+        folder: "solid",
+      },
+      {
+        name: "shoe-prints",
+        folder: "solid",
+      },
+      {
+        name: "shower",
+        folder: "solid",
+      },
+      {
+        name: "signs-post",
+        folder: "solid",
+      },
+      {
+        name: "snowplow",
+        folder: "solid",
+      },
+      {
+        name: "spoon",
+        folder: "solid",
+      },
+      {
+        name: "square-h",
+        folder: "solid",
+      },
+      {
+        name: "square-parking",
+        folder: "solid",
+      },
+      {
+        name: "square-phone",
+        folder: "solid",
+      },
+      {
+        name: "square-phone-flip",
+        folder: "solid",
+      },
+      {
+        name: "square-plus",
+        folder: "regular",
+      },
+      {
+        name: "street-view",
+        folder: "solid",
+      },
+      {
+        name: "suitcase",
+        folder: "solid",
+      },
+      {
+        name: "suitcase-medical",
+        folder: "solid",
+      },
+      {
+        name: "tag",
+        folder: "solid",
+      },
+      {
+        name: "tags",
+        folder: "solid",
+      },
+      {
+        name: "taxi",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack-slash",
+        folder: "solid",
+      },
+      {
+        name: "ticket",
+        folder: "solid",
+      },
+      {
+        name: "ticket-simple",
+        folder: "solid",
+      },
+      {
+        name: "traffic-light",
+        folder: "solid",
+      },
+      {
+        name: "train",
+        folder: "solid",
+      },
+      {
+        name: "train-subway",
+        folder: "solid",
+      },
+      {
+        name: "train-tram",
+        folder: "solid",
+      },
+      {
+        name: "tree",
+        folder: "solid",
+      },
+      {
+        name: "trophy",
+        folder: "solid",
+      },
+      {
+        name: "truck",
+        folder: "regular",
+      },
+      {
+        name: "truck-medical",
+        folder: "solid",
+      },
+      {
+        name: "tty",
+        folder: "solid",
+      },
+      {
+        name: "umbrella",
+        folder: "solid",
+      },
+      {
+        name: "utensils",
+        folder: "solid",
+      },
+      {
+        name: "vest",
+        folder: "solid",
+      },
+      {
+        name: "vest-patches",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
+      {
+        name: "wifi",
+        folder: "solid",
+      },
+      {
+        name: "wine-glass",
+        folder: "solid",
+      },
+      {
+        name: "wrench",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Maritime",
-  },
-  marketing: {
     icons: [
-      "arrows-spin",
-      "arrows-to-dot",
-      "arrows-to-eye",
-      "bullhorn",
-      "bullseye",
-      "chart-simple",
-      "comment-dollar",
-      "comments-dollar",
-      "envelope-open-text",
-      "envelopes-bulk",
-      "filter-circle-dollar",
-      "group-arrows-rotate",
-      "lightbulb",
-      "magnifying-glass-arrow-right",
-      "magnifying-glass-chart",
-      "magnifying-glass-dollar",
-      "magnifying-glass-location",
-      "people-group",
-      "person-rays",
-      "ranking-star",
-      "rectangle-ad",
-      "square-poll-horizontal",
-      "square-poll-vertical",
-      "timeline",
+      {
+        name: "anchor",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "anchor-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "anchor-lock",
+        folder: "solid",
+      },
+      {
+        name: "ferry",
+        folder: "solid",
+      },
+      {
+        name: "fish",
+        folder: "solid",
+      },
+      {
+        name: "fish-fins",
+        folder: "solid",
+      },
+      {
+        name: "otter",
+        folder: "solid",
+      },
+      {
+        name: "person-swimming",
+        folder: "solid",
+      },
+      {
+        name: "sailboat",
+        folder: "solid",
+      },
+      {
+        name: "ship",
+        folder: "solid",
+      },
+      {
+        name: "shrimp",
+        folder: "solid",
+      },
+      {
+        name: "water",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Marketing",
-  },
-  mathematics: {
     icons: [
-      "calculator",
-      "circle-minus",
-      "circle-plus",
-      "circle-xmark",
-      "divide",
-      "equals",
-      "greater-than",
-      "greater-than-equal",
-      "infinity",
-      "less-than",
-      "less-than-equal",
-      "minus",
-      "not-equal",
-      "percent",
-      "plus",
-      "plus-minus",
-      "square-minus",
-      "square-root-variable",
-      "square-xmark",
-      "subscript",
-      "superscript",
-      "wave-square",
-      "xmark",
+      {
+        name: "arrows-spin",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-dot",
+        folder: "solid",
+      },
+      {
+        name: "arrows-to-eye",
+        folder: "solid",
+      },
+      {
+        name: "bullhorn",
+        folder: "solid",
+      },
+      {
+        name: "bullseye",
+        folder: "solid",
+      },
+      {
+        name: "chart-simple",
+        folder: "solid",
+      },
+      {
+        name: "comment-dollar",
+        folder: "solid",
+      },
+      {
+        name: "comments-dollar",
+        folder: "solid",
+      },
+      {
+        name: "envelope-open-text",
+        folder: "solid",
+      },
+      {
+        name: "envelopes-bulk",
+        folder: "solid",
+      },
+      {
+        name: "filter-circle-dollar",
+        folder: "solid",
+      },
+      {
+        name: "group-arrows-rotate",
+        folder: "solid",
+      },
+      {
+        name: "lightbulb",
+        folder: "regular",
+      },
+      {
+        name: "magnifying-glass-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-chart",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-dollar",
+        folder: "solid",
+      },
+      {
+        name: "magnifying-glass-location",
+        folder: "solid",
+      },
+      {
+        name: "people-group",
+        folder: "solid",
+      },
+      {
+        name: "person-rays",
+        folder: "solid",
+      },
+      {
+        name: "ranking-star",
+        folder: "solid",
+      },
+      {
+        name: "rectangle-ad",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-horizontal",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-vertical",
+        folder: "solid",
+      },
+      {
+        name: "timeline",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Mathematics",
-  },
-  "media-playback": {
     icons: [
-      "arrow-rotate-left",
-      "arrow-rotate-right",
-      "arrows-rotate",
-      "backward",
-      "backward-fast",
-      "backward-step",
-      "circle-pause",
-      "circle-play",
-      "circle-stop",
-      "compress",
-      "down-left-and-up-right-to-center",
-      "eject",
-      "expand",
-      "forward",
-      "forward-fast",
-      "forward-step",
-      "hand",
-      "maximize",
-      "minimize",
-      "music",
-      "pause",
-      "phone-volume",
-      "play",
-      "plus-minus",
-      "repeat",
-      "rotate",
-      "rotate-left",
-      "rotate-right",
-      "rss",
-      "shuffle",
-      "sliders",
-      "stop",
-      "up-right-and-down-left-from-center",
-      "volume-high",
-      "volume-low",
-      "volume-off",
-      "volume-xmark",
+      {
+        name: "calculator",
+        folder: "solid",
+      },
+      {
+        name: "circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "circle-xmark",
+        folder: "regular",
+      },
+      {
+        name: "divide",
+        folder: "solid",
+      },
+      {
+        name: "equals",
+        folder: "solid",
+      },
+      {
+        name: "greater-than",
+        folder: "solid",
+      },
+      {
+        name: "greater-than-equal",
+        folder: "solid",
+      },
+      {
+        name: "infinity",
+        folder: "solid",
+      },
+      {
+        name: "less-than",
+        folder: "solid",
+      },
+      {
+        name: "less-than-equal",
+        folder: "solid",
+      },
+      {
+        name: "minus",
+        folder: "solid",
+      },
+      {
+        name: "not-equal",
+        folder: "solid",
+      },
+      {
+        name: "percent",
+        folder: "solid",
+      },
+      {
+        name: "plus",
+        folder: "solid",
+      },
+      {
+        name: "plus-minus",
+        folder: "solid",
+      },
+      {
+        name: "square-minus",
+        folder: "regular",
+      },
+      {
+        name: "square-root-variable",
+        folder: "solid",
+      },
+      {
+        name: "square-xmark",
+        folder: "solid",
+      },
+      {
+        name: "subscript",
+        folder: "solid",
+      },
+      {
+        name: "superscript",
+        folder: "solid",
+      },
+      {
+        name: "wave-square",
+        folder: "solid",
+      },
+      {
+        name: "xmark",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Media Playback",
-  },
-  "medical-health": {
     icons: [
-      "accessible-icon",
-      "bacteria",
-      "bacterium",
-      "ban-smoking",
-      "bandage",
-      "bed-pulse",
-      "biohazard",
-      "bone",
-      "bong",
-      "book-medical",
-      "brain",
-      "briefcase-medical",
-      "cannabis",
-      "capsules",
-      "circle-h",
-      "circle-radiation",
-      "clipboard-user",
-      "clock-rotate-left",
-      "comment-medical",
-      "crutch",
-      "disease",
-      "dna",
-      "droplet",
-      "droplet-slash",
-      "eye",
-      "eye-dropper",
-      "file-medical",
-      "file-prescription",
-      "file-waveform",
-      "fire-flame-simple",
-      "flask",
-      "flask-vial",
-      "hand-dots",
-      "hand-holding-droplet",
-      "hand-holding-medical",
-      "head-side-cough",
-      "head-side-cough-slash",
-      "head-side-mask",
-      "head-side-virus",
-      "heart",
-      "heart-circle-bolt",
-      "heart-circle-check",
-      "heart-circle-exclamation",
-      "heart-circle-minus",
-      "heart-circle-plus",
-      "heart-circle-xmark",
-      "heart-pulse",
-      "hospital",
-      "hospital-user",
-      "house-chimney-medical",
-      "house-medical",
-      "house-medical-circle-check",
-      "house-medical-circle-exclamation",
-      "house-medical-circle-xmark",
-      "house-medical-flag",
-      "id-card-clip",
-      "joint",
-      "kit-medical",
-      "laptop-medical",
-      "lungs",
-      "lungs-virus",
-      "mask-face",
-      "mask-ventilator",
-      "microscope",
-      "mortar-pestle",
-      "notes-medical",
-      "pager",
-      "person-breastfeeding",
-      "person-cane",
-      "person-dots-from-line",
-      "person-half-dress",
-      "pills",
-      "plus",
-      "poop",
-      "prescription",
-      "prescription-bottle",
-      "prescription-bottle-medical",
-      "pump-medical",
-      "radiation",
-      "receipt",
-      "shield-virus",
-      "skull",
-      "skull-crossbones",
-      "smoking",
-      "square-h",
-      "square-plus",
-      "square-virus",
-      "staff-snake",
-      "star-of-life",
-      "stethoscope",
-      "suitcase-medical",
-      "syringe",
-      "tablets",
-      "teeth",
-      "teeth-open",
-      "thermometer",
-      "tooth",
-      "truck-droplet",
-      "truck-medical",
-      "user-doctor",
-      "user-nurse",
-      "vial",
-      "vial-circle-check",
-      "vial-virus",
-      "vials",
-      "virus",
-      "virus-covid",
-      "virus-covid-slash",
-      "virus-slash",
-      "viruses",
-      "weight-scale",
-      "wheelchair",
-      "wheelchair-move",
-      "x-ray",
+      {
+        name: "arrow-rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "arrow-rotate-right",
+        folder: "solid",
+      },
+      {
+        name: "arrows-rotate",
+        folder: "solid",
+      },
+      {
+        name: "backward",
+        folder: "solid",
+      },
+      {
+        name: "backward-fast",
+        folder: "solid",
+      },
+      {
+        name: "backward-step",
+        folder: "solid",
+      },
+      {
+        name: "circle-pause",
+        folder: "regular",
+      },
+      {
+        name: "circle-play",
+        folder: "regular",
+      },
+      {
+        name: "circle-stop",
+        folder: "regular",
+      },
+      {
+        name: "compress",
+        folder: "solid",
+      },
+      {
+        name: "down-left-and-up-right-to-center",
+        folder: "solid",
+      },
+      {
+        name: "eject",
+        folder: "solid",
+      },
+      {
+        name: "expand",
+        folder: "solid",
+      },
+      {
+        name: "forward",
+        folder: "solid",
+      },
+      {
+        name: "forward-fast",
+        folder: "solid",
+      },
+      {
+        name: "forward-step",
+        folder: "solid",
+      },
+      {
+        name: "hand",
+        folder: "regular",
+      },
+      {
+        name: "maximize",
+        folder: "solid",
+      },
+      {
+        name: "minimize",
+        folder: "solid",
+      },
+      {
+        name: "music",
+        folder: "solid",
+      },
+      {
+        name: "pause",
+        folder: "solid",
+      },
+      {
+        name: "phone-volume",
+        folder: "solid",
+      },
+      {
+        name: "play",
+        folder: "solid",
+      },
+      {
+        name: "plus-minus",
+        folder: "solid",
+      },
+      {
+        name: "repeat",
+        folder: "solid",
+      },
+      {
+        name: "rotate",
+        folder: "solid",
+      },
+      {
+        name: "rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "rotate-right",
+        folder: "solid",
+      },
+      {
+        name: "rss",
+        folder: "solid",
+      },
+      {
+        name: "shuffle",
+        folder: "solid",
+      },
+      {
+        name: "sliders",
+        folder: "solid",
+      },
+      {
+        name: "stop",
+        folder: "solid",
+      },
+      {
+        name: "up-right-and-down-left-from-center",
+        folder: "solid",
+      },
+      {
+        name: "volume-high",
+        folder: "solid",
+      },
+      {
+        name: "volume-low",
+        folder: "solid",
+      },
+      {
+        name: "volume-off",
+        folder: "solid",
+      },
+      {
+        name: "volume-xmark",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Medical + Health",
-  },
-  money: {
     icons: [
-      "austral-sign",
-      "baht-sign",
-      "bangladeshi-taka-sign",
-      "bitcoin",
-      "bitcoin-sign",
-      "brazilian-real-sign",
-      "btc",
-      "cash-register",
-      "cedi-sign",
-      "cent-sign",
-      "chart-line",
-      "chart-pie",
-      "circle-dollar-to-slot",
-      "coins",
-      "colon-sign",
-      "comment-dollar",
-      "comments-dollar",
-      "credit-card",
-      "cruzeiro-sign",
-      "dollar-sign",
-      "dong-sign",
-      "ethereum",
-      "euro-sign",
-      "file-invoice",
-      "file-invoice-dollar",
-      "florin-sign",
-      "franc-sign",
-      "gg",
-      "gg-circle",
-      "guarani-sign",
-      "hand-holding-dollar",
-      "hryvnia-sign",
-      "indian-rupee-sign",
-      "kip-sign",
-      "landmark",
-      "lari-sign",
-      "lira-sign",
-      "litecoin-sign",
-      "manat-sign",
-      "mill-sign",
-      "money-bill",
-      "money-bill-1",
-      "money-bill-1-wave",
-      "money-bill-transfer",
-      "money-bill-trend-up",
-      "money-bill-wave",
-      "money-bill-wheat",
-      "money-bills",
-      "money-check",
-      "money-check-dollar",
-      "naira-sign",
-      "percent",
-      "peseta-sign",
-      "peso-sign",
-      "piggy-bank",
-      "receipt",
-      "ruble-sign",
-      "rupee-sign",
-      "rupiah-sign",
-      "sack-dollar",
-      "sack-xmark",
-      "scale-balanced",
-      "scale-unbalanced",
-      "scale-unbalanced-flip",
-      "shekel-sign",
-      "stamp",
-      "sterling-sign",
-      "tenge-sign",
-      "turkish-lira-sign",
-      "vault",
-      "wallet",
-      "won-sign",
-      "yen-sign",
+      {
+        name: "accessible-icon",
+        folder: "brands",
+      },
+      {
+        name: "bacteria",
+        folder: "solid",
+      },
+      {
+        name: "bacterium",
+        folder: "solid",
+      },
+      {
+        name: "ban-smoking",
+        folder: "solid",
+      },
+      {
+        name: "bandage",
+        folder: "solid",
+      },
+      {
+        name: "bed-pulse",
+        folder: "solid",
+      },
+      {
+        name: "biohazard",
+        folder: "solid",
+      },
+      {
+        name: "bone",
+        folder: "solid",
+      },
+      {
+        name: "bong",
+        folder: "solid",
+      },
+      {
+        name: "book-medical",
+        folder: "solid",
+      },
+      {
+        name: "brain",
+        folder: "solid",
+      },
+      {
+        name: "briefcase-medical",
+        folder: "solid",
+      },
+      {
+        name: "cannabis",
+        folder: "solid",
+      },
+      {
+        name: "capsules",
+        folder: "solid",
+      },
+      {
+        name: "circle-h",
+        folder: "solid",
+      },
+      {
+        name: "circle-radiation",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-user",
+        folder: "solid",
+      },
+      {
+        name: "clock-rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "comment-medical",
+        folder: "solid",
+      },
+      {
+        name: "crutch",
+        folder: "solid",
+      },
+      {
+        name: "disease",
+        folder: "solid",
+      },
+      {
+        name: "dna",
+        folder: "solid",
+      },
+      {
+        name: "droplet",
+        folder: "solid",
+      },
+      {
+        name: "droplet-slash",
+        folder: "solid",
+      },
+      {
+        name: "eye",
+        folder: "regular",
+      },
+      {
+        name: "eye-dropper",
+        folder: "solid",
+      },
+      {
+        name: "file-medical",
+        folder: "solid",
+      },
+      {
+        name: "file-prescription",
+        folder: "solid",
+      },
+      {
+        name: "file-waveform",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-simple",
+        folder: "solid",
+      },
+      {
+        name: "flask",
+        folder: "solid",
+      },
+      {
+        name: "flask-vial",
+        folder: "solid",
+      },
+      {
+        name: "hand-dots",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-droplet",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-medical",
+        folder: "solid",
+      },
+      {
+        name: "head-side-cough",
+        folder: "solid",
+      },
+      {
+        name: "head-side-cough-slash",
+        folder: "solid",
+      },
+      {
+        name: "head-side-mask",
+        folder: "solid",
+      },
+      {
+        name: "head-side-virus",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "heart-circle-bolt",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "heart-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "heart-pulse",
+        folder: "solid",
+      },
+      {
+        name: "hospital",
+        folder: "regular",
+      },
+      {
+        name: "hospital-user",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-medical",
+        folder: "solid",
+      },
+      {
+        name: "house-medical",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "house-medical-flag",
+        folder: "solid",
+      },
+      {
+        name: "id-card-clip",
+        folder: "solid",
+      },
+      {
+        name: "joint",
+        folder: "solid",
+      },
+      {
+        name: "kit-medical",
+        folder: "solid",
+      },
+      {
+        name: "laptop-medical",
+        folder: "solid",
+      },
+      {
+        name: "lungs",
+        folder: "solid",
+      },
+      {
+        name: "lungs-virus",
+        folder: "solid",
+      },
+      {
+        name: "mask-face",
+        folder: "solid",
+      },
+      {
+        name: "mask-ventilator",
+        folder: "solid",
+      },
+      {
+        name: "microscope",
+        folder: "solid",
+      },
+      {
+        name: "mortar-pestle",
+        folder: "solid",
+      },
+      {
+        name: "notes-medical",
+        folder: "solid",
+      },
+      {
+        name: "pager",
+        folder: "solid",
+      },
+      {
+        name: "person-breastfeeding",
+        folder: "solid",
+      },
+      {
+        name: "person-cane",
+        folder: "solid",
+      },
+      {
+        name: "person-dots-from-line",
+        folder: "solid",
+      },
+      {
+        name: "person-half-dress",
+        folder: "solid",
+      },
+      {
+        name: "pills",
+        folder: "solid",
+      },
+      {
+        name: "plus",
+        folder: "solid",
+      },
+      {
+        name: "poop",
+        folder: "solid",
+      },
+      {
+        name: "prescription",
+        folder: "solid",
+      },
+      {
+        name: "prescription-bottle",
+        folder: "solid",
+      },
+      {
+        name: "prescription-bottle-medical",
+        folder: "solid",
+      },
+      {
+        name: "pump-medical",
+        folder: "solid",
+      },
+      {
+        name: "radiation",
+        folder: "solid",
+      },
+      {
+        name: "receipt",
+        folder: "solid",
+      },
+      {
+        name: "shield-virus",
+        folder: "solid",
+      },
+      {
+        name: "skull",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "smoking",
+        folder: "solid",
+      },
+      {
+        name: "square-h",
+        folder: "solid",
+      },
+      {
+        name: "square-plus",
+        folder: "regular",
+      },
+      {
+        name: "square-virus",
+        folder: "solid",
+      },
+      {
+        name: "staff-snake",
+        folder: "solid",
+      },
+      {
+        name: "star-of-life",
+        folder: "solid",
+      },
+      {
+        name: "stethoscope",
+        folder: "solid",
+      },
+      {
+        name: "suitcase-medical",
+        folder: "solid",
+      },
+      {
+        name: "syringe",
+        folder: "solid",
+      },
+      {
+        name: "tablets",
+        folder: "solid",
+      },
+      {
+        name: "teeth",
+        folder: "solid",
+      },
+      {
+        name: "teeth-open",
+        folder: "solid",
+      },
+      {
+        name: "thermometer",
+        folder: "solid",
+      },
+      {
+        name: "tooth",
+        folder: "solid",
+      },
+      {
+        name: "truck-droplet",
+        folder: "solid",
+      },
+      {
+        name: "truck-medical",
+        folder: "solid",
+      },
+      {
+        name: "user-doctor",
+        folder: "solid",
+      },
+      {
+        name: "user-nurse",
+        folder: "solid",
+      },
+      {
+        name: "vial",
+        folder: "solid",
+      },
+      {
+        name: "vial-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "vial-virus",
+        folder: "solid",
+      },
+      {
+        name: "vials",
+        folder: "solid",
+      },
+      {
+        name: "virus",
+        folder: "solid",
+      },
+      {
+        name: "virus-covid",
+        folder: "solid",
+      },
+      {
+        name: "virus-covid-slash",
+        folder: "solid",
+      },
+      {
+        name: "virus-slash",
+        folder: "solid",
+      },
+      {
+        name: "viruses",
+        folder: "solid",
+      },
+      {
+        name: "weight-scale",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
+      {
+        name: "x-ray",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Money",
-  },
-  moving: {
     icons: [
-      "box-archive",
-      "box-open",
-      "boxes-packing",
-      "caravan",
-      "couch",
-      "dolly",
-      "house-chimney",
-      "people-carry-box",
-      "route",
-      "sign-hanging",
-      "suitcase",
-      "tape",
-      "trailer",
-      "truck-moving",
-      "truck-ramp-box",
-      "wine-glass",
+      {
+        name: "austral-sign",
+        folder: "solid",
+      },
+      {
+        name: "baht-sign",
+        folder: "solid",
+      },
+      {
+        name: "bangladeshi-taka-sign",
+        folder: "solid",
+      },
+      {
+        name: "bitcoin",
+        folder: "brands",
+      },
+      {
+        name: "bitcoin-sign",
+        folder: "solid",
+      },
+      {
+        name: "brazilian-real-sign",
+        folder: "solid",
+      },
+      {
+        name: "btc",
+        folder: "brands",
+      },
+      {
+        name: "cash-register",
+        folder: "solid",
+      },
+      {
+        name: "cedi-sign",
+        folder: "solid",
+      },
+      {
+        name: "cent-sign",
+        folder: "solid",
+      },
+      {
+        name: "chart-line",
+        folder: "solid",
+      },
+      {
+        name: "chart-pie",
+        folder: "solid",
+      },
+      {
+        name: "circle-dollar-to-slot",
+        folder: "solid",
+      },
+      {
+        name: "coins",
+        folder: "solid",
+      },
+      {
+        name: "colon-sign",
+        folder: "solid",
+      },
+      {
+        name: "comment-dollar",
+        folder: "solid",
+      },
+      {
+        name: "comments-dollar",
+        folder: "solid",
+      },
+      {
+        name: "credit-card",
+        folder: "regular",
+      },
+      {
+        name: "cruzeiro-sign",
+        folder: "solid",
+      },
+      {
+        name: "dollar-sign",
+        folder: "solid",
+      },
+      {
+        name: "dong-sign",
+        folder: "solid",
+      },
+      {
+        name: "ethereum",
+        folder: "brands",
+      },
+      {
+        name: "euro-sign",
+        folder: "solid",
+      },
+      {
+        name: "file-invoice",
+        folder: "solid",
+      },
+      {
+        name: "file-invoice-dollar",
+        folder: "solid",
+      },
+      {
+        name: "florin-sign",
+        folder: "solid",
+      },
+      {
+        name: "franc-sign",
+        folder: "solid",
+      },
+      {
+        name: "gg",
+        folder: "brands",
+      },
+      {
+        name: "gg-circle",
+        folder: "brands",
+      },
+      {
+        name: "guarani-sign",
+        folder: "solid",
+      },
+      {
+        name: "hand-holding-dollar",
+        folder: "solid",
+      },
+      {
+        name: "hryvnia-sign",
+        folder: "solid",
+      },
+      {
+        name: "indian-rupee-sign",
+        folder: "solid",
+      },
+      {
+        name: "kip-sign",
+        folder: "solid",
+      },
+      {
+        name: "landmark",
+        folder: "solid",
+      },
+      {
+        name: "lari-sign",
+        folder: "solid",
+      },
+      {
+        name: "lira-sign",
+        folder: "solid",
+      },
+      {
+        name: "litecoin-sign",
+        folder: "solid",
+      },
+      {
+        name: "manat-sign",
+        folder: "solid",
+      },
+      {
+        name: "mill-sign",
+        folder: "solid",
+      },
+      {
+        name: "money-bill",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-1",
+        folder: "regular",
+      },
+      {
+        name: "money-bill-1-wave",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-transfer",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-trend-up",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-wave",
+        folder: "solid",
+      },
+      {
+        name: "money-bill-wheat",
+        folder: "solid",
+      },
+      {
+        name: "money-bills",
+        folder: "solid",
+      },
+      {
+        name: "money-check",
+        folder: "solid",
+      },
+      {
+        name: "money-check-dollar",
+        folder: "solid",
+      },
+      {
+        name: "naira-sign",
+        folder: "solid",
+      },
+      {
+        name: "percent",
+        folder: "solid",
+      },
+      {
+        name: "peseta-sign",
+        folder: "solid",
+      },
+      {
+        name: "peso-sign",
+        folder: "solid",
+      },
+      {
+        name: "piggy-bank",
+        folder: "solid",
+      },
+      {
+        name: "receipt",
+        folder: "solid",
+      },
+      {
+        name: "ruble-sign",
+        folder: "solid",
+      },
+      {
+        name: "rupee-sign",
+        folder: "solid",
+      },
+      {
+        name: "rupiah-sign",
+        folder: "solid",
+      },
+      {
+        name: "sack-dollar",
+        folder: "solid",
+      },
+      {
+        name: "sack-xmark",
+        folder: "solid",
+      },
+      {
+        name: "scale-balanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced-flip",
+        folder: "solid",
+      },
+      {
+        name: "shekel-sign",
+        folder: "solid",
+      },
+      {
+        name: "stamp",
+        folder: "solid",
+      },
+      {
+        name: "sterling-sign",
+        folder: "solid",
+      },
+      {
+        name: "tenge-sign",
+        folder: "solid",
+      },
+      {
+        name: "turkish-lira-sign",
+        folder: "solid",
+      },
+      {
+        name: "vault",
+        folder: "solid",
+      },
+      {
+        name: "wallet",
+        folder: "solid",
+      },
+      {
+        name: "won-sign",
+        folder: "solid",
+      },
+      {
+        name: "yen-sign",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Moving",
-  },
-  "music-audio": {
     icons: [
-      "compact-disc",
-      "drum",
-      "drum-steelpan",
-      "file-audio",
-      "guitar",
-      "headphones",
-      "microphone",
-      "microphone-lines",
-      "microphone-lines-slash",
-      "microphone-slash",
-      "music",
-      "napster",
-      "radio",
-      "record-vinyl",
-      "sliders",
-      "soundcloud",
-      "spotify",
-      "volume-high",
-      "volume-low",
-      "volume-off",
-      "volume-xmark",
-      "wave-square",
+      {
+        name: "box-archive",
+        folder: "solid",
+      },
+      {
+        name: "box-open",
+        folder: "solid",
+      },
+      {
+        name: "boxes-packing",
+        folder: "solid",
+      },
+      {
+        name: "caravan",
+        folder: "solid",
+      },
+      {
+        name: "couch",
+        folder: "solid",
+      },
+      {
+        name: "dolly",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney",
+        folder: "solid",
+      },
+      {
+        name: "people-carry-box",
+        folder: "solid",
+      },
+      {
+        name: "route",
+        folder: "solid",
+      },
+      {
+        name: "sign-hanging",
+        folder: "solid",
+      },
+      {
+        name: "suitcase",
+        folder: "solid",
+      },
+      {
+        name: "tape",
+        folder: "solid",
+      },
+      {
+        name: "trailer",
+        folder: "solid",
+      },
+      {
+        name: "truck-moving",
+        folder: "solid",
+      },
+      {
+        name: "truck-ramp-box",
+        folder: "solid",
+      },
+      {
+        name: "wine-glass",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Music + Audio",
-  },
-  nature: {
     icons: [
-      "binoculars",
-      "bug",
-      "bugs",
-      "cannabis",
-      "cloud-sun",
-      "clover",
-      "feather",
-      "feather-pointed",
-      "fire",
-      "frog",
-      "icicles",
-      "leaf",
-      "locust",
-      "mosquito",
-      "mound",
-      "mountain",
-      "mountain-city",
-      "mountain-sun",
-      "person-hiking",
-      "plant-wilt",
-      "seedling",
-      "signs-post",
-      "spider",
-      "tree",
-      "volcano",
-      "water",
-      "wind",
-      "worm",
+      {
+        name: "compact-disc",
+        folder: "solid",
+      },
+      {
+        name: "drum",
+        folder: "solid",
+      },
+      {
+        name: "drum-steelpan",
+        folder: "solid",
+      },
+      {
+        name: "file-audio",
+        folder: "regular",
+      },
+      {
+        name: "guitar",
+        folder: "solid",
+      },
+      {
+        name: "headphones",
+        folder: "regular",
+      },
+      {
+        name: "microphone",
+        folder: "solid",
+      },
+      {
+        name: "microphone-lines",
+        folder: "solid",
+      },
+      {
+        name: "microphone-lines-slash",
+        folder: "solid",
+      },
+      {
+        name: "microphone-slash",
+        folder: "solid",
+      },
+      {
+        name: "music",
+        folder: "solid",
+      },
+      {
+        name: "napster",
+        folder: "brands",
+      },
+      {
+        name: "radio",
+        folder: "solid",
+      },
+      {
+        name: "record-vinyl",
+        folder: "solid",
+      },
+      {
+        name: "sliders",
+        folder: "solid",
+      },
+      {
+        name: "soundcloud",
+        folder: "brands",
+      },
+      {
+        name: "spotify",
+        folder: "brands",
+      },
+      {
+        name: "volume-high",
+        folder: "solid",
+      },
+      {
+        name: "volume-low",
+        folder: "solid",
+      },
+      {
+        name: "volume-off",
+        folder: "solid",
+      },
+      {
+        name: "volume-xmark",
+        folder: "solid",
+      },
+      {
+        name: "wave-square",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Nature",
+    icons: [
+      {
+        name: "binoculars",
+        folder: "solid",
+      },
+      {
+        name: "bug",
+        folder: "solid",
+      },
+      {
+        name: "bugs",
+        folder: "solid",
+      },
+      {
+        name: "cannabis",
+        folder: "solid",
+      },
+      {
+        name: "cloud-sun",
+        folder: "solid",
+      },
+      {
+        name: "clover",
+        folder: "solid",
+      },
+      {
+        name: "feather",
+        folder: "solid",
+      },
+      {
+        name: "feather-pointed",
+        folder: "solid",
+      },
+      {
+        name: "fire",
+        folder: "solid",
+      },
+      {
+        name: "frog",
+        folder: "solid",
+      },
+      {
+        name: "icicles",
+        folder: "solid",
+      },
+      {
+        name: "leaf",
+        folder: "solid",
+      },
+      {
+        name: "locust",
+        folder: "solid",
+      },
+      {
+        name: "mosquito",
+        folder: "solid",
+      },
+      {
+        name: "mound",
+        folder: "solid",
+      },
+      {
+        name: "mountain",
+        folder: "solid",
+      },
+      {
+        name: "mountain-city",
+        folder: "solid",
+      },
+      {
+        name: "mountain-sun",
+        folder: "solid",
+      },
+      {
+        name: "person-hiking",
+        folder: "solid",
+      },
+      {
+        name: "plant-wilt",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
+      {
+        name: "signs-post",
+        folder: "solid",
+      },
+      {
+        name: "spider",
+        folder: "solid",
+      },
+      {
+        name: "tree",
+        folder: "solid",
+      },
+      {
+        name: "volcano",
+        folder: "solid",
+      },
+      {
+        name: "water",
+        folder: "solid",
+      },
+      {
+        name: "wind",
+        folder: "solid",
+      },
+      {
+        name: "worm",
+        folder: "solid",
+      },
+    ],
   },
-  numbers: {
-    icons: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  {
     label: "Numbers",
-  },
-  "photos-images": {
     icons: [
-      "bolt",
-      "bolt-lightning",
-      "camera",
-      "camera-retro",
-      "camera-rotate",
-      "chalkboard",
-      "circle-half-stroke",
-      "clone",
-      "droplet",
-      "eye",
-      "eye-dropper",
-      "eye-slash",
-      "file-image",
-      "film",
-      "id-badge",
-      "id-card",
-      "image",
-      "image-portrait",
-      "images",
-      "minimize",
-      "panorama",
-      "photo-film",
-      "sliders",
-      "unsplash",
+      {
+        name: "0",
+        folder: "solid",
+      },
+      {
+        name: "1",
+        folder: "solid",
+      },
+      {
+        name: "2",
+        folder: "solid",
+      },
+      {
+        name: "3",
+        folder: "solid",
+      },
+      {
+        name: "4",
+        folder: "solid",
+      },
+      {
+        name: "5",
+        folder: "solid",
+      },
+      {
+        name: "6",
+        folder: "solid",
+      },
+      {
+        name: "7",
+        folder: "solid",
+      },
+      {
+        name: "8",
+        folder: "solid",
+      },
+      {
+        name: "9",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Photos + Images",
-  },
-  political: {
     icons: [
-      "award",
-      "building-flag",
-      "bullhorn",
-      "check-double",
-      "check-to-slot",
-      "circle-dollar-to-slot",
-      "democrat",
-      "dove",
-      "dumpster-fire",
-      "flag-usa",
-      "hand-fist",
-      "handshake",
-      "landmark-dome",
-      "landmark-flag",
-      "person-booth",
-      "piggy-bank",
-      "republican",
-      "scale-balanced",
-      "scale-unbalanced",
-      "scale-unbalanced-flip",
+      {
+        name: "bolt",
+        folder: "solid",
+      },
+      {
+        name: "bolt-lightning",
+        folder: "solid",
+      },
+      {
+        name: "camera",
+        folder: "regular",
+      },
+      {
+        name: "camera-retro",
+        folder: "solid",
+      },
+      {
+        name: "camera-rotate",
+        folder: "solid",
+      },
+      {
+        name: "chalkboard",
+        folder: "solid",
+      },
+      {
+        name: "circle-half-stroke",
+        folder: "solid",
+      },
+      {
+        name: "clone",
+        folder: "regular",
+      },
+      {
+        name: "droplet",
+        folder: "solid",
+      },
+      {
+        name: "eye",
+        folder: "regular",
+      },
+      {
+        name: "eye-dropper",
+        folder: "solid",
+      },
+      {
+        name: "eye-slash",
+        folder: "regular",
+      },
+      {
+        name: "file-image",
+        folder: "regular",
+      },
+      {
+        name: "film",
+        folder: "solid",
+      },
+      {
+        name: "id-badge",
+        folder: "regular",
+      },
+      {
+        name: "id-card",
+        folder: "regular",
+      },
+      {
+        name: "image",
+        folder: "regular",
+      },
+      {
+        name: "image-portrait",
+        folder: "solid",
+      },
+      {
+        name: "images",
+        folder: "regular",
+      },
+      {
+        name: "minimize",
+        folder: "solid",
+      },
+      {
+        name: "panorama",
+        folder: "solid",
+      },
+      {
+        name: "photo-film",
+        folder: "solid",
+      },
+      {
+        name: "sliders",
+        folder: "solid",
+      },
+      {
+        name: "unsplash",
+        folder: "brands",
+      },
     ],
+  },
+  {
     label: "Political",
-  },
-  "punctuation-symbols": {
     icons: [
-      "asterisk",
-      "at",
-      "check",
-      "check-double",
-      "circle-exclamation",
-      "circle-question",
-      "equals",
-      "exclamation",
-      "greater-than",
-      "hashtag",
-      "less-than",
-      "minus",
-      "percent",
-      "plus",
-      "question",
-      "quote-left",
-      "quote-right",
-      "section",
-      "single-quote-left",
-      "single-quote-right",
+      {
+        name: "award",
+        folder: "solid",
+      },
+      {
+        name: "building-flag",
+        folder: "solid",
+      },
+      {
+        name: "bullhorn",
+        folder: "solid",
+      },
+      {
+        name: "check-double",
+        folder: "solid",
+      },
+      {
+        name: "check-to-slot",
+        folder: "solid",
+      },
+      {
+        name: "circle-dollar-to-slot",
+        folder: "solid",
+      },
+      {
+        name: "democrat",
+        folder: "solid",
+      },
+      {
+        name: "dove",
+        folder: "solid",
+      },
+      {
+        name: "dumpster-fire",
+        folder: "solid",
+      },
+      {
+        name: "flag-usa",
+        folder: "solid",
+      },
+      {
+        name: "hand-fist",
+        folder: "solid",
+      },
+      {
+        name: "handshake",
+        folder: "regular",
+      },
+      {
+        name: "landmark-dome",
+        folder: "solid",
+      },
+      {
+        name: "landmark-flag",
+        folder: "solid",
+      },
+      {
+        name: "person-booth",
+        folder: "solid",
+      },
+      {
+        name: "piggy-bank",
+        folder: "solid",
+      },
+      {
+        name: "republican",
+        folder: "solid",
+      },
+      {
+        name: "scale-balanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced",
+        folder: "solid",
+      },
+      {
+        name: "scale-unbalanced-flip",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Punctuation + Symbols",
-  },
-  religion: {
     icons: [
-      "ankh",
-      "atom",
-      "bahai",
-      "book-bible",
-      "book-journal-whills",
-      "book-quran",
-      "book-tanakh",
-      "church",
-      "cross",
-      "dharmachakra",
-      "dove",
-      "gopuram",
-      "hamsa",
-      "hands-praying",
-      "hanukiah",
-      "jedi",
-      "kaaba",
-      "khanda",
-      "menorah",
-      "mosque",
-      "om",
-      "peace",
-      "person-praying",
-      "place-of-worship",
-      "scroll-torah",
-      "spaghetti-monster-flying",
-      "star-and-crescent",
-      "star-of-david",
-      "synagogue",
-      "torii-gate",
-      "vihara",
-      "yin-yang",
+      {
+        name: "asterisk",
+        folder: "solid",
+      },
+      {
+        name: "at",
+        folder: "solid",
+      },
+      {
+        name: "check",
+        folder: "solid",
+      },
+      {
+        name: "check-double",
+        folder: "solid",
+      },
+      {
+        name: "circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "circle-question",
+        folder: "regular",
+      },
+      {
+        name: "equals",
+        folder: "solid",
+      },
+      {
+        name: "exclamation",
+        folder: "solid",
+      },
+      {
+        name: "greater-than",
+        folder: "solid",
+      },
+      {
+        name: "hashtag",
+        folder: "solid",
+      },
+      {
+        name: "less-than",
+        folder: "solid",
+      },
+      {
+        name: "minus",
+        folder: "solid",
+      },
+      {
+        name: "percent",
+        folder: "solid",
+      },
+      {
+        name: "plus",
+        folder: "solid",
+      },
+      {
+        name: "question",
+        folder: "solid",
+      },
+      {
+        name: "quote-left",
+        folder: "solid",
+      },
+      {
+        name: "quote-right",
+        folder: "solid",
+      },
+      {
+        name: "section",
+        folder: "solid",
+      },
+      {
+        name: "single-quote-left",
+        folder: "solid",
+      },
+      {
+        name: "single-quote-right",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Religion",
-  },
-  science: {
     icons: [
-      "atom",
-      "biohazard",
-      "brain",
-      "capsules",
-      "circle-radiation",
-      "clipboard-check",
-      "disease",
-      "dna",
-      "eye-dropper",
-      "filter",
-      "fire",
-      "fire-flame-curved",
-      "fire-flame-simple",
-      "flask",
-      "flask-vial",
-      "frog",
-      "magnet",
-      "microscope",
-      "mortar-pestle",
-      "pills",
-      "prescription-bottle",
-      "radiation",
-      "seedling",
-      "skull-crossbones",
-      "square-virus",
-      "syringe",
-      "tablets",
-      "temperature-high",
-      "temperature-low",
-      "vial",
-      "vial-circle-check",
-      "vial-virus",
-      "vials",
+      {
+        name: "ankh",
+        folder: "solid",
+      },
+      {
+        name: "atom",
+        folder: "solid",
+      },
+      {
+        name: "bahai",
+        folder: "solid",
+      },
+      {
+        name: "book-bible",
+        folder: "solid",
+      },
+      {
+        name: "book-journal-whills",
+        folder: "solid",
+      },
+      {
+        name: "book-quran",
+        folder: "solid",
+      },
+      {
+        name: "book-tanakh",
+        folder: "solid",
+      },
+      {
+        name: "church",
+        folder: "solid",
+      },
+      {
+        name: "cross",
+        folder: "solid",
+      },
+      {
+        name: "dharmachakra",
+        folder: "solid",
+      },
+      {
+        name: "dove",
+        folder: "solid",
+      },
+      {
+        name: "gopuram",
+        folder: "solid",
+      },
+      {
+        name: "hamsa",
+        folder: "solid",
+      },
+      {
+        name: "hands-praying",
+        folder: "solid",
+      },
+      {
+        name: "hanukiah",
+        folder: "solid",
+      },
+      {
+        name: "jedi",
+        folder: "solid",
+      },
+      {
+        name: "kaaba",
+        folder: "solid",
+      },
+      {
+        name: "khanda",
+        folder: "solid",
+      },
+      {
+        name: "menorah",
+        folder: "solid",
+      },
+      {
+        name: "mosque",
+        folder: "solid",
+      },
+      {
+        name: "om",
+        folder: "solid",
+      },
+      {
+        name: "peace",
+        folder: "solid",
+      },
+      {
+        name: "person-praying",
+        folder: "solid",
+      },
+      {
+        name: "place-of-worship",
+        folder: "solid",
+      },
+      {
+        name: "scroll-torah",
+        folder: "solid",
+      },
+      {
+        name: "spaghetti-monster-flying",
+        folder: "solid",
+      },
+      {
+        name: "star-and-crescent",
+        folder: "solid",
+      },
+      {
+        name: "star-of-david",
+        folder: "solid",
+      },
+      {
+        name: "synagogue",
+        folder: "solid",
+      },
+      {
+        name: "torii-gate",
+        folder: "solid",
+      },
+      {
+        name: "vihara",
+        folder: "solid",
+      },
+      {
+        name: "yin-yang",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Science",
-  },
-  "science-fiction": {
     icons: [
-      "atom",
-      "book-journal-whills",
-      "explosion",
-      "galactic-republic",
-      "galactic-senate",
-      "hand-spock",
-      "jedi",
-      "jedi-order",
-      "old-republic",
-      "robot",
-      "rocket",
-      "space-awesome",
-      "user-astronaut",
+      {
+        name: "atom",
+        folder: "solid",
+      },
+      {
+        name: "biohazard",
+        folder: "solid",
+      },
+      {
+        name: "brain",
+        folder: "solid",
+      },
+      {
+        name: "capsules",
+        folder: "solid",
+      },
+      {
+        name: "circle-radiation",
+        folder: "solid",
+      },
+      {
+        name: "clipboard-check",
+        folder: "solid",
+      },
+      {
+        name: "disease",
+        folder: "solid",
+      },
+      {
+        name: "dna",
+        folder: "solid",
+      },
+      {
+        name: "eye-dropper",
+        folder: "solid",
+      },
+      {
+        name: "filter",
+        folder: "solid",
+      },
+      {
+        name: "fire",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-curved",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-simple",
+        folder: "solid",
+      },
+      {
+        name: "flask",
+        folder: "solid",
+      },
+      {
+        name: "flask-vial",
+        folder: "solid",
+      },
+      {
+        name: "frog",
+        folder: "solid",
+      },
+      {
+        name: "magnet",
+        folder: "solid",
+      },
+      {
+        name: "microscope",
+        folder: "solid",
+      },
+      {
+        name: "mortar-pestle",
+        folder: "solid",
+      },
+      {
+        name: "pills",
+        folder: "solid",
+      },
+      {
+        name: "prescription-bottle",
+        folder: "solid",
+      },
+      {
+        name: "radiation",
+        folder: "solid",
+      },
+      {
+        name: "seedling",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "square-virus",
+        folder: "solid",
+      },
+      {
+        name: "syringe",
+        folder: "solid",
+      },
+      {
+        name: "tablets",
+        folder: "solid",
+      },
+      {
+        name: "temperature-high",
+        folder: "solid",
+      },
+      {
+        name: "temperature-low",
+        folder: "solid",
+      },
+      {
+        name: "vial",
+        folder: "solid",
+      },
+      {
+        name: "vial-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "vial-virus",
+        folder: "solid",
+      },
+      {
+        name: "vials",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Science Fiction",
-  },
-  security: {
     icons: [
-      "ban",
-      "bug",
-      "bug-slash",
-      "building-lock",
-      "building-shield",
-      "burst",
-      "car-on",
-      "door-closed",
-      "door-open",
-      "dungeon",
-      "explosion",
-      "eye",
-      "eye-slash",
-      "file-contract",
-      "file-shield",
-      "file-signature",
-      "fingerprint",
-      "gun",
-      "handcuffs",
-      "hands-bound",
-      "hands-holding-child",
-      "hands-holding-circle",
-      "house-fire",
-      "house-lock",
-      "id-badge",
-      "id-card",
-      "id-card-clip",
-      "key",
-      "land-mine-on",
-      "lock",
-      "lock-open",
-      "mars-and-venus-burst",
-      "mask",
-      "passport",
-      "people-pulling",
-      "people-robbery",
-      "person-burst",
-      "person-dress-burst",
-      "person-falling-burst",
-      "person-harassing",
-      "person-military-pointing",
-      "person-military-rifle",
-      "person-military-to-person",
-      "person-rifle",
-      "person-shelter",
-      "person-through-window",
-      "road-spikes",
-      "shield",
-      "shield-cat",
-      "shield-dog",
-      "shield-halved",
-      "shield-heart",
-      "skull-crossbones",
-      "square-person-confined",
-      "tower-observation",
-      "unlock",
-      "unlock-keyhole",
-      "user-lock",
-      "user-secret",
-      "user-shield",
-      "vault",
+      {
+        name: "atom",
+        folder: "solid",
+      },
+      {
+        name: "book-journal-whills",
+        folder: "solid",
+      },
+      {
+        name: "explosion",
+        folder: "solid",
+      },
+      {
+        name: "galactic-republic",
+        folder: "brands",
+      },
+      {
+        name: "galactic-senate",
+        folder: "brands",
+      },
+      {
+        name: "hand-spock",
+        folder: "regular",
+      },
+      {
+        name: "jedi",
+        folder: "solid",
+      },
+      {
+        name: "jedi-order",
+        folder: "brands",
+      },
+      {
+        name: "old-republic",
+        folder: "brands",
+      },
+      {
+        name: "robot",
+        folder: "solid",
+      },
+      {
+        name: "rocket",
+        folder: "solid",
+      },
+      {
+        name: "space-awesome",
+        folder: "brands",
+      },
+      {
+        name: "user-astronaut",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Security",
-  },
-  shapes: {
     icons: [
-      "bookmark",
-      "burst",
-      "calendar",
-      "certificate",
-      "circle",
-      "circle-half-stroke",
-      "cloud",
-      "clover",
-      "comment",
-      "crown",
-      "cubes-stacked",
-      "diamond",
-      "file",
-      "folder",
-      "heart",
-      "heart-crack",
-      "hexagon",
-      "lines-leaning",
-      "location-pin",
-      "octagon",
-      "pentagon",
-      "play",
-      "septagon",
-      "shapes",
-      "shield",
-      "spiral",
-      "square",
-      "square-binary",
-      "star",
-      "ticket-simple",
+      {
+        name: "ban",
+        folder: "solid",
+      },
+      {
+        name: "bug",
+        folder: "solid",
+      },
+      {
+        name: "bug-slash",
+        folder: "solid",
+      },
+      {
+        name: "building-lock",
+        folder: "solid",
+      },
+      {
+        name: "building-shield",
+        folder: "solid",
+      },
+      {
+        name: "burst",
+        folder: "solid",
+      },
+      {
+        name: "car-on",
+        folder: "solid",
+      },
+      {
+        name: "door-closed",
+        folder: "solid",
+      },
+      {
+        name: "door-open",
+        folder: "solid",
+      },
+      {
+        name: "dungeon",
+        folder: "solid",
+      },
+      {
+        name: "explosion",
+        folder: "solid",
+      },
+      {
+        name: "eye",
+        folder: "regular",
+      },
+      {
+        name: "eye-slash",
+        folder: "regular",
+      },
+      {
+        name: "file-contract",
+        folder: "solid",
+      },
+      {
+        name: "file-shield",
+        folder: "solid",
+      },
+      {
+        name: "file-signature",
+        folder: "solid",
+      },
+      {
+        name: "fingerprint",
+        folder: "solid",
+      },
+      {
+        name: "gun",
+        folder: "solid",
+      },
+      {
+        name: "handcuffs",
+        folder: "solid",
+      },
+      {
+        name: "hands-bound",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-child",
+        folder: "solid",
+      },
+      {
+        name: "hands-holding-circle",
+        folder: "solid",
+      },
+      {
+        name: "house-fire",
+        folder: "solid",
+      },
+      {
+        name: "house-lock",
+        folder: "solid",
+      },
+      {
+        name: "id-badge",
+        folder: "regular",
+      },
+      {
+        name: "id-card",
+        folder: "regular",
+      },
+      {
+        name: "id-card-clip",
+        folder: "solid",
+      },
+      {
+        name: "key",
+        folder: "solid",
+      },
+      {
+        name: "land-mine-on",
+        folder: "solid",
+      },
+      {
+        name: "lock",
+        folder: "solid",
+      },
+      {
+        name: "lock-open",
+        folder: "solid",
+      },
+      {
+        name: "mars-and-venus-burst",
+        folder: "solid",
+      },
+      {
+        name: "mask",
+        folder: "solid",
+      },
+      {
+        name: "passport",
+        folder: "solid",
+      },
+      {
+        name: "people-pulling",
+        folder: "solid",
+      },
+      {
+        name: "people-robbery",
+        folder: "solid",
+      },
+      {
+        name: "person-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-dress-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-falling-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-harassing",
+        folder: "solid",
+      },
+      {
+        name: "person-military-pointing",
+        folder: "solid",
+      },
+      {
+        name: "person-military-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-military-to-person",
+        folder: "solid",
+      },
+      {
+        name: "person-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-shelter",
+        folder: "solid",
+      },
+      {
+        name: "person-through-window",
+        folder: "solid",
+      },
+      {
+        name: "road-spikes",
+        folder: "solid",
+      },
+      {
+        name: "shield",
+        folder: "solid",
+      },
+      {
+        name: "shield-cat",
+        folder: "solid",
+      },
+      {
+        name: "shield-dog",
+        folder: "solid",
+      },
+      {
+        name: "shield-halved",
+        folder: "solid",
+      },
+      {
+        name: "shield-heart",
+        folder: "solid",
+      },
+      {
+        name: "skull-crossbones",
+        folder: "solid",
+      },
+      {
+        name: "square-person-confined",
+        folder: "solid",
+      },
+      {
+        name: "tower-observation",
+        folder: "solid",
+      },
+      {
+        name: "unlock",
+        folder: "solid",
+      },
+      {
+        name: "unlock-keyhole",
+        folder: "solid",
+      },
+      {
+        name: "user-lock",
+        folder: "solid",
+      },
+      {
+        name: "user-secret",
+        folder: "solid",
+      },
+      {
+        name: "user-shield",
+        folder: "solid",
+      },
+      {
+        name: "vault",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Shapes",
-  },
-  shopping: {
     icons: [
-      "alipay",
-      "amazon-pay",
-      "apple-pay",
-      "bag-shopping",
-      "barcode",
-      "basket-shopping",
-      "bell",
-      "bitcoin",
-      "bookmark",
-      "btc",
-      "bullhorn",
-      "camera",
-      "camera-retro",
-      "cart-arrow-down",
-      "cart-plus",
-      "cart-shopping",
-      "cash-register",
-      "cc-amazon-pay",
-      "cc-amex",
-      "cc-apple-pay",
-      "cc-diners-club",
-      "cc-discover",
-      "cc-jcb",
-      "cc-mastercard",
-      "cc-paypal",
-      "cc-stripe",
-      "cc-visa",
-      "certificate",
-      "credit-card",
-      "ethereum",
-      "gem",
-      "gift",
-      "gifts",
-      "google-pay",
-      "google-wallet",
-      "handshake",
-      "heart",
-      "key",
-      "money-check",
-      "money-check-dollar",
-      "nfc-directional",
-      "nfc-symbol",
-      "paypal",
-      "person-booth",
-      "qrcode",
-      "receipt",
-      "shirt",
-      "shop",
-      "shop-lock",
-      "shop-slash",
-      "star",
-      "store",
-      "store-slash",
-      "stripe",
-      "stripe-s",
-      "tag",
-      "tags",
-      "thumbs-down",
-      "thumbs-up",
-      "trophy",
-      "truck",
-      "truck-fast",
+      {
+        name: "bookmark",
+        folder: "regular",
+      },
+      {
+        name: "burst",
+        folder: "solid",
+      },
+      {
+        name: "calendar",
+        folder: "regular",
+      },
+      {
+        name: "certificate",
+        folder: "solid",
+      },
+      {
+        name: "circle",
+        folder: "regular",
+      },
+      {
+        name: "circle-half-stroke",
+        folder: "solid",
+      },
+      {
+        name: "cloud",
+        folder: "regular",
+      },
+      {
+        name: "clover",
+        folder: "solid",
+      },
+      {
+        name: "comment",
+        folder: "regular",
+      },
+      {
+        name: "crown",
+        folder: "solid",
+      },
+      {
+        name: "cubes-stacked",
+        folder: "solid",
+      },
+      {
+        name: "diamond",
+        folder: "solid",
+      },
+      {
+        name: "file",
+        folder: "regular",
+      },
+      {
+        name: "folder",
+        folder: "regular",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "heart-crack",
+        folder: "solid",
+      },
+      {
+        name: "hexagon",
+        folder: "solid",
+      },
+      {
+        name: "lines-leaning",
+        folder: "solid",
+      },
+      {
+        name: "location-pin",
+        folder: "solid",
+      },
+      {
+        name: "octagon",
+        folder: "solid",
+      },
+      {
+        name: "pentagon",
+        folder: "solid",
+      },
+      {
+        name: "play",
+        folder: "solid",
+      },
+      {
+        name: "septagon",
+        folder: "solid",
+      },
+      {
+        name: "shapes",
+        folder: "solid",
+      },
+      {
+        name: "shield",
+        folder: "solid",
+      },
+      {
+        name: "spiral",
+        folder: "solid",
+      },
+      {
+        name: "square",
+        folder: "regular",
+      },
+      {
+        name: "square-binary",
+        folder: "solid",
+      },
+      {
+        name: "star",
+        folder: "regular",
+      },
+      {
+        name: "ticket-simple",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Shopping",
-  },
-  social: {
     icons: [
-      "bell",
-      "bluesky",
-      "cake-candles",
-      "camera",
-      "circle-user",
-      "comment",
-      "envelope",
-      "facebook",
-      "hashtag",
-      "heart",
-      "icons",
-      "image",
-      "images",
-      "location-dot",
-      "location-pin",
-      "message",
-      "photo-film",
-      "retweet",
-      "share",
-      "share-from-square",
-      "share-nodes",
-      "square-bluesky",
-      "square-poll-horizontal",
-      "square-poll-vertical",
-      "square-share-nodes",
-      "star",
-      "thumbs-down",
-      "thumbs-up",
-      "thumbtack",
-      "thumbtack-slash",
-      "user",
-      "user-group",
-      "user-plus",
-      "users",
-      "video",
+      {
+        name: "alipay",
+        folder: "brands",
+      },
+      {
+        name: "amazon-pay",
+        folder: "brands",
+      },
+      {
+        name: "apple-pay",
+        folder: "brands",
+      },
+      {
+        name: "bag-shopping",
+        folder: "solid",
+      },
+      {
+        name: "barcode",
+        folder: "solid",
+      },
+      {
+        name: "basket-shopping",
+        folder: "solid",
+      },
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "bitcoin",
+        folder: "brands",
+      },
+      {
+        name: "bookmark",
+        folder: "regular",
+      },
+      {
+        name: "btc",
+        folder: "brands",
+      },
+      {
+        name: "bullhorn",
+        folder: "solid",
+      },
+      {
+        name: "camera",
+        folder: "regular",
+      },
+      {
+        name: "camera-retro",
+        folder: "solid",
+      },
+      {
+        name: "cart-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "cart-plus",
+        folder: "solid",
+      },
+      {
+        name: "cart-shopping",
+        folder: "solid",
+      },
+      {
+        name: "cash-register",
+        folder: "solid",
+      },
+      {
+        name: "cc-amazon-pay",
+        folder: "brands",
+      },
+      {
+        name: "cc-amex",
+        folder: "brands",
+      },
+      {
+        name: "cc-apple-pay",
+        folder: "brands",
+      },
+      {
+        name: "cc-diners-club",
+        folder: "brands",
+      },
+      {
+        name: "cc-discover",
+        folder: "brands",
+      },
+      {
+        name: "cc-jcb",
+        folder: "brands",
+      },
+      {
+        name: "cc-mastercard",
+        folder: "brands",
+      },
+      {
+        name: "cc-paypal",
+        folder: "brands",
+      },
+      {
+        name: "cc-stripe",
+        folder: "brands",
+      },
+      {
+        name: "cc-visa",
+        folder: "brands",
+      },
+      {
+        name: "certificate",
+        folder: "solid",
+      },
+      {
+        name: "credit-card",
+        folder: "regular",
+      },
+      {
+        name: "ethereum",
+        folder: "brands",
+      },
+      {
+        name: "gem",
+        folder: "regular",
+      },
+      {
+        name: "gift",
+        folder: "solid",
+      },
+      {
+        name: "gifts",
+        folder: "solid",
+      },
+      {
+        name: "google-pay",
+        folder: "brands",
+      },
+      {
+        name: "google-wallet",
+        folder: "brands",
+      },
+      {
+        name: "handshake",
+        folder: "regular",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "key",
+        folder: "solid",
+      },
+      {
+        name: "money-check",
+        folder: "solid",
+      },
+      {
+        name: "money-check-dollar",
+        folder: "solid",
+      },
+      {
+        name: "nfc-directional",
+        folder: "brands",
+      },
+      {
+        name: "nfc-symbol",
+        folder: "brands",
+      },
+      {
+        name: "paypal",
+        folder: "brands",
+      },
+      {
+        name: "person-booth",
+        folder: "solid",
+      },
+      {
+        name: "qrcode",
+        folder: "solid",
+      },
+      {
+        name: "receipt",
+        folder: "solid",
+      },
+      {
+        name: "shirt",
+        folder: "solid",
+      },
+      {
+        name: "shop",
+        folder: "solid",
+      },
+      {
+        name: "shop-lock",
+        folder: "solid",
+      },
+      {
+        name: "shop-slash",
+        folder: "solid",
+      },
+      {
+        name: "star",
+        folder: "regular",
+      },
+      {
+        name: "store",
+        folder: "solid",
+      },
+      {
+        name: "store-slash",
+        folder: "solid",
+      },
+      {
+        name: "stripe",
+        folder: "brands",
+      },
+      {
+        name: "stripe-s",
+        folder: "brands",
+      },
+      {
+        name: "tag",
+        folder: "solid",
+      },
+      {
+        name: "tags",
+        folder: "solid",
+      },
+      {
+        name: "thumbs-down",
+        folder: "regular",
+      },
+      {
+        name: "thumbs-up",
+        folder: "regular",
+      },
+      {
+        name: "trophy",
+        folder: "solid",
+      },
+      {
+        name: "truck",
+        folder: "regular",
+      },
+      {
+        name: "truck-fast",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Social",
-  },
-  spinners: {
     icons: [
-      "arrow-rotate-left",
-      "arrow-rotate-right",
-      "arrows-rotate",
-      "arrows-spin",
-      "asterisk",
-      "atom",
-      "bahai",
-      "certificate",
-      "circle-notch",
-      "compact-disc",
-      "compass",
-      "crosshairs",
-      "dharmachakra",
-      "fan",
-      "gear",
-      "hurricane",
-      "life-ring",
-      "palette",
-      "ring",
-      "rotate",
-      "rotate-left",
-      "rotate-right",
-      "slash",
-      "snowflake",
-      "spinner",
-      "stroopwafel",
-      "sun",
-      "yin-yang",
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "bluesky",
+        folder: "brands",
+      },
+      {
+        name: "cake-candles",
+        folder: "solid",
+      },
+      {
+        name: "camera",
+        folder: "regular",
+      },
+      {
+        name: "circle-user",
+        folder: "regular",
+      },
+      {
+        name: "comment",
+        folder: "regular",
+      },
+      {
+        name: "envelope",
+        folder: "regular",
+      },
+      {
+        name: "facebook",
+        folder: "brands",
+      },
+      {
+        name: "hashtag",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "icons",
+        folder: "solid",
+      },
+      {
+        name: "image",
+        folder: "regular",
+      },
+      {
+        name: "images",
+        folder: "regular",
+      },
+      {
+        name: "location-dot",
+        folder: "solid",
+      },
+      {
+        name: "location-pin",
+        folder: "solid",
+      },
+      {
+        name: "message",
+        folder: "regular",
+      },
+      {
+        name: "photo-film",
+        folder: "solid",
+      },
+      {
+        name: "retweet",
+        folder: "solid",
+      },
+      {
+        name: "share",
+        folder: "solid",
+      },
+      {
+        name: "share-from-square",
+        folder: "regular",
+      },
+      {
+        name: "share-nodes",
+        folder: "solid",
+      },
+      {
+        name: "square-bluesky",
+        folder: "brands",
+      },
+      {
+        name: "square-poll-horizontal",
+        folder: "solid",
+      },
+      {
+        name: "square-poll-vertical",
+        folder: "solid",
+      },
+      {
+        name: "square-share-nodes",
+        folder: "solid",
+      },
+      {
+        name: "star",
+        folder: "regular",
+      },
+      {
+        name: "thumbs-down",
+        folder: "regular",
+      },
+      {
+        name: "thumbs-up",
+        folder: "regular",
+      },
+      {
+        name: "thumbtack",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack-slash",
+        folder: "solid",
+      },
+      {
+        name: "user",
+        folder: "regular",
+      },
+      {
+        name: "user-group",
+        folder: "solid",
+      },
+      {
+        name: "user-plus",
+        folder: "solid",
+      },
+      {
+        name: "users",
+        folder: "solid",
+      },
+      {
+        name: "video",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Spinners",
-  },
-  "sports-fitness": {
     icons: [
-      "baseball",
-      "baseball-bat-ball",
-      "basketball",
-      "bicycle",
-      "bowling-ball",
-      "broom-ball",
-      "dumbbell",
-      "fire-flame-curved",
-      "fire-flame-simple",
-      "football",
-      "futbol",
-      "golf-ball-tee",
-      "heart",
-      "heart-pulse",
-      "hockey-puck",
-      "medal",
-      "mound",
-      "person-biking",
-      "person-hiking",
-      "person-running",
-      "person-skating",
-      "person-skiing",
-      "person-skiing-nordic",
-      "person-snowboarding",
-      "person-swimming",
-      "person-walking",
-      "ranking-star",
-      "shoe-prints",
-      "spa",
-      "stopwatch-20",
-      "table-tennis-paddle-ball",
-      "volleyball",
-      "weight-hanging",
+      {
+        name: "arrow-rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "arrow-rotate-right",
+        folder: "solid",
+      },
+      {
+        name: "arrows-rotate",
+        folder: "solid",
+      },
+      {
+        name: "arrows-spin",
+        folder: "solid",
+      },
+      {
+        name: "asterisk",
+        folder: "solid",
+      },
+      {
+        name: "atom",
+        folder: "solid",
+      },
+      {
+        name: "bahai",
+        folder: "solid",
+      },
+      {
+        name: "certificate",
+        folder: "solid",
+      },
+      {
+        name: "circle-notch",
+        folder: "solid",
+      },
+      {
+        name: "compact-disc",
+        folder: "solid",
+      },
+      {
+        name: "compass",
+        folder: "regular",
+      },
+      {
+        name: "crosshairs",
+        folder: "solid",
+      },
+      {
+        name: "dharmachakra",
+        folder: "solid",
+      },
+      {
+        name: "fan",
+        folder: "solid",
+      },
+      {
+        name: "gear",
+        folder: "solid",
+      },
+      {
+        name: "hurricane",
+        folder: "solid",
+      },
+      {
+        name: "life-ring",
+        folder: "regular",
+      },
+      {
+        name: "palette",
+        folder: "solid",
+      },
+      {
+        name: "ring",
+        folder: "solid",
+      },
+      {
+        name: "rotate",
+        folder: "solid",
+      },
+      {
+        name: "rotate-left",
+        folder: "solid",
+      },
+      {
+        name: "rotate-right",
+        folder: "solid",
+      },
+      {
+        name: "slash",
+        folder: "solid",
+      },
+      {
+        name: "snowflake",
+        folder: "regular",
+      },
+      {
+        name: "spinner",
+        folder: "solid",
+      },
+      {
+        name: "stroopwafel",
+        folder: "solid",
+      },
+      {
+        name: "sun",
+        folder: "regular",
+      },
+      {
+        name: "yin-yang",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Sports + Fitness",
-  },
-  "text-formatting": {
     icons: [
-      "align-center",
-      "align-justify",
-      "align-left",
-      "align-right",
-      "bold",
-      "border-all",
-      "border-none",
-      "border-top-left",
-      "check",
-      "check-double",
-      "circle-check",
-      "filter-circle-xmark",
-      "font",
-      "heading",
-      "highlighter",
-      "i-cursor",
-      "icons",
-      "indent",
-      "italic",
-      "list",
-      "list-check",
-      "list-ol",
-      "list-ul",
-      "outdent",
-      "paragraph",
-      "rectangle-list",
-      "spell-check",
-      "square-check",
-      "strikethrough",
-      "subscript",
-      "superscript",
-      "table",
-      "table-cells",
-      "table-cells-column-lock",
-      "table-cells-large",
-      "table-cells-row-lock",
-      "table-cells-row-unlock",
-      "table-columns",
-      "table-list",
-      "text-height",
-      "text-slash",
-      "text-width",
-      "underline",
+      {
+        name: "baseball",
+        folder: "solid",
+      },
+      {
+        name: "baseball-bat-ball",
+        folder: "solid",
+      },
+      {
+        name: "basketball",
+        folder: "solid",
+      },
+      {
+        name: "bicycle",
+        folder: "solid",
+      },
+      {
+        name: "bowling-ball",
+        folder: "solid",
+      },
+      {
+        name: "broom-ball",
+        folder: "solid",
+      },
+      {
+        name: "dumbbell",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-curved",
+        folder: "solid",
+      },
+      {
+        name: "fire-flame-simple",
+        folder: "solid",
+      },
+      {
+        name: "football",
+        folder: "solid",
+      },
+      {
+        name: "futbol",
+        folder: "regular",
+      },
+      {
+        name: "golf-ball-tee",
+        folder: "solid",
+      },
+      {
+        name: "heart",
+        folder: "regular",
+      },
+      {
+        name: "heart-pulse",
+        folder: "solid",
+      },
+      {
+        name: "hockey-puck",
+        folder: "solid",
+      },
+      {
+        name: "medal",
+        folder: "solid",
+      },
+      {
+        name: "mound",
+        folder: "solid",
+      },
+      {
+        name: "person-biking",
+        folder: "solid",
+      },
+      {
+        name: "person-hiking",
+        folder: "solid",
+      },
+      {
+        name: "person-running",
+        folder: "solid",
+      },
+      {
+        name: "person-skating",
+        folder: "solid",
+      },
+      {
+        name: "person-skiing",
+        folder: "solid",
+      },
+      {
+        name: "person-skiing-nordic",
+        folder: "solid",
+      },
+      {
+        name: "person-snowboarding",
+        folder: "solid",
+      },
+      {
+        name: "person-swimming",
+        folder: "solid",
+      },
+      {
+        name: "person-walking",
+        folder: "solid",
+      },
+      {
+        name: "ranking-star",
+        folder: "solid",
+      },
+      {
+        name: "shoe-prints",
+        folder: "solid",
+      },
+      {
+        name: "spa",
+        folder: "solid",
+      },
+      {
+        name: "stopwatch-20",
+        folder: "solid",
+      },
+      {
+        name: "table-tennis-paddle-ball",
+        folder: "solid",
+      },
+      {
+        name: "volleyball",
+        folder: "solid",
+      },
+      {
+        name: "weight-hanging",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Text Formatting",
-  },
-  time: {
     icons: [
-      "alarm-clock",
-      "bell",
-      "bell-slash",
-      "calendar",
-      "calendar-check",
-      "calendar-day",
-      "calendar-days",
-      "calendar-minus",
-      "calendar-plus",
-      "calendar-week",
-      "calendar-xmark",
-      "clock",
-      "hourglass",
-      "hourglass-end",
-      "hourglass-half",
-      "hourglass-start",
-      "stopwatch",
-      "stopwatch-20",
+      {
+        name: "align-center",
+        folder: "solid",
+      },
+      {
+        name: "align-justify",
+        folder: "solid",
+      },
+      {
+        name: "align-left",
+        folder: "solid",
+      },
+      {
+        name: "align-right",
+        folder: "solid",
+      },
+      {
+        name: "bold",
+        folder: "solid",
+      },
+      {
+        name: "border-all",
+        folder: "solid",
+      },
+      {
+        name: "border-none",
+        folder: "solid",
+      },
+      {
+        name: "border-top-left",
+        folder: "solid",
+      },
+      {
+        name: "check",
+        folder: "solid",
+      },
+      {
+        name: "check-double",
+        folder: "solid",
+      },
+      {
+        name: "circle-check",
+        folder: "regular",
+      },
+      {
+        name: "filter-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "font",
+        folder: "solid",
+      },
+      {
+        name: "heading",
+        folder: "solid",
+      },
+      {
+        name: "highlighter",
+        folder: "solid",
+      },
+      {
+        name: "i-cursor",
+        folder: "solid",
+      },
+      {
+        name: "icons",
+        folder: "solid",
+      },
+      {
+        name: "indent",
+        folder: "solid",
+      },
+      {
+        name: "italic",
+        folder: "solid",
+      },
+      {
+        name: "list",
+        folder: "solid",
+      },
+      {
+        name: "list-check",
+        folder: "solid",
+      },
+      {
+        name: "list-ol",
+        folder: "solid",
+      },
+      {
+        name: "list-ul",
+        folder: "solid",
+      },
+      {
+        name: "outdent",
+        folder: "solid",
+      },
+      {
+        name: "paragraph",
+        folder: "solid",
+      },
+      {
+        name: "rectangle-list",
+        folder: "regular",
+      },
+      {
+        name: "spell-check",
+        folder: "solid",
+      },
+      {
+        name: "square-check",
+        folder: "regular",
+      },
+      {
+        name: "strikethrough",
+        folder: "solid",
+      },
+      {
+        name: "subscript",
+        folder: "solid",
+      },
+      {
+        name: "superscript",
+        folder: "solid",
+      },
+      {
+        name: "table",
+        folder: "solid",
+      },
+      {
+        name: "table-cells",
+        folder: "solid",
+      },
+      {
+        name: "table-cells-column-lock",
+        folder: "solid",
+      },
+      {
+        name: "table-cells-large",
+        folder: "solid",
+      },
+      {
+        name: "table-cells-row-lock",
+        folder: "solid",
+      },
+      {
+        name: "table-cells-row-unlock",
+        folder: "solid",
+      },
+      {
+        name: "table-columns",
+        folder: "solid",
+      },
+      {
+        name: "table-list",
+        folder: "solid",
+      },
+      {
+        name: "text-height",
+        folder: "solid",
+      },
+      {
+        name: "text-slash",
+        folder: "solid",
+      },
+      {
+        name: "text-width",
+        folder: "solid",
+      },
+      {
+        name: "underline",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Time",
-  },
-  toggle: {
     icons: [
-      "bullseye",
-      "circle",
-      "circle-check",
-      "circle-dot",
-      "location-crosshairs",
-      "microphone",
-      "microphone-slash",
-      "plane-up",
-      "signal",
-      "sliders",
-      "star",
-      "star-half",
-      "star-half-stroke",
-      "toggle-off",
-      "toggle-on",
-      "wifi",
+      {
+        name: "alarm-clock",
+        folder: "regular",
+      },
+      {
+        name: "bell",
+        folder: "regular",
+      },
+      {
+        name: "bell-slash",
+        folder: "regular",
+      },
+      {
+        name: "calendar",
+        folder: "regular",
+      },
+      {
+        name: "calendar-check",
+        folder: "regular",
+      },
+      {
+        name: "calendar-day",
+        folder: "solid",
+      },
+      {
+        name: "calendar-days",
+        folder: "regular",
+      },
+      {
+        name: "calendar-minus",
+        folder: "regular",
+      },
+      {
+        name: "calendar-plus",
+        folder: "regular",
+      },
+      {
+        name: "calendar-week",
+        folder: "solid",
+      },
+      {
+        name: "calendar-xmark",
+        folder: "regular",
+      },
+      {
+        name: "clock",
+        folder: "regular",
+      },
+      {
+        name: "hourglass",
+        folder: "regular",
+      },
+      {
+        name: "hourglass-end",
+        folder: "solid",
+      },
+      {
+        name: "hourglass-half",
+        folder: "regular",
+      },
+      {
+        name: "hourglass-start",
+        folder: "solid",
+      },
+      {
+        name: "stopwatch",
+        folder: "solid",
+      },
+      {
+        name: "stopwatch-20",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Toggle",
-  },
-  transportation: {
     icons: [
-      "accessible-icon",
-      "baby-carriage",
-      "bicycle",
-      "bus",
-      "bus-side",
-      "bus-simple",
-      "cable-car",
-      "car",
-      "car-burst",
-      "car-rear",
-      "car-side",
-      "car-tunnel",
-      "cart-shopping",
-      "ferry",
-      "helicopter",
-      "horse",
-      "jet-fighter",
-      "jet-fighter-up",
-      "motorcycle",
-      "mound",
-      "paper-plane",
-      "plane",
-      "plane-arrival",
-      "plane-slash",
-      "plane-up",
-      "road",
-      "road-barrier",
-      "road-spikes",
-      "rocket",
-      "sailboat",
-      "ship",
-      "shuttle-space",
-      "sleigh",
-      "snowplow",
-      "taxi",
-      "tractor",
-      "train",
-      "train-subway",
-      "train-tram",
-      "truck",
-      "truck-arrow-right",
-      "truck-droplet",
-      "truck-field",
-      "truck-field-un",
-      "truck-front",
-      "truck-medical",
-      "truck-monster",
-      "truck-pickup",
-      "truck-plane",
-      "van-shuttle",
-      "wheelchair",
-      "wheelchair-move",
+      {
+        name: "bullseye",
+        folder: "solid",
+      },
+      {
+        name: "circle",
+        folder: "regular",
+      },
+      {
+        name: "circle-check",
+        folder: "regular",
+      },
+      {
+        name: "circle-dot",
+        folder: "regular",
+      },
+      {
+        name: "location-crosshairs",
+        folder: "solid",
+      },
+      {
+        name: "microphone",
+        folder: "solid",
+      },
+      {
+        name: "microphone-slash",
+        folder: "solid",
+      },
+      {
+        name: "plane-up",
+        folder: "solid",
+      },
+      {
+        name: "signal",
+        folder: "solid",
+      },
+      {
+        name: "sliders",
+        folder: "solid",
+      },
+      {
+        name: "star",
+        folder: "regular",
+      },
+      {
+        name: "star-half",
+        folder: "regular",
+      },
+      {
+        name: "star-half-stroke",
+        folder: "regular",
+      },
+      {
+        name: "toggle-off",
+        folder: "solid",
+      },
+      {
+        name: "toggle-on",
+        folder: "solid",
+      },
+      {
+        name: "wifi",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Transportation",
-  },
-  "travel-hotel": {
     icons: [
-      "alarm-clock",
-      "archway",
-      "baby-carriage",
-      "ban-smoking",
-      "bath",
-      "bed",
-      "bell-concierge",
-      "book-atlas",
-      "briefcase",
-      "bus",
-      "bus-side",
-      "bus-simple",
-      "cable-car",
-      "car",
-      "caravan",
-      "cart-flatbed-suitcase",
-      "dice",
-      "dice-five",
-      "door-closed",
-      "door-open",
-      "dumbbell",
-      "earth-africa",
-      "earth-americas",
-      "earth-asia",
-      "earth-europe",
-      "earth-oceania",
-      "elevator",
-      "hot-tub-person",
-      "hotel",
-      "infinity",
-      "key",
-      "kitchen-set",
-      "map",
-      "map-location",
-      "map-location-dot",
-      "martini-glass",
-      "martini-glass-citrus",
-      "martini-glass-empty",
-      "monument",
-      "mountain-city",
-      "mug-saucer",
-      "passport",
-      "person-swimming",
-      "person-walking-luggage",
-      "plane",
-      "plane-arrival",
-      "plane-circle-check",
-      "plane-circle-exclamation",
-      "plane-circle-xmark",
-      "plane-departure",
-      "plane-lock",
-      "plane-slash",
-      "plane-up",
-      "shower",
-      "smoking",
-      "snowflake",
-      "spa",
-      "stairs",
-      "suitcase",
-      "suitcase-rolling",
-      "taxi",
-      "toilet",
-      "toilet-paper",
-      "train-tram",
-      "tree-city",
-      "tv",
-      "umbrella-beach",
-      "utensils",
-      "van-shuttle",
-      "water-ladder",
-      "wheelchair",
-      "wheelchair-move",
-      "wifi",
-      "wine-glass",
-      "wine-glass-empty",
+      {
+        name: "accessible-icon",
+        folder: "brands",
+      },
+      {
+        name: "baby-carriage",
+        folder: "solid",
+      },
+      {
+        name: "bicycle",
+        folder: "solid",
+      },
+      {
+        name: "bus",
+        folder: "solid",
+      },
+      {
+        name: "bus-side",
+        folder: "solid",
+      },
+      {
+        name: "bus-simple",
+        folder: "solid",
+      },
+      {
+        name: "cable-car",
+        folder: "solid",
+      },
+      {
+        name: "car",
+        folder: "solid",
+      },
+      {
+        name: "car-burst",
+        folder: "solid",
+      },
+      {
+        name: "car-rear",
+        folder: "solid",
+      },
+      {
+        name: "car-side",
+        folder: "solid",
+      },
+      {
+        name: "car-tunnel",
+        folder: "solid",
+      },
+      {
+        name: "cart-shopping",
+        folder: "solid",
+      },
+      {
+        name: "ferry",
+        folder: "solid",
+      },
+      {
+        name: "helicopter",
+        folder: "solid",
+      },
+      {
+        name: "horse",
+        folder: "solid",
+      },
+      {
+        name: "jet-fighter",
+        folder: "solid",
+      },
+      {
+        name: "jet-fighter-up",
+        folder: "solid",
+      },
+      {
+        name: "motorcycle",
+        folder: "solid",
+      },
+      {
+        name: "mound",
+        folder: "solid",
+      },
+      {
+        name: "paper-plane",
+        folder: "regular",
+      },
+      {
+        name: "plane",
+        folder: "solid",
+      },
+      {
+        name: "plane-arrival",
+        folder: "solid",
+      },
+      {
+        name: "plane-slash",
+        folder: "solid",
+      },
+      {
+        name: "plane-up",
+        folder: "solid",
+      },
+      {
+        name: "road",
+        folder: "solid",
+      },
+      {
+        name: "road-barrier",
+        folder: "solid",
+      },
+      {
+        name: "road-spikes",
+        folder: "solid",
+      },
+      {
+        name: "rocket",
+        folder: "solid",
+      },
+      {
+        name: "sailboat",
+        folder: "solid",
+      },
+      {
+        name: "ship",
+        folder: "solid",
+      },
+      {
+        name: "shuttle-space",
+        folder: "solid",
+      },
+      {
+        name: "sleigh",
+        folder: "solid",
+      },
+      {
+        name: "snowplow",
+        folder: "solid",
+      },
+      {
+        name: "taxi",
+        folder: "solid",
+      },
+      {
+        name: "tractor",
+        folder: "solid",
+      },
+      {
+        name: "train",
+        folder: "solid",
+      },
+      {
+        name: "train-subway",
+        folder: "solid",
+      },
+      {
+        name: "train-tram",
+        folder: "solid",
+      },
+      {
+        name: "truck",
+        folder: "regular",
+      },
+      {
+        name: "truck-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "truck-droplet",
+        folder: "solid",
+      },
+      {
+        name: "truck-field",
+        folder: "solid",
+      },
+      {
+        name: "truck-field-un",
+        folder: "solid",
+      },
+      {
+        name: "truck-front",
+        folder: "solid",
+      },
+      {
+        name: "truck-medical",
+        folder: "solid",
+      },
+      {
+        name: "truck-monster",
+        folder: "solid",
+      },
+      {
+        name: "truck-pickup",
+        folder: "solid",
+      },
+      {
+        name: "truck-plane",
+        folder: "solid",
+      },
+      {
+        name: "van-shuttle",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Travel + Hotel",
-  },
-  "users-people": {
     icons: [
-      "accessible-icon",
-      "address-book",
-      "address-card",
-      "arrows-down-to-people",
-      "baby",
-      "bed",
-      "chalkboard-user",
-      "child",
-      "child-dress",
-      "child-reaching",
-      "children",
-      "circle-user",
-      "clipboard-user",
-      "elevator",
-      "face-frown",
-      "face-meh",
-      "face-smile",
-      "head-side-cough",
-      "head-side-cough-slash",
-      "head-side-mask",
-      "head-side-virus",
-      "hospital-user",
-      "hot-tub-person",
-      "house-chimney-user",
-      "house-user",
-      "id-badge",
-      "id-card",
-      "id-card-clip",
-      "image-portrait",
-      "mars-and-venus-burst",
-      "people-arrows",
-      "people-carry-box",
-      "people-group",
-      "people-line",
-      "people-pulling",
-      "people-robbery",
-      "people-roof",
-      "person",
-      "person-arrow-down-to-line",
-      "person-arrow-up-from-line",
-      "person-biking",
-      "person-booth",
-      "person-breastfeeding",
-      "person-burst",
-      "person-cane",
-      "person-chalkboard",
-      "person-circle-check",
-      "person-circle-exclamation",
-      "person-circle-minus",
-      "person-circle-plus",
-      "person-circle-question",
-      "person-circle-xmark",
-      "person-digging",
-      "person-dots-from-line",
-      "person-dress",
-      "person-dress-burst",
-      "person-drowning",
-      "person-falling",
-      "person-falling-burst",
-      "person-half-dress",
-      "person-harassing",
-      "person-hiking",
-      "person-military-pointing",
-      "person-military-rifle",
-      "person-military-to-person",
-      "person-praying",
-      "person-pregnant",
-      "person-rays",
-      "person-rifle",
-      "person-running",
-      "person-shelter",
-      "person-skating",
-      "person-skiing",
-      "person-skiing-nordic",
-      "person-snowboarding",
-      "person-swimming",
-      "person-through-window",
-      "person-walking",
-      "person-walking-arrow-loop-left",
-      "person-walking-arrow-right",
-      "person-walking-dashed-line-arrow-right",
-      "person-walking-luggage",
-      "person-walking-with-cane",
-      "poo",
-      "restroom",
-      "skull",
-      "square-person-confined",
-      "street-view",
-      "user",
-      "user-astronaut",
-      "user-check",
-      "user-clock",
-      "user-doctor",
-      "user-gear",
-      "user-graduate",
-      "user-group",
-      "user-injured",
-      "user-lock",
-      "user-minus",
-      "user-ninja",
-      "user-nurse",
-      "user-pen",
-      "user-plus",
-      "user-secret",
-      "user-shield",
-      "user-slash",
-      "user-tag",
-      "user-tie",
-      "user-xmark",
-      "users",
-      "users-between-lines",
-      "users-gear",
-      "users-line",
-      "users-rays",
-      "users-rectangle",
-      "users-slash",
-      "users-viewfinder",
-      "wheelchair",
-      "wheelchair-move",
+      {
+        name: "alarm-clock",
+        folder: "regular",
+      },
+      {
+        name: "archway",
+        folder: "solid",
+      },
+      {
+        name: "baby-carriage",
+        folder: "solid",
+      },
+      {
+        name: "ban-smoking",
+        folder: "solid",
+      },
+      {
+        name: "bath",
+        folder: "solid",
+      },
+      {
+        name: "bed",
+        folder: "solid",
+      },
+      {
+        name: "bell-concierge",
+        folder: "solid",
+      },
+      {
+        name: "book-atlas",
+        folder: "solid",
+      },
+      {
+        name: "briefcase",
+        folder: "solid",
+      },
+      {
+        name: "bus",
+        folder: "solid",
+      },
+      {
+        name: "bus-side",
+        folder: "solid",
+      },
+      {
+        name: "bus-simple",
+        folder: "solid",
+      },
+      {
+        name: "cable-car",
+        folder: "solid",
+      },
+      {
+        name: "car",
+        folder: "solid",
+      },
+      {
+        name: "caravan",
+        folder: "solid",
+      },
+      {
+        name: "cart-flatbed-suitcase",
+        folder: "solid",
+      },
+      {
+        name: "dice",
+        folder: "solid",
+      },
+      {
+        name: "dice-five",
+        folder: "solid",
+      },
+      {
+        name: "door-closed",
+        folder: "solid",
+      },
+      {
+        name: "door-open",
+        folder: "solid",
+      },
+      {
+        name: "dumbbell",
+        folder: "solid",
+      },
+      {
+        name: "earth-africa",
+        folder: "solid",
+      },
+      {
+        name: "earth-americas",
+        folder: "solid",
+      },
+      {
+        name: "earth-asia",
+        folder: "solid",
+      },
+      {
+        name: "earth-europe",
+        folder: "solid",
+      },
+      {
+        name: "earth-oceania",
+        folder: "solid",
+      },
+      {
+        name: "elevator",
+        folder: "solid",
+      },
+      {
+        name: "hot-tub-person",
+        folder: "solid",
+      },
+      {
+        name: "hotel",
+        folder: "solid",
+      },
+      {
+        name: "infinity",
+        folder: "solid",
+      },
+      {
+        name: "key",
+        folder: "solid",
+      },
+      {
+        name: "kitchen-set",
+        folder: "solid",
+      },
+      {
+        name: "map",
+        folder: "regular",
+      },
+      {
+        name: "map-location",
+        folder: "solid",
+      },
+      {
+        name: "map-location-dot",
+        folder: "solid",
+      },
+      {
+        name: "martini-glass",
+        folder: "solid",
+      },
+      {
+        name: "martini-glass-citrus",
+        folder: "solid",
+      },
+      {
+        name: "martini-glass-empty",
+        folder: "solid",
+      },
+      {
+        name: "monument",
+        folder: "solid",
+      },
+      {
+        name: "mountain-city",
+        folder: "solid",
+      },
+      {
+        name: "mug-saucer",
+        folder: "solid",
+      },
+      {
+        name: "passport",
+        folder: "solid",
+      },
+      {
+        name: "person-swimming",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-luggage",
+        folder: "solid",
+      },
+      {
+        name: "plane",
+        folder: "solid",
+      },
+      {
+        name: "plane-arrival",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "plane-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "plane-departure",
+        folder: "solid",
+      },
+      {
+        name: "plane-lock",
+        folder: "solid",
+      },
+      {
+        name: "plane-slash",
+        folder: "solid",
+      },
+      {
+        name: "plane-up",
+        folder: "solid",
+      },
+      {
+        name: "shower",
+        folder: "solid",
+      },
+      {
+        name: "smoking",
+        folder: "solid",
+      },
+      {
+        name: "snowflake",
+        folder: "regular",
+      },
+      {
+        name: "spa",
+        folder: "solid",
+      },
+      {
+        name: "stairs",
+        folder: "solid",
+      },
+      {
+        name: "suitcase",
+        folder: "solid",
+      },
+      {
+        name: "suitcase-rolling",
+        folder: "solid",
+      },
+      {
+        name: "taxi",
+        folder: "solid",
+      },
+      {
+        name: "toilet",
+        folder: "solid",
+      },
+      {
+        name: "toilet-paper",
+        folder: "solid",
+      },
+      {
+        name: "train-tram",
+        folder: "solid",
+      },
+      {
+        name: "tree-city",
+        folder: "solid",
+      },
+      {
+        name: "tv",
+        folder: "solid",
+      },
+      {
+        name: "umbrella-beach",
+        folder: "solid",
+      },
+      {
+        name: "utensils",
+        folder: "solid",
+      },
+      {
+        name: "van-shuttle",
+        folder: "solid",
+      },
+      {
+        name: "water-ladder",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
+      {
+        name: "wifi",
+        folder: "solid",
+      },
+      {
+        name: "wine-glass",
+        folder: "solid",
+      },
+      {
+        name: "wine-glass-empty",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Users + People",
-  },
-  weather: {
     icons: [
-      "bolt",
-      "bolt-lightning",
-      "cloud",
-      "cloud-bolt",
-      "cloud-meatball",
-      "cloud-moon",
-      "cloud-moon-rain",
-      "cloud-rain",
-      "cloud-showers-heavy",
-      "cloud-showers-water",
-      "cloud-sun",
-      "cloud-sun-rain",
-      "house-tsunami",
-      "hurricane",
-      "icicles",
-      "meteor",
-      "moon",
-      "poo-storm",
-      "rainbow",
-      "smog",
-      "snowflake",
-      "sun",
-      "sun-plant-wilt",
-      "temperature-arrow-down",
-      "temperature-arrow-up",
-      "temperature-empty",
-      "temperature-full",
-      "temperature-half",
-      "temperature-high",
-      "temperature-low",
-      "temperature-quarter",
-      "temperature-three-quarters",
-      "tornado",
-      "umbrella",
-      "volcano",
-      "water",
-      "wind",
+      {
+        name: "accessible-icon",
+        folder: "brands",
+      },
+      {
+        name: "address-book",
+        folder: "regular",
+      },
+      {
+        name: "address-card",
+        folder: "regular",
+      },
+      {
+        name: "arrows-down-to-people",
+        folder: "solid",
+      },
+      {
+        name: "baby",
+        folder: "solid",
+      },
+      {
+        name: "bed",
+        folder: "solid",
+      },
+      {
+        name: "chalkboard-user",
+        folder: "solid",
+      },
+      {
+        name: "child",
+        folder: "solid",
+      },
+      {
+        name: "child-dress",
+        folder: "solid",
+      },
+      {
+        name: "child-reaching",
+        folder: "solid",
+      },
+      {
+        name: "children",
+        folder: "solid",
+      },
+      {
+        name: "circle-user",
+        folder: "regular",
+      },
+      {
+        name: "clipboard-user",
+        folder: "solid",
+      },
+      {
+        name: "elevator",
+        folder: "solid",
+      },
+      {
+        name: "face-frown",
+        folder: "regular",
+      },
+      {
+        name: "face-meh",
+        folder: "regular",
+      },
+      {
+        name: "face-smile",
+        folder: "regular",
+      },
+      {
+        name: "head-side-cough",
+        folder: "solid",
+      },
+      {
+        name: "head-side-cough-slash",
+        folder: "solid",
+      },
+      {
+        name: "head-side-mask",
+        folder: "solid",
+      },
+      {
+        name: "head-side-virus",
+        folder: "solid",
+      },
+      {
+        name: "hospital-user",
+        folder: "solid",
+      },
+      {
+        name: "hot-tub-person",
+        folder: "solid",
+      },
+      {
+        name: "house-chimney-user",
+        folder: "solid",
+      },
+      {
+        name: "house-user",
+        folder: "solid",
+      },
+      {
+        name: "id-badge",
+        folder: "regular",
+      },
+      {
+        name: "id-card",
+        folder: "regular",
+      },
+      {
+        name: "id-card-clip",
+        folder: "solid",
+      },
+      {
+        name: "image-portrait",
+        folder: "solid",
+      },
+      {
+        name: "mars-and-venus-burst",
+        folder: "solid",
+      },
+      {
+        name: "people-arrows",
+        folder: "solid",
+      },
+      {
+        name: "people-carry-box",
+        folder: "solid",
+      },
+      {
+        name: "people-group",
+        folder: "solid",
+      },
+      {
+        name: "people-line",
+        folder: "solid",
+      },
+      {
+        name: "people-pulling",
+        folder: "solid",
+      },
+      {
+        name: "people-robbery",
+        folder: "solid",
+      },
+      {
+        name: "people-roof",
+        folder: "solid",
+      },
+      {
+        name: "person",
+        folder: "solid",
+      },
+      {
+        name: "person-arrow-down-to-line",
+        folder: "solid",
+      },
+      {
+        name: "person-arrow-up-from-line",
+        folder: "solid",
+      },
+      {
+        name: "person-biking",
+        folder: "solid",
+      },
+      {
+        name: "person-booth",
+        folder: "solid",
+      },
+      {
+        name: "person-breastfeeding",
+        folder: "solid",
+      },
+      {
+        name: "person-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-cane",
+        folder: "solid",
+      },
+      {
+        name: "person-chalkboard",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-check",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-exclamation",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-minus",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-plus",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-question",
+        folder: "solid",
+      },
+      {
+        name: "person-circle-xmark",
+        folder: "solid",
+      },
+      {
+        name: "person-digging",
+        folder: "solid",
+      },
+      {
+        name: "person-dots-from-line",
+        folder: "solid",
+      },
+      {
+        name: "person-dress",
+        folder: "solid",
+      },
+      {
+        name: "person-dress-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-drowning",
+        folder: "solid",
+      },
+      {
+        name: "person-falling",
+        folder: "solid",
+      },
+      {
+        name: "person-falling-burst",
+        folder: "solid",
+      },
+      {
+        name: "person-half-dress",
+        folder: "solid",
+      },
+      {
+        name: "person-harassing",
+        folder: "solid",
+      },
+      {
+        name: "person-hiking",
+        folder: "solid",
+      },
+      {
+        name: "person-military-pointing",
+        folder: "solid",
+      },
+      {
+        name: "person-military-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-military-to-person",
+        folder: "solid",
+      },
+      {
+        name: "person-praying",
+        folder: "solid",
+      },
+      {
+        name: "person-pregnant",
+        folder: "solid",
+      },
+      {
+        name: "person-rays",
+        folder: "solid",
+      },
+      {
+        name: "person-rifle",
+        folder: "solid",
+      },
+      {
+        name: "person-running",
+        folder: "solid",
+      },
+      {
+        name: "person-shelter",
+        folder: "solid",
+      },
+      {
+        name: "person-skating",
+        folder: "solid",
+      },
+      {
+        name: "person-skiing",
+        folder: "solid",
+      },
+      {
+        name: "person-skiing-nordic",
+        folder: "solid",
+      },
+      {
+        name: "person-snowboarding",
+        folder: "solid",
+      },
+      {
+        name: "person-swimming",
+        folder: "solid",
+      },
+      {
+        name: "person-through-window",
+        folder: "solid",
+      },
+      {
+        name: "person-walking",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-arrow-loop-left",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-dashed-line-arrow-right",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-luggage",
+        folder: "solid",
+      },
+      {
+        name: "person-walking-with-cane",
+        folder: "solid",
+      },
+      {
+        name: "poo",
+        folder: "solid",
+      },
+      {
+        name: "restroom",
+        folder: "solid",
+      },
+      {
+        name: "skull",
+        folder: "solid",
+      },
+      {
+        name: "square-person-confined",
+        folder: "solid",
+      },
+      {
+        name: "street-view",
+        folder: "solid",
+      },
+      {
+        name: "user",
+        folder: "regular",
+      },
+      {
+        name: "user-astronaut",
+        folder: "solid",
+      },
+      {
+        name: "user-check",
+        folder: "solid",
+      },
+      {
+        name: "user-clock",
+        folder: "solid",
+      },
+      {
+        name: "user-doctor",
+        folder: "solid",
+      },
+      {
+        name: "user-gear",
+        folder: "solid",
+      },
+      {
+        name: "user-graduate",
+        folder: "solid",
+      },
+      {
+        name: "user-group",
+        folder: "solid",
+      },
+      {
+        name: "user-injured",
+        folder: "solid",
+      },
+      {
+        name: "user-lock",
+        folder: "solid",
+      },
+      {
+        name: "user-minus",
+        folder: "solid",
+      },
+      {
+        name: "user-ninja",
+        folder: "solid",
+      },
+      {
+        name: "user-nurse",
+        folder: "solid",
+      },
+      {
+        name: "user-pen",
+        folder: "solid",
+      },
+      {
+        name: "user-plus",
+        folder: "solid",
+      },
+      {
+        name: "user-secret",
+        folder: "solid",
+      },
+      {
+        name: "user-shield",
+        folder: "solid",
+      },
+      {
+        name: "user-slash",
+        folder: "solid",
+      },
+      {
+        name: "user-tag",
+        folder: "solid",
+      },
+      {
+        name: "user-tie",
+        folder: "solid",
+      },
+      {
+        name: "user-xmark",
+        folder: "solid",
+      },
+      {
+        name: "users",
+        folder: "solid",
+      },
+      {
+        name: "users-between-lines",
+        folder: "solid",
+      },
+      {
+        name: "users-gear",
+        folder: "solid",
+      },
+      {
+        name: "users-line",
+        folder: "solid",
+      },
+      {
+        name: "users-rays",
+        folder: "solid",
+      },
+      {
+        name: "users-rectangle",
+        folder: "solid",
+      },
+      {
+        name: "users-slash",
+        folder: "solid",
+      },
+      {
+        name: "users-viewfinder",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair",
+        folder: "solid",
+      },
+      {
+        name: "wheelchair-move",
+        folder: "solid",
+      },
     ],
+  },
+  {
     label: "Weather",
-  },
-  writing: {
     icons: [
-      "blog",
-      "book",
-      "book-bookmark",
-      "bookmark",
-      "box-archive",
-      "envelope",
-      "envelope-open",
-      "eraser",
-      "file",
-      "file-lines",
-      "folder",
-      "folder-open",
-      "keyboard",
-      "newspaper",
-      "notdef",
-      "note-sticky",
-      "paper-plane",
-      "paperclip",
-      "paragraph",
-      "pen",
-      "pen-clip",
-      "pen-to-square",
-      "pencil",
-      "quote-left",
-      "quote-right",
-      "signature",
-      "single-quote-left",
-      "single-quote-right",
-      "square-pen",
-      "thumbtack",
-      "thumbtack-slash",
+      {
+        name: "bolt",
+        folder: "solid",
+      },
+      {
+        name: "bolt-lightning",
+        folder: "solid",
+      },
+      {
+        name: "cloud",
+        folder: "regular",
+      },
+      {
+        name: "cloud-bolt",
+        folder: "solid",
+      },
+      {
+        name: "cloud-meatball",
+        folder: "solid",
+      },
+      {
+        name: "cloud-moon",
+        folder: "solid",
+      },
+      {
+        name: "cloud-moon-rain",
+        folder: "solid",
+      },
+      {
+        name: "cloud-rain",
+        folder: "solid",
+      },
+      {
+        name: "cloud-showers-heavy",
+        folder: "solid",
+      },
+      {
+        name: "cloud-showers-water",
+        folder: "solid",
+      },
+      {
+        name: "cloud-sun",
+        folder: "solid",
+      },
+      {
+        name: "cloud-sun-rain",
+        folder: "solid",
+      },
+      {
+        name: "house-tsunami",
+        folder: "solid",
+      },
+      {
+        name: "hurricane",
+        folder: "solid",
+      },
+      {
+        name: "icicles",
+        folder: "solid",
+      },
+      {
+        name: "meteor",
+        folder: "solid",
+      },
+      {
+        name: "moon",
+        folder: "regular",
+      },
+      {
+        name: "poo-storm",
+        folder: "solid",
+      },
+      {
+        name: "rainbow",
+        folder: "solid",
+      },
+      {
+        name: "smog",
+        folder: "solid",
+      },
+      {
+        name: "snowflake",
+        folder: "regular",
+      },
+      {
+        name: "sun",
+        folder: "regular",
+      },
+      {
+        name: "sun-plant-wilt",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-down",
+        folder: "solid",
+      },
+      {
+        name: "temperature-arrow-up",
+        folder: "solid",
+      },
+      {
+        name: "temperature-empty",
+        folder: "solid",
+      },
+      {
+        name: "temperature-full",
+        folder: "solid",
+      },
+      {
+        name: "temperature-half",
+        folder: "solid",
+      },
+      {
+        name: "temperature-high",
+        folder: "solid",
+      },
+      {
+        name: "temperature-low",
+        folder: "solid",
+      },
+      {
+        name: "temperature-quarter",
+        folder: "solid",
+      },
+      {
+        name: "temperature-three-quarters",
+        folder: "solid",
+      },
+      {
+        name: "tornado",
+        folder: "solid",
+      },
+      {
+        name: "umbrella",
+        folder: "solid",
+      },
+      {
+        name: "volcano",
+        folder: "solid",
+      },
+      {
+        name: "water",
+        folder: "solid",
+      },
+      {
+        name: "wind",
+        folder: "solid",
+      },
     ],
-    label: "Writing",
   },
-};
+  {
+    label: "Writing",
+    icons: [
+      {
+        name: "blog",
+        folder: "solid",
+      },
+      {
+        name: "book",
+        folder: "solid",
+      },
+      {
+        name: "book-bookmark",
+        folder: "solid",
+      },
+      {
+        name: "bookmark",
+        folder: "regular",
+      },
+      {
+        name: "box-archive",
+        folder: "solid",
+      },
+      {
+        name: "envelope",
+        folder: "regular",
+      },
+      {
+        name: "envelope-open",
+        folder: "regular",
+      },
+      {
+        name: "eraser",
+        folder: "solid",
+      },
+      {
+        name: "file",
+        folder: "regular",
+      },
+      {
+        name: "file-lines",
+        folder: "regular",
+      },
+      {
+        name: "folder",
+        folder: "regular",
+      },
+      {
+        name: "folder-open",
+        folder: "regular",
+      },
+      {
+        name: "keyboard",
+        folder: "regular",
+      },
+      {
+        name: "newspaper",
+        folder: "regular",
+      },
+      {
+        name: "notdef",
+        folder: "solid",
+      },
+      {
+        name: "note-sticky",
+        folder: "regular",
+      },
+      {
+        name: "paper-plane",
+        folder: "regular",
+      },
+      {
+        name: "paperclip",
+        folder: "solid",
+      },
+      {
+        name: "paragraph",
+        folder: "solid",
+      },
+      {
+        name: "pen",
+        folder: "solid",
+      },
+      {
+        name: "pen-clip",
+        folder: "solid",
+      },
+      {
+        name: "pen-to-square",
+        folder: "regular",
+      },
+      {
+        name: "pencil",
+        folder: "solid",
+      },
+      {
+        name: "quote-left",
+        folder: "solid",
+      },
+      {
+        name: "quote-right",
+        folder: "solid",
+      },
+      {
+        name: "signature",
+        folder: "solid",
+      },
+      {
+        name: "single-quote-left",
+        folder: "solid",
+      },
+      {
+        name: "single-quote-right",
+        folder: "solid",
+      },
+      {
+        name: "square-pen",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack",
+        folder: "solid",
+      },
+      {
+        name: "thumbtack-slash",
+        folder: "solid",
+      },
+    ],
+  },
+];
