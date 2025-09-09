@@ -6,7 +6,7 @@ class IconTree {
     this.container = document.getElementById(containerId);
   }
 
-  async buildTree(path = "./resources/font-awesome/svgs-full/") {
+  async buildTree(path = "./resources/font-awesome/svgs-full") {
     const categories = document.createElement("div");
     categories.className = "categories";
 
