@@ -1,0 +1,24 @@
+.category {
+  cursor: pointer;
+  color: #007bff;
+  user-select: none;
+  display: flex;
+  flex-wrap: wrap;
+  line-height: 22px;
+
+  &::before {
+    content: "📂 ";
+  }
+  &.collapsed .icon {
+    display: none;
+  }
+  &.collapsed::before {
+    content: "📁 ";
+  }
+  .icon {
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
