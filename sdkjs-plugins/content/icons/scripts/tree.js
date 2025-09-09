@@ -6,13 +6,13 @@ class IconTree {
     this.container = document.getElementById(containerId);
   }
 
-  async buildTree(path = "./resources/font-awesome/mix") {
+  async buildTree(path = "./resources/font-awesome/svgs-full/") {
     const categories = document.createElement("div");
     categories.className = "categories";
 
-    Object.values(FA_CATEGORIES).forEach((cat) => {
-      let label = cat.label;
-      let icons = cat.icons;
+    FA_CATEGORIES.forEach((categoryInfo) => {
+      let label = categoryInfo.label;
+      let icons = categoryInfo.icons;
       const category = document.createElement("div");
       category.className = "category collapsed";
       category.textContent = label;
@@ -23,8 +23,8 @@ class IconTree {
 
       for (let i = 0; i < icons.length; i++) {
         let icon = icons[i];
-        const fullPath = `${path}/${icon}.svg`;
-        let img = this.createIconPreview(category, fullPath);
+        const fullPath = `${path}${icon.folder}/${icon.name}.svg`;
+        let img = this.createIconPreview(fullPath, icon.name);
         category.appendChild(img);
       }
 
@@ -36,7 +36,7 @@ class IconTree {
     return categories;
   }
 
-  createIconPreview(li, path, title) {
+  createIconPreview(path, title) {
     const preview = document.createElement("div");
     preview.className = "icon";
 
