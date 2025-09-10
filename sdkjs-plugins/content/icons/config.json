@@ -23,8 +23,8 @@
   "variations": [
     {
       "description": "TODO: add description.",
-      "url": "index.html",
-      "icons": "src/resources/%theme-type%(light|dark)/icon.svg",
+      "url": "src/index.html",
+      "icons": "resources/%theme-type%(light|dark)/icon.svg",
       "EditorsSupport": ["word"],
       "type": "panel",
 
@@ -37,10 +37,10 @@
           "light": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
           "dark": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
         },
-        "screenshots": ["src/resources/store/screenshots/screen_1.png"],
+        "screenshots": ["resources/store/screenshots/screen_1.png"],
         "icons": {
-          "light": "src/resources/store/icons",
-          "dark": "src/resources/store/icons"
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
         },
         "categories": ["recommended"]
       }

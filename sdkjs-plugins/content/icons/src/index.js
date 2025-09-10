@@ -51,3 +51,12 @@ window.Asc.plugin.button = function (id, windowId) {
 window.Asc.plugin.onThemeChanged = function (theme) {
   console.log("onThemeChanged in icons");
 };
+
+window.addEventListener("resize", onResize);
+
+function onResize() {
+  const frameHeight = window.frameElement.offsetHeight;
+  console.warn(frameHeight);
+  document.body.style.height = `${frameHeight}px`;
+}
+onResize();
