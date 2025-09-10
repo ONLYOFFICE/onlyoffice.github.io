@@ -1,12 +1,11 @@
-const ICON_EXTENSIONS = [".svg", ".png", ".jpg", ".jpeg", ".ico", ".gif"];
-const EXCLUDE_DIRS = ["node_modules", ".git", "dist", "build"];
+import { FA_CATEGORIES } from "./categories.js";
 
 class IconTree {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
   }
 
-  async buildTree(path = "./resources/font-awesome/svgs-full") {
+  async buildTree(path = "./src/resources/font-awesome/svgs-full/") {
     const categories = document.createElement("div");
     categories.className = "categories";
 
@@ -49,3 +48,5 @@ class IconTree {
     return preview;
   }
 }
+
+export { IconTree };

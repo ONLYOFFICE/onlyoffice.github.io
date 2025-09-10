@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "dev": "rollup -c --environment NODE_ENV:development",
+    "check": "npx es-check es5 dist/bundle.es5.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@rollup/plugin-babel": "^6.0.4",
+    "rollup": "^4.50.1"
+  },
+  "dependencies": {
+    "core-js": "^3.45.1"
+  }
+}
