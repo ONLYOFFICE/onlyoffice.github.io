@@ -1,10 +1,11 @@
 import { FA_CATEGORIES } from "./categories.js";
-
-const FA_SVG_PATH = "./resources/font-awesome/sprites-full/";
+import { environment } from "../environments/environment.js";
 
 class IconTree {
+  #container;
+
   constructor(containerId) {
-    this.container = document.getElementById(containerId);
+    this.#container = document.getElementById(containerId);
   }
 
   async buildTree() {
@@ -33,24 +34,39 @@ class IconTree {
       categoryContainer.appendChild(categoryName);
       categoryName.textContent = label;
       categoryName.className = "category-name";
-      categoryName.onclick = (e) => {
-        categoryContainer.classList.toggle("collapsed");
-      };
 
       const iconsContainer = document.createElement("div");
       categoryContainer.appendChild(iconsContainer);
       iconsContainer.className = "icons";
       for (let i = 0; i < icons.length; i++) {
         let icon = icons[i];
-        let img = this.#createIcon(icon.name);
+        let img = this.#createIcon(icon.name, icon.folder);
         iconsContainer.appendChild(img);
       }
     });
 
-    this.container.appendChild(fragment);
+    this.#container.appendChild(fragment);
+
+    this.#addEventListeners();
   }
 
-  #createIcon(iconId) {
+  #addEventListeners() {
+    this.#container.addEventListener("click", (e) => {
+      const icon = e.target.closest(".icon");
+      const categoryName = e.target.closest(".category-name");
+      if (icon) {
+        let iconId = icon.getAttribute("data-name");
+        let section = icon.getAttribute("data-section");
+        console.log(section, iconId);
+        icon.classList.toggle("selected");
+      } else if (categoryName) {
+        let category = categoryName.parentElement;
+        category.classList.toggle("collapsed");
+      }
+    });
+  }
+
+  #createIcon(iconId, section) {
     const svgNS = "http://www.w3.org/2000/svg";
     const xlinkNS = "http://www.w3.org/1999/xlink";
 
@@ -59,7 +75,9 @@ class IconTree {
     fragment.appendChild(svg);
     svg.setAttribute("class", "icon");
     svg.setAttribute("role", "img");
-   
+    svg.setAttribute("data-name", iconId);
+    svg.setAttribute("data-section", section);
+
     const title = document.createElementNS(svgNS, "title");
     svg.appendChild(title);
     title.textContent = iconId;
@@ -75,7 +93,11 @@ class IconTree {
   #loadSprite(spriteName) {
     return new Promise((resolve, reject) => {
       const ajax = new XMLHttpRequest();
-      ajax.open("GET", FA_SVG_PATH + spriteName + ".svg", true);
+      ajax.open(
+        "GET",
+        environment.faSvgSpritesPath + spriteName + ".svg",
+        true
+      );
       ajax.send();
       ajax.onload = function (e) {
         document.body.insertAdjacentHTML("afterbegin", ajax.responseText);
