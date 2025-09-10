@@ -1,4 +1,7 @@
+body {
+  margin: 0;
+}
 .content {
-  max-height: 500px;
   overflow-y: auto;
+  height: inherit;
 }
