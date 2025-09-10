@@ -1,9 +1,12 @@
 {
   "scripts": {
     "build": "rollup -c",
+    "build:es5": "rollup -c --environment TARGET:es5",
+    "build:modern": "rollup -c --environment TARGET:modern",
+    "build:all": "npm run build:es5 && npm run build:modern",
     "watch": "rollup -c -w",
     "dev": "rollup -c --environment NODE_ENV:development",
-    "check": "npx es-check es5 dist/bundle.es5.js"
+    "es-check": "npx es-check es5 dist/bundle.es5.js"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
