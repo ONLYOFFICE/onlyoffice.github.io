@@ -30,6 +30,8 @@
  *
  */
 
+import { IconTree } from "./scripts/tree.js";
+
 window.Asc.plugin.init = async function () {
   const tree = new IconTree("tree-container");
   tree.buildTree();

@@ -1,4 +1,4 @@
-var FA_CATEGORIES = [
+const FA_CATEGORIES = [
   {
     label: "Accessibility",
     icons: [
@@ -11996,3 +11996,5 @@ var FA_CATEGORIES = [
     ],
   },
 ];
+
+export { FA_CATEGORIES };
