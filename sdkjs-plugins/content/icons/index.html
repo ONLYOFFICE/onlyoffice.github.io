@@ -39,7 +39,24 @@
       type="text/javascript"
       src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
     ></script>
-    <script type="text/javascript" src="dist/bundle.es5.js"></script>
+    <script>
+      function isBrowserSupportsES6() {
+        try {
+          new Function("let a = 1; const b = 2; class C {};");
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      if (isBrowserSupportsES6()) {
+        document.write(
+          '<script type="module" src="dist/bundle.modern.js"><\/script>'
+        );
+      } else {
+        document.write('<script src="dist/bundle.es5.js"><\/script>');
+      }
+    </script>
   </head>
   <body>
     <div id="overlay" class="overlay">
