@@ -1,19 +1,15 @@
 :root {
-  --font-color-category: #007bff;
-  --color-category-name: #eeeeee;
-  --color-category-shadow: #f7f7f7;
-  --color-icon: #323130;
-  --color-icon-hover: #000000;
-  --color-icon-pad: rgba(0, 0, 0, 0.1);
+  --font-color: #323130;
+  --font-color-hover: #000000;
+  --color-category: #eeeeee;
+  --color-pad-hover: rgba(0, 0, 0, 0.1);
 }
 
 body.dark {
-  --font-color-category: #e6e6e6;
-  --color-category-name: #404040;
-  --color-category-shadow: #222222;
-  --color-icon: #d9d9d9;
-  --color-icon-hover: #ffffff;
-  --color-icon-pad: rgba(255, 255, 255, 0.1);
+  --font-color: #d9d9d9;
+  --font-color-hover: #ffffff;
+  --color-category: #404040;
+  --color-pad-hover: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -44,10 +40,11 @@ body {
     height: calc(100% - 38px);
     overflow-y: scroll;
     box-sizing: border-box;
+    background-color: var(--color-category);
   }
   .category {
     cursor: pointer;
-    color: var(--font-color-category);
+    color: var(--font-color);
     user-select: none;
     line-height: 22px;
     position: relative;
@@ -64,11 +61,11 @@ body {
       display: block;
       min-width: 160px;
       box-sizing: border-box;
-      background-color: var(--color-category-name);
       padding: 4px 12px 4px 33px;
       border-radius: 3px;
       &:hover {
-        box-shadow: 0 0 3px 2px var(--color-category-shadow) inset;
+        color: var(--font-color-hover);
+        background-color: var(--color-pad-hover);
       }
     }
   }
@@ -86,12 +83,12 @@ body {
     gap: 5px;
   }
   .icon {
-    color: var(--color-icon);
+    color: var(--font-color);
     width: 48px;
     height: 48px;
     &:hover {
-      color: var(--color-icon-hover);
-      background: var(--color-icon-pad);
+      color: var(--font-color-hover);
+      background: var(--color-pad-hover);
     }
   }
 }
