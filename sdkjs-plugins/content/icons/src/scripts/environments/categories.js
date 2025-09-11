@@ -1,5 +1,6 @@
 const FA_CATEGORIES = [
   {
+    id: "accessibility",
     label: "Accessibility",
     icons: [
       {
@@ -97,6 +98,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "alert",
     label: "Alert",
     icons: [
       {
@@ -142,6 +144,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "alphabet",
     label: "Alphabet",
     icons: [
       {
@@ -263,6 +266,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "animals",
     label: "Animals",
     icons: [
       {
@@ -368,6 +372,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "arrows",
     label: "Arrows",
     icons: [
       {
@@ -849,6 +854,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "astronomy",
     label: "Astronomy",
     icons: [
       {
@@ -886,6 +892,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "automotive",
     label: "Automotive",
     icons: [
       {
@@ -1007,6 +1014,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "buildings",
     label: "Buildings",
     icons: [
       {
@@ -1308,6 +1316,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "business",
     label: "Business",
     icons: [
       {
@@ -1705,6 +1714,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "camping",
     label: "Camping",
     icons: [
       {
@@ -1858,6 +1868,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "charity",
     label: "Charity",
     icons: [
       {
@@ -1939,6 +1950,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "charts-diagrams",
     label: "Charts + Diagrams",
     icons: [
       {
@@ -2016,6 +2028,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "childhood",
     label: "Childhood",
     icons: [
       {
@@ -2121,6 +2134,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "clothing-fashion",
     label: "Clothing + Fashion",
     icons: [
       {
@@ -2174,6 +2188,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "coding",
     label: "Coding",
     icons: [
       {
@@ -2383,6 +2398,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "communication",
     label: "Communication",
     icons: [
       {
@@ -2616,6 +2632,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "connectivity",
     label: "Connectivity",
     icons: [
       {
@@ -2677,6 +2694,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "construction",
     label: "Construction",
     icons: [
       {
@@ -2802,6 +2820,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "design",
     label: "Design",
     icons: [
       {
@@ -3023,6 +3042,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "devices-hardware",
     label: "Devices + Hardware",
     icons: [
       {
@@ -3204,6 +3224,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "disaster",
     label: "Disaster + Crisis",
     icons: [
       {
@@ -3357,6 +3378,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "editing",
     label: "Editing",
     icons: [
       {
@@ -3550,6 +3572,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "education",
     label: "Education",
     icons: [
       {
@@ -3651,6 +3674,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "emoji",
     label: "Emoji",
     icons: [
       {
@@ -3800,6 +3824,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "energy",
     label: "Energy",
     icons: [
       {
@@ -3953,6 +3978,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "files",
     label: "Files",
     icons: [
       {
@@ -4106,6 +4132,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "film-video",
     label: "Film + Video",
     icons: [
       {
@@ -4203,6 +4230,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "food-beverage",
     label: "Food + Beverage",
     icons: [
       {
@@ -4400,6 +4428,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "fruits-vegetables",
     label: "Fruits + Vegetables",
     icons: [
       {
@@ -4429,6 +4458,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "gaming",
     label: "Gaming",
     icons: [
       {
@@ -4618,6 +4648,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "gender",
     label: "Genders",
     icons: [
       {
@@ -4683,6 +4714,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "halloween",
     label: "Halloween",
     icons: [
       {
@@ -4740,6 +4772,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "hands",
     label: "Hands",
     icons: [
       {
@@ -4877,6 +4910,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "holidays",
     label: "Holidays",
     icons: [
       {
@@ -4938,6 +4972,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "household",
     label: "Household",
     icons: [
       {
@@ -5135,6 +5170,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "humanitarian",
     label: "Humanitarian",
     icons: [
       {
@@ -6476,6 +6512,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "logistics",
     label: "Logistics",
     icons: [
       {
@@ -6713,6 +6750,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "maps",
     label: "Maps",
     icons: [
       {
@@ -7274,6 +7312,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "maritime",
     label: "Maritime",
     icons: [
       {
@@ -7335,6 +7374,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "marketing",
     label: "Marketing",
     icons: [
       {
@@ -7436,6 +7476,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "mathematics",
     label: "Mathematics",
     icons: [
       {
@@ -7533,6 +7574,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "media-playback",
     label: "Media Playback",
     icons: [
       {
@@ -7686,6 +7728,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "medical-health",
     label: "Medical + Health",
     icons: [
       {
@@ -8147,6 +8190,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "money",
     label: "Money",
     icons: [
       {
@@ -8444,6 +8488,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "moving",
     label: "Moving",
     icons: [
       {
@@ -8513,6 +8558,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "music-audio",
     label: "Music + Audio",
     icons: [
       {
@@ -8606,6 +8652,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "nature",
     label: "Nature",
     icons: [
       {
@@ -8723,6 +8770,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "numbers",
     label: "Numbers",
     icons: [
       {
@@ -8768,6 +8816,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "photos-images",
     label: "Photos + Images",
     icons: [
       {
@@ -8869,6 +8918,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "political",
     label: "Political",
     icons: [
       {
@@ -8954,6 +9004,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "punctuation-symbols",
     label: "Punctuation + Symbols",
     icons: [
       {
@@ -9039,6 +9090,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "religion",
     label: "Religion",
     icons: [
       {
@@ -9172,6 +9224,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "science",
     label: "Science",
     icons: [
       {
@@ -9309,6 +9362,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "science-fiction",
     label: "Science Fiction",
     icons: [
       {
@@ -9366,6 +9420,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "security",
     label: "Security",
     icons: [
       {
@@ -9615,6 +9670,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "shapes",
     label: "Shapes",
     icons: [
       {
@@ -9740,6 +9796,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "shopping",
     label: "Shopping",
     icons: [
       {
@@ -9993,6 +10050,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "social",
     label: "Social",
     icons: [
       {
@@ -10138,6 +10196,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "spinners",
     label: "Spinners",
     icons: [
       {
@@ -10255,6 +10314,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "sports-fitness",
     label: "Sports + Fitness",
     icons: [
       {
@@ -10392,6 +10452,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "text-formatting",
     label: "Text Formatting",
     icons: [
       {
@@ -10569,6 +10630,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "time",
     label: "Time",
     icons: [
       {
@@ -10646,6 +10708,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "toggle",
     label: "Toggle",
     icons: [
       {
@@ -10715,6 +10778,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "transportation",
     label: "Transportation",
     icons: [
       {
@@ -10928,6 +10992,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "travel-hotel",
     label: "Travel + Hotel",
     icons: [
       {
@@ -11233,6 +11298,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "users-people",
     label: "Users + People",
     icons: [
       {
@@ -11714,6 +11780,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "weather",
     label: "Weather",
     icons: [
       {
@@ -11867,6 +11934,7 @@ const FA_CATEGORIES = [
     ],
   },
   {
+    id: "writing",
     label: "Writing",
     icons: [
       {
