@@ -1,23 +1,22 @@
-import { FA_CATEGORIES } from "./environments/categories.js";
-
 class CategoriesPicker {
   #container;
-  #onSelectCategoryCallback;
+  #onSelectCategoryCallback = () => {};
+  #selectedCategory = "";
 
-  constructor(containerId) {
-    this.selectedCategory = "";
+  constructor(catalogOfIcons, containerId) {
     this.#container = document.getElementById(containerId);
     this.#addEventListener();
+    this.#show(catalogOfIcons);
   }
 
-  show() {
-    this.selectedCategory = "";
+  #show(catalogOfIcons) {
+    this.#selectedCategory = "";
     const fragment = document.createDocumentFragment();
     const categories = document.createElement("div");
     fragment.appendChild(categories);
     categories.className = "categories";
 
-    FA_CATEGORIES.forEach((categoryInfo) => {
+    catalogOfIcons.forEach((categoryInfo) => {
       let id = categoryInfo.id;
       let label = categoryInfo.label;
 
@@ -35,6 +34,17 @@ class CategoriesPicker {
     this.#container.appendChild(fragment);
   }
 
+  reset() {
+    if (this.#selectedCategory !== "") {
+      this.#selectedCategory = "";
+      this.#container
+        .querySelectorAll(".category.selected")
+        .forEach((category) => {
+          category.classList.remove("selected");
+        });
+    }
+  }
+
   /**
    * Set the callback function to be called when a category is selected.
    * The callback function will receive the name of the selected category as a parameter.
@@ -42,10 +52,6 @@ class CategoriesPicker {
    */
   setOnSelectCategoryCallback(callback) {
     this.#onSelectCategoryCallback = callback;
-  }
-
-  #onCategorySelect(categoryName) {
-    this.#onSelectCategoryCallback(categoryName);
   }
 
   #addEventListener() {
@@ -64,13 +70,12 @@ class CategoriesPicker {
 
         if (wasSelected) {
           category.classList.remove("selected");
-          this.selectedCategory = "";
-          this.#onCategorySelect("");
+          this.#selectedCategory = "";
         } else {
           category.classList.add("selected");
-          this.selectedCategory = id;
+          this.#selectedCategory = id;
         }
-        this.#onCategorySelect(this.selectedCategory);
+        this.#onSelectCategoryCallback(this.#selectedCategory);
       }
     });
   }

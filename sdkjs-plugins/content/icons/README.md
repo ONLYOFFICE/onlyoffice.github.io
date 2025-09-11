@@ -8,6 +8,14 @@
 📋 Copy HTML code or icon class names  
 🔄 Regular/Solid/Brands icon styles support
 
+### Build
+
+```bash
+npm i -g rollup
+npm i
+npm run build:all
+```
+
 ### Update Font Awesome Icons (windows)
 
 ```bash
@@ -21,7 +29,7 @@ rm -r -Force temp-repo
 Generate icon paths by category
 
 ```bash
-cd PLUGIN_DIR/svg-path-generator
+cd svg-path-generator
 npm i
 npm run generate-paths
 ```

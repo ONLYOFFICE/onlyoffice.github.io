@@ -3,6 +3,8 @@
   --color-category-name: #eeeeee;
   --color-category-shadow: #f7f7f7;
   --color-icon: #323130;
+  --color-icon-hover: #000000;
+  --color-icon-pad: rgba(0, 0, 0, 0.1);
 }
 
 body.dark {
@@ -10,6 +12,8 @@ body.dark {
   --color-category-name: #404040;
   --color-category-shadow: #222222;
   --color-icon: #d9d9d9;
+  --color-icon-hover: #ffffff;
+  --color-icon-pad: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -25,7 +29,22 @@ body {
 .sidebar {
   height: 100%;
   min-width: 215px;
-  overflow-y: scroll;
+  box-sizing: border-box;
+  .search {
+    margin: 4px 12px;
+    height: 30px;
+    box-sizing: border-box;
+    input {
+      height: 30px;
+      width: calc(100% - 12px);
+      box-sizing: border-box;
+    }
+  }
+  .categories-container {
+    height: calc(100% - 38px);
+    overflow-y: scroll;
+    box-sizing: border-box;
+  }
   .category {
     cursor: pointer;
     color: var(--font-color-category);
@@ -57,20 +76,22 @@ body {
 .icons-container {
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
   overflow-y: scroll;
   .icons {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 5px;
-    margin-bottom: 10px;
   }
   .icon {
     color: var(--color-icon);
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     &:hover {
-      opacity: 0.8;
+      color: var(--color-icon-hover);
+      background: var(--color-icon-pad);
     }
   }
 }

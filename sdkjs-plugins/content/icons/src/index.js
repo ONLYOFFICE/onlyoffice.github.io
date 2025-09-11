@@ -32,17 +32,28 @@
 
 import { IconPicker } from "./scripts/icon-picker.js";
 import { CategoriesPicker } from "./scripts/categories-picker.js";
+import { SearchFilter } from "./scripts/search-filter.js";
 import { Theme } from "./scripts/theme.js";
 import { SvgService } from "./scripts/svg-service.js";
+import { FA_CATEGORIES } from "./scripts/environments/categories.js";
 
 window.Asc.plugin.init = async function () {
   SvgService.loadSprites();
-  const categoriesPicker = new CategoriesPicker("categories-container");
-  categoriesPicker.show();
-  const iconsPicker = new IconPicker("icons-container");
-  iconsPicker.show();
+  const categoriesPicker = new CategoriesPicker(
+    FA_CATEGORIES,
+    "categories-container"
+  );
+  const iconsPicker = new IconPicker(FA_CATEGORIES, "icons-container");
+  const searchFilter = new SearchFilter(FA_CATEGORIES);
+
   categoriesPicker.setOnSelectCategoryCallback((categoryName) => {
-    iconsPicker.show(categoryName);
+    iconsPicker.show(FA_CATEGORIES, categoryName);
+    searchFilter.reset();
+  });
+
+  searchFilter.setOnFilterCallback((catalogOfIcons) => {
+    iconsPicker.show(catalogOfIcons);
+    categoriesPicker.reset();
   });
 };
 
