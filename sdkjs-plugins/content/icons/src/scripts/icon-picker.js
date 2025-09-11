@@ -1,40 +1,36 @@
-import { FA_CATEGORIES } from "./environments/categories.js";
-
 class IconPicker {
   #container;
+  #listOfIconNames;
 
-  constructor(containerId) {
+  constructor(catalogOfIcons, containerId) {
     this.#container = document.getElementById(containerId);
     this.#addEventListener();
+    this.show(catalogOfIcons);
   }
 
-  /**
-   * Populate the container element with all icons from the given category.
-   * If no category is provided, all icons will be shown.
-   * @param {string} [categoryId=''] - the name of the category to show
-   */
-  async show(categoryId = "") {
+  show(catalogOfIcons, categoryId = "") {
+    this.#listOfIconNames = new Set();
     this.#container.textContent = "";
     const fragment = document.createDocumentFragment();
     const iconsContainer = document.createElement("div");
     fragment.appendChild(iconsContainer);
     iconsContainer.className = "icons";
 
-    FA_CATEGORIES.forEach((categoryInfo) => {
+    catalogOfIcons.forEach((categoryInfo) => {
       let id = categoryInfo.id;
-      let label = categoryInfo.label;
       let icons = categoryInfo.icons;
-      console.log(categoryId);
       if (categoryId !== "" && categoryId !== id) {
         return;
       }
-      setTimeout(() => {
-        for (let i = 0; i < icons.length; i++) {
-          let icon = icons[i];
-          let img = this.#createIcon(icon.name, icon.folder);
-          iconsContainer.appendChild(img);
+
+      icons.forEach((icon) => {
+        if (this.#listOfIconNames.has(icon.name)) {
+          return;
         }
-      }, 50);
+        this.#listOfIconNames.add(icon.name);
+        let img = this.#createIcon(icon.name, icon.folder);
+        iconsContainer.appendChild(img);
+      });
     });
 
     this.#container.appendChild(fragment);
