@@ -7,8 +7,8 @@ async function generateIconsJson() {
   try {
     const FA_SVGS_FOLDER = "../resources/font-awesome/svgs-full/";
     const CATEGORIES_FILE = "../resources/font-awesome/categories.yml";
-    const OUTPUT_DIR = "../resources/font-awesome/";
-    const OUTPUT_FILE = "paths.json";
+    const OUTPUT_DIR = "../src/scripts/environments/";
+    const OUTPUT_FILE = "categories.js";
 
     // Get all SVG files in folder svgs-full
     const svgFiles = await glob(FA_SVGS_FOLDER + "**/*.svg");
@@ -23,10 +23,7 @@ async function generateIconsJson() {
       existingIcons.set(fileName, file);
     });
 
-    const result = {
-      generated: new Date().toISOString(),
-      categories: [],
-    };
+    const categories = [];
 
     let lostIcons = 0;
 
@@ -58,22 +55,31 @@ async function generateIconsJson() {
         }
       }
 
-      result.categories.push(category);
+      categories.push(category);
     }
 
-    // Save the result in JSON
+    // Save the result
     const outputPath = path.join(OUTPUT_DIR, OUTPUT_FILE);
-    await fs.writeJson(outputPath, result, { spaces: 2 });
-    console.log(`✅ ${OUTPUT_FILE} successfully created!`);
+    const fileContent = `export const FA_CATEGORIES = ${JSON.stringify(
+      categories,
+      null,
+      2
+    )}`;
+    fs.writeFile(outputPath, fileContent, (err) => {
+      if (err) {
+        console.error("❌ Error:", err);
+      } else {
+        console.log(`✅ ${OUTPUT_FILE} successfully created!`);
+      }
+    });
 
-    // Statistics
-    const totalIcons = result.categories.reduce(
+    const totalIcons = categories.reduce(
       (sum, category) => sum + category.icons.length,
       0
     );
 
     console.log(`📊 Found ${totalIcons - lostIcons} of ${totalIcons} icons`);
-    console.log(`📁 ${result.categories.length} categories processed`);
+    console.log(`📁 ${categories.length} categories processed`);
   } catch (error) {
     console.error("❌ Error:", error.message);
   }
