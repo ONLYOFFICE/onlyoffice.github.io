@@ -30,11 +30,20 @@
  *
  */
 
-import { IconTree } from "./scripts/tree.js";
+import { IconPicker } from "./scripts/icon-picker.js";
+import { CategoriesPicker } from "./scripts/categories-picker.js";
+import { Theme } from "./scripts/theme.js";
+import { SvgService } from "./scripts/svg-service.js";
 
 window.Asc.plugin.init = async function () {
-  const tree = new IconTree("tree-container");
-  tree.buildTree();
+  SvgService.loadSprites();
+  const categoriesPicker = new CategoriesPicker("categories-container");
+  categoriesPicker.show();
+  const iconsPicker = new IconPicker("icons-container");
+  iconsPicker.show();
+  categoriesPicker.setOnSelectCategoryCallback((categoryName) => {
+    iconsPicker.show(categoryName);
+  });
 };
 
 window.Asc.plugin.onTranslate = async function () {
@@ -48,15 +57,6 @@ window.Asc.plugin.button = function (id, windowId) {
   }
 };
 
-window.Asc.plugin.onThemeChanged = function (theme) {
-  console.log("onThemeChanged in icons");
-};
+window.Asc.plugin.onThemeChanged = Theme.onThemeChanged;
 
-window.addEventListener("resize", onResize);
-
-function onResize() {
-  const frameHeight = window.frameElement.offsetHeight;
-  console.warn(frameHeight);
-  document.body.style.height = `${frameHeight}px`;
-}
-onResize();
+console.log(window.Asc.plugin);

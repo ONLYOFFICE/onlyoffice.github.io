@@ -1,7 +1,76 @@
+:root {
+  --font-color-category: #007bff;
+  --color-category-name: #eeeeee;
+  --color-category-shadow: #f7f7f7;
+  --color-icon: #323130;
+}
+
+body.dark {
+  --font-color-category: #e6e6e6;
+  --color-category-name: #404040;
+  --color-category-shadow: #222222;
+  --color-icon: #d9d9d9;
+}
+
 body {
   margin: 0;
 }
 .content {
   overflow-y: auto;
   height: inherit;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  height: 100%;
+  min-width: 215px;
+  overflow-y: scroll;
+  .category {
+    cursor: pointer;
+    color: var(--font-color-category);
+    user-select: none;
+    line-height: 22px;
+    position: relative;
+
+    &::before {
+      content: "📁 ";
+      position: absolute;
+      left: 4px;
+    }
+    &.selected::before {
+      content: "✅ ";
+    }
+    .category-name {
+      display: block;
+      min-width: 160px;
+      box-sizing: border-box;
+      background-color: var(--color-category-name);
+      padding: 4px 12px 4px 33px;
+      border-radius: 3px;
+      &:hover {
+        box-shadow: 0 0 3px 2px var(--color-category-shadow) inset;
+      }
+    }
+  }
+}
+.icons-container {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  .icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .icon {
+    color: var(--color-icon);
+    width: 32px;
+    height: 32px;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 }

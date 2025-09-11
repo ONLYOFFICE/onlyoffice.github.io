@@ -26,9 +26,9 @@
       "url": "src/index.html",
       "icons": "resources/%theme-type%(light|dark)/icon.svg",
       "EditorsSupport": ["word"],
-      "type": "panel",
+      "type": "window",
 
-      "initDataType": "html",
+      "initDataType": "none",
       "buttons": [],
       "events": [],
 
