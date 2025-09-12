@@ -1,6 +1,5 @@
 class Theme {
   static onThemeChanged(theme) {
-    console.log("onThemeChanged in icons");
     window.Asc.plugin.onThemeChangedBase(theme);
 
     const themeType = theme.type || "light";
