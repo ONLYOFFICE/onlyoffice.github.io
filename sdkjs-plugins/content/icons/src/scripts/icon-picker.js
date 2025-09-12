@@ -1,6 +1,8 @@
 class IconPicker {
   #container;
+  #onSelectIconCallback = () => {};
   #listOfIconNames;
+  #selectedIcons;
 
   constructor(catalogOfIcons, containerId) {
     this.#container = document.getElementById(containerId);
@@ -10,11 +12,9 @@ class IconPicker {
 
   show(catalogOfIcons, categoryId = "") {
     this.#listOfIconNames = new Set();
+    this.#selectedIcons = new Map();
     this.#container.textContent = "";
     const fragment = document.createDocumentFragment();
-    const iconsContainer = document.createElement("div");
-    fragment.appendChild(iconsContainer);
-    iconsContainer.className = "icons";
 
     catalogOfIcons.forEach((categoryInfo) => {
       let id = categoryInfo.id;
@@ -29,11 +29,16 @@ class IconPicker {
         }
         this.#listOfIconNames.add(icon.name);
         let img = this.#createIcon(icon.name, icon.folder);
-        iconsContainer.appendChild(img);
+        fragment.appendChild(img);
       });
+      this.#onChange();
     });
 
     this.#container.appendChild(fragment);
+  }
+
+  setOnSelectIconCallback(callback) {
+    this.#onSelectIconCallback = callback;
   }
 
   #addEventListener() {
@@ -43,9 +48,26 @@ class IconPicker {
         let iconId = icon.getAttribute("data-name");
         let section = icon.getAttribute("data-section");
         console.log(section, iconId);
-        icon.classList.toggle("selected");
+        if (this.#selectedIcons.has(iconId)) {
+          icon.classList.remove("selected");
+          this.#selectedIcons.delete(iconId);
+        } else {
+          icon.classList.add("selected");
+          this.#selectedIcons.set(iconId, section);
+        }
+        this.#onChange();
       }
     });
+  }
+
+  #onChange() {
+    const total = this.#listOfIconNames.size;
+    const selected = this.#container.querySelectorAll(".icon.selected").length;
+    document.getElementById(
+      "total"
+    ).textContent = `${total} icons, ${selected} selected`;
+
+    this.#onSelectIconCallback(this.#selectedIcons);
   }
 
   #createIcon(iconId, section) {

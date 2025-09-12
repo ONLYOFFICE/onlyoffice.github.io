@@ -1,6 +1,6 @@
-import { environment } from "./environments/environment.js";
+import { environment } from "../environments/environment.js";
 
-class SvgService {
+class SvgLoader {
   constructor() {}
 
   static loadSprites() {
@@ -33,27 +33,37 @@ class SvgService {
     });
   }
 
+  static loadSvgs(selectedIcons) {
+    return Promise.all(
+      [...selectedIcons].map((item) => this.#loadSvg(item[1], item[0]))
+    ).catch((e) => {
+      console.error("Failed to load font awesome svgs");
+      console.error(e);
+    });
+  }
+
   /**
    * Loads the SVG string for the given icon from the given section.
    * @param {string} section - The section to load the SVG from.
    * @param {string} name - The name of the icon to load the SVG for.
    */
-  static loadSvg(section, name) {
-    const ajax = new XMLHttpRequest();
-    ajax.open(
-      "GET",
-      environment.faSvgPath + section + "/" + spriteName + ".svg",
-      true
-    );
-    ajax.send();
-    ajax.onload = function (e) {
-      const svgContent = Utils.escapeHtml(ajax.responseText);
-      resolve(svgContent);
-    };
-    ajax.onerror = function (e) {
-      reject(e);
-    };
+  static #loadSvg(section, name) {
+    return new Promise((resolve, reject) => {
+      const ajax = new XMLHttpRequest();
+      ajax.open(
+        "GET",
+        environment.faSvgPath + section + "/" + name + ".svg",
+        true
+      );
+      ajax.send();
+      ajax.onload = function (e) {
+        resolve(ajax.responseText);
+      };
+      ajax.onerror = function (e) {
+        reject(e);
+      };
+    });
   }
 }
 
-export { SvgService };
+export { SvgLoader };

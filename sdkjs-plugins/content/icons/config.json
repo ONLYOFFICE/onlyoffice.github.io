@@ -29,7 +29,41 @@
       "type": "window",
 
       "initDataType": "none",
-      "buttons": [],
+      "buttons": [
+        {
+          "text": "Insert",
+          "primary": true,
+          "textLocale": {
+            "ru": "Вставить",
+            "fr": "Insérer",
+            "es": "Insertar",
+            "de": "Einfügen",
+            "cs": "Vložit",
+            "it": "Inserisci",
+            "sq-AL": "Shtoni",
+            "sr-Cyrl-RS": "Убаци",
+            "sr-Latn-RS": "Ubaci",
+            "zh-ZH": "插入"
+          },
+          "isViewer": false
+        },
+        {
+          "text": "Cancel",
+          "primary": false,
+          "textLocale": {
+            "ru": "Отмена",
+            "fr": "Annuler",
+            "es": "Cancelar",
+            "de": "Abbrechen",
+            "cs": "Zrušit",
+            "it": "Annulla",
+            "sq-AL": "Anulo",
+            "sr-Cyrl-RS": "Откажи",
+            "sr-Latn-RS": "Otkaži",
+            "zh-ZH": "取消"
+          }
+        }
+      ],
       "events": [],
 
       "store": {

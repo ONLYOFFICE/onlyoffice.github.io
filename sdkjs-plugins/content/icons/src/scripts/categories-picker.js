@@ -12,16 +12,13 @@ class CategoriesPicker {
   #show(catalogOfIcons) {
     this.#selectedCategory = "";
     const fragment = document.createDocumentFragment();
-    const categories = document.createElement("div");
-    fragment.appendChild(categories);
-    categories.className = "categories";
 
     catalogOfIcons.forEach((categoryInfo) => {
       let id = categoryInfo.id;
       let label = categoryInfo.label;
 
       const categoryContainer = document.createElement("div");
-      categories.appendChild(categoryContainer);
+      fragment.appendChild(categoryContainer);
 
       categoryContainer.className = "category";
       const categoryName = document.createElement("span");

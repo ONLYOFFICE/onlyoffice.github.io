@@ -35,9 +35,17 @@
     <base href="../" />
     <title>AI Constructor</title>
     <link rel="stylesheet" href="src/styles/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+    />
     <script
       type="text/javascript"
       src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
     ></script>
     <script>
       function isBrowserSupportsES6() {
@@ -66,18 +74,24 @@
     <section class="content">
       <div class="sidebar">
         <div id="search" class="search">
-          <input type="text" id="searchFilter" placeholder="Search icons">
+          <input type="text" id="searchFilter" placeholder="Search icons" />
         </div>
-        <div id="categories-container" class="categories-container"></div>
+        <div id="categories-container" class="categories-container">
+          <div id="categories" class="categories"></div>
+        </div>
       </div>
-      <div id="icons-container" class="icons-container"></div>
+      <div id="icons-container" class="icons-container">
+        <div id="icons" class="icons"></div>
+        <div id="summary" class="summary">
+          <span id="total" class="total"></span>
+        </div>
+      </div>
     </section>
     <script>
       window.addEventListener("resize", onResize);
 
       function onResize() {
         const frameHeight = window.frameElement.offsetHeight;
-        console.warn(frameHeight);
         document.body.style.height = `${frameHeight}px`;
       }
       onResize();
