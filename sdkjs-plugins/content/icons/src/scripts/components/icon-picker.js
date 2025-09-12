@@ -3,9 +3,11 @@ class IconPicker {
   #onSelectIconCallback = () => {};
   #listOfIconNames;
   #selectedIcons;
+  #clearSelectionButton;
 
   constructor(catalogOfIcons, containerId) {
     this.#container = document.getElementById(containerId);
+    this.#clearSelectionButton = document.getElementById("clear");
     this.#addEventListener();
     this.show(catalogOfIcons);
   }
@@ -47,7 +49,6 @@ class IconPicker {
       if (icon) {
         let iconId = icon.getAttribute("data-name");
         let section = icon.getAttribute("data-section");
-        console.log(section, iconId);
         if (this.#selectedIcons.has(iconId)) {
           icon.classList.remove("selected");
           this.#selectedIcons.delete(iconId);
@@ -58,6 +59,29 @@ class IconPicker {
         this.#onChange();
       }
     });
+    this.#container.addEventListener("dblclick", (e) => {
+      const icon = e.target.closest(".icon");
+      if (icon) {
+        let iconId = icon.getAttribute("data-name");
+        let section = icon.getAttribute("data-section");
+        icon.classList.add("selected");
+        this.#selectedIcons.set(iconId, section);
+        const needToRun = true;
+        this.#onSelectIconCallback(this.#selectedIcons, needToRun);
+      }
+    });
+    this.#clearSelectionButton.addEventListener(
+      "click",
+      this.#unselectAll.bind(this)
+    );
+  }
+
+  #unselectAll() {
+    this.#selectedIcons = new Map();
+    this.#container.querySelectorAll(".icon.selected").forEach((icon) => {
+      icon.classList.remove("selected");
+    });
+    this.#onChange();
   }
 
   #onChange() {

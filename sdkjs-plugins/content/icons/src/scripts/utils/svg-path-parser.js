@@ -293,6 +293,7 @@ class SVGPathParser {
   }
 
   #handleEllipticalArc(command, params) {
+    // TODO: Review how to handle elliptical arcs more correctly
     for (let i = 0; i < params.length; i += 7) {
       let rx = params[i];
       let ry = params[i + 1];
