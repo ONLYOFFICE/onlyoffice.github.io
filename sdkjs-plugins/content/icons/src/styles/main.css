@@ -13,7 +13,7 @@ body.dark {
   --color-pad: rgba(255, 255, 255, 0.02);
   --color-pad-hover: rgba(255, 255, 255, 0.1);
   --color-pad-selected: rgba(255, 255, 255, 0.2);
-  --color-summary: rgba(255, 255, 255, 0.2);
+  --color-summary: #404040;
 }
 
 body {
@@ -111,7 +111,11 @@ body {
     padding: 0 12px;
     line-height: 20px;
     text-align: right;
-    background: #fff;
+    background: var(--color-summary);
     box-shadow: 2px 0 2px 0 var(--font-color);
+    button {
+      cursor: default;
+      height: 18px;
+    }
   }
 }

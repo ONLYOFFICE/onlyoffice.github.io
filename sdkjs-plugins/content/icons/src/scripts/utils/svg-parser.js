@@ -5,16 +5,15 @@ class SvgParser {
     const parser = new DOMParser();
 
     const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+    const viewBox = svgDoc.querySelector("svg").getAttribute("viewBox");
+    const [minX, minY, width, height] = viewBox.split(" ").map(parseFloat);
 
-    return this.#extractElements(svgDoc);
-  }
-
-  static #getElementStyle(element) {
     return {
-      fill: element.getAttribute("fill") || "black",
-      stroke: element.getAttribute("stroke") || "none",
-      strokeWidth: element.getAttribute("stroke-width") || "1",
-      opacity: element.getAttribute("opacity") || "1",
+      minX,
+      minY,
+      width,
+      height,
+      elements: this.#extractElements(svgDoc),
     };
   }
 
@@ -54,6 +53,15 @@ class SvgParser {
     });
 
     return elements;
+  }
+
+  static #getElementStyle(element) {
+    return {
+      fill: element.getAttribute("fill"),
+      stroke: element.getAttribute("stroke"),
+      strokeWidth: element.getAttribute("stroke-width"),
+      opacity: element.getAttribute("opacity"),
+    };
   }
 }
 

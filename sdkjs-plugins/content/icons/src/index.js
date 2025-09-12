@@ -30,13 +30,12 @@
  *
  */
 
-import { Commands } from "./scripts/commands.js";
-import { IconPicker } from "./scripts/icon-picker.js";
-import { CategoriesPicker } from "./scripts/categories-picker.js";
-import { SearchFilter } from "./scripts/search-filter.js";
+import { Executor } from "./scripts/services/executor.js";
+import { IconPicker } from "./scripts/components/icon-picker.js";
+import { CategoriesPicker } from "./scripts/components/categories-picker.js";
+import { SearchFilter } from "./scripts/components/search-filter.js";
 import { Theme } from "./scripts/theme.js";
-import { SvgLoader } from "./scripts/svg/svg-loader.js";
-import { SvgParser } from "./scripts/svg/svg-parser.js";
+import { SvgLoader } from "./scripts/utils/svg-loader.js";
 import { FA_CATEGORIES } from "./scripts/environments/categories.js";
 
 let selectedIcons = new Map();
@@ -57,8 +56,9 @@ window.Asc.plugin.init = async function () {
     categoriesPicker.reset();
   });
 
-  iconsPicker.setOnSelectIconCallback((icons) => {
+  iconsPicker.setOnSelectIconCallback((icons, needToRun) => {
     selectedIcons = icons;
+    needToRun && Executor.run(icons);
   });
 };
 
@@ -67,18 +67,10 @@ window.Asc.plugin.onTranslate = async function () {
 };
 
 window.Asc.plugin.button = function (id, windowId) {
-  console.log("button in icons", id, windowId);
   if (id === -1 || id === 1) {
     this.executeCommand("close", "");
   } else {
-    console.log("selectedIcons", selectedIcons);
-
-    SvgLoader.loadSvgs(selectedIcons).then((svgs) => {
-      let parsed = svgs.map((svg) => SvgParser.parse(svg));
-      console.log(parsed[0]);
-
-      Commands.insertIcon(parsed);
-    });
+    Executor.run(selectedIcons);
   }
 };
 
