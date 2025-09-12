@@ -1,15 +1,19 @@
 :root {
   --font-color: #323130;
   --font-color-hover: #000000;
-  --color-category: #eeeeee;
+  --color-pad: rgba(0, 0, 0, 0.02);
   --color-pad-hover: rgba(0, 0, 0, 0.1);
+  --color-pad-selected: rgba(0, 0, 0, 0.2);
+  --color-summary: #ffffff;
 }
 
 body.dark {
   --font-color: #d9d9d9;
   --font-color-hover: #ffffff;
-  --color-category: #404040;
+  --color-pad: rgba(255, 255, 255, 0.02);
   --color-pad-hover: rgba(255, 255, 255, 0.1);
+  --color-pad-selected: rgba(255, 255, 255, 0.2);
+  --color-summary: rgba(255, 255, 255, 0.2);
 }
 
 body {
@@ -40,7 +44,7 @@ body {
     height: calc(100% - 38px);
     overflow-y: scroll;
     box-sizing: border-box;
-    background-color: var(--color-category);
+    background-color: var(--color-pad);
   }
   .category {
     cursor: pointer;
@@ -54,8 +58,11 @@ body {
       position: absolute;
       left: 4px;
     }
-    &.selected::before {
-      content: "✅ ";
+    &.selected {
+      background: var(--color-pad-selected);
+      &::before {
+        content: "✅ ";
+      }
     }
     .category-name {
       display: block;
@@ -74,21 +81,37 @@ body {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  padding: 12px;
-  overflow-y: scroll;
   .icons {
+    height: calc(100% - 20px);
+    padding: 12px;
+    box-sizing: border-box;
+    overflow-y: scroll;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-content: flex-start;
     gap: 5px;
-  }
-  .icon {
-    color: var(--font-color);
-    width: 48px;
-    height: 48px;
-    &:hover {
-      color: var(--font-color-hover);
-      background: var(--color-pad-hover);
+    .icon {
+      color: var(--font-color);
+      width: 48px;
+      height: 48px;
+
+      background: var(--color-pad);
+      &:hover {
+        color: var(--font-color-hover);
+        background: var(--color-pad-hover);
+      }
+      &.selected {
+        background: var(--color-pad-selected);
+      }
     }
+  }
+  .summary {
+    height: 20px;
+    padding: 0 12px;
+    line-height: 20px;
+    text-align: right;
+    background: #fff;
+    box-shadow: 2px 0 2px 0 var(--font-color);
   }
 }
