@@ -1,85 +1,85 @@
 {
-  "name": "Icons",
-  "nameLocale": {
-    "ru": "Иконки",
-    "fr": "Icônes",
-    "es": "Iconos",
-    "de": "Symbole",
-    "cs": "Ikony",
-    "zh": "圖示",
-    "pt-BR": "Ícones",
-    "sr-Cyrl-RS": "Иконе",
-    "sr-Latn-RS": "Ikone",
-    "ja-JA": "アイコン",
-    "sq-AL": "Ikona",
-    "it": "Icone",
-    "ar-SA": "الأيقونات"
-  },
+    "name": "Icons",
+    "nameLocale": {
+        "ru": "Иконки",
+        "fr": "Icônes",
+        "es": "Iconos",
+        "de": "Symbole",
+        "cs": "Ikony",
+        "zh": "圖示",
+        "pt-BR": "Ícones",
+        "sr-Cyrl-RS": "Иконе",
+        "sr-Latn-RS": "Ikone",
+        "ja-JA": "アイコン",
+        "sq-AL": "Ikona",
+        "it": "Icone",
+        "ar-SA": "الأيقونات"
+    },
 
-  "guid": "asc.{1B6B4FBC-BFFA-4B01-A901-94996D88D1DC}",
-  "version": "0.0.1",
-  "minVersion": "8.2.0",
+    "guid": "asc.{1B6B4FBC-BFFA-4B01-A901-94996D88D1DC}",
+    "version": "0.0.1",
+    "minVersion": "8.2.0",
 
-  "variations": [
-    {
-      "description": "TODO: add description.",
-      "url": "src/index.html",
-      "icons": "resources/%theme-type%(light|dark)/icon.svg",
-      "EditorsSupport": ["word"],
-      "type": "window",
-
-      "initDataType": "none",
-      "buttons": [
+    "variations": [
         {
-          "text": "Insert",
-          "primary": true,
-          "textLocale": {
-            "ru": "Вставить",
-            "fr": "Insérer",
-            "es": "Insertar",
-            "de": "Einfügen",
-            "cs": "Vložit",
-            "it": "Inserisci",
-            "sq-AL": "Shtoni",
-            "sr-Cyrl-RS": "Убаци",
-            "sr-Latn-RS": "Ubaci",
-            "zh-ZH": "插入"
-          },
-          "isViewer": false
-        },
-        {
-          "text": "Cancel",
-          "primary": false,
-          "textLocale": {
-            "ru": "Отмена",
-            "fr": "Annuler",
-            "es": "Cancelar",
-            "de": "Abbrechen",
-            "cs": "Zrušit",
-            "it": "Annulla",
-            "sq-AL": "Anulo",
-            "sr-Cyrl-RS": "Откажи",
-            "sr-Latn-RS": "Otkaži",
-            "zh-ZH": "取消"
-          }
+            "description": "TODO: add description.",
+            "url": "src/index.html",
+            "icons": "resources/%theme-type%(light|dark)/icon.svg",
+            "EditorsSupport": ["word", "slide", "cell"],
+            "type": "window",
+
+            "initDataType": "none",
+            "buttons": [
+                {
+                    "text": "Insert",
+                    "primary": true,
+                    "textLocale": {
+                        "ru": "Вставить",
+                        "fr": "Insérer",
+                        "es": "Insertar",
+                        "de": "Einfügen",
+                        "cs": "Vložit",
+                        "it": "Inserisci",
+                        "sq-AL": "Shtoni",
+                        "sr-Cyrl-RS": "Убаци",
+                        "sr-Latn-RS": "Ubaci",
+                        "zh-ZH": "插入"
+                    },
+                    "isViewer": false
+                },
+                {
+                    "text": "Cancel",
+                    "primary": false,
+                    "textLocale": {
+                        "ru": "Отмена",
+                        "fr": "Annuler",
+                        "es": "Cancelar",
+                        "de": "Abbrechen",
+                        "cs": "Zrušit",
+                        "it": "Annulla",
+                        "sq-AL": "Anulo",
+                        "sr-Cyrl-RS": "Откажи",
+                        "sr-Latn-RS": "Otkaži",
+                        "zh-ZH": "取消"
+                    }
+                }
+            ],
+            "events": [],
+
+            "store": {
+                "background": {
+                    "light": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
+                    "dark": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
+                },
+                "screenshots": ["resources/store/screenshots/screen_1.png"],
+                "icons": {
+                    "light": "resources/store/icons",
+                    "dark": "resources/store/icons"
+                },
+                "categories": ["recommended"]
+            }
         }
-      ],
-      "events": [],
+    ],
 
-      "store": {
-        "background": {
-          "light": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
-          "dark": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
-        },
-        "screenshots": ["resources/store/screenshots/screen_1.png"],
-        "icons": {
-          "light": "resources/store/icons",
-          "dark": "resources/store/icons"
-        },
-        "categories": ["recommended"]
-      }
-    }
-  ],
-
-  "onlyofficeScheme": true
+    "onlyofficeScheme": true
 }
