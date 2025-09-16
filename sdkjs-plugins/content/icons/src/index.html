@@ -30,72 +30,76 @@
  -->
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <base href="../" />
-    <title>AI Constructor</title>
-    <link rel="stylesheet" href="src/styles/main.css" />
-    <link
-      rel="stylesheet"
-      href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
-    />
-    <script
-      type="text/javascript"
-      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
-    ></script>
-    <script>
-      function isBrowserSupportsES6() {
-        try {
-          new Function("let a = 1; const b = 2; class C {};");
-          return true;
-        } catch (e) {
-          return false;
-        }
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <base href="../" />
+        <title>AI Constructor</title>
+        <link rel="stylesheet" href="src/styles/main.css" />
+        <link
+            rel="stylesheet"
+            href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+        />
+        <script
+            type="text/javascript"
+            src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
+        ></script>
+        <script>
+            function isBrowserSupportsES6() {
+                try {
+                    new Function("let a = 1; const b = 2; class C {};");
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
 
-      if (isBrowserSupportsES6()) {
-        document.write(
-          '<script type="module" src="dist/bundle.modern.js" defer><\/script>'
-        );
-      } else {
-        document.write('<script src="dist/bundle.es5.js" defer><\/script>');
-      }
-    </script>
-  </head>
-  <body class="light">
-    <div id="overlay" class="overlay">
-      <div class="loader"></div>
-      <div class="overlay-close"></div>
-    </div>
-    <section class="content">
-      <div class="sidebar">
-        <div id="search" class="search">
-          <input type="text" id="searchFilter" placeholder="Search icons" />
-        </div>
-        <div id="categories-container" class="categories-container">
-          <div id="categories" class="categories"></div>
-        </div>
-      </div>
-      <div id="icons-container" class="icons-container">
-        <div id="icons" class="icons"></div>
-        <div id="summary" class="summary">
-          <span id="total" class="total"></span>
-          <button id="clear" class="btn-text-default i18n">Clear</button>
-        </div>
-      </div>
-    </section>
-    <script>
-      window.addEventListener("resize", onResize);
+            if (isBrowserSupportsES6()) {
+                document.write(
+                    '<script type="module" src="dist/bundle.modern.js" defer><\/script>'
+                );
+            } else {
+                document.write(
+                    '<script src="dist/bundle.es5.js" defer><\/script>'
+                );
+            }
+        </script>
+    </head>
+    <body class="light">
+        <section class="content">
+            <div class="sidebar">
+                <div id="search" class="search">
+                    <input
+                        type="text"
+                        id="searchFilter"
+                        placeholder="Search icons"
+                    />
+                </div>
+                <div id="categories-container" class="categories-container">
+                    <div id="categories" class="categories"></div>
+                </div>
+            </div>
+            <div id="icons-container" class="icons-container">
+                <div id="icons" class="icons"></div>
+                <div id="summary" class="summary">
+                    <span id="total" class="total"></span>
+                    <button id="clear" class="btn-text-default i18n">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </section>
+        <script>
+            window.addEventListener("resize", onResize);
 
-      function onResize() {
-        const frameHeight = window.frameElement.offsetHeight;
-        document.body.style.height = `${frameHeight}px`;
-      }
-      onResize();
-    </script>
-  </body>
+            function onResize() {
+                const frameHeight = window.frameElement.offsetHeight;
+                document.body.style.height = `${frameHeight}px`;
+            }
+            onResize();
+        </script>
+    </body>
 </html>
