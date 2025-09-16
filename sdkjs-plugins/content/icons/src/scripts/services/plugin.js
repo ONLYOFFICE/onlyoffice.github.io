@@ -23,7 +23,7 @@ class IconsPlugin {
     init() {
         return new Promise((resolve, reject) => {
             SvgLoader.loadSprites()
-                .then(() => resolve())
+                .then(resolve)
                 .catch((e) => {
                     console.error("Failed to load font awesome sprites");
                     reject(e);
@@ -44,7 +44,7 @@ class IconsPlugin {
                 this.#iconsPicker.setOnSelectIconCallback(
                     (icons, needToRun) => {
                         this.#selectedIcons = icons;
-                        needToRun && this.run(icons);
+                        needToRun && this.run();
                     }
                 );
             } catch (e) {
@@ -57,14 +57,15 @@ class IconsPlugin {
         return new Promise((resolve, reject) => {
             SvgLoader.loadSvgs(this.#selectedIcons)
                 .then((svgs) => {
-                    // console.log("svgs", svgs);
+                    console.log("selected", this.#selectedIcons);
+                    console.log("svgs", svgs);
                     let parsed = svgs.map((svg) => SvgParser.parse(svg));
-                    // console.log(parsed);
+                    console.log("parsed", parsed);
                     Asc.scope.editor = Asc.plugin.info.editorType;
                     Asc.scope.parsedSvgs = parsed;
                     Asc.plugin.callCommand(
                         Commands.insertIcon,
-                        true,
+                        false,
                         false,
                         resolve
                     );
