@@ -85,13 +85,11 @@ export const Commands = {
 
             svgParsedObject.elements.forEach((svgElement) => {
                 if (svgElement.type === "path") {
-                    let path;
+                    let path = customGeometry.AddPath();
 
                     svgElement.d.forEach((d) => {
                         switch (d.type) {
                             case "moveto":
-                                path = customGeometry.AddPath();
-
                                 path.SetWidth(width);
                                 path.SetHeight(height);
                                 path.SetFill("darken");
@@ -114,8 +112,24 @@ export const Commands = {
                                     d.y * factor
                                 );
                                 break;
+                            case "quadraticBezier":
+                                path.QuadBezTo(
+                                    d.x1 * factor,
+                                    d.y1 * factor,
+                                    d.x2 * factor,
+                                    d.y2 * factor
+                                );
+                                break;
                             case "lineto":
                                 path.LineTo(d.x * factor, d.y * factor);
+                                break;
+                            case "arc":
+                                path.ArcTo(
+                                    d.wR * factor,
+                                    d.hR * factor,
+                                    d.atAng * factor,
+                                    d.swAng * factor
+                                );
                                 break;
                             case "closepath":
                                 path.Close();
