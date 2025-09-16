@@ -15,11 +15,8 @@ class IconsPlugin {
 
     constructor() {
         this.#selectedIcons = new Map();
-        this.#categoriesPicker = new CategoriesPicker(
-            FA_CATEGORIES,
-            "categories"
-        );
-        this.#iconsPicker = new IconPicker(FA_CATEGORIES, "icons");
+        this.#iconsPicker = new IconPicker(FA_CATEGORIES);
+        this.#categoriesPicker = new CategoriesPicker(FA_CATEGORIES);
         this.#searchFilter = new SearchFilter(FA_CATEGORIES);
     }
 
@@ -46,7 +43,7 @@ class IconsPlugin {
 
                 this.#iconsPicker.setOnSelectIconCallback(
                     (icons, needToRun) => {
-                        selectedIcons = icons;
+                        this.#selectedIcons = icons;
                         needToRun && this.run(icons);
                     }
                 );
