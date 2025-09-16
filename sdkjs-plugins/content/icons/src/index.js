@@ -30,48 +30,29 @@
  *
  */
 
-import { Executor } from "./scripts/services/executor.js";
-import { IconPicker } from "./scripts/components/icon-picker.js";
-import { CategoriesPicker } from "./scripts/components/categories-picker.js";
-import { SearchFilter } from "./scripts/components/search-filter.js";
+import { IconsPlugin } from "./scripts/services/plugin.js";
 import { Theme } from "./scripts/theme.js";
-import { SvgLoader } from "./scripts/utils/svg-loader.js";
-import { FA_CATEGORIES } from "./scripts/environments/categories.js";
 
-let selectedIcons = new Map();
+let iconsPlugin;
 
 window.Asc.plugin.init = async function () {
-  SvgLoader.loadSprites();
-  const categoriesPicker = new CategoriesPicker(FA_CATEGORIES, "categories");
-  const iconsPicker = new IconPicker(FA_CATEGORIES, "icons");
-  const searchFilter = new SearchFilter(FA_CATEGORIES);
-
-  categoriesPicker.setOnSelectCategoryCallback((categoryName) => {
-    iconsPicker.show(FA_CATEGORIES, categoryName);
-    searchFilter.reset();
-  });
-
-  searchFilter.setOnFilterCallback((catalogOfIcons) => {
-    iconsPicker.show(catalogOfIcons);
-    categoriesPicker.reset();
-  });
-
-  iconsPicker.setOnSelectIconCallback((icons, needToRun) => {
-    selectedIcons = icons;
-    needToRun && Executor.run(icons);
-  });
+    iconsPlugin = new IconsPlugin();
+    await iconsPlugin.init().catch((e) => {
+        console.error("Failed to init icons plugin");
+        console.error(e);
+    });
 };
 
 window.Asc.plugin.onTranslate = async function () {
-  console.log("onTranslate in icons");
+    console.log("onTranslate in icons");
 };
 
-window.Asc.plugin.button = function (id, windowId) {
-  if (id === -1 || id === 1) {
-    this.executeCommand("close", "");
-  } else {
-    Executor.run(selectedIcons);
-  }
+window.Asc.plugin.button = async function (id, windowId) {
+    if (id === -1 || id === 1) {
+        this.executeCommand("close", "");
+    } else {
+        await iconsPlugin.run();
+    }
 };
 
 window.Asc.plugin.onThemeChanged = Theme.onThemeChanged;
