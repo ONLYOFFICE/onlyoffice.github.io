@@ -33,10 +33,9 @@
 import { IconsPlugin } from "./scripts/services/plugin.js";
 import { Theme } from "./scripts/theme.js";
 
-let iconsPlugin;
+let iconsPlugin = new IconsPlugin();
 
 window.Asc.plugin.init = async function () {
-    iconsPlugin = new IconsPlugin();
     await iconsPlugin.init().catch((e) => {
         console.error("Failed to init icons plugin");
         console.error(e);

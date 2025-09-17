@@ -20,19 +20,23 @@ class IconPicker {
 
         catalogOfIcons.forEach((categoryInfo) => {
             let id = categoryInfo.id;
-            let icons = categoryInfo.icons;
+
             if (categoryId !== "" && categoryId !== id) {
                 return;
             }
 
-            icons.forEach((icon) => {
-                if (this.#listOfIconNames.has(icon.name)) {
-                    return;
-                }
-                this.#listOfIconNames.add(icon.name);
-                let img = this.#createIcon(icon.name, icon.folder);
-                fragment.appendChild(img);
+            categoryInfo.folders.forEach((folderName, index) => {
+                let icons = categoryInfo.icons[index];
+                icons.forEach((iconName) => {
+                    if (this.#listOfIconNames.has(iconName)) {
+                        return;
+                    }
+                    this.#listOfIconNames.add(iconName);
+                    let img = this.#createIcon(iconName, folderName);
+                    fragment.appendChild(img);
+                });
             });
+
             this.#onChange();
         });
 
