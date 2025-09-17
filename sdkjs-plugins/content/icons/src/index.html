@@ -47,26 +47,7 @@
             type="text/javascript"
             src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
         ></script>
-        <script>
-            function isBrowserSupportsES6() {
-                try {
-                    new Function("let a = 1; const b = 2; class C {};");
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-
-            if (isBrowserSupportsES6()) {
-                document.write(
-                    '<script type="module" src="dist/bundle.modern.js" defer><\/script>'
-                );
-            } else {
-                document.write(
-                    '<script src="dist/bundle.es5.js" defer><\/script>'
-                );
-            }
-        </script>
+        <script></script>
     </head>
     <body class="">
         <div id="overlay" class="overlay">
@@ -97,6 +78,24 @@
             </div>
         </section>
         <script>
+            function isBrowserSupportsES6() {
+                try {
+                    new Function("let a = 1; const b = 2; class C {};");
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            if (isBrowserSupportsES6()) {
+                document.write(
+                    '<script type="module" src="dist/bundle.modern.js" defer><\/script>'
+                );
+            } else {
+                document.write(
+                    '<script src="dist/bundle.es5.js" defer><\/script>'
+                );
+            }
             window.addEventListener("resize", onResize);
 
             function onResize() {

@@ -55,6 +55,10 @@ class IconsPlugin {
 
     run() {
         return new Promise((resolve, reject) => {
+            if (!this.#selectedIcons.size) {
+                resolve(false);
+                return;
+            }
             SvgLoader.loadSvgs(this.#selectedIcons)
                 .then((svgs) => {
                     console.log("selected", this.#selectedIcons);
@@ -63,10 +67,12 @@ class IconsPlugin {
                     console.log("parsed", parsed);
                     Asc.scope.editor = Asc.plugin.info.editorType;
                     Asc.scope.parsedSvgs = parsed;
+                    const isCalc = true;
+                    const isClose = true;
                     Asc.plugin.callCommand(
                         Commands.insertIcon,
-                        false,
-                        false,
+                        isClose,
+                        isCalc,
                         resolve
                     );
                 })
