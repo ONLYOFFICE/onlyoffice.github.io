@@ -1,38 +1,21 @@
 export const Commands = {
     insertIcon: function () {
         let editor = Asc.scope.editor;
-        const factor = 36000;
-        const destination = {
-            word: {},
-            slide: {},
-            cell: {},
-        };
-        if (editor === "word") {
-            const document = Api.GetDocument();
-            destination.word.run = document.GetCurrentRun();
-        } else if (editor === "slide") {
-            const presentation = Api.GetPresentation();
-            destination.slide.active =
-                presentation.GetCurrentVisibleSlide() ||
-                presentation.GetCurrentSlide();
-            destination.slide.width = destination.slide.active.GetWidth();
-            destination.slide.height = destination.slide.active.GetHeight();
-        } else if (editor === "cell") {
-            destination.cell.sheet = Api.GetActiveSheet();
-            const activeCell = destination.cell.sheet.GetActiveCell();
-            destination.cell.row = activeCell.GetRow();
-            destination.cell.col = activeCell.GetCol();
-        }
+
+        let insertIconFunction = createInsertFunction(editor);
 
         Asc.scope.parsedSvgs.forEach((svgParsedObject) => {
-            const smallFactor = factor / 10;
-            const width = svgParsedObject.width * smallFactor;
-            const height = svgParsedObject.height * smallFactor;
+            let factor = 36000;
+            if (svgParsedObject.width * svgParsedObject.height > 10000) {
+                factor = factor / 10;
+            }
+            const width = svgParsedObject.width * factor;
+            const height = svgParsedObject.height * factor;
             let customGeometry = createCustomGeometry(
                 svgParsedObject,
                 width,
                 height,
-                smallFactor
+                factor
             );
 
             let fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 255));
@@ -41,43 +24,7 @@ export const Commands = {
                 Api.CreateSolidFill(Api.CreateRGBColor(0, 50, 200))
             );
 
-            if (editor === "word") {
-                let shape = Api.CreateShape(
-                    "rect",
-                    width,
-                    height,
-                    fill,
-                    stroke
-                );
-                shape.SetGeometry(customGeometry);
-                destination.word.run.AddDrawing(shape);
-            } else if (editor === "slide") {
-                let shape = Api.CreateShape(
-                    "rect",
-                    width,
-                    height,
-                    fill,
-                    stroke
-                );
-                const top = destination.slide.height / 2 - height / 2;
-                const left = destination.slide.width / 2 - width / 2;
-                shape.SetGeometry(customGeometry);
-                shape.SetPosition(left, top);
-                destination.slide.active.AddObject(shape);
-            } else if (editor === "cell") {
-                let shape = destination.cell.sheet.AddShape(
-                    "rect",
-                    width,
-                    height,
-                    fill,
-                    stroke,
-                    destination.cell.col - 1,
-                    0,
-                    destination.cell.row - 1,
-                    0
-                );
-                shape.SetGeometry(customGeometry);
-            }
+            insertIconFunction(customGeometry, width, height, fill, stroke);
         });
 
         function createCustomGeometry(svgParsedObject, width, height, factor) {
@@ -136,14 +83,68 @@ export const Commands = {
                                 break;
                         }
                     });
-                } else if (svgElement.type === "circle") {
-                    // TODO: circle
-                } else if (svgElement.type === "rect") {
-                    // TODO: rect
                 }
             });
 
             return customGeometry;
+        }
+
+        function createInsertFunction(editor) {
+            if (editor === "word") {
+                const document = Api.GetDocument();
+                const run = document.GetCurrentRun();
+                return (customGeometry, width, height, fill, stroke) => {
+                    let shape = Api.CreateShape(
+                        "rect",
+                        width,
+                        height,
+                        fill,
+                        stroke
+                    );
+                    shape.SetGeometry(customGeometry);
+                    run.AddDrawing(shape);
+                };
+            } else if (editor === "slide") {
+                const presentation = Api.GetPresentation();
+                const activeSlide =
+                    presentation.GetCurrentVisibleSlide() ||
+                    presentation.GetCurrentSlide();
+                const slideWidth = activeSlide.GetWidth();
+                const slideHeight = activeSlide.GetHeight();
+                return (customGeometry, width, height, fill, stroke) => {
+                    let shape = Api.CreateShape(
+                        "rect",
+                        width,
+                        height,
+                        fill,
+                        stroke
+                    );
+                    const top = slideHeight / 2 - height / 2;
+                    const left = slideWidth / 2 - width / 2;
+                    shape.SetGeometry(customGeometry);
+                    shape.SetPosition(left, top);
+                    activeSlide.AddObject(shape);
+                };
+            } else if (editor === "cell") {
+                const worksheet = Api.GetActiveSheet();
+                const activeCell = worksheet.GetActiveCell();
+                const row = activeCell.GetRow();
+                const col = activeCell.GetCol();
+                return (customGeometry, width, height, fill, stroke) => {
+                    let shape = worksheet.AddShape(
+                        "rect",
+                        width,
+                        height,
+                        fill,
+                        stroke,
+                        col - 1,
+                        0,
+                        row - 1,
+                        0
+                    );
+                    shape.SetGeometry(customGeometry);
+                };
+            }
         }
 
         return true;
