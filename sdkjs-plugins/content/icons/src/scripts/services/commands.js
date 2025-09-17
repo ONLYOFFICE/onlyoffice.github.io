@@ -145,5 +145,7 @@ export const Commands = {
 
             return customGeometry;
         }
+
+        return true;
     },
 };

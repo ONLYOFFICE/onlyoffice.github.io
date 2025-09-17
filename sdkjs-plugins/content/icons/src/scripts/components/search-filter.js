@@ -1,41 +1,47 @@
 class SearchFilter {
-  #catalogOfIcons;
-  #filteredCatalog;
-  #onFilterCallback;
+    #catalogOfIcons;
+    #filteredCatalog;
+    #onFilterCallback;
 
-  constructor(catalogOfIcons) {
-    this.#catalogOfIcons = catalogOfIcons;
-    this.input = document.getElementById("searchFilter");
-    this.input.addEventListener("input", this.#onInput.bind(this));
-  }
-
-  reset() {
-    if (this.input.value !== "") {
-      this.input.value = "";
-      this.#filteredCatalog = this.#catalogOfIcons;
+    constructor(catalogOfIcons) {
+        this.#catalogOfIcons = catalogOfIcons;
+        this.input = document.getElementById("searchFilter");
+        this.input.addEventListener("input", this.#onInput.bind(this));
     }
-  }
 
-  setOnFilterCallback(callback) {
-    this.#onFilterCallback = callback;
-  }
-
-  #onInput(e) {
-    const value = e.target.value.slice().toLowerCase();
-    if (value === "") {
-      this.#filteredCatalog = this.#catalogOfIcons;
-    } else {
-      this.#filteredCatalog = this.#catalogOfIcons
-        .slice()
-        .map((categoryInfo) => {
-          let icons = categoryInfo.icons.filter((icon) =>
-            icon.name.toLowerCase().includes(value)
-          );
-          return { ...categoryInfo, ...{ icons } };
-        });
+    reset() {
+        if (this.input.value !== "") {
+            this.input.value = "";
+            this.#filteredCatalog = this.#catalogOfIcons;
+        }
     }
-    this.#onFilterCallback(this.#filteredCatalog);
-  }
+
+    setOnFilterCallback(callback) {
+        this.#onFilterCallback = callback;
+    }
+
+    #onInput(e) {
+        const value = e.target.value.slice().toLowerCase();
+        if (value === "") {
+            this.#filteredCatalog = this.#catalogOfIcons;
+        } else {
+            this.#filteredCatalog = this.#catalogOfIcons
+                .slice()
+                .map((categoryInfo) => {
+                    let filteredIcons = [];
+
+                    categoryInfo.folders.forEach((folderName, index) => {
+                        let icons = categoryInfo.icons[index];
+                        filteredIcons[index] = icons.filter((iconName) =>
+                            iconName.toLowerCase().includes(value)
+                        );
+                    });
+
+                    return { ...categoryInfo, ...{ icons: filteredIcons } };
+                });
+        }
+        this.#onFilterCallback(this.#filteredCatalog);
+    }
 }
 
 export { SearchFilter };
