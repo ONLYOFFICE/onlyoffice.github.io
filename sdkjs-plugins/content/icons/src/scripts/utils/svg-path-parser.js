@@ -36,34 +36,34 @@ class SVGPathParser {
 
     #processCommand(command, params) {
         switch (command.toUpperCase()) {
-            case "M": // moveto
+            case "M":
                 this.#handleMoveto(command, params);
                 break;
-            case "L": // lineto
+            case "L":
                 this.#handleLineto(command, params);
                 break;
-            case "H": // horizontal lineto
+            case "H":
                 this.#handleHorizontalLineto(command, params);
                 break;
-            case "V": // vertical lineto
+            case "V":
                 this.#handleVerticalLineto(command, params);
                 break;
-            case "C": // cubic Bézier
+            case "C":
                 this.#handleCubicBezier(command, params);
                 break;
-            case "Q": // quadratic Bézier
+            case "Q":
                 this.#handleQuadraticBezier(command, params);
                 break;
-            case "S": // smooth cubic Bézier
+            case "S":
                 this.#handleSmoothCubicBezier(command, params);
                 break;
-            case "T": // smooth quadratic Bézier
+            case "T":
                 this.#handleSmoothQuadraticBezier(command, params);
                 break;
-            case "A": // elliptical arc
+            case "A":
                 this.#handleEllipticalArc(command, params);
                 break;
-            case "Z": // closepath
+            case "Z":
                 this.#handleClosepath();
                 break;
         }
@@ -71,12 +71,18 @@ class SVGPathParser {
 
     #handleMoveto(command, params) {
         for (let i = 0; i < params.length; i += 2) {
-            const x = params[i];
-            const y = params[i + 1];
+            let x = params[i];
+            let y = params[i + 1];
+            const absolute = command === "M";
 
             if (i === 0) {
                 this.#startX = x;
                 this.#startY = y;
+            }
+
+            if (!absolute) {
+                x += this.#currentX;
+                y += this.#currentY;
             }
 
             this.#currentX = x;
@@ -86,7 +92,7 @@ class SVGPathParser {
                 type: "moveto",
                 x: x,
                 y: y,
-                absolute: command === "M",
+                absolute,
             });
         }
     }
@@ -164,9 +170,9 @@ class SVGPathParser {
             let y2 = params[i + 3];
             let x = params[i + 4];
             let y = params[i + 5];
+            const absolute = command === "C";
 
-            if (command === "c") {
-                // relative
+            if (!absolute) {
                 x1 += this.#currentX;
                 y1 += this.#currentY;
                 x2 += this.#currentX;
@@ -183,7 +189,7 @@ class SVGPathParser {
                 y2: y2,
                 x: x,
                 y: y,
-                absolute: command === "C",
+                absolute,
             });
 
             this.#currentX = x;
@@ -226,17 +232,23 @@ class SVGPathParser {
             let y2 = params[i + 1];
             let x = params[i + 2];
             let y = params[i + 3];
+            const absolute = command === "S";
 
-            if (command === "s") {
-                // relative
+            let x1 = this.#currentX;
+            let y1 = this.#currentY;
+
+            if (!absolute) {
                 x2 += this.#currentX;
                 y2 += this.#currentY;
                 x += this.#currentX;
                 y += this.#currentY;
             }
-
-            let x1 = this.#currentX;
-            let y1 = this.#currentY;
+            if (
+                this.#commands[this.#commands.length - 1].type === "cubicBezier"
+            ) {
+                x1 = 2 * x1 - this.#commands[this.#commands.length - 1].x2;
+                y1 = 2 * y1 - this.#commands[this.#commands.length - 1].y2;
+            }
 
             this.#commands.push({
                 type: "cubicBezier",
@@ -246,7 +258,7 @@ class SVGPathParser {
                 y2: y2,
                 x: x,
                 y: y,
-                absolute: command === "S",
+                absolute,
                 isSmooth: true,
             });
 
@@ -412,8 +424,6 @@ class SVGPathParser {
         this.#commands.push({
             type: "closepath",
         });
-        this.#currentX = this.#startX;
-        this.#currentY = this.#startY;
     }
 }
 
