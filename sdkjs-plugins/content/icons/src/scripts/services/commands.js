@@ -2,7 +2,8 @@ export const Commands = {
     insertIcon: function () {
         let editor = Asc.scope.editor;
 
-        let insertIconFunction = createInsertFunction(editor);
+        const insertIconFunction = createInsertFunction(editor);
+        const fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 255));
 
         Asc.scope.parsedSvgs.forEach((svgParsedObject) => {
             let factor = 36000;
@@ -18,7 +19,6 @@ export const Commands = {
                 factor
             );
 
-            let fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 255));
             let stroke = Api.CreateStroke(
                 factor,
                 Api.CreateSolidFill(Api.CreateRGBColor(0, 50, 200))
@@ -69,14 +69,6 @@ export const Commands = {
                                 break;
                             case "lineto":
                                 path.LineTo(d.x * factor, d.y * factor);
-                                break;
-                            case "arc":
-                                path.ArcTo(
-                                    d.wR * factor,
-                                    d.hR * factor,
-                                    d.atAng * factor,
-                                    d.swAng * factor
-                                );
                                 break;
                             case "closepath":
                                 path.Close();
