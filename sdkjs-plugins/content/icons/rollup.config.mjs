@@ -1,5 +1,6 @@
 import { babel } from "@rollup/plugin-babel";
 import license from "rollup-plugin-license";
+import terser from "@rollup/plugin-terser";
 
 const isES5Build = process.env.TARGET === "es5";
 
@@ -50,6 +51,14 @@ export default {
         babel({
             ...getBabelConfig(),
             exclude: "node_modules/**",
+        }),
+        terser({
+            format: {
+                comments: false,
+                beautify: true,
+            },
+            compress: false,
+            mangle: false,
         }),
         license({
             banner: {

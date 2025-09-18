@@ -45,6 +45,7 @@ class SvgParser {
         const parser = new DOMParser();
 
         const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+
         let width = svgDoc.querySelector("svg")?.getAttribute("width");
         let height = svgDoc.querySelector("svg")?.getAttribute("height");
         const viewBox = svgDoc.querySelector("svg")?.getAttribute("viewBox");
@@ -56,6 +57,10 @@ class SvgParser {
         }
 
         const elements = this.#extractElements(svgDoc);
+
+        if (!elements || elements.length === 0) {
+            throw new Error("No elements found in SVG");
+        }
 
         return {
             width,

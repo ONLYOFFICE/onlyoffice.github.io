@@ -75,7 +75,7 @@ async function generateIconsJson() {
             categories,
             null,
             2
-        )}`;
+        )};\n`;
         fs.writeFile(outputPath, fileContent, (err) => {
             if (err) {
                 console.error("❌ Error:", err);

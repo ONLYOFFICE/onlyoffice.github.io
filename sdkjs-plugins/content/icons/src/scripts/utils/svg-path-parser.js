@@ -30,7 +30,7 @@
  *
  */
 
-import { convertSingleArcToCubics } from "./svg-arc-to-cubic-bezier.js";
+import { ArcToCubicConverter } from "./svg-arc-to-cubic-bezier.js";
 
 class SVGPathParser {
     #pathString;
@@ -341,7 +341,7 @@ class SVGPathParser {
             let x = params[i + 5];
             let y = params[i + 6];
 
-            const bezierCommands = convertSingleArcToCubics(
+            const bezierCommands = ArcToCubicConverter.convert(
                 rx,
                 ry,
                 rotation,
