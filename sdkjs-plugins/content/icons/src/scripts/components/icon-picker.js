@@ -122,7 +122,7 @@ class IconPicker {
             this.#unselectAll.bind(this)
         );
         this.#container.addEventListener("keydown", (e) => {
-            if (e.ctrlKey && e.key === "a") {
+            if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
                 e.preventDefault();
                 this.#selectAll();
             }

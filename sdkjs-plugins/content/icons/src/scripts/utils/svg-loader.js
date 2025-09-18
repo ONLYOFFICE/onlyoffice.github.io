@@ -65,6 +65,12 @@ class SvgLoader {
         });
     }
 
+    /**
+     * Loads SVGs from the given set of icons in parallel.
+     * @param {Map<string[]>} selectedIcons - A set of icons to load, where each item is an array containing the icon name and the color.
+     * @param {number} concurrency - The number of threads to use when loading the SVGs. Defaults to 100.
+     * @return {Promise<Array<string>>} - A promise that resolves to an array of SVGs, where each item is the loaded SVG as a string.
+     */
     static loadSvgs(selectedIcons, concurrency = 100) {
         let numOfImages = selectedIcons.size;
         if (numOfImages < concurrency) concurrency = numOfImages;
