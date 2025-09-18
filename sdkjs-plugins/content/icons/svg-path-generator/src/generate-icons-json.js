@@ -9,6 +9,7 @@ async function generateIconsJson() {
         const CATEGORIES_FILE = "../resources/font-awesome/categories.yml";
         const OUTPUT_DIR = "../src/scripts/environments/";
         const OUTPUT_FILE = "categories.js";
+        const LICENSE = "../LICENSE";
 
         // Get all SVG files in folder svgs-full
         const svgFiles = await glob(FA_SVGS_FOLDER + "**/*.svg");
@@ -68,8 +69,9 @@ async function generateIconsJson() {
         }
 
         // Save the result
+        const licenseText = await fs.readFile(LICENSE, "utf8");
         const outputPath = path.join(OUTPUT_DIR, OUTPUT_FILE);
-        const fileContent = `export const FA_CATEGORIES = ${JSON.stringify(
+        const fileContent = `${licenseText}\n export const FA_CATEGORIES = ${JSON.stringify(
             categories,
             null,
             2

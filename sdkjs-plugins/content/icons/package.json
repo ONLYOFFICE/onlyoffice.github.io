@@ -1,21 +1,21 @@
 {
-  "scripts": {
-    "build": "rollup -c",
-    "build:es5": "rollup -c --environment TARGET:es5",
-    "build:modern": "rollup -c --environment TARGET:modern",
-    "build:all": "npm run build:es5 && npm run build:modern",
-    "watch": "rollup -c -w",
-    "dev": "rollup -c --environment NODE_ENV:development",
-    "es-check": "npx es-check es5 dist/bundle.es5.js",
-    "update-icons": "git clone https://github.com/FortAwesome/Font-Awesome.git temp-repo && cp -r temp-repo/svgs-full ./resources/font-awesome/svgs-full && cp -r temp-repo/sprites-full ./resources/font-awesome/sprites-full && cp -r temp-repo/metadata/categories.yml ./resources/font-awesome/ && rm -r -Force temp-repo"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
-    "@rollup/plugin-babel": "^6.0.4",
-    "rollup": "^4.50.1"
-  },
-  "dependencies": {
-    "core-js": "^3.45.1"
-  }
+    "scripts": {
+        "build": "rollup -c",
+        "build:es5": "rollup -c --environment TARGET:es5",
+        "build:modern": "rollup -c --environment TARGET:modern",
+        "build:all": "npm run build:es5 && npm run build:modern",
+        "watch": "rollup -c -w",
+        "dev": "rollup -c --environment NODE_ENV:development",
+        "es-check": "npx es-check es5 dist/bundle.es5.js"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.4",
+        "@babel/preset-env": "^7.28.3",
+        "@rollup/plugin-babel": "^6.0.4",
+        "rollup": "^4.50.1",
+        "rollup-plugin-license": "^3.6.0"
+    },
+    "dependencies": {
+        "core-js": "^3.45.1"
+    }
 }
