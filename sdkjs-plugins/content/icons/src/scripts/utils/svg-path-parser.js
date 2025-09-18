@@ -1,8 +1,8 @@
+import { convertSingleArcToCubics } from "./svg-arc-to-cubic-bezier.js";
+
 class SVGPathParser {
     #pathString;
     #commands;
-    #startX;
-    #startY;
     #currentX;
     #currentY;
 
@@ -10,8 +10,6 @@ class SVGPathParser {
         this.#pathString = pathString;
         this.#currentX = 0;
         this.#currentY = 0;
-        this.#startX = 0;
-        this.#startY = 0;
         this.#commands = [];
     }
 
@@ -74,11 +72,6 @@ class SVGPathParser {
             let x = params[i];
             let y = params[i + 1];
             const absolute = command === "M";
-
-            if (i === 0) {
-                this.#startX = x;
-                this.#startY = y;
-            }
 
             if (!absolute) {
                 x += this.#currentX;
@@ -294,7 +287,6 @@ class SVGPathParser {
     }
 
     #handleEllipticalArc(command, params) {
-        // TODO: Review how to handle elliptical arcs more correctly
         for (let i = 0; i < params.length; i += 7) {
             const absolute = command === "A";
             const rx = params[i];
@@ -305,17 +297,7 @@ class SVGPathParser {
             let x = params[i + 5];
             let y = params[i + 6];
 
-            let startX = 0;
-            let startY = 0;
-
-            if (!absolute) {
-                x += this.#currentX;
-                y += this.#currentY;
-                startX += this.#currentX;
-                startY += this.#currentY;
-            }
-            const arc = {
-                absolute,
+            const bezierCommands = convertSingleArcToCubics(
                 rx,
                 ry,
                 rotation,
@@ -323,101 +305,18 @@ class SVGPathParser {
                 sweep,
                 x,
                 y,
-            };
-            const canvasParams = this.#svgArcToCanvasArc(arc, startX, startY);
-            this.#commands.push(canvasParams);
-
-            this.#currentX = x;
-            this.#currentY = y;
-        }
-    }
-
-    #svgArcToCanvasArc(arc, startX, startY) {
-        const { rx, ry, rotation, largeArc, sweep, x: endX, y: endY } = arc;
-
-        const phi = (rotation * Math.PI) / 180;
-        const x1 = startX;
-        const y1 = startY;
-        const x2 = endX;
-        const y2 = endY;
-
-        const dx = (x1 - x2) / 2;
-        const dy = (y1 - y2) / 2;
-
-        const x1_ = Math.cos(phi) * dx + Math.sin(phi) * dy;
-        const y1_ = -Math.sin(phi) * dx + Math.cos(phi) * dy;
-
-        let rx_ = Math.abs(rx);
-        let ry_ = Math.abs(ry);
-
-        const lambda = (x1_ * x1_) / (rx_ * rx_) + (y1_ * y1_) / (ry_ * ry_);
-        if (lambda > 1) {
-            rx_ *= Math.sqrt(lambda);
-            ry_ *= Math.sqrt(lambda);
-        }
-
-        const sign = largeArc === sweep ? -1 : 1;
-        const factor =
-            sign *
-            Math.sqrt(
-                Math.max(
-                    0,
-                    (rx_ * rx_ * ry_ * ry_ -
-                        rx_ * rx_ * y1_ * y1_ -
-                        ry_ * ry_ * x1_ * x1_) /
-                        (rx_ * rx_ * y1_ * y1_ + ry_ * ry_ * x1_ * x1_)
-                )
+                this.#currentX,
+                this.#currentY
             );
+            console.warn(bezierCommands);
 
-        const cx_ = (factor * (rx_ * y1_)) / ry_;
-        const cy_ = (factor * (-ry_ * x1_)) / rx_;
+            bezierCommands.forEach((command) => {
+                this.#commands.push(command);
+            });
 
-        const cx = Math.cos(phi) * cx_ - Math.sin(phi) * cy_ + (x1 + x2) / 2;
-        const cy = Math.sin(phi) * cx_ + Math.cos(phi) * cy_ + (y1 + y2) / 2;
-
-        const vectorAngle = (ux, uy, vx, vy) => {
-            const dot = ux * vx + uy * vy;
-            const len =
-                Math.sqrt(ux * ux + uy * uy) * Math.sqrt(vx * vx + vy * vy);
-            const cos = Math.max(-1, Math.min(1, dot / len));
-            const sign = ux * vy - uy * vx < 0 ? -1 : 1;
-            return sign * Math.acos(cos);
-        };
-
-        const startVectorX = (x1_ - cx_) / rx_;
-        const startVectorY = (y1_ - cy_) / ry_;
-        const endVectorX = (-x1_ - cx_) / rx_;
-        const endVectorY = (-y1_ - cy_) / ry_;
-
-        let startAngle = vectorAngle(1, 0, startVectorX, startVectorY);
-        let sweepAngle = vectorAngle(
-            startVectorX,
-            startVectorY,
-            endVectorX,
-            endVectorY
-        );
-
-        if (sweep === 0 && sweepAngle > 0) {
-            sweepAngle -= 2 * Math.PI;
-        } else if (sweep === 1 && sweepAngle < 0) {
-            sweepAngle += 2 * Math.PI;
+            this.#currentX += x;
+            this.#currentY += y;
         }
-
-        startAngle = (startAngle * 180) / Math.PI;
-        sweepAngle = (sweepAngle * 180) / Math.PI;
-
-        startAngle = ((startAngle % 360) + 360) % 360;
-        if (sweepAngle > 360) sweepAngle = 360;
-        if (sweepAngle < -360) sweepAngle = -360;
-
-        return {
-            type: "arc",
-            absolute: arc.absolute,
-            wR: rx_,
-            hR: ry_,
-            stAng: startAngle,
-            swAng: sweepAngle,
-        };
     }
 
     #handleClosepath() {
