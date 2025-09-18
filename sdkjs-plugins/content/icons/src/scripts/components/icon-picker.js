@@ -88,8 +88,13 @@ class IconPicker {
         this.#container.addEventListener("click", (e) => {
             const icon = e.target.closest(".icon");
             if (icon) {
+                const isModifierPressed = e.ctrlKey || e.metaKey;
+
                 let iconId = icon.getAttribute("data-name");
                 let section = icon.getAttribute("data-section");
+                if (!isModifierPressed) {
+                    this.#unselectAll(true);
+                }
                 if (this.#selectedIcons.has(iconId)) {
                     icon.classList.remove("selected");
                     this.#selectedIcons.delete(iconId);
@@ -97,6 +102,7 @@ class IconPicker {
                     icon.classList.add("selected");
                     this.#selectedIcons.set(iconId, section);
                 }
+
                 this.#onChange();
             }
         });
@@ -115,13 +121,32 @@ class IconPicker {
             "click",
             this.#unselectAll.bind(this)
         );
+        this.#container.addEventListener("keydown", (e) => {
+            if (e.ctrlKey && e.key === "a") {
+                e.preventDefault();
+                this.#selectAll();
+            }
+        });
     }
 
-    #unselectAll() {
+    #selectAll() {
+        this.#container
+            .querySelectorAll(".icon:not(.selected)")
+            .forEach((icon) => {
+                let iconId = icon.getAttribute("data-name");
+                let section = icon.getAttribute("data-section");
+                icon.classList.add("selected");
+                this.#selectedIcons.set(iconId, section);
+            });
+        this.#onChange();
+    }
+
+    #unselectAll(silent = false) {
         this.#selectedIcons = new Map();
         this.#container.querySelectorAll(".icon.selected").forEach((icon) => {
             icon.classList.remove("selected");
         });
+        if (silent) return;
         this.#onChange();
     }
 
@@ -147,6 +172,7 @@ class IconPicker {
         svg.setAttribute("role", "img");
         svg.setAttribute("data-name", iconId);
         svg.setAttribute("data-section", section);
+        svg.setAttribute("tabindex", 0);
 
         const title = document.createElementNS(svgNS, "title");
         svg.appendChild(title);

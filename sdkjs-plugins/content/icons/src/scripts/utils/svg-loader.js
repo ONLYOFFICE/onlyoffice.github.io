@@ -65,10 +65,22 @@ class SvgLoader {
         });
     }
 
-    static loadSvgs(selectedIcons) {
-        return Promise.all(
-            [...selectedIcons].map((item) => this.#loadSvg(item[1], item[0]))
-        );
+    static loadSvgs(selectedIcons, concurrency = 100) {
+        let numOfImages = selectedIcons.size;
+        if (numOfImages < concurrency) concurrency = numOfImages;
+
+        const results = new Array(numOfImages);
+        let arrayOfIcons = [...selectedIcons];
+
+        const threadPromises = [...Array(concurrency)].map(async () => {
+            while (numOfImages) {
+                const index = --numOfImages;
+                const item = arrayOfIcons[index];
+                results[index] = await this.#loadSvg(item[1], item[0]);
+            }
+        });
+
+        return Promise.all(threadPromises).then(() => results);
     }
 
     /**

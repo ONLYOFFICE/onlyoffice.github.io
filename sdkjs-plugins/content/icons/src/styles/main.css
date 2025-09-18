@@ -101,6 +101,9 @@ body {
                 color: var(--font-color-hover);
                 background: var(--color-pad-hover);
             }
+            &:focus {
+                box-shadow: 0 0 0 2px var(--color-pad-hover);
+            }
             &.selected {
                 background: var(--color-pad-selected);
             }
