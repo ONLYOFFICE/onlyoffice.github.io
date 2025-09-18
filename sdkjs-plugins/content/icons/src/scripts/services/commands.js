@@ -33,22 +33,21 @@ export const Commands = {
             svgParsedObject.elements.forEach((svgElement) => {
                 if (svgElement.type === "path") {
                     let path = customGeometry.AddPath();
+                    path.SetWidth(width);
+                    path.SetHeight(height);
+                    if (svgElement.style.fill) {
+                        path.SetFill(svgElement.style.fill);
+                    } else {
+                        path.SetFill("darken");
+                    }
+                    if (svgElement.style.stroke) {
+                        path.SetStroke(true);
+                    }
 
                     svgElement.d.forEach((d) => {
                         switch (d.type) {
                             case "moveto":
-                                path.SetWidth(width);
-                                path.SetHeight(height);
-                                if (svgElement.style.fill) {
-                                    path.SetFill(svgElement.style.fill);
-                                } else {
-                                    path.SetFill("darken");
-                                }
-                                if (svgElement.style.stroke) {
-                                    path.SetStroke(true);
-                                }
                                 path.MoveTo(d.x * factor, d.y * factor);
-
                                 break;
                             case "cubicBezier":
                                 path.CubicBezTo(

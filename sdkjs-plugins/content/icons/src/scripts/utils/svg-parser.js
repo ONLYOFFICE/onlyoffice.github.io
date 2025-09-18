@@ -1,6 +1,14 @@
 import { SVGPathParser } from "./svg-path-parser.js";
 
 class SvgParser {
+    /**
+     * Parses an SVG string and returns an object with the width, height, and an array of elements.
+     * @param {string} svgString - The SVG string to parse.
+     * @returns {object} - An object with the width, height, and elements.
+     * @property {string} width - The width of the SVG.
+     * @property {string} height - The height of the SVG.
+     * @property {{Array<{type: string, d: Array<object>, style: object}>}} elements - An array of parsed SVG elements.
+     */
     static parse(svgString) {
         const parser = new DOMParser();
 
@@ -9,17 +17,26 @@ class SvgParser {
         let height = svgDoc.querySelector("svg")?.getAttribute("height");
         const viewBox = svgDoc.querySelector("svg")?.getAttribute("viewBox");
         if (viewBox) {
-            width = width ? width : viewBox.split(" ")[2];
-            height = height ? height : viewBox.split(" ")[3];
+            width =
+                viewBox.split(" ").length > 2 ? viewBox.split(" ")[2] : width;
+            height =
+                viewBox.split(" ").length > 3 ? viewBox.split(" ")[3] : height;
         }
+
+        const elements = this.#extractElements(svgDoc);
 
         return {
             width,
             height,
-            elements: this.#extractElements(svgDoc),
+            elements,
         };
     }
 
+    /**
+     * Extracts elements from an SVG document and returns an array of parsed elements.
+     * @param {Document} svgDoc - The SVG document to extract elements from.
+     * @returns {Array<{type: string, d: Array<object>, style: object}>} - An array of parsed SVG elements.
+     */
     static #extractElements(svgDoc) {
         let elements = [];
 
@@ -273,8 +290,6 @@ class SvgParser {
 
         return commands.join(" ");
     }
-
-    static #polygonToPathCommands() {}
 }
 
 export { SvgParser };
