@@ -308,7 +308,6 @@ class SVGPathParser {
                 this.#currentX,
                 this.#currentY
             );
-            console.warn(bezierCommands);
 
             bezierCommands.forEach((command) => {
                 this.#commands.push(command);
