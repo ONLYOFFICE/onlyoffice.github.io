@@ -80,6 +80,7 @@ class IconsPlugin {
                     }
                 );
             } catch (e) {
+                console.error("Failed to init icons plugin");
                 reject(e);
             }
         });
@@ -100,7 +101,7 @@ class IconsPlugin {
                     Asc.scope.editor = Asc.plugin.info.editorType;
                     Asc.scope.parsedSvgs = parsed;
                     const isCalc = true;
-                    const isClose = true;
+                    const isClose = false;
                     Asc.plugin.callCommand(
                         Commands.insertIcon,
                         isClose,
@@ -108,7 +109,11 @@ class IconsPlugin {
                         resolve
                     );
                 })
-                .catch((e) => reject(e));
+                .catch((e) => {
+                    console.error("Failed to run icons plugin");
+                    console.error(e);
+                    reject(e);
+                });
         });
     }
 }
