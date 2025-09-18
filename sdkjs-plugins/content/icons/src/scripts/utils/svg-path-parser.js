@@ -6,6 +6,9 @@ class SVGPathParser {
     #currentX;
     #currentY;
 
+    /**
+     * @param {string} pathString The SVG path string to parse.
+     */
     constructor(pathString) {
         this.#pathString = pathString;
         this.#currentX = 0;
@@ -13,6 +16,12 @@ class SVGPathParser {
         this.#commands = [];
     }
 
+    /**
+     * Parse the SVG path string and return an array of commands.
+     *
+     * @return {array} An array of commands.
+     *
+     */
     parse() {
         const commandRegex = /([MLHVCSQTAZ])([^MLHVCSQTAZ]*)/gi;
         let match;
@@ -95,17 +104,18 @@ class SVGPathParser {
             let x = params[i];
             let y = params[i + 1];
 
-            if (command === "l") {
-                // relative
+            const absolute = command === "L";
+
+            if (!absolute) {
                 x += this.#currentX;
                 y += this.#currentY;
             }
 
             this.#commands.push({
                 type: "lineto",
-                x: x,
-                y: y,
-                absolute: command === "L",
+                x,
+                y,
+                absolute,
             });
 
             this.#currentX = x;
@@ -116,17 +126,17 @@ class SVGPathParser {
     #handleHorizontalLineto(command, params) {
         params.forEach((param) => {
             let x = param;
+            const absolute = command === "H";
 
-            if (command === "h") {
-                // relative
+            if (!absolute) {
                 x += this.#currentX;
             }
 
             this.#commands.push({
                 type: "lineto",
-                x: x,
+                x,
                 y: this.#currentY,
-                absolute: command === "H",
+                absolute,
                 isHorizontal: true,
             });
 
@@ -137,17 +147,17 @@ class SVGPathParser {
     #handleVerticalLineto(command, params) {
         params.forEach((param) => {
             let y = param;
+            const absolute = command === "V";
 
-            if (command === "v") {
-                // relative
+            if (!absolute) {
                 y += this.#currentY;
             }
 
             this.#commands.push({
                 type: "lineto",
                 x: this.#currentX,
-                y: y,
-                absolute: command === "V",
+                y,
+                absolute,
                 isVertical: true,
             });
 
@@ -197,8 +207,9 @@ class SVGPathParser {
             let x = params[i + 2];
             let y = params[i + 3];
 
-            if (command === "q") {
-                // relative
+            const absolute = command === "Q";
+
+            if (!absolute) {
                 x1 += this.#currentX;
                 y1 += this.#currentY;
                 x += this.#currentX;
@@ -211,7 +222,7 @@ class SVGPathParser {
                 y1: y1,
                 x2: x,
                 y2: y,
-                absolute: command === "Q",
+                absolute,
             });
 
             this.#currentX = x;
@@ -265,19 +276,20 @@ class SVGPathParser {
             let x = params[i];
             let y = params[i + 1];
 
-            if (command === "t") {
-                // relative
+            const absolute = command === "T";
+
+            if (!absolute) {
                 x += this.#currentX;
                 y += this.#currentY;
             }
 
             this.#commands.push({
                 type: "quadraticBezier",
-                x1: x1,
-                y1: y1,
+                x1,
+                y1,
                 x2: x,
                 y2: y,
-                absolute: command === "T",
+                absolute,
                 isSmooth: true,
             });
 
