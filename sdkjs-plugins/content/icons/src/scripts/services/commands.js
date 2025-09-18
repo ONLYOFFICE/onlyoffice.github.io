@@ -39,9 +39,10 @@ export const Commands = {
                             case "moveto":
                                 path.SetWidth(width);
                                 path.SetHeight(height);
-                                path.SetFill("darken");
                                 if (svgElement.style.fill) {
                                     path.SetFill(svgElement.style.fill);
+                                } else {
+                                    path.SetFill("darken");
                                 }
                                 if (svgElement.style.stroke) {
                                     path.SetStroke(true);
