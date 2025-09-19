@@ -3,6 +3,7 @@
         ".dev/*",
         "node_modules/*",
         "src/*",
+        "*.map",
         ".browserslistrc",
         ".gitignore",
         "LICENSE",
