@@ -5,11 +5,11 @@ const { glob } = require("glob");
 
 async function generateIconsJson() {
     try {
-        const FA_SVGS_FOLDER = "../resources/font-awesome/svgs-full/";
-        const CATEGORIES_FILE = "../resources/font-awesome/categories.yml";
-        const OUTPUT_DIR = "../src/scripts/environments/";
+        const FA_SVGS_FOLDER = "../../resources/font-awesome/svgs-full/";
+        const CATEGORIES_FILE = "../../resources/font-awesome/categories.yml";
+        const OUTPUT_DIR = "../../src/js/environments/";
         const OUTPUT_FILE = "categories.js";
-        const LICENSE = "../LICENSE";
+        const LICENSE = "../../LICENSE";
 
         // Get all SVG files in folder svgs-full
         const svgFiles = await glob(FA_SVGS_FOLDER + "**/*.svg");
