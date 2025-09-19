@@ -119,7 +119,7 @@ class IconPicker {
         });
         this.#clearSelectionButton.addEventListener(
             "click",
-            this.#unselectAll.bind(this)
+            this.#unselectAll.bind(this, false)
         );
         this.#container.addEventListener("keydown", (e) => {
             if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {

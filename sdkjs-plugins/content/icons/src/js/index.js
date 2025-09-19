@@ -30,8 +30,10 @@
  *
  */
 
-import { IconsPlugin } from "./scripts/services/plugin.js";
-import { Theme } from "./scripts/theme.js";
+import { IconsPlugin } from "./services/plugin.js";
+import { Theme } from "./theme.js";
+
+import "../styles.css";
 
 let iconsPlugin = new IconsPlugin();
 

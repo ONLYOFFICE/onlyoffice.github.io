@@ -5,13 +5,11 @@
 🔍 Search icons from Font Awesome library  
 ⚡ Quick insertion with simple clicks  
 🎨 Customizable size, color, and style  
-📋 Copy HTML code or icon class names  
 🔄 Regular/Solid/Brands icon styles support
 
 ### Build
 
 ```bash
-npm i -g rollup
 npm i
 npm run build:all
 ```
@@ -29,7 +27,7 @@ rm -r -Force temp-repo
 Generate icon paths by category
 
 ```bash
-cd svg-path-generator
+cd .dev/svg-path-generator
 npm i
 npm run generate-paths
 ```
