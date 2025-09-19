@@ -1,8 +1,13 @@
+import resolve from "@rollup/plugin-node-resolve";
 import { babel } from "@rollup/plugin-babel";
 import license from "rollup-plugin-license";
 import terser from "@rollup/plugin-terser";
+import html from "@rollup/plugin-html";
+import css from "rollup-plugin-css-only";
+import fs from "fs";
 
 const isES5Build = process.env.TARGET === "es5";
+const template = fs.readFileSync("src/index.html", "utf8");
 
 function getBabelConfig() {
     if (isES5Build) {
@@ -40,7 +45,7 @@ function getBabelConfig() {
 }
 
 export default {
-    input: "src/index.js",
+    input: "src/js/index.js",
     output: {
         file: isES5Build ? "dist/bundle.es5.js" : "dist/bundle.modern.js",
         format: isES5Build ? "umd" : "esm",
@@ -48,6 +53,9 @@ export default {
         sourcemap: true,
     },
     plugins: [
+        resolve({
+            browser: true,
+        }),
         babel({
             ...getBabelConfig(),
             exclude: "node_modules/**",
@@ -60,6 +68,11 @@ export default {
             compress: false,
             mangle: false,
         }),
+        html({
+            template: () => template,
+            fileName: "index.html",
+        }),
+        css({ output: "styles.css" }),
         license({
             banner: {
                 commentStyle: "none", // 'regular', 'none', 'ignored'

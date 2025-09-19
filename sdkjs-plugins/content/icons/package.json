@@ -12,8 +12,11 @@
         "@babel/core": "^7.28.4",
         "@babel/preset-env": "^7.28.3",
         "@rollup/plugin-babel": "^6.0.4",
+        "@rollup/plugin-html": "^2.0.0",
+        "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-terser": "^0.4.4",
         "rollup": "^4.50.1",
+        "rollup-plugin-css-only": "^4.5.5",
         "rollup-plugin-license": "^3.6.0"
     },
     "dependencies": {

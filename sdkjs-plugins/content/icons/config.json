@@ -23,7 +23,7 @@
     "variations": [
         {
             "description": "TODO: add description.",
-            "url": "src/index.html",
+            "url": "dist/index.html",
             "icons": "resources/%theme-type%(light|dark)/icon.svg",
             "EditorsSupport": ["word", "slide", "cell"],
             "type": "window",
