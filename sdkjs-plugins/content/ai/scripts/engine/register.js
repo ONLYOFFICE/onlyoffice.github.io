@@ -440,9 +440,9 @@ function registerButtons(window, undefined)
 		let result = await requestEngine.imageGenerationRequest(content);
 		if (!result) return;
 
-			if (Asc.plugin.info.editorSubType === "pdf")
-				return await Asc.Library.AddGeneratedImage(result);
-			await Asc.Library.AddOleObject(result, content);
+		if (Asc.plugin.info.editorSubType === "pdf")
+			return await Asc.Library.AddGeneratedImage(result);
+		await Asc.Library.AddOleObject(result, content);
 	}
 
 	if (true)
@@ -679,12 +679,12 @@ function registerButtons(window, undefined)
 	{
 		try
 		{
-			window.localStorage.setItem(actions_key, JSON.stringify(AI.Actions));
+			window.localStorage.setItem(actions_key, JSON.stringify(AI.Actions));			
 			return true;
 		}
 		catch (e)
 		{
-		}
+		}		
 		return false;
 	};
 
@@ -723,6 +723,9 @@ function registerButtons(window, undefined)
 			AI.Actions[id].model = model;
 			AI.ActionsSave();
 		}
+
+		if (Asc.plugin.sendEvent)
+			Asc.plugin.sendEvent("onAIActionsChange", window.getActionsInfo());
 	};
 
 	AI.ActionsLoad();

@@ -551,10 +551,11 @@
 		}
 	};
 
-	AI.Request.create = function(action) {
+	AI.Request.create = function(action, disableSettings) {
 		let model = AI.Storage.getModelById(AI.Actions[action].model);
 		if (!model) {
-			onOpenSettingsModal();
+			if (!disableSettings)
+				onOpenSettingsModal();
 			return null;
 		}
 		return new AI.Request(model);
