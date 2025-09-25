@@ -38,6 +38,18 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
 
+window.getActionsInfo = function() {
+	let actions = [];
+	for (const action in AI.ActionType) {
+		if (AI.ActionType.hasOwnProperty(action)) {
+			let requestEngine = AI.Request.create(action, true);
+			if (requestEngine)
+				actions.push({ [action] : requestEngine.model });
+		}		
+	}
+	return actions;
+};
+
 window.addSupportAgentMode = function(editorVersion) {
 	var agentHistory = [];
 	var agentDebug = false;
@@ -310,30 +322,97 @@ async function initWithTranslate(counter) {
 		if (editorVersion >= 9000000) {
 			window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
 				let data = {};
-				switch (params.type) {
-					case "text":
-					{
-						let requestEngine = AI.Request.create(AI.ActionType.Chat);
-						if (requestEngine)
-						{
-							let result = await requestEngine.chatRequest(params.data);
-							if (!result) result = "";
+				let isFromMethod = params.isFromMethod === true;
+				let isBlock = !isFromMethod;
 
-							data.type = "text";
-							data.text = result;
+				async function sendResult(data) {
+					if (isFromMethod) {
+						await Asc.Editor.callMethod("SendEventInternal", ["ai_onRequest", data]);	
+					} else {
+						await Asc.Editor.callMethod("onAIRequest", [data]);
+					}
+				}
+
+				if ("Actions" === params.type) {
+					data.Actions = window.getActionsInfo();
+					return await sendResult(data);
+				}
+				
+				if ("text" === params.type)
+					params.type = AI.ActionType.Chat;
+
+				let requestEngine = null;
+				if (AI.Actions[params.type])
+					requestEngine = AI.Request.create(params.type);
+
+				if (!requestEngine) {
+					data.type = "no-engine";
+					data.text = "";
+					data.error = "No model selected for chat action...";
+
+					return await sendResult(data);
+				}
+
+				if (isFromMethod) {
+					await Asc.Editor.callMethod("SendEventInternal", ["ai_onStartAction", {
+						type : "Block",
+						description : "AI (" + requestEngine.modelUI.name + ")"
+					}]);
+				}
+
+				switch (params.type) {
+					case AI.ActionType.Chat:
+					{
+						data.type = "text";
+						data.text = await requestEngine.chatRequest(params.data, isBlock);
+						break;
+					}
+					case AI.ActionType.Translation:
+					{
+						data.type = "text";
+						let prompt = Asc.Prompts.getTranslatePrompt(params.data.text, params.data.lang);
+						let result = await requestEngine.chatRequest(prompt, isBlock);
+						data.text = result ? Asc.Library.getTranslateResult(result, params.data.text) : "";
+						break;
+					}
+					case AI.ActionType.ImageGeneration:
+					{
+						data.type = AI.ActionType.ImageGeneration;
+						let result = await requestEngine.imageGenerationRequest(params.data, isBlock);
+						data.image = result || "";
+						break;
+					}
+					case AI.ActionType.OCR:
+					{
+						data.type = AI.ActionType.OCR;
+						let result = await requestEngine.imageOCRRequest(params.data, isBlock);
+						if (result) {
+							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]);
 						}
-						else
-						{
-							data.type = "no-engine";
-							data.text = "";
-							data.error = "No model selected for chat action..."
-						}
+						break;
+					}
+					case AI.ActionType.Vision:
+					{
+						data.type = AI.ActionType.Vision;
+						let result = await requestEngine.imageVisionRequest({
+							prompt : Asc.Prompts.getImageDescription(),
+							image : params.data
+						}, isBlock);
+						data.result = result || "";
+						break;
 					}
 					default:
 						break;
 				}
 
-				await Asc.Editor.callMethod("onAIRequest", [data]);
+				if (isFromMethod) {
+					await Asc.Editor.callMethod("SendEventInternal", ["ai_onEndAction", {
+						type : "Block",
+						description : "AI (" + requestEngine.modelUI.name + ")"
+					}]);
+				}
+
+				await sendResult(data);			
 			});
 
 			if ("cell" === window.Asc.plugin.info.editorType) {
