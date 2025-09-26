@@ -115,6 +115,322 @@ function CitationItemData(id) {
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-data.json#/items";
 }
 
+CitationItemData.prototype.fillFromObject = function (itemDataObject) {
+    if (Object.hasOwnProperty.call(itemDataObject, "type")) {
+        this._type = itemDataObject.type;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "categories")) {
+        this._categories = itemDataObject.categories;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "citation-key")) {
+        this._citationKey = itemDataObject["citation-key"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "language")) {
+        this._language = itemDataObject.language;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "journalAbbreviation")) {
+        this._journalAbbreviation = itemDataObject.journalAbbreviation;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "shortTitle")) {
+        this._shortTitle = itemDataObject.shortTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "author")) {
+        this._author = itemDataObject.author;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "chair")) {
+        this._chair = itemDataObject.chair;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "collection-editor")) {
+        this._collectionEditor = itemDataObject["collection-editor"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "compiler")) {
+        this._compiler = itemDataObject.compiler;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "composer")) {
+        this._composer = itemDataObject.composer;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "container-author")) {
+        this._containerAuthor = itemDataObject["container-author"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "contributor")) {
+        this._contributor = itemDataObject.contributor;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "curator")) {
+        this._curator = itemDataObject.curator;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "director")) {
+        this._director = itemDataObject.director;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "editorial-director")) {
+        this._editorialDirector = itemDataObject["editorial-director"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "editor")) {
+        this._editor = itemDataObject.editor;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "executive-producer")) {
+        this._executiveProducer = itemDataObject["executive-producer"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "guest")) {
+        this._guest = itemDataObject.guest;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "host")) {
+        this._host = itemDataObject.host;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "illustrator")) {
+        this._illustrator = itemDataObject.illustrator;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "narrator")) {
+        this._narrator = itemDataObject.narrator;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "organizer")) {
+        this._organizer = itemDataObject.organizer;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "original-author")) {
+        this._originalAuthor = itemDataObject["original-author"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "performer")) {
+        this._performer = itemDataObject.performer;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "producer")) {
+        this._producer = itemDataObject.producer;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "recipient")) {
+        this._recipient = itemDataObject.recipient;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "reviewed-author")) {
+        this._reviewedAuthor = itemDataObject["reviewed-author"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "script-writer")) {
+        this._scriptWriter = itemDataObject["script-writer"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "series-creator")) {
+        this._seriesCreator = itemDataObject["series-creator"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "translator")) {
+        this._translator = itemDataObject.translator;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "accessed")) {
+        this._accessed = itemDataObject.accessed;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "container")) {
+        this._container = itemDataObject.container;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "event-date")) {
+        this._eventDate = itemDataObject["event-date"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "issued")) {
+        this._issued = itemDataObject.issued;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "original-date")) {
+        this._originalDate = itemDataObject["original-date"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "submitted")) {
+        this._submitted = itemDataObject.submitted;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "abstract")) {
+        this._abstract = itemDataObject.abstract;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "annote")) {
+        this._annote = itemDataObject.annote;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "archive")) {
+        this._archive = itemDataObject.archive;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "archive_collection")) {
+        this._archiveCollection = itemDataObject["archive_collection"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "archive_location")) {
+        this._archiveLocation = itemDataObject["archive_location"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "archive-place")) {
+        this._archivePlace = itemDataObject["archive-place"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "authority")) {
+        this._authority = itemDataObject.authority;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "call-number")) {
+        this._callNumber = itemDataObject["call-number"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "chapter-number")) {
+        this._chapterNumber = itemDataObject["chapter-number"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "citation-number")) {
+        this._citationNumber = itemDataObject["citation-number"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "citation-label")) {
+        this._citationLabel = itemDataObject["citation-label"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "collection-number")) {
+        this._collectionNumber = itemDataObject["collection-number"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "collection-title")) {
+        this._collectionTitle = itemDataObject["collection-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "container-title")) {
+        this._containerTitle = itemDataObject["container-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "container-title-short")) {
+        this._containerTitleShort = itemDataObject["container-title-short"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "dimensions")) {
+        this._dimensions = itemDataObject.dimensions;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "DOI")) {
+        this._DOI = itemDataObject.DOI;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "edition")) {
+        this._edition = itemDataObject.edition;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "event")) {
+        this._event = itemDataObject.event;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "event-title")) {
+        this._eventTitle = itemDataObject["event-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "event-place")) {
+        this._eventPlace = itemDataObject["event-place"];
+    }
+    if (
+        Object.hasOwnProperty.call(
+            itemDataObject,
+            "first-reference-note-number"
+        )
+    ) {
+        this._firstReferenceNoteNumber =
+            itemDataObject["first-reference-note-number"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "genre")) {
+        this._genre = itemDataObject.genre;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "ISBN")) {
+        this._ISBN = itemDataObject.ISBN;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "ISSN")) {
+        this._ISSN = itemDataObject.ISSN;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "issue")) {
+        this._issue = itemDataObject.issue;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "jurisdiction")) {
+        this._jurisdiction = itemDataObject.jurisdiction;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "keyword")) {
+        this._keyword = itemDataObject.keyword;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "locator")) {
+        this._locator = itemDataObject.locator;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "medium")) {
+        this._medium = itemDataObject.medium;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "note")) {
+        this._note = itemDataObject.note;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "number")) {
+        this._number = itemDataObject.number;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "number-of-pages")) {
+        this._numberOfPages = itemDataObject["number-of-pages"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "number-of-volumes")) {
+        this._numberOfVolumes = itemDataObject["number-of-volumes"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "original-publisher")) {
+        this._originalPublisher = itemDataObject["original-publisher"];
+    }
+    if (
+        Object.hasOwnProperty.call(itemDataObject, "original-publisher-place")
+    ) {
+        this._originalPublisherPlace =
+            itemDataObject["original-publisher-place"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "original-title")) {
+        this._originalTitle = itemDataObject["original-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "page")) {
+        this._page = itemDataObject.page;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "page-first")) {
+        this._pageFirst = itemDataObject["page-first"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "part")) {
+        this._part = itemDataObject.part;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "part-title")) {
+        this._partTitle = itemDataObject["part-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "PMCID")) {
+        this._PMCID = itemDataObject.PMCID;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "PMID")) {
+        this._PMID = itemDataObject.PMID;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "printing")) {
+        this._printing = itemDataObject.printing;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "publisher")) {
+        this._publisher = itemDataObject.publisher;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "publisher-place")) {
+        this._publisherPlace = itemDataObject["publisher-place"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "references")) {
+        this._references = itemDataObject.references;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "reviewed-genre")) {
+        this._reviewedGenre = itemDataObject["reviewed-genre"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "reviewed-title")) {
+        this._reviewedTitle = itemDataObject["reviewed-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "scale")) {
+        this._scale = itemDataObject.scale;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "section")) {
+        this._section = itemDataObject.section;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "source")) {
+        this._source = itemDataObject.source;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "status")) {
+        this._status = itemDataObject.status;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "title")) {
+        this._title = itemDataObject.title;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "title-short")) {
+        this._titleShort = itemDataObject["title-short"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "URL")) {
+        this._URL = itemDataObject.URL;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "version")) {
+        this._version = itemDataObject.version;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "volume")) {
+        this._volume = itemDataObject.volume;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "volume-title")) {
+        this._volumeTitle = itemDataObject["volume-title"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "volume-title-short")) {
+        this._volumeTitleShort = itemDataObject["volume-title-short"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "year-suffix")) {
+        this._yearSuffix = itemDataObject["year-suffix"];
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "custom")) {
+        this._custom = itemDataObject.custom;
+    }
+};
+
+CitationItemData.prototype.getTitle = function () {
+    return this._title;
+};
+CitationItemData.prototype.getType = function () {
+    return this._type;
+};
+
 /**
  * @param {"article"|"article-journal"|"article-magazine"|"article-newspaper"|"bill"|"book"|"broadcast"|"chapter"|"classic"|"collection"|"dataset"|"document"|"entry"|"entry-dictionary"|"entry-encyclopedia"|"event"|"figure"|"graphic"|"hearing"|"interview"|"legal_case"|"legislation"|"manuscript"|"map"|"motion_picture"|"musical_score"|"pamphlet"|"paper-conference"|"patent"|"performance"|"periodical"|"personal_communication"|"post"|"post-weblog"|"report"|"review"|"review-book"|"software"|"song"|"speech"|"standard"|"thesis"|"treaty"|"webpage"} type
  * @returns {CitationItemData}
