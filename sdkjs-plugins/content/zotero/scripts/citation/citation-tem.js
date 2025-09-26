@@ -17,9 +17,38 @@ function CitationItem(id) {
     this._uris = new Array();
 }
 
+CitationItem.prototype.fillFromObject = function (itemObject) {
+    if (Object.hasOwnProperty.call(itemObject, "itemData")) {
+        var citationItemData = new CitationItemData(itemObject.itemData.id);
+        citationItemData.fillFromObject(itemObject.itemData);
+        this.setItemData(citationItemData);
+    }
+    if (Object.hasOwnProperty.call(itemObject, "prefix"))
+        this._prefix = itemObject.prefix;
+    if (Object.hasOwnProperty.call(itemObject, "suffix"))
+        this._suffix = itemObject.suffix;
+    if (Object.hasOwnProperty.call(itemObject, "locator"))
+        this._locator = itemObject.locator;
+    if (Object.hasOwnProperty.call(itemObject, "label"))
+        this._label = itemObject.label;
+    if (Object.hasOwnProperty.call(itemObject, "suppress-author"))
+        this._suppressAuthor = itemObject["suppress-author"];
+    if (Object.hasOwnProperty.call(itemObject, "author-only"))
+        this._authorOnly = itemObject["author-only"];
+    if (Object.hasOwnProperty.call(itemObject, "uris")) {
+        itemObject.uris.forEach(function (uri) {
+            this.addUri(uri);
+        }, this);
+    }
+};
+
 CitationItem.prototype.getSuppressAuthor = function () {
     return this._suppressAuthor;
-}
+};
+
+CitationItem.prototype.getItemData = function () {
+    return this._itemData;
+};
 
 /**
  * @param {CitationItemData} itemData
