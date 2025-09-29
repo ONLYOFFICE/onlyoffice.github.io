@@ -33,11 +33,17 @@ CSLCitation.prototype.getProperty = function (key) {
 };
 
 CSLCitation.prototype.fillFromObject = function (citationObject) {
-    if (citationObject.citationID) {
+    if (
+        Object.hasOwnProperty.call(citationObject, "properties") ||
+        Object.hasOwnProperty.call(citationObject, "schema")
+    ) {
         return this._fillFromCitationObject(citationObject);
-    } else {
+    } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
+        console.error("CSLCitation.citationItems: citationItems is empty");
         return this._fillFromOldCitationObject(citationObject);
     }
+
+    return this._fillFromOldCitationItem(citationObject);
 };
 
 CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
@@ -79,10 +85,31 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
 };
 
 /**
- * @param {{id: string, index: number, "suppress-author": boolean, title: string, type: string, userID: string, groupID: string}} itemObject
+ * @param {{citationObject: Array<{id: string, index: number, "suppress-author": boolean, title: string, type: string, userID: string, groupID: string}>}} citationObject
  * @returns
  */
-CSLCitation.prototype._fillFromOldCitationObject = function (itemObject) {
+CSLCitation.prototype._fillFromOldCitationObject = function (citationObject) {
+    if (citationObject.citationItems.length === 0) {
+        console.error("CSLCitation.citationItems: citationItems is empty");
+        return 0;
+    } else if (citationObject.citationItems.length > 1) {
+        console.error(
+            "CSLCitation.citationItems: citationItems has more than one item"
+        );
+    }
+
+    citationObject.citationItems.forEach(function (itemObject) {
+        this._fillFromOldCitationItem(itemObject);
+    }, this);
+
+    return 1;
+};
+
+/**
+ * @param {} citationObject
+ * @returns
+ */
+CSLCitation.prototype._fillFromOldCitationItem = function (itemObject) {
     var index =
         this._itemsStartIndex >= 0 ? this._itemsStartIndex : itemObject.index;
     var citationItem = new CitationItem(index);
