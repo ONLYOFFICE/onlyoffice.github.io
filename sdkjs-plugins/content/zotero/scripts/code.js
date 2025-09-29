@@ -20,8 +20,11 @@
     var displayNoneClass = "display-none";
     var blurClass = "blur";
 	var formatter = null;
-	var cslItems = {count: 0};
-	var citPrefix = "ZOTERO_CITATION ";
+	var citPrefixNew = "ZOTERO_ITEM";
+	var citSuffixNew = "CSL_CITATION";
+	var citPrefix = "ZOTERO_CITATION";
+	var bibPrefixNew = "ZOTERO_BIBL";
+	var bibSuffixNew = "CSL_BIBLIOGRAPHY";
 	var bibPrefix = "ZOTERO_BIBLIOGRAPHY";
     var repeatTimeout = null;
     var loadTimeout = null;
@@ -31,11 +34,20 @@
 	let bibPlaceholder = "Please insert some citation into the document.";
 	var bUserItemsUpdated = false;
 	var bGroupsItemsUpdated = false;
-	// TODO добавить варианты сохранения для совместимости с другими редакторами (ms, libre, google, мой офис), пока есть вариант сохранить как текст
-	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять из библиографии автоматически (это делать только при обновлении библиографии или refresh), но их точно нужно удалить из formatter!
-	// TODO добавить ещё обработку события (изменения линков), предлать пользователю обновить их или сохранить ручное форматирование (при ручном форматировании не меняем внешний вид цитаты при refresh (да и вообще не меняем))
-	// TODO сейчас всегда делаем полный refresh при каждом действии (обновлении, вставке линков, вставке библиографии), потому что мы не знаем что поменялось без событий (потом добавить ещё сравнение контента)
-	// TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку как документе (для этого нужно знать где именно в документе мы вставляем цитату, какая цитата сверху и снизу от текущего курсора)
+	// TODO добавить варианты сохранения для совместимости с другими редакторами 
+    //     (ms, libre, google, мой офис), пока есть вариант сохранить как текст
+	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
+    //     из библиографии автоматически (это делать только при обновлении библиографии
+    //     или refresh), но их точно нужно удалить из formatter!
+	// TODO добавить ещё обработку события (изменения линков), предлать пользователю
+    //     обновить их или сохранить ручное форматирование (при ручном форматировании
+    //     не меняем внешний вид цитаты при refresh (да и вообще не меняем))
+	// TODO сейчас всегда делаем полный refresh при каждом действии
+    //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
+    //     что поменялось без событий (потом добавить ещё сравнение контента)
+	// TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку
+    //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
+    //     какая цитата сверху и снизу от текущего курсора)
 
     var selected = {
         items: {},
@@ -905,53 +917,71 @@
             return;
         }
 		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
-			if (arrFields.length) {
-				var updatedFields = [];
-				var bibField = null;
-				elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
-				var bibliography = elements.tempDiv.innerText;
-				arrFields.forEach(function(field) {
-					if (bUpadteAll && ( field.Value.indexOf(citPrefix) !== -1 ) ) {
-						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
-						var keysL = [];
-						citationItems = citationItems.map(function(item) {
-							keysL.push({id:item.id, "suppress-author":item["suppress-author"]});
-							return cslItems[item.id];
-						});
-						elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
-						field["Content"] = elements.tempDiv.innerText;
-						if (bSyncronize) {
-							// if we make synchronization we must update value too
-							field['Value'] = citPrefix + JSON.stringify( { citationItems: citationItems } );
-						}
-						updatedFields.push(field);
-					} else if (field.Value.indexOf(bibPrefix) !== -1) {
-						bibField = field;
-					}
-				});
-				if (bibField) {
-					bibField["Content"] = bibliography;
-					updatedFields.push(bibField);
-				} else if (bPastBib) {
-					bibField = {
-						"Value" : bibPrefix,
-						"Content" : bibliography
-					};
-					window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
-						if (!updatedFields.length) {
-							showLoader(false);
-						}
-					});
-				}
-				
-				if (updatedFields.length) {
-					window.Asc.plugin.executeMethod("UpdateAddinFields", [updatedFields], function() {
-						showLoader(false);
-					});
-				}
-			} else {
+			if (!arrFields.length) {
 				showLoader(false);
-			}
+                return;
+            }
+            var updatedFields = [];
+            var bibField = null;
+            var bibFieldValue = ' ';
+            console.warn(formatter.makeBibliography({
+                mode: 'text',
+            }));
+            elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
+            var bibliography = elements.tempDiv.innerText;
+            arrFields.forEach(function(field) {
+                var citationObject;
+                    var citationStartIndex = field.Value.indexOf("{");
+                    if (citationStartIndex !== -1) {
+                        var citationString = field.Value.slice(citationStartIndex);
+                        citationObject = JSON.parse(citationString);
+                    }
+                var keysL = [];
+                var cslCitation;
+                if (bUpadteAll && ( field.Value.indexOf(citPrefixNew) !== -1 || field.Value.indexOf(citPrefix) !== -1 ) ) {
+                    var citationID = citationObject.citationID;
+                    if (field.Value.indexOf(citPrefix) !== -1) {
+                        citationID = citationObject.citationItems[0].id;
+                    }
+
+                    cslCitation = new CSLCitation(citationID, keysL.length);
+                    cslCitation.fillFromObject(citationObject);
+                    keysL = keysL.concat(cslCitation.getSuppressAuthors());
+                
+                    elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
+                    field["Content"] = elements.tempDiv.innerText;
+                    if (bSyncronize && cslCitation) {
+                        // if we make synchronization we must update value too
+                        field["Value"] = citPrefixNew + ' ' + citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                    }
+                    updatedFields.push(field);
+                } else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
+                    bibField = field;
+                    if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
+                        bibFieldValue = JSON.stringify(citationObject);
+                    }
+                }
+            });
+            if (bibField) {
+                bibField["Content"] = bibliography;
+                updatedFields.push(bibField);
+            } else if (bPastBib) {
+                bibField = {
+                    "Value" : bibPrefixNew + bibFieldValue + bibSuffixNew,
+                    "Content" : bibliography
+                };
+                window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
+                    if (!updatedFields.length) {
+                        showLoader(false);
+                    }
+                });
+            }
+            
+            if (updatedFields.length) {
+                window.Asc.plugin.executeMethod("UpdateAddinFields", [updatedFields], function() {
+                    showLoader(false);
+                });
+            }
 		});
 	};
 
@@ -964,15 +994,26 @@
             return;
         }
 
-		var arrItems = [];
-		for (var item in cslItems) {
-			if (item !== "count")
-				arrItems.push(item);
-		}
-
-		formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return cslItems[id]; } }, styles[selectedStyle], selectedLocale, true);
-		if (arrItems.length) {
-			formatter.updateItems(arrItems);
+        var arrIds = [];
+        CSLCitationStorage.forEach(function(item, id) {
+            arrIds.push(id);
+        });
+		formatter = new CSL.Engine(
+            {
+                retrieveLocale: function (id) { return locales[id]; }, 
+                retrieveItem: function (id) { 
+                    var item = CSLCitationStorage.get(id);
+                    console.log(id); 
+                    console.log(item.toOldJSON());
+                    return item.toOldJSON(); 
+                } 
+            }, 
+            styles[selectedStyle],
+            selectedLocale, 
+            true
+        );
+		if (arrIds.length) {
+			formatter.updateItems(arrIds);
 		}
 		if (bUpadteAll || bPastBib)
 			updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize);
@@ -982,33 +1023,43 @@
 		}
 	};
 
+    // onInit (1,0,0,0)
+    // Insert Citation (1,0,0,1)
+    // Insert Bibliography (1,1,1,0)
+    // Refresh (1,1,0,0)
 	function updateCslItems(bUpdadeFormatter, bUpadteAll, bPastBib, bPastLink) {
-		cslItems = {count: 0};
+		CSLCitationStorage.clear();
 		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
 			if (arrFields.length) {
-				var arrItems = [];
-				var tmpObj = {};
+				var numOfItems = 0;
 				var bibField = null;
+                var bibFieldValue = ' ';
 				arrFields.forEach(function(field) {
-					if (field.Value.indexOf(citPrefix) !== -1) {
-						var citationItems = JSON.parse(field.Value.slice(citPrefix.length)).citationItems;
-						citationItems.forEach(function(item) {
-							if (!tmpObj[item.id]) {
-								tmpObj[item.id] = 1;
-								arrItems.push(item);
-							}
-						});
-					} else if(field.Value.indexOf(bibPrefix) !== -1) {
+                    var citationObject;
+                    var citationStartIndex = field.Value.indexOf("{");
+                    if (citationStartIndex !== -1) {
+                        var citationString = field.Value.slice(citationStartIndex);
+                        citationObject = JSON.parse(citationString);
+                    }
+                    
+					if (field.Value.indexOf(citPrefix) !== -1 || field.Value.indexOf(citPrefixNew) !== -1) {
+                        var citationID = citationObject.citationID;
+                        if (field.Value.indexOf(citPrefix) !== -1) {
+                            citationID = citationObject.citationItems[0].id;
+                        }
+                        var cslCitation = new CSLCitation(citationID, numOfItems);
+                        CSLCitationStorage.set(citationID, cslCitation);
+                        numOfItems += cslCitation.fillFromObject(citationObject);
+					} else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
 						bibField = field;
+                        if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
+                            bibFieldValue = JSON.stringify(citationObject);
+                        }
 					}
 				});
 
-				if (arrItems.length) {
-					arrItems.sort( function(itemA, itemB) { return (itemA.index > itemB.index ? 1 : -1) } );
-					arrItems.forEach(function(item) {
-						item.index = ++cslItems.count;
-						cslItems[item.id] = item;
-					});
+				if (numOfItems) {
+                    // sort?
 				} else if (bUpdadeFormatter && bibField && bUpadteAll) {
 					// нет смысла ещё раз искать поле библиографии
 					bUpdadeFormatter = false;
@@ -1019,7 +1070,7 @@
 				}
 			} else if (bUpdadeFormatter && bPastBib) {
 				bibField = {
-					"Value" : bibPrefix,
+					"Value" : bibPrefixNew + bibFieldValue + bibSuffixNew,
 					"Content" : getMessage(bibPlaceholder)
 				};
 				window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
@@ -1044,46 +1095,48 @@
 		var bUpdateItems = false;
         var keys = [];
         var keysL = [];
-        for (var item in selected.items) {
-			if (!cslItems[item]) {
-				cslItems.count++;
-				cslItems[item] = convertToCSL(selected.items[item]);
+        for (var citationID in selected.items) {
+			if (!CSLCitationStorage.has(citationID)) {
+                var cslCitation = new CSLCitation(citationID, CSLCitationStorage.size);
+                var item = convertToCSL(selected.items[citationID]);
+                cslCitation.fillFromObject(item);
+                CSLCitationStorage.set(citationID, cslCitation);
 				bUpdateItems = true;
 			}
-            keys.push(item);
-			keysL.push({id:item, "suppress-author": cslItems[item]["suppress-author"]});
+            keys.push(citationID);
+            keysL = keysL.concat(CSLCitationStorage.get(citationID).getSuppressAuthors());
         }
 
         try {
 			if (bUpdateItems) {
-				var arrItems = [];
-				for (var item in cslItems) {
-					if (item !== "count")
-						arrItems.push(item);
-				}
-				formatter.updateItems(arrItems);
+				var arrIds = [];
+                CSLCitationStorage.forEach(function(item, id) {
+                    arrIds.push(id);
+                });
+				formatter.updateItems(arrIds);
 			}
 
-			var obj = {
-				citationItems : []
-			};
+			var objects = [];
 			keys.forEach(function(element) {
 				removeSelected(element);
-				obj.citationItems.push(cslItems[element]);
+				objects.push(CSLCitationStorage.get(element));
 			});
 			// TODO может ещё очистить поиск (подумать над этим)
 			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
-			var field = {
-				"Value" : citPrefix + JSON.stringify(obj),
-				"Content" : elements.tempDiv.innerText
-			};
-			window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
-				showLoader(false);
-				// TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-				// но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходитсяя в конце
-				// такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-				updateCslItems(true, true, false, false);
-			});
+            
+            objects.forEach(function(obj) {
+                var field = {
+                    "Value" : citPrefixNew + ' ' + citSuffixNew + JSON.stringify(obj.toJSON()),
+                    "Content" : elements.tempDiv.innerText
+                };
+                window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
+                    showLoader(false);
+                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
+                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
+                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
+                    updateCslItems(true, true, false, false);
+                });
+            });
         } catch (e) {
             showError(e);
         }
@@ -1091,10 +1144,9 @@
 
     function convertToCSL(item) {
         var cslData = item;
-		cslData.index = cslItems.count;
-		cslData["short-title"] = item.shortTitle;
-		cslData["title-short"] = item.shortTitle;
-		cslData["suppress-author"] = elements.checkOmitAuthor.checked;
+        cslData["short-title"] = item.shortTitle;
+        cslData["title-short"] = item.shortTitle;
+        cslData["suppress-author"] = elements.checkOmitAuthor.checked;
 
         return cslData;
     };
@@ -1104,15 +1156,11 @@
 		if (pos)
 			item.id = item.id.substring(pos);
 		
-		var cslItem = cslItems[item.id];
+		var cslItem = CSLCitationStorage.get(item.id);
 		item["short-title"] = item.shortTitle;
 		item["title-short"] = item.shortTitle;
+        cslItem.fillFromObject(item);
 
-		for (var key in item) {
-			if (Object.hasOwnProperty.call(item, key)) {
-				cslItem[key] = item[key];
-			}
-		}
     };
 
 	function saveAs() {
@@ -1120,7 +1168,12 @@
 		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
 			let count = 0;
 			arrFields.forEach(function(field) {
-				if ( ( field.Value.indexOf(bibPrefix) !== -1 ) || ( field.Value.indexOf(citPrefix) !== -1 ) ) {
+				if ( 
+                    ( field.Value.indexOf(bibPrefix) !== -1 ) || 
+                    ( field.Value.indexOf(citPrefix) !== -1 ) ||
+                    ( field.Value.indexOf(bibPrefixNew) !== -1 ) || 
+                    ( field.Value.indexOf(citPrefixNew) !== -1 )
+                ) {
 					count++;
 					window.Asc.plugin.executeMethod("RemoveFieldWrapper", [field.FieldId], function() {
 						count--;
@@ -1138,7 +1191,7 @@
 	function synchronizeData() {
 		// form an array for request (one array for user and other for groups)
 		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-		if (!cslItems.count)
+		if (!CSLCitationStorage.size)
 			return;
 
 		showLoader(true);
@@ -1147,21 +1200,19 @@
 		var bHasGroupsItems = false;
 		var arrUsrItems = [];
 		var arrGroupsItems = {};
-		for (var id in cslItems) {
-			if (Object.hasOwnProperty.call(cslItems, id)) {
-				if (id !== 'count') {
-					var item = cslItems[id];
-					if (item.userID) {
-						arrUsrItems.push(item.id)
-					} else if (item.groupID) {
-						if (!arrGroupsItems[item.groupID])
-							arrGroupsItems[item.groupID] = [];
-						
-						arrGroupsItems[item.groupID].push(item.id);
-					}
-				}
-			}
-		}
+        CSLCitationStorage.forEach(function(item, id) {
+            var userID = item.getProperty("userID");
+            var groupID = item.getProperty("groupID");
+            if (userID) {
+                arrUsrItems.push(id)
+            } else if (groupID) {
+                if (!arrGroupsItems[groupID])
+                    arrGroupsItems[groupID] = [];
+                
+                arrGroupsItems[groupID].push(id);
+            }
+        })
+
 		if (arrUsrItems.length) {
 			sdk.items(null, arrUsrItems)
 			.then(function(res) {
