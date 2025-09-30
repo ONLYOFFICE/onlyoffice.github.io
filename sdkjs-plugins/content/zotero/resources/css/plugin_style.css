@@ -321,7 +321,6 @@ input[type="text"] {
 }
 
 .doc {
-    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
 }
@@ -333,6 +332,7 @@ input[type="text"] {
 .doc > div {
     display: flex;
     flex-direction: column;
+    padding: 5px 0;
 }
 
 .secondary-text {
