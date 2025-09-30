@@ -244,17 +244,43 @@ function updatedComboBoxes() {
 			}
 		});
 
+		/*
+		if(options.length == 0) {
+			options.push({
+				id: 'empty',
+				text: window.Asc.plugin.tr("Models not found"),
+				disabled: true,
+			});
+		}
+		*/
+		options.push(
+			{
+				text: '-',
+				children: []
+			},
+			{
+				id: 'add',
+				text: window.Asc.plugin.tr("Add AI Model"),
+				handler: function() {
+					window.Asc.plugin.sendToPlugin("onOpenAddModal");
+				}
+			}
+		);
+
 		selectEl.select2().empty();
 		selectEl.select2({
 			data: options,
-			templateResult: function(option) {
-				var div = $('<div class="ellipsis-content"></div>');
-				div[0].innerText = option.text;
-				return div;
-			},
-			language: {
-				noResults: function() {
-					return window.Asc.plugin.tr("Models not found");
+			templateResult: function(option, el) {
+				if(option.text == '-') {
+					$(el).addClass('separator');
+					return '';
+				} else {
+					var $wrapper = $('<div style="display: flex"></div>');
+					var $div = $('<div class="ellipsis-content"></div>');
+					$div.text(option.text);
+					$wrapper.append($div);
+					$wrapper.prepend('<div class="check-icon"></div>');
+					return $wrapper;
 				}
 			},
 			minimumResultsForSearch: Infinity,
@@ -264,5 +290,16 @@ function updatedComboBoxes() {
 		// TODO: If the active model is no longer in the list, set null and trigger an event to change the model.
 		selectEl.val(action.model);
 		selectEl.trigger('change');
+
+
+		selectEl.on('select2:selecting', function (e) {
+			var selectedOption = e.params.args.data;
+
+			if(selectedOption.handler) {
+				e.preventDefault();
+				selectedOption.handler();
+				selectEl.select2('close');
+			}
+		});
 	});
 }
