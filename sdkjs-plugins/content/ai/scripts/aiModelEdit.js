@@ -395,7 +395,17 @@ function onChangeProviderComboBox() {
 
 	providerUrlInputEl.value = provider ? provider.url : '';
 	providerKeyInputEl.value = provider ? provider.key : '';
-	if(providerUrlInputEl.value) {
+
+	if (providerUrlInputEl.value === "[external]") {
+		providerUrlInputEl.setAttribute('disabled', true);
+		providerKeyInputEl.setAttribute('disabled', true);
+	}
+	else {
+		providerUrlInputEl.removeAttribute('disabled');
+		providerKeyInputEl.removeAttribute('disabled');
+	}
+
+	if (providerUrlInputEl.value) {
 		updateModelsList();
 	}
 }
@@ -439,7 +449,7 @@ function onChangeProviderKeyInput() {
 
 function onChangeModelComboBox() {
 	var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
-	if(modelObj && !isFirstLoadOfModels) {
+	if(modelObj && (type == 'add' || !isFirstLoadOfModels)) {
 		updateCapabilitiesBtns(modelObj.capabilities);
 	}
 
