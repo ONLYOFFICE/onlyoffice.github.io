@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- <title>设置标点符号转换规则</title> -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    .fixed-header {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      flex-shrink: 0;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .btn-bar {
+      margin-bottom: 6px;
+    }
+
+    .btn-mini {
+      padding: 4px 8px;
+      font-size: 13px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    .btn-mini:hover {
+      background-color: #f0f0f0;
+    }
+
+    .scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+    }
+
+    .rule-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 6px 0;
+      padding-left: 4px;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fixed-header">
+    <div class="title">设置标点符号转换规则</div>
+    <div class="desc">
+      请勾选需要处理的标点类型。<br>
+      系统将根据选择将这些半角符号转换为全角（或反之）。
+    </div>
+    <div class="btn-bar">
+      <button class="btn-mini" id="quanxuan" onclick="selectAllPunctuation()">全选</button>
+      <button class="btn-mini" id="qingkong" onclick="clearAllPunctuation()">清空</button>
+      <button class="btn-mini" id="fanxuan" onclick="invertPunctuation()">反选</button>
+    </div>
+  </div>
+
+  <div class="scroll-container" id="rules">
+    <div class="rule-row">
+      <label><input type="checkbox" value="，">逗号</label>
+      <label><input type="checkbox" value="；">分号</label>
+      <label><input type="checkbox" value="：">冒号</label>
+      <label><input type="checkbox" value="。">句号</label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="“">左引号</label>
+      <label><input type="checkbox" value="”">右引号</label>
+      <label><input type="checkbox" value="‘">左单引号</label>
+      <label><input type="checkbox" value="’">右单引号</label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="《">左书名号</label>
+      <label><input type="checkbox" value="》">右书名号</label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="（">左括号</label>
+      <label><input type="checkbox" value="）">右括号</label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="/">斜杠</label>
+      <label><input type="checkbox" value="？">问号</label>
+      <label><input type="checkbox" value="！">感叹号</label>
+      <label><input type="checkbox" value="—">破折号</label>
+    </div>
+    <!-- 货币符号（全角） -->
+    <div class="rule-row">
+      <label><input type="checkbox" value="＄">美元符号</label>
+      <label><input type="checkbox" value="￥">人民币符号</label>
+      <label><input type="checkbox" value="￡">英镑符号</label>
+    </div>
+    </div>
+
+  <script>
+    function selectAllPunctuation() {
+      const checkboxes = document.querySelectorAll('#rules input[type="checkbox"][value]');
+      checkboxes.forEach(cb => cb.checked = true);
+      saveSettings();
+    }
+
+    function clearAllPunctuation() {
+      const checkboxes = document.querySelectorAll('#rules input[type="checkbox"][value]');
+      checkboxes.forEach(cb => cb.checked = false);
+      saveSettings();
+    }
+
+    function invertPunctuation() {
+      const checkboxes = document.querySelectorAll('#rules input[type="checkbox"][value]');
+      checkboxes.forEach(cb => cb.checked = !cb.checked);
+      saveSettings();
+    }
+
+    function saveSettings() {
+      const punctuationCheckboxes = document.querySelectorAll('#rules input[type="checkbox"]:checked');
+      const selectedPunctuation = Array.from(punctuationCheckboxes).map(cb => cb.value);
+      localStorage.setItem('selectedPunctuation', JSON.stringify(selectedPunctuation));
+    }
+
+    function loadSettings() {
+      const allCheckboxes = document.querySelectorAll('#rules input[type="checkbox"]');
+      const stored = localStorage.getItem('selectedPunctuation');
+      if (!stored) {
+        allCheckboxes.forEach(cb => cb.checked = true);
+      } else {
+        const saved = JSON.parse(stored);
+        allCheckboxes.forEach(cb => cb.checked = saved.includes(cb.value));
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSettings();
+      document.querySelectorAll('input').forEach(el => el.addEventListener('change', saveSettings));
+    });
+  </script>
+
+  <script>
+window.Asc.plugin.init = function () {
+  // 获取系统语言
+  const urlParams = new URLSearchParams(window.location.search);
+  const lang = urlParams.get("lang") || "zh-CN"; // 默认英文
+  console.log("当前语言代码:", lang); // 添加日志查看实际语言代码
+
+  // 触发翻译
+  window.Asc.plugin.onTranslate();
+};
+
+
+window.Asc.plugin.onTranslate = function() {
+            try {
+                // 获取当前语言
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentLang = urlParams.get('lang') || 'en-EN';
+                
+                // 翻译对象
+                const translations = {
+                    'zh-CN': {
+                        "设置标点符号转换规则": "设置标点符号转换规则",
+                        "请勾选需要处理的标点类型。<br>系统将根据选择将这些半角符号转换为全角（或反之）。": "请勾选需要处理的标点类型。<br>系统将根据选择将这些半角符号转换为全角（或反之）。",
+                        "全选": "全选", 
+                        "清空": "清空", 
+                        "反选": "反选",
+
+                        "逗号":"逗号",
+                        "分号":"分号",
+                        "冒号":"冒号",
+                        "句号":"句号",
+                        "左引号":"左引号",
+                        "右引号":"右引号",
+                        "左单引号":"左单引号",
+                        "右单引号":"右单引号",
+                        "左书名号":"左书名号",
+                        "右书名号":"右书名号",
+                        "左括号":"左括号",
+                        "右括号":"右括号",
+                        "斜杠":"斜杠",
+                        "问号":"问号",
+                        "感叹号":"感叹号",
+                        "破折号":"破折号",
+                        "美元符号":"美元符号",
+                        "人民币符号":"人民币符号",
+                        "英镑符号":"英镑符号"
+                    },
+                    'en-EN': {
+                        "设置标点符号转换规则": "Set punctuation conversion rules",
+                        "请勾选需要处理的标点类型。": "Please check the types of punctuation you want to process.",
+                        "系统将根据选择将这些半角符号转换为全角（或反之）。": "The system will convert these half-width symbols to full-width (or vice versa) based on your selection.",
+                        "全选": "Select all",
+                        "清空": "Clear all",
+                        "反选": "Invert selection",
+
+                        "逗号": "Comma",
+                        "分号": "Semicolon",
+                        "冒号": "Colon",
+                        "句号": "Period",
+                        "左引号": "Left quotation mark",
+                        "右引号": "Right quotation mark",
+                        "左单引号": "Left single quotation mark",
+                        "右单引号": "Right single quotation mark",
+                        "左书名号": "Left book title mark",
+                        "右书名号": "Right book title mark",
+                        "左括号": "Left parenthesis",
+                        "右括号": "Right parenthesis",
+                        "斜杠": "Slash",
+                        "问号": "Question mark",
+                        "感叹号": "Exclamation mark",
+                        "破折号": "Em dash",
+                        "美元符号": "Dollar sign",
+                        "人民币符号": "Yuan sign",
+                        "英镑符号": "Pound sign"
+                    },
+
+                };
+
+                // 获取翻译文本的函数
+                function getTranslation(key) {
+                    console.log('当前使用的语言:', currentLang); // 添加日志
+                    // 根据当前语言选择翻译对象
+                    const langTranslations = translations[currentLang] || translations['zh-CN'];
+                    return langTranslations[key] || key;
+                }
+
+                // 应用翻译
+                document.getElementById("select-file").innerText = getTranslation("Upload Pictures");
+                document.getElementById("emoji").innerText = getTranslation("Emote");
+                document.getElementById("free-draw").innerText = getTranslation("Free drawing");
+                document.getElementById("Technology").innerText = getTranslation("Technology");
+                document.getElementById("People").innerText = getTranslation("People");
+                document.getElementById("Nature").innerText = getTranslation("Nature");
+                document.getElementById("Foods").innerText = getTranslation("Foods");
+                document.getElementById("Hand-drawn").innerText = getTranslation("Hand drawn");
+                document.getElementById("Goods").innerText = getTranslation("Goods");
+                document.getElementById("Myself").innerText = getTranslation("Myself");
+                document.getElementById("textElement1").innerText = getTranslation("Double click to insert picture");
+                document.getElementById("textElement2").innerText = getTranslation("Double-click the drawn image to insert the document");
+                document.getElementById("textElement3").innerText = getTranslation("Please double click to insert picture");
+                document.getElementById("textlabel").innerText = getTranslation("Double-click the drawn image to insert the document");
+                document.getElementById("textsave").innerText = getTranslation("Saved successfully");
+                document.getElementById("textConfirm").innerText = getTranslation("Confirm");
+                document.getElementById("textsave2").innerText = getTranslation("Download");
+                document.getElementById("textclean").innerText = getTranslation("Clear screen");
+                document.getElementById("text").innerText = getTranslation("Please choose the face and the expression you want.");
+                document.getElementById("textsave3").innerText = getTranslation("Insert");
+
+            } catch (e) {
+                console.error('翻译过程出错:', e);
+            }
+        };
+    </script>
+
+  
+
+</body>
+</html>
