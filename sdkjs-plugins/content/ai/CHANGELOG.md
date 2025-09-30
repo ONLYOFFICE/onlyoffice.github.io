@@ -117,3 +117,7 @@
 
 ## 2.4.2
 * Add agent for simple functions.
+
+## 2.5.0
+* Add events for another plugins.
+* Bug fix.
