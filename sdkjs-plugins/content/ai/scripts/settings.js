@@ -175,6 +175,13 @@ function renderActionsList() {
 				id: e.params.data.actionId,
 				model: e.params.data.id 
 			});
+
+			for (let i = 0; i < actionsList.length; i++) {
+				if (actionsList[i].id == e.params.data.actionId) {
+					actionsList[i].model = e.params.data.id;
+					break;
+				}
+			}
 		});
 	});
 	toggleScrollbarPadding();
