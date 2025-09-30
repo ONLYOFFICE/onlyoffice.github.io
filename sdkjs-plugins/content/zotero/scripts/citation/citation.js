@@ -39,7 +39,6 @@ CSLCitation.prototype.fillFromObject = function (citationObject) {
     ) {
         return this._fillFromCitationObject(citationObject);
     } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
-        console.error("CSLCitation.citationItems: citationItems is empty");
         return this._fillFromOldCitationObject(citationObject);
     }
 
