@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- 仅用于子窗与父插件通信；不影响样式 -->
+  <script src="../../v1/plugins.js"></script>
+  <meta charset="utf-8"/>
+  <title>格式化错误报告</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#222; --muted:#666; --soft:#f5f7fa; --line:#e6e8eb;
+      --primary:#155EEF; --primary-weak:#e7efff; --danger:#b00020;
+      --selbg:#e9f7ef; --selborder:#c9ecd7; --seltext:#0a7a3b; --warn:#b36b00;
+    }
+    *{box-sizing:border-box}
+    html, body { height: 100vh; }
+    body{
+      margin:0; padding:12px;
+      font:14px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC","Microsoft Yahei", sans-serif;
+      color:var(--fg); background:var(--bg);
+      display:flex; flex-direction:column; gap:10px; overflow:hidden;
+    }
+
+    header{
+      flex:0 0 auto;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+      border-bottom:1px solid var(--line); padding-bottom:10px;
+    }
+    h1{font-size:18px; margin:0}
+    .meta{font-size:12px; color:var(--muted)}
+    #topNotice{
+      display:none; padding:8px 12px; border-radius:8px; background:var(--primary-weak); color:#0a2a7a;
+      margin-top:6px; font-size:13px;
+    }
+
+    .content{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+    .sticky{
+      position:sticky; top:0; z-index:5;
+      background:#fff;
+      padding-bottom:8px; margin-bottom:8px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .stat{ display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#333; margin:6px 0 8px; }
+    .badge{display:inline-block; padding:2px 8px; border-radius:999px; background:var(--soft); border:1px solid var(--line)}
+    .badge.warn{background:#fff7e6; border-color:#ffe6b3; color:var(--warn)}
+    .badge.sel{background:var(--selbg); border-color:var(--selborder); color:var(--seltext);}
+
+    .toolbar{ display:flex; flex-wrap:wrap; gap:8px; }
+    button{
+      appearance:none; border:1px solid var(--line); background:#fff; color:#111; padding:6px 10px; border-radius:8px;
+      cursor:pointer; font-size:13px;
+    }
+    .toolbar button{ background:#fff; border-color:var(--line); }
+    .toolbar button:hover{ background:#fafbfc; }
+    button.primary{ background:var(--primary); border-color:var(--primary); color:#fff; }
+    button.danger{ background:#fff0f1; border-color:#ffd5da; color:var(--danger); }
+
+    .tablewrap{ flex:1 1 auto; min-height:0; overflow:auto; }
+    table{width:100%; border-collapse:collapse; border:1px solid var(--line); background:#fff}
+    thead th{
+      text-align:left; font-weight:600; font-size:12px; color:#444; background:#fafbfc; border-bottom:1px solid var(--line);
+      padding:8px; position:sticky; top:0; z-index:1;
+    }
+    tbody td{ padding:8px; border-top:1px solid var(--line); vertical-align:top; }
+    tbody tr:hover{ background:#fcfdff; }
+    .col-check{width:52px}
+    .col-idx{width:64px; color:#666}
+    .col-rule{width:150px}
+    .code{
+      white-space:pre-wrap; word-break:break-word; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#fbfcfe; border:1px solid var(--line); border-radius:6px; padding:6px 8px;
+    }
+    .changed{ background:#fff8e6; border-color:#ffe3a6; }
+    .empty{ color:#999; font-style:italic }
+
+    footer{
+      flex:0 0 auto; margin-top:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;
+      border-top:1px solid var(--line); padding-top:10px;
+    }
+    .hint{font-size:12px; color:#777}
+    .right{display:flex; gap:8px; flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>格式化错误报告</h1>
+      <div class="meta" id="metaInfo">从选中文本生成 · 以下仅显示“会发生变化”的行</div>
+      <div id="topNotice"></div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="sticky">
+      <div class="stat" id="statBar"></div>
+      <div class="toolbar">
+        <button id="btnSelectAll">全选</button>
+        <button id="btnSelectNone">全不选</button>
+        <button id="btnSelectSpace" title="只勾选空格相关规则（中英/数字间、数字-单位、百分号）">仅选空格相关</button>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <table id="reportTable" aria-label="报告列表">
+        <thead>
+          <tr>
+            <th class="col-check">选择</th>
+            <th class="col-idx">行号</th>
+            <th class="col-rule">问题</th>
+            <th>原文</th>
+            <th>修复后段落</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="hint">提示：未勾选的行将保持原样；勾选的行会替换为右侧“修复后段落”。</div>
+    <div class="right">
+      <!-- <button id="btnSave" class="primary">确定并保存</button> -->
+      <!-- 文案改为“取消” -->
+      <!-- <button id="btnClose" class="danger">取消</button> -->
+    </div>
+  </footer>
+
+
+
+
+  <script>
+  try { localStorage.setItem('reportCloseReason', 'open'); } catch(e){}
+
+      
+  // —— 统一的发送函数：优先 ONLYOFFICE 的 sendToPlugin，失败再回退 postMessage —— //
+  // —— 统一的发送函数：优先 sendToPlugin，失败再回退 postMessage —— //
+  function sendToHost(payload) {
+    try {
+      if (window.Asc && window.Asc.plugin && typeof window.Asc.plugin.sendToPlugin === 'function') {
+        window.Asc.plugin.sendToPlugin("onWindowMessage", payload);
+        return;
+      }
+    } catch (e) { }
+    try {
+      parent.postMessage({ source: 'zhlint', payload }, '*'); // 回退（通常用不到）
+    } catch (e) { }
+  }
+
+
+  (function(){
+    // ===== 读取数据 =====
+    const reportRaw = localStorage.getItem('zhlintReport') || '[]';
+    const originalLines = JSON.parse(localStorage.getItem('originalLines') || '[]');
+    const fixedLines    = JSON.parse(localStorage.getItem('fixedLines') || '[]');
+    const report = safeParse(reportRaw, []);
+
+    // 顶部显示“空格策略”
+    showStrategySummary();
+
+    if (!Array.isArray(originalLines) || !Array.isArray(fixedLines) || originalLines.length !== fixedLines.length) {
+      alert('报告数据异常：originalLines / fixedLines 缺失或长度不一致');
+      return;
+    }
+
+    // ==== 将 report（仅含有问题的行）映射回原始行号 ====>
+    const idxMap = [];
+    let start = 0;
+    report.forEach(item => {
+      const { original, fixed, errors } = item || {};
+      const found = findNextIndex(originalLines, fixedLines, original, fixed, start);
+      if (found >= 0) {
+        idxMap.push({ idx: found, original, fixed, errors: errors || [] });
+        start = found + 1;
+      }
+    });
+    if (idxMap.length === 0) {
+      for (let i=0;i<originalLines.length;i++){
+        if (originalLines[i] !== fixedLines[i]) {
+          idxMap.push({ idx:i, original: originalLines[i], fixed: fixedLines[i], errors: [] });
+        }
+      }
+    }
+
+    renderStat(originalLines.length, idxMap.length, idxMap);
+    renderTable(idxMap);
+    bindActions(idxMap, originalLines, fixedLines);
+    updateSelectedBadge();
+
+    // ===== 工具函数 =====
+    function safeParse(s, d){ try{return JSON.parse(s);}catch(e){return d;} }
+    function findNextIndex(origArr, fixArr, o, f, startAt){
+      for (let i=startAt;i<origArr.length;i++){ if (origArr[i] === o && fixArr[i] === f) return i; }
+      return -1;
+    }
+    function showStrategySummary(){
+      const cjk = localStorage.getItem('opt_cjkAnSpace') === '1';
+      const nu  = localStorage.getItem('opt_numUnitSpace') === '1';
+      const tip = document.getElementById('topNotice');
+      const a = cjk ? "添加空格" : "删除空格";
+      const b = nu  ? "添加空格" : "删除空格";
+      tip.textContent = `本次空格策略：中文-英文/数字 = ${a}；数字-单位/符号（含百分号） = ${b}。`;
+      tip.style.display = 'block';
+    }
+
+    function renderStat(total, changed, rows){
+      const spaceRules = new Set([
+        'spaceBetweenMixedLang:add','spaceBetweenMixedLang:remove',
+        'numberUnitSpacing:add','numberUnitSpacing:remove',
+        'percentSpacing:add','percentSpacing:remove'
+      ]);
+      let spaceCount = 0, otherCount = 0;
+      rows.forEach(r=>{
+        const rules = (r.errors||[]).map(e=>e.rule).filter(Boolean);
+        if (rules.length === 0) {
+          if (guessSpaceChange(r.original, r.fixed)) spaceCount++; else otherCount++;
+        } else {
+          let hasSpace=false, hasOther=false;
+          rules.forEach(rule=>{ if (spaceRules.has(rule)) hasSpace=true; else hasOther=true; });
+          if (hasSpace) spaceCount++;
+          if (hasOther) otherCount++;
+        }
+      });
+      const bar = document.getElementById('statBar');
+      bar.innerHTML = `
+        <span class="badge">总行数 ${total}</span>
+        <span class="badge warn">存在错误的行数 ${changed}</span>
+        <span class="badge">空格相关 ${spaceCount}</span>
+        <span class="badge">其它 ${otherCount}</span>
+        <span class="badge sel" id="selCountBadge">选中的行数 0</span>`;
+    }
+
+    function guessSpaceChange(a,b){
+      if (a.replace(/\s+/g,'') === b.replace(/\s+/g,'')) return a !== b;
+      return false;
+    }
+
+    function renderTable(rows){
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = '';
+      rows.forEach(({idx, original, fixed, errors})=>{
+        const tr = document.createElement('tr'); tr.dataset.idx = String(idx);
+
+        const tdCheck = document.createElement('td');
+        tdCheck.className = 'col-check';
+        tdCheck.innerHTML = `<input type="checkbox" class="row-check" checked aria-label="选择第${idx+1}行">`;
+        tr.appendChild(tdCheck);
+
+        const tdIdx = document.createElement('td');
+        tdIdx.className = 'col-idx';
+        tdIdx.textContent = String(idx + 1);
+        tr.appendChild(tdIdx);
+
+        const tdRule = document.createElement('td');
+        tdRule.className = 'col-rule';
+        tdRule.appendChild(renderRule(errors));
+        tr.appendChild(tdRule);
+
+        const tdOriginal = document.createElement('td');
+        tdOriginal.innerHTML = `<div class="code">${escapeHTML(original || '').trim() || '<span class="empty">（空行）</span>'}</div>`;
+        tr.appendChild(tdOriginal);
+
+        const tdFixed = document.createElement('td');
+        tdFixed.innerHTML = `<div class="code changed">${escapeHTML(fixed || '').trim() || '<span class="empty">（空行）</span>'}</div>`;
+        tr.appendChild(tdFixed);
+
+        tbody.appendChild(tr);
+      });
+
+      tbody.addEventListener('change', (e)=>{
+        if (e.target && e.target.classList.contains('row-check')) updateSelectedBadge();
+      });
+    }
+
+    function renderRule(errors){
+      const wrap = document.createElement('div');
+      const hiddenRules = new Set(['fullwidthPunctuation','spaceBetweenMixedLang:add']);
+      const list = (errors || []).filter(e => !hiddenRules.has(e.rule));
+      const text = (list.length ? list : (errors||[])).map(e => e.message).join('；');
+      wrap.innerHTML = `<div style="color:#555;font-size:12px">${escapeHTML(text || '存在格式优化（空格/标点）')}</div>`;
+      return wrap;
+    }
+
+    function bindActions(rows, original, fixed){
+      const tbody = document.getElementById('tbody');
+
+      document.getElementById('btnSelectAll').onclick  = () => {
+        tbody.querySelectorAll('.row-check').forEach(ch=> ch.checked = true);
+        updateSelectedBadge();
+      };
+      document.getElementById('btnSelectNone').onclick = () => {
+        tbody.querySelectorAll('.row-check').forEach(ch=> ch.checked = false);
+        updateSelectedBadge();
+      };
+      document.getElementById('btnSelectSpace').onclick = () => {
+        const spaceRules = new Set(['spaceBetweenMixedLang:add','spaceBetweenMixedLang:remove','numberUnitSpacing:add','numberUnitSpacing:remove','percentSpacing:add','percentSpacing:remove']);
+        const isSpaceRow = (r) => (r.errors && r.errors.length) ? r.errors.some(e => spaceRules.has(e.rule)) : guessSpaceChange(r.original, r.fixed);
+        tbody.querySelectorAll('.row-check').forEach(ch=> ch.checked = false);
+        Array.from(tbody.querySelectorAll('tr')).forEach(tr=>{
+          const idx = +tr.dataset.idx;
+          const row = rows.find(r => r.idx === idx);
+          if (row && isSpaceRow(row)) tr.querySelector('.row-check').checked = true;
+        });
+        updateSelectedBadge();
+      };
+
+    
+      // document.getElementById('btnSave').onclick = () => {
+      //   try { localStorage.setItem('reportCloseReason', 'saved'); } catch(e){}
+
+      //   const base = JSON.parse(localStorage.getItem('currentSelectionLines') || 'null') || original.slice();
+      //   const applyLines = buildApplyResult(rows, base, fixed, true);
+      //   if (!applyLines) {
+      //     // 你原有的错误提示保留
+      //     showNotice && showNotice('❌ 当前选择区行数异常，无法保存', true);
+      //     return;
+      //   }
+
+      //   // 1) 写入由主插件在窗口关闭时读取的结果（保持现有逻辑）
+      //   localStorage.setItem('batchReplaceResult', JSON.stringify(applyLines));
+
+      //   // 2) 🔔 新增：半透明提示（复制成功类）
+      //   showToast('关闭本窗口后，系统将依据您已勾选的内容保存并应用修改。');
+
+      //   // 你原有的统计提示与自动关闭逻辑保留
+      //   const checkedCount = Array.from(document.querySelectorAll('.row-check')).filter(ch => ch.checked).length;
+      //   const reportArr = JSON.parse(localStorage.getItem('zhlintReport') || '[]');
+      //   const msg = `✅ 已检测到 ${reportArr.length} 条问题，您勾选了 ${checkedCount} 条。窗口将自动关闭并完成替换。`;
+      //   if (typeof showNotice === 'function') showNotice(msg);
+
+      //   setTimeout(() => window.close(), 800);
+      // };
+
+      // —— 把保存流程抽成函数，供多处复用 —— //
+      function applySelectedAndClose() {
+        try { localStorage.setItem('reportCloseReason', 'saved'); } catch (e) { }
+
+        const base = JSON.parse(localStorage.getItem('currentSelectionLines') || 'null') || original.slice();
+        const applyLines = buildApplyResult(rows, base, fixed, true);
+        if (!applyLines) {
+          showNotice && showNotice('❌ 当前选择区行数异常，无法保存', true);
+          return;
+        }
+
+          // ✅ 新增：把结果落盘，父窗可兜底读取
+        try { localStorage.setItem('batchReplaceResult', JSON.stringify(applyLines)); } catch(e){}
+        try { localStorage.setItem('reportApplyReady', '1'); } catch(e){}
+
+        // 直接把结果发给父端（code.js 的 onMessage → apply-now 会替换并关窗）
+        sendToHost({ type: 'apply-now', lines: applyLines });
+
+        showToast('已保存并应用勾选的修改。');
+        setTimeout(() => { try { window.close(); } catch (e) { } }, 1000);
+      }
+
+      // 1) 如果页脚真的有按钮再绑定（你当前注释掉了，不会报错）
+      const btnSaveEl = document.getElementById('btnSave');
+      if (btnSaveEl) btnSaveEl.addEventListener('click', applySelectedAndClose);
+
+      // 2) 标准路径：父窗写入 reportApplyNow=1 时触发
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'reportApplyNow' && e.newValue === '1') {
+          try { localStorage.removeItem('reportApplyNow'); } catch (_) { }
+          applySelectedAndClose();
+        }
+      });
+
+      // 3) 兜底轮询：某些环境下 storage 事件不会触发（file://、沙盒等）
+      let _applyPoll = setInterval(() => {
+        if (localStorage.getItem('reportApplyNow') === '1') {
+          try { localStorage.removeItem('reportApplyNow'); } catch (_) { }
+          applySelectedAndClose();
+        }
+      }, 120);
+      window.addEventListener('pagehide', () => clearInterval(_applyPoll));
+
+
+      // —— 取消：对齐 space-options.html 的行为，直接关闭窗口 —— //
+      // document.getElementById('btnClose').onclick = () => {
+      //   window.close();
+      // };
+
+      // ========= 监听父窗触发的“一键保存并修改” =========
+      window.addEventListener('storage', function (e) {
+        if (e.key !== 'reportApplyNow' || e.newValue !== '1') return;
+        // 清标记，防抖
+        try { localStorage.removeItem('reportApplyNow'); } catch (err) { }
+
+        // 标记为已保存（防止父端把这次关闭当成“未保存”）
+        try { localStorage.setItem('reportCloseReason', 'saved'); } catch (err) { }
+
+        // —— 下面就是你 btnSave.onclick 里的那套 —— //
+        const base = JSON.parse(localStorage.getItem('currentSelectionLines') || 'null') || original.slice();
+        const applyLines = buildApplyResult(rows, base, fixed, true);
+        if (!applyLines) {
+          showNotice && showNotice('❌ 当前选择区行数异常，无法保存', true);
+          return;
+        }
+
+        // 直接把结果发给父端（走你 code.js 里的 onMessage → apply-now）
+        sendToHost({ type: 'apply-now', lines: applyLines });
+
+        // 给个轻提示 & 合上窗口（父端兜底也会关）
+        showToast('已保存并应用勾选的修改。');
+        setTimeout(() => { try { window.close(); } catch (e) { } }, 1000);
+      });
+
+
+
+
+
+
+
+
+    }
+
+    function updateSelectedBadge(){
+      const tbody = document.getElementById('tbody');
+      const sel = Array.from(tbody.querySelectorAll('.row-check')).filter(ch => ch.checked).length;
+      const badge = document.getElementById('selCountBadge');
+      if (badge) badge.textContent = `选中的行数 ${sel}`;
+    }
+
+    // 基于“当前基线行”按勾选覆盖 fixed
+    function buildApplyResult(rows, baseLines, fixed, respectCheckbox){
+      const out = baseLines.slice();
+      const tbody = document.getElementById('tbody');
+      if (out.length === 0) { alert('无法应用：当前选择区行数异常'); return null; }
+      Array.from(tbody.querySelectorAll('tr')).forEach(tr=>{
+        const idx = +tr.dataset.idx;
+        const checked = tr.querySelector('.row-check')?.checked;
+        if (!respectCheckbox || checked) out[idx] = fixed[idx];
+      });
+      return out;
+    }
+
+    function escapeHTML(str){
+      return String(str).replace(/[&<>"'`]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[s]));
+    }
+
+    // 🔔 轻量 Toast：半透明、自动消失，不影响现有样式
+    function showToast(text, duration = 600) {
+      const el = document.createElement('div');
+      el.textContent = text;
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      Object.assign(el.style, {
+        position: 'fixed',
+        top: '18px',
+        left: '50%',
+        transform: 'translateX(-50%) translateY(-6px)',
+        padding: '8px 20px',
+        borderRadius: '8px',
+        background: 'rgba(0,0,0,0.72)',
+        color: '#fff',
+        fontSize: '13px',
+        boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
+        zIndex: 9999,
+        pointerEvents: 'none',
+        opacity: 0,
+        transition: 'opacity .18s ease, transform .18s ease'
+      });
+      document.body.appendChild(el);
+      requestAnimationFrame(() => {
+        el.style.opacity = 1;
+        el.style.transform = 'translateX(-50%) translateY(0)';
+      });
+      setTimeout(() => {
+        el.style.opacity = 0;
+        el.style.transform = 'translateX(-50%) translateY(-6px)';
+        setTimeout(() => el.remove(), 200);
+      }, duration);
+    }
+
+    // 未点击保存而关闭窗口：标记为 closed_without_save
+    window.addEventListener('pagehide', function () {
+      try {
+        if (localStorage.getItem('reportCloseReason') !== 'saved') {
+          localStorage.setItem('reportCloseReason', 'closed_without_save');
+        }
+      } catch (e) { }
+    });
+
+
+  })();
+  </script>
+</body>
+</html>

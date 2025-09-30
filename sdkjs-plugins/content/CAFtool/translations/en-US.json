@@ -1,0 +1,28 @@
+{
+  "设置标点符号转换规则": "Set punctuation conversion rules",
+  "请勾选需要处理的标点类型。": "Please check the types of punctuation you want to process.",
+  "系统将根据选择将这些半角符号转换为全角（或反之）。": "The system will convert these half-width symbols to full-width (or vice versa) based on your selection.",
+  "全选": "Select all",
+  "清空": "Clear all",
+  "反选": "Invert selection",
+
+  "逗号": "Comma",
+  "分号": "Semicolon",
+  "冒号": "Colon",
+  "句号": "Period",
+  "左引号": "Left quotation mark",
+  "右引号": "Right quotation mark",
+  "左单引号": "Left single quotation mark",
+  "右单引号": "Right single quotation mark",
+  "左书名号": "Left book title mark",
+  "右书名号": "Right book title mark",
+  "左括号": "Left parenthesis",
+  "右括号": "Right parenthesis",
+  "斜杠": "Slash",
+  "问号": "Question mark",
+  "感叹号": "Exclamation mark",
+  "破折号": "Em dash",
+  "美元符号": "Dollar sign",
+  "人民币符号": "Yuan sign",
+  "英镑符号": "Pound sign"
+}

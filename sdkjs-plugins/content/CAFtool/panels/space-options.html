@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>空格策略选项</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#fff; --line:#e6e8ef; --title:#111827; --text:#374151; --muted:#6b7280;
+      --primary:#155EEF; --primary-weak:#e7efff; --ring:#cdd9ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg);
+      font:14px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      color:var(--text);
+      /* ✅ 改为可滚动，避免小窗里显示不全 */
+      display:block; padding:12px; overflow:auto;
+    }
+    .card{
+      width:100%; max-width:560px; background:var(--card); border:1px solid var(--line);
+      border-radius:14px; box-shadow:0 4px 20px rgba(17,24,39,.06);
+      margin:0 auto; padding:18px;
+      /* ✅ 在小窗中限制高度，并允许内部滚动 */
+      max-height:calc(100vh - 24px); overflow:auto;
+    }
+    .header{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
+    .dot{width:10px; height:10px; border-radius:50%; background:var(--primary);}
+    h3{margin:0; font-size:16px; color:var(--title);}
+    .desc{margin:6px 0 14px; font-size:13px; color:var(--muted); background:var(--primary-weak);
+      padding:8px 10px; border-radius:10px;}
+    .group{display:flex; flex-direction:column; gap:10px; margin:8px 0 6px;}
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:#fff;
+    }
+    .row .label{display:flex; gap:10px; align-items:center;}
+    .row .title{font-weight:600; color:#111827;}
+    .row .hint{font-size:12px; color:var(--muted);}
+    /* 开关样式 */
+    .switch{position:relative; width:44px; height:24px; flex:0 0 44px;}
+    .switch input{appearance:none; -webkit-appearance:none; width:100%; height:100%; margin:0; outline:none; cursor:pointer;}
+    .switch .track{
+      position:absolute; inset:0; background:#e5e7eb; border-radius:999px; transition:.2s ease;
+      border:1px solid #d1d5db;
+    }
+    .switch .thumb{
+      position:absolute; top:2px; left:2px; width:20px; height:20px; background:#fff; border-radius:50%;
+      box-shadow:0 1px 2px rgba(0,0,0,.08); transition:.2s ease;
+    }
+    .switch input:checked + .track{background:var(--primary); border-color:var(--primary);}
+    .switch input:checked + .track + .thumb{left:22px;}
+    .switch input:focus-visible + .track{box-shadow:0 0 0 3px var(--ring);}
+    /* 底部按钮：始终可见且居中 */
+    .actions{
+      position:sticky; bottom:0; display:flex; justify-content:center;
+      padding-top:10px; margin-top:14px;
+      background:linear-gradient(to top, rgba(246,248,251,1), rgba(246,248,251,0));
+    }
+    .btn{
+      appearance:none; border:1px solid var(--primary); background:var(--primary); color:#fff;
+      padding:8px 20px; border-radius:999px; font-weight:600; cursor:pointer; font-size:14px;
+      transition:filter .15s ease;
+    }
+    .btn:hover{filter:brightness(0.96)}
+    .btn:active{filter:brightness(0.92)}
+    .kbd{font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12px; color:var(--muted);}
+  </style>
+</head>
+<body>
+  <div class="card" role="dialog" aria-labelledby="title">
+    <div class="header">
+      <span class="dot" aria-hidden="true"></span>
+      <h3 id="title">空格策略选项</h3>
+    </div>
+
+    <div class="desc">
+      勾选需要<strong>添加空格</strong>的规则；未勾选将<strong>不添加</strong>，并会删除已有多余空格且在报告中指出。
+    </div>
+
+    <div class="group">
+      <div class="row">
+        <div class="label">
+          <div>
+            <div class="title">中文与英文/数字相邻添加空格</div>
+            <!-- ✅ 示例修正为“3 年 AI”，两个位置都有空格 -->
+            <div class="hint">例：你好World → 你好&nbsp;World；3年AI → 3&nbsp;年&nbsp;AI</div>
+          </div>
+        </div>
+        <label class="switch" aria-label="中文与英文/数字相邻添加空格">
+          <input type="checkbox" id="opt_cjkAnSpace" />
+          <span class="track"></span><span class="thumb"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <div class="label">
+          <div>
+            <div class="title">数字与单位/符号前添加空格</div>
+            <div class="hint">例：10kg → 10&nbsp;kg；30% → 30&nbsp;%</div>
+          </div>
+        </div>
+        <label class="switch" aria-label="数字与单位/符号前添加空格">
+          <input type="checkbox" id="opt_numUnitSpace" />
+          <span class="track"></span><span class="thumb"></span>
+          </label>
+          </div>
+          
+          <!-- 将半角的数字和拉丁字母全部转换为全角 -->
+          <!-- <div class="row">
+            <div class="label">
+              <div>
+                <div class="title">将半角的数字和拉丁字母全部转换为全角</div>
+                <div class="hint">例：ABC123 → ＡＢＣ１２３（慎用，可能影响链接/代码）</div>
+              </div>
+            </div>
+            <label class="switch" aria-label="半角字母数字→全角">
+              <input type="checkbox" id="opt_alnumHalfToFull" />
+              <span class="track"></span><span class="thumb"></span>
+            </label>
+          </div> -->
+          
+          <!-- 将全角的数字和拉丁字母全部转换为半角 -->
+          <!-- <div class="row">
+            <div class="label">
+              <div>
+                <div class="title">将全角的数字和拉丁字母全部转换为半角</div>
+                <div class="hint">例：ＡＢＣ１２３ → ABC123（推荐，兼容性更好）</div>
+              </div>
+            </div>
+            <label class="switch" aria-label="全角字母数字→半角">
+              <input type="checkbox" id="opt_alnumFullToHalf" />
+              <span class="track"></span><span class="thumb"></span>
+            </label>
+          </div> -->
+
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="ok" type="button">确 认</button>
+    </div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    // 标记“窗口已打开”（父页面轮询会用到）
+    localStorage.setItem('spaceOptOpen', '1');
+
+    // 载入旧值
+    $('opt_cjkAnSpace').checked   = (localStorage.getItem('opt_cjkAnSpace') === '1');
+    $('opt_numUnitSpace').checked = (localStorage.getItem('opt_numUnitSpace') === '1');
+    // $('opt_alnumHalfToFull').checked = (localStorage.getItem('opt_alnumHalfToFull') === '1');
+    // $('opt_alnumFullToHalf').checked = (localStorage.getItem('opt_alnumFullToHalf') === '1');
+
+    function confirmAndClose(){
+      localStorage.setItem('opt_cjkAnSpace',   $('opt_cjkAnSpace').checked ? '1' : '0');
+      localStorage.setItem('opt_numUnitSpace', $('opt_numUnitSpace').checked ? '1' : '0');
+      // localStorage.setItem('opt_alnumHalfToFull', $('opt_alnumHalfToFull').checked ? '1' : '0');
+      // localStorage.setItem('opt_alnumFullToHalf', $('opt_alnumFullToHalf').checked ? '1' : '0');
+
+
+
+      localStorage.setItem('spaceOptReady', '1'); // ✅ 通知父窗口进入报告
+      localStorage.removeItem('spaceOptOpen');    // 清理打开标记
+      window.close();                             // 立即关闭
+    }
+
+    // 仅保留点击确认；不再支持 Enter 快捷键
+    $('ok').addEventListener('click', confirmAndClose);
+
+    // 无论如何关闭（含右上角 ×），清掉打开标记
+    window.addEventListener('unload', () => {
+      localStorage.removeItem('spaceOptOpen');
+    });
+  </script>
+</body>
+</html>
