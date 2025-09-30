@@ -395,7 +395,17 @@ function onChangeProviderComboBox() {
 
 	providerUrlInputEl.value = provider ? provider.url : '';
 	providerKeyInputEl.value = provider ? provider.key : '';
-	if(providerUrlInputEl.value) {
+
+	if (providerUrlInputEl.value === "[external]") {
+		providerUrlInputEl.setAttribute('disabled', true);
+		providerKeyInputEl.setAttribute('disabled', true);
+	}
+	else {
+		providerUrlInputEl.removeAttribute('disabled');
+		providerKeyInputEl.removeAttribute('disabled');
+	}
+
+	if (providerUrlInputEl.value) {
 		updateModelsList();
 	}
 }

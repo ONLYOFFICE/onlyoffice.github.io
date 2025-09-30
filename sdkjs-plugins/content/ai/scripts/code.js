@@ -525,6 +525,102 @@ window.Asc.plugin.init = async function() {
 		delete window.Asc.plugin.info.aiPluginSettings;
 	}
 
+	if (this.sendEvent) {
+		this.sendEvent("ai_onInit", {});
+		this.attachEditorEvent("ai_onCustomProviders", function(providers) {
+			
+			for (let i = 0, len = providers.length; i < len; i++) {
+				let item = providers[i];
+				if (!item.name)
+					continue;
+
+				if (!item.content) {
+					item.content = "\"use strict\";\n\
+class Provider extends AI.Provider {\n\
+	constructor() {\n\
+		super(\"" + item.name + "\", \"[external]\", \"\", \"\");\n\
+	}\n\
+}";
+					let isError = !AI.addCustomProvider(item.content);
+
+					if (!isError) {
+						customProvidersWindow && customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
+						aiModelEditWindow && aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
+					}					
+				}
+			}
+
+		});
+
+		this.attachEditorEvent("ai_onCustomInit", function(obj) {
+			
+			if (obj.settingsLock !== undefined) {
+				let isSettingsRemoved = obj.settingsLock === "removed";
+				let isSettingsDisabled = obj.settingsLock === "disabled";
+
+				if (window.buttonSettings) {
+					if (window.buttonSettings.removed != isSettingsRemoved || 
+						window.buttonSettings.disabled != isSettingsDisabled) {
+						window.buttonSettings.removed = isSettingsRemoved;
+						window.buttonSettings.disabled = isSettingsDisabled;
+
+						Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonSettings]);
+					}
+				}
+			}
+
+			if (obj.actions) {
+				let isActionsOverride = obj.actionsOverride === true;
+
+				for (let type in obj.actions) {
+					if (!AI.Actions[type])
+						continue;
+					
+					if (!AI.Actions[type].model || isActionsOverride)
+						AI.Actions[type].model = obj.actions[type].model;
+				}
+
+				AI.ActionsSave();
+			}
+
+			let isUpdate = false;
+			if (obj.providers) {
+				for (let type in obj.providers) {
+					AI.Providers[type] = obj.providers[type];
+				}
+				isUpdate = true;
+			}
+
+			if (obj.models) {
+				for (let i = 0, len = obj.models.length; i < len; i++) {
+					let model = obj.models[i];
+					let isFound = false;
+
+					for (let j = 0, jLen = AI.Models.length; j < jLen; j++) {
+						let testModel = AI.Models[j];
+
+						if (testModel.name === model.name && 
+							testModel.provider === model.provider &&
+							testModel.id === model.id) {
+							isFound = true;
+							AI.Models[j] = model;
+							break;
+						}
+					}
+
+					if (!isFound) {
+						AI.Models.push(model);
+					}
+				}
+				isUpdate = true;
+			}
+
+			if (isUpdate)
+				AI.Storage.save();
+			
+		});
+	}
+
 	await initWithTranslate(1 << 1);
 	clearChatState();	
 };
