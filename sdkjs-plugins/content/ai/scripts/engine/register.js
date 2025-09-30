@@ -530,12 +530,14 @@ function registerButtons(window, undefined)
 	window.buttonMainToolbar = buttonMainToolbar;
 	window.getToolBarButtonIcons = getToolBarButtonIcons;
 
+	window.buttonSettings = null;
+
 	if (!AI.serverSettings)
 	{
-		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button1.text = "Settings";
-		button1.icons = getToolBarButtonIcons("settings");
-		button1.attachOnClick(function(data){
+		window.buttonSettings = new Asc.ButtonToolbar(buttonMainToolbar);
+		window.buttonSettings.text = "Settings";
+		window.buttonSettings.icons = getToolBarButtonIcons("settings");
+		window.buttonSettings.attachOnClick(function(data){
 			onOpenSettingsModal();
 		});
 	}
@@ -725,7 +727,7 @@ function registerButtons(window, undefined)
 		}
 
 		if (Asc.plugin.sendEvent)
-			Asc.plugin.sendEvent("onAIActionsChange", window.getActionsInfo());
+			Asc.plugin.sendEvent("ai_onActionsChange", window.getActionsInfo());
 	};
 
 	AI.ActionsLoad();
