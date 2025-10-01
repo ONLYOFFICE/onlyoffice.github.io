@@ -17,12 +17,67 @@
  */
 (function () {
     if (!window.Asc.plugin.zotero) window.Asc.plugin.zotero = {};
+
+    window.Asc.plugin.zotero.isLocalDesktop = (function(){
+		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
+			return false;
+		if (window.location && window.location.protocol == "file:")
+			return true;
+		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
+			return true;
+		return false;
+	})();
+    window.Asc.plugin.zotero.isOnlineAvailable = !window.Asc.plugin.zotero.isLocalDesktop;
+
     window.Asc.plugin.zotero.api = function (cfg) {
         var apiKey;
-        var userId;
+        var userId = 0;
         var userGroups = [];
-        var baseUrl = cfg.baseUrl || "https://api.zotero.org/";
+        var restApiUrl = "https://api.zotero.org/";
+        var desktopApiUrl = "http://127.0.0.1:23119/api/"; // users/0/items"
+        var baseUrl = cfg.baseUrl || restApiUrl;
+        var STYLES_URL = "https://www.zotero.org/styles-files/styles.json";
+        var STYLES_LOCAL_URL = "./resources/csl/styles.json";
 
+        function getRequestWithOfflineSupport(url) {
+            if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                return getRequest(url);
+            } else {
+                return getDesktopRequest(url.href);
+            }
+        }
+
+        /**
+         * Make a GET request to the local Zotero API.
+         * @param {string} url - URL of the request.
+         * @returns {Promise<{responseStatus: number, responseText: string, status: string, statusCode: number}>}
+         */
+        function getDesktopRequest(url) {
+            return new Promise(function (resolve, reject) {
+                window.AscSimpleRequest.createRequest({
+                    url: url,
+                    method: "GET",
+                    headers: {
+                        "Zotero-API-Version": "3",
+                        "User-Agent": "AscDesktopEditor",
+                    },
+                    complete: function(e) {
+                        resolve(e);
+                    },
+                    error: function(e) {
+                        console.error(e);
+                        if ( e.statusCode == -102 ) e.statusCode = 404;
+                        reject({error: e.statusCode, message: "Internal error"});
+                    }
+                }); 
+            });
+        }
+
+        /**
+         * Make a GET request to the online Zotero API.
+         * @param {string} url - URL of the request.
+         * @returns {Promise<{body: ReadableStream, bodyUsed: boolean, headers: Headers, ok: boolean, redirected: boolean, status: string, statusText: string, type: string, url: string}>}
+         */
         function getRequest(url) {
             return new Promise(function (resolve, reject) {
                 var headers = {
@@ -32,7 +87,10 @@
                 fetch(url, {
                     headers: headers
                 }).then(function (res) {
-                    if (!res.ok) throw new Error(res.status + " " + res.statusText);
+                    if (!res.ok) { 
+                        reject(new Error(res.status + " " + res.statusText));
+                        return;
+                    };
                     resolve(res);
                 }).catch(function (err) {
                     reject(err);
@@ -42,8 +100,11 @@
 
         function buildGetRequest(path, query) {
             var url = new URL(path, baseUrl);
+            if (!window.Asc.plugin.zotero.isOnlineAvailable) {
+                url = new URL(path, desktopApiUrl);
+            }
             for (var key in query) url.searchParams.append(key, query[key]);
-            return getRequest(url);
+            return getRequestWithOfflineSupport(url);
         }
 
         function items(search, itemsID) {
@@ -56,7 +117,12 @@
 				} else if (itemsID) {
 					props.itemKey = itemsID.join(',');
 				}
-                parseItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
+                if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                    parseItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
+                } else {
+                    parseDesktopItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
+                }
+                
             });
         }
 
@@ -70,7 +136,26 @@
 				} else if (itemsID) {
 					props.itemKey = itemsID.join(',');
 				}
-				parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
+                if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                    parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
+                } else {
+                    parseDesktopItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
+                }
+            });
+        }
+
+        /**
+         * @returns {Promise}
+         */
+        function getStyles() {
+            return new Promise(function (resolve, reject) {
+                if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                    return fetch(STYLES_URL)
+                        .then(function (resp) { return resp.json(); });
+                } else {
+                    return fetch(STYLES_LOCAL_URL)
+                        .then(function (resp) { return resp.json(); });
+                }
             });
         }
 
@@ -165,6 +250,32 @@
 			userGroups = [];
         }
 
+        /**
+         * @param {Promise} promise - promise from items request
+         * @param {function} resolve - resolve function for returned promise
+         * @param {function} reject - reject function for returned promise
+         * @param {string} id - id of request
+         * @returns {Promise<{items: {items: Array<Object>}, id: string}}>} promise with items and optional next function
+         */
+        function parseDesktopItemsResponse(promise, resolve, reject, id) {
+            promise.then(function (res) {
+                var obj = {
+                    items: {items: JSON.parse(res.responseText)},
+                    id: id
+                };
+                resolve(obj);
+            }).catch(function (err) {
+                reject(err);
+            });
+        }
+
+        /**
+         * @param {Promise} promise - promise from items request
+         * @param {function} resolve - resolve function for returned promise
+         * @param {function} reject - reject function for returned promise
+         * @param {string} id - id of request
+         * @returns {Promise<{items: {items: Array<Object>}, id: string}}>} promise with items and optional next function
+         */
         function parseItemsResponse(promise, resolve, reject, id) {
             promise.then(function (res) {
                 res.json().then(function (json) {
@@ -174,6 +285,7 @@
 						id: id
                     };
                     if (links.next) {
+                        console.error('next', links.next);
                         obj.next = function () {
                             return new Promise(function (rs, rj) {
                                 parseItemsResponse(getRequest(links.next), rs, rj, id);
@@ -202,6 +314,45 @@
             return links;
         }
 
+        /**
+         * @returns {Promise<{desktop: boolean, online: boolean, permissionNeeded: boolean}>}
+         * TODO: add Promise.allSettled for getRequest and getDesktopRequest
+         */
+        function isApiAvailable() {
+            return new Promise(function (resolve) {
+                let apiAvailable = {
+                    desktop: false,
+                    online: false,
+                    permissionNeeded: false
+                };
+                getRequest(restApiUrl).then(function (res) {
+                    return res.status === 200;
+                }).catch(function() {
+                    return false;
+                }).then(function (isOnlineAvailable) {
+                    apiAvailable.online = isOnlineAvailable;
+                    return getDesktopRequest(desktopApiUrl)
+                }).then(function (res) {
+                    if (res.status == 403) {
+                        apiAvailable.permissionNeeded = true;
+                    } 
+                    return res.responseStatus === 200;
+                }).catch(function() {
+                    return false;
+                }).then(function (isDesktopAvailable) {
+                    apiAvailable.desktop = isDesktopAvailable;
+                    window.Asc.plugin.zotero.isLocalDesktop = apiAvailable.desktop;
+                    window.Asc.plugin.zotero.isOnlineAvailable = apiAvailable.online;
+                    resolve(apiAvailable);
+                });
+            });
+            
+        }
+
+        function setUseDesktopApp(isUseDesktopApp) {
+            
+        }
+
         return {
             items: items,
 			groups: groups,
@@ -210,7 +361,10 @@
             hasSettings: getSettings,
             clearSettings: clearSettings,
             setApiKey: setApiKey,
-			getUserId: getUserId
+			getUserId: getUserId,
+            isApiAvailable: isApiAvailable,
+            setUseDesktopApp: setUseDesktopApp,
+            getStyles: getStyles
         }
     }
 })();
