@@ -16,6 +16,7 @@
  *
  */
 (function () {
+    var mode = "online"; // "offline", "online"
 	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
@@ -119,7 +120,8 @@
 		refreshBtn: document.getElementById('refreshBtn'),
 		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
 		synchronizeBtn: document.getElementById('synchronizeBtn'),
-		checkOmitAuthor: document.getElementById('omitAuthor')
+		checkOmitAuthor: document.getElementById('omitAuthor'),
+        useDesktopApp: document.getElementById('useDesktopApp')
     };
 
     var selectedScroller;
@@ -127,104 +129,76 @@
 
     window.Asc.plugin.init = function () {
 		showLoader(true);
+        setTimeout(function () { searchField.focus(); },100);
 		updateCslItems(true, false, false, false);
         sdk = window.Asc.plugin.zotero.api({});
+        initSdkApis();
 
         window.Asc.plugin.onTranslate = applyTranslations;
 
-        elements.logoutLink.onclick = function (e) {
-            sdk.clearSettings();
-            switchAuthState('config');
-            return true;
-        };
-
-        function searchFor(text) {
-            if (elements.mainState.classList.contains(displayNoneClass)) return;
-            text = text.trim();
-            if (!text) return;
-            if (text == lastSearch.text) return;
-            lastSearch.text = text;
-			lastSearch.obj = null;
-			lastSearch.groups = [];
-            clearLibrary();
-			var groups = sdk.getUserGropus();
-            loadLibrary(sdk.items(text), true, true, !groups.length, false, true);
-			if (groups.length) {
-				for (var i = 0; i < groups.length; i++) {
-					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
-				}
-			}
-        };
-        elements.searchField.onkeypress = function (e) {
-            if (e.keyCode == 13) searchFor(e.target.value);
-        };
-        elements.searchField.onblur = function (e) {
-            setTimeout(function () { searchFor(e.target.value); }, 500);
-        };
-
-        elements.searchField.onkeyup = function (e) {
-            switchClass(elements.searchClear, displayNoneClass, !e.target.value);
-        };
-        elements.searchClear.onclick = function (e) {
-            if (e.target.classList.contains(displayNoneClass)) return true;
-            switchClass(elements.searchClear, displayNoneClass, true);
-            elements.searchField.value = "";
-            lastSearch.text = "";
-            clearLibrary();
-            return true;
-        };
-
-        elements.cancelBtn.onclick = function (e) {
-            var ids = [];
-            for (var id in selected.items) {
-                ids.push(id);
-            }
-            for (var i = 0; i < ids.length; i++) {
-                removeSelected(ids[i]);
-            }
-        };
-
-        elements.saveConfigBtn.onclick = function (e) {
-            var apikey = elements.apiKeyConfigField.value.trim();
-            if (apikey) {
-                sdk.setApiKey(apikey)
-                    .then(function () {
-                        switchAuthState("main");
-                    }).catch(function () {
-                        showError(getMessage("Invalid API key"));
-                    });
-            }
-        };
-
-		elements.refreshBtn.onclick = function() {
-			showLoader(true);
-			updateCslItems(true, true, false, false);
-		};
-
-		elements.synchronizeBtn.onclick = function() {
-			synchronizeData();
-		};
-
-        elements.insertBibBtn.onclick = function() { 
-			showLoader(true);
-			// TODO #there
-			// updateCslItems(true, false, true, false);
-			updateCslItems(true, true, true, false);
-		};
-
-		elements.insertLinkBtn.onclick = function() {
-			showLoader(true);
-			updateCslItems(true, false, false, true);
-		};
-
-		elements.saveAsTextBtn.onclick = function() {
-			showLoader(true);
-			saveAs();
-		}
+        addEventListeners();
 
         selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
         docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
 
+        
+
+        initSelectBoxes();
+        elements.styleSelectList.onopen = function () {
+            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+        }
+    };
+
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        var rules = '.selectArrow > span { background-color: ' + window.Asc.plugin.theme['text-normal'] + '}\n';
+        rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
+        rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
+        rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
+        rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
+        rules += 'color : ' + window.Asc.plugin.theme['text-normal'] + '; }\n';
+        rules += '.selectList > span:hover { background-color : ' + window.Asc.plugin.theme['highlight-button-hover'] + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}\n';
+        rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme['highlight-button-pressed'] + ';' + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}';
+        var styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rules;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+    };
+
+    function initSdkApis() {
+        sdk.isApiAvailable().then(function(availableApis) {
+            console.log('apis', availableApis);
+            if (availableApis.desktop) {
+                // sdk.setUseDesktopApp(true);
+                switchAuthState('main');
+                return true;
+            }
+            if (availableApis.online) {
+                sdk.setUseDesktopApp(false);
+                if (sdk.hasSettings()) {
+                    switchAuthState('main');
+                } else {
+                    switchAuthState('config');
+                }
+                return true;
+            } 
+            if (availableApis.permissionNeeded) {
+                console.warn('You need to open access to the API');
+                console.warn('Edit -> Settings -> Advanced -> Allow other applications on this computer to communicate with Zotero');
+                console.warn('Restart Zotero');
+                return false;
+            }
+            console.warn('You are offline');
+            console.warn('Zotero is not running');
+            return false;
+        }).then(function(isApiAvailable) {
+            isApiAvailable && loadStyles();
+        });
+    }
+
+    function loadStyles() {
+        sdk.getStyles()
         fetch("https://www.zotero.org/styles-files/styles.json")
             .then(function (resp) { return resp.json(); })
             .then(function (json) {
@@ -303,7 +277,105 @@
                 }
             })
             .catch(function (err) { });
+    }
 
+    function addEventListeners() {
+        elements.useDesktopApp.onclick = function() {
+            showLoader(true);
+            initSdkApis().finally(function() {
+                showLoader(false);
+            });
+        };
+
+        elements.logoutLink.onclick = function (e) {
+            sdk.clearSettings();
+            switchAuthState('config');
+            return true;
+        };
+
+        function searchFor(text) {
+            console.log('searchFor', text);
+            if (elements.mainState.classList.contains(displayNoneClass)) return;
+            text = text.trim();
+            if (!text) return;
+            if (text == lastSearch.text) return;
+            lastSearch.text = text;
+			lastSearch.obj = null;
+			lastSearch.groups = [];
+            clearLibrary();
+			var groups = sdk.getUserGropus();
+            loadLibrary(sdk.items(text), true, true, !groups.length, false, true);
+			if (groups.length) {
+				for (var i = 0; i < groups.length; i++) {
+					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
+				}
+			}
+        };
+        elements.searchField.onkeypress = function (e) {
+            if (e.keyCode == 13) searchFor(e.target.value);
+        };
+        elements.searchField.onblur = function (e) {
+            setTimeout(function () { searchFor(e.target.value); }, 500);
+        };
+        elements.searchField.onkeyup = function (e) {
+            switchClass(elements.searchClear, displayNoneClass, !e.target.value);
+        };
+        elements.searchClear.onclick = function (e) {
+            if (e.target.classList.contains(displayNoneClass)) return true;
+            switchClass(elements.searchClear, displayNoneClass, true);
+            elements.searchField.value = "";
+            lastSearch.text = "";
+            clearLibrary();
+            return true;
+        };
+
+        elements.cancelBtn.onclick = function (e) {
+            var ids = [];
+            for (var id in selected.items) {
+                ids.push(id);
+            }
+            for (var i = 0; i < ids.length; i++) {
+                removeSelected(ids[i]);
+            }
+        };
+
+        elements.saveConfigBtn.onclick = function (e) {
+            var apikey = elements.apiKeyConfigField.value.trim();
+            if (apikey) {
+                sdk.setApiKey(apikey)
+                    .then(function () {
+                        switchAuthState("main");
+                    }).catch(function () {
+                        showError(getMessage("Invalid API key"));
+                    });
+            }
+        };
+
+		elements.refreshBtn.onclick = function() {
+			showLoader(true);
+			updateCslItems(true, true, false, false);
+		};
+
+		elements.synchronizeBtn.onclick = function() {
+			synchronizeData();
+		};
+
+        elements.insertBibBtn.onclick = function() { 
+			showLoader(true);
+			// TODO #there
+			// updateCslItems(true, false, true, false);
+			updateCslItems(true, true, true, false);
+		};
+
+		elements.insertLinkBtn.onclick = function() {
+			showLoader(true);
+			updateCslItems(true, false, false, true);
+		};
+
+		elements.saveAsTextBtn.onclick = function() {
+			showLoader(true);
+			saveAs();
+		}
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
             var filter = filter !== undefined ? filter : input.value.toLowerCase();
@@ -349,35 +421,7 @@
 			});
             selectedLocale = val;
         };
-
-        initSelectBoxes();
-        elements.styleSelectList.onopen = function () {
-            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
-        }
-
-        if (sdk.hasSettings()) {
-            switchAuthState('main');
-        } else {
-            switchAuthState('config');
-        }
-    };
-
-    window.Asc.plugin.onThemeChanged = function(theme)
-    {
-        window.Asc.plugin.onThemeChangedBase(theme);
-        var rules = '.selectArrow > span { background-color: ' + window.Asc.plugin.theme['text-normal'] + '}\n';
-        rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
-        rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
-        rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
-        rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
-        rules += 'color : ' + window.Asc.plugin.theme['text-normal'] + '; }\n';
-        rules += '.selectList > span:hover { background-color : ' + window.Asc.plugin.theme['highlight-button-hover'] + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}\n';
-        rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme['highlight-button-pressed'] + ';' + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}';
-        var styleTheme = document.createElement('style');
-        styleTheme.type = 'text/css';
-        styleTheme.innerHTML = rules;
-        document.getElementsByTagName('head')[0].appendChild(styleTheme);
-    };
+    }
 
     var scrollBoxes = [];
     function initScrollBox(holder, thumb, onscroll) {
@@ -1003,8 +1047,6 @@
                 retrieveLocale: function (id) { return locales[id]; }, 
                 retrieveItem: function (id) { 
                     var item = CSLCitationStorage.get(id);
-                    console.log(id); 
-                    console.log(item.toOldJSON());
                     return item.toOldJSON(); 
                 } 
             }, 
@@ -1104,7 +1146,7 @@
 				bUpdateItems = true;
 			}
             keys.push(citationID);
-            keysL = keysL.concat(CSLCitationStorage.get(citationID).getSuppressAuthors());
+            keysL.push(CSLCitationStorage.get(citationID).getSuppressAuthors());
         }
 
         try {
@@ -1116,27 +1158,25 @@
 				formatter.updateItems(arrIds);
 			}
 
-			var objects = [];
-			keys.forEach(function(element) {
-				removeSelected(element);
-				objects.push(CSLCitationStorage.get(element));
-			});
+            var element = keys[0];
+			var obj = CSLCitationStorage.get(element);
+			removeSelected(element);
+
 			// TODO может ещё очистить поиск (подумать над этим)
-			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
-            
-            objects.forEach(function(obj) {
-                var field = {
-                    "Value" : citPrefixNew + ' ' + citSuffixNew + JSON.stringify(obj.toJSON()),
-                    "Content" : elements.tempDiv.innerText
-                };
-                window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
-                    showLoader(false);
-                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
-                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-                    updateCslItems(true, true, false, false);
-                });
+			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL[0]);
+
+            var field = {
+                "Value" : citPrefixNew + ' ' + citSuffixNew + JSON.stringify(obj.toJSON()),
+                "Content" : elements.tempDiv.innerText
+            };
+            window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
+                showLoader(false);
+                // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
+                // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
+                // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
+                updateCslItems(true, true, false, false);
             });
+
         } catch (e) {
             showError(e);
         }

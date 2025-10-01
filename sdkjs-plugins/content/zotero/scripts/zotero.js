@@ -17,11 +17,60 @@
  */
 (function () {
     if (!window.Asc.plugin.zotero) window.Asc.plugin.zotero = {};
+
+    window.Asc.plugin.zotero.isLocalDesktop = (function(){
+		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
+			return false;
+		if (window.location && window.location.protocol == "file:")
+			return true;
+		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
+			return true;
+		return false;
+	})();
+
     window.Asc.plugin.zotero.api = function (cfg) {
         var apiKey;
-        var userId;
+        var userId = 0;
         var userGroups = [];
-        var baseUrl = cfg.baseUrl || "https://api.zotero.org/";
+        var onlineApiUrl = "https://api.zotero.org/";
+        var desktopApiUrl = "http://127.0.0.1:23119/api/";
+        var baseUrl = window.Asc.plugin.zotero.isLocalDesktop ? desktopApiUrl : cfg.baseUrl || onlineApiUrl;
+
+        function getRequestWithOfflineSupport(url) {
+            if (window.Asc.plugin.zotero.isLocalDesktop) {
+                // "http://127.0.0.1:23119/api/users/0/items"
+                console.log('url', url.href);
+                return getDesktopRequest(url.href);
+            } else {
+                console.log('no have local', url);
+                return getRequest(url);
+            }
+        }
+
+
+        function getDesktopRequest(url) {
+            return new Promise(function (resolve, reject) {
+                window.AscSimpleRequest.createRequest({
+                    url: url,
+                    method: "GET",
+                    headers: {
+                        "Zotero-API-Version": "3",
+                        "User-Agent": "AscDesktopEditor",
+                    },
+                    complete: function(e, status) {
+                        console.log('success', status);
+                        console.log(e);
+                        resolve(e);
+                    },
+                    error: function(e, status) {
+                        console.log('failure', status);
+                        console.log(e);
+                        if ( e.statusCode == -102 ) e.statusCode = 404;
+                        reject({error: e.statusCode, message: "Internal error"});
+                    }
+                }); 
+            });
+        }
 
         function getRequest(url) {
             return new Promise(function (resolve, reject) {
@@ -43,7 +92,7 @@
         function buildGetRequest(path, query) {
             var url = new URL(path, baseUrl);
             for (var key in query) url.searchParams.append(key, query[key]);
-            return getRequest(url);
+            return getRequestWithOfflineSupport(url);
         }
 
         function items(search, itemsID) {
@@ -71,6 +120,41 @@
 					props.itemKey = itemsID.join(',');
 				}
 				parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
+            });
+        }
+
+        /**
+         * @returns {Promise}
+         */
+        function getStyles() {
+            return new Promise(function (resolve, reject) {
+                if (window.Asc.plugin.zotero.isLocalDesktop) {
+                    return new Promise(function (resolve, reject) {
+                        window.AscSimpleRequest.createRequest({
+                            url: "http://127.0.0.1:23119/styles",
+                            method: "GET",
+                            headers: {
+                                'Accept': 'application/json',
+                            },
+                            complete: function(e, status) {
+                                console.log('success', status);
+                                console.log(e);
+                                e.json().then(function (styles) {
+                                    resolve(styles);
+                                });
+                            },
+                            error: function(e, status) {
+                                console.log('failure', status);
+                                console.log(e);
+                                if ( e.statusCode == -102 ) e.statusCode = 404;
+                                reject({error: e.statusCode, message: "Internal error"});
+                            }
+                        }); 
+                    });
+                } else {
+                    return fetch("https://www.zotero.org/styles-files/styles.json")
+                        .then(function (resp) { return resp.json(); });
+                }
             });
         }
 
@@ -174,6 +258,7 @@
 						id: id
                     };
                     if (links.next) {
+                        console.error('next', links.next);
                         obj.next = function () {
                             return new Promise(function (rs, rj) {
                                 parseItemsResponse(getRequest(links.next), rs, rj, id);
@@ -202,6 +287,44 @@
             return links;
         }
 
+
+        /**
+         * @returns {Promise<{desktop: boolean, online: boolean, permissionNeeded: boolean}>}
+         * TODO: add Promise.allSettled for getRequest and getDesktopRequest
+         */
+        function isApiAvailable() {
+            return new Promise(function (resolve) {
+                let apiAvailable = {
+                    desktop: false,
+                    online: false,
+                    permissionNeeded: false
+                };
+                getRequest(onlineApiUrl).then(function (res) {
+                    return res.status === 200;
+                }).catch(function() {
+                    return false;
+                }).then(function (isOnlineAvailable) {
+                    apiAvailable.online = isOnlineAvailable;
+                    return getDesktopRequest(desktopApiUrl)
+                }).then(function (res) {
+                    if (res.status == 403) {
+                        apiAvailable.permissionNeeded = true;
+                    } 
+                    return res.responseStatus === 200;
+                }).catch(function() {
+                    return false;
+                }).then(function (isDesktopAvailable) {
+                    apiAvailable.desktop = isDesktopAvailable;
+                    resolve(apiAvailable);
+                });
+            });
+            
+        }
+
+        function setUseDesktopApp(isUseDesktopApp) {
+            window.Asc.plugin.zotero.isLocalDesktop = isUseDesktopApp;
+        }
+
         return {
             items: items,
 			groups: groups,
@@ -210,7 +333,10 @@
             hasSettings: getSettings,
             clearSettings: clearSettings,
             setApiKey: setApiKey,
-			getUserId: getUserId
+			getUserId: getUserId,
+            isApiAvailable: isApiAvailable,
+            setUseDesktopApp: setUseDesktopApp,
+            getStyles: getStyles
         }
     }
 })();
