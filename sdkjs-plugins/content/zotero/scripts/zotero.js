@@ -36,8 +36,14 @@
         var restApiUrl = "https://api.zotero.org/";
         var desktopApiUrl = "http://127.0.0.1:23119/api/"; // users/0/items"
         var baseUrl = cfg.baseUrl || restApiUrl;
-        var STYLES_URL = "https://www.zotero.org/styles-files/styles.json";
-        var STYLES_LOCAL_URL = "./resources/csl/styles.json";
+        var STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json";
+        var STYLES_JSON_LOCAL = "./resources/csl/styles.json";
+        var STYLES_URL = "https://www.zotero.org/styles/";
+        var STYLES_LOCAL = "./resources/csl/styles/";
+        // https://raw.githubusercontent.com/citation-style-language/locales/master/locales-af-ZA.xml
+        // https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
+        var LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/";
+        var LOCALES_LOCAL_URL = "./resources/csl/locales/";
 
         function getRequestWithOfflineSupport(url) {
             if (window.Asc.plugin.zotero.isOnlineAvailable) {
@@ -144,19 +150,31 @@
             });
         }
 
-        /**
-         * @returns {Promise}
-         */
-        function getStyles() {
-            return new Promise(function (resolve, reject) {
-                if (window.Asc.plugin.zotero.isOnlineAvailable) {
-                    return fetch(STYLES_URL)
-                        .then(function (resp) { return resp.json(); });
-                } else {
-                    return fetch(STYLES_LOCAL_URL)
-                        .then(function (resp) { return resp.json(); });
-                }
-            });
+        function getStylesJson() {
+            let url = STYLES_JSON_LOCAL;
+            if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                url = STYLES_JSON_URL;
+            }
+            return fetch(url)
+                .then(function (resp) { return resp.json(); });
+        }
+
+        function getStyle(styleName) {
+            let url = STYLES_LOCAL + styleName + ".xml";
+            if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                url = STYLES_URL + styleName;
+            }
+            return fetch(url + styleName)
+                .then(function (resp) { return resp.text(); });
+        }
+
+        function getLocale(langTag) {
+            let url = LOCALES_LOCAL_URL;
+            if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                url = LOCALES_URL;
+            }
+            return fetch(url + "locales-" + langTag + ".xml")
+                .then(function (resp) { return resp.text(); });
         }
 
 		function getUserGropus() {
@@ -364,7 +382,9 @@
 			getUserId: getUserId,
             isApiAvailable: isApiAvailable,
             setUseDesktopApp: setUseDesktopApp,
-            getStyles: getStyles
+            getStylesJson: getStylesJson,
+            getStyle: getStyle,
+            getLocale: getLocale,
         }
     }
 })();
