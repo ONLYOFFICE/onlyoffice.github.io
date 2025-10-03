@@ -16,7 +16,6 @@
  *
  */
 (function () {
-    var mode = "online"; // "offline", "online"
 	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
@@ -63,11 +62,15 @@
 
 	var defaultStyles = 
     {
-        "American Medical Association 11th edition" : 1, "American Political Science Association" : 1,
-        "American Psychological Association 7th edition" : 1, "American Sociological Association 6th edition" : 1,
-        "Chicago Manual of Style 17th edition (author-date)" : 1, "Cite Them Right 10th edition - Harvard" : 1,
-        "IEEE" : 1, "Modern Humanities Research Association 3rd edition (note with bibliography)" : 1,
-        "Modern Language Association 8th edition" : 1, "Nature" : 1
+        "American Medical Association 11th edition" : 'american-medical-association',
+        "American Political Science Association" : 'american-political-science-association',
+        "American Psychological Association 7th edition" : 'apa',
+        "American Sociological Association 6th/7th edition" : 'american-sociological-association',
+        "Chicago Manual of Style 17th edition (author-date)" : 'chicago-author-date-17th-edition',
+        "Cite Them Right 10th edition - Harvard" : 'harvard-cite-them-right-10th-edition',
+        "IEEE" : 'ieee',
+        "Modern Language Association 8th edition" : 'modern-language-association-8th-edition',
+        "Nature" : 'nature'
     };
 
 	var locales = {};
@@ -197,7 +200,7 @@
     }
 
     function loadStyles() {
-        sdk.getStyles()
+        sdk.getStylesJson()
             .then(function (json) {
                 var lastStyle = getLastUsedStyle();
                 var found = false;
@@ -736,8 +739,7 @@
                 res(styles[styleName]);
             } else {
                 loadingStyle = true;
-                fetch("https://www.zotero.org/styles/" + styleName)
-                    .then(function (resp) { return resp.text(); })
+                sdk.getStyle(styleName)
                     .then(function (text) { styles[styleName] = text; res(text); loadingStyle = false; })
                     .catch(function (err) { rej(err); loadingStyle = false; });
             }
@@ -750,10 +752,7 @@
                 res(locales[langTag]);
             } else {
                 loadingLocale = true;
-				// https://raw.githubusercontent.com/citation-style-language/locales/master/locales-af-ZA.xml
-				// https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
-                fetch("https://raw.githubusercontent.com/citation-style-language/locales/master/locales-" + langTag + ".xml")
-                    .then(function (resp) { return resp.text(); })
+				sdk.getLocale(langTag)
                     .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
                     .catch(function (err) { rej(err); loadingLocale = false; });
             }

@@ -11,6 +11,18 @@ const STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json";
 const STYLES_JSON_FOLDER = "../../resources/csl/";
 const STYLES_DEST_FOLDER = "../../resources/csl/styles";
 
+const DEFAULT_STYLES = [
+    "american-medical-association",
+    "american-political-science-association",
+    "apa",
+    "american-sociological-association",
+    "chicago-author-date-17th-edition",
+    "harvard-cite-them-right-10th-edition",
+    "ieee",
+    "modern-language-association-8th-edition",
+    "nature",
+];
+
 function cloneRepository() {
     return new Promise((resolve, reject) => {
         exec(
@@ -75,8 +87,7 @@ async function downloadStyleFiles(arrayOfStyles, concurrency = 50) {
         [...Array(concurrency)].map(async () => {
             while (arrayOfStyles.length > 0) {
                 const item = arrayOfStyles.pop();
-                if (!item.name) {
-                    console.error("❌ Failed to download style:", item);
+                if (!item.name || !DEFAULT_STYLES.includes(item.name)) {
                     continue;
                 }
                 await downloadStyle(item.href, item.name);
@@ -107,7 +118,7 @@ async function updateLocalFiles() {
         const jsonData = await downloadStylesJson();
         console.log(`Copied: styles.json`);
         console.log(`Try to copy ${jsonData.length} styles`);
-        //await downloadStyleFiles(jsonData);
+        await downloadStyleFiles(jsonData);
 
         await cloneRepository();
         const numOfFiles = await copyLocales();
