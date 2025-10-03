@@ -15,3 +15,7 @@
 ## 1.0.3
 
 * Update jquery version.
+
+## 1.0.4
+
+* Update jquery version.
