@@ -36,10 +36,6 @@
         var restApiUrl = "https://api.zotero.org/";
         var desktopApiUrl = "http://127.0.0.1:23119/api/"; // users/0/items"
         var baseUrl = cfg.baseUrl || restApiUrl;
-        var STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json";
-        var STYLES_JSON_LOCAL = "./resources/csl/styles.json";
-        var STYLES_URL = "https://www.zotero.org/styles/";
-        var STYLES_LOCAL = "./resources/csl/styles/";
         // https://raw.githubusercontent.com/citation-style-language/locales/master/locales-af-ZA.xml
         // https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
         var LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/";
@@ -99,6 +95,7 @@
                     };
                     resolve(res);
                 }).catch(function (err) {
+                    console.log(err);
                     reject(err);
                 });
             });
@@ -150,24 +147,6 @@
             });
         }
 
-        function getStylesJson() {
-            let url = STYLES_JSON_LOCAL;
-            if (window.Asc.plugin.zotero.isOnlineAvailable) {
-                url = STYLES_JSON_URL;
-            }
-            return fetch(url)
-                .then(function (resp) { return resp.json(); });
-        }
-
-        function getStyle(styleName) {
-            let url = STYLES_LOCAL + styleName + ".xml";
-            if (window.Asc.plugin.zotero.isOnlineAvailable) {
-                url = STYLES_URL + styleName;
-            }
-            return fetch(url + styleName)
-                .then(function (resp) { return resp.text(); });
-        }
-
         function getLocale(langTag) {
             let url = LOCALES_LOCAL_URL;
             if (window.Asc.plugin.zotero.isOnlineAvailable) {
@@ -177,7 +156,7 @@
                 .then(function (resp) { return resp.text(); });
         }
 
-		function getUserGropus() {
+		function getUserGroups() {
 			return userGroups;
 		}
 
@@ -367,23 +346,16 @@
             
         }
 
-        function setUseDesktopApp(isUseDesktopApp) {
-            
-        }
-
         return {
             items: items,
 			groups: groups,
-			getUserGropus: getUserGropus,
+			getUserGroups: getUserGroups,
             format: format,
             hasSettings: getSettings,
             clearSettings: clearSettings,
             setApiKey: setApiKey,
 			getUserId: getUserId,
             isApiAvailable: isApiAvailable,
-            setUseDesktopApp: setUseDesktopApp,
-            getStylesJson: getStylesJson,
-            getStyle: getStyle,
             getLocale: getLocale,
         }
     }
