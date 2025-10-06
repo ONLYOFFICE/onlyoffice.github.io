@@ -79,6 +79,7 @@
     var selectedStyle;
 
     var sdk = null;
+    var cslStylesManager = null;
 
     var lastSearch = {
         text: "",
@@ -135,7 +136,13 @@
         setTimeout(function () { searchField.focus(); },100);
 		updateCslItems(true, false, false, false);
         sdk = window.Asc.plugin.zotero.api({});
-        initSdkApis();
+        
+        initSdkApis().then(function (availableApis) {
+            cslStylesManager = new CslStylesManager(availableApis.online, availableApis.desktop);
+            if (availableApis.online || availableApis.desktop) {
+                loadStyles();
+            }
+        });
 
         window.Asc.plugin.onTranslate = applyTranslations;
 
@@ -143,8 +150,6 @@
 
         selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
         docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
-
-        
 
         initSelectBoxes();
         elements.styleSelectList.onopen = function () {
@@ -170,45 +175,37 @@
     };
 
     function initSdkApis() {
-        sdk.isApiAvailable().then(function(availableApis) {
+        return sdk.isApiAvailable().then(function(availableApis) {
             console.log('apis', availableApis);
             if (availableApis.desktop) {
                 switchAuthState('main');
-                return true;
-            }
-            if (availableApis.online) {
-                sdk.setUseDesktopApp(false);
+            } else if (availableApis.online) {
                 if (sdk.hasSettings()) {
                     switchAuthState('main');
                 } else {
                     switchAuthState('config');
                 }
-                return true;
-            } 
-            if (availableApis.permissionNeeded) {
-                console.warn('You need to open access to the API');
+            } else if (availableApis.permissionNeeded) {
+                alert('Failed to establish connection with Zotero API.\n' + 'You need to allow Zotero to access this computer.');
                 console.warn('Edit -> Settings -> Advanced -> Allow other applications on this computer to communicate with Zotero');
                 console.warn('Restart Zotero');
-                return false;
+            } else {
+                alert('Failed to establish connection with Zotero API.');
             }
-            console.warn('You are offline');
-            console.warn('Zotero is not running');
-            return false;
-        }).then(function(isApiAvailable) {
-            isApiAvailable && loadStyles();
+            return availableApis;
         });
     }
 
     function loadStyles() {
-        sdk.getStylesJson()
+        cslStylesManager.getStyles()
             .then(function (json) {
-                var lastStyle = getLastUsedStyle();
+                var lastStyle = cslStylesManager._getLastUsedStyle();
                 var found = false;
 
                 var onStyleSelect = function (f) {
                     return function (ev) {
                         var sel = ev.target.getAttribute("data-value");
-                        saveLastUsedStyle(sel);
+                        cslStylesManager.saveLastUsedStyle(sel);
                         f(ev);
                     }
                 };
@@ -247,7 +244,7 @@
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-					if (defaultStyles[json[i].title] || json[i].name == lastStyle) {
+					if (cslStylesManager.defaultStyles[json[i].title] || json[i].name == lastStyle) {
                         if (json[i].name == lastStyle)
                             elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
                         else
@@ -303,7 +300,7 @@
 			lastSearch.obj = null;
 			lastSearch.groups = [];
             clearLibrary();
-			var groups = sdk.getUserGropus();
+			var groups = sdk.getUserGroups();
             loadLibrary(sdk.items(text), true, true, !groups.length, false, true);
 			if (groups.length) {
 				for (var i = 0; i < groups.length; i++) {
@@ -581,14 +578,6 @@
         return window.Asc.plugin.tr(key);
     };
 
-    function saveLastUsedStyle(id) {
-        localStorage.setItem("zoteroStyleId", id);
-    };
-
-    function getLastUsedStyle() {
-        return localStorage.getItem("zoteroStyleId");
-    };
-
 	function saveLanguage(id) {
 		localStorage.setItem("zoteroLang", id);
 	};
@@ -739,7 +728,7 @@
                 res(styles[styleName]);
             } else {
                 loadingStyle = true;
-                sdk.getStyle(styleName)
+                cslStylesManager.getStyle(styleName)
                     .then(function (text) { styles[styleName] = text; res(text); loadingStyle = false; })
                     .catch(function (err) { rej(err); loadingStyle = false; });
             }
