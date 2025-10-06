@@ -11,23 +11,17 @@ function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
 
     this._lastStyleKey = "zoteroStyleId";
 
-    this.defaultStyles = {
-        "American Medical Association 11th edition":
-            "american-medical-association",
-        "American Political Science Association":
-            "american-political-science-association",
-        "American Psychological Association 7th edition": "apa",
-        "American Sociological Association 6th/7th edition":
-            "american-sociological-association",
-        "Chicago Manual of Style 17th edition (author-date)":
-            "chicago-author-date-17th-edition",
-        "Cite Them Right 10th edition - Harvard":
-            "harvard-cite-them-right-10th-edition",
-        IEEE: "ieee",
-        "Modern Language Association 8th edition":
-            "modern-language-association-8th-edition",
-        Nature: "nature",
-    };
+    this._defaultStyles = [
+        "american-medical-association",
+        "american-political-science-association",
+        "apa",
+        "american-sociological-association",
+        "chicago-author-date-17th-edition",
+        "harvard-cite-them-right-10th-edition",
+        "ieee",
+        "modern-language-association-8th-edition",
+        "nature",
+    ];
 }
 
 /**
@@ -42,31 +36,40 @@ CslStylesManager.prototype.addCustomStyle = function (style) {
  * @returns {Array<{name: string, title: string, dependent: number}>}
  */
 CslStylesManager.prototype.getStyles = function () {
-    return new Promise(function (resolve, reject) {
-        let jsonStyles = this._getStylesJson();
-        let customStyles = this._customStylesStorage.getStyles();
-        const self = this;
+    const self = this;
+    let jsonStyles = this._getStylesJson();
+    let customStyles = this._customStylesStorage.getStyles();
+    return Promise.all([jsonStyles, customStyles]).then(function (styles) {
+        var lastStyle = self.getLastUsedStyle();
+        var resultStyles = [];
+        var resultStyleNames = self._customStylesStorage.getStyleNames();
 
-        Promise.all([jsonStyles, customStyles])
-            .then(function (styles) {
-                var resultStyles = styles[1];
-                if (self._isDesktopAvailable && !self._isOnlineAvailable) {
-                    styles[0] = styles[0].filter(function (style, i) {
-                        return !!self.defaultStyles[style[i].title];
-                    });
-                }
-                styles[0].forEach(function (style) {
-                    resultStyles.push(style);
-                });
-                resolve(
-                    resultStyles.filter(function (style) {
-                        return style.dependent === 0;
-                    })
+        if (self._isDesktopAvailable && !self._isOnlineAvailable) {
+            styles[0] = styles[0].filter(function (style) {
+                return (
+                    self._defaultStyles.indexOf(style.name) >= 0 ||
+                    style.name == lastStyle
                 );
-            })
-            .catch(function (err) {
-                reject(err);
             });
+        }
+
+        styles[1].forEach(function (style) {
+            if (lastStyle === style.name) {
+                resultStyles.unshift(style);
+            } else {
+                resultStyles.push(style);
+            }
+        });
+
+        styles[0].forEach(function (style) {
+            if (lastStyle === style.name) {
+                resultStyles.unshift(style);
+            } else if (resultStyleNames.indexOf(style.name) === -1) {
+                resultStyles.push(style);
+            }
+        });
+
+        return resultStyles;
     });
 };
 
@@ -98,9 +101,14 @@ CslStylesManager.prototype.getStyle = function (styleName) {
     });
 };
 
+CslStylesManager.prototype.getLastUsedStyle = function () {
+    return localStorage.getItem(this._lastStyleKey);
+};
+
+CslStylesManager.prototype.isStyleDefault = function (styleName) {
+    return this._defaultStyles.indexOf(styleName) >= 0;
+};
+
 CslStylesManager.prototype.saveLastUsedStyle = function (id) {
     localStorage.setItem(this._lastStyleKey, id);
-};
-CslStylesManager.prototype._getLastUsedStyle = function () {
-    return localStorage.getItem(this._lastStyleKey);
 };

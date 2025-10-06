@@ -60,19 +60,6 @@
         }
     };
 
-	var defaultStyles = 
-    {
-        "American Medical Association 11th edition" : 'american-medical-association',
-        "American Political Science Association" : 'american-political-science-association',
-        "American Psychological Association 7th edition" : 'apa',
-        "American Sociological Association 6th/7th edition" : 'american-sociological-association',
-        "Chicago Manual of Style 17th edition (author-date)" : 'chicago-author-date-17th-edition',
-        "Cite Them Right 10th edition - Harvard" : 'harvard-cite-them-right-10th-edition',
-        "IEEE" : 'ieee',
-        "Modern Language Association 8th edition" : 'modern-language-association-8th-edition',
-        "Nature" : 'nature'
-    };
-
 	var locales = {};
     var styles = {};
     var selectedLocale;
@@ -199,7 +186,7 @@
     function loadStyles() {
         cslStylesManager.getStyles()
             .then(function (json) {
-                var lastStyle = cslStylesManager._getLastUsedStyle();
+                var lastStyle = cslStylesManager.getLastUsedStyle();
                 var found = false;
 
                 var onStyleSelect = function (f) {
@@ -239,17 +226,11 @@
                 };
 
                 for (var i = 0; i < json.length; i++) {
-                    if (json[i].dependent != 0) continue;
-
                     var el = document.createElement("span");
                     el.setAttribute("data-value", json[i].name);
                     el.textContent = json[i].title;
-					if (cslStylesManager.defaultStyles[json[i].title] || json[i].name == lastStyle) {
-                        if (json[i].name == lastStyle)
-                            elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
-                        else
-                            elements.styleSelectList.appendChild(el);
-
+					if (cslStylesManager.isStyleDefault(json[i].name) || json[i].name == lastStyle) {
+                        elements.styleSelectList.appendChild(el);
                         el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
                     } else {
                         elements.styleSelectListOther.appendChild(el);
@@ -262,10 +243,12 @@
                     }
                 }
 
-				var other = document.createElement("span");
-                other.textContent = "More Styles...";
-                elements.styleSelectList.appendChild(other);
-                other.onclick = openOtherStyleList(elements.styleSelectListOther);
+                if (elements.styleSelectListOther.children.length > 0) {
+                    var other = document.createElement("span");
+                    other.textContent = "More Styles...";
+                    elements.styleSelectListOther.appendChild(other);
+                    other.onclick = openOtherStyleList(elements.styleSelectList);
+                }
 
                 if (!found) {
                     var first = elements.styleSelectList.children[0];
@@ -273,7 +256,9 @@
                     selectInput(elements.styleSelect, first, elements.styleSelectList, false);
                 }
             })
-            .catch(function (err) { });
+            .catch(function (err) {
+                console.error(err);
+             });
     }
 
     function addEventListeners() {
