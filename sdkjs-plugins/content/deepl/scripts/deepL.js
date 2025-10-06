@@ -386,7 +386,7 @@ function checkInternetExplorer(){
             }
         })
         $('#reconf').on('click', function() {
-            if (saved_key !== null) {
+            if (API_KEY !== null) {
                 elements.api_value.value = API_KEY;
             }
             document.getElementById('txt_shower').innerHTML = '';
