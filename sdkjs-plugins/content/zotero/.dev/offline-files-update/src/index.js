@@ -66,7 +66,8 @@ async function downloadStylesJson() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const jsonData = await response.json();
+        let jsonData = await response.json();
+        jsonData = jsonData.filter((style) => style.dependent === 0);
 
         await fs.writeFile(
             STYLES_JSON_FOLDER + "styles.json",
