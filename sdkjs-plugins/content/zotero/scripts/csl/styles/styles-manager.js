@@ -24,12 +24,62 @@ function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
     ];
 }
 
-/**
- * @param {{name: string, title: string, dependent: number}} style
- */
-CslStylesManager.prototype.addCustomStyle = function (style) {
-    console.log("addCustomStyle");
-    this._customStylesStorage.addCustomStyle(style);
+CslStylesManager.prototype.addCustomStyle = function (file) {
+    var fileName = file.name.toLowerCase();
+
+    if (fileName.slice(-4) === ".csl" || fileName.slice(-4) === ".xml") {
+        fileName = fileName.substring(0, fileName.length - 4);
+    } else {
+        throw new Error("Please select a .csl or .xml file.");
+    }
+
+    if (file.size > 1024 * 1024) {
+        throw new Error("Maximum file size is 1 MB.");
+    }
+
+    return this._readCSLFile(file).then(
+        function (content) {
+            this.saveLastUsedStyle(fileName);
+            if (this._defaultStyles.indexOf(fileName) === -1) {
+                this._defaultStyles.push(fileName);
+            }
+
+            return this._customStylesStorage.setStyle(fileName, content);
+        }.bind(this)
+    );
+};
+
+CslStylesManager.prototype._readCSLFile = function (file) {
+    const self = this;
+    return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var fileContent = e.target.result;
+
+            if (!self._isValidCSL(fileContent)) {
+                reject("The file is not a valid CSL file");
+                return;
+            }
+
+            resolve(fileContent);
+        };
+
+        reader.onerror = function () {
+            reject("Failed to read file");
+        };
+
+        reader.readAsText(file);
+    });
+};
+
+CslStylesManager.prototype._isValidCSL = function (content) {
+    return (
+        content.includes("<?xml") &&
+        content.includes("<style") &&
+        content.includes("citation") &&
+        content.includes("bibliography")
+    );
 };
 
 /**
@@ -37,27 +87,45 @@ CslStylesManager.prototype.addCustomStyle = function (style) {
  */
 CslStylesManager.prototype.getStyles = function () {
     const self = this;
-    let jsonStyles = this._getStylesJson();
-    let customStyles = this._customStylesStorage.getStyles();
-    return Promise.all([jsonStyles, customStyles]).then(function (styles) {
+    return Promise.all([
+        this._getStylesJson(),
+        this._customStylesStorage.getStyles(),
+    ]).then(function (styles) {
         var lastStyle = self.getLastUsedStyle();
         var resultStyles = [];
         var resultStyleNames = self._customStylesStorage.getStyleNames();
+        var loadedStyles = styles[0];
+        var customStyles = styles[1];
 
         if (self._isDesktopAvailable && !self._isOnlineAvailable) {
-            styles[0] = styles[0].filter(function (style) {
+            loadedStyles = loadedStyles.filter(function (style) {
                 return (
                     self._defaultStyles.indexOf(style.name) >= 0 ||
                     style.name == lastStyle
                 );
             });
         } else {
-            styles[0] = styles[0].filter(function (style) {
+            loadedStyles = loadedStyles.filter(function (style) {
                 return style.dependent === 0;
             });
         }
 
-        styles[1].forEach(function (style) {
+        customStyles.forEach(function (style) {
+            if (lastStyle === style.id) {
+                resultStyles.unshift(style);
+            } else {
+                resultStyles.push(style);
+            }
+            if (self._defaultStyles.indexOf(style.name) === -1) {
+                self._defaultStyles.push(style.name);
+            }
+        });
+
+        loadedStyles.forEach(function (style) {
+            if (resultStyleNames.indexOf(style.name) !== -1) {
+                // already added
+                return;
+            }
             if (lastStyle === style.name) {
                 resultStyles.unshift(style);
             } else {
@@ -65,20 +133,8 @@ CslStylesManager.prototype.getStyles = function () {
             }
         });
 
-        styles[0].forEach(function (style) {
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else if (resultStyleNames.indexOf(style.name) === -1) {
-                resultStyles.push(style);
-            }
-        });
-
         return resultStyles;
     });
-};
-
-CslStylesManager.prototype._getCustomStyles = function () {
-    console.log("getCustomStyles");
 };
 
 CslStylesManager.prototype._getStylesJson = function () {
@@ -96,6 +152,14 @@ CslStylesManager.prototype._getStylesJson = function () {
  * @returns
  */
 CslStylesManager.prototype.getStyle = function (styleName) {
+    const customStyleNames = this._customStylesStorage.getStyleNames();
+    if (customStyleNames.indexOf(styleName) !== -1) {
+        return this._customStylesStorage
+            .getStyle(styleName)
+            .then(function (style) {
+                return style.content;
+            });
+    }
     let url = this._STYLES_LOCAL + styleName + ".csl";
     if (this._isOnlineAvailable) {
         url = this._STYLES_URL + styleName;
