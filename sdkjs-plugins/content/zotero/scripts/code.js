@@ -187,18 +187,7 @@
 
     function loadStyles() {
         cslStylesManager.getStyles()
-            .then(function (json) {
-                var lastStyle = cslStylesManager.getLastUsedStyle();
-                var found = false;
-
-                var onStyleSelect = function (f) {
-                    return function (ev) {
-                        var sel = ev.target.getAttribute("data-value");
-                        cslStylesManager.saveLastUsedStyle(sel);
-                        f(ev);
-                    }
-                };
-
+            .then(function (stylesInfo) {
 				var openOtherStyleList = function (list) {
                     return function (ev) {
                         elements.styleSelectListOther.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
@@ -207,43 +196,7 @@
                     }
                 };
 
-				var onStyleSelectOther = function (list, other) {
-                    return function (ev) {
-                        var tmpEl = list.removeChild(list.children[list.children.length - 2]);
-                        var newEl = document.createElement("span");
-                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
-                        newEl.textContent = tmpEl.textContent;
-                        other.appendChild(newEl);
-                        newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
-                        tmpEl = other.removeChild(ev.target);
-                        newEl = document.createElement("span");
-                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
-                        newEl.textContent = tmpEl.textContent;
-                        list.insertBefore(newEl, list.firstElementChild);
-                        newEl.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
-                        var event = new Event("click");
-                        newEl.dispatchEvent(event);
-                        openList(null);
-                    }
-                };
-
-                for (var i = 0; i < json.length; i++) {
-                    var el = document.createElement("span");
-                    el.setAttribute("data-value", json[i].name);
-                    el.textContent = json[i].title;
-					if (cslStylesManager.isStyleDefault(json[i].name) || json[i].name == lastStyle) {
-                        elements.styleSelectList.appendChild(el);
-                        el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
-                    } else {
-                        elements.styleSelectListOther.appendChild(el);
-                        el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
-                    }
-                    if (json[i].name == lastStyle) {
-                        el.setAttribute("selected", "");
-                        selectInput(elements.styleSelect, el, elements.styleSelectList, false);
-                        found = true;
-                    }
-                }
+                addStylesToList(stylesInfo);
 
                 if (elements.styleSelectListOther.children.length > 0) {
                     var other = document.createElement("span");
@@ -259,82 +212,94 @@
                 label.textContent = "Add custom style...";
                 custom.appendChild(label);
                 elements.styleSelectList.appendChild(custom);
-
-                if (!found) {
-                    var first = elements.styleSelectList.children[0];
-                    first.setAttribute("selected", "");
-                    selectInput(elements.styleSelect, first, elements.styleSelectList, false);
-                }
             })
             .catch(function (err) {
                 console.error(err);
              });
     }
 
-    function readCSLFile(file) {
-        var reader = new FileReader();
-        
-        reader.onload = function(e) {
-            var fileContent = e.target.result;
-            processCSLContent(fileContent, file.name);
-        };
-        
-        reader.onerror = function() {
-            showMessage('Failed to read file', 'error');
-        };
-        
-        reader.readAsText(file, 'UTF-8');
-    }
+    /**
+     * @param {object} stylesInfo
+     */
+    function addStylesToList(stylesInfo) {
+        var found = false;
+        var lastStyle = cslStylesManager.getLastUsedStyle();
 
-    function processCSLContent(content, fileName) {
-        try {
-            if (!isValidCSL(content)) {
-                showMessage('The file is not a valid CSL file', 'error');
-                return;
+        var onStyleSelect = function (f) {
+            return function (ev) {
+                var sel = ev.target.getAttribute("data-value");
+                cslStylesManager.saveLastUsedStyle(sel);
+                f(ev);
             }
-            
-            saveCSLStyle(content, fileName);
-            
-        } catch (error) {
-            console.error('Failed to process CSL: ' + error.message, 'error');
+        };
+        
+        var onStyleSelectOther = function (list, other) {
+            return function (ev) {
+                var tmpEl = list.removeChild(list.children[list.children.length - 3]);
+                var newEl = document.createElement("span");
+                newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                newEl.textContent = tmpEl.textContent;
+                other.appendChild(newEl);
+                newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                tmpEl = other.removeChild(ev.target);
+                newEl = document.createElement("span");
+                newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                newEl.textContent = tmpEl.textContent;
+                list.insertBefore(newEl, list.firstElementChild);
+                newEl.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                var event = new Event("click");
+                newEl.dispatchEvent(event);
+                openList(null);
+            }
+        };
+
+        for (var i = 0; i < stylesInfo.length; i++) {
+            var el = document.createElement("span");
+            el.setAttribute("data-value", stylesInfo[i].name);
+            el.textContent = stylesInfo[i].title;
+            if (cslStylesManager.isStyleDefault(stylesInfo[i].name) || stylesInfo[i].name == lastStyle) {
+                if (stylesInfo[i].name == lastStyle)
+                    elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
+                else
+                    elements.styleSelectList.appendChild(el);
+                el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+            } else {
+                elements.styleSelectListOther.appendChild(el);
+                el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+            }
+            if (stylesInfo[i].name == lastStyle) {
+                el.setAttribute("selected", "");
+                selectInput(elements.styleSelect, el, elements.styleSelectList, false);
+                found = true;
+            }
         }
-    }
-
-    function isValidCSL(content) {
-        return content.includes('<?xml') && 
-               content.includes('<style') && 
-               content.includes('citation') &&
-               content.includes('bibliography');
-    }
-
-    function saveCSLStyle(content, fileName) {
-        cslStylesManager.addCustomStyle(fileName, content)
-            .then(function() {
-                showMessage('CSL style "' + fileName + '" saved!', 'success');
-                
-                if (window.Asc.plugin) {
-                    console.log('updateAvailableStyles executed...');
-                    //window.Asc.plugin.callCommand(function() {});
-                }
-                
-                document.getElementById('cslFileInput').value = '';
-            })
-            .catch(function(error) {
-                console.error('Failed to save:', error);
-                showMessage('Failed to save', 'error');
-            });
-    }
-
-    function showMessage(text, type) {
-        if (window.Asc.plugin && window.Asc.plugin.executeMethod) {
-            window.Asc.plugin.executeMethod('ShowMessage', [text]);
-        } else {
-            // Fallback
-            alert(text);
+        
+        if (!found) {
+            var first = elements.styleSelectList.children[0];
+            first.setAttribute("selected", "");
+            selectInput(elements.styleSelect, first, elements.styleSelectList, false);
         }
     }
 
     function addEventListeners() {
+        elements.fileInput.onchange = function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            showLoader(true);
+
+            cslStylesManager.addCustomStyle(file).then(function (styleValue) {
+                elements.styleSelectList.querySelector('[selected]').removeAttribute("selected");
+                addStylesToList([styleValue]);
+            }).catch(function (error) {
+                console.error(error);
+                if (typeof error === "string") {
+                    showError(error);
+                }
+            }).finally(function () {
+                showLoader(false);
+            });
+        };
+
         elements.useDesktopApp.onclick = function() {
             showLoader(true);
             initSdkApis().finally(function() {
@@ -476,25 +441,6 @@
 			});
             selectedLocale = val;
         };
-
-        elements.fileInput.onchange = function (e) {
-            var file = e.target.files[0];
-            if (!file) return;
-            showLoader(true);
-            
-            var fileName = file.name.toLowerCase();
-            if (!fileName.endsWith('.csl') && !fileName.endsWith('.xml')) {
-                showMessage('Please select a .csl or .xml file.');
-                return;
-            }
-            
-            if (file.size > 1024 * 1024) {
-                showMessage('Maximum file size is 1 MB.');
-                return;
-            }
-            
-            readCSLFile(file);
-        }
     }
 
     var scrollBoxes = [];
@@ -806,7 +752,10 @@
             } else {
                 loadingStyle = true;
                 cslStylesManager.getStyle(styleName)
-                    .then(function (text) { styles[styleName] = text; res(text); loadingStyle = false; })
+                    .then(function (text) { 
+                        styles[styleName] = text; 
+                        res(text); loadingStyle = false; 
+                    })
                     .catch(function (err) { rej(err); loadingStyle = false; });
             }
         });
@@ -1030,10 +979,16 @@
             var updatedFields = [];
             var bibField = null;
             var bibFieldValue = ' ';
-            console.warn(formatter.makeBibliography({
-                mode: 'text',
-            }));
-            elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
+
+            try {
+                elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
+            } catch (e) {
+                console.error(e);
+                showError("Failed to apply this style.");
+                showLoader(false);
+                return;
+            }
+            
             var bibliography = elements.tempDiv.innerText;
             arrFields.forEach(function(field) {
                 var citationObject;
