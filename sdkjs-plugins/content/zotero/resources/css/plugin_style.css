@@ -285,15 +285,25 @@ input[type="text"] {
     color: #444444;
 }
 
-        .selectList > span:hover {
-            background-color: #d8dadc;
-            color: #373737;
-        }
+    .selectList > span:hover {
+        background-color: #d8dadc;
+        color: #373737;
+    }
 
-        .selectList > span[selected=""] {
-            background-color: #7d858c;
-            color: #ffffff;
-        }
+    .selectList > span[selected=""] {
+        background-color: #7d858c;
+        color: #ffffff;
+    }
+
+    .selectList > span.select-file {
+        padding: 0;
+    }
+    .selectList > span label {
+        padding: 5px 20px;
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
 .scrollThumb {
     width: 9px;
