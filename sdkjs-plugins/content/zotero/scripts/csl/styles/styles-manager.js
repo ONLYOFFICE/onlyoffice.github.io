@@ -51,6 +51,10 @@ CslStylesManager.prototype.getStyles = function () {
                     style.name == lastStyle
                 );
             });
+        } else {
+            styles[0] = styles[0].filter(function (style) {
+                return style.dependent === 0;
+            });
         }
 
         styles[1].forEach(function (style) {

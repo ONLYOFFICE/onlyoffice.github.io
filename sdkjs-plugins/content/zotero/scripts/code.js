@@ -112,7 +112,8 @@
 		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
 		synchronizeBtn: document.getElementById('synchronizeBtn'),
 		checkOmitAuthor: document.getElementById('omitAuthor'),
-        useDesktopApp: document.getElementById('useDesktopApp')
+        useDesktopApp: document.getElementById('useDesktopApp'),
+        fileInput: document.getElementById('cslFileInput')
     };
 
     var selectedScroller;
@@ -125,6 +126,7 @@
         sdk = window.Asc.plugin.zotero.api({});
         
         initSdkApis().then(function (availableApis) {
+
             cslStylesManager = new CslStylesManager(availableApis.online, availableApis.desktop);
             if (availableApis.online || availableApis.desktop) {
                 loadStyles();
@@ -246,9 +248,17 @@
                 if (elements.styleSelectListOther.children.length > 0) {
                     var other = document.createElement("span");
                     other.textContent = "More Styles...";
-                    elements.styleSelectListOther.appendChild(other);
-                    other.onclick = openOtherStyleList(elements.styleSelectList);
+                    elements.styleSelectList.appendChild(other);
+                    other.onclick = openOtherStyleList(elements.styleSelectListOther);
                 }
+                
+                var custom = document.createElement("span");
+                custom.setAttribute("class", "select-file");
+                var label = document.createElement("label");
+                label.setAttribute("for", "cslFileInput");
+                label.textContent = "Add custom style...";
+                custom.appendChild(label);
+                elements.styleSelectList.appendChild(custom);
 
                 if (!found) {
                     var first = elements.styleSelectList.children[0];
@@ -259,6 +269,69 @@
             .catch(function (err) {
                 console.error(err);
              });
+    }
+
+    function readCSLFile(file) {
+        var reader = new FileReader();
+        
+        reader.onload = function(e) {
+            var fileContent = e.target.result;
+            processCSLContent(fileContent, file.name);
+        };
+        
+        reader.onerror = function() {
+            showMessage('Failed to read file', 'error');
+        };
+        
+        reader.readAsText(file, 'UTF-8');
+    }
+
+    function processCSLContent(content, fileName) {
+        try {
+            if (!isValidCSL(content)) {
+                showMessage('The file is not a valid CSL file', 'error');
+                return;
+            }
+            
+            saveCSLStyle(content, fileName);
+            
+        } catch (error) {
+            console.error('Failed to process CSL: ' + error.message, 'error');
+        }
+    }
+
+    function isValidCSL(content) {
+        return content.includes('<?xml') && 
+               content.includes('<style') && 
+               content.includes('citation') &&
+               content.includes('bibliography');
+    }
+
+    function saveCSLStyle(content, fileName) {
+        cslStylesManager.addCustomStyle(fileName, content)
+            .then(function() {
+                showMessage('CSL style "' + fileName + '" saved!', 'success');
+                
+                if (window.Asc.plugin) {
+                    console.log('updateAvailableStyles executed...');
+                    //window.Asc.plugin.callCommand(function() {});
+                }
+                
+                document.getElementById('cslFileInput').value = '';
+            })
+            .catch(function(error) {
+                console.error('Failed to save:', error);
+                showMessage('Failed to save', 'error');
+            });
+    }
+
+    function showMessage(text, type) {
+        if (window.Asc.plugin && window.Asc.plugin.executeMethod) {
+            window.Asc.plugin.executeMethod('ShowMessage', [text]);
+        } else {
+            // Fallback
+            alert(text);
+        }
     }
 
     function addEventListeners() {
@@ -403,6 +476,25 @@
 			});
             selectedLocale = val;
         };
+
+        elements.fileInput.onchange = function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            showLoader(true);
+            
+            var fileName = file.name.toLowerCase();
+            if (!fileName.endsWith('.csl') && !fileName.endsWith('.xml')) {
+                showMessage('Please select a .csl or .xml file.');
+                return;
+            }
+            
+            if (file.size > 1024 * 1024) {
+                showMessage('Maximum file size is 1 MB.');
+                return;
+            }
+            
+            readCSLFile(file);
+        }
     }
 
     var scrollBoxes = [];
