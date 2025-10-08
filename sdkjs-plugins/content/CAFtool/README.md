@@ -19,27 +19,6 @@
 - **格式报告**：提供可视化的错误列表与用户选择替换操作
 - **可自定义规则**：用户可以在设置界面自由选择需要转换的标点类型
 
-## 🖼️ 界面预览
-
-📌 工具栏按钮界面  
-👉 _图示：插件在 ONLYOFFICE 工具栏中的“强迫症救星”标签_  
-
-📋 设置界面（setting.html）  
-<img src="resources/store/screenshots/screen3.png"">
-
-![screen3](screenshots/screen1.png)
-
-
-
-
-
-📝 格式报告（report.html） 
-resources/store/screenshots/screen1.png
-resources/store/screenshots/screen2.png
-
-
-
-
 ## 🛠️ 使用方式
 
 1. 克隆项目并部署到支持插件的 ONLYOFFICE 实例
@@ -77,6 +56,7 @@ resources/store/screenshots/screen2.png
 ---
 
 如果你觉得这个插件有用，欢迎 Star ⭐、Fork 🍴、提 Issue！
+
 
 
 
