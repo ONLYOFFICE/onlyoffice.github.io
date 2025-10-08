@@ -195,6 +195,9 @@
 				AI.Models = obj.models;
 			}
 
+			if (!window.isCheckGenerationInfo)
+				window.checkGenerationInfo();
+
 			return true;
 		}
 		return false;

@@ -228,7 +228,7 @@
 		 *     content: ["Hello", "Hi"]
 		 * }
 		 */
-		getChatCompletionsResult(message, model) {
+		getChatCompletionsResult(message, model, isTrim) {
 			let result = {
 				content : []
 			};
@@ -260,17 +260,19 @@
 			if (choice.delta && choice.delta.text)
 				result.content.push(choice.delta.text);
 
-			let trimArray = ["\n".charCodeAt(0)];
-			for (let i = 0, len = result.content.length; i < len; i++) {
-				let iEnd = result.content[i].length - 1;
-				let iStart = 0;
-				while (iStart < iEnd && trimArray.includes(result.content[i].charCodeAt(iStart)))
-					iStart++;
-				while (iEnd > iStart && trimArray.includes(result.content[i].charCodeAt(iEnd)))
-					iEnd--;
+			if (isTrim !== false) {
+				let trimArray = ["\n".charCodeAt(0)];
+				for (let i = 0, len = result.content.length; i < len; i++) {
+					let iEnd = result.content[i].length - 1;
+					let iStart = 0;
+					while (iStart < iEnd && trimArray.includes(result.content[i].charCodeAt(iStart)))
+						iStart++;
+					while (iEnd > iStart && trimArray.includes(result.content[i].charCodeAt(iEnd)))
+						iEnd--;
 
-				if (iEnd > iStart && ((0 !== iStart) || ((result.content[i].length - 1) !== iEnd)))
-					result.content[i] = result.content[i].substring(iStart, iEnd + 1);
+					if (iEnd > iStart && ((0 !== iStart) || ((result.content[i].length - 1) !== iEnd)))
+						result.content[i] = result.content[i].substring(iStart, iEnd + 1);
+				}
 			}
 
 			return result;
