@@ -108,7 +108,6 @@
                     };
                     resolve(res);
                 }).catch(function (err) {
-                    console.log(err);
                     reject(err);
                 });
             });
