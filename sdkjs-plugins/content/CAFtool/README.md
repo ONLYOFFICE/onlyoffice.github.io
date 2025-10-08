@@ -33,7 +33,7 @@
 
 
 📝 格式报告（report.html） 
-![screen3](resources/store/screenshots/screen1.png)
+![screen3](./resources/store/screenshots/screen1.png)
 ![screen3](resources/store/screenshots/screen2.png)
 
 
@@ -76,6 +76,7 @@
 ---
 
 如果你觉得这个插件有用，欢迎 Star ⭐、Fork 🍴、提 Issue！
+
 
 
 
