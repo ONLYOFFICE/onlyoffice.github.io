@@ -26,15 +26,15 @@
 
 📋 设置界面（setting.html）  
 
-![screen3](./store/screenshots/screen3.png)
+![screen3](screenshots/screen1.png)
 
 
 
 
 
 📝 格式报告（report.html） 
-![screen3](./resources/store/screenshots/screen1.png)
-![screen3](resources/store/screenshots/screen2.png)
+resources/store/screenshots/screen1.png
+resources/store/screenshots/screen2.png
 
 
 
