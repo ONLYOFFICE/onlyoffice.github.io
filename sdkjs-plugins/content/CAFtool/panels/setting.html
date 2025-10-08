@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <base href="../">
+  <!-- 如需本地引用可换成 ../../v1/plugins.js -->
+  <script src="sdkjs-plugins/v1/plugins.js"></script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Punctuation rules settings</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: #fff;
+    }
+    .fixed-header {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      flex-shrink: 0;
+    }
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .btn-bar { margin-bottom: 6px; }
+    .btn-mini {
+      padding: 4px 8px;
+      font-size: 13px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    .btn-mini:hover { background-color: #f0f0f0; }
+    .scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+    }
+    .rule-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 6px 0;
+      padding-left: 4px;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fixed-header">
+    <div class="title" id="i_title">Punctuation conversion rules</div>
+    <div class="desc" id="i_desc">
+      Please check the punctuation types you want to process.<br>
+      The system will convert selected half-width symbols to full-width (or vice versa).
+    </div>
+    <div class="btn-bar">
+      <button class="btn-mini" id="btn_select_all" onclick="selectAllPunctuation()">Select all</button>
+      <button class="btn-mini" id="btn_clear_all" onclick="clearAllPunctuation()">Clear</button>
+      <button class="btn-mini" id="btn_invert" onclick="invertPunctuation()">Invert selection</button>
+    </div>
+  </div>
+
+  <div class="scroll-container" id="rules">
+    <div class="rule-row">
+      <label><input type="checkbox" value="，"><span id="lbl_comma">Comma</span></label>
+      <label><input type="checkbox" value="；"><span id="lbl_semicolon">Semicolon</span></label>
+      <label><input type="checkbox" value="："><span id="lbl_colon">Colon</span></label>
+      <label><input type="checkbox" value="。"><span id="lbl_period">Period</span></label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="“"><span id="lbl_lquote">Left quotation mark</span></label>
+      <label><input type="checkbox" value="”"><span id="lbl_rquote">Right quotation mark</span></label>
+      <label><input type="checkbox" value="‘"><span id="lbl_lsingle">Left single quotation mark</span></label>
+      <label><input type="checkbox" value="’"><span id="lbl_rsingle">Right single quotation mark</span></label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="《"><span id="lbl_lbook">Left book title mark</span></label>
+      <label><input type="checkbox" value="》"><span id="lbl_rbook">Right book title mark</span></label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="（"><span id="lbl_lparen">Left parenthesis</span></label>
+      <label><input type="checkbox" value="）"><span id="lbl_rparen">Right parenthesis</span></label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="/"><span id="lbl_slash">Slash</span></label>
+      <label><input type="checkbox" value="？"><span id="lbl_question">Question mark</span></label>
+      <label><input type="checkbox" value="！"><span id="lbl_exclamation">Exclamation mark</span></label>
+      <label><input type="checkbox" value="—"><span id="lbl_emdash">Em dash</span></label>
+    </div>
+    <div class="rule-row">
+      <label><input type="checkbox" value="＄"><span id="lbl_dollar">Dollar sign</span></label>
+      <label><input type="checkbox" value="￥"><span id="lbl_yuan">Yuan sign</span></label>
+      <label><input type="checkbox" value="￡"><span id="lbl_pound">Pound sign</span></label>
+    </div>
+  </div>
+
+  <script>
+    function selectAllPunctuation() {
+      const checkboxes = document.querySelectorAll('#rules input[type="checkbox"][value]');
+      checkboxes.forEach(cb => cb.checked = true);
+      saveSettings();
+    }
+    function clearAllPunctuation() {
+      const checkboxes = document.querySelectorAll('#rules input[type="checkbox"][value]');
+      checkboxes.forEach(cb => cb.checked = false);
+      saveSettings();
+    }
+    function invertPunctuation() {
+      const checkboxes = document.querySelectorAll('#rules input[type="checkbox"][value]');
+      checkboxes.forEach(cb => cb.checked = !cb.checked);
+      saveSettings();
+    }
+    function saveSettings() {
+      const punctuationCheckboxes = document.querySelectorAll('#rules input[type="checkbox"]:checked');
+      const selectedPunctuation = Array.from(punctuationCheckboxes).map(cb => cb.value);
+      localStorage.setItem('selectedPunctuation', JSON.stringify(selectedPunctuation));
+    }
+    function loadSettings() {
+      const allCheckboxes = document.querySelectorAll('#rules input[type="checkbox"]');
+      const stored = localStorage.getItem('selectedPunctuation');
+      if (!stored) {
+        allCheckboxes.forEach(cb => cb.checked = true);
+      } else {
+        const saved = JSON.parse(stored);
+        allCheckboxes.forEach(cb => cb.checked = saved.includes(cb.value));
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSettings();
+      document.querySelectorAll('#rules input[type="checkbox"]').forEach(el => el.addEventListener('change', saveSettings));
+    });
+  </script>
+
+  <script>
+    // 应用翻译（启动和语言变化都会触发）——官方推荐方式
+    window.Asc.plugin.onTranslate = function () {
+      setText("i_title", "Punctuation conversion rules");
+      setText("i_desc",  "Please check the punctuation types you want to process.<br>The system will convert selected half-width symbols to full-width (or vice versa).");
+
+      setText("btn_select_all", "Select all");
+      setText("btn_clear_all",  "Clear");
+      setText("btn_invert",     "Invert selection");
+
+      setText("lbl_comma",     "Comma");
+      setText("lbl_semicolon", "Semicolon");
+      setText("lbl_colon",     "Colon");
+      setText("lbl_period",    "Period");
+
+      setText("lbl_lquote",  "Left quotation mark");
+      setText("lbl_rquote",  "Right quotation mark");
+      setText("lbl_lsingle", "Left single quotation mark");
+      setText("lbl_rsingle", "Right single quotation mark");
+
+      setText("lbl_lbook", "Left book title mark");
+      setText("lbl_rbook", "Right book title mark");
+
+      setText("lbl_lparen", "Left parenthesis");
+      setText("lbl_rparen", "Right parenthesis");
+
+      setText("lbl_slash",      "Slash");
+      setText("lbl_question",   "Question mark");
+      setText("lbl_exclamation","Exclamation mark");
+      setText("lbl_emdash",     "Em dash");
+
+      setText("lbl_dollar", "Dollar sign");
+      setText("lbl_yuan",   "Yuan sign");
+      setText("lbl_pound",  "Pound sign");
+
+      function setText(id, key) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = window.Asc.plugin.tr(key);
+      }
+    };
+
+    // 启动时也执行一次翻译填充
+    window.Asc.plugin.init = function () {
+      if (typeof window.Asc.plugin.onTranslate === "function") {
+        window.Asc.plugin.onTranslate();
+      }
+    };
+  </script>
+
+</body>
+</html>
