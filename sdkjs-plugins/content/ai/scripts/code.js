@@ -484,6 +484,24 @@ async function initWithTranslate(counter) {
 			}
 		}
 
+		if (editorVersion >= 9001000 && window.isEnableDocumentGenerate) {
+
+			if (window.AscDesktopEditor && Asc.Editor.getType() === "word") {
+
+				let buttonGenerate = new Asc.ButtonToolbar(null);
+				buttonGenerate.text = "Generate";
+				buttonGenerate.icons = window.getToolBarButtonIcons("ocr");
+				
+				buttonGenerate.attachOnClick(async function(){
+					let content = await getFormGenerationPrompt();
+					window.AscDesktopEditor.generateNew("docx", "ai", content);
+				});
+
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonGenerate]);
+			}			
+
+		}
+
 		if (editorVersion >= 9000004)
 			window.addSupportAgentMode(editorVersion);
 	}
@@ -619,6 +637,7 @@ class Provider extends AI.Provider {\n\
 				AI.Storage.save();
 			
 		});
+
 	}
 
 	await initWithTranslate(1 << 1);

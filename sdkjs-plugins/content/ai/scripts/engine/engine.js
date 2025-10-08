@@ -782,7 +782,7 @@ function fetchExternal(url, options, isStreaming) {
 		let requestBody = {};
 		let model = this.model;
 		let processResult = function(data) {
-			let result = provider.getChatCompletionsResult(data, model);
+			let result = provider.getChatCompletionsResult(data, model, isStreaming ? false : true);
 			if (result.content.length === 0)
 				return "";
 
@@ -847,7 +847,8 @@ function fetchExternal(url, options, isStreaming) {
 					let resultObj = getStreamedResult(tail + readData.value);
 					tail = resultObj.tail;
 
-					let chunks = eval(resultObj.result);
+					//let chunks = eval(resultObj.result);
+					let chunks = JSON.parse(resultObj.result);
 
 					let errorObj = null;
 					try {
@@ -875,8 +876,10 @@ function fetchExternal(url, options, isStreaming) {
 						dataChunk += processResult(chunks[j]);
 
 						// TODO: MD support
-						dataChunk = dataChunk.replace(/\n\n/g, '\n');
+						//dataChunk = dataChunk.replace(/\n\n/g, '\n');
 					}
+
+					console.log(dataChunk);
 
 					//console.log(dataChunk);
 					allChunks += dataChunk;
@@ -1228,7 +1231,7 @@ function fetchExternal(url, options, isStreaming) {
 	};
 
 	function getStreamedResult(responseText) {
-		
+
 		let result = "[";
 
 		let isEscaped = false;
@@ -1270,7 +1273,7 @@ function fetchExternal(url, options, isStreaming) {
 						firstObject = false;
 						
 						
-						result += ("{ data : " + responseText.substring(curObjectStartPos, i) + "}");
+						result += ("{ \"data\" : " + responseText.substring(curObjectStartPos, i) + "}");
 
 						while (i < inputLen) {
 							char = responseText[i];
@@ -1291,6 +1294,12 @@ function fetchExternal(url, options, isStreaming) {
 		}
 
 		result += "]";
+
+		console.log("Parsed result:");
+		console.log(responseText);
+		console.log(result);
+		console.log(responseText.substring(curObjectPos));
+
 		return {
 			result : result,
 			tail : (curObjectPos === inputLen) ? "" : responseText.substring(curObjectPos)
