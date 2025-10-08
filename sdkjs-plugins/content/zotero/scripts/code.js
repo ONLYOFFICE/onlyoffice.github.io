@@ -735,6 +735,7 @@
             })
             .catch(function (err) {
 				if (bCount) counter--;
+                console.error(err);
                 displaySearchItems(append, {}, err.message, hideLoader, isGroup, (bCount && !counter) );
             })
             .finally(function () {	
