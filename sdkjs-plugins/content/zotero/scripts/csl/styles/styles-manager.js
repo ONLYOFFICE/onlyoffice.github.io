@@ -26,27 +26,29 @@ function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
 
 CslStylesManager.prototype.addCustomStyle = function (file) {
     var fileName = file.name.toLowerCase();
+    var self = this;
 
-    if (fileName.slice(-4) === ".csl" || fileName.slice(-4) === ".xml") {
-        fileName = fileName.substring(0, fileName.length - 4);
-    } else {
-        throw new Error("Please select a .csl or .xml file.");
-    }
+    return new Promise(function (resolve, reject) {
+        if (fileName.slice(-4) === ".csl" || fileName.slice(-4) === ".xml") {
+            fileName = fileName.substring(0, fileName.length - 4);
+        } else {
+            reject("Please select a .csl or .xml file.");
+        }
 
-    if (file.size > 1024 * 1024) {
-        throw new Error("Maximum file size is 1 MB.");
-    }
-
-    return this._readCSLFile(file).then(
-        function (content) {
-            this.saveLastUsedStyle(fileName);
-            if (this._defaultStyles.indexOf(fileName) === -1) {
-                this._defaultStyles.push(fileName);
+        if (file.size > 1024 * 1024) {
+            reject("Maximum file size is 1 MB.");
+        }
+        resolve();
+    }).then(function () {
+        return self._readCSLFile(file).then(function (content) {
+            self.saveLastUsedStyle(fileName);
+            if (self._defaultStyles.indexOf(fileName) === -1) {
+                self._defaultStyles.push(fileName);
             }
 
-            return this._customStylesStorage.setStyle(fileName, content);
-        }.bind(this)
-    );
+            return self._customStylesStorage.setStyle(fileName, content);
+        });
+    });
 };
 
 CslStylesManager.prototype._readCSLFile = function (file) {

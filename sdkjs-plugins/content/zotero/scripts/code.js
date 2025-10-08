@@ -175,11 +175,13 @@
                     switchAuthState('config');
                 }
             } else if (availableApis.permissionNeeded) {
-                alert('Failed to establish connection with Zotero API.\n' + 'You need to allow Zotero to access this computer.');
-                console.warn('Edit -> Settings -> Advanced -> Allow other applications on this computer to communicate with Zotero');
-                console.warn('Restart Zotero');
+                const errorMessage = 'Connection to Zotero failed. ' + 
+                    'Please enable external connections in Zotero: ' + 
+                    'Edit → Settings → Advanced → Check "Allow other ' + 
+                    'applications on this computer to communicate with Zotero"';
+                showError(getMessage(errorMessage));
             } else {
-                alert('Failed to establish connection with Zotero API.');
+                showError(getMessage('Connection to Zotero failed. Make sure Zotero is running.'));
             }
             return availableApis;
         });
@@ -285,16 +287,14 @@
         elements.fileInput.onchange = function (e) {
             var file = e.target.files[0];
             if (!file) return;
-            showLoader(true);
+            //showLoader(true);
 
             cslStylesManager.addCustomStyle(file).then(function (styleValue) {
                 elements.styleSelectList.querySelector('[selected]').removeAttribute("selected");
                 addStylesToList([styleValue]);
             }).catch(function (error) {
                 console.error(error);
-                if (typeof error === "string") {
-                    showError(error);
-                }
+                showError(getMessage("Failed to upload file"));
             }).finally(function () {
                 showLoader(false);
             });
@@ -314,7 +314,6 @@
         };
 
         function searchFor(text) {
-            console.log('searchFor', text);
             if (elements.mainState.classList.contains(displayNoneClass)) return;
             text = text.trim();
             if (!text) return;
@@ -984,7 +983,7 @@
                 elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
             } catch (e) {
                 console.error(e);
-                showError("Failed to apply this style.");
+                showError(getMessage("Failed to apply this style."));
                 showLoader(false);
                 return;
             }
