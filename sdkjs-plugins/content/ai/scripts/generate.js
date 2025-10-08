@@ -183,6 +183,7 @@ window.checkGenerationInfo = async function() {
 
 					await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 					await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+					await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
 					let isPaste = false;
 
@@ -229,6 +230,7 @@ window.checkGenerationInfo = async function() {
 					}
 
 					await checkEndAction();
+					await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 					await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 
 					break;
