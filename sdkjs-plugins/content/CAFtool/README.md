@@ -26,14 +26,14 @@
 
 📋 设置界面（setting.html）  
 👉 _图示：用户可选择希望转换的符号_ 
-![](resources/store/screenshots/screen3.png)
+![用户可选择希望转换的符号](resources/store/screenshots/screen3.png)
 
 
 
 
 📝 格式报告（report.html） 
-![](resources/store/screenshots/screen1.png)
-![](resources/store/screenshots/screen2.png)
+![格式报告](resources/store/screenshots/screen1.png)
+![格式报告](resources/store/screenshots/screen2.png)
 
 
 
@@ -74,6 +74,7 @@
 ---
 
 如果你觉得这个插件有用，欢迎 Star ⭐、Fork 🍴、提 Issue！
+
 
 
 
