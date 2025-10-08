@@ -25,6 +25,7 @@
 👉 _图示：插件在 ONLYOFFICE 工具栏中的“强迫症救星”标签_  
 
 📋 设置界面（setting.html）  
+<img src="resources/store/screenshots/screen3.png"">
 
 ![screen3](screenshots/screen1.png)
 
@@ -76,6 +77,7 @@ resources/store/screenshots/screen2.png
 ---
 
 如果你觉得这个插件有用，欢迎 Star ⭐、Fork 🍴、提 Issue！
+
 
 
 
