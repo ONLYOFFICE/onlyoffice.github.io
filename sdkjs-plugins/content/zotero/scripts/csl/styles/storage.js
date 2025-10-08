@@ -149,7 +149,7 @@ CslStylesStorage.prototype.getStyle = function (name) {
                 const request = store.get(name);
 
                 request.onsuccess = function () {
-                    //   self.deleteStyle(name);
+                    // self.deleteStyle(name);
                     resolve(request.result);
                 };
                 request.onerror = function () {

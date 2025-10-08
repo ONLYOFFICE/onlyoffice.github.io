@@ -67,9 +67,8 @@
                         resolve(e);
                     },
                     error: function(e) {
-                        console.error(e);
                         if ( e.statusCode == -102 ) e.statusCode = 404;
-                        reject({error: e.statusCode, message: "Internal error"});
+                        reject(e);
                     }
                 }); 
             });
@@ -313,24 +312,16 @@
 
         /**
          * @returns {Promise<{desktop: boolean, online: boolean, permissionNeeded: boolean}>}
-         * TODO: add Promise.allSettled for getRequest and getDesktopRequest
          */
         function isApiAvailable() {
             return new Promise(function (resolve) {
                 let apiAvailable = {
                     desktop: false,
-                    online: false,
+                    online: navigator.onLine,
                     permissionNeeded: false
                 };
-                getRequest(restApiUrl).then(function (res) {
-                    return res.status === 200;
-                }).catch(function() {
-                    return false;
-                }).then(function (isOnlineAvailable) {
-                    apiAvailable.online = isOnlineAvailable;
-                    return getDesktopRequest(desktopApiUrl)
-                }).then(function (res) {
-                    if (res.status == 403) {
+                getDesktopRequest(desktopApiUrl).then(function (res) {
+                    if (res.responseStatus == 403) {
                         apiAvailable.permissionNeeded = true;
                     } 
                     return res.responseStatus === 200;

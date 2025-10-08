@@ -24,5 +24,9 @@
 	"Save as text": "Uložit jako text",
 	"Please insert some citation into the document." : "Vložte prosím do dokumentu nějakou citaci.",
 	"Synchronize" : "Synchronizovat",
-	"Omit Author" : "Vynechat Autora"
+	"Omit Author" : "Vynechat Autora",
+    "Connection to Zotero failed. Make sure Zotero is running": "Pripojenie k Zotero zlyhalo. Zjistejte, aby Zotero bezočně spolčuje",
+    "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Pripojenie k Zotero zlyhalo. Přidejte externí pripojenie v Zotero. Zjistejte, aby Zotero bezočně spolčuje",
+	"Failed to apply this style": "Nepodarilo se aplikovat tento styl",
+	"Failed to upload file": "Nepodarilo se nahrát soubor"
 }
