@@ -11,7 +11,7 @@
  */
 
 /**
- * @typedef {"note"|"numeric"|"author"|"author-date"|"label"} StyleFormat
+ * @typedef {"note"|"numeric"|"author"|"author-date"|"label"|"note-ibid"} StyleFormat
  */
 
 const CslStylesParser = {
@@ -81,6 +81,7 @@ const CslStylesParser = {
         if (!type) throw new Error("Citation format not found");
         switch (type) {
             case "note":
+            case "note-ibid":
             case "numeric":
             case "author":
             case "author-date":
