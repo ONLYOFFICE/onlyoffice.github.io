@@ -17266,7 +17266,7 @@
         "generic-base"
       ]
     },
-    "updated": "2025-08-26 05:09:50",
+    "updated": "2025-10-06 07:42:30",
     "href": "https://www.zotero.org/styles/iso690-author-date-cs"
   },
   {
@@ -18096,19 +18096,6 @@
     },
     "updated": "2020-09-06 22:09:02",
     "href": "https://www.zotero.org/styles/journal-of-alzheimers-disease"
-  },
-  {
-    "title": "Journal of Analytical Toxicology",
-    "name": "journal-of-analytical-toxicology",
-    "dependent": 0,
-    "categories": {
-      "format": "numeric",
-      "fields": [
-        "chemistry"
-      ]
-    },
-    "updated": "2015-01-22 22:19:51",
-    "href": "https://www.zotero.org/styles/journal-of-analytical-toxicology"
   },
   {
     "title": "Journal of Anatomy",
@@ -19698,7 +19685,7 @@
         "zoology"
       ]
     },
-    "updated": "2016-11-07 05:00:44",
+    "updated": "2025-10-08 08:12:37",
     "href": "https://www.zotero.org/styles/journal-of-mammalogy"
   },
   {
@@ -32998,7 +32985,7 @@
         "biology"
       ]
     },
-    "updated": "2015-03-19 02:36:13",
+    "updated": "2025-10-08 08:40:56",
     "href": "https://www.zotero.org/styles/the-faseb-journal"
   },
   {
