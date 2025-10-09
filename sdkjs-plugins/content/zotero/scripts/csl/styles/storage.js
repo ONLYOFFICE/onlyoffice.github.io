@@ -1,3 +1,5 @@
+// @ts-check
+
 function CslStylesStorage() {
     this._dbName = "ZoteroStylesDB";
     this._storeName = "cslFiles";
@@ -9,6 +11,7 @@ CslStylesStorage.prototype._getIndexedDB = function () {
         if (!("indexedDB" in window) && !("msIndexedDB" in window)) {
             return null;
         }
+        // @ts-ignore for IE11
         return window.indexedDB || window.msIndexedDB;
     } catch (e) {
         return null;
@@ -34,6 +37,8 @@ CslStylesStorage.prototype._openDB = function () {
         };
 
         request.onupgradeneeded = function (event) {
+            /** @type {IDBDatabase} */
+            // @ts-ignore
             const db = event.target.result;
             if (!db.objectStoreNames.contains(self._storeName)) {
                 db.createObjectStore(self._storeName);
@@ -48,92 +53,14 @@ CslStylesStorage.prototype._openDB = function () {
 CslStylesStorage.prototype.getStyleNames = function () {
     let customStyleNames = localStorage.getItem(this._customStylesKey);
     if (customStyleNames) {
-        customStyleNames = JSON.parse(customStyleNames);
+        return JSON.parse(customStyleNames);
     } else {
-        customStyleNames = [];
+        return [];
     }
-    return customStyleNames;
 };
 
 /**
- * Returns a list of custom styles.
- * @returns {Promise<Array<{name: string, title: string, dependent: number}>>
- */
-CslStylesStorage.prototype.getStyles = function () {
-    const self = this;
-    return new Promise(function (resolve, reject) {
-        let customStyleNames = localStorage.getItem(self._customStylesKey);
-        if (customStyleNames) {
-            customStyleNames = JSON.parse(customStyleNames);
-        } else {
-            customStyleNames = [];
-        }
-
-        let styles = [];
-
-        if (customStyleNames.length === 0) {
-            resolve(styles);
-        }
-
-        for (let i = 0; i < customStyleNames.length; i++) {
-            self.getStyle(customStyleNames[i])
-                .then(function (style) {
-                    const result = self._parseStyle(customStyleNames[i], style);
-                    styles.push(result);
-                    if (styles.length === customStyleNames.length) {
-                        resolve(styles);
-                    }
-                })
-                .catch(function (err) {
-                    reject(err);
-                });
-        }
-    });
-};
-
-/**
- * Parse a style object to extract relevant information.
- * @param {{id: string, content: string, timestamp: number}} style - A style object returned from the indexedDB.
- * @returns {Object} An object containing the parsed style information.
- * @property {{fields: Array<string>, format: string}}} categories - An object containing the citation format and fields.
- * @property {number} dependent - A dependent style is one that requires a specific style to be installed.
- * @property {string} href - The URL of the style.
- * @property {string} name - The name of the style.
- * @property {string} title - The title of the style.
- * @property {string} updated - The date the style was last updated.
- */
-CslStylesStorage.prototype._parseStyle = function (name, style) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(style.content, "text/xml");
-    const title = xmlDoc.querySelector("info title").textContent;
-    const href = xmlDoc
-        .querySelector('info link[rel="self"]')
-        .getAttribute("href");
-    const updated = xmlDoc.querySelector("info updated").textContent;
-    const categories = {
-        fields: [],
-        format: xmlDoc
-            .querySelector("info category[citation-format]")
-            .getAttribute("citation-format"),
-    };
-    xmlDoc
-        .querySelectorAll("info category[field]")
-        .forEach(function (category) {
-            categories.fields.push(category.getAttribute("field"));
-        });
-
-    return {
-        categories: categories,
-        dependent: 0,
-        href: href,
-        name: name,
-        title: title,
-        updated: updated,
-    };
-};
-
-/**
- * @param {string}} name
+ * @param {string} name
  * @returns {Promise<{id: string, content: string, timestamp: number}>}
  */
 CslStylesStorage.prototype.getStyle = function (name) {
@@ -165,16 +92,61 @@ CslStylesStorage.prototype.getStyle = function (name) {
 };
 
 /**
+ * Returns a list of custom styles.
+ * @returns {Promise<Array<StyleInfo>>}
+ */
+CslStylesStorage.prototype.getStylesInfo = function () {
+    const self = this;
+    return new Promise(function (resolve, reject) {
+        const customStyleNamesString = localStorage.getItem(
+            self._customStylesKey
+        );
+        /** @type {Array<string>} */
+        let customStyleNames = [];
+        if (customStyleNamesString) {
+            customStyleNames = JSON.parse(customStyleNamesString);
+        }
+
+        /** @type {Array<StyleInfo>} */
+        let styles = [];
+
+        if (customStyleNames.length === 0) {
+            resolve(styles);
+        }
+
+        for (let i = 0; i < customStyleNames.length; i++) {
+            self.getStyle(customStyleNames[i])
+                .then(function (style) {
+                    /** @type {StyleInfo} */
+                    const result = CslStylesParser.getStyleInfo(
+                        customStyleNames[i],
+                        style
+                    );
+                    styles.push(result);
+                    if (styles.length === customStyleNames.length) {
+                        resolve(styles);
+                    }
+                })
+                .catch(function (err) {
+                    reject(err);
+                });
+        }
+    });
+};
+
+/**
  * Add a custom style to the storage.
  * @param {string} name - The name of the style.
  * @param {string} data - The content of the style.
- * @returns {Promise<void>}
+ * @returns {Promise<StyleInfo>}
  */
 CslStylesStorage.prototype.setStyle = function (name, data) {
     const self = this;
-    let customStyleNames = localStorage.getItem(this._customStylesKey);
-    if (customStyleNames) {
-        customStyleNames = JSON.parse(customStyleNames);
+    let customStyleNamesString = localStorage.getItem(this._customStylesKey);
+    /** @type {Array<string>} */
+    let customStyleNames = [];
+    if (customStyleNamesString) {
+        customStyleNames = JSON.parse(customStyleNamesString);
         if (customStyleNames.indexOf(name) !== -1) {
             customStyleNames = customStyleNames.filter(function (styleName) {
                 return styleName !== name;
@@ -208,7 +180,7 @@ CslStylesStorage.prototype.setStyle = function (name, data) {
                 const request = store.put(value, name);
 
                 request.onsuccess = function () {
-                    resolve(self._parseStyle(name, value));
+                    resolve(CslStylesParser.getStyleInfo(name, value));
                 };
                 request.onerror = function () {
                     reject(request.error);
@@ -239,7 +211,7 @@ CslStylesStorage.prototype.deleteStyle = function (name) {
                 const store = transaction.objectStore(self._storeName);
                 store.delete(name);
                 transaction.oncomplete = function () {
-                    resolve();
+                    resolve(name);
                 };
                 transaction.onerror = function () {
                     reject(transaction.error);
@@ -248,22 +220,22 @@ CslStylesStorage.prototype.deleteStyle = function (name) {
             .catch(function (err) {
                 reject(err);
             });
-    }).then(function () {
-        return new Promise(function (resolve, reject) {
-            let customStyleNames = localStorage.getItem(self._customStylesKey);
-            if (customStyleNames) {
-                customStyleNames = JSON.parse(customStyleNames);
-            } else {
-                customStyleNames = [];
-            }
-            customStyleNames = customStyleNames.filter(function (styleName) {
-                return styleName !== name;
-            });
-            localStorage.setItem(
-                self._customStylesKey,
-                JSON.stringify(customStyleNames)
-            );
-            resolve(name);
+    }).then(function (name) {
+        const customStyleNamesString = localStorage.getItem(
+            self._customStylesKey
+        );
+        /** @type {Array<string>} */
+        let customStyleNames = [];
+        if (customStyleNamesString) {
+            customStyleNames = JSON.parse(customStyleNamesString);
+        }
+        customStyleNames = customStyleNames.filter(function (styleName) {
+            return styleName !== name;
         });
+        localStorage.setItem(
+            self._customStylesKey,
+            JSON.stringify(customStyleNames)
+        );
+        return name;
     });
 };

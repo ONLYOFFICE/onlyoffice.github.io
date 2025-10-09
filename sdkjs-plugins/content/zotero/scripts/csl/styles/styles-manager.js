@@ -1,3 +1,9 @@
+// @ts-check
+
+/**
+ * @param {boolean} isOnlineAvailable
+ * @param {boolean} isDesktopAvailable
+ */
 function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
     this._isOnlineAvailable = isOnlineAvailable;
     this._isDesktopAvailable = isDesktopAvailable;
@@ -10,6 +16,7 @@ function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
     this._STYLES_LOCAL = "./resources/csl/styles/";
 
     this._lastStyleKey = "zoteroStyleId";
+    this._lastFormatKey = "zoteroFormatId";
 
     this._defaultStyles = [
         "american-medical-association",
@@ -22,15 +29,23 @@ function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
         "modern-language-association-8th-edition",
         "nature",
     ];
+
+    /** @type {Object.<string, string>} */
+    this._cache = {};
 }
 
+/**
+ * @param {File} file - The file to be added.
+ * @returns {Promise<StyleInfo>} - A promise that resolves when the file is added.
+ * @throws {Error} - If the file is not a .csl or .xml file, or if the file size is greater than 1 MB.
+ */
 CslStylesManager.prototype.addCustomStyle = function (file) {
-    var fileName = file.name.toLowerCase();
     var self = this;
 
     return new Promise(function (resolve, reject) {
+        let fileName = file.name.toLowerCase();
         if (fileName.slice(-4) === ".csl" || fileName.slice(-4) === ".xml") {
-            fileName = fileName.substring(0, fileName.length - 4);
+            fileName = fileName.substring(0, fileName.length - 4).trim();
         } else {
             reject("Please select a .csl or .xml file.");
         }
@@ -38,10 +53,9 @@ CslStylesManager.prototype.addCustomStyle = function (file) {
         if (file.size > 1024 * 1024) {
             reject("Maximum file size is 1 MB.");
         }
-        resolve();
-    }).then(function () {
+        resolve(fileName);
+    }).then(function (fileName) {
         return self._readCSLFile(file).then(function (content) {
-            self.saveLastUsedStyle(fileName);
             if (self._defaultStyles.indexOf(fileName) === -1) {
                 self._defaultStyles.push(fileName);
             }
@@ -51,52 +65,78 @@ CslStylesManager.prototype.addCustomStyle = function (file) {
     });
 };
 
-CslStylesManager.prototype._readCSLFile = function (file) {
-    const self = this;
-    return new Promise(function (resolve, reject) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            var fileContent = e.target.result;
-
-            if (!self._isValidCSL(fileContent)) {
-                reject("The file is not a valid CSL file");
-                return;
-            }
-
-            resolve(fileContent);
-        };
-
-        reader.onerror = function () {
-            reject("Failed to read file");
-        };
-
-        reader.readAsText(file);
-    });
-};
-
-CslStylesManager.prototype._isValidCSL = function (content) {
-    return (
-        content.includes("<?xml") &&
-        content.includes("<style") &&
-        content.includes("citation") &&
-        content.includes("bibliography")
-    );
+/**
+ * @returns {string}
+ */
+CslStylesManager.prototype.getLastUsedFormat = function () {
+    let getLastUsedFormat = localStorage.getItem(this._lastFormatKey);
+    if (getLastUsedFormat) {
+        return getLastUsedFormat;
+    }
+    return "numeric";
 };
 
 /**
- * @returns {Array<{name: string, title: string, dependent: number}>}
+ * @returns {string}
  */
-CslStylesManager.prototype.getStyles = function () {
+CslStylesManager.prototype.getLastUsedStyle = function () {
+    let lastUsedStyle = localStorage.getItem(this._lastStyleKey);
+    if (lastUsedStyle) {
+        return lastUsedStyle;
+    }
+    return "ieee";
+};
+
+/**
+ * @param {string} styleName
+ * @returns {Promise<string>} - csl file content
+ */
+CslStylesManager.prototype.getStyle = function (styleName) {
+    const self = this;
+
+    return Promise.resolve(styleName)
+        .then(function (styleName) {
+            if (self._cache[styleName]) {
+                return self._cache[styleName];
+            }
+            const customStyleNames = self._customStylesStorage.getStyleNames();
+            if (customStyleNames.indexOf(styleName) !== -1) {
+                return self._customStylesStorage
+                    .getStyle(styleName)
+                    .then(function (style) {
+                        return style.content;
+                    });
+            }
+            let url = self._STYLES_LOCAL + styleName + ".csl";
+            if (self._isOnlineAvailable) {
+                url = self._STYLES_URL + styleName;
+            }
+            return fetch(url).then(function (resp) {
+                return resp.text();
+            });
+        })
+        .then(function (content) {
+            self._saveLastUsedStyle(styleName, content);
+            return content;
+        });
+};
+
+/**
+ * @returns {Promise<Array<StyleInfo>>}
+ */
+CslStylesManager.prototype.getStylesInfo = function () {
     const self = this;
     return Promise.all([
         this._getStylesJson(),
-        this._customStylesStorage.getStyles(),
+        this._customStylesStorage.getStylesInfo(),
     ]).then(function (styles) {
         var lastStyle = self.getLastUsedStyle();
+        /** @type {Array<StyleInfo>} */
         var resultStyles = [];
         var resultStyleNames = self._customStylesStorage.getStyleNames();
+        /** @type {Array<StyleInfo>} */
         var loadedStyles = styles[0];
+        /** @type {Array<StyleInfo>} */
         var customStyles = styles[1];
 
         if (self._isDesktopAvailable && !self._isOnlineAvailable) {
@@ -113,7 +153,7 @@ CslStylesManager.prototype.getStyles = function () {
         }
 
         customStyles.forEach(function (style) {
-            if (lastStyle === style.id) {
+            if (lastStyle === style.name) {
                 resultStyles.unshift(style);
             } else {
                 resultStyles.push(style);
@@ -150,35 +190,75 @@ CslStylesManager.prototype._getStylesJson = function () {
 };
 
 /**
+ * @param {string} id
+ * @returns {string | null}
+ */
+CslStylesManager.prototype.cached = function (id) {
+    if (Object.hasOwnProperty.call(this._cache, id)) {
+        return this._cache[id];
+    }
+    return null;
+};
+
+/**
  * @param {string} styleName
  * @returns
  */
-CslStylesManager.prototype.getStyle = function (styleName) {
-    const customStyleNames = this._customStylesStorage.getStyleNames();
-    if (customStyleNames.indexOf(styleName) !== -1) {
-        return this._customStylesStorage
-            .getStyle(styleName)
-            .then(function (style) {
-                return style.content;
-            });
-    }
-    let url = this._STYLES_LOCAL + styleName + ".csl";
-    if (this._isOnlineAvailable) {
-        url = this._STYLES_URL + styleName;
-    }
-    return fetch(url).then(function (resp) {
-        return resp.text();
-    });
-};
-
-CslStylesManager.prototype.getLastUsedStyle = function () {
-    return localStorage.getItem(this._lastStyleKey);
-};
-
 CslStylesManager.prototype.isStyleDefault = function (styleName) {
     return this._defaultStyles.indexOf(styleName) >= 0;
 };
 
-CslStylesManager.prototype.saveLastUsedStyle = function (id) {
+/**
+ * @param {string} content
+ * @returns
+ */
+CslStylesManager.prototype._isValidCSL = function (content) {
+    return (
+        content.includes("<?xml") &&
+        content.includes("<style") &&
+        content.includes("citation") &&
+        content.includes("bibliography")
+    );
+};
+
+/**
+ * Reads a file and returns its content as a string.
+ * Rejects the promise if the file is not a valid CSL file.
+ * @param {File} file - The file to be read.
+ * @returns {Promise<string>} - A promise that resolves with the file content if the file is a valid CSL file.
+ * @throws {Error} - If the file is not a valid CSL file.
+ */
+CslStylesManager.prototype._readCSLFile = function (file) {
+    const self = this;
+    return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var fileContent = e.target ? String(e.target.result) : "";
+
+            if (!self._isValidCSL(fileContent)) {
+                reject("The file is not a valid CSL file");
+                return;
+            }
+
+            resolve(fileContent);
+        };
+
+        reader.onerror = function () {
+            reject("Failed to read file");
+        };
+
+        reader.readAsText(file);
+    });
+};
+
+/**
+ * @param {string} content
+ * @param {string} id
+ */
+CslStylesManager.prototype._saveLastUsedStyle = function (id, content) {
+    this._cache[id] = content;
     localStorage.setItem(this._lastStyleKey, id);
+    const currentStyleFormat = CslStylesParser.getCitationFormat(content);
+    localStorage.setItem(this._lastFormatKey, currentStyleFormat);
 };
