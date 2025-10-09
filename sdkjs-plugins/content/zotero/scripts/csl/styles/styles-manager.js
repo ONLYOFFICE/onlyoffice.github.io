@@ -66,12 +66,18 @@ CslStylesManager.prototype.addCustomStyle = function (file) {
 };
 
 /**
- * @returns {string}
+ * @returns {StyleFormat}
  */
 CslStylesManager.prototype.getLastUsedFormat = function () {
-    let getLastUsedFormat = localStorage.getItem(this._lastFormatKey);
-    if (getLastUsedFormat) {
-        return getLastUsedFormat;
+    let lastUsedFormat = localStorage.getItem(this._lastFormatKey);
+    switch (lastUsedFormat) {
+        case "note":
+        case "note-ibid":
+        case "numeric":
+        case "author":
+        case "author-date":
+        case "label":
+            return lastUsedFormat;
     }
     return "numeric";
 };
