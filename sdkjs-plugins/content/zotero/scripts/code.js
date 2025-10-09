@@ -75,7 +75,6 @@
     };
 
 	var locales = {};
-    var styles = {};
     var selectedLocale;
     var selectedStyle;
 
@@ -158,6 +157,14 @@
         elements.styleSelectList.onopen = function () {
             elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
         }
+
+        Asc.scope.text = "note";
+        /*window.Asc.plugin.callCommand(function () {
+            var oDocument = Api.GetDocument();
+            oDocument.AddFootnote();
+            let footnotesFirstParagraphs = oDocument.GetFootnotesFirstParagraphs();
+            footnotesFirstParagraphs[0].AddText(Asc.scope.text);
+        }, true);*/
     };
 
     window.Asc.plugin.onThemeChanged = function(theme)
@@ -202,7 +209,7 @@
     }
 
     function loadStyles() {
-        cslStylesManager.getStyles()
+        cslStylesManager.getStylesInfo()
             .then(function (stylesInfo) {
 				var openOtherStyleList = function (list) {
                     return function (ev) {
@@ -241,14 +248,6 @@
         var found = false;
         var lastStyle = cslStylesManager.getLastUsedStyle();
 
-        var onStyleSelect = function (f) {
-            return function (ev) {
-                var sel = ev.target.getAttribute("data-value");
-                cslStylesManager.saveLastUsedStyle(sel);
-                f(ev);
-            }
-        };
-        
         var onStyleSelectOther = function (list, other) {
             return function (ev) {
                 var tmpEl = list.removeChild(list.children[list.children.length - 3]);
@@ -262,7 +261,7 @@
                 newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
                 newEl.textContent = tmpEl.textContent;
                 list.insertBefore(newEl, list.firstElementChild);
-                newEl.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                newEl.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
                 var event = new Event("click");
                 newEl.dispatchEvent(event);
                 openList(null);
@@ -274,11 +273,11 @@
             el.setAttribute("data-value", stylesInfo[i].name);
             el.textContent = stylesInfo[i].title;
             if (cslStylesManager.isStyleDefault(stylesInfo[i].name) || stylesInfo[i].name == lastStyle) {
-                if (stylesInfo[i].name == lastStyle)
+                if (stylesInfo.length == 1)
                     elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
                 else
                     elements.styleSelectList.appendChild(el);
-                el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
+                el.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
             } else {
                 elements.styleSelectListOther.appendChild(el);
                 el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
@@ -286,14 +285,7 @@
             if (stylesInfo[i].name == lastStyle) {
                 el.setAttribute("selected", "");
                 selectInput(elements.styleSelect, el, elements.styleSelectList, false);
-                found = true;
             }
-        }
-        
-        if (!found) {
-            var first = elements.styleSelectList.children[0];
-            first.setAttribute("selected", "");
-            selectInput(elements.styleSelect, first, elements.styleSelectList, false);
         }
     }
 
@@ -304,7 +296,6 @@
             //showLoader(true);
 
             cslStylesManager.addCustomStyle(file).then(function (styleValue) {
-                elements.styleSelectList.querySelector('[selected]').removeAttribute("selected");
                 addStylesToList([styleValue]);
             }).catch(function (error) {
                 console.error(error);
@@ -432,9 +423,15 @@
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
-			.catch(function () { })
+			.catch(function (err) {
+                console.error(err);
+             })
 			.finally(function() {
-				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
+				if (
+                    locales[selectedLocale] &&
+                    cslStylesManager.cached(selectedStyle)
+                )
+                    showLoader(false);
 			});
             selectedStyle = val;
 			elements.styleSelect.oninput(null, '');
@@ -448,9 +445,11 @@
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
-			.catch(function () { })
+			.catch(function (error) {
+                console.error(error);
+            })
 			.finally(function() {
-				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
+				if (locales[selectedLocale] && cslStylesManager.cached(selectedStyle)) showLoader(false);
 			});
             selectedLocale = val;
         };
@@ -761,17 +760,12 @@
 
     function getStyle(styleName) {
         return new Promise(function (res, rej) {
-            if (styles[styleName] != null) {
-                res(styles[styleName]);
-            } else {
-                loadingStyle = true;
-                cslStylesManager.getStyle(styleName)
-                    .then(function (text) { 
-                        styles[styleName] = text; 
-                        res(text); loadingStyle = false; 
-                    })
-                    .catch(function (err) { rej(err); loadingStyle = false; });
-            }
+            loadingStyle = true;
+            cslStylesManager.getStyle(styleName)
+                .then(function (text) {
+                    res(text); loadingStyle = false; 
+                })
+                .catch(function (err) { rej(err); loadingStyle = false; });
         });
     };
 
@@ -1062,7 +1056,7 @@
 
 	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize) {
 		clearTimeout(repeatTimeout);
-        if (loadingStyle || loadingLocale || !styles[selectedStyle] || !locales[selectedLocale]) {
+        if (loadingStyle || loadingLocale || !cslStylesManager.cached(selectedStyle) || !locales[selectedLocale]) {
             repeatTimeout = setTimeout( function() {
 				updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize);
 			}, 100);
@@ -1081,7 +1075,7 @@
                     return item.toOldJSON(); 
                 } 
             }, 
-            styles[selectedStyle],
+            cslStylesManager.cached(selectedStyle),
             selectedLocale, 
             true
         );
