@@ -1041,6 +1041,7 @@
 	};
 
 	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize) {
+        // looks like a crutch
 		clearTimeout(repeatTimeout);
         if (loadingStyle || loadingLocale || !cslStylesManager.cached(selectedStyle) || !locales[selectedLocale]) {
             repeatTimeout = setTimeout( function() {
@@ -1180,6 +1181,12 @@
                 "Value" : citPrefixNew + ' ' + citSuffixNew + JSON.stringify(obj.toJSON()),
                 "Content" : elements.tempDiv.innerText
             };
+            if (['note', 'note-ibid'].indexOf(cslStylesManager.getLastUsedFormat()) !== -1) {
+                window.Asc.plugin.callCommand(function () {
+                    var oDocument = Api.GetDocument();
+                    oDocument.AddFootnote();
+                });
+            }
             window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
                 showLoader(false);
                 // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
