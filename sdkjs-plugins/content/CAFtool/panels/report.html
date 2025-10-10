@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <!-- 子页在 panels/ 下，统一把相对路径指回插件根： -->
+  <base href="../">
+  <!-- 官方 SDK（也可换成本地路径 ../../v1/plugins.js）： -->
+  <script src="scripts/v1/plugins.js"></script>
+
+  <title>Formatting report</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#222; --muted:#666; --soft:#f5f7fa; --line:#e6e8eb;
+      --primary:#155EEF; --primary-weak:#e7efff; --danger:#b00020;
+      --selbg:#e9f7ef; --selborder:#c9ecd7; --seltext:#0a7a3b; --warn:#b36b00;
+    }
+    *{box-sizing:border-box}
+    html, body { height: 100vh; }
+    body{
+      margin:0; padding:12px;
+      font:14px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC","Microsoft Yahei", sans-serif;
+      color:var(--fg); background:var(--bg);
+      display:flex; flex-direction:column; gap:10px; overflow:hidden;
+    }
+
+    header{
+      flex:0 0 auto;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+      border-bottom:1px solid var(--line); padding-bottom:10px;
+    }
+    h1{font-size:18px; margin:0}
+    .meta{font-size:12px; color:var(--muted)}
+    #topNotice{
+      display:none; padding:8px 12px; border-radius:8px; background:var(--primary-weak); color:#0a2a7a;
+      margin-top:6px; font-size:13px;
+    }
+
+    .content{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+    .sticky{
+      position:sticky; top:0; z-index:5;
+      background:#fff;
+      padding-bottom:8px; margin-bottom:8px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .stat{ display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#333; margin:6px 0 8px; }
+    .badge{display:inline-block; padding:2px 8px; border-radius:999px; background:var(--soft); border:1px solid var(--line)}
+    .badge.warn{background:#fff7e6; border-color:#ffe6b3; color:var(--warn)}
+    .badge.sel{background:var(--selbg); border-color:var(--selborder); color:var(--seltext);}
+
+    .toolbar{ display:flex; flex-wrap:wrap; gap:8px; }
+    button{
+      appearance:none; border:1px solid var(--line); background:#fff; color:#111; padding:6px 10px; border-radius:8px;
+      cursor:pointer; font-size:13px;
+    }
+    .toolbar button{ background:#fff; border-color:var(--line); }
+    .toolbar button:hover{ background:#fafbfc; }
+    button.primary{ background:var(--primary); border-color:var(--primary); color:#fff; }
+    button.danger{ background:#fff0f1; border-color:#ffd5da; color:var(--danger); }
+
+    .tablewrap{ flex:1 1 auto; min-height:0; overflow:auto; }
+    table{width:100%; border-collapse:collapse; border:1px solid var(--line); background:#fff}
+    thead th{
+      text-align:left; font-weight:600; font-size:12px; color:#444; background:#fafbfc; border-bottom:1px solid var(--line);
+      padding:8px; position:sticky; top:0; z-index:1;
+    }
+    tbody td{ padding:8px; border-top:1px solid var(--line); vertical-align:top; }
+    tbody tr:hover{ background:#fcfdff; }
+    .col-check{width:52px}
+    .col-idx{width:64px; color:#666}
+    .col-rule{width:160px}
+    .code{
+      white-space:pre-wrap; word-break:break-word; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#fbfcfe; border:1px solid var(--line); border-radius:6px; padding:6px 8px;
+    }
+    .changed{ background:#fff8e6; border-color:#ffe3a6; }
+    .empty{ color:#999; font-style:italic }
+
+    footer{
+      flex:0 0 auto; margin-top:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;
+      border-top:1px solid var(--line); padding-top:10px;
+    }
+    .hint{font-size:12px; color:#777}
+    .right{display:flex; gap:8px; flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 id="t_title">Formatting report</h1>
+      <div class="meta" id="t_meta">Generated from selection · Only rows with changes are shown</div>
+      <div id="topNotice"></div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="sticky">
+      <div class="stat" id="statBar"></div>
+      <div class="toolbar">
+        <button id="btnSelectAll">Select all</button>
+        <button id="btnSelectNone">Select none</button>
+        <button id="btnSelectSpace" title="" >Only spacing issues</button>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <table id="reportTable" aria-label="Report list">
+        <thead>
+          <tr>
+            <th class="col-check" id="th_select">Select</th>
+            <th class="col-idx"   id="th_line">Line</th>
+            <th class="col-rule"  id="th_issue">Issue</th>
+            <th id="th_original">Original</th>
+            <th id="th_fixed">Fixed paragraph</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="hint" id="t_hint">Tip: Unchecked rows remain unchanged; checked rows will be replaced by the “Fixed paragraph”.</div>
+    <div class="right">
+      <!-- 你项目现在走父窗触发“apply-now”，这里保留两个按钮的占位；如需本页按钮，可取消注释并在下方绑定行为 -->
+      <!-- <button id="btnSave" class="primary">Apply & Save</button> -->
+      <!-- <button id="btnClose" class="danger">Cancel</button> -->
+    </div>
+  </footer>
+
+  <script>
+  // ===== 小工具 =====
+  const t = (k) => (window.Asc && window.Asc.plugin ? window.Asc.plugin.tr(k) : k);
+  function escapeHTML(str){ return String(str).replace(/[&<>"'`]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[s])); }
+  function showToast(text, duration = 700) {
+    const el = document.createElement('div');
+    el.textContent = text; el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+    Object.assign(el.style,{
+      position:'fixed', top:'18px', left:'50%', transform:'translateX(-50%) translateY(-6px)',
+      padding:'8px 20px', borderRadius:'8px', background:'rgba(0,0,0,0.72)', color:'#fff',
+      fontSize:'13px', boxShadow:'0 6px 18px rgba(0,0,0,0.25)', zIndex:9999, pointerEvents:'none',
+      opacity:0, transition:'opacity .18s ease, transform .18s ease'
+    });
+    document.body.appendChild(el);
+    requestAnimationFrame(()=>{ el.style.opacity=1; el.style.transform='translateX(-50%) translateY(0)'; });
+    setTimeout(()=>{ el.style.opacity=0; el.style.transform='translateX(-50%) translateY(-6px)'; setTimeout(()=>el.remove(), 200); }, duration);
+  }
+
+  // —— 统一的发送：优先 sendToPlugin，失败回退 postMessage —— //
+  function sendToHost(payload) {
+    try {
+      if (window.Asc && window.Asc.plugin && typeof window.Asc.plugin.sendToPlugin === 'function') {
+        window.Asc.plugin.sendToPlugin("onWindowMessage", payload);
+        return;
+      }
+    } catch (e) {}
+    try { parent.postMessage({ source:'zhlint', payload }, '*'); } catch (e) {}
+  }
+
+  // ===== 页面主逻辑 =====
+  (function(){
+    try { localStorage.setItem('reportCloseReason', 'open'); } catch(e){}
+
+    // 读取数据
+    const safeParse = (s,d)=>{ try { return JSON.parse(s); } catch(e){ return d; } };
+    const report     = safeParse(localStorage.getItem('zhlintReport') || '[]', []);
+    const original   = safeParse(localStorage.getItem('originalLines') || '[]', []);
+    const fixed      = safeParse(localStorage.getItem('fixedLines') || '[]', []);
+
+    // 顶部显示“空格策略”
+    showStrategySummary();
+
+    if (!Array.isArray(original) || !Array.isArray(fixed) || original.length !== fixed.length) {
+      alert(t('Report data error: originalLines/fixedLines missing or length mismatch'));
+      return;
+    }
+
+    // 将 report（仅含有问题的行）映射回原始行号
+    const idxMap = [];
+    let start = 0;
+    report.forEach(item => {
+      const { original:o, fixed:f, errors } = item || {};
+      const found = findNextIndex(original, fixed, o, f, start);
+      if (found >= 0) { idxMap.push({ idx: found, original:o, fixed:f, errors: errors||[] }); start = found + 1; }
+    });
+    if (idxMap.length === 0) {
+      for (let i=0;i<original.length;i++){
+        if (original[i] !== fixed[i]) idxMap.push({ idx:i, original: original[i], fixed: fixed[i], errors: [] });
+      }
+    }
+
+    renderStat(original.length, idxMap.length, idxMap);
+    renderTable(idxMap);
+    bindActions(idxMap, original, fixed);
+    updateSelectedBadge();
+
+    // 让 onTranslate 可触发二次重绘
+    window.__statArgs = { total: original.length, changed: idxMap.length, rows: idxMap };
+    window.__rerenderStat = function () {
+      renderStat(window.__statArgs.total, window.__statArgs.changed, window.__statArgs.rows);
+    };
+    // 顶部“策略条”的重绘
+    window.__rerenderStrategy = showStrategySummary;
+    
+    
+
+    function findNextIndex(origArr, fixArr, o, f, startAt) {
+      for (let i = startAt; i < origArr.length; i++) { if (origArr[i] === o && fixArr[i] === f) return i; }
+      return -1;
+    }
+
+    function showStrategySummary() {
+      const get = k => localStorage.getItem(k);
+      const cjkEn   = get('opt_cjkEnSpace');
+      const cjkDig  = get('opt_cjkDigitSpace');
+      const numUnit = get('opt_numUnitSpace');
+      const numSym  = get('opt_numSymbolSpace');
+      const legacyCjk = get('opt_cjkAnSpace');
+      const legacyNum = get('opt_numUnitSpace_legacyAgg') ?? get('opt_numUnitSpace');
+      const valOr = (v, back) => (v === '0' || v === '1') ? v : back;
+      const v_cjkEn   = valOr(cjkEn, legacyCjk);
+      const v_cjkDig  = valOr(cjkDig, legacyCjk);
+      const v_numUnit = valOr(numUnit, legacyNum);
+      const v_numSym  = valOr(numSym, legacyNum);
+      const h2f = get('opt_alnumHalfToFull') === '1';
+      const f2h = get('opt_alnumFullToHalf') === '1';
+      const onoff = v => (v === '1' ? t('On') : t('Off'));
+
+      const tip = document.getElementById('topNotice');
+      tip.innerHTML = [
+        `${t('Chinese-Latin spacing')}: <b>${onoff(v_cjkEn)}</b>`,
+        `${t('Chinese-digit spacing')}: <b>${onoff(v_cjkDig)}</b>`,
+        `${t('Number-unit spacing')}: <b>${onoff(v_numUnit)}</b>`,
+        `${t('Number-symbol spacing')}: <b>${onoff(v_numSym)}</b>`,
+        `${t('Half-width → Full-width (letters/digits)')}: <b>${h2f ? t('On') : t('Off')}</b>`,
+        `${t('Full-width → Half-width (letters/digits)')}: <b>${f2h ? t('On') : t('Off')}</b>`
+      ].join(' | ');
+      tip.style.display = 'block';
+    }
+
+    function renderStat(total, changed, rows){
+      const spaceRules = new Set([
+        'spaceBetweenMixedLang:add', 'spaceBetweenMixedLang:remove',
+        'numberUnitSpacing:add', 'numberUnitSpacing:remove',
+        'percentSpacing:add', 'percentSpacing:remove',
+        'symbolSpacing:add', 'symbolSpacing:remove'
+      ]);
+      let spaceCount = 0, otherCount = 0;
+      rows.forEach(r=>{
+        const rules = (r.errors||[]).map(e=>e.rule).filter(Boolean);
+        if (rules.length === 0) {
+          if (guessSpaceChange(r.original, r.fixed)) spaceCount++; else otherCount++;
+        } else {
+          let hasSpace=false, hasOther=false;
+          rules.forEach(rule=>{ if (spaceRules.has(rule)) hasSpace=true; else hasOther=true; });
+          if (hasSpace) spaceCount++;
+          if (hasOther) otherCount++;
+        }
+      });
+      const bar = document.getElementById('statBar');
+      bar.innerHTML = `
+        <span class="badge">${t('Total lines')} ${total}</span>
+        <span class="badge warn">${t('Rows with issues')} ${changed}</span>
+        <span class="badge">${t('Spacing')} ${spaceCount}</span>
+        <span class="badge">${t('Other')} ${otherCount}</span>
+        <span class="badge sel" id="selCountBadge">${t('Selected rows')} 0</span>`;
+    }
+
+    function guessSpaceChange(a,b){
+      if (a.replace(/\s+/g,'') === b.replace(/\s+/g,'')) return a !== b;
+      return false;
+    }
+
+    function renderTable(rows){
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = '';
+      rows.forEach(({idx, original, fixed, errors})=>{
+        const tr = document.createElement('tr'); tr.dataset.idx = String(idx);
+
+        const tdCheck = document.createElement('td');
+        tdCheck.className = 'col-check';
+        tdCheck.innerHTML = `<input type="checkbox" class="row-check" checked aria-label="${t('Select row')} ${idx+1}">`;
+        tr.appendChild(tdCheck);
+
+        const tdIdx = document.createElement('td');
+        tdIdx.className = 'col-idx';
+        tdIdx.textContent = String(idx + 1);
+        tr.appendChild(tdIdx);
+
+        const tdRule = document.createElement('td');
+        tdRule.className = 'col-rule';
+        tdRule.appendChild(renderRule(errors));
+        tr.appendChild(tdRule);
+
+        const tdOriginal = document.createElement('td');
+        tdOriginal.innerHTML = `<div class="code">${escapeHTML(original || '').trim() || '<span class="empty">'+t('(empty line)')+'</span>'}</div>`;
+        tr.appendChild(tdOriginal);
+
+        const tdFixed = document.createElement('td');
+        tdFixed.innerHTML = `<div class="code changed">${escapeHTML(fixed || '').trim() || '<span class="empty">'+t('(empty line)')+'</span>'}</div>`;
+        tr.appendChild(tdFixed);
+
+        tbody.appendChild(tr);
+      });
+
+      tbody.addEventListener('change', (e)=>{
+        if (e.target && e.target.classList.contains('row-check')) updateSelectedBadge();
+      });
+    }
+
+    function renderRule(errors){
+      const wrap = document.createElement('div');
+      const hiddenRules = new Set(['fullwidthPunctuation','spaceBetweenMixedLang:add']);
+      const list = (errors || []).filter(e => !hiddenRules.has(e.rule));
+      const text = (list.length ? list : (errors||[])).map(e => e.message).join(' ; ');
+      wrap.innerHTML = `<div style="color:#555;font-size:12px">${escapeHTML(text || t('Formatting change (spacing/punctuation)'))}</div>`;
+      return wrap;
+    }
+
+    function bindActions(rows, original, fixed){
+      const tbody = document.getElementById('tbody');
+
+      document.getElementById('btnSelectAll').onclick  = () => {
+        tbody.querySelectorAll('.row-check').forEach(ch=> ch.checked = true);
+        updateSelectedBadge();
+      };
+      document.getElementById('btnSelectNone').onclick = () => {
+        tbody.querySelectorAll('.row-check').forEach(ch=> ch.checked = false);
+        updateSelectedBadge();
+      };
+      document.getElementById('btnSelectSpace').onclick = () => {
+        const spaceRules = new Set(['spaceBetweenMixedLang:add','spaceBetweenMixedLang:remove','numberUnitSpacing:add','numberUnitSpacing:remove','percentSpacing:add','percentSpacing:remove']);
+        const isSpaceRow = (r) => (r.errors && r.errors.length) ? r.errors.some(e => spaceRules.has(e.rule)) : guessSpaceChange(r.original, r.fixed);
+        tbody.querySelectorAll('.row-check').forEach(ch=> ch.checked = false);
+        Array.from(tbody.querySelectorAll('tr')).forEach(tr=>{
+          const idx = +tr.dataset.idx;
+          const row = rows.find(r => r.idx === idx);
+          if (row && isSpaceRow(row)) tr.querySelector('.row-check').checked = true;
+        });
+        updateSelectedBadge();
+      };
+
+      // 如果用页脚“Apply & Save”按钮，解除注释并绑定：
+      // const btnSaveEl = document.getElementById('btnSave');
+      // if (btnSaveEl) btnSaveEl.addEventListener('click', applySelectedAndClose);
+
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'reportApplyNow' && e.newValue === '1') {
+          try { localStorage.removeItem('reportApplyNow'); } catch (_) {}
+          applySelectedAndClose();
+        }
+      });
+
+      let _applyPoll = setInterval(() => {
+        if (localStorage.getItem('reportApplyNow') === '1') {
+          try { localStorage.removeItem('reportApplyNow'); } catch (_) {}
+          applySelectedAndClose();
+        }
+      }, 140);
+      window.addEventListener('pagehide', () => clearInterval(_applyPoll));
+
+      function applySelectedAndClose() {
+        try { localStorage.setItem('reportCloseReason', 'saved'); } catch (e) {}
+
+        const base = JSON.parse(localStorage.getItem('currentSelectionLines') || 'null') || original.slice();
+        const applyLines = buildApplyResult(rows, base, fixed, true);
+        if (!applyLines) {
+          showToast(t('Cannot apply: selection line count invalid'));
+          return;
+        }
+
+        try { localStorage.setItem('batchReplaceResult', JSON.stringify(applyLines)); } catch(e){}
+        try { localStorage.setItem('reportApplyReady', '1'); } catch(e){}
+
+        sendToHost({ type: 'apply-now', lines: applyLines });
+
+        showToast(t('Saved and applied selected changes.'));
+        setTimeout(() => { try { window.close(); } catch (e) {} }, 900);
+      }
+    }
+
+    function updateSelectedBadge(){
+      const tbody = document.getElementById('tbody');
+      const sel = Array.from(tbody.querySelectorAll('.row-check')).filter(ch => ch.checked).length;
+      const badge = document.getElementById('selCountBadge');
+      if (badge) badge.textContent = `${t('Selected rows')} ${sel}`;
+    }
+
+    function buildApplyResult(rows, baseLines, fixed, respectCheckbox){
+      const out = baseLines.slice();
+      const tbody = document.getElementById('tbody');
+      if (out.length === 0) { alert(t('Cannot apply: selection line count invalid')); return null; }
+      Array.from(tbody.querySelectorAll('tr')).forEach(tr=>{
+        const idx = +tr.dataset.idx;
+        const checked = tr.querySelector('.row-check')?.checked;
+        if (!respectCheckbox || checked) out[idx] = fixed[idx];
+      });
+      return out;
+    }
+
+    window.addEventListener('pagehide', function () {
+      try {
+        if (localStorage.getItem('reportCloseReason') !== 'saved') {
+          localStorage.setItem('reportCloseReason', 'closed_without_save');
+        }
+      } catch (e) { }
+    });
+
+  })();
+
+  // ===== 本地化钩子：把所有可见文本写回 =====
+  window.Asc.plugin.onTranslate = function () {
+    setText('t_title', 'Formatting report');
+    setText('t_meta',  'Generated from selection · Only rows with changes are shown');
+
+    setText('btnSelectAll',  'Select all');
+    setText('btnSelectNone', 'Select none');
+    setText('btnSelectSpace','Only spacing issues');
+    const btnSpace = document.getElementById('btnSelectSpace');
+    if (btnSpace) btnSpace.title = t('Select only spacing-related rows (CJK/Latin, digits, units, percent, symbols)');
+
+    setText('th_select',  'Select');
+    setText('th_line',    'Line');
+    setText('th_issue',   'Issue');
+    setText('th_original','Original');
+    setText('th_fixed',   'Fixed paragraph');
+
+    setText('t_hint','Tip: Unchecked rows remain unchanged; checked rows will be replaced by the “Fixed paragraph”.');
+    
+      // 让页面标题也随语言变化（可选）
+    document.title = t('Formatting report');
+    // 关键：翻译后重绘“策略条”和“统计徽章”
+    if (window.__rerenderStrategy) window.__rerenderStrategy();
+    if (window.__rerenderStat) window.__rerenderStat();
+
+
+
+  };
+
+  window.Asc.plugin.init = function () {
+    if (typeof window.Asc.plugin.onTranslate === 'function') {
+      window.Asc.plugin.onTranslate();
+    }
+  };
+
+  function setText(id, key){
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = t(key);
+    }
+  </script>
+
+  
+  
+
+
+
+</body>
+</html>
