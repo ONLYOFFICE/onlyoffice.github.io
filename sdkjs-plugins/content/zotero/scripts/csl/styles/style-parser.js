@@ -18,12 +18,12 @@ const CslStylesParser = {
     /**
      * Parse a style object to extract relevant information.
      * @param {string} name
-     * @param {{id: string, content: string, timestamp: number}} style - A style object returned from the indexedDB.
+     * @param {string} style - A style string
      * @returns {StyleInfo} An object containing the parsed style information.
      */
     getStyleInfo: function (name, style) {
         const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(style.content, "text/xml");
+        const xmlDoc = parser.parseFromString(style, "text/xml");
 
         /** @type {StyleInfo} */
         const styleInfo = {

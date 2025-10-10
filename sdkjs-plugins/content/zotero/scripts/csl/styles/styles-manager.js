@@ -95,7 +95,7 @@ CslStylesManager.prototype.getLastUsedStyle = function () {
 
 /**
  * @param {string} styleName
- * @returns {Promise<string>} - csl file content
+ * @returns {Promise<string | null>} - csl file content
  */
 CslStylesManager.prototype.getStyle = function (styleName) {
     const self = this;
@@ -108,10 +108,7 @@ CslStylesManager.prototype.getStyle = function (styleName) {
             const customStyleNames = self._customStylesStorage.getStyleNames();
             if (customStyleNames.indexOf(styleName) !== -1) {
                 return self._customStylesStorage
-                    .getStyle(styleName)
-                    .then(function (style) {
-                        return style.content;
-                    });
+                    .getStyle(styleName);
             }
             let url = self._STYLES_LOCAL + styleName + ".csl";
             if (self._isOnlineAvailable) {
@@ -122,7 +119,9 @@ CslStylesManager.prototype.getStyle = function (styleName) {
             });
         })
         .then(function (content) {
-            self._saveLastUsedStyle(styleName, content);
+            if (content) {
+                self._saveLastUsedStyle(styleName, content);
+            }
             return content;
         });
 };
