@@ -19,19 +19,6 @@ A lightweight ONLYOFFICE plugin tailored for Chinese writing. It automatically c
 - **Format Report**: visual list of issues with user-controlled replacement
 - **Customizable Rules**: choose which punctuation/types to convert in **Settings**
 
-## 🖼️ UI Preview
-
-📌 **Toolbar button**  
-_The plugin appears under a dedicated tab._
-
-📋 **Settings (setting.html)**  
-_Choose which symbols/rules to apply._  
-![Settings](resources/store/screenshots/screen3.png)
-
-📝 **Format Report (report.html)**  
-![Report 1](resources/store/screenshots/screen1.png)  
-![Report 2](resources/store/screenshots/screen2.png)
-
 ## 🛠️ How to Use
 
 1. Clone the project and deploy it to an ONLYOFFICE environment that supports plugins.
@@ -68,3 +55,4 @@ Released under the [MIT License](LICENSE).
 ---
 
 If you find this plugin helpful, please ⭐ Star, 🍴 Fork, and open Issues!
+
