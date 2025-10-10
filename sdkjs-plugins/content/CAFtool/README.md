@@ -1,4 +1,4 @@
-# CAF Tool — Chinese Auto-Formatting (ONLYOFFICE Plugin)
+# CAF Tool — Chinese Auto-Formatting
 
 A lightweight ONLYOFFICE plugin tailored for Chinese writing. It automatically checks and fixes common typography issues such as punctuation style, spacing between CJK and Latin text, and stray spaces — perfect for keeping your documents neat and consistent.
 
@@ -55,4 +55,5 @@ Released under the [MIT License](LICENSE).
 ---
 
 If you find this plugin helpful, please ⭐ Star, 🍴 Fork, and open Issues!
+
 
