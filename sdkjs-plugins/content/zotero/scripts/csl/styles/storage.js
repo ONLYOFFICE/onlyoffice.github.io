@@ -1,8 +1,6 @@
 // @ts-check
 
 function CslStylesStorage() {
-    this._dbName = "ZoteroStylesDB";
-    this._storeName = "cslFiles";
     this._customStyleNamesKey = "zoteroCustomStyleNames";
     this._customStylesKey = "zoteroCustomStyles";
 }

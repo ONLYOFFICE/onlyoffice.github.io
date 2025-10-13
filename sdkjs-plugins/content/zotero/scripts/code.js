@@ -66,6 +66,7 @@
 
     var sdk = null;
     var cslStylesManager = null;
+    var citationDocService = null;
 
     var lastSearch = {
         text: "",
@@ -121,7 +122,7 @@
     window.Asc.plugin.init = function () {
 		showLoader(true);
         setTimeout(function () { searchField.focus(); },100);
-		updateCslItems(true, false, false, false);
+        
         sdk = window.Asc.plugin.zotero.api({});
         
         initSdkApis().then(function (availableApis) {
@@ -130,6 +131,15 @@
             if (availableApis.online || availableApis.desktop) {
                 loadStyles();
             }
+            citationDocService = new CitationDocService(
+                citPrefixNew,
+                citSuffixNew,
+                bibPrefixNew,
+                bibSuffixNew,
+                cslStylesManager.getLastUsedFormat()
+            );
+            
+            updateCslItems(true, false, false, false);
         });
 
         window.Asc.plugin.onTranslate = applyTranslations;
@@ -143,14 +153,6 @@
         elements.styleSelectList.onopen = function () {
             elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
         }
-
-        Asc.scope.text = "note";
-        /*window.Asc.plugin.callCommand(function () {
-            var oDocument = Api.GetDocument();
-            oDocument.AddFootnote();
-            let footnotesFirstParagraphs = oDocument.GetFootnotesFirstParagraphs();
-            footnotesFirstParagraphs[0].AddText(Asc.scope.text);
-        }, true);*/
     };
 
     window.Asc.plugin.onThemeChanged = function(theme)
@@ -384,7 +386,7 @@
 
 		elements.saveAsTextBtn.onclick = function() {
 			showLoader(true);
-			saveAs();
+			citationDocService.saveAsText();
 		}
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
@@ -405,7 +407,9 @@
 			showLoader(true);
             getStyle(val)
 			.then(function(style) {
-				bNumFormat = (style.indexOf('citation-format="numeric"') !== -1);
+                let styleFormat = cslStylesManager.getLastUsedFormat();
+                citationDocService.setStyleFormat(styleFormat);
+				bNumFormat = styleFormat == 'numeric';
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
@@ -965,7 +969,7 @@
             showError(getMessage("Language is not selected"));
             return;
         }
-		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
+		citationDocService.getAllAddinFields().then(function(arrFields) {
 			if (!arrFields.length) {
 				showLoader(false);
                 return;
@@ -1012,28 +1016,25 @@
                     updatedFields.push(field);
                 } else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
                     bibField = field;
+                    bibField["Content"] = bibliography;
                     if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
                         bibFieldValue = JSON.stringify(citationObject);
                     }
                 }
             });
             if (bibField) {
-                bibField["Content"] = bibliography;
                 updatedFields.push(bibField);
             } else if (bPastBib) {
-                bibField = {
-                    "Value" : bibPrefixNew + bibFieldValue + bibSuffixNew,
-                    "Content" : bibliography
-                };
-                window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
-                    if (!updatedFields.length) {
-                        showLoader(false);
-                    }
-                });
+                citationDocService.addBibliography(bibliography, bibFieldValue)
+                    .then(function() {
+                        if (!updatedFields.length) {
+                            showLoader(false);
+                        }
+                    });
             }
             
             if (updatedFields.length) {
-                window.Asc.plugin.executeMethod("UpdateAddinFields", [updatedFields], function() {
+                citationDocService.updateAddinFields(updatedFields).then(function() {
                     showLoader(false);
                 });
             }
@@ -1083,7 +1084,8 @@
     // Refresh (1,1,0,0)
 	function updateCslItems(bUpdadeFormatter, bUpadteAll, bPastBib, bPastLink) {
 		CSLCitationStorage.clear();
-		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
+
+        return citationDocService.getAllAddinFields().then(function(arrFields) {
 			if (arrFields.length) {
 				var numOfItems = 0;
 				var bibField = null;
@@ -1118,18 +1120,18 @@
 					// нет смысла ещё раз искать поле библиографии
 					bUpdadeFormatter = false;
 					bibField["Content"] = getMessage(bibPlaceholder);
-					window.Asc.plugin.executeMethod("UpdateAddinFields", [[bibField]], function() {
-						showLoader(false);
-					});
+                    citationDocService.updateAddinFields([bibField]).then(function() {
+                        showLoader(false);
+                    });
 				}
 			} else if (bUpdadeFormatter && bPastBib) {
-				bibField = {
-					"Value" : bibPrefixNew + bibFieldValue + bibSuffixNew,
-					"Content" : getMessage(bibPlaceholder)
-				};
-				window.Asc.plugin.executeMethod("AddAddinField", [bibField], function() {
-					showLoader(false);
-				});
+
+                citationDocService.addBibliography(
+                    getMessage(bibPlaceholder),
+                    bibFieldValue
+                ).then(function() {
+                    showLoader(false);
+                });
 			}
 			if (bUpdadeFormatter)
 				updateFormatter(bUpadteAll, bPastBib, bPastLink, false);
@@ -1176,18 +1178,10 @@
 
 			// TODO может ещё очистить поиск (подумать над этим)
 			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL[0]);
-
-            var field = {
-                "Value" : citPrefixNew + ' ' + citSuffixNew + JSON.stringify(obj.toJSON()),
-                "Content" : elements.tempDiv.innerText
-            };
-            if (['note', 'note-ibid'].indexOf(cslStylesManager.getLastUsedFormat()) !== -1) {
-                window.Asc.plugin.callCommand(function () {
-                    var oDocument = Api.GetDocument();
-                    oDocument.AddFootnote();
-                });
-            }
-            window.Asc.plugin.executeMethod("AddAddinField", [field], function() {
+            citationDocService.addCitation(
+                elements.tempDiv.innerHTML, 
+                JSON.stringify(obj.toJSON())
+            ).then(function() {
                 showLoader(false);
                 // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
                 // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
@@ -1220,31 +1214,6 @@
         cslItem.fillFromObject(item);
 
     };
-
-	function saveAs() {
-		// TODO потом добавить ещё форматы, пока только как текст
-		window.Asc.plugin.executeMethod("GetAllAddinFields", null, function(arrFields) {
-			let count = 0;
-			arrFields.forEach(function(field) {
-				if ( 
-                    ( field.Value.indexOf(bibPrefix) !== -1 ) || 
-                    ( field.Value.indexOf(citPrefix) !== -1 ) ||
-                    ( field.Value.indexOf(bibPrefixNew) !== -1 ) || 
-                    ( field.Value.indexOf(citPrefixNew) !== -1 )
-                ) {
-					count++;
-					window.Asc.plugin.executeMethod("RemoveFieldWrapper", [field.FieldId], function() {
-						count--;
-						if (!count)
-							window.Asc.plugin.executeCommand("close", "");
-					});
-				}
-			});
-
-			if (!arrFields.length)
-				window.Asc.plugin.executeCommand("close", "");
-		});
-	};
 
 	function synchronizeData() {
 		// form an array for request (one array for user and other for groups)

@@ -107,8 +107,7 @@ CslStylesManager.prototype.getStyle = function (styleName) {
             }
             const customStyleNames = self._customStylesStorage.getStyleNames();
             if (customStyleNames.indexOf(styleName) !== -1) {
-                return self._customStylesStorage
-                    .getStyle(styleName);
+                return self._customStylesStorage.getStyle(styleName);
             }
             let url = self._STYLES_LOCAL + styleName + ".csl";
             if (self._isOnlineAvailable) {
