@@ -1,4 +1,10 @@
 /**
+ * @typedef {Object} SuppressAuthor
+ * @property {string} id
+ * @property {boolean} "suppress-author"
+ */
+
+/**
  * @param {string} citationID
  * @param {number} [itemsStartIndex]
  */
@@ -16,6 +22,10 @@ function CSLCitation(citationID, itemsStartIndex) {
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
 }
 
+/**
+ *
+ * @returns {Array<SuppressAuthor>}
+ */
 CSLCitation.prototype.getSuppressAuthors = function () {
     return this._citationItems.map(function (item) {
         return {
