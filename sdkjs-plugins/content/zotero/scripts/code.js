@@ -118,7 +118,7 @@
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
         notesStyleWrapper: document.querySelector(".notesStyle"),
-        notesStyleInput: document.querySelector(".notesStyle input"),
+        notesStyleRadios: document.querySelectorAll(".notesStyle input[name=notesAs]"),
 
         insertBibBtn: document.getElementById("insertBibBtn"),
         insertLinkBtn: document.getElementById("insertLinkBtn"),
@@ -460,12 +460,15 @@
             selectedLocale = val;
         };
 
-        elements.notesStyleInput.onselectchange = function (inp, val, isClick) {
-            if (!isClick) {
-                return;
-            }
-            cslStylesManager.saveLastUsedNotesStyle(val);
-        }
+        elements.notesStyleRadios.forEach(radio => {
+            radio.addEventListener('change', function(event)  {
+                if (event.target.checked) {
+                    cslStylesManager.saveLastUsedNotesStyle(event.target.value);
+                }
+            });
+        });
+            
+        
     }
 
     var scrollBoxes = [];
@@ -623,7 +626,7 @@
 
         let notesStyle = cslStylesManager.getLastUsedNotesStyle();
         citationDocService.setNotesStyle(notesStyle);
-        elements.notesStyleInput.value = notesStyle;
+        elements.notesStyleWrapper.querySelector('input[name="notesAs"][value="' + notesStyle + '"]').checked = true;
     }
 
     function applyTranslations() {

@@ -233,17 +233,18 @@ input[type="text"] {
 
 .notesStyle {
     width: 100%;
-    margin: 0 0 8px 0;
+    margin: 0 0 8px 4px;
 }
-    .notesStyle .selectHolder {
-        margin: 0 4px 0 0;
+    .notesStyle .radioHolder {
+        margin: 4px 4px 0 0;
     }
-    .notesStyle input {
-        width: 100%;
+    .notesStyle label {
         font-size: 11px;
+        margin-left: 6px;
+        vertical-align: top;
     }
-    .notesStyle .selectList {
-        min-height: auto !important;
+    .notesStyle label:first-of-type {
+        margin-right: 18px;
     }
 
 .selectHolder {
