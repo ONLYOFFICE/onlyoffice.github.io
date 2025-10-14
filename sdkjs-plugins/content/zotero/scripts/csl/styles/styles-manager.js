@@ -16,6 +16,7 @@ function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
     this._STYLES_LOCAL = "./resources/csl/styles/";
 
     this._lastStyleKey = "zoteroStyleId";
+    this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
 
     this._defaultStyles = [
@@ -80,6 +81,17 @@ CslStylesManager.prototype.getLastUsedFormat = function () {
             return lastUsedFormat;
     }
     return "numeric";
+};
+
+/**
+ * @returns {string}
+ */
+CslStylesManager.prototype.getLastUsedNotesStyle = function () {
+    let lastUsedNotesStyle = localStorage.getItem(this._lastNotesStyleKey);
+    if (lastUsedNotesStyle) {
+        return lastUsedNotesStyle;
+    }
+    return "footnotes";
 };
 
 /**
@@ -265,4 +277,11 @@ CslStylesManager.prototype._saveLastUsedStyle = function (id, content) {
     localStorage.setItem(this._lastStyleKey, id);
     const currentStyleFormat = CslStylesParser.getCitationFormat(content);
     localStorage.setItem(this._lastFormatKey, currentStyleFormat);
+};
+
+/**
+ * @param {"footnotes" | "endnotes"} notesStyle
+ */
+CslStylesManager.prototype.saveLastUsedNotesStyle = function (notesStyle) {
+    localStorage.setItem(this._lastNotesStyleKey, notesStyle);
 };
