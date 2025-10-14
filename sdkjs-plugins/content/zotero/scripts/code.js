@@ -103,7 +103,8 @@
         styleSelectListOther: document.getElementById("styleSelectedListOther"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
-        notesStyle: document.getElementById("notesStyle"),
+        notesStyleWrapper: document.querySelector(".notesStyle"),
+        notesStyleInput: document.querySelector(".notesStyle input"),
 
         insertBibBtn: document.getElementById("insertBibBtn"),
         insertLinkBtn: document.getElementById("insertLinkBtn"),
@@ -137,7 +138,8 @@
                 citSuffixNew,
                 bibPrefixNew,
                 bibSuffixNew,
-                cslStylesManager.getLastUsedFormat()
+                cslStylesManager.getLastUsedFormat(),
+                cslStylesManager.getLastUsedNotesStyle()
             );
             
             updateCslItems(true, false, false, false);
@@ -443,6 +445,13 @@
 			});
             selectedLocale = val;
         };
+
+        elements.notesStyleInput.onselectchange = function (inp, val, isClick) {
+            if (!isClick) {
+                return;
+            }
+            cslStylesManager.saveLastUsedNotesStyle(val);
+        }
     }
 
     var scrollBoxes = [];
@@ -593,10 +602,14 @@
         citationDocService.setStyleFormat(styleFormat);
         bNumFormat = styleFormat == 'numeric';
         if (["note", "note-ibid"].indexOf(styleFormat) !== -1) {
-            elements.notesStyle.classList.remove(displayNoneClass);
+            elements.notesStyleWrapper.classList.remove(displayNoneClass);
         } else {
-            elements.notesStyle.classList.add(displayNoneClass);
+            elements.notesStyleWrapper.classList.add(displayNoneClass);
         }
+
+        let notesStyle = cslStylesManager.getLastUsedNotesStyle();
+        citationDocService.setNotesStyle(notesStyle);
+        elements.notesStyleInput.value = notesStyle;
     }
 
     function applyTranslations() {

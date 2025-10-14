@@ -13,13 +13,15 @@
  * @param {string} bibPrefix
  * @param {string} bibSuffix
  * @param {StyleFormat} styleFormat
+ * @param {"footnotes" | "endnotes"} notesStyle
  */
 function CitationDocService(
     citPrefix,
     citSuffix,
     bibPrefix,
     bibSuffix,
-    styleFormat
+    styleFormat,
+    notesStyle
 ) {
     this._citPrefixOld = "ZOTERO_CITATION";
     this._bibPrefixOld = "ZOTERO_BIBLIOGRAPHY";
@@ -29,6 +31,7 @@ function CitationDocService(
     this._bibPrefix = bibPrefix;
     this._bibSuffix = bibSuffix;
     this._styleFormat = styleFormat;
+    this._notesStyle = notesStyle;
 
     /** @type {number} */
     this._repeatTimeout;
@@ -65,10 +68,20 @@ CitationDocService.prototype.addCitation = function (text, value) {
         Content: text,
     };
     if (["note", "note-ibid"].indexOf(this._styleFormat) !== -1) {
-        window.Asc.plugin.callCommand(function () {
-            const oDocument = Api.GetDocument();
-            oDocument.AddFootnote();
-        });
+        switch (this._notesStyle) {
+            case "footnotes":
+                window.Asc.plugin.callCommand(function () {
+                    const oDocument = Api.GetDocument();
+                    oDocument.AddFootnote();
+                });
+                break;
+            case "endnotes":
+                window.Asc.plugin.callCommand(function () {
+                    const oDocument = Api.GetDocument();
+                    oDocument.AddEndnote();
+                });
+                break;
+        }
     }
     return new Promise(function (resolve, reject) {
         window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
@@ -139,6 +152,13 @@ CitationDocService.prototype.saveAsText = function () {
             });
         });
     });
+};
+
+/**
+ * @param {"footnotes" | "endnotes"} notesStyle
+ */
+CitationDocService.prototype.setNotesStyle = function (notesStyle) {
+    this._notesStyle = notesStyle;
 };
 
 /**
