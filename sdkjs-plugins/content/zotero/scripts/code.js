@@ -103,6 +103,7 @@
         styleSelectListOther: document.getElementById("styleSelectedListOther"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
+        notesStyle: document.getElementById("notesStyle"),
 
         insertBibBtn: document.getElementById("insertBibBtn"),
         insertLinkBtn: document.getElementById("insertLinkBtn"),
@@ -140,16 +141,16 @@
             );
             
             updateCslItems(true, false, false, false);
+            addEventListeners();
+            initSelectBoxes();
         });
 
         window.Asc.plugin.onTranslate = applyTranslations;
 
-        addEventListeners();
 
         selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
         docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
 
-        initSelectBoxes();
         elements.styleSelectList.onopen = function () {
             elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
         }
@@ -407,9 +408,9 @@
 			showLoader(true);
             getStyle(val)
 			.then(function(style) {
-                let styleFormat = cslStylesManager.getLastUsedFormat();
-                citationDocService.setStyleFormat(styleFormat);
-				bNumFormat = styleFormat == 'numeric';
+                selectedStyle = val;
+				
+                onStyleChange();
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
@@ -423,7 +424,6 @@
                 )
                     showLoader(false);
 			});
-            selectedStyle = val;
 			elements.styleSelect.oninput(null, '');
         };
 
@@ -587,6 +587,17 @@
             }
         };
     };
+
+    function onStyleChange() {
+        let styleFormat = cslStylesManager.getLastUsedFormat();
+        citationDocService.setStyleFormat(styleFormat);
+        bNumFormat = styleFormat == 'numeric';
+        if (["note", "note-ibid"].indexOf(styleFormat) !== -1) {
+            elements.notesStyle.classList.remove(displayNoneClass);
+        } else {
+            elements.notesStyle.classList.add(displayNoneClass);
+        }
+    }
 
     function applyTranslations() {
         var elements = document.getElementsByClassName("i18n");

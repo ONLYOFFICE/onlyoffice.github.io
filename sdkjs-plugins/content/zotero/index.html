@@ -98,27 +98,27 @@
 							<input id="omitAuthor" type="checkbox" class="form-control i18n hidden" title="Omit Author">
                             </div>
                         <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
-                        </div>
-                        <div id="insertBibDiv" class="flex">
+                    </div>
+                    <div id="insertBibDiv" class="flex">
 						<button id="insertBibBtn" class="button control i18n btn-text-default">Insert Bibliography</button>
 						<button id="refreshBtn" class="button control btn-text-default i18n">Refresh</button>
-                        </div>
-                        <div id="SyncDataDiv" class="flexCol">
+                    </div>
+                    <div id="SyncDataDiv" class="flexCol">
 						<button id="synchronizeBtn" class="button control btn-text-default i18n">Synchronize</button>
-                        </div>
-                        <div id="styleWrapper">
-                            <div class="label">
-                                <span class="i18n">Style</span>
-                                <div class="selectHolder">
-                                <input id="styleSelect" class="control select text i18n" type="text" placeholder="Enter style name" autocomplete="off">
-                                <div id="styleSelectList" class="selectList display-none">
-                                </div>
-                                <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
-                                </div>
+                    </div>
+                    <div id="styleWrapper">
+                        <div class="label">
+                            <span class="i18n">Style</span>
+                            <div class="selectHolder">
+                            <input id="styleSelect" class="control select text i18n" type="text" placeholder="Enter style name" autocomplete="off">
+                            <div id="styleSelectList" class="selectList display-none">
                             </div>
-                            <div class="label styleWrapperSecond">
-                                <span class="i18n">Language</span>
-                                <div class="selectHolder">
+                            <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
+                            </div>
+                        </div>
+                        <div class="label styleWrapperSecond">
+                            <span class="i18n">Language</span>
+                            <div class="selectHolder">
                                 <input id="styleLang" readonly class="control select" type="text">
                                 <div id="styleLangList" class="selectList display-none">
                                     <span data-value="af-ZA">Afrikaans</span>
@@ -175,6 +175,16 @@
                                     <span data-value="zh-CN">Chinese (PRC)</span>
                                     <span data-value="zh-TW">Chinese (Taiwan)</span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="notesStyle" class="display-none">
+                        <label for="notesAs" class="i18n">Display citations as:</label>
+                        <div class="selectHolder">
+                            <input id="notesAs" readonly class="control select" type="text">
+                            <div id="notesAsList" class="selectList display-none">
+                                <span data-value="footnotes">footnotes</span>
+                                <span data-value="endnotes">endnotes</span>
                             </div>
                         </div>
                     </div>

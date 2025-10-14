@@ -205,7 +205,7 @@ input[type="text"] {
     }
 
         #styleWrapper .label:first-of-type {
-            flex: 5;
+            flex: 6;
             margin-right: 4px;
         }
 
@@ -230,6 +230,30 @@ input[type="text"] {
             flex: 1;
             margin-left: 4px;
         }
+
+#notesStyle {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 8px 0;
+}
+    #notesStyle label {
+        width: auto;
+        flex: 6;
+        margin-right: 4px;
+    }
+    #notesStyle .selectHolder {
+        width: auto;
+        flex: 4;
+        margin: 0 4px;
+    }
+    #notesStyle input {
+        width: 100%;
+        font-size: 11px;
+    }
+    #notesStyle .selectList {
+        min-height: auto !important;
+    }
 
 .selectHolder {
     position: relative;
