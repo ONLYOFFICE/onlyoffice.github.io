@@ -179,13 +179,16 @@
                         </div>
                     </div>
                     <div class="notesStyle display-none">
-                        <label for="notesAs" class="i18n">Display citations as:</label>
-                        <div class="selectHolder">
-                            <input id="notesAs" readonly class="control select" type="text">
-                            <div id="notesAsList" class="selectList display-none">
-                                <span data-value="footnotes">footnotes</span>
-                                <span data-value="endnotes">endnotes</span>
-                            </div>
+                        <span class="i18n">Display citations as:</span>
+                        <div class="radioHolder">
+                            <input type="radio" id="footNotes" class="form-control" value="footnotes" name="notesAs" checked/>
+                            <label for="footNotes" class="i18n">
+                                Footnotes
+                            </label>
+                            <input type="radio" id="endNotes" class="form-control" value="endnotes" name="notesAs"/>
+                            <label for="endNotes" class="i18n">
+                                Endnotes
+                            </label>
                         </div>
                     </div>
                 </div>
