@@ -121,3 +121,6 @@
 ## 2.5.0
 * Add events for another plugins.
 * Bug fix.
+
+## 2.5.1
+* Bug fix.
