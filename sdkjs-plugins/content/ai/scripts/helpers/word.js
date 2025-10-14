@@ -486,6 +486,101 @@ var WORD_FUNCTIONS = {};
 
 		return func;
 	}
+	WORD_FUNCTIONS.addImage = function()
+	{
+		let func = new RegisteredFunction();
+		func.name = "addImage";
+		func.params = [
+			"description (string): text description of the image to generate",
+			"width (number, optional): image width in mm (default: 100)",
+			"height (number, optional): image height in mm (default: 100)",
+			"style (string, optional): image style (realistic, cartoon, abstract, etc.)"
+		];
+
+		func.description = "Generate an image from text and insert it at the current cursor position. Width and height are in millimeters.";
+
+		func.examples = [
+			"If you need to add an image of a sunset, respond with:\n" +
+			"[functionCalling (addImage)]: {\"description\": \"sunset over mountains\"}",
+
+			"If you need a cartoon-style team image with custom size, respond with:\n" +
+			"[functionCalling (addImage)]: {\"description\": \"team of office workers\", \"style\": \"cartoon\", \"width\": 180, \"height\": 120}",
+
+			"If you need to add a realistic photo of a laptop on a wooden desk, respond with:\n" +
+			"[functionCalling (addImage)]: {\"description\": \"realistic photo of a laptop on a wooden desk\", \"style\": \"realistic\", \"width\": 120, \"height\": 80}",
+
+			"If you need to generate an abstract geometric background and insert it near the current text, respond with:\n" +
+			"[functionCalling (addImage)]: {\"description\": \"abstract geometric background with vibrant colors\", \"style\": \"abstract\"}"
+		];
+
+		func.call = async function(params) {
+			
+			let requestEngine = null;
+			requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
+			if (!requestEngine) {
+				return;
+			}
+			
+			let widthMm = params.width || 100;
+			let heightMm = params.height || 100;
+
+			let widthPx = (widthMm / 25.4) * 96 + 0.5 >> 0;
+			let heightPx = (heightMm / 25.4) * 96 + 0.5 >> 0;
+
+			let fullPrompt = params.description;
+			let imageStyle = params.style ? params.style : "realistic";
+			let sizeFormat = "";
+			let aspectRatio = widthPx / heightPx;
+			if (aspectRatio > 1.8) {
+				sizeFormat += ", wide panoramic format";
+			}
+			else if (aspectRatio < 0.6) {
+				sizeFormat += ", tall vertical format";
+			}
+			else if (aspectRatio > 0.9 && aspectRatio < 1.1) {
+				sizeFormat += ", square format";
+			}
+			
+			fullPrompt = imageStyle + " style, " + fullPrompt + ", image size " + widthPx + "x" + heightPx + " pixels" + sizeFormat;
+
+		
+			try {
+				let actionName = "AI (" + requestEngine.modelUI.name + ")";
+				await Asc.Editor.callMethod("StartAction", ["Block", actionName]);
+				let imageUrl;
+				imageUrl = await requestEngine.imageGenerationRequest(fullPrompt);
+				
+				
+				await Asc.Editor.callMethod("EndAction", ["Block", actionName]);
+				if (imageUrl) {
+					
+					const img = new Image();
+					img.src = imageUrl;
+					await img.decode();
+
+					const widthEmu = img.naturalWidth * 9525 + 0.5 >> 0;
+					const heightEmu = img.naturalHeight * 9525 + 0.5 >> 0;
+					
+					
+					Asc.scope.imageUrl = imageUrl;
+					Asc.scope.width = widthEmu;
+					Asc.scope.height = heightEmu;
+					
+					await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+					await Asc.Editor.callCommand(function () {
+						let doc = Api.GetDocument();
+						doc.ReplaceCurrentImage(Asc.scope.imageUrl, Asc.scope.width, Asc.scope.height);
+					});
+					await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+				}
+			} catch (error) {
+			}
+
+		};
+
+		return func;
+	};
+
 })();
 
 function getWordFunctions() {
@@ -527,6 +622,7 @@ function getWordFunctions() {
 	funcs.push(WORD_FUNCTIONS.rewriteText());
 	funcs.push(WORD_FUNCTIONS.insertPage());
 	funcs.push(WORD_FUNCTIONS.checkSpelling());
+	funcs.push(WORD_FUNCTIONS.addImage());
 
 	return funcs;
 
