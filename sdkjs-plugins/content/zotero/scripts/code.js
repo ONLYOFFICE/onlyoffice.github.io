@@ -1006,7 +1006,15 @@
             var bibFieldValue = ' ';
 
             try {
-                elements.tempDiv.innerHTML = formatter.makeBibliography()[1].join('');
+                // Sort bibliography items
+                var bibItems = new Array(CSLCitationStorage.size);
+                var bibObject = formatter.makeBibliography();
+                for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
+                    var citationId = bibObject[0].entry_ids[i][0];
+                    var citationIndex = CSLCitationStorage.getIndex(citationId);
+                    bibItems[citationIndex] = bibObject[1][i];
+                }
+                elements.tempDiv.innerHTML = bibItems.join('');
             } catch (e) {
                 console.error(e);
                 showError(getMessage("Failed to apply this style."));
