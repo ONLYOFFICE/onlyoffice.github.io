@@ -10,6 +10,9 @@ var CSLCitationStorage = {
         if (id >= 0) return this._items[id];
         return null;
     },
+    getIndex: function (id) {
+        return this._ids.indexOf(id);
+    },
     clear: function () {
         this._items = [];
         this._ids = [];
