@@ -767,6 +767,7 @@
 				if (bCount) counter--;
                 console.error(err);
                 displaySearchItems(append, {}, err.message, hideLoader, isGroup, (bCount && !counter) );
+                showError(err.message);
             })
             .finally(function () {	
 				if (hideLoader) {
@@ -1033,15 +1034,14 @@
                 var keysL = [];
                 var cslCitation;
                 if (bUpadteAll && ( field.Value.indexOf(citPrefixNew) !== -1 || field.Value.indexOf(citPrefix) !== -1 ) ) {
-                    var citationID = citationObject.citationItems[0].id; // old format
+                    var citationID = ""; // old format
                     if (field.Value.indexOf(citPrefix) === -1) { 
                         citationID = citationObject.citationID;
                     }
 
-                    cslCitation = new CSLCitation(citationID, keysL.length);
+                    cslCitation = new CSLCitation(keysL.length, citationID);
                     cslCitation.fillFromObject(citationObject);
-                    keysL = keysL.concat(cslCitation.getSuppressAuthors());
-                
+                    keysL = cslCitation.getSuppressAuthors();
                     elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
                     field["Content"] = elements.tempDiv.innerText;
                     if (bSyncronize && cslCitation) {
@@ -1095,7 +1095,8 @@
                 retrieveLocale: function (id) { return locales[id]; }, 
                 retrieveItem: function (id) { 
                     var item = CSLCitationStorage.get(id);
-                    return item.toOldJSON(); 
+                    let index = CSLCitationStorage.getIndex(id);
+                    return item.toOldJSON(index); 
                 } 
             }, 
             cslStylesManager.cached(selectedStyle),
@@ -1134,13 +1135,15 @@
                     }
                     
 					if (field.Value.indexOf(citPrefix) !== -1 || field.Value.indexOf(citPrefixNew) !== -1) {
-                        var citationID = citationObject.citationItems[0].id; // old format
+                        var citationID = ""; // old format
                         if (field.Value.indexOf(citPrefix) === -1) {
                             citationID = citationObject.citationID;
                         }
-                        var cslCitation = new CSLCitation(citationID, numOfItems);
-                        CSLCitationStorage.set(cslCitation.citationID, cslCitation);
+                        var cslCitation = new CSLCitation(numOfItems, citationID);
                         numOfItems += cslCitation.fillFromObject(citationObject);
+                        cslCitation.getCitationItems().forEach(function(item) {
+                            CSLCitationStorage.set(item.id, item);
+                        });
 					} else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
 						bibField = field;
                         if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
@@ -1186,17 +1189,19 @@
 		var bUpdateItems = false;
         var keys = [];
         var keysL = [];
+        var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
         for (var citationID in selected.items) {
-			if (!CSLCitationStorage.has(citationID)) {
-                var cslCitation = new CSLCitation(citationID, CSLCitationStorage.size);
-                var item = convertToCSL(selected.items[citationID]);
-                cslCitation.fillFromObject(item);
-                CSLCitationStorage.set(citationID, cslCitation);
-				bUpdateItems = true;
-			}
-            keys.push(citationID);
-            keysL.push(CSLCitationStorage.get(citationID).getSuppressAuthors());
+            var item = convertToCSL(selected.items[citationID]);
+            cslCitation.fillFromObject(item);
         }
+        cslCitation.getCitationItems().forEach(function(item) {
+            if (!CSLCitationStorage.has(item.id)) {
+                bUpdateItems = true;
+            }
+            CSLCitationStorage.set(item.id, item);
+            keys.push(item.id);
+            keysL.push(item.getSuppressAuthor());
+        });
 
         try {
 			if (bUpdateItems) {
@@ -1207,15 +1212,15 @@
 				formatter.updateItems(arrIds);
 			}
 
-            var element = keys[0];
-			var obj = CSLCitationStorage.get(element);
-			removeSelected(element);
-
+            keys.forEach(function(key) {
+                removeSelected(key);
+            })
+			
 			// TODO может ещё очистить поиск (подумать над этим)
-			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL[0]);
+			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
             citationDocService.addCitation(
                 elements.tempDiv.innerHTML, 
-                JSON.stringify(obj.toJSON())
+                JSON.stringify(cslCitation.toJSON())
             ).then(function() {
                 showLoader(false);
                 // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)

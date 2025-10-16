@@ -5,17 +5,20 @@
  */
 
 /**
- * @param {string} [citationID]
  * @param {number} [itemsStartIndex]
+ * @param {string} [citationID]
  */
-function CSLCitation(citationID, itemsStartIndex) {
+function CSLCitation(itemsStartIndex, citationID) {
     if (!citationID) {
+        // if no citationID, create new citation
         citationID = this._generateId();
+    }
+    if (typeof itemsStartIndex !== "number") {
+        throw new Error("itemsStartIndex is required");
     }
     /** @type {string} */
     this.citationID = citationID;
-    this._itemsStartIndex =
-        typeof itemsStartIndex === "number" ? itemsStartIndex : -1;
+    this._itemsStartIndex = itemsStartIndex;
     this._citationItems = new Array();
     this._properties = new Object();
 
@@ -23,6 +26,10 @@ function CSLCitation(citationID, itemsStartIndex) {
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
 }
 
+/**
+ * @param {*} citationObject 
+ * @returns 
+ */
 CSLCitation.prototype.fillFromObject = function (citationObject) {
     if (
         Object.hasOwnProperty.call(citationObject, "properties") ||
@@ -44,6 +51,11 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
         this._setProperties(citationObject.properties);
     }
 
+    if (!Object.hasOwnProperty.call(citationObject, "citationItems")) {
+        console.error("citationItems is empty");
+        return 0;
+    }
+
     var tmpArr = new Array();
     citationObject.citationItems.forEach(function (item) {
         if (tmpArr.indexOf(item.id) >= 0) {
@@ -52,10 +64,11 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
         }
         tmpArr.push(item.id);
 
-        var index =
-            this._itemsStartIndex >= 0 ? this._itemsStartIndex : item.id;
-        var citationItem = new CitationItem(index);
-        var citationItemData = new CitationItemData(index);
+        var index = this._itemsStartIndex;
+
+        var id = item.id;
+        var citationItem = new CitationItem(id);
+        var citationItemData = new CitationItemData(id);
 
         if (Object.hasOwnProperty.call(item, "itemData")) {
             citationItem.setItemData(item.itemData);
@@ -100,20 +113,23 @@ CSLCitation.prototype._fillFromOldCitationObject = function (citationObject) {
  * @returns
  */
 CSLCitation.prototype._fillFromOldCitationItem = function (itemObject) {
-    var index =
-        this._itemsStartIndex >= 0 ? this._itemsStartIndex : itemObject.index;
-    var citationItem = new CitationItem(index);
-    var citationItemData = new CitationItemData(index);
+    var index = this._itemsStartIndex;
+
+    var id = itemObject.id;
+    var citationItem = new CitationItem(id);
+    var citationItemData = new CitationItemData(id);
     citationItem.setItemData(citationItemData);
+
+    citationItem.fillFromObject(itemObject);
 
     if (Object.hasOwnProperty.call(itemObject, "suppress-author")) {
         citationItem.setSuppressAuthor(itemObject["suppress-author"]);
     }
     if (Object.hasOwnProperty.call(itemObject, "userID")) {
-        this._addProperty("userID", itemObject.userID);
+        citationItemData.addCustomProperty("userID", itemObject.userID);
     }
     if (Object.hasOwnProperty.call(itemObject, "groupID")) {
-        this._addProperty("groupID", itemObject.groupID);
+        citationItemData.addCustomProperty("groupID", itemObject.groupID);
     }
     if (Object.hasOwnProperty.call(itemObject, "title")) {
         citationItemData.setTitle(itemObject.title);
@@ -128,7 +144,7 @@ CSLCitation.prototype._fillFromOldCitationItem = function (itemObject) {
 
 CSLCitation.prototype.getCitationItems = function () {
     return this._citationItems;
-}
+};
 
 /**
  *
@@ -136,27 +152,24 @@ CSLCitation.prototype.getCitationItems = function () {
  */
 CSLCitation.prototype.getSuppressAuthors = function () {
     return this._citationItems.map(function (item) {
-        return {
-            id: this.citationID,
-            "suppress-author": item.getSuppressAuthor(),
-        };
+        return item.getSuppressAuthor();
     }, this);
 };
 
 CSLCitation.prototype.getProperty = function (key) {
-    if (Object.hasOwnProperty.call(this._properties, key)) {
-        return this._properties[key];
+    let items = this._citationItems;
+    for (var i = 0; i < items.length; i++) {
+        let itemData = items[i].getItemData();
+        if (itemData.getCustomProperty(key) !== null) {
+            return itemData.getCustomProperty(key);
+        }
     }
+
     return null;
 };
 
 CSLCitation.prototype._addCitationItem = function (item) {
     this._citationItems.push(item);
-    return this;
-};
-
-CSLCitation.prototype._addProperty = function (key, value) {
-    this._properties[key] = value;
     return this;
 };
 
@@ -226,30 +239,7 @@ CSLCitation.prototype.toOldJSON = function () {
     }
 
     this._citationItems.forEach(function (item, index) {
-        var oldItem = {
-            id: this.citationID,
-            index: item.id,
-        };
-        if (item.getSuppressAuthor() !== undefined) {
-            oldItem["suppress-author"] = item.getSuppressAuthor();
-        }
-        if (
-            item.getItemData().getTitle() !== "" &&
-            item.getItemData().getTitle() !== undefined
-        ) {
-            oldItem.title = item.getItemData().getTitle();
-        }
-        if (item.getItemData().getType()) {
-            oldItem.type = item.getItemData().getType();
-        }
-        if (this._properties && Object.keys(this._properties).length > 0) {
-            if (this._properties.userID) {
-                oldItem.userID = this._properties.userID;
-            }
-            if (this._properties.groupID) {
-                oldItem.groupID = this._properties.groupID;
-            }
-        }
+        var oldItem = item.toOldJSON(this._itemsStartIndex + index);
 
         result.push(oldItem);
     }, this);

@@ -43,11 +43,26 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
 };
 
 CitationItem.prototype.getSuppressAuthor = function () {
-    return this._suppressAuthor;
+    return {
+        id: this.id,
+        "suppress-author": this._suppressAuthor,
+    };
 };
 
 CitationItem.prototype.getItemData = function () {
     return this._itemData;
+};
+
+/**
+ *
+ * @param {string} key
+ * @returns {string|number|null}
+ */
+CitationItem.prototype.getProperty = function (key) {
+    if (this._itemData.getCustomProperty(key) !== null) {
+        return this._itemData.getCustomProperty(key);
+    }
+    return null;
 };
 
 /**
@@ -184,4 +199,31 @@ CitationItem.prototype.toJSON = function () {
     if (this._uris.length) result.uris = this._uris;
 
     return result;
+};
+
+CitationItem.prototype.toOldJSON = function (index) {
+    var oldItem = {
+        id: this.id,
+        index: index,
+    };
+    if (this._suppressAuthor !== undefined) {
+        oldItem["suppress-author"] = this._suppressAuthor;
+    }
+    if (
+        this._itemData.getTitle() !== "" &&
+        this._itemData.getTitle() !== undefined
+    ) {
+        oldItem.title = this._itemData.getTitle();
+    }
+    if (this._itemData.getType()) {
+        oldItem.type = this._itemData.getType();
+    }
+    if (this._itemData.getCustomProperty("userID") !== null) {
+        oldItem.userID = this._itemData.getCustomProperty("userID");
+    }
+    if (this._itemData.getCustomProperty("groupID") !== null) {
+        oldItem.groupID = this._itemData.getCustomProperty("groupID");
+    }
+
+    return oldItem;
 };

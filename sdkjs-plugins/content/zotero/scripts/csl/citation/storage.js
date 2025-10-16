@@ -1,10 +1,10 @@
 var CSLCitationStorage = {
-    /** @type {Array<CSLCitation>} */
+    /** @type {Array<CSLCitationItem>} */
     _items: [],
     /** @type {Array<string>} */
     _ids: [],
     size: 0,
-    /** @returns {CSLCitation} */
+    /** @returns {CSLCitationItem} */
     get: function (id) {
         var id = this._ids.indexOf(id);
         if (id >= 0) return this._items[id];
