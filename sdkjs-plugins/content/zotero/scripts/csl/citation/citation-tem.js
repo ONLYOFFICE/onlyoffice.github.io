@@ -5,7 +5,7 @@ function CitationItem(id) {
     if (typeof id !== "string" && typeof id !== "number") {
         throw new Error("CitationItem: id is required");
     }
-
+    /** @type {string|number} */
     this.id = id;
     this._itemData = new CitationItemData(id);
     this._prefix = undefined;

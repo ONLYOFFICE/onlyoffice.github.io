@@ -5,13 +5,14 @@
  */
 
 /**
- * @param {string} citationID
+ * @param {string} [citationID]
  * @param {number} [itemsStartIndex]
  */
 function CSLCitation(citationID, itemsStartIndex) {
     if (!citationID) {
-        throw new Error("CSLCitation: citationID is required");
+        citationID = this._generateId();
     }
+    /** @type {string} */
     this.citationID = citationID;
     this._itemsStartIndex =
         typeof itemsStartIndex === "number" ? itemsStartIndex : -1;
@@ -21,26 +22,6 @@ function CSLCitation(citationID, itemsStartIndex) {
     this._schema =
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
 }
-
-/**
- *
- * @returns {Array<SuppressAuthor>}
- */
-CSLCitation.prototype.getSuppressAuthors = function () {
-    return this._citationItems.map(function (item) {
-        return {
-            id: this.citationID,
-            "suppress-author": item.getSuppressAuthor(),
-        };
-    }, this);
-};
-
-CSLCitation.prototype.getProperty = function (key) {
-    if (Object.hasOwnProperty.call(this._properties, key)) {
-        return this._properties[key];
-    }
-    return null;
-};
 
 CSLCitation.prototype.fillFromObject = function (citationObject) {
     if (
@@ -102,7 +83,7 @@ CSLCitation.prototype._fillFromOldCitationObject = function (citationObject) {
         console.error("CSLCitation.citationItems: citationItems is empty");
         return 0;
     } else if (citationObject.citationItems.length > 1) {
-        console.error(
+        console.warn(
             "CSLCitation.citationItems: citationItems has more than one item"
         );
     }
@@ -145,13 +126,32 @@ CSLCitation.prototype._fillFromOldCitationItem = function (itemObject) {
     return 1;
 };
 
-CSLCitation.prototype._addCitationItem = function (item) {
-    this._citationItems.push(item);
-    return this;
+CSLCitation.prototype.getCitationItems = function () {
+    return this._citationItems;
+}
+
+/**
+ *
+ * @returns {Array<SuppressAuthor>}
+ */
+CSLCitation.prototype.getSuppressAuthors = function () {
+    return this._citationItems.map(function (item) {
+        return {
+            id: this.citationID,
+            "suppress-author": item.getSuppressAuthor(),
+        };
+    }, this);
 };
 
-CSLCitation.prototype._setProperties = function (properties) {
-    this._properties = properties;
+CSLCitation.prototype.getProperty = function (key) {
+    if (Object.hasOwnProperty.call(this._properties, key)) {
+        return this._properties[key];
+    }
+    return null;
+};
+
+CSLCitation.prototype._addCitationItem = function (item) {
+    this._citationItems.push(item);
     return this;
 };
 
@@ -160,9 +160,21 @@ CSLCitation.prototype._addProperty = function (key, value) {
     return this;
 };
 
+CSLCitation.prototype._setProperties = function (properties) {
+    this._properties = properties;
+    return this;
+};
+
 CSLCitation.prototype._setSchema = function (schema) {
     this._schema = schema;
     return this;
+};
+
+/**
+ * @returns {string}
+ */
+CSLCitation.prototype._generateId = function () {
+    return Math.random().toString(36).substring(2, 15); // o4wi5z43own
 };
 
 CSLCitation.prototype.validate = function () {
@@ -213,7 +225,7 @@ CSLCitation.prototype.toOldJSON = function () {
         return result;
     }
 
-    this._citationItems.forEach(function (item) {
+    this._citationItems.forEach(function (item, index) {
         var oldItem = {
             id: this.citationID,
             index: item.id,
@@ -246,7 +258,7 @@ CSLCitation.prototype.toOldJSON = function () {
         console.error("No citation items found");
         return null;
     } else if (result.length > 1) {
-        console.error("Multiple citation items found");
+        console.warn("Multiple citation items found");
     }
 
     return result[0];
