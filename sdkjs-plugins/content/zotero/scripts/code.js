@@ -319,7 +319,7 @@
 			lastSearch.groups = [];
             clearLibrary();
 			var groups = sdk.getUserGroups();
-            loadLibrary(sdk.items(text), true, true, !groups.length, false, true);
+            loadLibrary(sdk.getItems(text), true, true, !groups.length, false, true);
 			if (groups.length) {
 				for (var i = 0; i < groups.length; i++) {
 					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
@@ -1006,9 +1006,9 @@
             var bibFieldValue = ' ';
 
             try {
-                // Sort bibliography items
                 var bibItems = new Array(CSLCitationStorage.size);
                 var bibObject = formatter.makeBibliography();
+                // Sort bibliography items
                 for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
                     var citationId = bibObject[0].entry_ids[i][0];
                     var citationIndex = CSLCitationStorage.getIndex(citationId);
@@ -1033,9 +1033,9 @@
                 var keysL = [];
                 var cslCitation;
                 if (bUpadteAll && ( field.Value.indexOf(citPrefixNew) !== -1 || field.Value.indexOf(citPrefix) !== -1 ) ) {
-                    var citationID = citationObject.citationID;
-                    if (field.Value.indexOf(citPrefix) !== -1) {
-                        citationID = citationObject.citationItems[0].id;
+                    var citationID = citationObject.citationItems[0].id; // old format
+                    if (field.Value.indexOf(citPrefix) === -1) { 
+                        citationID = citationObject.citationID;
                     }
 
                     cslCitation = new CSLCitation(citationID, keysL.length);
@@ -1134,12 +1134,12 @@
                     }
                     
 					if (field.Value.indexOf(citPrefix) !== -1 || field.Value.indexOf(citPrefixNew) !== -1) {
-                        var citationID = citationObject.citationID;
-                        if (field.Value.indexOf(citPrefix) !== -1) {
-                            citationID = citationObject.citationItems[0].id;
+                        var citationID = citationObject.citationItems[0].id; // old format
+                        if (field.Value.indexOf(citPrefix) === -1) {
+                            citationID = citationObject.citationID;
                         }
                         var cslCitation = new CSLCitation(citationID, numOfItems);
-                        CSLCitationStorage.set(citationID, cslCitation);
+                        CSLCitationStorage.set(cslCitation.citationID, cslCitation);
                         numOfItems += cslCitation.fillFromObject(citationObject);
 					} else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
 						bibField = field;
@@ -1226,6 +1226,7 @@
 
         } catch (e) {
             showError(e);
+            console.error(e);
         }
     };
 
@@ -1276,7 +1277,7 @@
         })
 
 		if (arrUsrItems.length) {
-			sdk.items(null, arrUsrItems)
+			sdk.getItems(null, arrUsrItems)
 			.then(function(res) {
 				var items = ( (res.items ? res.items.items : []) || [] );
 				items.forEach(function(item) {

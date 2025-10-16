@@ -108,7 +108,13 @@
             return getRequestWithOfflineSupport(url);
         }
 
-        function items(search, itemsID) {
+        /**
+         * Retrieves items from the Zotero API.
+         * @param {string} [search] - Search query.
+         * @param {string[]} [itemsID] - IDs of items to retrieve.
+         * @returns {Promise<{body: ReadableStream, bodyUsed: boolean, headers: Headers, ok: boolean, redirected: boolean, status: string, statusText: string, type: string, url: string}>}
+         */
+        function getItems(search, itemsID) {
             return new Promise(function (resolve, reject) {
 				var props = {
 					format: "csljson"
@@ -123,7 +129,6 @@
                 } else {
                     parseDesktopItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
                 }
-                
             });
         }
 
@@ -337,7 +342,7 @@
         }
 
         return {
-            items: items,
+            getItems: getItems,
 			groups: groups,
 			getUserGroups: getUserGroups,
             format: format,
