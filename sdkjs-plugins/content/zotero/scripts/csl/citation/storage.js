@@ -6,11 +6,13 @@ var CSLCitationStorage = {
     size: 0,
     /** @returns {CSLCitationItem} */
     get: function (id) {
+        id = id.toString();
         var id = this._ids.indexOf(id);
         if (id >= 0) return this._items[id];
         return null;
     },
     getIndex: function (id) {
+        id = id.toString();
         return this._ids.indexOf(id);
     },
     clear: function () {
@@ -19,10 +21,11 @@ var CSLCitationStorage = {
         this.size = 0;
     },
     delete: function (id) {
-        var id = this._ids.indexOf(id);
-        if (id >= 0) {
-            this._items.splice(id, 1);
-            this._ids.splice(id, 1);
+        id = id.toString();
+        const index = this._ids.indexOf(id);
+        if (index >= 0) {
+            this._items.splice(index, 1);
+            this._ids.splice(index, 1);
             this.size--;
         }
     },
@@ -32,9 +35,11 @@ var CSLCitationStorage = {
         }
     },
     has: function (id) {
+        id = id.toString();
         return this._ids.indexOf(id) >= 0;
     },
     set: function (id, item) {
+        id = id.toString();
         var index = this._ids.indexOf(id);
         if (index >= 0) {
             this._items[index] = item;
