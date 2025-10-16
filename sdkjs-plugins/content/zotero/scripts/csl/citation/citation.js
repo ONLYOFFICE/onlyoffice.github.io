@@ -64,9 +64,12 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
         }
         tmpArr.push(item.id);
 
-        var index = this._itemsStartIndex;
-
         var id = item.id;
+
+        if (typeof id === "number") { // Word 365
+            id = this._extractIdFromWord365Citation(item);
+        }
+
         var citationItem = new CitationItem(id);
         var citationItemData = new CitationItemData(id);
 
@@ -186,8 +189,19 @@ CSLCitation.prototype._setSchema = function (schema) {
 /**
  * @returns {string}
  */
+CSLCitation.prototype._extractIdFromWord365Citation = function (item) {
+    if (Object.hasOwnProperty.call(item, "uris") && item.uris.length) {
+        const index = item.uris[0].lastIndexOf("/");
+        return item.uris[0].slice(index + 1);
+    }
+    return item.id;
+};
+
+/**
+ * @returns {string}
+ */
 CSLCitation.prototype._generateId = function () {
-    return Math.random().toString(36).substring(2, 15); // o4wi5z43own
+    return Math.random().toString(36).substring(2, 15); // o4wi5z43own for example
 };
 
 CSLCitation.prototype.validate = function () {
