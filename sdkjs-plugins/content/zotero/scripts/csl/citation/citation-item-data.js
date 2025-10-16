@@ -109,11 +109,28 @@ function CitationItemData(id) {
     this._volumeTitle = undefined;
     this._volumeTitleShort = undefined;
     this._yearSuffix = undefined;
+    /** @type {Object<string, string|number>} */
     this._custom = {};
 
     this.schema =
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-data.json#/items";
 }
+
+/**
+ *
+ * @param {string} key
+ * @param {string|number} value
+ * @returns
+ */
+CitationItemData.prototype.addCustomProperty = function (key, value) {
+    this._custom[key] = value;
+    return this;
+};
+
+CitationItemData.prototype.getCustomProperty = function (key) {
+    if (Object.hasOwnProperty.call(this._custom, key)) return this._custom[key];
+    return null;
+};
 
 CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "type")) {
