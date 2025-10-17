@@ -638,6 +638,13 @@ class Provider extends AI.Provider {\n\
 			
 		});
 
+		this.attachEditorEvent("onAnnotateText", function(obj) {
+			console.log("PLUGIN-AI");
+			console.log(JSON.stringify(obj));
+
+			spellCheckWithAI(obj["paragraphId"], obj["recalcId"], obj["text"]);
+		});
+
 	}
 
 	await initWithTranslate(1 << 1);
