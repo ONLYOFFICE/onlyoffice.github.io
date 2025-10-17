@@ -22,6 +22,10 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
         var citationItemData = new CitationItemData(itemObject.itemData.id);
         citationItemData.fillFromObject(itemObject.itemData);
         this.setItemData(citationItemData);
+    } else {
+        var citationItemData = new CitationItemData(itemObject.id);
+        citationItemData.fillFromObject(itemObject);
+        this.setItemData(citationItemData);
     }
     if (Object.hasOwnProperty.call(itemObject, "prefix"))
         this._prefix = itemObject.prefix;
