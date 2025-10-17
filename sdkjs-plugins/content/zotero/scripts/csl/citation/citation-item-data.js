@@ -122,7 +122,7 @@ function CitationItemData(id) {
  * @param {string|number} value
  * @returns
  */
-CitationItemData.prototype.addCustomProperty = function (key, value) {
+CitationItemData.prototype._addCustomProperty = function (key, value) {
     this._custom[key] = value;
     return this;
 };
@@ -438,6 +438,13 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     }
     if (Object.hasOwnProperty.call(itemDataObject, "custom")) {
         this._custom = itemDataObject.custom;
+    }
+
+    if (Object.hasOwnProperty.call(itemDataObject, "userID")) {
+        this._addCustomProperty("userID", itemDataObject.userID);
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "groupID")) {
+        this._addCustomProperty("groupID", itemDataObject.groupID);
     }
 };
 
@@ -1285,7 +1292,12 @@ CitationItemData.prototype.toJSON = function () {
     if (this._language !== undefined) result.language = this._language;
     if (this._journalAbbreviation !== undefined)
         result.journalAbbreviation = this._journalAbbreviation;
-    if (this._shortTitle !== undefined) result.shortTitle = this._shortTitle;
+    if (this._shortTitle !== undefined) {
+        result.shortTitle = this._shortTitle;
+        result["short-title"] = this._shortTitle;
+        if (this._titleShort === undefined)
+            result["title-short"] = this._shortTitle;
+    }
 
     if (this._author.length > 0) result.author = this._author;
     if (this._chair.length > 0) result.chair = this._chair;
