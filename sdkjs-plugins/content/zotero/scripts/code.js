@@ -1013,7 +1013,11 @@
                 for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
                     var citationId = bibObject[0].entry_ids[i][0];
                     var citationIndex = CSLCitationStorage.getIndex(citationId);
-                    bibItems[citationIndex] = bibObject[1][i];
+                    var bibText = bibObject[1][i];
+                    while (bibText.indexOf('\n') !== bibText.lastIndexOf('\n')) {
+                        bibText = bibText.replace(/\n/, '');
+                    }
+                    bibItems[citationIndex] = bibText;
                 }
                 elements.tempDiv.innerHTML = bibItems.join('');
             } catch (e) {
