@@ -1110,7 +1110,7 @@
                 retrieveItem: function (id) { 
                     var item = CSLCitationStorage.get(id);
                     let index = CSLCitationStorage.getIndex(id);
-                    return item.toOldJSON(index); 
+                    return item.toFlatJSON(index); 
                 } 
             }, 
             cslStylesManager.cached(selectedStyle),
@@ -1251,8 +1251,6 @@
 
     function convertToCSL(item) {
         var cslData = item;
-        cslData["short-title"] = item.shortTitle;
-        cslData["title-short"] = item.shortTitle;
         cslData["suppress-author"] = elements.checkOmitAuthor.checked;
 
         return cslData;
@@ -1264,8 +1262,6 @@
 			item.id = item.id.substring(pos);
 		
 		var cslItem = CSLCitationStorage.get(item.id);
-		item["short-title"] = item.shortTitle;
-		item["title-short"] = item.shortTitle;
         cslItem.fillFromObject(item);
 
     };
@@ -1284,7 +1280,7 @@
 		var arrGroupsItems = {};
         CSLCitationStorage.forEach(function(citationItem, id) {
             let index = CSLCitationStorage.getIndex(id);
-            let item = citationItem.toOldJSON(index);
+            let item = citationItem.toFlatJSON(index);
             var userID = citationItem.getProperty("userID");
             var groupID = citationItem.getProperty("groupID");
             if (userID) {

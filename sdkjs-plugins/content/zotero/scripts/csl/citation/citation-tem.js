@@ -19,14 +19,11 @@ function CitationItem(id) {
 
 CitationItem.prototype.fillFromObject = function (itemObject) {
     if (Object.hasOwnProperty.call(itemObject, "itemData")) {
-        var citationItemData = new CitationItemData(itemObject.itemData.id);
-        citationItemData.fillFromObject(itemObject.itemData);
-        this.setItemData(citationItemData);
+        this._itemData.fillFromObject(itemObject.itemData);
     } else {
-        var citationItemData = new CitationItemData(itemObject.id);
-        citationItemData.fillFromObject(itemObject);
-        this.setItemData(citationItemData);
+        this._itemData.fillFromObject(itemObject);
     }
+
     if (Object.hasOwnProperty.call(itemObject, "prefix"))
         this._prefix = itemObject.prefix;
     if (Object.hasOwnProperty.call(itemObject, "suffix"))
@@ -67,15 +64,6 @@ CitationItem.prototype.getProperty = function (key) {
         return this._itemData.getCustomProperty(key);
     }
     return null;
-};
-
-/**
- * @param {CitationItemData} itemData
- * @returns {CitationItem}
- */
-CitationItem.prototype.setItemData = function (itemData) {
-    this._itemData = itemData;
-    return this;
 };
 
 /**
@@ -205,7 +193,7 @@ CitationItem.prototype.toJSON = function () {
     return result;
 };
 
-CitationItem.prototype.toOldJSON = function (index) {
+CitationItem.prototype.toFlatJSON = function (index) {
     var oldItem = {
         id: this.id,
         index: index,
@@ -213,15 +201,10 @@ CitationItem.prototype.toOldJSON = function (index) {
     if (this._suppressAuthor !== undefined) {
         oldItem["suppress-author"] = this._suppressAuthor;
     }
-    if (
-        this._itemData.getTitle() !== "" &&
-        this._itemData.getTitle() !== undefined
-    ) {
-        oldItem.title = this._itemData.getTitle();
-    }
-    if (this._itemData.getType()) {
-        oldItem.type = this._itemData.getType();
-    }
+
+    let itemDataObject = this._itemData.toJSON();
+    Object.assign(oldItem, itemDataObject);
+
     if (this._itemData.getCustomProperty("userID") !== null) {
         oldItem.userID = this._itemData.getCustomProperty("userID");
     }
