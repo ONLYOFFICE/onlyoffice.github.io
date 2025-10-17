@@ -124,22 +124,15 @@ CSLCitation.prototype._fillFromOldCitationItem = function (itemObject) {
     citationItem.setItemData(citationItemData);
 
     citationItem.fillFromObject(itemObject);
+    citationItemData.fillFromObject(itemObject);
 
-    if (Object.hasOwnProperty.call(itemObject, "suppress-author")) {
-        citationItem.setSuppressAuthor(itemObject["suppress-author"]);
-    }
     if (Object.hasOwnProperty.call(itemObject, "userID")) {
         citationItemData.addCustomProperty("userID", itemObject.userID);
     }
     if (Object.hasOwnProperty.call(itemObject, "groupID")) {
         citationItemData.addCustomProperty("groupID", itemObject.groupID);
     }
-    if (Object.hasOwnProperty.call(itemObject, "title")) {
-        citationItemData.setTitle(itemObject.title);
-    }
-    if (Object.hasOwnProperty.call(itemObject, "type")) {
-        citationItemData.setType(itemObject.type);
-    }
+
     this._addCitationItem(citationItem);
 
     return 1;

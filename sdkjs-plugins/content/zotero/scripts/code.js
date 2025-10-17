@@ -1268,16 +1268,18 @@
 		var bHasGroupsItems = false;
 		var arrUsrItems = [];
 		var arrGroupsItems = {};
-        CSLCitationStorage.forEach(function(item, id) {
-            var userID = item.getProperty("userID");
-            var groupID = item.getProperty("groupID");
+        CSLCitationStorage.forEach(function(citationItem, id) {
+            let index = CSLCitationStorage.getIndex(id);
+            let item = citationItem.toOldJSON(index);
+            var userID = citationItem.getProperty("userID");
+            var groupID = citationItem.getProperty("groupID");
             if (userID) {
-                arrUsrItems.push(id)
+                arrUsrItems.push(citationItem.id);
             } else if (groupID) {
                 if (!arrGroupsItems[groupID])
                     arrGroupsItems[groupID] = [];
-                
-                arrGroupsItems[groupID].push(id);
+                    arrGroupsItems[groupID].push(item.id);
+
             }
         })
 
