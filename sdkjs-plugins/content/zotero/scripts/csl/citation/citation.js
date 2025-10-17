@@ -27,8 +27,8 @@ function CSLCitation(itemsStartIndex, citationID) {
 }
 
 /**
- * @param {*} citationObject 
- * @returns 
+ * @param {*} citationObject
+ * @returns
  */
 CSLCitation.prototype.fillFromObject = function (citationObject) {
     if (
@@ -37,10 +37,10 @@ CSLCitation.prototype.fillFromObject = function (citationObject) {
     ) {
         return this._fillFromCitationObject(citationObject);
     } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
-        return this._fillFromOldCitationObject(citationObject);
+        return this._fillFromFlatCitationObject(citationObject);
     }
 
-    return this._fillFromOldCitationItem(citationObject);
+    return this._fillFromFlatCitationItem(citationObject);
 };
 
 CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
@@ -66,23 +66,12 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
 
         var id = item.id;
 
-        if (typeof id === "number") { // Word 365
+        if (typeof id === "number") {
+            // Word 365
             id = this._extractIdFromWord365Citation(item);
         }
 
         var citationItem = new CitationItem(id);
-        var citationItemData = new CitationItemData(id);
-
-        if (Object.hasOwnProperty.call(item, "itemData")) {
-            citationItem.setItemData(item.itemData);
-
-            citationItemData.setType(item.itemData.type);
-            citationItemData.setContainerTitle(
-                item.itemData["container-title"]
-            );
-            citationItemData.setTitle(item.itemData.title);
-        }
-
         citationItem.fillFromObject(item);
 
         this._addCitationItem(citationItem);
@@ -94,7 +83,7 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
  * @param {{citationObject: Array<{id: string, index: number, "suppress-author": boolean, title: string, type: string, userID: string, groupID: string}>}} citationObject
  * @returns
  */
-CSLCitation.prototype._fillFromOldCitationObject = function (citationObject) {
+CSLCitation.prototype._fillFromFlatCitationObject = function (citationObject) {
     if (citationObject.citationItems.length === 0) {
         console.error("CSLCitation.citationItems: citationItems is empty");
         return 0;
@@ -105,7 +94,7 @@ CSLCitation.prototype._fillFromOldCitationObject = function (citationObject) {
     }
 
     citationObject.citationItems.forEach(function (itemObject) {
-        this._fillFromOldCitationItem(itemObject);
+        this._fillFromFlatCitationItem(itemObject);
     }, this);
 
     return 1;
@@ -115,23 +104,12 @@ CSLCitation.prototype._fillFromOldCitationObject = function (citationObject) {
  * @param {} citationObject
  * @returns
  */
-CSLCitation.prototype._fillFromOldCitationItem = function (itemObject) {
+CSLCitation.prototype._fillFromFlatCitationItem = function (itemObject) {
     var index = this._itemsStartIndex;
 
     var id = itemObject.id;
     var citationItem = new CitationItem(id);
-    var citationItemData = new CitationItemData(id);
-    citationItem.setItemData(citationItemData);
-
     citationItem.fillFromObject(itemObject);
-    citationItemData.fillFromObject(itemObject);
-
-    if (Object.hasOwnProperty.call(itemObject, "userID")) {
-        citationItemData.addCustomProperty("userID", itemObject.userID);
-    }
-    if (Object.hasOwnProperty.call(itemObject, "groupID")) {
-        citationItemData.addCustomProperty("groupID", itemObject.groupID);
-    }
 
     this._addCitationItem(citationItem);
 
@@ -234,29 +212,3 @@ CSLCitation.prototype.toJSON = function () {
     return result;
 };
 
-/**
- *
- * @returns {{id: string, index: number, "suppress-author": boolean, title: string, type: string, userID: string, , groupID: string}}
- */
-CSLCitation.prototype.toOldJSON = function () {
-    var result = [];
-
-    if (!this._citationItems || this._citationItems.length === 0) {
-        return result;
-    }
-
-    this._citationItems.forEach(function (item, index) {
-        var oldItem = item.toOldJSON(this._itemsStartIndex + index);
-
-        result.push(oldItem);
-    }, this);
-
-    if (result.length === 0) {
-        console.error("No citation items found");
-        return null;
-    } else if (result.length > 1) {
-        console.warn("Multiple citation items found");
-    }
-
-    return result[0];
-};
