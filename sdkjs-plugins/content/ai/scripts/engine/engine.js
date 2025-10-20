@@ -879,7 +879,7 @@ function fetchExternal(url, options, isStreaming) {
 						//dataChunk = dataChunk.replace(/\n\n/g, '\n');
 					}
 
-					console.log(dataChunk);
+					//console.log(dataChunk);
 
 					//console.log(dataChunk);
 					allChunks += dataChunk;
@@ -1295,10 +1295,10 @@ function fetchExternal(url, options, isStreaming) {
 
 		result += "]";
 
-		console.log("Parsed result:");
-		console.log(responseText);
-		console.log(result);
-		console.log(responseText.substring(curObjectPos));
+		// console.log("Parsed result:");
+		// console.log(responseText);
+		// console.log(result);
+		// console.log(responseText.substring(curObjectPos));
 
 		return {
 			result : result,
