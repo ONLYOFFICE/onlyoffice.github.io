@@ -138,6 +138,31 @@ function registerButtons(window, undefined)
 		window.chatWindow = chatWindow;
 	}
 
+	if (true)
+	{
+		let button = new Asc.ButtonContextMenu(buttonMain);
+		button.text = "Spellchecker";
+		button.icons = getContextMenuButtonIcons("summarization");
+		button.editors = ["word"];
+		button.addCheckers("Target");
+
+		button.attachOnClick(async function(data){
+
+			if (!window || !window.spellchecker)
+				return;
+
+			let text = window.spellchecker.getCurrentSuggestion();
+
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+			await Asc.Editor.callMethod("SelectAnnotationRange", [window.spellchecker.getCurrentRange()]);
+			await Asc.Editor.callMethod("RemoveSelectedContent");
+			await Asc.Editor.callMethod("InputText", [text]);
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		});
+
+		window.AI.spellcheckButton = button;
+	}
+
 	// Submenu summarize:
 	if (Asc.Editor.getType() !== "pdf")
 	{
