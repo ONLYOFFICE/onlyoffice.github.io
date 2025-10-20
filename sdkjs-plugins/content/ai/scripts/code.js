@@ -38,6 +38,8 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
 
+window.spellchecker = null;
+
 window.getActionsInfo = function() {
 	let actions = [];
 	for (const action in AI.ActionType) {
@@ -638,13 +640,40 @@ class Provider extends AI.Provider {\n\
 			
 		});
 
+		spellchecker = new Spellchecker();
+
 		this.attachEditorEvent("onAnnotateText", function(obj) {
+			if (!obj)
+				return;
+
 			console.log("PLUGIN-AI");
 			console.log(JSON.stringify(obj));
 
-			spellCheckWithAI(obj["paragraphId"], obj["recalcId"], obj["text"]);
+			spellchecker.checkParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
 		});
 
+		this.attachEditorEvent("onFocusAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+
+			console.log("onFocus");
+			console.log(JSON.stringify(obj));
+
+			if ("spelling" === obj["name"])
+				spellchecker.setCurrentRange(obj["paragraphId"], obj["rangeId"]);
+		});
+
+		this.attachEditorEvent("onBlurAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+			console.log("onBlur");
+			console.log(JSON.stringify(obj));
+
+			if ("spelling" === obj["name"])
+				spellchecker.setCurrentRange(null, null);
+		});
 	}
 
 	await initWithTranslate(1 << 1);
