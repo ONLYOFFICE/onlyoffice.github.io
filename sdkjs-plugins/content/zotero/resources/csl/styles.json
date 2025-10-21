@@ -4185,7 +4185,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2025-05-18 00:55:38",
+    "updated": "2025-10-09 15:24:33",
     "href": "https://www.zotero.org/styles/bern-university-of-applied-sciences-school-of-agricultural-forest-and-food-sciences-hafl"
   },
   {
@@ -9156,8 +9156,22 @@
     "href": "https://www.zotero.org/styles/corrosion"
   },
   {
-    "title": "Council of Science Editors, Citation-Name (numeric, sorted alphabetically)",
+    "title": "Council of Science Editors, Citation-Name 8th edition (numeric, sorted alphabetically)",
     "titleShort": "CSE C-N",
+    "name": "council-of-science-editors-numeric-alphabetical-8th-edition",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "science"
+      ]
+    },
+    "updated": "2025-09-12 07:53:12",
+    "href": "https://www.zotero.org/styles/council-of-science-editors-numeric-alphabetical-8th-edition"
+  },
+  {
+    "title": "Council of Science Editors, Citation-Name 9th edition (numeric, sorted alphabetically)",
+    "titleShort": "CSE C-S",
     "name": "council-of-science-editors-alphabetical",
     "dependent": 0,
     "categories": {
@@ -9166,7 +9180,7 @@
         "science"
       ]
     },
-    "updated": "2019-08-06 04:37:16",
+    "updated": "2025-09-12 07:48:48",
     "href": "https://www.zotero.org/styles/council-of-science-editors-alphabetical"
   },
   {
@@ -9236,7 +9250,7 @@
         "science"
       ]
     },
-    "updated": "2025-08-07 17:22:04",
+    "updated": "2025-10-11 08:27:53",
     "href": "https://www.zotero.org/styles/council-of-science-editors-author-date"
   },
   {
@@ -11583,7 +11597,7 @@
   },
   {
     "title": "Ethnobiology and Conservation",
-    "titleShort": "Ethnobiol Conserv",
+    "titleShort": "EBC",
     "name": "ethnobiology-and-conservation",
     "dependent": 0,
     "categories": {
@@ -11594,7 +11608,7 @@
         "biology"
       ]
     },
-    "updated": "2013-08-29 04:18:55",
+    "updated": "2025-10-20 15:01:37",
     "href": "https://www.zotero.org/styles/ethnobiology-and-conservation"
   },
   {
@@ -11708,9 +11722,8 @@
     "href": "https://www.zotero.org/styles/etudes-francaises"
   },
   {
-    "title": "EU Interinstitutional Style 1st edition (English, author-date)",
-    "titleShort": "EU style author-date En 1st Ed.",
-    "name": "eu-interinstitutional-style-1st-edition",
+    "title": "EU Interinstitutional Style (author-date)",
+    "name": "eu-interinstitutional-style",
     "dependent": 0,
     "categories": {
       "format": "author-date",
@@ -11718,8 +11731,8 @@
         "generic-base"
       ]
     },
-    "updated": "2025-08-26 06:36:03",
-    "href": "https://www.zotero.org/styles/eu-interinstitutional-style-1st-edition"
+    "updated": "2025-10-17 09:43:48",
+    "href": "https://www.zotero.org/styles/eu-interinstitutional-style"
   },
   {
     "title": "EUNOMÍA. Revista en Cultura de la Legalidad (Español)",
@@ -14871,7 +14884,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2025-05-18 00:55:38",
+    "updated": "2025-10-10 13:09:51",
     "href": "https://www.zotero.org/styles/hochschule-fur-soziale-arbeit-fhnw"
   },
   {
@@ -31210,7 +31223,7 @@
       "format": "numeric",
       "fields": []
     },
-    "updated": "2025-05-18 00:55:38",
+    "updated": "2025-09-19 16:43:52",
     "href": "https://www.zotero.org/styles/springer-vancouver"
   },
   {
@@ -32798,6 +32811,20 @@
     },
     "updated": "2013-08-29 03:14:21",
     "href": "https://www.zotero.org/styles/the-british-journal-of-psychiatry"
+  },
+  {
+    "title": "The British Journal of Social Work",
+    "titleShort": "BJSW",
+    "name": "the-british-journal-of-social-work",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "social_science"
+      ]
+    },
+    "updated": "2025-10-18 13:32:21",
+    "href": "https://www.zotero.org/styles/the-british-journal-of-social-work"
   },
   {
     "title": "The British Journal of Sociology",
@@ -35387,7 +35414,7 @@
         "generic-base"
       ]
     },
-    "updated": "2021-02-15 03:41:57",
+    "updated": "2025-10-11 22:57:33",
     "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-ufrgs-note-initials-with-ibid"
   },
   {
@@ -35401,7 +35428,7 @@
         "generic-base"
       ]
     },
-    "updated": "2023-12-27 02:24:36",
+    "updated": "2025-10-11 00:31:14",
     "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-ufrgs-initials"
   },
   {
@@ -36773,7 +36800,7 @@
         "anthropology"
       ]
     },
-    "updated": "2025-10-05 15:10:11",
+    "updated": "2025-10-09 17:27:12",
     "href": "https://www.zotero.org/styles/uniwersytet-gdanski-kulturoznawstwo-autor-rok"
   },
   {
@@ -38480,7 +38507,7 @@
         "law"
       ]
     },
-    "updated": "2023-04-03 02:03:30",
+    "updated": "2025-10-17 08:58:13",
     "href": "https://www.zotero.org/styles/zitierguide-leitfaden-zum-fachgerechten-zitieren-in-rechtswissenschaftlichen-arbeiten"
   },
   {
