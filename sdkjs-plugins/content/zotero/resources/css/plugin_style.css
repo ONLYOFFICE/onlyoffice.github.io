@@ -216,7 +216,6 @@ input[type="text"] {
         }
 
         #styleWrapper .label > span {
-            color: #444444;
             display: block;
         }
 
@@ -230,6 +229,21 @@ input[type="text"] {
             flex: 1;
             margin-left: 4px;
         }
+
+.notesStyle {
+    margin: 0 0 8px 4px;
+}
+    .notesStyle .radioHolder {
+        margin: 4px 4px 0 0;
+    }
+    .notesStyle label {
+        font-size: 11px;
+        margin-left: 6px;
+        vertical-align: top;
+    }
+    .notesStyle label:first-of-type {
+        margin-right: 18px;
+    }
 
 .selectHolder {
     position: relative;
@@ -295,6 +309,16 @@ input[type="text"] {
             color: #ffffff;
         }
 
+        .selectList > span.select-file {
+            padding: 0;
+        }
+        .selectList > span label {
+            padding: 5px 20px;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
 .scrollThumb {
     width: 9px;
     background-color: rgb(241, 241, 241);
@@ -321,7 +345,6 @@ input[type="text"] {
 }
 
 .doc {
-    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
 }
@@ -333,6 +356,7 @@ input[type="text"] {
 .doc > div {
     display: flex;
     flex-direction: column;
+    padding: 5px 0;
 }
 
 .secondary-text {

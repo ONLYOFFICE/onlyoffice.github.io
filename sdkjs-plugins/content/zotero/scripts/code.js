@@ -31,11 +31,20 @@
 	let bibPlaceholder = "Please insert some citation into the document.";
 	var bUserItemsUpdated = false;
 	var bGroupsItemsUpdated = false;
-	// TODO добавить варианты сохранения для совместимости с другими редакторами (ms, libre, google, мой офис), пока есть вариант сохранить как текст
-	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять из библиографии автоматически (это делать только при обновлении библиографии или refresh), но их точно нужно удалить из formatter!
-	// TODO добавить ещё обработку события (изменения линков), предлать пользователю обновить их или сохранить ручное форматирование (при ручном форматировании не меняем внешний вид цитаты при refresh (да и вообще не меняем))
-	// TODO сейчас всегда делаем полный refresh при каждом действии (обновлении, вставке линков, вставке библиографии), потому что мы не знаем что поменялось без событий (потом добавить ещё сравнение контента)
-	// TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку как документе (для этого нужно знать где именно в документе мы вставляем цитату, какая цитата сверху и снизу от текущего курсора)
+	// TODO добавить варианты сохранения для совместимости с другими редакторами 
+    //     (ms, libre, google, мой офис), пока есть вариант сохранить как текст
+	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
+    //     из библиографии автоматически (это делать только при обновлении библиографии
+    //     или refresh), но их точно нужно удалить из formatter!
+	// TODO добавить ещё обработку события (изменения линков), предлать пользователю
+    //     обновить их или сохранить ручное форматирование (при ручном форматировании
+    //     не меняем внешний вид цитаты при refresh (да и вообще не меняем))
+	// TODO сейчас всегда делаем полный refresh при каждом действии
+    //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
+    //     что поменялось без событий (потом добавить ещё сравнение контента)
+	// TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку
+    //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
+    //     какая цитата сверху и снизу от текущего курсора)
 
     var selected = {
         items: {},
@@ -48,21 +57,12 @@
         }
     };
 
-	var defaultStyles = 
-    {
-        "American Medical Association 11th edition" : 1, "American Political Science Association" : 1,
-        "American Psychological Association 7th edition" : 1, "American Sociological Association 6th edition" : 1,
-        "Chicago Manual of Style 17th edition (author-date)" : 1, "Cite Them Right 10th edition - Harvard" : 1,
-        "IEEE" : 1, "Modern Humanities Research Association 3rd edition (note with bibliography)" : 1,
-        "Modern Language Association 8th edition" : 1, "Nature" : 1
-    };
-
 	var locales = {};
-    var styles = {};
     var selectedLocale;
     var selectedStyle;
 
     var sdk = null;
+    var cslStylesManager = null;
 
     var lastSearch = {
         text: "",
@@ -99,6 +99,8 @@
         styleSelectListOther: document.getElementById("styleSelectedListOther"),
         styleSelect: document.getElementById("styleSelect"),
         styleLang: document.getElementById("styleLang"),
+        notesStyleWrapper: document.querySelector(".notesStyle"),
+        notesStyleRadios: document.querySelectorAll(".notesStyle input[name=notesAs]"),
 
         insertBibBtn: document.getElementById("insertBibBtn"),
         insertLinkBtn: document.getElementById("insertLinkBtn"),
@@ -107,7 +109,9 @@
 		refreshBtn: document.getElementById('refreshBtn'),
 		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
 		synchronizeBtn: document.getElementById('synchronizeBtn'),
-		checkOmitAuthor: document.getElementById('omitAuthor')
+		checkOmitAuthor: document.getElementById('omitAuthor'),
+        useDesktopApp: document.getElementById('useDesktopApp'),
+        fileInput: document.getElementById('cslFileInput')
     };
 
     var selectedScroller;
@@ -115,10 +119,154 @@
 
     window.Asc.plugin.init = function () {
 		showLoader(true);
-		updateCslItems(true, false, false, false);
+        
         sdk = window.Asc.plugin.zotero.api({});
+        
+        initSdkApis().then(function (availableApis) {
+
+            cslStylesManager = new CslStylesManager(availableApis.online, availableApis.desktop);
+            if (availableApis.online || availableApis.desktop) {
+                loadStyles();
+            }
+            updateCslItems(true, false, false, false);
+            addEventListeners();
+            initSelectBoxes();
+        });
 
         window.Asc.plugin.onTranslate = applyTranslations;
+
+        selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
+        docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
+
+    };
+
+    function initSdkApis() {
+        return sdk.isApiAvailable().then(function(availableApis) {
+            console.log('apis', availableApis);
+            if (availableApis.desktop) {
+                switchAuthState('main');
+            } else if (availableApis.online) {
+                if (sdk.hasSettings()) {
+                    switchAuthState('main');
+                } else {
+                    switchAuthState('config');
+                }
+            } else if (availableApis.permissionNeeded) {
+                const errorMessage = 'Connection to Zotero failed. ' + 
+                    'Please enable external connections in Zotero: ' + 
+                    'Edit → Settings → Advanced → Check "Allow other ' + 
+                    'applications on this computer to communicate with Zotero"';
+                showError(getMessage(errorMessage));
+            } else {
+                showError(getMessage('Connection to Zotero failed. Make sure Zotero is running.'));
+            }
+            return availableApis;
+        });
+    }
+
+    function loadStyles() {
+        cslStylesManager.getStylesInfo()
+            .then(function (stylesInfo) {
+				var openOtherStyleList = function (list) {
+                    return function (ev) {
+                        elements.styleSelectListOther.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+                        ev.stopPropagation();
+                        openList(list);
+                    }
+                };
+
+                addStylesToList(stylesInfo);
+
+                if (elements.styleSelectListOther.children.length > 0) {
+                    var other = document.createElement("span");
+                    other.textContent = "More Styles...";
+                    elements.styleSelectList.appendChild(other);
+                    other.onclick = openOtherStyleList(elements.styleSelectListOther);
+                }
+                
+                var custom = document.createElement("span");
+                custom.setAttribute("class", "select-file");
+                var label = document.createElement("label");
+                label.setAttribute("for", "cslFileInput");
+                label.textContent = "Add custom style...";
+                custom.appendChild(label);
+                elements.styleSelectList.appendChild(custom);
+            })
+            .catch(function (err) {
+                console.error(err);
+             });
+    }
+
+    /**
+     * @param {object} stylesInfo
+     */
+    function addStylesToList(stylesInfo) {
+        var found = false;
+        var lastStyle = cslStylesManager.getLastUsedStyle();
+
+        var onStyleSelectOther = function (list, other) {
+            return function (ev) {
+                var tmpEl = list.removeChild(list.children[list.children.length - 3]);
+                var newEl = document.createElement("span");
+                newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                newEl.textContent = tmpEl.textContent;
+                other.appendChild(newEl);
+                newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                tmpEl = other.removeChild(ev.target);
+                newEl = document.createElement("span");
+                newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                newEl.textContent = tmpEl.textContent;
+                list.insertBefore(newEl, list.firstElementChild);
+                newEl.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
+                var event = new Event("click");
+                newEl.dispatchEvent(event);
+                openList(null);
+            }
+        };
+
+        for (var i = 0; i < stylesInfo.length; i++) {
+            var el = document.createElement("span");
+            el.setAttribute("data-value", stylesInfo[i].name);
+            el.textContent = stylesInfo[i].title;
+            if (cslStylesManager.isStyleDefault(stylesInfo[i].name) || stylesInfo[i].name == lastStyle) {
+                if (stylesInfo.length == 1)
+                    elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
+                else
+                    elements.styleSelectList.appendChild(el);
+                el.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
+            } else {
+                elements.styleSelectListOther.appendChild(el);
+                el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+            }
+            if (stylesInfo[i].name == lastStyle) {
+                el.setAttribute("selected", "");
+                selectInput(elements.styleSelect, el, elements.styleSelectList, false);
+            }
+        }
+    }
+
+    function addEventListeners() {
+        elements.fileInput.onchange = function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            //showLoader(true);
+
+            cslStylesManager.addCustomStyle(file).then(function (styleValue) {
+                addStylesToList([styleValue]);
+            }).catch(function (error) {
+                console.error(error);
+                showError(getMessage("Failed to upload file"));
+            }).finally(function () {
+                showLoader(false);
+            });
+        };
+
+        elements.useDesktopApp.onclick = function() {
+            showLoader(true);
+            initSdkApis().finally(function() {
+                showLoader(false);
+            });
+        };
 
         elements.logoutLink.onclick = function (e) {
             sdk.clearSettings();
@@ -135,8 +283,8 @@
 			lastSearch.obj = null;
 			lastSearch.groups = [];
             clearLibrary();
-			var groups = sdk.getUserGropus();
-            loadLibrary(sdk.items(text), true, true, !groups.length, false, true);
+			var groups = sdk.getUserGroups();
+            loadLibrary(sdk.getItems(text), true, true, !groups.length, false, true);
 			if (groups.length) {
 				for (var i = 0; i < groups.length; i++) {
 					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
@@ -207,91 +355,8 @@
 
 		elements.saveAsTextBtn.onclick = function() {
 			showLoader(true);
-			saveAs();
+			citationDocService.saveAsText();
 		}
-
-        selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
-        docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
-
-        fetch("https://www.zotero.org/styles-files/styles.json")
-            .then(function (resp) { return resp.json(); })
-            .then(function (json) {
-                var lastStyle = getLastUsedStyle();
-                var found = false;
-
-                var onStyleSelect = function (f) {
-                    return function (ev) {
-                        var sel = ev.target.getAttribute("data-value");
-                        saveLastUsedStyle(sel);
-                        f(ev);
-                    }
-                };
-
-				var openOtherStyleList = function (list) {
-                    return function (ev) {
-                        elements.styleSelectListOther.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
-                        ev.stopPropagation();
-                        openList(list);
-                    }
-                };
-
-				var onStyleSelectOther = function (list, other) {
-                    return function (ev) {
-                        var tmpEl = list.removeChild(list.children[list.children.length - 2]);
-                        var newEl = document.createElement("span");
-                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
-                        newEl.textContent = tmpEl.textContent;
-                        other.appendChild(newEl);
-                        newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
-                        tmpEl = other.removeChild(ev.target);
-                        newEl = document.createElement("span");
-                        newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
-                        newEl.textContent = tmpEl.textContent;
-                        list.insertBefore(newEl, list.firstElementChild);
-                        newEl.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
-                        var event = new Event("click");
-                        newEl.dispatchEvent(event);
-                        openList(null);
-                    }
-                };
-
-                for (var i = 0; i < json.length; i++) {
-                    if (json[i].dependent != 0) continue;
-
-                    var el = document.createElement("span");
-                    el.setAttribute("data-value", json[i].name);
-                    el.textContent = json[i].title;
-					if (defaultStyles[json[i].title] || json[i].name == lastStyle) {
-                        if (json[i].name == lastStyle)
-                            elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
-                        else
-                            elements.styleSelectList.appendChild(el);
-
-                        el.onclick = onStyleSelect(onClickListElement(elements.styleSelectList, elements.styleSelect));
-                    } else {
-                        elements.styleSelectListOther.appendChild(el);
-                        el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
-                    }
-                    if (json[i].name == lastStyle) {
-                        el.setAttribute("selected", "");
-                        selectInput(elements.styleSelect, el, elements.styleSelectList, false);
-                        found = true;
-                    }
-                }
-
-				var other = document.createElement("span");
-                other.textContent = "More Styles...";
-                elements.styleSelectList.appendChild(other);
-                other.onclick = openOtherStyleList(elements.styleSelectListOther);
-
-                if (!found) {
-                    var first = elements.styleSelectList.children[0];
-                    first.setAttribute("selected", "");
-                    selectInput(elements.styleSelect, first, elements.styleSelectList, false);
-                }
-            })
-            .catch(function (err) { });
-
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
             var filter = filter !== undefined ? filter : input.value.toLowerCase();
@@ -311,15 +376,22 @@
 			showLoader(true);
             getStyle(val)
 			.then(function(style) {
-				bNumFormat = (style.indexOf('citation-format="numeric"') !== -1);
+                selectedStyle = val;
+				
+                onStyleChange();
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
-			.catch(function () { })
+			.catch(function (err) {
+                console.error(err);
+             })
 			.finally(function() {
-				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
+				if (
+                    locales[selectedLocale] &&
+                    cslStylesManager.cached(selectedStyle)
+                )
+                    showLoader(false);
 			});
-            selectedStyle = val;
 			elements.styleSelect.oninput(null, '');
         };
 
@@ -331,24 +403,29 @@
 				if (isClick)
 					updateCslItems(true, true, false, false);
 			})
-			.catch(function () { })
+			.catch(function (error) {
+                console.error(error);
+            })
 			.finally(function() {
-				if (locales[selectedLocale] && styles[selectedStyle]) showLoader(false);
+				if (locales[selectedLocale] && cslStylesManager.cached(selectedStyle)) showLoader(false);
 			});
             selectedLocale = val;
         };
 
-        initSelectBoxes();
         elements.styleSelectList.onopen = function () {
             elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
         }
 
-        if (sdk.hasSettings()) {
-            switchAuthState('main');
-        } else {
-            switchAuthState('config');
-        }
-    };
+        elements.notesStyleRadios.forEach(radio => {
+            radio.addEventListener('change', function(event)  {
+                if (event.target.checked) {
+                    cslStylesManager.saveLastUsedNotesStyle(event.target.value);
+                }
+            });
+        });
+            
+        
+    }
 
     window.Asc.plugin.onThemeChanged = function(theme)
     {
@@ -510,6 +587,21 @@
         };
     };
 
+    function onStyleChange() {
+        let styleFormat = cslStylesManager.getLastUsedFormat();
+
+        bNumFormat = styleFormat == 'numeric';
+        if (["note", "note-ibid"].indexOf(styleFormat) !== -1) {
+            // elements.notesStyleWrapper.classList.remove(displayNoneClass);
+        } else {
+            // elements.notesStyleWrapper.classList.add(displayNoneClass);
+        }
+
+        let notesStyle = cslStylesManager.getLastUsedNotesStyle();
+
+        elements.notesStyleWrapper.querySelector('input[name="notesAs"][value="' + notesStyle + '"]').checked = true;
+    }
+
     function applyTranslations() {
         var elements = document.getElementsByClassName("i18n");
 
@@ -523,14 +615,6 @@
 
     function getMessage(key) {
         return window.Asc.plugin.tr(key);
-    };
-
-    function saveLastUsedStyle(id) {
-        localStorage.setItem("zoteroStyleId", id);
-    };
-
-    function getLastUsedStyle() {
-        return localStorage.getItem("zoteroStyleId");
     };
 
 	function saveLanguage(id) {
@@ -668,6 +752,7 @@
             })
             .catch(function (err) {
 				if (bCount) counter--;
+                console.error(err);
                 displaySearchItems(append, {}, err.message, hideLoader, isGroup, (bCount && !counter) );
             })
             .finally(function () {	
@@ -679,15 +764,12 @@
 
     function getStyle(styleName) {
         return new Promise(function (res, rej) {
-            if (styles[styleName] != null) {
-                res(styles[styleName]);
-            } else {
-                loadingStyle = true;
-                fetch("https://www.zotero.org/styles/" + styleName)
-                    .then(function (resp) { return resp.text(); })
-                    .then(function (text) { styles[styleName] = text; res(text); loadingStyle = false; })
-                    .catch(function (err) { rej(err); loadingStyle = false; });
-            }
+            loadingStyle = true;
+            cslStylesManager.getStyle(styleName)
+                .then(function (text) {
+                    res(text); loadingStyle = false; 
+                })
+                .catch(function (err) { rej(err); loadingStyle = false; });
         });
     };
 
@@ -697,10 +779,7 @@
                 res(locales[langTag]);
             } else {
                 loadingLocale = true;
-				// https://raw.githubusercontent.com/citation-style-language/locales/master/locales-af-ZA.xml
-				// https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
-                fetch("https://raw.githubusercontent.com/citation-style-language/locales/master/locales-" + langTag + ".xml")
-                    .then(function (resp) { return resp.text(); })
+				sdk.getLocale(langTag)
                     .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
                     .catch(function (err) { rej(err); loadingLocale = false; });
             }
@@ -957,7 +1036,7 @@
 
 	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize) {
 		clearTimeout(repeatTimeout);
-        if (loadingStyle || loadingLocale || !styles[selectedStyle] || !locales[selectedLocale]) {
+        if (loadingStyle || loadingLocale || !cslStylesManager.cached(selectedStyle) || !locales[selectedLocale]) {
             repeatTimeout = setTimeout( function() {
 				updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize);
 			}, 100);
@@ -970,7 +1049,7 @@
 				arrItems.push(item);
 		}
 
-		formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return cslItems[id]; } }, styles[selectedStyle], selectedLocale, true);
+		formatter = new CSL.Engine({ retrieveLocale: function (id) { return locales[id]; }, retrieveItem: function (id) { return cslItems[id]; } }, cslStylesManager.cached(selectedStyle), selectedLocale, true);
 		if (arrItems.length) {
 			formatter.updateItems(arrItems);
 		}
@@ -1086,6 +1165,7 @@
 			});
         } catch (e) {
             showError(e);
+            console.error(e);
         }
     };
 
@@ -1163,7 +1243,7 @@
 			}
 		}
 		if (arrUsrItems.length) {
-			sdk.items(null, arrUsrItems)
+			sdk.getItems(null, arrUsrItems)
 			.then(function(res) {
 				var items = ( (res.items ? res.items.items : []) || [] );
 				items.forEach(function(item) {
