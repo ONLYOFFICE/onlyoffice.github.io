@@ -39,6 +39,7 @@ let translateSettingsWindow = null;
 let helperWindow = null;
 
 window.spellchecker = null;
+window.grammar = null;
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -641,6 +642,7 @@ class Provider extends AI.Provider {\n\
 		});
 
 		spellchecker = new Spellchecker();
+		grammar = new GrammarChecker();
 
 		this.attachEditorEvent("onAnnotateText", function(obj) {
 			if (!obj)
@@ -650,7 +652,9 @@ class Provider extends AI.Provider {\n\
 			console.log(JSON.stringify(obj));
 
 			spellchecker.checkParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
+			grammar.checkParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
 		});
+
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
 			if (!obj)
