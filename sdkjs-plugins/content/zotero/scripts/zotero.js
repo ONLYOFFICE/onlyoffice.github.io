@@ -18,7 +18,7 @@
 (function () {
     if (!window.Asc.plugin.zotero) window.Asc.plugin.zotero = {};
 
-    window.Asc.plugin.zotero.isLocalDesktop = (function(){
+    window.Asc.plugin.zotero.isOnlineAvailable = !(function(){
 		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
 			return false;
 		if (window.location && window.location.protocol == "file:")
@@ -27,7 +27,6 @@
 			return true;
 		return false;
 	})();
-    window.Asc.plugin.zotero.isOnlineAvailable = !window.Asc.plugin.zotero.isLocalDesktop;
 
     window.Asc.plugin.zotero.api = function (cfg) {
         var apiKey;
@@ -320,20 +319,31 @@
             return new Promise(function (resolve) {
                 let apiAvailable = {
                     desktop: false,
-                    online: navigator.onLine,
+                    online: false,
                     permissionNeeded: false
                 };
-                getDesktopRequest(desktopApiUrl).then(function (res) {
-                    if (res.responseStatus == 403) {
-                        apiAvailable.permissionNeeded = true;
-                    } 
-                    return res.responseStatus === 200;
-                }).catch(function() {
-                    return false;
-                }).then(function (isDesktopAvailable) {
-                    apiAvailable.desktop = isDesktopAvailable;
-                    window.Asc.plugin.zotero.isLocalDesktop = apiAvailable.desktop;
-                    window.Asc.plugin.zotero.isOnlineAvailable = apiAvailable.online;
+                Promise.all([
+                    fetch('https://api.zotero.org', {
+                        method: 'GET',
+                        cache: 'no-cache'
+                    }).then(function (res) {
+                        return res.status === 200;
+                    }).catch(function() {
+                        return false;
+                    }),
+                    getDesktopRequest(desktopApiUrl).then(function (res) {
+                        if (res.responseStatus == 403) {
+                            apiAvailable.permissionNeeded = true;
+                        } 
+                        return res.responseStatus === 200;
+                    }).catch(function() {
+                        return false;
+                    })
+                ])
+                .then(function (apisAvailable) {
+                    apiAvailable.online = apisAvailable[0];
+                    apiAvailable.desktop = apisAvailable[1];
+                    window.Asc.plugin.zotero.isOnlineAvailable = apisAvailable[0];
                     resolve(apiAvailable);
                 });
             });
