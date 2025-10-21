@@ -149,31 +149,10 @@
 
         window.Asc.plugin.onTranslate = applyTranslations;
 
-
         selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
         docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
-
-        elements.styleSelectList.onopen = function () {
-            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
-        }
     };
 
-    window.Asc.plugin.onThemeChanged = function(theme)
-    {
-        window.Asc.plugin.onThemeChangedBase(theme);
-        var rules = '.selectArrow > span { background-color: ' + window.Asc.plugin.theme['text-normal'] + '}\n';
-        rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
-        rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
-        rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
-        rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
-        rules += 'color : ' + window.Asc.plugin.theme['text-normal'] + '; }\n';
-        rules += '.selectList > span:hover { background-color : ' + window.Asc.plugin.theme['highlight-button-hover'] + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}\n';
-        rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme['highlight-button-pressed'] + ';' + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}';
-        var styleTheme = document.createElement('style');
-        styleTheme.type = 'text/css';
-        styleTheme.innerHTML = rules;
-        document.getElementsByTagName('head')[0].appendChild(styleTheme);
-    };
 
     function initSdkApis() {
         return sdk.isApiAvailable().then(function(availableApis) {
@@ -446,6 +425,10 @@
             selectedLocale = val;
         };
 
+        elements.styleSelectList.onopen = function () {
+            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+        }
+
         elements.notesStyleRadios.forEach(radio => {
             radio.addEventListener('change', function(event)  {
                 if (event.target.checked) {
@@ -456,6 +439,23 @@
             
         
     }
+
+    window.Asc.plugin.onThemeChanged = function(theme)
+    {
+        window.Asc.plugin.onThemeChangedBase(theme);
+        var rules = '.selectArrow > span { background-color: ' + window.Asc.plugin.theme['text-normal'] + '}\n';
+        rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
+        rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
+        rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
+        rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
+        rules += 'color : ' + window.Asc.plugin.theme['text-normal'] + '; }\n';
+        rules += '.selectList > span:hover { background-color : ' + window.Asc.plugin.theme['highlight-button-hover'] + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}\n';
+        rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme['highlight-button-pressed'] + ';' + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}';
+        var styleTheme = document.createElement('style');
+        styleTheme.type = 'text/css';
+        styleTheme.innerHTML = rules;
+        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+    };
 
     var scrollBoxes = [];
     function initScrollBox(holder, thumb, onscroll) {
