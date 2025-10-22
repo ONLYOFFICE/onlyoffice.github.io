@@ -341,6 +341,11 @@
                     })
                 ])
                 .then(function (apisAvailable) {
+                    if (apisAvailable[0] && apisAvailable[1]) {
+                        if (!getSettings()) {
+                            apisAvailable[0] = false;
+                        }
+                    }
                     apiAvailable.online = apisAvailable[0];
                     apiAvailable.desktop = apisAvailable[1];
                     window.Asc.plugin.zotero.isOnlineAvailable = apisAvailable[0];
