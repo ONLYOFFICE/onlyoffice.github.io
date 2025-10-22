@@ -56,92 +56,97 @@ function GrammarChecker()
 				isSendedEndLongAction = true;
 		}
 
-		// 	let argPrompt = `You are a spellcheck corrector. I will provide text that may contain spelling errors. Your task is to identify all spelling mistakes and return ONLY the corrections in the following format:
+		let argPrompt = `You are a grammar correction tool that analyzes text for punctuation and style issues only. You will receive text to analyze and must respond with corrections in a specific JSON format.
 
-		// [[startPos, endPos, "correctedText"], [startPos, endPos, "correctedText"], ...]
+CRITICAL REQUIREMENT - READ CAREFULLY:
+The "sentence" field in your JSON response MUST contain the EXACT text from the original input with NO changes whatsoever - not even fixing capitalization, punctuation, or anything else. Copy it character-by-character exactly as it appears in the original. Only the "suggestion" field should contain corrections.
 
-		// Rules:
-		// - startPos: the character position where the error begins (0-indexed)
-		// - endPos: the character position where the error ends (0-indexed, exclusive)
-		// - correctedText: the correctly spelled replacement text
-		// - Return an empty array [] if there are no errors
-		// - Return an empty array [] if the text is completely unintelligible or a complete mess
-		// - Do not include any explanations, commentary, or additional text
-		// - Only correct spelling errors, not grammar or style
+Your task is to:
+- Check ONLY for punctuation errors (commas, periods, semicolons, colons, apostrophes, quotation marks, etc.) and style issues (sentence structure, word order, grammar, capitalization)
+- Completely ignore spelling errors and typos. Do not mention them, do not flag them, do not include sentences just because they contain spelling errors. Pretend all words are spelled correctly.
+- Return corrections in JSON format only
 
-		// CRITICAL - Position Counting Method:
-		// Before identifying any positions, write out the ENTIRE text with position numbers above or below each character (including spaces) as a mental exercise. Count from 0.
-		// - Count EVERY single character including ALL spaces (even multiple consecutive spaces), punctuation, quotes, and special characters
-		// - Each space counts as ONE character position
-		// - Use 0-based indexing (first character is position 0)
-		// - For EACH misspelled word, count from position 0 again to find its exact location
-		// - The endPos should be the position AFTER the last character of the misspelled word
+What counts as an error:
+- Missing or incorrect punctuation (periods, commas, semicolons, etc.)
+- Run-on sentences needing punctuation
+- Incorrect sentence structure or word order
+- Grammar issues (subject-verb agreement, tense consistency, etc.)
+- Capitalization errors
 
-		// Example with position marking:
-		// Text: "Hi  there"
-		// Positions: H=0, i=1, (space)=2, (space)=3, t=4, h=5, e=6, r=7, e=8
+What does NOT count as an error:
+- Misspelled words or typos
+- Missing letters in words
+- Wrong letters in words
 
-		// MANDATORY VERIFICATION:
-		// Before providing your final answer, use your calculated positions to extract each substring from the original text and verify it matches the misspelled word exactly. If it doesn't match, recount.
-
-		// Example:
-		// Input: "The quck brown fox jumps ovr the lazy dog."
-		// Output: [[4, 8, "quick"], [25, 28, "over"]]
-
-		// Example (no errors):
-		// Input: "The quick brown fox jumps over the lazy dog."
-		// Output: []
-
-		// Example (unintelligible text):
-		// Input: "asdfjkl qwerty zxcvbn mnbvcx"
-		// Output: []
-
-		// Text to check:`;
-
-		let argPrompt = `You are a grammar correction tool. When I provide text, analyze it ONLY for punctuation and style issues. DO NOT check for spelling errors. Respond with corrections in the following JSON format only:
+Response format - return ONLY this JSON array with no additional text:
 [
   {
-    "sentence": "the original sentence with the error",
-    "suggestion": "the corrected version of the sentence",
+    "origin": "relevant snippet of text around the error",
+    "suggestion": "the corrected version of that snippet",
     "description": "brief explanation of the punctuation or style issue",
+   "difference":"difference between origin and suggestion"
     "occurrence": 1,
     "confidence": 0.95
   }
 ]
-Important guidelines:
 
-Return ONLY the JSON array, no additional text
-Check ONLY for punctuation errors (commas, periods, semicolons, colons, apostrophes, quotation marks, etc.) and style issues (sentence structure, word order, grammar)
-CRITICAL: DO NOT flag or correct spelling errors, typos, or misspelled words - ignore them completely and leave them exactly as written
-Each object represents one error found
-Only include sentences that have errors - skip sentences with no errors
-"sentence" field MUST contain the EXACT original text as provided - do NOT modify, correct, or change it in any way
-"suggestion" field contains your corrected version (maintaining all original spelling, even if wrong)
-"occurrence" indicates which occurrence of this sentence if it appears multiple times in the text (1 for first, 2 for second, etc.)
-"confidence" is a value between 0 and 1 indicating how certain you are about the correction (1.0 = completely certain, 0.5 = uncertain)
+Guidelines for each field:
+- "origin": VERY SHORT SNIPPET (3-8 words) of EXACT UNCHANGED original text around the error. Do not fix anything in this field.
+- "suggestion": The corrected version of that same snippet
+- "difference":  The difference between origin and suggestion in html format: the differences wrapped with <strong> tag
+- "description": Brief explanation of the punctuation or style issue
+- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
+- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
+
+Only include sentences that have punctuation or style errors - skip sentences with no errors.
+
 If no errors are found in the entire text, return an empty array: []
-Include the complete sentence containing the error, not just fragments
 
-Example:
-Input: "She dont like apples Me and him goes to school. Its a beautiful day. Its a beautiful day"
+Examples:
+
+Input: "She dont like apples Me and him goes to school however they enjoy learning. Its a beautiful day"
 Output:
 [
   {
-    "sentence": "She dont like apples Me and him goes to school.",
-    "suggestion": "She dont like apples. Me and him goes to school.",
-    "description": "Missing period between two independent sentences",
+    "origin": "apples Me and him",
+    "suggestion": "apples. Me and him",
+    "difference": "apples<strong>.</strong> Me and him"
+    "description": "Missing period between sentences",
     "occurrence": 1,
     "confidence": 1.0
   },
   {
-    "sentence": "Its a beautiful day",
-    "suggestion": "Its a beautiful day.",
+    "origin": "school however they",
+    "suggestion": "school; however, they",
+    "difference": "school<strong>;</strong> however<strong>,</strong> they"
+    "description": "Incorrect punctuation with 'however' - should use semicolon before and comma after",
+    "occurrence": 1,
+    "confidence": 0.95
+  },
+  {
+    "origin": "beautiful day",
+    "suggestion": "beautiful day.",
+    "difference": "beautiful day<strong>.</strong>",
     "description": "Missing period at end of sentence",
-    "occurrence": 2,
+    "occurrence": 1,
     "confidence": 1.0
   }
 ]
-Note: Spelling errors like "dont" and "Its" are intentionally not corrected. The first occurrence of "Its a beautiful day." has no punctuation errors so it's skipped.
+
+Input: "The sun is shining. however, it might rain later."
+Output:
+[
+  {
+    "origin": "shining. however, it",
+    "suggestion": "shining. However, it",
+    "difference": "shining. <strong>H</strong>owever, it",
+    "description": "Sentence should start with a capital letter",
+    "occurrence": 1,
+    "confidence": 1.0
+  }
+]
+
+Remember: Return ONLY the JSON array, no additional text or explanation.
 Text to check:`;
 		argPrompt += text;
 
@@ -165,9 +170,9 @@ Text to check:`;
 		let _t = this;
 		function convertToRanges(text, corrections) 
 		{
-			for (const { sentence, suggestion, description, occurrence, confidence } of corrections) 
+			for (const { origin, suggestion, difference, description, occurrence, confidence } of corrections) 
 			{
-				if (sentence === suggestion || confidence <= 0.7)
+				if (origin === suggestion || confidence <= 0.7)
 					continue;
 				
 				let count = 0;
@@ -175,39 +180,28 @@ Text to check:`;
 
 				while (searchStart < text.length)
 				{
-					const index = text.indexOf(sentence, searchStart);
+					const index = text.indexOf(origin, searchStart);
 					if (index === -1) break;
-
-					const isStartBoundary = index === 0 || isWordBoundary(text[index - 1]);
-					const isEndBoundary = index + sentence.length === text.length ||
-						isWordBoundary(text[index + sentence.length]);
-
-					if (isStartBoundary && isEndBoundary)
+					
+					count++;
+					if (count === occurrence)
 					{
-						count++;
-						if (count === occurrence)
-						{
-							ranges.push({
-								"start": index,
-								"length": sentence.length,
-								"id": rangeId
-							});
-							_t.paragraphs[paraId][rangeId] = {
-								"suggestion" : suggestion,
-								"description" : description
-							};
-							++rangeId;
-							break;
-						}
+						ranges.push({
+							"start": index,
+							"length": origin.length,
+							"id": rangeId
+						});
+						_t.paragraphs[paraId][rangeId] = {
+							"suggestion" : suggestion,
+							"difference" : difference,
+							"description" : description
+						};
+						++rangeId;
+						break;
 					}
 					searchStart = index + 1;
 				}
 			}
-		}
-
-		function isWordBoundary(char)
-		{
-			return /[\s.,!?;:'"()\[\]{}\-–—\/\\]/.test(char);
 		}
 
 		try 
@@ -306,10 +300,17 @@ Text to check:`;
 				Api.ReplaceTextSmart([Asc.scope.text]);
 			});
 			
+			await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			_t.closePopup();
 		});
 		popup.attachEvent("onClose", function() {
 			_t.closePopup();
+		});
+		popup.attachEvent("onUpdateHeight", function(height) {
+			if (height !== variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [popup.id, [variation.size[0], height]]);
+			}
 		});
 		popup.show(variation);
 		this.popup = popup;
