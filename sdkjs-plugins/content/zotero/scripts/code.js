@@ -114,7 +114,6 @@
 		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
 		synchronizeBtn: document.getElementById('synchronizeBtn'),
 		checkOmitAuthor: document.getElementById('omitAuthor'),
-        useDesktopApp: document.getElementById('useDesktopApp'),
         fileInput: document.getElementById('cslFileInput')
     };
 
@@ -271,13 +270,6 @@
                 console.error(error);
                 showError(getMessage("Failed to upload file"));
             }).finally(function () {
-                showLoader(false);
-            });
-        };
-
-        elements.useDesktopApp.onclick = function() {
-            showLoader(true);
-            initSdkApis().finally(function() {
                 showLoader(false);
             });
         };
