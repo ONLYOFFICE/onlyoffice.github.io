@@ -32,6 +32,10 @@
 
 function GrammarChecker()
 {
+	this.popup   = null;
+	this.paraId  = null;
+	this.rangeId = null;
+		
 	this.paragraphs = {};
 
 	this.currParaId  = null;
@@ -189,8 +193,8 @@ Text to check:`;
 								"id": rangeId
 							});
 							_t.paragraphs[paraId][rangeId] = {
-								suggestion : suggestion,
-								description : description
+								"suggestion" : suggestion,
+								"description" : description
 							};
 							++rangeId;
 							break;
@@ -228,15 +232,15 @@ Text to check:`;
 		this.currRangeId = rangeId;
 	};
 
-	this.getCurrentSuggestion = function()
+	this.getSuggestion = function(paraId, rangeId)
 	{
-		if (!this.currParaId 
-			|| !this.currRangeId 
-			|| !this.paragraphs[this.currParaId] 
-			|| !this.paragraphs[this.currParaId][this.currRangeId])
-			return "";
+		if (!this.paraId 
+			|| !this.rangeId 
+			|| !this.paragraphs[this.paraId] 
+			|| !this.paragraphs[this.paraId][this.rangeId])
+			return {"suggestion" : "", "description" : ""};
 
-		return this.paragraphs[this.currParaId][this.currRangeId];
+		return this.paragraphs[this.paraId][this.rangeId];
 	};
 
 	this.getCurrentRange = function()
@@ -246,6 +250,65 @@ Text to check:`;
 			rangeId : this.currRangeId,
 			name : "grammar"
 		}
+	};
+
+	this.onBlur 
+
+	this.onClickAnnotation = function(paragraphId, ranges)
+	{
+		console.log(`Click grammar: para=${paragraphId} ranges=${ranges}`);
+		if (!ranges || !ranges.length)
+			this.closePopup();
+		else
+			this.openPopup(paragraphId, ranges[0]);
+	};
+
+	this.openPopup = async function(paraId, rangeId)
+	{
+		if (this.paraId === paraId && this.rangeId === rangeId)
+			return;
+
+		this.paraId = paraId;
+		this.rangeId = rangeId;
+
+		if (this.popup)
+			this.popup.close();
+
+		let variation = {
+			url : 'grammarPopup.html',
+			isVisual : true,
+			buttons : [],
+			isModal : false,
+			isCustomWindow : true,
+			EditorsSupport : ["word", "slide", "cell", "pdf"],
+			size : [400, 500],
+			isTargeted : true,
+			transparent : true
+		};
+		let _t = this;
+		let popup = new window.Asc.PluginWindow();
+		popup.attachEvent("onWindowReady", function() {
+			popup.command("onUpdateSuggestion", _t.getSuggestion(paraId, rangeId));
+		});
+		popup.attachEvent("onAccept", function() {
+		});
+		popup.attachEvent("onClose", function() {
+			_t.closePopup();
+		});
+		popup.show(variation);
+		this.popup = popup;
+	};
+
+	this.closePopup = function()
+	{
+		if (!this.popup)
+			return;
+
+		this.paraId = null;
+		this.rangeId = null;
+
+		this.popup.close();
+		this.popup = null;
 	};
 
 }

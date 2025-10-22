@@ -38,8 +38,8 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
 
-window.spellchecker = null;
-window.grammar = null;
+let spellchecker = null;
+let grammar = null;
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -64,6 +64,9 @@ window.addSupportAgentMode = function(editorVersion) {
 	var is91 = editorVersion >= 9001000;
 
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
+		if (e.keyCode === 27 && grammar)
+			grammar.closePopup();
+
 		if (e.keyCode === 27 && helperWindow) {
 			helperWindow.close();
 			helperWindow = null;
@@ -648,22 +651,17 @@ class Provider extends AI.Provider {\n\
 			if (!obj)
 				return;
 
-			console.log("PLUGIN-AI");
-			console.log(JSON.stringify(obj));
-
+			// console.log("PLUGIN-AI");
+			// console.log(JSON.stringify(obj));
+			
 			spellchecker.checkParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
 			grammar.checkParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
 		});
 
-
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
 			if (!obj)
 				return;
-
-
-			console.log("onFocus");
-			console.log(JSON.stringify(obj));
-
+			
 			if ("spelling" === obj["name"])
 				spellchecker.setCurrentRange(obj["paragraphId"], obj["rangeId"]);
 		});
@@ -672,12 +670,20 @@ class Provider extends AI.Provider {\n\
 			if (!obj)
 				return;
 
-			console.log("onBlur");
-			console.log(JSON.stringify(obj));
-
 			if ("spelling" === obj["name"])
 				spellchecker.setCurrentRange(null, null);
+			else ("grammar" === obj["name"])
+				grammar.closePopup();
 		});
+
+		this.attachEditorEvent("onClickAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+			if ("grammar" === obj["name"])
+				grammar.onClickAnnotation(obj["paragraphId"], obj["ranges"]);
+		});
+
 	}
 
 	await initWithTranslate(1 << 1);
