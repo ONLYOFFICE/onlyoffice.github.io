@@ -215,13 +215,7 @@
 
 		document.getElementById('acceptBtn').addEventListener('click', function ()
 		{
-			if (window.parent !== window)
-			{
-				window.parent.postMessage({
-					action: 'accept',
-					suggestion: errorData.suggestion
-				}, '*');
-			}
+			window.Asc.plugin.sendToPlugin("onAccept");
 		});
 
 		window.Asc.plugin.init = function() {
@@ -239,12 +233,7 @@
 
 		document.getElementById('closeBtn').addEventListener('click', function ()
 		{
-			if (window.parent !== window)
-			{
-				window.parent.postMessage({
-					action: 'close'
-				}, '*');
-			}
+			window.Asc.plugin.sendToPlugin("onClose");
 		});
 	</script>
 </body>

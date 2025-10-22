@@ -252,8 +252,6 @@ Text to check:`;
 		}
 	};
 
-	this.onBlur 
-
 	this.onClickAnnotation = function(paragraphId, ranges)
 	{
 		console.log(`Click grammar: para=${paragraphId} ranges=${ranges}`);
@@ -290,7 +288,25 @@ Text to check:`;
 		popup.attachEvent("onWindowReady", function() {
 			popup.command("onUpdateSuggestion", _t.getSuggestion(paraId, rangeId));
 		});
-		popup.attachEvent("onAccept", function() {
+		popup.attachEvent("onAccept", async function() {
+			let text = _t.getSuggestion(paraId, rangeId)["suggestion"];
+			
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+			
+			let range = {
+				paragraphId: paraId,
+				rangeId: rangeId,
+				name: "grammar"
+			};
+			
+			await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
+			
+			Asc.scope.text = text;
+			await Asc.Editor.callCommand(function(){
+				Api.ReplaceTextSmart([Asc.scope.text]);
+			});
+			
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		});
 		popup.attachEvent("onClose", function() {
 			_t.closePopup();
@@ -298,14 +314,17 @@ Text to check:`;
 		popup.show(variation);
 		this.popup = popup;
 	};
+	
+	this.resetCurrentRange = function()
+	{
+		this.paraId = null;
+		this.rangeId = null;
+	};
 
 	this.closePopup = function()
 	{
 		if (!this.popup)
 			return;
-
-		this.paraId = null;
-		this.rangeId = null;
 
 		this.popup.close();
 		this.popup = null;
