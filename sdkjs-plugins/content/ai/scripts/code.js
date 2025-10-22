@@ -671,9 +671,14 @@ class Provider extends AI.Provider {\n\
 				return;
 
 			if ("spelling" === obj["name"])
+			{
 				spellchecker.setCurrentRange(null, null);
-			else ("grammar" === obj["name"])
+			}
+			else if ("grammar" === obj["name"]) 
+			{
+				grammar.resetCurrentRange();
 				grammar.closePopup();
+			}
 		});
 
 		this.attachEditorEvent("onClickAnnotation", function(obj) {
