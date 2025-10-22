@@ -168,7 +168,7 @@
 		<div class="popup-body">
 			<div class="suggestion-section">
 				<div class="label">Suggested Correction</div>
-				<div class="suggestion-text" id="suggestion"></div>
+				<div class="suggestion-text" id="difference"></div>
 				<div id="occurrenceBadge"></div>
 			</div>
 
@@ -187,14 +187,15 @@
 	<script>
 		const errorData = {
 			"suggestion": "",
+			"difference": "",
 			"description": "",
 			"occurrence": 1
 		};
 
 		function displayError(error)
 		{
-			document.getElementById('suggestion').textContent = error.suggestion;
-			document.getElementById('description').textContent = error.description;
+			document.getElementById('difference').innerHTML = error.difference;
+			document.getElementById('description').innerHTML = error.description;
 
 			const occurrenceBadge = document.getElementById('occurrenceBadge');
 			if (error.occurrence && error.occurrence > 1)
@@ -221,8 +222,8 @@
 		window.Asc.plugin.init = function() {
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
 			window.Asc.plugin.attachEvent("onUpdateSuggestion", function(obj) {
-				console.log(obj);
 				displayError(obj);
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
 			});
 		};
 

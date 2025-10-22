@@ -148,13 +148,13 @@ function registerButtons(window, undefined)
 
 		button.attachOnClick(async function(data){
 
-			if (!window || !window.spellchecker)
+			if (!spellchecker)
 				return;
 
-			let text = window.spellchecker.getCurrentSuggestion();
+			let text = spellchecker.getCurrentSuggestion();
 
 			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-			await Asc.Editor.callMethod("SelectAnnotationRange", [window.spellchecker.getCurrentRange()]);
+			await Asc.Editor.callMethod("SelectAnnotationRange", [spellchecker.getCurrentRange()]);
 			await Asc.Editor.callMethod("RemoveSelectedContent");
 			await Asc.Editor.callMethod("InputText", [text]);
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
