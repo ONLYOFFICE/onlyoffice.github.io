@@ -18,7 +18,15 @@ function CitationItem(id) {
 }
 
 CitationItem.prototype.fillFromObject = function (itemObject) {
-    if (Object.hasOwnProperty.call(itemObject, "itemData")) {
+    if (
+        Object.hasOwnProperty.call(itemObject, "version") &&
+        Object.hasOwnProperty.call(itemObject, "library")
+    ) {
+        this._itemData._fillFromJson(itemObject.data);
+        if (Object.hasOwnProperty.call(itemObject, "links")) {
+
+        }
+    } else if (Object.hasOwnProperty.call(itemObject, "itemData")) {
         this._itemData.fillFromObject(itemObject.itemData);
     } else {
         this._itemData.fillFromObject(itemObject);
