@@ -283,6 +283,7 @@ function fetchExternal(url, options, isStreaming) {
 					}
 				});
 			} else {
+				let requestUrl = message.url;
 				let request = {
 					method: message.method,
 					headers: message.headers
@@ -301,22 +302,22 @@ function fetchExternal(url, options, isStreaming) {
 							})
 						}
 						if (AI.serverSettings){
-							message.url = AI.serverSettings.proxy;
+							requestUrl = AI.serverSettings.proxy;
 							request["headers"] = {
 								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
 							}
 						} else {
-							message.url = AI.PROXY_URL;
+							requestUrl = AI.PROXY_URL;
 						}
 					}
 				}				
 
 				try {
 					let _fetch = fetch;
-					if (message.url.startsWith("[external]"))
+					if (requestUrl.startsWith("[external]"))
 						_fetch = fetchExternal;
 
-					_fetch(message.url, request)
+					_fetch(requestUrl, request)
 						.then(function(response) {
 							return response.json()
 						})
