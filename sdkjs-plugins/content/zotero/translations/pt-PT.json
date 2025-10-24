@@ -31,5 +31,6 @@
     "Connection to Zotero failed. Make sure Zotero is running": "A ligação com o Zotero falhou. Certifique-se de que o Zotero está em execução.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "A ligação com o Zotero falhou. Active as ligações externas no Zotero: Editar → Definições → Avançadas → Marque \"Permitir que outros aplicativos neste computador se comuniquem com o Zotero\"",
     "Failed to apply this style": "Falha ao aplicar este estilo",
-    "Failed to upload file": "Falha ao carregar o ficheiro"
+    "Failed to upload file": "Falha ao carregar o ficheiro",
+    "Work with local Zotero": "Trabalhar com o Zotero local"
 }
