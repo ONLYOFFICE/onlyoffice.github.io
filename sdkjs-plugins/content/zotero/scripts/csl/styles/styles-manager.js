@@ -1,12 +1,8 @@
 // @ts-check
 
-/**
- * @param {boolean} isOnlineAvailable
- * @param {boolean} isDesktopAvailable
- */
-function CslStylesManager(isOnlineAvailable, isDesktopAvailable) {
-    this._isOnlineAvailable = isOnlineAvailable;
-    this._isDesktopAvailable = isDesktopAvailable;
+function CslStylesManager() {
+    this._isOnlineAvailable = false;
+    this._isDesktopAvailable = false;
 
     this._customStylesStorage = new CslStylesStorage();
 
@@ -284,4 +280,17 @@ CslStylesManager.prototype._saveLastUsedStyle = function (id, content) {
  */
 CslStylesManager.prototype.saveLastUsedNotesStyle = function (notesStyle) {
     localStorage.setItem(this._lastNotesStyleKey, notesStyle);
+};
+
+/**
+ * @param {boolean} isApiAvailable
+ */
+CslStylesManager.prototype.setDesktopApiAvailable = function (isApiAvailable) {
+    this._isDesktopAvailable = isApiAvailable;
+};
+/**
+ * @param {boolean} isApiAvailable
+ */
+CslStylesManager.prototype.setRestApiAvailable = function (isApiAvailable) {
+    this._isOnlineAvailable = isApiAvailable;
 };

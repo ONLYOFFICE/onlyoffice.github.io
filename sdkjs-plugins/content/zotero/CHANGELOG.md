@@ -17,3 +17,7 @@
 ## 1.0.4
 
 * Update jquery version.
+
+## 1.0.5
+
+* Support offline mode.
