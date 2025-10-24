@@ -446,6 +446,43 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "groupID")) {
         this._addCustomProperty("groupID", itemDataObject.groupID);
     }
+
+    if (Object.hasOwnProperty.call(itemDataObject, "creators")) {
+        itemDataObject.creators.forEach(function (creator) {
+            let author = {};
+            if (creator.firstName) {
+                author.given = creator.firstName;
+            }
+            if (creator.lastName) {
+                author.family = creator.lastName;
+            }
+            this._author.push(author);
+        }, this);
+    }
+
+    if (Object.hasOwnProperty.call(itemDataObject, "libraryCatalog")) {
+        this._source = itemDataObject.libraryCatalog;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "place")) {
+        this._eventPlace = itemDataObject.place;
+        this._publisherPlace = itemDataObject.place;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "numberOfVolumes")) {
+        this._numberOfVolumes = itemDataObject.numberOfVolumes;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "extra")) {
+        this._note = itemDataObject.extra;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "rights")) {
+        // ms word compatibility
+        this._license = itemDataObject.rights;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "archiveLocation")) {
+        this._archiveLocation = itemDataObject.archiveLocation;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "abstractNote")) {
+        this._abstract = itemDataObject.abstractNote;
+    }
 };
 
 CitationItemData.prototype.getTitle = function () {
@@ -1294,7 +1331,6 @@ CitationItemData.prototype.toJSON = function () {
         result.journalAbbreviation = this._journalAbbreviation;
     if (this._shortTitle !== undefined) {
         result.shortTitle = this._shortTitle;
-        result["short-title"] = this._shortTitle;
         if (this._titleShort === undefined)
             result["title-short"] = this._shortTitle;
     }
@@ -1435,6 +1471,7 @@ CitationItemData.prototype.toJSON = function () {
     if (this._yearSuffix !== undefined)
         result["year-suffix"] = this._yearSuffix;
     if (Object.keys(this._custom).length !== 0) result.custom = this._custom;
+    if (this._license !== undefined) result.license = this._license;
 
     return result;
 };
