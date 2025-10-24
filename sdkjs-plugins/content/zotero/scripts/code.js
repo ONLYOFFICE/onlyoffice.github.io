@@ -114,8 +114,8 @@
 		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
 		synchronizeBtn: document.getElementById('synchronizeBtn'),
 		checkOmitAuthor: document.getElementById('omitAuthor'),
-        useDesktopApp: document.getElementById('useDesktopApp'),
-        fileInput: document.getElementById('cslFileInput')
+        useDesktopApp: document.getElementById("useDesktopApp"),
+        cslFileInput: document.getElementById("cslFileInput"),
     };
 
     var selectedScroller;
@@ -126,13 +126,13 @@
         setTimeout(function () { searchField.focus(); },100);
         
         sdk = window.Asc.plugin.zotero.api({});
+        cslStylesManager = new CslStylesManager();
+        addEventListeners();
         
         initSdkApis().then(function (availableApis) {
+            showLoader(true);
+            loadStyles();
 
-            cslStylesManager = new CslStylesManager(availableApis.online, availableApis.desktop);
-            if (availableApis.online || availableApis.desktop) {
-                loadStyles();
-            }
             citationDocService = new CitationDocService(
                 citPrefixNew,
                 citSuffixNew,
@@ -141,9 +141,9 @@
                 cslStylesManager.getLastUsedFormat(),
                 cslStylesManager.getLastUsedNotesStyle()
             );
-            
+
             updateCslItems(true, false, false, false);
-            addEventListeners();
+            addStylesEventListeners();
             initSelectBoxes();
         });
 
@@ -155,26 +155,49 @@
 
 
     function initSdkApis() {
-        return sdk.isApiAvailable().then(function(availableApis) {
-            console.log('apis', availableApis);
-            if (availableApis.desktop) {
-                switchAuthState('main');
-            } else if (availableApis.online) {
-                if (sdk.hasSettings()) {
-                    switchAuthState('main');
-                } else {
-                    switchAuthState('config');
+        return new Promise(function (resolve) {
+            let hasFirstAnswer = false;
+            let onlineZoteroElements =
+                document.querySelectorAll(".for-zotero-online");
+                
+            ZoteroApiChecker.runApisChecker(sdk).subscribe(function (
+                /** @type {AvailableApis} */ apis
+            ) {
+                cslStylesManager.setDesktopApiAvailable(apis.desktop);
+                cslStylesManager.setRestApiAvailable(apis.online);
+                if (!hasFirstAnswer) {
+                    console.log("apis", apis);
+                    hasFirstAnswer = true;
+                    if (!apis.desktopVersion) {
+                        elements.useDesktopApp.classList.add("display-none");
+                    }
+                    showLoader(false);
+                    switchAuthState("config");
                 }
-            } else if (availableApis.permissionNeeded) {
-                const errorMessage = 'Connection to Zotero failed. ' + 
-                    'Please enable external connections in Zotero: ' + 
-                    'Edit → Settings → Advanced → Check "Allow other ' + 
-                    'applications on this computer to communicate with Zotero"';
-                showError(getMessage(errorMessage));
+
+                if (apis.online) {
+                    onlineZoteroElements.forEach(function (element) {
+                        element.classList.remove("display-none");
+                    });
             } else {
-                showError(getMessage('Connection to Zotero failed. Make sure Zotero is running.'));
-            }
-            return availableApis;
+                    onlineZoteroElements.forEach(function (element) {
+                        element.classList.add("display-none");
+                    });
+                }
+                if (apis.online && apis.hasKey) {
+                    window.Asc.plugin.zotero.isOnlineAvailable = true;
+                    switchAuthState("main");
+                    resolve(apis);
+                    return;
+                } else if (apis.desktop && apis.hasPermission) {
+                    window.Asc.plugin.zotero.isOnlineAvailable = false;
+                    elements.logoutLink.style.display = "none";
+                    switchAuthState("main");
+                    showError(false);
+                    resolve(apis);
+                    return;
+                }
+            });
         });
     }
 
@@ -260,7 +283,7 @@
     }
 
     function addEventListeners() {
-        elements.fileInput.onchange = function (e) {
+        elements.cslFileInput.onchange = function (e) {
             var file = e.target.files[0];
             if (!file) return;
             //showLoader(true);
@@ -275,10 +298,27 @@
             });
         };
 
-        elements.useDesktopApp.onclick = function() {
-            showLoader(true);
-            initSdkApis().finally(function() {
-                showLoader(false);
+        elements.useDesktopApp.onclick = function () {
+            ZoteroApiChecker.checkStatus(sdk).then(function (/** @type {AvailableApis} */ apis) {
+                if (apis.desktop && apis.hasPermission) {
+                    window.Asc.plugin.zotero.isOnlineAvailable = false;
+                    elements.logoutLink.style.display = "none";
+                    switchAuthState("main");
+                    showError(false);
+                } else if (apis.desktop && !apis.hasPermission) {
+                    const errorMessage =
+                        "Connection to Zotero failed. " +
+                        "Please enable external connections in Zotero: " +
+                        'Edit → Settings → Advanced → Check "Allow other ' +
+                        'applications on this computer to communicate with Zotero"';
+                    showError(getMessage(errorMessage));
+                } else if (!apis.desktop) {
+                    showError(
+                        getMessage(
+                            "Connection to Zotero failed. Make sure Zotero is running."
+                        )
+                    );
+                }
             });
         };
 
@@ -338,8 +378,11 @@
             if (apikey) {
                 sdk.setApiKey(apikey)
                     .then(function () {
+                        ZoteroApiChecker.stopApisChecker();
                         switchAuthState("main");
-                    }).catch(function () {
+                    })
+                    .catch(function (err) {
+                        console.error(err);
                         showError(getMessage("Invalid API key"));
                     });
             }
@@ -369,7 +412,10 @@
 		elements.saveAsTextBtn.onclick = function() {
 			showLoader(true);
 			citationDocService.saveAsText();
-		}
+        }
+	}
+
+    function addStylesEventListeners() {
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
             var filter = filter !== undefined ? filter : input.value.toLowerCase();

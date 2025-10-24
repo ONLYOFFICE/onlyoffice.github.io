@@ -31,5 +31,6 @@
     "Connection to Zotero failed. Make sure Zotero is running": "Zoteroへの接続に失敗しました。Zoteroが起動していることを確認してください。",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Zoteroへの接続に失敗しました。Zoteroで外部接続を有効にしてください：編集 → 設定 → 詳細設定 → \"Allow other applications on this computer to communicate with Zotero\"をチェック",
     "Failed to apply this style": "このスタイルを適用できませんでした",
-    "Failed to upload file": "ファイルのアップロードに失敗しました"
+    "Failed to upload file": "ファイルのアップロードに失敗しました",
+    "Work with local Zotero": "ローカルZoteroとの作業"
 }
