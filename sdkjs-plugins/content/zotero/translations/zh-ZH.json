@@ -31,5 +31,6 @@
     "Connection to Zotero failed. Make sure Zotero is running": "連接 Zotero 失敗。請確保 Zotero 正在運行",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "連接到 Zotero 失敗。請在 Zotero 中啟用外部連線：編輯 → 設定 → 高級 → 檢查 \"允許此電腦上的其他應用程式與 Zotero 通訊\"",
     "Failed to apply this style": "無法套用此樣式",
-    "Failed to upload file": "上傳文件失敗"
+    "Failed to upload file": "上傳文件失敗",
+    "Work with local Zotero": "使用本地 Zotero"
 }
