@@ -54,13 +54,14 @@
         <div id="mainCont" class="flexCol">
 
             <div id="configState" class="display-none">
-                <div><span class="i18n">To use Zotero you should get an API key.</span> <span class="i18n">Navigate to</span> <a class="i18n" target="_blank" href="https://www.zotero.org/settings/keys">Zotero API settings</a>. <span class="i18n">Create and copy API key into the field below.</span></div>
-                <div class="mrtop label">
+                <div class="for-zotero-online"><span class="i18n">To use Zotero you should get an API key.</span> <span class="i18n">Navigate to</span> <a class="i18n" target="_blank" href="https://www.zotero.org/settings/keys">Zotero API settings</a>. <span class="i18n">Create and copy API key into the field below.</span></div>
+                <div class="mrtop label for-zotero-online">
                     <span class="i18n">API Key</span>
                     <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" style="width: 100%;"/>
                 </div>
-                <button id="saveConfigBtn" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Save</button>
+                <button id="saveConfigBtn" class="btn-text-default i18n for-zotero-online" style="margin-top: 16px; width: 100%;">Save</button>
                 <button id="saveAsTextBtn" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Save as text</button>
+                <button id="useDesktopApp" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Work with local Zotero</button>
             </div>
 
             <div id="mainState" class="flexCol flexSize display-none">
@@ -198,6 +199,8 @@
     </div>
 	<div id="div_temp" class="hidden"></div>
 
+    <script src="scripts/zotero-environment.js"></script>
+    <script src="scripts/zotero-api-checker.js"></script>
     <script src="scripts/zotero.js"></script>
     <script src="scripts/code.js"></script>
 </body>

@@ -18,27 +18,12 @@
 (function () {
     if (!window.Asc.plugin.zotero) window.Asc.plugin.zotero = {};
 
-    window.Asc.plugin.zotero.isOnlineAvailable = !(function(){
-		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
-			return false;
-		if (window.location && window.location.protocol == "file:")
-			return true;
-		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
-			return true;
-		return false;
-	})();
+    window.Asc.plugin.zotero.isOnlineAvailable = true;
 
     window.Asc.plugin.zotero.api = function (cfg) {
         var apiKey;
         var userId = 0;
         var userGroups = [];
-        var restApiUrl = "https://api.zotero.org/";
-        var desktopApiUrl = "http://127.0.0.1:23119/api/"; // users/0/items"
-        var baseUrl = cfg.baseUrl || restApiUrl;
-        // https://raw.githubusercontent.com/citation-style-language/locales/master/locales-af-ZA.xml
-        // https://cdn.jsdelivr.net/gh/citation-style-language/locales@master/locales-
-        var LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/";
-        var LOCALES_LOCAL_URL = "./resources/csl/locales/";
 
         function getRequestWithOfflineSupport(url) {
             if (window.Asc.plugin.zotero.isOnlineAvailable) {
@@ -99,9 +84,9 @@
         }
 
         function buildGetRequest(path, query) {
-            var url = new URL(path, baseUrl);
+            var url = new URL(path, zoteroEnvironment.restApiUrl);
             if (!window.Asc.plugin.zotero.isOnlineAvailable) {
-                url = new URL(path, desktopApiUrl);
+                url = new URL(path, zoteroEnvironment.desktopApiUrl);
             }
             for (var key in query) url.searchParams.append(key, query[key]);
             return getRequestWithOfflineSupport(url);
@@ -150,9 +135,9 @@
         }
 
         function getLocale(langTag) {
-            let url = LOCALES_LOCAL_URL;
+            let url = zoteroEnvironment.localesPath;
             if (window.Asc.plugin.zotero.isOnlineAvailable) {
-                url = LOCALES_URL;
+                url = zoteroEnvironment.localesUrl;
             }
             return fetch(url + "locales-" + langTag + ".xml")
                 .then(function (resp) { return resp.text(); });
@@ -312,49 +297,6 @@
             return links;
         }
 
-        /**
-         * @returns {Promise<{desktop: boolean, online: boolean, permissionNeeded: boolean}>}
-         */
-        function isApiAvailable() {
-            return new Promise(function (resolve) {
-                let apiAvailable = {
-                    desktop: false,
-                    online: false,
-                    permissionNeeded: false
-                };
-                Promise.all([
-                    fetch('https://api.zotero.org', {
-                        method: 'GET',
-                        cache: 'no-cache'
-                    }).then(function (res) {
-                        return res.status === 200;
-                    }).catch(function() {
-                        return false;
-                    }),
-                    getDesktopRequest(desktopApiUrl).then(function (res) {
-                        if (res.responseStatus == 403) {
-                            apiAvailable.permissionNeeded = true;
-                        } 
-                        return res.responseStatus === 200;
-                    }).catch(function() {
-                        return false;
-                    })
-                ])
-                .then(function (apisAvailable) {
-                    if (apisAvailable[0] && apisAvailable[1]) {
-                        if (!getSettings()) {
-                            apisAvailable[0] = false;
-                        }
-                    }
-                    apiAvailable.online = apisAvailable[0];
-                    apiAvailable.desktop = apisAvailable[1];
-                    window.Asc.plugin.zotero.isOnlineAvailable = apisAvailable[0];
-                    resolve(apiAvailable);
-                });
-            });
-            
-        }
-
         return {
             getItems: getItems,
 			groups: groups,
@@ -364,7 +306,6 @@
             clearSettings: clearSettings,
             setApiKey: setApiKey,
 			getUserId: getUserId,
-            isApiAvailable: isApiAvailable,
             getLocale: getLocale,
         }
     }
