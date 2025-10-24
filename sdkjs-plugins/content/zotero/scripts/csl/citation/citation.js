@@ -5,6 +5,27 @@
  */
 
 /**
+ * @typedef {Object} CitationJsonData
+ * @property {string} key
+ * @property {string} itemType
+ * @property {string} title
+ * @property {string} url
+ * @property {string} accessDate
+ * @property {string} parentItem
+ * @property {string} linkMode
+ * @property {string} contentType
+ * @property {string} charset
+ * @property {string} filename
+ * @property {string} md5
+ * @property {string} dateAdded
+ * @property {string} dateModified
+ * @property {Array<string>} tags
+ * @property {number} version
+ * @property {number} mtime
+ * @property {Object} relations
+ */
+
+/**
  * @param {number} [itemsStartIndex]
  * @param {string} [citationID]
  */
@@ -38,9 +59,13 @@ CSLCitation.prototype.fillFromObject = function (citationObject) {
         return this._fillFromCitationObject(citationObject);
     } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
         return this._fillFromFlatCitationObject(citationObject);
+    } else if (
+        Object.hasOwnProperty.call(citationObject, "version") &&
+        Object.hasOwnProperty.call(citationObject, "library")
+    ) {
     }
 
-    return this._fillFromFlatCitationItem(citationObject);
+    return this._fillFromCslJson(citationObject);
 };
 
 CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
@@ -56,27 +81,30 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
         return 0;
     }
 
-    var tmpArr = new Array();
-    citationObject.citationItems.forEach(function (item) {
-        if (tmpArr.indexOf(item.id) >= 0) {
-            console.error("CSLCitation.citationItems: duplicate id");
-            return;
-        }
-        tmpArr.push(item.id);
+    const existingIds = this._citationItems.map(function (item) {
+        return item.id;
+    });
 
-        var id = item.id;
+    citationObject.citationItems.forEach(function (item) {
+        const id = item.id;
+        let citationItem;
+        if (existingIds.indexOf(id) >= 0) {
+            citationItem = this._citationItems[existingIds.indexOf(id)];
+        } else {
+            citationItem = new CitationItem(id);
+            existingIds.push(id);
+        }
 
         if (typeof id === "number") {
-            // Word 365
+            // Word 365 or wps
             id = this._extractIdFromWord365Citation(item);
         }
 
-        var citationItem = new CitationItem(id);
         citationItem.fillFromObject(item);
 
         this._addCitationItem(citationItem);
     }, this);
-    return tmpArr.length;
+    return existingIds.length;
 };
 
 /**
@@ -94,23 +122,63 @@ CSLCitation.prototype._fillFromFlatCitationObject = function (citationObject) {
     }
 
     citationObject.citationItems.forEach(function (itemObject) {
-        this._fillFromFlatCitationItem(itemObject);
+        this._fillFromCslJson(itemObject);
     }, this);
 
     return 1;
 };
 
 /**
- * @param {} citationObject
+ * @param {Object} citationObject
  * @returns
  */
-CSLCitation.prototype._fillFromFlatCitationItem = function (itemObject) {
+CSLCitation.prototype._fillFromCslJson = function (itemObject) {
+    console.log("fill from csljson");
+    console.log(itemObject);
     var index = this._itemsStartIndex;
 
-    var id = itemObject.id;
-    var citationItem = new CitationItem(id);
-    citationItem.fillFromObject(itemObject);
+    const id = itemObject.id;
+    let citationItem;
 
+    const existingIds = this._citationItems.map(function (item) {
+        return item.id;
+    });
+    if (existingIds.indexOf(id) >= 0) {
+        citationItem = this._citationItems[existingIds.indexOf(id)];
+    } else {
+        citationItem = new CitationItem(id);
+    }
+
+    citationItem.fillFromObject(itemObject);
+    this._addCitationItem(citationItem);
+
+    return 1;
+};
+
+/**
+ * @param {{key: string, version: number, library: Object, links: Object, meta: Object, data: CitationJsonData}} citationObject
+ * @returns
+ */
+CSLCitation.prototype._fillFromJson = function (itemObject) {
+    console.log("fill from json");
+    console.log(itemObject);
+    var index = this._itemsStartIndex;
+    if (!Object.hasOwnProperty.call(itemObject, "data")) {
+        console.error("Invalid citation object");
+        return 0;
+    }
+
+    const existingIds = this._citationItems.map(function (item) {
+        return item.id;
+    });
+    const id = itemObject.data.id;
+    let citationItem;
+    if (existingIds.indexOf(id) >= 0) {
+        citationItem = this._citationItems[existingIds.indexOf(id)];
+    } else {
+        citationItem = new CitationItem(id);
+    }
+    citationItem.fillFromObject(itemObject.data);
     this._addCitationItem(citationItem);
 
     return 1;
@@ -143,6 +211,13 @@ CSLCitation.prototype.getProperty = function (key) {
 };
 
 CSLCitation.prototype._addCitationItem = function (item) {
+    const existingIds = this._citationItems.map(function (item) {
+        return item.id;
+    });
+    if (existingIds.indexOf(item.id) >= 0) {
+        this._citationItems[existingIds.indexOf(item.id)] = item;
+        return this;
+    }
     this._citationItems.push(item);
     return this;
 };
@@ -211,4 +286,3 @@ CSLCitation.prototype.toJSON = function () {
 
     return result;
 };
-
