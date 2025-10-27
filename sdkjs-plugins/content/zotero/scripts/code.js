@@ -1160,7 +1160,7 @@
 			updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize);
 		
 		if (bPastLink) {
-			formatInsertLink();
+			insertSelectedCitations();
 		}
 	};
 
@@ -1226,7 +1226,7 @@
 		});
 	};
 
-	function formatInsertLink() {
+    function insertSelectedCitations() {
         if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
             return;
@@ -1236,14 +1236,25 @@
             return;
         }
 
-		var bUpdateItems = false;
-        var keys = [];
-        var keysL = [];
         var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
         for (var citationID in selected.items) {
             var item = convertToCSL(selected.items[citationID]);
             cslCitation.fillFromObject(item);
         }
+        
+        return getSelectedInJsonFormat().then(function(items) {
+            items.forEach(function(item) {
+                cslCitation.fillFromObject(item);
+            });
+            return formatInsertLink(cslCitation);
+        });
+    }
+
+	function formatInsertLink(cslCitation) {
+		var bUpdateItems = false;
+        var keys = [];
+        var keysL = [];
+
         cslCitation.getCitationItems().forEach(function(item) {
             if (!CSLCitationStorage.has(item.id)) {
                 bUpdateItems = true;
@@ -1300,6 +1311,61 @@
 		var cslItem = CSLCitationStorage.get(item.id);
         cslItem.fillFromObject(item);
 
+    };
+
+    function getSelectedInJsonFormat() {
+		var arrUsrItems = [];
+		var arrGroupsItems = {};
+        for (var citationID in selected.items) {
+            var item = selected.items[citationID];
+            var userID = item["userID"];
+            var groupID = item["groupID"];
+            if (userID) {
+                arrUsrItems.push(item.id);
+            } else if (groupID) {
+                if (!arrGroupsItems[groupID]) {
+                    arrGroupsItems[groupID] = [];
+                }    
+                arrGroupsItems[groupID].push(item.id);
+            }
+        }
+
+        var promises = [];
+        if (arrUsrItems.length) {
+            promises.push(
+                sdk.getItems(null, arrUsrItems, 'json')
+                    .then(function(res) {
+                        var items = ( res.items || [] );
+                        return items
+                    })
+                .catch(function(err) {
+                    console.error(err);
+                })
+            );
+        }
+
+		for (var groupID in arrGroupsItems) {
+            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
+                promises.push(
+                    sdk.groups(null, groupID, arrGroupsItems[groupID], 'json')
+                    .then(function(res) {
+                        var items = ( res.items || [] );
+                        return items
+                    })
+                    .catch(function(err) {
+                        console.error(err);
+                    })
+                );
+            }
+        }
+
+        return Promise.all(promises).then(function(res) {
+            var items = [];
+            res.forEach(function(resItems) {
+                items = items.concat(resItems);
+            });
+            return items;
+        });
     };
 
 	function synchronizeData() {
