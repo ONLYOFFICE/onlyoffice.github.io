@@ -461,7 +461,7 @@
             elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
         }
 
-        elements.notesStyleRadios.forEach(radio => {
+        elements.notesStyleRadios.forEach(function(radio) {
             radio.addEventListener('change', function(event)  {
                 if (event.target.checked) {
                     cslStylesManager.saveLastUsedNotesStyle(event.target.value);
