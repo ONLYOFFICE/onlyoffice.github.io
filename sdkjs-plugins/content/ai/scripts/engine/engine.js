@@ -597,9 +597,10 @@ function fetchExternal(url, options, isStreaming) {
 				return;
 			}
 
+			let url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models);
 			let headers = AI._getHeaders(provider);
 			requestWrapper({
-				url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models),
+				url : url,
 				headers : headers,
 				method : "GET"
 			}).then(function(data) {
