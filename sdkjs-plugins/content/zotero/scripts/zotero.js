@@ -96,12 +96,14 @@
          * Retrieves items from the Zotero API.
          * @param {string} [search] - Search query.
          * @param {string[]} [itemsID] - IDs of items to retrieve.
+         * @param {string} [format]
          * @returns {Promise<{body: ReadableStream, bodyUsed: boolean, headers: Headers, ok: boolean, redirected: boolean, status: string, statusText: string, type: string, url: string}>}
          */
-        function getItems(search, itemsID) {
+        function getItems(search, itemsID, format) {
             return new Promise(function (resolve, reject) {
+                format = format || "csljson";
 				var props = {
-					format: "csljson"
+					format: format
                 };
 				if (search) {
 					props.q = search;
@@ -116,10 +118,11 @@
             });
         }
 
-		function groups(search, groupId, itemsID) {
+		function groups(search, groupId, itemsID, format) {
             return new Promise(function (resolve, reject) {
+                format = format || "csljson";
 				var props = {
-					format: "csljson"
+					format: format
                 };
 				if (search) {
 					props.q = search;
@@ -269,7 +272,6 @@
 						id: id
                     };
                     if (links.next) {
-                        console.error('next', links.next);
                         obj.next = function () {
                             return new Promise(function (rs, rj) {
                                 parseItemsResponse(getRequest(links.next), rs, rj, id);
