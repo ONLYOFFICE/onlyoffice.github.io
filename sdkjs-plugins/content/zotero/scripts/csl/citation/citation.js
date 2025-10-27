@@ -63,6 +63,7 @@ CSLCitation.prototype.fillFromObject = function (citationObject) {
         Object.hasOwnProperty.call(citationObject, "version") &&
         Object.hasOwnProperty.call(citationObject, "library")
     ) {
+        return this._fillFromJson(citationObject);
     }
 
     return this._fillFromCslJson(citationObject);
@@ -133,8 +134,6 @@ CSLCitation.prototype._fillFromFlatCitationObject = function (citationObject) {
  * @returns
  */
 CSLCitation.prototype._fillFromCslJson = function (itemObject) {
-    console.log("fill from csljson");
-    console.log(itemObject);
     var index = this._itemsStartIndex;
 
     const id = itemObject.id;
@@ -160,8 +159,6 @@ CSLCitation.prototype._fillFromCslJson = function (itemObject) {
  * @returns
  */
 CSLCitation.prototype._fillFromJson = function (itemObject) {
-    console.log("fill from json");
-    console.log(itemObject);
     var index = this._itemsStartIndex;
     if (!Object.hasOwnProperty.call(itemObject, "data")) {
         console.error("Invalid citation object");
@@ -171,14 +168,14 @@ CSLCitation.prototype._fillFromJson = function (itemObject) {
     const existingIds = this._citationItems.map(function (item) {
         return item.id;
     });
-    const id = itemObject.data.id;
+    const id = itemObject.data.key;
     let citationItem;
     if (existingIds.indexOf(id) >= 0) {
         citationItem = this._citationItems[existingIds.indexOf(id)];
     } else {
         citationItem = new CitationItem(id);
     }
-    citationItem.fillFromObject(itemObject.data);
+    citationItem.fillFromObject(itemObject);
     this._addCitationItem(citationItem);
 
     return 1;

@@ -22,9 +22,14 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
         Object.hasOwnProperty.call(itemObject, "version") &&
         Object.hasOwnProperty.call(itemObject, "library")
     ) {
-        this._itemData._fillFromJson(itemObject.data);
+        this._itemData.fillFromObject(itemObject.data);
         if (Object.hasOwnProperty.call(itemObject, "links")) {
-
+            if (Object.hasOwnProperty.call(itemObject.links, "self")) {
+                this.addUri(itemObject.links.self.href);
+            }
+            if (Object.hasOwnProperty.call(itemObject.links, "alternate")) {
+                this.addUri(itemObject.links.alternate.href);
+            }
         }
     } else if (Object.hasOwnProperty.call(itemObject, "itemData")) {
         this._itemData.fillFromObject(itemObject.itemData);
