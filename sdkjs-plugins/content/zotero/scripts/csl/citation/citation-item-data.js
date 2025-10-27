@@ -470,6 +470,18 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "numberOfVolumes")) {
         this._numberOfVolumes = itemDataObject.numberOfVolumes;
     }
+    if (Object.hasOwnProperty.call(itemDataObject, "callNumber")) {
+        this._callNumber = itemDataObject.callNumber;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "seriesNumber")) {
+        this._collectionNumber = itemDataObject.seriesNumber;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "series")) {
+        this._collectionTitle = itemDataObject.series;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "bookTitle")) {
+        this._containerTitle = itemDataObject.bookTitle;
+    }
     if (Object.hasOwnProperty.call(itemDataObject, "extra")) {
         this._note = itemDataObject.extra;
     }
