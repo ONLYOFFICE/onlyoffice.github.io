@@ -87,7 +87,7 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
     });
 
     citationObject.citationItems.forEach(function (item) {
-        const id = item.id;
+        let id = item.id;
         let citationItem;
         if (existingIds.indexOf(id) >= 0) {
             citationItem = this._citationItems[existingIds.indexOf(id)];
