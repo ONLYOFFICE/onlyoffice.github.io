@@ -457,18 +457,18 @@ function onChangeProviderKeyInput() {
 }
 
 function onChangeModelComboBox() {
-	var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
 	if(type == 'add' || !isFirstLoadOfModels)  {
+		var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
 		updateCapabilitiesBtns(modelObj ? modelObj.capabilities : 0);
-	}
-
-	if (modelObj && modelObj.name) {
-		let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
-		let providerName = providerObj ? providerObj.name : providerNameCmbEl.value;
-		if (providerName)
-			nameInputEl.value = providerName + ' [' + modelObj.name + ']';
-		else
-			nameInputEl.value = modelObj.name;
+		
+		if (modelObj && modelObj.name) {
+			let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
+			let providerName = providerObj ? providerObj.name : providerNameCmbEl.value;
+			if (providerName)
+				nameInputEl.value = providerName + ' [' + modelObj.name + ']';
+			else
+				nameInputEl.value = modelObj.name;
+		}
 	}
 }
 
