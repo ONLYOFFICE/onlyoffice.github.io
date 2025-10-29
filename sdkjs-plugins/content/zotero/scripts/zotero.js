@@ -15,18 +15,15 @@
  * limitations under the License.
  *
  */
-(function () {
-    if (!window.Asc.plugin.zotero) window.Asc.plugin.zotero = {};
 
-    window.Asc.plugin.zotero.isOnlineAvailable = true;
-
-    window.Asc.plugin.zotero.api = function (cfg) {
+const ZoteroSdk = function () {
         var apiKey;
         var userId = 0;
         var userGroups = [];
+        var isOnlineAvailable = true;
 
         function getRequestWithOfflineSupport(url) {
-            if (window.Asc.plugin.zotero.isOnlineAvailable) {
+            if (isOnlineAvailable) {
                 return getRequest(url);
             } else {
                 return getDesktopRequest(url.href);
@@ -85,7 +82,7 @@
 
         function buildGetRequest(path, query) {
             var url = new URL(path, zoteroEnvironment.restApiUrl);
-            if (!window.Asc.plugin.zotero.isOnlineAvailable) {
+            if (!isOnlineAvailable) {
                 url = new URL(path, zoteroEnvironment.desktopApiUrl);
             }
             for (var key in query) url.searchParams.append(key, query[key]);
@@ -110,7 +107,7 @@
 				} else if (itemsID) {
 					props.itemKey = itemsID.join(',');
 				}
-                if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                if (isOnlineAvailable) {
                     parseItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
                 } else {
                     parseDesktopItemsResponse(buildGetRequest("users/" + userId + "/items", props), resolve, reject, userId);
@@ -129,7 +126,7 @@
 				} else if (itemsID) {
 					props.itemKey = itemsID.join(',');
 				}
-                if (window.Asc.plugin.zotero.isOnlineAvailable) {
+                if (isOnlineAvailable) {
                     parseItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
                 } else {
                     parseDesktopItemsResponse(buildGetRequest("groups/" + groupId + "/items", props), resolve, reject, groupId);
@@ -139,7 +136,7 @@
 
         function getLocale(langTag) {
             let url = zoteroEnvironment.localesPath;
-            if (window.Asc.plugin.zotero.isOnlineAvailable) {
+            if (isOnlineAvailable) {
                 url = zoteroEnvironment.localesUrl;
             }
             return fetch(url + "locales-" + langTag + ".xml")
@@ -300,6 +297,10 @@
             return links;
         }
 
+        function setIsOnlineAvailable(isOnline) {
+            isOnlineAvailable = isOnline;
+        }
+
         return {
             getItems: getItems,
 			groups: groups,
@@ -310,6 +311,6 @@
             setApiKey: setApiKey,
 			getUserId: getUserId,
             getLocale: getLocale,
+            setIsOnlineAvailable: setIsOnlineAvailable
         }
-    }
-})();
+}

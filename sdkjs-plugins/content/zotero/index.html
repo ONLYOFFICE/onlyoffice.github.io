@@ -21,18 +21,46 @@
         <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="resources/css/plugin_style.css" />
-        <link
-            rel="stylesheet"
-            href="./../v1/plugins.css"
-        />
-        <script
-            type="text/javascript"
-            src="./../v1/plugins.js"
-        ></script>
-        <script
-            type="text/javascript"
-            src="./../v1/plugins-ui.js"
-        ></script>
+        <script>
+            const isDesktop = (function () {
+                if (
+                    window.navigator &&
+                    window.navigator.userAgent
+                        .toLowerCase()
+                        .indexOf("ascdesktopeditor") < 0
+                )
+                    return false;
+                if (window.location && window.location.protocol == "file:") return true;
+                if (
+                    window.document &&
+                    window.document.currentScript &&
+                    0 == window.document.currentScript.src.indexOf("file:///")
+                )
+                    return true;
+                return false;
+            })();
+            const scriptPlugins = document.createElement('script');
+            const scriptPluginsUi = document.createElement('script');
+            const stylePlugins = document.createElement('link');
+            scriptPlugins.type = 'text/javascript';
+            scriptPluginsUi.type = 'text/javascript';
+            stylePlugins.rel = 'stylesheet';
+            if (isDesktop) {
+                scriptPlugins.src = '../v1/plugins.js';
+                scriptPluginsUi.src = '../v1/plugins-ui.js';
+                stylePlugins.href = '../v1/plugins.css';
+            } else {
+                scriptPlugins.src = 'https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js';
+                scriptPluginsUi.src = 'https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js';
+                stylePlugins.href = 'https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css';
+            }
+            scriptPlugins.async = false;
+            scriptPluginsUi.async = false;
+            document.head.appendChild(scriptPlugins);
+            document.head.appendChild(scriptPluginsUi);
+            document.head.appendChild(stylePlugins);
+        </script>
+
         <script src="scripts/thirdparty/fetch.umd.js"></script>
         <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
         <script src="scripts/thirdparty/url-polyfill.min.js"></script>
@@ -48,7 +76,6 @@
         <script src="scripts/csl/styles/storage.js"></script>
 
         <script src="scripts/citation-doc-service.js"></script>
-        
     </head>
     <body id="body" spellcheck="false" class="noselect">
         <div id="loader" class="cssload-container display-none">

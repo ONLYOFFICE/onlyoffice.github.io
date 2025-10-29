@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-(function () {
+window.addEventListener('load', function() {
 	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
@@ -125,7 +125,7 @@
 		showLoader(true);
         setTimeout(function () { searchField.focus(); },100);
         
-        sdk = window.Asc.plugin.zotero.api({});
+        sdk = ZoteroSdk();
         cslStylesManager = new CslStylesManager();
         addEventListeners();
         
@@ -178,18 +178,18 @@
                     onlineZoteroElements.forEach(function (element) {
                         element.classList.remove("display-none");
                     });
-            } else {
+                } else {
                     onlineZoteroElements.forEach(function (element) {
                         element.classList.add("display-none");
                     });
                 }
                 if (apis.online && apis.hasKey) {
-                    window.Asc.plugin.zotero.isOnlineAvailable = true;
+                    sdk.setIsOnlineAvailable(true);
                     switchAuthState("main");
                     resolve(apis);
                     return;
                 } else if (apis.desktop && apis.hasPermission) {
-                    window.Asc.plugin.zotero.isOnlineAvailable = false;
+                    sdk.setIsOnlineAvailable(false);
                     elements.logoutLink.style.display = "none";
                     switchAuthState("main");
                     showError(false);
@@ -300,7 +300,7 @@
         elements.useDesktopApp.onclick = function () {
             ZoteroApiChecker.checkStatus(sdk).then(function (/** @type {AvailableApis} */ apis) {
                 if (apis.desktop && apis.hasPermission) {
-                    window.Asc.plugin.zotero.isOnlineAvailable = false;
+                    sdk.setIsOnlineAvailable(false);
                     elements.logoutLink.style.display = "none";
                     switchAuthState("main");
                     showError(false);
@@ -1461,4 +1461,4 @@
 		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
 		updateFormatter(true, false, false, true);
 	};
-})();
+});
