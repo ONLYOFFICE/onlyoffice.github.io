@@ -310,8 +310,8 @@ function fetchExternal(url, options, isStreaming) {
 							requestUrl = AI.PROXY_URL;
 						}
 					}
-				}				
-
+				}
+				
 				try {
 					let _fetch = fetch;
 					if (requestUrl.startsWith("[external]"))
@@ -319,7 +319,14 @@ function fetchExternal(url, options, isStreaming) {
 
 					_fetch(requestUrl, request)
 						.then(function(response) {
-							return response.json()
+							return response.text();
+						})
+						.then(function(text) {
+							try {
+								return JSON.parse(text)
+    						} catch {
+      							return { error : text };
+    						}
 						})
 						.then(function(data) {
 							if (data.error)
