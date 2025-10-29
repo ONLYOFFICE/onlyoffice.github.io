@@ -32,5 +32,6 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Zoteroへの接続に失敗しました。Zoteroで外部接続を有効にしてください：編集 → 設定 → 詳細設定 → \"Allow other applications on this computer to communicate with Zotero\"をチェック",
     "Failed to apply this style": "このスタイルを適用できませんでした",
     "Failed to upload file": "ファイルのアップロードに失敗しました",
-    "Work with local Zotero": "ローカルZoteroとの作業"
+    "Work with local Zotero": "ローカルZoteroとの作業",
+    "The current bibliographic style does not describe the bibliography": "現在の文献引用スタイルは、文献引用を記述していません"
 }

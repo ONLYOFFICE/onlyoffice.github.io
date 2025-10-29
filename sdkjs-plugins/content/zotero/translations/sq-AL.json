@@ -32,5 +32,6 @@
 	"Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Kontakti me Zotero ka qashtuar. Ju lutem aktivizoni lidhjen ekstern ne Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",
 	"Failed to apply this style": "Zbatimi i këtij stili dështoi",
 	"Failed to upload file": "Ngarkimi i skedarit dështoi",
-    "Work with local Zotero": "Zgjedhni Zotero local"
+    "Work with local Zotero": "Zgjedhni Zotero local",
+    "The current bibliographic style does not describe the bibliography": "Stili bibliografik aktual nuk shfaqet bibliografia"
 }

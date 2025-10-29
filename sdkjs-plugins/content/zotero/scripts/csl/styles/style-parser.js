@@ -11,7 +11,7 @@
  */
 
 /**
- * @typedef {"note"|"numeric"|"author"|"author-date"|"label"|"note-ibid"} StyleFormat
+ * @typedef {"note"|"numeric"|"author"|"author-date"|"label"} StyleFormat
  */
 
 const CslStylesParser = {
@@ -81,7 +81,6 @@ const CslStylesParser = {
         if (!type) throw new Error("Citation format not found");
         switch (type) {
             case "note":
-            case "note-ibid":
             case "numeric":
             case "author":
             case "author-date":
@@ -90,5 +89,12 @@ const CslStylesParser = {
         }
 
         throw new Error("Invalid citation format");
+    },
+    /**
+     * @param {string} styleContent
+     * @returns {boolean}
+     */
+    isStyleContainBibliography: function (styleContent) {
+        return styleContent.indexOf("<bibliography") > -1;
     },
 };

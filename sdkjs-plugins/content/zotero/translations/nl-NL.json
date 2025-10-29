@@ -32,5 +32,6 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Verbinding met Zotero mislukt. Schakel externe verbindingen in Zotero in: Bewerken → Instellingen → Geavanceerd → Vink \"Allow other applications on this computer to communicate with Zotero\" aan",
     "Failed to apply this style": "Het is niet gelukt deze stijl toe te passen",
     "Failed to upload file": "Het uploaden van het bestand is mislukt",
-    "Work with local Zotero": "Werk met lokale Zotero"
+    "Work with local Zotero": "Werk met lokale Zotero",
+    "The current bibliographic style does not describe the bibliography": "De huidige bibliografische stijl beschrijft de bibliografie niet"
 }

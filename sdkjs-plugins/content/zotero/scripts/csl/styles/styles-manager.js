@@ -14,6 +14,7 @@ function CslStylesManager() {
     this._lastStyleKey = "zoteroStyleId";
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
+    this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
 
     this._defaultStyles = [
         "american-medical-association",
@@ -69,7 +70,6 @@ CslStylesManager.prototype.getLastUsedFormat = function () {
     let lastUsedFormat = localStorage.getItem(this._lastFormatKey);
     switch (lastUsedFormat) {
         case "note":
-        case "note-ibid":
         case "numeric":
         case "author":
         case "author-date":
@@ -91,7 +91,7 @@ CslStylesManager.prototype.getLastUsedNotesStyle = function () {
 };
 
 /**
- * @returns {string}
+ * @returns {string} - style id
  */
 CslStylesManager.prototype.getLastUsedStyle = function () {
     let lastUsedStyle = localStorage.getItem(this._lastStyleKey);
@@ -213,8 +213,18 @@ CslStylesManager.prototype.cached = function (id) {
 };
 
 /**
+ * @returns {boolean}
+ */
+CslStylesManager.prototype.isLastUsedStyleContainBibliography = function () {
+    let containBibliography = localStorage.getItem(
+        this._lastUsedStyleContainBibliographyKey
+    );
+    return containBibliography !== "false";
+};
+
+/**
  * @param {string} styleName
- * @returns
+ * @returns {boolean}
  */
 CslStylesManager.prototype.isStyleDefault = function (styleName) {
     return this._defaultStyles.indexOf(styleName) >= 0;
@@ -222,14 +232,14 @@ CslStylesManager.prototype.isStyleDefault = function (styleName) {
 
 /**
  * @param {string} content
- * @returns
+ * @returns {boolean}
  */
 CslStylesManager.prototype._isValidCSL = function (content) {
     return (
-        content.includes("<?xml") &&
-        content.includes("<style") &&
-        content.includes("citation") &&
-        content.includes("bibliography")
+        content.indexOf("<?xml") > -1 &&
+        content.indexOf("<style") > -1 &&
+        content.indexOf("<macro") > -1 &&
+        content.indexOf("citation") > -1
     );
 };
 
@@ -273,6 +283,12 @@ CslStylesManager.prototype._saveLastUsedStyle = function (id, content) {
     localStorage.setItem(this._lastStyleKey, id);
     const currentStyleFormat = CslStylesParser.getCitationFormat(content);
     localStorage.setItem(this._lastFormatKey, currentStyleFormat);
+    const containBibliography =
+        CslStylesParser.isStyleContainBibliography(content);
+    localStorage.setItem(
+        this._lastUsedStyleContainBibliographyKey,
+        containBibliography.toString()
+    );
 };
 
 /**
