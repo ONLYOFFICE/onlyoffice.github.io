@@ -32,5 +32,6 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Не удалось установить соединение с Zotero. Пожалуйста, включите внешние соединения в Zotero. Сделайте это в разделе \"Правка → Настройки → Расширенные\": включите галочку \"Allow other applications on this computer to communicate with Zotero\"",
     "Failed to apply this style": "Не удалось применить этот стиль",
     "Failed to upload file": "Не удалось загрузить файл",
-    "Work with local Zotero": "Работа с локальным Zotero"
+    "Work with local Zotero": "Работа с локальным Zotero",
+    "The current bibliographic style does not describe the bibliography": "Текущий стиль не описывает библиографию"
 }

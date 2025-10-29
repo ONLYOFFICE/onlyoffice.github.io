@@ -67,7 +67,7 @@ CitationDocService.prototype.addCitation = function (text, value) {
         Value: this._citPrefix + " " + this._citSuffix + value,
         Content: text,
     };
-    if (["note", "note-ibid"].indexOf(this._styleFormat) !== -1) {
+    if ("note" === this._styleFormat) {
         switch (this._notesStyle) {
             case "footnotes":
                 window.Asc.plugin.callCommand(function () {

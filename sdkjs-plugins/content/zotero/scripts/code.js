@@ -166,7 +166,6 @@
                 cslStylesManager.setDesktopApiAvailable(apis.desktop);
                 cslStylesManager.setRestApiAvailable(apis.online);
                 if (!hasFirstAnswer) {
-                    console.log("apis", apis);
                     hasFirstAnswer = true;
                     if (!apis.desktopVersion) {
                         elements.useDesktopApp.classList.add("display-none");
@@ -650,7 +649,7 @@
         let styleFormat = cslStylesManager.getLastUsedFormat();
         citationDocService.setStyleFormat(styleFormat);
         bNumFormat = styleFormat == 'numeric';
-        if (["note", "note-ibid"].indexOf(styleFormat) !== -1) {
+        if ("note" === styleFormat) {
             elements.notesStyleWrapper.classList.remove(displayNoneClass);
         } else {
             elements.notesStyleWrapper.classList.add(displayNoneClass);
@@ -827,7 +826,8 @@
             loadingStyle = true;
             cslStylesManager.getStyle(styleName)
                 .then(function (text) {
-                    res(text); loadingStyle = false; 
+                    res(text); 
+                    loadingStyle = false;
                 })
                 .catch(function (err) { rej(err); loadingStyle = false; });
         });
@@ -1043,7 +1043,7 @@
             showError(getMessage("Language is not selected"));
             return;
         }
-		citationDocService.getAllAddinFields().then(function(arrFields) {
+		return citationDocService.getAllAddinFields().then(function(arrFields) {
 			if (!arrFields.length) {
 				showLoader(false);
                 return;
@@ -1067,10 +1067,17 @@
                 }
                 elements.tempDiv.innerHTML = bibItems.join('');
             } catch (e) {
-                console.error(e);
-                showError(getMessage("Failed to apply this style."));
-                showLoader(false);
-                return;
+                if (
+                    false === cslStylesManager.isLastUsedStyleContainBibliography()
+                ) {
+                    // style does not describe the bibliography
+                    elements.tempDiv.textContent = "";
+                } else {
+                    console.error(e);
+                    showError(getMessage("Failed to apply this style."));
+                    showLoader(false);
+                    return;
+                }
             }
             
             var bibliography = elements.tempDiv.innerText;
@@ -1110,12 +1117,16 @@
             if (bibField) {
                 updatedFields.push(bibField);
             } else if (bPastBib) {
-                citationDocService.addBibliography(bibliography, bibFieldValue)
-                    .then(function() {
-                        if (!updatedFields.length) {
-                            showLoader(false);
-                        }
-                    });
+                if (cslStylesManager.isLastUsedStyleContainBibliography()) {
+                    citationDocService.addBibliography(bibliography, bibFieldValue)
+                        .then(function() {
+                            if (!updatedFields.length) {
+                                showLoader(false);
+                            }
+                        });
+                } else {
+                    showError(getMessage("The current bibliographic style does not describe the bibliography"));
+                }
             }
             
             if (updatedFields.length) {
@@ -1213,13 +1224,17 @@
                     });
 				}
 			} else if (bUpdadeFormatter && bPastBib) {
-
-                citationDocService.addBibliography(
-                    getMessage(bibPlaceholder),
-                    bibFieldValue
-                ).then(function() {
-                    showLoader(false);
-                });
+                if (cslStylesManager.isLastUsedStyleContainBibliography()) {
+                    citationDocService.addBibliography(
+                        getMessage(bibPlaceholder),
+                        bibFieldValue
+                    ).then(function() {
+                        showLoader(false);
+                    });
+                } else {
+                    showError(getMessage("The current bibliographic style does not describe the bibliography"));
+                }
+                
 			}
 			if (bUpdadeFormatter)
 				updateFormatter(bUpadteAll, bPastBib, bPastLink, false);

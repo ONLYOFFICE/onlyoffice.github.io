@@ -32,5 +32,6 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Pripojenie k Zotero zlyhalo. Přidejte externí pripojenie v Zotero. Zjistejte, aby Zotero bezočně spolčuje",
 	"Failed to apply this style": "Nepodarilo se aplikovat tento styl",
 	"Failed to upload file": "Nepodarilo se nahrát soubor",
-    "Work with local Zotero": "Pracovat s lokalní Zotero"
+    "Work with local Zotero": "Pracovat s lokalní Zotero",
+    "The current bibliographic style does not describe the bibliography": "Aktuální bibliografický styl neopisuje bibliografii"
 }
