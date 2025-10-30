@@ -2,8 +2,46 @@
 import os
 import shutil
 import json
+import time
 from pathlib import Path
 from fnmatch import fnmatch
+
+def parse_arguments():
+  parser = argparse.ArgumentParser(description='Pack plugins')
+  parser.add_argument('--old-mode', action='store_true', 
+                      help='The old way: put the result in the root of each plugin\'s folder.')
+  return parser.parse_args()
+
+def safe_rename(src, dst, max_retries=3, delay=1):
+  for attempt in range(max_retries):
+    try:
+      Path(src).rename(dst)
+      return True
+    except PermissionError:
+      if attempt < max_retries - 1:
+        print(f"  File busy, retrying in {delay} second(s)...")
+        time.sleep(delay)
+      else:
+        print(f"  Failed to rename after {max_retries} attempts")
+        return False
+  return False
+
+def safe_rmtree(path, max_retries=3, delay=1):
+  if not os.path.exists(path):
+    return
+      
+  for attempt in range(max_retries):
+    try:
+      shutil.rmtree(path)
+      return True
+    except PermissionError:
+      if attempt < max_retries - 1:
+        print(f"  Directory busy, retrying in {delay} second(s)...")
+        time.sleep(delay)
+      else:
+        print(f"  Failed to remove directory after {max_retries} attempts: {path}")
+        return False
+  return False
 
 def pack_plugins():
   content_dir = "sdkjs-plugins/content/"
@@ -51,15 +89,17 @@ def pack_plugins():
         
         # Rename to .plugin extension
         plugin_file_path = Path(zip_path).with_suffix(".plugin")
-        Path(zip_path).rename(plugin_file_path)
         
-        print(f"Created: {plugin_name}")
-          
+        if safe_rename(zip_path, plugin_file_path):
+            print(f"✅ Created: {plugin_name}")
+        else:
+            print(f"❌ Failed to create: {plugin_name}")
+              
       except Exception as e:
         print(f"[{plugin_name}] Error: {e}")
       finally:
         # Clean up temporary directory
-        shutil.rmtree(temp_dir, ignore_errors=True)
+        safe_rmtree(temp_dir)
     else:
       zip_file = os.path.join(artifacts_dir, f"{plugin_name}")
       
@@ -67,9 +107,10 @@ def pack_plugins():
       zip_path = shutil.make_archive(zip_file, 'zip', plugin_path)
       # Rename to plugin
       plugin_path = Path(zip_path).with_suffix(".plugin")
-      Path(zip_path).rename(plugin_path)
-
-      print(f"Created: {plugin_name}")
+      if safe_rename(zip_path, plugin_path):
+        print(f"✅ Created: {plugin_name}")
+      else:
+        print(f"❌ Failed to create: {plugin_name}")
   
   return
 
