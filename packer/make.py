@@ -66,7 +66,7 @@ def move_file(src, dst):
 def pack_plugins():
     content_dir = "../sdkjs-plugins/content/"
     
-    if not is_exist(content_dir):
+    if not os.path.exists(content_dir):
         print(f"Directory {content_dir} does not exist")
         return
 
@@ -80,7 +80,7 @@ def pack_plugins():
         plugin_deploy_src_path = os.path.join(plugin_deploy_path, plugin_name)
 
         # Remove old deploy folder
-        if is_exist(plugin_deploy_path):
+        if os.path.exists(plugin_deploy_path):
             delete_dir(plugin_deploy_path)
 
         copy_dir(plugin_path, plugin_deploy_src_path)
