@@ -45,6 +45,21 @@ def delete_dir(path, max_retries=3, delay=1):
         return False
   return False
 
+def get_plugin_excludes(plugin_path):
+    plugin_config_path = os.path.join(plugin_path, ".dev", "config.json")
+    excludes = []
+    
+    if os.path.exists(plugin_config_path):
+        try:
+            with open(plugin_config_path, 'r') as f:
+                config = json.load(f)
+                excludes = config.get("excludes", [])
+                print(f"[{os.path.basename(plugin_path)}] Loaded exclude patterns: {excludes}")
+        except (json.JSONDecodeError, Exception) as e:
+            print(f"[{os.path.basename(plugin_path)}] Error reading config: {e}")
+    
+    return excludes
+
 def pack_plugins():
   content_dir = "sdkjs-plugins/content/"
   
@@ -62,21 +77,11 @@ def pack_plugins():
       continue
             
     # Load exclusion configuration for this specific plugin
-    plugin_config_path = os.path.join(plugin_path, ".dev", "config.json")
-    excludes = []
+    excludes = get_plugin_excludes(plugin_path)
 
-    if os.path.exists(plugin_config_path):
-      try:
-        with open(plugin_config_path, 'r') as f:
-          config = json.load(f)
-          excludes = config.get("excludes", [])
-          print(f"[{plugin_name}] Loaded exclude patterns: {excludes}")
-      except json.JSONDecodeError as e:
-        print(f"[{plugin_name}] Error parsing config.json: {e}")
-        continue
-        
+    if excludes:
       # Create temporary directory for filtered files
-      temp_dir = os.path.join(artifacts_dir, f"temp_{plugin_name}")
+      temp_dir = os.path.join(destination_path, f"temp_{plugin_name}")
       os.makedirs(temp_dir, exist_ok=True)
 
       try:
@@ -89,7 +94,7 @@ def pack_plugins():
           continue
         
         # Create zip archive from filtered directory
-        zip_file = os.path.join(artifacts_dir, f"{plugin_name}")
+        zip_file = os.path.join(destination_path, f"{plugin_name}")
         zip_path = shutil.make_archive(zip_file, 'zip', temp_dir)
         
         # Rename to .plugin extension
@@ -111,8 +116,8 @@ def pack_plugins():
       # Create zip
       zip_path = shutil.make_archive(zip_file, 'zip', plugin_path)
       # Rename to plugin
-      plugin_path = Path(zip_path).with_suffix(".plugin")
-      if safe_rename(zip_path, plugin_path):
+      plugin_file_path = Path(zip_path).with_suffix(".plugin")
+      if safe_rename(zip_path, plugin_file_path):
         print(f"✅ Created: {plugin_name}")
       else:
         print(f"❌ Failed to create: {plugin_name}")
@@ -157,7 +162,7 @@ def should_exclude(path, base_dir, excludes):
   return False
 
 def pack_plugins_old():
-    content_dir = "../sdkjs-plugins/content/"
+    content_dir = "sdkjs-plugins/content/"
     
     if not os.path.exists(content_dir):
         print(f"Directory {content_dir} does not exist")
@@ -169,42 +174,64 @@ def pack_plugins_old():
         if not os.path.isdir(plugin_path):
             continue
             
+        excludes = get_plugin_excludes(plugin_path)
+            
         destination_path = os.path.join(plugin_path, "deploy")
-        zip_file = os.path.join(destination_path, f"{plugin_name}")
-
+        temp_src_path = os.path.join(destination_path, plugin_name) if excludes else None
         
         # Remove old deploy folder
         if os.path.exists(destination_path):
             delete_dir(destination_path)
 
-        copy_dir(plugin_path, zip_file)
+        if excludes:
+            os.makedirs(destination_path, exist_ok=True)
+            copy_filtered_files(plugin_path, temp_src_path, excludes)
+            
+            if not any(os.scandir(temp_src_path)):
+                print(f"[{plugin_name}] No files to pack after filtering")
+                delete_dir(destination_path)
+                continue
+        else:
+            temp_src_path = os.path.join(destination_path, plugin_name)
+            copy_dir(plugin_path, temp_src_path)
         
         # Create .zip
         zip_file_path = os.path.join(destination_path, f"{plugin_name}.zip")
-        archive_folder(zip_file + "/*", zip_file_path)
+        archive_folder((temp_src_path + "/*") if excludes else temp_src_path, zip_file_path, excludes)
         
         # Rename to .plugin
         plugin_file_path = os.path.join(destination_path, f"{plugin_name}.plugin")
         move_file(zip_file_path, plugin_file_path)
         
         # Remove temp folder
-        delete_dir(zip_file)
+        if temp_src_path and os.path.exists(temp_src_path):
+            delete_dir(temp_src_path)
         
-        print(f"Processed plugin: {plugin_name}")
+        print(f"✅ Processed plugin: {plugin_name}")
 
 def copy_dir(src, dst):
     if os.path.exists(dst):
         delete_dir(dst)
     shutil.copytree(src, dst)
 
-def archive_folder(source_pattern, zip_path):
+def archive_folder(source_pattern, zip_path, excludes=None):
+    if excludes is None:
+        excludes = []
+        
     source_dir = source_pattern.rstrip('/*')
     os.makedirs(os.path.dirname(zip_path), exist_ok=True)
     
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for root, dirs, files in os.walk(source_dir):
+            if excludes:
+                dirs[:] = [d for d in dirs if not should_exclude(os.path.join(root, d), source_dir, excludes)]
+            
             for file in files:
                 file_path = os.path.join(root, file)
+                relative_path = os.path.relpath(file_path, source_dir)
+
+                if excludes and should_exclude(relative_path, source_dir, excludes):
+                    continue
                 
                 if root == source_dir:
                     arcname = file
