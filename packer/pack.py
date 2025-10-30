@@ -26,7 +26,7 @@ def safe_rename(src, dst, max_retries=3, delay=1):
         return False
   return False
 
-def safe_rmtree(path, max_retries=3, delay=1):
+def delete_dir(path, max_retries=3, delay=1):
   if not os.path.exists(path):
     return
       
@@ -36,10 +36,10 @@ def safe_rmtree(path, max_retries=3, delay=1):
       return True
     except PermissionError:
       if attempt < max_retries - 1:
-        print(f"  Directory busy, retrying in {delay} second(s)...")
+        print(f"Attempt {attempt + 1}: File in use... {path}")
         time.sleep(delay)
       else:
-        print(f"  Failed to remove directory after {max_retries} attempts: {path}")
+        print(f"Failed to delete {path}")
         return False
   return False
 
@@ -50,12 +50,15 @@ def pack_plugins():
     print(f"Content directory {content_dir} does not exist")
     return
   
-  artifacts_dir = f"artifacts"
-  os.makedirs(artifacts_dir, exist_ok=True)
+  destination_path = f"artifacts"
+  os.makedirs(destination_path, exist_ok=True)
   
   for plugin_name in os.listdir(content_dir):
     plugin_path = os.path.join(content_dir, plugin_name)
 
+    if not os.path.isdir(plugin_path):
+      continue
+            
     # Load exclusion configuration for this specific plugin
     plugin_config_path = os.path.join(plugin_path, ".dev", "config.json")
     excludes = []
@@ -99,9 +102,9 @@ def pack_plugins():
         print(f"[{plugin_name}] Error: {e}")
       finally:
         # Clean up temporary directory
-        safe_rmtree(temp_dir)
+        delete_dir(temp_dir)
     else:
-      zip_file = os.path.join(artifacts_dir, f"{plugin_name}")
+      zip_file = os.path.join(destination_path, f"{plugin_name}")
       
       # Create zip
       zip_path = shutil.make_archive(zip_file, 'zip', plugin_path)

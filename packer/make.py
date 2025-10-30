@@ -5,28 +5,22 @@ import shutil
 import time
 import zipfile
 
-def is_exist(path):
-    return os.path.exists(path)
-
-def delete_dir(path, max_retries=3):
-    if not os.path.exists(path):
-        return
-        
-    for attempt in range(max_retries):
-        try:
-            shutil.rmtree(path)
-            break
-        except PermissionError as e:
-            if attempt < max_retries - 1:
-                print(f"Attempt {attempt + 1}: File in use... {path}")
-                time.sleep(1)  # Wait before retry (1 second)
-            else:
-                print(f"Failed to delete {path}: {e}")
-                # Try alternative method
-                try:
-                    os.system(f'rmdir /S /Q "{path}"')  # For Windows
-                except:
-                    pass
+def delete_dir(path, max_retries=3, delay=1):
+  if not os.path.exists(path):
+    return
+      
+  for attempt in range(max_retries):
+    try:
+      shutil.rmtree(path)
+      return True
+    except PermissionError:
+      if attempt < max_retries - 1:
+        print(f"Attempt {attempt + 1}: File in use... {path}")
+        time.sleep(delay)
+      else:
+        print(f"Failed to delete {path}")
+        return False
+  return False
 
 def copy_dir(src, dst):
     if os.path.exists(dst):
@@ -76,25 +70,26 @@ def pack_plugins():
         if not os.path.isdir(plugin_path):
             continue
             
-        plugin_deploy_path = os.path.join(plugin_path, "deploy")
-        plugin_deploy_src_path = os.path.join(plugin_deploy_path, plugin_name)
+        destination_path = os.path.join(plugin_path, "deploy")
+        zip_file = os.path.join(destination_path, f"{plugin_name}")
 
+        
         # Remove old deploy folder
-        if os.path.exists(plugin_deploy_path):
-            delete_dir(plugin_deploy_path)
+        if os.path.exists(destination_path):
+            delete_dir(destination_path)
 
-        copy_dir(plugin_path, plugin_deploy_src_path)
+        copy_dir(plugin_path, zip_file)
         
         # Create .zip
-        zip_file_path = os.path.join(plugin_deploy_path, f"{plugin_name}.zip")
-        archive_folder(plugin_deploy_src_path + "/*", zip_file_path)
+        zip_file_path = os.path.join(destination_path, f"{plugin_name}.zip")
+        archive_folder(zip_file + "/*", zip_file_path)
         
         # Rename to .plugin
-        plugin_file_path = os.path.join(plugin_deploy_path, f"{plugin_name}.plugin")
+        plugin_file_path = os.path.join(destination_path, f"{plugin_name}.plugin")
         move_file(zip_file_path, plugin_file_path)
         
         # Remove temp folder
-        delete_dir(plugin_deploy_src_path)
+        delete_dir(zip_file)
         
         print(f"Processed plugin: {plugin_name}")
 
