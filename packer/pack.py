@@ -7,6 +7,7 @@ import os
 import shutil
 import json
 import time
+import re
 from pathlib import Path
 from fnmatch import fnmatch
 import argparse
@@ -18,6 +19,8 @@ class PluginPacker:
     DEFAULT_EXCLUDES = ['deploy/*', 'node_modules/*', '.dev/*']
     MAX_RETRIES = 3
     RETRY_DELAY = 1
+    OLD_PATH_PATTERN = r'https://onlyoffice\.github\.io/sdkjs-plugins/v1/[\w\-\./\*]*'
+    NEW_PATH = './../v1/'
     
     def __init__(self, old_mode=False):
         self.old_mode = old_mode
@@ -33,6 +36,36 @@ class PluginPacker:
             help='The old way: put the result in the root of each plugin\'s folder.'
         )
         return parser.parse_args()
+
+    def replace_html_paths(self, file_path):
+        """Replace paths in HTML files before packing"""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            new_content = re.sub(self.OLD_PATH_PATTERN, lambda match: self.NEW_PATH + match.group(0).split('/v1/')[1], content)
+            
+            # If changes were made, write back to file
+            if new_content != content:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(new_content)
+                return True
+            return False
+                
+        except Exception as e:
+            print(f"  Error processing HTML file {file_path}: {e}")
+            return False
+
+    def process_html_files(self, directory):
+        """Find and process all HTML files in directory"""
+        html_files_processed = 0
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.lower().endswith('.html'):
+                    file_path = os.path.join(root, file)
+                    if self.replace_html_paths(file_path):
+                        html_files_processed += 1
+        return html_files_processed
 
     def safe_rename(self, src, dst, max_retries=MAX_RETRIES, delay=RETRY_DELAY):
         """Safely rename file with retry logic for locked files"""
@@ -129,13 +162,17 @@ class PluginPacker:
         os.makedirs(temp_dir, exist_ok=True)
         
         try:
-            # Copy filtered files
+            # Copy filtered files to temp directory
             self.copy_filtered_files(source_dir, temp_dir, excludes or [])
             
             # Check if any files remain
             if not any(os.scandir(temp_dir)):
                 print(f"[{plugin_name}] No files to pack after filtering")
                 return False
+            
+            # Process HTML files in temp directory (before archiving)
+            self.process_html_files(temp_dir)
+
             
             # Create and rename archive
             zip_file = os.path.join(output_dir, plugin_name)
@@ -170,7 +207,6 @@ class PluginPacker:
             self.delete_dir(destination_path)
 
         return self.create_plugin_archive(plugin_path, plugin_name, destination_path, excludes)
-
 
     def pack_plugins(self):
         """Main packing method"""
