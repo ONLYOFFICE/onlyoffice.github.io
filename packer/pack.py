@@ -10,7 +10,6 @@ import time
 from pathlib import Path
 from fnmatch import fnmatch
 import argparse
-import zipfile
 
 
 class PluginPacker:
@@ -71,18 +70,19 @@ class PluginPacker:
     def get_plugin_excludes(self, plugin_path):
         """Get exclusion patterns for plugin from config.json"""
         plugin_config_path = os.path.join(plugin_path, ".dev", "config.json")
-        excludes = self.DEFAULT_EXCLUDES.copy()
+
+        excludes_set = set(self.DEFAULT_EXCLUDES)
         
         if os.path.exists(plugin_config_path):
             try:
                 with open(plugin_config_path, 'r', encoding='utf-8') as f:
                     config = json.load(f)
-                    excludes = config.get("excludes", excludes)
-                    print(f"[{os.path.basename(plugin_path)}] Loaded exclude patterns: {excludes}")
+                    custom_excludes = config.get("excludes", [])
+                    excludes_set.update(custom_excludes)
             except (json.JSONDecodeError, Exception) as e:
                 print(f"[{os.path.basename(plugin_path)}] Error reading config: {e}")
-        
-        return excludes
+    
+        return list(excludes_set)
 
     def should_exclude(self, path, base_dir, excludes):
         """Check if path should be excluded based on patterns"""
@@ -123,55 +123,7 @@ class PluginPacker:
                     os.makedirs(os.path.dirname(dest_file), exist_ok=True)
                     shutil.copy2(source_file, dest_file)
 
-    def copy_dir(self, src, dst, excludes=None):
-        """Copy directory with optional exclusion patterns"""
-        if os.path.exists(dst):
-            self.delete_dir(dst)
-        
-        if excludes:
-            self.copy_filtered_files(src, dst, excludes)
-        else:
-            shutil.copytree(src, dst)
-
-    def archive_folder(self, source_pattern, zip_path, excludes=None):
-        """Create zip archive with exclusion support"""
-        if excludes is None:
-            excludes = []
-            
-        source_dir = source_pattern.rstrip('/*')
-        os.makedirs(os.path.dirname(zip_path), exist_ok=True)
-        
-        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for root, dirs, files in os.walk(source_dir):
-                if excludes:
-                    dirs[:] = [d for d in dirs if not self.should_exclude(
-                        os.path.join(root, d), source_dir, excludes)]
-                
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    relative_path = os.path.relpath(file_path, source_dir)
-
-                    if excludes and self.should_exclude(relative_path, source_dir, excludes):
-                        continue
-                    
-                    arcname = file if root == source_dir else relative_path
-                    zipf.write(file_path, arcname)
-
-    def move_file(self, src, dst):
-        """Move file with retry logic"""
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        
-        for attempt in range(3):
-            try:
-                shutil.move(src, dst)
-                break
-            except PermissionError:
-                if attempt < 2:
-                    time.sleep(0.5)
-                else:
-                    raise
-
-    def create_plugin_archive(self, source_dir, plugin_name, output_dir, excludes=None):
+    def create_plugin_archive(self, source_dir, plugin_name, output_dir, excludes):
         """Create .plugin archive from source directory"""
         temp_dir = os.path.join(output_dir, f"temp_{plugin_name}")
         os.makedirs(temp_dir, exist_ok=True)
@@ -212,38 +164,13 @@ class PluginPacker:
         """Pack plugin in old mode (plugin's deploy directory)"""
         excludes = self.get_plugin_excludes(plugin_path)
         destination_path = os.path.join(plugin_path, "deploy")
-        temp_src_path = os.path.join(destination_path, plugin_name)
-        
+
         # Clean up old deploy folder
         if os.path.exists(destination_path):
             self.delete_dir(destination_path)
-        
-        if excludes:
-            os.makedirs(destination_path, exist_ok=True)
-            self.copy_filtered_files(plugin_path, temp_src_path, excludes)
-            
-            if not any(os.scandir(temp_src_path)):
-                print(f"[{plugin_name}] No files to pack after filtering")
-                self.delete_dir(destination_path)
-                return False
-        else:
-            self.copy_dir(plugin_path, temp_src_path)
-        
-        # Create archive
-        zip_file_path = os.path.join(destination_path, f"{plugin_name}.zip")
-        source_pattern = f"{temp_src_path}/*" if excludes else temp_src_path
-        self.archive_folder(source_pattern, zip_file_path, excludes)
-        
-        # Rename to .plugin
-        plugin_file_path = os.path.join(destination_path, f"{plugin_name}.plugin")
-        self.move_file(zip_file_path, plugin_file_path)
-        
-        # Cleanup
-        if os.path.exists(temp_src_path):
-            self.delete_dir(temp_src_path)
-        
-        print(f"✅ Processed plugin: {plugin_name}")
-        return True
+
+        return self.create_plugin_archive(plugin_path, plugin_name, destination_path, excludes)
+
 
     def pack_plugins(self):
         """Main packing method"""
