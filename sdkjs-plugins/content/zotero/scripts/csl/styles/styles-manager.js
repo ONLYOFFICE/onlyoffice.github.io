@@ -126,6 +126,26 @@ CslStylesManager.prototype.getStyle = function (styleName) {
             });
         })
         .then(function (content) {
+            if (
+                content &&
+                !self._isValidCSL(content) &&
+                self._isOnlineAvailable
+            ) {
+                /** @type {StyleInfo} */
+                let styleInfo = CslStylesParser.getStyleInfo(
+                    styleName,
+                    content
+                );
+                if (styleInfo && styleInfo.dependent > 0 && styleInfo.parent) {
+                    return fetch(styleInfo.parent).then(function (resp) {
+                        return resp.text();
+                    });
+                }
+            }
+
+            return content;
+        })
+        .then(function (content) {
             if (content) {
                 self._saveLastUsedStyle(styleName, content);
             }
@@ -157,10 +177,6 @@ CslStylesManager.prototype.getStylesInfo = function () {
                     self._defaultStyles.indexOf(style.name) >= 0 ||
                     style.name == lastStyle
                 );
-            });
-        } else {
-            loadedStyles = loadedStyles.filter(function (style) {
-                return style.dependent === 0;
             });
         }
 
