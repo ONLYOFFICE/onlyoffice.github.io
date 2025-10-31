@@ -539,7 +539,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2023-10-06 03:29:39",
+    "updated": "2025-10-21 10:52:24",
     "href": "https://www.zotero.org/styles/acta-universitatis-agriculturae-sueciae"
   },
   {
@@ -4334,7 +4334,7 @@
         "biology"
       ]
     },
-    "updated": "2025-04-18 15:07:59",
+    "updated": "2025-08-24 16:33:14",
     "href": "https://www.zotero.org/styles/bio-protocol"
   },
   {
@@ -4448,6 +4448,19 @@
     },
     "updated": "2015-01-01 23:37:43",
     "href": "https://www.zotero.org/styles/bioelectromagnetics"
+  },
+  {
+    "title": "Bioethics",
+    "name": "bioethics",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "anthropology"
+      ]
+    },
+    "updated": "2025-10-26 10:46:43",
+    "href": "https://www.zotero.org/styles/bioethics"
   },
   {
     "title": "Biofuel Research Journal",
@@ -8279,7 +8292,7 @@
         "generic-base"
       ]
     },
-    "updated": "2025-08-26 05:39:18",
+    "updated": "2025-10-29 11:57:22",
     "href": "https://www.zotero.org/styles/harvard-cite-them-right"
   },
   {
@@ -8292,7 +8305,7 @@
         "generic-base"
       ]
     },
-    "updated": "2025-08-26 05:39:18",
+    "updated": "2025-10-29 11:57:22",
     "href": "https://www.zotero.org/styles/harvard-cite-them-right-no-et-al"
   },
   {
@@ -9832,6 +9845,21 @@
     },
     "updated": "2022-01-02 01:47:37",
     "href": "https://www.zotero.org/styles/deutsches-archaologisches-institut"
+  },
+  {
+    "title": "Deutsches Archäologisches Institut - Römisch-Germanische Kommission (author-date, Deutsch)",
+    "titleShort": "DAI RGK",
+    "name": "deutsches-archaologisches-institut-romisch-germanische-kommission-author-date",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "anthropology",
+        "humanities"
+      ]
+    },
+    "updated": "2025-10-29 14:29:49",
+    "href": "https://www.zotero.org/styles/deutsches-archaologisches-institut-romisch-germanische-kommission-author-date"
   },
   {
     "title": "Deutsches Ärzteblatt",
@@ -16159,6 +16187,21 @@
     "href": "https://www.zotero.org/styles/instituto-superior-de-teologia-de-las-islas-canarias"
   },
   {
+    "title": "Instituto Universitário Militar",
+    "titleShort": "IUM",
+    "name": "instituto-universitario-militar",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "psychology",
+        "generic-base"
+      ]
+    },
+    "updated": "2025-10-23 06:14:09",
+    "href": "https://www.zotero.org/styles/instituto-universitario-militar"
+  },
+  {
     "title": "Instrumenta Patristica et Mediaevalia",
     "titleShort": "IPM",
     "name": "instrumenta-patristica-et-mediaevalia",
@@ -16172,7 +16215,7 @@
         "theology"
       ]
     },
-    "updated": "2025-08-29 07:36:14",
+    "updated": "2025-10-25 07:23:38",
     "href": "https://www.zotero.org/styles/instrumenta-patristica-et-mediaevalia"
   },
   {
@@ -26008,7 +26051,7 @@
         "history"
       ]
     },
-    "updated": "2019-07-08 04:39:57",
+    "updated": "2025-10-29 14:29:24",
     "href": "https://www.zotero.org/styles/opuscula"
   },
   {
@@ -27521,7 +27564,6 @@
   },
   {
     "title": "Population (Français)",
-    "titleShort": "Population-F",
     "name": "population",
     "dependent": 0,
     "categories": {
@@ -27531,7 +27573,7 @@
         "sociology"
       ]
     },
-    "updated": "2025-02-27 15:41:17",
+    "updated": "2025-10-21 09:07:19",
     "href": "https://www.zotero.org/styles/population"
   },
   {
@@ -32415,7 +32457,7 @@
         "linguistics"
       ]
     },
-    "updated": "2020-05-17 03:58:54",
+    "updated": "2025-10-26 14:55:55",
     "href": "https://www.zotero.org/styles/textual-cultures"
   },
   {
@@ -34801,6 +34843,19 @@
     "href": "https://www.zotero.org/styles/ucl-institute-of-education-harvard"
   },
   {
+    "title": "UCL Press (note)",
+    "name": "ucl-press-note",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "generic-base"
+      ]
+    },
+    "updated": "2025-10-23 11:35:34",
+    "href": "https://www.zotero.org/styles/ucl-press-note"
+  },
+  {
     "title": "UCL University College - APA (Dansk)",
     "titleShort": "APA - UCL",
     "name": "ucl-university-college-apa",
@@ -35033,6 +35088,20 @@
     },
     "updated": "2024-05-17 14:52:40",
     "href": "https://www.zotero.org/styles/unified-style-sheet-for-linguistics-de-gruyter-literature"
+  },
+  {
+    "title": "UNIRIO - Educação Infantil e Políticas Públicas - ABNT (Português - Brasil)",
+    "titleShort": "UNIRIO-EIPP-ABNT",
+    "name": "associacao-brasileira-de-normas-tecnicas-unirio-eipp",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "social_science"
+      ]
+    },
+    "updated": "2025-10-23 06:27:27",
+    "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-unirio-eipp"
   },
   {
     "title": "United Nations Conference on Trade and Development",
@@ -35362,20 +35431,6 @@
     },
     "updated": "2025-05-18 00:55:38",
     "href": "https://www.zotero.org/styles/universidade-federal-do-espirito-santo-abnt"
-  },
-  {
-    "title": "Universidade Federal do Estado do Rio de Janeiro - Educação Infantil e Políticas Públicas - ABNT (Português - Brasil)",
-    "titleShort": "UNIRIO-EIPP-ABNT",
-    "name": "associacao-brasileira-de-normas-tecnicas-unirio-eipp",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": [
-        "social_science"
-      ]
-    },
-    "updated": "2021-02-15 03:41:57",
-    "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-unirio-eipp"
   },
   {
     "title": "Universidade Federal do Paraná - ABNT (Português - Brasil)",
@@ -36070,6 +36125,20 @@
     },
     "updated": "2023-04-15 02:42:41",
     "href": "https://www.zotero.org/styles/universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie"
+  },
+  {
+    "title": "Université Gustave Eiffel - Arts Numériques et Cultures Visuelles (Français)",
+    "titleShort": "UGE - ANCV",
+    "name": "universite-gustave-eiffel-arts-numeriques-et-cultures-visuelles",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "humanities"
+      ]
+    },
+    "updated": "2025-10-24 06:59:58",
+    "href": "https://www.zotero.org/styles/universite-gustave-eiffel-arts-numeriques-et-cultures-visuelles"
   },
   {
     "title": "Université Laval - Département d'information et de communication (Français - Canada)",
@@ -38507,7 +38576,7 @@
         "law"
       ]
     },
-    "updated": "2025-10-17 08:58:13",
+    "updated": "2025-10-21 09:16:25",
     "href": "https://www.zotero.org/styles/zitierguide-leitfaden-zum-fachgerechten-zitieren-in-rechtswissenschaftlichen-arbeiten"
   },
   {
