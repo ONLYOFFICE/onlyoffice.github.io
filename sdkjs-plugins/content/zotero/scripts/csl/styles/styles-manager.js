@@ -93,7 +93,7 @@ CslStylesManager.prototype.getLastUsedNotesStyle = function () {
 /**
  * @returns {string} - style id
  */
-CslStylesManager.prototype.getLastUsedStyle = function () {
+CslStylesManager.prototype.getLastUsedStyleId = function () {
     let lastUsedStyle = localStorage.getItem(this._lastStyleKey);
     if (lastUsedStyle) {
         return lastUsedStyle;
@@ -162,7 +162,7 @@ CslStylesManager.prototype.getStylesInfo = function () {
         this._getStylesJson(),
         this._customStylesStorage.getStylesInfo(),
     ]).then(function (styles) {
-        var lastStyle = self.getLastUsedStyle();
+        var lastStyle = self.getLastUsedStyleId();
         /** @type {Array<StyleInfo>} */
         var resultStyles = [];
         var resultStyleNames = self._customStylesStorage.getStyleNames();

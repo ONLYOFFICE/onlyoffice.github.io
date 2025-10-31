@@ -1334,14 +1334,18 @@ CitationItemData.prototype.toJSON = function () {
     var result = {};
     result.id = this._id;
 
-    if (this._type !== undefined) result.type = this._type;
-    if (this._citationKey !== undefined)
+    if (this._type !== undefined && this._type !== "") result.type = this._type;
+    if (this._citationKey !== undefined && this._citationKey !== "")
         result["citation-key"] = this._citationKey;
     if (this._categories.length > 0) result.categories = this._categories;
-    if (this._language !== undefined) result.language = this._language;
-    if (this._journalAbbreviation !== undefined)
+    if (this._language !== undefined && this._language !== "")
+        result.language = this._language;
+    if (
+        this._journalAbbreviation !== undefined &&
+        this._journalAbbreviation !== ""
+    )
         result.journalAbbreviation = this._journalAbbreviation;
-    if (this._shortTitle !== undefined) {
+    if (this._shortTitle !== undefined && this._shortTitle !== "") {
         result.shortTitle = this._shortTitle;
         if (this._titleShort === undefined)
             result["title-short"] = this._shortTitle;
@@ -1393,97 +1397,133 @@ CitationItemData.prototype.toJSON = function () {
     if (Object.keys(this._submitted).length > 0)
         result.submitted = this._submitted;
 
-    if (this._abstract !== undefined) result.abstract = this._abstract;
-    if (this._annote !== undefined) result.annote = this._annote;
-    if (this._archive !== undefined) result.archive = this._archive;
-    if (this._archiveCollection !== undefined)
+    if (this._abstract !== undefined && this._abstract !== "")
+        result.abstract = this._abstract;
+    if (this._annote !== undefined && this._annote !== "")
+        result.annote = this._annote;
+    if (this._archive !== undefined && this._archive !== "")
+        result.archive = this._archive;
+    if (this._archiveCollection !== undefined && this._archiveCollection !== "")
         result["archive_collection"] = this._archiveCollection;
-    if (this._archiveLocation !== undefined)
+    if (this._archiveLocation !== undefined && this._archiveLocation !== "")
         result["archive_location"] = this._archiveLocation;
-    if (this._archivePlace !== undefined)
+    if (this._archivePlace !== undefined && this._archivePlace !== "")
         result["archive-place"] = this._archivePlace;
-    if (this._authority !== undefined) result.authority = this._authority;
-    if (this._callNumber !== undefined)
+    if (this._authority !== undefined && this._authority !== "")
+        result.authority = this._authority;
+    if (this._callNumber !== undefined && this._callNumber !== "")
         result["call-number"] = this._callNumber;
-    if (this._chapterNumber !== undefined)
+    if (this._chapterNumber !== undefined && this._chapterNumber !== "")
         result["chapter-number"] = this._chapterNumber;
-    if (this._citationNumber !== undefined)
+    if (this._citationNumber !== undefined && this._citationNumber !== "")
         result["citation-number"] = this._citationNumber;
-    if (this._citationLabel !== undefined)
+    if (this._citationLabel !== undefined && this._citationLabel !== "")
         result["citation-label"] = this._citationLabel;
-    if (this._collectionNumber !== undefined)
+    if (this._collectionNumber !== undefined && this._collectionNumber !== "")
         result["collection-number"] = this._collectionNumber;
-    if (this._collectionTitle !== undefined)
+    if (this._collectionTitle !== undefined && this._collectionTitle !== "")
         result["collection-title"] = this._collectionTitle;
-    if (this._containerTitle !== undefined)
+    if (this._containerTitle !== undefined && this._containerTitle !== "")
         result["container-title"] = this._containerTitle;
-    if (this._containerTitleShort !== undefined)
+    if (
+        this._containerTitleShort !== undefined &&
+        this._containerTitleShort !== ""
+    )
         result["container-title-short"] = this._containerTitleShort;
-    if (this._dimensions !== undefined) result.dimensions = this._dimensions;
-    if (this._DOI !== undefined) result.DOI = this._DOI;
-    if (this._edition !== undefined) result.edition = this._edition;
-    if (this._event !== undefined) result.event = this._event;
-    if (this._eventTitle !== undefined)
+    if (this._dimensions !== undefined && this._dimensions !== "")
+        result.dimensions = this._dimensions;
+    if (this._DOI !== undefined && this._DOI !== "") result.DOI = this._DOI;
+    if (this._edition !== undefined && this._edition !== "")
+        result.edition = this._edition;
+    if (this._event !== undefined && this._event !== "")
+        result.event = this._event;
+    if (this._eventTitle !== undefined && this._eventTitle !== "")
         result["event-title"] = this._eventTitle;
-    if (this._eventPlace !== undefined)
+    if (this._eventPlace !== undefined && this._eventPlace !== "")
         result["event-place"] = this._eventPlace;
-    if (this._firstReferenceNoteNumber !== undefined)
+    if (
+        this._firstReferenceNoteNumber !== undefined &&
+        this._firstReferenceNoteNumber !== ""
+    )
         result["first-reference-note-number"] = this._firstReferenceNoteNumber;
-    if (this._genre !== undefined) result.genre = this._genre;
-    if (this._ISBN !== undefined) result.ISBN = this._ISBN;
-    if (this._ISSN !== undefined) result.ISSN = this._ISSN;
-    if (this._issue !== undefined) result.issue = this._issue;
-    if (this._jurisdiction !== undefined)
+    if (this._genre !== undefined && this._genre !== "")
+        result.genre = this._genre;
+    if (this._ISBN !== undefined && this._ISBN !== "") result.ISBN = this._ISBN;
+    if (this._ISSN !== undefined && this._ISSN !== "") result.ISSN = this._ISSN;
+    if (this._issue !== undefined && this._issue !== "")
+        result.issue = this._issue;
+    if (this._jurisdiction !== undefined && this._jurisdiction !== "")
         result.jurisdiction = this._jurisdiction;
-    if (this._keyword !== undefined) result.keyword = this._keyword;
-    if (this._locator !== undefined) result.locator = this._locator;
-    if (this._medium !== undefined) result.medium = this._medium;
-    if (this._note !== undefined) result.note = this._note;
-    if (this._number !== undefined) result.number = this._number;
-    if (this._numberOfPages !== undefined)
+    if (this._keyword !== undefined && this._keyword !== "")
+        result.keyword = this._keyword;
+    if (this._locator !== undefined && this._locator !== "")
+        result.locator = this._locator;
+    if (this._medium !== undefined && this._medium !== "")
+        result.medium = this._medium;
+    if (this._note !== undefined && this._note !== "") result.note = this._note;
+    if (this._number !== undefined && this._number !== "")
+        result.number = this._number;
+    if (this._numberOfPages !== undefined && this._numberOfPages !== "")
         result["number-of-pages"] = this._numberOfPages;
-    if (this._numberOfVolumes !== undefined)
+    if (this._numberOfVolumes !== undefined && this._numberOfVolumes !== "")
         result["number-of-volumes"] = this._numberOfVolumes;
-    if (this._originalPublisher !== undefined)
+    if (this._originalPublisher !== undefined && this._originalPublisher !== "")
         result["original-publisher"] = this._originalPublisher;
-    if (this._originalPublisherPlace !== undefined)
+    if (
+        this._originalPublisherPlace !== undefined &&
+        this._originalPublisherPlace !== ""
+    )
         result["original-publisher-place"] = this._originalPublisherPlace;
-    if (this._originalTitle !== undefined)
+    if (this._originalTitle !== undefined && this._originalTitle !== "")
         result["original-title"] = this._originalTitle;
-    if (this._page !== undefined) result.page = this._page;
-    if (this._pageFirst !== undefined) result["page-first"] = this._pageFirst;
-    if (this._part !== undefined) result.part = this._part;
-    if (this._partTitle !== undefined) result["part-title"] = this._partTitle;
-    if (this._PMCID !== undefined) result.PMCID = this._PMCID;
-    if (this._PMID !== undefined) result.PMID = this._PMID;
-    if (this._printing !== undefined) result.printing = this._printing;
-    if (this._publisher !== undefined) result.publisher = this._publisher;
-    if (this._publisherPlace !== undefined)
+    if (this._page !== undefined && this._page !== "") result.page = this._page;
+    if (this._pageFirst !== undefined && this._pageFirst !== "")
+        result["page-first"] = this._pageFirst;
+    if (this._part !== undefined && this._part !== "") result.part = this._part;
+    if (this._partTitle !== undefined && this._partTitle !== "")
+        result["part-title"] = this._partTitle;
+    if (this._PMCID !== undefined && this._PMCID !== "")
+        result.PMCID = this._PMCID;
+    if (this._PMID !== undefined && this._PMID !== "") result.PMID = this._PMID;
+    if (this._printing !== undefined && this._printing !== "")
+        result.printing = this._printing;
+    if (this._publisher !== undefined && this._publisher !== "")
+        result.publisher = this._publisher;
+    if (this._publisherPlace !== undefined && this._publisherPlace !== "")
         result["publisher-place"] = this._publisherPlace;
-    if (this._references !== undefined) result.references = this._references;
-    if (this._reviewedGenre !== undefined)
+    if (this._references !== undefined && this._references !== "")
+        result.references = this._references;
+    if (this._reviewedGenre !== undefined && this._reviewedGenre !== "")
         result["reviewed-genre"] = this._reviewedGenre;
-    if (this._reviewedTitle !== undefined)
+    if (this._reviewedTitle !== undefined && this._reviewedTitle !== "")
         result["reviewed-title"] = this._reviewedTitle;
-    if (this._scale !== undefined) result.scale = this._scale;
-    if (this._section !== undefined) result.section = this._section;
-    if (this._source !== undefined) result.source = this._source;
-    if (this._status !== undefined) result.status = this._status;
+    if (this._scale !== undefined && this._scale !== "")
+        result.scale = this._scale;
+    if (this._section !== undefined && this._section !== "")
+        result.section = this._section;
+    if (this._source !== undefined && this._source !== "")
+        result.source = this._source;
+    if (this._status !== undefined && this._status !== "")
+        result.status = this._status;
 
-    if (this._title !== undefined) result.title = this._title;
-    if (this._titleShort !== undefined)
+    if (this._title !== undefined && this._title !== "")
+        result.title = this._title;
+    if (this._titleShort !== undefined && this._titleShort !== "")
         result["title-short"] = this._titleShort;
-    if (this._URL !== undefined) result.URL = this._URL;
-    if (this._version !== undefined) result.version = this._version;
-    if (this._volume !== undefined) result.volume = this._volume;
-    if (this._volumeTitle !== undefined)
+    if (this._URL !== undefined && this._URL !== "") result.URL = this._URL;
+    if (this._version !== undefined && this._version !== "")
+        result.version = this._version;
+    if (this._volume !== undefined && this._volume !== "")
+        result.volume = this._volume;
+    if (this._volumeTitle !== undefined && this._volumeTitle !== "")
         result["volume-title"] = this._volumeTitle;
-    if (this._volumeTitleShort !== undefined)
+    if (this._volumeTitleShort !== undefined && this._volumeTitleShort !== "")
         result["volume-title-short"] = this._volumeTitleShort;
-    if (this._yearSuffix !== undefined)
+    if (this._yearSuffix !== undefined && this._yearSuffix !== "")
         result["year-suffix"] = this._yearSuffix;
     if (Object.keys(this._custom).length !== 0) result.custom = this._custom;
-    if (this._license !== undefined) result.license = this._license;
+    if (this._license !== undefined && this._license !== "")
+        result.license = this._license;
 
     return result;
 };
