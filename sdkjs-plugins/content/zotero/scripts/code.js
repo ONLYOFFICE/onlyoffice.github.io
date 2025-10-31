@@ -238,7 +238,7 @@ window.addEventListener('load', function() {
      */
     function addStylesToList(stylesInfo) {
         var found = false;
-        var lastStyle = cslStylesManager.getLastUsedStyle();
+        var lastStyle = cslStylesManager.getLastUsedStyleId();
 
         var onStyleSelectOther = function (list, other) {
             return function (ev) {
