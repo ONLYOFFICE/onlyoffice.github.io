@@ -30,7 +30,172 @@
  *
  */
 
-window.isEnableDocumentGenerate = false;
+function MarkDownStreamer()
+{
+	this.isStated = false;
+	this.stable = "";
+	this.tail = "";
+
+	this.isStreaming = window.EditorHelper.isSupportStreaming;
+}
+
+// INTERFACE
+MarkDownStreamer.prototype.onStreamChunk = async function(mdValue, isFinalChunk)
+{
+	debugger;
+	if (!this.isStated) {
+		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+		this.isStated = true;
+	}
+
+	if (!this.isStreaming) {
+		this.tail += mdValue;
+
+		if (isFinalChunk) {
+			await this.onStreamEnd();
+			this.isStated = false;
+		}
+		return;
+	}		
+
+	let checkValue = this.tail + mdValue;
+	let cutPoint = this._findStableCutPoint(checkValue);
+
+	if (cutPoint >= 0) {
+		await this.onStable(checkValue.slice(0, cutPoint + 1));
+		await this.onTail(checkValue.slice(cutPoint + 1));
+	} else {
+		await this.onTail(checkValue);
+	}
+
+	if (isFinalChunk) {
+		await this.onStreamEnd();
+		this.isStated = false;
+	}
+};
+
+MarkDownStreamer.prototype.checkUndo = async function()
+{
+	if (this.tail === "")
+		return;
+
+	console.log("Undo");
+	await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
+	this.tail = "";
+};
+
+MarkDownStreamer.prototype.onStreamEnd = async function()
+{
+	if (!this.isStated)
+		return;
+
+	if (this.tail !== "") {
+		// save tail as stable
+		await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+	}		
+
+	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+};
+
+MarkDownStreamer.prototype.onStable = async function(mdValue)
+{
+	console.log("Stable chunk:" + mdValue);
+
+	this.checkUndo();
+
+	await Asc.Library.InsertAsMD(mdValue, [Asc.PluginsMD.latex]);
+	this.stable += mdValue;
+};
+
+MarkDownStreamer.prototype.onTail = async function(mdValue)
+{
+	if (mdValue === "")
+		return;
+
+	this.checkUndo();
+
+	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+	await Asc.Library.InsertAsMD(mdValue, [Asc.PluginsMD.latex]);
+	this.tail = mdValue;
+
+	console.log("Tail chunk:" + mdValue);
+};
+
+MarkDownStreamer.prototype.reset = function()
+{
+	this.stable = "";
+	this.tail = "";
+};
+
+// PRIVATE METHODS
+MarkDownStreamer.prototype._findStableCutPoint = function(markdown)
+{
+	const BLOCK_TYPES = {
+		CODE: { start: '```', end: '```', multiline: true },
+		LATEX: { start: '$$', end: '$$', multiline: true },
+		TABLE: { lineStart: '|', needsEmpty: true }
+	};
+	
+	let lastSafePoint = -1;
+	let lineStart = 0;
+	let currentLine = '';
+	let activeBlock = null; // { type, blockDef }
+	
+	for (let i = 0, len = markdown.length; i < len; i++) {
+		let char = markdown[i];
+
+		if (char === '\n') {
+			let trimmed = currentLine.trim();
+			
+			if (activeBlock) {
+				let def = activeBlock.blockDef;
+				
+				if (def.multiline) {
+					if (trimmed.startsWith(def.end)) {
+						activeBlock = null;
+						let nextLineStart = i + 1;
+						let nextChar = markdown[nextLineStart];
+						if (nextChar === '\n' || nextChar === undefined) {
+							lastSafePoint = i;
+						}
+					}
+				} else if (def.lineStart) {
+					let matches = typeof def.lineStart === 'string' 
+						? trimmed.startsWith(def.lineStart)
+						: def.lineStart.test(currentLine);
+					
+					if (!matches) {
+						activeBlock = null;
+						if (def.needsEmpty && !trimmed) {
+							lastSafePoint = i;
+						}
+					}
+				}
+			} else {
+				
+				for (let btKey in BLOCK_TYPES) {
+					let bt = BLOCK_TYPES[btKey];
+					if (bt.multiline && trimmed.startsWith(bt.start)) {
+						activeBlock = { type: btKey, blockDef: bt };
+						break;
+					}
+				}
+
+				if (!activeBlock && !trimmed) {
+					lastSafePoint = i;
+				}
+			}
+			
+			currentLine = '';
+			lineStart = i + 1;
+		} else {
+			currentLine += char;
+		}
+	}
+	return lastSafePoint;
+};
+
+window.isEnableDocumentGenerate = true;
 async function getFormGenerationPrompt() {
 
 	return await Asc.Editor.callCommand(function(){
@@ -182,10 +347,8 @@ window.checkGenerationInfo = async function() {
 					}
 
 					await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-					await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-					await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
-					let isPaste = false;
+					let markdownStreamer = new MarkDownStreamer();
 
 					let agentHistory = [];
 					agentHistory.push({
@@ -194,24 +357,8 @@ window.checkGenerationInfo = async function() {
 					});
 
 					let isSupportStreaming = window.EditorHelper.isSupportStreaming;
-					let dataStream = "";
 					async function onStreamEvent(data, end) {
-						dataStream += data;
-						if (isSupportStreaming)
-						{
-							if (isPaste)
-							{
-								await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
-								await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-							}
-							
-							isPaste = true;
-							await Asc.Library.InsertAsMD(dataStream, [Asc.PluginsMD.latex]);
-						}
-						else if (true === end && "" !== dataStream)
-						{
-							await Asc.Library.InsertAsMD(dataStream, [Asc.PluginsMD.latex]);
-						}
+						await markdownStreamer.onStreamChunk(data, end);
 					}
 
 					let result = await requestEngine.chatRequest(agentHistory, false, isSupportStreaming ? async function(data) {
@@ -224,15 +371,9 @@ window.checkGenerationInfo = async function() {
 						await onStreamEvent(data);
 					} : undefined);
 
-					if (!isSupportStreaming) {
-						dataStream = result;
-						await onStreamEvent("", true);
-					}
+					markdownStreamer.onStreamEnd();
 
 					await checkEndAction();
-					await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-					await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-
 					break;
 				}
 				default:
