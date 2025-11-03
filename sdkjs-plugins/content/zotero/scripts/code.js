@@ -1084,8 +1084,9 @@ window.addEventListener('load', function() {
             arrFields.forEach(function(field) {
                 var citationObject;
                     var citationStartIndex = field.Value.indexOf("{");
+                    var citationEndIndex = field.Value.lastIndexOf("}");
                     if (citationStartIndex !== -1) {
-                        var citationString = field.Value.slice(citationStartIndex);
+                        var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
                         citationObject = JSON.parse(citationString);
                     }
                 var keysL = [];
@@ -1190,8 +1191,9 @@ window.addEventListener('load', function() {
 				arrFields.forEach(function(field) {
                     var citationObject;
                     var citationStartIndex = field.Value.indexOf("{");
-                    if (citationStartIndex !== -1) {
-                        var citationString = field.Value.slice(citationStartIndex);
+                    var citationEndIndex = field.Value.lastIndexOf("}");
+                    if (citationStartIndex !== -1 && citationEndIndex !== -1) {
+                        var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
                         citationObject = JSON.parse(citationString);
                     }
                     
