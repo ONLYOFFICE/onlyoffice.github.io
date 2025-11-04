@@ -319,7 +319,9 @@ function fetchExternal(url, options, isStreaming) {
 
 					_fetch(requestUrl, request)
 						.then(function(response) {
-							return response.json()
+							if ( response.status == 401 )
+								return {error: {message: response.statusText ? response.statusText : "Unauthorized"}};
+							else return response.json()
 						})
 						.then(function(data) {
 							if (data.error)
