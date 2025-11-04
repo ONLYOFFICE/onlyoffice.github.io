@@ -1063,6 +1063,15 @@ window.addEventListener('load', function() {
                     while (bibText.indexOf('\n') !== bibText.lastIndexOf('\n')) {
                         bibText = bibText.replace(/\n/, '');
                     }
+                    // Check if bibliography item contains <sup> or <sub>
+                    if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
+                        // Escape <sup> and <sub>
+                        bibText = bibText
+                            .replace(/<sup\b[^>]*>/gi, '&lt;sup&gt;')
+                            .replace(/<\/sup>/gi, '&lt;/sup&gt;')
+                            .replace(/<sub\b[^>]*>/gi, '&lt;sub&gt;')
+                            .replace(/<\/sub>/gi, '&lt;/sub&gt;');;
+                    }
                     bibItems[citationIndex] = bibText;
                 }
                 elements.tempDiv.innerHTML = bibItems.join('');
@@ -1119,23 +1128,25 @@ window.addEventListener('load', function() {
                 updatedFields.push(bibField);
             } else if (bPastBib) {
                 if (cslStylesManager.isLastUsedStyleContainBibliography()) {
-                    citationDocService.addBibliography(bibliography, bibFieldValue)
+                    return citationDocService.addBibliography(bibliography, bibFieldValue)
                         .then(function() {
                             if (!updatedFields.length) {
                                 showLoader(false);
                             }
+                            return updatedFields;
                         });
                 } else {
                     showError(getMessage("The current bibliographic style does not describe the bibliography"));
                 }
             }
-            
-            if (updatedFields.length) {
-                citationDocService.updateAddinFields(updatedFields).then(function() {
+            return updatedFields;
+        }).then(function(updatedFields) {
+            if (updatedFields && updatedFields.length) {
+                return citationDocService.updateAddinFields(updatedFields).then(function() {
                     showLoader(false);
                 });
-            }
-		});
+            } 
+        });
 	};
 
 	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize) {
@@ -1180,6 +1191,13 @@ window.addEventListener('load', function() {
     // Insert Citation (1,0,0,1)
     // Insert Bibliography (1,1,1,0)
     // Refresh (1,1,0,0)
+    /**
+     * @param {boolean} bUpdadeFormatter 
+     * @param {boolean} bUpadteAll 
+     * @param {boolean} bPastBib 
+     * @param {boolean} bPastLink 
+     * @returns {Promise}
+     */
 	function updateCslItems(bUpdadeFormatter, bUpadteAll, bPastBib, bPastLink) {
 		CSLCitationStorage.clear();
 
@@ -1221,26 +1239,30 @@ window.addEventListener('load', function() {
 					// нет смысла ещё раз искать поле библиографии
 					bUpdadeFormatter = false;
 					bibField["Content"] = getMessage(bibPlaceholder);
-                    citationDocService.updateAddinFields([bibField]).then(function() {
+                    return citationDocService.updateAddinFields([bibField]).then(function() {
                         showLoader(false);
+                        return bUpdadeFormatter;
                     });
 				}
 			} else if (bUpdadeFormatter && bPastBib) {
                 if (cslStylesManager.isLastUsedStyleContainBibliography()) {
-                    citationDocService.addBibliography(
+                    return citationDocService.addBibliography(
                         getMessage(bibPlaceholder),
                         bibFieldValue
                     ).then(function() {
                         showLoader(false);
+                        return bUpdadeFormatter;
                     });
                 } else {
                     showError(getMessage("The current bibliographic style does not describe the bibliography"));
                 }
                 
 			}
-			if (bUpdadeFormatter)
-				updateFormatter(bUpadteAll, bPastBib, bPastLink, false);
-		});
+            return bUpdadeFormatter;
+        }).then(function(bUpdadeFormatter) {
+            if (bUpdadeFormatter)
+				return updateFormatter(bUpadteAll, bPastBib, bPastLink, false);
+        });
 	};
 
     function insertSelectedCitations() {
@@ -1304,7 +1326,7 @@ window.addEventListener('load', function() {
                 // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
                 // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
                 // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-                updateCslItems(true, true, false, false);
+                return updateCslItems(true, true, false, false);
             });
 
         } catch (e) {
