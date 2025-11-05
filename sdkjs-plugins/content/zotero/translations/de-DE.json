@@ -33,5 +33,8 @@
     "Failed to apply this style": "Fehler beim Anwenden dieses Stils",
     "Failed to upload file": "Fehler beim Hochladen des Datei",
     "Work with local Zotero": "Arbeiten mit lokalem Zotero",
-    "The current bibliographic style does not describe the bibliography": "Der aktuelle bibliographische Stil beschreibt die Bibliographie nicht"
+    "The current bibliographic style does not describe the bibliography": "Der aktuelle bibliographische Stil beschreibt die Bibliographie nicht",
+    "Failed to insert citation": "Fehler beim Einfügen des Zitats",
+    "Failed to insert bibliography": "Fehler beim Einfügen der Bibliographie",
+    "Failed to refresh": "Fehler beim Aktualisieren"
 }

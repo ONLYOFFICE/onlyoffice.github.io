@@ -33,5 +33,8 @@
     "Failed to apply this style": "Не удалось применить этот стиль",
     "Failed to upload file": "Не удалось загрузить файл",
     "Work with local Zotero": "Работа с локальным Zotero",
-    "The current bibliographic style does not describe the bibliography": "Текущий стиль не описывает библиографию"
+    "The current bibliographic style does not describe the bibliography": "Текущий стиль не описывает библиографию",
+    "Failed to insert citation": "Не удалось вставить цитату",
+    "Failed to insert bibliography": "Не удалось вставить библиографию",
+    "Failed to refresh": "Не удалось обновить"
 }

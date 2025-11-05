@@ -33,5 +33,8 @@
 	"Failed to apply this style": "Nepodarilo se aplikovat tento styl",
 	"Failed to upload file": "Nepodarilo se nahrát soubor",
     "Work with local Zotero": "Pracovat s lokalní Zotero",
-    "The current bibliographic style does not describe the bibliography": "Aktuální bibliografický styl neopisuje bibliografii"
+    "The current bibliographic style does not describe the bibliography": "Aktuální bibliografický styl neopisuje bibliografii",
+	"Failed to insert citation": "Nepodarilo se vložit citaci",
+    "Failed to insert bibliography": "Nepodarilo se vložit bibliografii",
+    "Failed to refresh": "Nepodarilo se aktualizovat"
 }

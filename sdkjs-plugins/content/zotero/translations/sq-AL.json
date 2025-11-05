@@ -33,5 +33,8 @@
 	"Failed to apply this style": "Zbatimi i këtij stili dështoi",
 	"Failed to upload file": "Ngarkimi i skedarit dështoi",
     "Work with local Zotero": "Zgjedhni Zotero local",
-    "The current bibliographic style does not describe the bibliography": "Stili bibliografik aktual nuk shfaqet bibliografia"
+    "The current bibliographic style does not describe the bibliography": "Stili bibliografik aktual nuk shfaqet bibliografia",
+	"Failed to insert citation": "Zbatimi i citimit dështoi",
+    "Failed to insert bibliography": "Zbatimi i bibliografise dështoi",
+    "Failed to refresh": "Rifreskimi dështoi"
 }
