@@ -21,3 +21,9 @@
 ## 1.0.5
 
 * Support offline mode.
+* Ability for users to upload their own styles
+* Ability to work with styles that inherit behavior from a parent
+* Fix for bibliography sorting
+* Fix for citation numbering
+* Improved compatibility with MS Word
+* Removing extra lines in a bibliography
