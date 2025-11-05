@@ -234,6 +234,11 @@
 		});
 	};
 
+	Library.prototype.getHTMLFromMD = function(data, plugins)
+	{
+		return Asc.Library.ConvertMdToHTML(data, plugins);
+	};
+
 	Library.prototype.InsertAsMD = async function(data, plugins)
 	{
 		let htmlContent = Asc.Library.ConvertMdToHTML(data, plugins);
