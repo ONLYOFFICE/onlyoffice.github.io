@@ -33,5 +33,8 @@
     "Failed to apply this style": "このスタイルを適用できませんでした",
     "Failed to upload file": "ファイルのアップロードに失敗しました",
     "Work with local Zotero": "ローカルZoteroとの作業",
-    "The current bibliographic style does not describe the bibliography": "現在の文献引用スタイルは、文献引用を記述していません"
+    "The current bibliographic style does not describe the bibliography": "現在の文献引用スタイルは、文献引用を記述していません",
+    "Failed to insert citation": "引用の挿入に失敗しました",
+    "Failed to insert bibliography": "文献引用の挿入に失敗しました",
+    "Failed to refresh": "リフレッシュに失敗しました"
 }
