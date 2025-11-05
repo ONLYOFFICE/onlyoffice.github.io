@@ -1048,6 +1048,12 @@
 		}
     };
 
+    /**
+     * @param {boolean} bUpadteAll 
+     * @param {boolean} bPastBib 
+     * @param {boolean} bSyncronize 
+     * @returns {Promise<void>}
+     */
 	function updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize) {
 		if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
@@ -1193,12 +1199,15 @@
 		if (arrIds.length) {
 			formatter.updateItems(arrIds);
 		}
-		if (bUpadteAll || bPastBib)
-			updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize);
 		
+        let promises = [];
+        if (bUpadteAll) {
+            promises.push(updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize));
+        }
 		if (bPastLink) {
-			insertSelectedCitations();
+            promises.push(insertSelectedCitations());
 		}
+        return Promise.all(promises);
 	};
 
     // onInit (1,0,0,0)
@@ -1279,6 +1288,9 @@
         });
 	};
 
+    /**
+     * @returns {Promise}
+     */
     function insertSelectedCitations() {
         if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
@@ -1303,6 +1315,11 @@
         });
     }
 
+    /**
+     * 
+     * @param {*} cslCitation 
+     * @returns {Promise}
+     */
 	function formatInsertLink(cslCitation) {
 		var bUpdateItems = false;
         var keys = [];
@@ -1332,7 +1349,7 @@
 			
 			// TODO может ещё очистить поиск (подумать над этим)
 			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
-            citationDocService.addCitation(
+            return citationDocService.addCitation(
                 elements.tempDiv.innerHTML, 
                 JSON.stringify(cslCitation.toJSON())
             ).then(function() {
