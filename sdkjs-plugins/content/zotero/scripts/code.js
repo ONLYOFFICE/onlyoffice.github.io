@@ -389,7 +389,11 @@
 
 		elements.refreshBtn.onclick = function() {
 			showLoader(true);
-			updateCslItems(true, true, false, false);
+            updateCslItems(true, true, false, false).catch(function (error) {
+                showLoader(false);
+                showError(getMessage("Failed to refresh"));
+                console.error(error);
+            });
 		};
 
 		elements.synchronizeBtn.onclick = function() {
@@ -400,12 +404,20 @@
 			showLoader(true);
 			// TODO #there
 			// updateCslItems(true, false, true, false);
-			updateCslItems(true, true, true, false);
+            updateCslItems(true, true, true, false).catch(function (error) {
+                showLoader(false);
+                showError(getMessage("Failed to insert bibliography"));
+                console.error(error);
+            });
 		};
 
 		elements.insertLinkBtn.onclick = function() {
 			showLoader(true);
-			updateCslItems(true, false, false, true);
+			updateCslItems(true, false, false, true).catch(function (error) {
+                showLoader(false);
+                showError(getMessage("Failed to insert citation"));
+                console.error(error);
+            });
 		};
 
 		elements.saveAsTextBtn.onclick = function() {
@@ -438,7 +450,7 @@
 				
                 onStyleChange();
 				if (isClick)
-					updateCslItems(true, true, false, false);
+					return updateCslItems(true, true, false, false);
 			})
 			.catch(function (err) {
                 console.error(err);
@@ -459,7 +471,7 @@
             getLocale(val)
 			.then(function() {
 				if (isClick)
-					updateCslItems(true, true, false, false);
+					return updateCslItems(true, true, false, false);
 			})
 			.catch(function (error) {
                 console.error(error);
@@ -1171,7 +1183,12 @@
         });
 		formatter = new CSL.Engine(
             {
-                retrieveLocale: function (id) { return locales[id]; }, 
+                retrieveLocale: function (id) {
+                    if (Object.hasOwnProperty.call(locales, id)) {
+                        return locales[id];
+                    }
+                    return locales[selectedLocale];
+                 }, 
                 retrieveItem: function (id) { 
                     var item = CSLCitationStorage.get(id);
                     let index = CSLCitationStorage.getIndex(id);
@@ -1185,14 +1202,14 @@
 		if (arrIds.length) {
 			formatter.updateItems(arrIds);
 		}
-		
+
         let promises = [];
         if (bUpadteAll) {
             promises.push(updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize));
         }
-		if (bPastLink) {
+        if (bPastLink) {
             promises.push(insertSelectedCitations());
-		}
+        }
         return Promise.all(promises);
 	};
 

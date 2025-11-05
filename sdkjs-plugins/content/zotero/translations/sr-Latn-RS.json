@@ -33,5 +33,8 @@
     "Failed to apply this style": "Neuspelo primjena ovog stila",
     "Failed to upload file": "Neuspelo preuzimanje datoteke",
     "Work with local Zotero": "Rad sa lokalnim Zotero",
-    "The current bibliographic style does not describe the bibliography": "Trenutni bibliografski stil ne opisuje bibliografiju"
+    "The current bibliographic style does not describe the bibliography": "Trenutni bibliografski stil ne opisuje bibliografiju",
+    "Failed to insert citation": "Neuspelo ubacivanje citata",
+    "Failed to insert bibliography": "Neuspelo ubacivanje bibliografije",
+    "Failed to refresh": "Neuspelo osvežavanje"
 }

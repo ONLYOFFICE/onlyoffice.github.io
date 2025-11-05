@@ -33,5 +33,8 @@
     "Failed to apply this style": "Het is niet gelukt deze stijl toe te passen",
     "Failed to upload file": "Het uploaden van het bestand is mislukt",
     "Work with local Zotero": "Werk met lokale Zotero",
-    "The current bibliographic style does not describe the bibliography": "De huidige bibliografische stijl beschrijft de bibliografie niet"
+    "The current bibliographic style does not describe the bibliography": "De huidige bibliografische stijl beschrijft de bibliografie niet",
+    "Failed to insert citation": "Het invoegen van de citaat is mislukt",
+    "Failed to insert bibliography": "Het invoegen van de bibliografie is mislukt",
+    "Failed to refresh": "Het vernieuwen is mislukt"
 }
