@@ -67,8 +67,15 @@ var ZoteroApiChecker = {
     checkStatus: function (sdk) {
         return this._checkApiAvailable(sdk);
     },
-    stopApisChecker: function () {
+    successfullyLoggedInUsingApiKey: function () {
         this._done = true;
+        this._callback({
+            online: true,
+            hasKey: true,
+            desktop: this._desktop,
+            hasPermission: this._hasPermission,
+            desktopVersion: this._desktopVersion,
+        });
     },
 
     _checkApiAvailable: function (sdk) {
