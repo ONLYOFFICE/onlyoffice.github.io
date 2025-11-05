@@ -30,12 +30,13 @@
  *
  */
 
-function RegisteredFunction()
+function RegisteredFunction(obj)
 {
-	this.name = "";
-	this.description = "";
-	this.params = [];
-	this.examples = [];
+	this.name = obj.name || "";
+	this.description = obj.description || "";
+	this.parameters = obj.parameters || {};
+	this.examples = obj.examples || [];
+	this.returns = obj.returns || {};
 
 	this.call = null;
 }
@@ -48,23 +49,37 @@ function EditorHelperImpl() {
 
 	let editorType = Asc.Editor.getType();
 
+	if (editorType === "word") {
+		this.isSupportStreaming = true;
+	}
+
+	let hs = [];
+
 	switch (editorType) {
 		case "word": {
-			this.funcs = getWordFunctions();
-			this.isSupportStreaming = true;
+			hs = HELPERS.word;
 			break;
 		}
 		case "cell": {
-			this.funcs = getCellFunctions();			
+			hs = HELPERS.cell;	
 			break;
 		}
 		case "slide": {
-			this.funcs = getSlideFunctions();
+			hs = HELPERS.slide;
 			break;
 		}
 		default:
 			break;
-	}	
+	}
+
+	for (let i = 0, len = hs.length; i < len; i++) {
+		if (Array.isArray(hs[i])) {
+			for (let j = 0, len2 = hs[i].length; j < len2; j++)
+				this.funcs.push(hs[i][j]);
+		} else {
+			this.funcs.push(hs[i]);
+		}
+	}
 
 	for (let i = 0; i < this.funcs.length; i++) {
 		let func = this.funcs[i];
@@ -76,54 +91,80 @@ EditorHelperImpl.prototype.getSystemPrompt = function() {
 	if (this.funcs.length === 0)
 		return "";
 
-	let systemPrompt = "\
-You are an assistant that calls functions in a strict format **only when needed**.\n\
-CRITICAL: Never add explanations, confirmations, or any text before or after function calls. Respond ONLY with the exact function call format when a function is required.\n\
+	let systemPrompt = "\n\
+You are a function-calling assistant.\n\
 \n\
-Function calling format:\n\
+Your task:\n\
+- Decide whether a user's request requires calling one of the available functions.\n\
+- If a function is required, respond **only** with the exact function call in the strict format below.\n\
+- If no function call is needed, respond with normal helpful text (no function syntax).\n\
 \n\
-If a function call is required based on the user's request, respond exactly as follows:\n\
+────────────────────────────\n\
+FUNCTION CALLING FORMAT\n\
+────────────────────────────\n\
+If you decide a function call is required, respond **only** like this:\n\
+\n\
 [functionCalling (functionName)]: parameters\n\
-Rules:\
-- NO explanatory text before function calls\n\
-- NO confirmations after function calls\n\
-- NO \"I will now...\", \"Let me...\", \"Here's the...\" phrases\n\
-- Follow the exact format — zero deviations allowed\n\
-- Only use function calls when explicitly required by the user's request\n\
-- If no function needed, respond with normal helpful text\n\
-where\n\
-- functionName is the name of the function to call,\n\
-- parameters is a JSON object containing all the parameters.\n\
 \n\
-When calling a function:\n\
-- Do not include any explanations or extra text outside the function call.\n\
-- Always follow the exact format — no deviations are allowed.\n\
+Where:\n\
+- functionName — the exact name of the function to call.\n\
+- parameters — a valid JSON object containing all function arguments.\n\
 \n\
-Only use function calls when they are explicitly required by the user's request.\n\
-If the user's request doesn't require any function, respond with normal helpful text.\n\
+────────────────────────────\n\
+STRICT RULES (CRITICAL)\n\
+────────────────────────────\n\
+- You MUST follow the exact format. No deviations.\n\
+- NO explanations, introductions, or comments.\n\
+- NO extra text before or after the function call.\n\
+- NO markdown formatting.\n\
+- NO code blocks.\n\
+- NO \"I will now...\", \"Let me...\", \"Here's the...\" or similar phrases.\n\
+- Only respond with plain text exactly matching the format.\n\
+- Do NOT include trailing punctuation (like \".\") after the call.\n\
+- Use a function call only if explicitly required to fulfill the user's request.\n\
+- If the user's message doesn't need a function, respond normally with helpful natural text.\n\
 \n\
-Available functions:\n";
+────────────────────────────\n\
+AVAILABLE FUNCTIONS\n\
+────────────────────────────\n\
+";
 
-	for (let i = 0; i < this.funcs.length; i++) {
+	for (let i in this.funcs) {
 		let func = this.funcs[i];
-		systemPrompt += "\n- " + func.name;
-		if (func.description)
-			systemPrompt += "\n  Description: " + func.description + "\n";
-		systemPrompt += "\n  Parameters:\n";
-		for (let j = 0; j < func.params.length; j++) {
-			systemPrompt += "  - " + func.params[j] + "\n";
+		systemPrompt += "\n\
+- " + func.name + "\n\
+Description: " + func.description + "\n\
+Parameters schema:\n" + 
+JSON.stringify(func.parameters.properties) + "\n\
+Returns:\n" +
+JSON.stringify(func.returns);
+
+		systemPrompt += "\n\n";
+	}
+	
+	systemPrompt += "\
+────────────────────────────\n\
+EXAMPLES\n\
+────────────────────────────\n\
+";
+	
+	for (let i in this.funcs) {
+		let func = this.funcs[i];
+		for (let j = 0, len = func.examples.length; j < len; j++) {
+			let ex = func.examples[j];
+			systemPrompt += "If the user says: \"" + ex.prompt + "\"\n\
+Respond exactly with:\n\
+[functionCalling (" + func.name + ")]: " + JSON.stringify(ex.arguments) + "\n";
 		}
 	}
 
-	systemPrompt += "\nExamples:\n";
-	for (let i = 0; i < this.funcs.length; i++) {
-		let func = this.funcs[i];
-		for (let j = 0; j < func.examples.length; j++) {
-			systemPrompt += func.examples[j] + "\n";
-		}
-	}
-
-	systemPrompt += "\nIf no function call is needed, respond with normal text.\n";
+	systemPrompt += "\
+────────────────────────────\n\
+REMINDER\n\
+────────────────────────────\n\
+If no function call is needed — respond normally with clear helpful text.\n\
+Never output a function call unless the user's request explicitly requires it.\n\
+";
 
 	return systemPrompt;
 };
