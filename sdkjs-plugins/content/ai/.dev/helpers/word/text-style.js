@@ -111,8 +111,6 @@
 			if (!range)
 				return;
 
-			debugger;
-
 			let props = Asc.scope.params;
 
 			if (undefined !== props.bold)
