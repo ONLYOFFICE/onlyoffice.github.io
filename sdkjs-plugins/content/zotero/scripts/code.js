@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-window.addEventListener('load', function() {
+(function () {
 	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
@@ -1485,4 +1485,4 @@ window.addEventListener('load', function() {
 		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
 		updateFormatter(true, false, false, true);
 	};
-});
+})();
