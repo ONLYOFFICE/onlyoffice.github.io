@@ -391,7 +391,7 @@
             if (apikey) {
                 sdk.setApiKey(apikey)
                     .then(function () {
-                        ZoteroApiChecker.stopApisChecker();
+                        ZoteroApiChecker.successfullyLoggedInUsingApiKey();
                         switchAuthState("main");
                     })
                     .catch(function (err) {
