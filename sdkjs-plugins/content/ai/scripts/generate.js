@@ -32,6 +32,7 @@
 
 function MarkDownStreamer()
 {
+	this.isUseStreamContentMethod = false;
 	this.isStated = false;
 	this.stable = "";
 	this.tail = "";
@@ -61,10 +62,18 @@ MarkDownStreamer.prototype.onStreamChunk = async function(mdValue, isFinalChunk)
 	let cutPoint = this._findStableCutPoint(checkValue);
 
 	if (cutPoint >= 0) {
-		await this.onStable(checkValue.slice(0, cutPoint + 1));
-		await this.onTail(checkValue.slice(cutPoint + 1));
+		if (this.isUseStreamContentMethod) {
+			await this.onStreamStableTail(checkValue.slice(0, cutPoint + 1), checkValue.slice(cutPoint + 1));
+		} else {
+			await this.onStable(checkValue.slice(0, cutPoint + 1));
+			await this.onTail(checkValue.slice(cutPoint + 1));
+		}		
 	} else {
-		await this.onTail(checkValue);
+		if (this.isUseStreamContentMethod) {
+			await this.onStreamStableTail("", checkValue);
+		} else {
+			await this.onTail(checkValue);
+		}
 	}
 
 	if (isFinalChunk) {
@@ -78,7 +87,7 @@ MarkDownStreamer.prototype.checkUndo = async function()
 	if (this.tail === "")
 		return;
 
-	console.log("Undo");
+	//console.log("Undo");
 	await Asc.Editor.callMethod("EndAction", ["GroupActions", "", "cancel"]);
 	this.tail = "";
 };
@@ -98,7 +107,7 @@ MarkDownStreamer.prototype.onStreamEnd = async function()
 
 MarkDownStreamer.prototype.onStable = async function(mdValue)
 {
-	console.log("Stable chunk:" + mdValue);
+	//console.log("Stable chunk:" + mdValue);
 
 	this.checkUndo();
 
@@ -117,7 +126,34 @@ MarkDownStreamer.prototype.onTail = async function(mdValue)
 	await Asc.Library.InsertAsMD(mdValue, [Asc.PluginsMD.latex]);
 	this.tail = mdValue;
 
-	console.log("Tail chunk:" + mdValue);
+	//console.log("Tail chunk:" + mdValue);
+};
+
+MarkDownStreamer.prototype.onStreamStableTail = async function(stableMD, tailMD)
+{
+	if (stableMD === "" && tailMD === "")
+		return;
+
+	let obj = {
+		stable: "",
+		tail: "",
+		undo: false,
+		word: {
+			removeSelection: true
+		}
+	};
+
+	if (this.tail !== "")
+		obj.undo = true;
+
+	if (stableMD !== "")
+		obj.stable = Asc.Library.getHTMLFromMD(stableMD, [Asc.PluginsMD.latex]);
+	if (tailMD !== "")
+		obj.tail = Asc.Library.getHTMLFromMD(tailMD, [Asc.PluginsMD.latex]);
+
+	this.tail = tailMD;
+
+	await Asc.Editor.callMethod("InsertStreamedContent", [obj]);
 };
 
 MarkDownStreamer.prototype.reset = function()
