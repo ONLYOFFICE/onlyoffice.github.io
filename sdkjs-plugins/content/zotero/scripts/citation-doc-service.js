@@ -136,9 +136,6 @@ CitationDocService.prototype.getAllAddinFields = function () {
     const self = this;
     return new Promise(function (resolve, reject) {
         window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
-    }).then(function (arrFields) {
-        console.warn("getAllAddinFields", arrFields);
-        return arrFields;
     });
 };
 
