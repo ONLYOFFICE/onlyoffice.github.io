@@ -42,7 +42,6 @@ function MarkDownStreamer()
 // INTERFACE
 MarkDownStreamer.prototype.onStreamChunk = async function(mdValue, isFinalChunk)
 {
-	debugger;
 	if (!this.isStated) {
 		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 		this.isStated = true;
