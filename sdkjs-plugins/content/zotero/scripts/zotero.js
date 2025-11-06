@@ -151,7 +151,23 @@ const ZoteroSdk = function () {
         }
 
 		function getUserGroups() {
-			return userGroups;
+            return new Promise(function (resolve, reject) {
+                if (userGroups.length > 0) {
+                    resolve(userGroups);
+                } else {
+                    buildGetRequest("users/" + userId + "/groups").then(function (res) {
+                        if (!res.ok) throw new Error(res.status + " " + res.statusText);
+                        return res.json();
+                    }).then(function (res) {
+                        res.forEach(function(el) {
+                            userGroups.push(el.id);
+                        });
+                        resolve(userGroups);
+                    }).catch(function (err) {
+                        reject(err);
+                    });
+                }
+            });
 		}
 
 		function getUserId() {
@@ -208,26 +224,11 @@ const ZoteroSdk = function () {
 			applySettings(id, key);
             localStorage.setItem("zoteroUserId", id);
             localStorage.setItem("zoteroApiKey", key);
-			buildGetRequest("users/" + id + "/groups")
-			.then(function (res) {
-				if (!res.ok) throw new Error(res.status + " " + res.statusText);
-				return res.json();
-			}).then(function (res) {
-				res.forEach(function(el) {
-					userGroups.push(el.id);
-				});
-				localStorage.setItem("zoteroUserGroups", userGroups.join(';'));
-			}).catch(function (err) {
-				throw new Error(err)
-			});
         }
 
         function getSettings() {
             var uid = localStorage.getItem("zoteroUserId");
             var key = localStorage.getItem("zoteroApiKey");
-			var groups = localStorage.getItem("zoteroUserGroups");
-			if (groups)
-            	userGroups = groups.split(';');
 
             var configured = !(!uid || !key);
             if (configured) applySettings(uid, key);
@@ -237,7 +238,6 @@ const ZoteroSdk = function () {
         function clearSettings() {
             localStorage.removeItem("zoteroUserId");
             localStorage.removeItem("zoteroApiKey");
-            localStorage.removeItem("zoteroUserGroups");
 			userGroups = [];
         }
 

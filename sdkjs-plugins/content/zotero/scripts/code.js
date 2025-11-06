@@ -336,13 +336,15 @@
 			lastSearch.obj = null;
 			lastSearch.groups = [];
             clearLibrary();
-			var groups = sdk.getUserGroups();
-            loadLibrary(sdk.getItems(text), true, true, !groups.length, false, true);
-			if (groups.length) {
-				for (var i = 0; i < groups.length; i++) {
+            sdk.getUserGroups().then(function (groups) {
+                loadLibrary(sdk.getItems(text), true, true, !groups.length, false, true);
+                if (!groups.length) {
+                    return;
+                }
+                for (var i = 0; i < groups.length; i++) {
 					loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
 				}
-			}
+            });
         };
         elements.searchField.onkeypress = function (e) {
             if (e.keyCode == 13) searchFor(e.target.value);
