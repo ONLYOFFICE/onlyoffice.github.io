@@ -62,7 +62,10 @@ const ZoteroSdk = function () {
                         resolve(e);
                     },
                     error: function(e) {
-                        if ( e.statusCode == -102 ) e.statusCode = 404;
+                        if ( e.statusCode == -102 ) {
+                            e.statusCode = 404;
+                            e.message = "Connection to Zotero failed. Make sure Zotero is running";
+                        } 
                         reject(e);
                     }
                 }); 
@@ -89,6 +92,10 @@ const ZoteroSdk = function () {
                     };
                     resolve(res);
                 }).catch(function (err) {
+                    if (typeof err === "object") {
+                        console.error(err.message);
+                        err.message = "Connection to Zotero failed";
+                    }
                     reject(err);
                 });
             });
@@ -276,7 +283,7 @@ const ZoteroSdk = function () {
          */
         function parseItemsResponse(promise, resolve, reject, id) {
             promise.then(function (res) {
-                res.json().then(function (json) {
+                return res.json().then(function (json) {
                     var links = parseLinkHeader(res.headers.get("Link"));
                     var obj = {
                         items: json,
