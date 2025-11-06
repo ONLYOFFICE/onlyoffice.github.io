@@ -12,7 +12,7 @@
 
 ## 1.0.2
 
-* Fix problem with IE.
+* Fix the problem with IE.
 
 ## 1.0.4
 
@@ -20,7 +20,7 @@
 
 ## 1.0.5
 
-* Offline mode support.
+* Offline mode support for the Desktop Editors.
 * Ability for users to upload custom citation styles.
 * Add support for styles that inherit behavior from parent styles.
 * Fix bibliography sorting issues.
