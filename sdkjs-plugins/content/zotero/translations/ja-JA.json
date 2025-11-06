@@ -28,6 +28,7 @@
     "Please insert some citation into the document.": "文書にいくつかの引用を挿入してください。",
     "Synchronize": "同期",
     "Omit Author": "著者を省略する",
+    "Connection to Zotero failed": "Zoteroへの接続に失敗しました",
     "Connection to Zotero failed. Make sure Zotero is running": "Zoteroへの接続に失敗しました。Zoteroが起動していることを確認してください。",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Zoteroへの接続に失敗しました。Zoteroで外部接続を有効にしてください：編集 → 設定 → 詳細設定 → \"Allow other applications on this computer to communicate with Zotero\"をチェック",
     "Failed to apply this style": "このスタイルを適用できませんでした",
