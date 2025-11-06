@@ -815,16 +815,18 @@
     function loadLibrary(promise, append, showLoader, hideLoader, isGroup, bCount) {
 		if (showLoader) showLibLoader(true);
 		if (bCount) counter++;
-        promise
+        return promise
             .then(function (res) {
 				if (bCount) counter--;
-                displaySearchItems(append, res, null, hideLoader, isGroup, (bCount && !counter) );
+                displaySearchItems(append, res, null, isGroup, (bCount && !counter) );
             })
             .catch(function (err) {
 				if (bCount) counter--;
                 console.error(err);
-                displaySearchItems(append, {}, err.message, hideLoader, isGroup, (bCount && !counter) );
-                showError(err.message);
+                if (err.message) {
+                    showError(getMessage(err.message));
+                }
+                displaySearchItems(append, {}, err, isGroup, (bCount && !counter) );
             })
             .finally(function () {	
 				if (hideLoader) {
@@ -858,7 +860,7 @@
         });
     };
 
-    function displaySearchItems(append, res, err, hideLoader, isGroup, showNotFound) {
+    function displaySearchItems(append, res, err, isGroup, showNotFound) {
         var holder = elements.docsHolder;
 
         if (!append) {
