@@ -156,8 +156,12 @@ const ZoteroSdk = function () {
                     resolve(userGroups);
                 } else {
                     buildGetRequest("users/" + userId + "/groups").then(function (res) {
-                        if (!res.ok) throw new Error(res.status + " " + res.statusText);
-                        return res.json();
+                        if (isOnlineAvailable) {
+                            if (!res.ok)
+                                throw new Error(res.status + " " + res.statusText);
+                            return res.json();
+                        }
+                        return JSON.parse(res.responseText);
                     }).then(function (res) {
                         res.forEach(function(el) {
                             userGroups.push(el.id);
