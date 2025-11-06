@@ -28,6 +28,7 @@
     "Please insert some citation into the document.": "Si prega di inserire qualche citazione nel documento.",
     "Synchronize": "Sincronizzare",
     "Omit Author": "Ometti Autore",
+    "Connection to Zotero failed": "Connessione a Zotero non riuscita",
     "Connection to Zotero failed. Make sure Zotero is running": "Connessione a Zotero non riuscita. Assicurati che Zotero sia in esecuzione",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Connessione a Zotero non riuscita. Abilita le connessioni esterne in Zotero: Modifica → Impostazioni → Avanzate → Seleziona \"Allow other applications on this computer to communicate with Zotero\"",
     "Failed to apply this style": "Impossibile applicare questo stile",
