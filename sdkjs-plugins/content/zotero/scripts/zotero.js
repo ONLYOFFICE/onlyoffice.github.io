@@ -115,7 +115,7 @@ const ZoteroSdk = function () {
             });
         }
 
-		function groups(search, groupId, itemsID, format) {
+		function getGroupItems(search, groupId, itemsID, format) {
             return new Promise(function (resolve, reject) {
                 format = format || "csljson";
 				var props = {
@@ -303,7 +303,7 @@ const ZoteroSdk = function () {
 
         return {
             getItems: getItems,
-			groups: groups,
+			getGroupItems: getGroupItems,
 			getUserGroups: getUserGroups,
             format: format,
             hasSettings: getSettings,

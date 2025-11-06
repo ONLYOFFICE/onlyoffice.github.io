@@ -180,6 +180,9 @@ CitationItem.prototype.setAuthorOnly = function (value) {
  * @returns {CitationItem}
  */
 CitationItem.prototype.addUri = function (uri) {
+    if (this._uris.indexOf(uri) !== -1) {
+        return this;
+    }
     this._uris.push(uri);
     return this;
 };
