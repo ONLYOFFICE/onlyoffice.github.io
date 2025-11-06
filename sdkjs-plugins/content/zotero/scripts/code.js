@@ -340,7 +340,7 @@
             loadLibrary(sdk.getItems(text), true, true, !groups.length, false, true);
 			if (groups.length) {
 				for (var i = 0; i < groups.length; i++) {
-					loadLibrary(sdk.groups(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
+					loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
 				}
 			}
         };
@@ -782,7 +782,7 @@
                 if (shouldLoadMore(holder)) {
                     loadLibrary(lastSearch.obj.next(), true, true, !lastSearch.groups.length, false, false);
 					for (var i = 0; (i < lastSearch.groups.length && lastSearch.groups[i].next); i++) {
-						loadLibrary(sdk.groups(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false, lastSearch.groups[i] );
+						loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false, lastSearch.groups[i] );
 					}
                 } else {
                 }
@@ -886,9 +886,7 @@
 			for (let index = 0; index < res.items.items.length; index++) {
 				let item = res.items.items[index];
 				item[ (isGroup ? "groupID" : "userID") ] = res.id;
-				var pos = item.id.indexOf("/") + 1;
-				if (pos)
-					item.id = item.id.substring(pos)
+                fillUrisFromId(item);
 
                 page.appendChild(buildDocElement(item));
             }
@@ -1088,7 +1086,7 @@
                             .replace(/<sup\b[^>]*>/gi, '&lt;sup&gt;')
                             .replace(/<\/sup>/gi, '&lt;/sup&gt;')
                             .replace(/<sub\b[^>]*>/gi, '&lt;sub&gt;')
-                            .replace(/<\/sub>/gi, '&lt;/sub&gt;');;
+                            .replace(/<\/sub>/gi, '&lt;/sub&gt;');
                     }
                     bibItems[citationIndex] = bibText;
                 }
@@ -1376,15 +1374,29 @@
         return cslData;
     };
 
+
 	function syncronizeCSLItem(item) {
-		var pos = item.id.indexOf("/") + 1;
-		if (pos)
-			item.id = item.id.substring(pos);
+        fillUrisFromId(item);
 		
 		var cslItem = CSLCitationStorage.get(item.id);
         cslItem.fillFromObject(item);
-
     };
+
+    function fillUrisFromId(item) {
+        const slashFirstIndex = item.id.indexOf("/") + 1;
+        const slashLastIndex = item.id.lastIndexOf("/") + 1;
+        const httpIndex = item.id.indexOf("http");
+        if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
+            if (!Object.hasOwnProperty(item, 'uris')) {
+                item.uris = [];
+            }
+            item.uris.push(item.id);
+        }
+        if (slashLastIndex)
+			item.id = item.id.substring(slashLastIndex);
+
+        return item;
+    }
 
     function getSelectedInJsonFormat() {
 		var arrUsrItems = [];
@@ -1420,7 +1432,7 @@
 		for (var groupID in arrGroupsItems) {
             if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
                 promises.push(
-                    sdk.groups(null, groupID, arrGroupsItems[groupID], 'json')
+                    sdk.getGroupItems(null, groupID, arrGroupsItems[groupID], 'json')
                     .then(function(res) {
                         var items = ( res.items || [] );
                         return items
@@ -1435,6 +1447,9 @@
         return Promise.all(promises).then(function(res) {
             var items = [];
             res.forEach(function(resItems) {
+                if (!Array.isArray(resItems) && Object.hasOwnProperty.call(resItems, 'items')) {
+                    resItems = resItems.items;
+                }
                 items = items.concat(resItems);
             });
             return items;
@@ -1491,7 +1506,7 @@
 		for (var groupID in arrGroupsItems) {
 			if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
 				bHasGroupsItems = true;
-				sdk.groups(null, groupID, arrGroupsItems[groupID])
+				sdk.getGroupItems(null, groupID, arrGroupsItems[groupID])
 				.then(function(res) {
 					var items = ( (res.items ? res.items.items : []) || [] );
 					items.forEach(function(item) {
