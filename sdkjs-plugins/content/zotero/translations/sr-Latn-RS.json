@@ -28,6 +28,7 @@
     "Please insert some citation into the document.": "Molimo ubacite neki citat u dokument.",
     "Synchronize": "Sinhronizuj",
     "Omit Author": "Izostavi autora",
+    "Connection to Zotero failed": "Neuspelo povezivanje na Zotero",
     "Connection to Zotero failed. Make sure Zotero is running": "Neuspelo povezivanje na Zotero. Molimo proverite da Zotero radi.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Neuspelo povezivanje na Zotero. Molimo omogucite vanjske veze u Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",
     "Failed to apply this style": "Neuspelo primjena ovog stila",
