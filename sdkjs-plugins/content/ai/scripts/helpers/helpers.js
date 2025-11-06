@@ -758,6 +758,381 @@ HELPERS.word.push((function(){
 
 
 HELPERS.slide = [];
+HELPERS.slide.push((function(){
+	let func = new RegisteredFunction({
+		"name": "addNewSlide",
+		"description": "Adds a new slide at the end of presentation using default layout from current slide's master",
+		"parameters": {
+			"type": "object",
+			"properties": {
+			},
+			"required": []
+		},
+		"examples": [
+			{
+				"prompt": "Add new slide",
+				"arguments": {}
+			}
+		]
+	});
+	
+	func.call = async function(params) {
+		Asc.scope.params = params;
+		await Asc.Editor.callCommand(function () {
+				let presentation = Api.GetPresentation();
+				let currentSlide = presentation.GetCurrentSlide();
+				let master;
+				if (currentSlide) {
+					currentSlide = presentation.GetSlideByIndex(0);
+					let curLayout = currentSlide.GetLayout();
+					master = curLayout.GetMaster();
+				}
+				else {
+					master = presentation.GetMasterByIndex(0);
+				}
+				if (!master) {
+					return;
+				}
+
+				let layout = master.GetLayoutByType("obj");
+				if (!layout) {
+					let layoutsCount = master.GetLayoutsCount();
+					if (layoutsCount > 0) {
+						layout = master.GetLayout(0);
+					}
+				}
+
+				if (!layout) return;
+				let newSlide = Api.CreateSlide();
+
+				if (layout) {
+					newSlide.ApplyLayout(layout);
+				}
+
+				presentation.AddSlide(newSlide);
+		});
+	};
+
+	return func;
+})());
+HELPERS.slide.push((function(){
+	let func = new RegisteredFunction({
+		"name": "addShapeToSlide",
+		"description": "Adds a shape to the slide with optional text (139x42mm, centered, blue fill with dark border)",
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"slideNumber": {
+					"type": "number",
+					"description": "Slide number to add shape to",
+					"minimum": 1
+				},
+				"shapeType": {
+					"type": "string",
+					"description": "shape type - rect, roundRect, ellipse, triangle, diamond, pentagon, hexagon, star5, plus, mathMinus, mathMultiply, mathEqual, mathNotEqual, heart, cloud, leftArrow, rightArrow, upArrow, downArrow, leftRightArrow, chevron, bentArrow, curvedRightArrow, blockArc, wedgeRectCallout, cloudCallout, ribbon, wave, can, cube, pie, donut, sun, moon, smileyFace, lightningBolt, noSmoking"
+				},
+				"text": {
+					"type": "string",
+					"description": "text to add to the shape"
+				}
+			},
+			"required": []
+		},
+		"examples": [
+			{
+				"prompt": "add a rectangle with text on slide 2",
+				"arguments": { "slideNumber": 2, "shapeType": "rect" }
+			},
+			{
+				"prompt": "add a star shape on current slide",
+				"arguments": { "shapeType": "star5" }
+			},
+			{
+				"prompt": "add a rounded rectangle with text",
+				"arguments": { "text": "Key Message" }
+			},
+			{
+				"prompt": "add a diamond shape with text",
+				"arguments": { "shapeType": "diamond", "text": "Decision Point" }
+			},
+			{
+				"prompt": "add a right arrow with text",
+				"arguments": { "shapeType": "rightArrow", "text": "Next Step" }
+			}
+		]
+	});
+	
+	func.call = async function(params) {
+		Asc.scope.params = params;
+		await Asc.Editor.callCommand(function () {
+				let presentation = Api.GetPresentation();
+				let slide;
+
+				if (Asc.scope.params.slideNumber) {
+					slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+				}
+				else {
+					slide = presentation.GetCurrentSlide();
+				}
+
+				if (!slide) return;
+
+				let slideWidth = presentation.GetWidth();
+				let slideHeight = presentation.GetHeight();
+
+				let shapeType = Asc.scope.params.shapeType || "rect";
+				let width = 2500000;
+				let height = 2500000;
+				let x = (slideWidth - width) / 2;
+				let y = (slideHeight - height) / 2;
+
+				let fill = Api.CreateSolidFill(Api.CreateSchemeColor("accent1"));
+				let stroke = Api.CreateStroke(12700, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+
+				let shape = Api.CreateShape(shapeType, width, height, fill, stroke);
+				shape.SetPosition(x, y);
+
+				if (Asc.scope.params.text) {
+					let docContent = shape.GetDocContent();
+					if (docContent) {
+						let paragraph = docContent.GetElement(0);
+						if (!paragraph) {
+							paragraph = Api.CreateParagraph();
+							docContent.Push(paragraph);
+						}
+						paragraph.SetJc("center");
+						paragraph.AddText(Asc.scope.params.text);
+						shape.SetVerticalTextAlign("center");
+					}
+				}
+				slide.AddObject(shape);
+		});
+	};
+
+	return func;
+})());
+HELPERS.slide.push((function(){
+	let func = new RegisteredFunction({
+		"name": "addImageByDescription",
+		"description": "Adds an image on the slide in the presentation",
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"slideNumber": {
+					"type": "number",
+					"description": "the slide number to add generated image to",
+					"minimum": 1
+				},
+				"description": {
+					"type": "string",
+					"description": "text description of the image to generate"
+				},
+				"width": {
+					"type": "number",
+					"description": "image width in mm"
+				},
+				"height": {
+					"type": "number",
+					"description": "image height in mm"
+				},
+				"style": {
+					"type": "string",
+					"description": "image style (realistic, cartoon, abstract, etc.)"
+				}
+			},
+			"required": []
+		},
+		"examples": [
+			{
+				"prompt": "add an image of a sunset over mountains to slide 1",
+				"arguments": { "slideNumber": 1, "description": "beautiful sunset over mountain range with orange and purple sky"}
+			},
+			{
+				"prompt": "add a cartoon style image of office workers with custom size",
+				"arguments": {"description": "team of diverse office workers collaborating around a table", "style": "cartoon" }
+			}
+		]
+	});
+	
+	func.call = async function(params) {
+		Asc.scope.params = params;
+		Asc.scope.description = params.description;
+
+		let widthMm = params.width || 100;
+		let heightMm = params.height || 100;
+		Asc.scope.width = widthMm * 36000;
+		Asc.scope.height = heightMm * 36000;
+		Asc.scope.style = params.style || "realistic";
+
+		let widthPx = Math.round((widthMm / 25.4) * 96);
+		let heightPx = Math.round((heightMm / 25.4) * 96);
+
+		let requestEngine = null;
+		requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
+		if (!requestEngine) {
+			return;
+		}
+
+		let fullPrompt = Asc.scope.description;
+		if (Asc.scope.style && Asc.scope.style !== "realistic") {
+			fullPrompt = Asc.scope.style + " style, " + fullPrompt;
+		}
+
+		fullPrompt += ", image size " + widthPx + "x" + heightPx + " pixels";
+
+		let aspectRatio = widthPx / heightPx;
+		if (aspectRatio > 1.8) {
+			fullPrompt += ", wide panoramic format";
+		}
+		else if (aspectRatio < 0.6) {
+			fullPrompt += ", tall vertical format";
+		}
+		else if (aspectRatio > 0.9 && aspectRatio < 1.1) {
+			fullPrompt += ", square format";
+		}
+
+		let isSendedEndLongAction = false;
+
+		async function checkEndAction() {
+			if (!isSendedEndLongAction) {
+				let actionName = "AI (" + requestEngine.modelUI.name + ")";
+				await Asc.Editor.callMethod("EndAction", ["Block", actionName]);
+				isSendedEndLongAction = true;
+			}
+		}
+
+		let actionName = "AI (" + requestEngine.modelUI.name + ")";
+		await Asc.Editor.callMethod("StartAction", ["Block", actionName]);
+		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+		try {
+			let imageUrl;
+			imageUrl = await requestEngine.imageGenerationRequest(fullPrompt);
+
+			await checkEndAction();
+
+			if (imageUrl) {
+				Asc.scope.imageUrl = imageUrl;
+				await Asc.Editor.callCommand(function () {
+					let oPresentation = Api.GetPresentation();
+					let oSlide;
+					if (params.slideNumber !== undefined && params.slideNumber !== null) {
+						oSlide = oPresentation.GetSlideByIndex(params.slideNum - 1);
+					}
+					else {
+						oSlide = oPresentation.GetCurrentSlide();
+					}
+					if (!oSlide) return;
+
+					let slideWidth = oPresentation.GetWidth();
+					let slideHeight = oPresentation.GetHeight();
+
+					let x = (slideWidth - Asc.scope.width) / 2;
+					let y = (slideHeight - Asc.scope.height) / 2;
+
+					let oImage = Api.CreateImage(Asc.scope.imageUrl, Asc.scope.width, Asc.scope.height);
+					oImage.SetPosition(x, y);
+					oSlide.AddObject(oImage);
+				});
+			}
+		} catch (error) {
+			await checkEndAction();
+		}
+
+		await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+	};
+
+	return func;
+})());
+HELPERS.slide.push((function(){
+	let func = new RegisteredFunction({
+		"name": "changeSlideBackground",
+		"description": "Changes the color of the slide in the presentation.",
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"slideNumber": {
+					"type": "number",
+					"description": "Slide number to apply the color",
+					"minimum": 1
+				},
+				"backgroundType": {
+					"type": "string",
+					"description": "type of background - 'solid', 'gradient'"
+				},
+				"color": {
+					"type": "string",
+					"description": "hex color for solid background (e.g., '#FF5733')"
+				},
+				"gradientColors": {
+					"type": "array",
+					"description": "array of hex colors for gradient"
+				}
+			},
+			"required": []
+		},
+		"examples": [
+			{
+				"prompt": "set blue background on slide 1",
+				"arguments": { "slideNumber": 1, "backgroundType": "solid", "color": "#0066CC" }
+			},
+			{
+				"prompt": "set gradient background",
+				"arguments": {"backgroundType": "gradient", "gradientColors": ["#FF0000", "#0000FF"] }
+			}
+		]
+	});
+	
+	func.call = async function(params) {
+		Asc.scope.params = params;
+		await Asc.Editor.callCommand(function () {
+				let presentation = Api.GetPresentation();
+				let slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+				if (!slide) 
+					slide = presentation.GetCurrentSlide();
+				if (!slide) return;
+
+				let fill;
+
+				switch (Asc.scope.params.backgroundType) {
+					case "solid":
+						if (Asc.scope.params.color) {
+							let rgb = parseInt(Asc.scope.params.color.slice(1), 16);
+							let r = (rgb >> 16) & 255;
+							let g = (rgb >> 8) & 255;
+							let b = rgb & 255;
+							fill = Api.CreateSolidFill(Api.CreateRGBColor(r, g, b));
+						}
+						break;
+
+					case "gradient":
+						if (Asc.scope.params.gradientColors && Asc.scope.params.gradientColors.length >= 2) {
+							let stops = [];
+							let step = 100000 / (Asc.scope.params.gradientColors.length - 1);
+
+							for (let i = 0; i < Asc.scope.params.gradientColors.length; i++) {
+								let color = Asc.scope.params.gradientColors[i];
+								let rgb = parseInt(color.slice(1), 16);
+								let r = (rgb >> 16) & 255;
+								let g = (rgb >> 8) & 255;
+								let b = rgb & 255;
+								let stop = Api.CreateGradientStop(Api.CreateRGBColor(r, g, b), i * step);
+								stops.push(stop);
+							}
+
+							fill = Api.CreateLinearGradientFill(stops, 5400000);
+						}
+						break;
+				}
+
+				if (fill) {
+					slide.SetBackground(fill);
+				}
+		});
+	};
+
+	return func;
+})());
 
 
 HELPERS.cell = [];
