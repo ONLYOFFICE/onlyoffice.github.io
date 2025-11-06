@@ -6,8 +6,8 @@
 
 ## 1.0.1
 
-* Add translations for Japan and Chine languages.
-* Add ability to work with fields, instead of text.
+* Add translations for Japanese and Chinese languages.
+* Add ability to work with fields instead of text.
 * Add ability to update links and bibliography.
 
 ## 1.0.2
@@ -20,10 +20,10 @@
 
 ## 1.0.5
 
-* Support offline mode.
-* Ability for users to upload their own styles
-* Ability to work with styles that inherit behavior from a parent
-* Fix for bibliography sorting
-* Fix for citation numbering
-* Improved compatibility with MS Word
-* Removing extra lines in a bibliography
+* Offline mode support.
+* Ability for users to upload custom citation styles.
+* Add support for styles that inherit behavior from parent styles.
+* Fix bibliography sorting issues.
+* Fix citation numbering issues.
+* Improved compatibility with MS Word.
+* Remove extra blank lines in bibliography.
