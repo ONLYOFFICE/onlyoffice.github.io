@@ -486,6 +486,17 @@
 		}
 
 		/**
+		 * Is provider support AI tools.
+		 */
+		isSupportTools(model) {
+			return false;
+		}
+
+		addTools(message) {
+			return;
+		}
+
+		/**
 		 * ========================================================================================
 		 * The following are methods for internal work. There is no need to overload these methods.
 		 * ========================================================================================
