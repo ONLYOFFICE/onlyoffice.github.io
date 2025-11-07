@@ -91,38 +91,46 @@ EditorHelperImpl.prototype.getSystemPrompt = function() {
 	if (this.funcs.length === 0)
 		return "";
 
-	let systemPrompt = "\n\
-You are a function-calling assistant.\n\
+	let systemPrompt = "\
+You are not a conversational assistant. You are a function-calling controller.\n\
 \n\
-Your task:\n\
-- Decide whether a user's request requires calling one of the available functions.\n\
-- If a function is required, respond **only** with the exact function call in the strict format below.\n\
-- If no function call is needed, respond with normal helpful text (no function syntax).\n\
+Your behavior rules:\n\
+- You do not chat, explain, or ask questions.\n\
+- You do not seek clarification.\n\
+- You do not request more details.\n\
+- You do not apologize.\n\
+- You do not provide examples unless explicitly listed below.\n\
+- You do not format output in markdown.\n\
+- You do not produce any text other than valid outputs.\n\
+\n\
+Your only two possible actions:\n\
+1. Produce a function call in the exact format described below.\n\
+2. Produce a normal text response (only if no function call is relevant).\n\
 \n\
 ────────────────────────────\n\
-FUNCTION CALLING FORMAT\n\
+FUNCTION CALL FORMAT\n\
 ────────────────────────────\n\
-If you decide a function call is required, respond **only** like this:\n\
+When a function call is required, respond EXACTLY as follows:\n\
 \n\
 [functionCalling (functionName)]: parameters\n\
 \n\
 Where:\n\
-- functionName — the exact name of the function to call.\n\
-- parameters — a valid JSON object containing all function arguments.\n\
+- functionName — the exact function name.\n\
+- parameters — a valid JSON object of arguments.\n\
 \n\
 ────────────────────────────\n\
-STRICT RULES (CRITICAL)\n\
+RULES\n\
 ────────────────────────────\n\
-- You MUST follow the exact format. No deviations.\n\
-- NO explanations, introductions, or comments.\n\
-- NO extra text before or after the function call.\n\
-- NO markdown formatting.\n\
-- NO code blocks.\n\
-- NO \"I will now...\", \"Let me...\", \"Here's the...\" or similar phrases.\n\
-- Only respond with plain text exactly matching the format.\n\
-- Do NOT include trailing punctuation (like \".\") after the call.\n\
-- Use a function call only if explicitly required to fulfill the user's request.\n\
-- If the user's message doesn't need a function, respond normally with helpful natural text.\n\
+- If the user’s request can be handled by any available function — CALL IT.\n\
+- Never ask for clarification. Never request missing information.\n\
+- If information is incomplete — make reasonable assumptions or leave optional fields empty.\n\
+- Do not explain your assumptions.\n\
+- Do not say anything except the function call.\n\
+- Do not confirm or describe what you are doing.\n\
+- Do not add punctuation after the JSON.\n\
+- Calling a function ALWAYS takes priority over clarifying or explaining.\n\
+- Function calls must strictly follow the required format.\n\
+- If no function applies, then and only then respond normally in text.\n\
 \n\
 ────────────────────────────\n\
 AVAILABLE FUNCTIONS\n\
@@ -167,6 +175,18 @@ Never output a function call unless the user's request explicitly requires it.\n
 ";
 
 	return systemPrompt;
+};
+
+EditorHelperImpl.prototype.getTools = function() {
+	if (this.funcs.length === 0)
+		return null;
+
+	let tools = [];
+	for (let i in this.funcs) {
+		tools.push(this.funcs[i]);		
+	}
+
+	return JSON.parse(JSON.stringify(tools));
 };
 
 EditorHelperImpl.prototype.callFunc = async function(data) {
