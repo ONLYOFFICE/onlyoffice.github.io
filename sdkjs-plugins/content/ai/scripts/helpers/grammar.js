@@ -192,6 +192,7 @@ Text to check:`;
 							"id": rangeId
 						});
 						_t.paragraphs[paraId][rangeId] = {
+							"original" : origin,
 							"suggestion" : suggestion,
 							"difference" : difference,
 							"description" : description
@@ -273,14 +274,19 @@ Text to check:`;
 			isModal : false,
 			isCustomWindow : true,
 			EditorsSupport : ["word", "slide", "cell", "pdf"],
-			size : [400, 500],
+			size : [318, 500],
 			isTargeted : true,
 			transparent : true
 		};
 		let _t = this;
 		let popup = new window.Asc.PluginWindow();
 		popup.attachEvent("onWindowReady", function() {
-			popup.command("onUpdateSuggestion", _t.getSuggestion(paraId, rangeId));
+			let _s = _t.getSuggestion(paraId, rangeId);
+			popup.command("onUpdateSuggestion", {
+				"suggested" : _s["difference"],
+				"original" : _s["original"],
+				"explanation" : _s["description"]
+			});
 		});
 		popup.attachEvent("onAccept", async function() {
 			let text = _t.getSuggestion(paraId, rangeId)["suggestion"];
@@ -307,9 +313,9 @@ Text to check:`;
 		popup.attachEvent("onClose", function() {
 			_t.closePopup();
 		});
-		popup.attachEvent("onUpdateHeight", function(height) {
-			if (height !== variation.size[1]) {
-				Asc.Editor.callMethod("ResizeWindow", [popup.id, [variation.size[0], height]]);
+		popup.attachEvent("onUpdateSize", function(size) {
+			if (size[0] !== variation.size[0] || size[1] !== variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [popup.id, [size[0], size[1]]]);
 			}
 		});
 		popup.show(variation);
