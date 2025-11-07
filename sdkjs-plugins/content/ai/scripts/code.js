@@ -40,6 +40,7 @@ let helperWindow = null;
 
 let spellchecker = null;
 let grammar = null;
+let suggestionPopup = null;
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -64,8 +65,9 @@ window.addSupportAgentMode = function(editorVersion) {
 	var is91 = editorVersion >= 9001000;
 
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
-		if (e.keyCode === 27 && grammar)
-			grammar.closePopup();
+		if (e.keyCode === 27 && suggestionPopup) {
+			suggestionPopup.close();
+		}
 
 		if (e.keyCode === 27 && helperWindow) {
 			helperWindow.close();
@@ -644,6 +646,7 @@ class Provider extends AI.Provider {\n\
 			
 		});
 
+		suggestionPopup = new SuggestionPopup();
 		spellchecker = new Spellchecker();
 		grammar = new GrammarChecker();
 
@@ -661,9 +664,6 @@ class Provider extends AI.Provider {\n\
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
 			if (!obj)
 				return;
-			
-			if ("spelling" === obj["name"])
-				spellchecker.setCurrentRange(obj["paragraphId"], obj["rangeId"]);
 		});
 
 		this.attachEditorEvent("onBlurAnnotation", function(obj) {
@@ -671,14 +671,9 @@ class Provider extends AI.Provider {\n\
 				return;
 
 			if ("spelling" === obj["name"])
-			{
-				spellchecker.setCurrentRange(null, null);
-			}
+				spellchecker.onBlur();
 			else if ("grammar" === obj["name"]) 
-			{
-				grammar.resetCurrentRange();
-				grammar.closePopup();
-			}
+				grammar.onBlur();
 		});
 
 		this.attachEditorEvent("onClickAnnotation", function(obj) {
@@ -687,6 +682,8 @@ class Provider extends AI.Provider {\n\
 
 			if ("grammar" === obj["name"])
 				grammar.onClickAnnotation(obj["paragraphId"], obj["ranges"]);
+			else if ("spelling" === obj["name"])
+				spellchecker.onClickAnnotation(obj["paragraphId"], obj["ranges"]);
 		});
 
 	}

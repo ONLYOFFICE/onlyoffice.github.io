@@ -217,7 +217,10 @@ Text to check:`;
 								"length": wrong.length,
 								"id": rangeId
 							});
-							_t.paragraphs[paraId][rangeId] = correct;
+							_t.paragraphs[paraId][rangeId] = {
+								"suggested" : correct,
+								"original" : wrong
+							};
 							++rangeId;
 							break;
 						}
@@ -266,7 +269,18 @@ Text to check:`;
 
 		return this.paragraphs[this.currParaId][this.currRangeId];
 	};
+	
+	this.getSuggestion = function(paraId, rangeId)
+	{
+		if (!paraId
+			|| !rangeId
+			|| !this.paragraphs[paraId] 
+			|| !this.paragraphs[paraId][rangeId])
+			return "";
 
+		return this.paragraphs[paraId][rangeId];
+	};
+	
 	this.getCurrentRange = function()
 	{
 		return {
@@ -275,5 +289,72 @@ Text to check:`;
 			name : "spelling"
 		}
 	};
+	
+	this.onClickAnnotation = function(paragraphId, ranges)
+	{
+		console.log(`Click grammar: para=${paragraphId} ranges=${ranges}`);
+		if (!ranges || !ranges.length)
+			this.closePopup();
+		else
+			this.openPopup(paragraphId, ranges[0]);
+	};
 
+	this.openPopup = async function(paraId, rangeId)
+	{
+		if (!suggestionPopup)
+			return;
+		
+		let popup = suggestionPopup.showSpelling(paraId, rangeId);
+		if (!popup)
+			return;
+		
+		let _t = this;
+		popup.attachEvent("onWindowReady", function() {
+			let _s = _t.getSuggestion(paraId, rangeId);
+			popup.command("onUpdateSuggestion", {
+				"title" : "Spelling suggestion",
+				"suggested" : _s["suggested"],
+				"original" : _s["original"]
+			});
+		});
+		popup.attachEvent("onAccept", async function() {
+			// let text = _t.getSuggestion(paraId, rangeId)["suggestion"];
+			
+			// await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+			
+			// let range = {
+			// 	paragraphId: paraId,
+			// 	rangeId: rangeId,
+			// 	name: "grammar"
+			// };
+			
+			// await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
+			
+			// Asc.scope.text = text;
+			// await Asc.Editor.callCommand(function(){
+			// 	Api.ReplaceTextSmart([Asc.scope.text]);
+			// });
+			
+			// await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
+			// await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			// _t.closePopup();
+		});
+	};
+
+	this.closePopup = function()
+	{
+		suggestionPopup.closeSpelling();
+	};
+	
+	this.resetCurrentRange = function()
+	{
+		this.paraId = null;
+		this.rangeId = null;
+	};
+	
+	this.onBlur = function()
+	{
+		this.closePopup();
+		this.resetCurrentRange();
+	};
 }
