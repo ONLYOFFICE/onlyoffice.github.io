@@ -40,7 +40,6 @@ let helperWindow = null;
 
 let spellchecker = null;
 let grammar = null;
-let suggestionPopup = null;
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -65,8 +64,8 @@ window.addSupportAgentMode = function(editorVersion) {
 	var is91 = editorVersion >= 9001000;
 
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
-		if (e.keyCode === 27 && suggestionPopup) {
-			suggestionPopup.close();
+		if (e.keyCode === 27 && textAnnotatorPopup) {
+			textAnnotatorPopup.close();
 		}
 
 		if (e.keyCode === 27 && helperWindow) {
@@ -645,9 +644,8 @@ class Provider extends AI.Provider {\n\
 				AI.Storage.save();
 			
 		});
-
-		suggestionPopup = new SuggestionPopup();
-		spellchecker = new Spellchecker();
+		
+		spellchecker = new SpellChecker();
 		grammar = new GrammarChecker();
 
 		this.attachEditorEvent("onAnnotateText", function(obj) {
@@ -681,9 +679,9 @@ class Provider extends AI.Provider {\n\
 				return;
 
 			if ("grammar" === obj["name"])
-				grammar.onClickAnnotation(obj["paragraphId"], obj["ranges"]);
+				grammar.onClick(obj["paragraphId"], obj["ranges"]);
 			else if ("spelling" === obj["name"])
-				spellchecker.onClickAnnotation(obj["paragraphId"], obj["ranges"]);
+				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
 		});
 
 	}
