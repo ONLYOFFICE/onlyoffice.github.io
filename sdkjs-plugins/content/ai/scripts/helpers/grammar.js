@@ -229,13 +229,13 @@ Text to check:`;
 
 	this.getSuggestion = function(paraId, rangeId)
 	{
-		if (!this.paraId 
-			|| !this.rangeId 
-			|| !this.paragraphs[this.paraId] 
-			|| !this.paragraphs[this.paraId][this.rangeId])
+		if (!paraId 
+			|| !rangeId 
+			|| !this.paragraphs[paraId] 
+			|| !this.paragraphs[paraId][rangeId])
 			return {"suggestion" : "", "description" : ""};
 
-		return this.paragraphs[this.paraId][this.rangeId];
+		return this.paragraphs[paraId][rangeId];
 	};
 
 	this.getCurrentRange = function()
@@ -245,6 +245,12 @@ Text to check:`;
 			rangeId : this.currRangeId,
 			name : "grammar"
 		}
+	};
+	
+	this.onBlur = function()
+	{
+		this.closePopup();
+		this.resetCurrentRange();
 	};
 
 	this.onClickAnnotation = function(paragraphId, ranges)
@@ -258,31 +264,18 @@ Text to check:`;
 
 	this.openPopup = async function(paraId, rangeId)
 	{
-		if (this.paraId === paraId && this.rangeId === rangeId)
+		if (!suggestionPopup)
 			return;
-
-		this.paraId = paraId;
-		this.rangeId = rangeId;
-
-		if (this.popup)
-			this.popup.close();
-
-		let variation = {
-			url : 'grammarPopup.html',
-			isVisual : true,
-			buttons : [],
-			isModal : false,
-			isCustomWindow : true,
-			EditorsSupport : ["word", "slide", "cell", "pdf"],
-			size : [318, 500],
-			isTargeted : true,
-			transparent : true
-		};
+		
+		let popup = suggestionPopup.showGrammar(paraId, rangeId);
+		if (!popup)
+			return;
+		
 		let _t = this;
-		let popup = new window.Asc.PluginWindow();
 		popup.attachEvent("onWindowReady", function() {
 			let _s = _t.getSuggestion(paraId, rangeId);
 			popup.command("onUpdateSuggestion", {
+				"title" : "Grammar suggestion",
 				"suggested" : _s["difference"],
 				"original" : _s["original"],
 				"explanation" : _s["description"]
@@ -310,16 +303,6 @@ Text to check:`;
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 			_t.closePopup();
 		});
-		popup.attachEvent("onClose", function() {
-			_t.closePopup();
-		});
-		popup.attachEvent("onUpdateSize", function(size) {
-			if (size[0] !== variation.size[0] || size[1] !== variation.size[1]) {
-				Asc.Editor.callMethod("ResizeWindow", [popup.id, [size[0], size[1]]]);
-			}
-		});
-		popup.show(variation);
-		this.popup = popup;
 	};
 	
 	this.resetCurrentRange = function()
@@ -330,11 +313,89 @@ Text to check:`;
 
 	this.closePopup = function()
 	{
+		suggestionPopup.closeGrammar();
+	};
+
+}
+
+function SuggestionPopup(){
+	this.popup = null;
+	this.type = 0; // 0 - spelling, 1 - grammar
+	this.paraId = -1;
+	this.rangeId = -1;
+	
+	this.showSpelling = function(paraId, rangeId) 
+	{
+		return this.open(0, paraId, rangeId);
+	};
+	
+	this.closeSpelling = function() 
+	{
+		if (this.popup && 0 === this.type)
+			this.close();
+	};
+	
+	this.showGrammar = function(paraId, rangeId) 
+	{
+		if (0 === this.type && this.popup)
+			return null;
+		return this.open(1, paraId, rangeId);
+	};
+	
+	this.closeGrammar = function() 
+	{
+		if (this.popup && 1 === this.type)
+			this.close();
+	};
+	
+	this.open = function(type, paraId, rangeId) 
+	{
+		
+		if (this.type === type
+			&& rangeId === this.rangeId
+			&& paraId === this.paraId)
+			return this.popup;
+			
+		this.type = type;
+		this.paraId = paraId;
+		this.rangeId = rangeId;
+		
+		if (this.popup)
+			this.popup.close();
+
+		let variation = {
+			url : 'grammarPopup.html',
+			isVisual : true,
+			buttons : [],
+			isModal : false,
+			isCustomWindow : true,
+			EditorsSupport : ["word", "slide", "cell", "pdf"],
+			size : [318, 500],
+			isTargeted : true,
+			transparent : true
+		};
+		let _t = this;
+		let popup = new window.Asc.PluginWindow();
+		popup.attachEvent("onClose", function() {
+			_t.close();
+		});
+		popup.attachEvent("onUpdateSize", function(size) {
+			if (size[0] !== variation.size[0] || size[1] !== variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [popup.id, [size[0], size[1]]]);
+			}
+		});
+		popup.show(variation);
+		this.popup = popup;
+		return popup;
+	};
+	
+	this.close = function() 
+	{
 		if (!this.popup)
 			return;
 
 		this.popup.close();
 		this.popup = null;
-	};
-
+		Asc.Editor.callMethod("FocusEditor");
+	}
 }

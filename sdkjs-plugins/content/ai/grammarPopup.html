@@ -142,7 +142,7 @@
 			font-weight: normal;
 		}
 		.suggested strong {
-			color: red;
+			color: #F62211;
 			font-weight: bold;
 		}
 
@@ -212,7 +212,7 @@
 <body>
 	<div class="popup" id="popup">
 		<div class="popup-header">
-			<span>Grammar suggestion</span>
+			<span id="title">Grammar suggestion</span>
 			<span class="close-icon" id="closeIcon">×</span>
 		</div>
 		<div class="popup-body">
@@ -227,7 +227,7 @@
 				</div>
 			</div>
 	
-			<div class="section">
+			<div class="section" id="explanation-section">
 				<div class="label">Explanation</div>
 				<div class="explanation" id="explanation"></div>
 			</div>
@@ -241,6 +241,7 @@
 
 	<script>
 		let errorData = {
+			"title" : "Grammar suggestion",
 			"original": "",
 			"suggested": "",
 			"explanation": ""
@@ -248,9 +249,17 @@
 
 		function displayError(error)
 		{
+			document.getElementById('title').textContent = error.title;
 			document.getElementById('original').textContent = error.original;
 			document.getElementById('suggested').innerHTML = error.suggested;
-			document.getElementById('explanation').textContent = error.explanation;
+			
+			if (!error.explanation) {
+				document.getElementById('explanation-section').style.display = "none";
+			} else {
+				document.getElementById('explanation-section').style.display = "block";
+				document.getElementById('explanation').textContent = error.explanation;
+			}
+				
 			errorData = error;
 		}
 
