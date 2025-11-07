@@ -316,9 +316,11 @@ function fetchExternal(url, options, isStreaming) {
 					let _fetch = fetch;
 					if (requestUrl.startsWith("[external]"))
 						_fetch = fetchExternal;
-
+					
+					let fetchResponse;
 					_fetch(requestUrl, request)
 						.then(function(response) {
+							fetchResponse = response;
 							return response.text();
 						})
 						.then(function(text) {
@@ -331,6 +333,8 @@ function fetchExternal(url, options, isStreaming) {
 						.then(function(data) {
 							if (data.error)
 								resolve({error: 1, message: data.error.message ? data.error.message : ((typeof data.error === "string") ? data.error : "")});
+							else if (fetchResponse && fetchResponse.status == 401 )
+								resolve({error: 1, message: fetchResponse.statusText ? fetchResponse.statusText : "Unauthorized"});	
 							else
 								resolve({error: 0, data: data.data ? data.data : data});
 						})
