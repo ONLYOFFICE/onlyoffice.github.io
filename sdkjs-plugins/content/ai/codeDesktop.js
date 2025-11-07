@@ -1,5 +1,18 @@
 (function(window, undefined){
 
+	window.on_update_plugin_info = function(obj)
+	{
+		if (obj["theme"])
+		{
+			console.log(JSON.parse(obj["theme"]));
+		}
+
+		if (obj["lang"])
+		{
+			console.log(obj["lang"]);
+		}
+	}
+
 	function GetSystemPrompt() {
 		let systemPrompt = "\
 You are an assistant that calls functions in a strict format **only when needed**.\n\
@@ -21,7 +34,36 @@ If the user's request doesn't require any function, respond with normal helpful 
 \n\
 Available functions:\n";
 
-		systemPrompt += AscDesktopEditor.getToolFunctions();
+		let tools = JSON.parse(AscDesktopEditor.getToolFunctions());
+
+		for (let i = 0; i < tools.length; i++) {
+			let tool = tools[i];
+
+			let funcString = "- " + tool.name + "\n";
+			if (tool.parameters && tool.parameters && tool.parameters.properties) {
+				funcString += "  Parameters:\n {";
+
+				let index = 0;
+				for (let item in tool.parameters.properties) {
+					if (index > 0) {
+						funcString += ",";
+						index++;
+					}
+					let param = tool.parameters.properties[item];
+					let isRequired = tool.parameters.required && tool.parameters.required.includes(item) ? "required" : "optional";
+					funcString += "\n    " + item + " (" + param.type + ", " + isRequired + "): " + param.description;
+				}
+
+				funcString += "\n}\n";
+			}
+
+			let description = tool.description || "";
+			description = description.replaceAll("{\n\"role\": \"tool\"", "[functionCalling (" + tool.name + ")]: {\n\"role\": \"tool\"");
+			funcString += "  Description: " + description + "\n";
+
+			systemPrompt += funcString;
+		}
+
 		systemPrompt += "\nIf no function call is needed, respond with normal text.\n";
 
 		return systemPrompt;
@@ -309,20 +351,17 @@ Available functions:\n";
 				if (result === "") {
 					shownResult = "System tool wasn't foundSystem tool not found. Please clarify your question.";
 				} else {
-					let resultMessageIndex = systemResult.indexOf("]");
-					let resultMessageType = systemResult.substring(1, resultMessageIndex);
-					let resultMessage = systemResult.substring(resultMessageIndex + 1);
-
-					switch (resultMessageType) {
+					let toolResult = JSON.parse(systemResult);				
+					switch (toolResult.toolSystemType) {
 						case "prompt": {
-							promptResult = resultMessage;
+							promptResult = toolResult.toolSystemResult;
 							shownResult = "System tool [" + options.name + "] was called.";
 							break;
 						}
 						case "file": {
 							shownResult = "File was created. Openining it...";
 
-							AscDesktopEditor.openTemplate(resultMessage, "new");
+							AscDesktopEditor.openTemplate(toolResult.toolSystemResult, "new");
 							break;
 						}
 						default: {
