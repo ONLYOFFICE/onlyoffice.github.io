@@ -1355,7 +1355,7 @@
 			// TODO может ещё очистить поиск (подумать над этим)
 			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
             return citationDocService.addCitation(
-                elements.tempDiv.innerHTML, 
+                elements.tempDiv.innerText,
                 JSON.stringify(cslCitation.toJSON())
             ).then(function() {
                 showLoader(false);
