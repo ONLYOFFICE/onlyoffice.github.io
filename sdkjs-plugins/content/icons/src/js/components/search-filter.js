@@ -30,37 +30,64 @@
  *
  */
 
+// @ts-check
+
+/** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
+
 class SearchFilter {
     #catalogOfIcons;
     #filteredCatalog;
     #onFilterCallback;
 
+    /**
+     * @param {IconCategoryType[]} catalogOfIcons
+     */
     constructor(catalogOfIcons) {
+        this.#onFilterCallback = (
+            /** @type {IconCategoryType[]} */ categories
+        ) => {};
+        this.#filteredCatalog = catalogOfIcons;
         this.#catalogOfIcons = catalogOfIcons;
         this.input = document.getElementById("searchFilter");
-        this.input.addEventListener("input", this.#onInput.bind(this));
+        this.input?.addEventListener(
+            "input",
+            this.#onInput.bind(this, this.input)
+        );
     }
 
     reset() {
+        if (this.input instanceof HTMLInputElement === false) {
+            return;
+        }
         if (this.input.value !== "") {
             this.input.value = "";
             this.#filteredCatalog = this.#catalogOfIcons;
         }
     }
 
+    /**
+     * @param {() => {}} callback
+     */
     setOnFilterCallback(callback) {
         this.#onFilterCallback = callback;
     }
 
-    #onInput(e) {
-        const value = e.target.value.slice().toLowerCase();
+    /**
+     * @param {HTMLElement} input
+     */
+    #onInput(input) {
+        if (input instanceof HTMLInputElement === false) {
+            return;
+        }
+        let value = input.value.slice().toLowerCase();
         if (value === "") {
             this.#filteredCatalog = this.#catalogOfIcons;
         } else {
             this.#filteredCatalog = this.#catalogOfIcons
                 .slice()
                 .map((categoryInfo) => {
-                    let filteredIcons = [];
+                    /** @type {[string[]]} */
+                    let filteredIcons = [[]];
 
                     categoryInfo.folders.forEach((folderName, index) => {
                         let icons = categoryInfo.icons[index];
