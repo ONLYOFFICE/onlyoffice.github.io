@@ -557,6 +557,7 @@ function fetchExternal(url, options, isStreaming) {
 			function resolveRequest(data) {
 				if (data.error)
 					resolve({
+						provider: provider.name,
 						error : 1,
 						message : data.message,
 						models : []
@@ -587,6 +588,7 @@ function fetchExternal(url, options, isStreaming) {
 					}
 
 					resolve({
+						provider: provider.name,
 						error : 0,
 						message : "",
 						models : AI.TmpProviderForModels.modelsUI
