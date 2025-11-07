@@ -30,17 +30,31 @@
  *
  */
 
+// @ts-check
+
+/** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
+
 class CategoriesPicker {
     #container;
-    #onSelectCategoryCallback = () => {};
+    /**
+     * @param {string} category
+     */
+    #onSelectCategoryCallback = (category) => {};
     #selectedCategory = "";
 
+    /**
+     * Constructor
+     * @param {IconCategoryType[]} catalogOfIcons
+     */
     constructor(catalogOfIcons) {
+        /** @type {HTMLDivElement} */
         this.#container = document.getElementById("categories");
         this.#addEventListener();
         this.#show(catalogOfIcons);
     }
-
+    /**
+     * @param {IconCategoryType[]} catalogOfIcons
+     */
     #show(catalogOfIcons) {
         this.#selectedCategory = "";
         const fragment = document.createDocumentFragment();
@@ -60,52 +74,61 @@ class CategoriesPicker {
             categoryName.className = "category-name";
         });
 
-        this.#container.appendChild(fragment);
+        this.#container?.appendChild(fragment);
     }
 
     reset() {
-        if (this.#selectedCategory !== "") {
-            this.#selectedCategory = "";
-            this.#container
-                .querySelectorAll(".category.selected")
-                .forEach((category) => {
-                    category.classList.remove("selected");
-                });
+        if (this.#selectedCategory === "") {
+            return;
         }
+        this.#selectedCategory = "";
+        this.#container
+            ?.querySelectorAll(".category.selected")
+            .forEach((category) => {
+                category.classList.remove("selected");
+            });
     }
 
     /**
-     * Set the callback function to be called when a category is selected.
-     * The callback function will receive the name of the selected category as a parameter.
-     * @param {function} callback - The callback function to be called when a category is selected
+     * @param {() => void} callback
      */
     setOnSelectCategoryCallback(callback) {
         this.#onSelectCategoryCallback = callback;
     }
 
     #addEventListener() {
-        this.#container.addEventListener("click", (e) => {
-            const categoryName = e.target.closest(".category-name");
-            if (categoryName) {
-                let id = categoryName.getAttribute("data-id");
-                let category = categoryName.parentElement;
-                let wasSelected = category.classList.contains("selected");
+        this.#container?.addEventListener("click", (e) => {
+            let categoryName;
 
-                this.#container
-                    .querySelectorAll(".category.selected")
-                    .forEach((category) => {
-                        category.classList.remove("selected");
-                    });
-
-                if (wasSelected) {
-                    category.classList.remove("selected");
-                    this.#selectedCategory = "";
-                } else {
-                    category.classList.add("selected");
-                    this.#selectedCategory = id;
-                }
-                this.#onSelectCategoryCallback(this.#selectedCategory);
+            const target = e.target;
+            if (target && target instanceof HTMLElement) {
+                categoryName = target.closest(".category-name");
             }
+
+            if (!categoryName) {
+                return;
+            }
+            let id = categoryName.getAttribute("data-id");
+            if (typeof id !== "string") {
+                id = "";
+            }
+            let category = categoryName.parentElement;
+            let wasSelected = category?.classList.contains("selected");
+
+            this.#container
+                ?.querySelectorAll(".category.selected")
+                .forEach((category) => {
+                    category.classList.remove("selected");
+                });
+
+            if (wasSelected) {
+                category?.classList.remove("selected");
+                this.#selectedCategory = "";
+            } else {
+                category?.classList.add("selected");
+                this.#selectedCategory = id;
+            }
+            this.#onSelectCategoryCallback(this.#selectedCategory);
         });
     }
 }

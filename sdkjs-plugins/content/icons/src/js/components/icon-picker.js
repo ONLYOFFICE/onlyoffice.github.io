@@ -30,24 +30,44 @@
  *
  */
 
+// @ts-check
+
+/** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
+
 class IconPicker {
     #container;
-    #onSelectIconCallback = () => {};
+    /**
+     * @param {Map<string, string>} map
+     * @param {boolean} [needToRun]
+     */
+    #onSelectIconCallback = (map, needToRun) => {};
     #listOfIconNames;
     #selectedIcons;
     #clearSelectionButton;
 
+    /**
+     * Constructor
+     * @param {IconCategoryType[]} catalogOfIcons
+     */
     constructor(catalogOfIcons) {
+        this.#listOfIconNames = new Set();
+        this.#selectedIcons = new Map();
         this.#container = document.getElementById("icons");
         this.#clearSelectionButton = document.getElementById("clear");
         this.#addEventListener();
         this.show(catalogOfIcons);
     }
 
+    /**
+     * @param {IconCategoryType[]} catalogOfIcons
+     * @param {string} categoryId
+     */
     show(catalogOfIcons, categoryId = "") {
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
-        this.#container.textContent = "";
+        if (this.#container) {
+            this.#container.textContent = "";
+        }
         const fragment = document.createDocumentFragment();
 
         catalogOfIcons.forEach((categoryInfo) => {
@@ -72,21 +92,29 @@ class IconPicker {
             this.#onChange();
         });
 
-        this.#container.appendChild(fragment);
+        this.#container?.appendChild(fragment);
 
-        if (this.#listOfIconNames.size === 0) {
+        if (this.#listOfIconNames.size === 0 && this.#container) {
             this.#container.textContent =
                 "Your search didn't match any content. Please try another term.";
         }
     }
 
+    /**
+     * @param {() => void} callback
+     */
     setOnSelectIconCallback(callback) {
         this.#onSelectIconCallback = callback;
     }
 
     #addEventListener() {
-        this.#container.addEventListener("click", (e) => {
-            const icon = e.target.closest(".icon");
+        this.#container?.addEventListener("click", (e) => {
+            let icon;
+            const target = e.target;
+            if (target && target instanceof HTMLElement) {
+                icon = target.closest(".icon");
+            }
+
             if (icon) {
                 const isModifierPressed = e.ctrlKey || e.metaKey;
 
@@ -106,22 +134,28 @@ class IconPicker {
                 this.#onChange();
             }
         });
-        this.#container.addEventListener("dblclick", (e) => {
-            const icon = e.target.closest(".icon");
-            if (icon) {
-                let iconId = icon.getAttribute("data-name");
-                let section = icon.getAttribute("data-section");
-                icon.classList.add("selected");
-                this.#selectedIcons.set(iconId, section);
-                const needToRun = true;
-                this.#onSelectIconCallback(this.#selectedIcons, needToRun);
+        this.#container?.addEventListener("dblclick", (e) => {
+            let icon;
+            const target = e.target;
+            if (target && target instanceof HTMLElement) {
+                icon = target.closest(".icon");
             }
+
+            if (!icon) {
+                return;
+            }
+            let iconId = icon.getAttribute("data-name");
+            let section = icon.getAttribute("data-section");
+            icon.classList.add("selected");
+            this.#selectedIcons.set(iconId, section);
+            const needToRun = true;
+            this.#onSelectIconCallback(this.#selectedIcons, needToRun);
         });
-        this.#clearSelectionButton.addEventListener(
+        this.#clearSelectionButton?.addEventListener(
             "click",
             this.#unselectAll.bind(this, false)
         );
-        this.#container.addEventListener("keydown", (e) => {
+        this.#container?.addEventListener("keydown", (e) => {
             if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
                 e.preventDefault();
                 this.#selectAll();
@@ -131,7 +165,7 @@ class IconPicker {
 
     #selectAll() {
         this.#container
-            .querySelectorAll(".icon:not(.selected)")
+            ?.querySelectorAll(".icon:not(.selected)")
             .forEach((icon) => {
                 let iconId = icon.getAttribute("data-name");
                 let section = icon.getAttribute("data-section");
@@ -143,7 +177,7 @@ class IconPicker {
 
     #unselectAll(silent = false) {
         this.#selectedIcons = new Map();
-        this.#container.querySelectorAll(".icon.selected").forEach((icon) => {
+        this.#container?.querySelectorAll(".icon.selected").forEach((icon) => {
             icon.classList.remove("selected");
         });
         if (silent) return;
@@ -153,14 +187,20 @@ class IconPicker {
     #onChange() {
         const total = this.#listOfIconNames.size;
         const selected =
-            this.#container.querySelectorAll(".icon.selected").length;
-        document.getElementById(
-            "total"
-        ).textContent = `${total} icons, ${selected} selected`;
+            this.#container?.querySelectorAll(".icon.selected").length;
+        const totalElement = document.getElementById("total");
+        if (totalElement) {
+            totalElement.textContent = `${total} icons, ${selected} selected`;
+        }
 
         this.#onSelectIconCallback(this.#selectedIcons);
     }
 
+    /**
+     * @param {string} iconId
+     * @param {string} section
+     * @returns
+     */
     #createIcon(iconId, section) {
         const svgNS = "http://www.w3.org/2000/svg";
         const xlinkNS = "http://www.w3.org/1999/xlink";
@@ -172,7 +212,7 @@ class IconPicker {
         svg.setAttribute("role", "img");
         svg.setAttribute("data-name", iconId);
         svg.setAttribute("data-section", section);
-        svg.setAttribute("tabindex", 0);
+        svg.setAttribute("tabindex", "0");
 
         const title = document.createElementNS(svgNS, "title");
         svg.appendChild(title);
