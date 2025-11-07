@@ -2,14 +2,73 @@ const yaml = require("js-yaml");
 const fs = require("fs-extra");
 const path = require("path");
 const { glob } = require("glob");
+const { exec } = require("child_process");
 
-async function generateIconsJson() {
+const FA_FOLDER = "../../resources/font-awesome/";
+const FA_SVGS_FOLDER = FA_FOLDER + "svgs-full/";
+const FA_SPRITES_FULL_FOLDER = FA_FOLDER + "sprites-full/";
+const CATEGORIES_FILE = FA_FOLDER + "categories.yml";
+const OUTPUT_DIR = "../../src/js/environments/";
+const OUTPUT_FILE = "categories.js";
+const LICENSE = "../../LICENSE";
+const REPO_URL = "https://github.com/FortAwesome/Font-Awesome.git";
+const REPO_DEST_FOLDER = "temp-repo";
+const SVGS_FULL_TEMP_FOLDER = "./" + REPO_DEST_FOLDER + "/svgs-full";
+const SPRITES_FULL_TEMP_FOLDER = "./" + REPO_DEST_FOLDER + "/sprites-full";
+const CATEGORIES_TEMP_FILE =
+    "./" + REPO_DEST_FOLDER + "/metadata/categories.yml";
+
+function cloneRepository() {
+    return new Promise((resolve, reject) => {
+        exec(
+            `git clone ${REPO_URL} ${REPO_DEST_FOLDER}`,
+            (error, stdout, stderr) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve({ stdout, stderr });
+            }
+        );
+    });
+}
+
+async function copyDir(src, dest) {
     try {
-        const FA_SVGS_FOLDER = "../../resources/font-awesome/svgs-full/";
-        const CATEGORIES_FILE = "../../resources/font-awesome/categories.yml";
-        const OUTPUT_DIR = "../../src/js/environments/";
-        const OUTPUT_FILE = "categories.js";
-        const LICENSE = "../../LICENSE";
+        await fs.copy(src, dest);
+    } catch (err) {
+        console.error("Failed to copy directory:", src);
+        console.error("Error:", err);
+    }
+}
+
+async function copyFile(source, destination) {
+    try {
+        if (destination.endsWith("/") || !path.extname(destination)) {
+            const fileName = path.basename(source);
+            destination = path.join(destination, fileName);
+        }
+        await fs.mkdir(path.dirname(destination), { recursive: true });
+        await fs.cp(source, destination, { recursive: true });
+    } catch (err) {
+        console.error("Failed to copy file:", err);
+        throw err;
+    }
+}
+
+async function updateLocalFiles() {
+    try {
+        await cloneRepository();
+        console.log(`Copied: ${REPO_URL}`);
+        await fs.ensureDir(FA_SVGS_FOLDER);
+        await copyDir(SVGS_FULL_TEMP_FOLDER, FA_SVGS_FOLDER);
+        console.log(`Copied: svgs-full`);
+        await copyDir(SPRITES_FULL_TEMP_FOLDER, FA_SPRITES_FULL_FOLDER);
+        console.log(`Copied: sprites-full`);
+        await copyFile(CATEGORIES_TEMP_FILE, FA_FOLDER);
+        console.log(`Copied: categories.yml`);
+        await fs.remove("./" + REPO_DEST_FOLDER);
+        console.log(`Removed: ${REPO_DEST_FOLDER}`);
 
         // Get all SVG files in folder svgs-full
         const svgFiles = await glob(FA_SVGS_FOLDER + "**/*.svg");
@@ -93,4 +152,4 @@ async function generateIconsJson() {
     }
 }
 
-generateIconsJson();
+updateLocalFiles();
