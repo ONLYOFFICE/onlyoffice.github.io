@@ -2558,6 +2558,8 @@ HELPERS.slide.push((function(){
 			}
 			const job = this.s.imageQueue.shift();
 			if (!job) {
+				
+				await Asc.Editor.callMethod("EndAction", ["GroupActions", "AI: Build presentation"]);
 				return;
 			}
 			this.s.imageBusy = true;
@@ -2630,7 +2632,8 @@ HELPERS.slide.push((function(){
 			}
 			const slideIndex = this.s.currentSlideIndex;
 			Asc.scope._slideIndex = slideIndex;
-			Asc.scope._ph = ph;
+			Asc.scope._ph_type = ph.ph_type;
+			Asc.scope._ph_idx  = ph.ph_idx;
 			Asc.scope._rows = Number(ph.rows || 0);
 			Asc.scope._cols = Number(ph.cols || 0);
 			this.s.tableId = await Asc.Editor.callCommand(function () {
@@ -2770,6 +2773,8 @@ HELPERS.slide.push((function(){
 			const slideIndex = this.s.currentSlideIndex;
 			Asc.scope._slideIndex = slideIndex;
 			Asc.scope._ph = ctx.ph;
+			Asc.scope._ph_idx = ctx.ph.ph_idx;
+			Asc.scope._ph_type = ctx.ph.ph_type;
 			Asc.scope._ctx = ctx;
 			await Asc.Editor.callCommand(function () {
 				const pres = Api.GetPresentation();
@@ -3161,18 +3166,18 @@ ${fontsContract}
 		const framer = new JsonObjectFramer(log);
 		const exec = new Executor(requestEngine, log);
 
+	
 		try {
 			async function handler(chunk) {
 				if (!chunk) return;
 				framer.push(chunk);
 				const objs = framer.drainObjects();
-				console.log(framer.all);
+				//console.log(framer.all);
 
 				for (const objStr of objs) {
 					const cmd = parseCmd(objStr, log);
 					if (!cmd) continue;
 					
-					await checkEndAction();
 					const t = cmd.t;
 
 					// PRESENTATION
@@ -3214,6 +3219,7 @@ ${fontsContract}
 					}
 					if (t === "theme.end") {
 						await exec.themeEnd();
+						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 						continue;
 					}
 
@@ -3313,11 +3319,14 @@ ${fontsContract}
 				}
 			}
 
+			await Asc.Editor.callMethod("StartAction", ["GroupActions", "AI: Build presentation"]);
+			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 			await requestEngine.chatRequest(prompt, false, handler);
-
+			
+			
 		} catch (e) {
-		} finally {
-			await exec.endAction();
+			
+			await Asc.Editor.callMethod("EndAction", ["GroupActions", "AI: Build presentation"]);
 		}
 	};
 	return func;
