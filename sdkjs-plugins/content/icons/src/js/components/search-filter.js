@@ -32,6 +32,8 @@
 
 // @ts-check
 
+import "./search-filter.css";
+
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
 class SearchFilter {

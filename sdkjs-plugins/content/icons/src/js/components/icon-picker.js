@@ -34,6 +34,8 @@
 
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
+import "./icon-picker.css";
+
 class IconPicker {
     #container;
     /**

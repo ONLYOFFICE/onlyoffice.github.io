@@ -31,6 +31,7 @@
  */
 
 // @ts-check
+import "./categories-picker.css";
 
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
