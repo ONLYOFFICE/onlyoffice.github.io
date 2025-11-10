@@ -36,14 +36,40 @@ function TextAnnotator()
 	this.rangeId = null;
 	
 	this.paragraphs = {};
+	this.paraToCheck = new Set();
 	
 	this.type = -1;
 }
-TextAnnotator.prototype.checkParagraph = async function(paraId, recalcId, text, ranges)
+TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
-	this.annotateParagraph(paraId, recalcId, text, ranges);
+	// TODO: Update ranges
+	this.waitParagraphs[paraId] = {
+		recalcId : recalcId,
+		text : text
+	};
+	
+	this._checkParagraph();
+	//this.annotateParagraph(paraId, recalcId, text, ranges);
 };
-TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text, ranges)
+TextAnnotator.prototype.checkParagraphs = async function(paraIds)
+{
+	this.paraToCheck.clear()
+	paraIds.array.forEach(paraId => this.paraToCheck.add(paraId));
+	//for (let paraId in )
+};
+TextAnnotator.prototype._checkParagraph = function(paraId)
+{
+	if (!this.paraToCheck[paraId] || !this.waitParagraphs[paraId])
+		return;
+	
+	let recalcId = this.waitParagraphs[paraId].recalcId;
+	let text = this.waitParagraphs[paraId].text;
+	this.annotateParagraph(paraId, recalcId, text);
+	
+	delete this.waitParagraphs[paraId];
+	this.paraToCheck.remove;
+};
+TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	
 };
