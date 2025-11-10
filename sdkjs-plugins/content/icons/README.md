@@ -16,8 +16,6 @@ npm run build:all
 
 ### Update Font Awesome Icons (windows)
 
-Generate icon paths by category
-
 ```bash
 cd .dev/svg-path-generator && npm i && npm run start && cd ../..
 ```

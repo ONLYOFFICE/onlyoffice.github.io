@@ -35,7 +35,7 @@
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
 class CategoriesPicker {
-    #container;
+    #categories;
     /**
      * @param {string} category
      */
@@ -48,7 +48,7 @@ class CategoriesPicker {
      */
     constructor(catalogOfIcons) {
         /** @type {HTMLDivElement} */
-        this.#container = document.getElementById("categories");
+        this.#categories = document.getElementById("categories");
         this.#addEventListener();
         this.#show(catalogOfIcons);
     }
@@ -70,11 +70,30 @@ class CategoriesPicker {
             const categoryName = document.createElement("span");
             categoryContainer.appendChild(categoryName);
             categoryName.textContent = label;
-            categoryName.setAttribute("data-id", id);
+            categoryName.setAttribute("data-value", id);
             categoryName.className = "category-name";
+
+            /** ******************** */
+            var el = document.createElement("span");
+            el.className = "category";
+            el.setAttribute("data-value", id);
+            el.textContent = label;
+
+            this.#categories?.appendChild(el);
+            /*el.onclick = onStyleSelectOther();
+            
+            if (json[i].name == lastStyle) {
+                el.setAttribute("selected", "");
+                selectInput(
+                    elements.styleSelect,
+                    el,
+                    elements.styleSelectList,
+                    false
+                );
+            }*/
         });
 
-        this.#container?.appendChild(fragment);
+        this.#categories?.appendChild(fragment);
     }
 
     reset() {
@@ -82,7 +101,7 @@ class CategoriesPicker {
             return;
         }
         this.#selectedCategory = "";
-        this.#container
+        this.#categories
             ?.querySelectorAll(".category.selected")
             .forEach((category) => {
                 category.classList.remove("selected");
@@ -97,7 +116,7 @@ class CategoriesPicker {
     }
 
     #addEventListener() {
-        this.#container?.addEventListener("click", (e) => {
+        /*this.#categories?.addEventListener("click", (e) => {
             let categoryName;
 
             const target = e.target;
@@ -108,14 +127,14 @@ class CategoriesPicker {
             if (!categoryName) {
                 return;
             }
-            let id = categoryName.getAttribute("data-id");
+            let id = categoryName.getAttribute("data-value");
             if (typeof id !== "string") {
                 id = "";
             }
             let category = categoryName.parentElement;
             let wasSelected = category?.classList.contains("selected");
 
-            this.#container
+            this.#categories
                 ?.querySelectorAll(".category.selected")
                 .forEach((category) => {
                     category.classList.remove("selected");
@@ -129,7 +148,7 @@ class CategoriesPicker {
                 this.#selectedCategory = id;
             }
             this.#onSelectCategoryCallback(this.#selectedCategory);
-        });
+        });*/
     }
 }
 

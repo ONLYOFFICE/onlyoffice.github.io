@@ -23,60 +23,57 @@ body {
     overflow-y: auto;
     height: inherit;
     display: flex;
+    flex-direction: column;
     box-sizing: border-box;
 }
 
-.sidebar {
-    height: 100%;
-    min-width: 215px;
+.search {
+    margin: 4px 12px;
+    height: 30px;
     box-sizing: border-box;
-    .search {
-        margin: 4px 12px;
+    input {
         height: 30px;
+        width: calc(100% - 12px);
         box-sizing: border-box;
-        input {
-            height: 30px;
-            width: calc(100% - 12px);
-            box-sizing: border-box;
-        }
     }
-    .categories-container {
-        height: calc(100% - 38px);
-        overflow-y: scroll;
-        box-sizing: border-box;
-        background-color: var(--color-pad);
-    }
-    .category {
-        cursor: pointer;
-        color: var(--font-color);
-        user-select: none;
-        line-height: 22px;
-        position: relative;
+}
+.categories-container {
+    height: calc(100% - 38px);
+    overflow-y: scroll;
+    box-sizing: border-box;
+    background-color: var(--color-pad);
+}
+.category {
+    cursor: pointer;
+    color: var(--font-color);
+    user-select: none;
+    line-height: 22px;
+    position: relative;
 
+    &::before {
+        content: "📁 ";
+        position: absolute;
+        left: 4px;
+    }
+    &.selected {
+        background: var(--color-pad-selected);
         &::before {
-            content: "📁 ";
-            position: absolute;
-            left: 4px;
+            content: "✅ ";
         }
-        &.selected {
-            background: var(--color-pad-selected);
-            &::before {
-                content: "✅ ";
-            }
-        }
-        .category-name {
-            display: block;
-            min-width: 160px;
-            box-sizing: border-box;
-            padding: 4px 12px 4px 33px;
-            border-radius: 3px;
-            &:hover {
-                color: var(--font-color-hover);
-                background-color: var(--color-pad-hover);
-            }
+    }
+    .category-name {
+        display: block;
+        min-width: 160px;
+        box-sizing: border-box;
+        padding: 4px 12px 4px 33px;
+        border-radius: 3px;
+        &:hover {
+            color: var(--font-color-hover);
+            background-color: var(--color-pad-hover);
         }
     }
 }
+
 .icons-container {
     height: 100%;
     width: 100%;
