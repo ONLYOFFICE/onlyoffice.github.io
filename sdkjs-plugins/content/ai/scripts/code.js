@@ -828,6 +828,12 @@ function onTranslateSettingsModal() {
 	translateSettingsWindow.show(variation);
 }
 
+function onCheckGrammarSpelling(isCurrent)
+{
+	// TODO: implement
+	console.log(`Check grammar & spelling all= ${!isCurrent}`);
+}
+
 /**
  * MODELS WINDOW
  */
