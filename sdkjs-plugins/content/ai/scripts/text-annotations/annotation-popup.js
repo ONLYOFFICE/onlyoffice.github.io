@@ -92,6 +92,10 @@ function TextAnnotationPopup()
 		
 		if (!this.popup)
 			return;
+		
+		this.type = -1;
+		this.rangeId = -1;
+		this.paraId = -1;
 
 		this.popup.close();
 		this.popup = null;
