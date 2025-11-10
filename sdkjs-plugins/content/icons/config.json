@@ -26,7 +26,7 @@
             "url": "dist/index.html",
             "icons": "resources/%theme-type%(light|dark)/icon.svg",
             "EditorsSupport": ["word", "slide", "cell"],
-            "type": "window",
+            "type": "panel",
 
             "initDataType": "none",
             "buttons": [
