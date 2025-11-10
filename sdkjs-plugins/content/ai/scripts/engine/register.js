@@ -138,29 +138,34 @@ function registerButtons(window, undefined)
 		window.chatWindow = chatWindow;
 	}
 
-	if (true)
+	if (Asc.Editor.getType() !== "pdf")
 	{
-		let button = new Asc.ButtonContextMenu(buttonMain);
-		button.text = "Spellchecker";
-		button.icons = getContextMenuButtonIcons("summarization");
-		button.editors = ["word"];
-		button.addCheckers("Target");
+		let buttonSub = new Asc.ButtonContextMenu(buttonMain);
+		buttonSub.text = "Grammar & Spelling";
+		buttonSub.icons = getContextMenuButtonIcons("summarization");
+		buttonSub.editors = ["word"];
+		buttonSub.addCheckers("Target", "Selection");
+		
+		let buttonAll = new Asc.ButtonContextMenu(buttonSub);
+		buttonAll.text = "Check all";
+		buttonAll.icons = getContextMenuButtonIcons("text-analysis-ai");
+		buttonAll.editors = ["word"];
+		buttonAll.addCheckers("Target", "Selection");
 
-		button.attachOnClick(async function(data){
-
-			if (!spellchecker)
-				return;
-
-			let text = spellchecker.getCurrentSuggestion();
-
-			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-			await Asc.Editor.callMethod("SelectAnnotationRange", [spellchecker.getCurrentRange()]);
-			await Asc.Editor.callMethod("RemoveSelectedContent");
-			await Asc.Editor.callMethod("InputText", [text]);
-			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		buttonAll.attachOnClick(async function(data){
+			onCheckGrammarSpelling(false);
 		});
 
-		window.AI.spellcheckButton = button;
+		let buttonCurrent = new Asc.ButtonContextMenu(buttonSub);
+		buttonCurrent.text = "Check current selection";
+		buttonCurrent.icons = getContextMenuButtonIcons("text-analysis-ai");
+		buttonCurrent.editors = ["word"];
+		buttonCurrent.addCheckers("Target", "Selection");
+
+		buttonCurrent.attachOnClick(async function(data){
+			onCheckGrammarSpelling(true);
+		});
+	
 	}
 
 	// Submenu summarize:
@@ -637,6 +642,27 @@ function registerButtons(window, undefined)
 			button2.text = "OCR";
 			button2.icons = getToolBarButtonIcons("ocr");
 			button2.attachOnClick(on_click_ocr);
+		}
+		
+		if (Asc.Editor.getType() !== "pdf")
+		{
+			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonGS.text = "Grammar & Spelling";
+			buttonGS.icons = getToolBarButtonIcons("grammar");
+			buttonGS.menu = [{
+				text: 'Check all',
+				id: 'sg10n-check-all',
+				onclick: () => onCheckGrammarSpelling(false)
+			}, 
+			{
+				text: 'Check current selection',
+				id: 'sg10n-check-selection',
+				onclick: () => onCheckGrammarSpelling(true)
+			}];
+			buttonGS.attachOnClick(async function(){
+				onCheckGrammarSpelling(true);
+			});
+			buttonGS.split = true;
 		}
 	}
 
