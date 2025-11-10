@@ -244,6 +244,7 @@ GrammarChecker.prototype.onAccept = async function(paraId, rangeId)
 	
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+	await Asc.Editor.callMethod("FocusEditor");
 };
 GrammarChecker.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {

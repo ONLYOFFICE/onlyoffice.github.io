@@ -229,6 +229,7 @@ SpellChecker.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("RemoveSelectedContent");
 	await Asc.Editor.callMethod("InputText", [anot["suggested"]]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+	await Asc.Editor.callMethod("FocusEditor");
 };
 SpellChecker.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
