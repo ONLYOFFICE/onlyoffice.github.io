@@ -1755,14 +1755,6 @@ HELPERS.slide.push((function(){
 				isSendedEndLongAction = true
 			}
 		}
-		
-		async function checkStartAction() {
-			if (isSendedEndLongAction) {
-				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-				isSendedEndLongAction = false;
-			}
-		}
-
 
 		function Logger(enabled) {
 			this.enabled = !!enabled;
@@ -2016,6 +2008,25 @@ HELPERS.slide.push((function(){
 			this.requestEngine = requestEngine;
 			this.log = logger;
 		}
+		Executor.prototype.ensureAction = async function () {
+			if (this.s._ended) {
+				return;
+			}
+			if (!this.s._started) {
+				this.s._started = true;
+				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + this.requestEngine.modelUI.name + ")"]);
+				await Asc.Editor.callMethod("StartAction", ["GroupActions", "AI: Build presentation"]);
+				//this.log.info("StartAction");
+			}
+		};
+		Executor.prototype.endAction = async function () {
+			if (!this.s._ended && this.s._started) {
+				await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+				await Asc.Editor.callMethod("EndAction", ["Block", "AI"]);
+				this.s._ended = true;
+				//this.log.info("EndAction");
+			}
+		};
 		Executor.prototype._inSlide = function () {
 			return this.s.currentSlideIndex !== null && this.s.currentSlideIndex !== undefined;
 		};
@@ -2178,11 +2189,23 @@ HELPERS.slide.push((function(){
 			}
 			this.s.theme.fonts = {major: major, minor: minor};
 		};
-		Executor.prototype.themeDecor = async function (decor) {
+		Executor.prototype.themeDecorStart = async function (decor) {
 			if (!this._themeAllowed()) {
 				return;
 			}
-			this.s.theme.decor = decor.layoutDecor;
+			this.s.theme.decor = {};
+		};
+		Executor.prototype.themeDecorEnd = async function () {
+		};
+		Executor.prototype.layoutDecor = async function (layoutDecor) {
+			
+			let decor = this.s.theme.decor;
+			if (!decor)
+				return;
+			
+			if (!decor[layoutDecor.layoutType]) 
+				decor[layoutDecor.layoutType] = [];
+			decor[layoutDecor.layoutType].push(layoutDecor);
 		};
 		Executor.prototype.themeEnd = async function () {
 		};
@@ -2264,19 +2287,79 @@ HELPERS.slide.push((function(){
 							if (decoObjects) {
 								for (let sp = 0; sp < decoObjects.length; ++sp) {
 									let decoObject = decoObjects[sp];
-									let fill = Api.CreateSolidFill(Api.CreateSchemeColor(decoObject.fill));
-									let stroke = Api.CreateStroke(0, Api.CreateNoFill());
-									let shape = Api.CreateShape("rect", pW, pH, fill, stroke);
-									let customGeometry = Api.CreateCustomGeometry();
-									for (let pathIdx = 0; pathIdx < decoObject.paths.length; ++pathIdx) {
-										let svgPath = decoObject.paths[pathIdx];
+								
+									
+									let svgPathString = decoObject.d;
+									let commands = svgPathString.split(" ");
+									
+									let aPathCommands = [];
+									let cmdIdx = 0;
+									while (cmdIdx < commands.length) {
+										let type = commands[cmdIdx];
+										if (type === "M") {
+											let x = parseFloat(commands[++cmdIdx]);
+											let y = parseFloat(commands[++cmdIdx]);
+											if (!isNaN(x) && !isNaN(y)) {
+												aPathCommands.push({op: "M", x: x, y: y});
+											}
+											else {
+												aPathCommands.length = 0;
+												break;
+											}
+										}
+										else if (type === "C") {
+											let x1 = parseFloat(commands[++cmdIdx]);
+											let y1 = parseFloat(commands[++cmdIdx]);
+											let x2 = parseFloat(commands[++cmdIdx]);
+											let y2 = parseFloat(commands[++cmdIdx]);
+											let x = parseFloat(commands[++cmdIdx]);
+											let y = parseFloat(commands[++cmdIdx]);
+											
+											if (!isNaN(x) && !isNaN(y) &&
+												!isNaN(x1) && !isNaN(y1) && 
+												!isNaN(x2) && !isNaN(y2)) {
+												aPathCommands.push({op: "C", x1: x1, y1: y1, x2: x2, y2: y2, x: x, y: y});
+											}
+											else {
+												aPathCommands.length = 0;
+												break;
+											}
+										}
+										else if (type === "L") {
+											let x = parseFloat(commands[++cmdIdx]);
+											let y = parseFloat(commands[++cmdIdx]);
+											if (!isNaN(x) && !isNaN(y)) {
+												aPathCommands.push({op: "L", x: x, y: y});
+											}
+											else {
+												aPathCommands.length = 0;
+												break;
+											}
+										}
+										else if (type === "Z") {
+											aPathCommands.push({op: "Z"});
+										}
+										else {
+											aPathCommands.length = 0;
+											break;
+										}
+										if (aPathCommands.length > 0) {
+											++cmdIdx;
+										}
+									}
+									
+									if (aPathCommands.length > 0) {
+										let fill = Api.CreateSolidFill(Api.CreateSchemeColor(decoObject.fill));
+										let stroke = Api.CreateStroke(0, Api.CreateNoFill());
+										let shape = Api.CreateShape("rect", pW, pH, fill, stroke);
+										let customGeometry = Api.CreateCustomGeometry();
 										let path = customGeometry.AddPath();
 										let scale = 100000;
 										path.SetWidth(scale);
 										path.SetHeight(scale);
 										path.SetStroke(false);
-										for (let cmdIdx = 0; cmdIdx < svgPath.length; ++cmdIdx) {
-											let cmdSvg = svgPath[cmdIdx];
+										for (let cmdIdx = 0; cmdIdx < aPathCommands.length; ++cmdIdx) {
+											let cmdSvg = aPathCommands[cmdIdx];
 											switch (cmdSvg.op) {
 												case "M":
 													path.MoveTo(cmdSvg.x * scale, cmdSvg.y * scale);
@@ -2299,11 +2382,11 @@ HELPERS.slide.push((function(){
 													break;
 											}
 										}
+										shape.SetGeometry(customGeometry);
+										shape.SetPosition(0, 0);
+										layout.AddObject(shape);
 									}
 									
-									shape.SetGeometry(customGeometry);
-									shape.SetPosition(0, 0);
-									layout.AddObject(shape);
 								}
 							}
 						}
@@ -2822,7 +2905,7 @@ Rules:
 5. Output exactly one valid pair.
 `;
 
-		const prompt = `
+const prompt = `
 You must stream a sequence of JSON objects (JSON Lines). Each line is one complete JSON object with a field "t".
 ABSOLUTELY NO prose, no markdown, no code fences — only JSON objects, one per line.
 
@@ -2842,7 +2925,9 @@ Allowed commands (flat placeholder fields; NO nested "placeholder" objects):
 - {"t":"theme.start"}
 - {"t":"theme.colors","dk1":"#RRGGBB","lt1":"#RRGGBB","dk2":"#RRGGBB","lt2":"#RRGGBB","accent1":"#RRGGBB","accent2":"#RRGGBB","accent3":"#RRGGBB","accent4":"#RRGGBB","accent5":"#RRGGBB","accent6":"#RRGGBB","hlink":"#RRGGBB","folHlink":"#RRGGBB"}
 - {"t":"theme.fonts","major":"<one of AVAILABLE FONTS>","minor":"<one of AVAILABLE FONTS>"}
-- {"t":"theme.decor","layoutDecor":{"<layoutType>":[{"fill":"accent1|accent2|accent3|accent4|accent5|accent6|dk1|lt1|dk2|lt2|hlink|folHlink","opacity":0.0_to_1.0,"paths":[ [ {"op":"M","x":0..1,"y":0..1}, {"op":"L","x":0..1,"y":0..1}, {"op":"C","x1":0..1,"y1":0..1,"x2":0..1,"y2":0..1,"x":0..1,"y":0..1}, {"op":"Z"} ] ]}...]}}
+- {"t":"theme.decor.start"}
+- {"t":"layoutDecor","layoutType":"title|obj|twoObj|twoTxTwoObj|secHead|titleOnly|blank|objTx|picTx|vertTx|vertTitleAndTx","fill":"accent1|accent2|accent3|accent4|accent5|accent6|dk1|lt1|dk2|lt2|hlink|folHlink","opacity":0.08_to_0.30,"d":"M 0.00 0.90 L 1.00 0.82 L 1.00 1.00 L 0.00 1.00 Z"}
+- {"t":"theme.decor.end"}
 - {"t":"theme.end"}
 
 - {"t":"slide.start","layout":"title|obj|twoObj|twoTxTwoObj|secHead|titleOnly|blank|objTx|picTx|vertTx|vertTitleAndTx"}
@@ -3024,64 +3109,53 @@ Remember:
 - Colors must be valid hex "#RRGGBB" values.
 - Font names must be from AVAILABLE FONTS exactly as listed.
 
-THEME DECOR (MANDATORY)
+THEME DECOR (MANDATORY, FLAT JSON BETWEEN START/END)
 
-- You MUST emit exactly one {"t":"theme.decor","layoutDecor":{...}} between theme.fonts and theme.end.
+- You MUST emit exactly one {"t":"theme.decor.start"} and one {"t":"theme.decor.end"} between theme.fonts and theme.end.
+- Between them, emit ONLY flat {"t":"layoutDecor",...} lines — no arrays or nested objects.
 
 LAYOUT COVERAGE GUARANTEE (ABSOLUTE)
 - Before emitting the first {"t":"slide.start"}, decide the exact set of layouts you will use in the entire deck.
-- theme.decor.layoutDecor MUST contain a key for EVERY layout you will later use in {"t":"slide.start","layout":...} (including "title").
+- For EVERY layout that will later appear in {"t":"slide.start","layout":...} (including "title"), emit 2–3 {"t":"layoutDecor"} lines (layers) before any slides.
 - Missing decor for any used layout is forbidden.
 - Do NOT include decor for layouts that will not appear in the slides.
-- After {"t":"theme.decor"} you MUST NOT introduce any new layout value in slides.
+- After {"t":"theme.decor.end"} you MUST NOT introduce any new layout value in slides.
 
-DECOR STRUCTURE (PER LAYOUT)
-- Each layout key maps to an ARRAY of **2–3** background layers (no more, no less).
-- Each layer is a SINGLE closed subpath in "paths": exactly one sub-array, e.g. "paths":[ [ ...segments... ] ].
-- Allowed segment ops: "M", "L", "C", "Z". "C" (cubic Bézier) is OPTIONAL globally (see Style→Geometry rules).
-- Path MUST start with "M" and end with "Z".
-- All coordinates (x,y,x1,y1,x2,y2) MUST be normalized floats in [0..1] and MUST be **quantized to a 0.05 grid** (allowed values: 0.00, 0.05, 0.10, …, 0.95, 1.00). The renderer clamps as needed.
-- Each layer should cover ~15%–35% of slide area and stay near edges/corners (background only). Do NOT overlap core text zones (title/body/picture placeholders).
+DECOR STRUCTURE (PER LAYOUT, FLAT LINE)
+- Each layer is one flat object:
+  {"t":"layoutDecor",
+   "layoutType":"title|obj|twoObj|twoTxTwoObj|secHead|titleOnly|blank|objTx|picTx|vertTx|vertTitleAndTx",
+   "fill":"accent1|accent2|accent3|accent4|accent5|accent6|dk1|lt1|dk2|lt2|hlink|folHlink",
+   "opacity":0.08..0.30,
+   "d":"M 0.00 0.90 L 1.00 0.82 L 1.00 1.00 L 0.00 1.00 Z"}
+- Exactly ONE closed path per layer (via "d" string). Path MUST start with "M" and end with "Z".
+- "d" uses ONLY M/L/C/Z with normalized coordinates in [0..1], quantized to 0.05 (0.00, 0.05, …, 1.00).
+- Each layer should cover ~15%–20% of slide area and stay near edges/corners (background only). Do NOT overlap core text zones (title/body/picture placeholders).
 - Consistency: the same layout type must keep the same decoration across all slides using that layout.
 
 FILL & OPACITY
-- "fill" MUST be one of the theme color keys ONLY: accent1..accent6, dk1, lt1, dk2, lt2, hlink, folHlink. Hex (#RRGGBB) is FORBIDDEN in theme.decor.
+- "fill" MUST be one of the theme color keys ONLY: accent1..accent6, dk1, lt1, dk2, lt2, hlink, folHlink. Hex (#RRGGBB) is FORBIDDEN in decor.
 - "opacity" MUST be between 0.08 and 0.30. Layers SHOULD vary in fill and/or opacity to create depth.
 
 STYLE → GEOMETRY RULES (CRITICAL)
-- **Corporate / Official / Classic / Minimal topics or style** (or topic includes: official, policy, legal, finance, audit, compliance, report, board, enterprise, government, tender, RFP, KPI, SLA, ISO, ГОСТ):
-  - Prefer STRAIGHT GEOMETRY (polygons): diagonal bands, corner blocks, trapezoids, parallelograms.
-  - "C" NOT required (layers may use only "L").
-- **Modern / Playful / Creative / Nature / Ocean / Marketing / Growth / Education / Wellness**:
-  - Prefer CURVED/ORGANIC shapes: waves, arcs, soft spotlight blobs.
-  - At least ONE layer SHOULD use "C" for smooth curves.
-- **Technical / Technology / AI / Data / Engineering / Cloud / Cyber / System / Architecture**:
-  - MIXED mode: base layer = straight geometry (polygon), second layer = subtle curve (ONE layer uses "C") for depth.
+- Corporate / Official / Classic / Minimal → STRAIGHT polygons (no curves).
+- Modern / Playful / Creative / Nature / Ocean / Marketing / Growth / Education / Wellness → at least one layer uses curve ("C").
+- Technical / Technology / AI / Data / Engineering / Cloud / Cyber / System / Architecture → mixed: one polygon layer, one curved.
 
-SHAPE LIBRARY (USE ONLY THESE PATTERNS; 2–3 layers total)
-- DIAGONAL_BAND (no curves): a tilted quadrilateral band at top or bottom.
-  Skeleton (variables multiple of 0.05):
-  [ M(0, B), L(1, B - T), L(1, B - T + H), L(0, B + H), Z ]
-  with B∈[0.70..0.95], T∈[0.05..0.20], H∈[0.08..0.20].
-- CORNER_BLOCK (no curves): triangle or trapezoid anchored to a corner.
-  Examples:
-  [ M(0,0), L(S,0), L(0,S), Z ]  // top-left triangle, S∈[0.20..0.45]
-  [ M(1-S,0), L(1,0), L(1,S), L(1-S,S*0.6), Z ] // top-right trapezoid
-- BOTTOM_WAVE (one curve): a single smooth C segment + closure at bottom.
-  [ M(0, A), C(0.40, A+U, 0.70, A+V, 1.00, A+W), L(1.00,1.00), L(0.00,1.00), Z ]
-  with A∈[0.75..0.95], U∈[0.02..0.10], V∈[0.00..0.12], W∈[0.00..0.10].
-- CORNER_ARC (rounded corner, ≤2 curves): quarter-arc approximation in a corner.
-  [ M(0, R), C(0.00, R*0.55, R*0.55, 0.00, R, 0.00), L(R,0.00), L(0.00,0.00), Z ]
-  with R∈[0.20..0.40].
+SHAPE LIBRARY (REFERENCE ONLY)
+The "d" path must implement one of these archetypes but you must NOT include any "shape" field.
+- DIAGONAL_BAND: [ M(0,B) L(1,B-T) L(1,B-T+H) L(0,B+H) Z ]
+- CORNER_BLOCK: [ M(0,0) L(S,0) L(0,S) Z ] or [ M(1-S,0) L(1,0) L(1,S) L(1-S,S*0.6) Z ]
+- BOTTOM_WAVE: [ M(0,A) C(0.4,A+U,0.7,A+V,1.0,A+W) L(1,1) L(0,1) Z ]
+- CORNER_ARC: [ M(0,R) C(0.0,R*0.55,R*0.55,0.0,R,0.0) L(R,0.0) L(0,0) Z ]
 
 HARD GEOMETRY GUARDRAILS
-- Each layer MUST be a closed shape (M...Z), convex (no self-intersections, no spikes).
-- Minimum edge length for "L" segments: ≥ 0.10 of slide width/height (normalized).
-- No pencil-thin lines, no chaotic zig-zags, no micro-triangles, no flood fills >35%.
-- Shapes must not overlap main text areas; keep them at edges/corners/underlays.
+- Each layer MUST be closed (M...Z), convex, edge ≥ 0.10, ≤35% area, near edges/corners.
+- No thin lines, spikes, or overlaps with text zones.
 
 ${fontsContract}
 `;
+
 
 
 		const framer = new JsonObjectFramer(log);
@@ -3089,12 +3163,11 @@ ${fontsContract}
 
 		try {
 			async function handler(chunk) {
-				if (!chunk) {
-					return;
-				}
+				if (!chunk) return;
 				framer.push(chunk);
 				const objs = framer.drainObjects();
-				
+				console.log(framer.all);
+
 				for (const objStr of objs) {
 					const cmd = parseCmd(objStr, log);
 					if (!cmd) continue;
@@ -3127,8 +3200,16 @@ ${fontsContract}
 						continue;
 					}
 					
-					if (t === "theme.decor") {
-						await exec.themeDecor(cmd);
+					if (t === "theme.decor.start") {
+						await exec.themeDecorStart(cmd);
+						continue;
+					}
+					if (t === "layoutDecor") {
+						await exec.layoutDecor(cmd);
+						continue;
+					}
+					if (t === "theme.decor.end") {
+						await exec.themeDecorEnd(cmd);
 						continue;
 					}
 					if (t === "theme.end") {
@@ -3230,15 +3311,13 @@ ${fontsContract}
 						continue;
 					}
 				}
-				await checkStartAction();
 			}
 
-			await checkStartAction();
 			await requestEngine.chatRequest(prompt, false, handler);
 
-			//await handler(payload)
 		} catch (e) {
 		} finally {
+			await exec.endAction();
 		}
 	};
 	return func;
