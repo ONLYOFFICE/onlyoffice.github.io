@@ -4,7 +4,6 @@ body.light {
     --color-pad: rgba(0, 0, 0, 0.02);
     --color-pad-hover: rgba(0, 0, 0, 0.1);
     --color-pad-selected: rgba(0, 0, 0, 0.2);
-    --color-summary: rgba(255, 255, 255, 0.2);
 }
 
 body.dark {
@@ -13,13 +12,13 @@ body.dark {
     --color-pad: rgba(255, 255, 255, 0.02);
     --color-pad-hover: rgba(255, 255, 255, 0.1);
     --color-pad-selected: rgba(255, 255, 255, 0.2);
-    --color-summary: #404040;
 }
 
 body {
     margin: 0;
 }
 .content {
+    margin: 4px 13px 11px 11px;
     overflow-y: auto;
     height: inherit;
     display: flex;
@@ -27,95 +26,73 @@ body {
     box-sizing: border-box;
 }
 
-.search {
-    margin: 4px 12px;
-    height: 30px;
-    box-sizing: border-box;
-    input {
-        height: 30px;
-        width: calc(100% - 12px);
-        box-sizing: border-box;
-    }
-}
-.categories-container {
-    height: calc(100% - 38px);
-    overflow-y: scroll;
-    box-sizing: border-box;
-    background-color: var(--color-pad);
-}
-.category {
-    cursor: pointer;
-    color: var(--font-color);
-    user-select: none;
-    line-height: 22px;
-    position: relative;
-
-    &::before {
-        content: "📁 ";
-        position: absolute;
-        left: 4px;
-    }
-    &.selected {
-        background: var(--color-pad-selected);
-        &::before {
-            content: "✅ ";
-        }
-    }
-    .category-name {
-        display: block;
-        min-width: 160px;
-        box-sizing: border-box;
-        padding: 4px 12px 4px 33px;
-        border-radius: 3px;
-        &:hover {
-            color: var(--font-color-hover);
-            background-color: var(--color-pad-hover);
-        }
-    }
+label {
+    display: block;
+    padding: 13px 0 6px 0;
 }
 
-.icons-container {
-    height: 100%;
+input[type="text"] {
+    line-height: 18px;
     width: 100%;
     box-sizing: border-box;
-    .icons {
-        height: calc(100% - 20px);
-        padding: 12px;
-        box-sizing: border-box;
-        overflow-y: scroll;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-content: flex-start;
-        gap: 5px;
-        .icon {
-            color: var(--font-color);
-            width: 48px;
-            height: 48px;
-
-            background: var(--color-pad);
-            &:hover {
-                color: var(--font-color-hover);
-                background: var(--color-pad-hover);
-            }
-            &:focus {
-                box-shadow: 0 0 0 2px var(--color-pad-hover);
-            }
-            &.selected {
-                background: var(--color-pad-selected);
-            }
-        }
-    }
-    .summary {
-        height: 20px;
-        padding: 0 12px;
-        line-height: 20px;
-        text-align: right;
-        background: var(--color-summary);
-        box-shadow: 2px 0 2px 0 var(--font-color);
-        button {
-            cursor: default;
-            height: 18px;
-        }
-    }
+    outline: none;
+}
+input[readonly]::selection {
+    background-color: transparent;
+}
+.selectHolder {
+    position: relative;
+}
+.selectArrow {
+    cursor: pointer;
+    position: absolute;
+    top: 6px;
+    right: 11px;
+    transform: rotate(0deg);
+    transition: transform 0.2s ease;
+}
+.selectArrow > span {
+    display: inline-block;
+    width: 4px;
+    height: 0.5px;
+    margin: 0 -1px 3px -1px;
+    background-color: #000000;
+}
+.selectArrow > span:first-of-type {
+    transform: rotateZ(45deg);
+}
+.selectArrow > span:last-of-type {
+    transform: rotateZ(-45deg);
+}
+.selectList:not(.hidden) {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background: #ffffff;
+    top: 22px;
+    width: 100%;
+    max-height: 158px !important;
+    min-height: 158px !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.selectList > span {
+    padding: 5px 20px;
+    cursor: pointer;
+    color: #444444;
+}
+.selectList > span:hover {
+    background-color: #d8dadc;
+    color: #373737;
+}
+.selectList > span[selected=""] {
+    background-color: #7d858c;
+    color: #ffffff;
+}
+.selectList:not(.hidden) + .selectArrow {
+    transform: rotate(180deg);
 }
