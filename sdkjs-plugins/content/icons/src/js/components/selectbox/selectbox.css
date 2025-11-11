@@ -1,3 +1,5 @@
+@import url("../../../colors.css");
+
 .selectbox-container {
     position: relative;
     display: inline-block;
@@ -5,143 +7,125 @@
     max-width: 300px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         sans-serif;
-}
 
-.selectbox {
-    position: relative;
-}
+    .selectbox {
+        position: relative;
+    }
 
-.selectbox-header {
-    padding: 10px 12px;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    background: white;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-    user-select: none;
-}
+    .selectbox-header {
+        border: 1px solid var(--input-border);
+        border-radius: 1px;
+        background: var(--input-bg);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+        user-select: none;
+        &:hover {
+            border-color: var(--input-border-hover);
+        }
+        &:focus {
+            outline: none;
+            border-color: var(--input-border-focus);
+        }
+    }
 
-.selectbox-header:hover {
-    border-color: #c0c4cc;
-}
+    .selectbox-header-open {
+        border-color: var(--input-border-focus);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
 
-.selectbox-header:focus {
-    outline: none;
-    border-color: #409eff;
-    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
-}
+    .selectbox-selected-text {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 7px;
+    }
 
-.selectbox-header-open {
-    border-color: #409eff;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
+    .selectbox-arrow {
+        transition: transform 0.3s ease;
+        width: 24px;
+        height: 22px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTMgNC44OTM3OWUtMDZMMCAyLjk5NzgxTDMgNS45OTU2MUw2IDIuOTk3ODFMMyA0Ljg5Mzc5ZS0wNlpNMyAwLjAwMDU0Mjg2NEwwLjc1IDIuMjQ4OUwzIDQuNDk3MjVMNS4yNSAyLjI0ODlMMyAwLjAwMDU0Mjg2NFoiIGZpbGw9ImJsYWNrIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgo8L3N2Zz4K");
+    }
 
-.selectbox-selected-text {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #606266;
-}
+    .selectbox-arrow-open {
+        transform: rotate(180deg);
+    }
 
-.selectbox-arrow {
-    transition: transform 0.3s ease;
-    width: 18px;
-    height: 24px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTMgNC44OTM3OWUtMDZMMCAyLjk5NzgxTDMgNS45OTU2MUw2IDIuOTk3ODFMMyA0Ljg5Mzc5ZS0wNlpNMyAwLjAwMDU0Mjg2NEwwLjc1IDIuMjQ4OUwzIDQuNDk3MjVMNS4yNSAyLjI0ODlMMyAwLjAwMDU0Mjg2NFoiIGZpbGw9ImJsYWNrIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgo8L3N2Zz4K");
-}
+    .selectbox-dropdown {
+        display: none;
+        position: absolute;
+        padding: 3px 0;
+        top: calc(100% + 2px);
+        left: 0;
+        right: 0;
+        background: var(--select-option);
+        border: 1px solid var(--input-border-focus);
+        border-radius: 4px;
+        box-shadow: 1px 1px 4px -1px var(--select-option-selected);
+        z-index: 1000;
+        max-height: 200px;
+        overflow: hidden;
+    }
 
-.selectbox-arrow-open {
-    transform: rotate(180deg);
-}
+    .selectbox-search {
+        border-bottom: 1px solid var(--select-option-hover);
+    }
 
-.selectbox-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #409eff;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    max-height: 200px;
-    overflow: hidden;
-}
+    .selectbox-search-input {
+        font-size: 11px;
+        width: 100%;
+        padding: 5px 12px 5px 27px;
+        border: none;
+        border-radius: 2px;
+        &:focus {
+            outline: none;
+            border-color: var(--input-border-focus);
+        }
+    }
 
-.selectbox-search {
-    padding: 8px;
-    border-bottom: 1px solid #e4e7ed;
-}
+    .selectbox-options {
+        max-height: 157px;
+        overflow-y: auto;
+    }
 
-.selectbox-search-input {
-    width: 100%;
-    padding: 6px 8px;
-    border: 1px solid #dcdfe6;
-    border-radius: 2px;
-    font-size: 14px;
-}
+    .selectbox-option {
+        padding: 5.7px 12px 5.7px 27px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s ease;
+        &:hover {
+            background-color: var(--select-option-hover);
+        }
+    }
 
-.selectbox-search-input:focus {
-    outline: none;
-    border-color: #409eff;
-}
+    .selectbox-option-selected {
+        background-color: var(--select-option-selected);
+        &:hover {
+            background-color: var(--select-option-selected);
+        }
+    }
 
-.selectbox-options {
-    max-height: 150px;
-    overflow-y: auto;
-}
+    .selectbox-checkbox {
+        margin: 0;
+    }
 
-.selectbox-option {
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background-color 0.2s ease;
-}
+    .selectbox-option-text {
+        flex: 1;
+    }
 
-.selectbox-option:hover {
-    background-color: #f5f7fa;
-}
-
-.selectbox-option-selected {
-    background-color: #f0f9ff;
-    color: #409eff;
-}
-
-.selectbox-option-selected .selectbox-option-text {
-    color: #409eff;
-    font-weight: 500;
-}
-
-.selectbox-checkbox {
-    margin: 0;
-}
-
-.selectbox-option-text {
-    flex: 1;
-}
-
-.selectbox-multiple .selectbox-selected-text {
-    color: #409eff;
-    font-weight: 500;
-}
-
-.selectbox-disabled .selectbox-header {
-    background-color: #f5f7fa;
-    cursor: not-allowed;
-    color: #c0c4cc;
-}
-
-.selectbox-disabled .selectbox-selected-text {
-    color: #c0c4cc;
+    .selectbox-disabled {
+        pointer-events: none;
+        .selectbox-header {
+            opacity: 0.65;
+        }
+    }
 }
