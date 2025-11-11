@@ -15,7 +15,7 @@
     .selectbox-header {
         border: 1px solid var(--input-border);
         border-radius: 1px;
-        background: var(--input-bg);
+        background-color: var(--input-bg);
         cursor: pointer;
         display: flex;
         justify-content: space-between;
@@ -65,7 +65,7 @@
         top: calc(100% + 2px);
         left: 0;
         right: 0;
-        background: var(--select-option);
+        background-color: var(--select-option);
         border: 1px solid var(--input-border-focus);
         border-radius: 4px;
         box-shadow: 1px 1px 4px -1px var(--select-option-selected);
@@ -126,6 +126,52 @@
         pointer-events: none;
         .selectbox-header {
             opacity: 0.65;
+        }
+    }
+}
+
+body.theme-dark .selectbox-container {
+    .selectbox-header {
+        border-color: var(--input-border-dark);
+        background-color: var(--input-bg-dark);
+        &:hover {
+            border-color: var(--input-border-hover-dark);
+        }
+        &:focus {
+            border-color: var(--input-border-focus-dark);
+        }
+    }
+
+    .selectbox-header-open {
+        border-color: var(--input-border-focus-dark);
+    }
+
+    .selectbox-dropdown {
+        background-color: var(--select-option-dark);
+        border-color: var(--input-border-focus-dark);
+        box-shadow: 1px 1px 4px -1px var(--select-option-selected-dark);
+    }
+
+    .selectbox-search {
+        border-bottom: 1px solid var(--select-option-hover-dark);
+    }
+
+    .selectbox-search-input {
+        &:focus {
+            border-color: var(--input-border-focus-dark);
+        }
+    }
+
+    .selectbox-option {
+        &:hover {
+            background-color: var(--select-option-hover-dark);
+        }
+    }
+
+    .selectbox-option-selected {
+        background-color: var(--select-option-selected-dark);
+        &:hover {
+            background-color: var(--select-option-selected-dark);
         }
     }
 }
