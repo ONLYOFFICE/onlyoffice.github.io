@@ -1,0 +1,13 @@
+html {
+    --font-color: #323130;
+    --font-color-hover: #000000;
+    --color-pad: rgba(0, 0, 0, 0.02);
+    --color-pad-hover: rgba(0, 0, 0, 0.1);
+    --color-pad-selected: rgba(0, 0, 0, 0.2);
+    --border-color: #c0c0c0;
+    --font-color--dark: #d9d9d9;
+    --font-color-hover--dark: #ffffff;
+    --color-pad--dark: rgba(255, 255, 255, 0.02);
+    --color-pad-hover--dark: rgba(255, 255, 255, 0.1);
+    --color-pad-selected--dark: rgba(255, 255, 255, 0.2);
+}
