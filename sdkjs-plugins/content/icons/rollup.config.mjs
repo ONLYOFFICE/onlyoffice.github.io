@@ -8,6 +8,7 @@ import autoprefixer from "autoprefixer";
 import customProperties from "postcss-custom-properties";
 import atImport from "postcss-import";
 import cssnano from "cssnano";
+import postcssNesting from "postcss-nesting";
 import fs from "fs";
 
 const isES5Build = process.env.TARGET === "es5";
@@ -65,6 +66,7 @@ export default {
                 customProperties({
                     preserve: false,
                 }),
+                postcssNesting(),
                 autoprefixer({
                     overrideBrowserslist: ["ie >= 11", "last 2 versions"],
                 }),
