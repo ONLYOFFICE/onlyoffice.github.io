@@ -31,12 +31,14 @@
  */
 
 // @ts-check
+import { SelectBox } from "./selectbox/selectbox.js";
 import "./categories-picker.css";
 
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
 class CategoriesPicker {
     #categories;
+    #input;
     /**
      * @param {string} category
      */
@@ -48,41 +50,72 @@ class CategoriesPicker {
      * @param {IconCategoryType[]} catalogOfIcons
      */
     constructor(catalogOfIcons) {
+        const categories = new SelectBox("categorySelectList", {
+            placeholder: "Loading...",
+        });
+        const input = document.getElementById("categorySelect");
+        if (input instanceof HTMLInputElement === false) {
+            throw new Error("categorySelect not found");
+        }
+
         /** @type {HTMLDivElement} */
-        this.#categories = document.getElementById("categories");
+        this.#categories = categories;
+        /** @type {HTMLInputElement} */
+        this.#input = input;
+
         this.#addEventListener();
         this.#show(catalogOfIcons);
     }
+
+    #initSelectBox() {
+        const holder = this.#input?.parentElement;
+        const arrow = document.createElement("span");
+        arrow.classList.add("selectArrow");
+        arrow.appendChild(document.createElement("span"));
+        arrow.appendChild(document.createElement("span"));
+        holder?.appendChild(arrow);
+
+        const list = holder?.querySelector(".selectList");
+        if (!list) {
+            console.error("selectList not found");
+            return;
+        }
+
+        const toggle = function () {
+            list.classList.toggle("hidden");
+            return true;
+        };
+
+        this.#input.onclick = toggle;
+        arrow.onclick = toggle;
+    }
+
     /**
      * @param {IconCategoryType[]} catalogOfIcons
      */
     #show(catalogOfIcons) {
         this.#selectedCategory = "";
+        this.#categories.addItem("", "All");
+        catalogOfIcons.forEach((categoryInfo) => {
+            this.#categories.addItem(categoryInfo.id, categoryInfo.label);
+        });
+
+        return;
         const fragment = document.createDocumentFragment();
+        const el = document.createElement("span");
+        el.className = "category-name";
+        el.setAttribute("data-value", "");
+        el.textContent = "All";
+        fragment.appendChild(el);
+        this.#input.value = "All";
 
         catalogOfIcons.forEach((categoryInfo) => {
-            let id = categoryInfo.id;
-            let label = categoryInfo.label;
-
-            const categoryContainer = document.createElement("div");
-            fragment.appendChild(categoryContainer);
-
-            categoryContainer.className = "category";
-            const categoryName = document.createElement("span");
-            categoryContainer.appendChild(categoryName);
-            categoryName.textContent = label;
-            categoryName.setAttribute("data-value", id);
-            categoryName.className = "category-name";
-
-            /** ******************** */
-            var el = document.createElement("span");
-            el.className = "category";
-            el.setAttribute("data-value", id);
-            el.textContent = label;
-
-            this.#categories?.appendChild(el);
-            /*el.onclick = onStyleSelectOther();
-            
+            const el = document.createElement("span");
+            el.className = "category-name";
+            el.setAttribute("data-value", categoryInfo.id);
+            el.textContent = categoryInfo.label;
+            fragment.appendChild(el);
+            /*
             if (json[i].name == lastStyle) {
                 el.setAttribute("selected", "");
                 selectInput(
@@ -94,7 +127,7 @@ class CategoriesPicker {
             }*/
         });
 
-        this.#categories?.appendChild(fragment);
+        this.#categories.appendChild(fragment);
     }
 
     reset() {
@@ -102,11 +135,7 @@ class CategoriesPicker {
             return;
         }
         this.#selectedCategory = "";
-        this.#categories
-            ?.querySelectorAll(".category.selected")
-            .forEach((category) => {
-                category.classList.remove("selected");
-            });
+        this.#categories.clear();
     }
 
     /**
@@ -117,7 +146,16 @@ class CategoriesPicker {
     }
 
     #addEventListener() {
-        /*this.#categories?.addEventListener("click", (e) => {
+        /*window.addEventListener("click", (e) => {
+            if (
+                e.target instanceof HTMLElement === false ||
+                !e.target.closest(".selectHolder")
+            ) {
+                this.#categories.classList.add("hidden");
+            }
+        });*/
+        /*this.#categories.addEventListener("click", (e) => {
+            console.log("click inside categories");
             let categoryName;
 
             const target = e.target;
@@ -132,23 +170,19 @@ class CategoriesPicker {
             if (typeof id !== "string") {
                 id = "";
             }
-            let category = categoryName.parentElement;
-            let wasSelected = category?.classList.contains("selected");
 
             this.#categories
-                ?.querySelectorAll(".category.selected")
+                .querySelectorAll(".selected")
                 .forEach((category) => {
                     category.classList.remove("selected");
                 });
 
-            if (wasSelected) {
-                category?.classList.remove("selected");
-                this.#selectedCategory = "";
-            } else {
-                category?.classList.add("selected");
-                this.#selectedCategory = id;
-            }
+            categoryName?.classList.add("selected");
+            this.#selectedCategory = id;
+            this.#input.value = categoryName.textContent;
+
             this.#onSelectCategoryCallback(this.#selectedCategory);
+            this.#categories.classList.add("hidden");
         });*/
     }
 }
