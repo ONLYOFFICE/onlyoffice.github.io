@@ -3,7 +3,11 @@ import { babel } from "@rollup/plugin-babel";
 import license from "rollup-plugin-license";
 import terser from "@rollup/plugin-terser";
 import html from "@rollup/plugin-html";
-import css from "rollup-plugin-css-only";
+import postcss from "rollup-plugin-postcss";
+import autoprefixer from "autoprefixer";
+import customProperties from "postcss-custom-properties";
+import atImport from "postcss-import";
+import cssnano from "cssnano";
 import fs from "fs";
 
 const isES5Build = process.env.TARGET === "es5";
@@ -53,6 +57,38 @@ export default {
         sourcemap: true,
     },
     plugins: [
+        postcss({
+            extract: "styles.css",
+            minimize: true,
+            plugins: [
+                atImport(), // process @import rules
+                customProperties({
+                    preserve: false,
+                }),
+                autoprefixer({
+                    overrideBrowserslist: ["ie >= 11", "last 2 versions"],
+                }),
+                cssnano({
+                    preset: [
+                        "default",
+                        {
+                            discardDuplicates: true,
+                            normalizeWhitespace: true,
+                            discardEmpty: true,
+                            mergeRules: true,
+                            discardUnused: {
+                                fontFace: false,
+                                keyframes: false,
+                                counterStyle: false,
+                            },
+                        },
+                    ],
+                }),
+            ],
+            sourceMap: true,
+            modules: false, // CSS Modules
+            // use: ["sass"], // preprocessor support
+        }),
         resolve({
             browser: true,
         }),
@@ -72,7 +108,6 @@ export default {
             template: () => template,
             fileName: "index.html",
         }),
-        css({ output: "styles.css" }),
         license({
             banner: {
                 commentStyle: "none", // 'regular', 'none', 'ignored'
