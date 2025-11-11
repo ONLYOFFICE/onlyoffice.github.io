@@ -187,13 +187,8 @@ class IconPicker {
     }
 
     #onChange() {
-        const total = this.#listOfIconNames.size;
-        const selected =
-            this.#container?.querySelectorAll(".icon.selected").length;
-        const totalElement = document.getElementById("total");
-        if (totalElement) {
-            totalElement.textContent = `${total} icons, ${selected} selected`;
-        }
+        //const total = this.#listOfIconNames.size;
+        //const selected = this.#container?.querySelectorAll(".icon.selected").length;
 
         this.#onSelectIconCallback(this.#selectedIcons);
     }

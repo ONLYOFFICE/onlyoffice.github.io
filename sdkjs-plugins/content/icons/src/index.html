@@ -55,7 +55,25 @@
             <div class="overlay-close"></div>
         </div>
         <section class="content">
+            <div id="categories-container" class="categories-container">
+                <label class="i18n header">Category</label>
+                <div class="selectHolder">
+                    <input
+                        id="categorySelect"
+                        class="control select text i18n noselect"
+                        type="text"
+                        placeholder="Loading..."
+                        autocomplete="off"
+                        readonly
+                    />
+                    <div
+                        id="categorySelectList"
+                        class="selectList hidden"
+                    ></div>
+                </div>
+            </div>
             <div id="search" class="search">
+                <label class="i18n header" for="searchFilter">Search</label>
                 <input
                     type="text"
                     id="searchFilter"
@@ -63,26 +81,6 @@
                 />
             </div>
 
-            <div id="categories-container" class="categories-container">
-                <span class="i18n">Category</span>
-                <div class="selectHolder">
-                    <input
-                        id="categorySelect"
-                        class="control select text i18n"
-                        type="text"
-                        placeholder="Enter category name"
-                        autocomplete="off"
-                    />
-                    <div
-                        id="categorySelectList"
-                        class="selectList display-none"
-                    ></div>
-                    <div
-                        id="categories"
-                        class="categories selectList display-none form-control"
-                    ></div>
-                </div>
-            </div>
             <div id="icons-container" class="icons-container">
                 <div id="icons" class="icons"></div>
                 <div id="summary" class="summary">
