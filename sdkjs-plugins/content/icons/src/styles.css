@@ -1,18 +1,4 @@
-body.light {
-    --font-color: #323130;
-    --font-color-hover: #000000;
-    --color-pad: rgba(0, 0, 0, 0.02);
-    --color-pad-hover: rgba(0, 0, 0, 0.1);
-    --color-pad-selected: rgba(0, 0, 0, 0.2);
-}
-
-body.dark {
-    --font-color: #d9d9d9;
-    --font-color-hover: #ffffff;
-    --color-pad: rgba(255, 255, 255, 0.02);
-    --color-pad-hover: rgba(255, 255, 255, 0.1);
-    --color-pad-selected: rgba(255, 255, 255, 0.2);
-}
+@import url("./colors.css");
 
 body {
     margin: 0;
