@@ -33,12 +33,12 @@ class SelectBox {
     }
 
     #init() {
-        this.#createDOM();
+        this._createDOM();
         this.#bindEvents();
-        this.renderOptions();
+        this.#renderOptions();
     }
 
-    #createDOM() {
+    _createDOM() {
         this.#container.innerHTML = "";
         this.#container.classList.add("selectbox-container");
 
@@ -81,32 +81,32 @@ class SelectBox {
     }
 
     #bindEvents() {
-        this.header.addEventListener("click", (e) => this.toggleDropdown(e));
+        this.header.addEventListener("click", (e) => this.#toggleDropdown(e));
 
         // Search
         if (this.searchInput) {
             this.searchInput.addEventListener("input", (e) =>
-                this.handleSearch(e)
+                this.#handleSearch(e)
             );
         }
 
         // Close on outside click
         document.addEventListener("click", (e) => {
             if (!this.#container.contains(e.target)) {
-                this.closeDropdown();
+                this.#closeDropdown();
             }
         });
 
         // Keyboard navigation
-        this.header.addEventListener("keydown", (e) => this.handleKeydown(e));
+        this.header.addEventListener("keydown", (e) => this.#handleKeydown(e));
     }
 
-    toggleDropdown(e) {
+    #toggleDropdown(e) {
         e.stopPropagation();
-        this.#isOpen ? this.closeDropdown() : this.openDropdown();
+        this.#isOpen ? this.#closeDropdown() : this.#openDropdown();
     }
 
-    openDropdown() {
+    #openDropdown() {
         this.#isOpen = true;
         this.dropdown.style.display = "block";
         this.arrow.classList.add("selectbox-arrow-open");
@@ -116,10 +116,10 @@ class SelectBox {
             setTimeout(() => this.searchInput.focus(), 100);
         }
 
-        this.renderOptions();
+        this.#renderOptions();
     }
 
-    closeDropdown() {
+    #closeDropdown() {
         this.#isOpen = false;
         this.dropdown.style.display = "none";
         this.arrow.classList.remove("selectbox-arrow-open");
@@ -130,50 +130,29 @@ class SelectBox {
         }
     }
 
-    handleSearch(e) {
+    #handleSearch(e) {
         const searchTerm = e.target.value.toLowerCase();
-        this.renderOptions(searchTerm);
+        this.#renderOptions(searchTerm);
     }
 
-    handleKeydown(e) {
+    #handleKeydown(e) {
         switch (e.key) {
             case " ":
             case "Enter":
                 e.preventDefault();
-                this.toggleDropdown(e);
+                this.#toggleDropdown(e);
                 break;
             case "Escape":
-                this.closeDropdown();
+                this.#closeDropdown();
                 break;
             case "ArrowDown":
                 e.preventDefault();
-                if (!this.#isOpen) this.openDropdown();
+                if (!this.#isOpen) this.#openDropdown();
                 break;
         }
     }
 
-    addItem(value, text, selected = false) {
-        this.#items.push({ value, text, selected });
-
-        if (selected) {
-            if (this.#options.multiple) {
-                this.#selectedValues.add(value);
-            } else {
-                this.#selectedValues.clear();
-                this.#selectedValues.add(value);
-            }
-        }
-
-        this.updateSelectedText();
-    }
-
-    removeItem(value) {
-        this.#items = this.#items.filter((item) => item.value !== value);
-        this.#selectedValues.delete(value);
-        this.updateSelectedText();
-    }
-
-    renderOptions(searchTerm = "") {
+    #renderOptions(searchTerm = "") {
         if (!this.#optionsContainer) return;
 
         const filteredItems = searchTerm
@@ -209,12 +188,12 @@ class SelectBox {
             .querySelectorAll(".selectbox-option")
             .forEach((option) => {
                 option.addEventListener("click", (e) =>
-                    this.handleOptionClick(e, option)
+                    this.#handleOptionClick(e, option)
                 );
             });
     }
 
-    handleOptionClick(e, option) {
+    #handleOptionClick(e, option) {
         const value = option.dataset.value;
 
         if (this.#options.multiple) {
@@ -226,17 +205,17 @@ class SelectBox {
         } else {
             this.#selectedValues.clear();
             this.#selectedValues.add(value);
-            this.closeDropdown();
+            this.#closeDropdown();
         }
 
-        this.updateSelectedText();
-        this.renderOptions(this.searchInput?.value || "");
+        this.#updateSelectedText();
+        this.#renderOptions(this.searchInput?.value || "");
 
         // Trigger custom event
-        this.triggerChange();
+        this.#triggerChange();
     }
 
-    updateSelectedText() {
+    #updateSelectedText() {
         if (this.#selectedValues.size === 0) {
             this.selectedText.textContent = this.#options.placeholder;
             return;
@@ -263,7 +242,7 @@ class SelectBox {
         }
     }
 
-    triggerChange() {
+    #triggerChange() {
         const event = new CustomEvent("selectbox:change", {
             detail: {
                 values: Array.from(this.#selectedValues),
@@ -276,6 +255,28 @@ class SelectBox {
     }
 
     // Public API
+
+    addItem(value, text, selected = false) {
+        this.#items.push({ value, text, selected });
+
+        if (selected) {
+            if (this.#options.multiple) {
+                this.#selectedValues.add(value);
+            } else {
+                this.#selectedValues.clear();
+                this.#selectedValues.add(value);
+            }
+        }
+
+        this.#updateSelectedText();
+    }
+
+    removeItem(value) {
+        this.#items = this.#items.filter((item) => item.value !== value);
+        this.#selectedValues.delete(value);
+        this.#updateSelectedText();
+    }
+
     getValue() {
         return this.#options.multiple
             ? Array.from(this.#selectedValues)
@@ -288,18 +289,18 @@ class SelectBox {
         } else {
             this.#selectedValues = new Set([value]);
         }
-        this.updateSelectedText();
-        this.renderOptions();
+        this.#updateSelectedText();
+        this.#renderOptions();
     }
 
     clear() {
         this.#selectedValues.clear();
-        this.updateSelectedText();
-        this.renderOptions();
+        this.#updateSelectedText();
+        this.#renderOptions();
     }
 
     destroy() {
-        document.removeEventListener("click", this.closeDropdown);
+        document.removeEventListener("click", this.#closeDropdown);
         this.#container.innerHTML = "";
         this.#container.classList.remove("selectbox-container");
     }
