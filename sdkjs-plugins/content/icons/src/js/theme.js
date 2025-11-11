@@ -37,9 +37,9 @@ class Theme {
         const themeType = theme.type || "light";
 
         const body = document.body;
-        body.classList.remove("dark");
-        body.classList.remove("light");
-        body.classList.add(themeType);
+        body.classList.remove("theme-dark");
+        body.classList.remove("theme-light");
+        body.classList.add("theme-" + themeType);
     }
 }
 

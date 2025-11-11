@@ -15,22 +15,41 @@
         align-content: flex-start;
         gap: 5px;
         .icon {
-            color: var(--font-color);
+            color: var(--font);
             width: 48px;
             height: 48px;
-
-            background: var(--color-pad);
+            background: var(--icon-pad);
+            &:hover {
+                color: var(--font-hover);
+                background: var(--icon-pad-hover);
+            }
+            &:focus {
+                box-shadow: 0 0 0 2px var(--icon-pad-hover);
+            }
+            &.selected {
+                background: var(--icon-pad-selected);
+            }
         }
     }
 }
 
-.icons-container .icons .icon:hover {
-    color: var(--font-color-hover);
-    background: var(--color-pad-hover);
-}
-.icons-container .icons .icon:focus {
-    box-shadow: 0 0 0 2px var(--color-pad-hover);
-}
-.icons-container .icons .icon.selected {
-    background: var(--color-pad-selected);
+body.theme-dark {
+    .icons-container {
+        .icons {
+            .icon {
+                color: var(--font-dark);
+                background: var(--icon-pad-dark);
+                &:hover {
+                    color: var(--font-hover-dark);
+                    background: var(--icon-pad-hover-dark);
+                }
+                &:focus {
+                    box-shadow: 0 0 0 2px var(--icon-pad-hover-dark);
+                }
+                &.selected {
+                    background: var(--icon-pad-selected-dark);
+                }
+            }
+        }
+    }
 }

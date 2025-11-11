@@ -1,38 +1,3 @@
-@import url("../../colors.css");
-
 .categories-container {
     box-sizing: border-box;
-}
-.categories-container input[type="text"] {
-    cursor: default;
-}
-
-.category {
-    cursor: pointer;
-    color: var(--font-color);
-    user-select: none;
-    line-height: 22px;
-    position: relative;
-}
-.category::before {
-    content: "📁 ";
-    position: absolute;
-    left: 4px;
-}
-.category.selected {
-    background: var(--color-pad-selected);
-}
-.category.selected::before {
-    content: "✅ ";
-}
-.category.category-name {
-    display: block;
-    min-width: 160px;
-    box-sizing: border-box;
-    padding: 4px 12px 4px 33px;
-    border-radius: 3px;
-}
-.category.category-name:hover {
-    color: var(--font-color-hover);
-    background-color: var(--color-pad-hover);
 }
