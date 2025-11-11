@@ -457,13 +457,32 @@ If possible, provide the output in valid Markdown (.md) format, but do not wrap 
 	return fullPrompt;
 }
 
-function getAnyPresentationGenerationPrompt(documentDescription) {
-	let instructions = "Generate a presentation based on the description.\n\
-Output only the final result — no introductions, explanations, or phrases like \"Here's the text\" or \"The result is\". \
-If possible, provide the output in valid Markdown (.md) format, but do not wrap it in \`\`\`markdown\`\`\` or any other code block.\n";
+async function getAnyPresentationGenerationPrompt(documentDescription) {
+	let hs = HELPERS.slide;
+	let funcName = "generatePresentationWithTheme";
+	let func = null;
 
-	let fullPrompt = instructions + "\n\nDescription:\n\n" + documentDescription;
-	return fullPrompt;
+	for (let i = 0, len = hs.length; i < len && !func; i++) {
+		if (Array.isArray(hs[i])) {
+			for (let j = 0, len2 = hs[i].length; j < len2; j++) {
+				if (hs[i][j].name === funcName) {
+					func = hs[i][j];
+					break;
+				}
+			}
+		} else {
+			if (hs[i].name === funcName) {
+				func = hs[i];
+				break;
+			}
+		}
+	}
+
+	if (func) {
+		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+		await func.call(JSON.parse(documentDescription));
+		await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+	}
 }
 
 window.isEnableDocumentGenerate = true;
@@ -603,7 +622,7 @@ window.checkGenerationInfo = async function() {
 			generationValue = getAnyDocumentGenerationPrompt(generationInfo.value);
 			break;
 		case "ai-gen-pptx":
-			generationValue = getAnyPresentationGenerationPrompt(generationInfo.value);
+			return await getAnyPresentationGenerationPrompt(generationInfo.value);
 			break;
 		case "ai-gen-form":
 			generationValue = getAnyFormGenerationPrompt(generationInfo.value);
