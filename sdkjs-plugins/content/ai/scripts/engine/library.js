@@ -255,7 +255,7 @@
 
 				let itemsHtml = items.map(item => {
 					const trimmed = item.trim();
-					return `\n\t<w:ListItem ListValue="${trimmed}" DataValue="${trimmed}"/>`;
+					return `<w:ListItem ListValue="${trimmed}" DataValue="${trimmed}"></w:ListItem>`;
 				}).join('');
 
 				return `<w:Sdt ComboBox="t" Form="t" Key="${key}" ID="${id}">${itemsHtml}\n</w:Sdt>`;
