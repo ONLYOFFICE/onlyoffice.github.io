@@ -1,10 +1,8 @@
-@import url("./colors.css");
-
 body {
     margin: 0;
 }
 .content {
-    margin: 4px 13px 11px 11px;
+    padding: 4px 13px 11px 11px;
     overflow-y: auto;
     height: inherit;
     display: flex;
@@ -26,30 +24,7 @@ input[type="text"] {
 input[readonly]::selection {
     background-color: transparent;
 }
-.selectHolder {
-    position: relative;
-}
-.selectArrow {
-    cursor: pointer;
-    position: absolute;
-    top: 6px;
-    right: 11px;
-    transform: rotate(0deg);
-    transition: transform 0.2s ease;
-}
-.selectArrow > span {
-    display: inline-block;
-    width: 4px;
-    height: 0.5px;
-    margin: 0 -1px 3px -1px;
-    background-color: #000000;
-}
-.selectArrow > span:first-of-type {
-    transform: rotateZ(45deg);
-}
-.selectArrow > span:last-of-type {
-    transform: rotateZ(-45deg);
-}
+/*
 .selectList:not(.hidden) {
     display: flex;
     flex-direction: column;
@@ -82,3 +57,4 @@ input[readonly]::selection {
 .selectList:not(.hidden) + .selectArrow {
     transform: rotate(180deg);
 }
+*/

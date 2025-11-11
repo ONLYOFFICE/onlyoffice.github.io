@@ -1,13 +1,29 @@
 html {
-    --font-color: #323130;
-    --font-color-hover: #000000;
-    --color-pad: rgba(0, 0, 0, 0.02);
-    --color-pad-hover: rgba(0, 0, 0, 0.1);
-    --color-pad-selected: rgba(0, 0, 0, 0.2);
-    --border-color: #c0c0c0;
-    --font-color--dark: #d9d9d9;
-    --font-color-hover--dark: #ffffff;
-    --color-pad--dark: rgba(255, 255, 255, 0.02);
-    --color-pad-hover--dark: rgba(255, 255, 255, 0.1);
-    --color-pad-selected--dark: rgba(255, 255, 255, 0.2);
+    --font: rgba(0, 0, 0, 0.8);
+    --font-hover: #000000;
+    --icon-pad: rgba(0, 0, 0, 0.02);
+    --icon-pad-hover: rgba(0, 0, 0, 0.1);
+    --icon-pad-selected: rgba(0, 0, 0, 0.2);
+    --input-bg: white;
+    --input-border: #c0c0c0;
+    --input-border-hover: #c0c0c0;
+    --input-border-focus: #848484;
+    --input-border-active: #c0c0c0;
+    --select-option: white;
+    --select-option-hover: #e0e0e0;
+    --select-option-selected: #cbcbcb;
+
+    --font-dark: rgba(255, 255, 255, 0.8);
+    --font-hover-dark: #ffffff;
+    --icon-pad-dark: rgba(255, 255, 255, 0.02);
+    --icon-pad-hover-dark: rgba(255, 255, 255, 0.1);
+    --icon-pad-selected-dark: rgba(255, 255, 255, 0.2);
+    --input-bg-dark: red;
+    --input-border-dark: red;
+    --input-border-hover-dark: red;
+    --input-border-focus-dark: red;
+    --input-border-active-dark: red;
+    --select-option-dark: red;
+    --select-option-hover-dark: red;
+    --select-option-selected-dark: red;
 }
