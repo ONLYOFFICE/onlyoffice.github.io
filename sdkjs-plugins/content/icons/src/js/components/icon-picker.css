@@ -1,42 +1,29 @@
-body.light {
-    --font-color: #323130;
-    --font-color-hover: #000000;
-    --color-pad: rgba(0, 0, 0, 0.02);
-    --color-pad-hover: rgba(0, 0, 0, 0.1);
-    --color-pad-selected: rgba(0, 0, 0, 0.2);
-}
-
-body.dark {
-    --font-color: #d9d9d9;
-    --font-color-hover: #ffffff;
-    --color-pad: rgba(255, 255, 255, 0.02);
-    --color-pad-hover: rgba(255, 255, 255, 0.1);
-    --color-pad-selected: rgba(255, 255, 255, 0.2);
-}
+@import url("../../colors.css");
 
 .icons-container {
     height: calc(100% - 190px);
     width: 100%;
     box-sizing: border-box;
-}
-.icons-container .icons {
-    height: calc(100% - 20px);
-    padding: 12px;
-    box-sizing: border-box;
-    overflow-y: scroll;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: flex-start;
-    gap: 5px;
-}
-.icons-container .icons .icon {
-    color: var(--font-color);
-    width: 48px;
-    height: 48px;
+    .icons {
+        height: calc(100% - 20px);
+        padding: 12px;
+        box-sizing: border-box;
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-content: flex-start;
+        gap: 5px;
+        .icon {
+            color: var(--font-color);
+            width: 48px;
+            height: 48px;
 
-    background: var(--color-pad);
+            background: var(--color-pad);
+        }
+    }
 }
+
 .icons-container .icons .icon:hover {
     color: var(--font-color-hover);
     background: var(--color-pad-hover);

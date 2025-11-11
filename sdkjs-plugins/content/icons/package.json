@@ -15,9 +15,14 @@
         "@rollup/plugin-html": "^2.0.0",
         "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-terser": "^0.4.4",
+        "autoprefixer": "^10.4.22",
+        "cssnano": "^7.1.2",
+        "postcss-custom-properties": "^14.0.6",
+        "postcss-import": "^16.1.1",
         "rollup": "^4.50.1",
         "rollup-plugin-css-only": "^4.5.5",
-        "rollup-plugin-license": "^3.6.0"
+        "rollup-plugin-license": "^3.6.0",
+        "rollup-plugin-postcss": "^4.0.2"
     },
     "dependencies": {
         "core-js": "^3.45.1"

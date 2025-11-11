@@ -50,8 +50,11 @@
 
 .selectbox-arrow {
     transition: transform 0.3s ease;
-    color: #c0c4cc;
-    font-size: 12px;
+    width: 18px;
+    height: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTMgNC44OTM3OWUtMDZMMCAyLjk5NzgxTDMgNS45OTU2MUw2IDIuOTk3ODFMMyA0Ljg5Mzc5ZS0wNlpNMyAwLjAwMDU0Mjg2NEwwLjc1IDIuMjQ4OUwzIDQuNDk3MjVMNS4yNSAyLjI0ODlMMyAwLjAwMDU0Mjg2NFoiIGZpbGw9ImJsYWNrIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgo8L3N2Zz4K");
 }
 
 .selectbox-arrow-open {
