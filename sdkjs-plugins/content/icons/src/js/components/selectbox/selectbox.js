@@ -1,25 +1,54 @@
+// @ts-check
+
+/** @typedef {import('./options-type.js').SelectboxOptionsType} SelectboxOptionsType */
+
 import "./selectbox.css";
 
 class SelectBox {
+    /** @type {HTMLElement} */
     #container;
+    /** @type {SelectboxOptionsType} */
     #options;
+    /** @type {HTMLElement} */
+    // @ts-ignore
     #optionsContainer;
     #selectedValues;
     #isOpen;
+    /** @type {Array<{ value: string | number, text: string, selected: boolean }>} */
     #items;
+    /** @type {HTMLInputElement | undefined} */
+    searchInput;
+    /** @type {HTMLElement} */
+    // @ts-ignore
+    header;
+    /** @type {HTMLElement} */
+    // @ts-ignore
+    selectedText;
+    /** @type {HTMLElement} */
+    // @ts-ignore
+    arrow;
+    /** @type {HTMLElement} */
+    // @ts-ignore
+    dropdown;
 
     /**
      * @param {string | HTMLElement} container
-     * @param {*} options
+     * @param {SelectboxOptionsType} options
      */
-    constructor(container, options = {}) {
-        this.#container =
-            typeof container === "string"
-                ? document.getElementById(container)
-                : container;
+    constructor(container, options) {
+        if (typeof container === "string") {
+            let temp = document.getElementById(container);
+            if (temp instanceof HTMLElement) {
+                container = temp;
+            }
+        }
+        if (container instanceof HTMLElement) {
+            this.#container = container;
+        } else {
+            throw new Error("Invalid container");
+        }
 
         this.#options = {
-            placeholder: options.placeholder || "Select an option",
             searchable: options.searchable || false,
             multiple: options.multiple || false,
             ...options,
@@ -29,10 +58,6 @@ class SelectBox {
         this.#isOpen = false;
         this.#items = [];
 
-        this.#init();
-    }
-
-    #init() {
         this._createDOM();
         this.#bindEvents();
         this.#renderOptions();
@@ -42,42 +67,45 @@ class SelectBox {
         this.#container.innerHTML = "";
         this.#container.classList.add("selectbox-container");
 
-        // Basic structure
-        this.#container.innerHTML = `
-            <div class="selectbox">
-                <div class="selectbox-header" tabindex="0">
-                    <span class="selectbox-selected-text">${
-                        this.#options.placeholder
-                    }</span>
-                    <span class="selectbox-arrow"></span>
-                </div>
-                <div class="selectbox-dropdown">
-                    ${
-                        this.#options.searchable
-                            ? `
-                        <div class="selectbox-search">
-                            <input type="text" class="selectbox-search-input" placeholder="Search...">
-                        </div>
-                    `
-                            : ""
-                    }
-                    <div class="selectbox-options"></div>
-                </div>
-            </div>
-        `;
+        const fragment = document.createDocumentFragment();
+        const selectBox = document.createElement("div");
+        selectBox.classList.add("selectbox");
+        fragment.appendChild(selectBox);
 
-        // Save references to key elements
-        this.header = this.#container.querySelector(".selectbox-header");
-        this.selectedText = this.#container.querySelector(
-            ".selectbox-selected-text"
-        );
-        this.arrow = this.#container.querySelector(".selectbox-arrow");
-        this.dropdown = this.#container.querySelector(".selectbox-dropdown");
-        this.#optionsContainer =
-            this.#container.querySelector(".selectbox-options");
-        this.searchInput = this.#container.querySelector(
-            ".selectbox-search-input"
-        );
+        this.header = document.createElement("div");
+        this.header.classList.add("selectbox-header");
+        selectBox.appendChild(this.header);
+        this.header.setAttribute("tabindex", "0");
+
+        this.selectedText = document.createElement("span");
+        this.selectedText.classList.add("selectbox-selected-text");
+        this.selectedText.textContent = this.#options.placeholder;
+        this.header.appendChild(this.selectedText);
+
+        this.arrow = document.createElement("span");
+        this.arrow.classList.add("selectbox-arrow");
+        this.header.appendChild(this.arrow);
+
+        this.dropdown = document.createElement("div");
+        this.dropdown.classList.add("selectbox-dropdown");
+        selectBox.appendChild(this.dropdown);
+
+        if (this.#options.searchable) {
+            const search = document.createElement("div");
+            search.classList.add("selectbox-search");
+            this.dropdown.appendChild(search);
+            this.searchInput = document.createElement("input");
+            this.searchInput.classList.add("selectbox-search-input");
+            this.searchInput.type = "text";
+            this.searchInput.placeholder = "Search...";
+            search.appendChild(this.searchInput);
+        }
+
+        this.#optionsContainer = document.createElement("div");
+        this.#optionsContainer.classList.add("selectbox-options");
+        this.dropdown.appendChild(this.#optionsContainer);
+
+        this.#container.appendChild(fragment);
     }
 
     #bindEvents() {
@@ -92,7 +120,10 @@ class SelectBox {
 
         // Close on outside click
         document.addEventListener("click", (e) => {
-            if (!this.#container.contains(e.target)) {
+            if (
+                e.target instanceof HTMLElement &&
+                !this.#container.contains(e.target)
+            ) {
                 this.#closeDropdown();
             }
         });
@@ -101,6 +132,9 @@ class SelectBox {
         this.header.addEventListener("keydown", (e) => this.#handleKeydown(e));
     }
 
+    /**
+     * @param {Event} e
+     */
     #toggleDropdown(e) {
         e.stopPropagation();
         this.#isOpen ? this.#closeDropdown() : this.#openDropdown();
@@ -113,7 +147,7 @@ class SelectBox {
         this.header.classList.add("selectbox-header-open");
 
         if (this.searchInput) {
-            setTimeout(() => this.searchInput.focus(), 100);
+            setTimeout(() => this.searchInput?.focus(), 100);
         }
 
         this.#renderOptions();
@@ -130,11 +164,20 @@ class SelectBox {
         }
     }
 
+    /**
+     * @param {Event} e
+     */
     #handleSearch(e) {
+        if (e.target instanceof HTMLInputElement === false) {
+            return;
+        }
         const searchTerm = e.target.value.toLowerCase();
         this.#renderOptions(searchTerm);
     }
 
+    /**
+     * @param {KeyboardEvent} e
+     */
     #handleKeydown(e) {
         switch (e.key) {
             case " ":
@@ -161,38 +204,44 @@ class SelectBox {
               )
             : this.#items;
 
-        this.#optionsContainer.innerHTML = filteredItems
-            .map(
-                (item) => `
-            <div class="selectbox-option ${
-                this.#selectedValues.has(item.value)
-                    ? "selectbox-option-selected"
-                    : ""
-            }" data-value="${item.value}">
-                ${
-                    this.#options.multiple
-                        ? `
-                    <input type="checkbox" ${
-                        this.#selectedValues.has(item.value) ? "checked" : ""
-                    } class="selectbox-checkbox">
-                `
-                        : ""
-                }
-                <span class="selectbox-option-text">${item.text}</span>
-            </div>
-        `
-            )
-            .join("");
+        /** @type {HTMLDivElement[]} */
+        const options = [];
+        const fragment = document.createDocumentFragment();
+        filteredItems.forEach((item, index) => {
+            options[index] = document.createElement("div");
+            options[index].classList.add("selectbox-option");
+            if (this.#selectedValues.has(item.value)) {
+                options[index].classList.add("selectbox-option-selected");
+            }
+            options[index].setAttribute("data-value", String(item.value));
 
-        this.#optionsContainer
-            .querySelectorAll(".selectbox-option")
-            .forEach((option) => {
-                option.addEventListener("click", (e) =>
-                    this.#handleOptionClick(e, option)
-                );
-            });
+            if (this.#options.multiple) {
+                const input = document.createElement("input");
+                input.type = "checkbox";
+                input.classList.add("selectbox-checkbox");
+                input.checked = this.#selectedValues.has(item.value);
+                options[index].appendChild(input);
+            }
+            const span = document.createElement("span");
+            span.classList.add("selectbox-option-text");
+            span.textContent = item.text;
+            options[index].appendChild(span);
+            fragment.appendChild(options[index]);
+        });
+        this.#optionsContainer.appendChild(fragment);
+
+        options.forEach((option) => {
+            option.addEventListener("click", (e) =>
+                this.#handleOptionClick(e, option)
+            );
+        });
     }
 
+    /**
+     *
+     * @param {Event} e
+     * @param {HTMLDivElement} option
+     */
     #handleOptionClick(e, option) {
         const value = option.dataset.value;
 
@@ -254,8 +303,11 @@ class SelectBox {
         this.#container.dispatchEvent(event);
     }
 
-    // Public API
-
+    /**
+     * @param {string | number} value
+     * @param {string} text
+     * @param {boolean} selected
+     */
     addItem(value, text, selected = false) {
         this.#items.push({ value, text, selected });
 
@@ -271,6 +323,9 @@ class SelectBox {
         this.#updateSelectedText();
     }
 
+    /**
+     * @param {string} value
+     */
     removeItem(value) {
         this.#items = this.#items.filter((item) => item.value !== value);
         this.#selectedValues.delete(value);
@@ -283,6 +338,9 @@ class SelectBox {
             : Array.from(this.#selectedValues)[0] || null;
     }
 
+    /**
+     * @param {string} value
+     */
     setValue(value) {
         if (this.#options.multiple && Array.isArray(value)) {
             this.#selectedValues = new Set(value);
