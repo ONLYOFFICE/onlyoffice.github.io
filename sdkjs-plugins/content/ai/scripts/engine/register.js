@@ -142,13 +142,12 @@ function registerButtons(window, undefined)
 	{
 		let buttonSub = new Asc.ButtonContextMenu(buttonMain);
 		buttonSub.text = "Grammar & Spelling";
-		buttonSub.icons = getContextMenuButtonIcons("summarization");
+		buttonSub.icons = getContextMenuButtonIcons("grammar");
 		buttonSub.editors = ["word"];
 		buttonSub.addCheckers("Target", "Selection");
 		
 		let buttonAll = new Asc.ButtonContextMenu(buttonSub);
 		buttonAll.text = "Check all";
-		buttonAll.icons = getContextMenuButtonIcons("text-analysis-ai");
 		buttonAll.editors = ["word"];
 		buttonAll.addCheckers("Target", "Selection");
 
@@ -158,7 +157,6 @@ function registerButtons(window, undefined)
 
 		let buttonCurrent = new Asc.ButtonContextMenu(buttonSub);
 		buttonCurrent.text = "Check current selection";
-		buttonCurrent.icons = getContextMenuButtonIcons("text-analysis-ai");
 		buttonCurrent.editors = ["word"];
 		buttonCurrent.addCheckers("Target", "Selection");
 
