@@ -828,10 +828,32 @@ function onTranslateSettingsModal() {
 	translateSettingsWindow.show(variation);
 }
 
-function onCheckGrammarSpelling(isCurrent)
+async function onCheckGrammarSpelling(isCurrent)
 {
-	// TODO: implement
-	console.log(`Check grammar & spelling all= ${!isCurrent}`);
+	console.log(`Check grammar & spelling all= ${!isCurrent}`);	
+	if (isCurrent)
+	{
+		let paraIds = await Asc.Editor.callCommand(function(){
+			let result = [];
+			let paragraphs = Api.GetDocument().GetRangeBySelect().GetAllParagraphs();
+			paragraphs.forEach(p => result.push(p.GetInternalId()));
+			return result;
+		});
+		
+		if (spellchecker)
+			spellchecker.checkParagraphs(paraIds);
+		
+		if (grammar)
+			grammar.checkParagraphs(paraIds);
+	}
+	else 
+	{
+		if (spellchecker)
+			spellchecker.checkAll();
+		
+		if (grammar)
+			grammar.checkAll();
+	}
 }
 
 /**
