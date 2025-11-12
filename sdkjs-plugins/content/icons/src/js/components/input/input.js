@@ -1,21 +1,45 @@
+// @ts-check
+
+/** @typedef {import('./options-type.js').InputOptionsType} InputOptionsType */
+
 class InputField {
+    /** @type {HTMLElement} */
     _container;
     _options;
+    /** @type {HTMLInputElement} */
+    // @ts-ignore
     input;
+    /** @type {HTMLButtonElement | undefined} */
     #clearButton;
+    /** @type {HTMLDivElement | undefined} */
     #counter;
+    /** @type {HTMLSpanElement | undefined} */
     #counterCurrent;
+    /** @type {HTMLSpanElement | undefined} */
     #counterMax;
+    /** @type {HTMLDivElement} */
+    // @ts-ignore
     #validationElement;
     isFocused;
     isValid;
     _validationMessage;
 
+    /**
+     * @param {string | HTMLElement} container
+     * @param {InputOptionsType} options
+     */
     constructor(container, options = {}) {
-        this._container =
-            typeof container === "string"
-                ? document.querySelector(container)
-                : container;
+        if (typeof container === "string") {
+            let temp = document.getElementById(container);
+            if (temp instanceof HTMLElement) {
+                container = temp;
+            }
+        }
+        if (container instanceof HTMLElement) {
+            this._container = container;
+        } else {
+            throw new Error("Invalid container");
+        }
 
         this._options = {
             type: options.type || "text",
@@ -37,10 +61,6 @@ class InputField {
         this.isValid = true;
         this._validationMessage = "";
 
-        this.#init();
-    }
-
-    #init() {
         this._createDOM();
         this.#bindEvents();
         this.#updateState();
@@ -50,70 +70,73 @@ class InputField {
         this._container.innerHTML = "";
         this._container.classList.add("input-field-container");
 
-        this._container.innerHTML = `
-            <div class="input-field ${
-                this._options.disabled ? "input-field-disabled" : ""
-            }">
-                <div class="input-field-main">
-                    <input 
-                        class="input-field-element"
-                        type="${this._options.type}"
-                        placeholder="${this._options.placeholder}"
-                        value="${this._options.value}"
-                        ${this._options.disabled ? "disabled" : ""}
-                        ${this._options.readonly ? "readonly" : ""}
-                        ${this._options.required ? "required" : ""}
-                        ${
-                            this._options.maxLength
-                                ? `maxlength="${this._options.maxLength}"`
-                                : ""
-                        }
-                        ${
-                            this._options.pattern
-                                ? `pattern="${this._options.pattern}"`
-                                : ""
-                        }
-                    >
-                    ${
-                        this._options.showClear
-                            ? `
-                        <button type="button" class="input-field-clear" style="display: none;">
-                            ×
-                        </button>
-                    `
-                            : ""
-                    }
-                </div>
-                ${
-                    this._options.showCounter
-                        ? `
-                    <div class="input-field-counter">
-                        <span class="input-field-counter-current">0</span>
-                        /
-                        <span class="input-field-counter-max">${
-                            this._options.maxLength || "∞"
-                        }</span>
-                    </div>
-                `
-                        : ""
-                }
-                <div class="input-field-validation" style="display: none;"></div>
-            </div>
-        `;
+        const fragment = document.createDocumentFragment();
 
-        // Links to elements
-        this.input = this._container.querySelector(".input-field-element");
-        this.#clearButton = this._container.querySelector(".input-field-clear");
-        this.#counter = this._container.querySelector(".input-field-counter");
-        this.#counterCurrent = this._container.querySelector(
-            ".input-field-counter-current"
-        );
-        this.#counterMax = this._container.querySelector(
-            ".input-field-counter-max"
-        );
-        this.#validationElement = this._container.querySelector(
-            ".input-field-validation"
-        );
+        const inputField = document.createElement("div");
+        fragment.appendChild(inputField);
+        inputField.classList.add("input-field");
+        if (this._options.disabled) {
+            inputField.classList.add("input-field-disabled");
+        }
+        const inputFieldMain = document.createElement("div");
+        inputField.appendChild(inputFieldMain);
+        inputFieldMain.classList.add("input-field-main");
+        this.input = document.createElement("input");
+        this.input.classList.add("input-field-element");
+        this.input.type = this._options.type || "text";
+        this.input.placeholder = this._options.placeholder || "";
+        this.input.value = String(this._options.value) || "";
+        if (this._options.disabled) {
+            this.input.disabled = true;
+        }
+        if (this._options.readonly) {
+            this.input.readOnly = true;
+        }
+        if (this._options.required) {
+            this.input.required = true;
+        }
+        if (this._options.maxLength) {
+            this.input.maxLength = this._options.maxLength;
+        }
+        if (this._options.pattern) {
+            this.input.pattern = this._options.pattern;
+        }
+        inputFieldMain.appendChild(this.input);
+
+        if (this._options.showClear) {
+            this.#clearButton = document.createElement("button");
+            inputField.appendChild(this.#clearButton);
+            this.#clearButton.classList.add("input-field-clear");
+            this.#clearButton.style.display = "none";
+            this.#clearButton.textContent = "×";
+        }
+
+        if (this._options.showCounter) {
+            this.#counter = document.createElement("div");
+            inputField.appendChild(this.#counter);
+            this.#counter.classList.add("input-field-counter");
+            this.#counterCurrent = document.createElement("span");
+            this.#counterCurrent.classList.add("input-field-counter-current");
+            this.#counterCurrent.textContent = "0";
+            this.#counter.appendChild(this.#counterCurrent);
+            let span = document.createElement("span");
+            span.textContent = "/";
+            this.#counter.appendChild(span);
+            this.#counterMax = document.createElement("span");
+            this.#counterMax.classList.add("input-field-counter-max");
+            this.#counterMax.textContent =
+                String(this._options.maxLength) || "∞";
+            this.#counter.appendChild(this.#counterMax);
+        }
+
+        this.#validationElement = document.createElement("div");
+        inputField.appendChild(this.#validationElement);
+        this.#validationElement.classList.add("input-field-validation");
+        this.#validationElement.style.display = "none";
+
+        inputField.appendChild(inputFieldMain);
+
+        this._container.appendChild(fragment);
     }
 
     #bindEvents() {
@@ -143,12 +166,18 @@ class InputField {
         this.validate();
     }
 
+    /**
+     * @param {Event} e
+     */
     #handleInput(e) {
         this.#updateClearButton();
         this.#updateCounter();
         this.#triggerInputEvent(e);
     }
 
+    /**
+     * @param {KeyboardEvent} e
+     */
     #handleKeydown(e) {
         if (e.key === "Escape" && this._options.showClear) {
             this.clear();
@@ -172,9 +201,12 @@ class InputField {
             const current = this.input.value.length;
             const max = this._options.maxLength;
 
-            this.#counterCurrent.textContent = current;
-            this.#counterMax.textContent = max;
-
+            if (this.#counterCurrent) {
+                this.#counterCurrent.textContent = String(current);
+            }
+            if (this.#counterMax) {
+                this.#counterMax.textContent = String(max);
+            }
             // Change color when near max
             if (current > max * 0.9) {
                 this.#counter.classList.add("input-field-counter-warning");
@@ -272,6 +304,9 @@ class InputField {
         return this.input.value;
     }
 
+    /**
+     * @param {string} value
+     */
     setValue(value) {
         this.input.value = value;
         this.#updateState();
@@ -303,7 +338,9 @@ class InputField {
         this._container.classList.add("input-field-disabled");
     }
 
-    // Events
+    /**
+     * @param {Event} e
+     */
     #triggerInputEvent(e) {
         const event = new CustomEvent("inputfield:input", {
             detail: {
@@ -339,3 +376,5 @@ class InputField {
         this._container.classList.remove("input-field-container");
     }
 }
+
+export { InputField };
