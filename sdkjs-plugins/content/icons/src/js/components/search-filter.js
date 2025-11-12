@@ -32,6 +32,7 @@
 
 // @ts-check
 
+import { SearchInput } from "./input/search-input.js";
 import "./search-filter.css";
 
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
@@ -50,11 +51,9 @@ class SearchFilter {
         ) => {};
         this.#filteredCatalog = catalogOfIcons;
         this.#catalogOfIcons = catalogOfIcons;
-        this.input = document.getElementById("searchFilter");
-        this.input?.addEventListener(
-            "input",
-            this.#onInput.bind(this, this.input)
-        );
+        this.input = new SearchInput("searchFilter", {
+            placeholder: "Enter the name of the icon",
+        });
     }
 
     reset() {

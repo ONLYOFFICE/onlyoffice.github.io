@@ -86,6 +86,9 @@
             outline: none;
             border-color: var(--input-border-focus);
         }
+        &::placeholder {
+            color: var(--input-placeholder);
+        }
     }
 
     .selectbox-options {
