@@ -5,10 +5,13 @@ html {
     --icon-pad-hover: rgba(0, 0, 0, 0.1);
     --icon-pad-selected: rgba(0, 0, 0, 0.2);
     --input-bg: white;
+    --input-placeholder: rgba(0, 0, 0, 0.4);
     --input-border: #c0c0c0;
     --input-border-hover: #c0c0c0;
     --input-border-focus: #848484;
     --input-border-active: #c0c0c0;
+    --input-icon: #bdbdbd;
+    --input-icon-hover: #848484;
     --select-option: white;
     --select-option-hover: #e0e0e0;
     --select-option-selected: #cbcbcb;
@@ -23,6 +26,7 @@ html {
     --input-border-hover-dark: red;
     --input-border-focus-dark: red;
     --input-border-active-dark: red;
+    --input-icon-dark: red;
     --select-option-dark: red;
     --select-option-hover-dark: red;
     --select-option-selected-dark: red;

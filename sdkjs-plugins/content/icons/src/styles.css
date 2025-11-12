@@ -2,7 +2,7 @@ body {
     margin: 0;
 }
 .content {
-    padding: 4px 13px 11px 11px;
+    padding: 3px 13px 11px 11px;
     overflow-y: auto;
     height: inherit;
     display: flex;
@@ -12,15 +12,9 @@ body {
 
 label {
     display: block;
-    padding: 13px 0 6px 0;
+    padding: 14px 0 6px 0;
 }
 
-input[type="text"] {
-    line-height: 18px;
-    width: 100%;
-    box-sizing: border-box;
-    outline: none;
-}
 input[readonly]::selection {
     background-color: transparent;
 }
