@@ -1,9 +1,10 @@
+@import url("../../../colors.css");
+
 .input-field-container {
     position: relative;
     display: inline-block;
     width: 100%;
     max-width: 300px;
-
     .input-field {
         position: relative;
     }
@@ -16,52 +17,50 @@
 
     .input-field-element {
         width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #dcdfe6;
-        border-radius: 4px;
-        background: white;
-        font-size: 14px;
-        line-height: 1.5;
+        padding: 0 8px 0 7px;
+        line-height: 22px;
+        font-size: 11px;
+        border: 1px solid var(--input-border);
+        border-radius: 1px;
+        background-color: var(--input-bg);
         transition: all 0.3s ease;
         box-sizing: border-box;
         &:focus {
             outline: none;
-            border-color: #409eff;
+            border-color: var(--input-border-focus);
             box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
         }
         &::placeholder {
-            color: #c0c4cc;
+            color: var(--input-placeholder);
+        }
+        &[type="search"]::-webkit-search-cancel-button {
+            -webkit-appearance: none;
         }
     }
 
     .input-field-focused .input-field-element {
-        border-color: #409eff;
+        border-color: var(--input-border-focus);
     }
 
     .input-field-disabled .input-field-element {
-        background-color: #f5f7fa;
-        color: #c0c4cc;
-        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.65;
     }
 
     /* Clear button */
     .input-field-clear {
         position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
+        right: 0px;
+        padding: 12px 6px;
+        top: 0;
         background: none;
         border: none;
-        font-size: 18px;
-        color: #c0c4cc;
-        cursor: pointer;
-        padding: 4px;
-        line-height: 1;
-        border-radius: 50%;
+        font-size: 22px;
+        color: var(--input-icon);
+        line-height: 0;
         transition: all 0.2s ease;
         &:hover {
-            background-color: #f5f5f5;
-            color: #909399;
+            color: var(--input-icon-hover);
         }
     }
 
@@ -107,22 +106,23 @@
     }
 
     /* Different input types */
-    .input-field-password .input-field-element {
+    &.input-field-password .input-field-element {
         padding-right: 40px;
     }
 
-    .input-field-search .input-field-element {
-        padding-left: 36px;
-    }
-
-    /* Sizes */
-    .input-field-sm .input-field-element {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-
-    .input-field-lg .input-field-element {
-        padding: 14px 16px;
-        font-size: 16px;
+    &.input-field-search {
+        .input-field-search-icon {
+            cursor: pointer;
+            position: absolute;
+            padding: 5px 5px 3px 5px;
+            top: 0;
+            right: 0;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+        .input-field-element {
+            padding-right: 30px;
+        }
     }
 }

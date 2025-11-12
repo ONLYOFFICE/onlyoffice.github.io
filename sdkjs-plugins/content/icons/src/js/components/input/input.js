@@ -2,6 +2,8 @@
 
 /** @typedef {import('./options-type.js').InputOptionsType} InputOptionsType */
 
+import "./input.css";
+
 class InputField {
     /** @type {HTMLElement} */
     _container;
@@ -52,7 +54,7 @@ class InputField {
             minLength: options.minLength || null,
             pattern: options.pattern || null,
             showCounter: options.showCounter || false,
-            showClear: options.showClear || false,
+            showClear: options.showClear || true,
             validation: options.validation || null,
             ...options,
         };
@@ -86,6 +88,7 @@ class InputField {
         this.input.type = this._options.type || "text";
         this.input.placeholder = this._options.placeholder || "";
         this.input.value = String(this._options.value) || "";
+        this.input.id = this._container.id + "Input";
         if (this._options.disabled) {
             this.input.disabled = true;
         }
@@ -102,14 +105,6 @@ class InputField {
             this.input.pattern = this._options.pattern;
         }
         inputFieldMain.appendChild(this.input);
-
-        if (this._options.showClear) {
-            this.#clearButton = document.createElement("button");
-            inputField.appendChild(this.#clearButton);
-            this.#clearButton.classList.add("input-field-clear");
-            this.#clearButton.style.display = "none";
-            this.#clearButton.textContent = "×";
-        }
 
         if (this._options.showCounter) {
             this.#counter = document.createElement("div");
@@ -135,6 +130,14 @@ class InputField {
         this.#validationElement.style.display = "none";
 
         inputField.appendChild(inputFieldMain);
+
+        if (this._options.showClear) {
+            this.#clearButton = document.createElement("button");
+            inputField.appendChild(this.#clearButton);
+            this.#clearButton.classList.add("input-field-clear");
+            this.#clearButton.style.display = "none";
+            this.#clearButton.textContent = "×";
+        }
 
         this._container.appendChild(fragment);
     }
