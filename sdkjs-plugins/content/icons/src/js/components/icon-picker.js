@@ -161,7 +161,6 @@ class IconPicker {
             this.#onSelectIconCallback(this.#selectedIcons, needToRun);
         });
         this.#container?.addEventListener("keydown", (e) => {
-            console.log("keydown", e.code);
             if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
                 e.preventDefault();
                 this.#selectAll();
