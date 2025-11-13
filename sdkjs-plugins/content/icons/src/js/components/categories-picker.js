@@ -74,7 +74,8 @@ class CategoriesPicker {
             return;
         }
         this.#selectedCategory = "";
-        this.#categories.clear();
+        const selectAll = true;
+        this.#categories.clear(selectAll);
     }
 
     /**
@@ -85,44 +86,14 @@ class CategoriesPicker {
     }
 
     #addEventListener() {
-        /*window.addEventListener("click", (e) => {
-            if (
-                e.target instanceof HTMLElement === false ||
-                !e.target.closest(".selectHolder")
-            ) {
-                this.#categories.classList.add("hidden");
+        this.#categories.subscribe((event) => {
+            if (event.type === "selectbox:change") {
+                const selectedValues = event.detail.values;
+                this.#selectedCategory =
+                    selectedValues.length > 0 ? selectedValues[0] : "";
+                this.#onSelectCategoryCallback(this.#selectedCategory);
             }
-        });*/
-        /*this.#categories.addEventListener("click", (e) => {
-            console.log("click inside categories");
-            let categoryName;
-
-            const target = e.target;
-            if (target && target instanceof HTMLElement) {
-                categoryName = target.closest(".category-name");
-            }
-
-            if (!categoryName) {
-                return;
-            }
-            let id = categoryName.getAttribute("data-value");
-            if (typeof id !== "string") {
-                id = "";
-            }
-
-            this.#categories
-                .querySelectorAll(".selected")
-                .forEach((category) => {
-                    category.classList.remove("selected");
-                });
-
-            categoryName?.classList.add("selected");
-            this.#selectedCategory = id;
-            this.#input.value = categoryName.textContent;
-
-            this.#onSelectCategoryCallback(this.#selectedCategory);
-            this.#categories.classList.add("hidden");
-        });*/
+        });
     }
 }
 

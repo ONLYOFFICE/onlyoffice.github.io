@@ -6,9 +6,9 @@ import { InputField } from "./input.js";
 
 class SearchInput extends InputField {
     /** @type {HTMLSpanElement} */
-    #searchIcon;
+    _searchIcon;
     /** @type {() => void} */
-    #boundHandle;
+    _boundHandle;
     /**
      * @param {string|HTMLElement} container
      * @param {InputOptionsType} options
@@ -27,9 +27,9 @@ class SearchInput extends InputField {
         this._container.classList.add("input-field-search");
 
         if (this._options.showSearchIcon) {
-            this.#searchIcon = document.createElement("span");
-            this.#searchIcon.className = "input-field-search-icon";
-            this.#searchIcon.innerHTML =
+            this._searchIcon = document.createElement("span");
+            this._searchIcon.className = "input-field-search-icon";
+            this._searchIcon.innerHTML =
                 '<svg width="14" height="14" viewBox="0 0 14 14" ' +
                 'fill="none" xmlns="http://www.w3.org/2000/svg">' +
                 '<path fill-rule="evenodd" clip-rule="evenodd" ' +
@@ -38,19 +38,19 @@ class SearchInput extends InputField {
                 "</svg>";
             this._container
                 .querySelector(".input-field-main")
-                ?.prepend(this.#searchIcon);
+                ?.prepend(this._searchIcon);
 
-            this.#boundHandle = this._triggerSubmit.bind(this);
-            this.#searchIcon.addEventListener("click", this.#boundHandle);
+            this._boundHandle = this._triggerSubmit.bind(this);
+            this._searchIcon.addEventListener("click", this._boundHandle);
         }
     }
 
     destroy() {
         try {
             if (this._options.showSearchIcon) {
-                this.#searchIcon.removeEventListener(
+                this._searchIcon.removeEventListener(
                     "click",
-                    this.#boundHandle
+                    this._boundHandle
                 );
             }
         } catch (e) {
