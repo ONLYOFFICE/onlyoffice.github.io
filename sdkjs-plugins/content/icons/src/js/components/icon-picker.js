@@ -111,37 +111,46 @@ class IconPicker {
         this.#container?.addEventListener("click", (e) => {
             let icon;
             const target = e.target;
-            if (target && target instanceof HTMLElement) {
+            if (
+                (target && target instanceof HTMLElement) ||
+                target instanceof SVGElement
+            ) {
                 icon = target.closest(".icon");
             }
-
-            if (icon) {
-                const isModifierPressed = e.ctrlKey || e.metaKey;
-
-                let iconId = icon.getAttribute("data-name");
-                let section = icon.getAttribute("data-section");
-                if (!isModifierPressed) {
-                    this.#unselectAll(true);
-                }
-                if (this.#selectedIcons.has(iconId)) {
-                    icon.classList.remove("selected");
-                    this.#selectedIcons.delete(iconId);
-                } else {
-                    icon.classList.add("selected");
-                    this.#selectedIcons.set(iconId, section);
-                }
-
-                this.#onChange();
+            if (!icon) {
+                console.warn("icon not found");
+                return;
             }
+
+            const isModifierPressed = e.ctrlKey || e.metaKey;
+
+            let iconId = icon.getAttribute("data-name");
+            let section = icon.getAttribute("data-section");
+            if (!isModifierPressed) {
+                this.#unselectAll(true);
+            }
+            if (this.#selectedIcons.has(iconId)) {
+                icon.classList.remove("selected");
+                this.#selectedIcons.delete(iconId);
+            } else {
+                icon.classList.add("selected");
+                this.#selectedIcons.set(iconId, section);
+            }
+
+            this.#onChange();
         });
         this.#container?.addEventListener("dblclick", (e) => {
             let icon;
             const target = e.target;
-            if (target && target instanceof HTMLElement) {
+            if (
+                (target && target instanceof HTMLElement) ||
+                target instanceof SVGElement
+            ) {
                 icon = target.closest(".icon");
             }
 
             if (!icon) {
+                console.log("icon not found");
                 return;
             }
             let iconId = icon.getAttribute("data-name");
@@ -152,9 +161,35 @@ class IconPicker {
             this.#onSelectIconCallback(this.#selectedIcons, needToRun);
         });
         this.#container?.addEventListener("keydown", (e) => {
+            console.log("keydown", e.code);
             if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
                 e.preventDefault();
                 this.#selectAll();
+            }
+            if (e.code === "Escape") {
+                e.preventDefault();
+                this.#unselectAll();
+            }
+            if (e.code === "Space") {
+                const focusedIcon =
+                    this.#container?.querySelector(".icon:focus");
+                if (focusedIcon) {
+                    e.preventDefault();
+                    this.#unselectAll();
+                    let iconId = focusedIcon.getAttribute("data-name");
+                    let section = focusedIcon.getAttribute("data-section");
+                    focusedIcon.classList.add("selected");
+                    this.#selectedIcons.set(iconId, section);
+                }
+            }
+            if (e.code === "Enter") {
+                e.preventDefault();
+                if (this.#selectedIcons.size === 0) {
+                    return;
+                }
+
+                const needToRun = true;
+                this.#onSelectIconCallback(this.#selectedIcons, needToRun);
             }
         });
     }

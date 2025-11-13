@@ -151,6 +151,7 @@ class SelectBox {
         document.addEventListener("click", this.#boundHandles.close);
         // Keyboard navigation
         this.header.addEventListener("keydown", this.#boundHandles.keydown);
+        this.dropdown.addEventListener("keydown", this.#boundHandles.keydown);
     }
 
     /**
@@ -246,6 +247,9 @@ class SelectBox {
                 this.#updateSelectedText();
                 this.#renderOptions(this.searchInput?.value || "");
                 this.#triggerChange();
+                break;
+            case "Tab":
+                this.#closeDropdown();
                 break;
         }
     }

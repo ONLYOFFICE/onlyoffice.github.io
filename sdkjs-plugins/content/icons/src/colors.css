@@ -2,7 +2,7 @@ html {
     --font: rgba(0, 0, 0, 0.8);
     --font-hover: #000000;
     --icon-pad: rgba(0, 0, 0, 0.02);
-    --icon-pad-hover: rgba(0, 0, 0, 0.1);
+    --icon-pad-hover: #cbcbcb;
     --icon-pad-selected: rgba(0, 0, 0, 0.2);
     --input-bg: white;
     --input-placeholder: rgba(0, 0, 0, 0.4);
