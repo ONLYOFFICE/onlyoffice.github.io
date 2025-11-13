@@ -1,6 +1,15 @@
 // @ts-check
 
 /** @typedef {import('./options-type.js').InputOptionsType} InputOptionsType */
+/**
+ * @typedef {Object} BoundHandlesType
+ * @property {() => void} focus
+ * @property {() => void} blur
+ * @property {(ev: Event) => void} input
+ * @property {(ev: KeyboardEvent) => void} keydown
+ * @property {() => void} clear
+ * @property {() => void} validate
+ */
 
 import "./input.css";
 
@@ -25,6 +34,11 @@ class InputField {
     isFocused;
     isValid;
     _validationMessage;
+    /** @type {Function[]} */
+    _subscribers = [];
+    /** @type {BoundHandlesType} */
+    // @ts-ignore
+    #boundHandles;
 
     /**
      * @param {string | HTMLElement} container
@@ -56,6 +70,7 @@ class InputField {
             showCounter: options.showCounter || false,
             showClear: options.showClear || true,
             validation: options.validation || null,
+            autocomplete: options.autocomplete || "off",
             ...options,
         };
 
@@ -104,6 +119,9 @@ class InputField {
         if (this._options.pattern) {
             this.input.pattern = this._options.pattern;
         }
+        if (this._options.autocomplete) {
+            this.input.autocomplete = this._options.autocomplete;
+        }
         inputFieldMain.appendChild(this.input);
 
         if (this._options.showCounter) {
@@ -143,18 +161,29 @@ class InputField {
     }
 
     #bindEvents() {
-        this.input.addEventListener("focus", () => this.#handleFocus());
-        this.input.addEventListener("blur", () => this.#handleBlur());
+        this.#boundHandles = {
+            focus: this.#handleFocus.bind(this),
+            blur: this.#handleBlur.bind(this),
+            input: this.#handleInput.bind(this),
+            keydown: this.#handleKeydown.bind(this),
+            clear: this.clear.bind(this),
+            validate: this.validate.bind(this),
+        };
+        this.input.addEventListener("focus", this.#boundHandles.focus);
+        this.input.addEventListener("blur", this.#boundHandles.blur);
 
-        this.input.addEventListener("input", (e) => this.#handleInput(e));
+        this.input.addEventListener("input", this.#boundHandles.input);
 
-        this.input.addEventListener("keydown", (e) => this.#handleKeydown(e));
+        this.input.addEventListener("keydown", this.#boundHandles.keydown);
 
         if (this.#clearButton) {
-            this.#clearButton.addEventListener("click", () => this.clear());
+            this.#clearButton.addEventListener(
+                "click",
+                this.#boundHandles.clear
+            );
         }
 
-        this.input.addEventListener("change", () => this.validate());
+        this.input.addEventListener("change", this.#boundHandles.validate);
     }
 
     #handleFocus() {
@@ -188,7 +217,7 @@ class InputField {
         }
 
         if (e.key === "Enter") {
-            this.#triggerSubmit();
+            this._triggerSubmit();
         }
     }
 
@@ -342,39 +371,100 @@ class InputField {
     }
 
     /**
+     * @param {Function} callback
+     * @returns
+     */
+    subscribe(callback) {
+        this._subscribers.push(callback);
+        return {
+            unsubscribe: () => {
+                this._subscribers = this._subscribers.filter(
+                    (cb) => cb !== callback
+                );
+            },
+        };
+    }
+
+    /**
      * @param {Event} e
      */
     #triggerInputEvent(e) {
+        const detail = {
+            value: this.input.value,
+            originalEvent: e,
+        };
         const event = new CustomEvent("inputfield:input", {
-            detail: {
-                value: this.input.value,
-                originalEvent: e,
-            },
+            detail,
         });
         this._container.dispatchEvent(event);
+
+        this._subscribers.forEach((cb) =>
+            cb({
+                type: "inputfield:input",
+                detail,
+            })
+        );
     }
 
     #triggerChange() {
+        const detail = {
+            value: this.input.value,
+            isValid: this.isValid,
+        };
         const event = new CustomEvent("inputfield:change", {
-            detail: {
-                value: this.input.value,
-                isValid: this.isValid,
-            },
+            detail,
         });
         this._container.dispatchEvent(event);
+
+        this._subscribers.forEach((cb) =>
+            cb({
+                type: "inputfield:change",
+                detail,
+            })
+        );
     }
 
-    #triggerSubmit() {
+    _triggerSubmit() {
+        const detail = {
+            value: this.input.value,
+            isValid: this.isValid,
+        };
         const event = new CustomEvent("inputfield:submit", {
-            detail: {
-                value: this.input.value,
-                isValid: this.isValid,
-            },
+            detail,
         });
         this._container.dispatchEvent(event);
+
+        this._subscribers.forEach((cb) =>
+            cb({
+                type: "inputfield:submit",
+                detail,
+            })
+        );
     }
 
     destroy() {
+        this._subscribers = [];
+        try {
+            this.input.removeEventListener("focus", this.#boundHandles.focus);
+            this.input.removeEventListener("blur", this.#boundHandles.blur);
+            this.input.removeEventListener("input", this.#boundHandles.input);
+            this.input.removeEventListener(
+                "keydown",
+                this.#boundHandles.keydown
+            );
+            if (this.#clearButton) {
+                this.#clearButton.removeEventListener(
+                    "click",
+                    this.#boundHandles.clear
+                );
+            }
+            this.input.removeEventListener(
+                "change",
+                this.#boundHandles.validate
+            );
+        } catch (error) {
+            console.error(error);
+        }
         this._container.innerHTML = "";
         this._container.classList.remove("input-field-container");
     }
