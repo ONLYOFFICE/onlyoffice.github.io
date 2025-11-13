@@ -55,6 +55,7 @@ class SearchFilter {
         this.#catalogOfIcons = catalogOfIcons;
         this.input = new SearchInput("searchFilter", {
             placeholder: "Enter the name of the icon",
+            autofocus: true,
         });
 
         this.input.subscribe((/** @type {InputEventType} */ event) => {

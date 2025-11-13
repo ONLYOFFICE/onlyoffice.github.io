@@ -61,6 +61,7 @@ class InputField {
             type: options.type || "text",
             placeholder: options.placeholder || "",
             value: options.value || "",
+            autofocus: options.autofocus || false,
             disabled: options.disabled || false,
             readonly: options.readonly || false,
             required: options.required || false,
@@ -81,6 +82,10 @@ class InputField {
         this._createDOM();
         this.#bindEvents();
         this.#updateState();
+
+        if (this._options.autofocus) {
+            setTimeout(() => this.focus(), 100);
+        }
     }
 
     _createDOM() {

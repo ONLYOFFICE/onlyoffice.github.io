@@ -101,7 +101,7 @@ class IconsPlugin {
                     Asc.scope.editor = Asc.plugin.info.editorType;
                     Asc.scope.parsedSvgs = parsed;
                     const isCalc = true;
-                    const isClose = true;
+                    const isClose = false;
                     Asc.plugin.callCommand(
                         Commands.insertIcon,
                         isClose,
