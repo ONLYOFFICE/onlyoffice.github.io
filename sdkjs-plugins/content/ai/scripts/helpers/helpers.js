@@ -2149,12 +2149,7 @@ HELPERS.slide.push((function(){
 			}
 		};
 		Executor.prototype.presentationStart = async function (sLanguage) {
-			Asc.scope.language = sLanguage;
-			await Asc.Editor.callCommand(function () {
-				let presentation = Api.GetPresentation();
-				presentation.SetLanguage(Asc.scope.language);
-			});
-			Asc.scope.language = null;
+			this.s.language = sLanguage;
 		};
 		Executor.prototype.presentationEnd = async function () {
 			await this._drainImages();
@@ -2223,8 +2218,12 @@ HELPERS.slide.push((function(){
 					fonts: this.s.theme.fonts,
 					decor: this.s.theme.decor
 				};
+				Asc.scope.language = this.s.language;
+				
 				let data = await Asc.Editor.callCommand(function () {
 					const pres = Api.GetPresentation();
+				
+					pres.SetLanguage(Asc.scope.language);
 					for (let i = pres.GetSlidesCount() - 1; i >= 0; i--) {
 						pres.GetSlideByIndex(i).Delete();
 					}
@@ -2405,6 +2404,8 @@ HELPERS.slide.push((function(){
 				Asc.scope.masterId = data.masterId;
 				this.s.theme = null;
 				Asc.scope._theme = null;
+				
+				Asc.scope.language = null;
 				this.s.presentationCreated = true;
 			}
 			else {
