@@ -274,6 +274,11 @@
 		{
 			window.Asc.plugin.sendToPlugin("onAccept");
 		});
+		
+		document.getElementById('rejectBtn').addEventListener('click', function ()
+		{
+			window.Asc.plugin.sendToPlugin("onReject");
+		});
 
 		window.Asc.plugin.init = function() {
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
