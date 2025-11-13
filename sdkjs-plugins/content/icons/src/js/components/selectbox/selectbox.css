@@ -27,6 +27,9 @@
             outline: none;
             border-color: var(--input-border-focus);
         }
+        &:active {
+            border-color: var(--input-border-focus);
+        }
     }
 
     .selectbox-header-open {
@@ -139,6 +142,9 @@ body.theme-dark .selectbox-container {
             border-color: var(--input-border-hover-dark);
         }
         &:focus {
+            border-color: var(--input-border-focus-dark);
+        }
+        &:active {
             border-color: var(--input-border-focus-dark);
         }
     }
