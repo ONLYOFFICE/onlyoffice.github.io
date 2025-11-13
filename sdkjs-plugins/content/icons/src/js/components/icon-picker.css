@@ -5,28 +5,31 @@
     width: 100%;
     box-sizing: border-box;
     margin-top: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
     background-color: var(--input-bg);
     .icons {
         height: 100%;
-        padding: 12px;
+        margin: 12px 4px 4px 4px;
+        margin-top: 4px;
+        padding: 4px 2px 0 11px;
         box-sizing: border-box;
         overflow-y: scroll;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
         align-content: flex-start;
-        gap: 5px;
         .icon {
             color: var(--font);
-            width: 48px;
-            height: 48px;
-            background: var(--icon-pad);
+            width: 21px;
+            height: 21px;
+            padding: 10px;
             &:hover {
                 color: var(--font-hover);
                 background: var(--icon-pad-hover);
             }
             &:focus {
-                box-shadow: 0 0 0 2px var(--icon-pad-hover);
+                outline: none;
+                box-shadow: 0 0 0 1px inset var(--icon-pad-hover);
             }
             &.selected {
                 background: var(--icon-pad-selected);
@@ -46,7 +49,7 @@ body.theme-dark {
                     background: var(--icon-pad-hover-dark);
                 }
                 &:focus {
-                    box-shadow: 0 0 0 2px var(--icon-pad-hover-dark);
+                    box-shadow: 0 0 0 2px inset var(--icon-pad-hover-dark);
                 }
                 &.selected {
                     background: var(--icon-pad-selected-dark);

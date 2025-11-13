@@ -3,6 +3,7 @@
  * @property {"text"|"search"|"email"|"password"|"number"|"tel"|"url"|"date"} [type]
  * @property {string} [placeholder]
  * @property {string|number} [value]
+ * @property {boolean} [autofocus]
  * @property {boolean} [disabled]
  * @property {boolean} [readonly]
  * @property {boolean} [required]
