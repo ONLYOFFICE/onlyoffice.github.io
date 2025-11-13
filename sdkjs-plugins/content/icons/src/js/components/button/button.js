@@ -1,120 +1,160 @@
-class Button {
-    constructor(container, options = {}) {
-        this.container =
-            typeof container === "string"
-                ? document.querySelector(container)
-                : container;
+// @ts-check
 
-        this.options = {
+/** @typedef {import('./options-type.js').ButtonOptionsType} ButtonOptionsType */
+/**
+ * @typedef {Object} BoundHandlesType
+ * @property {(e: Event) => void} click
+ * @property {() => void} mouseenter
+ * @property {() => void} mouseleave
+ * @property {() => void} focus
+ * @property {() => void} blur
+ * @property {(ev: KeyboardEvent) => void} keydown
+ */
+
+import "./button.css";
+
+class Button {
+    /** @type {HTMLDivElement} */
+    _container;
+    /** @type {HTMLButtonElement} */
+    button;
+    _options;
+
+    /** @type {BoundHandlesType} */
+    // @ts-ignore
+    #boundHandles;
+
+    /**
+     * @param {string | HTMLButtonElement} button
+     * @param {ButtonOptionsType} options
+     */
+    constructor(button, options) {
+        if (typeof button === "string") {
+            let temp = document.getElementById(button);
+            if (temp instanceof HTMLButtonElement) {
+                button = temp;
+            }
+        }
+        if (button instanceof HTMLButtonElement) {
+            this.button = button;
+        } else {
+            throw new Error("Invalid button");
+        }
+
+        this._options = {
             text: options.text || "Button",
-            type: options.type || "button", // button, submit, reset
-            variant: options.variant || "primary", // primary, secondary, success, danger, etc.
-            size: options.size || "medium", // small, medium, large
+            type: options.type || "button",
+            variant: options.variant || "primary",
+            size: options.size || "medium",
             disabled: options.disabled || false,
             loading: options.loading || false,
             icon: options.icon || null,
-            iconPosition: options.iconPosition || "left", // left, right
+            iconPosition: options.iconPosition || "left",
             badge: options.badge || null,
             tooltip: options.tooltip || null,
-            onClick: options.onClick || null,
             ...options,
         };
 
         this.isLoading = false;
-        this.originalText = this.options.text;
+        this.originalText = this._options.text;
 
-        this.init();
-    }
-
-    init() {
-        this.createDOM();
-        this.bindEvents();
+        this._createDOM();
+        this._bindEvents();
         this.updateState();
     }
 
-    createDOM() {
-        this.container.innerHTML = "";
-        this.container.classList.add("custom-button-container");
+    _createDOM() {
+        const parent = this.button.parentNode;
+        const nextSibling = this.button.nextSibling;
 
-        const buttonClasses = [
-            "custom-button",
-            `custom-button-${this.options.variant}`,
-            `custom-button-${this.options.size}`,
-            this.options.disabled ? "custom-button-disabled" : "",
-            this.options.loading ? "custom-button-loading" : "",
-        ]
-            .filter(Boolean)
-            .join(" ");
+        const fragment = document.createDocumentFragment();
+        this._container = document.createElement("div");
+        fragment.appendChild(this._container);
+        this._container.classList.add("custom-button-container");
 
-        this.container.innerHTML = `
-            <button 
-                class="${buttonClasses}"
-                type="${this.options.type}"
-                ${this.options.disabled ? "disabled" : ""}
-                ${this.options.tooltip ? `title="${this.options.tooltip}"` : ""}
-            >
-                ${
-                    this.options.loading
-                        ? `
-                    <span class="custom-button-spinner"></span>
-                `
-                        : ""
-                }
-                
-                ${
-                    this.options.icon && this.options.iconPosition === "left"
-                        ? `
-                    <span class="custom-button-icon custom-button-icon-left">${this.options.icon}</span>
-                `
-                        : ""
-                }
-                
-                <span class="custom-button-text">${this.options.text}</span>
-                
-                ${
-                    this.options.icon && this.options.iconPosition === "right"
-                        ? `
-                    <span class="custom-button-icon custom-button-icon-right">${this.options.icon}</span>
-                `
-                        : ""
-                }
-                
-                ${
-                    this.options.badge
-                        ? `
-                    <span class="custom-button-badge">${this.options.badge}</span>
-                `
-                        : ""
-                }
-            </button>
-        `;
+        this.button.classList.add("custom-button");
+        this.button.classList.add(`custom-button-${this._options.variant}`);
+        this.button.classList.add(`custom-button-${this._options.size}`);
+        if (this._options.disabled) {
+            this.button.classList.add("custom-button-disabled");
+        }
+        if (this._options.loading) {
+            this.button.classList.add("custom-button-loading");
+        }
+        this.button.type = this._options.type;
+        if (this._options.tooltip) {
+            this.button.title = this._options.tooltip;
+        }
+        if (this._options.disabled) {
+            this.button.disabled = true;
+        }
+        if (this._options.loading) {
+            this.spinner = document.createElement("span");
+            this.spinner.classList.add("custom-button-spinner");
+            this.button.appendChild(this.spinner);
+        }
+        this.buttonText = document.createElement("span");
+        this.buttonText.classList.add("custom-button-text");
+        this.buttonText.textContent = this._options.text;
 
-        // Сохраняем ссылки на элементы
-        this.button = this.container.querySelector(".custom-button");
-        this.buttonText = this.container.querySelector(".custom-button-text");
-        this.spinner = this.container.querySelector(".custom-button-spinner");
-        this.badgeElement = this.container.querySelector(
-            ".custom-button-badge"
-        );
+        if (this._options.icon) {
+            const iconSpan = document.createElement("span");
+            iconSpan.classList.add("custom-button-icon");
+            if (this._options.iconPosition === "left") {
+                iconSpan.classList.add("custom-button-icon-left");
+                this.button.appendChild(iconSpan);
+                this.button.appendChild(this.buttonText);
+            } else {
+                iconSpan.classList.add("custom-button-icon-right");
+                this.button.appendChild(this.buttonText);
+                this.button.appendChild(iconSpan);
+            }
+            iconSpan.innerHTML = this._options.icon;
+        } else {
+            this.button.appendChild(this.buttonText);
+        }
+
+        if (this._options.badge) {
+            this.badgeElement = document.createElement("span");
+            this.badgeElement.classList.add("custom-button-badge");
+            this.badgeElement.textContent = this._options.badge;
+            this.button.appendChild(this.badgeElement);
+        }
+
+        parent?.insertBefore(fragment, this.button);
+        this._container.appendChild(this.button);
     }
 
-    bindEvents() {
-        this.button.addEventListener("click", (e) => this.handleClick(e));
-        this.button.addEventListener("mouseenter", () =>
-            this.handleMouseEnter()
+    _bindEvents() {
+        this.#boundHandles = {
+            click: this._handleClick.bind(this),
+            mouseenter: this.#handleMouseEnter.bind(this),
+            mouseleave: this.#handleMouseLeave.bind(this),
+            focus: this.#handleFocus.bind(this),
+            blur: this.#handleBlur.bind(this),
+            keydown: this.#handleKeydown.bind(this),
+        };
+        this.button.addEventListener("click", this.#boundHandles.click);
+        this.button.addEventListener(
+            "mouseenter",
+            this.#boundHandles.mouseenter
         );
-        this.button.addEventListener("mouseleave", () =>
-            this.handleMouseLeave()
+        this.button.addEventListener(
+            "mouseleave",
+            this.#boundHandles.mouseleave
         );
-        this.button.addEventListener("focus", () => this.handleFocus());
-        this.button.addEventListener("blur", () => this.handleBlur());
-
-        // Keyboard events
-        this.button.addEventListener("keydown", (e) => this.handleKeydown(e));
+        this.button.addEventListener("focus", this.#boundHandles.focus);
+        this.button.addEventListener("blur", this.#boundHandles.blur);
+        this.button.addEventListener("keydown", this.#boundHandles.keydown);
     }
 
-    handleClick(e) {
-        if (this.options.disabled || this.isLoading) {
+    /**
+     *
+     * @param {Event} e
+     * @returns
+     */
+    _handleClick(e) {
+        if (this._options.disabled || this.isLoading) {
             e.preventDefault();
             e.stopPropagation();
             return;
@@ -124,40 +164,41 @@ class Button {
         this.triggerClickEvent(e);
 
         // Call user-provided callback
-        if (typeof this.options.onClick === "function") {
-            this.options.onClick(e, this);
-        }
+        /*if (typeof this._options.onClick === "function") {
+            this._options.onClick(e, this);
+        }*/
     }
 
-    handleMouseEnter() {
-        this.container.classList.add("custom-button-hover");
+    #handleMouseEnter() {
+        this._container.classList.add("custom-button-hover");
         this.triggerEvent("mouseenter");
     }
 
-    handleMouseLeave() {
-        this.container.classList.remove("custom-button-hover");
+    #handleMouseLeave() {
+        this._container.classList.remove("custom-button-hover");
         this.triggerEvent("mouseleave");
     }
 
-    handleFocus() {
-        this.container.classList.add("custom-button-focused");
+    #handleFocus() {
+        this._container.classList.add("custom-button-focused");
         this.triggerEvent("focus");
     }
 
-    handleBlur() {
-        this.container.classList.remove("custom-button-focused");
+    #handleBlur() {
+        this._container.classList.remove("custom-button-focused");
         this.triggerEvent("blur");
     }
 
-    handleKeydown(e) {
+    /**
+     * @param {KeyboardEvent} e
+     */
+    #handleKeydown(e) {
         switch (e.key) {
             case " ":
             case "Enter":
                 if (this.button.tagName === "BUTTON") {
-                    // Для button элемент уже обрабатывает клик
                     break;
                 }
-                // Для других элементов симулируем клик
                 e.preventDefault();
                 this.button.click();
                 break;
@@ -169,22 +210,33 @@ class Button {
         this.triggerEvent("keydown", { key: e.key });
     }
 
-    // Public API
+    /**
+     * @param {ButtonOptionsType['text']} text
+     */
     setText(text) {
-        this.options.text = text;
+        if (typeof text === "undefined") return;
+        this._options.text = text;
         if (this.buttonText) {
             this.buttonText.textContent = text;
         }
     }
 
+    /**
+     * @param {string} icon
+     * @param {ButtonOptionsType['iconPosition']} position
+     */
     setIcon(icon, position = "left") {
-        this.options.icon = icon;
-        this.options.iconPosition = position;
+        this._options.icon = icon;
+        this._options.iconPosition = position;
         this.rebuild();
     }
 
+    /**
+     * @param {ButtonOptionsType['badge']} badge
+     */
     setBadge(badge) {
-        this.options.badge = badge;
+        if (typeof badge === "undefined") return;
+        this._options.badge = badge;
         if (this.badgeElement) {
             this.badgeElement.textContent = badge;
             this.badgeElement.style.display = badge ? "flex" : "none";
@@ -193,39 +245,43 @@ class Button {
         }
     }
 
+    /**
+     *
+     * @param {ButtonOptionsType['variant']} variant
+     */
     setVariant(variant) {
-        // Удаляем старый класс варианта
-        this.button.classList.remove(`custom-button-${this.options.variant}`);
-        // Добавляем новый
-        this.options.variant = variant;
+        if (typeof variant === "undefined") return;
+        this.button.classList.remove(`custom-button-${this._options.variant}`);
+        this._options.variant = variant;
         this.button.classList.add(`custom-button-${variant}`);
     }
 
+    /**
+     * @param {ButtonOptionsType['size']} size
+     */
     setSize(size) {
-        // Удаляем старый класс размера
-        this.button.classList.remove(`custom-button-${this.options.size}`);
-        // Добавляем новый
-        this.options.size = size;
+        if (typeof size === "undefined") return;
+        this.button.classList.remove(`custom-button-${this._options.size}`);
+        this._options.size = size;
         this.button.classList.add(`custom-button-${size}`);
     }
 
     enable() {
-        this.options.disabled = false;
+        this._options.disabled = false;
         this.button.disabled = false;
-        this.container.classList.remove("custom-button-disabled");
+        this._container.classList.remove("custom-button-disabled");
     }
 
     disable() {
-        this.options.disabled = true;
+        this._options.disabled = true;
         this.button.disabled = true;
-        this.container.classList.add("custom-button-disabled");
+        this._container.classList.add("custom-button-disabled");
     }
 
-    // Loading state
     startLoading() {
         this.isLoading = true;
-        this.originalText = this.options.text;
-        this.container.classList.add("custom-button-loading");
+        this.originalText = this._options.text;
+        this._container.classList.add("custom-button-loading");
 
         if (this.spinner) {
             this.spinner.style.display = "inline-block";
@@ -240,7 +296,7 @@ class Button {
 
     stopLoading() {
         this.isLoading = false;
-        this.container.classList.remove("custom-button-loading");
+        this._container.classList.remove("custom-button-loading");
 
         if (this.spinner) {
             this.spinner.style.display = "none";
@@ -250,16 +306,22 @@ class Button {
             this.buttonText.textContent = this.originalText;
         }
 
-        this.button.disabled = this.options.disabled;
+        this.button.disabled = this._options.disabled;
     }
 
-    // Tooltip
+    /**
+     *
+     * @param {ButtonOptionsType['tooltip']} tooltip
+     */
     setTooltip(tooltip) {
-        this.options.tooltip = tooltip;
+        if (typeof tooltip === "undefined") return;
+        this._options.tooltip = tooltip;
         this.button.title = tooltip || "";
     }
 
-    // Events
+    /**
+     * @param {Event} e
+     */
     triggerClickEvent(e) {
         const event = new CustomEvent("button:click", {
             detail: {
@@ -267,9 +329,13 @@ class Button {
                 button: this,
             },
         });
-        this.container.dispatchEvent(event);
+        this._container.dispatchEvent(event);
     }
 
+    /**
+     * @param {"click"|"keydown" | "mouseenter" | "mouseleave" | "focus" | "blur"} eventName
+     * @param {Object} detail
+     */
     triggerEvent(eventName, detail = {}) {
         const event = new CustomEvent(`button:${eventName}`, {
             detail: {
@@ -277,31 +343,50 @@ class Button {
                 button: this,
             },
         });
-        this.container.dispatchEvent(event);
+        this._container.dispatchEvent(event);
     }
 
     // Rebuild the button (for major changes)
     rebuild() {
-        this.createDOM();
-        this.bindEvents();
+        this._createDOM();
+        this._bindEvents();
         this.updateState();
     }
 
     updateState() {
-        if (this.options.disabled) {
+        if (this._options.disabled) {
             this.disable();
         } else {
             this.enable();
         }
 
-        if (this.options.loading) {
+        if (this._options.loading) {
             this.startLoading();
         }
     }
 
     destroy() {
-        this.container.innerHTML = "";
-        this.container.classList.remove("custom-button-container");
+        try {
+            this.button.removeEventListener("click", this.#boundHandles.click);
+            this.button.removeEventListener(
+                "mouseenter",
+                this.#boundHandles.mouseenter
+            );
+            this.button.removeEventListener(
+                "mouseleave",
+                this.#boundHandles.mouseleave
+            );
+            this.button.removeEventListener("focus", this.#boundHandles.focus);
+            this.button.removeEventListener("blur", this.#boundHandles.blur);
+            this.button.removeEventListener(
+                "keydown",
+                this.#boundHandles.keydown
+            );
+        } catch (error) {
+            console.error(error);
+        }
+        this._container.innerHTML = "";
+        this._container.classList.remove("custom-button-container");
     }
 }
 
