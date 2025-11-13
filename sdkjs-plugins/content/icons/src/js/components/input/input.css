@@ -28,7 +28,6 @@
         &:focus {
             outline: none;
             border-color: var(--input-border-focus);
-            box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
         }
         &::placeholder {
             color: var(--input-placeholder);
@@ -90,7 +89,7 @@
     }
 
     .input-field-invalid .input-field-element {
-        border-color: #f56c6c;
+        border-color: var(--input-border-error);
         &:focus {
             border-color: #f56c6c;
             box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
@@ -123,6 +122,63 @@
         }
         .input-field-element {
             padding-right: 30px;
+        }
+    }
+}
+
+body.theme-dark {
+    .input-field-container {
+        .input-field-element {
+            background-color: var(--input-bg-dark);
+            border-color: var(--input-border-dark);
+            &::placeholder {
+                color: var(--input-placeholder-dark);
+            }
+            &:focus {
+                border-color: var(--input-border-focus-dark);
+            }
+        }
+
+        .input-field-focused .input-field-element {
+            border-color: var(--input-border-focus-dark);
+        }
+        .input-field-clear {
+            color: var(--input-icon-dark);
+            &:hover {
+                color: var(--input-icon-hover-dark);
+            }
+        }
+
+        .input-field-counter {
+            color: #909399;
+        }
+
+        .input-field-counter-warning {
+            color: #e6a23c;
+        }
+
+        .input-field-counter-error {
+            color: #f56c6c;
+        }
+
+        .input-field-validation {
+            color: #f56c6c;
+        }
+
+        .input-field-invalid .input-field-element {
+            border-color: var(--input-border-error-dark);
+            &:focus {
+                border-color: #f56c6c;
+                box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
+            }
+        }
+
+        .input-field-valid .input-field-element {
+            border-color: #67c23a;
+            &:focus {
+                border-color: #67c23a;
+                box-shadow: 0 0 0 2px rgba(103, 194, 58, 0.2);
+            }
         }
     }
 }
