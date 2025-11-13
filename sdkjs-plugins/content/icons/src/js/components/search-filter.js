@@ -35,12 +35,14 @@
 import { SearchInput } from "./input/search-input.js";
 import "./search-filter.css";
 
+/** @typedef {import('./input/options-type.js').InputEventType} InputEventType */
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
 class SearchFilter {
     #catalogOfIcons;
     #filteredCatalog;
     #onFilterCallback;
+    input;
 
     /**
      * @param {IconCategoryType[]} catalogOfIcons
@@ -54,14 +56,19 @@ class SearchFilter {
         this.input = new SearchInput("searchFilter", {
             placeholder: "Enter the name of the icon",
         });
+
+        this.input.subscribe((/** @type {InputEventType} */ event) => {
+            if (event.type !== "inputfield:input") {
+                return;
+            }
+            this.#onInput(event.detail.value.toLowerCase());
+        });
     }
 
     reset() {
-        if (this.input instanceof HTMLInputElement === false) {
-            return;
-        }
-        if (this.input.value !== "") {
-            this.input.value = "";
+        if (this.input.getValue() !== "") {
+            const bFocusInput = false;
+            this.input.clear(bFocusInput);
             this.#filteredCatalog = this.#catalogOfIcons;
         }
     }
@@ -74,13 +81,9 @@ class SearchFilter {
     }
 
     /**
-     * @param {HTMLElement} input
+     * @param {string} value
      */
-    #onInput(input) {
-        if (input instanceof HTMLInputElement === false) {
-            return;
-        }
-        let value = input.value.slice().toLowerCase();
+    #onInput(value) {
         if (value === "") {
             this.#filteredCatalog = this.#catalogOfIcons;
         } else {
