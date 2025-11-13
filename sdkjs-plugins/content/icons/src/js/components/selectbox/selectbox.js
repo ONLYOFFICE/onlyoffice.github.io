@@ -38,6 +38,8 @@ class SelectBox {
     /** @type {HTMLElement} */
     // @ts-ignore
     dropdown;
+    /** @type {Function[]} */
+    _subscribers = [];
     /** @type {BoundHandlesType} */
     // @ts-ignore
     #boundHandles;
@@ -255,7 +257,6 @@ class SelectBox {
      * @param {Event} e
      */
     #handleDropdownClick(e) {
-        console.log("click inside categories");
         /** @type {HTMLDivElement} */
         let option;
 
@@ -320,15 +321,37 @@ class SelectBox {
     }
 
     #triggerChange() {
+        const detail = {
+            values: Array.from(this.#selectedValues),
+            items: this.#items.filter((item) =>
+                this.#selectedValues.has(item.value)
+            ),
+        };
         const event = new CustomEvent("selectbox:change", {
-            detail: {
-                values: Array.from(this.#selectedValues),
-                items: this.#items.filter((item) =>
-                    this.#selectedValues.has(item.value)
-                ),
-            },
+            detail,
         });
         this.#container.dispatchEvent(event);
+        this._subscribers.forEach((cb) =>
+            cb({
+                type: "selectbox:change",
+                detail,
+            })
+        );
+    }
+
+    /**
+     * @param {Function} callback
+     * @returns
+     */
+    subscribe(callback) {
+        this._subscribers.push(callback);
+        return {
+            unsubscribe: () => {
+                this._subscribers = this._subscribers.filter(
+                    (cb) => cb !== callback
+                );
+            },
+        };
     }
 
     /**
@@ -379,13 +402,18 @@ class SelectBox {
         this.#renderOptions();
     }
 
-    clear() {
+    clear(bSelectFirst = false) {
         this.#selectedValues.clear();
+        if (bSelectFirst && this.#items.length > 0) {
+            const firstItem = this.#items[0];
+            this.#selectedValues.add(firstItem.value);
+        }
         this.#updateSelectedText();
         this.#renderOptions();
     }
 
     destroy() {
+        this._subscribers = [];
         try {
             this.header.removeEventListener("click", this.#boundHandles.toggle);
             if (this.searchInput) {

@@ -345,9 +345,11 @@ class InputField {
         this.#triggerChange();
     }
 
-    clear() {
+    clear(bFocus = true) {
         this.setValue("");
-        this.input.focus();
+        if (bFocus) {
+            this.input.focus();
+        }
     }
 
     focus() {
