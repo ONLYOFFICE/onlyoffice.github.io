@@ -14,6 +14,13 @@
  * @property {boolean} [showCounter]
  * @property {boolean} [showClear]
  * @property {function} [validation]
+ * @property {AutoFill} [autocomplete]
+ */
+
+/**
+ * @typedef {Object} InputEventType
+ * @property {string} type
+ * @property {{value: string}} detail
  */
 
 export {};

@@ -1,6 +1,14 @@
 // @ts-check
 
 /** @typedef {import('./options-type.js').SelectboxOptionsType} SelectboxOptionsType */
+/**
+ * @typedef {Object} BoundHandlesType
+ * @property {(e: Event) => void} toggle
+ * @property {(e: Event) => void} search
+ * @property {(e: MouseEvent) => void} close
+ * @property {(e: KeyboardEvent) => void} keydown
+ * @property {(e: Event) => void} dropdownClick
+ */
 
 import "./selectbox.css";
 
@@ -30,6 +38,9 @@ class SelectBox {
     /** @type {HTMLElement} */
     // @ts-ignore
     dropdown;
+    /** @type {BoundHandlesType} */
+    // @ts-ignore
+    #boundHandles;
 
     /**
      * @param {string | HTMLElement} container
@@ -109,27 +120,35 @@ class SelectBox {
     }
 
     #bindEvents() {
-        this.header.addEventListener("click", (e) => this.#toggleDropdown(e));
-
-        // Search
+        this.#boundHandles = {
+            toggle: this.#toggleDropdown.bind(this),
+            search: this.#handleSearch.bind(this),
+            close: (/** @type {MouseEvent} */ e) => {
+                if (
+                    e.target instanceof HTMLElement &&
+                    !this.#container.contains(e.target)
+                ) {
+                    this.#closeDropdown();
+                }
+            },
+            keydown: this.#handleKeydown.bind(this),
+            dropdownClick: this.#handleDropdownClick.bind(this),
+        };
+        this.header.addEventListener("click", this.#boundHandles.toggle);
         if (this.searchInput) {
-            this.searchInput.addEventListener("input", (e) =>
-                this.#handleSearch(e)
+            this.searchInput.addEventListener(
+                "input",
+                this.#boundHandles.search
             );
         }
-
+        this.dropdown.addEventListener(
+            "click",
+            this.#boundHandles.dropdownClick
+        );
         // Close on outside click
-        document.addEventListener("click", (e) => {
-            if (
-                e.target instanceof HTMLElement &&
-                !this.#container.contains(e.target)
-            ) {
-                this.#closeDropdown();
-            }
-        });
-
+        document.addEventListener("click", this.#boundHandles.close);
         // Keyboard navigation
-        this.header.addEventListener("keydown", (e) => this.#handleKeydown(e));
+        this.header.addEventListener("keydown", this.#boundHandles.keydown);
     }
 
     /**
@@ -229,20 +248,29 @@ class SelectBox {
             fragment.appendChild(options[index]);
         });
         this.#optionsContainer.appendChild(fragment);
-
-        options.forEach((option) => {
-            option.addEventListener("click", (e) =>
-                this.#handleOptionClick(e, option)
-            );
-        });
     }
 
     /**
      *
      * @param {Event} e
-     * @param {HTMLDivElement} option
      */
-    #handleOptionClick(e, option) {
+    #handleDropdownClick(e) {
+        console.log("click inside categories");
+        /** @type {HTMLDivElement} */
+        let option;
+
+        const target = e.target;
+        if (target && target instanceof HTMLElement) {
+            let temp = target.closest(".selectbox-option");
+            if (temp instanceof HTMLDivElement) {
+                option = temp;
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+
         const value = option.dataset.value;
 
         if (this.#options.multiple) {
@@ -358,7 +386,26 @@ class SelectBox {
     }
 
     destroy() {
-        document.removeEventListener("click", this.#closeDropdown);
+        try {
+            this.header.removeEventListener("click", this.#boundHandles.toggle);
+            if (this.searchInput) {
+                this.searchInput.removeEventListener(
+                    "input",
+                    this.#boundHandles.search
+                );
+            }
+            this.dropdown.removeEventListener(
+                "click",
+                this.#boundHandles.dropdownClick
+            );
+            document.removeEventListener("click", this.#boundHandles.close);
+            this.header.removeEventListener(
+                "keydown",
+                this.#boundHandles.keydown
+            );
+        } catch (error) {
+            console.error(error);
+        }
         this.#container.innerHTML = "";
         this.#container.classList.remove("selectbox-container");
     }
