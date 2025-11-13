@@ -45,7 +45,6 @@ class IconPicker {
     #onSelectIconCallback = (map, needToRun) => {};
     #listOfIconNames;
     #selectedIcons;
-    #clearSelectionButton;
 
     /**
      * Constructor
@@ -55,7 +54,6 @@ class IconPicker {
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
         this.#container = document.getElementById("icons");
-        this.#clearSelectionButton = document.getElementById("clear");
         this.#addEventListener();
         this.show(catalogOfIcons);
     }
@@ -153,10 +151,6 @@ class IconPicker {
             const needToRun = true;
             this.#onSelectIconCallback(this.#selectedIcons, needToRun);
         });
-        this.#clearSelectionButton?.addEventListener(
-            "click",
-            this.#unselectAll.bind(this, false)
-        );
         this.#container?.addEventListener("keydown", (e) => {
             if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
                 e.preventDefault();
@@ -187,9 +181,6 @@ class IconPicker {
     }
 
     #onChange() {
-        //const total = this.#listOfIconNames.size;
-        //const selected = this.#container?.querySelectorAll(".icon.selected").length;
-
         this.#onSelectIconCallback(this.#selectedIcons);
     }
 
