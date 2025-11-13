@@ -1,11 +1,13 @@
 @import url("../../colors.css");
 
 .icons-container {
-    height: calc(100% - 190px);
+    height: calc(100% - 170px);
     width: 100%;
     box-sizing: border-box;
+    margin-top: 12px;
+    background-color: var(--input-bg);
     .icons {
-        height: calc(100% - 20px);
+        height: 100%;
         padding: 12px;
         box-sizing: border-box;
         overflow-y: scroll;
