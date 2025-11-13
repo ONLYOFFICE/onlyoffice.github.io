@@ -211,13 +211,51 @@ class SelectBox {
                 break;
             case "ArrowDown":
                 e.preventDefault();
-                if (!this.#isOpen) this.#openDropdown();
+                if (this.#selectedValues.size === 0 && this.#items.length > 0) {
+                    const firstItem = this.#items[0];
+                    this.#selectedValues.add(firstItem.value);
+                } else {
+                    const selectedArray = Array.from(this.#selectedValues);
+                    const currentIndex = this.#items.findIndex(
+                        (item) => item.value === selectedArray[0]
+                    );
+                    const nextIndex = (currentIndex + 1) % this.#items.length;
+                    this.#selectedValues.clear();
+                    this.#selectedValues.add(this.#items[nextIndex].value);
+                }
+                this.#updateSelectedText();
+                this.#renderOptions(this.searchInput?.value || "");
+                this.#triggerChange();
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                if (this.#selectedValues.size === 0 && this.#items.length > 0) {
+                    const lastItem = this.#items[this.#items.length - 1];
+                    this.#selectedValues.add(lastItem.value);
+                } else {
+                    const selectedArray = Array.from(this.#selectedValues);
+                    const currentIndex = this.#items.findIndex(
+                        (item) => item.value === selectedArray[0]
+                    );
+                    const prevIndex =
+                        (currentIndex - 1 + this.#items.length) %
+                        this.#items.length;
+                    this.#selectedValues.clear();
+                    this.#selectedValues.add(this.#items[prevIndex].value);
+                }
+                this.#updateSelectedText();
+                this.#renderOptions(this.searchInput?.value || "");
+                this.#triggerChange();
                 break;
         }
     }
 
     #renderOptions(searchTerm = "") {
         if (!this.#optionsContainer) return;
+        this.#optionsContainer.innerHTML = "";
+
+        /** @type {HTMLDivElement} */
+        let selectedOption;
 
         const filteredItems = searchTerm
             ? this.#items.filter((item) =>
@@ -233,6 +271,7 @@ class SelectBox {
             options[index].classList.add("selectbox-option");
             if (this.#selectedValues.has(item.value)) {
                 options[index].classList.add("selectbox-option-selected");
+                selectedOption = options[index];
             }
             options[index].setAttribute("data-value", String(item.value));
 
@@ -250,6 +289,15 @@ class SelectBox {
             fragment.appendChild(options[index]);
         });
         this.#optionsContainer.appendChild(fragment);
+        // Scroll to selected option if present and dropdown is open
+        if (this.#isOpen && this.#optionsContainer && selectedOption) {
+            try {
+                // Prefer scrollIntoView with nearest block to avoid abrupt jumps
+                selectedOption.scrollIntoView({ block: "nearest" });
+            } catch (err) {
+                console.error(err);
+            }
+        }
     }
 
     /**
