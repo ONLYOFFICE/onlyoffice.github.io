@@ -32,7 +32,7 @@
 
 function MarkDownStreamer()
 {
-	this.isUseStreamContentMethod = false;
+	this.isUseStreamContentMethod = true;
 	this.isStated = false;
 	this.stable = "";
 	this.tail = "";
