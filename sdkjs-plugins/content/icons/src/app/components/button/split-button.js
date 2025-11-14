@@ -1,4 +1,13 @@
+// @ts-check
+import { Button } from "./button.js";
+
+/** @typedef {import('./options-type.js').ButtonOptionsType} ButtonOptionsType */
+
 class SplitButton extends Button {
+    /**
+     * @param {string | HTMLButtonElement} button
+     * @param {ButtonOptionsType} options
+     */
     constructor(container, options = {}) {
         super(container, {
             menuItems: options.menuItems || [],
@@ -6,29 +15,31 @@ class SplitButton extends Button {
         });
     }
 
-    createDOM() {
-        this.container.innerHTML = "";
-        this.container.classList.add("custom-split-button-container");
+    _createDOM() {
+        this._container.innerHTML = "";
+        this._container.classList.add("custom-split-button-container");
 
-        this.container.innerHTML = `
+        this._container.innerHTML = `
             <div class="custom-split-button">
                 <button class="custom-split-button-main" type="${
-                    this.options.type
+                    this._options.type
                 }">
                     ${
-                        this.options.icon &&
-                        this.options.iconPosition === "left"
+                        this._options.icon &&
+                        this._options.iconPosition === "left"
                             ? `
-                        <span class="custom-button-icon">${this.options.icon}</span>
+                        <span class="custom-button-icon">${this._options.icon}</span>
                     `
                             : ""
                     }
-                    <span class="custom-button-text">${this.options.text}</span>
+                    <span class="custom-button-text">${
+                        this._options.text
+                    }</span>
                     ${
-                        this.options.icon &&
-                        this.options.iconPosition === "right"
+                        this._options.icon &&
+                        this._options.iconPosition === "right"
                             ? `
-                        <span class="custom-button-icon">${this.options.icon}</span>
+                        <span class="custom-button-icon">${this._options.icon}</span>
                     `
                             : ""
                     }
@@ -37,7 +48,7 @@ class SplitButton extends Button {
                     ▼
                 </button>
                 <div class="custom-split-button-menu">
-                    ${this.options.menuItems
+                    ${this._options.menuItems
                         .map(
                             (item) => `
                         <div class="custom-split-button-menu-item" data-action="${
@@ -57,13 +68,13 @@ class SplitButton extends Button {
             </div>
         `;
 
-        this.mainButton = this.container.querySelector(
+        this.mainButton = this._container.querySelector(
             ".custom-split-button-main"
         );
-        this.toggleButton = this.container.querySelector(
+        this.toggleButton = this._container.querySelector(
             ".custom-split-button-toggle"
         );
-        this.menu = this.container.querySelector(".custom-split-button-menu");
+        this.menu = this._container.querySelector(".custom-split-button-menu");
 
         this.applyStyles();
     }
@@ -71,24 +82,24 @@ class SplitButton extends Button {
     applyStyles() {
         // Добавляем классы вариантов и размеров
         this.mainButton.classList.add(
-            `custom-button-${this.options.variant}`,
-            `custom-button-${this.options.size}`
+            `custom-button-${this._options.variant}`,
+            `custom-button-${this._options.size}`
         );
         this.toggleButton.classList.add(
-            `custom-button-${this.options.variant}`,
-            `custom-button-${this.options.size}`
+            `custom-button-${this._options.variant}`,
+            `custom-button-${this._options.size}`
         );
     }
 
-    bindEvents() {
-        super.bindEvents();
+    _bindEvents() {
+        super._bindEvents();
 
         this.toggleButton.addEventListener("click", (e) => this.toggleMenu(e));
         this.menu.addEventListener("click", (e) => this.handleMenuClick(e));
 
         // Закрытие меню при клике вне
         document.addEventListener("click", (e) => {
-            if (!this.container.contains(e.target)) {
+            if (!this._container.contains(e.target)) {
                 this.hideMenu();
             }
         });
@@ -125,6 +136,6 @@ class SplitButton extends Button {
                 button: this,
             },
         });
-        this.container.dispatchEvent(event);
+        this._container.dispatchEvent(event);
     }
 }
