@@ -615,6 +615,9 @@ window.checkGenerationInfo = async function() {
 		return;
 
 	let generationInfo = window.AscDesktopEditor.getGenerationInfo();
+	if (!generationInfo)
+		return;
+
 	let generationValue = "";
 
 	switch (generationInfo.type) {
@@ -634,7 +637,7 @@ window.checkGenerationInfo = async function() {
 			break;
 	}
 
-	if (generationInfo !== "") {
+	if (generationValue !== "") {
 
 		switch (Asc.Editor.getType()) {
 			case "word":
