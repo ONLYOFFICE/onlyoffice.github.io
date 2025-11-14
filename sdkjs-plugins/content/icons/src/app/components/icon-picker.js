@@ -105,8 +105,9 @@ class IconPicker {
         this.#container.appendChild(fragment);
 
         if (this.#listOfIconNames.size === 0) {
-            this.#container.textContent =
-                "Your search didn't match any content. Please try another term.";
+            this.#container.textContent = window.Asc.plugin.tr(
+                "Your search didn't match any content. Please try another term."
+            );
         }
     }
 

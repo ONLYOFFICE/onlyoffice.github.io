@@ -1284,7 +1284,7 @@ class IconPicker {
         });
         _classPrivateFieldGet2(_container$1, this).appendChild(fragment);
         if (_classPrivateFieldGet2(_listOfIconNames, this).size === 0) {
-            _classPrivateFieldGet2(_container$1, this).textContent = "Your search didn't match any content. Please try another term.";
+            _classPrivateFieldGet2(_container$1, this).textContent = window.Asc.plugin.tr("Your search didn't match any content. Please try another term.");
         }
     }
     setOnSelectIconCallback(callback) {
