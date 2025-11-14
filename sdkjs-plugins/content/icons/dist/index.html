@@ -34,11 +34,11 @@
         <meta charset="UTF-8" />
         <base href="../" />
         <title>AI Constructor</title>
-        <link rel="stylesheet" href="dist/styles.css" />
         <link
             rel="stylesheet"
             href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
         />
+        <link rel="stylesheet" href="dist/styles.css" />
         <script
             type="text/javascript"
             src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
@@ -55,27 +55,19 @@
             <div class="overlay-close"></div>
         </div>
         <section class="content">
-            <div class="sidebar">
-                <div id="search" class="search">
-                    <input
-                        type="text"
-                        id="searchFilter"
-                        placeholder="Search icons"
-                    />
-                </div>
-                <div id="categories-container" class="categories-container">
-                    <div id="categories" class="categories"></div>
-                </div>
+            <div id="categories-container" class="categories-container">
+                <label class="i18n header">Category</label>
+                <div id="categorySelectList"></div>
             </div>
+            <div id="search" class="search">
+                <label class="i18n header" for="searchFilter">Search</label>
+                <div id="searchFilter"></div>
+            </div>
+
             <div id="icons-container" class="icons-container">
                 <div id="icons" class="icons"></div>
-                <div id="summary" class="summary">
-                    <span id="total" class="total"></span>
-                    <button id="clear" class="btn-text-default i18n">
-                        Clear
-                    </button>
-                </div>
             </div>
+            <button id="insertIcon" class="run-button i18n">Insert</button>
         </section>
         <script>
             function isBrowserSupportsES6() {
