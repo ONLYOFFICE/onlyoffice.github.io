@@ -43,6 +43,8 @@ class Button {
             throw new Error("Invalid button");
         }
 
+        this._container = document.createElement("div");
+
         this._options = {
             text: options.text || button.textContent,
             type: options.type || "button",
@@ -62,10 +64,8 @@ class Button {
 
     _createDOM() {
         const parent = this.button.parentNode;
-        const nextSibling = this.button.nextSibling;
 
         const fragment = document.createDocumentFragment();
-        this._container = document.createElement("div");
         fragment.appendChild(this._container);
         this._container.classList.add("custom-button-container");
 
@@ -236,7 +236,7 @@ class Button {
     setIcon(icon, position = "left") {
         this._options.icon = icon;
         this._options.iconPosition = position;
-        this.rebuild();
+        //this.rebuild();
     }
 
     /**
@@ -249,7 +249,7 @@ class Button {
             this.badgeElement.textContent = badge;
             this.badgeElement.style.display = badge ? "flex" : "none";
         } else if (badge) {
-            this.rebuild();
+            //this.rebuild();
         }
     }
 
@@ -368,13 +368,6 @@ class Button {
                 detail,
             })
         );
-    }
-
-    // Rebuild the button (for major changes)
-    rebuild() {
-        this._createDOM();
-        this._bindEvents();
-        this.updateState();
     }
 
     updateState() {

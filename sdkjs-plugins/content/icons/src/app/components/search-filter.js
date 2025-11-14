@@ -54,7 +54,6 @@ class SearchFilter {
         this.#filteredCatalog = catalogOfIcons;
         this.#catalogOfIcons = catalogOfIcons;
         this.input = new SearchInput("searchFilter", {
-            placeholder: "Enter the name of the icon",
             autofocus: true,
         });
 

@@ -10,11 +10,11 @@ class SearchInput extends InputField {
     /** @type {() => void} */
     _boundHandle;
     /**
-     * @param {string|HTMLElement} container
+     * @param {string | HTMLInputElement} input
      * @param {InputOptionsType} options
      */
-    constructor(container, options = {}) {
-        super(container, {
+    constructor(input, options = {}) {
+        super(input, {
             type: "search",
             showClear: false,
             showSearchIcon: true,
@@ -28,7 +28,6 @@ class SearchInput extends InputField {
 
         if (this._options.showSearchIcon) {
             this._searchIcon = document.createElement("span");
-            this._searchIcon.setAttribute("title", "Search");
             this._searchIcon.className = "input-field-search-icon";
             this._searchIcon.innerHTML =
                 '<svg width="14" height="14" viewBox="0 0 14 14" ' +

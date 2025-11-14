@@ -1219,9 +1219,6 @@ function _handleKeydown$2(e) {
 
 function translate(text) {
     var translatedText = window.Asc.plugin.tr(text);
-    if (translatedText === text) {
-        console.warn('Translation missing for: "'.concat(text, '"'));
-    }
     return translatedText;
 }
 
@@ -2226,9 +2223,9 @@ function _triggerChange() {
 }
 
 class SearchInput extends InputField {
-    constructor(container) {
+    constructor(input) {
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        super(container, _objectSpread2({
+        super(input, _objectSpread2({
             type: "search",
             showClear: false,
             showSearchIcon: true
@@ -2242,7 +2239,6 @@ class SearchInput extends InputField {
         if (this._options.showSearchIcon) {
             var _this$_container$quer;
             this._searchIcon = document.createElement("span");
-            this._searchIcon.setAttribute("title", "Search");
             this._searchIcon.className = "input-field-search-icon";
             this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
             (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.prepend(this._searchIcon);
@@ -2281,7 +2277,6 @@ class SearchFilter {
         _classPrivateFieldSet2(_filteredCatalog, this, catalogOfIcons);
         _classPrivateFieldSet2(_catalogOfIcons, this, catalogOfIcons);
         this.input = new SearchInput("searchFilter", {
-            placeholder: translate("Enter the name of the icon"),
             autofocus: true
         });
         this.input.subscribe(event => {
