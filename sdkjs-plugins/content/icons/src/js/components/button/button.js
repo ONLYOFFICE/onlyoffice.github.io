@@ -19,16 +19,18 @@ class Button {
     /** @type {HTMLButtonElement} */
     button;
     _options;
-
+    #originalText;
+    /** @type {Function[]} */
+    _subscribers = [];
     /** @type {BoundHandlesType} */
     // @ts-ignore
     #boundHandles;
 
     /**
      * @param {string | HTMLButtonElement} button
-     * @param {ButtonOptionsType} options
+     * @param {ButtonOptionsType} [options]
      */
-    constructor(button, options) {
+    constructor(button, options = {}) {
         if (typeof button === "string") {
             let temp = document.getElementById(button);
             if (temp instanceof HTMLButtonElement) {
@@ -42,21 +44,16 @@ class Button {
         }
 
         this._options = {
-            text: options.text || "Button",
+            text: options.text || button.textContent,
             type: options.type || "button",
             variant: options.variant || "primary",
             size: options.size || "medium",
-            disabled: options.disabled || false,
-            loading: options.loading || false,
-            icon: options.icon || null,
             iconPosition: options.iconPosition || "left",
-            badge: options.badge || null,
-            tooltip: options.tooltip || null,
             ...options,
         };
 
         this.isLoading = false;
-        this.originalText = this._options.text;
+        this.#originalText = this._options.text;
 
         this._createDOM();
         this._bindEvents();
@@ -95,7 +92,8 @@ class Button {
         }
         this.buttonText = document.createElement("span");
         this.buttonText.classList.add("custom-button-text");
-        this.buttonText.textContent = this._options.text;
+
+        this.buttonText.textContent = "";
 
         if (this._options.icon) {
             const iconSpan = document.createElement("span");
@@ -162,11 +160,6 @@ class Button {
 
         // Trigger custom event
         this.triggerClickEvent(e);
-
-        // Call user-provided callback
-        /*if (typeof this._options.onClick === "function") {
-            this._options.onClick(e, this);
-        }*/
     }
 
     #handleMouseEnter() {
@@ -208,6 +201,21 @@ class Button {
         }
 
         this.triggerEvent("keydown", { key: e.key });
+    }
+
+    /**
+     * @param {Function} callback
+     * @returns
+     */
+    subscribe(callback) {
+        this._subscribers.push(callback);
+        return {
+            unsubscribe: () => {
+                this._subscribers = this._subscribers.filter(
+                    (cb) => cb !== callback
+                );
+            },
+        };
     }
 
     /**
@@ -280,7 +288,7 @@ class Button {
 
     startLoading() {
         this.isLoading = true;
-        this.originalText = this._options.text;
+        this.#originalText = this._options.text;
         this._container.classList.add("custom-button-loading");
 
         if (this.spinner) {
@@ -303,10 +311,10 @@ class Button {
         }
 
         if (this.buttonText) {
-            this.buttonText.textContent = this.originalText;
+            this.buttonText.textContent = this.#originalText;
         }
 
-        this.button.disabled = this._options.disabled;
+        this.button.disabled = !!this._options.disabled;
     }
 
     /**
@@ -323,13 +331,21 @@ class Button {
      * @param {Event} e
      */
     triggerClickEvent(e) {
+        const detail = {
+            originalEvent: e,
+            button: this,
+        };
         const event = new CustomEvent("button:click", {
-            detail: {
-                originalEvent: e,
-                button: this,
-            },
+            detail,
         });
         this._container.dispatchEvent(event);
+
+        this._subscribers.forEach((cb) =>
+            cb({
+                type: "button:click",
+                detail,
+            })
+        );
     }
 
     /**
@@ -337,13 +353,21 @@ class Button {
      * @param {Object} detail
      */
     triggerEvent(eventName, detail = {}) {
+        detail = {
+            ...detail,
+            button: this,
+        };
         const event = new CustomEvent(`button:${eventName}`, {
-            detail: {
-                ...detail,
-                button: this,
-            },
+            detail,
         });
         this._container.dispatchEvent(event);
+
+        this._subscribers.forEach((cb) =>
+            cb({
+                type: `button:${eventName}`,
+                detail,
+            })
+        );
     }
 
     // Rebuild the button (for major changes)
@@ -366,6 +390,7 @@ class Button {
     }
 
     destroy() {
+        this._subscribers = [];
         try {
             this.button.removeEventListener("click", this.#boundHandles.click);
             this.button.removeEventListener(
