@@ -25,6 +25,7 @@
         background-color: var(--input-bg);
         transition: all 0.3s ease;
         box-sizing: border-box;
+        color: --var(--font);
         &:focus {
             outline: none;
             border-color: var(--input-border-focus);
@@ -119,6 +120,9 @@
             &:hover {
                 opacity: 0.8;
             }
+            svg {
+                fill: var(--font);
+            }
         }
         .input-field-element {
             padding-right: 30px;
@@ -129,6 +133,7 @@
 body.theme-dark {
     .input-field-container {
         .input-field-element {
+            color: --var(--font-dark);
             background-color: var(--input-bg-dark);
             border-color: var(--input-border-dark);
             &::placeholder {
@@ -178,6 +183,13 @@ body.theme-dark {
             &:focus {
                 border-color: #67c23a;
                 box-shadow: 0 0 0 2px rgba(103, 194, 58, 0.2);
+            }
+        }
+        &.input-field-search {
+            .input-field-search-icon {
+                svg {
+                    fill: var(--font-dark);
+                }
             }
         }
     }
