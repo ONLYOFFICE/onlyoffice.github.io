@@ -5,14 +5,14 @@
     width: 100%;
     box-sizing: border-box;
     margin-top: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     padding-bottom: 8px;
     background-color: var(--input-bg);
     .icons {
         height: 100%;
         margin: 12px 4px 4px 4px;
         margin-top: 4px;
-        padding: 4px 2px 0 11px;
+        padding: 7px 2px 0 11px;
         box-sizing: border-box;
         overflow-y: scroll;
         display: flex;
@@ -23,13 +23,14 @@
             width: 21px;
             height: 21px;
             padding: 10px;
+            margin-top: 5px;
             &:hover {
                 color: var(--font-hover);
                 background: var(--icon-pad-hover);
             }
             &:focus {
                 outline: none;
-                box-shadow: 0 0 0 1px inset var(--icon-pad-hover);
+                box-shadow: 0 0 0 1px inset var(--icon-pad-selected);
             }
             &.selected {
                 background: var(--icon-pad-selected);
@@ -40,16 +41,16 @@
 
 body.theme-dark {
     .icons-container {
+        background-color: var(--input-bg-dark);
         .icons {
             .icon {
                 color: var(--font-dark);
-                background: var(--icon-pad-dark);
                 &:hover {
                     color: var(--font-hover-dark);
                     background: var(--icon-pad-hover-dark);
                 }
                 &:focus {
-                    box-shadow: 0 0 0 2px inset var(--icon-pad-hover-dark);
+                    box-shadow: 0 0 0 2px inset var(--icon-pad-selected-dark);
                 }
                 &.selected {
                     background: var(--icon-pad-selected-dark);

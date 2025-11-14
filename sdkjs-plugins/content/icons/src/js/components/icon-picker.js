@@ -34,10 +34,13 @@
 
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
+import { Button } from "./button/button.js";
 import "./icon-picker.css";
 
 class IconPicker {
+    /** @type {HTMLElement} */
     #container;
+    #insertButton;
     /**
      * @param {Map<string, string>} map
      * @param {boolean} [needToRun]
@@ -51,9 +54,16 @@ class IconPicker {
      * @param {IconCategoryType[]} catalogOfIcons
      */
     constructor(catalogOfIcons) {
+        const container = document.getElementById("icons");
+        if (container) {
+            this.#container = container;
+        } else {
+            throw new Error("Icons container not found");
+        }
+        this.#insertButton = new Button("insertIcon");
+
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
-        this.#container = document.getElementById("icons");
         this.#addEventListener();
         this.show(catalogOfIcons);
     }
@@ -65,9 +75,9 @@ class IconPicker {
     show(catalogOfIcons, categoryId = "") {
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
-        if (this.#container) {
-            this.#container.textContent = "";
-        }
+
+        this.#container.textContent = "";
+
         const fragment = document.createDocumentFragment();
 
         catalogOfIcons.forEach((categoryInfo) => {
@@ -92,9 +102,9 @@ class IconPicker {
             this.#onChange();
         });
 
-        this.#container?.appendChild(fragment);
+        this.#container.appendChild(fragment);
 
-        if (this.#listOfIconNames.size === 0 && this.#container) {
+        if (this.#listOfIconNames.size === 0) {
             this.#container.textContent =
                 "Your search didn't match any content. Please try another term.";
         }
@@ -108,7 +118,7 @@ class IconPicker {
     }
 
     #addEventListener() {
-        this.#container?.addEventListener("click", (e) => {
+        this.#container.addEventListener("click", (e) => {
             let icon;
             const target = e.target;
             if (
@@ -139,7 +149,7 @@ class IconPicker {
 
             this.#onChange();
         });
-        this.#container?.addEventListener("dblclick", (e) => {
+        this.#container.addEventListener("dblclick", (e) => {
             let icon;
             const target = e.target;
             if (
@@ -160,7 +170,7 @@ class IconPicker {
             const needToRun = true;
             this.#onSelectIconCallback(this.#selectedIcons, needToRun);
         });
-        this.#container?.addEventListener("keydown", (e) => {
+        this.#container.addEventListener("keydown", (e) => {
             if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
                 e.preventDefault();
                 this.#selectAll();
@@ -171,7 +181,7 @@ class IconPicker {
             }
             if (e.code === "Space") {
                 const focusedIcon =
-                    this.#container?.querySelector(".icon:focus");
+                    this.#container.querySelector(".icon:focus");
                 if (focusedIcon) {
                     e.preventDefault();
                     this.#unselectAll();
@@ -179,6 +189,7 @@ class IconPicker {
                     let section = focusedIcon.getAttribute("data-section");
                     focusedIcon.classList.add("selected");
                     this.#selectedIcons.set(iconId, section);
+                    this.#onChange();
                 }
             }
             if (e.code === "Enter") {
@@ -186,7 +197,13 @@ class IconPicker {
                 if (this.#selectedIcons.size === 0) {
                     return;
                 }
-
+                this.#onChange();
+                const needToRun = true;
+                this.#onSelectIconCallback(this.#selectedIcons, needToRun);
+            }
+        });
+        this.#insertButton.subscribe((event) => {
+            if (event.type === "button:click") {
                 const needToRun = true;
                 this.#onSelectIconCallback(this.#selectedIcons, needToRun);
             }
@@ -195,7 +212,7 @@ class IconPicker {
 
     #selectAll() {
         this.#container
-            ?.querySelectorAll(".icon:not(.selected)")
+            .querySelectorAll(".icon:not(.selected)")
             .forEach((icon) => {
                 let iconId = icon.getAttribute("data-name");
                 let section = icon.getAttribute("data-section");
@@ -207,7 +224,7 @@ class IconPicker {
 
     #unselectAll(silent = false) {
         this.#selectedIcons = new Map();
-        this.#container?.querySelectorAll(".icon.selected").forEach((icon) => {
+        this.#container.querySelectorAll(".icon.selected").forEach((icon) => {
             icon.classList.remove("selected");
         });
         if (silent) return;
@@ -215,6 +232,11 @@ class IconPicker {
     }
 
     #onChange() {
+        if (this.#selectedIcons.size === 0) {
+            this.#insertButton.disable();
+        } else {
+            this.#insertButton.enable();
+        }
         this.#onSelectIconCallback(this.#selectedIcons);
     }
 
