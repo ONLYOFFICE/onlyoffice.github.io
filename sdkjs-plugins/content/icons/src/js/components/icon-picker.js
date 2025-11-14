@@ -80,7 +80,7 @@ class IconPicker {
 
         const fragment = document.createDocumentFragment();
 
-        catalogOfIcons.forEach((categoryInfo) => {
+        catalogOfIcons.forEach((categoryInfo, categoryIndex) => {
             let id = categoryInfo.id;
 
             if (categoryId !== "" && categoryId !== id) {
@@ -94,7 +94,11 @@ class IconPicker {
                         return;
                     }
                     this.#listOfIconNames.add(iconName);
-                    let img = this.#createIcon(iconName, folderName);
+                    let img = this.#createIcon(
+                        iconName,
+                        folderName,
+                        index + categoryIndex === 0
+                    );
                     fragment.appendChild(img);
                 });
             });
@@ -132,6 +136,13 @@ class IconPicker {
                 return;
             }
 
+            const tabbableIcon = this.#container.querySelector(
+                ".icon[tabindex='0']"
+            );
+            if (tabbableIcon) {
+                tabbableIcon.removeAttribute("tabindex");
+            }
+
             const isModifierPressed = e.ctrlKey || e.metaKey;
 
             let iconId = icon.getAttribute("data-name");
@@ -146,6 +157,7 @@ class IconPicker {
                 icon.classList.add("selected");
                 this.#selectedIcons.set(iconId, section);
             }
+            icon.setAttribute("tabindex", "0");
 
             this.#onChange();
         });
@@ -197,7 +209,6 @@ class IconPicker {
                 if (this.#selectedIcons.size === 0) {
                     return;
                 }
-                this.#onChange();
                 const needToRun = true;
                 this.#onSelectIconCallback(this.#selectedIcons, needToRun);
             }
@@ -243,9 +254,10 @@ class IconPicker {
     /**
      * @param {string} iconId
      * @param {string} section
+     * @param {boolean} [tabbable]
      * @returns
      */
-    #createIcon(iconId, section) {
+    #createIcon(iconId, section, tabbable = false) {
         const svgNS = "http://www.w3.org/2000/svg";
         const xlinkNS = "http://www.w3.org/1999/xlink";
 
@@ -256,7 +268,9 @@ class IconPicker {
         svg.setAttribute("role", "img");
         svg.setAttribute("data-name", iconId);
         svg.setAttribute("data-section", section);
-        svg.setAttribute("tabindex", "0");
+        if (tabbable) {
+            svg.setAttribute("tabindex", "0");
+        }
 
         const title = document.createElementNS(svgNS, "title");
         svg.appendChild(title);

@@ -30,7 +30,7 @@
             }
             &:focus {
                 outline: none;
-                box-shadow: 0 0 0 1px inset var(--icon-pad-selected);
+                background: var(--icon-pad-focus);
             }
             &.selected {
                 background: var(--icon-pad-selected);
@@ -50,7 +50,7 @@ body.theme-dark {
                     background: var(--icon-pad-hover-dark);
                 }
                 &:focus {
-                    box-shadow: 0 0 0 2px inset var(--icon-pad-selected-dark);
+                    background: var(--icon-pad-focus-dark);
                 }
                 &.selected {
                     background: var(--icon-pad-selected-dark);
