@@ -80,7 +80,7 @@ class IconPicker {
 
         const fragment = document.createDocumentFragment();
 
-        catalogOfIcons.forEach((categoryInfo, categoryIndex) => {
+        catalogOfIcons.forEach((categoryInfo) => {
             let id = categoryInfo.id;
 
             if (categoryId !== "" && categoryId !== id) {
@@ -94,11 +94,7 @@ class IconPicker {
                         return;
                     }
                     this.#listOfIconNames.add(iconName);
-                    let img = this.#createIcon(
-                        iconName,
-                        folderName,
-                        index + categoryIndex === 0
-                    );
+                    let img = this.#createIcon(iconName, folderName);
                     fragment.appendChild(img);
                 });
             });
@@ -134,13 +130,6 @@ class IconPicker {
             if (!icon) {
                 console.warn("icon not found");
                 return;
-            }
-
-            const tabbableIcon = this.#container.querySelector(
-                ".icon[tabindex='0']"
-            );
-            if (tabbableIcon) {
-                tabbableIcon.removeAttribute("tabindex");
             }
 
             const isModifierPressed = e.ctrlKey || e.metaKey;
@@ -254,10 +243,9 @@ class IconPicker {
     /**
      * @param {string} iconId
      * @param {string} section
-     * @param {boolean} [tabbable]
      * @returns
      */
-    #createIcon(iconId, section, tabbable = false) {
+    #createIcon(iconId, section) {
         const svgNS = "http://www.w3.org/2000/svg";
         const xlinkNS = "http://www.w3.org/1999/xlink";
 
@@ -268,9 +256,7 @@ class IconPicker {
         svg.setAttribute("role", "img");
         svg.setAttribute("data-name", iconId);
         svg.setAttribute("data-section", section);
-        if (tabbable) {
-            svg.setAttribute("tabindex", "0");
-        }
+        svg.setAttribute("tabindex", "0");
 
         const title = document.createElementNS(svgNS, "title");
         svg.appendChild(title);
