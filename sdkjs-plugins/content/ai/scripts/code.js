@@ -830,30 +830,32 @@ function onTranslateSettingsModal() {
 
 async function onCheckGrammarSpelling(isCurrent)
 {
-	console.log(`Check grammar & spelling all= ${!isCurrent}`);	
+	let paraIds = [];
+	
 	if (isCurrent)
 	{
-		let paraIds = await Asc.Editor.callCommand(function(){
+		paraIds = await Asc.Editor.callCommand(function(){
 			let result = [];
 			let paragraphs = Api.GetDocument().GetRangeBySelect().GetAllParagraphs();
 			paragraphs.forEach(p => result.push(p.GetInternalId()));
 			return result;
 		});
-		
-		if (spellchecker)
-			spellchecker.checkParagraphs(paraIds);
-		
-		if (grammar)
-			grammar.checkParagraphs(paraIds);
 	}
-	else 
+	else
 	{
-		if (spellchecker)
-			spellchecker.checkAll();
-		
-		if (grammar)
-			grammar.checkAll();
+		paraIds = await Asc.Editor.callCommand(function(){
+			let result = [];
+			let paragraphs = Api.GetDocument().GetAllParagraphs();
+			paragraphs.forEach(p => result.push(p.GetInternalId()));
+			return result;
+		});
 	}
+	
+	if (spellchecker)
+		spellchecker.checkParagraphs(paraIds);
+	
+	if (grammar)
+		grammar.checkParagraphs(paraIds);
 }
 
 /**

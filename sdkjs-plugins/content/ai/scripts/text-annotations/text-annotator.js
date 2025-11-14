@@ -38,9 +38,6 @@ function TextAnnotator()
 	this.paragraphs = {};
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
-	this.isCheckAll = true;
-	
-	this.checked = {};
 	
 	this.type = -1;
 }
@@ -57,22 +54,11 @@ TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, tex
 };
 TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
-	this.isCheckAll = false;
-	
 	this.paraToCheck.clear()
 	paraIds.forEach(paraId => this.paraToCheck.add(paraId));
 	this.paraToCheck.forEach(paraId => this._checkParagraph(paraId));
 };
-TextAnnotator.prototype.checkAll = async function() 
-{
-	if (this.isCheckAll)
-		return;
-	
-	this.isCheckAll = true;
-	
-	this.checked = {};
-};
-TextAnnotator.prototype._checkParagraph = function(paraId)
+TextAnnotator.prototype._checkParagraph = async function(paraId)
 {
 	if (!this.paraToCheck.has(paraId) || !this.waitParagraphs[paraId])
 		return;
@@ -84,9 +70,8 @@ TextAnnotator.prototype._checkParagraph = function(paraId)
 	let range = this.getAnnotationRangeObj(paraId);
 	range["rangeId"] = undefined;
 	range["all"] = true;
-	Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
-	
-	this.annotateParagraph(paraId, recalcId, text);
+	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
+	await this.annotateParagraph(paraId, recalcId, text);
 	
 	delete this.waitParagraphs[paraId];
 	this.paraToCheck.delete(paraId);
