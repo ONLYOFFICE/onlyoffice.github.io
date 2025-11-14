@@ -485,7 +485,7 @@ async function getAnyPresentationGenerationPrompt(documentDescription) {
 	}
 }
 
-window.isEnableDocumentGenerate = true;
+window.isEnableDocumentGenerate = false;
 async function getFormGenerationPrompt() {
 
 	return await Asc.Editor.callCommand(function(){
