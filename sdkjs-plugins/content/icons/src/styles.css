@@ -14,41 +14,6 @@ label {
     display: block;
     padding: 14px 0 6px 0;
 }
-
-input[readonly]::selection {
-    background-color: transparent;
-}
-/*
-.selectList:not(.hidden) {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    background: #ffffff;
-    top: 22px;
+.run-button {
     width: 100%;
-    max-height: 158px !important;
-    min-height: 158px !important;
-    overflow-x: hidden;
-    overflow-y: auto;
 }
-.selectList > span {
-    padding: 5px 20px;
-    cursor: pointer;
-    color: #444444;
-}
-.selectList > span:hover {
-    background-color: #d8dadc;
-    color: #373737;
-}
-.selectList > span[selected=""] {
-    background-color: #7d858c;
-    color: #ffffff;
-}
-.selectList:not(.hidden) + .selectArrow {
-    transform: rotate(180deg);
-}
-*/
