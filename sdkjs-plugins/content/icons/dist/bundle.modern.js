@@ -952,6 +952,7 @@ class Button {
         } else {
             throw new Error("Invalid button");
         }
+        this._container = document.createElement("div");
         this._options = _objectSpread2({
             text: options.text || button.textContent,
             type: options.type || "button",
@@ -967,9 +968,7 @@ class Button {
     }
     _createDOM() {
         var parent = this.button.parentNode;
-        this.button.nextSibling;
         var fragment = document.createDocumentFragment();
-        this._container = document.createElement("div");
         fragment.appendChild(this._container);
         this._container.classList.add("custom-button-container");
         this.button.classList.add("custom-button");
@@ -1064,7 +1063,6 @@ class Button {
         var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "left";
         this._options.icon = icon;
         this._options.iconPosition = position;
-        this.rebuild();
     }
     setBadge(badge) {
         if (typeof badge === "undefined") return;
@@ -1072,8 +1070,6 @@ class Button {
         if (this.badgeElement) {
             this.badgeElement.textContent = badge;
             this.badgeElement.style.display = badge ? "flex" : "none";
-        } else if (badge) {
-            this.rebuild();
         }
     }
     setVariant(variant) {
@@ -1154,11 +1150,6 @@ class Button {
             detail: detail
         }));
     }
-    rebuild() {
-        this._createDOM();
-        this._bindEvents();
-        this.updateState();
-    }
     updateState() {
         if (this._options.disabled) {
             this.disable();
@@ -1226,6 +1217,14 @@ function _handleKeydown$2(e) {
     });
 }
 
+function translate(text) {
+    var translatedText = window.Asc.plugin.tr(text);
+    if (translatedText === text) {
+        console.warn('Translation missing for: "'.concat(text, '"'));
+    }
+    return translatedText;
+}
+
 var _container$1 = new WeakMap;
 
 var _insertButton = new WeakMap;
@@ -1284,7 +1283,7 @@ class IconPicker {
         });
         _classPrivateFieldGet2(_container$1, this).appendChild(fragment);
         if (_classPrivateFieldGet2(_listOfIconNames, this).size === 0) {
-            _classPrivateFieldGet2(_container$1, this).textContent = window.Asc.plugin.tr("Your search didn't match any content. Please try another term.");
+            _classPrivateFieldGet2(_container$1, this).textContent = translate("Your search didn't match any content. Please try another term.");
         }
     }
     setOnSelectIconCallback(callback) {
@@ -1870,7 +1869,7 @@ var _boundHandles = new WeakMap;
 var _InputField_brand = new WeakSet;
 
 class InputField {
-    constructor(container) {
+    constructor(input) {
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         _classPrivateMethodInitSpec(this, _InputField_brand);
         _defineProperty(this, "_container", void 0);
@@ -1886,21 +1885,22 @@ class InputField {
         _defineProperty(this, "_validationMessage", void 0);
         _defineProperty(this, "_subscribers", []);
         _classPrivateFieldInitSpec(this, _boundHandles, void 0);
-        if (typeof container === "string") {
-            var temp = document.getElementById(container);
-            if (temp instanceof HTMLElement) {
-                container = temp;
+        if (typeof input === "string") {
+            var temp = document.getElementById(input);
+            if (temp instanceof HTMLInputElement) {
+                input = temp;
             }
         }
-        if (container instanceof HTMLElement) {
-            this._container = container;
+        if (input instanceof HTMLInputElement) {
+            this.input = input;
         } else {
-            throw new Error("Invalid container");
+            throw new Error("Invalid input element");
         }
+        this._container = document.createElement("div");
         this._options = _objectSpread2({
-            type: options.type || "text",
-            placeholder: options.placeholder || "",
-            value: options.value || "",
+            type: options.type || input.type || "text",
+            placeholder: options.placeholder || input.placeholder || "",
+            value: options.value || input.value || "",
             autofocus: options.autofocus || false,
             disabled: options.disabled || false,
             readonly: options.readonly || false,
@@ -1924,11 +1924,12 @@ class InputField {
         }
     }
     _createDOM() {
-        this._container.innerHTML = "";
-        this._container.classList.add("input-field-container");
+        var parent = this.input.parentNode;
         var fragment = document.createDocumentFragment();
+        fragment.appendChild(this._container);
+        this._container.classList.add("input-field-container");
         var inputField = document.createElement("div");
-        fragment.appendChild(inputField);
+        this._container.appendChild(inputField);
         inputField.classList.add("input-field");
         if (this._options.disabled) {
             inputField.classList.add("input-field-disabled");
@@ -1936,12 +1937,10 @@ class InputField {
         var inputFieldMain = document.createElement("div");
         inputField.appendChild(inputFieldMain);
         inputFieldMain.classList.add("input-field-main");
-        this.input = document.createElement("input");
         this.input.classList.add("input-field-element");
         this.input.type = this._options.type || "text";
         this.input.placeholder = this._options.placeholder || "";
         this.input.value = String(this._options.value) || "";
-        this.input.id = this._container.id + "Input";
         if (this._options.disabled) {
             this.input.disabled = true;
         }
@@ -1960,7 +1959,6 @@ class InputField {
         if (this._options.autocomplete) {
             this.input.autocomplete = this._options.autocomplete;
         }
-        inputFieldMain.appendChild(this.input);
         if (this._options.showCounter) {
             _classPrivateFieldSet2(_counter, this, document.createElement("div"));
             inputField.appendChild(_classPrivateFieldGet2(_counter, this));
@@ -1989,7 +1987,8 @@ class InputField {
             _classPrivateFieldGet2(_clearButton, this).style.display = "none";
             _classPrivateFieldGet2(_clearButton, this).textContent = "×";
         }
-        this._container.appendChild(fragment);
+        parent === null || parent === void 0 || parent.insertBefore(fragment, this.input);
+        inputFieldMain.appendChild(this.input);
     }
     validate() {
         if (!this._options.validation) {
@@ -2282,7 +2281,7 @@ class SearchFilter {
         _classPrivateFieldSet2(_filteredCatalog, this, catalogOfIcons);
         _classPrivateFieldSet2(_catalogOfIcons, this, catalogOfIcons);
         this.input = new SearchInput("searchFilter", {
-            placeholder: "Enter the name of the icon",
+            placeholder: translate("Enter the name of the icon"),
             autofocus: true
         });
         this.input.subscribe(event => {
@@ -2754,7 +2753,13 @@ window.Asc.plugin.init = _asyncToGenerator(function*() {
 });
 
 window.Asc.plugin.onTranslate = _asyncToGenerator(function*() {
-    console.log("onTranslate in icons");
+    var elements = document.getElementsByClassName("i18n");
+    for (var i = 0; i < elements.length; i++) {
+        var el = elements[i];
+        if (el.attributes["placeholder"]) el.attributes["placeholder"].value = translate(el.attributes["placeholder"].value);
+        if (el.attributes["title"]) el.attributes["title"].value = translate(el.attributes["title"].value);
+        if (el.innerText) el.innerText = translate(el.innerText);
+    }
 });
 
 window.Asc.plugin.button = function() {

@@ -1625,6 +1625,7 @@
             } else {
                 throw new Error("Invalid button");
             }
+            this._container = document.createElement("div");
             this._options = _objectSpread2({
                 text: options.text || button.textContent,
                 type: options.type || "button",
@@ -1642,9 +1643,7 @@
             key: "_createDOM",
             value: function _createDOM() {
                 var parent = this.button.parentNode;
-                this.button.nextSibling;
                 var fragment = document.createDocumentFragment();
-                this._container = document.createElement("div");
                 fragment.appendChild(this._container);
                 this._container.classList.add("custom-button-container");
                 this.button.classList.add("custom-button");
@@ -1670,9 +1669,7 @@
                 }
                 this.buttonText = document.createElement("span");
                 this.buttonText.classList.add("custom-button-text");
-                if (this._options.text) {
-                    this.buttonText.textContent = this._options.text;
-                }
+                this.buttonText.textContent = "";
                 if (this._options.icon) {
                     var iconSpan = document.createElement("span");
                     iconSpan.classList.add("custom-button-icon");
@@ -1754,7 +1751,6 @@
                 var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "left";
                 this._options.icon = icon;
                 this._options.iconPosition = position;
-                this.rebuild();
             }
         }, {
             key: "setBadge",
@@ -1764,8 +1760,6 @@
                 if (this.badgeElement) {
                     this.badgeElement.textContent = badge;
                     this.badgeElement.style.display = badge ? "flex" : "none";
-                } else if (badge) {
-                    this.rebuild();
                 }
             }
         }, {
@@ -1869,13 +1863,6 @@
                 });
             }
         }, {
-            key: "rebuild",
-            value: function rebuild() {
-                this._createDOM();
-                this._bindEvents();
-                this.updateState();
-            }
-        }, {
             key: "updateState",
             value: function updateState() {
                 if (this._options.disabled) {
@@ -1941,6 +1928,13 @@
             key: e.key
         });
     }
+    function translate(text) {
+        var translatedText = window.Asc.plugin.tr(text);
+        if (translatedText === text) {
+            console.warn('Translation missing for: "'.concat(text, '"'));
+        }
+        return translatedText;
+    }
     var _container$1 = new WeakMap;
     var _insertButton = new WeakMap;
     var _onSelectIconCallback = new WeakMap;
@@ -1997,7 +1991,7 @@
                 });
                 _classPrivateFieldGet2(_container$1, this).appendChild(fragment);
                 if (_classPrivateFieldGet2(_listOfIconNames, this).size === 0) {
-                    _classPrivateFieldGet2(_container$1, this).textContent = "Your search didn't match any content. Please try another term.";
+                    _classPrivateFieldGet2(_container$1, this).textContent = translate("Your search didn't match any content. Please try another term.");
                 }
             }
         }, {
@@ -2032,6 +2026,7 @@
                 icon.classList.add("selected");
                 _classPrivateFieldGet2(_selectedIcons$1, _this2).set(iconId, section);
             }
+            icon.setAttribute("tabindex", "0");
             _assertClassBrand(_IconPicker_brand, _this2, _onChange).call(_this2);
         });
         _classPrivateFieldGet2(_container$1, this).addEventListener("dblclick", function(e) {
@@ -2069,6 +2064,7 @@
                     var section = focusedIcon.getAttribute("data-section");
                     focusedIcon.classList.add("selected");
                     _classPrivateFieldGet2(_selectedIcons$1, _this2).set(iconId, section);
+                    _assertClassBrand(_IconPicker_brand, _this2, _onChange).call(_this2);
                 }
             }
             if (e.code === "Enter") {
@@ -2082,7 +2078,7 @@
         });
         _classPrivateFieldGet2(_insertButton, this).subscribe(function(event) {
             if (event.type === "button:click") {
-                var needToRun = false;
+                var needToRun = true;
                 _classPrivateFieldGet2(_onSelectIconCallback, _this2).call(_this2, _classPrivateFieldGet2(_selectedIcons$1, _this2), needToRun);
             }
         });
@@ -2107,6 +2103,11 @@
         _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
     }
     function _onChange() {
+        if (_classPrivateFieldGet2(_selectedIcons$1, this).size === 0) {
+            _classPrivateFieldGet2(_insertButton, this).disable();
+        } else {
+            _classPrivateFieldGet2(_insertButton, this).enable();
+        }
         _classPrivateFieldGet2(_onSelectIconCallback, this).call(this, _classPrivateFieldGet2(_selectedIcons$1, this));
     }
     function _createIcon(iconId, section) {
@@ -2303,6 +2304,7 @@
                 this.header.appendChild(this.selectedText);
                 this.arrow = document.createElement("span");
                 this.arrow.classList.add("selectbox-arrow");
+                this.arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' + '2.24889L3 0.00053797Z" fill="currentColor"/>' + "</svg>";
                 this.header.appendChild(this.arrow);
                 this.dropdown = document.createElement("div");
                 this.dropdown.classList.add("selectbox-dropdown");
@@ -2940,7 +2942,7 @@
     var _boundHandles = new WeakMap;
     var _InputField_brand = new WeakSet;
     var InputField = function() {
-        function InputField(container) {
+        function InputField(input) {
             var _this = this;
             var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             _classCallCheck(this, InputField);
@@ -2958,21 +2960,22 @@
             _defineProperty(this, "_validationMessage", void 0);
             _defineProperty(this, "_subscribers", []);
             _classPrivateFieldInitSpec(this, _boundHandles, void 0);
-            if (typeof container === "string") {
-                var temp = document.getElementById(container);
-                if (temp instanceof HTMLElement) {
-                    container = temp;
+            if (typeof input === "string") {
+                var temp = document.getElementById(input);
+                if (temp instanceof HTMLInputElement) {
+                    input = temp;
                 }
             }
-            if (container instanceof HTMLElement) {
-                this._container = container;
+            if (input instanceof HTMLInputElement) {
+                this.input = input;
             } else {
-                throw new Error("Invalid container");
+                throw new Error("Invalid input element");
             }
+            this._container = document.createElement("div");
             this._options = _objectSpread2({
-                type: options.type || "text",
-                placeholder: options.placeholder || "",
-                value: options.value || "",
+                type: options.type || input.type || "text",
+                placeholder: options.placeholder || input.placeholder || "",
+                value: options.value || input.value || "",
                 autofocus: options.autofocus || false,
                 disabled: options.disabled || false,
                 readonly: options.readonly || false,
@@ -3000,11 +3003,12 @@
         return _createClass(InputField, [ {
             key: "_createDOM",
             value: function _createDOM() {
-                this._container.innerHTML = "";
-                this._container.classList.add("input-field-container");
+                var parent = this.input.parentNode;
                 var fragment = document.createDocumentFragment();
+                fragment.appendChild(this._container);
+                this._container.classList.add("input-field-container");
                 var inputField = document.createElement("div");
-                fragment.appendChild(inputField);
+                this._container.appendChild(inputField);
                 inputField.classList.add("input-field");
                 if (this._options.disabled) {
                     inputField.classList.add("input-field-disabled");
@@ -3012,12 +3016,10 @@
                 var inputFieldMain = document.createElement("div");
                 inputField.appendChild(inputFieldMain);
                 inputFieldMain.classList.add("input-field-main");
-                this.input = document.createElement("input");
                 this.input.classList.add("input-field-element");
                 this.input.type = this._options.type || "text";
                 this.input.placeholder = this._options.placeholder || "";
                 this.input.value = String(this._options.value) || "";
-                this.input.id = this._container.id + "Input";
                 if (this._options.disabled) {
                     this.input.disabled = true;
                 }
@@ -3036,7 +3038,6 @@
                 if (this._options.autocomplete) {
                     this.input.autocomplete = this._options.autocomplete;
                 }
-                inputFieldMain.appendChild(this.input);
                 if (this._options.showCounter) {
                     _classPrivateFieldSet2(_counter, this, document.createElement("div"));
                     inputField.appendChild(_classPrivateFieldGet2(_counter, this));
@@ -3065,7 +3066,8 @@
                     _classPrivateFieldGet2(_clearButton, this).style.display = "none";
                     _classPrivateFieldGet2(_clearButton, this).textContent = "×";
                 }
-                this._container.appendChild(fragment);
+                parent === null || parent === void 0 || parent.insertBefore(fragment, this.input);
+                inputFieldMain.appendChild(this.input);
             }
         }, {
             key: "validate",
@@ -3348,8 +3350,9 @@
                 if (this._options.showSearchIcon) {
                     var _this$_container$quer;
                     this._searchIcon = document.createElement("span");
+                    this._searchIcon.setAttribute("title", "Search");
                     this._searchIcon.className = "input-field-search-icon";
-                    this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="black" fill-opacity="0.8"/>' + "</svg>";
+                    this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
                     (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.prepend(this._searchIcon);
                     this._boundHandle = this._triggerSubmit.bind(this);
                     this._searchIcon.addEventListener("click", this._boundHandle);
@@ -3386,7 +3389,7 @@
             _classPrivateFieldSet2(_filteredCatalog, this, catalogOfIcons);
             _classPrivateFieldSet2(_catalogOfIcons, this, catalogOfIcons);
             this.input = new SearchInput("searchFilter", {
-                placeholder: "Enter the name of the icon",
+                placeholder: translate("Enter the name of the icon"),
                 autofocus: true
             });
             this.input.subscribe(function(event) {
@@ -3879,10 +3882,17 @@
         }, _callee);
     }));
     window.Asc.plugin.onTranslate = _asyncToGenerator(_regenerator().m(function _callee2() {
+        var elements, i, el;
         return _regenerator().w(function(_context2) {
             while (1) switch (_context2.n) {
               case 0:
-                console.log("onTranslate in icons");
+                elements = document.getElementsByClassName("i18n");
+                for (i = 0; i < elements.length; i++) {
+                    el = elements[i];
+                    if (el.attributes["placeholder"]) el.attributes["placeholder"].value = translate(el.attributes["placeholder"].value);
+                    if (el.attributes["title"]) el.attributes["title"].value = translate(el.attributes["title"].value);
+                    if (el.innerText) el.innerText = translate(el.innerText);
+                }
 
               case 1:
                 return _context2.a(2);
