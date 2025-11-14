@@ -35,6 +35,7 @@
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
 import { Button } from "./button/button.js";
+import { translate } from "../utils/translate.js";
 import "./icon-picker.css";
 
 class IconPicker {
@@ -105,7 +106,7 @@ class IconPicker {
         this.#container.appendChild(fragment);
 
         if (this.#listOfIconNames.size === 0) {
-            this.#container.textContent = window.Asc.plugin.tr(
+            this.#container.textContent = translate(
                 "Your search didn't match any content. Please try another term."
             );
         }
