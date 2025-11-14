@@ -41,26 +41,28 @@ class InputField {
     #boundHandles;
 
     /**
-     * @param {string | HTMLElement} container
+     * @param {string | HTMLInputElement} input
      * @param {InputOptionsType} options
      */
-    constructor(container, options = {}) {
-        if (typeof container === "string") {
-            let temp = document.getElementById(container);
-            if (temp instanceof HTMLElement) {
-                container = temp;
+    constructor(input, options = {}) {
+        if (typeof input === "string") {
+            let temp = document.getElementById(input);
+            if (temp instanceof HTMLInputElement) {
+                input = temp;
             }
         }
-        if (container instanceof HTMLElement) {
-            this._container = container;
+        if (input instanceof HTMLInputElement) {
+            this.input = input;
         } else {
-            throw new Error("Invalid container");
+            throw new Error("Invalid input element");
         }
 
+        this._container = document.createElement("div");
+
         this._options = {
-            type: options.type || "text",
-            placeholder: options.placeholder || "",
-            value: options.value || "",
+            type: options.type || input.type || "text",
+            placeholder: options.placeholder || input.placeholder || "",
+            value: options.value || input.value || "",
             autofocus: options.autofocus || false,
             disabled: options.disabled || false,
             readonly: options.readonly || false,
@@ -89,13 +91,14 @@ class InputField {
     }
 
     _createDOM() {
-        this._container.innerHTML = "";
-        this._container.classList.add("input-field-container");
+        const parent = this.input.parentNode;
 
         const fragment = document.createDocumentFragment();
+        fragment.appendChild(this._container);
+        this._container.classList.add("input-field-container");
 
         const inputField = document.createElement("div");
-        fragment.appendChild(inputField);
+        this._container.appendChild(inputField);
         inputField.classList.add("input-field");
         if (this._options.disabled) {
             inputField.classList.add("input-field-disabled");
@@ -103,12 +106,11 @@ class InputField {
         const inputFieldMain = document.createElement("div");
         inputField.appendChild(inputFieldMain);
         inputFieldMain.classList.add("input-field-main");
-        this.input = document.createElement("input");
         this.input.classList.add("input-field-element");
         this.input.type = this._options.type || "text";
         this.input.placeholder = this._options.placeholder || "";
         this.input.value = String(this._options.value) || "";
-        this.input.id = this._container.id + "Input";
+
         if (this._options.disabled) {
             this.input.disabled = true;
         }
@@ -127,7 +129,6 @@ class InputField {
         if (this._options.autocomplete) {
             this.input.autocomplete = this._options.autocomplete;
         }
-        inputFieldMain.appendChild(this.input);
 
         if (this._options.showCounter) {
             this.#counter = document.createElement("div");
@@ -162,7 +163,8 @@ class InputField {
             this.#clearButton.textContent = "×";
         }
 
-        this._container.appendChild(fragment);
+        parent?.insertBefore(fragment, this.input);
+        inputFieldMain.appendChild(this.input);
     }
 
     #bindEvents() {

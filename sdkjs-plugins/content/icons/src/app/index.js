@@ -32,6 +32,7 @@
 
 import { IconsPlugin } from "./services/plugin.js";
 import { Theme } from "./theme.js";
+import { translate } from "./utils/translate.js";
 
 import "../styles.css";
 
@@ -45,7 +46,20 @@ window.Asc.plugin.init = async function () {
 };
 
 window.Asc.plugin.onTranslate = async function () {
-    console.log("onTranslate in icons");
+    const elements = document.getElementsByClassName("i18n");
+
+    for (let i = 0; i < elements.length; i++) {
+        var el = elements[i];
+        if (el.attributes["placeholder"])
+            el.attributes["placeholder"].value = translate(
+                el.attributes["placeholder"].value
+            );
+        if (el.attributes["title"])
+            el.attributes["title"].value = translate(
+                el.attributes["title"].value
+            );
+        if (el.innerText) el.innerText = translate(el.innerText);
+    }
 };
 
 window.Asc.plugin.button = async function (id, windowId) {
