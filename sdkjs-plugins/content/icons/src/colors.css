@@ -16,13 +16,13 @@ html {
     --input-icon: #bdbdbd;
     --input-icon-hover: #848484;
     --select-option: white;
-    --select-option-hover: #cbcbcb;
+    --select-option-hover: #e0e0e0;
     --select-option-selected: #cbcbcb;
 
     --font-dark: rgba(255, 255, 255, 0.8);
     --font-hover-dark: white;
     --icon-pad-dark: rgba(255, 255, 255, 0.02);
-    --icon-pad-hover-dark: #606060;
+    --icon-pad-hover-dark: #555;
     --icon-pad-focus-dark: rgba(255, 255, 255, 0.1);
     --icon-pad-selected-dark: #606060;
     --input-bg-dark: #333333;
@@ -36,6 +36,6 @@ html {
     --input-icon-dark: rgba(255, 255, 255, 0.8);
     --input-icon-hover-dark: white;
     --select-option-dark: #333333;
-    --select-option-hover-dark: #606060;
+    --select-option-hover-dark: #555;
     --select-option-selected-dark: #606060;
 }

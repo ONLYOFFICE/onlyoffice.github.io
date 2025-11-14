@@ -50,7 +50,7 @@ function getBabelConfig() {
 }
 
 export default {
-    input: "src/js/index.js",
+    input: "src/app/index.js",
     output: {
         file: isES5Build ? "dist/bundle.es5.js" : "dist/bundle.modern.js",
         format: isES5Build ? "umd" : "esm",

@@ -6,41 +6,41 @@ class ToggleButton extends Button {
             ...options,
         });
 
-        this.isToggled = this.options.toggled;
+        this.isToggled = this._options.toggled;
     }
 
-    createDOM() {
-        super.createDOM();
+    _createDOM() {
+        super._createDOM();
         this.updateToggleState();
     }
 
-    handleClick(e) {
+    _handleClick(e) {
         if (
-            this.options.toggleOnClick &&
-            !this.options.disabled &&
+            this._options.toggleOnClick &&
+            !this._options.disabled &&
             !this.isLoading
         ) {
             this.toggle();
         }
-        super.handleClick(e);
+        super._handleClick(e);
     }
 
     toggle() {
         this.isToggled = !this.isToggled;
-        this.updateToggleState();
+        this.#updateToggleState();
         this.triggerToggleEvent();
     }
 
     setToggled(toggled) {
         this.isToggled = toggled;
-        this.updateToggleState();
+        this.#updateToggleState();
     }
 
-    updateToggleState() {
+    #updateToggleState() {
         if (this.isToggled) {
-            this.container.classList.add("custom-button-toggled");
+            this._container.classList.add("custom-button-toggled");
         } else {
-            this.container.classList.remove("custom-button-toggled");
+            this._container.classList.remove("custom-button-toggled");
         }
     }
 
@@ -51,6 +51,6 @@ class ToggleButton extends Button {
                 button: this,
             },
         });
-        this.container.dispatchEvent(event);
+        this._container.dispatchEvent(event);
     }
 }
