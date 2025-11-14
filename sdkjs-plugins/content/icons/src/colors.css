@@ -1,9 +1,9 @@
 html {
     --font: rgba(0, 0, 0, 0.8);
-    --font-hover: #000000;
+    --font-hover: black;
     --icon-pad: rgba(0, 0, 0, 0.02);
-    --icon-pad-hover: #cbcbcb;
-    --icon-pad-selected: rgba(0, 0, 0, 0.2);
+    --icon-pad-hover: rgba(0, 0, 0, 0.1);
+    --icon-pad-selected: #cbcbcb;
     --input-bg: white;
     --input-placeholder: rgba(0, 0, 0, 0.4);
     --input-border: #c0c0c0;
@@ -15,24 +15,25 @@ html {
     --input-icon: #bdbdbd;
     --input-icon-hover: #848484;
     --select-option: white;
-    --select-option-hover: #e0e0e0;
+    --select-option-hover: #cbcbcb;
     --select-option-selected: #cbcbcb;
 
     --font-dark: rgba(255, 255, 255, 0.8);
-    --font-hover-dark: #ffffff;
+    --font-hover-dark: white;
     --icon-pad-dark: rgba(255, 255, 255, 0.02);
     --icon-pad-hover-dark: rgba(255, 255, 255, 0.1);
-    --icon-pad-selected-dark: rgba(255, 255, 255, 0.2);
-    --input-bg-dark: red;
-    --input-border-dark: red;
-    --input-border-hover-dark: red;
-    --input-border-focus-dark: red;
-    --input-border-active-dark: red;
-    --input-border-error-dark: red;
-    --input-border-warning-dark: red;
-    --input-icon-dark: red;
-    --input-icon-hover-dark: red;
-    --select-option-dark: red;
-    --select-option-hover-dark: red;
-    --select-option-selected-dark: red;
+    --icon-pad-selected-dark: #606060;
+    --input-bg-dark: #333333;
+    --input-placeholder-dark: rgba(255, 255, 255, 0.4);
+    --input-border-dark: #666666;
+    --input-border-hover-dark: #666666;
+    --input-border-focus-dark: rgb(204, 204, 204);
+    --input-border-active-dark: #666666;
+    --input-border-error-dark: #f56c6c;
+    --input-border-warning-dark: #e6a23c;
+    --input-icon-dark: rgba(255, 255, 255, 0.8);
+    --input-icon-hover-dark: white;
+    --select-option-dark: #333333;
+    --select-option-hover-dark: #606060;
+    --select-option-selected-dark: #606060;
 }
