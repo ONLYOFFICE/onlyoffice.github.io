@@ -2,7 +2,8 @@ html {
     --font: rgba(0, 0, 0, 0.8);
     --font-hover: black;
     --icon-pad: rgba(0, 0, 0, 0.02);
-    --icon-pad-hover: rgba(0, 0, 0, 0.1);
+    --icon-pad-hover: #cbcbcb;
+    --icon-pad-focus: rgba(0, 0, 0, 0.1);
     --icon-pad-selected: #cbcbcb;
     --input-bg: white;
     --input-placeholder: rgba(0, 0, 0, 0.4);
@@ -21,7 +22,8 @@ html {
     --font-dark: rgba(255, 255, 255, 0.8);
     --font-hover-dark: white;
     --icon-pad-dark: rgba(255, 255, 255, 0.02);
-    --icon-pad-hover-dark: rgba(255, 255, 255, 0.1);
+    --icon-pad-hover-dark: #606060;
+    --icon-pad-focus-dark: rgba(255, 255, 255, 0.1);
     --icon-pad-selected-dark: #606060;
     --input-bg-dark: #333333;
     --input-placeholder-dark: rgba(255, 255, 255, 0.4);
