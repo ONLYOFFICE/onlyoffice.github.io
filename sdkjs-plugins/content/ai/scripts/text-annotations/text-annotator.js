@@ -38,6 +38,7 @@ function TextAnnotator()
 	this.paragraphs = {};
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
+	this.checked = new Set(); // was checked on the previous request
 	
 	this.type = -1;
 }
@@ -55,7 +56,12 @@ TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, tex
 TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
 	this.paraToCheck.clear()
-	paraIds.forEach(paraId => this.paraToCheck.add(paraId));
+	let _t = this;
+	paraIds.forEach(function(paraId) {
+		if (!_t.checked.has(paraId) || _t.waitParagraphs[paraId])
+			_t.paraToCheck.add(paraId);
+	});
+	
 	this.paraToCheck.forEach(paraId => this._checkParagraph(paraId));
 };
 TextAnnotator.prototype._checkParagraph = async function(paraId)
@@ -75,6 +81,8 @@ TextAnnotator.prototype._checkParagraph = async function(paraId)
 	
 	delete this.waitParagraphs[paraId];
 	this.paraToCheck.delete(paraId);
+	
+	this.checked.add(paraId);
 };
 TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
