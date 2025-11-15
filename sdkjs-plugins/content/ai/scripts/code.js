@@ -652,11 +652,11 @@ class Provider extends AI.Provider {\n\
 			if (!obj)
 				return;
 
-			// console.log("PLUGIN-AI");
-			// console.log(JSON.stringify(obj));
+			console.log("PLUGIN-AI");
+			console.log(JSON.stringify(obj));
 			
-			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
-			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"]);
+			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["ranges"]);
+			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["ranges"]);
 		});
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
