@@ -44,8 +44,7 @@ function TextAnnotator()
 }
 TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
-	// TODO: Update ranges
-	
+	this._handleNewRanges(ranges, paraId, text);
 	this.waitParagraphs[paraId] = {
 		recalcId : recalcId,
 		text : text
@@ -161,4 +160,18 @@ TextAnnotator.prototype.resetCurrentRange = function()
 {
 	this.paraId = null;
 	this.rangeId = null;
+};
+TextAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
+{
+	if (!ranges || !Array.isArray(ranges))
+		return;
+	
+	ranges.forEach(range => this._handleNewRangePositions(range, paraId, text));
+	for (let i = 0; i < ranges.length; ++i)
+	{
+		this._handleNewRangePositions(ranges[i]);
+	}
+};
+TextAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
+{
 };
