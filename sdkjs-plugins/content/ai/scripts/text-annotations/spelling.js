@@ -239,3 +239,23 @@ SpellChecker.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 		"name" : "spelling"
 	};
 };
+SpellChecker.prototype._handleNewRangePositions = async function(range, paraId, text)
+{
+	if (!range || range["name"] !== "spelling" || !this.paragraphs[paraId])
+		return;
+
+	let rangeId = range["id"];
+	let annot = this.getAnnotation(paraId, rangeId);
+	
+	if (!annot)
+		return;
+	
+	let start = range["start"];
+	let len = range["length"];
+	
+	if (annot["original"] !== text.substring(start, start + len))
+	{
+		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
+		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
+	}
+};
