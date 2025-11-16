@@ -38,6 +38,9 @@ let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
 
+let spellchecker = null;
+let grammar = null;
+
 window.getActionsInfo = function() {
 	let actions = [];
 	for (const action in AI.ActionType) {
@@ -61,6 +64,10 @@ window.addSupportAgentMode = function(editorVersion) {
 	var is91 = editorVersion >= 9001000;
 
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
+		if (e.keyCode === 27 && textAnnotatorPopup) {
+			textAnnotatorPopup.close();
+		}
+
 		if (e.keyCode === 27 && helperWindow) {
 			helperWindow.close();
 			helperWindow = null;
@@ -637,6 +644,45 @@ class Provider extends AI.Provider {\n\
 				AI.Storage.save();
 			
 		});
+		
+		spellchecker = new SpellChecker();
+		grammar = new GrammarChecker();
+
+		this.attachEditorEvent("onParagraphText", function(obj) {
+			if (!obj)
+				return;
+
+			console.log("PLUGIN-AI");
+			console.log(JSON.stringify(obj));
+			
+			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+		});
+
+		this.attachEditorEvent("onFocusAnnotation", function(obj) {
+			if (!obj)
+				return;
+		});
+
+		this.attachEditorEvent("onBlurAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+			if ("spelling" === obj["name"])
+				spellchecker.onBlur();
+			else if ("grammar" === obj["name"]) 
+				grammar.onBlur();
+		});
+
+		this.attachEditorEvent("onClickAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+			if ("grammar" === obj["name"])
+				grammar.onClick(obj["paragraphId"], obj["ranges"]);
+			else if ("spelling" === obj["name"])
+				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
+		});
 
 	}
 
@@ -780,6 +826,36 @@ function onTranslateSettingsModal() {
 
 	translateSettingsWindow = new window.Asc.PluginWindow();
 	translateSettingsWindow.show(variation);
+}
+
+async function onCheckGrammarSpelling(isCurrent)
+{
+	let paraIds = [];
+	
+	if (isCurrent)
+	{
+		paraIds = await Asc.Editor.callCommand(function(){
+			let result = [];
+			let paragraphs = Api.GetDocument().GetRangeBySelect().GetAllParagraphs();
+			paragraphs.forEach(p => result.push(p.GetInternalId()));
+			return result;
+		});
+	}
+	else
+	{
+		paraIds = await Asc.Editor.callCommand(function(){
+			let result = [];
+			let paragraphs = Api.GetDocument().GetAllParagraphs();
+			paragraphs.forEach(p => result.push(p.GetInternalId()));
+			return result;
+		});
+	}
+	
+	if (spellchecker)
+		spellchecker.checkParagraphs(paraIds);
+	
+	if (grammar)
+		grammar.checkParagraphs(paraIds);
 }
 
 /**

@@ -138,6 +138,34 @@ function registerButtons(window, undefined)
 		window.chatWindow = chatWindow;
 	}
 
+	if (Asc.Editor.getType() !== "pdf")
+	{
+		let buttonSub = new Asc.ButtonContextMenu(buttonMain);
+		buttonSub.text = "Grammar & Spelling";
+		buttonSub.icons = getContextMenuButtonIcons("grammar");
+		buttonSub.editors = ["word"];
+		buttonSub.addCheckers("Target", "Selection");
+		
+		let buttonAll = new Asc.ButtonContextMenu(buttonSub);
+		buttonAll.text = "Check all";
+		buttonAll.editors = ["word"];
+		buttonAll.addCheckers("Target", "Selection");
+
+		buttonAll.attachOnClick(async function(data){
+			onCheckGrammarSpelling(false);
+		});
+
+		let buttonCurrent = new Asc.ButtonContextMenu(buttonSub);
+		buttonCurrent.text = "Check current selection";
+		buttonCurrent.editors = ["word"];
+		buttonCurrent.addCheckers("Target", "Selection");
+
+		buttonCurrent.attachOnClick(async function(data){
+			onCheckGrammarSpelling(true);
+		});
+	
+	}
+
 	// Submenu summarize:
 	if (Asc.Editor.getType() !== "pdf")
 	{
@@ -612,6 +640,27 @@ function registerButtons(window, undefined)
 			button2.text = "OCR";
 			button2.icons = getToolBarButtonIcons("ocr");
 			button2.attachOnClick(on_click_ocr);
+		}
+		
+		if (Asc.Editor.getType() !== "pdf")
+		{
+			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonGS.text = "Grammar & Spelling";
+			buttonGS.icons = getToolBarButtonIcons("grammar");
+			buttonGS.menu = [{
+				text: 'Check all',
+				id: 'sg10n-check-all',
+				onclick: () => onCheckGrammarSpelling(false)
+			}, 
+			{
+				text: 'Check current selection',
+				id: 'sg10n-check-selection',
+				onclick: () => onCheckGrammarSpelling(true)
+			}];
+			buttonGS.attachOnClick(async function(){
+				onCheckGrammarSpelling(true);
+			});
+			buttonGS.split = true;
 		}
 	}
 
