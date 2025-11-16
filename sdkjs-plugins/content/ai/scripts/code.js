@@ -648,15 +648,15 @@ class Provider extends AI.Provider {\n\
 		spellchecker = new SpellChecker();
 		grammar = new GrammarChecker();
 
-		this.attachEditorEvent("onAnnotateText", function(obj) {
+		this.attachEditorEvent("onParagraphText", function(obj) {
 			if (!obj)
 				return;
 
 			console.log("PLUGIN-AI");
 			console.log(JSON.stringify(obj));
 			
-			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["ranges"]);
-			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["ranges"]);
+			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 		});
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
