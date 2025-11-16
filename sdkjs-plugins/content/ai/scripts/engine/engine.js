@@ -283,6 +283,7 @@ function fetchExternal(url, options, isStreaming) {
 					}
 				});
 			} else {
+				let requestUrl = message.url;
 				let request = {
 					method: message.method,
 					headers: message.headers
@@ -301,28 +302,39 @@ function fetchExternal(url, options, isStreaming) {
 							})
 						}
 						if (AI.serverSettings){
-							message.url = AI.serverSettings.proxy;
+							requestUrl = AI.serverSettings.proxy;
 							request["headers"] = {
 								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
 							}
 						} else {
-							message.url = AI.PROXY_URL;
+							requestUrl = AI.PROXY_URL;
 						}
 					}
-				}				
-
+				}
+				
 				try {
 					let _fetch = fetch;
-					if (message.url.startsWith("[external]"))
+					if (requestUrl.startsWith("[external]"))
 						_fetch = fetchExternal;
-
-					_fetch(message.url, request)
+					
+					let fetchResponse;
+					_fetch(requestUrl, request)
 						.then(function(response) {
-							return response.json()
+							fetchResponse = response;
+							return response.text();
+						})
+						.then(function(text) {
+							try {
+								return JSON.parse(text)
+    						} catch {
+      							return { error : text };
+    						}
 						})
 						.then(function(data) {
 							if (data.error)
 								resolve({error: 1, message: data.error.message ? data.error.message : ((typeof data.error === "string") ? data.error : "")});
+							else if (fetchResponse && fetchResponse.status == 401 )
+								resolve({error: 1, message: fetchResponse.statusText ? fetchResponse.statusText : "Unauthorized"});	
 							else
 								resolve({error: 0, data: data.data ? data.data : data});
 						})
@@ -549,6 +561,7 @@ function fetchExternal(url, options, isStreaming) {
 			function resolveRequest(data) {
 				if (data.error)
 					resolve({
+						provider: provider.name,
 						error : 1,
 						message : data.message,
 						models : []
@@ -579,6 +592,7 @@ function fetchExternal(url, options, isStreaming) {
 					}
 
 					resolve({
+						provider: provider.name,
 						error : 0,
 						message : "",
 						models : AI.TmpProviderForModels.modelsUI
@@ -596,9 +610,10 @@ function fetchExternal(url, options, isStreaming) {
 				return;
 			}
 
+			let url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models);
 			let headers = AI._getHeaders(provider);
 			requestWrapper({
-				url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models),
+				url : url,
 				headers : headers,
 				method : "GET"
 			}).then(function(data) {
@@ -879,9 +894,6 @@ function fetchExternal(url, options, isStreaming) {
 						//dataChunk = dataChunk.replace(/\n\n/g, '\n');
 					}
 
-					//console.log(dataChunk);
-
-					//console.log(dataChunk);
 					allChunks += dataChunk;
 
 					if (streamFunc)
@@ -1294,11 +1306,6 @@ function fetchExternal(url, options, isStreaming) {
 		}
 
 		result += "]";
-
-		// console.log("Parsed result:");
-		// console.log(responseText);
-		// console.log(result);
-		// console.log(responseText.substring(curObjectPos));
 
 		return {
 			result : result,
