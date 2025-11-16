@@ -159,9 +159,6 @@ Text to check:`;
 	});
 	await checkEndAction();
 
-	console.log("AI-response");
-	console.log(response);
-
 	let rangeId = 1;
 	let ranges = [];
 

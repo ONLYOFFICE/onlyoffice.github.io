@@ -651,9 +651,6 @@ class Provider extends AI.Provider {\n\
 		this.attachEditorEvent("onParagraphText", function(obj) {
 			if (!obj)
 				return;
-
-			console.log("PLUGIN-AI");
-			console.log(JSON.stringify(obj));
 			
 			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
