@@ -1,4 +1,5 @@
 import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 import { babel } from "@rollup/plugin-babel";
 import license from "rollup-plugin-license";
 import terser from "@rollup/plugin-terser";
@@ -8,7 +9,7 @@ import autoprefixer from "autoprefixer";
 import customProperties from "postcss-custom-properties";
 import atImport from "postcss-import";
 import cssnano from "cssnano";
-import postcssNesting from "postcss-nesting";
+import postcssNested from "postcss-nested";
 import fs from "fs";
 
 const isES5Build = process.env.TARGET === "es5";
@@ -66,7 +67,7 @@ export default {
                 customProperties({
                     preserve: false,
                 }),
-                postcssNesting(),
+                postcssNested(),
                 autoprefixer({
                     overrideBrowserslist: ["ie >= 11", "last 2 versions"],
                 }),
@@ -93,6 +94,10 @@ export default {
         }),
         resolve({
             browser: true,
+        }),
+        commonjs({
+            include: /node_modules/,
+            requireReturnsDefault: "auto",
         }),
         babel({
             ...getBabelConfig(),

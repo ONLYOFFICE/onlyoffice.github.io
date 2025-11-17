@@ -60,12 +60,13 @@
                 <div id="categorySelectList"></div>
             </div>
             <div id="search" class="search">
-                <label class="i18n header" for="searchFilter">Search</label>
+                <label class="i18n header">Search</label>
                 <input class="i18n" id="searchFilter" type="text" placeholder="Enter the name of the icon"></input>
             </div>
 
             <div id="icons-container" class="icons-container">
                 <div id="icons" class="icons"></div>
+                <div id="noIcons" class="no-icons i18n" style="display: none;">Your search didn't match any content. Please try another term.</div>
             </div>
             <button id="insertIcon" class="run-button i18n">Insert</button>
         </section>
@@ -92,7 +93,7 @@
 
             function onResize() {
                 const frameHeight = window.frameElement.offsetHeight;
-                document.body.style.height = `${frameHeight}px`;
+                document.body.style.height = frameHeight + 'px';
             }
             onResize();
         </script>

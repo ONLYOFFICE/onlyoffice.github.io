@@ -33,7 +33,6 @@
 // @ts-check
 
 import { SearchInput } from "./input/search-input.js";
-import "./search-filter.css";
 
 /** @typedef {import('./input/options-type.js').InputEventType} InputEventType */
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
@@ -43,6 +42,8 @@ class SearchFilter {
     #filteredCatalog;
     #onFilterCallback;
     input;
+    #text;
+    #debounceTimeout;
 
     /**
      * @param {IconCategoryType[]} catalogOfIcons
@@ -53,15 +54,26 @@ class SearchFilter {
         ) => {};
         this.#filteredCatalog = catalogOfIcons;
         this.#catalogOfIcons = catalogOfIcons;
+        this.#text = "";
         this.input = new SearchInput("searchFilter", {
             autofocus: true,
         });
 
         this.input.subscribe((/** @type {InputEventType} */ event) => {
-            if (event.type !== "inputfield:input") {
+            if (
+                event.type !== "inputfield:input" ||
+                this.#text === event.detail.value
+            ) {
                 return;
             }
-            this.#onInput(event.detail.value.toLowerCase());
+            if (this.#debounceTimeout) {
+                clearTimeout(this.#debounceTimeout);
+            }
+
+            this.#debounceTimeout = setTimeout(() => {
+                this.#text = event.detail.value;
+                this.#onInput(event.detail.value.toLowerCase());
+            }, 500);
         });
     }
 
@@ -69,6 +81,7 @@ class SearchFilter {
         if (this.input.getValue() !== "") {
             const bFocusInput = false;
             this.input.clear(bFocusInput);
+            this.#text = "";
             this.#filteredCatalog = this.#catalogOfIcons;
         }
     }

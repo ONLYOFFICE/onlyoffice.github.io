@@ -11,8 +11,6 @@
  * @property {(ev: KeyboardEvent) => void} keydown
  */
 
-import "./button.css";
-
 class Button {
     /** @type {HTMLDivElement} */
     _container;
@@ -335,10 +333,6 @@ class Button {
             originalEvent: e,
             button: this,
         };
-        const event = new CustomEvent("button:click", {
-            detail,
-        });
-        this._container.dispatchEvent(event);
 
         this._subscribers.forEach((cb) =>
             cb({
@@ -357,10 +351,6 @@ class Button {
             ...detail,
             button: this,
         };
-        const event = new CustomEvent(`button:${eventName}`, {
-            detail,
-        });
-        this._container.dispatchEvent(event);
 
         this._subscribers.forEach((cb) =>
             cb({

@@ -15,6 +15,7 @@
 
     .input-field-element {
         width: 100%;
+        height: 24px;
         padding: 0 8px 0 7px;
         line-height: 22px;
         font-size: 11px;
@@ -23,7 +24,7 @@
         background-color: var(--input-bg);
         transition: all 0.3s ease;
         box-sizing: border-box;
-        color: --var(--font);
+        color: var(--font);
         &:focus {
             outline: none;
             border-color: var(--input-border-focus);
@@ -131,7 +132,7 @@
 body.theme-dark {
     .input-field-container {
         .input-field-element {
-            color: --var(--font-dark);
+            color: var(--font-dark);
             background-color: var(--input-bg-dark);
             border-color: var(--input-border-dark);
             &::placeholder {

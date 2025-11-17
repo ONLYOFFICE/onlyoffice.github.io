@@ -106,6 +106,9 @@
         &:hover {
             background-color: var(--select-option-hover);
         }
+        * {
+            pointer-events: none;
+        }
     }
 
     .selectbox-option-selected {

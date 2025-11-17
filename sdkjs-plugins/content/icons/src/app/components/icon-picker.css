@@ -1,4 +1,5 @@
 .icons-container {
+    position: relative;
     height: calc(100% - 170px);
     width: 100%;
     box-sizing: border-box;
@@ -33,7 +34,15 @@
             &.selected {
                 background: var(--icon-pad-selected);
             }
+            * {
+                pointer-events: none;
+            }
         }
+    }
+    .no-icons {
+        position: absolute;
+        top: 0;
+        padding: 7px 18px 0 11px;
     }
 }
 
