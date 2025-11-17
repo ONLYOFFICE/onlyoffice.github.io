@@ -676,7 +676,7 @@ function registerButtons(window, undefined)
 		Vision           : "Vision"
 	};
 
-	AI.Actions = {};
+	AI.Actions = Object.create(null);
 
 	function ActionUI(name, icon, modelId, capabilities) {
 		this.name = name || "";
@@ -730,7 +730,21 @@ function registerButtons(window, undefined)
 	{
 		try
 		{
-			window.localStorage.setItem(actions_key, JSON.stringify(AI.Actions));			
+			// exclude external models
+			let excludeMap = Object.create(null);
+			for (let key in AI.Actions) {
+				if (AI.Actions[key].model.startsWith(AI.externalModelPrefix)) {
+					excludeMap[key] = AI.Actions[key].model;
+					AI.Actions[key].model = "";
+				}
+			}
+
+			window.localStorage.setItem(actions_key, JSON.stringify(AI.Actions));
+			
+			// restore excluded
+			for (let key in excludeMap) {
+				AI.Actions[key].model = excludeMap[key];
+			}
 			return true;
 		}
 		catch (e)

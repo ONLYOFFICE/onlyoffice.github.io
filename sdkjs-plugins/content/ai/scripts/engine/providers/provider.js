@@ -200,7 +200,7 @@
 		 */
 		getChatCompletions(message, model) {
 			return {
-				model : model.id,
+				model : this.correctModelId(model.id),
 				messages : message.messages
 			}
 		}
@@ -215,7 +215,7 @@
 		 */
 		getCompletions(message, model) {
 			return {
-				model : model.id,
+				model : this.correctModelId(model.id),
 				prompt : message.text
 			}
 		}
@@ -319,7 +319,7 @@
 			let index = sizes.length - 1;
 
 			return {
-				model : model.id,
+				model : this.correctModelId(model.id),
 				width : message.width || sizes[index].w,
 				height : message.width || sizes[index].h,
 				n : 1,
@@ -429,7 +429,7 @@
 		 */
 		async getImageVision(message, model) {
 			return {
-				model : model.id,
+				model : this.correctModelId(model.id),
 				messages : [
 					{
 						role: "user",
@@ -594,8 +594,15 @@
 			return this.getChatCompletions(data, model);
 		}
 
+		correctModelId(id) {
+			if (id.startsWith(AI.externalModelPrefix))
+				return id.substring(AI.externalModelPrefix.length);
+			return id;
+		}
+
 	}
 	
+	window.AI.externalModelPrefix = "[onlyoffice_external]";
 	window.AI.Provider = Provider;
 	await AI.loadInternalProviders();	
 	

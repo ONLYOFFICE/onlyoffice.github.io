@@ -627,6 +627,11 @@ function fetchExternal(url, options, isStreaming) {
 		this.model = null;
 		this.errorHandler = null;
 
+		if (model.id.startsWith(AI.externalModelPrefix)) {
+			this.model = this.modelUI;
+			return;
+		}
+
 		if ("" !== model.provider) {
 			let provider = null;
 			for (let i in AI.Providers) {
