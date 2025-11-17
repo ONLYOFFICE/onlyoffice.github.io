@@ -32,7 +32,6 @@
 
 // @ts-check
 import { SelectBox } from "./selectbox/selectbox.js";
-import "./categories-picker.css";
 
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 

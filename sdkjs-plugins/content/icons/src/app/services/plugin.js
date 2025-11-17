@@ -63,13 +63,13 @@ class IconsPlugin {
             try {
                 this.#categoriesPicker.setOnSelectCategoryCallback(
                     (categoryName) => {
-                        this.#iconsPicker.show(FA_CATEGORIES, categoryName);
+                        this.#iconsPicker.showCategory(categoryName);
                         this.#searchFilter.reset();
                     }
                 );
 
                 this.#searchFilter.setOnFilterCallback((catalogOfIcons) => {
-                    this.#iconsPicker.show(catalogOfIcons);
+                    this.#iconsPicker.showFound(catalogOfIcons);
                     this.#categoriesPicker.reset();
                 });
 
@@ -94,10 +94,7 @@ class IconsPlugin {
             }
             SvgLoader.loadSvgs(this.#selectedIcons)
                 .then((svgs) => {
-                    console.log("selected", this.#selectedIcons);
-                    console.log("svgs", svgs);
                     let parsed = svgs.map((svg) => SvgParser.parse(svg));
-                    console.log("parsed", parsed);
                     Asc.scope.editor = Asc.plugin.info.editorType;
                     Asc.scope.parsedSvgs = parsed;
                     const isCalc = true;

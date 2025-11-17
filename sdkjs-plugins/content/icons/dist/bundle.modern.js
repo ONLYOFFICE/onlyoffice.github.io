@@ -1127,10 +1127,6 @@ class Button {
             originalEvent: e,
             button: this
         };
-        var event = new CustomEvent("button:click", {
-            detail: detail
-        });
-        this._container.dispatchEvent(event);
         this._subscribers.forEach(cb => cb({
             type: "button:click",
             detail: detail
@@ -1141,10 +1137,6 @@ class Button {
         detail = _objectSpread2(_objectSpread2({}, detail), {}, {
             button: this
         });
-        var event = new CustomEvent("button:".concat(eventName), {
-            detail: detail
-        });
-        this._container.dispatchEvent(event);
         this._subscribers.forEach(cb => cb({
             type: "button:".concat(eventName),
             detail: detail
@@ -1235,7 +1227,7 @@ var _selectedIcons$1 = new WeakMap;
 var _IconPicker_brand = new WeakSet;
 
 class IconPicker {
-    constructor(catalogOfIcons) {
+    constructor(_catalogOfIcons) {
         _classPrivateMethodInitSpec(this, _IconPicker_brand);
         _classPrivateFieldInitSpec(this, _container$1, void 0);
         _classPrivateFieldInitSpec(this, _insertButton, void 0);
@@ -1252,48 +1244,101 @@ class IconPicker {
         _classPrivateFieldSet2(_listOfIconNames, this, new Set);
         _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
         _assertClassBrand(_IconPicker_brand, this, _addEventListener$1).call(this);
-        this.show(catalogOfIcons);
+        _assertClassBrand(_IconPicker_brand, this, _init).call(this, _catalogOfIcons);
     }
-    show(catalogOfIcons) {
-        var categoryId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-        _classPrivateFieldSet2(_listOfIconNames, this, new Set);
-        _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
-        _classPrivateFieldGet2(_container$1, this).textContent = "";
-        var fragment = document.createDocumentFragment();
-        catalogOfIcons.forEach(categoryInfo => {
-            var id = categoryInfo.id;
-            if (categoryId !== "" && categoryId !== id) {
-                return;
-            }
-            categoryInfo.folders.forEach((folderName, index) => {
-                var icons = categoryInfo.icons[index];
-                icons.forEach(iconName => {
-                    if (_classPrivateFieldGet2(_listOfIconNames, this).has(iconName)) {
-                        return;
-                    }
-                    _classPrivateFieldGet2(_listOfIconNames, this).add(iconName);
-                    var img = _assertClassBrand(_IconPicker_brand, this, _createIcon).call(this, iconName, folderName);
-                    fragment.appendChild(img);
+    showFound(foundIcons) {
+        return new Promise(resolve => {
+            _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this, true);
+            _assertClassBrand(_IconPicker_brand, this, _hideAll).call(this);
+            var displayedIcons = 0;
+            setTimeout(() => {
+                foundIcons.forEach(categoryInfo => {
+                    categoryInfo.folders.forEach((folderName, index) => {
+                        var icons = categoryInfo.icons[index];
+                        icons.forEach(iconName => {
+                            var iconElement = _classPrivateFieldGet2(_container$1, this).querySelector('.icon[data-name="'.concat(iconName, '"][data-section="').concat(folderName, '"]'));
+                            if (iconElement) {
+                                var currentClass = iconElement.getAttribute("class") || "";
+                                currentClass = currentClass.replace(new RegExp("\\b" + "hidden" + "\\b", "g"), "").trim();
+                                iconElement.setAttribute("class", currentClass);
+                                displayedIcons++;
+                            }
+                        });
+                    });
                 });
-            });
-            _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
+                _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
+                var noIconsElement = document.getElementById("noIcons");
+                if (noIconsElement) {
+                    if (displayedIcons === 0) {
+                        noIconsElement.style.display = "block";
+                    } else {
+                        noIconsElement.style.display = "none";
+                    }
+                }
+                resolve(true);
+            }, 0);
         });
-        _classPrivateFieldGet2(_container$1, this).appendChild(fragment);
-        if (_classPrivateFieldGet2(_listOfIconNames, this).size === 0) {
-            _classPrivateFieldGet2(_container$1, this).textContent = translate("Your search didn't match any content. Please try another term.");
-        }
+    }
+    showCategory() {
+        var categoryId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+        return new Promise(resolve => {
+            _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this, true);
+            setTimeout(() => {
+                var icons = _classPrivateFieldGet2(_container$1, this).getElementsByClassName("icon");
+                for (var i = 0; i < icons.length; i++) {
+                    var icon = icons[i];
+                    var category = icon.getAttribute("data-category");
+                    var currentClass = icon.getAttribute("class") || "";
+                    if (categoryId === "" || category === categoryId) {
+                        currentClass = currentClass.replace(new RegExp("\\b" + "hidden" + "\\b", "g"), "").trim();
+                        icon.setAttribute("class", currentClass);
+                    } else {
+                        if (currentClass.indexOf("hidden") === -1) {
+                            icon.setAttribute("class", currentClass + (currentClass ? " " : "") + "hidden");
+                        }
+                    }
+                }
+                _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
+                resolve(true);
+            }, 0);
+        });
     }
     setOnSelectIconCallback(callback) {
         _classPrivateFieldSet2(_onSelectIconCallback, this, callback);
     }
 }
 
+function _init(catalogOfIcons) {
+    _classPrivateFieldSet2(_listOfIconNames, this, new Set);
+    _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
+    var fragment = document.createDocumentFragment();
+    catalogOfIcons.forEach(categoryInfo => {
+        categoryInfo.folders.forEach((folderName, index) => {
+            var icons = categoryInfo.icons[index];
+            icons.forEach(iconName => {
+                if (_classPrivateFieldGet2(_listOfIconNames, this).has(iconName)) {
+                    return;
+                }
+                _classPrivateFieldGet2(_listOfIconNames, this).add(iconName);
+                var img = _assertClassBrand(_IconPicker_brand, this, _createIcon).call(this, iconName, folderName, categoryInfo.id);
+                fragment.appendChild(img);
+            });
+        });
+    });
+    _classPrivateFieldGet2(_container$1, this).appendChild(fragment);
+    _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
+}
+
 function _addEventListener$1() {
     _classPrivateFieldGet2(_container$1, this).addEventListener("click", e => {
         var icon;
         var target = e.target;
-        if (target && target instanceof HTMLElement || target instanceof SVGElement) {
-            icon = target.closest(".icon");
+        if (!target || target instanceof HTMLElement === false && target instanceof SVGElement === false) {
+            return;
+        }
+        var currentClass = target.getAttribute("class") || "";
+        if (currentClass.indexOf("icon") !== -1) {
+            icon = target;
         }
         if (!icon) {
             console.warn("icon not found");
@@ -1302,14 +1347,17 @@ function _addEventListener$1() {
         var isModifierPressed = e.ctrlKey || e.metaKey;
         var iconId = icon.getAttribute("data-name");
         var section = icon.getAttribute("data-section");
+        if (!iconId || !section) {
+            return;
+        }
         if (!isModifierPressed) {
             _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this, true);
         }
         if (_classPrivateFieldGet2(_selectedIcons$1, this).has(iconId)) {
-            icon.classList.remove("selected");
+            _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, false);
             _classPrivateFieldGet2(_selectedIcons$1, this).delete(iconId);
         } else {
-            icon.classList.add("selected");
+            _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, true);
             _classPrivateFieldGet2(_selectedIcons$1, this).set(iconId, section);
         }
         icon.setAttribute("tabindex", "0");
@@ -1318,8 +1366,12 @@ function _addEventListener$1() {
     _classPrivateFieldGet2(_container$1, this).addEventListener("dblclick", e => {
         var icon;
         var target = e.target;
-        if (target && target instanceof HTMLElement || target instanceof SVGElement) {
-            icon = target.closest(".icon");
+        if (!target || target instanceof HTMLElement === false && target instanceof SVGElement === false) {
+            return;
+        }
+        var currentClass = target.getAttribute("class") || "";
+        if (currentClass.indexOf("icon") !== -1) {
+            icon = target;
         }
         if (!icon) {
             console.log("icon not found");
@@ -1327,7 +1379,7 @@ function _addEventListener$1() {
         }
         var iconId = icon.getAttribute("data-name");
         var section = icon.getAttribute("data-section");
-        icon.classList.add("selected");
+        _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, true);
         _classPrivateFieldGet2(_selectedIcons$1, this).set(iconId, section);
         var needToRun = true;
         _classPrivateFieldGet2(_onSelectIconCallback, this).call(this, _classPrivateFieldGet2(_selectedIcons$1, this), needToRun);
@@ -1348,7 +1400,7 @@ function _addEventListener$1() {
                 _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this);
                 var iconId = focusedIcon.getAttribute("data-name");
                 var section = focusedIcon.getAttribute("data-section");
-                focusedIcon.classList.add("selected");
+                _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, focusedIcon, true);
                 _classPrivateFieldGet2(_selectedIcons$1, this).set(iconId, section);
                 _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
             }
@@ -1374,7 +1426,7 @@ function _selectAll() {
     _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon:not(.selected)").forEach(icon => {
         var iconId = icon.getAttribute("data-name");
         var section = icon.getAttribute("data-section");
-        icon.classList.add("selected");
+        _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, true);
         _classPrivateFieldGet2(_selectedIcons$1, this).set(iconId, section);
     });
     _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
@@ -1384,10 +1436,17 @@ function _unselectAll() {
     var silent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
     _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon.selected").forEach(icon => {
-        icon.classList.remove("selected");
+        _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, false);
     });
     if (silent) return;
     _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
+}
+
+function _hideAll() {
+    _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon:not(.hidden)").forEach(icon => {
+        var currentClass = icon.getAttribute("class") || "";
+        icon.setAttribute("class", currentClass + (currentClass ? " " : "") + "hidden");
+    });
 }
 
 function _onChange() {
@@ -1399,7 +1458,7 @@ function _onChange() {
     _classPrivateFieldGet2(_onSelectIconCallback, this).call(this, _classPrivateFieldGet2(_selectedIcons$1, this));
 }
 
-function _createIcon(iconId, section) {
+function _createIcon(iconId, section, categoryId) {
     var svgNS = "http://www.w3.org/2000/svg";
     var xlinkNS = "http://www.w3.org/1999/xlink";
     var fragment = document.createDocumentFragment();
@@ -1409,6 +1468,7 @@ function _createIcon(iconId, section) {
     svg.setAttribute("role", "img");
     svg.setAttribute("data-name", iconId);
     svg.setAttribute("data-section", section);
+    svg.setAttribute("data-category", categoryId);
     svg.setAttribute("tabindex", "0");
     var title = document.createElementNS(svgNS, "title");
     svg.appendChild(title);
@@ -1418,6 +1478,19 @@ function _createIcon(iconId, section) {
     use.setAttributeNS(xlinkNS, "xlink:href", "#".concat(iconId));
     use.setAttribute("href", "#".concat(iconId));
     return fragment;
+}
+
+function _setSelectedToIcon(icon, isSelected) {
+    if (isSelected) {
+        var currentClass = icon.getAttribute("class") || "";
+        if (currentClass.indexOf("selected") === -1) {
+            icon.setAttribute("class", currentClass + (currentClass ? " " : "") + "selected");
+        }
+    } else {
+        var _currentClass = icon.getAttribute("class") || "";
+        _currentClass = _currentClass.replace(new RegExp("\\b" + "selected" + "\\b", "g"), "").trim();
+        icon.setAttribute("class", _currentClass);
+    }
 }
 
 var _container = new WeakMap;
@@ -1739,10 +1812,14 @@ function _handleDropdownClick(e) {
     var option;
     var target = e.target;
     if (target && target instanceof HTMLElement) {
-        var temp = target.closest(".selectbox-option");
+        var temp;
+        if (target.classList.contains("selectbox-option")) {
+            temp = target;
+        }
         if (temp instanceof HTMLDivElement) {
             option = temp;
         } else {
+            console.log("Clicked outside option");
             return;
         }
     } else {
@@ -1790,10 +1867,6 @@ function _triggerChange$1() {
         values: Array.from(_classPrivateFieldGet2(_selectedValues, this)),
         items: _classPrivateFieldGet2(_items, this).filter(item => _classPrivateFieldGet2(_selectedValues, this).has(item.value))
     };
-    var event = new CustomEvent("selectbox:change", {
-        detail: detail
-    });
-    _classPrivateFieldGet2(_container, this).dispatchEvent(event);
     this._subscribers.forEach(cb => cb({
         type: "selectbox:change",
         detail: detail
@@ -2081,10 +2154,6 @@ class InputField {
             value: this.input.value,
             isValid: this.isValid
         };
-        var event = new CustomEvent("inputfield:submit", {
-            detail: detail
-        });
-        this._container.dispatchEvent(event);
         this._subscribers.forEach(cb => cb({
             type: "inputfield:submit",
             detail: detail
@@ -2197,10 +2266,6 @@ function _triggerInputEvent(e) {
         value: this.input.value,
         originalEvent: e
     };
-    var event = new CustomEvent("inputfield:input", {
-        detail: detail
-    });
-    this._container.dispatchEvent(event);
     this._subscribers.forEach(cb => cb({
         type: "inputfield:input",
         detail: detail
@@ -2212,10 +2277,6 @@ function _triggerChange() {
         value: this.input.value,
         isValid: this.isValid
     };
-    var event = new CustomEvent("inputfield:change", {
-        detail: detail
-    });
-    this._container.dispatchEvent(event);
     this._subscribers.forEach(cb => cb({
         type: "inputfield:change",
         detail: detail
@@ -2241,7 +2302,7 @@ class SearchInput extends InputField {
             this._searchIcon = document.createElement("span");
             this._searchIcon.className = "input-field-search-icon";
             this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
-            (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.prepend(this._searchIcon);
+            (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.appendChild(this._searchIcon);
             this._boundHandle = this._triggerSubmit.bind(this);
             this._searchIcon.addEventListener("click", this._boundHandle);
         }
@@ -2264,6 +2325,10 @@ var _filteredCatalog = new WeakMap;
 
 var _onFilterCallback = new WeakMap;
 
+var _text = new WeakMap;
+
+var _debounceTimeout = new WeakMap;
+
 var _SearchFilter_brand = new WeakSet;
 
 class SearchFilter {
@@ -2273,23 +2338,33 @@ class SearchFilter {
         _classPrivateFieldInitSpec(this, _filteredCatalog, void 0);
         _classPrivateFieldInitSpec(this, _onFilterCallback, void 0);
         _defineProperty(this, "input", void 0);
+        _classPrivateFieldInitSpec(this, _text, void 0);
+        _classPrivateFieldInitSpec(this, _debounceTimeout, void 0);
         _classPrivateFieldSet2(_onFilterCallback, this, categories => {});
         _classPrivateFieldSet2(_filteredCatalog, this, catalogOfIcons);
         _classPrivateFieldSet2(_catalogOfIcons, this, catalogOfIcons);
+        _classPrivateFieldSet2(_text, this, "");
         this.input = new SearchInput("searchFilter", {
             autofocus: true
         });
         this.input.subscribe(event => {
-            if (event.type !== "inputfield:input") {
+            if (event.type !== "inputfield:input" || _classPrivateFieldGet2(_text, this) === event.detail.value) {
                 return;
             }
-            _assertClassBrand(_SearchFilter_brand, this, _onInput).call(this, event.detail.value.toLowerCase());
+            if (_classPrivateFieldGet2(_debounceTimeout, this)) {
+                clearTimeout(_classPrivateFieldGet2(_debounceTimeout, this));
+            }
+            _classPrivateFieldSet2(_debounceTimeout, this, setTimeout(() => {
+                _classPrivateFieldSet2(_text, this, event.detail.value);
+                _assertClassBrand(_SearchFilter_brand, this, _onInput).call(this, event.detail.value.toLowerCase());
+            }, 500));
         });
     }
     reset() {
         if (this.input.getValue() !== "") {
             var bFocusInput = false;
             this.input.clear(bFocusInput);
+            _classPrivateFieldSet2(_text, this, "");
             _classPrivateFieldSet2(_filteredCatalog, this, _classPrivateFieldGet2(_catalogOfIcons, this));
         }
     }
@@ -2685,11 +2760,11 @@ class IconsPlugin {
             });
             try {
                 _classPrivateFieldGet2(_categoriesPicker, this).setOnSelectCategoryCallback(categoryName => {
-                    _classPrivateFieldGet2(_iconsPicker, this).show(FA_CATEGORIES, categoryName);
+                    _classPrivateFieldGet2(_iconsPicker, this).showCategory(categoryName);
                     _classPrivateFieldGet2(_searchFilter, this).reset();
                 });
                 _classPrivateFieldGet2(_searchFilter, this).setOnFilterCallback(catalogOfIcons => {
-                    _classPrivateFieldGet2(_iconsPicker, this).show(catalogOfIcons);
+                    _classPrivateFieldGet2(_iconsPicker, this).showFound(catalogOfIcons);
                     _classPrivateFieldGet2(_categoriesPicker, this).reset();
                 });
                 _classPrivateFieldGet2(_iconsPicker, this).setOnSelectIconCallback((icons, needToRun) => {
@@ -2709,10 +2784,7 @@ class IconsPlugin {
                 return;
             }
             SvgLoader.loadSvgs(_classPrivateFieldGet2(_selectedIcons, this)).then(svgs => {
-                console.log("selected", _classPrivateFieldGet2(_selectedIcons, this));
-                console.log("svgs", svgs);
                 var parsed = svgs.map(svg => SvgParser.parse(svg));
-                console.log("parsed", parsed);
                 Asc.scope.editor = Asc.plugin.info.editorType;
                 Asc.scope.parsedSvgs = parsed;
                 var isCalc = true;

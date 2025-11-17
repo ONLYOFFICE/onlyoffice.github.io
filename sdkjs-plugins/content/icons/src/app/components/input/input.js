@@ -11,8 +11,6 @@
  * @property {() => void} validate
  */
 
-import "./input.css";
-
 class InputField {
     /** @type {HTMLElement} */
     _container;
@@ -402,10 +400,6 @@ class InputField {
             value: this.input.value,
             originalEvent: e,
         };
-        const event = new CustomEvent("inputfield:input", {
-            detail,
-        });
-        this._container.dispatchEvent(event);
 
         this._subscribers.forEach((cb) =>
             cb({
@@ -420,10 +414,6 @@ class InputField {
             value: this.input.value,
             isValid: this.isValid,
         };
-        const event = new CustomEvent("inputfield:change", {
-            detail,
-        });
-        this._container.dispatchEvent(event);
 
         this._subscribers.forEach((cb) =>
             cb({
@@ -438,10 +428,6 @@ class InputField {
             value: this.input.value,
             isValid: this.isValid,
         };
-        const event = new CustomEvent("inputfield:submit", {
-            detail,
-        });
-        this._container.dispatchEvent(event);
 
         this._subscribers.forEach((cb) =>
             cb({

@@ -36,7 +36,6 @@
 
 import { Button } from "./button/button.js";
 import { translate } from "../utils/translate.js";
-import "./icon-picker.css";
 
 class IconPicker {
     /** @type {HTMLElement} */
@@ -66,28 +65,19 @@ class IconPicker {
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
         this.#addEventListener();
-        this.show(catalogOfIcons);
+        this.#init(catalogOfIcons);
     }
 
     /**
      * @param {IconCategoryType[]} catalogOfIcons
-     * @param {string} categoryId
      */
-    show(catalogOfIcons, categoryId = "") {
+    #init(catalogOfIcons) {
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
-
-        this.#container.textContent = "";
 
         const fragment = document.createDocumentFragment();
 
         catalogOfIcons.forEach((categoryInfo) => {
-            let id = categoryInfo.id;
-
-            if (categoryId !== "" && categoryId !== id) {
-                return;
-            }
-
             categoryInfo.folders.forEach((folderName, index) => {
                 let icons = categoryInfo.icons[index];
                 icons.forEach((iconName) => {
@@ -95,21 +85,111 @@ class IconPicker {
                         return;
                     }
                     this.#listOfIconNames.add(iconName);
-                    let img = this.#createIcon(iconName, folderName);
+                    let img = this.#createIcon(
+                        iconName,
+                        folderName,
+                        categoryInfo.id
+                    );
                     fragment.appendChild(img);
                 });
             });
-
-            this.#onChange();
         });
 
         this.#container.appendChild(fragment);
+        this.#onChange();
+    }
 
-        if (this.#listOfIconNames.size === 0) {
-            this.#container.textContent = translate(
-                "Your search didn't match any content. Please try another term."
-            );
-        }
+    /**
+     * @param {IconCategoryType[]} foundIcons
+     * returns {Promise<boolean>}
+     */
+    showFound(foundIcons) {
+        return new Promise((resolve) => {
+            this.#unselectAll(true);
+            this.#hideAll();
+            let displayedIcons = 0;
+
+            setTimeout(() => {
+                foundIcons.forEach((categoryInfo) => {
+                    categoryInfo.folders.forEach((folderName, index) => {
+                        let icons = categoryInfo.icons[index];
+                        icons.forEach((iconName) => {
+                            const iconElement = this.#container.querySelector(
+                                `.icon[data-name="${iconName}"][data-section="${folderName}"]`
+                            );
+                            if (iconElement) {
+                                let currentClass =
+                                    iconElement.getAttribute("class") || "";
+                                currentClass = currentClass
+                                    .replace(
+                                        new RegExp(
+                                            "\\b" + "hidden" + "\\b",
+                                            "g"
+                                        ),
+                                        ""
+                                    )
+                                    .trim();
+                                iconElement.setAttribute("class", currentClass);
+                                displayedIcons++;
+                            }
+                        });
+                    });
+                });
+
+                this.#onChange();
+
+                const noIconsElement = document.getElementById("noIcons");
+                if (noIconsElement) {
+                    if (displayedIcons === 0) {
+                        noIconsElement.style.display = "block";
+                    } else {
+                        noIconsElement.style.display = "none";
+                    }
+                }
+
+                resolve(true);
+            }, 0);
+        });
+    }
+
+    /**
+     * @param {string} [categoryId]
+     * returns {Promise<boolean>}
+     */
+    showCategory(categoryId = "") {
+        return new Promise((resolve) => {
+            this.#unselectAll(true);
+
+            setTimeout(() => {
+                const icons = this.#container.getElementsByClassName("icon");
+                for (let i = 0; i < icons.length; i++) {
+                    let icon = icons[i];
+                    let category = icon.getAttribute("data-category");
+                    let currentClass = icon.getAttribute("class") || "";
+                    if (categoryId === "" || category === categoryId) {
+                        currentClass = currentClass
+                            .replace(
+                                new RegExp("\\b" + "hidden" + "\\b", "g"),
+                                ""
+                            )
+                            .trim();
+                        icon.setAttribute("class", currentClass);
+                    } else {
+                        if (currentClass.indexOf("hidden") === -1) {
+                            icon.setAttribute(
+                                "class",
+                                currentClass +
+                                    (currentClass ? " " : "") +
+                                    "hidden"
+                            );
+                        }
+                    }
+                }
+
+                this.#onChange();
+                resolve(true);
+            }, 0);
+        });
     }
 
     /**
@@ -124,11 +204,18 @@ class IconPicker {
             let icon;
             const target = e.target;
             if (
-                (target && target instanceof HTMLElement) ||
-                target instanceof SVGElement
+                !target ||
+                (target instanceof HTMLElement === false &&
+                    target instanceof SVGElement === false)
             ) {
-                icon = target.closest(".icon");
+                return;
             }
+
+            let currentClass = target.getAttribute("class") || "";
+            if (currentClass.indexOf("icon") !== -1) {
+                icon = target;
+            }
+
             if (!icon) {
                 console.warn("icon not found");
                 return;
@@ -138,14 +225,17 @@ class IconPicker {
 
             let iconId = icon.getAttribute("data-name");
             let section = icon.getAttribute("data-section");
+            if (!iconId || !section) {
+                return;
+            }
             if (!isModifierPressed) {
                 this.#unselectAll(true);
             }
             if (this.#selectedIcons.has(iconId)) {
-                icon.classList.remove("selected");
+                this.#setSelectedToIcon(icon, false);
                 this.#selectedIcons.delete(iconId);
             } else {
-                icon.classList.add("selected");
+                this.#setSelectedToIcon(icon, true);
                 this.#selectedIcons.set(iconId, section);
             }
             icon.setAttribute("tabindex", "0");
@@ -156,10 +246,16 @@ class IconPicker {
             let icon;
             const target = e.target;
             if (
-                (target && target instanceof HTMLElement) ||
-                target instanceof SVGElement
+                !target ||
+                (target instanceof HTMLElement === false &&
+                    target instanceof SVGElement === false)
             ) {
-                icon = target.closest(".icon");
+                return;
+            }
+
+            let currentClass = target.getAttribute("class") || "";
+            if (currentClass.indexOf("icon") !== -1) {
+                icon = target;
             }
 
             if (!icon) {
@@ -168,7 +264,7 @@ class IconPicker {
             }
             let iconId = icon.getAttribute("data-name");
             let section = icon.getAttribute("data-section");
-            icon.classList.add("selected");
+            this.#setSelectedToIcon(icon, true);
             this.#selectedIcons.set(iconId, section);
             const needToRun = true;
             this.#onSelectIconCallback(this.#selectedIcons, needToRun);
@@ -190,7 +286,7 @@ class IconPicker {
                     this.#unselectAll();
                     let iconId = focusedIcon.getAttribute("data-name");
                     let section = focusedIcon.getAttribute("data-section");
-                    focusedIcon.classList.add("selected");
+                    this.#setSelectedToIcon(focusedIcon, true);
                     this.#selectedIcons.set(iconId, section);
                     this.#onChange();
                 }
@@ -218,7 +314,7 @@ class IconPicker {
             .forEach((icon) => {
                 let iconId = icon.getAttribute("data-name");
                 let section = icon.getAttribute("data-section");
-                icon.classList.add("selected");
+                this.#setSelectedToIcon(icon, true);
                 this.#selectedIcons.set(iconId, section);
             });
         this.#onChange();
@@ -227,10 +323,22 @@ class IconPicker {
     #unselectAll(silent = false) {
         this.#selectedIcons = new Map();
         this.#container.querySelectorAll(".icon.selected").forEach((icon) => {
-            icon.classList.remove("selected");
+            this.#setSelectedToIcon(icon, false);
         });
         if (silent) return;
         this.#onChange();
+    }
+
+    #hideAll() {
+        this.#container
+            .querySelectorAll(".icon:not(.hidden)")
+            .forEach((icon) => {
+                let currentClass = icon.getAttribute("class") || "";
+                icon.setAttribute(
+                    "class",
+                    currentClass + (currentClass ? " " : "") + "hidden"
+                );
+            });
     }
 
     #onChange() {
@@ -245,9 +353,10 @@ class IconPicker {
     /**
      * @param {string} iconId
      * @param {string} section
+     * @param {string} categoryId
      * @returns
      */
-    #createIcon(iconId, section) {
+    #createIcon(iconId, section, categoryId) {
         const svgNS = "http://www.w3.org/2000/svg";
         const xlinkNS = "http://www.w3.org/1999/xlink";
 
@@ -258,6 +367,7 @@ class IconPicker {
         svg.setAttribute("role", "img");
         svg.setAttribute("data-name", iconId);
         svg.setAttribute("data-section", section);
+        svg.setAttribute("data-category", categoryId);
         svg.setAttribute("tabindex", "0");
 
         const title = document.createElementNS(svgNS, "title");
@@ -270,6 +380,28 @@ class IconPicker {
         use.setAttribute("href", `#${iconId}`);
 
         return fragment;
+    }
+
+    /**
+     * @param {HTMLElement | SVGElement} icon
+     * @param {boolean} isSelected
+     */
+    #setSelectedToIcon(icon, isSelected) {
+        if (isSelected) {
+            let currentClass = icon.getAttribute("class") || "";
+            if (currentClass.indexOf("selected") === -1) {
+                icon.setAttribute(
+                    "class",
+                    currentClass + (currentClass ? " " : "") + "selected"
+                );
+            }
+        } else {
+            let currentClass = icon.getAttribute("class") || "";
+            currentClass = currentClass
+                .replace(new RegExp("\\b" + "selected" + "\\b", "g"), "")
+                .trim();
+            icon.setAttribute("class", currentClass);
+        }
     }
 }
 

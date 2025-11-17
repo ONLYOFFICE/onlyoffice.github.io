@@ -10,8 +10,6 @@
  * @property {(e: Event) => void} dropdownClick
  */
 
-import "./selectbox.css";
-
 class SelectBox {
     /** @type {HTMLElement} */
     #container;
@@ -312,7 +310,6 @@ class SelectBox {
     }
 
     /**
-     *
      * @param {Event} e
      */
     #handleDropdownClick(e) {
@@ -321,10 +318,15 @@ class SelectBox {
 
         const target = e.target;
         if (target && target instanceof HTMLElement) {
-            let temp = target.closest(".selectbox-option");
+            let temp;
+            if (target.classList.contains("selectbox-option")) {
+                temp = target;
+            }
+
             if (temp instanceof HTMLDivElement) {
                 option = temp;
             } else {
+                console.log("Clicked outside option");
                 return;
             }
         } else {
@@ -386,10 +388,6 @@ class SelectBox {
                 this.#selectedValues.has(item.value)
             ),
         };
-        const event = new CustomEvent("selectbox:change", {
-            detail,
-        });
-        this.#container.dispatchEvent(event);
         this._subscribers.forEach((cb) =>
             cb({
                 type: "selectbox:change",
