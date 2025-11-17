@@ -1,4 +1,10 @@
 @import url("./colors.css");
+@import url("./app/components/button/button.css");
+@import url("./app/components/input/input.css");
+@import url("./app/components/selectbox/selectbox.css");
+@import url("./app/components/categories-picker.css");
+@import url("./app/components/search-filter.css");
+@import url("./app/components/icon-picker.css");
 
 body {
     margin: 0;

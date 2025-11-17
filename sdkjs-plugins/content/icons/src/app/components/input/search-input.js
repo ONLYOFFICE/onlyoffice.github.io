@@ -38,7 +38,7 @@ class SearchInput extends InputField {
                 "</svg>";
             this._container
                 .querySelector(".input-field-main")
-                ?.prepend(this._searchIcon);
+                ?.appendChild(this._searchIcon);
 
             this._boundHandle = this._triggerSubmit.bind(this);
             this._searchIcon.addEventListener("click", this._boundHandle);
