@@ -35,36 +35,6 @@ import { environment } from "../environments/environment.js";
 class SvgLoader {
     constructor() {}
 
-    static loadSprites() {
-        return Promise.all([
-            this.#loadSprite("regular"),
-            this.#loadSprite("solid"),
-            this.#loadSprite("brands"),
-        ]);
-    }
-
-    static #loadSprite(spriteName) {
-        return new Promise((resolve, reject) => {
-            const ajax = new XMLHttpRequest();
-            ajax.open(
-                "GET",
-                environment.faSvgSpritesPath + spriteName + ".svg",
-                true
-            );
-            ajax.send();
-            ajax.onload = function (e) {
-                document.body.insertAdjacentHTML(
-                    "beforeend",
-                    ajax.responseText
-                );
-                resolve();
-            };
-            ajax.onerror = function (e) {
-                reject(e);
-            };
-        });
-    }
-
     /**
      * Loads SVGs from the given set of icons in parallel.
      * @param {Map<string[]>} selectedIcons - A set of icons to load, where each item is an array containing the icon name and the color.

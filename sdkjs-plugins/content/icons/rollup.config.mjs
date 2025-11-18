@@ -60,6 +60,7 @@ export default {
     },
     plugins: [
         postcss({
+            // for old browsers support
             extract: "styles.css",
             minimize: true,
             plugins: [

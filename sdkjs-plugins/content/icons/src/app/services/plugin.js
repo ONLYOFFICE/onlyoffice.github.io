@@ -53,36 +53,19 @@ class IconsPlugin {
     }
 
     init() {
-        return new Promise((resolve, reject) => {
-            SvgLoader.loadSprites()
-                .then(resolve)
-                .catch((e) => {
-                    console.error("Failed to load font awesome sprites");
-                    reject(e);
-                });
-            try {
-                this.#categoriesPicker.setOnSelectCategoryCallback(
-                    (categoryName) => {
-                        this.#iconsPicker.showCategory(categoryName);
-                        this.#searchFilter.reset();
-                    }
-                );
+        this.#categoriesPicker.setOnSelectCategoryCallback((categoryName) => {
+            this.#iconsPicker.showCategory(categoryName);
+            this.#searchFilter.reset();
+        });
 
-                this.#searchFilter.setOnFilterCallback((catalogOfIcons) => {
-                    this.#iconsPicker.showFound(catalogOfIcons);
-                    this.#categoriesPicker.reset();
-                });
+        this.#searchFilter.setOnFilterCallback((catalogOfIcons) => {
+            this.#iconsPicker.showFound(catalogOfIcons);
+            this.#categoriesPicker.reset();
+        });
 
-                this.#iconsPicker.setOnSelectIconCallback(
-                    (icons, needToRun) => {
-                        this.#selectedIcons = icons;
-                        needToRun && this.run();
-                    }
-                );
-            } catch (e) {
-                console.error("Failed to init icons plugin");
-                reject(e);
-            }
+        this.#iconsPicker.setOnSelectIconCallback((icons, needToRun) => {
+            this.#selectedIcons = icons;
+            needToRun && this.run();
         });
     }
 

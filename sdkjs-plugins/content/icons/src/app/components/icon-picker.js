@@ -35,7 +35,6 @@
 /** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
 
 import { Button } from "./button/button.js";
-import { translate } from "../utils/translate.js";
 
 class IconPicker {
     /** @type {HTMLElement} */
@@ -60,43 +59,13 @@ class IconPicker {
         } else {
             throw new Error("Icons container not found");
         }
-        this.#insertButton = new Button("insertIcon");
+        this.#insertButton = new Button("insertIcon", {
+            disabled: true,
+        });
 
         this.#listOfIconNames = new Set();
         this.#selectedIcons = new Map();
         this.#addEventListener();
-        this.#init(catalogOfIcons);
-    }
-
-    /**
-     * @param {IconCategoryType[]} catalogOfIcons
-     */
-    #init(catalogOfIcons) {
-        this.#listOfIconNames = new Set();
-        this.#selectedIcons = new Map();
-
-        const fragment = document.createDocumentFragment();
-
-        catalogOfIcons.forEach((categoryInfo) => {
-            categoryInfo.folders.forEach((folderName, index) => {
-                let icons = categoryInfo.icons[index];
-                icons.forEach((iconName) => {
-                    if (this.#listOfIconNames.has(iconName)) {
-                        return;
-                    }
-                    this.#listOfIconNames.add(iconName);
-                    let img = this.#createIcon(
-                        iconName,
-                        folderName,
-                        categoryInfo.id
-                    );
-                    fragment.appendChild(img);
-                });
-            });
-        });
-
-        this.#container.appendChild(fragment);
-        this.#onChange();
     }
 
     /**
