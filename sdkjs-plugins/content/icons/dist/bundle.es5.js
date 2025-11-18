@@ -42,9 +42,6 @@
     function _arrayWithHoles(r) {
         if (Array.isArray(r)) return r;
     }
-    function _arrayWithoutHoles(r) {
-        if (Array.isArray(r)) return _arrayLikeToArray(r);
-    }
     function _assertClassBrand(e, t, n) {
         if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
         throw new TypeError("Private element is not present on this object");
@@ -151,9 +148,6 @@
             return !!t;
         })();
     }
-    function _iterableToArray(r) {
-        if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
-    }
     function _iterableToArrayLimit(r, l) {
         var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
         if (null != t) {
@@ -175,9 +169,6 @@
     }
     function _nonIterableRest() {
         throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-    function _nonIterableSpread() {
-        throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
     function ownKeys$1(e, r) {
         var t = Object.keys(e);
@@ -322,9 +313,6 @@
         return "function" == typeof p ? function(t) {
             return p.apply(e, t);
         } : p;
-    }
-    function _toConsumableArray(r) {
-        return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
     }
     function _toPrimitive(t, r) {
         if ("object" != typeof t || !t) return t;
@@ -3035,10 +3023,10 @@
     requireEs_object_toString();
     var es_promise = {};
     var es_promise_constructor = {};
-    var environment$1;
+    var environment;
     var hasRequiredEnvironment;
     function requireEnvironment() {
-        if (hasRequiredEnvironment) return environment$1;
+        if (hasRequiredEnvironment) return environment;
         hasRequiredEnvironment = 1;
         var globalThis = requireGlobalThis();
         var userAgent = requireEnvironmentUserAgent();
@@ -3046,7 +3034,7 @@
         var userAgentStartsWith = function(string) {
             return userAgent.slice(0, string.length) === string;
         };
-        environment$1 = function() {
+        environment = function() {
             if (userAgentStartsWith("Bun/")) return "BUN";
             if (userAgentStartsWith("Cloudflare-Workers")) return "CLOUDFLARE";
             if (userAgentStartsWith("Deno/")) return "DENO";
@@ -3057,7 +3045,7 @@
             if (globalThis.window && globalThis.document) return "BROWSER";
             return "REST";
         }();
-        return environment$1;
+        return environment;
     }
     var environmentIsNode;
     var hasRequiredEnvironmentIsNode;
@@ -6074,65 +6062,90 @@
         commands.push("Z");
         return commands.join(" ");
     }
-    var environment = {
-        faSvgPath: "./resources/font-awesome/svgs-full/"
-    };
-    var SvgLoader = function() {
-        function SvgLoader() {
-            _classCallCheck(this, SvgLoader);
-        }
-        return _createClass(SvgLoader, null, [ {
-            key: "loadSvgs",
-            value: function loadSvgs(selectedIcons) {
-                var _this = this;
-                var concurrency = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
-                var numOfImages = selectedIcons.size;
-                if (numOfImages < concurrency) concurrency = numOfImages;
-                var results = new Array(numOfImages);
-                var arrayOfIcons = _toConsumableArray(selectedIcons);
-                var threadPromises = _toConsumableArray(Array(concurrency)).map(_asyncToGenerator(_regenerator().m(function _callee() {
-                    var index, item;
-                    return _regenerator().w(function(_context) {
-                        while (1) switch (_context.n) {
-                          case 0:
-                            if (!numOfImages) {
-                                _context.n = 2;
-                                break;
-                            }
-                            index = --numOfImages;
-                            item = arrayOfIcons[index];
-                            _context.n = 1;
-                            return _assertClassBrand(SvgLoader, _this, _loadSvg).call(_this, item[1], item[0]);
-
-                          case 1:
-                            results[index] = _context.v;
-                            _context.n = 0;
-                            break;
-
-                          case 2:
-                            return _context.a(2);
-                        }
-                    }, _callee);
-                })));
-                return Promise.all(threadPromises).then(function() {
-                    return results;
-                });
+    var es_array_from = {};
+    var callWithSafeIterationClosing;
+    var hasRequiredCallWithSafeIterationClosing;
+    function requireCallWithSafeIterationClosing() {
+        if (hasRequiredCallWithSafeIterationClosing) return callWithSafeIterationClosing;
+        hasRequiredCallWithSafeIterationClosing = 1;
+        var anObject = requireAnObject();
+        var iteratorClose = requireIteratorClose();
+        callWithSafeIterationClosing = function(iterator, fn, value, ENTRIES) {
+            try {
+                return ENTRIES ? fn(anObject(value)[0], value[1]) : fn(value);
+            } catch (error) {
+                iteratorClose(iterator, "throw", error);
             }
-        } ]);
-    }();
-    function _loadSvg(section, name) {
-        return new Promise(function(resolve, reject) {
-            var ajax = new XMLHttpRequest;
-            ajax.open("GET", environment.faSvgPath + section + "/" + name + ".svg", true);
-            ajax.send();
-            ajax.onload = function(e) {
-                resolve(ajax.responseText);
-            };
-            ajax.onerror = function(e) {
-                reject(e);
-            };
-        });
+        };
+        return callWithSafeIterationClosing;
     }
+    var arrayFrom;
+    var hasRequiredArrayFrom;
+    function requireArrayFrom() {
+        if (hasRequiredArrayFrom) return arrayFrom;
+        hasRequiredArrayFrom = 1;
+        var bind = requireFunctionBindContext();
+        var call = requireFunctionCall();
+        var toObject = requireToObject();
+        var callWithSafeIterationClosing = requireCallWithSafeIterationClosing();
+        var isArrayIteratorMethod = requireIsArrayIteratorMethod();
+        var isConstructor = requireIsConstructor();
+        var lengthOfArrayLike = requireLengthOfArrayLike();
+        var createProperty = requireCreateProperty();
+        var getIterator = requireGetIterator();
+        var getIteratorMethod = requireGetIteratorMethod();
+        var $Array = Array;
+        arrayFrom = function from(arrayLike) {
+            var O = toObject(arrayLike);
+            var IS_CONSTRUCTOR = isConstructor(this);
+            var argumentsLength = arguments.length;
+            var mapfn = argumentsLength > 1 ? arguments[1] : undefined;
+            var mapping = mapfn !== undefined;
+            if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : undefined);
+            var iteratorMethod = getIteratorMethod(O);
+            var index = 0;
+            var length, result, step, iterator, next, value;
+            if (iteratorMethod && !(this === $Array && isArrayIteratorMethod(iteratorMethod))) {
+                result = IS_CONSTRUCTOR ? new this : [];
+                iterator = getIterator(O, iteratorMethod);
+                next = iterator.next;
+                for (;!(step = call(next, iterator)).done; index++) {
+                    value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [ step.value, index ], true) : step.value;
+                    createProperty(result, index, value);
+                }
+            } else {
+                length = lengthOfArrayLike(O);
+                result = IS_CONSTRUCTOR ? new this(length) : $Array(length);
+                for (;length > index; index++) {
+                    value = mapping ? mapfn(O[index], index) : O[index];
+                    createProperty(result, index, value);
+                }
+            }
+            result.length = index;
+            return result;
+        };
+        return arrayFrom;
+    }
+    var hasRequiredEs_array_from;
+    function requireEs_array_from() {
+        if (hasRequiredEs_array_from) return es_array_from;
+        hasRequiredEs_array_from = 1;
+        var $ = require_export();
+        var from = requireArrayFrom();
+        var checkCorrectnessOfIteration = requireCheckCorrectnessOfIteration();
+        var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function(iterable) {
+            Array.from(iterable);
+        });
+        $({
+            target: "Array",
+            stat: true,
+            forced: INCORRECT_ITERATION
+        }, {
+            from: from
+        });
+        return es_array_from;
+    }
+    requireEs_array_from();
     var es_regexp_constructor = {};
     var proxyAccessor;
     var hasRequiredProxyAccessor;
@@ -6804,6 +6817,14 @@
             value: function setOnSelectIconCallback(callback) {
                 _classPrivateFieldSet2(_onSelectIconCallback, this, callback);
             }
+        }, {
+            key: "getSelectedSvgIcons",
+            value: function getSelectedSvgIcons() {
+                var icons = _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon.selected");
+                return Array.from(icons).map(function(svg) {
+                    return svg.outerHTML;
+                });
+            }
         } ]);
     }();
     function _addEventListener$1() {
@@ -6997,90 +7018,6 @@
         return es_array_findIndex;
     }
     requireEs_array_findIndex();
-    var es_array_from = {};
-    var callWithSafeIterationClosing;
-    var hasRequiredCallWithSafeIterationClosing;
-    function requireCallWithSafeIterationClosing() {
-        if (hasRequiredCallWithSafeIterationClosing) return callWithSafeIterationClosing;
-        hasRequiredCallWithSafeIterationClosing = 1;
-        var anObject = requireAnObject();
-        var iteratorClose = requireIteratorClose();
-        callWithSafeIterationClosing = function(iterator, fn, value, ENTRIES) {
-            try {
-                return ENTRIES ? fn(anObject(value)[0], value[1]) : fn(value);
-            } catch (error) {
-                iteratorClose(iterator, "throw", error);
-            }
-        };
-        return callWithSafeIterationClosing;
-    }
-    var arrayFrom;
-    var hasRequiredArrayFrom;
-    function requireArrayFrom() {
-        if (hasRequiredArrayFrom) return arrayFrom;
-        hasRequiredArrayFrom = 1;
-        var bind = requireFunctionBindContext();
-        var call = requireFunctionCall();
-        var toObject = requireToObject();
-        var callWithSafeIterationClosing = requireCallWithSafeIterationClosing();
-        var isArrayIteratorMethod = requireIsArrayIteratorMethod();
-        var isConstructor = requireIsConstructor();
-        var lengthOfArrayLike = requireLengthOfArrayLike();
-        var createProperty = requireCreateProperty();
-        var getIterator = requireGetIterator();
-        var getIteratorMethod = requireGetIteratorMethod();
-        var $Array = Array;
-        arrayFrom = function from(arrayLike) {
-            var O = toObject(arrayLike);
-            var IS_CONSTRUCTOR = isConstructor(this);
-            var argumentsLength = arguments.length;
-            var mapfn = argumentsLength > 1 ? arguments[1] : undefined;
-            var mapping = mapfn !== undefined;
-            if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : undefined);
-            var iteratorMethod = getIteratorMethod(O);
-            var index = 0;
-            var length, result, step, iterator, next, value;
-            if (iteratorMethod && !(this === $Array && isArrayIteratorMethod(iteratorMethod))) {
-                result = IS_CONSTRUCTOR ? new this : [];
-                iterator = getIterator(O, iteratorMethod);
-                next = iterator.next;
-                for (;!(step = call(next, iterator)).done; index++) {
-                    value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [ step.value, index ], true) : step.value;
-                    createProperty(result, index, value);
-                }
-            } else {
-                length = lengthOfArrayLike(O);
-                result = IS_CONSTRUCTOR ? new this(length) : $Array(length);
-                for (;length > index; index++) {
-                    value = mapping ? mapfn(O[index], index) : O[index];
-                    createProperty(result, index, value);
-                }
-            }
-            result.length = index;
-            return result;
-        };
-        return arrayFrom;
-    }
-    var hasRequiredEs_array_from;
-    function requireEs_array_from() {
-        if (hasRequiredEs_array_from) return es_array_from;
-        hasRequiredEs_array_from = 1;
-        var $ = require_export();
-        var from = requireArrayFrom();
-        var checkCorrectnessOfIteration = requireCheckCorrectnessOfIteration();
-        var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function(iterable) {
-            Array.from(iterable);
-        });
-        $({
-            target: "Array",
-            stat: true,
-            forced: INCORRECT_ITERATION
-        }, {
-            from: from
-        });
-        return es_array_from;
-    }
-    requireEs_array_from();
     var es_array_includes = {};
     var hasRequiredEs_array_includes;
     function requireEs_array_includes() {
@@ -8598,7 +8535,8 @@
                         resolve(false);
                         return;
                     }
-                    SvgLoader.loadSvgs(_classPrivateFieldGet2(_selectedIcons, _this2)).then(function(svgs) {
+                    try {
+                        var svgs = _classPrivateFieldGet2(_iconsPicker, _this2).getSelectedSvgIcons();
                         var parsed = svgs.map(function(svg) {
                             return SvgParser.parse(svg);
                         });
@@ -8607,11 +8545,12 @@
                         var isCalc = true;
                         var isClose = false;
                         Asc.plugin.callCommand(Commands.insertIcon, isClose, isCalc, resolve);
-                    }).catch(function(e) {
+                    } catch (e) {
                         console.error("Failed to run icons plugin");
                         console.error(e);
                         reject(e);
-                    });
+                        return;
+                    }
                 });
             }
         } ]);
