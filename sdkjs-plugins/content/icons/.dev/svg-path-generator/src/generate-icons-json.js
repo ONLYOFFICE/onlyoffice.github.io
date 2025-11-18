@@ -5,9 +5,6 @@ const { glob } = require("glob");
 const { exec } = require("child_process");
 const cheerio = require("cheerio");
 
-const FA_FOLDER = "../../resources/font-awesome/";
-const FA_SVGS_FOLDER = FA_FOLDER + "svgs-full/";
-const CATEGORIES_FILE = FA_FOLDER + "categories.yml";
 const OUTPUT_DIR = "../../src/app/environments/";
 const OUTPUT_FILE = "categories.js";
 const LICENSE = "../../LICENSE";
@@ -33,45 +30,15 @@ function cloneRepository() {
     });
 }
 
-async function copyDir(src, dest) {
-    try {
-        await fs.copy(src, dest);
-    } catch (err) {
-        console.error("Failed to copy directory:", src);
-        console.error("Error:", err);
-    }
-}
-
-async function copyFile(source, destination) {
-    try {
-        if (destination.endsWith("/") || !path.extname(destination)) {
-            const fileName = path.basename(source);
-            destination = path.join(destination, fileName);
-        }
-        await fs.mkdir(path.dirname(destination), { recursive: true });
-        await fs.cp(source, destination, { recursive: true });
-    } catch (err) {
-        console.error("Failed to copy file:", err);
-        throw err;
-    }
-}
-
 async function updateLocalFiles() {
     try {
         await cloneRepository();
         console.log(`Copied: ${REPO_URL}`);
-        await fs.ensureDir(FA_SVGS_FOLDER);
-        await copyDir(SVGS_FULL_TEMP_FOLDER, FA_SVGS_FOLDER);
-        console.log(`Copied: svgs-full`);
-        await copyFile(CATEGORIES_TEMP_FILE, FA_FOLDER);
-        console.log(`Copied: categories.yml`);
-        await fs.remove("./" + REPO_DEST_FOLDER);
-        console.log(`Removed: ${REPO_DEST_FOLDER}`);
 
         // Get all SVG files in folder svgs-full
-        const svgFiles = await glob(FA_SVGS_FOLDER + "**/*.svg");
+        const svgFiles = await glob(SVGS_FULL_TEMP_FOLDER + "/**/*.svg");
 
-        const yamlContent = await fs.readFile(CATEGORIES_FILE, "utf8");
+        const yamlContent = await fs.readFile(CATEGORIES_TEMP_FILE, "utf8");
         const categoriesData = yaml.load(yamlContent);
 
         // Create a map of existing files for quick search
@@ -101,7 +68,11 @@ async function updateLocalFiles() {
                 for (const iconName of categoryData.icons) {
                     const iconPath = existingIcons.get(iconName);
                     const dirname = path.dirname(iconPath);
-                    const folderName = path.relative(FA_SVGS_FOLDER, dirname);
+
+                    const folderName = path.relative(
+                        SVGS_FULL_TEMP_FOLDER,
+                        dirname
+                    );
 
                     if (iconPath) {
                         let folderIndex = category.folders.indexOf(folderName);
@@ -147,8 +118,12 @@ async function updateLocalFiles() {
         console.log(`📁 ${categories.length} categories processed`);
 
         await copyIconsToIndexHtmlFile(categories);
+
+        await fs.remove("./" + REPO_DEST_FOLDER);
+        console.log(`Removed: ${REPO_DEST_FOLDER}`);
     } catch (error) {
         console.error("❌ Error:", error.message);
+        console.error(error.stack);
     }
 }
 
@@ -164,7 +139,7 @@ async function copyIconsToIndexHtmlFile(categories) {
             let icons = categoryInfo.icons[index];
             icons.forEach((iconName) => {
                 const iconPath = path.join(
-                    FA_SVGS_FOLDER,
+                    SVGS_FULL_TEMP_FOLDER,
                     folderName,
                     iconName + ".svg"
                 );
@@ -176,6 +151,7 @@ async function copyIconsToIndexHtmlFile(categories) {
                     class: "icon",
                     role: "img",
                     tabindex: "0",
+                    title: iconName,
                     "data-name": iconName,
                     "data-section": folderName,
                     "data-category": categoryInfo.id,
@@ -201,6 +177,10 @@ function addSVGAttributes(svgContent, attributes = {}) {
                     "class",
                     `${existingClass} ${attributes[attr]}`.trim()
                 );
+            } else if (attr === "title") {
+                if (!$("title").length) {
+                    svgElement.prepend(`<title>${attributes[attr]}</title>`);
+                }
             } else {
                 svgElement.attr(attr, attributes[attr]);
             }
