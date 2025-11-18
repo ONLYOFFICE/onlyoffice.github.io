@@ -869,15 +869,11 @@ function _circleToPathCommands(circle) {
 }
 
 var environment = {
-    faSvgSpritesPath: "./resources/font-awesome/sprites-full/",
     faSvgPath: "./resources/font-awesome/svgs-full/"
 };
 
 class SvgLoader {
     constructor() {}
-    static loadSprites() {
-        return Promise.all([ _assertClassBrand(SvgLoader, this, _loadSprite).call(this, "regular"), _assertClassBrand(SvgLoader, this, _loadSprite).call(this, "solid"), _assertClassBrand(SvgLoader, this, _loadSprite).call(this, "brands") ]);
-    }
     static loadSvgs(selectedIcons) {
         var _this = this;
         var concurrency = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
@@ -894,21 +890,6 @@ class SvgLoader {
         }));
         return Promise.all(threadPromises).then(() => results);
     }
-}
-
-function _loadSprite(spriteName) {
-    return new Promise((resolve, reject) => {
-        var ajax = new XMLHttpRequest;
-        ajax.open("GET", environment.faSvgSpritesPath + spriteName + ".svg", true);
-        ajax.send();
-        ajax.onload = function(e) {
-            document.body.insertAdjacentHTML("beforeend", ajax.responseText);
-            resolve();
-        };
-        ajax.onerror = function(e) {
-            reject(e);
-        };
-    });
 }
 
 function _loadSvg(section, name) {
@@ -978,7 +959,7 @@ class Button {
             this.button.classList.add("custom-button-disabled");
         }
         if (this._options.loading) {
-            this.button.classList.add("custom-button-loading");
+            this._container.classList.add("custom-button-loading");
         }
         this.button.type = this._options.type;
         if (this._options.tooltip) {
@@ -1087,12 +1068,12 @@ class Button {
     enable() {
         this._options.disabled = false;
         this.button.disabled = false;
-        this._container.classList.remove("custom-button-disabled");
+        this.button.classList.remove("custom-button-disabled");
     }
     disable() {
         this._options.disabled = true;
         this.button.disabled = true;
-        this._container.classList.add("custom-button-disabled");
+        this.button.classList.add("custom-button-disabled");
     }
     startLoading() {
         this.isLoading = true;
@@ -1170,22 +1151,22 @@ class Button {
 }
 
 function _handleMouseEnter() {
-    this._container.classList.add("custom-button-hover");
+    this.button.classList.add("custom-button-hover");
     this.triggerEvent("mouseenter");
 }
 
 function _handleMouseLeave() {
-    this._container.classList.remove("custom-button-hover");
+    this.button.classList.remove("custom-button-hover");
     this.triggerEvent("mouseleave");
 }
 
 function _handleFocus$1() {
-    this._container.classList.add("custom-button-focused");
+    this.button.classList.add("custom-button-focused");
     this.triggerEvent("focus");
 }
 
 function _handleBlur$1() {
-    this._container.classList.remove("custom-button-focused");
+    this.button.classList.remove("custom-button-focused");
     this.triggerEvent("blur");
 }
 
@@ -1209,11 +1190,6 @@ function _handleKeydown$2(e) {
     });
 }
 
-function translate(text) {
-    var translatedText = window.Asc.plugin.tr(text);
-    return translatedText;
-}
-
 var _container$1 = new WeakMap;
 
 var _insertButton = new WeakMap;
@@ -1227,7 +1203,7 @@ var _selectedIcons$1 = new WeakMap;
 var _IconPicker_brand = new WeakSet;
 
 class IconPicker {
-    constructor(_catalogOfIcons) {
+    constructor(catalogOfIcons) {
         _classPrivateMethodInitSpec(this, _IconPicker_brand);
         _classPrivateFieldInitSpec(this, _container$1, void 0);
         _classPrivateFieldInitSpec(this, _insertButton, void 0);
@@ -1240,11 +1216,12 @@ class IconPicker {
         } else {
             throw new Error("Icons container not found");
         }
-        _classPrivateFieldSet2(_insertButton, this, new Button("insertIcon"));
+        _classPrivateFieldSet2(_insertButton, this, new Button("insertIcon", {
+            disabled: true
+        }));
         _classPrivateFieldSet2(_listOfIconNames, this, new Set);
         _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
         _assertClassBrand(_IconPicker_brand, this, _addEventListener$1).call(this);
-        _assertClassBrand(_IconPicker_brand, this, _init).call(this, _catalogOfIcons);
     }
     showFound(foundIcons) {
         return new Promise(resolve => {
@@ -1306,27 +1283,6 @@ class IconPicker {
     setOnSelectIconCallback(callback) {
         _classPrivateFieldSet2(_onSelectIconCallback, this, callback);
     }
-}
-
-function _init(catalogOfIcons) {
-    _classPrivateFieldSet2(_listOfIconNames, this, new Set);
-    _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
-    var fragment = document.createDocumentFragment();
-    catalogOfIcons.forEach(categoryInfo => {
-        categoryInfo.folders.forEach((folderName, index) => {
-            var icons = categoryInfo.icons[index];
-            icons.forEach(iconName => {
-                if (_classPrivateFieldGet2(_listOfIconNames, this).has(iconName)) {
-                    return;
-                }
-                _classPrivateFieldGet2(_listOfIconNames, this).add(iconName);
-                var img = _assertClassBrand(_IconPicker_brand, this, _createIcon).call(this, iconName, folderName, categoryInfo.id);
-                fragment.appendChild(img);
-            });
-        });
-    });
-    _classPrivateFieldGet2(_container$1, this).appendChild(fragment);
-    _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
 }
 
 function _addEventListener$1() {
@@ -1456,28 +1412,6 @@ function _onChange() {
         _classPrivateFieldGet2(_insertButton, this).enable();
     }
     _classPrivateFieldGet2(_onSelectIconCallback, this).call(this, _classPrivateFieldGet2(_selectedIcons$1, this));
-}
-
-function _createIcon(iconId, section, categoryId) {
-    var svgNS = "http://www.w3.org/2000/svg";
-    var xlinkNS = "http://www.w3.org/1999/xlink";
-    var fragment = document.createDocumentFragment();
-    var svg = document.createElementNS(svgNS, "svg");
-    fragment.appendChild(svg);
-    svg.setAttribute("class", "icon");
-    svg.setAttribute("role", "img");
-    svg.setAttribute("data-name", iconId);
-    svg.setAttribute("data-section", section);
-    svg.setAttribute("data-category", categoryId);
-    svg.setAttribute("tabindex", "0");
-    var title = document.createElementNS(svgNS, "title");
-    svg.appendChild(title);
-    title.textContent = iconId;
-    var use = document.createElementNS(svgNS, "use");
-    svg.appendChild(use);
-    use.setAttributeNS(xlinkNS, "xlink:href", "#".concat(iconId));
-    use.setAttribute("href", "#".concat(iconId));
-    return fragment;
 }
 
 function _setSelectedToIcon(icon, isSelected) {
@@ -2753,28 +2687,17 @@ class IconsPlugin {
         _classPrivateFieldSet2(_searchFilter, this, new SearchFilter(FA_CATEGORIES));
     }
     init() {
-        return new Promise((resolve, reject) => {
-            SvgLoader.loadSprites().then(resolve).catch(e => {
-                console.error("Failed to load font awesome sprites");
-                reject(e);
-            });
-            try {
-                _classPrivateFieldGet2(_categoriesPicker, this).setOnSelectCategoryCallback(categoryName => {
-                    _classPrivateFieldGet2(_iconsPicker, this).showCategory(categoryName);
-                    _classPrivateFieldGet2(_searchFilter, this).reset();
-                });
-                _classPrivateFieldGet2(_searchFilter, this).setOnFilterCallback(catalogOfIcons => {
-                    _classPrivateFieldGet2(_iconsPicker, this).showFound(catalogOfIcons);
-                    _classPrivateFieldGet2(_categoriesPicker, this).reset();
-                });
-                _classPrivateFieldGet2(_iconsPicker, this).setOnSelectIconCallback((icons, needToRun) => {
-                    _classPrivateFieldSet2(_selectedIcons, this, icons);
-                    needToRun && this.run();
-                });
-            } catch (e) {
-                console.error("Failed to init icons plugin");
-                reject(e);
-            }
+        _classPrivateFieldGet2(_categoriesPicker, this).setOnSelectCategoryCallback(categoryName => {
+            _classPrivateFieldGet2(_iconsPicker, this).showCategory(categoryName);
+            _classPrivateFieldGet2(_searchFilter, this).reset();
+        });
+        _classPrivateFieldGet2(_searchFilter, this).setOnFilterCallback(catalogOfIcons => {
+            _classPrivateFieldGet2(_iconsPicker, this).showFound(catalogOfIcons);
+            _classPrivateFieldGet2(_categoriesPicker, this).reset();
+        });
+        _classPrivateFieldGet2(_iconsPicker, this).setOnSelectIconCallback((icons, needToRun) => {
+            _classPrivateFieldSet2(_selectedIcons, this, icons);
+            needToRun && this.run();
         });
     }
     run() {
@@ -2810,13 +2733,20 @@ class Theme {
     }
 }
 
+function translate(text) {
+    var translatedText = window.Asc.plugin.tr(text);
+    return translatedText;
+}
+
 var iconsPlugin = new IconsPlugin;
 
 window.Asc.plugin.init = _asyncToGenerator(function*() {
-    yield iconsPlugin.init().catch(e => {
+    try {
+        iconsPlugin.init();
+    } catch (e) {
         console.error("Failed to init icons plugin");
         console.error(e);
-    });
+    }
 });
 
 window.Asc.plugin.onTranslate = _asyncToGenerator(function*() {
