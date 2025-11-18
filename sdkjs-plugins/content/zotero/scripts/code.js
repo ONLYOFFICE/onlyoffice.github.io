@@ -108,6 +108,7 @@
         selectedThumb: document.getElementById("selectedThumb"),
         buttonsWrapper: document.getElementById("buttonsWrapper"),
 
+        searchLibrary: document.getElementById("searchLibrary"),
         searchLabel: document.getElementById("searchLabel"),
         searchClear: document.getElementById("searchClear"),
         searchField: document.getElementById("searchField"),
@@ -146,6 +147,7 @@
         initSdkApis().then(function (availableApis) {
             showLoader(true);
             loadStyles();
+            loadGroups();
 
             citationDocService = new CitationDocService(
                 citPrefixNew,
@@ -245,6 +247,17 @@
             .catch(function (err) {
                 console.error(err);
              });
+    }
+
+    function loadGroups() {
+        sdk.getUserGroups().then(function (groups) {
+            for (var i = 0; i < groups.length; i++) {
+                var el = document.createElement("span");
+                el.setAttribute("data-value", groups[i].id);
+                el.textContent = groups[i].name;
+                elements.searchLibrary.appendChild(el);
+            }
+        });
     }
 
     /**
@@ -356,7 +369,7 @@
                     return;
                 }
                 for (var i = 0; i < groups.length; i++) {
-					loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i]), true, false, (i == groups.length -1), true, true );
+					loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i].id), true, false, (i == groups.length -1), true, true );
 				}
             });
         };
@@ -509,7 +522,6 @@
                 }
             });
         });
-            
         
     }
 

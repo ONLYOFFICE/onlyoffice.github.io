@@ -37,5 +37,6 @@
     "The current bibliographic style does not describe the bibliography": "目前的參考文献樣式未描述參考文献",
     "Failed to insert citation": "插入引用失敗",
     "Failed to insert bibliography": "插入參考文献失敗",
-    "Failed to refresh": "刷新失敗"
+    "Failed to refresh": "刷新失敗",
+    "All groups": "所有群組"
 }
