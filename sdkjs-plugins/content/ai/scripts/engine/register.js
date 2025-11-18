@@ -642,7 +642,7 @@ function registerButtons(window, undefined)
 			button2.attachOnClick(on_click_ocr);
 		}
 		
-		if (Asc.Editor.getType() !== "pdf")
+		if (Asc.Editor.getType() === "word")
 		{
 			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
 			buttonGS.text = "Grammar & Spelling";
