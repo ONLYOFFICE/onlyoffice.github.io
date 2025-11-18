@@ -868,44 +868,6 @@ function _circleToPathCommands(circle) {
     return commands.join(" ");
 }
 
-var environment = {
-    faSvgPath: "./resources/font-awesome/svgs-full/"
-};
-
-class SvgLoader {
-    constructor() {}
-    static loadSvgs(selectedIcons) {
-        var _this = this;
-        var concurrency = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
-        var numOfImages = selectedIcons.size;
-        if (numOfImages < concurrency) concurrency = numOfImages;
-        var results = new Array(numOfImages);
-        var arrayOfIcons = [ ...selectedIcons ];
-        var threadPromises = [ ...Array(concurrency) ].map(_asyncToGenerator(function*() {
-            while (numOfImages) {
-                var index = --numOfImages;
-                var item = arrayOfIcons[index];
-                results[index] = yield _assertClassBrand(SvgLoader, _this, _loadSvg).call(_this, item[1], item[0]);
-            }
-        }));
-        return Promise.all(threadPromises).then(() => results);
-    }
-}
-
-function _loadSvg(section, name) {
-    return new Promise((resolve, reject) => {
-        var ajax = new XMLHttpRequest;
-        ajax.open("GET", environment.faSvgPath + section + "/" + name + ".svg", true);
-        ajax.send();
-        ajax.onload = function(e) {
-            resolve(ajax.responseText);
-        };
-        ajax.onerror = function(e) {
-            reject(e);
-        };
-    });
-}
-
 var _originalText = new WeakMap;
 
 var _boundHandles$2 = new WeakMap;
@@ -1282,6 +1244,10 @@ class IconPicker {
     }
     setOnSelectIconCallback(callback) {
         _classPrivateFieldSet2(_onSelectIconCallback, this, callback);
+    }
+    getSelectedSvgIcons() {
+        var icons = _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon.selected");
+        return Array.from(icons).map(svg => svg.outerHTML);
     }
 }
 
@@ -2706,18 +2672,20 @@ class IconsPlugin {
                 resolve(false);
                 return;
             }
-            SvgLoader.loadSvgs(_classPrivateFieldGet2(_selectedIcons, this)).then(svgs => {
+            try {
+                var svgs = _classPrivateFieldGet2(_iconsPicker, this).getSelectedSvgIcons();
                 var parsed = svgs.map(svg => SvgParser.parse(svg));
                 Asc.scope.editor = Asc.plugin.info.editorType;
                 Asc.scope.parsedSvgs = parsed;
                 var isCalc = true;
                 var isClose = false;
                 Asc.plugin.callCommand(Commands.insertIcon, isClose, isCalc, resolve);
-            }).catch(e => {
+            } catch (e) {
                 console.error("Failed to run icons plugin");
                 console.error(e);
                 reject(e);
-            });
+                return;
+            }
         });
     }
 }
