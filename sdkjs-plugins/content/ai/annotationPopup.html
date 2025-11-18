@@ -43,10 +43,40 @@
 	<script>
 		window.Asc.plugin.init = function() {
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
-			window.Asc.plugin.attachEvent("onUpdateContent", function(content) {
-				document.body.innerHTML = content;
+			window.Asc.plugin.attachEvent("onUpdateContent", function(obj) {
+				document.body.innerHTML = obj.content;
+				document.querySelectorAll('strong').forEach(function(el){
+					el.style.color = obj.color;
+				});
 			});
 		};
+
+		window.Asc.plugin.attachEvent("onThemeChanged", function(theme) {
+			let backColor = theme["background-normal"];
+			let textColor = theme["text-normal"];
+			let borderColor = theme["border-divider"];
+			let ballonColor = theme["canvas-background"];
+
+			let backColorElements = document.getElementsByClassName("back-color");
+			for (let i = 0; i < backColorElements.length; i++) {
+				backColorElements[i].style.background = backColor;
+			}
+
+			let textColorElements = document.getElementsByClassName("text-color");
+			for (let i = 0; i < textColorElements.length; i++) {
+				textColorElements[i].style.color = textColor;
+			}
+
+			let borderColorElements = document.getElementsByClassName("border-color");
+			for (let i = 0; i < borderColorElements.length; i++) {
+				borderColorElements[i].style.borderColor = borderColor;
+			}
+
+			let ballonColorElements = document.getElementsByClassName("ballon-color");
+			for (let i = 0; i < ballonColorElements.length; i++) {
+				ballonColorElements[i].style.background = ballonColor;
+			}
+		});
 	</script>
 </body>
 </html>

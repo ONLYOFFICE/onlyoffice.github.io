@@ -79,7 +79,36 @@ function TextAnnotationPopup()
 
 		let _t = this;
 		popup.attachEvent("onWindowReady", function() {
-			popup.command("onUpdateContent", _t.content);
+			let name2color = {
+				"theme-light": "#F62211",
+				"theme-classic-light": "#D9534F",
+				
+				"theme-dark": "#F62211",
+				"theme-contrast-dark": "#F62211",
+
+				"theme-gray": "#F62211",
+
+				"theme-white": "#F23D3D",
+				"theme-night": "#F23D3D"
+			};
+			let type2color = {
+				"light": "#F62211",
+				"dark": "#F62211"
+			};
+
+			let color = type2color["light"];
+			if (window.Asc.plugin.theme)
+			{
+				if (window.Asc.plugin.theme.Name && name2color[window.Asc.plugin.theme.Name])
+					color = name2color[window.Asc.plugin.theme.Name];
+				else if (window.Asc.plugin.theme.Type && type2color[window.Asc.plugin.theme.Type])
+					color = type2color[window.Asc.plugin.theme.Type];
+			}
+
+			popup.command("onUpdateContent", {
+				content : _t.content,
+				color : color
+			});
 		});
 
 		popup.show(variation);
@@ -123,30 +152,30 @@ function TextAnnotationPopup()
 		let textColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["text-normal"] : "#3D3D3D";
 		let borderColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["border-divider"] : "#666666";
 		let ballonColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["canvas-background"] : "#F5F5F5";
-		this.content = `<div style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+		this.content = `<div class="back-color text-color" style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
 			<div style="padding:16px 16px 0px 16px;">
 
 				<div style="margin-bottom:12px;">
-					<div style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+					<div class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
 						${window.Asc.plugin.tr("Suggested correction")}
 					</div>
 
-					<div style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
+					<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
 						<div style="display:flex; align-items:center; gap:8px;">
-							<span style="color:${textColor}; font-weight:normal;">${data.original}</span>
-							<span style="color:${borderColor}; font-weight:bold;">→</span>
-							<span style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+							<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.original}</span>
+							<span class="text-color" style="color:${textColor}; font-weight:bold;">→</span>
+							<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
 						</div>
 					</div>
 				</div>`;
 
 		if (data.explanation) {
 			this.content += `<div style="margin-bottom:16px;">
-				<div style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+				<div class="text-color" class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
 					${window.Asc.plugin.tr("Explanation")}
 				</div>
 
-				<div style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">${data.explanation}</div>
+				<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">${data.explanation}</div>
 			</div>`;
 		}
 

@@ -758,6 +758,9 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
 	helperWindow && helperWindow.command('onThemeChanged', theme);
+
+	if (textAnnotatorPopup && textAnnotatorPopup.popup)
+		textAnnotatorPopup.popup.command('onThemeChanged', theme);
 };
 
 /**
