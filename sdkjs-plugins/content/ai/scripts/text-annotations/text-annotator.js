@@ -91,22 +91,19 @@ TextAnnotator.prototype.openPopup = async function(paraId, rangeId)
 	if (!textAnnotatorPopup)
 		return;
 		
-	let popup = textAnnotatorPopup.open(this.type, paraId, rangeId);
+	let popup = textAnnotatorPopup.open(this.type, paraId, rangeId, this.getInfoForPopup(paraId, rangeId));
 	if (!popup)
 		return;
-	
+
 	let _t = this;
-	popup.attachEvent("onWindowReady", function() {
-		popup.command("onUpdateSuggestion", _t.getInfoForPopup(paraId, rangeId));
-	});
-	popup.attachEvent("onAccept", async function() {
+	popup.onAccept = async function() {
 		await _t.onAccept(paraId, rangeId);
 		_t.closePopup();
-	});
-	popup.attachEvent("onReject", async function() {
+	};
+	popup.onReject = async function() {
 		await _t.onReject(paraId, rangeId);
 		_t.closePopup();
-	});	
+	};
 };
 TextAnnotator.prototype.closePopup = function()
 {

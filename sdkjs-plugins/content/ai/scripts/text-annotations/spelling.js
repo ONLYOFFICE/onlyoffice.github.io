@@ -210,9 +210,8 @@ SpellChecker.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let anot = this.getAnnotation(paraId, rangeId);
 	return {
-		"title" : "Spelling suggestion",
-		"suggested" : anot["suggested"],
-		"original" : anot["original"]
+		suggested : anot["suggested"],
+		original : anot["original"]
 	};
 };
 SpellChecker.prototype.onAccept = async function(paraId, rangeId)
