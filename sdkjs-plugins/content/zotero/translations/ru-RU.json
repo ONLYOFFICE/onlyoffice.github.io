@@ -15,9 +15,9 @@
     "Style": "Стиль",
     "Enter style name": "Введите имя стиля",
     "Language": "Язык",
-	"Display citations as:": "Показывать цитаты как:",
-	"Footnotes": "Сноски",
-	"Endnotes": "Концевые сноски",
+    "Display citations as:": "Показывать цитаты как:",
+    "Footnotes": "Сноски",
+    "Endnotes": "Концевые сноски",
     "Reconfigure": "Перенастроить",
     "Learn more here.": "Подробности здесь.",
     "Save": "Сохранить",
@@ -37,5 +37,6 @@
     "The current bibliographic style does not describe the bibliography": "Текущий стиль не описывает библиографию",
     "Failed to insert citation": "Не удалось вставить цитату",
     "Failed to insert bibliography": "Не удалось вставить библиографию",
-    "Failed to refresh": "Не удалось обновить"
+    "Failed to refresh": "Не удалось обновить",
+    "All groups": "Все группы"
 }

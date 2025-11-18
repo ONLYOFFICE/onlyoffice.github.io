@@ -164,7 +164,10 @@ const ZoteroSdk = function () {
                         return JSON.parse(res.responseText);
                     }).then(function (res) {
                         res.forEach(function(el) {
-                            userGroups.push(el.id);
+                            userGroups.push({
+                                id: el.id,
+                                name: el.data.name
+                            });
                         });
                         resolve(userGroups);
                     }).catch(function (err) {

@@ -37,5 +37,6 @@
     "The current bibliographic style does not describe the bibliography": "Текући библиографски стил не описује библиографију",
     "Failed to insert citation": "Убациње цитата није успело",
     "Failed to insert bibliography": "Убациње библиографије није успело",
-    "Failed to refresh": "Освежавање није успело"
+    "Failed to refresh": "Освежавање није успело",
+    "All groups": "Све групе"
 }
