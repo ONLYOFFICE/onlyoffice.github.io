@@ -39,10 +39,12 @@ import "../styles.css";
 let iconsPlugin = new IconsPlugin();
 
 window.Asc.plugin.init = async function () {
-    await iconsPlugin.init().catch((e) => {
+    try {
+        iconsPlugin.init();
+    } catch (e) {
         console.error("Failed to init icons plugin");
         console.error(e);
-    });
+    }
 };
 
 window.Asc.plugin.onTranslate = async function () {
