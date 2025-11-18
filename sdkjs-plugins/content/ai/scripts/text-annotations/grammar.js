@@ -219,10 +219,9 @@ GrammarChecker.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
 	return {
-		"title" : "Grammar suggestion",
-		"suggested" : _s["difference"],
-		"original" : _s["original"],
-		"explanation" : _s["description"]
+		suggested : _s["difference"],
+		original : _s["original"],
+		explanation : _s["description"]
 	};
 };
 GrammarChecker.prototype.onAccept = async function(paraId, rangeId)

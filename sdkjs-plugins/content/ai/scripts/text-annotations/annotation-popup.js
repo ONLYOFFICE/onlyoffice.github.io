@@ -36,15 +36,20 @@ function TextAnnotationPopup()
 	this.type = 0; // 0 - spelling, 1 - grammar
 	this.paraId = -1;
 	this.rangeId = -1;
+
+	this.content = "";
+	this.width = 318;
+	this.height = 500;
 	
-	this.open = function(type, paraId, rangeId)
+	this.open = function(type, paraId, rangeId, data)
 	{
 		if (this.popup && 0 === this.type && 1 === type)
 			return null;
 		
+		this._calculateWindowSize(data);
 		return this._open(type, paraId, rangeId);
 	};
-	
+
 	this._open = function(type, paraId, rangeId) 
 	{
 		if (this.type === type
@@ -62,24 +67,21 @@ function TextAnnotationPopup()
 		let variation = {
 			url : 'annotationPopup.html',
 			isVisual : true,
-			buttons : [],
+			buttons : this._getButtons(),
 			isModal : false,
-			isCustomWindow : true,
+			description: this._getTitle(),
 			EditorsSupport : ["word", "slide", "cell", "pdf"],
-			size : [318, 500],
-			isTargeted : true,
-			transparent : true
+			size : [this.width, this.height],
+			fixedSize : true,
+			isTargeted : true
 		};
-		let _t = this;
 		let popup = new window.Asc.PluginWindow();
-		popup.attachEvent("onClose", function() {
-			_t.close();
+
+		let _t = this;
+		popup.attachEvent("onWindowReady", function() {
+			popup.command("onUpdateContent", _t.content);
 		});
-		popup.attachEvent("onUpdateSize", function(size) {
-			if (size[0] !== variation.size[0] || size[1] !== variation.size[1]) {
-				Asc.Editor.callMethod("ResizeWindow", [popup.id, [size[0], size[1]]]);
-			}
-		});
+
 		popup.show(variation);
 		this.popup = popup;
 		return popup;
@@ -100,7 +102,74 @@ function TextAnnotationPopup()
 		this.popup.close();
 		this.popup = null;
 		Asc.Editor.callMethod("FocusEditor");
-	}
+	};
+
+	this._getTitle = function()
+	{
+		return window.Asc.plugin.tr(this.type === 0 ? "Spelling suggestion" : "Grammar suggestion");
+	};
+	
+	this._getButtons = function()
+	{
+		return [
+			{ text: window.Asc.plugin.tr('Accept'), primary: true },
+			{ text: window.Asc.plugin.tr('Reject'), primary: false }
+		];
+	};
+
+	this._calculateWindowSize = function(data)
+	{
+		let backColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["background-normal"] : "#FFFFFF";
+		let textColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["text-normal"] : "#3D3D3D";
+		let borderColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["border-divider"] : "#666666";
+		let ballonColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["canvas-background"] : "#F5F5F5";
+		this.content = `<div style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+			<div style="padding:16px 16px 0px 16px;">
+
+				<div style="margin-bottom:12px;">
+					<div style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+						${window.Asc.plugin.tr("Suggested correction")}
+					</div>
+
+					<div style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
+						<div style="display:flex; align-items:center; gap:8px;">
+							<span style="color:${textColor}; font-weight:normal;">${data.original}</span>
+							<span style="color:${borderColor}; font-weight:bold;">→</span>
+							<span style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+						</div>
+					</div>
+				</div>`;
+
+		if (data.explanation) {
+			this.content += `<div style="margin-bottom:16px;">
+				<div style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+					${window.Asc.plugin.tr("Explanation")}
+				</div>
+
+				<div style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">${data.explanation}</div>
+			</div>`;
+		}
+
+		this.content += "</div></div>";
+
+		let measureDiv = document.createElement("div");
+		measureDiv.style.position = "absolute";
+		measureDiv.style.left = "-9999px";
+		measureDiv.style.top = "-9999px";
+		measureDiv.style.width = this.width + "px";
+		measureDiv.style.visibility = "hidden";
+		measureDiv.style.pointerEvents = "none";
+		measureDiv.style.opacity = "0";
+		measureDiv.style.margin = "0";
+		measureDiv.style.padding = "0";
+		measureDiv.innerHTML = this.content;
+
+		document.body.appendChild(measureDiv);
+
+		this.height = measureDiv.scrollHeight;
+
+		document.body.removeChild(measureDiv);
+	};
 }
 
 var textAnnotatorPopup = new TextAnnotationPopup();
