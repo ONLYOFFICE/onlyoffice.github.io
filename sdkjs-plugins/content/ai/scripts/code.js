@@ -691,7 +691,7 @@ window.Asc.plugin.onTranslate = async function() {
 	await initWithTranslate(1);
 };
 
-window.Asc.plugin.button = function(id, windowId) {
+window.Asc.plugin.button = async function(id, windowId) {
 	if (!windowId) {
 		return
 	}
@@ -700,6 +700,22 @@ window.Asc.plugin.button = function(id, windowId) {
 	{
 		clearChatState();
 		delete window.chatWindow;
+	}
+
+	if (textAnnotatorPopup && textAnnotatorPopup.popup && textAnnotatorPopup.popup.id === windowId)
+	{
+		switch (id) {
+			case 0:
+				await textAnnotatorPopup.popup.onAccept();
+				break;
+			case 1:
+				await textAnnotatorPopup.popup.onReject();
+				break;
+			default:
+				textAnnotatorPopup.close();
+				break;
+		}
+		return;
 	}
 
 	if (settingsWindow && windowId === settingsWindow.id) {
