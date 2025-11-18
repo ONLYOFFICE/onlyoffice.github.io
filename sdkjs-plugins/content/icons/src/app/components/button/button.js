@@ -74,7 +74,7 @@ class Button {
             this.button.classList.add("custom-button-disabled");
         }
         if (this._options.loading) {
-            this.button.classList.add("custom-button-loading");
+            this._container.classList.add("custom-button-loading");
         }
         this.button.type = this._options.type;
         if (this._options.tooltip) {
@@ -161,22 +161,22 @@ class Button {
     }
 
     #handleMouseEnter() {
-        this._container.classList.add("custom-button-hover");
+        this.button.classList.add("custom-button-hover");
         this.triggerEvent("mouseenter");
     }
 
     #handleMouseLeave() {
-        this._container.classList.remove("custom-button-hover");
+        this.button.classList.remove("custom-button-hover");
         this.triggerEvent("mouseleave");
     }
 
     #handleFocus() {
-        this._container.classList.add("custom-button-focused");
+        this.button.classList.add("custom-button-focused");
         this.triggerEvent("focus");
     }
 
     #handleBlur() {
-        this._container.classList.remove("custom-button-focused");
+        this.button.classList.remove("custom-button-focused");
         this.triggerEvent("blur");
     }
 
@@ -275,13 +275,13 @@ class Button {
     enable() {
         this._options.disabled = false;
         this.button.disabled = false;
-        this._container.classList.remove("custom-button-disabled");
+        this.button.classList.remove("custom-button-disabled");
     }
 
     disable() {
         this._options.disabled = true;
         this.button.disabled = true;
-        this._container.classList.add("custom-button-disabled");
+        this.button.classList.add("custom-button-disabled");
     }
 
     startLoading() {
