@@ -32,7 +32,6 @@
 
 import { Commands } from "./commands.js";
 import { SvgParser } from "../utils/svg-parser.js";
-import { SvgLoader } from "../utils/svg-loader.js";
 import { IconPicker } from "../components/icon-picker.js";
 import { CategoriesPicker } from "../components/categories-picker.js";
 import { SearchFilter } from "../components/search-filter.js";
@@ -75,25 +74,25 @@ class IconsPlugin {
                 resolve(false);
                 return;
             }
-            SvgLoader.loadSvgs(this.#selectedIcons)
-                .then((svgs) => {
-                    let parsed = svgs.map((svg) => SvgParser.parse(svg));
-                    Asc.scope.editor = Asc.plugin.info.editorType;
-                    Asc.scope.parsedSvgs = parsed;
-                    const isCalc = true;
-                    const isClose = false;
-                    Asc.plugin.callCommand(
-                        Commands.insertIcon,
-                        isClose,
-                        isCalc,
-                        resolve
-                    );
-                })
-                .catch((e) => {
-                    console.error("Failed to run icons plugin");
-                    console.error(e);
-                    reject(e);
-                });
+            try {
+                const svgs = this.#iconsPicker.getSelectedSvgIcons();
+                let parsed = svgs.map((svg) => SvgParser.parse(svg));
+                Asc.scope.editor = Asc.plugin.info.editorType;
+                Asc.scope.parsedSvgs = parsed;
+                const isCalc = true;
+                const isClose = false;
+                Asc.plugin.callCommand(
+                    Commands.insertIcon,
+                    isClose,
+                    isCalc,
+                    resolve
+                );
+            } catch (e) {
+                console.error("Failed to run icons plugin");
+                console.error(e);
+                reject(e);
+                return;
+            }
         });
     }
 }

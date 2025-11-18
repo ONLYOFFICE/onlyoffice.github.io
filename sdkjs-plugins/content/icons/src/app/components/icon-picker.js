@@ -168,6 +168,14 @@ class IconPicker {
         this.#onSelectIconCallback = callback;
     }
 
+    /**
+     * @return {Array<string>}
+     */
+    getSelectedSvgIcons() {
+        const icons = this.#container.querySelectorAll(".icon.selected");
+        return Array.from(icons).map((svg) => svg.outerHTML);
+    }
+
     #addEventListener() {
         this.#container.addEventListener("click", (e) => {
             let icon;
@@ -317,38 +325,6 @@ class IconPicker {
             this.#insertButton.enable();
         }
         this.#onSelectIconCallback(this.#selectedIcons);
-    }
-
-    /**
-     * @param {string} iconId
-     * @param {string} section
-     * @param {string} categoryId
-     * @returns
-     */
-    #createIcon(iconId, section, categoryId) {
-        const svgNS = "http://www.w3.org/2000/svg";
-        const xlinkNS = "http://www.w3.org/1999/xlink";
-
-        const fragment = document.createDocumentFragment();
-        const svg = document.createElementNS(svgNS, "svg");
-        fragment.appendChild(svg);
-        svg.setAttribute("class", "icon");
-        svg.setAttribute("role", "img");
-        svg.setAttribute("data-name", iconId);
-        svg.setAttribute("data-section", section);
-        svg.setAttribute("data-category", categoryId);
-        svg.setAttribute("tabindex", "0");
-
-        const title = document.createElementNS(svgNS, "title");
-        svg.appendChild(title);
-        title.textContent = iconId;
-
-        const use = document.createElementNS(svgNS, "use");
-        svg.appendChild(use);
-        use.setAttributeNS(xlinkNS, "xlink:href", `#${iconId}`);
-        use.setAttribute("href", `#${iconId}`);
-
-        return fragment;
     }
 
     /**
