@@ -69,10 +69,20 @@
                         </div>
                     <div id="selectedThumb" class="scrollThumb display-none"></div>
                     </div>
-                    <label id="searchLabel">
-                    <input id="searchField" autocomplete="off" class="form-control i18n" type="text" placeholder="Search references by author, title or year" style="width: 100%;"/>
-                    <span id="searchClear" class="display-none">&#xd7;</span>
-                    </label>
+                    <div id="searchWrapper">
+                        <label for="library" class="i18n">Search in:</label>
+                        <div class="selectHolder">
+                            <input id="library" readonly class="control select" type="text">
+                            <div id="searchLibrary" class="selectList display-none">
+                                <span data-value="all" class="i18n">All groups</span>
+                            </div>
+                        </div>
+                        <label id="searchLabel">
+                        <input id="searchField" autocomplete="off" class="form-control i18n" type="text" placeholder="Search references by author, title or year" style="width: 100%;"/>
+                        <span id="searchClear" class="display-none">&#xd7;</span>
+                        </label>
+                    </div>
+                    
                     <div id="docsWrapper" class="flexSize">
                         <div class="flexCol flexSize">
                             <div id="docsHolder" class="flexCol"></div>
@@ -85,7 +95,7 @@
                     <div id="controlsHolder" class="flexCol">
 					<div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
 						<div class="flex" style="align-items: center;">
-							<button id="insertLinkBtn" class="button control i18n btn-text-default" style="flex: 1; margin-left: 8px;" disabled>Insert Citation</button>
+							<button id="insertLinkBtn" class="button control i18n btn-text-default" style="flex: 1; margin-left: 8px; margin-right: 0;" disabled>Insert Citation</button>
 							<input id="omitAuthor" type="checkbox" class="form-control i18n hidden" title="Omit Author">
                             </div>
                         <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>

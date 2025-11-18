@@ -37,5 +37,6 @@
     "The current bibliographic style does not describe the bibliography": "Aktuální bibliografický styl neopisuje bibliografii",
 	"Failed to insert citation": "Nepodarilo se vložit citaci",
     "Failed to insert bibliography": "Nepodarilo se vložit bibliografii",
-    "Failed to refresh": "Nepodarilo se aktualizovat"
+    "Failed to refresh": "Nepodarilo se aktualizovat",
+    "All groups": "Vsechny skupiny"
 }
