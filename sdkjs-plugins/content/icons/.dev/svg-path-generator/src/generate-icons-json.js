@@ -3,10 +3,10 @@ const fs = require("fs-extra");
 const path = require("path");
 const { glob } = require("glob");
 const { exec } = require("child_process");
+const cheerio = require("cheerio");
 
 const FA_FOLDER = "../../resources/font-awesome/";
 const FA_SVGS_FOLDER = FA_FOLDER + "svgs-full/";
-const FA_SPRITES_FULL_FOLDER = FA_FOLDER + "sprites-full/";
 const CATEGORIES_FILE = FA_FOLDER + "categories.yml";
 const OUTPUT_DIR = "../../src/app/environments/";
 const OUTPUT_FILE = "categories.js";
@@ -14,9 +14,9 @@ const LICENSE = "../../LICENSE";
 const REPO_URL = "https://github.com/FortAwesome/Font-Awesome.git";
 const REPO_DEST_FOLDER = "temp-repo";
 const SVGS_FULL_TEMP_FOLDER = "./" + REPO_DEST_FOLDER + "/svgs-full";
-const SPRITES_FULL_TEMP_FOLDER = "./" + REPO_DEST_FOLDER + "/sprites-full";
 const CATEGORIES_TEMP_FILE =
     "./" + REPO_DEST_FOLDER + "/metadata/categories.yml";
+const INDEX_HTML_FILE = "../../src/index.html";
 
 function cloneRepository() {
     return new Promise((resolve, reject) => {
@@ -63,8 +63,6 @@ async function updateLocalFiles() {
         await fs.ensureDir(FA_SVGS_FOLDER);
         await copyDir(SVGS_FULL_TEMP_FOLDER, FA_SVGS_FOLDER);
         console.log(`Copied: svgs-full`);
-        await copyDir(SPRITES_FULL_TEMP_FOLDER, FA_SPRITES_FULL_FOLDER);
-        console.log(`Copied: sprites-full`);
         await copyFile(CATEGORIES_TEMP_FILE, FA_FOLDER);
         console.log(`Copied: categories.yml`);
         await fs.remove("./" + REPO_DEST_FOLDER);
@@ -147,8 +145,71 @@ async function updateLocalFiles() {
             `📊 Found ${totalIcons - lostIcons} of ${totalIcons} icons`
         );
         console.log(`📁 ${categories.length} categories processed`);
+
+        await copyIconsToIndexHtmlFile(categories);
     } catch (error) {
         console.error("❌ Error:", error.message);
+    }
+}
+
+async function copyIconsToIndexHtmlFile(categories) {
+    let html = fs.readFileSync(INDEX_HTML_FILE, "utf8");
+    const $ = cheerio.load(html);
+    const iconsBlock = $("#icons");
+
+    iconsBlock.html("");
+
+    categories.forEach((categoryInfo) => {
+        categoryInfo.folders.forEach((folderName, index) => {
+            let icons = categoryInfo.icons[index];
+            icons.forEach((iconName) => {
+                const iconPath = path.join(
+                    FA_SVGS_FOLDER,
+                    folderName,
+                    iconName + ".svg"
+                );
+                let svgContent = fs
+                    .readFileSync(iconPath, "utf8")
+                    .replace(/<!--[\s\S]*?-->/g, "");
+
+                svgContent = addSVGAttributes(svgContent, {
+                    class: "icon",
+                    role: "img",
+                    tabindex: "0",
+                    "data-name": iconName,
+                    "data-section": folderName,
+                    "data-category": categoryInfo.id,
+                });
+                iconsBlock.append(svgContent);
+            });
+        });
+    });
+
+    fs.writeFileSync(INDEX_HTML_FILE, $.html(), "utf8");
+    console.log(`✅ Icons copied to ${INDEX_HTML_FILE}`);
+}
+
+function addSVGAttributes(svgContent, attributes = {}) {
+    try {
+        const $ = cheerio.load(svgContent, { xmlMode: true });
+        const svgElement = $("svg");
+
+        Object.keys(attributes).forEach((attr) => {
+            if (attr === "class") {
+                const existingClass = svgElement.attr("class") || "";
+                svgElement.attr(
+                    "class",
+                    `${existingClass} ${attributes[attr]}`.trim()
+                );
+            } else {
+                svgElement.attr(attr, attributes[attr]);
+            }
+        });
+
+        return $.html("svg");
+    } catch (error) {
+        console.error(`Error loading icon ${iconPath}:`, error);
+        return "";
     }
 }
 
