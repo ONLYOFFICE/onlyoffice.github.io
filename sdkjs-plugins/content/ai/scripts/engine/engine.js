@@ -837,6 +837,8 @@ function fetchExternal(url, options, isStreaming) {
 				readerAsync = await requestWrapperStream(objRequest);
 
 			if (!readerAsync) {
+				if (isStreaming && objRequest.body.stream)
+					delete objRequest.body.stream;
 				let result = await requestWrapper(objRequest);
 				if (result.error) {
 					throw {
