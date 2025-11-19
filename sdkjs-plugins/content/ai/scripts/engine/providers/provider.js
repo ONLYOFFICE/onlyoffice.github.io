@@ -368,8 +368,19 @@
 
 			if (!imageUrl) {
 				let candidates = getProp("candidates");
-				if (candidates && candidates[0] && candidates[0].content)
-					imageUrl = candidates[0].content;
+				if (candidates && candidates[0] && candidates[0].content) {
+					if (typeof(candidates[0].content) === "string") {
+						imageUrl = candidates[0].content;
+					} else if (Array.isArray(candidates[0].content.parts)) {
+						let parts = candidates[0].content.parts;
+						for (let i = 0, len = parts.length; i < len; i++) {
+							if (parts[i].inlineData) {
+								imageUrl = parts[i].inlineData.data;
+								break;
+							}
+						}
+					}
+				}
 			}
 
 			if (!imageUrl) {
