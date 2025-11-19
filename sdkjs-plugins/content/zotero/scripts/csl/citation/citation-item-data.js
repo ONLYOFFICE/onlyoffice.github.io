@@ -127,11 +127,18 @@ CitationItemData.prototype._addCustomProperty = function (key, value) {
     return this;
 };
 
+/**
+ * @param {string} key
+ * @returns
+ */
 CitationItemData.prototype.getCustomProperty = function (key) {
     if (Object.hasOwnProperty.call(this._custom, key)) return this._custom[key];
     return null;
 };
 
+/**
+ * @param {any} itemDataObject
+ */
 CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "type")) {
         this._type = itemDataObject.type;
@@ -448,7 +455,10 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     }
 
     if (Object.hasOwnProperty.call(itemDataObject, "creators")) {
-        itemDataObject.creators.forEach(function (creator) {
+        const self = this;
+        itemDataObject.creators.forEach(function (
+            /** @type {{firstName: string, lastName: string}}} */ creator
+        ) {
             let author = {};
             if (creator.firstName) {
                 author.given = creator.firstName;
@@ -456,8 +466,9 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
             if (creator.lastName) {
                 author.family = creator.lastName;
             }
-            this._author.push(author);
-        }, this);
+            self._author.push(author);
+        },
+        this);
     }
 
     if (Object.hasOwnProperty.call(itemDataObject, "libraryCatalog")) {

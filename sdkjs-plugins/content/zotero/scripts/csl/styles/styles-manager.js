@@ -1,4 +1,6 @@
 // @ts-check
+/// <reference path="./storage.js" />
+/// <reference path="./style-parser.js" />
 
 function CslStylesManager() {
     this._isOnlineAvailable = false;

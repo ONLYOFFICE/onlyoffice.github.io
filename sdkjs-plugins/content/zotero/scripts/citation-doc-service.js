@@ -1,19 +1,14 @@
 // @ts-check
 
+/// <reference path="./types-global.js" />
+/// <reference path="./csl/citation/citation.js" />
+/// <reference path="./csl/styles/style-parser.js" />
+
 /**
  * @typedef {Object} CustomField
  * @property {string} Value
  * @property {string} Content
  * @property {string} [FieldId]
- */
-
-/**
- * @typedef {Object} SupSubPositions
- * @property {'sup'|'sub'} type
- * @property {number} start
- * @property {number} end
- * @property {string} content
- * @property {string} originalMatch
  */
 
 /**
