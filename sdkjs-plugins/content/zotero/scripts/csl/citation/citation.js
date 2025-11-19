@@ -1,7 +1,10 @@
+// @ts-check
+/// <reference path="./citation-item.js" />
+
 /**
  * @typedef {Object} SuppressAuthor
- * @property {string} id
- * @property {boolean} "suppress-author"
+ * @property {string|number} id
+ * @property {boolean} `suppress-author`
  */
 
 /**
@@ -40,6 +43,7 @@ function CSLCitation(itemsStartIndex, citationID) {
     /** @type {string} */
     this.citationID = citationID;
     this._itemsStartIndex = itemsStartIndex;
+    /** @type {Array<CitationItem>} */
     this._citationItems = new Array();
     this._properties = new Object();
 
@@ -48,7 +52,7 @@ function CSLCitation(itemsStartIndex, citationID) {
 }
 
 /**
- * @param {*} citationObject
+ * @param {any} citationObject
  * @returns
  */
 CSLCitation.prototype.fillFromObject = function (citationObject) {
@@ -69,7 +73,12 @@ CSLCitation.prototype.fillFromObject = function (citationObject) {
     return this._fillFromCslJson(citationObject);
 };
 
+/**
+ * @param {any} citationObject
+ * @returns
+ */
 CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
+    const self = this;
     if (Object.hasOwnProperty.call(citationObject, "schema")) {
         // this._setSchema(citationObject.schema);
     }
@@ -86,11 +95,13 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
         return item.id;
     });
 
-    citationObject.citationItems.forEach(function (item) {
+    citationObject.citationItems.forEach(function (
+        /** @type {CitationItem} */ item
+    ) {
         let id = item.id;
         let citationItem;
         if (existingIds.indexOf(id) >= 0) {
-            citationItem = this._citationItems[existingIds.indexOf(id)];
+            citationItem = self._citationItems[existingIds.indexOf(id)];
         } else {
             citationItem = new CitationItem(id);
             existingIds.push(id);
@@ -98,21 +109,23 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
 
         if (typeof id === "number") {
             // Word 365 or wps
-            id = this._extractIdFromWord365Citation(item);
+            id = self._extractIdFromWord365Citation(item);
         }
 
         citationItem.fillFromObject(item);
 
-        this._addCitationItem(citationItem);
-    }, this);
+        self._addCitationItem(citationItem);
+    },
+    this);
     return existingIds.length;
 };
 
 /**
- * @param {{citationObject: Array<{id: string, index: number, "suppress-author": boolean, title: string, type: string, userID: string, groupID: string}>}} citationObject
+ * @param {{citationItems: OldCitationItem[]}} citationObject
  * @returns
  */
 CSLCitation.prototype._fillFromFlatCitationObject = function (citationObject) {
+    const self = this;
     if (citationObject.citationItems.length === 0) {
         console.error("CSLCitation.citationItems: citationItems is empty");
         return 0;
@@ -123,14 +136,14 @@ CSLCitation.prototype._fillFromFlatCitationObject = function (citationObject) {
     }
 
     citationObject.citationItems.forEach(function (itemObject) {
-        this._fillFromCslJson(itemObject);
+        self._fillFromCslJson(itemObject);
     }, this);
 
     return 1;
 };
 
 /**
- * @param {Object} citationObject
+ * @param {any} itemObject
  * @returns
  */
 CSLCitation.prototype._fillFromCslJson = function (itemObject) {
@@ -155,7 +168,7 @@ CSLCitation.prototype._fillFromCslJson = function (itemObject) {
 };
 
 /**
- * @param {{key: string, version: number, library: Object, links: Object, meta: Object, data: CitationJsonData}} citationObject
+ * @param {{key: string, version: number, library: Object, links: Object, meta: Object, data: CitationJsonData}} itemObject
  * @returns
  */
 CSLCitation.prototype._fillFromJson = function (itemObject) {
@@ -195,6 +208,10 @@ CSLCitation.prototype.getSuppressAuthors = function () {
     }, this);
 };
 
+/**
+ * @param {string} key
+ * @returns
+ */
 CSLCitation.prototype.getProperty = function (key) {
     let items = this._citationItems;
     for (var i = 0; i < items.length; i++) {
@@ -207,6 +224,10 @@ CSLCitation.prototype.getProperty = function (key) {
     return null;
 };
 
+/**
+ * @param {CitationItem} item
+ * @returns
+ */
 CSLCitation.prototype._addCitationItem = function (item) {
     const existingIds = this._citationItems.map(function (item) {
         return item.id;
@@ -219,17 +240,26 @@ CSLCitation.prototype._addCitationItem = function (item) {
     return this;
 };
 
+/**
+ * @param {object} properties
+ * @returns
+ */
 CSLCitation.prototype._setProperties = function (properties) {
     this._properties = properties;
     return this;
 };
 
+/**
+ * @param {string} schema
+ * @returns
+ */
 CSLCitation.prototype._setSchema = function (schema) {
     this._schema = schema;
     return this;
 };
 
 /**
+ * @param {any} item
  * @returns {string}
  */
 CSLCitation.prototype._extractIdFromWord365Citation = function (item) {
@@ -265,9 +295,10 @@ CSLCitation.prototype.validate = function () {
 };
 
 CSLCitation.prototype.toJSON = function () {
-    var result = {
+    var result = /** @type {any} */ ({
         citationID: this.citationID,
-    };
+        schema: this._schema,
+    });
 
     if (this._properties && Object.keys(this._properties).length > 0) {
         result.properties = this._properties;
@@ -275,11 +306,9 @@ CSLCitation.prototype.toJSON = function () {
 
     if (this._citationItems && this._citationItems.length > 0) {
         result.citationItems = this._citationItems.map(function (item) {
-            return item.toJSON ? item.toJSON() : item;
+            return item.toJSON();
         });
     }
-
-    result.schema = this._schema;
 
     return result;
 };

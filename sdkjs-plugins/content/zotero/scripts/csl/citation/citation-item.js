@@ -1,3 +1,16 @@
+// @ts-check
+/// <reference path="./citation-item-data.js" />
+/**
+ * @typedef {Object} OldCitationItem - before version 1.0.5
+ * @property {string|number} id
+ * @property {string} [type]
+ * @property {string} [title]
+ * @property {string} [userID]
+ * @property {string} [groupID]
+ * @property {number} index
+ * @property {boolean} [`suppress-author`]
+ */
+
 /**
  * @param {string|number} id
  */
@@ -17,7 +30,11 @@ function CitationItem(id) {
     this._uris = new Array();
 }
 
+/**
+ * @param {any} itemObject
+ */
 CitationItem.prototype.fillFromObject = function (itemObject) {
+    const self = this;
     if (
         Object.hasOwnProperty.call(itemObject, "version") &&
         Object.hasOwnProperty.call(itemObject, "library")
@@ -50,12 +67,15 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
     if (Object.hasOwnProperty.call(itemObject, "author-only"))
         this._authorOnly = itemObject["author-only"];
     if (Object.hasOwnProperty.call(itemObject, "uris")) {
-        itemObject.uris.forEach(function (uri) {
-            this.addUri(uri);
+        itemObject.uris.forEach(function (/** @type {string} */ uri) {
+            self.addUri(uri);
         }, this);
     }
 };
 
+/**
+ * @returns {SuppressAuthor}
+ */
 CitationItem.prototype.getSuppressAuthor = function () {
     return {
         id: this.id,
@@ -209,7 +229,12 @@ CitationItem.prototype.toJSON = function () {
     return result;
 };
 
+/**
+ * @param {number} index
+ * @returns
+ */
 CitationItem.prototype.toFlatJSON = function (index) {
+    /** @type {OldCitationItem} */
     var oldItem = {
         id: this.id,
         index: index,
@@ -221,11 +246,17 @@ CitationItem.prototype.toFlatJSON = function (index) {
     let itemDataObject = this._itemData.toJSON();
     Object.assign(oldItem, itemDataObject);
 
-    if (this._itemData.getCustomProperty("userID") !== null) {
-        oldItem.userID = this._itemData.getCustomProperty("userID");
+    if (
+        typeof this._itemData.getCustomProperty("userID") !== "undefined" &&
+        this._itemData.getCustomProperty("userID") !== null
+    ) {
+        oldItem.userID = String(this._itemData.getCustomProperty("userID"));
     }
-    if (this._itemData.getCustomProperty("groupID") !== null) {
-        oldItem.groupID = this._itemData.getCustomProperty("groupID");
+    if (
+        typeof this._itemData.getCustomProperty("groupID") !== "undefined" &&
+        this._itemData.getCustomProperty("groupID") !== null
+    ) {
+        oldItem.groupID = String(this._itemData.getCustomProperty("groupID"));
     }
 
     return oldItem;
