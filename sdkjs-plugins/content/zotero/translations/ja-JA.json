@@ -15,9 +15,9 @@
     "Style": "スタイル",
     "Enter style name": "スタイル名を入力してください",
     "Language": "言語",
-	"Display citations as:": "引用を表示する:",
-	"Footnotes": "脚注",
-	"Endnotes": "終わりの脚注",
+    "Display citations as:": "引用を表示する:",
+    "Footnotes": "脚注",
+    "Endnotes": "終わりの脚注",
     "Reconfigure": "再構成",
     "Learn more here.": "詳しくはこちら",
     "Save": "保存",
@@ -38,5 +38,6 @@
     "Failed to insert citation": "引用の挿入に失敗しました",
     "Failed to insert bibliography": "文献引用の挿入に失敗しました",
     "Failed to refresh": "リフレッシュに失敗しました",
-    "All groups": "全てのグループ"
+    "All groups": "全てのグループ",
+    "My library": "私のライブラリ"
 }

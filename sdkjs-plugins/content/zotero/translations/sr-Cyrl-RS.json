@@ -15,9 +15,9 @@
     "Style": "Стил",
     "Enter style name": "Унесите назив стила",
     "Language": "Језик",
-	"Display citations as:": "Прикажи цитате као:",
-	"Footnotes": "Фусноте",
-	"Endnotes": "Ендноте",
+    "Display citations as:": "Прикажи цитате као:",
+    "Footnotes": "Фусноте",
+    "Endnotes": "Ендноте",
     "Reconfigure": "Поново конфигуриши",
     "Learn more here.": "Сазнајте више овде.",
     "Save": "Сачувај",
@@ -38,5 +38,6 @@
     "Failed to insert citation": "Убациње цитата није успело",
     "Failed to insert bibliography": "Убациње библиографије није успело",
     "Failed to refresh": "Освежавање није успело",
-    "All groups": "Све групе"
+    "All groups": "Све групе",
+    "My library": "Моја библиотека"
 }
