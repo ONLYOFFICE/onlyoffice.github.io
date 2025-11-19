@@ -99,6 +99,7 @@
         selectedThumb: document.getElementById("selectedThumb"),
         buttonsWrapper: document.getElementById("buttonsWrapper"),
 
+        library: document.getElementById("library"),
         searchLibrary: document.getElementById("searchLibrary"),
         searchLabel: document.getElementById("searchLabel"),
         searchClear: document.getElementById("searchClear"),
@@ -242,14 +243,60 @@
 
     function loadGroups() {
         sdk.getUserGroups().then(function (groups) {
+            groups = [
+                {id: "all", name: getMessage("All groups")},
+                {id: "my_library", name: getMessage("My Library")}
+            ].concat(groups);
             for (var i = 0; i < groups.length; i++) {
+                var id = groups[i].id;
+                var name = groups[i].name;
                 var el = document.createElement("span");
-                el.setAttribute("data-value", groups[i].id);
-                el.textContent = groups[i].name;
+                el.setAttribute("data-value", id);
+                el.textContent = name;
                 elements.searchLibrary.appendChild(el);
+                if (id === "my_library") {
+                    el.setAttribute("selected", "");
+                    library.value = name;
+                    library.setAttribute("data-value", id);
+                    library.setAttribute("title", name);
+                }
             }
+            elements.searchLibrary.addEventListener("click", function (e) {
+                const target = e.target;
+                let option;
+                if (target && target instanceof HTMLSpanElement) {
+                    option = target;
+                } else {
+                    return;
+                }
+                elements.searchLibrary.querySelector('span[selected]').attributes.removeNamedItem("selected");
+                option.setAttribute("selected", "");
+                library.value = option.textContent;
+                library.setAttribute("data-value", option.getAttribute("data-value"));
+                library.setAttribute("title", option.textContent);
+
+                switchClass(elements.searchClear, displayNoneClass, true);
+                elements.searchField.value = "";
+                lastSearch.text = "";
+                clearLibrary();
+            });
         });
     }
+
+    /**
+     * @return {number|"all"|"my_library"}
+     */
+    getSelectedGroup = function () {
+        for (var i = 0; i < elements.searchLibrary.children.length; i++) {
+            const option = elements.searchLibrary.children[i];
+            if (option.hasAttribute("selected")) {
+                const id = option.getAttribute("data-value");
+                if (id == "my_library" || id == "all") return id;
+                return Number(id);
+            }
+        }
+        return "all";
+    };
 
     /**
      * @param {object} stylesInfo
@@ -354,14 +401,45 @@
 			lastSearch.obj = null;
 			lastSearch.groups = [];
             clearLibrary();
-            sdk.getUserGroups().then(function (groups) {
-                loadLibrary(sdk.getItems(text), true, true, !groups.length, false, true);
-                if (!groups.length) {
-                    return;
+
+            const promises = [];
+
+            const selectedGroup = getSelectedGroup();
+            console.log(selectedGroup);
+            
+            return sdk.getUserGroups().then(function (userGroups) {
+                let groups = [];
+                switch (selectedGroup) {
+                    case "my_library":
+                        groups = [];
+                        break;
+                    case "all":
+                        groups = userGroups.map(function (group) {
+                            return group.id;
+                        });
+                        break;
+                    default:
+                        groups = [selectedGroup];
+                        break;
                 }
+
+                const append = true;
+                let showLoader = true;
+                let hideLoader = !groups.length;
+                let isGroup = false;
+                const bCount = true
+
+                if (selectedGroup === "my_library" || selectedGroup === "all") {
+                    promises.push(loadLibrary(sdk.getItems(text), append, showLoader, hideLoader, false, bCount));
+                }
+
                 for (var i = 0; i < groups.length; i++) {
-					loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i].id), true, false, (i == groups.length -1), true, true );
+                    showLoader = i === 0 && promises.length === 0;
+                    hideLoader = i === groups.length - 1;
+					promises.push(loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i]), append, showLoader, hideLoader, true, bCount ));
 				}
+            }).then(function () {
+                return Promise.all(promises);
             });
         };
         elements.searchField.onkeypress = function (e) {
@@ -801,7 +879,7 @@
                 if (shouldLoadMore(holder)) {
                     loadLibrary(lastSearch.obj.next(), true, true, !lastSearch.groups.length, false, false);
 					for (var i = 0; (i < lastSearch.groups.length && lastSearch.groups[i].next); i++) {
-						loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false, lastSearch.groups[i] );
+						loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false);
 					}
                 } else {
                 }

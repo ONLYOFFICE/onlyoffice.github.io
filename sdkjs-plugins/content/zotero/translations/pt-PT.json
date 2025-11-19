@@ -15,9 +15,9 @@
     "Style": "Estilo",
     "Enter style name": "Digite o nome do estilo",
     "Language": "Idioma",
-	"Display citations as:": "Mostrar citações como:",
-	"Footnotes": "Notas de pé-de-página",
-	"Endnotes": "Notas finais",
+    "Display citations as:": "Mostrar citações como:",
+    "Footnotes": "Notas de pé-de-página",
+    "Endnotes": "Notas finais",
     "Reconfigure": "Reconfigurar",
     "Learn more here.": "Saiba mais aqui.",
     "Save": "Salve",
@@ -38,5 +38,6 @@
     "Failed to insert citation": "Falha ao inserir citação",
     "Failed to insert bibliography": "Falha ao inserir bibliografia",
     "Failed to refresh": "Falha ao actualizar",
-    "All groups": "Todos os grupos"
+    "All groups": "Todos os grupos",
+    "My library": "A minha biblioteca"
 }
