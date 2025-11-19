@@ -27,3 +27,7 @@
 * Fix citation numbering issues.
 * Improved compatibility with MS Word.
 * Remove extra blank lines in bibliography.
+
+## 1.0.6
+
+* The ability to choose which library to search in
