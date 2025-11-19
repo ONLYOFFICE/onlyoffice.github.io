@@ -15,9 +15,9 @@
     "Style": "Stijl",
     "Enter style name": "Stijl naam invoeren",
     "Language": "Taal",
-	"Display citations as:": "Citaat weergeven als:",
-	"Footnotes": "Voetnoten",
-	"Endnotes": "Eindnoten",
+    "Display citations as:": "Citaat weergeven als:",
+    "Footnotes": "Voetnoten",
+    "Endnotes": "Eindnoten",
     "Reconfigure": "Opnieuw instellen",
     "Learn more here.": "Lees hier meer.",
     "Save": "Opslaan",
@@ -38,5 +38,6 @@
     "Failed to insert citation": "Het invoegen van de citaat is mislukt",
     "Failed to insert bibliography": "Het invoegen van de bibliografie is mislukt",
     "Failed to refresh": "Het vernieuwen is mislukt",
-    "All groups": "Alle groepen"
+    "All groups": "Alle groepen",
+    "My library": "Mijn bibliotheek"
 }

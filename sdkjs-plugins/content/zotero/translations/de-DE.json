@@ -15,9 +15,9 @@
     "Style": "Stil",
     "Enter style name": "Stilname eingeben",
     "Language": "Sprache",
-	"Display citations as:": "Literaturengaben anzeigen als:",
-	"Footnotes": "Fußnoten",
-	"Endnotes": "Endnoten",
+    "Display citations as:": "Literaturengaben anzeigen als:",
+    "Footnotes": "Fußnoten",
+    "Endnotes": "Endnoten",
     "Reconfigure": "Neu konfigurieren",
     "Learn more here.": "Erfahren Sie mehr hier.",
     "Save": "Speichern",
@@ -38,5 +38,6 @@
     "Failed to insert citation": "Fehler beim Einfügen des Zitats",
     "Failed to insert bibliography": "Fehler beim Einfügen der Bibliographie",
     "Failed to refresh": "Fehler beim Aktualisieren",
-    "All groups": "Alle Gruppen"
+    "All groups": "Alle Gruppen",
+    "My library": "Meine Bibliothek"
 }

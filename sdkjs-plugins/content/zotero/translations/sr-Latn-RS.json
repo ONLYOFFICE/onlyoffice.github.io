@@ -15,9 +15,9 @@
     "Style": "Stil",
     "Enter style name": "Unesite naziv stila",
     "Language": "Jezik",
-	"Display citations as:": "Prikaži citat kao:",
-	"Footnotes": "Opisi",
-	"Endnotes": "Koneci opisi",
+    "Display citations as:": "Prikaži citat kao:",
+    "Footnotes": "Opisi",
+    "Endnotes": "Koneci opisi",
     "Reconfigure": "Ponovo konfiguriši",
     "Learn more here.": "Saznajte više ovde.",
     "Save": "Sačuvaj",
@@ -38,5 +38,6 @@
     "Failed to insert citation": "Neuspelo ubacivanje citata",
     "Failed to insert bibliography": "Neuspelo ubacivanje bibliografije",
     "Failed to refresh": "Neuspelo osvežavanje",
-    "All groups": "Sve grupe"
+    "All groups": "Sve grupe",
+    "My library": "Moja biblioteka"
 }
