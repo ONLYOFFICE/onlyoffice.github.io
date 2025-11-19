@@ -15,6 +15,10 @@
  * limitations under the License.
  *
  */
+/// <reference path="./zotero.js" />
+/// <reference path="./csl/citation/citation.js" />
+/// <reference path="./csl/styles/styles-manager.js" />
+
 (function () {
 	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
@@ -64,6 +68,7 @@
     var selectedLocale;
     var selectedStyle;
 
+    /** @type {ZoteroSdk} */
     var sdk = null;
     var cslStylesManager = null;
     var citationDocService = null;
@@ -126,7 +131,7 @@
 		showLoader(true);
         setTimeout(function () { searchField.focus(); },100);
         
-        sdk = ZoteroSdk();
+        sdk = new ZoteroSdk();
         cslStylesManager = new CslStylesManager();
         addEventListeners();
         
@@ -826,6 +831,15 @@
         docsScroller.onscroll();
     };
 
+    /**
+     * @param {Promise} promise 
+     * @param {boolean} append 
+     * @param {boolean} showLoader 
+     * @param {boolean} hideLoader 
+     * @param {boolean} isGroup 
+     * @param {boolean} bCount 
+     * @returns {Promise}
+     */
     function loadLibrary(promise, append, showLoader, hideLoader, isGroup, bCount) {
 		if (showLoader) showLibLoader(true);
 		if (bCount) counter++;
