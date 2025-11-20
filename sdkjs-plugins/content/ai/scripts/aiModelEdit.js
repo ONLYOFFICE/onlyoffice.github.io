@@ -502,6 +502,8 @@ function updateCapabilitiesBtns(capabilities) {
 		var itemProps = capabilitiesElements[key];
 		itemProps.btn.setValue((capabilities & itemProps.capabilities) !== 0);
 	}
+
+	onToggleCapability();
 }
 
 function updateModelsList() {
