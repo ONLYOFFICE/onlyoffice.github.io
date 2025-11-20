@@ -29,6 +29,7 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+
 /// <reference path="./zotero.js" />
 /// <reference path="./csl/citation/citation.js" />
 /// <reference path="./csl/styles/styles-manager.js" />
@@ -258,9 +259,11 @@
     function loadGroups() {
         sdk.getUserGroups().then(function (groups) {
             groups = [
-                {id: "all", name: getMessage("All groups")},
-                {id: "my_library", name: getMessage("My Library")}
+                {id: "all", name: getMessage("Everywhere")},
+                {id: "my_library", name: getMessage("My Library")},
+                {id: "group_libraries", name: getMessage("Group Libraries")}
             ].concat(groups);
+
             for (var i = 0; i < groups.length; i++) {
                 var id = groups[i].id;
                 var name = groups[i].name;
@@ -268,7 +271,7 @@
                 el.setAttribute("data-value", id);
                 el.textContent = name;
                 elements.searchLibrary.appendChild(el);
-                if (id === "my_library") {
+                if (id === "all") {
                     el.setAttribute("selected", "");
                     library.value = name;
                     library.setAttribute("data-value", id);
@@ -298,14 +301,14 @@
     }
 
     /**
-     * @return {number|"all"|"my_library"}
+     * @return {number|"all"|"my_library"|"group_libraries"}
      */
     getSelectedGroup = function () {
         for (var i = 0; i < elements.searchLibrary.children.length; i++) {
             const option = elements.searchLibrary.children[i];
             if (option.hasAttribute("selected")) {
                 const id = option.getAttribute("data-value");
-                if (id == "my_library" || id == "all") return id;
+                if (["my_library", "group_libraries", "all"].indexOf(id) >= 0) return id;
                 return Number(id);
             }
         }
@@ -428,6 +431,7 @@
                         groups = [];
                         break;
                     case "all":
+                    case "group_libraries":
                         groups = userGroups.map(function (group) {
                             return group.id;
                         });
@@ -440,8 +444,7 @@
                 const append = true;
                 let showLoader = true;
                 let hideLoader = !groups.length;
-                let isGroup = false;
-                const bCount = true
+                const bCount = true;
 
                 if (selectedGroup === "my_library" || selectedGroup === "all") {
                     promises.push(loadLibrary(sdk.getItems(text), append, showLoader, hideLoader, false, bCount));

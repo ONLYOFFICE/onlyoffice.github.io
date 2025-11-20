@@ -39,6 +39,7 @@
     "Failed to insert bibliography": "Het invoegen van de bibliografie is mislukt",
     "Failed to refresh": "Het vernieuwen is mislukt",
     "Search in:": "Zoeken in:",
-    "All groups": "Alle groepen",
-    "My Library": "Mijn bibliotheek"
+    "Everywhere": "Elke plaats",
+    "My Library": "Mijn bibliotheek",
+    "Group Libraries": "Groepsbibliotheek"
 }
