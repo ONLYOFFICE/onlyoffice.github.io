@@ -74,13 +74,21 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
 };
 
 /**
- * @returns {SuppressAuthor}
+ * @returns {InfoForCitationCluster}
  */
-CitationItem.prototype.getSuppressAuthor = function () {
-    return {
+CitationItem.prototype.getInfoForCitationCluster = function () {
+    /** @type {InfoForCitationCluster} */
+    let info = {
         id: this.id,
         "suppress-author": this._suppressAuthor,
     };
+    if (this._prefix) {
+        info.prefix = this._prefix;
+    }
+    if (this._suffix) {
+        info.suffix = this._suffix;
+    }
+    return info;
 };
 
 CitationItem.prototype.getItemData = function () {
@@ -258,6 +266,8 @@ CitationItem.prototype.toFlatJSON = function (index) {
     ) {
         oldItem.groupID = String(this._itemData.getCustomProperty("groupID"));
     }
+    if (this._prefix !== undefined) oldItem.prefix = this._prefix;
+    if (this._suffix !== undefined) oldItem.suffix = this._suffix;
 
     return oldItem;
 };

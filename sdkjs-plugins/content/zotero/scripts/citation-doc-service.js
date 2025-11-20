@@ -40,7 +40,7 @@ function CitationDocService(
     /** @type {number} */
     this._repeatTimeout;
     /**
-     * @type {{ updateItems: (arg0: string[]) => void; makeCitationCluster: (arg0: SuppressAuthor[]) => string; makeBibliography: () => any[][]; } | null}
+     * @type {{ updateItems: (arg0: string[]) => void; makeCitationCluster: (arg0: InfoForCitationCluster[]) => string; makeBibliography: () => any[][]; } | null}
      */
     this._formatter = null;
 }
@@ -315,7 +315,7 @@ CitationDocService.prototype.updateAddinFields = function (fields) {
         );
         field.Content = supSubPositions.text;
     });*/
-    console.log("updateAddinFields", fields);
+    //console.log("updateAddinFields", fields);
     return new Promise(function (resolve) {
         window.Asc.plugin.executeMethod("UpdateAddinFields", [fields], resolve);
     }) /*.then(function () {

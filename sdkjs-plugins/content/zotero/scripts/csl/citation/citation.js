@@ -2,9 +2,11 @@
 /// <reference path="./citation-item.js" />
 
 /**
- * @typedef {Object} SuppressAuthor
+ * @typedef {Object} InfoForCitationCluster
  * @property {string|number} id
  * @property {boolean} `suppress-author`
+ * @property {string} [prefix]
+ * @property {string} [suffix]
  */
 
 /**
@@ -200,11 +202,11 @@ CSLCitation.prototype.getCitationItems = function () {
 
 /**
  *
- * @returns {Array<SuppressAuthor>}
+ * @returns {Array<InfoForCitationCluster>}
  */
-CSLCitation.prototype.getSuppressAuthors = function () {
+CSLCitation.prototype.getInfoForCitationCluster = function () {
     return this._citationItems.map(function (item) {
-        return item.getSuppressAuthor();
+        return item.getInfoForCitationCluster();
     }, this);
 };
 
