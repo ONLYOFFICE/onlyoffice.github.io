@@ -928,7 +928,22 @@ function onOpenEditModal(data) {
 	if (!aiModelEditWindow) {
 		aiModelEditWindow = new window.Asc.PluginWindow();
 		aiModelEditWindow.attachEvent("onChangeModel", function(model){
+			//Assign this model to actions without a model
+			const models = AI.Storage.serializeModels();
+			let needUpdateSettingsWindow = false;
+			AI.ActionsGetSorted().forEach(function(action) {
+				const hasModel = models.some(function(model) { return model.id == action.model });
+				if(!hasModel && (action.capabilities & model.capabilities) !== 0) {
+					AI.ActionsChange(action.id, model.id);
+					needUpdateSettingsWindow = true;
+				}
+			});
+			if(needUpdateSettingsWindow) {
+				updateActions();
+			}
+
 			AI.Storage.addModel(model);
+
 			aiModelEditWindow.close();
 			aiModelEditWindow = null;
 		});
