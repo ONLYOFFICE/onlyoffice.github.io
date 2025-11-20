@@ -236,24 +236,23 @@
 				}
 
 				AI.Models = obj.models;
+			}
+		}
+		
+		if (AI.DEFAULT_DESKTOP_MODEL) {
+			AI.Models.push(AI.DEFAULT_DESKTOP_MODEL);
 
-				if (AI.DEFAULT_DESKTOP_MODEL) {
-					AI.Models.push(AI.DEFAULT_DESKTOP_MODEL);
-
-					for (let key in AI.Actions) {
-						if (AI.Actions[key].capabilities === AI.CapabilitiesUI.Chat && AI.Actions[key].model === "") {
-							AI.Actions[key].model = AI.DEFAULT_DESKTOP_MODEL.id;
-						}
-					}
+			for (let key in AI.Actions) {
+				if (AI.Actions[key].capabilities === AI.CapabilitiesUI.Chat && AI.Actions[key].model === "") {
+					AI.Actions[key].model = AI.DEFAULT_DESKTOP_MODEL.id;
 				}
 			}
-
-			if (!window.isCheckGenerationInfo)
-				window.checkGenerationInfo();
-
-			return true;
 		}
-		return false;
+
+		if (!window.isCheckGenerationInfo)
+			window.checkGenerationInfo();
+
+		return obj ? true : false;
 	};
 
 	AI.Storage.addModel = function(model) {
