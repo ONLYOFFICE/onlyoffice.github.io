@@ -39,6 +39,7 @@
     "Failed to insert bibliography": "Не удалось вставить библиографию",
     "Failed to refresh": "Не удалось обновить",
     "Search in:": "Поиск в:",
-    "All groups": "Все группы",
-    "My Library": "Моя библиотека"
+    "Everywhere": "Везде",
+    "My Library": "Моя библиотека",
+    "Group Libraries": "Группы библиотек"
 }

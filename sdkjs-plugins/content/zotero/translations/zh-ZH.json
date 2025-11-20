@@ -39,6 +39,7 @@
     "Failed to insert bibliography": "插入參考文献失敗",
     "Failed to refresh": "刷新失敗",
     "Search in:": "搜索:",
-    "All groups": "所有群組",
-    "My Library": "我的圖書館"
+    "Everywhere": "全部",
+    "My Library": "我的圖書館",
+    "Group Libraries": "群組圖書館"
 }
