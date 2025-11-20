@@ -30,7 +30,7 @@
  *
  */
 
-/// <reference path="./zotero.js" />
+/// <reference path="./zotero/zotero.js" />
 /// <reference path="./csl/citation/citation.js" />
 /// <reference path="./csl/styles/styles-manager.js" />
 
@@ -454,7 +454,6 @@
             const promises = [];
 
             const selectedGroup = getSelectedGroup();
-            console.log(selectedGroup);
             
             return sdk.getUserGroups().then(function (userGroups) {
                 let groups = [];
@@ -1017,6 +1016,28 @@
         });
     };
 
+    /**
+     * @returns {string}
+     */
+    function getPrefix() {
+        const prefixInput = document.getElementById("prefixField");
+        if (prefixInput && prefixInput.value) {
+            return prefixInput.value;
+        }
+        return "";
+    }
+
+    /**
+     * @returns {string}
+     */
+    function getSuffix() {
+        const suffixInput = document.getElementById("suffixField");
+        if (suffixInput && suffixInput.value) {
+            return suffixInput.value;
+        }
+        return "";
+    }
+
     function displaySearchItems(append, res, err, isGroup, showNotFound) {
         var holder = elements.docsHolder;
 
@@ -1283,7 +1304,7 @@
 
                     cslCitation = new CSLCitation(keysL.length, citationID);
                     cslCitation.fillFromObject(citationObject);
-                    keysL = cslCitation.getSuppressAuthors();
+                    keysL = cslCitation.getInfoForCitationCluster();
                     elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
                     field["Content"] = elements.tempDiv.innerText;
                     if (bSyncronize && cslCitation) {
@@ -1461,9 +1482,19 @@
             return;
         }
 
+        const prefix = getPrefix();
+        const suffix = getSuffix();
+
         var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
         for (var citationID in selected.items) {
             var item = convertToCSL(selected.items[citationID]);
+            
+            if (prefix !== "") {
+                item.prefix = prefix;
+            }
+            if (suffix !== "") {
+                item.suffix = suffix;
+            }
             cslCitation.fillFromObject(item);
         }
         
@@ -1484,6 +1515,7 @@
 		var bUpdateItems = false;
         var keys = [];
         var keysL = [];
+        
 
         cslCitation.getCitationItems().forEach(function(item) {
             if (!CSLCitationStorage.has(item.id)) {
@@ -1491,7 +1523,7 @@
             }
             CSLCitationStorage.set(item.id, item);
             keys.push(item.id);
-            keysL.push(item.getSuppressAuthor());
+            keysL.push(item.getInfoForCitationCluster());
         });
 
         try {
@@ -1517,7 +1549,7 @@
                 // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
                 // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
                 // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-                return updateCslItems(true, true, false, false);
+               // return updateCslItems(true, true, false, false);
             });
 
         } catch (e) {
