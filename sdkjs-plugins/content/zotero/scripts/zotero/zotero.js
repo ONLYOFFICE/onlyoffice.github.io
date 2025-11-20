@@ -17,7 +17,7 @@
  */
 
 // @ts-check
-/// <reference path="./types-global.js" />
+/// <reference path="../types-global.js" />
 /// <reference path="./zotero-environment.js" />
 
 /**
