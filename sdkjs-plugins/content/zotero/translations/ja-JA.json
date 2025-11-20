@@ -39,6 +39,7 @@
     "Failed to insert bibliography": "文献引用の挿入に失敗しました",
     "Failed to refresh": "リフレッシュに失敗しました",
     "Search in:": "検索対象:",
-    "All groups": "全てのグループ",
-    "My Library": "私のライブラリ"
+    "Everywhere": "全て",
+    "My Library": "私のライブラリ",
+    "Group Libraries": "グループライブラリ"
 }

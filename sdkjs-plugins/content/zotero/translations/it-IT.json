@@ -39,6 +39,7 @@
     "Failed to insert bibliography": "Impossibile inserire la bibliografia",
     "Failed to refresh": "Impossibile aggiornare",
     "Search in:": "Cerca in:",
-    "All groups": "Tutti i gruppi",
-    "My Library": "La mia biblioteca"
+    "Everywhere": "Tutto",
+    "My Library": "La mia biblioteca",
+    "Group Libraries": "Biblioteca dei gruppi"
 }

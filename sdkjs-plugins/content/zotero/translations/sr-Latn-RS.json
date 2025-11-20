@@ -39,6 +39,7 @@
     "Failed to insert bibliography": "Neuspelo ubacivanje bibliografije",
     "Failed to refresh": "Neuspelo osvežavanje",
     "Search in:": "Pretražite u:",
-    "All groups": "Sve grupe",
-    "My Library": "Moja biblioteka"
+    "Everywhere": "Sve",
+    "My Library": "Moja biblioteka",
+    "Group Libraries": "Grupe biblioteka"
 }
