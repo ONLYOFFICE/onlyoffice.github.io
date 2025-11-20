@@ -222,6 +222,9 @@
 
                 addStylesToList(stylesInfo);
 
+                const el = document.createElement("hr");
+                elements.styleSelectList.appendChild(el);
+
                 if (elements.styleSelectListOther.children.length > 0) {
                     var other = document.createElement("span");
                     other.textContent = "More Styles...";
@@ -243,27 +246,36 @@
     }
 
     function loadGroups() {
-        sdk.getUserGroups().then(function (groups) {
-            groups = [
+        return sdk.getUserGroups().then(function (groups) {
+            const customGroups = [
                 {id: "all", name: getMessage("Everywhere")},
                 {id: "my_library", name: getMessage("My Library")},
                 {id: "group_libraries", name: getMessage("Group Libraries")}
-            ].concat(groups);
+            ];
+            library.value = customGroups[0].name;
+            library.setAttribute("data-value", customGroups[0].id);
+            library.setAttribute("title", customGroups[0].name);
 
-            for (var i = 0; i < groups.length; i++) {
-                var id = groups[i].id;
-                var name = groups[i].name;
-                var el = document.createElement("span");
+            const selectedItem = localStorage.getItem("selectedGroup") || "all";
+
+            const addGroupToSelectBox = function (id, name) {
+                const el = document.createElement("span");
                 el.setAttribute("data-value", id);
                 el.textContent = name;
                 elements.searchLibrary.appendChild(el);
-                if (id === "all") {
+                if (id === selectedItem) {
                     el.setAttribute("selected", "");
                     library.value = name;
                     library.setAttribute("data-value", id);
                     library.setAttribute("title", name);
                 }
             }
+
+            const addSeparator = function () {
+                const el = document.createElement("hr");
+                elements.searchLibrary.appendChild(el);
+            }
+
             elements.searchLibrary.addEventListener("click", function (e) {
                 const target = e.target;
                 let option;
@@ -272,17 +284,37 @@
                 } else {
                     return;
                 }
-                elements.searchLibrary.querySelector('span[selected]').attributes.removeNamedItem("selected");
+                const selected = elements.searchLibrary.querySelector('span[selected]');
+                selected && selected.attributes.removeNamedItem("selected");
                 option.setAttribute("selected", "");
+                const id = option.getAttribute("data-value");
+                const name = option.textContent;
                 library.value = option.textContent;
-                library.setAttribute("data-value", option.getAttribute("data-value"));
-                library.setAttribute("title", option.textContent);
+                library.setAttribute("data-value", id);
+                library.setAttribute("title", name);
+                localStorage.setItem("selectedGroup", id);
 
                 switchClass(elements.searchClear, displayNoneClass, true);
                 elements.searchField.value = "";
                 lastSearch.text = "";
                 clearLibrary();
             });
+            
+            if (groups.length === 0) {
+                return;
+            }
+            for (var i = 0; i < customGroups.length; i++) {
+                const id = customGroups[i].id;
+                const name = customGroups[i].name;
+                addGroupToSelectBox(id, name);
+            }
+            addSeparator();
+            for (var i = 0; i < groups.length; i++) {
+                const id = groups[i].id;
+                const name = groups[i].name;
+                addGroupToSelectBox(id, name);
+            }
+
         });
     }
 
@@ -604,6 +636,8 @@
         rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
         rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
         rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
+        rules += '.selectList { border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '; background-color: ' + window.Asc.plugin.theme['background-normal'] + '; }\n';
+        rules += '.selectList > hr { border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '; }\n';
         rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
         rules += 'color : ' + window.Asc.plugin.theme['text-normal'] + '; }\n';
         rules += '.selectList > span:hover { background-color : ' + window.Asc.plugin.theme['highlight-button-hover'] + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}\n';
