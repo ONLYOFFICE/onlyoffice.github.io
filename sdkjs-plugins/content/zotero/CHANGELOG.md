@@ -31,3 +31,5 @@
 ## 1.0.6
 
 * The ability to choose which library to search in
+* Ability to add prefix and suffix
+* "Omit author" feature
