@@ -12,6 +12,14 @@
  */
 
 /**
+ * @typedef {Object} InfoForCitationCluster
+ * @property {string|number} id
+ * @property {boolean} `suppress-author`
+ * @property {string} [prefix]
+ * @property {string} [suffix]
+ */
+
+/**
  * @param {string|number} id
  */
 function CitationItem(id) {
