@@ -84,16 +84,8 @@ textarea:focus, input:focus {
     margin-top: 8px
 }
 
-.control {
-    box-sizing: border-box;
-    border: 1px solid #cfcfcf;
-    border-radius: 2px;
-    color: #333333;
-}
-
     .control.select {
         cursor: pointer;
-        background-color: #ffffff;
     }
 
     .control.text {
@@ -200,6 +192,14 @@ input[type="text"] {
         margin: 0px 0px 15px 8px;
     }
 	
+#omitAuthorDiv {
+    margin-bottom: 15px;
+    margin-left: 8px;
+}    
+    #omitAuthorDiv label {
+        vertical-align: top;
+    }
+
  #prefixSuffixDiv {
      display: flex;
      gap: 8px;
@@ -345,6 +345,9 @@ input[type="text"] {
     }
     .selectList > hr {
         margin: 4px 0;
+        border: none;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
     }
 
 .scrollThumb {
