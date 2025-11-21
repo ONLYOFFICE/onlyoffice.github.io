@@ -220,10 +220,16 @@ SpellChecker.prototype.onAccept = async function(paraId, rangeId)
 	if (!anot)
 		return;
 	
+	let range = this.getAnnotationRangeObj(paraId, rangeId);
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-	await Asc.Editor.callMethod("SelectAnnotationRange", [this.getAnnotationRangeObj(paraId, rangeId)]);
-	await Asc.Editor.callMethod("RemoveSelectedContent");
-	await Asc.Editor.callMethod("InputText", [anot["suggested"]]);
+	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
+	
+	Asc.scope.text = anot["suggested"];
+	await Asc.Editor.callCommand(function(){
+		Api.ReplaceTextSmart([Asc.scope.text]);
+	});	
+	
+	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
 };
