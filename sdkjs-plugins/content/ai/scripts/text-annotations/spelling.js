@@ -159,9 +159,8 @@ Text to check:`;
 				const index = text.indexOf(wrong, searchStart);
 				if (index === -1) break;
 
-				const isStartBoundary = index === 0 || isWordBoundary(text[index - 1]);
-				const isEndBoundary = index + wrong.length === text.length ||
-					isWordBoundary(text[index + wrong.length]);
+				const isStartBoundary = index === 0 || _t._isWordBoundary(text[index - 1]);
+				const isEndBoundary = index + wrong.length === text.length || _t._isWordBoundary(text[index + wrong.length]);
 
 				if (isStartBoundary && isEndBoundary)
 				{
@@ -185,12 +184,7 @@ Text to check:`;
 			}
 		}
 	}
-
-	function isWordBoundary(char)
-	{
-		return /[\s.,!?;:'"()\[\]{}\-–—\/\\]/.test(char);
-	}
-
+	
 	try 
 	{
 		convertToRanges(text, JSON.parse(response));
@@ -255,9 +249,16 @@ SpellChecker.prototype._handleNewRangePositions = async function(range, paraId, 
 	let start = range["start"];
 	let len = range["length"];
 	
-	if (annot["original"] !== text.substring(start, start + len))
+	const isStartBoundary = start === 0 || this._isWordBoundary(text[start - 1]);
+	const isEndBoundary = start + len === text.length || this._isWordBoundary(text[start + len]);
+	
+	if (!isStartBoundary || !isEndBoundary || annot["original"] !== text.substring(start, start + len))
 	{
 		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
 		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
 	}
+};
+SpellChecker.prototype._isWordBoundary = function(char)
+{
+	return /[\s.,!?;:'"()\[\]{}\-–—\/\\]/.test(char);
 };
