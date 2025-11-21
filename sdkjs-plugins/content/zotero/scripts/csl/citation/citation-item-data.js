@@ -466,6 +466,18 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
             if (creator.lastName) {
                 author.family = creator.lastName;
             }
+            let bHasAuthor = self._author.some(function (a) {
+                if (a.family !== author.family && (a.family || author.family)) {
+                    return false;
+                }
+                if (a.given !== author.given && (a.given || author.given)) {
+                    return false;
+                }
+                return true;
+            });
+            if (bHasAuthor) {
+                return;
+            }
             self._author.push(author);
         },
         this);

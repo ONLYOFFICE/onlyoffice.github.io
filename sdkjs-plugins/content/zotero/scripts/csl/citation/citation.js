@@ -2,14 +2,6 @@
 /// <reference path="./citation-item.js" />
 
 /**
- * @typedef {Object} InfoForCitationCluster
- * @property {string|number} id
- * @property {boolean} `suppress-author`
- * @property {string} [prefix]
- * @property {string} [suffix]
- */
-
-/**
  * @typedef {Object} CitationJsonData
  * @property {string} key
  * @property {string} itemType
