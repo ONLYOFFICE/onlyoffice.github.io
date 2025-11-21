@@ -200,13 +200,29 @@ input[type="text"] {
         vertical-align: top;
     }
 
- #prefixSuffixDiv {
-     display: flex;
-     gap: 8px;
-     margin-bottom: 8px;
-     margin-left: 8px;
- }   
-    
+#locatorLabelsDiv {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    margin-left: 8px;
+}
+    #locatorLabelsDiv > .selectHolder {
+        width: 50%;
+    }
+    #locatorLabelsDiv > .selectHolder input {
+        width: 100%;
+    }
+    #locatorLabelsDiv > input[type="text"] {
+        width: 50%;
+    }
+
+#prefixSuffixDiv {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+}   
+
     #prefixSuffixDiv input[type="text"] {
         width: 50%;
     }

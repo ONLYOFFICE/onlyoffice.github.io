@@ -114,6 +114,9 @@
         selectedThumb: document.getElementById("selectedThumb"),
         buttonsWrapper: document.getElementById("buttonsWrapper"),
 
+        locatorLabel: document.getElementById("locatorLabel"),
+        locatorLabelsList: document.getElementById("locatorLabelsList"),
+
         library: document.getElementById("library"),
         searchLibrary: document.getElementById("searchLibrary"),
         searchLabel: document.getElementById("searchLabel"),
@@ -167,7 +170,8 @@
 
             updateCslItems(true, false, false, false);
             addStylesEventListeners();
-            initSelectBoxes();
+            initSelectBoxes();        
+            initLocators();
         });
 
         window.Asc.plugin.onTranslate = applyTranslations;
@@ -221,6 +225,17 @@
                 }
             });
         });
+    }
+
+    function initLocators() {
+        const id = localStorage.getItem("selectedLocator") || "page";
+        const option = elements.locatorLabelsList.querySelector('[data-value="'+id+'"]');
+        option && option.setAttribute("selected", "");
+        const name = option.textContent;
+        console.log(id);
+        locatorLabel.value = option.textContent;
+        locatorLabel.setAttribute("data-value", id);
+        locatorLabel.setAttribute("title", name);
     }
 
     function loadStyles() {
@@ -570,6 +585,18 @@
 			showLoader(true);
 			citationDocService.saveAsText();
         }
+
+        elements.locatorLabelsList.addEventListener("click", function (e) {
+            const target = e.target;
+            let option;
+            if (target && target instanceof HTMLSpanElement) {
+                option = target;
+            } else {
+                return;
+            }
+            const id = option.getAttribute("data-value");
+            localStorage.setItem("selectedLocator", id);
+        });
 	}
 
     function addStylesEventListeners() {
@@ -1038,6 +1065,25 @@
         return "";
     }
 
+    /**
+     * @returns {{locator: string, label: string} | null}
+     */
+    function getLocator() {
+        const locatorInput = document.getElementById("locator");
+        if (!locatorInput || !locatorInput.value) {
+            return null;
+        }
+        const label = document.getElementById("locatorLabel");
+        if (!label || !label.value) {
+            return null;
+        }
+
+        return { 
+            locator: locatorInput.value,
+            label: label.getAttribute("data-value") 
+        }; 
+    }
+
     function displaySearchItems(append, res, err, isGroup, showNotFound) {
         var holder = elements.docsHolder;
 
@@ -1484,6 +1530,7 @@
 
         const prefix = getPrefix();
         const suffix = getSuffix();
+        const locatorInfo = getLocator();
 
         var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
         for (var citationID in selected.items) {
@@ -1494,6 +1541,10 @@
             }
             if (suffix !== "") {
                 item.suffix = suffix;
+            }
+            if (locatorInfo) {
+                item.locator = locatorInfo.locator;
+                item.label = locatorInfo.label;
             }
             cslCitation.fillFromObject(item);
         }

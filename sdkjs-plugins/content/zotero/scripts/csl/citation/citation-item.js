@@ -17,6 +17,8 @@
  * @property {boolean} `suppress-author`
  * @property {string} [prefix]
  * @property {string} [suffix]
+ * @property {string} [label]
+ * @property {string} [locator]
  */
 
 /**
@@ -95,6 +97,12 @@ CitationItem.prototype.getInfoForCitationCluster = function () {
     }
     if (this._suffix) {
         info.suffix = this._suffix;
+    }
+    if (this._locator) {
+        info.locator = this._locator;
+    }
+    if (this._label) {
+        info.label = this._label;
     }
     return info;
 };
@@ -274,8 +282,6 @@ CitationItem.prototype.toFlatJSON = function (index) {
     ) {
         oldItem.groupID = String(this._itemData.getCustomProperty("groupID"));
     }
-    if (this._prefix !== undefined) oldItem.prefix = this._prefix;
-    if (this._suffix !== undefined) oldItem.suffix = this._suffix;
 
     return oldItem;
 };
