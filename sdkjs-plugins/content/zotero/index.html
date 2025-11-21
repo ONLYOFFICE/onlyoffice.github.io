@@ -72,7 +72,7 @@
                     <div id="searchWrapper">
                         <label for="library" class="i18n">Search in:</label>
                         <div class="selectHolder">
-                            <input id="library" readonly class="control select" type="text">
+                            <input id="library" readonly class="form-control control select form-control" type="text">
                             <div id="searchLibrary" class="selectList display-none">
                             </div>
                         </div>
@@ -95,8 +95,7 @@
 					<div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
 						<div class="flex" style="align-items: center;">
 							<button id="insertLinkBtn" class="button control i18n btn-text-default" style="flex: 1; margin-left: 8px; margin-right: 0;" disabled>Insert Citation</button>
-							<input id="omitAuthor" type="checkbox" class="form-control i18n hidden" title="Omit Author">
-                            </div>
+                        </div>
                         <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
                     </div>
                     <div id="insertBibDiv" class="flex">
@@ -106,6 +105,10 @@
                     <div id="SyncDataDiv" class="flexCol">
 						<button id="synchronizeBtn" class="button control btn-text-default i18n">Synchronize</button>
                     </div>
+                    <div id="omitAuthorDiv">
+                        <label for="omitAuthor" class="i18n">Omit Author</label>
+						<input id="omitAuthor" type="checkbox" class="form-control i18n" title="Omit Author">
+                    </div>
                     <div id="prefixSuffixDiv">
                         <input id="prefixField" autocomplete="off" class="form-control i18n" type="text" placeholder="Prefix" />
                         <input id="suffixField" autocomplete="off" class="form-control i18n" type="text" placeholder="Suffix" />
@@ -114,7 +117,7 @@
                         <div class="label">
                             <label for="styleSelect" class="i18n">Style</label>
                             <div class="selectHolder">
-                            <input id="styleSelect" class="control select text i18n" type="text" placeholder="Enter style name" autocomplete="off">
+                            <input id="styleSelect" class="form-control control select text i18n" type="text" placeholder="Enter style name" autocomplete="off">
                             <div id="styleSelectList" class="selectList display-none">
                             </div>
                             <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
@@ -123,7 +126,7 @@
                         <div class="label styleWrapperSecond">
                             <label for="styleLang" class="i18n">Language</label>
                             <div class="selectHolder">
-                                <input id="styleLang" readonly class="control select" type="text">
+                                <input id="styleLang" readonly class="form-control control select" type="text">
                                 <div id="styleLangList" class="selectList display-none">
                                     <span data-value="af-ZA">Afrikaans</span>
                                         <span data-value="ar">Arabic</span>
