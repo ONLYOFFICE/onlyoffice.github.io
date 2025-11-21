@@ -156,7 +156,7 @@ function registerButtons(window, undefined)
 		});
 
 		let buttonCurrent = new Asc.ButtonContextMenu(buttonSub);
-		buttonCurrent.text = "Check current selection";
+		buttonCurrent.text = "Check current text";
 		buttonCurrent.editors = ["word"];
 		buttonCurrent.addCheckers("Target", "Selection");
 
@@ -653,8 +653,8 @@ function registerButtons(window, undefined)
 				onclick: () => onCheckGrammarSpelling(false)
 			}, 
 			{
-				text: 'Check current selection',
-				id: 'sg10n-check-selection',
+				text: 'Check current text',
+				id: 'sg10n-check-text',
 				onclick: () => onCheckGrammarSpelling(true)
 			}];
 			buttonGS.attachOnClick(async function(){
