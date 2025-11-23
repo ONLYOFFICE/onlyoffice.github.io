@@ -160,7 +160,7 @@ MarkDownStreamer.prototype.onStreamStableTail = async function(stableMD, tailMD)
 
 	this.tail = tailMD;
 
-	console.log("Streamed chunk. Stable:" + stableMD + " Html:" + obj.stable);
+	//console.log("Streamed chunk. Stable:" + stableMD + " Html:" + obj.stable);
 
 	await Asc.Editor.callMethod("InsertStreamedContent", [obj]);
 };
