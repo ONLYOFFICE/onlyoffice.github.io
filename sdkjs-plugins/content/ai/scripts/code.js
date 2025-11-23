@@ -539,6 +539,28 @@ async function GetOldCustomFunctions() {
 	return obj;
 }
 
+var isPluginInit = false;
+var arrayResolveInit = [];
+
+window.waitInit = async function() {
+	if (isPluginInit)
+		return;	
+
+	return new Promise(resolve => {
+		arrayResolveInit.push(resolve);
+	});
+};
+
+window.setInit = function() {
+	if (isPluginInit)
+		return;
+	isPluginInit = true;
+	arrayResolveInit.forEach(resolve => {
+		resolve();
+	});
+	arrayResolveInit = [];
+};
+
 window.Asc.plugin.init = async function() {
 	// Check server settings
 	if (window.Asc.plugin.info.aiPluginSettings) {
@@ -684,7 +706,9 @@ class Provider extends AI.Provider {\n\
 	}
 
 	await initWithTranslate(1 << 1);
-	clearChatState();	
+	clearChatState();
+
+	window.setInit();
 };
 
 window.Asc.plugin.onTranslate = async function() {
