@@ -246,6 +246,16 @@ function getAnyFormGenerationPrompt(documentDescription) {
 
 Generate the document **preferably** in Markdown (.md) format.
 Output only the final result — no introductions, explanations, or phrases like "Here's the text" or "The result is".
+
+The document MUST be written in pure Markdown.
+Absolutely forbidden:
+- HTML tags (e.g., <p>, <div>, <span>, <h1>, <img>, <br>)
+- HTML attributes (e.g., align="center", style="...")
+- Embedded CSS
+- Raw HTML blocks of any kind
+Emoji MUST NOT be wrapped in HTML containers.
+If you cannot decorate or center text without HTML, do NOT decorate or center it at all.
+
 If possible, provide the output in valid Markdown (.md) format, but do not wrap it in \`\`\`markdown\`\`\` or any other code block.
 
 When generating a document, use standard Markdown syntax. For interactive input fields, use the special syntax \`{FIELD:...}\`.
@@ -451,6 +461,14 @@ function getAnyDocumentGenerationPrompt(documentDescription) {
 
 	const instructions = "Generate the document **preferably** in Markdown (.md) format.\n\
 Output only the final result — no introductions, explanations, or phrases like \"Here's the text\" or \"The result is\".\n\
+The document MUST be written in pure Markdown.\n\
+Absolutely forbidden:\n\
+- HTML tags (e.g., <p>, <div>, <span>, <h1>, <img>, <br>)\n\
+- HTML attributes (e.g., align=\"center\", style=\"...\")\n\
+- Embedded CSS\n\
+- Raw HTML blocks of any kind\n\
+Emoji MUST NOT be wrapped in HTML containers.\n\
+If you cannot decorate or center text without HTML, do NOT decorate or center it at all.\n\
 If possible, provide the output in valid Markdown (.md) format, but do not wrap it in ```markdown``` or any other code block.\n";
 
 	let fullPrompt = instructions + "\nDescription:\n\n" + documentDescription;
