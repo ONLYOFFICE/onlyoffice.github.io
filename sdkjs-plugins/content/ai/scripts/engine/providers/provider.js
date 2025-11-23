@@ -148,7 +148,7 @@
 		 * Don't override this method unless you know what you're doing.
 		 * @returns {Object}
 		 */
-		getRequestBodyOptions() {
+		getRequestBodyOptions(body) {
 			return {};
 		}
 
