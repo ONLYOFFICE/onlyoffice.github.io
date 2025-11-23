@@ -2873,7 +2873,8 @@ HELPERS.slide.push((function(){
 
 
 		const topic = params.topic || "Untitled presentation";
-		const userSlideCount = (Number.isFinite(params.slideCount) && params.slideCount > 0) ? Math.floor(params.slideCount) : null;
+		let intSlideCount = parseInt(params.slideCount, 10);
+		const userSlideCount = (Number.isFinite(intSlideCount) && intSlideCount > 0) ? intSlideCount : null;
 		const style = params.style || "modern";
 
 		const additionalConstrait = userSlideCount !== null ? `- You have a HARD CAP of ${userSlideCount} slide blocks: output exactly ${userSlideCount} {"t":"slide.start"}...{"t":"slide.end"} pairs.` : ``;
