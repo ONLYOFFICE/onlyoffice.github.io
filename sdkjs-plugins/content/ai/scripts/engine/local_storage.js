@@ -116,7 +116,7 @@
 		return false;
 	};
 
-	AI.Storage.load = function() {
+	AI.Storage.load = async function() {
 		let obj = null;
 		try {
 			if (AI.serverSettings) {
@@ -249,8 +249,10 @@
 			}
 		}
 
-		if (!window.isCheckGenerationInfo)
+		if (!window.isCheckGenerationInfo) {
+			await window.waitInit();
 			window.checkGenerationInfo();
+		}
 
 		return obj ? true : false;
 	};
