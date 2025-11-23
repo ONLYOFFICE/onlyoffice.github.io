@@ -516,7 +516,7 @@ function fetchExternal(url, options, isStreaming) {
 	AI._extendBody = function(_provider, body) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
 		if (!provider) provider = new AI.Provider();
-		let bodyPr = provider.getRequestBodyOptions();
+		let bodyPr = provider.getRequestBodyOptions(body);
 
 		if (provider.isUseProxy())
 			bodyPr.target = provider.url;
