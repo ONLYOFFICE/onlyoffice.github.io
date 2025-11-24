@@ -232,19 +232,19 @@
 				const text = params.text || '';
 				const displaySymbol = checked ? symbolChecked : symbolUnchecked;
 
-				return `<w:Sdt CheckBox="t" Form="t" CheckBoxValueChecked="${symbolChecked}" CheckBoxValueUnchecked="${symbolUnchecked}" Key="${key}" Text="${text}"/>${displaySymbol}</w:Sdt>`;
+				return `<w:Sdt CheckBox="t" Form="t" CheckBoxValueChecked="${symbolChecked}" CheckBoxValueUnchecked="${symbolUnchecked}" Key="${key}" Text="${text}"/></w:Sdt>`;
 			}
 
 			function renderRadiobutton(params) {
 				const checked = params.checked === 'true';
-				const symbolChecked = params.symbolChecked || '◙';
+				const symbolChecked = params.symbolChecked || '◉';
 				const symbolUnchecked = params.symbolUnchecked || '○';
 				const groupKey = params.groupKey || params.GroupKey || 'Group 1';
 				const key = params.key || ('Radio' + fieldKeyCounter++);
 				const text = params.text || '';
 				const displaySymbol = checked ? symbolChecked : symbolUnchecked;
 
-				return `<w:Sdt CheckBox="t" Form="t" CheckBoxValueChecked="${symbolChecked}" CheckBoxValueUnchecked="${symbolUnchecked}" GroupKey="${groupKey}" Key="${key}">${displaySymbol}${text}</w:Sdt>`;
+				return `<w:Sdt CheckBox="t" Form="t" CheckBoxValueChecked="${symbolChecked}" CheckBoxValueUnchecked="${symbolUnchecked}" GroupKey="${groupKey}" Key="${key} Text="${text}"></w:Sdt>`;
 			}
 
 			function renderCombobox(params) {
