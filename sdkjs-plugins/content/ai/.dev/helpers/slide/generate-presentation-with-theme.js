@@ -467,6 +467,7 @@
 			this.s.language = sLanguage;
 		};
 		Executor.prototype.presentationEnd = async function () {
+			this.s.presentationEnd = true;
 			await this._drainImages();
 		};
 		Executor.prototype.themeStart = async function () {
@@ -882,6 +883,7 @@
 			try {
 				const imageEngine = AI.Request.create(AI.ActionType.ImageGeneration);
 				if (!imageEngine) {
+					await Asc.Editor.callMethod("EndAction", ["GroupActions", "AI: Build presentation"]);
 					return;
 				}
 				Asc.scope._drawId = job.drawingId;
@@ -1639,8 +1641,9 @@ ${fontsContract}
 			await Asc.Editor.callMethod("StartAction", ["GroupActions", "AI: Build presentation"]);
 			await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
 			await requestEngine.chatRequest(prompt, false, handler);
-			
-			
+			if (!exec.s.presentationEnd) {
+				await Asc.Editor.callMethod("EndAction", ["GroupActions", "AI: Build presentation"]);
+			}
 		} catch (e) {
 			
 			await Asc.Editor.callMethod("EndAction", ["GroupActions", "AI: Build presentation"]);
