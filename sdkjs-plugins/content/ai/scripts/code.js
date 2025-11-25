@@ -876,7 +876,11 @@ async function onCheckGrammarSpelling(isCurrent)
 	{
 		paraIds = await Asc.Editor.callCommand(function(){
 			let result = [];
-			let paragraphs = Api.GetDocument().GetRangeBySelect().GetAllParagraphs();
+			let range = Api.GetDocument().GetRangeBySelect();
+			if (!range)
+				return [];
+			
+			let paragraphs = range.GetAllParagraphs();
 			paragraphs.forEach(p => result.push(p.GetInternalId()));
 			return result;
 		});
