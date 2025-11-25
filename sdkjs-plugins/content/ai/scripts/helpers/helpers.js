@@ -1667,15 +1667,24 @@ HELPERS.slide.push((function(){
 	func.call = async function (params) {
 		Asc.scope.slideNum = params.slideNumber;
 
-		await Asc.Editor.callCommand(function () {
+		let data = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
-			if (slide) {
-				slide.Delete();
+			if (!slide) {
+				return null;
 			}
+			let curSlideIdx = presentation.GetCurSlideIndex();
+			let slideIdx = slide.GetSlideIndex();
+			slide.Delete();
+			return {"curSlideIdx": curSlideIdx, "slideIdx": slideIdx};
 		});
+		if (data) {
+			if (data["slideIdx"] <= data["curSlideIdx"]) {
+				await Asc.Editor.callMethod("GoToSlide", [data["curSlideIdx"]]);
+			}
+		}
 	};
 	return func;
 })());
@@ -1704,14 +1713,24 @@ HELPERS.slide.push((function(){
 	
 	func.call = async function (params) {
 		Asc.scope.slideNum = params.slideNumber;
-
-		await Asc.Editor.callCommand(function () {
+		let data = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
-			if (slide) {
-				let newSlide = slide.Duplicate(Asc.scope.slideNum);
+			if (!slide)
+				slide = presentation.GetCurrentSlide();
+			if (!slide) {
+				return null;
 			}
+			let slideIdx = slide.GetSlideIndex();
+			if (slide) {
+				slide.Duplicate(slideIdx + 1);
+				return {"idx": slideIdx + 1};
+			}
+			return null;
 		});
+		if (data) {
+			await Asc.Editor.callMethod("GoToSlide", [data["idx"] + 1]);
+		}
 	};
 	return func;
 })());
