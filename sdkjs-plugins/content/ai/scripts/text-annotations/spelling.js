@@ -236,6 +236,7 @@ SpellChecker.prototype.onAccept = async function(paraId, rangeId)
 	Asc.scope.text = anot["suggested"];
 	await Asc.Editor.callCommand(function(){
 		Api.ReplaceTextSmart([Asc.scope.text]);
+		Api.GetDocument().RemoveSelection();
 	});	
 	
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
