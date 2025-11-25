@@ -127,7 +127,7 @@ CitationDocService.prototype.addCitation = function (text, value) {
 /**
  * @returns {Promise<Array<CustomField>>}
  */
-CitationDocService.prototype.getAllAddinFields = function () {
+CitationDocService.prototype._getAllAddinFields = function () {
     const self = this;
     return new Promise(function (resolve, reject) {
         window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
@@ -137,10 +137,10 @@ CitationDocService.prototype.getAllAddinFields = function () {
 /**
  * @returns {Promise<Array<CustomField>>}
  */
-CitationDocService.prototype._getAddinZoteroFields = function () {
+CitationDocService.prototype.getAddinZoteroFields = function () {
     const self = this;
     return new Promise(function (resolve, reject) {
-        self.getAllAddinFields().then(function (arrFields) {
+        self._getAllAddinFields().then(function (arrFields) {
             try {
                 if (arrFields.length) {
                     arrFields = arrFields.filter(function (field) {
@@ -233,7 +233,7 @@ CitationDocService.prototype._removeSuperSubTagsWithPositions = function (
  */
 CitationDocService.prototype.saveAsText = function () {
     // TODO потом добавить ещё форматы, пока только как текст
-    return this._getAddinZoteroFields().then(function (arrFields) {
+    return this.getAddinZoteroFields().then(function (arrFields) {
         let count = arrFields.length;
         if (!count) {
             window.Asc.plugin.executeCommand("close", "");

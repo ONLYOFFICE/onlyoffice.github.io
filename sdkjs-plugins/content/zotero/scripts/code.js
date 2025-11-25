@@ -18,6 +18,7 @@
 
 /// <reference path="./zotero/zotero.js" />
 /// <reference path="./csl/citation/citation.js" />
+/// <reference path="./csl/citation/storage.js" />
 /// <reference path="./csl/styles/styles-manager.js" />
 
 (function () {
@@ -39,8 +40,7 @@
 	let bibPlaceholder = "Please insert some citation into the document.";
 	var bUserItemsUpdated = false;
 	var bGroupsItemsUpdated = false;
-	// TODO добавить варианты сохранения для совместимости с другими редакторами 
-    //     (ms, libre, google, мой офис), пока есть вариант сохранить как текст
+
 	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
     //     из библиографии автоматически (это делать только при обновлении библиографии
     //     или refresh), но их точно нужно удалить из formatter!
@@ -218,7 +218,6 @@
         const option = elements.locatorLabelsList.querySelector('[data-value="'+id+'"]');
         option && option.setAttribute("selected", "");
         const name = option.textContent;
-        console.log(id);
         locatorLabel.value = option.textContent;
         locatorLabel.setAttribute("data-value", id);
         locatorLabel.setAttribute("title", name);
@@ -1259,10 +1258,10 @@
     /**
      * @param {boolean} bUpadteAll 
      * @param {boolean} bPastBib 
-     * @param {boolean} bSyncronize 
+     * @param {boolean} bSynchronize 
      * @returns {Promise<void>}
      */
-	function updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize) {
+	function updateAllOrAddBib(bUpadteAll, bPastBib, bSynchronize) {
 		if (!selectedStyle) {
             showError(getMessage("Style is not selected"));
             return;
@@ -1271,7 +1270,7 @@
             showError(getMessage("Language is not selected"));
             return;
         }
-		return citationDocService.getAllAddinFields().then(function(arrFields) {
+		return citationDocService.getAddinZoteroFields().then(function(arrFields) {
 			if (!arrFields.length) {
 				showLoader(false);
                 return;
@@ -1279,6 +1278,10 @@
             var updatedFields = [];
             var bibField = null;
             var bibFieldValue = ' ';
+            
+            const fragment = document.createDocumentFragment();
+            const tempElement = document.createElement("div");
+            fragment.appendChild(tempElement);
 
             try {
                 var bibItems = new Array(CSLCitationStorage.size);
@@ -1302,13 +1305,13 @@
                     }
                     bibItems[citationIndex] = bibText;
                 }
-                elements.tempDiv.innerHTML = bibItems.join('');
+                tempElement.innerHTML = bibItems.join('');
             } catch (e) {
                 if (
                     false === cslStylesManager.isLastUsedStyleContainBibliography()
                 ) {
                     // style does not describe the bibliography
-                    elements.tempDiv.textContent = "";
+                    tempElement.textContent = "";
                 } else {
                     console.error(e);
                     showError(getMessage("Failed to apply this style."));
@@ -1317,7 +1320,7 @@
                 }
             }
             
-            var bibliography = elements.tempDiv.innerText;
+            var bibliography = tempElement.innerText;
             arrFields.forEach(function(field) {
                 var citationObject;
                     var citationStartIndex = field.Value.indexOf("{");
@@ -1337,9 +1340,9 @@
                     cslCitation = new CSLCitation(keysL.length, citationID);
                     cslCitation.fillFromObject(citationObject);
                     keysL = cslCitation.getInfoForCitationCluster();
-                    elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
-                    field["Content"] = elements.tempDiv.innerText;
-                    if (bSyncronize && cslCitation) {
+                    tempElement.innerHTML = formatter.makeCitationCluster(keysL);
+                    field["Content"] = tempElement.innerText;
+                    if (bSynchronize && cslCitation) {
                         // if we make synchronization we must update value too
                         field["Value"] = citPrefixNew + ' ' + citSuffixNew + JSON.stringify(cslCitation.toJSON());
                     }
@@ -1377,12 +1380,12 @@
         });
 	};
 
-	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize) {
+	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSynchronize) {
         // looks like a crutch
 		clearTimeout(repeatTimeout);
         if (loadingStyle || loadingLocale || !cslStylesManager.cached(selectedStyle) || !locales[selectedLocale]) {
             repeatTimeout = setTimeout( function() {
-				updateFormatter(bUpadteAll, bPastBib, bPastLink, bSyncronize);
+				updateFormatter(bUpadteAll, bPastBib, bPastLink, bSynchronize);
 			}, 100);
             return;
         }
@@ -1415,7 +1418,7 @@
 
         let promises = [];
         if (bUpadteAll) {
-            promises.push(updateAllOrAddBib(bUpadteAll, bPastBib, bSyncronize));
+            promises.push(updateAllOrAddBib(bUpadteAll, bPastBib, bSynchronize));
         }
         if (bPastLink) {
             promises.push(insertSelectedCitations());
@@ -1437,7 +1440,7 @@
 	function updateCslItems(bUpdadeFormatter, bUpadteAll, bPastBib, bPastLink) {
 		CSLCitationStorage.clear();
 
-        return citationDocService.getAllAddinFields().then(function(arrFields) {
+        return citationDocService.getAddinZoteroFields().then(function(arrFields) {
 			if (arrFields.length) {
 				var numOfItems = 0;
 				var bibField = null;
@@ -1574,12 +1577,16 @@
 
             keys.forEach(function(key) {
                 removeSelected(key);
-            })
+            });
+            const fragment = document.createDocumentFragment();
+            const tempElement = document.createElement("div");
+            fragment.appendChild(tempElement);
 			
 			// TODO может ещё очистить поиск (подумать над этим)
-			elements.tempDiv.innerHTML = formatter.makeCitationCluster(keysL);
+			tempElement.innerHTML = formatter.makeCitationCluster(keysL);
+            cslCitation.addPlainCitation(tempElement.innerText);
             return citationDocService.addCitation(
-                elements.tempDiv.innerText,
+                tempElement.innerText,
                 JSON.stringify(cslCitation.toJSON())
             ).then(function() {
                 showLoader(false);

@@ -39,7 +39,8 @@ function CSLCitation(itemsStartIndex, citationID) {
     this._itemsStartIndex = itemsStartIndex;
     /** @type {Array<CitationItem>} */
     this._citationItems = new Array();
-    this._properties = new Object();
+    /** @type {Object<string, string>} */
+    this._properties = {};
 
     this._schema =
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
@@ -203,19 +204,14 @@ CSLCitation.prototype.getInfoForCitationCluster = function () {
 };
 
 /**
- * @param {string} key
- * @returns
+ * @returns {string}
  */
-CSLCitation.prototype.getProperty = function (key) {
-    let items = this._citationItems;
-    for (var i = 0; i < items.length; i++) {
-        let itemData = items[i].getItemData();
-        if (itemData.getCustomProperty(key) !== null) {
-            return itemData.getCustomProperty(key);
-        }
+CSLCitation.prototype.getPlainCitation = function () {
+    if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
+        return this._properties.plainCitation;
     }
 
-    return null;
+    return "";
 };
 
 /**
@@ -235,11 +231,25 @@ CSLCitation.prototype._addCitationItem = function (item) {
 };
 
 /**
- * @param {object} properties
+ * @param {string} plainCitation
+ * @returns
+ */
+CSLCitation.prototype.addPlainCitation = function (plainCitation) {
+    this._setProperties({ plainCitation: plainCitation });
+    return this;
+};
+
+/**
+ * @param {Object<string, string>} properties
  * @returns
  */
 CSLCitation.prototype._setProperties = function (properties) {
-    this._properties = properties;
+    const self = this;
+    Object.keys(properties).forEach(function (key) {
+        if (Object.hasOwnProperty.call(properties, key)) {
+            self._properties[key] = properties[key];
+        }
+    }, this);
     return this;
 };
 
