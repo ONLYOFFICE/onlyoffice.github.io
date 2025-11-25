@@ -123,6 +123,21 @@ CRITICAL - What NOT to include:
 - DO NOT include entries where "wrong" and "correct" are identical
 - ONLY include actual spelling mistakes that are standalone words
 
+CRITICAL - Output Format:
+- Return ONLY the raw JSON array, nothing else
+- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
+- DO NOT include any explanatory text before or after the JSON
+- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
+- The response should start with [ and end with ]
+
+Correct output format:
+[{"wrong": "Hlo", "correct": "Hello", "occurrence": 1, "confidence": "high"}]
+
+Incorrect output formats (DO NOT USE):
+\`\`\`json
+[{"wrong": "Hlo", "correct": "Hello"}]
+\`\`\`
+
 Example (no errors):
 Input: "The quick brown fox jumps over the lazy dog."
 Output: []

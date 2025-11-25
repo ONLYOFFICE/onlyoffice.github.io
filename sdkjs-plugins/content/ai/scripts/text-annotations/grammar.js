@@ -144,7 +144,13 @@ Output:
   }
 ]
 
-Remember: Return ONLY the JSON array, no additional text or explanation.
+CRITICAL - Output Format:
+- Return ONLY the raw JSON array, nothing else
+- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
+- DO NOT include any explanatory text before or after the JSON
+- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
+- The response should start with [ and end with ]
+
 Text to check:`;
 	argPrompt += text;
 
