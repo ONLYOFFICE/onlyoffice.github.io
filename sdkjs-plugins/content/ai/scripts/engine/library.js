@@ -244,7 +244,7 @@
 				const text = params.text || '';
 				const displaySymbol = checked ? symbolChecked : symbolUnchecked;
 
-				return `<w:Sdt CheckBox="t" Form="t" CheckBoxValueChecked="${symbolChecked}" CheckBoxValueUnchecked="${symbolUnchecked}" GroupKey="${groupKey}" Key="${key} Text="${text}"></w:Sdt>`;
+				return `<w:Sdt CheckBox="t" Form="t" CheckBoxValueChecked="${symbolChecked}" CheckBoxValueUnchecked="${symbolUnchecked}" GroupKey="${groupKey}" Key="${key}" Text="${text}"></w:Sdt>`;
 			}
 
 			function renderCombobox(params) {
