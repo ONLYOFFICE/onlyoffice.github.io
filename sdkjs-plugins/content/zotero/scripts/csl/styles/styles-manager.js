@@ -82,11 +82,14 @@ CslStylesManager.prototype.getLastUsedFormat = function () {
 };
 
 /**
- * @returns {string}
+ * @returns {"endnotes" | "footnotes"}
  */
 CslStylesManager.prototype.getLastUsedNotesStyle = function () {
     let lastUsedNotesStyle = localStorage.getItem(this._lastNotesStyleKey);
-    if (lastUsedNotesStyle) {
+    if (
+        lastUsedNotesStyle === "footnotes" ||
+        lastUsedNotesStyle === "endnotes"
+    ) {
         return lastUsedNotesStyle;
     }
     return "footnotes";
@@ -100,7 +103,7 @@ CslStylesManager.prototype.getLastUsedStyleId = function () {
     if (lastUsedStyle) {
         return lastUsedStyle;
     }
-    return "ieee";
+    return "";
 };
 
 /**

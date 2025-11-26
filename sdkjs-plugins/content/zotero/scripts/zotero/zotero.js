@@ -38,7 +38,7 @@
  * @typedef {Object} ZoteroGroupInfo
  * @property {number} id
  * @property {number} version
- * @property {{alternate: {href: string, type: string}, self: {href: string, type: string}}} meta
+ * @property {CslJsonObjectLinks} meta
  * @property {{created: string, lastModified: string, numItems: number}} links
  * @property {{name: string, description: string, id: number, owner: number, type: string}} data
  */
@@ -60,6 +60,7 @@ const ZoteroSdk = function () {
 // Constants
 ZoteroSdk.prototype.ZOTERO_API_VERSION = "3";
 ZoteroSdk.prototype.USER_AGENT = "AscDesktopEditor";
+/** @type {"csljson"|"json"} */
 ZoteroSdk.prototype.DEFAULT_FORMAT = "csljson";
 ZoteroSdk.prototype.STORAGE_KEYS = {
     USER_ID: "zoteroUserId",
@@ -201,7 +202,7 @@ ZoteroSdk.prototype._parseLinkHeader = function (headerValue) {
  * @param {Promise<AscSimpleResponse>} promise
  * @param {function(any): void} resolve
  * @param {function(any): void} reject
- * @param {number} id
+ * @param {number|string} id
  * @returns {Promise<void>}
  */
 ZoteroSdk.prototype._parseDesktopItemsResponse = function (
@@ -227,7 +228,7 @@ ZoteroSdk.prototype._parseDesktopItemsResponse = function (
  * @param {Promise<FetchResponse>} promise
  * @param {function(any): void} resolve
  * @param {function(any): void} reject
- * @param {number} id
+ * @param {number|string} id
  * @returns {Promise<void>}
  */
 ZoteroSdk.prototype._parseItemsResponse = function (
@@ -247,7 +248,7 @@ ZoteroSdk.prototype._parseItemsResponse = function (
             var links = self._parseLinkHeader(
                 response.headers.get("Link") || ""
             );
-            /** @type {{items: any, id: number, next?: function(): Promise<void>}} */
+            /** @type {{items: any, id: number|string, next?: function(): Promise<void>}} */
             var result = {
                 items: json,
                 id: id,
@@ -276,7 +277,7 @@ ZoteroSdk.prototype._parseItemsResponse = function (
  * @param {Promise<AscSimpleResponse | FetchResponse>} promise
  * @param {function(any): void} resolve
  * @param {function(any): void} reject
- * @param {number} id
+ * @param {number|string} id
  */
 ZoteroSdk.prototype._parseResponse = function (promise, resolve, reject, id) {
     if (this._isOnlineAvailable) {
@@ -297,9 +298,9 @@ ZoteroSdk.prototype._parseResponse = function (promise, resolve, reject, id) {
 
 /**
  * Get items from user library
- * @param {string} search
+ * @param {string|null} search
  * @param {string[]} itemsID
- * @param {"csljson"|"json"} format
+ * @param {"csljson"|"json"} [format]
  */
 ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
@@ -331,10 +332,10 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
 
 /**
  * Get items from group library
- * @param {string} search
- * @param {number} groupId
+ * @param {string | null} search
+ * @param {number|string} groupId
  * @param {string[]} itemsID
- * @param {"csljson"|"json"} format
+ * @param {"csljson"|"json"} [format]
  *
  */
 ZoteroSdk.prototype.getGroupItems = function (
@@ -344,6 +345,7 @@ ZoteroSdk.prototype.getGroupItems = function (
     format
 ) {
     var self = this;
+
     format = format || self.DEFAULT_FORMAT;
 
     return new Promise(function (resolve, reject) {
