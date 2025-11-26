@@ -1,6 +1,81 @@
 // @ts-check
 
 /**
+ * @typedef {Object} CslJsonObjectItem
+ * @property {CslJsonObjectData} data
+ * @property {string} key
+ * @property {CslJsonObjectLibrary} library
+ * @property {CslJsonObjectLinks} links
+ * @property {CslJsonObjectMeta} meta
+ * @property {number} version
+ */
+
+/**
+ * @typedef {Object} CslJsonObjectData
+ * @property {string} ISBN
+ * @property {string} abstractNote
+ * @property {string} accessDate
+ * @property {string} archive
+ * @property {string} archiveLocation
+ * @property {string} callNumber
+ * @property {Array<any>} collections
+ * @property {{creatorType: string, firstName: string, lastName: string}[]} creators
+ * @property {string} date
+ * @property {string} dateAdded
+ * @property {string} dateModified
+ * @property {string} edition
+ * @property {string} extra
+ * @property {string} itemType
+ * @property {string} key
+ * @property {string} language
+ * @property {string} libraryCatalog
+ * @property {string} numPages
+ * @property {string} numberOfVolumes
+ * @property {string} place
+ * @property {string} publisher
+ * @property {Object} relations
+ * @property {string} rights
+ * @property {string} series
+ * @property {string} seriesNumber
+ * @property {string} shortTitle
+ * @property {Array<string>} tags
+ * @property {string} title
+ * @property {string} url
+ * @property {number} version
+ * @property {string} volume
+ */
+
+/**
+ * @typedef {Object} CslJsonObjectLink
+ * @property {string} href
+ * @property {string} type
+ */
+
+/**
+ * @typedef {Object} CslJsonObjectMeta
+ * @property {{id:number,name:string,username:string,links:{alternate:CslJsonObjectLink}}} createdByUser
+ * @property {string} creatorSummary
+ * @property {number} numChildren
+ * @property {string} parsedDate
+ */
+
+/**
+ * @typedef {Object} CslJsonObjectLinks
+ * @property {CslJsonObjectLink} alternate
+ * @property {CslJsonObjectLink} self
+ */
+
+/**
+ * @typedef {Object} CslJsonObjectLibrary
+ * @property {number} id
+ * @property {{alternate:CslJsonObjectLink}} links
+ * @property {string} name
+ * @property {string} type
+ */
+
+/** ------------------------------------------------ */
+
+/**
  * @typedef {Object} AscSimpleRequestParams
  * @property {string} url
  * @property {"GET"|"POST"} method
