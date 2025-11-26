@@ -1705,8 +1705,13 @@ HELPERS.slide.push((function(){
 		},
 		"examples": [
 			{
-				"prompt": "delete slide 3",
+				"prompt": "duplicate slide 3",
 				"arguments": {"slideNumber": 3}
+			},
+			
+			{
+				"prompt": "duplicate slide",
+				"arguments": {}
 			}
 		]
 	});
@@ -1715,7 +1720,10 @@ HELPERS.slide.push((function(){
 		Asc.scope.slideNum = params.slideNumber;
 		let data = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
-			let slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+			let slide;
+			if (Asc.scope.slideNum !== undefined && Asc.scope.slideNum !== null) {
+				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+			}
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
 			if (!slide) {
