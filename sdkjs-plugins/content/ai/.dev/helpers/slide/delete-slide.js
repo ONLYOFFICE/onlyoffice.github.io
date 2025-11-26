@@ -49,6 +49,11 @@
 			{
 				"prompt": "delete slide 5",
 				"arguments": {"slideNumber": 5}
+			},
+			
+			{
+				"prompt": "delete slide",
+				"arguments": {}
 			}
 		]
 	});
@@ -58,7 +63,10 @@
 
 		let data = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
-			let slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+			let slide;
+			if (Asc.scope.slideNum !== undefined && Asc.scope.slideNum !== null) {
+				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+			}
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
 			if (!slide) {
