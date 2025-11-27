@@ -188,9 +188,6 @@ input[type="text"] {
     #insertBibDiv > .button {
         margin: 0px 0px 15px 8px;
     }
-	#SyncDataDiv > .button {
-        margin: 0px 0px 15px 8px;
-    }
 	
 #omitAuthorDiv {
     margin-bottom: 15px;
