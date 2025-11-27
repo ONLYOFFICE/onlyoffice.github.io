@@ -16,29 +16,32 @@
  *
  */
 
+// @ts-check
+
+/// <reference path="./types-global.js" />
 /// <reference path="./zotero/zotero.js" />
+/// <reference path="./zotero/zotero-api-checker.js" />
 /// <reference path="./csl/citation/citation.js" />
 /// <reference path="./csl/citation/storage.js" />
 /// <reference path="./csl/styles/styles-manager.js" />
 /// <reference path="./csl/locales/locales-manager.js" />
+/// <reference path="./services/translate-service.js" />
+/// <reference path="./services/citation-service.js" />
+
+/**
+ * @typedef {Object} Scroller
+ * @property {Function} onscroll
+ */
 
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
-    //var formatter = null;
-    var citPrefixNew = "ZOTERO_ITEM";
-    var citSuffixNew = "CSL_CITATION";
-    //var citPrefix = "ZOTERO_CITATION";
-    var bibPrefixNew = "ZOTERO_BIBL";
-    var bibSuffixNew = "CSL_BIBLIOGRAPHY";
-    //var bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-    var loadTimeout = null;
+    /** @type {number} */
+    var loadTimeout;
     //var loadingStyle = false;
     //var loadingLocale = false;
     var bNumFormat = false;
-    // let bibPlaceholder = "Please insert some citation into the document.";
-    //var bUserItemsUpdated = false;
 
     // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
     //     из библиографии автоматически (это делать только при обновлении библиографии
@@ -65,74 +68,239 @@
     };
 
     /** @type {ZoteroSdk} */
-    var sdk = null;
-    var cslStylesManager = null;
-    var localesManager = null;
-    var citationService = null;
-    var citationDocService = null;
+    var sdk;
+    /** @type {CslStylesManager} */
+    var cslStylesManager;
+    /** @type {LocalesManager} */
+    var localesManager;
+    /** @type {CitationService} */
+    var citationService;
 
+    /** @type {{text: string, obj: SearchResult | null, groups: Array<SearchResult>}}} */
     var lastSearch = {
         text: "",
         obj: null,
         groups: [],
     };
-    var elements = {
-        loader: document.getElementById("loader"),
-        libLoader: document.getElementById("libLoader"),
-        error: document.getElementById("errorWrapper"),
 
-        contentHolder: document.getElementById("content"),
-        docsHolder: document.getElementById("docsHolder"),
-        docsThumb: document.getElementById("docsThumb"),
+    /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
+    var elements = {};
+    function initElements() {
+        const loader = document.getElementById("loader");
+        if (!loader) {
+            throw new Error("loader not found");
+        }
+        const libLoader = document.getElementById("libLoader");
+        if (!libLoader) {
+            throw new Error("libLoader not found");
+        }
+        const error = document.getElementById("errorWrapper");
+        if (!error) {
+            throw new Error("errorWrapper not found");
+        }
+        const contentHolder = document.getElementById("content");
+        if (!contentHolder) {
+            throw new Error("contentHolder not found");
+        }
+        const docsHolder = document.getElementById("docsHolder");
+        if (!docsHolder) {
+            throw new Error("docsHolder not found");
+        }
+        const docsThumb = document.getElementById("docsThumb");
+        if (!docsThumb) {
+            throw new Error("docsThumb not found");
+        }
+        const configState = document.getElementById("configState");
+        if (!configState) {
+            throw new Error("configState not found");
+        }
+        const apiKeyConfigField = document.getElementById("apiKeyField");
+        if (!apiKeyConfigField) {
+            throw new Error("apiKeyConfigField not found");
+        }
+        const saveConfigBtn = document.getElementById("saveConfigBtn");
+        if (!saveConfigBtn) {
+            throw new Error("saveConfigBtn not found");
+        }
+        const mainState = document.getElementById("mainState");
+        if (!mainState) {
+            throw new Error("mainState not found");
+        }
+        const logoutLink = document.getElementById("logoutLink");
+        if (!logoutLink) {
+            throw new Error("logoutLink not found");
+        }
+        const selectedWrapper = document.getElementById("selectedWrapper");
+        if (!selectedWrapper) {
+            throw new Error("selectedWrapper not found");
+        }
+        const selectedHolder = document.getElementById("selectedHolder");
+        if (!selectedHolder) {
+            throw new Error("selectedHolder not found");
+        }
+        const selectedThumb = document.getElementById("selectedThumb");
+        if (!selectedThumb) {
+            throw new Error("selectedThumb not found");
+        }
+        const buttonsWrapper = document.getElementById("buttonsWrapper");
+        if (!buttonsWrapper) {
+            throw new Error("buttonsWrapper not found");
+        }
+        const locatorLabel = document.getElementById("locatorLabel");
+        if (!locatorLabel) {
+            throw new Error("locatorLabel not found");
+        }
+        const locatorLabelsList = document.getElementById("locatorLabelsList");
+        if (!locatorLabelsList) {
+            throw new Error("locatorLabelsList not found");
+        }
+        const library = document.getElementById("library");
+        if (!library) {
+            throw new Error("library not found");
+        }
+        const searchLibrary = document.getElementById("searchLibrary");
+        if (!searchLibrary) {
+            throw new Error("searchLibrary not found");
+        }
+        const searchLabel = document.getElementById("searchLabel");
+        if (!searchLabel) {
+            throw new Error("searchLabel not found");
+        }
+        const searchClear = document.getElementById("searchClear");
+        if (!searchClear) {
+            throw new Error("searchClear not found");
+        }
+        const searchField = document.getElementById("searchField");
+        if (!searchField) {
+            throw new Error("searchField not found");
+        }
+        const styleWrapper = document.getElementById("styleWrapper");
+        if (!styleWrapper) {
+            throw new Error("styleWrapper not found");
+        }
+        const styleSelectList = document.getElementById("styleSelectList");
+        if (!styleSelectList) {
+            throw new Error("styleSelectList not found");
+        }
+        const styleSelectListOther = document.getElementById(
+            "styleSelectedListOther"
+        );
+        if (!styleSelectListOther) {
+            throw new Error("styleSelectListOther not found");
+        }
+        const styleSelect = document.getElementById("styleSelect");
+        if (!styleSelect) {
+            throw new Error("styleSelect not found");
+        }
+        const styleLang = document.getElementById("styleLang");
+        if (!styleLang) {
+            throw new Error("styleLang not found");
+        }
+        const notesStyleWrapper = document.getElementById("notesStyle");
+        if (!notesStyleWrapper) {
+            throw new Error("notesStyleWrapper not found");
+        }
+        const footNotes = document.getElementById("footNotes");
+        if (!footNotes) {
+            throw new Error("footNotes not found");
+        }
+        const endNotes = document.getElementById("endNotes");
+        if (!endNotes) {
+            throw new Error("endNotes not found");
+        }
+        const insertBibBtn = document.getElementById("insertBibBtn");
+        if (!insertBibBtn) {
+            throw new Error("insertBibBtn not found");
+        }
+        const insertLinkBtn = document.getElementById("insertLinkBtn");
+        if (!insertLinkBtn) {
+            throw new Error("insertLinkBtn not found");
+        }
+        const cancelBtn = document.getElementById("cancelBtn");
+        if (!cancelBtn) {
+            throw new Error("cancelBtn not found");
+        }
+        const refreshBtn = document.getElementById("refreshBtn");
+        if (!refreshBtn) {
+            throw new Error("refreshBtn not found");
+        }
+        const saveAsTextBtn = document.getElementById("saveAsTextBtn");
+        if (!saveAsTextBtn) {
+            throw new Error("saveAsTextBtn not found");
+        }
+        const checkOmitAuthor = document.getElementById("omitAuthor");
+        if (!checkOmitAuthor) {
+            throw new Error("checkOmitAuthor not found");
+        }
+        const useDesktopApp = document.getElementById("useDesktopApp");
+        if (!useDesktopApp) {
+            throw new Error("useDesktopApp not found");
+        }
+        const cslFileInput = document.getElementById("cslFileInput");
+        if (!cslFileInput) {
+            throw new Error("cslFileInput not found");
+        }
+        elements = {
+            loader: loader,
+            libLoader: libLoader,
+            error: error,
 
-        configState: document.getElementById("configState"),
-        apiKeyConfigField: document.getElementById("apiKeyField"),
-        saveConfigBtn: document.getElementById("saveConfigBtn"),
+            contentHolder: contentHolder,
+            docsHolder: docsHolder,
+            docsThumb: docsThumb,
 
-        mainState: document.getElementById("mainState"),
-        logoutLink: document.getElementById("logoutLink"),
+            configState: configState,
+            apiKeyConfigField: apiKeyConfigField,
+            saveConfigBtn: saveConfigBtn,
 
-        selectedWrapper: document.getElementById("selectedWrapper"),
-        selectedHolder: document.getElementById("selectedHolder"),
-        selectedThumb: document.getElementById("selectedThumb"),
-        buttonsWrapper: document.getElementById("buttonsWrapper"),
+            mainState: mainState,
+            logoutLink: logoutLink,
 
-        locatorLabel: document.getElementById("locatorLabel"),
-        locatorLabelsList: document.getElementById("locatorLabelsList"),
+            selectedWrapper: selectedWrapper,
+            selectedHolder: selectedHolder,
+            selectedThumb: selectedThumb,
+            buttonsWrapper: buttonsWrapper,
 
-        library: document.getElementById("library"),
-        searchLibrary: document.getElementById("searchLibrary"),
-        searchLabel: document.getElementById("searchLabel"),
-        searchClear: document.getElementById("searchClear"),
-        searchField: document.getElementById("searchField"),
+            locatorLabel: locatorLabel,
+            locatorLabelsList: locatorLabelsList,
 
-        styleWrapper: document.getElementById("styleWrapper"),
-        styleSelectList: document.getElementById("styleSelectList"),
-        styleSelectListOther: document.getElementById("styleSelectedListOther"),
-        styleSelect: document.getElementById("styleSelect"),
-        styleLang: document.getElementById("styleLang"),
-        notesStyleWrapper: document.querySelector(".notesStyle"),
-        notesStyleRadios: document.querySelectorAll(".notesStyle input[name=notesAs]"),
+            library: library,
+            searchLibrary: searchLibrary,
+            searchLabel: searchLabel,
+            searchClear: searchClear,
+            searchField: searchField,
 
-        insertBibBtn: document.getElementById("insertBibBtn"),
-        insertLinkBtn: document.getElementById("insertLinkBtn"),
-        cancelBtn: document.getElementById("cancelBtn"),
-        tempDiv: document.getElementById("div_temp"),
-        refreshBtn: document.getElementById("refreshBtn"),
-        saveAsTextBtn: document.getElementById("saveAsTextBtn"),
+            styleWrapper: styleWrapper,
+            styleSelectList: styleSelectList,
+            styleSelectListOther: styleSelectListOther,
+            styleSelect: styleSelect,
+            styleLang: styleLang,
+            notesStyleWrapper: notesStyleWrapper,
+            footNotes: footNotes,
+            endNotes: endNotes,
 
-        checkOmitAuthor: document.getElementById("omitAuthor"),
-        useDesktopApp: document.getElementById("useDesktopApp"),
-        cslFileInput: document.getElementById("cslFileInput"),
-    };
+            insertBibBtn: insertBibBtn,
+            insertLinkBtn: insertLinkBtn,
+            cancelBtn: cancelBtn,
+            refreshBtn: refreshBtn,
+            saveAsTextBtn: saveAsTextBtn,
 
+            checkOmitAuthor: checkOmitAuthor,
+            useDesktopApp: useDesktopApp,
+            cslFileInput: cslFileInput,
+        };
+    }
+
+    /** @type {Scroller} */
     var selectedScroller;
+    /** @type {Scroller} */
     var docsScroller;
 
     window.Asc.plugin.init = function () {
+        initElements();
         showLoader(true);
         setTimeout(function () {
-            searchField.focus();
+            if (elements.searchField) elements.searchField.focus();
         }, 100);
 
         sdk = new ZoteroSdk();
@@ -145,15 +313,11 @@
             loadStyles();
             loadGroups();
 
-            citationDocService = new CitationDocService(
-                citPrefixNew,
-                citSuffixNew,
-                bibPrefixNew,
-                bibSuffixNew,
-                cslStylesManager.getLastUsedFormat(),
-                cslStylesManager.getLastUsedNotesStyle()
+            citationService = new CitationService(
+                localesManager,
+                cslStylesManager,
+                sdk
             );
-            citationService = new CitationService(citationDocService, localesManager, cslStylesManager, sdk);
 
             addStylesEventListeners();
             initSelectBoxes();
@@ -188,7 +352,7 @@
                 localesManager.setRestApiAvailable(apis.online);
                 if (!hasFirstAnswer) {
                     hasFirstAnswer = true;
-                    if (!apis.desktopVersion) {
+                    if (!apis.desktopVersion && elements.useDesktopApp) {
                         elements.useDesktopApp.classList.add("display-none");
                     }
                     showLoader(false);
@@ -211,7 +375,8 @@
                     return;
                 } else if (apis.desktop && apis.hasPermission) {
                     sdk.setIsOnlineAvailable(false);
-                    elements.logoutLink.style.display = "none";
+                    if (elements.logoutLink)
+                        elements.logoutLink.style.display = "none";
                     switchAuthState("main");
                     showError(false);
                     resolve(apis);
@@ -226,19 +391,26 @@
         const option = elements.locatorLabelsList.querySelector(
             '[data-value="' + id + '"]'
         );
-        option && option.setAttribute("selected", "");
+        if (!option || !(elements.locatorLabel instanceof HTMLInputElement)) {
+            return;
+        }
+        option.setAttribute("selected", "");
         const name = option.textContent;
-        locatorLabel.value = option.textContent;
-        locatorLabel.setAttribute("data-value", id);
-        locatorLabel.setAttribute("title", name);
+
+        elements.locatorLabel.value = option.textContent;
+        elements.locatorLabel.setAttribute("data-value", id);
+        elements.locatorLabel.setAttribute("title", name);
     }
 
+    /** @returns {Promise<void>} */
     function loadStyles() {
-        cslStylesManager
+        return cslStylesManager
             .getStylesInfo()
             .then(function (stylesInfo) {
-                var openOtherStyleList = function (list) {
-                    return function (ev) {
+                var openOtherStyleList = function (
+                    /** @type {HTMLElement} */ list
+                ) {
+                    return function (/** @type {MouseEvent} */ ev) {
                         elements.styleSelectListOther.style.width =
                             elements.styleWrapper.clientWidth - 2 + "px";
                         ev.stopPropagation();
@@ -273,111 +445,146 @@
             });
     }
 
+    /** @returns {Promise<void>} */
     function loadGroups() {
-        return sdk.getUserGroups().then(function (groups) {
-            const customGroups = [
-                { id: "all", name: translate("Everywhere") },
-                { id: "my_library", name: translate("My Library") },
-                { id: "group_libraries", name: translate("Group Libraries") },
-            ];
-            library.value = customGroups[0].name;
-            library.setAttribute("data-value", customGroups[0].id);
-            library.setAttribute("title", customGroups[0].name);
-
-            const selectedItem = localStorage.getItem("selectedGroup") || "all";
-
-            const addGroupToSelectBox = function (id, name) {
-                const el = document.createElement("span");
-                el.setAttribute("data-value", id);
-                el.textContent = name;
-                elements.searchLibrary.appendChild(el);
-                if (id === selectedItem) {
-                    el.setAttribute("selected", "");
-                    library.value = name;
-                    library.setAttribute("data-value", id);
-                    library.setAttribute("title", name);
+        return sdk
+            .getUserGroups()
+            .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
+                const customGroups = [
+                    { id: "all", name: translate("Everywhere") },
+                    { id: "my_library", name: translate("My Library") },
+                    {
+                        id: "group_libraries",
+                        name: translate("Group Libraries"),
+                    },
+                ];
+                if (elements.library instanceof HTMLInputElement) {
+                    elements.library.value = customGroups[0].name;
                 }
-            };
+                elements.library.setAttribute("data-value", customGroups[0].id);
+                elements.library.setAttribute("title", customGroups[0].name);
 
-            const addSeparator = function () {
-                const el = document.createElement("hr");
-                elements.searchLibrary.appendChild(el);
-            };
+                const selectedItem =
+                    localStorage.getItem("selectedGroup") || "all";
 
-            elements.searchLibrary.addEventListener("click", function (e) {
-                const target = e.target;
-                let option;
-                if (target && target instanceof HTMLSpanElement) {
-                    option = target;
-                } else {
+                /**
+                 * @param {string|number} id
+                 * @param {string} name
+                 */
+                const addGroupToSelectBox = function (id, name) {
+                    if (typeof id === "number") {
+                        id = id.toString();
+                    }
+                    const el = document.createElement("span");
+                    el.setAttribute("data-value", id);
+                    el.textContent = name;
+                    elements.searchLibrary.appendChild(el);
+                    if (
+                        id === selectedItem &&
+                        elements.library instanceof HTMLInputElement
+                    ) {
+                        el.setAttribute("selected", "");
+                        elements.library.value = name;
+                        elements.library.setAttribute("data-value", id);
+                        elements.library.setAttribute("title", name);
+                    }
+                };
+
+                const addSeparator = function () {
+                    const el = document.createElement("hr");
+                    elements.searchLibrary.appendChild(el);
+                };
+
+                elements.searchLibrary.addEventListener("click", function (e) {
+                    const target = e.target;
+                    let option;
+                    if (target && target instanceof HTMLSpanElement) {
+                        option = target;
+                    } else {
+                        return;
+                    }
+                    const selected =
+                        elements.searchLibrary.querySelector("span[selected]");
+                    selected && selected.attributes.removeNamedItem("selected");
+                    option.setAttribute("selected", "");
+                    const id = option.getAttribute("data-value");
+                    const name = option.textContent;
+                    if (
+                        !(elements.library instanceof HTMLInputElement) ||
+                        !(elements.searchField instanceof HTMLInputElement) ||
+                        typeof id !== "string"
+                    ) {
+                        return;
+                    }
+                    elements.library.value = option.textContent;
+                    elements.library.setAttribute("data-value", id);
+                    elements.library.setAttribute("title", name);
+
+                    localStorage.setItem("selectedGroup", id);
+
+                    switchClass(elements.searchClear, displayNoneClass, true);
+                    elements.searchField.value = "";
+                    lastSearch.text = "";
+                    clearLibrary();
+                });
+
+                if (groups.length === 0) {
                     return;
                 }
-                const selected =
-                    elements.searchLibrary.querySelector("span[selected]");
-                selected && selected.attributes.removeNamedItem("selected");
-                option.setAttribute("selected", "");
-                const id = option.getAttribute("data-value");
-                const name = option.textContent;
-                library.value = option.textContent;
-                library.setAttribute("data-value", id);
-                library.setAttribute("title", name);
-                localStorage.setItem("selectedGroup", id);
-
-                switchClass(elements.searchClear, displayNoneClass, true);
-                elements.searchField.value = "";
-                lastSearch.text = "";
-                clearLibrary();
+                for (var i = 0; i < customGroups.length; i++) {
+                    const id = customGroups[i].id;
+                    const name = customGroups[i].name;
+                    addGroupToSelectBox(id, name);
+                }
+                addSeparator();
+                for (var i = 0; i < groups.length; i++) {
+                    const id = groups[i].id;
+                    const name = groups[i].name;
+                    addGroupToSelectBox(id, name);
+                }
             });
-
-            if (groups.length === 0) {
-                return;
-            }
-            for (var i = 0; i < customGroups.length; i++) {
-                const id = customGroups[i].id;
-                const name = customGroups[i].name;
-                addGroupToSelectBox(id, name);
-            }
-            addSeparator();
-            for (var i = 0; i < groups.length; i++) {
-                const id = groups[i].id;
-                const name = groups[i].name;
-                addGroupToSelectBox(id, name);
-            }
-        });
     }
 
     /**
      * @return {number|"all"|"my_library"|"group_libraries"}
      */
-    getSelectedGroup = function () {
+    function getSelectedGroup() {
         for (var i = 0; i < elements.searchLibrary.children.length; i++) {
             const option = elements.searchLibrary.children[i];
             if (option.hasAttribute("selected")) {
                 const id = option.getAttribute("data-value");
-                if (["my_library", "group_libraries", "all"].indexOf(id) >= 0)
+                if (
+                    id === "my_library" ||
+                    id === "group_libraries" ||
+                    id === "all"
+                ) {
                     return id;
+                }
                 return Number(id);
             }
         }
         return "all";
-    };
+    }
 
     /**
-     * @param {object} stylesInfo
+     * @param {Array<Object>} stylesInfo
      */
     function addStylesToList(stylesInfo) {
-        var found = false;
         var lastStyle = cslStylesManager.getLastUsedStyleId() || "ieee";
 
+        /**
+         * @param {HTMLElement} list - the list of styles where the element is added.
+         * @param {HTMLElement} other - the list of styles where the element is removed.
+         */
         var onStyleSelectOther = function (list, other) {
-            return function (ev) {
+            return function (/** @type {MouseEvent} */ ev) {
                 var tmpEl = list.removeChild(
                     list.children[list.children.length - 3]
                 );
                 var newEl = document.createElement("span");
                 newEl.setAttribute(
                     "data-value",
-                    tmpEl.getAttribute("data-value")
+                    String(tmpEl.getAttribute("data-value"))
                 );
                 newEl.textContent = tmpEl.textContent;
                 other.appendChild(newEl);
@@ -389,7 +596,7 @@
                 newEl = document.createElement("span");
                 newEl.setAttribute(
                     "data-value",
-                    tmpEl.getAttribute("data-value")
+                    String(tmpEl.getAttribute("data-value"))
                 );
                 newEl.textContent = tmpEl.textContent;
                 list.insertBefore(newEl, list.firstElementChild);
@@ -492,6 +699,10 @@
             return true;
         };
 
+        /**
+         * @param {string} text
+         * @returns
+         */
         function searchFor(text) {
             if (elements.mainState.classList.contains(displayNoneClass)) return;
             text = text.trim();
@@ -502,13 +713,17 @@
             lastSearch.groups = [];
             clearLibrary();
 
+            /** @type {Array<Promise<void>>} */
             const promises = [];
 
             const selectedGroup = getSelectedGroup();
 
             return sdk
                 .getUserGroups()
-                .then(function (userGroups) {
+                .then(function (
+                    /** @type {Array<UserGroupInfo>} */ userGroups
+                ) {
+                    /** @type {Array<string|number>} */
                     let groups = [];
                     switch (selectedGroup) {
                         case "my_library":
@@ -624,17 +839,19 @@
                 return;
             }
             showLoader(true);
-            citationService.updateCslItems(true, true, false)
-            .catch(function (error) {
-                console.error(error);
-                let message = translate("Failed to refresh");
-                if (typeof error === "string") {
-                    message += '. ' + translate(error);
-                }
-                showError(message);
-            }).finally(function () {
-                showLoader(false);
-            });
+            citationService
+                .updateCslItems(true, true, false)
+                .catch(function (error) {
+                    console.error(error);
+                    let message = translate("Failed to refresh");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                })
+                .finally(function () {
+                    showLoader(false);
+                });
         };
 
         elements.insertBibBtn.onclick = function () {
@@ -649,17 +866,19 @@
             showLoader(true);
             // TODO #there
             // updateCslItems(true, false, true);
-            citationService.updateCslItems(true, true, true)
-            .catch(function (error) {
-                console.error(error);
-                let message = translate("Failed to insert bibliography");
-                if (typeof error === "string") {
-                    message += '. ' + translate(error);
-                }
-                showError(message);
-            }).finally(function () {
-                showLoader(false);
-            });
+            citationService
+                .updateCslItems(true, true, true)
+                .catch(function (error) {
+                    console.error(error);
+                    let message = translate("Failed to insert bibliography");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                })
+                .finally(function () {
+                    showLoader(false);
+                });
         };
 
         elements.insertLinkBtn.onclick = function () {
@@ -672,39 +891,44 @@
                 return;
             }
             showLoader(true);
-            citationService.updateCslItems(true, false, false)
-            .then(function () {
-                const prefix = getPrefix();
-                const suffix = getSuffix();
-                const locatorInfo = getLocator();
+            citationService
+                .updateCslItems(true, false, false)
+                .then(function () {
+                    const prefix = getPrefix();
+                    const suffix = getSuffix();
+                    const locatorInfo = getLocator();
 
-                return citationService.insertSelectedCitations(
-                    selected.items,
-                    prefix,
-                    suffix,
-                    locatorInfo,
-                    elements.checkOmitAuthor.checked
-                );
-            }).then(function (keys) {
-                keys.forEach(function (key) {
-                    removeSelected(key);
+                    return citationService.insertSelectedCitations(
+                        selected.items,
+                        prefix,
+                        suffix,
+                        locatorInfo,
+                        elements.checkOmitAuthor.checked
+                    );
+                })
+                .then(function (keys) {
+                    keys.forEach(function (key) {
+                        removeSelected(key);
+                    });
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    let message = translate("Failed to insert citation");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                })
+                .finally(function () {
+                    showLoader(false);
                 });
-            })
-            .catch(function (error) {
-                console.error(error);
-                let message = translate("Failed to insert citation");
-                if (typeof error === "string") {
-                    message += '. ' + translate(error);
-                }
-                showError(message);
-            }).finally(function () {
-                showLoader(false);
-            });
         };
 
         elements.saveAsTextBtn.onclick = function () {
             showLoader(true);
-            citationDocService.saveAsText();
+            citationService.saveAsText().then(function () {
+                showLoader(false);
+            });
         };
 
         elements.locatorLabelsList.addEventListener("click", function (e) {
@@ -721,10 +945,13 @@
     }
 
     function addStylesEventListeners() {
+        /**
+         * @param {Event|null} e - The input event.
+         * @param {String} [filter] - The filter to apply on the style options.
+         */
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
-            var filter =
-                filter !== undefined ? filter : input.value.toLowerCase();
+            filter = filter !== undefined ? filter : input.value.toLowerCase();
             var list = elements.styleSelectList.classList.contains(
                 displayNoneClass
             )
@@ -742,20 +969,33 @@
             }
         };
 
-        elements.styleSelect.onselectchange = function (inp, styleName, isClick) {
+        /**
+         * @param {Event} inp - The input event.
+         * @param {String} styleName - The name of the selected style.
+         * @param {Boolean} isClick - Whether the style was selected manually or not.
+         */
+        elements.styleSelect.onselectchange = function (
+            inp,
+            styleName,
+            isClick
+        ) {
             showLoader(true);
             cslStylesManager
                 .getStyle(styleName)
                 .then(function (style) {
                     onStyleChange();
                     if (isClick) {
-                        return citationService.updateCslItems(true, true, false);
+                        return citationService.updateCslItems(
+                            true,
+                            true,
+                            false
+                        );
                     }
                 })
                 .catch(function (err) {
                     console.error(err);
-                    if (typeof error === 'string') {
-                        showError(error);
+                    if (typeof err === "string") {
+                        showError(err);
                     }
                 })
                 .finally(function () {
@@ -765,20 +1005,30 @@
                     )
                         showLoader(false);
                 });
-            elements.styleSelect.oninput(null, "");
+            elements.styleSelect.oninput(inp, "");
         };
 
+        /**
+         * @param {Event} inp - The select change event.
+         * @param {String} val - The value of the selected language.
+         * @param {Boolean} isClick - Whether the language was selected manually or not.
+         */
         elements.styleLang.onselectchange = function (inp, val, isClick) {
             showLoader(true);
             localesManager.saveLastUsedLanguage(val);
-            localesManager.loadLocale(val)
+            localesManager
+                .loadLocale(val)
                 .then(function () {
                     if (isClick)
-                        return citationService.updateCslItems(true, true, false);
+                        return citationService.updateCslItems(
+                            true,
+                            true,
+                            false
+                        );
                 })
                 .catch(function (error) {
                     console.error(error);
-                    if (typeof error === 'string') {
+                    if (typeof error === "string") {
                         showError(error);
                     }
                 })
@@ -796,16 +1046,22 @@
                 elements.styleWrapper.clientWidth - 2 + "px";
         };
 
-        elements.notesStyleRadios.forEach(function (radio) {
-            radio.addEventListener("change", function (event) {
-                if (event.target.checked) {
-                    cslStylesManager.saveLastUsedNotesStyle(event.target.value);
-                }
-            });
+        elements.footNotes.addEventListener("change", function (event) {
+            if (event.target.checked) {
+                cslStylesManager.saveLastUsedNotesStyle(event.target.value);
+            }
+        });
+        elements.endNotes.addEventListener("change", function (event) {
+            if (event.target.checked) {
+                cslStylesManager.saveLastUsedNotesStyle(event.target.value);
+            }
         });
     }
 
-    window.Asc.plugin.onThemeChanged = function (theme) {
+    /**
+     * @param {string} theme - The new theme of the SDK.
+     */
+    Asc.plugin.onThemeChanged = function (theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
         var rules =
             ".selectArrow > span { background-color: " +
@@ -859,7 +1115,12 @@
         document.getElementsByTagName("head")[0].appendChild(styleTheme);
     };
 
-    var scrollBoxes = [];
+    /**
+     * @param {HTMLElement} holder
+     * @param {HTMLElement} thumb
+     * @param {function(HTMLElement): void} [onscroll]
+     * @returns {Scroller}
+     */
     function initScrollBox(holder, thumb, onscroll) {
         var scroller = {};
         scroller.onscroll = checkScroll(holder, thumb, onscroll);
@@ -891,17 +1152,14 @@
             };
         };
 
-        scrollBoxes.push(scroller);
-
-        document.body.onresize = function () {
-            for (var i = 0; i < scrollBoxes.length; i++) {
-                scrollBoxes[i].onscroll();
-            }
-        };
+        document.body.addEventListener("resize", function () {
+            scroller.onscroll();
+        });
 
         return scroller;
     }
 
+    /** @type {HTMLElement[]} */
     var selectLists = [];
     function initSelectBoxes() {
         var select = document.getElementsByClassName("control select");
@@ -909,6 +1167,10 @@
         for (var i = 0; i < select.length; i++) {
             var input = select[i];
             var holder = input.parentElement;
+            if (!holder) {
+                console.error("Holder not found for select input");
+                continue;
+            }
             var arrow = document.createElement("span");
             arrow.classList.add("selectArrow");
             arrow.appendChild(document.createElement("span"));
@@ -944,7 +1206,7 @@
                 }
 
                 var f = function (list, input) {
-                    return function (ev) {
+                    return function (/** @type {MouseEvent} */ ev) {
                         ev.stopPropagation();
                         if (
                             !elements.styleSelectListOther.classList.contains(
@@ -977,6 +1239,9 @@
         };
     }
 
+    /**
+     * @param {HTMLElement|null} el
+     */
     function openList(el) {
         for (var i = 0; i < selectLists.length; i++) {
             var close = true;
@@ -990,6 +1255,12 @@
         }
     }
 
+    /**
+     * @param {*} input
+     * @param {*} el
+     * @param {*} list
+     * @param {*} isClick
+     */
     function selectInput(input, el, list, isClick) {
         input.value = el.textContent;
         var val = el.getAttribute("data-value");
@@ -1002,7 +1273,7 @@
     }
 
     function onClickListElement(list, input) {
-        return function (ev) {
+        return function (/** @type {MouseEvent} */ ev) {
             var sel = ev.target.getAttribute("data-value");
             for (var i = 0; i < list.children.length; i++) {
                 if (list.children[i].getAttribute("data-value") == sel) {
@@ -1019,7 +1290,7 @@
 
     function onStyleChange() {
         let styleFormat = cslStylesManager.getLastUsedFormat();
-        citationDocService.setStyleFormat(styleFormat);
+        citationService.setStyleFormat(styleFormat);
         bNumFormat = styleFormat == "numeric";
         if ("note" === styleFormat) {
             elements.notesStyleWrapper.classList.remove(displayNoneClass);
@@ -1028,7 +1299,7 @@
         }
 
         let notesStyle = cslStylesManager.getLastUsedNotesStyle();
-        citationDocService.setNotesStyle(notesStyle);
+        citationService.setNotesStyle(notesStyle);
         elements.notesStyleWrapper.querySelector(
             'input[name="notesAs"][value="' + notesStyle + '"]'
         ).checked = true;
@@ -1051,13 +1322,17 @@
         }
     }
 
+    /**
+     * @param {string|boolean} message
+     */
     function showError(message) {
-        if (message) {
+        if (message && typeof message === "string") {
+            let m = translate("");
             switchClass(elements.error, displayNoneClass, false);
             elements.error.textContent = message;
             setTimeout(function () {
                 window.onclick = function () {
-                    showError();
+                    showError(false);
                 };
             }, 100);
         } else {
@@ -1067,15 +1342,26 @@
         }
     }
 
+    /**
+     * @param {boolean} show
+     */
     function showLoader(show) {
         switchClass(elements.loader, displayNoneClass, !show);
         switchClass(elements.contentHolder, blurClass, show);
     }
 
+    /**
+     * @param {boolean} show
+     */
     function showLibLoader(show) {
         switchClass(elements.libLoader, displayNoneClass, !show);
     }
 
+    /**
+     * @param {HTMLElement} el
+     * @param {string} className
+     * @param {boolean} add
+     */
     function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
@@ -1084,16 +1370,28 @@
         }
     }
 
+    /**
+     * @param {boolean} hide
+     */
     function configState(hide) {
         switchClass(elements.configState, displayNoneClass, hide);
     }
 
+    /**
+     * @param {boolean} hide
+     */
     function mainState(hide) {
         switchClass(elements.mainState, displayNoneClass, hide);
         switchClass(elements.logoutLink, displayNoneClass, hide);
     }
 
+    /**
+     * @type {"main"|"config"}
+     */
     var currentAuthState;
+    /**
+     * @param {"main"|"config"} state
+     */
     function switchAuthState(state) {
         currentAuthState = state;
         configState(true);
@@ -1108,6 +1406,12 @@
         }
     }
 
+    /**
+     * @param {HTMLElement} holder
+     * @param {HTMLElement} thumb
+     * @param {function} [func] - an optional function to be called with the holder and thumb as arguments.
+     * @returns {function} - a function that checks the scroll state and updates the thumb accordingly.
+     * */
     function checkScroll(holder, thumb, func) {
         return function () {
             if (holder.scrollHeight <= holder.clientHeight) {
@@ -1131,7 +1435,11 @@
         };
     }
 
-    function checkDocsScroll(holder) {
+    /**
+     * @param {HTMLElement} holder - The element that contains the document list.
+     * @param {HTMLElement} [thumb]
+     */
+    function checkDocsScroll(holder, thumb) {
         if (shouldLoadMore(holder)) {
             if (loadTimeout) {
                 clearTimeout(loadTimeout);
@@ -1146,14 +1454,18 @@
 
             loadTimeout = setTimeout(function () {
                 if (shouldLoadMore(holder)) {
-                    loadLibrary(
-                        lastSearch.obj.next(),
-                        true,
-                        true,
-                        !lastSearch.groups.length,
-                        false,
-                        false
-                    );
+                    console.warn("Loading more...");
+                    if (lastSearch.obj && lastSearch.obj.next) {
+                        loadLibrary(
+                            lastSearch.obj.next(),
+                            true,
+                            true,
+                            !lastSearch.groups.length,
+                            false,
+                            false
+                        );
+                    }
+
                     for (
                         var i = 0;
                         i < lastSearch.groups.length &&
@@ -1161,7 +1473,10 @@
                         i++
                     ) {
                         loadLibrary(
-                            sdk.getGroupItems(lastSearch.groups[i].next()),
+                            sdk.getGroupItems(
+                                lastSearch.groups[i].next(),
+                                lastSearch.groups[i].id
+                            ),
                             true,
                             false,
                             i == lastSearch.groups.length - 1,
@@ -1169,16 +1484,21 @@
                             false
                         );
                     }
-                } else {
                 }
             }, 500);
         }
     }
 
+    /**
+     * @param {HTMLElement} holder
+     * @returns {boolean}
+     */
     function shouldLoadMore(holder) {
         if (currentAuthState != "main") return false;
-        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight)
+        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) {
             return false;
+        }
+
         var flag = true;
         lastSearch.groups.forEach(function (el) {
             if (el.next) flag = false;
@@ -1198,13 +1518,13 @@
     }
 
     /**
-     * @param {Promise} promise
+     * @param {Promise<SearchResult>} promise
      * @param {boolean} append
      * @param {boolean} showLoader
      * @param {boolean} hideLoader
      * @param {boolean} isGroup
      * @param {boolean} bCount
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
     function loadLibrary(
         promise,
@@ -1218,6 +1538,7 @@
         if (bCount) counter++;
         return promise
             .then(function (res) {
+                console.log(res);
                 if (bCount) counter--;
                 displaySearchItems(
                     append,
@@ -1235,7 +1556,7 @@
                 }
                 displaySearchItems(
                     append,
-                    {},
+                    null,
                     err,
                     isGroup,
                     bCount && !counter
@@ -1253,7 +1574,11 @@
      */
     function getPrefix() {
         const prefixInput = document.getElementById("prefixField");
-        if (prefixInput && prefixInput.value) {
+        if (
+            prefixInput &&
+            prefixInput instanceof HTMLInputElement &&
+            prefixInput.value
+        ) {
             return prefixInput.value;
         }
         return "";
@@ -1264,7 +1589,11 @@
      */
     function getSuffix() {
         const suffixInput = document.getElementById("suffixField");
-        if (suffixInput && suffixInput.value) {
+        if (
+            suffixInput &&
+            suffixInput instanceof HTMLInputElement &&
+            suffixInput.value
+        ) {
             return suffixInput.value;
         }
         return "";
@@ -1275,20 +1604,31 @@
      */
     function getLocator() {
         const locatorInput = document.getElementById("locator");
-        if (!locatorInput || !locatorInput.value) {
+        if (
+            !locatorInput ||
+            !(locatorInput instanceof HTMLInputElement) ||
+            !locatorInput.value
+        ) {
             return null;
         }
         const label = document.getElementById("locatorLabel");
-        if (!label || !label.value) {
+        if (!label || !(label instanceof HTMLInputElement) || !label.value) {
             return null;
         }
 
         return {
             locator: locatorInput.value,
-            label: label.getAttribute("data-value"),
+            label: label.getAttribute("data-value") || "",
         };
     }
 
+    /**
+     * @param {boolean} append
+     * @param {SearchResult | null} res
+     * @param {Error | null} err
+     * @param {boolean} isGroup
+     * @param {boolean} showNotFound
+     */
     function displaySearchItems(append, res, err, isGroup, showNotFound) {
         var holder = elements.docsHolder;
 
@@ -1297,12 +1637,7 @@
         }
 
         var first = false;
-        if (
-            !lastSearch.obj &&
-            res &&
-            res.items.items &&
-            !res.items.items.length
-        )
+        if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
         if (err) {
             if (first) {
@@ -1312,14 +1647,14 @@
             lastSearch.obj.next = null;
         } else {
             if (isGroup && res && res.next) lastSearch.groups.push(res);
-            else lastSearch.obj = res && res.items.items.length ? res : null;
+            else lastSearch.obj = res && res.items.length ? res : null;
         }
 
         var page = document.createElement("div");
         page.classList.add("page" + holder.children.length);
-        if (res && res.items.items.length > 0) {
-            for (let index = 0; index < res.items.items.length; index++) {
-                let item = res.items.items[index];
+        if (res && res.items && res.items.length > 0) {
+            for (let index = 0; index < res.items.length; index++) {
+                let item = res.items[index];
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 citationService.fillUrisFromId(item);
 
@@ -1340,6 +1675,10 @@
         docsScroller.onscroll();
     }
 
+    /**
+     * @param {SearchResultItem} item
+     * @returns {HTMLElement}
+     */
     function buildDocElement(item) {
         var root = document.createElement("div");
         root.classList.add("doc");
@@ -1400,8 +1739,13 @@
         root.appendChild(checkHolder);
         root.appendChild(docInfo);
 
+        /**
+         * @param {HTMLInputElement} input
+         * @param {unknown} item
+         * @returns
+         */
         function selectItem(input, item) {
-            return function (e) {
+            return function () {
                 input.checked = !input.checked;
                 if (input.checked) {
                     addSelected(item, input);
@@ -1418,6 +1762,10 @@
         return root;
     }
 
+    /**
+     * @param {SearchResultItem} item
+     * @param {HTMLInputElement} input
+     */
     function addSelected(item, input) {
         var el = buildSelectedElement(item);
         selected.items[item.id] = item;
@@ -1443,6 +1791,9 @@
         checkSelected();
     }
 
+    /**
+     * @param {SearchResultItem} item
+     */
     function buildSelectedElement(item) {
         var root = document.createElement("div");
         root.classList.add("selDoc");
@@ -1471,549 +1822,15 @@
 
     function checkSelected() {
         if (selected.count() <= 0) {
-            elements.insertLinkBtn.setAttribute("disabled", "");
-            elements.cancelBtn.setAttribute("disabled", "");
+            if (elements.insertLinkBtn)
+                elements.insertLinkBtn.setAttribute("disabled", "");
+            if (elements.cancelBtn)
+                elements.cancelBtn.setAttribute("disabled", "");
         } else {
-            elements.insertLinkBtn.removeAttribute("disabled", "");
-            elements.cancelBtn.removeAttribute("disabled", "");
+            if (elements.insertLinkBtn)
+                elements.insertLinkBtn.removeAttribute("disabled");
+            if (elements.cancelBtn)
+                elements.cancelBtn.removeAttribute("disabled");
         }
     }
-
-    /**
-     * @param {boolean} bUpdateAll
-     * @param {boolean} bPastBib
-     * @param {boolean} bSynchronize
-     * @returns {Promise<void>}
-     */
-    /*function updateAllOrAddBib(bUpdateAll, bPastBib, bSynchronize) {
-        if (!cslStylesManager.getLastUsedStyleId()) {
-            showError(translate("Style is not selected"));
-            return;
-        }
-        if (!localesManager.getLastUsedLanguage()) {
-            showError(translate("Language is not selected"));
-            return;
-        }
-        return citationDocService
-            .getAddinZoteroFields()
-            .then(function (arrFields) {
-                if (!arrFields.length) {
-                    showLoader(false);
-                    return;
-                }
-                var updatedFields = [];
-                var bibField = null;
-                var bibFieldValue = " ";
-
-                const fragment = document.createDocumentFragment();
-                const tempElement = document.createElement("div");
-                fragment.appendChild(tempElement);
-
-                try {
-                    var bibItems = new Array(CSLCitationStorage.size);
-                    var bibObject = formatter.makeBibliography();
-                    // Sort bibliography items
-                    for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                        var citationId = bibObject[0].entry_ids[i][0];
-                        var citationIndex =
-                            CSLCitationStorage.getIndex(citationId);
-                        var bibText = bibObject[1][i];
-                        while (
-                            bibText.indexOf("\n") !== bibText.lastIndexOf("\n")
-                        ) {
-                            bibText = bibText.replace(/\n/, "");
-                        }
-                        // Check if bibliography item contains <sup> or <sub>
-                        if (
-                            /<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(
-                                bibText
-                            )
-                        ) {
-                            // Escape <sup> and <sub>
-                            bibText = bibText
-                                .replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;")
-                                .replace(/<\/sup>/gi, "&lt;/sup&gt;")
-                                .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
-                                .replace(/<\/sub>/gi, "&lt;/sub&gt;");
-                        }
-                        bibItems[citationIndex] = bibText;
-                    }
-                    tempElement.innerHTML = bibItems.join("");
-                } catch (e) {
-                    if (
-                        false ===
-                        cslStylesManager.isLastUsedStyleContainBibliography()
-                    ) {
-                        // style does not describe the bibliography
-                        tempElement.textContent = "";
-                    } else {
-                        console.error(e);
-                        showError(translate("Failed to apply this style."));
-                        showLoader(false);
-                        return;
-                    }
-                }
-
-                var bibliography = tempElement.innerText;
-                arrFields.forEach(function (field) {
-                    var citationObject;
-                    var citationStartIndex = field.Value.indexOf("{");
-                    var citationEndIndex = field.Value.lastIndexOf("}");
-                    if (citationStartIndex !== -1) {
-                        var citationString = field.Value.slice(
-                            citationStartIndex,
-                            citationEndIndex + 1
-                        );
-                        citationObject = JSON.parse(citationString);
-                    }
-                    var keysL = [];
-                    var cslCitation;
-                    if (
-                        bUpdateAll &&
-                        (field.Value.indexOf(citPrefixNew) !== -1 ||
-                            field.Value.indexOf(citPrefix) !== -1)
-                    ) {
-                        var citationID = ""; // old format
-                        if (field.Value.indexOf(citPrefix) === -1) {
-                            citationID = citationObject.citationID;
-                        }
-
-                        cslCitation = new CSLCitation(keysL.length, citationID);
-                        cslCitation.fillFromObject(citationObject);
-                        console.warn(cslCitation);
-                        keysL = cslCitation.getInfoForCitationCluster();
-                        tempElement.innerHTML =
-                            formatter.makeCitationCluster(keysL);
-                        field["Content"] = tempElement.innerText;
-                        cslCitation.addPlainCitation(field["Content"]);
-                        console.warn(cslCitation.toJSON());
-                        if (bSynchronize && cslCitation) {
-                            // if we make synchronization we must update value too
-                            field["Value"] =
-                                citPrefixNew +
-                                " " +
-                                citSuffixNew +
-                                JSON.stringify(cslCitation.toJSON());
-                        }
-                        updatedFields.push(field);
-                    } else if (
-                        field.Value.indexOf(bibPrefix) !== -1 ||
-                        field.Value.indexOf(bibPrefixNew) !== -1
-                    ) {
-                        bibField = field;
-                        bibField["Content"] = bibliography;
-                        if (
-                            typeof citationObject === "object" &&
-                            Object.keys(citationObject).length > 0
-                        ) {
-                            bibFieldValue = JSON.stringify(citationObject);
-                        }
-                    }
-                });
-                if (bibField) {
-                    updatedFields.push(bibField);
-                } else if (bPastBib) {
-                    if (cslStylesManager.isLastUsedStyleContainBibliography()) {
-                        return citationDocService
-                            .addBibliography(bibliography, bibFieldValue)
-                            .then(function () {
-                                if (!updatedFields.length) {
-                                    showLoader(false);
-                                }
-                                return updatedFields;
-                            });
-                    } else {
-                        showError(
-                            translate(
-                                "The current bibliographic style does not describe the bibliography"
-                            )
-                        );
-                    }
-                }
-                return updatedFields;
-            })
-            .then(function (updatedFields) {
-                if (updatedFields && updatedFields.length) {
-                    return citationDocService
-                        .updateAddinFields(updatedFields)
-                        .then(function () {
-                            showLoader(false);
-                        });
-                }
-            });
-    }*/
-
-    /*function updateFormatter(bUpdateAll, bPastBib, bSynchronize) {
-        var arrIds = [];
-        CSLCitationStorage.forEach(function (item, id) {
-            arrIds.push(id);
-        });
-        formatter = new CSL.Engine(
-            {
-                retrieveLocale: function (id) {
-                    if (localesManager.getLocale(id)) {
-                        return localesManager.getLocale(id);
-                    }
-                    return localesManager.getLocale();
-                },
-                retrieveItem: function (id) {
-                    var item = CSLCitationStorage.get(id);
-                    let index = CSLCitationStorage.getIndex(id);
-                    return item.toFlatJSON(index);
-                },
-            },
-            cslStylesManager.getLastUsedStyleId(),
-            localesManager.getLastUsedLanguage(),
-            true
-        );
-        if (arrIds.length) {
-            formatter.updateItems(arrIds);
-        }
-
-        return citationService.updateAllOrAddBib(bUpdateAll, bPastBib, bSynchronize);
-    }*/
-
-    // onInit (1,0,0,0)
-    // Insert Citation (1,0,0,1)
-    // Insert Bibliography (1,1,1,0)
-    // Refresh (1,1,0,0)
-    /**
-     * @param {boolean} bUpdateFormatter
-     * @param {boolean} bUpdateAll
-     * @param {boolean} bPastBib
-     * @returns {Promise}
-     */
-    /*function updateCslItems(bUpdateFormatter, bUpdateAll, bPastBib) {
-        CSLCitationStorage.clear();
-
-        return citationDocService
-            .getAddinZoteroFields()
-            .then(function (arrFields) {
-                if (arrFields.length) {
-                    var numOfItems = 0;
-                    var bibField = null;
-                    var bibFieldValue = " ";
-                    arrFields.forEach(function (field) {
-                        var citationObject;
-                        var citationStartIndex = field.Value.indexOf("{");
-                        var citationEndIndex = field.Value.lastIndexOf("}");
-                        if (
-                            citationStartIndex !== -1 &&
-                            citationEndIndex !== -1
-                        ) {
-                            var citationString = field.Value.slice(
-                                citationStartIndex,
-                                citationEndIndex + 1
-                            );
-                            citationObject = JSON.parse(citationString);
-                        }
-
-                        if (
-                            field.Value.indexOf(citPrefix) !== -1 ||
-                            field.Value.indexOf(citPrefixNew) !== -1
-                        ) {
-                            var citationID = ""; // old format
-                            if (field.Value.indexOf(citPrefix) === -1) {
-                                citationID = citationObject.citationID;
-                            }
-                            var cslCitation = new CSLCitation(
-                                numOfItems,
-                                citationID
-                            );
-                            numOfItems +=
-                                cslCitation.fillFromObject(citationObject);
-                            cslCitation
-                                .getCitationItems()
-                                .forEach(function (item) {
-                                    CSLCitationStorage.set(item.id, item);
-                                });
-                        } else if (
-                            field.Value.indexOf(bibPrefix) !== -1 ||
-                            field.Value.indexOf(bibPrefixNew) !== -1
-                        ) {
-                            bibField = field;
-                            if (
-                                typeof citationObject === "object" &&
-                                Object.keys(citationObject).length > 0
-                            ) {
-                                bibFieldValue = JSON.stringify(citationObject);
-                            }
-                        }
-                    });
-
-                    if (numOfItems) {
-                        // sort?
-                    } else if (bUpdateFormatter && bibField && bUpdateAll) {
-                        // нет смысла ещё раз искать поле библиографии
-                        bUpdateFormatter = false;
-                        bibField["Content"] = translate(bibPlaceholder);
-                        return citationDocService
-                            .updateAddinFields([bibField])
-                            .then(function () {
-                                showLoader(false);
-                                return bUpdateFormatter;
-                            });
-                    }
-                } else if (bUpdateFormatter && bPastBib) {
-                    if (cslStylesManager.isLastUsedStyleContainBibliography()) {
-                        return citationDocService
-                            .addBibliography(
-                                translate(bibPlaceholder),
-                                bibFieldValue
-                            )
-                            .then(function () {
-                                showLoader(false);
-                                return bUpdateFormatter;
-                            });
-                    } else {
-                        showError(
-                            translate(
-                                "The current bibliographic style does not describe the bibliography"
-                            )
-                        );
-                    }
-                }
-                return bUpdateFormatter;
-            })
-            .then(function (bUpdateFormatter) {
-                if (bUpdateFormatter)
-                    return citationService.updateFormatter(bUpdateAll, bPastBib, false);
-            });
-    }*/
-
-    /**
-     * @returns {Promise}
-     */
-    /*function insertSelectedCitations() {
-        if (!cslStylesManager.getLastUsedStyleId()) {
-            showError(translate("Style is not selected"));
-            return;
-        }
-        if (!selectedLocale) {
-            showError(translate("Language is not selected"));
-            return;
-        }
-
-        const prefix = getPrefix();
-        const suffix = getSuffix();
-        const locatorInfo = getLocator();
-
-        var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
-        for (var citationID in selected.items) {
-            var item = selected.items[citationID];
-
-            if (prefix !== "") {
-                item.prefix = prefix;
-            }
-            if (suffix !== "") {
-                item.suffix = suffix;
-            }
-            if (locatorInfo) {
-                item.locator = locatorInfo.locator;
-                item.label = locatorInfo.label;
-            }
-            item["suppress-author"] = elements.checkOmitAuthor.checked;
-            cslCitation.fillFromObject(item);
-        }
-
-        return getSelectedInJsonFormat().then(function (items) {
-            items.forEach(function (item) {
-                cslCitation.fillFromObject(item);
-            });
-            return formatInsertLink(cslCitation);
-        });
-    }*/
-
-    /**
-     *
-     * @param {*} cslCitation
-     * @returns {Promise}
-     */
-    /*function formatInsertLink(cslCitation) {
-        var bUpdateItems = false;
-        var keys = [];
-        var keysL = [];
-
-        cslCitation.getCitationItems().forEach(function (item) {
-            if (!CSLCitationStorage.has(item.id)) {
-                bUpdateItems = true;
-            }
-            CSLCitationStorage.set(item.id, item);
-            keys.push(item.id);
-            keysL.push(item.getInfoForCitationCluster());
-        });
-
-        try {
-            if (bUpdateItems) {
-                var arrIds = [];
-                CSLCitationStorage.forEach(function (item, id) {
-                    arrIds.push(id);
-                });
-                formatter.updateItems(arrIds);
-            }
-
-            keys.forEach(function (key) {
-                removeSelected(key);
-            });
-            const fragment = document.createDocumentFragment();
-            const tempElement = document.createElement("div");
-            fragment.appendChild(tempElement);
-
-            // TODO может ещё очистить поиск (подумать над этим)
-            tempElement.innerHTML = formatter.makeCitationCluster(keysL);
-            cslCitation.addPlainCitation(tempElement.innerText);
-            return citationDocService
-                .addCitation(
-                    tempElement.innerText,
-                    JSON.stringify(cslCitation.toJSON())
-                )
-                .then(function () {
-                    showLoader(false);
-                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
-                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-                    return citationService.updateCslItems(true, true, false);
-                });
-        } catch (e) {
-            showError(e);
-            console.error(e);
-        }
-    }*/
-
-    /*function synchronizeCSLItem(item) {
-        citationService.fillUrisFromId(item);
-
-        var cslItem = CSLCitationStorage.get(item.id);
-        cslItem.fillFromObject(item);
-    }*/
-
-    /**
-     * @returns {Promise<CslJsonObjectItem[]>}
-     */
-    /*function getSelectedInJsonFormat() {
-        var arrUsrItems = [];
-        var arrGroupsItems = {};
-        for (var citationID in selected.items) {
-            var item = selected.items[citationID];
-            var userID = item["userID"];
-            var groupID = item["groupID"];
-            if (userID) {
-                arrUsrItems.push(item.id);
-            } else if (groupID) {
-                if (!arrGroupsItems[groupID]) {
-                    arrGroupsItems[groupID] = [];
-                }
-                arrGroupsItems[groupID].push(item.id);
-            }
-        }
-
-        var promises = [];
-        if (arrUsrItems.length) {
-            promises.push(
-                sdk
-                    .getItems(null, arrUsrItems, "json")
-                    .then(function (res) {
-                        var items = res.items || [];
-                        return items;
-                    })
-                    .catch(function (err) {
-                        console.error(err);
-                    })
-            );
-        }
-
-        for (var groupID in arrGroupsItems) {
-            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-                promises.push(
-                    sdk
-                        .getGroupItems(
-                            null,
-                            groupID,
-                            arrGroupsItems[groupID],
-                            "json"
-                        )
-                        .then(function (res) {
-                            var items = res.items || [];
-                            return items;
-                        })
-                        .catch(function (err) {
-                            console.error(err);
-                        })
-                );
-            }
-        }
-
-        return Promise.all(promises).then(function (res) {
-            var items = [];
-            res.forEach(function (resItems) {
-                if (
-                    !Array.isArray(resItems) &&
-                    Object.hasOwnProperty.call(resItems, "items")
-                ) {
-                    resItems = resItems.items;
-                }
-                items = items.concat(resItems);
-            });
-            return items;
-        });
-    }*/
-
-    /*function synchronizeData() {
-        // form an array for request (one array for user and other for groups)
-        // todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-        if (!CSLCitationStorage.size) return;
-
-        showLoader(true);
-        bGroupsItemsUpdated = false;
-        bUserItemsUpdated = false;
-        var bHasGroupsItems = false;
-        var arrUsrItems = [];
-        var arrGroupsItems = {};
-        CSLCitationStorage.forEach(function (citationItem, id) {
-            let index = CSLCitationStorage.getIndex(id);
-            let item = citationItem.toFlatJSON(index);
-            var userID = citationItem.getProperty("userID");
-            var groupID = citationItem.getProperty("groupID");
-            if (userID) {
-                arrUsrItems.push(citationItem.id);
-            } else if (groupID) {
-                if (!arrGroupsItems[groupID]) arrGroupsItems[groupID] = [];
-                arrGroupsItems[groupID].push(item.id);
-            }
-        });
-
-        const promises = [];
-
-        if (arrUsrItems.length) {
-            promises.push(sdk.getItems(null, arrUsrItems)
-                .then(function (res) {
-                    var items = (res.items ? res.items.items : []) || [];
-                    items.forEach(function (item) {
-                        synchronizeCSLItem(item);
-                    });
-                }));
-        }
-
-        for (var groupID in arrGroupsItems) {
-            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-                bHasGroupsItems = true;
-                promises.push(sdk.getGroupItems(null, groupID, arrGroupsItems[groupID])
-                    .then(function (res) {
-                        var items = (res.items ? res.items.items : []) || [];
-                        items.forEach(function (item) {
-                            synchronizeCSLItem(item);
-                        });
-                    })
-                    );
-            }
-        }
-        Promise.all(promises).catch(function (err) {
-                        console.error(err);
-                    }).then(function () { 
-            // todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-            citationService.updateFormatter(true, false, true);
-         });
-
-    }*/
-
 })();

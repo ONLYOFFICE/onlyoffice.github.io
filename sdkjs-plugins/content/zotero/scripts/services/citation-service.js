@@ -10,34 +10,38 @@
 /// <reference path="../csl/locales/locales-manager.js" />
 
 /**
- * @param {CitationDocService} citationDocService
  * @param {LocalesManager} localesManager
  * @param {CslStylesManager} cslStylesManager
  * @param {ZoteroSdk} sdk
  */
-function CitationService(
-    citationDocService,
-    localesManager,
-    cslStylesManager,
-    sdk
-) {
+function CitationService(localesManager, cslStylesManager, sdk) {
     this.bibPlaceholder = "Please insert some citation into the document.";
     this.citPrefixNew = "ZOTERO_ITEM";
     this.citSuffixNew = "CSL_CITATION";
     this.citPrefix = "ZOTERO_CITATION";
     this.bibPrefixNew = "ZOTERO_BIBL";
+    this.bibSuffixNew = "CSL_BIBLIOGRAPHY";
     this.bibPrefix = "ZOTERO_BIBLIOGRAPHY";
     this.sdk = sdk;
     this.localesManager = localesManager;
     this.cslStylesManager = cslStylesManager;
     /** @type {CSL.Engine} */
     this.formatter;
-    this.citationDocService = citationDocService;
+    this.citationDocService = new CitationDocService(
+        this.citPrefixNew,
+        this.citSuffixNew,
+        this.bibPrefixNew,
+        "CSL_BIBLIOGRAPHY"
+    );
+    /** @type {"footnotes" | "endnotes"} */
+    this._notesStyle;
+    /** @type {StyleFormat} */
+    this._styleFormat;
 }
 
 CitationService.prototype = {
     /**
-     * @param {{id: string, uris: string[]}} item
+     * @param {SearchResultItem} item
      * @returns
      */
     fillUrisFromId: function (item) {
@@ -45,7 +49,7 @@ CitationService.prototype = {
         const slashLastIndex = item.id.lastIndexOf("/") + 1;
         const httpIndex = item.id.indexOf("http");
         if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
-            if (!Object.hasOwnProperty.call(item, "uris")) {
+            if (!item.uris) {
                 item.uris = [];
             }
             item.uris.push(item.id);
@@ -99,9 +103,14 @@ CitationService.prototype = {
                 tempElement.innerHTML =
                     self.formatter.makeCitationCluster(keysL);
                 cslCitation.addPlainCitation(tempElement.innerText);
+                let notesStyle = null;
+                if ("note" === self._styleFormat) {
+                    notesStyle = self._notesStyle;
+                }
                 return self.citationDocService.addCitation(
                     tempElement.innerText,
-                    JSON.stringify(cslCitation.toJSON())
+                    JSON.stringify(cslCitation.toJSON()),
+                    notesStyle
                 );
             })
             .then(function () {
@@ -233,76 +242,25 @@ CitationService.prototype = {
     },
 
     /**
-     * @param {{id: string, uris: string[]}} item
-     * @returns
+     * @returns {Promise<boolean>}
      */
-    /*synchronizeCSLItem: function (item) {
-        this.fillUrisFromId(item);
+    saveAsText: function () {
+        return this.citationDocService.saveAsText();
+    },
 
-        var cslItem = CSLCitationStorage.get(item.id);
-        if (!cslItem) {
-            return;
-        }
-        cslItem.fillFromObject(item);
-    },*/
+    /**
+     * @param {"footnotes" | "endnotes"} notesStyle
+     */
+    setNotesStyle: function (notesStyle) {
+        this._notesStyle = notesStyle;
+    },
 
-    /*synchronizeData: function () {
-        const self = this;
-        // form an array for request (one array for user and other for groups)
-        // todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-        if (!CSLCitationStorage.size) return;
-
-        showLoader(true);
-
-        var bHasGroupsItems = false;
-        var arrUsrItems = [];
-        var arrGroupsItems = {};
-        CSLCitationStorage.forEach(function (citationItem, id) {
-            let index = CSLCitationStorage.getIndex(id);
-            let item = citationItem.toFlatJSON(index);
-            var userID = citationItem.getProperty("userID");
-            var groupID = citationItem.getProperty("groupID");
-            if (userID) {
-                arrUsrItems.push(citationItem.id);
-            } else if (groupID) {
-                if (!arrGroupsItems[groupID]) arrGroupsItems[groupID] = [];
-                arrGroupsItems[groupID].push(item.id);
-            }
-        });
-
-        const promises = [];
-
-        if (arrUsrItems.length) {
-            promises.push(this.sdk
-                .getItems(null, arrUsrItems)
-                .then(function (res) {
-                    var items = (res.items ? res.items.items : []) || [];
-                    items.forEach(function (item) {
-                        self.synchronizeCSLItem(item);
-                    });
-                }));
-        }
-
-        for (var groupID in arrGroupsItems) {
-            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-                bHasGroupsItems = true;
-                promises.push(this.sdk
-                    .getGroupItems(null, groupID, arrGroupsItems[groupID])
-                    .then(function (res) {
-                        var items = (res.items ? res.items.items : []) || [];
-                        items.forEach(function (item) {
-                            self.synchronizeCSLItem(item);
-                        });
-                    }));
-            }
-        }
-        Promise.all(promises).catch(function (err) {
-            console.error(err);
-        }).then(function () {
-            return self._updateAfterSync();
-        });
-
-    },*/
+    /**
+     * @param {StyleFormat} styleFormat
+     */
+    setStyleFormat: function (styleFormat) {
+        this._styleFormat = styleFormat;
+    },
 
     /**
      * @param {boolean} bUpdateAll
@@ -451,10 +409,6 @@ CitationService.prototype = {
                 }
             });
     },
-    /*_updateAfterSync: function () {
-        // todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-        this._updateFormatter(true, false, true);
-    },*/
 
     // onInit (1,0,0)
     // Insert Citation (1,0,0)
