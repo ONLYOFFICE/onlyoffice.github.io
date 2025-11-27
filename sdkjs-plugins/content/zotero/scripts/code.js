@@ -20,37 +20,36 @@
 /// <reference path="./csl/citation/citation.js" />
 /// <reference path="./csl/citation/storage.js" />
 /// <reference path="./csl/styles/styles-manager.js" />
+/// <reference path="./csl/locales/locales-manager.js" />
 
 (function () {
-	var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
+    var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
     var blurClass = "blur";
-	var formatter = null;
-	var citPrefixNew = "ZOTERO_ITEM";
-	var citSuffixNew = "CSL_CITATION";
-	var citPrefix = "ZOTERO_CITATION";
-	var bibPrefixNew = "ZOTERO_BIBL";
-	var bibSuffixNew = "CSL_BIBLIOGRAPHY";
-	var bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-    var repeatTimeout = null;
+    //var formatter = null;
+    var citPrefixNew = "ZOTERO_ITEM";
+    var citSuffixNew = "CSL_CITATION";
+    //var citPrefix = "ZOTERO_CITATION";
+    var bibPrefixNew = "ZOTERO_BIBL";
+    var bibSuffixNew = "CSL_BIBLIOGRAPHY";
+    //var bibPrefix = "ZOTERO_BIBLIOGRAPHY";
     var loadTimeout = null;
-	var loadingStyle = false;
-	var loadingLocale = false;
-	var bNumFormat = false;
-	let bibPlaceholder = "Please insert some citation into the document.";
-	var bUserItemsUpdated = false;
-	var bGroupsItemsUpdated = false;
+    //var loadingStyle = false;
+    //var loadingLocale = false;
+    var bNumFormat = false;
+    // let bibPlaceholder = "Please insert some citation into the document.";
+    //var bUserItemsUpdated = false;
 
-	// TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
+    // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
     //     из библиографии автоматически (это делать только при обновлении библиографии
     //     или refresh), но их точно нужно удалить из formatter!
-	// TODO добавить ещё обработку события (изменения линков), предлать пользователю
+    // TODO добавить ещё обработку события (изменения линков), предлать пользователю
     //     обновить их или сохранить ручное форматирование (при ручном форматировании
     //     не меняем внешний вид цитаты при refresh (да и вообще не меняем))
-	// TODO сейчас всегда делаем полный refresh при каждом действии
+    // TODO сейчас всегда делаем полный refresh при каждом действии
     //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
     //     что поменялось без событий (потом добавить ещё сравнение контента)
-	// TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку
+    // TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку
     //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
     //     какая цитата сверху и снизу от текущего курсора)
 
@@ -62,22 +61,20 @@
             var k = 0;
             for (var i in selected.items) k++;
             return k;
-        }
+        },
     };
-
-	var locales = {};
-    var selectedLocale;
-    var selectedStyle;
 
     /** @type {ZoteroSdk} */
     var sdk = null;
     var cslStylesManager = null;
+    var localesManager = null;
+    var citationService = null;
     var citationDocService = null;
 
     var lastSearch = {
         text: "",
         obj: null,
-		groups: []
+        groups: [],
     };
     var elements = {
         loader: document.getElementById("loader"),
@@ -120,11 +117,11 @@
         insertBibBtn: document.getElementById("insertBibBtn"),
         insertLinkBtn: document.getElementById("insertLinkBtn"),
         cancelBtn: document.getElementById("cancelBtn"),
-		tempDiv: document.getElementById('div_temp'),
-		refreshBtn: document.getElementById('refreshBtn'),
-		saveAsTextBtn: document.getElementById('saveAsTextBtn'),
-		synchronizeBtn: document.getElementById('synchronizeBtn'),
-		checkOmitAuthor: document.getElementById('omitAuthor'),
+        tempDiv: document.getElementById("div_temp"),
+        refreshBtn: document.getElementById("refreshBtn"),
+        saveAsTextBtn: document.getElementById("saveAsTextBtn"),
+
+        checkOmitAuthor: document.getElementById("omitAuthor"),
         useDesktopApp: document.getElementById("useDesktopApp"),
         cslFileInput: document.getElementById("cslFileInput"),
     };
@@ -133,13 +130,16 @@
     var docsScroller;
 
     window.Asc.plugin.init = function () {
-		showLoader(true);
-        setTimeout(function () { searchField.focus(); },100);
-        
+        showLoader(true);
+        setTimeout(function () {
+            searchField.focus();
+        }, 100);
+
         sdk = new ZoteroSdk();
         cslStylesManager = new CslStylesManager();
+        localesManager = new LocalesManager();
         addEventListeners();
-        
+
         initSdkApis().then(function (availableApis) {
             showLoader(true);
             loadStyles();
@@ -153,31 +153,39 @@
                 cslStylesManager.getLastUsedFormat(),
                 cslStylesManager.getLastUsedNotesStyle()
             );
+            citationService = new CitationService(citationDocService, localesManager, cslStylesManager, sdk);
 
-            updateCslItems(true, false, false, false);
             addStylesEventListeners();
-            initSelectBoxes();        
+            initSelectBoxes();
             initLocators();
         });
 
         window.Asc.plugin.onTranslate = applyTranslations;
 
-        selectedScroller = initScrollBox(elements.selectedHolder, elements.selectedThumb);
-        docsScroller = initScrollBox(elements.docsHolder, elements.docsThumb, checkDocsScroll);
+        selectedScroller = initScrollBox(
+            elements.selectedHolder,
+            elements.selectedThumb
+        );
+        docsScroller = initScrollBox(
+            elements.docsHolder,
+            elements.docsThumb,
+            checkDocsScroll
+        );
     };
-
 
     function initSdkApis() {
         return new Promise(function (resolve) {
             let hasFirstAnswer = false;
             let onlineZoteroElements =
                 document.querySelectorAll(".for-zotero-online");
-                
+
             ZoteroApiChecker.runApisChecker(sdk).subscribe(function (
                 /** @type {AvailableApis} */ apis
             ) {
                 cslStylesManager.setDesktopApiAvailable(apis.desktop);
                 cslStylesManager.setRestApiAvailable(apis.online);
+                localesManager.setDesktopApiAvailable(apis.desktop);
+                localesManager.setRestApiAvailable(apis.online);
                 if (!hasFirstAnswer) {
                     hasFirstAnswer = true;
                     if (!apis.desktopVersion) {
@@ -215,7 +223,9 @@
 
     function initLocators() {
         const id = localStorage.getItem("selectedLocator") || "page";
-        const option = elements.locatorLabelsList.querySelector('[data-value="'+id+'"]');
+        const option = elements.locatorLabelsList.querySelector(
+            '[data-value="' + id + '"]'
+        );
         option && option.setAttribute("selected", "");
         const name = option.textContent;
         locatorLabel.value = option.textContent;
@@ -224,14 +234,16 @@
     }
 
     function loadStyles() {
-        cslStylesManager.getStylesInfo()
+        cslStylesManager
+            .getStylesInfo()
             .then(function (stylesInfo) {
-				var openOtherStyleList = function (list) {
+                var openOtherStyleList = function (list) {
                     return function (ev) {
-                        elements.styleSelectListOther.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
+                        elements.styleSelectListOther.style.width =
+                            elements.styleWrapper.clientWidth - 2 + "px";
                         ev.stopPropagation();
                         openList(list);
-                    }
+                    };
                 };
 
                 addStylesToList(stylesInfo);
@@ -243,9 +255,11 @@
                     var other = document.createElement("span");
                     other.textContent = "More Styles...";
                     elements.styleSelectList.appendChild(other);
-                    other.onclick = openOtherStyleList(elements.styleSelectListOther);
+                    other.onclick = openOtherStyleList(
+                        elements.styleSelectListOther
+                    );
                 }
-                
+
                 var custom = document.createElement("span");
                 custom.setAttribute("class", "select-file");
                 var label = document.createElement("label");
@@ -256,15 +270,15 @@
             })
             .catch(function (err) {
                 console.error(err);
-             });
+            });
     }
 
     function loadGroups() {
         return sdk.getUserGroups().then(function (groups) {
             const customGroups = [
-                {id: "all", name: getMessage("Everywhere")},
-                {id: "my_library", name: getMessage("My Library")},
-                {id: "group_libraries", name: getMessage("Group Libraries")}
+                { id: "all", name: translate("Everywhere") },
+                { id: "my_library", name: translate("My Library") },
+                { id: "group_libraries", name: translate("Group Libraries") },
             ];
             library.value = customGroups[0].name;
             library.setAttribute("data-value", customGroups[0].id);
@@ -283,12 +297,12 @@
                     library.setAttribute("data-value", id);
                     library.setAttribute("title", name);
                 }
-            }
+            };
 
             const addSeparator = function () {
                 const el = document.createElement("hr");
                 elements.searchLibrary.appendChild(el);
-            }
+            };
 
             elements.searchLibrary.addEventListener("click", function (e) {
                 const target = e.target;
@@ -298,7 +312,8 @@
                 } else {
                     return;
                 }
-                const selected = elements.searchLibrary.querySelector('span[selected]');
+                const selected =
+                    elements.searchLibrary.querySelector("span[selected]");
                 selected && selected.attributes.removeNamedItem("selected");
                 option.setAttribute("selected", "");
                 const id = option.getAttribute("data-value");
@@ -313,7 +328,7 @@
                 lastSearch.text = "";
                 clearLibrary();
             });
-            
+
             if (groups.length === 0) {
                 return;
             }
@@ -328,7 +343,6 @@
                 const name = groups[i].name;
                 addGroupToSelectBox(id, name);
             }
-
         });
     }
 
@@ -340,7 +354,8 @@
             const option = elements.searchLibrary.children[i];
             if (option.hasAttribute("selected")) {
                 const id = option.getAttribute("data-value");
-                if (["my_library", "group_libraries", "all"].indexOf(id) >= 0) return id;
+                if (["my_library", "group_libraries", "all"].indexOf(id) >= 0)
+                    return id;
                 return Number(id);
             }
         }
@@ -352,45 +367,75 @@
      */
     function addStylesToList(stylesInfo) {
         var found = false;
-        var lastStyle = cslStylesManager.getLastUsedStyleId();
+        var lastStyle = cslStylesManager.getLastUsedStyleId() || "ieee";
 
         var onStyleSelectOther = function (list, other) {
             return function (ev) {
-                var tmpEl = list.removeChild(list.children[list.children.length - 3]);
+                var tmpEl = list.removeChild(
+                    list.children[list.children.length - 3]
+                );
                 var newEl = document.createElement("span");
-                newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                newEl.setAttribute(
+                    "data-value",
+                    tmpEl.getAttribute("data-value")
+                );
                 newEl.textContent = tmpEl.textContent;
                 other.appendChild(newEl);
-                newEl.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                newEl.onclick = onStyleSelectOther(
+                    elements.styleSelectList,
+                    elements.styleSelectListOther
+                );
                 tmpEl = other.removeChild(ev.target);
                 newEl = document.createElement("span");
-                newEl.setAttribute("data-value", tmpEl.getAttribute("data-value"));
+                newEl.setAttribute(
+                    "data-value",
+                    tmpEl.getAttribute("data-value")
+                );
                 newEl.textContent = tmpEl.textContent;
                 list.insertBefore(newEl, list.firstElementChild);
-                newEl.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
+                newEl.onclick = onClickListElement(
+                    elements.styleSelectList,
+                    elements.styleSelect
+                );
                 var event = new Event("click");
                 newEl.dispatchEvent(event);
                 openList(null);
-            }
+            };
         };
 
         for (var i = 0; i < stylesInfo.length; i++) {
             var el = document.createElement("span");
             el.setAttribute("data-value", stylesInfo[i].name);
             el.textContent = stylesInfo[i].title;
-            if (cslStylesManager.isStyleDefault(stylesInfo[i].name) || stylesInfo[i].name == lastStyle) {
+            if (
+                cslStylesManager.isStyleDefault(stylesInfo[i].name) ||
+                stylesInfo[i].name == lastStyle
+            ) {
                 if (stylesInfo.length == 1)
-                    elements.styleSelectList.insertBefore(el, elements.styleSelectList.firstElementChild);
-                else
-                    elements.styleSelectList.appendChild(el);
-                el.onclick = onClickListElement(elements.styleSelectList, elements.styleSelect);
+                    elements.styleSelectList.insertBefore(
+                        el,
+                        elements.styleSelectList.firstElementChild
+                    );
+                else elements.styleSelectList.appendChild(el);
+                el.onclick = onClickListElement(
+                    elements.styleSelectList,
+                    elements.styleSelect
+                );
             } else {
                 elements.styleSelectListOther.appendChild(el);
-                el.onclick = onStyleSelectOther(elements.styleSelectList, elements.styleSelectListOther);
+                el.onclick = onStyleSelectOther(
+                    elements.styleSelectList,
+                    elements.styleSelectListOther
+                );
             }
             if (stylesInfo[i].name == lastStyle) {
                 el.setAttribute("selected", "");
-                selectInput(elements.styleSelect, el, elements.styleSelectList, false);
+                selectInput(
+                    elements.styleSelect,
+                    el,
+                    elements.styleSelectList,
+                    false
+                );
             }
         }
     }
@@ -401,18 +446,24 @@
             if (!file) return;
             //showLoader(true);
 
-            cslStylesManager.addCustomStyle(file).then(function (styleValue) {
-                addStylesToList([styleValue]);
-            }).catch(function (error) {
-                console.error(error);
-                showError(getMessage("Failed to upload file"));
-            }).finally(function () {
-                showLoader(false);
-            });
+            cslStylesManager
+                .addCustomStyle(file)
+                .then(function (styleValue) {
+                    addStylesToList([styleValue]);
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    showError(translate("Failed to upload file"));
+                })
+                .finally(function () {
+                    showLoader(false);
+                });
         };
 
         elements.useDesktopApp.onclick = function () {
-            ZoteroApiChecker.checkStatus(sdk).then(function (/** @type {AvailableApis} */ apis) {
+            ZoteroApiChecker.checkStatus(sdk).then(function (
+                /** @type {AvailableApis} */ apis
+            ) {
                 if (apis.desktop && apis.hasPermission) {
                     sdk.setIsOnlineAvailable(false);
                     elements.logoutLink.style.display = "none";
@@ -424,10 +475,10 @@
                         "Please enable external connections in Zotero: " +
                         'Edit → Settings → Advanced → Check "Allow other ' +
                         'applications on this computer to communicate with Zotero"';
-                    showError(getMessage(errorMessage));
+                    showError(translate(errorMessage));
                 } else if (!apis.desktop) {
                     showError(
-                        getMessage(
+                        translate(
                             "Connection to Zotero failed. Make sure Zotero is running."
                         )
                     );
@@ -437,7 +488,7 @@
 
         elements.logoutLink.onclick = function (e) {
             sdk.clearSettings();
-            switchAuthState('config');
+            switchAuthState("config");
             return true;
         };
 
@@ -447,57 +498,87 @@
             if (!text) return;
             if (text == lastSearch.text) return;
             lastSearch.text = text;
-			lastSearch.obj = null;
-			lastSearch.groups = [];
+            lastSearch.obj = null;
+            lastSearch.groups = [];
             clearLibrary();
 
             const promises = [];
 
             const selectedGroup = getSelectedGroup();
-            
-            return sdk.getUserGroups().then(function (userGroups) {
-                let groups = [];
-                switch (selectedGroup) {
-                    case "my_library":
-                        groups = [];
-                        break;
-                    case "all":
-                    case "group_libraries":
-                        groups = userGroups.map(function (group) {
-                            return group.id;
-                        });
-                        break;
-                    default:
-                        groups = [selectedGroup];
-                        break;
-                }
 
-                const append = true;
-                let showLoader = true;
-                let hideLoader = !groups.length;
-                const bCount = true;
+            return sdk
+                .getUserGroups()
+                .then(function (userGroups) {
+                    let groups = [];
+                    switch (selectedGroup) {
+                        case "my_library":
+                            groups = [];
+                            break;
+                        case "all":
+                        case "group_libraries":
+                            groups = userGroups.map(function (group) {
+                                return group.id;
+                            });
+                            break;
+                        default:
+                            groups = [selectedGroup];
+                            break;
+                    }
 
-                if (selectedGroup === "my_library" || selectedGroup === "all") {
-                    promises.push(loadLibrary(sdk.getItems(text), append, showLoader, hideLoader, false, bCount));
-                }
+                    const append = true;
+                    let showLoader = true;
+                    let hideLoader = !groups.length;
+                    const bCount = true;
 
-                for (var i = 0; i < groups.length; i++) {
-                    showLoader = i === 0 && promises.length === 0;
-                    hideLoader = i === groups.length - 1;
-					promises.push(loadLibrary(sdk.getGroupItems(lastSearch.text, groups[i]), append, showLoader, hideLoader, true, bCount ));
-				}
-            }).then(function () {
-                return Promise.all(promises);
-            });
-        };
+                    if (
+                        selectedGroup === "my_library" ||
+                        selectedGroup === "all"
+                    ) {
+                        promises.push(
+                            loadLibrary(
+                                sdk.getItems(text),
+                                append,
+                                showLoader,
+                                hideLoader,
+                                false,
+                                bCount
+                            )
+                        );
+                    }
+
+                    for (var i = 0; i < groups.length; i++) {
+                        showLoader = i === 0 && promises.length === 0;
+                        hideLoader = i === groups.length - 1;
+                        promises.push(
+                            loadLibrary(
+                                sdk.getGroupItems(lastSearch.text, groups[i]),
+                                append,
+                                showLoader,
+                                hideLoader,
+                                true,
+                                bCount
+                            )
+                        );
+                    }
+                })
+                .then(function () {
+                    return Promise.all(promises);
+                });
+        }
         elements.searchField.onkeypress = function (e) {
             if (e.keyCode == 13) searchFor(e.target.value);
         };
         elements.searchField.onblur = function (e) {
-            setTimeout(function () { searchFor(e.target.value); }, 500);
+            setTimeout(function () {
+                searchFor(e.target.value);
+            }, 500);
         };
         elements.searchField.onkeyup = function (e) {
-            switchClass(elements.searchClear, displayNoneClass, !e.target.value);
+            switchClass(
+                elements.searchClear,
+                displayNoneClass,
+                !e.target.value
+            );
         };
         elements.searchClear.onclick = function (e) {
             if (e.target.classList.contains(displayNoneClass)) return true;
@@ -528,48 +609,103 @@
                     })
                     .catch(function (err) {
                         console.error(err);
-                        showError(getMessage("Invalid API key"));
+                        showError(translate("Invalid API key"));
                     });
             }
         };
 
-		elements.refreshBtn.onclick = function() {
-			showLoader(true);
-            updateCslItems(true, true, false, false).catch(function (error) {
-                showLoader(false);
-                showError(getMessage("Failed to refresh"));
+        elements.refreshBtn.onclick = function () {
+            if (!cslStylesManager.getLastUsedStyleId()) {
+                showError(translate("Style is not selected"));
+                return;
+            }
+            if (!localesManager.getLocale()) {
+                showError(translate("Language is not selected"));
+                return;
+            }
+            showLoader(true);
+            citationService.updateCslItems(true, true, false)
+            .catch(function (error) {
                 console.error(error);
-            });
-		};
-
-		elements.synchronizeBtn.onclick = function() {
-			synchronizeData();
-		};
-
-        elements.insertBibBtn.onclick = function() { 
-			showLoader(true);
-			// TODO #there
-			// updateCslItems(true, false, true, false);
-            updateCslItems(true, true, true, false).catch(function (error) {
+                let message = translate("Failed to refresh");
+                if (typeof error === "string") {
+                    message += '. ' + translate(error);
+                }
+                showError(message);
+            }).finally(function () {
                 showLoader(false);
-                showError(getMessage("Failed to insert bibliography"));
-                console.error(error);
             });
-		};
+        };
 
-		elements.insertLinkBtn.onclick = function() {
-			showLoader(true);
-			updateCslItems(true, false, false, true).catch(function (error) {
+        elements.insertBibBtn.onclick = function () {
+            if (!cslStylesManager.getLastUsedStyleId()) {
+                showError(translate("Style is not selected"));
+                return;
+            }
+            if (!localesManager.getLocale()) {
+                showError(translate("Language is not selected"));
+                return;
+            }
+            showLoader(true);
+            // TODO #there
+            // updateCslItems(true, false, true);
+            citationService.updateCslItems(true, true, true)
+            .catch(function (error) {
+                console.error(error);
+                let message = translate("Failed to insert bibliography");
+                if (typeof error === "string") {
+                    message += '. ' + translate(error);
+                }
+                showError(message);
+            }).finally(function () {
                 showLoader(false);
-                showError(getMessage("Failed to insert citation"));
-                console.error(error);
             });
-		};
+        };
 
-		elements.saveAsTextBtn.onclick = function() {
-			showLoader(true);
-			citationDocService.saveAsText();
-        }
+        elements.insertLinkBtn.onclick = function () {
+            if (!cslStylesManager.getLastUsedStyleId()) {
+                showError(translate("Style is not selected"));
+                return;
+            }
+            if (!localesManager.getLocale()) {
+                showError(translate("Language is not selected"));
+                return;
+            }
+            showLoader(true);
+            citationService.updateCslItems(true, false, false)
+            .then(function () {
+                const prefix = getPrefix();
+                const suffix = getSuffix();
+                const locatorInfo = getLocator();
+
+                return citationService.insertSelectedCitations(
+                    selected.items,
+                    prefix,
+                    suffix,
+                    locatorInfo,
+                    elements.checkOmitAuthor.checked
+                );
+            }).then(function (keys) {
+                keys.forEach(function (key) {
+                    removeSelected(key);
+                });
+            })
+            .catch(function (error) {
+                console.error(error);
+                let message = translate("Failed to insert citation");
+                if (typeof error === "string") {
+                    message += '. ' + translate(error);
+                }
+                showError(message);
+            }).finally(function () {
+                showLoader(false);
+            });
+        };
+
+        elements.saveAsTextBtn.onclick = function () {
+            showLoader(true);
+            citationDocService.saveAsText();
+        };
 
         elements.locatorLabelsList.addEventListener("click", function (e) {
             const target = e.target;
@@ -582,16 +718,22 @@
             const id = option.getAttribute("data-value");
             localStorage.setItem("selectedLocator", id);
         });
-	}
+    }
 
     function addStylesEventListeners() {
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
-            var filter = filter !== undefined ? filter : input.value.toLowerCase();
-            var list = (elements.styleSelectList.classList.contains(displayNoneClass)) ? elements.styleSelectListOther : elements.styleSelectList;
+            var filter =
+                filter !== undefined ? filter : input.value.toLowerCase();
+            var list = elements.styleSelectList.classList.contains(
+                displayNoneClass
+            )
+                ? elements.styleSelectListOther
+                : elements.styleSelectList;
 
             for (var i = 0; i < list.children.length; i++) {
-                var text = list.children[i].textContent || list.children[i].innerText;
+                var text =
+                    list.children[i].textContent || list.children[i].innerText;
                 var hide = true;
                 if (!filter || text.toLowerCase().indexOf(filter) > -1) {
                     hide = false;
@@ -600,77 +742,121 @@
             }
         };
 
-        elements.styleSelect.onselectchange = function (inp, val, isClick) {
-			showLoader(true);
-            getStyle(val)
-			.then(function(style) {
-                selectedStyle = val;
-				
-                onStyleChange();
-				if (isClick)
-					return updateCslItems(true, true, false, false);
-			})
-			.catch(function (err) {
-                console.error(err);
-             })
-			.finally(function() {
-				if (
-                    locales[selectedLocale] &&
-                    cslStylesManager.cached(selectedStyle)
-                )
-                    showLoader(false);
-			});
-			elements.styleSelect.oninput(null, '');
+        elements.styleSelect.onselectchange = function (inp, styleName, isClick) {
+            showLoader(true);
+            cslStylesManager
+                .getStyle(styleName)
+                .then(function (style) {
+                    onStyleChange();
+                    if (isClick) {
+                        return citationService.updateCslItems(true, true, false);
+                    }
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    if (typeof error === 'string') {
+                        showError(error);
+                    }
+                })
+                .finally(function () {
+                    if (
+                        localesManager.getLocale() &&
+                        cslStylesManager.cached(styleName)
+                    )
+                        showLoader(false);
+                });
+            elements.styleSelect.oninput(null, "");
         };
 
         elements.styleLang.onselectchange = function (inp, val, isClick) {
-			showLoader(true);
-			saveLanguage(val);
-            getLocale(val)
-			.then(function() {
-				if (isClick)
-					return updateCslItems(true, true, false, false);
-			})
-			.catch(function (error) {
-                console.error(error);
-            })
-			.finally(function() {
-				if (locales[selectedLocale] && cslStylesManager.cached(selectedStyle)) showLoader(false);
-			});
-            selectedLocale = val;
+            showLoader(true);
+            localesManager.saveLastUsedLanguage(val);
+            localesManager.loadLocale(val)
+                .then(function () {
+                    if (isClick)
+                        return citationService.updateCslItems(true, true, false);
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    if (typeof error === 'string') {
+                        showError(error);
+                    }
+                })
+                .finally(function () {
+                    if (
+                        localesManager.getLocale() &&
+                        cslStylesManager.getLastUsedStyleId()
+                    )
+                        showLoader(false);
+                });
         };
 
         elements.styleSelectList.onopen = function () {
-            elements.styleSelectList.style.width = (elements.styleWrapper.clientWidth - 2) + "px";
-        }
+            elements.styleSelectList.style.width =
+                elements.styleWrapper.clientWidth - 2 + "px";
+        };
 
-        elements.notesStyleRadios.forEach(function(radio) {
-            radio.addEventListener('change', function(event)  {
+        elements.notesStyleRadios.forEach(function (radio) {
+            radio.addEventListener("change", function (event) {
                 if (event.target.checked) {
                     cslStylesManager.saveLastUsedNotesStyle(event.target.value);
                 }
             });
         });
-        
     }
 
-    window.Asc.plugin.onThemeChanged = function(theme)
-    {
+    window.Asc.plugin.onThemeChanged = function (theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
-        var rules = '.selectArrow > span { background-color: ' + window.Asc.plugin.theme['text-normal'] + '}\n';
-        rules += '.link { color : ' + window.Asc.plugin.theme['text-normal'] + ';}\n';
-        rules += '.control.select { background-color : ' + window.Asc.plugin.theme['background-normal'] + ';}\n';
-        rules += '.control { color : ' + window.Asc.plugin.theme['text-normal'] + '; border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '}\n';
-        rules += '.selectList { border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '; background-color: ' + window.Asc.plugin.theme['background-normal'] + '; }\n';
-        rules += '.selectList > hr { border-color : ' + window.Asc.plugin.theme['border-regular-control'] + '; }\n';
-        rules += '.selectList > span { background-color: ' + window.Asc.plugin.theme['background-normal'] + '; ';
-        rules += 'color : ' + window.Asc.plugin.theme['text-normal'] + '; }\n';
-        rules += '.selectList > span:hover { background-color : ' + window.Asc.plugin.theme['highlight-button-hover'] + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}\n';
-        rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme['highlight-button-pressed'] + ';' + '; color : ' + window.Asc.plugin.theme['text-normal'] + '}';
-        var styleTheme = document.createElement('style');
-        styleTheme.type = 'text/css';
+        var rules =
+            ".selectArrow > span { background-color: " +
+            window.Asc.plugin.theme["text-normal"] +
+            "}\n";
+        rules +=
+            ".link { color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            ";}\n";
+        rules +=
+            ".control.select { background-color : " +
+            window.Asc.plugin.theme["background-normal"] +
+            ";}\n";
+        rules +=
+            ".control { color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            "; border-color : " +
+            window.Asc.plugin.theme["border-regular-control"] +
+            "}\n";
+        rules +=
+            ".selectList { border-color : " +
+            window.Asc.plugin.theme["border-regular-control"] +
+            "; background-color: " +
+            window.Asc.plugin.theme["background-normal"] +
+            "; }\n";
+        rules +=
+            ".selectList > hr { border-color : " +
+            window.Asc.plugin.theme["border-regular-control"] +
+            "; }\n";
+        rules +=
+            ".selectList > span { background-color: " +
+            window.Asc.plugin.theme["background-normal"] +
+            "; ";
+        rules += "color : " + window.Asc.plugin.theme["text-normal"] + "; }\n";
+        rules +=
+            ".selectList > span:hover { background-color : " +
+            window.Asc.plugin.theme["highlight-button-hover"] +
+            "; color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            "}\n";
+        rules +=
+            '.selectList > span[selected=""] { background-color : ' +
+            window.Asc.plugin.theme["highlight-button-pressed"] +
+            ";" +
+            "; color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            "}";
+        var styleTheme = document.createElement("style");
+        styleTheme.type = "text/css";
         styleTheme.innerHTML = rules;
-        document.getElementsByTagName('head')[0].appendChild(styleTheme);
+        document.getElementsByTagName("head")[0].appendChild(styleTheme);
     };
 
     var scrollBoxes = [];
@@ -679,7 +865,8 @@
         scroller.onscroll = checkScroll(holder, thumb, onscroll);
 
         holder.onwheel = function (e) {
-            holder.scrollTop += (e.deltaY > 10 || e.deltaY < -10) ? e.deltaY : e.deltaY * 20;
+            holder.scrollTop +=
+                e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
             scroller.onscroll();
         };
 
@@ -692,7 +879,7 @@
                 switchClass(thumb, "scrolling", false);
                 window.onmouseup = null;
                 window.onmousemove = null;
-            }
+            };
             window.onmousemove = function (e) {
                 var delta = e.clientY - y;
 
@@ -701,8 +888,8 @@
                 holder.scrollTop = initialPos + deltaScroll;
 
                 scroller.onscroll();
-            }
-        }
+            };
+        };
 
         scrollBoxes.push(scroller);
 
@@ -710,7 +897,7 @@
             for (var i = 0; i < scrollBoxes.length; i++) {
                 scrollBoxes[i].onscroll();
             }
-        }
+        };
 
         return scroller;
     }
@@ -718,7 +905,7 @@
     var selectLists = [];
     function initSelectBoxes() {
         var select = document.getElementsByClassName("control select");
-		var savedLang = restoreLanguage();
+        var savedLang = localesManager.getLastUsedLanguage();
         for (var i = 0; i < select.length; i++) {
             var input = select[i];
             var holder = input.parentElement;
@@ -728,18 +915,28 @@
             arrow.appendChild(document.createElement("span"));
             holder.appendChild(arrow);
 
-            for (var k = 0; k < holder.getElementsByClassName("selectList").length; k++) {
+            for (
+                var k = 0;
+                k < holder.getElementsByClassName("selectList").length;
+                k++
+            ) {
                 var list = holder.getElementsByClassName("selectList")[k];
                 if (list.children.length > 0) {
                     var def = false;
                     for (var j = 0; j < list.children.length; j++) {
-                        if (list.children[j].getAttribute("data-value") == savedLang) {
-							list.children[j].setAttribute("selected", "");
+                        if (
+                            list.children[j].getAttribute("data-value") ==
+                            savedLang
+                        ) {
+                            list.children[j].setAttribute("selected", "");
                             selectInput(input, list.children[j], list, false);
                             def = true;
                         }
 
-                        list.children[j].onclick = onClickListElement(list, input);
+                        list.children[j].onclick = onClickListElement(
+                            list,
+                            input
+                        );
                     }
                     if (!def) {
                         selectInput(input, list.children[0], list, false);
@@ -749,8 +946,12 @@
                 var f = function (list, input) {
                     return function (ev) {
                         ev.stopPropagation();
-                        if (!elements.styleSelectListOther.classList.contains(displayNoneClass))
-                        return true;
+                        if (
+                            !elements.styleSelectListOther.classList.contains(
+                                displayNoneClass
+                            )
+                        )
+                            return true;
 
                         if (list.onopen) {
                             list.onopen();
@@ -773,8 +974,8 @@
 
         window.onclick = function () {
             openList(null);
-        }
-    };
+        };
+    }
 
     function openList(el) {
         for (var i = 0; i < selectLists.length; i++) {
@@ -782,12 +983,12 @@
             if (selectLists[i] === el) {
                 close = false;
             }
-			if (close && selectLists[i] === elements.styleSelectList)
-				elements.styleSelect.oninput(null, '');
+            if (close && selectLists[i] === elements.styleSelectList)
+                elements.styleSelect.oninput(null, "");
 
             switchClass(selectLists[i], displayNoneClass, close);
         }
-    };
+    }
 
     function selectInput(input, el, list, isClick) {
         input.value = el.textContent;
@@ -798,7 +999,7 @@
             input.onselectchange(input, val, isClick);
         }
         switchClass(list, displayNoneClass, true);
-    };
+    }
 
     function onClickListElement(list, input) {
         return function (ev) {
@@ -814,12 +1015,12 @@
                 }
             }
         };
-    };
+    }
 
     function onStyleChange() {
         let styleFormat = cslStylesManager.getLastUsedFormat();
         citationDocService.setStyleFormat(styleFormat);
-        bNumFormat = styleFormat == 'numeric';
+        bNumFormat = styleFormat == "numeric";
         if ("note" === styleFormat) {
             elements.notesStyleWrapper.classList.remove(displayNoneClass);
         } else {
@@ -828,7 +1029,9 @@
 
         let notesStyle = cslStylesManager.getLastUsedNotesStyle();
         citationDocService.setNotesStyle(notesStyle);
-        elements.notesStyleWrapper.querySelector('input[name="notesAs"][value="' + notesStyle + '"]').checked = true;
+        elements.notesStyleWrapper.querySelector(
+            'input[name="notesAs"][value="' + notesStyle + '"]'
+        ).checked = true;
     }
 
     function applyTranslations() {
@@ -836,44 +1039,42 @@
 
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
-            if (el.attributes["placeholder"]) el.attributes["placeholder"].value = getMessage(el.attributes["placeholder"].value);
-            if (el.attributes["title"]) el.attributes["title"].value = getMessage(el.attributes["title"].value);
-            if (el.innerText) el.innerText = getMessage(el.innerText);
+            if (el.attributes["placeholder"])
+                el.attributes["placeholder"].value = translate(
+                    el.attributes["placeholder"].value
+                );
+            if (el.attributes["title"])
+                el.attributes["title"].value = translate(
+                    el.attributes["title"].value
+                );
+            if (el.innerText) el.innerText = translate(el.innerText);
         }
-    };
-
-    function getMessage(key) {
-        return window.Asc.plugin.tr(key);
-    };
-
-	function saveLanguage(id) {
-		localStorage.setItem("zoteroLang", id);
-	};
-
-	function restoreLanguage() {
-		return localStorage.getItem("zoteroLang") || "en-US";
-	};
+    }
 
     function showError(message) {
         if (message) {
             switchClass(elements.error, displayNoneClass, false);
             elements.error.textContent = message;
-            setTimeout(function () { window.onclick = function () { showError(); }; }, 100);
+            setTimeout(function () {
+                window.onclick = function () {
+                    showError();
+                };
+            }, 100);
         } else {
             switchClass(elements.error, displayNoneClass, true);
             elements.error.textContent = "";
             window.onclick = null;
         }
-    };
+    }
 
-	function showLoader(show) {
+    function showLoader(show) {
         switchClass(elements.loader, displayNoneClass, !show);
         switchClass(elements.contentHolder, blurClass, show);
-    };
+    }
 
     function showLibLoader(show) {
         switchClass(elements.libLoader, displayNoneClass, !show);
-    };
+    }
 
     function switchClass(el, className, add) {
         if (add) {
@@ -881,16 +1082,16 @@
         } else {
             el.classList.remove(className);
         }
-    };
+    }
 
     function configState(hide) {
         switchClass(elements.configState, displayNoneClass, hide);
-    };
+    }
 
     function mainState(hide) {
         switchClass(elements.mainState, displayNoneClass, hide);
         switchClass(elements.logoutLink, displayNoneClass, hide);
-    };
+    }
 
     var currentAuthState;
     function switchAuthState(state) {
@@ -898,14 +1099,14 @@
         configState(true);
         mainState(true);
         switch (state) {
-            case 'config':
+            case "config":
                 configState(false);
                 break;
-            case 'main':
+            case "main":
                 mainState(false);
                 break;
         }
-    };
+    }
 
     function checkScroll(holder, thumb, func) {
         return function () {
@@ -913,7 +1114,9 @@
                 switchClass(thumb, displayNoneClass, true);
             } else {
                 switchClass(thumb, displayNoneClass, false);
-                var height = holder.clientHeight / holder.scrollHeight * holder.clientHeight;
+                var height =
+                    (holder.clientHeight / holder.scrollHeight) *
+                    holder.clientHeight;
                 height = height < 40 ? 40 : height;
                 thumb.style.height = height + "px";
 
@@ -925,42 +1128,65 @@
             }
 
             if (func) func(holder, thumb);
-        }
-    };
+        };
+    }
 
     function checkDocsScroll(holder) {
         if (shouldLoadMore(holder)) {
-
             if (loadTimeout) {
                 clearTimeout(loadTimeout);
             }
 
-            if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
+            if (
+                !lastSearch.obj &&
+                !lastSearch.text.trim() &&
+                !lastSearch.groups.length
+            )
+                return;
 
             loadTimeout = setTimeout(function () {
                 if (shouldLoadMore(holder)) {
-                    loadLibrary(lastSearch.obj.next(), true, true, !lastSearch.groups.length, false, false);
-					for (var i = 0; (i < lastSearch.groups.length && lastSearch.groups[i].next); i++) {
-						loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next()), true, false, ( i == (lastSearch.groups.length -1) ), true, false);
-					}
+                    loadLibrary(
+                        lastSearch.obj.next(),
+                        true,
+                        true,
+                        !lastSearch.groups.length,
+                        false,
+                        false
+                    );
+                    for (
+                        var i = 0;
+                        i < lastSearch.groups.length &&
+                        lastSearch.groups[i].next;
+                        i++
+                    ) {
+                        loadLibrary(
+                            sdk.getGroupItems(lastSearch.groups[i].next()),
+                            true,
+                            false,
+                            i == lastSearch.groups.length - 1,
+                            true,
+                            false
+                        );
+                    }
                 } else {
                 }
             }, 500);
-
         }
-    };
+    }
 
     function shouldLoadMore(holder) {
         if (currentAuthState != "main") return false;
-        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) return false;
-		var flag = true;
-		lastSearch.groups.forEach(function(el) {
-			if (el.next) flag = false;
-		});
+        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight)
+            return false;
+        var flag = true;
+        lastSearch.groups.forEach(function (el) {
+            if (el.next) flag = false;
+        });
         if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
 
         return true;
-    };
+    }
 
     function clearLibrary() {
         var holder = elements.docsHolder;
@@ -969,64 +1195,58 @@
         }
         holder.scrollTop = 0;
         docsScroller.onscroll();
-    };
+    }
 
     /**
-     * @param {Promise} promise 
-     * @param {boolean} append 
-     * @param {boolean} showLoader 
-     * @param {boolean} hideLoader 
-     * @param {boolean} isGroup 
-     * @param {boolean} bCount 
+     * @param {Promise} promise
+     * @param {boolean} append
+     * @param {boolean} showLoader
+     * @param {boolean} hideLoader
+     * @param {boolean} isGroup
+     * @param {boolean} bCount
      * @returns {Promise}
      */
-    function loadLibrary(promise, append, showLoader, hideLoader, isGroup, bCount) {
-		if (showLoader) showLibLoader(true);
-		if (bCount) counter++;
+    function loadLibrary(
+        promise,
+        append,
+        showLoader,
+        hideLoader,
+        isGroup,
+        bCount
+    ) {
+        if (showLoader) showLibLoader(true);
+        if (bCount) counter++;
         return promise
             .then(function (res) {
-				if (bCount) counter--;
-                displaySearchItems(append, res, null, isGroup, (bCount && !counter) );
+                if (bCount) counter--;
+                displaySearchItems(
+                    append,
+                    res,
+                    null,
+                    isGroup,
+                    bCount && !counter
+                );
             })
             .catch(function (err) {
-				if (bCount) counter--;
+                if (bCount) counter--;
                 console.error(err);
                 if (err.message) {
-                    showError(getMessage(err.message));
+                    showError(translate(err.message));
                 }
-                displaySearchItems(append, {}, err, isGroup, (bCount && !counter) );
+                displaySearchItems(
+                    append,
+                    {},
+                    err,
+                    isGroup,
+                    bCount && !counter
+                );
             })
-            .finally(function () {	
-				if (hideLoader) {
-					showLibLoader(false);
-				}
+            .finally(function () {
+                if (hideLoader) {
+                    showLibLoader(false);
+                }
             });
-    };
-
-    function getStyle(styleName) {
-        return new Promise(function (res, rej) {
-            loadingStyle = true;
-            cslStylesManager.getStyle(styleName)
-                .then(function (text) {
-                    res(text); 
-                    loadingStyle = false;
-                })
-                .catch(function (err) { rej(err); loadingStyle = false; });
-        });
-    };
-
-    function getLocale(langTag) {
-        return new Promise(function (res, rej) {
-            if (locales[langTag] != null) {
-                res(locales[langTag]);
-            } else {
-                loadingLocale = true;
-				sdk.getLocale(langTag)
-                    .then(function (text) { locales[langTag] = text; res(text); loadingLocale = false; })
-                    .catch(function (err) { rej(err); loadingLocale = false; });
-            }
-        });
-    };
+    }
 
     /**
      * @returns {string}
@@ -1063,10 +1283,10 @@
             return null;
         }
 
-        return { 
+        return {
             locator: locatorInput.value,
-            label: label.getAttribute("data-value") 
-        }; 
+            label: label.getAttribute("data-value"),
+        };
     }
 
     function displaySearchItems(append, res, err, isGroup, showNotFound) {
@@ -1077,27 +1297,31 @@
         }
 
         var first = false;
-        if (!lastSearch.obj && (res && res.items.items && !res.items.items.length) ) first = true;
+        if (
+            !lastSearch.obj &&
+            res &&
+            res.items.items &&
+            !res.items.items.length
+        )
+            first = true;
         if (err) {
             if (first) {
-				lastSearch.obj = null;
-				lastSearch.groups = [];
-			} 
+                lastSearch.obj = null;
+                lastSearch.groups = [];
+            }
             lastSearch.obj.next = null;
         } else {
-			if (isGroup && res && res.next)
-				lastSearch.groups.push(res);
-			else
-            	lastSearch.obj = (res && res.items.items.length ? res : null);
+            if (isGroup && res && res.next) lastSearch.groups.push(res);
+            else lastSearch.obj = res && res.items.items.length ? res : null;
         }
 
         var page = document.createElement("div");
         page.classList.add("page" + holder.children.length);
         if (res && res.items.items.length > 0) {
-			for (let index = 0; index < res.items.items.length; index++) {
-				let item = res.items.items[index];
-				item[ (isGroup ? "groupID" : "userID") ] = res.id;
-                fillUrisFromId(item);
+            for (let index = 0; index < res.items.items.length; index++) {
+                let item = res.items.items[index];
+                item[isGroup ? "groupID" : "userID"] = res.id;
+                citationService.fillUrisFromId(item);
 
                 page.appendChild(buildDocElement(item));
             }
@@ -1106,7 +1330,7 @@
                 showError(err);
             } else if (showNotFound) {
                 var notFound = document.createElement("div");
-                notFound.textContent = getMessage("Nothing found");
+                notFound.textContent = translate("Nothing found");
                 notFound.classList.add("searchInfo");
                 page.appendChild(notFound);
             }
@@ -1114,7 +1338,7 @@
         holder.appendChild(page);
 
         docsScroller.onscroll();
-    };
+    }
 
     function buildDocElement(item) {
         var root = document.createElement("div");
@@ -1159,8 +1383,8 @@
         if (item.publisher || item["publisher-place"]) {
             source.textContent = item.publisher || item["publisher-place"];
         }
-        if (item.issued && item.issued['date-parts']) {
-			var date = item.issued['date-parts'][0];
+        if (item.issued && item.issued["date-parts"]) {
+            var date = item.issued["date-parts"][0];
             if (source.textContent) {
                 source.textContent += " (" + date.join("-") + ")";
             } else {
@@ -1192,7 +1416,7 @@
         docInfo.onclick = f;
 
         return root;
-    };
+    }
 
     function addSelected(item, input) {
         var el = buildSelectedElement(item);
@@ -1203,7 +1427,7 @@
         docsScroller.onscroll();
         selectedScroller.onscroll();
         checkSelected();
-    };
+    }
 
     function removeSelected(id) {
         var el = selected.html[id];
@@ -1217,7 +1441,7 @@
         docsScroller.onscroll();
         selectedScroller.onscroll();
         checkSelected();
-    };
+    }
 
     function buildSelectedElement(item) {
         var root = document.createElement("div");
@@ -1228,292 +1452,345 @@
         name.setAttribute("title", item.title);
 
         var year = document.createElement("span");
-        if (item.issued && item.issued['date-parts']) {
-            year.textContent = item.issued['date-parts'][0].join("-");
+        if (item.issued && item.issued["date-parts"]) {
+            year.textContent = item.issued["date-parts"][0].join("-");
         }
 
         var remove = document.createElement("span");
         remove.onclick = function () {
             removeSelected(item.id);
         };
-        remove.textContent = '×';
+        remove.textContent = "×";
 
         root.appendChild(name);
         root.appendChild(year);
         root.appendChild(remove);
 
         return root;
-    };
+    }
 
     function checkSelected() {
-		if (selected.count() <= 0) {
-			elements.insertLinkBtn.setAttribute('disabled', '');
-			elements.cancelBtn.setAttribute('disabled', '');
-		} else {
-			elements.insertLinkBtn.removeAttribute('disabled', '');
-			elements.cancelBtn.removeAttribute('disabled', '');
-		}
-    };
+        if (selected.count() <= 0) {
+            elements.insertLinkBtn.setAttribute("disabled", "");
+            elements.cancelBtn.setAttribute("disabled", "");
+        } else {
+            elements.insertLinkBtn.removeAttribute("disabled", "");
+            elements.cancelBtn.removeAttribute("disabled", "");
+        }
+    }
 
     /**
-     * @param {boolean} bUpadteAll 
-     * @param {boolean} bPastBib 
-     * @param {boolean} bSynchronize 
+     * @param {boolean} bUpdateAll
+     * @param {boolean} bPastBib
+     * @param {boolean} bSynchronize
      * @returns {Promise<void>}
      */
-	function updateAllOrAddBib(bUpadteAll, bPastBib, bSynchronize) {
-		if (!selectedStyle) {
-            showError(getMessage("Style is not selected"));
+    /*function updateAllOrAddBib(bUpdateAll, bPastBib, bSynchronize) {
+        if (!cslStylesManager.getLastUsedStyleId()) {
+            showError(translate("Style is not selected"));
             return;
         }
-        if (!selectedLocale) {
-            showError(getMessage("Language is not selected"));
+        if (!localesManager.getLastUsedLanguage()) {
+            showError(translate("Language is not selected"));
             return;
         }
-		return citationDocService.getAddinZoteroFields().then(function(arrFields) {
-			if (!arrFields.length) {
-				showLoader(false);
-                return;
-            }
-            var updatedFields = [];
-            var bibField = null;
-            var bibFieldValue = ' ';
-            
-            const fragment = document.createDocumentFragment();
-            const tempElement = document.createElement("div");
-            fragment.appendChild(tempElement);
-
-            try {
-                var bibItems = new Array(CSLCitationStorage.size);
-                var bibObject = formatter.makeBibliography();
-                // Sort bibliography items
-                for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                    var citationId = bibObject[0].entry_ids[i][0];
-                    var citationIndex = CSLCitationStorage.getIndex(citationId);
-                    var bibText = bibObject[1][i];
-                    while (bibText.indexOf('\n') !== bibText.lastIndexOf('\n')) {
-                        bibText = bibText.replace(/\n/, '');
-                    }
-                    // Check if bibliography item contains <sup> or <sub>
-                    if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
-                        // Escape <sup> and <sub>
-                        bibText = bibText
-                            .replace(/<sup\b[^>]*>/gi, '&lt;sup&gt;')
-                            .replace(/<\/sup>/gi, '&lt;/sup&gt;')
-                            .replace(/<sub\b[^>]*>/gi, '&lt;sub&gt;')
-                            .replace(/<\/sub>/gi, '&lt;/sub&gt;');
-                    }
-                    bibItems[citationIndex] = bibText;
-                }
-                tempElement.innerHTML = bibItems.join('');
-            } catch (e) {
-                if (
-                    false === cslStylesManager.isLastUsedStyleContainBibliography()
-                ) {
-                    // style does not describe the bibliography
-                    tempElement.textContent = "";
-                } else {
-                    console.error(e);
-                    showError(getMessage("Failed to apply this style."));
+        return citationDocService
+            .getAddinZoteroFields()
+            .then(function (arrFields) {
+                if (!arrFields.length) {
                     showLoader(false);
                     return;
                 }
-            }
-            
-            var bibliography = tempElement.innerText;
-            arrFields.forEach(function(field) {
-                var citationObject;
+                var updatedFields = [];
+                var bibField = null;
+                var bibFieldValue = " ";
+
+                const fragment = document.createDocumentFragment();
+                const tempElement = document.createElement("div");
+                fragment.appendChild(tempElement);
+
+                try {
+                    var bibItems = new Array(CSLCitationStorage.size);
+                    var bibObject = formatter.makeBibliography();
+                    // Sort bibliography items
+                    for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
+                        var citationId = bibObject[0].entry_ids[i][0];
+                        var citationIndex =
+                            CSLCitationStorage.getIndex(citationId);
+                        var bibText = bibObject[1][i];
+                        while (
+                            bibText.indexOf("\n") !== bibText.lastIndexOf("\n")
+                        ) {
+                            bibText = bibText.replace(/\n/, "");
+                        }
+                        // Check if bibliography item contains <sup> or <sub>
+                        if (
+                            /<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(
+                                bibText
+                            )
+                        ) {
+                            // Escape <sup> and <sub>
+                            bibText = bibText
+                                .replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;")
+                                .replace(/<\/sup>/gi, "&lt;/sup&gt;")
+                                .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
+                                .replace(/<\/sub>/gi, "&lt;/sub&gt;");
+                        }
+                        bibItems[citationIndex] = bibText;
+                    }
+                    tempElement.innerHTML = bibItems.join("");
+                } catch (e) {
+                    if (
+                        false ===
+                        cslStylesManager.isLastUsedStyleContainBibliography()
+                    ) {
+                        // style does not describe the bibliography
+                        tempElement.textContent = "";
+                    } else {
+                        console.error(e);
+                        showError(translate("Failed to apply this style."));
+                        showLoader(false);
+                        return;
+                    }
+                }
+
+                var bibliography = tempElement.innerText;
+                arrFields.forEach(function (field) {
+                    var citationObject;
                     var citationStartIndex = field.Value.indexOf("{");
                     var citationEndIndex = field.Value.lastIndexOf("}");
                     if (citationStartIndex !== -1) {
-                        var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
+                        var citationString = field.Value.slice(
+                            citationStartIndex,
+                            citationEndIndex + 1
+                        );
                         citationObject = JSON.parse(citationString);
                     }
-                var keysL = [];
-                var cslCitation;
-                if (bUpadteAll && ( field.Value.indexOf(citPrefixNew) !== -1 || field.Value.indexOf(citPrefix) !== -1 ) ) {
-                    var citationID = ""; // old format
-                    if (field.Value.indexOf(citPrefix) === -1) { 
-                        citationID = citationObject.citationID;
-                    }
+                    var keysL = [];
+                    var cslCitation;
+                    if (
+                        bUpdateAll &&
+                        (field.Value.indexOf(citPrefixNew) !== -1 ||
+                            field.Value.indexOf(citPrefix) !== -1)
+                    ) {
+                        var citationID = ""; // old format
+                        if (field.Value.indexOf(citPrefix) === -1) {
+                            citationID = citationObject.citationID;
+                        }
 
-                    cslCitation = new CSLCitation(keysL.length, citationID);
-                    cslCitation.fillFromObject(citationObject);
-                    keysL = cslCitation.getInfoForCitationCluster();
-                    tempElement.innerHTML = formatter.makeCitationCluster(keysL);
-                    field["Content"] = tempElement.innerText;
-                    if (bSynchronize && cslCitation) {
-                        // if we make synchronization we must update value too
-                        field["Value"] = citPrefixNew + ' ' + citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                        cslCitation = new CSLCitation(keysL.length, citationID);
+                        cslCitation.fillFromObject(citationObject);
+                        console.warn(cslCitation);
+                        keysL = cslCitation.getInfoForCitationCluster();
+                        tempElement.innerHTML =
+                            formatter.makeCitationCluster(keysL);
+                        field["Content"] = tempElement.innerText;
+                        cslCitation.addPlainCitation(field["Content"]);
+                        console.warn(cslCitation.toJSON());
+                        if (bSynchronize && cslCitation) {
+                            // if we make synchronization we must update value too
+                            field["Value"] =
+                                citPrefixNew +
+                                " " +
+                                citSuffixNew +
+                                JSON.stringify(cslCitation.toJSON());
+                        }
+                        updatedFields.push(field);
+                    } else if (
+                        field.Value.indexOf(bibPrefix) !== -1 ||
+                        field.Value.indexOf(bibPrefixNew) !== -1
+                    ) {
+                        bibField = field;
+                        bibField["Content"] = bibliography;
+                        if (
+                            typeof citationObject === "object" &&
+                            Object.keys(citationObject).length > 0
+                        ) {
+                            bibFieldValue = JSON.stringify(citationObject);
+                        }
                     }
-                    updatedFields.push(field);
-                } else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
-                    bibField = field;
-                    bibField["Content"] = bibliography;
-                    if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
-                        bibFieldValue = JSON.stringify(citationObject);
+                });
+                if (bibField) {
+                    updatedFields.push(bibField);
+                } else if (bPastBib) {
+                    if (cslStylesManager.isLastUsedStyleContainBibliography()) {
+                        return citationDocService
+                            .addBibliography(bibliography, bibFieldValue)
+                            .then(function () {
+                                if (!updatedFields.length) {
+                                    showLoader(false);
+                                }
+                                return updatedFields;
+                            });
+                    } else {
+                        showError(
+                            translate(
+                                "The current bibliographic style does not describe the bibliography"
+                            )
+                        );
                     }
+                }
+                return updatedFields;
+            })
+            .then(function (updatedFields) {
+                if (updatedFields && updatedFields.length) {
+                    return citationDocService
+                        .updateAddinFields(updatedFields)
+                        .then(function () {
+                            showLoader(false);
+                        });
                 }
             });
-            if (bibField) {
-                updatedFields.push(bibField);
-            } else if (bPastBib) {
-                if (cslStylesManager.isLastUsedStyleContainBibliography()) {
-                    return citationDocService.addBibliography(bibliography, bibFieldValue)
-                        .then(function() {
-                            if (!updatedFields.length) {
-                                showLoader(false);
-                            }
-                            return updatedFields;
-                        });
-                } else {
-                    showError(getMessage("The current bibliographic style does not describe the bibliography"));
-                }
-            }
-            return updatedFields;
-        }).then(function(updatedFields) {
-            if (updatedFields && updatedFields.length) {
-                return citationDocService.updateAddinFields(updatedFields).then(function() {
-                    showLoader(false);
-                });
-            } 
-        });
-	};
+    }*/
 
-	function updateFormatter(bUpadteAll, bPastBib, bPastLink, bSynchronize) {
-        // looks like a crutch
-		clearTimeout(repeatTimeout);
-        if (loadingStyle || loadingLocale || !cslStylesManager.cached(selectedStyle) || !locales[selectedLocale]) {
-            repeatTimeout = setTimeout( function() {
-				updateFormatter(bUpadteAll, bPastBib, bPastLink, bSynchronize);
-			}, 100);
-            return;
-        }
-
+    /*function updateFormatter(bUpdateAll, bPastBib, bSynchronize) {
         var arrIds = [];
-        CSLCitationStorage.forEach(function(item, id) {
+        CSLCitationStorage.forEach(function (item, id) {
             arrIds.push(id);
         });
-		formatter = new CSL.Engine(
+        formatter = new CSL.Engine(
             {
                 retrieveLocale: function (id) {
-                    if (Object.hasOwnProperty.call(locales, id)) {
-                        return locales[id];
+                    if (localesManager.getLocale(id)) {
+                        return localesManager.getLocale(id);
                     }
-                    return locales[selectedLocale];
-                 }, 
-                retrieveItem: function (id) { 
+                    return localesManager.getLocale();
+                },
+                retrieveItem: function (id) {
                     var item = CSLCitationStorage.get(id);
                     let index = CSLCitationStorage.getIndex(id);
-                    return item.toFlatJSON(index); 
-                } 
-            }, 
-            cslStylesManager.cached(selectedStyle),
-            selectedLocale, 
+                    return item.toFlatJSON(index);
+                },
+            },
+            cslStylesManager.getLastUsedStyleId(),
+            localesManager.getLastUsedLanguage(),
             true
         );
-		if (arrIds.length) {
-			formatter.updateItems(arrIds);
-		}
+        if (arrIds.length) {
+            formatter.updateItems(arrIds);
+        }
 
-        let promises = [];
-        if (bUpadteAll) {
-            promises.push(updateAllOrAddBib(bUpadteAll, bPastBib, bSynchronize));
-        }
-        if (bPastLink) {
-            promises.push(insertSelectedCitations());
-        }
-        return Promise.all(promises);
-	};
+        return citationService.updateAllOrAddBib(bUpdateAll, bPastBib, bSynchronize);
+    }*/
 
     // onInit (1,0,0,0)
     // Insert Citation (1,0,0,1)
     // Insert Bibliography (1,1,1,0)
     // Refresh (1,1,0,0)
     /**
-     * @param {boolean} bUpdadeFormatter 
-     * @param {boolean} bUpadteAll 
-     * @param {boolean} bPastBib 
-     * @param {boolean} bPastLink 
+     * @param {boolean} bUpdateFormatter
+     * @param {boolean} bUpdateAll
+     * @param {boolean} bPastBib
      * @returns {Promise}
      */
-	function updateCslItems(bUpdadeFormatter, bUpadteAll, bPastBib, bPastLink) {
-		CSLCitationStorage.clear();
+    /*function updateCslItems(bUpdateFormatter, bUpdateAll, bPastBib) {
+        CSLCitationStorage.clear();
 
-        return citationDocService.getAddinZoteroFields().then(function(arrFields) {
-			if (arrFields.length) {
-				var numOfItems = 0;
-				var bibField = null;
-                var bibFieldValue = ' ';
-				arrFields.forEach(function(field) {
-                    var citationObject;
-                    var citationStartIndex = field.Value.indexOf("{");
-                    var citationEndIndex = field.Value.lastIndexOf("}");
-                    if (citationStartIndex !== -1 && citationEndIndex !== -1) {
-                        var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
-                        citationObject = JSON.parse(citationString);
+        return citationDocService
+            .getAddinZoteroFields()
+            .then(function (arrFields) {
+                if (arrFields.length) {
+                    var numOfItems = 0;
+                    var bibField = null;
+                    var bibFieldValue = " ";
+                    arrFields.forEach(function (field) {
+                        var citationObject;
+                        var citationStartIndex = field.Value.indexOf("{");
+                        var citationEndIndex = field.Value.lastIndexOf("}");
+                        if (
+                            citationStartIndex !== -1 &&
+                            citationEndIndex !== -1
+                        ) {
+                            var citationString = field.Value.slice(
+                                citationStartIndex,
+                                citationEndIndex + 1
+                            );
+                            citationObject = JSON.parse(citationString);
+                        }
+
+                        if (
+                            field.Value.indexOf(citPrefix) !== -1 ||
+                            field.Value.indexOf(citPrefixNew) !== -1
+                        ) {
+                            var citationID = ""; // old format
+                            if (field.Value.indexOf(citPrefix) === -1) {
+                                citationID = citationObject.citationID;
+                            }
+                            var cslCitation = new CSLCitation(
+                                numOfItems,
+                                citationID
+                            );
+                            numOfItems +=
+                                cslCitation.fillFromObject(citationObject);
+                            cslCitation
+                                .getCitationItems()
+                                .forEach(function (item) {
+                                    CSLCitationStorage.set(item.id, item);
+                                });
+                        } else if (
+                            field.Value.indexOf(bibPrefix) !== -1 ||
+                            field.Value.indexOf(bibPrefixNew) !== -1
+                        ) {
+                            bibField = field;
+                            if (
+                                typeof citationObject === "object" &&
+                                Object.keys(citationObject).length > 0
+                            ) {
+                                bibFieldValue = JSON.stringify(citationObject);
+                            }
+                        }
+                    });
+
+                    if (numOfItems) {
+                        // sort?
+                    } else if (bUpdateFormatter && bibField && bUpdateAll) {
+                        // нет смысла ещё раз искать поле библиографии
+                        bUpdateFormatter = false;
+                        bibField["Content"] = translate(bibPlaceholder);
+                        return citationDocService
+                            .updateAddinFields([bibField])
+                            .then(function () {
+                                showLoader(false);
+                                return bUpdateFormatter;
+                            });
                     }
-                    
-					if (field.Value.indexOf(citPrefix) !== -1 || field.Value.indexOf(citPrefixNew) !== -1) {
-                        var citationID = ""; // old format
-                        if (field.Value.indexOf(citPrefix) === -1) {
-                            citationID = citationObject.citationID;
-                        }
-                        var cslCitation = new CSLCitation(numOfItems, citationID);
-                        numOfItems += cslCitation.fillFromObject(citationObject);
-                        cslCitation.getCitationItems().forEach(function(item) {
-                            CSLCitationStorage.set(item.id, item);
-                        });
-					} else if (field.Value.indexOf(bibPrefix) !== -1 || field.Value.indexOf(bibPrefixNew) !== -1) {
-						bibField = field;
-                        if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
-                            bibFieldValue = JSON.stringify(citationObject);
-                        }
-					}
-				});
-
-				if (numOfItems) {
-                    // sort?
-				} else if (bUpdadeFormatter && bibField && bUpadteAll) {
-					// нет смысла ещё раз искать поле библиографии
-					bUpdadeFormatter = false;
-					bibField["Content"] = getMessage(bibPlaceholder);
-                    return citationDocService.updateAddinFields([bibField]).then(function() {
-                        showLoader(false);
-                        return bUpdadeFormatter;
-                    });
-				}
-			} else if (bUpdadeFormatter && bPastBib) {
-                if (cslStylesManager.isLastUsedStyleContainBibliography()) {
-                    return citationDocService.addBibliography(
-                        getMessage(bibPlaceholder),
-                        bibFieldValue
-                    ).then(function() {
-                        showLoader(false);
-                        return bUpdadeFormatter;
-                    });
-                } else {
-                    showError(getMessage("The current bibliographic style does not describe the bibliography"));
+                } else if (bUpdateFormatter && bPastBib) {
+                    if (cslStylesManager.isLastUsedStyleContainBibliography()) {
+                        return citationDocService
+                            .addBibliography(
+                                translate(bibPlaceholder),
+                                bibFieldValue
+                            )
+                            .then(function () {
+                                showLoader(false);
+                                return bUpdateFormatter;
+                            });
+                    } else {
+                        showError(
+                            translate(
+                                "The current bibliographic style does not describe the bibliography"
+                            )
+                        );
+                    }
                 }
-                
-			}
-            return bUpdadeFormatter;
-        }).then(function(bUpdadeFormatter) {
-            if (bUpdadeFormatter)
-				return updateFormatter(bUpadteAll, bPastBib, bPastLink, false);
-        });
-	};
+                return bUpdateFormatter;
+            })
+            .then(function (bUpdateFormatter) {
+                if (bUpdateFormatter)
+                    return citationService.updateFormatter(bUpdateAll, bPastBib, false);
+            });
+    }*/
 
     /**
      * @returns {Promise}
      */
-    function insertSelectedCitations() {
-        if (!selectedStyle) {
-            showError(getMessage("Style is not selected"));
+    /*function insertSelectedCitations() {
+        if (!cslStylesManager.getLastUsedStyleId()) {
+            showError(translate("Style is not selected"));
             return;
         }
         if (!selectedLocale) {
-            showError(getMessage("Language is not selected"));
+            showError(translate("Language is not selected"));
             return;
         }
 
@@ -1523,8 +1800,8 @@
 
         var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
         for (var citationID in selected.items) {
-            var item = convertToCSL(selected.items[citationID]);
-            
+            var item = selected.items[citationID];
+
             if (prefix !== "") {
                 item.prefix = prefix;
             }
@@ -1535,29 +1812,29 @@
                 item.locator = locatorInfo.locator;
                 item.label = locatorInfo.label;
             }
+            item["suppress-author"] = elements.checkOmitAuthor.checked;
             cslCitation.fillFromObject(item);
         }
-        
-        return getSelectedInJsonFormat().then(function(items) {
-            items.forEach(function(item) {
+
+        return getSelectedInJsonFormat().then(function (items) {
+            items.forEach(function (item) {
                 cslCitation.fillFromObject(item);
             });
             return formatInsertLink(cslCitation);
         });
-    }
+    }*/
 
     /**
-     * 
-     * @param {*} cslCitation 
+     *
+     * @param {*} cslCitation
      * @returns {Promise}
      */
-	function formatInsertLink(cslCitation) {
-		var bUpdateItems = false;
+    /*function formatInsertLink(cslCitation) {
+        var bUpdateItems = false;
         var keys = [];
         var keysL = [];
-        
 
-        cslCitation.getCitationItems().forEach(function(item) {
+        cslCitation.getCitationItems().forEach(function (item) {
             if (!CSLCitationStorage.has(item.id)) {
                 bUpdateItems = true;
             }
@@ -1567,75 +1844,55 @@
         });
 
         try {
-			if (bUpdateItems) {
-				var arrIds = [];
-                CSLCitationStorage.forEach(function(item, id) {
+            if (bUpdateItems) {
+                var arrIds = [];
+                CSLCitationStorage.forEach(function (item, id) {
                     arrIds.push(id);
                 });
-				formatter.updateItems(arrIds);
-			}
+                formatter.updateItems(arrIds);
+            }
 
-            keys.forEach(function(key) {
+            keys.forEach(function (key) {
                 removeSelected(key);
             });
             const fragment = document.createDocumentFragment();
             const tempElement = document.createElement("div");
             fragment.appendChild(tempElement);
-			
-			// TODO может ещё очистить поиск (подумать над этим)
-			tempElement.innerHTML = formatter.makeCitationCluster(keysL);
-            cslCitation.addPlainCitation(tempElement.innerText);
-            return citationDocService.addCitation(
-                tempElement.innerText,
-                JSON.stringify(cslCitation.toJSON())
-            ).then(function() {
-                showLoader(false);
-                // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-                // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
-                // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-               // return updateCslItems(true, true, false, false);
-            });
 
+            // TODO может ещё очистить поиск (подумать над этим)
+            tempElement.innerHTML = formatter.makeCitationCluster(keysL);
+            cslCitation.addPlainCitation(tempElement.innerText);
+            return citationDocService
+                .addCitation(
+                    tempElement.innerText,
+                    JSON.stringify(cslCitation.toJSON())
+                )
+                .then(function () {
+                    showLoader(false);
+                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
+                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
+                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
+                    return citationService.updateCslItems(true, true, false);
+                });
         } catch (e) {
             showError(e);
             console.error(e);
         }
-    };
+    }*/
 
-    function convertToCSL(item) {
-        var cslData = item;
-        cslData["suppress-author"] = elements.checkOmitAuthor.checked;
+    /*function synchronizeCSLItem(item) {
+        citationService.fillUrisFromId(item);
 
-        return cslData;
-    };
-
-
-	function syncronizeCSLItem(item) {
-        fillUrisFromId(item);
-		
-		var cslItem = CSLCitationStorage.get(item.id);
+        var cslItem = CSLCitationStorage.get(item.id);
         cslItem.fillFromObject(item);
-    };
+    }*/
 
-    function fillUrisFromId(item) {
-        const slashFirstIndex = item.id.indexOf("/") + 1;
-        const slashLastIndex = item.id.lastIndexOf("/") + 1;
-        const httpIndex = item.id.indexOf("http");
-        if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
-            if (!Object.hasOwnProperty(item, 'uris')) {
-                item.uris = [];
-            }
-            item.uris.push(item.id);
-        }
-        if (slashLastIndex)
-			item.id = item.id.substring(slashLastIndex);
-
-        return item;
-    }
-
-    function getSelectedInJsonFormat() {
-		var arrUsrItems = [];
-		var arrGroupsItems = {};
+    /**
+     * @returns {Promise<CslJsonObjectItem[]>}
+     */
+    /*function getSelectedInJsonFormat() {
+        var arrUsrItems = [];
+        var arrGroupsItems = {};
         for (var citationID in selected.items) {
             var item = selected.items[citationID];
             var userID = item["userID"];
@@ -1645,7 +1902,7 @@
             } else if (groupID) {
                 if (!arrGroupsItems[groupID]) {
                     arrGroupsItems[groupID] = [];
-                }    
+                }
                 arrGroupsItems[groupID].push(item.id);
             }
         }
@@ -1653,57 +1910,66 @@
         var promises = [];
         if (arrUsrItems.length) {
             promises.push(
-                sdk.getItems(null, arrUsrItems, 'json')
-                    .then(function(res) {
-                        var items = ( res.items || [] );
-                        return items
+                sdk
+                    .getItems(null, arrUsrItems, "json")
+                    .then(function (res) {
+                        var items = res.items || [];
+                        return items;
                     })
-                .catch(function(err) {
-                    console.error(err);
-                })
+                    .catch(function (err) {
+                        console.error(err);
+                    })
             );
         }
 
-		for (var groupID in arrGroupsItems) {
+        for (var groupID in arrGroupsItems) {
             if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
                 promises.push(
-                    sdk.getGroupItems(null, groupID, arrGroupsItems[groupID], 'json')
-                    .then(function(res) {
-                        var items = ( res.items || [] );
-                        return items
-                    })
-                    .catch(function(err) {
-                        console.error(err);
-                    })
+                    sdk
+                        .getGroupItems(
+                            null,
+                            groupID,
+                            arrGroupsItems[groupID],
+                            "json"
+                        )
+                        .then(function (res) {
+                            var items = res.items || [];
+                            return items;
+                        })
+                        .catch(function (err) {
+                            console.error(err);
+                        })
                 );
             }
         }
 
-        return Promise.all(promises).then(function(res) {
+        return Promise.all(promises).then(function (res) {
             var items = [];
-            res.forEach(function(resItems) {
-                if (!Array.isArray(resItems) && Object.hasOwnProperty.call(resItems, 'items')) {
+            res.forEach(function (resItems) {
+                if (
+                    !Array.isArray(resItems) &&
+                    Object.hasOwnProperty.call(resItems, "items")
+                ) {
                     resItems = resItems.items;
                 }
                 items = items.concat(resItems);
             });
             return items;
         });
-    };
+    }*/
 
-	function synchronizeData() {
-		// form an array for request (one array for user and other for groups)
-		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-		if (!CSLCitationStorage.size)
-			return;
+    /*function synchronizeData() {
+        // form an array for request (one array for user and other for groups)
+        // todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
+        if (!CSLCitationStorage.size) return;
 
-		showLoader(true);
-		bGroupsItemsUpdated = false;
-		bUserItemsUpdated = false;
-		var bHasGroupsItems = false;
-		var arrUsrItems = [];
-		var arrGroupsItems = {};
-        CSLCitationStorage.forEach(function(citationItem, id) {
+        showLoader(true);
+        bGroupsItemsUpdated = false;
+        bUserItemsUpdated = false;
+        var bHasGroupsItems = false;
+        var arrUsrItems = [];
+        var arrGroupsItems = {};
+        CSLCitationStorage.forEach(function (citationItem, id) {
             let index = CSLCitationStorage.getIndex(id);
             let item = citationItem.toFlatJSON(index);
             var userID = citationItem.getProperty("userID");
@@ -1711,62 +1977,43 @@
             if (userID) {
                 arrUsrItems.push(citationItem.id);
             } else if (groupID) {
-                if (!arrGroupsItems[groupID])
-                    arrGroupsItems[groupID] = [];
-                    arrGroupsItems[groupID].push(item.id);
-
+                if (!arrGroupsItems[groupID]) arrGroupsItems[groupID] = [];
+                arrGroupsItems[groupID].push(item.id);
             }
-        })
+        });
 
-		if (arrUsrItems.length) {
-			sdk.getItems(null, arrUsrItems)
-			.then(function(res) {
-				var items = ( (res.items ? res.items.items : []) || [] );
-				items.forEach(function(item) {
-					syncronizeCSLItem(item);
-				});
-			})
-			.catch(function(err) {
-				console.error(err);
-			})
-			.finally(function() {
-				bUserItemsUpdated = true;
-				if (bGroupsItemsUpdated)
-					updateAfterSync();
-			});
-		} else {
-			bUserItemsUpdated = true;
-		}
-		
-		for (var groupID in arrGroupsItems) {
-			if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-				bHasGroupsItems = true;
-				sdk.getGroupItems(null, groupID, arrGroupsItems[groupID])
-				.then(function(res) {
-					var items = ( (res.items ? res.items.items : []) || [] );
-					items.forEach(function(item) {
-						syncronizeCSLItem(item);
-					})
-				})
-				.catch(function(err) {
-					console.error(err);
-				})
-				.finally(function() {
-					bGroupsItemsUpdated = true;
-					if (bUserItemsUpdated)
-						updateAfterSync();
-				});
-			}
-		}
-		if (!bHasGroupsItems) {
-			bGroupsItemsUpdated = true;
-		}
-		if (bGroupsItemsUpdated && bUserItemsUpdated)
-			updateAfterSync();
-	};
+        const promises = [];
 
-	function updateAfterSync() {
-		// todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
-		updateFormatter(true, false, false, true);
-	};
+        if (arrUsrItems.length) {
+            promises.push(sdk.getItems(null, arrUsrItems)
+                .then(function (res) {
+                    var items = (res.items ? res.items.items : []) || [];
+                    items.forEach(function (item) {
+                        synchronizeCSLItem(item);
+                    });
+                }));
+        }
+
+        for (var groupID in arrGroupsItems) {
+            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
+                bHasGroupsItems = true;
+                promises.push(sdk.getGroupItems(null, groupID, arrGroupsItems[groupID])
+                    .then(function (res) {
+                        var items = (res.items ? res.items.items : []) || [];
+                        items.forEach(function (item) {
+                            synchronizeCSLItem(item);
+                        });
+                    })
+                    );
+            }
+        }
+        Promise.all(promises).catch(function (err) {
+                        console.error(err);
+                    }).then(function () { 
+            // todo now we should make full update (because when we make refresh, we check fields into the document). Fix it in new version (when we change refreshing and updating processes)
+            citationService.updateFormatter(true, false, true);
+         });
+
+    }*/
+
 })();

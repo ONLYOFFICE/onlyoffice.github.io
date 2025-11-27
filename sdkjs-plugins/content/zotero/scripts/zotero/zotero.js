@@ -69,15 +69,6 @@ ZoteroSdk.prototype._getBaseUrl = function () {
 };
 
 /**
- * Get locales URL based on online/offline mode
- */
-ZoteroSdk.prototype._getLocalesUrl = function () {
-    return this._isOnlineAvailable
-        ? zoteroEnvironment.localesUrl
-        : zoteroEnvironment.localesPath;
-};
-
-/**
  * Make a GET request to the local Zotero API (offline mode)
  * @param {string} url
  * @returns {Promise<AscSimpleResponse>}
@@ -427,17 +418,6 @@ ZoteroSdk.prototype.getUserGroups = function () {
         return response.text();
     });
 };*/
-
-/**
- * Get locale data
- * @param {string} langTag
- */
-ZoteroSdk.prototype.getLocale = function (langTag) {
-    var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
-    return fetch(url).then(function (response) {
-        return response.text();
-    });
-};
 
 /**
  * Set API key and validate it

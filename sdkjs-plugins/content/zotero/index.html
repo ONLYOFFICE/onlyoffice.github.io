@@ -25,22 +25,29 @@
         <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
         <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 
-        <script src="scripts/thirdparty/fetch.umd.js"></script>
-        <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
-        <script src="scripts/thirdparty/url-polyfill.min.js"></script>
-        <script src="scripts/citeproc/citeproc_commonjs.js"></script>
+        <script defer src="scripts/thirdparty/fetch.umd.js"></script>
+        <script defer src="scripts/thirdparty/promise-polyfill.min.js"></script>
+        <script defer src="scripts/thirdparty/url-polyfill.min.js"></script>
+        <script defer src="scripts/citeproc/citeproc_commonjs.js"></script>
 
-        <script src="scripts/csl/citation/citation-item-data.js"></script>
-        <script src="scripts/csl/citation/citation-item.js"></script>
-        <script src="scripts/csl/citation/citation.js"></script>
-        <script src="scripts/csl/citation/storage.js"></script>
+        <script defer src="scripts/csl/citation/citation-item-data.js"></script>
+        <script defer src="scripts/csl/citation/citation-item.js"></script>
+        <script defer src="scripts/csl/citation/citation.js"></script>
+        <script defer src="scripts/csl/citation/storage.js"></script>
 
-        <script src="scripts/csl/styles/styles-manager.js"></script>
-        <script src="scripts/csl/styles/style-parser.js"></script>
-        <script src="scripts/csl/styles/storage.js"></script>
+        <script defer src="scripts/csl/locales/locales-manager.js"></script>
+        <script defer src="scripts/csl/styles/styles-manager.js"></script>
+        <script defer src="scripts/csl/styles/style-parser.js"></script>
+        <script defer src="scripts/csl/styles/storage.js"></script>
 
-        <script src="scripts/services/citation-service.js"></script>
-        <script src="scripts/services/translate-service.js"></script>
+        <script defer src="scripts/services/citation-doc-service.js"></script>
+        <script defer src="scripts/services/citation-service.js"></script>
+        <script defer src="scripts/services/translate-service.js"></script>
+        
+        <script defer src="scripts/zotero/zotero-environment.js"></script>
+        <script defer src="scripts/zotero/zotero-api-checker.js"></script>
+        <script defer src="scripts/zotero/zotero.js"></script>
+        <script defer src="scripts/code.js"></script>
     </head>
     <body id="body" spellcheck="false" class="noselect">
         <div id="loader" class="cssload-container display-none">
@@ -249,9 +256,5 @@
 
     </div>
 
-    <script src="scripts/zotero/zotero-environment.js"></script>
-    <script src="scripts/zotero/zotero-api-checker.js"></script>
-    <script src="scripts/zotero/zotero.js"></script>
-    <script src="scripts/code.js"></script>
 </body>
 </html>
