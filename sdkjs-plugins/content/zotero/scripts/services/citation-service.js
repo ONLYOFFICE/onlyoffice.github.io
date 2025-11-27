@@ -7,13 +7,20 @@
 /// <reference path="./translate-service.js" />
 /// <reference path="./citation-doc-service.js" />
 /// <reference path="../csl/styles/styles-manager.js" />
+/// <reference path="../csl/locales/locales-manager.js" />
 
 /**
  * @param {CitationDocService} citationDocService
+ * @param {LocalesManager} localesManager
  * @param {CslStylesManager} cslStylesManager
  * @param {ZoteroSdk} sdk
  */
-function CitationService(citationDocService, cslStylesManager, sdk) {
+function CitationService(
+    citationDocService,
+    localesManager,
+    cslStylesManager,
+    sdk
+) {
     this.bibPlaceholder = "Please insert some citation into the document.";
     this.citPrefixNew = "ZOTERO_ITEM";
     this.citSuffixNew = "CSL_CITATION";
@@ -21,6 +28,7 @@ function CitationService(citationDocService, cslStylesManager, sdk) {
     this.bibPrefixNew = "ZOTERO_BIBL";
     this.bibPrefix = "ZOTERO_BIBLIOGRAPHY";
     this.sdk = sdk;
+    this.localesManager = localesManager;
     this.cslStylesManager = cslStylesManager;
     /** @type {CSL.Engine} */
     this.formatter;
@@ -389,13 +397,11 @@ CitationService.prototype = {
 
                         cslCitation = new CSLCitation(keysL.length, citationID);
                         cslCitation.fillFromObject(citationObject);
-                        console.warn(cslCitation);
                         keysL = cslCitation.getInfoForCitationCluster();
                         tempElement.innerHTML =
                             self.formatter.makeCitationCluster(keysL);
                         field["Content"] = tempElement.innerText;
                         cslCitation.addPlainCitation(field["Content"]);
-                        console.warn(cslCitation.toJSON());
                         if (cslCitation) {
                             field["Value"] =
                                 self.citPrefixNew +
@@ -572,14 +578,15 @@ CitationService.prototype = {
         CSLCitationStorage.forEach(function (item, id) {
             arrIds.push(id);
         });
+        // @ts-ignore
         this.formatter = new CSL.Engine(
             {
                 /** @param {string} id */
                 retrieveLocale: function (id) {
-                    if (Object.hasOwnProperty.call(locales, id)) {
-                        return locales[id];
+                    if (self.localesManager.getLocale(id)) {
+                        return self.localesManager.getLocale(id);
                     }
-                    return locales[selectedLocale];
+                    return self.localesManager.getLocale();
                 },
                 /** @param {string} id */
                 retrieveItem: function (id) {
@@ -592,7 +599,7 @@ CitationService.prototype = {
             this.cslStylesManager.cached(
                 this.cslStylesManager.getLastUsedStyleId()
             ),
-            selectedLocale,
+            this.localesManager.getLastUsedLanguage(),
             true
         );
         if (arrIds.length) {
