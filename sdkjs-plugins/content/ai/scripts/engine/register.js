@@ -30,7 +30,7 @@
  *
  */
 
-function registerButtons(window, undefined)
+async function registerButtons(window, undefined)
 {
 	window.AI = window.AI || {};
 	var AI = window.AI;
@@ -138,7 +138,8 @@ function registerButtons(window, undefined)
 		window.chatWindow = chatWindow;
 	}
 
-	if (Asc.Editor.getType() !== "pdf")
+	let editorVersion = await Asc.Library.GetEditorVersion();
+	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
 	{
 		let buttonSub = new Asc.ButtonContextMenu(buttonMain);
 		buttonSub.text = "Grammar & Spelling";
