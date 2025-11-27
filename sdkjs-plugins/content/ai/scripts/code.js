@@ -271,7 +271,7 @@ async function initWithTranslate(counter) {
 	initCounter |= counter;
 	if (3 === initCounter) {
 		initCounter = 5;
-		registerButtons(window);
+		await registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();
 

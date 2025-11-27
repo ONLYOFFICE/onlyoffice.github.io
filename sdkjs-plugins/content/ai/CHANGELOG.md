@@ -124,3 +124,9 @@
 
 ## 2.5.1
 * Bug fix.
+
+## 3.0.0
+* Bug fix.
+* Add Grammar & Spelling functionality.
+* Add OpenRouter provider.
+* Refactoring helper functions.
