@@ -1,8 +1,8 @@
 // @ts-check
 
-/// <reference path="./types-global.js" />
-/// <reference path="./csl/citation/citation.js" />
-/// <reference path="./csl/styles/style-parser.js" />
+/// <reference path="../types-global.js" />
+/// <reference path="../csl/citation/citation.js" />
+/// <reference path="../csl/styles/style-parser.js" />
 
 /**
  * @typedef {Object} CustomField
