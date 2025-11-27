@@ -18,4 +18,5 @@
 
 ## 1.0.4
 
-* Update jquery version.
+* Bug fix.
+* Using modern API.
