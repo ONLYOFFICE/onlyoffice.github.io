@@ -188,11 +188,10 @@ ZoteroSdk.prototype._parseDesktopItemsResponse = function (
     reject,
     id
 ) {
-    var self = this;
     return promise
         .then(function (response) {
             return {
-                items: { items: JSON.parse(response.responseText) },
+                items: JSON.parse(response.responseText),
                 id: id,
             };
         })
@@ -225,11 +224,14 @@ ZoteroSdk.prototype._parseItemsResponse = function (
             var links = self._parseLinkHeader(
                 response.headers.get("Link") || ""
             );
-            /** @type {{items: any, id: number|string, next?: function(): Promise<void>}} */
+            /** @type {SearchResult} */
             var result = {
                 items: json,
                 id: id,
             };
+            if (typeof json === "object" && json.items) {
+                result.items = json.items;
+            }
 
             if (links.next) {
                 result.next = function () {
@@ -276,8 +278,9 @@ ZoteroSdk.prototype._parseResponse = function (promise, resolve, reject, id) {
 /**
  * Get items from user library
  * @param {string|null} search
- * @param {string[]} itemsID
+ * @param {string[]} [itemsID]
  * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
@@ -311,9 +314,9 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
  * Get items from group library
  * @param {string | null} search
  * @param {number|string} groupId
- * @param {string[]} itemsID
+ * @param {string[]} [itemsID]
  * @param {"csljson"|"json"} [format]
- *
+ * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype.getGroupItems = function (
     search,
@@ -322,7 +325,6 @@ ZoteroSdk.prototype.getGroupItems = function (
     format
 ) {
     var self = this;
-
     format = format || self.DEFAULT_FORMAT;
 
     return new Promise(function (resolve, reject) {
@@ -340,7 +342,6 @@ ZoteroSdk.prototype.getGroupItems = function (
         var path =
             self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
         var request = self._buildGetRequest(path, queryParams);
-
         self._parseResponse(request, resolve, reject, groupId);
     });
 };

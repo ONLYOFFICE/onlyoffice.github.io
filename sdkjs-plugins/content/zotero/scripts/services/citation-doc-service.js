@@ -5,28 +5,12 @@
 /// <reference path="../csl/styles/style-parser.js" />
 
 /**
- * @typedef {Object} CustomField
- * @property {string} Value
- * @property {string} Content
- * @property {string} [FieldId]
- */
-
-/**
  * @param {string} citPrefix
  * @param {string} citSuffix
  * @param {string} bibPrefix
  * @param {string} bibSuffix
- * @param {StyleFormat} styleFormat
- * @param {"footnotes" | "endnotes"} notesStyle
  */
-function CitationDocService(
-    citPrefix,
-    citSuffix,
-    bibPrefix,
-    bibSuffix,
-    styleFormat,
-    notesStyle
-) {
+function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
     this._citPrefixOld = "ZOTERO_CITATION";
     this._bibPrefixOld = "ZOTERO_BIBLIOGRAPHY";
 
@@ -34,8 +18,6 @@ function CitationDocService(
     this._citSuffix = citSuffix;
     this._bibPrefix = bibPrefix;
     this._bibSuffix = bibSuffix;
-    this._styleFormat = styleFormat;
-    this._notesStyle = notesStyle;
 
     /** @type {number} */
     this._repeatTimeout;
@@ -78,9 +60,10 @@ CitationDocService.prototype.addBibliography = function (text, value) {
 /**
  * @param {string} text
  * @param {string} value
+ * @param {"footnotes" | "endnotes" | null} notesStyle
  * @returns
  */
-CitationDocService.prototype.addCitation = function (text, value) {
+CitationDocService.prototype.addCitation = function (text, value, notesStyle) {
     const self = this;
     const supSubPositions = this._removeSuperSubTagsWithPositions(text);
     /** @type {CustomField} */
@@ -88,22 +71,18 @@ CitationDocService.prototype.addCitation = function (text, value) {
         Value: this._citPrefix + " " + this._citSuffix + value,
         Content: supSubPositions.text,
     };
-    if ("note" === this._styleFormat) {
-        switch (this._notesStyle) {
-            case "footnotes":
-                window.Asc.plugin.callCommand(function () {
-                    const oDocument = Api.GetDocument();
-                    oDocument.AddFootnote();
-                });
-                break;
-            case "endnotes":
-                window.Asc.plugin.callCommand(function () {
-                    const oDocument = Api.GetDocument();
-                    oDocument.AddEndnote();
-                });
-                break;
-        }
+    if ("footnotes" === notesStyle) {
+        window.Asc.plugin.callCommand(function () {
+            const oDocument = Api.GetDocument();
+            oDocument.AddFootnote();
+        });
+    } else if ("endnotes" === notesStyle) {
+        window.Asc.plugin.callCommand(function () {
+            const oDocument = Api.GetDocument();
+            oDocument.AddEndnote();
+        });
     }
+
     return this._addAddinField(field).then(function () {
         if (!supSubPositions.positions.length) return;
         return self._setSuperSubByPositions(supSubPositions.positions);
@@ -256,20 +235,6 @@ CitationDocService.prototype.saveAsText = function () {
             });
         });
     });
-};
-
-/**
- * @param {"footnotes" | "endnotes"} notesStyle
- */
-CitationDocService.prototype.setNotesStyle = function (notesStyle) {
-    this._notesStyle = notesStyle;
-};
-
-/**
- * @param {StyleFormat} styleFormat
- */
-CitationDocService.prototype.setStyleFormat = function (styleFormat) {
-    this._styleFormat = styleFormat;
 };
 
 /**
