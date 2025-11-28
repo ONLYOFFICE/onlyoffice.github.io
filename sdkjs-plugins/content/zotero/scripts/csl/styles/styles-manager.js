@@ -96,14 +96,14 @@ CslStylesManager.prototype.getLastUsedNotesStyle = function () {
 };
 
 /**
- * @returns {string} - style id
+ * @returns {string|null} - style id
  */
 CslStylesManager.prototype.getLastUsedStyleId = function () {
     let lastUsedStyle = localStorage.getItem(this._lastStyleKey);
     if (lastUsedStyle) {
         return lastUsedStyle;
     }
-    return "";
+    return null;
 };
 
 /**
@@ -167,7 +167,7 @@ CslStylesManager.prototype.getStylesInfo = function () {
         this._getStylesJson(),
         this._customStylesStorage.getStylesInfo(),
     ]).then(function (styles) {
-        var lastStyle = self.getLastUsedStyleId();
+        var lastStyle = self.getLastUsedStyleId() || "ieee";
         /** @type {Array<StyleInfo>} */
         var resultStyles = [];
         var resultStyleNames = self._customStylesStorage.getStyleNames();

@@ -196,6 +196,10 @@
         if (!styleLang) {
             throw new Error("styleLang not found");
         }
+        const styleLangList = document.getElementById("styleLangList");
+        if (!styleLangList) {
+            throw new Error("styleLangList not found");
+        }
         const notesStyleWrapper = document.getElementById("notesStyle");
         if (!notesStyleWrapper) {
             throw new Error("notesStyleWrapper not found");
@@ -275,6 +279,7 @@
             styleSelectListOther: styleSelectListOther,
             styleSelect: styleSelect,
             styleLang: styleLang,
+            styleLangList: styleLangList,
             notesStyleWrapper: notesStyleWrapper,
             footNotes: footNotes,
             endNotes: endNotes,
@@ -306,21 +311,28 @@
         sdk = new ZoteroSdk();
         cslStylesManager = new CslStylesManager();
         localesManager = new LocalesManager();
+        citationService = new CitationService(
+            localesManager,
+            cslStylesManager,
+            sdk
+        );
+
         addEventListeners();
+        initSelectBoxes();
 
         initSdkApis().then(function (availableApis) {
             showLoader(true);
-            loadStyles();
-            loadGroups();
 
-            citationService = new CitationService(
-                localesManager,
-                cslStylesManager,
-                sdk
-            );
+            Promise.all([
+                loadGroups(),
+                loadStyles(),
+                preloadLastStyle(),
+                initLanguageSelect(),
+            ]).then(function () {
+                showLoader(false);
+            });
 
             addStylesEventListeners();
-            initSelectBoxes();
             initLocators();
         });
 
@@ -386,12 +398,36 @@
         });
     }
 
+    function preloadLastStyle() {
+        var lastStyle = cslStylesManager.getLastUsedStyleId() || "ieee";
+        return cslStylesManager.getStyle(lastStyle);
+    }
+
+    /**
+     * @returns {Promise<string|null>}
+     */
+    function initLanguageSelect() {
+        const savedLang = localesManager.getLastUsedLanguage();
+        const option = elements.styleLangList.querySelector(
+            '[data-value="' + savedLang + '"]'
+        );
+        if (!option || !(elements.styleLang instanceof HTMLInputElement)) {
+            console.error("initLanguageSelect: no option");
+            return Promise.resolve(null);
+        }
+        option.setAttribute("selected", "");
+        elements.styleLang.value = option.textContent;
+        elements.styleLang.setAttribute("data-value", savedLang);
+        return localesManager.loadLocale(savedLang);
+    }
+
     function initLocators() {
         const id = localStorage.getItem("selectedLocator") || "page";
         const option = elements.locatorLabelsList.querySelector(
             '[data-value="' + id + '"]'
         );
         if (!option || !(elements.locatorLabel instanceof HTMLInputElement)) {
+            console.error("initLocators: no option");
             return;
         }
         option.setAttribute("selected", "");
@@ -979,8 +1015,10 @@
             styleName,
             isClick
         ) {
-            showLoader(true);
-            cslStylesManager
+            isClick && showLoader(true);
+            elements.styleSelect.oninput(inp, "");
+
+            return cslStylesManager
                 .getStyle(styleName)
                 .then(function (style) {
                     onStyleChange();
@@ -999,13 +1037,8 @@
                     }
                 })
                 .finally(function () {
-                    if (
-                        localesManager.getLocale() &&
-                        cslStylesManager.cached(styleName)
-                    )
-                        showLoader(false);
+                    isClick && showLoader(false);
                 });
-            elements.styleSelect.oninput(inp, "");
         };
 
         /**
@@ -1016,6 +1049,7 @@
         elements.styleLang.onselectchange = function (inp, val, isClick) {
             showLoader(true);
             localesManager.saveLastUsedLanguage(val);
+            console.warn("load locale", val);
             localesManager
                 .loadLocale(val)
                 .then(function () {
@@ -1033,11 +1067,7 @@
                     }
                 })
                 .finally(function () {
-                    if (
-                        localesManager.getLocale() &&
-                        cslStylesManager.getLastUsedStyleId()
-                    )
-                        showLoader(false);
+                    showLoader(false);
                 });
         };
 
@@ -1163,14 +1193,14 @@
     var selectLists = [];
     function initSelectBoxes() {
         var select = document.getElementsByClassName("control select");
-        var savedLang = localesManager.getLastUsedLanguage();
         for (var i = 0; i < select.length; i++) {
             var input = select[i];
             var holder = input.parentElement;
-            if (!holder) {
-                console.error("Holder not found for select input");
+            if (!(input instanceof HTMLInputElement) || !holder) {
+                console.error("initSelectBoxes: no input or holder");
                 continue;
             }
+
             var arrow = document.createElement("span");
             arrow.classList.add("selectArrow");
             arrow.appendChild(document.createElement("span"));
@@ -1184,27 +1214,20 @@
             ) {
                 var list = holder.getElementsByClassName("selectList")[k];
                 if (list.children.length > 0) {
-                    var def = false;
                     for (var j = 0; j < list.children.length; j++) {
-                        if (
-                            list.children[j].getAttribute("data-value") ==
-                            savedLang
-                        ) {
-                            list.children[j].setAttribute("selected", "");
-                            selectInput(input, list.children[j], list, false);
-                            def = true;
-                        }
-
                         list.children[j].onclick = onClickListElement(
                             list,
                             input
                         );
                     }
-                    if (!def) {
-                        selectInput(input, list.children[0], list, false);
-                    }
+                    // selectInput(input, list.children[0], list, false);
                 }
 
+                /**
+                 * @param {HTMLElement} list
+                 * @param {HTMLElement} input
+                 * @returns {function}
+                 */
                 var f = function (list, input) {
                     return function (/** @type {MouseEvent} */ ev) {
                         ev.stopPropagation();
@@ -1234,9 +1257,9 @@
             }
         }
 
-        window.onclick = function () {
+        window.addEventListener("click", function () {
             openList(null);
-        };
+        });
     }
 
     /**
@@ -1256,14 +1279,14 @@
     }
 
     /**
-     * @param {*} input
-     * @param {*} el
-     * @param {*} list
-     * @param {*} isClick
+     * @param {HTMLInputElement} input
+     * @param {HTMLElement} el
+     * @param {HTMLElement} list
+     * @param {boolean} isClick
      */
     function selectInput(input, el, list, isClick) {
         input.value = el.textContent;
-        var val = el.getAttribute("data-value");
+        var val = el.getAttribute("data-value") || "";
         input.setAttribute("data-value", val);
         input.setAttribute("title", el.textContent);
         if (input.onselectchange) {
@@ -1272,8 +1295,17 @@
         switchClass(list, displayNoneClass, true);
     }
 
+    /**
+     * @param {Element} list
+     * @param {Element} input
+     */
     function onClickListElement(list, input) {
         return function (/** @type {MouseEvent} */ ev) {
+            console.warn("onClickListElement", input);
+            if (!ev.target || !(ev.target instanceof HTMLElement)) {
+                console.error("onClickListElement: no target");
+                return;
+            }
             var sel = ev.target.getAttribute("data-value");
             for (var i = 0; i < list.children.length; i++) {
                 if (list.children[i].getAttribute("data-value") == sel) {
@@ -1300,9 +1332,12 @@
 
         let notesStyle = cslStylesManager.getLastUsedNotesStyle();
         citationService.setNotesStyle(notesStyle);
-        elements.notesStyleWrapper.querySelector(
+        const notesAs = elements.notesStyleWrapper.querySelector(
             'input[name="notesAs"][value="' + notesStyle + '"]'
-        ).checked = true;
+        );
+        if (notesAs && notesAs instanceof HTMLInputElement) {
+            notesAs.checked = true;
+        }
     }
 
     function applyTranslations() {
@@ -1310,6 +1345,7 @@
 
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
+
             if (el.attributes["placeholder"])
                 el.attributes["placeholder"].value = translate(
                     el.attributes["placeholder"].value
