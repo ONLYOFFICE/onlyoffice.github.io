@@ -197,6 +197,11 @@ var AscSimpleRequest = window.AscSimpleRequest;
  */
 
 /**
+ * @typedef {Object} Theme
+ * @property {'light'|'dark'} type
+ */
+
+/**
  * @typedef {Object} AscPlugin
  * @property {function(string, Array<any>|null, function(any): void): void} executeMethod
  * @property {ExecuteCommandCallback} executeCommand
@@ -206,8 +211,8 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @property {function(string): void} sendToPlugin
  * @property {function} onTranslate
  * @property {function(string, function): void} attachEvent
- * @property {function(string): void} onThemeChanged
- * @property {function(string): void} onThemeChangedBase
+ * @property {function(Theme): void} onThemeChanged
+ * @property {function(Theme): void} onThemeChangedBase
  * @property {AscPluginTheme} theme
  * @property {function(string): string} tr
  */
