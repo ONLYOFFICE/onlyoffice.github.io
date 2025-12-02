@@ -24,7 +24,7 @@
     "Insert Citation": "Citaat Invoegen",
     "Cancel select": "Annuleren selecteren",
     "Refresh": "Vernieuwen",
-    "Save as text": "Opslaan als tekst",
+    "Unlink citations": "Citaat Verwijderen",
     "Please insert some citation into the document.": "Voeg een citaat toe aan het document.",
     "Omit Author": "Auteur Weglaten",
     "Connection to Zotero failed": "Verbinding met Zotero mislukt",
@@ -32,7 +32,7 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Verbinding met Zotero mislukt. Schakel externe verbindingen in Zotero in: Bewerken → Instellingen → Geavanceerd → Vink \"Allow other applications on this computer to communicate with Zotero\" aan",
     "Failed to apply this style": "Het is niet gelukt deze stijl toe te passen",
     "Failed to upload file": "Het uploaden van het bestand is mislukt",
-    "Work with local Zotero": "Werk met lokale Zotero",
+    "Connect to Local Zotero": "Verbind met lokale Zotero",
     "The current bibliographic style does not describe the bibliography": "De huidige bibliografische stijl beschrijft de bibliografie niet",
     "Failed to insert citation": "Het invoegen van de citaat is mislukt",
     "Failed to insert bibliography": "Het invoegen van de bibliografie is mislukt",
@@ -40,5 +40,11 @@
     "Search in:": "Zoeken in:",
     "Everywhere": "Elke plaats",
     "My Library": "Mijn bibliotheek",
-    "Group Libraries": "Groepsbibliotheek"
+    "Group Libraries": "Groepsbibliotheek",
+    "This plugin help you search references by author, title or year in your own library.": "Deze plugin helpt u om referenties te zoeken op auteur, titel of jaar in uw eigen bibliotheek.",
+    "Click": "Klik",
+    "to replace all active Zotero citations and Bibliography with plain text.": "om alle actieve Zotero citaat en bibliografie te vervangen met tekst.",
+    "After conversion, citations can no longer be updated.": "Na de conversie kunnen citaaten niet meer worden bijgewerkt.",
+    "to access your local Zotero library.": "om toegang te krijgen tot uw lokale Zotero bibliotheek.",
+    "No API key required.": "Geen API key vereist."
 }
