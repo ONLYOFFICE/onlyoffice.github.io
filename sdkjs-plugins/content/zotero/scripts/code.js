@@ -18,15 +18,19 @@
 
 // @ts-check
 
+/// <reference path="./router.js" />
 /// <reference path="./types-global.js" />
 /// <reference path="./zotero/zotero.js" />
-/// <reference path="./zotero/zotero-api-checker.js" />
 /// <reference path="./csl/citation/citation.js" />
 /// <reference path="./csl/citation/storage.js" />
 /// <reference path="./csl/styles/styles-manager.js" />
 /// <reference path="./csl/locales/locales-manager.js" />
 /// <reference path="./services/translate-service.js" />
 /// <reference path="./services/citation-service.js" />
+/// <reference path="./components/input.js" />
+/// <reference path="./components/selectbox.js" />
+/// <reference path="./components/button.js" />
+/// <reference path="./connection.js" />
 
 /**
  * @typedef {Object} Scroller
@@ -43,7 +47,7 @@
 
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
-    var displayNoneClass = "display-none";
+    var displayNoneClass = "hidden";
     var blurClass = "blur";
     /** @type {number} */
     var loadTimeout;
@@ -76,8 +80,12 @@
         },
     };
 
+    /** @type {Router} */
+    var router;
     /** @type {ZoteroSdk} */
     var sdk;
+    /** @type {ConnectingToApi} */
+    var connectingToApi;
     /** @type {CslStylesManager} */
     var cslStylesManager;
     /** @type {LocalesManager} */
@@ -123,21 +131,9 @@
         if (!configState) {
             throw new Error("configState not found");
         }
-        const apiKeyConfigField = document.getElementById("apiKeyField");
-        if (!apiKeyConfigField) {
-            throw new Error("apiKeyConfigField not found");
-        }
-        const saveConfigBtn = document.getElementById("saveConfigBtn");
-        if (!saveConfigBtn) {
-            throw new Error("saveConfigBtn not found");
-        }
         const mainState = document.getElementById("mainState");
         if (!mainState) {
             throw new Error("mainState not found");
-        }
-        const logoutLink = document.getElementById("logoutLink");
-        if (!logoutLink) {
-            throw new Error("logoutLink not found");
         }
         const selectedWrapper = document.getElementById("selectedWrapper");
         if (!selectedWrapper) {
@@ -237,24 +233,11 @@
         if (!refreshBtn) {
             throw new Error("refreshBtn not found");
         }
-        const saveAsTextBtn = document.getElementById("saveAsTextBtn");
-        if (!saveAsTextBtn) {
-            throw new Error("saveAsTextBtn not found");
-        }
         const checkOmitAuthor = document.getElementById("omitAuthor");
         if (!checkOmitAuthor) {
             throw new Error("checkOmitAuthor not found");
         }
-        const useDesktopApp = document.getElementById("useDesktopApp");
-        if (!useDesktopApp) {
-            throw new Error("useDesktopApp not found");
-        }
-        const connectToLocalZotero = document.getElementById(
-            "connectToLocalZotero"
-        );
-        if (!connectToLocalZotero) {
-            throw new Error("connectToLocalZotero not found");
-        }
+
         const cslFileInput = document.getElementById("cslFileInput");
         if (!cslFileInput) {
             throw new Error("cslFileInput not found");
@@ -269,11 +252,8 @@
             docsThumb: docsThumb,
 
             configState: configState,
-            apiKeyConfigField: apiKeyConfigField,
-            saveConfigBtn: saveConfigBtn,
 
             mainState: mainState,
-            logoutLink: logoutLink,
 
             selectedWrapper: selectedWrapper,
             selectedHolder: selectedHolder,
@@ -303,11 +283,9 @@
             insertLinkBtn: insertLinkBtn,
             cancelBtn: cancelBtn,
             refreshBtn: refreshBtn,
-            saveAsTextBtn: saveAsTextBtn,
+            saveAsTextBtn: new Button("saveAsTextBtn"),
 
             checkOmitAuthor: checkOmitAuthor,
-            useDesktopApp: useDesktopApp,
-            connectToLocalZotero: connectToLocalZotero,
             cslFileInput: cslFileInput,
         };
     }
@@ -324,7 +302,9 @@
             if (elements.searchField) elements.searchField.focus();
         }, 100);
 
+        router = new Router();
         sdk = new ZoteroSdk();
+        connectingToApi = new ConnectingToApi(router, sdk);
         cslStylesManager = new CslStylesManager();
         localesManager = new LocalesManager();
         citationService = new CitationService(
@@ -336,7 +316,17 @@
         addEventListeners();
         initSelectBoxes();
 
-        initSdkApis().then(function (availableApis) {
+        const connector = connectingToApi.init();
+        connector.onOpen(function () {
+            showLoader(false);
+        });
+        connector.onChangeState(function (apis) {
+            cslStylesManager.setDesktopApiAvailable(apis.desktop);
+            cslStylesManager.setRestApiAvailable(apis.online);
+            localesManager.setDesktopApiAvailable(apis.desktop);
+            localesManager.setRestApiAvailable(apis.online);
+        });
+        connector.onAuthorized(function (apis) {
             showLoader(true);
 
             Promise.all([
@@ -364,55 +354,6 @@
             checkDocsScroll
         );
     };
-
-    function initSdkApis() {
-        return new Promise(function (resolve) {
-            let hasFirstAnswer = false;
-            let onlineZoteroElements =
-                document.querySelectorAll(".for-zotero-online");
-
-            ZoteroApiChecker.runApisChecker(sdk).subscribe(function (
-                /** @type {AvailableApis} */ apis
-            ) {
-                cslStylesManager.setDesktopApiAvailable(apis.desktop);
-                cslStylesManager.setRestApiAvailable(apis.online);
-                localesManager.setDesktopApiAvailable(apis.desktop);
-                localesManager.setRestApiAvailable(apis.online);
-                if (!hasFirstAnswer) {
-                    hasFirstAnswer = true;
-                    if (!apis.desktopVersion && elements.useDesktopApp) {
-                        elements.useDesktopApp.classList.add("display-none");
-                    }
-                    showLoader(false);
-                    switchAuthState("config");
-                }
-
-                if (apis.online) {
-                    onlineZoteroElements.forEach(function (element) {
-                        element.classList.remove("display-none");
-                    });
-                } else {
-                    onlineZoteroElements.forEach(function (element) {
-                        element.classList.add("display-none");
-                    });
-                }
-                if (apis.online && apis.hasKey) {
-                    sdk.setIsOnlineAvailable(true);
-                    switchAuthState("main");
-                    resolve(apis);
-                    return;
-                } else if (apis.desktop && apis.hasPermission) {
-                    sdk.setIsOnlineAvailable(false);
-                    if (elements.logoutLink)
-                        elements.logoutLink.style.display = "none";
-                    switchAuthState("main");
-                    showError(false);
-                    resolve(apis);
-                    return;
-                }
-            });
-        });
-    }
 
     function preloadLastStyle() {
         var lastStyle = cslStylesManager.getLastUsedStyleId() || "ieee";
@@ -731,38 +672,6 @@
                 });
         };
 
-        elements.connectToLocalZotero.onclick = function () {
-            ZoteroApiChecker.checkStatus(sdk).then(function (
-                /** @type {AvailableApis} */ apis
-            ) {
-                if (apis.desktop && apis.hasPermission) {
-                    sdk.setIsOnlineAvailable(false);
-                    elements.logoutLink.style.display = "none";
-                    switchAuthState("main");
-                    showError(false);
-                } else if (apis.desktop && !apis.hasPermission) {
-                    const errorMessage =
-                        "Connection to Zotero failed. " +
-                        "Please enable external connections in Zotero: " +
-                        'Edit → Settings → Advanced → Check "Allow other ' +
-                        'applications on this computer to communicate with Zotero"';
-                    showError(translate(errorMessage));
-                } else if (!apis.desktop) {
-                    showError(
-                        translate(
-                            "Connection to Zotero failed. Make sure Zotero is running."
-                        )
-                    );
-                }
-            });
-        };
-
-        elements.logoutLink.onclick = function (e) {
-            sdk.clearSettings();
-            switchAuthState("config");
-            return true;
-        };
-
         /**
          * @param {string} text
          * @returns
@@ -886,23 +795,6 @@
             }
         };
 
-        elements.saveConfigBtn.onclick = function (e) {
-            if (!(elements.apiKeyConfigField instanceof HTMLInputElement))
-                return;
-            const apiKey = elements.apiKeyConfigField.value.trim();
-            if (apiKey) {
-                sdk.setApiKey(apiKey)
-                    .then(function () {
-                        ZoteroApiChecker.successfullyLoggedInUsingApiKey();
-                        switchAuthState("main");
-                    })
-                    .catch(function (err) {
-                        console.error(err);
-                        showError(translate("Invalid API key"));
-                    });
-            }
-        };
-
         elements.refreshBtn.onclick = function () {
             if (!cslStylesManager.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
@@ -1002,12 +894,15 @@
                 });
         };
 
-        elements.saveAsTextBtn.onclick = function () {
+        elements.saveAsTextBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
             showLoader(true);
             citationService.saveAsText().then(function () {
                 showLoader(false);
             });
-        };
+        });
 
         elements.locatorLabelsList.addEventListener("click", function (e) {
             const target = e.target;
@@ -1145,6 +1040,7 @@
      * @param {string} theme - The new theme of the SDK.
      */
     Asc.plugin.onThemeChanged = function (theme) {
+        console.warn("theme", theme);
         window.Asc.plugin.onThemeChangedBase(theme);
         var rules =
             ".selectArrow > span { background-color: " +
@@ -1466,42 +1362,6 @@
     }
 
     /**
-     * @param {boolean} hide
-     */
-    function configState(hide) {
-        switchClass(elements.configState, displayNoneClass, hide);
-    }
-
-    /**
-     * @param {boolean} hide
-     */
-    function mainState(hide) {
-        switchClass(elements.mainState, displayNoneClass, hide);
-        switchClass(elements.logoutLink, displayNoneClass, hide);
-    }
-
-    /**
-     * @type {"main"|"config"}
-     */
-    var currentAuthState;
-    /**
-     * @param {"main"|"config"} state
-     */
-    function switchAuthState(state) {
-        currentAuthState = state;
-        configState(true);
-        mainState(true);
-        switch (state) {
-            case "config":
-                configState(false);
-                break;
-            case "main":
-                mainState(false);
-                break;
-        }
-    }
-
-    /**
      * @param {HTMLElement} holder
      * @param {HTMLElement} thumb
      * @param {function} [func] - an optional function to be called with the holder and thumb as arguments.
@@ -1589,7 +1449,7 @@
      * @returns {boolean}
      */
     function shouldLoadMore(holder) {
-        if (currentAuthState != "main") return false;
+        if (router.getRoute() != "main") return false;
         if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) {
             return false;
         }

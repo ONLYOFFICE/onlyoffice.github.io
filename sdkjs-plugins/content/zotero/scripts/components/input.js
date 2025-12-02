@@ -393,7 +393,7 @@ InputField.prototype._updateState = function () {
 
 // Public API
 InputField.prototype.getValue = function () {
-    return this.input.value;
+    return this.input.value.trim();
 };
 
 /**
@@ -447,7 +447,7 @@ InputField.prototype.disable = function () {
 };
 
 /**
- * @param {Function} callback
+ * @param {function(InputEventType): void} callback 
  * @returns {Object}
  */
 InputField.prototype.subscribe = function (callback) {

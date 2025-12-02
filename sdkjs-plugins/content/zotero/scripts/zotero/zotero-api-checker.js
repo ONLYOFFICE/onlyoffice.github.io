@@ -43,6 +43,7 @@ var ZoteroApiChecker = {
      */
     runApisChecker: function (sdk) {
         const self = this;
+        self._done = false;
 
         function attemptCheck() {
             if (self._done) return;
