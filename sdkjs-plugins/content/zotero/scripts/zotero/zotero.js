@@ -17,6 +17,7 @@
  */
 
 // @ts-check
+
 /// <reference path="../types-global.js" />
 /// <reference path="./zotero-environment.js" />
 
@@ -306,7 +307,7 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
             self.API_PATHS.ITEMS;
         var request = self._buildGetRequest(path, queryParams);
 
-        self._parseResponse(request, resolve, reject, self._userId);
+        return self._parseResponse(request, resolve, reject, self._userId);
     });
 };
 
@@ -342,7 +343,7 @@ ZoteroSdk.prototype.getGroupItems = function (
         var path =
             self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
         var request = self._buildGetRequest(path, queryParams);
-        self._parseResponse(request, resolve, reject, groupId);
+        return self._parseResponse(request, resolve, reject, groupId);
     });
 };
 

@@ -15,7 +15,8 @@
  -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+
+<head>
     <meta charset="UTF-8">
         <title>Zotero</title>
         <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
@@ -25,233 +26,262 @@
         <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
         <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 
-        <script defer src="scripts/thirdparty/fetch.umd.js"></script>
-        <script defer src="scripts/thirdparty/promise-polyfill.min.js"></script>
-        <script defer src="scripts/thirdparty/url-polyfill.min.js"></script>
-        <script defer src="scripts/citeproc/citeproc_commonjs.js"></script>
+    <script defer src="scripts/thirdparty/fetch.umd.js"></script>
+    <script defer src="scripts/thirdparty/promise-polyfill.min.js"></script>
+    <script defer src="scripts/thirdparty/url-polyfill.min.js"></script>
+    <script defer src="scripts/citeproc/citeproc_commonjs.js"></script>
 
-        <script defer src="scripts/csl/citation/citation-item-data.js"></script>
-        <script defer src="scripts/csl/citation/citation-item.js"></script>
-        <script defer src="scripts/csl/citation/citation.js"></script>
-        <script defer src="scripts/csl/citation/storage.js"></script>
+    <script defer src="scripts/csl/citation/citation-item-data.js"></script>
+    <script defer src="scripts/csl/citation/citation-item.js"></script>
+    <script defer src="scripts/csl/citation/citation.js"></script>
+    <script defer src="scripts/csl/citation/storage.js"></script>
 
-        <script defer src="scripts/csl/locales/locales-manager.js"></script>
-        <script defer src="scripts/csl/styles/styles-manager.js"></script>
-        <script defer src="scripts/csl/styles/style-parser.js"></script>
-        <script defer src="scripts/csl/styles/storage.js"></script>
+    <script defer src="scripts/csl/locales/locales-manager.js"></script>
+    <script defer src="scripts/csl/styles/styles-manager.js"></script>
+    <script defer src="scripts/csl/styles/style-parser.js"></script>
+    <script defer src="scripts/csl/styles/storage.js"></script>
 
-        <script defer src="scripts/services/citation-doc-service.js"></script>
-        <script defer src="scripts/services/citation-service.js"></script>
-        <script defer src="scripts/services/translate-service.js"></script>
-        
-        <script defer src="scripts/zotero/zotero-environment.js"></script>
-        <script defer src="scripts/zotero/zotero-api-checker.js"></script>
-        <script defer src="scripts/zotero/zotero.js"></script>
-        <script defer src="scripts/code.js"></script>
-    </head>
-    <body id="body" spellcheck="false" class="noselect">
-        <div id="loader" class="cssload-container display-none">
-            <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
-        </div>
-        <div id="errorWrapper" class="errorMsg display-none"></div>
+    <script defer src="scripts/services/citation-doc-service.js"></script>
+    <script defer src="scripts/services/citation-service.js"></script>
+    <script defer src="scripts/services/translate-service.js"></script>
 
-        <div id="content">
+    <script defer src="scripts/zotero/zotero-environment.js"></script>
+    <script defer src="scripts/zotero/zotero-api-checker.js"></script>
+    <script defer src="scripts/zotero/zotero.js"></script>
+    <script defer src="scripts/code.js"></script>
+</head>
 
-            <div id="mainCont" class="flexCol">
+<body id="body" spellcheck="false" class="noselect">
+    <div id="loader" class="cssload-container display-none">
+        <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div id="errorWrapper" class="errorMsg display-none"></div>
 
-                <div id="configState" class="display-none">
-                <div><span class="i18n">To use Zotero you should get an API key.</span> <span class="i18n">Navigate to</span> <a class="i18n" target="_blank" href="https://www.zotero.org/settings/keys">Zotero API settings</a>. <span class="i18n">Create and copy API key into the field below.</span></div>
-                    <div class="mrtop label">
-                        <span class="i18n">API Key</span>
-                    <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" style="width: 100%;"/>
+    <div id="content">
+        <div id="mainCont" class="flexCol">
+            <div id="configState" class="display-none">
+                <p>
+                    <span class="i18n">This plugin help you search references by author, title or year in your own
+                        library.</span>
+                </p>
+                <p>
+                    <span class="i18n">To use Zotero you should get an API key.</span>
+                    <span class="i18n">Navigate to</span>
+                    <a class="i18n" target="_blank" href="https://www.zotero.org/settings/keys">Zotero API settings</a>.
+                    <span class="i18n">Create and copy API key into the field below.</span>
+                </p>
+                <div class="mrtop label">
+                    <span class="i18n">API Key</span>
+                    <input id="apiKeyField" class="form-control" type="text" placeholder="API Key"
+                        style="width: 100%;" />
+                    <button id="saveConfigBtn" class="btn-text-default i18n"
+                        style="margin-top: 16px; width: 100%;">Save</button>
+                </div>
+                <p id="useDesktopApp">
+                    <span class="i18n">Click</span>
+                    <b class="i18n">Connect to Local Zotero</b>
+                    <span class="i18n">to access your local Zotero library.</span>
+                    <span class="i18n">No API key required.</span>
+                    <button id="connectToLocalZotero" class="btn-text-default i18n"
+                        style="margin-top: 16px; width: 100%;">Connect to Local Zotero</button>
+                </p>
+                <p>
+                    <span class="i18n">Click</span>
+                    <b class="i18n">Unlink citations</b>
+                    <span class="i18n">to replace all active Zotero citations and Bibliography with plain text.</span>
+                    <span class="i18n"></span>After conversion, citations can no longer be updated.</span>
+                    <button id="saveAsTextBtn" class="btn-text-default i18n"
+                        style="margin-top: 16px; width: 100%;">Unlink citations</button>
+                </p>
+            </div>
+            <div id="mainState" class="flexCol flexSize display-none">
+                <div id="selectedWrapper">
+                    <div class="flexCol flexSize flexCenter">
+                        <div id="selectedHolder"></div>
                     </div>
-                <button id="saveConfigBtn" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Save</button>
-                <button id="saveAsTextBtn" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Save as text</button>
-                <button id="useDesktopApp" class="btn-text-default i18n" style="margin-top: 16px; width: 100%;">Work with local Zotero</button>
+                    <div id="selectedThumb" class="scrollThumb display-none"></div>
+                </div>
+                <div id="searchWrapper">
+                    <label for="library" class="i18n">Search in:</label>
+                    <div class="selectHolder">
+                        <input id="library" readonly class="form-control control select form-control" type="text">
+                        <div id="searchLibrary" class="selectList display-none">
+                        </div>
+                    </div>
+                    <label id="searchLabel">
+                        <input id="searchField" autocomplete="off" class="form-control i18n" type="text"
+                            placeholder="Search references by author, title or year" style="width: 100%;" />
+                        <span id="searchClear" class="display-none">&#xd7;</span>
+                    </label>
                 </div>
 
-                <div id="mainState" class="flexCol flexSize display-none">
-                    <div id="selectedWrapper">
-                        <div class="flexCol flexSize flexCenter">
-                            <div id="selectedHolder"></div>
-                        </div>
-                    <div id="selectedThumb" class="scrollThumb display-none"></div>
-                    </div>
-                    <div id="searchWrapper">
-                        <label for="library" class="i18n">Search in:</label>
-                        <div class="selectHolder">
-                            <input id="library" readonly class="form-control control select form-control" type="text">
-                            <div id="searchLibrary" class="selectList display-none">
-                            </div>
-                        </div>
-                        <label id="searchLabel">
-                        <input id="searchField" autocomplete="off" class="form-control i18n" type="text" placeholder="Search references by author, title or year" style="width: 100%;"/>
-                        <span id="searchClear" class="display-none">&#xd7;</span>
-                        </label>
-                    </div>
-                    
-                    <div id="docsWrapper" class="flexSize">
-                        <div class="flexCol flexSize">
-                            <div id="docsHolder" class="flexCol"></div>
-                            <div class="flex flexCenter">
+                <div id="docsWrapper" class="flexSize">
+                    <div class="flexCol flexSize">
+                        <div id="docsHolder" class="flexCol"></div>
+                        <div class="flex flexCenter">
                             <div id="libLoader" class="cssload-loading display-none"><i></i><i></i><i></i><i></i></div>
                         </div>
                     </div>
                     <div id="docsThumb" class="scrollThumb display-none"></div>
-                    </div>
-                    <div id="controlsHolder" class="flexCol">
-					<div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
-						<div class="flex" style="align-items: center;">
-							<button id="insertLinkBtn" class="button control i18n btn-text-default" style="flex: 1; margin-left: 8px; margin-right: 0;" disabled>Insert Citation</button>
+                </div>
+                <div id="controlsHolder" class="flexCol">
+                    <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
+                        <div class="flex" style="align-items: center;">
+                            <button id="insertLinkBtn" class="button control i18n btn-text-default"
+                                style="flex: 1; margin-left: 8px; margin-right: 0;" disabled>Insert Citation</button>
                         </div>
-                        <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
+                        <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel
+                            select</button>
                     </div>
                     <div id="insertBibDiv" class="flex">
-						<button id="insertBibBtn" class="button control i18n btn-text-default">Insert Bibliography</button>
-						<button id="refreshBtn" class="button control btn-text-default i18n">Refresh</button>
+                        <button id="insertBibBtn" class="button control i18n btn-text-default">Insert
+                            Bibliography</button>
+                        <button id="refreshBtn" class="button control btn-text-default i18n">Refresh</button>
                     </div>
                     <div id="omitAuthorDiv">
                         <label for="omitAuthor" class="i18n">Omit Author</label>
-						<input id="omitAuthor" type="checkbox" class="form-control i18n" title="Omit Author">
+                        <input id="omitAuthor" type="checkbox" class="form-control i18n" title="Omit Author">
                     </div>
+                </div>
+                <div id="locatorLabelsDiv">
+                    <div class="selectHolder">
+                        <input id="locatorLabel" readonly class="form-control control select" type="text">
+                        <div id="locatorLabelsList" class="selectList display-none">
+                            <!--span class="i18n" data-value="">Act</span-->
+                            <span class="i18n" data-value="appendix">Appendix</span>
+                            <span class="i18n" data-value="article">Article</span>
+                            <span class="i18n" data-value="book">Book</span>
+                            <!--span class="i18n" data-value="canon">Canon</span-->
+                            <span class="i18n" data-value="chapter">Chapter</span>
+                            <span class="i18n" data-value="column">Column</span>
+                            <!--span class="i18n" data-value="location">Location</span-->
+                            <!--pan class="i18n" data-value="equation">Equation</span-->
+                            <span class="i18n" data-value="figure">Figure</span>
+                            <span class="i18n" data-value="folio">Folio</span>
+                            <span class="i18n" data-value="issue">Issue</span>
+                            <span class="i18n" data-value="line">Line</span>
+                            <span class="i18n" data-value="note">Note</span>
+                            <span class="i18n" data-value="opus">Opus</span>
+                            <span class="i18n" data-value="page">Page</span>
+                            <span class="i18n" data-value="paragraph">Paragraph</span>
+                            <span class="i18n" data-value="part">Part</span>
+                            <span class="i18n" data-value="rule">Rule</span>
+                            <!--span class="i18n" data-value="scene">Scene</span-->
+                            <span class="i18n" data-value="section">Section</span>
+                            <span class="i18n" data-value="sub-verbo">Sub verbo</span>
+                            <span class="i18n" data-value="table">Table</span>
+                            <!--span class="i18n" data-value="timestamp">Timestamp</span-->
+                            <span class="i18n" data-value="title">Title</span>
+                            <span class="i18n" data-value="verse">Verse</span>
+                            <span class="i18n" data-value="volume">Volume</span>
+                        </div>
                     </div>
-                    <div id="locatorLabelsDiv">
+                    <input id="locator" autocomplete="off" class="form-control i18n" type="text">
+                </div>
+                <div id="prefixSuffixDiv">
+                    <input id="prefixField" autocomplete="off" class="form-control i18n" type="text"
+                        placeholder="Prefix" />
+                    <input id="suffixField" autocomplete="off" class="form-control i18n" type="text"
+                        placeholder="Suffix" />
+                </div>
+                <div id="styleWrapper">
+                    <div class="label">
+                        <label for="styleSelect" class="i18n">Style</label>
                         <div class="selectHolder">
-                            <input id="locatorLabel" readonly class="form-control control select" type="text">
-                            <div id="locatorLabelsList" class="selectList display-none">
-                                <!--span class="i18n" data-value="">Act</span-->
-                                <span class="i18n" data-value="appendix">Appendix</span>
-                                <span class="i18n" data-value="article">Article</span>
-                                <span class="i18n" data-value="book">Book</span>
-                                <!--span class="i18n" data-value="canon">Canon</span-->
-                                <span class="i18n" data-value="chapter">Chapter</span>
-                                <span class="i18n" data-value="column">Column</span>
-                                <!--span class="i18n" data-value="location">Location</span-->
-                                <!--pan class="i18n" data-value="equation">Equation</span-->
-                                <span class="i18n" data-value="figure">Figure</span>
-                                <span class="i18n" data-value="folio">Folio</span>
-                                <span class="i18n" data-value="issue">Issue</span>
-                                <span class="i18n" data-value="line">Line</span>
-                                <span class="i18n" data-value="note">Note</span>
-                                <span class="i18n" data-value="opus">Opus</span>
-                                <span class="i18n" data-value="page">Page</span>
-                                <span class="i18n" data-value="paragraph">Paragraph</span>
-                                <span class="i18n" data-value="part">Part</span>
-                                <span class="i18n" data-value="rule">Rule</span>
-                                <!--span class="i18n" data-value="scene">Scene</span-->
-                                <span class="i18n" data-value="section">Section</span>
-                                <span class="i18n" data-value="sub-verbo">Sub verbo</span>
-                                <span class="i18n" data-value="table">Table</span>
-                                <!--span class="i18n" data-value="timestamp">Timestamp</span-->
-                                <span class="i18n" data-value="title">Title</span>
-                                <span class="i18n" data-value="verse">Verse</span>
-                                <span class="i18n" data-value="volume">Volume</span>
+                            <input id="styleSelect" class="form-control control select text i18n" type="text"
+                                placeholder="Enter style name" autocomplete="off">
+                            <div id="styleSelectList" class="selectList display-none">
                             </div>
-                        </div>
-						<input id="locator"  autocomplete="off" class="form-control i18n" type="text">
-                    </div>
-                    <div id="prefixSuffixDiv">
-                        <input id="prefixField" autocomplete="off" class="form-control i18n" type="text" placeholder="Prefix" />
-                        <input id="suffixField" autocomplete="off" class="form-control i18n" type="text" placeholder="Suffix" />
-                    </div>
-                    <div id="styleWrapper">
-                        <div class="label">
-                            <label for="styleSelect" class="i18n">Style</label>
-                            <div class="selectHolder">
-                                <input id="styleSelect" class="form-control control select text i18n" type="text" placeholder="Enter style name" autocomplete="off">
-                                <div id="styleSelectList" class="selectList display-none">
-                                </div>
-                                <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
-                            </div>
-                        </div>
-                        <div class="label styleWrapperSecond">
-                            <label for="styleLang" class="i18n">Language</label>
-                            <div class="selectHolder">
-                                <input id="styleLang" readonly class="form-control control select" type="text">
-                                <div id="styleLangList" class="selectList display-none">
-                                    <span data-value="af-ZA">Afrikaans</span>
-                                    <span data-value="ar">Arabic</span>
-                                    <span data-value="bg-BG">Bulgarian</span>
-                                    <span data-value="ca-AD">Catalan</span>
-                                    <span data-value="cs-CZ">Czech</span>
-                                    <span data-value="cy-GB">Welsh</span>
-                                    <span data-value="da-DK">Danish</span>
-                                    <span data-value="de-AT">German (Austria)</span>
-                                    <span data-value="de-CH">German (Switzerland)</span>
-                                    <span data-value="de-DE">German (Germany)</span>
-                                    <span data-value="el-GR">Greek</span>
-                                    <span data-value="en-GB">English (UK)</span>
-                                    <span data-value="en-US">English (US)</span>
-                                    <span data-value="es-CL">Spanish (Chile)</span>
-                                    <span data-value="es-ES">Spanish (Spain)</span>
-                                    <span data-value="es-MX">Spanish (Mexico)</span>
-                                    <span data-value="et-EE">Estonian</span>
-                                    <span data-value="eu">Basque</span>
-                                    <span data-value="fa-IR">Persian</span>
-                                    <span data-value="fi-FI">Finnish</span>
-                                    <span data-value="fr-CA">French (Canada)</span>
-                                    <span data-value="fr-FR">French (France)</span>
-                                    <span data-value="he-IL">Hebrew</span>
-                                    <span data-value="hr-HR">Croatian</span>
-                                    <span data-value="hu-HU">Hungarian</span>
-                                    <span data-value="id-ID">Indonesian</span>
-                                    <span data-value="is-IS">Icelandic</span>
-                                    <span data-value="it-IT">Italian</span>
-                                    <span data-value="ja-JP">Japanese</span>
-                                    <span data-value="km-KH">Khmer</span>
-                                    <span data-value="ko-KR">Korean</span>
-                                    <span data-value="la">Latin</span>
-                                    <span data-value="lt-LT">Lithuanian</span>
-                                    <span data-value="lv-LV">Latvian</span>
-                                    <span data-value="mn-MN">Mongolian</span>
-                                    <span data-value="nb-NO">Norwegian (Bokmål)</span>
-                                    <span data-value="nl-NL">Dutch</span>
-                                    <span data-value="nn-NO">Norwegian (Nynorsk)</span>
-                                    <span data-value="pl-PL">Polish</span>
-                                    <span data-value="pt-BR">Portuguese (Brazil)</span>
-                                    <span data-value="pt-PT">Portuguese (Portugal)</span>
-                                    <span data-value="ro-RO">Romanian</span>
-                                    <span data-value="ru-RU">Russian</span>
-                                    <span data-value="sk-SK">Slovak</span>
-                                    <span data-value="sl-SI">Slovenian</span>
-                                    <span data-value="sr-RS">Serbian</span>
-                                    <span data-value="sv-SE">Swedish</span>
-                                    <span data-value="th-TH">Thai</span>
-                                    <span data-value="tr-TR">Turkish</span>
-                                    <span data-value="uk-UA">Ukrainian</span>
-                                    <span data-value="vi-VN">Vietnamese</span>
-                                    <span data-value="zh-CN">Chinese (PRC)</span>
-                                    <span data-value="zh-TW">Chinese (Taiwan)</span>
-                                </div>
-                            </div>
+                            <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
                         </div>
                     </div>
-                    <div id="notesStyle" class="notesStyle display-none">
-                        <span class="i18n">Display citations as:</span>
-                        <div class="radioHolder">
-                            <input type="radio" id="footNotes" class="form-control" value="footnotes" name="notesAs" checked/>
-                            <label for="footNotes" class="i18n">
-                                Footnotes
-                            </label>
-                            <input type="radio" id="endNotes" class="form-control" value="endnotes" name="notesAs"/>
-                            <label for="endNotes" class="i18n">
-                                Endnotes
-                            </label>
+                    <div class="label styleWrapperSecond">
+                        <label for="styleLang" class="i18n">Language</label>
+                        <div class="selectHolder">
+                            <input id="styleLang" readonly class="form-control control select" type="text">
+                            <div id="styleLangList" class="selectList display-none">
+                                <span data-value="af-ZA">Afrikaans</span>
+                                <span data-value="ar">Arabic</span>
+                                <span data-value="bg-BG">Bulgarian</span>
+                                <span data-value="ca-AD">Catalan</span>
+                                <span data-value="cs-CZ">Czech</span>
+                                <span data-value="cy-GB">Welsh</span>
+                                <span data-value="da-DK">Danish</span>
+                                <span data-value="de-AT">German (Austria)</span>
+                                <span data-value="de-CH">German (Switzerland)</span>
+                                <span data-value="de-DE">German (Germany)</span>
+                                <span data-value="el-GR">Greek</span>
+                                <span data-value="en-GB">English (UK)</span>
+                                <span data-value="en-US">English (US)</span>
+                                <span data-value="es-CL">Spanish (Chile)</span>
+                                <span data-value="es-ES">Spanish (Spain)</span>
+                                <span data-value="es-MX">Spanish (Mexico)</span>
+                                <span data-value="et-EE">Estonian</span>
+                                <span data-value="eu">Basque</span>
+                                <span data-value="fa-IR">Persian</span>
+                                <span data-value="fi-FI">Finnish</span>
+                                <span data-value="fr-CA">French (Canada)</span>
+                                <span data-value="fr-FR">French (France)</span>
+                                <span data-value="he-IL">Hebrew</span>
+                                <span data-value="hr-HR">Croatian</span>
+                                <span data-value="hu-HU">Hungarian</span>
+                                <span data-value="id-ID">Indonesian</span>
+                                <span data-value="is-IS">Icelandic</span>
+                                <span data-value="it-IT">Italian</span>
+                                <span data-value="ja-JP">Japanese</span>
+                                <span data-value="km-KH">Khmer</span>
+                                <span data-value="ko-KR">Korean</span>
+                                <span data-value="la">Latin</span>
+                                <span data-value="lt-LT">Lithuanian</span>
+                                <span data-value="lv-LV">Latvian</span>
+                                <span data-value="mn-MN">Mongolian</span>
+                                <span data-value="nb-NO">Norwegian (Bokmål)</span>
+                                <span data-value="nl-NL">Dutch</span>
+                                <span data-value="nn-NO">Norwegian (Nynorsk)</span>
+                                <span data-value="pl-PL">Polish</span>
+                                <span data-value="pt-BR">Portuguese (Brazil)</span>
+                                <span data-value="pt-PT">Portuguese (Portugal)</span>
+                                <span data-value="ro-RO">Romanian</span>
+                                <span data-value="ru-RU">Russian</span>
+                                <span data-value="sk-SK">Slovak</span>
+                                <span data-value="sl-SI">Slovenian</span>
+                                <span data-value="sr-RS">Serbian</span>
+                                <span data-value="sv-SE">Swedish</span>
+                                <span data-value="th-TH">Thai</span>
+                                <span data-value="tr-TR">Turkish</span>
+                                <span data-value="uk-UA">Ukrainian</span>
+                                <span data-value="vi-VN">Vietnamese</span>
+                                <span data-value="zh-CN">Chinese (PRC)</span>
+                                <span data-value="zh-TW">Chinese (Taiwan)</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div id="notesStyle" class="notesStyle display-none">
+                    <span class="i18n">Display citations as:</span>
+                    <div class="radioHolder">
+                        <input type="radio" id="footNotes" class="form-control" value="footnotes" name="notesAs"
+                            checked />
+                        <label for="footNotes" class="i18n">Footnotes</label>
+                        <input type="radio" id="endNotes" class="form-control" value="endnotes" name="notesAs" />
+                        <label for="endNotes" class="i18n">Endnotes</label>
+                    </div>
+                </div>
             </div>
-
-            </div>
+        </div>
 
         <div id="footerCont">
-            <span><a href="https://www.zotero.org/" target="_blank" id="zotero-link" class="link i18n">Open Zotero website</a></span>
+            <span>
+                <a href="https://www.zotero.org/" target="_blank" id="zotero-link" class="link i18n">
+                    Open Zotero website
+                </a>
+            </span>
             <span id="logoutLink" class="link display-none i18n">Reconfigure</span>
         </div>
 
         <input type="file" id="cslFileInput" accept=".csl,.xml" style="display: none;" />
 
     </div>
-
 </body>
+
 </html>

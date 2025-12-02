@@ -24,7 +24,7 @@
     "Insert Citation": "Inserir Citação",
     "Cancel select": "Cancelar seleccionar",
     "Refresh": "Actualizar",
-    "Save as text": "Guardar como texto",
+    "Unlink citations": "Desligar citações",
     "Please insert some citation into the document.": "Por favor, insira alguma citação no documento.",
     "Omit Author": "Omitir Autor",
     "Connection to Zotero failed": "A ligação com o Zotero falhou",
@@ -32,7 +32,7 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "A ligação com o Zotero falhou. Active as ligações externas no Zotero: Editar → Definições → Avançadas → Marque \"Permitir que outros aplicativos neste computador se comuniquem com o Zotero\"",
     "Failed to apply this style": "Falha ao aplicar este estilo",
     "Failed to upload file": "Falha ao carregar o ficheiro",
-    "Work with local Zotero": "Trabalhar com o Zotero local",
+    "Connect to Local Zotero": "Conectar ao Zotero local",
     "The current bibliographic style does not describe the bibliography": "O estilo bibliográfico actual nao descreve a bibliografia",
     "Failed to insert citation": "Falha ao inserir citação",
     "Failed to insert bibliography": "Falha ao inserir bibliografia",
@@ -40,5 +40,11 @@
     "Search in:": "Procurar em:",
     "Everywhere": "Todos os lugares",
     "My Library": "A minha biblioteca",
-    "Group Libraries": "Grupos de bibliotecas"
+    "Group Libraries": "Grupos de bibliotecas",
+    "This plugin help you search references by author, title or year in your own library.": "Este plugin te ajudar a procurar referências por autor, título ou ano na tua biblioteca.",
+    "Click": "Clique",
+    "to replace all active Zotero citations and Bibliography with plain text.": "para substituir todas as citações Zotero ativas e Bibliografia com texto simples.",
+    "After conversion, citations can no longer be updated.": "Depois da conversão, as citações não podem mais ser atualizadas.",
+    "to access your local Zotero library.": "para acessar sua biblioteca Zotero local.",
+    "No API key required.": "Nenhuma chave de API requerida."
 }

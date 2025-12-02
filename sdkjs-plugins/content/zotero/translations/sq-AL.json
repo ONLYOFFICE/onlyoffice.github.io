@@ -24,7 +24,7 @@
     "Insert Citation": "Shtoni citimin",
     "Cancel select": "Anuloni selektimin",
     "Refresh": "Rifreskoni",
-    "Save as text": "Ruani si tekst",
+    "Unlink citations": "Hiqni citimet",
     "Please insert some citation into the document.": "Ju lutem shtoni ndonjë citim në dokument",
     "Omit Author": "Hiqni autorin",
     "Connection to Zotero failed": "Kontakti me Zotero ka qashtuar",
@@ -32,7 +32,7 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Kontakti me Zotero ka qashtuar. Ju lutem aktivizoni lidhjen ekstern ne Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",
     "Failed to apply this style": "Zbatimi i këtij stili dështoi",
     "Failed to upload file": "Ngarkimi i skedarit dështoi",
-    "Work with local Zotero": "Zgjedhni Zotero local",
+    "Connect to Local Zotero": "Lidhni me Zotero lokale",
     "The current bibliographic style does not describe the bibliography": "Stili bibliografik aktual nuk shfaqet bibliografia",
     "Failed to insert citation": "Zbatimi i citimit dështoi",
     "Failed to insert bibliography": "Zbatimi i bibliografise dështoi",
@@ -40,5 +40,11 @@
     "Search in:": "Kerkoni sipas:",
     "Everywhere": "Gjithashtu",
     "My Library": "Kutia mija",
-    "Group Libraries": "Kutia e grupave"
+    "Group Libraries": "Kutia e grupave",
+    "This plugin help you search references by author, title or year in your own library.": "Kjo plugin helponi t'u kerkoni referenca sipas autorit, titullit ose vitit ne kutia juaj.",
+    "Click": "Kliko",
+    "to replace all active Zotero citations and Bibliography with plain text.": "per t'i zameni te gjitha citatave Zotero dhe bibliografise me tekstin e plote.",
+    "After conversion, citations can no longer be updated.": "Pas konverzimit, citatat nuk mund te ndryshohen.",
+    "to access your local Zotero library.": "per t'i aksesuar kutia juaj Zotero.",
+    "No API key required.": "Nuk ka nevoje per API kljuce."
 }
