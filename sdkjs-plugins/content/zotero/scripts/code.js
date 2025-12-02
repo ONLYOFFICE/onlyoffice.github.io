@@ -595,6 +595,10 @@
                     elements.styleSelectListOther
                 );
 
+                if (ev.target instanceof HTMLElement === false) {
+                    console.error("ev.target is not an HTMLElement");
+                    return;
+                }
                 tmpEl = other.removeChild(ev.target);
                 newEl = document.createElement("span");
                 newEl.setAttribute(
@@ -894,15 +898,17 @@
                 });
         };
 
-        elements.saveAsTextBtn.subscribe(function (event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            showLoader(true);
-            citationService.saveAsText().then(function () {
-                showLoader(false);
+        if (elements.saveAsTextBtn instanceof Button) {
+            elements.saveAsTextBtn.subscribe(function (event) {
+                if (event.type !== "button:click") {
+                    return;
+                }
+                showLoader(true);
+                citationService.saveAsText().then(function () {
+                    showLoader(false);
+                });
             });
-        });
+        }
 
         elements.locatorLabelsList.addEventListener("click", function (e) {
             const target = e.target;
@@ -1037,10 +1043,10 @@
     }
 
     /**
-     * @param {string} theme - The new theme of the SDK.
+     * @param {Theme} theme - The new theme of the SDK.
      */
     Asc.plugin.onThemeChanged = function (theme) {
-        console.warn("theme", theme);
+        // console.warn("theme", theme);
         window.Asc.plugin.onThemeChangedBase(theme);
         var rules =
             ".selectArrow > span { background-color: " +
@@ -1092,6 +1098,13 @@
         styleTheme.type = "text/css";
         styleTheme.innerHTML = rules;
         document.getElementsByTagName("head")[0].appendChild(styleTheme);
+
+        const themeType = theme.type || "light";
+
+        const body = document.body;
+        body.classList.remove("theme-dark");
+        body.classList.remove("theme-light");
+        body.classList.add("theme-" + themeType);
     };
 
     /**
