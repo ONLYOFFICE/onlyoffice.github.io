@@ -1,0 +1,548 @@
+// @ts-check
+
+/// <reference path="./types.js" />
+
+/**
+ * @constructor
+ * @param {string | HTMLInputElement} input
+ * @param {InputOptionsType} options
+ */
+function InputField(input, options) {
+    var self = this;
+    options = options || {};
+
+    if (typeof input === "string") {
+        var temp = document.getElementById(input);
+        if (temp instanceof HTMLInputElement) {
+            input = temp;
+        }
+    }
+    if (input instanceof HTMLInputElement) {
+        /** @type {HTMLInputElement} */
+        this.input = input;
+    } else {
+        throw new Error("Invalid input element");
+    }
+    /** @type {HTMLElement} */
+    this._container = document.createElement("div");
+
+    /** @type {InputOptionsType} */
+    this._options = {
+        type: options.type || input.type || "text",
+        placeholder: options.placeholder || input.placeholder || "",
+        value: options.value || input.value || "",
+        autofocus: options.autofocus || false,
+        disabled: options.disabled || false,
+        readonly: options.readonly || false,
+        required: options.required || false,
+        showCounter: options.showCounter || false,
+        showClear: options.showClear !== undefined ? options.showClear : true,
+        autocomplete: options.autocomplete || "off",
+    };
+
+    // Copy any additional properties
+    for (var key in options) {
+        if (!this._options.hasOwnProperty(key)) {
+            // @ts-ignore
+            this._options[key] = options[key];
+        }
+    }
+
+    this.isFocused = false;
+    this.isValid = true;
+    this._validationMessage = "";
+    /** @type {Function[]} */
+    this._subscribers = [];
+    /** @type {InputBoundHandlesType} */
+    this._boundHandles = {
+        focus: function () {
+            self._handleFocus();
+        },
+        blur: function () {
+            self._handleBlur();
+        },
+        input: function (e) {
+            self._handleInput(e);
+        },
+        keydown: function (e) {
+            self._handleKeydown(e);
+        },
+        clear: function () {
+            self.clear();
+        },
+        validate: function () {
+            self.validate();
+        },
+    };
+    /** @type {HTMLButtonElement | null} */
+    this._clearButton = null;
+    /** @type {HTMLDivElement | null} */
+    this._counter = null;
+    /** @type {HTMLSpanElement | null} */
+    this._counterCurrent = null;
+    /** @type {HTMLSpanElement | null} */
+    this._counterMax = null;
+    /** @type {HTMLDivElement} */
+    this._validationElement = document.createElement("div");
+
+    this._createDOM();
+    this._bindEvents();
+    this._updateState();
+
+    if (this._options.autofocus) {
+        setTimeout(
+            (function (self) {
+                return function () {
+                    self.focus();
+                };
+            })(this),
+            100
+        );
+    }
+}
+
+InputField.prototype._createDOM = function () {
+    var parent = this.input.parentNode;
+
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(this._container);
+    this._container.className += " input-field-container";
+
+    var inputField = document.createElement("div");
+    this._container.appendChild(inputField);
+    inputField.className += " input-field";
+    if (this._options.disabled) {
+        inputField.className += " input-field-disabled";
+    }
+
+    var inputFieldMain = document.createElement("div");
+    inputField.appendChild(inputFieldMain);
+    inputFieldMain.className += " input-field-main";
+
+    this.input.className += " input-field-element";
+    this.input.type = this._options.type || "text";
+    this.input.placeholder = this._options.placeholder || "";
+    this.input.value = String(this._options.value) || "";
+
+    if (this._options.disabled) {
+        this.input.disabled = true;
+    }
+    if (this._options.readonly) {
+        this.input.readOnly = true;
+    }
+    if (this._options.required) {
+        this.input.required = true;
+    }
+    if (this._options.maxLength) {
+        this.input.maxLength = this._options.maxLength;
+    }
+    if (this._options.pattern) {
+        this.input.pattern = this._options.pattern;
+    }
+    if (this._options.autocomplete) {
+        this.input.autocomplete = this._options.autocomplete;
+    }
+
+    if (this._options.showCounter) {
+        this._counter = document.createElement("div");
+        inputField.appendChild(this._counter);
+        this._counter.className += " input-field-counter";
+        this._counterCurrent = document.createElement("span");
+        this._counterCurrent.className += " input-field-counter-current";
+        this._counterCurrent.textContent = "0";
+        this._counter.appendChild(this._counterCurrent);
+        var span = document.createElement("span");
+        span.textContent = "/";
+        this._counter.appendChild(span);
+        this._counterMax = document.createElement("span");
+        this._counterMax.className += " input-field-counter-max";
+        this._counterMax.textContent = String(this._options.maxLength) || "∞";
+        this._counter.appendChild(this._counterMax);
+    }
+
+    inputField.appendChild(this._validationElement);
+    this._validationElement.className += " input-field-validation";
+    this._validationElement.style.display = "none";
+
+    if (this._options.showClear) {
+        this._clearButton = document.createElement("button");
+        inputField.appendChild(this._clearButton);
+        this._clearButton.className += " input-field-clear";
+        this._clearButton.style.display = "none";
+        this._clearButton.textContent = "×";
+    }
+
+    if (parent) {
+        parent.insertBefore(fragment, this.input);
+    }
+    inputFieldMain.appendChild(this.input);
+};
+
+InputField.prototype._bindEvents = function () {
+    this.input.addEventListener("focus", this._boundHandles.focus);
+    this.input.addEventListener("blur", this._boundHandles.blur);
+    this.input.addEventListener("input", this._boundHandles.input);
+    this.input.addEventListener("keydown", this._boundHandles.keydown);
+
+    if (this._clearButton) {
+        this._clearButton.addEventListener("click", this._boundHandles.clear);
+    }
+
+    this.input.addEventListener("change", this._boundHandles.validate);
+};
+
+InputField.prototype._handleFocus = function () {
+    this.isFocused = true;
+    this._container.className += " input-field-focused";
+    this._updateClearButton();
+};
+
+InputField.prototype._handleBlur = function () {
+    this.isFocused = false;
+
+    var classes = this._container.className.split(" ");
+    var newClasses = [];
+    for (var i = 0; i < classes.length; i++) {
+        if (classes[i] !== "input-field-focused") {
+            newClasses.push(classes[i]);
+        }
+    }
+    this._container.className = newClasses.join(" ");
+
+    this.validate();
+};
+
+/**
+ * @param {Event} e
+ */
+InputField.prototype._handleInput = function (e) {
+    this._updateClearButton();
+    this._updateCounter();
+    this._triggerInputEvent(e);
+};
+
+/**
+ * @param {KeyboardEvent} e
+ */
+InputField.prototype._handleKeydown = function (e) {
+    var key = e.key || e.keyCode;
+
+    if ((key === "Escape" || key === 27) && this._options.showClear) {
+        this.clear();
+        e.preventDefault();
+    }
+
+    if (key === "Enter" || key === 13) {
+        this._triggerSubmit();
+    }
+};
+
+InputField.prototype._updateClearButton = function () {
+    if (this._clearButton) {
+        var hasValue = this.input.value.length > 0;
+        this._clearButton.style.display = hasValue ? "block" : "none";
+    }
+};
+
+InputField.prototype._updateCounter = function () {
+    if (this._counter && this._options.maxLength) {
+        var current = this.input.value.length;
+        var max = this._options.maxLength;
+
+        if (this._counterCurrent) {
+            this._counterCurrent.textContent = String(current);
+        }
+        if (this._counterMax) {
+            this._counterMax.textContent = String(max);
+        }
+
+        // Change color when near max
+        if (current > max * 0.9) {
+            var counterClasses = this._counter.className.split(" ");
+            if (counterClasses.indexOf("input-field-counter-warning") === -1) {
+                this._counter.className += " input-field-counter-warning";
+            }
+        } else {
+            this._counter.className = this._counter.className
+                .split(" ")
+                .filter(function (cls) {
+                    return cls !== "input-field-counter-warning";
+                })
+                .join(" ");
+        }
+
+        if (current > max) {
+            var counterClasses = this._counter.className.split(" ");
+            if (counterClasses.indexOf("input-field-counter-error") === -1) {
+                this._counter.className += " input-field-counter-error";
+            }
+        } else {
+            this._counter.className = this._counter.className
+                .split(" ")
+                .filter(function (cls) {
+                    return cls !== "input-field-counter-error";
+                })
+                .join(" ");
+        }
+    }
+};
+
+InputField.prototype.validate = function () {
+    if (!this._options.validation) {
+        this.isValid = true;
+        return true;
+    }
+
+    var value = this.input.value;
+    var isValid = true;
+    var message = "";
+
+    // Basic validation HTML
+    if (this._options.required && !value.trim()) {
+        isValid = false;
+        message = "This field is required";
+    } else if (
+        this._options.minLength &&
+        value.length < this._options.minLength
+    ) {
+        isValid = false;
+        message =
+            "Minimum length is " + this._options.minLength + " characters";
+    } else if (
+        this._options.maxLength &&
+        value.length > this._options.maxLength
+    ) {
+        isValid = false;
+        message =
+            "Maximum length is " + this._options.maxLength + " characters";
+    } else if (
+        this._options.pattern &&
+        !new RegExp(this._options.pattern).test(value)
+    ) {
+        isValid = false;
+        message = "Invalid format";
+    }
+
+    // Custom validation
+    if (isValid && typeof this._options.validation === "function") {
+        var customValidation = this._options.validation(value);
+        if (customValidation && !customValidation.isValid) {
+            isValid = false;
+            message = customValidation.message || "Invalid value";
+        }
+    }
+
+    this.isValid = isValid;
+    this._validationMessage = message;
+    this.updateValidationState();
+
+    return isValid;
+};
+
+InputField.prototype.updateValidationState = function () {
+    if (this._validationElement) {
+        if (!this.isValid) {
+            this._validationElement.textContent = this._validationMessage;
+            this._validationElement.style.display = "block";
+
+            var containerClasses = this._container.className.split(" ");
+            if (containerClasses.indexOf("input-field-invalid") === -1) {
+                this._container.className += " input-field-invalid";
+            }
+
+            this._container.className = this._container.className
+                .split(" ")
+                .filter(function (cls) {
+                    return cls !== "input-field-valid";
+                })
+                .join(" ");
+        } else if (this.input.value.length > 0) {
+            this._validationElement.style.display = "none";
+
+            var containerClasses = this._container.className.split(" ");
+            if (containerClasses.indexOf("input-field-valid") === -1) {
+                this._container.className += " input-field-valid";
+            }
+
+            this._container.className = this._container.className
+                .split(" ")
+                .filter(function (cls) {
+                    return cls !== "input-field-invalid";
+                })
+                .join(" ");
+        } else {
+            this._validationElement.style.display = "none";
+            this._container.className = this._container.className
+                .split(" ")
+                .filter(function (cls) {
+                    return (
+                        cls !== "input-field-valid" &&
+                        cls !== "input-field-invalid"
+                    );
+                })
+                .join(" ");
+        }
+    }
+};
+
+InputField.prototype._updateState = function () {
+    this._updateClearButton();
+    this._updateCounter();
+    this.validate();
+};
+
+// Public API
+InputField.prototype.getValue = function () {
+    return this.input.value;
+};
+
+/**
+ * @param {string} value
+ */
+InputField.prototype.setValue = function (value) {
+    this.input.value = value;
+    this._updateState();
+    this._triggerChange();
+};
+
+/**
+ * @param {boolean} [bFocus]
+ */
+InputField.prototype.clear = function (bFocus) {
+    bFocus = bFocus !== undefined ? bFocus : true;
+    this.setValue("");
+    if (bFocus) {
+        this.input.focus();
+    }
+};
+
+InputField.prototype.focus = function () {
+    this.input.focus();
+};
+
+InputField.prototype.blur = function () {
+    this.input.blur();
+};
+
+InputField.prototype.enable = function () {
+    this.input.disabled = false;
+    this._options.disabled = false;
+
+    this._container.className = this._container.className
+        .split(" ")
+        .filter(function (cls) {
+            return cls !== "input-field-disabled";
+        })
+        .join(" ");
+};
+
+InputField.prototype.disable = function () {
+    this.input.disabled = true;
+    this._options.disabled = true;
+
+    var containerClasses = this._container.className.split(" ");
+    if (containerClasses.indexOf("input-field-disabled") === -1) {
+        this._container.className += " input-field-disabled";
+    }
+};
+
+/**
+ * @param {Function} callback
+ * @returns {Object}
+ */
+InputField.prototype.subscribe = function (callback) {
+    var self = this;
+    this._subscribers.push(callback);
+
+    return {
+        unsubscribe: function () {
+            self._subscribers = self._subscribers.filter(function (cb) {
+                return cb !== callback;
+            });
+        },
+    };
+};
+
+/**
+ * @param {Event} e
+ */
+InputField.prototype._triggerInputEvent = function (e) {
+    var detail = {
+        value: this.input.value,
+        originalEvent: e,
+    };
+
+    this._subscribers.forEach(function (cb) {
+        cb({
+            type: "inputfield:input",
+            detail: detail,
+        });
+    });
+};
+
+InputField.prototype._triggerChange = function () {
+    var detail = {
+        value: this.input.value,
+        isValid: this.isValid,
+    };
+
+    this._subscribers.forEach(function (cb) {
+        cb({
+            type: "inputfield:change",
+            detail: detail,
+        });
+    });
+};
+
+InputField.prototype._triggerSubmit = function () {
+    var detail = {
+        value: this.input.value,
+        isValid: this.isValid,
+    };
+
+    this._subscribers.forEach(function (cb) {
+        cb({
+            type: "inputfield:submit",
+            detail: detail,
+        });
+    });
+};
+
+InputField.prototype.destroy = function () {
+    this._subscribers = [];
+
+    if (this._boundHandles) {
+        try {
+            this.input.removeEventListener("focus", this._boundHandles.focus);
+            this.input.removeEventListener("blur", this._boundHandles.blur);
+            this.input.removeEventListener("input", this._boundHandles.input);
+            this.input.removeEventListener(
+                "keydown",
+                this._boundHandles.keydown
+            );
+
+            if (this._clearButton) {
+                this._clearButton.removeEventListener(
+                    "click",
+                    this._boundHandles.clear
+                );
+            }
+
+            this.input.removeEventListener(
+                "change",
+                this._boundHandles.validate
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    this._container.innerHTML = "";
+
+    this._container.className = this._container.className
+        .split(" ")
+        .filter(function (cls) {
+            return cls !== "input-field-container";
+        })
+        .join(" ");
+};
