@@ -47,6 +47,14 @@
  * @property {Function} onscroll
  */
 
+/**
+ * @typedef {Object} Selected
+ * @property {Object<string|number, SearchResultItem>} items
+ * @property {Object<string|number, HTMLElement>} html
+ * @property {Object<string|number, HTMLInputElement>} checks
+ * @property {function(): number} count
+ */
+
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "display-none";
@@ -70,6 +78,7 @@
     //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
     //     какая цитата сверху и снизу от текущего курсора)
 
+    /** @type {Selected} */
     var selected = {
         items: {},
         html: {},
@@ -254,6 +263,12 @@
         if (!useDesktopApp) {
             throw new Error("useDesktopApp not found");
         }
+        const connectToLocalZotero = document.getElementById(
+            "connectToLocalZotero"
+        );
+        if (!connectToLocalZotero) {
+            throw new Error("connectToLocalZotero not found");
+        }
         const cslFileInput = document.getElementById("cslFileInput");
         if (!cslFileInput) {
             throw new Error("cslFileInput not found");
@@ -306,6 +321,7 @@
 
             checkOmitAuthor: checkOmitAuthor,
             useDesktopApp: useDesktopApp,
+            connectToLocalZotero: connectToLocalZotero,
             cslFileInput: cslFileInput,
         };
     }
@@ -456,40 +472,44 @@
     function loadStyles() {
         return cslStylesManager
             .getStylesInfo()
-            .then(function (stylesInfo) {
-                var openOtherStyleList = function (
-                    /** @type {HTMLElement} */ list
+            .then(
+                /** @param {Array<StyleInfo>} stylesInfo*/ function (
+                    stylesInfo
                 ) {
-                    return function (/** @type {MouseEvent} */ ev) {
-                        elements.styleSelectListOther.style.width =
-                            elements.styleWrapper.clientWidth - 2 + "px";
-                        ev.stopPropagation();
-                        openList(list);
+                    var openOtherStyleList = function (
+                        /** @type {HTMLElement} */ list
+                    ) {
+                        return function (/** @type {MouseEvent} */ ev) {
+                            elements.styleSelectListOther.style.width =
+                                elements.styleWrapper.clientWidth - 2 + "px";
+                            ev.stopPropagation();
+                            openList(list);
+                        };
                     };
-                };
 
-                addStylesToList(stylesInfo);
+                    addStylesToList(stylesInfo);
 
-                const el = document.createElement("hr");
-                elements.styleSelectList.appendChild(el);
+                    const el = document.createElement("hr");
+                    elements.styleSelectList.appendChild(el);
 
-                if (elements.styleSelectListOther.children.length > 0) {
-                    var other = document.createElement("span");
-                    other.textContent = "More Styles...";
-                    elements.styleSelectList.appendChild(other);
-                    other.onclick = openOtherStyleList(
-                        elements.styleSelectListOther
-                    );
+                    if (elements.styleSelectListOther.children.length > 0) {
+                        var other = document.createElement("span");
+                        other.textContent = "More Styles...";
+                        elements.styleSelectList.appendChild(other);
+                        other.onclick = openOtherStyleList(
+                            elements.styleSelectListOther
+                        );
+                    }
+
+                    var custom = document.createElement("span");
+                    custom.setAttribute("class", "select-file");
+                    var label = document.createElement("label");
+                    label.setAttribute("for", "cslFileInput");
+                    label.textContent = "Add custom style...";
+                    custom.appendChild(label);
+                    elements.styleSelectList.appendChild(custom);
                 }
-
-                var custom = document.createElement("span");
-                custom.setAttribute("class", "select-file");
-                var label = document.createElement("label");
-                label.setAttribute("for", "cslFileInput");
-                label.textContent = "Add custom style...";
-                custom.appendChild(label);
-                elements.styleSelectList.appendChild(custom);
-            })
+            )
             .catch(function (err) {
                 console.error(err);
             });
@@ -617,10 +637,15 @@
     }
 
     /**
-     * @param {Array<Object>} stylesInfo
+     * @param {Array<StyleInfo>} stylesInfo
      */
     function addStylesToList(stylesInfo) {
-        var lastStyle = cslStylesManager.getLastUsedStyleId() || "ieee";
+        var lastStyle = cslStylesManager.getLastUsedStyleIdOrDefault();
+        const styleSelect = elements.styleSelect;
+        if (styleSelect instanceof HTMLInputElement === false) {
+            console.error("styleSelect is not an input element");
+            return;
+        }
 
         /**
          * @param {HTMLElement} list - the list of styles where the element is added.
@@ -628,7 +653,7 @@
          */
         var onStyleSelectOther = function (list, other) {
             return function (/** @type {MouseEvent} */ ev) {
-                var tmpEl = list.removeChild(
+                let tmpEl = list.removeChild(
                     list.children[list.children.length - 3]
                 );
                 var newEl = document.createElement("span");
@@ -642,6 +667,7 @@
                     elements.styleSelectList,
                     elements.styleSelectListOther
                 );
+
                 tmpEl = other.removeChild(ev.target);
                 newEl = document.createElement("span");
                 newEl.setAttribute(
@@ -652,11 +678,11 @@
                 list.insertBefore(newEl, list.firstElementChild);
                 newEl.onclick = onClickListElement(
                     elements.styleSelectList,
-                    elements.styleSelect
+                    styleSelect
                 );
                 var event = new Event("click");
                 newEl.dispatchEvent(event);
-                openList(null);
+                closeList();
             };
         };
 
@@ -676,7 +702,7 @@
                 else elements.styleSelectList.appendChild(el);
                 el.onclick = onClickListElement(
                     elements.styleSelectList,
-                    elements.styleSelect
+                    styleSelect
                 );
             } else {
                 elements.styleSelectListOther.appendChild(el);
@@ -687,20 +713,22 @@
             }
             if (stylesInfo[i].name == lastStyle) {
                 el.setAttribute("selected", "");
-                selectInput(
-                    elements.styleSelect,
-                    el,
-                    elements.styleSelectList,
-                    false
-                );
+                selectInput(styleSelect, el, elements.styleSelectList, false);
             }
         }
     }
 
     function addEventListeners() {
         elements.cslFileInput.onchange = function (e) {
-            var file = e.target.files[0];
-            if (!file) return;
+            if (!(e.target instanceof HTMLInputElement)) return;
+            /** @type {HTMLInputElement} */
+            const target = e.target;
+            if (!target.files) return;
+            var file = target.files[0];
+            if (!file) {
+                console.error("No file selected");
+                return;
+            }
             //showLoader(true);
 
             cslStylesManager
@@ -717,7 +745,7 @@
                 });
         };
 
-        elements.useDesktopApp.onclick = function () {
+        elements.connectToLocalZotero.onclick = function () {
             ZoteroApiChecker.checkStatus(sdk).then(function (
                 /** @type {AvailableApis} */ apis
             ) {
@@ -831,14 +859,17 @@
                 });
         }
         elements.searchField.onkeypress = function (e) {
+            if (!(e.target instanceof HTMLInputElement)) return;
             if (e.keyCode == 13) searchFor(e.target.value);
         };
         elements.searchField.onblur = function (e) {
             setTimeout(function () {
+                if (!(e.target instanceof HTMLInputElement)) return;
                 searchFor(e.target.value);
             }, 500);
         };
         elements.searchField.onkeyup = function (e) {
+            if (!(e.target instanceof HTMLInputElement)) return;
             switchClass(
                 elements.searchClear,
                 displayNoneClass,
@@ -846,6 +877,11 @@
             );
         };
         elements.searchClear.onclick = function (e) {
+            if (
+                !(e.target instanceof HTMLElement) ||
+                !(elements.searchField instanceof HTMLInputElement)
+            )
+                return;
             if (e.target.classList.contains(displayNoneClass)) return true;
             switchClass(elements.searchClear, displayNoneClass, true);
             elements.searchField.value = "";
@@ -865,9 +901,11 @@
         };
 
         elements.saveConfigBtn.onclick = function (e) {
-            var apikey = elements.apiKeyConfigField.value.trim();
-            if (apikey) {
-                sdk.setApiKey(apikey)
+            if (!(elements.apiKeyConfigField instanceof HTMLInputElement))
+                return;
+            const apiKey = elements.apiKeyConfigField.value.trim();
+            if (apiKey) {
+                sdk.setApiKey(apiKey)
                     .then(function () {
                         ZoteroApiChecker.successfullyLoggedInUsingApiKey();
                         switchAuthState("main");
@@ -947,13 +985,17 @@
                     const prefix = getPrefix();
                     const suffix = getSuffix();
                     const locatorInfo = getLocator();
+                    let checked = false;
+                    if (elements.checkOmitAuthor instanceof HTMLInputElement) {
+                        checked = elements.checkOmitAuthor.checked;
+                    }
 
                     return citationService.insertSelectedCitations(
                         selected.items,
                         prefix,
                         suffix,
                         locatorInfo,
-                        elements.checkOmitAuthor.checked
+                        checked
                     );
                 })
                 .then(function (keys) {
@@ -990,6 +1032,7 @@
                 return;
             }
             const id = option.getAttribute("data-value");
+            if (id === null) return;
             localStorage.setItem("selectedLocator", id);
         });
     }
@@ -1001,6 +1044,7 @@
          */
         elements.styleSelect.oninput = function (e, filter) {
             var input = elements.styleSelect;
+            if (!(input instanceof HTMLInputElement)) return;
             filter = filter !== undefined ? filter : input.value.toLowerCase();
             var list = elements.styleSelectList.classList.contains(
                 displayNoneClass
@@ -1009,13 +1053,17 @@
                 : elements.styleSelectList;
 
             for (var i = 0; i < list.children.length; i++) {
-                var text =
-                    list.children[i].textContent || list.children[i].innerText;
+                const child = list.children[i];
+                if (child instanceof HTMLElement === false) {
+                    continue;
+                }
+                var text = child.textContent || child.innerText;
                 var hide = true;
                 if (!filter || text.toLowerCase().indexOf(filter) > -1) {
                     hide = false;
                 }
-                switchClass(list.children[i], displayNoneClass, hide);
+
+                switchClass(child, displayNoneClass, hide);
             }
         };
 
@@ -1090,15 +1138,20 @@
                 elements.styleWrapper.clientWidth - 2 + "px";
         };
 
-        elements.footNotes.addEventListener("change", function (event) {
-            if (event.target.checked) {
-                cslStylesManager.saveLastUsedNotesStyle(event.target.value);
-            }
-        });
-        elements.endNotes.addEventListener("change", function (event) {
-            if (event.target.checked) {
-                cslStylesManager.saveLastUsedNotesStyle(event.target.value);
-            }
+        [elements.footNotes, elements.endNotes].forEach(function (el) {
+            el.addEventListener("change", function (event) {
+                if (
+                    event.target instanceof HTMLInputElement &&
+                    event.target.checked
+                ) {
+                    const value = event.target.value;
+                    if (value === "endnotes" || value === "footnotes") {
+                        cslStylesManager.saveLastUsedNotesStyle(value);
+                    } else {
+                        console.error("Unknown notes style: " + value);
+                    }
+                }
+            });
         });
     }
 
@@ -1229,10 +1282,11 @@
                 var list = holder.getElementsByClassName("selectList")[k];
                 if (list.children.length > 0) {
                     for (var j = 0; j < list.children.length; j++) {
-                        list.children[j].onclick = onClickListElement(
-                            list,
-                            input
-                        );
+                        const child = list.children[j];
+                        if (child instanceof HTMLElement === false) {
+                            continue;
+                        }
+                        child.onclick = onClickListElement(list, input);
                     }
                     // selectInput(input, list.children[0], list, false);
                 }
@@ -1242,7 +1296,7 @@
                  * @param {HTMLElement} input
                  * @returns {function}
                  */
-                var f = function (list, input) {
+                var fOpen = function (list, input) {
                     return function (/** @type {MouseEvent} */ ev) {
                         ev.stopPropagation();
                         if (
@@ -1259,36 +1313,34 @@
                             input.select();
                         }
                         openList(list);
+
                         return true;
                     };
                 };
 
                 if (k !== 1) {
-                    input.onclick = f(list, input);
-                    arrow.onclick = f(list, input);
+                    input.onclick = fOpen(list, input);
+                    arrow.onclick = fOpen(list, input);
                 }
                 selectLists.push(list);
             }
         }
-
-        window.addEventListener("click", function () {
-            openList(null);
-        });
     }
 
     /**
-     * @param {HTMLElement|null} el
+     * @param {HTMLElement} el
      */
     function openList(el) {
-        for (var i = 0; i < selectLists.length; i++) {
-            var close = true;
-            if (selectLists[i] === el) {
-                close = false;
-            }
-            if (close && selectLists[i] === elements.styleSelectList)
-                elements.styleSelect.oninput(null, "");
+        switchClass(el, displayNoneClass, false);
+        window.addEventListener("click", closeList);
+    }
 
-            switchClass(selectLists[i], displayNoneClass, close);
+    function closeList() {
+        window.removeEventListener("click", closeList);
+        for (var i = 0; i < selectLists.length; i++) {
+            if (selectLists[i] === elements.styleSelectList)
+                elements.styleSelect.oninput(null, "");
+            switchClass(selectLists[i], displayNoneClass, true);
         }
     }
 
@@ -1311,7 +1363,7 @@
 
     /**
      * @param {Element} list
-     * @param {Element} input
+     * @param {HTMLInputElement} input
      */
     function onClickListElement(list, input) {
         return function (/** @type {MouseEvent} */ ev) {
@@ -1322,9 +1374,14 @@
             }
             var sel = ev.target.getAttribute("data-value");
             for (var i = 0; i < list.children.length; i++) {
+                const temp = list.children[i];
+                if (temp instanceof HTMLElement === false) continue;
+                /** @type {HTMLElement} */
+                const child = temp;
                 if (list.children[i].getAttribute("data-value") == sel) {
                     list.children[i].setAttribute("selected", "");
-                    selectInput(input, list.children[i], list, true);
+
+                    selectInput(input, child, list, true);
                 } else {
                     if (list.children[i].hasAttribute("selected")) {
                         list.children[i].attributes.removeNamedItem("selected");
@@ -1359,16 +1416,18 @@
 
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
+            if (el instanceof HTMLElement === false) continue;
 
-            if (el.attributes["placeholder"])
-                el.attributes["placeholder"].value = translate(
-                    el.attributes["placeholder"].value
-                );
-            if (el.attributes["title"])
-                el.attributes["title"].value = translate(
-                    el.attributes["title"].value
-                );
-            if (el.innerText) el.innerText = translate(el.innerText);
+            ["placeholder", "title"].forEach((attr) => {
+                if (el.hasAttribute(attr)) {
+                    el.setAttribute(
+                        attr,
+                        translate(el.getAttribute(attr) || "")
+                    );
+                }
+            });
+
+            if (el.innerText) el.innerText = translate(el.innerText.trim());
         }
     }
 
@@ -1770,7 +1829,8 @@
 
         var source = document.createElement("div");
         if (item.publisher || item["publisher-place"]) {
-            source.textContent = item.publisher || item["publisher-place"];
+            source.textContent =
+                item.publisher || item["publisher-place"] || "";
         }
         if (item.issued && item.issued["date-parts"]) {
             var date = item.issued["date-parts"][0];
@@ -1791,7 +1851,7 @@
 
         /**
          * @param {HTMLInputElement} input
-         * @param {unknown} item
+         * @param {SearchResultItem} item
          * @returns
          */
         function selectItem(input, item) {
@@ -1817,6 +1877,7 @@
      * @param {HTMLInputElement} input
      */
     function addSelected(item, input) {
+        /** @type {HTMLElement} */
         var el = buildSelectedElement(item);
         selected.items[item.id] = item;
         selected.html[item.id] = el;
@@ -1827,6 +1888,7 @@
         checkSelected();
     }
 
+    /** @param {string|number} id */
     function removeSelected(id) {
         var el = selected.html[id];
         delete selected.items[id];
@@ -1843,6 +1905,7 @@
 
     /**
      * @param {SearchResultItem} item
+     * @returns {HTMLElement}
      */
     function buildSelectedElement(item) {
         var root = document.createElement("div");

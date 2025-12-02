@@ -15,23 +15,23 @@
  * @param {ZoteroSdk} sdk
  */
 function CitationService(localesManager, cslStylesManager, sdk) {
-    this.bibPlaceholder = "Please insert some citation into the document.";
-    this.citPrefixNew = "ZOTERO_ITEM";
-    this.citSuffixNew = "CSL_CITATION";
-    this.citPrefix = "ZOTERO_CITATION";
-    this.bibPrefixNew = "ZOTERO_BIBL";
-    this.bibSuffixNew = "CSL_BIBLIOGRAPHY";
-    this.bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-    this.sdk = sdk;
-    this.localesManager = localesManager;
-    this.cslStylesManager = cslStylesManager;
+    this._bibPlaceholder = "Please insert some citation into the document.";
+    this._citPrefixNew = "ZOTERO_ITEM";
+    this._citSuffixNew = "CSL_CITATION";
+    this._citPrefix = "ZOTERO_CITATION";
+    this._bibPrefixNew = "ZOTERO_BIBL";
+    this._bibSuffixNew = "CSL_BIBLIOGRAPHY";
+    this._bibPrefix = "ZOTERO_BIBLIOGRAPHY";
+    this._sdk = sdk;
+    this._localesManager = localesManager;
+    this._cslStylesManager = cslStylesManager;
     /** @type {CSL.Engine} */
-    this.formatter;
+    this._formatter;
     this.citationDocService = new CitationDocService(
-        this.citPrefixNew,
-        this.citSuffixNew,
-        this.bibPrefixNew,
-        "CSL_BIBLIOGRAPHY"
+        this._citPrefixNew,
+        this._citSuffixNew,
+        this._bibPrefixNew,
+        this._bibSuffixNew
     );
     /** @type {"footnotes" | "endnotes"} */
     this._notesStyle;
@@ -40,6 +40,7 @@ function CitationService(localesManager, cslStylesManager, sdk) {
 }
 
 CitationService.prototype = {
+    constructor: CitationService,
     /**
      * @param {SearchResultItem} item
      * @returns
@@ -91,7 +92,7 @@ CitationService.prototype = {
                     CSLCitationStorage.forEach(function (item, id) {
                         arrIds.push(id);
                     });
-                    self.formatter.updateItems(arrIds);
+                    self._formatter.updateItems(arrIds);
                 }
             })
             .then(function () {
@@ -101,7 +102,7 @@ CitationService.prototype = {
 
                 // TODO может ещё очистить поиск (подумать над этим)
                 tempElement.innerHTML =
-                    self.formatter.makeCitationCluster(keysL);
+                    self._formatter.makeCitationCluster(keysL);
                 cslCitation.addPlainCitation(tempElement.innerText);
                 let notesStyle = null;
                 if ("note" === self._styleFormat) {
@@ -126,7 +127,7 @@ CitationService.prototype = {
 
     /**
      * @param {Array<any>} items
-     * @returns {Promise<CslJsonObjectItem[]>}
+     * @returns {Promise<Array<SearchResultItem>>}
      */
     _getSelectedInJsonFormat: function (items) {
         var arrUsrItems = [];
@@ -146,17 +147,15 @@ CitationService.prototype = {
             }
         }
 
+        /** @type {Array<Promise<SearchResultItem[]>>} */
         var promises = [];
         if (arrUsrItems.length) {
             promises.push(
-                this.sdk
+                this._sdk
                     .getItems(null, arrUsrItems, "json")
                     .then(function (res) {
                         var items = res.items || [];
                         return items;
-                    })
-                    .catch(function (err) {
-                        console.error(err);
                     })
             );
         }
@@ -164,7 +163,7 @@ CitationService.prototype = {
         for (var groupID in arrGroupsItems) {
             if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
                 promises.push(
-                    this.sdk
+                    this._sdk
                         .getGroupItems(
                             null,
                             groupID,
@@ -175,23 +174,14 @@ CitationService.prototype = {
                             var items = res.items || [];
                             return items;
                         })
-                        .catch(function (err) {
-                            console.error(err);
-                        })
                 );
             }
         }
 
         return Promise.all(promises).then(function (res) {
-            /** @type {CslJsonObjectItem[]} */
+            /** @type {Array<SearchResultItem>} */
             var items = [];
             res.forEach(function (resItems) {
-                if (
-                    !Array.isArray(resItems) &&
-                    Object.hasOwnProperty.call(resItems, "items")
-                ) {
-                    resItems = resItems.items;
-                }
                 items = items.concat(resItems);
             });
             return items;
@@ -287,7 +277,7 @@ CitationService.prototype = {
                 try {
                     var bibItems = new Array(CSLCitationStorage.size);
                     /** @type {false | any} */
-                    var bibObject = self.formatter.makeBibliography();
+                    var bibObject = self._formatter.makeBibliography();
                     // Sort bibliography items
                     for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
                         var citationId = bibObject[0].entry_ids[i][0];
@@ -319,7 +309,7 @@ CitationService.prototype = {
                 } catch (e) {
                     if (
                         false ===
-                        self.cslStylesManager.isLastUsedStyleContainBibliography()
+                        self._cslStylesManager.isLastUsedStyleContainBibliography()
                     ) {
                         // style does not describe the bibliography
                         tempElement.textContent = "";
@@ -345,11 +335,11 @@ CitationService.prototype = {
                     var cslCitation;
                     if (
                         bUpdateAll &&
-                        (field.Value.indexOf(self.citPrefixNew) !== -1 ||
-                            field.Value.indexOf(self.citPrefix) !== -1)
+                        (field.Value.indexOf(self._citPrefixNew) !== -1 ||
+                            field.Value.indexOf(self._citPrefix) !== -1)
                     ) {
                         var citationID = ""; // old format
-                        if (field.Value.indexOf(self.citPrefix) === -1) {
+                        if (field.Value.indexOf(self._citPrefix) === -1) {
                             citationID = citationObject.citationID;
                         }
 
@@ -357,20 +347,20 @@ CitationService.prototype = {
                         cslCitation.fillFromObject(citationObject);
                         keysL = cslCitation.getInfoForCitationCluster();
                         tempElement.innerHTML =
-                            self.formatter.makeCitationCluster(keysL);
+                            self._formatter.makeCitationCluster(keysL);
                         field["Content"] = tempElement.innerText;
                         cslCitation.addPlainCitation(field["Content"]);
                         if (cslCitation) {
                             field["Value"] =
-                                self.citPrefixNew +
+                                self._citPrefixNew +
                                 " " +
-                                self.citSuffixNew +
+                                self._citSuffixNew +
                                 JSON.stringify(cslCitation.toJSON());
                         }
                         updatedFields.push(field);
                     } else if (
-                        field.Value.indexOf(self.bibPrefix) !== -1 ||
-                        field.Value.indexOf(self.bibPrefixNew) !== -1
+                        field.Value.indexOf(self._bibPrefix) !== -1 ||
+                        field.Value.indexOf(self._bibPrefixNew) !== -1
                     ) {
                         bibField = field;
                         bibField["Content"] = bibliography;
@@ -386,7 +376,7 @@ CitationService.prototype = {
                     updatedFields.push(bibField);
                 } else if (bPastBib) {
                     if (
-                        self.cslStylesManager.isLastUsedStyleContainBibliography()
+                        self._cslStylesManager.isLastUsedStyleContainBibliography()
                     ) {
                         return self.citationDocService
                             .addBibliography(bibliography, bibFieldValue)
@@ -450,11 +440,11 @@ CitationService.prototype = {
                         }
 
                         if (
-                            field.Value.indexOf(self.citPrefix) !== -1 ||
-                            field.Value.indexOf(self.citPrefixNew) !== -1
+                            field.Value.indexOf(self._citPrefix) !== -1 ||
+                            field.Value.indexOf(self._citPrefixNew) !== -1
                         ) {
                             var citationID = ""; // old format
-                            if (field.Value.indexOf(self.citPrefix) === -1) {
+                            if (field.Value.indexOf(self._citPrefix) === -1) {
                                 citationID = citationObject.citationID;
                             }
                             var cslCitation = new CSLCitation(
@@ -469,8 +459,8 @@ CitationService.prototype = {
                                     CSLCitationStorage.set(item.id, item);
                                 });
                         } else if (
-                            field.Value.indexOf(self.bibPrefix) !== -1 ||
-                            field.Value.indexOf(self.bibPrefixNew) !== -1
+                            field.Value.indexOf(self._bibPrefix) !== -1 ||
+                            field.Value.indexOf(self._bibPrefixNew) !== -1
                         ) {
                             accumulator = field;
                             if (
@@ -489,7 +479,7 @@ CitationService.prototype = {
                     } else if (bUpdateFormatter && bibField && bUpdateAll) {
                         // no need to find bib field again
                         bUpdateFormatter = false;
-                        bibField["Content"] = translate(self.bibPlaceholder);
+                        bibField["Content"] = translate(self._bibPlaceholder);
                         return self.citationDocService
                             .updateAddinFields([bibField])
                             .then(function () {
@@ -498,11 +488,11 @@ CitationService.prototype = {
                     }
                 } else if (bUpdateFormatter && bPastBib) {
                     if (
-                        self.cslStylesManager.isLastUsedStyleContainBibliography()
+                        self._cslStylesManager.isLastUsedStyleContainBibliography()
                     ) {
                         return self.citationDocService
                             .addBibliography(
-                                translate(self.bibPlaceholder),
+                                translate(self._bibPlaceholder),
                                 bibFieldValue
                             )
                             .then(function () {
@@ -533,14 +523,14 @@ CitationService.prototype = {
             arrIds.push(id);
         });
         // @ts-ignore
-        this.formatter = new CSL.Engine(
+        this._formatter = new CSL.Engine(
             {
                 /** @param {string} id */
                 retrieveLocale: function (id) {
-                    if (self.localesManager.getLocale(id)) {
-                        return self.localesManager.getLocale(id);
+                    if (self._localesManager.getLocale(id)) {
+                        return self._localesManager.getLocale(id);
                     }
-                    return self.localesManager.getLocale();
+                    return self._localesManager.getLocale();
                 },
                 /** @param {string} id */
                 retrieveItem: function (id) {
@@ -550,14 +540,14 @@ CitationService.prototype = {
                     return item.toFlatJSON(index);
                 },
             },
-            this.cslStylesManager.cached(
-                this.cslStylesManager.getLastUsedStyleId()
+            this._cslStylesManager.cached(
+                this._cslStylesManager.getLastUsedStyleIdOrDefault()
             ),
-            this.localesManager.getLastUsedLanguage(),
+            this._localesManager.getLastUsedLanguage(),
             true
         );
         if (arrIds.length) {
-            this.formatter.updateItems(arrIds);
+            this._formatter.updateItems(arrIds);
         }
 
         return;

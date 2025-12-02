@@ -107,6 +107,17 @@ CslStylesManager.prototype.getLastUsedStyleId = function () {
 };
 
 /**
+ * @returns {string} - style id
+ */
+CslStylesManager.prototype.getLastUsedStyleIdOrDefault = function () {
+    let lastUsedStyle = localStorage.getItem(this._lastStyleKey);
+    if (lastUsedStyle) {
+        return lastUsedStyle;
+    }
+    return "ieee";
+};
+
+/**
  * @param {string} styleName
  * @returns {Promise<string | null>} - csl file content
  */

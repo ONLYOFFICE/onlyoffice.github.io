@@ -24,7 +24,7 @@
     "Insert Citation": "Insertar Cita",
     "Cancel select": "Cancelar seleccionar",
     "Refresh": "Actualizar",
-    "Save as text": "Guardar como texto",
+    "Unlink citations": "Desvincular citas",
     "Please insert some citation into the document.": "Por favor, inserte alguna cita en el documento",
     "Omit Author": "Omitir Autor",
     "Connection to Zotero failed": "Error en la conexión con Zotero",
@@ -32,7 +32,7 @@
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Error en la conexión a Zotero. Habilite las conexiones externas en Zotero: Editar → Ajustes → Avanzadas → Marque \"Permitir que otras aplicaciones de este se comuniquen con Zotero\"",
     "Failed to apply this style": "Fallo al aplicar este estilo",
     "Failed to upload file": "Fallo al subir el archivo",
-    "Work with local Zotero": "Trabajar con Zotero local",
+    "Connect to Local Zotero": "Conectar a Zotero local",
     "The current bibliographic style does not describe the bibliography": "El estilo bibliográfico actual no describe la bibliografía",
     "Failed to insert citation": "Fallo al insertar la cita",
     "Failed to insert bibliography": "Fallo al insertar la bibliografía",
@@ -40,5 +40,11 @@
     "Search in:": "Buscar en:",
     "Everywhere": "Todo",
     "My Library": "Mi biblioteca",
-    "Group Libraries": "Bibliotecas de grupos"
+    "Group Libraries": "Bibliotecas de grupos",
+    "This plugin help you search references by author, title or year in your own library.": "Este plugin te ayudará a buscar referencias por autor, título o año en tu propia biblioteca.",
+    "Click": "Clickear",
+    "to replace all active Zotero citations and Bibliography with plain text.": "para reemplazar todas las citas Zotero activas y la bibliografía con texto plano.",
+    "After conversion, citations can no longer be updated.": "Después de la conversión, las citas no pueden ser actualizadas.",
+    "to access your local Zotero library.": "para acceder a tu biblioteca Zotero local.",
+    "No API key required.": "No se necesita una clave de API."
 }
