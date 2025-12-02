@@ -128,6 +128,10 @@ input[type="text"] {
     flex: 1;
 }
 
+#configState .custom-button-container {
+    width: 100%;
+}
+
 #errorWrapper {
     background-color: #ffffff;
     padding: 10px 12px;
@@ -642,6 +646,6 @@ input[type="text"] {
 }
 /* end loader */
 
-.display-none {
+.hidden {
     display: none;
 }

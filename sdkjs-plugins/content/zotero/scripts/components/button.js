@@ -207,7 +207,7 @@ Button.prototype._handleKeydown = function (e) {
 
     this.triggerEvent("keydown", { key: key });
 };
-/** @param {Function} callback */
+/** @param {function(InputEventType): void} callback */
 Button.prototype.subscribe = function (callback) {
     var self = this;
     this._subscribers.push(callback);

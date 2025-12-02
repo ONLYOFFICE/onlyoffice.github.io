@@ -45,21 +45,29 @@
     <script defer src="scripts/services/citation-service.js"></script>
     <script defer src="scripts/services/translate-service.js"></script>
 
+    <script defer src="scripts/components/input.js"></script>
+    <script defer src="scripts/components/search-input.js"></script>
+    <script defer src="scripts/components/selectbox.js"></script>
+    <script defer src="scripts/components/button.js"></script>
+
     <script defer src="scripts/zotero/zotero-environment.js"></script>
     <script defer src="scripts/zotero/zotero-api-checker.js"></script>
     <script defer src="scripts/zotero/zotero.js"></script>
+
+    <script defer src="scripts/connection.js"></script>
+    <script defer src="scripts/router.js"></script>
     <script defer src="scripts/code.js"></script>
 </head>
 
 <body id="body" spellcheck="false" class="noselect">
-    <div id="loader" class="cssload-container display-none">
+    <div id="loader" class="cssload-container hidden">
         <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
     </div>
-    <div id="errorWrapper" class="errorMsg display-none"></div>
+    <div id="errorWrapper" class="errorMsg hidden"></div>
 
     <div id="content">
         <div id="mainCont" class="flexCol">
-            <div id="configState" class="display-none">
+            <div id="configState" class="hidden">
                 <p>
                     <span class="i18n">This plugin help you search references by author, title or year in your own
                         library.</span>
@@ -72,8 +80,7 @@
                 </p>
                 <div class="mrtop label">
                     <span class="i18n">API Key</span>
-                    <input id="apiKeyField" class="form-control" type="text" placeholder="API Key"
-                        style="width: 100%;" />
+                    <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" />
                     <button id="saveConfigBtn" class="btn-text-default i18n"
                         style="margin-top: 16px; width: 100%;">Save</button>
                 </div>
@@ -90,28 +97,27 @@
                     <b class="i18n">Unlink citations</b>
                     <span class="i18n">to replace all active Zotero citations and Bibliography with plain text.</span>
                     <span class="i18n"></span>After conversion, citations can no longer be updated.</span>
-                    <button id="saveAsTextBtn" class="btn-text-default i18n"
-                        style="margin-top: 16px; width: 100%;">Unlink citations</button>
                 </p>
+                <button id="saveAsTextBtn" class="btn-text-default i18n" style="width: 100%;">Unlink citations</button>
             </div>
-            <div id="mainState" class="flexCol flexSize display-none">
+            <div id="mainState" class="flexCol flexSize hidden">
                 <div id="selectedWrapper">
                     <div class="flexCol flexSize flexCenter">
                         <div id="selectedHolder"></div>
                     </div>
-                    <div id="selectedThumb" class="scrollThumb display-none"></div>
+                    <div id="selectedThumb" class="scrollThumb hidden"></div>
                 </div>
                 <div id="searchWrapper">
                     <label for="library" class="i18n">Search in:</label>
                     <div class="selectHolder">
                         <input id="library" readonly class="form-control control select form-control" type="text">
-                        <div id="searchLibrary" class="selectList display-none">
+                        <div id="searchLibrary" class="selectList hidden">
                         </div>
                     </div>
                     <label id="searchLabel">
                         <input id="searchField" autocomplete="off" class="form-control i18n" type="text"
                             placeholder="Search references by author, title or year" style="width: 100%;" />
-                        <span id="searchClear" class="display-none">&#xd7;</span>
+                        <span id="searchClear" class="hidden">&#xd7;</span>
                     </label>
                 </div>
 
@@ -119,10 +125,10 @@
                     <div class="flexCol flexSize">
                         <div id="docsHolder" class="flexCol"></div>
                         <div class="flex flexCenter">
-                            <div id="libLoader" class="cssload-loading display-none"><i></i><i></i><i></i><i></i></div>
+                            <div id="libLoader" class="cssload-loading hidden"><i></i><i></i><i></i><i></i></div>
                         </div>
                     </div>
-                    <div id="docsThumb" class="scrollThumb display-none"></div>
+                    <div id="docsThumb" class="scrollThumb hidden"></div>
                 </div>
                 <div id="controlsHolder" class="flexCol">
                     <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
@@ -146,7 +152,7 @@
                 <div id="locatorLabelsDiv">
                     <div class="selectHolder">
                         <input id="locatorLabel" readonly class="form-control control select" type="text">
-                        <div id="locatorLabelsList" class="selectList display-none">
+                        <div id="locatorLabelsList" class="selectList hidden">
                             <!--span class="i18n" data-value="">Act</span-->
                             <span class="i18n" data-value="appendix">Appendix</span>
                             <span class="i18n" data-value="article">Article</span>
@@ -190,16 +196,16 @@
                         <div class="selectHolder">
                             <input id="styleSelect" class="form-control control select text i18n" type="text"
                                 placeholder="Enter style name" autocomplete="off">
-                            <div id="styleSelectList" class="selectList display-none">
+                            <div id="styleSelectList" class="selectList hidden">
                             </div>
-                            <div id="styleSelectedListOther" class="selectList display-none form-control"></div>
+                            <div id="styleSelectedListOther" class="selectList hidden form-control"></div>
                         </div>
                     </div>
                     <div class="label styleWrapperSecond">
                         <label for="styleLang" class="i18n">Language</label>
                         <div class="selectHolder">
                             <input id="styleLang" readonly class="form-control control select" type="text">
-                            <div id="styleLangList" class="selectList display-none">
+                            <div id="styleLangList" class="selectList hidden">
                                 <span data-value="af-ZA">Afrikaans</span>
                                 <span data-value="ar">Arabic</span>
                                 <span data-value="bg-BG">Bulgarian</span>
@@ -257,7 +263,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="notesStyle" class="notesStyle display-none">
+                <div id="notesStyle" class="notesStyle hidden">
                     <span class="i18n">Display citations as:</span>
                     <div class="radioHolder">
                         <input type="radio" id="footNotes" class="form-control" value="footnotes" name="notesAs"
@@ -276,7 +282,7 @@
                     Open Zotero website
                 </a>
             </span>
-            <span id="logoutLink" class="link display-none i18n">Reconfigure</span>
+            <span id="logoutLink" class="link i18n">Reconfigure</span>
         </div>
 
         <input type="file" id="cslFileInput" accept=".csl,.xml" style="display: none;" />
