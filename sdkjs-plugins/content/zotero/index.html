@@ -18,13 +18,14 @@
 
 <head>
     <meta charset="UTF-8">
-        <title>Zotero</title>
-        <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
-        <link rel="stylesheet" href="resources/css/plugin_style.css" />
-        <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-        <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <title>Zotero</title>
+    <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="resources/css/plugin_style.css" />
+    <link rel="stylesheet" href="resources/css/components.css" />
 
     <script defer src="scripts/thirdparty/fetch.umd.js"></script>
     <script defer src="scripts/thirdparty/promise-polyfill.min.js"></script>
@@ -49,6 +50,7 @@
     <script defer src="scripts/components/search-input.js"></script>
     <script defer src="scripts/components/selectbox.js"></script>
     <script defer src="scripts/components/button.js"></script>
+    <script defer src="scripts/components/message.js"></script>
 
     <script defer src="scripts/zotero/zotero-environment.js"></script>
     <script defer src="scripts/zotero/zotero-api-checker.js"></script>
@@ -83,6 +85,7 @@
                     <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" />
                     <button id="saveConfigBtn" class="btn-text-default i18n"
                         style="margin-top: 16px; width: 100%;">Save</button>
+                    <div id="apiKeyMessage"></div>
                 </div>
                 <p id="useDesktopApp">
                     <span class="i18n">Click</span>
@@ -91,6 +94,7 @@
                     <span class="i18n">No API key required.</span>
                     <button id="connectToLocalZotero" class="btn-text-default i18n"
                         style="margin-top: 16px; width: 100%;">Connect to Local Zotero</button>
+                <div id="useDesktopMessage"></div>
                 </p>
                 <p>
                     <span class="i18n">Click</span>

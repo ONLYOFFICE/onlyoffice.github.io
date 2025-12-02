@@ -3,14 +3,11 @@
 /// <reference path="./router.js" />
 /// <reference path="./components/input.js" />
 /// <reference path="./components/button.js" />
+/// <reference path="./components/message.js" />
 /// <reference path="./components/types.js" />
+/// <reference path="./services/translate-service.js" />
 /// <reference path="./zotero/zotero.js" />
 /// <reference path="./zotero/zotero-api-checker.js" />
-
-function showError() {
-    console.log("showError");
-    console.error(arguments);
-}
 
 /**
  * @param {Router} router
@@ -25,6 +22,10 @@ function ConnectingToApi(router, sdk) {
     });
     this._saveConfigBtn = new Button("saveConfigBtn", {
         disabled: true,
+    });
+    this._apiKeyMessage = new Message("apiKeyMessage", { type: "error" });
+    this._useDesktopMessage = new Message("useDesktopMessage", {
+        type: "error",
     });
     this._connectToLocalZotero = new Button("connectToLocalZotero");
     this._useDesktopApp = document.getElementById("useDesktopApp");
@@ -83,7 +84,7 @@ ConnectingToApi.prototype.init = function () {
         } else if (apis.desktop && apis.hasPermission) {
             self._sdk.setIsOnlineAvailable(false);
             self._hide();
-            showError(false);
+            self._hideAllMessages();
             self._onAuthorized(apis);
             return;
         }
@@ -137,7 +138,7 @@ ConnectingToApi.prototype._addEventListeners = function () {
                 })
                 .catch(function (err) {
                     console.error(err);
-                    showError(translate("Invalid API key"));
+                    self._apiKeyMessage.show(translate("Invalid API key"));
                 });
         }
     });
@@ -151,16 +152,16 @@ ConnectingToApi.prototype._addEventListeners = function () {
             if (apis.desktop && apis.hasPermission) {
                 self._sdk.setIsOnlineAvailable(false);
                 self._hide();
-                showError(false);
+                self._hideAllMessages();
             } else if (apis.desktop && !apis.hasPermission) {
                 const errorMessage =
                     "Connection to Zotero failed. " +
                     "Please enable external connections in Zotero: " +
                     'Edit → Settings → Advanced → Check "Allow other ' +
                     'applications on this computer to communicate with Zotero"';
-                showError(translate(errorMessage));
+                self._useDesktopMessage.show(translate(errorMessage));
             } else if (!apis.desktop) {
-                showError(
+                self._useDesktopMessage.show(
                     translate(
                         "Connection to Zotero failed. Make sure Zotero is running."
                     )
@@ -173,6 +174,10 @@ ConnectingToApi.prototype._addEventListeners = function () {
         self._show();
         return true;
     };
+};
+
+ConnectingToApi.prototype._hideAllMessages = function () {
+    this._apiKeyMessage.close();
 };
 
 /** @param {string} apiKey */

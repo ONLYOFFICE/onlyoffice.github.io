@@ -67,3 +67,15 @@
  * @property {boolean} [searchable]
  * @property {boolean} [multiple]
  */
+
+/** ********************** */
+
+/**
+ * @typedef {Object} MessageOptionsType
+ * @property {"error"|"warning"|"info"|"success"} type
+ * @property {string} [text]
+ * @property {number} [duration]
+ * @property {boolean} [closeButton]
+ * @property {boolean} [autoClose]
+ * @property {boolean} [closeOnClickOutside]
+ */
