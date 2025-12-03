@@ -344,6 +344,9 @@ body.theme-dark .custom-button-container {
             -webkit-appearance: none;
         }
     }
+    .input-field-clearable {
+        padding-right: 22px;
+    }
 
     .input-field-disabled .input-field-element {
         pointer-events: none;
@@ -512,6 +515,7 @@ body.theme-dark {
     }
 
     .selectbox-header {
+        overflow: hidden;
         border-style: solid;
         border-width: 1px;
         border-radius: 1px;
@@ -598,6 +602,12 @@ body.theme-dark {
             pointer-events: none;
         }
     }
+    .selectbox-option-divider {
+        margin: 4px 0;
+        border: none;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
 
     .selectbox-checkbox {
         margin: 0;
@@ -653,10 +663,8 @@ body.theme-light .selectbox-container {
         }
     }
 
-    .selectbox-option {
-        &:hover {
-            background-color: var(--select-option-hover);
-        }
+    .selectbox-option:hover {
+        background-color: var(--select-option-hover);
     }
 
     .selectbox-option-selected {
@@ -664,6 +672,9 @@ body.theme-light .selectbox-container {
         &:hover {
             background-color: var(--select-option-selected);
         }
+    }
+    .selectbox-option-divider {
+        border-color: var(--input-border);
     }
 }
 
@@ -705,10 +716,8 @@ body.theme-dark .selectbox-container {
         }
     }
 
-    .selectbox-option {
-        &:hover {
-            background-color: var(--select-option-hover-dark);
-        }
+    .selectbox-option:hover {
+        background-color: var(--select-option-hover-dark);
     }
 
     .selectbox-option-selected {
@@ -716,6 +725,9 @@ body.theme-dark .selectbox-container {
         &:hover {
             background-color: var(--select-option-selected-dark);
         }
+    }
+    .selectbox-option-divider {
+        border-color: var(--input-border-dark);
     }
 }
 /** Message ************ */

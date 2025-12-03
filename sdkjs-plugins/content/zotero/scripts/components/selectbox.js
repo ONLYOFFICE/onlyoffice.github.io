@@ -39,7 +39,7 @@ function SelectBox(container, options) {
 
     this._selectedValues = new Set();
     this._isOpen = false;
-    /** @type {Array<{ value: string | number, text: string, selected: boolean }>} */
+    /** @type {Array<{ value: string, text: string, selected: boolean } | null>} */
     this._items = [];
     /** @type {Function[]} */
     this._subscribers = [];
@@ -54,7 +54,8 @@ function SelectBox(container, options) {
         close: function (e) {
             if (
                 e.target instanceof HTMLElement &&
-                !self._container.contains(e.target)
+                !self._container.contains(e.target) &&
+                !e.target.classList.contains("selectbox-option")
             ) {
                 self._closeDropdown();
             }
@@ -222,6 +223,10 @@ SelectBox.prototype._handleSearch = function (e) {
  */
 SelectBox.prototype._handleKeydown = function (e) {
     var key = e.key || e.keyCode;
+    const items = this._items.filter(function (item) {
+        return item !== null;
+    });
+    let newItem;
 
     switch (key) {
         case " ":
@@ -238,50 +243,51 @@ SelectBox.prototype._handleKeydown = function (e) {
         case "ArrowDown":
         case 40:
             e.preventDefault();
-            if (this._selectedValues.size === 0 && this._items.length > 0) {
-                var firstItem = this._items[0];
-                this._selectedValues.add(firstItem.value);
+            if (this._selectedValues.size === 0 && items.length > 0) {
+                newItem = items[0];
+                this._selectedValues.add(newItem.value);
             } else {
                 var selectedArray = Array.from(this._selectedValues);
                 var currentIndex = -1;
-                for (var i = 0; i < this._items.length; i++) {
-                    if (this._items[i].value === selectedArray[0]) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].value === selectedArray[0]) {
                         currentIndex = i;
                         break;
                     }
                 }
-                var nextIndex = (currentIndex + 1) % this._items.length;
+                var nextIndex = (currentIndex + 1) % items.length;
                 this._selectedValues.clear();
-                this._selectedValues.add(this._items[nextIndex].value);
+                newItem = items[nextIndex];
+                this._selectedValues.add(newItem.value);
             }
             this._updateSelectedText();
             this._renderOptions(this.searchInput ? this.searchInput.value : "");
-            this._triggerChange();
+            this._triggerChange(newItem.value, true);
             break;
         case "ArrowUp":
         case 38:
             e.preventDefault();
-            if (this._selectedValues.size === 0 && this._items.length > 0) {
-                var lastItem = this._items[this._items.length - 1];
-                this._selectedValues.add(lastItem.value);
+            if (this._selectedValues.size === 0 && items.length > 0) {
+                newItem = items[items.length - 1];
+                this._selectedValues.add(newItem.value);
             } else {
                 var selectedArray = Array.from(this._selectedValues);
                 var currentIndex = -1;
-                for (var i = 0; i < this._items.length; i++) {
-                    if (this._items[i].value === selectedArray[0]) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].value === selectedArray[0]) {
                         currentIndex = i;
                         break;
                     }
                 }
                 var prevIndex =
-                    (currentIndex - 1 + this._items.length) %
-                    this._items.length;
+                    (currentIndex - 1 + items.length) % items.length;
                 this._selectedValues.clear();
-                this._selectedValues.add(this._items[prevIndex].value);
+                newItem = items[prevIndex];
+                this._selectedValues.add(newItem.value);
             }
             this._updateSelectedText();
             this._renderOptions(this.searchInput ? this.searchInput.value : "");
-            this._triggerChange();
+            this._triggerChange(newItem.value, true);
             break;
         case "Tab":
         case 9:
@@ -299,28 +305,32 @@ SelectBox.prototype._renderOptions = function (searchTerm) {
     /** @type {HTMLDivElement | null} */
     var selectedOption = null;
 
-    var filteredItems = [];
+    var filteredItems = this._items;
     if (searchTerm) {
-        for (var i = 0; i < this._items.length; i++) {
-            var item = this._items[i];
-            if (item.text.toLowerCase().indexOf(searchTerm) !== -1) {
-                filteredItems.push(item);
-            }
-        }
-    } else {
-        filteredItems = this._items.slice();
+        filteredItems = filteredItems.filter(function (item) {
+            return (
+                item !== null &&
+                item.text.toLowerCase().indexOf(searchTerm) !== -1
+            );
+        });
     }
 
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < filteredItems.length; i++) {
         var item = filteredItems[i];
+        if (!item) {
+            const hr = document.createElement("hr");
+            hr.className += " selectbox-option-divider";
+            fragment.appendChild(hr);
+            continue;
+        }
         var option = document.createElement("div");
         option.className += " selectbox-option";
         if (this._selectedValues.has(item.value)) {
             option.className += " selectbox-option-selected";
             selectedOption = option;
         }
-        option.setAttribute("data-value", String(item.value));
+        option.setAttribute("data-value", item.value);
 
         if (this._options.multiple) {
             var input = document.createElement("input");
@@ -398,23 +408,24 @@ SelectBox.prototype._handleDropdownClick = function (e) {
     }
 
     var value = option.getAttribute("data-value");
+    if (value === null) return;
+    let enabled = true;
 
     if (this._options.multiple) {
         if (this._selectedValues.has(value)) {
-            this._selectedValues.delete(value);
+            this.unselectItems(value, true);
+            enabled = false;
         } else {
-            this._selectedValues.add(value);
+            this.selectItems(value, true);
         }
     } else {
-        this._selectedValues.clear();
-        this._selectedValues.add(value);
+        this.selectItems(value, true);
         this._closeDropdown();
     }
 
     this._updateSelectedText();
-    this._renderOptions(this.searchInput ? this.searchInput.value : "");
 
-    this._triggerChange();
+    this._triggerChange(value, enabled);
 };
 
 SelectBox.prototype._updateSelectedText = function () {
@@ -427,7 +438,7 @@ SelectBox.prototype._updateSelectedText = function () {
         var selectedItems = [];
         for (var i = 0; i < this._items.length; i++) {
             var item = this._items[i];
-            if (this._selectedValues.has(item.value)) {
+            if (item && this._selectedValues.has(item.value)) {
                 selectedItems.push(item);
             }
         }
@@ -444,7 +455,7 @@ SelectBox.prototype._updateSelectedText = function () {
         var selectedItem = null;
         for (var i = 0; i < this._items.length; i++) {
             var item = this._items[i];
-            if (this._selectedValues.has(item.value)) {
+            if (item && this._selectedValues.has(item.value)) {
                 selectedItem = item;
                 break;
             }
@@ -456,19 +467,26 @@ SelectBox.prototype._updateSelectedText = function () {
     }
 };
 
-SelectBox.prototype._triggerChange = function () {
+/**
+ * @param {string} currentValue
+ * @param {boolean} enabled
+ */
+SelectBox.prototype._triggerChange = function (currentValue, enabled) {
     var values = Array.from(this._selectedValues);
     var items = [];
     for (var i = 0; i < this._items.length; i++) {
         var item = this._items[i];
-        if (this._selectedValues.has(item.value)) {
+        if (item && this._selectedValues.has(item.value)) {
             items.push(item);
         }
     }
 
+    /** @type {SelectboxEventDetail} */
     var detail = {
         values: values,
         items: items,
+        current: currentValue,
+        enabled: enabled,
     };
 
     this._subscribers.forEach(function (cb) {
@@ -480,7 +498,7 @@ SelectBox.prototype._triggerChange = function () {
 };
 
 /**
- * @param {Function} callback
+ * @param {function(SelectboxEventType): void} callback
  * @returns {Object}
  */
 SelectBox.prototype.subscribe = function (callback) {
@@ -497,7 +515,7 @@ SelectBox.prototype.subscribe = function (callback) {
 };
 
 /**
- * @param {string | number} value
+ * @param {string} value
  * @param {string} text
  * @param {boolean} selected
  */
@@ -517,17 +535,20 @@ SelectBox.prototype.addItem = function (value, text, selected) {
     this._updateSelectedText();
 };
 
+SelectBox.prototype.addSeparator = function () {
+    this._items.push(null);
+};
+
 /**
  * @param {string} value
  */
 SelectBox.prototype.removeItem = function (value) {
-    var newItems = [];
-    for (var i = 0; i < this._items.length; i++) {
-        if (this._items[i].value !== value) {
-            newItems.push(this._items[i]);
+    this._items = this._items.filter(function (item) {
+        if (item === null || item.value !== value) {
+            return true;
         }
-    }
-    this._items = newItems;
+        return false;
+    });
     this._selectedValues.delete(value);
     this._updateSelectedText();
 };
@@ -555,6 +576,148 @@ SelectBox.prototype.setValue = function (value) {
 };
 
 /**
+ * @param {string | Array<string>} values
+ * @param {boolean} [bSilent]
+ */
+SelectBox.prototype.selectItems = function (values, bSilent) {
+    const self = this;
+    if (!this._options.multiple && Array.isArray(values)) {
+        console.error(
+            "Method selectItem is only available for multi-select boxes."
+        );
+        return;
+    }
+    /** @type {string} */
+    let value = "";
+
+    if (this._options.multiple) {
+        /**
+         * @param {string} value
+         */
+        let checkMultiOption = function (value) {
+            if (self._optionsContainer) {
+                let option = self._optionsContainer.querySelector(
+                    '[data-value="' + value + '"]'
+                );
+
+                if (option) {
+                    let checkbox = option.querySelector(
+                        'input[type="checkbox"]'
+                    );
+                    if (checkbox && checkbox instanceof HTMLInputElement) {
+                        checkbox.checked = true;
+                    }
+                    option.classList.add("selectbox-option-selected");
+                }
+            }
+        };
+        if (Array.isArray(values)) {
+            for (var i = 0; i < values.length; i++) {
+                value = values[i];
+                if (!this._selectedValues.has(value)) {
+                    this._selectedValues.add(value);
+                    checkMultiOption(value);
+                }
+            }
+        } else {
+            value = values;
+            if (!this._selectedValues.has(value)) {
+                this._selectedValues.add(value);
+                checkMultiOption(value);
+            }
+        }
+    } else if (!Array.isArray(values)) {
+        value = values;
+        this._selectedValues.clear();
+        this._selectedValues.add(value);
+
+        if (this._optionsContainer) {
+            let selectedOptions = this._optionsContainer.querySelectorAll(
+                '.selectbox-option-selected[data-value="' + value + '"]'
+            );
+            selectedOptions.forEach(function (option) {
+                option.classList.remove("selectbox-option-selected");
+            });
+            let option = this._optionsContainer.querySelector(
+                '[data-value="' + value + '"]'
+            );
+
+            if (option) {
+                option.classList.add("selectbox-option-selected");
+            }
+        }
+        this._closeDropdown();
+    }
+
+    this._updateSelectedText();
+
+    if (bSilent) {
+        return;
+    }
+
+    this._triggerChange(value, true);
+};
+
+/**
+ * @param {string | Array<string>} values
+ * @param {boolean} [bSilent]
+ */
+SelectBox.prototype.unselectItems = function (values, bSilent) {
+    const self = this;
+    if (!this._options.multiple) {
+        console.error(
+            "Method unselectItem is only available for multi-select boxes."
+        );
+        return;
+    }
+    /** @type {string} */
+    let value = "";
+
+    /**
+     * @param {string} value
+     */
+    let uncheckMultiOption = function (value) {
+        if (self._optionsContainer) {
+            let option = self._optionsContainer.querySelector(
+                '[data-value="' + value + '"]'
+            );
+
+            if (option) {
+                let checkbox = option.querySelector('input[type="checkbox"]');
+                if (checkbox && checkbox instanceof HTMLInputElement) {
+                    checkbox.checked = false;
+                }
+                option.classList.remove("selectbox-option-selected");
+            }
+        }
+    };
+
+    if (Array.isArray(values)) {
+        for (var i = 0; i < values.length; i++) {
+            value = values[i];
+            if (this._selectedValues.has(value)) {
+                this._selectedValues.delete(value);
+                uncheckMultiOption(value);
+            }
+        }
+    } else {
+        value = values;
+        if (this._selectedValues.has(value)) {
+            this._selectedValues.delete(value);
+            uncheckMultiOption(value);
+        }
+    }
+
+    this._updateSelectedText();
+
+    if (bSilent) {
+        return;
+    }
+
+    this._triggerChange(value, true);
+};
+
+/**
  * @param {boolean} bSelectFirst
  */
 SelectBox.prototype.clear = function (bSelectFirst) {
@@ -562,7 +725,9 @@ SelectBox.prototype.clear = function (bSelectFirst) {
     this._selectedValues.clear();
     if (bSelectFirst && this._items.length > 0) {
         var firstItem = this._items[0];
-        this._selectedValues.add(firstItem.value);
+        if (firstItem) {
+            this._selectedValues.add(firstItem.value);
+        }
     }
     this._updateSelectedText();
     this._renderOptions();

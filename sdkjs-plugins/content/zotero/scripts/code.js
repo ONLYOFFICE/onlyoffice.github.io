@@ -100,6 +100,9 @@
         groups: [],
     };
 
+    /** @type {Object.<string, Button | InputField | SelectBox>} */
+    var customElements = {};
+
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
     var elements = {};
     function initElements() {
@@ -158,26 +161,6 @@
         const locatorLabelsList = document.getElementById("locatorLabelsList");
         if (!locatorLabelsList) {
             throw new Error("locatorLabelsList not found");
-        }
-        const library = document.getElementById("library");
-        if (!library) {
-            throw new Error("library not found");
-        }
-        const searchLibrary = document.getElementById("searchLibrary");
-        if (!searchLibrary) {
-            throw new Error("searchLibrary not found");
-        }
-        const searchLabel = document.getElementById("searchLabel");
-        if (!searchLabel) {
-            throw new Error("searchLabel not found");
-        }
-        const searchClear = document.getElementById("searchClear");
-        if (!searchClear) {
-            throw new Error("searchClear not found");
-        }
-        const searchField = document.getElementById("searchField");
-        if (!searchField) {
-            throw new Error("searchField not found");
         }
         const styleWrapper = document.getElementById("styleWrapper");
         if (!styleWrapper) {
@@ -242,6 +225,18 @@
         if (!cslFileInput) {
             throw new Error("cslFileInput not found");
         }
+        customElements = {
+            searchField: new InputField("searchField", {
+                type: "text",
+                autofocus: true,
+                showClear: true,
+            }),
+            librarySelectList: new SelectBox("librarySelectList", {
+                placeholder: "Loading...",
+                multiple: true,
+            }),
+            saveAsTextBtn: new Button("saveAsTextBtn"),
+        };
         elements = {
             loader: loader,
             libLoader: libLoader,
@@ -263,12 +258,6 @@
             locatorLabel: locatorLabel,
             locatorLabelsList: locatorLabelsList,
 
-            library: library,
-            searchLibrary: searchLibrary,
-            searchLabel: searchLabel,
-            searchClear: searchClear,
-            searchField: searchField,
-
             styleWrapper: styleWrapper,
             styleSelectList: styleSelectList,
             styleSelectListOther: styleSelectListOther,
@@ -283,7 +272,6 @@
             insertLinkBtn: insertLinkBtn,
             cancelBtn: cancelBtn,
             refreshBtn: refreshBtn,
-            saveAsTextBtn: new Button("saveAsTextBtn"),
 
             checkOmitAuthor: checkOmitAuthor,
             cslFileInput: cslFileInput,
@@ -298,9 +286,6 @@
     window.Asc.plugin.init = function () {
         initElements();
         showLoader(true);
-        setTimeout(function () {
-            if (elements.searchField) elements.searchField.focus();
-        }, 100);
 
         router = new Router();
         sdk = new ZoteroSdk();
@@ -447,22 +432,35 @@
         return sdk
             .getUserGroups()
             .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
+                let selectedItem = localStorage.getItem("selectedGroup");
+                let hasSelected = false;
+                groups.forEach(function (group) {
+                    group.id = String(group.id);
+                });
+
                 const customGroups = [
-                    { id: "all", name: translate("Everywhere") },
                     { id: "my_library", name: translate("My Library") },
                     {
                         id: "group_libraries",
                         name: translate("Group Libraries"),
                     },
                 ];
-                if (elements.library instanceof HTMLInputElement) {
-                    elements.library.value = customGroups[0].name;
+                !hasSelected &&
+                    customGroups.forEach(function (group) {
+                        if (group.id === selectedItem) {
+                            hasSelected = true;
+                        }
+                    });
+                !hasSelected &&
+                    groups.forEach(function (group) {
+                        if (group.id.toString() === selectedItem) {
+                            hasSelected = true;
+                        }
+                    });
+                if (!hasSelected) {
+                    selectedItem = "my_library";
+                    hasSelected = true;
                 }
-                elements.library.setAttribute("data-value", customGroups[0].id);
-                elements.library.setAttribute("title", customGroups[0].name);
-
-                const selectedItem =
-                    localStorage.getItem("selectedGroup") || "all";
 
                 /**
                  * @param {string|number} id
@@ -472,95 +470,92 @@
                     if (typeof id === "number") {
                         id = id.toString();
                     }
-                    const el = document.createElement("span");
-                    el.setAttribute("data-value", id);
-                    el.textContent = name;
-                    elements.searchLibrary.appendChild(el);
-                    if (
-                        id === selectedItem &&
-                        elements.library instanceof HTMLInputElement
-                    ) {
-                        el.setAttribute("selected", "");
-                        elements.library.value = name;
-                        elements.library.setAttribute("data-value", id);
-                        elements.library.setAttribute("title", name);
-                    }
+                    if (customElements.librarySelectList instanceof SelectBox)
+                        customElements.librarySelectList.addItem(
+                            id,
+                            name,
+                            id === selectedItem
+                        );
                 };
 
-                const addSeparator = function () {
-                    const el = document.createElement("hr");
-                    elements.searchLibrary.appendChild(el);
-                };
-
-                elements.searchLibrary.addEventListener("click", function (e) {
-                    const target = e.target;
-                    let option;
-                    if (target && target instanceof HTMLSpanElement) {
-                        option = target;
-                    } else {
-                        return;
-                    }
-                    const selected =
-                        elements.searchLibrary.querySelector("span[selected]");
-                    selected && selected.attributes.removeNamedItem("selected");
-                    option.setAttribute("selected", "");
-                    const id = option.getAttribute("data-value");
-                    const name = option.textContent;
-                    if (
-                        !(elements.library instanceof HTMLInputElement) ||
-                        !(elements.searchField instanceof HTMLInputElement) ||
-                        typeof id !== "string"
-                    ) {
-                        return;
-                    }
-                    elements.library.value = option.textContent;
-                    elements.library.setAttribute("data-value", id);
-                    elements.library.setAttribute("title", name);
-
-                    localStorage.setItem("selectedGroup", id);
-
-                    switchClass(elements.searchClear, displayNoneClass, true);
-                    elements.searchField.value = "";
-                    lastSearch.text = "";
-                    clearLibrary();
-                });
-
-                if (groups.length === 0) {
-                    return;
-                }
                 for (var i = 0; i < customGroups.length; i++) {
                     const id = customGroups[i].id;
                     const name = customGroups[i].name;
                     addGroupToSelectBox(id, name);
                 }
-                addSeparator();
+
+                if (groups.length === 0) {
+                    return;
+                }
+                customElements.librarySelectList.addSeparator();
                 for (var i = 0; i < groups.length; i++) {
                     const id = groups[i].id;
                     const name = groups[i].name;
                     addGroupToSelectBox(id, name);
                 }
+                selectedGroupsWatcher(customGroups, groups);
             });
     }
 
     /**
-     * @return {number|"all"|"my_library"|"group_libraries"}
+     * @param {Array<{id: string, name: string}>} customGroups
+     * @param {Array<UserGroupInfo>} groups
+     * @returns
+     */
+    function selectedGroupsWatcher(customGroups, groups) {
+        if (customElements.librarySelectList instanceof SelectBox === false) {
+            return;
+        }
+        customElements.librarySelectList.subscribe(function (event) {
+            if (event.type !== "selectbox:change") {
+                return;
+            }
+            const values = event.detail.values;
+            const current = event.detail.current;
+            const bEnabled = event.detail.enabled;
+            const customIds = customGroups.map(function (group) {
+                return group.id;
+            });
+            let ids = groups.map(function (group) {
+                return group.id;
+            });
+
+            let bWasCustom = customIds.indexOf(String(current)) !== -1;
+
+            if (bWasCustom && current === "group_libraries") {
+                if (bEnabled) {
+                    customElements.librarySelectList.selectItems(ids, true);
+                } else {
+                    customElements.librarySelectList.unselectItems(ids, true);
+                }
+            } else if (!bWasCustom) {
+                let bAllGroupsSelected = ids.every(function (id) {
+                    return values.indexOf(id) !== -1;
+                });
+                if (bAllGroupsSelected) {
+                    customElements.librarySelectList.selectItems(
+                        "group_libraries",
+                        true
+                    );
+                } else {
+                    customElements.librarySelectList.unselectItems(
+                        "group_libraries",
+                        true
+                    );
+                }
+            }
+        });
+    }
+
+    /**
+     * @return {number|"my_library"|"group_libraries"}
      */
     function getSelectedGroup() {
-        for (var i = 0; i < elements.searchLibrary.children.length; i++) {
-            const option = elements.searchLibrary.children[i];
-            if (option.hasAttribute("selected")) {
-                const id = option.getAttribute("data-value");
-                if (
-                    id === "my_library" ||
-                    id === "group_libraries" ||
-                    id === "all"
-                ) {
-                    return id;
-                }
-                return Number(id);
-            }
+        const id = customElements.librarySelectList.getValue();
+        if (id === "my_library" || id === "group_libraries") {
+            return id;
         }
-        return "all";
+        return Number(id);
     }
 
     /**
@@ -706,7 +701,6 @@
                         case "my_library":
                             groups = [];
                             break;
-                        case "all":
                         case "group_libraries":
                             groups = userGroups.map(function (group) {
                                 return group.id;
@@ -722,10 +716,7 @@
                     let hideLoader = !groups.length;
                     const bCount = true;
 
-                    if (
-                        selectedGroup === "my_library" ||
-                        selectedGroup === "all"
-                    ) {
+                    if (selectedGroup === "my_library") {
                         promises.push(
                             loadLibrary(
                                 sdk.getItems(text),
@@ -757,37 +748,16 @@
                     return Promise.all(promises);
                 });
         }
-        elements.searchField.onkeypress = function (e) {
-            if (!(e.target instanceof HTMLInputElement)) return;
-            if (e.keyCode == 13) searchFor(e.target.value);
-        };
-        elements.searchField.onblur = function (e) {
-            setTimeout(function () {
-                if (!(e.target instanceof HTMLInputElement)) return;
-                searchFor(e.target.value);
-            }, 500);
-        };
-        elements.searchField.onkeyup = function (e) {
-            if (!(e.target instanceof HTMLInputElement)) return;
-            switchClass(
-                elements.searchClear,
-                displayNoneClass,
-                !e.target.value
-            );
-        };
-        elements.searchClear.onclick = function (e) {
-            if (
-                !(e.target instanceof HTMLElement) ||
-                !(elements.searchField instanceof HTMLInputElement)
-            )
-                return;
-            if (e.target.classList.contains(displayNoneClass)) return true;
-            switchClass(elements.searchClear, displayNoneClass, true);
-            elements.searchField.value = "";
-            lastSearch.text = "";
-            clearLibrary();
-            return true;
-        };
+        if (customElements.searchField instanceof HTMLInputElement) {
+            customElements.searchField.subscribe(function (e) {
+                if (
+                    e.type === "inputfield:blur" ||
+                    e.type === "inputfield:submit"
+                ) {
+                    searchFor(e.detail.value);
+                }
+            });
+        }
 
         elements.cancelBtn.onclick = function (e) {
             var ids = [];
@@ -898,8 +868,8 @@
                 });
         };
 
-        if (elements.saveAsTextBtn instanceof Button) {
-            elements.saveAsTextBtn.subscribe(function (event) {
+        if (customElements.saveAsTextBtn instanceof Button) {
+            customElements.saveAsTextBtn.subscribe(function (event) {
                 if (event.type !== "button:click") {
                     return;
                 }
@@ -998,7 +968,6 @@
         elements.styleLang.onselectchange = function (inp, val, isClick) {
             showLoader(true);
             localesManager.saveLastUsedLanguage(val);
-            console.warn("load locale", val);
             localesManager
                 .loadLocale(val)
                 .then(function () {
@@ -1262,7 +1231,6 @@
      */
     function onClickListElement(list, input) {
         return function (/** @type {MouseEvent} */ ev) {
-            console.warn("onClickListElement", input);
             if (!ev.target || !(ev.target instanceof HTMLElement)) {
                 console.error("onClickListElement: no target");
                 return;

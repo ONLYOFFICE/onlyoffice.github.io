@@ -37,7 +37,7 @@
     "Failed to insert citation": "引用の挿入に失敗しました",
     "Failed to insert bibliography": "文献引用の挿入に失敗しました",
     "Failed to refresh": "リフレッシュに失敗しました",
-    "Search in:": "検索対象:",
+    "Search the references you want to cite in this document.": "この文書内で引用したい文献を検索します。",
     "Everywhere": "全て",
     "My Library": "私のライブラリ",
     "Group Libraries": "グループライブラリ",

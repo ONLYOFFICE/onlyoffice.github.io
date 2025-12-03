@@ -26,8 +26,8 @@
 
 /**
  * @typedef {Object} InputBoundHandlesType
- * @property {() => void} focus
- * @property {() => void} blur
+ * @property {(ev: Event) => void} focus
+ * @property {(ev: Event) => void} blur
  * @property {(ev: Event) => void} input
  * @property {(ev: KeyboardEvent) => void} keydown
  * @property {() => void} clear
@@ -66,6 +66,20 @@
  * @property {string} placeholder
  * @property {boolean} [searchable]
  * @property {boolean} [multiple]
+ */
+
+/**
+ * @typedef {Object} SelectboxEventType
+ * @property {string} type
+ * @property {SelectboxEventDetail} detail
+ */
+
+/**
+ * @typedef {Object} SelectboxEventDetail
+ * @property {Array<string|number>} values
+ * @property {string|number} current
+ * @property {boolean} enabled
+ * @property {Array<SelectboxItem>} [items]
  */
 
 /** ********************** */
