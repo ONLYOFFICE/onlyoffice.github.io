@@ -7,13 +7,7 @@
     {
       "description": "Insert Typst mathematical formulas as SVG",
       "url": "index.html",
-      "icons": [
-        "resources/icon.png",
-        "resources/icon@1.25x.png",
-        "resources/icon@1.5x.png",
-        "resources/icon@1.75x.png",
-        "resources/icon@2x.png"
-      ],
+"icons": [ "resources/icon.png" ],
       "isViewer": false,
       "EditorsSupport": ["slide"],
       "isVisual": true,
