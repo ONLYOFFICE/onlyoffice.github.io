@@ -71,7 +71,66 @@
         #error {
             color: red;
             padding: 10px;
-            visibility: hidden;
+            visibility: hidden; /* Use visibility instead of display to reserve space */
+        }
+
+        /* Custom Dropdown Styles */
+        #history-container {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .custom-dropdown-list {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 100%;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+
+        .custom-dropdown-list div {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .custom-dropdown-list div:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-dropdown-header {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: black;
+            cursor: pointer;
+        }
+        
+        /* Tooltip Styles */
+        #preview-tooltip {
+            display: none;
+            position: fixed;
+            border: 1px solid #ccc;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 300px;
+            max-height: 300px;
+            pointer-events: none; /* So it doesn't interfere with mouse events */
+        }
+        #preview-tooltip svg {
+             max-width: 100%;
+             max-height: 100%;
         }
     </style>
 </head>
@@ -87,9 +146,11 @@
         <label>Preview:</label>
         <div id="preview">Type formula to preview...</div>
     </div>
+    <div id="preview-tooltip"></div>
     <script src="scripts/renderer.js"></script>
     <script src="scripts/slide-inserter.js"></script>
     <script src="scripts/history.js"></script>
+    <script src="scripts/ui.js"></script>
     <script src="scripts/script.js"></script>
 </body>
 
