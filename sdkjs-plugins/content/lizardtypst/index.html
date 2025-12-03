@@ -26,13 +26,6 @@
             flex-direction: column;
         }
 
-        .container {
-            display: flex;
-            gap: 20px;
-            flex: 1;
-            min-height: 0;
-        }
-
         .panel {
             flex: 1;
             display: flex;
@@ -85,8 +78,9 @@
 
 <body>
     <div id="error"></div>
+    <div id="history-container"></div>
     <div class="panel">
-        <label>Typst Code:</label>
+        <label for="input">Typst Code:</label>
         <textarea id="input"></textarea>
     </div>
     <div class="panel" id="preview-panel">
@@ -95,6 +89,7 @@
     </div>
     <script src="scripts/renderer.js"></script>
     <script src="scripts/slide-inserter.js"></script>
+    <script src="scripts/history.js"></script>
     <script src="scripts/script.js"></script>
 </body>
 
