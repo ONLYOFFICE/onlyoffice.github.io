@@ -26,7 +26,6 @@
     "Refresh": "Rafraîchir",
     "Unlink citations": "Dissocier les citations",
     "Please insert some citation into the document.": "Veuillez insérer une citation dans le document.",
-
     "Omit Author": "Omettre l'auteur",
     "Connection to Zotero failed": "La connexion à Zotero a échoué",
     "Connection to Zotero failed. Make sure Zotero is running": "La connexion à Zotero a échoué. Vérifiez que Zotero est actif",
@@ -38,7 +37,7 @@
     "Failed to insert citation": "Échec de l'insertion de la citation",
     "Failed to insert bibliography": "Échec de l'insertion de la bibliographie",
     "Failed to refresh": "Échec de la mise à jour",
-    "Search in:": "Rechercher dans:",
+    "Search the references you want to cite in this document.": "Rechercher les citations que vous souhaitez citer dans ce document.",
     "Everywhere": "Partout",
     "My Library": "Ma bibliothèque",
     "Group Libraries": "Bibliothèques de groupes",

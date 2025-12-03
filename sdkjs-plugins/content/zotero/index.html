@@ -71,8 +71,7 @@
         <div id="mainCont" class="flexCol">
             <div id="configState" class="hidden">
                 <p>
-                    <span class="i18n">This plugin help you search references by author, title or year in your own
-                        library.</span>
+                    <span class="i18n">This plugin help you search references by author, title or year in your own library.</span>
                 </p>
                 <p>
                     <span class="i18n">To use Zotero you should get an API key.</span>
@@ -112,17 +111,15 @@
                     <div id="selectedThumb" class="scrollThumb hidden"></div>
                 </div>
                 <div id="searchWrapper">
-                    <label for="library" class="i18n">Search in:</label>
-                    <div class="selectHolder">
-                        <input id="library" readonly class="form-control control select form-control" type="text">
-                        <div id="searchLibrary" class="selectList hidden">
-                        </div>
-                    </div>
-                    <label id="searchLabel">
-                        <input id="searchField" autocomplete="off" class="form-control i18n" type="text"
-                            placeholder="Search references by author, title or year" style="width: 100%;" />
-                        <span id="searchClear" class="hidden">&#xd7;</span>
-                    </label>
+                    <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
+                    <input id="searchField" autocomplete="off" class="form-control i18n" type="text"
+                        placeholder="Search references by author, title" />
+                    <button>
+                        <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 9L7 11V5L12 0H0L5 5V9Z" fill="black" fill-opacity="0.8"/>
+                        </svg>
+                    </button>
+                    <div id="librarySelectList"></div>
                 </div>
 
                 <div id="docsWrapper" class="flexSize">
@@ -140,12 +137,10 @@
                             <button id="insertLinkBtn" class="button control i18n btn-text-default"
                                 style="flex: 1; margin-left: 8px; margin-right: 0;" disabled>Insert Citation</button>
                         </div>
-                        <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel
-                            select</button>
+                        <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
                     </div>
                     <div id="insertBibDiv" class="flex">
-                        <button id="insertBibBtn" class="button control i18n btn-text-default">Insert
-                            Bibliography</button>
+                        <button id="insertBibBtn" class="button control i18n btn-text-default">Insert Bibliography</button>
                         <button id="refreshBtn" class="button control btn-text-default i18n">Refresh</button>
                     </div>
                     <div id="omitAuthorDiv">
