@@ -4,9 +4,14 @@ A simple plugin for ONLYOFFICE that allows you to insert Typst mathematical form
 
 This plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of ONLYOFFICE editors. It can be added to ONLYOFFICE instances manually.
 
+## Motivation
+
+The LizardTypst plugin draws inspiration from the existing **Iguana LaTeX** plugin. Our goal is to provide a modern and accessible solution for Typst users by leveraging the benefits of Typst directly within ONLYOFFICE, without requiring complex local setups.
+
 ## Features
 
-- **Real-time Preview**: See a live preview of the rendered Typst formula as you type.
+- **Real-time Rendering**: See a live preview of the rendered Typst formula as you type. This provides an immediate and interactive editing experience.
+- **No Local Installation Required**: Unlike solutions that depend on server-side rendering or local LaTeX/Typst installations, LizardTypst utilizes `typst.ts` to compile Typst code directly in your browser. This means you don't need any additional software installed on your machine to use the plugin.
 - **SVG-based Rendering**: Inserts formulas as scalable vector graphics, ensuring high quality at any zoom level.
 
 ## Powered By
