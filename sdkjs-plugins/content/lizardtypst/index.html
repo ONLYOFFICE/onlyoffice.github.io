@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Typst Math</title>
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #preview-panel {
+            flex: 2;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        #input {
+            flex: 1;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+        #preview {
+            width: 100%;
+            /* Fill width of parent */
+            height: 300px;
+            /* Constant height */
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #f9f9f9;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #preview svg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Maintain aspect ratio within fixed dimensions */
+        }
+
+        #error {
+            color: red;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="panel">
+        <label>Typst Code:</label>
+        <textarea id="input"></textarea>
+    </div>
+    <div class="panel" id="preview-panel">
+        <label>Preview:</label>
+        <div id="preview">Type formula to preview...</div>
+    </div>
+</body>
+
+</html>

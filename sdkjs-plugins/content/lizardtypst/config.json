@@ -1,0 +1,29 @@
+{
+  "name": "LizardTypst",
+  "guid": "asc.{F8B5E3A1-9C7D-4E2F-A1B3-5D8E9F0A1C2D}",
+  "version": "0.1.0",
+  "minVersion": "8.2.0",
+  "variations": [
+    {
+      "description": "Insert Typst mathematical formulas as SVG",
+      "url": "index.html",
+      "icons": [
+        "resources/icon.png",
+        "resources/icon@1.25x.png",
+        "resources/icon@1.5x.png",
+        "resources/icon@1.75x.png",
+        "resources/icon@2x.png"
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["slide"],
+      "isVisual": true,
+      "isModal": true,
+      "initDataType": "text",
+      "buttons": [
+        { "text": "Insert", "primary": true },
+        { "text": "Cancel", "primary": false }
+      ],
+      "size": [800, 600]
+    }
+  ]
+}
