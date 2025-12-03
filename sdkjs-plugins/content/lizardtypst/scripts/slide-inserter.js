@@ -26,11 +26,7 @@ function sanitizeSvgString(svgString) {
       return;
     }
     svgString = sanitizeSvgString(svgString);
-    console.log("Inserting SVG into slide:", { width, height });
-    console.log(svgString);
-
-    const base64 = btoa(unescape(encodeURIComponent(svgString)));
-    Asc.scope.dataUrl = "data:image/svg+xml;base64," + base64;
+    Asc.scope.dataUrl = "data:image/svg+xml," + encodeURIComponent(svgString);
 
     const scale = 2.0; // Apply a default scaling factor to make it larger
     Asc.scope.nWidth = (((width * scale) / 96) * 914400 + 0.5) >> 0;
