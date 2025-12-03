@@ -10,70 +10,42 @@ $
 `;
 
 (function (window) {
-  let input, preview;
+  window.Asc.plugin.init = function (text) {
+    const input = document.getElementById("input");
+    const preview = document.getElementById("preview");
+    const errorDiv = document.getElementById("error");
 
-  window.Asc.plugin.init = function () {
-    input = document.getElementById("input");
-    preview = document.getElementById("preview");
-
-    // Initialize Typst compiler and renderer with WASM paths from CDN
-    // This ensures typst.ts is correctly configured.
+    // Initialize Typst compiler and renderer
     window.$typst.setCompilerInitOptions({
       getModule: () =>
-        'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm',
+        "https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm",
     });
     window.$typst.setRendererInitOptions({
       getModule: () =>
-        'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm',
+        "https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm",
     });
-    if(!input.value) input.value = InitTypstCode;
-    
-    // Bind previewSvg action to the textarea
+
+    if (text) {
+      input.value = text;
+    } else if (input.value === "") {
+      input.value = InitTypstCode;
+    }
+
     input.oninput = () => {
-      updatePreview(input.value);
-      // Optional: auto-resize textarea height
-      input.style.height = '10px';
-      input.style.height = input.scrollHeight + 'px';
+      window.TypstRenderer.updatePreview(input, preview, errorDiv);
+      input.style.height = "10px";
+      input.style.height = input.scrollHeight + "px";
     };
 
-    // Trigger the first preview.
-    updatePreview(input.value);
+    window.TypstRenderer.updatePreview(input, preview, errorDiv);
   };
 
-  async function updatePreview(mainContent) {
-    const code = mainContent.trim();
-    if (!code) {
-      preview.innerHTML = "Type formula to preview...";
-      return;
-    }
-
-    preview.innerHTML = "Loading preview...";
-
-    try {
-      const typst = window.$typst || window.typst || null;
-      if (!typst || typeof typst.svg !== "function") {
-        preview.innerHTML = "Error: Typst runtime not loaded yet.";
-        return;
-      }
-
-      const svg = await typst.svg({ mainContent: code });
-      
-      // Append svg text directly
-      preview.innerHTML = svg;
-
-      // Resize SVG to fit content div width
-      const svgElem = preview.firstElementChild;
-      if (svgElem) {
-        // SVG sizing is now handled purely by CSS
-      }
-    } catch (e) {
-      preview.innerHTML = `Error rendering preview: ${e.message || String(e)}`;
-    }
-  }
-
-  // Remove the button function entirely as per user request (rendering only)
   window.Asc.plugin.button = function (id) {
-    // Just close the plugin since insertion is removed.
-    window.Asc.plugin.executeCommand("close", "");
+    if (id === 0) {
+      const { svg, width, height } = window.TypstRenderer.getCurrentSvgData();
+      window.SlideInserter.insert(svg, width, height);
+    } else {
+      window.Asc.plugin.executeCommand("close", "");
+    }
   };
 })(window);
