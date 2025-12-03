@@ -48,6 +48,7 @@ function InputField(input, options) {
         }
     }
 
+    this._id = input.id || "input_" + Math.random().toString(36).slice(2, 9);
     this.isFocused = false;
     this.isValid = true;
     this._validationMessage = "";
@@ -55,11 +56,11 @@ function InputField(input, options) {
     this._subscribers = [];
     /** @type {InputBoundHandlesType} */
     this._boundHandles = {
-        focus: function () {
-            self._handleFocus();
+        focus: function (e) {
+            self._handleFocus(e);
         },
-        blur: function () {
-            self._handleBlur();
+        blur: function (e) {
+            self._handleBlur(e);
         },
         input: function (e) {
             self._handleInput(e);
@@ -106,7 +107,7 @@ InputField.prototype._createDOM = function () {
 
     var fragment = document.createDocumentFragment();
     fragment.appendChild(this._container);
-    this._container.className += " input-field-container";
+    this._container.className += " input-field-container  input-field-container-" + this._id;
 
     var inputField = document.createElement("div");
     this._container.appendChild(inputField);
@@ -165,6 +166,7 @@ InputField.prototype._createDOM = function () {
     this._validationElement.style.display = "none";
 
     if (this._options.showClear) {
+        this.input.className += " input-field-clearable";
         this._clearButton = document.createElement("button");
         inputField.appendChild(this._clearButton);
         this._clearButton.className += " input-field-clear";
@@ -191,13 +193,20 @@ InputField.prototype._bindEvents = function () {
     this.input.addEventListener("change", this._boundHandles.validate);
 };
 
-InputField.prototype._handleFocus = function () {
+/**
+ * @param {Event} e
+ */
+InputField.prototype._handleFocus = function (e) {
     this.isFocused = true;
     this._container.className += " input-field-focused";
     this._updateClearButton();
+    this._triggerFocusEvent(e);
 };
 
-InputField.prototype._handleBlur = function () {
+/**
+ * @param {Event} e
+ */
+InputField.prototype._handleBlur = function (e) {
     this.isFocused = false;
 
     var classes = this._container.className.split(" ");
@@ -210,6 +219,7 @@ InputField.prototype._handleBlur = function () {
     this._container.className = newClasses.join(" ");
 
     this.validate();
+    this._triggerBlurEvent(e);
 };
 
 /**
@@ -475,6 +485,40 @@ InputField.prototype._triggerInputEvent = function (e) {
     this._subscribers.forEach(function (cb) {
         cb({
             type: "inputfield:input",
+            detail: detail,
+        });
+    });
+};
+
+/**
+ * @param {Event} e
+ */
+InputField.prototype._triggerFocusEvent = function (e) {
+    var detail = {
+        value: this.input.value,
+        originalEvent: e,
+    };
+
+    this._subscribers.forEach(function (cb) {
+        cb({
+            type: "inputfield:focus",
+            detail: detail,
+        });
+    });
+};
+
+/**
+ * @param {Event} e
+ */
+InputField.prototype._triggerBlurEvent = function (e) {
+    var detail = {
+        value: this.input.value,
+        originalEvent: e,
+    };
+
+    this._subscribers.forEach(function (cb) {
+        cb({
+            type: "inputfield:blur",
             detail: detail,
         });
     });

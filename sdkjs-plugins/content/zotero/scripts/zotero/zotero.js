@@ -46,7 +46,7 @@
 
 /**
  * @typedef {Object} UserGroupInfo
- * @property {number} id
+ * @property {number|string} id
  * @property {string} name
  */
 
