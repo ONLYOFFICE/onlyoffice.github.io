@@ -43,7 +43,7 @@ function sanitizeSvgString(svgString) {
         );
         oSlide.AddObject(oImage);
       }
-    }, true);
+    }, false);
   }
 
   // Expose the function to the global window object.

@@ -59,6 +59,7 @@ $
       window.TypstHistory.save(input.value);
 
       window.SlideInserter.insert(svg, width, height);
+      window.Asc.plugin.executeCommand("close", "");
     } else {
       window.Asc.plugin.executeCommand("close", "");
     }
