@@ -21,7 +21,7 @@
 /**
  * @typedef {Object} InputEventType
  * @property {string} type
- * @property {{value: string}} detail
+ * @property {{value: string, originalEvent?: Event}} detail
  */
 
 /**

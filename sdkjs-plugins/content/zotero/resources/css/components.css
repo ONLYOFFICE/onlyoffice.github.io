@@ -63,10 +63,22 @@ html {
         vertical-align: middle;
         box-sizing: border-box;
     }
+    .custom-button:focus {
+        outline: none;
+    }
+
+    .custom-button > svg,
+    .custom-button > img {
+        pointer-events: none;
+    }
+
+    .custom-button-secondary-icon {
+        width: 24px;
+    }
 
     .custom-button-small {
-        padding: 1px 10px;
-        line-height: 14px;
+        height: 24px;
+        padding: 0;
     }
 
     .custom-button-medium {
@@ -78,10 +90,6 @@ html {
         padding: 6px 20px;
         font-size: 14px;
         line-height: 20;
-    }
-
-    .custom-button-primary:focus {
-        outline: none;
     }
 
     .custom-button-secondary {
@@ -139,30 +147,6 @@ html {
         border-color: #138496;
     }
 
-    /* Outline варианты */
-    .custom-button-outline-primary {
-        background-color: transparent;
-        border-color: #007bff;
-        color: #007bff;
-    }
-
-    .custom-button-outline-primary:hover:not(.custom-button-disabled) {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .custom-button-outline-secondary {
-        background-color: transparent;
-        border-color: #6c757d;
-        color: #6c757d;
-    }
-
-    .custom-button-outline-secondary:hover:not(.custom-button-disabled) {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    /* Ghost варианты */
     .custom-button-ghost {
         background-color: transparent;
         border-color: transparent;
@@ -283,14 +267,31 @@ body.theme-light .custom-button-container {
         border-color: var(--font);
         color: var(--input-bg);
     }
-
     .custom-button-primary:hover:not(.custom-button-disabled) {
         background-color: var(--font-hover);
         border-color: var(--font-hover);
     }
-
     .custom-button-primary:focus {
         box-shadow: 0 0 0 1px inset var(--font-hover);
+    }
+
+    .custom-button-secondary-icon,
+    .custom-button-secondary {
+        background-color: var(--input-bg);
+        border-color: var(--input-border);
+        color: var(--font);
+    }
+    .custom-button-secondary-icon:hover:not(.custom-button-disabled),
+    .custom-button-secondary:hover:not(.custom-button-disabled) {
+        background-color: var(--select-option-hover);
+    }
+    .custom-button-secondary-icon:active:not(.custom-button-disabled),
+    .custom-button-secondary:active:not(.custom-button-disabled) {
+        background-color: var(--select-option-selected);
+    }
+    .custom-button-secondary-icon:focus:not(:active):not(:hover),
+    .custom-button-secondary:focus:not(:active):not(:hover) {
+        border-color: var(--input-border-focus);
     }
 }
 
@@ -308,6 +309,25 @@ body.theme-dark .custom-button-container {
 
     .custom-button-primary:focus {
         box-shadow: 0 0 0 1px inset var(--font-hover-dark);
+    }
+
+    .custom-button-secondary-icon,
+    .custom-button-secondary {
+        background-color: var(--input-bg-dark);
+        border-color: var(--input-border-dark);
+        color: var(--font-dark);
+    }
+    .custom-button-secondary-icon:hover:not(.custom-button-disabled),
+    .custom-button-secondary:hover:not(.custom-button-disabled) {
+        background-color: var(--select-option-hover-dark);
+    }
+    .custom-button-secondary-icon:active:not(.custom-button-disabled),
+    .custom-button-secondary:active:not(.custom-button-disabled) {
+        background-color: var(--select-option-selected-dark);
+    }
+    .custom-button-secondary-icon:focus:not(:active):not(:hover),
+    .custom-button-secondary:focus:not(:active):not(:hover) {
+        border-color: var(--input-border-focus-dark);
     }
 }
 /** Input field ************ */
