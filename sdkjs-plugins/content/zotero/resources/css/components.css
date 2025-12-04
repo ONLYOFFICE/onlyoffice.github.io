@@ -11,7 +11,7 @@ html {
     --input-border-hover: #c0c0c0;
     --input-border-focus: #848484;
     --input-border-active: #c0c0c0;
-    --input-border-error: #f56c6c;
+    --input-border-error: #F62211;
     --input-border-warning: #e6a23c;
     --input-icon: #bdbdbd;
     --input-icon-hover: #848484;
@@ -31,7 +31,7 @@ html {
     --input-border-hover-dark: #666666;
     --input-border-focus-dark: rgb(204, 204, 204);
     --input-border-active-dark: #666666;
-    --input-border-error-dark: #f56c6c;
+    --input-border-error-dark: #F62211;
     --input-border-warning-dark: #e6a23c;
     --input-icon-dark: rgba(255, 255, 255, 0.8);
     --input-icon-hover-dark: white;
