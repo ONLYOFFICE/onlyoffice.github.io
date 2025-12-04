@@ -93,16 +93,18 @@
     /** @type {CitationService} */
     var citationService;
 
-    /** @type {{text: string, obj: SearchResult | null, groups: Array<SearchResult>}}} */
+    /** @type {{text: string, obj: SearchResult | null, groups: Array<SearchResult>, groupsHash: string}}} */
     var lastSearch = {
         text: "",
         obj: null,
         groups: [],
+        groupsHash: "",
     };
 
-    /** @type {Object.<string, Button | InputField | SelectBox>} */
-    var customElements = {};
-
+    /** @type {SearchFilter} */
+    var searchFilter;
+    /** @type {Button} */
+    var saveAsTextBtn;
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
     var elements = {};
     function initElements() {
@@ -225,23 +227,9 @@
         if (!cslFileInput) {
             throw new Error("cslFileInput not found");
         }
-        customElements = {
-            searchField: new InputField("searchField", {
-                type: "text",
-                autofocus: true,
-                showClear: true,
-            }),
-            filterButton: new Button("filterButton", {
-                variant: "secondary-icon",
-                size: "small",
-            }),
-            librarySelectList: new SelectBox("librarySelectList", {
-                // TODO: add translation
-                placeholder: translate("No items selected"),
-                multiple: true,
-            }),
-            saveAsTextBtn: new Button("saveAsTextBtn"),
-        };
+        searchFilter = new SearchFilter();
+        saveAsTextBtn = new Button("saveAsTextBtn");
+
         elements = {
             loader: loader,
             libLoader: libLoader,
@@ -437,130 +425,8 @@
         return sdk
             .getUserGroups()
             .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
-                let selectedItem = localStorage.getItem("selectedGroup");
-                let hasSelected = false;
-                groups.forEach(function (group) {
-                    group.id = String(group.id);
-                });
-
-                const customGroups = [
-                    { id: "my_library", name: translate("My Library") },
-                    {
-                        id: "group_libraries",
-                        name: translate("Group Libraries"),
-                    },
-                ];
-                !hasSelected &&
-                    customGroups.forEach(function (group) {
-                        if (group.id === selectedItem) {
-                            hasSelected = true;
-                        }
-                    });
-                !hasSelected &&
-                    groups.forEach(function (group) {
-                        if (group.id.toString() === selectedItem) {
-                            hasSelected = true;
-                        }
-                    });
-                if (!hasSelected) {
-                    selectedItem = "my_library";
-                    hasSelected = true;
-                }
-
-                /**
-                 * @param {string|number} id
-                 * @param {string} name
-                 */
-                const addGroupToSelectBox = function (id, name) {
-                    if (typeof id === "number") {
-                        id = id.toString();
-                    }
-                    if (customElements.librarySelectList instanceof SelectBox)
-                        customElements.librarySelectList.addItem(
-                            id,
-                            name,
-                            id === selectedItem
-                        );
-                };
-
-                for (var i = 0; i < customGroups.length; i++) {
-                    const id = customGroups[i].id;
-                    const name = customGroups[i].name;
-                    addGroupToSelectBox(id, name);
-                }
-
-                if (groups.length === 0) {
-                    return;
-                }
-                customElements.librarySelectList.addSeparator();
-                for (var i = 0; i < groups.length; i++) {
-                    const id = groups[i].id;
-                    const name = groups[i].name;
-                    addGroupToSelectBox(id, name);
-                }
-                selectedGroupsWatcher(customGroups, groups);
+                searchFilter.addGroups(groups);
             });
-    }
-
-    /**
-     * @param {Array<{id: string, name: string}>} customGroups
-     * @param {Array<UserGroupInfo>} groups
-     * @returns
-     */
-    function selectedGroupsWatcher(customGroups, groups) {
-        if (customElements.librarySelectList instanceof SelectBox === false) {
-            return;
-        }
-        customElements.librarySelectList.subscribe(function (event) {
-            if (event.type !== "selectbox:change") {
-                return;
-            }
-            const values = event.detail.values;
-            const current = event.detail.current;
-            const bEnabled = event.detail.enabled;
-            const customIds = customGroups.map(function (group) {
-                return group.id;
-            });
-            let ids = groups.map(function (group) {
-                return group.id;
-            });
-
-            let bWasCustom = customIds.indexOf(String(current)) !== -1;
-
-            if (bWasCustom && current === "group_libraries") {
-                if (bEnabled) {
-                    customElements.librarySelectList.selectItems(ids, true);
-                } else {
-                    customElements.librarySelectList.unselectItems(ids, true);
-                }
-            } else if (!bWasCustom) {
-                let bAllGroupsSelected = ids.every(function (id) {
-                    return values.indexOf(id) !== -1;
-                });
-                if (bAllGroupsSelected) {
-                    customElements.librarySelectList.selectItems(
-                        "group_libraries",
-                        true
-                    );
-                } else {
-                    customElements.librarySelectList.unselectItems(
-                        "group_libraries",
-                        true
-                    );
-                }
-            }
-        });
-    }
-
-    /**
-     * @return {number|"my_library"|"group_libraries"}
-     */
-    function getSelectedGroup() {
-        const id = customElements.librarySelectList.getValue();
-        if (id === "my_library" || id === "group_libraries") {
-            return id;
-        }
-        return Number(id);
     }
 
     /**
@@ -678,22 +544,25 @@
 
         /**
          * @param {string} text
+         * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
          * @returns
          */
-        function searchFor(text) {
-            if (elements.mainState.classList.contains(displayNoneClass)) return;
+        function searchFor(text, selectedGroups) {
             text = text.trim();
-            if (!text) return;
-            if (text == lastSearch.text) return;
-            lastSearch.text = text;
-            lastSearch.obj = null;
-            lastSearch.groups = [];
+            const groupsHash = selectedGroups.join(",");
+            if (
+                elements.mainState.classList.contains(displayNoneClass) ||
+                !text ||
+                (text == lastSearch.text &&
+                    groupsHash === lastSearch.groupsHash) ||
+                selectedGroups.length === 0
+            )
+                return Promise.resolve();
+
             clearLibrary();
 
             /** @type {Array<Promise<void>>} */
             const promises = [];
-
-            const selectedGroup = getSelectedGroup();
 
             return sdk
                 .getUserGroups()
@@ -701,27 +570,19 @@
                     /** @type {Array<UserGroupInfo>} */ userGroups
                 ) {
                     /** @type {Array<string|number>} */
-                    let groups = [];
-                    switch (selectedGroup) {
-                        case "my_library":
-                            groups = [];
-                            break;
-                        case "group_libraries":
-                            groups = userGroups.map(function (group) {
-                                return group.id;
-                            });
-                            break;
-                        default:
-                            groups = [selectedGroup];
-                            break;
-                    }
+                    let groups = selectedGroups.filter(function (group) {
+                        return (
+                            group !== "my_library" &&
+                            group !== "group_libraries"
+                        );
+                    });
 
                     const append = true;
                     let showLoader = true;
                     let hideLoader = !groups.length;
                     const bCount = true;
 
-                    if (selectedGroup === "my_library") {
+                    if (selectedGroups.indexOf("my_library") !== -1) {
                         promises.push(
                             loadLibrary(
                                 sdk.getItems(text),
@@ -739,7 +600,7 @@
                         hideLoader = i === groups.length - 1;
                         promises.push(
                             loadLibrary(
-                                sdk.getGroupItems(lastSearch.text, groups[i]),
+                                sdk.getGroupItems(text, groups[i]),
                                 append,
                                 showLoader,
                                 hideLoader,
@@ -750,31 +611,16 @@
                     }
                 })
                 .then(function () {
+                    lastSearch.text = text;
+                    lastSearch.obj = null;
+                    lastSearch.groups = [];
+                    lastSearch.groupsHash = groupsHash;
                     return Promise.all(promises);
                 });
         }
-        if (customElements.searchField instanceof HTMLInputElement) {
-            customElements.searchField.subscribe(function (e) {
-                if (
-                    e.type === "inputfield:blur" ||
-                    e.type === "inputfield:submit"
-                ) {
-                    searchFor(e.detail.value);
-                }
-            });
-        }
-        if (customElements.filterButton instanceof Button) {
-            customElements.filterButton.subscribe(function (e) {
-                if (e.type === "button:click") {
-                    if (!customElements.librarySelectList.isOpen) {
-                        if (e.detail.originalEvent) {
-                            e.detail.originalEvent.stopPropagation();
-                        }
-                        customElements.librarySelectList.openDropdown();
-                    }
-                }
-            });
-        }
+        searchFilter.subscribe(function (text, selectedGroups) {
+            searchFor(text, selectedGroups);
+        });
 
         elements.cancelBtn.onclick = function (e) {
             var ids = [];
@@ -885,17 +731,15 @@
                 });
         };
 
-        if (customElements.saveAsTextBtn instanceof Button) {
-            customElements.saveAsTextBtn.subscribe(function (event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                showLoader(true);
-                citationService.saveAsText().then(function () {
-                    showLoader(false);
-                });
+        saveAsTextBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
+            showLoader(true);
+            citationService.saveAsText().then(function () {
+                showLoader(false);
             });
-        }
+        });
 
         elements.locatorLabelsList.addEventListener("click", function (e) {
             const target = e.target;

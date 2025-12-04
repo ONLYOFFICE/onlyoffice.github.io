@@ -107,7 +107,8 @@ InputField.prototype._createDOM = function () {
 
     var fragment = document.createDocumentFragment();
     fragment.appendChild(this._container);
-    this._container.className += " input-field-container  input-field-container-" + this._id;
+    this._container.className +=
+        " input-field-container  input-field-container-" + this._id;
 
     var inputField = document.createElement("div");
     this._container.appendChild(inputField);
@@ -350,48 +351,45 @@ InputField.prototype.validate = function () {
 };
 
 InputField.prototype.updateValidationState = function () {
-    if (this._validationElement) {
-        if (!this.isValid) {
-            this._validationElement.textContent = this._validationMessage;
-            this._validationElement.style.display = "block";
+    if (!this.isValid) {
+        this._validationElement.textContent = this._validationMessage;
+        this._validationElement.style.display = "block";
 
-            var containerClasses = this._container.className.split(" ");
-            if (containerClasses.indexOf("input-field-invalid") === -1) {
-                this._container.className += " input-field-invalid";
-            }
-
-            this._container.className = this._container.className
-                .split(" ")
-                .filter(function (cls) {
-                    return cls !== "input-field-valid";
-                })
-                .join(" ");
-        } else if (this.input.value.length > 0) {
-            this._validationElement.style.display = "none";
-
-            var containerClasses = this._container.className.split(" ");
-            if (containerClasses.indexOf("input-field-valid") === -1) {
-                this._container.className += " input-field-valid";
-            }
-
-            this._container.className = this._container.className
-                .split(" ")
-                .filter(function (cls) {
-                    return cls !== "input-field-invalid";
-                })
-                .join(" ");
-        } else {
-            this._validationElement.style.display = "none";
-            this._container.className = this._container.className
-                .split(" ")
-                .filter(function (cls) {
-                    return (
-                        cls !== "input-field-valid" &&
-                        cls !== "input-field-invalid"
-                    );
-                })
-                .join(" ");
+        var containerClasses = this._container.className.split(" ");
+        if (containerClasses.indexOf("input-field-invalid") === -1) {
+            this._container.className += " input-field-invalid";
         }
+
+        this._container.className = this._container.className
+            .split(" ")
+            .filter(function (cls) {
+                return cls !== "input-field-valid";
+            })
+            .join(" ");
+    } else if (this.input.value.length > 0) {
+        this._validationElement.style.display = "none";
+
+        var containerClasses = this._container.className.split(" ");
+        if (containerClasses.indexOf("input-field-valid") === -1) {
+            this._container.className += " input-field-valid";
+        }
+
+        this._container.className = this._container.className
+            .split(" ")
+            .filter(function (cls) {
+                return cls !== "input-field-invalid";
+            })
+            .join(" ");
+    } else {
+        this._validationElement.style.display = "none";
+        this._container.className = this._container.className
+            .split(" ")
+            .filter(function (cls) {
+                return (
+                    cls !== "input-field-valid" && cls !== "input-field-invalid"
+                );
+            })
+            .join(" ");
     }
 };
 
@@ -457,7 +455,7 @@ InputField.prototype.disable = function () {
 };
 
 /**
- * @param {function(InputEventType): void} callback 
+ * @param {function(InputEventType): void} callback
  * @returns {Object}
  */
 InputField.prototype.subscribe = function (callback) {
