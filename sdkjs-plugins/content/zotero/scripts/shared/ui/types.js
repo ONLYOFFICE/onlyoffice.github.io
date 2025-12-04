@@ -40,7 +40,7 @@
  * @typedef {Object} ButtonOptionsType
  * @property {string} [text]
  * @property {"button"|"submit"|"reset"} [type]
- * @property {"primary"|"secondary"|"success"|"danger"} [variant]
+ * @property {"primary"|"secondary"|"success"|"danger"|"secondary-icon"|"icon-only"} [variant]
  * @property {"small"|"medium"|"large"} [size]
  * @property {boolean} [disabled]
  * @property {boolean} [loading]

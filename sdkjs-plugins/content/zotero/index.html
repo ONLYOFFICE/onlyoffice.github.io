@@ -46,11 +46,11 @@
     <script defer src="scripts/services/citation-service.js"></script>
     <script defer src="scripts/services/translate-service.js"></script>
 
-    <script defer src="scripts/components/input.js"></script>
-    <script defer src="scripts/components/search-input.js"></script>
-    <script defer src="scripts/components/selectbox.js"></script>
-    <script defer src="scripts/components/button.js"></script>
-    <script defer src="scripts/components/message.js"></script>
+    <script defer src="scripts/shared/ui/input.js"></script>
+    <script defer src="scripts/shared/ui/search-input.js"></script>
+    <script defer src="scripts/shared/ui/selectbox.js"></script>
+    <script defer src="scripts/shared/ui/button.js"></script>
+    <script defer src="scripts/shared/ui/message.js"></script>
 
     <script defer src="scripts/zotero/zotero-environment.js"></script>
     <script defer src="scripts/zotero/zotero-api-checker.js"></script>
@@ -110,16 +110,16 @@
                     </div>
                     <div id="selectedThumb" class="scrollThumb hidden"></div>
                 </div>
+                <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
                 <div id="searchWrapper">
-                    <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
+                    <div id="librarySelectList"></div>
                     <input id="searchField" autocomplete="off" class="form-control i18n" type="text"
                         placeholder="Search references by author, title" />
-                    <button>
+                    <button id="filterButton">
                         <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 9L7 11V5L12 0H0L5 5V9Z" fill="black" fill-opacity="0.8"/>
+                            <path d="M5 9L7 11V5L12 0H0L5 5V9Z" fill="black" fill-opacity="0.8" />
                         </svg>
                     </button>
-                    <div id="librarySelectList"></div>
                 </div>
 
                 <div id="docsWrapper" class="flexSize">

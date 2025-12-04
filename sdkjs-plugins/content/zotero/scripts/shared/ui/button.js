@@ -23,7 +23,7 @@ function Button(button, options) {
     this._container = document.createElement("div");
     this._options = options || {};
 
-    this._options.text = this._options.text || button.textContent;
+    this._options.text = this._options.text || button.textContent.trim();
     this._options.type = this._options.type || "button";
     this._options.variant = this._options.variant || "primary";
     this._options.size = this._options.size || "medium";
@@ -95,26 +95,28 @@ Button.prototype._createDOM = function () {
         this.button.appendChild(this.spinner);
     }
 
-    this.buttonText = document.createElement("span");
-    this.buttonText.className = "custom-button-text";
-    this.buttonText.textContent = "";
+    if (this._options.text !== undefined && this._options.text !== "") {
+        this.buttonText = document.createElement("span");
+        this.buttonText.className = "custom-button-text";
+        this.buttonText.textContent = this._options.text || "";
 
-    if (this._options.icon) {
-        var iconSpan = document.createElement("span");
-        iconSpan.className = "custom-button-icon";
+        if (this._options.icon) {
+            var iconSpan = document.createElement("span");
+            iconSpan.className = "custom-button-icon";
 
-        if (this._options.iconPosition === "left") {
-            iconSpan.className += " custom-button-icon-left";
-            this.button.appendChild(iconSpan);
-            this.button.appendChild(this.buttonText);
+            if (this._options.iconPosition === "left") {
+                iconSpan.className += " custom-button-icon-left";
+                this.button.appendChild(iconSpan);
+                this.button.appendChild(this.buttonText);
+            } else {
+                iconSpan.className += " custom-button-icon-right";
+                this.button.appendChild(this.buttonText);
+                this.button.appendChild(iconSpan);
+            }
+            iconSpan.innerHTML = this._options.icon;
         } else {
-            iconSpan.className += " custom-button-icon-right";
             this.button.appendChild(this.buttonText);
-            this.button.appendChild(iconSpan);
         }
-        iconSpan.innerHTML = this._options.icon;
-    } else {
-        this.button.appendChild(this.buttonText);
     }
 
     if (this._options.badge) {
@@ -224,9 +226,13 @@ Button.prototype.subscribe = function (callback) {
 Button.prototype.setText = function (text) {
     if (typeof text === "undefined") return;
     this._options.text = text;
-    if (this.buttonText) {
-        this.buttonText.textContent = text;
+    if (!this.buttonText) {
+        this.buttonText = document.createElement("span");
+        this.buttonText.className = "custom-button-text";
+        this.buttonText.textContent = "";
+        this.button.appendChild(this.buttonText);
     }
+    this.buttonText.textContent = text;
 };
 /**
  * @param {string} icon
