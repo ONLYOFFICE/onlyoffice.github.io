@@ -148,6 +148,12 @@ input[type="text"] {
     margin-bottom: 14px;
 }
 
+#selectedInfo:not(.hidden) {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
 #searchWrapper {
     display: flex;
     justify-content: space-between;

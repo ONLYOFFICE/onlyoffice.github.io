@@ -51,6 +51,8 @@
     <script defer src="scripts/shared/ui/selectbox.js"></script>
     <script defer src="scripts/shared/ui/button.js"></script>
     <script defer src="scripts/shared/ui/message.js"></script>
+    <script defer src="scripts/shared/components/search-filter.js"></script>
+    <script defer src="scripts/shared/components/select-citation.js"></script>
 
     <script defer src="scripts/zotero/zotero-environment.js"></script>
     <script defer src="scripts/zotero/zotero-api-checker.js"></script>
@@ -118,6 +120,10 @@
                 <div id="selectedWrapper">
                     <div class="flexCol flexSize flexCenter">
                         <div id="selectedHolder"></div>
+                        <div id="selectedInfo" class="hidden">
+                            <span id="selectedCount">0 selected</span>
+                            <span id="cancelBtn" class="i18n link">Cancel selection</span>
+                        </div>
                     </div>
                     <div id="selectedThumb" class="scrollThumb hidden"></div>
                 </div>
@@ -136,7 +142,6 @@
                             <button id="insertLinkBtn" class="button control i18n btn-text-default"
                                 style="flex: 1; margin-left: 8px; margin-right: 0;" disabled>Insert Citation</button>
                         </div>
-                        <button id="cancelBtn" class="button control i18n btn-text-default" disabled>Cancel select</button>
                     </div>
                     <div id="insertBibDiv" class="flex">
                         <button id="insertBibBtn" class="button control i18n btn-text-default">Insert Bibliography</button>
