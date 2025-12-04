@@ -27,6 +27,8 @@
 /// <reference path="./csl/locales/locales-manager.js" />
 /// <reference path="./services/translate-service.js" />
 /// <reference path="./services/citation-service.js" />
+/// <reference path="./shared/components/search-filter.js" />
+/// <reference path="./shared/components/select-citation.js" />
 /// <reference path="./shared/ui/input.js" />
 /// <reference path="./shared/ui/selectbox.js" />
 /// <reference path="./shared/ui/button.js" />
@@ -37,20 +39,11 @@
  * @property {Function} onscroll
  */
 
-/**
- * @typedef {Object} Selected
- * @property {Object<string|number, SearchResultItem>} items
- * @property {Object<string|number, HTMLElement>} html
- * @property {Object<string|number, HTMLInputElement>} checks
- * @property {function(): number} count
- */
-
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "hidden";
     var blurClass = "blur";
-    /** @type {number} */
-    var loadTimeout;
+
     //var loadingStyle = false;
     //var loadingLocale = false;
     var bNumFormat = false;
@@ -67,18 +60,6 @@
     // TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку
     //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
     //     какая цитата сверху и снизу от текущего курсора)
-
-    /** @type {Selected} */
-    var selected = {
-        items: {},
-        html: {},
-        checks: {},
-        count: function () {
-            var k = 0;
-            for (var i in selected.items) k++;
-            return k;
-        },
-    };
 
     /** @type {Router} */
     var router;
@@ -101,8 +82,10 @@
         groupsHash: "",
     };
 
-    /** @type {SearchFilter} */
+    /** @type {SearchFilterComponents} */
     var searchFilter;
+    /** @type {SelectCitationsComponent} */
+    var selectCitation;
     /** @type {Button} */
     var saveAsTextBtn;
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
@@ -124,14 +107,7 @@
         if (!contentHolder) {
             throw new Error("contentHolder not found");
         }
-        const docsHolder = document.getElementById("docsHolder");
-        if (!docsHolder) {
-            throw new Error("docsHolder not found");
-        }
-        const docsThumb = document.getElementById("docsThumb");
-        if (!docsThumb) {
-            throw new Error("docsThumb not found");
-        }
+
         const configState = document.getElementById("configState");
         if (!configState) {
             throw new Error("configState not found");
@@ -139,18 +115,6 @@
         const mainState = document.getElementById("mainState");
         if (!mainState) {
             throw new Error("mainState not found");
-        }
-        const selectedWrapper = document.getElementById("selectedWrapper");
-        if (!selectedWrapper) {
-            throw new Error("selectedWrapper not found");
-        }
-        const selectedHolder = document.getElementById("selectedHolder");
-        if (!selectedHolder) {
-            throw new Error("selectedHolder not found");
-        }
-        const selectedThumb = document.getElementById("selectedThumb");
-        if (!selectedThumb) {
-            throw new Error("selectedThumb not found");
         }
         const buttonsWrapper = document.getElementById("buttonsWrapper");
         if (!buttonsWrapper) {
@@ -210,10 +174,6 @@
         if (!insertLinkBtn) {
             throw new Error("insertLinkBtn not found");
         }
-        const cancelBtn = document.getElementById("cancelBtn");
-        if (!cancelBtn) {
-            throw new Error("cancelBtn not found");
-        }
         const refreshBtn = document.getElementById("refreshBtn");
         if (!refreshBtn) {
             throw new Error("refreshBtn not found");
@@ -227,7 +187,12 @@
         if (!cslFileInput) {
             throw new Error("cslFileInput not found");
         }
-        searchFilter = new SearchFilter();
+        searchFilter = new SearchFilterComponents();
+        selectCitation = new SelectCitationsComponent(
+            displayNoneClass,
+            loadMore,
+            shouldLoadMore
+        );
         saveAsTextBtn = new Button("saveAsTextBtn");
 
         elements = {
@@ -236,16 +201,10 @@
             error: error,
 
             contentHolder: contentHolder,
-            docsHolder: docsHolder,
-            docsThumb: docsThumb,
-
             configState: configState,
 
             mainState: mainState,
 
-            selectedWrapper: selectedWrapper,
-            selectedHolder: selectedHolder,
-            selectedThumb: selectedThumb,
             buttonsWrapper: buttonsWrapper,
 
             locatorLabel: locatorLabel,
@@ -263,18 +222,12 @@
 
             insertBibBtn: insertBibBtn,
             insertLinkBtn: insertLinkBtn,
-            cancelBtn: cancelBtn,
             refreshBtn: refreshBtn,
 
             checkOmitAuthor: checkOmitAuthor,
             cslFileInput: cslFileInput,
         };
     }
-
-    /** @type {Scroller} */
-    var selectedScroller;
-    /** @type {Scroller} */
-    var docsScroller;
 
     window.Asc.plugin.init = function () {
         initElements();
@@ -321,16 +274,6 @@
         });
 
         window.Asc.plugin.onTranslate = applyTranslations;
-
-        selectedScroller = initScrollBox(
-            elements.selectedHolder,
-            elements.selectedThumb
-        );
-        docsScroller = initScrollBox(
-            elements.docsHolder,
-            elements.docsThumb,
-            checkDocsScroll
-        );
     };
 
     function preloadLastStyle() {
@@ -516,6 +459,8 @@
     }
 
     function addEventListeners() {
+        selectCitation.subscribe(checkSelected);
+
         elements.cslFileInput.onchange = function (e) {
             if (!(e.target instanceof HTMLInputElement)) return;
             /** @type {HTMLInputElement} */
@@ -559,9 +504,9 @@
             )
                 return Promise.resolve();
 
-            clearLibrary();
+            selectCitation.clearLibrary();
 
-            /** @type {Array<Promise<void>>} */
+            /** @type {Array<Promise<boolean>>} */
             const promises = [];
 
             return sdk
@@ -621,16 +566,6 @@
         searchFilter.subscribe(function (text, selectedGroups) {
             searchFor(text, selectedGroups);
         });
-
-        elements.cancelBtn.onclick = function (e) {
-            var ids = [];
-            for (var id in selected.items) {
-                ids.push(id);
-            }
-            for (var i = 0; i < ids.length; i++) {
-                removeSelected(ids[i]);
-            }
-        };
 
         elements.refreshBtn.onclick = function () {
             if (!cslStylesManager.getLastUsedStyleId()) {
@@ -706,7 +641,7 @@
                     }
 
                     return citationService.insertSelectedCitations(
-                        selected.items,
+                        selectCitation.getItems(),
                         prefix,
                         suffix,
                         locatorInfo,
@@ -714,9 +649,7 @@
                     );
                 })
                 .then(function (keys) {
-                    keys.forEach(function (key) {
-                        removeSelected(key);
-                    });
+                    selectCitation.removeItems(keys);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -1232,57 +1165,35 @@
         };
     }
 
-    /**
-     * @param {HTMLElement} holder - The element that contains the document list.
-     * @param {HTMLElement} [thumb]
-     */
-    function checkDocsScroll(holder, thumb) {
-        if (shouldLoadMore(holder)) {
-            if (loadTimeout) {
-                clearTimeout(loadTimeout);
-            }
+    function loadMore() {
+        console.warn("Loading more...");
+        if (lastSearch.obj && lastSearch.obj.next) {
+            loadLibrary(
+                lastSearch.obj.next(),
+                true,
+                true,
+                !lastSearch.groups.length,
+                false,
+                false
+            );
+        }
 
-            if (
-                !lastSearch.obj &&
-                !lastSearch.text.trim() &&
-                !lastSearch.groups.length
-            )
-                return;
-
-            loadTimeout = setTimeout(function () {
-                if (shouldLoadMore(holder)) {
-                    console.warn("Loading more...");
-                    if (lastSearch.obj && lastSearch.obj.next) {
-                        loadLibrary(
-                            lastSearch.obj.next(),
-                            true,
-                            true,
-                            !lastSearch.groups.length,
-                            false,
-                            false
-                        );
-                    }
-
-                    for (
-                        var i = 0;
-                        i < lastSearch.groups.length &&
-                        lastSearch.groups[i].next;
-                        i++
-                    ) {
-                        loadLibrary(
-                            sdk.getGroupItems(
-                                lastSearch.groups[i].next(),
-                                lastSearch.groups[i].id
-                            ),
-                            true,
-                            false,
-                            i == lastSearch.groups.length - 1,
-                            true,
-                            false
-                        );
-                    }
-                }
-            }, 500);
+        for (
+            var i = 0;
+            i < lastSearch.groups.length && lastSearch.groups[i].next;
+            i++
+        ) {
+            loadLibrary(
+                sdk.getGroupItems(
+                    lastSearch.groups[i].next(),
+                    lastSearch.groups[i].id
+                ),
+                true,
+                false,
+                i == lastSearch.groups.length - 1,
+                true,
+                false
+            );
         }
     }
 
@@ -1301,17 +1212,14 @@
             if (el.next) flag = false;
         });
         if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
+        if (
+            !lastSearch.obj &&
+            !lastSearch.text.trim() &&
+            !lastSearch.groups.length
+        )
+            return false;
 
         return true;
-    }
-
-    function clearLibrary() {
-        var holder = elements.docsHolder;
-        while (holder.lastChild) {
-            holder.removeChild(holder.lastChild);
-        }
-        holder.scrollTop = 0;
-        docsScroller.onscroll();
     }
 
     /**
@@ -1321,7 +1229,7 @@
      * @param {boolean} hideLoader
      * @param {boolean} isGroup
      * @param {boolean} bCount
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     function loadLibrary(
         promise,
@@ -1335,9 +1243,9 @@
         if (bCount) counter++;
         return promise
             .then(function (res) {
-                console.log(res);
+                console.warn(res);
                 if (bCount) counter--;
-                displaySearchItems(
+                return displaySearchItems(
                     append,
                     res,
                     null,
@@ -1351,7 +1259,7 @@
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                displaySearchItems(
+                return displaySearchItems(
                     append,
                     null,
                     err,
@@ -1427,12 +1335,6 @@
      * @param {boolean} showNotFound
      */
     function displaySearchItems(append, res, err, isGroup, showNotFound) {
-        var holder = elements.docsHolder;
-
-        if (!append) {
-            clearLibrary();
-        }
-
         var first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
@@ -1446,192 +1348,31 @@
             if (isGroup && res && res.next) lastSearch.groups.push(res);
             else lastSearch.obj = res && res.items.length ? res : null;
         }
-
-        var page = document.createElement("div");
-        page.classList.add("page" + holder.children.length);
         if (res && res.items && res.items.length > 0) {
             for (let index = 0; index < res.items.length; index++) {
                 let item = res.items[index];
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 citationService.fillUrisFromId(item);
-
-                page.appendChild(buildDocElement(item));
-            }
-        } else if (err || first) {
-            if (err) {
-                showError(err);
-            } else if (showNotFound) {
-                var notFound = document.createElement("div");
-                notFound.textContent = translate("Nothing found");
-                notFound.classList.add("searchInfo");
-                page.appendChild(notFound);
             }
         }
-        holder.appendChild(page);
 
-        docsScroller.onscroll();
+        return selectCitation.displaySearchItems(
+            append,
+            res,
+            err,
+            showNotFound,
+            first
+        );
     }
 
     /**
-     * @param {SearchResultItem} item
-     * @returns {HTMLElement}
+     * @param {number} numOfSelected
      */
-    function buildDocElement(item) {
-        var root = document.createElement("div");
-        root.classList.add("doc");
-
-        var checkHolder = document.createElement("div");
-        var checkWrapper = document.createElement("div");
-        checkWrapper.classList.add("checkbox");
-        var check = document.createElement("input");
-        check.setAttribute("type", "checkbox");
-        if (selected.items[item.id]) {
-            check.checked = true;
-            selected.checks[item.id] = check;
-        }
-        checkWrapper.appendChild(check);
-        checkWrapper.appendChild(document.createElement("span"));
-        checkHolder.appendChild(checkWrapper);
-
-        var docInfo = document.createElement("div");
-        docInfo.classList.add("docInfo");
-
-        var title = document.createElement("div");
-        title.textContent = item.title;
-        title.classList.add("truncate-text");
-        docInfo.appendChild(title);
-
-        if (item.author && item.author.length > 0) {
-            var authors = document.createElement("div");
-            authors.textContent = item.author
-                .map(function (a) {
-                    return a.family + ", " + a.given;
-                })
-                .join("; ");
-            authors.setAttribute("title", authors.textContent);
-            authors.classList.add("secondary-text");
-            authors.classList.add("truncate-text");
-            authors.classList.add("nowrap");
-            docInfo.appendChild(authors);
-        }
-
-        var source = document.createElement("div");
-        if (item.publisher || item["publisher-place"]) {
-            source.textContent =
-                item.publisher || item["publisher-place"] || "";
-        }
-        if (item.issued && item.issued["date-parts"]) {
-            var date = item.issued["date-parts"][0];
-            if (source.textContent) {
-                source.textContent += " (" + date.join("-") + ")";
-            } else {
-                source.textContent = date.join("-");
-            }
-        }
-        source.setAttribute("title", source.textContent);
-        source.classList.add("secondary-text");
-        source.classList.add("truncate-text");
-        source.classList.add("nowrap");
-        docInfo.appendChild(source);
-
-        root.appendChild(checkHolder);
-        root.appendChild(docInfo);
-
-        /**
-         * @param {HTMLInputElement} input
-         * @param {SearchResultItem} item
-         * @returns
-         */
-        function selectItem(input, item) {
-            return function () {
-                input.checked = !input.checked;
-                if (input.checked) {
-                    addSelected(item, input);
-                } else {
-                    removeSelected(item.id);
-                }
-            };
-        }
-
-        var f = selectItem(check, item);
-        checkWrapper.onclick = f;
-        docInfo.onclick = f;
-
-        return root;
-    }
-
-    /**
-     * @param {SearchResultItem} item
-     * @param {HTMLInputElement} input
-     */
-    function addSelected(item, input) {
-        /** @type {HTMLElement} */
-        var el = buildSelectedElement(item);
-        selected.items[item.id] = item;
-        selected.html[item.id] = el;
-        selected.checks[item.id] = input;
-        elements.selectedHolder.appendChild(el);
-        docsScroller.onscroll();
-        selectedScroller.onscroll();
-        checkSelected();
-    }
-
-    /** @param {string|number} id */
-    function removeSelected(id) {
-        var el = selected.html[id];
-        delete selected.items[id];
-        delete selected.html[id];
-        if (selected.checks[id]) {
-            selected.checks[id].checked = false;
-            delete selected.checks[id];
-        }
-        elements.selectedHolder.removeChild(el);
-        docsScroller.onscroll();
-        selectedScroller.onscroll();
-        checkSelected();
-    }
-
-    /**
-     * @param {SearchResultItem} item
-     * @returns {HTMLElement}
-     */
-    function buildSelectedElement(item) {
-        var root = document.createElement("div");
-        root.classList.add("selDoc");
-
-        var name = document.createElement("span");
-        name.textContent = item.title;
-        name.setAttribute("title", item.title);
-
-        var year = document.createElement("span");
-        if (item.issued && item.issued["date-parts"]) {
-            year.textContent = item.issued["date-parts"][0].join("-");
-        }
-
-        var remove = document.createElement("span");
-        remove.onclick = function () {
-            removeSelected(item.id);
-        };
-        remove.textContent = "×";
-
-        root.appendChild(name);
-        root.appendChild(year);
-        root.appendChild(remove);
-
-        return root;
-    }
-
-    function checkSelected() {
-        if (selected.count() <= 0) {
-            if (elements.insertLinkBtn)
-                elements.insertLinkBtn.setAttribute("disabled", "");
-            if (elements.cancelBtn)
-                elements.cancelBtn.setAttribute("disabled", "");
+    function checkSelected(numOfSelected) {
+        if (numOfSelected <= 0) {
+            elements.insertLinkBtn.setAttribute("disabled", "");
         } else {
-            if (elements.insertLinkBtn)
-                elements.insertLinkBtn.removeAttribute("disabled");
-            if (elements.cancelBtn)
-                elements.cancelBtn.removeAttribute("disabled");
+            elements.insertLinkBtn.removeAttribute("disabled");
         }
     }
 })();
