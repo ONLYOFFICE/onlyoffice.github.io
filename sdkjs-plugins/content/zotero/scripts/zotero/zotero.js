@@ -21,21 +21,6 @@
 /// <reference path="../types-global.js" />
 /// <reference path="./zotero-environment.js" />
 
-/**
- * @typedef {Object} ZoteroGroupInfo
- * @property {number} id
- * @property {number} version
- * @property {CslJsonObjectLinks} meta
- * @property {{created: string, lastModified: string, numItems: number}} links
- * @property {{name: string, description: string, id: number, owner: number, type: string}} data
- */
-
-/**
- * @typedef {Object} UserGroupInfo
- * @property {number|string} id
- * @property {string} name
- */
-
 const ZoteroSdk = function () {
     this._apiKey = null;
     this._userId = 0;

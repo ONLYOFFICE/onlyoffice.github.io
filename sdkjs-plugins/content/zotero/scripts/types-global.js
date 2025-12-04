@@ -256,3 +256,20 @@ var Api = window.Api;
 /**
  * @typedef {Promise<FetchResponse>} FetchPromise
  */
+
+/** ------------------------------------------------ */
+
+/**
+ * @typedef {Object} ZoteroGroupInfo
+ * @property {number} id
+ * @property {number} version
+ * @property {CslJsonObjectLinks} meta
+ * @property {{created: string, lastModified: string, numItems: number}} links
+ * @property {{name: string, description: string, id: number, owner: number, type: string}} data
+ */
+
+/**
+ * @typedef {Object} UserGroupInfo
+ * @property {number|string} id
+ * @property {string} name
+ */

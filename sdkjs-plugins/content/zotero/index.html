@@ -104,12 +104,6 @@
                 <button id="saveAsTextBtn" class="btn-text-default i18n" style="width: 100%;">Unlink citations</button>
             </div>
             <div id="mainState" class="flexCol flexSize hidden">
-                <div id="selectedWrapper">
-                    <div class="flexCol flexSize flexCenter">
-                        <div id="selectedHolder"></div>
-                    </div>
-                    <div id="selectedThumb" class="scrollThumb hidden"></div>
-                </div>
                 <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
                 <div id="searchWrapper">
                     <div id="librarySelectList"></div>
@@ -121,7 +115,12 @@
                         </svg>
                     </button>
                 </div>
-
+                <div id="selectedWrapper">
+                    <div class="flexCol flexSize flexCenter">
+                        <div id="selectedHolder"></div>
+                    </div>
+                    <div id="selectedThumb" class="scrollThumb hidden"></div>
+                </div>
                 <div id="docsWrapper" class="flexSize">
                     <div class="flexCol flexSize">
                         <div id="docsHolder" class="flexCol"></div>

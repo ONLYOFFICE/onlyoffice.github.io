@@ -556,7 +556,10 @@ SelectBox.prototype.removeItem = function (value) {
     this._updateSelectedText();
 };
 
-SelectBox.prototype.getValue = function () {
+/**
+ * @return {null | string | Array<string>}
+ */
+SelectBox.prototype.getSelectedValues = function () {
     if (this._options.multiple) {
         return Array.from(this._selectedValues);
     } else {
@@ -568,7 +571,7 @@ SelectBox.prototype.getValue = function () {
 /**
  * @param {string | Array<string>} value
  */
-SelectBox.prototype.setValue = function (value) {
+SelectBox.prototype.setSelectedValues = function (value) {
     if (this._options.multiple && Array.isArray(value)) {
         this._selectedValues = new Set(value);
     } else {
