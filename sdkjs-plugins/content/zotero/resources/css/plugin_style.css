@@ -148,13 +148,20 @@ input[type="text"] {
     margin-bottom: 14px;
 }
 
-#searchWrapper .input-field-container-searchField {
-    width: 207px;
+#searchWrapper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
 }
-#searchWrapper .selectList {
-    top: 22px;
-    z-index: 1;
-}
+    #searchWrapper .input-field-container-searchField {
+        width: 207px;
+    }
+    #searchWrapper .selectbox-container {
+        position: absolute;
+    }
+        #searchWrapper .selectbox-container .selectbox-header {
+            opacity: 0;
+        }
 #searchField {
     width: 207px;
 }

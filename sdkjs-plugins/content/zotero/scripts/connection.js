@@ -1,10 +1,10 @@
 // @ts-check
 
 /// <reference path="./router.js" />
-/// <reference path="./components/input.js" />
-/// <reference path="./components/button.js" />
-/// <reference path="./components/message.js" />
-/// <reference path="./components/types.js" />
+/// <reference path="./shared/ui/input.js" />
+/// <reference path="./shared/ui/button.js" />
+/// <reference path="./shared/ui/message.js" />
+/// <reference path="./shared/ui/types.js" />
 /// <reference path="./services/translate-service.js" />
 /// <reference path="./zotero/zotero.js" />
 /// <reference path="./zotero/zotero-api-checker.js" />

@@ -27,9 +27,9 @@
 /// <reference path="./csl/locales/locales-manager.js" />
 /// <reference path="./services/translate-service.js" />
 /// <reference path="./services/citation-service.js" />
-/// <reference path="./components/input.js" />
-/// <reference path="./components/selectbox.js" />
-/// <reference path="./components/button.js" />
+/// <reference path="./shared/ui/input.js" />
+/// <reference path="./shared/ui/selectbox.js" />
+/// <reference path="./shared/ui/button.js" />
 /// <reference path="./connection.js" />
 
 /**
@@ -231,8 +231,13 @@
                 autofocus: true,
                 showClear: true,
             }),
+            filterButton: new Button("filterButton", {
+                variant: "secondary-icon",
+                size: "small",
+            }),
             librarySelectList: new SelectBox("librarySelectList", {
-                placeholder: "Loading...",
+                // TODO: add translation
+                placeholder: translate("No items selected"),
                 multiple: true,
             }),
             saveAsTextBtn: new Button("saveAsTextBtn"),
@@ -755,6 +760,18 @@
                     e.type === "inputfield:submit"
                 ) {
                     searchFor(e.detail.value);
+                }
+            });
+        }
+        if (customElements.filterButton instanceof Button) {
+            customElements.filterButton.subscribe(function (e) {
+                if (e.type === "button:click") {
+                    if (!customElements.librarySelectList.isOpen) {
+                        if (e.detail.originalEvent) {
+                            e.detail.originalEvent.stopPropagation();
+                        }
+                        customElements.librarySelectList.openDropdown();
+                    }
                 }
             });
         }

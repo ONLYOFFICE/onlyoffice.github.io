@@ -38,7 +38,7 @@ function SelectBox(container, options) {
     });
 
     this._selectedValues = new Set();
-    this._isOpen = false;
+    this.isOpen = false;
     /** @type {Array<{ value: string, text: string, selected: boolean } | null>} */
     this._items = [];
     /** @type {Function[]} */
@@ -46,7 +46,7 @@ function SelectBox(container, options) {
     /** @type {BoundHandlesType} */
     this._boundHandles = {
         toggle: function (e) {
-            self._toggleDropdown(e);
+            self._toggle(e);
         },
         search: function (e) {
             self._handleSearch(e);
@@ -72,10 +72,10 @@ function SelectBox(container, options) {
     /** @type {HTMLInputElement | null} */
     this.searchInput = null;
     /** @type {HTMLElement} */
-    this.header = document.createElement("div");
-    this.selectedText = document.createElement("span");
-    this.arrow = document.createElement("span");
-    this.dropdown = document.createElement("div");
+    this._header = document.createElement("div");
+    this._selectedText = document.createElement("span");
+    this._arrow = document.createElement("span");
+    this._dropdown = document.createElement("div");
 
     this._createDOM();
     this._bindEvents();
@@ -91,31 +91,31 @@ SelectBox.prototype._createDOM = function () {
     selectBox.className += " selectbox";
     fragment.appendChild(selectBox);
 
-    this.header.className += " selectbox-header";
-    selectBox.appendChild(this.header);
-    this.header.setAttribute("tabindex", "0");
+    this._header.className += " selectbox-header";
+    selectBox.appendChild(this._header);
+    this._header.setAttribute("tabindex", "0");
 
-    this.selectedText.className += " selectbox-selected-text";
-    this.selectedText.textContent = this._options.placeholder;
-    this.header.appendChild(this.selectedText);
+    this._selectedText.className += " selectbox-selected-text";
+    this._selectedText.textContent = this._options.placeholder;
+    this._header.appendChild(this._selectedText);
 
-    this.arrow.className += " selectbox-arrow";
-    this.arrow.innerHTML =
+    this._arrow.className += " selectbox-arrow";
+    this._arrow.innerHTML =
         '<svg width="6" height="6" viewBox="0 0 6 6" ' +
         'fill="none" xmlns="http://www.w3.org/2000/svg">' +
         '<path fill-rule="evenodd" clip-rule="evenodd"' +
         ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' +
         '2.24889L3 0.00053797Z" fill="currentColor"/>' +
         "</svg>";
-    this.header.appendChild(this.arrow);
+    this._header.appendChild(this._arrow);
 
-    this.dropdown.className += " selectbox-dropdown";
-    selectBox.appendChild(this.dropdown);
+    this._dropdown.className += " selectbox-dropdown";
+    selectBox.appendChild(this._dropdown);
 
     if (this._options.searchable) {
         var search = document.createElement("div");
         search.className += " selectbox-search";
-        this.dropdown.appendChild(search);
+        this._dropdown.appendChild(search);
         this.searchInput = document.createElement("input");
         this.searchInput.className += " selectbox-search-input";
         this.searchInput.type = "text";
@@ -125,7 +125,7 @@ SelectBox.prototype._createDOM = function () {
 
     this._optionsContainer = document.createElement("div");
     this._optionsContainer.className += " selectbox-options";
-    this.dropdown.appendChild(this._optionsContainer);
+    this._dropdown.appendChild(this._optionsContainer);
 
     this._container.appendChild(fragment);
 };
@@ -133,36 +133,36 @@ SelectBox.prototype._createDOM = function () {
 SelectBox.prototype._bindEvents = function () {
     var self = this;
 
-    this.header.addEventListener("click", this._boundHandles.toggle);
+    this._header.addEventListener("click", this._boundHandles.toggle);
 
     if (this.searchInput) {
         this.searchInput.addEventListener("input", this._boundHandles.search);
     }
 
-    this.dropdown.addEventListener("click", this._boundHandles.dropdownClick);
-
-    // Close on outside click
-    document.addEventListener("click", this._boundHandles.close);
+    this._dropdown.addEventListener("click", this._boundHandles.dropdownClick);
 
     // Keyboard navigation
-    this.header.addEventListener("keydown", this._boundHandles.keydown);
-    this.dropdown.addEventListener("keydown", this._boundHandles.keydown);
+    this._header.addEventListener("keydown", this._boundHandles.keydown);
+    this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
 };
 
 /**
- * @param {Event} e
+ * @param {Event} [e]
  */
-SelectBox.prototype._toggleDropdown = function (e) {
-    e.stopPropagation();
-    this._isOpen ? this._closeDropdown() : this._openDropdown();
+SelectBox.prototype._toggle = function (e) {
+    e && e.stopPropagation();
+    this.isOpen ? this._closeDropdown() : this.openDropdown();
 };
 
-SelectBox.prototype._openDropdown = function () {
-    this._isOpen = true;
-    this.dropdown.style.display = "block";
-    this.arrow.className += " selectbox-arrow-open";
-    this.header.className += " selectbox-header-open";
-
+SelectBox.prototype.openDropdown = function () {
+    if (!this.isOpen) {
+        // Close on outside click
+        document.addEventListener("click", this._boundHandles.close);
+    }
+    this.isOpen = true;
+    this._dropdown.style.display = "block";
+    this._arrow.className += " selectbox-arrow-open";
+    this._header.className += " selectbox-header-open";
     if (this.searchInput) {
         setTimeout(
             (function (self) {
@@ -180,26 +180,29 @@ SelectBox.prototype._openDropdown = function () {
 };
 
 SelectBox.prototype._closeDropdown = function () {
-    this._isOpen = false;
-    this.dropdown.style.display = "none";
+    if (this.isOpen && document && this._boundHandles) {
+        document.removeEventListener("click", this._boundHandles.close);
+    }
+    this.isOpen = false;
+    this._dropdown.style.display = "none";
 
-    var arrowClasses = this.arrow.className.split(" ");
+    var arrowClasses = this._arrow.className.split(" ");
     var newArrowClasses = [];
     for (var i = 0; i < arrowClasses.length; i++) {
         if (arrowClasses[i] !== "selectbox-arrow-open") {
             newArrowClasses.push(arrowClasses[i]);
         }
     }
-    this.arrow.className = newArrowClasses.join(" ");
+    this._arrow.className = newArrowClasses.join(" ");
 
-    var headerClasses = this.header.className.split(" ");
+    var headerClasses = this._header.className.split(" ");
     var newHeaderClasses = [];
     for (var i = 0; i < headerClasses.length; i++) {
         if (headerClasses[i] !== "selectbox-header-open") {
             newHeaderClasses.push(headerClasses[i]);
         }
     }
-    this.header.className = newHeaderClasses.join(" ");
+    this._header.className = newHeaderClasses.join(" ");
 
     if (this.searchInput) {
         this.searchInput.value = "";
@@ -234,7 +237,7 @@ SelectBox.prototype._handleKeydown = function (e) {
         case 32:
         case 13:
             e.preventDefault();
-            this._toggleDropdown(e);
+            this._toggle(e);
             break;
         case "Escape":
         case 27:
@@ -349,7 +352,7 @@ SelectBox.prototype._renderOptions = function (searchTerm) {
 
     this._optionsContainer.appendChild(fragment);
 
-    if (this._isOpen && this._optionsContainer && selectedOption) {
+    if (this.isOpen && this._optionsContainer && selectedOption) {
         try {
             if (selectedOption.scrollIntoView) {
                 selectedOption.scrollIntoView({ block: "nearest" });
@@ -430,7 +433,7 @@ SelectBox.prototype._handleDropdownClick = function (e) {
 
 SelectBox.prototype._updateSelectedText = function () {
     if (this._selectedValues.size === 0) {
-        this.selectedText.textContent = this._options.placeholder;
+        this._selectedText.textContent = this._options.placeholder;
         return;
     }
 
@@ -444,11 +447,11 @@ SelectBox.prototype._updateSelectedText = function () {
         }
 
         if (selectedItems.length === 0) {
-            this.selectedText.textContent = this._options.placeholder;
+            this._selectedText.textContent = this._options.placeholder;
         } else if (selectedItems.length === 1) {
-            this.selectedText.textContent = selectedItems[0].text;
+            this._selectedText.textContent = selectedItems[0].text;
         } else {
-            this.selectedText.textContent =
+            this._selectedText.textContent =
                 selectedItems.length + " items selected";
         }
     } else {
@@ -461,7 +464,7 @@ SelectBox.prototype._updateSelectedText = function () {
             }
         }
 
-        this.selectedText.textContent = selectedItem
+        this._selectedText.textContent = selectedItem
             ? selectedItem.text
             : this._options.placeholder;
     }
@@ -737,8 +740,11 @@ SelectBox.prototype.destroy = function () {
     this._subscribers = [];
 
     try {
-        if (this.header && this._boundHandles) {
-            this.header.removeEventListener("click", this._boundHandles.toggle);
+        if (this._header && this._boundHandles) {
+            this._header.removeEventListener(
+                "click",
+                this._boundHandles.toggle
+            );
         }
         if (this.searchInput && this._boundHandles) {
             this.searchInput.removeEventListener(
@@ -746,8 +752,8 @@ SelectBox.prototype.destroy = function () {
                 this._boundHandles.search
             );
         }
-        if (this.dropdown && this._boundHandles) {
-            this.dropdown.removeEventListener(
+        if (this._dropdown && this._boundHandles) {
+            this._dropdown.removeEventListener(
                 "click",
                 this._boundHandles.dropdownClick
             );
@@ -755,14 +761,14 @@ SelectBox.prototype.destroy = function () {
         if (document && this._boundHandles) {
             document.removeEventListener("click", this._boundHandles.close);
         }
-        if (this.header && this._boundHandles) {
-            this.header.removeEventListener(
+        if (this._header && this._boundHandles) {
+            this._header.removeEventListener(
                 "keydown",
                 this._boundHandles.keydown
             );
         }
-        if (this.dropdown && this._boundHandles) {
-            this.dropdown.removeEventListener(
+        if (this._dropdown && this._boundHandles) {
+            this._dropdown.removeEventListener(
                 "keydown",
                 this._boundHandles.keydown
             );
