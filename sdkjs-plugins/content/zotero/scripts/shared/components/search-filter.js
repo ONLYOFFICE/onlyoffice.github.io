@@ -5,7 +5,7 @@
 /// <reference path="../ui/selectbox.js" />
 /// <reference path="../ui/button.js" />
 
-function SearchFilter() {
+function SearchFilterComponents() {
     this._searchField = new InputField("searchField", {
         type: "text",
         autofocus: true,
@@ -22,9 +22,11 @@ function SearchFilter() {
     });
     /** @type {Function[]} */
     this._subscribers = [];
+
+    this._addEventListeners();
 }
 
-SearchFilter.prototype._addEventListeners = function () {
+SearchFilterComponents.prototype._addEventListeners = function () {
     const self = this;
     this._searchField.subscribe(function (e) {
         if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
@@ -49,7 +51,7 @@ SearchFilter.prototype._addEventListeners = function () {
 /**
  * @param {Array<UserGroupInfo>} groups
  */
-SearchFilter.prototype.addGroups = function (groups) {
+SearchFilterComponents.prototype.addGroups = function (groups) {
     const self = this;
     let selectedItem = localStorage.getItem("selectedGroup");
     let hasSelected = false;
@@ -114,7 +116,7 @@ SearchFilter.prototype.addGroups = function (groups) {
 /**
  * @return {Array<string|"my_library"|"group_libraries">}
  */
-SearchFilter.prototype._getSelectedGroups = function () {
+SearchFilterComponents.prototype._getSelectedGroups = function () {
     const self = this;
     const ids = this._librarySelectList.getSelectedValues();
     if (Array.isArray(ids) === false || ids.length === 0) {
@@ -132,7 +134,7 @@ SearchFilter.prototype._getSelectedGroups = function () {
  * @param {function(string, Array<string|"my_library"|"group_libraries">): void} callback
  * @returns {Object}
  */
-SearchFilter.prototype.subscribe = function (callback) {
+SearchFilterComponents.prototype.subscribe = function (callback) {
     var self = this;
     this._subscribers.push(callback);
 
@@ -150,7 +152,7 @@ SearchFilter.prototype.subscribe = function (callback) {
  * @param {Array<UserGroupInfo>} groups
  * @returns
  */
-SearchFilter.prototype._selectedGroupsWatcher = function (
+SearchFilterComponents.prototype._selectedGroupsWatcher = function (
     customGroups,
     groups
 ) {
