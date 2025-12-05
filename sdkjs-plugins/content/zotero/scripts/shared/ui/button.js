@@ -89,13 +89,8 @@ Button.prototype._createDOM = function () {
         this.button.disabled = true;
     }
 
-    if (this._options.loading) {
-        this.spinner = document.createElement("span");
-        this.spinner.className = "custom-button-spinner";
-        this.button.appendChild(this.spinner);
-    }
-
-    if (this._options.text !== undefined && this._options.text !== "") {
+    if (this._options.text) {
+        this.button.textContent = "";
         this.buttonText = document.createElement("span");
         this.buttonText.className = "custom-button-text";
         this.buttonText.textContent = this._options.text || "";
@@ -117,6 +112,12 @@ Button.prototype._createDOM = function () {
         } else {
             this.button.appendChild(this.buttonText);
         }
+    }
+
+    if (this._options.loading) {
+        this.spinner = document.createElement("span");
+        this.spinner.className = "custom-button-spinner";
+        this.button.appendChild(this.spinner);
     }
 
     if (this._options.badge) {
