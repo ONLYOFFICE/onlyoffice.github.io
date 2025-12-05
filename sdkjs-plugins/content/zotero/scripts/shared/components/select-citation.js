@@ -3,6 +3,11 @@
 /// <reference path="../../types-global.js" />
 
 /**
+ * @typedef {Object} Scroller
+ * @property {Function} onscroll
+ */
+
+/**
  * @param {string} displayNoneClass
  * @param {function(): void} fLoadMore
  * @param {function(HTMLElement): boolean} fShouldLoadMore
@@ -12,6 +17,7 @@ function SelectCitationsComponent(
     fLoadMore,
     fShouldLoadMore
 ) {
+    this._displayNoneClass = displayNoneClass;
     /** @type {Object<string|number, SearchResultItem>} */
     this._items = {};
     /** @type {Object<string|number, HTMLElement>} */
@@ -46,7 +52,6 @@ function SelectCitationsComponent(
     }
     /** @type {Function[]} */
     this._subscribers = [];
-    this._displayNoneClass = displayNoneClass;
     this._fShouldLoadMore = fShouldLoadMore;
     this._fLoadMore = fLoadMore;
     /** @type {number} */
@@ -166,12 +171,15 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     const self = this;
     var root = document.createElement("div");
     root.classList.add("doc");
+    var docInfo = document.createElement("div");
+    docInfo.classList.add("docInfo");
 
     var checkHolder = document.createElement("div");
     var checkWrapper = document.createElement("div");
     checkWrapper.classList.add("checkbox");
     var check = document.createElement("input");
     check.setAttribute("type", "checkbox");
+    check.setAttribute("id", item.id);
     if (this._items[item.id]) {
         check.checked = true;
         this._checks[item.id] = check;
@@ -180,46 +188,48 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     checkWrapper.appendChild(document.createElement("span"));
     checkHolder.appendChild(checkWrapper);
 
-    var docInfo = document.createElement("div");
-    docInfo.classList.add("docInfo");
-
-    var title = document.createElement("div");
-    title.textContent = item.title;
-    title.classList.add("truncate-text");
-    docInfo.appendChild(title);
-
+    const label = document.createElement("label");
     if (item.author && item.author.length > 0) {
-        var authors = document.createElement("div");
-        authors.textContent = item.author
+        label.textContent = item.author
             .map(function (a) {
-                return a.family + ", " + a.given;
+                return a.family.trim() + ", " + a.given.trim();
             })
             .join("; ");
-        authors.setAttribute("title", authors.textContent);
-        authors.classList.add("secondary-text");
-        authors.classList.add("truncate-text");
-        authors.classList.add("nowrap");
-        docInfo.appendChild(authors);
+        label.setAttribute("title", label.textContent);
+        label.classList.add("truncate-text");
+        label.classList.add("nowrap");
     }
 
-    var source = document.createElement("div");
+    var title = document.createElement("div");
+    title.textContent = item.title.trim();
+    title.classList.add("truncate-text");
+    title.classList.add("secondary-text");
+
     if (item.publisher || item["publisher-place"]) {
-        source.textContent = item.publisher || item["publisher-place"] || "";
+        title.textContent +=
+            " · " + (item.publisher || item["publisher-place"] || "");
     }
     if (item.issued && item.issued["date-parts"]) {
         var date = item.issued["date-parts"][0];
-        if (source.textContent) {
-            source.textContent += " (" + date.join("-") + ")";
+        if (label.textContent.length > 20) {
+            title.textContent += " (" + date.join("-") + ")";
         } else {
-            source.textContent = date.join("-");
+            if (
+                label.textContent.length > 0 &&
+                label.textContent.slice(-1) !== "." &&
+                label.textContent.slice(-1) !== ","
+            )
+                label.textContent += ".";
+            label.textContent += " " + date.join("-");
         }
     }
-    source.setAttribute("title", source.textContent);
-    source.classList.add("secondary-text");
-    source.classList.add("truncate-text");
-    source.classList.add("nowrap");
-    docInfo.appendChild(source);
+    if (label.textContent.length === 0) {
+        label.textContent = title.textContent;
+    }
+    title.setAttribute("title", title.textContent);
+    docInfo.appendChild(title);
 
+    checkHolder.appendChild(label);
     root.appendChild(checkHolder);
     root.appendChild(docInfo);
 
@@ -242,6 +252,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     var f = selectItem(check, item);
     checkWrapper.onclick = f;
     docInfo.onclick = f;
+    label.onclick = f;
 
     return root;
 };
@@ -255,23 +266,35 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
     var root = document.createElement("div");
     root.classList.add("selDoc");
 
-    var name = document.createElement("span");
-    name.textContent = item.title;
-    name.setAttribute("title", item.title);
-
-    var year = document.createElement("span");
-    if (item.issued && item.issued["date-parts"]) {
-        year.textContent = item.issued["date-parts"][0].join("-");
+    const span = document.createElement("span");
+    if (item.author && item.author.length > 0) {
+        span.textContent = item.author
+            .map(function (a) {
+                return a.family + ", " + a.given;
+            })
+            .join("; ");
+    } else {
+        span.textContent = item.title;
     }
+
+    if (item.issued && item.issued["date-parts"]) {
+        span.textContent += " " + item.issued["date-parts"][0].join("-");
+    }
+    span.setAttribute("title", span.textContent);
+    root.appendChild(span);
 
     var remove = document.createElement("span");
     remove.onclick = function () {
         self._removeSelected(item.id);
     };
-    remove.textContent = "×";
-
-    root.appendChild(name);
-    root.appendChild(year);
+    remove.innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829' +
+        " 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275" +
+        " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" +
+        " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" +
+        ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' +
+        ' fill="black" fill-opacity="0.8"/></svg>';
     root.appendChild(remove);
 
     return root;
@@ -389,7 +412,7 @@ SelectCitationsComponent.prototype._checkScroll = function (
             var height =
                 (holder.clientHeight / holder.scrollHeight) *
                 holder.clientHeight;
-            height = height < 40 ? 40 : height;
+            height = height < 20 ? 20 : height;
             thumb.style.height = height + "px";
 
             var scroll = holder.scrollHeight - holder.clientHeight;
@@ -422,12 +445,14 @@ SelectCitationsComponent.prototype._removeSelected = function (id) {
 
 SelectCitationsComponent.prototype._checkSelected = function () {
     const numOfSelected = this._count();
-    if (!this._selectedInfo || !this._selectedCount) {
+    if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
         return;
     }
     if (numOfSelected <= 0) {
+        this._selectedWrapper.classList.add(this._displayNoneClass);
         this._selectedInfo.classList.add(this._displayNoneClass);
     } else {
+        this._selectedWrapper.classList.remove(this._displayNoneClass);
         this._selectedInfo.classList.remove(this._displayNoneClass);
         this._selectedCount.textContent =
             numOfSelected + " " + translate("selected");

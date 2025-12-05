@@ -28,29 +28,9 @@ div::-moz-selection {
     background: #D8DADC; /* Gecko Browsers */
 }
 
-textarea:focus, input:focus {
+textarea:focus {
     outline: none;
 }
-
-.button {
-    background: #fff;
-    outline: none;
-    font-size: 12px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    cursor: pointer;
-    text-align: center;
-    margin: 15px 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px 18px;
-}
-
-    .button.wide {
-        padding: 7px 13px;
-        margin: 15px 0px;
-        width: 100%;
-    }
 
 .blur {
     filter: blur(3px);
@@ -126,17 +106,20 @@ input[type="text"] {
     display: flex;
     flex-direction: row;
     overflow-y: hidden;
+    margin-top: 11px;
 }
 
 #docsHolder {
     width: 100%;
 }
 
-#selectedWrapper {
+#selectedWrapper:not(.hidden) {
     display: flex;
     flex-direction: row;
     overflow-y: hidden;
-    max-height: 60px;
+    font-size: 10px;
+    max-height: 33px;
+    margin-top: 14px;
 }
 
 #selectedHolder {
@@ -144,20 +127,18 @@ input[type="text"] {
     overflow-y: hidden;
 }
 
-#selectedHolder > div:last-of-type {
-    margin-bottom: 14px;
-}
-
 #selectedInfo:not(.hidden) {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    margin-top: 10px;
 }
 
 #searchWrapper {
     display: flex;
     justify-content: space-between;
     position: relative;
+    margin-top: 13px;
 }
     #searchWrapper .input-field-container-searchField {
         width: 207px;
@@ -173,22 +154,19 @@ input[type="text"] {
 }
 
 #controlsHolder {
-    border-top: 1px solid #cfcfcf;
-    padding-top: 15px;
+    padding-top: 4px;
     overflow-y: visible;
 }
-
-#buttonsWrapper, #insertBibDiv {
-    flex-direction: column;
-}
-
-    #buttonsWrapper > .button {
-        margin: 0px 0px 15px 8px;
+    #controlsHolder button {
+        margin-top: 8px;
     }
-    #insertBibDiv > .button {
-        margin: 0px 0px 15px 8px;
+    #controlsHolder .custom-button-primary {
+        width: 207px;
     }
-	
+    #controlsHolder .custom-button-secondary {
+        width: 100%;
+    }
+
 #omitAuthorDiv {
     margin-bottom: 15px;
     margin-left: 8px;
@@ -231,10 +209,6 @@ input[type="text"] {
     margin-bottom: 8px;
 }
 
-    #styleWrapper .label {
-        /* margin-bottom: 15px; */
-    }
-
         #styleWrapper .label:first-of-type {
             flex: 5;
             margin-right: 4px;
@@ -254,11 +228,6 @@ input[type="text"] {
             width: 100%;
             padding-right: 18px;
             font-size: 11px;
-        }
-
-		#styleWrapper > button {
-            flex: 1;
-            margin-left: 4px;
         }
 
 .notesStyle {
@@ -364,20 +333,12 @@ input[type="text"] {
     }
 
 .scrollThumb {
-    width: 9px;
-    background-color: rgb(241, 241, 241);
-    border-radius: 2px;
+    width: 8px;
+    border-radius: 4px;
     box-sizing: border-box;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAQAAAAz1Zf0AAAAIUlEQVR42mNgAILz/0GQAQo+/gdBBqLAqE5ydH5k+sgEANHgUH2JtDRHAAAAAElFTkSuQmCC);
-    background-repeat: no-repeat;
-    background-position: 0 center;
-    border: 1px solid #cfcfcf;
+    border: 2px solid transparent;
+    position: relative;
 }
-
-    .scrollThumb.scrolling {
-        background-color: #adadad;
-        border-color: #adadad;
-    }
 
 .errorMsg {
     color: #D9534F;
@@ -390,7 +351,13 @@ input[type="text"] {
 
 .doc {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 1px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    padding-top: 10px;
 }
 
 .docInfo {
@@ -399,9 +366,16 @@ input[type="text"] {
 
 .doc > div {
     display: flex;
-    flex-direction: column;
-    padding: 5px 0;
+    padding-left: 6px;
 }
+.doc .docInfo {
+    flex-direction: column;
+    padding-top: 7px;
+}
+    .doc > div label {
+        width: 171px;
+        padding-bottom: 5px;
+    }
 
 .secondary-text {
     font-size: 11px;
@@ -434,7 +408,7 @@ input[type="text"] {
     box-sizing: border-box;
     width: 13px;
     height: 13px;
-    margin-right: 8px;
+    margin-right: 6px;
 }
 
     .checkbox > input {
@@ -458,26 +432,19 @@ input[type="text"] {
         display: inline-block;
     }
 
-.btn-text-default {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .selDoc {
     display: inline-block;
-    margin-bottom: 5px;
     margin-right: 6px;
+    margin-bottom: 1px;
 }
 
     .selDoc > span {
         display: inline-block;
-        margin-right: 5px;
-        vertical-align: middle;
+        vertical-align: top;
     }
 
         .selDoc > span:first-of-type {
-            max-width: 52px;
+            max-width: 203px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -485,8 +452,7 @@ input[type="text"] {
 
         .selDoc > span:last-of-type {
             cursor: pointer;
-            font-size: 18px;
-            margin-top: 2px;
+            margin-top: -2px;
         }
 
 /* loader */
@@ -641,6 +607,39 @@ input[type="text"] {
     }
 }
 /* end loader */
+
+body.theme-light {
+    .doc {
+        background-color: var(--input-bg);
+        border-color: var(--input-border);
+    }
+    .scrollThumb {
+        box-shadow: 0 0 8px 8px var(--scroll) inset;
+    }
+    .scrollThumb:hover {
+        box-shadow: 0 0 8px 8px var(--scroll-hover) inset;
+    }
+    .scrollThumb.scrolling {
+        box-shadow: 0 0 8px 8px var(--scroll-active) inset;
+    }
+}
+
+body.theme-dark {
+    .doc {
+        background-color: var(--input-bg-dark);
+        border-color: var(--input-border-dark);
+    }
+    .scrollThumb {
+        box-shadow: 0 0 8px 8px var(--scroll-dark) inset;
+    }
+    .scrollThumb:hover {
+        box-shadow: 0 0 8px 8px var(--scroll-hover-dark) inset;
+    }
+    .scrollThumb.scrolling {
+        box-shadow: 0 0 8px 8px var(--scroll-active-dark) inset;
+    }
+}
+
 
 .hidden {
     display: none;

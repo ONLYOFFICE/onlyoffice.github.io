@@ -34,11 +34,6 @@
 /// <reference path="./shared/ui/button.js" />
 /// <reference path="./connection.js" />
 
-/**
- * @typedef {Object} Scroller
- * @property {Function} onscroll
- */
-
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "hidden";
@@ -88,6 +83,14 @@
     var selectCitation;
     /** @type {Button} */
     var saveAsTextBtn;
+    /** @type {Button} */
+    var insertLinkBtn;
+    /** @type {Button} */
+    var settingsBtn;
+    /** @type {Button} */
+    var insertBibBtn;
+    /** @type {Button} */
+    var refreshBtn;
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
     var elements = {};
     function initElements() {
@@ -115,10 +118,6 @@
         const mainState = document.getElementById("mainState");
         if (!mainState) {
             throw new Error("mainState not found");
-        }
-        const buttonsWrapper = document.getElementById("buttonsWrapper");
-        if (!buttonsWrapper) {
-            throw new Error("buttonsWrapper not found");
         }
         const locatorLabel = document.getElementById("locatorLabel");
         if (!locatorLabel) {
@@ -166,18 +165,6 @@
         if (!endNotes) {
             throw new Error("endNotes not found");
         }
-        const insertBibBtn = document.getElementById("insertBibBtn");
-        if (!insertBibBtn) {
-            throw new Error("insertBibBtn not found");
-        }
-        const insertLinkBtn = document.getElementById("insertLinkBtn");
-        if (!insertLinkBtn) {
-            throw new Error("insertLinkBtn not found");
-        }
-        const refreshBtn = document.getElementById("refreshBtn");
-        if (!refreshBtn) {
-            throw new Error("refreshBtn not found");
-        }
         const checkOmitAuthor = document.getElementById("omitAuthor");
         if (!checkOmitAuthor) {
             throw new Error("checkOmitAuthor not found");
@@ -193,8 +180,22 @@
             loadMore,
             shouldLoadMore
         );
-        saveAsTextBtn = new Button("saveAsTextBtn");
-
+        saveAsTextBtn = new Button("saveAsTextBtn", {
+            variant: "secondary",
+        });
+        insertLinkBtn = new Button("insertLinkBtn", {
+            disabled: true,
+        });
+        settingsBtn = new Button("settingsBtn", {
+            variant: "icon-only",
+            size: "small",
+        });
+        insertBibBtn = new Button("insertBibBtn", {
+            variant: "secondary",
+        });
+        refreshBtn = new Button("refreshBtn", {
+            variant: "secondary",
+        });
         elements = {
             loader: loader,
             libLoader: libLoader,
@@ -204,8 +205,6 @@
             configState: configState,
 
             mainState: mainState,
-
-            buttonsWrapper: buttonsWrapper,
 
             locatorLabel: locatorLabel,
             locatorLabelsList: locatorLabelsList,
@@ -219,10 +218,6 @@
             notesStyleWrapper: notesStyleWrapper,
             footNotes: footNotes,
             endNotes: endNotes,
-
-            insertBibBtn: insertBibBtn,
-            insertLinkBtn: insertLinkBtn,
-            refreshBtn: refreshBtn,
 
             checkOmitAuthor: checkOmitAuthor,
             cslFileInput: cslFileInput,
@@ -567,7 +562,10 @@
             searchFor(text, selectedGroups);
         });
 
-        elements.refreshBtn.onclick = function () {
+        refreshBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
             if (!cslStylesManager.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
@@ -590,9 +588,12 @@
                 .finally(function () {
                     showLoader(false);
                 });
-        };
+        });
 
-        elements.insertBibBtn.onclick = function () {
+        insertBibBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
             if (!cslStylesManager.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
@@ -617,9 +618,12 @@
                 .finally(function () {
                     showLoader(false);
                 });
-        };
+        });
 
-        elements.insertLinkBtn.onclick = function () {
+        insertLinkBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
             if (!cslStylesManager.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
@@ -662,7 +666,7 @@
                 .finally(function () {
                     showLoader(false);
                 });
-        };
+        });
 
         saveAsTextBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
@@ -869,50 +873,6 @@
         body.classList.remove("theme-light");
         body.classList.add("theme-" + themeType);
     };
-
-    /**
-     * @param {HTMLElement} holder
-     * @param {HTMLElement} thumb
-     * @param {function(HTMLElement): void} [onscroll]
-     * @returns {Scroller}
-     */
-    function initScrollBox(holder, thumb, onscroll) {
-        var scroller = {};
-        scroller.onscroll = checkScroll(holder, thumb, onscroll);
-
-        holder.onwheel = function (e) {
-            holder.scrollTop +=
-                e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
-            scroller.onscroll();
-        };
-
-        thumb.onmousedown = function (e) {
-            switchClass(thumb, "scrolling", true);
-            var y = e.clientY;
-            var initialPos = holder.scrollTop;
-
-            window.onmouseup = function (e) {
-                switchClass(thumb, "scrolling", false);
-                window.onmouseup = null;
-                window.onmousemove = null;
-            };
-            window.onmousemove = function (e) {
-                var delta = e.clientY - y;
-
-                var percMoved = delta / holder.clientHeight;
-                var deltaScroll = holder.scrollHeight * percMoved;
-                holder.scrollTop = initialPos + deltaScroll;
-
-                scroller.onscroll();
-            };
-        };
-
-        document.body.addEventListener("resize", function () {
-            scroller.onscroll();
-        });
-
-        return scroller;
-    }
 
     /** @type {HTMLElement[]} */
     var selectLists = [];
@@ -1136,35 +1096,6 @@
         }
     }
 
-    /**
-     * @param {HTMLElement} holder
-     * @param {HTMLElement} thumb
-     * @param {function} [func] - an optional function to be called with the holder and thumb as arguments.
-     * @returns {function} - a function that checks the scroll state and updates the thumb accordingly.
-     * */
-    function checkScroll(holder, thumb, func) {
-        return function () {
-            if (holder.scrollHeight <= holder.clientHeight) {
-                switchClass(thumb, displayNoneClass, true);
-            } else {
-                switchClass(thumb, displayNoneClass, false);
-                var height =
-                    (holder.clientHeight / holder.scrollHeight) *
-                    holder.clientHeight;
-                height = height < 40 ? 40 : height;
-                thumb.style.height = height + "px";
-
-                var scroll = holder.scrollHeight - holder.clientHeight;
-                var percScrolled = holder.scrollTop / scroll;
-
-                var margin = percScrolled * (holder.clientHeight - height);
-                thumb.style.marginTop = margin + "px";
-            }
-
-            if (func) func(holder, thumb);
-        };
-    }
-
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
@@ -1369,10 +1300,16 @@
      * @param {number} numOfSelected
      */
     function checkSelected(numOfSelected) {
+        insertLinkBtn.setText(translate("Insert Citation"));
         if (numOfSelected <= 0) {
-            elements.insertLinkBtn.setAttribute("disabled", "");
+            insertLinkBtn.disable();
         } else {
-            elements.insertLinkBtn.removeAttribute("disabled");
+            insertLinkBtn.enable();
+            if (numOfSelected > 1)
+                // TODO: add translate
+                insertLinkBtn.setText(
+                    translate("Insert " + numOfSelected + " Citations")
+                );
         }
     }
 })();
