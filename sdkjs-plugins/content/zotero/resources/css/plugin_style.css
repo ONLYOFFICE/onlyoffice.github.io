@@ -93,7 +93,7 @@ input[type="text"] {
     flex: 1;
 }
 
-#configState .custom-button-container {
+#loginState .custom-button-container {
     width: 100%;
 }
 

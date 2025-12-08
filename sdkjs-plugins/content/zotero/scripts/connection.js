@@ -16,11 +16,11 @@
 function ConnectingToApi(router, sdk) {
     this._router = router;
     this._sdk = sdk;
-    this._apiKeyConfigField = new InputField("apiKeyField", {
+    this._apiKeyLoginField = new InputField("apiKeyField", {
         autofocus: true,
         autocomplete: "on",
     });
-    this._saveConfigBtn = new Button("saveConfigBtn", {
+    this._saveApiKeyBtn = new Button("saveApiKeyBtn", {
         disabled: true,
     });
     this._apiKeyMessage = new Message("apiKeyMessage", { type: "error" });
@@ -114,21 +114,21 @@ ConnectingToApi.prototype.init = function () {
 
 ConnectingToApi.prototype._addEventListeners = function () {
     const self = this;
-    this._apiKeyConfigField.subscribe(function (event) {
+    this._apiKeyLoginField.subscribe(function (event) {
         if (event.type !== "inputfield:input") {
             return;
         }
-        if (self._apiKeyConfigField.getValue()) {
-            self._saveConfigBtn.enable();
+        if (self._apiKeyLoginField.getValue()) {
+            self._saveApiKeyBtn.enable();
         } else {
-            self._saveConfigBtn.disable();
+            self._saveApiKeyBtn.disable();
         }
     });
-    this._saveConfigBtn.subscribe(function (event) {
+    this._saveApiKeyBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
         }
-        const apiKey = self._apiKeyConfigField.getValue();
+        const apiKey = self._apiKeyLoginField.getValue();
         if (apiKey) {
             self._sdk
                 .setApiKey(apiKey)
@@ -192,6 +192,6 @@ ConnectingToApi.prototype._hide = function (bShowLogoutLink) {
 };
 
 ConnectingToApi.prototype._show = function () {
-    this._router.openConfig();
+    this._router.openLogin();
     this._logoutLink.classList.add("hidden");
 };
