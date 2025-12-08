@@ -1,5 +1,6 @@
 // @ts-check
 
+/// <reference path="../../services/translate-service.js" />
 /// <reference path="../../types-global.js" />
 /// <reference path="../ui/input.js" />
 /// <reference path="../ui/selectbox.js" />
@@ -53,7 +54,15 @@ SearchFilterComponents.prototype._addEventListeners = function () {
  */
 SearchFilterComponents.prototype.addGroups = function (groups) {
     const self = this;
-    let selectedItem = localStorage.getItem("selectedGroup");
+    const savedGroups = localStorage.getItem("selectedGroups");
+    /** @type {Array<string>} */
+    let selectedItems = savedGroups
+        ? JSON.parse(savedGroups).map(function (
+              /** @type {string|number}*/ id
+          ) {
+              return id.toString();
+          })
+        : ["my_library", "group_libraries"];
     let hasSelected = false;
     groups.forEach(function (group) {
         group.id = String(group.id);
@@ -68,47 +77,53 @@ SearchFilterComponents.prototype.addGroups = function (groups) {
     ];
     !hasSelected &&
         customGroups.forEach(function (group) {
-            if (group.id === selectedItem) {
+            if (selectedItems.indexOf(group.id) !== -1) {
                 hasSelected = true;
             }
         });
     !hasSelected &&
         groups.forEach(function (group) {
-            if (group.id.toString() === selectedItem) {
+            if (selectedItems.indexOf(group.id.toString()) !== -1) {
                 hasSelected = true;
             }
         });
     if (!hasSelected) {
-        selectedItem = "my_library";
-        hasSelected = true;
+        // if local storage data is invalid, select both My Library and Group Libraries
+        selectedItems = ["my_library", "group_libraries"];
     }
 
     /**
      * @param {string|number} id
      * @param {string} name
+     * @param {boolean} selected
      */
-    const addGroupToSelectBox = function (id, name) {
+    const addGroupToSelectBox = function (id, name, selected) {
         if (typeof id === "number") {
             id = id.toString();
         }
         if (self._librarySelectList instanceof SelectBox)
-            self._librarySelectList.addItem(id, name, id === selectedItem);
+            self._librarySelectList.addItem(id, name, selected);
     };
 
     for (var i = 0; i < customGroups.length; i++) {
         const id = customGroups[i].id;
         const name = customGroups[i].name;
-        addGroupToSelectBox(id, name);
+        addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
     }
 
     if (groups.length === 0) {
         return;
     }
     this._librarySelectList.addSeparator();
+    let selected = selectedItems.indexOf("group_libraries") !== -1;
     for (var i = 0; i < groups.length; i++) {
         const id = groups[i].id;
         const name = groups[i].name;
-        addGroupToSelectBox(id, name);
+        addGroupToSelectBox(
+            id,
+            name,
+            selected || selectedItems.indexOf(id.toString()) !== -1
+        );
     }
     this._selectedGroupsWatcher(customGroups, groups);
 };
@@ -164,6 +179,8 @@ SearchFilterComponents.prototype._selectedGroupsWatcher = function (
         if (event.type !== "selectbox:change") {
             return;
         }
+        /** @type {Array<string|number>} */
+        let aGroupsToSave = [];
         const values = event.detail.values;
         const current = event.detail.current;
         const bEnabled = event.detail.enabled;
@@ -177,11 +194,26 @@ SearchFilterComponents.prototype._selectedGroupsWatcher = function (
 
         let bWasCustom = customIds.indexOf(String(current)) !== -1;
 
-        if (bWasCustom && current === "group_libraries") {
-            if (bEnabled) {
-                self._librarySelectList.selectItems(ids, true);
+        if (bWasCustom) {
+            if (current === "group_libraries") {
+                if (bEnabled) {
+                    aGroupsToSave.push("group_libraries");
+                    self._librarySelectList.selectItems(ids, true);
+                } else {
+                    self._librarySelectList.unselectItems(ids, true);
+                }
+                if (values.indexOf("my_library") !== -1) {
+                    aGroupsToSave.push("my_library");
+                }
             } else {
-                self._librarySelectList.unselectItems(ids, true);
+                if (values.indexOf("group_libraries") !== -1) {
+                    aGroupsToSave.push("group_libraries");
+                    if (bEnabled) {
+                        aGroupsToSave.push(current);
+                    }
+                } else {
+                    aGroupsToSave = values.slice();
+                }
             }
         } else if (!bWasCustom) {
             let bAllGroupsSelected = ids.every(function (id) {
@@ -189,9 +221,24 @@ SearchFilterComponents.prototype._selectedGroupsWatcher = function (
             });
             if (bAllGroupsSelected) {
                 self._librarySelectList.selectItems("group_libraries", true);
+                aGroupsToSave.push("group_libraries");
+                if (values.indexOf("my_library") !== -1) {
+                    aGroupsToSave.push("my_library");
+                }
             } else {
                 self._librarySelectList.unselectItems("group_libraries", true);
+                aGroupsToSave = values.filter(function (value) {
+                    return value !== "group_libraries";
+                });
             }
+        }
+        if (aGroupsToSave.length === 0) {
+            localStorage.removeItem("selectedGroups");
+        } else {
+            localStorage.setItem(
+                "selectedGroups",
+                JSON.stringify(aGroupsToSave)
+            );
         }
     });
 };
