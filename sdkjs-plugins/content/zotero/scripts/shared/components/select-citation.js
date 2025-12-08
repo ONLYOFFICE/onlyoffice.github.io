@@ -1,6 +1,8 @@
 // @ts-check
 
 /// <reference path="../../types-global.js" />
+/// <reference path="../ui/input.js" />
+/// <reference path="../ui/selectbox.js" />
 
 /**
  * @typedef {Object} Scroller
@@ -24,6 +26,30 @@ function SelectCitationsComponent(
     this._html = {};
     /** @type {Object<string|number, HTMLInputElement>} */
     this._checks = {};
+
+    this._locatorValues = [
+        ["appendix", "Appendix"],
+        ["article", "Article"],
+        ["book", "Book"],
+        ["chapter", "Chapter"],
+        ["column", "Column"],
+        ["figure", "Figure"],
+        ["folio", "Folio"],
+        ["issue", "Issue"],
+        ["line", "Line"],
+        ["note", "Note"],
+        ["opus", "Opus"],
+        ["page", "Page"],
+        ["paragraph", "Paragraph"],
+        ["part", "Part"],
+        ["rule", "Rule"],
+        ["section", "Section"],
+        ["sub-verbo", "Sub verbo"],
+        ["table", "Table"],
+        ["title", "Title"],
+        ["verses", "Verses"],
+        ["volume", "Volume"],
+    ];
 
     this._cancelBtn = document.getElementById("cancelBtn");
 
@@ -269,8 +295,10 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
         }
     }
 
-    checkWrapper.onclick = selectItem.bind(this, check, item);
-    label.onclick = selectItem.bind(this, check, item);
+    const f = selectItem.bind(this, check, item);
+    checkWrapper.onclick = f;
+    label.onclick = f;
+    docInfo.onclick = f;
     arrow.onclick = toggleItem;
 
     return root;
@@ -310,6 +338,21 @@ SelectCitationsComponent.prototype._buildCitationParams = function () {
     const locatorInput = new InputField(locator, {
         type: "text",
         placeholder: "",
+    });
+
+    const id = localStorage.getItem("selectedLocator") || "page";
+    this._locatorValues.forEach(function (info) {
+        const selected = info[0] === id;
+        locatorSelectbox.addItem(info[0], info[1], selected);
+    });
+    locatorSelectbox.subscribe(function (event) {
+        if (event.type !== "selectbox:change") {
+            return;
+        }
+        localStorage.setItem(
+            "selectedLocator",
+            event.detail.values[0].toString()
+        );
     });
 
     return params;

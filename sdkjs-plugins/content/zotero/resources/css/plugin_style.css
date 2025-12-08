@@ -175,22 +175,6 @@ input[type="text"] {
         vertical-align: top;
     }
 
-#locatorLabelsDiv {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 15px;
-    margin-left: 8px;
-}
-    #locatorLabelsDiv > .selectHolder {
-        width: 50%;
-    }
-    #locatorLabelsDiv > .selectHolder input {
-        width: 100%;
-    }
-    #locatorLabelsDiv > input[type="text"] {
-        width: 50%;
-    }
-
 #prefixSuffixDiv {
     display: flex;
     gap: 8px;
@@ -393,6 +377,16 @@ input[type="text"] {
         text-align: center;
         line-height: 20px;
         cursor: pointer;
+        position: relative;
+    }
+    .doc .selectbox-arrow::after {
+        content: "";
+        display: inline-block;
+        width: 34px;
+        height: 42px;
+        position: absolute;
+        top: -10px;
+        left: -5px;
     }
 
     .doc.doc-open {

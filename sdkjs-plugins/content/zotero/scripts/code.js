@@ -119,14 +119,7 @@
         if (!mainState) {
             throw new Error("mainState not found");
         }
-        const locatorLabel = document.getElementById("locatorLabel");
-        if (!locatorLabel) {
-            throw new Error("locatorLabel not found");
-        }
-        const locatorLabelsList = document.getElementById("locatorLabelsList");
-        if (!locatorLabelsList) {
-            throw new Error("locatorLabelsList not found");
-        }
+
         const styleWrapper = document.getElementById("styleWrapper");
         if (!styleWrapper) {
             throw new Error("styleWrapper not found");
@@ -206,9 +199,6 @@
 
             mainState: mainState,
 
-            locatorLabel: locatorLabel,
-            locatorLabelsList: locatorLabelsList,
-
             styleWrapper: styleWrapper,
             styleSelectList: styleSelectList,
             styleSelectListOther: styleSelectListOther,
@@ -265,7 +255,6 @@
             });
 
             addStylesEventListeners();
-            initLocators();
         });
 
         window.Asc.plugin.onTranslate = applyTranslations;
@@ -292,23 +281,6 @@
         elements.styleLang.value = option.textContent;
         elements.styleLang.setAttribute("data-value", savedLang);
         return localesManager.loadLocale(savedLang);
-    }
-
-    function initLocators() {
-        const id = localStorage.getItem("selectedLocator") || "page";
-        const option = elements.locatorLabelsList.querySelector(
-            '[data-value="' + id + '"]'
-        );
-        if (!option || !(elements.locatorLabel instanceof HTMLInputElement)) {
-            console.error("initLocators: no option");
-            return;
-        }
-        option.setAttribute("selected", "");
-        const name = option.textContent;
-
-        elements.locatorLabel.value = option.textContent;
-        elements.locatorLabel.setAttribute("data-value", id);
-        elements.locatorLabel.setAttribute("title", name);
     }
 
     /** @returns {Promise<void>} */
@@ -676,19 +648,6 @@
             citationService.saveAsText().then(function () {
                 showLoader(false);
             });
-        });
-
-        elements.locatorLabelsList.addEventListener("click", function (e) {
-            const target = e.target;
-            let option;
-            if (target && target instanceof HTMLSpanElement) {
-                option = target;
-            } else {
-                return;
-            }
-            const id = option.getAttribute("data-value");
-            if (id === null) return;
-            localStorage.setItem("selectedLocator", id);
         });
     }
 
