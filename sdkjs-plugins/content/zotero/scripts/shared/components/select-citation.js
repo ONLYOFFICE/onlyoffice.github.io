@@ -39,7 +39,8 @@ function SelectCitationsComponent(
         /** @type {Scroller} */
         this._selectedScroller = this._initScrollBox(
             this._selectedHolder,
-            this._selectedThumb
+            this._selectedThumb,
+            20
         );
     }
     if (this._docsHolder && this._docsThumb) {
@@ -47,6 +48,7 @@ function SelectCitationsComponent(
         this._docsScroller = this._initScrollBox(
             this._docsHolder,
             this._docsThumb,
+            40,
             this._checkDocsScroll.bind(this)
         );
     }
@@ -199,6 +201,15 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
         label.classList.add("truncate-text");
         label.classList.add("nowrap");
     }
+    const arrow = document.createElement("div");
+    arrow.classList.add("selectbox-arrow");
+    arrow.innerHTML =
+        '<svg width="6" height="6" viewBox="0 0 6 6" ' +
+        'fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path fill-rule="evenodd" clip-rule="evenodd"' +
+        ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75' +
+        ' 2.24889L3 4.49724L5.25 2.24889L3 0.00053797Z" ' +
+        'fill="currentColor"/></svg>';
 
     var title = document.createElement("div");
     title.textContent = item.title.trim();
@@ -230,8 +241,12 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     docInfo.appendChild(title);
 
     checkHolder.appendChild(label);
+    checkHolder.appendChild(arrow);
     root.appendChild(checkHolder);
     root.appendChild(docInfo);
+
+    /** @type {DocumentFragment} */
+    let params;
 
     /**
      * @param {HTMLInputElement} input
@@ -239,22 +254,65 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
      * @returns
      */
     function selectItem(input, item) {
-        return function () {
-            input.checked = !input.checked;
-            if (input.checked) {
-                self._addSelected(item, input);
-            } else {
-                self._removeSelected(item.id);
-            }
-        };
+        input.checked = !input.checked;
+        if (input.checked) {
+            self._addSelected(item, input);
+        } else {
+            self._removeSelected(item.id);
+        }
+    }
+    function toggleItem() {
+        root.classList.toggle("doc-open");
+        if (!params) {
+            params = self._buildCitationParams();
+            root.appendChild(params);
+        }
     }
 
-    var f = selectItem(check, item);
-    checkWrapper.onclick = f;
-    docInfo.onclick = f;
-    label.onclick = f;
+    checkWrapper.onclick = selectItem.bind(this, check, item);
+    label.onclick = selectItem.bind(this, check, item);
+    arrow.onclick = toggleItem;
 
     return root;
+};
+
+/**
+ * @returns {DocumentFragment}
+ */
+SelectCitationsComponent.prototype._buildCitationParams = function () {
+    const params = document.createDocumentFragment();
+    const prefixSuffixContainer = document.createElement("div");
+    const prefix = document.createElement("input");
+    const suffix = document.createElement("input");
+    const locatorContainer = document.createElement("div");
+    const locatorSelect = document.createElement("div");
+    const locator = document.createElement("input");
+
+    params.appendChild(prefixSuffixContainer);
+    prefixSuffixContainer.appendChild(prefix);
+    prefixSuffixContainer.appendChild(suffix);
+
+    params.appendChild(locatorContainer);
+    locatorContainer.appendChild(locatorSelect);
+    locatorContainer.appendChild(locator);
+
+    const prefixInput = new InputField(prefix, {
+        type: "text",
+        placeholder: "Prefix",
+    });
+    const suffixInput = new InputField(suffix, {
+        type: "text",
+        placeholder: "Suffix",
+    });
+    const locatorSelectbox = new SelectBox(locatorSelect, {
+        placeholder: "Locator",
+    });
+    const locatorInput = new InputField(locator, {
+        type: "text",
+        placeholder: "",
+    });
+
+    return params;
 };
 
 /**
@@ -347,16 +405,23 @@ SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
 /**
  * @param {HTMLElement} holder
  * @param {HTMLElement} thumb
+ * @param {number} minThumbHeight
  * @param {function(HTMLElement): void} [onscroll]
  * @returns {Scroller}
  */
 SelectCitationsComponent.prototype._initScrollBox = function (
     holder,
     thumb,
+    minThumbHeight,
     onscroll
 ) {
     var scroller = {};
-    scroller.onscroll = this._checkScroll(holder, thumb, onscroll);
+    scroller.onscroll = this._checkScroll(
+        holder,
+        thumb,
+        minThumbHeight,
+        onscroll
+    );
 
     holder.onwheel = function (e) {
         holder.scrollTop +=
@@ -395,12 +460,14 @@ SelectCitationsComponent.prototype._initScrollBox = function (
 /**
  * @param {HTMLElement} holder
  * @param {HTMLElement} thumb
+ * @param {number} minThumbHeight
  * @param {function} [func] - an optional function to be called with the holder and thumb as arguments.
  * @returns {function} - a function that checks the scroll state and updates the thumb accordingly.
  * */
 SelectCitationsComponent.prototype._checkScroll = function (
     holder,
     thumb,
+    minThumbHeight,
     func
 ) {
     const displayNoneClass = this._displayNoneClass;
@@ -412,7 +479,7 @@ SelectCitationsComponent.prototype._checkScroll = function (
             var height =
                 (holder.clientHeight / holder.scrollHeight) *
                 holder.clientHeight;
-            height = height < 20 ? 20 : height;
+            height = height < minThumbHeight ? minThumbHeight : height;
             thumb.style.height = height + "px";
 
             var scroll = holder.scrollHeight - holder.clientHeight;
