@@ -189,20 +189,11 @@ CitationService.prototype = {
     },
 
     /**
-     * @param {Array<any>} items
-     * @param {string} prefix
-     * @param {string} suffix
-     * @param {{locator: string, label: string} | null} locatorInfo
+     * @param {Array<SearchResultItem>} items
      * @param {boolean} bOmitAuthor
      * @returns {Promise<Array<string|number>>}
      */
-    insertSelectedCitations: function (
-        items,
-        prefix,
-        suffix,
-        locatorInfo,
-        bOmitAuthor
-    ) {
+    insertSelectedCitations: function (items, bOmitAuthor) {
         const self = this;
 
         var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
@@ -210,16 +201,6 @@ CitationService.prototype = {
             const item = items[citationID];
             item["suppress-author"] = bOmitAuthor;
 
-            if (prefix !== "") {
-                item.prefix = prefix;
-            }
-            if (suffix !== "") {
-                item.suffix = suffix;
-            }
-            if (locatorInfo) {
-                item.locator = locatorInfo.locator;
-                item.label = locatorInfo.label;
-            }
             cslCitation.fillFromObject(item);
         }
 

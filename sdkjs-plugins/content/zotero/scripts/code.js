@@ -608,19 +608,13 @@
             citationService
                 .updateCslItems(true, false, false)
                 .then(function () {
-                    const prefix = getPrefix();
-                    const suffix = getSuffix();
-                    const locatorInfo = getLocator();
                     let checked = false;
                     if (elements.checkOmitAuthor instanceof HTMLInputElement) {
                         checked = elements.checkOmitAuthor.checked;
                     }
 
                     return citationService.insertSelectedCitations(
-                        selectCitation.getItems(),
-                        prefix,
-                        suffix,
-                        locatorInfo,
+                        selectCitation.getSelectedItems(),
                         checked
                     );
                 })
@@ -1162,59 +1156,6 @@
                     showLibLoader(false);
                 }
             });
-    }
-
-    /**
-     * @returns {string}
-     */
-    function getPrefix() {
-        const prefixInput = document.getElementById("prefixField");
-        if (
-            prefixInput &&
-            prefixInput instanceof HTMLInputElement &&
-            prefixInput.value
-        ) {
-            return prefixInput.value;
-        }
-        return "";
-    }
-
-    /**
-     * @returns {string}
-     */
-    function getSuffix() {
-        const suffixInput = document.getElementById("suffixField");
-        if (
-            suffixInput &&
-            suffixInput instanceof HTMLInputElement &&
-            suffixInput.value
-        ) {
-            return suffixInput.value;
-        }
-        return "";
-    }
-
-    /**
-     * @returns {{locator: string, label: string} | null}
-     */
-    function getLocator() {
-        const locatorInput = document.getElementById("locator");
-        if (
-            !locatorInput ||
-            !(locatorInput instanceof HTMLInputElement) ||
-            !locatorInput.value
-        ) {
-            return null;
-        }
-        const label = document.getElementById("locatorLabel");
-        if (!label || !(label instanceof HTMLInputElement) || !label.value) {
-            return null;
-        }
-
-        return {
-            locator: locatorInput.value,
-            label: label.getAttribute("data-value") || "",
-        };
     }
 
     /**
