@@ -113,6 +113,11 @@
  * @property {string} [URL]
  * @property {number|string} [userID]
  * @property {string} [volume]
+ * @property {string} [prefix]
+ * @property {string} [suffix]
+ * @property {string} [label]
+ * @property {string} [locator]
+ * @property {boolean} [suppress-author]
  */
 
 /** ------------------------------------------------ */

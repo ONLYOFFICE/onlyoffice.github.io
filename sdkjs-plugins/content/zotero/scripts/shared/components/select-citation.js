@@ -27,7 +27,7 @@ function SelectCitationsComponent(
     /** @type {Object<string|number, HTMLInputElement>} */
     this._checks = {};
 
-    this._locatorValues = [
+    this._LOCATOR_VALUES = [
         ["appendix", "Appendix"],
         ["article", "Article"],
         ["book", "Book"],
@@ -159,7 +159,7 @@ SelectCitationsComponent.prototype.displaySearchItems = function (
 };
 
 /** @returns {Object<string|number, SearchResultItem>} */
-SelectCitationsComponent.prototype.getItems = function () {
+SelectCitationsComponent.prototype.getSelectedItems = function () {
     return this._items;
 };
 
@@ -290,7 +290,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     function toggleItem() {
         root.classList.toggle("doc-open");
         if (!params) {
-            params = self._buildCitationParams();
+            params = self._buildCitationParams(item);
             root.appendChild(params);
         }
     }
@@ -305,9 +305,13 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
 };
 
 /**
+ * @param {SearchResultItem} item
  * @returns {DocumentFragment}
  */
-SelectCitationsComponent.prototype._buildCitationParams = function () {
+SelectCitationsComponent.prototype._buildCitationParams = function (item) {
+    const locatorLabel = localStorage.getItem("selectedLocator") || "page";
+    item.label = locatorLabel;
+
     const params = document.createDocumentFragment();
     const prefixSuffixContainer = document.createElement("div");
     const prefix = document.createElement("input");
@@ -340,19 +344,35 @@ SelectCitationsComponent.prototype._buildCitationParams = function () {
         placeholder: "",
     });
 
-    const id = localStorage.getItem("selectedLocator") || "page";
-    this._locatorValues.forEach(function (info) {
-        const selected = info[0] === id;
+    prefixInput.subscribe(function (event) {
+        if (event.type !== "input:change") {
+            return;
+        }
+        item.prefix = event.detail.value;
+    });
+    suffixInput.subscribe(function (event) {
+        if (event.type !== "input:change") {
+            return;
+        }
+        item.suffix = event.detail.value;
+    });
+    locatorInput.subscribe(function (event) {
+        if (event.type !== "input:change") {
+            return;
+        }
+        item.locator = event.detail.value;
+    });
+
+    this._LOCATOR_VALUES.forEach(function (info) {
+        const selected = info[0] === locatorLabel;
         locatorSelectbox.addItem(info[0], info[1], selected);
     });
     locatorSelectbox.subscribe(function (event) {
         if (event.type !== "selectbox:change") {
             return;
         }
-        localStorage.setItem(
-            "selectedLocator",
-            event.detail.values[0].toString()
-        );
+        item.label = event.detail.values[0].toString();
+        localStorage.setItem("selectedLocator", item.label);
     });
 
     return params;
