@@ -2706,11 +2706,10 @@ function translate(text) {
     return translatedText;
 }
 
-var iconsPlugin = new IconsPlugin;
-
 window.Asc.plugin.init = _asyncToGenerator(function*() {
     try {
-        iconsPlugin.init();
+        var _iconsPlugin = new IconsPlugin;
+        _iconsPlugin.init();
     } catch (e) {
         console.error("Failed to init icons plugin");
         console.error(e);
