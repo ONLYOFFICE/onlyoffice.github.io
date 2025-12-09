@@ -111,9 +111,9 @@
             throw new Error("contentHolder not found");
         }
 
-        const configState = document.getElementById("configState");
-        if (!configState) {
-            throw new Error("configState not found");
+        const loginState = document.getElementById("loginState");
+        if (!loginState) {
+            throw new Error("loginState not found");
         }
         const mainState = document.getElementById("mainState");
         if (!mainState) {
@@ -195,7 +195,7 @@
             error: error,
 
             contentHolder: contentHolder,
-            configState: configState,
+            loginState: loginState,
 
             mainState: mainState,
 
