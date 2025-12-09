@@ -6,11 +6,16 @@
 @import url("./app/components/search-filter.css");
 @import url("./app/components/icon-picker.css");
 
+html,
 body {
+    height: 100%;
+    width: 100%;
     margin: 0;
+    box-sizing: border-box;
 }
+
 .content {
-    padding: 3px 13px 11px 11px;
+    padding: 3px 12px 11px 12px;
     overflow-y: auto;
     height: inherit;
     display: flex;
