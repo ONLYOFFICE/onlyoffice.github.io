@@ -46,5 +46,6 @@
     "to replace all active Zotero citations and Bibliography with plain text.": "pour remplacer toutes les citations Zotero actives et la bibliographie par du texte simple.",
     "After conversion, citations can no longer be updated.": "Après conversion, les citations ne peuvent plus être mises à jour.",
     "to access your local Zotero library.": "pour acceder à votre bibliothèque Zotero locale.",
-    "No API key required.": "Aucune clé API requise."
+    "No API key required.": "Aucune clé API requise.",
+    "Configure how citations will be formatted in your document.": "Configurer la façon dont les citations seront formatées dans votre document."
 }

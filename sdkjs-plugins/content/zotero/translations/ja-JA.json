@@ -46,5 +46,6 @@
     "to replace all active Zotero citations and Bibliography with plain text.": "全ての有効なZotero引用とBibliographyをテキストに置き換えます。",
     "After conversion, citations can no longer be updated.": "変換後、引用は更新できません。",
     "to access your local Zotero library.": "ローカルZoteroにアクセスします。",
-    "No API key required.": "APIキーは必要ありません。"
+    "No API key required.": "APIキーは必要ありません。",
+    "Configure how citations will be formatted in your document.": "文書内の引用のフォーマットを設定します。"
 }

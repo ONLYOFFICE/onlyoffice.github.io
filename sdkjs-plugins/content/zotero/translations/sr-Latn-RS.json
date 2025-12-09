@@ -46,5 +46,6 @@
     "to replace all active Zotero citations and Bibliography with plain text.": "za zamenu svih aktivnih Zotero citata i bibliografije tekstom.",
     "After conversion, citations can no longer be updated.": " Nakon konverzije, citat ne može visje biti azuriran.",
     "to access your local Zotero library.": "za pristup vasoj lokalnoj biblioteci Zotero.",
-    "No API key required.": "Nije potreban API ključ."
+    "No API key required.": "Nije potreban API ključ.",
+    "Configure how citations will be formatted in your document.": "Konfigurišite kako će citati biti formatirani u vašem dokumentu."
 }
