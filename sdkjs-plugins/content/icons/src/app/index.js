@@ -36,10 +36,9 @@ import { translate } from "./utils/translate.js";
 
 import "../styles.css";
 
-let iconsPlugin = new IconsPlugin();
-
 window.Asc.plugin.init = async function () {
     try {
+        let iconsPlugin = new IconsPlugin();
         iconsPlugin.init();
     } catch (e) {
         console.error("Failed to init icons plugin");

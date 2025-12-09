@@ -8575,13 +8575,14 @@
         var translatedText = window.Asc.plugin.tr(text);
         return translatedText;
     }
-    var iconsPlugin = new IconsPlugin;
     window.Asc.plugin.init = _asyncToGenerator(_regenerator().m(function _callee() {
+        var _iconsPlugin;
         return _regenerator().w(function(_context) {
             while (1) switch (_context.n) {
               case 0:
                 try {
-                    iconsPlugin.init();
+                    _iconsPlugin = new IconsPlugin;
+                    _iconsPlugin.init();
                 } catch (e) {
                     console.error("Failed to init icons plugin");
                     console.error(e);
