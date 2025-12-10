@@ -142,5 +142,15 @@
 	"Text to Image": "Tekst në Imazh",
 	"Image generation": "Gjenerim imazhi",
 	"OCR": "OCR",
-	"Vision": "Vizion"
+	"Vision": "Vizion",
+	
+	"Grammar & Spelling": "Gramatikë dhe Drejtshkrim",
+	"Accept": "Pranoj",
+	"Reject": "Refuzoj",
+	"Spelling suggestion": "Sugjerim drejtshkrimor",
+	"Grammar suggestion": "Sugjerim gramatikor",
+	"Check all": "Kontrolloni të gjitha",
+	"Check current text": "Kontrolloni tekstin aktual",
+	"Suggested correction": "Korrigjim i sugjeruar",
+	"Explanation": "Shpjegim"
 }

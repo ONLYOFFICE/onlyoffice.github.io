@@ -28,6 +28,7 @@
 	"Name" : "Name",
 	"URL" : "URL",
 	"Key" : "Schlüssel",
+	"e.g. abc123...": "z.B. abc123...",
 	"Update models list" : "Liste der Modelle aktualisieren",
 	"Use model for" : "Modell verwenden für",
 	"All": "Alles",
