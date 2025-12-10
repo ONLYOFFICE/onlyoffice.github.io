@@ -142,5 +142,15 @@
 	"Text to Image": "Text zu Bild",
 	"Image generation": "Bildgenerierung",
 	"OCR": "OCR",
-	"Vision": "Visão"
+	"Vision": "Vision",
+	
+	"Grammar & Spelling": "Grammatik & Rechtschreibung",
+	"Accept": "Annehmen",
+	"Reject": "Ablehnen",
+	"Spelling suggestion": "Rechtschreibvorschlag",
+	"Grammar suggestion": "Grammatikvorschlag",
+	"Check all": "Alles prüfen",
+	"Check current text": "Aktuellen Text prüfen",
+	"Suggested correction": "Korrekturvorschlag",
+	"Explanation": "Erklärung"
 }
