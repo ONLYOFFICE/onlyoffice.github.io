@@ -1,9 +1,9 @@
 // @ts-check
 
 function Router() {
-    this._states = ["mainState", "loginState"];
-    this._routes = ["main", "login"];
-    /** @type {"main"|"login"} */
+    this._states = ["mainState", "loginState", "settingsState"];
+    this._routes = ["main", "login", "settings"];
+    /** @type {"main"|"login"|"settings"} */
     this._currentRoute = "login";
     this._currentRouteIndex = 1;
     this._containers = this._states.map(function (route) {
@@ -13,12 +13,12 @@ function Router() {
     });
 }
 
-/** @returns {"main"|"login"} */
+/** @returns {"main"|"login"|"settings"} */
 Router.prototype.getRoute = function () {
     return this._currentRoute;
 };
 
-/** @param {"main"|"login"} route */
+/** @param {"main"|"login"|"settings"} route */
 Router.prototype._setCurrentRoute = function (route) {
     this._containers[this._currentRouteIndex].classList.add("hidden");
     this._currentRoute = route;
@@ -32,4 +32,8 @@ Router.prototype.openMain = function () {
 
 Router.prototype.openLogin = function () {
     this._setCurrentRoute("login");
+};
+
+Router.prototype.openSettings = function () {
+    this._setCurrentRoute("settings");
 };

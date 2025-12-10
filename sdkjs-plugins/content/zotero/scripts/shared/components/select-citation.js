@@ -51,7 +51,7 @@ function SelectCitationsComponent(
         ["volume", "Volume"],
     ];
 
-    this._cancelBtn = document.getElementById("cancelBtn");
+    this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
 
     this._docsHolder = document.getElementById("docsHolder");
     this._docsThumb = document.getElementById("docsThumb");
@@ -89,8 +89,8 @@ function SelectCitationsComponent(
 
 SelectCitationsComponent.prototype._init = function () {
     const self = this;
-    if (this._cancelBtn) {
-        this._cancelBtn.onclick = function (e) {
+    if (this._cancelSelectBtn) {
+        this._cancelSelectBtn.onclick = function (e) {
             var ids = [];
             for (var id in self._items) {
                 ids.push(id);

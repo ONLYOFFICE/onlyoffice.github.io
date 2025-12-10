@@ -136,22 +136,17 @@ input[type="text"] {
 
 #searchWrapper {
     display: flex;
+    gap: 4px;
     justify-content: space-between;
     position: relative;
     margin-top: 13px;
 }
-    #searchWrapper .input-field-container-searchField {
-        width: 207px;
-    }
     #searchWrapper .selectbox-container {
         position: absolute;
     }
         #searchWrapper .selectbox-container .selectbox-header {
             opacity: 0;
         }
-#searchField {
-    width: 207px;
-}
 
 #controlsHolder {
     padding-top: 4px;
@@ -160,8 +155,8 @@ input[type="text"] {
     #controlsHolder button {
         margin-top: 8px;
     }
-    #controlsHolder .custom-button-primary {
-        width: 207px;
+    #controlsHolder .custom-button-container:first-child {
+        width: calc(100% - 28px);
     }
     #controlsHolder .custom-button-secondary {
         width: 100%;
@@ -256,11 +251,6 @@ input[type="text"] {
         transform: rotateZ(-45deg);
     }
 
-
-#styleLangList {
-    right: 0px;
-}
-
 .selectList {
     display: flex;
     flex-direction: column;
@@ -342,7 +332,7 @@ input[type="text"] {
     box-sizing: border-box;
     margin-top: 6px;
     padding: 4px 6px 6px 6px;
-    height: 51px;
+    max-height: 51px;
     overflow: hidden;
 }
     .page0 > .doc:first-child {
@@ -390,8 +380,7 @@ input[type="text"] {
     }
 
     .doc.doc-open {
-        height: auto;
-        overflow: visible;
+        max-height: none;
     }
     .doc-open .selectbox-arrow {
         transform: rotate(180deg);
