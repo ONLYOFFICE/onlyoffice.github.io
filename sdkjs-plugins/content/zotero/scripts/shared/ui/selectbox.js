@@ -538,6 +538,36 @@ SelectBox.prototype.addItem = function (value, text, selected) {
     this._updateSelectedText();
 };
 
+/**
+ * @param {Array<[string,string]>} values
+ * @param {string} [selectedValue]
+ */
+SelectBox.prototype.addItems = function (values, selectedValue) {
+    const self = this;
+    values.forEach(function (pair, index) {
+        const isSelected = selectedValue
+            ? pair[0] === selectedValue
+            : index === 0;
+
+        if (isSelected) {
+            if (self._options.multiple) {
+                self._selectedValues.add(pair[0]);
+            } else {
+                self._selectedValues.clear();
+                self._selectedValues.add(pair[0]);
+            }
+        }
+
+        self._items.push({
+            value: pair[0],
+            text: pair[1],
+            selected: isSelected,
+        });
+    }, this);
+
+    this._updateSelectedText();
+};
+
 SelectBox.prototype.addSeparator = function () {
     this._items.push(null);
 };
@@ -554,6 +584,21 @@ SelectBox.prototype.removeItem = function (value) {
     });
     this._selectedValues.delete(value);
     this._updateSelectedText();
+};
+
+/**
+ * @return {null | string}
+ */
+SelectBox.prototype.getSelectedValue = function () {
+    if (this._options.multiple) {
+        console.error(
+            "Method getSelectedValue is only available for single-select boxes."
+        );
+        return null;
+    } else {
+        var values = Array.from(this._selectedValues);
+        return values.length > 0 ? values[0] : null;
+    }
 };
 
 /**

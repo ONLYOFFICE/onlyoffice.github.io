@@ -23,25 +23,18 @@
 /// <reference path="./zotero/zotero.js" />
 /// <reference path="./csl/citation/citation.js" />
 /// <reference path="./csl/citation/storage.js" />
-/// <reference path="./csl/styles/styles-manager.js" />
-/// <reference path="./csl/locales/locales-manager.js" />
 /// <reference path="./services/translate-service.js" />
 /// <reference path="./services/citation-service.js" />
 /// <reference path="./shared/components/search-filter.js" />
 /// <reference path="./shared/components/select-citation.js" />
-/// <reference path="./shared/ui/input.js" />
-/// <reference path="./shared/ui/selectbox.js" />
 /// <reference path="./shared/ui/button.js" />
-/// <reference path="./connection.js" />
+/// <reference path="./login.js" />
+/// <reference path="./settings.js" />
 
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "hidden";
     var blurClass = "blur";
-
-    //var loadingStyle = false;
-    //var loadingLocale = false;
-    var bNumFormat = false;
 
     // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
     //     из библиографии автоматически (это делать только при обновлении библиографии
@@ -52,7 +45,7 @@
     // TODO сейчас всегда делаем полный refresh при каждом действии
     //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
     //     что поменялось без событий (потом добавить ещё сравнение контента)
-    // TODO ms меняет линки (если стиль с нумерацией bNumFormat) делает их по порядку
+    // TODO ms меняет линки (если стиль с нумерацией settings._bNumFormat) делает их по порядку
     //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
     //     какая цитата сверху и снизу от текущего курсора)
 
@@ -60,12 +53,10 @@
     var router;
     /** @type {ZoteroSdk} */
     var sdk;
-    /** @type {ConnectingToApi} */
-    var connectingToApi;
-    /** @type {CslStylesManager} */
-    var cslStylesManager;
-    /** @type {LocalesManager} */
-    var localesManager;
+
+    /** @type {SettingsPage} */
+    var settings;
+
     /** @type {CitationService} */
     var citationService;
 
@@ -85,8 +76,6 @@
     var saveAsTextBtn;
     /** @type {Button} */
     var insertLinkBtn;
-    /** @type {Button} */
-    var settingsBtn;
     /** @type {Button} */
     var insertBibBtn;
     /** @type {Button} */
@@ -111,62 +100,16 @@
             throw new Error("contentHolder not found");
         }
 
-        const loginState = document.getElementById("loginState");
-        if (!loginState) {
-            throw new Error("loginState not found");
-        }
         const mainState = document.getElementById("mainState");
         if (!mainState) {
             throw new Error("mainState not found");
         }
 
-        const styleWrapper = document.getElementById("styleWrapper");
-        if (!styleWrapper) {
-            throw new Error("styleWrapper not found");
-        }
-        const styleSelectList = document.getElementById("styleSelectList");
-        if (!styleSelectList) {
-            throw new Error("styleSelectList not found");
-        }
-        const styleSelectListOther = document.getElementById(
-            "styleSelectedListOther"
-        );
-        if (!styleSelectListOther) {
-            throw new Error("styleSelectListOther not found");
-        }
-        const styleSelect = document.getElementById("styleSelect");
-        if (!styleSelect) {
-            throw new Error("styleSelect not found");
-        }
-        const styleLang = document.getElementById("styleLang");
-        if (!styleLang) {
-            throw new Error("styleLang not found");
-        }
-        const styleLangList = document.getElementById("styleLangList");
-        if (!styleLangList) {
-            throw new Error("styleLangList not found");
-        }
-        const notesStyleWrapper = document.getElementById("notesStyle");
-        if (!notesStyleWrapper) {
-            throw new Error("notesStyleWrapper not found");
-        }
-        const footNotes = document.getElementById("footNotes");
-        if (!footNotes) {
-            throw new Error("footNotes not found");
-        }
-        const endNotes = document.getElementById("endNotes");
-        if (!endNotes) {
-            throw new Error("endNotes not found");
-        }
         const checkOmitAuthor = document.getElementById("omitAuthor");
         if (!checkOmitAuthor) {
             throw new Error("checkOmitAuthor not found");
         }
 
-        const cslFileInput = document.getElementById("cslFileInput");
-        if (!cslFileInput) {
-            throw new Error("cslFileInput not found");
-        }
         searchFilter = new SearchFilterComponents();
         selectCitation = new SelectCitationsComponent(
             displayNoneClass,
@@ -178,10 +121,6 @@
         });
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
-        });
-        settingsBtn = new Button("settingsBtn", {
-            variant: "icon-only",
-            size: "small",
         });
         insertBibBtn = new Button("insertBibBtn", {
             variant: "secondary",
@@ -195,22 +134,10 @@
             error: error,
 
             contentHolder: contentHolder,
-            loginState: loginState,
 
             mainState: mainState,
 
-            styleWrapper: styleWrapper,
-            styleSelectList: styleSelectList,
-            styleSelectListOther: styleSelectListOther,
-            styleSelect: styleSelect,
-            styleLang: styleLang,
-            styleLangList: styleLangList,
-            notesStyleWrapper: notesStyleWrapper,
-            footNotes: footNotes,
-            endNotes: endNotes,
-
             checkOmitAuthor: checkOmitAuthor,
-            cslFileInput: cslFileInput,
         };
     }
 
@@ -220,115 +147,35 @@
 
         router = new Router();
         sdk = new ZoteroSdk();
-        connectingToApi = new ConnectingToApi(router, sdk);
-        cslStylesManager = new CslStylesManager();
-        localesManager = new LocalesManager();
+        const loginPage = new LoginPage(router, sdk);
+        settings = new SettingsPage(router, displayNoneClass);
         citationService = new CitationService(
-            localesManager,
-            cslStylesManager,
+            settings.getLocalesManager(),
+            settings.getStyleManager(),
             sdk
         );
 
         addEventListeners();
-        initSelectBoxes();
 
-        const connector = connectingToApi.init();
-        connector.onOpen(function () {
-            showLoader(false);
-        });
-        connector.onChangeState(function (apis) {
-            cslStylesManager.setDesktopApiAvailable(apis.desktop);
-            cslStylesManager.setRestApiAvailable(apis.online);
-            localesManager.setDesktopApiAvailable(apis.desktop);
-            localesManager.setRestApiAvailable(apis.online);
-        });
-        connector.onAuthorized(function (apis) {
-            showLoader(true);
-
-            Promise.all([
-                loadGroups(),
-                loadStyles(),
-                preloadLastStyle(),
-                initLanguageSelect(),
-            ]).then(function () {
+        loginPage
+            .init()
+            .onOpen(function () {
                 showLoader(false);
-            });
+            })
+            .onChangeState(function (apis) {
+                settings.setDesktopApiAvailable(apis.desktop);
+                settings.setRestApiAvailable(apis.online);
+            })
+            .onAuthorized(function (apis) {
+                showLoader(true);
 
-            addStylesEventListeners();
-        });
+                Promise.all([loadGroups(), settings.init()]).then(function () {
+                    showLoader(false);
+                });
+            });
 
         window.Asc.plugin.onTranslate = applyTranslations;
     };
-
-    function preloadLastStyle() {
-        var lastStyle = cslStylesManager.getLastUsedStyleId() || "ieee";
-        return cslStylesManager.getStyle(lastStyle);
-    }
-
-    /**
-     * @returns {Promise<string|null>}
-     */
-    function initLanguageSelect() {
-        const savedLang = localesManager.getLastUsedLanguage();
-        const option = elements.styleLangList.querySelector(
-            '[data-value="' + savedLang + '"]'
-        );
-        if (!option || !(elements.styleLang instanceof HTMLInputElement)) {
-            console.error("initLanguageSelect: no option");
-            return Promise.resolve(null);
-        }
-        option.setAttribute("selected", "");
-        elements.styleLang.value = option.textContent;
-        elements.styleLang.setAttribute("data-value", savedLang);
-        return localesManager.loadLocale(savedLang);
-    }
-
-    /** @returns {Promise<void>} */
-    function loadStyles() {
-        return cslStylesManager
-            .getStylesInfo()
-            .then(
-                /** @param {Array<StyleInfo>} stylesInfo*/ function (
-                    stylesInfo
-                ) {
-                    var openOtherStyleList = function (
-                        /** @type {HTMLElement} */ list
-                    ) {
-                        return function (/** @type {MouseEvent} */ ev) {
-                            elements.styleSelectListOther.style.width =
-                                elements.styleWrapper.clientWidth - 2 + "px";
-                            ev.stopPropagation();
-                            openList(list);
-                        };
-                    };
-
-                    addStylesToList(stylesInfo);
-
-                    const el = document.createElement("hr");
-                    elements.styleSelectList.appendChild(el);
-
-                    if (elements.styleSelectListOther.children.length > 0) {
-                        var other = document.createElement("span");
-                        other.textContent = "More Styles...";
-                        elements.styleSelectList.appendChild(other);
-                        other.onclick = openOtherStyleList(
-                            elements.styleSelectListOther
-                        );
-                    }
-
-                    var custom = document.createElement("span");
-                    custom.setAttribute("class", "select-file");
-                    var label = document.createElement("label");
-                    label.setAttribute("for", "cslFileInput");
-                    label.textContent = "Add custom style...";
-                    custom.appendChild(label);
-                    elements.styleSelectList.appendChild(custom);
-                }
-            )
-            .catch(function (err) {
-                console.error(err);
-            });
-    }
 
     /** @returns {Promise<void>} */
     function loadGroups() {
@@ -339,120 +186,8 @@
             });
     }
 
-    /**
-     * @param {Array<StyleInfo>} stylesInfo
-     */
-    function addStylesToList(stylesInfo) {
-        var lastStyle = cslStylesManager.getLastUsedStyleIdOrDefault();
-        const styleSelect = elements.styleSelect;
-        if (styleSelect instanceof HTMLInputElement === false) {
-            console.error("styleSelect is not an input element");
-            return;
-        }
-
-        /**
-         * @param {HTMLElement} list - the list of styles where the element is added.
-         * @param {HTMLElement} other - the list of styles where the element is removed.
-         */
-        var onStyleSelectOther = function (list, other) {
-            return function (/** @type {MouseEvent} */ ev) {
-                let tmpEl = list.removeChild(
-                    list.children[list.children.length - 3]
-                );
-                var newEl = document.createElement("span");
-                newEl.setAttribute(
-                    "data-value",
-                    String(tmpEl.getAttribute("data-value"))
-                );
-                newEl.textContent = tmpEl.textContent;
-                other.appendChild(newEl);
-                newEl.onclick = onStyleSelectOther(
-                    elements.styleSelectList,
-                    elements.styleSelectListOther
-                );
-
-                if (ev.target instanceof HTMLElement === false) {
-                    console.error("ev.target is not an HTMLElement");
-                    return;
-                }
-                tmpEl = other.removeChild(ev.target);
-                newEl = document.createElement("span");
-                newEl.setAttribute(
-                    "data-value",
-                    String(tmpEl.getAttribute("data-value"))
-                );
-                newEl.textContent = tmpEl.textContent;
-                list.insertBefore(newEl, list.firstElementChild);
-                newEl.onclick = onClickListElement(
-                    elements.styleSelectList,
-                    styleSelect
-                );
-                var event = new Event("click");
-                newEl.dispatchEvent(event);
-                closeList();
-            };
-        };
-
-        for (var i = 0; i < stylesInfo.length; i++) {
-            var el = document.createElement("span");
-            el.setAttribute("data-value", stylesInfo[i].name);
-            el.textContent = stylesInfo[i].title;
-            if (
-                cslStylesManager.isStyleDefault(stylesInfo[i].name) ||
-                stylesInfo[i].name == lastStyle
-            ) {
-                if (stylesInfo.length == 1)
-                    elements.styleSelectList.insertBefore(
-                        el,
-                        elements.styleSelectList.firstElementChild
-                    );
-                else elements.styleSelectList.appendChild(el);
-                el.onclick = onClickListElement(
-                    elements.styleSelectList,
-                    styleSelect
-                );
-            } else {
-                elements.styleSelectListOther.appendChild(el);
-                el.onclick = onStyleSelectOther(
-                    elements.styleSelectList,
-                    elements.styleSelectListOther
-                );
-            }
-            if (stylesInfo[i].name == lastStyle) {
-                el.setAttribute("selected", "");
-                selectInput(styleSelect, el, elements.styleSelectList, false);
-            }
-        }
-    }
-
     function addEventListeners() {
         selectCitation.subscribe(checkSelected);
-
-        elements.cslFileInput.onchange = function (e) {
-            if (!(e.target instanceof HTMLInputElement)) return;
-            /** @type {HTMLInputElement} */
-            const target = e.target;
-            if (!target.files) return;
-            var file = target.files[0];
-            if (!file) {
-                console.error("No file selected");
-                return;
-            }
-            //showLoader(true);
-
-            cslStylesManager
-                .addCustomStyle(file)
-                .then(function (styleValue) {
-                    addStylesToList([styleValue]);
-                })
-                .catch(function (error) {
-                    console.error(error);
-                    showError(translate("Failed to upload file"));
-                })
-                .finally(function () {
-                    showLoader(false);
-                });
-        };
 
         /**
          * @param {string} text
@@ -538,11 +273,11 @@
             if (event.type !== "button:click") {
                 return;
             }
-            if (!cslStylesManager.getLastUsedStyleId()) {
+            if (!settings.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
             }
-            if (!localesManager.getLocale()) {
+            if (!settings.getLocale()) {
                 showError(translate("Language is not selected"));
                 return;
             }
@@ -566,11 +301,11 @@
             if (event.type !== "button:click") {
                 return;
             }
-            if (!cslStylesManager.getLastUsedStyleId()) {
+            if (!settings.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
             }
-            if (!localesManager.getLocale()) {
+            if (!settings.getLocale()) {
                 showError(translate("Language is not selected"));
                 return;
             }
@@ -596,11 +331,11 @@
             if (event.type !== "button:click") {
                 return;
             }
-            if (!cslStylesManager.getLastUsedStyleId()) {
+            if (!settings.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
             }
-            if (!localesManager.getLocale()) {
+            if (!settings.getLocale()) {
                 showError(translate("Language is not selected"));
                 return;
             }
@@ -643,91 +378,12 @@
                 showLoader(false);
             });
         });
-    }
 
-    function addStylesEventListeners() {
-        /**
-         * @param {Event|null} e - The input event.
-         * @param {String} [filter] - The filter to apply on the style options.
-         */
-        elements.styleSelect.oninput = function (e, filter) {
-            var input = elements.styleSelect;
-            if (!(input instanceof HTMLInputElement)) return;
-            filter = filter !== undefined ? filter : input.value.toLowerCase();
-            var list = elements.styleSelectList.classList.contains(
-                displayNoneClass
-            )
-                ? elements.styleSelectListOther
-                : elements.styleSelectList;
-
-            for (var i = 0; i < list.children.length; i++) {
-                const child = list.children[i];
-                if (child instanceof HTMLElement === false) {
-                    continue;
-                }
-                var text = child.textContent || child.innerText;
-                var hide = true;
-                if (!filter || text.toLowerCase().indexOf(filter) > -1) {
-                    hide = false;
-                }
-
-                switchClass(child, displayNoneClass, hide);
-            }
-        };
-
-        /**
-         * @param {Event} inp - The input event.
-         * @param {String} styleName - The name of the selected style.
-         * @param {Boolean} isClick - Whether the style was selected manually or not.
-         */
-        elements.styleSelect.onselectchange = function (
-            inp,
-            styleName,
-            isClick
-        ) {
-            isClick && showLoader(true);
-            elements.styleSelect.oninput(inp, "");
-
-            return cslStylesManager
-                .getStyle(styleName)
-                .then(function (style) {
-                    onStyleChange();
-                    if (isClick) {
-                        return citationService.updateCslItems(
-                            true,
-                            true,
-                            false
-                        );
-                    }
-                })
-                .catch(function (err) {
-                    console.error(err);
-                    if (typeof err === "string") {
-                        showError(err);
-                    }
-                })
-                .finally(function () {
-                    isClick && showLoader(false);
-                });
-        };
-
-        /**
-         * @param {Event} inp - The select change event.
-         * @param {String} val - The value of the selected language.
-         * @param {Boolean} isClick - Whether the language was selected manually or not.
-         */
-        elements.styleLang.onselectchange = function (inp, val, isClick) {
+        settings.onChangeState(function (/** @type {Promise<void>} */ promise) {
             showLoader(true);
-            localesManager.saveLastUsedLanguage(val);
-            localesManager
-                .loadLocale(val)
+            promise
                 .then(function () {
-                    if (isClick)
-                        return citationService.updateCslItems(
-                            true,
-                            true,
-                            false
-                        );
+                    return citationService.updateCslItems(true, true, false);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -738,27 +394,6 @@
                 .finally(function () {
                     showLoader(false);
                 });
-        };
-
-        elements.styleSelectList.onopen = function () {
-            elements.styleSelectList.style.width =
-                elements.styleWrapper.clientWidth - 2 + "px";
-        };
-
-        [elements.footNotes, elements.endNotes].forEach(function (el) {
-            el.addEventListener("change", function (event) {
-                if (
-                    event.target instanceof HTMLInputElement &&
-                    event.target.checked
-                ) {
-                    const value = event.target.value;
-                    if (value === "endnotes" || value === "footnotes") {
-                        cslStylesManager.saveLastUsedNotesStyle(value);
-                    } else {
-                        console.error("Unknown notes style: " + value);
-                    }
-                }
-            });
         });
     }
 
@@ -826,160 +461,6 @@
         body.classList.remove("theme-light");
         body.classList.add("theme-" + themeType);
     };
-
-    /** @type {HTMLElement[]} */
-    var selectLists = [];
-    function initSelectBoxes() {
-        var select = document.getElementsByClassName("control select");
-        for (var i = 0; i < select.length; i++) {
-            var input = select[i];
-            var holder = input.parentElement;
-            if (!(input instanceof HTMLInputElement) || !holder) {
-                console.error("initSelectBoxes: no input or holder");
-                continue;
-            }
-
-            var arrow = document.createElement("span");
-            arrow.classList.add("selectArrow");
-            arrow.appendChild(document.createElement("span"));
-            arrow.appendChild(document.createElement("span"));
-            holder.appendChild(arrow);
-
-            for (
-                var k = 0;
-                k < holder.getElementsByClassName("selectList").length;
-                k++
-            ) {
-                var list = holder.getElementsByClassName("selectList")[k];
-                if (list.children.length > 0) {
-                    for (var j = 0; j < list.children.length; j++) {
-                        const child = list.children[j];
-                        if (child instanceof HTMLElement === false) {
-                            continue;
-                        }
-                        child.onclick = onClickListElement(list, input);
-                    }
-                    // selectInput(input, list.children[0], list, false);
-                }
-
-                /**
-                 * @param {HTMLElement} list
-                 * @param {HTMLElement} input
-                 * @returns {function}
-                 */
-                var fOpen = function (list, input) {
-                    return function (/** @type {MouseEvent} */ ev) {
-                        ev.stopPropagation();
-                        if (
-                            !elements.styleSelectListOther.classList.contains(
-                                displayNoneClass
-                            )
-                        )
-                            return true;
-
-                        if (list.onopen) {
-                            list.onopen();
-                        }
-                        if (!input.hasAttribute("readonly")) {
-                            input.select();
-                        }
-                        openList(list);
-
-                        return true;
-                    };
-                };
-
-                if (k !== 1) {
-                    input.onclick = fOpen(list, input);
-                    arrow.onclick = fOpen(list, input);
-                }
-                selectLists.push(list);
-            }
-        }
-    }
-
-    /**
-     * @param {HTMLElement} el
-     */
-    function openList(el) {
-        switchClass(el, displayNoneClass, false);
-        window.addEventListener("click", closeList);
-    }
-
-    function closeList() {
-        window.removeEventListener("click", closeList);
-        for (var i = 0; i < selectLists.length; i++) {
-            if (selectLists[i] === elements.styleSelectList)
-                elements.styleSelect.oninput(null, "");
-            switchClass(selectLists[i], displayNoneClass, true);
-        }
-    }
-
-    /**
-     * @param {HTMLInputElement} input
-     * @param {HTMLElement} el
-     * @param {HTMLElement} list
-     * @param {boolean} isClick
-     */
-    function selectInput(input, el, list, isClick) {
-        input.value = el.textContent;
-        var val = el.getAttribute("data-value") || "";
-        input.setAttribute("data-value", val);
-        input.setAttribute("title", el.textContent);
-        if (input.onselectchange) {
-            input.onselectchange(input, val, isClick);
-        }
-        switchClass(list, displayNoneClass, true);
-    }
-
-    /**
-     * @param {Element} list
-     * @param {HTMLInputElement} input
-     */
-    function onClickListElement(list, input) {
-        return function (/** @type {MouseEvent} */ ev) {
-            if (!ev.target || !(ev.target instanceof HTMLElement)) {
-                console.error("onClickListElement: no target");
-                return;
-            }
-            var sel = ev.target.getAttribute("data-value");
-            for (var i = 0; i < list.children.length; i++) {
-                const temp = list.children[i];
-                if (temp instanceof HTMLElement === false) continue;
-                /** @type {HTMLElement} */
-                const child = temp;
-                if (list.children[i].getAttribute("data-value") == sel) {
-                    list.children[i].setAttribute("selected", "");
-
-                    selectInput(input, child, list, true);
-                } else {
-                    if (list.children[i].hasAttribute("selected")) {
-                        list.children[i].attributes.removeNamedItem("selected");
-                    }
-                }
-            }
-        };
-    }
-
-    function onStyleChange() {
-        let styleFormat = cslStylesManager.getLastUsedFormat();
-        citationService.setStyleFormat(styleFormat);
-        bNumFormat = styleFormat == "numeric";
-        if ("note" === styleFormat) {
-            elements.notesStyleWrapper.classList.remove(displayNoneClass);
-        } else {
-            elements.notesStyleWrapper.classList.add(displayNoneClass);
-        }
-
-        let notesStyle = cslStylesManager.getLastUsedNotesStyle();
-        citationService.setNotesStyle(notesStyle);
-        const notesAs = elements.notesStyleWrapper.querySelector(
-            'input[name="notesAs"][value="' + notesStyle + '"]'
-        );
-        if (notesAs && notesAs instanceof HTMLInputElement) {
-            notesAs.checked = true;
-        }
-    }
 
     function applyTranslations() {
         var elements = document.getElementsByClassName("i18n");
