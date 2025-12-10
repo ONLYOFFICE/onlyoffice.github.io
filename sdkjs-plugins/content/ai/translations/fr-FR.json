@@ -142,5 +142,15 @@
 	"Text to Image": "Texte en image",
 	"Image generation": "Génération d'images",
 	"OCR": "OCR",
-	"Vision": "Vision"
+	"Vision": "Vision",
+	
+	"Grammar & Spelling": "Grammaire et orthographe",
+	"Accept": "Accepter",
+	"Reject": "Rejeter",
+	"Spelling suggestion": "Suggestion d'orthographe",
+	"Grammar suggestion": "Suggestion de grammaire",
+	"Check all": "Vérifier tout",
+	"Check current text": "Vérifier le texte actuel",
+	"Suggested correction": "Correction suggérée",
+	"Explanation": "Explication"
 }
