@@ -13,7 +13,7 @@
  * @param {Router} router
  * @param {ZoteroSdk} sdk
  */
-function ConnectingToApi(router, sdk) {
+function LoginPage(router, sdk) {
     this._router = router;
     this._sdk = sdk;
     this._apiKeyLoginField = new InputField("apiKeyField", {
@@ -48,7 +48,7 @@ function ConnectingToApi(router, sdk) {
     this._onOpen = function () {};
 }
 
-ConnectingToApi.prototype.init = function () {
+LoginPage.prototype.init = function () {
     const self = this;
     this._addEventListeners();
     let hasFirstAnswer = false;
@@ -90,29 +90,34 @@ ConnectingToApi.prototype.init = function () {
         }
     });
 
-    return {
+    const triggers = {
         /**
-         * @param {function(AvailableApis): void} callbackFn
+         * @param {function(): void} callbackFn
          */
-        onAuthorized: function (callbackFn) {
-            self._onAuthorized = callbackFn;
+        onOpen: function (callbackFn) {
+            self._onOpen = callbackFn;
+            return triggers;
         },
         /**
          * @param {function(AvailableApis): void} callbackFn
          */
         onChangeState: function (callbackFn) {
             self._onChangeState = callbackFn;
+            return triggers;
         },
         /**
-         * @param {function(): void} callbackFn
+         * @param {function(AvailableApis): void} callbackFn
          */
-        onOpen: function (callbackFn) {
-            self._onOpen = callbackFn;
+        onAuthorized: function (callbackFn) {
+            self._onAuthorized = callbackFn;
+            return triggers;
         },
     };
+
+    return triggers;
 };
 
-ConnectingToApi.prototype._addEventListeners = function () {
+LoginPage.prototype._addEventListeners = function () {
     const self = this;
     this._apiKeyLoginField.subscribe(function (event) {
         if (event.type !== "inputfield:input") {
@@ -176,22 +181,19 @@ ConnectingToApi.prototype._addEventListeners = function () {
     };
 };
 
-ConnectingToApi.prototype._hideAllMessages = function () {
+LoginPage.prototype._hideAllMessages = function () {
     this._apiKeyMessage.close();
 };
 
-/** @param {string} apiKey */
-ConnectingToApi.prototype._onClickSave = function (apiKey) {};
-
 /** @param {boolean} [bShowLogoutLink] */
-ConnectingToApi.prototype._hide = function (bShowLogoutLink) {
+LoginPage.prototype._hide = function (bShowLogoutLink) {
     this._router.openMain();
     if (bShowLogoutLink) {
         this._logoutLink.classList.remove("hidden");
     }
 };
 
-ConnectingToApi.prototype._show = function () {
+LoginPage.prototype._show = function () {
     this._router.openLogin();
     this._logoutLink.classList.add("hidden");
 };
