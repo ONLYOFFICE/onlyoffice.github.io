@@ -28,6 +28,7 @@
 	"Name" : "Nome",
 	"URL" : "URL",
 	"Key" : "Chave",
+	"e.g. abc123...": "por exemplo, abc123...",
 	"Update models list" : "Atualizar a lista de modelos",
 	"Use model for" : "Use o modelo para",
 	"All": "Todos",
@@ -142,5 +143,15 @@
 	"Text to Image": "Texto para Imagem",
 	"Image generation": "Geração de Imagem",
 	"OCR": "OCR",
-	"Vision": "Visão"
+	"Vision": "Visão",
+	
+	"Grammar & Spelling": "Gramática e Ortografia",
+	"Accept": "Aceitar",
+	"Reject": "Rejeitar",
+	"Spelling suggestion": "Sugestão ortográfica",
+	"Grammar suggestion": "Sugestão gramatical",
+	"Check all": "Verificar tudo",
+	"Check current text": "Verificar o texto atual",
+	"Suggested correction": "Correção sugerida",
+	"Explanation": "Explicação"
 }
