@@ -789,18 +789,16 @@ body.theme-dark .selectbox-container {
 }
 /** Message ************ */
 .message-container {
-    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .message {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 15px 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 1px;
+    padding: 9px 6px 6px 6px;
     margin-bottom: 10px;
-    min-width: 300px;
-    max-width: 400px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -809,82 +807,93 @@ body.theme-dark .selectbox-container {
     transition: opacity 0.3s, transform 0.3s;
 }
 
-.message-error {
-    border-left: 4px solid #dc3545;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
+.message-error:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 6px;
+    top: 9px;
+    background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
 }
 
 .message-warning {
-    border-left: 4px solid #ffc107;
     background-color: #fff3cd;
     border-color: #ffeaa7;
 }
 
 .message-info {
-    border-left: 4px solid #17a2b8;
     background-color: #d1ecf1;
     border-color: #bee5eb;
 }
 
 .message-success {
-    border-left: 4px solid #28a745;
     background-color: #d4edda;
     border-color: #c3e6cb;
 }
 
 .message-content {
     display: flex;
-    align-items: center;
+    gap: 8px;
+    flex-direction: column;
     flex-grow: 1;
 }
 
-.message-icon {
+.message-title {
+    flex-grow: 1;
+    font-family: Arial, sans-serif;
+    text-indent: 20px;
     font-weight: bold;
-    margin-right: 10px;
-    font-size: 18px;
-    pointer-events: none;
-}
-
-.message-error .message-icon {
-    color: #dc3545;
-}
-
-.message-warning .message-icon {
-    color: #ffc107;
-}
-
-.message-info .message-icon {
-    color: #17a2b8;
-}
-
-.message-success .message-icon {
-    color: #28a745;
 }
 
 .message-text {
     flex-grow: 1;
     font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 11px;
 }
 
 .message-close {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 18px;
     line-height: 1;
     cursor: pointer;
-    padding: 0 0 0 15px;
-    color: #999;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    padding: 0 4px;
+    color: transparent;
     transition: color 0.2s;
-}
-
-.message-close:hover {
-    color: #333;
 }
 
 .message-close:focus {
     outline: none;
-    color: #333;
+}
+body.theme-light {
+    .message {
+        background-color: var(--input-bg);
+        border-color: var(--input-border);
+    }
+
+    .message-container:hover .message-close {
+        color: var(--input-icon);
+    }
+
+    .message-close:hover {
+        color: var(--input-icon-hover);
+    }
+}
+body.theme-dark {
+    .message {
+        background-color: var(--input-bg-dark);
+        border-color: var(--input-border-dark);
+    }
+
+    .message-container:hover .message-close {
+        color: var(--input-icon-dark);
+    }
+
+    .message-close:hover {
+        color: var(--input-icon-hover-dark);
+    }
 }
