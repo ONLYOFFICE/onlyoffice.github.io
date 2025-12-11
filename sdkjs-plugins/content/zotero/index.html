@@ -137,7 +137,7 @@
                     <span id="selectedCount">0 selected</span>
                     <span id="cancelSelectBtn" class="i18n link">Cancel selection</span>
                 </div>
-                <div id="controlsHolder" class="flexCol">
+                <div class="flexCol controls-holder">
                     <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
                         <button id="insertLinkBtn" class="i18n" disabled>Insert Citation</button>
                         <button id="settingsBtn" class="i18n" title="Configure how citations will be formatted in your document.">
@@ -171,9 +171,11 @@
                             <div id="styleSelectedListOther" class="selectList hidden form-control"></div>
                         </div>
                     </div>
+                    <div id="styleMessage"></div>
                 </div>
 
                 <div id="styleLangList"></div>
+                <div id="langMessage"></div>
 
                 <div id="notesStyle" class="notesStyle hidden">
                     <span class="i18n">Display citations as:</span>
@@ -185,8 +187,10 @@
                         <label for="endNotes" class="i18n">Endnotes</label>
                     </div>
                 </div>
-                <button id="saveSettingsBtn" class="i18n">Done</button>
-                <button id="cancelBtn" class="i18n">Cancel</button>
+                <div class="flexCol controls-holder">
+                    <button id="saveSettingsBtn" class="i18n">Done</button>
+                    <button id="cancelBtn" class="i18n">Cancel</button>
+                </div>
             </div>
         </div>
 

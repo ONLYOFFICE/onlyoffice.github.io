@@ -18,12 +18,13 @@ function Message(container, options) {
         /** @type {HTMLElement} */
         this.container = container;
     } else {
-        throw new Error("Invalid container _element");
+        throw new Error("Invalid container element");
     }
     /** @type {MessageOptionsType} */
     this._options = Object.assign(options, {
         type: options.type || "info",
         text: options.text || "",
+        title: options.title || "",
         duration: options.duration || 0,
         closeButton:
             options.closeButton !== undefined ? options.closeButton : true,
@@ -45,28 +46,44 @@ Message.prototype._create = function () {
     messageEl.className = "message message-" + this._options.type;
     messageEl.setAttribute("role", "alert");
 
-    var icon = "";
-    switch (this._options.type) {
-        case "error":
-            icon = "✕";
-            break;
-        case "warning":
-            icon = "⚠";
-            break;
-        case "success":
-            icon = "✓";
-            break;
-        default:
-            icon = "ℹ";
+    let title = this._options.title;
+    if (!title) {
+        title = "Error";
+        switch (this._options.type) {
+            case "success":
+                title = "Success";
+                break;
+            case "warning":
+                title = "Warning";
+                break;
+            case "info":
+                title = "Information";
+                break;
+        }
+    }
+    let text = this._options.text;
+    if (!text) {
+        text = "";
+        switch (this._options.type) {
+            case "success":
+                text = "Operation completed successfully.";
+                break;
+            case "warning":
+                text = "Please be cautious.";
+                break;
+            case "error":
+                text = "Something went wrong.";
+                break;
+        }
     }
 
     messageEl.innerHTML =
         '<div class="message-content">' +
-        '<span class="message-icon">' +
-        icon +
+        '<span class="message-title">' +
+        title +
         "</span>" +
         '<span class="message-text">' +
-        this._options.text +
+        text +
         "</span>" +
         "</div>";
 
@@ -115,11 +132,16 @@ Message.prototype.removeOutsideClickListener = function () {
 
 /**
  * @param {string} [text]
+ * @param {string} [title]
  * @returns
  */
-Message.prototype.show = function (text) {
+Message.prototype.show = function (text, title) {
     if (!this.container.classList.contains("message-container")) {
         this.container.classList.add("message-container");
+    }
+
+    if (title) {
+        this._options.title = title;
     }
 
     if (text) {
