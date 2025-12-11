@@ -868,85 +868,91 @@ function _circleToPathCommands(circle) {
     return commands.join(" ");
 }
 
-var _originalText = new WeakMap;
-
-var _boundHandles$2 = new WeakMap;
-
-var _Button_brand = new WeakSet;
-
-class Button {
-    constructor(button) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        _classPrivateMethodInitSpec(this, _Button_brand);
-        _defineProperty(this, "_container", void 0);
-        _defineProperty(this, "button", void 0);
-        _defineProperty(this, "_options", void 0);
-        _classPrivateFieldInitSpec(this, _originalText, void 0);
-        _defineProperty(this, "_subscribers", []);
-        _classPrivateFieldInitSpec(this, _boundHandles$2, void 0);
-        if (typeof button === "string") {
-            var temp = document.getElementById(button);
-            if (temp instanceof HTMLButtonElement) {
-                button = temp;
-            }
+function Button(button, options) {
+    var self = this;
+    if (typeof button === "string") {
+        var temp = document.getElementById(button);
+        if (temp instanceof HTMLButtonElement) {
+            button = temp;
         }
-        if (button instanceof HTMLButtonElement) {
-            this.button = button;
-        } else {
-            throw new Error("Invalid button");
-        }
-        this._container = document.createElement("div");
-        this._options = _objectSpread2({
-            text: options.text || button.textContent,
-            type: options.type || "button",
-            variant: options.variant || "primary",
-            size: options.size || "medium",
-            iconPosition: options.iconPosition || "left"
-        }, options);
-        this.isLoading = false;
-        _classPrivateFieldSet2(_originalText, this, this._options.text);
-        this._createDOM();
-        this._bindEvents();
-        this.updateState();
     }
-    _createDOM() {
-        var parent = this.button.parentNode;
-        var fragment = document.createDocumentFragment();
-        fragment.appendChild(this._container);
-        this._container.classList.add("custom-button-container");
-        this.button.classList.add("custom-button");
-        this.button.classList.add("custom-button-".concat(this._options.variant));
-        this.button.classList.add("custom-button-".concat(this._options.size));
-        if (this._options.disabled) {
-            this.button.classList.add("custom-button-disabled");
+    if (button instanceof HTMLButtonElement) {
+        this.button = button;
+    } else {
+        throw new Error("Invalid button");
+    }
+    this._container = document.createElement("div");
+    this._options = options || {};
+    this._options.text = this._options.text || button.textContent.trim();
+    this._options.type = this._options.type || "button";
+    this._options.variant = this._options.variant || "primary";
+    this._options.size = this._options.size || "medium";
+    this._options.iconPosition = this._options.iconPosition || "left";
+    this.isLoading = false;
+    this._originalText = this._options.text;
+    this._subscribers = [];
+    this._boundHandles = {
+        click: function click(e) {
+            self._handleClick(e);
+        },
+        mouseenter: function mouseenter() {
+            self._handleMouseEnter();
+        },
+        mouseleave: function mouseleave() {
+            self._handleMouseLeave();
+        },
+        focus: function focus() {
+            self._handleFocus();
+        },
+        blur: function blur() {
+            self._handleBlur();
+        },
+        keydown: function keydown(e) {
+            self._handleKeydown(e);
         }
-        if (this._options.loading) {
-            this._container.classList.add("custom-button-loading");
-        }
+    };
+    this._createDOM();
+    this._bindEvents();
+    this.updateState();
+}
+
+Button.prototype._createDOM = function() {
+    var parent = this.button.parentNode;
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(this._container);
+    this._container.className += " custom-button-container";
+    this.button.className += " custom-button";
+    this.button.className += " custom-button-" + this._options.variant;
+    this.button.className += " custom-button-" + this._options.size;
+    if (this._options.disabled) {
+        this.button.className += " custom-button-disabled";
+    }
+    if (this._options.loading) {
+        this._container.className += " custom-button-loading";
+    }
+    if (this._options.type) {
         this.button.type = this._options.type;
-        if (this._options.tooltip) {
-            this.button.title = this._options.tooltip;
-        }
-        if (this._options.disabled) {
-            this.button.disabled = true;
-        }
-        if (this._options.loading) {
-            this.spinner = document.createElement("span");
-            this.spinner.classList.add("custom-button-spinner");
-            this.button.appendChild(this.spinner);
-        }
+    }
+    if (this._options.tooltip) {
+        this.button.title = this._options.tooltip;
+    }
+    if (this._options.disabled) {
+        this.button.disabled = true;
+    }
+    if (this._options.text) {
+        this.button.textContent = "";
         this.buttonText = document.createElement("span");
-        this.buttonText.classList.add("custom-button-text");
-        this.buttonText.textContent = "";
+        this.buttonText.className = "custom-button-text";
+        this.buttonText.textContent = this._options.text || "";
         if (this._options.icon) {
             var iconSpan = document.createElement("span");
-            iconSpan.classList.add("custom-button-icon");
+            iconSpan.className = "custom-button-icon";
             if (this._options.iconPosition === "left") {
-                iconSpan.classList.add("custom-button-icon-left");
+                iconSpan.className += " custom-button-icon-left";
                 this.button.appendChild(iconSpan);
                 this.button.appendChild(this.buttonText);
             } else {
-                iconSpan.classList.add("custom-button-icon-right");
+                iconSpan.className += " custom-button-icon-right";
                 this.button.appendChild(this.buttonText);
                 this.button.appendChild(iconSpan);
             }
@@ -954,205 +960,255 @@ class Button {
         } else {
             this.button.appendChild(this.buttonText);
         }
-        if (this._options.badge) {
-            this.badgeElement = document.createElement("span");
-            this.badgeElement.classList.add("custom-button-badge");
-            this.badgeElement.textContent = this._options.badge;
-            this.button.appendChild(this.badgeElement);
-        }
-        parent === null || parent === void 0 || parent.insertBefore(fragment, this.button);
-        this._container.appendChild(this.button);
     }
-    _bindEvents() {
-        _classPrivateFieldSet2(_boundHandles$2, this, {
-            click: this._handleClick.bind(this),
-            mouseenter: _assertClassBrand(_Button_brand, this, _handleMouseEnter).bind(this),
-            mouseleave: _assertClassBrand(_Button_brand, this, _handleMouseLeave).bind(this),
-            focus: _assertClassBrand(_Button_brand, this, _handleFocus$1).bind(this),
-            blur: _assertClassBrand(_Button_brand, this, _handleBlur$1).bind(this),
-            keydown: _assertClassBrand(_Button_brand, this, _handleKeydown$2).bind(this)
-        });
-        this.button.addEventListener("click", _classPrivateFieldGet2(_boundHandles$2, this).click);
-        this.button.addEventListener("mouseenter", _classPrivateFieldGet2(_boundHandles$2, this).mouseenter);
-        this.button.addEventListener("mouseleave", _classPrivateFieldGet2(_boundHandles$2, this).mouseleave);
-        this.button.addEventListener("focus", _classPrivateFieldGet2(_boundHandles$2, this).focus);
-        this.button.addEventListener("blur", _classPrivateFieldGet2(_boundHandles$2, this).blur);
-        this.button.addEventListener("keydown", _classPrivateFieldGet2(_boundHandles$2, this).keydown);
+    if (this._options.loading) {
+        this.spinner = document.createElement("span");
+        this.spinner.className = "custom-button-spinner";
+        this.button.appendChild(this.spinner);
     }
-    _handleClick(e) {
-        if (this._options.disabled || this.isLoading) {
+    if (this._options.badge) {
+        this.badgeElement = document.createElement("span");
+        this.badgeElement.className = "custom-button-badge";
+        this.badgeElement.textContent = this._options.badge;
+        this.button.appendChild(this.badgeElement);
+    }
+    if (parent) {
+        parent.insertBefore(fragment, this.button);
+    }
+    this._container.appendChild(this.button);
+};
+
+Button.prototype._bindEvents = function() {
+    this.button.addEventListener("click", this._boundHandles.click);
+    this.button.addEventListener("mouseenter", this._boundHandles.mouseenter);
+    this.button.addEventListener("mouseleave", this._boundHandles.mouseleave);
+    this.button.addEventListener("focus", this._boundHandles.focus);
+    this.button.addEventListener("blur", this._boundHandles.blur);
+    this.button.addEventListener("keydown", this._boundHandles.keydown);
+};
+
+Button.prototype._handleClick = function(e) {
+    if (this._options.disabled || this.isLoading) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+    }
+    this.triggerClickEvent(e);
+};
+
+Button.prototype._handleMouseEnter = function() {
+    var classes = this.button.className.split(" ");
+    if (classes.indexOf("custom-button-hover") === -1) {
+        this.button.className += " custom-button-hover";
+    }
+    this.triggerEvent("mouseenter");
+};
+
+Button.prototype._handleMouseLeave = function() {
+    this.button.className = this.button.className.split(" ").filter(function(cls) {
+        return cls !== "custom-button-hover";
+    }).join(" ");
+    this.triggerEvent("mouseleave");
+};
+
+Button.prototype._handleFocus = function() {
+    var classes = this.button.className.split(" ");
+    if (classes.indexOf("custom-button-focused") === -1) {
+        this.button.className += " custom-button-focused";
+    }
+    this.triggerEvent("focus");
+};
+
+Button.prototype._handleBlur = function() {
+    this.button.className = this.button.className.split(" ").filter(function(cls) {
+        return cls !== "custom-button-focused";
+    }).join(" ");
+    this.triggerEvent("blur");
+};
+
+Button.prototype._handleKeydown = function(e) {
+    var key = e.key || e.keyCode;
+    if (key === " " || key === "Enter" || key === 32 || key === 13) {
+        if (this.button.tagName === "BUTTON") ; else {
             e.preventDefault();
-            e.stopPropagation();
-            return;
+            this.button.click();
         }
-        this.triggerClickEvent(e);
+    } else if (key === "Escape" || key === 27) {
+        this.button.blur();
     }
-    subscribe(callback) {
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: () => {
-                this._subscribers = this._subscribers.filter(cb => cb !== callback);
-            }
-        };
-    }
-    setText(text) {
-        if (typeof text === "undefined") return;
-        this._options.text = text;
-        if (this.buttonText) {
-            this.buttonText.textContent = text;
+    this.triggerEvent("keydown", {
+        key: key
+    });
+};
+
+Button.prototype.subscribe = function(callback) {
+    var self = this;
+    this._subscribers.push(callback);
+    return {
+        unsubscribe: function unsubscribe() {
+            self._subscribers = self._subscribers.filter(function(cb) {
+                return cb !== callback;
+            });
         }
+    };
+};
+
+Button.prototype.setText = function(text) {
+    if (typeof text === "undefined") return;
+    this._options.text = text;
+    if (!this.buttonText) {
+        this.buttonText = document.createElement("span");
+        this.buttonText.className = "custom-button-text";
+        this.buttonText.textContent = "";
+        this.button.appendChild(this.buttonText);
     }
-    setIcon(icon) {
-        var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "left";
-        this._options.icon = icon;
-        this._options.iconPosition = position;
+    this.buttonText.textContent = text;
+};
+
+Button.prototype.setIcon = function(icon, position) {
+    this._options.icon = icon;
+    this._options.iconPosition = position || "left";
+};
+
+Button.prototype.setBadge = function(badge) {
+    if (typeof badge === "undefined") return;
+    this._options.badge = badge;
+    if (this.badgeElement) {
+        this.badgeElement.textContent = badge;
+        this.badgeElement.style.display = badge ? "flex" : "none";
     }
-    setBadge(badge) {
-        if (typeof badge === "undefined") return;
-        this._options.badge = badge;
-        if (this.badgeElement) {
-            this.badgeElement.textContent = badge;
-            this.badgeElement.style.display = badge ? "flex" : "none";
-        }
+};
+
+Button.prototype.setVariant = function(variant) {
+    if (typeof variant === "undefined") return;
+    var oldClass = "custom-button-" + this._options.variant;
+    var newClass = "custom-button-" + variant;
+    this.button.className = this.button.className.split(" ").filter(function(cls) {
+        return cls !== oldClass;
+    }).join(" ") + " " + newClass;
+    this._options.variant = variant;
+};
+
+Button.prototype.setSize = function(size) {
+    if (typeof size === "undefined") return;
+    var oldClass = "custom-button-" + this._options.size;
+    var newClass = "custom-button-" + size;
+    this.button.className = this.button.className.split(" ").filter(function(cls) {
+        return cls !== oldClass;
+    }).join(" ") + " " + newClass;
+    this._options.size = size;
+};
+
+Button.prototype.enable = function() {
+    this._options.disabled = false;
+    this.button.disabled = false;
+    this.button.className = this.button.className.split(" ").filter(function(cls) {
+        return cls !== "custom-button-disabled";
+    }).join(" ");
+};
+
+Button.prototype.disable = function() {
+    this._options.disabled = true;
+    this.button.disabled = true;
+    var classes = this.button.className.split(" ");
+    if (classes.indexOf("custom-button-disabled") === -1) {
+        this.button.className += " custom-button-disabled";
     }
-    setVariant(variant) {
-        if (typeof variant === "undefined") return;
-        this.button.classList.remove("custom-button-".concat(this._options.variant));
-        this._options.variant = variant;
-        this.button.classList.add("custom-button-".concat(variant));
+};
+
+Button.prototype.startLoading = function() {
+    this.isLoading = true;
+    if (typeof this._options.text !== "undefined") this._originalText = this._options.text;
+    var containerClasses = this._container.className.split(" ");
+    if (containerClasses.indexOf("custom-button-loading") === -1) {
+        this._container.className += " custom-button-loading";
     }
-    setSize(size) {
-        if (typeof size === "undefined") return;
-        this.button.classList.remove("custom-button-".concat(this._options.size));
-        this._options.size = size;
-        this.button.classList.add("custom-button-".concat(size));
+    if (this.spinner) {
+        this.spinner.style.display = "inline-block";
     }
-    enable() {
-        this._options.disabled = false;
-        this.button.disabled = false;
-        this.button.classList.remove("custom-button-disabled");
+    if (this.buttonText) {
+        this.buttonText.textContent = "Loading...";
     }
-    disable() {
-        this._options.disabled = true;
-        this.button.disabled = true;
-        this.button.classList.add("custom-button-disabled");
+    this.button.disabled = true;
+};
+
+Button.prototype.stopLoading = function() {
+    this.isLoading = false;
+    this._container.className = this._container.className.split(" ").filter(function(cls) {
+        return cls !== "custom-button-loading";
+    }).join(" ");
+    if (this.spinner) {
+        this.spinner.style.display = "none";
     }
-    startLoading() {
-        this.isLoading = true;
-        _classPrivateFieldSet2(_originalText, this, this._options.text);
-        this._container.classList.add("custom-button-loading");
-        if (this.spinner) {
-            this.spinner.style.display = "inline-block";
-        }
-        if (this.buttonText) {
-            this.buttonText.textContent = "Loading...";
-        }
-        this.button.disabled = true;
+    if (this.buttonText) {
+        this.buttonText.textContent = this._originalText;
     }
-    stopLoading() {
-        this.isLoading = false;
-        this._container.classList.remove("custom-button-loading");
-        if (this.spinner) {
-            this.spinner.style.display = "none";
-        }
-        if (this.buttonText) {
-            this.buttonText.textContent = _classPrivateFieldGet2(_originalText, this);
-        }
-        this.button.disabled = !!this._options.disabled;
-    }
-    setTooltip(tooltip) {
-        if (typeof tooltip === "undefined") return;
-        this._options.tooltip = tooltip;
-        this.button.title = tooltip || "";
-    }
-    triggerClickEvent(e) {
-        var detail = {
-            originalEvent: e,
-            button: this
-        };
-        this._subscribers.forEach(cb => cb({
+    this.button.disabled = !!this._options.disabled;
+};
+
+Button.prototype.setTooltip = function(tooltip) {
+    if (typeof tooltip === "undefined") return;
+    this._options.tooltip = tooltip;
+    this.button.title = tooltip || "";
+};
+
+Button.prototype.triggerClickEvent = function(e) {
+    var detail = {
+        originalEvent: e,
+        button: this
+    };
+    this._subscribers.forEach(function(cb) {
+        cb({
             type: "button:click",
             detail: detail
-        }));
-    }
-    triggerEvent(eventName) {
-        var detail = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        detail = _objectSpread2(_objectSpread2({}, detail), {}, {
-            button: this
         });
-        this._subscribers.forEach(cb => cb({
-            type: "button:".concat(eventName),
+    });
+};
+
+Button.prototype.triggerEvent = function(eventName, detail) {
+    detail = detail || {};
+    detail.button = this;
+    this._subscribers.forEach(function(cb) {
+        cb({
+            type: "button:" + eventName,
             detail: detail
-        }));
+        });
+    });
+};
+
+Button.prototype.updateState = function() {
+    if (this._options.disabled) {
+        this.disable();
+    } else {
+        this.enable();
     }
-    updateState() {
-        if (this._options.disabled) {
-            this.disable();
-        } else {
-            this.enable();
-        }
-        if (this._options.loading) {
-            this.startLoading();
-        }
+    if (this._options.loading) {
+        this.startLoading();
     }
-    destroy() {
-        this._subscribers = [];
+};
+
+Button.prototype.destroy = function() {
+    this._subscribers = [];
+    if (this._boundHandles) {
         try {
-            this.button.removeEventListener("click", _classPrivateFieldGet2(_boundHandles$2, this).click);
-            this.button.removeEventListener("mouseenter", _classPrivateFieldGet2(_boundHandles$2, this).mouseenter);
-            this.button.removeEventListener("mouseleave", _classPrivateFieldGet2(_boundHandles$2, this).mouseleave);
-            this.button.removeEventListener("focus", _classPrivateFieldGet2(_boundHandles$2, this).focus);
-            this.button.removeEventListener("blur", _classPrivateFieldGet2(_boundHandles$2, this).blur);
-            this.button.removeEventListener("keydown", _classPrivateFieldGet2(_boundHandles$2, this).keydown);
+            this.button.removeEventListener("click", this._boundHandles.click);
+            this.button.removeEventListener("mouseenter", this._boundHandles.mouseenter);
+            this.button.removeEventListener("mouseleave", this._boundHandles.mouseleave);
+            this.button.removeEventListener("focus", this._boundHandles.focus);
+            this.button.removeEventListener("blur", this._boundHandles.blur);
+            this.button.removeEventListener("keydown", this._boundHandles.keydown);
         } catch (error) {
             console.error(error);
         }
-        this._container.innerHTML = "";
-        this._container.classList.remove("custom-button-container");
     }
-}
+    this._container.innerHTML = "";
+    var containerClasses = this._container.className.split(" ").filter(function(cls) {
+        return cls !== "custom-button-container";
+    }).join(" ");
+    this._container.className = containerClasses;
+};
 
-function _handleMouseEnter() {
-    this.button.classList.add("custom-button-hover");
-    this.triggerEvent("mouseenter");
-}
-
-function _handleMouseLeave() {
-    this.button.classList.remove("custom-button-hover");
-    this.triggerEvent("mouseleave");
-}
-
-function _handleFocus$1() {
-    this.button.classList.add("custom-button-focused");
-    this.triggerEvent("focus");
-}
-
-function _handleBlur$1() {
-    this.button.classList.remove("custom-button-focused");
-    this.triggerEvent("blur");
-}
-
-function _handleKeydown$2(e) {
-    switch (e.key) {
-      case " ":
-      case "Enter":
-        if (this.button.tagName === "BUTTON") {
-            break;
-        }
-        e.preventDefault();
-        this.button.click();
-        break;
-
-      case "Escape":
-        this.button.blur();
-        break;
-    }
-    this.triggerEvent("keydown", {
-        key: e.key
-    });
-}
-
-var _container$1 = new WeakMap;
+var _container = new WeakMap;
 
 var _insertButton = new WeakMap;
 
@@ -1167,14 +1223,14 @@ var _IconPicker_brand = new WeakSet;
 class IconPicker {
     constructor(catalogOfIcons) {
         _classPrivateMethodInitSpec(this, _IconPicker_brand);
-        _classPrivateFieldInitSpec(this, _container$1, void 0);
+        _classPrivateFieldInitSpec(this, _container, void 0);
         _classPrivateFieldInitSpec(this, _insertButton, void 0);
         _classPrivateFieldInitSpec(this, _onSelectIconCallback, (map, needToRun) => {});
         _classPrivateFieldInitSpec(this, _listOfIconNames, void 0);
         _classPrivateFieldInitSpec(this, _selectedIcons$1, void 0);
         var container = document.getElementById("icons");
         if (container) {
-            _classPrivateFieldSet2(_container$1, this, container);
+            _classPrivateFieldSet2(_container, this, container);
         } else {
             throw new Error("Icons container not found");
         }
@@ -1195,7 +1251,7 @@ class IconPicker {
                     categoryInfo.folders.forEach((folderName, index) => {
                         var icons = categoryInfo.icons[index];
                         icons.forEach(iconName => {
-                            var iconElement = _classPrivateFieldGet2(_container$1, this).querySelector('.icon[data-name="'.concat(iconName, '"][data-section="').concat(folderName, '"]'));
+                            var iconElement = _classPrivateFieldGet2(_container, this).querySelector('.icon[data-name="'.concat(iconName, '"][data-section="').concat(folderName, '"]'));
                             if (iconElement) {
                                 var currentClass = iconElement.getAttribute("class") || "";
                                 currentClass = currentClass.replace(new RegExp("\\b" + "hidden" + "\\b", "g"), "").trim();
@@ -1223,7 +1279,7 @@ class IconPicker {
         return new Promise(resolve => {
             _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this, true);
             setTimeout(() => {
-                var icons = _classPrivateFieldGet2(_container$1, this).getElementsByClassName("icon");
+                var icons = _classPrivateFieldGet2(_container, this).getElementsByClassName("icon");
                 for (var i = 0; i < icons.length; i++) {
                     var icon = icons[i];
                     var category = icon.getAttribute("data-category");
@@ -1246,13 +1302,13 @@ class IconPicker {
         _classPrivateFieldSet2(_onSelectIconCallback, this, callback);
     }
     getSelectedSvgIcons() {
-        var icons = _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon.selected");
+        var icons = _classPrivateFieldGet2(_container, this).querySelectorAll(".icon.selected");
         return Array.from(icons).map(svg => svg.outerHTML);
     }
 }
 
 function _addEventListener$1() {
-    _classPrivateFieldGet2(_container$1, this).addEventListener("click", e => {
+    _classPrivateFieldGet2(_container, this).addEventListener("click", e => {
         var icon;
         var target = e.target;
         if (!target || target instanceof HTMLElement === false && target instanceof SVGElement === false) {
@@ -1285,7 +1341,7 @@ function _addEventListener$1() {
         icon.setAttribute("tabindex", "0");
         _assertClassBrand(_IconPicker_brand, this, _onChange).call(this);
     });
-    _classPrivateFieldGet2(_container$1, this).addEventListener("dblclick", e => {
+    _classPrivateFieldGet2(_container, this).addEventListener("dblclick", e => {
         var icon;
         var target = e.target;
         if (!target || target instanceof HTMLElement === false && target instanceof SVGElement === false) {
@@ -1306,7 +1362,7 @@ function _addEventListener$1() {
         var needToRun = true;
         _classPrivateFieldGet2(_onSelectIconCallback, this).call(this, _classPrivateFieldGet2(_selectedIcons$1, this), needToRun);
     });
-    _classPrivateFieldGet2(_container$1, this).addEventListener("keydown", e => {
+    _classPrivateFieldGet2(_container, this).addEventListener("keydown", e => {
         if ((e.ctrlKey || e.metaKey) && e.code === "KeyA") {
             e.preventDefault();
             _assertClassBrand(_IconPicker_brand, this, _selectAll).call(this);
@@ -1316,7 +1372,7 @@ function _addEventListener$1() {
             _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this);
         }
         if (e.code === "Space") {
-            var focusedIcon = _classPrivateFieldGet2(_container$1, this).querySelector(".icon:focus");
+            var focusedIcon = _classPrivateFieldGet2(_container, this).querySelector(".icon:focus");
             if (focusedIcon) {
                 e.preventDefault();
                 _assertClassBrand(_IconPicker_brand, this, _unselectAll).call(this);
@@ -1345,7 +1401,7 @@ function _addEventListener$1() {
 }
 
 function _selectAll() {
-    _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon:not(.selected)").forEach(icon => {
+    _classPrivateFieldGet2(_container, this).querySelectorAll(".icon:not(.selected)").forEach(icon => {
         var iconId = icon.getAttribute("data-name");
         var section = icon.getAttribute("data-section");
         _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, true);
@@ -1357,7 +1413,7 @@ function _selectAll() {
 function _unselectAll() {
     var silent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     _classPrivateFieldSet2(_selectedIcons$1, this, new Map);
-    _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon.selected").forEach(icon => {
+    _classPrivateFieldGet2(_container, this).querySelectorAll(".icon.selected").forEach(icon => {
         _assertClassBrand(_IconPicker_brand, this, _setSelectedToIcon).call(this, icon, false);
     });
     if (silent) return;
@@ -1365,7 +1421,7 @@ function _unselectAll() {
 }
 
 function _hideAll() {
-    _classPrivateFieldGet2(_container$1, this).querySelectorAll(".icon:not(.hidden)").forEach(icon => {
+    _classPrivateFieldGet2(_container, this).querySelectorAll(".icon:not(.hidden)").forEach(icon => {
         var currentClass = icon.getAttribute("class") || "";
         icon.setAttribute("class", currentClass + (currentClass ? " " : "") + "hidden");
     });
@@ -1393,385 +1449,645 @@ function _setSelectedToIcon(icon, isSelected) {
     }
 }
 
-var _container = new WeakMap;
-
-var _options = new WeakMap;
-
-var _optionsContainer = new WeakMap;
-
-var _selectedValues = new WeakMap;
-
-var _isOpen = new WeakMap;
-
-var _items = new WeakMap;
-
-var _boundHandles$1 = new WeakMap;
-
-var _SelectBox_brand = new WeakSet;
-
-class SelectBox {
-    constructor(container, _options2) {
-        _classPrivateMethodInitSpec(this, _SelectBox_brand);
-        _classPrivateFieldInitSpec(this, _container, void 0);
-        _classPrivateFieldInitSpec(this, _options, void 0);
-        _classPrivateFieldInitSpec(this, _optionsContainer, void 0);
-        _classPrivateFieldInitSpec(this, _selectedValues, void 0);
-        _classPrivateFieldInitSpec(this, _isOpen, void 0);
-        _classPrivateFieldInitSpec(this, _items, void 0);
-        _defineProperty(this, "searchInput", void 0);
-        _defineProperty(this, "header", void 0);
-        _defineProperty(this, "selectedText", void 0);
-        _defineProperty(this, "arrow", void 0);
-        _defineProperty(this, "dropdown", void 0);
-        _defineProperty(this, "_subscribers", []);
-        _classPrivateFieldInitSpec(this, _boundHandles$1, void 0);
-        if (typeof container === "string") {
-            var temp = document.getElementById(container);
-            if (temp instanceof HTMLElement) {
-                container = temp;
-            }
+function SelectBox(container, options) {
+    var self = this;
+    if (typeof container === "string") {
+        var temp = document.getElementById(container);
+        if (temp instanceof HTMLElement) {
+            container = temp;
         }
-        if (container instanceof HTMLElement) {
-            _classPrivateFieldSet2(_container, this, container);
-        } else {
-            throw new Error("Invalid container");
-        }
-        _classPrivateFieldSet2(_options, this, _objectSpread2({
-            searchable: _options2.searchable || false,
-            multiple: _options2.multiple || false
-        }, _options2));
-        _classPrivateFieldSet2(_selectedValues, this, new Set);
-        _classPrivateFieldSet2(_isOpen, this, false);
-        _classPrivateFieldSet2(_items, this, []);
-        this._createDOM();
-        _assertClassBrand(_SelectBox_brand, this, _bindEvents$1).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
     }
-    _createDOM() {
-        _classPrivateFieldGet2(_container, this).innerHTML = "";
-        _classPrivateFieldGet2(_container, this).classList.add("selectbox-container");
-        var fragment = document.createDocumentFragment();
-        var selectBox = document.createElement("div");
-        selectBox.classList.add("selectbox");
-        fragment.appendChild(selectBox);
-        this.header = document.createElement("div");
-        this.header.classList.add("selectbox-header");
-        selectBox.appendChild(this.header);
-        this.header.setAttribute("tabindex", "0");
-        this.selectedText = document.createElement("span");
-        this.selectedText.classList.add("selectbox-selected-text");
-        this.selectedText.textContent = _classPrivateFieldGet2(_options, this).placeholder;
-        this.header.appendChild(this.selectedText);
-        this.arrow = document.createElement("span");
-        this.arrow.classList.add("selectbox-arrow");
-        this.arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' + '2.24889L3 0.00053797Z" fill="currentColor"/>' + "</svg>";
-        this.header.appendChild(this.arrow);
-        this.dropdown = document.createElement("div");
-        this.dropdown.classList.add("selectbox-dropdown");
-        selectBox.appendChild(this.dropdown);
-        if (_classPrivateFieldGet2(_options, this).searchable) {
-            var search = document.createElement("div");
-            search.classList.add("selectbox-search");
-            this.dropdown.appendChild(search);
-            this.searchInput = document.createElement("input");
-            this.searchInput.classList.add("selectbox-search-input");
-            this.searchInput.type = "text";
-            this.searchInput.placeholder = "Search...";
-            search.appendChild(this.searchInput);
-        }
-        _classPrivateFieldSet2(_optionsContainer, this, document.createElement("div"));
-        _classPrivateFieldGet2(_optionsContainer, this).classList.add("selectbox-options");
-        this.dropdown.appendChild(_classPrivateFieldGet2(_optionsContainer, this));
-        _classPrivateFieldGet2(_container, this).appendChild(fragment);
+    if (container instanceof HTMLElement) {
+        this._container = container;
+    } else {
+        throw new Error("Invalid container");
     }
-    subscribe(callback) {
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: () => {
-                this._subscribers = this._subscribers.filter(cb => cb !== callback);
-            }
-        };
-    }
-    addItem(value, text) {
-        var selected = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-        _classPrivateFieldGet2(_items, this).push({
-            value: value,
-            text: text,
-            selected: selected
-        });
-        if (selected) {
-            if (_classPrivateFieldGet2(_options, this).multiple) {
-                _classPrivateFieldGet2(_selectedValues, this).add(value);
-            } else {
-                _classPrivateFieldGet2(_selectedValues, this).clear();
-                _classPrivateFieldGet2(_selectedValues, this).add(value);
-            }
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    }
-    removeItem(value) {
-        _classPrivateFieldSet2(_items, this, _classPrivateFieldGet2(_items, this).filter(item => item.value !== value));
-        _classPrivateFieldGet2(_selectedValues, this).delete(value);
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    }
-    getValue() {
-        return _classPrivateFieldGet2(_options, this).multiple ? Array.from(_classPrivateFieldGet2(_selectedValues, this)) : Array.from(_classPrivateFieldGet2(_selectedValues, this))[0] || null;
-    }
-    setValue(value) {
-        if (_classPrivateFieldGet2(_options, this).multiple && Array.isArray(value)) {
-            _classPrivateFieldSet2(_selectedValues, this, new Set(value));
-        } else {
-            _classPrivateFieldSet2(_selectedValues, this, new Set([ value ]));
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-    }
-    clear() {
-        var bSelectFirst = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        _classPrivateFieldGet2(_selectedValues, this).clear();
-        if (bSelectFirst && _classPrivateFieldGet2(_items, this).length > 0) {
-            var firstItem = _classPrivateFieldGet2(_items, this)[0];
-            _classPrivateFieldGet2(_selectedValues, this).add(firstItem.value);
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-    }
-    destroy() {
-        this._subscribers = [];
-        try {
-            this.header.removeEventListener("click", _classPrivateFieldGet2(_boundHandles$1, this).toggle);
-            if (this.searchInput) {
-                this.searchInput.removeEventListener("input", _classPrivateFieldGet2(_boundHandles$1, this).search);
-            }
-            this.dropdown.removeEventListener("click", _classPrivateFieldGet2(_boundHandles$1, this).dropdownClick);
-            document.removeEventListener("click", _classPrivateFieldGet2(_boundHandles$1, this).close);
-            this.header.removeEventListener("keydown", _classPrivateFieldGet2(_boundHandles$1, this).keydown);
-        } catch (error) {
-            console.error(error);
-        }
-        _classPrivateFieldGet2(_container, this).innerHTML = "";
-        _classPrivateFieldGet2(_container, this).classList.remove("selectbox-container");
-    }
-}
-
-function _bindEvents$1() {
-    _classPrivateFieldSet2(_boundHandles$1, this, {
-        toggle: _assertClassBrand(_SelectBox_brand, this, _toggleDropdown).bind(this),
-        search: _assertClassBrand(_SelectBox_brand, this, _handleSearch).bind(this),
-        close: e => {
-            if (e.target instanceof HTMLElement && !_classPrivateFieldGet2(_container, this).contains(e.target)) {
-                _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+    this._options = Object.assign(options, {
+        placeholder: options.placeholder || "Select...",
+        searchable: options.searchable || false,
+        multiple: options.multiple || false
+    });
+    this._selectedValues = new Set;
+    this.isOpen = false;
+    this._items = [];
+    this._subscribers = [];
+    this._boundHandles = {
+        toggle: function toggle(e) {
+            self._toggle(e);
+        },
+        search: function search(e) {
+            self._handleSearch(e);
+        },
+        close: function close(e) {
+            if (e.target instanceof HTMLElement && !self._container.contains(e.target) && !e.target.classList.contains("selectbox-option")) {
+                self._closeDropdown();
             }
         },
-        keydown: _assertClassBrand(_SelectBox_brand, this, _handleKeydown$1).bind(this),
-        dropdownClick: _assertClassBrand(_SelectBox_brand, this, _handleDropdownClick).bind(this)
-    });
-    this.header.addEventListener("click", _classPrivateFieldGet2(_boundHandles$1, this).toggle);
-    if (this.searchInput) {
-        this.searchInput.addEventListener("input", _classPrivateFieldGet2(_boundHandles$1, this).search);
+        keydown: function keydown(e) {
+            self._handleKeydown(e);
+        },
+        dropdownClick: function dropdownClick(e) {
+            self._handleDropdownClick(e);
+        }
+    };
+    this._optionsContainer = null;
+    this.searchInput = null;
+    this._header = document.createElement("div");
+    this._selectedText = document.createElement("span");
+    this._arrow = document.createElement("span");
+    this._dropdown = document.createElement("div");
+    this._createDOM();
+    this._bindEvents();
+    this._renderOptions();
+}
+
+SelectBox.prototype._createDOM = function() {
+    this._container.innerHTML = "";
+    this._container.className += " selectbox-container";
+    var fragment = document.createDocumentFragment();
+    var selectBox = document.createElement("div");
+    selectBox.className += " selectbox";
+    fragment.appendChild(selectBox);
+    this._header.className += " selectbox-header";
+    selectBox.appendChild(this._header);
+    this._header.setAttribute("tabindex", "0");
+    this._selectedText.className += " selectbox-selected-text";
+    this._selectedText.textContent = this._options.placeholder;
+    this._header.appendChild(this._selectedText);
+    this._arrow.className += " selectbox-arrow";
+    this._arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' + '2.24889L3 0.00053797Z" fill="currentColor"/>' + "</svg>";
+    this._header.appendChild(this._arrow);
+    this._dropdown.className += " selectbox-dropdown";
+    selectBox.appendChild(this._dropdown);
+    if (this._options.searchable) {
+        var search = document.createElement("div");
+        search.className += " selectbox-search";
+        this._dropdown.appendChild(search);
+        this.searchInput = document.createElement("input");
+        this.searchInput.className += " selectbox-search-input";
+        this.searchInput.type = "text";
+        this.searchInput.placeholder = "Search...";
+        search.appendChild(this.searchInput);
     }
-    this.dropdown.addEventListener("click", _classPrivateFieldGet2(_boundHandles$1, this).dropdownClick);
-    document.addEventListener("click", _classPrivateFieldGet2(_boundHandles$1, this).close);
-    this.header.addEventListener("keydown", _classPrivateFieldGet2(_boundHandles$1, this).keydown);
-    this.dropdown.addEventListener("keydown", _classPrivateFieldGet2(_boundHandles$1, this).keydown);
-}
+    this._optionsContainer = document.createElement("div");
+    this._optionsContainer.className += " selectbox-options";
+    this._dropdown.appendChild(this._optionsContainer);
+    this._container.appendChild(fragment);
+};
 
-function _toggleDropdown(e) {
-    e.stopPropagation();
-    _classPrivateFieldGet2(_isOpen, this) ? _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this) : _assertClassBrand(_SelectBox_brand, this, _openDropdown).call(this);
-}
-
-function _openDropdown() {
-    _classPrivateFieldSet2(_isOpen, this, true);
-    this.dropdown.style.display = "block";
-    this.arrow.classList.add("selectbox-arrow-open");
-    this.header.classList.add("selectbox-header-open");
+SelectBox.prototype._bindEvents = function() {
+    this._header.addEventListener("click", this._boundHandles.toggle);
     if (this.searchInput) {
-        setTimeout(() => {
-            var _this$searchInput;
-            return (_this$searchInput = this.searchInput) === null || _this$searchInput === void 0 ? void 0 : _this$searchInput.focus();
-        }, 100);
+        this.searchInput.addEventListener("input", this._boundHandles.search);
     }
-    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-}
+    this._dropdown.addEventListener("click", this._boundHandles.dropdownClick);
+    this._header.addEventListener("keydown", this._boundHandles.keydown);
+    this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
+};
 
-function _closeDropdown() {
-    _classPrivateFieldSet2(_isOpen, this, false);
-    this.dropdown.style.display = "none";
-    this.arrow.classList.remove("selectbox-arrow-open");
-    this.header.classList.remove("selectbox-header-open");
+SelectBox.prototype._toggle = function(e) {
+    e && e.stopPropagation();
+    this.isOpen ? this._closeDropdown() : this.openDropdown();
+};
+
+SelectBox.prototype.openDropdown = function() {
+    if (!this.isOpen) {
+        document.addEventListener("click", this._boundHandles.close);
+    }
+    this.isOpen = true;
+    this._dropdown.style.display = "block";
+    this._arrow.className += " selectbox-arrow-open";
+    this._header.className += " selectbox-header-open";
+    if (this.searchInput) {
+        setTimeout(function(self) {
+            return function() {
+                if (self.searchInput) {
+                    self.searchInput.focus();
+                }
+            };
+        }(this), 100);
+    }
+    this._renderOptions();
+};
+
+SelectBox.prototype._closeDropdown = function() {
+    if (this.isOpen && document && this._boundHandles) {
+        document.removeEventListener("click", this._boundHandles.close);
+    }
+    this.isOpen = false;
+    this._dropdown.style.display = "none";
+    var arrowClasses = this._arrow.className.split(" ");
+    var newArrowClasses = [];
+    for (var i = 0; i < arrowClasses.length; i++) {
+        if (arrowClasses[i] !== "selectbox-arrow-open") {
+            newArrowClasses.push(arrowClasses[i]);
+        }
+    }
+    this._arrow.className = newArrowClasses.join(" ");
+    var headerClasses = this._header.className.split(" ");
+    var newHeaderClasses = [];
+    for (var i = 0; i < headerClasses.length; i++) {
+        if (headerClasses[i] !== "selectbox-header-open") {
+            newHeaderClasses.push(headerClasses[i]);
+        }
+    }
+    this._header.className = newHeaderClasses.join(" ");
     if (this.searchInput) {
         this.searchInput.value = "";
     }
-}
+};
 
-function _handleSearch(e) {
-    if (e.target instanceof HTMLInputElement === false) {
+SelectBox.prototype._handleSearch = function(e) {
+    var target = e.target;
+    if (!(target instanceof HTMLInputElement)) {
         return;
     }
-    var searchTerm = e.target.value.toLowerCase();
-    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, searchTerm);
-}
+    var searchTerm = target.value.toLowerCase();
+    this._renderOptions(searchTerm);
+};
 
-function _handleKeydown$1(e) {
-    var _this$searchInput2, _this$searchInput3;
-    switch (e.key) {
+SelectBox.prototype._handleKeydown = function(e) {
+    var key = e.key || e.keyCode;
+    var items = this._items.filter(function(item) {
+        return item !== null;
+    });
+    var newItem;
+    switch (key) {
       case " ":
       case "Enter":
+      case 32:
+      case 13:
         e.preventDefault();
-        _assertClassBrand(_SelectBox_brand, this, _toggleDropdown).call(this, e);
+        this._toggle(e);
         break;
 
       case "Escape":
-        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+      case 27:
+        this._closeDropdown();
         break;
 
       case "ArrowDown":
+      case 40:
         e.preventDefault();
-        if (_classPrivateFieldGet2(_selectedValues, this).size === 0 && _classPrivateFieldGet2(_items, this).length > 0) {
-            var firstItem = _classPrivateFieldGet2(_items, this)[0];
-            _classPrivateFieldGet2(_selectedValues, this).add(firstItem.value);
+        if (this._selectedValues.size === 0 && items.length > 0) {
+            newItem = items[0];
+            this._selectedValues.add(newItem.value);
         } else {
-            var selectedArray = Array.from(_classPrivateFieldGet2(_selectedValues, this));
-            var currentIndex = _classPrivateFieldGet2(_items, this).findIndex(item => item.value === selectedArray[0]);
-            var nextIndex = (currentIndex + 1) % _classPrivateFieldGet2(_items, this).length;
-            _classPrivateFieldGet2(_selectedValues, this).clear();
-            _classPrivateFieldGet2(_selectedValues, this).add(_classPrivateFieldGet2(_items, this)[nextIndex].value);
+            var selectedArray = Array.from(this._selectedValues);
+            var currentIndex = -1;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].value === selectedArray[0]) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            var nextIndex = (currentIndex + 1) % items.length;
+            this._selectedValues.clear();
+            newItem = items[nextIndex];
+            this._selectedValues.add(newItem.value);
         }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, ((_this$searchInput2 = this.searchInput) === null || _this$searchInput2 === void 0 ? void 0 : _this$searchInput2.value) || "");
-        _assertClassBrand(_SelectBox_brand, this, _triggerChange$1).call(this);
+        this._updateSelectedText();
+        this._renderOptions(this.searchInput ? this.searchInput.value : "");
+        this._triggerChange(newItem.value, true);
         break;
 
       case "ArrowUp":
+      case 38:
         e.preventDefault();
-        if (_classPrivateFieldGet2(_selectedValues, this).size === 0 && _classPrivateFieldGet2(_items, this).length > 0) {
-            var lastItem = _classPrivateFieldGet2(_items, this)[_classPrivateFieldGet2(_items, this).length - 1];
-            _classPrivateFieldGet2(_selectedValues, this).add(lastItem.value);
+        if (this._selectedValues.size === 0 && items.length > 0) {
+            newItem = items[items.length - 1];
+            this._selectedValues.add(newItem.value);
         } else {
-            var _selectedArray = Array.from(_classPrivateFieldGet2(_selectedValues, this));
-            var _currentIndex = _classPrivateFieldGet2(_items, this).findIndex(item => item.value === _selectedArray[0]);
-            var prevIndex = (_currentIndex - 1 + _classPrivateFieldGet2(_items, this).length) % _classPrivateFieldGet2(_items, this).length;
-            _classPrivateFieldGet2(_selectedValues, this).clear();
-            _classPrivateFieldGet2(_selectedValues, this).add(_classPrivateFieldGet2(_items, this)[prevIndex].value);
+            var selectedArray = Array.from(this._selectedValues);
+            var currentIndex = -1;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].value === selectedArray[0]) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            var prevIndex = (currentIndex - 1 + items.length) % items.length;
+            this._selectedValues.clear();
+            newItem = items[prevIndex];
+            this._selectedValues.add(newItem.value);
         }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, ((_this$searchInput3 = this.searchInput) === null || _this$searchInput3 === void 0 ? void 0 : _this$searchInput3.value) || "");
-        _assertClassBrand(_SelectBox_brand, this, _triggerChange$1).call(this);
+        this._updateSelectedText();
+        this._renderOptions(this.searchInput ? this.searchInput.value : "");
+        this._triggerChange(newItem.value, true);
         break;
 
       case "Tab":
-        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+      case 9:
+        this._closeDropdown();
         break;
     }
-}
+};
 
-function _renderOptions() {
-    var searchTerm = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-    if (!_classPrivateFieldGet2(_optionsContainer, this)) return;
-    _classPrivateFieldGet2(_optionsContainer, this).innerHTML = "";
-    var selectedOption;
-    var filteredItems = searchTerm ? _classPrivateFieldGet2(_items, this).filter(item => item.text.toLowerCase().includes(searchTerm)) : _classPrivateFieldGet2(_items, this);
-    var options = [];
+SelectBox.prototype._renderOptions = function(searchTerm) {
+    searchTerm = searchTerm || "";
+    if (!this._optionsContainer) return;
+    this._optionsContainer.innerHTML = "";
+    var selectedOption = null;
+    var filteredItems = this._items;
+    if (searchTerm) {
+        filteredItems = filteredItems.filter(function(item) {
+            return item !== null && item.text.toLowerCase().indexOf(searchTerm) !== -1;
+        });
+    }
     var fragment = document.createDocumentFragment();
-    filteredItems.forEach((item, index) => {
-        options[index] = document.createElement("div");
-        options[index].classList.add("selectbox-option");
-        if (_classPrivateFieldGet2(_selectedValues, this).has(item.value)) {
-            options[index].classList.add("selectbox-option-selected");
-            selectedOption = options[index];
+    for (var i = 0; i < filteredItems.length; i++) {
+        var item = filteredItems[i];
+        if (!item) {
+            var hr = document.createElement("hr");
+            hr.className += " selectbox-option-divider";
+            fragment.appendChild(hr);
+            continue;
         }
-        options[index].setAttribute("data-value", String(item.value));
-        if (_classPrivateFieldGet2(_options, this).multiple) {
+        var option = document.createElement("div");
+        option.className += " selectbox-option";
+        if (this._selectedValues.has(item.value)) {
+            option.className += " selectbox-option-selected";
+            selectedOption = option;
+        }
+        option.setAttribute("data-value", item.value);
+        if (this._options.multiple) {
             var input = document.createElement("input");
             input.type = "checkbox";
-            input.classList.add("selectbox-checkbox");
-            input.checked = _classPrivateFieldGet2(_selectedValues, this).has(item.value);
-            options[index].appendChild(input);
+            input.className += " selectbox-checkbox";
+            input.checked = this._selectedValues.has(item.value);
+            option.appendChild(input);
         }
         var span = document.createElement("span");
-        span.classList.add("selectbox-option-text");
+        span.className += " selectbox-option-text";
         span.textContent = item.text;
-        options[index].appendChild(span);
-        fragment.appendChild(options[index]);
-    });
-    _classPrivateFieldGet2(_optionsContainer, this).appendChild(fragment);
-    if (_classPrivateFieldGet2(_isOpen, this) && _classPrivateFieldGet2(_optionsContainer, this) && selectedOption) {
+        option.appendChild(span);
+        fragment.appendChild(option);
+    }
+    this._optionsContainer.appendChild(fragment);
+    if (this.isOpen && this._optionsContainer && selectedOption) {
         try {
-            selectedOption.scrollIntoView({
-                block: "nearest"
-            });
+            if (selectedOption.scrollIntoView) {
+                selectedOption.scrollIntoView({
+                    block: "nearest"
+                });
+            }
         } catch (err) {
             console.error(err);
         }
     }
-}
+};
 
-function _handleDropdownClick(e) {
-    var _this$searchInput4;
-    var option;
-    var target = e.target;
+SelectBox.prototype._handleDropdownClick = function(e) {
+    var target = e.target || e.srcElement;
+    var option = null;
     if (target && target instanceof HTMLElement) {
-        var temp;
-        if (target.classList.contains("selectbox-option")) {
+        var temp = null;
+        var classList = target.className.split(" ");
+        var hasOptionClass = false;
+        for (var i = 0; i < classList.length; i++) {
+            if (classList[i] === "selectbox-option") {
+                hasOptionClass = true;
+                break;
+            }
+        }
+        if (hasOptionClass) {
             temp = target;
+        } else if (target.parentNode && target.parentNode instanceof HTMLElement) {
+            var parentClassList = target.parentNode.className.split(" ");
+            var parentHasOptionClass = false;
+            for (var i = 0; i < parentClassList.length; i++) {
+                if (parentClassList[i] === "selectbox-option") {
+                    parentHasOptionClass = true;
+                    break;
+                }
+            }
+            if (parentHasOptionClass) {
+                temp = target.parentNode;
+            }
         }
         if (temp instanceof HTMLDivElement) {
             option = temp;
         } else {
-            console.log("Clicked outside option");
             return;
         }
     } else {
         return;
     }
-    var value = option.dataset.value;
-    if (_classPrivateFieldGet2(_options, this).multiple) {
-        if (_classPrivateFieldGet2(_selectedValues, this).has(value)) {
-            _classPrivateFieldGet2(_selectedValues, this).delete(value);
+    var value = option.getAttribute("data-value");
+    if (value === null) return;
+    var enabled = true;
+    if (this._options.multiple) {
+        if (this._selectedValues.has(value)) {
+            this.unselectItems(value, true);
+            enabled = false;
         } else {
-            _classPrivateFieldGet2(_selectedValues, this).add(value);
+            this.selectItems(value, true);
         }
     } else {
-        _classPrivateFieldGet2(_selectedValues, this).clear();
-        _classPrivateFieldGet2(_selectedValues, this).add(value);
-        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+        this.selectItems(value, true);
+        this._closeDropdown();
     }
-    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, ((_this$searchInput4 = this.searchInput) === null || _this$searchInput4 === void 0 ? void 0 : _this$searchInput4.value) || "");
-    _assertClassBrand(_SelectBox_brand, this, _triggerChange$1).call(this);
-}
+    this._updateSelectedText();
+    this._triggerChange(value, enabled);
+};
 
-function _updateSelectedText() {
-    if (_classPrivateFieldGet2(_selectedValues, this).size === 0) {
-        this.selectedText.textContent = _classPrivateFieldGet2(_options, this).placeholder;
+SelectBox.prototype._updateSelectedText = function() {
+    if (this._selectedValues.size === 0) {
+        this._selectedText.textContent = this._options.placeholder;
         return;
     }
-    if (_classPrivateFieldGet2(_options, this).multiple) {
-        var selectedItems = _classPrivateFieldGet2(_items, this).filter(item => _classPrivateFieldGet2(_selectedValues, this).has(item.value));
+    if (this._options.multiple) {
+        var selectedItems = [];
+        for (var i = 0; i < this._items.length; i++) {
+            var item = this._items[i];
+            if (item && this._selectedValues.has(item.value)) {
+                selectedItems.push(item);
+            }
+        }
         if (selectedItems.length === 0) {
-            this.selectedText.textContent = _classPrivateFieldGet2(_options, this).placeholder;
+            this._selectedText.textContent = this._options.placeholder;
         } else if (selectedItems.length === 1) {
-            this.selectedText.textContent = selectedItems[0].text;
+            this._selectedText.textContent = selectedItems[0].text;
         } else {
-            this.selectedText.textContent = "".concat(selectedItems.length, " items selected");
+            this._selectedText.textContent = selectedItems.length + " items selected";
         }
     } else {
-        var selectedItem = _classPrivateFieldGet2(_items, this).find(item => _classPrivateFieldGet2(_selectedValues, this).has(item.value));
-        this.selectedText.textContent = selectedItem ? selectedItem.text : _classPrivateFieldGet2(_options, this).placeholder;
+        var selectedItem = null;
+        for (var i = 0; i < this._items.length; i++) {
+            var item = this._items[i];
+            if (item && this._selectedValues.has(item.value)) {
+                selectedItem = item;
+                break;
+            }
+        }
+        this._selectedText.textContent = selectedItem ? selectedItem.text : this._options.placeholder;
     }
-}
+};
 
-function _triggerChange$1() {
+SelectBox.prototype._triggerChange = function(currentValue, enabled) {
+    var values = Array.from(this._selectedValues);
+    var items = [];
+    for (var i = 0; i < this._items.length; i++) {
+        var item = this._items[i];
+        if (item && this._selectedValues.has(item.value)) {
+            items.push(item);
+        }
+    }
     var detail = {
-        values: Array.from(_classPrivateFieldGet2(_selectedValues, this)),
-        items: _classPrivateFieldGet2(_items, this).filter(item => _classPrivateFieldGet2(_selectedValues, this).has(item.value))
+        values: values,
+        items: items,
+        current: currentValue,
+        enabled: enabled
     };
-    this._subscribers.forEach(cb => cb({
-        type: "selectbox:change",
-        detail: detail
-    }));
-}
+    this._subscribers.forEach(function(cb) {
+        cb({
+            type: "selectbox:change",
+            detail: detail
+        });
+    });
+};
+
+SelectBox.prototype.subscribe = function(callback) {
+    var self = this;
+    this._subscribers.push(callback);
+    return {
+        unsubscribe: function unsubscribe() {
+            self._subscribers = self._subscribers.filter(function(cb) {
+                return cb !== callback;
+            });
+        }
+    };
+};
+
+SelectBox.prototype.addItem = function(value, text, selected) {
+    selected = selected || false;
+    this._items.push({
+        value: value,
+        text: text,
+        selected: selected
+    });
+    if (selected) {
+        if (this._options.multiple) {
+            this._selectedValues.add(value);
+        } else {
+            this._selectedValues.clear();
+            this._selectedValues.add(value);
+        }
+    }
+    this._updateSelectedText();
+};
+
+SelectBox.prototype.addItems = function(values, selectedValue) {
+    var self = this;
+    values.forEach(function(pair, index) {
+        var isSelected = selectedValue ? pair[0] === selectedValue : index === 0;
+        if (isSelected) {
+            if (self._options.multiple) {
+                self._selectedValues.add(pair[0]);
+            } else {
+                self._selectedValues.clear();
+                self._selectedValues.add(pair[0]);
+            }
+        }
+        self._items.push({
+            value: pair[0],
+            text: pair[1],
+            selected: isSelected
+        });
+    }, this);
+    this._updateSelectedText();
+};
+
+SelectBox.prototype.addSeparator = function() {
+    this._items.push(null);
+};
+
+SelectBox.prototype.removeItem = function(value) {
+    this._items = this._items.filter(function(item) {
+        if (item === null || item.value !== value) {
+            return true;
+        }
+        return false;
+    });
+    this._selectedValues.delete(value);
+    this._updateSelectedText();
+};
+
+SelectBox.prototype.getSelectedValue = function() {
+    if (this._options.multiple) {
+        console.error("Method getSelectedValue is only available for single-select boxes.");
+        return null;
+    } else {
+        var values = Array.from(this._selectedValues);
+        return values.length > 0 ? values[0] : null;
+    }
+};
+
+SelectBox.prototype.getSelectedValues = function() {
+    if (this._options.multiple) {
+        return Array.from(this._selectedValues);
+    } else {
+        var values = Array.from(this._selectedValues);
+        return values.length > 0 ? values[0] : null;
+    }
+};
+
+SelectBox.prototype.setSelectedValues = function(value) {
+    if (this._options.multiple && Array.isArray(value)) {
+        this._selectedValues = new Set(value);
+    } else {
+        this._selectedValues = new Set([ value ]);
+    }
+    this._updateSelectedText();
+    this._renderOptions();
+};
+
+SelectBox.prototype.selectItems = function(values, bSilent) {
+    var self = this;
+    if (!this._options.multiple && Array.isArray(values)) {
+        console.error("Method selectItem is only available for multi-select boxes.");
+        return;
+    }
+    var value = "";
+    if (this._options.multiple) {
+        var checkMultiOption = function checkMultiOption(value) {
+            if (self._optionsContainer) {
+                var option = self._optionsContainer.querySelector('[data-value="' + value + '"]');
+                if (option) {
+                    var checkbox = option.querySelector('input[type="checkbox"]');
+                    if (checkbox && checkbox instanceof HTMLInputElement) {
+                        checkbox.checked = true;
+                    }
+                    option.classList.add("selectbox-option-selected");
+                }
+            }
+        };
+        if (Array.isArray(values)) {
+            for (var i = 0; i < values.length; i++) {
+                value = values[i];
+                if (!this._selectedValues.has(value)) {
+                    this._selectedValues.add(value);
+                    checkMultiOption(value);
+                }
+            }
+        } else {
+            value = values;
+            if (!this._selectedValues.has(value)) {
+                this._selectedValues.add(value);
+                checkMultiOption(value);
+            }
+        }
+    } else if (!Array.isArray(values)) {
+        value = values;
+        this._selectedValues.clear();
+        this._selectedValues.add(value);
+        if (this._optionsContainer) {
+            var selectedOptions = this._optionsContainer.querySelectorAll('.selectbox-option-selected[data-value="' + value + '"]');
+            selectedOptions.forEach(function(option) {
+                option.classList.remove("selectbox-option-selected");
+            });
+            var option = this._optionsContainer.querySelector('[data-value="' + value + '"]');
+            if (option) {
+                option.classList.add("selectbox-option-selected");
+            }
+        }
+        this._closeDropdown();
+    }
+    this._updateSelectedText();
+    if (bSilent) {
+        return;
+    }
+    this._triggerChange(value, true);
+};
+
+SelectBox.prototype.unselectItems = function(values, bSilent) {
+    var self = this;
+    if (!this._options.multiple) {
+        console.error("Method unselectItem is only available for multi-select boxes.");
+        return;
+    }
+    var value = "";
+    var uncheckMultiOption = function uncheckMultiOption(value) {
+        if (self._optionsContainer) {
+            var option = self._optionsContainer.querySelector('[data-value="' + value + '"]');
+            if (option) {
+                var checkbox = option.querySelector('input[type="checkbox"]');
+                if (checkbox && checkbox instanceof HTMLInputElement) {
+                    checkbox.checked = false;
+                }
+                option.classList.remove("selectbox-option-selected");
+            }
+        }
+    };
+    if (Array.isArray(values)) {
+        for (var i = 0; i < values.length; i++) {
+            value = values[i];
+            if (this._selectedValues.has(value)) {
+                this._selectedValues.delete(value);
+                uncheckMultiOption(value);
+            }
+        }
+    } else {
+        value = values;
+        if (this._selectedValues.has(value)) {
+            this._selectedValues.delete(value);
+            uncheckMultiOption(value);
+        }
+    }
+    this._updateSelectedText();
+    if (bSilent) {
+        return;
+    }
+    this._triggerChange(value, true);
+};
+
+SelectBox.prototype.clear = function(bSelectFirst) {
+    bSelectFirst = bSelectFirst || false;
+    this._selectedValues.clear();
+    if (bSelectFirst && this._items.length > 0) {
+        var firstItem = this._items[0];
+        if (firstItem) {
+            this._selectedValues.add(firstItem.value);
+        }
+    }
+    this._updateSelectedText();
+    this._renderOptions();
+};
+
+SelectBox.prototype.destroy = function() {
+    this._subscribers = [];
+    try {
+        if (this._header && this._boundHandles) {
+            this._header.removeEventListener("click", this._boundHandles.toggle);
+        }
+        if (this.searchInput && this._boundHandles) {
+            this.searchInput.removeEventListener("input", this._boundHandles.search);
+        }
+        if (this._dropdown && this._boundHandles) {
+            this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick);
+        }
+        if (document && this._boundHandles) {
+            document.removeEventListener("click", this._boundHandles.close);
+        }
+        if (this._header && this._boundHandles) {
+            this._header.removeEventListener("keydown", this._boundHandles.keydown);
+        }
+        if (this._dropdown && this._boundHandles) {
+            this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    this._container.innerHTML = "";
+    var containerClasses = this._container.className.split(" ");
+    var newClasses = [];
+    for (var i = 0; i < containerClasses.length; i++) {
+        if (containerClasses[i] !== "selectbox-container") {
+            newClasses.push(containerClasses[i]);
+        }
+    }
+    this._container.className = newClasses.join(" ");
+};
 
 var _categories = new WeakMap;
 
@@ -1824,90 +2140,111 @@ function _addEventListener() {
     });
 }
 
-var _clearButton = new WeakMap;
-
-var _counter = new WeakMap;
-
-var _counterCurrent = new WeakMap;
-
-var _counterMax = new WeakMap;
-
-var _validationElement = new WeakMap;
-
-var _boundHandles = new WeakMap;
-
-var _InputField_brand = new WeakSet;
-
-class InputField {
-    constructor(input) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        _classPrivateMethodInitSpec(this, _InputField_brand);
-        _defineProperty(this, "_container", void 0);
-        _defineProperty(this, "_options", void 0);
-        _defineProperty(this, "input", void 0);
-        _classPrivateFieldInitSpec(this, _clearButton, void 0);
-        _classPrivateFieldInitSpec(this, _counter, void 0);
-        _classPrivateFieldInitSpec(this, _counterCurrent, void 0);
-        _classPrivateFieldInitSpec(this, _counterMax, void 0);
-        _classPrivateFieldInitSpec(this, _validationElement, void 0);
-        _defineProperty(this, "isFocused", void 0);
-        _defineProperty(this, "isValid", void 0);
-        _defineProperty(this, "_validationMessage", void 0);
-        _defineProperty(this, "_subscribers", []);
-        _classPrivateFieldInitSpec(this, _boundHandles, void 0);
-        if (typeof input === "string") {
-            var temp = document.getElementById(input);
-            if (temp instanceof HTMLInputElement) {
-                input = temp;
-            }
-        }
-        if (input instanceof HTMLInputElement) {
-            this.input = input;
-        } else {
-            throw new Error("Invalid input element");
-        }
-        this._container = document.createElement("div");
-        this._options = _objectSpread2({
-            type: options.type || input.type || "text",
-            placeholder: options.placeholder || input.placeholder || "",
-            value: options.value || input.value || "",
-            autofocus: options.autofocus || false,
-            disabled: options.disabled || false,
-            readonly: options.readonly || false,
-            required: options.required || false,
-            maxLength: options.maxLength || null,
-            minLength: options.minLength || null,
-            pattern: options.pattern || null,
-            showCounter: options.showCounter || false,
-            showClear: options.showClear || true,
-            validation: options.validation || null,
-            autocomplete: options.autocomplete || "off"
-        }, options);
-        this.isFocused = false;
-        this.isValid = true;
-        this._validationMessage = "";
-        this._createDOM();
-        _assertClassBrand(_InputField_brand, this, _bindEvents).call(this);
-        _assertClassBrand(_InputField_brand, this, _updateState).call(this);
-        if (this._options.autofocus) {
-            setTimeout(() => this.focus(), 100);
+function InputField(input, options) {
+    var self = this;
+    options = options || {};
+    if (typeof input === "string") {
+        var temp = document.getElementById(input);
+        if (temp instanceof HTMLInputElement) {
+            input = temp;
         }
     }
-    _createDOM() {
+    if (input instanceof HTMLInputElement) {
+        this.input = input;
+    } else {
+        throw new Error("Invalid input element");
+    }
+    this._container = document.createElement("div");
+    this._options = {
+        type: options.type || input.type || "text",
+        placeholder: options.placeholder || input.placeholder || "",
+        value: options.value || input.value || "",
+        autofocus: options.autofocus || false,
+        disabled: options.disabled || false,
+        readonly: options.readonly || false,
+        required: options.required || false,
+        showCounter: options.showCounter || false,
+        showClear: options.showClear !== undefined ? options.showClear : true,
+        autocomplete: options.autocomplete || "off"
+    };
+    for (var key in options) {
+        if (!this._options.hasOwnProperty(key)) {
+            this._options[key] = options[key];
+        }
+    }
+    this._id = input.id || "input_" + Math.random().toString(36).slice(2, 9);
+    this.isFocused = false;
+    this.isValid = true;
+    this._validationMessage = "";
+    this._subscribers = [];
+    this._boundHandles = {
+        focus: function focus(e) {
+            self._handleFocus(e);
+        },
+        blur: function blur(e) {
+            self._handleBlur(e);
+        },
+        input: function input(e) {
+            self._handleInput(e);
+        },
+        keydown: function keydown(e) {
+            self._handleKeydown(e);
+        },
+        clear: function clear() {
+            self.clear();
+        },
+        validate: function validate() {
+            self.validate();
+        }
+    };
+    this._clearButton = null;
+    this._counter = null;
+    this._counterCurrent = null;
+    this._counterMax = null;
+    this._validationElement = document.createElement("div");
+    this._createDOM();
+    this._bindEvents();
+    this._updateState();
+    if (this._options.autofocus) {
+        setTimeout(function(self) {
+            return function() {
+                self.focus();
+            };
+        }(this), 100);
+    }
+}
+
+InputField.prototype = {
+    constructor: InputField,
+    input: null,
+    _container: null,
+    _options: {},
+    _id: "",
+    isFocused: false,
+    isValid: true,
+    _validationMessage: "",
+    _subscribers: [],
+    _boundHandles: null,
+    _clearButton: null,
+    _counter: null,
+    _counterCurrent: null,
+    _counterMax: null,
+    _validationElement: null,
+    _createDOM: function _createDOM() {
         var parent = this.input.parentNode;
         var fragment = document.createDocumentFragment();
         fragment.appendChild(this._container);
-        this._container.classList.add("input-field-container");
+        this._container.className += " input-field-container  input-field-container-" + this._id;
         var inputField = document.createElement("div");
         this._container.appendChild(inputField);
-        inputField.classList.add("input-field");
+        inputField.className += " input-field";
         if (this._options.disabled) {
-            inputField.classList.add("input-field-disabled");
+            inputField.className += " input-field-disabled";
         }
         var inputFieldMain = document.createElement("div");
         inputField.appendChild(inputFieldMain);
-        inputFieldMain.classList.add("input-field-main");
-        this.input.classList.add("input-field-element");
+        inputFieldMain.className += " input-field-main";
+        this.input.className += " input-field-element";
         this.input.type = this._options.type || "text";
         this.input.placeholder = this._options.placeholder || "";
         this.input.value = String(this._options.value) || "";
@@ -1930,37 +2267,120 @@ class InputField {
             this.input.autocomplete = this._options.autocomplete;
         }
         if (this._options.showCounter) {
-            _classPrivateFieldSet2(_counter, this, document.createElement("div"));
-            inputField.appendChild(_classPrivateFieldGet2(_counter, this));
-            _classPrivateFieldGet2(_counter, this).classList.add("input-field-counter");
-            _classPrivateFieldSet2(_counterCurrent, this, document.createElement("span"));
-            _classPrivateFieldGet2(_counterCurrent, this).classList.add("input-field-counter-current");
-            _classPrivateFieldGet2(_counterCurrent, this).textContent = "0";
-            _classPrivateFieldGet2(_counter, this).appendChild(_classPrivateFieldGet2(_counterCurrent, this));
+            this._counter = document.createElement("div");
+            inputField.appendChild(this._counter);
+            this._counter.className += " input-field-counter";
+            this._counterCurrent = document.createElement("span");
+            this._counterCurrent.className += " input-field-counter-current";
+            this._counterCurrent.textContent = "0";
+            this._counter.appendChild(this._counterCurrent);
             var span = document.createElement("span");
             span.textContent = "/";
-            _classPrivateFieldGet2(_counter, this).appendChild(span);
-            _classPrivateFieldSet2(_counterMax, this, document.createElement("span"));
-            _classPrivateFieldGet2(_counterMax, this).classList.add("input-field-counter-max");
-            _classPrivateFieldGet2(_counterMax, this).textContent = String(this._options.maxLength) || "∞";
-            _classPrivateFieldGet2(_counter, this).appendChild(_classPrivateFieldGet2(_counterMax, this));
+            this._counter.appendChild(span);
+            this._counterMax = document.createElement("span");
+            this._counterMax.className += " input-field-counter-max";
+            this._counterMax.textContent = String(this._options.maxLength) || "∞";
+            this._counter.appendChild(this._counterMax);
         }
-        _classPrivateFieldSet2(_validationElement, this, document.createElement("div"));
-        inputField.appendChild(_classPrivateFieldGet2(_validationElement, this));
-        _classPrivateFieldGet2(_validationElement, this).classList.add("input-field-validation");
-        _classPrivateFieldGet2(_validationElement, this).style.display = "none";
-        inputField.appendChild(inputFieldMain);
+        inputField.appendChild(this._validationElement);
+        this._validationElement.className += " input-field-validation";
+        this._validationElement.style.display = "none";
         if (this._options.showClear) {
-            _classPrivateFieldSet2(_clearButton, this, document.createElement("button"));
-            inputField.appendChild(_classPrivateFieldGet2(_clearButton, this));
-            _classPrivateFieldGet2(_clearButton, this).classList.add("input-field-clear");
-            _classPrivateFieldGet2(_clearButton, this).style.display = "none";
-            _classPrivateFieldGet2(_clearButton, this).textContent = "×";
+            this.input.className += " input-field-clearable";
+            this._clearButton = document.createElement("button");
+            inputField.appendChild(this._clearButton);
+            this._clearButton.className += " input-field-clear";
+            this._clearButton.style.display = "none";
+            this._clearButton.textContent = "×";
         }
-        parent === null || parent === void 0 || parent.insertBefore(fragment, this.input);
+        if (parent) {
+            parent.insertBefore(fragment, this.input);
+        }
         inputFieldMain.appendChild(this.input);
-    }
-    validate() {
+    },
+    _bindEvents: function _bindEvents() {
+        this.input.addEventListener("focus", this._boundHandles.focus);
+        this.input.addEventListener("blur", this._boundHandles.blur);
+        this.input.addEventListener("input", this._boundHandles.input);
+        this.input.addEventListener("keydown", this._boundHandles.keydown);
+        if (this._clearButton) {
+            this._clearButton.addEventListener("click", this._boundHandles.clear);
+        }
+        this.input.addEventListener("change", this._boundHandles.validate);
+    },
+    _handleFocus: function _handleFocus(e) {
+        this.isFocused = true;
+        this._container.className += " input-field-focused";
+        this._updateClearButton();
+        this._triggerFocusEvent(e);
+    },
+    _handleBlur: function _handleBlur(e) {
+        this.isFocused = false;
+        var classes = this._container.className.split(" ");
+        var newClasses = [];
+        for (var i = 0; i < classes.length; i++) {
+            if (classes[i] !== "input-field-focused") {
+                newClasses.push(classes[i]);
+            }
+        }
+        this._container.className = newClasses.join(" ");
+        this.validate();
+        this._triggerBlurEvent(e);
+    },
+    _handleInput: function _handleInput(e) {
+        this._updateClearButton();
+        this._updateCounter();
+        this._triggerInputEvent(e);
+    },
+    _handleKeydown: function _handleKeydown(e) {
+        var key = e.key || e.keyCode;
+        if ((key === "Escape" || key === 27) && this._options.showClear) {
+            this.clear();
+            e.preventDefault();
+        }
+        if (key === "Enter" || key === 13) {
+            this._triggerSubmit();
+        }
+    },
+    _updateClearButton: function _updateClearButton() {
+        if (this._clearButton) {
+            var hasValue = this.input.value.length > 0;
+            this._clearButton.style.display = hasValue ? "block" : "none";
+        }
+    },
+    _updateCounter: function _updateCounter() {
+        if (this._counter && this._options.maxLength) {
+            var current = this.input.value.length;
+            var max = this._options.maxLength;
+            if (this._counterCurrent) {
+                this._counterCurrent.textContent = String(current);
+            }
+            if (this._counterMax) {
+                this._counterMax.textContent = String(max);
+            }
+            if (current > max * .9) {
+                var counterClasses = this._counter.className.split(" ");
+                if (counterClasses.indexOf("input-field-counter-warning") === -1) {
+                    this._counter.className += " input-field-counter-warning";
+                }
+            } else {
+                this._counter.className = this._counter.className.split(" ").filter(function(cls) {
+                    return cls !== "input-field-counter-warning";
+                }).join(" ");
+            }
+            if (current > max) {
+                var counterClasses = this._counter.className.split(" ");
+                if (counterClasses.indexOf("input-field-counter-error") === -1) {
+                    this._counter.className += " input-field-counter-error";
+                }
+            } else {
+                this._counter.className = this._counter.className.split(" ").filter(function(cls) {
+                    return cls !== "input-field-counter-error";
+                }).join(" ");
+            }
+        }
+    },
+    validate: function validate() {
         if (!this._options.validation) {
             this.isValid = true;
             return true;
@@ -1973,10 +2393,10 @@ class InputField {
             message = "This field is required";
         } else if (this._options.minLength && value.length < this._options.minLength) {
             isValid = false;
-            message = "Minimum length is ".concat(this._options.minLength, " characters");
+            message = "Minimum length is " + this._options.minLength + " characters";
         } else if (this._options.maxLength && value.length > this._options.maxLength) {
             isValid = false;
-            message = "Maximum length is ".concat(this._options.maxLength, " characters");
+            message = "Maximum length is " + this._options.maxLength + " characters";
         } else if (this._options.pattern && !new RegExp(this._options.pattern).test(value)) {
             isValid = false;
             message = "Invalid format";
@@ -1992,232 +2412,205 @@ class InputField {
         this._validationMessage = message;
         this.updateValidationState();
         return isValid;
-    }
-    updateValidationState() {
-        if (_classPrivateFieldGet2(_validationElement, this)) {
-            if (!this.isValid) {
-                _classPrivateFieldGet2(_validationElement, this).textContent = this._validationMessage;
-                _classPrivateFieldGet2(_validationElement, this).style.display = "block";
-                this._container.classList.add("input-field-invalid");
-                this._container.classList.remove("input-field-valid");
-            } else if (this.input.value.length > 0) {
-                _classPrivateFieldGet2(_validationElement, this).style.display = "none";
-                this._container.classList.add("input-field-valid");
-                this._container.classList.remove("input-field-invalid");
-            } else {
-                _classPrivateFieldGet2(_validationElement, this).style.display = "none";
-                this._container.classList.remove("input-field-valid", "input-field-invalid");
+    },
+    updateValidationState: function updateValidationState() {
+        if (!this.isValid) {
+            this._validationElement.textContent = this._validationMessage;
+            this._validationElement.style.display = "block";
+            var containerClasses = this._container.className.split(" ");
+            if (containerClasses.indexOf("input-field-invalid") === -1) {
+                this._container.className += " input-field-invalid";
             }
+            this._container.className = this._container.className.split(" ").filter(function(cls) {
+                return cls !== "input-field-valid";
+            }).join(" ");
+        } else if (this.input.value.length > 0) {
+            this._validationElement.style.display = "none";
+            var containerClasses = this._container.className.split(" ");
+            if (containerClasses.indexOf("input-field-valid") === -1) {
+                this._container.className += " input-field-valid";
+            }
+            this._container.className = this._container.className.split(" ").filter(function(cls) {
+                return cls !== "input-field-invalid";
+            }).join(" ");
+        } else {
+            this._validationElement.style.display = "none";
+            this._container.className = this._container.className.split(" ").filter(function(cls) {
+                return cls !== "input-field-valid" && cls !== "input-field-invalid";
+            }).join(" ");
         }
-    }
-    getValue() {
-        return this.input.value;
-    }
-    setValue(value) {
+    },
+    _updateState: function _updateState() {
+        this._updateClearButton();
+        this._updateCounter();
+        this.validate();
+    },
+    getValue: function getValue() {
+        return this.input.value.trim();
+    },
+    setValue: function setValue(value) {
         this.input.value = value;
-        _assertClassBrand(_InputField_brand, this, _updateState).call(this);
-        _assertClassBrand(_InputField_brand, this, _triggerChange).call(this);
-    }
-    clear() {
-        var bFocus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+        this._updateState();
+        this._triggerChange();
+    },
+    clear: function clear(bFocus) {
+        bFocus = bFocus !== undefined ? bFocus : true;
         this.setValue("");
         if (bFocus) {
             this.input.focus();
         }
-    }
-    focus() {
+    },
+    focus: function focus() {
         this.input.focus();
-    }
-    blur() {
+    },
+    blur: function blur() {
         this.input.blur();
-    }
-    enable() {
+    },
+    enable: function enable() {
         this.input.disabled = false;
         this._options.disabled = false;
-        this._container.classList.remove("input-field-disabled");
-    }
-    disable() {
+        this._container.className = this._container.className.split(" ").filter(function(cls) {
+            return cls !== "input-field-disabled";
+        }).join(" ");
+    },
+    disable: function disable() {
         this.input.disabled = true;
         this._options.disabled = true;
-        this._container.classList.add("input-field-disabled");
-    }
-    subscribe(callback) {
+        var containerClasses = this._container.className.split(" ");
+        if (containerClasses.indexOf("input-field-disabled") === -1) {
+            this._container.className += " input-field-disabled";
+        }
+    },
+    subscribe: function subscribe(callback) {
+        var self = this;
         this._subscribers.push(callback);
         return {
-            unsubscribe: () => {
-                this._subscribers = this._subscribers.filter(cb => cb !== callback);
+            unsubscribe: function unsubscribe() {
+                self._subscribers = self._subscribers.filter(function(cb) {
+                    return cb !== callback;
+                });
             }
         };
-    }
-    _triggerSubmit() {
+    },
+    _triggerInputEvent: function _triggerInputEvent(e) {
+        var detail = {
+            value: this.input.value,
+            originalEvent: e
+        };
+        this._subscribers.forEach(function(cb) {
+            cb({
+                type: "inputfield:input",
+                detail: detail
+            });
+        });
+    },
+    _triggerFocusEvent: function _triggerFocusEvent(e) {
+        var detail = {
+            value: this.input.value,
+            originalEvent: e
+        };
+        this._subscribers.forEach(function(cb) {
+            cb({
+                type: "inputfield:focus",
+                detail: detail
+            });
+        });
+    },
+    _triggerBlurEvent: function _triggerBlurEvent(e) {
+        var detail = {
+            value: this.input.value,
+            originalEvent: e
+        };
+        this._subscribers.forEach(function(cb) {
+            cb({
+                type: "inputfield:blur",
+                detail: detail
+            });
+        });
+    },
+    _triggerChange: function _triggerChange() {
         var detail = {
             value: this.input.value,
             isValid: this.isValid
         };
-        this._subscribers.forEach(cb => cb({
-            type: "inputfield:submit",
-            detail: detail
-        }));
-    }
-    destroy() {
+        this._subscribers.forEach(function(cb) {
+            cb({
+                type: "inputfield:change",
+                detail: detail
+            });
+        });
+    },
+    _triggerSubmit: function _triggerSubmit() {
+        var detail = {
+            value: this.input.value,
+            isValid: this.isValid
+        };
+        this._subscribers.forEach(function(cb) {
+            cb({
+                type: "inputfield:submit",
+                detail: detail
+            });
+        });
+    },
+    destroy: function destroy() {
         this._subscribers = [];
-        try {
-            this.input.removeEventListener("focus", _classPrivateFieldGet2(_boundHandles, this).focus);
-            this.input.removeEventListener("blur", _classPrivateFieldGet2(_boundHandles, this).blur);
-            this.input.removeEventListener("input", _classPrivateFieldGet2(_boundHandles, this).input);
-            this.input.removeEventListener("keydown", _classPrivateFieldGet2(_boundHandles, this).keydown);
-            if (_classPrivateFieldGet2(_clearButton, this)) {
-                _classPrivateFieldGet2(_clearButton, this).removeEventListener("click", _classPrivateFieldGet2(_boundHandles, this).clear);
+        if (this._boundHandles) {
+            try {
+                this.input.removeEventListener("focus", this._boundHandles.focus);
+                this.input.removeEventListener("blur", this._boundHandles.blur);
+                this.input.removeEventListener("input", this._boundHandles.input);
+                this.input.removeEventListener("keydown", this._boundHandles.keydown);
+                if (this._clearButton) {
+                    this._clearButton.removeEventListener("click", this._boundHandles.clear);
+                }
+                this.input.removeEventListener("change", this._boundHandles.validate);
+            } catch (error) {
+                console.error(error);
             }
-            this.input.removeEventListener("change", _classPrivateFieldGet2(_boundHandles, this).validate);
-        } catch (error) {
-            console.error(error);
         }
         this._container.innerHTML = "";
-        this._container.classList.remove("input-field-container");
+        this._container.className = this._container.className.split(" ").filter(function(cls) {
+            return cls !== "input-field-container";
+        }).join(" ");
     }
+};
+
+function SearchInput(input, options) {
+    InputField.call(this, input, _objectSpread2({
+        type: "search",
+        showClear: false,
+        showSearchIcon: true
+    }, options));
 }
 
-function _bindEvents() {
-    _classPrivateFieldSet2(_boundHandles, this, {
-        focus: _assertClassBrand(_InputField_brand, this, _handleFocus).bind(this),
-        blur: _assertClassBrand(_InputField_brand, this, _handleBlur).bind(this),
-        input: _assertClassBrand(_InputField_brand, this, _handleInput).bind(this),
-        keydown: _assertClassBrand(_InputField_brand, this, _handleKeydown).bind(this),
-        clear: this.clear.bind(this),
-        validate: this.validate.bind(this)
-    });
-    this.input.addEventListener("focus", _classPrivateFieldGet2(_boundHandles, this).focus);
-    this.input.addEventListener("blur", _classPrivateFieldGet2(_boundHandles, this).blur);
-    this.input.addEventListener("input", _classPrivateFieldGet2(_boundHandles, this).input);
-    this.input.addEventListener("keydown", _classPrivateFieldGet2(_boundHandles, this).keydown);
-    if (_classPrivateFieldGet2(_clearButton, this)) {
-        _classPrivateFieldGet2(_clearButton, this).addEventListener("click", _classPrivateFieldGet2(_boundHandles, this).clear);
+SearchInput.prototype = Object.create(InputField.prototype);
+
+SearchInput.prototype.constructor = SearchInput;
+
+SearchInput.prototype._createDOM = function() {
+    InputField.prototype._createDOM.call(this);
+    this._container.classList.add("input-field-search");
+    this._searchIcon = document.createElement("span");
+    this._boundHandle = this._triggerSubmit.bind(this);
+    if (this._options.showSearchIcon) {
+        var _this$_container$quer;
+        this._searchIcon.classList.add("input-field-search-icon");
+        this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
+        (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.appendChild(this._searchIcon);
+        this._searchIcon.addEventListener("click", this._boundHandle);
     }
-    this.input.addEventListener("change", _classPrivateFieldGet2(_boundHandles, this).validate);
-}
+};
 
-function _handleFocus() {
-    this.isFocused = true;
-    this._container.classList.add("input-field-focused");
-    _assertClassBrand(_InputField_brand, this, _updateClearButton).call(this);
-}
-
-function _handleBlur() {
-    this.isFocused = false;
-    this._container.classList.remove("input-field-focused");
-    this.validate();
-}
-
-function _handleInput(e) {
-    _assertClassBrand(_InputField_brand, this, _updateClearButton).call(this);
-    _assertClassBrand(_InputField_brand, this, _updateCounter).call(this);
-    _assertClassBrand(_InputField_brand, this, _triggerInputEvent).call(this, e);
-}
-
-function _handleKeydown(e) {
-    if (e.key === "Escape" && this._options.showClear) {
-        this.clear();
-        e.preventDefault();
-    }
-    if (e.key === "Enter") {
-        this._triggerSubmit();
-    }
-}
-
-function _updateClearButton() {
-    if (_classPrivateFieldGet2(_clearButton, this)) {
-        var hasValue = this.input.value.length > 0;
-        _classPrivateFieldGet2(_clearButton, this).style.display = hasValue ? "block" : "none";
-    }
-}
-
-function _updateCounter() {
-    if (_classPrivateFieldGet2(_counter, this) && this._options.maxLength) {
-        var current = this.input.value.length;
-        var max = this._options.maxLength;
-        if (_classPrivateFieldGet2(_counterCurrent, this)) {
-            _classPrivateFieldGet2(_counterCurrent, this).textContent = String(current);
-        }
-        if (_classPrivateFieldGet2(_counterMax, this)) {
-            _classPrivateFieldGet2(_counterMax, this).textContent = String(max);
-        }
-        if (current > max * .9) {
-            _classPrivateFieldGet2(_counter, this).classList.add("input-field-counter-warning");
-        } else {
-            _classPrivateFieldGet2(_counter, this).classList.remove("input-field-counter-warning");
-        }
-        if (current > max) {
-            _classPrivateFieldGet2(_counter, this).classList.add("input-field-counter-error");
-        } else {
-            _classPrivateFieldGet2(_counter, this).classList.remove("input-field-counter-error");
-        }
-    }
-}
-
-function _updateState() {
-    _assertClassBrand(_InputField_brand, this, _updateClearButton).call(this);
-    _assertClassBrand(_InputField_brand, this, _updateCounter).call(this);
-    this.validate();
-}
-
-function _triggerInputEvent(e) {
-    var detail = {
-        value: this.input.value,
-        originalEvent: e
-    };
-    this._subscribers.forEach(cb => cb({
-        type: "inputfield:input",
-        detail: detail
-    }));
-}
-
-function _triggerChange() {
-    var detail = {
-        value: this.input.value,
-        isValid: this.isValid
-    };
-    this._subscribers.forEach(cb => cb({
-        type: "inputfield:change",
-        detail: detail
-    }));
-}
-
-class SearchInput extends InputField {
-    constructor(input) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        super(input, _objectSpread2({
-            type: "search",
-            showClear: false,
-            showSearchIcon: true
-        }, options));
-        _defineProperty(this, "_searchIcon", void 0);
-        _defineProperty(this, "_boundHandle", void 0);
-    }
-    _createDOM() {
-        super._createDOM();
-        this._container.classList.add("input-field-search");
+SearchInput.prototype.destroy = function() {
+    try {
         if (this._options.showSearchIcon) {
-            var _this$_container$quer;
-            this._searchIcon = document.createElement("span");
-            this._searchIcon.className = "input-field-search-icon";
-            this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
-            (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.appendChild(this._searchIcon);
-            this._boundHandle = this._triggerSubmit.bind(this);
-            this._searchIcon.addEventListener("click", this._boundHandle);
+            this._searchIcon.removeEventListener("click", this._boundHandle);
         }
+    } catch (e) {
+        console.error(e);
     }
-    destroy() {
-        try {
-            if (this._options.showSearchIcon) {
-                this._searchIcon.removeEventListener("click", this._boundHandle);
-            }
-        } catch (e) {
-            console.error(e);
-        }
-        super.destroy();
-    }
-}
+    InputField.prototype.destroy.call(this);
+};
 
 var _catalogOfIcons = new WeakMap;
 
@@ -2690,14 +3083,25 @@ class IconsPlugin {
     }
 }
 
+var themes = new Set([ "theme-classic-light", "theme-classic-dark", "theme-light", "theme-dark", "theme-contrast-dark", "theme-gray", "theme-night", "theme-white" ]);
+
 class Theme {
     static onThemeChanged(theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
-        var themeType = theme.type || "light";
+        var themeName = theme.name;
+        console.warn(theme);
+        if (!themes.has(themeName)) {
+            if (theme.type === "dark") {
+                themeName = "theme-dark";
+            } else {
+                themeName = "theme-light";
+            }
+        }
         var body = document.body;
-        body.classList.remove("theme-dark");
-        body.classList.remove("theme-light");
-        body.classList.add("theme-" + themeType);
+        for (var className of themes) {
+            body.classList.remove(className);
+        }
+        body.classList.add(themeName);
     }
 }
 
