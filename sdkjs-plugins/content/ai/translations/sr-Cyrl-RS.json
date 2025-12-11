@@ -28,6 +28,7 @@
 	"Name" : "Име",
 	"URL" : "URL",
 	"Key" : "Кључ",
+	"e.g. abc123...": "нпр. abc123...",
 	"Update models list" : "Ажурирај листу модела",
 	"Use model for" : "Користи модел за",
 	"All": "Све",
@@ -142,5 +143,15 @@
 	"Text to Image": "Текст у слику",
 	"Image generation": "Генерисање слике",
 	"OCR": "OCR",
-	"Vision": "Визија"
+	"Vision": "Визија",
+	
+	"Grammar & Spelling": "Граматика и правопис",
+	"Accept": "Прихвати",
+	"Reject": "Одбиј",
+	"Spelling suggestion": "Предлог за правопис",
+	"Grammar suggestion": "Предлог за граматику",
+	"Check all": "Означи све",
+	"Check current text": "Провери тренутни текст",
+	"Suggested correction": "Предложена исправка",
+	"Explanation": "Објашњење"
 }
