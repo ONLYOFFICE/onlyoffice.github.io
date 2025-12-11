@@ -33,7 +33,7 @@ function CitationService(localesManager, cslStylesManager, sdk) {
         this._bibPrefixNew,
         this._bibSuffixNew
     );
-    /** @type {"footnotes" | "endnotes"} */
+    /** @type {NoteStyle} */
     this._notesStyle;
     /** @type {StyleFormat} */
     this._styleFormat;
@@ -220,7 +220,7 @@ CitationService.prototype = {
     },
 
     /**
-     * @param {"footnotes" | "endnotes"} notesStyle
+     * @param {NoteStyle} notesStyle
      */
     setNotesStyle: function (notesStyle) {
         this._notesStyle = notesStyle;

@@ -2,6 +2,10 @@
 /// <reference path="./storage.js" />
 /// <reference path="./style-parser.js" />
 
+/**
+ * @typedef {"footnotes" | "endnotes"} NoteStyle
+ */
+
 function CslStylesManager() {
     this._isOnlineAvailable = false;
     this._isDesktopAvailable = false;
@@ -82,7 +86,7 @@ CslStylesManager.prototype.getLastUsedFormat = function () {
 };
 
 /**
- * @returns {"endnotes" | "footnotes"}
+ * @returns {NoteStyle}
  */
 CslStylesManager.prototype.getLastUsedNotesStyle = function () {
     let lastUsedNotesStyle = localStorage.getItem(this._lastNotesStyleKey);
@@ -324,7 +328,7 @@ CslStylesManager.prototype._saveLastUsedStyle = function (id, content) {
 };
 
 /**
- * @param {"footnotes" | "endnotes"} notesStyle
+ * @param {NoteStyle} notesStyle
  */
 CslStylesManager.prototype.saveLastUsedNotesStyle = function (notesStyle) {
     localStorage.setItem(this._lastNotesStyleKey, notesStyle);
