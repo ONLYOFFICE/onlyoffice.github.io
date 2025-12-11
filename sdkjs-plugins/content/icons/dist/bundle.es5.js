@@ -8562,6 +8562,7 @@
         return _createClass(Theme, null, [ {
             key: "onThemeChanged",
             value: function onThemeChanged(theme) {
+                console.warn("Theme.onThemeChanged", theme);
                 window.Asc.plugin.onThemeChangedBase(theme);
                 var themeType = theme.type || "light";
                 var body = document.body;

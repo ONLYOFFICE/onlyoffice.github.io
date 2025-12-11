@@ -30,16 +30,41 @@
  *
  */
 
+// @ts-check
+
+const themes = new Set([
+    "theme-classic-light",
+    "theme-classic-dark",
+    "theme-light",
+    "theme-dark",
+    "theme-contrast-dark",
+    "theme-gray",
+    "theme-night",
+    "theme-white",
+]);
+
 class Theme {
+    /**
+     * @param {{name: string, type: string}} theme
+     */
     static onThemeChanged(theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
 
-        const themeType = theme.type || "light";
+        let themeName = theme.name;
+        console.warn(theme);
+        if (!themes.has(themeName)) {
+            if (theme.type === "dark") {
+                themeName = "theme-dark";
+            } else {
+                themeName = "theme-light";
+            }
+        }
 
         const body = document.body;
-        body.classList.remove("theme-dark");
-        body.classList.remove("theme-light");
-        body.classList.add("theme-" + themeType);
+        for (const className of themes) {
+            body.classList.remove(className);
+        }
+        body.classList.add(themeName);
     }
 }
 
