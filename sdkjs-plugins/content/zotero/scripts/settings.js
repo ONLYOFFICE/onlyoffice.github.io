@@ -10,6 +10,14 @@
 /// <reference path="./csl/locales/locales-manager.js" />
 
 /**
+ * @typedef {Object} Settings
+ * @property {string} [language]
+ * @property {string} style
+ * @property {NoteStyle} notesStyle
+ * @property {StyleFormat} styleFormat
+ */
+
+/**
  * @param {Router} router
  * @param {string} displayNoneClass
  */
@@ -43,7 +51,10 @@ function SettingsPage(router, displayNoneClass) {
         throw new Error("styleSelectListOther not found");
     }
     this._styleSelect = document.getElementById("styleSelect");
-    if (!this._styleSelect) {
+    if (
+        !this._styleSelect ||
+        this._styleSelect instanceof HTMLInputElement === false
+    ) {
         throw new Error("styleSelect not found");
     }
     this._notesStyleWrapper = document.getElementById("notesStyle");
@@ -51,11 +62,17 @@ function SettingsPage(router, displayNoneClass) {
         throw new Error("notesStyleWrapper not found");
     }
     this._footNotes = document.getElementById("footNotes");
-    if (!this._footNotes) {
+    if (
+        !this._footNotes ||
+        this._footNotes instanceof HTMLInputElement === false
+    ) {
         throw new Error("footNotes not found");
     }
     this._endNotes = document.getElementById("endNotes");
-    if (!this._endNotes) {
+    if (
+        !this._endNotes ||
+        this._endNotes instanceof HTMLInputElement === false
+    ) {
         throw new Error("endNotes not found");
     }
 
@@ -74,9 +91,9 @@ function SettingsPage(router, displayNoneClass) {
     /** @type {HTMLElement[]} */
     this._selectLists = [];
     /**
-     * @param {Promise<void>} promise
+     * @param {Settings} settings
      */
-    this._onChangeState = function (promise) {};
+    this._onChangeState = function (settings) {};
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -139,6 +156,13 @@ function SettingsPage(router, displayNoneClass) {
     this._bNumFormat = false;
 
     this._initSelectBoxes();
+
+    /** @type {Settings} */
+    this._stateSettings = {
+        style: "",
+        notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
+        styleFormat: this._cslStylesManager.getLastUsedFormat(),
+    };
 }
 
 /**
@@ -189,7 +213,7 @@ SettingsPage.prototype.init = function () {
 };
 
 /**
- * @param {function(Promise<void>): void} callbackFn
+ * @param {function(Settings): void} callbackFn
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
@@ -230,24 +254,100 @@ SettingsPage.prototype._addEventListeners = function () {
             return;
         }
         const promises = [];
-        if (self._localesManager.getLastUsedLanguage() !== selectedLang) {
+        if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
-            promises.push(self._localesManager.loadLocale(selectedLang));
+            promises.push(
+                self._localesManager
+                    .loadLocale(selectedLang)
+                    .catch(function (err) {
+                        console.error(err);
+                        self._langMessage.show(
+                            translate("Failed to load language")
+                        );
+                        throw err;
+                    })
+            );
+        }
+
+        [self._footNotes, self._endNotes].forEach(function (el) {
+            if (el.checked) {
+                const value = el.value;
+                if (
+                    (self._stateSettings.notesStyle !== value &&
+                        value === "footnotes") ||
+                    value === "endnotes"
+                ) {
+                    self._cslStylesManager.saveLastUsedNotesStyle(value);
+                }
+            }
+        });
+        const selectedStyleId = self._styleSelect.getAttribute("data-value");
+        if (
+            self._stateSettings.style !== selectedStyleId &&
+            selectedStyleId !== null
+        ) {
+            promises.push(self._onStyleChange(selectedStyleId));
         }
 
         if (promises.length) {
-            self._onChangeState(
-                Promise.all(promises).then(function () {
+            self._showLoader();
+            Promise.all(promises)
+                .then(function () {
                     self._hide();
+                    self._hideLoader();
+
+                    self._onChangeState({
+                        language: selectedLang,
+                        style: self._cslStylesManager.getLastUsedStyleIdOrDefault(),
+                        notesStyle:
+                            self._cslStylesManager.getLastUsedNotesStyle(),
+                        styleFormat: self._cslStylesManager.getLastUsedFormat(),
+                    });
                 })
-            );
+                .catch(function (err) {
+                    self._hideLoader();
+                });
         }
     });
     this._cancelBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
         }
-        self._hide();
+        [self._footNotes, self._endNotes].forEach(function (el) {
+            const value = el.value;
+            if (self._stateSettings.notesStyle === value) {
+                el.checked = true;
+            }
+        });
+        const selectedLang = self._languageSelect.getSelectedValue();
+        const selectedStyleId = self._styleSelect.getAttribute("data-value");
+        if (
+            selectedLang !== null &&
+            self._localesManager.getLastUsedLanguage() !== selectedLang
+        ) {
+            self._languageSelect.selectItems(
+                self._localesManager.getLastUsedLanguage(),
+                true
+            );
+        }
+        if (
+            self._stateSettings.style !== selectedStyleId &&
+            selectedStyleId !== null
+        ) {
+            const el = self._styleSelectList.querySelector(
+                "[data-value='" + self._stateSettings.style + "']"
+            );
+            if (el && el instanceof HTMLElement) {
+                self._selectStyle(el, false);
+                self._onStyleChange(self._stateSettings.style, true).then(
+                    function () {
+                        self._hide();
+                    }
+                );
+            }
+        } else {
+            self._hide();
+        }
     });
 
     this._cslFileInput.onchange = function (e) {
@@ -275,87 +375,6 @@ SettingsPage.prototype._addEventListeners = function () {
                 self._hideLoader();
             });
     };
-
-    /**
-     * @param {Event|null} e - The input event.
-     * @param {String} [filter] - The filter to apply on the style options.
-     */
-    this._styleSelect.oninput = function (e, filter) {
-        var input = self._styleSelect;
-        if (!(input instanceof HTMLInputElement)) return;
-        filter = filter !== undefined ? filter : input.value.toLowerCase();
-        var list = self._styleSelectList.classList.contains(
-            self._displayNoneClass
-        )
-            ? self._styleSelectListOther
-            : self._styleSelectList;
-
-        for (var i = 0; i < list.children.length; i++) {
-            const child = list.children[i];
-            if (child instanceof HTMLElement === false) {
-                continue;
-            }
-            var text = child.textContent || child.innerText;
-            if (!filter || text.toLowerCase().indexOf(filter) > -1) {
-                child.classList.remove(self._displayNoneClass);
-            } else {
-                child.classList.add(self._displayNoneClass);
-            }
-        }
-    };
-
-    /**
-     * @param {Event} inp - The input event.
-     * @param {String} styleName - The name of the selected style.
-     * @param {Boolean} isClick - Whether the style was selected manually or not.
-     */
-    this._styleSelect.onselectchange = function (inp, styleName, isClick) {
-        isClick && self._showLoader();
-        self._styleSelect.oninput(inp, "");
-
-        return self._cslStylesManager
-            .getStyle(styleName)
-            .then(function (style) {
-                self._onStyleChange();
-                if (isClick) {
-                    return self._citationService.updateCslItems(
-                        true,
-                        true,
-                        false
-                    );
-                }
-            })
-            .catch(function (err) {
-                console.error(err);
-                if (typeof err === "string") {
-                    self._styleMessage.show(translate(err));
-                }
-            })
-            .finally(function () {
-                isClick && self._hideLoader();
-            });
-    };
-
-    this._styleSelectList.onopen = function () {
-        self._styleSelectList.style.width =
-            self._styleWrapper.clientWidth - 2 + "px";
-    };
-
-    [this._footNotes, this._endNotes].forEach(function (el) {
-        el.addEventListener("change", function (event) {
-            if (
-                event.target instanceof HTMLInputElement &&
-                event.target.checked
-            ) {
-                const value = event.target.value;
-                if (value === "endnotes" || value === "footnotes") {
-                    self._cslStylesManager.saveLastUsedNotesStyle(value);
-                } else {
-                    console.error("Unknown notes style: " + value);
-                }
-            }
-        });
-    });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -368,6 +387,12 @@ SettingsPage.prototype._hide = function () {
 };
 
 SettingsPage.prototype._show = function () {
+    this._stateSettings = {
+        language: this._localesManager.getLastUsedLanguage(),
+        style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
+        notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
+        styleFormat: this._cslStylesManager.getLastUsedFormat(),
+    };
     this._router.openSettings();
 };
 
@@ -423,11 +448,6 @@ SettingsPage.prototype._loadStyles = function () {
 SettingsPage.prototype._addStylesToList = function (stylesInfo) {
     const self = this;
     var lastStyle = this._cslStylesManager.getLastUsedStyleIdOrDefault();
-    const styleSelect = this._styleSelect;
-    if (styleSelect instanceof HTMLInputElement === false) {
-        console.error("styleSelect is not an input element");
-        return;
-    }
 
     /**
      * @param {HTMLElement} list - the list of styles where the element is added.
@@ -462,10 +482,7 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
             );
             newEl.textContent = tmpEl.textContent;
             list.insertBefore(newEl, list.firstElementChild);
-            newEl.onclick = self._onClickListElement(
-                self._styleSelectList,
-                styleSelect
-            );
+            newEl.onclick = self._onClickListElement(self._styleSelectList);
             var event = new Event("click");
             newEl.dispatchEvent(event);
             self._closeList();
@@ -486,10 +503,7 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
                     self._styleSelectList.firstElementChild
                 );
             else self._styleSelectList.appendChild(el);
-            el.onclick = self._onClickListElement(
-                self._styleSelectList,
-                styleSelect
-            );
+            el.onclick = self._onClickListElement(self._styleSelectList);
         } else {
             self._styleSelectListOther.appendChild(el);
             el.onclick = onStyleSelectOther(
@@ -499,28 +513,8 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
         }
         if (stylesInfo[i].name == lastStyle) {
             el.setAttribute("selected", "");
-            self._selectInput(styleSelect, el, self._styleSelectList, false);
+            self._selectStyle(el, false);
         }
-    }
-};
-
-SettingsPage.prototype._onStyleChange = function () {
-    let styleFormat = this._cslStylesManager.getLastUsedFormat();
-    this._citationService.setStyleFormat(styleFormat);
-    this._bNumFormat = styleFormat == "numeric";
-    if ("note" === styleFormat) {
-        this._notesStyleWrapper.classList.remove(this._displayNoneClass);
-    } else {
-        this._notesStyleWrapper.classList.add(this._displayNoneClass);
-    }
-
-    let notesStyle = this._cslStylesManager.getLastUsedNotesStyle();
-    this._citationService.setNotesStyle(notesStyle);
-    const notesAs = this._notesStyleWrapper.querySelector(
-        'input[name="notesAs"][value="' + notesStyle + '"]'
-    );
-    if (notesAs && notesAs instanceof HTMLInputElement) {
-        notesAs.checked = true;
     }
 };
 
@@ -540,7 +534,7 @@ SettingsPage.prototype._openList = function (el) {
 SettingsPage.prototype._closeList = function () {
     for (var i = 0; i < this._selectLists.length; i++) {
         if (this._selectLists[i] === this._styleSelectList)
-            this._styleSelect.oninput(null, "");
+            this._onStyleFilterInput("");
         this._selectLists[i].classList.add(this._displayNoneClass);
     }
 };
@@ -582,7 +576,7 @@ SettingsPage.prototype._initSelectBoxes = function () {
                     if (child instanceof HTMLElement === false) {
                         continue;
                     }
-                    child.onclick = self._onClickListElement(list, input);
+                    child.onclick = self._onClickListElement(list);
                 }
                 // selectInput(input, list.children[0], list, false);
             }
@@ -602,9 +596,8 @@ SettingsPage.prototype._initSelectBoxes = function () {
                     )
                         return true;
 
-                    if (list.onopen) {
-                        list.onopen();
-                    }
+                    self._styleSelectList.style.width =
+                        self._styleWrapper.clientWidth - 2 + "px";
                     if (!input.hasAttribute("readonly")) {
                         input.select();
                     }
@@ -625,9 +618,8 @@ SettingsPage.prototype._initSelectBoxes = function () {
 
 /**
  * @param {HTMLElement} list
- * @param {HTMLInputElement} input
  */
-SettingsPage.prototype._onClickListElement = function (list, input) {
+SettingsPage.prototype._onClickListElement = function (list) {
     const self = this;
     return function (/** @type {MouseEvent} */ ev) {
         if (!ev.target || !(ev.target instanceof HTMLElement)) {
@@ -643,7 +635,7 @@ SettingsPage.prototype._onClickListElement = function (list, input) {
             if (list.children[i].getAttribute("data-value") == sel) {
                 list.children[i].setAttribute("selected", "");
 
-                self._selectInput(input, child, list, true);
+                self._selectStyle(child, true);
             } else {
                 if (list.children[i].hasAttribute("selected")) {
                     list.children[i].attributes.removeNamedItem("selected");
@@ -654,20 +646,84 @@ SettingsPage.prototype._onClickListElement = function (list, input) {
 };
 
 /**
- * @param {HTMLInputElement} input
  * @param {HTMLElement} el
- * @param {HTMLElement} list
  * @param {boolean} isClick
  */
-SettingsPage.prototype._selectInput = function (input, el, list, isClick) {
-    input.value = el.textContent;
+SettingsPage.prototype._selectStyle = function (el, isClick) {
+    this._styleSelect.value = el.textContent;
     var val = el.getAttribute("data-value") || "";
-    input.setAttribute("data-value", val);
-    input.setAttribute("title", el.textContent);
-    if (input.onselectchange) {
-        input.onselectchange(input, val, isClick);
+    this._styleSelect.setAttribute("data-value", val);
+    this._styleSelect.setAttribute("title", el.textContent);
+
+    this._onStyleFilterInput("");
+    this._onStyleChange(val, isClick);
+
+    this._styleSelectList.classList.add(this._displayNoneClass);
+};
+
+/**
+ * @param {String} [filter] - The filter to apply on the style options.
+ */
+SettingsPage.prototype._onStyleFilterInput = function (filter) {
+    var input = this._styleSelect;
+    if (!(input instanceof HTMLInputElement)) return;
+    filter = filter !== undefined ? filter : input.value.toLowerCase();
+    var list = this._styleSelectList.classList.contains(this._displayNoneClass)
+        ? this._styleSelectListOther
+        : this._styleSelectList;
+
+    for (var i = 0; i < list.children.length; i++) {
+        const child = list.children[i];
+        if (child instanceof HTMLElement === false) {
+            continue;
+        }
+        var text = child.textContent || child.innerText;
+        if (!filter || text.toLowerCase().indexOf(filter) > -1) {
+            child.classList.remove(this._displayNoneClass);
+        } else {
+            child.classList.add(this._displayNoneClass);
+        }
     }
-    list.classList.add(this._displayNoneClass);
+};
+
+/**
+ * @param {String} styleName - The name of the selected style.
+ * @param {Boolean} [isClick] - Whether the style was selected manually or not.
+ * @returns {Promise<void>}
+ */
+SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
+    const self = this;
+    isClick && self._showLoader();
+
+    return self._cslStylesManager
+        .getStyle(styleName)
+        .then(function (style) {
+            let styleFormat = self._cslStylesManager.getLastUsedFormat();
+            self._bNumFormat = styleFormat == "numeric";
+            if ("note" === styleFormat) {
+                self._notesStyleWrapper.classList.remove(
+                    self._displayNoneClass
+                );
+            } else {
+                self._notesStyleWrapper.classList.add(self._displayNoneClass);
+            }
+
+            let notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
+            const notesAs = self._notesStyleWrapper.querySelector(
+                'input[name="notesAs"][value="' + notesStyle + '"]'
+            );
+            if (notesAs && notesAs instanceof HTMLInputElement) {
+                notesAs.checked = true;
+            }
+            isClick && self._hideLoader();
+        })
+        .catch(function (err) {
+            console.error(err);
+            if (typeof err === "string") {
+                self._styleMessage.show(translate(err));
+            }
+            isClick && self._hideLoader();
+        });
 };
 
 SettingsPage.prototype._showLoader = function () {

@@ -60,7 +60,7 @@ CitationDocService.prototype.addBibliography = function (text, value) {
 /**
  * @param {string} text
  * @param {string} value
- * @param {"footnotes" | "endnotes" | null} notesStyle
+ * @param {NoteStyle | null} notesStyle
  * @returns
  */
 CitationDocService.prototype.addCitation = function (text, value, notesStyle) {

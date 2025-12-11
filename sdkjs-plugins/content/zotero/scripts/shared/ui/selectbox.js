@@ -614,19 +614,6 @@ SelectBox.prototype.getSelectedValues = function () {
 };
 
 /**
- * @param {string | Array<string>} value
- */
-SelectBox.prototype.setSelectedValues = function (value) {
-    if (this._options.multiple && Array.isArray(value)) {
-        this._selectedValues = new Set(value);
-    } else {
-        this._selectedValues = new Set([value]);
-    }
-    this._updateSelectedText();
-    this._renderOptions();
-};
-
-/**
  * @param {string | Array<string>} values
  * @param {boolean} [bSilent]
  */
