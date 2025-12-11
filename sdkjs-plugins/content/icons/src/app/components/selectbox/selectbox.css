@@ -9,6 +9,7 @@
     }
 
     .selectbox-header {
+        overflow: hidden;
         border-style: solid;
         border-width: 1px;
         border-radius: 1px;
@@ -95,6 +96,12 @@
             pointer-events: none;
         }
     }
+    .selectbox-option-divider {
+        margin: 4px 0;
+        border: none;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
 
     .selectbox-checkbox {
         margin: 0;
@@ -112,7 +119,9 @@
     }
 }
 
-body.theme-light .selectbox-container {
+body.theme-gray .selectbox-container,
+body.theme-light .selectbox-container,
+body.theme-classic-light .selectbox-container {
     .selectbox-header {
         border-color: var(--input-border);
         background-color: var(--input-bg);
@@ -150,10 +159,8 @@ body.theme-light .selectbox-container {
         }
     }
 
-    .selectbox-option {
-        &:hover {
-            background-color: var(--select-option-hover);
-        }
+    .selectbox-option:hover {
+        background-color: var(--select-option-hover);
     }
 
     .selectbox-option-selected {
@@ -162,9 +169,14 @@ body.theme-light .selectbox-container {
             background-color: var(--select-option-selected);
         }
     }
+    .selectbox-option-divider {
+        border-color: var(--input-border);
+    }
 }
 
-body.theme-dark .selectbox-container {
+body.theme-dark .selectbox-container,
+body.theme-classic-dark .selectbox-container,
+body.theme-contrast-dark .selectbox-container {
     .selectbox-header {
         border-color: var(--input-border-dark);
         background-color: var(--input-bg-dark);
@@ -202,10 +214,8 @@ body.theme-dark .selectbox-container {
         }
     }
 
-    .selectbox-option {
-        &:hover {
-            background-color: var(--select-option-hover-dark);
-        }
+    .selectbox-option:hover {
+        background-color: var(--select-option-hover-dark);
     }
 
     .selectbox-option-selected {
@@ -214,4 +224,14 @@ body.theme-dark .selectbox-container {
             background-color: var(--select-option-selected-dark);
         }
     }
+    .selectbox-option-divider {
+        border-color: var(--input-border-dark);
+    }
+}
+
+body.theme-white .selectbox-container {
+    /** */
+}
+body.theme-night .selectbox-container {
+    /** */
 }
