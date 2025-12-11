@@ -168,6 +168,7 @@
             settings.getStyleManager(),
             sdk
         );
+        let isInit = false;
 
         addEventListeners();
 
@@ -181,6 +182,8 @@
                 settings.setRestApiAvailable(apis.online);
             })
             .onAuthorized(function (apis) {
+                if (isInit) return;
+                isInit = true;
                 showLoader(true);
 
                 Promise.all([loadGroups(), settings.init()]).then(function () {
@@ -393,21 +396,10 @@
             });
         });
 
-        settings.onChangeState(function (/** @type {Promise<void>} */ promise) {
-            showLoader(true);
-            promise
-                .then(function () {
-                    return citationService.updateCslItems(true, true, false);
-                })
-                .catch(function (error) {
-                    console.error(error);
-                    if (typeof error === "string") {
-                        showError(error);
-                    }
-                })
-                .finally(function () {
-                    showLoader(false);
-                });
+        settings.onChangeState(function (/** @type {Settings} */ settings) {
+            citationService.setNotesStyle(settings.notesStyle);
+            citationService.setStyleFormat(settings.styleFormat);
+            return citationService.updateCslItems(true, true, false);
         });
     }
 
