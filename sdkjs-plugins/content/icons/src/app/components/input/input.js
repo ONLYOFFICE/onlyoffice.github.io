@@ -1,110 +1,147 @@
 // @ts-check
 
-/** @typedef {import('./options-type.js').InputOptionsType} InputOptionsType */
+/// <reference path="./types.js" />
 /**
- * @typedef {Object} BoundHandlesType
- * @property {() => void} focus
- * @property {() => void} blur
- * @property {(ev: Event) => void} input
- * @property {(ev: KeyboardEvent) => void} keydown
- * @property {() => void} clear
- * @property {() => void} validate
+ * @constructor
+ * @param {string | HTMLInputElement} input
+ * @param {InputOptionsType} options
  */
+function InputField(input, options) {
+    var self = this;
+    options = options || {};
 
-class InputField {
-    /** @type {HTMLElement} */
-    _container;
-    _options;
-    /** @type {HTMLInputElement} */
-    // @ts-ignore
-    input;
-    /** @type {HTMLButtonElement | undefined} */
-    #clearButton;
-    /** @type {HTMLDivElement | undefined} */
-    #counter;
-    /** @type {HTMLSpanElement | undefined} */
-    #counterCurrent;
-    /** @type {HTMLSpanElement | undefined} */
-    #counterMax;
-    /** @type {HTMLDivElement} */
-    // @ts-ignore
-    #validationElement;
-    isFocused;
-    isValid;
-    _validationMessage;
-    /** @type {Function[]} */
-    _subscribers = [];
-    /** @type {BoundHandlesType} */
-    // @ts-ignore
-    #boundHandles;
-
-    /**
-     * @param {string | HTMLInputElement} input
-     * @param {InputOptionsType} options
-     */
-    constructor(input, options = {}) {
-        if (typeof input === "string") {
-            let temp = document.getElementById(input);
-            if (temp instanceof HTMLInputElement) {
-                input = temp;
-            }
+    if (typeof input === "string") {
+        var temp = document.getElementById(input);
+        if (temp instanceof HTMLInputElement) {
+            input = temp;
         }
-        if (input instanceof HTMLInputElement) {
-            this.input = input;
-        } else {
-            throw new Error("Invalid input element");
-        }
+    }
+    if (input instanceof HTMLInputElement) {
+        this.input = input;
+    } else {
+        throw new Error("Invalid input element");
+    }
+    this._container = document.createElement("div");
 
-        this._container = document.createElement("div");
+    this._options = {
+        type: options.type || input.type || "text",
+        placeholder: options.placeholder || input.placeholder || "",
+        value: options.value || input.value || "",
+        autofocus: options.autofocus || false,
+        disabled: options.disabled || false,
+        readonly: options.readonly || false,
+        required: options.required || false,
+        showCounter: options.showCounter || false,
+        showClear: options.showClear !== undefined ? options.showClear : true,
+        autocomplete: options.autocomplete || "off",
+    };
 
-        this._options = {
-            type: options.type || input.type || "text",
-            placeholder: options.placeholder || input.placeholder || "",
-            value: options.value || input.value || "",
-            autofocus: options.autofocus || false,
-            disabled: options.disabled || false,
-            readonly: options.readonly || false,
-            required: options.required || false,
-            maxLength: options.maxLength || null,
-            minLength: options.minLength || null,
-            pattern: options.pattern || null,
-            showCounter: options.showCounter || false,
-            showClear: options.showClear || true,
-            validation: options.validation || null,
-            autocomplete: options.autocomplete || "off",
-            ...options,
-        };
-
-        this.isFocused = false;
-        this.isValid = true;
-        this._validationMessage = "";
-
-        this._createDOM();
-        this.#bindEvents();
-        this.#updateState();
-
-        if (this._options.autofocus) {
-            setTimeout(() => this.focus(), 100);
+    // Copy any additional properties
+    for (var key in options) {
+        if (!this._options.hasOwnProperty(key)) {
+            // @ts-ignore
+            this._options[key] = options[key];
         }
     }
 
-    _createDOM() {
-        const parent = this.input.parentNode;
+    this._id = input.id || "input_" + Math.random().toString(36).slice(2, 9);
+    this.isFocused = false;
+    this.isValid = true;
+    this._validationMessage = "";
+    this._subscribers = [];
+    this._boundHandles = {
+        focus: function (/** @type {Event} */ e) {
+            self._handleFocus(e);
+        },
+        blur: function (/** @type {Event} */ e) {
+            self._handleBlur(e);
+        },
+        input: function (/** @type {Event} */ e) {
+            self._handleInput(e);
+        },
+        keydown: function (/** @type {KeyboardEvent} */ e) {
+            self._handleKeydown(e);
+        },
+        clear: function () {
+            self.clear();
+        },
+        validate: function () {
+            self.validate();
+        },
+    };
+    this._clearButton = null;
+    this._counter = null;
+    this._counterCurrent = null;
+    this._counterMax = null;
+    this._validationElement = document.createElement("div");
 
-        const fragment = document.createDocumentFragment();
+    this._createDOM();
+    this._bindEvents();
+    this._updateState();
+
+    if (this._options.autofocus) {
+        setTimeout(
+            (function (self) {
+                return function () {
+                    self.focus();
+                };
+            })(this),
+            100
+        );
+    }
+}
+
+InputField.prototype = {
+    constructor: InputField,
+
+    /** @type {HTMLInputElement} */
+    // @ts-ignore
+    input: null,
+    /** @type {HTMLElement} */
+    // @ts-ignore
+    _container: null,
+    /** @type {InputOptionsType} */
+    _options: {},
+    _id: "",
+    isFocused: false,
+    isValid: true,
+    _validationMessage: "",
+    /** @type {Function[]} */
+    _subscribers: [],
+    /** @type {InputBoundHandlesType} */
+    // @ts-ignore
+    _boundHandles: null,
+    /** @type {HTMLButtonElement | null} */
+    _clearButton: null,
+    /** @type {HTMLDivElement | null} */
+    _counter: null,
+    /** @type {HTMLSpanElement | null} */
+    _counterCurrent: null,
+    /** @type {HTMLSpanElement | null} */
+    _counterMax: null,
+    /** @type {HTMLDivElement} */
+    // @ts-ignore
+    _validationElement: null,
+    _createDOM: function () {
+        var parent = this.input.parentNode;
+
+        var fragment = document.createDocumentFragment();
         fragment.appendChild(this._container);
-        this._container.classList.add("input-field-container");
+        this._container.className +=
+            " input-field-container  input-field-container-" + this._id;
 
-        const inputField = document.createElement("div");
+        var inputField = document.createElement("div");
         this._container.appendChild(inputField);
-        inputField.classList.add("input-field");
+        inputField.className += " input-field";
         if (this._options.disabled) {
-            inputField.classList.add("input-field-disabled");
+            inputField.className += " input-field-disabled";
         }
-        const inputFieldMain = document.createElement("div");
+
+        var inputFieldMain = document.createElement("div");
         inputField.appendChild(inputFieldMain);
-        inputFieldMain.classList.add("input-field-main");
-        this.input.classList.add("input-field-element");
+        inputFieldMain.className += " input-field-main";
+
+        this.input.className += " input-field-element";
         this.input.type = this._options.type || "text";
         this.input.placeholder = this._options.placeholder || "";
         this.input.value = String(this._options.value) || "";
@@ -129,145 +166,171 @@ class InputField {
         }
 
         if (this._options.showCounter) {
-            this.#counter = document.createElement("div");
-            inputField.appendChild(this.#counter);
-            this.#counter.classList.add("input-field-counter");
-            this.#counterCurrent = document.createElement("span");
-            this.#counterCurrent.classList.add("input-field-counter-current");
-            this.#counterCurrent.textContent = "0";
-            this.#counter.appendChild(this.#counterCurrent);
-            let span = document.createElement("span");
+            this._counter = document.createElement("div");
+            inputField.appendChild(this._counter);
+            this._counter.className += " input-field-counter";
+            this._counterCurrent = document.createElement("span");
+            this._counterCurrent.className += " input-field-counter-current";
+            this._counterCurrent.textContent = "0";
+            this._counter.appendChild(this._counterCurrent);
+            var span = document.createElement("span");
             span.textContent = "/";
-            this.#counter.appendChild(span);
-            this.#counterMax = document.createElement("span");
-            this.#counterMax.classList.add("input-field-counter-max");
-            this.#counterMax.textContent =
+            this._counter.appendChild(span);
+            this._counterMax = document.createElement("span");
+            this._counterMax.className += " input-field-counter-max";
+            this._counterMax.textContent =
                 String(this._options.maxLength) || "∞";
-            this.#counter.appendChild(this.#counterMax);
+            this._counter.appendChild(this._counterMax);
         }
 
-        this.#validationElement = document.createElement("div");
-        inputField.appendChild(this.#validationElement);
-        this.#validationElement.classList.add("input-field-validation");
-        this.#validationElement.style.display = "none";
-
-        inputField.appendChild(inputFieldMain);
+        inputField.appendChild(this._validationElement);
+        this._validationElement.className += " input-field-validation";
+        this._validationElement.style.display = "none";
 
         if (this._options.showClear) {
-            this.#clearButton = document.createElement("button");
-            inputField.appendChild(this.#clearButton);
-            this.#clearButton.classList.add("input-field-clear");
-            this.#clearButton.style.display = "none";
-            this.#clearButton.textContent = "×";
+            this.input.className += " input-field-clearable";
+            this._clearButton = document.createElement("button");
+            inputField.appendChild(this._clearButton);
+            this._clearButton.className += " input-field-clear";
+            this._clearButton.style.display = "none";
+            this._clearButton.textContent = "×";
         }
 
-        parent?.insertBefore(fragment, this.input);
+        if (parent) {
+            parent.insertBefore(fragment, this.input);
+        }
         inputFieldMain.appendChild(this.input);
-    }
+    },
+    _bindEvents: function () {
+        this.input.addEventListener("focus", this._boundHandles.focus);
+        this.input.addEventListener("blur", this._boundHandles.blur);
+        this.input.addEventListener("input", this._boundHandles.input);
+        this.input.addEventListener("keydown", this._boundHandles.keydown);
 
-    #bindEvents() {
-        this.#boundHandles = {
-            focus: this.#handleFocus.bind(this),
-            blur: this.#handleBlur.bind(this),
-            input: this.#handleInput.bind(this),
-            keydown: this.#handleKeydown.bind(this),
-            clear: this.clear.bind(this),
-            validate: this.validate.bind(this),
-        };
-        this.input.addEventListener("focus", this.#boundHandles.focus);
-        this.input.addEventListener("blur", this.#boundHandles.blur);
-
-        this.input.addEventListener("input", this.#boundHandles.input);
-
-        this.input.addEventListener("keydown", this.#boundHandles.keydown);
-
-        if (this.#clearButton) {
-            this.#clearButton.addEventListener(
+        if (this._clearButton) {
+            this._clearButton.addEventListener(
                 "click",
-                this.#boundHandles.clear
+                this._boundHandles.clear
             );
         }
 
-        this.input.addEventListener("change", this.#boundHandles.validate);
-    }
-
-    #handleFocus() {
-        this.isFocused = true;
-        this._container.classList.add("input-field-focused");
-        this.#updateClearButton();
-    }
-
-    #handleBlur() {
-        this.isFocused = false;
-        this._container.classList.remove("input-field-focused");
-        this.validate();
-    }
-
+        this.input.addEventListener("change", this._boundHandles.validate);
+    },
     /**
      * @param {Event} e
      */
-    #handleInput(e) {
-        this.#updateClearButton();
-        this.#updateCounter();
-        this.#triggerInputEvent(e);
-    }
+    _handleFocus: function (e) {
+        this.isFocused = true;
+        this._container.className += " input-field-focused";
+        this._updateClearButton();
+        this._triggerFocusEvent(e);
+    },
+    /**
+     * @param {Event} e
+     */
+    _handleBlur: function (e) {
+        this.isFocused = false;
+
+        var classes = this._container.className.split(" ");
+        var newClasses = [];
+        for (var i = 0; i < classes.length; i++) {
+            if (classes[i] !== "input-field-focused") {
+                newClasses.push(classes[i]);
+            }
+        }
+        this._container.className = newClasses.join(" ");
+
+        this.validate();
+        this._triggerBlurEvent(e);
+    },
+    /**
+     * @param {Event} e
+     */
+    _handleInput: function (e) {
+        this._updateClearButton();
+        this._updateCounter();
+        this._triggerInputEvent(e);
+    },
 
     /**
      * @param {KeyboardEvent} e
      */
-    #handleKeydown(e) {
-        if (e.key === "Escape" && this._options.showClear) {
+    _handleKeydown: function (e) {
+        var key = e.key || e.keyCode;
+
+        if ((key === "Escape" || key === 27) && this._options.showClear) {
             this.clear();
             e.preventDefault();
         }
 
-        if (e.key === "Enter") {
+        if (key === "Enter" || key === 13) {
             this._triggerSubmit();
         }
-    }
+    },
 
-    #updateClearButton() {
-        if (this.#clearButton) {
-            const hasValue = this.input.value.length > 0;
-            this.#clearButton.style.display = hasValue ? "block" : "none";
+    _updateClearButton: function () {
+        if (this._clearButton) {
+            var hasValue = this.input.value.length > 0;
+            this._clearButton.style.display = hasValue ? "block" : "none";
         }
-    }
+    },
 
-    #updateCounter() {
-        if (this.#counter && this._options.maxLength) {
-            const current = this.input.value.length;
-            const max = this._options.maxLength;
+    _updateCounter: function () {
+        if (this._counter && this._options.maxLength) {
+            var current = this.input.value.length;
+            var max = this._options.maxLength;
 
-            if (this.#counterCurrent) {
-                this.#counterCurrent.textContent = String(current);
+            if (this._counterCurrent) {
+                this._counterCurrent.textContent = String(current);
             }
-            if (this.#counterMax) {
-                this.#counterMax.textContent = String(max);
+            if (this._counterMax) {
+                this._counterMax.textContent = String(max);
             }
+
             // Change color when near max
             if (current > max * 0.9) {
-                this.#counter.classList.add("input-field-counter-warning");
+                var counterClasses = this._counter.className.split(" ");
+                if (
+                    counterClasses.indexOf("input-field-counter-warning") === -1
+                ) {
+                    this._counter.className += " input-field-counter-warning";
+                }
             } else {
-                this.#counter.classList.remove("input-field-counter-warning");
+                this._counter.className = this._counter.className
+                    .split(" ")
+                    .filter(function (cls) {
+                        return cls !== "input-field-counter-warning";
+                    })
+                    .join(" ");
             }
 
             if (current > max) {
-                this.#counter.classList.add("input-field-counter-error");
+                var counterClasses = this._counter.className.split(" ");
+                if (
+                    counterClasses.indexOf("input-field-counter-error") === -1
+                ) {
+                    this._counter.className += " input-field-counter-error";
+                }
             } else {
-                this.#counter.classList.remove("input-field-counter-error");
+                this._counter.className = this._counter.className
+                    .split(" ")
+                    .filter(function (cls) {
+                        return cls !== "input-field-counter-error";
+                    })
+                    .join(" ");
             }
         }
-    }
+    },
 
-    validate() {
+    validate: function () {
         if (!this._options.validation) {
             this.isValid = true;
             return true;
         }
 
-        const value = this.input.value;
-        let isValid = true;
-        let message = "";
+        var value = this.input.value;
+        var isValid = true;
+        var message = "";
 
         // Basic validation HTML
         if (this._options.required && !value.trim()) {
@@ -278,13 +341,15 @@ class InputField {
             value.length < this._options.minLength
         ) {
             isValid = false;
-            message = `Minimum length is ${this._options.minLength} characters`;
+            message =
+                "Minimum length is " + this._options.minLength + " characters";
         } else if (
             this._options.maxLength &&
             value.length > this._options.maxLength
         ) {
             isValid = false;
-            message = `Maximum length is ${this._options.maxLength} characters`;
+            message =
+                "Maximum length is " + this._options.maxLength + " characters";
         } else if (
             this._options.pattern &&
             !new RegExp(this._options.pattern).test(value)
@@ -295,7 +360,7 @@ class InputField {
 
         // Custom validation
         if (isValid && typeof this._options.validation === "function") {
-            const customValidation = this._options.validation(value);
+            var customValidation = this._options.validation(value);
             if (customValidation && !customValidation.isValid) {
                 isValid = false;
                 message = customValidation.message || "Invalid value";
@@ -307,162 +372,253 @@ class InputField {
         this.updateValidationState();
 
         return isValid;
-    }
+    },
 
-    updateValidationState() {
-        if (this.#validationElement) {
-            if (!this.isValid) {
-                this.#validationElement.textContent = this._validationMessage;
-                this.#validationElement.style.display = "block";
-                this._container.classList.add("input-field-invalid");
-                this._container.classList.remove("input-field-valid");
-            } else if (this.input.value.length > 0) {
-                this.#validationElement.style.display = "none";
-                this._container.classList.add("input-field-valid");
-                this._container.classList.remove("input-field-invalid");
-            } else {
-                this.#validationElement.style.display = "none";
-                this._container.classList.remove(
-                    "input-field-valid",
-                    "input-field-invalid"
-                );
+    updateValidationState: function () {
+        if (!this.isValid) {
+            this._validationElement.textContent = this._validationMessage;
+            this._validationElement.style.display = "block";
+
+            var containerClasses = this._container.className.split(" ");
+            if (containerClasses.indexOf("input-field-invalid") === -1) {
+                this._container.className += " input-field-invalid";
             }
-        }
-    }
 
-    #updateState() {
-        this.#updateClearButton();
-        this.#updateCounter();
+            this._container.className = this._container.className
+                .split(" ")
+                .filter(function (cls) {
+                    return cls !== "input-field-valid";
+                })
+                .join(" ");
+        } else if (this.input.value.length > 0) {
+            this._validationElement.style.display = "none";
+
+            var containerClasses = this._container.className.split(" ");
+            if (containerClasses.indexOf("input-field-valid") === -1) {
+                this._container.className += " input-field-valid";
+            }
+
+            this._container.className = this._container.className
+                .split(" ")
+                .filter(function (cls) {
+                    return cls !== "input-field-invalid";
+                })
+                .join(" ");
+        } else {
+            this._validationElement.style.display = "none";
+            this._container.className = this._container.className
+                .split(" ")
+                .filter(function (cls) {
+                    return (
+                        cls !== "input-field-valid" &&
+                        cls !== "input-field-invalid"
+                    );
+                })
+                .join(" ");
+        }
+    },
+
+    _updateState: function () {
+        this._updateClearButton();
+        this._updateCounter();
         this.validate();
-    }
+    },
 
     // Public API
-    getValue() {
-        return this.input.value;
-    }
+    getValue: function () {
+        return this.input.value.trim();
+    },
 
     /**
      * @param {string} value
      */
-    setValue(value) {
+    setValue: function (value) {
         this.input.value = value;
-        this.#updateState();
-        this.#triggerChange();
-    }
+        this._updateState();
+        this._triggerChange();
+    },
 
-    clear(bFocus = true) {
+    /**
+     * @param {boolean} [bFocus]
+     */
+    clear: function (bFocus) {
+        bFocus = bFocus !== undefined ? bFocus : true;
         this.setValue("");
         if (bFocus) {
             this.input.focus();
         }
-    }
+    },
 
-    focus() {
+    focus: function () {
         this.input.focus();
-    }
+    },
 
-    blur() {
+    blur: function () {
         this.input.blur();
-    }
+    },
 
-    enable() {
+    enable: function () {
         this.input.disabled = false;
         this._options.disabled = false;
-        this._container.classList.remove("input-field-disabled");
-    }
 
-    disable() {
+        this._container.className = this._container.className
+            .split(" ")
+            .filter(function (cls) {
+                return cls !== "input-field-disabled";
+            })
+            .join(" ");
+    },
+
+    disable: function () {
         this.input.disabled = true;
         this._options.disabled = true;
-        this._container.classList.add("input-field-disabled");
-    }
+
+        var containerClasses = this._container.className.split(" ");
+        if (containerClasses.indexOf("input-field-disabled") === -1) {
+            this._container.className += " input-field-disabled";
+        }
+    },
 
     /**
-     * @param {Function} callback
-     * @returns
+     * @param {function(InputEventType): void} callback
+     * @returns {Object}
      */
-    subscribe(callback) {
+    subscribe: function (callback) {
+        var self = this;
         this._subscribers.push(callback);
+
         return {
-            unsubscribe: () => {
-                this._subscribers = this._subscribers.filter(
-                    (cb) => cb !== callback
-                );
+            unsubscribe: function () {
+                self._subscribers = self._subscribers.filter(function (cb) {
+                    return cb !== callback;
+                });
             },
         };
-    }
+    },
 
     /**
      * @param {Event} e
      */
-    #triggerInputEvent(e) {
-        const detail = {
+    _triggerInputEvent: function (e) {
+        var detail = {
             value: this.input.value,
             originalEvent: e,
         };
 
-        this._subscribers.forEach((cb) =>
+        this._subscribers.forEach(function (cb) {
             cb({
                 type: "inputfield:input",
-                detail,
-            })
-        );
-    }
+                detail: detail,
+            });
+        });
+    },
 
-    #triggerChange() {
-        const detail = {
+    /**
+     * @param {Event} e
+     */
+    _triggerFocusEvent: function (e) {
+        var detail = {
+            value: this.input.value,
+            originalEvent: e,
+        };
+
+        this._subscribers.forEach(function (cb) {
+            cb({
+                type: "inputfield:focus",
+                detail: detail,
+            });
+        });
+    },
+
+    /**
+     * @param {Event} e
+     */
+    _triggerBlurEvent: function (e) {
+        var detail = {
+            value: this.input.value,
+            originalEvent: e,
+        };
+
+        this._subscribers.forEach(function (cb) {
+            cb({
+                type: "inputfield:blur",
+                detail: detail,
+            });
+        });
+    },
+
+    _triggerChange: function () {
+        var detail = {
             value: this.input.value,
             isValid: this.isValid,
         };
 
-        this._subscribers.forEach((cb) =>
+        this._subscribers.forEach(function (cb) {
             cb({
                 type: "inputfield:change",
-                detail,
-            })
-        );
-    }
+                detail: detail,
+            });
+        });
+    },
 
-    _triggerSubmit() {
-        const detail = {
+    _triggerSubmit: function () {
+        var detail = {
             value: this.input.value,
             isValid: this.isValid,
         };
 
-        this._subscribers.forEach((cb) =>
+        this._subscribers.forEach(function (cb) {
             cb({
                 type: "inputfield:submit",
-                detail,
-            })
-        );
-    }
+                detail: detail,
+            });
+        });
+    },
 
-    destroy() {
+    destroy: function () {
         this._subscribers = [];
-        try {
-            this.input.removeEventListener("focus", this.#boundHandles.focus);
-            this.input.removeEventListener("blur", this.#boundHandles.blur);
-            this.input.removeEventListener("input", this.#boundHandles.input);
-            this.input.removeEventListener(
-                "keydown",
-                this.#boundHandles.keydown
-            );
-            if (this.#clearButton) {
-                this.#clearButton.removeEventListener(
-                    "click",
-                    this.#boundHandles.clear
+
+        if (this._boundHandles) {
+            try {
+                this.input.removeEventListener(
+                    "focus",
+                    this._boundHandles.focus
                 );
+                this.input.removeEventListener("blur", this._boundHandles.blur);
+                this.input.removeEventListener(
+                    "input",
+                    this._boundHandles.input
+                );
+                this.input.removeEventListener(
+                    "keydown",
+                    this._boundHandles.keydown
+                );
+
+                if (this._clearButton) {
+                    this._clearButton.removeEventListener(
+                        "click",
+                        this._boundHandles.clear
+                    );
+                }
+
+                this.input.removeEventListener(
+                    "change",
+                    this._boundHandles.validate
+                );
+            } catch (error) {
+                console.error(error);
             }
-            this.input.removeEventListener(
-                "change",
-                this.#boundHandles.validate
-            );
-        } catch (error) {
-            console.error(error);
         }
+
         this._container.innerHTML = "";
-        this._container.classList.remove("input-field-container");
-    }
-}
+
+        this._container.className = this._container.className
+            .split(" ")
+            .filter(function (cls) {
+                return cls !== "input-field-container";
+            })
+            .join(" ");
+    },
+};
 
 export { InputField };
