@@ -71,7 +71,11 @@
                     "light": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
                     "dark": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
                 },
-                "screenshots": ["resources/store/screenshots/screen_1.png"],
+                "screenshots": [
+                    "resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+                ],
                 "icons": {
                     "light": "resources/store/icons",
                     "dark": "resources/store/icons"
