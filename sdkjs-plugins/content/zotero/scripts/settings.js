@@ -77,7 +77,8 @@ function SettingsPage(router, displayNoneClass) {
      * @param {Promise<void>} promise
      */
     this._onChangeState = function (promise) {};
-    this._apiKeyMessage = new Message("apiKeyMessage", { type: "error" });
+    this._styleMessage = new Message("styleMessage", { type: "error" });
+    this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
     this._LANGUAGES = [
         ["af-ZA", "Afrikaans"],
@@ -268,10 +269,10 @@ SettingsPage.prototype._addEventListeners = function () {
             })
             .catch(function (error) {
                 console.error(error);
-                showError(translate("Failed to upload file"));
+                self._styleMessage.show(translate("Invalid CSL style file"));
             })
             .finally(function () {
-                showLoader(false);
+                self._hideLoader();
             });
     };
 
@@ -309,7 +310,7 @@ SettingsPage.prototype._addEventListeners = function () {
      * @param {Boolean} isClick - Whether the style was selected manually or not.
      */
     this._styleSelect.onselectchange = function (inp, styleName, isClick) {
-        isClick && self._showLoader(true);
+        isClick && self._showLoader();
         self._styleSelect.oninput(inp, "");
 
         return self._cslStylesManager
@@ -327,11 +328,11 @@ SettingsPage.prototype._addEventListeners = function () {
             .catch(function (err) {
                 console.error(err);
                 if (typeof err === "string") {
-                    self._showError(err);
+                    self._styleMessage.show(translate(err));
                 }
             })
             .finally(function () {
-                isClick && self._showLoader(false);
+                isClick && self._hideLoader();
             });
     };
 
@@ -358,7 +359,8 @@ SettingsPage.prototype._addEventListeners = function () {
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
-    this._apiKeyMessage.close();
+    this._langMessage.close();
+    this._styleMessage.close();
 };
 
 SettingsPage.prototype._hide = function () {
@@ -666,4 +668,13 @@ SettingsPage.prototype._selectInput = function (input, el, list, isClick) {
         input.onselectchange(input, val, isClick);
     }
     list.classList.add(this._displayNoneClass);
+};
+
+SettingsPage.prototype._showLoader = function () {
+    this._cancelBtn.disable();
+    this._saveBtn.disable();
+};
+SettingsPage.prototype._hideLoader = function () {
+    this._cancelBtn.enable();
+    this._saveBtn.enable();
 };

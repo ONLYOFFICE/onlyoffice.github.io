@@ -87,6 +87,7 @@
 /**
  * @typedef {Object} MessageOptionsType
  * @property {"error"|"warning"|"info"|"success"} type
+ * @property {string} [title]
  * @property {string} [text]
  * @property {number} [duration]
  * @property {boolean} [closeButton]

@@ -148,19 +148,20 @@ input[type="text"] {
             opacity: 0;
         }
 
-#controlsHolder {
+.controls-holder {
     padding-top: 4px;
     overflow-y: visible;
 }
-    #controlsHolder button {
+    .controls-holder button {
         margin-top: 8px;
     }
-    #controlsHolder .custom-button-container:first-child {
-        width: calc(100% - 28px);
-    }
-    #controlsHolder .custom-button-secondary {
+    .controls-holder > .custom-button-container {
         width: 100%;
     }
+
+#buttonsWrapper .custom-button-container:first-child {
+    width: calc(100% - 28px);
+}
 
 #omitAuthorDiv {
     margin-bottom: 15px;
@@ -255,12 +256,13 @@ input[type="text"] {
     display: flex;
     flex-direction: column;
     position: absolute;
+    z-index: 1;
     border-width: 1px;
     border-style: solid;
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    bottom: 22px;
+    top: 22px;
     max-height: 158px !important;
 	min-height: 158px !important;
     overflow-x: hidden;
@@ -526,6 +528,10 @@ input[type="text"] {
         -webkit-animation: cssload-loading-ani1 0.58s linear infinite;
         -moz-animation: cssload-loading-ani1 0.58s linear infinite;
     }
+
+.message-container {
+    margin-top: 16px;
+}    
 
 @keyframes cssload-loading-ani1 {
     100% {
