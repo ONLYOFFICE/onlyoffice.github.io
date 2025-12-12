@@ -30,6 +30,7 @@
 /// <reference path="./shared/ui/button.js" />
 /// <reference path="./login.js" />
 /// <reference path="./settings.js" />
+/// <reference path="./theme.js" />
 
 (function () {
     var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
