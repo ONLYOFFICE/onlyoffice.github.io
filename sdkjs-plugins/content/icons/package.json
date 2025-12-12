@@ -18,7 +18,6 @@
         "@rollup/plugin-terser": "^0.4.4",
         "autoprefixer": "^10.4.22",
         "cssnano": "^7.1.2",
-        "postcss-custom-properties": "^14.0.6",
         "postcss-import": "^16.1.1",
         "postcss-nested": "^7.0.2",
         "rollup": "^4.50.1",
