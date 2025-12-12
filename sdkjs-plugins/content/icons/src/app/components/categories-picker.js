@@ -33,7 +33,7 @@
 // @ts-check
 import { SelectBox } from "./selectbox/selectbox.js";
 
-/** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
+/// <reference path="../types.js" />
 
 class CategoriesPicker {
     #categories;

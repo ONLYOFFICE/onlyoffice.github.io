@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
+/// <reference path="../types.js" />
 
 import { Button } from "./button/button.js";
 

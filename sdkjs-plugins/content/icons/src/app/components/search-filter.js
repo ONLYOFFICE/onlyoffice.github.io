@@ -34,8 +34,8 @@
 
 import { SearchInput } from "./input/search-input.js";
 
-/** @typedef {import('./input/options-type.js').InputEventType} InputEventType */
-/** @typedef {import('../types.js').IconCategoryType} IconCategoryType */
+/// <reference path="../types.js" />
+/// <reference path="./input/types.js" />
 
 class SearchFilter {
     #catalogOfIcons;
