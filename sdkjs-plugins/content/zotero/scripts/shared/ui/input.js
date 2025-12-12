@@ -130,6 +130,10 @@ InputField.prototype = {
     /** @type {HTMLDivElement} */
     // @ts-ignore
     _validationElement: null,
+
+    /**
+     * @private
+     */
     _createDOM: function () {
         var parent = this.input.parentNode;
 
@@ -221,6 +225,9 @@ InputField.prototype = {
         }
         inputFieldMain.appendChild(this.input);
     },
+    /**
+     * @private
+     */
     _bindEvents: function () {
         this.input.addEventListener("focus", this._boundHandles.focus);
         this.input.addEventListener("blur", this._boundHandles.blur);
@@ -245,6 +252,7 @@ InputField.prototype = {
     },
     /**
      * @param {Event} e
+     * @private
      */
     _handleFocus: function (e) {
         this.isFocused = true;
@@ -254,6 +262,7 @@ InputField.prototype = {
     },
     /**
      * @param {Event} e
+     * @private
      */
     _handleBlur: function (e) {
         this.isFocused = false;
@@ -272,6 +281,7 @@ InputField.prototype = {
     },
     /**
      * @param {Event} e
+     * @private
      */
     _handleInput: function (e) {
         this._updateClearButton();
@@ -281,6 +291,7 @@ InputField.prototype = {
 
     /**
      * @param {KeyboardEvent} e
+     * @private
      */
     _handleKeydown: function (e) {
         var key = e.key || e.keyCode;
@@ -295,6 +306,9 @@ InputField.prototype = {
         }
     },
 
+    /**
+     * @private
+     */
     _updateClearButton: function () {
         if (this._clearButton) {
             var hasValue = this.input.value.length > 0;
@@ -302,6 +316,9 @@ InputField.prototype = {
         }
     },
 
+    /**
+     * @private
+     */
     _updateCounter: function () {
         if (this._counter && this._options.maxLength) {
             var current = this.input.value.length;
@@ -445,6 +462,9 @@ InputField.prototype = {
         }
     },
 
+    /**
+     * @private
+     */
     _updateState: function () {
         this._updateClearButton();
         this._updateCounter();
@@ -525,6 +545,7 @@ InputField.prototype = {
 
     /**
      * @param {Event} e
+     * @private
      */
     _triggerInputEvent: function (e) {
         var detail = {
@@ -542,6 +563,7 @@ InputField.prototype = {
 
     /**
      * @param {Event} e
+     * @private
      */
     _triggerFocusEvent: function (e) {
         var detail = {
@@ -559,6 +581,7 @@ InputField.prototype = {
 
     /**
      * @param {Event} e
+     * @private
      */
     _triggerBlurEvent: function (e) {
         var detail = {
@@ -574,6 +597,9 @@ InputField.prototype = {
         });
     },
 
+    /**
+     * @private
+     */
     _triggerChange: function () {
         var detail = {
             value: this.input.value,
@@ -588,6 +614,9 @@ InputField.prototype = {
         });
     },
 
+    /**
+     * @private
+     */
     _triggerSubmit: function () {
         var detail = {
             value: this.input.value,

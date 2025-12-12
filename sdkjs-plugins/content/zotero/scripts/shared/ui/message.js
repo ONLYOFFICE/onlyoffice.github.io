@@ -20,177 +20,196 @@ function Message(container, options) {
     } else {
         throw new Error("Invalid container element");
     }
-    /** @type {MessageOptionsType} */
-    this._options = Object.assign(options, {
-        type: options.type || "info",
-        text: options.text || "",
-        title: options.title || "",
-        duration: options.duration || 0,
-        closeButton:
-            options.closeButton !== undefined ? options.closeButton : true,
-        autoClose: options.autoClose !== undefined ? options.autoClose : true,
-        closeOnClickOutside:
-            options.closeOnClickOutside !== undefined
-                ? options.closeOnClickOutside
-                : true,
-    });
-
-    this._element = null;
-    this._timeoutId = null;
-    /** @type {null | function(MouseEvent): void} */
-    this._outsideClickListener = null;
+    /**
+     * @type {MessageOptionsType}
+     * @private
+     */
+    this._options = Object.assign(this._options, options);
 }
 
-Message.prototype._create = function () {
-    var messageEl = document.createElement("div");
-    messageEl.className = "message message-" + this._options.type;
-    messageEl.setAttribute("role", "alert");
+Message.prototype = {
+    constructor: Message,
 
-    let title = this._options.title;
-    if (!title) {
-        title = "Error";
-        switch (this._options.type) {
-            case "success":
-                title = "Success";
-                break;
-            case "warning":
-                title = "Warning";
-                break;
-            case "info":
-                title = "Information";
-                break;
+    _options: {
+        type: "info",
+        text: "",
+        title: "",
+        duration: 0,
+        closeButton: true,
+        autoClose: false,
+        closeOnClickOutside: true,
+    },
+    /**
+     * @type {null | function(MouseEvent): void}
+     * @private
+     */
+    _outsideClickListener: null,
+    /**
+     * @type {null | HTMLElement}
+     * @private
+     */
+    _element: null,
+    /**
+     * @type {null | number}
+     * @private
+     */
+    _timeoutId: null,
+
+    /**
+     * @returns {HTMLElement}
+     * @private
+     */
+    _create: function () {
+        var messageEl = document.createElement("div");
+        messageEl.className = "message message-" + this._options.type;
+        messageEl.setAttribute("role", "alert");
+
+        let title = this._options.title;
+        if (!title) {
+            title = "Error";
+            switch (this._options.type) {
+                case "success":
+                    title = "Success";
+                    break;
+                case "warning":
+                    title = "Warning";
+                    break;
+                case "info":
+                    title = "Information";
+                    break;
+            }
         }
-    }
-    let text = this._options.text;
-    if (!text) {
-        text = "";
-        switch (this._options.type) {
-            case "success":
-                text = "Operation completed successfully.";
-                break;
-            case "warning":
-                text = "Please be cautious.";
-                break;
-            case "error":
-                text = "Something went wrong.";
-                break;
+        let text = this._options.text;
+        if (!text) {
+            text = "";
+            switch (this._options.type) {
+                case "success":
+                    text = "Operation completed successfully.";
+                    break;
+                case "warning":
+                    text = "Please be cautious.";
+                    break;
+                case "error":
+                    text = "Something went wrong.";
+                    break;
+            }
         }
-    }
 
-    messageEl.innerHTML =
-        '<div class="message-content">' +
-        '<span class="message-title">' +
-        title +
-        "</span>" +
-        '<span class="message-text">' +
-        text +
-        "</span>" +
-        "</div>";
+        messageEl.innerHTML =
+            '<div class="message-content">' +
+            '<span class="message-title">' +
+            title +
+            "</span>" +
+            '<span class="message-text">' +
+            text +
+            "</span>" +
+            "</div>";
 
-    if (this._options.closeButton) {
-        var closeBtn = document.createElement("button");
-        closeBtn.className = "message-close";
-        closeBtn.textContent = "×";
-        closeBtn.setAttribute("aria-label", "Close");
+        if (this._options.closeButton) {
+            var closeBtn = document.createElement("button");
+            closeBtn.className = "message-close";
+            closeBtn.textContent = "×";
+            closeBtn.setAttribute("aria-label", "Close");
 
-        closeBtn.onclick = this.close.bind(this);
-        messageEl.appendChild(closeBtn);
-    }
+            closeBtn.onclick = this.close.bind(this);
+            messageEl.appendChild(closeBtn);
+        }
 
-    return messageEl;
-};
+        return messageEl;
+    },
 
-Message.prototype.addOutsideClickListener = function () {
-    if (this._outsideClickListener) {
-        document.removeEventListener("click", this._outsideClickListener);
-    }
+    addOutsideClickListener: function () {
+        if (this._outsideClickListener) {
+            document.removeEventListener("click", this._outsideClickListener);
+        }
 
-    const self = this;
-    this._outsideClickListener = function (/** @type {MouseEvent} */ e) {
-        if (e.target instanceof HTMLElement === false) {
+        const self = this;
+        this._outsideClickListener = function (/** @type {MouseEvent} */ e) {
+            if (e.target instanceof HTMLElement === false) {
+                return;
+            }
+            if (self._element && !self._element.contains(e.target)) {
+                self.close();
+            }
+        };
+
+        setTimeout(function () {
+            if (!self._outsideClickListener) {
+                return;
+            }
+            document.addEventListener("click", self._outsideClickListener);
+        }, 10);
+    },
+
+    removeOutsideClickListener: function () {
+        if (this._outsideClickListener) {
+            document.removeEventListener("click", this._outsideClickListener);
+            this._outsideClickListener = null;
+        }
+    },
+
+    /**
+     * @param {string} [text]
+     * @param {string} [title]
+     * @returns
+     */
+    show: function (text, title) {
+        if (!this.container.classList.contains("message-container")) {
+            this.container.classList.add("message-container");
+        }
+
+        if (title) {
+            this._options.title = title;
+        }
+
+        if (text) {
+            this._options.text = text;
+        }
+
+        var messageEl = this._create();
+        this._element = messageEl;
+        this.container.appendChild(messageEl);
+
+        setTimeout(function () {
+            messageEl.style.opacity = "1";
+            messageEl.style.transform = "translateY(0)";
+        }, 10);
+
+        if (this._options.autoClose && Number(this._options.duration) > 0) {
+            this._timeoutId = setTimeout(
+                this.close.bind(this),
+                this._options.duration
+            );
+        }
+
+        if (this._options.closeOnClickOutside) {
+            this.addOutsideClickListener();
+        }
+
+        return this;
+    },
+
+    close: function () {
+        const self = this;
+        if (!this._element || !this._element.parentNode) {
             return;
         }
-        if (self._element && !self._element.contains(e.target)) {
-            self.close();
+
+        if (this._timeoutId) {
+            clearTimeout(this._timeoutId);
+            this._timeoutId = null;
         }
-    };
 
-    setTimeout(function () {
-        if (!self._outsideClickListener) {
-            return;
-        }
-        document.addEventListener("click", self._outsideClickListener);
-    }, 10);
-};
+        this.removeOutsideClickListener();
 
-Message.prototype.removeOutsideClickListener = function () {
-    if (this._outsideClickListener) {
-        document.removeEventListener("click", this._outsideClickListener);
-        this._outsideClickListener = null;
-    }
-};
+        var _element = this._element;
+        _element.style.opacity = "0";
+        _element.style.transform = "translateY(-20px)";
 
-/**
- * @param {string} [text]
- * @param {string} [title]
- * @returns
- */
-Message.prototype.show = function (text, title) {
-    if (!this.container.classList.contains("message-container")) {
-        this.container.classList.add("message-container");
-    }
-
-    if (title) {
-        this._options.title = title;
-    }
-
-    if (text) {
-        this._options.text = text;
-    }
-
-    var messageEl = this._create();
-    this._element = messageEl;
-    this.container.appendChild(messageEl);
-
-    setTimeout(function () {
-        messageEl.style.opacity = "1";
-        messageEl.style.transform = "translateY(0)";
-    }, 10);
-
-    if (this._options.autoClose && Number(this._options.duration) > 0) {
-        this._timeoutId = setTimeout(
-            this.close.bind(this),
-            this._options.duration
-        );
-    }
-
-    if (this._options.closeOnClickOutside) {
-        this.addOutsideClickListener();
-    }
-
-    return this;
-};
-
-Message.prototype.close = function () {
-    const self = this;
-    if (!this._element || !this._element.parentNode) {
-        return;
-    }
-
-    if (this._timeoutId) {
-        clearTimeout(this._timeoutId);
-        this._timeoutId = null;
-    }
-
-    this.removeOutsideClickListener();
-
-    var _element = this._element;
-    _element.style.opacity = "0";
-    _element.style.transform = "translateY(-20px)";
-
-    setTimeout(function () {
-        if (_element.parentNode) {
-            _element.parentNode.removeChild(_element);
-        }
-    }, 300);
+        setTimeout(function () {
+            if (_element.parentNode) {
+                _element.parentNode.removeChild(_element);
+            }
+        }, 300);
+    },
 };
