@@ -330,7 +330,6 @@ input[type="text"] {
     flex-direction: column;
     border-style: solid;
     border-width: 1px;
-    border-radius: 1px;
     box-sizing: border-box;
     margin-top: 6px;
     padding: 4px 6px 6px 6px;
@@ -530,7 +529,7 @@ input[type="text"] {
     }
 
 .message-container {
-    margin-top: 16px;
+    margin-top: 1px;
 }    
 
 @keyframes cssload-loading-ani1 {
@@ -633,39 +632,6 @@ input[type="text"] {
     }
 }
 /* end loader */
-
-body.theme-light {
-    .doc {
-        background-color: var(--input-bg);
-        border-color: var(--input-border);
-    }
-    .scrollThumb {
-        box-shadow: 0 0 8px 8px var(--scroll) inset;
-    }
-    .scrollThumb:hover {
-        box-shadow: 0 0 8px 8px var(--scroll-hover) inset;
-    }
-    .scrollThumb.scrolling {
-        box-shadow: 0 0 8px 8px var(--scroll-active) inset;
-    }
-}
-
-body.theme-dark {
-    .doc {
-        background-color: var(--input-bg-dark);
-        border-color: var(--input-border-dark);
-    }
-    .scrollThumb {
-        box-shadow: 0 0 8px 8px var(--scroll-dark) inset;
-    }
-    .scrollThumb:hover {
-        box-shadow: 0 0 8px 8px var(--scroll-hover-dark) inset;
-    }
-    .scrollThumb.scrolling {
-        box-shadow: 0 0 8px 8px var(--scroll-active-dark) inset;
-    }
-}
-
 
 .hidden {
     display: none;
