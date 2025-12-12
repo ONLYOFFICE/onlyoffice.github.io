@@ -62,6 +62,9 @@
     <script defer src="scripts/settings.js"></script>
     <script defer src="scripts/router.js"></script>
     <script defer src="scripts/code.js"></script>
+    <script defer src="scripts/theme.js"></script>
+    <style id="componentsStyles"></style>
+    <style id="pluginStyles"></style>
 </head>
 
 <body id="body" spellcheck="false" class="noselect">
@@ -84,7 +87,7 @@
                 </p>
                 <div class="mrtop label">
                     <span class="i18n">API Key</span>
-                    <input id="apiKeyField" class="form-control" type="text" placeholder="API Key" />
+                    <input id="apiKeyField" type="text" placeholder="API Key" />
                     <button id="saveApiKeyBtn" class="i18n"
                         style="margin-top: 16px; width: 100%;">Save</button>
                     <div id="apiKeyMessage"></div>
@@ -110,7 +113,7 @@
                 <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
                 <div id="searchWrapper">
                     <div id="librarySelectList"></div>
-                    <input id="searchField" autocomplete="off" class="form-control i18n" type="text"
+                    <input id="searchField" autocomplete="off" class="i18n" type="text"
                         placeholder="Search references by author, title" />
                     <button id="filterButton">
                         <svg width="12" height="11" viewBox="0 0 12 11" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
@@ -148,7 +151,7 @@
                         </button>
                     </div>
                     <button id="insertBibBtn" class="i18n">Insert Bibliography</button>
-                    <button id="refreshBtn" class="control i18n">Refresh</button>
+                    <button id="refreshBtn" class="i18n">Refresh</button>
 
                     <div id="omitAuthorDiv">
                         <label for="omitAuthor" class="i18n">Omit Author</label>

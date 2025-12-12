@@ -390,11 +390,11 @@
     }
 
     /**
-     * @param {Theme} theme - The new theme of the SDK.
+     * @param {ThemeColors} theme - The new theme of the SDK.
      */
     Asc.plugin.onThemeChanged = function (theme) {
-        // console.warn("theme", theme);
         window.Asc.plugin.onThemeChangedBase(theme);
+        Theme.addStylesForComponents(theme);
         var rules =
             ".selectArrow > span { background-color: " +
             window.Asc.plugin.theme["text-normal"] +
@@ -441,13 +441,43 @@
             "; color : " +
             window.Asc.plugin.theme["text-normal"] +
             "}";
-        var styleTheme = document.createElement("style");
-        styleTheme.type = "text/css";
-        styleTheme.innerHTML = rules;
-        document.getElementsByTagName("head")[0].appendChild(styleTheme);
+
+        rules +=
+            ".doc { border-color: " +
+            theme["border-regular-control"] +
+            "; background-color: " +
+            theme["background-normal"] +
+            "; }\n";
+        rules +=
+            ".scrollThumb { box-shadow: 0 0 8px 8px " +
+            theme["highlight-button-hover"] +
+            " inset; }\n";
+        rules +=
+            ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " +
+            theme["canvas-scroll-thumb-pressed"] +
+            " inset; }\n";
+        rules +=
+            ".scrollThumb:hover { box-shadow: 0 0 8px 8px " +
+            theme["canvas-scroll-thumb-hover"] +
+            " inset; }\n";
+        if (
+            ["theme-white", "theme-night"].indexOf(theme.name) !== -1 ||
+            ["theme-white", "theme-night"].indexOf(theme.Name) !== -1
+        ) {
+            rules += ".doc { border-radius: 4px; }\n";
+        }
+
+        let styleTheme = document.getElementById("pluginStyles");
+        if (!styleTheme) {
+            styleTheme = document.createElement("style");
+            styleTheme.id = "pluginStyles";
+            styleTheme.innerHTML = rules;
+            document.getElementsByTagName("head")[0].appendChild(styleTheme);
+        } else {
+            styleTheme.innerHTML = rules;
+        }
 
         const themeType = theme.type || "light";
-
         const body = document.body;
         body.classList.remove("theme-dark");
         body.classList.remove("theme-light");
