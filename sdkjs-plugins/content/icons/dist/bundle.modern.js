@@ -2202,6 +2202,11 @@ function InputField(input, options) {
     this._counterCurrent = null;
     this._counterMax = null;
     this._validationElement = document.createElement("div");
+    if (this._options.type === "search") {
+        this._searchIcon = document.createElement("span");
+        this._boundHandles.search = this._triggerSubmit.bind(this);
+        this._container.classList.add("input-field-search");
+    }
     this._createDOM();
     this._bindEvents();
     this._updateState();
@@ -2293,6 +2298,11 @@ InputField.prototype = {
             this._clearButton.style.display = "none";
             this._clearButton.textContent = "×";
         }
+        if (this._options.showSearchIcon) {
+            this._searchIcon.classList.add("input-field-search-icon");
+            this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
+            inputFieldMain.appendChild(this._searchIcon);
+        }
         if (parent) {
             parent.insertBefore(fragment, this.input);
         }
@@ -2305,6 +2315,9 @@ InputField.prototype = {
         this.input.addEventListener("keydown", this._boundHandles.keydown);
         if (this._clearButton) {
             this._clearButton.addEventListener("click", this._boundHandles.clear);
+        }
+        if (this._options.showSearchIcon && this._boundHandles.search) {
+            this._searchIcon.addEventListener("click", this._boundHandles.search);
         }
         this.input.addEventListener("change", this._boundHandles.validate);
     },
@@ -2563,6 +2576,9 @@ InputField.prototype = {
                 if (this._clearButton) {
                     this._clearButton.removeEventListener("click", this._boundHandles.clear);
                 }
+                if (this._options.showSearchIcon && this._boundHandles.search) {
+                    this._searchIcon.removeEventListener("click", this._boundHandles.search);
+                }
                 this.input.removeEventListener("change", this._boundHandles.validate);
             } catch (error) {
                 console.error(error);
@@ -2573,43 +2589,6 @@ InputField.prototype = {
             return cls !== "input-field-container";
         }).join(" ");
     }
-};
-
-function SearchInput(input, options) {
-    InputField.call(this, input, _objectSpread2({
-        type: "search",
-        showClear: false,
-        showSearchIcon: true
-    }, options));
-}
-
-SearchInput.prototype = Object.create(InputField.prototype);
-
-SearchInput.prototype.constructor = SearchInput;
-
-SearchInput.prototype._createDOM = function() {
-    InputField.prototype._createDOM.call(this);
-    this._container.classList.add("input-field-search");
-    this._searchIcon = document.createElement("span");
-    this._boundHandle = this._triggerSubmit.bind(this);
-    if (this._options.showSearchIcon) {
-        var _this$_container$quer;
-        this._searchIcon.classList.add("input-field-search-icon");
-        this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
-        (_this$_container$quer = this._container.querySelector(".input-field-main")) === null || _this$_container$quer === void 0 || _this$_container$quer.appendChild(this._searchIcon);
-        this._searchIcon.addEventListener("click", this._boundHandle);
-    }
-};
-
-SearchInput.prototype.destroy = function() {
-    try {
-        if (this._options.showSearchIcon) {
-            this._searchIcon.removeEventListener("click", this._boundHandle);
-        }
-    } catch (e) {
-        console.error(e);
-    }
-    InputField.prototype.destroy.call(this);
 };
 
 var _catalogOfIcons = new WeakMap;
@@ -2637,8 +2616,11 @@ class SearchFilter {
         _classPrivateFieldSet2(_filteredCatalog, this, catalogOfIcons);
         _classPrivateFieldSet2(_catalogOfIcons, this, catalogOfIcons);
         _classPrivateFieldSet2(_text, this, "");
-        this.input = new SearchInput("searchFilter", {
-            autofocus: true
+        this.input = new InputField("searchFilter", {
+            autofocus: true,
+            type: "search",
+            showClear: false,
+            showSearchIcon: true
         });
         this.input.subscribe(event => {
             if (event.type !== "inputfield:input" || _classPrivateFieldGet2(_text, this) === event.detail.value) {
@@ -3104,7 +3086,6 @@ class Theme {
         }
         Theme.addStylesForComponents(theme);
         var themeName = theme.name;
-        console.warn(theme);
         if (!themes.has(themeName)) {
             if (theme.type === "dark") {
                 themeName = "theme-dark";
@@ -3120,47 +3101,21 @@ class Theme {
     }
     static addStylesForComponents(theme) {
         var styles = "";
-        if (theme["background-normal"]) {
-            styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".message { background-color: " + theme["background-normal"] + "; }\n";
-        }
-        if (theme["text-inverse"]) {
-            styles += ".custom-button-primary { color: " + theme["text-inverse"] + "; }\n";
-        }
-        if (theme["border-regular-control"]) {
-            styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".input-field-element,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".selectbox-search-input:focus,\n" + ".selectbox-option-divider,\n" + ".message { border-color: " + theme["border-regular-control"] + "; }\n";
-        }
-        if (theme["border-error"]) {
-            styles += ".input-field-invalid .input-field-element { border-color: " + theme["border-error"] + "; }\n";
-        }
-        if (theme["border-control-focus"]) {
-            styles += ".custom-button-icon-only:focus:not(:active):not(:hover),\n" + ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" + ".custom-button-secondary:focus:not(:active):not(:hover),\n" + ".input-field-element:focus,\n" + ".input-field-focused .input-field-element,\n" + ".selectbox-header:active,\n" + ".selectbox-header:focus,\n" + ".selectbox-header-open { border-color: " + theme["border-control-focus"] + "; }\n";
-        }
-        if (theme["highlight-button-hover"]) {
-            styles += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".selectbox-search,\n" + ".selectbox-option:hover { background-color: " + theme["highlight-button-hover"] + "; }\n";
-        }
-        if (theme["highlight-button-pressed"]) {
-            styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".selectbox-option-selected:hover,\n" + ".selectbox-option-selected { background-color: " + theme["highlight-button-pressed"] + "; }\n";
-            styles += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + theme["highlight-button-pressed"] + "; }\n";
-        }
-        if (theme["highlight-primary-dialog-button-hover"]) {
-            styles += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + theme["highlight-primary-dialog-button-hover"] + "; border-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
-        }
-        if (theme["background-primary-dialog-button"]) {
-            styles += ".custom-button-primary { background-color: " + theme["background-primary-dialog-button"] + "; border-color: " + theme["background-primary-dialog-button"] + "; }\n";
-        }
-        if (theme["background-toolbar-additional"]) {
-            styles += ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled { background-color: " + theme["background-toolbar-additional"] + "; border-color: " + theme["background-toolbar-additional"] + "; }\n";
-        }
-        if (theme["text-normal"]) {
-            styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element { color: " + theme["text-normal"] + "; }\n";
-            styles += ".input-field-search-icon svg { fill: " + theme["text-normal"] + "; }\n";
-        }
-        if (theme["text-secondary"]) {
-            styles += ".message-close:hover,\n" + ".input-field-clear:hover { color: " + theme["text-secondary"] + "; }\n";
-        }
-        if (theme["text-tertiary"]) {
-            styles += ".input-field-clear,\n" + ".message-container:hover .message-close,\n" + ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled,\n" + ".input-field-element::placeholder,\n" + ".selectbox-search-input::placeholder { color: " + theme["text-tertiary"] + "; }\n";
-        }
+        styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".message { background-color: " + theme["background-normal"] + "; }\n";
+        styles += ".custom-button-primary { color: " + theme["text-inverse"] + "; }\n";
+        styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".input-field-element,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".selectbox-search-input:focus,\n" + ".selectbox-option-divider,\n" + ".message { border-color: " + theme["border-regular-control"] + "; }\n";
+        styles += ".input-field-invalid .input-field-element { border-color: " + theme["border-error"] + "; }\n";
+        styles += ".custom-button-icon-only:focus:not(:active):not(:hover),\n" + ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" + ".custom-button-secondary:focus:not(:active):not(:hover),\n" + ".input-field-element:focus,\n" + ".input-field-focused .input-field-element,\n" + ".selectbox-header:active,\n" + ".selectbox-header:focus,\n" + ".selectbox-header-open { border-color: " + theme["border-control-focus"] + "; }\n";
+        styles += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".selectbox-search,\n" + ".selectbox-option:hover { background-color: " + theme["highlight-button-hover"] + "; }\n";
+        styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".selectbox-option-selected:hover,\n" + ".selectbox-option-selected { background-color: " + theme["highlight-button-pressed"] + "; }\n";
+        styles += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + theme["highlight-button-pressed"] + "; }\n";
+        styles += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + theme["highlight-primary-dialog-button-hover"] + "; border-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
+        styles += ".custom-button-primary { background-color: " + theme["background-primary-dialog-button"] + "; border-color: " + theme["background-primary-dialog-button"] + "; }\n";
+        styles += ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled { background-color: " + theme["background-toolbar-additional"] + "; border-color: " + theme["background-toolbar-additional"] + "; }\n";
+        styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element { color: " + theme["text-normal"] + "; }\n";
+        styles += ".input-field-search-icon svg { fill: " + theme["text-normal"] + "; }\n";
+        styles += ".message-close:hover,\n" + ".input-field-clear:hover { color: " + theme["text-secondary"] + "; }\n";
+        styles += ".input-field-clear,\n" + ".message-container:hover .message-close,\n" + ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled,\n" + ".input-field-element::placeholder,\n" + ".selectbox-search-input::placeholder { color: " + theme["text-tertiary"] + "; }\n";
         if ([ "theme-white", "theme-night" ].indexOf(theme.name) !== -1 || [ "theme-white", "theme-night" ].indexOf(theme.Name) !== -1) {
             styles += ".message,\n" + ".custom-button,\n" + ".selectbox-header,\n" + ".input-field-element { border-radius: 4px; }\n";
         }

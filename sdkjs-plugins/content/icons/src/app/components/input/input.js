@@ -75,6 +75,13 @@ function InputField(input, options) {
     this._counterMax = null;
     this._validationElement = document.createElement("div");
 
+    if (this._options.type === "search") {
+        /** @type {HTMLSpanElement} */
+        this._searchIcon = document.createElement("span");
+        this._boundHandles.search = this._triggerSubmit.bind(this);
+        this._container.classList.add("input-field-search");
+    }
+
     this._createDOM();
     this._bindEvents();
     this._updateState();
@@ -196,6 +203,18 @@ InputField.prototype = {
             this._clearButton.textContent = "×";
         }
 
+        if (this._options.showSearchIcon) {
+            this._searchIcon.classList.add("input-field-search-icon");
+            this._searchIcon.innerHTML =
+                '<svg width="14" height="14" viewBox="0 0 14 14" ' +
+                'fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                '<path fill-rule="evenodd" clip-rule="evenodd" ' +
+                'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' +
+                'fill="currentColor"/>' +
+                "</svg>";
+            inputFieldMain.appendChild(this._searchIcon);
+        }
+
         if (parent) {
             parent.insertBefore(fragment, this.input);
         }
@@ -211,6 +230,13 @@ InputField.prototype = {
             this._clearButton.addEventListener(
                 "click",
                 this._boundHandles.clear
+            );
+        }
+
+        if (this._options.showSearchIcon && this._boundHandles.search) {
+            this._searchIcon.addEventListener(
+                "click",
+                this._boundHandles.search
             );
         }
 
@@ -598,6 +624,13 @@ InputField.prototype = {
                     this._clearButton.removeEventListener(
                         "click",
                         this._boundHandles.clear
+                    );
+                }
+
+                if (this._options.showSearchIcon && this._boundHandles.search) {
+                    this._searchIcon.removeEventListener(
+                        "click",
+                        this._boundHandles.search
                     );
                 }
 
