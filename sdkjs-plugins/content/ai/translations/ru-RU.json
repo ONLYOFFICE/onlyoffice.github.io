@@ -143,5 +143,15 @@
 	"Text to Image": "Текст в изображение",
 	"Image generation": "Генерирование изображений",
 	"OCR": "Оптическое распознавание символов",
-	"Vision": "Распознавание изображений"
+	"Vision": "Распознавание изображений",
+	
+	"Grammar & Spelling": "Орфография и пунктуация",
+	"Accept": "Принять",
+	"Reject": "Отклонить",
+	"Spelling suggestion": "Орфография",
+	"Grammar suggestion": "Пунктуация",
+	"Check all": "Проверить все",
+	"Check current text": "Проверить текущий текст",
+	"Suggested correction": "Предложение",
+	"Explanation": "Объяснение"
 }
