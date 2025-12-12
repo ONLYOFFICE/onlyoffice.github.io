@@ -1,10 +1,3 @@
-html {
-    --button-primary-disabled: #000000;
-    --button-primary-disabled-font: #ffffff;
-
-    --button-primary-disabled-dark: #ffffff;
-    --button-primary-disabled-font-dark: #000000;
-}
 /** Button ************ */
 .custom-button-container {
     display: inline-block;
@@ -443,6 +436,9 @@ html {
         border-bottom-width: 1px;
         border-bottom-style: solid;
     }
+    .selectbox-multiple .selectbox-option-selected:not(:hover) {
+        background-color: transparent;
+    }
 
     .selectbox-checkbox {
         margin: 0;
@@ -463,80 +459,80 @@ html {
 .message-container {
     box-sizing: border-box;
     position: relative;
-}
+    .message {
+        border-style: solid;
+        border-width: 1px;
+        padding: 9px 6px 6px 6px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
 
-.message {
-    border-style: solid;
-    border-width: 1px;
-    padding: 9px 6px 6px 6px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.3s, transform 0.3s;
-}
+    .message-error:before {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        left: 6px;
+        top: 9px;
+        background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
+    }
 
-.message-error:before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    left: 6px;
-    top: 9px;
-    background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
-}
+    .message-warning {
+        background-color: #fff3cd;
+        border-color: #ffeaa7;
+    }
 
-.message-warning {
-    background-color: #fff3cd;
-    border-color: #ffeaa7;
-}
+    .message-info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
 
-.message-info {
-    background-color: #d1ecf1;
-    border-color: #bee5eb;
-}
+    .message-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
 
-.message-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
+    .message-content {
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+        flex-grow: 1;
+    }
 
-.message-content {
-    display: flex;
-    gap: 8px;
-    flex-direction: column;
-    flex-grow: 1;
-}
+    .message-title {
+        flex-grow: 1;
+        font-family: Arial, sans-serif;
+        text-indent: 20px;
+        font-weight: bold;
+    }
 
-.message-title {
-    flex-grow: 1;
-    font-family: Arial, sans-serif;
-    text-indent: 20px;
-    font-weight: bold;
-}
+    .message-text {
+        flex-grow: 1;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+    }
 
-.message-text {
-    flex-grow: 1;
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-}
+    .message-close {
+        background: none;
+        border: none;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        position: absolute;
+        right: 4px;
+        top: 4px;
+        padding: 0 4px;
+        color: transparent;
+        transition: color 0.2s;
+    }
 
-.message-close {
-    background: none;
-    border: none;
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    padding: 0 4px;
-    color: transparent;
-    transition: color 0.2s;
+    .message-close:focus {
+        outline: none;
+    }
 }
-
-.message-close:focus {
-    outline: none;
 }

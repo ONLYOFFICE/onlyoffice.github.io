@@ -355,10 +355,13 @@ const Theme = {
                 ".selectbox-header,\n" +
                 ".selectbox-dropdown,\n" +
                 ".selectbox-search-input:focus,\n" +
-                ".selectbox-option-divider,\n" +
                 ".message { border-color: " +
                 theme["border-regular-control"] +
                 "; }\n";
+            styles +=
+                ".selectbox-option-divider { border-color: " +
+                theme["border-regular-control"] +
+                " !important; }\n";
         }
         if (theme["border-error"]) {
             styles +=
