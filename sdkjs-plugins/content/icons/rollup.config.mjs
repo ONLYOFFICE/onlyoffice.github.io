@@ -6,7 +6,6 @@ import terser from "@rollup/plugin-terser";
 import html from "@rollup/plugin-html";
 import postcss from "rollup-plugin-postcss";
 import autoprefixer from "autoprefixer";
-import customProperties from "postcss-custom-properties";
 import atImport from "postcss-import";
 import cssnano from "cssnano";
 import postcssNested from "postcss-nested";
@@ -65,9 +64,6 @@ export default {
             minimize: true,
             plugins: [
                 atImport(), // process @import rules
-                customProperties({
-                    preserve: false,
-                }),
                 postcssNested(),
                 autoprefixer({
                     overrideBrowserslist: ["ie >= 11", "last 2 versions"],
