@@ -30,6 +30,7 @@
  * @property {(ev: Event) => void} blur
  * @property {(ev: Event) => void} input
  * @property {(ev: KeyboardEvent) => void} keydown
+ * @property {() => void} [search]
  * @property {() => void} clear
  * @property {() => void} validate
  */
