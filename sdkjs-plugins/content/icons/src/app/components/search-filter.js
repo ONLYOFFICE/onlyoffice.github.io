@@ -32,7 +32,7 @@
 
 // @ts-check
 
-import { SearchInput } from "./input/search-input.js";
+import { InputField } from "./input/input.js";
 
 /// <reference path="../types.js" />
 /// <reference path="./input/types.js" />
@@ -43,6 +43,8 @@ class SearchFilter {
     #onFilterCallback;
     input;
     #text;
+    /** @type {number} */
+    // @ts-ignore
     #debounceTimeout;
 
     /**
@@ -55,8 +57,11 @@ class SearchFilter {
         this.#filteredCatalog = catalogOfIcons;
         this.#catalogOfIcons = catalogOfIcons;
         this.#text = "";
-        this.input = new SearchInput("searchFilter", {
+        this.input = new InputField("searchFilter", {
             autofocus: true,
+            type: "search",
+            showClear: false,
+            showSearchIcon: true,
         });
 
         this.input.subscribe((/** @type {InputEventType} */ event) => {
