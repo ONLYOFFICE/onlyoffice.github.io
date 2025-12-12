@@ -84,7 +84,6 @@ class Theme {
         Theme.addStylesForComponents(theme);
 
         let themeName = theme.name;
-        console.warn(theme);
         if (!themes.has(themeName)) {
             if (theme.type === "dark") {
                 themeName = "theme-dark";
@@ -106,144 +105,131 @@ class Theme {
     static addStylesForComponents(theme) {
         let styles = "";
 
-        if (theme["background-normal"]) {
-            styles +=
-                ".custom-button-secondary-icon,\n" +
-                ".custom-button-secondary,\n" +
-                ".input-field-element,\n" +
-                ".selectbox-header,\n" +
-                ".selectbox-dropdown,\n" +
-                ".message { background-color: " +
-                theme["background-normal"] +
-                "; }\n";
-        }
-        if (theme["text-inverse"]) {
-            styles +=
-                ".custom-button-primary { color: " +
-                theme["text-inverse"] +
-                "; }\n";
-        }
-        if (theme["border-regular-control"]) {
-            styles +=
-                ".custom-button-icon-only:active:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary:active:not(.custom-button-disabled),\n" +
-                ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary:hover:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary,\n" +
-                ".custom-button-secondary-icon,\n" +
-                ".input-field-element,\n" +
-                ".selectbox-header,\n" +
-                ".selectbox-dropdown,\n" +
-                ".selectbox-search-input:focus,\n" +
-                ".selectbox-option-divider,\n" +
-                ".message { border-color: " +
-                theme["border-regular-control"] +
-                "; }\n";
-        }
-        if (theme["border-error"]) {
-            styles +=
-                ".input-field-invalid .input-field-element { border-color: " +
-                theme["border-error"] +
-                "; }\n";
-        }
-        if (theme["border-control-focus"]) {
-            styles +=
-                ".custom-button-icon-only:focus:not(:active):not(:hover),\n" +
-                ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" +
-                ".custom-button-secondary:focus:not(:active):not(:hover),\n" +
-                ".input-field-element:focus,\n" +
-                ".input-field-focused .input-field-element,\n" +
-                ".selectbox-header:active,\n" +
-                ".selectbox-header:focus,\n" +
-                ".selectbox-header-open { border-color: " +
-                theme["border-control-focus"] +
-                "; }\n";
-        }
-        if (theme["highlight-button-hover"]) {
-            styles +=
-                ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary:hover:not(.custom-button-disabled),\n" +
-                ".selectbox-search,\n" +
-                ".selectbox-option:hover { background-color: " +
-                theme["highlight-button-hover"] +
-                "; }\n";
-        }
-        if (theme["highlight-button-pressed"]) {
-            styles +=
-                ".custom-button-icon-only:active:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" +
-                ".custom-button-secondary:active:not(.custom-button-disabled),\n" +
-                ".selectbox-option-selected:hover,\n" +
-                ".selectbox-option-selected { background-color: " +
-                theme["highlight-button-pressed"] +
-                "; }\n";
-            styles +=
-                ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " +
-                theme["highlight-button-pressed"] +
-                "; }\n";
-        }
-        if (theme["highlight-primary-dialog-button-hover"]) {
-            styles +=
-                ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " +
-                theme["highlight-primary-dialog-button-hover"] +
-                "; border-color: " +
-                theme["highlight-primary-dialog-button-hover"] +
-                "; }\n";
-        }
-        if (theme["background-primary-dialog-button"]) {
-            styles +=
-                ".custom-button-primary { background-color: " +
-                theme["background-primary-dialog-button"] +
-                "; border-color: " +
-                theme["background-primary-dialog-button"] +
-                "; }\n";
-        }
-        if (theme["background-toolbar-additional"]) {
-            styles +=
-                ".custom-button-secondary-icon:disabled,\n" +
-                ".custom-button-secondary-icon.custom-button-disabled,\n" +
-                ".custom-button-secondary:disabled,\n" +
-                ".custom-button-secondary.custom-button-disabled { background-color: " +
-                theme["background-toolbar-additional"] +
-                "; border-color: " +
-                theme["background-toolbar-additional"] +
-                "; }\n";
-        }
-        if (theme["text-normal"]) {
-            styles +=
-                ".custom-button-secondary-icon,\n" +
-                ".custom-button-secondary,\n" +
-                ".input-field-element { color: " +
-                theme["text-normal"] +
-                "; }\n";
-            styles +=
-                ".input-field-search-icon svg { fill: " +
-                theme["text-normal"] +
-                "; }\n";
-        }
-        if (theme["text-secondary"]) {
-            styles +=
-                ".message-close:hover,\n" +
-                ".input-field-clear:hover { color: " +
-                theme["text-secondary"] +
-                "; }\n";
-        }
-        if (theme["text-tertiary"]) {
-            styles +=
-                ".input-field-clear,\n" +
-                ".message-container:hover .message-close,\n" +
-                ".custom-button-secondary-icon:disabled,\n" +
-                ".custom-button-secondary-icon.custom-button-disabled,\n" +
-                ".custom-button-secondary:disabled,\n" +
-                ".custom-button-secondary.custom-button-disabled,\n" +
-                ".input-field-element::placeholder,\n" +
-                ".selectbox-search-input::placeholder { color: " +
-                theme["text-tertiary"] +
-                "; }\n";
-        }
+        styles +=
+            ".custom-button-secondary-icon,\n" +
+            ".custom-button-secondary,\n" +
+            ".input-field-element,\n" +
+            ".selectbox-header,\n" +
+            ".selectbox-dropdown,\n" +
+            ".message { background-color: " +
+            theme["background-normal"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-primary { color: " +
+            theme["text-inverse"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-icon-only:active:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary:active:not(.custom-button-disabled),\n" +
+            ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary:hover:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary,\n" +
+            ".custom-button-secondary-icon,\n" +
+            ".input-field-element,\n" +
+            ".selectbox-header,\n" +
+            ".selectbox-dropdown,\n" +
+            ".selectbox-search-input:focus,\n" +
+            ".selectbox-option-divider,\n" +
+            ".message { border-color: " +
+            theme["border-regular-control"] +
+            "; }\n";
+
+        styles +=
+            ".input-field-invalid .input-field-element { border-color: " +
+            theme["border-error"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-icon-only:focus:not(:active):not(:hover),\n" +
+            ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" +
+            ".custom-button-secondary:focus:not(:active):not(:hover),\n" +
+            ".input-field-element:focus,\n" +
+            ".input-field-focused .input-field-element,\n" +
+            ".selectbox-header:active,\n" +
+            ".selectbox-header:focus,\n" +
+            ".selectbox-header-open { border-color: " +
+            theme["border-control-focus"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary:hover:not(.custom-button-disabled),\n" +
+            ".selectbox-search,\n" +
+            ".selectbox-option:hover { background-color: " +
+            theme["highlight-button-hover"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-icon-only:active:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" +
+            ".custom-button-secondary:active:not(.custom-button-disabled),\n" +
+            ".selectbox-option-selected:hover,\n" +
+            ".selectbox-option-selected { background-color: " +
+            theme["highlight-button-pressed"] +
+            "; }\n";
+        styles +=
+            ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " +
+            theme["highlight-button-pressed"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " +
+            theme["highlight-primary-dialog-button-hover"] +
+            "; border-color: " +
+            theme["highlight-primary-dialog-button-hover"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-primary { background-color: " +
+            theme["background-primary-dialog-button"] +
+            "; border-color: " +
+            theme["background-primary-dialog-button"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-secondary-icon:disabled,\n" +
+            ".custom-button-secondary-icon.custom-button-disabled,\n" +
+            ".custom-button-secondary:disabled,\n" +
+            ".custom-button-secondary.custom-button-disabled { background-color: " +
+            theme["background-toolbar-additional"] +
+            "; border-color: " +
+            theme["background-toolbar-additional"] +
+            "; }\n";
+
+        styles +=
+            ".custom-button-secondary-icon,\n" +
+            ".custom-button-secondary,\n" +
+            ".input-field-element { color: " +
+            theme["text-normal"] +
+            "; }\n";
+        styles +=
+            ".input-field-search-icon svg { fill: " +
+            theme["text-normal"] +
+            "; }\n";
+
+        styles +=
+            ".message-close:hover,\n" +
+            ".input-field-clear:hover { color: " +
+            theme["text-secondary"] +
+            "; }\n";
+
+        styles +=
+            ".input-field-clear,\n" +
+            ".message-container:hover .message-close,\n" +
+            ".custom-button-secondary-icon:disabled,\n" +
+            ".custom-button-secondary-icon.custom-button-disabled,\n" +
+            ".custom-button-secondary:disabled,\n" +
+            ".custom-button-secondary.custom-button-disabled,\n" +
+            ".input-field-element::placeholder,\n" +
+            ".selectbox-search-input::placeholder { color: " +
+            theme["text-tertiary"] +
+            "; }\n";
+
         if (
             ["theme-white", "theme-night"].indexOf(theme.name) !== -1 ||
             ["theme-white", "theme-night"].indexOf(theme.Name) !== -1
