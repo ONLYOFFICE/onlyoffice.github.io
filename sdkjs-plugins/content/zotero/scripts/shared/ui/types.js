@@ -38,6 +38,21 @@
 /** ********************** */
 
 /**
+ * @typedef {Object} CheckboxOptionsType
+ * @property {boolean} [checked]
+ * @property {boolean} [disabled]
+ * @property {boolean} [indeterminate]
+ * @property {string} [label]
+ * @property {string} [name]
+ * @property {string} [value]
+ * @property {string} [id]
+ * @property {string} [id]
+ */
+
+
+/** ********************** */
+
+/**
  * @typedef {Object} ButtonOptionsType
  * @property {string} [text]
  * @property {"button"|"submit"|"reset"} [type]

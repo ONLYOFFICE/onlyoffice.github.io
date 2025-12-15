@@ -47,7 +47,7 @@
     <script defer src="scripts/services/translate-service.js"></script>
 
     <script defer src="scripts/shared/ui/input.js"></script>
-    <script defer src="scripts/shared/ui/search-input.js"></script>
+    <script defer src="scripts/shared/ui/checkbox.js"></script>
     <script defer src="scripts/shared/ui/selectbox.js"></script>
     <script defer src="scripts/shared/ui/button.js"></script>
     <script defer src="scripts/shared/ui/message.js"></script>
@@ -141,6 +141,9 @@
                     <span id="cancelSelectBtn" class="i18n link">Cancel selection</span>
                 </div>
                 <div class="flexCol controls-holder">
+                    
+                    <input id="omitAuthor" type="checkbox" class="i18n" title="Omit Author">
+
                     <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
                         <button id="insertLinkBtn" class="i18n" disabled>Insert Citation</button>
                         <button id="settingsBtn" class="i18n" title="Configure how citations will be formatted in your document.">
@@ -152,11 +155,6 @@
                     </div>
                     <button id="insertBibBtn" class="i18n">Insert Bibliography</button>
                     <button id="refreshBtn" class="i18n">Refresh</button>
-
-                    <div id="omitAuthorDiv">
-                        <label for="omitAuthor" class="i18n">Omit Author</label>
-                        <input id="omitAuthor" type="checkbox" class="form-control i18n" title="Omit Author">
-                    </div>
                 </div>
             </div>
             <div id="settingsState" class="hidden flexCol flexSize">
