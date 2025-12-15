@@ -1303,7 +1303,8 @@ class IconPicker {
     }
     getSelectedSvgIcons() {
         var icons = _classPrivateFieldGet2(_container, this).querySelectorAll(".icon.selected");
-        return Array.from(icons).map(svg => svg.outerHTML);
+        var serializer = new XMLSerializer;
+        return Array.from(icons).map(svg => serializer.serializeToString(svg));
     }
 }
 
@@ -3070,6 +3071,7 @@ var themes = new Set([ "theme-classic-light", "theme-classic-dark", "theme-light
 class Theme {
     static onThemeChanged(theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
+        theme = Theme.fixThemeForIE(theme);
         var rules = ".icons-container { background-color: " + theme["background-normal"] + "; }\n";
         rules += ".icons .icon { color: " + theme["text-normal"] + "; }\n";
         rules += ".icons .icon:focus { background-color: " + theme["highlight-button-hover"] + "; }\n";
@@ -3087,6 +3089,7 @@ class Theme {
         Theme.addStylesForComponents(theme);
         var themeName = theme.name;
         if (!themes.has(themeName)) {
+            console.log('Undefined theme "' + themeName + '"');
             if (theme.type === "dark") {
                 themeName = "theme-dark";
             } else {
@@ -3098,6 +3101,48 @@ class Theme {
             body.classList.remove(className);
         }
         body.classList.add(themeName);
+    }
+    static fixThemeForIE(theme) {
+        if (!theme["text-normal"]) {
+            theme["text-normal"] = "rgb(51, 51, 51)";
+        }
+        if (!theme["text-secondary"]) {
+            theme["text-secondary"] = "#848484";
+        }
+        if (!theme["highlight-button-hover"]) {
+            theme["highlight-button-hover"] = "#e0e0e0";
+        }
+        if (!theme["background-normal"]) {
+            theme["background-normal"] = "white";
+        }
+        if (!theme["highlight-button-pressed"]) {
+            theme["highlight-button-pressed"] = "#cbcbcb";
+        }
+        if (!theme["text-inverse"]) {
+            theme["text-inverse"] = "white";
+        }
+        if (!theme["border-regular-control"]) {
+            theme["border-regular-control"] = "#c0c0c0";
+        }
+        if (!theme["border-error"]) {
+            theme["border-error"] = "#f62211";
+        }
+        if (!theme["border-control-focus"]) {
+            theme["border-control-focus"] = "#848484";
+        }
+        if (!theme["highlight-primary-dialog-button-hover"]) {
+            theme["highlight-primary-dialog-button-hover"] = "#1c1c1c";
+        }
+        if (!theme["background-primary-dialog-button"]) {
+            theme["background-primary-dialog-button"] = "#444444";
+        }
+        if (!theme["background-toolbar-additional"]) {
+            theme["background-toolbar-additional"] = "#efefef";
+        }
+        if (!theme["text-tertiary"]) {
+            theme["text-tertiary"] = "#bdbdbd";
+        }
+        return theme;
     }
     static addStylesForComponents(theme) {
         var styles = "";

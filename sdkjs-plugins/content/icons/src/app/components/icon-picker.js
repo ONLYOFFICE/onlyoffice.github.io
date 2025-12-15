@@ -173,7 +173,11 @@ class IconPicker {
      */
     getSelectedSvgIcons() {
         const icons = this.#container.querySelectorAll(".icon.selected");
-        return Array.from(icons).map((svg) => svg.outerHTML);
+
+        const serializer = new XMLSerializer();
+        return Array.from(icons).map((svg) =>
+            serializer.serializeToString(svg)
+        );
     }
 
     #addEventListener() {
