@@ -28,6 +28,7 @@
 /// <reference path="./shared/components/search-filter.js" />
 /// <reference path="./shared/components/select-citation.js" />
 /// <reference path="./shared/ui/button.js" />
+/// <reference path="./shared/ui/checkbox.js" />
 /// <reference path="./login.js" />
 /// <reference path="./settings.js" />
 /// <reference path="./theme.js" />
@@ -106,7 +107,9 @@
             throw new Error("mainState not found");
         }
 
-        const checkOmitAuthor = document.getElementById("omitAuthor");
+        const checkOmitAuthor = new Checkbox("omitAuthor", {
+            label: "Omit Author",
+        });
         if (!checkOmitAuthor) {
             throw new Error("checkOmitAuthor not found");
         }

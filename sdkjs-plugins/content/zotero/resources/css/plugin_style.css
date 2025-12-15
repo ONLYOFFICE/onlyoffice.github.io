@@ -163,14 +163,6 @@ input[type="text"] {
     width: calc(100% - 28px);
 }
 
-#omitAuthorDiv {
-    margin-bottom: 15px;
-    margin-left: 8px;
-}    
-    #omitAuthorDiv label {
-        vertical-align: top;
-    }
-
 #prefixSuffixDiv {
     display: flex;
     gap: 8px;
@@ -413,45 +405,6 @@ input[type="text"] {
     #footerCont > span:first-of-type {
         flex: 1;
     }
-
-/* checkbox */
-
-.checkbox {
-    background: #FFFFFF;
-    border: 1px solid #CFCFCF;
-    box-sizing: border-box;
-    width: 13px;
-    height: 13px;
-    position: relative;
-}
-    .checkbox > input {
-        width: 0;
-        height: 0;
-        position: absolute;
-        visibility: hidden;
-    }
-    .checkbox > span {
-        background: url('../img/checkmark.png') no-repeat;
-        display: none;
-        width: 11px;
-        height: 10px;
-        position: relative;
-        top: -1px;
-        left: 2px;
-    }
-    .checkbox > input:checked ~ span {
-        display: inline-block;
-    }
-    .checkbox::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: -6px;
-        left: -6px;
-        width: 25px;
-        height: 25px;
-    }
-
 
 .selDoc {
     display: inline-block;
