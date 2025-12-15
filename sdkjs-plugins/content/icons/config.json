@@ -6,7 +6,7 @@
 		"es": "Iconos",
 		"de": "Symbole",
 		"cs": "Ikony",
-		"zh": "圖示",
+		"zh-ZH": "圖示",
 		"pt-BR": "Ícones",
 		"sr-Cyrl-RS": "Иконе",
 		"sr-Latn-RS": "Ikone",
@@ -24,7 +24,19 @@
 		{
 			"description": "Insert icons into your documents by selecting the appropriate Category or using the Search.",
 			"descriptionLocale": {
-				"ru": "Вставляйте иконки в документы, выбрав нужную категорию или с помощью поиска."
+				"ru": "Вставляйте иконки в документы, выбрав нужную категорию или с помощью поиска.",
+				"fr": "Insérez des icônes dans vos documents en sélectionnant la catégorie appropriée ou en utilisant la fonction de recherche.",
+				"es": "Inserte iconos en sus documentos seleccionando la categoría adecuada o utilizando la función de búsqueda.",
+				"de": "Fügen Sie Symbole in Ihre Dokumente ein, indem Sie die entsprechende Kategorie auswählen oder die Suchfunktion verwenden.",
+				"cs": "Vložte ikony do dokumentů výběrem příslušné kategorie nebo pomocí vyhledávání.",
+				"zh-ZH": "在文档中插入图标：可按类别选择合适的图标，或通过搜索快速查找并插入。",
+				"pt-BR": "Insira ícones em seus documentos selecionando a categoria apropriada ou usando a função de pesquisa.",
+				"sr-Cyrl-RS": "Уметните иконе у ваше документе одабиром одговарајуће Категорије или коришћењем Претраге.",
+				"sr-Latn-RS": "Umetnite ikone u vaše dokumente odabirom odgovarajuće Kategorije ili korišćenjem Pretrage.",
+				"ja-JA": "文書にアイコンを挿入するには、適切なカテゴリを選択するか、検索機能を使用してください。",
+				"sq-AL": "Vendos ikonat në dokumentet e tua duke zgjedhur Kategorinë e duhur ose duke përdorur Kërkimin.",
+				"it": "Inserisci icone nei tuoi documenti selezionando la categoria appropriata oppure utilizzando la funzione di ricerca.",
+				"ar-SA": "قم بإدراج الرموز في مستنداتك عن طريق تحديد الفئة المناسبة أو استخدام البحث."
 			},
 			"url": "dist/index.html",
 			"icons": "resources/%theme-type%(light|dark)/icon.svg",
