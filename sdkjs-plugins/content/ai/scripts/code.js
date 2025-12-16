@@ -36,12 +36,242 @@ let aiModelEditWindow = null;
 let customProvidersWindow = null;
 let summarizationWindow = null;
 let translateSettingsWindow = null;
+let helperWindow = null;
+
+let spellchecker = null;
+let grammar = null;
+
+window.getActionsInfo = function() {
+	let actions = [];
+	for (const action in AI.ActionType) {
+		if (AI.ActionType.hasOwnProperty(action)) {
+			let requestEngine = AI.Request.create(action, true);
+			if (requestEngine)
+				actions.push({ [action] : requestEngine.model });
+		}		
+	}
+	return actions;
+};
+
+window.addSupportAgentMode = function(editorVersion) {
+	var agentHistory = [];
+	var agentDebug = false;
+
+	if (!window.EditorHelper) {
+		window.EditorHelper = new EditorHelperImpl();
+	}
+
+	var is91 = editorVersion >= 9001000;
+
+	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
+		if (e.keyCode === 27 && textAnnotatorPopup) {
+			textAnnotatorPopup.close();
+		}
+
+		if (e.keyCode === 27 && helperWindow) {
+			helperWindow.close();
+			helperWindow = null;
+			Asc.Editor.callMethod("FocusEditor");
+			return;
+		}
+
+		let isCtrl = e.ctrlKey || e.metaKey;
+		let isClearHistory = isCtrl && e.altKey;
+
+		let isAgentShow = false;
+		if (isCtrl)
+		{
+			if (is91)
+			{
+				isAgentShow = e.key === "/";
+			}
+			else
+			{
+				isAgentShow = e.keyCode === 191 || e.keyCode === 111;
+			}
+		}		
+		
+		if (isAgentShow && isCtrl && !helperWindow) {
+			if (isClearHistory)
+				agentHistory = [];
+
+			let variation = {
+				url : 'helper.html',
+				isVisual : true,
+				buttons : [],
+				isModal : false,
+				isCustomWindow : true,
+				EditorsSupport : ["word", "slide", "cell", "pdf"],
+				size : [500, 50],
+				isTargeted : true,
+				transparent : true
+			};
+			helperWindow = new window.Asc.PluginWindow();
+
+			helperWindow.attachEvent("onHelperShow", function() {
+				helperWindow.activate(true);
+			});
+
+			helperWindow.attachEvent("onHelperClose", function() {
+				helperWindow.close();
+				helperWindow = null;
+				Asc.Editor.callMethod("FocusEditor");
+			});
+
+			helperWindow.attachEvent("onHelperAction", async function(prompt) {
+				//console.log("Helper action: " + prompt);
+
+				helperWindow.close();
+				helperWindow = null;
+				Asc.Editor.callMethod("FocusEditor");
+
+				let requestEngine = AI.Request.create(AI.ActionType.Chat);
+				if (!requestEngine)
+					return;
+
+				let isSendedEndLongAction = false;
+				async function checkEndAction() {
+					if (!isSendedEndLongAction) {
+						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+						isSendedEndLongAction = true
+					}
+				}
+
+				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+				let bufferWait = "[functionCalling";
+				let checkBuffer = true;
+				let buffer = "";
+
+				if (0 === agentHistory.length) {
+					let systemPrompt = window.EditorHelper.getSystemPrompt();
+					if (systemPrompt !== "") {
+						agentHistory.push({
+							role: "system", content: systemPrompt
+						});
+					}
+				}
+
+				if (agentHistory.length > 0 && agentHistory[agentHistory.length - 1].role === "user") {
+					agentHistory[agentHistory.length - 1].content += "\n" + prompt;
+				} else {
+					agentHistory.push({
+						role: "user",
+						content: prompt
+					});
+				}
+
+				let copyMessages = [];
+				for (let i = 0, len = agentHistory.length; i < len; i++) {
+					let item = agentHistory[i];
+					copyMessages.push({
+						role: item.role,
+						content: item.content
+					});
+				}
+
+				let isSupportStreaming = window.EditorHelper.isSupportStreaming;
+				let dataStream = "";
+				async function onStreamEvent(data, end) {
+					if (isSupportStreaming)
+						await Asc.Library.PasteText(data);
+					dataStream += data;
+					if (true === end && "" !== dataStream) {
+						await Asc.Library.PasteText(dataStream);
+						dataStream = "";
+					}
+				}
+
+				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
+					if (!data)
+						return;
+
+					if (isSupportStreaming)
+						await checkEndAction();
+					
+					let oldBuffer = buffer;
+					buffer += data;
+					if (checkBuffer && buffer.length >= bufferWait.length) {
+						if (!buffer.startsWith(bufferWait)) {
+							data = oldBuffer + data;
+							checkBuffer = false;
+						}
+					}
+
+					if (!checkBuffer)
+						await onStreamEvent(data);
+				});
+
+				if (checkBuffer && !buffer.startsWith(bufferWait)) {
+					checkBuffer = false;
+					await onStreamEvent(buffer, true);
+				}
+
+				if (!isSupportStreaming) {
+					await onStreamEvent("", true);
+				}
+
+				await checkEndAction();
+
+				if (checkBuffer) {
+					if (agentDebug)
+						console.log(buffer);
+
+					let resultFunc = await window.EditorHelper.callFunc(buffer);
+					if (resultFunc) {
+						if (resultFunc.error) {
+							agentHistory.push({
+								role: "assistant",
+								content: resultFunc.error
+							});
+						} else if (resultFunc.message !== undefined) {
+							agentHistory.push({
+								role: "assistant", content: resultFunc.message
+							});
+						}
+
+						if (resultFunc.prompt !== undefined) {
+							agentHistory.push({
+								role: "user", content: resultFunc.prompt
+							});
+						}
+					}
+				} else {
+					if (agentDebug)
+						console.log(result);
+
+					agentHistory.push({
+						role: "assistant",
+						content: result
+					});
+				}
+				await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			});
+
+			helperWindow.show(variation);
+			helperWindow.isSkipClick = true;
+			setTimeout(function() {
+				if (helperWindow)
+					helperWindow.isSkipClick = false;
+			}, 500);
+		}
+	});
+	
+	window.Asc.plugin.attachEditorEvent("onClick", function(e) {
+		if (helperWindow && !helperWindow.isSkipClick) {
+			helperWindow.close();
+			helperWindow = null;
+		}
+	});
+}
 
 let initCounter = 0;
 async function initWithTranslate(counter) {
 	initCounter |= counter;
 	if (3 === initCounter) {
-		registerButtons(window);
+		initCounter = 5;
+		await registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();
 
@@ -94,6 +324,193 @@ async function initWithTranslate(counter) {
 
 			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonOCRPage]);
 		}
+
+		let editorVersion = await Asc.Library.GetEditorVersion();
+		if (editorVersion >= 9000000) {
+			window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
+				let data = {};
+				let isFromMethod = params.isFromMethod === true;
+				let isBlock = !isFromMethod;
+
+				async function sendResult(data) {
+					if (isFromMethod) {
+						await Asc.Editor.callMethod("SendEventInternal", ["ai_onRequest", data]);	
+					} else {
+						await Asc.Editor.callMethod("onAIRequest", [data]);
+					}
+				}
+
+				if ("Actions" === params.type) {
+					data.Actions = window.getActionsInfo();
+					return await sendResult(data);
+				}
+				
+				if ("text" === params.type)
+					params.type = AI.ActionType.Chat;
+
+				let requestEngine = null;
+				if (AI.Actions[params.type])
+					requestEngine = AI.Request.create(params.type);
+
+				if (!requestEngine) {
+					data.type = "no-engine";
+					data.text = "";
+					data.error = "No model selected for chat action...";
+
+					return await sendResult(data);
+				}
+
+				if (isFromMethod) {
+					await Asc.Editor.callMethod("SendEventInternal", ["ai_onStartAction", {
+						type : "Block",
+						description : "AI (" + requestEngine.modelUI.name + ")"
+					}]);
+				}
+
+				switch (params.type) {
+					case AI.ActionType.Chat:
+					{
+						data.type = "text";
+						data.text = await requestEngine.chatRequest(params.data, isBlock);
+						break;
+					}
+					case AI.ActionType.Translation:
+					{
+						data.type = "text";
+						let prompt = Asc.Prompts.getTranslatePrompt(params.data.text, params.data.lang);
+						let result = await requestEngine.chatRequest(prompt, isBlock);
+						data.text = result ? Asc.Library.getTranslateResult(result, params.data.text) : "";
+						break;
+					}
+					case AI.ActionType.ImageGeneration:
+					{
+						data.type = AI.ActionType.ImageGeneration;
+						let result = await requestEngine.imageGenerationRequest(params.data, isBlock);
+						data.image = result || "";
+						break;
+					}
+					case AI.ActionType.OCR:
+					{
+						data.type = AI.ActionType.OCR;
+						let result = await requestEngine.imageOCRRequest(params.data, isBlock);
+						if (result) {
+							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]);
+						}
+						break;
+					}
+					case AI.ActionType.Vision:
+					{
+						data.type = AI.ActionType.Vision;
+						let result = await requestEngine.imageVisionRequest({
+							prompt : Asc.Prompts.getImageDescription(),
+							image : params.data
+						}, isBlock);
+						data.result = result || "";
+						break;
+					}
+					default:
+						break;
+				}
+
+				if (isFromMethod) {
+					await Asc.Editor.callMethod("SendEventInternal", ["ai_onEndAction", {
+						type : "Block",
+						description : "AI (" + requestEngine.modelUI.name + ")"
+					}]);
+				}
+
+				await sendResult(data);			
+			});
+
+			if ("cell" === window.Asc.plugin.info.editorType) {
+				let AIFunc = {
+					guid : "e8ea2fb288054deaa6b82158c04dee37",
+					name : "AI",
+					value : "\
+	(function()\n\
+	{\n\
+		/**\n\
+		 * Function that returns the AI answer.\n\
+		 * @customfunction\n\
+		 * @param {string} value Prompt.\n\
+		 * @param {?boolean} isSaveAIFunction Indicator whether the AI function should be saved.\n\
+		 * @returns {string} Answer value.\n\
+		 */\n\
+		async function AI(value, isSaveAIFunction) {\n\
+			let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
+			return new Promise(resolve => (function(){\n\
+				Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
+					if (data.error)\n\
+						return resolve(data.error);\n\
+					switch (data.type) {\n\
+						case \"text\":\n\
+						{\n\
+							let result = data.text.trim();\n\
+							if (isSaveAIFunction !== true)\n\
+								result = \"@@\" + result;\n\
+							resolve(result);\n\
+							break;\n\
+						}\n\
+						default:\n\
+						{\n\
+							resolve(\"#ERROR\");\n\
+						}\n\
+					}\n\
+					resolve(data)\n\
+				});\n\
+			})());\n\
+		}\n\
+		Api.AddCustomFunction(AI);\n\
+	})();"
+				};
+
+				let oldCF = await GetOldCustomFunctions();
+				let isFound = false;
+				let isUpdate = false;
+
+				for (let i = 0, len = oldCF.macrosArray.length; i < len; i++) {
+					let item = oldCF.macrosArray[i];
+					if (item.name === AIFunc.name) {
+						isFound = true;
+
+						if (item.guid === AIFunc.guid) {
+							if (item.value !== AIFunc.value) {
+								isUpdate = true;
+								item.value = AIFunc.value;
+							}
+						}
+					}
+				}
+				if (!isFound) {
+					oldCF.macrosArray.push(AIFunc);
+					isUpdate = true;
+				}
+
+				if (isUpdate)
+					await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
+			}
+		}
+
+		if (editorVersion >= 9001000 && window.isEnableDocumentGenerate) {
+
+			if (window.AscDesktopEditor && Asc.Editor.getType() === "word") {
+
+				let buttonGenerate = new Asc.ButtonToolbar(null);
+				buttonGenerate.text = "Generate";
+				buttonGenerate.icons = window.getToolBarButtonIcons("ocr");
+				
+				buttonGenerate.attachOnClick(async function(){
+					let content = await getFormGenerationPrompt();
+					window.AscDesktopEditor.generateNew("docx", "ai", content);
+				});
+
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonGenerate]);
+			}			
+
+		}
+
+		if (editorVersion >= 9000004)
+			window.addSupportAgentMode(editorVersion);
 	}
 }
 
@@ -122,6 +539,28 @@ async function GetOldCustomFunctions() {
 	return obj;
 }
 
+var isPluginInit = false;
+var arrayResolveInit = [];
+
+window.waitInit = async function() {
+	if (isPluginInit)
+		return;	
+
+	return new Promise(resolve => {
+		arrayResolveInit.push(resolve);
+	});
+};
+
+window.setInit = function() {
+	if (isPluginInit)
+		return;
+	isPluginInit = true;
+	arrayResolveInit.forEach(resolve => {
+		resolve();
+	});
+	arrayResolveInit = [];
+};
+
 window.Asc.plugin.init = async function() {
 	// Check server settings
 	if (window.Asc.plugin.info.aiPluginSettings) {
@@ -133,114 +572,150 @@ window.Asc.plugin.init = async function() {
 		delete window.Asc.plugin.info.aiPluginSettings;
 	}
 
-	await initWithTranslate(1 << 1);
-	clearChatState();
+	if (this.sendEvent) {
+		this.sendEvent("ai_onInit", {});
+		this.attachEditorEvent("ai_onCustomProviders", function(providers) {
+			
+			for (let i = 0, len = providers.length; i < len; i++) {
+				let item = providers[i];
+				if (!item.name)
+					continue;
 
-	let editorVersion = await Asc.Library.GetEditorVersion();
-	if (editorVersion >= 9000000) {
-		window.Asc.plugin.attachEditorEvent("onAIRequest", async function(params){
-			let data = {};
-			switch (params.type) {
-				case "text":
-				{
-					let requestEngine = AI.Request.create(AI.ActionType.Chat);
-					if (requestEngine)
-					{
-						let result = await requestEngine.chatRequest(params.data);
-						if (!result) result = "";
+				if (!item.content) {
+					item.content = "\"use strict\";\n\
+class Provider extends AI.Provider {\n\
+	constructor() {\n\
+		super(\"" + item.name + "\", \"[external]\", \"\", \"\");\n\
+	}\n\
+}";
+					let isError = !AI.addCustomProvider(item.content);
 
-						data.type = "text";
-						data.text = result;
-					}
-					else
-					{
-						data.type = "no-engine";
-						data.text = "";
-						data.error = "No model selected for chat action..."
-					}
+					if (!isError) {
+						customProvidersWindow && customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
+						aiModelEditWindow && aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
+					}					
 				}
-				default:
-					break;
 			}
 
-			await Asc.Editor.callMethod("onAIRequest", [data]);
 		});
 
-		if ("cell" === window.Asc.plugin.info.editorType) {
-			let AIFunc = {
-				guid : "e8ea2fb288054deaa6b82158c04dee37",
-				name : "AI",
-				value : "\
-(function()\n\
-{\n\
-    /**\n\
-     * Function that returns the AI answer.\n\
-     * @customfunction\n\
-     * @param {string} value Prompt.\n\
-     * @param {?boolean} isSaveAIFunction Indicator whether the AI function should be saved.\n\
-     * @returns {string} Answer value.\n\
-     */\n\
-    async function AI(value, isSaveAIFunction) {\n\
-        let systemMessage = \"As an Excel formula expert, your job is to provide advanced Excel formulas that perform complex calculations or data manipulations as described by the user. Keep your answers as brief as possible. If the user asks for formulas, return only the formula. If the user asks for something, answer briefly and only the result, without descriptions or reflections. If you received a request that is not based on Excel formulas, then simply answer the text request as briefly as possible, without descriptions or reflections\";\n\
-        return new Promise(resolve => (function(){\n\
-            Api.AI({ type : \"text\", data : [{role: \"system\", content: systemMessage}, {role:\"user\", content: value}] }, function(data){\n\
-                if (data.error)\n\
-                    return resolve(data.error);\n\
-                switch (data.type) {\n\
-                    case \"text\":\n\
-                    {\n\
-                        let result = data.text.trim();\n\
-                        if (isSaveAIFunction !== true)\n\
-                            result = \"@@\" + result;\n\
-                        resolve(result);\n\
-                        break;\n\
-                    }\n\
-                    default:\n\
-                    {\n\
-                        resolve(\"#ERROR\");\n\
-                    }\n\
-                }\n\
-                resolve(data)\n\
-            });\n\
-        })());\n\
-    }\n\
-    Api.AddCustomFunction(AI);\n\
-})();"
-			};
+		this.attachEditorEvent("ai_onCustomInit", function(obj) {
+			
+			if (obj.settingsLock !== undefined) {
+				let isSettingsRemoved = obj.settingsLock === "removed";
+				let isSettingsDisabled = obj.settingsLock === "disabled";
 
-			let oldCF = await GetOldCustomFunctions();
-			let isFound = false;
-			let isUpdate = false;
+				if (window.buttonSettings) {
+					if (window.buttonSettings.removed != isSettingsRemoved || 
+						window.buttonSettings.disabled != isSettingsDisabled) {
+						window.buttonSettings.removed = isSettingsRemoved;
+						window.buttonSettings.disabled = isSettingsDisabled;
 
-			for (let i = 0, len = oldCF.macrosArray.length; i < len; i++) {
-				let item = oldCF.macrosArray[i];
-				if (item.name === AIFunc.name) {
-					isFound = true;
-
-					if (item.guid === AIFunc.guid) {
-						if (item.value !== AIFunc.value) {
-							isUpdate = true;
-							item.value = AIFunc.value;
-						}
+						Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonSettings]);
 					}
 				}
 			}
-			if (!isFound) {
-				oldCF.macrosArray.push(AIFunc);
+
+			if (obj.actions) {
+				let isActionsOverride = obj.actionsOverride === true;
+
+				for (let type in obj.actions) {
+					if (!AI.Actions[type])
+						continue;
+					
+					if (!AI.Actions[type].model || isActionsOverride)
+						AI.Actions[type].model = obj.actions[type].model;
+				}
+
+				AI.ActionsSave();
+			}
+
+			let isUpdate = false;
+			if (obj.providers) {
+				for (let type in obj.providers) {
+					AI.Providers[type] = obj.providers[type];
+				}
+				isUpdate = true;
+			}
+
+			if (obj.models) {
+				for (let i = 0, len = obj.models.length; i < len; i++) {
+					let model = obj.models[i];
+					let isFound = false;
+
+					for (let j = 0, jLen = AI.Models.length; j < jLen; j++) {
+						let testModel = AI.Models[j];
+
+						if (testModel.name === model.name && 
+							testModel.provider === model.provider &&
+							testModel.id === model.id) {
+							isFound = true;
+							AI.Models[j] = model;
+							break;
+						}
+					}
+
+					if (!isFound) {
+						AI.Models.push(model);
+					}
+				}
 				isUpdate = true;
 			}
 
 			if (isUpdate)
-				await Asc.Editor.callMethod("SetCustomFunctions", [JSON.stringify(oldCF)]);
-		}		
-	}	
+				AI.Storage.save();
+			
+		});
+		
+		spellchecker = new SpellChecker();
+		grammar = new GrammarChecker();
+
+		this.attachEditorEvent("onParagraphText", function(obj) {
+			if (!obj)
+				return;
+			
+			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+		});
+
+		this.attachEditorEvent("onFocusAnnotation", function(obj) {
+			if (!obj)
+				return;
+		});
+
+		this.attachEditorEvent("onBlurAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+			if ("spelling" === obj["name"])
+				spellchecker.onBlur();
+			else if ("grammar" === obj["name"]) 
+				grammar.onBlur();
+		});
+
+		this.attachEditorEvent("onClickAnnotation", function(obj) {
+			if (!obj)
+				return;
+
+			if ("grammar" === obj["name"])
+				grammar.onClick(obj["paragraphId"], obj["ranges"]);
+			else if ("spelling" === obj["name"])
+				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
+		});
+
+	}
+
+	await initWithTranslate(1 << 1);
+	clearChatState();
+
+	window.setInit();
 };
 
 window.Asc.plugin.onTranslate = async function() {
 	await initWithTranslate(1);
 };
 
-window.Asc.plugin.button = function(id, windowId) {
+window.Asc.plugin.button = async function(id, windowId) {
 	if (!windowId) {
 		return
 	}
@@ -249,6 +724,22 @@ window.Asc.plugin.button = function(id, windowId) {
 	{
 		clearChatState();
 		delete window.chatWindow;
+	}
+
+	if (textAnnotatorPopup && textAnnotatorPopup.popup && textAnnotatorPopup.popup.id === windowId)
+	{
+		switch (id) {
+			case 0:
+				await textAnnotatorPopup.popup.onAccept();
+				break;
+			case 1:
+				await textAnnotatorPopup.popup.onReject();
+				break;
+			default:
+				textAnnotatorPopup.close();
+				break;
+		}
+		return;
 	}
 
 	if (settingsWindow && windowId === settingsWindow.id) {
@@ -290,6 +781,10 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	translateSettingsWindow && translateSettingsWindow.command('onThemeChanged', theme);
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
+	helperWindow && helperWindow.command('onThemeChanged', theme);
+
+	if (textAnnotatorPopup && textAnnotatorPopup.popup)
+		textAnnotatorPopup.popup.command('onThemeChanged', theme);
 };
 
 /**
@@ -341,6 +836,16 @@ function onOpenSettingsModal() {
 			AI.ActionsChange(data.id, data.model);
 		});
 		settingsWindow.attachEvent('onOpenAiModelsModal', onOpenAiModelsModal);
+		settingsWindow.attachEvent('onOpenAddModal', function () {
+			onOpenEditModal({ type: 'add' })
+		});
+
+		settingsWindow.attachEvent('onClose', function(){
+			if (settingsWindow) {
+				settingsWindow.close();
+				settingsWindow = null;
+			}
+		});
 	}
 	settingsWindow.show(variation);
 }
@@ -363,6 +868,40 @@ function onTranslateSettingsModal() {
 	translateSettingsWindow.show(variation);
 }
 
+async function onCheckGrammarSpelling(isCurrent)
+{
+	let paraIds = [];
+	
+	if (isCurrent)
+	{
+		paraIds = await Asc.Editor.callCommand(function(){
+			let result = [];
+			let range = Api.GetDocument().GetRangeBySelect();
+			if (!range)
+				return [];
+			
+			let paragraphs = range.GetAllParagraphs();
+			paragraphs.forEach(p => result.push(p.GetInternalId()));
+			return result;
+		});
+	}
+	else
+	{
+		paraIds = await Asc.Editor.callCommand(function(){
+			let result = [];
+			let paragraphs = Api.GetDocument().GetAllParagraphs();
+			paragraphs.forEach(p => result.push(p.GetInternalId()));
+			return result;
+		});
+	}
+	
+	if (spellchecker)
+		spellchecker.checkParagraphs(paraIds);
+	
+	if (grammar)
+		grammar.checkParagraphs(paraIds);
+}
+
 /**
  * MODELS WINDOW
  */
@@ -376,8 +915,8 @@ function onOpenAiModelsModal() {
 		url : 'aiModelsList.html',
 		description : window.Asc.plugin.tr('AI Models list'),
 		isVisual : true,
-		buttons : [ 
-			{ text: window.Asc.plugin.tr('Back'), primary: false },
+		buttons : [
+			{ text: window.Asc.plugin.tr('OK'), primary: false },
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell", "pdf"],
@@ -411,13 +950,28 @@ function onOpenEditModal(data) {
 		],
 		isModal : true,
 		EditorsSupport : ["word", "slide", "cell", "pdf"],
-		size : [320, 375]
+		size : [365, 425]
 	};
 
 	if (!aiModelEditWindow) {
 		aiModelEditWindow = new window.Asc.PluginWindow();
 		aiModelEditWindow.attachEvent("onChangeModel", function(model){
+			//Assign this model to actions without a model
+			const models = AI.Storage.serializeModels();
+			let needUpdateSettingsWindow = false;
+			AI.ActionsGetSorted().forEach(function(action) {
+				const hasModel = models.some(function(model) { return model.id == action.model });
+				if(!hasModel && (action.capabilities & model.capabilities) !== 0) {
+					AI.ActionsChange(action.id, model.id);
+					needUpdateSettingsWindow = true;
+				}
+			});
+			if(needUpdateSettingsWindow) {
+				updateActions();
+			}
+
 			AI.Storage.addModel(model);
+
 			aiModelEditWindow.close();
 			aiModelEditWindow = null;
 		});
@@ -431,6 +985,11 @@ function onOpenEditModal(data) {
 				model : data.model ? AI.Storage.getModelByName(data.model.name) : null,
 				providers : AI.serializeProviders()
 			});
+		});
+		aiModelEditWindow.attachEvent("onUpdateHeight", function(height) {
+			if(height > variation.size[1]) {
+				Asc.Editor.callMethod("ResizeWindow", [aiModelEditWindow.id, [variation.size[0] - 2, height]]);	//2 is the border-width at the window
+			}
 		});
 		aiModelEditWindow.attachEvent('onOpenCustomProvidersModal', onOpenCustomProvidersModal);
 	}
