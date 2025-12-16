@@ -1,6 +1,7 @@
 .icons-container {
     position: relative;
     height: calc(100% - 170px);
+    min-height: 100px;
     width: 100%;
     box-sizing: border-box;
     margin-top: 12px;
