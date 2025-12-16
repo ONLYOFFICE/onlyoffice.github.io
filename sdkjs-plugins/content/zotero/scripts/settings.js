@@ -68,17 +68,6 @@ function SettingsPage(router, displayNoneClass) {
         variant: "secondary",
     });
 
-    /*
-    this._styleSelectList = document.getElementById("styleSelectList");
-    if (!this._styleSelectList) {
-        throw new Error("styleSelectList not found");
-    }
-    this._styleSelectListOther = document.getElementById(
-        "styleSelectedListOther"
-    );
-    if (!this._styleSelectListOther) {
-        throw new Error("styleSelectListOther not found");
-    }*/
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
     });
@@ -86,13 +75,7 @@ function SettingsPage(router, displayNoneClass) {
         placeholder: "Enter style name",
         searchable: true,
     });
-    /*this._styleSelect = document.getElementById("styleSelect");
-    if (
-        !this._styleSelect ||
-        this._styleSelect instanceof HTMLInputElement === false
-    ) {
-        throw new Error("styleSelect not found");
-    }*/
+
     this._notesStyleWrapper = document.getElementById("notesStyle");
     if (!this._notesStyleWrapper) {
         throw new Error("notesStyleWrapper not found");
@@ -190,8 +173,6 @@ function SettingsPage(router, displayNoneClass) {
     ];
 
     this._bNumFormat = false;
-
-    this._initSelectBoxes();
 
     /** @type {Settings} */
     this._stateSettings = {
@@ -371,17 +352,12 @@ SettingsPage.prototype._addEventListeners = function () {
             self._stateSettings.style !== selectedStyleId &&
             selectedStyleId !== null
         ) {
-            const el = self._styleSelectList.querySelector(
-                "[data-value='" + self._stateSettings.style + "']"
+            self._styleSelect.selectItems([self._stateSettings.style], true);
+            self._onStyleChange(self._stateSettings.style, true).then(
+                function () {
+                    self._hide();
+                }
             );
-            if (el && el instanceof HTMLElement) {
-                self._selectStyle(el, false);
-                self._onStyleChange(self._stateSettings.style, true).then(
-                    function () {
-                        self._hide();
-                    }
-                );
-            }
         } else {
             self._hide();
         }
@@ -419,6 +395,7 @@ SettingsPage.prototype._addEventListeners = function () {
                 event.detail.current.toString(),
                 true
             );
+            self._onStyleChange(event.detail.current.toString(), true);
             return;
         } else if (event.type !== "selectbox:custom") {
             return;
@@ -467,15 +444,6 @@ SettingsPage.prototype._loadStyles = function () {
         .getStylesInfo()
         .then(
             /** @param {Array<StyleInfo>} stylesInfo*/ function (stylesInfo) {
-                /*var openOtherStyleList = function (
-                    list
-                ) {
-                    return function (ev) {
-                        ev.stopPropagation();
-                        self._openList(list);
-                    };
-                };*/
-
                 self._addStylesToList(stylesInfo);
                 self._styleSelect.addCustomItem(
                     "more_styles",
@@ -485,27 +453,6 @@ SettingsPage.prototype._loadStyles = function () {
                     "cslFileInput",
                     "Add custom style..."
                 );
-                /*
-                const el = document.createElement("hr");
-                self._styleSelectList.appendChild(el);
-
-                if (self._styleSelectListOther.children.length > 0) {
-                    var other = document.createElement("span");
-                    other.textContent = "More Styles...";
-                    self._styleSelectList.appendChild(other);
-                    other.onclick = openOtherStyleList(
-                        self._styleSelectListOther
-                    );
-                }
-
-                var custom = document.createElement("span");
-                custom.setAttribute("class", "select-file");
-                var label = document.createElement("label");
-                label.setAttribute("for", "cslFileInput");
-                label.textContent = "Add custom style...";
-                custom.appendChild(label);
-                self._styleSelectList.appendChild(custom);
-                */
             }
         )
         .catch(function (err) {
@@ -520,46 +467,6 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
     const self = this;
     var lastStyle = this._cslStylesManager.getLastUsedStyleIdOrDefault();
 
-    /**
-     * @param {HTMLElement} list - the list of styles where the element is added.
-     * @param {HTMLElement} other - the list of styles where the element is removed.
-     */
-    /*var onStyleSelectOther = function (list, other) {
-        return function ( ev) {
-            let tmpEl = list.removeChild(
-                list.children[list.children.length - 3]
-            );
-            var newEl = document.createElement("span");
-            newEl.setAttribute(
-                "data-value",
-                String(tmpEl.getAttribute("data-value"))
-            );
-            newEl.textContent = tmpEl.textContent;
-            other.appendChild(newEl);
-            newEl.onclick = onStyleSelectOther(
-                self._styleSelectList,
-                self._styleSelectListOther
-            );
-
-            if (ev.target instanceof HTMLElement === false) {
-                console.error("ev.target is not an HTMLElement");
-                return;
-            }
-            tmpEl = other.removeChild(ev.target);
-            newEl = document.createElement("span");
-            newEl.setAttribute(
-                "data-value",
-                String(tmpEl.getAttribute("data-value"))
-            );
-            newEl.textContent = tmpEl.textContent;
-            list.insertBefore(newEl, list.firstElementChild);
-            newEl.onclick = self._onClickListElement(self._styleSelectList);
-            var event = new Event("click");
-            newEl.dispatchEvent(event);
-            self._closeList();
-        };
-    };
-*/
     /** @type {[string, string][]} */
     const allStyles = stylesInfo.map(function (style) {
         return [style.name, style.title];
@@ -572,200 +479,6 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
 
     this._styleSelect.addItems(mainStyles, lastStyle);
     this._styleSelectListOther.addItems(allStyles, lastStyle);
-
-    /*for (var i = 0; i < stylesInfo.length; i++) {
-        var el = document.createElement("span");
-        el.setAttribute("data-value", stylesInfo[i].name);
-        el.textContent = stylesInfo[i].title;
-        if (
-            self._cslStylesManager.isStyleDefault(stylesInfo[i].name) ||
-            stylesInfo[i].name == lastStyle
-        ) {
-            if (stylesInfo.length == 1)
-                self._styleSelectList.insertBefore(
-                    el,
-                    self._styleSelectList.firstElementChild
-                );
-            else self._styleSelectList.appendChild(el);
-            el.onclick = self._onClickListElement(self._styleSelectList);
-        } else {
-            self._styleSelectListOther.appendChild(el);
-            el.onclick = onStyleSelectOther(
-                self._styleSelectList,
-                self._styleSelectListOther
-            );
-        }
-        if (stylesInfo[i].name == lastStyle) {
-            el.setAttribute("selected", "");
-            self._selectStyle(el, false);
-        }
-    }*/
-};
-
-/**
- * @param {HTMLElement} el
- */
-SettingsPage.prototype._openList = function (el) {
-    const self = this;
-    el.classList.remove(this._displayNoneClass);
-    const f = function () {
-        self._closeList();
-        window.removeEventListener("click", f);
-    };
-    window.addEventListener("click", f);
-};
-
-SettingsPage.prototype._closeList = function () {
-    for (var i = 0; i < this._selectLists.length; i++) {
-        if (this._selectLists[i] === this._styleSelectList)
-            this._onStyleFilterInput("");
-        this._selectLists[i].classList.add(this._displayNoneClass);
-    }
-};
-
-SettingsPage.prototype._initSelectBoxes = function () {
-    const self = this;
-    var select = document.getElementsByClassName("control select");
-    for (var i = 0; i < select.length; i++) {
-        var input = select[i];
-        var holder = input.parentElement;
-        if (!(input instanceof HTMLInputElement) || !holder) {
-            console.error("initSelectBoxes: no input or holder");
-            continue;
-        }
-
-        var arrow = document.createElement("span");
-        arrow.classList.add("selectArrow");
-        arrow.appendChild(document.createElement("span"));
-        arrow.appendChild(document.createElement("span"));
-        holder.appendChild(arrow);
-
-        const holderElement = holder.getElementsByClassName("selectList");
-
-        for (var k = 0; k < holderElement.length; k++) {
-            var temp = holderElement[k];
-            var list;
-            if (temp instanceof HTMLElement) {
-                list = temp;
-            } else {
-                console.error(
-                    "initSelectBoxes: holderElement is not HTMLElement"
-                );
-                continue;
-            }
-
-            if (list.children.length > 0) {
-                for (var j = 0; j < list.children.length; j++) {
-                    const child = list.children[j];
-                    if (child instanceof HTMLElement === false) {
-                        continue;
-                    }
-                    child.onclick = self._onClickListElement(list);
-                }
-                // selectInput(input, list.children[0], list, false);
-            }
-
-            /**
-             * @param {HTMLElement} list
-             * @param {HTMLElement} input
-             * @returns {function}
-             */
-            var fOpen = function (list, input) {
-                return function (/** @type {MouseEvent} */ ev) {
-                    ev.stopPropagation();
-                    if (
-                        !self._styleSelectListOther.classList.contains(
-                            self._displayNoneClass
-                        )
-                    )
-                        return true;
-
-                    if (!input.hasAttribute("readonly")) {
-                        input.select();
-                    }
-                    self._openList(list);
-
-                    return true;
-                };
-            };
-
-            if (k !== 1) {
-                input.onclick = fOpen(list, input);
-                arrow.onclick = fOpen(list, input);
-            }
-            self._selectLists.push(list);
-        }
-    }
-};
-
-/**
- * @param {HTMLElement} list
- */
-SettingsPage.prototype._onClickListElement = function (list) {
-    const self = this;
-    return function (/** @type {MouseEvent} */ ev) {
-        if (!ev.target || !(ev.target instanceof HTMLElement)) {
-            console.error("onClickListElement: no target");
-            return;
-        }
-        var sel = ev.target.getAttribute("data-value");
-        for (var i = 0; i < list.children.length; i++) {
-            const temp = list.children[i];
-            if (temp instanceof HTMLElement === false) continue;
-            /** @type {HTMLElement} */
-            const child = temp;
-            if (list.children[i].getAttribute("data-value") == sel) {
-                list.children[i].setAttribute("selected", "");
-
-                self._selectStyle(child, true);
-            } else {
-                if (list.children[i].hasAttribute("selected")) {
-                    list.children[i].attributes.removeNamedItem("selected");
-                }
-            }
-        }
-    };
-};
-
-/**
- * @param {HTMLElement} el
- * @param {boolean} isClick
- */
-SettingsPage.prototype._selectStyle = function (el, isClick) {
-    this._styleSelect.value = el.textContent;
-    var val = el.getAttribute("data-value") || "";
-    this._styleSelect.setAttribute("data-value", val);
-    this._styleSelect.setAttribute("title", el.textContent);
-
-    this._onStyleFilterInput("");
-    this._onStyleChange(val, isClick);
-
-    this._styleSelectList.classList.add(this._displayNoneClass);
-};
-
-/**
- * @param {String} [filter] - The filter to apply on the style options.
- */
-SettingsPage.prototype._onStyleFilterInput = function (filter) {
-    var input = this._styleSelect;
-    if (!(input instanceof HTMLInputElement)) return;
-    filter = filter !== undefined ? filter : input.value.toLowerCase();
-    var list = this._styleSelectList.classList.contains(this._displayNoneClass)
-        ? this._styleSelectListOther
-        : this._styleSelectList;
-
-    for (var i = 0; i < list.children.length; i++) {
-        const child = list.children[i];
-        if (child instanceof HTMLElement === false) {
-            continue;
-        }
-        var text = child.textContent || child.innerText;
-        if (!filter || text.toLowerCase().indexOf(filter) > -1) {
-            child.classList.remove(this._displayNoneClass);
-        } else {
-            child.classList.add(this._displayNoneClass);
-        }
-    }
 };
 
 /**

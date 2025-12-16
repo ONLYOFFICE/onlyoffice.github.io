@@ -209,7 +209,6 @@ SelectBox.prototype = {
         this.isOpen ? this._closeDropdown() : this.openDropdown();
     },
     openDropdown: function () {
-        console.warn("Opening dropdown", this.isOpen);
         if (!this.isOpen) {
             // Close on outside click
             document.addEventListener("click", this._boundHandles.close);
@@ -340,7 +339,7 @@ SelectBox.prototype = {
         }
 
         this._updateSelectedText();
-        this._renderOptions(searchTerm);
+        this._renderOptions(searchTerm, true);
         this._triggerChange(newItem.value, true);
     },
 
@@ -379,9 +378,10 @@ SelectBox.prototype = {
     },
     /**
      * @param {string} [searchTerm]
+     * @param {boolean} [scrollIntoView]
      * @private
      * */
-    _renderOptions: function (searchTerm) {
+    _renderOptions: function (searchTerm, scrollIntoView) {
         searchTerm = searchTerm || "";
         if (!this._optionsContainer) return;
         this._optionsContainer.innerHTML = "";
@@ -478,7 +478,12 @@ SelectBox.prototype = {
 
         this._optionsContainer.appendChild(fragment);
 
-        if (this.isOpen && this._optionsContainer && selectedOption) {
+        if (
+            scrollIntoView &&
+            this.isOpen &&
+            this._optionsContainer &&
+            selectedOption
+        ) {
             try {
                 if (selectedOption.scrollIntoView) {
                     selectedOption.scrollIntoView({ block: "nearest" });
