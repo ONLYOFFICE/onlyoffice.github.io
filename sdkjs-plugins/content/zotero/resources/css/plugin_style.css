@@ -400,6 +400,7 @@ input[type="text"] {
 #footerCont {
     display: flex;
     flex-direction: row;
+    margin-top: 20px;
 }
 
     #footerCont > span:first-of-type {

@@ -49,6 +49,12 @@
  * @property {string} [id]
  */
 
+/**
+ * @typedef {Object} CheckboxEventType
+ * @property {string} type
+ * @property {Event} [originalEvent]
+ * @property {{value: string, disabled: boolean, checked: boolean}} detail
+ */
 
 /** ********************** */
 
