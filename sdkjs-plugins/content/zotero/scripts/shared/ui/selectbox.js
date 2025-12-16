@@ -160,6 +160,9 @@ SelectBox.prototype = {
             "click",
             this._boundHandles.dropdownClick
         );
+        this._dropdown.addEventListener("wheel", function (e) {
+            e.stopPropagation();
+        });
 
         // Keyboard navigation
         this._header.addEventListener("keydown", this._boundHandles.keydown);
@@ -376,23 +379,49 @@ SelectBox.prototype = {
             let option = document.createElement("div");
             option.className += " selectbox-option";
             if (this._selectedValues.has(item.value)) {
-                option.className += " selectbox-option-selected";
+                option.className +=
+                    " selectbox-option-selected checkbox--checked";
                 selectedOption = option;
             }
             option.setAttribute("data-value", item.value);
 
+            let label = document.createElement("label");
+            label.className += " selectbox-option-text";
+            label.textContent = item.text;
+
             if (this._options.multiple) {
+                option.className += " checkbox";
                 let input = document.createElement("input");
                 input.type = "checkbox";
+                input.id = "checkbox-" + item.value;
                 input.className += " selectbox-checkbox";
                 input.checked = this._selectedValues.has(item.value);
                 option.appendChild(input);
+                //label.htmlFor = input.id;
+                const visualCheckbox = document.createElement("span");
+                visualCheckbox.className = "checkbox-visual";
+                visualCheckbox.setAttribute("aria-hidden", "true");
+
+                const svgNS = "http://www.w3.org/2000/svg";
+                const checkmarkSVG = document.createElementNS(svgNS, "svg");
+                checkmarkSVG.setAttribute("viewBox", "0 0 10 8");
+                checkmarkSVG.setAttribute("class", "checkbox-checkmark");
+
+                const path = document.createElementNS(svgNS, "path");
+                path.setAttribute(
+                    "d",
+                    "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"
+                );
+                path.setAttribute("fill", "none");
+                path.setAttribute("stroke", "currentColor");
+                path.setAttribute("stroke-width", "2");
+
+                checkmarkSVG.appendChild(path);
+                visualCheckbox.appendChild(checkmarkSVG);
+                option.appendChild(visualCheckbox);
             }
 
-            let span = document.createElement("span");
-            span.className += " selectbox-option-text";
-            span.textContent = item.text;
-            option.appendChild(span);
+            option.appendChild(label);
             fragment.appendChild(option);
         }
         if (this._customItems.length) {
@@ -780,6 +809,7 @@ SelectBox.prototype = {
                             checkbox.checked = true;
                         }
                         option.classList.add("selectbox-option-selected");
+                        option.classList.add("checkbox--checked");
                     }
                 }
             };
@@ -809,6 +839,7 @@ SelectBox.prototype = {
                 );
                 selectedOptions.forEach(function (option) {
                     option.classList.remove("selectbox-option-selected");
+                    option.classList.remove("checkbox--checked");
                 });
                 let option = this._optionsContainer.querySelector(
                     '[data-value="' + value + '"]'
@@ -816,6 +847,7 @@ SelectBox.prototype = {
 
                 if (option) {
                     option.classList.add("selectbox-option-selected");
+                    option.classList.add("checkbox--checked");
                 }
             }
             this._closeDropdown();
@@ -862,6 +894,7 @@ SelectBox.prototype = {
                         checkbox.checked = false;
                     }
                     option.classList.remove("selectbox-option-selected");
+                    option.classList.remove("checkbox--checked");
                 }
             }
         };

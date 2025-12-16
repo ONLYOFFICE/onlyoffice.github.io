@@ -25,7 +25,7 @@ function SelectCitationsComponent(
     this._items = {};
     /** @type {Object<string|number, HTMLElement>} */
     this._html = {};
-    /** @type {Object<string|number, HTMLInputElement>} */
+    /** @type {Object<string|number, Checkbox>} */
     this._checks = {};
 
     this._LOCATOR_VALUES = [
@@ -161,7 +161,8 @@ SelectCitationsComponent.prototype.displaySearchItems = function (
 
 /** @returns {Object<string|number, SearchResultItem>} */
 SelectCitationsComponent.prototype.getSelectedItems = function () {
-    return this._items;
+    const items = Object.assign({}, this._items || {});
+    return items;
 };
 
 /**
@@ -204,29 +205,14 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     docInfo.classList.add("docInfo");
 
     var checkHolder = document.createElement("div");
-    var checkWrapper = document.createElement("div");
-    checkWrapper.classList.add("checkbox");
-    var check = document.createElement("input");
-    check.setAttribute("type", "checkbox");
-    check.setAttribute("id", item.id);
-    if (this._items[item.id]) {
-        check.checked = true;
-        this._checks[item.id] = check;
-    }
-    checkWrapper.appendChild(check);
-    checkWrapper.appendChild(document.createElement("span"));
-    checkHolder.appendChild(checkWrapper);
 
-    const label = document.createElement("label");
+    let label = "";
     if (item.author && item.author.length > 0) {
-        label.textContent = item.author
+        label = item.author
             .map(function (a) {
                 return a.family.trim() + ", " + a.given.trim();
             })
             .join("; ");
-        label.setAttribute("title", label.textContent);
-        label.classList.add("truncate-text");
-        label.classList.add("nowrap");
     }
     const arrow = document.createElement("div");
     arrow.classList.add("selectbox-arrow");
@@ -249,25 +235,36 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
     if (item.issued && item.issued["date-parts"]) {
         var date = item.issued["date-parts"][0];
-        if (label.textContent.length > 20) {
+        if (label.length > 20) {
             title.textContent += " (" + date.join("-") + ")";
         } else {
             if (
-                label.textContent.length > 0 &&
-                label.textContent.slice(-1) !== "." &&
-                label.textContent.slice(-1) !== ","
+                label.length > 0 &&
+                label.slice(-1) !== "." &&
+                label.slice(-1) !== ","
             )
-                label.textContent += ".";
-            label.textContent += " " + date.join("-");
+                label += ".";
+            label += " " + date.join("-");
         }
     }
-    if (label.textContent.length === 0) {
-        label.textContent = title.textContent;
+    if (label.length === 0) {
+        label = title.textContent;
     }
     title.setAttribute("title", title.textContent);
     docInfo.appendChild(title);
 
-    checkHolder.appendChild(label);
+    const check = document.createElement("input");
+
+    checkHolder.appendChild(check);
+    const checkInput = new Checkbox(check, {
+        checked: !!this._items[item.id],
+        label: label,
+        id: item.id,
+    });
+    if (this._items[item.id]) {
+        this._checks[item.id] = checkInput;
+    }
+
     checkHolder.appendChild(arrow);
     root.appendChild(checkHolder);
     root.appendChild(docInfo);
@@ -275,19 +272,6 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     /** @type {DocumentFragment} */
     let params;
 
-    /**
-     * @param {HTMLInputElement} input
-     * @param {SearchResultItem} item
-     * @returns
-     */
-    function selectItem(input, item) {
-        input.checked = !input.checked;
-        if (input.checked) {
-            self._addSelected(item, input);
-        } else {
-            self._removeSelected(item.id);
-        }
-    }
     function toggleItem() {
         root.classList.toggle("doc-open");
         if (!params) {
@@ -296,11 +280,17 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
         }
     }
 
-    const f = selectItem.bind(this, check, item);
-    checkWrapper.onclick = f;
-    label.onclick = f;
-    docInfo.onclick = f;
     arrow.onclick = toggleItem;
+    checkInput.subscribe(function (event) {
+        if (event.type !== "checkbox:change") {
+            return;
+        }
+        if (event.detail.checked) {
+            self._addSelected(item, checkInput);
+        } else {
+            self._removeSelected(item.id);
+        }
+    });
 
     return root;
 };
@@ -354,19 +344,19 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     });
 
     prefixInput.subscribe(function (event) {
-        if (event.type !== "input:change") {
+        if (event.type !== "inputfield:input") {
             return;
         }
         item.prefix = event.detail.value;
     });
     suffixInput.subscribe(function (event) {
-        if (event.type !== "input:change") {
+        if (event.type !== "inputfield:input") {
             return;
         }
         item.suffix = event.detail.value;
     });
     locatorInput.subscribe(function (event) {
-        if (event.type !== "input:change") {
+        if (event.type !== "inputfield:input") {
             return;
         }
         item.locator = event.detail.value;
@@ -438,14 +428,14 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
 
 /**
  * @param {SearchResultItem} item
- * @param {HTMLInputElement} input
+ * @param {Checkbox} checkbox
  */
-SelectCitationsComponent.prototype._addSelected = function (item, input) {
+SelectCitationsComponent.prototype._addSelected = function (item, checkbox) {
     /** @type {HTMLElement} */
     var el = this._buildSelectedElement(item);
     this._items[item.id] = item;
     this._html[item.id] = el;
-    this._checks[item.id] = input;
+    this._checks[item.id] = checkbox;
     if (this._selectedHolder) {
         this._selectedHolder.appendChild(el);
     }
@@ -574,15 +564,17 @@ SelectCitationsComponent.prototype._checkScroll = function (
 /** @param {string|number} id */
 SelectCitationsComponent.prototype._removeSelected = function (id) {
     var el = this._html[id];
-    delete this._items[id];
-    delete this._html[id];
-    if (this._checks[id]) {
-        this._checks[id].checked = false;
-        delete this._checks[id];
-    }
     if (this._selectedHolder) {
         this._selectedHolder.removeChild(el);
     }
+
+    delete this._items[id];
+    delete this._html[id];
+    if (this._checks[id]) {
+        this._checks[id].uncheck(true);
+        delete this._checks[id];
+    }
+
     this._docsScroller.onscroll();
     this._selectedScroller.onscroll();
     this._checkSelected();
