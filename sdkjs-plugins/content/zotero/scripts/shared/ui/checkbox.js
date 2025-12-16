@@ -33,6 +33,8 @@ function Checkbox(checkbox, options) {
     this._createDOM(checkbox);
     this._setupEventListeners();
     this._updateVisualState();
+    /** @type {Function[]} */
+    this._subscribers = [];
 }
 
 Checkbox.prototype = {
@@ -58,8 +60,6 @@ Checkbox.prototype = {
      * @private
      */
     _labelElement: null,
-    /** @type {Function[]} */
-    _subscribers: [],
 
     /**
      * @param {HTMLInputElement} checkbox
@@ -264,26 +264,28 @@ Checkbox.prototype = {
 
     /**
      * Set checkbox to checked state
+     * @param {boolean} [bSilent]
      */
-    check: function () {
+    check: function (bSilent) {
         if (this._disabled || (this._checked && !this._indeterminate)) return;
 
         this._checked = true;
         this._indeterminate = false;
         this._updateVisualState();
-        this._triggerChange();
+        if (!bSilent) this._triggerChange();
     },
 
     /**
      * Set checkbox to unchecked state
+     * @param {boolean} [bSilent]
      */
-    uncheck: function () {
+    uncheck: function (bSilent) {
         if (this._disabled || (!this._checked && !this._indeterminate)) return;
 
         this._checked = false;
         this._indeterminate = false;
         this._updateVisualState();
-        this._triggerChange();
+        if (!bSilent) this._triggerChange();
     },
 
     /**

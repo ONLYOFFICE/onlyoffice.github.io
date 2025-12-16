@@ -321,9 +321,12 @@ input[type="text"] {
         white-space: nowrap;
         margin-top: 0;
     }
-    .doc > div label {
+    .doc > div:first-child .checkbox {
         width: calc(100% - 44px);
         padding-bottom: 5px;
+    }
+    .doc > div:first-child label {
+        
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -349,8 +352,9 @@ input[type="text"] {
 
     .doc.doc-open {
         max-height: none;
+        overflow: visible;
     }
-    .doc-open .selectbox-arrow {
+    .doc-open > div:first-child .selectbox-arrow {
         transform: rotate(180deg);
     }
     .doc-open .docInfo {
