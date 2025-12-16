@@ -352,6 +352,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     params.appendChild(locatorContainer);
     locatorContainer.appendChild(locatorSelect);
     locatorContainer.appendChild(locator);
+    let locatorPlaceholder = "";
 
     params.appendChild(omitAuthorContainer);
     omitAuthorContainer.appendChild(omitAuthor);
@@ -367,9 +368,16 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     const locatorSelectbox = new SelectBox(locatorSelect, {
         placeholder: "Locator",
     });
+    this._LOCATOR_VALUES.forEach(function (info) {
+        const selected = info[0] === locatorLabel;
+        locatorSelectbox.addItem(info[0], info[1], selected);
+        if (selected) {
+            locatorPlaceholder = info[1];
+        }
+    });
     const locatorInput = new InputField(locator, {
         type: "text",
-        placeholder: "",
+        placeholder: locatorPlaceholder,
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
         label: "Omit author",
@@ -394,14 +402,15 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
         item.locator = event.detail.value;
     });
 
-    this._LOCATOR_VALUES.forEach(function (info) {
-        const selected = info[0] === locatorLabel;
-        locatorSelectbox.addItem(info[0], info[1], selected);
-    });
     locatorSelectbox.subscribe(function (event) {
         if (event.type !== "selectbox:change") {
             return;
         }
+        if (!event.detail.items) {
+            return;
+        }
+        const eventItem = event.detail.items[0];
+        locatorInput.setPlaceholder(eventItem.text);
         item.label = event.detail.values[0].toString();
         localStorage.setItem("selectedLocator", item.label);
     });

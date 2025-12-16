@@ -518,6 +518,14 @@ InputField.prototype = {
     },
 
     /**
+     * @param {string} value
+     */
+    setPlaceholder: function (value) {
+        this.input.placeholder = value;
+        this._options.placeholder = value;
+    },
+
+    /**
      * @param {boolean} [bFocus]
      */
     clear: function (bFocus) {
