@@ -7,10 +7,13 @@ function sanitizeSvgString(svgString) {
   if (typeof svgString !== "string") {
     return "";
   }
-  return svgString.replace(
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    "",
-  );
+  return svgString
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(
+      /<foreignObject\b[^<]*(?:(?!<\/foreignObject>)<[^<]*)*<\/foreignObject>/gi,
+      "",
+    )
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "");
 }
 
 (function (window) {
@@ -26,11 +29,13 @@ function sanitizeSvgString(svgString) {
       return;
     }
     svgString = sanitizeSvgString(svgString);
+    // console.log(svgString);
     Asc.scope.dataUrl =
       "data:image/svg+xml;base64," +
       window.btoa(
         String.fromCharCode.apply(null, new TextEncoder().encode(svgString)),
       );
+    // console.log(Asc.scope.dataUrl);
     const scale = 2.0; // Apply a default scaling factor to make it larger
     Asc.scope.nWidth = (((width * scale) / 96) * 914400 + 0.5) >> 0;
     Asc.scope.nHeight = (((height * scale) / 96) * 914400 + 0.5) >> 0;
