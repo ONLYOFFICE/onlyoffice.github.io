@@ -107,7 +107,7 @@ let errorLabelEl = document.getElementById('error-label');
 let errorLabelTimeout = null;
 
 // TODO: Change path for template file
-let templateFilePath = document.currentScript.src + '/../engine/providers/provider.js';
+let templateFilePath = document.currentScript.src + '/../engine/providers/internal/openai.js';
 
 window.Asc.plugin.init = function() {
 	window.Asc.plugin.sendToPlugin("onInit");
@@ -153,10 +153,10 @@ window.Asc.plugin.onTranslate = function () {
 			innerEl.appendChild(linkEl);
 			return innerEl;
 		},
-		xAnchor: 'left',
-		align: 'left',
+		xAnchor: 'center',
+		align: 'auto',
 		yOffset: 4,
-		width: 150,
+		width: 145,
 		hasShadow: true,
 		keepAliveOnHover: true,
 		delay: 200,

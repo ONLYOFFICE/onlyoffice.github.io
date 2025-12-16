@@ -28,8 +28,10 @@
 	"Name" : "名称",
 	"URL" : "URL",
 	"Key" : "密钥",
+	"e.g. abc123...": "例如：abc123...",
 	"Update models list" : "更新模型列表",
 	"Use model for" : "使用模型",
+	"All": "全部",
 	"Text": "处理文本",
 	"Audio Processing": "处理音频",
 	"Content Moderation": "审核内容",
@@ -141,5 +143,15 @@
 	"Text to Image": "文本转图像",
 	"Image generation": "图像生成",
 	"OCR": "OCR文字识别",
-	"Vision": "智能视觉处理"
+	"Vision": "智能视觉处理",
+	
+	"Grammar & Spelling": "拼写与语法检查",
+	"Accept": "接受",
+	"Reject": "拒绝",
+	"Spelling suggestion": "拼写建议",
+	"Grammar suggestion": "语法建议",
+	"Check all": "检查全部",
+	"Check current text": "检查当前文本",
+	"Suggested correction": "修改建议",
+	"Explanation": "解释说明"
 }

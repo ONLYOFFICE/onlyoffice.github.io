@@ -79,6 +79,17 @@ Two installation ways are available:
 
 5. Copy the newly created key and paste to `API Key` field in the plugin’s interface and save it. 
 
+## Offline mode
+
+1. [Download](https://www.zotero.org/download/) and install Zotero Connector.
+2. Launch the desktop application.
+3. Make sure the application API is open for interaction. (`Edit` -> `Settings` -> `Advanced` -> `Allow other applications on this computer to communicate with Zotero`)
+
+### Update locale files downloaded offline
+```bash
+    cd .dev/offline-files-update && npm run start && cd ../..
+```
+
 ## Known issues
 
 For CentOS users with SELinx enabled, after copying the src folder to sdkjs-plugins, plugins may not work due to the variable file security context. To restore the rights, use the following command:
