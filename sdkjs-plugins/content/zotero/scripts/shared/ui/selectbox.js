@@ -41,6 +41,8 @@ function SelectBox(container, options) {
     this.isOpen = false;
     /** @type {Array<{ value: string, text: string, selected: boolean } | null>} */
     this._items = [];
+    /** @type {Array<{ value: string, text: string, selected: boolean }>} */
+    this._customItems = [];
     /** @type {Function[]} */
     this._subscribers = [];
     /** @type {BoundHandlesType} */
@@ -172,6 +174,7 @@ SelectBox.prototype = {
         this.isOpen ? this._closeDropdown() : this.openDropdown();
     },
     openDropdown: function () {
+        console.warn("Opening dropdown", this.isOpen);
         if (!this.isOpen) {
             // Close on outside click
             document.addEventListener("click", this._boundHandles.close);
@@ -241,20 +244,80 @@ SelectBox.prototype = {
     },
 
     /**
+     * @param {'up'|'down'} direction
+     */
+    _selectNextPrevItem: function (direction) {
+        const searchTerm = this.searchInput
+            ? this.searchInput.value.toLowerCase()
+            : "";
+        let newItem;
+        let items = this._items.filter(function (item) {
+            return item !== null;
+        });
+        if (searchTerm) {
+            items = items.filter(function (item) {
+                return item.text.toLowerCase().indexOf(searchTerm) !== -1;
+            });
+        }
+        if (items.length === 0) {
+            return;
+        }
+        if (direction === "up") {
+            if (this._selectedValues.size === 0 && items.length > 0) {
+                newItem = items[items.length - 1];
+                this._selectedValues.add(newItem.value);
+            } else {
+                var selectedArray = Array.from(this._selectedValues);
+                var currentIndex = -1;
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].value === selectedArray[0]) {
+                        currentIndex = i;
+                        break;
+                    }
+                }
+                var prevIndex =
+                    (currentIndex - 1 + items.length) % items.length;
+                this._selectedValues.clear();
+                newItem = items[prevIndex];
+                this._selectedValues.add(newItem.value);
+            }
+        } else {
+            if (this._selectedValues.size === 0 && items.length > 0) {
+                newItem = items[0];
+                this._selectedValues.add(newItem.value);
+            } else {
+                var selectedArray = Array.from(this._selectedValues);
+                var currentIndex = -1;
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].value === selectedArray[0]) {
+                        currentIndex = i;
+                        break;
+                    }
+                }
+                var nextIndex = (currentIndex + 1) % items.length;
+                if (nextIndex === items.length) {
+                    nextIndex = 0;
+                }
+                this._selectedValues.clear();
+                newItem = items[nextIndex];
+                this._selectedValues.add(newItem.value);
+            }
+        }
+
+        this._updateSelectedText();
+        this._renderOptions(searchTerm);
+        this._triggerChange(newItem.value, true);
+    },
+
+    /**
      * @param {KeyboardEvent} e
      * @private
      */
     _handleKeydown: function (e) {
         var key = e.key || e.keyCode;
-        const items = this._items.filter(function (item) {
-            return item !== null;
-        });
-        let newItem;
 
         switch (key) {
-            case " ":
             case "Enter":
-            case 32:
             case 13:
                 e.preventDefault();
                 this._toggle(e);
@@ -266,55 +329,12 @@ SelectBox.prototype = {
             case "ArrowDown":
             case 40:
                 e.preventDefault();
-                if (this._selectedValues.size === 0 && items.length > 0) {
-                    newItem = items[0];
-                    this._selectedValues.add(newItem.value);
-                } else {
-                    var selectedArray = Array.from(this._selectedValues);
-                    var currentIndex = -1;
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].value === selectedArray[0]) {
-                            currentIndex = i;
-                            break;
-                        }
-                    }
-                    var nextIndex = (currentIndex + 1) % items.length;
-                    this._selectedValues.clear();
-                    newItem = items[nextIndex];
-                    this._selectedValues.add(newItem.value);
-                }
-                this._updateSelectedText();
-                this._renderOptions(
-                    this.searchInput ? this.searchInput.value : ""
-                );
-                this._triggerChange(newItem.value, true);
+                this._selectNextPrevItem("down");
                 break;
             case "ArrowUp":
             case 38:
                 e.preventDefault();
-                if (this._selectedValues.size === 0 && items.length > 0) {
-                    newItem = items[items.length - 1];
-                    this._selectedValues.add(newItem.value);
-                } else {
-                    var selectedArray = Array.from(this._selectedValues);
-                    var currentIndex = -1;
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].value === selectedArray[0]) {
-                            currentIndex = i;
-                            break;
-                        }
-                    }
-                    var prevIndex =
-                        (currentIndex - 1 + items.length) % items.length;
-                    this._selectedValues.clear();
-                    newItem = items[prevIndex];
-                    this._selectedValues.add(newItem.value);
-                }
-                this._updateSelectedText();
-                this._renderOptions(
-                    this.searchInput ? this.searchInput.value : ""
-                );
-                this._triggerChange(newItem.value, true);
+                this._selectNextPrevItem("up");
                 break;
             case "Tab":
             case 9:
@@ -346,14 +366,14 @@ SelectBox.prototype = {
 
         var fragment = document.createDocumentFragment();
         for (var i = 0; i < filteredItems.length; i++) {
-            var item = filteredItems[i];
+            let item = filteredItems[i];
             if (!item) {
                 const hr = document.createElement("hr");
                 hr.className += " selectbox-option-divider";
                 fragment.appendChild(hr);
                 continue;
             }
-            var option = document.createElement("div");
+            let option = document.createElement("div");
             option.className += " selectbox-option";
             if (this._selectedValues.has(item.value)) {
                 option.className += " selectbox-option-selected";
@@ -362,12 +382,31 @@ SelectBox.prototype = {
             option.setAttribute("data-value", item.value);
 
             if (this._options.multiple) {
-                var input = document.createElement("input");
+                let input = document.createElement("input");
                 input.type = "checkbox";
                 input.className += " selectbox-checkbox";
                 input.checked = this._selectedValues.has(item.value);
                 option.appendChild(input);
             }
+
+            let span = document.createElement("span");
+            span.className += " selectbox-option-text";
+            span.textContent = item.text;
+            option.appendChild(span);
+            fragment.appendChild(option);
+        }
+        if (this._customItems.length) {
+            const hr = document.createElement("hr");
+            hr.className += " selectbox-option-divider";
+            fragment.appendChild(hr);
+        }
+        for (var i = 0; i < this._customItems.length; i++) {
+            let item = this._customItems[i];
+
+            let option = document.createElement("label");
+            option.className += " selectbox-custom-option";
+            option.setAttribute("data-value", item.value);
+            option.setAttribute("for", item.value);
 
             var span = document.createElement("span");
             span.className += " selectbox-option-text";
@@ -404,6 +443,15 @@ SelectBox.prototype = {
                 if (classList[i] === "selectbox-option") {
                     hasOptionClass = true;
                     break;
+                } else if (classList[i] === "selectbox-custom-option") {
+                    const val = target.getAttribute("data-value");
+                    if (val) {
+                        e.stopPropagation();
+                        this._triggerCustomChange(val);
+                        this._closeDropdown();
+                        return;
+                    }
+                    break;
                 }
             }
 
@@ -418,6 +466,18 @@ SelectBox.prototype = {
                 for (var i = 0; i < parentClassList.length; i++) {
                     if (parentClassList[i] === "selectbox-option") {
                         parentHasOptionClass = true;
+                        break;
+                    } else if (
+                        parentClassList[i] === "selectbox-custom-option"
+                    ) {
+                        const val =
+                            target.parentNode.getAttribute("data-value");
+                        if (val) {
+                            e.stopPropagation();
+                            this._triggerCustomChange(val);
+                            this._closeDropdown();
+                            return;
+                        }
                         break;
                     }
                 }
@@ -527,6 +587,25 @@ SelectBox.prototype = {
             });
         });
     },
+    /**
+     * @param {string} currentValue
+     * @private
+     */
+    _triggerCustomChange: function (currentValue) {
+        /** @type {SelectboxEventDetail} */
+        var detail = {
+            values: [],
+            current: currentValue,
+            enabled: false,
+        };
+
+        this._subscribers.forEach(function (cb) {
+            cb({
+                type: "selectbox:custom",
+                detail: detail,
+            });
+        });
+    },
 
     /**
      * @param {function(SelectboxEventType): void} callback
@@ -552,6 +631,10 @@ SelectBox.prototype = {
      */
     addItem: function (value, text, selected) {
         selected = selected || false;
+        const bHasItem = this._items.some(
+            (item) => item && item.value === value
+        );
+        if (bHasItem) return;
         this._items.push({ value: value, text: text, selected: selected });
 
         if (selected) {
@@ -572,6 +655,10 @@ SelectBox.prototype = {
     addItems: function (values, selectedValue) {
         const self = this;
         values.forEach(function (pair, index) {
+            const bHasItem = self._items.some(
+                (item) => item && item.value === pair[0]
+            );
+            if (bHasItem) return;
             const isSelected = selectedValue
                 ? pair[0] === selectedValue
                 : index === 0;
@@ -592,7 +679,18 @@ SelectBox.prototype = {
             });
         }, this);
 
+        if (this.isOpen) {
+            this._renderOptions();
+        }
+
         this._updateSelectedText();
+    },
+    /**
+     * @param {string} value
+     * @param {string} text
+     */
+    addCustomItem: function (value, text) {
+        this._customItems.push({ value: value, text: text, selected: false });
     },
 
     addSeparator: function () {
@@ -603,6 +701,12 @@ SelectBox.prototype = {
      */
     removeItem: function (value) {
         this._items = this._items.filter(function (item) {
+            if (item === null || item.value !== value) {
+                return true;
+            }
+            return false;
+        });
+        this._customItems = this._customItems.filter(function (item) {
             if (item === null || item.value !== value) {
                 return true;
             }

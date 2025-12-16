@@ -36,7 +36,7 @@ function SettingsPage(router, displayNoneClass) {
         variant: "secondary",
     });
 
-    this._styleWrapper = document.getElementById("styleWrapper");
+    /*this._styleWrapper = document.getElementById("styleWrapper");
     if (!this._styleWrapper) {
         throw new Error("styleWrapper not found");
     }
@@ -49,14 +49,21 @@ function SettingsPage(router, displayNoneClass) {
     );
     if (!this._styleSelectListOther) {
         throw new Error("styleSelectListOther not found");
-    }
-    this._styleSelect = document.getElementById("styleSelect");
+    }*/
+    this._styleSelect = new SelectBox("styleSelectList", {
+        placeholder: "Enter style name",
+    });
+    this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
+        placeholder: "Enter style name",
+        searchable: true,
+    });
+    /*this._styleSelect = document.getElementById("styleSelect");
     if (
         !this._styleSelect ||
         this._styleSelect instanceof HTMLInputElement === false
     ) {
         throw new Error("styleSelect not found");
-    }
+    }*/
     this._notesStyleWrapper = document.getElementById("notesStyle");
     if (!this._notesStyleWrapper) {
         throw new Error("notesStyleWrapper not found");
@@ -281,7 +288,8 @@ SettingsPage.prototype._addEventListeners = function () {
                 }
             }
         });
-        const selectedStyleId = self._styleSelect.getAttribute("data-value");
+
+        const selectedStyleId = self._styleSelect.getSelectedValue();
         if (
             self._stateSettings.style !== selectedStyleId &&
             selectedStyleId !== null
@@ -320,7 +328,7 @@ SettingsPage.prototype._addEventListeners = function () {
             }
         });
         const selectedLang = self._languageSelect.getSelectedValue();
-        const selectedStyleId = self._styleSelect.getAttribute("data-value");
+        const selectedStyleId = self._styleSelect.getSelectedValue();
         if (
             selectedLang !== null &&
             self._localesManager.getLastUsedLanguage() !== selectedLang
@@ -375,6 +383,30 @@ SettingsPage.prototype._addEventListeners = function () {
                 self._hideLoader();
             });
     };
+
+    this._styleSelect.subscribe(function (event) {
+        if (event.type === "selectbox:change") {
+            self._styleSelectListOther.selectItems(
+                event.detail.current.toString(),
+                true
+            );
+            return;
+        } else if (event.type !== "selectbox:custom") {
+            return;
+        }
+        console.warn(event);
+        const actionId = event.detail.current;
+        if (actionId === "more_styles") {
+            console.warn("More styles");
+
+            self._styleSelectListOther.openDropdown();
+        }
+    });
+    self._styleSelectListOther.subscribe(function (event) {
+        if (event.type !== "selectbox:change") {
+            return;
+        }
+    });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -403,19 +435,27 @@ SettingsPage.prototype._loadStyles = function () {
         .getStylesInfo()
         .then(
             /** @param {Array<StyleInfo>} stylesInfo*/ function (stylesInfo) {
-                var openOtherStyleList = function (
-                    /** @type {HTMLElement} */ list
+                /*var openOtherStyleList = function (
+                    list
                 ) {
-                    return function (/** @type {MouseEvent} */ ev) {
+                    return function (ev) {
                         self._styleSelectListOther.style.width =
                             self._styleWrapper.clientWidth - 2 + "px";
                         ev.stopPropagation();
                         self._openList(list);
                     };
-                };
+                };*/
 
                 self._addStylesToList(stylesInfo);
-
+                self._styleSelect.addCustomItem(
+                    "more_styles",
+                    "More Styles..."
+                );
+                self._styleSelect.addCustomItem(
+                    "cslFileInput",
+                    "Add custom style..."
+                );
+                /*
                 const el = document.createElement("hr");
                 self._styleSelectList.appendChild(el);
 
@@ -435,6 +475,7 @@ SettingsPage.prototype._loadStyles = function () {
                 label.textContent = "Add custom style...";
                 custom.appendChild(label);
                 self._styleSelectList.appendChild(custom);
+                */
             }
         )
         .catch(function (err) {
@@ -453,8 +494,8 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
      * @param {HTMLElement} list - the list of styles where the element is added.
      * @param {HTMLElement} other - the list of styles where the element is removed.
      */
-    var onStyleSelectOther = function (list, other) {
-        return function (/** @type {MouseEvent} */ ev) {
+    /*var onStyleSelectOther = function (list, other) {
+        return function ( ev) {
             let tmpEl = list.removeChild(
                 list.children[list.children.length - 3]
             );
@@ -488,8 +529,27 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
             self._closeList();
         };
     };
+*/
+    /** @type {[string, string][]} */
+    const allStyles = stylesInfo.map(function (style) {
+        return [style.name, style.title];
+    });
+    const mainStyles = allStyles.filter(function (style) {
+        if (style[0] == lastStyle) return true;
+        if (self._cslStylesManager.isStyleDefault(style[0])) return true;
+        return false;
+    });
+    const otherStyles = allStyles.filter(function (style) {
+        if (style[0] == lastStyle) return false;
+        if (self._cslStylesManager.isStyleDefault(style[0])) return false;
+        return true;
+    });
 
-    for (var i = 0; i < stylesInfo.length; i++) {
+    this._styleSelect.addItems(mainStyles, lastStyle);
+    this._styleSelectListOther.addItems(mainStyles, lastStyle);
+    this._styleSelectListOther.addItems(otherStyles);
+
+    /*for (var i = 0; i < stylesInfo.length; i++) {
         var el = document.createElement("span");
         el.setAttribute("data-value", stylesInfo[i].name);
         el.textContent = stylesInfo[i].title;
@@ -515,7 +575,7 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
             el.setAttribute("selected", "");
             self._selectStyle(el, false);
         }
-    }
+    }*/
 };
 
 /**
