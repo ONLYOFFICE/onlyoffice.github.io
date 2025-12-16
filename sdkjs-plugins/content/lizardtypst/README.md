@@ -18,6 +18,11 @@ The LizardTypst plugin draws inspiration from the existing **Iguana LaTeX** plug
 
 This plugin leverages the power of [typst.ts](https://github.com/myriaddreamin/typst.ts), a powerful TypeScript library for compiling and rendering Typst code directly in the browser using WebAssembly.
 
+## Vendored Dependencies
+
+This plugin uses a vendored (self-hosted) version of `typst.ts` to ensure offline functionality.
+- **`@myriaddreamin/typst.ts`**: `0.6.1-rc5`
+
 ## How to use
 
 1. Go to the **Plugins** tab in the ONLYOFFICE editor.

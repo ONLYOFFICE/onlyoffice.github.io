@@ -24,12 +24,10 @@ $
 
     // Initialize Typst compiler and renderer
     window.$typst.setCompilerInitOptions({
-      getModule: () =>
-        "https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm",
+      getModule: () => "scripts/vendor/typst_ts_web_compiler_bg.wasm",
     });
     window.$typst.setRendererInitOptions({
-      getModule: () =>
-        "https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm",
+      getModule: () => "scripts/vendor/typst_ts_renderer_bg.wasm",
     });
 
     if (text) {
@@ -44,7 +42,7 @@ $
     window.TypstUI.initialize({
       container: historyContainer,
       input: input,
-      onSelect: updatePreviewAndResize
+      onSelect: updatePreviewAndResize,
     });
 
     updatePreviewAndResize();
@@ -54,7 +52,7 @@ $
     if (id === 0) {
       const input = document.getElementById("input");
       const { svg, width, height } = window.TypstRenderer.getCurrentSvgData();
-      
+
       // Save to history before inserting
       window.TypstHistory.save(input.value);
 
