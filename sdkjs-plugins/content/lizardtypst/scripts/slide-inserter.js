@@ -9,7 +9,7 @@ function sanitizeSvgString(svgString) {
   }
   return svgString.replace(
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    ""
+    "",
   );
 }
 
@@ -26,8 +26,11 @@ function sanitizeSvgString(svgString) {
       return;
     }
     svgString = sanitizeSvgString(svgString);
-    Asc.scope.dataUrl = "data:image/svg+xml," + encodeURIComponent(svgString);
-
+    Asc.scope.dataUrl =
+      "data:image/svg+xml;base64," +
+      window.btoa(
+        String.fromCharCode.apply(null, new TextEncoder().encode(svgString)),
+      );
     const scale = 2.0; // Apply a default scaling factor to make it larger
     Asc.scope.nWidth = (((width * scale) / 96) * 914400 + 0.5) >> 0;
     Asc.scope.nHeight = (((height * scale) / 96) * 914400 + 0.5) >> 0;
@@ -39,7 +42,7 @@ function sanitizeSvgString(svgString) {
         var oImage = Api.CreateImage(
           Asc.scope.dataUrl,
           Asc.scope.nWidth,
-          Asc.scope.nHeight
+          Asc.scope.nHeight,
         );
         oSlide.AddObject(oImage);
       }
