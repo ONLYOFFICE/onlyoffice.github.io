@@ -58,6 +58,8 @@ Checkbox.prototype = {
      * @private
      */
     _labelElement: null,
+    /** @type {Function[]} */
+    _subscribers: [],
 
     /**
      * @param {HTMLInputElement} checkbox
@@ -121,7 +123,7 @@ Checkbox.prototype = {
         // Create label if provided
         if (this._label) {
             this._labelElement = document.createElement("label");
-            this._labelElement.className = "checkbox-label";
+            this._labelElement.className = "checkbox-label i18n";
             this._labelElement.htmlFor = this.id;
             this._labelElement.textContent = this._label;
         }
@@ -340,41 +342,77 @@ Checkbox.prototype = {
 
     /**
      * Get current checkbox state
-     * @returns {Object} - State object
+     * @returns {{value: string, disabled: boolean, checked: boolean}} - State object
      */
     getState: function () {
+        if (this._input) {
+            return {
+                checked: this._input.checked,
+                disabled: this._input.disabled,
+                value: this._input.value,
+            };
+        }
         return {
-            checked: this._checked,
-            indeterminate: this._indeterminate,
-            disabled: this._disabled,
-            value: this._value,
+            checked: false,
+            disabled: false,
+            value: "",
         };
     },
 
     /**
+     * @param {function(CheckboxEventType): void} callback
+     * @returns {Object}
+     */
+    subscribe: function (callback) {
+        var self = this;
+        this._subscribers.push(callback);
+
+        return {
+            unsubscribe: function () {
+                self._subscribers = self._subscribers.filter(function (cb) {
+                    return cb !== callback;
+                });
+            },
+        };
+    },
+
+    /**
+     * @param {Event} [e]
      * @private
      */
-    _triggerChange: function () {
-        console.warn("Checkbox changed");
+    _triggerChange: function (e) {
+        var detail = this.getState();
+        /** @type {CheckboxEventType} */
+
+        const objEvent = {
+            type: "checkbox:change",
+            detail: detail,
+        };
+
+        if (e) {
+            objEvent.originalEvent = e;
+        }
+
+        this._subscribers.forEach(function (cb) {
+            cb(objEvent);
+        });
     },
 
     /**
      * Clean up event listeners and references
      */
     destroy: function () {
-        // Remove event listeners
+        this._subscribers = [];
         this._handlers.forEach((handler, event) => {
             this._container &&
                 this._container.removeEventListener(event, handler);
         });
         this._handlers.clear();
 
-        // Remove DOM elements
         if (this._container && this._container.parentNode) {
             this._container.parentNode.removeChild(this._container);
         }
 
-        // Clear references
         this._container = null;
         this._input = null;
         this._visualCheckbox = null;

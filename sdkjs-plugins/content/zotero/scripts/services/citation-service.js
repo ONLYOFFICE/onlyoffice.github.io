@@ -190,16 +190,14 @@ CitationService.prototype = {
 
     /**
      * @param {Array<SearchResultItem>} items
-     * @param {boolean} bOmitAuthor
      * @returns {Promise<Array<string|number>>}
      */
-    insertSelectedCitations: function (items, bOmitAuthor) {
+    insertSelectedCitations: function (items) {
         const self = this;
 
         var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
         for (var citationID in items) {
             const item = items[citationID];
-            item["suppress-author"] = bOmitAuthor;
 
             cslCitation.fillFromObject(item);
         }
