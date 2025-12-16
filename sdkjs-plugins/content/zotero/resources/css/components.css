@@ -408,7 +408,7 @@
         width: 100%;
         padding: 5px 12px 5px 27px;
         border: none;
-        border-radius: 2px;
+        box-sizing: border-box;
         &:focus {
             outline: none;
         }
@@ -416,9 +416,11 @@
 
     .selectbox-options {
         max-height: 157px;
+        overflow-x: hidden;
         overflow-y: auto;
     }
 
+    .selectbox-custom-option,
     .selectbox-option {
         padding: 5.7px 12px 5.7px 27px;
         cursor: pointer;
