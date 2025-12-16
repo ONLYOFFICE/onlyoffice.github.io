@@ -341,9 +341,8 @@
             citationService
                 .updateCslItems(true, false, false)
                 .then(function () {
-                    return citationService.insertSelectedCitations(
-                        selectCitation.getSelectedItems()
-                    );
+                    const items = selectCitation.getSelectedItems();
+                    return citationService.insertSelectedCitations(items);
                 })
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
