@@ -1,0 +1,116 @@
+.input-field-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+    .input-field {
+        position: relative;
+    }
+
+    .input-field-main {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-field-element {
+        width: 100%;
+        height: 24px;
+        padding: 0 8px 0 7px;
+        line-height: 22px;
+        font-size: 11px;
+        border-style: solid;
+        border-width: 1px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        &:focus {
+            outline: none;
+        }
+        &[type="search"]::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+        }
+    }
+    .input-field-clearable {
+        padding-right: 22px;
+    }
+
+    .input-field-disabled .input-field-element {
+        pointer-events: none;
+        opacity: 0.65;
+    }
+
+    /* Clear button */
+    .input-field-clear {
+        position: absolute;
+        right: 0px;
+        padding: 12px 6px;
+        top: 0;
+        background: none;
+        border: none;
+        font-size: 22px;
+        line-height: 0;
+        transition: all 0.2s ease;
+        outline: none;
+    }
+
+    /* Counter */
+    .input-field-counter {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #909399;
+        text-align: right;
+    }
+
+    .input-field-counter-warning {
+        color: #e6a23c;
+    }
+
+    .input-field-counter-error {
+        color: #f56c6c;
+        font-weight: bold;
+    }
+
+    /* Validation */
+    .input-field-validation {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #f56c6c;
+        text-align: left;
+    }
+
+    .input-field-invalid .input-field-element {
+        &:focus {
+            border-color: #f56c6c;
+            box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
+        }
+    }
+
+    .input-field-valid .input-field-element {
+        border-color: #67c23a;
+        &:focus {
+            border-color: #67c23a;
+            box-shadow: 0 0 0 2px rgba(103, 194, 58, 0.2);
+        }
+    }
+
+    /* Different input types */
+    &.input-field-password .input-field-element {
+        padding-right: 40px;
+    }
+
+    &.input-field-search {
+        .input-field-search-icon {
+            cursor: pointer;
+            position: absolute;
+            padding: 5px 5px 3px 5px;
+            top: 0;
+            right: 0;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+        .input-field-element {
+            padding-right: 30px;
+        }
+    }
+}
