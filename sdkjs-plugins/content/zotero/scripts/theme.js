@@ -360,6 +360,7 @@ const Theme = {
                 theme["border-regular-control"] +
                 "; }\n";
             styles +=
+                ".selectbox-search,\n" +
                 ".selectbox-option-divider { border-color: " +
                 theme["border-regular-control"] +
                 " !important; }\n";
@@ -388,7 +389,7 @@ const Theme = {
                 ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" +
                 ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" +
                 ".custom-button-secondary:hover:not(.custom-button-disabled),\n" +
-                ".selectbox-search,\n" +
+                ".selectbox-custom-option:hover,\n" +
                 ".selectbox-option:hover { background-color: " +
                 theme["highlight-button-hover"] +
                 "; }\n";

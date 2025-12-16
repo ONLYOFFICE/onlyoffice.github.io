@@ -64,18 +64,6 @@ textarea:focus {
     margin-top: 8px
 }
 
-    .control.select {
-        cursor: pointer;
-    }
-
-    .control.text {
-        cursor: text;
-    }
-
-    .control.text.wide {
-        width: 100%;
-    }
-
 input[type="text"] {
     padding: 2px;
     cursor: text;
@@ -176,31 +164,22 @@ input[type="text"] {
 
 #styleWrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     margin-bottom: 8px;
 }
 
-        #styleWrapper .label:first-of-type {
-            flex: 5;
-            margin-right: 4px;
-        }
-
-        .styleWrapperSecond {
-            flex: 4;
-            margin-left: 4px;
-            margin-right: 4px;
-        }
-
-        #styleWrapper .label > span {
+        #styleWrapper > label {
+            font-weight: bold;
             display: block;
         }
-
-        #styleWrapper .label input {
-            width: 100%;
-            padding-right: 18px;
-            font-size: 11px;
+        #styleWrapper .mrtop {
+            position: relative
         }
+
+#styleSelectedListOther {
+    position: absolute;
+}        
 
 .notesStyle {
     margin: 0 0 8px 4px;
@@ -216,10 +195,6 @@ input[type="text"] {
     .notesStyle label:first-of-type {
         margin-right: 18px;
     }
-
-.selectHolder {
-    position: relative;
-}
 
 .selectArrow {
     cursor: pointer;
