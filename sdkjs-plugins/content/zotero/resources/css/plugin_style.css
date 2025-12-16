@@ -322,7 +322,7 @@ input[type="text"] {
         margin-top: 0;
     }
     .doc > div label {
-        width: 172px;
+        width: calc(100% - 44px);
         padding-bottom: 5px;
         overflow: hidden;
         text-overflow: ellipsis;

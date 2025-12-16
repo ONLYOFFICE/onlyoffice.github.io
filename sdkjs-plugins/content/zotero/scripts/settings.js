@@ -36,10 +36,7 @@ function SettingsPage(router, displayNoneClass) {
         variant: "secondary",
     });
 
-    /*this._styleWrapper = document.getElementById("styleWrapper");
-    if (!this._styleWrapper) {
-        throw new Error("styleWrapper not found");
-    }
+    /*
     this._styleSelectList = document.getElementById("styleSelectList");
     if (!this._styleSelectList) {
         throw new Error("styleSelectList not found");
@@ -394,7 +391,6 @@ SettingsPage.prototype._addEventListeners = function () {
         } else if (event.type !== "selectbox:custom") {
             return;
         }
-        console.warn(event);
         const actionId = event.detail.current;
         if (actionId === "more_styles") {
             console.warn("More styles");
@@ -406,6 +402,10 @@ SettingsPage.prototype._addEventListeners = function () {
         if (event.type !== "selectbox:change") {
             return;
         }
+        console.warn(event);
+        if (!event.detail.items) return;
+        const item = event.detail.items[0];
+        self._styleSelect.addItem(item.value, item.text, true);
     });
 };
 
@@ -439,8 +439,6 @@ SettingsPage.prototype._loadStyles = function () {
                     list
                 ) {
                     return function (ev) {
-                        self._styleSelectListOther.style.width =
-                            self._styleWrapper.clientWidth - 2 + "px";
                         ev.stopPropagation();
                         self._openList(list);
                     };
@@ -539,15 +537,9 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
         if (self._cslStylesManager.isStyleDefault(style[0])) return true;
         return false;
     });
-    const otherStyles = allStyles.filter(function (style) {
-        if (style[0] == lastStyle) return false;
-        if (self._cslStylesManager.isStyleDefault(style[0])) return false;
-        return true;
-    });
 
     this._styleSelect.addItems(mainStyles, lastStyle);
-    this._styleSelectListOther.addItems(mainStyles, lastStyle);
-    this._styleSelectListOther.addItems(otherStyles);
+    this._styleSelectListOther.addItems(allStyles, lastStyle);
 
     /*for (var i = 0; i < stylesInfo.length; i++) {
         var el = document.createElement("span");
@@ -656,8 +648,6 @@ SettingsPage.prototype._initSelectBoxes = function () {
                     )
                         return true;
 
-                    self._styleSelectList.style.width =
-                        self._styleWrapper.clientWidth - 2 + "px";
                     if (!input.hasAttribute("readonly")) {
                         input.select();
                     }
