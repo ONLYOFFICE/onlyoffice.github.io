@@ -220,7 +220,6 @@
     position: relative;
     display: inline-block;
     width: 100%;
-    max-width: 300px;
     .input-field {
         position: relative;
     }
@@ -337,7 +336,6 @@
     position: relative;
     display: inline-block;
     width: 100%;
-    max-width: 300px;
 
     .selectbox {
         position: relative;

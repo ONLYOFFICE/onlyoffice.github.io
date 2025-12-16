@@ -634,8 +634,14 @@ SelectBox.prototype = {
         const bHasItem = this._items.some(
             (item) => item && item.value === value
         );
-        if (bHasItem) return;
-        this._items.push({ value: value, text: text, selected: selected });
+        if (bHasItem) {
+            const item = this._items.find(
+                (item) => item && item.value === value
+            );
+            if (item) item.selected = selected;
+        } else {
+            this._items.push({ value: value, text: text, selected: selected });
+        }
 
         if (selected) {
             if (this._options.multiple) {
