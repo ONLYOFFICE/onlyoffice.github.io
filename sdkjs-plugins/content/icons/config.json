@@ -36,7 +36,7 @@
 				"ja-JA": "文書にアイコンを挿入するには、適切なカテゴリを選択するか、検索機能を使用してください。",
 				"sq-AL": "Vendos ikonat në dokumentet e tua duke zgjedhur Kategorinë e duhur ose duke përdorur Kërkimin.",
 				"it": "Inserisci icone nei tuoi documenti selezionando la categoria appropriata oppure utilizzando la funzione di ricerca.",
-				"ar-SA": "قم بإدراج الرموز في مستنداتك عن طريق تحديد الفئة المناسبة أو استخدام البحث."
+				"ar-SA": "أدرجوا الأيقونات في مستنداتكم عن طريق اختيار الفئة المناسبة أو باستخدام البحث."
 			},
 			"url": "dist/index.html",
 			"icons": "resources/%theme-type%(light|dark)/icon.svg",
