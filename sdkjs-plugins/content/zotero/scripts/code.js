@@ -107,13 +107,6 @@
             throw new Error("mainState not found");
         }
 
-        const checkOmitAuthor = new Checkbox("omitAuthor", {
-            label: "Omit Author",
-        });
-        if (!checkOmitAuthor) {
-            throw new Error("checkOmitAuthor not found");
-        }
-
         searchFilter = new SearchFilterComponents();
         selectCitation = new SelectCitationsComponent(
             displayNoneClass,
@@ -140,8 +133,6 @@
             contentHolder: contentHolder,
 
             mainState: mainState,
-
-            checkOmitAuthor: checkOmitAuthor,
         };
     }
 
@@ -350,14 +341,8 @@
             citationService
                 .updateCslItems(true, false, false)
                 .then(function () {
-                    let checked = false;
-                    if (elements.checkOmitAuthor instanceof HTMLInputElement) {
-                        checked = elements.checkOmitAuthor.checked;
-                    }
-
                     return citationService.insertSelectedCitations(
-                        selectCitation.getSelectedItems(),
-                        checked
+                        selectCitation.getSelectedItems()
                     );
                 })
                 .then(function (keys) {
@@ -398,6 +383,7 @@
      */
     Asc.plugin.onThemeChanged = function (theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
+        Theme.fixThemeForIE(theme);
         Theme.addStylesForComponents(theme);
         var rules =
             ".selectArrow > span { background-color: " +

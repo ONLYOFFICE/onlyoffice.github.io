@@ -3,6 +3,7 @@
 /// <reference path="../../types-global.js" />
 /// <reference path="../ui/input.js" />
 /// <reference path="../ui/selectbox.js" />
+/// <reference path="../ui/checkbox.js" />
 
 /**
  * @typedef {Object} Scroller
@@ -319,6 +320,8 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     const locatorContainer = document.createElement("div");
     const locatorSelect = document.createElement("div");
     const locator = document.createElement("input");
+    const omitAuthorContainer = document.createElement("div");
+    const omitAuthor = document.createElement("input");
 
     params.appendChild(prefixSuffixContainer);
     prefixSuffixContainer.appendChild(prefix);
@@ -327,6 +330,9 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     params.appendChild(locatorContainer);
     locatorContainer.appendChild(locatorSelect);
     locatorContainer.appendChild(locator);
+
+    params.appendChild(omitAuthorContainer);
+    omitAuthorContainer.appendChild(omitAuthor);
 
     const prefixInput = new InputField(prefix, {
         type: "text",
@@ -342,6 +348,9 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     const locatorInput = new InputField(locator, {
         type: "text",
         placeholder: "",
+    });
+    const omitAuthorInput = new Checkbox(omitAuthor, {
+        label: "Omit author",
     });
 
     prefixInput.subscribe(function (event) {
@@ -373,6 +382,12 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
         }
         item.label = event.detail.values[0].toString();
         localStorage.setItem("selectedLocator", item.label);
+    });
+    omitAuthorInput.subscribe(function (event) {
+        if (event.type !== "checkbox:change") {
+            return;
+        }
+        item["suppress-author"] = event.detail.checked;
     });
 
     return params;

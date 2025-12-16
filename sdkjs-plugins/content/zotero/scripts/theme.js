@@ -489,7 +489,13 @@ const Theme = {
                 theme["background-primary-dialog-button"] +
                 "; }\n";
             styles +=
-                ".checkbox:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " +
+                ".checkbox:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " +
+                theme["highlight-button-hover"] +
+                "; }\n";
+            styles +=
+                ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " +
+                theme["highlight-primary-dialog-button-hover"] +
+                "; background-color: " +
                 theme["highlight-primary-dialog-button-hover"] +
                 "; }\n";
         } else {
@@ -513,5 +519,52 @@ const Theme = {
         }
         styleTheme.innerHTML = styles;
         return styles;
+    },
+
+    /**
+     * @param {ThemeColors} theme
+     */
+    fixThemeForIE: function (theme) {
+        if (!theme["text-normal"]) {
+            theme["text-normal"] = "rgb(51, 51, 51)";
+        }
+        if (!theme["text-secondary"]) {
+            theme["text-secondary"] = "#848484";
+        }
+        if (!theme["highlight-button-hover"]) {
+            theme["highlight-button-hover"] = "#e0e0e0";
+        }
+        if (!theme["background-normal"]) {
+            theme["background-normal"] = "white";
+        }
+        if (!theme["highlight-button-pressed"]) {
+            theme["highlight-button-pressed"] = "#cbcbcb";
+        }
+        if (!theme["text-inverse"]) {
+            theme["text-inverse"] = "white";
+        }
+        if (!theme["border-regular-control"]) {
+            theme["border-regular-control"] = "#c0c0c0";
+        }
+        if (!theme["border-error"]) {
+            theme["border-error"] = "#f62211";
+        }
+        if (!theme["border-control-focus"]) {
+            theme["border-control-focus"] = "#848484";
+        }
+        if (!theme["highlight-primary-dialog-button-hover"]) {
+            theme["highlight-primary-dialog-button-hover"] = "#1c1c1c";
+        }
+        if (!theme["background-primary-dialog-button"]) {
+            theme["background-primary-dialog-button"] = "#444444";
+        }
+        if (!theme["background-toolbar-additional"]) {
+            theme["background-toolbar-additional"] = "#efefef";
+        }
+        if (!theme["text-tertiary"]) {
+            theme["text-tertiary"] = "#bdbdbd";
+        }
+
+        return theme;
     },
 };
