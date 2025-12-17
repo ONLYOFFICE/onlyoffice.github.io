@@ -84,6 +84,14 @@ input[type="text"] {
 #loginState .custom-button-container {
     width: 100%;
 }
+    #loginState .label > span {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+    #loginState .message-container {
+        margin-top: 8px;
+    }
 
 #errorWrapper {
     background-color: #ffffff;

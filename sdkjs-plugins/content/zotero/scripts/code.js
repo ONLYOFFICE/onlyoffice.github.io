@@ -619,7 +619,6 @@
         if (bCount) counter++;
         return promise
             .then(function (res) {
-                console.warn(res);
                 if (bCount) counter--;
                 return displaySearchItems(
                     append,

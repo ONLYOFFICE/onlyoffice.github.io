@@ -221,7 +221,7 @@ SettingsPage.prototype.init = function () {
     this._languageSelect.addItems(this._LANGUAGES, savedLang);
 
     const promises = [
-        this._cslStylesManager.getStyle(lastStyle),
+        this._onStyleChange(lastStyle),
         this._localesManager.loadLocale(savedLang),
         this._loadStyles(),
     ];
@@ -325,6 +325,8 @@ SettingsPage.prototype._addEventListeners = function () {
                 .catch(function (err) {
                     self._hideLoader();
                 });
+        } else {
+            self._hide();
         }
     });
     this._cancelBtn.subscribe(function (event) {
@@ -339,6 +341,7 @@ SettingsPage.prototype._addEventListeners = function () {
         });
         const selectedLang = self._languageSelect.getSelectedValue();
         const selectedStyleId = self._styleSelect.getSelectedValue();
+
         if (
             selectedLang !== null &&
             self._localesManager.getLastUsedLanguage() !== selectedLang
@@ -352,7 +355,11 @@ SettingsPage.prototype._addEventListeners = function () {
             self._stateSettings.style !== selectedStyleId &&
             selectedStyleId !== null
         ) {
-            self._styleSelect.selectItems([self._stateSettings.style], true);
+            self._styleSelect.selectItems(self._stateSettings.style, true);
+            self._styleSelectListOther.selectItems(
+                self._stateSettings.style,
+                true
+            );
             self._onStyleChange(self._stateSettings.style, true).then(
                 function () {
                     self._hide();
@@ -395,6 +402,7 @@ SettingsPage.prototype._addEventListeners = function () {
                 event.detail.current.toString(),
                 true
             );
+            self._somethingWasChanged();
             self._onStyleChange(event.detail.current.toString(), true);
             return;
         } else if (event.type !== "selectbox:custom") {
@@ -402,8 +410,6 @@ SettingsPage.prototype._addEventListeners = function () {
         }
         const actionId = event.detail.current;
         if (actionId === "more_styles") {
-            console.warn("More styles");
-
             self._styleSelectListOther.openDropdown();
         }
     });
@@ -411,10 +417,23 @@ SettingsPage.prototype._addEventListeners = function () {
         if (event.type !== "selectbox:change") {
             return;
         }
-        console.warn(event);
         if (!event.detail.items) return;
         const item = event.detail.items[0];
         self._styleSelect.addItem(item.value, item.text, true);
+        self._somethingWasChanged();
+        self._onStyleChange(item.value, true);
+    });
+    this._languageSelect.subscribe(function (event) {
+        if (event.type !== "selectbox:change") {
+            return;
+        }
+        self._somethingWasChanged();
+    });
+    this._footNotes.addEventListener("change", function (event) {
+        self._somethingWasChanged();
+    });
+    this._endNotes.addEventListener("change", function (event) {
+        self._somethingWasChanged();
     });
 };
 
@@ -434,6 +453,7 @@ SettingsPage.prototype._show = function () {
         notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
         styleFormat: this._cslStylesManager.getLastUsedFormat(),
     };
+    this._saveBtn.disable();
     this._router.openSettings();
 };
 
@@ -479,6 +499,10 @@ SettingsPage.prototype._addStylesToList = function (stylesInfo) {
 
     this._styleSelect.addItems(mainStyles, lastStyle);
     this._styleSelectListOther.addItems(allStyles, lastStyle);
+};
+
+SettingsPage.prototype._somethingWasChanged = function () {
+    this._saveBtn.enable();
 };
 
 /**
