@@ -574,29 +574,35 @@ window.Asc.plugin.init = async function() {
 
 	if (this.sendEvent) {
 		this.sendEvent("ai_onInit", {});
-		this.attachEditorEvent("ai_onCustomProviders", function(providers) {
-			
+
+		function onLoadCustomExternalProviders(providers) {
 			for (let i = 0, len = providers.length; i < len; i++) {
 				let item = providers[i];
 				if (!item.name)
 					continue;
 
 				if (!item.content) {
+					let url = item.url || "[external]";
+					let key = item.key || "";
+					let addon = item.addon || "";
+
 					item.content = "\"use strict\";\n\
 class Provider extends AI.Provider {\n\
 	constructor() {\n\
-		super(\"" + item.name + "\", \"[external]\", \"\", \"\");\n\
+		super(\"" + item.name + "\", \"" + url + "\", \"" + key + "\", \"" + addon + "\");\n\
 	}\n\
-}";
-					let isError = !AI.addCustomProvider(item.content);
+}";				}
 
-					if (!isError) {
-						customProvidersWindow && customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
-						aiModelEditWindow && aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
-					}					
-				}
+				let isError = !AI.addCustomProvider(item.content);
+				if (!isError) {
+					customProvidersWindow && customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
+					aiModelEditWindow && aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
+				}					
 			}
+		}
 
+		this.attachEditorEvent("ai_onCustomProviders", function(providers) {
+			onLoadCustomExternalProviders(providers);
 		});
 
 		this.attachEditorEvent("ai_onCustomInit", function(obj) {
@@ -632,9 +638,14 @@ class Provider extends AI.Provider {\n\
 
 			let isUpdate = false;
 			if (obj.providers) {
+				let customProviders = [];
 				for (let type in obj.providers) {
-					AI.Providers[type] = obj.providers[type];
+					if (!obj.providers[type].name)
+						continue;
+					customProviders.push(obj.providers[type]);
 				}
+				if (customProviders.length > 0)
+					onLoadCustomExternalProviders(customProviders);
 				isUpdate = true;
 			}
 
