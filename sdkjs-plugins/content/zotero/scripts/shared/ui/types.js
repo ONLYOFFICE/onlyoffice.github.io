@@ -87,6 +87,7 @@
  * @property {string} placeholder
  * @property {boolean} [searchable]
  * @property {boolean} [multiple]
+ * @property {string} [description]
  */
 
 /**

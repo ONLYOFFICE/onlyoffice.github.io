@@ -52,6 +52,7 @@ function SearchFilterComponents() {
         // TODO: add translation
         placeholder: translate("No items selected"),
         multiple: true,
+        description: translate("Search in:"),
     });
     /** @type {Function[]} */
     this._subscribers = [];

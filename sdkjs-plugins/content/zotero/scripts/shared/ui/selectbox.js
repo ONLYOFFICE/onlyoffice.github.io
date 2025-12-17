@@ -67,6 +67,7 @@ function SelectBox(container, options) {
         placeholder: options.placeholder || "Select...",
         searchable: options.searchable || false,
         multiple: options.multiple || false,
+        description: options.description || "",
     });
 
     this._selectedValues = new Set();
@@ -106,6 +107,7 @@ function SelectBox(container, options) {
     /** @type {HTMLInputElement | null} */
     this.searchInput = null;
     /** @type {HTMLElement} */
+    this._select = document.createElement("div");
     this._header = document.createElement("div");
     this._selectedText = document.createElement("span");
     this._arrow = document.createElement("span");
@@ -127,15 +129,14 @@ SelectBox.prototype = {
         this._container.className += " selectbox-container";
 
         var fragment = document.createDocumentFragment();
-        var selectBox = document.createElement("div");
-        selectBox.className += " selectbox";
+        this._select.className += " selectbox";
         if (this._options.multiple) {
-            selectBox.className += " selectbox-multiple";
+            this._select.className += " selectbox-multiple";
         }
-        fragment.appendChild(selectBox);
+        fragment.appendChild(this._select);
 
         this._header.className += " selectbox-header";
-        selectBox.appendChild(this._header);
+        this._select.appendChild(this._header);
         this._header.setAttribute("tabindex", "0");
 
         this._selectedText.className += " selectbox-selected-text";
@@ -153,8 +154,14 @@ SelectBox.prototype = {
         this._header.appendChild(this._arrow);
 
         this._dropdown.className += " selectbox-dropdown";
-        selectBox.appendChild(this._dropdown);
+        this._select.appendChild(this._dropdown);
 
+        if (this._options.description) {
+            var description = document.createElement("div");
+            description.className += " i18n selectbox-description";
+            description.textContent = this._options.description;
+            this._dropdown.appendChild(description);
+        }
         if (this._options.searchable) {
             var search = document.createElement("div");
             search.className += " selectbox-search";
@@ -959,6 +966,12 @@ SelectBox.prototype = {
         }
 
         this._triggerChange(value, true);
+    },
+    disable: function () {
+        this._select.classList.add("selectbox-disabled");
+    },
+    enable: function () {
+        this._select.classList.remove("selectbox-disabled");
     },
     /**
      * @param {boolean} bSelectFirst

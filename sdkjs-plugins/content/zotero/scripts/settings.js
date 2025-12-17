@@ -548,8 +548,12 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
 SettingsPage.prototype._showLoader = function () {
     this._cancelBtn.disable();
     this._saveBtn.disable();
+    this._styleSelect.disable();
+    this._languageSelect.disable();
 };
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
+    this._styleSelect.enable();
+    this._languageSelect.enable();
 };
