@@ -92,7 +92,7 @@ function Button(button, options) {
     this.updateState();
 }
 
-Button.prototype = {
+Button.prototype = /** @lends Button.prototype */ {
     constructor: Button,
 
     /**

@@ -49,15 +49,24 @@ function Checkbox(checkbox, options) {
     if (checkbox instanceof HTMLInputElement === false) {
         throw new Error("Invalid input element");
     }
-    this.id =
-        options.id ||
-        `checkbox_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-    this._checked = options.checked || false;
-    this._disabled = options.disabled || false;
-    this._indeterminate = options.indeterminate || false;
-    this._label = options.label || "";
-    this._name = options.name || "";
-    this._value = options.value || "on";
+
+    /** @type {CheckboxOptionsType} */
+    this._options = Object.assign(
+        {
+            id: `checkbox_${Date.now()}_${Math.random()
+                .toString(36)
+                .slice(2, 11)}`,
+            checked: false,
+            disabled: false,
+            indeterminate: false,
+            label: "",
+            name: "",
+            value: "on",
+        },
+        options
+    );
+
+    this._options.disabled = options.disabled || false;
 
     this._handlers = new Map();
 
@@ -107,22 +116,36 @@ Checkbox.prototype = {
         this._container.setAttribute("role", "checkbox");
         this._container.setAttribute(
             "aria-checked",
-            this._checked ? "true" : "false"
+            this._options.checked ? "true" : "false"
         );
         this._container.setAttribute(
             "aria-disabled",
-            this._disabled ? "true" : "false"
+            this._options.disabled ? "true" : "false"
         );
-        this._container.tabIndex = this._disabled ? -1 : 0;
+        this._container.tabIndex = this._options.disabled ? -1 : 0;
 
         this._input = checkbox;
+        const elId = this._input.getAttribute("id");
+        if (elId !== null) {
+            this._options.id = elId;
+        } else if (this._options.id) {
+            this._input.setAttribute("id", this._options.id);
+        }
         this._input.type = "checkbox";
-        this._input.id = this.id;
-        this._input.name = this._name;
-        this._input.value = this._value;
-        this._input.checked = this._checked;
-        this._input.disabled = this._disabled;
-        this._input.indeterminate = this._indeterminate;
+
+        if (this._options.name) {
+            this._input.name = this._options.name;
+        }
+        if (this._options.value) {
+            this._input.value = this._options.value;
+        }
+        this._input.checked = !!this._options.checked;
+        if (this._options.disabled) {
+            this._input.disabled = true;
+        }
+        if (this._options.indeterminate) {
+            this._input.indeterminate = true;
+        }
 
         // Create visual checkbox element
         this._visualCheckbox = document.createElement("span");
@@ -153,15 +176,15 @@ Checkbox.prototype = {
         this._visualCheckbox.appendChild(indeterminateLine);
 
         // Create label if provided
-        if (this._label) {
+        if (this._options.label) {
             this._labelElement = document.createElement("label");
             this._labelElement.className = "checkbox-label i18n";
-            this._labelElement.htmlFor = this.id;
-            this._labelElement.textContent = this._label;
+            if (this._options.id) this._labelElement.htmlFor = this._options.id;
+            this._labelElement.textContent = this._options.label;
         }
 
         // Add disabled state styling
-        if (this._disabled) {
+        if (this._options.disabled) {
             this._container.classList.add("checkbox--disabled");
         }
         if (parent) {
@@ -187,7 +210,7 @@ Checkbox.prototype = {
          */
         const handleClick = function (e) {
             e.preventDefault();
-            if (!self._disabled && self._container) {
+            if (!self._options.disabled && self._container) {
                 self.toggle();
                 self._container.focus();
             }
@@ -199,7 +222,7 @@ Checkbox.prototype = {
          * @returns
          */
         const handleKeyDown = function (e) {
-            if (self._disabled) return;
+            if (self._options.disabled) return;
 
             switch (e.key) {
                 case " ":
@@ -211,15 +234,20 @@ Checkbox.prototype = {
                 case "ArrowRight":
                 case "ArrowDown":
                     e.preventDefault();
-                    if (!self._checked && !self._indeterminate) {
-                        self._checked ? self.setIndeterminate() : self.check();
+                    if (
+                        !self._options.checked &&
+                        !self._options.indeterminate
+                    ) {
+                        self._options.checked
+                            ? self.setIndeterminate()
+                            : self.check();
                     }
                     break;
                 case "ArrowLeft":
                 case "ArrowUp":
                     e.preventDefault();
-                    if (self._checked || self._indeterminate) {
-                        self._indeterminate
+                    if (self._options.checked || self._options.indeterminate) {
+                        self._options.indeterminate
                             ? self.uncheck()
                             : self.setIndeterminate();
                     }
@@ -259,19 +287,24 @@ Checkbox.prototype = {
         if (!this._container || !this._input) return;
         this._container.setAttribute(
             "aria-checked",
-            this._indeterminate ? "mixed" : this._checked.toString()
+            this._options.indeterminate
+                ? "mixed"
+                : String(this._options.checked)
         );
 
         // Update visual classes
-        this._container.classList.toggle("checkbox--checked", this._checked);
+        this._container.classList.toggle(
+            "checkbox--checked",
+            this._options.checked
+        );
         this._container.classList.toggle(
             "checkbox--indeterminate",
-            this._indeterminate
+            this._options.indeterminate
         );
 
         // Update hidden input
-        this._input.checked = this._checked;
-        this._input.indeterminate = this._indeterminate;
+        this._input.checked = !!this._options.checked;
+        this._input.indeterminate = !!this._options.indeterminate;
     },
 
     /**
@@ -279,19 +312,19 @@ Checkbox.prototype = {
      * @returns {boolean} - New checked state
      */
     toggle: function () {
-        if (this._disabled) return this._checked;
+        if (this._options.disabled) return !!this._options.checked;
 
-        if (this._indeterminate) {
-            this._indeterminate = false;
-            this._checked = true;
+        if (this._options.indeterminate) {
+            this._options.indeterminate = false;
+            this._options.checked = true;
         } else {
-            this._checked = !this._checked;
+            this._options.checked = !this._options.checked;
         }
 
         this._updateVisualState();
         this._triggerChange();
 
-        return this._checked;
+        return this._options.checked;
     },
 
     /**
@@ -299,10 +332,14 @@ Checkbox.prototype = {
      * @param {boolean} [bSilent]
      */
     check: function (bSilent) {
-        if (this._disabled || (this._checked && !this._indeterminate)) return;
+        if (
+            this._options.disabled ||
+            (this._options.checked && !this._options.indeterminate)
+        )
+            return;
 
-        this._checked = true;
-        this._indeterminate = false;
+        this._options.checked = true;
+        this._options.indeterminate = false;
         this._updateVisualState();
         if (!bSilent) this._triggerChange();
     },
@@ -312,10 +349,14 @@ Checkbox.prototype = {
      * @param {boolean} [bSilent]
      */
     uncheck: function (bSilent) {
-        if (this._disabled || (!this._checked && !this._indeterminate)) return;
+        if (
+            this._options.disabled ||
+            (!this._options.checked && !this._options.indeterminate)
+        )
+            return;
 
-        this._checked = false;
-        this._indeterminate = false;
+        this._options.checked = false;
+        this._options.indeterminate = false;
         this._updateVisualState();
         if (!bSilent) this._triggerChange();
     },
@@ -324,9 +365,9 @@ Checkbox.prototype = {
      * Set checkbox to indeterminate state
      */
     setIndeterminate: function () {
-        if (this._disabled || this._indeterminate) return;
+        if (this._options.disabled || this._options.indeterminate) return;
 
-        this._indeterminate = true;
+        this._options.indeterminate = true;
         this._updateVisualState();
         this._triggerChange();
     },
@@ -335,9 +376,9 @@ Checkbox.prototype = {
      * Enable the checkbox
      */
     enable: function () {
-        if (!this._disabled || !this._container || !this._input) return;
+        if (!this._options.disabled || !this._container || !this._input) return;
 
-        this._disabled = false;
+        this._options.disabled = false;
         this._input.disabled = false;
         this._container.setAttribute("aria-disabled", "false");
         this._container.tabIndex = 0;
@@ -348,9 +389,9 @@ Checkbox.prototype = {
      * Disable the checkbox
      */
     disable: function () {
-        if (this._disabled || !this._container || !this._input) return;
+        if (this._options.disabled || !this._container || !this._input) return;
 
-        this._disabled = true;
+        this._options.disabled = true;
         this._input.disabled = true;
         this._container.setAttribute("aria-disabled", "true");
         this._container.tabIndex = -1;
@@ -362,13 +403,13 @@ Checkbox.prototype = {
      * @param {string} label - New label text
      */
     setLabel: function (label) {
-        this._label = label;
+        this._options.label = label;
         if (this._labelElement) {
             this._labelElement.textContent = label;
         } else if (label && this._container) {
             this._labelElement = document.createElement("label");
             this._labelElement.className = "checkbox-label";
-            this._labelElement.htmlFor = this.id;
+            if (this._options.id) this._labelElement.htmlFor = this._options.id;
             this._labelElement.textContent = label;
             this._container.appendChild(this._labelElement);
         }
