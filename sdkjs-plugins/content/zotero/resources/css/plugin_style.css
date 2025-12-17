@@ -12,6 +12,10 @@ body {
     font-size: 11px;
 }
 
+input[type="text"] {
+    outline: none;
+}
+
 input::selection {
     background: #D8DADC; /* WebKit/Blink Browsers */
 }
