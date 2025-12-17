@@ -3,7 +3,7 @@
 	"nameLocale": {
 		"ru": "ИИ",
 		"fr": "AI",
-		"es": "IA",
+		"es": "AI",
 		"de": "AI",
 		"cs": "AI",
 		"zh": "AI",
@@ -17,7 +17,7 @@
 	},
 
 	"guid" : "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
-	"version": "3.0.1",
+	"version": "3.0.2",
 	"minVersion" : "8.2.0",
 
 	"variations" : [
