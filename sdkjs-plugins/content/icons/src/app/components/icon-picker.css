@@ -1,0 +1,38 @@
+.icons-container {
+    position: relative;
+    height: calc(100% - 170px);
+    min-height: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    .icons {
+        height: 100%;
+        margin: 12px 4px 4px 4px;
+        margin-top: 4px;
+        padding: 7px 0 0 11px;
+        box-sizing: border-box;
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        .icon {
+            width: 21px;
+            height: 21px;
+            padding: 10px;
+            margin-top: 5px;
+            &:focus {
+                outline: none;
+            }
+            * {
+                pointer-events: none;
+            }
+        }
+    }
+    .no-icons {
+        position: absolute;
+        top: 0;
+        padding: 7px 18px 0 11px;
+    }
+}
