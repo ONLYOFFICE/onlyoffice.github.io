@@ -38,7 +38,6 @@ const Theme = {
      * @param {ThemeColors} theme
      */
     addStylesForComponents: function (theme) {
-        console.log(theme);
         let styles = "";
         /*
         if (!theme.RulersButton) {}
