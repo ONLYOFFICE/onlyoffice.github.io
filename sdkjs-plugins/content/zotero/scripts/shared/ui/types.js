@@ -58,6 +58,25 @@
 /** ********************** */
 
 /**
+ * @typedef {Object} RadioOptionsType
+ * @property {boolean} [checked]
+ * @property {boolean} [disabled]
+ * @property {string} [label]
+ * @property {string} [name]
+ * @property {string} [value]
+ * @property {string} [id]
+ */
+
+/**
+ * @typedef {Object} RadioEventType
+ * @property {string} type
+ * @property {Event} [originalEvent]
+ * @property {{value: string, disabled: boolean, checked: boolean}} detail
+ */
+
+/** ********************** */
+
+/**
  * @typedef {Object} ButtonOptionsType
  * @property {string} [text]
  * @property {"button"|"submit"|"reset"} [type]
