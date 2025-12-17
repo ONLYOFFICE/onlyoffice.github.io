@@ -543,7 +543,6 @@
     cursor: pointer;
     user-select: none;
     position: relative;
-    padding: 4px;
     transition: background-color 0.2s;
 }
 
@@ -551,6 +550,7 @@
     position: absolute;
     opacity: 0;
     pointer-events: none;
+    margin: 0;
 }
 
 .checkbox--disabled {
@@ -560,6 +560,7 @@
 .checkbox-visual {
     width: 14px;
     height: 14px;
+    box-sizing: border-box;
     border-width: 1px;
     border-style: solid;
     border-radius: 2px;
@@ -572,11 +573,15 @@
 }
 
 .checkbox-checkmark {
-    width: 12px;
-    height: 10px;
+    width: 10px;
+    height: 8px;
     opacity: 0;
     transform: scale(0);
     transition: all 0.2s;
+}
+
+.checkbox-label {
+    margin-top: 3px;
 }
 
 .checkbox--checked .checkbox-checkmark {

@@ -99,6 +99,7 @@ input[type="text"] {
 
 #docsHolder {
     width: 100%;
+    overflow-x: hidden;
 }
 
 #selectedWrapper:not(.hidden) {
@@ -299,8 +300,8 @@ input[type="text"] {
     border-width: 1px;
     box-sizing: border-box;
     margin-top: 6px;
-    padding: 4px 6px 6px 6px;
-    max-height: 51px;
+    padding: 1px 6px 6px 6px;
+    max-height: 41px;
     overflow: hidden;
 }
     .page0 > .doc:first-child {
@@ -313,7 +314,6 @@ input[type="text"] {
 
     .doc > div {
         display: flex;
-        margin-top: 6px;
         gap: 6px;
     }
     .doc .docInfo {
@@ -322,8 +322,7 @@ input[type="text"] {
         margin-top: 0;
     }
     .doc > div:first-child .checkbox {
-        width: calc(100% - 44px);
-        padding-bottom: 5px;
+        width: calc(100% - 27px);
     }
     .doc > div:first-child label {
         
@@ -344,10 +343,14 @@ input[type="text"] {
         content: "";
         display: inline-block;
         width: 34px;
-        height: 42px;
+        height: 36px;
         position: absolute;
-        top: -10px;
-        left: -5px;
+        top: -7px;
+        left: -6px;
+    }
+
+    .doc:not(.doc-open) > div:nth-child(n+3) {
+        display: none;
     }
 
     .doc.doc-open {
@@ -356,6 +359,9 @@ input[type="text"] {
     }
     .doc-open > div:first-child .selectbox-arrow {
         transform: rotate(180deg);
+    }
+    .doc-open > div:not(:first-child) {
+        margin-top: 6px;
     }
     .doc-open .docInfo {
         white-space: normal;
