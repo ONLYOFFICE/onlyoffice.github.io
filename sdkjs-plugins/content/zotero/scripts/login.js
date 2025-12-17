@@ -59,7 +59,9 @@ function LoginPage(router, sdk) {
     this._useDesktopMessage = new Message("useDesktopMessage", {
         type: "error",
     });
-    this._connectToLocalZotero = new Button("connectToLocalZotero");
+    this._connectToLocalZotero = new Button("connectToLocalZotero", {
+        variant: "secondary",
+    });
     this._useDesktopApp = document.getElementById("useDesktopApp");
     if (!this._useDesktopApp) {
         throw new Error("useDesktopApp not found");

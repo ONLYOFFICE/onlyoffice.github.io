@@ -503,7 +503,8 @@
                 }
             });
 
-            if (el.innerText) el.innerText = translate(el.innerText.trim());
+            const translated = translate(el.innerText.trim());
+            if (translated) el.innerText = translated;
         }
     }
 

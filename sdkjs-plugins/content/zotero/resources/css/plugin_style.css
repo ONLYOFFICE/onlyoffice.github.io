@@ -89,9 +89,6 @@ input[type="text"] {
         font-weight: bold;
         margin-bottom: 8px;
     }
-    #loginState .message-container {
-        margin-top: 8px;
-    }
 
 #errorWrapper {
     background-color: #ffffff;
@@ -188,7 +185,10 @@ input[type="text"] {
 
 #styleSelectedListOther {
     position: absolute;
-}        
+}       
+    #styleSelectedListOther .selectbox-header {
+        opacity: 0;
+    }
 
 .notesStyle {
     margin: 0 0 8px 4px;
@@ -476,7 +476,7 @@ input[type="text"] {
     }
 
 .message-container {
-    margin-top: 1px;
+    margin-top: 12px;
 }    
 
 @keyframes cssload-loading-ani1 {
