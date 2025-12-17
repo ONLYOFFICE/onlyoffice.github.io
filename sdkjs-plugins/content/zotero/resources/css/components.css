@@ -430,6 +430,15 @@
             pointer-events: none;
         }
     }
+    .selectbox-description {
+        padding: 5.7px 12px 5.7px 6px;
+        display: flex;
+        font-weight: bold;
+    }
+    .selectbox-option.checkbox {
+        padding-left: 6px;
+    }
+
     .selectbox-option-divider {
         margin: 4px 0;
         border: none;
@@ -451,7 +460,7 @@
     .selectbox-disabled {
         pointer-events: none;
         .selectbox-header {
-            opacity: 0.65;
+            opacity: 0.5;
         }
     }
 }

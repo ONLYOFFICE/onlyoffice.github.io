@@ -461,7 +461,7 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
         " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" +
         " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" +
         ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' +
-        ' fill="black" fill-opacity="0.8"/></svg>';
+        ' fill="currentColor" fill-opacity="0.8"/></svg>';
     root.appendChild(remove);
 
     return root;

@@ -328,6 +328,7 @@ const Theme = {
                 ".custom-button-secondary-icon,\n" +
                 ".custom-button-secondary,\n" +
                 ".input-field-element,\n" +
+                ".selectbox-search-input,\n" +
                 ".selectbox-header,\n" +
                 ".selectbox-dropdown,\n" +
                 ".message { background-color: " +
@@ -439,6 +440,9 @@ const Theme = {
             styles +=
                 ".custom-button-secondary-icon,\n" +
                 ".custom-button-secondary,\n" +
+                ".custom-button-secondary-icon,\n" +
+                ".custom-button-icon-only,\n" +
+                ".selectbox-search-input,\n" +
                 ".input-field-element { color: " +
                 theme["text-normal"] +
                 "; }\n";
