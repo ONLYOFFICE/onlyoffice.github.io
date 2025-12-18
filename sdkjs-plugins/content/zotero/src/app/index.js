@@ -397,10 +397,7 @@ import "../styles.css";
         window.Asc.plugin.onThemeChangedBase(theme);
         Theme.fixThemeForIE(theme);
         Theme.addStylesForComponents(theme);
-        var rules =
-            ".selectArrow > span { background-color: " +
-            window.Asc.plugin.theme["text-normal"] +
-            "}\n";
+        var rules = "";
         rules +=
             ".link { color : " +
             window.Asc.plugin.theme["text-normal"] +
@@ -415,35 +412,6 @@ import "../styles.css";
             "; border-color : " +
             window.Asc.plugin.theme["border-regular-control"] +
             "}\n";
-        rules +=
-            ".selectList { border-color : " +
-            window.Asc.plugin.theme["border-regular-control"] +
-            "; background-color: " +
-            window.Asc.plugin.theme["background-normal"] +
-            "; }\n";
-        rules +=
-            ".selectList > hr { border-color : " +
-            window.Asc.plugin.theme["border-regular-control"] +
-            "; }\n";
-        rules +=
-            ".selectList > span { background-color: " +
-            window.Asc.plugin.theme["background-normal"] +
-            "; ";
-        rules += "color : " + window.Asc.plugin.theme["text-normal"] + "; }\n";
-        rules +=
-            ".selectList > span:hover { background-color : " +
-            window.Asc.plugin.theme["highlight-button-hover"] +
-            "; color : " +
-            window.Asc.plugin.theme["text-normal"] +
-            "}\n";
-        rules +=
-            '.selectList > span[selected=""] { background-color : ' +
-            window.Asc.plugin.theme["highlight-button-pressed"] +
-            ";" +
-            "; color : " +
-            window.Asc.plugin.theme["text-normal"] +
-            "}";
-
         rules +=
             ".doc { border-color: " +
             theme["border-regular-control"] +

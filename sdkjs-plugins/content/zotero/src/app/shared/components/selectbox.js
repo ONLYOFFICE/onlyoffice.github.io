@@ -429,7 +429,7 @@ SelectBox.prototype = {
             label.textContent = item.text;
 
             if (this._options.multiple) {
-                option.className += " checkbox";
+                option.className += " selectbox-option-checkbox";
                 let input = document.createElement("input");
                 input.type = "checkbox";
                 input.id = "checkbox-" + item.value;

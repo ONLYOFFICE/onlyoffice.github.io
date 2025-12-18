@@ -2333,7 +2333,7 @@ SelectBox.prototype = {
             label.className += " selectbox-option-text";
             label.textContent = item.text;
             if (this._options.multiple) {
-                option.className += " checkbox";
+                option.className += " selectbox-option-checkbox";
                 var input = document.createElement("input");
                 input.type = "checkbox";
                 input.id = "checkbox-" + item.value;
@@ -25484,16 +25484,10 @@ SelectCitationsComponent.prototype._count = function() {
         window.Asc.plugin.onThemeChangedBase(theme);
         Theme.fixThemeForIE(theme);
         Theme.addStylesForComponents(theme);
-        var rules = ".selectArrow > span { background-color: " + window.Asc.plugin.theme["text-normal"] + "}\n";
+        var rules = "";
         rules += ".link { color : " + window.Asc.plugin.theme["text-normal"] + ";}\n";
         rules += ".control.select { background-color : " + window.Asc.plugin.theme["background-normal"] + ";}\n";
         rules += ".control { color : " + window.Asc.plugin.theme["text-normal"] + "; border-color : " + window.Asc.plugin.theme["border-regular-control"] + "}\n";
-        rules += ".selectList { border-color : " + window.Asc.plugin.theme["border-regular-control"] + "; background-color: " + window.Asc.plugin.theme["background-normal"] + "; }\n";
-        rules += ".selectList > hr { border-color : " + window.Asc.plugin.theme["border-regular-control"] + "; }\n";
-        rules += ".selectList > span { background-color: " + window.Asc.plugin.theme["background-normal"] + "; ";
-        rules += "color : " + window.Asc.plugin.theme["text-normal"] + "; }\n";
-        rules += ".selectList > span:hover { background-color : " + window.Asc.plugin.theme["highlight-button-hover"] + "; color : " + window.Asc.plugin.theme["text-normal"] + "}\n";
-        rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme["highlight-button-pressed"] + ";" + "; color : " + window.Asc.plugin.theme["text-normal"] + "}";
         rules += ".doc { border-color: " + theme["border-regular-control"] + "; background-color: " + theme["background-normal"] + "; }\n";
         rules += ".scrollThumb { box-shadow: 0 0 8px 8px " + theme["highlight-button-hover"] + " inset; }\n";
         rules += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + theme["canvas-scroll-thumb-pressed"] + " inset; }\n";
