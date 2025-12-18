@@ -47,5 +47,7 @@
     "After conversion, citations can no longer be updated.": "После конвертации цитаты больше не будут обновляться.",
     "to access your local Zotero library.": "чтобы получить доступ к вашей локальной библиотеке Zotero.",
     "No API key required.": "Не требуется API-ключ.",
-    "Configure how citations will be formatted in your document.": "Настройте формат цитат в вашем документе."
+    "Configure how citations will be formatted in your document.": "Настройте формат цитат в вашем документе.",
+    "Search in": "Поиск в",
+    "Search in:": "Поиск в:"
 }
