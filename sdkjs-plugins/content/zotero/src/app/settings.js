@@ -33,19 +33,13 @@
 // @ts-check
 
 /**
- * @typedef {import('../router').Router} Router
+ * @typedef {import('./router').Router} Router
  */
 
-import {
-    Button,
-    SelectBox,
-    Radio,
-    Message,
-    Loader,
-} from "../shared/components";
-import { translate } from "../services";
-import { CslStylesManager } from "../csl/styles";
-import { LocalesManager } from "../csl/locales";
+import { Button, SelectBox, Message } from "./shared/components";
+import { translate } from "./services";
+import { CslStylesManager } from "./csl/styles/styles-manager";
+import { LocalesManager } from "./csl/locales/locales-manager";
 
 /**
  * @typedef {Object} Settings
@@ -63,6 +57,10 @@ function SettingsPage(router, displayNoneClass) {
     this._router = router;
     this._displayNoneClass = displayNoneClass;
 
+    this._openSettingsBtn = new Button("settingsBtn", {
+        variant: "icon-only",
+        size: "small",
+    });
     this._saveBtn = new Button("saveSettingsBtn", {
         variant: "primary",
     });
@@ -72,7 +70,6 @@ function SettingsPage(router, displayNoneClass) {
 
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
-        sortable: true
     });
     this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
         placeholder: "Enter style name",
@@ -83,13 +80,20 @@ function SettingsPage(router, displayNoneClass) {
     if (!this._notesStyleWrapper) {
         throw new Error("notesStyleWrapper not found");
     }
-
-    this._footNotes = new Radio("footNotes", {
-        label: "Footnotes",
-    });
-    this._endNotes = new Radio("endNotes", {
-        label: "Endnotes",
-    });
+    this._footNotes = document.getElementById("footNotes");
+    if (
+        !this._footNotes ||
+        this._footNotes instanceof HTMLInputElement === false
+    ) {
+        throw new Error("footNotes not found");
+    }
+    this._endNotes = document.getElementById("endNotes");
+    if (
+        !this._endNotes ||
+        this._endNotes instanceof HTMLInputElement === false
+    ) {
+        throw new Error("endNotes not found");
+    }
 
     this._cslFileInput = document.getElementById("cslFileInput");
     if (!this._cslFileInput) {
@@ -100,17 +104,15 @@ function SettingsPage(router, displayNoneClass) {
         placeholder: "Select language",
     });
 
-    this._cslStylesManager = new CslStylesManager("zoteroStyleId");
+    this._cslStylesManager = new CslStylesManager();
     this._localesManager = new LocalesManager();
 
     /** @type {HTMLElement[]} */
     this._selectLists = [];
     /**
-     * @param {Settings} newSettings
-     * @param {Settings} oldSettings 
-     * @returns {void}
+     * @param {Settings} settings
      */
-    this._onChangeState = function (newSettings, oldSettings) {};
+    this._onChangeState = function (settings) {};
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -175,8 +177,8 @@ function SettingsPage(router, displayNoneClass) {
     /** @type {Settings} */
     this._stateSettings = {
         style: "",
-        notesStyle: "footnotes",
-        styleFormat: "numeric",
+        notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
+        styleFormat: this._cslStylesManager.getLastUsedFormat(),
     };
 }
 
@@ -228,7 +230,7 @@ SettingsPage.prototype.init = function () {
 };
 
 /**
- * @param {function(Settings, Settings): void} callbackFn
+ * @param {function(Settings): void} callbackFn
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
@@ -253,6 +255,12 @@ SettingsPage.prototype.setRestApiAvailable = function (isAvailable) {
 SettingsPage.prototype._addEventListeners = function () {
     const self = this;
 
+    this._openSettingsBtn.subscribe(function (event) {
+        if (event.type !== "button:click") {
+            return;
+        }
+        self._show();
+    });
     this._saveBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
@@ -262,10 +270,6 @@ SettingsPage.prototype._addEventListeners = function () {
             console.error("No language selected");
             return;
         }
-
-        /** @type {Settings} */
-        const oldState = {...self._stateSettings};
-
         const promises = [];
         if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
@@ -282,17 +286,18 @@ SettingsPage.prototype._addEventListeners = function () {
             );
         }
 
-        /** @type {NoteStyle} */
-        let noteValue = "footnotes";
-        if (self._endNotes.getState().checked) {
-            noteValue = "endnotes";
-        }
-        if (self._stateSettings.notesStyle !== noteValue) {
-            self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
-            if (self._cslStylesManager.getLastUsedFormat() === "note") {
-                promises.push(Promise.resolve());
+        [self._footNotes, self._endNotes].forEach(function (el) {
+            if (el.checked) {
+                const value = el.value;
+                if (
+                    (self._stateSettings.notesStyle !== value &&
+                        value === "footnotes") ||
+                    value === "endnotes"
+                ) {
+                    self._cslStylesManager.saveLastUsedNotesStyle(value);
+                }
             }
-        }
+        });
 
         const selectedStyleId = self._styleSelect.getSelectedValue();
         if (
@@ -309,14 +314,13 @@ SettingsPage.prototype._addEventListeners = function () {
                     self._hide();
                     self._hideLoader();
 
-                    const newState = {
+                    self._onChangeState({
                         language: selectedLang,
-                        style: selectedStyleId || "ieee",
-                        notesStyle: noteValue,
+                        style: self._cslStylesManager.getLastUsedStyleIdOrDefault(),
+                        notesStyle:
+                            self._cslStylesManager.getLastUsedNotesStyle(),
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
-                    };
-
-                    self._onChangeState(newState, oldState);
+                    });
                 })
                 .catch(function (err) {
                     self._hideLoader();
@@ -329,7 +333,12 @@ SettingsPage.prototype._addEventListeners = function () {
         if (event.type !== "button:click") {
             return;
         }
-
+        [self._footNotes, self._endNotes].forEach(function (el) {
+            const value = el.value;
+            if (self._stateSettings.notesStyle === value) {
+                el.checked = true;
+            }
+        });
         const selectedLang = self._languageSelect.getSelectedValue();
         const selectedStyleId = self._styleSelect.getSelectedValue();
 
@@ -420,10 +429,10 @@ SettingsPage.prototype._addEventListeners = function () {
         }
         self._somethingWasChanged();
     });
-    this._footNotes.subscribe(function (event) {
+    this._footNotes.addEventListener("change", function (event) {
         self._somethingWasChanged();
     });
-    this._endNotes.subscribe(function (event) {
+    this._endNotes.addEventListener("change", function (event) {
         self._somethingWasChanged();
     });
 };
@@ -437,7 +446,7 @@ SettingsPage.prototype._hide = function () {
     this._router.openMain();
 };
 
-SettingsPage.prototype.show = function () {
+SettingsPage.prototype._show = function () {
     this._stateSettings = {
         language: this._localesManager.getLastUsedLanguage(),
         style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
@@ -446,11 +455,6 @@ SettingsPage.prototype.show = function () {
     };
     this._saveBtn.disable();
     this._router.openSettings();
-    if (this._stateSettings.notesStyle === this._endNotes.getState().value) {
-        this._endNotes.check();
-    } else {
-        this._footNotes.check();
-    }
 };
 
 /** @returns {Promise<void>} */
@@ -511,9 +515,9 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
     isClick && self._showLoader();
 
     return self._cslStylesManager
-        .getStyle(styleName, !isClick)
-        .then(function (styleInfo) {
-            let styleFormat = styleInfo.styleFormat;
+        .getStyle(styleName)
+        .then(function (style) {
+            let styleFormat = self._cslStylesManager.getLastUsedFormat();
             self._bNumFormat = styleFormat == "numeric";
             if ("note" === styleFormat) {
                 self._notesStyleWrapper.classList.remove(
@@ -523,6 +527,13 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._notesStyleWrapper.classList.add(self._displayNoneClass);
             }
 
+            let notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
+            const notesAs = self._notesStyleWrapper.querySelector(
+                'input[name="notesAs"][value="' + notesStyle + '"]'
+            );
+            if (notesAs && notesAs instanceof HTMLInputElement) {
+                notesAs.checked = true;
+            }
             isClick && self._hideLoader();
         })
         .catch(function (err) {
@@ -531,7 +542,6 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._styleMessage.show(translate(err));
             }
             isClick && self._hideLoader();
-            throw err;
         });
 };
 
@@ -540,14 +550,12 @@ SettingsPage.prototype._showLoader = function () {
     this._saveBtn.disable();
     this._styleSelect.disable();
     this._languageSelect.disable();
-    //Loader.show();
 };
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
     this._styleSelect.enable();
     this._languageSelect.enable();
-    //Loader.hide();
 };
 
 export { SettingsPage };

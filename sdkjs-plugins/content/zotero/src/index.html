@@ -34,6 +34,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <base href="../">
     <title>Zotero</title>
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
     <link rel="stylesheet" href="dist/styles.css">
@@ -41,9 +42,17 @@
     <style id="pluginStyles"></style>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="vendor/citeproc/citeproc_commonjs.js"></script>
     <script>
-        if (typeof Promise === 'function' && typeof Promise.any === 'function') {
+        function isBrowserSupportsES6() {
+            try {
+                new Function("let a = 1; const b = 2; class C {};");
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        if (isBrowserSupportsES6()) {
             document.write(
                 '<script type="module" src="dist/bundle.modern.js"><\/script>'
             );

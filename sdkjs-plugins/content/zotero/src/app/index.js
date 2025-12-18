@@ -34,36 +34,49 @@
 /// <reference path="./types-global.js" />
 /// <reference path="./zotero/types.js" />
 
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
-
 import { Theme } from "./theme";
 import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
-import { SettingsPage } from "./pages/settings";
-import { LoginPage } from "./pages/login";
-import { translate, CitationService, CursorService } from "./services";
+import { SettingsPage } from "./settings";
+import { LoginPage } from "./login";
+import { translate, CitationService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
-import { Button, Loader } from "./shared/components";
+import { Button } from "./shared/components";
 
 import "../components.css";
 import "../styles.css";
 
 (function () {
-    const displayNoneClass = "hidden";
+    var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
+    var displayNoneClass = "hidden";
+    var blurClass = "blur";
+
+    // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
+    //     из библиографии автоматически (это делать только при обновлении библиографии
+    //     или refresh), но их точно нужно удалить из formatter!
+    // TODO добавить ещё обработку события (изменения линков), предлать пользователю
+    //     обновить их или сохранить ручное форматирование (при ручном форматировании
+    //     не меняем внешний вид цитаты при refresh (да и вообще не меняем))
+    // TODO сейчас всегда делаем полный refresh при каждом действии
+    //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
+    //     что поменялось без событий (потом добавить ещё сравнение контента)
+    // TODO ms меняет линки (если стиль с нумерацией settings._bNumFormat) делает их по порядку
+    //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
+    //     какая цитата сверху и снизу от текущего курсора)
 
     /** @type {Router} */
-    let router;
+    var router;
     /** @type {ZoteroSdk} */
-    let sdk;
+    var sdk;
 
     /** @type {SettingsPage} */
-    let settings;
+    var settings;
 
     /** @type {CitationService} */
-    let citationService;
+    var citationService;
 
-    /** @type {LastSearch} */
-    const lastSearch = {
+    /** @type {{text: string, obj: SearchResult | null, groups: Array<SearchResult>, groupsHash: string}}} */
+    var lastSearch = {
         text: "",
         obj: null,
         groups: [],
@@ -71,26 +84,35 @@ import "../styles.css";
     };
 
     /** @type {SearchFilterComponents} */
-    let searchFilter;
+    var searchFilter;
     /** @type {SelectCitationsComponent} */
-    let selectCitation;
+    var selectCitation;
     /** @type {Button} */
-    let saveAsTextBtn;
+    var saveAsTextBtn;
     /** @type {Button} */
-    let insertLinkBtn;
+    var insertLinkBtn;
     /** @type {Button} */
-    let openSettingsBtn;
+    var insertBibBtn;
     /** @type {Button} */
-    let insertBibBtn;
-    /** @type {Button} */
-    let refreshBtn;
-    const libLoader = new Loader("libLoader", translate("Loading..."));
+    var refreshBtn;
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
-    let elements = {};
+    var elements = {};
     function initElements() {
+        const loader = document.getElementById("loader");
+        if (!loader) {
+            throw new Error("loader not found");
+        }
+        const libLoader = document.getElementById("libLoader");
+        if (!libLoader) {
+            throw new Error("libLoader not found");
+        }
         const error = document.getElementById("errorWrapper");
         if (!error) {
             throw new Error("errorWrapper not found");
+        }
+        const contentHolder = document.getElementById("content");
+        if (!contentHolder) {
+            throw new Error("contentHolder not found");
         }
 
         const mainState = document.getElementById("mainState");
@@ -110,10 +132,6 @@ import "../styles.css";
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
         });
-        openSettingsBtn = new Button("settingsBtn", {
-            variant: "icon-only",
-            size: "small",
-        });
         insertBibBtn = new Button("insertBibBtn", {
             variant: "secondary",
         });
@@ -121,14 +139,19 @@ import "../styles.css";
             variant: "secondary",
         });
         elements = {
+            loader: loader,
+            libLoader: libLoader,
             error: error,
+
+            contentHolder: contentHolder,
+
             mainState: mainState,
         };
     }
 
     window.Asc.plugin.init = function () {
-        Loader.show();
         initElements();
+        showLoader(true);
 
         router = new Router();
         sdk = new ZoteroSdk();
@@ -146,7 +169,7 @@ import "../styles.css";
         loginPage
             .init()
             .onOpen(function () {
-                Loader.hide();
+                showLoader(false);
             })
             .onChangeState(function (apis) {
                 settings.setDesktopApiAvailable(apis.desktop);
@@ -155,67 +178,22 @@ import "../styles.css";
             .onAuthorized(function (apis) {
                 if (isInit) return;
                 isInit = true;
-                Loader.show();
+                showLoader(true);
 
-                let loadGroupsPromise = loadGroups().catch((e) => {
-                    console.error(e);
-                    showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
-                });
-                let initSettingsPromise = settings.init().catch((e) => {
-                    console.error(e);
-                    showError(translate("An error occurred while loading settings. Try restarting the plugin."));
-                    settings.show();
-                });
-
-                Promise.all([loadGroupsPromise, initSettingsPromise]).then(function () {
-                    Loader.hide();
-                    return showCitationsAtTheStartFromMyLibrary();
-                }).finally(function () {
-                    Loader.hide();
+                Promise.all([loadGroups(), settings.init()]).then(function () {
+                    showLoader(false);
                 });
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
-        
-        getEditorVersion().then((editorVersion) => {
-            window.Asc.scope.editorVersion = editorVersion; // 9003000
-            addContextMenuButtons();
-        }).catch((e) => {
-            console.error(e);
-        });
-        
     };
 
-    function showCitationsAtTheStartFromMyLibrary() {
-        libLoader.show();
-        const promise = sdk.getItems(null)
-            .then(res => {
-                delete res.next;
-                return res;
-            })
-        return loadLibrary(promise, false)
-            .then((res) => {
-                if (res > 0) {
-                    updateHeaderText("started"); 
-                } else {
-                    updateHeaderText("empty");
-                }
-            })
-            .catch((e) => {
-                console.error(e);
-            })
-            .finally(() => {
-                libLoader.hide();
-            });
-    }
-
-    /** @returns {Promise<UserGroupInfo[]>} */
+    /** @returns {Promise<void>} */
     function loadGroups() {
         return sdk
             .getUserGroups()
             .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
                 searchFilter.addGroups(groups);
-                return groups;
             });
     }
 
@@ -225,12 +203,23 @@ import "../styles.css";
         /**
          * @param {string} text
          * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
-         * @param {string} groupsHash
-         * @returns {Promise<Array<Promise<number>>>}
+         * @returns
          */
-        function searchFor(text, selectedGroups, groupsHash) {
+        function searchFor(text, selectedGroups) {
+            text = text.trim();
+            const groupsHash = selectedGroups.join(",");
+            if (
+                elements.mainState.classList.contains(displayNoneClass) ||
+                !text ||
+                (text == lastSearch.text &&
+                    groupsHash === lastSearch.groupsHash) ||
+                selectedGroups.length === 0
+            )
+                return Promise.resolve();
+
             selectCitation.clearLibrary();
-            /** @type {Array<Promise<number>>} */
+
+            /** @type {Array<Promise<boolean>>} */
             const promises = [];
 
             return sdk
@@ -246,76 +235,52 @@ import "../styles.css";
                         );
                     });
 
+                    const append = true;
+                    let showLoader = true;
+                    let hideLoader = !groups.length;
+                    const bCount = true;
+
                     if (selectedGroups.indexOf("my_library") !== -1) {
                         promises.push(
-                            loadLibrary(sdk.getItems(text), false),
+                            loadLibrary(
+                                sdk.getItems(text),
+                                append,
+                                showLoader,
+                                hideLoader,
+                                false,
+                                bCount
+                            )
                         );
                     }
 
                     for (var i = 0; i < groups.length; i++) {
+                        showLoader = i === 0 && promises.length === 0;
+                        hideLoader = i === groups.length - 1;
                         promises.push(
                             loadLibrary(
                                 sdk.getGroupItems(text, groups[i]),
-                                true
+                                append,
+                                showLoader,
+                                hideLoader,
+                                true,
+                                bCount
                             )
                         );
                     }
+                })
+                .then(function () {
                     lastSearch.text = text;
                     lastSearch.obj = null;
                     lastSearch.groups = [];
                     lastSearch.groupsHash = groupsHash;
-                    return promises;
+                    return Promise.all(promises);
                 });
         }
         searchFilter.subscribe(function (text, selectedGroups) {
-            text = text.trim();
-            const groupsHash = selectedGroups.join(",");
-            if (
-                elements.mainState.classList.contains(displayNoneClass) ||
-                !text ||
-                (text == lastSearch.text &&
-                    groupsHash === lastSearch.groupsHash) ||
-                selectedGroups.length === 0
-            )
-                return;
-
-            searchFor(text, selectedGroups, groupsHash)
-                .catch(() => {
-                    return [];
-                })
-                .then(function (promises) {
-                    if (promises.length) {
-                        libLoader.show();
-                        Promise.any(promises)
-                            .then(function () {
-                                libLoader.hide();
-                            })
-                            .finally(function () {
-                                libLoader.hide();
-                            });
-                    }
-                    return Promise.allSettled(promises);
-                })
-                .then(function (
-                        /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib,
-                    ) {
-                        let numOfShown = 0;
-                        numOfShownByLib.forEach(function (promise) {
-                            if (promise.status === "fulfilled") {
-                                numOfShown += promise.value;
-                            }
-                        });
-                        if (numOfShown === 0) {
-                            updateHeaderText("empty");
-                            selectCitation.displayNothingFound();
-                        } else {
-                            updateHeaderText("not-empty");
-                        }
-                    },
-                );
+            searchFor(text, selectedGroups);
         });
 
-        refreshBtn.subscribe(async function (event) {
+        refreshBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
                 return;
             }
@@ -327,23 +292,9 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
-
-            let updateFn = citationService.updateCslItems.bind(
-                citationService,
-                false
-            );
-            
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateCslItemsInNotes.bind(
-                    citationService,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
-
-            updateFn()
+            showLoader(true);
+            citationService
+                .updateCslItems(true, true, false)
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");
@@ -353,11 +304,11 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    showLoader(false);
                 });
         });
 
-        insertBibBtn.subscribe(async (event) => {
+        insertBibBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
                 return;
             }
@@ -369,33 +320,25 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
-            /** @type {string} */
-            let addedFieldId = "";
-
+            showLoader(true);
+            // TODO #there
+            // updateCslItems(true, false, true);
             citationService
-                .insertBibliography()
-                .then(function (fieldId) {
-                    addedFieldId = fieldId;
-                })
+                .updateCslItems(true, true, true)
                 .catch(function (error) {
                     console.error(error);
-                    citationService.showWarningMessage("Failed to insert bibliography");
-
+                    let message = translate("Failed to insert bibliography");
                     if (typeof error === "string") {
-                        let message = translate(error);
-                        showError(message);
+                        message += ". " + translate(error);
                     }
+                    showError(message);
                 })
                 .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
-                    if (addedFieldId) {
-                        citationService.moveCursorOutsideField(addedFieldId);
-                    }
+                    showLoader(false);
                 });
         });
 
-        insertLinkBtn.subscribe(async (event) => {
+        insertLinkBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
                 return;
             }
@@ -407,24 +350,15 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(true, "Zotero (" + translate("Inserting citation") + ")");
-            const items = selectCitation.getSelectedItems();
-            /** @type {AddinFieldData | null} */
-            let addedField = null;
-            let bHasNotes = false;
-
-            return citationService.insertSelectedCitations(items)
-                .then(function (hasNotes) {
-                    bHasNotes = hasNotes;
-                    selectCitation.removeItems(Object.keys(items));
-                    return citationService.getCurrentField();
+            showLoader(true);
+            citationService
+                .updateCslItems(true, false, false)
+                .then(function () {
+                    const items = selectCitation.getSelectedItems();
+                    return citationService.insertSelectedCitations(items);
                 })
-                .then(function (field) {
-                    addedField = field;
-                    if (bHasNotes) {
-                        return citationService.updateCslItems(false);
-                    }
-                    return citationService.updateCslItems();
+                .then(function (keys) {
+                    selectCitation.removeItems(keys);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -434,101 +368,82 @@ import "../styles.css";
                     }
                     showError(message);
                 })
-                .finally(async () => {
-                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
-                    if (bHasNotes) {
-                        await citationService.moveCursorRight();
-                    } else if (addedField) {
-                        await citationService.moveCursorOutsideField(addedField.FieldId);
-                    }
+                .finally(function () {
+                    showLoader(false);
                 });
         });
 
-        openSettingsBtn.subscribe(function (event) {
+        saveAsTextBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
                 return;
             }
-            settings.show();
-        });
-
-        saveAsTextBtn.subscribe(async (event) => {
-            if (event.type !== "button:click") {
-                return;
-            }
-            await onStartAction(false, "Zotero (" + translate("Saving as text") + ")");
+            showLoader(true);
             citationService.saveAsText().then(function () {
-                onEndAction(false, "Zotero (" + translate("Saving as text") + ")");
+                showLoader(false);
             });
         });
 
-        settings.onChangeState(async function (newState, oldState) {
-            await onStartAction(
-                true,
-                "Zotero (" + translate("Updating citations") + ")",
-            );
-
-            let updateFn = citationService.updateCslItems.bind(
-                citationService,
-                true,
-            );
-
-            if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
-                if (newState.styleFormat !== oldState.styleFormat) {
-                    if (newState.styleFormat === "note") {
-                        updateFn =
-                            citationService.switchingBetweenNotesAndText.bind(
-                                citationService,
-                                newState.notesStyle,
-                            );
-                    } else {
-                        updateFn =
-                            citationService.switchingBetweenNotesAndText.bind(
-                                citationService,
-                            );
-                    }
-                } else if (newState.notesStyle !== oldState.notesStyle) {
-                    updateFn = citationService.convertNotesStyle.bind(
-                        citationService,
-                        newState.notesStyle,
-                    );
-                } else {
-                    updateFn = citationService.updateCslItems.bind(
-                        citationService,
-                        true,
-                    );
-                }
-            }
-
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to refresh");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                })
-                .finally(function () {
-                    onEndAction(
-                        false,
-                        "Zotero (" + translate("Updating citations") + ")",
-                    );
-                });
+        settings.onChangeState(function (settings) {
+            citationService.setNotesStyle(settings.notesStyle);
+            citationService.setStyleFormat(settings.styleFormat);
+            return citationService.updateCslItems(true, true, false);
         });
     }
 
     /**
-     * @param {AscTheme} theme - The new theme of the SDK.
+     * @param {ThemeColors} theme - The new theme of the SDK.
      */
     Asc.plugin.onThemeChanged = function (theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
         Theme.fixThemeForIE(theme);
         Theme.addStylesForComponents(theme);
-        let rules = "";
-        rules +=
-            ".link, .link:visited, .link:hover { color : " +
+        var rules =
+            ".selectArrow > span { background-color: " +
             window.Asc.plugin.theme["text-normal"] +
-            " !important;}\n";
+            "}\n";
+        rules +=
+            ".link { color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            ";}\n";
+        rules +=
+            ".control.select { background-color : " +
+            window.Asc.plugin.theme["background-normal"] +
+            ";}\n";
+        rules +=
+            ".control { color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            "; border-color : " +
+            window.Asc.plugin.theme["border-regular-control"] +
+            "}\n";
+        rules +=
+            ".selectList { border-color : " +
+            window.Asc.plugin.theme["border-regular-control"] +
+            "; background-color: " +
+            window.Asc.plugin.theme["background-normal"] +
+            "; }\n";
+        rules +=
+            ".selectList > hr { border-color : " +
+            window.Asc.plugin.theme["border-regular-control"] +
+            "; }\n";
+        rules +=
+            ".selectList > span { background-color: " +
+            window.Asc.plugin.theme["background-normal"] +
+            "; ";
+        rules += "color : " + window.Asc.plugin.theme["text-normal"] + "; }\n";
+        rules +=
+            ".selectList > span:hover { background-color : " +
+            window.Asc.plugin.theme["highlight-button-hover"] +
+            "; color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            "}\n";
+        rules +=
+            '.selectList > span[selected=""] { background-color : ' +
+            window.Asc.plugin.theme["highlight-button-pressed"] +
+            ";" +
+            "; color : " +
+            window.Asc.plugin.theme["text-normal"] +
+            "}";
+
         rules +=
             ".doc { border-color: " +
             theme["border-regular-control"] +
@@ -572,24 +487,22 @@ import "../styles.css";
     };
 
     function applyTranslations() {
-        let elements = document.getElementsByClassName("i18n");
+        var elements = document.getElementsByClassName("i18n");
 
-        for (let i = 0; i < elements.length; i++) {
-            let el = elements[i];
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
             if (el instanceof HTMLElement === false) continue;
 
             ["placeholder", "title"].forEach((attr) => {
                 if (el.hasAttribute(attr)) {
                     el.setAttribute(
                         attr,
-                        translate(el.getAttribute(attr) || ""),
+                        translate(el.getAttribute(attr) || "")
                     );
                 }
             });
 
-            const translated = translate(
-                el.innerText.trim().replace(/\s+/g, " "),
-            );
+            const translated = translate(el.innerText.trim());
             if (translated) el.innerText = translated;
         }
     }
@@ -600,7 +513,7 @@ import "../styles.css";
     function showError(message) {
         if (message && typeof message === "string") {
             let m = translate("");
-            elements.error.classList.remove(displayNoneClass);
+            switchClass(elements.error, displayNoneClass, false);
             elements.error.textContent = message;
             setTimeout(function () {
                 window.onclick = function () {
@@ -608,116 +521,68 @@ import "../styles.css";
                 };
             }, 100);
         } else {
-            elements.error.classList.add(displayNoneClass);
+            switchClass(elements.error, displayNoneClass, true);
             elements.error.textContent = "";
             window.onclick = null;
         }
     }
 
     /**
-     * @param {boolean} keepSelection
-     * @param {string} [preloaderMessage]
+     * @param {boolean} show
      */
-    async function onStartAction(keepSelection, preloaderMessage) {
-        insertBibBtn.disable();
-        refreshBtn.disable();
-        insertLinkBtn.disable();
-
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            // @ts-ignore
-            window._cursorPosition = await CursorService.getCursorPosition();
-        } else {
-            await new Promise(resolve => {
-                Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true, "keepSelection" : keepSelection }], resolve);
-            });
-        }
-        /*if (preloaderMessage) {
-            await new Promise(resolve => {
-                Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
-                    resolve(returnValue);
-                });
-            });
-        }*/
+    function showLoader(show) {
+        switchClass(elements.loader, displayNoneClass, !show);
+        switchClass(elements.contentHolder, blurClass, show);
     }
 
     /**
-     * @param {boolean} scrollToTarget
-     * @param {string} [preloaderMessage]
+     * @param {boolean} show
      */
-    async function onEndAction(scrollToTarget, preloaderMessage) {
-        insertBibBtn.enable();
-        refreshBtn.enable();
-        checkSelected();
-        
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            // @ts-ignore
-            CursorService.setCursorPosition(window._cursorPosition || 0);
-        } else {
-            await new Promise(resolve => {
-                Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
-            });
-        }
-        /*if (preloaderMessage) {
-            await new Promise(resolve => {
-                Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
-                    resolve(returnValue);
-                });
-            });
-        }*/
+    function showLibLoader(show) {
+        switchClass(elements.libLoader, displayNoneClass, !show);
     }
 
     /**
-     * @param {"empty" | "not-empty" | "started"} whatToShow
+     * @param {HTMLElement} el
+     * @param {string} className
+     * @param {boolean} add
      */
-    function updateHeaderText(whatToShow) {
-        const searchLabel = document.getElementById("searchLabel");
-        if (!searchLabel) {
-            console.error("Search label not found");
-            return;
+    function switchClass(el, className, add) {
+        if (add) {
+            el.classList.add(className);
+        } else {
+            el.classList.remove(className);
         }
-        const textWhenEmpty = searchLabel.querySelector('.when-empty');
-        const textWhenNotEmpty = searchLabel.querySelector('.when-not-empty');
-        const textWhenStarted = searchLabel.querySelector('.when-started');
-        if (!textWhenEmpty || !textWhenNotEmpty || !textWhenStarted) {
-            console.error("Search label elements not found");
-            return;
-        }
-        textWhenEmpty.classList.add("hidden");
-        textWhenNotEmpty.classList.add("hidden");
-        textWhenStarted.classList.add("hidden");
-        switch (whatToShow) {
-            case "empty":
-                textWhenEmpty.classList.remove("hidden");
-                break;
-            case "not-empty":
-                textWhenNotEmpty.classList.remove("hidden");
-                break;
-            case "started":
-                textWhenNotEmpty.classList.remove("hidden");
-                textWhenStarted.classList.remove("hidden");
-                break;
-        } 
     }
 
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), false);
+            loadLibrary(
+                lastSearch.obj.next(),
+                true,
+                true,
+                !lastSearch.groups.length,
+                false,
+                false
+            );
         }
 
         for (
-            let i = 0;
+            var i = 0;
             i < lastSearch.groups.length && lastSearch.groups[i].next;
             i++
         ) {
             loadLibrary(
                 sdk.getGroupItems(
                     lastSearch.groups[i].next(),
-                    lastSearch.groups[i].id,
+                    lastSearch.groups[i].id
                 ),
                 true,
+                false,
+                i == lastSearch.groups.length - 1,
+                true,
+                false
             );
         }
     }
@@ -732,7 +597,7 @@ import "../styles.css";
             return false;
         }
 
-        let flag = true;
+        var flag = true;
         lastSearch.groups.forEach(function (el) {
             if (el.next) flag = false;
         });
@@ -749,34 +614,64 @@ import "../styles.css";
 
     /**
      * @param {Promise<SearchResult>} promise
+     * @param {boolean} append
+     * @param {boolean} showLoader
+     * @param {boolean} hideLoader
      * @param {boolean} isGroup
-     * @returns {Promise<number>}
+     * @param {boolean} bCount
+     * @returns {Promise<boolean>}
      */
-    function loadLibrary(promise, isGroup) {
+    function loadLibrary(
+        promise,
+        append,
+        showLoader,
+        hideLoader,
+        isGroup,
+        bCount
+    ) {
+        if (showLoader) showLibLoader(true);
+        if (bCount) counter++;
         return promise
             .then(function (res) {
-                return displaySearchItems(res, null, isGroup);
+                if (bCount) counter--;
+                return displaySearchItems(
+                    append,
+                    res,
+                    null,
+                    isGroup,
+                    bCount && !counter
+                );
             })
             .catch(function (err) {
+                if (bCount) counter--;
                 console.error(err);
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                return displaySearchItems(null, err, isGroup);
+                return displaySearchItems(
+                    append,
+                    null,
+                    err,
+                    isGroup,
+                    bCount && !counter
+                );
             })
-            .then(function (numOfShown) {
-                return numOfShown;
+            .finally(function () {
+                if (hideLoader) {
+                    showLibLoader(false);
+                }
             });
     }
 
     /**
+     * @param {boolean} append
      * @param {SearchResult | null} res
      * @param {Error | null} err
      * @param {boolean} isGroup
-     * @returns {Promise<number>}
+     * @param {boolean} showNotFound
      */
-    function displaySearchItems(res, err, isGroup) {
-        let first = false;
+    function displaySearchItems(append, res, err, isGroup, showNotFound) {
+        var first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
         if (err) {
@@ -784,195 +679,42 @@ import "../styles.css";
                 lastSearch.obj = null;
                 lastSearch.groups = [];
             }
-            if (lastSearch && lastSearch.obj) {
-                delete lastSearch.obj.next;
-            }
+            lastSearch.obj.next = null;
         } else {
             if (isGroup && res && res.next) lastSearch.groups.push(res);
             else lastSearch.obj = res && res.items.length ? res : null;
         }
-        /**
-         * @param {SearchResultItem} item
-         * @returns
-         */
-        const fillUrisFromId = function (item) {
-            if (!item.id) return item;
-            const slashFirstIndex = item.id.indexOf("/") + 1;
-            const slashLastIndex = item.id.lastIndexOf("/") + 1;
-            const httpIndex = item.id.indexOf("http");
-            if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
-                if (!item.uris) {
-                    item.uris = [];
-                }
-                item.uris.push(item.id);
-            }
-            if (slashLastIndex) item.id = item.id.substring(slashLastIndex);
-
-            return item;
-        };
         if (res && res.items && res.items.length > 0) {
-            res.items = res.items.map(item => {
-                item = convertJsonToCsl(item);
+            for (let index = 0; index < res.items.length; index++) {
+                let item = res.items[index];
                 item[isGroup ? "groupID" : "userID"] = res.id;
-                fillUrisFromId(item);
-                return item;
-            });
-        }
-
-        return selectCitation.displaySearchItems(res, err, lastSearch);
-    }
-
-    /**
-     * @param {any} item 
-     * @returns {SearchResultItem}
-     */
-    function convertJsonToCsl(item) {
-        if (item.id || !item.key) return item;
-        /** @type {SearchResultItem} */
-        const res = {
-            id: item.key,
-            title: item.data.title,
-            type: item.data.itemType,
-        };
-        if (Object.hasOwnProperty.call(item, "url")) {
-            res.URL = item.data.url;
-        }
-        if (Object.hasOwnProperty.call(item, "volume")) {
-            res.volume = item.data.volume;
-        }
-        if (Object.hasOwnProperty.call(item, "language")) {
-            res.language = item.data.language;
-        }
-        if (Object.hasOwnProperty.call(item, "abstract")) {
-            res.abstract = item.data.abstract;
-        }
-        if (Object.hasOwnProperty.call(item, "note")) {
-            res.note = item.data.note;
-        }
-        if (Object.hasOwnProperty.call(item, "page")) {
-            res.page = item.data.page;
-        }
-        if (Object.hasOwnProperty.call(item, "shortTitle")) {
-            res.shortTitle = item.data.shortTitle;
-        }
-        if (Object.hasOwnProperty.call(item, "links")) {
-            res.uris = [];
-            if (Object.hasOwnProperty.call(item.links, "self")) {
-                res.uris.push(item.links.self.href)
-            }
-            if (Object.hasOwnProperty.call(item.links, "alternate")) {
-                res.uris.push(item.links.alternate.href)
+                citationService.fillUrisFromId(item);
             }
         }
 
-        return res;
+        return selectCitation.displaySearchItems(
+            append,
+            res,
+            err,
+            showNotFound,
+            first
+        );
     }
 
     /**
-     * @param {number} [numOfSelected]
+     * @param {number} numOfSelected
      */
     function checkSelected(numOfSelected) {
-        if (typeof numOfSelected === "undefined") {
-            numOfSelected = selectCitation.count();
-        }
+        insertLinkBtn.setText(translate("Insert Citation"));
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
-            insertLinkBtn.setText(translate("Insert Citation"));
         } else {
             insertLinkBtn.enable();
-            if (numOfSelected > 1) {
+            if (numOfSelected > 1)
                 // TODO: add translate
                 insertLinkBtn.setText(
-                    translate("Insert " + numOfSelected + " Citations"),
+                    translate("Insert " + numOfSelected + " Citations")
                 );
-            } else {
-                insertLinkBtn.setText(translate("Insert Citation"));
-            }
         }
-    }
-
-    /**
-     * @returns {Promise<number>}
-     */
-    async function getEditorVersion() {
-        try {
-            let version = await new Promise(resolve => {
-                Asc.plugin.executeMethod("GetVersion", [], resolve);
-            });
-            if ("develop" == version)
-                version = "99.99.99";
-
-            let arrVer = version.split(".");
-            while (3 > arrVer.length)
-                arrVer.push("0");
-
-            return 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
-        } catch (error) {
-            console.error(error);
-            return 99_999_999;
-        }
-		
-	}
-
-    function addContextMenuButtons() {
-        let buttonMain = new Asc.ButtonContextMenu();
-        buttonMain.text = "Edit citation";
-        buttonMain.addCheckers("Target", "Selection");
-        buttonMain.attachOnClick(async function () {
-            /** @type {AddinFieldData | null} */
-            const field = await new Promise((resolve) => {
-                window.Asc.plugin.executeMethod(
-                    "GetCurrentAddinField",
-                    undefined,
-                    resolve,
-                );
-            });
-            if (
-                !field ||
-                !field.Value ||
-                field.Value.toLowerCase().indexOf("zotero_item") === -1
-            ) {
-                citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
-                return;
-            }
-            const updatedField = await citationService.showEditCitationWindow(field);
-            if (!updatedField) {
-                return;
-            }
-            await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-
-            let updateFn = citationService.updateItem.bind(
-                citationService,
-                updatedField
-            );
-
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItem.bind(
-                    citationService,
-                    updatedField,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
-
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                })
-                .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                    if (field) {
-                        citationService.moveCursorOutsideField(field.FieldId);
-                    }
-                });
-        });
-        Asc.Buttons.registerContextMenu();
-
     }
 })();

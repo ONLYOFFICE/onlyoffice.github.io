@@ -37,10 +37,7 @@
 import { CslStylesStorage } from "./storage";
 import { CslStylesParser } from "./style-parser";
 
-/**
- * @param {string} lastStyleKey
- */
-function CslStylesManager(lastStyleKey) {
+function CslStylesManager() {
     this._isOnlineAvailable = false;
     this._isDesktopAvailable = false;
 

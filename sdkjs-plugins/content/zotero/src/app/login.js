@@ -33,13 +33,13 @@
 // @ts-check
 
 /**
- * @typedef {import('../router').Router} Router
- * @typedef {import('../zotero').ZoteroSdk} ZoteroSdk
+ * @typedef {import('./router').Router} Router
+ * @typedef {import('./zotero').ZoteroSdk} ZoteroSdk
  */
 
-import { InputField, Button, Message } from "../shared/components";
-import { translate } from "../services";
-import { ZoteroApiChecker } from "../zotero";
+import { InputField, Button, Message } from "./shared/components";
+import { translate } from "./services";
+import { ZoteroApiChecker } from "./zotero";
 
 /**
  * @param {Router} router
@@ -154,79 +154,65 @@ LoginPage.prototype.init = function () {
 LoginPage.prototype._addEventListeners = function () {
     const self = this;
     this._apiKeyLoginField.subscribe(function (event) {
-        if (event.type !== "inputfield:submit") {
-            // self._tryToApplyKey();
+        if (event.type !== "inputfield:input") {
+            return;
         }
-        if (event.type === "inputfield:input") {
-            if (self._apiKeyLoginField.getValue()) {
-                self._saveApiKeyBtn.enable();
-            } else {
-                self._saveApiKeyBtn.disable();
-            }
+        if (self._apiKeyLoginField.getValue()) {
+            self._saveApiKeyBtn.enable();
+        } else {
+            self._saveApiKeyBtn.disable();
         }
     });
     this._saveApiKeyBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
         }
-        self._tryToApplyKey();
+        const apiKey = self._apiKeyLoginField.getValue();
+        if (apiKey) {
+            self._sdk
+                .setApiKey(apiKey)
+                .then(function () {
+                    ZoteroApiChecker.successfullyLoggedInUsingApiKey();
+                    self._hide(true);
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    self._apiKeyMessage.show(translate("Invalid API key"));
+                });
+        }
     });
     this._connectToLocalZotero.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
         }
-        self._showLoader();
-        ZoteroApiChecker.checkStatus(self._sdk)
-            .then(function (/** @type {AvailableApis} */ apis) {
-                if (apis.desktop && apis.hasPermission) {
-                    self._sdk.setIsOnlineAvailable(false);
-                    self._hide();
-                    self._hideAllMessages();
-                } else if (apis.desktop && !apis.hasPermission) {
-                    const errorMessage =
-                        "Connection to Zotero failed. " +
-                        "Please enable external connections in Zotero: " +
-                        'Edit → Settings → Advanced → Check "Allow other ' +
-                        'applications on this computer to communicate with Zotero"';
-                    self._useDesktopMessage.show(translate(errorMessage));
-                } else if (!apis.desktop) {
-                    self._useDesktopMessage.show(
-                        translate(
-                            "Connection to Zotero failed. Make sure Zotero is running."
-                        )
-                    );
-                }
-            })
-            .finally(function () {
-                self._hideLoader();
-            });
+        ZoteroApiChecker.checkStatus(self._sdk).then(function (
+            /** @type {AvailableApis} */ apis
+        ) {
+            if (apis.desktop && apis.hasPermission) {
+                self._sdk.setIsOnlineAvailable(false);
+                self._hide();
+                self._hideAllMessages();
+            } else if (apis.desktop && !apis.hasPermission) {
+                const errorMessage =
+                    "Connection to Zotero failed. " +
+                    "Please enable external connections in Zotero: " +
+                    'Edit → Settings → Advanced → Check "Allow other ' +
+                    'applications on this computer to communicate with Zotero"';
+                self._useDesktopMessage.show(translate(errorMessage));
+            } else if (!apis.desktop) {
+                self._useDesktopMessage.show(
+                    translate(
+                        "Connection to Zotero failed. Make sure Zotero is running."
+                    )
+                );
+            }
+        });
     });
     this._logoutLink.onclick = function (e) {
         self._sdk.clearSettings();
         self._show();
         return true;
     };
-};
-
-LoginPage.prototype._tryToApplyKey = function () {
-    const self = this;
-    const apiKey = self._apiKeyLoginField.getValue();
-    if (apiKey) {
-        self._showLoader();
-        self._sdk
-            .setApiKey(apiKey)
-            .then(function () {
-                ZoteroApiChecker.successfullyLoggedInUsingApiKey();
-                self._hide(true);
-            })
-            .catch(function (err) {
-                console.error(err);
-                self._apiKeyMessage.show(translate("Invalid API key"));
-            })
-            .finally(function () {
-                self._hideLoader();
-            });
-    }
 };
 
 LoginPage.prototype._hideAllMessages = function () {
@@ -244,19 +230,6 @@ LoginPage.prototype._hide = function (bShowLogoutLink) {
 LoginPage.prototype._show = function () {
     this._router.openLogin();
     this._logoutLink.classList.add("hidden");
-};
-
-LoginPage.prototype._showLoader = function () {
-    this._saveApiKeyBtn.disable();
-    this._connectToLocalZotero.disable();
-    this._apiKeyLoginField.disable();
-    //Loader.show();
-};
-LoginPage.prototype._hideLoader = function () {
-    this._saveApiKeyBtn.enable();
-    this._connectToLocalZotero.enable();
-    this._apiKeyLoginField.enable();
-    //Loader.hide();
 };
 
 export { LoginPage };

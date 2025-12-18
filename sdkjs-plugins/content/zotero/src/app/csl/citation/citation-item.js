@@ -245,17 +245,13 @@ CitationItem.prototype.addUri = function (uri) {
     return this;
 };
 
-/**
- * @param {boolean} [bCompressed]
- * @returns 
- */
-CitationItem.prototype.toJSON = function (bCompressed) {
+CitationItem.prototype.toJSON = function () {
     var result = {};
     result.id = this.id;
 
     if (this._itemData) {
         result.itemData = this._itemData.toJSON
-            ? this._itemData.toJSON(bCompressed || false)
+            ? this._itemData.toJSON()
             : this._itemData;
     }
     if (this._prefix !== undefined) result.prefix = this._prefix;

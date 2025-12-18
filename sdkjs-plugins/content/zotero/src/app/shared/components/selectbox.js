@@ -1061,7 +1061,7 @@ class SelectBox {
             }
         }
         this._container.className = newClasses.join(" ");
-    }
-}
+    },
+};
 
 export { SelectBox };
