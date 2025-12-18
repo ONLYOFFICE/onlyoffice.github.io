@@ -400,8 +400,20 @@
     display: flex;
     font-weight: bold;
 }
-.selectbox-option.checkbox {
+.selectbox-option-checkbox {
     padding-left: 6px;
+    gap: 6px;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    position: relative;
+    transition: background-color 0.2s;
+}
+.selectbox-option-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    margin: 0;
 }
 
 .selectbox-option-divider {
