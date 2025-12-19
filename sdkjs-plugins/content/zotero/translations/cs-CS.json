@@ -47,5 +47,7 @@
     "After conversion, citations can no longer be updated.": "Po konverzii citace nelze aktualizovat.",
     "to access your local Zotero library.": "pro pripojeni k vasemu lokalnimu Zotero knihovne.",
     "No API key required.": "Neni potreba API kluc.",
-    "Configure how citations will be formatted in your document.": "Nastavte, jak budou citace formátovány ve vašem dokumentu."
+    "Configure how citations will be formatted in your document.": "Nastavte, jak budou citace formátovány ve vašem dokumentu.",
+    "Search in": "Vyhledat v",
+    "Search in:": "Vyhledat v:"
 }

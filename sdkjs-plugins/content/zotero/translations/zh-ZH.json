@@ -47,5 +47,7 @@
     "After conversion, citations can no longer be updated.": "轉換後，引用將無法更新。",
     "to access your local Zotero library.": "以本地 Zotero 圖書館的方式存取。",
     "No API key required.": "不需要 API Key。",
-    "Configure how citations will be formatted in your document.": "配置引用在文件中的格式。"
+    "Configure how citations will be formatted in your document.": "配置引用在文件中的格式。",
+    "Search in": "搜尋",
+    "Search in:": "搜尋:"
 }
