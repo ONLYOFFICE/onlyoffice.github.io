@@ -3563,6 +3563,7 @@
     var Theme = {
         addStylesForComponents: function addStylesForComponents(theme) {
             var styles = "";
+            console.warn(theme);
             if (theme["background-normal"]) {
                 styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element,\n" + ".selectbox-search-input,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".message { background-color: " + theme["background-normal"] + "; }\n";
             }
@@ -3570,7 +3571,7 @@
                 styles += ".custom-button-primary { color: " + theme["text-inverse"] + "; }\n";
             }
             if (theme["border-regular-control"]) {
-                styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".input-field-element,\n" + ".checkbox-visual,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".selectbox-search-input:focus,\n" + ".message { border-color: " + theme["border-regular-control"] + "; }\n";
+                styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".input-field-element,\n" + ".checkbox-visual,\n" + ".radio-visual,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".selectbox-search-input:focus,\n" + ".message { border-color: " + theme["border-regular-control"] + "; }\n";
                 styles += ".selectbox-search,\n" + ".selectbox-option-divider { border-color: " + theme["border-regular-control"] + " !important; }\n";
             }
             if (theme["border-error"]) {
@@ -3605,17 +3606,22 @@
             if (theme["text-tertiary"]) {
                 styles += ".input-field-clear,\n" + ".message-container:hover .message-close,\n" + ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled,\n" + ".input-field-element::placeholder,\n" + ".selectbox-search-input::placeholder { color: " + theme["text-tertiary"] + "; }\n";
             }
+            var fontSize = "11px";
             if ([ "theme-white", "theme-night" ].indexOf(theme.name) !== -1 || [ "theme-white", "theme-night" ].indexOf(theme.Name) !== -1) {
+                fontSize = "12px";
                 styles += ".message,\n" + ".custom-button,\n" + ".selectbox-header,\n" + ".input-field-element { border-radius: 4px; }\n";
+                styles += ".checkbox-visual, .radio-visual { background-color: " + theme["background-normal"] + "; }\n";
                 styles += ".checkbox-checkmark { color: " + theme["text-inverse"] + "; }\n";
-                styles += ".checkbox--checked .checkbox-visual { background-color: " + theme["background-primary-dialog-button"] + "; }\n";
-                styles += ".checkbox--checked .checkbox-visual { border-color: " + theme["background-primary-dialog-button"] + "; }\n";
-                styles += ".checkbox:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + theme["highlight-button-hover"] + "; }\n";
-                styles += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; background-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
+                styles += ".radio--checked .radio-visual,\n" + ".checkbox--checked .checkbox-visual { background-color: " + theme["background-primary-dialog-button"] + "; }\n";
+                styles += ".radio--checked .radio-visual,\n" + ".checkbox--checked .checkbox-visual { border-color: " + theme["background-primary-dialog-button"] + "; }\n";
+                styles += ".radio-button-container:hover:not(.radio--disabled) .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + theme["highlight-button-hover"] + "; }\n";
+                styles += ".radio--checked:hover:not(.radio--disabled) .radio-visual,\n" + ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; background-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
+                styles += "body { font-size: 12px; }\n";
             } else {
                 styles += ".checkbox-checkmark { color: " + theme["text-normal"] + "; }\n";
-                styles += ".checkbox:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["border-control-focus"] + "; }\n";
+                styles += ".radio-container:hover:not(.radio--disabled) .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["border-control-focus"] + "; }\n";
             }
+            styles += "body, input, textarea, select, button { font-size: " + fontSize + "; }\n";
             var styleTheme = document.getElementById("componentsStyles");
             if (!styleTheme) {
                 styleTheme = document.createElement("style");
@@ -3854,6 +3860,40 @@
         for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
         return n;
     }
+    function _assertClassBrand(e, t, n) {
+        if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
+        throw new TypeError("Private element is not present on this object");
+    }
+    function _checkPrivateRedeclaration(e, t) {
+        if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+    }
+    function _classCallCheck(a, n) {
+        if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+    }
+    function _classPrivateFieldGet2(s, a) {
+        return s.get(_assertClassBrand(s, a));
+    }
+    function _classPrivateFieldInitSpec(e, t, a) {
+        _checkPrivateRedeclaration(e, t), t.set(e, a);
+    }
+    function _classPrivateFieldSet2(s, a, r) {
+        return s.set(_assertClassBrand(s, a), r), r;
+    }
+    function _classPrivateMethodInitSpec(e, a) {
+        _checkPrivateRedeclaration(e, a), a.add(e);
+    }
+    function _defineProperties(e, r) {
+        for (var t = 0; t < r.length; t++) {
+            var o = r[t];
+            o.enumerable = o.enumerable || false, o.configurable = true, "value" in o && (o.writable = true), 
+            Object.defineProperty(e, _toPropertyKey(o.key), o);
+        }
+    }
+    function _createClass(e, r, t) {
+        return r && _defineProperties(e.prototype, r), Object.defineProperty(e, "prototype", {
+            writable: false
+        }), e;
+    }
     function _createForOfIteratorHelper(r, e) {
         var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
         if (!t) {
@@ -3898,6 +3938,20 @@
                 }
             }
         };
+    }
+    function _toPrimitive(t, r) {
+        if ("object" != typeof t || !t) return t;
+        var e = t[Symbol.toPrimitive];
+        if (void 0 !== e) {
+            var i = e.call(t, r);
+            if ("object" != typeof i) return i;
+            throw new TypeError("@@toPrimitive must return a primitive value.");
+        }
+        return String(t);
+    }
+    function _toPropertyKey(t) {
+        var i = _toPrimitive(t, "string");
+        return "symbol" == typeof i ? i : i + "";
     }
     function _typeof(o) {
         "@babel/helpers - typeof";
@@ -7044,6 +7098,7 @@
         },
         _handleKeydown: function _handleKeydown(e) {
             var key = e.key || e.keyCode;
+            console.warn(e);
             if ((key === "Escape" || key === 27) && this._options.showClear) {
                 this.clear();
                 e.preventDefault();
@@ -7850,6 +7905,117 @@
         return es_array_concat;
     }
     requireEs_array_concat();
+    var es_array_splice = {};
+    var arraySetLength;
+    var hasRequiredArraySetLength;
+    function requireArraySetLength() {
+        if (hasRequiredArraySetLength) return arraySetLength;
+        hasRequiredArraySetLength = 1;
+        var DESCRIPTORS = requireDescriptors();
+        var isArray = requireIsArray();
+        var $TypeError = TypeError;
+        var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+        var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function() {
+            if (this !== undefined) return true;
+            try {
+                Object.defineProperty([], "length", {
+                    writable: false
+                }).length = 1;
+            } catch (error) {
+                return error instanceof TypeError;
+            }
+        }();
+        arraySetLength = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function(O, length) {
+            if (isArray(O) && !getOwnPropertyDescriptor(O, "length").writable) {
+                throw new $TypeError("Cannot set read only .length");
+            }
+            return O.length = length;
+        } : function(O, length) {
+            return O.length = length;
+        };
+        return arraySetLength;
+    }
+    var deletePropertyOrThrow;
+    var hasRequiredDeletePropertyOrThrow;
+    function requireDeletePropertyOrThrow() {
+        if (hasRequiredDeletePropertyOrThrow) return deletePropertyOrThrow;
+        hasRequiredDeletePropertyOrThrow = 1;
+        var tryToString = requireTryToString();
+        var $TypeError = TypeError;
+        deletePropertyOrThrow = function(O, P) {
+            if (!delete O[P]) throw new $TypeError("Cannot delete property " + tryToString(P) + " of " + tryToString(O));
+        };
+        return deletePropertyOrThrow;
+    }
+    var hasRequiredEs_array_splice;
+    function requireEs_array_splice() {
+        if (hasRequiredEs_array_splice) return es_array_splice;
+        hasRequiredEs_array_splice = 1;
+        var $ = require_export();
+        var toObject = requireToObject();
+        var toAbsoluteIndex = requireToAbsoluteIndex();
+        var toIntegerOrInfinity = requireToIntegerOrInfinity();
+        var lengthOfArrayLike = requireLengthOfArrayLike();
+        var setArrayLength = requireArraySetLength();
+        var doesNotExceedSafeInteger = requireDoesNotExceedSafeInteger();
+        var arraySpeciesCreate = requireArraySpeciesCreate();
+        var createProperty = requireCreateProperty();
+        var deletePropertyOrThrow = requireDeletePropertyOrThrow();
+        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
+        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("splice");
+        var max = Math.max;
+        var min = Math.min;
+        $({
+            target: "Array",
+            proto: true,
+            forced: !HAS_SPECIES_SUPPORT
+        }, {
+            splice: function splice(start, deleteCount) {
+                var O = toObject(this);
+                var len = lengthOfArrayLike(O);
+                var actualStart = toAbsoluteIndex(start, len);
+                var argumentsLength = arguments.length;
+                var insertCount, actualDeleteCount, A, k, from, to;
+                if (argumentsLength === 0) {
+                    insertCount = actualDeleteCount = 0;
+                } else if (argumentsLength === 1) {
+                    insertCount = 0;
+                    actualDeleteCount = len - actualStart;
+                } else {
+                    insertCount = argumentsLength - 2;
+                    actualDeleteCount = min(max(toIntegerOrInfinity(deleteCount), 0), len - actualStart);
+                }
+                doesNotExceedSafeInteger(len + insertCount - actualDeleteCount);
+                A = arraySpeciesCreate(O, actualDeleteCount);
+                for (k = 0; k < actualDeleteCount; k++) {
+                    from = actualStart + k;
+                    if (from in O) createProperty(A, k, O[from]);
+                }
+                A.length = actualDeleteCount;
+                if (insertCount < actualDeleteCount) {
+                    for (k = actualStart; k < len - actualDeleteCount; k++) {
+                        from = k + actualDeleteCount;
+                        to = k + insertCount;
+                        if (from in O) O[to] = O[from]; else deletePropertyOrThrow(O, to);
+                    }
+                    for (k = len; k > len - actualDeleteCount + insertCount; k--) deletePropertyOrThrow(O, k - 1);
+                } else if (insertCount > actualDeleteCount) {
+                    for (k = len - actualDeleteCount; k > actualStart; k--) {
+                        from = k + actualDeleteCount - 1;
+                        to = k + insertCount - 1;
+                        if (from in O) O[to] = O[from]; else deletePropertyOrThrow(O, to);
+                    }
+                }
+                for (k = 0; k < insertCount; k++) {
+                    O[k + actualStart] = arguments[k + 2];
+                }
+                setArrayLength(O, len - actualDeleteCount + insertCount);
+                return A;
+            }
+        });
+        return es_array_splice;
+    }
+    requireEs_array_splice();
     var es_map = {};
     var es_map_constructor = {};
     var internalMetadata = {
@@ -8289,280 +8455,541 @@
         return es_map;
     }
     requireEs_map();
-    function Radio(radio, options) {
-        if (typeof radio === "string") {
-            var temp = document.getElementById(radio);
-            if (temp instanceof HTMLInputElement) {
-                radio = temp;
-            }
-        }
-        if (radio instanceof HTMLInputElement === false) {
-            throw new Error("Invalid input element");
-        }
-        this._options = Object.assign({
-            id: "radio_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)),
-            checked: false,
-            disabled: false,
-            indeterminate: false,
-            label: "",
-            name: "",
-            value: "on"
-        }, options);
-        this._container = document.createElement("div");
-        this._input = radio;
-        this._visualRadio = document.createElement("span");
-        this.handlers = new Map;
-        this._createDOM(radio);
-        this._setupEventListeners();
-        this._updateVisualState();
-    }
-    Radio.prototype = {
-        constructor: Radio,
-        _labelElement: null,
-        _createDOM: function _createDOM(radio) {
-            this._container.setAttribute("role", "radio");
-            this._container.setAttribute("aria-checked", String(!!this._options.checked));
-            this._container.setAttribute("aria-disabled", String(!!this._options.disabled));
-            this._container.tabIndex = this._options.disabled ? -1 : 0;
-            this._input.type = "radio";
-            var elId = this._input.getAttribute("id");
-            var elName = this._input.getAttribute("name");
-            var elValue = this._input.getAttribute("value");
-            var elChecked = this._input.getAttribute("checked");
-            var elDisabled = this._input.getAttribute("disabled");
-            if (elId !== null) {
-                this._options.id = elId;
-            } else if (this._options.id) {
-                this._input.setAttribute("id", this._options.id);
-            }
-            if (elName !== null) {
-                this._options.name = elName;
-            } else if (this._options.name) {
-                this._input.setAttribute("name", this._options.name);
-            }
-            if (elValue !== null) {
-                this._options.value = elValue;
-            } else if (this._options.value) {
-                this._input.setAttribute("value", this._options.value);
-            }
-            if (elChecked !== null) {
-                this._options.checked = elChecked === "true";
-            } else if (this._options.checked) {
-                this._input.setAttribute("checked", "true");
-            }
-            if (elDisabled !== null) {
-                this._options.disabled = elDisabled === "true";
-            } else if (this._options.disabled) {
-                this._input.setAttribute("disabled", "true");
-            }
-            this._input.style.position = "absolute";
-            this._input.style.opacity = "0";
-            this._input.style.pointerEvents = "none";
-            this._visualRadio.className = "radio__visual";
-            this._visualRadio.setAttribute("aria-hidden", "true");
-            var innerCircle = document.createElement("span");
-            innerCircle.className = "radio__inner-circle";
-            this._visualRadio.appendChild(innerCircle);
-            if (this._options.label) {
-                this._labelElement = document.createElement("label");
-                this._labelElement.className = "radio__label";
-                this._labelElement.htmlFor = String(this._options.id);
-                this._labelElement.textContent = this._options.label;
-            }
-            this._container.appendChild(this._input);
-            this._container.appendChild(this._visualRadio);
-            if (this._labelElement) {
-                this._container.appendChild(this._labelElement);
-            }
-            if (this._options.disabled) {
-                this._container.classList.add("radio--disabled");
-            }
-            this._updateRadioGroupTabIndex();
-        },
-        _updateRadioGroupTabIndex: function _updateRadioGroupTabIndex() {
-            var _this = this;
-            if (!this._options.name) return;
-            if (this._options.checked) {
-                this._container.tabIndex = this._options.disabled ? -1 : 0;
-            } else {
-                var radios = document.querySelectorAll('[name="'.concat(this._options.name, '"]'));
-                var hasChecked = false;
-                radios.forEach(function(radio) {
-                    if (radio instanceof HTMLInputElement && radio.checked && radio !== _this._input) {
-                        hasChecked = true;
-                    }
-                });
-                if (!hasChecked && !this._options.checked && !this._options.disabled) {
-                    this._container.tabIndex = 0;
-                } else {
-                    this._container.tabIndex = -1;
-                }
-            }
-        },
-        _setupEventListeners: function _setupEventListeners() {
-            var self = this;
-            var handleClick = function handleClick(e) {
-                e.preventDefault();
-                if (!self._options.disabled && !self._options.checked) {
-                    self.check();
-                    self._container.focus();
-                }
-            };
-            var handleKeyDown = function handleKeyDown(e) {
-                if (self._options.disabled) return;
-                switch (e.key) {
-                  case " ":
-                  case "Spacebar":
-                  case "Enter":
-                    e.preventDefault();
-                    if (!self._options.checked) {
-                        self.check();
-                    }
-                    break;
-                }
-            };
-            var handleFocus = function handleFocus() {
-                self._container.classList.add("radio--focused");
-            };
-            var handleBlur = function handleBlur() {
-                self._container.classList.remove("radio--focused");
-            };
-            var handleGroupChange = function handleGroupChange() {
-                if (self._options.name) {
-                    self._handleExternalRadioChange();
-                }
-            };
-            this.handlers.set("click", handleClick);
-            this.handlers.set("keydown", handleKeyDown);
-            this.handlers.set("focus", handleFocus);
-            this.handlers.set("blur", handleBlur);
-            this.handlers.set("groupChange", handleGroupChange);
-            this._container.addEventListener("click", handleClick);
-            this._container.addEventListener("keydown", handleKeyDown);
-            this._container.addEventListener("focus", handleFocus);
-            this._container.addEventListener("blur", handleBlur);
-            if (this._options.name) {
-                document.addEventListener("change", handleGroupChange);
-            }
-        },
-        _handleExternalRadioChange: function _handleExternalRadioChange() {
-            var _this2 = this;
-            var radios = document.querySelectorAll('[name="'.concat(this._options.name, '"]'));
-            var isChecked = false;
-            radios.forEach(function(radio) {
-                if (radio instanceof HTMLInputElement && radio !== _this2._input && radio.checked) {
-                    isChecked = true;
-                }
+    var es_weakMap = {};
+    var es_weakMap_constructor = {};
+    var collectionWeak;
+    var hasRequiredCollectionWeak;
+    function requireCollectionWeak() {
+        if (hasRequiredCollectionWeak) return collectionWeak;
+        hasRequiredCollectionWeak = 1;
+        var uncurryThis = requireFunctionUncurryThis();
+        var defineBuiltIns = requireDefineBuiltIns();
+        var getWeakData = requireInternalMetadata().getWeakData;
+        var anInstance = requireAnInstance();
+        var anObject = requireAnObject();
+        var isNullOrUndefined = requireIsNullOrUndefined();
+        var isObject = requireIsObject();
+        var iterate = requireIterate();
+        var ArrayIterationModule = requireArrayIteration();
+        var hasOwn = requireHasOwnProperty();
+        var InternalStateModule = requireInternalState();
+        var setInternalState = InternalStateModule.set;
+        var internalStateGetterFor = InternalStateModule.getterFor;
+        var find = ArrayIterationModule.find;
+        var findIndex = ArrayIterationModule.findIndex;
+        var splice = uncurryThis([].splice);
+        var id = 0;
+        var uncaughtFrozenStore = function(state) {
+            return state.frozen || (state.frozen = new UncaughtFrozenStore);
+        };
+        var UncaughtFrozenStore = function() {
+            this.entries = [];
+        };
+        var findUncaughtFrozen = function(store, key) {
+            return find(store.entries, function(it) {
+                return it[0] === key;
             });
-            if (isChecked && this._options.checked) {
-                this.uncheck();
-            }
-        },
-        _updateVisualState: function _updateVisualState() {
-            this._container.setAttribute("aria-checked", String(!!this._options.checked));
-            this._container.classList.toggle("radio--checked", this._options.checked);
-            this._input.checked = !!this._options.checked;
-            this._updateRadioGroupTabIndex();
-        },
-        getElement: function getElement() {
-            return this._container;
-        },
-        check: function check() {
-            var _this3 = this;
-            if (this._options.disabled || this._options.checked) return;
-            if (this._options.name) {
-                var radios = document.querySelectorAll('[name="'.concat(this._options.name, '"]'));
-                radios.forEach(function(radio) {
-                    if (radio instanceof HTMLInputElement && radio !== _this3._input && radio.checked) {
-                        radio.checked = false;
-                        var parentRadio = radio.parentNode.radioInstance;
-                        if (parentRadio) {
-                            parentRadio.checked = false;
-                            parentRadio._updateVisualState();
-                            parentRadio._triggerChange(false);
-                        }
-                    }
+        };
+        UncaughtFrozenStore.prototype = {
+            get: function(key) {
+                var entry = findUncaughtFrozen(this, key);
+                if (entry) return entry[1];
+            },
+            has: function(key) {
+                return !!findUncaughtFrozen(this, key);
+            },
+            set: function(key, value) {
+                var entry = findUncaughtFrozen(this, key);
+                if (entry) entry[1] = value; else this.entries.push([ key, value ]);
+            },
+            delete: function(key) {
+                var index = findIndex(this.entries, function(it) {
+                    return it[0] === key;
                 });
+                if (~index) splice(this.entries, index, 1);
+                return !!~index;
             }
-            this._options.checked = true;
-            this._updateVisualState();
-            this._triggerChange(true);
-        },
-        uncheck: function uncheck() {
-            if (this._options.disabled || !this._options.checked) return;
-            this._options.checked = false;
-            this._updateVisualState();
-            this._triggerChange(false);
-        },
-        enable: function enable() {
-            if (!this._options.disabled) return;
-            this._options.disabled = false;
-            this._input.disabled = false;
-            this._container.setAttribute("aria-disabled", "false");
-            if (this._options.checked) {
-                this._container.tabIndex = 0;
-            } else {
-                this._updateRadioGroupTabIndex();
-            }
-            this._container.classList.remove("radio--disabled");
-        },
-        disable: function disable() {
-            if (this._options.disabled) return;
-            this._options.disabled = true;
-            this._input.disabled = true;
-            this._container.setAttribute("aria-disabled", "true");
-            this._container.tabIndex = -1;
-            this._container.classList.add("radio--disabled");
-        },
-        setLabel: function setLabel(label) {
-            this._options.label = label;
-            if (this._labelElement) {
-                this._labelElement.textContent = label;
-            } else if (label) {
-                this._labelElement = document.createElement("label");
-                this._labelElement.className = "radio__label";
-                this._labelElement.htmlFor = String(this._options.id);
-                this._labelElement.textContent = label;
-                this._container.appendChild(this._labelElement);
-            }
-        },
-        getState: function getState() {
-            return {
-                checked: this._options.checked,
-                disabled: this._options.disabled,
-                value: this._options.value,
-                name: this._options.name
-            };
-        },
-        _triggerChange: function _triggerChange(checked) {
-            if (this._options.name) {
-                var event = new CustomEvent("radioChange", {
-                    detail: {
-                        name: this._options.name,
-                        value: this._options.value,
-                        checked: checked,
-                        id: this._options.id
+        };
+        collectionWeak = {
+            getConstructor: function(wrapper, CONSTRUCTOR_NAME, IS_MAP, ADDER) {
+                var Constructor = wrapper(function(that, iterable) {
+                    anInstance(that, Prototype);
+                    setInternalState(that, {
+                        type: CONSTRUCTOR_NAME,
+                        id: id++,
+                        frozen: null
+                    });
+                    if (!isNullOrUndefined(iterable)) iterate(iterable, that[ADDER], {
+                        that: that,
+                        AS_ENTRIES: IS_MAP
+                    });
+                });
+                var Prototype = Constructor.prototype;
+                var getInternalState = internalStateGetterFor(CONSTRUCTOR_NAME);
+                var define = function(that, key, value) {
+                    var state = getInternalState(that);
+                    var data = getWeakData(anObject(key), true);
+                    if (data === true) uncaughtFrozenStore(state).set(key, value); else data[state.id] = value;
+                    return that;
+                };
+                defineBuiltIns(Prototype, {
+                    delete: function(key) {
+                        var state = getInternalState(this);
+                        if (!isObject(key)) return false;
+                        var data = getWeakData(key);
+                        if (data === true) return uncaughtFrozenStore(state)["delete"](key);
+                        return data && hasOwn(data, state.id) && delete data[state.id];
                     },
-                    bubbles: true
+                    has: function has(key) {
+                        var state = getInternalState(this);
+                        if (!isObject(key)) return false;
+                        var data = getWeakData(key);
+                        if (data === true) return uncaughtFrozenStore(state).has(key);
+                        return data && hasOwn(data, state.id);
+                    }
                 });
-                this._input.dispatchEvent(event);
+                defineBuiltIns(Prototype, IS_MAP ? {
+                    get: function get(key) {
+                        var state = getInternalState(this);
+                        if (isObject(key)) {
+                            var data = getWeakData(key);
+                            if (data === true) return uncaughtFrozenStore(state).get(key);
+                            if (data) return data[state.id];
+                        }
+                    },
+                    set: function set(key, value) {
+                        return define(this, key, value);
+                    }
+                } : {
+                    add: function add(value) {
+                        return define(this, value, true);
+                    }
+                });
+                return Constructor;
             }
-        },
-        destroy: function destroy() {
-            var _this4 = this;
-            this.handlers.forEach(function(handler, event) {
-                if (event === "groupChange") {
-                    document.removeEventListener("change", handler);
-                } else {
-                    _this4._container.removeEventListener(event, handler);
+        };
+        return collectionWeak;
+    }
+    var hasRequiredEs_weakMap_constructor;
+    function requireEs_weakMap_constructor() {
+        if (hasRequiredEs_weakMap_constructor) return es_weakMap_constructor;
+        hasRequiredEs_weakMap_constructor = 1;
+        var FREEZING = requireFreezing();
+        var globalThis = requireGlobalThis();
+        var uncurryThis = requireFunctionUncurryThis();
+        var defineBuiltIns = requireDefineBuiltIns();
+        var InternalMetadataModule = requireInternalMetadata();
+        var collection = requireCollection();
+        var collectionWeak = requireCollectionWeak();
+        var isObject = requireIsObject();
+        var enforceInternalState = requireInternalState().enforce;
+        var fails = requireFails();
+        var NATIVE_WEAK_MAP = requireWeakMapBasicDetection();
+        var $Object = Object;
+        var isArray = Array.isArray;
+        var isExtensible = $Object.isExtensible;
+        var isFrozen = $Object.isFrozen;
+        var isSealed = $Object.isSealed;
+        var freeze = $Object.freeze;
+        var seal = $Object.seal;
+        var IS_IE11 = !globalThis.ActiveXObject && "ActiveXObject" in globalThis;
+        var InternalWeakMap;
+        var wrapper = function(init) {
+            return function WeakMap() {
+                return init(this, arguments.length ? arguments[0] : undefined);
+            };
+        };
+        var $WeakMap = collection("WeakMap", wrapper, collectionWeak);
+        var WeakMapPrototype = $WeakMap.prototype;
+        var nativeSet = uncurryThis(WeakMapPrototype.set);
+        var hasMSEdgeFreezingBug = function() {
+            return FREEZING && fails(function() {
+                var frozenArray = freeze([]);
+                nativeSet(new $WeakMap, frozenArray, 1);
+                return !isFrozen(frozenArray);
+            });
+        };
+        if (NATIVE_WEAK_MAP) if (IS_IE11) {
+            InternalWeakMap = collectionWeak.getConstructor(wrapper, "WeakMap", true);
+            InternalMetadataModule.enable();
+            var nativeDelete = uncurryThis(WeakMapPrototype["delete"]);
+            var nativeHas = uncurryThis(WeakMapPrototype.has);
+            var nativeGet = uncurryThis(WeakMapPrototype.get);
+            defineBuiltIns(WeakMapPrototype, {
+                delete: function(key) {
+                    if (isObject(key) && !isExtensible(key)) {
+                        var state = enforceInternalState(this);
+                        if (!state.frozen) state.frozen = new InternalWeakMap;
+                        return nativeDelete(this, key) || state.frozen["delete"](key);
+                    }
+                    return nativeDelete(this, key);
+                },
+                has: function has(key) {
+                    if (isObject(key) && !isExtensible(key)) {
+                        var state = enforceInternalState(this);
+                        if (!state.frozen) state.frozen = new InternalWeakMap;
+                        return nativeHas(this, key) || state.frozen.has(key);
+                    }
+                    return nativeHas(this, key);
+                },
+                get: function get(key) {
+                    if (isObject(key) && !isExtensible(key)) {
+                        var state = enforceInternalState(this);
+                        if (!state.frozen) state.frozen = new InternalWeakMap;
+                        return nativeHas(this, key) ? nativeGet(this, key) : state.frozen.get(key);
+                    }
+                    return nativeGet(this, key);
+                },
+                set: function set(key, value) {
+                    if (isObject(key) && !isExtensible(key)) {
+                        var state = enforceInternalState(this);
+                        if (!state.frozen) state.frozen = new InternalWeakMap;
+                        nativeHas(this, key) ? nativeSet(this, key, value) : state.frozen.set(key, value);
+                    } else nativeSet(this, key, value);
+                    return this;
                 }
             });
-            this.handlers.clear();
-            if (this._container && this._container.parentNode) {
-                this._container.parentNode.removeChild(this._container);
-            }
-            this._labelElement = null;
+        } else if (hasMSEdgeFreezingBug()) {
+            defineBuiltIns(WeakMapPrototype, {
+                set: function set(key, value) {
+                    var arrayIntegrityLevel;
+                    if (isArray(key)) {
+                        if (isFrozen(key)) arrayIntegrityLevel = freeze; else if (isSealed(key)) arrayIntegrityLevel = seal;
+                    }
+                    nativeSet(this, key, value);
+                    if (arrayIntegrityLevel) arrayIntegrityLevel(key);
+                    return this;
+                }
+            });
         }
+        return es_weakMap_constructor;
+    }
+    var hasRequiredEs_weakMap;
+    function requireEs_weakMap() {
+        if (hasRequiredEs_weakMap) return es_weakMap;
+        hasRequiredEs_weakMap = 1;
+        requireEs_weakMap_constructor();
+        return es_weakMap;
+    }
+    requireEs_weakMap();
+    var es_weakSet = {};
+    var es_weakSet_constructor = {};
+    var hasRequiredEs_weakSet_constructor;
+    function requireEs_weakSet_constructor() {
+        if (hasRequiredEs_weakSet_constructor) return es_weakSet_constructor;
+        hasRequiredEs_weakSet_constructor = 1;
+        var collection = requireCollection();
+        var collectionWeak = requireCollectionWeak();
+        collection("WeakSet", function(init) {
+            return function WeakSet() {
+                return init(this, arguments.length ? arguments[0] : undefined);
+            };
+        }, collectionWeak);
+        return es_weakSet_constructor;
+    }
+    var hasRequiredEs_weakSet;
+    function requireEs_weakSet() {
+        if (hasRequiredEs_weakSet) return es_weakSet;
+        hasRequiredEs_weakSet = 1;
+        requireEs_weakSet_constructor();
+        return es_weakSet;
+    }
+    requireEs_weakSet();
+    var _container = new WeakMap;
+    var _input = new WeakMap;
+    var _visualRadio = new WeakMap;
+    var _labelElement = new WeakMap;
+    var _options = new WeakMap;
+    var _handlers = new WeakMap;
+    var _Radio_brand = new WeakSet;
+    var Radio = function() {
+        function Radio(_radio, options) {
+            _classCallCheck(this, Radio);
+            _classPrivateMethodInitSpec(this, _Radio_brand);
+            _classPrivateFieldInitSpec(this, _container, void 0);
+            _classPrivateFieldInitSpec(this, _input, void 0);
+            _classPrivateFieldInitSpec(this, _visualRadio, void 0);
+            _classPrivateFieldInitSpec(this, _labelElement, null);
+            _classPrivateFieldInitSpec(this, _options, void 0);
+            _classPrivateFieldInitSpec(this, _handlers, new Map);
+            if (typeof _radio === "string") {
+                var temp = document.getElementById(_radio);
+                if (temp instanceof HTMLInputElement) {
+                    _radio = temp;
+                }
+            }
+            if (!(_radio instanceof HTMLInputElement)) {
+                throw new Error("Invalid input element");
+            }
+            _classPrivateFieldSet2(_input, this, _radio);
+            _classPrivateFieldSet2(_options, this, Object.assign({
+                id: "radio_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)),
+                checked: false,
+                disabled: false,
+                indeterminate: false,
+                label: "",
+                name: "",
+                value: "on"
+            }, options));
+            _assertClassBrand(_Radio_brand, this, _applyInputAttributes).call(this);
+            _classPrivateFieldSet2(_container, this, document.createElement("div"));
+            _classPrivateFieldSet2(_visualRadio, this, document.createElement("span"));
+            _assertClassBrand(_Radio_brand, this, _createDOM).call(this);
+            _assertClassBrand(_Radio_brand, this, _setupEventListeners).call(this);
+            _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
+            if (!_classPrivateFieldGet2(_options, this).name) {
+                throw new Error("Name attribute is required");
+            }
+            var sameNameInstances = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+            if (!sameNameInstances) {
+                sameNameInstances = new Array;
+                _instances._.set(_classPrivateFieldGet2(_options, this).name, sameNameInstances);
+            }
+            sameNameInstances.push(this);
+        }
+        return _createClass(Radio, [ {
+            key: "getElement",
+            value: function getElement() {
+                return _classPrivateFieldGet2(_container, this);
+            }
+        }, {
+            key: "check",
+            value: function check(bSilent) {
+                var _this = this;
+                if (_classPrivateFieldGet2(_options, this).disabled || _classPrivateFieldGet2(_options, this).checked) return;
+                if (_classPrivateFieldGet2(_options, this).name) {
+                    var radios = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+                    radios && radios.forEach(function(radio) {
+                        if (radio !== _this && _classPrivateFieldGet2(_options, radio).checked) {
+                            radio.uncheck();
+                        }
+                    });
+                }
+                _classPrivateFieldGet2(_options, this).checked = true;
+                _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
+                _assertClassBrand(_Radio_brand, this, _triggerChange).call(this, true);
+            }
+        }, {
+            key: "uncheck",
+            value: function uncheck(bSilent) {
+                if (_classPrivateFieldGet2(_options, this).disabled || !_classPrivateFieldGet2(_options, this).checked) return;
+                _classPrivateFieldGet2(_options, this).checked = false;
+                _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
+                _assertClassBrand(_Radio_brand, this, _triggerChange).call(this, false);
+            }
+        }, {
+            key: "enable",
+            value: function enable() {
+                if (!_classPrivateFieldGet2(_options, this).disabled) return;
+                _classPrivateFieldGet2(_options, this).disabled = false;
+                _classPrivateFieldGet2(_input, this).disabled = false;
+                _classPrivateFieldGet2(_container, this).setAttribute("aria-disabled", "false");
+                if (_classPrivateFieldGet2(_options, this).checked) {
+                    _classPrivateFieldGet2(_container, this).tabIndex = 0;
+                } else {
+                    _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
+                }
+                _classPrivateFieldGet2(_container, this).classList.remove("radio--disabled");
+            }
+        }, {
+            key: "disable",
+            value: function disable() {
+                if (_classPrivateFieldGet2(_options, this).disabled) return;
+                _classPrivateFieldGet2(_options, this).disabled = true;
+                _classPrivateFieldGet2(_input, this).disabled = true;
+                _classPrivateFieldGet2(_container, this).setAttribute("aria-disabled", "true");
+                _classPrivateFieldGet2(_container, this).tabIndex = -1;
+                _classPrivateFieldGet2(_container, this).classList.add("radio--disabled");
+            }
+        }, {
+            key: "setLabel",
+            value: function setLabel(label) {
+                _classPrivateFieldGet2(_options, this).label = label;
+                if (_classPrivateFieldGet2(_labelElement, this)) {
+                    _classPrivateFieldGet2(_labelElement, this).textContent = label;
+                } else if (label) {
+                    _classPrivateFieldSet2(_labelElement, this, document.createElement("label"));
+                    _classPrivateFieldGet2(_labelElement, this).className = "radio-label";
+                    _classPrivateFieldGet2(_labelElement, this).htmlFor = String(_classPrivateFieldGet2(_options, this).id);
+                    _classPrivateFieldGet2(_labelElement, this).textContent = label;
+                    _classPrivateFieldGet2(_container, this).appendChild(_classPrivateFieldGet2(_labelElement, this));
+                }
+            }
+        }, {
+            key: "getState",
+            value: function getState() {
+                return {
+                    checked: !!_classPrivateFieldGet2(_options, this).checked,
+                    disabled: !!_classPrivateFieldGet2(_options, this).disabled,
+                    value: _classPrivateFieldGet2(_options, this).value || "",
+                    name: _classPrivateFieldGet2(_options, this).name || ""
+                };
+            }
+        }, {
+            key: "destroy",
+            value: function destroy() {
+                var _this2 = this;
+                if (!_classPrivateFieldGet2(_options, this).name) return;
+                var sameNameInstances = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+                if (sameNameInstances) {
+                    var index = sameNameInstances.indexOf(this);
+                    if (index >= 0) sameNameInstances.splice(index, 1);
+                }
+                _classPrivateFieldGet2(_handlers, this).forEach(function(handler, event) {
+                    _classPrivateFieldGet2(_container, _this2).removeEventListener(event, handler);
+                });
+                _classPrivateFieldGet2(_handlers, this).clear();
+                if (_classPrivateFieldGet2(_container, this) && _classPrivateFieldGet2(_container, this).parentNode) {
+                    _classPrivateFieldGet2(_container, this).parentNode.removeChild(_classPrivateFieldGet2(_container, this));
+                }
+                _classPrivateFieldSet2(_labelElement, this, null);
+            }
+        } ]);
+    }();
+    function _applyInputAttributes() {
+        _classPrivateFieldGet2(_input, this).type = "radio";
+        var elId = _classPrivateFieldGet2(_input, this).getAttribute("id");
+        var elName = _classPrivateFieldGet2(_input, this).getAttribute("name");
+        var elValue = _classPrivateFieldGet2(_input, this).getAttribute("value");
+        var elChecked = _classPrivateFieldGet2(_input, this).getAttribute("checked");
+        var elDisabled = _classPrivateFieldGet2(_input, this).getAttribute("disabled");
+        if (elId !== null) {
+            _classPrivateFieldGet2(_options, this).id = elId;
+        } else if (_classPrivateFieldGet2(_options, this).id) {
+            _classPrivateFieldGet2(_input, this).setAttribute("id", _classPrivateFieldGet2(_options, this).id);
+        }
+        if (elName !== null) {
+            _classPrivateFieldGet2(_options, this).name = elName;
+        } else if (_classPrivateFieldGet2(_options, this).name) {
+            _classPrivateFieldGet2(_input, this).setAttribute("name", _classPrivateFieldGet2(_options, this).name);
+        }
+        if (elValue !== null) {
+            _classPrivateFieldGet2(_options, this).value = elValue;
+        } else if (_classPrivateFieldGet2(_options, this).value) {
+            _classPrivateFieldGet2(_input, this).setAttribute("value", _classPrivateFieldGet2(_options, this).value);
+        }
+        if (elChecked !== null) {
+            _classPrivateFieldGet2(_options, this).checked = elChecked === "true";
+        } else if (_classPrivateFieldGet2(_options, this).checked) {
+            _classPrivateFieldGet2(_input, this).setAttribute("checked", "true");
+        }
+        if (elDisabled !== null) {
+            _classPrivateFieldGet2(_options, this).disabled = elDisabled === "true";
+        } else if (_classPrivateFieldGet2(_options, this).disabled) {
+            _classPrivateFieldGet2(_input, this).setAttribute("disabled", "true");
+        }
+        _classPrivateFieldGet2(_input, this).style.position = "absolute";
+        _classPrivateFieldGet2(_input, this).style.opacity = "0";
+        _classPrivateFieldGet2(_input, this).style.pointerEvents = "none";
+    }
+    function _createDOM() {
+        var parent = _classPrivateFieldGet2(_input, this).parentNode;
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(_classPrivateFieldGet2(_container, this));
+        _classPrivateFieldGet2(_container, this).classList.add("radio-button-container");
+        _classPrivateFieldGet2(_container, this).setAttribute("role", "radio");
+        _classPrivateFieldGet2(_container, this).setAttribute("aria-checked", String(!!_classPrivateFieldGet2(_options, this).checked));
+        _classPrivateFieldGet2(_container, this).setAttribute("aria-disabled", String(!!_classPrivateFieldGet2(_options, this).disabled));
+        _classPrivateFieldGet2(_container, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0;
+        _classPrivateFieldGet2(_visualRadio, this).className = "radio-visual";
+        _classPrivateFieldGet2(_visualRadio, this).setAttribute("aria-hidden", "true");
+        if (_classPrivateFieldGet2(_options, this).label) {
+            _classPrivateFieldSet2(_labelElement, this, document.createElement("label"));
+            _classPrivateFieldGet2(_labelElement, this).className = "i18n radio-label";
+            _classPrivateFieldGet2(_labelElement, this).htmlFor = String(_classPrivateFieldGet2(_options, this).id);
+            _classPrivateFieldGet2(_labelElement, this).textContent = _classPrivateFieldGet2(_options, this).label;
+        }
+        if (_classPrivateFieldGet2(_options, this).disabled) {
+            _classPrivateFieldGet2(_container, this).classList.add("radio--disabled");
+        }
+        if (parent) {
+            parent.insertBefore(fragment, _classPrivateFieldGet2(_input, this));
+        }
+        _classPrivateFieldGet2(_container, this).appendChild(_classPrivateFieldGet2(_input, this));
+        _classPrivateFieldGet2(_container, this).appendChild(_classPrivateFieldGet2(_visualRadio, this));
+        if (_classPrivateFieldGet2(_labelElement, this)) {
+            _classPrivateFieldGet2(_container, this).appendChild(_classPrivateFieldGet2(_labelElement, this));
+        }
+        _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
+    }
+    function _updateRadioGroupTabIndex() {
+        var _this3 = this;
+        if (_classPrivateFieldGet2(_options, this).checked) {
+            _classPrivateFieldGet2(_container, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0;
+        } else if (_classPrivateFieldGet2(_options, this).name && _instances._.has(_classPrivateFieldGet2(_options, this).name)) {
+            var radios = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+            var hasChecked = false;
+            radios && radios.forEach(function(radio) {
+                if (_classPrivateFieldGet2(_options, radio).checked && radio !== _this3) {
+                    hasChecked = true;
+                }
+            });
+            if (!hasChecked && !_classPrivateFieldGet2(_options, this).checked && !_classPrivateFieldGet2(_options, this).disabled) {
+                _classPrivateFieldGet2(_container, this).tabIndex = 0;
+            } else {
+                _classPrivateFieldGet2(_container, this).tabIndex = -1;
+            }
+        }
+    }
+    function _setupEventListeners() {
+        var _this4 = this;
+        var handleClick = function handleClick(e) {
+            e.preventDefault();
+            if (!_classPrivateFieldGet2(_options, _this4).disabled && !_classPrivateFieldGet2(_options, _this4).checked) {
+                _this4.check();
+                _classPrivateFieldGet2(_container, _this4).focus();
+            }
+        };
+        var handleKeyDown = function handleKeyDown(e) {
+            if (_classPrivateFieldGet2(_options, _this4).disabled) return;
+            switch (e.key) {
+              case " ":
+              case "Spacebar":
+              case "Enter":
+                e.preventDefault();
+                if (!_classPrivateFieldGet2(_options, _this4).checked) {
+                    _this4.check();
+                }
+                break;
+            }
+        };
+        var handleFocus = function handleFocus() {
+            _classPrivateFieldGet2(_container, _this4).classList.add("radio--focused");
+        };
+        var handleBlur = function handleBlur() {
+            _classPrivateFieldGet2(_container, _this4).classList.remove("radio--focused");
+        };
+        _classPrivateFieldGet2(_handlers, this).set("click", handleClick);
+        _classPrivateFieldGet2(_handlers, this).set("keydown", handleKeyDown);
+        _classPrivateFieldGet2(_handlers, this).set("focus", handleFocus);
+        _classPrivateFieldGet2(_handlers, this).set("blur", handleBlur);
+        _classPrivateFieldGet2(_container, this).addEventListener("click", handleClick);
+        _classPrivateFieldGet2(_container, this).addEventListener("keydown", handleKeyDown);
+        _classPrivateFieldGet2(_container, this).addEventListener("focus", handleFocus);
+        _classPrivateFieldGet2(_container, this).addEventListener("blur", handleBlur);
+    }
+    function _updateVisualState() {
+        _classPrivateFieldGet2(_container, this).setAttribute("aria-checked", String(!!_classPrivateFieldGet2(_options, this).checked));
+        _classPrivateFieldGet2(_container, this).classList.toggle("radio--checked", _classPrivateFieldGet2(_options, this).checked);
+        _classPrivateFieldGet2(_input, this).checked = !!_classPrivateFieldGet2(_options, this).checked;
+        _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
+    }
+    function _triggerChange(checked) {
+        if (_classPrivateFieldGet2(_options, this).name) {
+            var event = new CustomEvent("radioChange", {
+                detail: {
+                    name: _classPrivateFieldGet2(_options, this).name,
+                    value: _classPrivateFieldGet2(_options, this).value,
+                    checked: checked,
+                    id: _classPrivateFieldGet2(_options, this).id
+                },
+                bubbles: true
+            });
+            _classPrivateFieldGet2(_input, this).dispatchEvent(event);
+        }
+    }
+    var _instances = {
+        _: new Map
     };
     function Checkbox(checkbox, options) {
         if (typeof checkbox === "string") {
@@ -8601,7 +9028,7 @@
             var fragment = document.createDocumentFragment();
             this._container = document.createElement("div");
             fragment.appendChild(this._container);
-            this._container.classList.add("checkbox");
+            this._container.classList.add("checkbox-container");
             this._container.setAttribute("role", "checkbox");
             this._container.setAttribute("aria-checked", this._options.checked ? "true" : "false");
             this._container.setAttribute("aria-disabled", this._options.disabled ? "true" : "false");
@@ -9857,7 +10284,7 @@
                 label.className += " selectbox-option-text";
                 label.textContent = item.text;
                 if (this._options.multiple) {
-                    option.className += " checkbox";
+                    option.className += " selectbox-option-checkbox";
                     var input = document.createElement("input");
                     input.type = "checkbox";
                     input.id = "checkbox-" + item.value;
@@ -10497,18 +10924,6 @@
     }
     requireEs_string_replace();
     var es_array_sort = {};
-    var deletePropertyOrThrow;
-    var hasRequiredDeletePropertyOrThrow;
-    function requireDeletePropertyOrThrow() {
-        if (hasRequiredDeletePropertyOrThrow) return deletePropertyOrThrow;
-        hasRequiredDeletePropertyOrThrow = 1;
-        var tryToString = requireTryToString();
-        var $TypeError = TypeError;
-        deletePropertyOrThrow = function(O, P) {
-            if (!delete O[P]) throw new $TypeError("Cannot delete property " + tryToString(P) + " of " + tryToString(O));
-        };
-        return deletePropertyOrThrow;
-    }
     var environmentFfVersion;
     var hasRequiredEnvironmentFfVersion;
     function requireEnvironmentFfVersion() {
@@ -12112,105 +12527,6 @@
         }
         return result;
     };
-    var es_array_splice = {};
-    var arraySetLength;
-    var hasRequiredArraySetLength;
-    function requireArraySetLength() {
-        if (hasRequiredArraySetLength) return arraySetLength;
-        hasRequiredArraySetLength = 1;
-        var DESCRIPTORS = requireDescriptors();
-        var isArray = requireIsArray();
-        var $TypeError = TypeError;
-        var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-        var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function() {
-            if (this !== undefined) return true;
-            try {
-                Object.defineProperty([], "length", {
-                    writable: false
-                }).length = 1;
-            } catch (error) {
-                return error instanceof TypeError;
-            }
-        }();
-        arraySetLength = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function(O, length) {
-            if (isArray(O) && !getOwnPropertyDescriptor(O, "length").writable) {
-                throw new $TypeError("Cannot set read only .length");
-            }
-            return O.length = length;
-        } : function(O, length) {
-            return O.length = length;
-        };
-        return arraySetLength;
-    }
-    var hasRequiredEs_array_splice;
-    function requireEs_array_splice() {
-        if (hasRequiredEs_array_splice) return es_array_splice;
-        hasRequiredEs_array_splice = 1;
-        var $ = require_export();
-        var toObject = requireToObject();
-        var toAbsoluteIndex = requireToAbsoluteIndex();
-        var toIntegerOrInfinity = requireToIntegerOrInfinity();
-        var lengthOfArrayLike = requireLengthOfArrayLike();
-        var setArrayLength = requireArraySetLength();
-        var doesNotExceedSafeInteger = requireDoesNotExceedSafeInteger();
-        var arraySpeciesCreate = requireArraySpeciesCreate();
-        var createProperty = requireCreateProperty();
-        var deletePropertyOrThrow = requireDeletePropertyOrThrow();
-        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
-        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("splice");
-        var max = Math.max;
-        var min = Math.min;
-        $({
-            target: "Array",
-            proto: true,
-            forced: !HAS_SPECIES_SUPPORT
-        }, {
-            splice: function splice(start, deleteCount) {
-                var O = toObject(this);
-                var len = lengthOfArrayLike(O);
-                var actualStart = toAbsoluteIndex(start, len);
-                var argumentsLength = arguments.length;
-                var insertCount, actualDeleteCount, A, k, from, to;
-                if (argumentsLength === 0) {
-                    insertCount = actualDeleteCount = 0;
-                } else if (argumentsLength === 1) {
-                    insertCount = 0;
-                    actualDeleteCount = len - actualStart;
-                } else {
-                    insertCount = argumentsLength - 2;
-                    actualDeleteCount = min(max(toIntegerOrInfinity(deleteCount), 0), len - actualStart);
-                }
-                doesNotExceedSafeInteger(len + insertCount - actualDeleteCount);
-                A = arraySpeciesCreate(O, actualDeleteCount);
-                for (k = 0; k < actualDeleteCount; k++) {
-                    from = actualStart + k;
-                    if (from in O) createProperty(A, k, O[from]);
-                }
-                A.length = actualDeleteCount;
-                if (insertCount < actualDeleteCount) {
-                    for (k = actualStart; k < len - actualDeleteCount; k++) {
-                        from = k + actualDeleteCount;
-                        to = k + insertCount;
-                        if (from in O) O[to] = O[from]; else deletePropertyOrThrow(O, to);
-                    }
-                    for (k = len; k > len - actualDeleteCount + insertCount; k--) deletePropertyOrThrow(O, k - 1);
-                } else if (insertCount > actualDeleteCount) {
-                    for (k = len - actualDeleteCount; k > actualStart; k--) {
-                        from = k + actualDeleteCount - 1;
-                        to = k + insertCount - 1;
-                        if (from in O) O[to] = O[from]; else deletePropertyOrThrow(O, to);
-                    }
-                }
-                for (k = 0; k < insertCount; k++) {
-                    O[k + actualStart] = arguments[k + 2];
-                }
-                setArrayLength(O, len - actualDeleteCount + insertCount);
-                return A;
-            }
-        });
-        return es_array_splice;
-    }
-    requireEs_array_splice();
     var CSLCitationStorage = {
         _items: [],
         _ids: [],
@@ -31795,14 +32111,12 @@
         if (!this._notesStyleWrapper) {
             throw new Error("notesStyleWrapper not found");
         }
-        this._footNotes = document.getElementById("footNotes");
-        if (!this._footNotes || this._footNotes instanceof HTMLInputElement === false) {
-            throw new Error("footNotes not found");
-        }
-        this._endNotes = document.getElementById("endNotes");
-        if (!this._endNotes || this._endNotes instanceof HTMLInputElement === false) {
-            throw new Error("endNotes not found");
-        }
+        this._footNotes = new Radio("footNotes", {
+            label: "Footnotes"
+        });
+        this._endNotes = new Radio("endNotes", {
+            label: "Endnotes"
+        });
         this._cslFileInput = document.getElementById("cslFileInput");
         if (!this._cslFileInput) {
             throw new Error("cslFileInput not found");
@@ -31885,14 +32199,13 @@
                     throw err;
                 }));
             }
-            [ self._footNotes, self._endNotes ].forEach(function(el) {
-                if (el.checked) {
-                    var value = el.value;
-                    if (self._stateSettings.notesStyle !== value && value === "footnotes" || value === "endnotes") {
-                        self._cslStylesManager.saveLastUsedNotesStyle(value);
-                    }
-                }
-            });
+            var noteValue = "footnotes";
+            if (self._endNotes.getState().checked) {
+                noteValue = "endnotes";
+            }
+            if (self._stateSettings.notesStyle !== noteValue && noteValue === "footnotes" || noteValue === "endnotes") {
+                self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+            }
             var selectedStyleId = self._styleSelect.getSelectedValue();
             if (self._stateSettings.style !== selectedStyleId && selectedStyleId !== null) {
                 promises.push(self._onStyleChange(selectedStyleId));
@@ -31919,12 +32232,11 @@
             if (event.type !== "button:click") {
                 return;
             }
-            [ self._footNotes, self._endNotes ].forEach(function(el) {
-                var value = el.value;
-                if (self._stateSettings.notesStyle === value) {
-                    el.checked = true;
-                }
-            });
+            if (self._stateSettings.notesStyle === self._endNotes.getState().value) {
+                self._endNotes.check();
+            } else {
+                self._footNotes.check();
+            }
             var selectedLang = self._languageSelect.getSelectedValue();
             var selectedStyleId = self._styleSelect.getSelectedValue();
             if (selectedLang !== null && self._localesManager.getLastUsedLanguage() !== selectedLang) {
@@ -31986,12 +32298,6 @@
             if (event.type !== "selectbox:change") {
                 return;
             }
-            self._somethingWasChanged();
-        });
-        this._footNotes.addEventListener("change", function(event) {
-            self._somethingWasChanged();
-        });
-        this._endNotes.addEventListener("change", function(event) {
             self._somethingWasChanged();
         });
     };
@@ -32164,29 +32470,20 @@
     LoginPage.prototype._addEventListeners = function() {
         var self = this;
         this._apiKeyLoginField.subscribe(function(event) {
-            if (event.type !== "inputfield:input") {
-                return;
-            }
-            if (self._apiKeyLoginField.getValue()) {
-                self._saveApiKeyBtn.enable();
-            } else {
-                self._saveApiKeyBtn.disable();
+            if (event.type !== "inputfield:submit") ;
+            if (event.type === "inputfield:input") {
+                if (self._apiKeyLoginField.getValue()) {
+                    self._saveApiKeyBtn.enable();
+                } else {
+                    self._saveApiKeyBtn.disable();
+                }
             }
         });
         this._saveApiKeyBtn.subscribe(function(event) {
             if (event.type !== "button:click") {
                 return;
             }
-            var apiKey = self._apiKeyLoginField.getValue();
-            if (apiKey) {
-                self._sdk.setApiKey(apiKey).then(function() {
-                    ZoteroApiChecker.successfullyLoggedInUsingApiKey();
-                    self._hide(true);
-                }).catch(function(err) {
-                    console.error(err);
-                    self._apiKeyMessage.show(translate("Invalid API key"));
-                });
-            }
+            self._tryToApplyKey();
         });
         this._connectToLocalZotero.subscribe(function(event) {
             if (event.type !== "button:click") {
@@ -32210,6 +32507,19 @@
             self._show();
             return true;
         };
+    };
+    LoginPage.prototype._tryToApplyKey = function() {
+        var self = this;
+        var apiKey = self._apiKeyLoginField.getValue();
+        if (apiKey) {
+            self._sdk.setApiKey(apiKey).then(function() {
+                ZoteroApiChecker.successfullyLoggedInUsingApiKey();
+                self._hide(true);
+            }).catch(function(err) {
+                console.error(err);
+                self._apiKeyMessage.show(translate("Invalid API key"));
+            });
+        }
     };
     LoginPage.prototype._hideAllMessages = function() {
         this._apiKeyMessage.close();
@@ -33019,16 +33329,8 @@
             window.Asc.plugin.onThemeChangedBase(theme);
             Theme.fixThemeForIE(theme);
             Theme.addStylesForComponents(theme);
-            var rules = ".selectArrow > span { background-color: " + window.Asc.plugin.theme["text-normal"] + "}\n";
+            var rules = "";
             rules += ".link { color : " + window.Asc.plugin.theme["text-normal"] + ";}\n";
-            rules += ".control.select { background-color : " + window.Asc.plugin.theme["background-normal"] + ";}\n";
-            rules += ".control { color : " + window.Asc.plugin.theme["text-normal"] + "; border-color : " + window.Asc.plugin.theme["border-regular-control"] + "}\n";
-            rules += ".selectList { border-color : " + window.Asc.plugin.theme["border-regular-control"] + "; background-color: " + window.Asc.plugin.theme["background-normal"] + "; }\n";
-            rules += ".selectList > hr { border-color : " + window.Asc.plugin.theme["border-regular-control"] + "; }\n";
-            rules += ".selectList > span { background-color: " + window.Asc.plugin.theme["background-normal"] + "; ";
-            rules += "color : " + window.Asc.plugin.theme["text-normal"] + "; }\n";
-            rules += ".selectList > span:hover { background-color : " + window.Asc.plugin.theme["highlight-button-hover"] + "; color : " + window.Asc.plugin.theme["text-normal"] + "}\n";
-            rules += '.selectList > span[selected=""] { background-color : ' + window.Asc.plugin.theme["highlight-button-pressed"] + ";" + "; color : " + window.Asc.plugin.theme["text-normal"] + "}";
             rules += ".doc { border-color: " + theme["border-regular-control"] + "; background-color: " + theme["background-normal"] + "; }\n";
             rules += ".scrollThumb { box-shadow: 0 0 8px 8px " + theme["highlight-button-hover"] + " inset; }\n";
             rules += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + theme["canvas-scroll-thumb-pressed"] + " inset; }\n";

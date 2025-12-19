@@ -331,6 +331,8 @@ const Theme = {
                 ".selectbox-search-input,\n" +
                 ".selectbox-header,\n" +
                 ".selectbox-dropdown,\n" +
+                ".radio-visual, \n" +
+                ".checkbox-visual, \n" +
                 ".message { background-color: " +
                 theme["background-normal"] +
                 "; }\n";
@@ -353,6 +355,7 @@ const Theme = {
                 ".custom-button-secondary-icon,\n" +
                 ".input-field-element,\n" +
                 ".checkbox-visual,\n" +
+                ".radio-visual,\n" +
                 ".selectbox-header,\n" +
                 ".selectbox-dropdown,\n" +
                 ".selectbox-search-input:focus,\n" +
@@ -471,15 +474,18 @@ const Theme = {
                 theme["text-tertiary"] +
                 "; }\n";
         }
+        let fontSize = "11px";
         if (
             ["theme-white", "theme-night"].indexOf(theme.name) !== -1 ||
             ["theme-white", "theme-night"].indexOf(theme.Name) !== -1
         ) {
+            fontSize = "12px";
             styles +=
                 ".message,\n" +
                 ".custom-button,\n" +
                 ".selectbox-header,\n" +
                 ".input-field-element { border-radius: 4px; }\n";
+            styles += ".radio--checked .radio-visual { border-width: 4px; }\n";
             styles +=
                 ".checkbox-checkmark { color: " +
                 theme["text-inverse"] +
@@ -489,11 +495,13 @@ const Theme = {
                 theme["background-primary-dialog-button"] +
                 "; }\n";
             styles +=
+                ".radio--checked .radio-visual,\n" +
                 ".checkbox--checked .checkbox-visual { border-color: " +
                 theme["background-primary-dialog-button"] +
                 "; }\n";
             styles +=
-                ".checkbox:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " +
+                ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n" +
+                ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " +
                 theme["highlight-button-hover"] +
                 "; }\n";
             styles +=
@@ -502,16 +510,32 @@ const Theme = {
                 "; background-color: " +
                 theme["highlight-primary-dialog-button-hover"] +
                 "; }\n";
+            styles +=
+                ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " +
+                theme["highlight-primary-dialog-button-hover"] +
+                "; }\n";
+            styles += "body { font-size: 12px; }\n";
         } else {
             styles +=
                 ".checkbox-checkmark { color: " +
                 theme["text-normal"] +
                 "; }\n";
             styles +=
-                ".checkbox:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " +
+                ".radio--checked .radio-visual { background-color: " +
+                theme["text-normal"] +
+                ";\n box-shadow: 0 0 0 2px" +
+                theme["background-normal"] +
+                " inset; }\n";
+            styles +=
+                ".radio-button-container:hover .radio-visual,\n" +
+                ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " +
                 theme["border-control-focus"] +
                 "; }\n";
         }
+        styles +=
+            "body, input, textarea, select, button { font-size: " +
+            fontSize +
+            "; }\n";
 
         let styleTheme = document.getElementById("componentsStyles");
         if (!styleTheme) {
