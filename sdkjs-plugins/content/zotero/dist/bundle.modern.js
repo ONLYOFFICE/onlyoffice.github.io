@@ -24404,11 +24404,6 @@ SettingsPage.prototype._addEventListeners = function() {
         if (event.type !== "button:click") {
             return;
         }
-        if (self._stateSettings.notesStyle === self._endNotes.getState().value) {
-            self._endNotes.check();
-        } else {
-            self._footNotes.check();
-        }
         var selectedLang = self._languageSelect.getSelectedValue();
         var selectedStyleId = self._styleSelect.getSelectedValue();
         if (selectedLang !== null && self._localesManager.getLastUsedLanguage() !== selectedLang) {
@@ -24498,6 +24493,11 @@ SettingsPage.prototype._show = function() {
     };
     this._saveBtn.disable();
     this._router.openSettings();
+    if (this._stateSettings.notesStyle === this._endNotes.getState().value) {
+        this._endNotes.check();
+    } else {
+        this._footNotes.check();
+    }
 };
 
 SettingsPage.prototype._loadStyles = function() {

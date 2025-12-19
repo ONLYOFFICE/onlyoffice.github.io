@@ -325,13 +325,6 @@ SettingsPage.prototype._addEventListeners = function () {
         if (event.type !== "button:click") {
             return;
         }
-        if (
-            self._stateSettings.notesStyle === self._endNotes.getState().value
-        ) {
-            self._endNotes.check();
-        } else {
-            self._footNotes.check();
-        }
 
         const selectedLang = self._languageSelect.getSelectedValue();
         const selectedStyleId = self._styleSelect.getSelectedValue();
@@ -449,6 +442,11 @@ SettingsPage.prototype._show = function () {
     };
     this._saveBtn.disable();
     this._router.openSettings();
+    if (this._stateSettings.notesStyle === this._endNotes.getState().value) {
+        this._endNotes.check();
+    } else {
+        this._footNotes.check();
+    }
 };
 
 /** @returns {Promise<void>} */
