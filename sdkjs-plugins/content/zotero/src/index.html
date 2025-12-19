@@ -28,16 +28,7 @@
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
     <script>
-        function isBrowserSupportsES6() {
-            try {
-                new Function("let a = 1; const b = 2; class C {};");
-                return true;
-            } catch (e) {
-                return false;
-            }
-        }
-
-        if (isBrowserSupportsES6()) {
+        if (typeof Promise === 'function' && typeof Promise.allSettled === 'function') {
             document.write(
                 '<script type="module" src="dist/bundle.modern.js"><\/script>'
             );
@@ -105,6 +96,7 @@
                 </div>
                 <div id="docsWrapper" class="flexSize">
                     <div class="flexCol flexSize">
+                        <div id="nothingFound" class="flexCol hidden i18n">Nothing found</div>
                         <div id="docsHolder" class="flexCol"></div>
                         <div class="flex flexCenter">
                             <div id="libLoader" class="cssload-loading hidden"><i></i><i></i><i></i><i></i></div>

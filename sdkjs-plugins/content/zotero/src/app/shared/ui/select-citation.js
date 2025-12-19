@@ -88,6 +88,7 @@ function SelectCitationsComponent(
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
 
     this._docsHolder = document.getElementById("docsHolder");
+    this._nothingFound = document.getElementById("nothingFound");
     this._docsThumb = document.getElementById("docsThumb");
     this._selectedWrapper = document.getElementById("selectedWrapper");
     this._selectedHolder = document.getElementById("selectedHolder");
@@ -136,6 +137,8 @@ SelectCitationsComponent.prototype._init = function () {
     }
 };
 SelectCitationsComponent.prototype.clearLibrary = function () {
+    this._nothingFound &&
+        this._nothingFound.classList.add(this._displayNoneClass);
     var holder = this._docsHolder;
     while (holder && holder.lastChild) {
         holder.removeChild(holder.lastChild);
@@ -144,51 +147,39 @@ SelectCitationsComponent.prototype.clearLibrary = function () {
     this._docsScroller.onscroll();
 };
 
+SelectCitationsComponent.prototype.displayNothingFound = function () {
+    this.clearLibrary();
+    this._nothingFound &&
+        this._nothingFound.classList.remove(this._displayNoneClass);
+};
+
 /**
- * @param {boolean} append
  * @param {SearchResult | null} res
  * @param {Error | null} err
- * @param {boolean} showNotFound
- * @param {boolean} first
- * @returns {Promise<boolean>}
+ * @returns {Promise<number>}
  */
-SelectCitationsComponent.prototype.displaySearchItems = function (
-    append,
-    res,
-    err,
-    showNotFound,
-    first
-) {
+SelectCitationsComponent.prototype.displaySearchItems = function (res, err) {
     const self = this;
     var holder = this._docsHolder;
 
-    if (!append) {
-        this.clearLibrary();
-    }
-
-    var page = document.createElement("div");
-    if (holder) page.classList.add("page" + holder.children.length);
+    let numOfShown = 0;
 
     return new Promise((resolve, reject) => {
         if (res && res.items && res.items.length > 0) {
+            const page = document.createElement("div");
+            if (holder) page.classList.add("page" + holder.children.length);
             for (let index = 0; index < res.items.length; index++) {
                 let item = res.items[index];
                 page.appendChild(self._buildDocElement(item));
+                numOfShown++;
             }
-        } else if (err || first) {
-            if (err) {
-                reject(err);
-            } else if (showNotFound) {
-                var notFound = document.createElement("div");
-                notFound.textContent = translate("Nothing found");
-                notFound.classList.add("searchInfo");
-                page.appendChild(notFound);
-            }
+            if (holder) holder.appendChild(page);
+        } else if (err) {
+            reject(err);
         }
-        if (holder) holder.appendChild(page);
 
         this._docsScroller.onscroll();
-        resolve(true);
+        resolve(numOfShown);
     });
 };
 
