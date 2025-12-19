@@ -3563,9 +3563,8 @@
     var Theme = {
         addStylesForComponents: function addStylesForComponents(theme) {
             var styles = "";
-            console.warn(theme);
             if (theme["background-normal"]) {
-                styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element,\n" + ".selectbox-search-input,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".message { background-color: " + theme["background-normal"] + "; }\n";
+                styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element,\n" + ".selectbox-search-input,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".radio-visual, \n" + ".checkbox-visual, \n" + ".message { background-color: " + theme["background-normal"] + "; }\n";
             }
             if (theme["text-inverse"]) {
                 styles += ".custom-button-primary { color: " + theme["text-inverse"] + "; }\n";
@@ -3610,16 +3609,18 @@
             if ([ "theme-white", "theme-night" ].indexOf(theme.name) !== -1 || [ "theme-white", "theme-night" ].indexOf(theme.Name) !== -1) {
                 fontSize = "12px";
                 styles += ".message,\n" + ".custom-button,\n" + ".selectbox-header,\n" + ".input-field-element { border-radius: 4px; }\n";
-                styles += ".checkbox-visual, .radio-visual { background-color: " + theme["background-normal"] + "; }\n";
+                styles += ".radio--checked .radio-visual { border-width: 4px; }\n";
                 styles += ".checkbox-checkmark { color: " + theme["text-inverse"] + "; }\n";
-                styles += ".radio--checked .radio-visual,\n" + ".checkbox--checked .checkbox-visual { background-color: " + theme["background-primary-dialog-button"] + "; }\n";
+                styles += ".checkbox--checked .checkbox-visual { background-color: " + theme["background-primary-dialog-button"] + "; }\n";
                 styles += ".radio--checked .radio-visual,\n" + ".checkbox--checked .checkbox-visual { border-color: " + theme["background-primary-dialog-button"] + "; }\n";
-                styles += ".radio-button-container:hover:not(.radio--disabled) .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + theme["highlight-button-hover"] + "; }\n";
-                styles += ".radio--checked:hover:not(.radio--disabled) .radio-visual,\n" + ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; background-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
+                styles += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + theme["highlight-button-hover"] + "; }\n";
+                styles += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; background-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
+                styles += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
                 styles += "body { font-size: 12px; }\n";
             } else {
                 styles += ".checkbox-checkmark { color: " + theme["text-normal"] + "; }\n";
-                styles += ".radio-container:hover:not(.radio--disabled) .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["border-control-focus"] + "; }\n";
+                styles += ".radio--checked .radio-visual { background-color: " + theme["text-normal"] + ";\n box-shadow: 0 0 0 2px" + theme["background-normal"] + " inset; }\n";
+                styles += ".radio-button-container:hover .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["border-control-focus"] + "; }\n";
             }
             styles += "body, input, textarea, select, button { font-size: " + fontSize + "; }\n";
             var styleTheme = document.getElementById("componentsStyles");
@@ -7098,7 +7099,6 @@
         },
         _handleKeydown: function _handleKeydown(e) {
             var key = e.key || e.keyCode;
-            console.warn(e);
             if ((key === "Escape" || key === 27) && this._options.showClear) {
                 this.clear();
                 e.preventDefault();
@@ -8701,6 +8701,7 @@
     var _labelElement = new WeakMap;
     var _options = new WeakMap;
     var _handlers = new WeakMap;
+    var _subscribers = new WeakMap;
     var _Radio_brand = new WeakSet;
     var Radio = function() {
         function Radio(_radio, options) {
@@ -8712,6 +8713,7 @@
             _classPrivateFieldInitSpec(this, _labelElement, null);
             _classPrivateFieldInitSpec(this, _options, void 0);
             _classPrivateFieldInitSpec(this, _handlers, new Map);
+            _classPrivateFieldInitSpec(this, _subscribers, []);
             if (typeof _radio === "string") {
                 var temp = document.getElementById(_radio);
                 if (temp instanceof HTMLInputElement) {
@@ -8748,6 +8750,19 @@
             sameNameInstances.push(this);
         }
         return _createClass(Radio, [ {
+            key: "subscribe",
+            value: function subscribe(callback) {
+                var self = this;
+                _classPrivateFieldGet2(_subscribers, this).push(callback);
+                return {
+                    unsubscribe: function unsubscribe() {
+                        _classPrivateFieldSet2(_subscribers, self, _classPrivateFieldGet2(_subscribers, self).filter(function(cb) {
+                            return cb !== callback;
+                        }));
+                    }
+                };
+            }
+        }, {
             key: "getElement",
             value: function getElement() {
                 return _classPrivateFieldGet2(_container, this);
@@ -8767,7 +8782,8 @@
                 }
                 _classPrivateFieldGet2(_options, this).checked = true;
                 _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
-                _assertClassBrand(_Radio_brand, this, _triggerChange).call(this, true);
+                if (bSilent) return;
+                _assertClassBrand(_Radio_brand, this, _triggerChange).call(this);
             }
         }, {
             key: "uncheck",
@@ -8775,7 +8791,8 @@
                 if (_classPrivateFieldGet2(_options, this).disabled || !_classPrivateFieldGet2(_options, this).checked) return;
                 _classPrivateFieldGet2(_options, this).checked = false;
                 _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
-                _assertClassBrand(_Radio_brand, this, _triggerChange).call(this, false);
+                if (bSilent) return;
+                _assertClassBrand(_Radio_brand, this, _triggerChange).call(this);
             }
         }, {
             key: "enable",
@@ -8829,6 +8846,7 @@
             key: "destroy",
             value: function destroy() {
                 var _this2 = this;
+                _classPrivateFieldSet2(_subscribers, this, []);
                 if (!_classPrivateFieldGet2(_options, this).name) return;
                 var sameNameInstances = _instances._.get(_classPrivateFieldGet2(_options, this).name);
                 if (sameNameInstances) {
@@ -8878,9 +8896,6 @@
         } else if (_classPrivateFieldGet2(_options, this).disabled) {
             _classPrivateFieldGet2(_input, this).setAttribute("disabled", "true");
         }
-        _classPrivateFieldGet2(_input, this).style.position = "absolute";
-        _classPrivateFieldGet2(_input, this).style.opacity = "0";
-        _classPrivateFieldGet2(_input, this).style.pointerEvents = "none";
     }
     function _createDOM() {
         var parent = _classPrivateFieldGet2(_input, this).parentNode;
@@ -8974,19 +8989,18 @@
         _classPrivateFieldGet2(_input, this).checked = !!_classPrivateFieldGet2(_options, this).checked;
         _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
     }
-    function _triggerChange(checked) {
-        if (_classPrivateFieldGet2(_options, this).name) {
-            var event = new CustomEvent("radioChange", {
-                detail: {
-                    name: _classPrivateFieldGet2(_options, this).name,
-                    value: _classPrivateFieldGet2(_options, this).value,
-                    checked: checked,
-                    id: _classPrivateFieldGet2(_options, this).id
-                },
-                bubbles: true
-            });
-            _classPrivateFieldGet2(_input, this).dispatchEvent(event);
+    function _triggerChange(e) {
+        var detail = this.getState();
+        var objEvent = {
+            type: "radio:change",
+            detail: detail
+        };
+        if (e) {
+            objEvent.originalEvent = e;
         }
+        _classPrivateFieldGet2(_subscribers, this).forEach(function(cb) {
+            cb(objEvent);
+        });
     }
     var _instances = {
         _: new Map
@@ -32232,11 +32246,6 @@
             if (event.type !== "button:click") {
                 return;
             }
-            if (self._stateSettings.notesStyle === self._endNotes.getState().value) {
-                self._endNotes.check();
-            } else {
-                self._footNotes.check();
-            }
             var selectedLang = self._languageSelect.getSelectedValue();
             var selectedStyleId = self._styleSelect.getSelectedValue();
             if (selectedLang !== null && self._localesManager.getLastUsedLanguage() !== selectedLang) {
@@ -32300,6 +32309,12 @@
             }
             self._somethingWasChanged();
         });
+        this._footNotes.subscribe(function(event) {
+            self._somethingWasChanged();
+        });
+        this._endNotes.subscribe(function(event) {
+            self._somethingWasChanged();
+        });
     };
     SettingsPage.prototype._hideAllMessages = function() {
         this._langMessage.close();
@@ -32317,6 +32332,11 @@
         };
         this._saveBtn.disable();
         this._router.openSettings();
+        if (this._stateSettings.notesStyle === this._endNotes.getState().value) {
+            this._endNotes.check();
+        } else {
+            this._footNotes.check();
+        }
     };
     SettingsPage.prototype._loadStyles = function() {
         var self = this;

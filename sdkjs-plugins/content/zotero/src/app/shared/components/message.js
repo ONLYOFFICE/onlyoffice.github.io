@@ -57,6 +57,7 @@ function Message(container, options) {
      * @private
      */
     this._options = Object.assign(this._options, options);
+    this._isShow = false;
 }
 
 Message.prototype = {
@@ -186,6 +187,10 @@ Message.prototype = {
      * @returns
      */
     show: function (text, title) {
+        if (this._isShow) {
+            return this;
+        }
+        this._isShow = true;
         if (!this.container.classList.contains("message-container")) {
             this.container.classList.add("message-container");
         }
@@ -223,6 +228,7 @@ Message.prototype = {
 
     close: function () {
         const self = this;
+        this._isShow = false;
         if (!this._element || !this._element.parentNode) {
             return;
         }
