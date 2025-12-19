@@ -1813,7 +1813,7 @@ function _updateVisualState() {
     _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
 }
 
-function _triggerChange() {
+function _triggerChange(e) {
     var detail = this.getState();
     var objEvent = {
         type: "radio:change",
@@ -1822,7 +1822,7 @@ function _triggerChange() {
     if (e) {
         objEvent.originalEvent = e;
     }
-    this._subscribers.forEach(function(cb) {
+    _classPrivateFieldGet2(_subscribers, this).forEach(function(cb) {
         cb(objEvent);
     });
 }

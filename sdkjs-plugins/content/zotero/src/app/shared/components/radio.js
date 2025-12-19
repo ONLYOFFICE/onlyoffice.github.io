@@ -281,7 +281,8 @@ class Radio {
         this.#updateRadioGroupTabIndex();
     }
 
-    #triggerChange() {
+    /** @param {Event} [e] */
+    #triggerChange(e) {
         var detail = this.getState();
         /** @type {RadioEventType} */
         const objEvent = {
@@ -293,7 +294,7 @@ class Radio {
             objEvent.originalEvent = e;
         }
 
-        this._subscribers.forEach(function (cb) {
+        this.#subscribers.forEach(function (cb) {
             cb(objEvent);
         });
     }
