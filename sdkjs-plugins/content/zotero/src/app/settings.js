@@ -36,7 +36,7 @@
  * @typedef {import('./router').Router} Router
  */
 
-import { Button, SelectBox, Message } from "./shared/components";
+import { Button, SelectBox, Radio, Message } from "./shared/components";
 import { translate } from "./services";
 import { CslStylesManager } from "./csl/styles/styles-manager";
 import { LocalesManager } from "./csl/locales/locales-manager";
@@ -80,20 +80,13 @@ function SettingsPage(router, displayNoneClass) {
     if (!this._notesStyleWrapper) {
         throw new Error("notesStyleWrapper not found");
     }
-    this._footNotes = document.getElementById("footNotes");
-    if (
-        !this._footNotes ||
-        this._footNotes instanceof HTMLInputElement === false
-    ) {
-        throw new Error("footNotes not found");
-    }
-    this._endNotes = document.getElementById("endNotes");
-    if (
-        !this._endNotes ||
-        this._endNotes instanceof HTMLInputElement === false
-    ) {
-        throw new Error("endNotes not found");
-    }
+
+    this._footNotes = new Radio("footNotes", {
+        label: "Footnotes",
+    });
+    this._endNotes = new Radio("endNotes", {
+        label: "Endnotes",
+    });
 
     this._cslFileInput = document.getElementById("cslFileInput");
     if (!this._cslFileInput) {
@@ -286,18 +279,17 @@ SettingsPage.prototype._addEventListeners = function () {
             );
         }
 
-        [self._footNotes, self._endNotes].forEach(function (el) {
-            if (el.checked) {
-                const value = el.value;
-                if (
-                    (self._stateSettings.notesStyle !== value &&
-                        value === "footnotes") ||
-                    value === "endnotes"
-                ) {
-                    self._cslStylesManager.saveLastUsedNotesStyle(value);
-                }
-            }
-        });
+        let noteValue = "footnotes";
+        if (self._endNotes.getState().checked) {
+            noteValue = "endnotes";
+        }
+        if (
+            (self._stateSettings.notesStyle !== noteValue &&
+                noteValue === "footnotes") ||
+            noteValue === "endnotes"
+        ) {
+            self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+        }
 
         const selectedStyleId = self._styleSelect.getSelectedValue();
         if (
@@ -333,12 +325,14 @@ SettingsPage.prototype._addEventListeners = function () {
         if (event.type !== "button:click") {
             return;
         }
-        [self._footNotes, self._endNotes].forEach(function (el) {
-            const value = el.value;
-            if (self._stateSettings.notesStyle === value) {
-                el.checked = true;
-            }
-        });
+        if (
+            self._stateSettings.notesStyle === self._endNotes.getState().value
+        ) {
+            self._endNotes.check();
+        } else {
+            self._footNotes.check();
+        }
+
         const selectedLang = self._languageSelect.getSelectedValue();
         const selectedStyleId = self._styleSelect.getSelectedValue();
 
@@ -429,10 +423,10 @@ SettingsPage.prototype._addEventListeners = function () {
         }
         self._somethingWasChanged();
     });
-    this._footNotes.addEventListener("change", function (event) {
+    this._footNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
-    this._endNotes.addEventListener("change", function (event) {
+    this._endNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
 };

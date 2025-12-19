@@ -177,14 +177,8 @@ div::-moz-selection {
 }
 
 .notesStyle {
-    margin: 0 0 8px 4px;
     .radioHolder {
-        margin: 4px 4px 0 0;
-    }
-    label {
-        font-size: 11px;
-        margin-left: 6px;
-        vertical-align: top;
+        margin-top: 8px;
     }
     label:first-of-type {
         margin-right: 18px;
@@ -224,7 +218,7 @@ div::-moz-selection {
         white-space: nowrap;
         margin-top: 0;
     }
-    & > div:first-child .checkbox {
+    & > div:first-child .checkbox-container {
         width: calc(100% - 27px);
     }
     & > div:first-child label {
