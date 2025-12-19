@@ -112,7 +112,7 @@ Checkbox.prototype = {
         this._container = document.createElement("div");
 
         fragment.appendChild(this._container);
-        this._container.classList.add("checkbox");
+        this._container.classList.add("checkbox-container");
         this._container.setAttribute("role", "checkbox");
         this._container.setAttribute(
             "aria-checked",

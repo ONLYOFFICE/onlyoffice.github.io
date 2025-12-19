@@ -39,6 +39,9 @@
  * @class
  */
 class Radio {
+    /** @type {Map<string, Array<Radio>>} */
+    static #instances = new Map();
+
     /** @type {HTMLElement} */
     #container;
     /** @type {HTMLInputElement} */
@@ -51,6 +54,8 @@ class Radio {
     #options;
     /** @type {Map<string, function(any): void>} */
     #handlers = new Map();
+    /** @type {Function[]} */
+    #subscribers = [];
 
     /**
      * Create a Radio instance
@@ -90,8 +95,19 @@ class Radio {
         this.#container = document.createElement("div");
         this.#visualRadio = document.createElement("span");
         this.#createDOM();
-        this._setupEventListeners();
-        this._updateVisualState();
+        this.#setupEventListeners();
+        this.#updateVisualState();
+
+        if (!this.#options.name) {
+            throw new Error("Name attribute is required");
+        }
+
+        let sameNameInstances = Radio.#instances.get(this.#options.name);
+        if (!sameNameInstances) {
+            sameNameInstances = new Array();
+            Radio.#instances.set(this.#options.name, sameNameInstances);
+        }
+        sameNameInstances.push(this);
     }
 
     #applyInputAttributes() {
@@ -131,13 +147,13 @@ class Radio {
         } else if (this.#options.disabled) {
             this.#input.setAttribute("disabled", "true");
         }
-
-        this.#input.style.position = "absolute";
-        this.#input.style.opacity = "0";
-        this.#input.style.pointerEvents = "none";
     }
 
     #createDOM() {
+        const parent = this.#input.parentNode;
+        const fragment = document.createDocumentFragment();
+        fragment.appendChild(this.#container);
+        this.#container.classList.add("radio-button-container");
         this.#container.setAttribute("role", "radio");
         this.#container.setAttribute(
             "aria-checked",
@@ -149,57 +165,48 @@ class Radio {
         );
         this.#container.tabIndex = this.#options.disabled ? -1 : 0;
 
-        this.#visualRadio.className = "radio__visual";
+        this.#visualRadio.className = "radio-visual";
         this.#visualRadio.setAttribute("aria-hidden", "true");
-
-        const innerCircle = document.createElement("span");
-        innerCircle.className = "radio__inner-circle";
-        this.#visualRadio.appendChild(innerCircle);
 
         if (this.#options.label) {
             this.#labelElement = document.createElement("label");
-            this.#labelElement.className = "radio__label";
+            this.#labelElement.className = "i18n radio-label";
             this.#labelElement.htmlFor = String(this.#options.id);
             this.#labelElement.textContent = this.#options.label;
-        }
-
-        this.#container.appendChild(this.#input);
-        this.#container.appendChild(this.#visualRadio);
-        if (this.#labelElement) {
-            this.#container.appendChild(this.#labelElement);
         }
 
         if (this.#options.disabled) {
             this.#container.classList.add("radio--disabled");
         }
 
-        this._updateRadioGroupTabIndex();
+        if (parent) {
+            parent.insertBefore(fragment, this.#input);
+        }
+        this.#container.appendChild(this.#input);
+        this.#container.appendChild(this.#visualRadio);
+        if (this.#labelElement) {
+            this.#container.appendChild(this.#labelElement);
+        }
+
+        this.#updateRadioGroupTabIndex();
     }
 
-    /**
-     * Update tabindex for radio group accessibility
-     * @private
-     */
-    _updateRadioGroupTabIndex() {
-        if (!this.#options.name) return;
-
+    #updateRadioGroupTabIndex() {
         if (this.#options.checked) {
             this.#container.tabIndex = this.#options.disabled ? -1 : 0;
-        } else {
-            const radios = document.querySelectorAll(
-                `[name="${this.#options.name}"]`
-            );
+        } else if (
+            this.#options.name &&
+            Radio.#instances.has(this.#options.name)
+        ) {
+            const radios = Radio.#instances.get(this.#options.name);
             let hasChecked = false;
 
-            radios.forEach((radio) => {
-                if (
-                    radio instanceof HTMLInputElement &&
-                    radio.checked &&
-                    radio !== this.#input
-                ) {
-                    hasChecked = true;
-                }
-            });
+            radios &&
+                radios.forEach((radio) => {
+                    if (radio.#options.checked && radio !== this) {
+                        hasChecked = true;
+                    }
+                });
 
             if (
                 !hasChecked &&
@@ -213,11 +220,7 @@ class Radio {
         }
     }
 
-    /**
-     * Setup event listeners
-     * @private
-     */
-    _setupEventListeners() {
+    #setupEventListeners() {
         /** @param {MouseEvent} e */
         const handleClick = (e) => {
             e.preventDefault();
@@ -262,11 +265,7 @@ class Radio {
         this.#container.addEventListener("blur", handleBlur);
     }
 
-    /**
-     * Update visual state based on current properties
-     * @private
-     */
-    _updateVisualState() {
+    #updateVisualState() {
         this.#container.setAttribute(
             "aria-checked",
             String(!!this.#options.checked)
@@ -279,80 +278,80 @@ class Radio {
 
         this.#input.checked = !!this.#options.checked;
 
-        this._updateRadioGroupTabIndex();
+        this.#updateRadioGroupTabIndex();
     }
 
-    /**
-     * Trigger change event
-     * @private
-     * @param {boolean} checked
-     */
-    _triggerChange(checked) {
-        if (this.#options.name) {
-            const event = new CustomEvent("radioChange", {
-                detail: {
-                    name: this.#options.name,
-                    value: this.#options.value,
-                    checked: checked,
-                    id: this.#options.id,
-                },
-                bubbles: true,
-            });
-            this.#input.dispatchEvent(event);
+    #triggerChange() {
+        var detail = this.getState();
+        /** @type {RadioEventType} */
+        const objEvent = {
+            type: "radio:change",
+            detail: detail,
+        };
+
+        if (e) {
+            objEvent.originalEvent = e;
         }
+
+        this._subscribers.forEach(function (cb) {
+            cb(objEvent);
+        });
     }
 
     /**
-     * Get the root DOM element
+     * @param {function(RadioEventType): void} callback
+     * @returns {Object}
+     */
+    subscribe(callback) {
+        var self = this;
+        this.#subscribers.push(callback);
+
+        return {
+            unsubscribe: function () {
+                self.#subscribers = self.#subscribers.filter(function (cb) {
+                    return cb !== callback;
+                });
+            },
+        };
+    }
+
+    /**
      * @returns {HTMLElement}
      */
     getElement() {
         return this.#container;
     }
 
-    /**
-     * Set radio button to checked state
-     */
-    check() {
+    /** @param {boolean} [bSilent] */
+    check(bSilent) {
         if (this.#options.disabled || this.#options.checked) return;
 
         if (this.#options.name) {
-            const radios = document.querySelectorAll(
-                `[name="${this.#options.name}"]`
-            );
-            radios.forEach((radio) => {
-                if (
-                    radio instanceof HTMLInputElement &&
-                    radio !== this.#input &&
-                    radio.checked
-                ) {
-                    radio.checked = false;
-                    this.#options.checked = false;
-                    this._updateVisualState();
-                    this._triggerChange(false);
-                }
-            });
+            const radios = Radio.#instances.get(this.#options.name);
+            radios &&
+                radios.forEach((radio) => {
+                    if (radio !== this && radio.#options.checked) {
+                        radio.uncheck();
+                    }
+                });
         }
 
         this.#options.checked = true;
-        this._updateVisualState();
-        this._triggerChange(true);
+        this.#updateVisualState();
+        if (bSilent) return;
+        this.#triggerChange();
     }
 
-    /**
-     * Set radio button to unchecked state
-     */
-    uncheck() {
+    /** @param {boolean} [bSilent] */
+    uncheck(bSilent) {
         if (this.#options.disabled || !this.#options.checked) return;
 
         this.#options.checked = false;
-        this._updateVisualState();
-        this._triggerChange(false);
+        this.#updateVisualState();
+        if (bSilent) return;
+        this.#triggerChange();
     }
 
-    /**
-     * Enable the radio button
-     */
     enable() {
         if (!this.#options.disabled) return;
 
@@ -363,15 +362,12 @@ class Radio {
         if (this.#options.checked) {
             this.#container.tabIndex = 0;
         } else {
-            this._updateRadioGroupTabIndex();
+            this.#updateRadioGroupTabIndex();
         }
 
         this.#container.classList.remove("radio--disabled");
     }
 
-    /**
-     * Disable the radio button
-     */
     disable() {
         if (this.#options.disabled) return;
 
@@ -382,40 +378,38 @@ class Radio {
         this.#container.classList.add("radio--disabled");
     }
 
-    /**
-     * Update radio button label
-     * @param {string} label
-     */
+    /** @param {string} label */
     setLabel(label) {
         this.#options.label = label;
         if (this.#labelElement) {
             this.#labelElement.textContent = label;
         } else if (label) {
             this.#labelElement = document.createElement("label");
-            this.#labelElement.className = "radio__label";
+            this.#labelElement.className = "radio-label";
             this.#labelElement.htmlFor = String(this.#options.id);
             this.#labelElement.textContent = label;
             this.#container.appendChild(this.#labelElement);
         }
     }
 
-    /**
-     * Get current radio button state
-     * @returns {Object}
-     */
+    /** @returns {{checked: boolean, disabled: boolean, value: string, name: string}}} */
     getState() {
         return {
-            checked: this.#options.checked,
-            disabled: this.#options.disabled,
-            value: this.#options.value,
-            name: this.#options.name,
+            checked: !!this.#options.checked,
+            disabled: !!this.#options.disabled,
+            value: this.#options.value || "",
+            name: this.#options.name || "",
         };
     }
 
-    /**
-     * Clean up event listeners and references
-     */
     destroy() {
+        this.#subscribers = [];
+        if (!this.#options.name) return;
+        let sameNameInstances = Radio.#instances.get(this.#options.name);
+        if (sameNameInstances) {
+            const index = sameNameInstances.indexOf(this);
+            if (index >= 0) sameNameInstances.splice(index, 1);
+        }
         this.#handlers.forEach((handler, event) => {
             this.#container.removeEventListener(event, handler);
         });
