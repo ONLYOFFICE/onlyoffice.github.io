@@ -403,16 +403,6 @@ import "../styles.css";
             window.Asc.plugin.theme["text-normal"] +
             ";}\n";
         rules +=
-            ".control.select { background-color : " +
-            window.Asc.plugin.theme["background-normal"] +
-            ";}\n";
-        rules +=
-            ".control { color : " +
-            window.Asc.plugin.theme["text-normal"] +
-            "; border-color : " +
-            window.Asc.plugin.theme["border-regular-control"] +
-            "}\n";
-        rules +=
             ".doc { border-color: " +
             theme["border-regular-control"] +
             "; background-color: " +
