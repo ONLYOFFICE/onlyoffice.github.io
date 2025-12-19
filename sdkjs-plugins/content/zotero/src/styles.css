@@ -163,8 +163,9 @@ div::-moz-selection {
     & > label {
         font-weight: bold;
         display: block;
+        margin-bottom: 4px;
     }
-    .mrtop {
+    .style-select-combination {
         position: relative;
     }
 }
@@ -177,6 +178,9 @@ div::-moz-selection {
 }
 
 .notesStyle {
+    & > span {
+        font-weight: bold;
+    }
     .radioHolder {
         margin-top: 8px;
     }
@@ -259,6 +263,9 @@ div::-moz-selection {
     }
     &.doc-open > div:not(:first-child) {
         margin-top: 6px;
+    }
+    &.doc-open > div:last-child {
+        justify-content: end;
     }
     &.doc-open .docInfo {
         white-space: normal;
