@@ -243,7 +243,14 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     if (item.author && item.author.length > 0) {
         label = item.author
             .map(function (a) {
-                return a.family.trim() + ", " + a.given.trim();
+                if (a.family && a.given) {
+                    return a.family.trim() + ", " + a.given.trim();
+                } else if (a.family) {
+                    return a.family.trim();
+                } else if (a.given) {
+                    return a.given.trim();
+                }
+                return "";
             })
             .join("; ");
     }

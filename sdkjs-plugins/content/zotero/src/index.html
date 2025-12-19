@@ -20,7 +20,6 @@
     <meta charset="UTF-8">
     <base href="../">
     <title>Zotero</title>
-    <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
     <link rel="stylesheet" href="dist/styles.css">
@@ -96,7 +95,7 @@
                 <div id="searchWrapper">
                     <div id="librarySelectList"></div>
                     <input id="searchField" autocomplete="off" class="i18n" type="text"
-                        placeholder="Search references by author, title" />
+                        placeholder="Search references by author, title or year" />
                     <button id="filterButton" class="i18n" title="Search in">
                         <svg width="12" height="11" viewBox="0 0 12 11" fill="currentcolor"
                             xmlns="http://www.w3.org/2000/svg">
@@ -149,15 +148,13 @@
                 </p>
                 <div id="styleWrapper">
                     <label for="styleSelect" class="i18n">Style</label>
-                    <div class="mrtop">
+                    <div class="style-select-combination">
                         <div id="styleSelectedListOther"></div>
                         <div id="styleSelectList"></div>
                     </div>
                     <div id="styleMessage"></div>
                     <label for="langMessage" class="i18n mrtop">Language</label>
-                    <div class="mrtop">
-                        <div id="styleLangList"></div>
-                    </div>
+                    <div id="styleLangList"></div>
                     <div id="langMessage"></div>
                 </div>
 
