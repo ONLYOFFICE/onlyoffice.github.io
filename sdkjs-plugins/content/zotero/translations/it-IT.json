@@ -47,5 +47,7 @@
     "After conversion, citations can no longer be updated.": "Dopo la conversione, le citazioni non possono piu' essere aggiornate.",
     "to access your local Zotero library.": "per accedere alla tua biblioteca Zotero locale.",
     "No API key required.": "Nessuna chiave API richiesta.",
-    "Configure how citations will be formatted in your document.": "Configura come le citazioni saranno formattate nel tuo documento."
+    "Configure how citations will be formatted in your document.": "Configura come le citazioni saranno formattate nel tuo documento.",
+    "Search in": "Cerca in",
+    "Search in:": "Cerca in:"
 }
