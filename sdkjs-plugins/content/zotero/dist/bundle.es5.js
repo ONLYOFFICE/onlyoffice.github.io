@@ -7377,6 +7377,7 @@
             throw new Error("Invalid container element");
         }
         this._options = Object.assign(this._options, options);
+        this._isShow = false;
     }
     Message.prototype = {
         constructor: Message,
@@ -7468,6 +7469,10 @@
             }
         },
         show: function show(text, title) {
+            if (this._isShow) {
+                return this;
+            }
+            this._isShow = true;
             if (!this.container.classList.contains("message-container")) {
                 this.container.classList.add("message-container");
             }
@@ -7493,6 +7498,7 @@
             return this;
         },
         close: function close() {
+            this._isShow = false;
             if (!this._element || !this._element.parentNode) {
                 return;
             }
@@ -32844,7 +32850,14 @@
         var label = "";
         if (item.author && item.author.length > 0) {
             label = item.author.map(function(a) {
-                return a.family.trim() + ", " + a.given.trim();
+                if (a.family && a.given) {
+                    return a.family.trim() + ", " + a.given.trim();
+                } else if (a.family) {
+                    return a.family.trim();
+                } else if (a.given) {
+                    return a.given.trim();
+                }
+                return "";
             }).join("; ");
         }
         var arrow = document.createElement("div");
