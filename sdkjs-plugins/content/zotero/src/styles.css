@@ -61,10 +61,15 @@ div::-moz-selection {
     flex: 1;
     overflow-y: hidden;
     padding: 14px 12px 10px 12px;
+    overflow-y: auto;
 }
 
 #mainCont {
     flex: 1;
+    overflow-y: auto;
+    & > div {
+        overflow-y: auto;
+    }
 }
 
 #loginState {
@@ -88,6 +93,7 @@ div::-moz-selection {
     flex-direction: row;
     overflow-y: hidden;
     margin-top: 17px;
+    min-height: 133px;
 }
 
 #docsHolder {
