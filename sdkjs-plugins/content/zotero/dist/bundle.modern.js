@@ -24930,6 +24930,7 @@ function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) 
     this._LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
     this._docsHolder = document.getElementById("docsHolder");
+    this._nothingFound = document.getElementById("nothingFound");
     this._docsThumb = document.getElementById("docsThumb");
     this._selectedWrapper = document.getElementById("selectedWrapper");
     this._selectedHolder = document.getElementById("selectedHolder");
@@ -24965,6 +24966,7 @@ SelectCitationsComponent.prototype._init = function() {
 };
 
 SelectCitationsComponent.prototype.clearLibrary = function() {
+    this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
     var holder = this._docsHolder;
     while (holder && holder.lastChild) {
         holder.removeChild(holder.lastChild);
@@ -24973,33 +24975,30 @@ SelectCitationsComponent.prototype.clearLibrary = function() {
     this._docsScroller.onscroll();
 };
 
-SelectCitationsComponent.prototype.displaySearchItems = function(append, res, err, showNotFound, first) {
+SelectCitationsComponent.prototype.displayNothingFound = function() {
+    this.clearLibrary();
+    this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
+};
+
+SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
     var self = this;
     var holder = this._docsHolder;
-    if (!append) {
-        this.clearLibrary();
-    }
-    var page = document.createElement("div");
-    if (holder) page.classList.add("page" + holder.children.length);
+    var numOfShown = 0;
     return new Promise((resolve, reject) => {
         if (res && res.items && res.items.length > 0) {
+            var page = document.createElement("div");
+            if (holder) page.classList.add("page" + holder.children.length);
             for (var index = 0; index < res.items.length; index++) {
                 var item = res.items[index];
                 page.appendChild(self._buildDocElement(item));
+                numOfShown++;
             }
-        } else if (err || first) {
-            if (err) {
-                reject(err);
-            } else if (showNotFound) {
-                var notFound = document.createElement("div");
-                notFound.textContent = translate("Nothing found");
-                notFound.classList.add("searchInfo");
-                page.appendChild(notFound);
-            }
+            if (holder) holder.appendChild(page);
+        } else if (err) {
+            reject(err);
         }
-        if (holder) holder.appendChild(page);
         this._docsScroller.onscroll();
-        resolve(true);
+        resolve(numOfShown);
     });
 };
 
@@ -25335,7 +25334,6 @@ SelectCitationsComponent.prototype._count = function() {
 };
 
 (function() {
-    var counter = 0;
     var displayNoneClass = "hidden";
     var blurClass = "blur";
     var router;
@@ -25433,35 +25431,45 @@ SelectCitationsComponent.prototype._count = function() {
         function searchFor(text, selectedGroups) {
             text = text.trim();
             var groupsHash = selectedGroups.join(",");
-            if (elements.mainState.classList.contains(displayNoneClass) || !text || text == lastSearch.text && groupsHash === lastSearch.groupsHash || selectedGroups.length === 0) return Promise.resolve();
+            if (elements.mainState.classList.contains(displayNoneClass) || !text || text == lastSearch.text && groupsHash === lastSearch.groupsHash || selectedGroups.length === 0) return Promise.resolve([]);
             selectCitation.clearLibrary();
             var promises = [];
             return sdk.getUserGroups().then(function(userGroups) {
                 var groups = selectedGroups.filter(function(group) {
                     return group !== "my_library" && group !== "group_libraries";
                 });
-                var append = true;
                 var showLoader = true;
                 var hideLoader = !groups.length;
-                var bCount = true;
                 if (selectedGroups.indexOf("my_library") !== -1) {
-                    promises.push(loadLibrary(sdk.getItems(text), append, showLoader, hideLoader, false, bCount));
+                    promises.push(loadLibrary(sdk.getItems(text), showLoader, hideLoader, false));
                 }
                 for (var i = 0; i < groups.length; i++) {
                     showLoader = i === 0 && promises.length === 0;
                     hideLoader = i === groups.length - 1;
-                    promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), append, showLoader, hideLoader, true, bCount));
+                    promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), showLoader, hideLoader, true));
                 }
-            }).then(function() {
                 lastSearch.text = text;
                 lastSearch.obj = null;
                 lastSearch.groups = [];
                 lastSearch.groupsHash = groupsHash;
-                return Promise.all(promises);
+                return promises;
             });
         }
         searchFilter.subscribe(function(text, selectedGroups) {
-            searchFor(text, selectedGroups);
+            searchFor(text, selectedGroups).catch(() => []).then(function(promises) {
+                return Promise.allSettled(promises);
+            }).then(function(numOfShownByLib) {
+                var numOfShown = 0;
+                numOfShownByLib.forEach(function(promise) {
+                    if (promise.status === "fulfilled") {
+                        numOfShown += promise.value;
+                    }
+                });
+                if (numOfShown === 0) {
+                    selectCitation.displayNothingFound();
+                }
+                console.warn(numOfShown);
+            });
         });
         refreshBtn.subscribe(function(event) {
             if (event.type !== "button:click") {
@@ -25630,10 +25638,10 @@ SelectCitationsComponent.prototype._count = function() {
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), true, true, !lastSearch.groups.length, false, false);
+            loadLibrary(lastSearch.obj.next(), true, !lastSearch.groups.length, false);
         }
         for (var i = 0; i < lastSearch.groups.length && lastSearch.groups[i].next; i++) {
-            loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), true, false, i == lastSearch.groups.length - 1, true, false);
+            loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), false, i == lastSearch.groups.length - 1, true);
         }
     }
     function shouldLoadMore(holder) {
@@ -25649,26 +25657,24 @@ SelectCitationsComponent.prototype._count = function() {
         if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return false;
         return true;
     }
-    function loadLibrary(promise, append, showLoader, hideLoader, isGroup, bCount) {
+    function loadLibrary(promise, showLoader, hideLoader, isGroup) {
         if (showLoader) showLibLoader(true);
-        if (bCount) counter++;
         return promise.then(function(res) {
-            if (bCount) counter--;
-            return displaySearchItems(append, res, null, isGroup, bCount && !counter);
+            return displaySearchItems(res, null, isGroup);
         }).catch(function(err) {
-            if (bCount) counter--;
             console.error(err);
             if (err.message) {
                 showError(translate(err.message));
             }
-            return displaySearchItems(append, null, err, isGroup, bCount && !counter);
-        }).finally(function() {
+            return displaySearchItems(null, err, isGroup);
+        }).then(function(numOfShown) {
             if (hideLoader) {
                 showLibLoader(false);
             }
+            return numOfShown;
         });
     }
-    function displaySearchItems(append, res, err, isGroup, showNotFound) {
+    function displaySearchItems(res, err, isGroup) {
         var first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length) first = true;
         if (err) {
@@ -25676,7 +25682,9 @@ SelectCitationsComponent.prototype._count = function() {
                 lastSearch.obj = null;
                 lastSearch.groups = [];
             }
-            lastSearch.obj.next = null;
+            if (lastSearch && lastSearch.obj) {
+                delete lastSearch.obj.next;
+            }
         } else {
             if (isGroup && res && res.next) lastSearch.groups.push(res); else lastSearch.obj = res && res.items.length ? res : null;
         }
@@ -25687,7 +25695,7 @@ SelectCitationsComponent.prototype._count = function() {
                 citationService.fillUrisFromId(item);
             }
         }
-        return selectCitation.displaySearchItems(append, res, err, showNotFound, first);
+        return selectCitation.displaySearchItems(res, err);
     }
     function checkSelected(numOfSelected) {
         insertLinkBtn.setText(translate("Insert Citation"));

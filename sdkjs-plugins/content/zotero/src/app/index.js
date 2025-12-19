@@ -47,7 +47,6 @@ import "../components.css";
 import "../styles.css";
 
 (function () {
-    var counter = 0; // счетчик отправленных запросов (используется чтобы знать показывать "not found" или нет)
     var displayNoneClass = "hidden";
     var blurClass = "blur";
 
@@ -203,7 +202,7 @@ import "../styles.css";
         /**
          * @param {string} text
          * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
-         * @returns
+         * @returns {Promise<Array<Promise<number>>}
          */
         function searchFor(text, selectedGroups) {
             text = text.trim();
@@ -215,11 +214,11 @@ import "../styles.css";
                     groupsHash === lastSearch.groupsHash) ||
                 selectedGroups.length === 0
             )
-                return Promise.resolve();
+                return Promise.resolve([]);
 
             selectCitation.clearLibrary();
 
-            /** @type {Array<Promise<boolean>>} */
+            /** @type {Array<Promise<number>>} */
             const promises = [];
 
             return sdk
@@ -235,20 +234,16 @@ import "../styles.css";
                         );
                     });
 
-                    const append = true;
                     let showLoader = true;
                     let hideLoader = !groups.length;
-                    const bCount = true;
 
                     if (selectedGroups.indexOf("my_library") !== -1) {
                         promises.push(
                             loadLibrary(
                                 sdk.getItems(text),
-                                append,
                                 showLoader,
                                 hideLoader,
-                                false,
-                                bCount
+                                false
                             )
                         );
                     }
@@ -259,25 +254,41 @@ import "../styles.css";
                         promises.push(
                             loadLibrary(
                                 sdk.getGroupItems(text, groups[i]),
-                                append,
                                 showLoader,
                                 hideLoader,
-                                true,
-                                bCount
+                                true
                             )
                         );
                     }
-                })
-                .then(function () {
                     lastSearch.text = text;
                     lastSearch.obj = null;
                     lastSearch.groups = [];
                     lastSearch.groupsHash = groupsHash;
-                    return Promise.all(promises);
+                    return promises;
                 });
         }
         searchFilter.subscribe(function (text, selectedGroups) {
-            searchFor(text, selectedGroups);
+            searchFor(text, selectedGroups)
+                .catch(() => {
+                    return [];
+                })
+                .then(function (promises) {
+                    return Promise.allSettled(promises);
+                })
+                .then(function (
+                    /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib
+                ) {
+                    let numOfShown = 0;
+                    numOfShownByLib.forEach(function (promise) {
+                        if (promise.status === "fulfilled") {
+                            numOfShown += promise.value;
+                        }
+                    });
+                    if (numOfShown === 0) {
+                        selectCitation.displayNothingFound();
+                    }
+                    console.warn(numOfShown);
+                });
         });
 
         refreshBtn.subscribe(function (event) {
@@ -519,9 +530,7 @@ import "../styles.css";
             loadLibrary(
                 lastSearch.obj.next(),
                 true,
-                true,
                 !lastSearch.groups.length,
-                false,
                 false
             );
         }
@@ -536,11 +545,9 @@ import "../styles.css";
                     lastSearch.groups[i].next(),
                     lastSearch.groups[i].id
                 ),
-                true,
                 false,
                 i == lastSearch.groups.length - 1,
-                true,
-                false
+                true
             );
         }
     }
@@ -572,63 +579,39 @@ import "../styles.css";
 
     /**
      * @param {Promise<SearchResult>} promise
-     * @param {boolean} append
      * @param {boolean} showLoader
      * @param {boolean} hideLoader
      * @param {boolean} isGroup
-     * @param {boolean} bCount
-     * @returns {Promise<boolean>}
+     * @returns {Promise<number>}
      */
-    function loadLibrary(
-        promise,
-        append,
-        showLoader,
-        hideLoader,
-        isGroup,
-        bCount
-    ) {
+    function loadLibrary(promise, showLoader, hideLoader, isGroup) {
         if (showLoader) showLibLoader(true);
-        if (bCount) counter++;
         return promise
             .then(function (res) {
-                if (bCount) counter--;
-                return displaySearchItems(
-                    append,
-                    res,
-                    null,
-                    isGroup,
-                    bCount && !counter
-                );
+                return displaySearchItems(res, null, isGroup);
             })
             .catch(function (err) {
-                if (bCount) counter--;
                 console.error(err);
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                return displaySearchItems(
-                    append,
-                    null,
-                    err,
-                    isGroup,
-                    bCount && !counter
-                );
+                return displaySearchItems(null, err, isGroup);
             })
-            .finally(function () {
+            .then(function (numOfShown) {
                 if (hideLoader) {
                     showLibLoader(false);
                 }
+                return numOfShown;
             });
     }
 
     /**
-     * @param {boolean} append
      * @param {SearchResult | null} res
      * @param {Error | null} err
      * @param {boolean} isGroup
-     * @param {boolean} showNotFound
+     * @returns {Promise<number>}
      */
-    function displaySearchItems(append, res, err, isGroup, showNotFound) {
+    function displaySearchItems(res, err, isGroup) {
         var first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
@@ -637,7 +620,9 @@ import "../styles.css";
                 lastSearch.obj = null;
                 lastSearch.groups = [];
             }
-            lastSearch.obj.next = null;
+            if (lastSearch && lastSearch.obj) {
+                delete lastSearch.obj.next;
+            }
         } else {
             if (isGroup && res && res.next) lastSearch.groups.push(res);
             else lastSearch.obj = res && res.items.length ? res : null;
@@ -650,13 +635,7 @@ import "../styles.css";
             }
         }
 
-        return selectCitation.displaySearchItems(
-            append,
-            res,
-            err,
-            showNotFound,
-            first
-        );
+        return selectCitation.displaySearchItems(res, err);
     }
 
     /**
