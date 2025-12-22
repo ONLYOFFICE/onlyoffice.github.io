@@ -35,7 +35,8 @@
 /// <reference path="../types-global.js" />
 /// <reference path="./types.js" />
 
-import { zoteroEnvironment } from "./zotero-environment.js";
+import { zoteroEnvironment } from "./zotero-environment";
+import { RateLimitedFetcher } from "./zotero-api-fetcher";
 
 const ZoteroSdk = function () {
     this._apiKey = null;
