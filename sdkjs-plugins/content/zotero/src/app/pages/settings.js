@@ -36,7 +36,13 @@
  * @typedef {import('../router').Router} Router
  */
 
-import { Button, SelectBox, Radio, Message } from "../shared/components";
+import {
+    Button,
+    SelectBox,
+    Radio,
+    Message,
+    Loader,
+} from "../shared/components";
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
 import { LocalesManager } from "../csl/locales";
@@ -531,12 +537,14 @@ SettingsPage.prototype._showLoader = function () {
     this._saveBtn.disable();
     this._styleSelect.disable();
     this._languageSelect.disable();
+    Loader.show();
 };
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
     this._styleSelect.enable();
     this._languageSelect.enable();
+    Loader.hide();
 };
 
 export { SettingsPage };
