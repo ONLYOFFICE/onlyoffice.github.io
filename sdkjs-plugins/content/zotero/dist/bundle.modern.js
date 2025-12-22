@@ -3078,8 +3078,6 @@ class Loader {
 
 function _createDOM(text) {
     _classPrivateFieldGet2(_container, this).classList.add("loader-container");
-    var body = document.createElement("div");
-    body.classList.add("loader-body");
     var svgNS = "http://www.w3.org/2000/svg";
     var image = document.createElementNS(svgNS, "svg");
     image.classList.add("loader-image");
@@ -3093,13 +3091,12 @@ function _createDOM(text) {
     circle.setAttribute("r", "7.25");
     circle.setAttribute("stroke-dasharray", "160%, 40%");
     image.appendChild(circle);
-    body.appendChild(image);
+    _classPrivateFieldGet2(_container, this).appendChild(image);
     var title = document.createElement("div");
     title.classList.add("loader-title");
     title.classList.add("i18n");
     title.innerText = text;
-    body.appendChild(title);
-    _classPrivateFieldGet2(_container, this).appendChild(body);
+    _classPrivateFieldGet2(_container, this).appendChild(title);
 }
 
 var _mainLoaderContainer = {
@@ -6554,7 +6551,7 @@ SelectCitationsComponent.prototype._removeSelected = function(id) {
 };
 
 SelectCitationsComponent.prototype._checkSelected = function() {
-    var numOfSelected = this._count();
+    var numOfSelected = this.count();
     if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
         return;
     }
@@ -6571,7 +6568,7 @@ SelectCitationsComponent.prototype._checkSelected = function() {
     });
 };
 
-SelectCitationsComponent.prototype._count = function() {
+SelectCitationsComponent.prototype.count = function() {
     var k = 0;
     for (var i in this._items) k++;
     return k;
@@ -6626,6 +6623,7 @@ SelectCitationsComponent.prototype._count = function() {
         };
     }
     window.Asc.plugin.init = function() {
+        Loader.show();
         initElements();
         router = new Router;
         sdk = new ZoteroSdk;
@@ -6635,16 +6633,16 @@ SelectCitationsComponent.prototype._count = function() {
         var isInit = false;
         addEventListeners();
         loginPage.init().onOpen(function() {
-            showLoader(false);
+            Loader.hide();
         }).onChangeState(function(apis) {
             settings.setDesktopApiAvailable(apis.desktop);
             settings.setRestApiAvailable(apis.online);
         }).onAuthorized(function(apis) {
             if (isInit) return;
             isInit = true;
-            showLoader(true);
+            Loader.show();
             Promise.all([ loadGroups(), settings.init() ]).then(function() {
-                showLoader(false);
+                Loader.hide();
             });
         });
         window.Asc.plugin.onTranslate = applyTranslations;
@@ -6696,7 +6694,6 @@ SelectCitationsComponent.prototype._count = function() {
                 if (numOfShown === 0) {
                     selectCitation.displayNothingFound();
                 }
-                console.warn(numOfShown);
             });
         });
         refreshBtn.subscribe(function(event) {
@@ -6711,7 +6708,7 @@ SelectCitationsComponent.prototype._count = function() {
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService.updateCslItems(true, true, false).catch(function(error) {
                 console.error(error);
                 var message = translate("Failed to refresh");
@@ -6720,7 +6717,7 @@ SelectCitationsComponent.prototype._count = function() {
                 }
                 showError(message);
             }).finally(function() {
-                showLoader(false);
+                hideLoader();
             });
         });
         insertBibBtn.subscribe(function(event) {
@@ -6735,7 +6732,7 @@ SelectCitationsComponent.prototype._count = function() {
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService.updateCslItems(true, true, true).catch(function(error) {
                 console.error(error);
                 var message = translate("Failed to insert bibliography");
@@ -6744,7 +6741,7 @@ SelectCitationsComponent.prototype._count = function() {
                 }
                 showError(message);
             }).finally(function() {
-                showLoader(false);
+                hideLoader();
             });
         });
         insertLinkBtn.subscribe(function(event) {
@@ -6759,7 +6756,7 @@ SelectCitationsComponent.prototype._count = function() {
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService.updateCslItems(true, false, false).then(function() {
                 var items = selectCitation.getSelectedItems();
                 return citationService.insertSelectedCitations(items);
@@ -6773,16 +6770,16 @@ SelectCitationsComponent.prototype._count = function() {
                 }
                 showError(message);
             }).finally(function() {
-                showLoader(false);
+                hideLoader();
             });
         });
         saveAsTextBtn.subscribe(function(event) {
             if (event.type !== "button:click") {
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService.saveAsText().then(function() {
-                showLoader(false);
+                hideLoader();
             });
         });
         settings.onChangeState(function(settings) {
@@ -6849,12 +6846,15 @@ SelectCitationsComponent.prototype._count = function() {
             window.onclick = null;
         }
     }
-    function showLoader(show) {
-        if (show) {
-            Loader.show();
-        } else {
-            Loader.hide();
-        }
+    function showLoader() {
+        insertBibBtn.disable();
+        refreshBtn.disable();
+        insertLinkBtn.disable();
+    }
+    function hideLoader() {
+        insertBibBtn.enable();
+        refreshBtn.enable();
+        checkSelected();
     }
     function switchClass(el, className, add) {
         if (add) {
@@ -6926,12 +6926,19 @@ SelectCitationsComponent.prototype._count = function() {
         return selectCitation.displaySearchItems(res, err);
     }
     function checkSelected(numOfSelected) {
-        insertLinkBtn.setText(translate("Insert Citation"));
+        if (typeof numOfSelected === "undefined") {
+            numOfSelected = selectCitation.count();
+        }
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
+            insertLinkBtn.setText(translate("Insert Citation"));
         } else {
             insertLinkBtn.enable();
-            if (numOfSelected > 1) insertLinkBtn.setText(translate("Insert " + numOfSelected + " Citations"));
+            if (numOfSelected > 1) {
+                insertLinkBtn.setText(translate("Insert " + numOfSelected + " Citations"));
+            } else {
+                insertLinkBtn.setText(translate("Insert Citation"));
+            }
         }
     }
 })();

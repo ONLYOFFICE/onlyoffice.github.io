@@ -36,6 +36,7 @@
 /// <reference path="./types.js" />
 
 import { zoteroEnvironment } from "./zotero-environment";
+import { RateLimitedFetcher } from "./zotero-api-fetcher";
 
 const ZoteroSdk = function () {
     this._apiKey = null;
@@ -43,6 +44,11 @@ const ZoteroSdk = function () {
     /** @type {Array<UserGroupInfo>}} */
     this._userGroups = [];
     this._isOnlineAvailable = true;
+
+    this._fetcher = new RateLimitedFetcher({
+        maxRetries: 5,
+        initialDelay: 5000,
+    });
 };
 
 // Constants
@@ -109,15 +115,18 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
         "Zotero-API-Key": this._apiKey || "",
     };
 
+    //return this._fetcher.fetchWithRetry(url, headers, 9);
+
     return fetch(url, { headers: headers })
         .then(function (response) {
             if (!response.ok) {
-                throw new Error(response.status + " " + response.statusText);
+                const message = response.status + " " + response.statusText;
+                console.error(message);
+                throw new Error(message);
             }
             return response;
         })
         .catch(function (error) {
-            console.error("Zotero API request failed:", error.message);
             if (typeof error === "object") {
                 error.message = "Connection to Zotero failed";
             }
