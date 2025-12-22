@@ -5980,7 +5980,7 @@ function SearchFilterComponents() {
     this._searchField = new InputField("searchField", {
         type: "text",
         autofocus: true,
-        showClear: true
+        showClear: false
     });
     this._filterButton = new Button("filterButton", {
         variant: "secondary-icon",
@@ -6661,15 +6661,11 @@ SelectCitationsComponent.prototype.count = function() {
                 var groups = selectedGroups.filter(function(group) {
                     return group !== "my_library" && group !== "group_libraries";
                 });
-                var bShowLoader = true;
-                var hideLoader = !groups.length;
                 if (selectedGroups.indexOf("my_library") !== -1) {
-                    promises.push(loadLibrary(sdk.getItems(text), bShowLoader, hideLoader, false));
+                    promises.push(loadLibrary(sdk.getItems(text), false));
                 }
                 for (var i = 0; i < groups.length; i++) {
-                    bShowLoader = i === 0 && promises.length === 0;
-                    hideLoader = i === groups.length - 1;
-                    promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), bShowLoader, hideLoader, true));
+                    promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), true));
                 }
                 lastSearch.text = text;
                 lastSearch.obj = null;
@@ -6683,6 +6679,12 @@ SelectCitationsComponent.prototype.count = function() {
             var groupsHash = selectedGroups.join(",");
             if (elements.mainState.classList.contains(displayNoneClass) || !text || text == lastSearch.text && groupsHash === lastSearch.groupsHash || selectedGroups.length === 0) return;
             searchFor(text, selectedGroups, groupsHash).catch(() => []).then(function(promises) {
+                if (promises.length) {
+                    libLoader.show();
+                    Promise.any(promises).then(function() {
+                        libLoader.hide();
+                    });
+                }
                 return Promise.allSettled(promises);
             }).then(function(numOfShownByLib) {
                 var numOfShown = 0;
@@ -6866,10 +6868,10 @@ SelectCitationsComponent.prototype.count = function() {
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), true, !lastSearch.groups.length, false);
+            loadLibrary(lastSearch.obj.next(), false);
         }
         for (var i = 0; i < lastSearch.groups.length && lastSearch.groups[i].next; i++) {
-            loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), false, i == lastSearch.groups.length - 1, true);
+            loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), true);
         }
     }
     function shouldLoadMore(holder) {
@@ -6885,8 +6887,7 @@ SelectCitationsComponent.prototype.count = function() {
         if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return false;
         return true;
     }
-    function loadLibrary(promise, bShowLoader, hideLoader, isGroup) {
-        if (bShowLoader) libLoader.show();
+    function loadLibrary(promise, isGroup) {
         return promise.then(function(res) {
             return displaySearchItems(res, null, isGroup);
         }).catch(function(err) {
@@ -6896,9 +6897,6 @@ SelectCitationsComponent.prototype.count = function() {
             }
             return displaySearchItems(null, err, isGroup);
         }).then(function(numOfShown) {
-            if (hideLoader) {
-                libLoader.hide();
-            }
             return numOfShown;
         });
     }
