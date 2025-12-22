@@ -35,7 +35,7 @@
 /// <reference path="../types-global.js" />
 /// <reference path="./types.js" />
 
-import { zoteroEnvironment } from "./zotero-environment.js";
+import { zoteroEnvironment } from "./zotero-environment";
 
 const ZoteroSdk = function () {
     this._apiKey = null;
@@ -104,10 +104,9 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
  * @returns {Promise<FetchResponse>}
  */
 ZoteroSdk.prototype._getOnlineRequest = function (url) {
-    var self = this;
-    var headers = {
-        "Zotero-API-Version": self.ZOTERO_API_VERSION,
-        "Zotero-API-Key": self._apiKey || "",
+    const headers = {
+        "Zotero-API-Version": this.ZOTERO_API_VERSION,
+        "Zotero-API-Key": this._apiKey || "",
     };
 
     return fetch(url, { headers: headers })
