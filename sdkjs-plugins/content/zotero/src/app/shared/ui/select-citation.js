@@ -621,7 +621,7 @@ SelectCitationsComponent.prototype._removeSelected = function (id) {
 };
 
 SelectCitationsComponent.prototype._checkSelected = function () {
-    const numOfSelected = this._count();
+    const numOfSelected = this.count();
     if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
         return;
     }
@@ -639,7 +639,7 @@ SelectCitationsComponent.prototype._checkSelected = function () {
     });
 };
 
-SelectCitationsComponent.prototype._count = function () {
+SelectCitationsComponent.prototype.count = function () {
     var k = 0;
     for (var i in this._items) k++;
     return k;

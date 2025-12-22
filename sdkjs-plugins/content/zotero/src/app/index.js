@@ -133,6 +133,7 @@ import "../styles.css";
     }
 
     window.Asc.plugin.init = function () {
+        Loader.show();
         initElements();
 
         router = new Router();
@@ -151,7 +152,7 @@ import "../styles.css";
         loginPage
             .init()
             .onOpen(function () {
-                showLoader(false);
+                Loader.hide();
             })
             .onChangeState(function (apis) {
                 settings.setDesktopApiAvailable(apis.desktop);
@@ -160,10 +161,10 @@ import "../styles.css";
             .onAuthorized(function (apis) {
                 if (isInit) return;
                 isInit = true;
-                showLoader(true);
+                Loader.show();
 
                 Promise.all([loadGroups(), settings.init()]).then(function () {
-                    showLoader(false);
+                    Loader.hide();
                 });
             });
 
@@ -270,7 +271,6 @@ import "../styles.css";
                     if (numOfShown === 0) {
                         selectCitation.displayNothingFound();
                     }
-                    console.warn(numOfShown);
                 });
         });
 
@@ -286,7 +286,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService
                 .updateCslItems(true, true, false)
                 .catch(function (error) {
@@ -298,7 +298,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    showLoader(false);
+                    hideLoader();
                 });
         });
 
@@ -314,7 +314,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader(true);
+            showLoader();
             // TODO #there
             // updateCslItems(true, false, true);
             citationService
@@ -328,7 +328,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    showLoader(false);
+                    hideLoader();
                 });
         });
 
@@ -344,7 +344,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService
                 .updateCslItems(true, false, false)
                 .then(function () {
@@ -363,7 +363,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    showLoader(false);
+                    hideLoader();
                 });
         });
 
@@ -371,9 +371,9 @@ import "../styles.css";
             if (event.type !== "button:click") {
                 return;
             }
-            showLoader(true);
+            showLoader();
             citationService.saveAsText().then(function () {
-                showLoader(false);
+                hideLoader();
             });
         });
 
@@ -479,15 +479,15 @@ import "../styles.css";
         }
     }
 
-    /**
-     * @param {boolean} show
-     */
-    function showLoader(show) {
-        if (show) {
-            Loader.show();
-        } else {
-            Loader.hide();
-        }
+    function showLoader() {
+        insertBibBtn.disable();
+        refreshBtn.disable();
+        insertLinkBtn.disable();
+    }
+    function hideLoader() {
+        insertBibBtn.enable();
+        refreshBtn.enable();
+        checkSelected();
     }
 
     /**
@@ -618,19 +618,25 @@ import "../styles.css";
     }
 
     /**
-     * @param {number} numOfSelected
+     * @param {number} [numOfSelected]
      */
     function checkSelected(numOfSelected) {
-        insertLinkBtn.setText(translate("Insert Citation"));
+        if (typeof numOfSelected === "undefined") {
+            numOfSelected = selectCitation.count();
+        }
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
+            insertLinkBtn.setText(translate("Insert Citation"));
         } else {
             insertLinkBtn.enable();
-            if (numOfSelected > 1)
+            if (numOfSelected > 1) {
                 // TODO: add translate
                 insertLinkBtn.setText(
                     translate("Insert " + numOfSelected + " Citations")
                 );
+            } else {
+                insertLinkBtn.setText(translate("Insert Citation"));
+            }
         }
     }
 })();

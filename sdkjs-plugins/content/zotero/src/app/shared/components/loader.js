@@ -55,8 +55,6 @@ class Loader {
      */
     #createDOM(text) {
         this.#container.classList.add("loader-container");
-        const body = document.createElement("div");
-        body.classList.add("loader-body");
         const svgNS = "http://www.w3.org/2000/svg";
         const image = document.createElementNS(svgNS, "svg");
         image.classList.add("loader-image");
@@ -70,13 +68,12 @@ class Loader {
         circle.setAttribute("r", "7.25");
         circle.setAttribute("stroke-dasharray", "160%, 40%");
         image.appendChild(circle);
-        body.appendChild(image);
+        this.#container.appendChild(image);
         const title = document.createElement("div");
         title.classList.add("loader-title");
         title.classList.add("i18n");
         title.innerText = text;
-        body.appendChild(title);
-        this.#container.appendChild(body);
+        this.#container.appendChild(title);
     }
 
     show() {

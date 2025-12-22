@@ -3,7 +3,6 @@ import commonjs from "@rollup/plugin-commonjs";
 import { babel } from "@rollup/plugin-babel";
 import license from "rollup-plugin-license";
 import terser from "@rollup/plugin-terser";
-import html from "@rollup/plugin-html";
 import postcss from "rollup-plugin-postcss";
 import autoprefixer from "autoprefixer";
 import atImport from "postcss-import";
@@ -13,7 +12,6 @@ import copy from "rollup-plugin-copy";
 import fs from "fs";
 
 const isES5Build = process.env.TARGET === "es5";
-const template = fs.readFileSync("src/index.html", "utf8");
 
 function getBabelConfig() {
     if (isES5Build) {
@@ -108,10 +106,6 @@ export default {
             },
             compress: false,
             mangle: false,
-        }),
-        html({
-            template: () => template,
-            fileName: "index.html",
         }),
         license({
             banner: {
