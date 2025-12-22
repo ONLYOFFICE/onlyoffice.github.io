@@ -202,7 +202,7 @@ const Theme = {
         if (theme["background-notification-popover"]) {}
         if (theme["background-notification-badge"]) {}
         if (theme["background-scrim"]) {}
-        if (theme["background-loader"]) {}
+
         if (theme["background-accent-button"]) {}
         if (theme["background-contrast-popover"]) {}
         */
@@ -322,7 +322,12 @@ const Theme = {
         if (theme["canvas-anim-pane-timeline-scroller-opacity-hovered"]) {}
         if (theme["canvas-anim-pane-timeline-scroller-opacity-active"]) {}
         */
-
+        if (theme["background-loader"]) {
+            styles +=
+                ".loader-container .loadmask-image { color: " +
+                theme["background-loader"] +
+                "; }\n";
+        }
         if (theme["background-normal"]) {
             styles +=
                 ".custom-button-secondary-icon,\n" +
@@ -564,6 +569,9 @@ const Theme = {
         }
         if (!theme["background-normal"]) {
             theme["background-normal"] = "white";
+        }
+        if (!theme["background-loader"]) {
+            theme["background-loader"] = "rgba(24, 24, 24, 0.9)";
         }
         if (!theme["highlight-button-pressed"]) {
             theme["highlight-button-pressed"] = "#cbcbcb";
