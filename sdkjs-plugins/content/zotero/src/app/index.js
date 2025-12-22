@@ -94,13 +94,10 @@ import "../styles.css";
     var insertBibBtn;
     /** @type {Button} */
     var refreshBtn;
+    const libLoader = new Loader("libLoader", translate("Loading..."));
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
     var elements = {};
     function initElements() {
-        const libLoader = document.getElementById("libLoader");
-        if (!libLoader) {
-            throw new Error("libLoader not found");
-        }
         const error = document.getElementById("errorWrapper");
         if (!error) {
             throw new Error("errorWrapper not found");
@@ -130,7 +127,6 @@ import "../styles.css";
             variant: "secondary",
         });
         elements = {
-            libLoader: libLoader,
             error: error,
             mainState: mainState,
         };
@@ -495,13 +491,6 @@ import "../styles.css";
     }
 
     /**
-     * @param {boolean} show
-     */
-    function showLibLoader(show) {
-        switchClass(elements.libLoader, displayNoneClass, !show);
-    }
-
-    /**
      * @param {HTMLElement} el
      * @param {string} className
      * @param {boolean} add
@@ -575,7 +564,7 @@ import "../styles.css";
      * @returns {Promise<number>}
      */
     function loadLibrary(promise, bShowLoader, hideLoader, isGroup) {
-        if (bShowLoader) showLibLoader(true);
+        if (bShowLoader) libLoader.show();
         return promise
             .then(function (res) {
                 return displaySearchItems(res, null, isGroup);
@@ -589,7 +578,7 @@ import "../styles.css";
             })
             .then(function (numOfShown) {
                 if (hideLoader) {
-                    showLibLoader(false);
+                    libLoader.hide();
                 }
                 return numOfShown;
             });

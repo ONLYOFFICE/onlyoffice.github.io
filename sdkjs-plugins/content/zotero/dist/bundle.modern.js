@@ -73,7 +73,7 @@ var Theme = {
             styles += ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled { background-color: " + theme["background-toolbar-additional"] + "; border-color: " + theme["background-toolbar-additional"] + "; }\n";
         }
         if (theme["text-normal"]) {
-            styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".custom-button-icon-only,\n" + ".selectbox-search-input,\n" + ".input-field-element { color: " + theme["text-normal"] + "; }\n";
+            styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".custom-button-icon-only,\n" + ".selectbox-search-input,\n" + ".loader-image,\n" + ".input-field-element { color: " + theme["text-normal"] + "; }\n";
             styles += ".input-field-search-icon svg { fill: " + theme["text-normal"] + "; }\n";
         }
         if (theme["text-secondary"]) {
@@ -588,7 +588,21 @@ ZoteroSdk.prototype._getOnlineRequest = function(url) {
         "Zotero-API-Version": this.ZOTERO_API_VERSION,
         "Zotero-API-Key": this._apiKey || ""
     };
-    return this._fetcher.fetchWithRetry(url, headers, 9);
+    return fetch(url, {
+        headers: headers
+    }).then(function(response) {
+        if (!response.ok) {
+            var message = response.status + " " + response.statusText;
+            console.error(message);
+            throw new Error(message);
+        }
+        return response;
+    }).catch(function(error) {
+        if (typeof error === "object") {
+            error.message = "Connection to Zotero failed";
+        }
+        throw error;
+    });
 };
 
 ZoteroSdk.prototype._getRequestWithOfflineSupport = function(url) {
@@ -1763,7 +1777,7 @@ class Radio {
         _assertClassBrand(_Radio_brand, this, _applyInputAttributes).call(this);
         _classPrivateFieldSet2(_container$1, this, document.createElement("div"));
         _classPrivateFieldSet2(_visualRadio, this, document.createElement("span"));
-        _assertClassBrand(_Radio_brand, this, _createDOM).call(this);
+        _assertClassBrand(_Radio_brand, this, _createDOM$1).call(this);
         _assertClassBrand(_Radio_brand, this, _setupEventListeners).call(this);
         _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
         if (!_classPrivateFieldGet2(_options, this).name) {
@@ -1905,7 +1919,7 @@ function _applyInputAttributes() {
     }
 }
 
-function _createDOM() {
+function _createDOM$1() {
     var parent = _classPrivateFieldGet2(_input, this).parentNode;
     var fragment = document.createDocumentFragment();
     fragment.appendChild(_classPrivateFieldGet2(_container$1, this));
@@ -3031,19 +3045,64 @@ SelectBox.prototype = {
     }
 };
 
+var _container = new WeakMap;
+
+var _Loader_brand = new WeakSet;
+
 class Loader {
-    constructor() {}
+    constructor(containerId, _text) {
+        _classPrivateMethodInitSpec(this, _Loader_brand);
+        _classPrivateFieldInitSpec(this, _container, void 0);
+        var temp = document.getElementById(containerId);
+        if (temp instanceof HTMLElement === false) throw new Error("Invalid container");
+        _classPrivateFieldSet2(_container, this, temp);
+        _assertClassBrand(_Loader_brand, this, _createDOM).call(this, _text);
+    }
+    show() {
+        var _classPrivateFieldGet2$1;
+        (_classPrivateFieldGet2$1 = _classPrivateFieldGet2(_container, this)) === null || _classPrivateFieldGet2$1 === void 0 || _classPrivateFieldGet2$1.classList.remove("hidden");
+    }
+    hide() {
+        var _classPrivateFieldGet3;
+        (_classPrivateFieldGet3 = _classPrivateFieldGet2(_container, this)) === null || _classPrivateFieldGet3 === void 0 || _classPrivateFieldGet3.classList.add("hidden");
+    }
     static show() {
         var _assertClassBrand$_;
-        (_assertClassBrand$_ = _assertClassBrand(Loader, this, _container)._) === null || _assertClassBrand$_ === void 0 || _assertClassBrand$_.classList.remove("hidden");
+        (_assertClassBrand$_ = _assertClassBrand(Loader, this, _mainLoaderContainer)._) === null || _assertClassBrand$_ === void 0 || _assertClassBrand$_.classList.remove("hidden");
     }
     static hide() {
         var _assertClassBrand$_2;
-        (_assertClassBrand$_2 = _assertClassBrand(Loader, this, _container)._) === null || _assertClassBrand$_2 === void 0 || _assertClassBrand$_2.classList.add("hidden");
+        (_assertClassBrand$_2 = _assertClassBrand(Loader, this, _mainLoaderContainer)._) === null || _assertClassBrand$_2 === void 0 || _assertClassBrand$_2.classList.add("hidden");
     }
 }
 
-var _container = {
+function _createDOM(text) {
+    _classPrivateFieldGet2(_container, this).classList.add("loader-container");
+    var body = document.createElement("div");
+    body.classList.add("loader-body");
+    var svgNS = "http://www.w3.org/2000/svg";
+    var image = document.createElementNS(svgNS, "svg");
+    image.classList.add("loader-image");
+    image.setAttribute("viewBox", "0 0 20 20");
+    var circle = document.createElementNS(svgNS, "circle");
+    circle.setAttribute("cx", "10");
+    circle.setAttribute("cy", "10");
+    circle.setAttribute("fill", "none");
+    circle.setAttribute("stroke", "currentColor");
+    circle.setAttribute("stroke-width", "1.5");
+    circle.setAttribute("r", "7.25");
+    circle.setAttribute("stroke-dasharray", "160%, 40%");
+    image.appendChild(circle);
+    body.appendChild(image);
+    var title = document.createElement("div");
+    title.classList.add("loader-title");
+    title.classList.add("i18n");
+    title.innerText = text;
+    body.appendChild(title);
+    _classPrivateFieldGet2(_container, this).appendChild(body);
+}
+
+var _mainLoaderContainer = {
     _: document.getElementById("loader")
 };
 
@@ -5752,7 +5811,6 @@ SettingsPage.prototype._showLoader = function() {
     this._saveBtn.disable();
     this._styleSelect.disable();
     this._languageSelect.disable();
-    Loader.show();
 };
 
 SettingsPage.prototype._hideLoader = function() {
@@ -5760,7 +5818,6 @@ SettingsPage.prototype._hideLoader = function() {
     this._saveBtn.enable();
     this._styleSelect.enable();
     this._languageSelect.enable();
-    Loader.hide();
 };
 
 function LoginPage(router, sdk) {
@@ -6538,12 +6595,9 @@ SelectCitationsComponent.prototype._count = function() {
     var insertLinkBtn;
     var insertBibBtn;
     var refreshBtn;
+    var libLoader = new Loader("libLoader", translate("Loading..."));
     var elements = {};
     function initElements() {
-        var libLoader = document.getElementById("libLoader");
-        if (!libLoader) {
-            throw new Error("libLoader not found");
-        }
         var error = document.getElementById("errorWrapper");
         if (!error) {
             throw new Error("errorWrapper not found");
@@ -6567,7 +6621,6 @@ SelectCitationsComponent.prototype._count = function() {
             variant: "secondary"
         });
         elements = {
-            libLoader: libLoader,
             error: error,
             mainState: mainState
         };
@@ -6803,9 +6856,6 @@ SelectCitationsComponent.prototype._count = function() {
             Loader.hide();
         }
     }
-    function showLibLoader(show) {
-        switchClass(elements.libLoader, displayNoneClass, !show);
-    }
     function switchClass(el, className, add) {
         if (add) {
             el.classList.add(className);
@@ -6836,7 +6886,7 @@ SelectCitationsComponent.prototype._count = function() {
         return true;
     }
     function loadLibrary(promise, bShowLoader, hideLoader, isGroup) {
-        if (bShowLoader) showLibLoader(true);
+        if (bShowLoader) libLoader.show();
         return promise.then(function(res) {
             return displaySearchItems(res, null, isGroup);
         }).catch(function(err) {
@@ -6847,7 +6897,7 @@ SelectCitationsComponent.prototype._count = function() {
             return displaySearchItems(null, err, isGroup);
         }).then(function(numOfShown) {
             if (hideLoader) {
-                showLibLoader(false);
+                libLoader.hide();
             }
             return numOfShown;
         });

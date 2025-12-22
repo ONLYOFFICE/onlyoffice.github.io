@@ -42,10 +42,13 @@
 </head>
 
 <body id="body" spellcheck="false" class="noselect">
-    <div id="loader" class="loader-container hidden">
+    <div id="loader" class="loader-container loader-container-main hidden">
         <div class="loader-bg"></div>
         <div class="loader-body">
-            <i class="loader-image"></i>
+            <svg class="loader-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" fill="none" stroke="currentColor" stroke-width="1.5" r="7.25"
+                    stroke-dasharray="160%, 40%" />
+            </svg>
             <div class="loader-title i18n">Loading...</div>
         </div>
     </div>
@@ -103,9 +106,8 @@
                     <div class="flexCol flexSize">
                         <div id="nothingFound" class="flexCol hidden i18n">Nothing found</div>
                         <div id="docsHolder" class="flexCol"></div>
-                        <div class="flex flexCenter">
-                            <div id="libLoader" class="cssload-loading hidden"><i></i><i></i><i></i><i></i></div>
-                        </div>
+
+                        <div id="libLoader" class="hidden"></div>
                     </div>
                     <div id="docsThumb" class="scrollThumb hidden"></div>
                 </div>
