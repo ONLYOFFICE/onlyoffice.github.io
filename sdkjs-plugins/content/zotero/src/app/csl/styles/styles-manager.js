@@ -154,9 +154,13 @@ CslStylesManager.prototype.getLastUsedStyleIdOrDefault = function () {
 
 /**
  * @param {string} styleName
- * @returns {Promise<string | null>} - csl file content
+ * @param {boolean} saveToLocalStorage
+ * @returns {Promise<{content: string|null, styleFormat: StyleFormat}>} - csl file content
  */
-CslStylesManager.prototype.getStyle = function (styleName) {
+CslStylesManager.prototype.getStyle = function (
+    styleName,
+    saveToLocalStorage = true
+) {
     const self = this;
 
     return Promise.resolve(styleName)
@@ -197,10 +201,18 @@ CslStylesManager.prototype.getStyle = function (styleName) {
             return content;
         })
         .then(function (content) {
-            if (content) {
-                self._saveLastUsedStyle(styleName, content);
+            const styleFormat =
+                (content && CslStylesParser.getCitationFormat(content)) ||
+                "numeric";
+            const result = {
+                content: content,
+                styleFormat: styleFormat,
+            };
+            if (content && saveToLocalStorage) {
+                self._saveLastUsedStyle(styleName, content, styleFormat);
             }
-            return content;
+
+            return result;
         });
 };
 
@@ -344,11 +356,15 @@ CslStylesManager.prototype._readCSLFile = function (file) {
 /**
  * @param {string} content
  * @param {string} id
+ * @param {StyleFormat} currentStyleFormat
  */
-CslStylesManager.prototype._saveLastUsedStyle = function (id, content) {
+CslStylesManager.prototype._saveLastUsedStyle = function (
+    id,
+    content,
+    currentStyleFormat
+) {
     this._cache[id] = content;
     localStorage.setItem(this._lastStyleKey, id);
-    const currentStyleFormat = CslStylesParser.getCitationFormat(content);
     localStorage.setItem(this._lastFormatKey, currentStyleFormat);
     const containBibliography =
         CslStylesParser.isStyleContainBibliography(content);
