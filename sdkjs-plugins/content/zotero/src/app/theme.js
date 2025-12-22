@@ -464,6 +464,7 @@ const Theme = {
                 ".custom-button-secondary-icon,\n" +
                 ".custom-button-icon-only,\n" +
                 ".selectbox-search-input,\n" +
+                ".loader-image,\n" +
                 ".input-field-element { color: " +
                 theme["text-normal"] +
                 "; }\n";
