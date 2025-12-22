@@ -37,8 +37,8 @@
 import { Theme } from "./theme";
 import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
-import { SettingsPage } from "./settings";
-import { LoginPage } from "./login";
+import { SettingsPage } from "./pages/settings";
+import { LoginPage } from "./pages/login";
 import { translate, CitationService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button } from "./shared/components";
@@ -202,22 +202,11 @@ import "../styles.css";
         /**
          * @param {string} text
          * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
-         * @returns {Promise<Array<Promise<number>>}
+         * @param {string} groupsHash
+         * @returns {Promise<Array<Promise<number>>>}
          */
-        function searchFor(text, selectedGroups) {
-            text = text.trim();
-            const groupsHash = selectedGroups.join(",");
-            if (
-                elements.mainState.classList.contains(displayNoneClass) ||
-                !text ||
-                (text == lastSearch.text &&
-                    groupsHash === lastSearch.groupsHash) ||
-                selectedGroups.length === 0
-            )
-                return Promise.resolve([]);
-
+        function searchFor(text, selectedGroups, groupsHash) {
             selectCitation.clearLibrary();
-
             /** @type {Array<Promise<number>>} */
             const promises = [];
 
@@ -268,7 +257,18 @@ import "../styles.css";
                 });
         }
         searchFilter.subscribe(function (text, selectedGroups) {
-            searchFor(text, selectedGroups)
+            text = text.trim();
+            const groupsHash = selectedGroups.join(",");
+            if (
+                elements.mainState.classList.contains(displayNoneClass) ||
+                !text ||
+                (text == lastSearch.text &&
+                    groupsHash === lastSearch.groupsHash) ||
+                selectedGroups.length === 0
+            )
+                return;
+
+            searchFor(text, selectedGroups, groupsHash)
                 .catch(() => {
                     return [];
                 })

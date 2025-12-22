@@ -33,13 +33,13 @@
 // @ts-check
 
 /**
- * @typedef {import('./router').Router} Router
+ * @typedef {import('../router').Router} Router
  */
 
-import { Button, SelectBox, Radio, Message } from "./shared/components";
-import { translate } from "./services";
-import { CslStylesManager } from "./csl/styles/styles-manager";
-import { LocalesManager } from "./csl/locales/locales-manager";
+import { Button, SelectBox, Radio, Message } from "../shared/components";
+import { translate } from "../services";
+import { CslStylesManager } from "../csl/styles";
+import { LocalesManager } from "../csl/locales";
 
 /**
  * @typedef {Object} Settings
@@ -170,8 +170,8 @@ function SettingsPage(router, displayNoneClass) {
     /** @type {Settings} */
     this._stateSettings = {
         style: "",
-        notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
-        styleFormat: this._cslStylesManager.getLastUsedFormat(),
+        notesStyle: "footnotes",
+        styleFormat: "numeric",
     };
 }
 
@@ -279,15 +279,12 @@ SettingsPage.prototype._addEventListeners = function () {
             );
         }
 
+        /** @type {NoteStyle} */
         let noteValue = "footnotes";
         if (self._endNotes.getState().checked) {
             noteValue = "endnotes";
         }
-        if (
-            (self._stateSettings.notesStyle !== noteValue &&
-                noteValue === "footnotes") ||
-            noteValue === "endnotes"
-        ) {
+        if (self._stateSettings.notesStyle !== noteValue) {
             self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
         }
 
@@ -308,9 +305,8 @@ SettingsPage.prototype._addEventListeners = function () {
 
                     self._onChangeState({
                         language: selectedLang,
-                        style: self._cslStylesManager.getLastUsedStyleIdOrDefault(),
-                        notesStyle:
-                            self._cslStylesManager.getLastUsedNotesStyle(),
+                        style: selectedStyleId || "ieee",
+                        notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
                     });
                 })
@@ -507,9 +503,9 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
     isClick && self._showLoader();
 
     return self._cslStylesManager
-        .getStyle(styleName)
-        .then(function (style) {
-            let styleFormat = self._cslStylesManager.getLastUsedFormat();
+        .getStyle(styleName, !isClick)
+        .then(function (styleInfo) {
+            let styleFormat = styleInfo.styleFormat;
             self._bNumFormat = styleFormat == "numeric";
             if ("note" === styleFormat) {
                 self._notesStyleWrapper.classList.remove(
@@ -519,13 +515,6 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._notesStyleWrapper.classList.add(self._displayNoneClass);
             }
 
-            let notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
-            const notesAs = self._notesStyleWrapper.querySelector(
-                'input[name="notesAs"][value="' + notesStyle + '"]'
-            );
-            if (notesAs && notesAs instanceof HTMLInputElement) {
-                notesAs.checked = true;
-            }
             isClick && self._hideLoader();
         })
         .catch(function (err) {

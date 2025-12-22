@@ -35,16 +35,15 @@
 /// <reference path="../zotero/types.js" />
 
 /**
- * @typedef {import('../csl/styles/styles-manager').CslStylesManager} CslStylesManager
+ * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
  * @typedef {import('../zotero/zotero').ZoteroSdk} ZoteroSdk
- * @typedef {import('../csl/locales/locales-manager').LocalesManager} LocalesManager
+ * @typedef {import('../csl/locales').LocalesManager} LocalesManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
  */
 
 import { CitationDocService } from "./citation-doc-service";
 import { translate } from "./translate-service";
-import { CSLCitation } from "../csl/citation/citation";
-import { CSLCitationStorage } from "../csl/citation/storage";
+import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { CSL } from "../citeproc/citeproc_commonjs";
 
 /**
