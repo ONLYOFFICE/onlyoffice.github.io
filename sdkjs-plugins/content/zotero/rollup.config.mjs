@@ -9,6 +9,7 @@ import autoprefixer from "autoprefixer";
 import atImport from "postcss-import";
 import cssnano from "cssnano";
 import postcssNested from "postcss-nested";
+import copy from "rollup-plugin-copy";
 import fs from "fs";
 
 const isES5Build = process.env.TARGET === "es5";
@@ -120,6 +121,15 @@ export default {
                     encoding: "utf-8",
                 },
             },
+        }),
+        copy({
+            targets: [
+                { src: "src/app/citeproc/citeproc_commonjs.js", dest: "dist" },
+            ],
+            copyOnce: false, // Copy files only once
+            flatten: true, // Do not save folders structure
+            verbose: false, // Print info about copied files
+            hook: "buildEnd", // When to run
         }),
     ],
 };

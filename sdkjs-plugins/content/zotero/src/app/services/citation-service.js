@@ -33,6 +33,7 @@
 // @ts-check
 
 /// <reference path="../zotero/types.js" />
+/// <reference path="../citeproc/citeproc_commonjs.js" />
 
 /**
  * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
@@ -44,7 +45,6 @@
 import { CitationDocService } from "./citation-doc-service";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
-import { CSL } from "../citeproc/citeproc_commonjs";
 
 /**
  * @param {LocalesManager} localesManager

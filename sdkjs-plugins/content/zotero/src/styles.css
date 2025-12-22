@@ -386,10 +386,6 @@ div::-moz-selection {
     }
 }
 
-.message-container {
-    margin-top: 12px;
-}
-
 @keyframes cssload-loading-ani1 {
     100% {
         transform: translate(39px);
@@ -490,6 +486,10 @@ div::-moz-selection {
     }
 }
 /* end loader */
+
+.message-container {
+    margin-top: 12px;
+}
 
 .hidden {
     display: none;
