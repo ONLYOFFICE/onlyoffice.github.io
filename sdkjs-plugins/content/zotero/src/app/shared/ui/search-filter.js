@@ -41,7 +41,7 @@ function SearchFilterComponents() {
     this._searchField = new InputField("searchField", {
         type: "text",
         autofocus: true,
-        showClear: true,
+        showClear: false,
     });
     this._filterButton = new Button("filterButton", {
         variant: "secondary-icon",

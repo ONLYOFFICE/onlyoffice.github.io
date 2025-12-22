@@ -207,28 +207,14 @@ import "../styles.css";
                         );
                     });
 
-                    let bShowLoader = true;
-                    let hideLoader = !groups.length;
-
                     if (selectedGroups.indexOf("my_library") !== -1) {
-                        promises.push(
-                            loadLibrary(
-                                sdk.getItems(text),
-                                bShowLoader,
-                                hideLoader,
-                                false
-                            )
-                        );
+                        promises.push(loadLibrary(sdk.getItems(text), false));
                     }
 
                     for (var i = 0; i < groups.length; i++) {
-                        bShowLoader = i === 0 && promises.length === 0;
-                        hideLoader = i === groups.length - 1;
                         promises.push(
                             loadLibrary(
                                 sdk.getGroupItems(text, groups[i]),
-                                bShowLoader,
-                                hideLoader,
                                 true
                             )
                         );
@@ -257,6 +243,12 @@ import "../styles.css";
                     return [];
                 })
                 .then(function (promises) {
+                    if (promises.length) {
+                        libLoader.show();
+                        Promise.any(promises).then(function () {
+                            libLoader.hide();
+                        });
+                    }
                     return Promise.allSettled(promises);
                 })
                 .then(function (
@@ -506,12 +498,7 @@ import "../styles.css";
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(
-                lastSearch.obj.next(),
-                true,
-                !lastSearch.groups.length,
-                false
-            );
+            loadLibrary(lastSearch.obj.next(), false);
         }
 
         for (
@@ -524,8 +511,6 @@ import "../styles.css";
                     lastSearch.groups[i].next(),
                     lastSearch.groups[i].id
                 ),
-                false,
-                i == lastSearch.groups.length - 1,
                 true
             );
         }
@@ -558,13 +543,10 @@ import "../styles.css";
 
     /**
      * @param {Promise<SearchResult>} promise
-     * @param {boolean} bShowLoader
-     * @param {boolean} hideLoader
      * @param {boolean} isGroup
      * @returns {Promise<number>}
      */
-    function loadLibrary(promise, bShowLoader, hideLoader, isGroup) {
-        if (bShowLoader) libLoader.show();
+    function loadLibrary(promise, isGroup) {
         return promise
             .then(function (res) {
                 return displaySearchItems(res, null, isGroup);
@@ -577,9 +559,6 @@ import "../styles.css";
                 return displaySearchItems(null, err, isGroup);
             })
             .then(function (numOfShown) {
-                if (hideLoader) {
-                    libLoader.hide();
-                }
                 return numOfShown;
             });
     }
