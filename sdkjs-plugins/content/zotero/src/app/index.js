@@ -41,7 +41,7 @@ import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
 import { translate, CitationService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
-import { Button } from "./shared/components";
+import { Button, Loader } from "./shared/components";
 
 import "../components.css";
 import "../styles.css";
@@ -97,10 +97,6 @@ import "../styles.css";
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
     var elements = {};
     function initElements() {
-        const loader = document.getElementById("loader");
-        if (!loader) {
-            throw new Error("loader not found");
-        }
         const libLoader = document.getElementById("libLoader");
         if (!libLoader) {
             throw new Error("libLoader not found");
@@ -108,10 +104,6 @@ import "../styles.css";
         const error = document.getElementById("errorWrapper");
         if (!error) {
             throw new Error("errorWrapper not found");
-        }
-        const contentHolder = document.getElementById("content");
-        if (!contentHolder) {
-            throw new Error("contentHolder not found");
         }
 
         const mainState = document.getElementById("mainState");
@@ -138,19 +130,14 @@ import "../styles.css";
             variant: "secondary",
         });
         elements = {
-            loader: loader,
             libLoader: libLoader,
             error: error,
-
-            contentHolder: contentHolder,
-
             mainState: mainState,
         };
     }
 
     window.Asc.plugin.init = function () {
         initElements();
-        showLoader(true);
 
         router = new Router();
         sdk = new ZoteroSdk();
@@ -223,14 +210,14 @@ import "../styles.css";
                         );
                     });
 
-                    let showLoader = true;
+                    let bShowLoader = true;
                     let hideLoader = !groups.length;
 
                     if (selectedGroups.indexOf("my_library") !== -1) {
                         promises.push(
                             loadLibrary(
                                 sdk.getItems(text),
-                                showLoader,
+                                bShowLoader,
                                 hideLoader,
                                 false
                             )
@@ -238,12 +225,12 @@ import "../styles.css";
                     }
 
                     for (var i = 0; i < groups.length; i++) {
-                        showLoader = i === 0 && promises.length === 0;
+                        bShowLoader = i === 0 && promises.length === 0;
                         hideLoader = i === groups.length - 1;
                         promises.push(
                             loadLibrary(
                                 sdk.getGroupItems(text, groups[i]),
-                                showLoader,
+                                bShowLoader,
                                 hideLoader,
                                 true
                             )
@@ -500,8 +487,11 @@ import "../styles.css";
      * @param {boolean} show
      */
     function showLoader(show) {
-        switchClass(elements.loader, displayNoneClass, !show);
-        switchClass(elements.contentHolder, blurClass, show);
+        if (show) {
+            Loader.show();
+        } else {
+            Loader.hide();
+        }
     }
 
     /**
@@ -579,13 +569,13 @@ import "../styles.css";
 
     /**
      * @param {Promise<SearchResult>} promise
-     * @param {boolean} showLoader
+     * @param {boolean} bShowLoader
      * @param {boolean} hideLoader
      * @param {boolean} isGroup
      * @returns {Promise<number>}
      */
-    function loadLibrary(promise, showLoader, hideLoader, isGroup) {
-        if (showLoader) showLibLoader(true);
+    function loadLibrary(promise, bShowLoader, hideLoader, isGroup) {
+        if (bShowLoader) showLibLoader(true);
         return promise
             .then(function (res) {
                 return displaySearchItems(res, null, isGroup);

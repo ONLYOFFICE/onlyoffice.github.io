@@ -27,6 +27,7 @@
     <style id="pluginStyles"></style>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <script src="dist/citeproc_commonjs.js"></script>
     <script>
         if (typeof Promise === 'function' && typeof Promise.allSettled === 'function') {
             document.write(
@@ -41,8 +42,12 @@
 </head>
 
 <body id="body" spellcheck="false" class="noselect">
-    <div id="loader" class="cssload-container hidden">
-        <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
+    <div id="loader" class="loader-container hidden">
+        <div class="loader-bg"></div>
+        <div class="loader-body">
+            <i class="loader-image"></i>
+            <div class="loader-title i18n">Loading...</div>
+        </div>
     </div>
     <div id="errorWrapper" class="errorMsg hidden"></div>
 

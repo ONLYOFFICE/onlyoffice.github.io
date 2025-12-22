@@ -49,5 +49,6 @@
     "No API key required.": "APIキーは必要ありません。",
     "Configure how citations will be formatted in your document.": "文書内の引用のフォーマットを設定します。",
     "Search in": "検索する",
-    "Search in:": "検索する:"
+    "Search in:": "検索する:",
+    "Loading...": "読み込み中..."
 }
