@@ -615,3 +615,57 @@
     opacity: 1;
     transform: scale(1);
 }
+/** Loader *************** */
+.loader-container {
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 41px;
+    z-index: 10000;
+
+    .loader-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+    }
+    .loader-body {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+    }
+    .loader-image {
+        animation-duration: 0.8s;
+        animation-name: spin;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" fill="none" stroke="currentColor" stroke-width="1.5" r="7.25" stroke-dasharray="160%, 40%" /></svg>');
+        height: 20px;
+        width: 20px;
+        float: left;
+        margin-left: 8px;
+        margin-right: 0;
+    }
+    .loader-title {
+        margin: 0 8px;
+        white-space: pre-wrap;
+        height: 22px;
+        line-height: 22px;
+        font-size: 15px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -33,63 +33,15 @@
 // @ts-check
 
 class Loader {
-    static #mainLoaderContainer = document.getElementById("loader");
-    #container;
+    static #container = document.getElementById("loader");
+    constructor() {}
 
-    /**
-     * @param {string} containerId
-     * @param {string} text
-     */
-    constructor(containerId, text) {
-        const temp = document.getElementById(containerId);
-        if (temp instanceof HTMLElement === false)
-            throw new Error("Invalid container");
-
-        this.#container = temp;
-
-        this.#createDOM(text);
-    }
-
-    /**
-     * @param {string} text
-     */
-    #createDOM(text) {
-        this.#container.classList.add("loader-container");
-        const svgNS = "http://www.w3.org/2000/svg";
-        const image = document.createElementNS(svgNS, "svg");
-        image.classList.add("loader-image");
-        image.setAttribute("viewBox", "0 0 20 20");
-        const circle = document.createElementNS(svgNS, "circle");
-        circle.setAttribute("cx", "10");
-        circle.setAttribute("cy", "10");
-        circle.setAttribute("fill", "none");
-        circle.setAttribute("stroke", "currentColor");
-        circle.setAttribute("stroke-width", "1.5");
-        circle.setAttribute("r", "7.25");
-        circle.setAttribute("stroke-dasharray", "160%, 40%");
-        image.appendChild(circle);
-        this.#container.appendChild(image);
-        const title = document.createElement("div");
-        title.classList.add("loader-title");
-        title.classList.add("i18n");
-        title.innerText = text;
-        this.#container.appendChild(title);
-    }
-
-    show() {
+    static show() {
         this.#container?.classList.remove("hidden");
     }
 
-    hide() {
-        this.#container?.classList.add("hidden");
-    }
-
-    static show() {
-        this.#mainLoaderContainer?.classList.remove("hidden");
-    }
-
     static hide() {
-        this.#mainLoaderContainer?.classList.add("hidden");
+        this.#container?.classList.add("hidden");
     }
 }
 

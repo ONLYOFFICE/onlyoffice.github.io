@@ -41,6 +41,7 @@ const Theme = {
      * @param {AscTheme} theme
      */
     addStylesForComponents: function (theme) {
+        console.warn(theme);
         let styles = "";
         /*
         if (!theme.RulersButton) {}
