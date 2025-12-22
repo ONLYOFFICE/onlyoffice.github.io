@@ -38,6 +38,7 @@ const Theme = {
      * @param {ThemeColors} theme
      */
     addStylesForComponents: function (theme) {
+        console.warn(theme);
         let styles = "";
         /*
         if (!theme.RulersButton) {}
@@ -322,9 +323,21 @@ const Theme = {
         if (theme["canvas-anim-pane-timeline-scroller-opacity-hovered"]) {}
         if (theme["canvas-anim-pane-timeline-scroller-opacity-active"]) {}
         */
+
+        if (theme["background-toolbar"]) {
+            styles +=
+                ".loader-body,\n" +
+                ".loader-bg { background-color: " +
+                theme["background-toolbar"] +
+                "; }\n";
+            styles +=
+                ".loader-body {     box-shadow: 0 0 99px 99px " +
+                theme["background-toolbar"] +
+                "; }\n";
+        }
         if (theme["background-loader"]) {
             styles +=
-                ".loader-container .loadmask-image { color: " +
+                ".loader-image { color: " +
                 theme["background-loader"] +
                 "; }\n";
         }
@@ -558,6 +571,9 @@ const Theme = {
      * @param {ThemeColors} theme
      */
     fixThemeForIE: function (theme) {
+        if (!theme["background-toolbar"]) {
+            theme["background-toolbar"] = "#f7f7f7";
+        }
         if (!theme["text-normal"]) {
             theme["text-normal"] = "rgb(51, 51, 51)";
         }
