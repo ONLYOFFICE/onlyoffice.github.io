@@ -537,14 +537,14 @@ SettingsPage.prototype._showLoader = function () {
     this._saveBtn.disable();
     this._styleSelect.disable();
     this._languageSelect.disable();
-    Loader.show();
+    //Loader.show();
 };
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
     this._styleSelect.enable();
     this._languageSelect.enable();
-    Loader.hide();
+    //Loader.hide();
 };
 
 export { SettingsPage };
