@@ -31,7 +31,6 @@
  */
 var Theme = {
     addStylesForComponents: function addStylesForComponents(theme) {
-        console.warn(theme);
         var styles = "";
         if (theme["background-toolbar"]) {
             styles += ".loader-body,\n" + ".loader-bg { background-color: " + theme["background-toolbar"] + "; }\n";
@@ -2117,6 +2116,9 @@ Checkbox.prototype = {
             this._labelElement.className = "checkbox-label i18n";
             if (this._options.id) this._labelElement.htmlFor = this._options.id;
             this._labelElement.textContent = this._options.label;
+            if (this._options.title) {
+                this._labelElement.setAttribute("title", this._options.label);
+            }
         }
         if (this._options.disabled) {
             this._container.classList.add("checkbox--disabled");
@@ -2250,6 +2252,9 @@ Checkbox.prototype = {
             if (this._options.id) this._labelElement.htmlFor = this._options.id;
             this._labelElement.textContent = label;
             this._container.appendChild(this._labelElement);
+        }
+        if (this._options.title && this._labelElement) {
+            this._labelElement.setAttribute("title", label);
         }
     },
     getState: function getState() {
@@ -6316,6 +6321,7 @@ SelectCitationsComponent.prototype._buildDocElement = function(item) {
     var checkInput = new Checkbox(check, {
         checked: !!this._items[item.id],
         label: label,
+        title: true,
         id: item.id
     });
     if (this._items[item.id]) {
