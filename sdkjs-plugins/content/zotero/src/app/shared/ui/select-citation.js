@@ -290,6 +290,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     const checkInput = new Checkbox(check, {
         checked: !!this._items[item.id],
         label: label,
+        title: true,
         id: item.id,
     });
     if (this._items[item.id]) {

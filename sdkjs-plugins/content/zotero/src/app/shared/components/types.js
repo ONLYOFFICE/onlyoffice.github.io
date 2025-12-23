@@ -46,6 +46,7 @@
  * @property {string} [name]
  * @property {string} [value]
  * @property {string} [id]
+ * @property {boolean} [title]
  */
 
 /**

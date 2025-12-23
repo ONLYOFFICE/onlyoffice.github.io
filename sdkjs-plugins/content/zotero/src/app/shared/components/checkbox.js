@@ -181,6 +181,9 @@ Checkbox.prototype = {
             this._labelElement.className = "checkbox-label i18n";
             if (this._options.id) this._labelElement.htmlFor = this._options.id;
             this._labelElement.textContent = this._options.label;
+            if (this._options.title) {
+                this._labelElement.setAttribute("title", this._options.label);
+            }
         }
 
         // Add disabled state styling
@@ -412,6 +415,9 @@ Checkbox.prototype = {
             if (this._options.id) this._labelElement.htmlFor = this._options.id;
             this._labelElement.textContent = label;
             this._container.appendChild(this._labelElement);
+        }
+        if (this._options.title && this._labelElement) {
+            this._labelElement.setAttribute("title", label);
         }
     },
 
