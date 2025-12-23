@@ -184,11 +184,6 @@ Checkbox.prototype = {
             if (this._options.title) {
                 this._labelElement.setAttribute("title", this._options.label);
             }
-        } else {
-            const label = document.querySelector("label[for='" + this._options.id + "']");
-            if (label instanceof HTMLLabelElement) {
-                this._labelElement = label;
-            }
         }
 
         // Add disabled state styling
