@@ -52,7 +52,8 @@ import { CSLCitation, CSLCitationStorage } from "../csl/citation";
  * @param {ZoteroSdk} sdk
  */
 function CitationService(localesManager, cslStylesManager, sdk) {
-    this._bibPlaceholder = "Please insert some citation into the document.";
+    this._bibPlaceholderIfEmpty =
+        "Please insert some citation into the document.";
     this._citPrefixNew = "ZOTERO_ITEM";
     this._citSuffixNew = "CSL_CITATION";
     this._citPrefix = "ZOTERO_CITATION";
@@ -62,6 +63,7 @@ function CitationService(localesManager, cslStylesManager, sdk) {
     this._sdk = sdk;
     this._localesManager = localesManager;
     this._cslStylesManager = cslStylesManager;
+    this._storage = new CSLCitationStorage();
     /** @type {CSL.Engine} */
     this._formatter;
     this.citationDocService = new CitationDocService(
@@ -78,24 +80,6 @@ function CitationService(localesManager, cslStylesManager, sdk) {
 
 CitationService.prototype = {
     constructor: CitationService,
-    /**
-     * @param {SearchResultItem} item
-     * @returns
-     */
-    fillUrisFromId: function (item) {
-        const slashFirstIndex = item.id.indexOf("/") + 1;
-        const slashLastIndex = item.id.lastIndexOf("/") + 1;
-        const httpIndex = item.id.indexOf("http");
-        if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
-            if (!item.uris) {
-                item.uris = [];
-            }
-            item.uris.push(item.id);
-        }
-        if (slashLastIndex) item.id = item.id.substring(slashLastIndex);
-
-        return item;
-    },
 
     /**
      *
@@ -115,10 +99,10 @@ CitationService.prototype = {
                 cslCitation
                     .getCitationItems()
                     .forEach(function (/** @type {CitationItem} */ item) {
-                        if (!CSLCitationStorage.has(item.id)) {
+                        if (!self._storage.has(item.id)) {
                             bUpdateItems = true;
                         }
-                        CSLCitationStorage.set(item.id, item);
+                        self._storage.set(item.id, item);
                         keys.push(item.id);
                         keysL.push(item.getInfoForCitationCluster());
                     });
@@ -126,7 +110,7 @@ CitationService.prototype = {
                 if (bUpdateItems) {
                     /** @type {string[]} */
                     var arrIds = [];
-                    CSLCitationStorage.forEach(function (item, id) {
+                    self._storage.forEach(function (item, id) {
                         arrIds.push(id);
                     });
                     self._formatter.updateItems(arrIds);
@@ -137,7 +121,7 @@ CitationService.prototype = {
                 const tempElement = document.createElement("div");
                 fragment.appendChild(tempElement);
 
-                // TODO может ещё очистить поиск (подумать над этим)
+                // TODO: Maybe I should clear the search (think about it)
                 tempElement.innerHTML =
                     self._formatter.makeCitationCluster(keysL);
                 cslCitation.addPlainCitation(tempElement.innerText);
@@ -150,12 +134,6 @@ CitationService.prototype = {
                     JSON.stringify(cslCitation.toJSON()),
                     notesStyle
                 );
-            })
-            .then(function () {
-                // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-                // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
-                // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-                return self.updateCslItems(true, true, false);
             })
             .then(function () {
                 return keys;
@@ -225,26 +203,192 @@ CitationService.prototype = {
         });
     },
 
+    _makeBibliography: function () {
+        const self = this;
+        const fragment = document.createDocumentFragment();
+        const tempElement = document.createElement("div");
+        fragment.appendChild(tempElement);
+
+        try {
+            var bibItems = new Array(self._storage.size);
+            /** @type {false | any} */
+            var bibObject = self._formatter.makeBibliography();
+            // Sort bibliography items
+            for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
+                var citationId = bibObject[0].entry_ids[i][0];
+                var citationIndex = self._storage.getIndex(citationId);
+                /** @type {string} */
+                var bibText = bibObject[1][i];
+                while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
+                    bibText = bibText.replace(/\n/, "");
+                }
+                // Check if bibliography item contains <sup> or <sub>
+                if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
+                    // Escape <sup> and <sub>
+                    bibText = bibText
+                        .replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;")
+                        .replace(/<\/sup>/gi, "&lt;/sup&gt;")
+                        .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
+                        .replace(/<\/sub>/gi, "&lt;/sub&gt;");
+                }
+                bibItems[citationIndex] = bibText;
+            }
+            tempElement.innerHTML = bibItems.join("");
+        } catch (e) {
+            if (
+                false ===
+                self._cslStylesManager.isLastUsedStyleContainBibliography()
+            ) {
+                // style does not describe the bibliography
+                tempElement.textContent = "";
+            } else {
+                console.error(e);
+                throw "Failed to apply this style.";
+            }
+        }
+        return tempElement.innerText;
+    },
+
+    /** @param {CustomField} field */
+    _extractField: function (field) {
+        let citationObject;
+        const citationStartIndex = field.Value.indexOf("{");
+        const citationEndIndex = field.Value.lastIndexOf("}");
+        if (citationStartIndex !== -1) {
+            var citationString = field.Value.slice(
+                citationStartIndex,
+                citationEndIndex + 1
+            );
+            citationObject = JSON.parse(citationString);
+        }
+        return citationObject;
+    },
+
     /**
-     * @param {Array<SearchResultItem>} items
-     * @returns {Promise<Array<string|number>>}
+     *
+     * @returns {Promise<{bibField: CustomField | undefined, fields: CustomField[], updatedFields: CustomField[], bibFieldValue: string}>}
      */
-    insertSelectedCitations: function (items) {
+    _synchronizeStorageWithDocItems: function () {
+        const self = this;
+        return this.citationDocService
+            .getAddinZoteroFields()
+            .then(function (/** @type {CustomField[]} */ arrFields) {
+                const fragment = document.createDocumentFragment();
+                const tempElement = document.createElement("div");
+                fragment.appendChild(tempElement);
+
+                let numOfItems = 0;
+                let bibFieldValue = " ";
+
+                /** @type {CustomField | undefined} */
+                const bibField = arrFields.find(function (field) {
+                    return (
+                        field.Value.indexOf(self._bibPrefixNew) !== -1 ||
+                        field.Value.indexOf(self._bibPrefix) !== -1
+                    );
+                });
+                if (bibField) {
+                    let citationObject = self._extractField(bibField);
+                    if (
+                        typeof citationObject === "object" &&
+                        Object.keys(citationObject).length > 0
+                    ) {
+                        bibFieldValue = JSON.stringify(citationObject);
+                    }
+                }
+
+                const fields = arrFields.filter(function (field) {
+                    return (
+                        field.Value.indexOf(self._citPrefixNew) !== -1 ||
+                        field.Value.indexOf(self._citPrefix) !== -1
+                    );
+                });
+                const fieldsWithCitations = fields.map(function (field) {
+                    let citationObject = self._extractField(field);
+
+                    let citationID = ""; // old format
+                    if (field.Value.indexOf(self._citPrefix) === -1) {
+                        citationID = citationObject.citationID;
+                    }
+
+                    let cslCitation = new CSLCitation(numOfItems, citationID);
+                    numOfItems += cslCitation.fillFromObject(citationObject);
+                    cslCitation.getCitationItems().forEach(function (item) {
+                        self._storage.set(item.id, item);
+                    });
+
+                    return { field: { ...field }, cslCitation: cslCitation };
+                });
+
+                self._updateFormatter();
+
+                /** @type {CustomField[]} */
+                const updatedFields = fieldsWithCitations.map(function ({
+                    field,
+                    cslCitation,
+                }, index) {
+                    let keysL = cslCitation.getInfoForCitationCluster();
+                    tempElement.innerHTML =
+                        self._formatter.makeCitationCluster(keysL);
+                    field["Content"] = tempElement.innerText;
+                    // cslCitation.addPlainCitation(field["Content"]);
+                    if (cslCitation) {
+                        field["Value"] =
+                            self._citPrefixNew +
+                            " " +
+                            self._citSuffixNew +
+                            JSON.stringify(cslCitation.toJSON());
+                    }
+
+                    return field;
+                });
+
+                return {
+                    fields: fields,
+                    updatedFields: updatedFields,
+                    bibField: bibField,
+                    bibFieldValue: bibFieldValue,
+                };
+            });
+    },
+
+    _updateFormatter: function () {
         const self = this;
 
-        var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
-        for (var citationID in items) {
-            const item = items[citationID];
-
-            cslCitation.fillFromObject(item);
+        /** @type {string[]} */
+        const arrIds = [];
+        this._storage.forEach(function (item, id) {
+            arrIds.push(id);
+        });
+        // @ts-ignore
+        this._formatter = new CSL.Engine(
+            {
+                /** @param {string} id */
+                retrieveLocale: function (id) {
+                    if (self._localesManager.getLocale(id)) {
+                        return self._localesManager.getLocale(id);
+                    }
+                    return self._localesManager.getLocale();
+                },
+                /** @param {string} id */
+                retrieveItem: function (id) {
+                    var item = self._storage.get(id);
+                    let index = self._storage.getIndex(id);
+                    if (!item) return null;
+                    return item.toFlatJSON(index);
+                },
+            },
+            this._cslStylesManager.cached(
+                this._cslStylesManager.getLastUsedStyleIdOrDefault()
+            ),
+            this._localesManager.getLastUsedLanguage(),
+            true
+        );
+        if (arrIds.length) {
+            this._formatter.updateItems(arrIds);
         }
 
-        return this._getSelectedInJsonFormat(items).then(function (items) {
-            items.forEach(function (item) {
-                cslCitation.fillFromObject(item);
-            });
-            return self._formatInsertLink(cslCitation);
-        });
+        return;
     },
 
     /**
@@ -269,128 +413,60 @@ CitationService.prototype = {
     },
 
     /**
+     * @param {Array<SearchResultItem>} items
+     * @returns {Promise<Array<string|number>>}
+     */
+    insertSelectedCitations: function (items) {
+        const self = this;
+
+        var cslCitation = new CSLCitation(self._storage.size, "");
+        for (var citationID in items) {
+            const item = items[citationID];
+
+            cslCitation.fillFromObject(item);
+        }
+
+        return this._getSelectedInJsonFormat(items).then(function (items) {
+            items.forEach(function (item) {
+                cslCitation.fillFromObject(item);
+            });
+            return self._formatInsertLink(cslCitation);
+        });
+    },
+
+    // onInit (0,0)
+    // Insert Citation (0,0)
+    // Insert Bibliography (1,1)
+    // Refresh (1,0)
+    /**
      * @param {boolean} bUpdateAll
      * @param {boolean} bPastBib
      * @returns {Promise<void>}
      */
-    _updateAllOrAddBib: function (bUpdateAll, bPastBib) {
+    updateCslItems: function (bUpdateAll, bPastBib) {
+        this._storage.clear();
         const self = this;
-        return this.citationDocService
-            .getAddinZoteroFields()
-            .then(function (/** @type {CustomField[]} */ arrFields) {
-                if (!arrFields.length) {
-                    return;
-                }
-                /** @type {CustomField[]} */
-                var updatedFields = [];
-                var bibField = null;
-                var bibFieldValue = " ";
 
-                const fragment = document.createDocumentFragment();
-                const tempElement = document.createElement("div");
-                fragment.appendChild(tempElement);
+        return this._synchronizeStorageWithDocItems()
+            .then(function (info) {
+                const { fields, updatedFields, bibField, bibFieldValue } = info;
 
-                try {
-                    var bibItems = new Array(CSLCitationStorage.size);
-                    /** @type {false | any} */
-                    var bibObject = self._formatter.makeBibliography();
-                    // Sort bibliography items
-                    for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                        var citationId = bibObject[0].entry_ids[i][0];
-                        var citationIndex =
-                            CSLCitationStorage.getIndex(citationId);
-                        /** @type {string} */
-                        var bibText = bibObject[1][i];
-                        while (
-                            bibText.indexOf("\n") !== bibText.lastIndexOf("\n")
-                        ) {
-                            bibText = bibText.replace(/\n/, "");
-                        }
-                        // Check if bibliography item contains <sup> or <sub>
-                        if (
-                            /<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(
-                                bibText
-                            )
-                        ) {
-                            // Escape <sup> and <sub>
-                            bibText = bibText
-                                .replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;")
-                                .replace(/<\/sup>/gi, "&lt;/sup&gt;")
-                                .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
-                                .replace(/<\/sub>/gi, "&lt;/sub&gt;");
-                        }
-                        bibItems[citationIndex] = bibText;
-                    }
-                    tempElement.innerHTML = bibItems.join("");
-                } catch (e) {
-                    if (
-                        false ===
-                        self._cslStylesManager.isLastUsedStyleContainBibliography()
-                    ) {
-                        // style does not describe the bibliography
-                        tempElement.textContent = "";
-                    } else {
-                        console.error(e);
-                        throw "Failed to apply this style.";
-                    }
+                if (!bUpdateAll && !bPastBib) {
+                    return [];
                 }
 
-                var bibliography = tempElement.innerText;
-                arrFields.forEach(function (field) {
-                    var citationObject;
-                    var citationStartIndex = field.Value.indexOf("{");
-                    var citationEndIndex = field.Value.lastIndexOf("}");
-                    if (citationStartIndex !== -1) {
-                        var citationString = field.Value.slice(
-                            citationStartIndex,
-                            citationEndIndex + 1
-                        );
-                        citationObject = JSON.parse(citationString);
-                    }
-                    var keysL = [];
-                    var cslCitation;
-                    if (
-                        bUpdateAll &&
-                        (field.Value.indexOf(self._citPrefixNew) !== -1 ||
-                            field.Value.indexOf(self._citPrefix) !== -1)
-                    ) {
-                        var citationID = ""; // old format
-                        if (field.Value.indexOf(self._citPrefix) === -1) {
-                            citationID = citationObject.citationID;
-                        }
-
-                        cslCitation = new CSLCitation(keysL.length, citationID);
-                        cslCitation.fillFromObject(citationObject);
-                        keysL = cslCitation.getInfoForCitationCluster();
-                        tempElement.innerHTML =
-                            self._formatter.makeCitationCluster(keysL);
-                        field["Content"] = tempElement.innerText;
-                        cslCitation.addPlainCitation(field["Content"]);
-                        if (cslCitation) {
-                            field["Value"] =
-                                self._citPrefixNew +
-                                " " +
-                                self._citSuffixNew +
-                                JSON.stringify(cslCitation.toJSON());
-                        }
-                        updatedFields.push(field);
-                    } else if (
-                        field.Value.indexOf(self._bibPrefix) !== -1 ||
-                        field.Value.indexOf(self._bibPrefixNew) !== -1
-                    ) {
-                        bibField = field;
-                        bibField["Content"] = bibliography;
-                        if (
-                            typeof citationObject === "object" &&
-                            Object.keys(citationObject).length > 0
-                        ) {
-                            bibFieldValue = JSON.stringify(citationObject);
-                        }
-                    }
-                });
                 if (bibField) {
+                    if (updatedFields.length === 0) {
+                        bibField["Content"] = translate(
+                            self._bibPlaceholderIfEmpty
+                        );
+                    }
                     updatedFields.push(bibField);
                 } else if (bPastBib) {
+                    let bibliography = self._makeBibliography();
+                    if (updatedFields.length === 0) {
+                        bibliography = translate(self._bibPlaceholderIfEmpty);
+                    }
                     if (
                         self._cslStylesManager.isLastUsedStyleContainBibliography()
                     ) {
@@ -414,159 +490,6 @@ CitationService.prototype = {
                     );
                 }
             });
-    },
-
-    // onInit (1,0,0)
-    // Insert Citation (1,0,0)
-    // Insert Bibliography (1,1,1)
-    // Refresh (1,1,0)
-    /**
-     * @param {boolean} bUpdateFormatter
-     * @param {boolean} bUpdateAll
-     * @param {boolean} bPastBib
-     * @returns {Promise<void>}
-     */
-    updateCslItems: function (bUpdateFormatter, bUpdateAll, bPastBib) {
-        CSLCitationStorage.clear();
-        const self = this;
-
-        return this.citationDocService
-            .getAddinZoteroFields()
-            .then(function (/** @type {CustomField[]} */ arrFields) {
-                var bibFieldValue = " ";
-                if (arrFields.length) {
-                    var numOfItems = 0;
-                    /** @type {CustomField | null} */
-                    let bibField = arrFields.reduce(function (
-                        /** @type {CustomField | null}*/ accumulator,
-                        field
-                    ) {
-                        var citationObject;
-                        var citationStartIndex = field.Value.indexOf("{");
-                        var citationEndIndex = field.Value.lastIndexOf("}");
-                        if (
-                            citationStartIndex !== -1 &&
-                            citationEndIndex !== -1
-                        ) {
-                            var citationString = field.Value.slice(
-                                citationStartIndex,
-                                citationEndIndex + 1
-                            );
-                            citationObject = JSON.parse(citationString);
-                        }
-
-                        if (
-                            field.Value.indexOf(self._citPrefix) !== -1 ||
-                            field.Value.indexOf(self._citPrefixNew) !== -1
-                        ) {
-                            var citationID = ""; // old format
-                            if (field.Value.indexOf(self._citPrefix) === -1) {
-                                citationID = citationObject.citationID;
-                            }
-                            var cslCitation = new CSLCitation(
-                                numOfItems,
-                                citationID
-                            );
-                            numOfItems +=
-                                cslCitation.fillFromObject(citationObject);
-                            cslCitation
-                                .getCitationItems()
-                                .forEach(function (item) {
-                                    CSLCitationStorage.set(item.id, item);
-                                });
-                        } else if (
-                            field.Value.indexOf(self._bibPrefix) !== -1 ||
-                            field.Value.indexOf(self._bibPrefixNew) !== -1
-                        ) {
-                            accumulator = field;
-                            if (
-                                typeof citationObject === "object" &&
-                                Object.keys(citationObject).length > 0
-                            ) {
-                                bibFieldValue = JSON.stringify(citationObject);
-                            }
-                        }
-                        return accumulator;
-                    },
-                    null);
-
-                    if (numOfItems) {
-                        // sort?
-                    } else if (bUpdateFormatter && bibField && bUpdateAll) {
-                        // no need to find bib field again
-                        bUpdateFormatter = false;
-                        bibField["Content"] = translate(self._bibPlaceholder);
-                        return self.citationDocService
-                            .updateAddinFields([bibField])
-                            .then(function () {
-                                return bUpdateFormatter;
-                            });
-                    }
-                } else if (bUpdateFormatter && bPastBib) {
-                    if (
-                        self._cslStylesManager.isLastUsedStyleContainBibliography()
-                    ) {
-                        return self.citationDocService
-                            .addBibliography(
-                                translate(self._bibPlaceholder),
-                                bibFieldValue
-                            )
-                            .then(function () {
-                                return bUpdateFormatter;
-                            });
-                    } else {
-                        throw "The current bibliographic style does not describe the bibliography";
-                    }
-                }
-                return bUpdateFormatter;
-            })
-            .then(function (bUpdateFormatter) {
-                if (bUpdateFormatter) return self._updateFormatter();
-            })
-            .then(function () {
-                if (bUpdateAll) {
-                    return self._updateAllOrAddBib(bUpdateAll, bPastBib);
-                }
-            });
-    },
-
-    _updateFormatter: function () {
-        const self = this;
-
-        /** @type {string[]} */
-        const arrIds = [];
-        CSLCitationStorage.forEach(function (item, id) {
-            arrIds.push(id);
-        });
-        // @ts-ignore
-        this._formatter = new CSL.Engine(
-            {
-                /** @param {string} id */
-                retrieveLocale: function (id) {
-                    if (self._localesManager.getLocale(id)) {
-                        return self._localesManager.getLocale(id);
-                    }
-                    return self._localesManager.getLocale();
-                },
-                /** @param {string} id */
-                retrieveItem: function (id) {
-                    var item = CSLCitationStorage.get(id);
-                    let index = CSLCitationStorage.getIndex(id);
-                    if (!item) return null;
-                    return item.toFlatJSON(index);
-                },
-            },
-            this._cslStylesManager.cached(
-                this._cslStylesManager.getLastUsedStyleIdOrDefault()
-            ),
-            this._localesManager.getLastUsedLanguage(),
-            true
-        );
-        if (arrIds.length) {
-            this._formatter.updateItems(arrIds);
-        }
-
-        return;
     },
 };
 
