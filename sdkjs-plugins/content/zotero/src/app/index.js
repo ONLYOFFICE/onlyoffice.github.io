@@ -280,7 +280,7 @@ import "../styles.css";
             }
             showLoader();
             citationService
-                .updateCslItems(true, true, false)
+                .updateCslItems(true, false)
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");
@@ -308,9 +308,9 @@ import "../styles.css";
             }
             showLoader();
             // TODO #there
-            // updateCslItems(true, false, true);
+            // updateCslItems(false, true);
             citationService
-                .updateCslItems(true, true, true)
+                .updateCslItems(true, true)
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to insert bibliography");
@@ -338,13 +338,17 @@ import "../styles.css";
             }
             showLoader();
             citationService
-                .updateCslItems(true, false, false)
+                .updateCslItems(false, false)
                 .then(function () {
                     const items = selectCitation.getSelectedItems();
                     return citationService.insertSelectedCitations(items);
                 })
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
+                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
+                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
+                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
+                    return citationService.updateCslItems(true, false);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -372,7 +376,7 @@ import "../styles.css";
         settings.onChangeState(function (settings) {
             citationService.setNotesStyle(settings.notesStyle);
             citationService.setStyleFormat(settings.styleFormat);
-            return citationService.updateCslItems(true, true, false);
+            return citationService.updateCslItems(true, false);
         });
     }
 
@@ -585,11 +589,29 @@ import "../styles.css";
             if (isGroup && res && res.next) lastSearch.groups.push(res);
             else lastSearch.obj = res && res.items.length ? res : null;
         }
+        /**
+         * @param {SearchResultItem} item
+         * @returns
+         */
+        const fillUrisFromId = function (item) {
+            const slashFirstIndex = item.id.indexOf("/") + 1;
+            const slashLastIndex = item.id.lastIndexOf("/") + 1;
+            const httpIndex = item.id.indexOf("http");
+            if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
+                if (!item.uris) {
+                    item.uris = [];
+                }
+                item.uris.push(item.id);
+            }
+            if (slashLastIndex) item.id = item.id.substring(slashLastIndex);
+
+            return item;
+        };
         if (res && res.items && res.items.length > 0) {
             for (let index = 0; index < res.items.length; index++) {
                 let item = res.items[index];
                 item[isGroup ? "groupID" : "userID"] = res.id;
-                citationService.fillUrisFromId(item);
+                fillUrisFromId(item);
             }
         }
 

@@ -166,6 +166,7 @@ CitationDocService.prototype.getAddinZoteroFields = function () {
             } catch (e) {
                 reject(e);
             }
+            console.warn(arrFields);
             resolve(arrFields);
         });
     });
