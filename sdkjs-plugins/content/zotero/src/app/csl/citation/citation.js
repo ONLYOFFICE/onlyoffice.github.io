@@ -73,7 +73,7 @@ function CSLCitation(itemsStartIndex, citationID) {
     this._itemsStartIndex = itemsStartIndex;
     /** @type {Array<CitationItem>} */
     this._citationItems = new Array();
-    /** @type {Object<string, string>} */
+    /** @type {Object<string, string|boolean>} */
     this._properties = {};
 
     this._schema =
@@ -228,6 +228,16 @@ CSLCitation.prototype.getCitationItems = function () {
 };
 
 /**
+ * @returns {boolean}
+ */
+CSLCitation.prototype.getDoNotUpdate = function () {
+    if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
+        return !!this._properties.dontUpdate;
+    }
+    return false;
+};
+
+/**
  *
  * @returns {Array<InfoForCitationCluster>}
  */
@@ -242,7 +252,7 @@ CSLCitation.prototype.getInfoForCitationCluster = function () {
  */
 CSLCitation.prototype.getPlainCitation = function () {
     if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
-        return this._properties.plainCitation;
+        return String(this._properties.plainCitation);
     }
 
     return "";
@@ -265,6 +275,14 @@ CSLCitation.prototype._addCitationItem = function (item) {
 };
 
 /**
+ * @returns
+ */
+CSLCitation.prototype.addDoNotUpdate = function () {
+    this._setProperties({ dontUpdate: true });
+    return this;
+};
+
+/**
  * @param {string} plainCitation
  * @returns
  */
@@ -274,7 +292,7 @@ CSLCitation.prototype.addPlainCitation = function (plainCitation) {
 };
 
 /**
- * @param {Object<string, string>} properties
+ * @param {Object<string, string | boolean>} properties
  * @returns
  */
 CSLCitation.prototype._setProperties = function (properties) {

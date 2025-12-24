@@ -34,85 +34,91 @@
 
 import { CitationItem } from "./citation-item";
 
-const CSLCitationStorage = {
+class CSLCitationStorage {
     /** @type {Array<CitationItem>} */
-    _items: [],
+    #items;
     /** @type {Array<string>} */
-    _ids: [],
-    size: 0,
+    #ids;
+
+    constructor() {
+        this.#items = [];
+        this.#ids = [];
+        this.size = 0;
+    }
+
     /** @returns {CitationItem} */
     /**
      * @param {string|number} id
      * @returns {CitationItem|null}
      **/
-    get: function (id) {
+    get(id) {
         id = id.toString();
-        const index = this._ids.indexOf(id);
-        if (index >= 0) return this._items[index];
+        const index = this.#ids.indexOf(id);
+        if (index >= 0) return this.#items[index];
         return null;
-    },
+    }
     /**
      *
      * @param {string|number} id
      * @returns {number}
      */
-    getIndex: function (id) {
+    getIndex(id) {
         id = id.toString();
-        return this._ids.indexOf(id);
-    },
-    clear: function () {
-        this._items = [];
-        this._ids = [];
+        return this.#ids.indexOf(id);
+    }
+    clear() {
+        this.#items = [];
+        this.#ids = [];
         this.size = 0;
         return this;
-    },
+    }
     /**
      * @param {string|number} id
      * @returns {CSLCitationStorage}
      */
-    delete: function (id) {
+    delete(id) {
         id = id.toString();
-        const index = this._ids.indexOf(id);
+        const index = this.#ids.indexOf(id);
         if (index >= 0) {
-            this._items.splice(index, 1);
-            this._ids.splice(index, 1);
+            this.#items.splice(index, 1);
+            this.#ids.splice(index, 1);
             this.size--;
         }
         return this;
-    },
+    }
     /**
-     * @param {function(CitationItem, string, CSLCitationStorage?)} callback
+     * @param {function(CitationItem, string, CSLCitationStorage?): void} callback
      */
-    forEach: function (callback) {
+    forEach(callback) {
         for (var i = 0; i < this.size; i++) {
-            callback(this._items[i], this._ids[i], this);
+            callback(this.#items[i], this.#ids[i], this);
         }
-    },
+    }
     /**
      * @param {string|number} id
      * @returns {boolean}
      */
-    has: function (id) {
+    has(id) {
         id = id.toString();
-        return this._ids.indexOf(id) >= 0;
-    },
+        return this.#ids.indexOf(id) >= 0;
+    }
     /**
      * @param {string|number} id
      * @param {CitationItem} item
      * @returns {CSLCitationStorage}
      */
-    set: function (id, item) {
+    set(id, item) {
         id = id.toString();
-        const index = this._ids.indexOf(id);
+        const index = this.#ids.indexOf(id);
         if (index >= 0) {
-            this._items[index] = item;
+            this.#items[index] = item;
             return this;
         }
-        this._items.push(item);
-        this._ids.push(id);
+        this.#items.push(item);
+        this.#ids.push(id);
         this.size++;
         return this;
-    },
-};
+    }
+}
 
 export { CSLCitationStorage };

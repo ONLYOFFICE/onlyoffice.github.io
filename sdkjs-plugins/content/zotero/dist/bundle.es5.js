@@ -3432,6 +3432,157 @@
         return es_string_trim;
     }
     requireEs_string_trim();
+    var esnext_aggregateError = {};
+    var es_aggregateError = {};
+    var es_aggregateError_constructor = {};
+    var installErrorCause;
+    var hasRequiredInstallErrorCause;
+    function requireInstallErrorCause() {
+        if (hasRequiredInstallErrorCause) return installErrorCause;
+        hasRequiredInstallErrorCause = 1;
+        var isObject = requireIsObject();
+        var createNonEnumerableProperty = requireCreateNonEnumerableProperty();
+        installErrorCause = function(O, options) {
+            if (isObject(options) && "cause" in options) {
+                createNonEnumerableProperty(O, "cause", options.cause);
+            }
+        };
+        return installErrorCause;
+    }
+    var errorStackClear;
+    var hasRequiredErrorStackClear;
+    function requireErrorStackClear() {
+        if (hasRequiredErrorStackClear) return errorStackClear;
+        hasRequiredErrorStackClear = 1;
+        var uncurryThis = requireFunctionUncurryThis();
+        var $Error = Error;
+        var replace = uncurryThis("".replace);
+        var TEST = function(arg) {
+            return String(new $Error(arg).stack);
+        }("zxcasd");
+        var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
+        var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
+        errorStackClear = function(stack, dropEntries) {
+            if (IS_V8_OR_CHAKRA_STACK && typeof stack == "string" && !$Error.prepareStackTrace) {
+                while (dropEntries--) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, "");
+            }
+            return stack;
+        };
+        return errorStackClear;
+    }
+    var errorStackInstallable;
+    var hasRequiredErrorStackInstallable;
+    function requireErrorStackInstallable() {
+        if (hasRequiredErrorStackInstallable) return errorStackInstallable;
+        hasRequiredErrorStackInstallable = 1;
+        var fails = requireFails();
+        var createPropertyDescriptor = requireCreatePropertyDescriptor();
+        errorStackInstallable = !fails(function() {
+            var error = new Error("a");
+            if (!("stack" in error)) return true;
+            Object.defineProperty(error, "stack", createPropertyDescriptor(1, 7));
+            return error.stack !== 7;
+        });
+        return errorStackInstallable;
+    }
+    var errorStackInstall;
+    var hasRequiredErrorStackInstall;
+    function requireErrorStackInstall() {
+        if (hasRequiredErrorStackInstall) return errorStackInstall;
+        hasRequiredErrorStackInstall = 1;
+        var createNonEnumerableProperty = requireCreateNonEnumerableProperty();
+        var clearErrorStack = requireErrorStackClear();
+        var ERROR_STACK_INSTALLABLE = requireErrorStackInstallable();
+        var captureStackTrace = Error.captureStackTrace;
+        errorStackInstall = function(error, C, stack, dropEntries) {
+            if (ERROR_STACK_INSTALLABLE) {
+                if (captureStackTrace) captureStackTrace(error, C); else createNonEnumerableProperty(error, "stack", clearErrorStack(stack, dropEntries));
+            }
+        };
+        return errorStackInstall;
+    }
+    var normalizeStringArgument;
+    var hasRequiredNormalizeStringArgument;
+    function requireNormalizeStringArgument() {
+        if (hasRequiredNormalizeStringArgument) return normalizeStringArgument;
+        hasRequiredNormalizeStringArgument = 1;
+        var toString = requireToString();
+        normalizeStringArgument = function(argument, $default) {
+            return argument === undefined ? arguments.length < 2 ? "" : $default : toString(argument);
+        };
+        return normalizeStringArgument;
+    }
+    var hasRequiredEs_aggregateError_constructor;
+    function requireEs_aggregateError_constructor() {
+        if (hasRequiredEs_aggregateError_constructor) return es_aggregateError_constructor;
+        hasRequiredEs_aggregateError_constructor = 1;
+        var $ = require_export();
+        var isPrototypeOf = requireObjectIsPrototypeOf();
+        var getPrototypeOf = requireObjectGetPrototypeOf();
+        var setPrototypeOf = requireObjectSetPrototypeOf();
+        var copyConstructorProperties = requireCopyConstructorProperties();
+        var create = requireObjectCreate();
+        var createNonEnumerableProperty = requireCreateNonEnumerableProperty();
+        var createPropertyDescriptor = requireCreatePropertyDescriptor();
+        var installErrorCause = requireInstallErrorCause();
+        var installErrorStack = requireErrorStackInstall();
+        var iterate = requireIterate();
+        var normalizeStringArgument = requireNormalizeStringArgument();
+        var wellKnownSymbol = requireWellKnownSymbol();
+        var TO_STRING_TAG = wellKnownSymbol("toStringTag");
+        var $Error = Error;
+        var push = [].push;
+        var $AggregateError = function AggregateError(errors, message) {
+            var isInstance = isPrototypeOf(AggregateErrorPrototype, this);
+            var that;
+            if (setPrototypeOf) {
+                that = setPrototypeOf(new $Error, isInstance ? getPrototypeOf(this) : AggregateErrorPrototype);
+            } else {
+                that = isInstance ? this : create(AggregateErrorPrototype);
+                createNonEnumerableProperty(that, TO_STRING_TAG, "Error");
+            }
+            if (message !== undefined) createNonEnumerableProperty(that, "message", normalizeStringArgument(message));
+            installErrorStack(that, $AggregateError, that.stack, 1);
+            if (arguments.length > 2) installErrorCause(that, arguments[2]);
+            var errorsArray = [];
+            iterate(errors, push, {
+                that: errorsArray
+            });
+            createNonEnumerableProperty(that, "errors", errorsArray);
+            return that;
+        };
+        if (setPrototypeOf) setPrototypeOf($AggregateError, $Error); else copyConstructorProperties($AggregateError, $Error, {
+            name: true
+        });
+        var AggregateErrorPrototype = $AggregateError.prototype = create($Error.prototype, {
+            constructor: createPropertyDescriptor(1, $AggregateError),
+            message: createPropertyDescriptor(1, ""),
+            name: createPropertyDescriptor(1, "AggregateError")
+        });
+        $({
+            global: true,
+            constructor: true,
+            arity: 2
+        }, {
+            AggregateError: $AggregateError
+        });
+        return es_aggregateError_constructor;
+    }
+    var hasRequiredEs_aggregateError;
+    function requireEs_aggregateError() {
+        if (hasRequiredEs_aggregateError) return es_aggregateError;
+        hasRequiredEs_aggregateError = 1;
+        requireEs_aggregateError_constructor();
+        return es_aggregateError;
+    }
+    var hasRequiredEsnext_aggregateError;
+    function requireEsnext_aggregateError() {
+        if (hasRequiredEsnext_aggregateError) return esnext_aggregateError;
+        hasRequiredEsnext_aggregateError = 1;
+        requireEs_aggregateError();
+        return esnext_aggregateError;
+    }
+    requireEsnext_aggregateError();
     var esnext_promise_allSettled = {};
     var es_promise_allSettled = {};
     var hasRequiredEs_promise_allSettled;
@@ -3498,6 +3649,69 @@
         return esnext_promise_allSettled;
     }
     requireEsnext_promise_allSettled();
+    var esnext_promise_any = {};
+    var es_promise_any = {};
+    var hasRequiredEs_promise_any;
+    function requireEs_promise_any() {
+        if (hasRequiredEs_promise_any) return es_promise_any;
+        hasRequiredEs_promise_any = 1;
+        var $ = require_export();
+        var call = requireFunctionCall();
+        var aCallable = requireACallable();
+        var getBuiltIn = requireGetBuiltIn();
+        var newPromiseCapabilityModule = requireNewPromiseCapability();
+        var perform = requirePerform();
+        var iterate = requireIterate();
+        var PROMISE_STATICS_INCORRECT_ITERATION = requirePromiseStaticsIncorrectIteration();
+        var PROMISE_ANY_ERROR = "No one promise resolved";
+        $({
+            target: "Promise",
+            stat: true,
+            forced: PROMISE_STATICS_INCORRECT_ITERATION
+        }, {
+            any: function any(iterable) {
+                var C = this;
+                var AggregateError = getBuiltIn("AggregateError");
+                var capability = newPromiseCapabilityModule.f(C);
+                var resolve = capability.resolve;
+                var reject = capability.reject;
+                var result = perform(function() {
+                    var promiseResolve = aCallable(C.resolve);
+                    var errors = [];
+                    var counter = 0;
+                    var remaining = 1;
+                    var alreadyResolved = false;
+                    iterate(iterable, function(promise) {
+                        var index = counter++;
+                        var alreadyRejected = false;
+                        remaining++;
+                        call(promiseResolve, C, promise).then(function(value) {
+                            if (alreadyRejected || alreadyResolved) return;
+                            alreadyResolved = true;
+                            resolve(value);
+                        }, function(error) {
+                            if (alreadyRejected || alreadyResolved) return;
+                            alreadyRejected = true;
+                            errors[index] = error;
+                            --remaining || reject(new AggregateError(errors, PROMISE_ANY_ERROR));
+                        });
+                    });
+                    --remaining || reject(new AggregateError(errors, PROMISE_ANY_ERROR));
+                });
+                if (result.error) reject(result.value);
+                return capability.promise;
+            }
+        });
+        return es_promise_any;
+    }
+    var hasRequiredEsnext_promise_any;
+    function requireEsnext_promise_any() {
+        if (hasRequiredEsnext_promise_any) return esnext_promise_any;
+        hasRequiredEsnext_promise_any = 1;
+        requireEs_promise_any();
+        return esnext_promise_any;
+    }
+    requireEsnext_promise_any();
     var web_domCollections_forEach = {};
     var domIterables;
     var hasRequiredDomIterables;
@@ -3628,7 +3842,6 @@
     requireWeb_domCollections_iterator();
     var Theme = {
         addStylesForComponents: function addStylesForComponents(theme) {
-            console.warn(theme);
             var styles = "";
             if (theme["background-toolbar"]) {
                 styles += ".loader-body,\n" + ".loader-bg { background-color: " + theme["background-toolbar"] + "; }\n";
@@ -9542,6 +9755,9 @@
                 this._labelElement.className = "checkbox-label i18n";
                 if (this._options.id) this._labelElement.htmlFor = this._options.id;
                 this._labelElement.textContent = this._options.label;
+                if (this._options.title) {
+                    this._labelElement.setAttribute("title", this._options.label);
+                }
             }
             if (this._options.disabled) {
                 this._container.classList.add("checkbox--disabled");
@@ -9675,6 +9891,9 @@
                 if (this._options.id) this._labelElement.htmlFor = this._options.id;
                 this._labelElement.textContent = label;
                 this._container.appendChild(this._labelElement);
+            }
+            if (this._options.title && this._labelElement) {
+                this._labelElement.setAttribute("title", label);
             }
         },
         getState: function getState() {
@@ -11654,6 +11873,7 @@
                 } catch (e) {
                     reject(e);
                 }
+                console.warn(arrFields);
                 resolve(arrFields);
             });
         });
@@ -12872,58 +13092,80 @@
         }
         return oldItem;
     };
-    var CSLCitationStorage = {
-        _items: [],
-        _ids: [],
-        size: 0,
-        get: function get(id) {
-            id = id.toString();
-            var index = this._ids.indexOf(id);
-            if (index >= 0) return this._items[index];
-            return null;
-        },
-        getIndex: function getIndex(id) {
-            id = id.toString();
-            return this._ids.indexOf(id);
-        },
-        clear: function clear() {
-            this._items = [];
-            this._ids = [];
+    var _items = new WeakMap;
+    var _ids = new WeakMap;
+    var CSLCitationStorage = function() {
+        function CSLCitationStorage() {
+            _classCallCheck(this, CSLCitationStorage);
+            _classPrivateFieldInitSpec(this, _items, void 0);
+            _classPrivateFieldInitSpec(this, _ids, void 0);
+            _classPrivateFieldSet2(_items, this, []);
+            _classPrivateFieldSet2(_ids, this, []);
             this.size = 0;
-            return this;
-        },
-        delete: function _delete(id) {
-            id = id.toString();
-            var index = this._ids.indexOf(id);
-            if (index >= 0) {
-                this._items.splice(index, 1);
-                this._ids.splice(index, 1);
-                this.size--;
+        }
+        return _createClass(CSLCitationStorage, [ {
+            key: "get",
+            value: function get(id) {
+                id = id.toString();
+                var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
+                if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
+                return null;
             }
-            return this;
-        },
-        forEach: function forEach(callback) {
-            for (var i = 0; i < this.size; i++) {
-                callback(this._items[i], this._ids[i], this);
+        }, {
+            key: "getIndex",
+            value: function getIndex(id) {
+                id = id.toString();
+                return _classPrivateFieldGet2(_ids, this).indexOf(id);
             }
-        },
-        has: function has(id) {
-            id = id.toString();
-            return this._ids.indexOf(id) >= 0;
-        },
-        set: function set(id, item) {
-            id = id.toString();
-            var index = this._ids.indexOf(id);
-            if (index >= 0) {
-                this._items[index] = item;
+        }, {
+            key: "clear",
+            value: function clear() {
+                _classPrivateFieldSet2(_items, this, []);
+                _classPrivateFieldSet2(_ids, this, []);
+                this.size = 0;
                 return this;
             }
-            this._items.push(item);
-            this._ids.push(id);
-            this.size++;
-            return this;
-        }
-    };
+        }, {
+            key: "delete",
+            value: function _delete(id) {
+                id = id.toString();
+                var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
+                if (index >= 0) {
+                    _classPrivateFieldGet2(_items, this).splice(index, 1);
+                    _classPrivateFieldGet2(_ids, this).splice(index, 1);
+                    this.size--;
+                }
+                return this;
+            }
+        }, {
+            key: "forEach",
+            value: function forEach(callback) {
+                for (var i = 0; i < this.size; i++) {
+                    callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_ids, this)[i], this);
+                }
+            }
+        }, {
+            key: "has",
+            value: function has(id) {
+                id = id.toString();
+                return _classPrivateFieldGet2(_ids, this).indexOf(id) >= 0;
+            }
+        }, {
+            key: "set",
+            value: function set(id, item) {
+                id = id.toString();
+                var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
+                if (index >= 0) {
+                    _classPrivateFieldGet2(_items, this)[index] = item;
+                    return this;
+                }
+                _classPrivateFieldGet2(_items, this).push(item);
+                _classPrivateFieldGet2(_ids, this).push(id);
+                this.size++;
+                return this;
+            }
+        } ]);
+    }();
     function CSLCitation(itemsStartIndex, citationID) {
         if (!citationID) {
             citationID = this._generateId();
@@ -13109,7 +13351,7 @@
         return result;
     };
     function CitationService(localesManager, cslStylesManager, sdk) {
-        this._bibPlaceholder = "Please insert some citation into the document.";
+        this._bibPlaceholderIfEmpty = "Please insert some citation into the document.";
         this._citPrefixNew = "ZOTERO_ITEM";
         this._citSuffixNew = "CSL_CITATION";
         this._citPrefix = "ZOTERO_CITATION";
@@ -13119,25 +13361,31 @@
         this._sdk = sdk;
         this._localesManager = localesManager;
         this._cslStylesManager = cslStylesManager;
+        this._storage = new CSLCitationStorage;
         this._formatter;
         this.citationDocService = new CitationDocService(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew);
         this._notesStyle;
         this._styleFormat;
+        this._initFormatter();
     }
     CitationService.prototype = {
         constructor: CitationService,
-        fillUrisFromId: function fillUrisFromId(item) {
-            var slashFirstIndex = item.id.indexOf("/") + 1;
-            var slashLastIndex = item.id.lastIndexOf("/") + 1;
-            var httpIndex = item.id.indexOf("http");
-            if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
-                if (!item.uris) {
-                    item.uris = [];
+        _initFormatter: function _initFormatter() {
+            var self = this;
+            this._formatter = new CSL.Engine({
+                retrieveLocale: function retrieveLocale(id) {
+                    if (self._localesManager.getLocale(id)) {
+                        return self._localesManager.getLocale(id);
+                    }
+                    return self._localesManager.getLocale();
+                },
+                retrieveItem: function retrieveItem(id) {
+                    var item = self._storage.get(id);
+                    var index = self._storage.getIndex(id);
+                    if (!item) return null;
+                    return item.toFlatJSON(index);
                 }
-                item.uris.push(item.id);
-            }
-            if (slashLastIndex) item.id = item.id.substring(slashLastIndex);
-            return item;
+            }, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), true);
         },
         _formatInsertLink: function _formatInsertLink(cslCitation) {
             var self = this;
@@ -13146,16 +13394,16 @@
             var keysL = [];
             return Promise.resolve().then(function() {
                 cslCitation.getCitationItems().forEach(function(item) {
-                    if (!CSLCitationStorage.has(item.id)) {
+                    if (!self._storage.has(item.id)) {
                         bUpdateItems = true;
                     }
-                    CSLCitationStorage.set(item.id, item);
+                    self._storage.set(item.id, item);
                     keys.push(item.id);
                     keysL.push(item.getInfoForCitationCluster());
                 });
                 if (bUpdateItems) {
                     var arrIds = [];
-                    CSLCitationStorage.forEach(function(item, id) {
+                    self._storage.forEach(function(item, id) {
                         arrIds.push(id);
                     });
                     self._formatter.updateItems(arrIds);
@@ -13171,8 +13419,6 @@
                     notesStyle = self._notesStyle;
                 }
                 return self.citationDocService.addCitation(tempElement.innerText, JSON.stringify(cslCitation.toJSON()), notesStyle);
-            }).then(function() {
-                return self.updateCslItems(true, true, false);
             }).then(function() {
                 return keys;
             });
@@ -13216,9 +13462,123 @@
                 return items;
             });
         },
+        _makeBibliography: function _makeBibliography() {
+            var self = this;
+            var fragment = document.createDocumentFragment();
+            var tempElement = document.createElement("div");
+            fragment.appendChild(tempElement);
+            try {
+                var bibItems = new Array(self._storage.size);
+                var bibObject = self._formatter.makeBibliography();
+                for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
+                    var citationId = bibObject[0].entry_ids[i][0];
+                    var citationIndex = self._storage.getIndex(citationId);
+                    var bibText = bibObject[1][i];
+                    while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
+                        bibText = bibText.replace(/\n/, "");
+                    }
+                    if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
+                        bibText = bibText.replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;").replace(/<\/sup>/gi, "&lt;/sup&gt;").replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;").replace(/<\/sub>/gi, "&lt;/sub&gt;");
+                    }
+                    bibItems[citationIndex] = bibText;
+                }
+                tempElement.innerHTML = bibItems.join("");
+            } catch (e) {
+                if (false === self._cslStylesManager.isLastUsedStyleContainBibliography()) {
+                    tempElement.textContent = "";
+                } else {
+                    console.error(e);
+                    throw "Failed to apply this style.";
+                }
+            }
+            return tempElement.innerText;
+        },
+        _extractField: function _extractField(field) {
+            var citationObject;
+            var citationStartIndex = field.Value.indexOf("{");
+            var citationEndIndex = field.Value.lastIndexOf("}");
+            if (citationStartIndex !== -1) {
+                var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
+                citationObject = JSON.parse(citationString);
+            }
+            return citationObject;
+        },
+        _synchronizeStorageWithDocItems: function _synchronizeStorageWithDocItems() {
+            var self = this;
+            return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
+                var fragment = document.createDocumentFragment();
+                var tempElement = document.createElement("div");
+                fragment.appendChild(tempElement);
+                var numOfItems = 0;
+                var bibFieldValue = " ";
+                var updatedFields = [];
+                var bibField = arrFields.find(function(field) {
+                    return field.Value.indexOf(self._bibPrefixNew) !== -1 || field.Value.indexOf(self._bibPrefix) !== -1;
+                });
+                if (bibField) {
+                    var citationObject = self._extractField(bibField);
+                    if (_typeof(citationObject) === "object" && Object.keys(citationObject).length > 0) {
+                        bibFieldValue = JSON.stringify(citationObject);
+                    }
+                }
+                var fieldsWithCitations = arrFields.filter(function(field) {
+                    return field.Value.indexOf(self._citPrefixNew) !== -1 || field.Value.indexOf(self._citPrefix) !== -1;
+                }).map(function(field) {
+                    var citationObject = self._extractField(field);
+                    var citationID = "";
+                    if (field.Value.indexOf(self._citPrefix) === -1) {
+                        citationID = citationObject.citationID;
+                    }
+                    var cslCitation = new CSLCitation(numOfItems, citationID);
+                    numOfItems += cslCitation.fillFromObject(citationObject);
+                    cslCitation.getCitationItems().forEach(function(item) {
+                        self._storage.set(item.id, item);
+                    });
+                    return {
+                        field: field,
+                        cslCitation: cslCitation
+                    };
+                });
+                self._updateFormatter();
+                fieldsWithCitations.forEach(function(_ref) {
+                    var field = _ref.field, cslCitation = _ref.cslCitation;
+                    var keysL = cslCitation.getInfoForCitationCluster();
+                    tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+                    field["Content"] = tempElement.innerText;
+                    if (cslCitation) {
+                        field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                    }
+                    updatedFields.push(field);
+                });
+                return {
+                    updatedFields: updatedFields,
+                    bibField: bibField,
+                    bibFieldValue: bibFieldValue
+                };
+            });
+        },
+        _updateFormatter: function _updateFormatter() {
+            var arrIds = [];
+            this._storage.forEach(function(item, id) {
+                arrIds.push(id);
+            });
+            if (arrIds.length) {
+                this._formatter.updateItems(arrIds);
+            }
+            return;
+        },
+        saveAsText: function saveAsText() {
+            return this.citationDocService.saveAsText();
+        },
+        setNotesStyle: function setNotesStyle(notesStyle) {
+            this._notesStyle = notesStyle;
+        },
+        setStyleFormat: function setStyleFormat(styleFormat) {
+            this._styleFormat = styleFormat;
+        },
         insertSelectedCitations: function insertSelectedCitations(items) {
             var self = this;
-            var cslCitation = new CSLCitation(CSLCitationStorage.size, "");
+            var cslCitation = new CSLCitation(self._storage.size, "");
             for (var citationID in items) {
                 var item = items[citationID];
                 cslCitation.fillFromObject(item);
@@ -13230,88 +13590,24 @@
                 return self._formatInsertLink(cslCitation);
             });
         },
-        saveAsText: function saveAsText() {
-            return this.citationDocService.saveAsText();
-        },
-        setNotesStyle: function setNotesStyle(notesStyle) {
-            this._notesStyle = notesStyle;
-        },
-        setStyleFormat: function setStyleFormat(styleFormat) {
-            this._styleFormat = styleFormat;
-        },
-        _updateAllOrAddBib: function _updateAllOrAddBib(bUpdateAll, bPastBib) {
+        updateCslItems: function updateCslItems(bUpdateAll, bPastBib) {
+            this._storage.clear();
             var self = this;
-            return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
-                if (!arrFields.length) {
-                    return;
+            return this._synchronizeStorageWithDocItems().then(function(fields) {
+                var updatedFields = fields.updatedFields, bibField = fields.bibField, bibFieldValue = fields.bibFieldValue;
+                if (!bUpdateAll && !bPastBib) {
+                    return [];
                 }
-                var updatedFields = [];
-                var bibField = null;
-                var bibFieldValue = " ";
-                var fragment = document.createDocumentFragment();
-                var tempElement = document.createElement("div");
-                fragment.appendChild(tempElement);
-                try {
-                    var bibItems = new Array(CSLCitationStorage.size);
-                    var bibObject = self._formatter.makeBibliography();
-                    for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                        var citationId = bibObject[0].entry_ids[i][0];
-                        var citationIndex = CSLCitationStorage.getIndex(citationId);
-                        var bibText = bibObject[1][i];
-                        while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
-                            bibText = bibText.replace(/\n/, "");
-                        }
-                        if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
-                            bibText = bibText.replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;").replace(/<\/sup>/gi, "&lt;/sup&gt;").replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;").replace(/<\/sub>/gi, "&lt;/sub&gt;");
-                        }
-                        bibItems[citationIndex] = bibText;
-                    }
-                    tempElement.innerHTML = bibItems.join("");
-                } catch (e) {
-                    if (false === self._cslStylesManager.isLastUsedStyleContainBibliography()) {
-                        tempElement.textContent = "";
-                    } else {
-                        console.error(e);
-                        throw "Failed to apply this style.";
-                    }
-                }
-                var bibliography = tempElement.innerText;
-                arrFields.forEach(function(field) {
-                    var citationObject;
-                    var citationStartIndex = field.Value.indexOf("{");
-                    var citationEndIndex = field.Value.lastIndexOf("}");
-                    if (citationStartIndex !== -1) {
-                        var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
-                        citationObject = JSON.parse(citationString);
-                    }
-                    var keysL = [];
-                    var cslCitation;
-                    if (bUpdateAll && (field.Value.indexOf(self._citPrefixNew) !== -1 || field.Value.indexOf(self._citPrefix) !== -1)) {
-                        var citationID = "";
-                        if (field.Value.indexOf(self._citPrefix) === -1) {
-                            citationID = citationObject.citationID;
-                        }
-                        cslCitation = new CSLCitation(keysL.length, citationID);
-                        cslCitation.fillFromObject(citationObject);
-                        keysL = cslCitation.getInfoForCitationCluster();
-                        tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
-                        field["Content"] = tempElement.innerText;
-                        cslCitation.addPlainCitation(field["Content"]);
-                        if (cslCitation) {
-                            field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
-                        }
-                        updatedFields.push(field);
-                    } else if (field.Value.indexOf(self._bibPrefix) !== -1 || field.Value.indexOf(self._bibPrefixNew) !== -1) {
-                        bibField = field;
-                        bibField["Content"] = bibliography;
-                        if (_typeof(citationObject) === "object" && Object.keys(citationObject).length > 0) {
-                            bibFieldValue = JSON.stringify(citationObject);
-                        }
-                    }
-                });
                 if (bibField) {
+                    if (updatedFields.length === 0) {
+                        bibField["Content"] = translate(self._bibPlaceholderIfEmpty);
+                    }
                     updatedFields.push(bibField);
                 } else if (bPastBib) {
+                    var bibliography = self._makeBibliography();
+                    if (updatedFields.length === 0) {
+                        bibliography = translate(self._bibPlaceholderIfEmpty);
+                    }
                     if (self._cslStylesManager.isLastUsedStyleContainBibliography()) {
                         return self.citationDocService.addBibliography(bibliography, bibFieldValue).then(function() {
                             return updatedFields;
@@ -13326,89 +13622,6 @@
                     return self.citationDocService.updateAddinFields(updatedFields);
                 }
             });
-        },
-        updateCslItems: function updateCslItems(bUpdateFormatter, bUpdateAll, bPastBib) {
-            CSLCitationStorage.clear();
-            var self = this;
-            return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
-                var bibFieldValue = " ";
-                if (arrFields.length) {
-                    var numOfItems = 0;
-                    var bibField = arrFields.reduce(function(accumulator, field) {
-                        var citationObject;
-                        var citationStartIndex = field.Value.indexOf("{");
-                        var citationEndIndex = field.Value.lastIndexOf("}");
-                        if (citationStartIndex !== -1 && citationEndIndex !== -1) {
-                            var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
-                            citationObject = JSON.parse(citationString);
-                        }
-                        if (field.Value.indexOf(self._citPrefix) !== -1 || field.Value.indexOf(self._citPrefixNew) !== -1) {
-                            var citationID = "";
-                            if (field.Value.indexOf(self._citPrefix) === -1) {
-                                citationID = citationObject.citationID;
-                            }
-                            var cslCitation = new CSLCitation(numOfItems, citationID);
-                            numOfItems += cslCitation.fillFromObject(citationObject);
-                            cslCitation.getCitationItems().forEach(function(item) {
-                                CSLCitationStorage.set(item.id, item);
-                            });
-                        } else if (field.Value.indexOf(self._bibPrefix) !== -1 || field.Value.indexOf(self._bibPrefixNew) !== -1) {
-                            accumulator = field;
-                            if (_typeof(citationObject) === "object" && Object.keys(citationObject).length > 0) {
-                                bibFieldValue = JSON.stringify(citationObject);
-                            }
-                        }
-                        return accumulator;
-                    }, null);
-                    if (numOfItems) ; else if (bUpdateFormatter && bibField && bUpdateAll) {
-                        bUpdateFormatter = false;
-                        bibField["Content"] = translate(self._bibPlaceholder);
-                        return self.citationDocService.updateAddinFields([ bibField ]).then(function() {
-                            return bUpdateFormatter;
-                        });
-                    }
-                } else if (bUpdateFormatter && bPastBib) {
-                    if (self._cslStylesManager.isLastUsedStyleContainBibliography()) {
-                        return self.citationDocService.addBibliography(translate(self._bibPlaceholder), bibFieldValue).then(function() {
-                            return bUpdateFormatter;
-                        });
-                    } else {
-                        throw "The current bibliographic style does not describe the bibliography";
-                    }
-                }
-                return bUpdateFormatter;
-            }).then(function(bUpdateFormatter) {
-                if (bUpdateFormatter) return self._updateFormatter();
-            }).then(function() {
-                if (bUpdateAll) {
-                    return self._updateAllOrAddBib(bUpdateAll, bPastBib);
-                }
-            });
-        },
-        _updateFormatter: function _updateFormatter() {
-            var self = this;
-            var arrIds = [];
-            CSLCitationStorage.forEach(function(item, id) {
-                arrIds.push(id);
-            });
-            this._formatter = new CSL.Engine({
-                retrieveLocale: function retrieveLocale(id) {
-                    if (self._localesManager.getLocale(id)) {
-                        return self._localesManager.getLocale(id);
-                    }
-                    return self._localesManager.getLocale();
-                },
-                retrieveItem: function retrieveItem(id) {
-                    var item = CSLCitationStorage.get(id);
-                    var index = CSLCitationStorage.getIndex(id);
-                    if (!item) return null;
-                    return item.toFlatJSON(index);
-                }
-            }, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), true);
-            if (arrIds.length) {
-                this._formatter.updateItems(arrIds);
-            }
-            return;
         }
     };
     var CslStylesParser = {
@@ -14249,7 +14462,7 @@
         this._searchField = new InputField("searchField", {
             type: "text",
             autofocus: true,
-            showClear: true
+            showClear: false
         });
         this._filterButton = new Button("filterButton", {
             variant: "secondary-icon",
@@ -14572,6 +14785,7 @@
         var checkInput = new Checkbox(check, {
             checked: !!this._items[item.id],
             label: label,
+            title: true,
             id: item.id
         });
         if (this._items[item.id]) {
@@ -14907,15 +15121,11 @@
                     var groups = selectedGroups.filter(function(group) {
                         return group !== "my_library" && group !== "group_libraries";
                     });
-                    var bShowLoader = true;
-                    var hideLoader = !groups.length;
                     if (selectedGroups.indexOf("my_library") !== -1) {
-                        promises.push(loadLibrary(sdk.getItems(text), bShowLoader, hideLoader, false));
+                        promises.push(loadLibrary(sdk.getItems(text), false));
                     }
                     for (var i = 0; i < groups.length; i++) {
-                        bShowLoader = i === 0 && promises.length === 0;
-                        hideLoader = i === groups.length - 1;
-                        promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), bShowLoader, hideLoader, true));
+                        promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), true));
                     }
                     lastSearch.text = text;
                     lastSearch.obj = null;
@@ -14931,6 +15141,12 @@
                 searchFor(text, selectedGroups, groupsHash).catch(function() {
                     return [];
                 }).then(function(promises) {
+                    if (promises.length) {
+                        libLoader.show();
+                        Promise.any(promises).then(function() {
+                            libLoader.hide();
+                        });
+                    }
                     return Promise.allSettled(promises);
                 }).then(function(numOfShownByLib) {
                     var numOfShown = 0;
@@ -14957,7 +15173,7 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(true, true, false).catch(function(error) {
+                citationService.updateCslItems(true, false).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to refresh");
                     if (typeof error === "string") {
@@ -14981,7 +15197,7 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(true, true, true).catch(function(error) {
+                citationService.updateCslItems(true, true).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to insert bibliography");
                     if (typeof error === "string") {
@@ -15005,11 +15221,12 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(true, false, false).then(function() {
+                citationService.updateCslItems(false, false).then(function() {
                     var items = selectCitation.getSelectedItems();
                     return citationService.insertSelectedCitations(items);
                 }).then(function(keys) {
                     selectCitation.removeItems(keys);
+                    return citationService.updateCslItems(true, false);
                 }).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to insert citation");
@@ -15033,7 +15250,7 @@
             settings.onChangeState(function(settings) {
                 citationService.setNotesStyle(settings.notesStyle);
                 citationService.setStyleFormat(settings.styleFormat);
-                return citationService.updateCslItems(true, true, false);
+                return citationService.updateCslItems(true, false);
             });
         }
         Asc.plugin.onThemeChanged = function(theme) {
@@ -15114,10 +15331,10 @@
         function loadMore() {
             console.warn("Loading more...");
             if (lastSearch.obj && lastSearch.obj.next) {
-                loadLibrary(lastSearch.obj.next(), true, !lastSearch.groups.length, false);
+                loadLibrary(lastSearch.obj.next(), false);
             }
             for (var i = 0; i < lastSearch.groups.length && lastSearch.groups[i].next; i++) {
-                loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), false, i == lastSearch.groups.length - 1, true);
+                loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), true);
             }
         }
         function shouldLoadMore(holder) {
@@ -15133,8 +15350,7 @@
             if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return false;
             return true;
         }
-        function loadLibrary(promise, bShowLoader, hideLoader, isGroup) {
-            if (bShowLoader) libLoader.show();
+        function loadLibrary(promise, isGroup) {
             return promise.then(function(res) {
                 return displaySearchItems(res, null, isGroup);
             }).catch(function(err) {
@@ -15144,9 +15360,6 @@
                 }
                 return displaySearchItems(null, err, isGroup);
             }).then(function(numOfShown) {
-                if (hideLoader) {
-                    libLoader.hide();
-                }
                 return numOfShown;
             });
         }
@@ -15164,11 +15377,24 @@
             } else {
                 if (isGroup && res && res.next) lastSearch.groups.push(res); else lastSearch.obj = res && res.items.length ? res : null;
             }
+            var fillUrisFromId = function fillUrisFromId(item) {
+                var slashFirstIndex = item.id.indexOf("/") + 1;
+                var slashLastIndex = item.id.lastIndexOf("/") + 1;
+                var httpIndex = item.id.indexOf("http");
+                if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
+                    if (!item.uris) {
+                        item.uris = [];
+                    }
+                    item.uris.push(item.id);
+                }
+                if (slashLastIndex) item.id = item.id.substring(slashLastIndex);
+                return item;
+            };
             if (res && res.items && res.items.length > 0) {
                 for (var index = 0; index < res.items.length; index++) {
                     var item = res.items[index];
                     item[isGroup ? "groupID" : "userID"] = res.id;
-                    citationService.fillUrisFromId(item);
+                    fillUrisFromId(item);
                 }
             }
             return selectCitation.displaySearchItems(res, err);
