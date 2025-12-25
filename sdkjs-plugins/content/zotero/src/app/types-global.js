@@ -442,6 +442,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @typedef {Object} Asc
  * @property {AscPlugin} plugin
  * @property {{positions: Array<SupSubPositions>}} scope
+ * @property {any} PluginWindow
  */
 
 /** @type {Asc} */
