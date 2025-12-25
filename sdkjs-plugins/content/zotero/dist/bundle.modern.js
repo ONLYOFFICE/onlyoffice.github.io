@@ -302,7 +302,6 @@ var ZoteroApiChecker = {
                     "User-Agent": "AscDesktopEditor"
                 },
                 complete: function complete(e) {
-                    console.warn(e);
                     var hasPermission = false;
                     var isZoteroRunning = false;
                     if (e.responseStatus == 403) {
@@ -3233,7 +3232,6 @@ CitationDocService.prototype.getAddinZoteroFields = function() {
             } catch (e) {
                 reject(e);
             }
-            console.warn(arrFields);
             resolve(arrFields);
         });
     });
@@ -5656,9 +5654,6 @@ function _makeBibliography() {
             while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                 bibText = bibText.replace(/\n/, "");
             }
-            if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
-                bibText = bibText.replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;").replace(/<\/sup>/gi, "&lt;/sup&gt;").replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;").replace(/<\/sub>/gi, "&lt;/sub&gt;");
-            }
             bibItems[citationIndex] = bibText;
         }
         tempElement.innerHTML = bibItems.join("");
@@ -5729,7 +5724,6 @@ function _synchronizeStorageWithDocItems() {
             var newContent = tempElement.innerText;
             if (oldContent !== newContent) {
                 field["Content"] = newContent;
-                _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("info-window", "Zotero Citation", newContent);
             }
             console.log(cslCitation.getDoNotUpdate());
             if (cslCitation) {

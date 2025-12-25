@@ -225,14 +225,14 @@ class CitationService {
                     bibText = bibText.replace(/\n/, "");
                 }
                 // Check if bibliography item contains <sup> or <sub>
-                if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
+                /*if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
                     // Escape <sup> and <sub>
                     bibText = bibText
                         .replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;")
                         .replace(/<\/sup>/gi, "&lt;/sup&gt;")
                         .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
-                        .replace(/<\/sub>/gi, "&lt;/sub&gt;");
-                }
+                        .replace(/<\/sub>/gi, "&lt;/sub&gt;"); 
+                }*/
                 bibItems[citationIndex] = bibText;
             }
             tempElement.innerHTML = bibItems.join("");
