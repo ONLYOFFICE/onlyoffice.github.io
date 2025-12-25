@@ -45,48 +45,50 @@
 import { CitationDocService } from "./citation-doc-service";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
+import { AdditionalWindow } from "../shared/ui";
 
-/**
- * @param {LocalesManager} localesManager
- * @param {CslStylesManager} cslStylesManager
- * @param {ZoteroSdk} sdk
- */
-function CitationService(localesManager, cslStylesManager, sdk) {
-    this._bibPlaceholderIfEmpty =
-        "Please insert some citation into the document.";
-    this._citPrefixNew = "ZOTERO_ITEM";
-    this._citSuffixNew = "CSL_CITATION";
-    this._citPrefix = "ZOTERO_CITATION";
-    this._bibPrefixNew = "ZOTERO_BIBL";
-    this._bibSuffixNew = "CSL_BIBLIOGRAPHY";
-    this._bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-    this._sdk = sdk;
-    this._localesManager = localesManager;
-    this._cslStylesManager = cslStylesManager;
-    this._storage = new CSLCitationStorage();
-    /** @type {CSL.Engine} */
-    this._formatter;
-    this.citationDocService = new CitationDocService(
-        this._citPrefixNew,
-        this._citSuffixNew,
-        this._bibPrefixNew,
-        this._bibSuffixNew
-    );
-    /** @type {NoteStyle} */
-    this._notesStyle;
-    /** @type {StyleFormat} */
-    this._styleFormat;
-}
+class CitationService {
+    #onUserEditCitationManuallyWindow;
 
-CitationService.prototype = {
-    constructor: CitationService,
+    /**
+     * @param {LocalesManager} localesManager
+     * @param {CslStylesManager} cslStylesManager
+     * @param {ZoteroSdk} sdk
+     */
+    constructor(localesManager, cslStylesManager, sdk) {
+        this._bibPlaceholderIfEmpty =
+            "Please insert some citation into the document.";
+        this._citPrefixNew = "ZOTERO_ITEM";
+        this._citSuffixNew = "CSL_CITATION";
+        this._citPrefix = "ZOTERO_CITATION";
+        this._bibPrefixNew = "ZOTERO_BIBL";
+        this._bibSuffixNew = "CSL_BIBLIOGRAPHY";
+        this._bibPrefix = "ZOTERO_BIBLIOGRAPHY";
+        this._sdk = sdk;
+        this._localesManager = localesManager;
+        this._cslStylesManager = cslStylesManager;
+        this._storage = new CSLCitationStorage();
+        /** @type {CSL.Engine} */
+        this._formatter;
+        this.citationDocService = new CitationDocService(
+            this._citPrefixNew,
+            this._citSuffixNew,
+            this._bibPrefixNew,
+            this._bibSuffixNew
+        );
+        /** @type {NoteStyle} */
+        this._notesStyle;
+        /** @type {StyleFormat} */
+        this._styleFormat;
+        this.#onUserEditCitationManuallyWindow = new AdditionalWindow();
+    }
 
     /**
      *
      * @param {*} cslCitation
      * @returns {Promise<Array<string|number>>}
      */
-    _formatInsertLink: function (cslCitation) {
+    #formatInsertLink(cslCitation) {
         const self = this;
         let bUpdateItems = false;
         /** @type {Array<string|number>} */
@@ -138,13 +140,13 @@ CitationService.prototype = {
             .then(function () {
                 return keys;
             });
-    },
+    }
 
     /**
      * @param {Array<any>} items
      * @returns {Promise<Array<SearchResultItem>>}
      */
-    _getSelectedInJsonFormat: function (items) {
+    #getSelectedInJsonFormat(items) {
         var arrUsrItems = [];
         /** @type {Object<string, string[]>} */
         var arrGroupsItems = {};
@@ -201,9 +203,9 @@ CitationService.prototype = {
             });
             return items;
         });
-    },
+    }
 
-    _makeBibliography: function () {
+    #makeBibliography() {
         const self = this;
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
@@ -247,10 +249,10 @@ CitationService.prototype = {
             }
         }
         return tempElement.innerText;
-    },
+    }
 
     /** @param {CustomField} field */
-    _extractField: function (field) {
+    #extractField(field) {
         let citationObject;
         const citationStartIndex = field.Value.indexOf("{");
         const citationEndIndex = field.Value.lastIndexOf("}");
@@ -262,13 +264,13 @@ CitationService.prototype = {
             citationObject = JSON.parse(citationString);
         }
         return citationObject;
-    },
+    }
 
     /**
      *
      * @returns {Promise<{bibField: CustomField | undefined, fields: CustomField[], updatedFields: CustomField[], bibFieldValue: string}>}
      */
-    _synchronizeStorageWithDocItems: function () {
+    #synchronizeStorageWithDocItems() {
         const self = this;
         return this.citationDocService
             .getAddinZoteroFields()
@@ -288,7 +290,7 @@ CitationService.prototype = {
                     );
                 });
                 if (bibField) {
-                    let citationObject = self._extractField(bibField);
+                    let citationObject = self.#extractField(bibField);
                     if (
                         typeof citationObject === "object" &&
                         Object.keys(citationObject).length > 0
@@ -304,7 +306,7 @@ CitationService.prototype = {
                     );
                 });
                 const fieldsWithCitations = fields.map(function (field) {
-                    let citationObject = self._extractField(field);
+                    let citationObject = self.#extractField(field);
 
                     let citationID = ""; // old format
                     if (field.Value.indexOf(self._citPrefix) === -1) {
@@ -320,17 +322,30 @@ CitationService.prototype = {
                     return { field: { ...field }, cslCitation: cslCitation };
                 });
 
-                self._updateFormatter();
+                self.#updateFormatter();
 
                 /** @type {CustomField[]} */
-                const updatedFields = fieldsWithCitations.map(function ({
-                    field,
-                    cslCitation,
-                }, index) {
+                const updatedFields = fieldsWithCitations.map(function (
+                    { field, cslCitation },
+                    index
+                ) {
                     let keysL = cslCitation.getInfoForCitationCluster();
                     tempElement.innerHTML =
                         self._formatter.makeCitationCluster(keysL);
-                    field["Content"] = tempElement.innerText;
+                    const oldContent = field["Content"];
+                    const newContent = tempElement.innerText;
+
+                    if (oldContent !== newContent) {
+                        field["Content"] = newContent;
+                        /* self.#onUserEditCitationManuallyWindow.show(
+                            "info-window",
+                            "Zotero Citation",
+                            newContent
+                        );*/
+                    }
+
+                    console.log(cslCitation.getDoNotUpdate());
+
                     // cslCitation.addPlainCitation(field["Content"]);
                     if (cslCitation) {
                         field["Value"] =
@@ -350,9 +365,9 @@ CitationService.prototype = {
                     bibFieldValue: bibFieldValue,
                 };
             });
-    },
+    }
 
-    _updateFormatter: function () {
+    #updateFormatter() {
         const self = this;
 
         /** @type {string[]} */
@@ -389,34 +404,34 @@ CitationService.prototype = {
         }
 
         return;
-    },
+    }
 
     /**
      * @returns {Promise<boolean>}
      */
-    saveAsText: function () {
+    saveAsText() {
         return this.citationDocService.saveAsText();
-    },
+    }
 
     /**
      * @param {NoteStyle} notesStyle
      */
-    setNotesStyle: function (notesStyle) {
+    setNotesStyle(notesStyle) {
         this._notesStyle = notesStyle;
-    },
+    }
 
     /**
      * @param {StyleFormat} styleFormat
      */
-    setStyleFormat: function (styleFormat) {
+    setStyleFormat(styleFormat) {
         this._styleFormat = styleFormat;
-    },
+    }
 
     /**
      * @param {Array<SearchResultItem>} items
      * @returns {Promise<Array<string|number>>}
      */
-    insertSelectedCitations: function (items) {
+    insertSelectedCitations(items) {
         const self = this;
 
         var cslCitation = new CSLCitation(self._storage.size, "");
@@ -426,13 +441,13 @@ CitationService.prototype = {
             cslCitation.fillFromObject(item);
         }
 
-        return this._getSelectedInJsonFormat(items).then(function (items) {
+        return this.#getSelectedInJsonFormat(items).then(function (items) {
             items.forEach(function (item) {
                 cslCitation.fillFromObject(item);
             });
-            return self._formatInsertLink(cslCitation);
+            return self.#formatInsertLink(cslCitation);
         });
-    },
+    }
 
     // onInit (0,0)
     // Insert Citation (0,0)
@@ -443,11 +458,11 @@ CitationService.prototype = {
      * @param {boolean} bPastBib
      * @returns {Promise<void>}
      */
-    updateCslItems: function (bUpdateAll, bPastBib) {
+    updateCslItems(bUpdateAll, bPastBib) {
         this._storage.clear();
         const self = this;
 
-        return this._synchronizeStorageWithDocItems()
+        return this.#synchronizeStorageWithDocItems()
             .then(function (info) {
                 const { fields, updatedFields, bibField, bibFieldValue } = info;
 
@@ -460,10 +475,13 @@ CitationService.prototype = {
                         bibField["Content"] = translate(
                             self._bibPlaceholderIfEmpty
                         );
+                    } else {
+                        let bibliography = self.#makeBibliography();
+                        bibField["Content"] = bibliography;
                     }
                     updatedFields.push(bibField);
                 } else if (bPastBib) {
-                    let bibliography = self._makeBibliography();
+                    let bibliography = self.#makeBibliography();
                     if (updatedFields.length === 0) {
                         bibliography = translate(self._bibPlaceholderIfEmpty);
                     }
@@ -490,7 +508,7 @@ CitationService.prototype = {
                     );
                 }
             });
-    },
-};
+    }
+}
 
 export { CitationService };
