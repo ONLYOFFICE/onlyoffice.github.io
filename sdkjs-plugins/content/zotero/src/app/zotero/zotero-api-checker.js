@@ -184,7 +184,6 @@ var ZoteroApiChecker = {
                     "User-Agent": "AscDesktopEditor",
                 },
                 complete: function (/** @type {AscSimpleResponse} */ e) {
-                    console.warn(e);
                     let hasPermission = false;
                     let isZoteroRunning = false;
                     if (e.responseStatus == 403) {
