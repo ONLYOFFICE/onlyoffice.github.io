@@ -4126,7 +4126,6 @@
                         "User-Agent": "AscDesktopEditor"
                     },
                     complete: function complete(e) {
-                        console.warn(e);
                         var hasPermission = false;
                         var isZoteroRunning = false;
                         if (e.responseStatus == 403) {
@@ -11902,7 +11901,6 @@
                 } catch (e) {
                     reject(e);
                 }
-                console.warn(arrFields);
                 resolve(arrFields);
             });
         });
@@ -13975,71 +13973,23 @@
         return _createClass(AdditionalWindow, [ {
             key: "show",
             value: function show(fileName, description, text) {
-                var self = this;
                 var variation = {
                     url: fileName + ".html",
                     description: window.Asc.plugin.tr(description),
                     isVisual: true,
-                    buttons: [ {
-                        text: window.Asc.plugin.tr("Yes"),
-                        primary: true
-                    }, {
-                        text: window.Asc.plugin.tr("No"),
-                        primary: false
-                    } ],
-                    isModal: true,
+                    isModal: false,
                     EditorsSupport: [ "word" ],
-                    size: [ 400, 310 ]
+                    size: [ 400, 310 ],
+                    isViewer: true,
+                    isDisplayedInViewer: false,
+                    isInsideMode: false
                 };
                 this._window = new window.Asc.PluginWindow;
-                this._window.attachEvent("onInit", _asyncToGenerator(_regenerator().m(function _callee() {
-                    return _regenerator().w(function(_context) {
-                        while (1) switch (_context.n) {
-                          case 0:
-                            console.log("onInit");
-
-                          case 1:
-                            return _context.a(2);
-                        }
-                    }, _callee);
-                })));
-                this._window.attachEvent("Summarize", function() {
-                    var _ref2 = _asyncToGenerator(_regenerator().m(function _callee2(content) {
-                        return _regenerator().w(function(_context2) {
-                            while (1) switch (_context2.n) {
-                              case 0:
-                                console.log("Summarize", data);
-                                self._window && self._window.command("onSummarize", {
-                                    error: 0,
-                                    data: "------"
-                                });
-
-                              case 1:
-                                return _context2.a(2);
-                            }
-                        }, _callee2);
-                    }));
-                    return function(_x) {
-                        return _ref2.apply(this, arguments);
-                    };
-                }());
-                this._window.attachEvent("onSummarize", function() {
-                    var _ref3 = _asyncToGenerator(_regenerator().m(function _callee3(data) {
-                        return _regenerator().w(function(_context3) {
-                            while (1) switch (_context3.n) {
-                              case 0:
-                                console.log("onSummarize", data);
-
-                              case 1:
-                                return _context3.a(2);
-                            }
-                        }, _callee3);
-                    }));
-                    return function(_x2) {
-                        return _ref3.apply(this, arguments);
-                    };
-                }());
                 this._window.show(variation);
+                this._window.button = function(id) {
+                    console.log("button", id);
+                    window.Asc.plugin.executeCommand("close", "");
+                };
             }
         }, {
             key: "hide",
@@ -14232,9 +14182,6 @@
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                     bibText = bibText.replace(/\n/, "");
                 }
-                if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
-                    bibText = bibText.replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;").replace(/<\/sup>/gi, "&lt;/sup&gt;").replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;").replace(/<\/sub>/gi, "&lt;/sub&gt;");
-                }
                 bibItems[citationIndex] = bibText;
             }
             tempElement.innerHTML = bibItems.join("");
@@ -14303,7 +14250,6 @@
                 var newContent = tempElement.innerText;
                 if (oldContent !== newContent) {
                     field["Content"] = newContent;
-                    _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("info-window", "Zotero Citation", newContent);
                 }
                 console.log(cslCitation.getDoNotUpdate());
                 if (cslCitation) {
