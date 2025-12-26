@@ -102,3 +102,38 @@
 
 ## 2.3.2
 * Fix offline work.
+
+## 2.3.3
+* Refactoring custom providers.
+
+## 2.3.4
+* Refactoring custom providers.
+
+## 2.4.0
+* Bug fix.
+
+## 2.4.1
+* Bug fix.
+
+## 2.4.2
+* Add agent for simple functions.
+
+## 2.5.0
+* Add events for another plugins.
+* Bug fix.
+
+## 2.5.1
+* Bug fix.
+
+## 3.0.0
+* Bug fix.
+* Add Grammar & Spelling functionality.
+* Add OpenRouter provider.
+* Refactoring helper functions.
+
+## 3.0.1
+* Bug fix.
+* Translations added.
+
+## 3.0.2
+* Bug fix.
