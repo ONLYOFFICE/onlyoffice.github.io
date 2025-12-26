@@ -247,13 +247,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
     const arrow = document.createElement("div");
     arrow.classList.add("selectbox-arrow");
-    arrow.innerHTML =
-        '<svg width="6" height="6" viewBox="0 0 6 6" ' +
-        'fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '<path fill-rule="evenodd" clip-rule="evenodd"' +
-        ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75' +
-        ' 2.24889L3 4.49724L5.25 2.24889L3 0.00053797Z" ' +
-        'fill="currentColor"/></svg>';
+    arrow.innerHTML = "<b></b>";
 
     var title = document.createElement("div");
     title.textContent = item.title.trim();
