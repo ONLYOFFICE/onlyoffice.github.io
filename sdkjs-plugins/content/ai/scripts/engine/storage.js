@@ -48,6 +48,16 @@
 		return false;
 	})();
 
+	AI.isLocalDesktopForNotStreamedRequests = (function(){
+		if (AI.isLocalDesktop)
+			return true;
+
+		if (window.location && window.location.protocol == "onlyoffice:")
+			return true;
+
+		return false;
+	})();
+
 	AI.isLocalUrl = function(url) {
 		let filter = ["localhost", "127.0.0.1"];
 		for (let i = 0, len = filter.length; i < len; i++) {
