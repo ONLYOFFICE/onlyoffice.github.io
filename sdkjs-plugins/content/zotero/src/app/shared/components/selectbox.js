@@ -44,30 +44,22 @@
  */
 
 class SelectBox {
-    static #instances = new Set(); 
+    static #instances = new Set();
 
     /**
-     * @param {string | HTMLSelectElement | HTMLElement} selectbox
+     * @param {string | HTMLElement} container
      * @param {SelectboxOptionsType} options
      */
-    constructor(selectbox, options) {
-        if (typeof selectbox === "string") {
-            const temp = document.getElementById(selectbox);
-            if (temp instanceof HTMLSelectElement) {
-                selectbox = temp;
-            } else if (temp instanceof HTMLElement) {
-                this._container = temp;
-            } else {
-                throw new Error("Invalid selectbox");
+    constructor(container, options) {
+        if (typeof container === "string") {
+            var temp = document.getElementById(container);
+            if (temp instanceof HTMLElement) {
+                container = temp;
             }
-        } else if (selectbox instanceof HTMLElement) {
-            this._container = selectbox;
         }
-
-        if (selectbox instanceof HTMLSelectElement) {
-            this._selectbox = selectbox;
-            this._container = document.createElement("div");
-        } else if (this._container instanceof HTMLElement === false) {
+        if (container instanceof HTMLElement) {
+            this._container = container;
+        } else {
             throw new Error("Invalid container");
         }
 
@@ -75,8 +67,6 @@ class SelectBox {
         this._options = Object.assign(options, {
             placeholder: options.placeholder || "Select...",
             searchable: options.searchable || false,
-            sortable: options.sortable || false,
-            translate: options.translate,
             multiple: options.multiple || false,
             description: options.description || "",
         });
@@ -179,16 +169,6 @@ class SelectBox {
         this._dropdown.appendChild(this._optionsContainer);
 
         this._container.appendChild(fragment);
-
-        if (this._selectbox) {
-            const parent = this._selectbox.parentNode;
-            if (parent) {
-                parent.insertBefore(this._container, this._selectbox);
-                const options = this.#extractOptions(this._selectbox);
-                this.addItems(options.values, options.selectedValue);
-                this._selectbox.remove();
-            }
-        }
     }
 
     #bindEvents() {
@@ -254,7 +234,9 @@ class SelectBox {
 
         this.#renderOptions();
     }
-
+    /**
+     * @private
+     */
     #closeDropdown() {
         if (this.isOpen && document && this._boundHandles) {
             document.removeEventListener("click", this._boundHandles.close);
@@ -602,7 +584,9 @@ class SelectBox {
 
         this.#triggerChange(value, enabled);
     }
-
+    /**
+     * @private
+     */
     #updateSelectedText() {
         if (this._selectedValues.size === 0) {
             this._selectedText.textContent = this._options.placeholder;
@@ -687,21 +671,6 @@ class SelectBox {
                 detail: detail,
             });
         });
-    }
-    /**
-     * @param {HTMLSelectElement} selectbox 
-     * @returns {{values: Array<[string, string]>, selectedValue?: string}}
-     */
-    #extractOptions(selectbox) {
-        /** @type {Array<[string, string]>} */
-        const options = Array.from(selectbox.options).map((option) => {
-            return [option.value, option.text];
-        });
-        /** @type {{values: Array<[string, string]>, selectedValue?: string}} */
-        const result = { values: options };
-        const selectedValue = selectbox.value;
-        if (selectedValue) result.selectedValue = selectedValue;
-        return result;
     }
     /**
      * @param {function(SelectboxEventType): void} callback
@@ -1061,7 +1030,7 @@ class SelectBox {
             }
         }
         this._container.className = newClasses.join(" ");
-    },
-};
+    }
+}
 
 export { SelectBox };
