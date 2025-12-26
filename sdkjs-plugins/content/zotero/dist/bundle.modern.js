@@ -5475,28 +5475,34 @@ SelectCitationsComponent.prototype.count = function() {
     return k;
 };
 
+var _window = new WeakMap;
+
 class AdditionalWindow {
     constructor() {
-        this._window = null;
+        _classPrivateFieldInitSpec(this, _window, void 0);
+        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
     }
     show(fileName, description, text) {
         var variation = {
-            url: fileName + ".html",
+            url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
+            buttons: [ {
+                text: window.Asc.plugin.tr("Yes"),
+                primary: true,
+                isViewer: false
+            }, {
+                text: window.Asc.plugin.tr("No"),
+                primary: false
+            } ],
             isModal: false,
             EditorsSupport: [ "word" ],
-            size: [ 400, 310 ],
+            size: [ 400, 200 ],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false
         };
-        this._window = new window.Asc.PluginWindow;
-        this._window.show(variation);
-        this._window.button = function(id) {
-            console.log("button", id);
-            window.Asc.plugin.executeCommand("close", "");
-        };
+        _classPrivateFieldGet2(_window, this).show(variation);
     }
     hide() {}
 }
@@ -6960,7 +6966,7 @@ LoginPage.prototype._hideLoader = function() {
                     el.setAttribute(attr, translate(el.getAttribute(attr) || ""));
                 }
             });
-            var translated = translate(el.innerText.trim());
+            var translated = translate(el.innerText.trim().replace(/\s+/g, " "));
             if (translated) el.innerText = translated;
         }
     }
