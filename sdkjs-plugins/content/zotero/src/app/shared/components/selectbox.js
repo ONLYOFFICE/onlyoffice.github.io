@@ -43,88 +43,85 @@
  * @property {(e: Event) => void} dropdownClick
  */
 
-/**
- * @constructor
- * @param {string | HTMLElement} container
- * @param {SelectboxOptionsType} options
- */
-function SelectBox(container, options) {
-    const self = this;
-    if (typeof container === "string") {
-        var temp = document.getElementById(container);
-        if (temp instanceof HTMLElement) {
-            container = temp;
-        }
-    }
-    if (container instanceof HTMLElement) {
-        this._container = container;
-    } else {
-        throw new Error("Invalid container");
-    }
-
-    /** @type {SelectboxOptionsType} */
-    this._options = Object.assign(options, {
-        placeholder: options.placeholder || "Select...",
-        searchable: options.searchable || false,
-        multiple: options.multiple || false,
-        description: options.description || "",
-    });
-
-    this._selectedValues = new Set();
-    this.isOpen = false;
-    /** @type {Array<{ value: string, text: string, selected: boolean } | null>} */
-    this._items = [];
-    /** @type {Array<{ value: string, text: string, selected: boolean }>} */
-    this._customItems = [];
-    /** @type {Function[]} */
-    this._subscribers = [];
-    /** @type {BoundHandlesType} */
-    this._boundHandles = {
-        toggle: function (e) {
-            self._toggle(e);
-        },
-        search: function (e) {
-            self._handleSearch(e);
-        },
-        close: function (e) {
-            if (
-                e.target instanceof HTMLElement &&
-                !self._container.contains(e.target) &&
-                !e.target.classList.contains("selectbox-option")
-            ) {
-                self._closeDropdown();
-            }
-        },
-        keydown: function (e) {
-            self._handleKeydown(e);
-        },
-        dropdownClick: function (e) {
-            self._handleDropdownClick(e);
-        },
-    };
-    /** @type {HTMLElement|null} */
-    this._optionsContainer = null;
-    /** @type {HTMLInputElement | null} */
-    this.searchInput = null;
-    /** @type {HTMLElement} */
-    this._select = document.createElement("div");
-    this._header = document.createElement("div");
-    this._selectedText = document.createElement("span");
-    this._arrow = document.createElement("span");
-    this._dropdown = document.createElement("div");
-
-    this._createDOM();
-    this._bindEvents();
-    this._renderOptions();
-}
-
-SelectBox.prototype = {
-    constructor: SelectBox,
+class SelectBox {
+    static #instances = new Set();
 
     /**
-     * @private
+     * @param {string | HTMLElement} container
+     * @param {SelectboxOptionsType} options
      */
-    _createDOM: function () {
+    constructor(container, options) {
+        if (typeof container === "string") {
+            var temp = document.getElementById(container);
+            if (temp instanceof HTMLElement) {
+                container = temp;
+            }
+        }
+        if (container instanceof HTMLElement) {
+            this._container = container;
+        } else {
+            throw new Error("Invalid container");
+        }
+
+        /** @type {SelectboxOptionsType} */
+        this._options = Object.assign(options, {
+            placeholder: options.placeholder || "Select...",
+            searchable: options.searchable || false,
+            multiple: options.multiple || false,
+            description: options.description || "",
+        });
+
+        this._selectedValues = new Set();
+        this.isOpen = false;
+        /** @type {Array<{ value: string, text: string, selected: boolean } | null>} */
+        this._items = [];
+        /** @type {Array<{ value: string, text: string, selected: boolean }>} */
+        this._customItems = [];
+        /** @type {Function[]} */
+        this._subscribers = [];
+        /** @type {BoundHandlesType} */
+        this._boundHandles = {
+            toggle: (e) => {
+                this.#toggle(e);
+            },
+            search: (e) => {
+                this.#handleSearch(e);
+            },
+            close: (e) => {
+                if (
+                    e.target instanceof HTMLElement &&
+                    !this._container.contains(e.target) &&
+                    !e.target.classList.contains("selectbox-option")
+                ) {
+                    this.#closeDropdown();
+                }
+            },
+            keydown: (e) => {
+                this.#handleKeydown(e);
+            },
+            dropdownClick: (e) => {
+                this.#handleDropdownClick(e);
+            },
+        };
+        /** @type {HTMLElement|null} */
+        this._optionsContainer = null;
+        /** @type {HTMLInputElement | null} */
+        this.searchInput = null;
+        /** @type {HTMLElement} */
+        this._select = document.createElement("div");
+        this._header = document.createElement("div");
+        this._selectedText = document.createElement("span");
+        this._arrow = document.createElement("span");
+        this._dropdown = document.createElement("div");
+
+        this.#createDOM();
+        this.#bindEvents();
+        this.#renderOptions();
+
+        SelectBox.#instances.add(this);
+    }
+
+    #createDOM() {
         this._container.innerHTML = "";
         this._container.className += " selectbox-container";
 
@@ -178,12 +175,9 @@ SelectBox.prototype = {
         this._dropdown.appendChild(this._optionsContainer);
 
         this._container.appendChild(fragment);
-    },
+    }
 
-    /**
-     * @private
-     */
-    _bindEvents: function () {
+    #bindEvents() {
         var self = this;
 
         this._header.addEventListener("click", this._boundHandles.toggle);
@@ -206,16 +200,23 @@ SelectBox.prototype = {
         // Keyboard navigation
         this._header.addEventListener("keydown", this._boundHandles.keydown);
         this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
-    },
+    }
     /**
      * @param {Event} [e]
-     * @private
      */
-    _toggle: function (e) {
+    #toggle(e) {
         e && e.stopPropagation();
-        this.isOpen ? this._closeDropdown() : this.openDropdown();
-    },
-    openDropdown: function () {
+        this.isOpen ? this.#closeDropdown() : this.openDropdown();
+
+        if (e && e.type === "click") {
+            for (const selBox of SelectBox.#instances) {
+                if (selBox.isOpen && selBox !== this) {
+                    selBox.#closeDropdown();
+                }
+            }
+        }
+    }
+    openDropdown() {
         if (!this.isOpen) {
             // Close on outside click
             document.addEventListener("click", this._boundHandles.close);
@@ -237,12 +238,12 @@ SelectBox.prototype = {
             );
         }
 
-        this._renderOptions();
-    },
+        this.#renderOptions();
+    }
     /**
      * @private
      */
-    _closeDropdown: function () {
+    #closeDropdown() {
         if (this.isOpen && document && this._boundHandles) {
             document.removeEventListener("click", this._boundHandles.close);
         }
@@ -270,24 +271,23 @@ SelectBox.prototype = {
         if (this.searchInput) {
             this.searchInput.value = "";
         }
-    },
+    }
     /**
      * @param {Event} e
      * @private
      */
-    _handleSearch: function (e) {
+    #handleSearch(e) {
         var target = e.target;
         if (!(target instanceof HTMLInputElement)) {
             return;
         }
         var searchTerm = target.value.toLowerCase();
-        this._renderOptions(searchTerm);
-    },
-
+        this.#renderOptions(searchTerm);
+    }
     /**
      * @param {'up'|'down'} direction
      */
-    _selectNextPrevItem: function (direction) {
+    #selectNextPrevItem(direction) {
         const searchTerm = this.searchInput
             ? this.searchInput.value.toLowerCase()
             : "";
@@ -345,50 +345,49 @@ SelectBox.prototype = {
             }
         }
 
-        this._updateSelectedText();
-        this._renderOptions(searchTerm, true);
-        this._triggerChange(newItem.value, true);
-    },
-
+        this.#updateSelectedText();
+        this.#renderOptions(searchTerm, true);
+        this.#triggerChange(newItem.value, true);
+    }
     /**
      * @param {KeyboardEvent} e
      * @private
      */
-    _handleKeydown: function (e) {
+    #handleKeydown(e) {
         var key = e.key || e.keyCode;
 
         switch (key) {
             case "Enter":
             case 13:
                 e.preventDefault();
-                this._toggle(e);
+                this.#toggle(e);
                 break;
             case "Escape":
             case 27:
-                this._closeDropdown();
+                this.#closeDropdown();
                 break;
             case "ArrowDown":
             case 40:
                 e.preventDefault();
-                this._selectNextPrevItem("down");
+                this.#selectNextPrevItem("down");
                 break;
             case "ArrowUp":
             case 38:
                 e.preventDefault();
-                this._selectNextPrevItem("up");
+                this.#selectNextPrevItem("up");
                 break;
             case "Tab":
             case 9:
-                this._closeDropdown();
+                this.#closeDropdown();
                 break;
         }
-    },
+    }
     /**
      * @param {string} [searchTerm]
      * @param {boolean} [scrollIntoView]
      * @private
      * */
-    _renderOptions: function (searchTerm, scrollIntoView) {
+    #renderOptions(searchTerm, scrollIntoView) {
         searchTerm = searchTerm || "";
         if (!this._optionsContainer) return;
         this._optionsContainer.innerHTML = "";
@@ -499,12 +498,12 @@ SelectBox.prototype = {
                 console.error(err);
             }
         }
-    },
+    }
     /**
      * @param {Event} e
      * @private
      */
-    _handleDropdownClick: function (e) {
+    #handleDropdownClick(e) {
         var target = e.target || e.srcElement;
         var option = null;
 
@@ -520,8 +519,8 @@ SelectBox.prototype = {
                     const val = target.getAttribute("data-value");
                     if (val) {
                         e.stopPropagation();
-                        this._triggerCustomChange(val);
-                        this._closeDropdown();
+                        this.#triggerCustomChange(val);
+                        this.#closeDropdown();
                         return;
                     }
                     break;
@@ -547,8 +546,8 @@ SelectBox.prototype = {
                             target.parentNode.getAttribute("data-value");
                         if (val) {
                             e.stopPropagation();
-                            this._triggerCustomChange(val);
-                            this._closeDropdown();
+                            this.#triggerCustomChange(val);
+                            this.#closeDropdown();
                             return;
                         }
                         break;
@@ -582,17 +581,17 @@ SelectBox.prototype = {
             }
         } else {
             this.selectItems(value, true);
-            this._closeDropdown();
+            this.#closeDropdown();
         }
 
-        this._updateSelectedText();
+        this.#updateSelectedText();
 
-        this._triggerChange(value, enabled);
-    },
+        this.#triggerChange(value, enabled);
+    }
     /**
      * @private
      */
-    _updateSelectedText: function () {
+    #updateSelectedText() {
         if (this._selectedValues.size === 0) {
             this._selectedText.textContent = this._options.placeholder;
             return;
@@ -629,13 +628,13 @@ SelectBox.prototype = {
                 ? selectedItem.text
                 : this._options.placeholder;
         }
-    },
+    }
     /**
      * @param {string} currentValue
      * @param {boolean} enabled
      * @private
      */
-    _triggerChange: function (currentValue, enabled) {
+    #triggerChange(currentValue, enabled) {
         var values = Array.from(this._selectedValues);
         var items = [];
         for (var i = 0; i < this._items.length; i++) {
@@ -659,12 +658,12 @@ SelectBox.prototype = {
                 detail: detail,
             });
         });
-    },
+    }
     /**
      * @param {string} currentValue
      * @private
      */
-    _triggerCustomChange: function (currentValue) {
+    #triggerCustomChange(currentValue) {
         /** @type {SelectboxEventDetail} */
         var detail = {
             values: [],
@@ -678,31 +677,29 @@ SelectBox.prototype = {
                 detail: detail,
             });
         });
-    },
-
+    }
     /**
      * @param {function(SelectboxEventType): void} callback
      * @returns {Object}
      */
-    subscribe: function (callback) {
+    subscribe(callback) {
         var self = this;
         this._subscribers.push(callback);
 
         return {
-            unsubscribe: function () {
+            unsubscribe() {
                 self._subscribers = self._subscribers.filter(function (cb) {
                     return cb !== callback;
                 });
             },
         };
-    },
-
+    }
     /**
      * @param {string} value
      * @param {string} text
      * @param {boolean} selected
      */
-    addItem: function (value, text, selected) {
+    addItem(value, text, selected) {
         selected = selected || false;
         const bHasItem = this._items.some(
             (item) => item && item.value === value
@@ -725,13 +722,13 @@ SelectBox.prototype = {
             }
         }
 
-        this._updateSelectedText();
-    },
+        this.#updateSelectedText();
+    }
     /**
      * @param {Array<[string,string]>} values
      * @param {string} [selectedValue]
      */
-    addItems: function (values, selectedValue) {
+    addItems(values, selectedValue) {
         const self = this;
         values.forEach(function (pair, index) {
             const bHasItem = self._items.some(
@@ -759,26 +756,25 @@ SelectBox.prototype = {
         }, this);
 
         if (this.isOpen) {
-            this._renderOptions();
+            this.#renderOptions();
         }
 
-        this._updateSelectedText();
-    },
+        this.#updateSelectedText();
+    }
     /**
      * @param {string} value
      * @param {string} text
      */
-    addCustomItem: function (value, text) {
+    addCustomItem(value, text) {
         this._customItems.push({ value: value, text: text, selected: false });
-    },
-
-    addSeparator: function () {
+    }
+    addSeparator() {
         this._items.push(null);
-    },
+    }
     /**
      * @param {string} value
      */
-    removeItem: function (value) {
+    removeItem(value) {
         this._items = this._items.filter(function (item) {
             if (item === null || item.value !== value) {
                 return true;
@@ -792,12 +788,12 @@ SelectBox.prototype = {
             return false;
         });
         this._selectedValues.delete(value);
-        this._updateSelectedText();
-    },
+        this.#updateSelectedText();
+    }
     /**
      * @return {null | string}
      */
-    getSelectedValue: function () {
+    getSelectedValue() {
         if (this._options.multiple) {
             console.error(
                 "Method getSelectedValue is only available for single-select boxes."
@@ -807,24 +803,23 @@ SelectBox.prototype = {
             var values = Array.from(this._selectedValues);
             return values.length > 0 ? values[0] : null;
         }
-    },
+    }
     /**
      * @return {null | string | Array<string>}
      */
-    getSelectedValues: function () {
+    getSelectedValues() {
         if (this._options.multiple) {
             return Array.from(this._selectedValues);
         } else {
             var values = Array.from(this._selectedValues);
             return values.length > 0 ? values[0] : null;
         }
-    },
-
+    }
     /**
      * @param {string | Array<string>} values
      * @param {boolean} [bSilent]
      */
-    selectItems: function (values, bSilent) {
+    selectItems(values, bSilent) {
         const self = this;
         if (!this._options.multiple && Array.isArray(values)) {
             console.error(
@@ -894,23 +889,22 @@ SelectBox.prototype = {
                     option.classList.add("checkbox--checked");
                 }
             }
-            this._closeDropdown();
+            this.#closeDropdown();
         }
 
-        this._updateSelectedText();
+        this.#updateSelectedText();
 
         if (bSilent) {
             return;
         }
 
-        this._triggerChange(value, true);
-    },
-
+        this.#triggerChange(value, true);
+    }
     /**
      * @param {string | Array<string>} values
      * @param {boolean} [bSilent]
      */
-    unselectItems: function (values, bSilent) {
+    unselectItems(values, bSilent) {
         const self = this;
         if (!this._options.multiple) {
             console.error(
@@ -959,24 +953,24 @@ SelectBox.prototype = {
             }
         }
 
-        this._updateSelectedText();
+        this.#updateSelectedText();
 
         if (bSilent) {
             return;
         }
 
-        this._triggerChange(value, true);
-    },
-    disable: function () {
+        this.#triggerChange(value, true);
+    }
+    disable() {
         this._select.classList.add("selectbox-disabled");
-    },
-    enable: function () {
+    }
+    enable() {
         this._select.classList.remove("selectbox-disabled");
-    },
+    }
     /**
      * @param {boolean} bSelectFirst
      */
-    clear: function (bSelectFirst) {
+    clear(bSelectFirst) {
         bSelectFirst = bSelectFirst || false;
         this._selectedValues.clear();
         if (bSelectFirst && this._items.length > 0) {
@@ -985,12 +979,12 @@ SelectBox.prototype = {
                 this._selectedValues.add(firstItem.value);
             }
         }
-        this._updateSelectedText();
-        this._renderOptions();
-    },
-    destroy: function () {
+        this.#updateSelectedText();
+        this.#renderOptions();
+    }
+    destroy() {
         this._subscribers = [];
-
+        SelectBox.#instances.delete(this);
         try {
             if (this._header && this._boundHandles) {
                 this._header.removeEventListener(
@@ -1039,7 +1033,7 @@ SelectBox.prototype = {
             }
         }
         this._container.className = newClasses.join(" ");
-    },
-};
+    }
+}
 
 export { SelectBox };
