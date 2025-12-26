@@ -28,8 +28,10 @@
 	"Name" : "名前",
 	"URL" : "URL",
 	"Key" : "キー",
+	"e.g. abc123...": "例：abc123...",
 	"Update models list" : "モデルリストを更新",
 	"Use model for" : "モデルの用途",
+	"All": "すべて",
 	"Text": "テキスト",
 	"Audio Processing": "オーディオ処理",
 	"Content Moderation": "コンテンツモデレーション",
@@ -141,5 +143,15 @@
 	"Text to Image": "テキストから画像へ",
 	"Image generation": "画像生成",
 	"OCR": "OCR",
-	"Vision": "ビジョン"
+	"Vision": "ビジョン",
+	
+	"Grammar & Spelling": "文法＆スペル",
+	"Accept": "承認",
+	"Reject": "却下",
+	"Spelling suggestion": "スペル修正提案",
+	"Grammar suggestion": "文法修正提案",
+	"Check all": "すべてチェック",
+	"Check current text": "現在のテキストをチェック",
+	"Suggested correction": "修正提案",
+	"Explanation": "説明"
 }

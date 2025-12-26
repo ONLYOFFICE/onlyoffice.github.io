@@ -94,10 +94,8 @@ class Provider extends AI.Provider {
 		
 		if (0 === model.id.indexOf("gpt-4o") ||
 			0 === model.id.indexOf("o1-") ||
-			0 === model.id.indexOf("gpt-4-turbo"))
-			model.options.max_input_tokens = AI.InputMaxTokens["128k"];
-		else if (0 === model.id.indexOf("gpt-4"))
-			model.options.max_input_tokens = AI.InputMaxTokens["8k"];
+			0 === model.id.indexOf("gpt-4"))			
+			model.options.max_input_tokens = AI.InputMaxTokens["128k"];		
 		else if (-1 != model.id.indexOf("gpt-3.5-turbo-instruct")) {
 			model.options.max_input_tokens = AI.InputMaxTokens["4k"];
 			model.endpoints.push(AI.Endpoints.Types.v1.Completions);
@@ -108,7 +106,7 @@ class Provider extends AI.Provider {
 
 		model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
 		return AI.CapabilitiesUI.Chat | AI.CapabilitiesUI.Vision;
-	};
+	}
 
 	getImageGeneration(message, model) {
 		let result = super.getImageGeneration(message, model);

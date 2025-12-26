@@ -28,8 +28,10 @@
 	"Name" : "Nome",
 	"URL" : "URL",
 	"Key" : "Chiave",
+	"e.g. abc123...": "per esempio abc123...",
 	"Update models list" : "Aggiorna elenco modelli",
 	"Use model for" : "Utilizza modello per",
+	"All": "Tutti",
 	"Text": "Testo",
 	"Audio Processing": "Elaborazione audio",
 	"Content Moderation": "Moderazione dei contenuti",
@@ -141,5 +143,15 @@
 	"Text to Image": "Da testo a immagine",
 	"Image generation": "Generazione di immagini",
 	"OCR": "OCR",
-	"Vision": "Visione"
+	"Vision": "Visione",
+	
+	"Grammar & Spelling": "Grammatica e ortografia",
+	"Accept": "Accetta",
+	"Reject": "Rifiuta",
+	"Spelling suggestion": "Suggerimento ortografico",
+	"Grammar suggestion": "Suggerimento grammaticale",
+	"Check all": "Controlla tutto",
+	"Check current text": "Controlla il testo corrente",
+	"Suggested correction": "Correzione suggerita",
+	"Explanation": "Spiegazione"
 }
