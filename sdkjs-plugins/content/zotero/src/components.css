@@ -315,6 +315,9 @@
         &:focus {
             outline: none;
         }
+        & > * {
+            pointer-events: none;
+        }
     }
 
     .selectbox-header-open {
