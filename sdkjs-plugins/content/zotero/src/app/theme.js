@@ -471,6 +471,10 @@ const Theme = {
                 ".input-field-search-icon svg { fill: " +
                 theme["text-normal"] +
                 "; }\n";
+            styles +=
+                ".selectbox-arrow b { border-color: " +
+                theme["text-normal"] +
+                "; }\n";
         }
         if (theme["text-secondary"]) {
             styles +=
