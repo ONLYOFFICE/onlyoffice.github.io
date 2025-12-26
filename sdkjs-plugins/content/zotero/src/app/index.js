@@ -245,9 +245,13 @@ import "../styles.css";
                 .then(function (promises) {
                     if (promises.length) {
                         libLoader.show();
-                        Promise.any(promises).then(function () {
-                            libLoader.hide();
-                        });
+                        Promise.any(promises)
+                            .then(function () {
+                                libLoader.hide();
+                            })
+                            .finally(function () {
+                                libLoader.hide();
+                            });
                     }
                     return Promise.allSettled(promises);
                 })
