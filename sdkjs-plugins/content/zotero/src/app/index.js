@@ -389,9 +389,9 @@ import "../styles.css";
         Theme.addStylesForComponents(theme);
         var rules = "";
         rules +=
-            ".link { color : " +
+            ".link, .link:visited, .link:hover { color : " +
             window.Asc.plugin.theme["text-normal"] +
-            ";}\n";
+            " !important;}\n";
         rules +=
             ".doc { border-color: " +
             theme["border-regular-control"] +

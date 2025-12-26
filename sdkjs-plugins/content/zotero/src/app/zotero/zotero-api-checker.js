@@ -127,39 +127,37 @@ var ZoteroApiChecker = {
      */
     _checkApiAvailable: function (sdk) {
         const self = this;
-        return new Promise(function (resolve) {
-            Promise.all([
-                fetch(zoteroEnvironment.restApiUrl, {
-                    method: "GET",
-                    cache: "no-cache",
+        return Promise.all([
+            fetch(zoteroEnvironment.restApiUrl, {
+                method: "GET",
+                cache: "no-cache",
+            })
+                .then(function (res) {
+                    return res.status === 200;
                 })
-                    .then(function (res) {
-                        return res.status === 200;
-                    })
-                    .catch(function () {
-                        return false;
-                    }),
-                self
-                    ._sendDesktopRequest(zoteroEnvironment.desktopApiUrl)
-                    .then(function (res) {
-                        self._hasPermission = res.hasPermission;
-                        return res.isZoteroRunning;
-                    })
-                    .catch(function () {
-                        return false;
-                    }),
-            ]).then(function (apisAvailable) {
-                self._online = apisAvailable[0];
-                self._desktop = apisAvailable[1];
-                self._hasKey = sdk.hasSettings();
-                resolve({
-                    online: self._online,
-                    hasKey: self._hasKey,
-                    desktop: self._desktop,
-                    hasPermission: self._hasPermission,
-                    desktopVersion: self._desktopVersion,
-                });
-            });
+                .catch(function () {
+                    return false;
+                }),
+            self
+                ._sendDesktopRequest(zoteroEnvironment.desktopApiUrl)
+                .then(function (res) {
+                    self._hasPermission = res.hasPermission;
+                    return res.isZoteroRunning;
+                })
+                .catch(function () {
+                    return false;
+                }),
+        ]).then(function (apisAvailable) {
+            self._online = apisAvailable[0];
+            self._desktop = apisAvailable[1];
+            self._hasKey = sdk.hasSettings();
+            return {
+                online: self._online,
+                hasKey: self._hasKey,
+                desktop: self._desktop,
+                hasPermission: self._hasPermission,
+                desktopVersion: self._desktopVersion,
+            };
         });
     },
     /**
