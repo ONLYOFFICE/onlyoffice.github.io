@@ -1,13 +1,19 @@
 [
 	"openai",
-	"anthropic",
 	"google-gemini",
+	"anthropic",
+	"xAI",
+	"stabilityai",
 	"deepseek",
+	"mistral",
+	
 	"together.ai",
 	"groq",
+	"openrouter",
+
 	"ollama",
-	"mistral",
+	"lmstudio",
 	"gpt4all",
-	"xAI",
-	"stabilityai"
+
+	"zhipu"
 ]
