@@ -454,7 +454,9 @@ import "../styles.css";
                 }
             });
 
-            const translated = translate(el.innerText.trim());
+            const translated = translate(
+                el.innerText.trim().replace(/\s+/g, " ")
+            );
             if (translated) el.innerText = translated;
         }
     }
