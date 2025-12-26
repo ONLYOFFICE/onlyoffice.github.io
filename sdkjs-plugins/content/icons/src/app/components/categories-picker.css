@@ -1,0 +1,6 @@
+.categories-container {
+    box-sizing: border-box;
+}
+#categorySelectList {
+    min-height: 24px;
+}
