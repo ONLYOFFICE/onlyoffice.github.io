@@ -73,6 +73,12 @@ div::-moz-selection {
 }
 
 #loginState {
+    p {
+        margin: 1em 0;
+    }
+    & > p:first-child {
+        margin-top: 0;
+    }
     .custom-button-container {
         width: 100%;
     }

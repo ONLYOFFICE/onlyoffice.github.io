@@ -175,28 +175,31 @@ LoginPage.prototype._addEventListeners = function () {
         if (event.type !== "button:click") {
             return;
         }
-        ZoteroApiChecker.checkStatus(self._sdk).then(function (
-            /** @type {AvailableApis} */ apis
-        ) {
-            if (apis.desktop && apis.hasPermission) {
-                self._sdk.setIsOnlineAvailable(false);
-                self._hide();
-                self._hideAllMessages();
-            } else if (apis.desktop && !apis.hasPermission) {
-                const errorMessage =
-                    "Connection to Zotero failed. " +
-                    "Please enable external connections in Zotero: " +
-                    'Edit → Settings → Advanced → Check "Allow other ' +
-                    'applications on this computer to communicate with Zotero"';
-                self._useDesktopMessage.show(translate(errorMessage));
-            } else if (!apis.desktop) {
-                self._useDesktopMessage.show(
-                    translate(
-                        "Connection to Zotero failed. Make sure Zotero is running."
-                    )
-                );
-            }
-        });
+        self._showLoader();
+        ZoteroApiChecker.checkStatus(self._sdk)
+            .then(function (/** @type {AvailableApis} */ apis) {
+                if (apis.desktop && apis.hasPermission) {
+                    self._sdk.setIsOnlineAvailable(false);
+                    self._hide();
+                    self._hideAllMessages();
+                } else if (apis.desktop && !apis.hasPermission) {
+                    const errorMessage =
+                        "Connection to Zotero failed. " +
+                        "Please enable external connections in Zotero: " +
+                        'Edit → Settings → Advanced → Check "Allow other ' +
+                        'applications on this computer to communicate with Zotero"';
+                    self._useDesktopMessage.show(translate(errorMessage));
+                } else if (!apis.desktop) {
+                    self._useDesktopMessage.show(
+                        translate(
+                            "Connection to Zotero failed. Make sure Zotero is running."
+                        )
+                    );
+                }
+            })
+            .finally(function () {
+                self._hideLoader();
+            });
     });
     this._logoutLink.onclick = function (e) {
         self._sdk.clearSettings();
@@ -209,6 +212,7 @@ LoginPage.prototype._tryToApplyKey = function () {
     const self = this;
     const apiKey = self._apiKeyLoginField.getValue();
     if (apiKey) {
+        self._showLoader();
         self._sdk
             .setApiKey(apiKey)
             .then(function () {
@@ -218,6 +222,9 @@ LoginPage.prototype._tryToApplyKey = function () {
             .catch(function (err) {
                 console.error(err);
                 self._apiKeyMessage.show(translate("Invalid API key"));
+            })
+            .finally(function () {
+                self._hideLoader();
             });
     }
 };
@@ -237,6 +244,19 @@ LoginPage.prototype._hide = function (bShowLogoutLink) {
 LoginPage.prototype._show = function () {
     this._router.openLogin();
     this._logoutLink.classList.add("hidden");
+};
+
+LoginPage.prototype._showLoader = function () {
+    this._saveApiKeyBtn.disable();
+    this._connectToLocalZotero.disable();
+    this._apiKeyLoginField.disable();
+    //Loader.show();
+};
+LoginPage.prototype._hideLoader = function () {
+    this._saveApiKeyBtn.enable();
+    this._connectToLocalZotero.enable();
+    this._apiKeyLoginField.enable();
+    //Loader.hide();
 };
 
 export { LoginPage };
