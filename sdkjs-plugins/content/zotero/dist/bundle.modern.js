@@ -74,6 +74,7 @@ var Theme = {
         if (theme["text-normal"]) {
             styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".custom-button-icon-only,\n" + ".selectbox-search-input,\n" + ".loader-image,\n" + ".input-field-element { color: " + theme["text-normal"] + "; }\n";
             styles += ".input-field-search-icon svg { fill: " + theme["text-normal"] + "; }\n";
+            styles += ".selectbox-arrow b { border-color: " + theme["text-normal"] + "; }\n";
         }
         if (theme["text-secondary"]) {
             styles += ".message-close:hover,\n" + ".input-field-clear:hover { color: " + theme["text-secondary"] + "; }\n";
@@ -2707,7 +2708,7 @@ function _createDOM$1() {
     this._selectedText.textContent = this._options.placeholder;
     this._header.appendChild(this._selectedText);
     this._arrow.className += " selectbox-arrow";
-    this._arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' + '2.24889L3 0.00053797Z" fill="currentColor"/>' + "</svg>";
+    this._arrow.innerHTML = "<b></b>";
     this._header.appendChild(this._arrow);
     this._dropdown.className += " selectbox-dropdown";
     this._select.appendChild(this._dropdown);
@@ -5188,7 +5189,7 @@ SelectCitationsComponent.prototype._buildDocElement = function(item) {
     }
     var arrow = document.createElement("div");
     arrow.classList.add("selectbox-arrow");
-    arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75' + ' 2.24889L3 4.49724L5.25 2.24889L3 0.00053797Z" ' + 'fill="currentColor"/></svg>';
+    arrow.innerHTML = "<b></b>";
     var title = document.createElement("div");
     title.textContent = item.title.trim();
     title.classList.add("truncate-text");
