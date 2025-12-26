@@ -257,31 +257,29 @@ var ZoteroApiChecker = {
     },
     _checkApiAvailable: function _checkApiAvailable(sdk) {
         var self = this;
-        return new Promise(function(resolve) {
-            Promise.all([ fetch(zoteroEnvironment.restApiUrl, {
-                method: "GET",
-                cache: "no-cache"
-            }).then(function(res) {
-                return res.status === 200;
-            }).catch(function() {
-                return false;
-            }), self._sendDesktopRequest(zoteroEnvironment.desktopApiUrl).then(function(res) {
-                self._hasPermission = res.hasPermission;
-                return res.isZoteroRunning;
-            }).catch(function() {
-                return false;
-            }) ]).then(function(apisAvailable) {
-                self._online = apisAvailable[0];
-                self._desktop = apisAvailable[1];
-                self._hasKey = sdk.hasSettings();
-                resolve({
-                    online: self._online,
-                    hasKey: self._hasKey,
-                    desktop: self._desktop,
-                    hasPermission: self._hasPermission,
-                    desktopVersion: self._desktopVersion
-                });
-            });
+        return Promise.all([ fetch(zoteroEnvironment.restApiUrl, {
+            method: "GET",
+            cache: "no-cache"
+        }).then(function(res) {
+            return res.status === 200;
+        }).catch(function() {
+            return false;
+        }), self._sendDesktopRequest(zoteroEnvironment.desktopApiUrl).then(function(res) {
+            self._hasPermission = res.hasPermission;
+            return res.isZoteroRunning;
+        }).catch(function() {
+            return false;
+        }) ]).then(function(apisAvailable) {
+            self._online = apisAvailable[0];
+            self._desktop = apisAvailable[1];
+            self._hasKey = sdk.hasSettings();
+            return {
+                online: self._online,
+                hasKey: self._hasKey,
+                desktop: self._desktop,
+                hasPermission: self._hasPermission,
+                desktopVersion: self._desktopVersion
+            };
         });
     },
     _sendDesktopRequest: function _sendDesktopRequest(url) {
@@ -1823,16 +1821,16 @@ class Radio {
         _assertClassBrand(_Radio_brand, this, _applyInputAttributes).call(this);
         _classPrivateFieldSet2(_container$1, this, document.createElement("div"));
         _classPrivateFieldSet2(_visualRadio, this, document.createElement("span"));
-        _assertClassBrand(_Radio_brand, this, _createDOM$1).call(this);
+        _assertClassBrand(_Radio_brand, this, _createDOM$2).call(this);
         _assertClassBrand(_Radio_brand, this, _setupEventListeners).call(this);
         _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
         if (!_classPrivateFieldGet2(_options, this).name) {
             throw new Error("Name attribute is required");
         }
-        var sameNameInstances = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+        var sameNameInstances = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
         if (!sameNameInstances) {
             sameNameInstances = new Array;
-            _instances._.set(_classPrivateFieldGet2(_options, this).name, sameNameInstances);
+            _instances$1._.set(_classPrivateFieldGet2(_options, this).name, sameNameInstances);
         }
         sameNameInstances.push(this);
     }
@@ -1853,7 +1851,7 @@ class Radio {
     check(bSilent) {
         if (_classPrivateFieldGet2(_options, this).disabled || _classPrivateFieldGet2(_options, this).checked) return;
         if (_classPrivateFieldGet2(_options, this).name) {
-            var radios = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+            var radios = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
             radios && radios.forEach(radio => {
                 if (radio !== this && _classPrivateFieldGet2(_options, radio).checked) {
                     radio.uncheck();
@@ -1863,14 +1861,14 @@ class Radio {
         _classPrivateFieldGet2(_options, this).checked = true;
         _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
         if (bSilent) return;
-        _assertClassBrand(_Radio_brand, this, _triggerChange).call(this);
+        _assertClassBrand(_Radio_brand, this, _triggerChange$1).call(this);
     }
     uncheck(bSilent) {
         if (_classPrivateFieldGet2(_options, this).disabled || !_classPrivateFieldGet2(_options, this).checked) return;
         _classPrivateFieldGet2(_options, this).checked = false;
         _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
         if (bSilent) return;
-        _assertClassBrand(_Radio_brand, this, _triggerChange).call(this);
+        _assertClassBrand(_Radio_brand, this, _triggerChange$1).call(this);
     }
     enable() {
         if (!_classPrivateFieldGet2(_options, this).disabled) return;
@@ -1915,7 +1913,7 @@ class Radio {
     destroy() {
         _classPrivateFieldSet2(_subscribers, this, []);
         if (!_classPrivateFieldGet2(_options, this).name) return;
-        var sameNameInstances = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+        var sameNameInstances = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
         if (sameNameInstances) {
             var index = sameNameInstances.indexOf(this);
             if (index >= 0) sameNameInstances.splice(index, 1);
@@ -1965,7 +1963,7 @@ function _applyInputAttributes() {
     }
 }
 
-function _createDOM$1() {
+function _createDOM$2() {
     var parent = _classPrivateFieldGet2(_input, this).parentNode;
     var fragment = document.createDocumentFragment();
     fragment.appendChild(_classPrivateFieldGet2(_container$1, this));
@@ -1999,8 +1997,8 @@ function _createDOM$1() {
 function _updateRadioGroupTabIndex() {
     if (_classPrivateFieldGet2(_options, this).checked) {
         _classPrivateFieldGet2(_container$1, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0;
-    } else if (_classPrivateFieldGet2(_options, this).name && _instances._.has(_classPrivateFieldGet2(_options, this).name)) {
-        var radios = _instances._.get(_classPrivateFieldGet2(_options, this).name);
+    } else if (_classPrivateFieldGet2(_options, this).name && _instances$1._.has(_classPrivateFieldGet2(_options, this).name)) {
+        var radios = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
         var hasChecked = false;
         radios && radios.forEach(radio => {
             if (_classPrivateFieldGet2(_options, radio).checked && radio !== this) {
@@ -2059,7 +2057,7 @@ function _updateVisualState() {
     _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
 }
 
-function _triggerChange(e) {
+function _triggerChange$1(e) {
     var detail = this.getState();
     var objEvent = {
         type: "radio:change",
@@ -2073,7 +2071,7 @@ function _triggerChange(e) {
     });
 }
 
-var _instances = {
+var _instances$1 = {
     _: new Map
 };
 
@@ -2358,121 +2356,65 @@ Checkbox.prototype = {
     }
 };
 
-function SelectBox(container, options) {
-    var self = this;
-    if (typeof container === "string") {
-        var temp = document.getElementById(container);
-        if (temp instanceof HTMLElement) {
-            container = temp;
-        }
-    }
-    if (container instanceof HTMLElement) {
-        this._container = container;
-    } else {
-        throw new Error("Invalid container");
-    }
-    this._options = Object.assign(options, {
-        placeholder: options.placeholder || "Select...",
-        searchable: options.searchable || false,
-        multiple: options.multiple || false,
-        description: options.description || ""
-    });
-    this._selectedValues = new Set;
-    this.isOpen = false;
-    this._items = [];
-    this._customItems = [];
-    this._subscribers = [];
-    this._boundHandles = {
-        toggle: function toggle(e) {
-            self._toggle(e);
-        },
-        search: function search(e) {
-            self._handleSearch(e);
-        },
-        close: function close(e) {
-            if (e.target instanceof HTMLElement && !self._container.contains(e.target) && !e.target.classList.contains("selectbox-option")) {
-                self._closeDropdown();
-            }
-        },
-        keydown: function keydown(e) {
-            self._handleKeydown(e);
-        },
-        dropdownClick: function dropdownClick(e) {
-            self._handleDropdownClick(e);
-        }
-    };
-    this._optionsContainer = null;
-    this.searchInput = null;
-    this._select = document.createElement("div");
-    this._header = document.createElement("div");
-    this._selectedText = document.createElement("span");
-    this._arrow = document.createElement("span");
-    this._dropdown = document.createElement("div");
-    this._createDOM();
-    this._bindEvents();
-    this._renderOptions();
-}
+var _SelectBox_brand = new WeakSet;
 
-SelectBox.prototype = {
-    constructor: SelectBox,
-    _createDOM: function _createDOM() {
-        this._container.innerHTML = "";
-        this._container.className += " selectbox-container";
-        var fragment = document.createDocumentFragment();
-        this._select.className += " selectbox";
-        if (this._options.multiple) {
-            this._select.className += " selectbox-multiple";
+class SelectBox {
+    constructor(container, options) {
+        _classPrivateMethodInitSpec(this, _SelectBox_brand);
+        if (typeof container === "string") {
+            var _temp = document.getElementById(container);
+            if (_temp instanceof HTMLElement) {
+                container = _temp;
+            }
         }
-        fragment.appendChild(this._select);
-        this._header.className += " selectbox-header";
-        this._select.appendChild(this._header);
-        this._header.setAttribute("tabindex", "0");
-        this._selectedText.className += " selectbox-selected-text";
-        this._selectedText.textContent = this._options.placeholder;
-        this._header.appendChild(this._selectedText);
-        this._arrow.className += " selectbox-arrow";
-        this._arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' + '2.24889L3 0.00053797Z" fill="currentColor"/>' + "</svg>";
-        this._header.appendChild(this._arrow);
-        this._dropdown.className += " selectbox-dropdown";
-        this._select.appendChild(this._dropdown);
-        if (this._options.description) {
-            var description = document.createElement("div");
-            description.className += " i18n selectbox-description";
-            description.textContent = this._options.description;
-            this._dropdown.appendChild(description);
+        if (container instanceof HTMLElement) {
+            this._container = container;
+        } else {
+            throw new Error("Invalid container");
         }
-        if (this._options.searchable) {
-            var search = document.createElement("div");
-            search.className += " selectbox-search";
-            this._dropdown.appendChild(search);
-            this.searchInput = document.createElement("input");
-            this.searchInput.className += " selectbox-search-input";
-            this.searchInput.type = "text";
-            this.searchInput.placeholder = "Search...";
-            search.appendChild(this.searchInput);
-        }
-        this._optionsContainer = document.createElement("div");
-        this._optionsContainer.className += " selectbox-options";
-        this._dropdown.appendChild(this._optionsContainer);
-        this._container.appendChild(fragment);
-    },
-    _bindEvents: function _bindEvents() {
-        this._header.addEventListener("click", this._boundHandles.toggle);
-        if (this.searchInput) {
-            this.searchInput.addEventListener("input", this._boundHandles.search);
-        }
-        this._dropdown.addEventListener("click", this._boundHandles.dropdownClick);
-        this._dropdown.addEventListener("wheel", function(e) {
-            e.stopPropagation();
+        this._options = Object.assign(options, {
+            placeholder: options.placeholder || "Select...",
+            searchable: options.searchable || false,
+            multiple: options.multiple || false,
+            description: options.description || ""
         });
-        this._header.addEventListener("keydown", this._boundHandles.keydown);
-        this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
-    },
-    _toggle: function _toggle(e) {
-        e && e.stopPropagation();
-        this.isOpen ? this._closeDropdown() : this.openDropdown();
-    },
-    openDropdown: function openDropdown() {
+        this._selectedValues = new Set;
+        this.isOpen = false;
+        this._items = [];
+        this._customItems = [];
+        this._subscribers = [];
+        this._boundHandles = {
+            toggle: e => {
+                _assertClassBrand(_SelectBox_brand, this, _toggle).call(this, e);
+            },
+            search: e => {
+                _assertClassBrand(_SelectBox_brand, this, _handleSearch).call(this, e);
+            },
+            close: e => {
+                if (e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option")) {
+                    _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+                }
+            },
+            keydown: e => {
+                _assertClassBrand(_SelectBox_brand, this, _handleKeydown).call(this, e);
+            },
+            dropdownClick: e => {
+                _assertClassBrand(_SelectBox_brand, this, _handleDropdownClick).call(this, e);
+            }
+        };
+        this._optionsContainer = null;
+        this.searchInput = null;
+        this._select = document.createElement("div");
+        this._header = document.createElement("div");
+        this._selectedText = document.createElement("span");
+        this._arrow = document.createElement("span");
+        this._dropdown = document.createElement("div");
+        _assertClassBrand(_SelectBox_brand, this, _createDOM$1).call(this);
+        _assertClassBrand(_SelectBox_brand, this, _bindEvents).call(this);
+        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
+        _instances._.add(this);
+    }
+    openDropdown() {
         if (!this.isOpen) {
             document.addEventListener("click", this._boundHandles.close);
         }
@@ -2489,369 +2431,20 @@ SelectBox.prototype = {
                 };
             }(this), 100);
         }
-        this._renderOptions();
-    },
-    _closeDropdown: function _closeDropdown() {
-        if (this.isOpen && document && this._boundHandles) {
-            document.removeEventListener("click", this._boundHandles.close);
-        }
-        this.isOpen = false;
-        this._dropdown.style.display = "none";
-        var arrowClasses = this._arrow.className.split(" ");
-        var newArrowClasses = [];
-        for (var i = 0; i < arrowClasses.length; i++) {
-            if (arrowClasses[i] !== "selectbox-arrow-open") {
-                newArrowClasses.push(arrowClasses[i]);
-            }
-        }
-        this._arrow.className = newArrowClasses.join(" ");
-        var headerClasses = this._header.className.split(" ");
-        var newHeaderClasses = [];
-        for (var i = 0; i < headerClasses.length; i++) {
-            if (headerClasses[i] !== "selectbox-header-open") {
-                newHeaderClasses.push(headerClasses[i]);
-            }
-        }
-        this._header.className = newHeaderClasses.join(" ");
-        if (this.searchInput) {
-            this.searchInput.value = "";
-        }
-    },
-    _handleSearch: function _handleSearch(e) {
-        var target = e.target;
-        if (!(target instanceof HTMLInputElement)) {
-            return;
-        }
-        var searchTerm = target.value.toLowerCase();
-        this._renderOptions(searchTerm);
-    },
-    _selectNextPrevItem: function _selectNextPrevItem(direction) {
-        var searchTerm = this.searchInput ? this.searchInput.value.toLowerCase() : "";
-        var newItem;
-        var items = this._items.filter(function(item) {
-            return item !== null;
-        });
-        if (searchTerm) {
-            items = items.filter(function(item) {
-                return item.text.toLowerCase().indexOf(searchTerm) !== -1;
-            });
-        }
-        if (items.length === 0) {
-            return;
-        }
-        if (direction === "up") {
-            if (this._selectedValues.size === 0 && items.length > 0) {
-                newItem = items[items.length - 1];
-                this._selectedValues.add(newItem.value);
-            } else {
-                var selectedArray = Array.from(this._selectedValues);
-                var currentIndex = -1;
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].value === selectedArray[0]) {
-                        currentIndex = i;
-                        break;
-                    }
-                }
-                var prevIndex = (currentIndex - 1 + items.length) % items.length;
-                this._selectedValues.clear();
-                newItem = items[prevIndex];
-                this._selectedValues.add(newItem.value);
-            }
-        } else {
-            if (this._selectedValues.size === 0 && items.length > 0) {
-                newItem = items[0];
-                this._selectedValues.add(newItem.value);
-            } else {
-                var selectedArray = Array.from(this._selectedValues);
-                var currentIndex = -1;
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].value === selectedArray[0]) {
-                        currentIndex = i;
-                        break;
-                    }
-                }
-                var nextIndex = (currentIndex + 1) % items.length;
-                if (nextIndex === items.length) {
-                    nextIndex = 0;
-                }
-                this._selectedValues.clear();
-                newItem = items[nextIndex];
-                this._selectedValues.add(newItem.value);
-            }
-        }
-        this._updateSelectedText();
-        this._renderOptions(searchTerm, true);
-        this._triggerChange(newItem.value, true);
-    },
-    _handleKeydown: function _handleKeydown(e) {
-        var key = e.key || e.keyCode;
-        switch (key) {
-          case "Enter":
-          case 13:
-            e.preventDefault();
-            this._toggle(e);
-            break;
-
-          case "Escape":
-          case 27:
-            this._closeDropdown();
-            break;
-
-          case "ArrowDown":
-          case 40:
-            e.preventDefault();
-            this._selectNextPrevItem("down");
-            break;
-
-          case "ArrowUp":
-          case 38:
-            e.preventDefault();
-            this._selectNextPrevItem("up");
-            break;
-
-          case "Tab":
-          case 9:
-            this._closeDropdown();
-            break;
-        }
-    },
-    _renderOptions: function _renderOptions(searchTerm, scrollIntoView) {
-        searchTerm = searchTerm || "";
-        if (!this._optionsContainer) return;
-        this._optionsContainer.innerHTML = "";
-        var selectedOption = null;
-        var filteredItems = this._items;
-        if (searchTerm) {
-            filteredItems = filteredItems.filter(function(item) {
-                return item !== null && item.text.toLowerCase().indexOf(searchTerm) !== -1;
-            });
-        }
-        var fragment = document.createDocumentFragment();
-        for (var i = 0; i < filteredItems.length; i++) {
-            var item = filteredItems[i];
-            if (!item) {
-                var hr = document.createElement("hr");
-                hr.className += " selectbox-option-divider";
-                fragment.appendChild(hr);
-                continue;
-            }
-            var option = document.createElement("div");
-            option.className += " selectbox-option";
-            if (this._selectedValues.has(item.value)) {
-                option.className += " selectbox-option-selected checkbox--checked";
-                selectedOption = option;
-            }
-            option.setAttribute("data-value", item.value);
-            var label = document.createElement("label");
-            label.className += " selectbox-option-text";
-            label.textContent = item.text;
-            if (this._options.multiple) {
-                option.className += " selectbox-option-checkbox";
-                var input = document.createElement("input");
-                input.type = "checkbox";
-                input.id = "checkbox-" + item.value;
-                input.className += " selectbox-checkbox";
-                input.checked = this._selectedValues.has(item.value);
-                option.appendChild(input);
-                var visualCheckbox = document.createElement("span");
-                visualCheckbox.className = "checkbox-visual";
-                visualCheckbox.setAttribute("aria-hidden", "true");
-                var svgNS = "http://www.w3.org/2000/svg";
-                var checkmarkSVG = document.createElementNS(svgNS, "svg");
-                checkmarkSVG.setAttribute("viewBox", "0 0 10 8");
-                checkmarkSVG.setAttribute("class", "checkbox-checkmark");
-                var path = document.createElementNS(svgNS, "path");
-                path.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116");
-                path.setAttribute("fill", "none");
-                path.setAttribute("stroke", "currentColor");
-                path.setAttribute("stroke-width", "2");
-                checkmarkSVG.appendChild(path);
-                visualCheckbox.appendChild(checkmarkSVG);
-                option.appendChild(visualCheckbox);
-            }
-            option.appendChild(label);
-            fragment.appendChild(option);
-        }
-        if (this._customItems.length) {
-            var _hr = document.createElement("hr");
-            _hr.className += " selectbox-option-divider";
-            fragment.appendChild(_hr);
-        }
-        for (var i = 0; i < this._customItems.length; i++) {
-            var _item = this._customItems[i];
-            var _option = document.createElement("label");
-            _option.className += " selectbox-custom-option";
-            _option.setAttribute("data-value", _item.value);
-            _option.setAttribute("for", _item.value);
-            var span = document.createElement("span");
-            span.className += " selectbox-option-text";
-            span.textContent = _item.text;
-            _option.appendChild(span);
-            fragment.appendChild(_option);
-        }
-        this._optionsContainer.appendChild(fragment);
-        if (scrollIntoView && this.isOpen && this._optionsContainer && selectedOption) {
-            try {
-                if (selectedOption.scrollIntoView) {
-                    selectedOption.scrollIntoView({
-                        block: "nearest"
-                    });
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        }
-    },
-    _handleDropdownClick: function _handleDropdownClick(e) {
-        var target = e.target || e.srcElement;
-        var option = null;
-        if (target && target instanceof HTMLElement) {
-            var temp = null;
-            var classList = target.className.split(" ");
-            var hasOptionClass = false;
-            for (var i = 0; i < classList.length; i++) {
-                if (classList[i] === "selectbox-option") {
-                    hasOptionClass = true;
-                    break;
-                } else if (classList[i] === "selectbox-custom-option") {
-                    var val = target.getAttribute("data-value");
-                    if (val) {
-                        e.stopPropagation();
-                        this._triggerCustomChange(val);
-                        this._closeDropdown();
-                        return;
-                    }
-                    break;
-                }
-            }
-            if (hasOptionClass) {
-                temp = target;
-            } else if (target.parentNode && target.parentNode instanceof HTMLElement) {
-                var parentClassList = target.parentNode.className.split(" ");
-                var parentHasOptionClass = false;
-                for (var i = 0; i < parentClassList.length; i++) {
-                    if (parentClassList[i] === "selectbox-option") {
-                        parentHasOptionClass = true;
-                        break;
-                    } else if (parentClassList[i] === "selectbox-custom-option") {
-                        var _val = target.parentNode.getAttribute("data-value");
-                        if (_val) {
-                            e.stopPropagation();
-                            this._triggerCustomChange(_val);
-                            this._closeDropdown();
-                            return;
-                        }
-                        break;
-                    }
-                }
-                if (parentHasOptionClass) {
-                    temp = target.parentNode;
-                }
-            }
-            if (temp instanceof HTMLDivElement) {
-                option = temp;
-            } else {
-                return;
-            }
-        } else {
-            return;
-        }
-        var value = option.getAttribute("data-value");
-        if (value === null) return;
-        var enabled = true;
-        if (this._options.multiple) {
-            if (this._selectedValues.has(value)) {
-                this.unselectItems(value, true);
-                enabled = false;
-            } else {
-                this.selectItems(value, true);
-            }
-        } else {
-            this.selectItems(value, true);
-            this._closeDropdown();
-        }
-        this._updateSelectedText();
-        this._triggerChange(value, enabled);
-    },
-    _updateSelectedText: function _updateSelectedText() {
-        if (this._selectedValues.size === 0) {
-            this._selectedText.textContent = this._options.placeholder;
-            return;
-        }
-        if (this._options.multiple) {
-            var selectedItems = [];
-            for (var i = 0; i < this._items.length; i++) {
-                var item = this._items[i];
-                if (item && this._selectedValues.has(item.value)) {
-                    selectedItems.push(item);
-                }
-            }
-            if (selectedItems.length === 0) {
-                this._selectedText.textContent = this._options.placeholder;
-            } else if (selectedItems.length === 1) {
-                this._selectedText.textContent = selectedItems[0].text;
-            } else {
-                this._selectedText.textContent = selectedItems.length + " items selected";
-            }
-        } else {
-            var selectedItem = null;
-            for (var i = 0; i < this._items.length; i++) {
-                var item = this._items[i];
-                if (item && this._selectedValues.has(item.value)) {
-                    selectedItem = item;
-                    break;
-                }
-            }
-            this._selectedText.textContent = selectedItem ? selectedItem.text : this._options.placeholder;
-        }
-    },
-    _triggerChange: function _triggerChange(currentValue, enabled) {
-        var values = Array.from(this._selectedValues);
-        var items = [];
-        for (var i = 0; i < this._items.length; i++) {
-            var item = this._items[i];
-            if (item && this._selectedValues.has(item.value)) {
-                items.push(item);
-            }
-        }
-        var detail = {
-            values: values,
-            items: items,
-            current: currentValue,
-            enabled: enabled
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "selectbox:change",
-                detail: detail
-            });
-        });
-    },
-    _triggerCustomChange: function _triggerCustomChange(currentValue) {
-        var detail = {
-            values: [],
-            current: currentValue,
-            enabled: false
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "selectbox:custom",
-                detail: detail
-            });
-        });
-    },
-    subscribe: function subscribe(callback) {
+        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
+    }
+    subscribe(callback) {
         var self = this;
         this._subscribers.push(callback);
         return {
-            unsubscribe: function unsubscribe() {
+            unsubscribe() {
                 self._subscribers = self._subscribers.filter(function(cb) {
                     return cb !== callback;
                 });
             }
         };
-    },
-    addItem: function addItem(value, text, selected) {
+    }
+    addItem(value, text, selected) {
         selected = selected || false;
         var bHasItem = this._items.some(item => item && item.value === value);
         if (bHasItem) {
@@ -2872,9 +2465,9 @@ SelectBox.prototype = {
                 this._selectedValues.add(value);
             }
         }
-        this._updateSelectedText();
-    },
-    addItems: function addItems(values, selectedValue) {
+        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+    }
+    addItems(values, selectedValue) {
         var self = this;
         values.forEach(function(pair, index) {
             var bHasItem = self._items.some(item => item && item.value === pair[0]);
@@ -2895,21 +2488,21 @@ SelectBox.prototype = {
             });
         }, this);
         if (this.isOpen) {
-            this._renderOptions();
+            _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
         }
-        this._updateSelectedText();
-    },
-    addCustomItem: function addCustomItem(value, text) {
+        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+    }
+    addCustomItem(value, text) {
         this._customItems.push({
             value: value,
             text: text,
             selected: false
         });
-    },
-    addSeparator: function addSeparator() {
+    }
+    addSeparator() {
         this._items.push(null);
-    },
-    removeItem: function removeItem(value) {
+    }
+    removeItem(value) {
         this._items = this._items.filter(function(item) {
             if (item === null || item.value !== value) {
                 return true;
@@ -2923,9 +2516,9 @@ SelectBox.prototype = {
             return false;
         });
         this._selectedValues.delete(value);
-        this._updateSelectedText();
-    },
-    getSelectedValue: function getSelectedValue() {
+        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+    }
+    getSelectedValue() {
         if (this._options.multiple) {
             console.error("Method getSelectedValue is only available for single-select boxes.");
             return null;
@@ -2933,16 +2526,16 @@ SelectBox.prototype = {
             var values = Array.from(this._selectedValues);
             return values.length > 0 ? values[0] : null;
         }
-    },
-    getSelectedValues: function getSelectedValues() {
+    }
+    getSelectedValues() {
         if (this._options.multiple) {
             return Array.from(this._selectedValues);
         } else {
             var values = Array.from(this._selectedValues);
             return values.length > 0 ? values[0] : null;
         }
-    },
-    selectItems: function selectItems(values, bSilent) {
+    }
+    selectItems(values, bSilent) {
         var self = this;
         if (!this._options.multiple && Array.isArray(values)) {
             console.error("Method selectItem is only available for multi-select boxes.");
@@ -2994,15 +2587,15 @@ SelectBox.prototype = {
                     option.classList.add("checkbox--checked");
                 }
             }
-            this._closeDropdown();
+            _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
         }
-        this._updateSelectedText();
+        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
         if (bSilent) {
             return;
         }
-        this._triggerChange(value, true);
-    },
-    unselectItems: function unselectItems(values, bSilent) {
+        _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, value, true);
+    }
+    unselectItems(values, bSilent) {
         var self = this;
         if (!this._options.multiple) {
             console.error("Method unselectItem is only available for multi-select boxes.");
@@ -3037,19 +2630,19 @@ SelectBox.prototype = {
                 uncheckMultiOption(value);
             }
         }
-        this._updateSelectedText();
+        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
         if (bSilent) {
             return;
         }
-        this._triggerChange(value, true);
-    },
-    disable: function disable() {
+        _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, value, true);
+    }
+    disable() {
         this._select.classList.add("selectbox-disabled");
-    },
-    enable: function enable() {
+    }
+    enable() {
         this._select.classList.remove("selectbox-disabled");
-    },
-    clear: function clear(bSelectFirst) {
+    }
+    clear(bSelectFirst) {
         bSelectFirst = bSelectFirst || false;
         this._selectedValues.clear();
         if (bSelectFirst && this._items.length > 0) {
@@ -3058,11 +2651,12 @@ SelectBox.prototype = {
                 this._selectedValues.add(firstItem.value);
             }
         }
-        this._updateSelectedText();
-        this._renderOptions();
-    },
-    destroy: function destroy() {
+        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
+    }
+    destroy() {
         this._subscribers = [];
+        _instances._.delete(this);
         try {
             if (this._header && this._boundHandles) {
                 this._header.removeEventListener("click", this._boundHandles.toggle);
@@ -3095,6 +2689,435 @@ SelectBox.prototype = {
         }
         this._container.className = newClasses.join(" ");
     }
+}
+
+function _createDOM$1() {
+    this._container.innerHTML = "";
+    this._container.className += " selectbox-container";
+    var fragment = document.createDocumentFragment();
+    this._select.className += " selectbox";
+    if (this._options.multiple) {
+        this._select.className += " selectbox-multiple";
+    }
+    fragment.appendChild(this._select);
+    this._header.className += " selectbox-header";
+    this._select.appendChild(this._header);
+    this._header.setAttribute("tabindex", "0");
+    this._selectedText.className += " selectbox-selected-text";
+    this._selectedText.textContent = this._options.placeholder;
+    this._header.appendChild(this._selectedText);
+    this._arrow.className += " selectbox-arrow";
+    this._arrow.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd"' + ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' + '2.24889L3 0.00053797Z" fill="currentColor"/>' + "</svg>";
+    this._header.appendChild(this._arrow);
+    this._dropdown.className += " selectbox-dropdown";
+    this._select.appendChild(this._dropdown);
+    if (this._options.description) {
+        var description = document.createElement("div");
+        description.className += " i18n selectbox-description";
+        description.textContent = this._options.description;
+        this._dropdown.appendChild(description);
+    }
+    if (this._options.searchable) {
+        var search = document.createElement("div");
+        search.className += " selectbox-search";
+        this._dropdown.appendChild(search);
+        this.searchInput = document.createElement("input");
+        this.searchInput.className += " selectbox-search-input";
+        this.searchInput.type = "text";
+        this.searchInput.placeholder = "Search...";
+        search.appendChild(this.searchInput);
+    }
+    this._optionsContainer = document.createElement("div");
+    this._optionsContainer.className += " selectbox-options";
+    this._dropdown.appendChild(this._optionsContainer);
+    this._container.appendChild(fragment);
+}
+
+function _bindEvents() {
+    this._header.addEventListener("click", this._boundHandles.toggle);
+    if (this.searchInput) {
+        this.searchInput.addEventListener("input", this._boundHandles.search);
+    }
+    this._dropdown.addEventListener("click", this._boundHandles.dropdownClick);
+    this._dropdown.addEventListener("wheel", function(e) {
+        e.stopPropagation();
+    });
+    this._header.addEventListener("keydown", this._boundHandles.keydown);
+    this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
+}
+
+function _toggle(e) {
+    e && e.stopPropagation();
+    this.isOpen ? _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this) : this.openDropdown();
+    if (e && e.type === "click") {
+        for (var selBox of _instances._) {
+            if (selBox.isOpen && selBox !== this) {
+                _assertClassBrand(_SelectBox_brand, selBox, _closeDropdown).call(selBox);
+            }
+        }
+    }
+}
+
+function _closeDropdown() {
+    if (this.isOpen && document && this._boundHandles) {
+        document.removeEventListener("click", this._boundHandles.close);
+    }
+    this.isOpen = false;
+    this._dropdown.style.display = "none";
+    var arrowClasses = this._arrow.className.split(" ");
+    var newArrowClasses = [];
+    for (var i = 0; i < arrowClasses.length; i++) {
+        if (arrowClasses[i] !== "selectbox-arrow-open") {
+            newArrowClasses.push(arrowClasses[i]);
+        }
+    }
+    this._arrow.className = newArrowClasses.join(" ");
+    var headerClasses = this._header.className.split(" ");
+    var newHeaderClasses = [];
+    for (var i = 0; i < headerClasses.length; i++) {
+        if (headerClasses[i] !== "selectbox-header-open") {
+            newHeaderClasses.push(headerClasses[i]);
+        }
+    }
+    this._header.className = newHeaderClasses.join(" ");
+    if (this.searchInput) {
+        this.searchInput.value = "";
+    }
+}
+
+function _handleSearch(e) {
+    var target = e.target;
+    if (!(target instanceof HTMLInputElement)) {
+        return;
+    }
+    var searchTerm = target.value.toLowerCase();
+    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, searchTerm);
+}
+
+function _selectNextPrevItem(direction) {
+    var searchTerm = this.searchInput ? this.searchInput.value.toLowerCase() : "";
+    var newItem;
+    var items = this._items.filter(function(item) {
+        return item !== null;
+    });
+    if (searchTerm) {
+        items = items.filter(function(item) {
+            return item.text.toLowerCase().indexOf(searchTerm) !== -1;
+        });
+    }
+    if (items.length === 0) {
+        return;
+    }
+    if (direction === "up") {
+        if (this._selectedValues.size === 0 && items.length > 0) {
+            newItem = items[items.length - 1];
+            this._selectedValues.add(newItem.value);
+        } else {
+            var selectedArray = Array.from(this._selectedValues);
+            var currentIndex = -1;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].value === selectedArray[0]) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            var prevIndex = (currentIndex - 1 + items.length) % items.length;
+            this._selectedValues.clear();
+            newItem = items[prevIndex];
+            this._selectedValues.add(newItem.value);
+        }
+    } else {
+        if (this._selectedValues.size === 0 && items.length > 0) {
+            newItem = items[0];
+            this._selectedValues.add(newItem.value);
+        } else {
+            var selectedArray = Array.from(this._selectedValues);
+            var currentIndex = -1;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].value === selectedArray[0]) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            var nextIndex = (currentIndex + 1) % items.length;
+            if (nextIndex === items.length) {
+                nextIndex = 0;
+            }
+            this._selectedValues.clear();
+            newItem = items[nextIndex];
+            this._selectedValues.add(newItem.value);
+        }
+    }
+    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, searchTerm, true);
+    _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, newItem.value, true);
+}
+
+function _handleKeydown(e) {
+    var key = e.key || e.keyCode;
+    switch (key) {
+      case "Enter":
+      case 13:
+        e.preventDefault();
+        _assertClassBrand(_SelectBox_brand, this, _toggle).call(this, e);
+        break;
+
+      case "Escape":
+      case 27:
+        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+        break;
+
+      case "ArrowDown":
+      case 40:
+        e.preventDefault();
+        _assertClassBrand(_SelectBox_brand, this, _selectNextPrevItem).call(this, "down");
+        break;
+
+      case "ArrowUp":
+      case 38:
+        e.preventDefault();
+        _assertClassBrand(_SelectBox_brand, this, _selectNextPrevItem).call(this, "up");
+        break;
+
+      case "Tab":
+      case 9:
+        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+        break;
+    }
+}
+
+function _renderOptions(searchTerm, scrollIntoView) {
+    searchTerm = searchTerm || "";
+    if (!this._optionsContainer) return;
+    this._optionsContainer.innerHTML = "";
+    var selectedOption = null;
+    var filteredItems = this._items;
+    if (searchTerm) {
+        filteredItems = filteredItems.filter(function(item) {
+            return item !== null && item.text.toLowerCase().indexOf(searchTerm) !== -1;
+        });
+    }
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < filteredItems.length; i++) {
+        var item = filteredItems[i];
+        if (!item) {
+            var hr = document.createElement("hr");
+            hr.className += " selectbox-option-divider";
+            fragment.appendChild(hr);
+            continue;
+        }
+        var option = document.createElement("div");
+        option.className += " selectbox-option";
+        if (this._selectedValues.has(item.value)) {
+            option.className += " selectbox-option-selected checkbox--checked";
+            selectedOption = option;
+        }
+        option.setAttribute("data-value", item.value);
+        var label = document.createElement("label");
+        label.className += " selectbox-option-text";
+        label.textContent = item.text;
+        if (this._options.multiple) {
+            option.className += " selectbox-option-checkbox";
+            var input = document.createElement("input");
+            input.type = "checkbox";
+            input.id = "checkbox-" + item.value;
+            input.className += " selectbox-checkbox";
+            input.checked = this._selectedValues.has(item.value);
+            option.appendChild(input);
+            var visualCheckbox = document.createElement("span");
+            visualCheckbox.className = "checkbox-visual";
+            visualCheckbox.setAttribute("aria-hidden", "true");
+            var svgNS = "http://www.w3.org/2000/svg";
+            var checkmarkSVG = document.createElementNS(svgNS, "svg");
+            checkmarkSVG.setAttribute("viewBox", "0 0 10 8");
+            checkmarkSVG.setAttribute("class", "checkbox-checkmark");
+            var path = document.createElementNS(svgNS, "path");
+            path.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116");
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", "currentColor");
+            path.setAttribute("stroke-width", "2");
+            checkmarkSVG.appendChild(path);
+            visualCheckbox.appendChild(checkmarkSVG);
+            option.appendChild(visualCheckbox);
+        }
+        option.appendChild(label);
+        fragment.appendChild(option);
+    }
+    if (this._customItems.length) {
+        var _hr = document.createElement("hr");
+        _hr.className += " selectbox-option-divider";
+        fragment.appendChild(_hr);
+    }
+    for (var i = 0; i < this._customItems.length; i++) {
+        var _item = this._customItems[i];
+        var _option = document.createElement("label");
+        _option.className += " selectbox-custom-option";
+        _option.setAttribute("data-value", _item.value);
+        _option.setAttribute("for", _item.value);
+        var span = document.createElement("span");
+        span.className += " selectbox-option-text";
+        span.textContent = _item.text;
+        _option.appendChild(span);
+        fragment.appendChild(_option);
+    }
+    this._optionsContainer.appendChild(fragment);
+    if (scrollIntoView && this.isOpen && this._optionsContainer && selectedOption) {
+        try {
+            if (selectedOption.scrollIntoView) {
+                selectedOption.scrollIntoView({
+                    block: "nearest"
+                });
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+}
+
+function _handleDropdownClick(e) {
+    var target = e.target || e.srcElement;
+    var option = null;
+    if (target && target instanceof HTMLElement) {
+        var temp = null;
+        var classList = target.className.split(" ");
+        var hasOptionClass = false;
+        for (var i = 0; i < classList.length; i++) {
+            if (classList[i] === "selectbox-option") {
+                hasOptionClass = true;
+                break;
+            } else if (classList[i] === "selectbox-custom-option") {
+                var val = target.getAttribute("data-value");
+                if (val) {
+                    e.stopPropagation();
+                    _assertClassBrand(_SelectBox_brand, this, _triggerCustomChange).call(this, val);
+                    _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+                    return;
+                }
+                break;
+            }
+        }
+        if (hasOptionClass) {
+            temp = target;
+        } else if (target.parentNode && target.parentNode instanceof HTMLElement) {
+            var parentClassList = target.parentNode.className.split(" ");
+            var parentHasOptionClass = false;
+            for (var i = 0; i < parentClassList.length; i++) {
+                if (parentClassList[i] === "selectbox-option") {
+                    parentHasOptionClass = true;
+                    break;
+                } else if (parentClassList[i] === "selectbox-custom-option") {
+                    var _val = target.parentNode.getAttribute("data-value");
+                    if (_val) {
+                        e.stopPropagation();
+                        _assertClassBrand(_SelectBox_brand, this, _triggerCustomChange).call(this, _val);
+                        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+                        return;
+                    }
+                    break;
+                }
+            }
+            if (parentHasOptionClass) {
+                temp = target.parentNode;
+            }
+        }
+        if (temp instanceof HTMLDivElement) {
+            option = temp;
+        } else {
+            return;
+        }
+    } else {
+        return;
+    }
+    var value = option.getAttribute("data-value");
+    if (value === null) return;
+    var enabled = true;
+    if (this._options.multiple) {
+        if (this._selectedValues.has(value)) {
+            this.unselectItems(value, true);
+            enabled = false;
+        } else {
+            this.selectItems(value, true);
+        }
+    } else {
+        this.selectItems(value, true);
+        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+    }
+    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+    _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, value, enabled);
+}
+
+function _updateSelectedText() {
+    if (this._selectedValues.size === 0) {
+        this._selectedText.textContent = this._options.placeholder;
+        return;
+    }
+    if (this._options.multiple) {
+        var selectedItems = [];
+        for (var i = 0; i < this._items.length; i++) {
+            var item = this._items[i];
+            if (item && this._selectedValues.has(item.value)) {
+                selectedItems.push(item);
+            }
+        }
+        if (selectedItems.length === 0) {
+            this._selectedText.textContent = this._options.placeholder;
+        } else if (selectedItems.length === 1) {
+            this._selectedText.textContent = selectedItems[0].text;
+        } else {
+            this._selectedText.textContent = selectedItems.length + " items selected";
+        }
+    } else {
+        var selectedItem = null;
+        for (var i = 0; i < this._items.length; i++) {
+            var item = this._items[i];
+            if (item && this._selectedValues.has(item.value)) {
+                selectedItem = item;
+                break;
+            }
+        }
+        this._selectedText.textContent = selectedItem ? selectedItem.text : this._options.placeholder;
+    }
+}
+
+function _triggerChange(currentValue, enabled) {
+    var values = Array.from(this._selectedValues);
+    var items = [];
+    for (var i = 0; i < this._items.length; i++) {
+        var item = this._items[i];
+        if (item && this._selectedValues.has(item.value)) {
+            items.push(item);
+        }
+    }
+    var detail = {
+        values: values,
+        items: items,
+        current: currentValue,
+        enabled: enabled
+    };
+    this._subscribers.forEach(function(cb) {
+        cb({
+            type: "selectbox:change",
+            detail: detail
+        });
+    });
+}
+
+function _triggerCustomChange(currentValue) {
+    var detail = {
+        values: [],
+        current: currentValue,
+        enabled: false
+    };
+    this._subscribers.forEach(function(cb) {
+        cb({
+            type: "selectbox:custom",
+            detail: detail
+        });
+    });
+}
+
+var _instances = {
+    _: new Set
 };
 
 var _container = new WeakMap;
@@ -3232,6 +3255,7 @@ CitationDocService.prototype.getAddinZoteroFields = function() {
             } catch (e) {
                 reject(e);
             }
+            console.warn(arrFields);
             resolve(arrFields);
         });
     });
@@ -6610,6 +6634,7 @@ LoginPage.prototype._addEventListeners = function() {
         if (event.type !== "button:click") {
             return;
         }
+        self._showLoader();
         ZoteroApiChecker.checkStatus(self._sdk).then(function(apis) {
             if (apis.desktop && apis.hasPermission) {
                 self._sdk.setIsOnlineAvailable(false);
@@ -6621,6 +6646,8 @@ LoginPage.prototype._addEventListeners = function() {
             } else if (!apis.desktop) {
                 self._useDesktopMessage.show(translate("Connection to Zotero failed. Make sure Zotero is running."));
             }
+        }).finally(function() {
+            self._hideLoader();
         });
     });
     this._logoutLink.onclick = function(e) {
@@ -6634,12 +6661,15 @@ LoginPage.prototype._tryToApplyKey = function() {
     var self = this;
     var apiKey = self._apiKeyLoginField.getValue();
     if (apiKey) {
+        self._showLoader();
         self._sdk.setApiKey(apiKey).then(function() {
             ZoteroApiChecker.successfullyLoggedInUsingApiKey();
             self._hide(true);
         }).catch(function(err) {
             console.error(err);
             self._apiKeyMessage.show(translate("Invalid API key"));
+        }).finally(function() {
+            self._hideLoader();
         });
     }
 };
@@ -6658,6 +6688,18 @@ LoginPage.prototype._hide = function(bShowLogoutLink) {
 LoginPage.prototype._show = function() {
     this._router.openLogin();
     this._logoutLink.classList.add("hidden");
+};
+
+LoginPage.prototype._showLoader = function() {
+    this._saveApiKeyBtn.disable();
+    this._connectToLocalZotero.disable();
+    this._apiKeyLoginField.disable();
+};
+
+LoginPage.prototype._hideLoader = function() {
+    this._saveApiKeyBtn.enable();
+    this._connectToLocalZotero.enable();
+    this._apiKeyLoginField.enable();
 };
 
 (function() {
@@ -6882,7 +6924,7 @@ LoginPage.prototype._show = function() {
         Theme.fixThemeForIE(theme);
         Theme.addStylesForComponents(theme);
         var rules = "";
-        rules += ".link { color : " + window.Asc.plugin.theme["text-normal"] + ";}\n";
+        rules += ".link, .link:visited, .link:hover { color : " + window.Asc.plugin.theme["text-normal"] + " !important;}\n";
         rules += ".doc { border-color: " + theme["border-regular-control"] + "; background-color: " + theme["background-normal"] + "; }\n";
         rules += ".scrollThumb { box-shadow: 0 0 8px 8px " + theme["highlight-button-hover"] + " inset; }\n";
         rules += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + theme["canvas-scroll-thumb-pressed"] + " inset; }\n";
