@@ -3,8 +3,10 @@
 /// <reference path="../../types-global.js" />
 
 class AdditionalWindow {
+    #window;
+
     constructor() {
-        this._window = null;
+        this.#window = new window.Asc.PluginWindow();
     }
 
     /**
@@ -13,35 +15,27 @@ class AdditionalWindow {
      * @param {string} text
      */
     show(fileName, description, text) {
-        const self = this;
-        let variation = {
-            url: fileName + ".html",
+        const variation = {
+            url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
-            /*buttons: [
+            buttons: [
                 {
                     text: window.Asc.plugin.tr("Yes"),
                     primary: true,
                     isViewer: false,
                 },
                 { text: window.Asc.plugin.tr("No"), primary: false },
-            ],*/
+            ],
             isModal: false,
             EditorsSupport: ["word"],
-            size: [400, 310],
+            size: [400, 200],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
         };
 
-        this._window = new window.Asc.PluginWindow();
-
-        this._window.show(variation);
-
-        this._window.button = function (id) {
-            console.log("button", id);
-            window.Asc.plugin.executeCommand("close", "");
-        };
+        this.#window.show(variation);
     }
 
     hide() {}

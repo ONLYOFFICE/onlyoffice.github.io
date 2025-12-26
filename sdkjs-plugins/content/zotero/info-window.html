@@ -33,12 +33,10 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Summarization</title>
+	<title>Zotero</title>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-
 </head>
 
 <body class="noselect">
@@ -65,21 +63,9 @@
 	</div>
 
 	<script type="text/javascript">
-		(function (window, undefined) {
-			window.Asc.plugin.init = function (data) {
-				console.log("init", data);
-			};
-
-			/**
-			 * Called when a button in the plugin's UI is clicked.
-			 * @param {number} id - The ordinal number of the button that was clicked.
-			 */
-			window.Asc.plugin.button = function (id) {
-				console.log("button", id);
-				window.Asc.plugin.executeCommand("close", "");
-			};
-
-		})(window, undefined);
+		window.Asc.plugin.init = function (data) {
+			console.log("init", data);
+		};
 
 	</script>
 </body>
