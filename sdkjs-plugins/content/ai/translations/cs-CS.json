@@ -30,6 +30,7 @@
 	"Key" : "Klíč",
 	"Update models list" : "Aktualizovat seznam modelů",
 	"Use model for" : "Použít model pro",
+	"All": "Vše",
 	"Text": "Text",
 	"Audio Processing": "Zpracování zvuku",
 	"Content Moderation": "Moderování obsahu",
@@ -141,5 +142,15 @@
 	"Text to Image": "Text na obrázek",
 	"Image generation": "Generování obrázků",
 	"OCR": "OCR",
-	"Vision": "Vize"
+	"Vision": "Vize",
+	
+	"Grammar & Spelling": "Gramatika a pravopis",
+	"Accept": "Přijmout",
+	"Reject": "Odmítnout",
+	"Spelling suggestion": "Návrh pravopisu",
+	"Grammar suggestion": "Návrh gramatické chyby",
+	"Check all": "Zkontrolovat vše",
+	"Check current text": "Zkontrolovat aktuální text",
+	"Suggested correction": "Navrhovaná oprava",
+	"Explanation": "Vysvětlení"
 }

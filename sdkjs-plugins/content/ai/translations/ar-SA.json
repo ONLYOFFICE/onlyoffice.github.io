@@ -30,6 +30,7 @@
 	"Key" : "المفتاح",
 	"Update models list" : "تحديث قائمة النماذج",
 	"Use model for" : "استخدم النموذج في:",
+	"All": "الكل",
 	"Text": "النصوص",
 	"Audio Processing": "معالجة الصوت",
 	"Content Moderation": "الإشراف على المحتوى",
@@ -141,5 +142,15 @@
 	"Text to Image": "تحويل النص إلى صورة",
 	"Image generation": "توليد الصور",
 	"OCR": "التعرّف الضوئي على الحروف",
-	"Vision": "الرؤية الحاسوبية"
+	"Vision": "الرؤية الحاسوبية",
+	
+	"Grammar & Spelling": "النحو والإملاء",
+	"Accept": "قبول",
+	"Reject": "رفض",
+	"Spelling suggestion": "اقتراح إملائي",
+	"Grammar suggestion": "اقتراح نحوي",
+	"Check all": "تدقيق الكل",
+	"Check current text": "تدقيق النص الحالي",
+	"Suggested correction": "تصحيح مقترح",
+	"Explanation": "شرح"
 }
