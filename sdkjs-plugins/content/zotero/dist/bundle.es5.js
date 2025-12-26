@@ -15360,6 +15360,8 @@
                         libLoader.show();
                         Promise.any(promises).then(function() {
                             libLoader.hide();
+                        }).finally(function() {
+                            libLoader.hide();
                         });
                     }
                     return Promise.allSettled(promises);
