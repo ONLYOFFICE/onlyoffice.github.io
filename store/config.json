@@ -35,5 +35,6 @@
 	{ "name": "pomodoro", "discussion": "" },
 	{ "name": "videoembedder", "discussion": "" },
 	{ "name": "mathpix", "discussion": "" },
-	{ "name": "icons", "discussion": "" }
+	{ "name": "icons", "discussion": "" },
+	{ "name": "nlpsolver", "discussion": "" }
 ]
