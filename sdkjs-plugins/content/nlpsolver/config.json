@@ -1,0 +1,82 @@
+{
+  "name": "NLP Solver",
+  "guid": "asc.{3cc9292b-2cb5-4550-999b-859cb7f1087d}",
+  "baseUrl": "",
+  "version": "1.0.0",
+  "minVersion": "7.2.0",
+  "offered": "karlbreuer.com",
+  "help": "https://karlbreuer.com/nlp-solver/en",
+  "nameLocale": {
+    "de": "NLP Solver",
+    "fr": "Solveur NLP"
+  },
+  "variations": [
+    {
+      "description": "Solve nonlinear optimization problems in spreadsheets using NLP algorithms",
+      "descriptionLocale": {
+        "de": "Lösen Sie nichtlineare Optimierungsprobleme in Tabellenkalkulationen",
+        "fr": "Résolvez des problèmes d'optimisation non linéaire dans les feuilles de calcul"
+      },
+      "url": "index.html",
+      "EditorsSupport": ["cell"],
+      "type": "panelRight",
+      "initDataType": "none",
+      "initData": "",
+      "isDisplayedInViewer": false,
+      "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
+      "icons2": [
+        {
+          "style": "light",
+
+          "100%": {
+            "normal": "resources/light/icon.png"
+          },
+          "125%": {
+            "normal": "resources/light/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/light/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/light/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/light/icon@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+
+          "100%": {
+            "normal": "resources/dark/icon.png"
+          },
+          "125%": {
+            "normal": "resources/dark/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/dark/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/dark/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/dark/icon@2x.png"
+          }
+        }
+      ],
+
+      "store": {
+        "background": {
+          "light": "#F5F5F5",
+          "dark": "#444444"
+        },
+        "categories": ["work", "devTools"],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "screenshots": ["resources/store/screenshots/screen_1.png"]
+      }
+    }
+  ]
+}
