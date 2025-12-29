@@ -436,6 +436,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @property {function(ThemeColors): void} onThemeChangedBase
  * @property {AscPluginTheme} theme
  * @property {function(string): string} tr
+ * @property {function(number, string): void} button
  */
 
 /**

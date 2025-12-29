@@ -28,23 +28,39 @@ class AdditionalWindow {
             ],*/
             isModal: false,
             EditorsSupport: ["word"],
-            size: [400, 310],
+            size: [300, 120],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
         };
 
-        this._window = new window.Asc.PluginWindow();
+        this.#window.show(variation);
 
-        this._window.show(variation);
-
-        this._window.button = function (id) {
-            console.log("button", id);
-            window.Asc.plugin.executeCommand("close", "");
-        };
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    console.log("yes");
+                    resolve(true);
+                } else {
+                    console.log("no");
+                    resolve(false);
+                }
+                this.#window.close();
+            };
+        });
     }
 
-    hide() {}
+    hide() {
+        if (this.#window) {
+            this.#window.close();
+        }
+    }
+
+    destroy() {
+        this.#window.close();
+        this.#window = null;
+        window.Asc.plugin.button = () => {};
+    }
 }
 
 export { AdditionalWindow };
