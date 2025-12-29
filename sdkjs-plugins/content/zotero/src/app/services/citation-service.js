@@ -126,7 +126,7 @@ class CitationService {
                 // TODO: Maybe I should clear the search (think about it)
                 tempElement.innerHTML =
                     self._formatter.makeCitationCluster(keysL);
-                cslCitation.addPlainCitation(tempElement.innerText);
+                cslCitation.setPlainCitation(tempElement.innerText);
                 let notesStyle = null;
                 if ("note" === self._styleFormat) {
                     notesStyle = self._notesStyle;
@@ -265,20 +265,14 @@ class CitationService {
         }
         return citationObject;
     }
-
     /**
-     *
-     * @returns {Promise<{bibField: CustomField | undefined, fields: CustomField[], updatedFields: CustomField[], bibFieldValue: string}>}
+     * @returns {Promise<{fields: CustomField[], fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
      */
-    #synchronizeStorageWithDocItems() {
+    #getDocFields() {
         const self = this;
         return this.citationDocService
             .getAddinZoteroFields()
             .then(function (/** @type {CustomField[]} */ arrFields) {
-                const fragment = document.createDocumentFragment();
-                const tempElement = document.createElement("div");
-                fragment.appendChild(tempElement);
-
                 let numOfItems = 0;
                 let bibFieldValue = " ";
 
@@ -322,49 +316,81 @@ class CitationService {
                     return { field: { ...field }, cslCitation: cslCitation };
                 });
 
-                self.#updateFormatter();
-
-                /** @type {CustomField[]} */
-                const updatedFields = fieldsWithCitations.map(function (
-                    { field, cslCitation },
-                    index
-                ) {
-                    let keysL = cslCitation.getInfoForCitationCluster();
-                    tempElement.innerHTML =
-                        self._formatter.makeCitationCluster(keysL);
-                    const oldContent = field["Content"];
-                    const newContent = tempElement.innerText;
-
-                    if (oldContent !== newContent) {
-                        field["Content"] = newContent;
-                        /* self.#onUserEditCitationManuallyWindow.show(
-                            "info-window",
-                            "Zotero Citation",
-                            newContent
-                        );*/
-                    }
-
-                    console.log(cslCitation.getDoNotUpdate());
-
-                    // cslCitation.addPlainCitation(field["Content"]);
-                    if (cslCitation) {
-                        field["Value"] =
-                            self._citPrefixNew +
-                            " " +
-                            self._citSuffixNew +
-                            JSON.stringify(cslCitation.toJSON());
-                    }
-
-                    return field;
-                });
-
                 return {
                     fields: fields,
-                    updatedFields: updatedFields,
                     bibField: bibField,
                     bibFieldValue: bibFieldValue,
+                    fieldsWithCitations: fieldsWithCitations,
                 };
             });
+    }
+
+    /**
+     * @returns {Promise<{fields: CustomField[], updatedFields: CustomField[], bibField: CustomField | undefined, bibFieldValue: string, numOfSkippedCitations: number}>}
+     */
+    #synchronizeStorageWithDocItems() {
+        const self = this;
+        return this.#getDocFields().then(async function (data) {
+            const { fields, fieldsWithCitations } = data;
+            self.#updateFormatter();
+
+            const fragment = document.createDocumentFragment();
+            const tempElement = document.createElement("div");
+            fragment.appendChild(tempElement);
+
+            /** @type {CustomField[]} */
+            const updatedFields = [];
+            let numOfSkippedCitations = 0;
+
+            for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
+                const { field, cslCitation } = fieldsWithCitations[i];
+                let keysL = cslCitation.getInfoForCitationCluster();
+                tempElement.innerHTML =
+                    self._formatter.makeCitationCluster(keysL);
+                const oldContent = field["Content"];
+                const newContent = tempElement.innerText;
+
+                let bDoNotUpdate = cslCitation.getDoNotUpdate();
+
+                if (bDoNotUpdate) {
+                    fields.splice(i, 1);
+                    numOfSkippedCitations++;
+                    continue;
+                }
+
+                if (oldContent !== newContent) {
+                    await self.#onUserEditCitationManuallyWindow
+                        .show("info-window", "Zotero Citation", newContent)
+                        .then(function (bNeedSaveUserInput) {
+                            if (bNeedSaveUserInput) {
+                                bDoNotUpdate = true;
+                                cslCitation.setDoNotUpdate();
+                            } else {
+                                field["Content"] = newContent;
+                                cslCitation.setPlainCitation(newContent);
+                            }
+                        });
+                }
+
+                if (cslCitation) {
+                    field["Value"] =
+                        self._citPrefixNew +
+                        " " +
+                        self._citSuffixNew +
+                        JSON.stringify(cslCitation.toJSON());
+                }
+
+                updatedFields.push(field);
+            }
+
+            return {
+                fields: data.fields,
+                updatedFields: updatedFields,
+                bibField: data.bibField,
+                bibFieldValue: data.bibFieldValue,
+                numOfSkippedCitations: numOfSkippedCitations,
+            };
+        });
     }
 
     #updateFormatter() {
@@ -464,14 +490,23 @@ class CitationService {
 
         return this.#synchronizeStorageWithDocItems()
             .then(function (info) {
-                const { fields, updatedFields, bibField, bibFieldValue } = info;
+                const {
+                    fields,
+                    updatedFields,
+                    bibField,
+                    bibFieldValue,
+                    numOfSkippedCitations,
+                } = info;
 
                 if (!bUpdateAll && !bPastBib) {
                     return [];
                 }
 
                 if (bibField) {
-                    if (updatedFields.length === 0) {
+                    if (
+                        updatedFields.length === 0 &&
+                        numOfSkippedCitations === 0
+                    ) {
                         bibField["Content"] = translate(
                             self._bibPlaceholderIfEmpty
                         );
@@ -482,7 +517,10 @@ class CitationService {
                     updatedFields.push(bibField);
                 } else if (bPastBib) {
                     let bibliography = self.#makeBibliography();
-                    if (updatedFields.length === 0) {
+                    if (
+                        updatedFields.length === 0 &&
+                        numOfSkippedCitations === 0
+                    ) {
                         bibliography = translate(self._bibPlaceholderIfEmpty);
                     }
                     if (

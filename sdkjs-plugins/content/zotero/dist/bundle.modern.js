@@ -4805,14 +4805,14 @@ CSLCitation.prototype._addCitationItem = function(item) {
     return this;
 };
 
-CSLCitation.prototype.addDoNotUpdate = function() {
+CSLCitation.prototype.setDoNotUpdate = function() {
     this._setProperties({
         dontUpdate: true
     });
     return this;
 };
 
-CSLCitation.prototype.addPlainCitation = function(plainCitation) {
+CSLCitation.prototype.setPlainCitation = function(plainCitation) {
     this._setProperties({
         plainCitation: plainCitation
     });
@@ -5497,14 +5497,35 @@ class AdditionalWindow {
             } ],
             isModal: false,
             EditorsSupport: [ "word" ],
-            size: [ 400, 200 ],
+            size: [ 300, 120 ],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false
         };
         _classPrivateFieldGet2(_window, this).show(variation);
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    console.log("yes");
+                    resolve(true);
+                } else {
+                    console.log("no");
+                    resolve(false);
+                }
+                _classPrivateFieldGet2(_window, this).close();
+            };
+        });
     }
-    hide() {}
+    hide() {
+        if (_classPrivateFieldGet2(_window, this)) {
+            _classPrivateFieldGet2(_window, this).close();
+        }
+    }
+    destroy() {
+        _classPrivateFieldGet2(_window, this).close();
+        _classPrivateFieldSet2(_window, this, null);
+        window.Asc.plugin.button = () => {};
+    }
 }
 
 var _onUserEditCitationManuallyWindow = new WeakMap;
@@ -5559,12 +5580,12 @@ class CitationService {
         this._storage.clear();
         var self = this;
         return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this).then(function(info) {
-            var {fields: fields, updatedFields: updatedFields, bibField: bibField, bibFieldValue: bibFieldValue} = info;
+            var {fields: fields, updatedFields: updatedFields, bibField: bibField, bibFieldValue: bibFieldValue, numOfSkippedCitations: numOfSkippedCitations} = info;
             if (!bUpdateAll && !bPastBib) {
                 return [];
             }
             if (bibField) {
-                if (updatedFields.length === 0) {
+                if (updatedFields.length === 0 && numOfSkippedCitations === 0) {
                     bibField["Content"] = translate(self._bibPlaceholderIfEmpty);
                 } else {
                     var bibliography = _assertClassBrand(_CitationService_brand, self, _makeBibliography).call(self);
@@ -5573,7 +5594,7 @@ class CitationService {
                 updatedFields.push(bibField);
             } else if (bPastBib) {
                 var _bibliography = _assertClassBrand(_CitationService_brand, self, _makeBibliography).call(self);
-                if (updatedFields.length === 0) {
+                if (updatedFields.length === 0 && numOfSkippedCitations === 0) {
                     _bibliography = translate(self._bibPlaceholderIfEmpty);
                 }
                 if (self._cslStylesManager.isLastUsedStyleContainBibliography()) {
@@ -5619,7 +5640,7 @@ function _formatInsertLink(cslCitation) {
         var tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
         tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
-        cslCitation.addPlainCitation(tempElement.innerText);
+        cslCitation.setPlainCitation(tempElement.innerText);
         var notesStyle = null;
         if ("note" === self._styleFormat) {
             notesStyle = self._notesStyle;
@@ -5710,12 +5731,9 @@ function _extractField(field) {
     return citationObject;
 }
 
-function _synchronizeStorageWithDocItems() {
+function _getDocFields() {
     var self = this;
     return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
-        var fragment = document.createDocumentFragment();
-        var tempElement = document.createElement("div");
-        fragment.appendChild(tempElement);
         var numOfItems = 0;
         var bibFieldValue = " ";
         var bibField = arrFields.find(function(field) {
@@ -5746,29 +5764,69 @@ function _synchronizeStorageWithDocItems() {
                 cslCitation: cslCitation
             };
         });
-        _assertClassBrand(_CitationService_brand, self, _updateFormatter).call(self);
-        var updatedFields = fieldsWithCitations.map(function(_ref, index) {
-            var {field: field, cslCitation: cslCitation} = _ref;
-            var keysL = cslCitation.getInfoForCitationCluster();
-            tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
-            var oldContent = field["Content"];
-            var newContent = tempElement.innerText;
-            if (oldContent !== newContent) {
-                field["Content"] = newContent;
-            }
-            console.log(cslCitation.getDoNotUpdate());
-            if (cslCitation) {
-                field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
-            }
-            return field;
-        });
         return {
             fields: fields,
-            updatedFields: updatedFields,
             bibField: bibField,
-            bibFieldValue: bibFieldValue
+            bibFieldValue: bibFieldValue,
+            fieldsWithCitations: fieldsWithCitations
         };
     });
+}
+
+function _synchronizeStorageWithDocItems() {
+    var self = this;
+    return _assertClassBrand(_CitationService_brand, this, _getDocFields).call(this).then(function() {
+        var _ref = _asyncToGenerator(function*(data) {
+            var {fields: fields, fieldsWithCitations: fieldsWithCitations} = data;
+            _assertClassBrand(_CitationService_brand, self, _updateFormatter).call(self);
+            var fragment = document.createDocumentFragment();
+            var tempElement = document.createElement("div");
+            fragment.appendChild(tempElement);
+            var updatedFields = [];
+            var numOfSkippedCitations = 0;
+            var _loop = function* _loop() {
+                var {field: field, cslCitation: cslCitation} = fieldsWithCitations[i];
+                var keysL = cslCitation.getInfoForCitationCluster();
+                tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+                var oldContent = field["Content"];
+                var newContent = tempElement.innerText;
+                var bDoNotUpdate = cslCitation.getDoNotUpdate();
+                if (bDoNotUpdate) {
+                    fields.splice(i, 1);
+                    numOfSkippedCitations++;
+                    return 1;
+                }
+                if (oldContent !== newContent) {
+                    yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("info-window", "Zotero Citation", newContent).then(function(bNeedSaveUserInput) {
+                        if (bNeedSaveUserInput) {
+                            bDoNotUpdate = true;
+                            cslCitation.setDoNotUpdate();
+                        } else {
+                            field["Content"] = newContent;
+                            cslCitation.setPlainCitation(newContent);
+                        }
+                    });
+                }
+                if (cslCitation) {
+                    field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                }
+                updatedFields.push(field);
+            };
+            for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
+                if (yield* _loop()) continue;
+            }
+            return {
+                fields: data.fields,
+                updatedFields: updatedFields,
+                bibField: data.bibField,
+                bibFieldValue: data.bibFieldValue,
+                numOfSkippedCitations: numOfSkippedCitations
+            };
+        });
+        return function(_x) {
+            return _ref.apply(this, arguments);
+        };
+    }());
 }
 
 function _updateFormatter() {

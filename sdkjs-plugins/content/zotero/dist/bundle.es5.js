@@ -3287,7 +3287,7 @@
         return es_promise_finally;
     }
     requireEs_promise_finally();
-    var es_string_iterator = {};
+    var es_regexp_exec = {};
     var toString;
     var hasRequiredToString;
     function requireToString() {
@@ -3301,6 +3301,199 @@
         };
         return toString;
     }
+    var regexpFlags;
+    var hasRequiredRegexpFlags;
+    function requireRegexpFlags() {
+        if (hasRequiredRegexpFlags) return regexpFlags;
+        hasRequiredRegexpFlags = 1;
+        var anObject = requireAnObject();
+        regexpFlags = function() {
+            var that = anObject(this);
+            var result = "";
+            if (that.hasIndices) result += "d";
+            if (that.global) result += "g";
+            if (that.ignoreCase) result += "i";
+            if (that.multiline) result += "m";
+            if (that.dotAll) result += "s";
+            if (that.unicode) result += "u";
+            if (that.unicodeSets) result += "v";
+            if (that.sticky) result += "y";
+            return result;
+        };
+        return regexpFlags;
+    }
+    var regexpStickyHelpers;
+    var hasRequiredRegexpStickyHelpers;
+    function requireRegexpStickyHelpers() {
+        if (hasRequiredRegexpStickyHelpers) return regexpStickyHelpers;
+        hasRequiredRegexpStickyHelpers = 1;
+        var fails = requireFails();
+        var globalThis = requireGlobalThis();
+        var $RegExp = globalThis.RegExp;
+        var UNSUPPORTED_Y = fails(function() {
+            var re = $RegExp("a", "y");
+            re.lastIndex = 2;
+            return re.exec("abcd") !== null;
+        });
+        var MISSED_STICKY = UNSUPPORTED_Y || fails(function() {
+            return !$RegExp("a", "y").sticky;
+        });
+        var BROKEN_CARET = UNSUPPORTED_Y || fails(function() {
+            var re = $RegExp("^r", "gy");
+            re.lastIndex = 2;
+            return re.exec("str") !== null;
+        });
+        regexpStickyHelpers = {
+            BROKEN_CARET: BROKEN_CARET,
+            MISSED_STICKY: MISSED_STICKY,
+            UNSUPPORTED_Y: UNSUPPORTED_Y
+        };
+        return regexpStickyHelpers;
+    }
+    var regexpUnsupportedDotAll;
+    var hasRequiredRegexpUnsupportedDotAll;
+    function requireRegexpUnsupportedDotAll() {
+        if (hasRequiredRegexpUnsupportedDotAll) return regexpUnsupportedDotAll;
+        hasRequiredRegexpUnsupportedDotAll = 1;
+        var fails = requireFails();
+        var globalThis = requireGlobalThis();
+        var $RegExp = globalThis.RegExp;
+        regexpUnsupportedDotAll = fails(function() {
+            var re = $RegExp(".", "s");
+            return !(re.dotAll && re.test("\n") && re.flags === "s");
+        });
+        return regexpUnsupportedDotAll;
+    }
+    var regexpUnsupportedNcg;
+    var hasRequiredRegexpUnsupportedNcg;
+    function requireRegexpUnsupportedNcg() {
+        if (hasRequiredRegexpUnsupportedNcg) return regexpUnsupportedNcg;
+        hasRequiredRegexpUnsupportedNcg = 1;
+        var fails = requireFails();
+        var globalThis = requireGlobalThis();
+        var $RegExp = globalThis.RegExp;
+        regexpUnsupportedNcg = fails(function() {
+            var re = $RegExp("(?<a>b)", "g");
+            return re.exec("b").groups.a !== "b" || "b".replace(re, "$<a>c") !== "bc";
+        });
+        return regexpUnsupportedNcg;
+    }
+    var regexpExec;
+    var hasRequiredRegexpExec;
+    function requireRegexpExec() {
+        if (hasRequiredRegexpExec) return regexpExec;
+        hasRequiredRegexpExec = 1;
+        var call = requireFunctionCall();
+        var uncurryThis = requireFunctionUncurryThis();
+        var toString = requireToString();
+        var regexpFlags = requireRegexpFlags();
+        var stickyHelpers = requireRegexpStickyHelpers();
+        var shared = requireShared();
+        var create = requireObjectCreate();
+        var getInternalState = requireInternalState().get;
+        var UNSUPPORTED_DOT_ALL = requireRegexpUnsupportedDotAll();
+        var UNSUPPORTED_NCG = requireRegexpUnsupportedNcg();
+        var nativeReplace = shared("native-string-replace", String.prototype.replace);
+        var nativeExec = RegExp.prototype.exec;
+        var patchedExec = nativeExec;
+        var charAt = uncurryThis("".charAt);
+        var indexOf = uncurryThis("".indexOf);
+        var replace = uncurryThis("".replace);
+        var stringSlice = uncurryThis("".slice);
+        var UPDATES_LAST_INDEX_WRONG = function() {
+            var re1 = /a/;
+            var re2 = /b*/g;
+            call(nativeExec, re1, "a");
+            call(nativeExec, re2, "a");
+            return re1.lastIndex !== 0 || re2.lastIndex !== 0;
+        }();
+        var UNSUPPORTED_Y = stickyHelpers.BROKEN_CARET;
+        var NPCG_INCLUDED = /()??/.exec("")[1] !== undefined;
+        var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
+        if (PATCH) {
+            patchedExec = function exec(string) {
+                var re = this;
+                var state = getInternalState(re);
+                var str = toString(string);
+                var raw = state.raw;
+                var result, reCopy, lastIndex, match, i, object, group;
+                if (raw) {
+                    raw.lastIndex = re.lastIndex;
+                    result = call(patchedExec, raw, str);
+                    re.lastIndex = raw.lastIndex;
+                    return result;
+                }
+                var groups = state.groups;
+                var sticky = UNSUPPORTED_Y && re.sticky;
+                var flags = call(regexpFlags, re);
+                var source = re.source;
+                var charsAdded = 0;
+                var strCopy = str;
+                if (sticky) {
+                    flags = replace(flags, "y", "");
+                    if (indexOf(flags, "g") === -1) {
+                        flags += "g";
+                    }
+                    strCopy = stringSlice(str, re.lastIndex);
+                    if (re.lastIndex > 0 && (!re.multiline || re.multiline && charAt(str, re.lastIndex - 1) !== "\n")) {
+                        source = "(?: " + source + ")";
+                        strCopy = " " + strCopy;
+                        charsAdded++;
+                    }
+                    reCopy = new RegExp("^(?:" + source + ")", flags);
+                }
+                if (NPCG_INCLUDED) {
+                    reCopy = new RegExp("^" + source + "$(?!\\s)", flags);
+                }
+                if (UPDATES_LAST_INDEX_WRONG) lastIndex = re.lastIndex;
+                match = call(nativeExec, sticky ? reCopy : re, strCopy);
+                if (sticky) {
+                    if (match) {
+                        match.input = stringSlice(match.input, charsAdded);
+                        match[0] = stringSlice(match[0], charsAdded);
+                        match.index = re.lastIndex;
+                        re.lastIndex += match[0].length;
+                    } else re.lastIndex = 0;
+                } else if (UPDATES_LAST_INDEX_WRONG && match) {
+                    re.lastIndex = re.global ? match.index + match[0].length : lastIndex;
+                }
+                if (NPCG_INCLUDED && match && match.length > 1) {
+                    call(nativeReplace, match[0], reCopy, function() {
+                        for (i = 1; i < arguments.length - 2; i++) {
+                            if (arguments[i] === undefined) match[i] = undefined;
+                        }
+                    });
+                }
+                if (match && groups) {
+                    match.groups = object = create(null);
+                    for (i = 0; i < groups.length; i++) {
+                        group = groups[i];
+                        object[group[0]] = match[group[1]];
+                    }
+                }
+                return match;
+            };
+        }
+        regexpExec = patchedExec;
+        return regexpExec;
+    }
+    var hasRequiredEs_regexp_exec;
+    function requireEs_regexp_exec() {
+        if (hasRequiredEs_regexp_exec) return es_regexp_exec;
+        hasRequiredEs_regexp_exec = 1;
+        var $ = require_export();
+        var exec = requireRegexpExec();
+        $({
+            target: "RegExp",
+            proto: true,
+            forced: /./.exec !== exec
+        }, {
+            exec: exec
+        });
+        return es_regexp_exec;
+    }
+    requireEs_regexp_exec();
+    var es_string_iterator = {};
     var stringMultibyte;
     var hasRequiredStringMultibyte;
     function requireStringMultibyte() {
@@ -3361,6 +3554,341 @@
         return es_string_iterator;
     }
     requireEs_string_iterator();
+    var es_string_replace = {};
+    var fixRegexpWellKnownSymbolLogic;
+    var hasRequiredFixRegexpWellKnownSymbolLogic;
+    function requireFixRegexpWellKnownSymbolLogic() {
+        if (hasRequiredFixRegexpWellKnownSymbolLogic) return fixRegexpWellKnownSymbolLogic;
+        hasRequiredFixRegexpWellKnownSymbolLogic = 1;
+        requireEs_regexp_exec();
+        var call = requireFunctionCall();
+        var defineBuiltIn = requireDefineBuiltIn();
+        var regexpExec = requireRegexpExec();
+        var fails = requireFails();
+        var wellKnownSymbol = requireWellKnownSymbol();
+        var createNonEnumerableProperty = requireCreateNonEnumerableProperty();
+        var SPECIES = wellKnownSymbol("species");
+        var RegExpPrototype = RegExp.prototype;
+        fixRegexpWellKnownSymbolLogic = function(KEY, exec, FORCED, SHAM) {
+            var SYMBOL = wellKnownSymbol(KEY);
+            var DELEGATES_TO_SYMBOL = !fails(function() {
+                var O = {};
+                O[SYMBOL] = function() {
+                    return 7;
+                };
+                return ""[KEY](O) !== 7;
+            });
+            var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails(function() {
+                var execCalled = false;
+                var re = /a/;
+                if (KEY === "split") {
+                    var constructor = {};
+                    constructor[SPECIES] = function() {
+                        return re;
+                    };
+                    re = {
+                        constructor: constructor,
+                        flags: ""
+                    };
+                    re[SYMBOL] = /./[SYMBOL];
+                }
+                re.exec = function() {
+                    execCalled = true;
+                    return null;
+                };
+                re[SYMBOL]("");
+                return !execCalled;
+            });
+            if (!DELEGATES_TO_SYMBOL || !DELEGATES_TO_EXEC || FORCED) {
+                var nativeRegExpMethod = /./[SYMBOL];
+                var methods = exec(SYMBOL, ""[KEY], function(nativeMethod, regexp, str, arg2, forceStringMethod) {
+                    var $exec = regexp.exec;
+                    if ($exec === regexpExec || $exec === RegExpPrototype.exec) {
+                        if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
+                            return {
+                                done: true,
+                                value: call(nativeRegExpMethod, regexp, str, arg2)
+                            };
+                        }
+                        return {
+                            done: true,
+                            value: call(nativeMethod, str, regexp, arg2)
+                        };
+                    }
+                    return {
+                        done: false
+                    };
+                });
+                defineBuiltIn(String.prototype, KEY, methods[0]);
+                defineBuiltIn(RegExpPrototype, SYMBOL, methods[1]);
+            }
+            if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], "sham", true);
+        };
+        return fixRegexpWellKnownSymbolLogic;
+    }
+    var advanceStringIndex;
+    var hasRequiredAdvanceStringIndex;
+    function requireAdvanceStringIndex() {
+        if (hasRequiredAdvanceStringIndex) return advanceStringIndex;
+        hasRequiredAdvanceStringIndex = 1;
+        var charAt = requireStringMultibyte().charAt;
+        advanceStringIndex = function(S, index, unicode) {
+            return index + (unicode ? charAt(S, index).length : 1);
+        };
+        return advanceStringIndex;
+    }
+    var getSubstitution;
+    var hasRequiredGetSubstitution;
+    function requireGetSubstitution() {
+        if (hasRequiredGetSubstitution) return getSubstitution;
+        hasRequiredGetSubstitution = 1;
+        var uncurryThis = requireFunctionUncurryThis();
+        var toObject = requireToObject();
+        var floor = Math.floor;
+        var charAt = uncurryThis("".charAt);
+        var replace = uncurryThis("".replace);
+        var stringSlice = uncurryThis("".slice);
+        var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
+        var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
+        getSubstitution = function(matched, str, position, captures, namedCaptures, replacement) {
+            var tailPos = position + matched.length;
+            var m = captures.length;
+            var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+            if (namedCaptures !== undefined) {
+                namedCaptures = toObject(namedCaptures);
+                symbols = SUBSTITUTION_SYMBOLS;
+            }
+            return replace(replacement, symbols, function(match, ch) {
+                var capture;
+                switch (charAt(ch, 0)) {
+                  case "$":
+                    return "$";
+
+                  case "&":
+                    return matched;
+
+                  case "`":
+                    return stringSlice(str, 0, position);
+
+                  case "'":
+                    return stringSlice(str, tailPos);
+
+                  case "<":
+                    capture = namedCaptures[stringSlice(ch, 1, -1)];
+                    break;
+
+                  default:
+                    var n = +ch;
+                    if (n === 0) return match;
+                    if (n > m) {
+                        var f = floor(n / 10);
+                        if (f === 0) return match;
+                        if (f <= m) return captures[f - 1] === undefined ? charAt(ch, 1) : captures[f - 1] + charAt(ch, 1);
+                        return match;
+                    }
+                    capture = captures[n - 1];
+                }
+                return capture === undefined ? "" : capture;
+            });
+        };
+        return getSubstitution;
+    }
+    var regexpFlagsDetection;
+    var hasRequiredRegexpFlagsDetection;
+    function requireRegexpFlagsDetection() {
+        if (hasRequiredRegexpFlagsDetection) return regexpFlagsDetection;
+        hasRequiredRegexpFlagsDetection = 1;
+        var globalThis = requireGlobalThis();
+        var fails = requireFails();
+        var RegExp = globalThis.RegExp;
+        var FLAGS_GETTER_IS_CORRECT = !fails(function() {
+            var INDICES_SUPPORT = true;
+            try {
+                RegExp(".", "d");
+            } catch (error) {
+                INDICES_SUPPORT = false;
+            }
+            var O = {};
+            var calls = "";
+            var expected = INDICES_SUPPORT ? "dgimsy" : "gimsy";
+            var addGetter = function(key, chr) {
+                Object.defineProperty(O, key, {
+                    get: function() {
+                        calls += chr;
+                        return true;
+                    }
+                });
+            };
+            var pairs = {
+                dotAll: "s",
+                global: "g",
+                ignoreCase: "i",
+                multiline: "m",
+                sticky: "y"
+            };
+            if (INDICES_SUPPORT) pairs.hasIndices = "d";
+            for (var key in pairs) addGetter(key, pairs[key]);
+            var result = Object.getOwnPropertyDescriptor(RegExp.prototype, "flags").get.call(O);
+            return result !== expected || calls !== expected;
+        });
+        regexpFlagsDetection = {
+            correct: FLAGS_GETTER_IS_CORRECT
+        };
+        return regexpFlagsDetection;
+    }
+    var regexpGetFlags;
+    var hasRequiredRegexpGetFlags;
+    function requireRegexpGetFlags() {
+        if (hasRequiredRegexpGetFlags) return regexpGetFlags;
+        hasRequiredRegexpGetFlags = 1;
+        var call = requireFunctionCall();
+        var hasOwn = requireHasOwnProperty();
+        var isPrototypeOf = requireObjectIsPrototypeOf();
+        var regExpFlagsDetection = requireRegexpFlagsDetection();
+        var regExpFlagsGetterImplementation = requireRegexpFlags();
+        var RegExpPrototype = RegExp.prototype;
+        regexpGetFlags = regExpFlagsDetection.correct ? function(it) {
+            return it.flags;
+        } : function(it) {
+            return !regExpFlagsDetection.correct && isPrototypeOf(RegExpPrototype, it) && !hasOwn(it, "flags") ? call(regExpFlagsGetterImplementation, it) : it.flags;
+        };
+        return regexpGetFlags;
+    }
+    var regexpExecAbstract;
+    var hasRequiredRegexpExecAbstract;
+    function requireRegexpExecAbstract() {
+        if (hasRequiredRegexpExecAbstract) return regexpExecAbstract;
+        hasRequiredRegexpExecAbstract = 1;
+        var call = requireFunctionCall();
+        var anObject = requireAnObject();
+        var isCallable = requireIsCallable();
+        var classof = requireClassofRaw();
+        var regexpExec = requireRegexpExec();
+        var $TypeError = TypeError;
+        regexpExecAbstract = function(R, S) {
+            var exec = R.exec;
+            if (isCallable(exec)) {
+                var result = call(exec, R, S);
+                if (result !== null) anObject(result);
+                return result;
+            }
+            if (classof(R) === "RegExp") return call(regexpExec, R, S);
+            throw new $TypeError("RegExp#exec called on incompatible receiver");
+        };
+        return regexpExecAbstract;
+    }
+    var hasRequiredEs_string_replace;
+    function requireEs_string_replace() {
+        if (hasRequiredEs_string_replace) return es_string_replace;
+        hasRequiredEs_string_replace = 1;
+        var apply = requireFunctionApply();
+        var call = requireFunctionCall();
+        var uncurryThis = requireFunctionUncurryThis();
+        var fixRegExpWellKnownSymbolLogic = requireFixRegexpWellKnownSymbolLogic();
+        var fails = requireFails();
+        var anObject = requireAnObject();
+        var isCallable = requireIsCallable();
+        var isObject = requireIsObject();
+        var toIntegerOrInfinity = requireToIntegerOrInfinity();
+        var toLength = requireToLength();
+        var toString = requireToString();
+        var requireObjectCoercible = requireRequireObjectCoercible();
+        var advanceStringIndex = requireAdvanceStringIndex();
+        var getMethod = requireGetMethod();
+        var getSubstitution = requireGetSubstitution();
+        var getRegExpFlags = requireRegexpGetFlags();
+        var regExpExec = requireRegexpExecAbstract();
+        var wellKnownSymbol = requireWellKnownSymbol();
+        var REPLACE = wellKnownSymbol("replace");
+        var max = Math.max;
+        var min = Math.min;
+        var concat = uncurryThis([].concat);
+        var push = uncurryThis([].push);
+        var stringIndexOf = uncurryThis("".indexOf);
+        var stringSlice = uncurryThis("".slice);
+        var maybeToString = function(it) {
+            return it === undefined ? it : String(it);
+        };
+        var REPLACE_KEEPS_$0 = function() {
+            return "a".replace(/./, "$0") === "$0";
+        }();
+        var REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE = function() {
+            if (/./[REPLACE]) {
+                return /./[REPLACE]("a", "$0") === "";
+            }
+            return false;
+        }();
+        var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function() {
+            var re = /./;
+            re.exec = function() {
+                var result = [];
+                result.groups = {
+                    a: "7"
+                };
+                return result;
+            };
+            return "".replace(re, "$<a>") !== "7";
+        });
+        fixRegExpWellKnownSymbolLogic("replace", function(_, nativeReplace, maybeCallNative) {
+            var UNSAFE_SUBSTITUTE = REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE ? "$" : "$0";
+            return [ function replace(searchValue, replaceValue) {
+                var O = requireObjectCoercible(this);
+                var replacer = isObject(searchValue) ? getMethod(searchValue, REPLACE) : undefined;
+                return replacer ? call(replacer, searchValue, O, replaceValue) : call(nativeReplace, toString(O), searchValue, replaceValue);
+            }, function(string, replaceValue) {
+                var rx = anObject(this);
+                var S = toString(string);
+                if (typeof replaceValue == "string" && stringIndexOf(replaceValue, UNSAFE_SUBSTITUTE) === -1 && stringIndexOf(replaceValue, "$<") === -1) {
+                    var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
+                    if (res.done) return res.value;
+                }
+                var functionalReplace = isCallable(replaceValue);
+                if (!functionalReplace) replaceValue = toString(replaceValue);
+                var flags = toString(getRegExpFlags(rx));
+                var global = stringIndexOf(flags, "g") !== -1;
+                var fullUnicode;
+                if (global) {
+                    fullUnicode = stringIndexOf(flags, "u") !== -1;
+                    rx.lastIndex = 0;
+                }
+                var results = [];
+                var result;
+                while (true) {
+                    result = regExpExec(rx, S);
+                    if (result === null) break;
+                    push(results, result);
+                    if (!global) break;
+                    var matchStr = toString(result[0]);
+                    if (matchStr === "") rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+                }
+                var accumulatedResult = "";
+                var nextSourcePosition = 0;
+                for (var i = 0; i < results.length; i++) {
+                    result = results[i];
+                    var matched = toString(result[0]);
+                    var position = max(min(toIntegerOrInfinity(result.index), S.length), 0);
+                    var captures = [];
+                    var replacement;
+                    for (var j = 1; j < result.length; j++) push(captures, maybeToString(result[j]));
+                    var namedCaptures = result.groups;
+                    if (functionalReplace) {
+                        var replacerArgs = concat([ matched ], captures, position, S);
+                        if (namedCaptures !== undefined) push(replacerArgs, namedCaptures);
+                        replacement = toString(apply(replaceValue, undefined, replacerArgs));
+                    } else {
+                        replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
+                    }
+                    if (position >= nextSourcePosition) {
+                        accumulatedResult += stringSlice(S, nextSourcePosition, position) + replacement;
+                        nextSourcePosition = position + matched.length;
+                    }
+                }
+                return accumulatedResult + stringSlice(S, nextSourcePosition);
+            } ];
+        }, !REPLACE_SUPPORTS_NAMED_GROUPS || !REPLACE_KEEPS_$0 || REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE);
+        return es_string_replace;
+    }
+    requireEs_string_replace();
     var es_string_trim = {};
     var whitespaces;
     var hasRequiredWhitespaces;
@@ -4564,199 +5092,6 @@
         return es_object_keys;
     }
     requireEs_object_keys();
-    var es_regexp_exec = {};
-    var regexpFlags;
-    var hasRequiredRegexpFlags;
-    function requireRegexpFlags() {
-        if (hasRequiredRegexpFlags) return regexpFlags;
-        hasRequiredRegexpFlags = 1;
-        var anObject = requireAnObject();
-        regexpFlags = function() {
-            var that = anObject(this);
-            var result = "";
-            if (that.hasIndices) result += "d";
-            if (that.global) result += "g";
-            if (that.ignoreCase) result += "i";
-            if (that.multiline) result += "m";
-            if (that.dotAll) result += "s";
-            if (that.unicode) result += "u";
-            if (that.unicodeSets) result += "v";
-            if (that.sticky) result += "y";
-            return result;
-        };
-        return regexpFlags;
-    }
-    var regexpStickyHelpers;
-    var hasRequiredRegexpStickyHelpers;
-    function requireRegexpStickyHelpers() {
-        if (hasRequiredRegexpStickyHelpers) return regexpStickyHelpers;
-        hasRequiredRegexpStickyHelpers = 1;
-        var fails = requireFails();
-        var globalThis = requireGlobalThis();
-        var $RegExp = globalThis.RegExp;
-        var UNSUPPORTED_Y = fails(function() {
-            var re = $RegExp("a", "y");
-            re.lastIndex = 2;
-            return re.exec("abcd") !== null;
-        });
-        var MISSED_STICKY = UNSUPPORTED_Y || fails(function() {
-            return !$RegExp("a", "y").sticky;
-        });
-        var BROKEN_CARET = UNSUPPORTED_Y || fails(function() {
-            var re = $RegExp("^r", "gy");
-            re.lastIndex = 2;
-            return re.exec("str") !== null;
-        });
-        regexpStickyHelpers = {
-            BROKEN_CARET: BROKEN_CARET,
-            MISSED_STICKY: MISSED_STICKY,
-            UNSUPPORTED_Y: UNSUPPORTED_Y
-        };
-        return regexpStickyHelpers;
-    }
-    var regexpUnsupportedDotAll;
-    var hasRequiredRegexpUnsupportedDotAll;
-    function requireRegexpUnsupportedDotAll() {
-        if (hasRequiredRegexpUnsupportedDotAll) return regexpUnsupportedDotAll;
-        hasRequiredRegexpUnsupportedDotAll = 1;
-        var fails = requireFails();
-        var globalThis = requireGlobalThis();
-        var $RegExp = globalThis.RegExp;
-        regexpUnsupportedDotAll = fails(function() {
-            var re = $RegExp(".", "s");
-            return !(re.dotAll && re.test("\n") && re.flags === "s");
-        });
-        return regexpUnsupportedDotAll;
-    }
-    var regexpUnsupportedNcg;
-    var hasRequiredRegexpUnsupportedNcg;
-    function requireRegexpUnsupportedNcg() {
-        if (hasRequiredRegexpUnsupportedNcg) return regexpUnsupportedNcg;
-        hasRequiredRegexpUnsupportedNcg = 1;
-        var fails = requireFails();
-        var globalThis = requireGlobalThis();
-        var $RegExp = globalThis.RegExp;
-        regexpUnsupportedNcg = fails(function() {
-            var re = $RegExp("(?<a>b)", "g");
-            return re.exec("b").groups.a !== "b" || "b".replace(re, "$<a>c") !== "bc";
-        });
-        return regexpUnsupportedNcg;
-    }
-    var regexpExec;
-    var hasRequiredRegexpExec;
-    function requireRegexpExec() {
-        if (hasRequiredRegexpExec) return regexpExec;
-        hasRequiredRegexpExec = 1;
-        var call = requireFunctionCall();
-        var uncurryThis = requireFunctionUncurryThis();
-        var toString = requireToString();
-        var regexpFlags = requireRegexpFlags();
-        var stickyHelpers = requireRegexpStickyHelpers();
-        var shared = requireShared();
-        var create = requireObjectCreate();
-        var getInternalState = requireInternalState().get;
-        var UNSUPPORTED_DOT_ALL = requireRegexpUnsupportedDotAll();
-        var UNSUPPORTED_NCG = requireRegexpUnsupportedNcg();
-        var nativeReplace = shared("native-string-replace", String.prototype.replace);
-        var nativeExec = RegExp.prototype.exec;
-        var patchedExec = nativeExec;
-        var charAt = uncurryThis("".charAt);
-        var indexOf = uncurryThis("".indexOf);
-        var replace = uncurryThis("".replace);
-        var stringSlice = uncurryThis("".slice);
-        var UPDATES_LAST_INDEX_WRONG = function() {
-            var re1 = /a/;
-            var re2 = /b*/g;
-            call(nativeExec, re1, "a");
-            call(nativeExec, re2, "a");
-            return re1.lastIndex !== 0 || re2.lastIndex !== 0;
-        }();
-        var UNSUPPORTED_Y = stickyHelpers.BROKEN_CARET;
-        var NPCG_INCLUDED = /()??/.exec("")[1] !== undefined;
-        var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
-        if (PATCH) {
-            patchedExec = function exec(string) {
-                var re = this;
-                var state = getInternalState(re);
-                var str = toString(string);
-                var raw = state.raw;
-                var result, reCopy, lastIndex, match, i, object, group;
-                if (raw) {
-                    raw.lastIndex = re.lastIndex;
-                    result = call(patchedExec, raw, str);
-                    re.lastIndex = raw.lastIndex;
-                    return result;
-                }
-                var groups = state.groups;
-                var sticky = UNSUPPORTED_Y && re.sticky;
-                var flags = call(regexpFlags, re);
-                var source = re.source;
-                var charsAdded = 0;
-                var strCopy = str;
-                if (sticky) {
-                    flags = replace(flags, "y", "");
-                    if (indexOf(flags, "g") === -1) {
-                        flags += "g";
-                    }
-                    strCopy = stringSlice(str, re.lastIndex);
-                    if (re.lastIndex > 0 && (!re.multiline || re.multiline && charAt(str, re.lastIndex - 1) !== "\n")) {
-                        source = "(?: " + source + ")";
-                        strCopy = " " + strCopy;
-                        charsAdded++;
-                    }
-                    reCopy = new RegExp("^(?:" + source + ")", flags);
-                }
-                if (NPCG_INCLUDED) {
-                    reCopy = new RegExp("^" + source + "$(?!\\s)", flags);
-                }
-                if (UPDATES_LAST_INDEX_WRONG) lastIndex = re.lastIndex;
-                match = call(nativeExec, sticky ? reCopy : re, strCopy);
-                if (sticky) {
-                    if (match) {
-                        match.input = stringSlice(match.input, charsAdded);
-                        match[0] = stringSlice(match[0], charsAdded);
-                        match.index = re.lastIndex;
-                        re.lastIndex += match[0].length;
-                    } else re.lastIndex = 0;
-                } else if (UPDATES_LAST_INDEX_WRONG && match) {
-                    re.lastIndex = re.global ? match.index + match[0].length : lastIndex;
-                }
-                if (NPCG_INCLUDED && match && match.length > 1) {
-                    call(nativeReplace, match[0], reCopy, function() {
-                        for (i = 1; i < arguments.length - 2; i++) {
-                            if (arguments[i] === undefined) match[i] = undefined;
-                        }
-                    });
-                }
-                if (match && groups) {
-                    match.groups = object = create(null);
-                    for (i = 0; i < groups.length; i++) {
-                        group = groups[i];
-                        object[group[0]] = match[group[1]];
-                    }
-                }
-                return match;
-            };
-        }
-        regexpExec = patchedExec;
-        return regexpExec;
-    }
-    var hasRequiredEs_regexp_exec;
-    function requireEs_regexp_exec() {
-        if (hasRequiredEs_regexp_exec) return es_regexp_exec;
-        hasRequiredEs_regexp_exec = 1;
-        var $ = require_export();
-        var exec = requireRegexpExec();
-        $({
-            target: "RegExp",
-            proto: true,
-            forced: /./.exec !== exec
-        }, {
-            exec: exec
-        });
-        return es_regexp_exec;
-    }
-    requireEs_regexp_exec();
     var web_url = {};
     var web_url_constructor = {};
     var urlConstructorDetection;
@@ -7716,67 +8051,6 @@
         this._isOnlineAvailable = isOnline;
     };
     var es_regexp_toString = {};
-    var regexpFlagsDetection;
-    var hasRequiredRegexpFlagsDetection;
-    function requireRegexpFlagsDetection() {
-        if (hasRequiredRegexpFlagsDetection) return regexpFlagsDetection;
-        hasRequiredRegexpFlagsDetection = 1;
-        var globalThis = requireGlobalThis();
-        var fails = requireFails();
-        var RegExp = globalThis.RegExp;
-        var FLAGS_GETTER_IS_CORRECT = !fails(function() {
-            var INDICES_SUPPORT = true;
-            try {
-                RegExp(".", "d");
-            } catch (error) {
-                INDICES_SUPPORT = false;
-            }
-            var O = {};
-            var calls = "";
-            var expected = INDICES_SUPPORT ? "dgimsy" : "gimsy";
-            var addGetter = function(key, chr) {
-                Object.defineProperty(O, key, {
-                    get: function() {
-                        calls += chr;
-                        return true;
-                    }
-                });
-            };
-            var pairs = {
-                dotAll: "s",
-                global: "g",
-                ignoreCase: "i",
-                multiline: "m",
-                sticky: "y"
-            };
-            if (INDICES_SUPPORT) pairs.hasIndices = "d";
-            for (var key in pairs) addGetter(key, pairs[key]);
-            var result = Object.getOwnPropertyDescriptor(RegExp.prototype, "flags").get.call(O);
-            return result !== expected || calls !== expected;
-        });
-        regexpFlagsDetection = {
-            correct: FLAGS_GETTER_IS_CORRECT
-        };
-        return regexpFlagsDetection;
-    }
-    var regexpGetFlags;
-    var hasRequiredRegexpGetFlags;
-    function requireRegexpGetFlags() {
-        if (hasRequiredRegexpGetFlags) return regexpGetFlags;
-        hasRequiredRegexpGetFlags = 1;
-        var call = requireFunctionCall();
-        var hasOwn = requireHasOwnProperty();
-        var isPrototypeOf = requireObjectIsPrototypeOf();
-        var regExpFlagsDetection = requireRegexpFlagsDetection();
-        var regExpFlagsGetterImplementation = requireRegexpFlags();
-        var RegExpPrototype = RegExp.prototype;
-        regexpGetFlags = regExpFlagsDetection.correct ? function(it) {
-            return it.flags;
-        } : function(it) {
-            return !regExpFlagsDetection.correct && isPrototypeOf(RegExpPrototype, it) && !hasOwn(it, "flags") ? call(regExpFlagsGetterImplementation, it) : it.flags;
-        };
-        return regexpGetFlags;
-    }
     var hasRequiredEs_regexp_toString;
     function requireEs_regexp_toString() {
         if (hasRequiredEs_regexp_toString) return es_regexp_toString;
@@ -8061,77 +8335,6 @@
     }
     requireEs_regexp_constructor();
     var es_string_search = {};
-    var fixRegexpWellKnownSymbolLogic;
-    var hasRequiredFixRegexpWellKnownSymbolLogic;
-    function requireFixRegexpWellKnownSymbolLogic() {
-        if (hasRequiredFixRegexpWellKnownSymbolLogic) return fixRegexpWellKnownSymbolLogic;
-        hasRequiredFixRegexpWellKnownSymbolLogic = 1;
-        requireEs_regexp_exec();
-        var call = requireFunctionCall();
-        var defineBuiltIn = requireDefineBuiltIn();
-        var regexpExec = requireRegexpExec();
-        var fails = requireFails();
-        var wellKnownSymbol = requireWellKnownSymbol();
-        var createNonEnumerableProperty = requireCreateNonEnumerableProperty();
-        var SPECIES = wellKnownSymbol("species");
-        var RegExpPrototype = RegExp.prototype;
-        fixRegexpWellKnownSymbolLogic = function(KEY, exec, FORCED, SHAM) {
-            var SYMBOL = wellKnownSymbol(KEY);
-            var DELEGATES_TO_SYMBOL = !fails(function() {
-                var O = {};
-                O[SYMBOL] = function() {
-                    return 7;
-                };
-                return ""[KEY](O) !== 7;
-            });
-            var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails(function() {
-                var execCalled = false;
-                var re = /a/;
-                if (KEY === "split") {
-                    var constructor = {};
-                    constructor[SPECIES] = function() {
-                        return re;
-                    };
-                    re = {
-                        constructor: constructor,
-                        flags: ""
-                    };
-                    re[SYMBOL] = /./[SYMBOL];
-                }
-                re.exec = function() {
-                    execCalled = true;
-                    return null;
-                };
-                re[SYMBOL]("");
-                return !execCalled;
-            });
-            if (!DELEGATES_TO_SYMBOL || !DELEGATES_TO_EXEC || FORCED) {
-                var nativeRegExpMethod = /./[SYMBOL];
-                var methods = exec(SYMBOL, ""[KEY], function(nativeMethod, regexp, str, arg2, forceStringMethod) {
-                    var $exec = regexp.exec;
-                    if ($exec === regexpExec || $exec === RegExpPrototype.exec) {
-                        if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
-                            return {
-                                done: true,
-                                value: call(nativeRegExpMethod, regexp, str, arg2)
-                            };
-                        }
-                        return {
-                            done: true,
-                            value: call(nativeMethod, str, regexp, arg2)
-                        };
-                    }
-                    return {
-                        done: false
-                    };
-                });
-                defineBuiltIn(String.prototype, KEY, methods[0]);
-                defineBuiltIn(RegExpPrototype, SYMBOL, methods[1]);
-            }
-            if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], "sham", true);
-        };
-        return fixRegexpWellKnownSymbolLogic;
-    }
     var sameValue;
     var hasRequiredSameValue;
     function requireSameValue() {
@@ -8141,29 +8344,6 @@
             return x === y ? x !== 0 || 1 / x === 1 / y : x !== x && y !== y;
         };
         return sameValue;
-    }
-    var regexpExecAbstract;
-    var hasRequiredRegexpExecAbstract;
-    function requireRegexpExecAbstract() {
-        if (hasRequiredRegexpExecAbstract) return regexpExecAbstract;
-        hasRequiredRegexpExecAbstract = 1;
-        var call = requireFunctionCall();
-        var anObject = requireAnObject();
-        var isCallable = requireIsCallable();
-        var classof = requireClassofRaw();
-        var regexpExec = requireRegexpExec();
-        var $TypeError = TypeError;
-        regexpExecAbstract = function(R, S) {
-            var exec = R.exec;
-            if (isCallable(exec)) {
-                var result = call(exec, R, S);
-                if (result !== null) anObject(result);
-                return result;
-            }
-            if (classof(R) === "RegExp") return call(regexpExec, R, S);
-            throw new $TypeError("RegExp#exec called on incompatible receiver");
-        };
-        return regexpExecAbstract;
     }
     var hasRequiredEs_string_search;
     function requireEs_string_search() {
@@ -11628,186 +11808,6 @@
     function translate(message) {
         return window.Asc.plugin.tr(message);
     }
-    var es_string_replace = {};
-    var advanceStringIndex;
-    var hasRequiredAdvanceStringIndex;
-    function requireAdvanceStringIndex() {
-        if (hasRequiredAdvanceStringIndex) return advanceStringIndex;
-        hasRequiredAdvanceStringIndex = 1;
-        var charAt = requireStringMultibyte().charAt;
-        advanceStringIndex = function(S, index, unicode) {
-            return index + (unicode ? charAt(S, index).length : 1);
-        };
-        return advanceStringIndex;
-    }
-    var getSubstitution;
-    var hasRequiredGetSubstitution;
-    function requireGetSubstitution() {
-        if (hasRequiredGetSubstitution) return getSubstitution;
-        hasRequiredGetSubstitution = 1;
-        var uncurryThis = requireFunctionUncurryThis();
-        var toObject = requireToObject();
-        var floor = Math.floor;
-        var charAt = uncurryThis("".charAt);
-        var replace = uncurryThis("".replace);
-        var stringSlice = uncurryThis("".slice);
-        var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
-        var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
-        getSubstitution = function(matched, str, position, captures, namedCaptures, replacement) {
-            var tailPos = position + matched.length;
-            var m = captures.length;
-            var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
-            if (namedCaptures !== undefined) {
-                namedCaptures = toObject(namedCaptures);
-                symbols = SUBSTITUTION_SYMBOLS;
-            }
-            return replace(replacement, symbols, function(match, ch) {
-                var capture;
-                switch (charAt(ch, 0)) {
-                  case "$":
-                    return "$";
-
-                  case "&":
-                    return matched;
-
-                  case "`":
-                    return stringSlice(str, 0, position);
-
-                  case "'":
-                    return stringSlice(str, tailPos);
-
-                  case "<":
-                    capture = namedCaptures[stringSlice(ch, 1, -1)];
-                    break;
-
-                  default:
-                    var n = +ch;
-                    if (n === 0) return match;
-                    if (n > m) {
-                        var f = floor(n / 10);
-                        if (f === 0) return match;
-                        if (f <= m) return captures[f - 1] === undefined ? charAt(ch, 1) : captures[f - 1] + charAt(ch, 1);
-                        return match;
-                    }
-                    capture = captures[n - 1];
-                }
-                return capture === undefined ? "" : capture;
-            });
-        };
-        return getSubstitution;
-    }
-    var hasRequiredEs_string_replace;
-    function requireEs_string_replace() {
-        if (hasRequiredEs_string_replace) return es_string_replace;
-        hasRequiredEs_string_replace = 1;
-        var apply = requireFunctionApply();
-        var call = requireFunctionCall();
-        var uncurryThis = requireFunctionUncurryThis();
-        var fixRegExpWellKnownSymbolLogic = requireFixRegexpWellKnownSymbolLogic();
-        var fails = requireFails();
-        var anObject = requireAnObject();
-        var isCallable = requireIsCallable();
-        var isObject = requireIsObject();
-        var toIntegerOrInfinity = requireToIntegerOrInfinity();
-        var toLength = requireToLength();
-        var toString = requireToString();
-        var requireObjectCoercible = requireRequireObjectCoercible();
-        var advanceStringIndex = requireAdvanceStringIndex();
-        var getMethod = requireGetMethod();
-        var getSubstitution = requireGetSubstitution();
-        var getRegExpFlags = requireRegexpGetFlags();
-        var regExpExec = requireRegexpExecAbstract();
-        var wellKnownSymbol = requireWellKnownSymbol();
-        var REPLACE = wellKnownSymbol("replace");
-        var max = Math.max;
-        var min = Math.min;
-        var concat = uncurryThis([].concat);
-        var push = uncurryThis([].push);
-        var stringIndexOf = uncurryThis("".indexOf);
-        var stringSlice = uncurryThis("".slice);
-        var maybeToString = function(it) {
-            return it === undefined ? it : String(it);
-        };
-        var REPLACE_KEEPS_$0 = function() {
-            return "a".replace(/./, "$0") === "$0";
-        }();
-        var REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE = function() {
-            if (/./[REPLACE]) {
-                return /./[REPLACE]("a", "$0") === "";
-            }
-            return false;
-        }();
-        var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function() {
-            var re = /./;
-            re.exec = function() {
-                var result = [];
-                result.groups = {
-                    a: "7"
-                };
-                return result;
-            };
-            return "".replace(re, "$<a>") !== "7";
-        });
-        fixRegExpWellKnownSymbolLogic("replace", function(_, nativeReplace, maybeCallNative) {
-            var UNSAFE_SUBSTITUTE = REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE ? "$" : "$0";
-            return [ function replace(searchValue, replaceValue) {
-                var O = requireObjectCoercible(this);
-                var replacer = isObject(searchValue) ? getMethod(searchValue, REPLACE) : undefined;
-                return replacer ? call(replacer, searchValue, O, replaceValue) : call(nativeReplace, toString(O), searchValue, replaceValue);
-            }, function(string, replaceValue) {
-                var rx = anObject(this);
-                var S = toString(string);
-                if (typeof replaceValue == "string" && stringIndexOf(replaceValue, UNSAFE_SUBSTITUTE) === -1 && stringIndexOf(replaceValue, "$<") === -1) {
-                    var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
-                    if (res.done) return res.value;
-                }
-                var functionalReplace = isCallable(replaceValue);
-                if (!functionalReplace) replaceValue = toString(replaceValue);
-                var flags = toString(getRegExpFlags(rx));
-                var global = stringIndexOf(flags, "g") !== -1;
-                var fullUnicode;
-                if (global) {
-                    fullUnicode = stringIndexOf(flags, "u") !== -1;
-                    rx.lastIndex = 0;
-                }
-                var results = [];
-                var result;
-                while (true) {
-                    result = regExpExec(rx, S);
-                    if (result === null) break;
-                    push(results, result);
-                    if (!global) break;
-                    var matchStr = toString(result[0]);
-                    if (matchStr === "") rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
-                }
-                var accumulatedResult = "";
-                var nextSourcePosition = 0;
-                for (var i = 0; i < results.length; i++) {
-                    result = results[i];
-                    var matched = toString(result[0]);
-                    var position = max(min(toIntegerOrInfinity(result.index), S.length), 0);
-                    var captures = [];
-                    var replacement;
-                    for (var j = 1; j < result.length; j++) push(captures, maybeToString(result[j]));
-                    var namedCaptures = result.groups;
-                    if (functionalReplace) {
-                        var replacerArgs = concat([ matched ], captures, position, S);
-                        if (namedCaptures !== undefined) push(replacerArgs, namedCaptures);
-                        replacement = toString(apply(replaceValue, undefined, replacerArgs));
-                    } else {
-                        replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
-                    }
-                    if (position >= nextSourcePosition) {
-                        accumulatedResult += stringSlice(S, nextSourcePosition, position) + replacement;
-                        nextSourcePosition = position + matched.length;
-                    }
-                }
-                return accumulatedResult + stringSlice(S, nextSourcePosition);
-            } ];
-        }, !REPLACE_SUPPORTS_NAMED_GROUPS || !REPLACE_KEEPS_$0 || REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE);
-        return es_string_replace;
-    }
-    requireEs_string_replace();
     var es_array_sort = {};
     var environmentFfVersion;
     var hasRequiredEnvironmentFfVersion;
@@ -14075,30 +14075,38 @@
         for (var i in this._items) k++;
         return k;
     };
+    var _window = new WeakMap;
     var AdditionalWindow = function() {
         function AdditionalWindow() {
             _classCallCheck(this, AdditionalWindow);
-            this._window = null;
+            _classPrivateFieldInitSpec(this, _window, void 0);
+            _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
         }
         return _createClass(AdditionalWindow, [ {
             key: "show",
             value: function show(fileName, description, text) {
                 var variation = {
-                    url: fileName + ".html",
+                    url: "info-window.html",
                     description: window.Asc.plugin.tr(description),
                     isVisual: true,
+                    buttons: [ {
+                        text: window.Asc.plugin.tr("Yes"),
+                        primary: true,
+                        isViewer: false
+                    }, {
+                        text: window.Asc.plugin.tr("No"),
+                        primary: false
+                    } ],
                     isModal: false,
                     EditorsSupport: [ "word" ],
-                    size: [ 400, 310 ],
+                    size: [ 400, 200 ],
                     isViewer: true,
                     isDisplayedInViewer: false,
                     isInsideMode: false
                 };
-                this._window = new window.Asc.PluginWindow;
-                this._window.show(variation);
-                this._window.button = function(id) {
+                _classPrivateFieldGet2(_window, this).show(variation);
+                window.Asc.plugin.button = function(id) {
                     console.log("button", id);
-                    window.Asc.plugin.executeCommand("close", "");
                 };
             }
         }, {
@@ -15509,7 +15517,7 @@
                         el.setAttribute(attr, translate(el.getAttribute(attr) || ""));
                     }
                 });
-                var translated = translate(el.innerText.trim());
+                var translated = translate(el.innerText.trim().replace(/\s+/g, " "));
                 if (translated) el.innerText = translated;
             }
         }
