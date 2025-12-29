@@ -29,16 +29,39 @@ class AdditionalWindow {
             ],
             isModal: false,
             EditorsSupport: ["word"],
-            size: [400, 200],
+            size: [300, 120],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
         };
 
         this.#window.show(variation);
+
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    console.log("yes");
+                    resolve(true);
+                } else {
+                    console.log("no");
+                    resolve(false);
+                }
+                this.#window.close();
+            };
+        });
     }
 
-    hide() {}
+    hide() {
+        if (this.#window) {
+            this.#window.close();
+        }
+    }
+
+    destroy() {
+        this.#window.close();
+        this.#window = null;
+        window.Asc.plugin.button = () => {};
+    }
 }
 
 export { AdditionalWindow };

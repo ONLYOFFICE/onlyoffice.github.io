@@ -275,9 +275,9 @@ CSLCitation.prototype._addCitationItem = function (item) {
 };
 
 /**
- * @returns
+ * @returns {CSLCitation}
  */
-CSLCitation.prototype.addDoNotUpdate = function () {
+CSLCitation.prototype.setDoNotUpdate = function () {
     this._setProperties({ dontUpdate: true });
     return this;
 };
@@ -286,7 +286,7 @@ CSLCitation.prototype.addDoNotUpdate = function () {
  * @param {string} plainCitation
  * @returns
  */
-CSLCitation.prototype.addPlainCitation = function (plainCitation) {
+CSLCitation.prototype.setPlainCitation = function (plainCitation) {
     this._setProperties({ plainCitation: plainCitation });
     return this;
 };
