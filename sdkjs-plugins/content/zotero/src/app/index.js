@@ -284,7 +284,7 @@ import "../styles.css";
             }
             showLoader();
             citationService
-                .updateCslItems(true, false)
+                .updateCslItems(false)
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");
@@ -311,10 +311,8 @@ import "../styles.css";
                 return;
             }
             showLoader();
-            // TODO #there
-            // updateCslItems(false, true);
             citationService
-                .updateCslItems(true, true)
+                .insertBibliography()
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to insert bibliography");
@@ -341,18 +339,12 @@ import "../styles.css";
                 return;
             }
             showLoader();
+            const items = selectCitation.getSelectedItems();
             citationService
-                .updateCslItems(false, false)
-                .then(function () {
-                    const items = selectCitation.getSelectedItems();
-                    return citationService.insertSelectedCitations(items);
-                })
+                .insertSelectedCitations(items)
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
-                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
-                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
-                    return citationService.updateCslItems(true, false);
+                    return citationService.updateCslItems();
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -380,7 +372,7 @@ import "../styles.css";
         settings.onChangeState(function (settings) {
             citationService.setNotesStyle(settings.notesStyle);
             citationService.setStyleFormat(settings.styleFormat);
-            return citationService.updateCslItems(true, false);
+            return citationService.updateCslItems(true);
         });
     }
 

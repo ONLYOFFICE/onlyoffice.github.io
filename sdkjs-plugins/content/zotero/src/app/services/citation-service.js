@@ -266,9 +266,9 @@ class CitationService {
         return citationObject;
     }
     /**
-     * @returns {Promise<{fields: CustomField[], fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
+     * @returns {Promise<{fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
      */
-    #getDocFields() {
+    #synchronizeStorageWithDocItems() {
         const self = this;
         return this.citationDocService
             .getAddinZoteroFields()
@@ -317,7 +317,6 @@ class CitationService {
                 });
 
                 return {
-                    fields: fields,
                     bibField: bibField,
                     bibFieldValue: bibFieldValue,
                     fieldsWithCitations: fieldsWithCitations,
@@ -326,71 +325,95 @@ class CitationService {
     }
 
     /**
-     * @returns {Promise<{fields: CustomField[], updatedFields: CustomField[], bibField: CustomField | undefined, bibFieldValue: string, numOfSkippedCitations: number}>}
+     * @param {boolean} bNoHaveFields
+     * @param {string} bibFieldValue
+     * @returns
      */
-    #synchronizeStorageWithDocItems() {
+    #addBibliography(bNoHaveFields, bibFieldValue) {
+        let bibliography = this.#makeBibliography();
+        if (bNoHaveFields) {
+            bibliography = translate(this._bibPlaceholderIfEmpty);
+        }
+        if (this._cslStylesManager.isLastUsedStyleContainBibliography()) {
+            return this.citationDocService.addBibliography(
+                bibliography,
+                bibFieldValue
+            );
+        } else {
+            throw "The current bibliographic style does not describe the bibliography";
+        }
+    }
+
+    /**
+     * @param {boolean} bNoHaveFields
+     * @param {CustomField} bibField
+     * @returns {CustomField}
+     */
+    #updateBibliography(bNoHaveFields, bibField) {
+        if (bNoHaveFields) {
+            bibField["Content"] = translate(this._bibPlaceholderIfEmpty);
+        } else {
+            let bibliography = this.#makeBibliography();
+            bibField["Content"] = bibliography;
+        }
+
+        return bibField;
+    }
+
+    /**
+     * @param {{field: CustomField, cslCitation: CSLCitation}[]} fieldsWithCitations
+     * @param {boolean} bHardRefresh
+     * @returns {Promise<CustomField[]>}
+     */
+    async #getUpdatedFields(fieldsWithCitations, bHardRefresh) {
         const self = this;
-        return this.#getDocFields().then(async function (data) {
-            const { fields, fieldsWithCitations } = data;
-            self.#updateFormatter();
 
-            const fragment = document.createDocumentFragment();
-            const tempElement = document.createElement("div");
-            fragment.appendChild(tempElement);
+        const fragment = document.createDocumentFragment();
+        const tempElement = document.createElement("div");
+        fragment.appendChild(tempElement);
 
-            /** @type {CustomField[]} */
-            const updatedFields = [];
-            let numOfSkippedCitations = 0;
+        /** @type {CustomField[]} */
+        const updatedFields = [];
 
-            for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
-                const { field, cslCitation } = fieldsWithCitations[i];
-                let keysL = cslCitation.getInfoForCitationCluster();
-                tempElement.innerHTML =
-                    self._formatter.makeCitationCluster(keysL);
-                const oldContent = field["Content"];
-                const newContent = tempElement.innerText;
+        for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
+            const { field, cslCitation } = fieldsWithCitations[i];
+            let keysL = cslCitation.getInfoForCitationCluster();
+            tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+            const oldContent = field["Content"];
+            const newContent = tempElement.innerText;
 
-                let bDoNotUpdate = cslCitation.getDoNotUpdate();
-
-                if (bDoNotUpdate) {
-                    fields.splice(i, 1);
-                    numOfSkippedCitations++;
-                    continue;
-                }
-
-                if (oldContent !== newContent) {
-                    await self.#onUserEditCitationManuallyWindow
-                        .show("info-window", "Zotero Citation", newContent)
-                        .then(function (bNeedSaveUserInput) {
-                            if (bNeedSaveUserInput) {
-                                bDoNotUpdate = true;
-                                cslCitation.setDoNotUpdate();
-                            } else {
-                                field["Content"] = newContent;
-                                cslCitation.setPlainCitation(newContent);
-                            }
-                        });
-                }
-
-                if (cslCitation) {
-                    field["Value"] =
-                        self._citPrefixNew +
-                        " " +
-                        self._citSuffixNew +
-                        JSON.stringify(cslCitation.toJSON());
-                }
-
-                updatedFields.push(field);
+            if (cslCitation.getDoNotUpdate()) {
+                continue;
             }
 
-            return {
-                fields: data.fields,
-                updatedFields: updatedFields,
-                bibField: data.bibField,
-                bibFieldValue: data.bibFieldValue,
-                numOfSkippedCitations: numOfSkippedCitations,
-            };
-        });
+            if (bHardRefresh) {
+                field["Content"] = newContent;
+                cslCitation.setPlainCitation(newContent);
+            } else if (oldContent !== newContent) {
+                await self.#onUserEditCitationManuallyWindow
+                    .show("info-window", "Zotero Citation", newContent)
+                    .then(function (bNeedSaveUserInput) {
+                        if (bNeedSaveUserInput) {
+                            cslCitation.setDoNotUpdate();
+                        } else {
+                            field["Content"] = newContent;
+                            cslCitation.setPlainCitation(newContent);
+                        }
+                    });
+            }
+
+            if (cslCitation) {
+                field["Value"] =
+                    self._citPrefixNew +
+                    " " +
+                    self._citSuffixNew +
+                    JSON.stringify(cslCitation.toJSON());
+            }
+
+            updatedFields.push(field);
+        }
+
+        return updatedFields;
     }
 
     #updateFormatter() {
@@ -457,10 +480,18 @@ class CitationService {
      * @param {Array<SearchResultItem>} items
      * @returns {Promise<Array<string|number>>}
      */
-    insertSelectedCitations(items) {
+    async insertSelectedCitations(items) {
         const self = this;
 
-        var cslCitation = new CSLCitation(self._storage.size, "");
+        this._storage.clear();
+        try {
+            await this.#synchronizeStorageWithDocItems();
+            this.#updateFormatter();
+        } catch (e) {
+            throw e;
+        }
+
+        const cslCitation = new CSLCitation(this._storage.size, "");
         for (var citationID in items) {
             const item = items[citationID];
 
@@ -475,77 +506,76 @@ class CitationService {
         });
     }
 
-    // onInit (0,0)
-    // Insert Citation (0,0)
-    // Insert Bibliography (1,1)
-    // Refresh (1,0)
+    /** @returns {Promise<void>} */
+    async insertBibliography() {
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations, bibFieldValue, bibField } =
+                await this.#synchronizeStorageWithDocItems();
+            const bNoHaveFields = fieldsWithCitations.length === 0;
+
+            this.#updateFormatter();
+
+            if (bibField) {
+                const updatedFields = [
+                    await this.#updateBibliography(bNoHaveFields, bibField),
+                ];
+                return this.citationDocService.updateAddinFields(updatedFields);
+            } else {
+                return this.#addBibliography(bNoHaveFields, bibFieldValue);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
     /**
-     * @param {boolean} bUpdateAll
-     * @param {boolean} bPastBib
+     * @param {boolean} [bHardRefresh]
      * @returns {Promise<void>}
      */
-    updateCslItems(bUpdateAll, bPastBib) {
+    async updateCslItems(bHardRefresh) {
         this._storage.clear();
-        const self = this;
 
-        return this.#synchronizeStorageWithDocItems()
-            .then(function (info) {
-                const {
-                    fields,
-                    updatedFields,
-                    bibField,
-                    bibFieldValue,
-                    numOfSkippedCitations,
-                } = info;
+        try {
+            const { fieldsWithCitations, bibField } =
+                await this.#synchronizeStorageWithDocItems();
+            const bNoHaveFields = fieldsWithCitations.length === 0;
 
-                if (!bUpdateAll && !bPastBib) {
-                    return [];
-                }
+            this.#updateFormatter();
 
-                if (bibField) {
-                    if (
-                        updatedFields.length === 0 &&
-                        numOfSkippedCitations === 0
-                    ) {
-                        bibField["Content"] = translate(
-                            self._bibPlaceholderIfEmpty
-                        );
-                    } else {
-                        let bibliography = self.#makeBibliography();
-                        bibField["Content"] = bibliography;
-                    }
-                    updatedFields.push(bibField);
-                } else if (bPastBib) {
-                    let bibliography = self.#makeBibliography();
-                    if (
-                        updatedFields.length === 0 &&
-                        numOfSkippedCitations === 0
-                    ) {
-                        bibliography = translate(self._bibPlaceholderIfEmpty);
-                    }
-                    if (
-                        self._cslStylesManager.isLastUsedStyleContainBibliography()
-                    ) {
-                        return self.citationDocService
-                            .addBibliography(bibliography, bibFieldValue)
-                            .then(function () {
-                                return updatedFields;
-                            });
-                    } else {
-                        throw "The current bibliographic style does not describe the bibliography";
-                    }
-                }
-                return updatedFields;
-            })
-            .then(function (
-                /** @type {CustomField[] | undefined} */ updatedFields
-            ) {
-                if (updatedFields && updatedFields.length) {
-                    return self.citationDocService.updateAddinFields(
-                        updatedFields
+            /** @type {CustomField[]} */
+            let updatedFields = [];
+
+            if (typeof bHardRefresh === "undefined") {
+                const format = this._cslStylesManager.getLastUsedFormat();
+                bHardRefresh = format === "numeric";
+
+                if (bHardRefresh) {
+                    updatedFields = await this.#getUpdatedFields(
+                        fieldsWithCitations,
+                        bHardRefresh
                     );
                 }
-            });
+            } else {
+                updatedFields = await this.#getUpdatedFields(
+                    fieldsWithCitations,
+                    bHardRefresh
+                );
+            }
+
+            if (bibField) {
+                updatedFields.push(
+                    await this.#updateBibliography(bNoHaveFields, bibField)
+                );
+            }
+
+            if (updatedFields && updatedFields.length) {
+                return this.citationDocService.updateAddinFields(updatedFields);
+            }
+        } catch (e) {
+            throw e;
+        }
     }
 }
 
