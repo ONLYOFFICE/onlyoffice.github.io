@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>NLP Solver</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        padding: 3px;
+        background: #f8f9fa;
+        color: #333;
+        font-size: 12px;
+        min-width: 160px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .scroll-container {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 1px;
+        padding-left: 9px;
+        padding-bottom: 1px;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: white;
+        flex-shrink: 0;
+      }
+      .header img {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+      }
+      .header-text h1 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #082d51;
+      }
+      .header .author {
+        font-size: 9px;
+        color: #1c1c9d;
+      }
+      .section {
+        margin-bottom: 0px;
+        padding: 3px;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+      }
+      .section-side-condition {
+        background: #cae0fb;
+      }
+      .section-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #2c3e50;
+      }
+      .section-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+      .section-title-row .section-title {
+        margin-bottom: 0;
+      }
+      .picker-btn-small {
+        width: 22px;
+        height: 22px;
+      }
+      .picker-btn-small svg {
+        width: 12px;
+        height: 12px;
+      }
+      .target-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .target-label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #2c3e50;
+        flex-shrink: 0;
+      }
+      .target-input {
+        flex: 1;
+        min-width: 0;
+        padding: 5px 6px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: monospace;
+        text-transform: uppercase;
+      }
+      .target-input:focus {
+        outline: none;
+        border-color: #446995;
+        box-shadow: 0 0 0 2px rgba(68, 105, 149, 0.15);
+      }
+      .picker-btn {
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        background: #27ae60;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 26px;
+        text-align: center;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .picker-btn:hover {
+        background: #3a5a80;
+      }
+      .picker-btn:active {
+        background: #2e4a6a;
+      }
+      .picker-btn svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+      }
+      #parametersList,
+      #sideConditionsList {
+        max-height: 250px;
+        overflow-y: auto;
+      }
+      .parameter-row,
+      .side-condition-row {
+        background: #f8f9fa;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin-bottom: 4px;
+      }
+      .parameter-row:last-child,
+      .side-condition-row:last-child {
+        margin-bottom: 0;
+      }
+      .side-condition-row {
+        border: 1px solid #f4d03f;
+      }
+      .param-top-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 5px;
+      }
+      .param-label {
+        font-size: 10px;
+        color: #666;
+        flex-shrink: 0;
+      }
+      .condition-cell,
+      .param-cell {
+        flex: 1;
+        min-width: 0;
+        padding: 4px 6px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        font-size: 14px;
+        font-family: monospace;
+        text-transform: uppercase;
+        background: white;
+      }
+      .condition-cell:focus,
+      .param-cell:focus {
+        outline: none;
+        border-color: #446995;
+      }
+      .param-picker-btn {
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        background: #27ae60;
+        border: none;
+        color: white;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 22px;
+        text-align: center;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .param-picker-btn:hover {
+        background: #3a5a80;
+      }
+
+      .param-bounds-row input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        margin: 0;
+        flex-shrink: 0;
+      }
+      .limit-check {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .limit-check label {
+        font-size: 8px;
+        color: #888;
+      }
+      .remove-btn {
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        background: #e74c3c;
+        border: none;
+        color: white;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 22px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .remove-btn:hover {
+        background: #c0392b;
+      }
+      .param-bounds-row,
+      .condition-bounds-row {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .bounds-label {
+        font-size: 9px;
+        color: #888;
+        flex-shrink: 0;
+      }
+      .param-minmax,
+      .condition-minmax {
+        flex: 1;
+        min-width: 25px;
+        padding: 3px 5px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        font-size: 14px;
+        text-align: center;
+        background: white;
+      }
+      .param-minmax:focus,
+      .condition-minmax:focus {
+        outline: none;
+        border-color: #446995;
+      }
+      .param-minmax:disabled,
+      .condition-minmax:disabled {
+        background: #e9e9e9;
+        color: #999;
+        cursor: not-allowed;
+      }
+      .add-btn {
+        width: 100%;
+        padding: 5px 8px;
+        background: #27ae60;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        margin-top: 6px;
+      }
+      .add-btn:hover {
+        background: #130b69;
+      }
+      .add-btn-side-condition {
+        background: #b57104;
+      }
+      .start-btn {
+        display: block;
+        width: 100%;
+        padding: 9px 12px;
+        background: linear-gradient(135deg, #446995 0%, #3a5a80 100%);
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        margin: 10px 0;
+        transition: transform 0.1s, box-shadow 0.1s;
+      }
+      .start-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(68, 105, 149, 0.3);
+      }
+      .start-btn:active {
+        transform: translateY(0);
+      }
+      .start-btn:disabled {
+        background: #a0a0a0;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+      .status-section {
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        padding: 8px;
+        max-height: 250px;
+        overflow-y: auto;
+      }
+      .status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        gap: 6px;
+      }
+      .status-row:last-child {
+        border-bottom: none;
+      }
+      .status-label {
+        color: #666;
+        flex-shrink: 0;
+      }
+      .status-value {
+        font-family: monospace;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: right;
+        word-break: break-all;
+        min-width: 0;
+      }
+      .status-value.running {
+        color: #f39c12;
+      }
+      .status-value.ready {
+        color: #27ae60;
+      }
+      .status-value.error {
+        color: #e74c3c;
+      }
+      .params-section {
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px solid #eee;
+      }
+      .params-header {
+        font-size: 10px;
+        color: #666;
+        margin-bottom: 4px;
+      }
+      .params-display {
+        font-family: monospace;
+        font-size: 14px;
+        font-weight: 600;
+        background: #fff;
+        color: #000;
+        padding: 6px 8px;
+        border-radius: 4px;
+        max-height: 60px;
+        overflow-y: auto;
+        word-break: break-all;
+        line-height: 1.4;
+      }
+      .hidden {
+        display: none;
+      }
+      .side-conditions-display {
+        font-family: monospace;
+        font-size: 14px;
+        background: #fff;
+        color: #000;
+        padding: 6px 8px;
+        border-radius: 4px;
+        max-height: 80px;
+        overflow-y: auto;
+      }
+      .condition-ok {
+        color: #27ae60;
+      }
+      .condition-violation {
+        color: #e74c3c;
+      }
+      .help-link {
+        margin-left: auto;
+        font-size: 10px;
+        color: #1d3c61 !important;
+        text-decoration: none;
+        padding-right: 10px;
+      }
+      .help-link:hover {
+        text-decoration: underline;
+      }
+      .transfer-btn {
+        display: block;
+        width: 100%;
+        padding: 9px 12px;
+        background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .transfer-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3);
+      }
+      .transfer-btn:disabled {
+        background: #a0a0a0;
+        cursor: not-allowed;
+      }
+    </style>
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script src="https://karl1b.github.io/only-office-nlp-solver/scripts/wasm_exec.js"></script>
+    <script src="scripts/go-script.js"></script>
+    <script src="https://karl1b.github.io/only-office-nlp-solver/scripts/get-target.js"></script>
+    <script src="https://karl1b.github.io/only-office-nlp-solver/scripts/status-monitor.js"></script>
+  </head>
+  <body>
+    <div class="scroll-container" id="scrollContainer">
+      <div class="header">
+        <img src="resources/light/icon.png" alt="NLP Solver" />
+        <div class="header-text">
+          <h1>NLP Solver</h1>
+          <span class="author">karlbreuer.com</span>
+        </div>
+        <a
+          href="https://karlbreuer.com/nlp-solver/en"
+          target="_blank"
+          class="help-link"
+          >Help page ←</a
+        >
+      </div>
+
+      <div class="section">
+        <div class="target-row">
+          <span class="target-label">Target</span>
+          <input
+            id="targetCell"
+            type="text"
+            class="target-input"
+            placeholder="A1"
+            value=""
+          />
+          <button
+            class="picker-btn"
+            onclick="pickTargetCell()"
+            title="Pick cell from spreadsheet"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title-row">
+          <span class="section-title">Parameters</span>
+          <button
+            class="picker-btn picker-btn-small"
+            onclick="pickParameterRange()"
+            title="Pick cells from spreadsheet"
+          >
+            +
+          </button>
+        </div>
+        <div id="parametersList"></div>
+        <button class="add-btn" onclick="addParameterRow()">
+          + Add Parameter
+        </button>
+      </div>
+
+      <div class="section section-side-condition">
+        <div class="section-title-row">
+          <span class="section-title">Side Conditions</span>
+        </div>
+        <div id="sideConditionsList"></div>
+        <button
+          class="add-btn add-btn-side-condition"
+          onclick="addSideConditionRow()"
+        >
+          + Add Side Condition
+        </button>
+      </div>
+
+      <div class="section">
+        <div class="target-row">
+          <span class="target-label">Iterations</span>
+          <input
+            id="iterationsInput"
+            type="number"
+            class="target-input"
+            placeholder="1000"
+            value="1000"
+          />
+        </div>
+      </div>
+
+      <button class="start-btn" id="startBtn" onclick="startSolver()">
+        Start Solver
+      </button>
+      <button
+        class="transfer-btn"
+        id="transferBtn"
+        onclick="transferResults()"
+        disabled
+      >
+        Transfer Result
+      </button>
+      <div class="section status-section" id="statusSection">
+        <div class="section-title">Status</div>
+        <div class="status-row">
+          <span class="status-label">Status:</span>
+          <span class="status-value ready" id="statusText">Ready</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Iterations:</span>
+          <span class="status-value" id="currentIterations">—</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Fit Time s:</span>
+          <span class="status-value" id="currentFitTime">—</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Best Fit:</span>
+          <span class="status-value" id="currentFit">—</span>
+        </div>
+        <div class="params-section">
+          <div class="params-header">Parameter Values:</div>
+          <div class="params-display" id="currentParams">—</div>
+        </div>
+        <div class="params-section" id="sideConditionsSection">
+          <div class="params-header">Side Conditions:</div>
+          <div class="side-conditions-display" id="sideConditionsDisplay">
+            —
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        window.Asc.plugin.init = function () {
+          console.log("[PLUGIN] Initialized");
+          addParameterRow();
+          startStatusMonitor();
+        };
+        window.Asc.plugin.button = function (id) {
+          this.executeCommand("close", "");
+        };
+      })();
+    </script>
+  </body>
+</html>
