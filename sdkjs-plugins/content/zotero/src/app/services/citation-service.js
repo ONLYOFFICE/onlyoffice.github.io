@@ -121,18 +121,16 @@ class CitationService {
             .then(function () {
                 const fragment = document.createDocumentFragment();
                 const tempElement = document.createElement("div");
+                const htmlCitation = self._formatter.makeCitationCluster(keysL);
                 fragment.appendChild(tempElement);
-
-                // TODO: Maybe I should clear the search (think about it)
-                tempElement.innerHTML =
-                    self._formatter.makeCitationCluster(keysL);
+                tempElement.innerHTML = htmlCitation;
                 cslCitation.setPlainCitation(tempElement.innerText);
                 let notesStyle = null;
                 if ("note" === self._styleFormat) {
                     notesStyle = self._notesStyle;
                 }
                 return self.citationDocService.addCitation(
-                    tempElement.innerText,
+                    htmlCitation,
                     JSON.stringify(cslCitation.toJSON()),
                     notesStyle
                 );
