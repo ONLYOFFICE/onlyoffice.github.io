@@ -58,13 +58,10 @@ class CslDocFormatter {
                     function () {
                         const doc = Api.GetDocument();
                         const selRange = doc.GetRangeBySelect();
-                        console.log(selRange.GetStartPos());
-                        selRange.MoveCursorToPos(
-                            selRange.GetStartPos() + Asc.scope.text.length
+                        doc.MoveCursorToPos(
+                            selRange.GetEndPos() - Asc.scope.text.length
                         );
                         let run = doc.GetCurrentRun();
-                        console.log(Asc.scope.text);
-                        console.warn(Asc.scope.formatting);
                         for (
                             let i = Asc.scope.formatting.length - 1;
                             i >= 0;
