@@ -4876,614 +4876,34 @@ CSLCitation.prototype.toJSON = function() {
     return result;
 };
 
-function SearchFilterComponents() {
-    this._searchField = new InputField("searchField", {
-        type: "text",
-        autofocus: true,
-        showClear: false
-    });
-    this._filterButton = new Button("filterButton", {
-        variant: "secondary-icon",
-        size: "small"
-    });
-    this._librarySelectList = new SelectBox("librarySelectList", {
-        placeholder: translate("No items selected"),
-        multiple: true,
-        description: translate("Search in:")
-    });
-    this._subscribers = [];
-    this._addEventListeners();
-}
-
-SearchFilterComponents.prototype._addEventListeners = function() {
-    var self = this;
-    this._searchField.subscribe(function(e) {
-        if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
-            var selectedGroups = self._getSelectedGroups();
-            self._subscribers.forEach(function(cb) {
-                cb(e.detail.value, selectedGroups);
-            });
-        }
-    });
-    this._filterButton.subscribe(function(e) {
-        if (e.type === "button:click") {
-            if (!self._librarySelectList.isOpen) {
-                if (e.detail.originalEvent) {
-                    e.detail.originalEvent.stopPropagation();
-                }
-                self._librarySelectList.openDropdown();
-            }
-        }
-    });
-};
-
-SearchFilterComponents.prototype.addGroups = function(groups) {
-    var self = this;
-    var savedGroups = localStorage.getItem("selectedGroups");
-    var selectedItems = savedGroups ? JSON.parse(savedGroups).map(function(id) {
-        return id.toString();
-    }) : [ "my_library", "group_libraries" ];
-    var hasSelected = false;
-    groups.forEach(function(group) {
-        group.id = String(group.id);
-    });
-    var customGroups = [ {
-        id: "my_library",
-        name: translate("My Library")
-    }, {
-        id: "group_libraries",
-        name: translate("Group Libraries")
-    } ];
-    !hasSelected && customGroups.forEach(function(group) {
-        if (selectedItems.indexOf(group.id) !== -1) {
-            hasSelected = true;
-        }
-    });
-    !hasSelected && groups.forEach(function(group) {
-        if (selectedItems.indexOf(group.id.toString()) !== -1) {
-            hasSelected = true;
-        }
-    });
-    if (!hasSelected) {
-        selectedItems = [ "my_library", "group_libraries" ];
-    }
-    var addGroupToSelectBox = function addGroupToSelectBox(id, name, selected) {
-        if (typeof id === "number") {
-            id = id.toString();
-        }
-        if (self._librarySelectList instanceof SelectBox) self._librarySelectList.addItem(id, name, selected);
-    };
-    for (var i = 0; i < customGroups.length; i++) {
-        var id = customGroups[i].id;
-        var name = customGroups[i].name;
-        addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
-    }
-    if (groups.length === 0) {
-        return;
-    }
-    this._librarySelectList.addSeparator();
-    var selected = selectedItems.indexOf("group_libraries") !== -1;
-    for (var i = 0; i < groups.length; i++) {
-        var _id = groups[i].id;
-        var _name = groups[i].name;
-        addGroupToSelectBox(_id, _name, selected || selectedItems.indexOf(_id.toString()) !== -1);
-    }
-    this._selectedGroupsWatcher(customGroups, groups);
-};
-
-SearchFilterComponents.prototype._getSelectedGroups = function() {
-    var self = this;
-    var ids = this._librarySelectList.getSelectedValues();
-    if (Array.isArray(ids) === false || ids.length === 0) {
-        setTimeout(function() {
-            self._librarySelectList.openDropdown();
-        }, 500);
-    }
-    if (ids === null || typeof ids === "string") {
-        return [];
-    }
-    return ids;
-};
-
-SearchFilterComponents.prototype.subscribe = function(callback) {
-    var self = this;
-    this._subscribers.push(callback);
-    return {
-        unsubscribe: function unsubscribe() {
-            self._subscribers = self._subscribers.filter(function(cb) {
-                return cb !== callback;
-            });
-        }
-    };
-};
-
-SearchFilterComponents.prototype._selectedGroupsWatcher = function(customGroups, groups) {
-    var self = this;
-    if (this._librarySelectList instanceof SelectBox === false) {
-        return;
-    }
-    this._librarySelectList.subscribe(function(event) {
-        if (event.type !== "selectbox:change") {
-            return;
-        }
-        var aGroupsToSave = [];
-        var values = event.detail.values;
-        var current = event.detail.current;
-        var bEnabled = event.detail.enabled;
-        var customIds = customGroups.map(function(group) {
-            return group.id;
-        });
-        var ids = groups.map(function(group) {
-            return group.id.toString();
-        });
-        var bWasCustom = customIds.indexOf(String(current)) !== -1;
-        if (bWasCustom) {
-            if (current === "group_libraries") {
-                if (bEnabled) {
-                    aGroupsToSave.push("group_libraries");
-                    self._librarySelectList.selectItems(ids, true);
-                } else {
-                    self._librarySelectList.unselectItems(ids, true);
-                }
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
-            } else {
-                if (values.indexOf("group_libraries") !== -1) {
-                    aGroupsToSave.push("group_libraries");
-                    if (bEnabled) {
-                        aGroupsToSave.push(current);
-                    }
-                } else {
-                    aGroupsToSave = values.slice();
-                }
-            }
-        } else if (!bWasCustom) {
-            var bAllGroupsSelected = ids.every(function(id) {
-                return values.indexOf(id) !== -1;
-            });
-            if (bAllGroupsSelected) {
-                self._librarySelectList.selectItems("group_libraries", true);
-                aGroupsToSave.push("group_libraries");
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
-            } else {
-                self._librarySelectList.unselectItems("group_libraries", true);
-                aGroupsToSave = values.filter(function(value) {
-                    return value !== "group_libraries";
-                });
-            }
-        }
-        if (aGroupsToSave.length === 0) {
-            localStorage.removeItem("selectedGroups");
-        } else {
-            localStorage.setItem("selectedGroups", JSON.stringify(aGroupsToSave));
-        }
-    });
-};
-
-function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) {
-    this._displayNoneClass = displayNoneClass;
-    this._items = {};
-    this._html = {};
-    this._checks = {};
-    this._LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
-    this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
-    this._docsHolder = document.getElementById("docsHolder");
-    this._nothingFound = document.getElementById("nothingFound");
-    this._docsThumb = document.getElementById("docsThumb");
-    this._selectedWrapper = document.getElementById("selectedWrapper");
-    this._selectedHolder = document.getElementById("selectedHolder");
-    this._selectedInfo = document.getElementById("selectedInfo");
-    this._selectedCount = document.getElementById("selectedCount");
-    this._selectedThumb = document.getElementById("selectedThumb");
-    if (this._selectedHolder && this._selectedThumb) {
-        this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20);
-    }
-    if (this._docsHolder && this._docsThumb) {
-        this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
-    }
-    this._subscribers = [];
-    this._fShouldLoadMore = fShouldLoadMore;
-    this._fLoadMore = fLoadMore;
-    this._loadTimeout;
-    this._init();
-}
-
-SelectCitationsComponent.prototype._init = function() {
-    var self = this;
-    if (this._cancelSelectBtn) {
-        this._cancelSelectBtn.onclick = function(e) {
-            var ids = [];
-            for (var id in self._items) {
-                ids.push(id);
-            }
-            for (var i = 0; i < ids.length; i++) {
-                self._removeSelected(ids[i]);
-            }
-        };
-    }
-};
-
-SelectCitationsComponent.prototype.clearLibrary = function() {
-    this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
-    var holder = this._docsHolder;
-    while (holder && holder.lastChild) {
-        holder.removeChild(holder.lastChild);
-    }
-    if (holder) holder.scrollTop = 0;
-    this._docsScroller.onscroll();
-};
-
-SelectCitationsComponent.prototype.displayNothingFound = function() {
-    this.clearLibrary();
-    this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
-};
-
-SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
-    var self = this;
-    var holder = this._docsHolder;
-    var numOfShown = 0;
-    return new Promise((resolve, reject) => {
-        if (res && res.items && res.items.length > 0) {
-            var page = document.createElement("div");
-            if (holder) page.classList.add("page" + holder.children.length);
-            for (var index = 0; index < res.items.length; index++) {
-                var item = res.items[index];
-                page.appendChild(self._buildDocElement(item));
-                numOfShown++;
-            }
-            if (holder) holder.appendChild(page);
-        } else if (err) {
-            reject(err);
-        }
-        this._docsScroller.onscroll();
-        resolve(numOfShown);
-    });
-};
-
-SelectCitationsComponent.prototype.getSelectedItems = function() {
-    var items = Object.assign({}, this._items || {});
-    return items;
-};
-
-SelectCitationsComponent.prototype.removeItems = function(keys) {
-    var self = this;
-    keys.forEach(function(key) {
-        self._removeSelected(key);
-    });
-};
-
-SelectCitationsComponent.prototype.subscribe = function(callback) {
-    var self = this;
-    this._subscribers.push(callback);
-    return {
-        unsubscribe: function unsubscribe() {
-            self._subscribers = self._subscribers.filter(function(cb) {
-                return cb !== callback;
-            });
-        }
-    };
-};
-
-SelectCitationsComponent.prototype._buildDocElement = function(item) {
-    var self = this;
-    var root = document.createElement("div");
-    root.classList.add("doc");
-    var docInfo = document.createElement("div");
-    docInfo.classList.add("docInfo");
-    var checkHolder = document.createElement("div");
-    var label = "";
-    if (item.author && item.author.length > 0) {
-        label = item.author.map(function(a) {
-            if (a.family && a.given) {
-                return a.family.trim() + ", " + a.given.trim();
-            } else if (a.family) {
-                return a.family.trim();
-            } else if (a.given) {
-                return a.given.trim();
-            }
-            return "";
-        }).join("; ");
-    }
-    var arrow = document.createElement("div");
-    arrow.classList.add("selectbox-arrow");
-    arrow.innerHTML = "<b></b>";
-    var title = document.createElement("div");
-    title.textContent = item.title.trim();
-    title.classList.add("truncate-text");
-    title.classList.add("secondary-text");
-    if (item.publisher || item["publisher-place"]) {
-        title.textContent += " · " + (item.publisher || item["publisher-place"] || "");
-    }
-    if (item.issued && item.issued["date-parts"]) {
-        var date = item.issued["date-parts"][0];
-        if (label.length > 20) {
-            title.textContent += " (" + date.join("-") + ")";
-        } else {
-            if (label.length > 0 && label.slice(-1) !== "." && label.slice(-1) !== ",") label += ".";
-            label += " " + date.join("-");
-        }
-    }
-    if (label.length === 0) {
-        label = title.textContent;
-    }
-    title.setAttribute("title", title.textContent);
-    docInfo.appendChild(title);
-    var check = document.createElement("input");
-    checkHolder.appendChild(check);
-    var checkInput = new Checkbox(check, {
-        checked: !!this._items[item.id],
-        label: label,
-        title: true,
-        id: item.id
-    });
-    if (this._items[item.id]) {
-        this._checks[item.id] = checkInput;
-    }
-    checkHolder.appendChild(arrow);
-    root.appendChild(checkHolder);
-    root.appendChild(docInfo);
-    var params;
-    function toggleItem() {
-        root.classList.toggle("doc-open");
-        if (!params) {
-            params = self._buildCitationParams(item);
-            root.appendChild(params);
-        }
-    }
-    arrow.onclick = toggleItem;
-    checkInput.subscribe(function(event) {
-        if (event.type !== "checkbox:change") {
-            return;
-        }
-        if (event.detail.checked) {
-            self._addSelected(item, checkInput);
-        } else {
-            self._removeSelected(item.id);
-        }
-    });
-    return root;
-};
-
-SelectCitationsComponent.prototype._buildCitationParams = function(item) {
-    var locatorLabel = localStorage.getItem("selectedLocator") || "page";
-    item.label = locatorLabel;
-    var params = document.createDocumentFragment();
-    var prefixSuffixContainer = document.createElement("div");
-    var prefix = document.createElement("input");
-    var suffix = document.createElement("input");
-    var locatorContainer = document.createElement("div");
-    var locatorSelect = document.createElement("div");
-    var locator = document.createElement("input");
-    var omitAuthorContainer = document.createElement("div");
-    var omitAuthor = document.createElement("input");
-    params.appendChild(prefixSuffixContainer);
-    prefixSuffixContainer.appendChild(prefix);
-    prefixSuffixContainer.appendChild(suffix);
-    params.appendChild(locatorContainer);
-    locatorContainer.appendChild(locatorSelect);
-    locatorContainer.appendChild(locator);
-    var locatorPlaceholder = "";
-    params.appendChild(omitAuthorContainer);
-    omitAuthorContainer.appendChild(omitAuthor);
-    var prefixInput = new InputField(prefix, {
-        type: "text",
-        placeholder: "Prefix"
-    });
-    var suffixInput = new InputField(suffix, {
-        type: "text",
-        placeholder: "Suffix"
-    });
-    var locatorSelectbox = new SelectBox(locatorSelect, {
-        placeholder: "Locator"
-    });
-    this._LOCATOR_VALUES.forEach(function(info) {
-        var selected = info[0] === locatorLabel;
-        locatorSelectbox.addItem(info[0], info[1], selected);
-        if (selected) {
-            locatorPlaceholder = info[1];
-        }
-    });
-    var locatorInput = new InputField(locator, {
-        type: "text",
-        placeholder: locatorPlaceholder
-    });
-    var omitAuthorInput = new Checkbox(omitAuthor, {
-        label: "Omit author"
-    });
-    prefixInput.subscribe(function(event) {
-        if (event.type !== "inputfield:input") {
-            return;
-        }
-        item.prefix = event.detail.value;
-    });
-    suffixInput.subscribe(function(event) {
-        if (event.type !== "inputfield:input") {
-            return;
-        }
-        item.suffix = event.detail.value;
-    });
-    locatorInput.subscribe(function(event) {
-        if (event.type !== "inputfield:input") {
-            return;
-        }
-        item.locator = event.detail.value;
-    });
-    locatorSelectbox.subscribe(function(event) {
-        if (event.type !== "selectbox:change") {
-            return;
-        }
-        if (!event.detail.items) {
-            return;
-        }
-        var eventItem = event.detail.items[0];
-        locatorInput.setPlaceholder(eventItem.text);
-        item.label = event.detail.values[0].toString();
-        localStorage.setItem("selectedLocator", item.label);
-    });
-    omitAuthorInput.subscribe(function(event) {
-        if (event.type !== "checkbox:change") {
-            return;
-        }
-        item["suppress-author"] = event.detail.checked;
-    });
-    return params;
-};
-
-SelectCitationsComponent.prototype._buildSelectedElement = function(item) {
-    var self = this;
-    var root = document.createElement("div");
-    root.classList.add("selDoc");
-    var span = document.createElement("span");
-    if (item.author && item.author.length > 0) {
-        span.textContent = item.author.map(function(a) {
-            return a.family + ", " + a.given;
-        }).join("; ");
-    } else {
-        span.textContent = item.title;
-    }
-    if (item.issued && item.issued["date-parts"]) {
-        span.textContent += " " + item.issued["date-parts"][0].join("-");
-    }
-    span.setAttribute("title", span.textContent);
-    root.appendChild(span);
-    var remove = document.createElement("span");
-    remove.onclick = function() {
-        self._removeSelected(item.id);
-    };
-    remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829' + " 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275" + " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" + " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" + ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' + ' fill="currentColor" fill-opacity="0.8"/></svg>';
-    root.appendChild(remove);
-    return root;
-};
-
-SelectCitationsComponent.prototype._addSelected = function(item, checkbox) {
-    var el = this._buildSelectedElement(item);
-    this._items[item.id] = item;
-    this._html[item.id] = el;
-    this._checks[item.id] = checkbox;
-    if (this._selectedHolder) {
-        this._selectedHolder.appendChild(el);
-    }
-    this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
-    this._checkSelected();
-};
-
-SelectCitationsComponent.prototype._checkDocsScroll = function(holder, thumb) {
-    var self = this;
-    if (this._fShouldLoadMore(holder)) {
-        if (this._loadTimeout) {
-            clearTimeout(this._loadTimeout);
-        }
-        if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
-        this._loadTimeout = setTimeout(function() {
-            if (self._fShouldLoadMore(holder)) {
-                self._fLoadMore();
-            }
-        }, 500);
-    }
-};
-
-SelectCitationsComponent.prototype._initScrollBox = function(holder, thumb, minThumbHeight, onscroll) {
-    var scroller = {};
-    scroller.onscroll = this._checkScroll(holder, thumb, minThumbHeight, onscroll);
-    holder.onwheel = function(e) {
-        holder.scrollTop += e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
-        scroller.onscroll();
-    };
-    thumb.onmousedown = function(e) {
-        thumb.classList.add("scrolling");
-        var y = e.clientY;
-        var initialPos = holder.scrollTop;
-        window.onmouseup = function(e) {
-            thumb.classList.remove("scrolling");
-            window.onmouseup = null;
-            window.onmousemove = null;
-        };
-        window.onmousemove = function(e) {
-            var delta = e.clientY - y;
-            var percMoved = delta / holder.clientHeight;
-            var deltaScroll = holder.scrollHeight * percMoved;
-            holder.scrollTop = initialPos + deltaScroll;
-            scroller.onscroll();
-        };
-    };
-    document.body.addEventListener("resize", function() {
-        scroller.onscroll();
-    });
-    return scroller;
-};
-
-SelectCitationsComponent.prototype._checkScroll = function(holder, thumb, minThumbHeight, func) {
-    var displayNoneClass = this._displayNoneClass;
-    return function() {
-        if (holder.scrollHeight <= holder.clientHeight) {
-            thumb.classList.add(displayNoneClass);
-        } else {
-            thumb.classList.remove(displayNoneClass);
-            var height = holder.clientHeight / holder.scrollHeight * holder.clientHeight;
-            height = height < minThumbHeight ? minThumbHeight : height;
-            thumb.style.height = height + "px";
-            var scroll = holder.scrollHeight - holder.clientHeight;
-            var percScrolled = holder.scrollTop / scroll;
-            var margin = percScrolled * (holder.clientHeight - height);
-            thumb.style.marginTop = margin + "px";
-        }
-        if (func) func(holder, thumb);
-    };
-};
-
-SelectCitationsComponent.prototype._removeSelected = function(id) {
-    var el = this._html[id];
-    if (this._selectedHolder) {
-        this._selectedHolder.removeChild(el);
-    }
-    delete this._items[id];
-    delete this._html[id];
-    if (this._checks[id]) {
-        this._checks[id].uncheck(true);
-        delete this._checks[id];
-    }
-    this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
-    this._checkSelected();
-};
-
-SelectCitationsComponent.prototype._checkSelected = function() {
-    var numOfSelected = this.count();
-    if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
-        return;
-    }
-    if (numOfSelected <= 0) {
-        this._selectedWrapper.classList.add(this._displayNoneClass);
-        this._selectedInfo.classList.add(this._displayNoneClass);
-    } else {
-        this._selectedWrapper.classList.remove(this._displayNoneClass);
-        this._selectedInfo.classList.remove(this._displayNoneClass);
-        this._selectedCount.textContent = numOfSelected + " " + translate("selected");
-    }
-    this._subscribers.forEach(function(cb) {
-        cb(numOfSelected);
-    });
-};
-
-SelectCitationsComponent.prototype.count = function() {
-    var k = 0;
-    for (var i in this._items) k++;
-    return k;
-};
-
 var _window = new WeakMap;
+
+var _defaultButtonFn = new WeakMap;
+
+var _defaultThemeChangedFn = new WeakMap;
+
+var _defaultTranslateFn = new WeakMap;
+
+var _AdditionalWindow_brand = new WeakSet;
 
 class AdditionalWindow {
     constructor() {
+        _classPrivateMethodInitSpec(this, _AdditionalWindow_brand);
         _classPrivateFieldInitSpec(this, _window, void 0);
+        _classPrivateFieldInitSpec(this, _defaultButtonFn, void 0);
+        _classPrivateFieldInitSpec(this, _defaultThemeChangedFn, void 0);
+        _classPrivateFieldInitSpec(this, _defaultTranslateFn, void 0);
         _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
+        _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
+        _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
+        _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
     }
-    show(fileName, description, text) {
+    show(description, text) {
+        _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
+        _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
+        _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
         var variation = {
+            name: "Zotero",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
@@ -5497,35 +4917,48 @@ class AdditionalWindow {
             } ],
             isModal: false,
             EditorsSupport: [ "word" ],
-            size: [ 300, 120 ],
+            size: [ 320, 240 ],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false
         };
         _classPrivateFieldGet2(_window, this).show(variation);
+        window.Asc.plugin.onThemeChanged = theme => {
+            _classPrivateFieldGet2(_window, this).command("onThemeChanged", theme);
+            _classPrivateFieldGet2(_defaultThemeChangedFn, this).call(this, theme);
+        };
+        window.Asc.plugin.onTranslate = () => {
+            _classPrivateFieldGet2(_window, this).command("onTranslate");
+            _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
+        };
+        _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
+            _classPrivateFieldGet2(_window, this).command("onAttachedText", text);
+        });
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {
                     console.log("yes");
                     resolve(true);
                 } else {
-                    console.log("no");
+                    console.log("no", buttonId);
                     resolve(false);
                 }
-                _classPrivateFieldGet2(_window, this).close();
+                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
             };
         });
     }
-    hide() {
-        if (_classPrivateFieldGet2(_window, this)) {
-            _classPrivateFieldGet2(_window, this).close();
-        }
-    }
     destroy() {
-        _classPrivateFieldGet2(_window, this).close();
+        _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
         _classPrivateFieldSet2(_window, this, null);
-        window.Asc.plugin.button = () => {};
     }
+}
+
+function _hide() {
+    if (_classPrivateFieldGet2(_window, this)) {
+        _classPrivateFieldGet2(_window, this).close();
+    }
+    window.Asc.plugin.button = _classPrivateFieldGet2(_defaultButtonFn, this);
+    window.Asc.plugin.onThemeChanged = _classPrivateFieldGet2(_defaultThemeChangedFn, this);
 }
 
 var _onUserEditCitationManuallyWindow = new WeakMap;
@@ -5616,11 +5049,11 @@ class CitationService {
                 var updatedFields = [];
                 if (typeof bHardRefresh === "undefined") {
                     var format = _this3._cslStylesManager.getLastUsedFormat();
-                    bHardRefresh = format === "numeric";
-                    if (bHardRefresh) {
-                        updatedFields = yield _assertClassBrand(_CitationService_brand, _this3, _getUpdatedFields).call(_this3, fieldsWithCitations, bHardRefresh);
+                    if (format === "numeric") {
+                        bHardRefresh = true;
                     }
-                } else {
+                }
+                if (typeof bHardRefresh === "boolean") {
                     updatedFields = yield _assertClassBrand(_CitationService_brand, _this3, _getUpdatedFields).call(_this3, fieldsWithCitations, bHardRefresh);
                 }
                 if (bibField) {
@@ -5827,35 +5260,35 @@ function _getUpdatedFields2() {
         var tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
         var updatedFields = [];
-        var _loop = function* _loop() {
+        for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
             var {field: field, cslCitation: cslCitation} = fieldsWithCitations[i];
             var keysL = cslCitation.getInfoForCitationCluster();
             tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
             var oldContent = field["Content"];
             var newContent = tempElement.innerText;
             if (cslCitation.getDoNotUpdate()) {
-                return 1;
+                continue;
+            }
+            if (oldContent === newContent) {
+                continue;
             }
             if (bHardRefresh) {
                 field["Content"] = newContent;
                 cslCitation.setPlainCitation(newContent);
             } else if (oldContent !== newContent) {
-                yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("info-window", "Zotero Citation", newContent).then(function(bNeedSaveUserInput) {
-                    if (bNeedSaveUserInput) {
-                        cslCitation.setDoNotUpdate();
-                    } else {
-                        field["Content"] = newContent;
-                        cslCitation.setPlainCitation(newContent);
-                    }
-                });
+                var text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
+                var bNeedSaveUserInput = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("Saving custom edits", text);
+                if (bNeedSaveUserInput) {
+                    cslCitation.setDoNotUpdate();
+                } else {
+                    field["Content"] = newContent;
+                    cslCitation.setPlainCitation(newContent);
+                }
             }
             if (cslCitation) {
                 field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
             }
             updatedFields.push(field);
-        };
-        for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
-            if (yield* _loop()) continue;
         }
         return updatedFields;
     });
@@ -6798,6 +6231,605 @@ LoginPage.prototype._hideLoader = function() {
     this._saveApiKeyBtn.enable();
     this._connectToLocalZotero.enable();
     this._apiKeyLoginField.enable();
+};
+
+function SearchFilterComponents() {
+    this._searchField = new InputField("searchField", {
+        type: "text",
+        autofocus: true,
+        showClear: false
+    });
+    this._filterButton = new Button("filterButton", {
+        variant: "secondary-icon",
+        size: "small"
+    });
+    this._librarySelectList = new SelectBox("librarySelectList", {
+        placeholder: translate("No items selected"),
+        multiple: true,
+        description: translate("Search in:")
+    });
+    this._subscribers = [];
+    this._addEventListeners();
+}
+
+SearchFilterComponents.prototype._addEventListeners = function() {
+    var self = this;
+    this._searchField.subscribe(function(e) {
+        if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
+            var selectedGroups = self._getSelectedGroups();
+            self._subscribers.forEach(function(cb) {
+                cb(e.detail.value, selectedGroups);
+            });
+        }
+    });
+    this._filterButton.subscribe(function(e) {
+        if (e.type === "button:click") {
+            if (!self._librarySelectList.isOpen) {
+                if (e.detail.originalEvent) {
+                    e.detail.originalEvent.stopPropagation();
+                }
+                self._librarySelectList.openDropdown();
+            }
+        }
+    });
+};
+
+SearchFilterComponents.prototype.addGroups = function(groups) {
+    var self = this;
+    var savedGroups = localStorage.getItem("selectedGroups");
+    var selectedItems = savedGroups ? JSON.parse(savedGroups).map(function(id) {
+        return id.toString();
+    }) : [ "my_library", "group_libraries" ];
+    var hasSelected = false;
+    groups.forEach(function(group) {
+        group.id = String(group.id);
+    });
+    var customGroups = [ {
+        id: "my_library",
+        name: translate("My Library")
+    }, {
+        id: "group_libraries",
+        name: translate("Group Libraries")
+    } ];
+    !hasSelected && customGroups.forEach(function(group) {
+        if (selectedItems.indexOf(group.id) !== -1) {
+            hasSelected = true;
+        }
+    });
+    !hasSelected && groups.forEach(function(group) {
+        if (selectedItems.indexOf(group.id.toString()) !== -1) {
+            hasSelected = true;
+        }
+    });
+    if (!hasSelected) {
+        selectedItems = [ "my_library", "group_libraries" ];
+    }
+    var addGroupToSelectBox = function addGroupToSelectBox(id, name, selected) {
+        if (typeof id === "number") {
+            id = id.toString();
+        }
+        if (self._librarySelectList instanceof SelectBox) self._librarySelectList.addItem(id, name, selected);
+    };
+    for (var i = 0; i < customGroups.length; i++) {
+        var id = customGroups[i].id;
+        var name = customGroups[i].name;
+        addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
+    }
+    if (groups.length === 0) {
+        return;
+    }
+    this._librarySelectList.addSeparator();
+    var selected = selectedItems.indexOf("group_libraries") !== -1;
+    for (var i = 0; i < groups.length; i++) {
+        var _id = groups[i].id;
+        var _name = groups[i].name;
+        addGroupToSelectBox(_id, _name, selected || selectedItems.indexOf(_id.toString()) !== -1);
+    }
+    this._selectedGroupsWatcher(customGroups, groups);
+};
+
+SearchFilterComponents.prototype._getSelectedGroups = function() {
+    var self = this;
+    var ids = this._librarySelectList.getSelectedValues();
+    if (Array.isArray(ids) === false || ids.length === 0) {
+        setTimeout(function() {
+            self._librarySelectList.openDropdown();
+        }, 500);
+    }
+    if (ids === null || typeof ids === "string") {
+        return [];
+    }
+    return ids;
+};
+
+SearchFilterComponents.prototype.subscribe = function(callback) {
+    var self = this;
+    this._subscribers.push(callback);
+    return {
+        unsubscribe: function unsubscribe() {
+            self._subscribers = self._subscribers.filter(function(cb) {
+                return cb !== callback;
+            });
+        }
+    };
+};
+
+SearchFilterComponents.prototype._selectedGroupsWatcher = function(customGroups, groups) {
+    var self = this;
+    if (this._librarySelectList instanceof SelectBox === false) {
+        return;
+    }
+    this._librarySelectList.subscribe(function(event) {
+        if (event.type !== "selectbox:change") {
+            return;
+        }
+        var aGroupsToSave = [];
+        var values = event.detail.values;
+        var current = event.detail.current;
+        var bEnabled = event.detail.enabled;
+        var customIds = customGroups.map(function(group) {
+            return group.id;
+        });
+        var ids = groups.map(function(group) {
+            return group.id.toString();
+        });
+        var bWasCustom = customIds.indexOf(String(current)) !== -1;
+        if (bWasCustom) {
+            if (current === "group_libraries") {
+                if (bEnabled) {
+                    aGroupsToSave.push("group_libraries");
+                    self._librarySelectList.selectItems(ids, true);
+                } else {
+                    self._librarySelectList.unselectItems(ids, true);
+                }
+                if (values.indexOf("my_library") !== -1) {
+                    aGroupsToSave.push("my_library");
+                }
+            } else {
+                if (values.indexOf("group_libraries") !== -1) {
+                    aGroupsToSave.push("group_libraries");
+                    if (bEnabled) {
+                        aGroupsToSave.push(current);
+                    }
+                } else {
+                    aGroupsToSave = values.slice();
+                }
+            }
+        } else if (!bWasCustom) {
+            var bAllGroupsSelected = ids.every(function(id) {
+                return values.indexOf(id) !== -1;
+            });
+            if (bAllGroupsSelected) {
+                self._librarySelectList.selectItems("group_libraries", true);
+                aGroupsToSave.push("group_libraries");
+                if (values.indexOf("my_library") !== -1) {
+                    aGroupsToSave.push("my_library");
+                }
+            } else {
+                self._librarySelectList.unselectItems("group_libraries", true);
+                aGroupsToSave = values.filter(function(value) {
+                    return value !== "group_libraries";
+                });
+            }
+        }
+        if (aGroupsToSave.length === 0) {
+            localStorage.removeItem("selectedGroups");
+        } else {
+            localStorage.setItem("selectedGroups", JSON.stringify(aGroupsToSave));
+        }
+    });
+};
+
+function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) {
+    this._displayNoneClass = displayNoneClass;
+    this._items = {};
+    this._html = {};
+    this._checks = {};
+    this._LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
+    this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
+    this._docsHolder = document.getElementById("docsHolder");
+    this._nothingFound = document.getElementById("nothingFound");
+    this._docsThumb = document.getElementById("docsThumb");
+    this._selectedWrapper = document.getElementById("selectedWrapper");
+    this._selectedHolder = document.getElementById("selectedHolder");
+    this._selectedInfo = document.getElementById("selectedInfo");
+    this._selectedCount = document.getElementById("selectedCount");
+    this._selectedThumb = document.getElementById("selectedThumb");
+    if (this._selectedHolder && this._selectedThumb) {
+        this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20);
+    }
+    if (this._docsHolder && this._docsThumb) {
+        this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
+    }
+    this._subscribers = [];
+    this._fShouldLoadMore = fShouldLoadMore;
+    this._fLoadMore = fLoadMore;
+    this._loadTimeout;
+    this._init();
+}
+
+SelectCitationsComponent.prototype._init = function() {
+    var self = this;
+    if (this._cancelSelectBtn) {
+        this._cancelSelectBtn.onclick = function(e) {
+            var ids = [];
+            for (var id in self._items) {
+                ids.push(id);
+            }
+            for (var i = 0; i < ids.length; i++) {
+                self._removeSelected(ids[i]);
+            }
+        };
+    }
+};
+
+SelectCitationsComponent.prototype.clearLibrary = function() {
+    this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
+    var holder = this._docsHolder;
+    while (holder && holder.lastChild) {
+        holder.removeChild(holder.lastChild);
+    }
+    if (holder) holder.scrollTop = 0;
+    this._docsScroller.onscroll();
+};
+
+SelectCitationsComponent.prototype.displayNothingFound = function() {
+    this.clearLibrary();
+    this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
+};
+
+SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
+    var self = this;
+    var holder = this._docsHolder;
+    var numOfShown = 0;
+    return new Promise((resolve, reject) => {
+        if (res && res.items && res.items.length > 0) {
+            var page = document.createElement("div");
+            if (holder) page.classList.add("page" + holder.children.length);
+            for (var index = 0; index < res.items.length; index++) {
+                var item = res.items[index];
+                page.appendChild(self._buildDocElement(item));
+                numOfShown++;
+            }
+            if (holder) holder.appendChild(page);
+        } else if (err) {
+            reject(err);
+        }
+        this._docsScroller.onscroll();
+        resolve(numOfShown);
+    });
+};
+
+SelectCitationsComponent.prototype.getSelectedItems = function() {
+    var items = Object.assign({}, this._items || {});
+    return items;
+};
+
+SelectCitationsComponent.prototype.removeItems = function(keys) {
+    var self = this;
+    keys.forEach(function(key) {
+        self._removeSelected(key);
+    });
+};
+
+SelectCitationsComponent.prototype.subscribe = function(callback) {
+    var self = this;
+    this._subscribers.push(callback);
+    return {
+        unsubscribe: function unsubscribe() {
+            self._subscribers = self._subscribers.filter(function(cb) {
+                return cb !== callback;
+            });
+        }
+    };
+};
+
+SelectCitationsComponent.prototype._buildDocElement = function(item) {
+    var self = this;
+    var root = document.createElement("div");
+    root.classList.add("doc");
+    var docInfo = document.createElement("div");
+    docInfo.classList.add("docInfo");
+    var checkHolder = document.createElement("div");
+    var label = "";
+    if (item.author && item.author.length > 0) {
+        label = item.author.map(function(a) {
+            if (a.family && a.given) {
+                return a.family.trim() + ", " + a.given.trim();
+            } else if (a.family) {
+                return a.family.trim();
+            } else if (a.given) {
+                return a.given.trim();
+            }
+            return "";
+        }).join("; ");
+    }
+    var arrow = document.createElement("div");
+    arrow.classList.add("selectbox-arrow");
+    arrow.innerHTML = "<b></b>";
+    var title = document.createElement("div");
+    title.textContent = item.title.trim();
+    title.classList.add("truncate-text");
+    title.classList.add("secondary-text");
+    if (item.publisher || item["publisher-place"]) {
+        title.textContent += " · " + (item.publisher || item["publisher-place"] || "");
+    }
+    if (item.issued && item.issued["date-parts"]) {
+        var date = item.issued["date-parts"][0];
+        if (label.length > 20) {
+            title.textContent += " (" + date.join("-") + ")";
+        } else {
+            if (label.length > 0 && label.slice(-1) !== "." && label.slice(-1) !== ",") label += ".";
+            label += " " + date.join("-");
+        }
+    }
+    if (label.length === 0) {
+        label = title.textContent;
+    }
+    title.setAttribute("title", title.textContent);
+    docInfo.appendChild(title);
+    var check = document.createElement("input");
+    checkHolder.appendChild(check);
+    var checkInput = new Checkbox(check, {
+        checked: !!this._items[item.id],
+        label: label,
+        title: true,
+        id: item.id
+    });
+    if (this._items[item.id]) {
+        this._checks[item.id] = checkInput;
+    }
+    checkHolder.appendChild(arrow);
+    root.appendChild(checkHolder);
+    root.appendChild(docInfo);
+    var params;
+    function toggleItem() {
+        root.classList.toggle("doc-open");
+        if (!params) {
+            params = self._buildCitationParams(item);
+            root.appendChild(params);
+        }
+    }
+    arrow.onclick = toggleItem;
+    checkInput.subscribe(function(event) {
+        if (event.type !== "checkbox:change") {
+            return;
+        }
+        if (event.detail.checked) {
+            self._addSelected(item, checkInput);
+        } else {
+            self._removeSelected(item.id);
+        }
+    });
+    return root;
+};
+
+SelectCitationsComponent.prototype._buildCitationParams = function(item) {
+    var locatorLabel = localStorage.getItem("selectedLocator") || "page";
+    item.label = locatorLabel;
+    var params = document.createDocumentFragment();
+    var prefixSuffixContainer = document.createElement("div");
+    var prefix = document.createElement("input");
+    var suffix = document.createElement("input");
+    var locatorContainer = document.createElement("div");
+    var locatorSelect = document.createElement("div");
+    var locator = document.createElement("input");
+    var omitAuthorContainer = document.createElement("div");
+    var omitAuthor = document.createElement("input");
+    params.appendChild(prefixSuffixContainer);
+    prefixSuffixContainer.appendChild(prefix);
+    prefixSuffixContainer.appendChild(suffix);
+    params.appendChild(locatorContainer);
+    locatorContainer.appendChild(locatorSelect);
+    locatorContainer.appendChild(locator);
+    var locatorPlaceholder = "";
+    params.appendChild(omitAuthorContainer);
+    omitAuthorContainer.appendChild(omitAuthor);
+    var prefixInput = new InputField(prefix, {
+        type: "text",
+        placeholder: "Prefix"
+    });
+    var suffixInput = new InputField(suffix, {
+        type: "text",
+        placeholder: "Suffix"
+    });
+    var locatorSelectbox = new SelectBox(locatorSelect, {
+        placeholder: "Locator"
+    });
+    this._LOCATOR_VALUES.forEach(function(info) {
+        var selected = info[0] === locatorLabel;
+        locatorSelectbox.addItem(info[0], info[1], selected);
+        if (selected) {
+            locatorPlaceholder = info[1];
+        }
+    });
+    var locatorInput = new InputField(locator, {
+        type: "text",
+        placeholder: locatorPlaceholder
+    });
+    var omitAuthorInput = new Checkbox(omitAuthor, {
+        label: "Omit author"
+    });
+    prefixInput.subscribe(function(event) {
+        if (event.type !== "inputfield:input") {
+            return;
+        }
+        item.prefix = event.detail.value;
+    });
+    suffixInput.subscribe(function(event) {
+        if (event.type !== "inputfield:input") {
+            return;
+        }
+        item.suffix = event.detail.value;
+    });
+    locatorInput.subscribe(function(event) {
+        if (event.type !== "inputfield:input") {
+            return;
+        }
+        item.locator = event.detail.value;
+    });
+    locatorSelectbox.subscribe(function(event) {
+        if (event.type !== "selectbox:change") {
+            return;
+        }
+        if (!event.detail.items) {
+            return;
+        }
+        var eventItem = event.detail.items[0];
+        locatorInput.setPlaceholder(eventItem.text);
+        item.label = event.detail.values[0].toString();
+        localStorage.setItem("selectedLocator", item.label);
+    });
+    omitAuthorInput.subscribe(function(event) {
+        if (event.type !== "checkbox:change") {
+            return;
+        }
+        item["suppress-author"] = event.detail.checked;
+    });
+    return params;
+};
+
+SelectCitationsComponent.prototype._buildSelectedElement = function(item) {
+    var self = this;
+    var root = document.createElement("div");
+    root.classList.add("selDoc");
+    var span = document.createElement("span");
+    if (item.author && item.author.length > 0) {
+        span.textContent = item.author.map(function(a) {
+            return a.family + ", " + a.given;
+        }).join("; ");
+    } else {
+        span.textContent = item.title;
+    }
+    if (item.issued && item.issued["date-parts"]) {
+        span.textContent += " " + item.issued["date-parts"][0].join("-");
+    }
+    span.setAttribute("title", span.textContent);
+    root.appendChild(span);
+    var remove = document.createElement("span");
+    remove.onclick = function() {
+        self._removeSelected(item.id);
+    };
+    remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829' + " 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275" + " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" + " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" + ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' + ' fill="currentColor" fill-opacity="0.8"/></svg>';
+    root.appendChild(remove);
+    return root;
+};
+
+SelectCitationsComponent.prototype._addSelected = function(item, checkbox) {
+    var el = this._buildSelectedElement(item);
+    this._items[item.id] = item;
+    this._html[item.id] = el;
+    this._checks[item.id] = checkbox;
+    if (this._selectedHolder) {
+        this._selectedHolder.appendChild(el);
+    }
+    this._docsScroller.onscroll();
+    this._selectedScroller.onscroll();
+    this._checkSelected();
+};
+
+SelectCitationsComponent.prototype._checkDocsScroll = function(holder, thumb) {
+    var self = this;
+    if (this._fShouldLoadMore(holder)) {
+        if (this._loadTimeout) {
+            clearTimeout(this._loadTimeout);
+        }
+        if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
+        this._loadTimeout = setTimeout(function() {
+            if (self._fShouldLoadMore(holder)) {
+                self._fLoadMore();
+            }
+        }, 500);
+    }
+};
+
+SelectCitationsComponent.prototype._initScrollBox = function(holder, thumb, minThumbHeight, onscroll) {
+    var scroller = {};
+    scroller.onscroll = this._checkScroll(holder, thumb, minThumbHeight, onscroll);
+    holder.onwheel = function(e) {
+        holder.scrollTop += e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
+        scroller.onscroll();
+    };
+    thumb.onmousedown = function(e) {
+        thumb.classList.add("scrolling");
+        var y = e.clientY;
+        var initialPos = holder.scrollTop;
+        window.onmouseup = function(e) {
+            thumb.classList.remove("scrolling");
+            window.onmouseup = null;
+            window.onmousemove = null;
+        };
+        window.onmousemove = function(e) {
+            var delta = e.clientY - y;
+            var percMoved = delta / holder.clientHeight;
+            var deltaScroll = holder.scrollHeight * percMoved;
+            holder.scrollTop = initialPos + deltaScroll;
+            scroller.onscroll();
+        };
+    };
+    document.body.addEventListener("resize", function() {
+        scroller.onscroll();
+    });
+    return scroller;
+};
+
+SelectCitationsComponent.prototype._checkScroll = function(holder, thumb, minThumbHeight, func) {
+    var displayNoneClass = this._displayNoneClass;
+    return function() {
+        if (holder.scrollHeight <= holder.clientHeight) {
+            thumb.classList.add(displayNoneClass);
+        } else {
+            thumb.classList.remove(displayNoneClass);
+            var height = holder.clientHeight / holder.scrollHeight * holder.clientHeight;
+            height = height < minThumbHeight ? minThumbHeight : height;
+            thumb.style.height = height + "px";
+            var scroll = holder.scrollHeight - holder.clientHeight;
+            var percScrolled = holder.scrollTop / scroll;
+            var margin = percScrolled * (holder.clientHeight - height);
+            thumb.style.marginTop = margin + "px";
+        }
+        if (func) func(holder, thumb);
+    };
+};
+
+SelectCitationsComponent.prototype._removeSelected = function(id) {
+    var el = this._html[id];
+    if (this._selectedHolder) {
+        this._selectedHolder.removeChild(el);
+    }
+    delete this._items[id];
+    delete this._html[id];
+    if (this._checks[id]) {
+        this._checks[id].uncheck(true);
+        delete this._checks[id];
+    }
+    this._docsScroller.onscroll();
+    this._selectedScroller.onscroll();
+    this._checkSelected();
+};
+
+SelectCitationsComponent.prototype._checkSelected = function() {
+    var numOfSelected = this.count();
+    if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
+        return;
+    }
+    if (numOfSelected <= 0) {
+        this._selectedWrapper.classList.add(this._displayNoneClass);
+        this._selectedInfo.classList.add(this._displayNoneClass);
+    } else {
+        this._selectedWrapper.classList.remove(this._displayNoneClass);
+        this._selectedInfo.classList.remove(this._displayNoneClass);
+        this._selectedCount.textContent = numOfSelected + " " + translate("selected");
+    }
+    this._subscribers.forEach(function(cb) {
+        cb(numOfSelected);
+    });
+};
+
+SelectCitationsComponent.prototype.count = function() {
+    var k = 0;
+    for (var i in this._items) k++;
+    return k;
 };
 
 (function() {
