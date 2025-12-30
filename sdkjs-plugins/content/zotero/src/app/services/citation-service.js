@@ -204,49 +204,36 @@ class CitationService {
     }
 
     #makeBibliography() {
-        const self = this;
-        const fragment = document.createDocumentFragment();
-        const tempElement = document.createElement("div");
-        fragment.appendChild(tempElement);
-
         try {
-            var bibItems = new Array(self._storage.size);
+            var bibItems = new Array(this._storage.size);
             /** @type {false | any} */
-            var bibObject = self._formatter.makeBibliography();
+            var bibObject = this._formatter.makeBibliography();
             // Sort bibliography items
             for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
                 var citationId = bibObject[0].entry_ids[i][0];
-                var citationIndex = self._storage.getIndex(citationId);
+                var citationIndex = this._storage.getIndex(citationId);
                 /** @type {string} */
                 var bibText = bibObject[1][i];
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                     bibText = bibText.replace(/\n/, "");
                 }
-                // Check if bibliography item contains <sup> or <sub>
-                /*if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
-                    // Escape <sup> and <sub>
-                    bibText = bibText
-                        .replace(/<sup\b[^>]*>/gi, "&lt;sup&gt;")
-                        .replace(/<\/sup>/gi, "&lt;/sup&gt;")
-                        .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
-                        .replace(/<\/sub>/gi, "&lt;/sub&gt;"); 
-                }*/
+
                 bibItems[citationIndex] = bibText;
             }
-            tempElement.innerHTML = bibItems.join("");
+            const htmlBibliography = bibItems.join("");
+            return htmlBibliography;
         } catch (e) {
             if (
                 false ===
-                self._cslStylesManager.isLastUsedStyleContainBibliography()
+                this._cslStylesManager.isLastUsedStyleContainBibliography()
             ) {
                 // style does not describe the bibliography
-                tempElement.textContent = "";
             } else {
                 console.error(e);
                 throw "Failed to apply this style.";
             }
+            return "";
         }
-        return tempElement.innerText;
     }
 
     /** @param {CustomField} field */
@@ -364,8 +351,6 @@ class CitationService {
      * @returns {Promise<CustomField[]>}
      */
     async #getUpdatedFields(fieldsWithCitations, bHardRefresh) {
-        const self = this;
-
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
@@ -376,7 +361,8 @@ class CitationService {
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
             const { field, cslCitation } = fieldsWithCitations[i];
             let keysL = cslCitation.getInfoForCitationCluster();
-            tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+            const htmlCitation = this._formatter.makeCitationCluster(keysL);
+            tempElement.innerHTML = htmlCitation;
             const oldContent = field["Content"];
             const newContent = tempElement.innerText;
 
@@ -389,7 +375,7 @@ class CitationService {
             }
 
             if (bHardRefresh) {
-                field["Content"] = newContent;
+                field["Content"] = htmlCitation;
                 cslCitation.setPlainCitation(newContent);
             } else if (oldContent !== newContent) {
                 let text =
@@ -414,23 +400,23 @@ class CitationService {
                     oldContent +
                     "</p>";
                 const bNeedSaveUserInput =
-                    await self.#onUserEditCitationManuallyWindow.show(
+                    await this.#onUserEditCitationManuallyWindow.show(
                         "Saving custom edits",
                         text
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
                 } else {
-                    field["Content"] = newContent;
+                    field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
             }
 
             if (cslCitation) {
                 field["Value"] =
-                    self._citPrefixNew +
+                    this._citPrefixNew +
                     " " +
-                    self._citSuffixNew +
+                    this._citSuffixNew +
                     JSON.stringify(cslCitation.toJSON());
             }
 

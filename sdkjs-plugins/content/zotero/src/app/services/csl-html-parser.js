@@ -7,7 +7,7 @@ class CslHtmlParser {
      * Parse HTML string to extract plain text and formatting information.
      * Only supports: <sub>, <sup>, <i>, <u>, <b> tags
      * @param {string} htmlString - HTML string to parse
-     * @returns {{text: string, formatting: Array<FormattingPositions>}}} Object with text and formatting array
+     * @returns {{text: string, formatting: Array<FormattingPositions>}} Object with text and formatting array
      */
     static parseHtmlFormatting(htmlString) {
         /** @type {Set<AllowedTags>} */

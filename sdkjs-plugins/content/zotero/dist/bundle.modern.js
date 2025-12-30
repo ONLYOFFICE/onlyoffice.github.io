@@ -3183,173 +3183,325 @@ function translate(message) {
     return window.Asc.plugin.tr(message);
 }
 
-function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
-    this._citPrefixOld = "ZOTERO_CITATION";
-    this._bibPrefixOld = "ZOTERO_BIBLIOGRAPHY";
-    this._citPrefix = citPrefix;
-    this._citSuffix = citSuffix;
-    this._bibPrefix = bibPrefix;
-    this._bibSuffix = bibSuffix;
-    this._repeatTimeout;
-    this._formatter = null;
+class CslHtmlParser {
+    static parseHtmlFormatting(htmlString) {
+        var allowedTags = new Set([ "i", "u", "b", "sup", "sub", "em", "div", "span" ]);
+        var result = {
+            text: "",
+            formatting: []
+        };
+        var stack = [];
+        var textPosition = 0;
+        var i = 0;
+        while (i < htmlString.length) {
+            if (htmlString[i] === "<" && i + 1 < htmlString.length) {
+                var isClosingTag = htmlString[i + 1] === "/";
+                var tagEnd = htmlString.indexOf(">", i);
+                if (tagEnd === -1) {
+                    result.text += htmlString[i];
+                    i++;
+                    continue;
+                }
+                var tagName = htmlString.substring(isClosingTag ? i + 2 : i + 1, tagEnd).trim();
+                if (allowedTags.has(tagName)) {
+                    if (isClosingTag) {
+                        for (var j = stack.length - 1; j >= 0; j--) {
+                            if (stack[j].tag === tagName) {
+                                var {tag: tag, start: start} = stack.splice(j, 1)[0];
+                                result.formatting.push({
+                                    type: tag,
+                                    start: start,
+                                    end: textPosition
+                                });
+                                break;
+                            }
+                        }
+                    } else {
+                        stack.push({
+                            tag: tagName,
+                            start: textPosition
+                        });
+                    }
+                }
+                i = tagEnd + 1;
+            } else {
+                result.text += htmlString[i];
+                textPosition++;
+                i++;
+            }
+        }
+        result.formatting.sort((a, b) => {
+            if (a.start === b.start) {
+                return a.end - b.end;
+            }
+            return a.start - b.start;
+        });
+        return result;
+    }
+    static parseHtmlFormattingRegex(htmlString) {
+        var allowedTags = new Set([ "i", "u", "b", "sup", "sub" ]);
+        var result = {
+            text: "",
+            formatting: []
+        };
+        var stack = [];
+        var textPosition = 0;
+        var pos = 0;
+        var tagPattern = /<\/?([a-z]+)>/gi;
+        while (pos < htmlString.length) {
+            var substring = htmlString.substring(pos);
+            var match = tagPattern.exec(substring);
+            if (match) {
+                var textBefore = htmlString.substring(pos, pos + match.index);
+                result.text += textBefore;
+                textPosition += textBefore.length;
+                var fullTag = match[0];
+                var tagName = match[1];
+                if (allowedTags.has(tagName)) {
+                    if (fullTag.startsWith("</")) {
+                        for (var i = stack.length - 1; i >= 0; i--) {
+                            if (stack[i].tag === tagName) {
+                                var {tag: tag, start: start} = stack.splice(i, 1)[0];
+                                result.formatting.push({
+                                    type: tag,
+                                    start: start,
+                                    end: textPosition
+                                });
+                                break;
+                            }
+                        }
+                    } else {
+                        stack.push({
+                            tag: tagName,
+                            start: textPosition
+                        });
+                    }
+                }
+                pos += match.index + match[0].length;
+                tagPattern.lastIndex = 0;
+            } else {
+                var remainingText = htmlString.substring(pos);
+                result.text += remainingText;
+                break;
+            }
+        }
+        result.formatting.sort((a, b) => {
+            if (a.start === b.start) {
+                return a.end - b.end;
+            }
+            return a.start - b.start;
+        });
+        return result;
+    }
 }
 
-CitationDocService.prototype._addAddinField = function(field) {
-    return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("AddAddinField", [ field ], resolve);
-    });
-};
-
-CitationDocService.prototype.addBibliography = function(text, value) {
-    var self = this;
-    var supSubPositions = this._removeSuperSubTagsWithPositions(text);
-    var field = {
-        Value: this._bibPrefix + value + this._bibSuffix,
-        Content: supSubPositions.text
-    };
-    return this._addAddinField(field).then(function() {
-        if (!supSubPositions.positions.length) return;
-        return self._setSuperSubByPositions(supSubPositions.positions);
-    });
-};
-
-CitationDocService.prototype.addCitation = function(text, value, notesStyle) {
-    var self = this;
-    var supSubPositions = this._removeSuperSubTagsWithPositions(text);
-    var field = {
-        Value: this._citPrefix + " " + this._citSuffix + value,
-        Content: supSubPositions.text
-    };
-    if ("footnotes" === notesStyle) {
-        window.Asc.plugin.callCommand(function() {
-            var oDocument = Api.GetDocument();
-            oDocument.AddFootnote();
-        });
-    } else if ("endnotes" === notesStyle) {
-        window.Asc.plugin.callCommand(function() {
-            var oDocument = Api.GetDocument();
-            oDocument.AddEndnote();
+class CslDocFormatter {
+    static formatAfterInsert(positions) {
+        return new Promise(function(resolve) {
+            var isCalc = true;
+            var isClose = false;
+            Asc.scope.formatting = positions;
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                var run = doc.GetCurrentRun();
+                for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
+                    var pos = Asc.scope.formatting[i];
+                    var range = run.GetRange(pos.start, pos.end);
+                    if ("sup" === pos.type) {
+                        range.SetVertAlign("superscript");
+                    } else if ("sub" === pos.type) {
+                        range.SetVertAlign("subscript");
+                    } else if ("u" === pos.type) {
+                        range.SetUnderline(true);
+                    } else if ("b" === pos.type) {
+                        range.SetBold(true);
+                    } else if ("i" === pos.type || "em" === pos.type) {
+                        range.SetItalic(true);
+                    }
+                }
+            }, isClose, isCalc, resolve);
         });
     }
-    return this._addAddinField(field).then(function() {
-        if (!supSubPositions.positions.length) return;
-        return self._setSuperSubByPositions(supSubPositions.positions);
-    });
-};
-
-CitationDocService.prototype._getAllAddinFields = function() {
-    return new Promise(function(resolve, reject) {
-        window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
-    });
-};
-
-CitationDocService.prototype.getAddinZoteroFields = function() {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-        self._getAllAddinFields().then(function(arrFields) {
-            try {
-                if (arrFields.length) {
-                    arrFields = arrFields.filter(function(field) {
-                        return field.Value.indexOf(self._citPrefix) !== -1 || field.Value.indexOf(self._bibPrefix) !== -1 || field.Value.indexOf(self._citPrefixOld) !== -1 || field.Value.indexOf(self._bibPrefixOld) !== -1;
-                    });
-                }
-            } catch (e) {
-                reject(e);
+    static formatAfterUpdate(formatMap) {
+        var _this = this;
+        return _asyncToGenerator(function*() {
+            var self = _this;
+            var isCalc = true;
+            var isClose = false;
+            for (var [fieldId, formattingPositions] of formatMap) {
+                Asc.scope.fieldId = fieldId;
+                Asc.scope.text = formattingPositions.text;
+                Asc.scope.formatting = formattingPositions.formatting;
+                yield _assertClassBrand(CslDocFormatter, self, _selectField).call(self, fieldId);
+                yield new Promise(function(resolve) {
+                    Asc.plugin.callCommand(function() {
+                        var doc = Api.GetDocument();
+                        var selRange = doc.GetRangeBySelect();
+                        console.log(selRange.GetStartPos());
+                        selRange.MoveCursorToPos(selRange.GetStartPos() + Asc.scope.text.length);
+                        var run = doc.GetCurrentRun();
+                        console.log(Asc.scope.text);
+                        console.warn(Asc.scope.formatting);
+                        for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
+                            var pos = Asc.scope.formatting[i];
+                            var range = run.GetRange(pos.start, pos.end);
+                            if ("sup" === pos.type) {
+                                range.SetVertAlign("superscript");
+                            } else if ("sub" === pos.type) {
+                                range.SetVertAlign("subscript");
+                            } else if ("u" === pos.type) {
+                                range.SetUnderline(true);
+                            } else if ("b" === pos.type) {
+                                range.SetBold(true);
+                            } else if ("i" === pos.type || "em" === pos.type) {
+                                range.SetItalic(true);
+                            }
+                        }
+                    }, isClose, isCalc, resolve);
+                });
+                yield new Promise(function(resolve) {
+                    setTimeout(resolve, 300);
+                });
             }
-            console.warn(arrFields);
-            resolve(arrFields);
-        });
-    });
-};
+        })();
+    }
+}
 
-CitationDocService.prototype._removeSuperSubTagsWithPositions = function(escapedHtmlText) {
-    var positions = [];
-    var currentIndex = 0;
-    var result = "";
-    var tempResult = escapedHtmlText;
-    tempResult = tempResult.replace(/<sup\b[^>]*>([^<]*)<\/sup>/gi, function(match, content, offset) {
-        var start = offset + currentIndex;
-        var end = start + content.length;
-        positions.push({
-            type: "sup",
-            content: content,
-            start: start,
-            end: end,
-            originalMatch: match
-        });
-        currentIndex += content.length - match.length;
-        return content;
+function _selectField(fieldId) {
+    return new Promise(function(resolve) {
+        window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], resolve);
     });
-    currentIndex = 0;
-    result = tempResult;
-    tempResult = tempResult.replace(/<sub\b[^>]*>([^<]*)<\/sub>/gi, function(match, content, offset) {
-        var start = offset + currentIndex;
-        var end = start + content.length;
-        positions.push({
-            type: "sub",
-            content: content,
-            start: start,
-            end: end,
-            originalMatch: match
-        });
-        currentIndex += content.length - match.length;
-        return content;
-    });
-    result = tempResult;
-    return {
-        text: result,
-        positions: positions.sort(function(a, b) {
-            return a.start - b.start;
-        })
-    };
-};
+}
 
-CitationDocService.prototype.saveAsText = function() {
-    return this.getAddinZoteroFields().then(function(arrFields) {
-        var count = arrFields.length;
-        if (!count) {
-            window.Asc.plugin.executeCommand("close", "");
-            return false;
+var _citPrefixOld = new WeakMap;
+
+var _citPrefix = new WeakMap;
+
+var _bibPrefixOld = new WeakMap;
+
+var _citSuffix = new WeakMap;
+
+var _bibPrefix = new WeakMap;
+
+var _bibSuffix = new WeakMap;
+
+var _CitationDocService_brand = new WeakSet;
+
+class CitationDocService {
+    constructor(citPrefix, citSuffix, bibPrefix, bibSuffix) {
+        _classPrivateMethodInitSpec(this, _CitationDocService_brand);
+        _classPrivateFieldInitSpec(this, _citPrefixOld, void 0);
+        _classPrivateFieldInitSpec(this, _citPrefix, void 0);
+        _classPrivateFieldInitSpec(this, _bibPrefixOld, void 0);
+        _classPrivateFieldInitSpec(this, _citSuffix, void 0);
+        _classPrivateFieldInitSpec(this, _bibPrefix, void 0);
+        _classPrivateFieldInitSpec(this, _bibSuffix, void 0);
+        _classPrivateFieldSet2(_citPrefixOld, this, "ZOTERO_CITATION");
+        _classPrivateFieldSet2(_bibPrefixOld, this, "ZOTERO_BIBLIOGRAPHY");
+        _classPrivateFieldSet2(_citPrefix, this, citPrefix);
+        _classPrivateFieldSet2(_citSuffix, this, citSuffix);
+        _classPrivateFieldSet2(_bibPrefix, this, bibPrefix);
+        _classPrivateFieldSet2(_bibSuffix, this, bibSuffix);
+    }
+    addBibliography(text, value) {
+        var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+        var field = {
+            Value: _classPrivateFieldGet2(_bibPrefix, this) + value + _classPrivateFieldGet2(_bibSuffix, this),
+            Content: formattingPositions.text
+        };
+        return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
+            if (!formattingPositions.formatting.length) return;
+            return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+        });
+    }
+    addCitation(text, value, notesStyle) {
+        var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+        var field = {
+            Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
+            Content: formattingPositions.text
+        };
+        if ("footnotes" === notesStyle) {
+            window.Asc.plugin.callCommand(function() {
+                var oDocument = Api.GetDocument();
+                oDocument.AddFootnote();
+            });
+        } else if ("endnotes" === notesStyle) {
+            window.Asc.plugin.callCommand(function() {
+                var oDocument = Api.GetDocument();
+                oDocument.AddEndnote();
+            });
         }
-        return new Promise(function(resolve) {
-            arrFields.forEach(function(field) {
-                window.Asc.plugin.executeMethod("RemoveFieldWrapper", [ field.FieldId ], function() {
-                    count--;
-                    if (!count) {
-                        resolve(true);
-                        window.Asc.plugin.executeCommand("close", "");
+        return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
+            if (!formattingPositions.formatting.length) return;
+            return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+        });
+    }
+    getAddinZoteroFields() {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            _assertClassBrand(_CitationDocService_brand, self, _getAllAddinFields).call(self).then(function(arrFields) {
+                try {
+                    if (arrFields.length) {
+                        arrFields = arrFields.filter(function(field) {
+                            return field.Value.indexOf(_classPrivateFieldGet2(_citPrefix, self)) !== -1 || field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, self)) !== -1 || field.Value.indexOf(_classPrivateFieldGet2(_citPrefixOld, self)) !== -1 || field.Value.indexOf(_classPrivateFieldGet2(_bibPrefixOld, self)) !== -1;
+                        });
                     }
+                } catch (e) {
+                    reject(e);
+                }
+                resolve(arrFields);
+            });
+        });
+    }
+    saveAsText() {
+        return this.getAddinZoteroFields().then(function(arrFields) {
+            var count = arrFields.length;
+            if (!count) {
+                window.Asc.plugin.executeCommand("close", "");
+                return false;
+            }
+            return new Promise(function(resolve) {
+                arrFields.forEach(function(field) {
+                    window.Asc.plugin.executeMethod("RemoveFieldWrapper", [ field.FieldId ], function() {
+                        count--;
+                        if (!count) {
+                            resolve(true);
+                            window.Asc.plugin.executeCommand("close", "");
+                        }
+                    });
                 });
             });
         });
-    });
-};
+    }
+    updateAddinFields(fields) {
+        var formats = new Map;
+        fields.forEach(function(field) {
+            var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
+            field.Content = formattingPositions.text;
+            if (formattingPositions.formatting.length && field.FieldId) {
+                formats.set(field.FieldId, formattingPositions);
+            }
+        });
+        return new Promise(function(resolve) {
+            window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
+        }).then(function() {
+            if (!formats.size) return;
+            return CslDocFormatter.formatAfterUpdate(formats);
+        });
+    }
+}
 
-CitationDocService.prototype._setSuperSubByPositions = function(positions) {
+function _addAddinField(field) {
     return new Promise(function(resolve) {
-        var isCalc = true;
-        var isClose = false;
-        Asc.scope.positions = positions;
-        Asc.plugin.callCommand(function() {
-            var doc = Api.GetDocument();
-            var run = doc.GetCurrentRun();
-            Asc.scope.positions.forEach(function(pos) {
-                var range = run.GetRange(pos.start, pos.end);
-                if ("sup" === pos.type) {
-                    range.SetVertAlign("superscript");
-                } else {
-                    range.SetVertAlign("subscript");
-                }
-            });
-        }, isClose, isCalc, resolve);
+        window.Asc.plugin.executeMethod("AddAddinField", [ field ], resolve);
     });
-};
+}
 
-CitationDocService.prototype.updateAddinFields = function(fields) {
-    return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
+function _getAllAddinFields() {
+    return new Promise(function(resolve, reject) {
+        window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
     });
-};
+}
 
 function CitationItemData(id) {
     if (typeof id !== "string" && typeof id !== "number") {
@@ -5092,14 +5244,15 @@ function _formatInsertLink(cslCitation) {
     }).then(function() {
         var fragment = document.createDocumentFragment();
         var tempElement = document.createElement("div");
+        var htmlCitation = self._formatter.makeCitationCluster(keysL);
         fragment.appendChild(tempElement);
-        tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+        tempElement.innerHTML = htmlCitation;
         cslCitation.setPlainCitation(tempElement.innerText);
         var notesStyle = null;
         if ("note" === self._styleFormat) {
             notesStyle = self._notesStyle;
         }
-        return self.citationDocService.addCitation(tempElement.innerText, JSON.stringify(cslCitation.toJSON()), notesStyle);
+        return self.citationDocService.addCitation(htmlCitation, JSON.stringify(cslCitation.toJSON()), notesStyle);
     }).then(function() {
         return keys;
     });
@@ -5146,32 +5299,27 @@ function _getSelectedInJsonFormat(items) {
 }
 
 function _makeBibliography() {
-    var self = this;
-    var fragment = document.createDocumentFragment();
-    var tempElement = document.createElement("div");
-    fragment.appendChild(tempElement);
     try {
-        var bibItems = new Array(self._storage.size);
-        var bibObject = self._formatter.makeBibliography();
+        var bibItems = new Array(this._storage.size);
+        var bibObject = this._formatter.makeBibliography();
         for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
             var citationId = bibObject[0].entry_ids[i][0];
-            var citationIndex = self._storage.getIndex(citationId);
+            var citationIndex = this._storage.getIndex(citationId);
             var bibText = bibObject[1][i];
             while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                 bibText = bibText.replace(/\n/, "");
             }
             bibItems[citationIndex] = bibText;
         }
-        tempElement.innerHTML = bibItems.join("");
+        var htmlBibliography = bibItems.join("");
+        return htmlBibliography;
     } catch (e) {
-        if (false === self._cslStylesManager.isLastUsedStyleContainBibliography()) {
-            tempElement.textContent = "";
-        } else {
+        if (false === this._cslStylesManager.isLastUsedStyleContainBibliography()) ; else {
             console.error(e);
             throw "Failed to apply this style.";
         }
+        return "";
     }
-    return tempElement.innerText;
 }
 
 function _extractField(field) {
@@ -5254,7 +5402,6 @@ function _getUpdatedFields(_x, _x2) {
 
 function _getUpdatedFields2() {
     _getUpdatedFields2 = _asyncToGenerator(function*(fieldsWithCitations, bHardRefresh) {
-        var self = this;
         var fragment = document.createDocumentFragment();
         var tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
@@ -5262,7 +5409,8 @@ function _getUpdatedFields2() {
         for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
             var {field: field, cslCitation: cslCitation} = fieldsWithCitations[i];
             var keysL = cslCitation.getInfoForCitationCluster();
-            tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+            var htmlCitation = this._formatter.makeCitationCluster(keysL);
+            tempElement.innerHTML = htmlCitation;
             var oldContent = field["Content"];
             var newContent = tempElement.innerText;
             if (cslCitation.getDoNotUpdate()) {
@@ -5272,20 +5420,20 @@ function _getUpdatedFields2() {
                 continue;
             }
             if (bHardRefresh) {
-                field["Content"] = newContent;
+                field["Content"] = htmlCitation;
                 cslCitation.setPlainCitation(newContent);
             } else if (oldContent !== newContent) {
                 var text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
-                var bNeedSaveUserInput = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("Saving custom edits", text);
+                var bNeedSaveUserInput = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, this).show("Saving custom edits", text);
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
                 } else {
-                    field["Content"] = newContent;
+                    field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
             }
             if (cslCitation) {
-                field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                field["Value"] = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
             }
             updatedFields.push(field);
         }
