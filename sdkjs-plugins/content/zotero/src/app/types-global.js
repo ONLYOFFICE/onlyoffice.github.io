@@ -114,13 +114,17 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /** ------------------------------------------------ */
 
 /**
- * @typedef {Object} SupSubPositions
- * @property {'sup'|'sub'} type
+ * @typedef {'i'|'u'|'b'|'sup'|'sub'|string} AllowedTags
+ */
+
+/**
+ * @typedef {Object} FormattingPositions
+ * @property {AllowedTags} type
  * @property {number} start
  * @property {number} end
- * @property {string} content
- * @property {string} originalMatch
  */
+
+/** ------------------------------------------------ */
 
 /**
  * @typedef {Object} AscPluginTheme
@@ -442,7 +446,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /**
  * @typedef {Object} Asc
  * @property {AscPlugin} plugin
- * @property {{positions: Array<SupSubPositions>}} scope
+ * @property {{formatting: Array<FormattingPositions>, pos: FormattingPositions}} scope
  * @property {any} PluginWindow
  */
 

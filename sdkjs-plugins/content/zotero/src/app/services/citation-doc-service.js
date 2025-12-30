@@ -36,290 +36,186 @@
 /// <reference path="../csl/citation/types.js" />
 /// <reference path="../csl/styles/types.js" />
 
-/**
- * @param {string} citPrefix
- * @param {string} citSuffix
- * @param {string} bibPrefix
- * @param {string} bibSuffix
- */
-function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
-    this._citPrefixOld = "ZOTERO_CITATION";
-    this._bibPrefixOld = "ZOTERO_BIBLIOGRAPHY";
+import { CslHtmlParser } from "./csl-html-parser";
+import { CslDocFormatter } from "./csl-doc-formatter";
 
-    this._citPrefix = citPrefix;
-    this._citSuffix = citSuffix;
-    this._bibPrefix = bibPrefix;
-    this._bibSuffix = bibSuffix;
+class CitationDocService {
+    #citPrefixOld;
+    #citPrefix;
+    #bibPrefixOld;
+    #citSuffix;
+    #bibPrefix;
+    #bibSuffix;
 
-    /** @type {number} */
-    this._repeatTimeout;
     /**
-     * @type {{ updateItems: (arg0: string[]) => void; makeCitationCluster: (arg0: InfoForCitationCluster[]) => string; makeBibliography: () => any[][]; } | null}
+     * @param {string} citPrefix
+     * @param {string} citSuffix
+     * @param {string} bibPrefix
+     * @param {string} bibSuffix
      */
-    this._formatter = null;
-}
+    constructor(citPrefix, citSuffix, bibPrefix, bibSuffix) {
+        this.#citPrefixOld = "ZOTERO_CITATION";
+        this.#bibPrefixOld = "ZOTERO_BIBLIOGRAPHY";
 
-/**
- * @param {CustomField} field
- * @returns {Promise<void>}
- */
-CitationDocService.prototype._addAddinField = function (field) {
-    return new Promise(function (resolve) {
-        window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
-    });
-};
+        this.#citPrefix = citPrefix;
+        this.#citSuffix = citSuffix;
+        this.#bibPrefix = bibPrefix;
+        this.#bibSuffix = bibSuffix;
+    }
 
-/**
- * @param {string} text
- * @param {string} value
- * @returns {Promise<void>}
- */
-CitationDocService.prototype.addBibliography = function (text, value) {
-    const self = this;
-    const supSubPositions = this._removeSuperSubTagsWithPositions(text);
-    /** @type {CustomField} */
-    const field = {
-        Value: this._bibPrefix + value + this._bibSuffix,
-        Content: supSubPositions.text,
-    };
-
-    return this._addAddinField(field).then(function () {
-        if (!supSubPositions.positions.length) return;
-        return self._setSuperSubByPositions(supSubPositions.positions);
-    });
-};
-
-/**
- * @param {string} text
- * @param {string} value
- * @param {NoteStyle | null} notesStyle
- * @returns
- */
-CitationDocService.prototype.addCitation = function (text, value, notesStyle) {
-    const self = this;
-    const supSubPositions = this._removeSuperSubTagsWithPositions(text);
-    /** @type {CustomField} */
-    const field = {
-        Value: this._citPrefix + " " + this._citSuffix + value,
-        Content: supSubPositions.text,
-    };
-    if ("footnotes" === notesStyle) {
-        window.Asc.plugin.callCommand(function () {
-            const oDocument = Api.GetDocument();
-            oDocument.AddFootnote();
-        });
-    } else if ("endnotes" === notesStyle) {
-        window.Asc.plugin.callCommand(function () {
-            const oDocument = Api.GetDocument();
-            oDocument.AddEndnote();
+    /**
+     * @param {CustomField} field
+     * @returns {Promise<void>}
+     */
+    #addAddinField(field) {
+        return new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
         });
     }
 
-    return this._addAddinField(field).then(function () {
-        if (!supSubPositions.positions.length) return;
-        return self._setSuperSubByPositions(supSubPositions.positions);
-    });
-};
-/**
-        window.Asc.plugin.executeMethod("AddAddinField", [field], function () {
-            const isCalc = true;
-            const isClose = false;
-            Asc.plugin.callCommand(
-                function () {
-                    const doc = Api.GetDocument();
-                    doc.RemoveSelection();
-                },
-                isClose,
-                isCalc,
-                resolve
-            );
-        });
-*/
-/**
- * @returns {Promise<Array<CustomField>>}
- */
-CitationDocService.prototype._getAllAddinFields = function () {
-    const self = this;
-    return new Promise(function (resolve, reject) {
-        window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
-    });
-};
+    /**
+     * @param {string} text
+     * @param {string} value
+     * @returns {Promise<void>}
+     */
+    addBibliography(text, value) {
+        const self = this;
+        const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+        /** @type {CustomField} */
+        const field = {
+            Value: this.#bibPrefix + value + this.#bibSuffix,
+            Content: formattingPositions.text,
+        };
 
-/**
- * @returns {Promise<Array<CustomField>>}
- */
-CitationDocService.prototype.getAddinZoteroFields = function () {
-    const self = this;
-    return new Promise(function (resolve, reject) {
-        self._getAllAddinFields().then(function (arrFields) {
-            try {
-                if (arrFields.length) {
-                    arrFields = arrFields.filter(function (field) {
-                        return (
-                            field.Value.indexOf(self._citPrefix) !== -1 ||
-                            field.Value.indexOf(self._bibPrefix) !== -1 ||
-                            field.Value.indexOf(self._citPrefixOld) !== -1 ||
-                            field.Value.indexOf(self._bibPrefixOld) !== -1
-                        );
-                    });
+        return this.#addAddinField(field).then(function () {
+            if (!formattingPositions.formatting.length) return;
+            return CslDocFormatter.format(formattingPositions.formatting);
+        });
+    }
+
+    /**
+     * @param {string} text
+     * @param {string} value
+     * @param {NoteStyle | null} notesStyle
+     * @returns
+     */
+    addCitation(text, value, notesStyle) {
+        const self = this;
+        const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+        /** @type {CustomField} */
+        const field = {
+            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Content: formattingPositions.text,
+        };
+        if ("footnotes" === notesStyle) {
+            window.Asc.plugin.callCommand(function () {
+                const oDocument = Api.GetDocument();
+                oDocument.AddFootnote();
+            });
+        } else if ("endnotes" === notesStyle) {
+            window.Asc.plugin.callCommand(function () {
+                const oDocument = Api.GetDocument();
+                oDocument.AddEndnote();
+            });
+        }
+
+        return this.#addAddinField(field).then(function () {
+            if (!formattingPositions.formatting.length) return;
+            return CslDocFormatter.format(formattingPositions.formatting);
+        });
+    }
+
+    /**
+     * @returns {Promise<Array<CustomField>>}
+     */
+    #getAllAddinFields() {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+        });
+    }
+
+    /**
+     * @returns {Promise<Array<CustomField>>}
+     */
+    getAddinZoteroFields() {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.#getAllAddinFields().then(function (arrFields) {
+                try {
+                    if (arrFields.length) {
+                        arrFields = arrFields.filter(function (field) {
+                            return (
+                                field.Value.indexOf(self.#citPrefix) !== -1 ||
+                                field.Value.indexOf(self.#bibPrefix) !== -1 ||
+                                field.Value.indexOf(self.#citPrefixOld) !==
+                                    -1 ||
+                                field.Value.indexOf(self.#bibPrefixOld) !== -1
+                            );
+                        });
+                    }
+                } catch (e) {
+                    reject(e);
                 }
-            } catch (e) {
-                reject(e);
+                resolve(arrFields);
+            });
+        });
+    }
+
+    /**
+     * @returns {Promise<boolean>}
+     */
+    saveAsText() {
+        // TODO потом добавить ещё форматы, пока только как текст
+        return this.getAddinZoteroFields().then(function (arrFields) {
+            let count = arrFields.length;
+            if (!count) {
+                window.Asc.plugin.executeCommand("close", "");
+                return false;
             }
-            console.warn(arrFields);
-            resolve(arrFields);
-        });
-    });
-};
 
-/**
- * @param {string} escapedHtmlText
- * @returns {{text: string, positions: Array<SupSubPositions>}}
- */
-CitationDocService.prototype._removeSuperSubTagsWithPositions = function (
-    escapedHtmlText
-) {
-    /** @type {Array<SupSubPositions>} */
-    const positions = [];
-    let currentIndex = 0;
-    let result = "";
-
-    let tempResult = escapedHtmlText;
-
-    // Process <sup> tags
-    tempResult = tempResult.replace(
-        /<sup\b[^>]*>([^<]*)<\/sup>/gi,
-        function (match, content, offset) {
-            const start = offset + currentIndex;
-            const end = start + content.length;
-
-            positions.push({
-                type: "sup",
-                content: content,
-                start: start,
-                end: end,
-                originalMatch: match,
-            });
-
-            currentIndex += content.length - match.length;
-            return content;
-        }
-    );
-
-    // Reset indexes for <sub> tags
-    currentIndex = 0;
-    result = tempResult;
-
-    // Process <sub> tags
-    tempResult = tempResult.replace(
-        /<sub\b[^>]*>([^<]*)<\/sub>/gi,
-        function (match, content, offset) {
-            const start = offset + currentIndex;
-            const end = start + content.length;
-
-            positions.push({
-                type: "sub",
-                content: content,
-                start: start,
-                end: end,
-                originalMatch: match,
-            });
-
-            currentIndex += content.length - match.length;
-            return content;
-        }
-    );
-
-    result = tempResult;
-
-    return {
-        text: result,
-        positions: positions.sort(function (a, b) {
-            return a.start - b.start;
-        }),
-    };
-};
-
-/**
- * @returns {Promise<boolean>}
- */
-CitationDocService.prototype.saveAsText = function () {
-    // TODO потом добавить ещё форматы, пока только как текст
-    return this.getAddinZoteroFields().then(function (arrFields) {
-        let count = arrFields.length;
-        if (!count) {
-            window.Asc.plugin.executeCommand("close", "");
-            return false;
-        }
-
-        return new Promise(function (resolve) {
-            arrFields.forEach(function (field) {
-                window.Asc.plugin.executeMethod(
-                    "RemoveFieldWrapper",
-                    [field.FieldId],
-                    function () {
-                        count--;
-                        if (!count) {
-                            resolve(true);
-                            window.Asc.plugin.executeCommand("close", "");
+            return new Promise(function (resolve) {
+                arrFields.forEach(function (field) {
+                    window.Asc.plugin.executeMethod(
+                        "RemoveFieldWrapper",
+                        [field.FieldId],
+                        function () {
+                            count--;
+                            if (!count) {
+                                resolve(true);
+                                window.Asc.plugin.executeCommand("close", "");
+                            }
                         }
-                    }
-                );
+                    );
+                });
             });
         });
-    });
-};
+    }
 
-/**
- * @param {Array<SupSubPositions>} positions
- * @returns {Promise<void>}
- */
-CitationDocService.prototype._setSuperSubByPositions = function (positions) {
-    return new Promise(function (resolve) {
-        const isCalc = true;
-        const isClose = false;
-        Asc.scope.positions = positions;
-        Asc.plugin.callCommand(
-            function () {
-                const doc = Api.GetDocument();
-                let run = doc.GetCurrentRun();
-                Asc.scope.positions.forEach(function (
-                    /** @type {SupSubPositions} */ pos
-                ) {
-                    let range = run.GetRange(pos.start, pos.end);
-                    if ("sup" === pos.type) {
-                        range.SetVertAlign("superscript");
-                    } else {
-                        range.SetVertAlign("subscript");
-                    }
-                });
-            },
-            isClose,
-            isCalc,
-            resolve
-        );
-    });
-};
-
-/**
- * @param {Array<CustomField>} fields
- * @returns {Promise<void>}
- */
-CitationDocService.prototype.updateAddinFields = function (fields) {
-    const self = this;
-    /*fields.forEach(function (field) {
-        const supSubPositions = self._removeSuperSubTagsWithPositions(
+    /**
+     * @param {Array<CustomField>} fields
+     * @returns {Promise<void>}
+     */
+    updateAddinFields(fields) {
+        const self = this;
+        /*fields.forEach(function (field) {
+        const formattingPositions = CslHtmlParser.parseHtmlFormatting(
             field.Content
         );
-        field.Content = supSubPositions.text;
+        field.Content = formattingPositions.text;
     });*/
-    //console.log("updateAddinFields", fields);
-    return new Promise(function (resolve) {
-        window.Asc.plugin.executeMethod("UpdateAddinFields", [fields], resolve);
-    }) /*.then(function () {
-        if (!supSubPositions.positions.length) return;
-        return self._setSuperSubByPositions(supSubPositions.positions);
+        //console.log("updateAddinFields", fields);
+        return new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve
+            );
+        }) /*.then(function () {
+        if (!formattingPositions.formatting.length) return;
+        return CslDocFormatter.format(formattingPositions.formatting);
     })*/;
-};
+    }
+}
 
 export { CitationDocService };
