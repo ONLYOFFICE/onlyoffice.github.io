@@ -12191,11 +12191,8 @@
                                 Asc.plugin.callCommand(function() {
                                     var doc = Api.GetDocument();
                                     var selRange = doc.GetRangeBySelect();
-                                    console.log(selRange.GetStartPos());
-                                    selRange.MoveCursorToPos(selRange.GetStartPos() + Asc.scope.text.length);
+                                    doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
                                     var run = doc.GetCurrentRun();
-                                    console.log(Asc.scope.text);
-                                    console.warn(Asc.scope.formatting);
                                     for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                                         var pos = Asc.scope.formatting[i];
                                         var range = run.GetRange(pos.start, pos.end);
