@@ -20,6 +20,7 @@ class AdditionalWindow {
      * @param {string} text
      */
     show(description, text) {
+        this.#window = new window.Asc.PluginWindow();
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
         this.#defaultTranslateFn = Asc.plugin.onTranslate;
@@ -38,7 +39,7 @@ class AdditionalWindow {
             ],
             isModal: false,
             EditorsSupport: ["word"],
-            size: [320, 240],
+            size: [380, 240],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
@@ -50,7 +51,6 @@ class AdditionalWindow {
             this.#window.command("onThemeChanged", theme);
             this.#defaultThemeChangedFn(theme);
         };
-
         window.Asc.plugin.onTranslate = () => {
             this.#window.command("onTranslate");
             this.#defaultTranslateFn();
@@ -63,10 +63,8 @@ class AdditionalWindow {
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {
-                    console.log("yes");
                     resolve(true);
                 } else {
-                    console.log("no", buttonId);
                     resolve(false);
                 }
 

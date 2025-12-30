@@ -4899,6 +4899,7 @@ class AdditionalWindow {
         _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
     }
     show(description, text) {
+        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
         _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
         _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
         _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
@@ -4917,7 +4918,7 @@ class AdditionalWindow {
             } ],
             isModal: false,
             EditorsSupport: [ "word" ],
-            size: [ 320, 240 ],
+            size: [ 380, 240 ],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false
@@ -4937,10 +4938,8 @@ class AdditionalWindow {
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {
-                    console.log("yes");
                     resolve(true);
                 } else {
-                    console.log("no", buttonId);
                     resolve(false);
                 }
                 _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
