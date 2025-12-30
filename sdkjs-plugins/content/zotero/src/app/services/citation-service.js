@@ -45,7 +45,7 @@
 import { CitationDocService } from "./citation-doc-service";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
-import { AdditionalWindow } from "../shared/ui";
+import { AdditionalWindow } from "../pages/additional-window";
 
 class CitationService {
     #onUserEditCitationManuallyWindow;
@@ -386,20 +386,46 @@ class CitationService {
                 continue;
             }
 
+            if (oldContent === newContent) {
+                continue;
+            }
+
             if (bHardRefresh) {
                 field["Content"] = newContent;
                 cslCitation.setPlainCitation(newContent);
             } else if (oldContent !== newContent) {
-                await self.#onUserEditCitationManuallyWindow
-                    .show("info-window", "Zotero Citation", newContent)
-                    .then(function (bNeedSaveUserInput) {
-                        if (bNeedSaveUserInput) {
-                            cslCitation.setDoNotUpdate();
-                        } else {
-                            field["Content"] = newContent;
-                            cslCitation.setPlainCitation(newContent);
-                        }
-                    });
+                let text =
+                    "<p>" +
+                    translate(
+                        "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?"
+                    ) +
+                    "</p>" +
+                    "<p>" +
+                    translate(
+                        "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes."
+                    ) +
+                    "</p>" +
+                    "<p>" +
+                    translate("Original:") +
+                    " " +
+                    newContent +
+                    "</p>" +
+                    "<p>" +
+                    translate("Modified:") +
+                    " " +
+                    oldContent +
+                    "</p>";
+                const bNeedSaveUserInput =
+                    await self.#onUserEditCitationManuallyWindow.show(
+                        "Saving custom edits",
+                        text
+                    );
+                if (bNeedSaveUserInput) {
+                    cslCitation.setDoNotUpdate();
+                } else {
+                    field["Content"] = newContent;
+                    cslCitation.setPlainCitation(newContent);
+                }
             }
 
             if (cslCitation) {
@@ -549,15 +575,11 @@ class CitationService {
 
             if (typeof bHardRefresh === "undefined") {
                 const format = this._cslStylesManager.getLastUsedFormat();
-                bHardRefresh = format === "numeric";
-
-                if (bHardRefresh) {
-                    updatedFields = await this.#getUpdatedFields(
-                        fieldsWithCitations,
-                        bHardRefresh
-                    );
+                if (format === "numeric") {
+                    bHardRefresh = true;
                 }
-            } else {
+            }
+            if (typeof bHardRefresh === "boolean") {
                 updatedFields = await this.#getUpdatedFields(
                     fieldsWithCitations,
                     bHardRefresh

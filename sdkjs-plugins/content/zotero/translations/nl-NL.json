@@ -51,5 +51,12 @@
     "Configure how citations will be formatted in your document.": "Configureer hoe citaten in uw document worden opgemaakt.",
     "Search in": "Zoek in",
     "Search in:": "Zoek in:",
-    "Loading...": "Laden..."
+    "Loading...": "Laden...",
+    "Saving custom edits": "Opslaan aanpassingen",
+    "Original:": "Oorspronkelijk:",
+    "Modified:": "Aangepast:",
+    "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "U hebt deze citaat gewijzigd sinds Zotero het heeft gegenereerd. Wilt u uw wijzigingen opslaan en de toekomstige wijzigingen voorkomen?",
+    "Yes": "Ja",
+    "No": "Nee",
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Klikken op 'Ja' voorkomt dat Zotero deze citaat bijwerkt als u extra citaaten toevoegt, de stijl wijzigt of de item wijzigt waarop deze citaat verwijst. Klikken op 'Nee' verwijdert uw wijzigingen."
 }

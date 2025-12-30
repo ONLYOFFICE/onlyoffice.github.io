@@ -13436,13 +13436,13 @@
         this._citationItems.push(item);
         return this;
     };
-    CSLCitation.prototype.addDoNotUpdate = function() {
+    CSLCitation.prototype.setDoNotUpdate = function() {
         this._setProperties({
             dontUpdate: true
         });
         return this;
     };
-    CSLCitation.prototype.addPlainCitation = function(plainCitation) {
+    CSLCitation.prototype.setPlainCitation = function(plainCitation) {
         this._setProperties({
             plainCitation: plainCitation
         });
@@ -13499,593 +13499,33 @@
         }
         return result;
     };
-    function SearchFilterComponents() {
-        this._searchField = new InputField("searchField", {
-            type: "text",
-            autofocus: true,
-            showClear: false
-        });
-        this._filterButton = new Button("filterButton", {
-            variant: "secondary-icon",
-            size: "small"
-        });
-        this._librarySelectList = new SelectBox("librarySelectList", {
-            placeholder: translate("No items selected"),
-            multiple: true,
-            description: translate("Search in:")
-        });
-        this._subscribers = [];
-        this._addEventListeners();
-    }
-    SearchFilterComponents.prototype._addEventListeners = function() {
-        var self = this;
-        this._searchField.subscribe(function(e) {
-            if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
-                var selectedGroups = self._getSelectedGroups();
-                self._subscribers.forEach(function(cb) {
-                    cb(e.detail.value, selectedGroups);
-                });
-            }
-        });
-        this._filterButton.subscribe(function(e) {
-            if (e.type === "button:click") {
-                if (!self._librarySelectList.isOpen) {
-                    if (e.detail.originalEvent) {
-                        e.detail.originalEvent.stopPropagation();
-                    }
-                    self._librarySelectList.openDropdown();
-                }
-            }
-        });
-    };
-    SearchFilterComponents.prototype.addGroups = function(groups) {
-        var self = this;
-        var savedGroups = localStorage.getItem("selectedGroups");
-        var selectedItems = savedGroups ? JSON.parse(savedGroups).map(function(id) {
-            return id.toString();
-        }) : [ "my_library", "group_libraries" ];
-        var hasSelected = false;
-        groups.forEach(function(group) {
-            group.id = String(group.id);
-        });
-        var customGroups = [ {
-            id: "my_library",
-            name: translate("My Library")
-        }, {
-            id: "group_libraries",
-            name: translate("Group Libraries")
-        } ];
-        !hasSelected && customGroups.forEach(function(group) {
-            if (selectedItems.indexOf(group.id) !== -1) {
-                hasSelected = true;
-            }
-        });
-        !hasSelected && groups.forEach(function(group) {
-            if (selectedItems.indexOf(group.id.toString()) !== -1) {
-                hasSelected = true;
-            }
-        });
-        if (!hasSelected) {
-            selectedItems = [ "my_library", "group_libraries" ];
-        }
-        var addGroupToSelectBox = function addGroupToSelectBox(id, name, selected) {
-            if (typeof id === "number") {
-                id = id.toString();
-            }
-            if (self._librarySelectList instanceof SelectBox) self._librarySelectList.addItem(id, name, selected);
-        };
-        for (var i = 0; i < customGroups.length; i++) {
-            var id = customGroups[i].id;
-            var name = customGroups[i].name;
-            addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
-        }
-        if (groups.length === 0) {
-            return;
-        }
-        this._librarySelectList.addSeparator();
-        var selected = selectedItems.indexOf("group_libraries") !== -1;
-        for (var i = 0; i < groups.length; i++) {
-            var _id = groups[i].id;
-            var _name = groups[i].name;
-            addGroupToSelectBox(_id, _name, selected || selectedItems.indexOf(_id.toString()) !== -1);
-        }
-        this._selectedGroupsWatcher(customGroups, groups);
-    };
-    SearchFilterComponents.prototype._getSelectedGroups = function() {
-        var self = this;
-        var ids = this._librarySelectList.getSelectedValues();
-        if (Array.isArray(ids) === false || ids.length === 0) {
-            setTimeout(function() {
-                self._librarySelectList.openDropdown();
-            }, 500);
-        }
-        if (ids === null || typeof ids === "string") {
-            return [];
-        }
-        return ids;
-    };
-    SearchFilterComponents.prototype.subscribe = function(callback) {
-        var self = this;
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: function unsubscribe() {
-                self._subscribers = self._subscribers.filter(function(cb) {
-                    return cb !== callback;
-                });
-            }
-        };
-    };
-    SearchFilterComponents.prototype._selectedGroupsWatcher = function(customGroups, groups) {
-        var self = this;
-        if (this._librarySelectList instanceof SelectBox === false) {
-            return;
-        }
-        this._librarySelectList.subscribe(function(event) {
-            if (event.type !== "selectbox:change") {
-                return;
-            }
-            var aGroupsToSave = [];
-            var values = event.detail.values;
-            var current = event.detail.current;
-            var bEnabled = event.detail.enabled;
-            var customIds = customGroups.map(function(group) {
-                return group.id;
-            });
-            var ids = groups.map(function(group) {
-                return group.id.toString();
-            });
-            var bWasCustom = customIds.indexOf(String(current)) !== -1;
-            if (bWasCustom) {
-                if (current === "group_libraries") {
-                    if (bEnabled) {
-                        aGroupsToSave.push("group_libraries");
-                        self._librarySelectList.selectItems(ids, true);
-                    } else {
-                        self._librarySelectList.unselectItems(ids, true);
-                    }
-                    if (values.indexOf("my_library") !== -1) {
-                        aGroupsToSave.push("my_library");
-                    }
-                } else {
-                    if (values.indexOf("group_libraries") !== -1) {
-                        aGroupsToSave.push("group_libraries");
-                        if (bEnabled) {
-                            aGroupsToSave.push(current);
-                        }
-                    } else {
-                        aGroupsToSave = values.slice();
-                    }
-                }
-            } else if (!bWasCustom) {
-                var bAllGroupsSelected = ids.every(function(id) {
-                    return values.indexOf(id) !== -1;
-                });
-                if (bAllGroupsSelected) {
-                    self._librarySelectList.selectItems("group_libraries", true);
-                    aGroupsToSave.push("group_libraries");
-                    if (values.indexOf("my_library") !== -1) {
-                        aGroupsToSave.push("my_library");
-                    }
-                } else {
-                    self._librarySelectList.unselectItems("group_libraries", true);
-                    aGroupsToSave = values.filter(function(value) {
-                        return value !== "group_libraries";
-                    });
-                }
-            }
-            if (aGroupsToSave.length === 0) {
-                localStorage.removeItem("selectedGroups");
-            } else {
-                localStorage.setItem("selectedGroups", JSON.stringify(aGroupsToSave));
-            }
-        });
-    };
-    function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) {
-        this._displayNoneClass = displayNoneClass;
-        this._items = {};
-        this._html = {};
-        this._checks = {};
-        this._LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
-        this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
-        this._docsHolder = document.getElementById("docsHolder");
-        this._nothingFound = document.getElementById("nothingFound");
-        this._docsThumb = document.getElementById("docsThumb");
-        this._selectedWrapper = document.getElementById("selectedWrapper");
-        this._selectedHolder = document.getElementById("selectedHolder");
-        this._selectedInfo = document.getElementById("selectedInfo");
-        this._selectedCount = document.getElementById("selectedCount");
-        this._selectedThumb = document.getElementById("selectedThumb");
-        if (this._selectedHolder && this._selectedThumb) {
-            this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20);
-        }
-        if (this._docsHolder && this._docsThumb) {
-            this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
-        }
-        this._subscribers = [];
-        this._fShouldLoadMore = fShouldLoadMore;
-        this._fLoadMore = fLoadMore;
-        this._loadTimeout;
-        this._init();
-    }
-    SelectCitationsComponent.prototype._init = function() {
-        var self = this;
-        if (this._cancelSelectBtn) {
-            this._cancelSelectBtn.onclick = function(e) {
-                var ids = [];
-                for (var id in self._items) {
-                    ids.push(id);
-                }
-                for (var i = 0; i < ids.length; i++) {
-                    self._removeSelected(ids[i]);
-                }
-            };
-        }
-    };
-    SelectCitationsComponent.prototype.clearLibrary = function() {
-        this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
-        var holder = this._docsHolder;
-        while (holder && holder.lastChild) {
-            holder.removeChild(holder.lastChild);
-        }
-        if (holder) holder.scrollTop = 0;
-        this._docsScroller.onscroll();
-    };
-    SelectCitationsComponent.prototype.displayNothingFound = function() {
-        this.clearLibrary();
-        this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
-    };
-    SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
-        var _this = this;
-        var self = this;
-        var holder = this._docsHolder;
-        var numOfShown = 0;
-        return new Promise(function(resolve, reject) {
-            if (res && res.items && res.items.length > 0) {
-                var page = document.createElement("div");
-                if (holder) page.classList.add("page" + holder.children.length);
-                for (var index = 0; index < res.items.length; index++) {
-                    var item = res.items[index];
-                    page.appendChild(self._buildDocElement(item));
-                    numOfShown++;
-                }
-                if (holder) holder.appendChild(page);
-            } else if (err) {
-                reject(err);
-            }
-            _this._docsScroller.onscroll();
-            resolve(numOfShown);
-        });
-    };
-    SelectCitationsComponent.prototype.getSelectedItems = function() {
-        var items = Object.assign({}, this._items || {});
-        return items;
-    };
-    SelectCitationsComponent.prototype.removeItems = function(keys) {
-        var self = this;
-        keys.forEach(function(key) {
-            self._removeSelected(key);
-        });
-    };
-    SelectCitationsComponent.prototype.subscribe = function(callback) {
-        var self = this;
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: function unsubscribe() {
-                self._subscribers = self._subscribers.filter(function(cb) {
-                    return cb !== callback;
-                });
-            }
-        };
-    };
-    SelectCitationsComponent.prototype._buildDocElement = function(item) {
-        var self = this;
-        var root = document.createElement("div");
-        root.classList.add("doc");
-        var docInfo = document.createElement("div");
-        docInfo.classList.add("docInfo");
-        var checkHolder = document.createElement("div");
-        var label = "";
-        if (item.author && item.author.length > 0) {
-            label = item.author.map(function(a) {
-                if (a.family && a.given) {
-                    return a.family.trim() + ", " + a.given.trim();
-                } else if (a.family) {
-                    return a.family.trim();
-                } else if (a.given) {
-                    return a.given.trim();
-                }
-                return "";
-            }).join("; ");
-        }
-        var arrow = document.createElement("div");
-        arrow.classList.add("selectbox-arrow");
-        arrow.innerHTML = "<b></b>";
-        var title = document.createElement("div");
-        title.textContent = item.title.trim();
-        title.classList.add("truncate-text");
-        title.classList.add("secondary-text");
-        if (item.publisher || item["publisher-place"]) {
-            title.textContent += " · " + (item.publisher || item["publisher-place"] || "");
-        }
-        if (item.issued && item.issued["date-parts"]) {
-            var date = item.issued["date-parts"][0];
-            if (label.length > 20) {
-                title.textContent += " (" + date.join("-") + ")";
-            } else {
-                if (label.length > 0 && label.slice(-1) !== "." && label.slice(-1) !== ",") label += ".";
-                label += " " + date.join("-");
-            }
-        }
-        if (label.length === 0) {
-            label = title.textContent;
-        }
-        title.setAttribute("title", title.textContent);
-        docInfo.appendChild(title);
-        var check = document.createElement("input");
-        checkHolder.appendChild(check);
-        var checkInput = new Checkbox(check, {
-            checked: !!this._items[item.id],
-            label: label,
-            title: true,
-            id: item.id
-        });
-        if (this._items[item.id]) {
-            this._checks[item.id] = checkInput;
-        }
-        checkHolder.appendChild(arrow);
-        root.appendChild(checkHolder);
-        root.appendChild(docInfo);
-        var params;
-        function toggleItem() {
-            root.classList.toggle("doc-open");
-            if (!params) {
-                params = self._buildCitationParams(item);
-                root.appendChild(params);
-            }
-        }
-        arrow.onclick = toggleItem;
-        checkInput.subscribe(function(event) {
-            if (event.type !== "checkbox:change") {
-                return;
-            }
-            if (event.detail.checked) {
-                self._addSelected(item, checkInput);
-            } else {
-                self._removeSelected(item.id);
-            }
-        });
-        return root;
-    };
-    SelectCitationsComponent.prototype._buildCitationParams = function(item) {
-        var locatorLabel = localStorage.getItem("selectedLocator") || "page";
-        item.label = locatorLabel;
-        var params = document.createDocumentFragment();
-        var prefixSuffixContainer = document.createElement("div");
-        var prefix = document.createElement("input");
-        var suffix = document.createElement("input");
-        var locatorContainer = document.createElement("div");
-        var locatorSelect = document.createElement("div");
-        var locator = document.createElement("input");
-        var omitAuthorContainer = document.createElement("div");
-        var omitAuthor = document.createElement("input");
-        params.appendChild(prefixSuffixContainer);
-        prefixSuffixContainer.appendChild(prefix);
-        prefixSuffixContainer.appendChild(suffix);
-        params.appendChild(locatorContainer);
-        locatorContainer.appendChild(locatorSelect);
-        locatorContainer.appendChild(locator);
-        var locatorPlaceholder = "";
-        params.appendChild(omitAuthorContainer);
-        omitAuthorContainer.appendChild(omitAuthor);
-        var prefixInput = new InputField(prefix, {
-            type: "text",
-            placeholder: "Prefix"
-        });
-        var suffixInput = new InputField(suffix, {
-            type: "text",
-            placeholder: "Suffix"
-        });
-        var locatorSelectbox = new SelectBox(locatorSelect, {
-            placeholder: "Locator"
-        });
-        this._LOCATOR_VALUES.forEach(function(info) {
-            var selected = info[0] === locatorLabel;
-            locatorSelectbox.addItem(info[0], info[1], selected);
-            if (selected) {
-                locatorPlaceholder = info[1];
-            }
-        });
-        var locatorInput = new InputField(locator, {
-            type: "text",
-            placeholder: locatorPlaceholder
-        });
-        var omitAuthorInput = new Checkbox(omitAuthor, {
-            label: "Omit author"
-        });
-        prefixInput.subscribe(function(event) {
-            if (event.type !== "inputfield:input") {
-                return;
-            }
-            item.prefix = event.detail.value;
-        });
-        suffixInput.subscribe(function(event) {
-            if (event.type !== "inputfield:input") {
-                return;
-            }
-            item.suffix = event.detail.value;
-        });
-        locatorInput.subscribe(function(event) {
-            if (event.type !== "inputfield:input") {
-                return;
-            }
-            item.locator = event.detail.value;
-        });
-        locatorSelectbox.subscribe(function(event) {
-            if (event.type !== "selectbox:change") {
-                return;
-            }
-            if (!event.detail.items) {
-                return;
-            }
-            var eventItem = event.detail.items[0];
-            locatorInput.setPlaceholder(eventItem.text);
-            item.label = event.detail.values[0].toString();
-            localStorage.setItem("selectedLocator", item.label);
-        });
-        omitAuthorInput.subscribe(function(event) {
-            if (event.type !== "checkbox:change") {
-                return;
-            }
-            item["suppress-author"] = event.detail.checked;
-        });
-        return params;
-    };
-    SelectCitationsComponent.prototype._buildSelectedElement = function(item) {
-        var self = this;
-        var root = document.createElement("div");
-        root.classList.add("selDoc");
-        var span = document.createElement("span");
-        if (item.author && item.author.length > 0) {
-            span.textContent = item.author.map(function(a) {
-                return a.family + ", " + a.given;
-            }).join("; ");
-        } else {
-            span.textContent = item.title;
-        }
-        if (item.issued && item.issued["date-parts"]) {
-            span.textContent += " " + item.issued["date-parts"][0].join("-");
-        }
-        span.setAttribute("title", span.textContent);
-        root.appendChild(span);
-        var remove = document.createElement("span");
-        remove.onclick = function() {
-            self._removeSelected(item.id);
-        };
-        remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829' + " 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275" + " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" + " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" + ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' + ' fill="currentColor" fill-opacity="0.8"/></svg>';
-        root.appendChild(remove);
-        return root;
-    };
-    SelectCitationsComponent.prototype._addSelected = function(item, checkbox) {
-        var el = this._buildSelectedElement(item);
-        this._items[item.id] = item;
-        this._html[item.id] = el;
-        this._checks[item.id] = checkbox;
-        if (this._selectedHolder) {
-            this._selectedHolder.appendChild(el);
-        }
-        this._docsScroller.onscroll();
-        this._selectedScroller.onscroll();
-        this._checkSelected();
-    };
-    SelectCitationsComponent.prototype._checkDocsScroll = function(holder, thumb) {
-        var self = this;
-        if (this._fShouldLoadMore(holder)) {
-            if (this._loadTimeout) {
-                clearTimeout(this._loadTimeout);
-            }
-            if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
-            this._loadTimeout = setTimeout(function() {
-                if (self._fShouldLoadMore(holder)) {
-                    self._fLoadMore();
-                }
-            }, 500);
-        }
-    };
-    SelectCitationsComponent.prototype._initScrollBox = function(holder, thumb, minThumbHeight, onscroll) {
-        var scroller = {};
-        scroller.onscroll = this._checkScroll(holder, thumb, minThumbHeight, onscroll);
-        holder.onwheel = function(e) {
-            holder.scrollTop += e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
-            scroller.onscroll();
-        };
-        thumb.onmousedown = function(e) {
-            thumb.classList.add("scrolling");
-            var y = e.clientY;
-            var initialPos = holder.scrollTop;
-            window.onmouseup = function(e) {
-                thumb.classList.remove("scrolling");
-                window.onmouseup = null;
-                window.onmousemove = null;
-            };
-            window.onmousemove = function(e) {
-                var delta = e.clientY - y;
-                var percMoved = delta / holder.clientHeight;
-                var deltaScroll = holder.scrollHeight * percMoved;
-                holder.scrollTop = initialPos + deltaScroll;
-                scroller.onscroll();
-            };
-        };
-        document.body.addEventListener("resize", function() {
-            scroller.onscroll();
-        });
-        return scroller;
-    };
-    SelectCitationsComponent.prototype._checkScroll = function(holder, thumb, minThumbHeight, func) {
-        var displayNoneClass = this._displayNoneClass;
-        return function() {
-            if (holder.scrollHeight <= holder.clientHeight) {
-                thumb.classList.add(displayNoneClass);
-            } else {
-                thumb.classList.remove(displayNoneClass);
-                var height = holder.clientHeight / holder.scrollHeight * holder.clientHeight;
-                height = height < minThumbHeight ? minThumbHeight : height;
-                thumb.style.height = height + "px";
-                var scroll = holder.scrollHeight - holder.clientHeight;
-                var percScrolled = holder.scrollTop / scroll;
-                var margin = percScrolled * (holder.clientHeight - height);
-                thumb.style.marginTop = margin + "px";
-            }
-            if (func) func(holder, thumb);
-        };
-    };
-    SelectCitationsComponent.prototype._removeSelected = function(id) {
-        var el = this._html[id];
-        if (this._selectedHolder) {
-            this._selectedHolder.removeChild(el);
-        }
-        delete this._items[id];
-        delete this._html[id];
-        if (this._checks[id]) {
-            this._checks[id].uncheck(true);
-            delete this._checks[id];
-        }
-        this._docsScroller.onscroll();
-        this._selectedScroller.onscroll();
-        this._checkSelected();
-    };
-    SelectCitationsComponent.prototype._checkSelected = function() {
-        var numOfSelected = this.count();
-        if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
-            return;
-        }
-        if (numOfSelected <= 0) {
-            this._selectedWrapper.classList.add(this._displayNoneClass);
-            this._selectedInfo.classList.add(this._displayNoneClass);
-        } else {
-            this._selectedWrapper.classList.remove(this._displayNoneClass);
-            this._selectedInfo.classList.remove(this._displayNoneClass);
-            this._selectedCount.textContent = numOfSelected + " " + translate("selected");
-        }
-        this._subscribers.forEach(function(cb) {
-            cb(numOfSelected);
-        });
-    };
-    SelectCitationsComponent.prototype.count = function() {
-        var k = 0;
-        for (var i in this._items) k++;
-        return k;
-    };
     var _window = new WeakMap;
+    var _defaultButtonFn = new WeakMap;
+    var _defaultThemeChangedFn = new WeakMap;
+    var _defaultTranslateFn = new WeakMap;
+    var _AdditionalWindow_brand = new WeakSet;
     var AdditionalWindow = function() {
         function AdditionalWindow() {
             _classCallCheck(this, AdditionalWindow);
+            _classPrivateMethodInitSpec(this, _AdditionalWindow_brand);
             _classPrivateFieldInitSpec(this, _window, void 0);
+            _classPrivateFieldInitSpec(this, _defaultButtonFn, void 0);
+            _classPrivateFieldInitSpec(this, _defaultThemeChangedFn, void 0);
+            _classPrivateFieldInitSpec(this, _defaultTranslateFn, void 0);
             _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
+            _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
+            _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
+            _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
         }
         return _createClass(AdditionalWindow, [ {
             key: "show",
-            value: function show(fileName, description, text) {
+            value: function show(description, text) {
+                var _this = this;
+                _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
+                _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
+                _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
                 var variation = {
+                    name: "Zotero",
                     url: "info-window.html",
                     description: window.Asc.plugin.tr(description),
                     isVisual: true,
@@ -14099,21 +13539,51 @@
                     } ],
                     isModal: false,
                     EditorsSupport: [ "word" ],
-                    size: [ 400, 200 ],
+                    size: [ 320, 240 ],
                     isViewer: true,
                     isDisplayedInViewer: false,
                     isInsideMode: false
                 };
                 _classPrivateFieldGet2(_window, this).show(variation);
-                window.Asc.plugin.button = function(id) {
-                    console.log("button", id);
+                window.Asc.plugin.onThemeChanged = function(theme) {
+                    _classPrivateFieldGet2(_window, _this).command("onThemeChanged", theme);
+                    _classPrivateFieldGet2(_defaultThemeChangedFn, _this).call(_this, theme);
                 };
+                window.Asc.plugin.onTranslate = function() {
+                    _classPrivateFieldGet2(_window, _this).command("onTranslate");
+                    _classPrivateFieldGet2(_defaultTranslateFn, _this).call(_this);
+                };
+                _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", function() {
+                    _classPrivateFieldGet2(_window, _this).command("onAttachedText", text);
+                });
+                return new Promise(function(resolve, reject) {
+                    window.Asc.plugin.button = function(buttonId, windowId) {
+                        if (buttonId === 0) {
+                            console.log("yes");
+                            resolve(true);
+                        } else {
+                            console.log("no", buttonId);
+                            resolve(false);
+                        }
+                        _assertClassBrand(_AdditionalWindow_brand, _this, _hide).call(_this);
+                    };
+                });
             }
         }, {
-            key: "hide",
-            value: function hide() {}
+            key: "destroy",
+            value: function destroy() {
+                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
+                _classPrivateFieldSet2(_window, this, null);
+            }
         } ]);
     }();
+    function _hide() {
+        if (_classPrivateFieldGet2(_window, this)) {
+            _classPrivateFieldGet2(_window, this).close();
+        }
+        window.Asc.plugin.button = _classPrivateFieldGet2(_defaultButtonFn, this);
+        window.Asc.plugin.onThemeChanged = _classPrivateFieldGet2(_defaultThemeChangedFn, this);
+    }
     var _onUserEditCitationManuallyWindow = new WeakMap;
     var _CitationService_brand = new WeakSet;
     var CitationService = function() {
@@ -14155,59 +13625,176 @@
             }
         }, {
             key: "insertSelectedCitations",
-            value: function insertSelectedCitations(items) {
-                var self = this;
-                var cslCitation = new CSLCitation(self._storage.size, "");
-                for (var citationID in items) {
-                    var item = items[citationID];
-                    cslCitation.fillFromObject(item);
+            value: function() {
+                var _insertSelectedCitations = _asyncToGenerator(_regenerator().m(function _callee(items) {
+                    var self, cslCitation, citationID, item, _t;
+                    return _regenerator().w(function(_context) {
+                        while (1) switch (_context.p = _context.n) {
+                          case 0:
+                            self = this;
+                            this._storage.clear();
+                            _context.p = 1;
+                            _context.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 2:
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            _context.n = 4;
+                            break;
+
+                          case 3:
+                            _context.p = 3;
+                            _t = _context.v;
+                            throw _t;
+
+                          case 4:
+                            cslCitation = new CSLCitation(this._storage.size, "");
+                            for (citationID in items) {
+                                item = items[citationID];
+                                cslCitation.fillFromObject(item);
+                            }
+                            return _context.a(2, _assertClassBrand(_CitationService_brand, this, _getSelectedInJsonFormat).call(this, items).then(function(items) {
+                                items.forEach(function(item) {
+                                    cslCitation.fillFromObject(item);
+                                });
+                                return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
+                            }));
+                        }
+                    }, _callee, this, [ [ 1, 3 ] ]);
+                }));
+                function insertSelectedCitations(_x) {
+                    return _insertSelectedCitations.apply(this, arguments);
                 }
-                return _assertClassBrand(_CitationService_brand, this, _getSelectedInJsonFormat).call(this, items).then(function(items) {
-                    items.forEach(function(item) {
-                        cslCitation.fillFromObject(item);
-                    });
-                    return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
-                });
-            }
+                return insertSelectedCitations;
+            }()
+        }, {
+            key: "insertBibliography",
+            value: function() {
+                var _insertBibliography = _asyncToGenerator(_regenerator().m(function _callee2() {
+                    var _yield$_assertClassBr, fieldsWithCitations, bibFieldValue, bibField, bNoHaveFields, updatedFields, _t2, _t3;
+                    return _regenerator().w(function(_context2) {
+                        while (1) switch (_context2.p = _context2.n) {
+                          case 0:
+                            this._storage.clear();
+                            _context2.p = 1;
+                            _context2.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 2:
+                            _yield$_assertClassBr = _context2.v;
+                            fieldsWithCitations = _yield$_assertClassBr.fieldsWithCitations;
+                            bibFieldValue = _yield$_assertClassBr.bibFieldValue;
+                            bibField = _yield$_assertClassBr.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            if (!bibField) {
+                                _context2.n = 4;
+                                break;
+                            }
+                            _context2.n = 3;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 3:
+                            _t2 = _context2.v;
+                            updatedFields = [ _t2 ];
+                            return _context2.a(2, this.citationDocService.updateAddinFields(updatedFields));
+
+                          case 4:
+                            return _context2.a(2, _assertClassBrand(_CitationService_brand, this, _addBibliography).call(this, bNoHaveFields, bibFieldValue));
+
+                          case 5:
+                            _context2.n = 7;
+                            break;
+
+                          case 6:
+                            _context2.p = 6;
+                            _t3 = _context2.v;
+                            throw _t3;
+
+                          case 7:
+                            return _context2.a(2);
+                        }
+                    }, _callee2, this, [ [ 1, 6 ] ]);
+                }));
+                function insertBibliography() {
+                    return _insertBibliography.apply(this, arguments);
+                }
+                return insertBibliography;
+            }()
         }, {
             key: "updateCslItems",
-            value: function updateCslItems(bUpdateAll, bPastBib) {
-                this._storage.clear();
-                var self = this;
-                return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this).then(function(info) {
-                    info.fields;
-                    var updatedFields = info.updatedFields, bibField = info.bibField, bibFieldValue = info.bibFieldValue;
-                    if (!bUpdateAll && !bPastBib) {
-                        return [];
-                    }
-                    if (bibField) {
-                        if (updatedFields.length === 0) {
-                            bibField["Content"] = translate(self._bibPlaceholderIfEmpty);
-                        } else {
-                            var bibliography = _assertClassBrand(_CitationService_brand, self, _makeBibliography).call(self);
-                            bibField["Content"] = bibliography;
+            value: function() {
+                var _updateCslItems = _asyncToGenerator(_regenerator().m(function _callee3(bHardRefresh) {
+                    var _yield$_assertClassBr2, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, format, _t4, _t5;
+                    return _regenerator().w(function(_context3) {
+                        while (1) switch (_context3.p = _context3.n) {
+                          case 0:
+                            this._storage.clear();
+                            _context3.p = 1;
+                            _context3.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 2:
+                            _yield$_assertClassBr2 = _context3.v;
+                            fieldsWithCitations = _yield$_assertClassBr2.fieldsWithCitations;
+                            bibField = _yield$_assertClassBr2.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            updatedFields = [];
+                            if (typeof bHardRefresh === "undefined") {
+                                format = this._cslStylesManager.getLastUsedFormat();
+                                if (format === "numeric") {
+                                    bHardRefresh = true;
+                                }
+                            }
+                            if (!(typeof bHardRefresh === "boolean")) {
+                                _context3.n = 4;
+                                break;
+                            }
+                            _context3.n = 3;
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, bHardRefresh);
+
+                          case 3:
+                            updatedFields = _context3.v;
+
+                          case 4:
+                            if (!bibField) {
+                                _context3.n = 6;
+                                break;
+                            }
+                            _t4 = updatedFields;
+                            _context3.n = 5;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 5:
+                            _t4.push.call(_t4, _context3.v);
+
+                          case 6:
+                            if (!(updatedFields && updatedFields.length)) {
+                                _context3.n = 7;
+                                break;
+                            }
+                            return _context3.a(2, this.citationDocService.updateAddinFields(updatedFields));
+
+                          case 7:
+                            _context3.n = 9;
+                            break;
+
+                          case 8:
+                            _context3.p = 8;
+                            _t5 = _context3.v;
+                            throw _t5;
+
+                          case 9:
+                            return _context3.a(2);
                         }
-                        updatedFields.push(bibField);
-                    } else if (bPastBib) {
-                        var _bibliography = _assertClassBrand(_CitationService_brand, self, _makeBibliography).call(self);
-                        if (updatedFields.length === 0) {
-                            _bibliography = translate(self._bibPlaceholderIfEmpty);
-                        }
-                        if (self._cslStylesManager.isLastUsedStyleContainBibliography()) {
-                            return self.citationDocService.addBibliography(_bibliography, bibFieldValue).then(function() {
-                                return updatedFields;
-                            });
-                        } else {
-                            throw "The current bibliographic style does not describe the bibliography";
-                        }
-                    }
-                    return updatedFields;
-                }).then(function(updatedFields) {
-                    if (updatedFields && updatedFields.length) {
-                        return self.citationDocService.updateAddinFields(updatedFields);
-                    }
-                });
-            }
+                    }, _callee3, this, [ [ 1, 8 ] ]);
+                }));
+                function updateCslItems(_x2) {
+                    return _updateCslItems.apply(this, arguments);
+                }
+                return updateCslItems;
+            }()
         } ]);
     }();
     function _formatInsertLink(cslCitation) {
@@ -14236,7 +13823,7 @@
             var tempElement = document.createElement("div");
             fragment.appendChild(tempElement);
             tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
-            cslCitation.addPlainCitation(tempElement.innerText);
+            cslCitation.setPlainCitation(tempElement.innerText);
             var notesStyle = null;
             if ("note" === self._styleFormat) {
                 notesStyle = self._notesStyle;
@@ -14326,9 +13913,6 @@
     function _synchronizeStorageWithDocItems() {
         var self = this;
         return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
-            var fragment = document.createDocumentFragment();
-            var tempElement = document.createElement("div");
-            fragment.appendChild(tempElement);
             var numOfItems = 0;
             var bibFieldValue = " ";
             var bibField = arrFields.find(function(field) {
@@ -14359,29 +13943,118 @@
                     cslCitation: cslCitation
                 };
             });
-            _assertClassBrand(_CitationService_brand, self, _updateFormatter).call(self);
-            var updatedFields = fieldsWithCitations.map(function(_ref, index) {
-                var field = _ref.field, cslCitation = _ref.cslCitation;
-                var keysL = cslCitation.getInfoForCitationCluster();
-                tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
-                var oldContent = field["Content"];
-                var newContent = tempElement.innerText;
-                if (oldContent !== newContent) {
-                    field["Content"] = newContent;
-                }
-                console.log(cslCitation.getDoNotUpdate());
-                if (cslCitation) {
-                    field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
-                }
-                return field;
-            });
             return {
-                fields: fields,
-                updatedFields: updatedFields,
                 bibField: bibField,
-                bibFieldValue: bibFieldValue
+                bibFieldValue: bibFieldValue,
+                fieldsWithCitations: fieldsWithCitations
             };
         });
+    }
+    function _addBibliography(bNoHaveFields, bibFieldValue) {
+        var bibliography = _assertClassBrand(_CitationService_brand, this, _makeBibliography).call(this);
+        if (bNoHaveFields) {
+            bibliography = translate(this._bibPlaceholderIfEmpty);
+        }
+        if (this._cslStylesManager.isLastUsedStyleContainBibliography()) {
+            return this.citationDocService.addBibliography(bibliography, bibFieldValue);
+        } else {
+            throw "The current bibliographic style does not describe the bibliography";
+        }
+    }
+    function _updateBibliography(bNoHaveFields, bibField) {
+        if (bNoHaveFields) {
+            bibField["Content"] = translate(this._bibPlaceholderIfEmpty);
+        } else {
+            var bibliography = _assertClassBrand(_CitationService_brand, this, _makeBibliography).call(this);
+            bibField["Content"] = bibliography;
+        }
+        return bibField;
+    }
+    function _getUpdatedFields(_x3, _x4) {
+        return _getUpdatedFields2.apply(this, arguments);
+    }
+    function _getUpdatedFields2() {
+        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee4(fieldsWithCitations, bHardRefresh) {
+            var self, fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, keysL, oldContent, newContent, text, bNeedSaveUserInput;
+            return _regenerator().w(function(_context4) {
+                while (1) switch (_context4.n) {
+                  case 0:
+                    self = this;
+                    fragment = document.createDocumentFragment();
+                    tempElement = document.createElement("div");
+                    fragment.appendChild(tempElement);
+                    updatedFields = [];
+                    i = fieldsWithCitations.length - 1;
+
+                  case 1:
+                    if (!(i >= 0)) {
+                        _context4.n = 8;
+                        break;
+                    }
+                    _fieldsWithCitations$ = fieldsWithCitations[i], field = _fieldsWithCitations$.field, 
+                    cslCitation = _fieldsWithCitations$.cslCitation;
+                    keysL = cslCitation.getInfoForCitationCluster();
+                    tempElement.innerHTML = self._formatter.makeCitationCluster(keysL);
+                    oldContent = field["Content"];
+                    newContent = tempElement.innerText;
+                    if (!cslCitation.getDoNotUpdate()) {
+                        _context4.n = 2;
+                        break;
+                    }
+                    return _context4.a(3, 7);
+
+                  case 2:
+                    if (!(oldContent === newContent)) {
+                        _context4.n = 3;
+                        break;
+                    }
+                    return _context4.a(3, 7);
+
+                  case 3:
+                    if (!bHardRefresh) {
+                        _context4.n = 4;
+                        break;
+                    }
+                    field["Content"] = newContent;
+                    cslCitation.setPlainCitation(newContent);
+                    _context4.n = 6;
+                    break;
+
+                  case 4:
+                    if (!(oldContent !== newContent)) {
+                        _context4.n = 6;
+                        break;
+                    }
+                    text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
+                    _context4.n = 5;
+                    return _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, self).show("Saving custom edits", text);
+
+                  case 5:
+                    bNeedSaveUserInput = _context4.v;
+                    if (bNeedSaveUserInput) {
+                        cslCitation.setDoNotUpdate();
+                    } else {
+                        field["Content"] = newContent;
+                        cslCitation.setPlainCitation(newContent);
+                    }
+
+                  case 6:
+                    if (cslCitation) {
+                        field["Value"] = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                    }
+                    updatedFields.push(field);
+
+                  case 7:
+                    i--;
+                    _context4.n = 1;
+                    break;
+
+                  case 8:
+                    return _context4.a(2, updatedFields);
+                }
+            }, _callee4, this);
+        }));
+        return _getUpdatedFields2.apply(this, arguments);
     }
     function _updateFormatter() {
         var self = this;
@@ -15258,6 +14931,582 @@
         this._connectToLocalZotero.enable();
         this._apiKeyLoginField.enable();
     };
+    function SearchFilterComponents() {
+        this._searchField = new InputField("searchField", {
+            type: "text",
+            autofocus: true,
+            showClear: false
+        });
+        this._filterButton = new Button("filterButton", {
+            variant: "secondary-icon",
+            size: "small"
+        });
+        this._librarySelectList = new SelectBox("librarySelectList", {
+            placeholder: translate("No items selected"),
+            multiple: true,
+            description: translate("Search in:")
+        });
+        this._subscribers = [];
+        this._addEventListeners();
+    }
+    SearchFilterComponents.prototype._addEventListeners = function() {
+        var self = this;
+        this._searchField.subscribe(function(e) {
+            if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
+                var selectedGroups = self._getSelectedGroups();
+                self._subscribers.forEach(function(cb) {
+                    cb(e.detail.value, selectedGroups);
+                });
+            }
+        });
+        this._filterButton.subscribe(function(e) {
+            if (e.type === "button:click") {
+                if (!self._librarySelectList.isOpen) {
+                    if (e.detail.originalEvent) {
+                        e.detail.originalEvent.stopPropagation();
+                    }
+                    self._librarySelectList.openDropdown();
+                }
+            }
+        });
+    };
+    SearchFilterComponents.prototype.addGroups = function(groups) {
+        var self = this;
+        var savedGroups = localStorage.getItem("selectedGroups");
+        var selectedItems = savedGroups ? JSON.parse(savedGroups).map(function(id) {
+            return id.toString();
+        }) : [ "my_library", "group_libraries" ];
+        var hasSelected = false;
+        groups.forEach(function(group) {
+            group.id = String(group.id);
+        });
+        var customGroups = [ {
+            id: "my_library",
+            name: translate("My Library")
+        }, {
+            id: "group_libraries",
+            name: translate("Group Libraries")
+        } ];
+        !hasSelected && customGroups.forEach(function(group) {
+            if (selectedItems.indexOf(group.id) !== -1) {
+                hasSelected = true;
+            }
+        });
+        !hasSelected && groups.forEach(function(group) {
+            if (selectedItems.indexOf(group.id.toString()) !== -1) {
+                hasSelected = true;
+            }
+        });
+        if (!hasSelected) {
+            selectedItems = [ "my_library", "group_libraries" ];
+        }
+        var addGroupToSelectBox = function addGroupToSelectBox(id, name, selected) {
+            if (typeof id === "number") {
+                id = id.toString();
+            }
+            if (self._librarySelectList instanceof SelectBox) self._librarySelectList.addItem(id, name, selected);
+        };
+        for (var i = 0; i < customGroups.length; i++) {
+            var id = customGroups[i].id;
+            var name = customGroups[i].name;
+            addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
+        }
+        if (groups.length === 0) {
+            return;
+        }
+        this._librarySelectList.addSeparator();
+        var selected = selectedItems.indexOf("group_libraries") !== -1;
+        for (var i = 0; i < groups.length; i++) {
+            var _id = groups[i].id;
+            var _name = groups[i].name;
+            addGroupToSelectBox(_id, _name, selected || selectedItems.indexOf(_id.toString()) !== -1);
+        }
+        this._selectedGroupsWatcher(customGroups, groups);
+    };
+    SearchFilterComponents.prototype._getSelectedGroups = function() {
+        var self = this;
+        var ids = this._librarySelectList.getSelectedValues();
+        if (Array.isArray(ids) === false || ids.length === 0) {
+            setTimeout(function() {
+                self._librarySelectList.openDropdown();
+            }, 500);
+        }
+        if (ids === null || typeof ids === "string") {
+            return [];
+        }
+        return ids;
+    };
+    SearchFilterComponents.prototype.subscribe = function(callback) {
+        var self = this;
+        this._subscribers.push(callback);
+        return {
+            unsubscribe: function unsubscribe() {
+                self._subscribers = self._subscribers.filter(function(cb) {
+                    return cb !== callback;
+                });
+            }
+        };
+    };
+    SearchFilterComponents.prototype._selectedGroupsWatcher = function(customGroups, groups) {
+        var self = this;
+        if (this._librarySelectList instanceof SelectBox === false) {
+            return;
+        }
+        this._librarySelectList.subscribe(function(event) {
+            if (event.type !== "selectbox:change") {
+                return;
+            }
+            var aGroupsToSave = [];
+            var values = event.detail.values;
+            var current = event.detail.current;
+            var bEnabled = event.detail.enabled;
+            var customIds = customGroups.map(function(group) {
+                return group.id;
+            });
+            var ids = groups.map(function(group) {
+                return group.id.toString();
+            });
+            var bWasCustom = customIds.indexOf(String(current)) !== -1;
+            if (bWasCustom) {
+                if (current === "group_libraries") {
+                    if (bEnabled) {
+                        aGroupsToSave.push("group_libraries");
+                        self._librarySelectList.selectItems(ids, true);
+                    } else {
+                        self._librarySelectList.unselectItems(ids, true);
+                    }
+                    if (values.indexOf("my_library") !== -1) {
+                        aGroupsToSave.push("my_library");
+                    }
+                } else {
+                    if (values.indexOf("group_libraries") !== -1) {
+                        aGroupsToSave.push("group_libraries");
+                        if (bEnabled) {
+                            aGroupsToSave.push(current);
+                        }
+                    } else {
+                        aGroupsToSave = values.slice();
+                    }
+                }
+            } else if (!bWasCustom) {
+                var bAllGroupsSelected = ids.every(function(id) {
+                    return values.indexOf(id) !== -1;
+                });
+                if (bAllGroupsSelected) {
+                    self._librarySelectList.selectItems("group_libraries", true);
+                    aGroupsToSave.push("group_libraries");
+                    if (values.indexOf("my_library") !== -1) {
+                        aGroupsToSave.push("my_library");
+                    }
+                } else {
+                    self._librarySelectList.unselectItems("group_libraries", true);
+                    aGroupsToSave = values.filter(function(value) {
+                        return value !== "group_libraries";
+                    });
+                }
+            }
+            if (aGroupsToSave.length === 0) {
+                localStorage.removeItem("selectedGroups");
+            } else {
+                localStorage.setItem("selectedGroups", JSON.stringify(aGroupsToSave));
+            }
+        });
+    };
+    function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) {
+        this._displayNoneClass = displayNoneClass;
+        this._items = {};
+        this._html = {};
+        this._checks = {};
+        this._LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
+        this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
+        this._docsHolder = document.getElementById("docsHolder");
+        this._nothingFound = document.getElementById("nothingFound");
+        this._docsThumb = document.getElementById("docsThumb");
+        this._selectedWrapper = document.getElementById("selectedWrapper");
+        this._selectedHolder = document.getElementById("selectedHolder");
+        this._selectedInfo = document.getElementById("selectedInfo");
+        this._selectedCount = document.getElementById("selectedCount");
+        this._selectedThumb = document.getElementById("selectedThumb");
+        if (this._selectedHolder && this._selectedThumb) {
+            this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20);
+        }
+        if (this._docsHolder && this._docsThumb) {
+            this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
+        }
+        this._subscribers = [];
+        this._fShouldLoadMore = fShouldLoadMore;
+        this._fLoadMore = fLoadMore;
+        this._loadTimeout;
+        this._init();
+    }
+    SelectCitationsComponent.prototype._init = function() {
+        var self = this;
+        if (this._cancelSelectBtn) {
+            this._cancelSelectBtn.onclick = function(e) {
+                var ids = [];
+                for (var id in self._items) {
+                    ids.push(id);
+                }
+                for (var i = 0; i < ids.length; i++) {
+                    self._removeSelected(ids[i]);
+                }
+            };
+        }
+    };
+    SelectCitationsComponent.prototype.clearLibrary = function() {
+        this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
+        var holder = this._docsHolder;
+        while (holder && holder.lastChild) {
+            holder.removeChild(holder.lastChild);
+        }
+        if (holder) holder.scrollTop = 0;
+        this._docsScroller.onscroll();
+    };
+    SelectCitationsComponent.prototype.displayNothingFound = function() {
+        this.clearLibrary();
+        this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
+    };
+    SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
+        var _this = this;
+        var self = this;
+        var holder = this._docsHolder;
+        var numOfShown = 0;
+        return new Promise(function(resolve, reject) {
+            if (res && res.items && res.items.length > 0) {
+                var page = document.createElement("div");
+                if (holder) page.classList.add("page" + holder.children.length);
+                for (var index = 0; index < res.items.length; index++) {
+                    var item = res.items[index];
+                    page.appendChild(self._buildDocElement(item));
+                    numOfShown++;
+                }
+                if (holder) holder.appendChild(page);
+            } else if (err) {
+                reject(err);
+            }
+            _this._docsScroller.onscroll();
+            resolve(numOfShown);
+        });
+    };
+    SelectCitationsComponent.prototype.getSelectedItems = function() {
+        var items = Object.assign({}, this._items || {});
+        return items;
+    };
+    SelectCitationsComponent.prototype.removeItems = function(keys) {
+        var self = this;
+        keys.forEach(function(key) {
+            self._removeSelected(key);
+        });
+    };
+    SelectCitationsComponent.prototype.subscribe = function(callback) {
+        var self = this;
+        this._subscribers.push(callback);
+        return {
+            unsubscribe: function unsubscribe() {
+                self._subscribers = self._subscribers.filter(function(cb) {
+                    return cb !== callback;
+                });
+            }
+        };
+    };
+    SelectCitationsComponent.prototype._buildDocElement = function(item) {
+        var self = this;
+        var root = document.createElement("div");
+        root.classList.add("doc");
+        var docInfo = document.createElement("div");
+        docInfo.classList.add("docInfo");
+        var checkHolder = document.createElement("div");
+        var label = "";
+        if (item.author && item.author.length > 0) {
+            label = item.author.map(function(a) {
+                if (a.family && a.given) {
+                    return a.family.trim() + ", " + a.given.trim();
+                } else if (a.family) {
+                    return a.family.trim();
+                } else if (a.given) {
+                    return a.given.trim();
+                }
+                return "";
+            }).join("; ");
+        }
+        var arrow = document.createElement("div");
+        arrow.classList.add("selectbox-arrow");
+        arrow.innerHTML = "<b></b>";
+        var title = document.createElement("div");
+        title.textContent = item.title.trim();
+        title.classList.add("truncate-text");
+        title.classList.add("secondary-text");
+        if (item.publisher || item["publisher-place"]) {
+            title.textContent += " · " + (item.publisher || item["publisher-place"] || "");
+        }
+        if (item.issued && item.issued["date-parts"]) {
+            var date = item.issued["date-parts"][0];
+            if (label.length > 20) {
+                title.textContent += " (" + date.join("-") + ")";
+            } else {
+                if (label.length > 0 && label.slice(-1) !== "." && label.slice(-1) !== ",") label += ".";
+                label += " " + date.join("-");
+            }
+        }
+        if (label.length === 0) {
+            label = title.textContent;
+        }
+        title.setAttribute("title", title.textContent);
+        docInfo.appendChild(title);
+        var check = document.createElement("input");
+        checkHolder.appendChild(check);
+        var checkInput = new Checkbox(check, {
+            checked: !!this._items[item.id],
+            label: label,
+            title: true,
+            id: item.id
+        });
+        if (this._items[item.id]) {
+            this._checks[item.id] = checkInput;
+        }
+        checkHolder.appendChild(arrow);
+        root.appendChild(checkHolder);
+        root.appendChild(docInfo);
+        var params;
+        function toggleItem() {
+            root.classList.toggle("doc-open");
+            if (!params) {
+                params = self._buildCitationParams(item);
+                root.appendChild(params);
+            }
+        }
+        arrow.onclick = toggleItem;
+        checkInput.subscribe(function(event) {
+            if (event.type !== "checkbox:change") {
+                return;
+            }
+            if (event.detail.checked) {
+                self._addSelected(item, checkInput);
+            } else {
+                self._removeSelected(item.id);
+            }
+        });
+        return root;
+    };
+    SelectCitationsComponent.prototype._buildCitationParams = function(item) {
+        var locatorLabel = localStorage.getItem("selectedLocator") || "page";
+        item.label = locatorLabel;
+        var params = document.createDocumentFragment();
+        var prefixSuffixContainer = document.createElement("div");
+        var prefix = document.createElement("input");
+        var suffix = document.createElement("input");
+        var locatorContainer = document.createElement("div");
+        var locatorSelect = document.createElement("div");
+        var locator = document.createElement("input");
+        var omitAuthorContainer = document.createElement("div");
+        var omitAuthor = document.createElement("input");
+        params.appendChild(prefixSuffixContainer);
+        prefixSuffixContainer.appendChild(prefix);
+        prefixSuffixContainer.appendChild(suffix);
+        params.appendChild(locatorContainer);
+        locatorContainer.appendChild(locatorSelect);
+        locatorContainer.appendChild(locator);
+        var locatorPlaceholder = "";
+        params.appendChild(omitAuthorContainer);
+        omitAuthorContainer.appendChild(omitAuthor);
+        var prefixInput = new InputField(prefix, {
+            type: "text",
+            placeholder: "Prefix"
+        });
+        var suffixInput = new InputField(suffix, {
+            type: "text",
+            placeholder: "Suffix"
+        });
+        var locatorSelectbox = new SelectBox(locatorSelect, {
+            placeholder: "Locator"
+        });
+        this._LOCATOR_VALUES.forEach(function(info) {
+            var selected = info[0] === locatorLabel;
+            locatorSelectbox.addItem(info[0], info[1], selected);
+            if (selected) {
+                locatorPlaceholder = info[1];
+            }
+        });
+        var locatorInput = new InputField(locator, {
+            type: "text",
+            placeholder: locatorPlaceholder
+        });
+        var omitAuthorInput = new Checkbox(omitAuthor, {
+            label: "Omit author"
+        });
+        prefixInput.subscribe(function(event) {
+            if (event.type !== "inputfield:input") {
+                return;
+            }
+            item.prefix = event.detail.value;
+        });
+        suffixInput.subscribe(function(event) {
+            if (event.type !== "inputfield:input") {
+                return;
+            }
+            item.suffix = event.detail.value;
+        });
+        locatorInput.subscribe(function(event) {
+            if (event.type !== "inputfield:input") {
+                return;
+            }
+            item.locator = event.detail.value;
+        });
+        locatorSelectbox.subscribe(function(event) {
+            if (event.type !== "selectbox:change") {
+                return;
+            }
+            if (!event.detail.items) {
+                return;
+            }
+            var eventItem = event.detail.items[0];
+            locatorInput.setPlaceholder(eventItem.text);
+            item.label = event.detail.values[0].toString();
+            localStorage.setItem("selectedLocator", item.label);
+        });
+        omitAuthorInput.subscribe(function(event) {
+            if (event.type !== "checkbox:change") {
+                return;
+            }
+            item["suppress-author"] = event.detail.checked;
+        });
+        return params;
+    };
+    SelectCitationsComponent.prototype._buildSelectedElement = function(item) {
+        var self = this;
+        var root = document.createElement("div");
+        root.classList.add("selDoc");
+        var span = document.createElement("span");
+        if (item.author && item.author.length > 0) {
+            span.textContent = item.author.map(function(a) {
+                return a.family + ", " + a.given;
+            }).join("; ");
+        } else {
+            span.textContent = item.title;
+        }
+        if (item.issued && item.issued["date-parts"]) {
+            span.textContent += " " + item.issued["date-parts"][0].join("-");
+        }
+        span.setAttribute("title", span.textContent);
+        root.appendChild(span);
+        var remove = document.createElement("span");
+        remove.onclick = function() {
+            self._removeSelected(item.id);
+        };
+        remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829' + " 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275" + " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" + " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" + ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' + ' fill="currentColor" fill-opacity="0.8"/></svg>';
+        root.appendChild(remove);
+        return root;
+    };
+    SelectCitationsComponent.prototype._addSelected = function(item, checkbox) {
+        var el = this._buildSelectedElement(item);
+        this._items[item.id] = item;
+        this._html[item.id] = el;
+        this._checks[item.id] = checkbox;
+        if (this._selectedHolder) {
+            this._selectedHolder.appendChild(el);
+        }
+        this._docsScroller.onscroll();
+        this._selectedScroller.onscroll();
+        this._checkSelected();
+    };
+    SelectCitationsComponent.prototype._checkDocsScroll = function(holder, thumb) {
+        var self = this;
+        if (this._fShouldLoadMore(holder)) {
+            if (this._loadTimeout) {
+                clearTimeout(this._loadTimeout);
+            }
+            if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
+            this._loadTimeout = setTimeout(function() {
+                if (self._fShouldLoadMore(holder)) {
+                    self._fLoadMore();
+                }
+            }, 500);
+        }
+    };
+    SelectCitationsComponent.prototype._initScrollBox = function(holder, thumb, minThumbHeight, onscroll) {
+        var scroller = {};
+        scroller.onscroll = this._checkScroll(holder, thumb, minThumbHeight, onscroll);
+        holder.onwheel = function(e) {
+            holder.scrollTop += e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
+            scroller.onscroll();
+        };
+        thumb.onmousedown = function(e) {
+            thumb.classList.add("scrolling");
+            var y = e.clientY;
+            var initialPos = holder.scrollTop;
+            window.onmouseup = function(e) {
+                thumb.classList.remove("scrolling");
+                window.onmouseup = null;
+                window.onmousemove = null;
+            };
+            window.onmousemove = function(e) {
+                var delta = e.clientY - y;
+                var percMoved = delta / holder.clientHeight;
+                var deltaScroll = holder.scrollHeight * percMoved;
+                holder.scrollTop = initialPos + deltaScroll;
+                scroller.onscroll();
+            };
+        };
+        document.body.addEventListener("resize", function() {
+            scroller.onscroll();
+        });
+        return scroller;
+    };
+    SelectCitationsComponent.prototype._checkScroll = function(holder, thumb, minThumbHeight, func) {
+        var displayNoneClass = this._displayNoneClass;
+        return function() {
+            if (holder.scrollHeight <= holder.clientHeight) {
+                thumb.classList.add(displayNoneClass);
+            } else {
+                thumb.classList.remove(displayNoneClass);
+                var height = holder.clientHeight / holder.scrollHeight * holder.clientHeight;
+                height = height < minThumbHeight ? minThumbHeight : height;
+                thumb.style.height = height + "px";
+                var scroll = holder.scrollHeight - holder.clientHeight;
+                var percScrolled = holder.scrollTop / scroll;
+                var margin = percScrolled * (holder.clientHeight - height);
+                thumb.style.marginTop = margin + "px";
+            }
+            if (func) func(holder, thumb);
+        };
+    };
+    SelectCitationsComponent.prototype._removeSelected = function(id) {
+        var el = this._html[id];
+        if (this._selectedHolder) {
+            this._selectedHolder.removeChild(el);
+        }
+        delete this._items[id];
+        delete this._html[id];
+        if (this._checks[id]) {
+            this._checks[id].uncheck(true);
+            delete this._checks[id];
+        }
+        this._docsScroller.onscroll();
+        this._selectedScroller.onscroll();
+        this._checkSelected();
+    };
+    SelectCitationsComponent.prototype._checkSelected = function() {
+        var numOfSelected = this.count();
+        if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
+            return;
+        }
+        if (numOfSelected <= 0) {
+            this._selectedWrapper.classList.add(this._displayNoneClass);
+            this._selectedInfo.classList.add(this._displayNoneClass);
+        } else {
+            this._selectedWrapper.classList.remove(this._displayNoneClass);
+            this._selectedInfo.classList.remove(this._displayNoneClass);
+            this._selectedCount.textContent = numOfSelected + " " + translate("selected");
+        }
+        this._subscribers.forEach(function(cb) {
+            cb(numOfSelected);
+        });
+    };
+    SelectCitationsComponent.prototype.count = function() {
+        var k = 0;
+        for (var i in this._items) k++;
+        return k;
+    };
     (function() {
         var displayNoneClass = "hidden";
         var router;
@@ -15399,7 +15648,7 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(true, false).catch(function(error) {
+                citationService.updateCslItems(false).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to refresh");
                     if (typeof error === "string") {
@@ -15423,7 +15672,7 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(true, true).catch(function(error) {
+                citationService.insertBibliography().catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to insert bibliography");
                     if (typeof error === "string") {
@@ -15447,12 +15696,10 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(false, false).then(function() {
-                    var items = selectCitation.getSelectedItems();
-                    return citationService.insertSelectedCitations(items);
-                }).then(function(keys) {
+                var items = selectCitation.getSelectedItems();
+                citationService.insertSelectedCitations(items).then(function(keys) {
                     selectCitation.removeItems(keys);
-                    return citationService.updateCslItems(true, false);
+                    return citationService.updateCslItems();
                 }).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to insert citation");
@@ -15476,7 +15723,7 @@
             settings.onChangeState(function(settings) {
                 citationService.setNotesStyle(settings.notesStyle);
                 citationService.setStyleFormat(settings.styleFormat);
-                return citationService.updateCslItems(true, false);
+                return citationService.updateCslItems(true);
             });
         }
         Asc.plugin.onThemeChanged = function(theme) {

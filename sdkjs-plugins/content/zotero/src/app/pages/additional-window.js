@@ -1,21 +1,30 @@
 // @ts-check
 
-/// <reference path="../../types-global.js" />
+/// <reference path="../types-global.js" />
 
 class AdditionalWindow {
     #window;
+    #defaultButtonFn;
+    #defaultThemeChangedFn;
+    #defaultTranslateFn;
 
     constructor() {
         this.#window = new window.Asc.PluginWindow();
+        this.#defaultButtonFn = window.Asc.plugin.button;
+        this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
+        this.#defaultTranslateFn = Asc.plugin.onTranslate;
     }
 
     /**
-     * @param {string} fileName
      * @param {string} description
      * @param {string} text
      */
-    show(fileName, description, text) {
+    show(description, text) {
+        this.#defaultButtonFn = window.Asc.plugin.button;
+        this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
+        this.#defaultTranslateFn = Asc.plugin.onTranslate;
         const variation = {
+            name: "Zotero",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
@@ -29,7 +38,7 @@ class AdditionalWindow {
             ],
             isModal: false,
             EditorsSupport: ["word"],
-            size: [300, 120],
+            size: [320, 240],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
@@ -37,30 +46,46 @@ class AdditionalWindow {
 
         this.#window.show(variation);
 
+        window.Asc.plugin.onThemeChanged = (theme) => {
+            this.#window.command("onThemeChanged", theme);
+            this.#defaultThemeChangedFn(theme);
+        };
+
+        window.Asc.plugin.onTranslate = () => {
+            this.#window.command("onTranslate");
+            this.#defaultTranslateFn();
+        };
+
+        this.#window.attachEvent("onWindowReady", () => {
+            this.#window.command("onAttachedText", text);
+        });
+
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {
                     console.log("yes");
                     resolve(true);
                 } else {
-                    console.log("no");
+                    console.log("no", buttonId);
                     resolve(false);
                 }
-                this.#window.close();
+
+                this.#hide();
             };
         });
     }
 
-    hide() {
+    #hide() {
         if (this.#window) {
             this.#window.close();
         }
+        window.Asc.plugin.button = this.#defaultButtonFn;
+        window.Asc.plugin.onThemeChanged = this.#defaultThemeChangedFn;
     }
 
     destroy() {
-        this.#window.close();
+        this.#hide();
         this.#window = null;
-        window.Asc.plugin.button = () => {};
     }
 }
 
