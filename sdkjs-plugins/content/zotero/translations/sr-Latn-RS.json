@@ -51,5 +51,12 @@
     "Configure how citations will be formatted in your document.": "Konfigurišite kako će citati biti formatirani u vašem dokumentu.",
     "Search in": "Pretražite u",
     "Search in:": "Pretražite u:",
-    "Loading...": "Učitavanje..."
+    "Loading...": "Učitavanje...",
+    "Saving custom edits": "Sačuvanje prilagođenih izmena",
+    "Original:": "Orijinal:",
+    "Modified:": "Promjenjen:",
+    "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "Vas citat je promjenjen nakon toga kako je Zotero ga napravio. Zelite li odrzati vasu promjenu i preveriti buducnosti azuriranja?",
+    "Yes": "Da",
+    "No": "Ne",
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Klikom 'Da' prevenite Zotero azuriranje ovog citata ako dodate dodatne citate, promijenite stil ili promijenite stavku na koju se odnosi ovaj citat. Klikom 'Ne' obrisite vasu promjenu."
 }

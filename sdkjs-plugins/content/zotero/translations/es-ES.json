@@ -51,5 +51,12 @@
     "Configure how citations will be formatted in your document.": "Configure cómo se formatearán las citas en su documento.",
     "Search in": "Buscar en",
     "Search in:": "Buscar en:",
-    "Loading...": "Cargando..."
+    "Loading...": "Cargando...",
+    "Saving custom edits": "Guardando ediciones personalizadas",
+    "Original:": "Original:",
+    "Modified:": "Modificado:",
+    "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "Has modificado esta cita desde que Zotero la ha creado. ¿Quieres mantener tus modificaciones y evitar futuras actualizaciones?",
+    "Yes": "Si",
+    "No": "No",
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Al hacer clic en „Sí“, Zotero evitará que actualice esta cita si agrega citas adicionales, cambia de estilo o modifica el elemento al que se refiere. Al hacer clic en „No“, se borrarán los cambios."
 }

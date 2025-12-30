@@ -41,20 +41,18 @@
 
 <body class="noselect">
 	<div class="content">
-		<p>
-			You have modified this citation since Zotero generated it. Do you want to keep your modifications and
-			prevent future updates?
-		</p>
-		<p>
-			Clicking "Yes" will prevent Zotero from updating this citation if you add additional citations, switch
-			styles, or modify the item to which it refers.
-			Clicking "No" will erase your changes.
-		</p>
+
 	</div>
 
 	<script type="text/javascript">
 		window.Asc.plugin.init = function (data) {
+			window.Asc.plugin.sendToPlugin("onWindowReady", {});
+			window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChangedBase);
 
+
+			window.Asc.plugin.attachEvent("onAttachedText", function (htmlContent) {
+				document.querySelector(".content").innerHTML = htmlContent;
+			});
 		};
 
 	</script>
