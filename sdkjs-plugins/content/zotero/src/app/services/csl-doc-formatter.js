@@ -23,6 +23,8 @@ class CslDocFormatter {
                             range.SetVertAlign("superscript");
                         } else if ("sub" === pos.type) {
                             range.SetVertAlign("subscript");
+                        } else if ("sc" === pos.type) {
+                            range.SetSmallCaps(true);
                         } else if ("u" === pos.type) {
                             range.SetUnderline(true);
                         } else if ("b" === pos.type) {
@@ -74,6 +76,8 @@ class CslDocFormatter {
                                 range.SetVertAlign("superscript");
                             } else if ("sub" === pos.type) {
                                 range.SetVertAlign("subscript");
+                            } else if ("sc" === pos.type) {
+                                range.SetSmallCaps(true);
                             } else if ("u" === pos.type) {
                                 range.SetUnderline(true);
                             } else if ("b" === pos.type) {

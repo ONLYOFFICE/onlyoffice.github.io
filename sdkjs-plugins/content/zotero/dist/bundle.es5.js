@@ -11970,43 +11970,6 @@
         return es_array_sort;
     }
     requireEs_array_sort();
-    var es_string_startsWith = {};
-    var hasRequiredEs_string_startsWith;
-    function requireEs_string_startsWith() {
-        if (hasRequiredEs_string_startsWith) return es_string_startsWith;
-        hasRequiredEs_string_startsWith = 1;
-        var $ = require_export();
-        var uncurryThis = requireFunctionUncurryThisClause();
-        var getOwnPropertyDescriptor = requireObjectGetOwnPropertyDescriptor().f;
-        var toLength = requireToLength();
-        var toString = requireToString();
-        var notARegExp = requireNotARegexp();
-        var requireObjectCoercible = requireRequireObjectCoercible();
-        var correctIsRegExpLogic = requireCorrectIsRegexpLogic();
-        var IS_PURE = requireIsPure();
-        var stringSlice = uncurryThis("".slice);
-        var min = Math.min;
-        var CORRECT_IS_REGEXP_LOGIC = correctIsRegExpLogic("startsWith");
-        var MDN_POLYFILL_BUG = !IS_PURE && !CORRECT_IS_REGEXP_LOGIC && !!function() {
-            var descriptor = getOwnPropertyDescriptor(String.prototype, "startsWith");
-            return descriptor && !descriptor.writable;
-        }();
-        $({
-            target: "String",
-            proto: true,
-            forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGEXP_LOGIC
-        }, {
-            startsWith: function startsWith(searchString) {
-                var that = toString(requireObjectCoercible(this));
-                notARegExp(searchString);
-                var index = toLength(min(arguments.length > 1 ? arguments[1] : undefined, that.length));
-                var search = toString(searchString);
-                return stringSlice(that, index, index + search.length) === search;
-            }
-        });
-        return es_string_startsWith;
-    }
-    requireEs_string_startsWith();
     var CslHtmlParser = function() {
         function CslHtmlParser() {
             _classCallCheck(this, CslHtmlParser);
@@ -12014,7 +11977,7 @@
         return _createClass(CslHtmlParser, null, [ {
             key: "parseHtmlFormatting",
             value: function parseHtmlFormatting(htmlString) {
-                var allowedTags = new Set([ "i", "u", "b", "sup", "sub", "em", "div", "span" ]);
+                console.warn("parseHtmlFormatting", htmlString);
                 var result = {
                     text: "",
                     formatting: []
@@ -12031,14 +11994,27 @@
                             i++;
                             continue;
                         }
-                        var tagName = htmlString.substring(isClosingTag ? i + 2 : i + 1, tagEnd).trim();
-                        if (allowedTags.has(tagName)) {
+                        var tag = htmlString.substring(isClosingTag ? i + 2 : i + 1, tagEnd).trim();
+                        var tagParts = tag.split(" ");
+                        if (tagParts.length === 0) {
+                            result.text += htmlString[i];
+                            i++;
+                            continue;
+                        }
+                        var tagName = tagParts[0];
+                        var styleTag = tagName;
+                        if (tag.indexOf("font-variant:small-caps") !== -1) {
+                            styleTag = "sc";
+                        } else if (tag.indexOf("text-decoration:underline") !== -1) {
+                            styleTag = "u";
+                        }
+                        if (_assertClassBrand(CslHtmlParser, this, _allowedTags)._.has(tagName)) {
                             if (isClosingTag) {
                                 for (var j = stack.length - 1; j >= 0; j--) {
                                     if (stack[j].tag === tagName) {
-                                        var _stack$splice$ = stack.splice(j, 1)[0], tag = _stack$splice$.tag, start = _stack$splice$.start;
+                                        var _stack$splice$ = stack.splice(j, 1)[0], start = _stack$splice$.start, _styleTag = _stack$splice$.styleTag;
                                         result.formatting.push({
-                                            type: tag,
+                                            type: _styleTag,
                                             start: start,
                                             end: textPosition
                                         });
@@ -12048,7 +12024,8 @@
                             } else {
                                 stack.push({
                                     tag: tagName,
-                                    start: textPosition
+                                    start: textPosition,
+                                    styleTag: styleTag
                                 });
                             }
                         }
@@ -12067,65 +12044,11 @@
                 });
                 return result;
             }
-        }, {
-            key: "parseHtmlFormattingRegex",
-            value: function parseHtmlFormattingRegex(htmlString) {
-                var allowedTags = new Set([ "i", "u", "b", "sup", "sub" ]);
-                var result = {
-                    text: "",
-                    formatting: []
-                };
-                var stack = [];
-                var textPosition = 0;
-                var pos = 0;
-                var tagPattern = /<\/?([a-z]+)>/gi;
-                while (pos < htmlString.length) {
-                    var substring = htmlString.substring(pos);
-                    var match = tagPattern.exec(substring);
-                    if (match) {
-                        var textBefore = htmlString.substring(pos, pos + match.index);
-                        result.text += textBefore;
-                        textPosition += textBefore.length;
-                        var fullTag = match[0];
-                        var tagName = match[1];
-                        if (allowedTags.has(tagName)) {
-                            if (fullTag.startsWith("</")) {
-                                for (var i = stack.length - 1; i >= 0; i--) {
-                                    if (stack[i].tag === tagName) {
-                                        var _stack$splice$2 = stack.splice(i, 1)[0], tag = _stack$splice$2.tag, start = _stack$splice$2.start;
-                                        result.formatting.push({
-                                            type: tag,
-                                            start: start,
-                                            end: textPosition
-                                        });
-                                        break;
-                                    }
-                                }
-                            } else {
-                                stack.push({
-                                    tag: tagName,
-                                    start: textPosition
-                                });
-                            }
-                        }
-                        pos += match.index + match[0].length;
-                        tagPattern.lastIndex = 0;
-                    } else {
-                        var remainingText = htmlString.substring(pos);
-                        result.text += remainingText;
-                        break;
-                    }
-                }
-                result.formatting.sort(function(a, b) {
-                    if (a.start === b.start) {
-                        return a.end - b.end;
-                    }
-                    return a.start - b.start;
-                });
-                return result;
-            }
         } ]);
     }();
+    var _allowedTags = {
+        _: new Set([ "i", "u", "b", "sc", "sup", "sub", "em", "div", "span" ])
+    };
     var CslDocFormatter = function() {
         function CslDocFormatter() {
             _classCallCheck(this, CslDocFormatter);
@@ -12147,6 +12070,8 @@
                                 range.SetVertAlign("superscript");
                             } else if ("sub" === pos.type) {
                                 range.SetVertAlign("subscript");
+                            } else if ("sc" === pos.type) {
+                                range.SetSmallCaps(true);
                             } else if ("u" === pos.type) {
                                 range.SetUnderline(true);
                             } else if ("b" === pos.type) {
@@ -12200,6 +12125,8 @@
                                             range.SetVertAlign("superscript");
                                         } else if ("sub" === pos.type) {
                                             range.SetVertAlign("subscript");
+                                        } else if ("sc" === pos.type) {
+                                            range.SetSmallCaps(true);
                                         } else if ("u" === pos.type) {
                                             range.SetUnderline(true);
                                         } else if ("b" === pos.type) {
@@ -13841,8 +13768,8 @@
                 _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", function() {
                     _classPrivateFieldGet2(_window, _this).command("onAttachedText", text);
                 });
-                _classPrivateFieldGet2(_window, this).attachEvent("onWindowResized", function() {
-                    window.Asc.Editor.callMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, _this).id, [ 400, 400 ], [ 400, 400 ], [ 0, 0 ] ]);
+                _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", function(height) {
+                    Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, _this).id, [ variation.size[0] - 2, height ] ], function() {});
                 });
                 return new Promise(function(resolve, reject) {
                     window.Asc.plugin.button = function(buttonId, windowId) {

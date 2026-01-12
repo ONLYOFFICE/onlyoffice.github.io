@@ -3185,7 +3185,7 @@ function translate(message) {
 
 class CslHtmlParser {
     static parseHtmlFormatting(htmlString) {
-        var allowedTags = new Set([ "i", "u", "b", "sup", "sub", "em", "div", "span" ]);
+        console.warn("parseHtmlFormatting", htmlString);
         var result = {
             text: "",
             formatting: []
@@ -3202,14 +3202,27 @@ class CslHtmlParser {
                     i++;
                     continue;
                 }
-                var tagName = htmlString.substring(isClosingTag ? i + 2 : i + 1, tagEnd).trim();
-                if (allowedTags.has(tagName)) {
+                var tag = htmlString.substring(isClosingTag ? i + 2 : i + 1, tagEnd).trim();
+                var tagParts = tag.split(" ");
+                if (tagParts.length === 0) {
+                    result.text += htmlString[i];
+                    i++;
+                    continue;
+                }
+                var tagName = tagParts[0];
+                var styleTag = tagName;
+                if (tag.indexOf("font-variant:small-caps") !== -1) {
+                    styleTag = "sc";
+                } else if (tag.indexOf("text-decoration:underline") !== -1) {
+                    styleTag = "u";
+                }
+                if (_assertClassBrand(CslHtmlParser, this, _allowedTags)._.has(tagName)) {
                     if (isClosingTag) {
                         for (var j = stack.length - 1; j >= 0; j--) {
                             if (stack[j].tag === tagName) {
-                                var {tag: tag, start: start} = stack.splice(j, 1)[0];
+                                var {start: start, styleTag: _styleTag} = stack.splice(j, 1)[0];
                                 result.formatting.push({
-                                    type: tag,
+                                    type: _styleTag,
                                     start: start,
                                     end: textPosition
                                 });
@@ -3219,7 +3232,8 @@ class CslHtmlParser {
                     } else {
                         stack.push({
                             tag: tagName,
-                            start: textPosition
+                            start: textPosition,
+                            styleTag: styleTag
                         });
                     }
                 }
@@ -3238,62 +3252,11 @@ class CslHtmlParser {
         });
         return result;
     }
-    static parseHtmlFormattingRegex(htmlString) {
-        var allowedTags = new Set([ "i", "u", "b", "sup", "sub" ]);
-        var result = {
-            text: "",
-            formatting: []
-        };
-        var stack = [];
-        var textPosition = 0;
-        var pos = 0;
-        var tagPattern = /<\/?([a-z]+)>/gi;
-        while (pos < htmlString.length) {
-            var substring = htmlString.substring(pos);
-            var match = tagPattern.exec(substring);
-            if (match) {
-                var textBefore = htmlString.substring(pos, pos + match.index);
-                result.text += textBefore;
-                textPosition += textBefore.length;
-                var fullTag = match[0];
-                var tagName = match[1];
-                if (allowedTags.has(tagName)) {
-                    if (fullTag.startsWith("</")) {
-                        for (var i = stack.length - 1; i >= 0; i--) {
-                            if (stack[i].tag === tagName) {
-                                var {tag: tag, start: start} = stack.splice(i, 1)[0];
-                                result.formatting.push({
-                                    type: tag,
-                                    start: start,
-                                    end: textPosition
-                                });
-                                break;
-                            }
-                        }
-                    } else {
-                        stack.push({
-                            tag: tagName,
-                            start: textPosition
-                        });
-                    }
-                }
-                pos += match.index + match[0].length;
-                tagPattern.lastIndex = 0;
-            } else {
-                var remainingText = htmlString.substring(pos);
-                result.text += remainingText;
-                break;
-            }
-        }
-        result.formatting.sort((a, b) => {
-            if (a.start === b.start) {
-                return a.end - b.end;
-            }
-            return a.start - b.start;
-        });
-        return result;
-    }
 }
+
+var _allowedTags = {
+    _: new Set([ "i", "u", "b", "sc", "sup", "sub", "em", "div", "span" ])
+};
 
 class CslDocFormatter {
     static formatAfterInsert(positions) {
@@ -3311,6 +3274,8 @@ class CslDocFormatter {
                         range.SetVertAlign("superscript");
                     } else if ("sub" === pos.type) {
                         range.SetVertAlign("subscript");
+                    } else if ("sc" === pos.type) {
+                        range.SetSmallCaps(true);
                     } else if ("u" === pos.type) {
                         range.SetUnderline(true);
                     } else if ("b" === pos.type) {
@@ -3346,6 +3311,8 @@ class CslDocFormatter {
                                 range.SetVertAlign("superscript");
                             } else if ("sub" === pos.type) {
                                 range.SetVertAlign("subscript");
+                            } else if ("sc" === pos.type) {
+                                range.SetSmallCaps(true);
                             } else if ("u" === pos.type) {
                                 range.SetUnderline(true);
                             } else if ("b" === pos.type) {
