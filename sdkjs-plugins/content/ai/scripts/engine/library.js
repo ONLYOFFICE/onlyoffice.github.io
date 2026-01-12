@@ -608,7 +608,7 @@
 	Library.prototype.getMarkdownResult = function(data) {
 		let markdownEscape = data.indexOf("```md");
 		if (-1 !== markdownEscape && markdownEscape < 5)
-			data = data.substring(markdownEscape + 5);		
+			data = data.substring(markdownEscape + 5);
 		return this.trimResult(data);
 	};
 
