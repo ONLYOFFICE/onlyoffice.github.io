@@ -114,7 +114,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /** ------------------------------------------------ */
 
 /**
- * @typedef {'i'|'u'|'b'|'sup'|'sub'|string} AllowedTags
+ * @typedef {'i'|'u'|'b'|'sc'|'sup'|'sub'|string} AllowedTags
  */
 
 /**

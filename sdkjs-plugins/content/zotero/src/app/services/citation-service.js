@@ -446,7 +446,7 @@ class CitationService {
                 },
                 /** @param {string} id */
                 retrieveItem: function (id) {
-                    var item = self._storage.get(id);
+                    const item = self._storage.get(id);
                     let index = self._storage.getIndex(id);
                     if (!item) return null;
                     return item.toFlatJSON(index);
