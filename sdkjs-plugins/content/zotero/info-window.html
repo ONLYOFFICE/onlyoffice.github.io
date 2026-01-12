@@ -37,6 +37,12 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<style>
+		body {
+			margin: 0;
+			padding: 8px 16px;
+		}
+	</style>
 </head>
 
 <body class="noselect">
@@ -49,9 +55,9 @@
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
 			window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChangedBase);
 
-
 			window.Asc.plugin.attachEvent("onAttachedText", function (htmlContent) {
 				document.querySelector(".content").innerHTML = htmlContent;
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
 			});
 		};
 
