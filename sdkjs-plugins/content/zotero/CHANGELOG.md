@@ -35,3 +35,8 @@
 * Ability to add prefix and suffix
 * "Omit author" feature
 * Citation locators support: Added ability to include page numbers, chapters, sections, and other location references in citations
+
+## 1.0.7
+
+* Formatting superscript and subscript text when inserting a bibliography using the Zotero plugin
+* Preserving manual citation formatting
