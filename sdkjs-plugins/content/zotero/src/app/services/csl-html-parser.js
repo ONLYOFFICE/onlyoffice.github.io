@@ -23,6 +23,7 @@ class CslHtmlParser {
      * @returns {{text: string, formatting: Array<FormattingPositions>}} Object with text and formatting array
      */
     static parseHtmlFormatting(htmlString) {
+        console.warn("parseHtmlFormatting", htmlString);
 
         /** @type {{text: string, formatting: Array<FormattingPositions>}} */
         const result = {
@@ -66,15 +67,9 @@ class CslHtmlParser {
                     continue;
                 }
 
-                const loverCaseTagName = tagParts[0].toLowerCase();
-                if (loverCaseTagName === "br") {
-                    // <br> is a special case - add a newline
-                    result.text += "\n";
-                    i = tagEnd + 1;
-                    continue;
-                }
+                const tagName = tagParts[0];
 
-                let styleTag = loverCaseTagName;
+                let styleTag = tagName;
                 if (tag.indexOf("font-variant:small-caps") !== -1) {
                     styleTag = "sc";
                 } else if (tag.indexOf("text-decoration:underline") !== -1) {
@@ -82,7 +77,7 @@ class CslHtmlParser {
                 }
 
                 // Only process allowed tags
-                if (this.#allowedTags.has(loverCaseTagName)) {
+                if (this.#allowedTags.has(tagName)) {
                     if (isClosingTag) {
                         // Closing tag - find matching opening tag
                         // Search from the end of stack (LIFO order)
@@ -124,7 +119,7 @@ class CslHtmlParser {
         // Sort formatting for consistent output (by start position, then by end)
         result.formatting.sort((a, b) => {
             if (a.start === b.start) {
-                return b.end - a.end;
+                return a.end - b.end;
             }
             return a.start - b.start;
         });

@@ -114,8 +114,12 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /** ------------------------------------------------ */
 
 /**
- * @typedef {Object} SupSubPositions
- * @property {'sup'|'sub'} type
+ * @typedef {'i'|'u'|'b'|'sc'|'sup'|'sub'|string} AllowedTags
+ */
+
+/**
+ * @typedef {Object} FormattingPositions
+ * @property {AllowedTags} type
  * @property {number} start
  * @property {number} end
  * @property {string} content
