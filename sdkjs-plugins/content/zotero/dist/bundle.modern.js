@@ -5084,6 +5084,9 @@ class AdditionalWindow {
         _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
             _classPrivateFieldGet2(_window, this).command("onAttachedText", text);
         });
+        _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
+            Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, this).id, [ variation.size[0] - 2, height ] ], () => {});
+        });
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {

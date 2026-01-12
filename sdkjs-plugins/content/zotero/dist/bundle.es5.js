@@ -13841,6 +13841,9 @@
                 _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", function() {
                     _classPrivateFieldGet2(_window, _this).command("onAttachedText", text);
                 });
+                _classPrivateFieldGet2(_window, this).attachEvent("onWindowResized", function() {
+                    window.Asc.Editor.callMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, _this).id, [ 400, 400 ], [ 400, 400 ], [ 0, 0 ] ]);
+                });
                 return new Promise(function(resolve, reject) {
                     window.Asc.plugin.button = function(buttonId, windowId) {
                         if (buttonId === 0) {

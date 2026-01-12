@@ -60,6 +60,17 @@ class AdditionalWindow {
             this.#window.command("onAttachedText", text);
         });
 
+        this.#window.attachEvent(
+            "onUpdateHeight",
+            (/** @type {number} */ height) => {
+                Asc.plugin.executeMethod(
+                    "ResizeWindow",
+                    [this.#window.id, [variation.size[0] - 2, height]],
+                    () => {}
+                ); // 2 is the border-width at the window
+            }
+        );
+
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {
