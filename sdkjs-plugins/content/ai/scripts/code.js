@@ -171,16 +171,14 @@ window.addSupportAgentMode = function(editorVersion) {
 					});
 				}
 
+				let markdownStreamer = new MarkDownStreamer();
+
 				let isSupportStreaming = window.EditorHelper.isSupportStreaming;
-				let dataStream = "";
 				async function onStreamEvent(data, end) {
 					if (isSupportStreaming)
-						await Asc.Library.PasteText(data);
-					dataStream += data;
-					if (true === end && "" !== dataStream) {
-						await Asc.Library.PasteText(dataStream);
-						dataStream = "";
-					}
+						await markdownStreamer.onStreamChunk(data, end);
+					else if (end)
+						await Asc.Library.PasteText(data);					
 				}
 
 				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
@@ -203,14 +201,18 @@ window.addSupportAgentMode = function(editorVersion) {
 						await onStreamEvent(data);
 				});
 
+				if (!isSupportStreaming)
+					buffer = result;
+
 				if (checkBuffer && !buffer.startsWith(bufferWait)) {
 					checkBuffer = false;
-					await onStreamEvent(buffer, true);
 				}
 
-				if (!isSupportStreaming) {
-					await onStreamEvent("", true);
-				}
+				if (!isSupportStreaming && !checkBuffer)
+					await onStreamEvent(buffer, true);
+
+				if (isSupportStreaming)
+					markdownStreamer.onStreamEnd();
 
 				await checkEndAction();
 
