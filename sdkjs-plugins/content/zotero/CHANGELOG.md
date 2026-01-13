@@ -38,5 +38,6 @@
 
 ## 1.0.7
 
-* Formatting superscript and subscript text when inserting a bibliography using the Zotero plugin
-* Preserving manual citation formatting
+* Formatting text when inserting a bibliography using the Zotero plugin
+* Preserve formatting and editing of manual citations.
+* Sorting bibliography according to style
