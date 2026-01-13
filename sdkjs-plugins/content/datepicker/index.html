@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>OnlyOffice Date Picker</title>
+    <link
+      rel="stylesheet"
+      href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+    />
+    <style>
+      .datepicker-wrapper {
+        position: relative;
+      }
+
+      .datepicker-icon {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: all 0.2s;
+        border-radius: 2px;
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .datepicker-icon[style] {
+        background-image: none !important;
+      }
+
+      .datepicker-icon:hover,
+      .datepicker-icon.active {
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .datepicker-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+
+      .datepicker-icon::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("./resources/button/calendar.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .datepicker-icon.dark-theme::before {
+        filter: brightness(0) invert(1) !important;
+      }
+
+      .datepicker-icon.light-theme::before {
+        filter: none !important;
+      }
+
+      .dark-theme.datepicker-icon::before {
+        filter: brightness(0) invert(1) !important;
+      }
+
+      .light-theme.datepicker-icon::before {
+        filter: none !important;
+      }
+
+      .datepicker-icon.has-bg-image::before {
+        opacity: 1;
+      }
+
+      .datepicker-icon.has-bg-image svg {
+        opacity: 0;
+      }
+
+      .form {
+        padding: 16px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 4px 12px;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        box-sizing: border-box;
+        padding-right: 36px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: inherit;
+        color: inherit;
+      }
+
+      .form-control-second {
+        padding-left: 9px !important;
+        padding-top: 2px !important;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      }
+
+      .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #374151;
+        border-radius: 3px;
+        padding: 10px 16px;
+        width: 100%;
+        font-weight: 600;
+        font-size: 12px;
+        cursor: pointer;
+        height: 36px;
+        transition: all 0.2s;
+        background: #374151;
+        color: #ffffff;
+      }
+
+      .button:hover {
+        background: #4b5563;
+        border-color: #4b5563;
+      }
+
+      .instruction-text {
+        font-size: 12px;
+        margin-bottom: 20px;
+        text-align: justify;
+        line-height: 1.4;
+      }
+
+      .custom-calendar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        margin-top: 2px;
+        display: none;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .custom-calendar.show {
+        display: block;
+      }
+
+      .calendar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        height: 45px;
+        box-sizing: border-box;
+        background: rgba(0, 0, 0, 0.02);
+      }
+
+      .calendar-title {
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .calendar-title:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .calendar-nav-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 3px;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.2s;
+        min-width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+      }
+
+      .calendar-nav-btn:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .calendar-grid {
+        padding: 0 12px 12px 12px;
+        box-sizing: border-box;
+      }
+
+      .calendar-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+
+      .calendar-weekday {
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.7;
+      }
+
+      .calendar-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+      }
+
+      .calendar-day {
+        text-align: center;
+        padding: 0;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+        min-height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .calendar-day:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .calendar-day.other-month {
+        opacity: 0.4;
+      }
+
+      .calendar-day:nth-child(7n + 1),
+      .calendar-day:nth-child(7n) {
+        color: #dc3545 !important;
+      }
+
+      .calendar-day.today {
+        font-weight: bold;
+        border: 2px solid #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+      }
+
+      .calendar-day.selected {
+        background-color: #0d6efd;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      .calendar-months,
+      .calendar-years {
+        display: grid;
+        gap: 8px;
+        padding: 12px;
+      }
+
+      .calendar-months {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .calendar-years {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .calendar-month,
+      .calendar-year {
+        padding: 8px 6px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.2s;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .calendar-month:hover,
+      .calendar-year:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .calendar-month.active,
+      .calendar-year.active {
+        background-color: #0d6efd;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        flex-direction: column;
+        z-index: 9999;
+        padding: 16px;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
+      .loading-content {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        justify-content: start;
+        margin-top: 24px;
+      }
+
+      .loading-spinner {
+        width: 16px;
+        height: 16px;
+        margin-right: 12px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top: 2px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        flex-shrink: 0;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        font-size: 12px;
+      }
+
+      .main-content {
+        position: relative;
+        min-height: 320px;
+      }
+
+      .main-content.loading > *:not(.loading-overlay) {
+        display: none !important;
+      }
+
+      .main-content.loading .loading-overlay {
+        display: flex !important;
+      }
+
+      .theme-type-dark .calendar-day.today,
+      .theme-dark .calendar-day.today {
+        border-color: #4d8eff;
+        background-color: rgba(77, 142, 255, 0.15);
+      }
+
+      .theme-type-dark .calendar-day.selected,
+      .theme-dark .calendar-day.selected,
+      .theme-type-dark .calendar-month.active,
+      .theme-dark .calendar-month.active,
+      .theme-type-dark .calendar-year.active,
+      .theme-dark .calendar-year.active {
+        background-color: #9ca3af;
+        color: #ffffff;
+      }
+
+      .theme-type-contrast-dark .calendar-day.today,
+      .theme-contrast-dark .calendar-day.today {
+        border-color: #ffcc00;
+        background-color: rgba(255, 204, 0, 0.15);
+      }
+
+      .theme-type-contrast-dark .calendar-day.selected,
+      .theme-contrast-dark .calendar-day.selected,
+      .theme-type-contrast-dark .calendar-month.active,
+      .theme-contrast-dark .calendar-month.active,
+      .theme-type-contrast-dark .calendar-year.active,
+      .theme-contrast-dark .calendar-year.active {
+        background-color: #9ca3af;
+        color: #ffffff;
+      }
+
+      .theme-type-classic-light .calendar-day.today,
+      .theme-classic-light .calendar-day.today {
+        border-color: #0066cc;
+        background-color: rgba(0, 102, 204, 0.1);
+      }
+
+      .theme-type-classic-light .calendar-day.selected,
+      .theme-classic-light .calendar-day.selected,
+      .theme-type-classic-light .calendar-month.active,
+      .theme-classic-light .calendar-month.active,
+      .theme-type-classic-light .calendar-year.active,
+      .theme-classic-light .calendar-year.active {
+        background-color: #d1d5db;
+        color: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content" id="mainContent">
+      <div class="loading-overlay" id="loadingOverlay">
+        <div
+          id="pleaseDoNotClose"
+          style="font-size: 12px; font-weight: bold; margin-bottom: 8px"
+        >
+          Please <strong>do not close</strong> the plugin panel.
+        </div>
+        <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <div class="loading-text" id="loadingText">Loading...</div>
+        </div>
+      </div>
+
+      <div class="form" id="mainForm">
+        <div class="instruction-text" id="instructionText">
+          Select the <strong>date and format</strong>, then click the
+          <strong>Insert date</strong> button. The date will be displayed in the
+          selected cell.
+        </div>
+
+        <div class="form-group">
+          <label for="dateInput" id="selectDateLabel">Select date</label>
+          <div class="datepicker-wrapper">
+            <input
+              type="text"
+              id="dateInput"
+              class="form-control"
+              placeholder="Select a date"
+              autocomplete="off"
+              readonly
+            />
+            <span id="calendarIcon" class="datepicker-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"
+                />
+              </svg>
+            </span>
+            <div class="custom-calendar" id="customCalendar">
+              <div class="calendar-header">
+                <button class="calendar-nav-btn" id="prevBtn">‹</button>
+                <div class="calendar-title" id="monthYearTitle">June 2025</div>
+                <button class="calendar-nav-btn" id="nextBtn">›</button>
+              </div>
+              <div class="calendar-grid">
+                <div class="calendar-weekdays" id="calendarWeekdays">
+                  <div class="calendar-weekday" data-day="0">Su</div>
+                  <div class="calendar-weekday" data-day="1">Mo</div>
+                  <div class="calendar-weekday" data-day="2">Tu</div>
+                  <div class="calendar-weekday" data-day="3">We</div>
+                  <div class="calendar-weekday" data-day="4">Th</div>
+                  <div class="calendar-weekday" data-day="5">Fr</div>
+                  <div class="calendar-weekday" data-day="6">Sa</div>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+                <div
+                  class="calendar-months"
+                  id="monthView"
+                  style="display: none"
+                >
+                  <div class="calendar-month" data-month="0">Jan</div>
+                  <div class="calendar-month" data-month="1">Feb</div>
+                  <div class="calendar-month" data-month="2">Mar</div>
+                  <div class="calendar-month" data-month="3">Apr</div>
+                  <div class="calendar-month" data-month="4">May</div>
+                  <div class="calendar-month" data-month="5">Jun</div>
+                  <div class="calendar-month" data-month="6">Jul</div>
+                  <div class="calendar-month" data-month="7">Aug</div>
+                  <div class="calendar-month" data-month="8">Sep</div>
+                  <div class="calendar-month" data-month="9">Oct</div>
+                  <div class="calendar-month" data-month="10">Nov</div>
+                  <div class="calendar-month" data-month="11">Dec</div>
+                </div>
+                <div
+                  class="calendar-years"
+                  id="yearView"
+                  style="display: none"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dateFormat" id="selectDateFormatLabel"
+            >Select date format</label
+          >
+          <select id="dateFormat" class="form-control form-control-second">
+            <option value="MM/DD/YYYY">05/06/2025</option>
+            <option value="dddd, MMMM D, YYYY">Monday, May 26, 2025</option>
+            <option value="MMMM D, YYYY">May 26, 2025</option>
+            <option value="M/D/YY">5/26/25</option>
+            <option value="YYYY-MM-DD">2025-05-26</option>
+            <option value="D-MMM-YY">26-May-25</option>
+            <option value="M.D.YYYY">5.26.2025</option>
+          </select>
+        </div>
+
+        <button id="insertDate" class="button">Insert date</button>
+      </div>
+    </div>
+
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script src="scripts/code.js"></script>
+  </body>
+</html>
