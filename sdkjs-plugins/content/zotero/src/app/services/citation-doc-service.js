@@ -213,7 +213,7 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
                 formats.set(field.FieldId, formattingPositions);
             }
         });
-        //console.warn("updateAddinFields", fields);
+
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod(
                 "UpdateAddinFields",
@@ -225,44 +225,6 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             return CslDocFormatter.formatAfterUpdate(formats);
         });
     }
-    /**
-     * @param {CustomField} field
-     * @returns {Promise<void>}
-     */
-    /*updateAddinField(field) {
-        const formattingPositions = CslHtmlParser.parseHtmlFormatting(
-            field.Content
-        );
-        field.Content = formattingPositions.text;
-        console.warn("updateAddinField", field, formattingPositions);
-        return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod(
-                "UpdateAddinFields",
-                [[field]],
-                () => {
-                    resolve(true);
-                }
-            );
-        })
-            .then(function () {
-                return new Promise(function (resolve) {
-                    window.Asc.plugin.executeMethod(
-                        "SelectAddinField",
-                        [field.FieldId],
-                        () => {
-                            resolve(true);
-                        }
-                    );
-                });
-            })
-            .then(async () => {
-                if (!formattingPositions.formatting.length) return;
-                CslDocFormatter.formatAfterUpdate(
-                    formattingPositions.formatting,
-                    formattingPositions.text
-                );
-            });
-    }*/
 }
 
 /**

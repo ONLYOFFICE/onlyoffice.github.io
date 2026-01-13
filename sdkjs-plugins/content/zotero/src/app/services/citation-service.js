@@ -120,6 +120,8 @@ class CitationService {
             .then(function () {
                 const fragment = document.createDocumentFragment();
                 const tempElement = document.createElement("div");
+                let htmlCitation = self._formatter.makeCitationCluster(keysL);
+                htmlCitation = self.#unEscapeHtml(htmlCitation);
                 fragment.appendChild(tempElement);
 
                 // TODO: Maybe I should clear the search (think about it)
@@ -206,15 +208,16 @@ class CitationService {
 
     #makeBibliography() {
         try {
-            var bibItems = new Array(this._storage.size);
+            const bibItems = new Array(this._storage.size);
             /** @type {false | any} */
-            var bibObject = this._formatter.makeBibliography();
+            const bibObject = this._formatter.makeBibliography();
+            
             // Sort bibliography items
-            for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                var citationId = bibObject[0].entry_ids[i][0];
-                var citationIndex = this._storage.getIndex(citationId);
+            for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
+                const citationId = bibObject[0].entry_ids[i][0];
+                const citationIndex = this._storage.getIndex(citationId);
                 /** @type {string} */
-                var bibText = bibObject[1][i];
+                let bibText = this.#unEscapeHtml(bibObject[1][i]);
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                     bibText = bibText.replace(/\n/, "");
                 }
@@ -362,7 +365,8 @@ class CitationService {
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
             const { field, cslCitation } = fieldsWithCitations[i];
             let keysL = cslCitation.getInfoForCitationCluster();
-            const htmlCitation = this._formatter.makeCitationCluster(keysL);
+            let htmlCitation = this._formatter.makeCitationCluster(keysL);
+            htmlCitation = this.#unEscapeHtml(htmlCitation);
             tempElement.innerHTML = htmlCitation;
             const oldContent = field["Content"];
             const newContent = tempElement.innerText;
@@ -464,6 +468,18 @@ class CitationService {
         }
 
         return;
+    }
+
+    /**
+     * @param {string} htmlString
+     * @returns {string}
+     */
+    #unEscapeHtml(htmlString) {
+        return htmlString
+            .replace(/\u00A0/g, " ")
+            .replace(/&#60;/g, "<")
+            .replace(/&#62;/g, ">")
+            .replace(/&#38;/g, "&");
     }
 
     /**
