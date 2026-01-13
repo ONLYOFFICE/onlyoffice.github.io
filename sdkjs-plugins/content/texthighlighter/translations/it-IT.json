@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Evidenziatore di Testo",
+  "PluginInstructions": "Inserisci o seleziona <b>una parola o frase</b> da cercare nel testo del documento e configura le impostazioni necessarie.",
+  
+  "TextToSearch": "Testo da cercare:",
+  "SearchPlaceholder": "Inserisci testo o seleziona nel documento",
+  "IgnoreCase": "Ignora maiuscole/minuscole",
+
+  "HighlightColor": "Colore evidenziazione:",
+  "HighlightYellow": "Giallo",
+  "HighlightGreen": "Verde",
+  "HighlightBlue": "Blu",
+  "HighlightRed": "Rosso",
+  "HighlightNone": "Nessun riempimento",
+
+  "TextColorHeader": "Colore del testo",
+  "TextColorPicker": "Scegli colore del testo",
+  "ArrowDropdown": "▸",
+
+  "TextFormattingHeader": "Formattazione testo",
+  "FormatBold": "Grassetto",
+  "FormatItalic": "Corsivo",
+  "FormatUnderline": "Sottolineato",
+  "FormatStrike": "Barrato",
+
+  "ApplyButton": "Applica",
+
+  "SearchNoResults": "Ricerca completata. <strong>Nessuna corrispondenza trovata.</strong>",
+  "HighlightMore": "Evidenzia di più",
+  "HighlightMore2": "Evidenzia di più",
+
+  "SearchDone": "Fatto! La ricerca è completa e gli stili sono stati applicati.",
+  "MatchesFound": "Corrispondenze trovate:",
+  "RevertToOriginal": "Ripristina",
+
+  "LoadingMessage": "Elaborazione...",
+
+  "AboutTitle": "Evidenziatore di Testo",
+  "AboutVersion": "Versione 1.0.0",
+  "AboutDescription": "Questo plugin consente di cercare il testo e applicare evidenziazioni, colori e formattazioni nel documento.",
+  "AboutCopyright": "© 2025 Plugin ONLYOFFICE"
+}
