@@ -5281,7 +5281,7 @@ function _makeBibliography() {
             while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                 bibText = bibText.replace(/\n/, "");
             }
-            bibItems[citationIndex] = bibText;
+            bibItems.push(bibText);
         }
         var htmlBibliography = bibItems.join("");
         return htmlBibliography;

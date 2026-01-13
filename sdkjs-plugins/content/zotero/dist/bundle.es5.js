@@ -11977,7 +11977,6 @@
         return _createClass(CslHtmlParser, null, [ {
             key: "parseHtmlFormatting",
             value: function parseHtmlFormatting(htmlString) {
-                console.warn("parseHtmlFormatting", htmlString);
                 var result = {
                     text: "",
                     formatting: []
@@ -12001,17 +12000,22 @@
                             i++;
                             continue;
                         }
-                        var tagName = tagParts[0];
-                        var styleTag = tagName;
+                        var loverCaseTagName = tagParts[0].toLowerCase();
+                        if (loverCaseTagName === "br") {
+                            result.text += "\n";
+                            i = tagEnd + 1;
+                            continue;
+                        }
+                        var styleTag = loverCaseTagName;
                         if (tag.indexOf("font-variant:small-caps") !== -1) {
                             styleTag = "sc";
                         } else if (tag.indexOf("text-decoration:underline") !== -1) {
                             styleTag = "u";
                         }
-                        if (_assertClassBrand(CslHtmlParser, this, _allowedTags)._.has(tagName)) {
+                        if (_assertClassBrand(CslHtmlParser, this, _allowedTags)._.has(loverCaseTagName)) {
                             if (isClosingTag) {
                                 for (var j = stack.length - 1; j >= 0; j--) {
-                                    if (stack[j].tag === tagName) {
+                                    if (stack[j].tag === loverCaseTagName) {
                                         var _stack$splice$ = stack.splice(j, 1)[0], start = _stack$splice$.start, _styleTag = _stack$splice$.styleTag;
                                         result.formatting.push({
                                             type: _styleTag,
@@ -12023,7 +12027,7 @@
                                 }
                             } else {
                                 stack.push({
-                                    tag: tagName,
+                                    tag: loverCaseTagName,
                                     start: textPosition,
                                     styleTag: styleTag
                                 });
@@ -12038,7 +12042,7 @@
                 }
                 result.formatting.sort(function(a, b) {
                     if (a.start === b.start) {
-                        return a.end - b.end;
+                        return b.end - a.end;
                     }
                     return a.start - b.start;
                 });
@@ -14035,6 +14039,7 @@
             var fragment = document.createDocumentFragment();
             var tempElement = document.createElement("div");
             var htmlCitation = self._formatter.makeCitationCluster(keysL);
+            htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, htmlCitation);
             fragment.appendChild(tempElement);
             tempElement.innerHTML = htmlCitation;
             cslCitation.setPlainCitation(tempElement.innerText);
@@ -14093,11 +14098,11 @@
             for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
                 var citationId = bibObject[0].entry_ids[i][0];
                 var citationIndex = this._storage.getIndex(citationId);
-                var bibText = bibObject[1][i];
+                var bibText = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, bibObject[1][i]);
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                     bibText = bibText.replace(/\n/, "");
                 }
-                bibItems[citationIndex] = bibText;
+                bibItems.push(bibText);
             }
             var htmlBibliography = bibItems.join("");
             return htmlBibliography;
@@ -14203,6 +14208,7 @@
                     cslCitation = _fieldsWithCitations$.cslCitation;
                     keysL = cslCitation.getInfoForCitationCluster();
                     htmlCitation = this._formatter.makeCitationCluster(keysL);
+                    htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, htmlCitation);
                     tempElement.innerHTML = htmlCitation;
                     oldContent = field["Content"];
                     newContent = tempElement.innerText;
@@ -14289,6 +14295,9 @@
             this._formatter.updateItems(arrIds);
         }
         return;
+    }
+    function _unEscapeHtml(htmlString) {
+        return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
     }
     var CslStylesParser = {
         getStyleInfo: function getStyleInfo(name, style) {

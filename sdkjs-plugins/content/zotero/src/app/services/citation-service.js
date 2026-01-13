@@ -209,8 +209,7 @@ class CitationService {
             const bibItems = new Array(this._storage.size);
             /** @type {false | any} */
             const bibObject = this._formatter.makeBibliography();
-            
-            // Sort bibliography items
+
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
                 const citationId = bibObject[0].entry_ids[i][0];
                 const citationIndex = this._storage.getIndex(citationId);
@@ -220,7 +219,7 @@ class CitationService {
                     bibText = bibText.replace(/\n/, "");
                 }
 
-                bibItems[citationIndex] = bibText;
+                bibItems.push(bibText);
             }
             const htmlBibliography = bibItems.join("");
             return htmlBibliography;
