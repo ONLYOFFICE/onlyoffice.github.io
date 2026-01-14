@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Texthervorhebung",
+  "PluginInstructions": "Geben Sie <b>ein Wort oder einen Satz</b> ein oder wählen Sie es aus dem Dokument aus, und konfigurieren Sie die gewünschten Einstellungen.",
+
+  "TextToSearch": "Zu suchender Text:",
+  "SearchPlaceholder": "Text eingeben oder im Dokument auswählen",
+  "IgnoreCase": "Groß-/Kleinschreibung ignorieren",
+
+  "HighlightColor": "Hervorhebungsfarbe:",
+  "HighlightYellow": "Gelb",
+  "HighlightGreen": "Grün",
+  "HighlightBlue": "Blau",
+  "HighlightRed": "Rot",
+  "HighlightNone": "Keine Füllung",
+  "ArrowDropdown": "▸",
+
+  "TextColorHeader": "Textfarbe",
+  "TextColorPicker": "Textfarbe wählen",
+
+  "TextFormattingHeader": "Textformatierung",
+  "FormatBold": "Fett",
+  "FormatItalic": "Kursiv",
+  "FormatUnderline": "Unterstrichen",
+  "FormatStrike": "Durchgestrichen",
+
+  "ApplyButton": "Anwenden",
+
+  "SearchNoResults": "Suche abgeschlossen. <strong>Keine Treffer gefunden.</strong>",
+  "HighlightMore": "Mehr hervorheben",
+  "HighlightMore2": "Mehr hervorheben",
+
+  "SearchDone": "Fertig! Die Suche ist abgeschlossen und die Stile wurden angewendet.",
+  "MatchesFound": "Gefundene Treffer:",
+  "RevertToOriginal": "Wiederherstellen",
+
+  "LoadingMessage": "Verarbeitung läuft...",
+
+  "AboutTitle": "Texthervorhebung",
+  "AboutVersion": "Version 1.0.0",
+  "AboutDescription": "Dieses Plugin ermöglicht das Suchen von Text und das Anwenden von Hervorhebungen, Farben und Formatierungen im Dokument.",
+  "AboutCopyright": "© 2025 ONLYOFFICE-Plugin"
+}
