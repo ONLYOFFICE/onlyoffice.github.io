@@ -138,6 +138,52 @@ async function registerButtons(window, undefined)
 		window.chatWindow = chatWindow;
 	}
 
+	function addCustomAssistantWindowShow()
+	{
+		if (window.addCustomAssistantWindow) {
+			window.addCustomAssistantWindow.activate();
+			return;
+		}
+
+		let variation = {
+			url : "customAssistant.html",
+			description : window.Asc.plugin.tr("Create your own AI assistant"),
+			isVisual : true,
+			buttons : [],
+			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+			isModal : false,
+			isCanDocked: true,
+			type: window.localStorage.getItem("onlyoffice_ai_add_custom_assistant_placement") || "window",
+			EditorsSupport : ["word"],
+			size : [ 400, 200 ]
+		};
+
+		var addCustomAssistantWindow = new window.Asc.PluginWindow();
+		addCustomAssistantWindow.attachEvent("onWindowReady", function() {
+			Asc.Editor.callMethod("ResizeWindow", [addCustomAssistantWindow.id, [400, 400], [400, 400], [0, 0]]);
+		});
+
+		addCustomAssistantWindow.attachEvent("onAddNewAssistant", async function(text) {
+			window.localStorage.setItem("onlyoffice_ai_add_custom_assistant_text", text);
+
+			async function waitSaveSettings()
+			{
+				return new Promise(resolve => (function(){
+					addCustomAssistantWindow.attachEvent("onUpdateState", function(type) {
+						resolve();
+					});
+					addCustomAssistantWindow.command("onUpdateState");
+				})());
+			};
+			
+			await waitSaveSettings();
+			Asc.Editor.callMethod("OnWindowDockChangedCallback", [addCustomAssistantWindow.id]);
+		});
+		addCustomAssistantWindow.show(variation);
+
+		window.addCustomAssistantWindow = addCustomAssistantWindow;
+	}
+
 	let editorVersion = await Asc.Library.GetEditorVersion();
 	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
 	{
@@ -662,6 +708,14 @@ async function registerButtons(window, undefined)
 				onCheckGrammarSpelling(true);
 			});
 			buttonGS.split = true;
+
+			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonCustomAssistant.text = "Create a new assistant";
+			buttonCustomAssistant.icons = getToolBarButtonIcons("grammar");
+			buttonCustomAssistant.separator = true;
+			buttonCustomAssistant.attachOnClick(function(){
+				addCustomAssistantWindowShow();
+			});
 		}
 	}
 
