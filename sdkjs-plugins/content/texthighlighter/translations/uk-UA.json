@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Виділення тексту",
+  "PluginInstructions": "Введіть або виберіть <b>слово чи фразу</b> для пошуку в документі та налаштуйте необхідні параметри.",
+
+  "TextToSearch": "Текст для пошуку:",
+  "SearchPlaceholder": "Введіть текст або виберіть у документі",
+  "IgnoreCase": "Ігнорувати регістр",
+
+  "HighlightColor": "Колір виділення:",
+  "HighlightYellow": "Жовтий",
+  "HighlightGreen": "Зелений",
+  "HighlightBlue": "Синій",
+  "HighlightRed": "Червоний",
+  "HighlightNone": "Без заповнення",
+  "ArrowDropdown": "▸",
+
+  "TextColorHeader": "Колір тексту",
+  "TextColorPicker": "Виберіть колір тексту",
+
+  "TextFormattingHeader": "Форматування тексту",
+  "FormatBold": "Жирний",
+  "FormatItalic": "Курсив",
+  "FormatUnderline": "Підкреслення",
+  "FormatStrike": "Закреслення",
+
+  "ApplyButton": "Застосувати",
+
+  "SearchNoResults": "Пошук завершено. <strong>Збігів не знайдено.</strong>",
+  "HighlightMore": "Виділити ще",
+  "HighlightMore2": "Виділити ще",
+
+  "SearchDone": "Готово! Пошук завершено, стилі застосовано.",
+  "MatchesFound": "Знайдено збігів:",
+  "RevertToOriginal": "Повернути",
+
+  "LoadingMessage": "Обробка...",
+
+  "AboutTitle": "Виділення тексту",
+  "AboutVersion": "Версія 1.0.0",
+  "AboutDescription": "Цей плагін дозволяє виконувати пошук тексту та застосовувати виділення, колір і стилі форматування у вашому документі.",
+  "AboutCopyright": "© 2025 Плагін ONLYOFFICE"
+}
