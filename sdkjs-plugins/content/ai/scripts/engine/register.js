@@ -149,39 +149,42 @@ async function registerButtons(window, undefined)
 			url : "customAssistant.html",
 			description : window.Asc.plugin.tr("Create your own AI assistant"),
 			isVisual : true,
-			buttons : [],
+			buttons : [
+				{ text: window.Asc.plugin.tr('Add'), primary: true },
+				{ text: window.Asc.plugin.tr('Cancel'), primary: false },
+			],
 			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
-			isCanDocked: true,
+			isCanDocked: false,
 			type: window.localStorage.getItem("onlyoffice_ai_add_custom_assistant_placement") || "window",
 			EditorsSupport : ["word"],
 			size : [ 400, 200 ]
 		};
 
-		var addCustomAssistantWindow = new window.Asc.PluginWindow();
+		const addCustomAssistantWindow = new window.Asc.PluginWindow();
 		addCustomAssistantWindow.attachEvent("onWindowReady", function() {
 			Asc.Editor.callMethod("ResizeWindow", [addCustomAssistantWindow.id, [400, 400], [400, 400], [0, 0]]);
 		});
-
-		addCustomAssistantWindow.attachEvent("onAddNewAssistant", async function(text) {
-			window.localStorage.setItem("onlyoffice_ai_add_custom_assistant_text", text);
-
-			async function waitSaveSettings()
-			{
-				return new Promise(resolve => (function(){
-					addCustomAssistantWindow.attachEvent("onUpdateState", function(type) {
-						resolve();
-					});
-					addCustomAssistantWindow.command("onUpdateState");
-				})());
-			};
-			
-			await waitSaveSettings();
-			Asc.Editor.callMethod("OnWindowDockChangedCallback", [addCustomAssistantWindow.id]);
-		});
+		
 		addCustomAssistantWindow.show(variation);
 
-		window.addCustomAssistantWindow = addCustomAssistantWindow;
+		const buttonsCallback = window.Asc.plugin.button;
+		window.Asc.plugin.button = async function(id, windowId, ...args) {
+			if (addCustomAssistantWindow && windowId === addCustomAssistantWindow.id) {
+				if (id === 0) {
+					const text = await new Promise(resolve => {
+						addCustomAssistantWindow.attachEvent("onAddNewAssistant", resolve);
+						addCustomAssistantWindow.command('onClickAdd');
+					});
+					if (!text) return;
+				}
+				window.Asc.plugin.button = buttonsCallback;
+				addCustomAssistantWindow.close();
+				window.addCustomAssistantWindow = null;
+			} else {
+				await buttonsCallback(id, windowId, ...args);
+			}
+		}
 	}
 
 	let editorVersion = await Asc.Library.GetEditorVersion();

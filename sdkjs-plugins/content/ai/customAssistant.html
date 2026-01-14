@@ -37,31 +37,19 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script type="text/javascript" src="scripts/utils/theme.js"></script>
-	<script type="text/javascript" src="scripts/customAssistant.js"></script>
+	<link rel="stylesheet" href="./resources/styles/customAssistant.css">
+	<script type="text/javascript" src="scripts/utils/theme.js" defer></script>
+	<script type="text/javascript" src="scripts/customAssistant.js" defer></script>
 </head>
 
 <body style="display: flex;">
 	<div id="custom_assistant_window" class="custom_assistant_window">
-		<div id="custom_assistant_wrapper" class="form-control empty">
-			<div id="custom_assistant" class="noselect">
-				<div id="start_panel">
-					<div id="welcome_text">
-						<br />
-						<br />
-						<span class="i18n">Enter a prompt message with instructions for text operations.</span>
-						<br />
-						<br />
-					</div>
-				</div>
-			</div>
+		<div id="custom_assistant" class="noselect">
+			<span class="i18n">Enter a prompt message with instructions for text operations.</span>
 		</div>
 
 		<div id="input_prompt_wrapper">
 			<textarea id="input_prompt" rows="1" class="form-control" spellcheck="false"></textarea>
-			<div id="input_prompt_submit" class="noselect">
-				<img src="resources/icons/light/btn-demote.png" draggable="false" class="icon" />
-			</div>
 		</div>
 	</div>
 </body>
