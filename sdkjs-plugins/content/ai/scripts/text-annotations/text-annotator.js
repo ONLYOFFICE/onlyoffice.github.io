@@ -164,6 +164,7 @@ TextAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
 		return;
 	
 	ranges.forEach(range => this._handleNewRangePositions(range, paraId, text));
+	// ↓↓↓ TODO: the cycle seems to make no sense ↓↓↓
 	for (let i = 0; i < ranges.length; ++i)
 	{
 		this._handleNewRangePositions(ranges[i]);
