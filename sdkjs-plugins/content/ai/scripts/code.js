@@ -916,6 +916,118 @@ async function onCheckGrammarSpelling(isCurrent)
 }
 
 /**
+ * CUSTOM ASSISTANT
+ * @param {string} [assistantId] Assistant ID for editing
+ * @param {Asc.ButtonToolbar} [buttonAssistant]
+ */
+function customAssistantWindowShow(assistantId, buttonAssistant)
+{
+	if (window.customAssistantWindow) {
+		window.customAssistantWindow.close();
+		window.customAssistantWindow = null;
+	}
+	const actionButtonText = assistantId ? window.Asc.plugin.tr('Save') : window.Asc.plugin.tr('Add');
+
+	let variation = {
+		url : "customAssistant.html",
+		description : window.Asc.plugin.tr("Your own AI assistant"),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr(actionButtonText), primary: true },
+			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
+		],
+		icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+		isModal : false,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 400, 400 ]
+	};
+
+	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 400], [400, 400], [0, 0]]);
+		if (assistantId) {
+			customAssistantWindow.command('onEditAssistant', assistantId);
+		}
+	});
+	
+	customAssistantWindow.show(variation);
+
+	const buttonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			if (id === 0) {
+				const element = await new Promise(resolve => {
+					customAssistantWindow.attachEvent("onAddNewAssistant", resolve);
+					customAssistantWindow.command('onClickAdd');
+				});
+				if (!element) return;
+				if (buttonAssistant) {
+					buttonAssistant.text = element.name;
+					Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+				} else {
+					buttonAssistant = new Asc.ButtonToolbar(null);
+					buttonAssistant.text = element.name;
+					buttonAssistant.icons = getToolBarButtonIcons("grammar");
+					buttonAssistant.split = true;
+					buttonAssistant.menu = [{
+						text: 'Edit',
+						id: element.id + '-edit',
+						onclick: () => {console.log("Edit custom assistant: " + element.id);}
+					},
+					{
+						text: 'Delete',
+						id: element.id + '-delete',
+						onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
+					}];
+					buttonAssistant.attachOnClick(async function(){
+						console.log("Start custom assistant: " + element.id);
+						//onStartCustomAssistant(element.id);
+					});
+					Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+				}
+			}
+			window.Asc.plugin.button = buttonsCallback;
+			customAssistantWindow.close();
+			window.customAssistantWindow = null;
+			
+
+		} else {
+			await buttonsCallback(id, windowId, ...args);
+		}
+	}
+
+	window.customAssistantWindow = customAssistantWindow;
+}
+
+/**
+ * @param {string} assistantId
+ * @param {Asc.ButtonToolbar} buttonAssistant
+ */
+function deleteCustomAssistant(assistantId, buttonAssistant) {
+	const savedAssistants = JSON.parse(
+		localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+	);
+	const index = savedAssistants.findIndex((item) => item.id === assistantId);
+	if (index !== -1) {
+		savedAssistants.splice(index, 1);
+		localStorage.setItem(
+			"onlyoffice_ai_saved_assistants",
+			JSON.stringify(savedAssistants)
+		);
+		if (buttonAssistant) {
+			buttonAssistant.removed = true;
+			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+		}
+		if (window.customAssistantWindow) {
+			window.customAssistantWindow.close();
+			window.customAssistantWindow = null;
+		}
+	}
+}
+
+/**
  * MODELS WINDOW
  */
 function onOpenAiModelsModal() {
