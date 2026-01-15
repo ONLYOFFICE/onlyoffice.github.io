@@ -138,55 +138,6 @@ async function registerButtons(window, undefined)
 		window.chatWindow = chatWindow;
 	}
 
-	function addCustomAssistantWindowShow()
-	{
-		if (window.addCustomAssistantWindow) {
-			window.addCustomAssistantWindow.activate();
-			return;
-		}
-
-		let variation = {
-			url : "customAssistant.html",
-			description : window.Asc.plugin.tr("Create your own AI assistant"),
-			isVisual : true,
-			buttons : [
-				{ text: window.Asc.plugin.tr('Add'), primary: true },
-				{ text: window.Asc.plugin.tr('Cancel'), primary: false },
-			],
-			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
-			isModal : false,
-			isCanDocked: false,
-			type: window.localStorage.getItem("onlyoffice_ai_add_custom_assistant_placement") || "window",
-			EditorsSupport : ["word"],
-			size : [ 400, 200 ]
-		};
-
-		const addCustomAssistantWindow = new window.Asc.PluginWindow();
-		addCustomAssistantWindow.attachEvent("onWindowReady", function() {
-			Asc.Editor.callMethod("ResizeWindow", [addCustomAssistantWindow.id, [400, 400], [400, 400], [0, 0]]);
-		});
-		
-		addCustomAssistantWindow.show(variation);
-
-		const buttonsCallback = window.Asc.plugin.button;
-		window.Asc.plugin.button = async function(id, windowId, ...args) {
-			if (addCustomAssistantWindow && windowId === addCustomAssistantWindow.id) {
-				if (id === 0) {
-					const text = await new Promise(resolve => {
-						addCustomAssistantWindow.attachEvent("onAddNewAssistant", resolve);
-						addCustomAssistantWindow.command('onClickAdd');
-					});
-					if (!text) return;
-				}
-				window.Asc.plugin.button = buttonsCallback;
-				addCustomAssistantWindow.close();
-				window.addCustomAssistantWindow = null;
-			} else {
-				await buttonsCallback(id, windowId, ...args);
-			}
-		}
-	}
-
 	let editorVersion = await Asc.Library.GetEditorVersion();
 	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
 	{
@@ -717,7 +668,31 @@ async function registerButtons(window, undefined)
 			buttonCustomAssistant.icons = getToolBarButtonIcons("grammar");
 			buttonCustomAssistant.separator = true;
 			buttonCustomAssistant.attachOnClick(function(){
-				addCustomAssistantWindowShow();
+				customAssistantWindowShow();
+			});
+			const savedAssistants = JSON.parse(
+				localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+			);
+
+			savedAssistants.forEach(element => {
+				const buttonAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+				buttonAssistant.text = element.name;
+				buttonAssistant.icons = getToolBarButtonIcons("grammar");
+				buttonAssistant.split = true;
+				buttonAssistant.menu = [{
+					text: 'Edit',
+					id: element.id + '-edit',
+					onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+				}, 
+				{
+					text: 'Delete',
+					id: element.id + '-delete',
+					onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
+				}];
+				buttonAssistant.attachOnClick(async function(){
+					console.log("Start custom assistant: " + element.id);
+					//onStartCustomAssistant(element.id);
+				});
 			});
 		}
 	}
