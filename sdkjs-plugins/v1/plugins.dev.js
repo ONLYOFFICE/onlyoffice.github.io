@@ -400,6 +400,19 @@
 
 		buttonMainToolbar.toToolbar(items);
 
+		for (let i = 0, len = buttons.length; i < len; i++)
+		{
+			let button = buttons[i];
+			if (!!button.menu) {
+				for (let indexItem in button.menu) {
+					let item = button.menu.hasOwnProperty(indexItem) ? button.menu[indexItem] : null;
+					if (item && !!item.onclick) {
+						window.Asc.plugin.attachToolbarMenuClickEvent(item.id, item.onclick);
+					}
+				}
+			}
+		}
+
 		if (items.tabs.length > 0)
 			window.Asc.plugin.executeMethod("UpdateToolbarMenuItem", [items]);
 	};
