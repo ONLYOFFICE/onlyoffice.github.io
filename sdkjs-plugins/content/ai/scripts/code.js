@@ -959,13 +959,12 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 		if (customAssistantWindow && windowId === customAssistantWindow.id) {
 			if (id === 0) {
 				const element = await new Promise(resolve => {
-					customAssistantWindow.attachEvent("onAddNewAssistant", resolve);
+					customAssistantWindow.attachEvent("onAddEditAssistant", resolve);
 					customAssistantWindow.command('onClickAdd');
 				});
 				if (!element) return;
 				if (buttonAssistant) {
 					buttonAssistant.text = element.name;
-					Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 				} else {
 					buttonAssistant = new Asc.ButtonToolbar(null);
 					buttonAssistant.text = element.name;
@@ -985,8 +984,8 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 						console.log("Start custom assistant: " + element.id);
 						//onStartCustomAssistant(element.id);
 					});
-					Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 				}
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 			}
 			window.Asc.plugin.button = buttonsCallback;
 			customAssistantWindow.close();
