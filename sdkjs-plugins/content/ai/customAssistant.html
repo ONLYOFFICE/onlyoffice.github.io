@@ -48,9 +48,13 @@
 			<span class="i18n">Enter a prompt message with instructions for text operations.</span>
 		</div>
 
-		<div id="input_prompt_wrapper">
-			<textarea id="input_prompt" rows="1" class="form-control" spellcheck="false"></textarea>
-		</div>
+		<form id="input_prompt_wrapper">
+			<input type="hidden" id="input_prompt_id" value="" />
+			<input type="text" id="input_prompt_name" class="form-control i18n" maxlength="30"
+				placeholder="Assistant's name" spellcheck="false" required />
+			<textarea id="input_prompt" rows="1" class="form-control i18n" placeholder="Enter your query here..."
+				spellcheck="false" required></textarea>
+		</form>
 	</div>
 </body>
 

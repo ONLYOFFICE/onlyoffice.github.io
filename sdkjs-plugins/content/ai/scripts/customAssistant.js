@@ -32,25 +32,19 @@
 
 // @ts-check
 
-/// <reference path="../../../v1/plugins.js" />
 /// <reference path="./utils/theme.js" />
+/**
+ * @typedef {Object} localStorageCustomAssistantItem
+ * @property {string} id
+ * @property {string} name
+ * @property {string} query
+ */
 
 (function (window) {
+    const LOCAL_STORAGE_KEY = "onlyoffice_ai_saved_assistants";
+    const { form, textarea, inputId, inputName } = getFormElements();
     const mainContainer = document.getElementById("custom_assistant_window");
-
-    const tempTextarea = document.getElementById("input_prompt");
-    if (tempTextarea instanceof HTMLTextAreaElement === false) {
-        console.error("Custom Assistant: textarea is not HTMLTextAreaElement");
-        return;
-    }
-    /** @type {HTMLTextAreaElement} */
-    const textarea = tempTextarea;
-
-    if (
-        !textarea ||
-        !mainContainer ||
-        textarea instanceof HTMLTextAreaElement === false
-    ) {
+    if (!mainContainer) {
         console.error("Custom Assistant: required elements are missing");
         return;
     }
@@ -58,7 +52,8 @@
     window.Asc.plugin.init = function () {
         window.Asc.plugin.sendToPlugin("onWindowReady", {});
 
-        textarea.focus();
+        inputId.value = generateHashedDateString();
+        inputName.focus();
 
         mainContainer.addEventListener("click", function (e) {
             if (e.target instanceof HTMLAnchorElement) {
@@ -68,35 +63,130 @@
         });
     };
 
+    window.Asc.plugin.attachEvent("onClickAdd", () => {
+        let formFields = null;
+        if (form.checkValidity()) {
+            formFields = saveCustomAssistantToLocalStorage();
+        } else {
+            form.reportValidity();
+            if (!inputName.value) {
+                inputName.focus();
+            } else {
+                textarea.focus();
+            }
+        }
+
+        window.Asc.plugin.sendToPlugin("onAddNewAssistant", formFields);
+    });
+
+    window.Asc.plugin.attachEvent(
+        "onEditAssistant",
+        (/** @type {string} */ assistantId) => {
+            const savedAssistants = JSON.parse(
+                localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+            );
+            const assistant = savedAssistants.find(
+                (/** @type {localStorageCustomAssistantItem} */ item) =>
+                    item.id === assistantId
+            );
+            if (assistant) {
+                inputId.value = assistant.id;
+                inputName.value = assistant.name;
+                textarea.value = assistant.query;
+            }
+
+            textarea.focus();
+        }
+    );
+
     function onThemeChanged(theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
         updateBodyThemeClasses(theme.type, theme.name);
         updateThemeVariables(theme);
     }
-
     window.Asc.plugin.onTranslate = function () {
         let elements = document.querySelectorAll(".i18n");
-
         elements.forEach(function (element) {
-            if (element instanceof HTMLElement === false) {
-                return;
+            if (
+                element instanceof HTMLTextAreaElement ||
+                element instanceof HTMLInputElement
+            ) {
+                element.placeholder = window.Asc.plugin.tr(element.placeholder);
+            } else if (element instanceof HTMLElement) {
+                element.innerText = window.Asc.plugin.tr(element.innerText);
             }
-            element.innerText = window.Asc.plugin.tr(element.innerText);
         });
-
-        // Textarea
-        textarea.setAttribute(
-            "placeholder",
-            window.Asc.plugin.tr("Enter your query here...")
-        );
     };
-
     window.Asc.plugin.onThemeChanged = onThemeChanged;
     window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
-    window.Asc.plugin.attachEvent("onClickAdd", () => {
-        let value = textarea.value.trim();
-        textarea.focus();
-        window.Asc.plugin.sendToPlugin("onAddNewAssistant", value);
-    });
+    /** @returns {localStorageCustomAssistantItem} */
+    function saveCustomAssistantToLocalStorage() {
+        const id = inputId.value.trim();
+        const name = inputName.value.trim();
+        const query = textarea.value.trim();
+
+        /** @type {localStorageCustomAssistantItem[]} */
+        const savedAssistants = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        const existingAssistantIndex = savedAssistants.findIndex(
+            (item) => item.id === id
+        );
+        if (existingAssistantIndex !== -1) {
+            savedAssistants[existingAssistantIndex] = { id, name, query };
+        } else {
+            savedAssistants.push({ id, name, query });
+        }
+
+        localStorage.setItem(
+            LOCAL_STORAGE_KEY,
+            JSON.stringify(savedAssistants)
+        );
+
+        return { id, name, query };
+    }
+
+    /** @returns {{textarea: HTMLTextAreaElement, inputId: HTMLInputElement, inputName: HTMLInputElement, form: HTMLFormElement}} */
+    function getFormElements() {
+        const form = document.getElementById("input_prompt_wrapper");
+        const inputId = document.getElementById("input_prompt_id");
+        const inputName = document.getElementById("input_prompt_name");
+        const textarea = document.getElementById("input_prompt");
+        if (form instanceof HTMLFormElement === false) {
+            throw new Error("Custom Assistant: form is not HTMLFormElement");
+        }
+        if (textarea instanceof HTMLTextAreaElement === false) {
+            throw new Error(
+                "Custom Assistant: textarea is not HTMLTextAreaElement"
+            );
+        }
+        if (inputId instanceof HTMLInputElement === false) {
+            throw new Error(
+                "Custom Assistant: input id is not HTMLInputElement"
+            );
+        }
+        if (inputName instanceof HTMLInputElement === false) {
+            throw new Error(
+                "Custom Assistant: input name is not HTMLInputElement"
+            );
+        }
+
+        return { form, textarea, inputId, inputName };
+    }
+
+    /** @returns {string} */
+    function generateHashedDateString() {
+        const date = new Date();
+        const data = date.toISOString() + Math.random() + performance.now();
+
+        let hash = 0;
+        for (let i = 0; i < data.length; i++) {
+            const char = data.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            hash = hash & hash;
+        }
+
+        return Math.abs(hash).toString(36) + "_" + date.getTime().toString(36);
+    }
 })(window);

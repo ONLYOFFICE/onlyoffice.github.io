@@ -23,10 +23,6 @@ ol {
     margin: 10px;
 }
 
-input {
-    flex: 1;
-}
-
 .custom_assistant_window {
     display: flex;
     flex-direction: column;
@@ -50,7 +46,9 @@ input {
 
 #input_prompt_wrapper {
     display: flex;
+    flex-direction: column;
     flex: 1;
+    gap: 12px;
     background-color: #fff;
     background-color: var(--background-normal);
     position: relative;
