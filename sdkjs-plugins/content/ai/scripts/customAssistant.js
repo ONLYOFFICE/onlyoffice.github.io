@@ -76,7 +76,7 @@
             }
         }
 
-        window.Asc.plugin.sendToPlugin("onAddNewAssistant", formFields);
+        window.Asc.plugin.sendToPlugin("onAddEditAssistant", formFields);
     });
 
     window.Asc.plugin.attachEvent(
