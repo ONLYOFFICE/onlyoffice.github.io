@@ -37,7 +37,10 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
 	<link rel="stylesheet" href="./resources/styles/customAssistant.css">
+	<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
 	<script type="text/javascript" src="scripts/utils/theme.js" defer></script>
 	<script type="text/javascript" src="scripts/customAssistant.js" defer></script>
 </head>
@@ -52,6 +55,7 @@
 			<input type="hidden" id="input_prompt_id" value="" />
 			<input type="text" id="input_prompt_name" class="form-control i18n" maxlength="30"
 				placeholder="Assistant's name" spellcheck="false" required />
+			<select id="assistantType" class="form-control" title="Type"></select>
 			<textarea id="input_prompt" rows="1" class="form-control i18n" placeholder="Enter your query here..."
 				spellcheck="false" required></textarea>
 		</form>
