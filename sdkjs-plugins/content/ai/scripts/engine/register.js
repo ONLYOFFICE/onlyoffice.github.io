@@ -679,6 +679,7 @@ async function registerButtons(window, undefined)
 				buttonAssistant.text = element.name;
 				buttonAssistant.icons = getToolBarButtonIcons("grammar");
 				buttonAssistant.split = true;
+				buttonAssistant.enableToggle = true;
 				buttonAssistant.menu = [{
 					text: 'Edit',
 					id: element.id + '-edit',

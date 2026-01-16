@@ -40,6 +40,7 @@ let helperWindow = null;
 
 let spellchecker = null;
 let grammar = null;
+let customAssistant = null;
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -682,6 +683,7 @@ class Provider extends AI.Provider {\n\
 		
 		spellchecker = new SpellChecker();
 		grammar = new GrammarChecker();
+		customAssistant = new CustomAssistant();
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
 			if (!obj)
@@ -923,8 +925,7 @@ async function onCheckGrammarSpelling(isCurrent)
 function customAssistantWindowShow(assistantId, buttonAssistant)
 {
 	if (window.customAssistantWindow) {
-		window.customAssistantWindow.close();
-		window.customAssistantWindow = null;
+		closeCustomAssistantWindow();
 	}
 	const actionButtonText = assistantId ? window.Asc.plugin.tr('Save') : window.Asc.plugin.tr('Add');
 
@@ -954,7 +955,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 	
 	customAssistantWindow.show(variation);
 
-	const buttonsCallback = window.Asc.plugin.button;
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
 	window.Asc.plugin.button = async function(id, windowId, ...args) {
 		if (customAssistantWindow && windowId === customAssistantWindow.id) {
 			if (id === 0) {
@@ -970,10 +971,11 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 					buttonAssistant.text = element.name;
 					buttonAssistant.icons = getToolBarButtonIcons("grammar");
 					buttonAssistant.split = true;
+					buttonAssistant.enableToggle = true;
 					buttonAssistant.menu = [{
 						text: 'Edit',
 						id: element.id + '-edit',
-						onclick: () => {console.log("Edit custom assistant: " + element.id);}
+						onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
 					},
 					{
 						text: 'Delete',
@@ -987,17 +989,24 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 				}
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 			}
-			window.Asc.plugin.button = buttonsCallback;
-			customAssistantWindow.close();
-			window.customAssistantWindow = null;
-			
-
+			closeCustomAssistantWindow();
 		} else {
-			await buttonsCallback(id, windowId, ...args);
+			await window.pluginsButtonsCallback(id, windowId, ...args);
 		}
 	}
 
 	window.customAssistantWindow = customAssistantWindow;
+}
+
+function closeCustomAssistantWindow() {
+	if (window.customAssistantWindow) {
+		window.customAssistantWindow.close();
+		window.customAssistantWindow = null;
+	}
+	if (window.pluginsButtonsCallback) {
+		window.Asc.plugin.button = window.pluginsButtonsCallback;
+		window.pluginsButtonsCallback = null;
+	}
 }
 
 /**
@@ -1019,11 +1028,30 @@ function deleteCustomAssistant(assistantId, buttonAssistant) {
 			buttonAssistant.removed = true;
 			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 		}
-		if (window.customAssistantWindow) {
-			window.customAssistantWindow.close();
-			window.customAssistantWindow = null;
-		}
+		closeCustomAssistantWindow();
 	}
+}
+
+async function onStartCustomAssistant(assistantId)
+{
+	let paraIds = [];
+
+	paraIds = await Asc.Editor.callCommand(function(){
+		let result = [];
+		let range = Api.GetDocument().GetRangeBySelect();
+		let paragraphs;
+		if (range) {
+			paragraphs = range.GetAllParagraphs();
+		} else {
+			paragraphs = Api.GetDocument().GetAllParagraphs();
+		}
+		paragraphs.forEach(p => result.push(p.GetInternalId()));
+		return result;
+	});
+
+	if (customAssistant)
+		customAssistant.checkParagraphs(paraIds);
+	
 }
 
 /**
