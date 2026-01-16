@@ -33,7 +33,7 @@
 function CustomAnnotationPopup()
 {
 	this.popup = null;
-	this.type = 0; // 0 - spelling, 1 - grammar
+	this.type = 0; // 0 - hint, 1 - replacement, 2 - correction
 	this.paraId = -1;
 	this.rangeId = -1;
 
@@ -43,9 +43,6 @@ function CustomAnnotationPopup()
 	
 	this.open = function(type, paraId, rangeId, data)
 	{
-		if (this.popup && 0 === this.type && 1 === type)
-			return null;
-		
 		this._calculateWindowSize(data);
 		return this._open(type, paraId, rangeId);
 	};
@@ -67,7 +64,7 @@ function CustomAnnotationPopup()
 		let variation = {
 			url : 'annotationPopup.html',
 			isVisual : true,
-			buttons : this._getButtons(),
+			buttons : this._getButtons(type),
 			isModal : false,
 			description: this._getTitle(),
 			EditorsSupport : ["word", "slide", "cell", "pdf"],
@@ -135,15 +132,16 @@ function CustomAnnotationPopup()
 
 	this._getTitle = function()
 	{
-		return window.Asc.plugin.tr(this.type === 0 ? "Spelling suggestion" : "Grammar suggestion");
+		return window.Asc.plugin.tr(this.type === 0 ? "Match" : "Proposal for replacement");
 	};
 	
 	this._getButtons = function()
 	{
-		return [
-			{ text: window.Asc.plugin.tr('Accept'), primary: true },
-			{ text: window.Asc.plugin.tr('Reject'), primary: false }
-		];
+		const buttons = [{ text: window.Asc.plugin.tr('Accept'), primary: true }];
+		if (this.type === 1 || this.type === 2) {
+			buttons.push({ text: window.Asc.plugin.tr('Reject'), primary: false });
+		}
+		return buttons;
 	};
 
 	this._calculateWindowSize = function(data)
@@ -152,23 +150,25 @@ function CustomAnnotationPopup()
 		let textColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["text-normal"] : "#3D3D3D";
 		let borderColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["border-divider"] : "#666666";
 		let ballonColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["canvas-background"] : "#F5F5F5";
-		this.content = `<div class="back-color text-color" style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-			<div style="padding:16px 16px 0px 16px;">
+		
+		if (data.suggested) {
+			this.content = `<div class="back-color text-color" style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+				<div style="padding:16px 16px 0px 16px;">
 
-				<div style="margin-bottom:12px;">
-					<div class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
-						${window.Asc.plugin.tr("Suggested correction")}
-					</div>
-
-					<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
-						<div style="display:flex; align-items:center; gap:8px;">
-							<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.original}</span>
-							<span class="text-color" style="color:${textColor}; font-weight:bold;">→</span>
-							<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+					<div style="margin-bottom:12px;">
+						<div class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+							${window.Asc.plugin.tr("Suggested correction")}
 						</div>
-					</div>
-				</div>`;
 
+						<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
+							<div style="display:flex; align-items:center; gap:8px;">
+								<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.original}</span>
+								<span class="text-color" style="color:${textColor}; font-weight:bold;">→</span>
+								<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+							</div>
+						</div>
+					</div>`;
+		}	
 		if (data.explanation) {
 			this.content += `<div style="margin-bottom:16px;">
 				<div class="text-color" class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
