@@ -30,10 +30,11 @@
  *
  */
 
-function CustomAssistant()
+function CustomAssistant(assistantData)
 {
 	TextAnnotator.call(this);
 	this.type = 1;
+    this.assistantData = assistantData;
 }
 
 CustomAssistant.prototype = Object.create(TextAnnotator.prototype);
@@ -212,7 +213,7 @@ Text to check:`;
 		let obj = {
 			"type": "highlightText",
 			"paragraphId": paraId,
-			"name" : "grammar",
+			"name" : "customAssistant_" + this.assistantData.id,
 			"recalcId": recalcId,
 			"ranges": ranges
 		};
@@ -254,12 +255,12 @@ CustomAssistant.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 	return {
 		"paragraphId" : paraId,
 		"rangeId" : rangeId,
-		"name" : "grammar"
+		"name" : "customAssistant_" + this.assistantData.id
 	};
 };
 CustomAssistant.prototype._handleNewRangePositions = async function(range, paraId, text)
 {
-	if (!range || range["name"] !== "grammar" || !this.paragraphs[paraId])
+	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
 		return;
 
 	let rangeId = range["id"];
