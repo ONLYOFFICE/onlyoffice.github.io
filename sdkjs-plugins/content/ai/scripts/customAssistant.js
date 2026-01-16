@@ -33,16 +33,19 @@
 // @ts-check
 
 /// <reference path="./utils/theme.js" />
+/// <reference path="../vendor/select2-4.0.6-rc.1/dist/js/select2.js" />
 /**
  * @typedef {Object} localStorageCustomAssistantItem
  * @property {string} id
  * @property {string} name
+ * @property {number} type
  * @property {string} query
  */
 
 (function (window) {
     const LOCAL_STORAGE_KEY = "onlyoffice_ai_saved_assistants";
-    const { form, textarea, inputId, inputName } = getFormElements();
+    let selectType = null;
+    const { form, textarea, inputId, inputName } = initFormElements();
     const mainContainer = document.getElementById("custom_assistant_window");
     if (!mainContainer) {
         console.error("Custom Assistant: required elements are missing");
@@ -92,6 +95,7 @@
             if (assistant) {
                 inputId.value = assistant.id;
                 inputName.value = assistant.name;
+                selectType.val(assistant.type).trigger('change');
                 textarea.value = assistant.query;
             }
 
@@ -122,8 +126,9 @@
 
     /** @returns {localStorageCustomAssistantItem} */
     function saveCustomAssistantToLocalStorage() {
-        const id = inputId.value.trim();
+        const id = inputId.value;
         const name = inputName.value.trim();
+        const type = Number(selectType.val());
         const query = textarea.value.trim();
 
         /** @type {localStorageCustomAssistantItem[]} */
@@ -134,9 +139,9 @@
             (item) => item.id === id
         );
         if (existingAssistantIndex !== -1) {
-            savedAssistants[existingAssistantIndex] = { id, name, query };
+            savedAssistants[existingAssistantIndex] = { id, name, type, query };
         } else {
-            savedAssistants.push({ id, name, query });
+            savedAssistants.push({ id, name, type, query });
         }
 
         localStorage.setItem(
@@ -144,11 +149,11 @@
             JSON.stringify(savedAssistants)
         );
 
-        return { id, name, query };
+        return { id, name, type, query };
     }
 
     /** @returns {{textarea: HTMLTextAreaElement, inputId: HTMLInputElement, inputName: HTMLInputElement, form: HTMLFormElement}} */
-    function getFormElements() {
+    function initFormElements() {
         const form = document.getElementById("input_prompt_wrapper");
         const inputId = document.getElementById("input_prompt_id");
         const inputName = document.getElementById("input_prompt_name");
@@ -171,6 +176,28 @@
                 "Custom Assistant: input name is not HTMLInputElement"
             );
         }
+
+        selectType = $('#assistantType');
+        selectType.select2({
+            data : [{
+                id: 0,
+                text: "Hint"
+            },
+            {
+                id: 1,
+                text: "Replace"
+            }],
+            tags: true,
+            minimumResultsForSearch: Infinity,
+            dropdownAutoWidth: true
+        });
+        selectType.on('select2:select', (e) => {
+            
+        });
+        selectType.val(1);
+
+        selectType.trigger('select2:select');
+        selectType.trigger('change');
 
         return { form, textarea, inputId, inputName };
     }

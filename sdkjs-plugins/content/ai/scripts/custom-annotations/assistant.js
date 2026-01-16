@@ -32,12 +32,12 @@
 
 function CustomAssistant(assistantData)
 {
-	TextAnnotator.call(this);
+	CustomAnnotator.call(this);
 	this.type = 1;
     this.assistantData = assistantData;
 }
 
-CustomAssistant.prototype = Object.create(TextAnnotator.prototype);
+CustomAssistant.prototype = Object.create(CustomAnnotator.prototype);
 CustomAssistant.prototype.constructor = CustomAssistant;
 
 CustomAssistant.prototype.annotateParagraph = async function(paraId, recalcId, text)
@@ -55,28 +55,7 @@ CustomAssistant.prototype.annotateParagraph = async function(paraId, recalcId, t
 			isSendedEndLongAction = true;
 	}
 
-	let argPrompt = `You are a grammar correction tool that analyzes text for punctuation and style issues only. You will receive text to analyze and must respond with corrections in a specific JSON format.
-
-CRITICAL REQUIREMENT - READ CAREFULLY:
-The "sentence" field in your JSON response MUST contain the EXACT text from the original input with NO changes whatsoever - not even fixing capitalization, punctuation, or anything else. Copy it character-by-character exactly as it appears in the original. Only the "suggestion" field should contain corrections.
-
-Your task is to:
-- Check ONLY for punctuation errors (commas, periods, semicolons, colons, apostrophes, quotation marks, etc.) and style issues (sentence structure, word order, grammar, capitalization)
-- Completely ignore spelling errors and typos. Do not mention them, do not flag them, do not include sentences just because they contain spelling errors. Pretend all words are spelled correctly.
-- Return corrections in JSON format only
-
-What counts as an error:
-- Missing or incorrect punctuation (periods, commas, semicolons, etc.)
-- Run-on sentences needing punctuation
-- Incorrect sentence structure or word order
-- Grammar issues (subject-verb agreement, tense consistency, etc.)
-- Capitalization errors
-
-What does NOT count as an error:
-- Misspelled words or typos
-- Missing letters in words
-- Wrong letters in words
-
+	let argPrompt = `${this.assistantData.query}
 Response format - return ONLY this JSON array with no additional text:
 [
   {
