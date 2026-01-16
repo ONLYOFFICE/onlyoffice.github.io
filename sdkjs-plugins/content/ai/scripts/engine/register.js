@@ -692,7 +692,7 @@ async function registerButtons(window, undefined)
 				}];
 				buttonAssistant.attachOnClick(async function(){
 					console.log("Start custom assistant: " + element.id);
-					//onStartCustomAssistant(element.id);
+					onStartCustomAssistant(element.id);
 				});
 			});
 		}
