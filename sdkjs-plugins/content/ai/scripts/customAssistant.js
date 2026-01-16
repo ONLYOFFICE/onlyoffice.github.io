@@ -186,6 +186,10 @@
             {
                 id: 1,
                 text: "Replace"
+            },
+            {
+                id: 2,
+                text: "Correction"
             }],
             tags: true,
             minimumResultsForSearch: Infinity,

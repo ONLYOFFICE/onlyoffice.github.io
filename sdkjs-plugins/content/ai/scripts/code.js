@@ -68,6 +68,9 @@ window.addSupportAgentMode = function(editorVersion) {
 		if (e.keyCode === 27 && textAnnotatorPopup) {
 			textAnnotatorPopup.close();
 		}
+		if (e.keyCode === 27 && customAnnotationPopup) {
+			customAnnotationPopup.close();
+		}
 
 		if (e.keyCode === 27 && helperWindow) {
 			helperWindow.close();
@@ -686,7 +689,7 @@ class Provider extends AI.Provider {\n\
 		JSON.parse(
                 localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
             ).forEach(assistantData => {
-				customAssistants.set(assistantData.id, new CustomAssistant(assistantData));
+				customAssistants.set(assistantData.id, createCustomAssistant(assistantData));
 			});
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
@@ -775,6 +778,21 @@ window.Asc.plugin.button = async function(id, windowId) {
 		}
 		return;
 	}
+	if (customAnnotationPopup && customAnnotationPopup.popup && customAnnotationPopup.popup.id === windowId)
+	{
+		switch (id) {
+			case 0:
+				await customAnnotationPopup.popup.onAccept();
+				break;
+			case 1:
+				await customAnnotationPopup.popup.onReject();
+				break;
+			default:
+				customAnnotationPopup.close();
+				break;
+		}	
+		return;
+	}
 
 	if (settingsWindow && windowId === settingsWindow.id) {
 		settingsWindow.close();
@@ -819,6 +837,8 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 
 	if (textAnnotatorPopup && textAnnotatorPopup.popup)
 		textAnnotatorPopup.popup.command('onThemeChanged', theme);
+	if (customAnnotationPopup && customAnnotationPopup.popup)
+		customAnnotationPopup.popup.command('onThemeChanged', theme);
 };
 
 /**
