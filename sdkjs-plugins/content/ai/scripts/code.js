@@ -40,7 +40,7 @@ let helperWindow = null;
 
 let spellchecker = null;
 let grammar = null;
-let customAssistant = null;
+let customAssistants = new Map();
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -683,7 +683,11 @@ class Provider extends AI.Provider {\n\
 		
 		spellchecker = new SpellChecker();
 		grammar = new GrammarChecker();
-		customAssistant = new CustomAssistant();
+		JSON.parse(
+                localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+            ).forEach(assistantData => {
+				customAssistants.set(assistantData.id, new CustomAssistant(assistantData));
+			});
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
 			if (!obj)
@@ -691,6 +695,7 @@ class Provider extends AI.Provider {\n\
 			
 			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+			customAssistants.forEach(assistant => assistant.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]));
 		});
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
@@ -706,6 +711,12 @@ class Provider extends AI.Provider {\n\
 				spellchecker.onBlur();
 			else if ("grammar" === obj["name"]) 
 				grammar.onBlur();
+			else if ("customAssistant" === obj["name"].slice(0, 15)) {
+				const assistantId = obj["name"].slice(16);
+				const assistant = customAssistants.get(assistantId);
+				if (assistant)
+					assistant.onBlur();
+			}	
 		});
 
 		this.attachEditorEvent("onClickAnnotation", function(obj) {
@@ -716,6 +727,14 @@ class Provider extends AI.Provider {\n\
 				grammar.onClick(obj["paragraphId"], obj["ranges"]);
 			else if ("spelling" === obj["name"])
 				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
+			else if ("customAssistant" === obj["name"].slice(0, 15)) {
+				const assistantId = obj["name"].slice(16);
+				const assistant = customAssistants.get(assistantId);
+				if (assistant)
+					assistant.onClick(obj["paragraphId"], obj["ranges"]);
+				else
+					console.warn("Custom assistant not found: " + assistantId);
+			}
 		});
 
 	}
@@ -984,7 +1003,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 					}];
 					buttonAssistant.attachOnClick(async function(){
 						console.log("Start custom assistant: " + element.id);
-						//onStartCustomAssistant(element.id);
+						onStartCustomAssistant(element.id);
 					});
 				}
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
@@ -1049,8 +1068,8 @@ async function onStartCustomAssistant(assistantId)
 		return result;
 	});
 
-	if (customAssistant)
-		customAssistant.checkParagraphs(paraIds);
+	if (customAssistants.has(assistantId))
+		customAssistants.get(assistantId).checkParagraphs(paraIds);
 	
 }
 
