@@ -172,6 +172,9 @@
                 "Custom Assistant: input name is not HTMLInputElement"
             );
         }
+        form.onsubmit = function (e) {
+            e.preventDefault();
+        }
 
         selectType = $('#assistantType');
         selectType.select2({

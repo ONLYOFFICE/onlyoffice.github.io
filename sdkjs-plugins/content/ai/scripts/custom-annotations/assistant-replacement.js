@@ -30,14 +30,18 @@
  *
  */
 
-function AssistantReplacement()
+/// <reference path="./custom-annotator.js" />
+/// <reference path="./types.js" />
+
+/** @param {localStorageCustomAssistantItem} assistantData */
+function AssistantReplacement(assistantData)
 {
-	TextAnnotator.call(this);
+	CustomAnnotator.call(this);
 	this.type = assistantData.type; // 1
     this.assistantData = assistantData;
 }
 
-AssistantReplacement.prototype = Object.create(TextAnnotator.prototype);
+AssistantReplacement.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplacement.prototype.constructor = AssistantReplacement;
 
 AssistantReplacement.prototype.annotateParagraph = async function(paraId, recalcId, text)
@@ -213,7 +217,7 @@ Text to check:`;
 		let obj = {
 			"type": "highlightText",
 			"paragraphId": paraId,
-			"name" : "grammar",
+			"name" : "customAssistant_" + this.assistantData.id,
 			"recalcId": recalcId,
 			"ranges": ranges
 		};
@@ -222,6 +226,11 @@ Text to check:`;
 	catch (e)
 	{ }
 }
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ * @returns {ReplacementInfoForPopup}
+ */
 AssistantReplacement.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
@@ -255,12 +264,12 @@ AssistantReplacement.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 	return {
 		"paragraphId" : paraId,
 		"rangeId" : rangeId,
-		"name" : "grammar"
+		"name" : "customAssistant_" + this.assistantData.id
 	};
 };
 AssistantReplacement.prototype._handleNewRangePositions = async function(range, paraId, text)
 {
-	if (!range || range["name"] !== "grammar" || !this.paragraphs[paraId])
+	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
 		return;
 
 	let rangeId = range["id"];

@@ -30,17 +30,24 @@
  *
  */
 
-function AssistantCorrection()
+// @ts-check
+
+/// <reference path="./custom-annotator.js" />
+/// <reference path="./types.js" />
+
+/** @param {localStorageCustomAssistantItem} assistantData */
+function AssistantCorrection(assistantData)
 {
-	TextAnnotator.call(this);
+	CustomAnnotator.call(this);
 	this.type = assistantData.type; // 2
     this.assistantData = assistantData;
 }
-AssistantCorrection.prototype = Object.create(TextAnnotator.prototype);
+AssistantCorrection.prototype = Object.create(CustomAnnotator.prototype);
 AssistantCorrection.prototype.constructor = AssistantCorrection;
 
 AssistantCorrection.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
+	console.warn("AssistantCorrection annotateParagraph:", text);
 	this.paragraphs[paraId] = {};
 
 	let requestEngine = AI.Request.create(AI.ActionType.Chat);
@@ -54,104 +61,13 @@ AssistantCorrection.prototype.annotateParagraph = async function(paraId, recalcI
 			isSendedEndLongAction = true;
 	}
 
-	let argPrompt = `You are a spellcheck corrector. I will provide text that may contain spelling errors in any language. Your task is to identify ALL spelling mistakes and return ONLY the corrections in the following JSON format:
-
-[
-  {"wrong": "misspelledWord", "correct": "correctWord", "occurrence": 1, "confidence": "high"},
-  ...
-]
-
-Rules:
-- "wrong": the exact misspelled word as it appears in the text
-- "correct": the correctly spelled replacement
-- "occurrence": which occurrence of this word if it appears multiple times (1 for first, 2 for second, etc.)
-- "confidence": how certain you are this is a misspelling
-  * "high" - definitely misspelled, no valid alternative meaning
-  * "medium" - likely misspelled in this context, but could be valid elsewhere
-  * "low" - uncertain, highly context-dependent
-- Return an empty array [] if there are no errors
-- Return an empty array [] if the text is completely unintelligible or a complete mess
-- Support multiple languages (English, Russian, etc.)
-
-CRITICAL
-- Ouput should be in the exact this format
-- No any comments are allowed
-
-CRITICAL - Word Boundaries (MOST IMPORTANT):
-- ONLY match complete, standalone words separated by spaces, punctuation, or at the start/end of text
-- DO NOT match letters or substrings that are PART of other words
-- A word is bounded by: spaces, punctuation (.,!?;:), quotes, or start/end of text
-- Examples of what NOT to match:
-  * "r" in "letter" - NO! "r" is part of the word "letter"
-  * "r" in "great" - NO! "r" is part of the word "great"
-  * "te" in "letter" - NO! "te" is part of the word "letter"
-- Examples of what TO match:
-  * "r" in "r u sure" - YES! "r" is a standalone word
-  * "te" in "What te problem" - YES! "te" is a standalone word
-
-CRITICAL - Handling same word with different meanings:
-If the same word appears multiple times but only some occurrences are misspelled:
-- ONLY include the misspelled occurrences
-- Use the "occurrence" number to specify which instance
-
-Example showing word boundaries:
-Input: "The letter r. r u sure about it?"
-Explanation:
-- "letter" - correct word, don't touch it
-- "r." - this is the standalone letter r
-- "r u" - this "r" is a standalone word (misspelled, should be "are")
-Output: [
-  {"wrong": "r", "correct": "are", "occurrence": 2, "confidence": "medium"},
-  {"wrong": "u", "correct": "you", "occurrence": 1, "confidence": "medium"}
-]
-Note: The first standalone "r" (after "letter") is correct. The second standalone "r" (in "r u") is misspelled.
-
-Example with substring trap:
-Input: "Great! r u coming?"
-Output: [
-  {"wrong": "r", "correct": "are", "occurrence": 1, "confidence": "medium"},
-  {"wrong": "u", "correct": "you", "occurrence": 1, "confidence": "medium"}
-]
-Note: The "r" in "Great" is NOT matched because it's part of the word "Great", not a standalone word.
-
-CRITICAL - Completeness:
-- Find and include EVERY misspelled standalone word in the text
-- If the same misspelled word appears multiple times, create separate entries
-- Single-letter standalone words can be misspellings (e.g., standalone "r" → "are", standalone "u" → "you")
-
-CRITICAL - What NOT to include:
-- DO NOT include letters or substrings within other words
-- DO NOT include entries where "wrong" and "correct" are identical
-- ONLY include actual spelling mistakes that are standalone words
-
-CRITICAL - Output Format:
-- Return ONLY the raw JSON array, nothing else
-- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
-- DO NOT include any explanatory text before or after the JSON
-- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
-- The response should start with [ and end with ]
-
-Correct output format:
-[{"wrong": "Hlo", "correct": "Hello", "occurrence": 1, "confidence": "high"}]
-
-Incorrect output formats (DO NOT USE):
-\`\`\`json
-[{"wrong": "Hlo", "correct": "Hello"}]
-\`\`\`
-
-Example (no errors):
-Input: "The quick brown fox jumps over the lazy dog."
-Output: []
-Text to check:`;
-	argPrompt += text;
-
+	const argPrompt = this._createPrompt(text);
 	let response = "";
 	await requestEngine.chatRequest(argPrompt, false, async function (data)
 	{
 		if (!data)
 			return;
 		await checkEndAction();
-
 		response += data;
 	});
 	await checkEndAction();
@@ -160,9 +76,14 @@ Text to check:`;
 	let ranges = [];
 
 	let _t = this;
+
+	/**
+	 * @param {string} text 
+	 * @param {CorrectionAiResponse[]} corrections 
+	 */
 	function convertToRanges(text, corrections) 
 	{
-		for (const { wrong, correct, occurrence } of corrections) 
+		for (const { wrong, correct, reason, paragraph, occurrence, confidence } of corrections) 
 		{
 			if (wrong === correct)
 				continue;
@@ -190,7 +111,8 @@ Text to check:`;
 						});
 						_t.paragraphs[paraId][rangeId] = {
 							"suggested" : correct,
-							"original" : wrong
+							"original" : wrong,
+							"reason" : reason
 						};
 						++rangeId;
 						break;
@@ -207,7 +129,7 @@ Text to check:`;
 		let obj = {
 			"type": "highlightText",
 			"paragraphId": paraId,
-			"name" : "spelling",
+			"name" : "customAssistant_" + this.assistantData.id,
 			"recalcId": recalcId,
 			"ranges": ranges
 		};
@@ -216,12 +138,92 @@ Text to check:`;
 	catch (e)
 	{ }
 }
+
+AssistantCorrection.prototype._createPrompt = function(text) {
+	return `You are an intelligent text analysis and transformation assistant.
+	  Your task is to analyze text and identify words that match user-defined criteria for replacement.
+	
+	  MANDATORY RULES:
+		1. UNDERSTAND the user's intent from their criteria.
+		2. FIND all words matching the criteria.
+		3. For EACH match you find:
+		  - Provide the exact quote.
+		  - SUGGEST appropriate replacements.
+		  - Explain WHY it matches the criteria.
+		  - Provide position information (paragraph number).
+		4. If no matches are found, return an empty array: [].
+		5. Format your response STRICTLY in JSON format.
+
+	  ANALYSIS FRAMEWORK:
+		For each text element, consider:
+		- SEMANTIC: Does it match the meaning criteria?
+		- STYLISTIC: Does it match the style criteria?
+		- CONTEXTUAL: Is it appropriate for the context?
+		- FUNCTIONAL: Does it serve the intended purpose?
+
+	  REPLACEMENT STRATEGIES:
+		1. Direct synonym replacement
+		2. Paraphrasing for better fit
+		3. Complete restructuring if needed
+		4. Adding/removing elements as required
+		5. Adjusting tone or register
+
+	  Response format - return ONLY this JSON array with no additional text:
+		[
+		  {
+			"wrong": "exact text fragment that matches the query",
+      		"correct": "suggested replacement",
+			"reason": "detailed explanation why it matches the criteria",
+			"paragraph": paragraph_number,
+			"occurrence": 1,
+			"confidence": 0.95
+		  }
+		]
+
+	  Guidelines for each field:
+		- "wrong": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
+		- "correct": Your suggested replacement for the fragment.
+			* Ensure it aligns with the user's criteria.
+			* Maintain coherence with surrounding text.
+		- "reason": Clear explanation of why this fragment matches the criteria.
+		- "paragraph": Paragraph number where the fragment is found (0-based index)
+		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
+		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
+	  
+	  CRITICAL - Word Boundaries (MOST IMPORTANT):
+		- ONLY match complete, standalone words separated by spaces, punctuation, or at the start/end of text
+		- DO NOT match letters or substrings that are PART of other words
+		- A word is bounded by: spaces, punctuation (.,!?;:), quotes, or start/end of text
+
+	  CRITICAL - Output Format:
+		- Return ONLY the raw JSON array, nothing else
+		- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
+		- DO NOT include any explanatory text before or after the JSON
+		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
+		- The response should start with [ and end with ]
+
+	  USER REQUEST: ${this.assistantData.query}	
+	  
+	  TEXT TO ANALYZE:
+		"""
+		${text}
+		"""
+
+	  Please analyze this text and find all words that match the user's request. Be thorough but precise.`;
+}
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ * @returns {CorrectionInfoForPopup}
+ */
 AssistantCorrection.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let anot = this.getAnnotation(paraId, rangeId);
 	return {
 		suggested : anot["suggested"],
-		original : anot["original"]
+		original : anot["original"],
+		// explanation : anot["reason"]
 	};
 };
 AssistantCorrection.prototype.onAccept = async function(paraId, rangeId)
@@ -249,12 +251,12 @@ AssistantCorrection.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 	return {
 		"paragraphId" : paraId,
 		"rangeId" : rangeId,
-		"name" : "spelling"
+		"name" : "customAssistant_" + this.assistantData.id
 	};
 };
 AssistantCorrection.prototype._handleNewRangePositions = async function(range, paraId, text)
 {
-	if (!range || range["name"] !== "spelling" || !this.paragraphs[paraId])
+	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
 		return;
 
 	let rangeId = range["id"];
