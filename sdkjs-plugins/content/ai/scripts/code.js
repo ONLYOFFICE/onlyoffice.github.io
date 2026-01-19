@@ -41,6 +41,7 @@ let helperWindow = null;
 let spellchecker = null;
 let grammar = null;
 let customAssistants = new Map();
+let isCustomAssistantRunning = new Map();
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -690,6 +691,7 @@ class Provider extends AI.Provider {\n\
                 localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
             ).forEach(assistantData => {
 				customAssistants.set(assistantData.id, createCustomAssistant(assistantData));
+				isCustomAssistantRunning.set(assistantData.id, false);
 			});
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
@@ -1073,6 +1075,7 @@ function deleteCustomAssistant(assistantId, buttonAssistant) {
 
 async function onStartCustomAssistant(assistantId)
 {
+	isCustomAssistantRunning.set(assistantId, !isCustomAssistantRunning.get(assistantId));
 	let paraIds = [];
 
 	paraIds = await Asc.Editor.callCommand(function(){
@@ -1088,7 +1091,7 @@ async function onStartCustomAssistant(assistantId)
 		return result;
 	});
 
-	if (customAssistants.has(assistantId))
+	if (customAssistants.has(assistantId) && isCustomAssistantRunning.get(assistantId))
 		customAssistants.get(assistantId).checkParagraphs(paraIds);
 	
 }

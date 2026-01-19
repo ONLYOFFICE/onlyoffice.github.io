@@ -153,6 +153,7 @@ AssistantHint.prototype._createPrompt = function(text) {
 		  - Provide position information (paragraph number).
 		4. If no matches are found, return an empty array: [].
 		5. Format your response STRICTLY in JSON format.
+		6. Support multiple languages (English, Russian, etc.)
 
 	  Response format - return ONLY this JSON array with no additional text:
 		[
@@ -168,10 +169,14 @@ AssistantHint.prototype._createPrompt = function(text) {
 	  Guidelines for each field:
 		- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
 		- "reason": Clear explanation of why this fragment matches the criteria.
-		- "paragraph": Paragraph number where the fragment is found (1-based index)
+		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
 	  
+	  CRITICAL
+		- Ouput should be in the exact this format
+		- No any comments are allowed
+
 	  CRITICAL - Output Format:
 		- Return ONLY the raw JSON array, nothing else
 		- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)

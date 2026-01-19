@@ -7,6 +7,16 @@
  */
 
 /**
+ * @typedef {Object} CorrectionAiResponse
+ * @property {string} wrong
+ * @property {string} correct
+ * @property {string} reason
+ * @property {number} paragraph
+ * @property {number} occurrence
+ * @property {number} confidence
+ */
+
+/**
  * @typedef {Object} HintAiResponse
  * @property {string} origin
  * @property {string} reason
@@ -18,6 +28,7 @@
 /**
  * @typedef {Object} CorrectionInfoForPopup
  * @property {string} original
+ * @property {string} suggested
  * @property {string} explanation
  */
 
@@ -30,6 +41,7 @@
 /**
  * @typedef {Object} ReplacementInfoForPopup
  * @property {string} original
+ * @property {string} suggested
  * @property {string} explanation
  */
 
