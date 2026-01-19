@@ -30,6 +30,10 @@
  *
  */
 
+/// <reference path="./custom-annotator.js" />
+/// <reference path="./types.js" />
+
+/** @param {localStorageCustomAssistantItem} assistantData */
 function AssistantHint(assistantData)
 {
 	CustomAnnotator.call(this);
@@ -40,12 +44,19 @@ function AssistantHint(assistantData)
 AssistantHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantHint.prototype.constructor = AssistantHint;
 
+/**
+ * 
+ * @param {string} paraId 
+ * @param {string} recalcId 
+ * @param {string} text 
+ * @returns 
+ */
 AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
 
 	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine)
+	if (!requestEngine || text.length === 0)
 		return false;
 
 	let isSendedEndLongAction = false;
@@ -55,90 +66,15 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 			isSendedEndLongAction = true;
 	}
 
-	let argPrompt = `${this.assistantData.query}
-Response format - return ONLY this JSON array with no additional text:
-[
-  {
-    "origin": "relevant snippet of text around the error",
-    "suggestion": "the corrected version of that snippet",
-    "description": "brief explanation of the punctuation or style issue",
-   "difference":"difference between origin and suggestion"
-    "occurrence": 1,
-    "confidence": 0.95
-  }
-]
-
-Guidelines for each field:
-- "origin": VERY SHORT SNIPPET (3-8 words) of EXACT UNCHANGED original text around the error. Do not fix anything in this field.
-- "suggestion": The corrected version of that same snippet
-- "difference":  The difference between origin and suggestion in html format: the differences wrapped with <strong> tag
-- "description": Brief explanation of the punctuation or style issue
-- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
-- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
-
-Only include sentences that have punctuation or style errors - skip sentences with no errors.
-
-If no errors are found in the entire text, return an empty array: []
-
-Examples:
-
-Input: "She dont like apples Me and him goes to school however they enjoy learning. Its a beautiful day"
-Output:
-[
-  {
-    "origin": "apples Me and him",
-    "suggestion": "apples. Me and him",
-    "difference": "apples<strong>.</strong> Me and him"
-    "description": "Missing period between sentences",
-    "occurrence": 1,
-    "confidence": 1.0
-  },
-  {
-    "origin": "school however they",
-    "suggestion": "school; however, they",
-    "difference": "school<strong>;</strong> however<strong>,</strong> they"
-    "description": "Incorrect punctuation with 'however' - should use semicolon before and comma after",
-    "occurrence": 1,
-    "confidence": 0.95
-  },
-  {
-    "origin": "beautiful day",
-    "suggestion": "beautiful day.",
-    "difference": "beautiful day<strong>.</strong>",
-    "description": "Missing period at end of sentence",
-    "occurrence": 1,
-    "confidence": 1.0
-  }
-]
-
-Input: "The sun is shining. however, it might rain later."
-Output:
-[
-  {
-    "origin": "shining. however, it",
-    "suggestion": "shining. However, it",
-    "difference": "shining. <strong>H</strong>owever, it",
-    "description": "Sentence should start with a capital letter",
-    "occurrence": 1,
-    "confidence": 1.0
-  }
-]
-
-CRITICAL - Output Format:
-- Return ONLY the raw JSON array, nothing else
-- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
-- DO NOT include any explanatory text before or after the JSON
-- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
-- The response should start with [ and end with ]
-
-Text to check:`;
-	argPrompt += text;
+	const argPrompt = this._createPrompt(text);
 
 	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (data)
+	await requestEngine.chatRequest(argPrompt, false, async function (/** @type {string} */data)
 	{
-		if (!data)
+		if (!data) {	
+			console.error('no data');
 			return;
+		}
 		await checkEndAction();
 
 		response += data;
@@ -149,11 +85,16 @@ Text to check:`;
 	let ranges = [];
 
 	let _t = this;
-	function convertToRanges(text, corrections) 
+
+	/**
+	 * @param {string} text 
+	 * @param {Array<HintAiResponse>} matches 
+	 */
+	function convertToRanges(text, matches) 
 	{
-		for (const { origin, suggestion, difference, description, occurrence, confidence } of corrections) 
+		for (const { origin, reason, paragraph, occurrence, confidence } of matches) 
 		{
-			if (origin === suggestion || confidence <= 0.7)
+			if (confidence <= 0.7)
 				continue;
 			
 			let count = 0;
@@ -174,9 +115,7 @@ Text to check:`;
 					});
 					_t.paragraphs[paraId][rangeId] = {
 						"original" : origin,
-						"suggestion" : suggestion,
-						"difference" : difference,
-						"description" : description
+						"reason" : reason,
 					};
 					++rangeId;
 					break;
@@ -201,27 +140,81 @@ Text to check:`;
 	catch (e)
 	{ }
 }
+
+AssistantHint.prototype._createPrompt = function(text) {
+	return `You are a text analysis specialist. Your task is to find text fragments that match the user's criteria.
+	
+	  MANDATORY RULES:
+		1. Analyze ONLY the provided text.
+		2. Find words, phrases, or sentences that match the user's criteria.
+		3. For EACH match you find:
+		  - Provide the exact quote.
+		  - Explain WHY it matches the criteria.
+		  - Provide position information (paragraph number).
+		4. If no matches are found, return an empty array: [].
+		5. Format your response STRICTLY in JSON format.
+
+	  Response format - return ONLY this JSON array with no additional text:
+		[
+		  {
+			"origin": "exact text fragment that matches the query",
+			"reason": "detailed explanation why it matches the criteria",
+			"paragraph": paragraph_number,
+			"occurrence": 1,
+			"confidence": 0.95
+		  }
+		]
+
+	  Guidelines for each field:
+		- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
+		- "reason": Clear explanation of why this fragment matches the criteria.
+		- "paragraph": Paragraph number where the fragment is found (1-based index)
+		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
+		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
+	  
+	  CRITICAL - Output Format:
+		- Return ONLY the raw JSON array, nothing else
+		- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
+		- DO NOT include any explanatory text before or after the JSON
+		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
+		- The response should start with [ and end with ]
+		
+	  USER REQUEST: ${this.assistantData.query}	
+	  
+	  TEXT TO ANALYZE:
+		"""
+		${text}
+		"""
+
+	  Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+}
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ * @return {HintInfoForPopup}
+ */
 AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
 	return {
-		suggested : _s["difference"],
 		original : _s["original"],
-		explanation : _s["description"]
+		reason : _s["reason"]
 	};
 };
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ */
 AssistantHint.prototype.onAccept = async function(paraId, rangeId)
 {
-	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
-	
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 	
 	let range = this.getAnnotationRangeObj(paraId, rangeId);
 	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
 	
-	Asc.scope.text = text;
 	await Asc.Editor.callCommand(function(){
-		Api.ReplaceTextSmart([Asc.scope.text]);
 		Api.GetDocument().RemoveSelection();
 	});
 	
@@ -229,6 +222,11 @@ AssistantHint.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
 };
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ */
 AssistantHint.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
