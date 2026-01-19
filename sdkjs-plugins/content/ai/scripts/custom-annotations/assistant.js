@@ -32,10 +32,15 @@
 
 // @ts-check
 
+/// <reference path="./types.js" />
 /// <reference path="./assistant-hint.js" />
 /// <reference path="./assistant-replacement.js" />
 /// <reference path="./assistant-correction.js" />
 
+/**
+ * @param {localStorageCustomAssistantItem} assistantData 
+ * @returns 
+ */
 function createCustomAssistant(assistantData)
 {
 	switch(assistantData.type) {

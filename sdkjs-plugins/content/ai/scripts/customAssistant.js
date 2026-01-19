@@ -34,16 +34,12 @@
 
 /// <reference path="./utils/theme.js" />
 /// <reference path="../vendor/select2-4.0.6-rc.1/dist/js/select2.js" />
-/**
- * @typedef {Object} localStorageCustomAssistantItem
- * @property {string} id
- * @property {string} name
- * @property {number} type
- * @property {string} query
- */
+/// <reference path="./custom-annotations/types.js" />
+
 
 (function (window) {
     const LOCAL_STORAGE_KEY = "onlyoffice_ai_saved_assistants";
+    /** @type {any} */
     let selectType = null;
     const { form, textarea, inputId, inputName } = initFormElements();
     const mainContainer = document.getElementById("custom_assistant_window");

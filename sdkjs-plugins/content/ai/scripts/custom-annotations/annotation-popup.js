@@ -30,6 +30,10 @@
  *
  */
 
+// @ts-check
+
+/// <reference path="./types.js" />
+
 function CustomAnnotationPopup()
 {
 	this.popup = null;
@@ -41,6 +45,13 @@ function CustomAnnotationPopup()
 	this.width = 318;
 	this.height = 500;
 	
+	/**
+	 * @param {number} type 
+	 * @param {string} paraId 
+	 * @param {string} rangeId 
+	 * @param {InfoForPopup} data 
+	 * @returns 
+	 */
 	this.open = function(type, paraId, rangeId, data)
 	{
 		this._calculateWindowSize(data);
@@ -137,13 +148,17 @@ function CustomAnnotationPopup()
 	
 	this._getButtons = function()
 	{
-		const buttons = [{ text: window.Asc.plugin.tr('Accept'), primary: true }];
-		if (this.type === 1 || this.type === 2) {
+		const buttons = [];
+		if (this.type === 0) {
+			buttons.push({ text: window.Asc.plugin.tr('OK'), primary: true });
+		} else {
+			buttons.push({ text: window.Asc.plugin.tr('Accept'), primary: true });
 			buttons.push({ text: window.Asc.plugin.tr('Reject'), primary: false });
 		}
 		return buttons;
 	};
 
+	/** @param {InfoForPopup} data */
 	this._calculateWindowSize = function(data)
 	{
 		let backColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["background-normal"] : "#FFFFFF";
@@ -151,6 +166,12 @@ function CustomAnnotationPopup()
 		let borderColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["border-divider"] : "#666666";
 		let ballonColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["canvas-background"] : "#F5F5F5";
 		
+		if (data.reason) {
+			this.content = `<div>
+				<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; padding:10px;">${data.reason}</div>
+			</div>`;
+		}
+
 		if (data.suggested) {
 			this.content = `<div class="back-color text-color" style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
 				<div style="padding:16px 16px 0px 16px;">

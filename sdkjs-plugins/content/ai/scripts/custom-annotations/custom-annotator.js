@@ -30,6 +30,8 @@
  *
  */
 
+/// <reference path="./types.js" />
+
 function CustomAnnotator()
 {
 	this.paraId = null;
@@ -90,8 +92,11 @@ CustomAnnotator.prototype.openPopup = async function(paraId, rangeId)
 {
 	if (!customAnnotationPopup)
 		return;
+
+	/** @type {InfoForPopup} */
+	const popupInfo = this.getInfoForPopup(paraId, rangeId);
 		
-	let popup = customAnnotationPopup.open(this.type, paraId, rangeId, this.getInfoForPopup(paraId, rangeId));
+	let popup = customAnnotationPopup.open(this.type, paraId, rangeId, popupInfo);
 	if (!popup)
 		return;
 
