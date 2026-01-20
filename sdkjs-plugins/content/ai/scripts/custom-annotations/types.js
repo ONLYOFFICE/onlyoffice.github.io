@@ -7,20 +7,8 @@
  */
 
 /**
- * @typedef {Object} ReplaceHintAiResponse
+ * @typedef {Object} HintAiResponse
  * @property {string} origin
- * @property {string} suggestion
- * @property {string} description
- * @property {string} difference
- * @property {number} paragraph
- * @property {number} occurrence
- * @property {number} confidence
- */
-
-/**
- * @typedef {Object} ReplaceAiResponse
- * @property {string} wrong
- * @property {string} correct
  * @property {string} reason
  * @property {number} paragraph
  * @property {number} occurrence
@@ -28,8 +16,16 @@
  */
 
 /**
- * @typedef {Object} HintAiResponse
+ * @typedef {Object} HintInfoForPopup
+ * @property {string} original
+ * @property {string} explanation
+ * @property {number} type
+ */
+
+/**
+ * @typedef {Object} ReplaceAiResponse
  * @property {string} origin
+ * @property {string} suggestion
  * @property {string} reason
  * @property {number} paragraph
  * @property {number} occurrence
@@ -44,10 +40,14 @@
  */
 
 /**
- * @typedef {Object} HintInfoForPopup
- * @property {string} original
+ * @typedef {Object} ReplaceHintAiResponse
+ * @property {string} origin
+ * @property {string} suggestion
  * @property {string} reason
- * @property {number} type
+ * @property {string} difference
+ * @property {number} paragraph
+ * @property {number} occurrence
+ * @property {number} confidence
  */
 
 /**
