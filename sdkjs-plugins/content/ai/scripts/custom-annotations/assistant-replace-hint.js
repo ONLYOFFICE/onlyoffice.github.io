@@ -176,7 +176,7 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 			* Ensure it aligns with the user's criteria.
 			* Maintain coherence with surrounding text.
 		- "reason": Clear explanation of why this fragment matches the criteria.
-		- "difference":  The difference between origin and suggestion in html format: the differences wrapped with <strong> tag
+		- "difference":  The difference between origin and suggestion in html format: that is, you need to take the suggestion field and highlight the differences in it by wrapping them in the <strong> tag.
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
