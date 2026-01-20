@@ -34,17 +34,17 @@
 /// <reference path="./types.js" />
 
 /** @param {localStorageCustomAssistantItem} assistantData */
-function AssistantReplacement(assistantData)
+function AssistantReplaceHint(assistantData)
 {
 	CustomAnnotator.call(this);
 	this.type = assistantData.type; // 1
     this.assistantData = assistantData;
 }
 
-AssistantReplacement.prototype = Object.create(CustomAnnotator.prototype);
-AssistantReplacement.prototype.constructor = AssistantReplacement;
+AssistantReplaceHint.prototype = Object.create(CustomAnnotator.prototype);
+AssistantReplaceHint.prototype.constructor = AssistantReplaceHint;
 
-AssistantReplacement.prototype.annotateParagraph = async function(paraId, recalcId, text)
+AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
 
@@ -59,105 +59,7 @@ AssistantReplacement.prototype.annotateParagraph = async function(paraId, recalc
 			isSendedEndLongAction = true;
 	}
 
-	let argPrompt = `You are a grammar correction tool that analyzes text for punctuation and style issues only. You will receive text to analyze and must respond with corrections in a specific JSON format.
-
-CRITICAL REQUIREMENT - READ CAREFULLY:
-The "sentence" field in your JSON response MUST contain the EXACT text from the original input with NO changes whatsoever - not even fixing capitalization, punctuation, or anything else. Copy it character-by-character exactly as it appears in the original. Only the "suggestion" field should contain corrections.
-
-Your task is to:
-- Check ONLY for punctuation errors (commas, periods, semicolons, colons, apostrophes, quotation marks, etc.) and style issues (sentence structure, word order, grammar, capitalization)
-- Completely ignore spelling errors and typos. Do not mention them, do not flag them, do not include sentences just because they contain spelling errors. Pretend all words are spelled correctly.
-- Return corrections in JSON format only
-
-What counts as an error:
-- Missing or incorrect punctuation (periods, commas, semicolons, etc.)
-- Run-on sentences needing punctuation
-- Incorrect sentence structure or word order
-- Grammar issues (subject-verb agreement, tense consistency, etc.)
-- Capitalization errors
-
-What does NOT count as an error:
-- Misspelled words or typos
-- Missing letters in words
-- Wrong letters in words
-
-Response format - return ONLY this JSON array with no additional text:
-[
-  {
-    "origin": "relevant snippet of text around the error",
-    "suggestion": "the corrected version of that snippet",
-    "description": "brief explanation of the punctuation or style issue",
-   "difference":"difference between origin and suggestion"
-    "occurrence": 1,
-    "confidence": 0.95
-  }
-]
-
-Guidelines for each field:
-- "origin": VERY SHORT SNIPPET (3-8 words) of EXACT UNCHANGED original text around the error. Do not fix anything in this field.
-- "suggestion": The corrected version of that same snippet
-- "difference":  The difference between origin and suggestion in html format: the differences wrapped with <strong> tag
-- "description": Brief explanation of the punctuation or style issue
-- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
-- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
-
-Only include sentences that have punctuation or style errors - skip sentences with no errors.
-
-If no errors are found in the entire text, return an empty array: []
-
-Examples:
-
-Input: "She dont like apples Me and him goes to school however they enjoy learning. Its a beautiful day"
-Output:
-[
-  {
-    "origin": "apples Me and him",
-    "suggestion": "apples. Me and him",
-    "difference": "apples<strong>.</strong> Me and him"
-    "description": "Missing period between sentences",
-    "occurrence": 1,
-    "confidence": 1.0
-  },
-  {
-    "origin": "school however they",
-    "suggestion": "school; however, they",
-    "difference": "school<strong>;</strong> however<strong>,</strong> they"
-    "description": "Incorrect punctuation with 'however' - should use semicolon before and comma after",
-    "occurrence": 1,
-    "confidence": 0.95
-  },
-  {
-    "origin": "beautiful day",
-    "suggestion": "beautiful day.",
-    "difference": "beautiful day<strong>.</strong>",
-    "description": "Missing period at end of sentence",
-    "occurrence": 1,
-    "confidence": 1.0
-  }
-]
-
-Input: "The sun is shining. however, it might rain later."
-Output:
-[
-  {
-    "origin": "shining. however, it",
-    "suggestion": "shining. However, it",
-    "difference": "shining. <strong>H</strong>owever, it",
-    "description": "Sentence should start with a capital letter",
-    "occurrence": 1,
-    "confidence": 1.0
-  }
-]
-
-CRITICAL - Output Format:
-- Return ONLY the raw JSON array, nothing else
-- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
-- DO NOT include any explanatory text before or after the JSON
-- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
-- The response should start with [ and end with ]
-
-Text to check:`;
-	argPrompt += text;
+	let argPrompt = this._createPrompt(text);
 
 	let response = "";
 	await requestEngine.chatRequest(argPrompt, false, async function (data)
@@ -174,6 +76,11 @@ Text to check:`;
 	let ranges = [];
 
 	let _t = this;
+	
+	/**
+	 * @param {string} text 
+	 * @param {ReplaceHintAiResponse[]} corrections 
+	 */
 	function convertToRanges(text, corrections) 
 	{
 		for (const { origin, suggestion, difference, description, occurrence, confidence } of corrections) 
@@ -226,12 +133,91 @@ Text to check:`;
 	catch (e)
 	{ }
 }
+
+/**
+ * @param {string} text 
+ * @returns {string}
+ */
+AssistantReplaceHint.prototype._createPrompt = function(text) {
+	return `You are an intelligent text analysis and transformation assistant.
+	  Your task is to analyze text and identify elements that match user-defined criteria for replacement.
+	
+	  MANDATORY RULES:
+		1. UNDERSTAND the user's intent from their criteria.
+		2. FIND all text elements matching the criteria.
+		3. For EACH match you find:
+		  - Provide the exact quote.
+		  - SUGGEST appropriate replacements.
+		  - Explain WHY it matches the criteria.
+		  - Provide position information (paragraph number).
+		4. If no matches are found, return an empty array: [].
+		5. Format your response STRICTLY in JSON format.
+
+	  ANALYSIS FRAMEWORK:
+		For each text element, consider:
+		- SEMANTIC: Does it match the meaning criteria?
+		- STYLISTIC: Does it match the style criteria?
+		- CONTEXTUAL: Is it appropriate for the context?
+		- FUNCTIONAL: Does it serve the intended purpose?
+
+	  REPLACEMENT STRATEGIES:
+		1. Direct synonym replacement
+		2. Paraphrasing for better fit
+		3. Complete restructuring if needed
+		4. Adding/removing elements as required
+		5. Adjusting tone or register
+
+	  Response format - return ONLY this JSON array with no additional text:
+		[
+		  {
+			"origin": "exact text fragment that matches the query",
+      		"suggestion": "suggested replacement",
+			"description": "detailed explanation why it matches the criteria",
+   			"difference":"difference between origin and suggestion"
+			"paragraph": paragraph_number,
+			"occurrence": 1,
+			"confidence": 0.95
+		  }
+		]
+
+	  Guidelines for each field:
+		- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
+		- "suggestion": Your suggested replacement for the fragment.
+			* Ensure it aligns with the user's criteria.
+			* Maintain coherence with surrounding text.
+		- "description": Clear explanation of why this fragment matches the criteria.
+		- "difference":  The difference between origin and suggestion in html format: the differences wrapped with <strong> tag
+		- "paragraph": Paragraph number where the fragment is found (0-based index)
+		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
+		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
+	  
+	  CRITICAL - Word Boundaries (MOST IMPORTANT):
+		- ONLY match complete, standalone words separated by spaces, punctuation, or at the start/end of text
+		- DO NOT match letters or substrings that are PART of other words
+		- A word is bounded by: spaces, punctuation (.,!?;:), quotes, or start/end of text
+
+	  CRITICAL - Output Format:
+		- Return ONLY the raw JSON array, nothing else
+		- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
+		- DO NOT include any explanatory text before or after the JSON
+		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
+		- The response should start with [ and end with ]
+
+	  USER REQUEST: ${this.assistantData.query}	
+	  
+	  TEXT TO ANALYZE:
+		"""
+		${text}
+		"""
+	`;
+}
+
 /**
  * @param {string} paraId 
  * @param {string} rangeId 
- * @returns {ReplacementInfoForPopup}
+ * @returns {ReplaceHintInfoForPopup}
  */
-AssistantReplacement.prototype.getInfoForPopup = function(paraId, rangeId)
+AssistantReplaceHint.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
 	return {
@@ -240,7 +226,7 @@ AssistantReplacement.prototype.getInfoForPopup = function(paraId, rangeId)
 		explanation : _s["description"]
 	};
 };
-AssistantReplacement.prototype.onAccept = async function(paraId, rangeId)
+AssistantReplaceHint.prototype.onAccept = async function(paraId, rangeId)
 {
 	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
 	
@@ -259,7 +245,7 @@ AssistantReplacement.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
 };
-AssistantReplacement.prototype.getAnnotationRangeObj = function(paraId, rangeId)
+AssistantReplaceHint.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
 		"paragraphId" : paraId,
@@ -267,7 +253,7 @@ AssistantReplacement.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 		"name" : "customAssistant_" + this.assistantData.id
 	};
 };
-AssistantReplacement.prototype._handleNewRangePositions = async function(range, paraId, text)
+AssistantReplaceHint.prototype._handleNewRangePositions = async function(range, paraId, text)
 {
 	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
 		return;

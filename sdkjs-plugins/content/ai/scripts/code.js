@@ -1024,7 +1024,6 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 						onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
 					}];
 					buttonAssistant.attachOnClick(async function(){
-						console.log("Start custom assistant: " + element.id);
 						onStartCustomAssistant(element.id);
 					});
 				}
