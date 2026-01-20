@@ -1028,6 +1028,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 					});
 				}
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+				customAssistants.set(element.id, createCustomAssistant(element));
 			}
 			closeCustomAssistantWindow();
 		} else {
@@ -1060,6 +1061,8 @@ function deleteCustomAssistant(assistantId, buttonAssistant) {
 	const index = savedAssistants.findIndex((item) => item.id === assistantId);
 	if (index !== -1) {
 		savedAssistants.splice(index, 1);
+		customAssistants.delete(assistantId);
+		isCustomAssistantRunning.delete(assistantId);
 		localStorage.setItem(
 			"onlyoffice_ai_saved_assistants",
 			JSON.stringify(savedAssistants)
