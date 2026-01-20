@@ -40,12 +40,14 @@
  * @typedef {Object} ReplaceInfoForPopup
  * @property {string} original
  * @property {string} suggested
+ * @property {number} type
  */
 
 /**
  * @typedef {Object} HintInfoForPopup
  * @property {string} original
  * @property {string} reason
+ * @property {number} type
  */
 
 /**
@@ -53,6 +55,7 @@
  * @property {string} original
  * @property {string} suggested
  * @property {string} explanation
+ * @property {number} type
  */
 
 /**

@@ -29,9 +29,7 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
 // @ts-check
-
 /// <reference path="./types.js" />
 
 function CustomAnnotationPopup()
@@ -166,7 +164,7 @@ function CustomAnnotationPopup()
 		let borderColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["border-divider"] : "#666666";
 		let ballonColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["canvas-background"] : "#F5F5F5";
 		
-		if (data.reason) {
+		if (data.type === 0) { // Hint
 			this.content = `<div>
 				<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; padding:10px;">${data.reason}</div>
 			</div>`;

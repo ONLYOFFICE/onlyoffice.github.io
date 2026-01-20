@@ -1075,6 +1075,15 @@ function deleteCustomAssistant(assistantId, buttonAssistant) {
 async function onStartCustomAssistant(assistantId)
 {
 	isCustomAssistantRunning.set(assistantId, !isCustomAssistantRunning.get(assistantId));
+	if (!isCustomAssistantRunning.get(assistantId)) {
+		console.log("Custom assistant stopped: " + assistantId);
+		return;
+	}
+	if (!isCustomAssistantRunning.has(assistantId)) {
+		console.error("Custom assistant is not found: " + assistantId);
+		return;
+	}
+	
 	let paraIds = [];
 
 	paraIds = await Asc.Editor.callCommand(function(){
@@ -1090,8 +1099,7 @@ async function onStartCustomAssistant(assistantId)
 		return result;
 	});
 
-	if (customAssistants.has(assistantId) && isCustomAssistantRunning.get(assistantId))
-		customAssistants.get(assistantId).checkParagraphs(paraIds);
+	customAssistants.get(assistantId).checkParagraphs(paraIds);
 	
 }
 

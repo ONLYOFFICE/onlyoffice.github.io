@@ -223,7 +223,8 @@ AssistantReplaceHint.prototype.getInfoForPopup = function(paraId, rangeId)
 	return {
 		suggested : _s["difference"],
 		original : _s["original"],
-		explanation : _s["description"]
+		explanation : _s["description"],
+		type : this.type
 	};
 };
 AssistantReplaceHint.prototype.onAccept = async function(paraId, rangeId)
