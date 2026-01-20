@@ -40,16 +40,20 @@ function AssistantReplaceHint(assistantData)
 	this.type = assistantData.type; // 1
     this.assistantData = assistantData;
 }
-
 AssistantReplaceHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplaceHint.prototype.constructor = AssistantReplaceHint;
 
+/**
+ * @param {string} paraId 
+ * @param {string} recalcId 
+ * @param {string} text
+ */
 AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
 
 	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine)
+	if (!requestEngine || text.length === 0)
 		return false;
 
 	let isSendedEndLongAction = false;
@@ -59,15 +63,14 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 			isSendedEndLongAction = true;
 	}
 
-	let argPrompt = this._createPrompt(text);
+	const argPrompt = this._createPrompt(text);
 
 	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (data)
+	await requestEngine.chatRequest(argPrompt, false, async function (/** @type {string} */data)
 	{
 		if (!data)
 			return;
 		await checkEndAction();
-
 		response += data;
 	});
 	await checkEndAction();
@@ -76,14 +79,14 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 	let ranges = [];
 
 	let _t = this;
-	
+
 	/**
 	 * @param {string} text 
 	 * @param {ReplaceHintAiResponse[]} corrections 
 	 */
 	function convertToRanges(text, corrections) 
 	{
-		for (const { origin, suggestion, difference, description, occurrence, confidence } of corrections) 
+		for (const { origin, suggestion, difference, reason, paragraph, occurrence, confidence } of corrections) 
 		{
 			if (origin === suggestion || confidence <= 0.7)
 				continue;
@@ -95,7 +98,7 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 			{
 				const index = text.indexOf(origin, searchStart);
 				if (index === -1) break;
-				
+
 				count++;
 				if (count === occurrence)
 				{
@@ -108,7 +111,7 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 						"original" : origin,
 						"suggestion" : suggestion,
 						"difference" : difference,
-						"description" : description
+						"reason" : reason
 					};
 					++rangeId;
 					break;
@@ -139,12 +142,12 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
  * @returns {string}
  */
 AssistantReplaceHint.prototype._createPrompt = function(text) {
-	return `You are an intelligent text analysis and transformation assistant.
-	  Your task is to analyze text and identify elements that match user-defined criteria for replacement.
+	let prompt = `You are a multi-disciplinary text analysis and transformation assistant.
+	  Your task is to analyze text based on user's specific criteria and provide intelligent corrections.
 	
 	  MANDATORY RULES:
 		1. UNDERSTAND the user's intent from their criteria.
-		2. FIND all text elements matching the criteria.
+		2. Find words, phrases, or sentences that match the user's criteria.
 		3. For EACH match you find:
 		  - Provide the exact quote.
 		  - SUGGEST appropriate replacements.
@@ -152,27 +155,14 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 		  - Provide position information (paragraph number).
 		4. If no matches are found, return an empty array: [].
 		5. Format your response STRICTLY in JSON format.
-
-	  ANALYSIS FRAMEWORK:
-		For each text element, consider:
-		- SEMANTIC: Does it match the meaning criteria?
-		- STYLISTIC: Does it match the style criteria?
-		- CONTEXTUAL: Is it appropriate for the context?
-		- FUNCTIONAL: Does it serve the intended purpose?
-
-	  REPLACEMENT STRATEGIES:
-		1. Direct synonym replacement
-		2. Paraphrasing for better fit
-		3. Complete restructuring if needed
-		4. Adding/removing elements as required
-		5. Adjusting tone or register
+		6. Support multiple languages (English, Russian, etc.)
 
 	  Response format - return ONLY this JSON array with no additional text:
 		[
 		  {
 			"origin": "exact text fragment that matches the query",
       		"suggestion": "suggested replacement",
-			"description": "detailed explanation why it matches the criteria",
+			"reason": "detailed explanation why it matches the criteria",
    			"difference":"difference between origin and suggestion"
 			"paragraph": paragraph_number,
 			"occurrence": 1,
@@ -185,16 +175,15 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 		- "suggestion": Your suggested replacement for the fragment.
 			* Ensure it aligns with the user's criteria.
 			* Maintain coherence with surrounding text.
-		- "description": Clear explanation of why this fragment matches the criteria.
+		- "reason": Clear explanation of why this fragment matches the criteria.
 		- "difference":  The difference between origin and suggestion in html format: the differences wrapped with <strong> tag
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
 	  
-	  CRITICAL - Word Boundaries (MOST IMPORTANT):
-		- ONLY match complete, standalone words separated by spaces, punctuation, or at the start/end of text
-		- DO NOT match letters or substrings that are PART of other words
-		- A word is bounded by: spaces, punctuation (.,!?;:), quotes, or start/end of text
+	  CRITICAL:
+		- Output should be in the exact this format
+		- No any comments are allowed
 
 	  CRITICAL - Output Format:
 		- Return ONLY the raw JSON array, nothing else
@@ -202,14 +191,14 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 		- DO NOT include any explanatory text before or after the JSON
 		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
 		- The response should start with [ and end with ]
-
-	  USER REQUEST: ${this.assistantData.query}	
+	  `;
+	  prompt += "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
 	  
-	  TEXT TO ANALYZE:
-		"""
-		${text}
-		"""
-	`;
+	  prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
+
+	  prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+
+	  return prompt;
 }
 
 /**
@@ -221,18 +210,23 @@ AssistantReplaceHint.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
 	return {
-		suggested : _s["difference"],
 		original : _s["original"],
-		explanation : _s["description"],
+		suggested : _s["difference"],
+		explanation : _s["reason"],
 		type : this.type
 	};
 };
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ */
 AssistantReplaceHint.prototype.onAccept = async function(paraId, rangeId)
 {
 	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
 	
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-	
+
 	let range = this.getAnnotationRangeObj(paraId, rangeId);
 	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
 	
@@ -246,6 +240,11 @@ AssistantReplaceHint.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
 };
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ */
 AssistantReplaceHint.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
@@ -267,7 +266,7 @@ AssistantReplaceHint.prototype._handleNewRangePositions = async function(range, 
 	
 	let start = range["start"];
 	let len = range["length"];
-	
+
 	if (annot["original"] !== text.substring(start, start + len))
 	{
 		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);

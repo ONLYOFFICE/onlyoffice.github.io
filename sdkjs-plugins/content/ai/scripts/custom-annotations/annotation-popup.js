@@ -166,36 +166,36 @@ function CustomAnnotationPopup()
 		
 		if (data.type === 0) { // Hint
 			this.content = `<div>
-				<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; padding:10px;">${data.reason}</div>
+				<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; padding:10px;">${data.explanation}</div>
 			</div>`;
-		}
+		} else { // Replace + Hint or Replace
+			if (data.suggested) {
+				this.content = `<div class="back-color text-color" style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+					<div style="padding:16px 16px 0px 16px;">
 
-		if (data.suggested) {
-			this.content = `<div class="back-color text-color" style="background:${backColor}; overflow:hidden; max-width:320px; min-width:280px;color:${textColor}; user-select:none;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-				<div style="padding:16px 16px 0px 16px;">
-
-					<div style="margin-bottom:12px;">
-						<div class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
-							${window.Asc.plugin.tr("Suggested correction")}
-						</div>
-
-						<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
-							<div style="display:flex; align-items:center; gap:8px;">
-								<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.original}</span>
-								<span class="text-color" style="color:${textColor}; font-weight:bold;">→</span>
-								<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+						<div style="margin-bottom:12px;">
+							<div class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+								${window.Asc.plugin.tr("Suggested correction")}
 							</div>
-						</div>
-					</div>`;
-		}	
-		if (data.explanation) {
-			this.content += `<div style="margin-bottom:16px;">
-				<div class="text-color" class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
-					${window.Asc.plugin.tr("Explanation")}
-				</div>
 
-				<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">${data.explanation}</div>
-			</div>`;
+							<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
+								<div style="display:flex; align-items:center; gap:8px;">
+									<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.original}</span>
+									<span class="text-color" style="color:${textColor}; font-weight:bold;">→</span>
+									<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+								</div>
+							</div>
+						</div>`;
+			}	
+			if (data.explanation) {
+				this.content += `<div style="margin-bottom:16px;">
+					<div class="text-color" class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+						${window.Asc.plugin.tr("Explanation")}
+					</div>
+
+					<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">${data.explanation}</div>
+				</div>`;
+			}
 		}
 
 		this.content += "</div></div>";
