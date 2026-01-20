@@ -183,12 +183,12 @@
                 text: "Hint"
             },
             {
-                id: 1,
+                id: 2,
                 text: "Replace"
             },
             {
-                id: 2,
-                text: "Correction"
+                id: 1,
+                text: "Replace + Hint"
             }],
             tags: true,
             minimumResultsForSearch: Infinity,
@@ -197,7 +197,7 @@
         selectType.on('select2:select', (e) => {
             
         });
-        selectType.val(1);
+        selectType.val(0); // Default value
 
         selectType.trigger('select2:select');
         selectType.trigger('change');

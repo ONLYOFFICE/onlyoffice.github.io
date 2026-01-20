@@ -37,7 +37,7 @@
 function CustomAnnotationPopup()
 {
 	this.popup = null;
-	this.type = 0; // 0 - hint, 1 - replacement, 2 - correction
+	this.type = 0; // 0 - hint, 1 - replace + hint, 2 - replace
 	this.paraId = -1;
 	this.rangeId = -1;
 
