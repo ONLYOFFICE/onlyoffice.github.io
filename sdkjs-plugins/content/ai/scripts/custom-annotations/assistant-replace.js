@@ -221,6 +221,7 @@ AssistantReplace.prototype.getInfoForPopup = function(paraId, rangeId)
 	return {
 		suggested : anot["suggested"],
 		original : anot["original"],
+		type : this.type
 	};
 };
 AssistantReplace.prototype.onAccept = async function(paraId, rangeId)
