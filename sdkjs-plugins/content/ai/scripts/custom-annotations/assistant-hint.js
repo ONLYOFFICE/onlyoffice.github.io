@@ -40,16 +40,13 @@ function AssistantHint(assistantData)
 	this.type = assistantData.type; // 0
     this.assistantData = assistantData;
 }
-
 AssistantHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantHint.prototype.constructor = AssistantHint;
 
 /**
- * 
  * @param {string} paraId 
  * @param {string} recalcId 
- * @param {string} text 
- * @returns 
+ * @param {string} text
  */
 AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
@@ -71,11 +68,9 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 	let response = "";
 	await requestEngine.chatRequest(argPrompt, false, async function (/** @type {string} */data)
 	{
-		if (!data) {	
+		if (!data)
 			return;
-		}
 		await checkEndAction();
-
 		response += data;
 	});
 	await checkEndAction();
@@ -103,7 +98,7 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 			{
 				const index = text.indexOf(origin, searchStart);
 				if (index === -1) break;
-				
+
 				count++;
 				if (count === occurrence)
 				{
@@ -114,7 +109,7 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 					});
 					_t.paragraphs[paraId][rangeId] = {
 						"original" : origin,
-						"reason" : reason,
+						"reason" : reason
 					};
 					++rangeId;
 					break;
@@ -140,8 +135,13 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 	{ }
 }
 
+/**
+ * @param {string} text 
+ * @returns {string}
+ */
 AssistantHint.prototype._createPrompt = function(text) {
-	return `You are a text analysis specialist. Your task is to find text fragments that match the user's criteria.
+	let prompt = `You are a multi-disciplinary text analysis assistant.
+	  Your task is to find text fragments that match the user's criteria.
 	
 	  MANDATORY RULES:
 		1. Analyze ONLY the provided text.
@@ -173,7 +173,7 @@ AssistantHint.prototype._createPrompt = function(text) {
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
 	  
 	  CRITICAL
-		- Ouput should be in the exact this format
+		- Output should be in the exact this format
 		- No any comments are allowed
 
 	  CRITICAL - Output Format:
@@ -182,15 +182,14 @@ AssistantHint.prototype._createPrompt = function(text) {
 		- DO NOT include any explanatory text before or after the JSON
 		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
 		- The response should start with [ and end with ]
-		
-	  USER REQUEST: ${this.assistantData.query}	
+	  `;
+	  prompt += "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
 	  
-	  TEXT TO ANALYZE:
-		"""
-		${text}
-		"""
+	  prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
 
-	  Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+	  prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+
+	  return prompt;
 }
 
 /**
@@ -203,7 +202,7 @@ AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
 	let _s = this.getAnnotation(paraId, rangeId);
 	return {
 		original : _s["original"],
-		reason : _s["reason"],
+		explanation : _s["reason"],
 		type : this.type
 	};
 };
@@ -215,7 +214,7 @@ AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
 AssistantHint.prototype.onAccept = async function(paraId, rangeId)
 {
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-	
+
 	let range = this.getAnnotationRangeObj(paraId, rangeId);
 	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
 	
@@ -253,7 +252,7 @@ AssistantHint.prototype._handleNewRangePositions = async function(range, paraId,
 	
 	let start = range["start"];
 	let len = range["length"];
-	
+
 	if (annot["original"] !== text.substring(start, start + len))
 	{
 		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);

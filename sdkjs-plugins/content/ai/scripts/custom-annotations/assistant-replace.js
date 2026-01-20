@@ -43,12 +43,17 @@ function AssistantReplace(assistantData)
 AssistantReplace.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplace.prototype.constructor = AssistantReplace;
 
+/**
+ * @param {string} paraId 
+ * @param {string} recalcId 
+ * @param {string} text
+ */
 AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
 
 	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine)
+	if (!requestEngine || text.length === 0)
 		return false;
 
 	let isSendedEndLongAction = false;
@@ -59,8 +64,9 @@ AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, 
 	}
 
 	const argPrompt = this._createPrompt(text);
+
 	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (data)
+	await requestEngine.chatRequest(argPrompt, false, async function (/** @type {string} */data)
 	{
 		if (!data)
 			return;
@@ -80,9 +86,9 @@ AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, 
 	 */
 	function convertToRanges(text, corrections) 
 	{
-		for (const { wrong, correct, reason, paragraph, occurrence, confidence } of corrections) 
+		for (const { origin, suggestion, paragraph, occurrence, confidence } of corrections) 
 		{
-			if (wrong === correct)
+			if (origin === suggestion || confidence <= 0.7)
 				continue;
 			
 			let count = 0;
@@ -90,35 +96,29 @@ AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, 
 
 			while (searchStart < text.length)
 			{
-				const index = text.indexOf(wrong, searchStart);
+				const index = text.indexOf(origin, searchStart);
 				if (index === -1) break;
 
-				const isStartBoundary = index === 0 || _t._isWordBoundary(text[index - 1]);
-				const isEndBoundary = index + wrong.length === text.length || _t._isWordBoundary(text[index + wrong.length]);
-
-				if (isStartBoundary && isEndBoundary)
+				count++;
+				if (count === occurrence)
 				{
-					count++;
-					if (count === occurrence)
-					{
-						ranges.push({
-							"start": index,
-							"length": wrong.length,
-							"id": rangeId
-						});
-						_t.paragraphs[paraId][rangeId] = {
-							"suggested" : correct,
-							"original" : wrong
-						};
-						++rangeId;
-						break;
-					}
+					ranges.push({
+						"start": index,
+						"length": origin.length,
+						"id": rangeId
+					});
+					_t.paragraphs[paraId][rangeId] = {
+						"original" : origin,
+						"suggestion" : suggestion,
+					};
+					++rangeId;
+					break;
 				}
 				searchStart = index + 1;
 			}
 		}
 	}
-	
+
 	try 
 	{
 		convertToRanges(text, JSON.parse(response));
@@ -140,8 +140,8 @@ AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, 
  * @returns {string}
  */
 AssistantReplace.prototype._createPrompt = function(text) {
-	return `You are an intelligent text analysis and transformation assistant.
-	  Your task is to analyze text and identify words that match user-defined criteria for replacement.
+	let prompt = `You are a multi-disciplinary text analysis and transformation assistant.
+	  Your task is to analyze text based on user's specific criteria and provide intelligent corrections.
 	
 	  MANDATORY RULES:
 		1. UNDERSTAND the user's intent from their criteria.
@@ -153,26 +153,13 @@ AssistantReplace.prototype._createPrompt = function(text) {
 		  - Provide position information (paragraph number).
 		4. If no matches are found, return an empty array: [].
 		5. Format your response STRICTLY in JSON format.
-
-	  ANALYSIS FRAMEWORK:
-		For each text element, consider:
-		- SEMANTIC: Does it match the meaning criteria?
-		- STYLISTIC: Does it match the style criteria?
-		- CONTEXTUAL: Is it appropriate for the context?
-		- FUNCTIONAL: Does it serve the intended purpose?
-
-	  REPLACEMENT STRATEGIES:
-		1. Direct synonym replacement
-		2. Paraphrasing for better fit
-		3. Complete restructuring if needed
-		4. Adding/removing elements as required
-		5. Adjusting tone or register
+		6. Support multiple languages (English, Russian, etc.)
 
 	  Response format - return ONLY this JSON array with no additional text:
 		[
 		  {
-			"wrong": "exact text fragment that matches the query",
-      		"correct": "suggested replacement",
+			"origin": "exact text fragment that matches the query",
+      		"suggestion": "suggested replacement",
 			"paragraph": paragraph_number,
 			"occurrence": 1,
 			"confidence": 0.95
@@ -180,18 +167,17 @@ AssistantReplace.prototype._createPrompt = function(text) {
 		]
 
 	  Guidelines for each field:
-		- "wrong": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
-		- "correct": Your suggested replacement for the fragment.
+		- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
+		- "suggestion": Your suggested replacement for the fragment.
 			* Ensure it aligns with the user's criteria.
 			* Maintain coherence with surrounding text.
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
 	  
-	  CRITICAL - Word Boundaries (MOST IMPORTANT):
-		- ONLY match complete, standalone words separated by spaces, punctuation, or at the start/end of text
-		- DO NOT match letters or substrings that are PART of other words
-		- A word is bounded by: spaces, punctuation (.,!?;:), quotes, or start/end of text
+	  CRITICAL:
+		- Output should be in the exact this format
+		- No any comments are allowed
 
 	  CRITICAL - Output Format:
 		- Return ONLY the raw JSON array, nothing else
@@ -199,15 +185,14 @@ AssistantReplace.prototype._createPrompt = function(text) {
 		- DO NOT include any explanatory text before or after the JSON
 		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
 		- The response should start with [ and end with ]
-
-	  USER REQUEST: ${this.assistantData.query}	
+	  `;
+	  prompt += "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
 	  
-	  TEXT TO ANALYZE:
-		"""
-		${text}
-		"""
+	  prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
 
-	  Please analyze this text and find all words that match the user's request. Be thorough but precise.`;
+	  prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+
+	  return prompt;
 }
 
 /**
@@ -217,33 +202,42 @@ AssistantReplace.prototype._createPrompt = function(text) {
  */
 AssistantReplace.prototype.getInfoForPopup = function(paraId, rangeId)
 {
-	let anot = this.getAnnotation(paraId, rangeId);
+	let _s = this.getAnnotation(paraId, rangeId);
 	return {
-		suggested : anot["suggested"],
-		original : anot["original"],
+		original : _s["original"],
+		suggested : _s["suggestion"],
 		type : this.type
 	};
 };
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ */
 AssistantReplace.prototype.onAccept = async function(paraId, rangeId)
 {
-	let anot = this.getAnnotation(paraId, rangeId);
-	if (!anot)
-		return;
+	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
 	
-	let range = this.getAnnotationRangeObj(paraId, rangeId);
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+	let range = this.getAnnotationRangeObj(paraId, rangeId);
 	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
 	
-	Asc.scope.text = anot["suggested"];
+	Asc.scope.text = text;
 	await Asc.Editor.callCommand(function(){
 		Api.ReplaceTextSmart([Asc.scope.text]);
 		Api.GetDocument().RemoveSelection();
-	});	
+	});
 	
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
 };
+
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ */
 AssistantReplace.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
@@ -265,17 +259,10 @@ AssistantReplace.prototype._handleNewRangePositions = async function(range, para
 	
 	let start = range["start"];
 	let len = range["length"];
-	
-	const isStartBoundary = start === 0 || this._isWordBoundary(text[start - 1]);
-	const isEndBoundary = start + len === text.length || this._isWordBoundary(text[start + len]);
-	
-	if (!isStartBoundary || !isEndBoundary || annot["original"] !== text.substring(start, start + len))
+
+	if (annot["original"] !== text.substring(start, start + len))
 	{
 		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
 		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
 	}
-};
-AssistantReplace.prototype._isWordBoundary = function(char)
-{
-	return /[\s.,!?;:'"()\[\]{}\-–—\/\\]/.test(char);
 };
