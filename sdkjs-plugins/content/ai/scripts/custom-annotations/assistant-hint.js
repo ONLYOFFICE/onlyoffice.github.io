@@ -203,7 +203,8 @@ AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
 	let _s = this.getAnnotation(paraId, rangeId);
 	return {
 		original : _s["original"],
-		reason : _s["reason"]
+		reason : _s["reason"],
+		type : this.type
 	};
 };
 
