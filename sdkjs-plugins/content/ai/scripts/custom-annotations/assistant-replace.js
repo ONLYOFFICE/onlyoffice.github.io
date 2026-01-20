@@ -30,24 +30,21 @@
  *
  */
 
-// @ts-check
-
 /// <reference path="./custom-annotator.js" />
 /// <reference path="./types.js" />
 
 /** @param {localStorageCustomAssistantItem} assistantData */
-function AssistantCorrection(assistantData)
+function AssistantReplace(assistantData)
 {
 	CustomAnnotator.call(this);
 	this.type = assistantData.type; // 2
     this.assistantData = assistantData;
 }
-AssistantCorrection.prototype = Object.create(CustomAnnotator.prototype);
-AssistantCorrection.prototype.constructor = AssistantCorrection;
+AssistantReplace.prototype = Object.create(CustomAnnotator.prototype);
+AssistantReplace.prototype.constructor = AssistantReplace;
 
-AssistantCorrection.prototype.annotateParagraph = async function(paraId, recalcId, text)
+AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
-	console.warn("AssistantCorrection annotateParagraph:", text);
 	this.paragraphs[paraId] = {};
 
 	let requestEngine = AI.Request.create(AI.ActionType.Chat);
@@ -79,7 +76,7 @@ AssistantCorrection.prototype.annotateParagraph = async function(paraId, recalcI
 
 	/**
 	 * @param {string} text 
-	 * @param {CorrectionAiResponse[]} corrections 
+	 * @param {ReplaceAiResponse[]} corrections 
 	 */
 	function convertToRanges(text, corrections) 
 	{
@@ -111,8 +108,7 @@ AssistantCorrection.prototype.annotateParagraph = async function(paraId, recalcI
 						});
 						_t.paragraphs[paraId][rangeId] = {
 							"suggested" : correct,
-							"original" : wrong,
-							"reason" : reason
+							"original" : wrong
 						};
 						++rangeId;
 						break;
@@ -139,7 +135,11 @@ AssistantCorrection.prototype.annotateParagraph = async function(paraId, recalcI
 	{ }
 }
 
-AssistantCorrection.prototype._createPrompt = function(text) {
+/**
+ * @param {string} text 
+ * @returns {string}
+ */
+AssistantReplace.prototype._createPrompt = function(text) {
 	return `You are an intelligent text analysis and transformation assistant.
 	  Your task is to analyze text and identify words that match user-defined criteria for replacement.
 	
@@ -173,7 +173,6 @@ AssistantCorrection.prototype._createPrompt = function(text) {
 		  {
 			"wrong": "exact text fragment that matches the query",
       		"correct": "suggested replacement",
-			"reason": "detailed explanation why it matches the criteria",
 			"paragraph": paragraph_number,
 			"occurrence": 1,
 			"confidence": 0.95
@@ -185,7 +184,6 @@ AssistantCorrection.prototype._createPrompt = function(text) {
 		- "correct": Your suggested replacement for the fragment.
 			* Ensure it aligns with the user's criteria.
 			* Maintain coherence with surrounding text.
-		- "reason": Clear explanation of why this fragment matches the criteria.
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
@@ -215,18 +213,17 @@ AssistantCorrection.prototype._createPrompt = function(text) {
 /**
  * @param {string} paraId 
  * @param {string} rangeId 
- * @returns {CorrectionInfoForPopup}
+ * @returns {ReplaceInfoForPopup}
  */
-AssistantCorrection.prototype.getInfoForPopup = function(paraId, rangeId)
+AssistantReplace.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let anot = this.getAnnotation(paraId, rangeId);
 	return {
 		suggested : anot["suggested"],
 		original : anot["original"],
-		// explanation : anot["reason"]
 	};
 };
-AssistantCorrection.prototype.onAccept = async function(paraId, rangeId)
+AssistantReplace.prototype.onAccept = async function(paraId, rangeId)
 {
 	let anot = this.getAnnotation(paraId, rangeId);
 	if (!anot)
@@ -246,7 +243,7 @@ AssistantCorrection.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
 };
-AssistantCorrection.prototype.getAnnotationRangeObj = function(paraId, rangeId)
+AssistantReplace.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
 		"paragraphId" : paraId,
@@ -254,7 +251,7 @@ AssistantCorrection.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 		"name" : "customAssistant_" + this.assistantData.id
 	};
 };
-AssistantCorrection.prototype._handleNewRangePositions = async function(range, paraId, text)
+AssistantReplace.prototype._handleNewRangePositions = async function(range, paraId, text)
 {
 	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
 		return;
@@ -277,7 +274,7 @@ AssistantCorrection.prototype._handleNewRangePositions = async function(range, p
 		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
 	}
 };
-AssistantCorrection.prototype._isWordBoundary = function(char)
+AssistantReplace.prototype._isWordBoundary = function(char)
 {
 	return /[\s.,!?;:'"()\[\]{}\-–—\/\\]/.test(char);
 };

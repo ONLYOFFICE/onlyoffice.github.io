@@ -72,7 +72,6 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 	await requestEngine.chatRequest(argPrompt, false, async function (/** @type {string} */data)
 	{
 		if (!data) {	
-			console.error('no data');
 			return;
 		}
 		await checkEndAction();

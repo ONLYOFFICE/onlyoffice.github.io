@@ -691,7 +691,6 @@ async function registerButtons(window, undefined)
 					onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
 				}];
 				buttonAssistant.attachOnClick(async function(){
-					console.log("Start custom assistant: " + element.id);
 					onStartCustomAssistant(element.id);
 				});
 			});

@@ -34,8 +34,8 @@
 
 /// <reference path="./types.js" />
 /// <reference path="./assistant-hint.js" />
-/// <reference path="./assistant-replacement.js" />
-/// <reference path="./assistant-correction.js" />
+/// <reference path="./assistant-replace-hint.js" />
+/// <reference path="./assistant-replace.js" />
 
 /**
  * @param {localStorageCustomAssistantItem} assistantData 
@@ -47,9 +47,9 @@ function createCustomAssistant(assistantData)
     case 0:
       return new AssistantHint(assistantData);
     case 1:
-      return new AssistantReplacement(assistantData);
+      return new AssistantReplaceHint(assistantData);
     case 2:
-      return new AssistantCorrection(assistantData);
+      return new AssistantReplace(assistantData);
     default:
       throw new Error(`Unknown assistant type: ${assistantData.type}`);
   }
