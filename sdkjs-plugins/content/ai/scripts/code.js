@@ -40,8 +40,7 @@ let helperWindow = null;
 
 let spellchecker = null;
 let grammar = null;
-let customAssistants = new Map();
-let isCustomAssistantRunning = new Map();
+let customAssistantManager = new CustomAssistantManager();
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -690,8 +689,7 @@ class Provider extends AI.Provider {\n\
 		JSON.parse(
                 localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
             ).forEach(assistantData => {
-				customAssistants.set(assistantData.id, createCustomAssistant(assistantData));
-				isCustomAssistantRunning.set(assistantData.id, false);
+				customAssistantManager.createAssistant(assistantData);
 			});
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
@@ -700,7 +698,8 @@ class Provider extends AI.Provider {\n\
 			
 			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
-			customAssistants.forEach(assistant => assistant.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]));
+
+			customAssistantManager.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 		});
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
@@ -718,9 +717,7 @@ class Provider extends AI.Provider {\n\
 				grammar.onBlur();
 			else if ("customAssistant" === obj["name"].slice(0, 15)) {
 				const assistantId = obj["name"].slice(16);
-				const assistant = customAssistants.get(assistantId);
-				if (assistant)
-					assistant.onBlur();
+				customAssistantManager.onBlur(assistantId);
 			}	
 		});
 
@@ -734,11 +731,7 @@ class Provider extends AI.Provider {\n\
 				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
 			else if ("customAssistant" === obj["name"].slice(0, 15)) {
 				const assistantId = obj["name"].slice(16);
-				const assistant = customAssistants.get(assistantId);
-				if (assistant)
-					assistant.onClick(obj["paragraphId"], obj["ranges"]);
-				else
-					console.warn("Custom assistant not found: " + assistantId);
+				customAssistantManager.onClick(assistantId, obj["paragraphId"], obj["ranges"]);
 			}
 		});
 
@@ -1028,7 +1021,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 					});
 				}
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
-				customAssistants.set(element.id, createCustomAssistant(element));
+				customAssistantManager.createAssistant(element);
 			}
 			closeCustomAssistantWindow();
 		} else {
@@ -1061,8 +1054,6 @@ function deleteCustomAssistant(assistantId, buttonAssistant) {
 	const index = savedAssistants.findIndex((item) => item.id === assistantId);
 	if (index !== -1) {
 		savedAssistants.splice(index, 1);
-		customAssistants.delete(assistantId);
-		isCustomAssistantRunning.delete(assistantId);
 		localStorage.setItem(
 			"onlyoffice_ai_saved_assistants",
 			JSON.stringify(savedAssistants)
@@ -1077,23 +1068,19 @@ function deleteCustomAssistant(assistantId, buttonAssistant) {
 
 async function onStartCustomAssistant(assistantId)
 {
-	isCustomAssistantRunning.set(assistantId, !isCustomAssistantRunning.get(assistantId));
-	if (!isCustomAssistantRunning.get(assistantId)) {
-		console.log("Custom assistant stopped: " + assistantId);
+	if (customAssistantManager.checkNeedToRunAssistant(assistantId)) {
 		return;
 	}
-	if (!isCustomAssistantRunning.has(assistantId)) {
-		console.error("Custom assistant is not found: " + assistantId);
-		return;
-	}
-	
 	let paraIds = [];
 
+	let selectedText = await Asc.Library.GetSelectedText();
+
+	Asc.scope.hasSelectedText = !!selectedText;
 	paraIds = await Asc.Editor.callCommand(function(){
 		let result = [];
-		let range = Api.GetDocument().GetRangeBySelect();
 		let paragraphs;
-		if (range) {
+		if (Asc.scope.hasSelectedText) {
+			const range = Api.GetDocument().GetRangeBySelect();
 			paragraphs = range.GetAllParagraphs();
 		} else {
 			paragraphs = Api.GetDocument().GetAllParagraphs();
@@ -1102,7 +1089,7 @@ async function onStartCustomAssistant(assistantId)
 		return result;
 	});
 
-	customAssistants.get(assistantId).checkParagraphs(paraIds);
+	customAssistantManager.run(assistantId, paraIds);
 	
 }
 

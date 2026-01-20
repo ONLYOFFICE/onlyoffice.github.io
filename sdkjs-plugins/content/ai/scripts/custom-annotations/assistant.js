@@ -37,20 +37,140 @@
 /// <reference path="./assistant-replace-hint.js" />
 /// <reference path="./assistant-replace.js" />
 
-/**
- * @param {localStorageCustomAssistantItem} assistantData 
- * @returns 
- */
-function createCustomAssistant(assistantData)
-{
-	switch(assistantData.type) {
-    case 0:
-      return new AssistantHint(assistantData);
-    case 1:
-      return new AssistantReplaceHint(assistantData);
-    case 2:
-      return new AssistantReplace(assistantData);
-    default:
-      throw new Error(`Unknown assistant type: ${assistantData.type}`);
-  }
+class CustomAssistantManager {
+    constructor() {
+		/**
+		 * @type {Map<string, CustomAnnotator>}
+		 */
+        this._customAssistants = new Map();
+        this._isCustomAssistantInit = new Map();
+        this._isCustomAssistantRunning = new Map();
+		/** @type {Map<string, {recalcId: number, text: string, annotations: any}>} */
+		this._paragraphsStack = new Map();
+    }
+
+    /**
+     * @param {localStorageCustomAssistantItem} assistantData
+     * @returns
+     */
+    createAssistant(assistantData) {
+        let assistant;
+        switch (assistantData.type) {
+            case 0:
+                assistant = new AssistantHint(assistantData);
+                break;
+            case 1:
+                assistant = new AssistantReplaceHint(assistantData);
+                break;
+            case 2:
+                assistant = new AssistantReplace(assistantData);
+                break;
+            default:
+                throw new Error(
+                    `Unknown assistant type: ${assistantData.type}`
+                );
+        }
+        if (!this._customAssistants.has(assistantData.id)) {
+            this._isCustomAssistantInit.set(assistantData.id, false);
+            this._isCustomAssistantRunning.set(assistantData.id, false);
+        }
+        this._customAssistants.set(assistantData.id, assistant);
+
+        return assistant;
+    }
+
+    /** @param {string} assistantId */
+    deleteAssistant(assistantId) {
+        this._customAssistants.delete(assistantId);
+        this._isCustomAssistantInit.delete(assistantId);
+        this._isCustomAssistantRunning.delete(assistantId);
+    }
+
+	/** @param {string} assistantId */
+    checkNeedToRunAssistant(assistantId) {
+		const isRunning = this._isCustomAssistantRunning.get(assistantId);
+        this._isCustomAssistantRunning.set(
+            assistantId,
+            !isRunning
+        );
+		return isRunning;
+    }
+
+    /**
+     * @param {string} assistantId
+     * @param {string[]} paraIds
+     */
+    run(assistantId, paraIds) {
+        const assistant = this._customAssistants.get(assistantId);
+		if (!assistant) {
+			console.error("Custom assistant not found: " + assistantId);
+			return;
+		}
+
+		if (!this._isCustomAssistantInit.get(assistantId)) {
+			this._paragraphsStack.forEach((value, paraId) => {
+				assistant.onChangeParagraph(
+					paraId,
+					value.recalcId,
+					value.text,
+					value.annotations
+				)
+			});
+		}
+
+        assistant.checkParagraphs(paraIds);
+		this._isCustomAssistantInit.set(assistantId, true);
+    }
+
+    /**
+     * @param {string} paragraphId
+     * @param {number} recalcId
+     * @param {string} text
+     * @param {*} annotations
+     */
+    onChangeParagraph(paragraphId, recalcId, text, annotations) {
+		this._paragraphsStack.set(paragraphId, {
+			recalcId,
+			text,
+			annotations
+		});
+        this._customAssistants.forEach((assistant, assistantId) => {
+            const isInit = this._isCustomAssistantInit.get(assistantId);
+		    if (!isInit) {
+				return;
+			}	
+			assistant.onChangeParagraph(
+                paragraphId,
+                recalcId,
+                text,
+                annotations
+            );
+			const isRunning = this._isCustomAssistantRunning.get(assistantId);
+			if (isRunning) {
+				assistant.checkParagraphs([paragraphId]);
+			}
+        });
+    }
+
+    /** @param {string} assistantId */
+    onBlur(assistantId) {
+        const assistant = this._customAssistants.get(assistantId);
+        if (assistant) {
+            assistant.onBlur();
+        }
+    }
+
+    /**
+     * @param {string} assistantId
+     * @param {string} paragraphId
+     * @param {*} ranges
+     */
+    onClick(assistantId, paragraphId, ranges) {
+        const assistant = this._customAssistants.get(assistantId);
+        if (assistant) {
+            assistant.onClick(paragraphId, ranges);
+        } else {
+            console.error("Custom assistant not found: " + assistantId);
+        }
+    }
 }

@@ -34,9 +34,6 @@
 
 function CustomAnnotator()
 {
-	this.paraId = null;
-	this.rangeId = null;
-	
 	this.paragraphs = {};
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
@@ -54,25 +51,36 @@ CustomAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, t
 	
 	this._checkParagraph(paraId);
 };
+CustomAnnotator.prototype.onClick = function(paraId, ranges)
+{
+	if (!ranges || !ranges.length)
+		this._closePopup();
+	else
+		this._openPopup(paraId, ranges[0]);
+};
+CustomAnnotator.prototype.onBlur = function()
+{
+	this._closePopup();
+};
 CustomAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
 	this.paraToCheck.clear()
-	let _t = this;
 	paraIds.forEach(function(paraId) {
-		if (!_t.checked.has(paraId) || _t.waitParagraphs[paraId])
-			_t.paraToCheck.add(paraId);
-	});
-	
-	this.paraToCheck.forEach(paraId => this._checkParagraph(paraId));
+		if (!this.checked.has(paraId) || this.waitParagraphs[paraId]) {
+			this.paraToCheck.add(paraId);
+			this._checkParagraph(paraId);
+		}	
+	}, this);
 };
 CustomAnnotator.prototype._checkParagraph = async function(paraId)
 {
-	if (!this.paraToCheck.has(paraId) || !this.waitParagraphs[paraId])
+	if (!this.paraToCheck.has(paraId) || !this.waitParagraphs[paraId]) {
 		return;
+	}
 	
 	let recalcId = this.waitParagraphs[paraId].recalcId;
 	let text = this.waitParagraphs[paraId].text;
-	
+
 	// TODO: Temporarily for simplicity
 	let range = this.getAnnotationRangeObj(paraId);
 	range["rangeId"] = undefined;
@@ -88,7 +96,7 @@ CustomAnnotator.prototype._checkParagraph = async function(paraId)
 CustomAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 };
-CustomAnnotator.prototype.openPopup = async function(paraId, rangeId)
+CustomAnnotator.prototype._openPopup = async function(paraId, rangeId)
 {
 	if (!customAnnotationPopup)
 		return;
@@ -103,14 +111,14 @@ CustomAnnotator.prototype.openPopup = async function(paraId, rangeId)
 	let _t = this;
 	popup.onAccept = async function() {
 		await _t.onAccept(paraId, rangeId);
-		_t.closePopup();
+		_t._closePopup();
 	};
 	popup.onReject = async function() {
 		await _t.onReject(paraId, rangeId);
-		_t.closePopup();
+		_t._closePopup();
 	};
 };
-CustomAnnotator.prototype.closePopup = function()
+CustomAnnotator.prototype._closePopup = function()
 {
 	if (!customAnnotationPopup)
 		return;
@@ -143,36 +151,14 @@ CustomAnnotator.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 		"rangeId" : rangeId
 	};
 };
-CustomAnnotator.prototype.onClick = function(paraId, ranges)
-{
-	if (!ranges || !ranges.length)
-		this.closePopup();
-	else
-		this.openPopup(paraId, ranges[0]);
-};
-CustomAnnotator.prototype.onBlur = function()
-{
-	this.closePopup();
-	this.resetCurrentRange();
-};
-CustomAnnotator.prototype.onFocus = function(paraId, rangeId)
-{	
-};
-CustomAnnotator.prototype.resetCurrentRange = function()
-{
-	this.paraId = null;
-	this.rangeId = null;
-};
 CustomAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
 {
 	if (!ranges || !Array.isArray(ranges))
 		return;
-	
-	ranges.forEach(range => this._handleNewRangePositions(range, paraId, text));
-	// ↓↓↓ TODO: the cycle seems to make no sense ↓↓↓
+
 	for (let i = 0; i < ranges.length; ++i)
 	{
-		this._handleNewRangePositions(ranges[i]);
+		this._handleNewRangePositions(ranges[i], paraId, text);
 	}
 };
 CustomAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
