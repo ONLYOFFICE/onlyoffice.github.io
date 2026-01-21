@@ -32,15 +32,24 @@
 
 /// <reference path="./types.js" />
 
-function CustomAnnotator()
+/** @param {localStorageCustomAssistantItem} assistantData */
+function CustomAnnotator(assistantData)
 {
 	this.paragraphs = {};
+	/** @type {Object.<string, {recalcId: string, text: string}>} */
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
 	this.checked = new Set(); // was checked on the previous request
 	
-	this.type = -1;
+	this.type = assistantData.type; // 2
+    this.assistantData = assistantData;
 }
+/**
+ * @param {string} paraId 
+ * @param {string} recalcId 
+ * @param {string} text
+ * @param {string[]} ranges
+ */
 CustomAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
 	this._handleNewRanges(ranges, paraId, text);
@@ -51,6 +60,10 @@ CustomAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, t
 	
 	this._checkParagraph(paraId);
 };
+/**
+ * @param {string} paraId 
+ * @param {string[]} ranges 
+ */
 CustomAnnotator.prototype.onClick = function(paraId, ranges)
 {
 	if (!ranges || !ranges.length)
@@ -62,6 +75,9 @@ CustomAnnotator.prototype.onBlur = function()
 {
 	this._closePopup();
 };
+/**
+ * @param {string[]} paraIds 
+ */
 CustomAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
 	this.paraToCheck.clear()

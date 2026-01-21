@@ -36,9 +36,7 @@
 /** @param {localStorageCustomAssistantItem} assistantData */
 function AssistantReplace(assistantData)
 {
-	CustomAnnotator.call(this);
-	this.type = assistantData.type; // 2
-    this.assistantData = assistantData;
+	CustomAnnotator.call(this, assistantData);
 }
 AssistantReplace.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplace.prototype.constructor = AssistantReplace;
