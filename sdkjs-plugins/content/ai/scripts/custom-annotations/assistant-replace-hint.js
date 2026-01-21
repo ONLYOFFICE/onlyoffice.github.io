@@ -36,9 +36,7 @@
 /** @param {localStorageCustomAssistantItem} assistantData */
 function AssistantReplaceHint(assistantData)
 {
-	CustomAnnotator.call(this);
-	this.type = assistantData.type; // 1
-    this.assistantData = assistantData;
+	CustomAnnotator.call(this, assistantData);
 }
 AssistantReplaceHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplaceHint.prototype.constructor = AssistantReplaceHint;
@@ -161,7 +159,7 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 		[
 		  {
 			"origin": "exact text fragment that matches the query",
-      		"suggestion": "suggested replacement",
+      		"suggestion": "suggested replacement (plain text)",
 			"reason": "detailed explanation why it matches the criteria",
    			"difference":"difference between origin and suggestion"
 			"paragraph": paragraph_number,
