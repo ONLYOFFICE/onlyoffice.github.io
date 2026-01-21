@@ -180,6 +180,40 @@ CustomAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
 CustomAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
 {
 };
+CustomAnnotator.prototype.chatRequest = async function(prompt)
+{
+	let requestEngine = AI.Request.create(AI.ActionType.Chat);
+	if (!requestEngine)
+		return null;
+	
+	let response = await requestEngine.chatRequest(prompt, false);
+	return this.normalizeResponse(response);
+};
+/**
+ * Normalizes AI response by removing markdown code block wrappers
+ * @param {string} response - The raw AI response that might be wrapped in ```json``` blocks
+ * @returns {string} - The normalized response with markdown code blocks removed
+ */
+CustomAnnotator.prototype.normalizeResponse = function(response) {
+	if (typeof response !== 'string') {
+		return response;
+	}
+
+	// Trim whitespace
+	let normalized = response.trim();
+
+	// Check if response is wrapped in markdown code blocks
+	// Patterns: ```json\n{...}\n``` or ```\n{...}\n```
+	const codeBlockPattern = /^```(?:json)?\s*\n?([\s\S]*?)\n?```$/;
+	const match = normalized.match(codeBlockPattern);
+
+	if (match) {
+		// Extract content between code block markers
+		normalized = match[1].trim();
+	}
+
+	return normalized;
+};
 /**
  * @param {string} str 
  * @param {string} searchStr 
