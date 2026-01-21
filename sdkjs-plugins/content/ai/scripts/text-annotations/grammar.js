@@ -181,7 +181,7 @@ Text to check:`;
 
 			while (searchStart < text.length)
 			{
-				const index = text.indexOf(origin, searchStart);
+				const index = _t.simpleGraphemeIndexOf(text, origin, searchStart);
 				if (index === -1) break;
 				
 				count++;
@@ -189,7 +189,7 @@ Text to check:`;
 				{
 					ranges.push({
 						"start": index,
-						"length": origin.length,
+						"length": [...origin].length,
 						"id": rangeId
 					});
 					_t.paragraphs[paraId][rangeId] = {
