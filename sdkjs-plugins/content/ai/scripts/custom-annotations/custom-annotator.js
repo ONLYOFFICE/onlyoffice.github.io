@@ -164,3 +164,28 @@ CustomAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
 CustomAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
 {
 };
+/**
+ * @param {string} str 
+ * @param {string} searchStr 
+ * @param {string} [fromIndex] 
+ * @returns {number}
+ */
+CustomAnnotator.prototype.simpleGraphemeIndexOf = function(str, searchStr, fromIndex = 0) {
+    const codeUnitIndex = str.indexOf(searchStr, fromIndex);
+	if (codeUnitIndex < 2) {
+		return codeUnitIndex;
+	}
+	const adjustedIndex = adjustIndexForSurrogates(str, codeUnitIndex);
+		
+	function adjustIndexForSurrogates(str, codeUnitIndex) {
+		let surrogateCount = 0;
+		for (let i = 0; i < codeUnitIndex; i++) {
+			const code = str.charCodeAt(i);
+			if (code >= 0xD800 && code <= 0xDBFF) {
+				surrogateCount++;
+			}
+		}
+		return codeUnitIndex - surrogateCount;
+	}
+	return adjustedIndex;
+}

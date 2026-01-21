@@ -171,7 +171,7 @@ Text to check:`;
 
 			while (searchStart < text.length)
 			{
-				const index = text.indexOf(wrong, searchStart);
+				const index = _t.simpleGraphemeIndexOf(text, wrong, searchStart);
 				if (index === -1) break;
 
 				const isStartBoundary = index === 0 || _t._isWordBoundary(text[index - 1]);
@@ -184,7 +184,7 @@ Text to check:`;
 					{
 						ranges.push({
 							"start": index,
-							"length": wrong.length,
+							"length": [...wrong].length,
 							"id": rangeId
 						});
 						_t.paragraphs[paraId][rangeId] = {

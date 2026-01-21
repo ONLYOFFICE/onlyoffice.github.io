@@ -96,7 +96,7 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 
 			while (searchStart < text.length)
 			{
-				const index = text.indexOf(origin, searchStart);
+				const index = _t.simpleGraphemeIndexOf(text, origin, searchStart);
 				if (index === -1) break;
 
 				count++;
@@ -104,7 +104,7 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 				{
 					ranges.push({
 						"start": index,
-						"length": origin.length,
+						"length": [...origin].length,
 						"id": rangeId
 					});
 					_t.paragraphs[paraId][rangeId] = {
