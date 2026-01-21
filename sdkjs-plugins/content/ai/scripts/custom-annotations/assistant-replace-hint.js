@@ -54,7 +54,7 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 		return false;
 	
 	const argPrompt = this._createPrompt(text);
-	let response = await this.chatRequest(argPrompt);;
+	let response = await this.chatRequest(argPrompt);
 	if (!response)
 		return false;	
 	
