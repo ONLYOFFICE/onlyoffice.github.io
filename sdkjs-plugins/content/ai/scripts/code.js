@@ -40,6 +40,7 @@ let helperWindow = null;
 
 let spellchecker = null;
 let grammar = null;
+let customAssistantManager = new CustomAssistantManager();
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -66,6 +67,9 @@ window.addSupportAgentMode = function(editorVersion) {
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
 		if (e.keyCode === 27 && textAnnotatorPopup) {
 			textAnnotatorPopup.close();
+		}
+		if (e.keyCode === 27 && customAnnotationPopup) {
+			customAnnotationPopup.close();
 		}
 
 		if (e.keyCode === 27 && helperWindow) {
@@ -682,6 +686,11 @@ class Provider extends AI.Provider {\n\
 		
 		spellchecker = new SpellChecker();
 		grammar = new GrammarChecker();
+		JSON.parse(
+                localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+            ).forEach(assistantData => {
+				customAssistantManager.createAssistant(assistantData);
+			});
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
 			if (!obj)
@@ -689,6 +698,8 @@ class Provider extends AI.Provider {\n\
 			
 			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+
+			customAssistantManager.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 		});
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
@@ -704,6 +715,10 @@ class Provider extends AI.Provider {\n\
 				spellchecker.onBlur();
 			else if ("grammar" === obj["name"]) 
 				grammar.onBlur();
+			else if ("customAssistant" === obj["name"].slice(0, 15)) {
+				const assistantId = obj["name"].slice(16);
+				customAssistantManager.onBlur(assistantId);
+			}	
 		});
 
 		this.attachEditorEvent("onClickAnnotation", function(obj) {
@@ -714,6 +729,10 @@ class Provider extends AI.Provider {\n\
 				grammar.onClick(obj["paragraphId"], obj["ranges"]);
 			else if ("spelling" === obj["name"])
 				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
+			else if ("customAssistant" === obj["name"].slice(0, 15)) {
+				const assistantId = obj["name"].slice(16);
+				customAssistantManager.onClick(assistantId, obj["paragraphId"], obj["ranges"]);
+			}
 		});
 
 	}
@@ -752,6 +771,21 @@ window.Asc.plugin.button = async function(id, windowId) {
 				textAnnotatorPopup.close();
 				break;
 		}
+		return;
+	}
+	if (customAnnotationPopup && customAnnotationPopup.popup && customAnnotationPopup.popup.id === windowId)
+	{
+		switch (id) {
+			case 0:
+				await customAnnotationPopup.popup.onAccept();
+				break;
+			case 1:
+				await customAnnotationPopup.popup.onReject();
+				break;
+			default:
+				customAnnotationPopup.close();
+				break;
+		}	
 		return;
 	}
 
@@ -798,6 +832,8 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 
 	if (textAnnotatorPopup && textAnnotatorPopup.popup)
 		textAnnotatorPopup.popup.command('onThemeChanged', theme);
+	if (customAnnotationPopup && customAnnotationPopup.popup)
+		customAnnotationPopup.popup.command('onThemeChanged', theme);
 };
 
 /**
@@ -913,6 +949,148 @@ async function onCheckGrammarSpelling(isCurrent)
 	
 	if (grammar)
 		grammar.checkParagraphs(paraIds);
+}
+
+/**
+ * CUSTOM ASSISTANT
+ * @param {string} [assistantId] Assistant ID for editing
+ * @param {Asc.ButtonToolbar} [buttonAssistant]
+ */
+function customAssistantWindowShow(assistantId, buttonAssistant)
+{
+	if (window.customAssistantWindow) {
+		closeCustomAssistantWindow();
+	}
+	const actionButtonText = assistantId ? window.Asc.plugin.tr('Save') : window.Asc.plugin.tr('Add');
+
+	let variation = {
+		url : "customAssistant.html",
+		description : window.Asc.plugin.tr("Your own AI assistant"),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr(actionButtonText), primary: true },
+			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
+		],
+		icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+		isModal : false,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 400, 400 ]
+	};
+
+	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 400], [400, 400], [0, 0]]);
+		if (assistantId) {
+			customAssistantWindow.command('onEditAssistant', assistantId);
+		}
+	});
+	
+	customAssistantWindow.show(variation);
+
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			if (id === 0) {
+				const element = await new Promise(resolve => {
+					customAssistantWindow.attachEvent("onAddEditAssistant", resolve);
+					customAssistantWindow.command('onClickAdd');
+				});
+				if (!element) return;
+				if (buttonAssistant) {
+					buttonAssistant.text = element.name;
+				} else {
+					buttonAssistant = new Asc.ButtonToolbar(null);
+					buttonAssistant.text = element.name;
+					buttonAssistant.icons = getToolBarButtonIcons("grammar");
+					buttonAssistant.split = true;
+					buttonAssistant.enableToggle = true;
+					buttonAssistant.menu = [{
+						text: 'Edit',
+						id: element.id + '-edit',
+						onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+					},
+					{
+						text: 'Delete',
+						id: element.id + '-delete',
+						onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
+					}];
+					buttonAssistant.attachOnClick(async function(){
+						onStartCustomAssistant(element.id);
+					});
+				}
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+				customAssistantManager.createAssistant(element);
+			}
+			closeCustomAssistantWindow();
+		} else {
+			await window.pluginsButtonsCallback(id, windowId, ...args);
+		}
+	}
+
+	window.customAssistantWindow = customAssistantWindow;
+}
+
+function closeCustomAssistantWindow() {
+	if (window.customAssistantWindow) {
+		window.customAssistantWindow.close();
+		window.customAssistantWindow = null;
+	}
+	if (window.pluginsButtonsCallback) {
+		window.Asc.plugin.button = window.pluginsButtonsCallback;
+		window.pluginsButtonsCallback = null;
+	}
+}
+
+/**
+ * @param {string} assistantId
+ * @param {Asc.ButtonToolbar} buttonAssistant
+ */
+function deleteCustomAssistant(assistantId, buttonAssistant) {
+	const savedAssistants = JSON.parse(
+		localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+	);
+	const index = savedAssistants.findIndex((item) => item.id === assistantId);
+	if (index !== -1) {
+		savedAssistants.splice(index, 1);
+		localStorage.setItem(
+			"onlyoffice_ai_saved_assistants",
+			JSON.stringify(savedAssistants)
+		);
+		if (buttonAssistant) {
+			buttonAssistant.removed = true;
+			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+		}
+		closeCustomAssistantWindow();
+	}
+}
+
+async function onStartCustomAssistant(assistantId)
+{
+	if (customAssistantManager.checkNeedToRunAssistant(assistantId)) {
+		return;
+	}
+	let paraIds = [];
+
+	let selectedText = await Asc.Library.GetSelectedText();
+
+	Asc.scope.hasSelectedText = !!selectedText;
+	paraIds = await Asc.Editor.callCommand(function(){
+		let result = [];
+		let paragraphs;
+		if (Asc.scope.hasSelectedText) {
+			const range = Api.GetDocument().GetRangeBySelect();
+			paragraphs = range.GetAllParagraphs();
+		} else {
+			paragraphs = Api.GetDocument().GetAllParagraphs();
+		}
+		paragraphs.forEach(p => result.push(p.GetInternalId()));
+		return result;
+	});
+
+	customAssistantManager.run(assistantId, paraIds);
+	
 }
 
 /**
