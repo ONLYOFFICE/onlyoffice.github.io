@@ -662,6 +662,38 @@ async function registerButtons(window, undefined)
 				onCheckGrammarSpelling(true);
 			});
 			buttonGS.split = true;
+
+			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonCustomAssistant.text = "Create a new assistant";
+			buttonCustomAssistant.icons = getToolBarButtonIcons("grammar");
+			buttonCustomAssistant.separator = true;
+			buttonCustomAssistant.attachOnClick(function(){
+				customAssistantWindowShow();
+			});
+			const savedAssistants = JSON.parse(
+				localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+			);
+
+			savedAssistants.forEach(element => {
+				const buttonAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+				buttonAssistant.text = element.name;
+				buttonAssistant.icons = getToolBarButtonIcons("grammar");
+				buttonAssistant.split = true;
+				buttonAssistant.enableToggle = true;
+				buttonAssistant.menu = [{
+					text: 'Edit',
+					id: element.id + '-edit',
+					onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+				}, 
+				{
+					text: 'Delete',
+					id: element.id + '-delete',
+					onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
+				}];
+				buttonAssistant.attachOnClick(async function(){
+					onStartCustomAssistant(element.id);
+				});
+			});
 		}
 	}
 
