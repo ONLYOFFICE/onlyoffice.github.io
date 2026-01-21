@@ -137,3 +137,7 @@
 
 ## 3.0.2
 * Bug fix.
+
+
+## 3.0.4
+* New Feature: Build Your Own AI Assistants
