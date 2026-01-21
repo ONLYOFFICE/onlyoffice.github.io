@@ -36,7 +36,7 @@
 function CustomAnnotator(assistantData)
 {
 	this.paragraphs = {};
-	/** @type {Object.<string, {recalcId: string, text: string}>} */
+	/** @type {Object.<string, {recalcId: number, text: string}>} */
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
 	this.checked = new Set(); // was checked on the previous request
@@ -46,7 +46,7 @@ function CustomAnnotator(assistantData)
 }
 /**
  * @param {string} paraId 
- * @param {string} recalcId 
+ * @param {number} recalcId 
  * @param {string} text
  * @param {string[]} ranges
  */

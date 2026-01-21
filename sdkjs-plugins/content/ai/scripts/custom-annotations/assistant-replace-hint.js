@@ -173,7 +173,7 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 		- "suggestion": Your suggested replacement for the fragment.
 			* Ensure it aligns with the user's criteria.
 			* Maintain coherence with surrounding text.
-		- "reason": Clear explanation of why this fragment matches the criteria.
+		- "reason": Clear explanation of why this fragment matches the criteria; IF the user's request contains words like "source", "reference", "link", "cite", "website", "URL", "Wikipedia", "proof", "evidence", "verify" - then you MUST include actual working links in your explanations in html format.
 		- "difference":  The difference between origin and suggestion in html format: that is, you need to take the suggestion field and highlight the differences in it by wrapping them in the <strong> tag.
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
@@ -207,10 +207,16 @@ AssistantReplaceHint.prototype._createPrompt = function(text) {
 AssistantReplaceHint.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
+	let reason = _s["reason"];
+	try {
+		reason = reason.replace(/<a\s+(.*?)>/gi, '<a $1 target="_blank">');
+	} catch (e) {
+		console.error(e);
+	}
 	return {
 		original : _s["original"],
 		suggested : _s["difference"],
-		explanation : _s["reason"],
+		explanation : reason,
 		type : this.type
 	};
 };
