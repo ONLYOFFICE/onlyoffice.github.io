@@ -50,28 +50,14 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 {
 	this.paragraphs[paraId] = {};
 
-	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine || text.length === 0)
+	if (text.length === 0)
 		return false;
-
-	let isSendedEndLongAction = false;
-	async function checkEndAction()
-	{
-		if (!isSendedEndLongAction)
-			isSendedEndLongAction = true;
-	}
 
 	const argPrompt = this._createPrompt(text);
 
-	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (/** @type {string} */data)
-	{
-		if (!data)
-			return;
-		await checkEndAction();
-		response += data;
-	});
-	await checkEndAction();
+	let response = await this.chatRequest(argPrompt);;
+	if (!response)
+		return false;
 
 	let rangeId = 1;
 	let ranges = [];
