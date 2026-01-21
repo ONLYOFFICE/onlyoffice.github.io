@@ -54,7 +54,12 @@ class CustomAssistantManager {
      * @returns
      */
     createAssistant(assistantData) {
-        let assistant;
+        let assistant = this._customAssistants.get(assistantData.id);
+        if (assistant) {
+            assistant.assistantData = assistantData;
+            assistant.type = assistantData.type;
+            return assistant;
+        }
         switch (assistantData.type) {
             case 0:
                 assistant = new AssistantHint(assistantData);
@@ -70,10 +75,9 @@ class CustomAssistantManager {
                     `Unknown assistant type: ${assistantData.type}`
                 );
         }
-        if (!this._customAssistants.has(assistantData.id)) {
-            this._isCustomAssistantInit.set(assistantData.id, false);
-            this._isCustomAssistantRunning.set(assistantData.id, false);
-        }
+        
+        this._isCustomAssistantInit.set(assistantData.id, false);
+        this._isCustomAssistantRunning.set(assistantData.id, false);
         this._customAssistants.set(assistantData.id, assistant);
 
         return assistant;

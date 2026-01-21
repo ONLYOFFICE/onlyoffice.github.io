@@ -36,9 +36,7 @@
 /** @param {localStorageCustomAssistantItem} assistantData */
 function AssistantHint(assistantData)
 {
-	CustomAnnotator.call(this);
-	this.type = assistantData.type; // 0
-    this.assistantData = assistantData;
+	CustomAnnotator.call(this, assistantData);
 }
 AssistantHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantHint.prototype.constructor = AssistantHint;
