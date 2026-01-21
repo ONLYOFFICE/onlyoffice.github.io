@@ -42,17 +42,6 @@ SpellChecker.prototype.annotateParagraph = async function(paraId, recalcId, text
 {
 	this.paragraphs[paraId] = {};
 
-	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine)
-		return false;
-
-	let isSendedEndLongAction = false;
-	async function checkEndAction()
-	{
-		if (!isSendedEndLongAction)
-			isSendedEndLongAction = true;
-	}
-
 	let argPrompt = `You are a spellcheck corrector. I will provide text that may contain spelling errors in any language. Your task is to identify ALL spelling mistakes and return ONLY the corrections in the following JSON format:
 
 [
@@ -144,16 +133,9 @@ Output: []
 Text to check:`;
 	argPrompt += text;
 
-	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (data)
-	{
-		if (!data)
-			return;
-		await checkEndAction();
-
-		response += data;
-	});
-	await checkEndAction();
+	let response = await this.chatRequest(argPrompt);
+	if (!response)
+		return false;
 
 	let rangeId = 1;
 	let ranges = [];
