@@ -192,20 +192,7 @@ TextAnnotator.prototype.normalizeResponse = function(response) {
 		return response;
 	}
 
-	// Trim whitespace
-	let normalized = response.trim();
-
-	// Check if response is wrapped in markdown code blocks
-	// Patterns: ```json\n{...}\n``` or ```\n{...}\n```
-	const codeBlockPattern = /^```(?:json)?\s*\n?([\s\S]*?)\n?```$/;
-	const match = normalized.match(codeBlockPattern);
-
-	if (match) {
-		// Extract content between code block markers
-		normalized = match[1].trim();
-	}
-
-	return normalized;
+	return Asc.Library.getJSONResult(response);
 };
 /**
  * @param {string} str
