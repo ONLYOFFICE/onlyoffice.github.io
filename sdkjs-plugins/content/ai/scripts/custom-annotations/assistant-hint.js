@@ -165,7 +165,7 @@ AssistantHint.prototype._createPrompt = function(text) {
 
 	  Guidelines for each field:
 		- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
-		- "reason": Clear explanation of why this fragment matches the criteria.
+		- "reason": Clear explanation of why this fragment matches the criteria; IF the user's request contains words like "source", "reference", "link", "cite", "website", "URL", "Wikipedia", "proof", "evidence", "verify" - then you MUST include actual working links in your explanations in html format.
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
@@ -198,9 +198,15 @@ AssistantHint.prototype._createPrompt = function(text) {
 AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
 {
 	let _s = this.getAnnotation(paraId, rangeId);
+	let reason = _s["reason"];
+	try {
+		reason = reason.replace(/<a\s+(.*?)>/gi, '<a $1 target="_blank">');
+	} catch (e) {
+		console.error(e);
+	}
 	return {
 		original : _s["original"],
-		explanation : _s["reason"],
+		explanation : reason,
 		type : this.type
 	};
 };
