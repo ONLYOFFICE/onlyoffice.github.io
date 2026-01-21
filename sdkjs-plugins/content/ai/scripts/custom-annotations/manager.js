@@ -101,6 +101,7 @@ class CustomAssistantManager {
      * @param {string[]} paraIds
      */
     run(assistantId, paraIds) {
+        console.warn("CustomAssistantManager.run", assistantId, paraIds);
         const assistant = this._customAssistants.get(assistantId);
 		if (!assistant) {
 			console.error("Custom assistant not found: " + assistantId);
