@@ -31,7 +31,7 @@
  */
 
 /// <reference path="./types.js" />
-/// <reference path="../text-annotations/text-annotator.js" />
+/// <reference path="../text-annotator.js" />
 
 /**
  * @constructor
