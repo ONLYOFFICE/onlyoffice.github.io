@@ -99,6 +99,15 @@
         }
     );
 
+    window.Asc.plugin.attachEvent(
+        "onDeleteAssistant",
+        (/** @type {localStorageCustomAssistantItem} */ assistant) => {
+            mainContainer.innerHTML = '<div id="deletion_text" class="noselect">' +
+                window.Asc.plugin.tr("Do you really want to delete this custom assistant?") +
+                '</div>';
+        }
+    );
+
     function onThemeChanged(theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
         updateBodyThemeClasses(theme.type, theme.name);

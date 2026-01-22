@@ -688,7 +688,7 @@ async function registerButtons(window, undefined)
 				{
 					text: 'Delete',
 					id: element.id + '-delete',
-					onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
+					onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
 				}];
 				buttonAssistant.attachOnClick(async function(){
 					onStartCustomAssistant(element.id);

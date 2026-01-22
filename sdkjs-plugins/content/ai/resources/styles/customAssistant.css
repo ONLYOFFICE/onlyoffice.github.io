@@ -31,6 +31,15 @@ ol {
     width: calc(100% - 24px);
 }
 
+#deletion_text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 10px 0 0 0;
+    justify-content: center;
+    text-align: center;
+}
+
 #custom_assistant {
     height: auto;
     padding: 10px 13px;
