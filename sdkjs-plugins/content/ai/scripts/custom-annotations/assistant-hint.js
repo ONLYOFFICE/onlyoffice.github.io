@@ -207,6 +207,7 @@ AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
  */
 AssistantHint.prototype.onAccept = async function(paraId, rangeId)
 {
+	await CustomAnnotator.prototype.onAccept.call(this);
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
 	let range = this.getAnnotationRangeObj(paraId, rangeId);

@@ -217,6 +217,7 @@ AssistantReplaceHint.prototype.getInfoForPopup = function(paraId, rangeId)
  */
 AssistantReplaceHint.prototype.onAccept = async function(paraId, rangeId)
 {
+	await CustomAnnotator.prototype.onAccept.call(this, paraId, rangeId);
 	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
 	
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);

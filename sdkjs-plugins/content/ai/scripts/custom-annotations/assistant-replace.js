@@ -204,6 +204,7 @@ AssistantReplace.prototype.getInfoForPopup = function(paraId, rangeId)
  */
 AssistantReplace.prototype.onAccept = async function(paraId, rangeId)
 {
+	await CustomAnnotator.prototype.onAccept.call(this);
 	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
 	
 	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
