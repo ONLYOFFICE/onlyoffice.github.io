@@ -34,9 +34,9 @@
 /// <reference path="./types.js" />
 
 /** @param {localStorageCustomAssistantItem} assistantData */
-function AssistantHint(assistantData)
+function AssistantHint(annotationPopup, assistantData)
 {
-	CustomAnnotator.call(this, assistantData);
+	CustomAnnotator.call(this, annotationPopup, assistantData);
 }
 AssistantHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantHint.prototype.constructor = AssistantHint;
@@ -58,7 +58,7 @@ AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, tex
 	let response = await this.chatRequest(argPrompt);
 	if (!response)
 		return false;
-
+	
 	let rangeId = 1;
 	let ranges = [];
 
@@ -215,37 +215,4 @@ AssistantHint.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
-};
-
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- */
-AssistantHint.prototype.getAnnotationRangeObj = function(paraId, rangeId)
-{
-	return {
-		"paragraphId" : paraId,
-		"rangeId" : rangeId,
-		"name" : "customAssistant_" + this.assistantData.id
-	};
-};
-AssistantHint.prototype._handleNewRangePositions = async function(range, paraId, text)
-{
-	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
-		return;
-
-	let rangeId = range["id"];
-	let annot = this.getAnnotation(paraId, rangeId);
-	
-	if (!annot)
-		return;
-	
-	let start = range["start"];
-	let len = range["length"];
-
-	if (annot["original"] !== text.substring(start, start + len))
-	{
-		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
-		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
-	}
 };

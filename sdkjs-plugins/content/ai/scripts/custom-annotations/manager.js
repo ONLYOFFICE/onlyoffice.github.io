@@ -36,11 +36,13 @@
 /// <reference path="./assistant-hint.js" />
 /// <reference path="./assistant-replace-hint.js" />
 /// <reference path="./assistant-replace.js" />
+/// <reference path="../text-annotations/text-annotator.js" />
+/// <reference path="./annotation-popup.js" />
 
 class CustomAssistantManager {
     constructor() {
 		/**
-		 * @type {Map<string, CustomAnnotator>}
+		 * @type {Map<string, TextAnnotator>}
 		 */
         this._customAssistants = new Map();
         this._isCustomAssistantInit = new Map();
@@ -62,13 +64,13 @@ class CustomAssistantManager {
         }
         switch (assistantData.type) {
             case 0:
-                assistant = new AssistantHint(assistantData);
+                assistant = new AssistantHint(customAnnotationPopup, assistantData);
                 break;
             case 1:
-                assistant = new AssistantReplaceHint(assistantData);
+                assistant = new AssistantReplaceHint(customAnnotationPopup, assistantData);
                 break;
             case 2:
-                assistant = new AssistantReplace(assistantData);
+                assistant = new AssistantReplace(customAnnotationPopup, assistantData);
                 break;
             default:
                 throw new Error(
