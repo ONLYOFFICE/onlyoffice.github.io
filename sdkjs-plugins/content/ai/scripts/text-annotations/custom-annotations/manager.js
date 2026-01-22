@@ -36,7 +36,7 @@
 /// <reference path="./assistant-hint.js" />
 /// <reference path="./assistant-replace-hint.js" />
 /// <reference path="./assistant-replace.js" />
-/// <reference path="../text-annotations/text-annotator.js" />
+/// <reference path="../text-annotator.js" />
 /// <reference path="./annotation-popup.js" />
 
 class CustomAssistantManager {
