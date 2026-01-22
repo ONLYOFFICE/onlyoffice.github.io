@@ -31,7 +31,12 @@
  */
 
 /// <reference path="./types.js" />
+/// <reference path="../text-annotations/text-annotator.js" />
 
+/**
+ * @constructor
+ * @extends TextAnnotator
+ */
 function CustomAnnotator(annotationPopup, assistantData)
 {
 	TextAnnotator.call(this, annotationPopup);

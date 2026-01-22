@@ -33,7 +33,11 @@
 /// <reference path="./custom-annotator.js" />
 /// <reference path="./types.js" />
 
-/** @param {localStorageCustomAssistantItem} assistantData */
+/**
+ * @param {localStorageCustomAssistantItem} assistantData
+ * @constructor
+ * @extends CustomAnnotator
+ */
 function AssistantReplaceHint(annotationPopup, assistantData)
 {
 	CustomAnnotator.call(this, annotationPopup, assistantData);

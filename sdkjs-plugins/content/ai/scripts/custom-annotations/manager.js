@@ -42,7 +42,7 @@
 class CustomAssistantManager {
     constructor() {
 		/**
-		 * @type {Map<string, TextAnnotator>}
+		 * @type {Map<string, Assistant>}
 		 */
         this._customAssistants = new Map();
         this._isCustomAssistantInit = new Map();
@@ -53,15 +53,13 @@ class CustomAssistantManager {
 
     /**
      * @param {localStorageCustomAssistantItem} assistantData
-     * @returns
      */
     createAssistant(assistantData) {
-        let assistant = this._customAssistants.get(assistantData.id);
-        if (assistant) {
-            assistant.assistantData = assistantData;
-            assistant.type = assistantData.type;
-            return assistant;
+        if (this._customAssistants.has(assistantData.id)) {
+            return this._updateAssistant(assistantData);
         }
+        /** @type {Assistant | null} */
+        let assistant = null;
         switch (assistantData.type) {
             case 0:
                 assistant = new AssistantHint(customAnnotationPopup, assistantData);
@@ -72,15 +70,42 @@ class CustomAssistantManager {
             case 2:
                 assistant = new AssistantReplace(customAnnotationPopup, assistantData);
                 break;
-            default:
-                throw new Error(
-                    `Unknown assistant type: ${assistantData.type}`
-                );
+        }
+        if (!assistant) {
+            throw new Error("Unknown custom assistant type: " + assistantData.type);
         }
         
         this._isCustomAssistantInit.set(assistantData.id, false);
         this._isCustomAssistantRunning.set(assistantData.id, false);
         this._customAssistants.set(assistantData.id, assistant);
+
+        return assistant;
+    }
+    /**
+     * @param {localStorageCustomAssistantItem} assistantData
+     */
+    _updateAssistant(assistantData) {
+        let assistant = this._customAssistants.get(assistantData.id);
+        if (!assistant) {
+            throw new Error("Custom assistant not found: " + assistantData.id);
+        }
+        assistant.assistantData = assistantData;
+        assistant.type = assistantData.type;
+
+        const isRunning = this._isCustomAssistantRunning.get(assistantData.id);
+        
+        this._paragraphsStack.forEach((value, paraId) => {
+            assistant.onChangeParagraph(
+                paraId,
+                value.recalcId,
+                value.text,
+                value.annotations
+            );
+        });
+        const paragraphIdsToUpdate = [...assistant.checked];
+        if (isRunning) {
+            assistant.checkParagraphs(paragraphIdsToUpdate);
+        }
 
         return assistant;
     }
