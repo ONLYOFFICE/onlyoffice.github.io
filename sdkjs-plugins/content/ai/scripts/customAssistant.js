@@ -34,7 +34,7 @@
 
 /// <reference path="./utils/theme.js" />
 /// <reference path="../vendor/select2-4.0.6-rc.1/dist/js/select2.js" />
-/// <reference path="./custom-annotations/types.js" />
+/// <reference path="./text-annotations/custom-annotations/types.js" />
 
 
 (function (window) {
