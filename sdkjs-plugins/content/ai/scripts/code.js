@@ -961,7 +961,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 	if (window.customAssistantWindow) {
 		closeCustomAssistantWindow();
 	}
-	const actionButtonText = assistantId ? window.Asc.plugin.tr('Save') : window.Asc.plugin.tr('Add');
+	const actionButtonText = assistantId ? 'Save' : 'Add';
 
 	let variation = {
 		url : "customAssistant.html",
@@ -1014,7 +1014,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 					{
 						text: 'Delete',
 						id: element.id + '-delete',
-						onclick: () => deleteCustomAssistant(element.id, buttonAssistant)
+						onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
 					}];
 					buttonAssistant.attachOnClick(async function(){
 						onStartCustomAssistant(element.id);
@@ -1042,28 +1042,71 @@ function closeCustomAssistantWindow() {
 		window.pluginsButtonsCallback = null;
 	}
 }
-
 /**
  * @param {string} assistantId
  * @param {Asc.ButtonToolbar} buttonAssistant
  */
-function deleteCustomAssistant(assistantId, buttonAssistant) {
+function customAssistantWindowDeleteConfirm(assistantId, buttonAssistant) {
+if (window.customAssistantWindow) {
+		closeCustomAssistantWindow();
+	}
+
 	const savedAssistants = JSON.parse(
 		localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
 	);
 	const index = savedAssistants.findIndex((item) => item.id === assistantId);
-	if (index !== -1) {
-		savedAssistants.splice(index, 1);
-		localStorage.setItem(
-			"onlyoffice_ai_saved_assistants",
-			JSON.stringify(savedAssistants)
-		);
-		if (buttonAssistant) {
-			buttonAssistant.removed = true;
-			Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+	const assistant = savedAssistants[index];
+
+	let variation = {
+		url : "customAssistant.html",
+		description : assistant.name,
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr('Yes'), primary: true },
+			{ text: window.Asc.plugin.tr('No'), primary: false },
+		],
+		icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+		isModal : false,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 400, 100 ]
+	};
+
+	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 100], [400, 100], [0, 0]]);
+		if (assistantId) {
+			customAssistantWindow.command('onDeleteAssistant', assistant);
 		}
-		closeCustomAssistantWindow();
+	});
+	
+	customAssistantWindow.show(variation);
+
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			if (id === 0) {
+
+				if (index !== -1) {
+					savedAssistants.splice(index, 1);
+					localStorage.setItem(
+						"onlyoffice_ai_saved_assistants",
+						JSON.stringify(savedAssistants)
+					);
+					if (buttonAssistant) {
+						buttonAssistant.removed = true;
+						Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+					}
+				}
+			}
+			closeCustomAssistantWindow();
+		} else {
+			await window.pluginsButtonsCallback(id, windowId, ...args);
+		}
 	}
+
+	window.customAssistantWindow = customAssistantWindow;
 }
 
 async function onStartCustomAssistant(assistantId)
