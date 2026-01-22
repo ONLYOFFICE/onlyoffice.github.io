@@ -30,18 +30,26 @@
  *
  */
 
-function TextAnnotator()
+function TextAnnotator(annotatorPopup)
 {
+	this.annotatorPopup = annotatorPopup;
 	this.paraId = null;
 	this.rangeId = null;
 	
 	this.paragraphs = {};
+	/** @type {Object.<string, {recalcId: number, text: string}>} */
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
 	this.checked = new Set(); // was checked on the previous request
 	
 	this.type = -1;
 }
+/**
+ * @param {string} paraId 
+ * @param {number} recalcId 
+ * @param {string} text
+ * @param {string[]} ranges
+ */
 TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
 	this._handleNewRanges(ranges, paraId, text);
@@ -52,6 +60,9 @@ TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, tex
 	
 	this._checkParagraph(paraId);
 };
+/**
+ * @param {string[]} paraIds 
+ */
 TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
 	this.paraToCheck.clear()
@@ -88,10 +99,10 @@ TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, tex
 };
 TextAnnotator.prototype.openPopup = async function(paraId, rangeId)
 {
-	if (!textAnnotatorPopup)
+	if (!this.annotatorPopup)
 		return;
 		
-	let popup = textAnnotatorPopup.open(this.type, paraId, rangeId, this.getInfoForPopup(paraId, rangeId));
+	let popup = this.annotatorPopup.open(this.type, paraId, rangeId, this.getInfoForPopup(paraId, rangeId));
 	if (!popup)
 		return;
 
@@ -107,10 +118,10 @@ TextAnnotator.prototype.openPopup = async function(paraId, rangeId)
 };
 TextAnnotator.prototype.closePopup = function()
 {
-	if (!textAnnotatorPopup)
+	if (!this.annotatorPopup)
 		return;
 	
-	textAnnotatorPopup.close(this.type);
+	this.annotatorPopup.close(this.type);
 };
 TextAnnotator.prototype.getInfoForPopup = function(paraId, rangeId)
 {
@@ -138,6 +149,10 @@ TextAnnotator.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 		"rangeId" : rangeId
 	};
 };
+/**
+ * @param {string} paraId 
+ * @param {string[]} ranges 
+ */
 TextAnnotator.prototype.onClick = function(paraId, ranges)
 {
 	if (!ranges || !ranges.length)

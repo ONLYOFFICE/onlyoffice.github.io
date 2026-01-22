@@ -30,9 +30,9 @@
  *
  */
 
-function SpellChecker()
+function SpellChecker(annotatorPopup)
 {
-	TextAnnotator.call(this);
+	TextAnnotator.call(this, annotatorPopup);
 	this.type = 0;
 }
 SpellChecker.prototype = Object.create(TextAnnotator.prototype);

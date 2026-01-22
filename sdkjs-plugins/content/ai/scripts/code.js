@@ -684,8 +684,8 @@ class Provider extends AI.Provider {\n\
 			
 		});
 		
-		spellchecker = new SpellChecker();
-		grammar = new GrammarChecker();
+		spellchecker = new SpellChecker(textAnnotatorPopup);
+		grammar = new GrammarChecker(textAnnotatorPopup);
 		JSON.parse(
                 localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
             ).forEach(assistantData => {

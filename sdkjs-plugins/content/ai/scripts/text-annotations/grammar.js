@@ -30,9 +30,9 @@
  *
  */
 
-function GrammarChecker()
+function GrammarChecker(annotatorPopup)
 {
-	TextAnnotator.call(this);
+	TextAnnotator.call(this, annotatorPopup);
 	this.type = 1;
 }
 
