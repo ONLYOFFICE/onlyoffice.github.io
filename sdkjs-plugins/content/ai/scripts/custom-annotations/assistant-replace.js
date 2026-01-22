@@ -34,9 +34,9 @@
 /// <reference path="./types.js" />
 
 /** @param {localStorageCustomAssistantItem} assistantData */
-function AssistantReplace(assistantData)
+function AssistantReplace(annotationPopup, assistantData)
 {
-	CustomAnnotator.call(this, assistantData);
+	CustomAnnotator.call(this, annotationPopup, assistantData);
 }
 AssistantReplace.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplace.prototype.constructor = AssistantReplace;
@@ -52,12 +52,13 @@ AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, 
 
 	if (text.length === 0)
 		return false;
-	
+
 	const argPrompt = this._createPrompt(text);
+
 	let response = await this.chatRequest(argPrompt);
 	if (!response)
 		return false;
-	
+
 	let rangeId = 1;
 	let ranges = [];
 
@@ -65,11 +66,11 @@ AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, 
 
 	/**
 	 * @param {string} text 
-	 * @param {ReplaceAiResponse[]} corrections 
+	 * @param {ReplaceAiResponse[]} matches 
 	 */
-	function convertToRanges(text, corrections) 
+	function convertToRanges(text, matches) 
 	{
-		for (const { origin, suggestion, paragraph, occurrence, confidence } of corrections) 
+		for (const { origin, suggestion, paragraph, occurrence, confidence } of matches) 
 		{
 			if (origin === suggestion || confidence <= 0.7)
 				continue;
@@ -215,37 +216,4 @@ AssistantReplace.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
-};
-
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- */
-AssistantReplace.prototype.getAnnotationRangeObj = function(paraId, rangeId)
-{
-	return {
-		"paragraphId" : paraId,
-		"rangeId" : rangeId,
-		"name" : "customAssistant_" + this.assistantData.id
-	};
-};
-AssistantReplace.prototype._handleNewRangePositions = async function(range, paraId, text)
-{
-	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
-		return;
-
-	let rangeId = range["id"];
-	let annot = this.getAnnotation(paraId, rangeId);
-	
-	if (!annot)
-		return;
-	
-	let start = range["start"];
-	let len = range["length"];
-
-	if (annot["original"] !== text.substring(start, start + len))
-	{
-		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
-		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
-	}
 };

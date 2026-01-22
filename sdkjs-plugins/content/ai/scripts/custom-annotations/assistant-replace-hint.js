@@ -34,9 +34,9 @@
 /// <reference path="./types.js" />
 
 /** @param {localStorageCustomAssistantItem} assistantData */
-function AssistantReplaceHint(assistantData)
+function AssistantReplaceHint(annotationPopup, assistantData)
 {
-	CustomAnnotator.call(this, assistantData);
+	CustomAnnotator.call(this, annotationPopup, assistantData);
 }
 AssistantReplaceHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplaceHint.prototype.constructor = AssistantReplaceHint;
@@ -52,11 +52,12 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 
 	if (text.length === 0)
 		return false;
-	
+
 	const argPrompt = this._createPrompt(text);
+
 	let response = await this.chatRequest(argPrompt);
 	if (!response)
-		return false;	
+		return false;
 	
 	let rangeId = 1;
 	let ranges = [];
@@ -65,11 +66,11 @@ AssistantReplaceHint.prototype.annotateParagraph = async function(paraId, recalc
 
 	/**
 	 * @param {string} text 
-	 * @param {ReplaceHintAiResponse[]} corrections 
+	 * @param {ReplaceHintAiResponse[]} matches 
 	 */
-	function convertToRanges(text, corrections) 
+	function convertToRanges(text, matches) 
 	{
-		for (const { origin, suggestion, difference, reason, paragraph, occurrence, confidence } of corrections) 
+		for (const { origin, suggestion, difference, reason, paragraph, occurrence, confidence } of matches) 
 		{
 			if (origin === suggestion || confidence <= 0.7)
 				continue;
@@ -228,37 +229,4 @@ AssistantReplaceHint.prototype.onAccept = async function(paraId, rangeId)
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
 	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 	await Asc.Editor.callMethod("FocusEditor");
-};
-
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- */
-AssistantReplaceHint.prototype.getAnnotationRangeObj = function(paraId, rangeId)
-{
-	return {
-		"paragraphId" : paraId,
-		"rangeId" : rangeId,
-		"name" : "customAssistant_" + this.assistantData.id
-	};
-};
-AssistantReplaceHint.prototype._handleNewRangePositions = async function(range, paraId, text)
-{
-	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
-		return;
-
-	let rangeId = range["id"];
-	let annot = this.getAnnotation(paraId, rangeId);
-	
-	if (!annot)
-		return;
-	
-	let start = range["start"];
-	let len = range["length"];
-
-	if (annot["original"] !== text.substring(start, start + len))
-	{
-		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
-		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
-	}
 };
