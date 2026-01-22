@@ -42,6 +42,7 @@ function CustomAnnotator(annotationPopup, assistantData)
 	TextAnnotator.call(this, annotationPopup);
 	this.assistantData = assistantData;
 	this.type = assistantData.type;
+	this._skipNextChangeParagraph = false;
 }
 CustomAnnotator.prototype = Object.create(TextAnnotator.prototype);
 CustomAnnotator.prototype.constructor = CustomAnnotator;
@@ -77,4 +78,20 @@ CustomAnnotator.prototype._handleNewRangePositions = async function(range, paraI
 		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
 		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
 	}
+};
+/**
+ * @param {string[]} paraIds 
+ */
+CustomAnnotator.prototype.checkParagraphs = async function(paraIds)
+{
+	if (this._skipNextChangeParagraph)
+	{
+		this._skipNextChangeParagraph = false;
+		return;
+	}
+	TextAnnotator.prototype.checkParagraphs.call(this, paraIds);
+};
+CustomAnnotator.prototype.onAccept = async function(paraId, rangeId)
+{
+	this._skipNextChangeParagraph = true;
 };
