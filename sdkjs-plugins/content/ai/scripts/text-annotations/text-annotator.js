@@ -40,6 +40,7 @@ function TextAnnotator(annotatorPopup)
 	/** @type {Object.<string, {recalcId: number, text: string}>} */
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
+	/** @type {Set<string>} */
 	this.checked = new Set(); // was checked on the previous request
 	
 	this.type = -1;

@@ -62,3 +62,6 @@
  * @typedef {ReplaceHintInfoForPopup | HintInfoForPopup | ReplaceInfoForPopup} InfoForPopup
  */
 
+/**
+ * @typedef {CustomAnnotator & TextAnnotator & AssistantHint & AssistantReplaceHint & AssistantReplace} Assistant
+ */
