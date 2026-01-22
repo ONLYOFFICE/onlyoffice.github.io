@@ -93,6 +93,9 @@ class CustomAssistantManager {
         assistant.type = assistantData.type;
 
         const isRunning = this._isCustomAssistantRunning.get(assistantData.id);
+        if (!isRunning) {
+            return assistant;
+        }
         
         this._paragraphsStack.forEach((value, paraId) => {
             assistant.onChangeParagraph(
@@ -103,9 +106,7 @@ class CustomAssistantManager {
             );
         });
         const paragraphIdsToUpdate = [...assistant.checked];
-        if (isRunning) {
-            assistant.checkParagraphs(paragraphIdsToUpdate);
-        }
+        assistant.checkParagraphs(paragraphIdsToUpdate);
 
         return assistant;
     }
