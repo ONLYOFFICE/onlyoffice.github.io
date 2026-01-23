@@ -37,7 +37,7 @@ function TextAnnotator(annotatorPopup)
 	this.rangeId = null;
 	
 	this.paragraphs = {};
-	/** @type {Object.<string, {recalcId: number, text: string}>} */
+	/** @type {Object.<string, {recalcId: string, text: string}>} */
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
 	/** @type {Set<string>} */
@@ -47,7 +47,7 @@ function TextAnnotator(annotatorPopup)
 }
 /**
  * @param {string} paraId 
- * @param {number} recalcId 
+ * @param {string} recalcId 
  * @param {string} text
  * @param {string[]} ranges
  */

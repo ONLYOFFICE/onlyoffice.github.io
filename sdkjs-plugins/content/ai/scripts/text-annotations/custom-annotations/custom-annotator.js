@@ -37,61 +37,86 @@
  * @constructor
  * @extends TextAnnotator
  */
-function CustomAnnotator(annotationPopup, assistantData)
-{
-	TextAnnotator.call(this, annotationPopup);
-	this.assistantData = assistantData;
-	this.type = assistantData.type;
-	this._skipNextChangeParagraph = false;
+function CustomAnnotator(annotationPopup, assistantData) {
+    TextAnnotator.call(this, annotationPopup);
+    this.assistantData = assistantData;
+    this.type = assistantData.type;
+    this._skipNextChangeParagraph = false;
 }
 CustomAnnotator.prototype = Object.create(TextAnnotator.prototype);
 CustomAnnotator.prototype.constructor = CustomAnnotator;
 
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- */
-CustomAnnotator.prototype.getAnnotationRangeObj = function(paraId, rangeId)
-{
-	return {
-		"paragraphId" : paraId,
-		"rangeId" : rangeId,
-		"name" : "customAssistant_" + this.assistantData.id
-	};
-};
-CustomAnnotator.prototype._handleNewRangePositions = async function(range, paraId, text)
-{
-	if (!range || range["name"] !== "customAssistant_" + this.assistantData.id || !this.paragraphs[paraId])
-		return;
+Object.assign(CustomAnnotator.prototype, {
+    /**
+     * @param {string} paraId
+     * @param {string} recalcId
+     * @param {string} text
+     */
+    annotateParagraph: async function (paraId, recalcId, text) {
+        this.paragraphs[paraId] = {};
 
-	let rangeId = range["id"];
-	let annot = this.getAnnotation(paraId, rangeId);
-	
-	if (!annot)
-		return;
-	
-	let start = range["start"];
-	let len = range["length"];
+        if (text.length === 0) return false;
 
-	if (annot["original"] !== text.substring(start, start + len))
-	{
-		let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
-		Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
-	}
-};
-/**
- * @param {string[]} paraIds 
- */
-CustomAnnotator.prototype.checkParagraphs = async function(paraIds)
-{
-	if (this._skipNextChangeParagraph)
-	{
-		this._skipNextChangeParagraph = false;
-		return;
-	}
-	TextAnnotator.prototype.checkParagraphs.call(this, paraIds);
-};
-CustomAnnotator.prototype.onAccept = async function(paraId, rangeId)
-{
-	this._skipNextChangeParagraph = true;
-};
+        const argPrompt = this._createPrompt(text);
+
+        let response = await this.chatRequest(argPrompt);
+        if (!response) return false;
+
+        try {
+            const ranges = this._convertToRanges(paraId, text, JSON.parse(response));
+            let obj = {
+                type: "highlightText",
+                paragraphId: paraId,
+                name: "customAssistant_" + this.assistantData.id,
+                recalcId: recalcId,
+                ranges: ranges,
+            };
+            await Asc.Editor.callMethod("AnnotateParagraph", [obj]);
+        } catch (e) {}
+    },
+    /**
+     * @param {string} paraId
+     * @param {string} rangeId
+     */
+    getAnnotationRangeObj: function (paraId, rangeId) {
+        return {
+            paragraphId: paraId,
+            rangeId: rangeId,
+            name: "customAssistant_" + this.assistantData.id,
+        };
+    },
+    _handleNewRangePositions: async function (range, paraId, text) {
+        if (
+            !range ||
+            range["name"] !== "customAssistant_" + this.assistantData.id ||
+            !this.paragraphs[paraId]
+        )
+            return;
+
+        let rangeId = range["id"];
+        let annot = this.getAnnotation(paraId, rangeId);
+
+        if (!annot) return;
+
+        let start = range["start"];
+        let len = range["length"];
+
+        if (annot["original"] !== text.substring(start, start + len)) {
+            let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
+            Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
+        }
+    },
+    /**
+     * @param {string[]} paraIds
+     */
+    checkParagraphs: async function (paraIds) {
+        if (this._skipNextChangeParagraph) {
+            this._skipNextChangeParagraph = false;
+            return;
+        }
+        TextAnnotator.prototype.checkParagraphs.call(this, paraIds);
+    },
+    onAccept: async function (paraId, rangeId) {
+        this._skipNextChangeParagraph = true;
+    },
+});
