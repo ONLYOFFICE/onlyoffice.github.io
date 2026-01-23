@@ -38,186 +38,156 @@
  * @constructor
  * @extends CustomAnnotator
  */
-function AssistantHint(annotationPopup, assistantData)
-{
-	CustomAnnotator.call(this, annotationPopup, assistantData);
+function AssistantHint(annotationPopup, assistantData) {
+    CustomAnnotator.call(this, annotationPopup, assistantData);
 }
 AssistantHint.prototype = Object.create(CustomAnnotator.prototype);
 AssistantHint.prototype.constructor = AssistantHint;
 
-/**
- * @param {string} paraId 
- * @param {string} recalcId 
- * @param {string} text
- */
-AssistantHint.prototype.annotateParagraph = async function(paraId, recalcId, text)
-{
-	this.paragraphs[paraId] = {};
+Object.assign(AssistantHint.prototype, {
+    /**
+     * @param {string} text
+     * @param {Array<HintAiResponse>} matches
+     */
+    _convertToRanges: function (paraId, text, matches) {
+        const _t = this;
+        let rangeId = 1;
+        const ranges = [];
+        for (const {
+            origin,
+            reason,
+            paragraph,
+            occurrence,
+            confidence,
+        } of matches) {
+            if (confidence <= 0.7) continue;
 
-	if (text.length === 0)
-		return false;
+            let count = 0;
+            let searchStart = 0;
 
-	const argPrompt = this._createPrompt(text);
+            while (searchStart < text.length) {
+                const index = _t.simpleGraphemeIndexOf(
+                    text,
+                    origin,
+                    searchStart,
+                );
+                if (index === -1) break;
 
-	let response = await this.chatRequest(argPrompt);
-	if (!response)
-		return false;
-	
-	let rangeId = 1;
-	let ranges = [];
+                count++;
+                if (count === occurrence) {
+                    ranges.push({
+                        start: index,
+                        length: [...origin].length,
+                        id: rangeId,
+                    });
+                    _t.paragraphs[paraId][rangeId] = {
+                        original: origin,
+                        reason: reason,
+                    };
+                    ++rangeId;
+                    break;
+                }
+                searchStart = index + 1;
+            }
+        }
+        return ranges;
+    },
 
-	let _t = this;
+    /**
+     * @param {string} text
+     * @returns {string}
+     */
+    _createPrompt: function (text) {
+        let prompt = `You are a multi-disciplinary text analysis assistant.
+		Your task is to find text fragments that match the user's criteria.
+		
+		MANDATORY RULES:
+			1. Analyze ONLY the provided text.
+			2. Find words, phrases, or sentences that match the user's criteria.
+			3. For EACH match you find:
+			- Provide the exact quote.
+			- Explain WHY it matches the criteria.
+			- Provide position information (paragraph number).
+			4. If no matches are found, return an empty array: [].
+			5. Format your response STRICTLY in JSON format.
+			6. Support multiple languages (English, Russian, etc.)
 
-	/**
-	 * @param {string} text 
-	 * @param {Array<HintAiResponse>} matches 
-	 */
-	function convertToRanges(text, matches) 
-	{
-		for (const { origin, reason, paragraph, occurrence, confidence } of matches) 
-		{
-			if (confidence <= 0.7)
-				continue;
-			
-			let count = 0;
-			let searchStart = 0;
-
-			while (searchStart < text.length)
+		Response format - return ONLY this JSON array with no additional text:
+			[
 			{
-				const index = _t.simpleGraphemeIndexOf(text, origin, searchStart);
-				if (index === -1) break;
-
-				count++;
-				if (count === occurrence)
-				{
-					ranges.push({
-						"start": index,
-						"length": [...origin].length,
-						"id": rangeId
-					});
-					_t.paragraphs[paraId][rangeId] = {
-						"original" : origin,
-						"reason" : reason
-					};
-					++rangeId;
-					break;
-				}
-				searchStart = index + 1;
+				"origin": "exact text fragment that matches the query",
+				"reason": "detailed explanation why it matches the criteria",
+				"paragraph": paragraph_number,
+				"occurrence": 1,
+				"confidence": 0.95
 			}
-		}
-	}
+			]
 
-	try 
-	{
-		convertToRanges(text, JSON.parse(response));
-		let obj = {
-			"type": "highlightText",
-			"paragraphId": paraId,
-			"name" : "customAssistant_" + this.assistantData.id,
-			"recalcId": recalcId,
-			"ranges": ranges
-		};
-		await Asc.Editor.callMethod("AnnotateParagraph", [obj]);
-	}
-	catch (e)
-	{ }
-}
+		Guidelines for each field:
+			- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
+			- "reason": Clear explanation of why this fragment matches the criteria; IF the user's request contains words like "source", "reference", "link", "cite", "website", "URL", "Wikipedia", "proof", "evidence", "verify" - then you MUST include actual working links in your explanations in html format.
+			- "paragraph": Paragraph number where the fragment is found (0-based index)
+			- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
+			- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
+		
+		CRITICAL
+			- Output should be in the exact this format
+			- No any comments are allowed
 
-/**
- * @param {string} text 
- * @returns {string}
- */
-AssistantHint.prototype._createPrompt = function(text) {
-	let prompt = `You are a multi-disciplinary text analysis assistant.
-	  Your task is to find text fragments that match the user's criteria.
-	
-	  MANDATORY RULES:
-		1. Analyze ONLY the provided text.
-		2. Find words, phrases, or sentences that match the user's criteria.
-		3. For EACH match you find:
-		  - Provide the exact quote.
-		  - Explain WHY it matches the criteria.
-		  - Provide position information (paragraph number).
-		4. If no matches are found, return an empty array: [].
-		5. Format your response STRICTLY in JSON format.
-		6. Support multiple languages (English, Russian, etc.)
+		CRITICAL - Output Format:
+			- Return ONLY the raw JSON array, nothing else
+			- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
+			- DO NOT include any explanatory text before or after the JSON
+			- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
+			- The response should start with [ and end with ]
+		`;
+        prompt +=
+            "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
 
-	  Response format - return ONLY this JSON array with no additional text:
-		[
-		  {
-			"origin": "exact text fragment that matches the query",
-			"reason": "detailed explanation why it matches the criteria",
-			"paragraph": paragraph_number,
-			"occurrence": 1,
-			"confidence": 0.95
-		  }
-		]
+        prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
 
-	  Guidelines for each field:
-		- "origin": EXACT UNCHANGED original text fragment. Do not fix anything in this field.
-		- "reason": Clear explanation of why this fragment matches the criteria; IF the user's request contains words like "source", "reference", "link", "cite", "website", "URL", "Wikipedia", "proof", "evidence", "verify" - then you MUST include actual working links in your explanations in html format.
-		- "paragraph": Paragraph number where the fragment is found (0-based index)
-		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
-		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
-	  
-	  CRITICAL
-		- Output should be in the exact this format
-		- No any comments are allowed
+        prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
 
-	  CRITICAL - Output Format:
-		- Return ONLY the raw JSON array, nothing else
-		- DO NOT wrap the response in markdown code blocks (no \`\`\`json or \`\`\`)
-		- DO NOT include any explanatory text before or after the JSON
-		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
-		- The response should start with [ and end with ]
-	  `;
-	  prompt += "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
-	  
-	  prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
+        return prompt;
+    },
 
-	  prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+    /**
+     * @param {string} paraId
+     * @param {string} rangeId
+     * @return {HintInfoForPopup}
+     */
+    getInfoForPopup: function (paraId, rangeId) {
+        let _s = this.getAnnotation(paraId, rangeId);
+        let reason = _s["reason"];
+        try {
+            reason = reason.replace(/<a\s+(.*?)>/gi, '<a $1 target="_blank">');
+        } catch (e) {
+            console.error(e);
+        }
+        return {
+            original: _s["original"],
+            explanation: reason,
+            type: this.type,
+        };
+    },
 
-	  return prompt;
-}
+    /**
+     * @param {string} paraId
+     * @param {string} rangeId
+     */
+    onAccept: async function (paraId, rangeId) {
+        await CustomAnnotator.prototype.onAccept.call(this);
+        await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- * @return {HintInfoForPopup}
- */
-AssistantHint.prototype.getInfoForPopup = function(paraId, rangeId)
-{
-	let _s = this.getAnnotation(paraId, rangeId);
-	let reason = _s["reason"];
-	try {
-		reason = reason.replace(/<a\s+(.*?)>/gi, '<a $1 target="_blank">');
-	} catch (e) {
-		console.error(e);
-	}
-	return {
-		original : _s["original"],
-		explanation : reason,
-		type : this.type
-	};
-};
+        let range = this.getAnnotationRangeObj(paraId, rangeId);
+        await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
 
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- */
-AssistantHint.prototype.onAccept = async function(paraId, rangeId)
-{
-	await CustomAnnotator.prototype.onAccept.call(this);
-	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+        await Asc.Editor.callCommand(function () {
+            Api.GetDocument().RemoveSelection();
+        });
 
-	let range = this.getAnnotationRangeObj(paraId, rangeId);
-	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
-	
-	await Asc.Editor.callCommand(function(){
-		Api.GetDocument().RemoveSelection();
-	});
-	
-	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
-	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-	await Asc.Editor.callMethod("FocusEditor");
-};
+        await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
+        await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+        await Asc.Editor.callMethod("FocusEditor");
+    },
+});

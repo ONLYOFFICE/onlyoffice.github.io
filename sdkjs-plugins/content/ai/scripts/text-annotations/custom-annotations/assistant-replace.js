@@ -38,97 +38,67 @@
  * @constructor
  * @extends CustomAnnotator
  */
-function AssistantReplace(annotationPopup, assistantData)
-{
-	CustomAnnotator.call(this, annotationPopup, assistantData);
+function AssistantReplace(annotationPopup, assistantData) {
+    CustomAnnotator.call(this, annotationPopup, assistantData);
 }
 AssistantReplace.prototype = Object.create(CustomAnnotator.prototype);
 AssistantReplace.prototype.constructor = AssistantReplace;
 
-/**
- * @param {string} paraId 
- * @param {string} recalcId 
- * @param {string} text
- */
-AssistantReplace.prototype.annotateParagraph = async function(paraId, recalcId, text)
-{
-	this.paragraphs[paraId] = {};
+Object.assign(AssistantReplace.prototype, {
+    /**
+     * @param {string} text
+     * @param {ReplaceAiResponse[]} matches
+     */
+    _convertToRanges: function (paraId, text, matches) {
+        const _t = this;
+        let rangeId = 1;
+        const ranges = [];
+        for (const {
+            origin,
+            suggestion,
+            paragraph,
+            occurrence,
+            confidence,
+        } of matches) {
+            if (origin === suggestion || confidence <= 0.7) continue;
 
-	if (text.length === 0)
-		return false;
+            let count = 0;
+            let searchStart = 0;
 
-	const argPrompt = this._createPrompt(text);
+            while (searchStart < text.length) {
+                const index = _t.simpleGraphemeIndexOf(
+                    text,
+                    origin,
+                    searchStart,
+                );
+                if (index === -1) break;
 
-	let response = await this.chatRequest(argPrompt);
-	if (!response)
-		return false;
+                count++;
+                if (count === occurrence) {
+                    ranges.push({
+                        start: index,
+                        length: [...origin].length,
+                        id: rangeId,
+                    });
+                    _t.paragraphs[paraId][rangeId] = {
+                        original: origin,
+                        suggestion: suggestion,
+                    };
+                    ++rangeId;
+                    break;
+                }
+                searchStart = index + 1;
+            }
+        }
+        return ranges;
+    },
 
-	let rangeId = 1;
-	let ranges = [];
-
-	let _t = this;
-
-	/**
-	 * @param {string} text 
-	 * @param {ReplaceAiResponse[]} matches 
-	 */
-	function convertToRanges(text, matches) 
-	{
-		for (const { origin, suggestion, paragraph, occurrence, confidence } of matches) 
-		{
-			if (origin === suggestion || confidence <= 0.7)
-				continue;
-			
-			let count = 0;
-			let searchStart = 0;
-
-			while (searchStart < text.length)
-			{
-				const index = _t.simpleGraphemeIndexOf(text, origin, searchStart);
-				if (index === -1) break;
-
-				count++;
-				if (count === occurrence)
-				{
-					ranges.push({
-						"start": index,
-						"length": [...origin].length,
-						"id": rangeId
-					});
-					_t.paragraphs[paraId][rangeId] = {
-						"original" : origin,
-						"suggestion" : suggestion,
-					};
-					++rangeId;
-					break;
-				}
-				searchStart = index + 1;
-			}
-		}
-	}
-
-	try 
-	{
-		convertToRanges(text, JSON.parse(response));
-		let obj = {
-			"type": "highlightText",
-			"paragraphId": paraId,
-			"name" : "customAssistant_" + this.assistantData.id,
-			"recalcId": recalcId,
-			"ranges": ranges
-		};
-		await Asc.Editor.callMethod("AnnotateParagraph", [obj]);
-	}
-	catch (e)
-	{ }
-}
-
-/**
- * @param {string} text 
- * @returns {string}
- */
-AssistantReplace.prototype._createPrompt = function(text) {
-	let prompt = `You are a multi-disciplinary text analysis and transformation assistant.
+    /**
+     * @param {string} text
+     * @returns {string}
+     */
+    _createPrompt: function (text) {
+        let prompt = `You are a multi-disciplinary text analysis and transformation assistant.
 	  Your task is to analyze text based on user's specific criteria and provide intelligent corrections.
 	
 	  MANDATORY RULES:
@@ -174,51 +144,51 @@ AssistantReplace.prototype._createPrompt = function(text) {
 		- DO NOT use escaped newlines (\\n) - return the JSON on a single line if possible
 		- The response should start with [ and end with ]
 	  `;
-	  prompt += "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
-	  
-	  prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
+        prompt +=
+            "\n\nUSER REQUEST:\n```" + this.assistantData.query + "\n```\n\n";
 
-	  prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
+        prompt += "TEXT TO ANALYZE:\n```\n" + text + "\n```\n\n";
 
-	  return prompt;
-}
+        prompt += `Please analyze this text and find all fragments that match the user's request. Be thorough but precise.`;
 
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- * @returns {ReplaceInfoForPopup}
- */
-AssistantReplace.prototype.getInfoForPopup = function(paraId, rangeId)
-{
-	let _s = this.getAnnotation(paraId, rangeId);
-	return {
-		original : _s["original"],
-		suggested : _s["suggestion"],
-		type : this.type
-	};
-};
+        return prompt;
+    },
 
-/**
- * @param {string} paraId 
- * @param {string} rangeId 
- */
-AssistantReplace.prototype.onAccept = async function(paraId, rangeId)
-{
-	await CustomAnnotator.prototype.onAccept.call(this);
-	let text = this.getAnnotation(paraId, rangeId)["suggestion"];
-	
-	await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+    /**
+     * @param {string} paraId
+     * @param {string} rangeId
+     * @returns {ReplaceInfoForPopup}
+     */
+    getInfoForPopup: function (paraId, rangeId) {
+        let _s = this.getAnnotation(paraId, rangeId);
+        return {
+            original: _s["original"],
+            suggested: _s["suggestion"],
+            type: this.type,
+        };
+    },
 
-	let range = this.getAnnotationRangeObj(paraId, rangeId);
-	await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
-	
-	Asc.scope.text = text;
-	await Asc.Editor.callCommand(function(){
-		Api.ReplaceTextSmart([Asc.scope.text]);
-		Api.GetDocument().RemoveSelection();
-	});
-	
-	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
-	await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
-	await Asc.Editor.callMethod("FocusEditor");
-};
+    /**
+     * @param {string} paraId
+     * @param {string} rangeId
+     */
+    onAccept: async function (paraId, rangeId) {
+        await CustomAnnotator.prototype.onAccept.call(this);
+        let text = this.getAnnotation(paraId, rangeId)["suggestion"];
+
+        await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+        let range = this.getAnnotationRangeObj(paraId, rangeId);
+        await Asc.Editor.callMethod("SelectAnnotationRange", [range]);
+
+        Asc.scope.text = text;
+        await Asc.Editor.callCommand(function () {
+            Api.ReplaceTextSmart([Asc.scope.text]);
+            Api.GetDocument().RemoveSelection();
+        });
+
+        await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
+        await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+        await Asc.Editor.callMethod("FocusEditor");
+    },
+});
