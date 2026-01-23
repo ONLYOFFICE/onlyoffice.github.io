@@ -41,14 +41,14 @@
 
 class CustomAssistantManager {
     constructor() {
-		/**
-		 * @type {Map<string, Assistant>}
-		 */
+        /**
+         * @type {Map<string, Assistant>}
+         */
         this._customAssistants = new Map();
         this._isCustomAssistantInit = new Map();
         this._isCustomAssistantRunning = new Map();
-		/** @type {Map<string, {recalcId: number, text: string, annotations: any}>} */
-		this._paragraphsStack = new Map();
+        /** @type {Map<string, {recalcId: string, text: string, annotations: any}>} */
+        this._paragraphsStack = new Map();
     }
 
     /**
@@ -62,19 +62,30 @@ class CustomAssistantManager {
         let assistant = null;
         switch (assistantData.type) {
             case 0:
-                assistant = new AssistantHint(customAnnotationPopup, assistantData);
+                assistant = new AssistantHint(
+                    customAnnotationPopup,
+                    assistantData,
+                );
                 break;
             case 1:
-                assistant = new AssistantReplaceHint(customAnnotationPopup, assistantData);
+                assistant = new AssistantReplaceHint(
+                    customAnnotationPopup,
+                    assistantData,
+                );
                 break;
             case 2:
-                assistant = new AssistantReplace(customAnnotationPopup, assistantData);
+                assistant = new AssistantReplace(
+                    customAnnotationPopup,
+                    assistantData,
+                );
                 break;
         }
         if (!assistant) {
-            throw new Error("Unknown custom assistant type: " + assistantData.type);
+            throw new Error(
+                "Unknown custom assistant type: " + assistantData.type,
+            );
         }
-        
+
         this._isCustomAssistantInit.set(assistantData.id, false);
         this._isCustomAssistantRunning.set(assistantData.id, false);
         this._customAssistants.set(assistantData.id, assistant);
@@ -96,13 +107,13 @@ class CustomAssistantManager {
         if (!isRunning) {
             return assistant;
         }
-        
+
         this._paragraphsStack.forEach((value, paraId) => {
             assistant.onChangeParagraph(
                 paraId,
                 value.recalcId,
                 value.text,
-                value.annotations
+                value.annotations,
             );
         });
         const paragraphIdsToUpdate = [...assistant.checked];
@@ -118,14 +129,11 @@ class CustomAssistantManager {
         this._isCustomAssistantRunning.delete(assistantId);
     }
 
-	/** @param {string} assistantId */
+    /** @param {string} assistantId */
     checkNeedToRunAssistant(assistantId) {
-		const isRunning = this._isCustomAssistantRunning.get(assistantId);
-        this._isCustomAssistantRunning.set(
-            assistantId,
-            !isRunning
-        );
-		return isRunning;
+        const isRunning = this._isCustomAssistantRunning.get(assistantId);
+        this._isCustomAssistantRunning.set(assistantId, !isRunning);
+        return isRunning;
     }
 
     /**
@@ -134,53 +142,53 @@ class CustomAssistantManager {
      */
     run(assistantId, paraIds) {
         const assistant = this._customAssistants.get(assistantId);
-		if (!assistant) {
-			console.error("Custom assistant not found: " + assistantId);
-			return;
-		}
+        if (!assistant) {
+            console.error("Custom assistant not found: " + assistantId);
+            return;
+        }
 
-		if (!this._isCustomAssistantInit.get(assistantId)) {
-			this._paragraphsStack.forEach((value, paraId) => {
-				assistant.onChangeParagraph(
-					paraId,
-					value.recalcId,
-					value.text,
-					value.annotations
-				)
-			});
-		}
+        if (!this._isCustomAssistantInit.get(assistantId)) {
+            this._paragraphsStack.forEach((value, paraId) => {
+                assistant.onChangeParagraph(
+                    paraId,
+                    value.recalcId,
+                    value.text,
+                    value.annotations,
+                );
+            });
+        }
 
         assistant.checkParagraphs(paraIds);
-		this._isCustomAssistantInit.set(assistantId, true);
+        this._isCustomAssistantInit.set(assistantId, true);
     }
 
     /**
      * @param {string} paragraphId
-     * @param {number} recalcId
+     * @param {string} recalcId
      * @param {string} text
      * @param {*} annotations
      */
     onChangeParagraph(paragraphId, recalcId, text, annotations) {
-		this._paragraphsStack.set(paragraphId, {
-			recalcId,
-			text,
-			annotations
-		});
+        this._paragraphsStack.set(paragraphId, {
+            recalcId,
+            text,
+            annotations,
+        });
         this._customAssistants.forEach((assistant, assistantId) => {
             const isInit = this._isCustomAssistantInit.get(assistantId);
-		    if (!isInit) {
-				return;
-			}	
-			assistant.onChangeParagraph(
+            if (!isInit) {
+                return;
+            }
+            assistant.onChangeParagraph(
                 paragraphId,
                 recalcId,
                 text,
-                annotations
+                annotations,
             );
-			const isRunning = this._isCustomAssistantRunning.get(assistantId);
-			if (isRunning) {
-				assistant.checkParagraphs([paragraphId]);
-			}
+            const isRunning = this._isCustomAssistantRunning.get(assistantId);
+            if (isRunning) {
+                assistant.checkParagraphs([paragraphId]);
+            }
         });
     }
 
