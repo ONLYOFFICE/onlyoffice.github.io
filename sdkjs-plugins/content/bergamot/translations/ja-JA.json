@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "手動でテキストを入力",
+	"Hide field": "フィールドを非表示",
+	"Translating...": "翻訳中...",
+	"Loading translation engine...": "翻訳エンジンを読み込み中...",
+	"Downloading model...": "モデルをダウンロード中...",
+	"Model loaded - Ready for offline translation": "モデル読み込み完了 - オフライン翻訳準備完了",
+	"Failed to load model: ": "モデルの読み込みに失敗しました：",
+	"Ready - Select languages to translate": "準備完了 - 翻訳する言語を選択してください",
+	"Failed to initialize: ": "初期化に失敗しました：",
+	"Translation complete": "翻訳完了",
+	"Translation failed: ": "翻訳に失敗しました：",
+	"Translation failed": "翻訳に失敗しました",
+	"Copied to clipboard": "クリップボードにコピーしました",
+	"Copy": "コピー",
+	"Insert to document": "ドキュメントに挿入",
+	"Offline": "オフライン"
+}
