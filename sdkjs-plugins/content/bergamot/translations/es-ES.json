@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "Introducir texto manualmente",
+	"Hide field": "Ocultar campo",
+	"Translating...": "Traduciendo...",
+	"Loading translation engine...": "Cargando motor de traducción...",
+	"Downloading model...": "Descargando modelo...",
+	"Model loaded - Ready for offline translation": "Modelo cargado - Listo para traducción sin conexión",
+	"Failed to load model: ": "Error al cargar el modelo: ",
+	"Ready - Select languages to translate": "Listo - Seleccione idiomas para traducir",
+	"Failed to initialize: ": "Error de inicialización: ",
+	"Translation complete": "Traducción completada",
+	"Translation failed: ": "Error de traducción: ",
+	"Translation failed": "Error de traducción",
+	"Copied to clipboard": "Copiado al portapapeles",
+	"Copy": "Copiar",
+	"Insert to document": "Insertar en documento",
+	"Offline": "Sin conexión"
+}

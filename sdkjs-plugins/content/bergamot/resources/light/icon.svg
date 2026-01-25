@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g fill="none" stroke="#444444" stroke-width="1.2">
+    <!-- Globe outline -->
+    <circle cx="10" cy="10" r="7.5"/>
+    <!-- Horizontal line -->
+    <ellipse cx="10" cy="10" rx="7.5" ry="3"/>
+    <!-- Vertical ellipse -->
+    <ellipse cx="10" cy="10" rx="3" ry="7.5"/>
+    <!-- Translation arrows -->
+    <path d="M2 10 L5 10" stroke-linecap="round"/>
+    <path d="M15 10 L18 10" stroke-linecap="round"/>
+    <path d="M16.5 8.5 L18 10 L16.5 11.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
