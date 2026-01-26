@@ -82,6 +82,11 @@ Object.assign(AssistantReplaceHint.prototype, {
                         length: [...origin].length,
                         id: rangeId,
                     });
+                    if (difference.indexOf(origin + " → ") === 0) {
+                        difference = difference.slice(
+                            origin.length + 3,
+                        );
+                    }
                     _t.paragraphs[paraId][rangeId] = {
                         original: origin,
                         suggestion: suggestion,
@@ -123,7 +128,7 @@ Object.assign(AssistantReplaceHint.prototype, {
 			"origin": "exact text fragment that matches the query",
       		"suggestion": "suggested replacement (plain text)",
 			"reason": "detailed explanation why it matches the criteria",
-   			"difference":"difference between origin and suggestion"
+   			"difference":"visual representation showing exact changes between origin and suggestion"
 			"paragraph": paragraph_number,
 			"occurrence": 1,
 			"confidence": 0.95
@@ -136,11 +141,16 @@ Object.assign(AssistantReplaceHint.prototype, {
 			* Ensure it aligns with the user's criteria.
 			* Maintain coherence with surrounding text.
 		- "reason": Clear explanation of why this fragment matches the criteria; IF the user's request contains words like "source", "reference", "link", "cite", "website", "URL", "Wikipedia", "proof", "evidence", "verify" - then you MUST include actual working links in your explanations in html format.
-		- "difference":  The difference between origin and suggestion in html format: that is, you need to take the suggestion field and highlight the differences in it by wrapping them in the <strong> tag.
+		- "difference":  The difference between origin and suggestion in html format.
 		- "paragraph": Paragraph number where the fragment is found (0-based index)
 		- "occurrence": Which occurrence of this sentence if it appears multiple times (1 for first, 2 for second, etc.)
 		- "confidence": Value between 0 and 1 indicating certainty (1.0 = completely certain, 0.5 = uncertain)
 	  
+      CRITICAL: Rules for the "difference" field:
+        - Format: "original → corrected", you need to leave only "corrected", never show the "original"
+        - "<strong>" for added characters - use for the corrected version
+        - Show exact character-level changes
+
 	  CRITICAL:
 		- Output should be in the exact this format
 		- No any comments are allowed
