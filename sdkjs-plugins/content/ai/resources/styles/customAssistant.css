@@ -9,26 +9,24 @@ p {
     margin: 5px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin: 10px;
+label {
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 5px;
 }
-
-ul,
-ol {
-    margin: 10px;
-}
+    label strong {
+        color: red;
+        color: var(--border-error);
+    }
 
 .custom_assistant_window {
     display: flex;
     flex-direction: column;
-    margin: 2px 12px 12px 12px;
+    padding: 1px 15px 20px 15px;
     flex: 1;
     width: calc(100% - 24px);
+    background-color: #fff;
+    background-color: var(--background-normal);
 }
 
 #deletion_text {
@@ -42,15 +40,12 @@ ol {
 
 #custom_assistant {
     height: auto;
-    padding: 10px 13px;
+    padding: 14px 0 8px 0;
     display: flex;
     flex-direction: column;
     overflow: auto;
     position: relative;
-}
-
-.hidden {
-    display: none !important;
+    line-height: 16px;
 }
 
 #input_prompt_wrapper {
@@ -58,8 +53,6 @@ ol {
     flex-direction: column;
     flex: 1;
     gap: 12px;
-    background-color: #fff;
-    background-color: var(--background-normal);
     position: relative;
 }
 
@@ -80,4 +73,8 @@ ol {
 #input_prompt:focus {
     border-color: #4a87e7;
     border-color: var(--border-control-focus);
+}
+
+.hidden {
+    display: none !important;
 }
