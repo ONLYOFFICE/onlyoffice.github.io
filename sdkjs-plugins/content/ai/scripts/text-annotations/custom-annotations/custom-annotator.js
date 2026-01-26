@@ -51,6 +51,7 @@ Object.assign(CustomAnnotator.prototype, {
      * @param {string} paraId
      * @param {string} recalcId
      * @param {string} text
+     * @returns {Promise<boolean>}
      */
     annotateParagraph: async function (paraId, recalcId, text) {
         this.paragraphs[paraId] = {};
@@ -60,7 +61,10 @@ Object.assign(CustomAnnotator.prototype, {
         const argPrompt = this._createPrompt(text);
 
         let response = await this.chatRequest(argPrompt);
-        if (!response) return false;
+
+        if (!response || response === '[]') {
+            return false;
+        }
 
         try {
             const ranges = this._convertToRanges(paraId, text, JSON.parse(response));
@@ -73,6 +77,8 @@ Object.assign(CustomAnnotator.prototype, {
             };
             await Asc.Editor.callMethod("AnnotateParagraph", [obj]);
         } catch (e) {}
+
+        return true;
     },
     /**
      * @param {string} paraId
@@ -103,18 +109,19 @@ Object.assign(CustomAnnotator.prototype, {
 
         if (annot["original"] !== text.substring(start, start + len)) {
             let annotRange = this.getAnnotationRangeObj(paraId, rangeId);
-            Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
+            return Asc.Editor.callMethod("RemoveAnnotationRange", [annotRange]);
         }
     },
     /**
      * @param {string[]} paraIds
+     * @returns {Promise<boolean[]>}
      */
     checkParagraphs: async function (paraIds) {
         if (this._skipNextChangeParagraph) {
             this._skipNextChangeParagraph = false;
-            return;
+            return paraIds.map(() => false);
         }
-        TextAnnotator.prototype.checkParagraphs.call(this, paraIds);
+        return await TextAnnotator.prototype.checkParagraphs.call(this, paraIds);
     },
     onAccept: async function (paraId, rangeId) {
         this._skipNextChangeParagraph = true;

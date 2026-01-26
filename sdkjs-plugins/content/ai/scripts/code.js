@@ -30,6 +30,8 @@
  *
  */
 
+/// <reference path="./text-annotations/custom-annotations/manager.js" />
+
 let settingsWindow = null;
 let aiModelsListWindow = null; 
 let aiModelEditWindow = null;
@@ -961,7 +963,7 @@ async function onCheckGrammarSpelling(isCurrent)
 function customAssistantWindowShow(assistantId, buttonAssistant)
 {
 	if (window.customAssistantWindow) {
-		closeCustomAssistantWindow();
+		customAssistantWindowClose();
 	}
 	const actionButtonText = assistantId ? 'Save' : 'Create';
 	const description = assistantId ? 'Edit' : 'Create a new assistant';
@@ -1025,7 +1027,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 				customAssistantManager.createAssistant(element);
 			}
-			closeCustomAssistantWindow();
+			customAssistantWindowClose();
 		} else {
 			await window.pluginsButtonsCallback(id, windowId, ...args);
 		}
@@ -1034,7 +1036,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 	window.customAssistantWindow = customAssistantWindow;
 }
 
-function closeCustomAssistantWindow() {
+function customAssistantWindowClose() {
 	if (window.customAssistantWindow) {
 		window.customAssistantWindow.close();
 		window.customAssistantWindow = null;
@@ -1050,7 +1052,7 @@ function closeCustomAssistantWindow() {
  */
 function customAssistantWindowDeleteConfirm(assistantId, buttonAssistant) {
 if (window.customAssistantWindow) {
-		closeCustomAssistantWindow();
+		customAssistantWindowClose();
 	}
 
 	const savedAssistants = JSON.parse(
@@ -1101,7 +1103,50 @@ if (window.customAssistantWindow) {
 					}
 				}
 			}
-			closeCustomAssistantWindow();
+			customAssistantWindowClose();
+		} else {
+			await window.pluginsButtonsCallback(id, windowId, ...args);
+		}
+	}
+
+	window.customAssistantWindow = customAssistantWindow;
+}
+/**
+ * @param {localStorageCustomAssistantItem} assistantData
+ * @param {string} warningText
+ */
+function customAssistantWarning(assistantData, warningText) {
+if (window.customAssistantWindow) {
+		customAssistantWindowClose();
+	}
+
+	let variation = {
+		url : "customAssistant.html",
+		description : window.Asc.plugin.tr('Warning!'),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr('Ok'), primary: true },
+		],
+		isModal : true,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 350, 76 ]
+	};
+
+	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [350, 76], [350, 76], [0, 0]]);
+		customAssistantWindow.command('onWarningAssistant', warningText);
+
+	});
+	
+	customAssistantWindow.show(variation);
+
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			customAssistantWindowClose();
 		} else {
 			await window.pluginsButtonsCallback(id, windowId, ...args);
 		}
