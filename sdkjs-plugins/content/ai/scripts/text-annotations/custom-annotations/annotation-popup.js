@@ -29,7 +29,7 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-// @ts-check
+
 /// <reference path="./types.js" />
 
 function CustomAnnotationPopup()
@@ -85,35 +85,9 @@ function CustomAnnotationPopup()
 
 		let _t = this;
 		popup.attachEvent("onWindowReady", function() {
-			let name2color = {
-				"theme-light": "#F62211",
-				"theme-classic-light": "#D9534F",
-				
-				"theme-dark": "#F62211",
-				"theme-contrast-dark": "#F62211",
-
-				"theme-gray": "#F62211",
-
-				"theme-white": "#F23D3D",
-				"theme-night": "#F23D3D"
-			};
-			let type2color = {
-				"light": "#F62211",
-				"dark": "#F62211"
-			};
-
-			let color = type2color["light"];
-			if (window.Asc.plugin.theme)
-			{
-				if (window.Asc.plugin.theme.Name && name2color[window.Asc.plugin.theme.Name])
-					color = name2color[window.Asc.plugin.theme.Name];
-				else if (window.Asc.plugin.theme.Type && type2color[window.Asc.plugin.theme.Type])
-					color = type2color[window.Asc.plugin.theme.Type];
-			}
-
 			popup.command("onUpdateContent", {
 				content : _t.content,
-				color : color
+				theme : window.Asc.plugin.theme
 			});
 		});
 
@@ -174,15 +148,15 @@ function CustomAnnotationPopup()
 					<div style="padding:16px 16px 0px 16px;">
 
 						<div style="margin-bottom:12px;">
-							<div class="text-color" style="font-size:11px; font-weight:700; color:${textColor}; margin-bottom:6px;">
+							<div class="text-color" style="font-size:11px; font-weight:700; margin-bottom:6px;">
 								${window.Asc.plugin.tr("Suggested correction")}
 							</div>
 
-							<div class="ballon-color text-color border-color" style="font-size:12px; color:${textColor}; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
+							<div class="ballon-color text-color border-color" style="font-size:12px; line-height:1.5; background:${ballonColor}; border:1px solid ${borderColor}; border-radius:3px; padding:10px;">
 								<div style="display:flex; align-items:center; gap:8px;">
-									<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.original}</span>
-									<span class="text-color" style="color:${textColor}; font-weight:bold;">→</span>
-									<span class="text-color" style="color:${textColor}; font-weight:normal;">${data.suggested}</span>
+									<span class="original" font-weight:normal;">${data.original}</span>
+									<span class="style="font-weight:bold;">→</span>
+									<span class="corrected" style="font-weight:normal;">${data.suggested}</span>
 								</div>
 							</div>
 						</div>`;
