@@ -52,8 +52,8 @@
 
             "store": {
                 "background": {
-                    "light" : "#F5F5F5",
-                    "dark" : "#444444"
+                    "light" : "#E2E88C",
+                    "dark" : "#E2E88C"
                 },
                 "screenshots" : [
                     "resources/store/screenshots/screen_1.png"
