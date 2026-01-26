@@ -664,8 +664,8 @@ async function registerButtons(window, undefined)
 			buttonGS.split = true;
 
 			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
-			buttonCustomAssistant.text = "Create a new assistant";
-			buttonCustomAssistant.icons = getToolBarButtonIcons("grammar");
+			buttonCustomAssistant.text = "Create AI assistant";
+			buttonCustomAssistant.icons = getToolBarButtonIcons("plugin-writer");
 			buttonCustomAssistant.separator = true;
 			buttonCustomAssistant.attachOnClick(function(){
 				customAssistantWindowShow();
@@ -677,7 +677,7 @@ async function registerButtons(window, undefined)
 			savedAssistants.forEach(element => {
 				const buttonAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
 				buttonAssistant.text = element.name;
-				buttonAssistant.icons = getToolBarButtonIcons("grammar");
+				buttonAssistant.icons = getToolBarButtonIcons("written-plugin");
 				buttonAssistant.split = true;
 				buttonAssistant.enableToggle = true;
 				buttonAssistant.menu = [{

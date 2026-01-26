@@ -48,16 +48,19 @@
 <body style="display: flex;">
 	<div id="custom_assistant_window" class="custom_assistant_window">
 		<div id="custom_assistant" class="noselect">
-			<span class="i18n">Enter a prompt message with instructions for text operations.</span>
+			<span class="i18n">Turn any repetitive text task into a custom button on your toolbar. Automate specific editing, checking, or rewriting tasks using the power of AI.</span>
 		</div>
 
-		<form id="input_prompt_wrapper">
-			<input type="hidden" id="input_prompt_id" value="" />
+		<form id="input_prompt_wrapper" autocomplete="off">
+			<input type="hidden" id="input_prompt_id" value=""/>
+			<label for="input_prompt_name" class="noselect"><span class="i18n">Name</span><strong>*</strong></label>
 			<input type="text" id="input_prompt_name" class="form-control i18n" maxlength="30"
-				placeholder="Assistant's name" spellcheck="false" required />
-			<select id="assistantType" class="form-control" title="Type"></select>
-			<textarea id="input_prompt" rows="1" class="form-control i18n" placeholder="Enter your query here..."
+				placeholder="Give your tool a short name for the toolbar" spellcheck="false" required />
+			<label for="input_prompt" class="noselect"><span class="i18n">Prompt</span><strong>*</strong></label>
+			<textarea id="input_prompt" rows="1" class="form-control i18n" placeholder='Tell the AI what to do with the selected text (e.g., "Find factual errors" or "Summarize")'
 				spellcheck="false" required></textarea>
+			<label for="input_prompt" class="noselect"><span class="i18n">Action</span></label>
+			<select id="assistantType" class="form-control" title="Type"></select>
 		</form>
 	</div>
 </body>

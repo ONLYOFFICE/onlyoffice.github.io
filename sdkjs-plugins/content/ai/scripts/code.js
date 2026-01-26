@@ -37,6 +37,7 @@ let customProvidersWindow = null;
 let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
+let customAssistantWindow = null;
 
 let spellchecker = null;
 let grammar = null;
@@ -829,6 +830,7 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
 	helperWindow && helperWindow.command('onThemeChanged', theme);
+	customAssistantWindow && customAssistantWindow.command('onThemeChanged', theme);
 
 	if (textAnnotatorPopup && textAnnotatorPopup.popup)
 		textAnnotatorPopup.popup.command('onThemeChanged', theme);
@@ -961,27 +963,27 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 	if (window.customAssistantWindow) {
 		closeCustomAssistantWindow();
 	}
-	const actionButtonText = assistantId ? 'Save' : 'Add';
+	const actionButtonText = assistantId ? 'Save' : 'Create';
+	const description = assistantId ? 'Edit' : 'Create a new assistant';
 
 	let variation = {
 		url : "customAssistant.html",
-		description : window.Asc.plugin.tr("Your own AI assistant"),
+		description : window.Asc.plugin.tr(description),
 		isVisual : true,
 		buttons : [
 			{ text: window.Asc.plugin.tr(actionButtonText), primary: true },
 			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
 		],
-		icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 		isModal : false,
 		isCanDocked: false,
 		type: "window",
 		EditorsSupport : ["word"],
-		size : [ 400, 400 ]
+		size : [ 427, 303 ] //383
 	};
 
-	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow = new window.Asc.PluginWindow();
 	customAssistantWindow.attachEvent("onWindowReady", function() {
-		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 400], [400, 400], [0, 0]]);
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [427, 303], [427, 303], [0, 0]]);
 		if (assistantId) {
 			customAssistantWindow.command('onEditAssistant', assistantId);
 		}
@@ -1059,23 +1061,22 @@ if (window.customAssistantWindow) {
 
 	let variation = {
 		url : "customAssistant.html",
-		description : assistant.name,
+		description : assistant.name + ' - ' + window.Asc.plugin.tr('Delete Assistant'),
 		isVisual : true,
 		buttons : [
 			{ text: window.Asc.plugin.tr('Yes'), primary: true },
 			{ text: window.Asc.plugin.tr('No'), primary: false },
 		],
-		icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
-		isModal : false,
+		isModal : true,
 		isCanDocked: false,
 		type: "window",
 		EditorsSupport : ["word"],
-		size : [ 400, 100 ]
+		size : [ 400, 70 ]
 	};
 
 	const customAssistantWindow = new window.Asc.PluginWindow();
 	customAssistantWindow.attachEvent("onWindowReady", function() {
-		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 100], [400, 100], [0, 0]]);
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 70], [400, 70], [0, 0]]);
 		if (assistantId) {
 			customAssistantWindow.command('onDeleteAssistant', assistant);
 		}
