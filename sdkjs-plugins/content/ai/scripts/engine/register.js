@@ -643,7 +643,7 @@ async function registerButtons(window, undefined)
 			button2.attachOnClick(on_click_ocr);
 		}
 		
-		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word")
+		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word" && AI.getDesktopLocalVersion() >= 9003000)
 		{
 			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
 			buttonGS.text = "Grammar & Spelling";
