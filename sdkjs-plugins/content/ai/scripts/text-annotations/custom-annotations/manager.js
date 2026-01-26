@@ -140,7 +140,7 @@ class CustomAssistantManager {
      * @param {string} assistantId
      * @param {string[]} paraIds
      */
-    run(assistantId, paraIds) {
+    async run(assistantId, paraIds) {
         const assistant = this._customAssistants.get(assistantId);
         if (!assistant) {
             console.error("Custom assistant not found: " + assistantId);
@@ -148,17 +148,32 @@ class CustomAssistantManager {
         }
 
         if (!this._isCustomAssistantInit.get(assistantId)) {
+            /** @type {Promise<boolean>[]} */
+            const promises = [];
             this._paragraphsStack.forEach((value, paraId) => {
-                assistant.onChangeParagraph(
+                const promise = assistant.onChangeParagraph(
                     paraId,
                     value.recalcId,
                     value.text,
                     value.annotations,
                 );
+                promises.push(promise);
             });
+            await Promise.all(promises);
         }
 
-        assistant.checkParagraphs(paraIds);
+        /** @type {boolean[]} */
+        const isParagraphsChecked = await assistant.checkParagraphs(paraIds);
+
+        if (
+            isParagraphsChecked && 
+            isParagraphsChecked.length &&  
+            isParagraphsChecked.every(isDone => !isDone) 
+        ) {
+            const warningMessage = "Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.";
+            customAssistantWarning(assistant.assistantData, warningMessage);
+        }
+
         this._isCustomAssistantInit.set(assistantId, true);
     }
 

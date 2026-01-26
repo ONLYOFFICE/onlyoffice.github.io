@@ -50,19 +50,21 @@ function TextAnnotator(annotatorPopup)
  * @param {string} recalcId 
  * @param {string} text
  * @param {string[]} ranges
+ * @returns {Promise<boolean>}
  */
 TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
-	this._handleNewRanges(ranges, paraId, text);
+	await this._handleNewRanges(ranges, paraId, text);
 	this.waitParagraphs[paraId] = {
 		recalcId : recalcId,
 		text : text
 	};
 	
-	this._checkParagraph(paraId);
+	return this._checkParagraph(paraId);
 };
 /**
  * @param {string[]} paraIds 
+ * @returns {Promise<boolean[]>}
  */
 TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
@@ -73,12 +75,19 @@ TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 			_t.paraToCheck.add(paraId);
 	});
 	
-	this.paraToCheck.forEach(paraId => this._checkParagraph(paraId));
+	/** @type {Promise<boolean>[]} */
+	const promises = [];
+	this.paraToCheck.forEach(paraId => {promises.push(this._checkParagraph(paraId))});
+	return Promise.all(promises);
 };
+/**
+ * @param {string} paraId 
+ * @returns {Promise<boolean>}
+ */
 TextAnnotator.prototype._checkParagraph = async function(paraId)
 {
 	if (!this.paraToCheck.has(paraId) || !this.waitParagraphs[paraId])
-		return;
+		return false;
 	
 	let recalcId = this.waitParagraphs[paraId].recalcId;
 	let text = this.waitParagraphs[paraId].text;
@@ -88,12 +97,14 @@ TextAnnotator.prototype._checkParagraph = async function(paraId)
 	range["rangeId"] = undefined;
 	range["all"] = true;
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
-	await this.annotateParagraph(paraId, recalcId, text);
+	const isAnnotate = await this.annotateParagraph(paraId, recalcId, text);
 	
 	delete this.waitParagraphs[paraId];
 	this.paraToCheck.delete(paraId);
 	
 	this.checked.add(paraId);
+
+	return isAnnotate;
 };
 TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
@@ -174,17 +185,18 @@ TextAnnotator.prototype.resetCurrentRange = function()
 	this.paraId = null;
 	this.rangeId = null;
 };
-TextAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
+TextAnnotator.prototype._handleNewRanges = async function(ranges, paraId, text)
 {
 	if (!ranges || !Array.isArray(ranges))
 		return;
-	
-	ranges.forEach(range => this._handleNewRangePositions(range, paraId, text));
-	// ↓↓↓ TODO: the cycle seems to make no sense ↓↓↓
+	const promises = [];
+
 	for (let i = 0; i < ranges.length; ++i)
 	{
-		this._handleNewRangePositions(ranges[i]);
+		promises[i] = this._handleNewRangePositions(ranges[i], paraId, text);
 	}
+
+	return Promise.all(promises);
 };
 TextAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
 {
