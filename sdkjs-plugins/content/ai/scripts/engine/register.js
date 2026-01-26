@@ -643,11 +643,7 @@ async function registerButtons(window, undefined)
 			button2.attachOnClick(on_click_ocr);
 		}
 
-		let neededVersionForAiAssistant = 9002000;
-		if (window.AscDesktopEditor) {
-			neededVersionForAiAssistant = 9003000;
-		}
-		if (editorVersion >= neededVersionForAiAssistant && Asc.Editor.getType() === "word")
+		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word")
 		{
 			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
 			buttonGS.text = "Grammar & Spelling";
@@ -666,7 +662,14 @@ async function registerButtons(window, undefined)
 				onCheckGrammarSpelling(true);
 			});
 			buttonGS.split = true;
+		}
 
+		let neededVersionForAiAssistant = 9002000;
+		if (window.AscDesktopEditor) {
+			neededVersionForAiAssistant = 9003000;
+		}
+		if (editorVersion >= neededVersionForAiAssistant && Asc.Editor.getType() === "word")
+		{	
 			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
 			buttonCustomAssistant.text = "Create AI assistant";
 			buttonCustomAssistant.icons = getToolBarButtonIcons("plugin-writer");
