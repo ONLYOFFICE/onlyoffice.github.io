@@ -642,9 +642,7 @@ async function registerButtons(window, undefined)
 			button2.icons = getToolBarButtonIcons("ocr");
 			button2.attachOnClick(on_click_ocr);
 		}
-		
-		console.warn(editorVersion);
-		console.warn(Asc);
+
 		let neededVersionForAiAssistant = 9002000;
 		if (window.AscDesktopEditor) {
 			neededVersionForAiAssistant = 9003000;
