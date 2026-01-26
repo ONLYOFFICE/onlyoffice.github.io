@@ -67,7 +67,7 @@
         if (form.checkValidity()) {
             formFields = saveCustomAssistantToLocalStorage();
         } else {
-            form.reportValidity();
+            //form.reportValidity();
             if (!inputName.value) {
                 inputName.focus();
             } else {
@@ -102,9 +102,11 @@
     window.Asc.plugin.attachEvent(
         "onDeleteAssistant",
         (/** @type {localStorageCustomAssistantItem} */ assistant) => {
-            mainContainer.innerHTML = '<div id="deletion_text" class="noselect">' +
-                window.Asc.plugin.tr("Do you really want to delete this custom assistant?") +
-                '</div>';
+            mainContainer.innerHTML = '<div id="deletion_text" class="noselect"><p>' +
+                window.Asc.plugin.tr("Are you sure you want to delete this assistant?") +
+                '</p><p>' +
+                window.Asc.plugin.tr("This action cannot be undone.") +
+                '</p></div>';
         }
     );
 
