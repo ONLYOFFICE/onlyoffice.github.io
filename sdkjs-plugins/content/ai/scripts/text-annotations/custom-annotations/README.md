@@ -36,7 +36,7 @@ If your assistant prompt requests sources/links:
    - Click the AI icon in your editor toolbar
 
 2. **Create a New Assistant**
-   - Click **"Create a new assistant"** button
+   - Click **"Create AI assistant"** button
    - Fill in the creation form:
      - **Name**: Give your assistant a descriptive name
      - **Type**: Choose Hint, Replace, or Replace+Hint
