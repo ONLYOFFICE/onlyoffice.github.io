@@ -43,6 +43,21 @@ label {
     text-align: center;
 }
 
+#warning_text {
+    display: flex;
+    flex-direction: row;
+    padding-top: 8px;
+    gap: 12px;
+    line-height: 16px;
+}
+    #warning_text svg {
+        margin-top: 7px;
+    }
+    #warning_text p {
+        width: calc(100% - 76px);
+    }
+    
+
 #custom_assistant {
     height: auto;
     padding: 14px 0 8px 0;
