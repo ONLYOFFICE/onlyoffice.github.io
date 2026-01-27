@@ -164,5 +164,7 @@
 	"This action cannot be undone.": "Kjo veprim nuk mund të zhbëhet.",
 	"Warning!": "Paralajmërim!",
 	"Custom assistant is not available. Please check your configuration.": "Asistenti i personalizuar nuk është i disponueshëm. Ju lutemi kontrolloni konfigurimin tuaj.",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nuk mund të kryhet kjo veprim. Ju lutemi përdorni promptet të lidhura me analizën e tekstit, redaktimin ose formatimin."
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nuk mund të kryhet kjo veprim. Ju lutemi përdorni promptet të lidhura me analizën e tekstit, redaktimin ose formatimin.",
+	"Processing selection...": "Procesimi i përsëritjes së seleksionit...",
+	"Processing document...": "Procesimi i dokumentit..."
 }

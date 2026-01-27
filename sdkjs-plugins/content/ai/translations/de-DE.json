@@ -166,4 +166,6 @@
 	"Warning!": "Warnung!",
 	"Custom assistant is not available. Please check your configuration.": "Benutzerdefinierter Assistent ist nicht verfügbar. Bitte überprüfen Sie Ihre Konfiguration.",
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Diese Aktion kann nicht ausgeführt werden. Bitte verwenden Sie Prompts im Zusammenhang mit Textanalyse, Bearbeitung oder Formatierung.",
+	"Processing selection...": "Verarbeitung der Auswahl...",
+	"Processing document...": "Verarbeitung des Dokuments..."
 }

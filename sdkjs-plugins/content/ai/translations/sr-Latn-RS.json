@@ -165,5 +165,7 @@
 	"This action cannot be undone.": "Ova akcija ne može biti ponovljena.",
 	"Warning!": "Upozorenje!",
 	"Custom assistant is not available. Please check your configuration.": "Prilagođeni asistent nije dostupan. Molimo provjerite konfiguraciju.",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nije u stanju da izvrsi ovu akciju. Molimo koristi prompove vezane za analizu teksta, uređivanje ili formatiranje."
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nije u stanju da izvrsi ovu akciju. Molimo koristi prompove vezane za analizu teksta, uređivanje ili formatiranje.",
+	"Processing selection...": "Procesiranje izbora...",
+	"Processing document...": "Procesiranje dokumenta..."
 }

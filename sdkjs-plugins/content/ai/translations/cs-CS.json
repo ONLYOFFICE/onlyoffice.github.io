@@ -164,5 +164,7 @@
 	"This action cannot be undone.": "Tuto akci nelze vrátit zpět.",
 	"Warning!": "Varování!",
 	"Custom assistant is not available. Please check your configuration.": "Vlastní asistent není k dispozici. Zkontrolujte prosím svou konfiguraci.",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nelze provést tuto akci. Použijte prosím výzvy související s analýzou textu, úpravami nebo formátováním."
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nelze provést tuto akci. Použijte prosím výzvy souventicí s analýzou textu, úpravami nebo formátováním.",
+	"Processing selection...": "Procesování výběru...",
+	"Processing document...": "Procesování dokumentu..."
 }
