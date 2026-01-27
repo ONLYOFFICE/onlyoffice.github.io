@@ -170,5 +170,6 @@
 	"Action": "إجراء",
 	"Prompt": "إدخال",
 	"Give your tool a short name for the toolbar": "أعطِ أداةك اسماً قصيراً للشريط الأدائي",
-	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "قول للذكاء الاصطناعي ما يجب عليه فعله مع النص المحدد (مثل \"إيجاد أخطاء حقيقة\" أو \"إعادة صياغة\")"
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "قول للذكاء الاصطناعي ما يجب عليه فعله مع النص المحدد (مثل \"إيجاد أخطاء حقيقة\" أو \"إعادة صياغة\")",
+	"Create AI assistant": "إنشاء مساعد ذكاء اصطناعي"
 }
