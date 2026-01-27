@@ -1125,7 +1125,7 @@ function customAssistantWarning(warningText, assistantData) {
 		description : window.Asc.plugin.tr('Warning!'),
 		isVisual : true,
 		buttons : [
-			{ text: window.Asc.plugin.tr('Ok'), primary: true },
+			{ text: window.Asc.plugin.tr('OK'), primary: true },
 		],
 		isModal : true,
 		isCanDocked: false,
@@ -1189,13 +1189,13 @@ async function onStartCustomAssistant(assistantId, buttonAssistant)
 			break;
 		case customAssistantManager.STATUSES.NOT_FOUND:
 			console.error("Custom assistant not found: " + assistantId);
-            customAssistantWarning("Custom assistant is not available. Please check your configuration.");
+            customAssistantWarning(window.Asc.plugin.tr("Custom assistant is not available. Please check your configuration."));
 			//buttonAssistant.disabled = true;
 			//Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 			break;
 		case customAssistantManager.STATUSES.ERROR:
             customAssistantWarning(
-				"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.",
+				window.Asc.plugin.tr("Not able to perform this action. Please use prompts related to text analysis, editing, or formatting."),
 				assistant.assistantData
 			);
 			// TODO: Add the ability to remove a button press.

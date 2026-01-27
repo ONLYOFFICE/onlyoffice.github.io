@@ -102,9 +102,9 @@
     window.Asc.plugin.attachEvent(
         "onDeleteAssistant",
         (/** @type {localStorageCustomAssistantItem} */ assistant) => {
-            mainContainer.innerHTML = '<div id="deletion_text" class="noselect"><p>' +
+            mainContainer.innerHTML = '<div id="deletion_text" class="noselect"><p class="i18n">' +
                 window.Asc.plugin.tr("Are you sure you want to delete this assistant?") +
-                '</p><p>' +
+                '</p><p class="i18n">' +
                 window.Asc.plugin.tr("This action cannot be undone.") +
                 '</p></div>';
         }
@@ -119,7 +119,7 @@
                 '<path d="M25.3447 12.3324C25.3447 13.1968 24.33 17.5992 23.6672 21.5581C23.0761 25.0894 22.8285 28.2678 22.8285 28.2678C22.4092 28.2678 21.7103 28.2678 21.1511 28.2678C21.1511 28.2678 20.9036 25.0894 20.3124 21.5581C19.6496 17.5992 18.635 13.1968 18.635 12.3324C18.635 10.4795 20.137 8.97754 21.9898 8.97754C23.8427 8.97754 25.3447 10.4795 25.3447 12.3324Z" fill="white"/>' +
                 '</svg>';
             const text =  '<div id="warning_text" class="noselect">' +
-                image + '<p>' + window.Asc.plugin.tr(warningText) + '</p></div>'   
+                image + '<p class="i18n">' + warningText + '</p></div>'   
             mainContainer.innerHTML = image + text;
         }
     );
