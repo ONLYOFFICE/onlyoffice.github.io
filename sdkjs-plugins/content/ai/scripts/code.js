@@ -1007,7 +1007,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 				} else {
 					buttonAssistant = new Asc.ButtonToolbar(null);
 					buttonAssistant.text = element.name;
-					buttonAssistant.icons = getToolBarButtonIcons("grammar");
+					buttonAssistant.icons = getToolBarButtonIcons("written-plugin");
 					buttonAssistant.split = true;
 					buttonAssistant.enableToggle = true;
 					buttonAssistant.menu = [{
@@ -1021,7 +1021,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 						onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
 					}];
 					buttonAssistant.attachOnClick(async function(){
-						onStartCustomAssistant(element.id);
+						onStartCustomAssistant(element.id, buttonAssistant);
 					});
 				}
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
@@ -1112,11 +1112,11 @@ if (window.customAssistantWindow) {
 	window.customAssistantWindow = customAssistantWindow;
 }
 /**
- * @param {localStorageCustomAssistantItem} assistantData
  * @param {string} warningText
+ * @param {localStorageCustomAssistantItem} [assistantData]
  */
-function customAssistantWarning(assistantData, warningText) {
-if (window.customAssistantWindow) {
+function customAssistantWarning(warningText, assistantData) {
+	if (window.customAssistantWindow) {
 		customAssistantWindowClose();
 	}
 
@@ -1154,10 +1154,15 @@ if (window.customAssistantWindow) {
 
 	window.customAssistantWindow = customAssistantWindow;
 }
-
-async function onStartCustomAssistant(assistantId)
+/** 
+ * @param {string} assistantId 
+ * @param {Asc.ButtonToolbar} buttonAssistant 
+ * @returns 
+ */
+async function onStartCustomAssistant(assistantId, buttonAssistant)
 {
-	if (customAssistantManager.checkNeedToRunAssistant(assistantId)) {
+	const isAssistantRunning = customAssistantManager.checkNeedToRunAssistant(assistantId);
+	if (isAssistantRunning) {
 		return;
 	}
 	let paraIds = [];
@@ -1178,8 +1183,27 @@ async function onStartCustomAssistant(assistantId)
 		return result;
 	});
 
-	customAssistantManager.run(assistantId, paraIds);
-	
+	const status = await customAssistantManager.run(assistantId, paraIds);
+	switch (status) {
+		case customAssistantManager.STATUSES.OK:
+			break;
+		case customAssistantManager.STATUSES.NOT_FOUND:
+			console.error("Custom assistant not found: " + assistantId);
+            customAssistantWarning("Custom assistant is not available. Please check your configuration.");
+			//buttonAssistant.disabled = true;
+			//Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+			break;
+		case customAssistantManager.STATUSES.ERROR:
+            customAssistantWarning(
+				"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.",
+				assistant.assistantData
+			);
+			// TODO: Add the ability to remove a button press.
+			// buttonAssistant.PRESSED = false;
+			// Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+			// customAssistantManager.checkNeedToRunAssistant(assistantId);
+			break;
+	}
 }
 
 /**
