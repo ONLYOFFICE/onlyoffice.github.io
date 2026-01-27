@@ -665,9 +665,9 @@ async function registerButtons(window, undefined)
 		}
 
 		let neededVersionForAiAssistant = 9002000;
-		if (window.AscDesktopEditor) {
+		/*if (window.AscDesktopEditor) {
 			neededVersionForAiAssistant = 9003000;
-		}
+		}*/
 		if (editorVersion >= neededVersionForAiAssistant && Asc.Editor.getType() === "word")
 		{	
 			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
