@@ -167,5 +167,9 @@
 	"Custom assistant is not available. Please check your configuration.": "Пользовательский ассистент недоступен. Пожалуйста, проверьте вашу конфигурацию.",
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Не удается выполнить это действие. Пожалуйста, используйте запросы, связанные с анализом текста, редактированием или форматированием.",
 	"Processing selection...": "Обработка выделенного фрагмента...",
-	"Processing document...": "Обработка документа..."
+	"Processing document...": "Обработка документа...",
+	"Action": "Действие",
+	"Prompt": "Пометка",
+	"Give your tool a short name for the toolbar": "Дайте вашему инструменту короткое имя для панели инструментов",
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Попросите ИИ выполнить действие над выбранным текстом (например, \"Найти фактические ошибки\" или \"Сжать\")"
 }
