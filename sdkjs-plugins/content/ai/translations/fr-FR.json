@@ -167,5 +167,9 @@
 	"Custom assistant is not available. Please check your configuration.": "L'assistant personnalisé n'est pas disponible. Veuillez vérifier votre configuration.",
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Impossible d'effectuer cette action. Veuillez utiliser des invites liées à l'analyse, l'édition ou le formatage du texte.",
 	"Processing selection...": "Traitement de la sélection...",
-	"Processing document...": "Traitement du document..."
+	"Processing document...": "Traitement du document...",
+	"Action": "Action",
+	"Prompt": "Prompt",
+	"Give your tool a short name for the toolbar": "Donnez un nom court à votre outil pour la barre d'outils",
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dites à l'IA ce qu'elle doit faire avec le texte sélectionné (par exemple, \"Trouver les erreurs factuelles\" ou \"Riassumer\")"
 }

@@ -1080,7 +1080,7 @@ if (window.customAssistantWindow) {
 	customAssistantWindow.attachEvent("onWindowReady", function() {
 		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 70], [400, 70], [0, 0]]);
 		if (assistantId) {
-			let text = window.Asc.plugin.tr('Are you sure you want to delete the assistant?');
+			let text = window.Asc.plugin.tr('Are you sure you want to delete this assistant?');
 			text += '<br>' + window.Asc.plugin.tr("This action cannot be undone.");
 			customAssistantWindow.command('onWarningAssistant', text);
 		}
