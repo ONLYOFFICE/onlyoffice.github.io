@@ -171,5 +171,6 @@
 	"Action": "Akcija",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dajte vam alatku kratko ime za alatnu traku",
-	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Rekajte AI što da radi sa odabranim tekstom (npr., \"Pronalazǐte grěsě u faktu\" ili \"Sažmi\")"
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Rekajte AI što da radi sa odabranim tekstom (npr., \"Pronalazǐte grěsě u faktu\" ili \"Sažmi\")",
+	"Create AI assistant": "Kreiraj AI asistenta"
 }

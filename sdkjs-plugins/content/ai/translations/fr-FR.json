@@ -171,5 +171,6 @@
 	"Action": "Action",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Donnez un nom court à votre outil pour la barre d'outils",
-	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dites à l'IA ce qu'elle doit faire avec le texte sélectionné (par exemple, \"Trouver les erreurs factuelles\" ou \"Riassumer\")"
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dites à l'IA ce qu'elle doit faire avec le texte sélectionné (par exemple, \"Trouver les erreurs factuelles\" ou \"Riassumer\")",
+	"Create AI assistant": "Créer un assistant IA"
 }

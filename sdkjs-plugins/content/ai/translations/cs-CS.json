@@ -170,5 +170,6 @@
 	"Action": "Akce",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dalejte svému nástroji krátký název pro panel nástrojů",
-	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Říkejte AI, co s vybraným textem dělat (například \"Najít faktické chyby\" nebo \"Riassumovat\")"
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Říkejte AI, co s vybraným textem dělat (například \"Najít faktické chyby\" nebo \"Riassumovat\")",
+	"Create AI assistant": "Vytvořit asistenta AI"
 }
