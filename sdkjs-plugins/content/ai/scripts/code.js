@@ -1168,6 +1168,7 @@ async function onStartCustomAssistant(assistantId, buttonAssistant)
 	let paraIds = [];
 
 	let selectedText = await Asc.Library.GetSelectedText();
+	let preloaderMessage = !!selectedText ? window.Asc.plugin.tr("Processing selection...") : window.Asc.plugin.tr("Processing document...");
 
 	Asc.scope.hasSelectedText = !!selectedText;
 	paraIds = await Asc.Editor.callCommand(function(){
@@ -1182,6 +1183,8 @@ async function onStartCustomAssistant(assistantId, buttonAssistant)
 		paragraphs.forEach(p => result.push(p.GetInternalId()));
 		return result;
 	});
+
+	await Asc.Editor.callMethod("StartAction", ["Block", preloaderMessage]);
 
 	const status = await customAssistantManager.run(assistantId, paraIds);
 	switch (status) {
@@ -1204,6 +1207,8 @@ async function onStartCustomAssistant(assistantId, buttonAssistant)
 			// customAssistantManager.checkNeedToRunAssistant(assistantId);
 			break;
 	}
+
+	await Asc.Editor.callMethod("EndAction", ["Block", preloaderMessage]);
 }
 
 /**

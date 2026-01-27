@@ -165,5 +165,7 @@
 	"This action cannot be undone.": "Это действие не может быть отменено.",
 	"Warning!": "Предупреждение!",
 	"Custom assistant is not available. Please check your configuration.": "Пользовательский ассистент недоступен. Пожалуйста, проверьте вашу конфигурацию.",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Не удается выполнить это действие. Пожалуйста, используйте запросы, связанные с анализом текста, редактированием или форматированием."
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Не удается выполнить это действие. Пожалуйста, используйте запросы, связанные с анализом текста, редактированием или форматированием.",
+	"Processing selection...": "Обработка выделенного фрагмента...",
+	"Processing document...": "Обработка документа..."
 }

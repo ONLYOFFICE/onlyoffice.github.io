@@ -165,5 +165,7 @@
 	"This action cannot be undone.": "この操作は元に戻せません。",
 	"Warning!": "警告！",
 	"Custom assistant is not available. Please check your configuration.": "カスタムアシスタントは利用できません。設定を確認してください。",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "この操作は実行できません。テキスト分析、編集、またはフォーマットに関連するプロンプトを使用してください。"
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "この操作は実行できません。テキスト分析、編集、またはフォーマットに関連するプロンプトを使用してください。",
+	"Processing selection...": "選択を処理中...",
+	"Processing document...": "文書を処理中..."
 }
