@@ -167,5 +167,10 @@
 	"Custom assistant is not available. Please check your configuration.": "自定义助手不可用。请检查您的配置。",
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "无法执行此操作。请使用与文本分析、编辑或格式化相关的提示。",
 	"Processing selection...": "处理选择...",
-	"Processing document...": "处理文档..."
+	"Processing document...": "处理文档...",
+	"Action": "操作",
+	"Prompt": "提示词",
+	"Give your tool a short name for the toolbar": "为工具栏提供一个简短的名称",
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "告诉 AI 选中文本要做什么（例如，\"查找事实错误\" 或 \"摘要\"）"
+	
 }

@@ -167,5 +167,9 @@
 	"Custom assistant is not available. Please check your configuration.": "Prilagođeni asistent nije dostupan. Molimo provjerite konfiguraciju.",
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nije u stanju da izvrsi ovu akciju. Molimo koristi prompove vezane za analizu teksta, uređivanje ili formatiranje.",
 	"Processing selection...": "Procesiranje izbora...",
-	"Processing document...": "Procesiranje dokumenta..."
+	"Processing document...": "Procesiranje dokumenta...",
+	"Action": "Akcija",
+	"Prompt": "Prompt",
+	"Give your tool a short name for the toolbar": "Dajte vam alatku kratko ime za alatnu traku",
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Rekajte AI što da radi sa odabranim tekstom (npr., \"Pronalazǐte grěsě u faktu\" ili \"Sažmi\")"
 }

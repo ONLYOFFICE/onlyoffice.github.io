@@ -167,5 +167,9 @@
 	"Custom assistant is not available. Please check your configuration.": "カスタムアシスタントは利用できません。設定を確認してください。",
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "この操作は実行できません。テキスト分析、編集、またはフォーマットに関連するプロンプトを使用してください。",
 	"Processing selection...": "選択を処理中...",
-	"Processing document...": "文書を処理中..."
+	"Processing document...": "文書を処理中...",
+	"Action": "アクション",
+	"Prompt": "プロンプト",
+	"Give your tool a short name for the toolbar": "ツールバーに短い名前をつけてください",
+	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "選択したテキストに対してAIに何をすべきかを教える (例: \"事実上の誤りを見つけ\"または\"要約\")"
 }
