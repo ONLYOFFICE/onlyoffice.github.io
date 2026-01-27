@@ -49,6 +49,15 @@ class CustomAssistantManager {
         this._isCustomAssistantRunning = new Map();
         /** @type {Map<string, {recalcId: string, text: string, annotations: any}>} */
         this._paragraphsStack = new Map();
+        /**
+         * @type {{OK: 0, NOT_FOUND: 1, ERROR: 2}} 
+         * @enum {0|1|2}
+         */
+        this.STATUSES = {
+            OK: 0,
+            NOT_FOUND: 1,
+            ERROR: 2,
+        };
     }
 
     /**
@@ -129,7 +138,10 @@ class CustomAssistantManager {
         this._isCustomAssistantRunning.delete(assistantId);
     }
 
-    /** @param {string} assistantId */
+    /** 
+     * @param {string} assistantId
+     * @returns {boolean}
+     */
     checkNeedToRunAssistant(assistantId) {
         const isRunning = this._isCustomAssistantRunning.get(assistantId);
         this._isCustomAssistantRunning.set(assistantId, !isRunning);
@@ -139,12 +151,13 @@ class CustomAssistantManager {
     /**
      * @param {string} assistantId
      * @param {string[]} paraIds
+     * @returns {Promise<number>}
      */
     async run(assistantId, paraIds) {
+        
         const assistant = this._customAssistants.get(assistantId);
         if (!assistant) {
-            console.error("Custom assistant not found: " + assistantId);
-            return;
+            return this.STATUSES.NOT_FOUND;
         }
 
         if (!this._isCustomAssistantInit.get(assistantId)) {
@@ -170,11 +183,13 @@ class CustomAssistantManager {
             isParagraphsChecked.length &&  
             isParagraphsChecked.every(isDone => !isDone) 
         ) {
-            const warningMessage = "Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.";
-            customAssistantWarning(assistant.assistantData, warningMessage);
+            
+            return this.STATUSES.ERROR;
         }
 
         this._isCustomAssistantInit.set(assistantId, true);
+
+        return this.STATUSES.OK;
     }
 
     /**
