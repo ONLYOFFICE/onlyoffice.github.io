@@ -26,27 +26,19 @@ label {
 
 .custom_assistant_window {
     display: flex;
-    flex-direction: column;
-    padding: 1px 15px 20px 15px;
+    padding: 1px 15px 0 15px;
     flex: 1;
     width: calc(100% - 24px);
     background-color: #fff;
     background-color: var(--background-normal);
 }
-
-#deletion_text {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding-top: 12px;
-    justify-content: center;
-    text-align: center;
-}
+    .custom_assistant_window:not(.warning) {
+        flex-direction: column;
+    }
 
 #warning_text {
     display: flex;
     flex-direction: row;
-    padding-top: 8px;
     gap: 12px;
     line-height: 16px;
     align-items: center;
@@ -71,6 +63,7 @@ label {
     flex-direction: column;
     flex: 1;
     position: relative;
+    padding-bottom: 20px;
 }
 
 #input_prompt {

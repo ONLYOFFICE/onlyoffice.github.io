@@ -110,6 +110,7 @@
             const text =  '<div id="warning_text" class="noselect">' +
                 image + '<p class="i18n">' + warningText + '</p></div>'   
             mainContainer.innerHTML = text;
+            mainContainer.classList.add("warning");
         }
     );
 

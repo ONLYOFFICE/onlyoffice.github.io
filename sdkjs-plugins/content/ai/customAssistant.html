@@ -37,7 +37,7 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css"/>
+	<link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.css" />
 	<link rel="stylesheet" href="./resources/styles/customAssistant.css">
 	<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
 	<script src="vendor/select2-4.0.6-rc.1/dist/js/select2.js"></script>
@@ -52,12 +52,13 @@
 		</div>
 
 		<form id="input_prompt_wrapper" autocomplete="off">
-			<input type="hidden" id="input_prompt_id" value=""/>
+			<input type="hidden" id="input_prompt_id" value="" />
 			<label for="input_prompt_name" class="noselect"><span class="i18n">Name</span><strong>*</strong></label>
 			<input type="text" id="input_prompt_name" class="form-control i18n" maxlength="30"
 				placeholder="Give your tool a short name for the toolbar" spellcheck="false" required />
 			<label for="input_prompt" class="noselect"><span class="i18n">Prompt</span><strong>*</strong></label>
-			<textarea id="input_prompt" rows="1" class="form-control i18n" placeholder='Tell the AI what to do with the selected text (e.g., "Find factual errors" or "Summarize")'
+			<textarea id="input_prompt" minlength="1" rows="1" class="form-control i18n"
+				placeholder='Tell the AI what to do with the selected text (e.g., "Find factual errors" or "Summarize")'
 				spellcheck="false" required></textarea>
 			<label for="input_prompt" class="noselect"><span class="i18n">Action</span></label>
 			<select id="assistantType" class="form-control" title="Type"></select>
