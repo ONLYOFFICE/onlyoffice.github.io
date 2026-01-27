@@ -1080,7 +1080,9 @@ if (window.customAssistantWindow) {
 	customAssistantWindow.attachEvent("onWindowReady", function() {
 		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 70], [400, 70], [0, 0]]);
 		if (assistantId) {
-			customAssistantWindow.command('onDeleteAssistant', assistant);
+			let text = window.Asc.plugin.tr('Are you sure you want to delete the assistant?');
+			text += '<br>' + window.Asc.plugin.tr("This action cannot be undone.");
+			customAssistantWindow.command('onWarningAssistant', text);
 		}
 	});
 	
@@ -1198,8 +1200,7 @@ async function onStartCustomAssistant(assistantId, buttonAssistant)
 			break;
 		case customAssistantManager.STATUSES.ERROR:
             customAssistantWarning(
-				window.Asc.plugin.tr("Not able to perform this action. Please use prompts related to text analysis, editing, or formatting."),
-				assistant.assistantData
+				window.Asc.plugin.tr("Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.")
 			);
 			// TODO: Add the ability to remove a button press.
 			// buttonAssistant.PRESSED = false;
