@@ -30,6 +30,9 @@
  *
  */
 
+/// <reference path="./annotation-popup.js" />
+
+/** @param {TextAnnotationPopup} annotatorPopup */
 function TextAnnotator(annotatorPopup)
 {
 	this.annotatorPopup = annotatorPopup;
@@ -154,6 +157,11 @@ TextAnnotator.prototype.getAnnotation = function(paraId, rangeId)
 	
 	return this.paragraphs[paraId][rangeId];
 };
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ * @returns {{paragraphId: string, rangeId: string}}
+ */
 TextAnnotator.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
@@ -185,10 +193,17 @@ TextAnnotator.prototype.resetCurrentRange = function()
 	this.paraId = null;
 	this.rangeId = null;
 };
-TextAnnotator.prototype._handleNewRanges = async function(ranges, paraId, text)
+/**
+ * @param {Array<string>} ranges 
+ * @param {string} paraId 
+ * @param {string} text 
+ * @returns {Promise<void[]>}
+ */
+TextAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
 {
 	if (!ranges || !Array.isArray(ranges))
-		return;
+		return Promise.resolve([]);
+	/** @type {Promise<void>[]} */
 	const promises = [];
 
 	for (let i = 0; i < ranges.length; ++i)
@@ -198,6 +213,7 @@ TextAnnotator.prototype._handleNewRanges = async function(ranges, paraId, text)
 
 	return Promise.all(promises);
 };
+/** @returns {Promise<void>} */
 TextAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
 {
 };
