@@ -165,5 +165,7 @@
 	"This action cannot be undone.": "Esta ação não pode ser desfeita.",
 	"Warning!": "Aviso!",
 	"Custom assistant is not available. Please check your configuration.": "O assistente personalizado não está disponível. Verifique sua configuração.",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Não é possível realizar esta ação. Use prompts relacionados à análise de texto, edição ou formatação."
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Não é possível realizar esta ação. Use prompts relacionados à análise de texto, edição ou formatação.",
+	"Processing selection...": "Processando seleção...",
+	"Processing document...": "Processando documento..."
 }

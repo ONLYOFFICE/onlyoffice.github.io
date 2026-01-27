@@ -165,5 +165,7 @@
 	"This action cannot be undone.": "此操作无法撤销。",
 	"Warning!": "警告!",
 	"Custom assistant is not available. Please check your configuration.": "自定义助手不可用。请检查您的配置。",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "无法执行此操作。请使用与文本分析、编辑或格式化相关的提示。"
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "无法执行此操作。请使用与文本分析、编辑或格式化相关的提示。",
+	"Processing selection...": "处理选择...",
+	"Processing document...": "处理文档..."
 }

@@ -164,5 +164,7 @@
 	"This action cannot be undone.": "هذا الإجراء لا يمكن التراجع عنه.",
 	"Warning!": "تحذير!",
 	"Custom assistant is not available. Please check your configuration.": "المساعد المخصص غير متاح. يرجى التحقق من إعداداتك.",
-	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "غير قادر على تنفيذ هذا الإجراء. يرجى استخدام تعليمات متعلقة بتحليل النصوص، التحرير، أو التنسيق."
+	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "غير قادر على تنفيذ هذا الإجراء. يرجى استخدام تعليمات متعلقة بتحليل النصوص، التحرير، أو التنسيق.",
+	"Processing selection...": "معالجة التحديد...",
+	"Processing document...": "معالجة المستند..."
 }
