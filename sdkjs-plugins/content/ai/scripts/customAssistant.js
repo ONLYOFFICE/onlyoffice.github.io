@@ -100,17 +100,6 @@
     );
 
     window.Asc.plugin.attachEvent(
-        "onDeleteAssistant",
-        (/** @type {localStorageCustomAssistantItem} */ assistant) => {
-            mainContainer.innerHTML = '<div id="deletion_text" class="noselect"><p class="i18n">' +
-                window.Asc.plugin.tr("Are you sure you want to delete this assistant?") +
-                '</p><p class="i18n">' +
-                window.Asc.plugin.tr("This action cannot be undone.") +
-                '</p></div>';
-        }
-    );
-
-    window.Asc.plugin.attachEvent(
         "onWarningAssistant",
         (/** @type {string} */ warningText) => {
             const image = '<svg width="44" height="39" viewBox="0 0 44 39" fill="none" xmlns="http://www.w3.org/2000/svg">' + 
@@ -120,7 +109,7 @@
                 '</svg>';
             const text =  '<div id="warning_text" class="noselect">' +
                 image + '<p class="i18n">' + warningText + '</p></div>'   
-            mainContainer.innerHTML = image + text;
+            mainContainer.innerHTML = text;
         }
     );
 
