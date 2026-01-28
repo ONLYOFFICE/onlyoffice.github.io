@@ -185,9 +185,13 @@ Object.assign(AssistantReplaceHint.prototype, {
         } catch (e) {
             console.error(e);
         }
+        let suggested = _s["difference"];
+        if (suggested.indexOf('</strong>') === -1) {
+            suggested = `<strong>${suggested}</strong>`;
+        }
         return {
             original: _s["original"],
-            suggested: _s["difference"],
+            suggested: suggested,
             explanation: reason,
             type: this.type,
         };
