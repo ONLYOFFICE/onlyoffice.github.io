@@ -1004,6 +1004,7 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 				if (!element) return;
 				if (buttonAssistant) {
 					buttonAssistant.text = element.name;
+					customAssistantManager.updateAssistant(element);
 				} else {
 					buttonAssistant = new Asc.ButtonToolbar(null);
 					buttonAssistant.text = element.name;
@@ -1021,11 +1022,11 @@ function customAssistantWindowShow(assistantId, buttonAssistant)
 						onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
 					}];
 					buttonAssistant.attachOnClick(async function(){
-						onStartCustomAssistant(element.id, buttonAssistant);
+						customAssistantOnClickToolbarIcon(element.id, buttonAssistant);
 					});
+					customAssistantManager.createAssistant(element);
 				}
 				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
-				customAssistantManager.createAssistant(element);
 			}
 			customAssistantWindowClose();
 		} else {
@@ -1161,7 +1162,7 @@ function customAssistantWarning(warningText, assistantData) {
  * @param {Asc.ButtonToolbar} buttonAssistant 
  * @returns 
  */
-async function onStartCustomAssistant(assistantId, buttonAssistant)
+async function customAssistantOnClickToolbarIcon(assistantId, buttonAssistant)
 {
 	const isAssistantRunning = customAssistantManager.checkNeedToRunAssistant(assistantId);
 	if (isAssistantRunning) {
