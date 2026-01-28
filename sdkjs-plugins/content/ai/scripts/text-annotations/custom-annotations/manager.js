@@ -50,13 +50,14 @@ class CustomAssistantManager {
         /** @type {Map<string, {recalcId: string, text: string, annotations: any}>} */
         this._paragraphsStack = new Map();
         /**
-         * @type {{OK: 0, NOT_FOUND: 1, ERROR: 2}} 
-         * @enum {0|1|2}
+         * @type {{OK: 0, NOT_FOUND: 1, ERROR: 2, NO_AI_MODEL_SELECTED: 3}} 
+         * @enum {0|1|2|3}
          */
         this.STATUSES = {
             OK: 0,
             NOT_FOUND: 1,
             ERROR: 2,
+            NO_AI_MODEL_SELECTED: 3
         };
     }
 
@@ -161,7 +162,7 @@ class CustomAssistantManager {
         }
 
         if (!this._isCustomAssistantInit.get(assistantId)) {
-            /** @type {Promise<boolean>[]} */
+            /** @type {Promise<boolean | null>[]} */
             const promises = [];
             this._paragraphsStack.forEach((value, paraId) => {
                 const promise = assistant.onChangeParagraph(
@@ -175,7 +176,7 @@ class CustomAssistantManager {
             await Promise.all(promises);
         }
 
-        /** @type {boolean[]} */
+        /** @type {Array<boolean | null>} */
         const isParagraphsChecked = await assistant.checkParagraphs(paraIds);
 
         if (
@@ -183,7 +184,9 @@ class CustomAssistantManager {
             isParagraphsChecked.length &&  
             isParagraphsChecked.every(isDone => !isDone) 
         ) {
-            
+            if (isParagraphsChecked.some(isDone => isDone === null)) {
+                return this.STATUSES.NO_AI_MODEL_SELECTED;
+            }
             return this.STATUSES.ERROR;
         }
 
