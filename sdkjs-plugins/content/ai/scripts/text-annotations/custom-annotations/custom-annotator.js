@@ -51,7 +51,7 @@ Object.assign(CustomAnnotator.prototype, {
      * @param {string} paraId
      * @param {string} recalcId
      * @param {string} text
-     * @returns {Promise<boolean>}
+     * @returns {Promise<boolean | null>}
      */
     annotateParagraph: async function (paraId, recalcId, text) {
         this.paragraphs[paraId] = {};
@@ -63,6 +63,9 @@ Object.assign(CustomAnnotator.prototype, {
         let response = await this.chatRequest(argPrompt);
 
         if (!response || response === '[]') {
+            if (response === null) {
+                return null; // no AI model selected
+            }
             return false;
         }
 
@@ -114,7 +117,7 @@ Object.assign(CustomAnnotator.prototype, {
     },
     /**
      * @param {string[]} paraIds
-     * @returns {Promise<boolean[]>}
+     * @returns {Promise<Array<boolean | null>>}
      */
     checkParagraphs: async function (paraIds) {
         if (this._skipNextChangeParagraph) {
