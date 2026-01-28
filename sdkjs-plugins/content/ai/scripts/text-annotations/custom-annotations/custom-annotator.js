@@ -146,6 +146,25 @@ Object.assign(CustomAnnotator.prototype, {
             paraIds,
         );
     },
+    /**
+     * @param {Array<string>} paraIds 
+     * @returns 
+     */
+    uncheckParagraphs: async function (paraIds) {
+        /** @type {Promise<any>[]} */
+        const promises = [];
+
+        paraIds.forEach(function(paraId) {
+            promises.push(Asc.Editor.callMethod("RemoveAnnotationRange", [{
+                all: true,
+                paragraphId : paraId,
+		        rangeId : undefined,
+                name: "customAssistant_" + this.assistantData.id
+            }]));
+        }, this);
+
+        return Promise.all(promises);
+    },
     onAccept: async function (paraId, rangeId) {
         this._skipNextChangeParagraph = true;
     },

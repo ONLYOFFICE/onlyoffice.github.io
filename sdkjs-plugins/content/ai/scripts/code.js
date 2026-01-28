@@ -1164,8 +1164,9 @@ function customAssistantWarning(warningText, assistantData) {
  */
 async function customAssistantOnClickToolbarIcon(assistantId, buttonAssistant)
 {
-	const isAssistantRunning = customAssistantManager.checkNeedToRunAssistant(assistantId);
+	const isAssistantRunning = customAssistantManager.isCustomAssistantRunning(assistantId);
 	if (isAssistantRunning) {
+		customAssistantManager.stop(assistantId);
 		return;
 	}
 	let paraIds = [];
@@ -1206,7 +1207,7 @@ async function customAssistantOnClickToolbarIcon(assistantId, buttonAssistant)
 			// TODO: Add the ability to remove a button press.
 			// buttonAssistant.PRESSED = false;
 			// Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
-			// customAssistantManager.checkNeedToRunAssistant(assistantId);
+			// customAssistantManager.stop(assistantId);
 			break;
 		case customAssistantManager.NO_AI_MODEL_SELECTED:
 			// A window with settings will appear.
