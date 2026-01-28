@@ -45,7 +45,7 @@ class CustomAssistantManager {
          * @type {Map<string, Assistant>}
          */
         this._customAssistants = new Map();
-        this._isCustomAssistantInit = new Map();
+        this._isCustomAssistantTrackChanges = new Map();
         this._isCustomAssistantRunning = new Map();
         /** @type {Map<string, {recalcId: string, text: string, annotations: any}>} */
         this._paragraphsStack = new Map();
@@ -96,7 +96,7 @@ class CustomAssistantManager {
 
         this._customAssistants.set(assistantData.id, assistant);
         if (!isForUpdate) {
-            this._isCustomAssistantInit.set(assistantData.id, false);
+            this._isCustomAssistantTrackChanges.set(assistantData.id, false);
             this._isCustomAssistantRunning.set(assistantData.id, false);
         }
 
@@ -106,7 +106,6 @@ class CustomAssistantManager {
      * @param {localStorageCustomAssistantItem} assistantData
      */
     updateAssistant(assistantData) {
-        console.warn("Updating custom assistant: " + assistantData.id);
         let oldAssistant = this._customAssistants.get(assistantData.id);
         if (!oldAssistant) {
             throw new Error("Custom assistant not found: " + assistantData.id);
@@ -135,7 +134,7 @@ class CustomAssistantManager {
     /** @param {string} assistantId */
     deleteAssistant(assistantId) {
         this._customAssistants.delete(assistantId);
-        this._isCustomAssistantInit.delete(assistantId);
+        this._isCustomAssistantTrackChanges.delete(assistantId);
         this._isCustomAssistantRunning.delete(assistantId);
     }
 
@@ -143,10 +142,8 @@ class CustomAssistantManager {
      * @param {string} assistantId
      * @returns {boolean}
      */
-    checkNeedToRunAssistant(assistantId) {
-        const isRunning = this._isCustomAssistantRunning.get(assistantId);
-        this._isCustomAssistantRunning.set(assistantId, !isRunning);
-        return isRunning;
+    isCustomAssistantRunning(assistantId) {
+        return this._isCustomAssistantRunning.get(assistantId);
     }
 
     /**
@@ -155,13 +152,13 @@ class CustomAssistantManager {
      * @returns {Promise<number>}
      */
     async run(assistantId, paraIds) {
-        
         const assistant = this._customAssistants.get(assistantId);
         if (!assistant) {
             return this.STATUSES.NOT_FOUND;
         }
+        this._isCustomAssistantRunning.set(assistantId, true);
 
-        if (!this._isCustomAssistantInit.get(assistantId)) {
+        if (!this._isCustomAssistantTrackChanges.get(assistantId)) {
             /** @type {Promise<boolean | null>[]} */
             const promises = [];
             this._paragraphsStack.forEach((value, paraId) => {
@@ -190,9 +187,23 @@ class CustomAssistantManager {
             return this.STATUSES.ERROR;
         }
 
-        this._isCustomAssistantInit.set(assistantId, true);
+        this._isCustomAssistantTrackChanges.set(assistantId, true);
 
         return this.STATUSES.OK;
+    }
+
+    /** @param {string} assistantId */
+    async stop(assistantId) {
+        this._isCustomAssistantRunning.set(assistantId, false);
+
+        let assistant = this._customAssistants.get(assistantId);
+        if (!assistant) {
+            throw new Error("Custom assistant not found: " + assistantId);
+        }
+        const paraIdsToUncheck = [...assistant.checked];
+        assistant.checked.clear();
+        this._isCustomAssistantTrackChanges.set(assistantId, false);
+        await assistant.uncheckParagraphs(paraIdsToUncheck);
     }
 
     /**
@@ -208,7 +219,7 @@ class CustomAssistantManager {
             annotations,
         });
         this._customAssistants.forEach((assistant, assistantId) => {
-            const isInit = this._isCustomAssistantInit.get(assistantId);
+            const isInit = this._isCustomAssistantTrackChanges.get(assistantId);
             if (!isInit) {
                 return;
             }
