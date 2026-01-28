@@ -9,6 +9,7 @@ const config = {
   "addons": [
     "@storybook/addon-docs",
   ],
+  "staticDirs": ["../images"],
   "framework": {
     "name": "@storybook/html-vite",
     "options": {}
