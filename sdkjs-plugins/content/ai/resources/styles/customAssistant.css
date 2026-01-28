@@ -19,6 +19,9 @@ label {
         color: var(--border-error);
     }
 
+.select2-container {
+    width: auto !important;
+}    
 .select2-container--default .select2-selection--single,    
 .form-control {
     background-color: transparent;
