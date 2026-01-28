@@ -1207,6 +1207,9 @@ async function onStartCustomAssistant(assistantId, buttonAssistant)
 			// Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
 			// customAssistantManager.checkNeedToRunAssistant(assistantId);
 			break;
+		case customAssistantManager.NO_AI_MODEL_SELECTED:
+			// A window with settings will appear.
+			break;		
 	}
 
 	await Asc.Editor.callMethod("EndAction", ["Block", preloaderMessage]);

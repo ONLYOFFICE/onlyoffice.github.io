@@ -53,7 +53,7 @@ function TextAnnotator(annotatorPopup)
  * @param {string} recalcId 
  * @param {string} text
  * @param {string[]} ranges
- * @returns {Promise<boolean>}
+ * @returns {Promise<boolean | null>}
  */
 TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
@@ -67,7 +67,7 @@ TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, tex
 };
 /**
  * @param {string[]} paraIds 
- * @returns {Promise<boolean[]>}
+ * @returns {Promise<Array<boolean | null>>}
  */
 TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
@@ -78,14 +78,14 @@ TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 			_t.paraToCheck.add(paraId);
 	});
 	
-	/** @type {Promise<boolean>[]} */
+	/** @type {Promise<boolean | null>[]} */
 	const promises = [];
 	this.paraToCheck.forEach(paraId => {promises.push(this._checkParagraph(paraId))});
 	return Promise.all(promises);
 };
 /**
  * @param {string} paraId 
- * @returns {Promise<boolean>}
+ * @returns {Promise<boolean | null>}
  */
 TextAnnotator.prototype._checkParagraph = async function(paraId)
 {
