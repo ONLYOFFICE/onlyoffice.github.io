@@ -139,4 +139,4 @@
 * Bug fix.
 
 ## 3.0.4
-* New Feature: Build Your Own [AI Assistants](./scripts/text-annotations/custom-annotations/README.md)
+* New Feature: Build Your Own AI Assistants
