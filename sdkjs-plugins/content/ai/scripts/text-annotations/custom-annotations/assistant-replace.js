@@ -117,7 +117,7 @@ Object.assign(AssistantReplace.prototype, {
 		[
 		  {
 			"origin": "exact text fragment that matches the query",
-      		"suggestion": "suggested replacement",
+      		"suggestion": "suggested replacement (plain text)",
 			"paragraph": paragraph_number,
 			"occurrence": 1,
 			"confidence": 0.95
@@ -161,9 +161,13 @@ Object.assign(AssistantReplace.prototype, {
      */
     getInfoForPopup: function (paraId, rangeId) {
         let _s = this.getAnnotation(paraId, rangeId);
+        let suggested = _s["suggestion"];
+        if (suggested.indexOf('</strong>') === -1) {
+            suggested = `<strong>${suggested}</strong>`;
+        }
         return {
             original: _s["original"],
-            suggested: _s["suggestion"],
+            suggested: suggested,
             type: this.type,
         };
     },
