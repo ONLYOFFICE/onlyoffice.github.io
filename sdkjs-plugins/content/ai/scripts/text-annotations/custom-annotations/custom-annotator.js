@@ -166,6 +166,8 @@ Object.assign(CustomAnnotator.prototype, {
         return Promise.all(promises);
     },
     onAccept: async function (paraId, rangeId) {
-        this._skipNextChangeParagraph = true;
+        if (this.type !== 0) { // not for hint
+            this._skipNextChangeParagraph = true;
+        }
     },
 });
