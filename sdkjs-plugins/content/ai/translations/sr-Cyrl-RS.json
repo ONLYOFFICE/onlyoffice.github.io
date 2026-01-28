@@ -172,5 +172,7 @@
 	"Prompt": "Пометка",
 	"Give your tool a short name for the toolbar": "Дајте вашем alatu kratko ime za alatnu traku",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Рекајте AI шта да ради са одабраним текстом (нпр., \"Пронађи грешке у факту\" или \"Сажми\")",
-	"Create AI assistant": "Креирај AI асистента"
+	"Create AI assistant": "Креирај AI асистента",
+	"Match": "Поређај",
+	"Proposal for replacement": "Предлог за замену"
 }

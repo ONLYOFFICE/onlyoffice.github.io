@@ -172,5 +172,7 @@
 	"Prompt": "Пометка",
 	"Give your tool a short name for the toolbar": "Дайте вашему инструменту короткое имя для панели инструментов",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Попросите ИИ выполнить действие над выбранным текстом (например, \"Найти фактические ошибки\" или \"Сжать\")",
-	"Create AI assistant": "Создать ассистента ИИ"
+	"Create AI assistant": "Создать ассистента ИИ",
+	"Match": "Совпадение",
+	"Proposal for replacement": "Предложение для замены"
 }

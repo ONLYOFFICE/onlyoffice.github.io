@@ -172,5 +172,7 @@
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dê um nome curto para o seu ferramentário",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Diga ao AI o que fazer com o texto selecionado (por exemplo, \"Encontre erros fatos\" ou \"Resumir\")",
-	"Create AI assistant": "Criar assistente de IA"
+	"Create AI assistant": "Criar assistente de IA",
+	"Match": "Correspondência",
+	"Proposal for replacement": "Proposta de substituição"
 }
