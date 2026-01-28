@@ -172,5 +172,9 @@
 	"Prompt": "提示词",
 	"Give your tool a short name for the toolbar": "为工具栏提供一个简短的名称",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "告诉 AI 选中文本要做什么（例如，\"查找事实错误\" 或 \"摘要\"）",
-	"Create AI assistant": "创建 AI 助手"
+	"Create AI assistant": "创建 AI 助手",
+	"Match": "匹配",
+	"Proposal for replacement": "替换建议"
+	
+
 }

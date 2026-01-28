@@ -172,5 +172,7 @@
 	"Prompt": "プロンプト",
 	"Give your tool a short name for the toolbar": "ツールバーに短い名前をつけてください",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "選択したテキストに対してAIに何をすべきかを教える (例: \"事実上の誤りを見つけ\"または\"要約\")",
-	"Create AI assistant": "AIアシスタントを作成"
+	"Create AI assistant": "AIアシスタントを作成",
+	"Match": "一致",
+	"Proposal for replacement": "置き換えの提案"
 }
