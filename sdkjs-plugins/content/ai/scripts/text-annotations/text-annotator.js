@@ -112,6 +112,9 @@ TextAnnotator.prototype._checkParagraph = async function(paraId)
 TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 };
+TextAnnotator.prototype.uncheckParagraphs = async function(paraIds)
+{
+};
 TextAnnotator.prototype.openPopup = async function(paraId, rangeId)
 {
 	if (!this.annotatorPopup)
