@@ -42,6 +42,8 @@ function CustomAnnotator(annotationPopup, assistantData) {
     this.assistantData = assistantData;
     this.type = assistantData.type;
     this._skipNextChangeParagraph = false;
+
+    this._lastUsedPrompt = "";
 }
 CustomAnnotator.prototype = Object.create(TextAnnotator.prototype);
 CustomAnnotator.prototype.constructor = CustomAnnotator;
@@ -60,9 +62,20 @@ Object.assign(CustomAnnotator.prototype, {
 
         const argPrompt = this._createPrompt(text);
 
+        if (this._lastUsedPrompt && argPrompt !== this._lastUsedPrompt) {
+            let resetInstruction = 
+                `CRITICAL
+                    - Ignore all previous messages and instructions.
+                    - Please respond only to this new query and treat this as a new request.
+                
+                    `;
+            argPrompt = resetInstruction + argPrompt;
+            this._lastUsedPrompt = argPrompt;    
+        }
+
         let response = await this.chatRequest(argPrompt);
 
-        if (!response || response === '[]') {
+        if (!response || response === "[]") {
             if (response === null) {
                 return null; // no AI model selected
             }
@@ -70,7 +83,11 @@ Object.assign(CustomAnnotator.prototype, {
         }
 
         try {
-            const ranges = this._convertToRanges(paraId, text, JSON.parse(response));
+            const ranges = this._convertToRanges(
+                paraId,
+                text,
+                JSON.parse(response),
+            );
             let obj = {
                 type: "highlightText",
                 paragraphId: paraId,
@@ -124,7 +141,10 @@ Object.assign(CustomAnnotator.prototype, {
             this._skipNextChangeParagraph = false;
             return paraIds.map(() => false);
         }
-        return await TextAnnotator.prototype.checkParagraphs.call(this, paraIds);
+        return await TextAnnotator.prototype.checkParagraphs.call(
+            this,
+            paraIds,
+        );
     },
     onAccept: async function (paraId, rangeId) {
         this._skipNextChangeParagraph = true;

@@ -137,6 +137,7 @@ function CustomAnnotationPopup()
 		let textColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["text-normal"] : "#3D3D3D";
 		let borderColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["border-divider"] : "#666666";
 		let ballonColor = window.Asc.plugin.theme ? window.Asc.plugin.theme["canvas-background"] : "#F5F5F5";
+		this.content = "";
 		
 		if (data.type === 0) { // Hint
 			this.content = `<div>

@@ -63,11 +63,9 @@ class CustomAssistantManager {
 
     /**
      * @param {localStorageCustomAssistantItem} assistantData
+     * @param {boolean} [isForUpdate]
      */
-    createAssistant(assistantData) {
-        if (this._customAssistants.has(assistantData.id)) {
-            return this._updateAssistant(assistantData);
-        }
+    createAssistant(assistantData, isForUpdate) {
         /** @type {Assistant | null} */
         let assistant = null;
         switch (assistantData.type) {
@@ -96,40 +94,42 @@ class CustomAssistantManager {
             );
         }
 
-        this._isCustomAssistantInit.set(assistantData.id, false);
-        this._isCustomAssistantRunning.set(assistantData.id, false);
         this._customAssistants.set(assistantData.id, assistant);
+        if (!isForUpdate) {
+            this._isCustomAssistantInit.set(assistantData.id, false);
+            this._isCustomAssistantRunning.set(assistantData.id, false);
+        }
 
         return assistant;
     }
     /**
      * @param {localStorageCustomAssistantItem} assistantData
      */
-    _updateAssistant(assistantData) {
-        let assistant = this._customAssistants.get(assistantData.id);
-        if (!assistant) {
+    updateAssistant(assistantData) {
+        console.warn("Updating custom assistant: " + assistantData.id);
+        let oldAssistant = this._customAssistants.get(assistantData.id);
+        if (!oldAssistant) {
             throw new Error("Custom assistant not found: " + assistantData.id);
         }
-        assistant.assistantData = assistantData;
-        assistant.type = assistantData.type;
-
         const isRunning = this._isCustomAssistantRunning.get(assistantData.id);
+        const newAssistant = this.createAssistant(assistantData, isRunning);
         if (!isRunning) {
-            return assistant;
+            return newAssistant;
         }
 
         this._paragraphsStack.forEach((value, paraId) => {
-            assistant.onChangeParagraph(
+            newAssistant.onChangeParagraph(
                 paraId,
                 value.recalcId,
                 value.text,
                 value.annotations,
             );
         });
-        const paragraphIdsToUpdate = [...assistant.checked];
-        assistant.checkParagraphs(paragraphIdsToUpdate);
+        const paragraphIdsToUpdate = [...oldAssistant.checked];
+        oldAssistant.checked.clear();
+        newAssistant.checkParagraphs(paragraphIdsToUpdate);
 
-        return assistant;
+        return newAssistant;
     }
 
     /** @param {string} assistantId */

@@ -698,7 +698,7 @@ async function registerButtons(window, undefined)
 					onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
 				}];
 				buttonAssistant.attachOnClick(async function(){
-					onStartCustomAssistant(element.id, buttonAssistant);
+					customAssistantOnClickToolbarIcon(element.id, buttonAssistant);
 				});
 			});
 		}
