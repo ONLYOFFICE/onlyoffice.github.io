@@ -30,9 +30,9 @@
  *
  */
 
-function GrammarChecker()
+function GrammarChecker(annotatorPopup)
 {
-	TextAnnotator.call(this);
+	TextAnnotator.call(this, annotatorPopup);
 	this.type = 1;
 }
 
@@ -42,17 +42,6 @@ GrammarChecker.prototype.constructor = GrammarChecker;
 GrammarChecker.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
-
-	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine)
-		return false;
-
-	let isSendedEndLongAction = false;
-	async function checkEndAction()
-	{
-		if (!isSendedEndLongAction)
-			isSendedEndLongAction = true;
-	}
 
 	let argPrompt = `You are a grammar correction tool that analyzes text for punctuation and style issues only. You will receive text to analyze and must respond with corrections in a specific JSON format.
 
@@ -153,17 +142,10 @@ CRITICAL - Output Format:
 
 Text to check:`;
 	argPrompt += text;
-
-	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (data)
-	{
-		if (!data)
-			return;
-		await checkEndAction();
-
-		response += data;
-	});
-	await checkEndAction();
+	
+	let response = await this.chatRequest(argPrompt);
+	if (!response)
+		return false;
 
 	let rangeId = 1;
 	let ranges = [];
@@ -181,7 +163,7 @@ Text to check:`;
 
 			while (searchStart < text.length)
 			{
-				const index = text.indexOf(origin, searchStart);
+				const index = _t.simpleGraphemeIndexOf(text, origin, searchStart);
 				if (index === -1) break;
 				
 				count++;
@@ -189,7 +171,7 @@ Text to check:`;
 				{
 					ranges.push({
 						"start": index,
-						"length": origin.length,
+						"length": [...origin].length,
 						"id": rangeId
 					});
 					_t.paragraphs[paraId][rangeId] = {

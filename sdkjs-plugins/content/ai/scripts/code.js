@@ -30,6 +30,8 @@
  *
  */
 
+/// <reference path="./text-annotations/custom-annotations/manager.js" />
+
 let settingsWindow = null;
 let aiModelsListWindow = null; 
 let aiModelEditWindow = null;
@@ -37,9 +39,11 @@ let customProvidersWindow = null;
 let summarizationWindow = null;
 let translateSettingsWindow = null;
 let helperWindow = null;
+let customAssistantWindow = null;
 
 let spellchecker = null;
 let grammar = null;
+let customAssistantManager = new CustomAssistantManager();
 
 window.getActionsInfo = function() {
 	let actions = [];
@@ -66,6 +70,9 @@ window.addSupportAgentMode = function(editorVersion) {
 	window.Asc.plugin.attachEditorEvent("onKeyDown", function(e) {
 		if (e.keyCode === 27 && textAnnotatorPopup) {
 			textAnnotatorPopup.close();
+		}
+		if (e.keyCode === 27 && customAnnotationPopup) {
+			customAnnotationPopup.close();
 		}
 
 		if (e.keyCode === 27 && helperWindow) {
@@ -171,16 +178,14 @@ window.addSupportAgentMode = function(editorVersion) {
 					});
 				}
 
+				let markdownStreamer = new MarkDownStreamer();
+
 				let isSupportStreaming = window.EditorHelper.isSupportStreaming;
-				let dataStream = "";
 				async function onStreamEvent(data, end) {
 					if (isSupportStreaming)
-						await Asc.Library.PasteText(data);
-					dataStream += data;
-					if (true === end && "" !== dataStream) {
-						await Asc.Library.PasteText(dataStream);
-						dataStream = "";
-					}
+						await markdownStreamer.onStreamChunk(data, end);
+					else if (end)
+						await Asc.Library.PasteText(data);					
 				}
 
 				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
@@ -203,14 +208,18 @@ window.addSupportAgentMode = function(editorVersion) {
 						await onStreamEvent(data);
 				});
 
+				if (!isSupportStreaming)
+					buffer = result;
+
 				if (checkBuffer && !buffer.startsWith(bufferWait)) {
 					checkBuffer = false;
-					await onStreamEvent(buffer, true);
 				}
 
-				if (!isSupportStreaming) {
-					await onStreamEvent("", true);
-				}
+				if (!isSupportStreaming && !checkBuffer)
+					await onStreamEvent(buffer, true);
+
+				if (isSupportStreaming)
+					markdownStreamer.onStreamEnd();
 
 				await checkEndAction();
 
@@ -678,8 +687,13 @@ class Provider extends AI.Provider {\n\
 			
 		});
 		
-		spellchecker = new SpellChecker();
-		grammar = new GrammarChecker();
+		spellchecker = new SpellChecker(textAnnotatorPopup);
+		grammar = new GrammarChecker(textAnnotatorPopup);
+		JSON.parse(
+                localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+            ).forEach(assistantData => {
+				customAssistantManager.createAssistant(assistantData);
+			});
 
 		this.attachEditorEvent("onParagraphText", function(obj) {
 			if (!obj)
@@ -687,6 +701,8 @@ class Provider extends AI.Provider {\n\
 			
 			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+
+			customAssistantManager.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
 		});
 
 		this.attachEditorEvent("onFocusAnnotation", function(obj) {
@@ -702,6 +718,10 @@ class Provider extends AI.Provider {\n\
 				spellchecker.onBlur();
 			else if ("grammar" === obj["name"]) 
 				grammar.onBlur();
+			else if ("customAssistant" === obj["name"].slice(0, 15)) {
+				const assistantId = obj["name"].slice(16);
+				customAssistantManager.onBlur(assistantId);
+			}	
 		});
 
 		this.attachEditorEvent("onClickAnnotation", function(obj) {
@@ -712,6 +732,10 @@ class Provider extends AI.Provider {\n\
 				grammar.onClick(obj["paragraphId"], obj["ranges"]);
 			else if ("spelling" === obj["name"])
 				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
+			else if ("customAssistant" === obj["name"].slice(0, 15)) {
+				const assistantId = obj["name"].slice(16);
+				customAssistantManager.onClick(assistantId, obj["paragraphId"], obj["ranges"]);
+			}
 		});
 
 	}
@@ -750,6 +774,21 @@ window.Asc.plugin.button = async function(id, windowId) {
 				textAnnotatorPopup.close();
 				break;
 		}
+		return;
+	}
+	if (customAnnotationPopup && customAnnotationPopup.popup && customAnnotationPopup.popup.id === windowId)
+	{
+		switch (id) {
+			case 0:
+				await customAnnotationPopup.popup.onAccept();
+				break;
+			case 1:
+				await customAnnotationPopup.popup.onReject();
+				break;
+			default:
+				customAnnotationPopup.close();
+				break;
+		}	
 		return;
 	}
 
@@ -793,9 +832,12 @@ window.Asc.plugin.onThemeChanged = function(theme) {
 	customProvidersWindow && customProvidersWindow.command('onThemeChanged', theme);
 	window.chatWindow && window.chatWindow.command('onThemeChanged', theme);
 	helperWindow && helperWindow.command('onThemeChanged', theme);
+	customAssistantWindow && customAssistantWindow.command('onThemeChanged', theme);
 
 	if (textAnnotatorPopup && textAnnotatorPopup.popup)
 		textAnnotatorPopup.popup.command('onThemeChanged', theme);
+	if (customAnnotationPopup && customAnnotationPopup.popup)
+		customAnnotationPopup.popup.command('onThemeChanged', theme);
 };
 
 /**
@@ -911,6 +953,268 @@ async function onCheckGrammarSpelling(isCurrent)
 	
 	if (grammar)
 		grammar.checkParagraphs(paraIds);
+}
+
+/**
+ * CUSTOM ASSISTANT
+ * @param {string} [assistantId] Assistant ID for editing
+ * @param {Asc.ButtonToolbar} [buttonAssistant]
+ */
+function customAssistantWindowShow(assistantId, buttonAssistant)
+{
+	if (window.customAssistantWindow) {
+		customAssistantWindowClose();
+	}
+	const actionButtonText = assistantId ? 'Save' : 'Create';
+	const description = assistantId ? 'Edit' : 'Create a new assistant';
+
+	let variation = {
+		url : "customAssistant.html",
+		description : window.Asc.plugin.tr(description),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr(actionButtonText), primary: true },
+			{ text: window.Asc.plugin.tr('Cancel'), primary: false },
+		],
+		isModal : false,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 427, 303 ] //383
+	};
+
+	customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [427, 303], [427, 303], [0, 0]]);
+		if (assistantId) {
+			customAssistantWindow.command('onEditAssistant', assistantId);
+		}
+	});
+	
+	customAssistantWindow.show(variation);
+
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			if (id === 0) {
+				const element = await new Promise(resolve => {
+					customAssistantWindow.attachEvent("onAddEditAssistant", resolve);
+					customAssistantWindow.command('onClickAdd');
+				});
+				if (!element) return;
+				if (buttonAssistant) {
+					buttonAssistant.text = element.name;
+					customAssistantManager.updateAssistant(element);
+				} else {
+					buttonAssistant = new Asc.ButtonToolbar(null);
+					buttonAssistant.text = element.name;
+					buttonAssistant.icons = getToolBarButtonIcons("written-plugin");
+					buttonAssistant.split = true;
+					buttonAssistant.enableToggle = true;
+					buttonAssistant.menu = [{
+						text: 'Edit',
+						id: element.id + '-edit',
+						onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+					},
+					{
+						text: 'Delete',
+						id: element.id + '-delete',
+						onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
+					}];
+					buttonAssistant.attachOnClick(async function(){
+						customAssistantOnClickToolbarIcon(element.id, buttonAssistant);
+					});
+					customAssistantManager.createAssistant(element);
+				}
+				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+			}
+			customAssistantWindowClose();
+		} else {
+			await window.pluginsButtonsCallback(id, windowId, ...args);
+		}
+	}
+
+	window.customAssistantWindow = customAssistantWindow;
+}
+
+function customAssistantWindowClose() {
+	if (window.customAssistantWindow) {
+		window.customAssistantWindow.close();
+		window.customAssistantWindow = null;
+	}
+	if (window.pluginsButtonsCallback) {
+		window.Asc.plugin.button = window.pluginsButtonsCallback;
+		window.pluginsButtonsCallback = null;
+	}
+}
+/**
+ * @param {string} assistantId
+ * @param {Asc.ButtonToolbar} buttonAssistant
+ */
+function customAssistantWindowDeleteConfirm(assistantId, buttonAssistant) {
+if (window.customAssistantWindow) {
+		customAssistantWindowClose();
+	}
+
+	const savedAssistants = JSON.parse(
+		localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+	);
+	const index = savedAssistants.findIndex((item) => item.id === assistantId);
+	const assistant = savedAssistants[index];
+
+	let variation = {
+		url : "customAssistant.html",
+		description : assistant.name + ' - ' + window.Asc.plugin.tr('Delete Assistant'),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr('Yes'), primary: true },
+			{ text: window.Asc.plugin.tr('No'), primary: false },
+		],
+		isModal : true,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 400, 70 ]
+	};
+
+	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [400, 70], [400, 70], [0, 0]]);
+		if (assistantId) {
+			let text = window.Asc.plugin.tr('Are you sure you want to delete this assistant?');
+			text += '<br>' + window.Asc.plugin.tr("This action cannot be undone.");
+			customAssistantWindow.command('onWarningAssistant', text);
+		}
+	});
+	
+	customAssistantWindow.show(variation);
+
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			if (id === 0) {
+
+				if (index !== -1) {
+					savedAssistants.splice(index, 1);
+					localStorage.setItem(
+						"onlyoffice_ai_saved_assistants",
+						JSON.stringify(savedAssistants)
+					);
+					if (buttonAssistant) {
+						buttonAssistant.removed = true;
+						Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+					}
+				}
+			}
+			customAssistantWindowClose();
+		} else {
+			await window.pluginsButtonsCallback(id, windowId, ...args);
+		}
+	}
+
+	window.customAssistantWindow = customAssistantWindow;
+}
+/**
+ * @param {string} warningText
+ * @param {localStorageCustomAssistantItem} [assistantData]
+ */
+function customAssistantWarning(warningText, assistantData) {
+	if (window.customAssistantWindow) {
+		customAssistantWindowClose();
+	}
+
+	let variation = {
+		url : "customAssistant.html",
+		description : window.Asc.plugin.tr('Warning!'),
+		isVisual : true,
+		buttons : [
+			{ text: window.Asc.plugin.tr('OK'), primary: true },
+		],
+		isModal : true,
+		isCanDocked: false,
+		type: "window",
+		EditorsSupport : ["word"],
+		size : [ 350, 76 ]
+	};
+
+	const customAssistantWindow = new window.Asc.PluginWindow();
+	customAssistantWindow.attachEvent("onWindowReady", function() {
+		Asc.Editor.callMethod("ResizeWindow", [customAssistantWindow.id, [350, 76], [350, 76], [0, 0]]);
+		customAssistantWindow.command('onWarningAssistant', warningText);
+
+	});
+	
+	customAssistantWindow.show(variation);
+
+	window.pluginsButtonsCallback = window.Asc.plugin.button;
+	window.Asc.plugin.button = async function(id, windowId, ...args) {
+		if (customAssistantWindow && windowId === customAssistantWindow.id) {
+			customAssistantWindowClose();
+		} else {
+			await window.pluginsButtonsCallback(id, windowId, ...args);
+		}
+	}
+
+	window.customAssistantWindow = customAssistantWindow;
+}
+/** 
+ * @param {string} assistantId 
+ * @param {Asc.ButtonToolbar} buttonAssistant 
+ * @returns 
+ */
+async function customAssistantOnClickToolbarIcon(assistantId, buttonAssistant)
+{
+	const isAssistantRunning = customAssistantManager.isCustomAssistantRunning(assistantId);
+	if (isAssistantRunning) {
+		customAssistantManager.stop(assistantId);
+		return;
+	}
+	let paraIds = [];
+
+	let selectedText = await Asc.Library.GetSelectedText();
+	let preloaderMessage = !!selectedText ? window.Asc.plugin.tr("Processing selection...") : window.Asc.plugin.tr("Processing document...");
+
+	Asc.scope.hasSelectedText = !!selectedText;
+	paraIds = await Asc.Editor.callCommand(function(){
+		let result = [];
+		let paragraphs;
+		if (Asc.scope.hasSelectedText) {
+			const range = Api.GetDocument().GetRangeBySelect();
+			paragraphs = range.GetAllParagraphs();
+		} else {
+			paragraphs = Api.GetDocument().GetAllParagraphs();
+		}
+		paragraphs.forEach(p => result.push(p.GetInternalId()));
+		return result;
+	});
+
+	await Asc.Editor.callMethod("StartAction", ["Block", preloaderMessage]);
+
+	const status = await customAssistantManager.run(assistantId, paraIds);
+	switch (status) {
+		case customAssistantManager.STATUSES.OK:
+			break;
+		case customAssistantManager.STATUSES.NOT_FOUND:
+			console.error("Custom assistant not found: " + assistantId);
+            customAssistantWarning(window.Asc.plugin.tr("Custom assistant is not available. Please check your configuration."));
+			//buttonAssistant.disabled = true;
+			//Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+			break;
+		case customAssistantManager.STATUSES.ERROR:
+            customAssistantWarning(
+				window.Asc.plugin.tr("Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.")
+			);
+			// TODO: Add the ability to remove a button press.
+			// buttonAssistant.PRESSED = false;
+			// Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonAssistant]);
+			// customAssistantManager.stop(assistantId);
+			break;
+		case customAssistantManager.NO_AI_MODEL_SELECTED:
+			// A window with settings will appear.
+			break;		
+	}
+
+	await Asc.Editor.callMethod("EndAction", ["Block", preloaderMessage]);
 }
 
 /**

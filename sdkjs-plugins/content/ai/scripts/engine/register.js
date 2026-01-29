@@ -642,7 +642,7 @@ async function registerButtons(window, undefined)
 			button2.icons = getToolBarButtonIcons("ocr");
 			button2.attachOnClick(on_click_ocr);
 		}
-		
+
 		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word")
 		{
 			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
@@ -662,6 +662,45 @@ async function registerButtons(window, undefined)
 				onCheckGrammarSpelling(true);
 			});
 			buttonGS.split = true;
+		}
+
+		let neededVersionForAiAssistant = 9002000;
+		/*if (window.AscDesktopEditor) {
+			neededVersionForAiAssistant = 9003000;
+		}*/
+		if (editorVersion >= neededVersionForAiAssistant && Asc.Editor.getType() === "word")
+		{	
+			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonCustomAssistant.text = "Create AI assistant";
+			buttonCustomAssistant.icons = getToolBarButtonIcons("plugin-writer");
+			buttonCustomAssistant.separator = true;
+			buttonCustomAssistant.attachOnClick(function(){
+				customAssistantWindowShow();
+			});
+			const savedAssistants = JSON.parse(
+				localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+			);
+
+			savedAssistants.forEach(element => {
+				const buttonAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+				buttonAssistant.text = element.name;
+				buttonAssistant.icons = getToolBarButtonIcons("written-plugin");
+				buttonAssistant.split = true;
+				buttonAssistant.enableToggle = true;
+				buttonAssistant.menu = [{
+					text: 'Edit',
+					id: element.id + '-edit',
+					onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+				}, 
+				{
+					text: 'Delete',
+					id: element.id + '-delete',
+					onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
+				}];
+				buttonAssistant.attachOnClick(async function(){
+					customAssistantOnClickToolbarIcon(element.id, buttonAssistant);
+				});
+			});
 		}
 	}
 

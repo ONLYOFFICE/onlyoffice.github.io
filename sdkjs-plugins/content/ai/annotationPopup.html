@@ -34,6 +34,7 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<style id="pluginStyles"></style>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Annotation popup</title>
@@ -45,13 +46,15 @@
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
 			window.Asc.plugin.attachEvent("onUpdateContent", function(obj) {
 				document.body.innerHTML = obj.content;
-				document.querySelectorAll('strong').forEach(function(el){
-					el.style.color = obj.color;
-				});
+				if (obj.theme) {
+					onThemeChanged(obj.theme);
+				}
 			});
 		};
 
-		window.Asc.plugin.attachEvent("onThemeChanged", function(theme) {
+		window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+
+		function onThemeChanged(theme) {
 			let backColor = theme["background-normal"];
 			let textColor = theme["text-normal"];
 			let borderColor = theme["border-divider"];
@@ -76,7 +79,29 @@
 			for (let i = 0; i < ballonColorElements.length; i++) {
 				ballonColorElements[i].style.background = ballonColor;
 			}
-		});
+
+			let textRules =
+				".original { color: " +
+				theme["border-error"] +
+				"; }\n";
+			if (theme.name !== "theme-white" && theme.name !== "theme-night") {
+				textRules +=
+					".corrected strong { color: " +
+					"#009900" +
+					"; }\n";
+			}
+			textRules += ".corrected strong { font-weight:normal; }\n";
+				
+			let styleTheme = document.getElementById("pluginStyles");
+			if (!styleTheme) {
+				styleTheme = document.createElement("style");
+				styleTheme.id = "pluginStyles";
+				styleTheme.innerHTML = textRules;
+				document.getElementsByTagName("head")[0].appendChild(styleTheme);
+			} else {
+				styleTheme.innerHTML = textRules;
+			}
+		}
 	</script>
 </body>
 </html>
