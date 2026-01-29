@@ -137,3 +137,7 @@
 
 ## 3.0.2
 * Bug fix.
+
+## 3.0.5
+* New Feature: Build Your Own AI Assistants
+* Known issues: immediately after adding the assistant in the desktop application (and only there), the Edit and Delete buttons will not work. After restarting the plugin or reopening the file, they will work correctly. This will be fixed in version 9.3.0.

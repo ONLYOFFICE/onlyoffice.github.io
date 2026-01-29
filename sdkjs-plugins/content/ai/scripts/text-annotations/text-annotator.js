@@ -30,28 +30,45 @@
  *
  */
 
-function TextAnnotator()
+/// <reference path="./annotation-popup.js" />
+
+/** @param {TextAnnotationPopup} annotatorPopup */
+function TextAnnotator(annotatorPopup)
 {
+	this.annotatorPopup = annotatorPopup;
 	this.paraId = null;
 	this.rangeId = null;
 	
 	this.paragraphs = {};
+	/** @type {Object.<string, {recalcId: string, text: string}>} */
 	this.waitParagraphs = {};
 	this.paraToCheck = new Set();
+	/** @type {Set<string>} */
 	this.checked = new Set(); // was checked on the previous request
 	
 	this.type = -1;
 }
+/**
+ * @param {string} paraId 
+ * @param {string} recalcId 
+ * @param {string} text
+ * @param {string[]} ranges
+ * @returns {Promise<boolean | null>}
+ */
 TextAnnotator.prototype.onChangeParagraph = async function(paraId, recalcId, text, ranges)
 {
-	this._handleNewRanges(ranges, paraId, text);
+	await this._handleNewRanges(ranges, paraId, text);
 	this.waitParagraphs[paraId] = {
 		recalcId : recalcId,
 		text : text
 	};
 	
-	this._checkParagraph(paraId);
+	return this._checkParagraph(paraId);
 };
+/**
+ * @param {string[]} paraIds 
+ * @returns {Promise<Array<boolean | null>>}
+ */
 TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 {
 	this.paraToCheck.clear()
@@ -61,12 +78,19 @@ TextAnnotator.prototype.checkParagraphs = async function(paraIds)
 			_t.paraToCheck.add(paraId);
 	});
 	
-	this.paraToCheck.forEach(paraId => this._checkParagraph(paraId));
+	/** @type {Promise<boolean | null>[]} */
+	const promises = [];
+	this.paraToCheck.forEach(paraId => {promises.push(this._checkParagraph(paraId))});
+	return Promise.all(promises);
 };
+/**
+ * @param {string} paraId 
+ * @returns {Promise<boolean | null>}
+ */
 TextAnnotator.prototype._checkParagraph = async function(paraId)
 {
 	if (!this.paraToCheck.has(paraId) || !this.waitParagraphs[paraId])
-		return;
+		return false;
 	
 	let recalcId = this.waitParagraphs[paraId].recalcId;
 	let text = this.waitParagraphs[paraId].text;
@@ -76,22 +100,27 @@ TextAnnotator.prototype._checkParagraph = async function(paraId)
 	range["rangeId"] = undefined;
 	range["all"] = true;
 	await Asc.Editor.callMethod("RemoveAnnotationRange", [range]);
-	await this.annotateParagraph(paraId, recalcId, text);
+	const isAnnotate = await this.annotateParagraph(paraId, recalcId, text);
 	
 	delete this.waitParagraphs[paraId];
 	this.paraToCheck.delete(paraId);
 	
 	this.checked.add(paraId);
+
+	return isAnnotate;
 };
 TextAnnotator.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 };
+TextAnnotator.prototype.uncheckParagraphs = async function(paraIds)
+{
+};
 TextAnnotator.prototype.openPopup = async function(paraId, rangeId)
 {
-	if (!textAnnotatorPopup)
+	if (!this.annotatorPopup)
 		return;
 		
-	let popup = textAnnotatorPopup.open(this.type, paraId, rangeId, this.getInfoForPopup(paraId, rangeId));
+	let popup = this.annotatorPopup.open(this.type, paraId, rangeId, this.getInfoForPopup(paraId, rangeId));
 	if (!popup)
 		return;
 
@@ -107,10 +136,10 @@ TextAnnotator.prototype.openPopup = async function(paraId, rangeId)
 };
 TextAnnotator.prototype.closePopup = function()
 {
-	if (!textAnnotatorPopup)
+	if (!this.annotatorPopup)
 		return;
 	
-	textAnnotatorPopup.close(this.type);
+	this.annotatorPopup.close(this.type);
 };
 TextAnnotator.prototype.getInfoForPopup = function(paraId, rangeId)
 {
@@ -131,6 +160,11 @@ TextAnnotator.prototype.getAnnotation = function(paraId, rangeId)
 	
 	return this.paragraphs[paraId][rangeId];
 };
+/**
+ * @param {string} paraId 
+ * @param {string} rangeId 
+ * @returns {{paragraphId: string, rangeId: string}}
+ */
 TextAnnotator.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 {
 	return {
@@ -138,6 +172,10 @@ TextAnnotator.prototype.getAnnotationRangeObj = function(paraId, rangeId)
 		"rangeId" : rangeId
 	};
 };
+/**
+ * @param {string} paraId 
+ * @param {string[]} ranges 
+ */
 TextAnnotator.prototype.onClick = function(paraId, ranges)
 {
 	if (!ranges || !ranges.length)
@@ -158,17 +196,74 @@ TextAnnotator.prototype.resetCurrentRange = function()
 	this.paraId = null;
 	this.rangeId = null;
 };
+/**
+ * @param {Array<string>} ranges 
+ * @param {string} paraId 
+ * @param {string} text 
+ * @returns {Promise<void[]>}
+ */
 TextAnnotator.prototype._handleNewRanges = function(ranges, paraId, text)
 {
 	if (!ranges || !Array.isArray(ranges))
-		return;
-	
-	ranges.forEach(range => this._handleNewRangePositions(range, paraId, text));
+		return Promise.resolve([]);
+	/** @type {Promise<void>[]} */
+	const promises = [];
+
 	for (let i = 0; i < ranges.length; ++i)
 	{
-		this._handleNewRangePositions(ranges[i]);
+		promises[i] = this._handleNewRangePositions(ranges[i], paraId, text);
 	}
+
+	return Promise.all(promises);
 };
+/** @returns {Promise<void>} */
 TextAnnotator.prototype._handleNewRangePositions = function(range, paraId, text)
 {
 };
+TextAnnotator.prototype.chatRequest = async function(prompt)
+{
+	let requestEngine = AI.Request.create(AI.ActionType.Chat);
+	if (!requestEngine)
+		return null;
+	
+	let response = await requestEngine.chatRequest(prompt, false);
+	return this.normalizeResponse(response);
+};
+/**
+ * Normalizes AI response by removing markdown code block wrappers
+ * @param {string} response - The raw AI response that might be wrapped in ```json``` blocks
+ * @returns {string} - The normalized response with markdown code blocks removed
+ */
+TextAnnotator.prototype.normalizeResponse = function(response) {
+	if (typeof response !== 'string') {
+		return response;
+	}
+
+	return Asc.Library.getJSONResult(response);
+};
+/**
+ * @param {string} str
+ * @param {string} searchStr
+ * @param {string} [fromIndex]
+ * @returns {number}
+ */
+TextAnnotator.prototype.simpleGraphemeIndexOf = function(str, searchStr, fromIndex = 0) {
+    const codeUnitIndex = str.indexOf(searchStr, fromIndex);
+	if (codeUnitIndex < 2) {
+		return codeUnitIndex;
+	}
+	const adjustedIndex = adjustIndexForSurrogates(str, codeUnitIndex);
+
+	function adjustIndexForSurrogates(str, codeUnitIndex) {
+		let surrogateCount = 0;
+		for (let i = 0; i < codeUnitIndex; i++) {
+			const code = str.charCodeAt(i);
+			if (code >= 0xD800 && code <= 0xDBFF) {
+				surrogateCount++;
+			}
+		}
+		return codeUnitIndex - surrogateCount;
+	}
+	return adjustedIndex;
+}
+
