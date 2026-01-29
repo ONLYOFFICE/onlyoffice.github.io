@@ -1,0 +1,329 @@
+body {
+  background: #fff;
+  overflow-y: scroll;
+
+  color: #333;
+}
+
+.container {
+  padding: 13px;
+  overflow-y: auto;
+  height: 95vh;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.header {
+  font-size: 0.8em;
+  margin-top: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 20px;
+}
+
+/*  */
+#highlightColor {
+  color: black;
+  padding: 0.2em;
+  max-width: 80px;
+  font-size: 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+#highlightColor:hover {
+  border-color: #aaa;
+}
+
+#highlightColor option {
+  padding: 0.5em;
+  background-color: #fff;
+  color: #252525;
+}
+
+#highlightColor option:hover {
+  background-color: #ddd;
+}
+
+#highlightColor option[value="yellow"] {
+  background-color: #ffffcc;
+}
+
+#highlightColor option[value="green"] {
+  background-color: #ccffcc;
+}
+
+#highlightColor option[value="blue"] {
+  background-color: #4781d1;
+}
+
+#highlightColor option[value="red"] {
+  background-color: #ffcccc;
+}
+
+
+/*  */
+/* Hide scrollbar for IE, Edge and Firefox */
+.container {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.container p {
+  font-size: 12px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+#state-no-results button,
+#state-done button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+#state-done p:first-child {
+  font-weight: bold;
+}
+
+/* Dropdown panel wrapper */
+.dropdown {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+/* Header always visible */
+.dropdown-header {
+  padding: 10px;
+  background: #f9f9f9;
+  cursor: pointer;
+  position: relative;
+  font-weight: bold;
+}
+
+/* The little arrow */
+.dropdown-header .arrow {
+  position: absolute;
+  right: 12px;
+  transition: transform 0.2s;
+}
+
+/* Collapsed by default */
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #fff;
+  padding: 0 10px;
+}
+
+/* When open, allow comfortable height */
+.dropdown.open .dropdown-content {
+  max-height: 150px;
+  /* adjust if you need more space */
+  padding: 10px;
+}
+
+/* Rotate arrow when open */
+.dropdown.open .dropdown-header .arrow {
+  transform: rotate(90deg);
+}
+
+/* Formatting options laid out */
+.format-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.format-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f0f0f0;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.section {
+  margin-bottom: 10px;
+  padding: 0 2px 12px 0;
+
+}
+
+.section label {
+  font-weight: bold;
+  align-items: center;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+input[type="text"] {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.format-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.format-option {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.format-option:hover {
+  background: #e0e0e0;
+}
+
+.format-option.active {
+  background: #446995;
+  color: white;
+}
+
+.applyButton {
+  background: #446995;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 18px;
+  margin-bottom: 15px;
+}
+
+.applyButton:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#loader {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+body.dark-mode {
+  background: #404040;
+  color: #ddd;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode select,
+body.dark-mode .dropdown-content {
+  background: #2a2a2a;
+  color: #ddd;
+  border-color: #444;
+}
+
+body.dark-mode .dropdown-header {
+  background: #2a2a2a;
+  color: #ddd;
+  border-color: #444;
+}
+
+body.dark-mode .dropdown.open .dropdown-content {
+  background: #2a2a2a;
+}
+
+body.dark-mode .format-options label {
+  background: #333;
+  color: #eee;
+}
+
+body.dark-mode .format-options label:hover {
+  background: #3a3a3a;
+}
+
+body.dark-mode button {
+  background: #fff !important;
+  opacity: 0.8 !important;
+  color: #333 !important;
+}
+
+body.dark-mode button:disabled {
+  background: #fff !important;
+  opacity: 0.5 !important;
+  color: #333 !important;
+}
+
+body.dark-mode .loader {
+  color: #aaa;
+}
+
+/* ─── Desktop/wide screens ─────────────────────────────────── */
+@media (min-width: 1300px) {
+  .container {
+    max-width: 500px;
+    /* widen the panel */
+    font-size: 0.9rem;
+    /* bump up base text */
+    padding: 18px;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  input[type="text"],
+  select {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+
+  .dropdown-header {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .dropdown-content input,
+  .format-options label {
+    font-size: 0.85rem;
+  }
+
+  .applyButton,
+  #state-no-results button,
+  #state-done button {
+    font-size: 0.85rem;
+    padding: 12px;
+  }
+
+  /* Make the container scroll if it grows taller than the sidebar */
+}
+
+#textColorPicker {
+  width: 100%;
+  height: 32px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #000;
+  /* initial default color swatch */
+}

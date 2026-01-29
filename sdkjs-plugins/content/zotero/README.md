@@ -2,7 +2,7 @@
 
 Zotero plugin allows users to create bibliographies in ONLYOFFICE editors using Zotero service.
 
-The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Community Edition), ONLYOFFICE cloud service, and ONLYOFFICE Personal. It can also be installed to Document Server and desktop editors manually. 
+The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Community Edition), ONLYOFFICE cloud service, and ONLYOFFICE Personal. It can also be installed to Document Server and desktop editors manually.
 
 ## How to use
 
@@ -18,9 +18,7 @@ The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Communi
 
 6. Press the button `Refresh` to refresh all citations and a bibliography fields into the document.
 
-7. Press the button `Synchronize` to synchronize data with zotero service and update data into the document.
-
-8. If you want to open this document in other editors, you should convert all fields to text. Press the button `Save as text` for it.
+7. If you want to open this document in other editors(which do not have the Zotero plugin), you should convert all fields to text. Press the button `Unlink citations` for it.
 
 Please note that Zotero works only with user’s personal library associated with the your account. The desired sources must be added to your library in Zotero before you can search and add them to your bibliography via plugin.
 
@@ -28,7 +26,7 @@ Please note that Zotero works only with user’s personal library associated wit
 
 Two installation ways are available:
 
-1. Put the folder with the plugin code to ONLYOFFICE Document Server folder depending on the operating system:
+1.  Put the folder with the plugin code to ONLYOFFICE Document Server folder depending on the operating system:
 
     For Linux - `/var/www/onlyoffice/documentserver/sdkjs-plugins/`.
 
@@ -37,47 +35,48 @@ Two installation ways are available:
     The plugins will be available to all the users users of ONLYOFFICE Document Server.
     No service restart is required.
 
-2. Edit the Document Server config to add the following lines:
+2.  Edit the Document Server config to add the following lines:
 
-    ```
-    var docEditor = new DocsAPI.DocEditor("placeholder", {
-        "editorConfig": {
-            "plugins": {
-                "autostart": [
-                    "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
-                    ...
-                ],
-                "pluginsData": [
-                    "https://example.com/path/to/zotero/config.json",
-                    ...
-                ]
+        ```
+        var docEditor = new DocsAPI.DocEditor("placeholder", {
+            "editorConfig": {
+                "plugins": {
+                    "autostart": [
+                        "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
+                        ...
+                    ],
+                    "pluginsData": [
+                        "https://example.com/path/to/zotero/config.json",
+                        ...
+                    ]
+                },
+                ...
             },
             ...
-        },
-        ...
-    });
-    ```
-**Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable.
+        });
+        ```
+
+    **Important**: when you integrate ONLYOFFICE Document Server with a 3rd-party storage, you need to use special connectors (integration apps). If you compile a connector from source code or create a new one, you can add plugins using Document Server config. If you use ready connectors (e.g. from ownCloud/Nextcloud marketplaces) adding plugins via config is not applicable.
 
 ## How to install to desktop
 
-* Archive the plugin files (the archive must contain config.json, index.html, and pluginCode.js).
-* Change the file extension to .plugin.
-* Go to the Plugins tab, click Manage Plugins >> Add plugin, browse for the .plugin file.
+-   Archive the plugin files (the archive must contain config.json, index.html, and pluginCode.js).
+-   Change the file extension to .plugin.
+-   Go to the Plugins tab, click Manage Plugins >> Add plugin, browse for the .plugin file.
 
 ## Configuration
 
 1. Find Zotero plugin in `Plugins` tab of the ONLYOFFICE Document Editor and click it.
 
-2. Log in to your Zotero account. 
+2. Log in to your Zotero account.
 
-3. Follow `Zotero API settings` link from the plugin’s window. If you are logged in, you'll be able to proceed. If you are not logged in, you'll see an error message. In this case, click `Log in` (top right corner of your screen). 
+3. Follow `Zotero API settings` link from the plugin’s window. If you are logged in, you'll be able to proceed. If you are not logged in, you'll see an error message. In this case, click `Log in` (top right corner of your screen).
 
 4. Press `Create new private key`.
 
 5. Fill in `Key Description`, make sure `Allow library access` box is checked and press `Save Key`.
 
-5. Copy the newly created key and paste to `API Key` field in the plugin’s interface and save it. 
+6. Copy the newly created key and paste to `API Key` field in the plugin’s interface and save it.
 
 ## Offline mode
 
@@ -86,8 +85,24 @@ Two installation ways are available:
 3. Make sure the application API is open for interaction. (`Edit` -> `Settings` -> `Advanced` -> `Allow other applications on this computer to communicate with Zotero`)
 
 ### Update locale files downloaded offline
+
 ```bash
     cd .dev/offline-files-update && npm run start && cd ../..
+```
+
+## For developers
+
+Build:
+
+```bash
+npm i
+npm run build:all
+```
+
+Watch mode - automatically rebuild when files change:
+
+```bash
+npm run watch
 ```
 
 ## Known issues
