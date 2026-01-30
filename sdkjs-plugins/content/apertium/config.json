@@ -5,7 +5,11 @@
 		"fr": "Apertium",
 		"es": "Apertium",
 		"pt-BR": "Apertium",
-		"de": "Apertium"
+		"de": "Apertium",
+		"sq-AL": "Apertium",
+		"sr-Cyrl-RS": "Apertium",
+		"sr-Latn-RS": "Apertium",
+		"zh-ZH": "Apertium"
 	},
 	"guid": "asc.{9b224050-2354-4c1b-822b-03a97f61c79d}",
 	"version": "1.0.3",
@@ -18,7 +22,11 @@
 				"fr": "Traduisez rapidement des mots et des phrases avec Apertium.",
 				"es": "Traduzca rápidamente palabras y frases con Apertium.",
 				"pt-BR": "Traduza palavras e frases rapidamente usando Apertium.",
-				"de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium."
+				"de": "Übersetzen Sie Wörter und Sätze schnell mit Apertium.",
+				"sq-AL": "Përktheni shpejt fjalë dhe fjali duke përdorur Apertium.",
+				"sr-Cyrl-RS": "Брзо преводите речи и реченице користећи Apertium.",
+				"sr-Latn-RS": "Brzo prevodite reči i rečenice koristeći Apertium.",
+				"zh-ZH": "使用 Apertium 快速翻译单词和句子。"
 			},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

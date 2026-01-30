@@ -26,9 +26,10 @@ var Ps = null;
  * parent must have position: relative
  */
 showLoader = function (parent, text) {
+	var themeType = window.Asc && window.Asc.plugin && window.Asc.plugin.theme && window.Asc.plugin.theme.type;
 	var loader = document.createElement('div');
 	loader.className = 'asc-plugin-loader';
-	loader.innerHTML = '<div class="asc-loader-image asc-loader-image-' + ( (window.Asc.plugin.theme.type === "dark") ? 'light' : 'dark' ) + '"></div><div class="asc-loader-title">' + (text || "Loading") + '</div>';
+	loader.innerHTML = '<div class="asc-loader-image asc-loader-image-' + ( (themeType === "dark") ? 'light' : 'dark' ) + '"></div><div class="asc-loader-title">' + (text || "Loading") + '</div>';
 	parent.append ? parent.append(loader) : parent.appendChild(loader);
 	return loader;
 };

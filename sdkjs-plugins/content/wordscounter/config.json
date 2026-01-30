@@ -5,7 +5,12 @@
 		"fr": "Compteur de mots",
 		"es": "Recuento de palabras",
 		"pt-BR": "Word counter",
-		"de": "Wortanzahl"
+		"de": "Wortanzahl",
+		"it": "Word counter",
+		"sq-AL": "Word counter",
+		"sr-Cyrl-RS": "Бројач речи",
+		"sr-Latn-RS": "Brojač reči",
+		"zh-ZH": "字数统计器"
 	},
 	"guid" : "asc.{584EEEE8-DBF5-45C3-A4CA-F52177C82754}",
 	"version": "1.0.1",
@@ -18,7 +23,12 @@
 				"fr": "Comptez les mots, les caractères (avec/sans espaces) et les paragraphes dans la partie sélectionnée de votre document.",
 				"es": "Cuente las palabras, los caracteres (con/sin espacios) y los párrafos en la parte seleccionada de su documento.",
 				"pt-BR": "Conte palavras, caracteres (com/sem espaços) e parágrafos na parte selecionada do seu documento.",
-				"de": "Zählen Sie Wörter, Zeichen (mit/ohne Leerzeichen) und Absätze im ausgewählten Teil Ihres Dokuments."
+				"de": "Zählen Sie Wörter, Zeichen (mit/ohne Leerzeichen) und Absätze im ausgewählten Teil Ihres Dokuments.",
+				"it": "Conta parole, caratteri (con o senza spazi) e paragrafi nella parte selezionata del documento.",
+				"sq-AL": "Llogaritni fjalë, karaktere (me ose pa hapësirë), dhe paragrafe në pjesën e selektuar të dokumentit tuaj.",
+				"sr-Cyrl-RS": "Броји речи, карактере (са/без размака) и пасусе у изабраном делу вашег документа.",
+				"sr-Latn-RS": "Broji reči, karaktere (sa/bez razmaka) i pasuse u izabranom delu vašeg dokumenta.",
+				"zh-ZH": "统计文档所选内容的字数、字符数（含/不含空格）和段落数。"
 			},
 			"url" : "index.html",
 

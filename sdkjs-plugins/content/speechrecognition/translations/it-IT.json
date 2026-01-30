@@ -1,0 +1,13 @@
+{
+	"Start dictation": "Avvia dettatura",
+	"Speak now": "Parla ora",
+	"This plugin doesn't work in Desktop Editors.": "Questo plugin non funziona in Desktop Editors.",
+	"This plugin doesn't work into this browser.": "Questo plugin non funziona in questo browser.",
+	"Web Speech API is not supported by this browser. Please open it in Google Chrome browser.": "Web Speech API non è supportata da questo browser. Aprilo nel browser Google Chrome.",
+	"Error with connection to recognition service of this browser, please use the Chrome browser.": "Errore di connessione al servizio di riconoscimento di questo browser, utilizza il browser Chrome.",
+	"No speech was detected. You may need to adjust your microphone settings.": "Nessuna voce rilevata. Potrebbe essere necessario modificare le impostazioni del microfono.",
+	"No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.": "Nessun microfono trovato. Assicurati che sia installato un microfono e che le impostazioni del microfono siano configurate correttamente.",
+	"Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone": "L'autorizzazione all'uso del microfono è bloccata. Per modificarla, vai su chrome://settings/content/microphone",
+	"Permission to use microphone was denied.": "L'autorizzazione all'uso del microfono è stata negata.",
+	"Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.": "Web Speech API non è supportata da questo browser. Esegui l'aggiornamento a Chrome versione 25 o successiva."
+}

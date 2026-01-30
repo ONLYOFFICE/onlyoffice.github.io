@@ -1,3 +1,35 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2025
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
 var langCmbEl = document.getElementById('target-lang-cmb');
 var insertCmbEl = document.getElementById('insert-as-cmb');
 
@@ -10,7 +42,12 @@ summarizeBtnEl.addEventListener('click', onSummarize);
 var insertBtnEl = document.getElementById('insert-btn');
 insertBtnEl.setAttribute('disabled', true);
 insertBtnEl.addEventListener('click', onInsert);
-window.Asc.plugin.tr('Set Background Color')
+
+var clearBtnEl = document.getElementById('clear-btn');
+clearBtnEl.addEventListener('click', function() {
+	originalAreaEl.value = '';
+});
+
 var copyBtnEl = document.getElementById('copy-btn');
 copyBtnEl.setAttribute('disabled', true);
 copyBtnEl.addEventListener('click', function() {
@@ -44,22 +81,22 @@ function insertEngine(type) {
 
 var insertList = [
 	{
-		name: window.Asc.plugin.tr('As review'), 
+		name: 'As review', 
 		value: 'review', 
 		insertCallback: insertEngine("review")
 	},
 	{
-		name: window.Asc.plugin.tr('In comment'), 
+		name: 'In comment', 
 		value: 'comment',
 		insertCallback: insertEngine("comment")
 	},
 	{
-		name: window.Asc.plugin.tr('Replace original text'), 
+		name: 'Replace original text', 
 		value: 'replace',
 		insertCallback: insertEngine("replace")
 	},
 	{
-		name: window.Asc.plugin.tr('To the end of document'), 
+		name: 'To the end of document', 
 		value: 'end', 
 		insertCallback: insertEngine("end")
 	}
@@ -69,10 +106,10 @@ var insertList = [
 window.Asc.plugin.init = function() {
 	if (Asc.plugin.info.editorType !== "word") {
 		insertList = insertList.slice(1, 3);
+		updateInsertList();
 	}
 
 	updateLangList();
-	updateInsertList();
 
 	window.Asc.plugin.executeMethod("GetDocumentLang", [], setDefaultLang);
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
@@ -106,6 +143,17 @@ window.Asc.plugin.onTranslate = function () {
 	elements.forEach(function(element) {
 		element.innerText = window.Asc.plugin.tr(element.innerText);
 	});
+
+	originalAreaEl.placeholder = window.Asc.plugin.tr(originalAreaEl.placeholder);
+	resultAreaEl.placeholder = window.Asc.plugin.tr(resultAreaEl.placeholder);
+
+
+	console.log('translate');
+	//"Insert result" combobox items
+	insertList.forEach(function(item) {
+		item.name = window.Asc.plugin.tr(item.name);
+	});
+	updateInsertList();
 };
 
 window.addEventListener("resize", onResize);
@@ -113,23 +161,15 @@ onResize();
 
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
-	themeType = theme.type || 'light';
-	
-	var classes = document.body.className.split(' ');
-	classes.forEach(function(className) {
-		if (className.indexOf('theme-') != -1) {
-			document.body.classList.remove(className);
-		}
-	});
-	document.body.classList.add(theme.name);
-	document.body.classList.add('theme-type-' + themeType);
-	$('img').each(function() {
-		var el = $(this);
-		var src = $(el).attr('src');
-		if(!src.includes('resources/icons/')) return;
 
+	var themeType = theme.type || 'light';
+	updateBodyThemeClasses(theme.type, theme.name);
+	updateThemeVariables(theme);
+
+	$('img.icon').each(function() {
+		var src = $(this).attr('src');
 		var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
-		el.attr('src', newSrc);
+		$(this).attr('src', newSrc);
 	});
 }
 
@@ -185,16 +225,17 @@ function updateLangList() {
 function updateInsertList() {
 	var cmbEl = $(insertCmbEl);
 	cmbEl.select2({
-		data : insertList.map(function(item) {
-			return {
-				id: item.value,
-				text: item.name
-			}
-		}),
 		minimumResultsForSearch: Infinity,
 		dropdownAutoWidth: true,
 		width: 'auto'
 	});
+	cmbEl.empty();
+
+	insertList.forEach(function(item) {
+		const newOption = new Option(item.name, item.value, false, false);
+		cmbEl.append(newOption);
+	});
+	cmbEl.trigger('change');
 }
 
 function onSummarize() {

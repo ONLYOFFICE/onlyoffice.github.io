@@ -1,0 +1,22 @@
+{
+    "Click to upload": "点击上传",
+    "Results": "结果",
+    "Configuration": "配置",
+    "Mathpix App ID:": "Mathpix 应用 ID:",
+    "Mathpix APP Key:": "Mathpix 应用密钥:",
+    "Enter your App ID": "请输入应用 ID",
+    "Enter your APP Key": "请输入应用密钥",
+    "Save Credentials": "保存凭据",
+    "Don't have an API key?": "没有 API 密钥？",
+    "Register here": "在此注册",
+    "Output Formats:": "输出格式：",
+    "Recognize": "识别",
+    "Clear": "清除",
+    "Copy": "复制",
+    "Insert": "插入",
+    "Image": "图片",
+    "No preview available": "预览不可用",
+    "Credentials saved!": "凭据已保存！",
+    "Please enter both your Mathpix App ID and APP Key in the configuration panel.": "请在配置面板中输入您的 Mathpix 应用 ID 和应用密钥。",
+    "Note: Some advanced LaTeX syntax may not be compatible with Document Editor. Manual adjustment might be needed.": "注意：某些高级 LaTeX 语法可能与文档编辑器不兼容。可能需要手动调整。"
+}

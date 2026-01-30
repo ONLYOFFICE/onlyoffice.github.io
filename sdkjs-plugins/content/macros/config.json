@@ -6,7 +6,12 @@
 		"es": "Macros",
 		"pt-BR": "Macros",
 		"de": "Makros",
-		"si": "සාර්ව"
+		"si": "සාර්ව",
+		"it": "Macro",
+		"sq-AL": "Makros",
+		"sr-Cyrl-RS": "Makros",
+		"sr-Latn-RS": "Makros",
+		"zh-ZH": "宏"
 	},
 	"guid": "asc.{E6978D28-0441-4BD7-8346-82FAD68BCA3B}",
 	"version": "2.0.1",
@@ -24,7 +29,12 @@
 				"es": "Automatice sus tareas rutinarias y estandarice los documentos mediante macros (se utiliza la sintaxis del lenguaje JavaScript).",
 				"pt-BR": "Automatize suas tarefas rotineiras e padronize documentos usando macros (é usada a sintaxe da linguagem JavaScript).",
 				"de": "Automatisieren Sie Routineaufgaben und standardisieren Sie Dokumente mit Makros (die JavaScript-Syntax wird verwendet).",
-				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ)."
+				"si": "සාර්ව භාවිතයෙන් ඔබගේ දෛනික කාර්යන් ස්වයංක්‍රිය කරන්න සහ ලේඛන ප්‍රමිතියකට තබා ගන්න (ජාවාස්ක්‍රිප්ට් භාෂා පද ගැළපුම් භාවිතා වේ).",
+				"it": "Automatizza i tuoi compiti di routine e rendi i tuoi documenti standard utilizzando le macro (viene utilizzata la sintassi del linguaggio JavaScript).",
+				"sq-AL": "Automatizoni detyrat tuaja të përditshme dhe standardizoni dokumentet duke përdorur makro (është përdorur sintaksa gjuhës JavaScript).",
+				"sr-Cyrl-RS": "Аутоматизујте своје рутинске задатке и стандардизујте документе користећи макрое (користи се синтакса језика JavaScript).",
+				"sr-Latn-RS": "Automatizujte svoje rutinske zadatke i standardizujte dokumente koristeći makroe (koristi se sintaksa jezika JavaScript).",
+				"zh-ZH": "使用宏（基于JavaScript语法）实现日常任务自动化并使文档标准化。"
 			},
 			"url": "index.html",
 			"help" : "https://api.onlyoffice.com/docs/plugin-and-macros/macros/getting-started/",
@@ -86,7 +96,12 @@
 						"ru": "Сохранить",
 						"fr": "Sauvegarder",
 						"es": "Guardar",
-						"de": "Speichern"
+						"de": "Speichern",
+						"it": "Salva",
+						"sq-AL": "Ruaj",
+						"sr-Cyrl-RS": "Сачувај",
+						"sr-Latn-RS": "Sačuvaj",
+						"zh-ZH": "保存"
 					}
 				},
 				{
@@ -96,7 +111,12 @@
 						"ru": "Отмена",
 						"fr": "Annuler",
 						"es": "Cancelar",
-						"de": "Abbrechen"
+						"de": "Abbrechen",
+						"it": "Annulla",
+						"sq-AL": "Anulo",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži",
+						"zh-ZH": "取消"
 					}
 				}
 			],
