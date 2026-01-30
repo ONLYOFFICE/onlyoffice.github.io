@@ -1,0 +1,18 @@
+{
+	"New": "Krijoni",
+	"Delete": "Fshini",
+	"Rename": "Riemërtoni",
+	"Autostart" : "Filloni automatikisht",
+	"Run": "Ekzekutoni",
+	"Cancel" : "Anuloni",
+	"Macros" : "makrot",
+	"Title" : "Emri nuk mund të jetë bosh",
+	"Copy": "Kopjoni",
+	"Make autostart": "Bëni fillimin automatik",
+	"Unmake autostart": "Zhbëni fillimin automatik",
+	"Custom function": "Funksioni i personalizuar",
+	"Custom functions": "Gunksione të personalizuara",
+	"Ok": "Ok",
+	"Add macros": "Shtoni makrot",
+	"Add custom function": "Shtoni funksion të personalizuar"
+}

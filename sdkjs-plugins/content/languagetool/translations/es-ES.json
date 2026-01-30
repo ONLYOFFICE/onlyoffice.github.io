@@ -1,8 +1,11 @@
-{
+﻿{
 	"Checking...": "Examen...",
 	"Check": "Cheque",
 	"Insert to document": "Insertar en documento",
 	"Dismiss": "Saltar",
 	"Clear": "Borrar",
-	"Language": "Idioma"
+	"Language": "Idioma",
+	"Select the text to check in the document or enter it manually": "Seleccione el texto para comprobar en el documento o introdúzcalo manualmente",
+	"Possible mistakes found": "Posibles errores encontrados: ",
+	"No possible mistakes found": "No se han encontrado posibles errores"
 }

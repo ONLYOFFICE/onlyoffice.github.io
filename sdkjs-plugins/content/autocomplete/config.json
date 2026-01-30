@@ -5,7 +5,12 @@
 		"fr": "Autocomplete",
 		"es": "Autocomplete",
 		"pt-BR": "Preenchimento automático",
-		"de": "Autocomplete"
+		"de": "Autocomplete",
+		"it": "Autocompletamento",
+		"sq-AL": "Kompletimi automatik",
+		"sr-Cyrl-RS": "Autocomplete",
+		"sr-Latn-RS": "Autocomplete",
+		"zh-ZH": "Autocomplete"
 	},
 	"guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
 	"version" : "1.0.0",
@@ -18,7 +23,12 @@
 				"fr": "Utilisez un assistant de saisie pendant que vous tapez dans les éditeurs.",
 				"es": "Utilice un asistente de entrada mientras escribe en los editores.",
 				"pt-BR": "Use um assistente de entrada enquanto digita nos editores.",
-				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren."
+				"de": "Verwenden Sie einen Assistenten bei der Eingabe in den Editoren.",
+				"it": "Utilizza un assistente di input mentre digiti negli editor.",
+				"sq-AL": "Përdorni një asistues hyrjeje gjatë të shkruarit në editorë.",
+				"sr-Cyrl-RS": "Користите помоћ при уносу док куцате у уређивачима",
+				"sr-Latn-RS": "Koristite pomoć pri unosu dok kucate u uređivačima",
+				"zh-ZH": "在编辑器中打字时使用输入助手。"
 			},
 			"url"                 : "index.html",
 			"icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],

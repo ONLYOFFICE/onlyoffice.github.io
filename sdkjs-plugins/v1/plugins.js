@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,285 +16,24 @@
  *
  */
 
-(function(window, undefined){
-
-    window.Asc = window.Asc || {};
-    window.Asc.plugin = {};
-
-    // ie channel
-    window.Asc.plugin.ie_channel = null;
-    window.Asc.plugin.ie_channel_check = function(e) {
-        var uagent = navigator.userAgent.toLowerCase();
-        if (uagent.indexOf("msie") > -1 || uagent.indexOf("trident") > -1)
-        {
-            if (e.ports && e.ports[0])
-                this.ie_channel = e.ports[0];
-        }
-    };
-
-    function _sendMessageToParent(data) {
-        if (window.Asc.plugin.ie_channel)
-            window.Asc.plugin.ie_channel.postMessage(data);
-        else
-            window.parent.postMessage(data, "*");
-    }
-
-    window.Asc.plugin.tr_init = false;
-    window.Asc.plugin.tr = function(val) { return val; }
-
-    window.Asc.scope = {};
-    window.Asc.scope.prototype = {
-        clear : function() {
-            for (var i in window.Asc.scope) 
-                delete window.Asc.scope[i];
-        }
-    };
-
-    function extend(obj, plugin) {
-        if (!obj || !("object" == typeof(obj) || "array" == typeof(obj)))
-            return obj;
-
-        var dst = (plugin === undefined) ? {} : plugin;
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-                dst[prop] = (obj[prop] && "object" === typeof obj[prop]) ? extend(obj[prop]) : obj[prop];
-            }
-        }
-        return dst;
-    }
-
-    function getSearchParam(name) {
-        var _windowSearch = window.location.search;
-        var _nameSearch = name + "=";
-        var _pos1 = _windowSearch.indexOf(_nameSearch);
-        if (_pos1 >= 0)
-        {
-            _pos1 += _nameSearch.length;
-            var _pos2 = _windowSearch.indexOf("&", _pos1);
-            if (_pos2 < 0)
-                _pos2 = _windowSearch.length;
-
-            return _windowSearch.substring(_pos1, _pos2);
-        }
-        return undefined;
-    }
-
-    function checkPluginWindow() {
-        var windowID = getSearchParam("windowID");
-        if (windowID) {
-            window.Asc.plugin.windowID = windowID;
-
-            if (!window.Asc.plugin.guid)
-                window.Asc.plugin.guid = decodeURIComponent(getSearchParam("guid"));
-        }
-
-        return (undefined !== windowID) ? true : false;
-    }
-
-    window.onload = function()
-    {
-        if (!window.Asc || !window.Asc.plugin)
-            return;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("get", "./config.json", true);
-        xhr.responseType = "json";
-        xhr.onload = function() {
-            if (!window.Asc || !window.Asc.plugin)
-                return;
-            
-            if (xhr.status === 404)
-                return xhr.onerror();
-
-            if (xhr.status == 200 || (xhr.status == 0 && xhr.readyState == 4)) {
-                var objConfig = xhr.response;
-                if ((typeof objConfig) == "string")
-                    objConfig = JSON.parse(objConfig);
-
-                extend(objConfig, window.Asc.plugin);
-
-                var obj = {
-                    type : "initialize",
-                    guid : window.Asc.plugin.guid
-                };
-
-                if (checkPluginWindow()) {
-                    obj.windowID = window.Asc.plugin.windowID;
-                }
-
-                var _body = document.body;
-                if (_body && true !== window.Asc.plugin.enableDrops) {
-                    _body.ondrop = function(e) {
-                        if (e && e.preventDefault)
-                            e.preventDefault();
-                        return false;
-                    };
-                    _body.ondragenter = function(e) {
-                        if (e && e.preventDefault)
-                            e.preventDefault();
-                        return false;
-                    };
-                    _body.ondragover = function(e) {
-                        if (e && e.preventDefault)
-                            e.preventDefault();
-                        if (e && e.dataTransfer)
-                            e.dataTransfer.dropEffect = "none";
-                        return false;
-                    };
-                }
-
-                // ie11 not support message from another domain
-                window.Asc.plugin._initInternal = true;
-                window.parent.postMessage(JSON.stringify(obj), "*");
-            }
-        };
-        xhr.onerror = function() {
-            if (!window.Asc || !window.Asc.plugin)
-                return;
-
-            if (checkPluginWindow()) {
-                var obj = {
-                    type : "initialize",
-                    guid : window.Asc.plugin.guid
-                };
-                obj.windowID = window.Asc.plugin.windowID;
-
-                // ie11 not support message from another domain
-                window.Asc.plugin._initInternal = true;
-                window.parent.postMessage(JSON.stringify(obj), "*");
-            }
-        }
-        xhr.send();
-    };
-
-    window.Asc.supportOrigins = {};
-    window.Asc.supportOrigins[window.origin] = true;
-
-    function onMessage(event) {
-        if (!window.Asc || !window.Asc.plugin)
-            return;
-
-        if (window.plugin_onMessage) {
-            if (!window.Asc.supportOrigins[event.origin])
-                return;
-            window.plugin_onMessage(event);
-            return;
-        }
-
-        if (!window.Asc.plugin._initInternal)
-            return;
-
-        if (typeof(event.data) == "string") {
-            var pluginData = {};
-            try {
-                pluginData = JSON.parse(event.data);
-            }
-            catch(err) {
-                pluginData = {};
-            }
-
-            if (pluginData.type == "plugin_init") {
-                window.Asc.supportOrigins[event.origin] = true;
-                window.Asc.plugin.ie_channel_check(event);
-                eval(pluginData.data);
-            }
-        }
-    }
-
-    if (window.addEventListener)
-        window.addEventListener("message", onMessage, false);
-    else
-        window.attachEvent("onmessage", onMessage);
-
-    window.Asc.plugin._attachCustomMenuClickEvent = function(type, id, action)
-    {
-        if (!this[type])
-            this[type] = {};
-
-        this[type][id] = action;
-    };
-    window.Asc.plugin._onCustomMenuClick = function(type, id)
-    {
-        // parse data from id: text from item.
-        var itemId = id;
-        var itemData = undefined;
-        var itemPos = itemId.indexOf("_oo_sep_");
-        if (-1 !== itemPos)
-        {
-            itemData = itemId.substring(itemPos + 8);
-            itemId = itemId.substring(0, itemPos);
-        }
-
-        if (this[type] && this[type][itemId])
-           this[type][itemId].call(this, itemData);
-    };
-
-    window.Asc.plugin.attachContextMenuClickEvent = function(id, action)
-    {
-        this._attachCustomMenuClickEvent("contextMenuEvents", id, action);
-    };
-    window.Asc.plugin.event_onContextMenuClick = function(id)
-    {
-        this._onCustomMenuClick("contextMenuEvents", id);
-    };
-
-    window.Asc.plugin.attachToolbarMenuClickEvent = function(id, action)
-    {
-        this._attachCustomMenuClickEvent("toolbarMenuEvents", id, action);
-    };
-    window.Asc.plugin.event_onToolbarMenuClick = function(id)
-    {
-        this._onCustomMenuClick("toolbarMenuEvents", id);
-    };
-
-    window.Asc.plugin.attachEvent = function(id, action)
-    {
-        var pluginObj = window.Asc.plugin;
-        if (!pluginObj._events)
-            pluginObj._events = {};
-
-        pluginObj._events[id] = action;
-    };
-    window.Asc.plugin.detachEvent = function(id)
-    {
-        var pluginObj = window.Asc.plugin;
-        if (pluginObj._events && pluginObj._events[id])
-            delete pluginObj._events[id];
-    };
-    window.Asc.plugin.onEvent = function(id, data)
-    {
-        var pluginObj = window.Asc.plugin;
-        if (pluginObj._events && pluginObj._events[id])
-            pluginObj._events[id].call(pluginObj, data);
-    };
-
-    window.Asc.plugin.attachEditorEvent = function(id, action)
-    {
-        window.Asc.plugin["event_" + id] = action.bind(window.Asc.plugin);
-
-        _sendMessageToParent(JSON.stringify({
-            "guid" : window.Asc.plugin.guid,
-            "type" : "attachEvent",
-            "name" : id
-        }));
-    };
-    window.Asc.plugin.detachEditorEvent = function(id)
-    {
-        if (window.Asc.plugin["event_" + id])
-            delete window.Asc.plugin["event_" + id];
-
-        _sendMessageToParent(JSON.stringify({
-            "guid" : window.Asc.plugin.guid,
-            "type" : "detachEvent",
-            "name" : id
-        }));
-    };
-
-    window.onunload = function() {
-        if (window.addEventListener)
-            window.removeEventListener("message", onMessage, false);
-        else
-            window.detachEvent("onmessage", onMessage);
-    };
-
-})(window, undefined);
+(function(a,t){function v(c){a.Asc.plugin.ie_channel?a.Asc.plugin.ie_channel.postMessage(c):a.parent.postMessage(c,"*")}function r(c,d){if(!c||"object"!=typeof c&&"array"!=typeof c)return c;d=d===t?{}:d;for(var g in c)c.hasOwnProperty(g)&&(d[g]=c[g]&&"object"===typeof c[g]?r(c[g]):c[g]);return d}function p(c){var d=a.location.search,g=c+"=";c=d.indexOf(g);return 0<=c?(c+=g.length,g=d.indexOf("&",c),0>g&&(g=d.length),d.substring(c,g)):t}function m(){var c=p("windowID");c&&(a.Asc.plugin.windowID=c,
+a.Asc.plugin.guid||(a.Asc.plugin.guid=decodeURIComponent(p("guid"))));return t!==c?!0:!1}function q(c){if(a.Asc&&a.Asc.plugin)if(a.plugin_onMessage)a.Asc.supportOrigins[c.origin]&&a.plugin_onMessage(c);else if(a.Asc.plugin._initInternal&&"string"==typeof c.data){var d={};try{d=JSON.parse(c.data)}catch(g){d={}}"plugin_init"==d.type&&(a.Asc.supportOrigins[c.origin]=!0,a.Asc.plugin.ie_channel_check(c),eval(d.data))}}a.Asc=a.Asc||{};a.Asc.plugin={};a.Asc.plugin.ie_channel=null;a.Asc.plugin.ie_channel_check=
+function(c){var d=navigator.userAgent.toLowerCase();(-1<d.indexOf("msie")||-1<d.indexOf("trident"))&&c.ports&&c.ports[0]&&(this.ie_channel=c.ports[0])};a.Asc.plugin.tr_init=!1;a.Asc.plugin.tr=function(c){return c};a.Asc.scope={};a.Asc.scope.prototype={clear:function(){for(var c in a.Asc.scope)delete a.Asc.scope[c]}};a.onload=function(){if(a.Asc&&a.Asc.plugin){var c=new XMLHttpRequest;c.open("get","./config.json",!0);c.responseType="json";c.onload=function(){if(a.Asc&&a.Asc.plugin){if(404===c.status)return c.onerror();
+if(200==c.status||0==c.status&&4==c.readyState){var d=c.response;"string"==typeof d&&(d=JSON.parse(d));r(d,a.Asc.plugin);d={type:"initialize",guid:a.Asc.plugin.guid};m()&&(d.windowID=a.Asc.plugin.windowID);var g=document.body;g&&!0!==a.Asc.plugin.enableDrops&&(g.ondrop=function(k){k&&k.preventDefault&&k.preventDefault();return!1},g.ondragenter=function(k){k&&k.preventDefault&&k.preventDefault();return!1},g.ondragover=function(k){k&&k.preventDefault&&k.preventDefault();k&&k.dataTransfer&&(k.dataTransfer.dropEffect=
+"none");return!1});a.Asc.plugin._initInternal=!0;a.parent.postMessage(JSON.stringify(d),"*")}}};c.onerror=function(){if(a.Asc&&a.Asc.plugin&&m()){var d={type:"initialize",guid:a.Asc.plugin.guid};d.windowID=a.Asc.plugin.windowID;a.Asc.plugin._initInternal=!0;a.parent.postMessage(JSON.stringify(d),"*")}};c.send()}};a.Asc.supportOrigins={};a.Asc.supportOrigins[a.origin]=!0;a.addEventListener?a.addEventListener("message",q,!1):a.attachEvent("onmessage",q);a.Asc.plugin._attachCustomMenuClickEvent=function(c,
+d,g){this[c]||(this[c]={});this[c][d]=g};a.Asc.plugin._onCustomMenuClick=function(c,d){var g=t,k=d.indexOf("_oo_sep_");-1!==k&&(g=d.substring(k+8),d=d.substring(0,k));this[c]&&this[c][d]&&this[c][d].call(this,g)};a.Asc.plugin.attachContextMenuClickEvent=function(c,d){this._attachCustomMenuClickEvent("contextMenuEvents",c,d)};a.Asc.plugin.event_onContextMenuClick=function(c){this._onCustomMenuClick("contextMenuEvents",c)};a.Asc.plugin.attachToolbarMenuClickEvent=function(c,d){this._attachCustomMenuClickEvent("toolbarMenuEvents",
+c,d)};a.Asc.plugin.event_onToolbarMenuClick=function(c){this._onCustomMenuClick("toolbarMenuEvents",c)};a.Asc.plugin.attachEvent=function(c,d){var g=a.Asc.plugin;g._events||(g._events={});g._events[c]=d};a.Asc.plugin.detachEvent=function(c){var d=a.Asc.plugin;d._events&&d._events[c]&&delete d._events[c]};a.Asc.plugin.onEvent=function(c,d){var g=a.Asc.plugin;g._events&&g._events[c]&&g._events[c].call(g,d)};a.Asc.plugin.attachEditorEvent=function(c,d){a.Asc.plugin["event_"+c]=d.bind(a.Asc.plugin);v(JSON.stringify({guid:a.Asc.plugin.guid,
+type:"attachEvent",name:c}))};a.Asc.plugin.detachEditorEvent=function(c){a.Asc.plugin["event_"+c]&&delete a.Asc.plugin["event_"+c];v(JSON.stringify({guid:a.Asc.plugin.guid,type:"detachEvent",name:c}))};a.onunload=function(){a.addEventListener?a.removeEventListener("message",q,!1):a.detachEvent("onmessage",q)}})(window,void 0);
+(function(a,t){function v(){function b(){return(65536+e[h++]).toString(16).substring(1)}if(!a.crypto||!a.crypto.getRandomValues){function f(){return Math.floor(65536*(1+Math.random())).toString(16).substring(1)}return f()+f()+"-"+f()+"-"+f()+"-"+f()+"-"+f()+f()+f()}var e=new Uint16Array(8);a.crypto.getRandomValues(e);var h=0;return b()+b()+"-"+b()+"-"+b()+"-"+b()+"-"+b()+b()+b()}function r(b){return a.Asc.plugin.tr(b)}function p(b,e){this.itemType=k.None;this.editors=["word","cell","slide"];this.id=
+e===t?v():e;this.icons=null;this.text="";this.hint=null;this.data="";this.separator=!1;this.lockInViewMode=!0;this.removed=this.disabled=this.enableToggle=!1;this.parent=b?b:null;this.childs=null;this.parent&&(this.parent.childs||(this.parent.childs=[]),this.parent.childs.push(this))}function m(b,e){p.call(this,b,e);this.itemType=k.ContextMenu;this.showOnOptionsType=[];d.Buttons.ButtonsContextMenu.push(this)}function q(b,e){p.call(this,b,e);this.itemType=k.Toolbar;this.type=g.BigButton;this.tab="";
+d.Buttons.ButtonsToolbar.push(this)}function c(b,e){p.call(this,b,e);this.itemType=k.ContentControl;this.checker=null;0===d.Buttons.ButtonsContentControl.length&&d.Buttons.registerContentControl();d.Buttons.ButtonsContentControl.push(this)}a.Asc=a.Asc||{};var d=a.Asc;d.Buttons={};d.Buttons.ButtonsContextMenu=[];d.Buttons.ButtonsToolbar=[];d.Buttons.ButtonsContentControl=[];d.Buttons.registerContextMenu=function(){a.Asc.plugin.attachEvent("onContextMenuShow",function(b){if(b){var e={guid:a.Asc.plugin.guid};
+for(let h=0,f=d.Buttons.ButtonsContextMenu.length;h<f;h++){let l=d.Buttons.ButtonsContextMenu[h];if(null===l.parent)l.onContextMenuShow(b,e)}e.items&&a.Asc.plugin.executeMethod("AddContextMenuItem",[e])}})};d.Buttons.registerToolbarMenu=function(){let b={guid:a.Asc.plugin.guid,tabs:[]};for(let e=0,h=d.Buttons.ButtonsToolbar.length;e<h;e++){let f=d.Buttons.ButtonsToolbar[e];null===f.parent&&f.toToolbar(b);if(f.menu)for(let l in f.menu){let n=f.menu.hasOwnProperty(l)?f.menu[l]:null;n&&n.onclick&&a.Asc.plugin.attachToolbarMenuClickEvent(n.id,
+n.onclick)}}0<b.tabs.length&&a.Asc.plugin.executeMethod("AddToolbarMenuItem",[b])};d.Buttons.updateToolbarMenu=function(b,e,h){b=new d.ButtonToolbar(null,b);b.text=e;e={guid:a.Asc.plugin.guid,tabs:[]};b.childs=h;for(let f=0,l=h.length;f<l;f++)h[f].parent=b;b.toToolbar(e);0<e.tabs.length&&a.Asc.plugin.executeMethod("UpdateToolbarMenuItem",[e])};d.Buttons.registerContentControl=function(){a.Asc.plugin.attachEditorEvent("onShowContentControlTrack",function(e){let h={guid:a.Asc.plugin.guid,items:{}},
+f=[];for(let l=0,n=d.Buttons.ButtonsContentControl.length;l<n;++l)f.push(d.Buttons.ButtonsContentControl[l].onShowTrack(e,h.items));Promise.all(f).then(function(){for(let l in h.items){a.Asc.plugin.executeMethod("AddContentControlButtons",[h]);break}})});a.Asc.plugin._attachContentControlButtonClickEvent=function(e,h){this.ContentControlButtonEvents||(this.ContentControlButtonEvents={});this.ContentControlButtonEvents[e]=h};let b=a.Asc.plugin;a.Asc.plugin.attachEditorEvent("onContentControlButtonClick",
+function(e){let h=e&&e.buttonId?e.buttonId:null;e=e&&e.contentControlId?e.contentControlId:null;h&&e&&b.ContentControlButtonEvents&&b.ContentControlButtonEvents[h]&&b.ContentControlButtonEvents[h].call(b,e)})};var g={Button:"button",BigButton:"big-button"},k={None:0,ContextMenu:1,Toolbar:2,ContentControl:3};p.prototype.toItem=function(){let b={id:this.id,text:r(this.text)};null!==this.hint&&(b.hint=r(""===this.hint?this.hint:this.text));this.separator&&(b.separator=!0);this.data&&(b.data=this.data);
+this.lockInViewMode&&(b.lockInViewMode=!0);this.enableToggle&&(b.enableToggle=!0);b.disabled=this.disabled?!0:!1;this.removed&&(b.removed=!0);this.icons&&(b.icons=this.icons);this.itemType===k.Toolbar&&(b.type=this.type);this.menu&&(b.items=this.menu.map(function(e){e.text=r(e.text);return e}));this.split&&(b.split=!0);return b};p.prototype.attachOnClick=function(b){};p.prototype.onClick=function(){console.log("BUTTON: "+this.text)};m.prototype=Object.create(p.prototype);m.prototype.constructor=m;
+m.prototype.copy=function(){let b=new m(this.parent,this.id);b.editors=this.editors;b.separator=this.separator;b.lockInViewMode=this.lockInViewMode;b.enableToggle=this.enableToggle;b.disabled=this.disabled;b.showOnOptionsType=this.showOnOptionsType.slice();return b};m.prototype.addCheckers=function(){let b=arguments.length;this.showOnOptionsType=Array(b);for(let e=0;e<b;e++)this.showOnOptionsType[e]=arguments[e]};m.prototype.attachOnClick=function(b){a.Asc.plugin.attachContextMenuClickEvent(this.id,
+b)};m.prototype.onContextMenuShowAnalyze=function(b,e){return!1};m.prototype.onContextMenuShowExtendItem=function(b,e){};m.prototype.onContextMenuShow=function(b,e){if(!this.onContextMenuShowAnalyze(b,e)){var h=!1;for(let f=0,l=this.editors.length;f<l;f++)if(d.plugin.info.editorType===this.editors[f]){h=!0;break}if(h)for(let f=0,l=this.showOnOptionsType.length;f<l;f++)if(b.type===this.showOnOptionsType[f]||"All"===this.showOnOptionsType[f]){e.items||(e.items=[]);h=this.toItem();this.onContextMenuShowExtendItem(b,
+h);if(this.childs)for(let n=0,x=this.childs.length;n<x;n++)this.childs[n].onContextMenuShow(b,h);e.items.push(h);break}}};q.prototype=Object.create(p.prototype);q.prototype.constructor=q;q.prototype.attachOnClick=function(b){a.Asc.plugin.attachToolbarMenuClickEvent(this.id,b)};q.prototype.toItem=function(b){b=p.prototype.toItem.call(this);b.type=this.type;return b};q.prototype.toToolbar=function(b){if(null===this.parent){var e={id:this.id,text:r(this.text),items:[]};null!==this.hint&&(e.hint=r(""===
+this.hint?this.hint:this.text));b.tabs.push(e)}else e=this.toItem(),b.items||(b.items=[]),b.items.push(e);if(this.childs)for(let h=0,f=this.childs.length;h<f;h++)this.childs[h].toToolbar(e)};c.prototype=Object.create(p.prototype);c.prototype.constructor=c;c.prototype.attachOnClick=function(b){a.Asc.plugin._attachContentControlButtonClickEvent(this.id,b)};c.prototype.addChecker=function(b){b&&"function"===typeof b&&(this.checker=b)};c.prototype.onShowTrack=function(b,e){let h=this.checker,f=[],l=this.toItem();
+for(let n=0,x=b.length;n<x;++n){let w=b[n];f.push((new Promise(function(u){if(h){let y=h(w);y instanceof Promise?y.then(function(z){u(z)}):u(!!y)}else u(!0)})).then(function(u){u&&(e[w]||(e[w]=[]),e[w].push(l))}))}return Promise.all(f)};d.ToolbarButtonType=g;d.ButtonContextMenu=m;d.ButtonToolbar=q;d.ButtonContentControl=c})(window);

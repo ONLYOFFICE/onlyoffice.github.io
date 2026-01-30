@@ -1,0 +1,13 @@
+{
+	"Start dictation": "Filloni diktimin",
+	"Speak now": "Filsni tani",
+	"This plugin doesn't work in Desktop Editors.": "Kjo shtojcë nuk funksionon në redaktrët desktop.",
+	"This plugin doesn't work into this browser.": "Kjo shtojcë nuk funksionon në këtë shfletues.",
+	"Web Speech API is not supported by this browser. Please open it in Google Chrome browser.": "Web Speech API nuk mbështetet nga ky shfletues. Ju lutem hapni në shfletuessin Google Chrome.",
+	"Error with connection to recognition service of this browser, please use the Chrome browser.": "Gabim lidhjeje me shërbimin e njohjes së këtij shfletuesi, ju lutem përdorni shfletuesin Chrome.",
+	"No speech was detected. You may need to adjust your microphone settings.": "Nuk u regjistrua asnjë fjalë. Mund të jetë e nevojshme të rregulloni cilësimet e mikrofonit tuaj.",
+	"No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly.": "Nuk u gjend asnjë mikrofon. Sigurohuni që një mikrofon të jetë i instaluar dhe cilësimet e mikrofonit të jenë të konfiguruara siç duhet.",
+	"Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone": "Leja për të përdorur mikrofonin është bllokuar. Për ta ndryshuar, shkoni te chrome://settings/content/microphone",
+	"Permission to use microphone was denied.": "Leja për të përdorur mikrofonin u refuzua.",
+	"Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.": "Web Speech API nuk mbështetet nga ky shfletues. Përmirësoni në versionin 25 të Chrome ose më vonë."
+}

@@ -58,13 +58,47 @@
 * Bug fix
 
 ## 2.1.5
-* Bug fix
+* Bug fix.
 
 ## 2.2.0
 * Refactoring
 
 ## 2.2.1
-* Bug fix
+* Bug fix.
 
 ## 2.2.2
 * Add xAI as internal provider.
+
+## 2.2.3
+* Fix translations.
+
+## 2.2.4
+* Refactoring chat. Add docked mode for chat window.
+
+## 2.2.5
+* Bug fix.
+
+## 2.2.6
+* Add interface for system role detection.
+* Fixed the work of providers antropic and gemini when working with a system role.
+* Fix bug with custom functions in spreadsheets editor.
+
+## 2.2.7
+* Add image actions.
+* Add Stability AI provider.
+
+## 2.2.8
+* Fix image actions. Add "OCR" and "Image to text" support.
+
+## 2.2.9
+* Add support server settings.
+* Bug fix.
+
+## 2.3.0
+* Add license.
+
+## 2.3.1
+* Bug fix.
+
+## 2.3.2
+* Fix offline work.

@@ -5,7 +5,12 @@
 		"fr": "Rainbow",
 		"es": "Rainbow",
 		"pt-BR": "Rainbow",
-		"de": "Rainbow"
+		"de": "Rainbow",
+		"it": "Rainbow",
+		"sq-AL": "Rainbow",
+		"sr-Cyrl-RS": "Rainbow",
+		"sr-Latn-RS": "Rainbow",
+		"zh-ZH": "Rainbow"
 	},
 	"guid": "asc.{0743b63f-cb32-438c-b46b-81ce182ff4f7}",
 	"version": "1.0.2",
@@ -18,7 +23,12 @@
 				"fr": "Communiquez via chat ou passez des appels avec Rainbow.",
 				"es": "Intercambie mensajes instantáneos y realice llamadas con Rainbow.",
 				"pt-BR": "Troque mensagens instantâneas e faça chamadas usando Rainbow.",
-				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow."
+				"de": "Tauschen Sie Sofortnachrichten aus und machen Sie Anrufe mit Rainbow.",
+				"it": "Scambia messaggi istantanei ed effettua chiamate utilizzando Rainbow.",
+				"sq-AL": "Shërbim për dorgimin e mesazheve dhe thirrjeve telefonike në kohë reale duke përdorur Rainbow.",
+				"sr-Cyrl-RS": "Размењујте инстант поруке и упућујте позиве помоћу Rainbow-а.",
+				"sr-Latn-RS": "Razmenjujte instant poruke i upućujte pozive pomoću Rainbow-a.",
+				"zh-ZH": "使用 Rainbow 即时通讯和拨打电话。"
 			},
 			"url": "index.html",
 
@@ -79,7 +89,12 @@
 						"ru": "Закрыть",
 						"fr": "Fermer",
 						"es": "Cerrar",
-						"de": "Schließen"
+						"de": "Schließen",
+						"it": "Chiudi",
+						"sq-AL": "Mbyllni",
+						"sr-Cyrl-RS": "Затвори",
+						"sr-Latn-RS": "Zatvori",
+						"zh-ZH": "关闭"
 					}
 				}
 			],
@@ -102,7 +117,12 @@
 				"ru": "Справка",
 				"fr": "À propos",
 				"es": "Sobre programa",
-				"de": "Über"
+				"de": "Über",
+				"it": "Informazioni su",
+				"sq-AL": "Rreth",
+				"sr-Cyrl-RS": "У вези",
+				"sr-Latn-RS": "U vezi",
+				"zh-ZH": "关于"
 			},
 			"url": "index_about.html",
 			"icons": [ "resources/img/icon.png", "resources/img/icon@2x.png" ],
