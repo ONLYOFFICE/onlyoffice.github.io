@@ -61,7 +61,11 @@
 				placeholder='Tell the AI what to do with the selected text (e.g., "Find factual errors" or "Summarize")'
 				spellcheck="false" required></textarea>
 			<label for="input_prompt" class="noselect"><span class="i18n">Action</span></label>
-			<select id="assistantType" class="form-control" title="Type"></select>
+			<select id="assistantType" class="form-control" title="Type">
+				<option value="0" class="i18n">Hint</option>
+				<option value="2" class="i18n">Replace</option>
+				<option value="1" class="i18n">Replace + Hint</option>
+			</select>
 		</form>
 	</div>
 </body>

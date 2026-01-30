@@ -173,5 +173,8 @@
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "قول للذكاء الاصطناعي ما يجب عليه فعله مع النص المحدد (مثل \"إيجاد أخطاء حقيقة\" أو \"إعادة صياغة\")",
 	"Create AI assistant": "إنشاء مساعد ذكاء اصطناعي",
 	"Match": "التطابق",
-	"Proposal for replacement": "اقتراح للإضافة"
+	"Proposal for replacement": "اقتراح للإضافة",
+	"Hint": "الإرشاد",
+	"Replace": "الإضافة",
+	"Replace + Hint": "إضافة + إرشاد"
 }
