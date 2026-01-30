@@ -369,7 +369,7 @@ function checkInternetExplorer(){
             sTextForDisplay = "";
             $('<div>', {
                 id: "no_mistakes",
-                text: "No possible mistakes found"
+                text: getMessage("No possible mistakes found")
             }).appendTo('#result');
         }
         else {
@@ -391,7 +391,7 @@ function checkInternetExplorer(){
             }
             $('<div>', {
                 id: "yes_mistakes",
-                text: "Possible mistakes found: " + data.length
+                text: getMessage("Possible mistakes found") + ": " + data.length
             }).appendTo('#result');
         }
 
@@ -407,7 +407,7 @@ function checkInternetExplorer(){
                 setTextWithErrors(txt.slice(matches[ind].offset, matches[ind].offset + matches[ind].length), ind);
             else {
                 var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-                $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+                $('#yes_mistakes').text(getMessage("Possible mistakes found") + ": " + String(countMistakes - 1));
                 return;
             }
 
@@ -480,7 +480,7 @@ function checkInternetExplorer(){
 					text: elem.value,
 					click : function () {
 						var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-			            $('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+			            $('#yes_mistakes').text(getMessage("Possible mistakes found") + ": " + String(countMistakes - 1));
 						correctText($(this));
 					}
 				}).data({ index : ind })
@@ -515,7 +515,7 @@ function checkInternetExplorer(){
 
 					$('#div_'+$(this).data().index).remove();
 					var countMistakes = Number($('#yes_mistakes').text().split(' ')[3]);
-					$('#yes_mistakes').text("Possible mistakes found: " + String(countMistakes - 1));
+					$('#yes_mistakes').text(getMessage("Possible mistakes found") + ": " + String(countMistakes - 1));
 				},
 			    "class": "dismiss btn-text-default i18n"
 			}).data({ index : ind }).appendTo(dismiss_buttons);

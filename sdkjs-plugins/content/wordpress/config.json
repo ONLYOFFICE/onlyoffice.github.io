@@ -5,7 +5,12 @@
 		"fr": "WordPress",
 		"es": "WordPress",
 		"pt-BR": "WordPress",
-		"de": "WordPress"
+		"de": "WordPress",
+		"it": "WordPress",
+		"sq-AL": "WordPress",
+		"sr-Cyrl-RS": "WordPress",
+		"sr-Latn-RS": "WordPress",
+		"zh-ZH": "WordPress"
 	},
 	"guid"    : "asc.{0847b6a4-b007-11e7-abc4-cec278b6b50a}",
 	"baseUrl" : "",
@@ -18,7 +23,12 @@
 				"fr": "Publiez des articles directement depuis l'éditeur de documents sur votre site web WordPress (compatible avec le cloud ONLYOFFICE).",
 				"es": "Publique artículos directamente desde el editor de documentos en su sitio web de WordPress (compatible con la nube de ONLYOFFICE).",
 				"pt-BR": "Publique artigos diretamente do editor de documentos em seu site WordPress (compatível com a nuvem ONLYOFFICE).",
-				"de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud)."
+				"de": "Veröffentlichen Sie Artikel direkt aus dem Dokumenteneditor auf Ihrer WordPress-Website (kompatibel mit ONLYOFFICE in der Cloud).",
+				"it": "Pubblica articoli sul tuo sito web WordPress direttamente dall'editor di documenti (compatibile con ONLYOFFICE cloud).",
+				"sq-AL": "Publikoni artikuj drejtpërdrejt nga redaktori i dokumenteve në faqen tuaj WordPress (i pajtueshëm me renë e ONLYOFFICE).",
+				"sr-Cyrl-RS": "Објавите чланке директно из уређивача докумената на вашој WordPress веб локацији (компатибилно са ONLYOFFICE cloud-ом).",
+				"sr-Latn-RS": "Objavite članke direktno iz uređivača dokumenata na vašoj WordPress web lokaciji (kompatibilno sa ONLYOFFICE cloud-om).",
+				"zh-ZH": "直接从文档编辑器将文章发布到您的 WordPress 网站（与 ONLYOFFICE 云兼容）。"
 			},
 			"url"    : "index.html",
 			"icons"  : [ "resources/light/icon.png", "resources/light/icon@2x.png" ],

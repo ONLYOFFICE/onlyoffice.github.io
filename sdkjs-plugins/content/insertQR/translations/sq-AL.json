@@ -1,0 +1,16 @@
+{
+    "QR Settings": "Cilësimet QR",
+    "Set QR Color": "Vendosni ngjyrën e QR",
+    "Set Background Color": "Vendosni ngjyrën e sfondit",
+    "Width": "Gjerësia",
+    "Height": "Lartësia",
+    "Minimum QR size is 50px": "Madhësia minimale e QR është 50px",
+    "Maximum QR size is 2000px": "Madhësia maksimale e QR është 2000px",
+    "Warning": "Paralajmërim",
+    "Insert QR": "Shtoni QR",
+    "The plugin is not supported in the Internet Explorer": "Shtojëca nuk mbështetet në Internet Explorer.",
+    "The selected text сannot be used": "Teksti i selektuar nuk mund të përdoret.",
+    "The colors must be different": "Ngjyrat duhet të jenë të ndryshme",
+    "Insert QR: info": "Shtoni QR: info",
+    "Cancel": "Anuloni"
+}

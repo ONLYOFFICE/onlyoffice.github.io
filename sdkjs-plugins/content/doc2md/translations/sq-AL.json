@@ -1,0 +1,14 @@
+{
+	"Copy": "Kopjoni",
+	"Show settings": "Shfaqni cilësimet",
+	"Hide settings": "Fshihni cilësimet",
+	"Render HTML tags": "Shfaq etiketat HTML",
+	"Demote headings (H1 → H2, etc.)": "Ulni titujt (H1 → H2, etc.)",
+	"HTML headings/IDs": "Titujt HTML/ID- të",
+	"Create base64 images": "Krijo foto",
+	"Suppress top comment": "Fshihni komentet e sipërme",
+	"Help": "Selektoni Markdown ose HTML.\n* Default: Konvertoni të gjithë dokumentin.\n* Selektoni tekstin për të kufizuar shtrirjen.",
+	"Text was copied to buffer!": "Teksti u kopjua në bufer!",
+	"Convert to Markdown or HTML": "Konvertoni në Markdown ose HTML",
+	"Preview": "Parapamja"
+}

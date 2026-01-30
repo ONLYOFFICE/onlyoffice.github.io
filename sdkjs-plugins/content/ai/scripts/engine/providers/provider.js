@@ -1,3 +1,35 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2025
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
 "use strict";
 
 (async function(){
@@ -100,6 +132,9 @@
 
 			case Types.v1.Realtime:
 				return "/realtime";
+
+			case Types.v1.OCR:
+				return "/chat/completions";
 
 			default:
 				break;
@@ -230,10 +265,217 @@
 					iEnd--;
 
 				if (iEnd > iStart && ((0 !== iStart) || ((result.content[i].length - 1) !== iEnd)))
-					result.content[i] = result.content[i].substring(iStart, iEnd + 1);				
+					result.content[i] = result.content[i].substring(iStart, iEnd + 1);
 			}
 
 			return result;
+		}
+
+		/**
+		 * Get available sizes for input images.
+		 * @returns {Array.<Object>} sizes 
+		 */
+		getImageSizesInput(model) {
+			return [
+				{ w: 256, h: 256 },
+				{ w: 512, h: 512 },
+				{ w: 1024, h: 1024 }
+			];
+		}
+
+		/**
+		 * Get available sizes for outpit images.
+		 * @returns {Array.<Object>} sizes 
+		 */
+		getImageSizesOutput(model) {
+			return [
+				{ w: 256, h: 256 },
+				{ w: 512, h: 512 },
+				{ w: 1024, h: 1024 }
+			];
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     prompt: "",
+		 *     width:1024,
+		 *     height:1024,
+		 *     background: "transparent",
+		 *     quality: "high"
+		 * }
+		 */
+		getImageGeneration(message, model) {
+			let sizes = this.getImageSizesOutput(model);
+			let index = sizes.length - 1;
+
+			return {
+				model : model.id,
+				width : message.width || sizes[index].w,
+				height : message.width || sizes[index].h,
+				n : 1,
+				response_format : "b64_json",
+				prompt : message.prompt
+			};
+		}
+
+		/**
+		 * Convert *getImageGeneration* answer to result base64 image.
+		 * @returns {String} Image in base64 format 
+		 */
+		async getImageGenerationResult(message, model) {
+			let imageUrl = "";
+			let getProp = function(name) {
+				if (message[name])
+					return message[name];
+				if (message.data && message.data[name])
+					return message.data[name];
+				return undefined;
+			};
+
+			if (!imageUrl) {
+				let data = getProp("data");
+				if (data && data[0] && data[0].b64_json)
+					imageUrl = data[0].b64_json;
+			}
+
+			if (!imageUrl) {
+				let artifacts = getProp("artifacts");
+				if (artifacts && artifacts[0] && artifacts[0].base64)
+					imageUrl = artifacts[0].base64;
+			}
+
+			if (!imageUrl) {
+				let result = getProp("result");
+				if (result && result.imageUrl)
+					imageUrl = result.imageUrl;
+			}
+
+			if (!imageUrl) {
+				let generations = getProp("generations");
+				if (generations && generations[0] && generations[0].url)
+					imageUrl = generations[0].url;
+			}
+
+			if (!imageUrl) {
+				let candidates = getProp("candidates");
+				if (candidates && candidates[0] && candidates[0].content)
+					imageUrl = candidates[0].content;
+			}
+
+			if (!imageUrl) {
+				let image = getProp("image");
+				if (image)
+					imageUrl = image;
+			}
+
+			if (!imageUrl) {
+				let response = getProp("response");
+				if (response) {
+					let matches = response.match(/data:image\/[^;]+;base64,([^"'\s]+)/);
+					if (matches && matches[1])
+						imageUrl = matches[1];
+				}
+			}
+
+			if (!imageUrl) {
+				let content = getProp("content");
+				if (content) {
+					for (let i = 0, len = content.length; i < len; i++) {
+						if (content[i].type === 'text') {
+							let svgMatch = content[i].text.match(/<svg[\s\S]*?<\/svg>/);
+							if (svgMatch) {
+								imageUrl = svgMatch[0];
+								break;
+							}
+						}
+					}
+				}
+
+				if (imageUrl) {
+					imageUrl = "data:image/svg+xml;base64," + btoa(imageUrl);
+				}
+			}
+
+			if (!imageUrl) {
+				let candidates = getProp("predictions");
+				if (candidates && candidates[0] && candidates[0].bytesBase64Encoded)
+					imageUrl = candidates[0].bytesBase64Encoded;
+			}
+			
+			if (!imageUrl)
+				return "";
+
+			return await AI.ImageEngine.getBase64FromUrl(imageUrl);
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     image: "base64...",
+		 *     prompt: "text"
+		 * }
+		 */
+		async getImageVision(message, model) {
+			return {
+				model : model.id,
+				messages : [
+					{
+						role: "user",
+						content: [
+							{							
+								type: "text",
+								text: message.prompt
+							},
+							{
+								type: "image_url", 
+								image_url: {
+									url: message.image
+								}
+							}
+						]
+					}
+				]
+			}
+		}
+
+		getImageVisionResult(message, model) {
+			let result = this.getChatCompletionsResult(message, model);
+
+			if (result.content.length === 0)
+				return "";
+
+			if (0 === result.content[0].indexOf("<think>")) {
+				let end = result.content[0].indexOf("</think>");
+				if (end !== -1)
+					result.content[0] = result.content[0].substring(end + 8);
+			}
+
+			return result.content[0];
+
+		}
+
+		/**
+		 * Get request body object by message.
+		 * @param {Object} message 
+		 * *message* is in folowing format:
+		 * {
+		 *     image: "base64..."
+		 * }
+		 */
+		async getImageOCR(message, model) {
+			return await this.getImageVision({
+				image : message.image,
+				prompt : Asc.Prompts.getImagePromptOCR()
+			}, model);
+		}
+
+		getImageOCRResult(message, model) {
+			return this.getImageVisionResult(message, model);
 		}
 
 		/**
@@ -259,6 +501,67 @@
 				this.modelsUI.push(modelUI);
 			}
 		}
+
+		getSystemMessage(message, isRemove) {
+			let messages = message.messages;
+			let isFound = false;
+			if (!messages)
+				return "";
+			let result = "";
+			for (let i = 0; i < messages.length; ++i) {
+				if (messages[i].role === "system") {
+					if (isFound) {
+						messages.splice(i, 1);
+					} else {
+						isFound = true;
+						result = messages[i].content;
+						if (isRemove === true) {
+							messages.splice(i, 1);
+						}
+					}
+				}
+			}
+			return result;
+		}
+
+		getImageGenerationWithChat(message, model, addon) {
+			let prompt = "Please generate image. ";
+			if (addon)
+				prompt += addon;
+			// TODO: sizes
+			prompt += "Here is the description for the image content:\"";
+			prompt += message.prompt;
+			prompt += "\"";
+		
+			let data = {
+				messages : [
+					{
+						role: "user",
+						content: prompt
+					}
+				]
+			};
+
+			return this.getChatCompletions(data, model);
+		}
+
+		getImageVisionWithChat(message, model) {
+			let prompt = "Please generate image. ";
+			if (addon)
+				prompt += addon;
+		
+			let data = {
+				messages : [
+					{
+						role: "user",
+						content: message.prompt
+					}
+				]
+			};
+
+			return this.getChatCompletions(data, model);
+		}
+
 	}
 	
 	window.AI.Provider = Provider;

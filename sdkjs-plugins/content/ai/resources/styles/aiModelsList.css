@@ -4,15 +4,14 @@ body {
 }
 
 #ai-models-list .item {
-    padding: 6px;
-    border-bottom: 1px solid;
+    border-bottom: none;
 }
 #ai-models-list .item .content {
     display: -webkit-inline-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 1;
 }
 
 #buttons-block {
@@ -37,23 +36,5 @@ body {
 }
 
 #ai-models-list {
-    margin-right: 10px;
-}
-
-/* Themes style for Item Models List */
-body.theme-classic-light #ai-models-list .item {
-    border-color: #cfcfcf;
-}
-
-body.theme-light #ai-models-list .item,
-body.theme-gray #ai-models-list .item {
-    border-color: #c0c0c0;
-}
-
-body.theme-dark #ai-models-list .item {
-    border-color: #666;
-}
-
-body.theme-contrast-dark #ai-models-list .item  {
-    border-color: #696969;
+    margin-right: 4px;
 }

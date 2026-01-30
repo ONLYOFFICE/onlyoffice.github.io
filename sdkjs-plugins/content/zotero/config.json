@@ -5,7 +5,10 @@
 		"fr": "Zotero",
 		"es": "Zotero",
 		"pt-BR": "Zotero",
-		"de": "Zotero"
+		"de": "Zotero",
+		"sq-AL": "Zotero",
+		"sr-Cyrl-RS": "Zotero",
+		"sr-Latn-RS": "Zotero"
 	},
 	"guid": "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
 	"version": "1.0.4",
@@ -19,7 +22,10 @@
 					"fr": "Créez des bibliographies dans le style nécessaire avec Zotero.",
 					"es": "Cree bibliografías en el estilo requerido utilizando el servicio Zotero.",
 					"pt-BR": "Crie bibliografias no estilo desejado usando o serviço Zotero.",
-					"de": "Erstellen Sie Literaturverzeichnisse im gewünschten Stil mittels Zotero."
+					"de": "Erstellen Sie Literaturverzeichnisse im gewünschten Stil mittels Zotero.",
+					"sq-AL": "Krijoni bibliografi në stilin e kërkuar duke përdorur shërbimin Zotero.",
+					"sr-Cyrl-RS": "Креирајте библиографије у потребном стилу користећи Zotero услугу.",
+					"sr-Latn-RS": "Kreirajte bibliografije u potrebnom stilu koristeći Zotero uslugu."
 				},
 			"url": "index.html",
 			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
