@@ -173,5 +173,8 @@
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Říkejte AI, co s vybraným textem dělat (například \"Najít faktické chyby\" nebo \"Riassumovat\")",
 	"Create AI assistant": "Vytvořit asistenta AI",
 	"Match": "Correspondance",
-	"Proposal for replacement": "Proposition de remplacement"
+	"Proposal for replacement": "Proposition de remplacement",
+	"Hint": "Indice",
+	"Replace": "Remplacer",
+	"Replace + Hint": "Remplacer + Indice"
 }
