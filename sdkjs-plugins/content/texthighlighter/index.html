@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
+
+  <script src="./scripts/code.js" defer></script>
+</head>
+
+<body>
+  <div class="container scrollable">
+
+    <!-- Plugin instructions header -->
+    <div class="header" id="PluginInstructions">
+      Enter or select <b>a word or phrase</b> to search in the document text, and configure the necessary settings.
+    </div>
+
+    <!-- STATE 1: Input + Apply -->
+    <div id="state-input">
+
+      <div class="section">
+        <label id="TextToSearch">Text to search:</label>
+        <input type="text" id="searchText" placeholder="Enter text or select in document" />
+      </div>
+
+      <div class="section">
+        <label>
+          <input type="checkbox" id="ignoreCase" checked />
+          <span id="IgnoreCase">Ignore case</span>
+        </label>
+      </div>
+
+      <div class="section">
+        <label id="HighlightColor">Highlight color :</label>
+        <select id="highlightColor">
+          <option value="yellow" id="HighlightYellow">Yellow</option>
+          <option value="green" id="HighlightGreen">Green</option>
+          <option value="blue" id="HighlightBlue">Blue</option>
+          <option value="red" id="HighlightRed">Red</option>
+          <option value="none" id="HighlightNone">No Fill</option>
+        </select>
+      </div>
+
+      <!-- Text color dropdown -->
+      <div class="dropdown">
+        <div class="dropdown-header" id="TextColorHeader">
+          <span class="arrow" id="ArrowDropdown">▸</span> Text color
+        </div>
+        <div class="dropdown-content" id="TextColorContent">
+          <div id="textColorPicker"></div>
+          <div id="TextColorPickerLabel" style="margin-top:8px; font-size:13px;">Choose text color</div>
+        </div>
+      </div>
+
+      <!-- Text formatting dropdown -->
+      <div class="dropdown">
+        <div class="dropdown-header" id="TextFormattingHeader">
+          <span class="arrow" id="ArrowDropdownFormat">▸</span> Text formatting
+        </div>
+        <div class="dropdown-content format-options" id="TextFormattingContent">
+          <label><input type="checkbox" id="boldCheckbox" /> <span id="FormatBold">Bold</span></label>
+          <label><input type="checkbox" id="italicCheckbox" /> <span id="FormatItalic">Italic</span></label>
+          <label><input type="checkbox" id="underlineCheckbox" /> <span id="FormatUnderline">Underline</span></label>
+          <label><input type="checkbox" id="strikeCheckbox" /> <span id="FormatStrike">Strikethrough</span></label>
+        </div>
+      </div>
+
+      <button id="ApplyButton" class="applyButton">Apply</button>
+    </div>
+
+    <!-- STATE 2: No matches -->
+    <div id="state-no-results" style="display:none">
+      <p id="SearchNoResults">Search completed. <strong>No matches found.</strong></p>
+      <button id="HighlightMore1">Highlight more</button>
+    </div>
+
+    <!-- STATE 3: Done / Matches found -->
+    <div id="state-done" style="display:none">
+      <p id="SearchDone">Done! The search is complete and styles have been applied.</p>
+      <p><span id="MatchesFound">Matches found:</span> <span id="foundCount"></span></p>
+      <button id="RevertToOriginal">Revert</button>
+      <button id="HighlightMore2">Highlight more</button>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" style="display:none; text-align:center; font-style:italic; color:#666;">
+      <span id="LoadingMessage">Processing...</span>
+    </div>
+
+  </div>
+</body>
+
+</html>

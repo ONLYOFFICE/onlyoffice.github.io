@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Означивач текста",
+  "PluginInstructions": "Унесите или изаберите <b>реч или фразу</b> за претрагу у тексту документа и подесите потребна подешавања.",
+  
+  "TextToSearch": "Текст за претрагу:",
+  "SearchPlaceholder": "Унесите текст или изаберите у документу",
+  "IgnoreCase": "Игнориши велика/мала слова",
+
+  "HighlightColor": "Боја означавања:",
+  "HighlightYellow": "Жута",
+  "HighlightGreen": "Зелена",
+  "HighlightBlue": "Плава",
+  "HighlightRed": "Црвена",
+  "HighlightNone": "Без испуне",
+
+  "TextColorHeader": "Боја текста",
+  "TextColorPicker": "Изабери боју текста",
+
+  "TextFormattingHeader": "Форматирање текста",
+  "FormatBold": "Подебљано",
+  "FormatItalic": "Курзив",
+  "FormatUnderline": "Подвучено",
+  "FormatStrike": "Прецртано",
+
+  "ApplyButton": "Примени",
+
+  "SearchNoResults": "Претрага завршена. <strong>Нема пронађених поклапања.</strong>",
+  "HighlightMore": "Означи више",
+  "HighlightMore2": "Означи више",
+  "ArrowDropdown": "▸",
+
+  "SearchDone": "Готово! Претрага је завршена и стилови су примењени.",
+  "MatchesFound": "Пронађена поклапања:",
+  "RevertToOriginal": "Врати на оригинал",
+
+  "LoadingMessage": "Обрада у току...",
+
+  "AboutTitle": "Означивач текста",
+  "AboutVersion": "Верзија 1.0.0",
+  "AboutDescription": "Овај додатак омогућава претрагу текста и примену означавања, боја и форматирања у документу.",
+  "AboutCopyright": "© 2025 ONLYOFFICE Plugin"
+}
