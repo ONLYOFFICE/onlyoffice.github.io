@@ -29,7 +29,7 @@
     let isInitializing = false;
     let txt = "";
     let translatedText = "";
-    let paste_done = false;
+    let paste_done = true;
     let loadedModels = []; // Track loaded models (max 3 to prevent memory overflow)
     const MAX_LOADED_MODELS = 3;
 
@@ -623,23 +623,43 @@
         const pasteBtn = document.getElementById("paste");
         if (pasteBtn) {
             pasteBtn.addEventListener("click", function() {
-                if (translatedText && !paste_done) {
-                    paste_done = true;
+                if (!paste_done)
+                    return;
 
-                    window.Asc.plugin.executeMethod("GetSelectionType", [], function(selectionType) {
-                        if (selectionType === "none" || selectionType === "drawing") {
-                            window.Asc.plugin.executeMethod("PasteText", [translatedText], function() {
-                                paste_done = false;
-                            });
-                        } else {
-                            window.Asc.plugin.callCommand(function() {
-                                Api.ReplaceTextSmart([translatedText]);
-                            }, false, false, function() {
-                                paste_done = false;
-                            });
-                        }
-                    });
-                }
+                if (!translatedText)
+                    return;
+
+                paste_done = false;
+
+                // Store translated text in Asc.scope so it's accessible in callCommand context
+                Asc.scope.translatedText = translatedText;
+                window.Asc.plugin.info.recalculate = true;
+
+                window.Asc.plugin.executeMethod("GetVersion", [], function(version) {
+                    if (version === undefined) {
+                        window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText], function(result) {
+                            paste_done = true;
+                        });
+                    } else {
+                        window.Asc.plugin.executeMethod("GetSelectionType", [], function(selectionType) {
+                            switch (selectionType) {
+                                case "none":
+                                case "drawing":
+                                    window.Asc.plugin.executeMethod("PasteText", [$("#txt_shower")[0].innerText], function(result) {
+                                        paste_done = true;
+                                    });
+                                    break;
+                                case "text":
+                                    window.Asc.plugin.callCommand(function() {
+                                        Api.ReplaceTextSmart([Asc.scope.translatedText]);
+                                    }, undefined, undefined, function(result) {
+                                        paste_done = true;
+                                    });
+                                    break;
+                            }
+                        });
+                    }
+                });
             });
         }
 
