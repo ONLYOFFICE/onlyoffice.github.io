@@ -55,6 +55,10 @@
 			width:100%;
 			margin-left: 12px;
 			font-size: 13px;
+			flex: 1;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
 		}
 
 		.input__head {
@@ -156,6 +160,12 @@
 			border-radius: 2px;
 			transition: width 0.3s ease;
 			width: 0%;
+		}
+		#txt_shower {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			min-height: 0;
 		}
 	</style>
 </head>
