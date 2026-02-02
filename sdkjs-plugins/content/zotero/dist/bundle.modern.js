@@ -5445,6 +5445,32 @@ function _unEscapeHtml(htmlString) {
     return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
 }
 
+class CursorService {
+    static getCursorPosition() {
+        return new Promise(function(resolve) {
+            var isCalc = false;
+            var isClose = false;
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                var selRange = doc.GetRangeBySelect();
+                var endPos = selRange.GetEndPos();
+                return endPos;
+            }, isClose, isCalc, resolve);
+        });
+    }
+    static setCursorPosition(pos) {
+        return new Promise(function(resolve) {
+            var isCalc = false;
+            var isClose = false;
+            Asc.scope.pos = pos;
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                doc.MoveCursorToPos(Asc.scope.pos);
+            }, isClose, isCalc, resolve);
+        });
+    }
+}
+
 var CslStylesParser = {
     getStyleInfo: function getStyleInfo(name, style) {
         var parser = new DOMParser;
@@ -7095,7 +7121,11 @@ SelectCitationsComponent.prototype.count = function() {
                 return;
             }
             showLoader();
-            citationService.updateCslItems(false).catch(function(error) {
+            var cursorPos;
+            CursorService.getCursorPosition().then(function(pos) {
+                cursorPos = pos;
+                return citationService.updateCslItems(false);
+            }).catch(function(error) {
                 console.error(error);
                 var message = translate("Failed to refresh");
                 if (typeof error === "string") {
@@ -7104,6 +7134,7 @@ SelectCitationsComponent.prototype.count = function() {
                 showError(message);
             }).finally(function() {
                 hideLoader();
+                CursorService.setCursorPosition(cursorPos);
             });
         });
         insertBibBtn.subscribe(function(event) {
@@ -7144,7 +7175,11 @@ SelectCitationsComponent.prototype.count = function() {
             }
             showLoader();
             var items = selectCitation.getSelectedItems();
-            citationService.insertSelectedCitations(items).then(function(keys) {
+            var cursorPos;
+            CursorService.getCursorPosition().then(function(pos) {
+                cursorPos = pos;
+                return citationService.insertSelectedCitations(items);
+            }).then(function(keys) {
                 selectCitation.removeItems(keys);
                 return citationService.updateCslItems();
             }).catch(function(error) {
@@ -7156,6 +7191,7 @@ SelectCitationsComponent.prototype.count = function() {
                 showError(message);
             }).finally(function() {
                 hideLoader();
+                CursorService.setCursorPosition(cursorPos);
             });
         });
         saveAsTextBtn.subscribe(function(event) {
@@ -7170,7 +7206,13 @@ SelectCitationsComponent.prototype.count = function() {
         settings.onChangeState(function(settings) {
             citationService.setNotesStyle(settings.notesStyle);
             citationService.setStyleFormat(settings.styleFormat);
-            return citationService.updateCslItems(true);
+            var cursorPos;
+            return CursorService.getCursorPosition().then(function(pos) {
+                cursorPos = pos;
+                return citationService.updateCslItems(true);
+            }).finally(function() {
+                CursorService.setCursorPosition(cursorPos);
+            });
         });
     }
     Asc.plugin.onThemeChanged = function(theme) {
