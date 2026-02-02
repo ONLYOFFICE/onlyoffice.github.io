@@ -726,7 +726,8 @@ ZoteroSdk.prototype.getItems = function(search, itemsID, format) {
     format = format || self.DEFAULT_FORMAT;
     return new Promise(function(resolve, reject) {
         var queryParams = {
-            format: format
+            format: format,
+            itemType: "-attachment"
         };
         if (search) {
             queryParams.q = search;

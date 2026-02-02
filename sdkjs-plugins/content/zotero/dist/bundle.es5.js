@@ -7975,7 +7975,8 @@
         format = format || self.DEFAULT_FORMAT;
         return new Promise(function(resolve, reject) {
             var queryParams = {
-                format: format
+                format: format,
+                itemType: "-attachment"
             };
             if (search) {
                 queryParams.q = search;
@@ -12059,12 +12060,11 @@
         }
         return _createClass(CslDocFormatter, null, [ {
             key: "formatAfterInsert",
-            value: function formatAfterInsert(positions, text) {
+            value: function formatAfterInsert(positions) {
                 return new Promise(function(resolve) {
                     var isCalc = true;
                     var isClose = false;
                     Asc.scope.formatting = positions;
-                    Asc.scope.text = text;
                     Asc.plugin.callCommand(function() {
                         var doc = Api.GetDocument();
                         var run = doc.GetCurrentRun();
@@ -12218,13 +12218,12 @@
                 };
                 return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
                     if (!formattingPositions.formatting.length) return;
-                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting, text);
+                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
                 });
             }
         }, {
             key: "addCitation",
             value: function addCitation(text, value, notesStyle) {
-                var self = this;
                 var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
                 var field = {
                     Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
@@ -12241,9 +12240,9 @@
                         oDocument.AddEndnote();
                     });
                 }
-                return _assertClassBrand(_CitationDocService_brand, self, _addAddinField).call(self, field).then(function() {
+                return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
                     if (!formattingPositions.formatting.length) return;
-                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting, field.Value);
+                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
                 });
             }
         }, {
