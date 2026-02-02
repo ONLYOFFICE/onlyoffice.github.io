@@ -506,6 +506,14 @@
     window.Asc.plugin.init = function(text) {
         txt = text || "";
 
+        // Populate manual entry field with selected text
+        if (txt.trim() !== "") {
+            const enterContainer = document.getElementById("enter_container");
+            if (enterContainer) {
+                enterContainer.value = txt;
+            }
+        }
+
         if (!isInitialized && !isInitializing) {
             initializeTranslator().then(() => {
                 if (txt) {
@@ -588,10 +596,15 @@
 
     // DOM Ready handler
     $(document).ready(function() {
+        // Initialize manual text entry field
+        const enterContainer = document.getElementById("enter_container");
+        if (enterContainer) {
+            enterContainer.value = "";
+        }
+
         // Manual text entry toggle
         const showManually = document.getElementById("show_manually");
         const hideManually = document.getElementById("hide_manually");
-        const enterContainer = document.getElementById("enter_container");
 
         if (showManually) {
             showManually.addEventListener("click", function() {
