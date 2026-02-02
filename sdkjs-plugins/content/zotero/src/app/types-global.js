@@ -122,6 +122,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @property {AllowedTags} type
  * @property {number} start
  * @property {number} end
+ * @property {string} [text]
  */
 
 /** ------------------------------------------------ */
