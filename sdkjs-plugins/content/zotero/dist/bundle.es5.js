@@ -12059,11 +12059,12 @@
         }
         return _createClass(CslDocFormatter, null, [ {
             key: "formatAfterInsert",
-            value: function formatAfterInsert(positions) {
+            value: function formatAfterInsert(positions, text) {
                 return new Promise(function(resolve) {
                     var isCalc = true;
                     var isClose = false;
                     Asc.scope.formatting = positions;
+                    Asc.scope.text = text;
                     Asc.plugin.callCommand(function() {
                         var doc = Api.GetDocument();
                         var run = doc.GetCurrentRun();
@@ -12217,12 +12218,13 @@
                 };
                 return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
                     if (!formattingPositions.formatting.length) return;
-                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting, text);
                 });
             }
         }, {
             key: "addCitation",
             value: function addCitation(text, value, notesStyle) {
+                var self = this;
                 var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
                 var field = {
                     Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
@@ -12239,9 +12241,9 @@
                         oDocument.AddEndnote();
                     });
                 }
-                return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
+                return _assertClassBrand(_CitationDocService_brand, self, _addAddinField).call(self, field).then(function() {
                     if (!formattingPositions.formatting.length) return;
-                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting, field.Value);
                 });
             }
         }, {
@@ -14299,6 +14301,39 @@
     function _unEscapeHtml(htmlString) {
         return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
     }
+    var CursorService = function() {
+        function CursorService() {
+            _classCallCheck(this, CursorService);
+        }
+        return _createClass(CursorService, null, [ {
+            key: "getCursorPosition",
+            value: function getCursorPosition() {
+                return new Promise(function(resolve) {
+                    var isCalc = false;
+                    var isClose = false;
+                    Asc.plugin.callCommand(function() {
+                        var doc = Api.GetDocument();
+                        var selRange = doc.GetRangeBySelect();
+                        var endPos = selRange.GetEndPos();
+                        return endPos;
+                    }, isClose, isCalc, resolve);
+                });
+            }
+        }, {
+            key: "setCursorPosition",
+            value: function setCursorPosition(pos) {
+                return new Promise(function(resolve) {
+                    var isCalc = false;
+                    var isClose = false;
+                    Asc.scope.pos = pos;
+                    Asc.plugin.callCommand(function() {
+                        var doc = Api.GetDocument();
+                        doc.MoveCursorToPos(Asc.scope.pos);
+                    }, isClose, isCalc, resolve);
+                });
+            }
+        } ]);
+    }();
     var CslStylesParser = {
         getStyleInfo: function getStyleInfo(name, style) {
             var parser = new DOMParser;
@@ -15866,7 +15901,11 @@
                     return;
                 }
                 showLoader();
-                citationService.updateCslItems(false).catch(function(error) {
+                var cursorPos;
+                CursorService.getCursorPosition().then(function(pos) {
+                    cursorPos = pos;
+                    return citationService.updateCslItems(false);
+                }).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to refresh");
                     if (typeof error === "string") {
@@ -15875,6 +15914,7 @@
                     showError(message);
                 }).finally(function() {
                     hideLoader();
+                    CursorService.setCursorPosition(cursorPos);
                 });
             });
             insertBibBtn.subscribe(function(event) {
@@ -15915,7 +15955,11 @@
                 }
                 showLoader();
                 var items = selectCitation.getSelectedItems();
-                citationService.insertSelectedCitations(items).then(function(keys) {
+                var cursorPos;
+                CursorService.getCursorPosition().then(function(pos) {
+                    cursorPos = pos;
+                    return citationService.insertSelectedCitations(items);
+                }).then(function(keys) {
                     selectCitation.removeItems(keys);
                     return citationService.updateCslItems();
                 }).catch(function(error) {
@@ -15927,6 +15971,7 @@
                     showError(message);
                 }).finally(function() {
                     hideLoader();
+                    CursorService.setCursorPosition(cursorPos);
                 });
             });
             saveAsTextBtn.subscribe(function(event) {
@@ -15941,7 +15986,13 @@
             settings.onChangeState(function(settings) {
                 citationService.setNotesStyle(settings.notesStyle);
                 citationService.setStyleFormat(settings.styleFormat);
-                return citationService.updateCslItems(true);
+                var cursorPos;
+                return CursorService.getCursorPosition().then(function(pos) {
+                    cursorPos = pos;
+                    return citationService.updateCslItems(true);
+                }).finally(function() {
+                    CursorService.setCursorPosition(cursorPos);
+                });
             });
         }
         Asc.plugin.onThemeChanged = function(theme) {
