@@ -99,7 +99,7 @@ class CitationDocService {
      * @param {string} text
      * @param {string} value
      * @param {NoteStyle | null} notesStyle
-     * @returns
+     * @returns {Promise<void>}
      */
     addCitation(text, value, notesStyle) {
         const self = this;
