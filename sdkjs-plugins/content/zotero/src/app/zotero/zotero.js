@@ -284,8 +284,9 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
 
     return new Promise(function (resolve, reject) {
         var queryParams =
-            /** @type {{format: string, q?: string, itemKey?: string}} */ ({
+            /** @type {{format: "csljson"|"json", q?: string, itemKey?: string}} */ ({
                 format: format,
+                itemType: "-attachment", // skip attachments (pdf, docx, etc.)
             });
 
         if (search) {
