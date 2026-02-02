@@ -39,7 +39,7 @@ import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
 import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
-import { translate, CitationService } from "./services";
+import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
 
@@ -283,9 +283,12 @@ import "../styles.css";
                 return;
             }
             showLoader();
-            citationService
-                .updateCslItems(false)
-                .catch(function (error) {
+            /** @type {number} */
+            let cursorPos;
+            CursorService.getCursorPosition().then(function (pos) {
+                cursorPos = pos;
+                return citationService.updateCslItems(false);
+            }).catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");
                     if (typeof error === "string") {
@@ -295,6 +298,7 @@ import "../styles.css";
                 })
                 .finally(function () {
                     hideLoader();
+                    CursorService.setCursorPosition(cursorPos);
                 });
         });
 
@@ -340,9 +344,12 @@ import "../styles.css";
             }
             showLoader();
             const items = selectCitation.getSelectedItems();
-            citationService
-                .insertSelectedCitations(items)
-                .then(function (keys) {
+            /** @type {number} */
+            let cursorPos;
+            CursorService.getCursorPosition().then(function (pos) {
+                cursorPos = pos;
+                return citationService.insertSelectedCitations(items);
+            }).then(function (keys) {
                     selectCitation.removeItems(keys);
                     return citationService.updateCslItems();
                 })
@@ -356,6 +363,7 @@ import "../styles.css";
                 })
                 .finally(function () {
                     hideLoader();
+                    CursorService.setCursorPosition(cursorPos);
                 });
         });
 
@@ -372,7 +380,14 @@ import "../styles.css";
         settings.onChangeState(function (settings) {
             citationService.setNotesStyle(settings.notesStyle);
             citationService.setStyleFormat(settings.styleFormat);
-            return citationService.updateCslItems(true);
+            /** @type {number} */
+            let cursorPos;
+            return CursorService.getCursorPosition().then(function (pos) {
+                cursorPos = pos;
+                return citationService.updateCslItems(true);
+            }).finally(function () {
+                CursorService.setCursorPosition(cursorPos);
+            })
         });
     }
 
