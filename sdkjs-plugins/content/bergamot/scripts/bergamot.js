@@ -19,6 +19,7 @@
     // MODELS_REGISTRY_URL: online registry with full model URLs
     const TRANSLATOR_MODULE_URL = "../vendor/bergamot/translator.js";
     const MODELS_REGISTRY_URL = "https://bergamot.s3.amazonaws.com/models/index.json";
+    const DEBUG = false; // Set to true to enable debug logging
 
     // State
     let translator = null;
@@ -29,6 +30,15 @@
     let txt = "";
     let translatedText = "";
     let paste_done = false;
+    let loadedModels = []; // Track loaded models (max 3 to prevent memory overflow)
+    const MAX_LOADED_MODELS = 3;
+
+    // Debug logging function
+    function debugLog(...args) {
+        if (DEBUG) {
+            console.log("[Bergamot]", ...args);
+        }
+    }
 
     // Language names mapping (ISO 639-1 to display names)
     const LANGUAGE_NAMES = {
@@ -145,6 +155,38 @@
         }
     }
 
+    // Clean up old translation models to free memory
+    async function freeOldestModel() {
+        if (!translator || !translator.workers || translator.workers.length === 0) {
+            return;
+        }
+
+        try {
+            // Get the oldest model (first in array)
+            const oldestModel = loadedModels.shift();
+            if (!oldestModel) {
+                return;
+            }
+
+            // Free the model from all workers
+            for (const workerEntry of translator.workers) {
+                if (workerEntry && workerEntry.exports && workerEntry.exports.freeTranslationModel) {
+                    try {
+                        await workerEntry.exports.freeTranslationModel({
+                            from: oldestModel.from,
+                            to: oldestModel.to
+                        });
+                        debugLog(`Freed model: ${oldestModel.from}->${oldestModel.to}`);
+                    } catch (err) {
+                        console.warn(`Failed to free model ${oldestModel.from}->${oldestModel.to}:`, err);
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn("Error during model cleanup:", error);
+        }
+    }
+
     // Perform translation using the high-level API
     async function translate(text, sourceLang, targetLang) {
         if (!text || !text.trim()) {
@@ -154,6 +196,23 @@
         try {
             if (!translator) {
                 await loadTranslatorModule();
+            }
+
+            // Track this model and clean up old ones if needed
+            const modelKey = `${sourceLang}-${targetLang}`;
+            const existingIndex = loadedModels.findIndex(m => `${m.from}-${m.to}` === modelKey);
+
+            if (existingIndex === -1) {
+                // New model - check if we need to free space
+                if (loadedModels.length >= MAX_LOADED_MODELS) {
+                    await freeOldestModel();
+                }
+                // Add to the end (most recent)
+                loadedModels.push({ from: sourceLang, to: targetLang });
+            } else {
+                // Move existing model to end (mark as most recently used)
+                const model = loadedModels.splice(existingIndex, 1)[0];
+                loadedModels.push(model);
             }
 
             updateStatus(getMessage("Downloading model..."), "info");
