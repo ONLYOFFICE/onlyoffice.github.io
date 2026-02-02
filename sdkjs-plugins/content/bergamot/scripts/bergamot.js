@@ -234,7 +234,7 @@
                 loadedModels.push(model);
             }
 
-            updateStatus(getMessage("Downloading model..."), "info");
+            updateStatus(getMessage("Translating..."), "info");
             updateProgress(50);
 
             // Use the translator's translate method
@@ -395,7 +395,6 @@
             return;
         }
 
-        showLoader(["#loader-container"], true);
         updateStatus(getMessage("Translating..."), "info");
 
         try {
@@ -405,8 +404,6 @@
         } catch (error) {
             displayTranslation(getMessage("Translation failed: ") + error.message);
             updateStatus(getMessage("Translation failed"), "error");
-        } finally {
-            showLoader(["#loader-container"], false);
         }
     }
 
