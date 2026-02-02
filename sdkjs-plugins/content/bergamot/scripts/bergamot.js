@@ -316,11 +316,11 @@
         // Event handlers
         $(sourceSelect).on("change", function() {
             updateTargetLanguages();
-            runTranslation();
+            RunTranslate(txt);
         });
 
         $(targetSelect).on("change", function() {
-            runTranslation();
+            RunTranslate(txt);
         });
     }
 
@@ -358,12 +358,60 @@
         $(targetSelect).trigger("change.select2");
     }
 
+    // Run translation based on editor type
+    function RunTranslate(sText) {
+        switch (window.Asc.plugin.info.editorType) {
+            case 'word':
+            case 'slide': {
+                window.Asc.plugin.executeMethod("GetSelectedText",
+                    [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}],
+                    function(data) {
+                        sText = data.replace(/\r/g, ' ');
+                        runTranslation(sText);
+                    });
+                break;
+            }
+            case 'cell': {
+                window.Asc.plugin.executeMethod("GetSelectedText",
+                    [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}],
+                    function(data) {
+                        if (data == '')
+                            sText = txt.replace(/\r/g, ' ').replace(/\t/g, '\n');
+                        else
+                            sText = data.replace(/\r/g, ' ');
+                        runTranslation(sText);
+                    });
+                break;
+            }
+            case 'pdf': {
+                window.Asc.plugin.executeMethod("GetSelectedText",
+                    [{Numbering:false, Math: false, TableCellSeparator: '\n', ParaSeparator: '\n'}],
+                    function(data) {
+                        if (data && data.trim() !== '')
+                            sText = data.replace(/\r/g, ' ');
+                        runTranslation(sText);
+                    });
+                break;
+            }
+            default: {
+                // Fallback for other editor types
+                runTranslation(sText);
+                break;
+            }
+        }
+    }
+
     // Run translation
-    async function runTranslation() {
-        if (!txt || !txt.trim()) {
+    async function runTranslation(textToTranslate) {
+        const textInput = textToTranslate || txt;
+
+        if (!textInput || !textInput.trim()) {
             clearTranslation();
             return;
         }
+
+        // Update txt with the actual text to translate
+        txt = textInput;
 
         if (!isInitialized) {
             await initializeTranslator();
@@ -482,6 +530,10 @@
 
     // Plugin initialization
     window.Asc.plugin.init = function(text) {
+        // Hide paste button in view mode (e.g., PDF viewer)
+        if (window.Asc.plugin.info.isViewMode)
+            document.getElementById("paste").classList.add('hidden');
+
         txt = text || "";
 
         // Populate manual entry field with selected text
@@ -495,11 +547,11 @@
         if (!isInitialized && !isInitializing) {
             initializeTranslator().then(() => {
                 if (txt) {
-                    runTranslation();
+                    RunTranslate(txt);
                 }
             });
         } else if (txt) {
-            runTranslation();
+            RunTranslate(txt);
         }
     };
 
@@ -612,7 +664,7 @@
         if (enterContainer) {
             const debouncedTranslate = debounce(function() {
                 txt = enterContainer.value;
-                runTranslation();
+                RunTranslate(txt);
             }, 500);
 
             enterContainer.addEventListener("input", debouncedTranslate);
