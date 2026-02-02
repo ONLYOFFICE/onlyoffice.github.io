@@ -279,11 +279,12 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
-    let queryParams = {
-        format: format,
-        itemType: "-attachment", // skip attachments (pdf, docx, etc.)
-    };
+    return new Promise(function (resolve, reject) {
+        var queryParams =
+            /** @type {{format: "csljson"|"json", q?: string, itemKey?: string}} */ ({
+                format: format,
+                itemType: "-attachment", // skip attachments (pdf, docx, etc.)
+            });
 
     if (search) {
         queryParams.q = search;
