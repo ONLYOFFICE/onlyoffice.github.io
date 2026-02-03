@@ -109,9 +109,11 @@ function SettingsPage(router, displayNoneClass) {
     /** @type {HTMLElement[]} */
     this._selectLists = [];
     /**
-     * @param {Settings} settings
+     * @param {Settings} newSettings
+     * @param {Settings} oldSettings 
+     * @returns {void}
      */
-    this._onChangeState = function (settings) {};
+    this._onChangeState = function (newSettings, oldSettings) {};
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -229,7 +231,7 @@ SettingsPage.prototype.init = function () {
 };
 
 /**
- * @param {function(Settings): void} callbackFn
+ * @param {function(Settings, Settings): void} callbackFn
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
@@ -269,6 +271,10 @@ SettingsPage.prototype._addEventListeners = function () {
             console.error("No language selected");
             return;
         }
+
+        /** @type {Settings} */
+        const oldState = {...self._stateSettings};
+
         const promises = [];
         if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
@@ -292,6 +298,9 @@ SettingsPage.prototype._addEventListeners = function () {
         }
         if (self._stateSettings.notesStyle !== noteValue) {
             self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+            if (self._cslStylesManager.getLastUsedFormat() === "note") {
+                promises.push(Promise.resolve());
+            }
         }
 
         const selectedStyleId = self._styleSelect.getSelectedValue();
@@ -309,12 +318,14 @@ SettingsPage.prototype._addEventListeners = function () {
                     self._hide();
                     self._hideLoader();
 
-                    self._onChangeState({
+                    const newState = {
                         language: selectedLang,
                         style: selectedStyleId || "ieee",
                         notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
-                    });
+                    };
+
+                    self._onChangeState(newState, oldState);
                 })
                 .catch(function (err) {
                     self._hideLoader();
