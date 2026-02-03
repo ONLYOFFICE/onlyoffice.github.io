@@ -41,8 +41,5 @@
 * Formatting text when inserting a bibliography using the Zotero plugin
 * Preserve formatting and editing of manual citations.
 * Sorting bibliography according to style
-* Do not show attached files in search results
+* Do not show attached files is search results
 * Support for styles with footnotes and endnotes
-* Ability to edit citations via the context menu
-* Improved handling of repeated citations (e.g., automatic `Ibid.` support).
-* Added bibliography formatting feature.

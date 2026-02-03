@@ -75,10 +75,6 @@ class CitationService {
             this._bibPrefixNew,
             this._bibSuffixNew
         );
-        /** @type {NoteStyle} */
-        this._notesStyle;
-        /** @type {StyleFormat} */
-        this._styleFormat;
         this.#onUserEditCitationManuallyWindow = new AdditionalWindow();
     }
 
@@ -129,8 +125,8 @@ class CitationService {
                     self._formatter.makeCitationCluster(keysL);
                 cslCitation.setPlainCitation(tempElement.innerText);
                 let notesStyle = null;
-                if ("note" === self._styleFormat) {
-                    notesStyle = self._notesStyle;
+                if ("note" === self._cslStylesManager.getLastUsedFormat()) {
+                    notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
                 return self.citationDocService.addCitation(
                     tempElement.innerText,
@@ -377,6 +373,10 @@ class CitationService {
             if (oldContent === newContent) {
                 continue;
             }
+            if (oldContent === "null") {
+                console.error("Unable to update footnotes");
+                continue;
+            }
 
             if (bHardRefresh) {
                 field["Content"] = htmlCitation;
@@ -489,20 +489,6 @@ class CitationService {
     }
 
     /**
-     * @param {NoteStyle} notesStyle
-     */
-    setNotesStyle(notesStyle) {
-        this._notesStyle = notesStyle;
-    }
-
-    /**
-     * @param {StyleFormat} styleFormat
-     */
-    setStyleFormat(styleFormat) {
-        this._styleFormat = styleFormat;
-    }
-
-    /**
      * @param {Array<SearchResultItem>} items
      * @returns {Promise<Array<string|number>>}
      */
@@ -598,6 +584,88 @@ class CitationService {
         } catch (e) {
             throw e;
         }
+    }
+    /**
+     * @returns {Promise<void>}
+     */
+    async convertNotesToText() {
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations, bibField } =
+                await this.#synchronizeStorageWithDocItems();
+            const bNoHaveFields = fieldsWithCitations.length === 0;
+
+            this.#updateFormatter();
+
+            /** @type {CustomField[]} */
+            let updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                true,
+            );
+
+            if (updatedFields && updatedFields.length) {
+                return this.citationDocService.convertNotesToText(
+                    updatedFields,
+                );
+            }
+            
+            if (bibField) {
+                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
+                await this.citationDocService.updateAddinFields(bibFields);
+            }
+
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    async convertTextToNotes(notesStyle) {
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations, bibField } =
+                await this.#synchronizeStorageWithDocItems();
+            const bNoHaveFields = fieldsWithCitations.length === 0;
+
+            this.#updateFormatter();
+
+            /** @type {CustomField[]} */
+            let updatedFields = [];
+
+            updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                true,
+            );
+
+            if (updatedFields && updatedFields.length) {
+                return this.citationDocService.convertTextToNotes(
+                    updatedFields,
+                    notesStyle,
+                );
+            }
+            
+            if (bibField) {
+                console.warn("bibField", bibField);
+                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
+                await this.citationDocService.updateAddinFields(bibFields);
+            }
+
+        } catch (e) {
+            throw e;
+        }
+    }
+    /**
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    async convertNotesStyle(notesStyle) {
+        console.warn("convertNotesStyle", notesStyle);
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 }
 

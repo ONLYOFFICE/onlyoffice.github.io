@@ -446,7 +446,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /**
  * @typedef {Object} Asc
  * @property {AscPlugin} plugin
- * @property {{formatting: Array<FormattingPositions>, text: string, fieldId: string}} scope
+ * @property {{formatting: Array<FormattingPositions>, text: string, fieldId: string, notesStyle?: string}} scope
  * @property {any} PluginWindow
  */
 
