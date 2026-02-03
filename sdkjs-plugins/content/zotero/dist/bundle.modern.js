@@ -29,6 +29,104 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+function _assertClassBrand(e, t, n) {
+    if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
+    throw new TypeError("Private element is not present on this object");
+}
+
+function asyncGeneratorStep(n, t, e, r, o, a, c) {
+    try {
+        var i = n[a](c), u = i.value;
+    } catch (n) {
+        return void e(n);
+    }
+    i.done ? t(u) : Promise.resolve(u).then(r, o);
+}
+
+function _asyncToGenerator(n) {
+    return function() {
+        var t = this, e = arguments;
+        return new Promise(function(r, o) {
+            var a = n.apply(t, e);
+            function _next(n) {
+                asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
+            }
+            function _throw(n) {
+                asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
+            }
+            _next(void 0);
+        });
+    };
+}
+
+function _checkPrivateRedeclaration(e, t) {
+    if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+}
+
+function _classPrivateFieldGet2(s, a) {
+    return s.get(_assertClassBrand(s, a));
+}
+
+function _classPrivateFieldInitSpec(e, t, a) {
+    _checkPrivateRedeclaration(e, t), t.set(e, a);
+}
+
+function _classPrivateFieldSet2(s, a, r) {
+    return s.set(_assertClassBrand(s, a), r), r;
+}
+
+function _classPrivateMethodInitSpec(e, a) {
+    _checkPrivateRedeclaration(e, a), a.add(e);
+}
+
+function _defineProperty(e, r, t) {
+    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+        value: t,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    }) : e[r] = t, e;
+}
+
+function ownKeys(e, r) {
+    var t = Object.keys(e);
+    if (Object.getOwnPropertySymbols) {
+        var o = Object.getOwnPropertySymbols(e);
+        r && (o = o.filter(function(r) {
+            return Object.getOwnPropertyDescriptor(e, r).enumerable;
+        })), t.push.apply(t, o);
+    }
+    return t;
+}
+
+function _objectSpread2(e) {
+    for (var r = 1; r < arguments.length; r++) {
+        var t = null != arguments[r] ? arguments[r] : {};
+        r % 2 ? ownKeys(Object(t), true).forEach(function(r) {
+            _defineProperty(e, r, t[r]);
+        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
+            Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+        });
+    }
+    return e;
+}
+
+function _toPrimitive(t, r) {
+    if ("object" != typeof t || !t) return t;
+    var e = t[Symbol.toPrimitive];
+    if (void 0 !== e) {
+        var i = e.call(t, r);
+        if ("object" != typeof i) return i;
+        throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return ("string" === r ? String : Number)(t);
+}
+
+function _toPropertyKey(t) {
+    var i = _toPrimitive(t, "string");
+    return "symbol" == typeof i ? i : i + "";
+}
+
 var Theme = {
     addStylesForComponents: function addStylesForComponents(theme) {
         var styles = "";
@@ -323,104 +421,6 @@ var ZoteroApiChecker = {
         });
     }
 };
-
-function _assertClassBrand(e, t, n) {
-    if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-    throw new TypeError("Private element is not present on this object");
-}
-
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-    try {
-        var i = n[a](c), u = i.value;
-    } catch (n) {
-        return void e(n);
-    }
-    i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-
-function _asyncToGenerator(n) {
-    return function() {
-        var t = this, e = arguments;
-        return new Promise(function(r, o) {
-            var a = n.apply(t, e);
-            function _next(n) {
-                asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-            }
-            function _throw(n) {
-                asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-            }
-            _next(void 0);
-        });
-    };
-}
-
-function _checkPrivateRedeclaration(e, t) {
-    if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-
-function _classPrivateFieldGet2(s, a) {
-    return s.get(_assertClassBrand(s, a));
-}
-
-function _classPrivateFieldInitSpec(e, t, a) {
-    _checkPrivateRedeclaration(e, t), t.set(e, a);
-}
-
-function _classPrivateFieldSet2(s, a, r) {
-    return s.set(_assertClassBrand(s, a), r), r;
-}
-
-function _classPrivateMethodInitSpec(e, a) {
-    _checkPrivateRedeclaration(e, a), a.add(e);
-}
-
-function _defineProperty(e, r, t) {
-    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-        value: t,
-        enumerable: true,
-        configurable: true,
-        writable: true
-    }) : e[r] = t, e;
-}
-
-function ownKeys(e, r) {
-    var t = Object.keys(e);
-    if (Object.getOwnPropertySymbols) {
-        var o = Object.getOwnPropertySymbols(e);
-        r && (o = o.filter(function(r) {
-            return Object.getOwnPropertyDescriptor(e, r).enumerable;
-        })), t.push.apply(t, o);
-    }
-    return t;
-}
-
-function _objectSpread2(e) {
-    for (var r = 1; r < arguments.length; r++) {
-        var t = null != arguments[r] ? arguments[r] : {};
-        r % 2 ? ownKeys(Object(t), true).forEach(function(r) {
-            _defineProperty(e, r, t[r]);
-        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
-            Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-        });
-    }
-    return e;
-}
-
-function _toPrimitive(t, r) {
-    if ("object" != typeof t || !t) return t;
-    var e = t[Symbol.toPrimitive];
-    if (void 0 !== e) {
-        var i = e.call(t, r);
-        if ("object" != typeof i) return i;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return ("string" === r ? String : Number)(t);
-}
-
-function _toPropertyKey(t) {
-    var i = _toPrimitive(t, "string");
-    return "symbol" == typeof i ? i : i + "";
-}
 
 var _maxRetries = new WeakMap;
 
@@ -3292,54 +3292,38 @@ class CslDocFormatter {
             }, isClose, isCalc, resolve);
         });
     }
-    static formatAfterUpdate(formatMap) {
-        var _this = this;
-        return _asyncToGenerator(function*() {
-            var self = _this;
-            var isCalc = true;
-            var isClose = false;
-            for (var [fieldId, formattingPositions] of formatMap) {
-                Asc.scope.fieldId = fieldId;
-                Asc.scope.text = formattingPositions.text;
-                Asc.scope.formatting = formattingPositions.formatting;
-                yield _assertClassBrand(CslDocFormatter, self, _selectField).call(self, fieldId);
-                yield new Promise(function(resolve) {
-                    Asc.plugin.callCommand(function() {
-                        var doc = Api.GetDocument();
-                        var selRange = doc.GetRangeBySelect();
-                        doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
-                        var run = doc.GetCurrentRun();
-                        for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
-                            var pos = Asc.scope.formatting[i];
-                            var range = run.GetRange(pos.start, pos.end);
-                            if ("sup" === pos.type) {
-                                range.SetVertAlign("superscript");
-                            } else if ("sub" === pos.type) {
-                                range.SetVertAlign("subscript");
-                            } else if ("sc" === pos.type) {
-                                range.SetSmallCaps(true);
-                            } else if ("u" === pos.type) {
-                                range.SetUnderline(true);
-                            } else if ("b" === pos.type) {
-                                range.SetBold(true);
-                            } else if ("i" === pos.type || "em" === pos.type) {
-                                range.SetItalic(true);
-                            }
-                        }
-                    }, isClose, isCalc, resolve);
-                });
-                yield new Promise(function(resolve) {
-                    setTimeout(resolve, 300);
-                });
-            }
-        })();
+    static formatAfterUpdate(fieldId, formattingPositions) {
+        var isCalc = true;
+        var isClose = false;
+        Asc.scope.fieldId = fieldId;
+        Asc.scope.text = formattingPositions.text;
+        Asc.scope.formatting = formattingPositions.formatting;
+        return new Promise(function(resolve) {
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                var selRange = doc.GetRangeBySelect();
+                doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
+                var run = doc.GetCurrentRun();
+                for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
+                    var pos = Asc.scope.formatting[i];
+                    var range = run.GetRange(pos.start, pos.end);
+                    if ("sup" === pos.type) {
+                        range.SetVertAlign("superscript");
+                    } else if ("sub" === pos.type) {
+                        range.SetVertAlign("subscript");
+                    } else if ("sc" === pos.type) {
+                        range.SetSmallCaps(true);
+                    } else if ("u" === pos.type) {
+                        range.SetUnderline(true);
+                    } else if ("b" === pos.type) {
+                        range.SetBold(true);
+                    } else if ("i" === pos.type || "em" === pos.type) {
+                        range.SetItalic(true);
+                    }
+                }
+            }, isClose, isCalc, resolve);
+        });
     }
-}
-
-function _selectField(fieldId) {
-    return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], resolve);
-    });
 }
 
 var _citPrefixOld = new WeakMap;
@@ -3384,26 +3368,21 @@ class CitationDocService {
         });
     }
     addCitation(text, value, notesStyle) {
-        var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-        var field = {
-            Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
-            Content: formattingPositions.text
-        };
-        if ("footnotes" === notesStyle) {
-            window.Asc.plugin.callCommand(function() {
-                var oDocument = Api.GetDocument();
-                oDocument.AddFootnote();
+        var _this = this;
+        return _asyncToGenerator(function*() {
+            var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+            var field = {
+                Value: _classPrivateFieldGet2(_citPrefix, _this) + " " + _classPrivateFieldGet2(_citSuffix, _this) + value,
+                Content: formattingPositions.text
+            };
+            if (notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1) {
+                yield _assertClassBrand(_CitationDocService_brand, _this, _addNote).call(_this, notesStyle);
+            }
+            return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field).then(function() {
+                if (!formattingPositions.formatting.length) return;
+                return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
             });
-        } else if ("endnotes" === notesStyle) {
-            window.Asc.plugin.callCommand(function() {
-                var oDocument = Api.GetDocument();
-                oDocument.AddEndnote();
-            });
-        }
-        return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
-            if (!formattingPositions.formatting.length) return;
-            return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-        });
+        })();
     }
     getAddinZoteroFields() {
         var self = this;
@@ -3443,20 +3422,56 @@ class CitationDocService {
         });
     }
     updateAddinFields(fields) {
-        var formats = new Map;
-        fields.forEach(function(field) {
-            var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
-            field.Content = formattingPositions.text;
-            if (formattingPositions.formatting.length && field.FieldId) {
-                formats.set(field.FieldId, formattingPositions);
-            }
-        });
-        return new Promise(function(resolve) {
-            window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
-        }).then(function() {
+        var _this2 = this;
+        return _asyncToGenerator(function*() {
+            var formats = _assertClassBrand(_CitationDocService_brand, _this2, _makeFormattingPositions).call(_this2, fields);
+            yield new Promise(function(resolve) {
+                window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
+            });
             if (!formats.size) return;
-            return CslDocFormatter.formatAfterUpdate(formats);
-        });
+            for (var [fieldId, formattingPositions] of formats) {
+                yield _assertClassBrand(_CitationDocService_brand, _this2, _selectField).call(_this2, fieldId);
+                yield CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
+            }
+        })();
+    }
+    convertNotesToText(fields) {
+        var _this3 = this;
+        return _asyncToGenerator(function*() {
+            var formats = _assertClassBrand(_CitationDocService_brand, _this3, _makeFormattingPositions).call(_this3, fields);
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!field.FieldId) {
+                    console.error("Field id is not defined");
+                    continue;
+                }
+                yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, field.FieldId);
+                yield _assertClassBrand(_CitationDocService_brand, _this3, _selectFieldReference).call(_this3);
+                yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSuperscript).call(_this3);
+                yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSelectedContent).call(_this3);
+                yield _assertClassBrand(_CitationDocService_brand, _this3, _addAddinField).call(_this3, field);
+                var formatting = formats.get(field.FieldId);
+                if (!formatting) continue;
+                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            }
+        })();
+    }
+    convertTextToNotes(fields, notesStyle) {
+        var _this4 = this;
+        return _asyncToGenerator(function*() {
+            var formats = _assertClassBrand(_CitationDocService_brand, _this4, _makeFormattingPositions).call(_this4, fields);
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!field.FieldId) continue;
+                yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, field.FieldId);
+                yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSelectedContent).call(_this4);
+                yield _assertClassBrand(_CitationDocService_brand, _this4, _addNote).call(_this4, notesStyle);
+                yield _assertClassBrand(_CitationDocService_brand, _this4, _addAddinField).call(_this4, field);
+                var formatting = formats.get(field.FieldId);
+                if (!formatting) continue;
+                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            }
+        })();
     }
 }
 
@@ -3466,9 +3481,74 @@ function _addAddinField(field) {
     });
 }
 
+function _addNote(notesStyle) {
+    Asc.scope.notesStyle = notesStyle;
+    return new Promise(resolve => {
+        Asc.plugin.callCommand(() => {
+            var oDocument = Api.GetDocument();
+            if ("footnotes" === Asc.scope.notesStyle) {
+                oDocument.AddFootnote();
+            } else if ("endnotes" === Asc.scope.notesStyle) {
+                oDocument.AddEndnote();
+            }
+        }, false, false, resolve);
+    });
+}
+
 function _getAllAddinFields() {
     return new Promise(function(resolve, reject) {
         window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+    });
+}
+
+function _makeFormattingPositions(fields) {
+    var formats = new Map;
+    fields.forEach(function(field) {
+        var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
+        field.Content = formattingPositions.text;
+        if (formattingPositions.formatting.length && field.FieldId) {
+            formats.set(field.FieldId, formattingPositions);
+        }
+    });
+    return formats;
+}
+
+function _removeSelectedContent() {
+    return new Promise(resolve => {
+        window.Asc.plugin.executeMethod("RemoveSelectedContent", null, resolve);
+    });
+}
+
+function _selectField(fieldId) {
+    return new Promise(function(resolve) {
+        window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], resolve);
+    });
+}
+
+function _selectFieldReference() {
+    return new Promise(function(resolve) {
+        var isCalc = true;
+        var isClose = false;
+        Asc.plugin.callCommand(() => {
+            var doc = Api.GetDocument();
+            var note = doc.GetCurrentFootEndnote();
+            if (!note) return;
+            var reference = note.SelectNoteReference();
+            if (!reference) return;
+        }, isClose, isCalc, resolve);
+    });
+}
+
+function _removeSuperscript() {
+    return new Promise(function(resolve) {
+        var isCalc = false;
+        var isClose = false;
+        Asc.plugin.callCommand(() => {
+            var doc = Api.GetDocument();
+            var selRange = doc.GetRangeBySelect();
+            if (!selRange) return;
+            selRange.SetVertAlign("baseline");
+        }, isClose, isCalc, resolve);
     });
 }
 
@@ -5105,18 +5185,10 @@ class CitationService {
         this._storage = new CSLCitationStorage;
         this._formatter;
         this.citationDocService = new CitationDocService(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew);
-        this._notesStyle;
-        this._styleFormat;
         _classPrivateFieldSet2(_onUserEditCitationManuallyWindow, this, new AdditionalWindow);
     }
     saveAsText() {
         return this.citationDocService.saveAsText();
-    }
-    setNotesStyle(notesStyle) {
-        this._notesStyle = notesStyle;
-    }
-    setStyleFormat(styleFormat) {
-        this._styleFormat = styleFormat;
     }
     insertSelectedCitations(items) {
         var _this = this;
@@ -5190,6 +5262,56 @@ class CitationService {
             }
         })();
     }
+    convertNotesToText() {
+        var _this4 = this;
+        return _asyncToGenerator(function*() {
+            _this4._storage.clear();
+            try {
+                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this4, _synchronizeStorageWithDocItems).call(_this4);
+                var bNoHaveFields = fieldsWithCitations.length === 0;
+                _assertClassBrand(_CitationService_brand, _this4, _updateFormatter).call(_this4);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this4, _getUpdatedFields).call(_this4, fieldsWithCitations, true);
+                if (updatedFields && updatedFields.length) {
+                    return _this4.citationDocService.convertNotesToText(updatedFields);
+                }
+                if (bibField) {
+                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this4, _updateBibliography).call(_this4, bNoHaveFields, bibField) ];
+                    yield _this4.citationDocService.updateAddinFields(bibFields);
+                }
+            } catch (e) {
+                throw e;
+            }
+        })();
+    }
+    convertTextToNotes(notesStyle) {
+        var _this5 = this;
+        return _asyncToGenerator(function*() {
+            _this5._storage.clear();
+            try {
+                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this5, _synchronizeStorageWithDocItems).call(_this5);
+                var bNoHaveFields = fieldsWithCitations.length === 0;
+                _assertClassBrand(_CitationService_brand, _this5, _updateFormatter).call(_this5);
+                var updatedFields = [];
+                updatedFields = yield _assertClassBrand(_CitationService_brand, _this5, _getUpdatedFields).call(_this5, fieldsWithCitations, true);
+                if (updatedFields && updatedFields.length) {
+                    return _this5.citationDocService.convertTextToNotes(updatedFields, notesStyle);
+                }
+                if (bibField) {
+                    console.warn("bibField", bibField);
+                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this5, _updateBibliography).call(_this5, bNoHaveFields, bibField) ];
+                    yield _this5.citationDocService.updateAddinFields(bibFields);
+                }
+            } catch (e) {
+                throw e;
+            }
+        })();
+    }
+    convertNotesStyle(notesStyle) {
+        return _asyncToGenerator(function*() {
+            console.warn("convertNotesStyle", notesStyle);
+            yield new Promise(resolve => setTimeout(resolve, 1e3));
+        })();
+    }
 }
 
 function _formatInsertLink(cslCitation) {
@@ -5222,8 +5344,8 @@ function _formatInsertLink(cslCitation) {
         tempElement.innerHTML = htmlCitation;
         cslCitation.setPlainCitation(tempElement.innerText);
         var notesStyle = null;
-        if ("note" === self._styleFormat) {
-            notesStyle = self._notesStyle;
+        if ("note" === self._cslStylesManager.getLastUsedFormat()) {
+            notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
         }
         return self.citationDocService.addCitation(htmlCitation, JSON.stringify(cslCitation.toJSON()), notesStyle);
     }).then(function() {
@@ -5391,6 +5513,10 @@ function _getUpdatedFields2() {
                 continue;
             }
             if (oldContent === newContent) {
+                continue;
+            }
+            if (oldContent === "null") {
+                console.error("Unable to update footnotes");
                 continue;
             }
             if (bHardRefresh) {
@@ -5932,7 +6058,7 @@ function SettingsPage(router, displayNoneClass) {
     this._cslStylesManager = new CslStylesManager;
     this._localesManager = new LocalesManager;
     this._selectLists = [];
-    this._onChangeState = function(settings) {};
+    this._onChangeState = function(newSettings, oldSettings) {};
     this._styleMessage = new Message("styleMessage", {
         type: "error"
     });
@@ -6004,6 +6130,7 @@ SettingsPage.prototype._addEventListeners = function() {
             console.error("No language selected");
             return;
         }
+        var oldState = _objectSpread2({}, self._stateSettings);
         var promises = [];
         if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
@@ -6019,6 +6146,9 @@ SettingsPage.prototype._addEventListeners = function() {
         }
         if (self._stateSettings.notesStyle !== noteValue) {
             self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+            if (self._cslStylesManager.getLastUsedFormat() === "note") {
+                promises.push(Promise.resolve());
+            }
         }
         var selectedStyleId = self._styleSelect.getSelectedValue();
         if (self._stateSettings.style !== selectedStyleId && selectedStyleId !== null) {
@@ -6029,12 +6159,13 @@ SettingsPage.prototype._addEventListeners = function() {
             Promise.all(promises).then(function() {
                 self._hide();
                 self._hideLoader();
-                self._onChangeState({
+                var newState = {
                     language: selectedLang,
                     style: selectedStyleId || "ieee",
                     notesStyle: noteValue,
                     styleFormat: self._cslStylesManager.getLastUsedFormat()
-                });
+                };
+                self._onChangeState(newState, oldState);
             }).catch(function(err) {
                 self._hideLoader();
             });
@@ -7059,6 +7190,7 @@ SelectCitationsComponent.prototype.count = function() {
     function loadGroups() {
         return sdk.getUserGroups().then(function(groups) {
             searchFilter.addGroups(groups);
+            return groups;
         });
     }
     function addEventListeners() {
@@ -7204,17 +7336,28 @@ SelectCitationsComponent.prototype.count = function() {
                 hideLoader();
             });
         });
-        settings.onChangeState(function(settings) {
-            citationService.setNotesStyle(settings.notesStyle);
-            citationService.setStyleFormat(settings.styleFormat);
-            var cursorPos;
-            return CursorService.getCursorPosition().then(function(pos) {
-                cursorPos = pos;
-                return citationService.updateCslItems(true);
-            }).finally(function() {
-                CursorService.setCursorPosition(cursorPos);
+        settings.onChangeState(function() {
+            var _ref = _asyncToGenerator(function*(newState, oldState) {
+                var cursorPos = yield CursorService.getCursorPosition();
+                if ([ newState.styleFormat, oldState.styleFormat ].includes("note")) {
+                    if (newState.styleFormat !== oldState.styleFormat) {
+                        if (newState.styleFormat === "note") {
+                            yield citationService.convertTextToNotes(newState.notesStyle);
+                        } else {
+                            yield citationService.convertNotesToText();
+                        }
+                    } else if (newState.notesStyle !== oldState.notesStyle) {
+                        yield citationService.convertNotesStyle(newState.notesStyle);
+                    }
+                } else {
+                    yield citationService.updateCslItems(true);
+                }
+                yield CursorService.setCursorPosition(cursorPos);
             });
-        });
+            return function(_x, _x2) {
+                return _ref.apply(this, arguments);
+            };
+        }());
     }
     Asc.plugin.onThemeChanged = function(theme) {
         window.Asc.plugin.onThemeChangedBase(theme);

@@ -171,12 +171,13 @@ import "../styles.css";
         window.Asc.plugin.onTranslate = applyTranslations;
     };
 
-    /** @returns {Promise<void>} */
+    /** @returns {Promise<UserGroupInfo[]>} */
     function loadGroups() {
         return sdk
             .getUserGroups()
             .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
                 searchFilter.addGroups(groups);
+                return groups;
             });
     }
 
@@ -377,17 +378,26 @@ import "../styles.css";
             });
         });
 
-        settings.onChangeState(function (settings) {
-            citationService.setNotesStyle(settings.notesStyle);
-            citationService.setStyleFormat(settings.styleFormat);
+        settings.onChangeState(async function (newState, oldState) {
             /** @type {number} */
-            let cursorPos;
-            return CursorService.getCursorPosition().then(function (pos) {
-                cursorPos = pos;
-                return citationService.updateCslItems(true);
-            }).finally(function () {
-                CursorService.setCursorPosition(cursorPos);
-            })
+            const cursorPos = await CursorService.getCursorPosition();
+
+            if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
+                if (newState.styleFormat !== oldState.styleFormat) {
+                    if (newState.styleFormat === "note") {
+                        await citationService.convertTextToNotes(newState.notesStyle);
+                    } else {
+                        await citationService.convertNotesToText();
+                    }
+                } else if (newState.notesStyle !== oldState.notesStyle) {
+                    await citationService.convertNotesStyle(newState.notesStyle);
+                }
+            } else {
+                await citationService.updateCslItems(true);
+            }
+            
+            await CursorService.setCursorPosition(cursorPos);
+            
         });
     }
 

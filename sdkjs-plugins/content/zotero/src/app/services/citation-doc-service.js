@@ -64,16 +64,6 @@ class CitationDocService {
     }
 
     /**
-     * @param {CustomField} field
-     * @returns {Promise<void>}
-     */
-    #addAddinField(field) {
-        return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
-        });
-    }
-
-    /**
      * @param {string} text
      * @param {string} value
      * @returns {Promise<void>}
@@ -90,7 +80,7 @@ class CitationDocService {
         return this.#addAddinField(field).then(function () {
             if (!formattingPositions.formatting.length) return;
             return CslDocFormatter.formatAfterInsert(
-                formattingPositions.formatting
+                formattingPositions.formatting,
             );
         });
     }
@@ -101,7 +91,7 @@ class CitationDocService {
      * @param {NoteStyle | null} notesStyle
      * @returns {Promise<void>}
      */
-    addCitation(text, value, notesStyle) {
+    async addCitation(text, value, notesStyle) {
         const self = this;
         const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
         /** @type {CustomField} */
@@ -109,16 +99,11 @@ class CitationDocService {
             Value: this.#citPrefix + " " + this.#citSuffix + value,
             Content: formattingPositions.text,
         };
-        if ("footnotes" === notesStyle) {
-            window.Asc.plugin.callCommand(function () {
-                const oDocument = Api.GetDocument();
-                oDocument.AddFootnote();
-            });
-        } else if ("endnotes" === notesStyle) {
-            window.Asc.plugin.callCommand(function () {
-                const oDocument = Api.GetDocument();
-                oDocument.AddEndnote();
-            });
+        if (
+            notesStyle &&
+            ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
+        ) {
+            await this.#addNote(notesStyle);
         }
 
         return this.#addAddinField(field).then(function () {
@@ -126,16 +111,6 @@ class CitationDocService {
             return CslDocFormatter.formatAfterInsert(
                 formattingPositions.formatting
             );
-        });
-    }
-
-    /**
-     * @returns {Promise<Array<CustomField>>}
-     */
-    #getAllAddinFields() {
-        const self = this;
-        return new Promise(function (resolve, reject) {
-            window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
         });
     }
 
@@ -198,7 +173,127 @@ class CitationDocService {
      * @param {Array<CustomField>} fields
      * @returns {Promise<void>}
      */
-    updateAddinFields(fields) {
+    async updateAddinFields(fields) {
+        const formats = this.#makeFormattingPositions(fields);
+
+        await new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+
+        if (!formats.size) return;
+        for (const [fieldId, formattingPositions] of formats) {
+            await this.#selectField(fieldId);
+            await CslDocFormatter.formatAfterUpdate(
+                fieldId,
+                formattingPositions,
+            );
+        }
+    }
+
+    /**
+     * @param {Array<CustomField>} fields
+     * @returns {Promise<void>}
+     */
+    async convertNotesToText(fields) {
+        const formats = this.#makeFormattingPositions(fields);
+        
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (!field.FieldId) {
+                console.error("Field id is not defined");
+                continue;
+            }
+
+            await this.#selectField(field.FieldId);
+            await this.#selectFieldReference();
+            await this.#removeSuperscript();
+            await this.#removeSelectedContent();
+            await this.#addAddinField(field);
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            await CslDocFormatter.formatAfterInsert(
+                formatting.formatting,
+            );
+        }
+    }
+
+    /**
+     * @param {Array<CustomField>} fields
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    async convertTextToNotes(fields, notesStyle) {
+        const formats = this.#makeFormattingPositions(fields);
+
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (!field.FieldId) continue;
+
+            await this.#selectField(field.FieldId);
+            await this.#removeSelectedContent();
+            await this.#addNote(notesStyle);
+            await this.#addAddinField(field);
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            await CslDocFormatter.formatAfterInsert(
+                formatting.formatting,
+            );
+        }
+    }
+
+    /**
+     * @param {CustomField} field
+     * @returns {Promise<void>}
+     */
+    #addAddinField(field) {
+        return new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
+        });
+    }
+
+    /**
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    #addNote(notesStyle) {
+        Asc.scope.notesStyle = notesStyle;
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const oDocument = Api.GetDocument();
+                    if ("footnotes" === Asc.scope.notesStyle) {
+                        oDocument.AddFootnote();
+                    } else if ("endnotes" === Asc.scope.notesStyle) {
+                        oDocument.AddEndnote();
+                    }
+                },
+                false,
+                false,
+                resolve,
+            );
+        });
+    }
+
+    /**
+     * @returns {Promise<Array<CustomField>>}
+     */
+    #getAllAddinFields() {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+        });
+    }
+
+    /**
+     * @param {Array<CustomField>} fields
+     * @returns {Map<string, {text: string, formatting: Array<FormattingPositions>}>}
+     * @modifies {fields}
+     */
+    #makeFormattingPositions(fields) {
         /** @type {Map<string, {text: string, formatting: Array<FormattingPositions>}>} */
         const formats = new Map();
         fields.forEach(function (field) {
@@ -210,18 +305,73 @@ class CitationDocService {
                 formats.set(field.FieldId, formattingPositions);
             }
         });
+        return formats;
+    }
 
-        return new Promise(function (resolve) {
+    /** @returns {Promise<void>} */
+    #removeSelectedContent() {
+        return new Promise((resolve) => {
             window.Asc.plugin.executeMethod(
-                "UpdateAddinFields",
-                [fields],
-                resolve
+                "RemoveSelectedContent",
+                null,
+                resolve,
             );
-        }).then(function () {
-            if (!formats.size) return;
-            return CslDocFormatter.formatAfterUpdate(formats);
         });
     }
+    /**
+     * @param {string} fieldId
+     * @returns {Promise<void>}
+     */
+    #selectField(fieldId) {
+        return new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "SelectAddinField",
+                [fieldId],
+                resolve,
+            );
+        });
+    }
+
+    /**
+     * @returns {Promise<void>}
+     */
+    #selectFieldReference() {
+        return new Promise(function (resolve) {
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const note = doc.GetCurrentFootEndnote();
+                    if (!note) return;
+                    const reference = note.SelectNoteReference();
+                    if (!reference) return;
+                },
+                isClose,
+                isCalc,
+                resolve,
+            );
+        });
+    }
+
+    #removeSuperscript() {
+        return new Promise(function (resolve) {
+            const isCalc = false;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const selRange = doc.GetRangeBySelect();
+                    if (!selRange) return;
+                    selRange.SetVertAlign("baseline");
+                },
+                isClose,
+                isCalc,
+                resolve,
+            );
+        });
+    }
+
 }
 
 export { CitationDocService };
