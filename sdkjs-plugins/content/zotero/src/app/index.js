@@ -169,6 +169,7 @@ import "../styles.css";
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
+        // addContextMenuButtons();
     };
 
     /** @returns {Promise<UserGroupInfo[]>} */
@@ -669,4 +670,16 @@ import "../styles.css";
             }
         }
     }
+
+    function addContextMenuButtons() {
+        console.warn("updateContextMenuButtons");
+        let buttonMain = new Asc.ButtonContextMenu();
+        buttonMain.text = "Edit citation";
+        buttonMain.addCheckers("All");
+        buttonMain.attachOnClick(async function(){
+			citationService.showEditCitationWindow("105");
+		});
+        
+		Asc.Buttons.registerContextMenu();
+    };
 })();

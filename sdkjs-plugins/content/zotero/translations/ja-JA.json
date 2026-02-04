@@ -58,5 +58,6 @@
     "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "Zoteroによってこの引用が作成されました。変更を保存しますか?",
     "Yes": "はい",
     "No": "いいえ",
-    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "引用を追加する場合は'はい'をクリックするとZoteroは更新されません。スタイルを変更する場合は'いいえ'をクリックすると変更を破棄します。"
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "引用を追加する場合は'はい'をクリックするとZoteroは更新されません。スタイルを変更する場合は'いいえ'をクリックすると変更を破棄します。",
+    "Edit citation": "引用を編集"
 }

@@ -58,5 +58,6 @@
     "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "Sie haben diese Zitate seit Zotero erzeugt. Wollen Sie Ihre Anderungen behalten und zukunftssichere Aktualisierungen verhindern?",
     "Yes": "Ja",
     "No": "Nein",
-    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Wenn Sie auf „Ja“ klicken, verhindert Zotero, dass dieses Zitat aktualisiert wird, wenn Sie weitere Zitate hinzufügen, den Stil ändern oder das referenzierte Element bearbeiten. Wenn Sie auf „Nein“ klicken, werden Ihre Änderungen verworfen."
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Wenn Sie auf „Ja“ klicken, verhindert Zotero, dass dieses Zitat aktualisiert wird, wenn Sie weitere Zitate hinzufügen, den Stil ändern oder das referenzierte Element bearbeiten. Wenn Sie auf „Nein“ klicken, werden Ihre Änderungen verworfen.",
+    "Edit citation": "Zitat bearbeiten"
 }

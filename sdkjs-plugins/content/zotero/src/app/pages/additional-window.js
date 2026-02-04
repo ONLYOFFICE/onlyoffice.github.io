@@ -21,9 +21,6 @@ class AdditionalWindow {
      */
     show(description, text) {
         this.#window = new window.Asc.PluginWindow();
-        this.#defaultButtonFn = window.Asc.plugin.button;
-        this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
-        this.#defaultTranslateFn = Asc.plugin.onTranslate;
         const variation = {
             name: "Zotero",
             url: "info-window.html",
@@ -45,8 +42,71 @@ class AdditionalWindow {
             isInsideMode: false,
         };
 
+        this.#onShow(variation, text);
         this.#window.show(variation);
 
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+
+                this.#hide();
+            };
+        });
+    }    
+    /**
+     * @param {string} text
+     */
+    showEditWindow(text) {
+        this.#window = new window.Asc.PluginWindow();
+        const variation = {
+            name: "Zotero",
+            url: "edit-window.html",
+            description: window.Asc.plugin.tr("Edit citation"),
+            isVisual: true,
+            buttons: [
+                {
+                    text: window.Asc.plugin.tr("Save"),
+                    primary: true,
+                    isViewer: false,
+                },
+                { text: window.Asc.plugin.tr("Cancel"), primary: false },
+            ],
+            isModal: false,
+            EditorsSupport: ["word"],
+            size: [380, 240],
+            isViewer: true,
+            isDisplayedInViewer: false,
+            isInsideMode: false,
+        };
+
+        this.#onShow(variation, text);
+        this.#window.show(variation);
+
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+
+                this.#hide();
+            };
+        });
+    }
+
+    /**
+     * @param {Object} variation
+     * @param {string} text
+     */
+    #onShow(variation, text) {
+        this.#defaultButtonFn = window.Asc.plugin.button;
+        this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
+        this.#defaultTranslateFn = Asc.plugin.onTranslate;
         window.Asc.plugin.onThemeChanged = (theme) => {
             this.#window.command("onThemeChanged", theme);
             this.#defaultThemeChangedFn(theme);
@@ -70,18 +130,6 @@ class AdditionalWindow {
                 ); // 2 is the border-width at the window
             }
         );
-
-        return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = (buttonId, windowId) => {
-                if (buttonId === 0) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-
-                this.#hide();
-            };
-        });
     }
 
     #hide() {
