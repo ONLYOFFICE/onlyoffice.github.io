@@ -33,6 +33,299 @@
     typeof define === "function" && define.amd ? define(factory) : factory();
 })(function() {
     "use strict";
+    function _arrayLikeToArray(r, a) {
+        (null == a || a > r.length) && (a = r.length);
+        for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+        return n;
+    }
+    function _arrayWithHoles(r) {
+        if (Array.isArray(r)) return r;
+    }
+    function _assertClassBrand(e, t, n) {
+        if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
+        throw new TypeError("Private element is not present on this object");
+    }
+    function asyncGeneratorStep(n, t, e, r, o, a, c) {
+        try {
+            var i = n[a](c), u = i.value;
+        } catch (n) {
+            return void e(n);
+        }
+        i.done ? t(u) : Promise.resolve(u).then(r, o);
+    }
+    function _asyncToGenerator(n) {
+        return function() {
+            var t = this, e = arguments;
+            return new Promise(function(r, o) {
+                var a = n.apply(t, e);
+                function _next(n) {
+                    asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
+                }
+                function _throw(n) {
+                    asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
+                }
+                _next(void 0);
+            });
+        };
+    }
+    function _checkPrivateRedeclaration(e, t) {
+        if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+    }
+    function _classCallCheck(a, n) {
+        if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+    }
+    function _classPrivateFieldGet2(s, a) {
+        return s.get(_assertClassBrand(s, a));
+    }
+    function _classPrivateFieldInitSpec(e, t, a) {
+        _checkPrivateRedeclaration(e, t), t.set(e, a);
+    }
+    function _classPrivateFieldSet2(s, a, r) {
+        return s.set(_assertClassBrand(s, a), r), r;
+    }
+    function _classPrivateMethodInitSpec(e, a) {
+        _checkPrivateRedeclaration(e, a), a.add(e);
+    }
+    function _defineProperties(e, r) {
+        for (var t = 0; t < r.length; t++) {
+            var o = r[t];
+            o.enumerable = o.enumerable || false, o.configurable = true, "value" in o && (o.writable = true), 
+            Object.defineProperty(e, _toPropertyKey(o.key), o);
+        }
+    }
+    function _createClass(e, r, t) {
+        return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
+            writable: false
+        }), e;
+    }
+    function _createForOfIteratorHelper(r, e) {
+        var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+        if (!t) {
+            if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e) {
+                t && (r = t);
+                var n = 0, F = function() {};
+                return {
+                    s: F,
+                    n: function() {
+                        return n >= r.length ? {
+                            done: true
+                        } : {
+                            done: false,
+                            value: r[n++]
+                        };
+                    },
+                    e: function(r) {
+                        throw r;
+                    },
+                    f: F
+                };
+            }
+            throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+        }
+        var o, a = true, u = false;
+        return {
+            s: function() {
+                t = t.call(r);
+            },
+            n: function() {
+                var r = t.next();
+                return a = r.done, r;
+            },
+            e: function(r) {
+                u = true, o = r;
+            },
+            f: function() {
+                try {
+                    a || null == t.return || t.return();
+                } finally {
+                    if (u) throw o;
+                }
+            }
+        };
+    }
+    function _defineProperty(e, r, t) {
+        return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+            value: t,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        }) : e[r] = t, e;
+    }
+    function _iterableToArrayLimit(r, l) {
+        var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+        if (null != t) {
+            var e, n, i, u, a = [], f = true, o = false;
+            try {
+                if (i = (t = t.call(r)).next, 0 === l) ; else for (;!(f = (e = i.call(t)).done) && (a.push(e.value), 
+                a.length !== l); f = !0) ;
+            } catch (r) {
+                o = true, n = r;
+            } finally {
+                try {
+                    if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return;
+                } finally {
+                    if (o) throw n;
+                }
+            }
+            return a;
+        }
+    }
+    function _nonIterableRest() {
+        throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+    function ownKeys$1(e, r) {
+        var t = Object.keys(e);
+        if (Object.getOwnPropertySymbols) {
+            var o = Object.getOwnPropertySymbols(e);
+            r && (o = o.filter(function(r) {
+                return Object.getOwnPropertyDescriptor(e, r).enumerable;
+            })), t.push.apply(t, o);
+        }
+        return t;
+    }
+    function _objectSpread2(e) {
+        for (var r = 1; r < arguments.length; r++) {
+            var t = null != arguments[r] ? arguments[r] : {};
+            r % 2 ? ownKeys$1(Object(t), true).forEach(function(r) {
+                _defineProperty(e, r, t[r]);
+            }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function(r) {
+                Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+            });
+        }
+        return e;
+    }
+    function _regenerator() {
+        var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag";
+        function i(r, n, o, i) {
+            var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype);
+            return _regeneratorDefine(u, "_invoke", function(r, n, o) {
+                var i, c, u, f = 0, p = o || [], y = false, G = {
+                    p: 0,
+                    n: 0,
+                    v: e,
+                    a: d,
+                    f: d.bind(e, 4),
+                    d: function(t, r) {
+                        return i = t, c = 0, u = e, G.n = r, a;
+                    }
+                };
+                function d(r, n) {
+                    for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
+                        var o, i = p[t], d = G.p, l = i[2];
+                        r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, 
+                        G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, 
+                        G.n = l, c = 0));
+                    }
+                    if (o || r > 1) return a;
+                    throw y = true, n;
+                }
+                return function(o, p, l) {
+                    if (f > 1) throw TypeError("Generator is already running");
+                    for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y; ) {
+                        i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
+                        try {
+                            if (f = 2, i) {
+                                if (c || (o = "next"), t = i[o]) {
+                                    if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
+                                    if (!t.done) return t;
+                                    u = t.value, c < 2 && (c = 0);
+                                } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), 
+                                c = 1);
+                                i = e;
+                            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
+                        } catch (t) {
+                            i = e, c = 1, u = t;
+                        } finally {
+                            f = 1;
+                        }
+                    }
+                    return {
+                        value: t,
+                        done: y
+                    };
+                };
+            }(r, o, i), true), u;
+        }
+        var a = {};
+        function Generator() {}
+        function GeneratorFunction() {}
+        function GeneratorFunctionPrototype() {}
+        t = Object.getPrototypeOf;
+        var c = [][n] ? t(t([][n]())) : (_regeneratorDefine(t = {}, n, function() {
+            return this;
+        }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
+        function f(e) {
+            return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, 
+            _regeneratorDefine(e, o, "GeneratorFunction")), e.prototype = Object.create(u), 
+            e;
+        }
+        return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine(u, "constructor", GeneratorFunctionPrototype), 
+        _regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), 
+        GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine(GeneratorFunctionPrototype, o, "GeneratorFunction"), 
+        _regeneratorDefine(u), _regeneratorDefine(u, o, "Generator"), _regeneratorDefine(u, n, function() {
+            return this;
+        }), _regeneratorDefine(u, "toString", function() {
+            return "[object Generator]";
+        }), (_regenerator = function() {
+            return {
+                w: i,
+                m: f
+            };
+        })();
+    }
+    function _regeneratorDefine(e, r, n, t) {
+        var i = Object.defineProperty;
+        try {
+            i({}, "", {});
+        } catch (e) {
+            i = 0;
+        }
+        _regeneratorDefine = function(e, r, n, t) {
+            function o(r, n) {
+                _regeneratorDefine(e, r, function(e) {
+                    return this._invoke(r, n, e);
+                });
+            }
+            r ? i ? i(e, r, {
+                value: n,
+                enumerable: !t,
+                configurable: !t,
+                writable: !t
+            }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
+        }, _regeneratorDefine(e, r, n, t);
+    }
+    function _slicedToArray(r, e) {
+        return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
+    }
+    function _toPrimitive(t, r) {
+        if ("object" != typeof t || !t) return t;
+        var e = t[Symbol.toPrimitive];
+        if (void 0 !== e) {
+            var i = e.call(t, r);
+            if ("object" != typeof i) return i;
+            throw new TypeError("@@toPrimitive must return a primitive value.");
+        }
+        return String(t);
+    }
+    function _toPropertyKey(t) {
+        var i = _toPrimitive(t, "string");
+        return "symbol" == typeof i ? i : i + "";
+    }
+    function _typeof(o) {
+        "@babel/helpers - typeof";
+        return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
+            return typeof o;
+        } : function(o) {
+            return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+        }, _typeof(o);
+    }
+    function _unsupportedIterableToArray(r, a) {
+        if (r) {
+            if ("string" == typeof r) return _arrayLikeToArray(r, a);
+            var t = {}.toString.call(r).slice(8, -1);
+            return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
+        }
+    }
     var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
     var es_array_filter = {};
     var globalThis_1;
@@ -1087,10 +1380,10 @@
         objectGetOwnPropertySymbols.f = Object.getOwnPropertySymbols;
         return objectGetOwnPropertySymbols;
     }
-    var ownKeys$1;
+    var ownKeys;
     var hasRequiredOwnKeys;
     function requireOwnKeys() {
-        if (hasRequiredOwnKeys) return ownKeys$1;
+        if (hasRequiredOwnKeys) return ownKeys;
         hasRequiredOwnKeys = 1;
         var getBuiltIn = requireGetBuiltIn();
         var uncurryThis = requireFunctionUncurryThis();
@@ -1098,12 +1391,12 @@
         var getOwnPropertySymbolsModule = requireObjectGetOwnPropertySymbols();
         var anObject = requireAnObject();
         var concat = uncurryThis([].concat);
-        ownKeys$1 = getBuiltIn("Reflect", "ownKeys") || function ownKeys(it) {
+        ownKeys = getBuiltIn("Reflect", "ownKeys") || function ownKeys(it) {
             var keys = getOwnPropertyNamesModule.f(anObject(it));
             var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
             return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
         };
-        return ownKeys$1;
+        return ownKeys;
     }
     var copyConstructorProperties;
     var hasRequiredCopyConstructorProperties;
@@ -1463,6 +1756,7 @@
         return es_array_filter;
     }
     requireEs_array_filter();
+    var es_array_includes = {};
     var objectDefineProperties = {};
     var objectKeys;
     var hasRequiredObjectKeys;
@@ -1592,6 +1886,30 @@
         };
         return addToUnscopables;
     }
+    var hasRequiredEs_array_includes;
+    function requireEs_array_includes() {
+        if (hasRequiredEs_array_includes) return es_array_includes;
+        hasRequiredEs_array_includes = 1;
+        var $ = require_export();
+        var $includes = requireArrayIncludes().includes;
+        var fails = requireFails();
+        var addToUnscopables = requireAddToUnscopables();
+        var BROKEN_ON_SPARSE = fails(function() {
+            return !Array(1).includes();
+        });
+        $({
+            target: "Array",
+            proto: true,
+            forced: BROKEN_ON_SPARSE
+        }, {
+            includes: function includes(el) {
+                return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
+            }
+        });
+        addToUnscopables("includes");
+        return es_array_includes;
+    }
+    requireEs_array_includes();
     var iterators;
     var hasRequiredIterators;
     function requireIterators() {
@@ -4675,299 +4993,6 @@
             });
         }
     };
-    function _arrayLikeToArray(r, a) {
-        (null == a || a > r.length) && (a = r.length);
-        for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-        return n;
-    }
-    function _arrayWithHoles(r) {
-        if (Array.isArray(r)) return r;
-    }
-    function _assertClassBrand(e, t, n) {
-        if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-        throw new TypeError("Private element is not present on this object");
-    }
-    function asyncGeneratorStep(n, t, e, r, o, a, c) {
-        try {
-            var i = n[a](c), u = i.value;
-        } catch (n) {
-            return void e(n);
-        }
-        i.done ? t(u) : Promise.resolve(u).then(r, o);
-    }
-    function _asyncToGenerator(n) {
-        return function() {
-            var t = this, e = arguments;
-            return new Promise(function(r, o) {
-                var a = n.apply(t, e);
-                function _next(n) {
-                    asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-                }
-                function _throw(n) {
-                    asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-                }
-                _next(void 0);
-            });
-        };
-    }
-    function _checkPrivateRedeclaration(e, t) {
-        if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-    }
-    function _classCallCheck(a, n) {
-        if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-    }
-    function _classPrivateFieldGet2(s, a) {
-        return s.get(_assertClassBrand(s, a));
-    }
-    function _classPrivateFieldInitSpec(e, t, a) {
-        _checkPrivateRedeclaration(e, t), t.set(e, a);
-    }
-    function _classPrivateFieldSet2(s, a, r) {
-        return s.set(_assertClassBrand(s, a), r), r;
-    }
-    function _classPrivateMethodInitSpec(e, a) {
-        _checkPrivateRedeclaration(e, a), a.add(e);
-    }
-    function _defineProperties(e, r) {
-        for (var t = 0; t < r.length; t++) {
-            var o = r[t];
-            o.enumerable = o.enumerable || false, o.configurable = true, "value" in o && (o.writable = true), 
-            Object.defineProperty(e, _toPropertyKey(o.key), o);
-        }
-    }
-    function _createClass(e, r, t) {
-        return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-            writable: false
-        }), e;
-    }
-    function _createForOfIteratorHelper(r, e) {
-        var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
-        if (!t) {
-            if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e) {
-                t && (r = t);
-                var n = 0, F = function() {};
-                return {
-                    s: F,
-                    n: function() {
-                        return n >= r.length ? {
-                            done: true
-                        } : {
-                            done: false,
-                            value: r[n++]
-                        };
-                    },
-                    e: function(r) {
-                        throw r;
-                    },
-                    f: F
-                };
-            }
-            throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-        }
-        var o, a = true, u = false;
-        return {
-            s: function() {
-                t = t.call(r);
-            },
-            n: function() {
-                var r = t.next();
-                return a = r.done, r;
-            },
-            e: function(r) {
-                u = true, o = r;
-            },
-            f: function() {
-                try {
-                    a || null == t.return || t.return();
-                } finally {
-                    if (u) throw o;
-                }
-            }
-        };
-    }
-    function _defineProperty(e, r, t) {
-        return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-            value: t,
-            enumerable: true,
-            configurable: true,
-            writable: true
-        }) : e[r] = t, e;
-    }
-    function _iterableToArrayLimit(r, l) {
-        var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
-        if (null != t) {
-            var e, n, i, u, a = [], f = true, o = false;
-            try {
-                if (i = (t = t.call(r)).next, 0 === l) ; else for (;!(f = (e = i.call(t)).done) && (a.push(e.value), 
-                a.length !== l); f = !0) ;
-            } catch (r) {
-                o = true, n = r;
-            } finally {
-                try {
-                    if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return;
-                } finally {
-                    if (o) throw n;
-                }
-            }
-            return a;
-        }
-    }
-    function _nonIterableRest() {
-        throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-    function ownKeys(e, r) {
-        var t = Object.keys(e);
-        if (Object.getOwnPropertySymbols) {
-            var o = Object.getOwnPropertySymbols(e);
-            r && (o = o.filter(function(r) {
-                return Object.getOwnPropertyDescriptor(e, r).enumerable;
-            })), t.push.apply(t, o);
-        }
-        return t;
-    }
-    function _objectSpread2(e) {
-        for (var r = 1; r < arguments.length; r++) {
-            var t = null != arguments[r] ? arguments[r] : {};
-            r % 2 ? ownKeys(Object(t), true).forEach(function(r) {
-                _defineProperty(e, r, t[r]);
-            }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
-                Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-            });
-        }
-        return e;
-    }
-    function _regenerator() {
-        var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag";
-        function i(r, n, o, i) {
-            var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype);
-            return _regeneratorDefine(u, "_invoke", function(r, n, o) {
-                var i, c, u, f = 0, p = o || [], y = false, G = {
-                    p: 0,
-                    n: 0,
-                    v: e,
-                    a: d,
-                    f: d.bind(e, 4),
-                    d: function(t, r) {
-                        return i = t, c = 0, u = e, G.n = r, a;
-                    }
-                };
-                function d(r, n) {
-                    for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-                        var o, i = p[t], d = G.p, l = i[2];
-                        r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, 
-                        G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, 
-                        G.n = l, c = 0));
-                    }
-                    if (o || r > 1) return a;
-                    throw y = true, n;
-                }
-                return function(o, p, l) {
-                    if (f > 1) throw TypeError("Generator is already running");
-                    for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y; ) {
-                        i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-                        try {
-                            if (f = 2, i) {
-                                if (c || (o = "next"), t = i[o]) {
-                                    if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                                    if (!t.done) return t;
-                                    u = t.value, c < 2 && (c = 0);
-                                } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), 
-                                c = 1);
-                                i = e;
-                            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-                        } catch (t) {
-                            i = e, c = 1, u = t;
-                        } finally {
-                            f = 1;
-                        }
-                    }
-                    return {
-                        value: t,
-                        done: y
-                    };
-                };
-            }(r, o, i), true), u;
-        }
-        var a = {};
-        function Generator() {}
-        function GeneratorFunction() {}
-        function GeneratorFunctionPrototype() {}
-        t = Object.getPrototypeOf;
-        var c = [][n] ? t(t([][n]())) : (_regeneratorDefine(t = {}, n, function() {
-            return this;
-        }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-        function f(e) {
-            return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, 
-            _regeneratorDefine(e, o, "GeneratorFunction")), e.prototype = Object.create(u), 
-            e;
-        }
-        return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine(u, "constructor", GeneratorFunctionPrototype), 
-        _regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), 
-        GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine(GeneratorFunctionPrototype, o, "GeneratorFunction"), 
-        _regeneratorDefine(u), _regeneratorDefine(u, o, "Generator"), _regeneratorDefine(u, n, function() {
-            return this;
-        }), _regeneratorDefine(u, "toString", function() {
-            return "[object Generator]";
-        }), (_regenerator = function() {
-            return {
-                w: i,
-                m: f
-            };
-        })();
-    }
-    function _regeneratorDefine(e, r, n, t) {
-        var i = Object.defineProperty;
-        try {
-            i({}, "", {});
-        } catch (e) {
-            i = 0;
-        }
-        _regeneratorDefine = function(e, r, n, t) {
-            function o(r, n) {
-                _regeneratorDefine(e, r, function(e) {
-                    return this._invoke(r, n, e);
-                });
-            }
-            r ? i ? i(e, r, {
-                value: n,
-                enumerable: !t,
-                configurable: !t,
-                writable: !t
-            }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-        }, _regeneratorDefine(e, r, n, t);
-    }
-    function _slicedToArray(r, e) {
-        return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
-    }
-    function _toPrimitive(t, r) {
-        if ("object" != typeof t || !t) return t;
-        var e = t[Symbol.toPrimitive];
-        if (void 0 !== e) {
-            var i = e.call(t, r);
-            if ("object" != typeof i) return i;
-            throw new TypeError("@@toPrimitive must return a primitive value.");
-        }
-        return String(t);
-    }
-    function _toPropertyKey(t) {
-        var i = _toPrimitive(t, "string");
-        return "symbol" == typeof i ? i : i + "";
-    }
-    function _typeof(o) {
-        "@babel/helpers - typeof";
-        return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
-            return typeof o;
-        } : function(o) {
-            return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-        }, _typeof(o);
-    }
-    function _unsupportedIterableToArray(r, a) {
-        if (r) {
-            if ("string" == typeof r) return _arrayLikeToArray(r, a);
-            var t = {}.toString.call(r).slice(8, -1);
-            return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
-        }
-    }
     var es_number_constructor = {};
     var inheritIfRequired;
     var hasRequiredInheritIfRequired;
@@ -7035,31 +7060,6 @@
         return es_array_concat;
     }
     requireEs_array_concat();
-    var es_array_includes = {};
-    var hasRequiredEs_array_includes;
-    function requireEs_array_includes() {
-        if (hasRequiredEs_array_includes) return es_array_includes;
-        hasRequiredEs_array_includes = 1;
-        var $ = require_export();
-        var $includes = requireArrayIncludes().includes;
-        var fails = requireFails();
-        var addToUnscopables = requireAddToUnscopables();
-        var BROKEN_ON_SPARSE = fails(function() {
-            return !Array(1).includes();
-        });
-        $({
-            target: "Array",
-            proto: true,
-            forced: BROKEN_ON_SPARSE
-        }, {
-            includes: function includes(el) {
-                return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
-            }
-        });
-        addToUnscopables("includes");
-        return es_array_includes;
-    }
-    requireEs_array_includes();
     var es_string_includes = {};
     var isRegexp;
     var hasRequiredIsRegexp;
@@ -12090,100 +12090,40 @@
             }
         }, {
             key: "formatAfterUpdate",
-            value: function() {
-                var _formatAfterUpdate = _asyncToGenerator(_regenerator().m(function _callee(formatMap) {
-                    var self, isCalc, isClose, _iterator, _step, _step$value, fieldId, formattingPositions, _t;
-                    return _regenerator().w(function(_context) {
-                        while (1) switch (_context.p = _context.n) {
-                          case 0:
-                            self = this;
-                            isCalc = true;
-                            isClose = false;
-                            _iterator = _createForOfIteratorHelper(formatMap);
-                            _context.p = 1;
-                            _iterator.s();
-
-                          case 2:
-                            if ((_step = _iterator.n()).done) {
-                                _context.n = 6;
-                                break;
+            value: function formatAfterUpdate(fieldId, formattingPositions) {
+                var isCalc = true;
+                var isClose = false;
+                Asc.scope.fieldId = fieldId;
+                Asc.scope.text = formattingPositions.text;
+                Asc.scope.formatting = formattingPositions.formatting;
+                return new Promise(function(resolve) {
+                    Asc.plugin.callCommand(function() {
+                        var doc = Api.GetDocument();
+                        var selRange = doc.GetRangeBySelect();
+                        doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
+                        var run = doc.GetCurrentRun();
+                        for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
+                            var pos = Asc.scope.formatting[i];
+                            var range = run.GetRange(pos.start, pos.end);
+                            if ("sup" === pos.type) {
+                                range.SetVertAlign("superscript");
+                            } else if ("sub" === pos.type) {
+                                range.SetVertAlign("subscript");
+                            } else if ("sc" === pos.type) {
+                                range.SetSmallCaps(true);
+                            } else if ("u" === pos.type) {
+                                range.SetUnderline(true);
+                            } else if ("b" === pos.type) {
+                                range.SetBold(true);
+                            } else if ("i" === pos.type || "em" === pos.type) {
+                                range.SetItalic(true);
                             }
-                            _step$value = _slicedToArray(_step.value, 2), fieldId = _step$value[0], formattingPositions = _step$value[1];
-                            Asc.scope.fieldId = fieldId;
-                            Asc.scope.text = formattingPositions.text;
-                            Asc.scope.formatting = formattingPositions.formatting;
-                            _context.n = 3;
-                            return _assertClassBrand(CslDocFormatter, self, _selectField).call(self, fieldId);
-
-                          case 3:
-                            _context.n = 4;
-                            return new Promise(function(resolve) {
-                                Asc.plugin.callCommand(function() {
-                                    var doc = Api.GetDocument();
-                                    var selRange = doc.GetRangeBySelect();
-                                    doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
-                                    var run = doc.GetCurrentRun();
-                                    for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
-                                        var pos = Asc.scope.formatting[i];
-                                        var range = run.GetRange(pos.start, pos.end);
-                                        if ("sup" === pos.type) {
-                                            range.SetVertAlign("superscript");
-                                        } else if ("sub" === pos.type) {
-                                            range.SetVertAlign("subscript");
-                                        } else if ("sc" === pos.type) {
-                                            range.SetSmallCaps(true);
-                                        } else if ("u" === pos.type) {
-                                            range.SetUnderline(true);
-                                        } else if ("b" === pos.type) {
-                                            range.SetBold(true);
-                                        } else if ("i" === pos.type || "em" === pos.type) {
-                                            range.SetItalic(true);
-                                        }
-                                    }
-                                }, isClose, isCalc, resolve);
-                            });
-
-                          case 4:
-                            _context.n = 5;
-                            return new Promise(function(resolve) {
-                                setTimeout(resolve, 300);
-                            });
-
-                          case 5:
-                            _context.n = 2;
-                            break;
-
-                          case 6:
-                            _context.n = 8;
-                            break;
-
-                          case 7:
-                            _context.p = 7;
-                            _t = _context.v;
-                            _iterator.e(_t);
-
-                          case 8:
-                            _context.p = 8;
-                            _iterator.f();
-                            return _context.f(8);
-
-                          case 9:
-                            return _context.a(2);
                         }
-                    }, _callee, this, [ [ 1, 7, 8, 9 ] ]);
-                }));
-                function formatAfterUpdate(_x) {
-                    return _formatAfterUpdate.apply(this, arguments);
-                }
-                return formatAfterUpdate;
-            }()
+                    }, isClose, isCalc, resolve);
+                });
+            }
         } ]);
     }();
-    function _selectField(fieldId) {
-        return new Promise(function(resolve) {
-            window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], resolve);
-        });
-    }
     var _citPrefixOld = new WeakMap;
     var _citPrefix = new WeakMap;
     var _bibPrefixOld = new WeakMap;
@@ -12223,28 +12163,37 @@
             }
         }, {
             key: "addCitation",
-            value: function addCitation(text, value, notesStyle) {
-                var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-                var field = {
-                    Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
-                    Content: formattingPositions.text
-                };
-                if ("footnotes" === notesStyle) {
-                    window.Asc.plugin.callCommand(function() {
-                        var oDocument = Api.GetDocument();
-                        oDocument.AddFootnote();
-                    });
-                } else if ("endnotes" === notesStyle) {
-                    window.Asc.plugin.callCommand(function() {
-                        var oDocument = Api.GetDocument();
-                        oDocument.AddEndnote();
-                    });
+            value: function() {
+                var _addCitation = _asyncToGenerator(_regenerator().m(function _callee(text, value, notesStyle) {
+                    var formattingPositions, field;
+                    return _regenerator().w(function(_context) {
+                        while (1) switch (_context.n) {
+                          case 0:
+                            formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+                            field = {
+                                Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
+                                Content: formattingPositions.text
+                            };
+                            if (!(notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1)) {
+                                _context.n = 1;
+                                break;
+                            }
+                            _context.n = 1;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
+
+                          case 1:
+                            return _context.a(2, _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
+                                if (!formattingPositions.formatting.length) return;
+                                return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+                            }));
+                        }
+                    }, _callee, this);
+                }));
+                function addCitation(_x, _x2, _x3) {
+                    return _addCitation.apply(this, arguments);
                 }
-                return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
-                    if (!formattingPositions.formatting.length) return;
-                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-                });
-            }
+                return addCitation;
+            }()
         }, {
             key: "getAddinZoteroFields",
             value: function getAddinZoteroFields() {
@@ -12288,22 +12237,278 @@
             }
         }, {
             key: "updateAddinFields",
-            value: function updateAddinFields(fields) {
-                var formats = new Map;
-                fields.forEach(function(field) {
-                    var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
-                    field.Content = formattingPositions.text;
-                    if (formattingPositions.formatting.length && field.FieldId) {
-                        formats.set(field.FieldId, formattingPositions);
-                    }
-                });
-                return new Promise(function(resolve) {
-                    window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
-                }).then(function() {
-                    if (!formats.size) return;
-                    return CslDocFormatter.formatAfterUpdate(formats);
-                });
-            }
+            value: function() {
+                var _updateAddinFields = _asyncToGenerator(_regenerator().m(function _callee2(fields) {
+                    var formats, _iterator, _step, _step$value, fieldId, formattingPositions, _t;
+                    return _regenerator().w(function(_context2) {
+                        while (1) switch (_context2.p = _context2.n) {
+                          case 0:
+                            formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
+                            _context2.n = 1;
+                            return new Promise(function(resolve) {
+                                window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
+                            });
+
+                          case 1:
+                            if (formats.size) {
+                                _context2.n = 2;
+                                break;
+                            }
+                            return _context2.a(2);
+
+                          case 2:
+                            _iterator = _createForOfIteratorHelper(formats);
+                            _context2.p = 3;
+                            _iterator.s();
+
+                          case 4:
+                            if ((_step = _iterator.n()).done) {
+                                _context2.n = 7;
+                                break;
+                            }
+                            _step$value = _slicedToArray(_step.value, 2), fieldId = _step$value[0], formattingPositions = _step$value[1];
+                            _context2.n = 5;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, fieldId);
+
+                          case 5:
+                            _context2.n = 6;
+                            return CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
+
+                          case 6:
+                            _context2.n = 4;
+                            break;
+
+                          case 7:
+                            _context2.n = 9;
+                            break;
+
+                          case 8:
+                            _context2.p = 8;
+                            _t = _context2.v;
+                            _iterator.e(_t);
+
+                          case 9:
+                            _context2.p = 9;
+                            _iterator.f();
+                            return _context2.f(9);
+
+                          case 10:
+                            return _context2.a(2);
+                        }
+                    }, _callee2, this, [ [ 3, 8, 9, 10 ] ]);
+                }));
+                function updateAddinFields(_x4) {
+                    return _updateAddinFields.apply(this, arguments);
+                }
+                return updateAddinFields;
+            }()
+        }, {
+            key: "convertNotesToText",
+            value: function() {
+                var _convertNotesToText = _asyncToGenerator(_regenerator().m(function _callee3(fields) {
+                    var formats, i, field, formatting;
+                    return _regenerator().w(function(_context3) {
+                        while (1) switch (_context3.n) {
+                          case 0:
+                            formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
+                            i = 0;
+
+                          case 1:
+                            if (!(i < fields.length)) {
+                                _context3.n = 10;
+                                break;
+                            }
+                            field = fields[i];
+                            if (field.FieldId) {
+                                _context3.n = 2;
+                                break;
+                            }
+                            console.error("Field id is not defined");
+                            return _context3.a(3, 9);
+
+                          case 2:
+                            _context3.n = 3;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, field.FieldId);
+
+                          case 3:
+                            _context3.n = 4;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectFieldReference).call(this);
+
+                          case 4:
+                            _context3.n = 5;
+                            return _assertClassBrand(_CitationDocService_brand, this, _removeSuperscript).call(this);
+
+                          case 5:
+                            _context3.n = 6;
+                            return _assertClassBrand(_CitationDocService_brand, this, _removeSelectedContent).call(this);
+
+                          case 6:
+                            _context3.n = 7;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
+
+                          case 7:
+                            formatting = formats.get(field.FieldId);
+                            if (formatting) {
+                                _context3.n = 8;
+                                break;
+                            }
+                            return _context3.a(3, 9);
+
+                          case 8:
+                            _context3.n = 9;
+                            return CslDocFormatter.formatAfterInsert(formatting.formatting);
+
+                          case 9:
+                            i++;
+                            _context3.n = 1;
+                            break;
+
+                          case 10:
+                            return _context3.a(2);
+                        }
+                    }, _callee3, this);
+                }));
+                function convertNotesToText(_x5) {
+                    return _convertNotesToText.apply(this, arguments);
+                }
+                return convertNotesToText;
+            }()
+        }, {
+            key: "convertTextToNotes",
+            value: function() {
+                var _convertTextToNotes = _asyncToGenerator(_regenerator().m(function _callee4(fields, notesStyle) {
+                    var formats, i, field, formatting;
+                    return _regenerator().w(function(_context4) {
+                        while (1) switch (_context4.n) {
+                          case 0:
+                            formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
+                            i = 0;
+
+                          case 1:
+                            if (!(i < fields.length)) {
+                                _context4.n = 9;
+                                break;
+                            }
+                            field = fields[i];
+                            if (field.FieldId) {
+                                _context4.n = 2;
+                                break;
+                            }
+                            return _context4.a(3, 8);
+
+                          case 2:
+                            _context4.n = 3;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, field.FieldId);
+
+                          case 3:
+                            _context4.n = 4;
+                            return _assertClassBrand(_CitationDocService_brand, this, _removeSelectedContent).call(this);
+
+                          case 4:
+                            _context4.n = 5;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
+
+                          case 5:
+                            _context4.n = 6;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
+
+                          case 6:
+                            formatting = formats.get(field.FieldId);
+                            if (formatting) {
+                                _context4.n = 7;
+                                break;
+                            }
+                            return _context4.a(3, 8);
+
+                          case 7:
+                            _context4.n = 8;
+                            return CslDocFormatter.formatAfterInsert(formatting.formatting);
+
+                          case 8:
+                            i++;
+                            _context4.n = 1;
+                            break;
+
+                          case 9:
+                            return _context4.a(2);
+                        }
+                    }, _callee4, this);
+                }));
+                function convertTextToNotes(_x6, _x7) {
+                    return _convertTextToNotes.apply(this, arguments);
+                }
+                return convertTextToNotes;
+            }()
+        }, {
+            key: "convertNotesStyle",
+            value: function() {
+                var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee5(fields, notesStyle) {
+                    var formats, i, field, formatting;
+                    return _regenerator().w(function(_context5) {
+                        while (1) switch (_context5.n) {
+                          case 0:
+                            formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
+                            i = 0;
+
+                          case 1:
+                            if (!(i < fields.length)) {
+                                _context5.n = 10;
+                                break;
+                            }
+                            field = fields[i];
+                            if (field.FieldId) {
+                                _context5.n = 2;
+                                break;
+                            }
+                            return _context5.a(3, 9);
+
+                          case 2:
+                            _context5.n = 3;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, field.FieldId);
+
+                          case 3:
+                            _context5.n = 4;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectFieldReference).call(this);
+
+                          case 4:
+                            _context5.n = 5;
+                            return _assertClassBrand(_CitationDocService_brand, this, _removeSelectedContent).call(this);
+
+                          case 5:
+                            _context5.n = 6;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
+
+                          case 6:
+                            _context5.n = 7;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
+
+                          case 7:
+                            formatting = formats.get(field.FieldId);
+                            if (formatting) {
+                                _context5.n = 8;
+                                break;
+                            }
+                            return _context5.a(3, 9);
+
+                          case 8:
+                            _context5.n = 9;
+                            return CslDocFormatter.formatAfterInsert(formatting.formatting);
+
+                          case 9:
+                            i++;
+                            _context5.n = 1;
+                            break;
+
+                          case 10:
+                            return _context5.a(2);
+                        }
+                    }, _callee5, this);
+                }));
+                function convertNotesStyle(_x8, _x9) {
+                    return _convertNotesStyle.apply(this, arguments);
+                }
+                return convertNotesStyle;
+            }()
         } ]);
     }();
     function _addAddinField(field) {
@@ -12311,9 +12516,69 @@
             window.Asc.plugin.executeMethod("AddAddinField", [ field ], resolve);
         });
     }
+    function _addNote(notesStyle) {
+        Asc.scope.notesStyle = notesStyle;
+        return new Promise(function(resolve) {
+            Asc.plugin.callCommand(function() {
+                var oDocument = Api.GetDocument();
+                if ("footnotes" === Asc.scope.notesStyle) {
+                    oDocument.AddFootnote();
+                } else if ("endnotes" === Asc.scope.notesStyle) {
+                    oDocument.AddEndnote();
+                }
+            }, false, false, resolve);
+        });
+    }
     function _getAllAddinFields() {
         return new Promise(function(resolve, reject) {
             window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+        });
+    }
+    function _makeFormattingPositions(fields) {
+        var formats = new Map;
+        fields.forEach(function(field) {
+            if (!field.Content) return;
+            var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
+            field.Content = formattingPositions.text;
+            if (formattingPositions.formatting.length && field.FieldId) {
+                formats.set(field.FieldId, formattingPositions);
+            }
+        });
+        return formats;
+    }
+    function _removeSelectedContent() {
+        return new Promise(function(resolve) {
+            window.Asc.plugin.executeMethod("RemoveSelectedContent", null, resolve);
+        });
+    }
+    function _selectField(fieldId) {
+        return new Promise(function(resolve) {
+            window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], resolve);
+        });
+    }
+    function _selectFieldReference() {
+        return new Promise(function(resolve) {
+            var isCalc = true;
+            var isClose = false;
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                var note = doc.GetCurrentFootEndnote();
+                if (!note) return;
+                var reference = note.SelectNoteReference();
+                if (!reference) return;
+            }, isClose, isCalc, resolve);
+        });
+    }
+    function _removeSuperscript() {
+        return new Promise(function(resolve) {
+            var isCalc = false;
+            var isClose = false;
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                var selRange = doc.GetRangeBySelect();
+                if (!selRange) return;
+                selRange.SetVertAlign("baseline");
+            }, isClose, isCalc, resolve);
         });
     }
     function CitationItemData(id) {
@@ -13822,24 +14087,12 @@
             this._storage = new CSLCitationStorage;
             this._formatter;
             this.citationDocService = new CitationDocService(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew);
-            this._notesStyle;
-            this._styleFormat;
             _classPrivateFieldSet2(_onUserEditCitationManuallyWindow, this, new AdditionalWindow);
         }
         return _createClass(CitationService, [ {
             key: "saveAsText",
             value: function saveAsText() {
                 return this.citationDocService.saveAsText();
-            }
-        }, {
-            key: "setNotesStyle",
-            value: function setNotesStyle(notesStyle) {
-                this._notesStyle = notesStyle;
-            }
-        }, {
-            key: "setStyleFormat",
-            value: function setStyleFormat(styleFormat) {
-                this._styleFormat = styleFormat;
             }
         }, {
             key: "insertSelectedCitations",
@@ -14013,6 +14266,197 @@
                 }
                 return updateCslItems;
             }()
+        }, {
+            key: "updateCslItemsInNotes",
+            value: function() {
+                var _updateCslItemsInNotes = _asyncToGenerator(_regenerator().m(function _callee4(notesStyle) {
+                    var _yield$_assertClassBr3, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t6, _t7;
+                    return _regenerator().w(function(_context4) {
+                        while (1) switch (_context4.p = _context4.n) {
+                          case 0:
+                            this._storage.clear();
+                            _context4.p = 1;
+                            _context4.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 2:
+                            _yield$_assertClassBr3 = _context4.v;
+                            fieldsWithCitations = _yield$_assertClassBr3.fieldsWithCitations;
+                            bibField = _yield$_assertClassBr3.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            _context4.n = 3;
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
+
+                          case 3:
+                            updatedFields = _context4.v;
+                            if (!(updatedFields && updatedFields.length)) {
+                                _context4.n = 4;
+                                break;
+                            }
+                            _context4.n = 4;
+                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+
+                          case 4:
+                            if (!bibField) {
+                                _context4.n = 6;
+                                break;
+                            }
+                            _context4.n = 5;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 5:
+                            _t6 = _context4.v;
+                            bibFields = [ _t6 ];
+                            _context4.n = 6;
+                            return this.citationDocService.updateAddinFields(bibFields);
+
+                          case 6:
+                            _context4.n = 8;
+                            break;
+
+                          case 7:
+                            _context4.p = 7;
+                            _t7 = _context4.v;
+                            throw _t7;
+
+                          case 8:
+                            return _context4.a(2);
+                        }
+                    }, _callee4, this, [ [ 1, 7 ] ]);
+                }));
+                function updateCslItemsInNotes(_x3) {
+                    return _updateCslItemsInNotes.apply(this, arguments);
+                }
+                return updateCslItemsInNotes;
+            }()
+        }, {
+            key: "switchingBetweenNotesAndText",
+            value: function() {
+                var _switchingBetweenNotesAndText = _asyncToGenerator(_regenerator().m(function _callee5(notesStyle) {
+                    var _yield$_assertClassBr4, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t8, _t9;
+                    return _regenerator().w(function(_context5) {
+                        while (1) switch (_context5.p = _context5.n) {
+                          case 0:
+                            this._storage.clear();
+                            _context5.p = 1;
+                            _context5.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 2:
+                            _yield$_assertClassBr4 = _context5.v;
+                            fieldsWithCitations = _yield$_assertClassBr4.fieldsWithCitations;
+                            bibField = _yield$_assertClassBr4.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            _context5.n = 3;
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
+
+                          case 3:
+                            updatedFields = _context5.v;
+                            if (!(updatedFields && updatedFields.length)) {
+                                _context5.n = 6;
+                                break;
+                            }
+                            if (!notesStyle) {
+                                _context5.n = 5;
+                                break;
+                            }
+                            _context5.n = 4;
+                            return this.citationDocService.convertTextToNotes(updatedFields, notesStyle);
+
+                          case 4:
+                            _context5.n = 6;
+                            break;
+
+                          case 5:
+                            _context5.n = 6;
+                            return this.citationDocService.convertNotesToText(updatedFields);
+
+                          case 6:
+                            if (!bibField) {
+                                _context5.n = 8;
+                                break;
+                            }
+                            _context5.n = 7;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 7:
+                            _t8 = _context5.v;
+                            bibFields = [ _t8 ];
+                            _context5.n = 8;
+                            return this.citationDocService.updateAddinFields(bibFields);
+
+                          case 8:
+                            _context5.n = 10;
+                            break;
+
+                          case 9:
+                            _context5.p = 9;
+                            _t9 = _context5.v;
+                            throw _t9;
+
+                          case 10:
+                            return _context5.a(2);
+                        }
+                    }, _callee5, this, [ [ 1, 9 ] ]);
+                }));
+                function switchingBetweenNotesAndText(_x4) {
+                    return _switchingBetweenNotesAndText.apply(this, arguments);
+                }
+                return switchingBetweenNotesAndText;
+            }()
+        }, {
+            key: "convertNotesStyle",
+            value: function() {
+                var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee6(notesStyle) {
+                    var _yield$_assertClassBr5, fieldsWithCitations, updatedFields, _t0;
+                    return _regenerator().w(function(_context6) {
+                        while (1) switch (_context6.p = _context6.n) {
+                          case 0:
+                            this._storage.clear();
+                            _context6.p = 1;
+                            _context6.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 2:
+                            _yield$_assertClassBr5 = _context6.v;
+                            fieldsWithCitations = _yield$_assertClassBr5.fieldsWithCitations;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            _context6.n = 3;
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
+
+                          case 3:
+                            updatedFields = _context6.v;
+                            if (!(!updatedFields || !updatedFields.length)) {
+                                _context6.n = 4;
+                                break;
+                            }
+                            return _context6.a(2);
+
+                          case 4:
+                            _context6.n = 5;
+                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+
+                          case 5:
+                            _context6.n = 7;
+                            break;
+
+                          case 6:
+                            _context6.p = 6;
+                            _t0 = _context6.v;
+                            throw _t0;
+
+                          case 7:
+                            return _context6.a(2);
+                        }
+                    }, _callee6, this, [ [ 1, 6 ] ]);
+                }));
+                function convertNotesStyle(_x5) {
+                    return _convertNotesStyle.apply(this, arguments);
+                }
+                return convertNotesStyle;
+            }()
         } ]);
     }();
     function _formatInsertLink(cslCitation) {
@@ -14045,8 +14489,8 @@
             tempElement.innerHTML = htmlCitation;
             cslCitation.setPlainCitation(tempElement.innerText);
             var notesStyle = null;
-            if ("note" === self._styleFormat) {
-                notesStyle = self._notesStyle;
+            if ("note" === self._cslStylesManager.getLastUsedFormat()) {
+                notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
             }
             return self.citationDocService.addCitation(htmlCitation, JSON.stringify(cslCitation.toJSON()), notesStyle);
         }).then(function() {
@@ -14185,14 +14629,14 @@
         }
         return bibField;
     }
-    function _getUpdatedFields(_x3, _x4) {
+    function _getUpdatedFields(_x6, _x7) {
         return _getUpdatedFields2.apply(this, arguments);
     }
     function _getUpdatedFields2() {
-        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee4(fieldsWithCitations, bHardRefresh) {
+        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee7(fieldsWithCitations, bHardRefresh) {
             var fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, keysL, htmlCitation, oldContent, newContent, text, bNeedSaveUserInput;
-            return _regenerator().w(function(_context4) {
-                while (1) switch (_context4.n) {
+            return _regenerator().w(function(_context7) {
+                while (1) switch (_context7.n) {
                   case 0:
                     fragment = document.createDocumentFragment();
                     tempElement = document.createElement("div");
@@ -14202,7 +14646,7 @@
 
                   case 1:
                     if (!(i >= 0)) {
-                        _context4.n = 8;
+                        _context7.n = 8;
                         break;
                     }
                     _fieldsWithCitations$ = fieldsWithCitations[i], field = _fieldsWithCitations$.field, 
@@ -14214,41 +14658,46 @@
                     oldContent = field["Content"];
                     newContent = tempElement.innerText;
                     if (!cslCitation.getDoNotUpdate()) {
-                        _context4.n = 2;
+                        _context7.n = 2;
                         break;
                     }
-                    return _context4.a(3, 7);
+                    return _context7.a(3, 7);
 
                   case 2:
                     if (!(oldContent === newContent)) {
-                        _context4.n = 3;
+                        _context7.n = 3;
                         break;
                     }
-                    return _context4.a(3, 7);
+                    return _context7.a(3, 7);
 
                   case 3:
+                    if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
+                        console.error("Unable to update footnotes");
+                        bHardRefresh = true;
+                    }
                     if (!bHardRefresh) {
-                        _context4.n = 4;
+                        _context7.n = 4;
                         break;
                     }
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
-                    _context4.n = 6;
+                    _context7.n = 6;
                     break;
 
                   case 4:
                     if (!(oldContent !== newContent)) {
-                        _context4.n = 6;
+                        _context7.n = 6;
                         break;
                     }
                     text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
-                    _context4.n = 5;
+                    _context7.n = 5;
                     return _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, this).show("Saving custom edits", text);
 
                   case 5:
-                    bNeedSaveUserInput = _context4.v;
+                    bNeedSaveUserInput = _context7.v;
                     if (bNeedSaveUserInput) {
                         cslCitation.setDoNotUpdate();
+                        delete field["Content"];
                     } else {
                         field["Content"] = htmlCitation;
                         cslCitation.setPlainCitation(newContent);
@@ -14262,13 +14711,13 @@
 
                   case 7:
                     i--;
-                    _context4.n = 1;
+                    _context7.n = 1;
                     break;
 
                   case 8:
-                    return _context4.a(2, updatedFields);
+                    return _context7.a(2, updatedFields);
                 }
-            }, _callee4, this);
+            }, _callee7, this);
         }));
         return _getUpdatedFields2.apply(this, arguments);
     }
@@ -14759,7 +15208,7 @@
         this._cslStylesManager = new CslStylesManager;
         this._localesManager = new LocalesManager;
         this._selectLists = [];
-        this._onChangeState = function(settings) {};
+        this._onChangeState = function(newSettings, oldSettings) {};
         this._styleMessage = new Message("styleMessage", {
             type: "error"
         });
@@ -14822,6 +15271,7 @@
                 console.error("No language selected");
                 return;
             }
+            var oldState = _objectSpread2({}, self._stateSettings);
             var promises = [];
             if (self._stateSettings.language !== selectedLang) {
                 self._localesManager.saveLastUsedLanguage(selectedLang);
@@ -14837,6 +15287,9 @@
             }
             if (self._stateSettings.notesStyle !== noteValue) {
                 self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+                if (self._cslStylesManager.getLastUsedFormat() === "note") {
+                    promises.push(Promise.resolve());
+                }
             }
             var selectedStyleId = self._styleSelect.getSelectedValue();
             if (self._stateSettings.style !== selectedStyleId && selectedStyleId !== null) {
@@ -14847,12 +15300,13 @@
                 Promise.all(promises).then(function() {
                     self._hide();
                     self._hideLoader();
-                    self._onChangeState({
+                    var newState = {
                         language: selectedLang,
                         style: selectedStyleId || "ieee",
                         notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat()
-                    });
+                    };
+                    self._onChangeState(newState, oldState);
                 }).catch(function(err) {
                     self._hideLoader();
                 });
@@ -15835,6 +16289,7 @@
         function loadGroups() {
             return sdk.getUserGroups().then(function(groups) {
                 searchFilter.addGroups(groups);
+                return groups;
             });
         }
         function addEventListeners() {
@@ -15887,35 +16342,67 @@
                     }
                 });
             });
-            refreshBtn.subscribe(function(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                if (!settings.getLastUsedStyleId()) {
-                    showError(translate("Style is not selected"));
-                    return;
-                }
-                if (!settings.getLocale()) {
-                    showError(translate("Language is not selected"));
-                    return;
-                }
-                showLoader();
-                var cursorPos;
-                CursorService.getCursorPosition().then(function(pos) {
-                    cursorPos = pos;
-                    return citationService.updateCslItems(false);
-                }).catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to refresh");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(function() {
-                    hideLoader();
-                    CursorService.setCursorPosition(cursorPos);
-                });
-            });
+            refreshBtn.subscribe(function() {
+                var _ref = _asyncToGenerator(_regenerator().m(function _callee(event) {
+                    var cursorPos, updateFn, styleManager;
+                    return _regenerator().w(function(_context) {
+                        while (1) switch (_context.n) {
+                          case 0:
+                            if (!(event.type !== "button:click")) {
+                                _context.n = 1;
+                                break;
+                            }
+                            return _context.a(2);
+
+                          case 1:
+                            if (settings.getLastUsedStyleId()) {
+                                _context.n = 2;
+                                break;
+                            }
+                            showError(translate("Style is not selected"));
+                            return _context.a(2);
+
+                          case 2:
+                            if (settings.getLocale()) {
+                                _context.n = 3;
+                                break;
+                            }
+                            showError(translate("Language is not selected"));
+                            return _context.a(2);
+
+                          case 3:
+                            showLoader();
+                            _context.n = 4;
+                            return CursorService.getCursorPosition();
+
+                          case 4:
+                            cursorPos = _context.v;
+                            updateFn = citationService.updateCslItems.bind(citationService, false);
+                            styleManager = settings.getStyleManager();
+                            if (styleManager.getLastUsedFormat() === "note") {
+                                updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
+                            }
+                            updateFn().catch(function(error) {
+                                console.error(error);
+                                var message = translate("Failed to refresh");
+                                if (typeof error === "string") {
+                                    message += ". " + translate(error);
+                                }
+                                showError(message);
+                            }).finally(function() {
+                                hideLoader();
+                                CursorService.setCursorPosition(cursorPos);
+                            });
+
+                          case 5:
+                            return _context.a(2);
+                        }
+                    }, _callee);
+                }));
+                return function(_x) {
+                    return _ref.apply(this, arguments);
+                };
+            }());
             insertBibBtn.subscribe(function(event) {
                 if (event.type !== "button:click") {
                     return;
@@ -15982,17 +16469,73 @@
                     hideLoader();
                 });
             });
-            settings.onChangeState(function(settings) {
-                citationService.setNotesStyle(settings.notesStyle);
-                citationService.setStyleFormat(settings.styleFormat);
-                var cursorPos;
-                return CursorService.getCursorPosition().then(function(pos) {
-                    cursorPos = pos;
-                    return citationService.updateCslItems(true);
-                }).finally(function() {
-                    CursorService.setCursorPosition(cursorPos);
-                });
-            });
+            settings.onChangeState(function() {
+                var _ref2 = _asyncToGenerator(_regenerator().m(function _callee2(newState, oldState) {
+                    var cursorPos;
+                    return _regenerator().w(function(_context2) {
+                        while (1) switch (_context2.n) {
+                          case 0:
+                            _context2.n = 1;
+                            return CursorService.getCursorPosition();
+
+                          case 1:
+                            cursorPos = _context2.v;
+                            if (![ newState.styleFormat, oldState.styleFormat ].includes("note")) {
+                                _context2.n = 7;
+                                break;
+                            }
+                            if (!(newState.styleFormat !== oldState.styleFormat)) {
+                                _context2.n = 5;
+                                break;
+                            }
+                            if (!(newState.styleFormat === "note")) {
+                                _context2.n = 3;
+                                break;
+                            }
+                            _context2.n = 2;
+                            return citationService.switchingBetweenNotesAndText(newState.notesStyle);
+
+                          case 2:
+                            _context2.n = 4;
+                            break;
+
+                          case 3:
+                            _context2.n = 4;
+                            return citationService.switchingBetweenNotesAndText();
+
+                          case 4:
+                            _context2.n = 6;
+                            break;
+
+                          case 5:
+                            if (!(newState.notesStyle !== oldState.notesStyle)) {
+                                _context2.n = 6;
+                                break;
+                            }
+                            _context2.n = 6;
+                            return citationService.convertNotesStyle(newState.notesStyle);
+
+                          case 6:
+                            _context2.n = 8;
+                            break;
+
+                          case 7:
+                            _context2.n = 8;
+                            return citationService.updateCslItems(true);
+
+                          case 8:
+                            _context2.n = 9;
+                            return CursorService.setCursorPosition(cursorPos);
+
+                          case 9:
+                            return _context2.a(2);
+                        }
+                    }, _callee2);
+                }));
+                return function(_x2, _x3) {
+                    return _ref2.apply(this, arguments);
+                };
+            }());
         }
         Asc.plugin.onThemeChanged = function(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);

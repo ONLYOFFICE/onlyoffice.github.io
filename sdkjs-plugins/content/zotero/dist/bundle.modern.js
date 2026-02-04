@@ -3473,6 +3473,24 @@ class CitationDocService {
             }
         })();
     }
+    convertNotesStyle(fields, notesStyle) {
+        var _this5 = this;
+        return _asyncToGenerator(function*() {
+            var formats = _assertClassBrand(_CitationDocService_brand, _this5, _makeFormattingPositions).call(_this5, fields);
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!field.FieldId) continue;
+                yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
+                yield _assertClassBrand(_CitationDocService_brand, _this5, _selectFieldReference).call(_this5);
+                yield _assertClassBrand(_CitationDocService_brand, _this5, _removeSelectedContent).call(_this5);
+                yield _assertClassBrand(_CitationDocService_brand, _this5, _addNote).call(_this5, notesStyle);
+                yield _assertClassBrand(_CitationDocService_brand, _this5, _addAddinField).call(_this5, field);
+                var formatting = formats.get(field.FieldId);
+                if (!formatting) continue;
+                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            }
+        })();
+    }
 }
 
 function _addAddinField(field) {
@@ -3504,6 +3522,7 @@ function _getAllAddinFields() {
 function _makeFormattingPositions(fields) {
     var formats = new Map;
     fields.forEach(function(field) {
+        if (!field.Content) return;
         var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
         field.Content = formattingPositions.text;
         if (formattingPositions.formatting.length && field.FieldId) {
@@ -5262,7 +5281,7 @@ class CitationService {
             }
         })();
     }
-    convertNotesToText() {
+    updateCslItemsInNotes(notesStyle) {
         var _this4 = this;
         return _asyncToGenerator(function*() {
             _this4._storage.clear();
@@ -5270,9 +5289,9 @@ class CitationService {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this4, _synchronizeStorageWithDocItems).call(_this4);
                 var bNoHaveFields = fieldsWithCitations.length === 0;
                 _assertClassBrand(_CitationService_brand, _this4, _updateFormatter).call(_this4);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this4, _getUpdatedFields).call(_this4, fieldsWithCitations, true);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this4, _getUpdatedFields).call(_this4, fieldsWithCitations, false);
                 if (updatedFields && updatedFields.length) {
-                    return _this4.citationDocService.convertNotesToText(updatedFields);
+                    yield _this4.citationDocService.convertNotesStyle(updatedFields, notesStyle);
                 }
                 if (bibField) {
                     var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this4, _updateBibliography).call(_this4, bNoHaveFields, bibField) ];
@@ -5283,7 +5302,7 @@ class CitationService {
             }
         })();
     }
-    convertTextToNotes(notesStyle) {
+    switchingBetweenNotesAndText(notesStyle) {
         var _this5 = this;
         return _asyncToGenerator(function*() {
             _this5._storage.clear();
@@ -5291,13 +5310,15 @@ class CitationService {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this5, _synchronizeStorageWithDocItems).call(_this5);
                 var bNoHaveFields = fieldsWithCitations.length === 0;
                 _assertClassBrand(_CitationService_brand, _this5, _updateFormatter).call(_this5);
-                var updatedFields = [];
-                updatedFields = yield _assertClassBrand(_CitationService_brand, _this5, _getUpdatedFields).call(_this5, fieldsWithCitations, true);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this5, _getUpdatedFields).call(_this5, fieldsWithCitations, true);
                 if (updatedFields && updatedFields.length) {
-                    return _this5.citationDocService.convertTextToNotes(updatedFields, notesStyle);
+                    if (notesStyle) {
+                        yield _this5.citationDocService.convertTextToNotes(updatedFields, notesStyle);
+                    } else {
+                        yield _this5.citationDocService.convertNotesToText(updatedFields);
+                    }
                 }
                 if (bibField) {
-                    console.warn("bibField", bibField);
                     var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this5, _updateBibliography).call(_this5, bNoHaveFields, bibField) ];
                     yield _this5.citationDocService.updateAddinFields(bibFields);
                 }
@@ -5307,9 +5328,18 @@ class CitationService {
         })();
     }
     convertNotesStyle(notesStyle) {
+        var _this6 = this;
         return _asyncToGenerator(function*() {
-            console.warn("convertNotesStyle", notesStyle);
-            yield new Promise(resolve => setTimeout(resolve, 1e3));
+            _this6._storage.clear();
+            try {
+                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this6, _synchronizeStorageWithDocItems).call(_this6);
+                _assertClassBrand(_CitationService_brand, _this6, _updateFormatter).call(_this6);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this6, _getUpdatedFields).call(_this6, fieldsWithCitations, false);
+                if (!updatedFields || !updatedFields.length) return;
+                yield _this6.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+            } catch (e) {
+                throw e;
+            }
         })();
     }
 }
@@ -5515,9 +5545,9 @@ function _getUpdatedFields2() {
             if (oldContent === newContent) {
                 continue;
             }
-            if (oldContent === "null") {
+            if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
                 console.error("Unable to update footnotes");
-                continue;
+                bHardRefresh = true;
             }
             if (bHardRefresh) {
                 field["Content"] = htmlCitation;
@@ -5527,6 +5557,7 @@ function _getUpdatedFields2() {
                 var bNeedSaveUserInput = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, this).show("Saving custom edits", text);
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
+                    delete field["Content"];
                 } else {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
@@ -7241,35 +7272,42 @@ SelectCitationsComponent.prototype.count = function() {
                 }
             });
         });
-        refreshBtn.subscribe(function(event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            if (!settings.getLastUsedStyleId()) {
-                showError(translate("Style is not selected"));
-                return;
-            }
-            if (!settings.getLocale()) {
-                showError(translate("Language is not selected"));
-                return;
-            }
-            showLoader();
-            var cursorPos;
-            CursorService.getCursorPosition().then(function(pos) {
-                cursorPos = pos;
-                return citationService.updateCslItems(false);
-            }).catch(function(error) {
-                console.error(error);
-                var message = translate("Failed to refresh");
-                if (typeof error === "string") {
-                    message += ". " + translate(error);
+        refreshBtn.subscribe(function() {
+            var _ref = _asyncToGenerator(function*(event) {
+                if (event.type !== "button:click") {
+                    return;
                 }
-                showError(message);
-            }).finally(function() {
-                hideLoader();
-                CursorService.setCursorPosition(cursorPos);
+                if (!settings.getLastUsedStyleId()) {
+                    showError(translate("Style is not selected"));
+                    return;
+                }
+                if (!settings.getLocale()) {
+                    showError(translate("Language is not selected"));
+                    return;
+                }
+                showLoader();
+                var cursorPos = yield CursorService.getCursorPosition();
+                var updateFn = citationService.updateCslItems.bind(citationService, false);
+                var styleManager = settings.getStyleManager();
+                if (styleManager.getLastUsedFormat() === "note") {
+                    updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
+                }
+                updateFn().catch(function(error) {
+                    console.error(error);
+                    var message = translate("Failed to refresh");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                }).finally(function() {
+                    hideLoader();
+                    CursorService.setCursorPosition(cursorPos);
+                });
             });
-        });
+            return function(_x) {
+                return _ref.apply(this, arguments);
+            };
+        }());
         insertBibBtn.subscribe(function(event) {
             if (event.type !== "button:click") {
                 return;
@@ -7337,14 +7375,14 @@ SelectCitationsComponent.prototype.count = function() {
             });
         });
         settings.onChangeState(function() {
-            var _ref = _asyncToGenerator(function*(newState, oldState) {
+            var _ref2 = _asyncToGenerator(function*(newState, oldState) {
                 var cursorPos = yield CursorService.getCursorPosition();
                 if ([ newState.styleFormat, oldState.styleFormat ].includes("note")) {
                     if (newState.styleFormat !== oldState.styleFormat) {
                         if (newState.styleFormat === "note") {
-                            yield citationService.convertTextToNotes(newState.notesStyle);
+                            yield citationService.switchingBetweenNotesAndText(newState.notesStyle);
                         } else {
-                            yield citationService.convertNotesToText();
+                            yield citationService.switchingBetweenNotesAndText();
                         }
                     } else if (newState.notesStyle !== oldState.notesStyle) {
                         yield citationService.convertNotesStyle(newState.notesStyle);
@@ -7354,8 +7392,8 @@ SelectCitationsComponent.prototype.count = function() {
                 }
                 yield CursorService.setCursorPosition(cursorPos);
             });
-            return function(_x, _x2) {
-                return _ref.apply(this, arguments);
+            return function(_x2, _x3) {
+                return _ref2.apply(this, arguments);
             };
         }());
     }

@@ -371,9 +371,11 @@ class CitationService {
             if (oldContent === newContent) {
                 continue;
             }
-            if (oldContent === "null") {
+            if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
                 console.error("Unable to update footnotes");
-                continue;
+                // TODO: Modify "GetAllAddinFields" method for footnotes
+                // window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+                bHardRefresh = true;
             }
 
             if (bHardRefresh) {
@@ -408,6 +410,7 @@ class CitationService {
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
+                    delete field["Content"];
                 } else {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
@@ -584,9 +587,46 @@ class CitationService {
         }
     }
     /**
+     * // it is a crutch, because "SelectAddinField" does not work with notes
+     * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
-    async convertNotesToText() {
+    async updateCslItemsInNotes(notesStyle) {
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations, bibField } =
+                await this.#synchronizeStorageWithDocItems();
+            const bNoHaveFields = fieldsWithCitations.length === 0;
+
+            this.#updateFormatter();
+
+            /** @type {CustomField[]} */
+            let updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                false
+            );
+
+            if (updatedFields && updatedFields.length) {
+                await this.citationDocService.convertNotesStyle(
+                    updatedFields,
+                    notesStyle,
+                );
+            }
+
+            if (bibField) {
+                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
+                await this.citationDocService.updateAddinFields(bibFields);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+    /**
+     * @param {"footnotes" | "endnotes"} [notesStyle]
+     * @returns {Promise<void>}
+     */
+    async switchingBetweenNotesAndText(notesStyle) {
         this._storage.clear();
 
         try {
@@ -603,9 +643,17 @@ class CitationService {
             );
 
             if (updatedFields && updatedFields.length) {
-                return this.citationDocService.convertNotesToText(
-                    updatedFields,
-                );
+                if (notesStyle) {
+                    await this.citationDocService.convertTextToNotes(
+                        updatedFields,
+                        notesStyle,
+                    );
+                } else {
+                    await this.citationDocService.convertNotesToText(
+                        updatedFields,
+                    );
+                }
+                
             }
             
             if (bibField) {
@@ -618,52 +666,33 @@ class CitationService {
         }
     }
 
-    /**
-     * @param {"footnotes" | "endnotes"} notesStyle
-     * @returns {Promise<void>}
-     */
-    async convertTextToNotes(notesStyle) {
-        this._storage.clear();
-
-        try {
-            const { fieldsWithCitations, bibField } =
-                await this.#synchronizeStorageWithDocItems();
-            const bNoHaveFields = fieldsWithCitations.length === 0;
-
-            this.#updateFormatter();
-
-            /** @type {CustomField[]} */
-            let updatedFields = [];
-
-            updatedFields = await this.#getUpdatedFields(
-                fieldsWithCitations,
-                true,
-            );
-
-            if (updatedFields && updatedFields.length) {
-                return this.citationDocService.convertTextToNotes(
-                    updatedFields,
-                    notesStyle,
-                );
-            }
-            
-            if (bibField) {
-                console.warn("bibField", bibField);
-                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
-                await this.citationDocService.updateAddinFields(bibFields);
-            }
-
-        } catch (e) {
-            throw e;
-        }
-    }
     /**
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
     async convertNotesStyle(notesStyle) {
-        console.warn("convertNotesStyle", notesStyle);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations } =
+                await this.#synchronizeStorageWithDocItems();
+
+            this.#updateFormatter();
+
+            /** @type {CustomField[]} */
+            let updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                false,
+            );
+            if (!updatedFields || !updatedFields.length) return;
+
+            await this.citationDocService.convertNotesStyle(
+                updatedFields,
+                notesStyle,
+            );
+        } catch (e) {
+            throw e;
+        }
     }
 }
 
