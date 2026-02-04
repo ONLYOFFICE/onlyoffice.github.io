@@ -1,5 +1,6 @@
 {
   "name": "Date picker",
+  "offered": "Office Extensions Group",
   "nameLocale": {
     "cs": "Výběr data",
     "de": "Datumsauswahl",
@@ -31,7 +32,6 @@
     "sp": "Dodatak za ubacivanje formatiranih datuma u ćelije.",
     "zh": "用于在单元格中插入格式化日期的插件。"
   },
-  "offered": "Office Extensions Group",
   "type": "panel",
   "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
   "variations": [
