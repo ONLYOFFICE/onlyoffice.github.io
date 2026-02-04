@@ -78,7 +78,7 @@
 /**
  * @typedef {Object} CustomField
  * @property {string} Value
- * @property {string} Content
+ * @property {string} [Content]
  * @property {string} [FieldId]
  */
 

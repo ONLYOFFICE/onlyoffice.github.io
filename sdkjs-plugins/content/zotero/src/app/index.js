@@ -271,7 +271,7 @@ import "../styles.css";
                 });
         });
 
-        refreshBtn.subscribe(function (event) {
+        refreshBtn.subscribe(async function (event) {
             if (event.type !== "button:click") {
                 return;
             }
@@ -284,8 +284,17 @@ import "../styles.css";
                 return;
             }
             showLoader();
-            citationService
-                .updateCslItems(false)
+            /** @type {number} */
+            let cursorPos = await CursorService.getCursorPosition();
+            let updateFn = citationService.updateCslItems.bind(citationService, false);
+
+            const styleManager = settings.getStyleManager();
+            if (styleManager.getLastUsedFormat() === "note") {
+                // this way, because "SelectAddinField" does not work with notes
+                updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
+            }
+
+            updateFn()
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");
@@ -377,9 +386,9 @@ import "../styles.css";
             if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
                 if (newState.styleFormat !== oldState.styleFormat) {
                     if (newState.styleFormat === "note") {
-                        await citationService.convertTextToNotes(newState.notesStyle);
+                        await citationService.switchingBetweenNotesAndText(newState.notesStyle);
                     } else {
-                        await citationService.convertNotesToText();
+                        await citationService.switchingBetweenNotesAndText();
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
                     await citationService.convertNotesStyle(newState.notesStyle);
