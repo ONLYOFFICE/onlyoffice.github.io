@@ -246,6 +246,31 @@ class CitationDocService {
     }
 
     /**
+     * @param {Array<CustomField>} fields
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    async convertNotesStyle(fields, notesStyle) {
+        const formats = this.#makeFormattingPositions(fields);
+
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (!field.FieldId) continue;
+
+            await this.#selectField(field.FieldId);
+            await this.#selectFieldReference();
+            await this.#removeSelectedContent();
+            await this.#addNote(notesStyle);
+            await this.#addAddinField(field);
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            await CslDocFormatter.formatAfterInsert(
+                formatting.formatting,
+            );
+        }
+    }
+
+    /**
      * @param {CustomField} field
      * @returns {Promise<void>}
      */
@@ -297,6 +322,7 @@ class CitationDocService {
         /** @type {Map<string, {text: string, formatting: Array<FormattingPositions>}>} */
         const formats = new Map();
         fields.forEach(function (field) {
+            if (!field.Content) return;
             const formattingPositions = CslHtmlParser.parseHtmlFormatting(
                 field.Content
             );
