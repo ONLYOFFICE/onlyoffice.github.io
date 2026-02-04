@@ -1,5 +1,6 @@
 {
   "name": "News",
+  "offered": "Office Extensions Group",
   "guid": "asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}",
   "version": "1.0.0",
   "baseUrl": "",
@@ -17,7 +18,6 @@
         "ja": "80,000を超える大小のニュースソースとブログから数百万の記事を検索します。",
         "cs-CZ": "Prohledejte miliony článků z více než 80 000 velkých a malých zpravodajských zdrojů a blogů."
       },
-      "offered": "Office Extensions Group",
       "url": "index.html",
       "icons": [
         "resources/store/icons/icon.png",
