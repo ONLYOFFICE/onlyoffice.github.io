@@ -1,5 +1,6 @@
 {
   "name": "Text Cleaner",
+  "offered": "Office Extensions Group",
   "nameLocale": {
     "en": "Text Cleaner",
     "tr": "Metin Temizleyici",
@@ -38,7 +39,6 @@
 		"uk-UA": "це більш розумна версія команди “очистити форматування”. Він зберігає курсив і напівжирний шрифт, водночас видаляючи розриви рядків, зайві пробіли та інший непотріб, залишаючи чистий текст, що відповідає стилям вашого документа.",
     "pt": "O Text Cleaner é uma versão mais inteligente do “limpar formatação”. Ele mantém itálico e negrito enquanto remove quebras de linha, espaços extras e outras bagunças, deixando o texto limpo e compatível com os estilos do seu documento."
       },
-      "offered": "Office Extensions Group",
       "url": "index.html",
       "icons": ["resources/light/icon.svg","resources/light/icon@2x.svg" ],
       "icons2": [

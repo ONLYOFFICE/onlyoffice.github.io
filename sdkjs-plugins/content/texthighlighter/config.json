@@ -1,5 +1,6 @@
 {
   "name": "Text Highlighter",
+  "offered": "Office Extensions Group",
   "nameLocale": {
     "en-US": "Text Highlighter",
     "ru": "Выделение текста",
@@ -44,7 +45,6 @@
         "sr-Latn-RS": "Ovaj dodatak vam omogućava da pretražujete tekst i primenjujete stilove istaknutog teksta, boje i formatiranja u dokumentu."
         
       },
-      "offered": "Office Extensions Group",
       "url": "index.html",
        "type":          "panel",
       "size":          [300, 600],
