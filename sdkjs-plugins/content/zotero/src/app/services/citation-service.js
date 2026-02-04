@@ -371,7 +371,10 @@ class CitationService {
             if (oldContent === newContent) {
                 continue;
             }
-            if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
+            if (
+                !bHardRefresh &&
+                (oldContent === "null" || oldContent === null)
+            ) {
                 console.error("Unable to update footnotes");
                 // TODO: Modify "GetAllAddinFields" method for footnotes
                 // window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
@@ -615,7 +618,9 @@ class CitationService {
             }
 
             if (bibField) {
-                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
+                const bibFields = [
+                    await this.#updateBibliography(bNoHaveFields, bibField),
+                ];
                 await this.citationDocService.updateAddinFields(bibFields);
             }
         } catch (e) {
@@ -653,11 +658,12 @@ class CitationService {
                         updatedFields,
                     );
                 }
-                
             }
             
             if (bibField) {
-                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
+                const bibFields = [
+                    await this.#updateBibliography(bNoHaveFields, bibField)
+                ];
                 await this.citationDocService.updateAddinFields(bibFields);
             }
 
@@ -692,6 +698,31 @@ class CitationService {
             );
         } catch (e) {
             throw e;
+        }
+    }
+
+    /** @param {string} fieldId */
+    async showEditCitationWindow(fieldId) {
+        /** @type {CustomField[]} */
+        const fields = await this.citationDocService.getAddinZoteroFields();
+        //const field = fields.find((field) => field.FieldId === fieldId);
+
+        let citationObject = this.#extractField(fields[0]);
+        const field = citationObject.citationItems[0].itemData;
+        console.log(field);    
+        if (!field) return;
+        let text =
+            "<p>" +
+            field.title +
+            "</p>";
+        const bNeedSaveEdits =
+            await this.#onUserEditCitationManuallyWindow.showEditWindow(
+                text
+            );
+        if (bNeedSaveEdits) {
+            console.log("Save");
+        } else {
+            console.log("Cancel");
         }
     }
 }
