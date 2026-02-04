@@ -58,5 +58,6 @@
     "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "Ваша цитата је промењена од стране зотеро. За да немате промене и да се одмени будуће ажурирања?",
     "Yes": "Да",
     "No": "Не",
-    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Клик на „Да“ ће спречити Zotero да ажурира овај цитат ако додате додатне цитате, промените стилове или измените ставку на коју се односи. Клик на „Не“ ће обрисати ваше измене."
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Клик на „Да“ ће спречити Zotero да ажурира овај цитат ако додате додатне цитате, промените стилове или измените ставку на коју се односи. Клик на „Не“ ће обрисати ваше измене.",
+    "Edit citation": "Измените цитат"
 }

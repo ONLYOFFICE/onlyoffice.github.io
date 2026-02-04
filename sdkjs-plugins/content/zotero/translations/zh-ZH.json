@@ -58,5 +58,6 @@
     "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?": "您已修改這個引用，因為 Zotero 產生了它。您想保留您的修改並防止未來更新嗎?",
     "Yes": "是",
     "No": "否",
-    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "點擊 '是' 將防止 Zotero 更新此引用，如果您添加額外的引用、切換樣式或修改所引用的項目。點擊 '否' 將清除您的更改。"
+    "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "點擊 '是' 將防止 Zotero 更新此引用，如果您添加額外的引用、切換樣式或修改所引用的項目。點擊 '否' 將清除您的更改。",
+    "Edit citation": "編輯引用"
 }
