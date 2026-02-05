@@ -14003,9 +14003,6 @@
             value: function show(description, text) {
                 var _this = this;
                 _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
-                _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
-                _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
-                _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
                 var variation = {
                     name: "Zotero",
                     url: "info-window.html",
@@ -14026,21 +14023,8 @@
                     isDisplayedInViewer: false,
                     isInsideMode: false
                 };
+                _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text);
                 _classPrivateFieldGet2(_window, this).show(variation);
-                window.Asc.plugin.onThemeChanged = function(theme) {
-                    _classPrivateFieldGet2(_window, _this).command("onThemeChanged", theme);
-                    _classPrivateFieldGet2(_defaultThemeChangedFn, _this).call(_this, theme);
-                };
-                window.Asc.plugin.onTranslate = function() {
-                    _classPrivateFieldGet2(_window, _this).command("onTranslate");
-                    _classPrivateFieldGet2(_defaultTranslateFn, _this).call(_this);
-                };
-                _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", function() {
-                    _classPrivateFieldGet2(_window, _this).command("onAttachedText", text);
-                });
-                _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", function(height) {
-                    Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, _this).id, [ variation.size[0] - 2, height ] ], function() {});
-                });
                 return new Promise(function(resolve, reject) {
                     window.Asc.plugin.button = function(buttonId, windowId) {
                         if (buttonId === 0) {
@@ -14053,6 +14037,44 @@
                 });
             }
         }, {
+            key: "showEditWindow",
+            value: function showEditWindow(text) {
+                var _this2 = this;
+                _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
+                var variation = {
+                    name: "Zotero",
+                    url: "edit-window.html",
+                    description: window.Asc.plugin.tr("Edit citation"),
+                    isVisual: true,
+                    buttons: [ {
+                        text: window.Asc.plugin.tr("Save"),
+                        primary: true,
+                        isViewer: false
+                    }, {
+                        text: window.Asc.plugin.tr("Cancel"),
+                        primary: false
+                    } ],
+                    isModal: false,
+                    EditorsSupport: [ "word" ],
+                    size: [ 380, 240 ],
+                    isViewer: true,
+                    isDisplayedInViewer: false,
+                    isInsideMode: false
+                };
+                _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text);
+                _classPrivateFieldGet2(_window, this).show(variation);
+                return new Promise(function(resolve, reject) {
+                    window.Asc.plugin.button = function(buttonId, windowId) {
+                        if (buttonId === 0) {
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                        _assertClassBrand(_AdditionalWindow_brand, _this2, _hide).call(_this2);
+                    };
+                });
+            }
+        }, {
             key: "destroy",
             value: function destroy() {
                 _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
@@ -14060,6 +14082,26 @@
             }
         } ]);
     }();
+    function _onShow(variation, text) {
+        var _this3 = this;
+        _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
+        _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
+        _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
+        window.Asc.plugin.onThemeChanged = function(theme) {
+            _classPrivateFieldGet2(_window, _this3).command("onThemeChanged", theme);
+            _classPrivateFieldGet2(_defaultThemeChangedFn, _this3).call(_this3, theme);
+        };
+        window.Asc.plugin.onTranslate = function() {
+            _classPrivateFieldGet2(_window, _this3).command("onTranslate");
+            _classPrivateFieldGet2(_defaultTranslateFn, _this3).call(_this3);
+        };
+        _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", function() {
+            _classPrivateFieldGet2(_window, _this3).command("onAttachedText", text);
+        });
+        _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", function(height) {
+            Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, _this3).id, [ variation.size[0] - 2, height ] ], function() {});
+        });
+    }
     function _hide() {
         if (_classPrivateFieldGet2(_window, this)) {
             _classPrivateFieldGet2(_window, this).close();
@@ -14457,6 +14499,51 @@
                 }
                 return convertNotesStyle;
             }()
+        }, {
+            key: "showEditCitationWindow",
+            value: function() {
+                var _showEditCitationWindow = _asyncToGenerator(_regenerator().m(function _callee7(fieldId) {
+                    var fields, citationObject, field, text, bNeedSaveEdits;
+                    return _regenerator().w(function(_context7) {
+                        while (1) switch (_context7.n) {
+                          case 0:
+                            _context7.n = 1;
+                            return this.citationDocService.getAddinZoteroFields();
+
+                          case 1:
+                            fields = _context7.v;
+                            citationObject = _assertClassBrand(_CitationService_brand, this, _extractField).call(this, fields[0]);
+                            field = citationObject.citationItems[0].itemData;
+                            console.log(field);
+                            if (field) {
+                                _context7.n = 2;
+                                break;
+                            }
+                            return _context7.a(2);
+
+                          case 2:
+                            text = "<p>" + field.title + "</p>";
+                            _context7.n = 3;
+                            return _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, this).showEditWindow(text);
+
+                          case 3:
+                            bNeedSaveEdits = _context7.v;
+                            if (bNeedSaveEdits) {
+                                console.log("Save");
+                            } else {
+                                console.log("Cancel");
+                            }
+
+                          case 4:
+                            return _context7.a(2);
+                        }
+                    }, _callee7, this);
+                }));
+                function showEditCitationWindow(_x6) {
+                    return _showEditCitationWindow.apply(this, arguments);
+                }
+                return showEditCitationWindow;
+            }()
         } ]);
     }();
     function _formatInsertLink(cslCitation) {
@@ -14629,14 +14716,14 @@
         }
         return bibField;
     }
-    function _getUpdatedFields(_x6, _x7) {
+    function _getUpdatedFields(_x7, _x8) {
         return _getUpdatedFields2.apply(this, arguments);
     }
     function _getUpdatedFields2() {
-        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee7(fieldsWithCitations, bHardRefresh) {
+        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee8(fieldsWithCitations, bHardRefresh) {
             var fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, keysL, htmlCitation, oldContent, newContent, text, bNeedSaveUserInput;
-            return _regenerator().w(function(_context7) {
-                while (1) switch (_context7.n) {
+            return _regenerator().w(function(_context8) {
+                while (1) switch (_context8.n) {
                   case 0:
                     fragment = document.createDocumentFragment();
                     tempElement = document.createElement("div");
@@ -14646,7 +14733,7 @@
 
                   case 1:
                     if (!(i >= 0)) {
-                        _context7.n = 8;
+                        _context8.n = 8;
                         break;
                     }
                     _fieldsWithCitations$ = fieldsWithCitations[i], field = _fieldsWithCitations$.field, 
@@ -14658,17 +14745,17 @@
                     oldContent = field["Content"];
                     newContent = tempElement.innerText;
                     if (!cslCitation.getDoNotUpdate()) {
-                        _context7.n = 2;
+                        _context8.n = 2;
                         break;
                     }
-                    return _context7.a(3, 7);
+                    return _context8.a(3, 7);
 
                   case 2:
                     if (!(oldContent === newContent)) {
-                        _context7.n = 3;
+                        _context8.n = 3;
                         break;
                     }
-                    return _context7.a(3, 7);
+                    return _context8.a(3, 7);
 
                   case 3:
                     if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
@@ -14676,25 +14763,25 @@
                         bHardRefresh = true;
                     }
                     if (!bHardRefresh) {
-                        _context7.n = 4;
+                        _context8.n = 4;
                         break;
                     }
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
-                    _context7.n = 6;
+                    _context8.n = 6;
                     break;
 
                   case 4:
                     if (!(oldContent !== newContent)) {
-                        _context7.n = 6;
+                        _context8.n = 6;
                         break;
                     }
                     text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
-                    _context7.n = 5;
+                    _context8.n = 5;
                     return _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, this).show("Saving custom edits", text);
 
                   case 5:
-                    bNeedSaveUserInput = _context7.v;
+                    bNeedSaveUserInput = _context8.v;
                     if (bNeedSaveUserInput) {
                         cslCitation.setDoNotUpdate();
                         delete field["Content"];
@@ -14711,13 +14798,13 @@
 
                   case 7:
                     i--;
-                    _context7.n = 1;
+                    _context8.n = 1;
                     break;
 
                   case 8:
-                    return _context7.a(2, updatedFields);
+                    return _context8.a(2, updatedFields);
                 }
-            }, _callee7, this);
+            }, _callee8, this);
         }));
         return _getUpdatedFields2.apply(this, arguments);
     }
@@ -14761,8 +14848,21 @@
                     var isClose = false;
                     Asc.plugin.callCommand(function() {
                         var doc = Api.GetDocument();
+                        var canSelectWord = doc.SelectCurrentWord();
                         var selRange = doc.GetRangeBySelect();
                         var endPos = selRange.GetEndPos();
+                        if (canSelectWord) {
+                            return endPos;
+                        }
+                        var currentParagraphText = doc.GetCurrentParagraph().GetText();
+                        var runText = doc.GetCurrentRun().GetText();
+                        if (runText && currentParagraphText.indexOf(runText) !== -1) {
+                            return endPos + currentParagraphText.indexOf(runText);
+                        }
+                        var sentenceText = doc.GetCurrentSentence();
+                        if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
+                            return endPos + currentParagraphText.indexOf(sentenceText);
+                        }
                         return endPos;
                     }, isClose, isCalc, resolve);
                 });
