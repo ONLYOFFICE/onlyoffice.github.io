@@ -2036,6 +2036,7 @@ HELPERS.slide.push((function(){
 			this._started = false;
 			this._ended = false;
 			this._pendingPictureDrawingId = null;
+			this._lastDrawingId = null;
 		}
 
 		function Executor(requestEngine, logger) {
@@ -2901,9 +2902,101 @@ HELPERS.slide.push((function(){
 			this.s.docContentId = null;
 			this.s.paraId = null;
 		};
+		Executor.prototype.slideTransition = async function (effect, speed, advanceOnClick) {
+			if (!this._requireInSlide("slide.transition")) {
+				return;
+			}
+			const slideIndex = this.s.currentSlideIndex;
+			Asc.scope._slideIndex = slideIndex;
+			Asc.scope._effect = effect || "effectFadeSmoothly";
+			Asc.scope._speed = speed || "medium";
+			Asc.scope._advanceOnClick = advanceOnClick !== false;
+			await Asc.Editor.callCommand(function () {
+				const pres = Api.GetPresentation();
+				const slide = pres.GetSlideByIndex(Asc.scope._slideIndex);
+				if (!slide) {
+					return;
+				}
+				const transition = Api.CreateSlideShowTransition();
+				transition.SetEntryEffect(Asc.scope._effect);
+				transition.SetSpeed(Asc.scope._speed);
+				transition.SetAdvanceOnClick(Asc.scope._advanceOnClick);
+				slide.SetSlideShowTransition(transition);
+			});
+			Asc.scope._slideIndex = null;
+			Asc.scope._effect = null;
+			Asc.scope._speed = null;
+			Asc.scope._advanceOnClick = null;
+		};
+		Executor.prototype.animation = async function (ph_type, ph_idx, effectType, trigger, duration) {
+			if (!this._requireInSlide("animation")) {
+				return;
+			}
+			const slideIndex = this.s.currentSlideIndex;
+			const normalizedPhType = normalizePhType(ph_type);
+			Asc.scope._slideIndex = slideIndex;
+			Asc.scope._ph_type = normalizedPhType;
+			Asc.scope._ph_idx = Number(ph_idx || 0);
+			Asc.scope._effectType = effectType || "fade";
+			Asc.scope._trigger = trigger || "afterprevious";
+			Asc.scope._duration = Number(duration) || 500;
+			await Asc.Editor.callCommand(function () {
+				const pres = Api.GetPresentation();
+				const slide = pres.GetSlideByIndex(Asc.scope._slideIndex);
+				if (!slide) {
+					return;
+				}
+				const drawings = slide.GetAllDrawings();
+				let targetDrawing = null;
+				for (let d of drawings) {
+					const ph = d.GetPlaceholder();
+					if (!ph) {
+						continue;
+					}
+					const type = ph.GetType();
+					const typeOk = type === Asc.scope._ph_type ||
+						(type === "unknown" && Asc.scope._ph_type === "body") ||
+						(type === "ctrTitle" && Asc.scope._ph_type === "title");
+					if (!typeOk) {
+						continue;
+					}
+					const phIdx = parseInt(ph.GetIndex() || "0");
+					const want = parseInt(Asc.scope._ph_idx || 0);
+					const match = phIdx === want || (!ph.GetIndex() && want === 0);
+					if (match) {
+						targetDrawing = d;
+						break;
+					}
+				}
+				if (!targetDrawing) {
+					return;
+				}
+				const timeLine = slide.GetTimeLine();
+				if (!timeLine) {
+					return;
+				}
+				const seq = timeLine.GetMainSequence();
+				if (!seq) {
+					return;
+				}
+				const effect = seq.AddEffect(targetDrawing, Asc.scope._effectType, Asc.scope._trigger);
+				if (effect && Asc.scope._duration) {
+					effect.SetDuration(Asc.scope._duration);
+				}
+			});
+			Asc.scope._slideIndex = null;
+			Asc.scope._ph_type = null;
+			Asc.scope._ph_idx = null;
+			Asc.scope._effectType = null;
+			Asc.scope._trigger = null;
+			Asc.scope._duration = null;
+		};
 
 		const fontList = await Asc.Editor.callMethod("GetFontList");
 		const availableFonts = fontList.map(f => f.m_wsFontName).filter(Boolean);
+
+		const editorVersion = await Asc.Library.GetEditorVersion();
+		const supportsAnimations = editorVersion >= 9003000;
 
 		const requestEngine = AI.Request.create(AI.ActionType.Chat);
 		if (!requestEngine) return;
@@ -2927,6 +3020,67 @@ SLIDE COUNT CONTRACT (CRITICAL — HARD CAP):
 - Never emit a ${userSlideCount + 1}-th {"t":"slide.start"} under any circumstances.
 ` : ``;
 
+
+const animationCommands = supportsAnimations ? `
+- {"t":"slide.transition","effect":"effectFadeSmoothly","speed":"medium","advanceOnClick":true}
+- {"t":"animation","ph_type":"title|ctrTitle|subTitle|body","ph_idx":<number>,"effect":"fade|appear|fly-in|float-in|wipe|zoom|bounce|split|wheel","trigger":"withprevious|afterprevious|onclick","duration":500}
+` : '';
+
+const animationConstraint = supportsAnimations ?
+`- Add slide transitions and animations for professional polish. When animating a slide, animate all its content elements (title and body). See "SLIDE TRANSITIONS & ANIMATIONS" section.` : '';
+
+const animationSection = supportsAnimations ? `
+SLIDE TRANSITIONS & ANIMATIONS:
+
+Use transitions and animations where logical and appropriate for the content and narrative.
+Not every slide needs effects — use them to enhance meaning, not distract from it.
+
+Transitions (slide.transition):
+- Add transitions to slides for visual flow — section changes, topic shifts, after visual content.
+- Skip transition on title slide (first slide).
+- Place {"t":"slide.transition",...} AFTER {"t":"slide.start"} and BEFORE any content.
+- Available effects:
+  * Subtle: "effectFadeSmoothly", "effectFade", "effectDissolve", "effectWipeLeft", "effectWipeRight", "effectWipeUp", "effectWipeDown"
+  * Modern: "effectPushLeft", "effectPushRight", "effectCoverLeft", "effectCoverRight"
+  * Bold: "effectCubeLeft", "effectCubeRight", "effectFlipLeft", "effectFlipRight"
+- Speed: "fast", "medium", "slow". Use "medium" by default.
+- Match style: corporate → fade/wipe; modern → push/cover; creative → cube/flip.
+
+Animations (animation):
+- Add animations to reveal content sequentially — titles, then body content.
+- When you animate a slide, animate ALL content elements (title AND body/chart/table) so everything appears in sequence.
+- Place {"t":"animation",...} AFTER each element's figure.end/table.end/chart.end/picture.end.
+- Effects: "fade", "appear", "wipe", "float-in", "zoom", "fly-in", "bounce", "split", "wheel".
+- Trigger: "afterprevious" (auto-play in sequence), "withprevious" (simultaneous), "onclick" (on click).
+- Duration: 300-800ms. Use 500ms as default.
+- Do NOT animate: dt, ftr, sldNum placeholders.
+
+Example — title slide with animations:
+{"t":"slide.start","layout":"title"}
+{"t":"figure.start","ph_type":"ctrTitle","ph_idx":0}
+{"t":"para","text":"Quarterly Report"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"ctrTitle","ph_idx":0,"effect":"fade","trigger":"afterprevious","duration":500}
+{"t":"figure.start","ph_type":"subTitle","ph_idx":1}
+{"t":"para","text":"Q4 2024 Results"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"subTitle","ph_idx":1,"effect":"fade","trigger":"afterprevious","duration":400}
+{"t":"slide.end"}
+
+Example — content slide with transition and animations:
+{"t":"slide.start","layout":"obj"}
+{"t":"slide.transition","effect":"effectFadeSmoothly","speed":"medium"}
+{"t":"figure.start","ph_type":"title","ph_idx":0}
+{"t":"para","text":"Key Findings"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"title","ph_idx":0,"effect":"fade","trigger":"afterprevious","duration":400}
+{"t":"figure.start","ph_type":"body","ph_idx":1}
+{"t":"para","text":"Revenue grew by 15%"}
+{"t":"para","text":"Customer base expanded"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"body","ph_idx":1,"effect":"wipe","trigger":"afterprevious","duration":500}
+{"t":"slide.end"}
+` : '';
 
 const fontsContract = `
 FONT SELECTION POLICY
@@ -3001,12 +3155,13 @@ Allowed commands (flat placeholder fields; NO nested "placeholder" objects):
 - {"t":"notes.start"}
 - {"t":"para","text":"speaker note..."}  // no bullets in notes either
 - {"t":"notes.end"}
-
+${animationCommands}
 
 ${additionalConstrait}
 
 Constraints:
 - The VERY FIRST object must be {"t":"presentation.start"} and the VERY LAST must be {"t":"presentation.end"}.
+${animationConstraint}
 - All commands (theme.*, slide.*, figure.*, para, picture.*, table.*, chart.*, notes.*) MUST appear STRICTLY between presentation.start and presentation.end.
 - Inside the presentation, all slide content and notes MUST appear strictly between that slide’s {"t":"slide.start"} and {"t":"slide.end"}.
 - Do NOT emit any figure/table/chart/picture/notes/para outside an open slide.
@@ -3033,7 +3188,7 @@ Constraints:
   * A slide = one {"t":"slide.start",...} ... {"t":"slide.end"} pair.
   * Never exceed or fall short of this number. If you need more content, compress/merge within existing slides.
   * If the user did not provide a slide count, choose an optimal number yourself and do NOT state any number.
-
+${animationSection}
 - Language (critical):
   * The "language" property in {"t":"presentation.start", ...} defines the language for ALL human-readable text in this deck:
 	slide titles, body paragraphs, captions, picture.desc, chart titles/axes/categories/series names, speaker notes, etc.
@@ -3353,6 +3508,22 @@ ${fontsContract}
 					}
 					if (t === "notes.end") {
 						await exec.notesEnd();
+						continue;
+					}
+
+					// TRANSITION
+					if (t === "slide.transition") {
+						if (supportsAnimations) {
+							await exec.slideTransition(cmd.effect, cmd.speed, cmd.advanceOnClick);
+						}
+						continue;
+					}
+
+					// ANIMATION
+					if (t === "animation") {
+						if (supportsAnimations) {
+							await exec.animation(cmd.ph_type, cmd.ph_idx, cmd.effect, cmd.trigger, cmd.duration);
+						}
 						continue;
 					}
 				}
