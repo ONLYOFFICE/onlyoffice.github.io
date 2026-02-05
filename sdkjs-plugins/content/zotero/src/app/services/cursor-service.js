@@ -12,20 +12,21 @@ class CursorService {
             Asc.plugin.callCommand(
                 () => {
                     const doc = Api.GetDocument();
-                    let pos = 0;
-                    if (!doc) {
-                        return pos;
+                    const canSelectWord = doc.SelectCurrentWord();
+                    const endPos = doc.GetRangeBySelect().GetEndPos();
+                    if (canSelectWord) {
+                        return endPos;
                     }
-
-                    const currentRun = doc.GetCurrentRun();
-                    if (!currentRun) {
-                        return pos;
+                    const currentParagraphText = doc.GetCurrentParagraph().GetText();
+                    const runText = doc.GetCurrentRun().GetText();
+                    if (runText && currentParagraphText.indexOf(runText) !== -1) {
+                        return endPos + currentParagraphText.indexOf(runText);
                     }
-                    const range = currentRun.GetRange(0, 0);
-                    if (range) {
-                        return range.GetEndPos();
+                    const sentenceText = doc.GetCurrentSentence();
+                    if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
+                        return endPos + currentParagraphText.indexOf(sentenceText);
                     }
-                    return pos;
+                    return endPos;
                 },
                 isClose,
                 isCalc,
