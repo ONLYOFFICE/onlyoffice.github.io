@@ -5120,9 +5120,6 @@ class AdditionalWindow {
     }
     show(description, text) {
         _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
-        _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
-        _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
-        _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
         var variation = {
             name: "Zotero",
             url: "info-window.html",
@@ -5143,21 +5140,43 @@ class AdditionalWindow {
             isDisplayedInViewer: false,
             isInsideMode: false
         };
+        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text);
         _classPrivateFieldGet2(_window, this).show(variation);
-        window.Asc.plugin.onThemeChanged = theme => {
-            _classPrivateFieldGet2(_window, this).command("onThemeChanged", theme);
-            _classPrivateFieldGet2(_defaultThemeChangedFn, this).call(this, theme);
-        };
-        window.Asc.plugin.onTranslate = () => {
-            _classPrivateFieldGet2(_window, this).command("onTranslate");
-            _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
-        };
-        _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
-            _classPrivateFieldGet2(_window, this).command("onAttachedText", text);
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
+            };
         });
-        _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
-            Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, this).id, [ variation.size[0] - 2, height ] ], () => {});
-        });
+    }
+    showEditWindow(text) {
+        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
+        var variation = {
+            name: "Zotero",
+            url: "edit-window.html",
+            description: window.Asc.plugin.tr("Edit citation"),
+            isVisual: true,
+            buttons: [ {
+                text: window.Asc.plugin.tr("Save"),
+                primary: true,
+                isViewer: false
+            }, {
+                text: window.Asc.plugin.tr("Cancel"),
+                primary: false
+            } ],
+            isModal: false,
+            EditorsSupport: [ "word" ],
+            size: [ 380, 240 ],
+            isViewer: true,
+            isDisplayedInViewer: false,
+            isInsideMode: false
+        };
+        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text);
+        _classPrivateFieldGet2(_window, this).show(variation);
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
                 if (buttonId === 0) {
@@ -5173,6 +5192,26 @@ class AdditionalWindow {
         _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
         _classPrivateFieldSet2(_window, this, null);
     }
+}
+
+function _onShow(variation, text) {
+    _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
+    _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
+    _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
+    window.Asc.plugin.onThemeChanged = theme => {
+        _classPrivateFieldGet2(_window, this).command("onThemeChanged", theme);
+        _classPrivateFieldGet2(_defaultThemeChangedFn, this).call(this, theme);
+    };
+    window.Asc.plugin.onTranslate = () => {
+        _classPrivateFieldGet2(_window, this).command("onTranslate");
+        _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
+    };
+    _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
+        _classPrivateFieldGet2(_window, this).command("onAttachedText", text);
+    });
+    _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
+        Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, this).id, [ variation.size[0] - 2, height ] ], () => {});
+    });
 }
 
 function _hide() {
@@ -5339,6 +5378,23 @@ class CitationService {
                 yield _this6.citationDocService.convertNotesStyle(updatedFields, notesStyle);
             } catch (e) {
                 throw e;
+            }
+        })();
+    }
+    showEditCitationWindow(fieldId) {
+        var _this7 = this;
+        return _asyncToGenerator(function*() {
+            var fields = yield _this7.citationDocService.getAddinZoteroFields();
+            var citationObject = _assertClassBrand(_CitationService_brand, _this7, _extractField).call(_this7, fields[0]);
+            var field = citationObject.citationItems[0].itemData;
+            console.log(field);
+            if (!field) return;
+            var text = "<p>" + field.title + "</p>";
+            var bNeedSaveEdits = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, _this7).showEditWindow(text);
+            if (bNeedSaveEdits) {
+                console.log("Save");
+            } else {
+                console.log("Cancel");
             }
         })();
     }
@@ -5608,10 +5664,22 @@ class CursorService {
         return new Promise(function(resolve) {
             var isCalc = false;
             var isClose = false;
-            Asc.plugin.callCommand(function() {
+            Asc.plugin.callCommand(() => {
                 var doc = Api.GetDocument();
-                var selRange = doc.GetRangeBySelect();
-                var endPos = selRange.GetEndPos();
+                var canSelectWord = doc.SelectCurrentWord();
+                var endPos = doc.GetRangeBySelect().GetEndPos();
+                if (canSelectWord) {
+                    return endPos;
+                }
+                var currentParagraphText = doc.GetCurrentParagraph().GetText();
+                var runText = doc.GetCurrentRun().GetText();
+                if (runText && currentParagraphText.indexOf(runText) !== -1) {
+                    return endPos + currentParagraphText.indexOf(runText);
+                }
+                var sentenceText = doc.GetCurrentSentence();
+                if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
+                    return endPos + currentParagraphText.indexOf(sentenceText);
+                }
                 return endPos;
             }, isClose, isCalc, resolve);
         });

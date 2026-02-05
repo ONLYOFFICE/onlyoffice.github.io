@@ -10,10 +10,22 @@ class CursorService {
             const isCalc = false;
             const isClose = false;
             Asc.plugin.callCommand(
-                function () {
+                () => {
                     const doc = Api.GetDocument();
-                    const selRange = doc.GetRangeBySelect();
-                    const endPos = selRange.GetEndPos();
+                    const canSelectWord = doc.SelectCurrentWord();
+                    const endPos = doc.GetRangeBySelect().GetEndPos();
+                    if (canSelectWord) {
+                        return endPos;
+                    }
+                    const currentParagraphText = doc.GetCurrentParagraph().GetText();
+                    const runText = doc.GetCurrentRun().GetText();
+                    if (runText && currentParagraphText.indexOf(runText) !== -1) {
+                        return endPos + currentParagraphText.indexOf(runText);
+                    }
+                    const sentenceText = doc.GetCurrentSentence();
+                    if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
+                        return endPos + currentParagraphText.indexOf(sentenceText);
+                    }
                     return endPos;
                 },
                 isClose,
