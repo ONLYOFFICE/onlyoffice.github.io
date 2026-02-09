@@ -275,11 +275,199 @@ window.addSupportAgentMode = function(editorVersion) {
 	});
 }
 
+async function initAssistants() {
+	let _this = window.Asc.plugin;
+	if (!_this.sendEvent)
+		return;
+
+	spellchecker = new SpellChecker(textAnnotatorPopup);
+	grammar = new GrammarChecker(textAnnotatorPopup);
+	JSON.parse(
+			localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+		).forEach(assistantData => {
+			customAssistantManager.createAssistant(assistantData);
+		});
+
+	_this.attachEditorEvent("onParagraphText", function(obj) {
+		if (!obj)
+			return;
+		
+		spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+		grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+
+		customAssistantManager.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
+	});
+
+	_this.attachEditorEvent("onFocusAnnotation", function(obj) {
+		if (!obj)
+			return;
+	});
+
+	_this.attachEditorEvent("onBlurAnnotation", function(obj) {
+		if (!obj)
+			return;
+
+		if ("spelling" === obj["name"])
+			spellchecker.onBlur();
+		else if ("grammar" === obj["name"]) 
+			grammar.onBlur();
+		else if ("customAssistant" === obj["name"].slice(0, 15)) {
+			const assistantId = obj["name"].slice(16);
+			customAssistantManager.onBlur(assistantId);
+		}	
+	});
+
+	_this.attachEditorEvent("onClickAnnotation", function(obj) {
+		if (!obj)
+			return;
+
+		if ("grammar" === obj["name"])
+			grammar.onClick(obj["paragraphId"], obj["ranges"]);
+		else if ("spelling" === obj["name"])
+			spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
+		else if ("customAssistant" === obj["name"].slice(0, 15)) {
+			const assistantId = obj["name"].slice(16);
+			customAssistantManager.onClick(assistantId, obj["paragraphId"], obj["ranges"]);
+		}
+	});
+}
+
+async function initExternalProviders() {
+	let _this = window.Asc.plugin;
+	if (!_this.sendEvent)
+		return;
+	
+	function onLoadCustomExternalProviders(providers) {
+		for (let i = 0, len = providers.length; i < len; i++) {
+			let item = providers[i];
+			if (!item.name)
+				continue;
+
+			if (!item.content) {
+				let url = item.url || "[external]";
+				let key = item.key || "";
+				let addon = item.addon || "";
+
+				item.content = "\"use strict\";\n\
+class Provider extends AI.Provider {\n\
+constructor() {\n\
+	super(\"" + item.name + "\", \"" + url + "\", \"" + key + "\", \"" + addon + "\");\n\
+}\n\
+}";
+				AI.addExternalProvider(item.content);
+			}
+		}
+
+		if (0 < providers.length) {
+			AI.Storage.save();
+			AI.Storage.load();
+		}
+	}
+
+	_this.attachEditorEvent("ai_onCustomProviders", function(providers) {
+		onLoadCustomExternalProviders(providers);
+	});
+
+	_this.attachEditorEvent("ai_onCustomInit", function(obj) {
+		
+		if (obj.settingsLock !== undefined) {
+			let isSettingsRemoved = obj.settingsLock === "removed";
+			let isSettingsDisabled = obj.settingsLock === "disabled";
+
+			if (window.buttonSettings) {
+				if (window.buttonSettings.removed != isSettingsRemoved || 
+					window.buttonSettings.disabled != isSettingsDisabled) {
+					window.buttonSettings.removed = isSettingsRemoved;
+					window.buttonSettings.disabled = isSettingsDisabled;
+
+					Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonSettings]);
+				}
+			}
+		}
+
+		// mark model as external (not saved to localstorage)
+		if (obj.actions) {
+			for (let type in obj.actions) {
+				if (obj.actions[type] && obj.actions[type].model) {
+					if (!obj.actions[type].model.startsWith(AI.externalModelPrefix))
+						obj.actions[type].model = AI.externalModelPrefix + obj.actions[type].model;
+				}
+			}
+		}
+		if (obj.models) {
+			for (let i = 0, len = obj.models.length; i < len; i++) {
+				let model = obj.models[i];
+				if (model.id && !model.id.startsWith(AI.externalModelPrefix))
+					model.id = AI.externalModelPrefix + model.id;
+			}
+		}
+
+		// override the actions, if needed
+		if (obj.actions) {
+			let isActionsOverride = obj.actionsOverride === true;
+
+			for (let type in obj.actions) {
+				if (!AI.Actions[type])
+					continue;
+				
+				if (!AI.Actions[type].model || isActionsOverride)
+					AI.Actions[type].model = obj.actions[type].model;
+			}
+
+			AI.ActionsSave();
+		}
+
+		let isUpdate = false;
+		if (obj.providers) {
+			let customProviders = [];
+			for (let type in obj.providers) {
+				if (!obj.providers[type].name)
+					continue;
+				customProviders.push(obj.providers[type]);
+			}
+			if (customProviders.length > 0)
+				onLoadCustomExternalProviders(customProviders);
+			isUpdate = true;
+		}
+
+		if (obj.models) {
+			for (let i = 0, len = obj.models.length; i < len; i++) {
+				let model = obj.models[i];
+				let isFound = false;
+
+				for (let j = 0, jLen = AI.Models.length; j < jLen; j++) {
+					let testModel = AI.Models[j];
+
+					if (testModel.name === model.name && 
+						testModel.provider === model.provider &&
+						testModel.id === model.id) {
+						isFound = true;
+						AI.Models[j] = model;
+						break;
+					}
+				}
+
+				if (!isFound) {
+					if (!model.endpoints)
+						model.endpoints = [AI.Endpoints.Types.v1.Chat_Completions];
+					AI.Models.push(model);
+				}
+			}
+			isUpdate = true;
+		}
+
+		if (isUpdate)
+			AI.Storage.save();
+		
+	});
+}
+
 let initCounter = 0;
 async function initWithTranslate(counter) {
 	initCounter |= counter;
 	if (3 === initCounter) {
 		initCounter = 5;
+		await AI.loadInternalProviders();
 		await registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();
@@ -520,6 +708,12 @@ async function initWithTranslate(counter) {
 
 		if (editorVersion >= 9000004)
 			window.addSupportAgentMode(editorVersion);
+
+		initAssistants();
+		initExternalProviders();
+
+		if (this.sendEvent)
+			this.sendEvent("ai_onInit", {});
 	}
 }
 
@@ -579,165 +773,6 @@ window.Asc.plugin.init = async function() {
 			AI.serverSettings = null;
 		}
 		delete window.Asc.plugin.info.aiPluginSettings;
-	}
-
-	if (this.sendEvent) {
-		this.sendEvent("ai_onInit", {});
-
-		function onLoadCustomExternalProviders(providers) {
-			for (let i = 0, len = providers.length; i < len; i++) {
-				let item = providers[i];
-				if (!item.name)
-					continue;
-
-				if (!item.content) {
-					let url = item.url || "[external]";
-					let key = item.key || "";
-					let addon = item.addon || "";
-
-					item.content = "\"use strict\";\n\
-class Provider extends AI.Provider {\n\
-	constructor() {\n\
-		super(\"" + item.name + "\", \"" + url + "\", \"" + key + "\", \"" + addon + "\");\n\
-	}\n\
-}";				}
-
-				let isError = !AI.addCustomProvider(item.content);
-				if (!isError) {
-					customProvidersWindow && customProvidersWindow.command('onSetCustomProvider', AI.getCustomProviders());
-					aiModelEditWindow && aiModelEditWindow.command('onProvidersUpdate', { providers : AI.serializeProviders() });
-				}					
-			}
-		}
-
-		this.attachEditorEvent("ai_onCustomProviders", function(providers) {
-			onLoadCustomExternalProviders(providers);
-		});
-
-		this.attachEditorEvent("ai_onCustomInit", function(obj) {
-			
-			if (obj.settingsLock !== undefined) {
-				let isSettingsRemoved = obj.settingsLock === "removed";
-				let isSettingsDisabled = obj.settingsLock === "disabled";
-
-				if (window.buttonSettings) {
-					if (window.buttonSettings.removed != isSettingsRemoved || 
-						window.buttonSettings.disabled != isSettingsDisabled) {
-						window.buttonSettings.removed = isSettingsRemoved;
-						window.buttonSettings.disabled = isSettingsDisabled;
-
-						Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [window.buttonSettings]);
-					}
-				}
-			}
-
-			if (obj.actions) {
-				let isActionsOverride = obj.actionsOverride === true;
-
-				for (let type in obj.actions) {
-					if (!AI.Actions[type])
-						continue;
-					
-					if (!AI.Actions[type].model || isActionsOverride)
-						AI.Actions[type].model = obj.actions[type].model;
-				}
-
-				AI.ActionsSave();
-			}
-
-			let isUpdate = false;
-			if (obj.providers) {
-				let customProviders = [];
-				for (let type in obj.providers) {
-					if (!obj.providers[type].name)
-						continue;
-					customProviders.push(obj.providers[type]);
-				}
-				if (customProviders.length > 0)
-					onLoadCustomExternalProviders(customProviders);
-				isUpdate = true;
-			}
-
-			if (obj.models) {
-				for (let i = 0, len = obj.models.length; i < len; i++) {
-					let model = obj.models[i];
-					let isFound = false;
-
-					for (let j = 0, jLen = AI.Models.length; j < jLen; j++) {
-						let testModel = AI.Models[j];
-
-						if (testModel.name === model.name && 
-							testModel.provider === model.provider &&
-							testModel.id === model.id) {
-							isFound = true;
-							AI.Models[j] = model;
-							break;
-						}
-					}
-
-					if (!isFound) {
-						AI.Models.push(model);
-					}
-				}
-				isUpdate = true;
-			}
-
-			if (isUpdate)
-				AI.Storage.save();
-			
-		});
-		
-		spellchecker = new SpellChecker(textAnnotatorPopup);
-		grammar = new GrammarChecker(textAnnotatorPopup);
-		JSON.parse(
-                localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
-            ).forEach(assistantData => {
-				customAssistantManager.createAssistant(assistantData);
-			});
-
-		this.attachEditorEvent("onParagraphText", function(obj) {
-			if (!obj)
-				return;
-			
-			spellchecker.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
-			grammar.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
-
-			customAssistantManager.onChangeParagraph(obj["paragraphId"], obj["recalcId"], obj["text"], obj["annotations"]);
-		});
-
-		this.attachEditorEvent("onFocusAnnotation", function(obj) {
-			if (!obj)
-				return;
-		});
-
-		this.attachEditorEvent("onBlurAnnotation", function(obj) {
-			if (!obj)
-				return;
-
-			if ("spelling" === obj["name"])
-				spellchecker.onBlur();
-			else if ("grammar" === obj["name"]) 
-				grammar.onBlur();
-			else if ("customAssistant" === obj["name"].slice(0, 15)) {
-				const assistantId = obj["name"].slice(16);
-				customAssistantManager.onBlur(assistantId);
-			}	
-		});
-
-		this.attachEditorEvent("onClickAnnotation", function(obj) {
-			if (!obj)
-				return;
-
-			if ("grammar" === obj["name"])
-				grammar.onClick(obj["paragraphId"], obj["ranges"]);
-			else if ("spelling" === obj["name"])
-				spellchecker.onClick(obj["paragraphId"], obj["ranges"]);
-			else if ("customAssistant" === obj["name"].slice(0, 15)) {
-				const assistantId = obj["name"].slice(16);
-				customAssistantManager.onClick(assistantId, obj["paragraphId"], obj["ranges"]);
-			}
-		});
-
 	}
 
 	await initWithTranslate(1 << 1);
