@@ -712,8 +712,8 @@ async function initWithTranslate(counter) {
 		initAssistants();
 		initExternalProviders();
 
-		if (this.sendEvent)
-			this.sendEvent("ai_onInit", {});
+		if (window.Asc.plugin.sendEvent)
+			window.Asc.plugin.sendEvent("ai_onInit", {});
 	}
 }
 
