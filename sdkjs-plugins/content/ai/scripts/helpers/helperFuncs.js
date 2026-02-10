@@ -168,6 +168,20 @@ Respond exactly with:\n\
 
 	systemPrompt += "\
 ────────────────────────────\n\
+FUNCTION EXECUTION RESULTS\n\
+────────────────────────────\n\
+When you call a function, the system will execute it and return a result message like:\n\
+- \"System function 'functionName' executed successfully\" - function completed successfully\n\
+- Or an error message if something went wrong\n\
+\n\
+IMPORTANT:\n\
+- When you receive a function execution result, DO NOT call the same function again\n\
+- Use the result to proceed with the user's original request\n\
+- If the task is complete, provide a final response to the user\n\
+- If more functions are needed, call the next required function\n\
+- Never repeat the same function call after receiving its result\n\
+\n\
+────────────────────────────\n\
 REMINDER\n\
 ────────────────────────────\n\
 If no function call is needed — respond normally with clear helpful text.\n\

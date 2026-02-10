@@ -177,5 +177,8 @@
 	"Proposal for replacement": "Предложение для замены",
 	"Hint": "Подсказка",
 	"Replace": "Заменa",
-	"Replace + Hint": "Замена + Подсказка"
+	"Replace + Hint": "Замена + Подсказка",
+	"Function": "Функция",
+	"Arguments": "Параметры",
+	"Result": "Результат"
 }

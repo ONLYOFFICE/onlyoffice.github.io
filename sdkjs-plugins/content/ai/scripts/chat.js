@@ -56,7 +56,7 @@
 
 	let messagesList = {
 		_list: [],
-		
+
 		_renderItemToList: function(item, index) {
 			$('#chat_wrapper').removeClass('empty');
 
@@ -65,6 +65,53 @@
 			$chat.prepend(item.$el);
 			this._renderItem(item);
 			$chat.scrollTop($chat[0].scrollHeight);
+		},
+
+		_renderToolCall: function(item) {
+			item.$el.empty();
+			item.$el.addClass('tool_call_message');
+
+			let $toolCallContent = $('<div class="form-control message_content tool_call_content"></div>');
+
+			// Parse function name and args
+			let funcName = item.functionName || 'Unknown';
+			let funcArgs = item.arguments || '';
+
+			// Header with collapse/expand functionality
+			let $header = $('<div class="tool_call_header"></div>');
+			let $collapseIcon = $('<span class="tool_call_collapse_icon">▶</span>');
+			let $title = $('<span class="tool_call_title">' + window.Asc.plugin.tr('Function') + ': <strong>' + funcName + '</strong></span>');
+
+			$header.append($collapseIcon);
+			$header.append($title);
+
+			// Details section (collapsed by default)
+			let $details = $('<div class="tool_call_details collapsed"></div>');
+
+			if (funcArgs) {
+				$details.append('<div class="tool_call_section"><strong>' + window.Asc.plugin.tr('Arguments') + ':</strong><pre>' + funcArgs + '</pre></div>');
+			}
+
+			if (item.result) {
+				let resultText = typeof item.result === 'string' ? item.result : JSON.stringify(item.result, null, 2);
+				$details.append('<div class="tool_call_result"><strong>' + window.Asc.plugin.tr('Result') + ':</strong><pre>' + resultText + '</pre></div>');
+			}
+
+			// Toggle collapse/expand
+			$header.on('click', function() {
+				$details.toggleClass('collapsed');
+				if ($details.hasClass('collapsed')) {
+					$collapseIcon.text('▶');
+				} else {
+					$collapseIcon.text('▼');
+				}
+				scrollbarList && scrollbarList.update();
+			});
+
+			$toolCallContent.append($header);
+			$toolCallContent.append($details);
+			item.$el.append($toolCallContent);
+			scrollbarList && scrollbarList.update();
 		},
 		_renderItem: function(item) {
 			item.$el.empty();
@@ -197,6 +244,22 @@
 			message.content.push(content);
 			message.activeContentIndex = message.content.length - 1;
 			this._renderItem(message);
+		},
+		addToolCall: function(toolCallData) {
+			const toolCall = {
+				role: 'tool',
+				isToolCall: true,
+				functionName: toolCallData.functionName,
+				arguments: toolCallData.arguments,
+				result: toolCallData.result
+			};
+
+			this._list.push(toolCall);
+			let $chat = $('#chat');
+			toolCall.$el = $('<div class="message" style="order: ' + (this._list.length - 1) + ';"></div>');
+			$chat.prepend(toolCall.$el);
+			this._renderToolCall(toolCall);
+			$chat.scrollTop($chat[0].scrollHeight);
 		},
 		get: function() {
 			return this._list;
@@ -479,20 +542,24 @@
 			createTyping();
 		}
 
-		let list = isRegenerating 
-			? messagesList.get().slice(0, regenerationMessageIndex) 
+		let list = isRegenerating
+			? messagesList.get().slice(0, regenerationMessageIndex)
 			: messagesList.get();
-		
-		//Remove the errors and user messages that caused the error
+
+		//Remove the errors, tool calls, and user messages that caused the error
 		list = list.filter(function(item, index) {
 			const nextItem = list[index + 1]
+			// Filter out tool messages (they are only for UI display)
+			if (item.isToolCall || item.role === 'tool') {
+				return false;
+			}
 			return !item.error && !(nextItem && nextItem.error);
-		});	
+		});
 		list = list.map(function(item) {
-			return { role: item.role, content: item.getActiveContent() }
+			return { role: item.role, content: item.getActiveContent ? item.getActiveContent() : item.content }
 		});
 
-		window.Asc.plugin.sendToPlugin("onChatMessage", list);	
+		window.Asc.plugin.sendToPlugin("onChatMessage", list);
 	};
 
 	function createTyping() {
@@ -693,6 +760,45 @@
 			attachedText: attachedText.hasShow() ? attachedText.get() : ''
 		});
 		window.Asc.plugin.sendToPlugin("onUpdateState");
+	});
+
+	window.Asc.plugin.attachEvent("onToolCall", function(toolCallData) {
+		// Parse tool call data
+		let funcName = 'Unknown';
+		let funcArgs = '';
+		let result = '';
+
+		if (toolCallData.type === 'native') {
+			// Native tool calls (OpenAI, Anthropic format)
+			funcName = toolCallData.functionName || 'Unknown';
+			funcArgs = toolCallData.arguments || '';
+			result = typeof toolCallData.result === 'object' ?
+				(toolCallData.result.message || toolCallData.result.error || JSON.stringify(toolCallData.result)) :
+				(toolCallData.result || 'Success');
+		} else if (toolCallData.type === 'system_prompt') {
+			// Parse system prompt style: [functionCalling (functionName)]: {...}
+			let callStr = toolCallData.call;
+			let nameMatch = callStr.match(/\(([^)]+)\)/);
+			if (nameMatch) {
+				funcName = nameMatch[1];
+			}
+			let argsMatch = callStr.match(/\{[\s\S]*\}/);
+			if (argsMatch) {
+				try {
+					let args = JSON.parse(argsMatch[0]);
+					funcArgs = JSON.stringify(args, null, 2);
+				} catch (e) {
+					funcArgs = argsMatch[0];
+				}
+			}
+			result = toolCallData.result ? (toolCallData.result.message || toolCallData.result.error || 'Success') : '';
+		}
+
+		messagesList.addToolCall({
+			functionName: funcName,
+			arguments: funcArgs,
+			result: result
+		});
 	});
 
 })(window, undefined);
