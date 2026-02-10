@@ -116,4 +116,8 @@ class Provider extends AI.Provider {
 		return result;
 	}
 
+	isSupportTools(model) {
+		return true;
+	}
+
 }

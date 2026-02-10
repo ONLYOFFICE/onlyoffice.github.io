@@ -704,6 +704,11 @@ function fetchExternal(url, options, isStreaming) {
 		return await this._wrapRequest(this._chatRequest, content, block !== false, streamFunc);
 	};
 
+	// Chat request with full response (includes tool_calls)
+	AI.Request.prototype.chatRequestFull = async function(content, block, streamFunc) {
+		return await this._wrapRequest(this._chatRequestFull, content, block !== false, streamFunc);
+	};
+
 	AI.Request.prototype._chatRequest = async function(content, streamFunc) {
 		let provider = null;
 		if (this.modelUI)
@@ -753,7 +758,16 @@ function fetchExternal(url, options, isStreaming) {
 
 		let headers = AI._getHeaders(provider);
 
+		// Check if content contains tools
+		let tools = null;
 		let isMessages = Array.isArray(content);
+
+		// Support for object with messages and tools
+		if (content && typeof content === 'object' && !Array.isArray(content) && content.messages) {
+			tools = content.tools || null;
+			content = content.messages;
+			isMessages = true;
+		}
 
 		if (isUseCompletionsInsteadChat && isMessages) {
 			content = content[content.length - 1].content;
@@ -823,6 +837,11 @@ function fetchExternal(url, options, isStreaming) {
 					requestBody.messages = [{role:"user",content:messages[0]}];
 
 				objRequest.body = provider.getChatCompletions(requestBody, this.model);
+
+				// Add tools if provider supports them
+				if (tools && tools.length > 0 && provider.isSupportTools(this.model)) {
+					provider.addTools(objRequest.body, tools);
+				}
 
 				if (isStreaming && options.streamingBody !== false)
 					objRequest.body.stream = true;
@@ -960,6 +979,70 @@ function fetchExternal(url, options, isStreaming) {
 			}
 			return resultText;
 		}
+	};
+
+	// Full chat request that returns raw response with tool_calls
+	AI.Request.prototype._chatRequestFull = async function(content, streamFunc) {
+		let provider = null;
+		if (this.modelUI)
+			provider = AI.Storage.getProvider(this.modelUI.provider);
+
+		if (!provider) {
+			throw {
+				error : 1,
+				message : "Please select the correct model for action."
+			};
+		}
+
+		// Check if content contains tools
+		let tools = null;
+		let isMessages = Array.isArray(content);
+
+		// Support for object with messages and tools
+		if (content && typeof content === 'object' && !Array.isArray(content) && content.messages) {
+			tools = content.tools || null;
+			content = content.messages;
+			isMessages = true;
+		}
+
+		if (!isMessages) {
+			content = [{role:"user", content: content}];
+		}
+
+		let headers = AI._getHeaders(provider);
+		let requestBody = {
+			messages: content
+		};
+
+		let objRequest = {
+			headers : headers,
+			method : "POST"
+		};
+
+		objRequest.url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model, {streaming: false});
+		objRequest.body = provider.getChatCompletions(requestBody, this.model);
+
+		// Add tools if provider supports them
+		if (tools && tools.length > 0 && provider.isSupportTools(this.model)) {
+			provider.addTools(objRequest.body, tools);
+		}
+
+		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
+
+		let result = await requestWrapper(objRequest);
+		if (result.error) {
+			throw {
+				error : result.error,
+				message : result.message
+			};
+		}
+
+		// Return full response including tool_calls
+		return {
+			content: provider.getChatCompletionsResult(result, this.model, true).content[0] || "",
+			tool_calls: provider.getToolCallsResult ? provider.getToolCallsResult(result) : null,
+			raw: result
+		};
 	};
 
 	// IMAGE REQUESTS

@@ -38,4 +38,8 @@ class Provider extends AI.Provider {
 		super("Deepseek", "https://api.deepseek.com", "", "");
 	}
 
+	isSupportTools(model) {
+		return true;
+	}
+
 }
