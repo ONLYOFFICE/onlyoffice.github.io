@@ -63,4 +63,9 @@ class Provider extends AI.Provider {
 		return AI.CapabilitiesUI.Chat;
 	}
 
+	isSupportTools(model) {
+		// xAI supports OpenAI-compatible tools
+		return true;
+	}
+
 }

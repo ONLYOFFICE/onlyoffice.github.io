@@ -177,5 +177,8 @@
 	"Proposal for replacement": "Предлог за замену",
 	"Hint": "Hint",
 	"Replace": "Замени", 
-	"Replace + Hint": "Замени + Hint"
+	"Replace + Hint": "Замени + Hint",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result"
 }

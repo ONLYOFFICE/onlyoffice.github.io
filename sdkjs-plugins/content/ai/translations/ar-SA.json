@@ -176,5 +176,8 @@
 	"Proposal for replacement": "اقتراح للإضافة",
 	"Hint": "الإرشاد",
 	"Replace": "الإضافة",
-	"Replace + Hint": "إضافة + إرشاد"
+	"Replace + Hint": "إضافة + إرشاد",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result"
 }

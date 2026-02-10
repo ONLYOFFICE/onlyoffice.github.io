@@ -177,5 +177,8 @@
 	"Proposal for replacement": "Proposition de remplacement",
 	"Hint": "Indice",
 	"Replace": "Remplacer",
-	"Replace + Hint": "Remplacer + Indice"
+	"Replace + Hint": "Remplacer + Indice",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result"
 }
