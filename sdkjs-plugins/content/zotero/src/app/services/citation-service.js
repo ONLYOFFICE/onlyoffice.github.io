@@ -74,7 +74,7 @@ class CitationService {
             this._citPrefixNew,
             this._citSuffixNew,
             this._bibPrefixNew,
-            this._bibSuffixNew
+            this._bibSuffixNew,
         );
         this.#onUserEditCitationManuallyWindow = new AdditionalWindow();
     }
@@ -129,7 +129,7 @@ class CitationService {
                 return self.citationDocService.addCitation(
                     htmlCitation,
                     JSON.stringify(cslCitation.toJSON()),
-                    notesStyle
+                    notesStyle,
                 );
             })
             .then(function () {
@@ -168,7 +168,7 @@ class CitationService {
                     .then(function (res) {
                         var items = res.items || [];
                         return items;
-                    })
+                    }),
             );
         }
 
@@ -180,12 +180,12 @@ class CitationService {
                             null,
                             groupID,
                             arrGroupsItems[groupID],
-                            "json"
+                            "json",
                         )
                         .then(function (res) {
                             var items = res.items || [];
                             return items;
-                        })
+                        }),
                 );
             }
         }
@@ -241,16 +241,17 @@ class CitationService {
         if (citationStartIndex !== -1) {
             var citationString = field.Value.slice(
                 citationStartIndex,
-                citationEndIndex + 1
+                citationEndIndex + 1,
             );
             citationObject = JSON.parse(citationString);
         }
         return citationObject;
     }
     /**
+     * @param {Object} [updatedField]
      * @returns {Promise<{fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
      */
-    #synchronizeStorageWithDocItems() {
+    #synchronizeStorageWithDocItems(updatedField) {
         const self = this;
         return this.citationDocService
             .getAddinZoteroFields()
@@ -281,7 +282,7 @@ class CitationService {
                         field.Value.indexOf(self._citPrefix) !== -1
                     );
                 });
-                const fieldsWithCitations = fields.map(function (field) {
+                let fieldsWithCitations = fields.map(function (field) {
                     let citationObject = self.#extractField(field);
 
                     let citationID = ""; // old format
@@ -290,13 +291,32 @@ class CitationService {
                     }
 
                     let cslCitation = new CSLCitation(numOfItems, citationID);
-                    numOfItems += cslCitation.fillFromObject(citationObject);
+                    if (updatedField) {
+                        numOfItems += cslCitation.fillFromObject(updatedField);
+                    } else {
+                        numOfItems +=
+                            cslCitation.fillFromObject(citationObject);
+                    }
+
                     cslCitation.getCitationItems().forEach(function (item) {
                         self._storage.set(item.id, item);
                     });
 
                     return { field: { ...field }, cslCitation: cslCitation };
                 });
+                if (updatedField) {
+                    fieldsWithCitations = fieldsWithCitations.filter(
+                        function (b) {
+                            if (
+                                b.cslCitation.citationID ===
+                                updatedField.citationID
+                            ) {
+                                return true;
+                            }
+                            return false;
+                        },
+                    );
+                }
 
                 return {
                     bibField: bibField,
@@ -319,7 +339,7 @@ class CitationService {
         if (this._cslStylesManager.isLastUsedStyleContainBibliography()) {
             return this.citationDocService.addBibliography(
                 bibliography,
-                bibFieldValue
+                bibFieldValue,
             );
         } else {
             throw "The current bibliographic style does not describe the bibliography";
@@ -388,12 +408,12 @@ class CitationService {
                 let text =
                     "<p>" +
                     translate(
-                        "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?"
+                        "You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?",
                     ) +
                     "</p>" +
                     "<p>" +
                     translate(
-                        "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes."
+                        "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.",
                     ) +
                     "</p>" +
                     "<p>" +
@@ -409,7 +429,7 @@ class CitationService {
                 const bNeedSaveUserInput =
                     await this.#onUserEditCitationManuallyWindow.show(
                         "Saving custom edits",
-                        text
+                        text,
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
@@ -461,10 +481,10 @@ class CitationService {
                 },
             },
             this._cslStylesManager.cached(
-                this._cslStylesManager.getLastUsedStyleIdOrDefault()
+                this._cslStylesManager.getLastUsedStyleIdOrDefault(),
             ),
             this._localesManager.getLastUsedLanguage(),
-            true
+            true,
         );
         if (arrIds.length) {
             this._formatter.updateItems(arrIds);
@@ -572,13 +592,13 @@ class CitationService {
             if (typeof bHardRefresh === "boolean") {
                 updatedFields = await this.#getUpdatedFields(
                     fieldsWithCitations,
-                    bHardRefresh
+                    bHardRefresh,
                 );
             }
 
             if (bibField) {
                 updatedFields.push(
-                    await this.#updateBibliography(bNoHaveFields, bibField)
+                    await this.#updateBibliography(bNoHaveFields, bibField),
                 );
             }
 
@@ -607,7 +627,7 @@ class CitationService {
             /** @type {CustomField[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
-                false
+                false,
             );
 
             if (updatedFields && updatedFields.length) {
@@ -627,6 +647,65 @@ class CitationService {
             throw e;
         }
     }
+
+    /**
+     * @param {Object} updatedField
+     * @returns {Promise<void>}
+     */
+    async updateItem(updatedField) {
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations } =
+                await this.#synchronizeStorageWithDocItems(updatedField);
+
+            this.#updateFormatter();
+
+            /** @type {CustomField[]} */
+            let updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                true,
+            );
+
+            if (updatedFields && updatedFields.length) {
+                return this.citationDocService.updateAddinFields(updatedFields);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+    /**
+     * // it is a crutch, because "SelectAddinField" does not work with notes
+     * @param {Object} updatedField
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    async updateItemInNotes(updatedField, notesStyle) {
+        this._storage.clear();
+
+        try {
+            const { fieldsWithCitations } =
+                await this.#synchronizeStorageWithDocItems(updatedField);
+
+            this.#updateFormatter();
+
+            /** @type {CustomField[]} */
+            let updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                true,
+            );
+
+            if (updatedFields && updatedFields.length) {
+                await this.citationDocService.convertNotesStyle(
+                    updatedFields,
+                    notesStyle,
+                );
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
     /**
      * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<void>}
@@ -659,14 +738,13 @@ class CitationService {
                     );
                 }
             }
-            
+
             if (bibField) {
                 const bibFields = [
-                    await this.#updateBibliography(bNoHaveFields, bibField)
+                    await this.#updateBibliography(bNoHaveFields, bibField),
                 ];
                 await this.citationDocService.updateAddinFields(bibFields);
             }
-
         } catch (e) {
             throw e;
         }
@@ -701,29 +779,20 @@ class CitationService {
         }
     }
 
-    /** @param {string} fieldId */
-    async showEditCitationWindow(fieldId) {
-        /** @type {CustomField[]} */
-        const fields = await this.citationDocService.getAddinZoteroFields();
-        //const field = fields.find((field) => field.FieldId === fieldId);
+    /**
+     * @param {CustomField} field
+     * @returns {Promise<CustomField | null>}
+     */
+    async showEditCitationWindow(field) {
+        if (!field) return null;
 
-        let citationObject = this.#extractField(fields[0]);
-        const field = citationObject.citationItems[0].itemData;
-        console.log(field);    
-        if (!field) return;
-        let text =
-            "<p>" +
-            field.title +
-            "</p>";
-        const bNeedSaveEdits =
-            await this.#onUserEditCitationManuallyWindow.showEditWindow(
-                text
-            );
-        if (bNeedSaveEdits) {
-            console.log("Save");
-        } else {
-            console.log("Cancel");
+        const updatedField =
+            await this.#onUserEditCitationManuallyWindow.showEditWindow(field);
+        if (!updatedField) {
+            // Cancel click
+            return null;
         }
+        return updatedField;
     }
 }
 
