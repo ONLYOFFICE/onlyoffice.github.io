@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "Tekst handmatig invoeren",
+	"Hide field": "Veld verbergen",
+	"Translating...": "Vertalen...",
+	"Loading translation engine...": "Vertaalengine laden...",
+	"Downloading model...": "Model downloaden...",
+	"Model loaded - Ready for offline translation": "Model geladen - Klaar voor offline vertaling",
+	"Failed to load model: ": "Model laden mislukt: ",
+	"Ready - Select languages to translate": "Gereed - Selecteer talen om te vertalen",
+	"Failed to initialize: ": "Initialisatie mislukt: ",
+	"Translation complete": "Vertaling voltooid",
+	"Translation failed: ": "Vertaling mislukt: ",
+	"Translation failed": "Vertaling mislukt",
+	"Copied to clipboard": "Gekopieerd naar klembord",
+	"Copy": "Kopiëren",
+	"Insert to document": "Invoegen in document",
+	"Offline": "Offline"
+}
