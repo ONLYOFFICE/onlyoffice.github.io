@@ -48,15 +48,27 @@
 				},
 				"data": {
 					"type": "array",
-					"description": "2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count"
+					"description": "2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count",
+					"items": {
+						"type": "array",
+						"items": {
+							"type": "number"
+						}
+					}
 				},
 				"series": {
 					"type": "array",
-					"description": "array of series names - must have same length as data arrays count"
+					"description": "array of series names - must have same length as data arrays count",
+					"items": {
+						"type": "string"
+					}
 				},
 				"categories": {
 					"type": "array",
-					"description": "array of category names - must have same length as each data array"
+					"description": "array of category names - must have same length as each data array",
+					"items": {
+						"type": "string"
+					}
 				},
 				"prompt": {
 					"type": "string",

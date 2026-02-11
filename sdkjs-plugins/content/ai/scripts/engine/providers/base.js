@@ -151,6 +151,11 @@
 
 	AI.InternalProviders = [];
 	AI.createProviderInstance = function(name, url, key, addon) {
+		// order is important
+		for (let i = 0, len = window.AI.ExternalCustomProviders.length; i < len; i++) {
+			if (name === AI.ExternalCustomProviders[i].name)
+				return AI.ExternalCustomProviders[i].createInstance(name, url, key, addon || AI.ExternalCustomProviders[i].addon);
+		}
 		for (let i = 0, len = window.AI.InternalCustomProviders.length; i < len; i++) {
 			if (name === AI.InternalCustomProviders[i].name)
 				return AI.InternalCustomProviders[i].createInstance(name, url, key, addon || AI.InternalCustomProviders[i].addon);
@@ -198,6 +203,7 @@
 
 	AI.InternalCustomProvidersSources = {};
 	AI.InternalCustomProviders = [];
+	AI.ExternalCustomProviders = [];
 	AI.providersWeights = {};
 
 	AI.loadCustomProviders = function() {
@@ -240,6 +246,36 @@
 
 			return true;
 
+		} catch(err) {			
+		}
+
+		return false;
+
+	};
+
+	AI.addExternalProvider = function(providerContent) {
+
+		try {
+			let content = "(function(){\n" + providerContent + "\nreturn new Provider();})();";
+			let provider = eval(content);
+
+			if (!provider.name)
+				return false;
+
+			if (provider.isOnlyDesktop() && (-1 === navigator.userAgent.indexOf("AscDesktopEditor")))
+				return false;
+
+			provider.isExternal = true;
+
+			for (let i = 0, len = AI.ExternalCustomProviders.length; i < len; i++) {
+				if (AI.ExternalCustomProviders[i].name === provider.name) {
+					AI.ExternalCustomProviders.splice(i, 1);
+					break;
+				}
+			}
+
+			AI.ExternalCustomProviders.push(provider);
+			return true;
 		} catch(err) {			
 		}
 

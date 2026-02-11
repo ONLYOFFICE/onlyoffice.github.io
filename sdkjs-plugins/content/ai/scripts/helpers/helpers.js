@@ -403,6 +403,279 @@ HELPERS.word.push((function(){
 })());
 HELPERS.word.push((function(){
 	let func = new RegisteredFunction({
+		"name": "generateDocx",
+		"description": "Use this function if you are asked to generate a textual document (report, article, letter, etc.) based on a description. Input: Short description of what needs to be generated.",
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string",
+					"description": "Short description of the document to generate."
+				}
+			},
+			"required": ["description"]
+		}
+	});
+	
+	func.call = async function(params) {
+		const instructions = "Generate the document **preferably** in Markdown (.md) format.\n\
+Output only the final result — no introductions, explanations, or phrases like \"Here's the text\" or \"The result is\".\n\
+The document MUST be written in pure Markdown.\n\
+Absolutely forbidden:\n\
+- HTML tags (e.g., <p>, <div>, <span>, <h1>, <img>, <br>)\n\
+- HTML attributes (e.g., align=\"center\", style=\"...\")\n\
+- Embedded CSS\n\
+- Raw HTML blocks of any kind\n\
+Emoji MUST NOT be wrapped in HTML containers.\n\
+If you cannot decorate or center text without HTML, do NOT decorate or center it at all.\n\
+If possible, provide the output in valid Markdown (.md) format, but do not wrap it in ```markdown``` or any other code block.\n";
+
+		let fullPrompt = instructions + "\nDescription:\n\n" + params.description;
+
+		await streamPromptResultToDocument(fullPrompt);
+	};
+
+	return func;
+})());
+HELPERS.word.push((function(){
+	let func = new RegisteredFunction({
+		"name": "generateForm",
+		"description": "Use this function if you are asked to generate a form or document template (contract, any document for filling) based on a description. Input: a detailed description of the desired form or template.",
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string",
+					"description": "Detailed description of the form or template to generate, including purpose, structure."
+				}
+			},
+			"required": ["description"]
+		}
+	});
+	
+	func.call = async function(params) {
+		let instructions = `# Instructions for Generating Markdown Documents with Interactive Fields
+
+## General Rules
+
+Generate the document **preferably** in Markdown (.md) format.
+Output only the final result — no introductions, explanations, or phrases like "Here's the text" or "The result is".
+
+The document MUST be written in pure Markdown.
+Absolutely forbidden:
+- HTML tags (e.g., <p>, <div>, <span>, <h1>, <img>, <br>)
+- HTML attributes (e.g., align="center", style="...")
+- Embedded CSS
+- Raw HTML blocks of any kind
+Emoji MUST NOT be wrapped in HTML containers.
+If you cannot decorate or center text without HTML, do NOT decorate or center it at all.
+
+If possible, provide the output in valid Markdown (.md) format, but do not wrap it in \`\`\`markdown\`\`\` or any other code block.
+
+When generating a document, use standard Markdown syntax. For interactive input fields, use the special syntax \`{FIELD:...}\`.
+
+## Field Types and Their Usage
+
+### 1. Checkbox
+Used for fields that can be checked (yes/no, agree/disagree).
+
+**Syntax:**
+\`\`\`
+{FIELD:type='checkbox',checked='false',key='uniqueKey',text='Description'}
+\`\`\`
+
+**Parameters:**
+- \`type='checkbox'\` - field type
+- \`checked='true'/'false'\` - initial state
+- \`key='uniqueKey'\` - unique field key
+- \`text='...'\` - description text (optional)
+- \`symbolChecked:'☑'\` - symbol for checked state (optional, default ☑)
+- \`symbolUnchecked:'☐'\` - symbol for unchecked state (optional, default ☐)
+
+**Example:**
+\`\`\`
+I agree to the terms: {FIELD:type='checkbox',checked='false',key='agreement',text='Agreement'}
+\`\`\`
+
+### 2. Radiobutton
+Used for selecting one option from a group (mutually exclusive choices).
+
+**Syntax:**
+\`\`\`
+{FIELD:type='radiobutton',checked='false',key='uniqueOption',groupKey='groupName',text='Option text'}
+\`\`\`
+
+**Parameters:**
+- \`type='radiobutton'\` - field type
+- \`checked='true'/'false'\` - initial state (only one button in the group should be true)
+- \`key='uniqueOption'\` - unique key for this option
+- \`groupKey='groupName'\` - **REQUIRED**: same key for all radio buttons in one group
+- \`text='...'\` - option text
+
+**IMPORTANT:** All radio buttons that belong to the same question/choice must have the same \`groupKey\`.
+
+**Example:**
+\`\`\`
+Select your gender:
+- {FIELD:type='radiobutton',checked='true',key='gender_male',groupKey='gender',text='Male'}
+- {FIELD:type='radiobutton',checked='false',key='gender_female',groupKey='gender',text='Female'}
+- {FIELD:type='radiobutton',checked='false',key='gender_other',groupKey='gender',text='Other'}
+\`\`\`
+
+### 3. Combobox (Dropdown List)
+Used for selecting one value from a predefined list.
+
+**Syntax:**
+\`\`\`
+{FIELD:type='combobox',items:'option1,option2,option3',selected:'option1',key='uniqueKey',text='Description'}
+\`\`\`
+
+**Parameters:**
+- \`type='combobox'\` - field type
+- \`items:'item1,item2,item3'\` - list of options separated by commas
+- \`selected:'item'\` - default selected value (optional)
+- \`key='uniqueKey'\` - unique field key
+- \`text='...'\` - description text (optional)
+
+**Example:**
+\`\`\`
+City: {FIELD:type='combobox',items:'New York,Los Angeles,Chicago,Houston',selected:'New York',key='city'}
+\`\`\`
+
+### 4. Textbox (Text Field)
+Used for entering arbitrary text.
+
+**Syntax:**
+\`\`\`
+{FIELD:type='textbox',value:'initial value',placeholder:'hint text',key='uniqueKey'}
+\`\`\`
+
+**Parameters:**
+- \`type='textbox'\` - field type
+- \`value:'...'\` - initial value (optional)
+- \`placeholder:'...'\` - hint text in empty field (optional)
+- \`key='uniqueKey'\` - unique field key
+
+**Example:**
+\`\`\`
+Full Name: {FIELD:type='textbox',placeholder:'Enter full name',key='fullname'}
+Comment: {FIELD:type='textbox',value:'',key='comment'}
+\`\`\`
+
+### 5. Date (Date Field)
+Used for entering dates.
+
+**Syntax:**
+\`\`\`
+{FIELD:type='date',value:'DD.MM.YYYY',key='uniqueKey'}
+\`\`\`
+
+**Parameters:**
+- \`type='date'\` - field type
+- \`value:'DD.MM.YYYY'\` - initial date value in DD.MM.YYYY format
+- \`key='uniqueKey'\` - unique field key
+
+**Example:**
+\`\`\`
+Date of Birth: {FIELD:type='date',value:'01.01.2000',key='birthdate'}
+Signing Date: {FIELD:type='date',value:'10.11.2025',key='signdate'}
+\`\`\`
+
+## Rules for Using Keys
+
+### Unique Keys
+Each field must have a unique \`key\` that identifies it.
+
+### Same Keys for Related Fields
+**IMPORTANT:** If multiple fields in the document MUST have the same value, use the same \`key\` for them.
+
+**Examples when the same key is needed:**
+- Client name mentioned in multiple places in a contract
+- Document date repeated at the beginning and end
+- Contract number appearing in different sections
+
+**Example:**
+\`\`\`
+# Contract
+
+Client: {FIELD:type='textbox',placeholder:'Client full name',key='client_name'}
+
+... contract text ...
+
+Client Signature: {FIELD:type='textbox',placeholder:'Full name',key='client_name'}
+________________
+\`\`\`
+
+In this example, both fields use \`key='client_name'\`, so when one field is filled, the other will be automatically filled as well.
+
+### GroupKey for Radio Buttons
+For radio buttons, always use the same \`groupKey\` for all options of the same question. This ensures that only one option can be selected from the group.
+
+## Recommendations for Choosing Field Type
+
+| Task | Field Type |
+|------|------------|
+| Yes/No, agreement, checkbox | \`checkbox\` |
+| Choose one of 2-5 options (exclusive) | \`radiobutton\` |
+| Choose from many options (list) | \`combobox\` |
+| Enter text, name, address | \`textbox\` |
+| Enter date | \`date\` |
+
+## Complete Document Example
+
+\`\`\`markdown
+# Employee Form
+
+## Personal Information
+
+**Full Name:** {FIELD:type='textbox',placeholder:'John Smith',key='fullname'}
+
+**Date of Birth:** {FIELD:type='date',value:'01.01.1990',key='birthdate'}
+
+**Gender:**
+- {FIELD:type='radiobutton',checked='true',key='gender_m',groupKey='gender',text='Male'}
+- {FIELD:type='radiobutton',checked='false',key='gender_f',groupKey='gender',text='Female'}
+
+**City of Residence:** {FIELD:type='combobox',items:'New York,Los Angeles,Chicago,Other',key='city'}
+
+## Education
+
+**Education Level:**
+- {FIELD:type='radiobutton',checked='false',key='edu_bachelors',groupKey='education',text='Bachelor's Degree'}
+- {FIELD:type='radiobutton',checked='false',key='edu_masters',groupKey='education',text='Master's Degree'}
+- {FIELD:type='radiobutton',checked='false',key='edu_highschool',groupKey='education',text='High School'}
+
+## Agreements
+
+{FIELD:type='checkbox',checked='false',key='agree_data',text='Data processing consent'} I agree to personal data processing
+
+{FIELD:type='checkbox',checked='false',key='agree_rules',text='Rules agreement'} I agree to the company rules
+
+---
+
+**Date Completed:** {FIELD:type='date',value:'10.11.2025',key='fill_date'}
+
+**Signature:** {FIELD:type='textbox',placeholder:'Full name',key='fullname'}
+\`\`\`
+
+## Important Notes
+
+1. Always use single quotes \`'\` for string values
+2. For lists in \`items\` use colon \`:\` and commas without spaces
+3. Dates are always in \`DD.MM.YYYY\` format
+4. Don't forget \`groupKey\` for radio buttons
+5. Use meaningful names for \`key\` (in English, without spaces)
+6. If a field should be empty, use \`value:''\` or \`text:''\``;
+
+		let fullPrompt = instructions + "\n\n# Document to Generate\n\n" + params.description;
+
+		await streamPromptResultToDocument(fullPrompt);
+	};
+
+	return func;
+})());
+HELPERS.word.push((function(){
+	let func = new RegisteredFunction({
 		"name": "insertPage",
 		"description": "Inserts a blank page at the specified location in the document.",
 		"parameters": {
@@ -776,15 +1049,27 @@ HELPERS.slide.push((function(){
 				},
 				"data": {
 					"type": "array",
-					"description": "2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count"
+					"description": "2D array of numeric data values - all sub-arrays must have same length, number of arrays must match series count",
+					"items": {
+						"type": "array",
+						"items": {
+							"type": "number"
+						}
+					}
 				},
 				"series": {
 					"type": "array",
-					"description": "array of series names - must have same length as data arrays count"
+					"description": "array of series names - must have same length as data arrays count",
+					"items": {
+						"type": "string"
+					}
 				},
 				"categories": {
 					"type": "array",
-					"description": "array of category names - must have same length as each data array"
+					"description": "array of category names - must have same length as each data array",
+					"items": {
+						"type": "string"
+					}
 				},
 				"prompt": {
 					"type": "string",
@@ -1134,7 +1419,13 @@ HELPERS.slide.push((function(){
 				},
 				"data": {
 					"type": "array",
-					"description": "2D array of cell values - rows x columns"
+					"description": "2D array of cell values - rows x columns",
+					"items": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
 				}
 			},
 			"required": []
@@ -1574,7 +1865,10 @@ HELPERS.slide.push((function(){
 				},
 				"gradientColors": {
 					"type": "array",
-					"description": "array of hex colors for gradient"
+					"description": "array of hex colors for gradient",
+					"items": {
+						"type": "string"
+					}
 				}
 			},
 			"required": []
@@ -2036,6 +2330,7 @@ HELPERS.slide.push((function(){
 			this._started = false;
 			this._ended = false;
 			this._pendingPictureDrawingId = null;
+			this._lastDrawingId = null;
 		}
 
 		function Executor(requestEngine, logger) {
@@ -2901,9 +3196,101 @@ HELPERS.slide.push((function(){
 			this.s.docContentId = null;
 			this.s.paraId = null;
 		};
+		Executor.prototype.slideTransition = async function (effect, speed, advanceOnClick) {
+			if (!this._requireInSlide("slide.transition")) {
+				return;
+			}
+			const slideIndex = this.s.currentSlideIndex;
+			Asc.scope._slideIndex = slideIndex;
+			Asc.scope._effect = effect || "effectFadeSmoothly";
+			Asc.scope._speed = speed || "medium";
+			Asc.scope._advanceOnClick = advanceOnClick !== false;
+			await Asc.Editor.callCommand(function () {
+				const pres = Api.GetPresentation();
+				const slide = pres.GetSlideByIndex(Asc.scope._slideIndex);
+				if (!slide) {
+					return;
+				}
+				const transition = Api.CreateSlideShowTransition();
+				transition.SetEntryEffect(Asc.scope._effect);
+				transition.SetSpeed(Asc.scope._speed);
+				transition.SetAdvanceOnClick(Asc.scope._advanceOnClick);
+				slide.SetSlideShowTransition(transition);
+			});
+			Asc.scope._slideIndex = null;
+			Asc.scope._effect = null;
+			Asc.scope._speed = null;
+			Asc.scope._advanceOnClick = null;
+		};
+		Executor.prototype.animation = async function (ph_type, ph_idx, effectType, trigger, duration) {
+			if (!this._requireInSlide("animation")) {
+				return;
+			}
+			const slideIndex = this.s.currentSlideIndex;
+			const normalizedPhType = normalizePhType(ph_type);
+			Asc.scope._slideIndex = slideIndex;
+			Asc.scope._ph_type = normalizedPhType;
+			Asc.scope._ph_idx = Number(ph_idx || 0);
+			Asc.scope._effectType = effectType || "fade";
+			Asc.scope._trigger = trigger || "afterprevious";
+			Asc.scope._duration = Number(duration) || 500;
+			await Asc.Editor.callCommand(function () {
+				const pres = Api.GetPresentation();
+				const slide = pres.GetSlideByIndex(Asc.scope._slideIndex);
+				if (!slide) {
+					return;
+				}
+				const drawings = slide.GetAllDrawings();
+				let targetDrawing = null;
+				for (let d of drawings) {
+					const ph = d.GetPlaceholder();
+					if (!ph) {
+						continue;
+					}
+					const type = ph.GetType();
+					const typeOk = type === Asc.scope._ph_type ||
+						(type === "unknown" && Asc.scope._ph_type === "body") ||
+						(type === "ctrTitle" && Asc.scope._ph_type === "title");
+					if (!typeOk) {
+						continue;
+					}
+					const phIdx = parseInt(ph.GetIndex() || "0");
+					const want = parseInt(Asc.scope._ph_idx || 0);
+					const match = phIdx === want || (!ph.GetIndex() && want === 0);
+					if (match) {
+						targetDrawing = d;
+						break;
+					}
+				}
+				if (!targetDrawing) {
+					return;
+				}
+				const timeLine = slide.GetTimeLine();
+				if (!timeLine) {
+					return;
+				}
+				const seq = timeLine.GetMainSequence();
+				if (!seq) {
+					return;
+				}
+				const effect = seq.AddEffect(targetDrawing, Asc.scope._effectType, Asc.scope._trigger);
+				if (effect && Asc.scope._duration) {
+					effect.SetDuration(Asc.scope._duration);
+				}
+			});
+			Asc.scope._slideIndex = null;
+			Asc.scope._ph_type = null;
+			Asc.scope._ph_idx = null;
+			Asc.scope._effectType = null;
+			Asc.scope._trigger = null;
+			Asc.scope._duration = null;
+		};
 
 		const fontList = await Asc.Editor.callMethod("GetFontList");
 		const availableFonts = fontList.map(f => f.m_wsFontName).filter(Boolean);
+
+		const editorVersion = await Asc.Library.GetEditorVersion();
+		const supportsAnimations = editorVersion >= 9003000;
 
 		const requestEngine = AI.Request.create(AI.ActionType.Chat);
 		if (!requestEngine) return;
@@ -2927,6 +3314,67 @@ SLIDE COUNT CONTRACT (CRITICAL — HARD CAP):
 - Never emit a ${userSlideCount + 1}-th {"t":"slide.start"} under any circumstances.
 ` : ``;
 
+
+const animationCommands = supportsAnimations ? `
+- {"t":"slide.transition","effect":"effectFadeSmoothly","speed":"medium","advanceOnClick":true}
+- {"t":"animation","ph_type":"title|ctrTitle|subTitle|body","ph_idx":<number>,"effect":"fade|appear|fly-in|float-in|wipe|zoom|bounce|split|wheel","trigger":"withprevious|afterprevious|onclick","duration":500}
+` : '';
+
+const animationConstraint = supportsAnimations ?
+`- Add slide transitions and animations for professional polish. When animating a slide, animate all its content elements (title and body). See "SLIDE TRANSITIONS & ANIMATIONS" section.` : '';
+
+const animationSection = supportsAnimations ? `
+SLIDE TRANSITIONS & ANIMATIONS:
+
+Use transitions and animations where logical and appropriate for the content and narrative.
+Not every slide needs effects — use them to enhance meaning, not distract from it.
+
+Transitions (slide.transition):
+- Add transitions to slides for visual flow — section changes, topic shifts, after visual content.
+- Skip transition on title slide (first slide).
+- Place {"t":"slide.transition",...} AFTER {"t":"slide.start"} and BEFORE any content.
+- Available effects:
+  * Subtle: "effectFadeSmoothly", "effectFade", "effectDissolve", "effectWipeLeft", "effectWipeRight", "effectWipeUp", "effectWipeDown"
+  * Modern: "effectPushLeft", "effectPushRight", "effectCoverLeft", "effectCoverRight"
+  * Bold: "effectCubeLeft", "effectCubeRight", "effectFlipLeft", "effectFlipRight"
+- Speed: "fast", "medium", "slow". Use "medium" by default.
+- Match style: corporate → fade/wipe; modern → push/cover; creative → cube/flip.
+
+Animations (animation):
+- Add animations to reveal content sequentially — titles, then body content.
+- When you animate a slide, animate ALL content elements (title AND body/chart/table) so everything appears in sequence.
+- Place {"t":"animation",...} AFTER each element's figure.end/table.end/chart.end/picture.end.
+- Effects: "fade", "appear", "wipe", "float-in", "zoom", "fly-in", "bounce", "split", "wheel".
+- Trigger: "afterprevious" (auto-play in sequence), "withprevious" (simultaneous), "onclick" (on click).
+- Duration: 300-800ms. Use 500ms as default.
+- Do NOT animate: dt, ftr, sldNum placeholders.
+
+Example — title slide with animations:
+{"t":"slide.start","layout":"title"}
+{"t":"figure.start","ph_type":"ctrTitle","ph_idx":0}
+{"t":"para","text":"Quarterly Report"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"ctrTitle","ph_idx":0,"effect":"fade","trigger":"afterprevious","duration":500}
+{"t":"figure.start","ph_type":"subTitle","ph_idx":1}
+{"t":"para","text":"Q4 2024 Results"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"subTitle","ph_idx":1,"effect":"fade","trigger":"afterprevious","duration":400}
+{"t":"slide.end"}
+
+Example — content slide with transition and animations:
+{"t":"slide.start","layout":"obj"}
+{"t":"slide.transition","effect":"effectFadeSmoothly","speed":"medium"}
+{"t":"figure.start","ph_type":"title","ph_idx":0}
+{"t":"para","text":"Key Findings"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"title","ph_idx":0,"effect":"fade","trigger":"afterprevious","duration":400}
+{"t":"figure.start","ph_type":"body","ph_idx":1}
+{"t":"para","text":"Revenue grew by 15%"}
+{"t":"para","text":"Customer base expanded"}
+{"t":"figure.end"}
+{"t":"animation","ph_type":"body","ph_idx":1,"effect":"wipe","trigger":"afterprevious","duration":500}
+{"t":"slide.end"}
+` : '';
 
 const fontsContract = `
 FONT SELECTION POLICY
@@ -3001,12 +3449,13 @@ Allowed commands (flat placeholder fields; NO nested "placeholder" objects):
 - {"t":"notes.start"}
 - {"t":"para","text":"speaker note..."}  // no bullets in notes either
 - {"t":"notes.end"}
-
+${animationCommands}
 
 ${additionalConstrait}
 
 Constraints:
 - The VERY FIRST object must be {"t":"presentation.start"} and the VERY LAST must be {"t":"presentation.end"}.
+${animationConstraint}
 - All commands (theme.*, slide.*, figure.*, para, picture.*, table.*, chart.*, notes.*) MUST appear STRICTLY between presentation.start and presentation.end.
 - Inside the presentation, all slide content and notes MUST appear strictly between that slide’s {"t":"slide.start"} and {"t":"slide.end"}.
 - Do NOT emit any figure/table/chart/picture/notes/para outside an open slide.
@@ -3033,7 +3482,7 @@ Constraints:
   * A slide = one {"t":"slide.start",...} ... {"t":"slide.end"} pair.
   * Never exceed or fall short of this number. If you need more content, compress/merge within existing slides.
   * If the user did not provide a slide count, choose an optimal number yourself and do NOT state any number.
-
+${animationSection}
 - Language (critical):
   * The "language" property in {"t":"presentation.start", ...} defines the language for ALL human-readable text in this deck:
 	slide titles, body paragraphs, captions, picture.desc, chart titles/axes/categories/series names, speaker notes, etc.
@@ -3353,6 +3802,22 @@ ${fontsContract}
 					}
 					if (t === "notes.end") {
 						await exec.notesEnd();
+						continue;
+					}
+
+					// TRANSITION
+					if (t === "slide.transition") {
+						if (supportsAnimations) {
+							await exec.slideTransition(cmd.effect, cmd.speed, cmd.advanceOnClick);
+						}
+						continue;
+					}
+
+					// ANIMATION
+					if (t === "animation") {
+						if (supportsAnimations) {
+							await exec.animation(cmd.ph_type, cmd.ph_idx, cmd.effect, cmd.trigger, cmd.duration);
+						}
 						continue;
 					}
 				}

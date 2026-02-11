@@ -52,7 +52,13 @@
 				},
 				"data": {
 					"type": "array",
-					"description": "2D array of cell values - rows x columns"
+					"description": "2D array of cell values - rows x columns",
+					"items": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
 				}
 			},
 			"required": []

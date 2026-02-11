@@ -174,5 +174,8 @@
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Рекајте AI шта да ради са одабраним текстом (нпр., \"Пронађи грешке у факту\" или \"Сажми\")",
 	"Create AI assistant": "Креирај AI асистента",
 	"Match": "Поређај",
-	"Proposal for replacement": "Предлог за замену"
+	"Proposal for replacement": "Предлог за замену",
+	"Hint": "Hint",
+	"Replace": "Замени", 
+	"Replace + Hint": "Замени + Hint"
 }

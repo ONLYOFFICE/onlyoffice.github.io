@@ -174,5 +174,8 @@
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Попросите ИИ выполнить действие над выбранным текстом (например, \"Найти фактические ошибки\" или \"Сжать\")",
 	"Create AI assistant": "Создать ассистента ИИ",
 	"Match": "Совпадение",
-	"Proposal for replacement": "Предложение для замены"
+	"Proposal for replacement": "Предложение для замены",
+	"Hint": "Подсказка",
+	"Replace": "Заменa",
+	"Replace + Hint": "Замена + Подсказка"
 }
