@@ -140,7 +140,7 @@ window.addSupportAgentMode = function(editorVersion) {
 				async function checkEndAction() {
 					if (!isSendedEndLongAction) {
 						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-						isSendedEndLongAction = true
+						isSendedEndLongAction = true;
 					}
 				}
 
@@ -192,9 +192,6 @@ window.addSupportAgentMode = function(editorVersion) {
 					if (!data)
 						return;
 
-					if (isSupportStreaming)
-						await checkEndAction();
-					
 					let oldBuffer = buffer;
 					buffer += data;
 					if (checkBuffer && buffer.length >= bufferWait.length) {
@@ -203,6 +200,9 @@ window.addSupportAgentMode = function(editorVersion) {
 							checkBuffer = false;
 						}
 					}
+
+					if (isSupportStreaming && !checkBuffer)
+						await checkEndAction();
 
 					if (!checkBuffer)
 						await onStreamEvent(data);
@@ -459,6 +459,31 @@ constructor() {\n\
 		if (isUpdate)
 			AI.Storage.save();
 		
+	});
+
+	_this.attachEditorEvent("ai_onCallTool", async function(toolCall) {
+		let funcName = toolCall.name;
+		let funcArgs = toolCall.arguments;
+		let argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+
+		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+
+		let toolResult = {};
+		try {
+			toolResult = await window.EditorHelper.names2funcs[funcName].call(argsObj);
+			if (!toolResult)
+				toolResult = {};
+			toolResult.message = "System function '" + funcName + "' executed successfully";
+		} catch (e) {
+			let errorMsg = "Error calling function: " + funcName;
+			console.error(errorMsg);
+			toolResult = {
+				error: errorMsg
+			};
+		}
+
+		await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+		window.Asc.plugin.sendEvent("ai_onCallToolResult", toolResult);
 	});
 }
 
