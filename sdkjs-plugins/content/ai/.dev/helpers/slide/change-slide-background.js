@@ -52,7 +52,10 @@
 				},
 				"gradientColors": {
 					"type": "array",
-					"description": "array of hex colors for gradient"
+					"description": "array of hex colors for gradient",
+					"items": {
+						"type": "string"
+					}
 				}
 			},
 			"required": []
