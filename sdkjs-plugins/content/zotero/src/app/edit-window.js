@@ -29,13 +29,9 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
 // @ts-check
 
 /// <reference path="../app/types-global.js" />
-
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
-
 
 import { InputField, Checkbox, SelectBox } from "./shared/components";
 import LOCATOR_VALUES from "./shared/constants/locator-values";
@@ -65,6 +61,7 @@ import "../edit-window.css";
             }
             /** @type {HTMLElement} */
             this._container = container;
+            this._field = null;
             
             /** @type {{citationItems: CitationItem[]} | null} */
             this.citationObject = null;
@@ -78,18 +75,8 @@ import "../edit-window.css";
         createForm(citationItem) {
             const form = document.createElement("form");
             form.classList.add("form");
-            form.classList.add("message-container");
             this._container.appendChild(form);
 
-            var deleteBtn = document.createElement("button");
-            deleteBtn.className = "message-close i18n";
-            deleteBtn.textContent = "×";
-            deleteBtn.setAttribute("aria-label", "Close");
-            deleteBtn.setAttribute("title", "Remove");
-            deleteBtn.setAttribute("type", "button");
-
-            deleteBtn.onclick = this.removeItem.bind(this, form, citationItem.id);
-            form.appendChild(deleteBtn);
             const title = document.createElement("div");
             title.classList.add("title");
             title.textContent = citationItem.itemData.title;
@@ -120,17 +107,14 @@ import "../edit-window.css";
                 type: "text",
                 placeholder: "Prefix",
                 value: citationItem.prefix,
-                showClear: false,
             });
             const suffixInput = new InputField(suffix, {
                 type: "text",
                 placeholder: "Suffix",
                 value: citationItem.suffix,
-                showClear: false,
             });
             const locatorSelectbox = new SelectBox(locatorSelect, {
                 placeholder: "Locator",
-                translate: Asc.plugin.tr,
             });
             const locatorLabel = citationItem.label || "page";
             LOCATOR_VALUES.forEach(function (info) {
@@ -144,10 +128,9 @@ import "../edit-window.css";
                 type: "text",
                 placeholder: locatorPlaceholder,
                 value: citationItem.locator,
-                showClear: false,
             });
             const omitAuthorInput = new Checkbox(omitAuthor, {
-                label: "Omit Author",
+                label: "Omit author",
                 checked: !!citationItem["suppress-author"],
             });
 
@@ -170,82 +153,27 @@ import "../edit-window.css";
             form.appendChild(params);
         }
 
-        updateRemoveButtonsVisibility() {
-            if (!this.citationObject) {
-                return;
-            }
-            const numOfCitations = this.citationObject.citationItems.length;
-            if (numOfCitations > 1) {
-                this._container.classList.remove('hide-remove-button');
-            } else {
-                this._container.classList.add('hide-remove-button');
-            }
-            const formHeight = (document.querySelector('form')?.offsetHeight || 134);
-            const winHeight = numOfCitations === 1 ? (formHeight + 16) : (2 * formHeight);
-            window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
-        }
-
-        /**
-         * @param {HTMLFormElement} form
-         * @param {string} id
-         */
-        removeItem(form, id) {
-            if (!this.citationObject) {
-                return;
-            }
-            this.citationObject.citationItems = this.citationObject.citationItems.filter(item => item.id !== id);
-            this._container.removeChild(form);
-
-            this.updateRemoveButtonsVisibility();
-        }
-
-        onTranslate() {
-            const elements = document.getElementsByClassName("i18n");
-            for (let i = 0; i < elements.length; i++) {
-                let el = elements[i];
-                if (el instanceof HTMLElement === false) continue;
-
-                ["placeholder", "title"].forEach((attr) => {
-                    if (el.hasAttribute(attr)) {
-                        el.setAttribute(
-                            attr,
-                            window.Asc.plugin.tr(el.getAttribute(attr) || ""),
-                        );
-                    }
-                });
-
-                const translated = window.Asc.plugin.tr(
-                    el.innerText.trim().replace(/\s+/g, " "),
-                );
-                if (translated) el.innerText = translated;
-            }
-        }
-
-        /** @param {AscTheme} theme */
+        /** @param {ThemeColors} theme */
         onThemeChanged(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);
             Theme.fixThemeForIE(theme);
             Theme.addStylesForComponents(theme);
-            let rules = "";
-            rules +=
-                "body { background-color: " +
-                theme["background-normal"]  +
-                " !important;}\n";
-
-            let styleTheme = document.getElementById("pluginStyles");
-            if (!styleTheme) {
-                styleTheme = document.createElement("style");
-                styleTheme.id = "pluginStyles";
-                styleTheme.innerHTML = rules;
-                document.getElementsByTagName("head")[0].appendChild(styleTheme);
-            } else {
-                styleTheme.innerHTML = rules;
-            }
         }
 
-        /** @param {{citationItems: CitationItem[]}} citationObject */
-        async onAttachedContent(citationObject) {
-            this.citationObject = citationObject;
+        /** @param {CustomField} field */
+        onAttachedContent(field) {
+            this._field = field;
+
+            const citationStartIndex = field.Value.indexOf("{");
+            const citationEndIndex = field.Value.lastIndexOf("}");
+            if (citationStartIndex === -1) {
+                return;
+            }
+            const citationString = field.Value.slice(
+                citationStartIndex,
+                citationEndIndex + 1,
+            );
+            this.citationObject = JSON.parse(citationString);
 
             if (!this.citationObject) {
                 return;
@@ -255,16 +183,11 @@ import "../edit-window.css";
                     this.createForm(item);
                 },
             );
-            this.updateRemoveButtonsVisibility();
 
-            for (let i = 0; i < 10; i++) {
-                if (window.Asc.plugin.translateManager) {
-                    this.onTranslate();
-                    i = Number.MAX_SAFE_INTEGER;
-                    break;
-                }
-                await new Promise(resolve => setTimeout(() => resolve(true), 100));
-            }
+            window.Asc.plugin.sendToPlugin(
+                "onUpdateHeight",
+                document.body.scrollHeight,
+            );
         }
 
         onClickSave() {

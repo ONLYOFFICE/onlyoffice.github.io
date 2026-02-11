@@ -169,6 +169,7 @@ import "../styles.css";
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
+        addContextMenuButtons();
     };
 
     /** @returns {Promise<UserGroupInfo[]>} */
@@ -220,7 +221,9 @@ import "../styles.css";
                     });
 
                     if (selectedGroups.indexOf("my_library") !== -1) {
-                        promises.push(loadLibrary(sdk.getItems(text), false));
+                        promises.push(
+                            loadLibrary(sdk.getItems(text), false),
+                        );
                     }
 
                     for (var i = 0; i < groups.length; i++) {
@@ -257,18 +260,19 @@ import "../styles.css";
                     return Promise.allSettled(promises);
                 })
                 .then(function (
-                    /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib
-                ) {
-                    let numOfShown = 0;
-                    numOfShownByLib.forEach(function (promise) {
-                        if (promise.status === "fulfilled") {
-                            numOfShown += promise.value;
+                        /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib,
+                    ) {
+                        let numOfShown = 0;
+                        numOfShownByLib.forEach(function (promise) {
+                            if (promise.status === "fulfilled") {
+                                numOfShown += promise.value;
+                            }
+                        });
+                        if (numOfShown === 0) {
+                            selectCitation.displayNothingFound();
                         }
-                    });
-                    if (numOfShown === 0) {
-                        selectCitation.displayNothingFound();
-                    }
-                });
+                    },
+                );
         });
 
         refreshBtn.subscribe(async function (event) {
@@ -286,12 +290,18 @@ import "../styles.css";
             showLoader();
             /** @type {number} */
             let cursorPos = await CursorService.getCursorPosition();
-            let updateFn = citationService.updateCslItems.bind(citationService, false);
+            let updateFn = citationService.updateCslItems.bind(
+                citationService,
+                false
+            );
 
             const styleManager = settings.getStyleManager();
             if (styleManager.getLastUsedFormat() === "note") {
                 // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
+                updateFn = citationService.updateCslItemsInNotes.bind(
+                    citationService,
+                    styleManager.getLastUsedNotesStyle()
+                );
             }
 
             updateFn()
@@ -350,8 +360,13 @@ import "../styles.css";
             }
             showLoader();
             const items = selectCitation.getSelectedItems();
-            citationService
-                .insertSelectedCitations(items)
+            /** @type {number} */
+            let cursorPos;
+            CursorService.getCursorPosition()
+                .then(function (pos) {
+                    cursorPos = pos;
+                    return citationService.insertSelectedCitations(items);
+                })
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
                     return citationService.updateCslItems();
@@ -386,19 +401,22 @@ import "../styles.css";
             if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
                 if (newState.styleFormat !== oldState.styleFormat) {
                     if (newState.styleFormat === "note") {
-                        await citationService.switchingBetweenNotesAndText(newState.notesStyle);
+                        await citationService.switchingBetweenNotesAndText(
+                            newState.notesStyle,
+                        );
                     } else {
                         await citationService.switchingBetweenNotesAndText();
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
-                    await citationService.convertNotesStyle(newState.notesStyle);
+                    await citationService.convertNotesStyle(
+                        newState.notesStyle,
+                    );
                 }
             } else {
                 await citationService.updateCslItems(true);
             }
-            
+
             await CursorService.setCursorPosition(cursorPos);
-            
         });
     }
 
@@ -467,13 +485,13 @@ import "../styles.css";
                 if (el.hasAttribute(attr)) {
                     el.setAttribute(
                         attr,
-                        translate(el.getAttribute(attr) || "")
+                        translate(el.getAttribute(attr) || ""),
                     );
                 }
             });
 
             const translated = translate(
-                el.innerText.trim().replace(/\s+/g, " ")
+                el.innerText.trim().replace(/\s+/g, " "),
             );
             if (translated) el.innerText = translated;
         }
@@ -537,9 +555,9 @@ import "../styles.css";
             loadLibrary(
                 sdk.getGroupItems(
                     lastSearch.groups[i].next(),
-                    lastSearch.groups[i].id
+                    lastSearch.groups[i].id,
                 ),
-                true
+                true,
             );
         }
     }
@@ -657,11 +675,71 @@ import "../styles.css";
             if (numOfSelected > 1) {
                 // TODO: add translate
                 insertLinkBtn.setText(
-                    translate("Insert " + numOfSelected + " Citations")
+                    translate("Insert " + numOfSelected + " Citations"),
                 );
             } else {
                 insertLinkBtn.setText(translate("Insert Citation"));
             }
         }
+    }
+
+    function addContextMenuButtons() {
+        let buttonMain = new Asc.ButtonContextMenu();
+        buttonMain.text = "Edit citation";
+        buttonMain.addCheckers("Target", "Selection");
+        buttonMain.attachOnClick(async function () {
+            /** @type {CustomField | null} */
+            const field = await new Promise((resolve) => {
+                window.Asc.plugin.executeMethod(
+                    "GetCurrentAddinField",
+                    null,
+                    resolve,
+                );
+            });
+            if (
+                !field ||
+                !field.Value ||
+                field.Value.toLowerCase().indexOf("zotero_item") === -1
+            ) {
+                return;
+            }
+            const updatedField = await citationService.showEditCitationWindow(field);
+            if (!updatedField) {
+                return;
+            }
+            showLoader();
+            /** @type {number} */
+            let cursorPos = await CursorService.getCursorPosition();
+            let updateFn = citationService.updateItem.bind(
+                citationService,
+                updatedField
+            );
+
+            const styleManager = settings.getStyleManager();
+            if (styleManager.getLastUsedFormat() === "note") {
+                // this way, because "SelectAddinField" does not work with notes
+                updateFn = citationService.updateItemInNotes.bind(
+                    citationService,
+                    updatedField,
+                    styleManager.getLastUsedNotesStyle()
+                );
+            }
+
+            updateFn()
+                .catch(function (error) {
+                    console.error(error);
+                    let message = translate("Failed to insert citation");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                })
+                .finally(function () {
+                    hideLoader();
+                    CursorService.setCursorPosition(cursorPos);
+                });
+        });
+        Asc.Buttons.registerContextMenu();
+
     }
 })();

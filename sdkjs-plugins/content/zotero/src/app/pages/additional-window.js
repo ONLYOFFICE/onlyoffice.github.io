@@ -47,6 +47,72 @@ class AdditionalWindow {
 
         this.#window.show(variation);
 
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+
+                this.#hide();
+            };
+        });
+    }    
+    /**
+     * @param {any} content
+     */
+    showEditWindow(content) {
+        this.#window = new window.Asc.PluginWindow();
+        const variation = {
+            name: "Zotero",
+            url: "edit-window.html",
+            description: window.Asc.plugin.tr("Edit citation"),
+            isVisual: true,
+            buttons: [
+                {
+                    text: window.Asc.plugin.tr("Save"),
+                    primary: true,
+                    isViewer: false,
+                },
+                { text: window.Asc.plugin.tr("Cancel"), primary: false },
+            ],
+            isModal: false,
+            EditorsSupport: ["word"],
+            size: [380, 150],
+            isViewer: true,
+            isDisplayedInViewer: false,
+            isInsideMode: false,
+        };
+
+        this.#onShow(variation, content);
+        this.#window.show(variation);
+
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = async (buttonId, windowId) => {
+                const element = await new Promise(resolve => {
+					this.#window.attachEvent("onSaveFields", resolve);
+					this.#window.command('onClickSave');
+				});
+                if (buttonId === 0) {
+                    resolve(element);
+                } else {
+                    resolve(null);
+                }
+
+                this.#hide();
+            };
+        });
+    }
+
+    /**
+     * @param {Object} variation
+     * @param {any} content
+     */
+    #onShow(variation, content) {
+        this.#defaultButtonFn = window.Asc.plugin.button;
+        this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
+        this.#defaultTranslateFn = Asc.plugin.onTranslate;
         window.Asc.plugin.onThemeChanged = (theme) => {
             this.#window.command("onThemeChanged", theme);
             this.#defaultThemeChangedFn(theme);
@@ -57,7 +123,7 @@ class AdditionalWindow {
         };
 
         this.#window.attachEvent("onWindowReady", () => {
-            this.#window.command("onAttachedText", text);
+            this.#window.command("onAttachedContent", content);
         });
 
         this.#window.attachEvent(
