@@ -43,3 +43,4 @@
 * Sorting bibliography according to style
 * Do not show attached files is search results
 * Support for styles with footnotes and endnotes
+* Ability to edit citations via the context menu
