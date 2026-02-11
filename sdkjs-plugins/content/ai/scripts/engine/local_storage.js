@@ -193,13 +193,11 @@
 					oldProviders[pr.name] = pr;
 				}
 
-				for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
-					if (AI.InternalCustomProviders[i].name === name) {
-						AI.InternalCustomProviders.splice(i, 1);
-						break;
-					}				
+				for (let i = 0, len = AI.ExternalCustomProviders.length; i < len; i++) {
+					let pr = AI.ExternalCustomProviders[i];
+					oldProviders[pr.name] = pr;
 				}
-
+				
 				for (let i in obj.providers) {
 					let pr = obj.providers[i];
 					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);

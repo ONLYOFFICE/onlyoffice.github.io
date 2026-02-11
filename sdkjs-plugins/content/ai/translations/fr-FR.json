@@ -174,5 +174,8 @@
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dites à l'IA ce qu'elle doit faire avec le texte sélectionné (par exemple, \"Trouver les erreurs factuelles\" ou \"Riassumer\")",
 	"Create AI assistant": "Créer un assistant IA",
 	"Match": "Correspondance",
-	"Proposal for replacement": "Proposition de remplacement"
+	"Proposal for replacement": "Proposition de remplacement",
+	"Hint": "Indice",
+	"Replace": "Remplacer",
+	"Replace + Hint": "Remplacer + Indice"
 }

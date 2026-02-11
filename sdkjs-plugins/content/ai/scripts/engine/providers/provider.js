@@ -615,6 +615,5 @@
 	
 	window.AI.externalModelPrefix = "[onlyoffice_external]";
 	window.AI.Provider = Provider;
-	await AI.loadInternalProviders();	
 	
 })();
