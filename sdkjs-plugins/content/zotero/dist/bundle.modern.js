@@ -2166,6 +2166,11 @@ Checkbox.prototype = {
             if (this._options.title) {
                 this._labelElement.setAttribute("title", this._options.label);
             }
+        } else {
+            var label = document.querySelector("label[for='" + this._options.id + "']");
+            if (label instanceof HTMLLabelElement) {
+                this._labelElement = label;
+            }
         }
         if (this._options.disabled) {
             this._container.classList.add("checkbox--disabled");
@@ -2361,24 +2366,31 @@ Checkbox.prototype = {
 var _SelectBox_brand = new WeakSet;
 
 class SelectBox {
-    constructor(container, options) {
+    constructor(_selectbox, _options) {
         _classPrivateMethodInitSpec(this, _SelectBox_brand);
-        if (typeof container === "string") {
-            var _temp = document.getElementById(container);
-            if (_temp instanceof HTMLElement) {
-                container = _temp;
+        if (typeof _selectbox === "string") {
+            var temp = document.getElementById(_selectbox);
+            if (temp instanceof HTMLSelectElement) {
+                _selectbox = temp;
+            } else if (temp instanceof HTMLElement) {
+                this._container = temp;
+            } else {
+                throw new Error("Invalid selectbox");
             }
+        } else if (_selectbox instanceof HTMLElement) {
+            this._container = _selectbox;
         }
-        if (container instanceof HTMLElement) {
-            this._container = container;
-        } else {
+        if (_selectbox instanceof HTMLSelectElement) {
+            this._selectbox = _selectbox;
+            this._container = document.createElement("div");
+        } else if (this._container instanceof HTMLElement === false) {
             throw new Error("Invalid container");
         }
-        this._options = Object.assign(options, {
-            placeholder: options.placeholder || "Select...",
-            searchable: options.searchable || false,
-            multiple: options.multiple || false,
-            description: options.description || ""
+        this._options = Object.assign(_options, {
+            placeholder: _options.placeholder || "Select...",
+            searchable: _options.searchable || false,
+            multiple: _options.multiple || false,
+            description: _options.description || ""
         });
         this._selectedValues = new Set;
         this.isOpen = false;
@@ -2733,6 +2745,15 @@ function _createDOM$1() {
     this._optionsContainer.className += " selectbox-options";
     this._dropdown.appendChild(this._optionsContainer);
     this._container.appendChild(fragment);
+    if (this._selectbox) {
+        var parent = this._selectbox.parentNode;
+        if (parent) {
+            parent.insertBefore(this._container, this._selectbox);
+            var options = _assertClassBrand(_SelectBox_brand, this, _extractOptions).call(this, this._selectbox);
+            this.addItems(options.values, options.selectedValue);
+            this._selectbox.remove();
+        }
+    }
 }
 
 function _bindEvents() {
@@ -3116,6 +3137,16 @@ function _triggerCustomChange(currentValue) {
             detail: detail
         });
     });
+}
+
+function _extractOptions(selectbox) {
+    var options = Array.from(selectbox.options).map(option => [ option.value, option.text ]);
+    var result = {
+        values: options
+    };
+    var selectedValue = selectbox.value;
+    if (selectedValue) result.selectedValue = selectedValue;
+    return result;
 }
 
 var _instances = {
@@ -5153,7 +5184,8 @@ class AdditionalWindow {
             };
         });
     }
-    showEditWindow(text) {
+    showEditWindow(content) {
+        var _this = this;
         _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
         var variation = {
             name: "Zotero",
@@ -5170,22 +5202,31 @@ class AdditionalWindow {
             } ],
             isModal: false,
             EditorsSupport: [ "word" ],
-            size: [ 380, 240 ],
+            size: [ 380, 150 ],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false
         };
-        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text);
+        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, content);
         _classPrivateFieldGet2(_window, this).show(variation);
         return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = (buttonId, windowId) => {
-                if (buttonId === 0) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
-            };
+            window.Asc.plugin.button = function() {
+                var _ref = _asyncToGenerator(function*(buttonId, windowId) {
+                    var element = yield new Promise(resolve => {
+                        _classPrivateFieldGet2(_window, _this).attachEvent("onSaveFields", resolve);
+                        _classPrivateFieldGet2(_window, _this).command("onClickSave");
+                    });
+                    if (buttonId === 0) {
+                        resolve(element);
+                    } else {
+                        resolve(null);
+                    }
+                    _assertClassBrand(_AdditionalWindow_brand, _this, _hide).call(_this);
+                });
+                return function(_x, _x2) {
+                    return _ref.apply(this, arguments);
+                };
+            }();
         });
     }
     destroy() {
@@ -5194,7 +5235,7 @@ class AdditionalWindow {
     }
 }
 
-function _onShow(variation, text) {
+function _onShow(variation, content) {
     _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
     _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
     _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
@@ -5207,7 +5248,7 @@ function _onShow(variation, text) {
         _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
     };
     _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
-        _classPrivateFieldGet2(_window, this).command("onAttachedText", text);
+        _classPrivateFieldGet2(_window, this).command("onAttachedContent", content);
     });
     _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
         Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, this).id, [ variation.size[0] - 2, height ] ], () => {});
@@ -5341,25 +5382,57 @@ class CitationService {
             }
         })();
     }
-    switchingBetweenNotesAndText(notesStyle) {
+    updateItem(updatedField) {
         var _this5 = this;
         return _asyncToGenerator(function*() {
             _this5._storage.clear();
             try {
-                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this5, _synchronizeStorageWithDocItems).call(_this5);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
+                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this5, _synchronizeStorageWithDocItems).call(_this5, updatedField);
                 _assertClassBrand(_CitationService_brand, _this5, _updateFormatter).call(_this5);
                 var updatedFields = yield _assertClassBrand(_CitationService_brand, _this5, _getUpdatedFields).call(_this5, fieldsWithCitations, true);
                 if (updatedFields && updatedFields.length) {
+                    return _this5.citationDocService.updateAddinFields(updatedFields);
+                }
+            } catch (e) {
+                throw e;
+            }
+        })();
+    }
+    updateItemInNotes(updatedField, notesStyle) {
+        var _this6 = this;
+        return _asyncToGenerator(function*() {
+            _this6._storage.clear();
+            try {
+                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this6, _synchronizeStorageWithDocItems).call(_this6, updatedField);
+                _assertClassBrand(_CitationService_brand, _this6, _updateFormatter).call(_this6);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this6, _getUpdatedFields).call(_this6, fieldsWithCitations, true);
+                if (updatedFields && updatedFields.length) {
+                    yield _this6.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+                }
+            } catch (e) {
+                throw e;
+            }
+        })();
+    }
+    switchingBetweenNotesAndText(notesStyle) {
+        var _this7 = this;
+        return _asyncToGenerator(function*() {
+            _this7._storage.clear();
+            try {
+                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this7, _synchronizeStorageWithDocItems).call(_this7);
+                var bNoHaveFields = fieldsWithCitations.length === 0;
+                _assertClassBrand(_CitationService_brand, _this7, _updateFormatter).call(_this7);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this7, _getUpdatedFields).call(_this7, fieldsWithCitations, true);
+                if (updatedFields && updatedFields.length) {
                     if (notesStyle) {
-                        yield _this5.citationDocService.convertTextToNotes(updatedFields, notesStyle);
+                        yield _this7.citationDocService.convertTextToNotes(updatedFields, notesStyle);
                     } else {
-                        yield _this5.citationDocService.convertNotesToText(updatedFields);
+                        yield _this7.citationDocService.convertNotesToText(updatedFields);
                     }
                 }
                 if (bibField) {
-                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this5, _updateBibliography).call(_this5, bNoHaveFields, bibField) ];
-                    yield _this5.citationDocService.updateAddinFields(bibFields);
+                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this7, _updateBibliography).call(_this7, bNoHaveFields, bibField) ];
+                    yield _this7.citationDocService.updateAddinFields(bibFields);
                 }
             } catch (e) {
                 throw e;
@@ -5367,35 +5440,29 @@ class CitationService {
         })();
     }
     convertNotesStyle(notesStyle) {
-        var _this6 = this;
+        var _this8 = this;
         return _asyncToGenerator(function*() {
-            _this6._storage.clear();
+            _this8._storage.clear();
             try {
-                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this6, _synchronizeStorageWithDocItems).call(_this6);
-                _assertClassBrand(_CitationService_brand, _this6, _updateFormatter).call(_this6);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this6, _getUpdatedFields).call(_this6, fieldsWithCitations, false);
+                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8);
+                _assertClassBrand(_CitationService_brand, _this8, _updateFormatter).call(_this8);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this8, _getUpdatedFields).call(_this8, fieldsWithCitations, false);
                 if (!updatedFields || !updatedFields.length) return;
-                yield _this6.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+                yield _this8.citationDocService.convertNotesStyle(updatedFields, notesStyle);
             } catch (e) {
                 throw e;
             }
         })();
     }
-    showEditCitationWindow(fieldId) {
-        var _this7 = this;
+    showEditCitationWindow(field) {
+        var _this9 = this;
         return _asyncToGenerator(function*() {
-            var fields = yield _this7.citationDocService.getAddinZoteroFields();
-            var citationObject = _assertClassBrand(_CitationService_brand, _this7, _extractField).call(_this7, fields[0]);
-            var field = citationObject.citationItems[0].itemData;
-            console.log(field);
-            if (!field) return;
-            var text = "<p>" + field.title + "</p>";
-            var bNeedSaveEdits = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, _this7).showEditWindow(text);
-            if (bNeedSaveEdits) {
-                console.log("Save");
-            } else {
-                console.log("Cancel");
+            if (!field) return null;
+            var updatedField = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, _this9).showEditWindow(field);
+            if (!updatedField) {
+                return null;
             }
+            return updatedField;
         })();
     }
 }
@@ -5514,7 +5581,7 @@ function _extractField(field) {
     return citationObject;
 }
 
-function _synchronizeStorageWithDocItems() {
+function _synchronizeStorageWithDocItems(updatedField) {
     var self = this;
     return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
         var numOfItems = 0;
@@ -5538,7 +5605,11 @@ function _synchronizeStorageWithDocItems() {
                 citationID = citationObject.citationID;
             }
             var cslCitation = new CSLCitation(numOfItems, citationID);
-            numOfItems += cslCitation.fillFromObject(citationObject);
+            if (updatedField) {
+                numOfItems += cslCitation.fillFromObject(updatedField);
+            } else {
+                numOfItems += cslCitation.fillFromObject(citationObject);
+            }
             cslCitation.getCitationItems().forEach(function(item) {
                 self._storage.set(item.id, item);
             });
@@ -5547,6 +5618,14 @@ function _synchronizeStorageWithDocItems() {
                 cslCitation: cslCitation
             };
         });
+        if (updatedField) {
+            fieldsWithCitations = fieldsWithCitations.filter(function(b) {
+                if (b.cslCitation.citationID === updatedField.citationID) {
+                    return true;
+                }
+                return false;
+            });
+        }
         return {
             bibField: bibField,
             bibFieldValue: bibFieldValue,
@@ -6801,12 +6880,13 @@ SearchFilterComponents.prototype._selectedGroupsWatcher = function(customGroups,
     });
 };
 
+var LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
+
 function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) {
     this._displayNoneClass = displayNoneClass;
     this._items = {};
     this._html = {};
     this._checks = {};
-    this._LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
     this._docsHolder = document.getElementById("docsHolder");
     this._nothingFound = document.getElementById("nothingFound");
@@ -7017,7 +7097,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function(item) {
     var locatorSelectbox = new SelectBox(locatorSelect, {
         placeholder: "Locator"
     });
-    this._LOCATOR_VALUES.forEach(function(info) {
+    LOCATOR_VALUES.forEach(function(info) {
         var selected = info[0] === locatorLabel;
         locatorSelectbox.addItem(info[0], info[1], selected);
         if (selected) {
@@ -7285,6 +7365,7 @@ SelectCitationsComponent.prototype.count = function() {
             });
         });
         window.Asc.plugin.onTranslate = applyTranslations;
+        addContextMenuButtons();
     };
     function loadGroups() {
         return sdk.getUserGroups().then(function(groups) {
@@ -7626,6 +7707,42 @@ SelectCitationsComponent.prototype.count = function() {
                 insertLinkBtn.setText(translate("Insert Citation"));
             }
         }
+    }
+    function addContextMenuButtons() {
+        var buttonMain = new Asc.ButtonContextMenu;
+        buttonMain.text = "Edit citation";
+        buttonMain.addCheckers("Target", "Selection");
+        buttonMain.attachOnClick(_asyncToGenerator(function*() {
+            var field = yield new Promise(resolve => {
+                window.Asc.plugin.executeMethod("GetCurrentAddinField", null, resolve);
+            });
+            if (!field || !field.Value || field.Value.toLowerCase().indexOf("zotero_item") === -1) {
+                return;
+            }
+            var updatedField = yield citationService.showEditCitationWindow(field);
+            if (!updatedField) {
+                return;
+            }
+            showLoader();
+            var cursorPos = yield CursorService.getCursorPosition();
+            var updateFn = citationService.updateItem.bind(citationService, updatedField);
+            var styleManager = settings.getStyleManager();
+            if (styleManager.getLastUsedFormat() === "note") {
+                updateFn = citationService.updateItemInNotes.bind(citationService, updatedField, styleManager.getLastUsedNotesStyle());
+            }
+            updateFn().catch(function(error) {
+                console.error(error);
+                var message = translate("Failed to insert citation");
+                if (typeof error === "string") {
+                    message += ". " + translate(error);
+                }
+                showError(message);
+            }).finally(function() {
+                hideLoader();
+                CursorService.setCursorPosition(cursorPos);
+            });
+        }));
+        Asc.Buttons.registerContextMenu();
     }
 })();
 //# sourceMappingURL=bundle.modern.js.map

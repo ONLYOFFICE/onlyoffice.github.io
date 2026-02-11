@@ -434,7 +434,7 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @property {CallCommandCallback} callCommand
  * @property {function(): void} init
  * @property {object} info
- * @property {function(string): void} sendToPlugin
+ * @property {function(string, any): void} sendToPlugin
  * @property {function} onTranslate
  * @property {function(string, function): void} attachEvent
  * @property {function(ThemeColors): void} onThemeChanged

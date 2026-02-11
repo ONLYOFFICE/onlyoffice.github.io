@@ -58,9 +58,9 @@ class AdditionalWindow {
         });
     }    
     /**
-     * @param {string} text
+     * @param {any} content
      */
-    showEditWindow(text) {
+    showEditWindow(content) {
         this.#window = new window.Asc.PluginWindow();
         const variation = {
             name: "Zotero",
@@ -77,21 +77,25 @@ class AdditionalWindow {
             ],
             isModal: false,
             EditorsSupport: ["word"],
-            size: [380, 240],
+            size: [380, 150],
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
         };
 
-        this.#onShow(variation, text);
+        this.#onShow(variation, content);
         this.#window.show(variation);
 
         return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = (buttonId, windowId) => {
+            window.Asc.plugin.button = async (buttonId, windowId) => {
+                const element = await new Promise(resolve => {
+					this.#window.attachEvent("onSaveFields", resolve);
+					this.#window.command('onClickSave');
+				});
                 if (buttonId === 0) {
-                    resolve(true);
+                    resolve(element);
                 } else {
-                    resolve(false);
+                    resolve(null);
                 }
 
                 this.#hide();
@@ -101,9 +105,9 @@ class AdditionalWindow {
 
     /**
      * @param {Object} variation
-     * @param {string} text
+     * @param {any} content
      */
-    #onShow(variation, text) {
+    #onShow(variation, content) {
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
         this.#defaultTranslateFn = Asc.plugin.onTranslate;
@@ -117,7 +121,7 @@ class AdditionalWindow {
         };
 
         this.#window.attachEvent("onWindowReady", () => {
-            this.#window.command("onAttachedText", text);
+            this.#window.command("onAttachedContent", content);
         });
 
         this.#window.attachEvent(
