@@ -55,7 +55,7 @@
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
 			window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChangedBase);
 
-			window.Asc.plugin.attachEvent("onAttachedText", function (htmlContent) {
+			window.Asc.plugin.attachEvent("onAttachedContent", function (htmlContent) {
 				document.querySelector(".content").innerHTML = htmlContent;
 				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
 			});

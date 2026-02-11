@@ -37,6 +37,7 @@
 
 import { translate } from "../../services";
 import { Checkbox, InputField, SelectBox } from "../components";
+import LOCATOR_VALUES from "../constants/locator-values";
 
 /**
  * @typedef {Object} Scroller
@@ -60,30 +61,6 @@ function SelectCitationsComponent(
     this._html = {};
     /** @type {Object<string|number, Checkbox>} */
     this._checks = {};
-
-    this._LOCATOR_VALUES = [
-        ["appendix", "Appendix"],
-        ["article", "Article"],
-        ["book", "Book"],
-        ["chapter", "Chapter"],
-        ["column", "Column"],
-        ["figure", "Figure"],
-        ["folio", "Folio"],
-        ["issue", "Issue"],
-        ["line", "Line"],
-        ["note", "Note"],
-        ["opus", "Opus"],
-        ["page", "Page"],
-        ["paragraph", "Paragraph"],
-        ["part", "Part"],
-        ["rule", "Rule"],
-        ["section", "Section"],
-        ["sub-verbo", "Sub verbo"],
-        ["table", "Table"],
-        ["title", "Title"],
-        ["verses", "Verses"],
-        ["volume", "Volume"],
-    ];
 
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
 
@@ -362,7 +339,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     const locatorSelectbox = new SelectBox(locatorSelect, {
         placeholder: "Locator",
     });
-    this._LOCATOR_VALUES.forEach(function (info) {
+    LOCATOR_VALUES.forEach(function (info) {
         const selected = info[0] === locatorLabel;
         locatorSelectbox.addItem(info[0], info[1], selected);
         if (selected) {

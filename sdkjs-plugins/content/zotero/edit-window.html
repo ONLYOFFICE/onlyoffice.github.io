@@ -37,56 +37,32 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-    <link rel="stylesheet" href="dist/styles.css">
+	<link rel="stylesheet" href="dist/edit-window.css">
 	<style>
 		body {
 			margin: 0;
 			padding: 8px 16px;
 		}
 	</style>
+	<script>
+		if (typeof Promise === 'function' && typeof Promise.any === 'function') {
+			document.write(
+				'<script type="module" src="dist/edit-window.modern.js"><\/script>'
+			);
+		} else {
+			document.write(
+				'<script src="dist/edit-window.es5.js"><\/script>'
+			);
+		}
+	</script>
 </head>
 
 <body class="noselect">
 	<div class="content">
-		<div class="content-text"></div>
-		<input id="page" autocomplete="off" class="i18n" type="text"
-                        placeholder="Page" />
-		<input id="prefix" autocomplete="off" class="i18n" type="text"
-                        placeholder="Prefix" />
-		<input id="suffix" autocomplete="off" class="i18n" type="text"
-                        placeholder="Suffix" />
+		<div class="container">
+
+		</div>
 	</div>
-
-	<script type="text/javascript">
-		window.Asc.plugin.init = function (data) {
-			window.Asc.plugin.sendToPlugin("onWindowReady", {});
-			window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChangedBase);
-
-			window.Asc.plugin.attachEvent("onAttachedText", function (htmlContent) {
-				document.querySelector(".content-text").innerHTML = htmlContent;
-				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
-			});
-
-			const pageField = new InputField("page", {
-				type: "text",
-				autofocus: true,
-				showClear: false,
-			});
-
-			const prefixField = new InputField("prefix", {
-				type: "text",
-				autofocus: false,
-				showClear: false,
-			});
-
-			const suffixField = new InputField("suffix", {
-				type: "text",
-				autofocus: false,
-				showClear: false,
-			});
-		};
-
-	</script>
 </body>
 
 </html>
