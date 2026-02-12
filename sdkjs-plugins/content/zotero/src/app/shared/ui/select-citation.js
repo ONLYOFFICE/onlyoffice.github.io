@@ -90,6 +90,8 @@ function SelectCitationsComponent(
             this._checkDocsScroll.bind(this)
         );
     }
+    /** @type {LastSearch | null} */
+    this._lastSearch = null;
     /** @type {Function[]} */
     this._subscribers = [];
     this._fShouldLoadMore = fShouldLoadMore;
@@ -133,11 +135,13 @@ SelectCitationsComponent.prototype.displayNothingFound = function () {
 /**
  * @param {SearchResult | null} res
  * @param {Error | null} err
+ * @param {LastSearch} lastSearch
  * @returns {Promise<number>}
  */
-SelectCitationsComponent.prototype.displaySearchItems = function (res, err) {
+SelectCitationsComponent.prototype.displaySearchItems = function (res, err, lastSearch) {
     const self = this;
     var holder = this._docsHolder;
+    this._lastSearch = lastSearch;
 
     let numOfShown = 0;
 
@@ -147,6 +151,9 @@ SelectCitationsComponent.prototype.displaySearchItems = function (res, err) {
             if (holder) page.classList.add("page" + holder.children.length);
             for (let index = 0; index < res.items.length; index++) {
                 let item = res.items[index];
+                if (!item.title) {
+                    continue;
+                }
                 page.appendChild(self._buildDocElement(item));
                 numOfShown++;
             }
@@ -468,9 +475,9 @@ SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
         }
 
         if (
-            !lastSearch.obj &&
-            !lastSearch.text.trim() &&
-            !lastSearch.groups.length
+            !this._lastSearch.obj &&
+            !this._lastSearch.text.trim() &&
+            !this._lastSearch.groups.length
         )
             return;
 
