@@ -158,6 +158,21 @@ import "../edit-window.css";
             window.Asc.plugin.onThemeChangedBase(theme);
             Theme.fixThemeForIE(theme);
             Theme.addStylesForComponents(theme);
+            let rules = "";
+            rules +=
+                "body { background-color: " +
+                theme["background-normal"]  +
+                " !important;}\n";
+
+            let styleTheme = document.getElementById("pluginStyles");
+            if (!styleTheme) {
+                styleTheme = document.createElement("style");
+                styleTheme.id = "pluginStyles";
+                styleTheme.innerHTML = rules;
+                document.getElementsByTagName("head")[0].appendChild(styleTheme);
+            } else {
+                styleTheme.innerHTML = rules;
+            }
         }
 
         /** @param {CustomField} field */

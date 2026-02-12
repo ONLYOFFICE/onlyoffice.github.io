@@ -37,6 +37,7 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <style id="pluginStyles"></style>
 	<style>
 		body {
 			margin: 0;
@@ -51,15 +52,35 @@
 	</div>
 
 	<script type="text/javascript">
+		// @ts-check
 		window.Asc.plugin.init = function (data) {
 			window.Asc.plugin.sendToPlugin("onWindowReady", {});
-			window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChangedBase);
-
-			window.Asc.plugin.attachEvent("onAttachedContent", function (htmlContent) {
-				document.querySelector(".content").innerHTML = htmlContent;
-				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
-			});
 		};
+		window.Asc.plugin.attachEvent("onAttachedContent", function (htmlContent) {
+			document.querySelector(".content").innerHTML = htmlContent;
+			window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
+		});
+		window.Asc.plugin.onThemeChanged = onThemeChanged;
+		window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+
+		function onThemeChanged(theme) {
+			window.Asc.plugin.onThemeChangedBase(theme);
+			let rules = "";
+			rules +=
+				"body { background-color: " +
+				theme["background-normal"] +
+				" !important;}\n";
+
+			let styleTheme = document.getElementById("pluginStyles");
+			if (!styleTheme) {
+				styleTheme = document.createElement("style");
+				styleTheme.id = "pluginStyles";
+				styleTheme.innerHTML = rules;
+				document.getElementsByTagName("head")[0].appendChild(styleTheme);
+			} else {
+				styleTheme.innerHTML = rules;
+			}
+		}
 
 	</script>
 </body>
