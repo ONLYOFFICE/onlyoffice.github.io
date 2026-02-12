@@ -2279,6 +2279,17 @@ var Theme = {
             window.Asc.plugin.onThemeChangedBase(theme);
             Theme.fixThemeForIE(theme);
             Theme.addStylesForComponents(theme);
+            var rules = "";
+            rules += "body { background-color: " + theme["background-normal"] + " !important;}\n";
+            var styleTheme = document.getElementById("pluginStyles");
+            if (!styleTheme) {
+                styleTheme = document.createElement("style");
+                styleTheme.id = "pluginStyles";
+                styleTheme.innerHTML = rules;
+                document.getElementsByTagName("head")[0].appendChild(styleTheme);
+            } else {
+                styleTheme.innerHTML = rules;
+            }
         }
         onAttachedContent(field) {
             this._field = field;
