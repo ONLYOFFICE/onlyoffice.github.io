@@ -297,16 +297,18 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     format = format || self.DEFAULT_FORMAT;
 
     return new Promise(function (resolve, reject) {
-        var queryParams =
-            /** @type {{format: "csljson"|"json", q?: string, itemKey?: string}} */ ({
-                format: format,
-                itemType: "-attachment", // skip attachments (pdf, docx, etc.)
-            });
+        /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
+        const queryParams = {
+            format: format,
+            itemType: "-attachment", // skip attachments (pdf, docx, etc.)
+        };
 
         if (search) {
             queryParams.q = search;
         } else if (itemsID) {
             queryParams.itemKey = itemsID.join(",");
+        } else {
+            queryParams.limit = 20;
         }
 
         var path =
@@ -406,30 +408,6 @@ ZoteroSdk.prototype.getUserGroups = function () {
             .catch(reject);
     });
 };
-
-/**
- * Format citations
- */
-/*ZoteroSdk.prototype.format = function (ids, groupKey, style, locale) {
-    var queryParams = {
-        format: "bib",
-        style: style,
-        locale: locale,
-        itemKey: ids.join(","),
-    };
-
-    var path = groupKey
-        ? this.API_PATHS.GROUPS + "/" + groupKey + "/" + this.API_PATHS.ITEMS
-        : this.API_PATHS.USERS +
-          "/" +
-          this._userId +
-          "/" +
-          this.API_PATHS.ITEMS;
-
-    return this._buildGetRequest(path, queryParams).then(function (response) {
-        return response.text();
-    });
-};*/
 
 /**
  * Set API key and validate it

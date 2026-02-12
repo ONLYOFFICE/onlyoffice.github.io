@@ -74,7 +74,7 @@ import "../styles.css";
     /** @type {CitationService} */
     var citationService;
 
-    /** @type {{text: string, obj: SearchResult | null, groups: Array<SearchResult>, groupsHash: string}}} */
+    /** @type {LastSearch} */
     var lastSearch = {
         text: "",
         obj: null,
@@ -165,12 +165,33 @@ import "../styles.css";
 
                 Promise.all([loadGroups(), settings.init()]).then(function () {
                     Loader.hide();
+                    showCitationsAtTheStartFromMyLibrary();
                 });
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
         addContextMenuButtons();
     };
+
+    function showCitationsAtTheStartFromMyLibrary() {
+        libLoader.show();
+        const promise = sdk.getItems(null)
+            .then(res => {
+                delete res.next;
+                return res;
+            })
+        loadLibrary(promise, false)
+            .then((res) => {
+                if (res > 0) {
+                    updateHeaderText("started"); 
+                } else {
+                    updateHeaderText("empty");
+                }
+            })
+            .finally(() => {
+                libLoader.hide();
+            });
+    }
 
     /** @returns {Promise<UserGroupInfo[]>} */
     function loadGroups() {
@@ -269,7 +290,10 @@ import "../styles.css";
                             }
                         });
                         if (numOfShown === 0) {
+                            updateHeaderText("empty");
                             selectCitation.displayNothingFound();
+                        } else {
+                            updateHeaderText("not-empty");
                         }
                     },
                 );
@@ -543,6 +567,39 @@ import "../styles.css";
         }
     }
 
+    /**
+     * @param {"empty" | "not-empty" | "started"} whatToShow
+     */
+    function updateHeaderText(whatToShow) {
+        const searchLabel = document.getElementById("searchLabel");
+        if (!searchLabel) {
+            console.error("Search label not found");
+            return;
+        }
+        const textWhenEmpty = searchLabel.querySelector('.when-empty');
+        const textWhenNotEmpty = searchLabel.querySelector('.when-not-empty');
+        const textWhenStarted = searchLabel.querySelector('.when-started');
+        if (!textWhenEmpty || !textWhenNotEmpty || !textWhenStarted) {
+            console.error("Search label elements not found");
+            return;
+        }
+        textWhenEmpty.classList.add("hidden");
+        textWhenNotEmpty.classList.add("hidden");
+        textWhenStarted.classList.add("hidden");
+        switch (whatToShow) {
+            case "empty":
+                textWhenEmpty.classList.remove("hidden");
+                break;
+            case "not-empty":
+                textWhenNotEmpty.classList.remove("hidden");
+                break;
+            case "started":
+                textWhenNotEmpty.classList.remove("hidden");
+                textWhenStarted.classList.remove("hidden");
+                break;
+        } 
+    }
+
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
@@ -659,7 +716,7 @@ import "../styles.css";
             }
         }
 
-        return selectCitation.displaySearchItems(res, err);
+        return selectCitation.displaySearchItems(res, err, lastSearch);
     }
 
     /**

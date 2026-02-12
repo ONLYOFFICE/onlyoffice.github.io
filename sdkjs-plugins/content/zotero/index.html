@@ -106,7 +106,11 @@
                 <button id="saveAsTextBtn" class="i18n" style="width: 100%;">Unlink citations</button>
             </div>
             <div id="mainState" class="flexCol flexSize hidden">
-                <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
+                <label for="searchField" id="searchLabel">
+                    <span class="i18n when-empty">Search the references you want to cite in this document.</span>
+                    <span class="i18n when-not-empty hidden">Select the references you want to cite in this document.</span>
+                    <span class="i18n when-started hidden">You see sources from My library, use the search to see others.</span>
+                </label>
                 <div id="searchWrapper">
                     <div id="librarySelectList"></div>
                     <input id="searchField" autocomplete="off" class="i18n" type="text"
