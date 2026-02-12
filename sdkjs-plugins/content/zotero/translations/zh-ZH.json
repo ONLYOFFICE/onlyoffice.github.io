@@ -39,6 +39,8 @@
     "Failed to insert bibliography": "插入參考文献失敗",
     "Failed to refresh": "刷新失敗",
     "Search the references you want to cite in this document.": "在此文件中搜索引用。",
+    "Select the references you want to cite in this document.": "選擇您想要引用的引用。",
+    "You see sources from My library, use the search to see others.": "您看到 My library 中的來源，使用搜索查看其他來源。",
     "Everywhere": "全部",
     "My Library": "我的圖書館",
     "Group Libraries": "群組圖書館",

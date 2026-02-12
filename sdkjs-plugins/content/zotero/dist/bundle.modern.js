@@ -733,6 +733,8 @@ ZoteroSdk.prototype.getItems = function(search, itemsID, format) {
             queryParams.q = search;
         } else if (itemsID) {
             queryParams.itemKey = itemsID.join(",");
+        } else {
+            queryParams.limit = 20;
         }
         var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
         var request = self._buildGetRequest(path, queryParams);
@@ -6902,6 +6904,7 @@ function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) 
     if (this._docsHolder && this._docsThumb) {
         this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
     }
+    this._lastSearch = null;
     this._subscribers = [];
     this._fShouldLoadMore = fShouldLoadMore;
     this._fLoadMore = fLoadMore;
@@ -6939,9 +6942,10 @@ SelectCitationsComponent.prototype.displayNothingFound = function() {
     this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
 };
 
-SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
+SelectCitationsComponent.prototype.displaySearchItems = function(res, err, lastSearch) {
     var self = this;
     var holder = this._docsHolder;
+    this._lastSearch = lastSearch;
     var numOfShown = 0;
     return new Promise((resolve, reject) => {
         if (res && res.items && res.items.length > 0) {
@@ -6949,6 +6953,9 @@ SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
             if (holder) page.classList.add("page" + holder.children.length);
             for (var index = 0; index < res.items.length; index++) {
                 var item = res.items[index];
+                if (!item.title) {
+                    continue;
+                }
                 page.appendChild(self._buildDocElement(item));
                 numOfShown++;
             }
@@ -7195,7 +7202,7 @@ SelectCitationsComponent.prototype._checkDocsScroll = function(holder, thumb) {
         if (this._loadTimeout) {
             clearTimeout(this._loadTimeout);
         }
-        if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
+        if (!this._lastSearch.obj && !this._lastSearch.text.trim() && !this._lastSearch.groups.length) return;
         this._loadTimeout = setTimeout(function() {
             if (self._fShouldLoadMore(holder)) {
                 self._fLoadMore();
@@ -7362,11 +7369,28 @@ SelectCitationsComponent.prototype.count = function() {
             Loader.show();
             Promise.all([ loadGroups(), settings.init() ]).then(function() {
                 Loader.hide();
+                showCitationsAtTheStartFromMyLibrary();
             });
         });
         window.Asc.plugin.onTranslate = applyTranslations;
         addContextMenuButtons();
     };
+    function showCitationsAtTheStartFromMyLibrary() {
+        libLoader.show();
+        var promise = sdk.getItems(null).then(res => {
+            delete res.next;
+            return res;
+        });
+        loadLibrary(promise, false).then(res => {
+            if (res > 0) {
+                updateHeaderText("started");
+            } else {
+                updateHeaderText("empty");
+            }
+        }).finally(() => {
+            libLoader.hide();
+        });
+    }
     function loadGroups() {
         return sdk.getUserGroups().then(function(groups) {
             searchFilter.addGroups(groups);
@@ -7417,7 +7441,10 @@ SelectCitationsComponent.prototype.count = function() {
                     }
                 });
                 if (numOfShown === 0) {
+                    updateHeaderText("empty");
                     selectCitation.displayNothingFound();
+                } else {
+                    updateHeaderText("not-empty");
                 }
             });
         });
@@ -7621,6 +7648,37 @@ SelectCitationsComponent.prototype.count = function() {
             el.classList.remove(className);
         }
     }
+    function updateHeaderText(whatToShow) {
+        var searchLabel = document.getElementById("searchLabel");
+        if (!searchLabel) {
+            console.error("Search label not found");
+            return;
+        }
+        var textWhenEmpty = searchLabel.querySelector(".when-empty");
+        var textWhenNotEmpty = searchLabel.querySelector(".when-not-empty");
+        var textWhenStarted = searchLabel.querySelector(".when-started");
+        if (!textWhenEmpty || !textWhenNotEmpty || !textWhenStarted) {
+            console.error("Search label elements not found");
+            return;
+        }
+        textWhenEmpty.classList.add("hidden");
+        textWhenNotEmpty.classList.add("hidden");
+        textWhenStarted.classList.add("hidden");
+        switch (whatToShow) {
+          case "empty":
+            textWhenEmpty.classList.remove("hidden");
+            break;
+
+          case "not-empty":
+            textWhenNotEmpty.classList.remove("hidden");
+            break;
+
+          case "started":
+            textWhenNotEmpty.classList.remove("hidden");
+            textWhenStarted.classList.remove("hidden");
+            break;
+        }
+    }
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
@@ -7690,7 +7748,7 @@ SelectCitationsComponent.prototype.count = function() {
                 fillUrisFromId(item);
             }
         }
-        return selectCitation.displaySearchItems(res, err);
+        return selectCitation.displaySearchItems(res, err, lastSearch);
     }
     function checkSelected(numOfSelected) {
         if (typeof numOfSelected === "undefined") {
