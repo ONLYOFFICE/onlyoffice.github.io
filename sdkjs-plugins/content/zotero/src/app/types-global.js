@@ -486,3 +486,11 @@ var Api = window.Api;
  */
 
 /** ------------------------------------------------ */
+
+/**
+ * @typedef {Object} LastSearch
+ * @property {string} text
+ * @property {SearchResult | null} obj
+ * @property {Array<SearchResult>} groups
+ * @property {string} groupsHash
+ */

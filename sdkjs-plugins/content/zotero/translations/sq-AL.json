@@ -39,6 +39,8 @@
     "Failed to insert bibliography": "Zbatimi i bibliografise dështoi",
     "Failed to refresh": "Rifreskimi dështoi",
     "Search the references you want to cite in this document.": "Kerkoni referenca sipas autorit, titullit ose vitit",
+    "Select the references you want to cite in this document.": "Për të zgjedhur referencën që doni të shtoni në dokument",
+    "You see sources from My library, use the search to see others.": "Ju keni të shihni burimet nga kutia juaj, përdorini kërkimin për të shihni të tjetrinë.",
     "Everywhere": "Gjithashtu",
     "My Library": "Kutia mija",
     "Group Libraries": "Kutia e grupave",

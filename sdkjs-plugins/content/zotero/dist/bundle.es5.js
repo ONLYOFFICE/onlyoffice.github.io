@@ -7982,6 +7982,8 @@
                 queryParams.q = search;
             } else if (itemsID) {
                 queryParams.itemKey = itemsID.join(",");
+            } else {
+                queryParams.limit = 20;
             }
             var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
             var request = self._buildGetRequest(path, queryParams);
@@ -16090,6 +16092,7 @@
         if (this._docsHolder && this._docsThumb) {
             this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
         }
+        this._lastSearch = null;
         this._subscribers = [];
         this._fShouldLoadMore = fShouldLoadMore;
         this._fLoadMore = fLoadMore;
@@ -16123,10 +16126,11 @@
         this.clearLibrary();
         this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
     };
-    SelectCitationsComponent.prototype.displaySearchItems = function(res, err) {
+    SelectCitationsComponent.prototype.displaySearchItems = function(res, err, lastSearch) {
         var _this = this;
         var self = this;
         var holder = this._docsHolder;
+        this._lastSearch = lastSearch;
         var numOfShown = 0;
         return new Promise(function(resolve, reject) {
             if (res && res.items && res.items.length > 0) {
@@ -16134,6 +16138,9 @@
                 if (holder) page.classList.add("page" + holder.children.length);
                 for (var index = 0; index < res.items.length; index++) {
                     var item = res.items[index];
+                    if (!item.title) {
+                        continue;
+                    }
                     page.appendChild(self._buildDocElement(item));
                     numOfShown++;
                 }
@@ -16372,7 +16379,7 @@
             if (this._loadTimeout) {
                 clearTimeout(this._loadTimeout);
             }
-            if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return;
+            if (!this._lastSearch.obj && !this._lastSearch.text.trim() && !this._lastSearch.groups.length) return;
             this._loadTimeout = setTimeout(function() {
                 if (self._fShouldLoadMore(holder)) {
                     self._fLoadMore();
@@ -16533,11 +16540,28 @@
                 Loader.show();
                 Promise.all([ loadGroups(), settings.init() ]).then(function() {
                     Loader.hide();
+                    showCitationsAtTheStartFromMyLibrary();
                 });
             });
             window.Asc.plugin.onTranslate = applyTranslations;
             addContextMenuButtons();
         };
+        function showCitationsAtTheStartFromMyLibrary() {
+            libLoader.show();
+            var promise = sdk.getItems(null).then(function(res) {
+                delete res.next;
+                return res;
+            });
+            loadLibrary(promise, false).then(function(res) {
+                if (res > 0) {
+                    updateHeaderText("started");
+                } else {
+                    updateHeaderText("empty");
+                }
+            }).finally(function() {
+                libLoader.hide();
+            });
+        }
         function loadGroups() {
             return sdk.getUserGroups().then(function(groups) {
                 searchFilter.addGroups(groups);
@@ -16590,7 +16614,10 @@
                         }
                     });
                     if (numOfShown === 0) {
+                        updateHeaderText("empty");
                         selectCitation.displayNothingFound();
+                    } else {
+                        updateHeaderText("not-empty");
                     }
                 });
             });
@@ -16864,6 +16891,37 @@
                 el.classList.remove(className);
             }
         }
+        function updateHeaderText(whatToShow) {
+            var searchLabel = document.getElementById("searchLabel");
+            if (!searchLabel) {
+                console.error("searchLabel not found");
+                return;
+            }
+            var textWhenEmpty = searchLabel.querySelector(".when-empty");
+            var textWhenNotEmpty = searchLabel.querySelector(".when-not-empty");
+            var textWhenStarted = searchLabel.querySelector(".when-started");
+            if (!textWhenEmpty || !textWhenNotEmpty || !textWhenStarted) {
+                console.error("template not found");
+                return;
+            }
+            textWhenEmpty.classList.add("hidden");
+            textWhenNotEmpty.classList.add("hidden");
+            textWhenStarted.classList.add("hidden");
+            switch (whatToShow) {
+              case "empty":
+                textWhenEmpty.classList.remove("hidden");
+                break;
+
+              case "not-empty":
+                textWhenNotEmpty.classList.remove("hidden");
+                break;
+
+              case "started":
+                textWhenNotEmpty.classList.remove("hidden");
+                textWhenStarted.classList.remove("hidden");
+                break;
+            }
+        }
         function loadMore() {
             console.warn("Loading more...");
             if (lastSearch.obj && lastSearch.obj.next) {
@@ -16933,7 +16991,7 @@
                     fillUrisFromId(item);
                 }
             }
-            return selectCitation.displaySearchItems(res, err);
+            return selectCitation.displaySearchItems(res, err, lastSearch);
         }
         function checkSelected(numOfSelected) {
             if (typeof numOfSelected === "undefined") {

@@ -39,6 +39,8 @@
     "Failed to insert bibliography": "Échec de l'insertion de la bibliographie",
     "Failed to refresh": "Échec de la mise à jour",
     "Search the references you want to cite in this document.": "Rechercher les citations que vous souhaitez citer dans ce document.",
+    "Select the references you want to cite in this document.": "Sélectionnez les citations que vous souhaitez citer dans ce document.",
+    "You see sources from My library, use the search to see others.": "Vous voyez les sources de votre bibliothèque, utilisez la recherche pour voir les autres.",
     "Everywhere": "Partout",
     "My Library": "Ma bibliothèque",
     "Group Libraries": "Bibliothèques de groupes",
