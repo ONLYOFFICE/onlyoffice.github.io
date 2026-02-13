@@ -12531,13 +12531,11 @@
                             return _context5.a(3, 11);
 
                           case 2:
-                            console.log(1);
                             _context5.n = 3;
                             return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, field.FieldId);
 
                           case 3:
                             selectFieldResult = _context5.v;
-                            console.log(2);
                             if (selectFieldResult) {
                                 _context5.n = 4;
                                 break;
@@ -12550,7 +12548,6 @@
 
                           case 5:
                             isReferenceSelected = _context5.v;
-                            console.log(3);
                             if (isReferenceSelected) {
                                 _context5.n = 6;
                                 break;
@@ -12562,17 +12559,14 @@
                             return _assertClassBrand(_CitationDocService_brand, this, _removeSelectedContent).call(this);
 
                           case 7:
-                            console.log(4);
                             _context5.n = 8;
                             return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
 
                           case 8:
-                            console.log(5);
                             _context5.n = 9;
                             return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
 
                           case 9:
-                            console.log(6);
                             formatting = formats.get(field.FieldId);
                             if (formatting) {
                                 _context5.n = 10;
@@ -14219,7 +14213,7 @@
                     } ],
                     isModal: false,
                     EditorsSupport: [ "word" ],
-                    size: [ 380, 240 ],
+                    size: [ 350, 76 ],
                     isViewer: true,
                     isDisplayedInViewer: false,
                     isInsideMode: false
@@ -14489,7 +14483,7 @@
                                 break;
                             }
                             _context4.n = 1;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                            return _classPrivateFieldGet2(_additionalWindow, this).showWarningWindow("Something went wrong", "Update your editor to use this feature.");
 
                           case 1:
                             return _context4.a(2);
@@ -14660,7 +14654,7 @@
                                 break;
                             }
                             _context7.n = 1;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                            return _classPrivateFieldGet2(_additionalWindow, this).showWarningWindow("Something went wrong", "Update your editor to use this feature.");
 
                           case 1:
                             return _context7.a(2);
@@ -14748,7 +14742,7 @@
                                 break;
                             }
                             _context8.n = 1;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                            return _classPrivateFieldGet2(_additionalWindow, this).showWarningWindow("Something went wrong", "Update your editor to use this feature.");
 
                           case 1:
                             return _context8.a(2);
@@ -17181,7 +17175,7 @@
                         if ("develop" == version) version = "99.99.99";
                         arrVer = version.split(".");
                         while (3 > arrVer.length) arrVer.push("0");
-                        return _context4.a(2, 2);
+                        return _context4.a(2, 1e6 * parseInt(arrVer[0]) + 1e3 * parseInt(arrVer[1]) + parseInt(arrVer[2]));
 
                       case 2:
                         _context4.p = 2;
