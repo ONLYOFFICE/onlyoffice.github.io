@@ -294,6 +294,22 @@
             }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
         }, _regeneratorDefine(e, r, n, t);
     }
+    function _regeneratorValues(e) {
+        if (null != e) {
+            var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0;
+            if (t) return t.call(e);
+            if ("function" == typeof e.next) return e;
+            if (!isNaN(e.length)) return {
+                next: function() {
+                    return e && r >= e.length && (e = void 0), {
+                        value: e && e[r++],
+                        done: !e
+                    };
+                }
+            };
+        }
+        throw new TypeError(typeof e + " is not iterable");
+    }
     function _slicedToArray(r, e) {
         return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
     }
@@ -12511,80 +12527,114 @@
             key: "convertNotesStyle",
             value: function() {
                 var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee5(fields, notesStyle) {
-                    var formats, i, field, selectFieldResult, isReferenceSelected, formatting;
-                    return _regenerator().w(function(_context5) {
-                        while (1) switch (_context5.n) {
+                    var _this = this;
+                    var formats, _loop, _ret, i;
+                    return _regenerator().w(function(_context6) {
+                        while (1) switch (_context6.n) {
                           case 0:
                             formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
+                            _loop = _regenerator().m(function _loop() {
+                                var field, selectFieldResult, isReferenceSelected, formatting;
+                                return _regenerator().w(function(_context5) {
+                                    while (1) switch (_context5.n) {
+                                      case 0:
+                                        field = fields[i];
+                                        if (field.FieldId) {
+                                            _context5.n = 1;
+                                            break;
+                                        }
+                                        return _context5.a(2, 0);
+
+                                      case 1:
+                                        if (field.Content) {
+                                            _context5.n = 3;
+                                            break;
+                                        }
+                                        _context5.n = 2;
+                                        return new Promise(function(resolve) {
+                                            window.Asc.plugin.executeMethod("UpdateAddinFields", [ field ], resolve);
+                                        });
+
+                                      case 2:
+                                        return _context5.a(2, 0);
+
+                                      case 3:
+                                        _context5.n = 4;
+                                        return _assertClassBrand(_CitationDocService_brand, _this, _selectField).call(_this, field.FieldId);
+
+                                      case 4:
+                                        selectFieldResult = _context5.v;
+                                        if (selectFieldResult) {
+                                            _context5.n = 5;
+                                            break;
+                                        }
+                                        return _context5.a(2, 0);
+
+                                      case 5:
+                                        _context5.n = 6;
+                                        return _assertClassBrand(_CitationDocService_brand, _this, _selectFieldReference).call(_this);
+
+                                      case 6:
+                                        isReferenceSelected = _context5.v;
+                                        if (isReferenceSelected) {
+                                            _context5.n = 7;
+                                            break;
+                                        }
+                                        return _context5.a(2, 0);
+
+                                      case 7:
+                                        _context5.n = 8;
+                                        return _assertClassBrand(_CitationDocService_brand, _this, _removeSelectedContent).call(_this);
+
+                                      case 8:
+                                        _context5.n = 9;
+                                        return _assertClassBrand(_CitationDocService_brand, _this, _addNote).call(_this, notesStyle);
+
+                                      case 9:
+                                        _context5.n = 10;
+                                        return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field);
+
+                                      case 10:
+                                        formatting = formats.get(field.FieldId);
+                                        if (formatting) {
+                                            _context5.n = 11;
+                                            break;
+                                        }
+                                        return _context5.a(2, 0);
+
+                                      case 11:
+                                        _context5.n = 12;
+                                        return CslDocFormatter.formatAfterInsert(formatting.formatting);
+
+                                      case 12:
+                                        return _context5.a(2);
+                                    }
+                                }, _loop);
+                            });
                             i = 0;
 
                           case 1:
                             if (!(i < fields.length)) {
-                                _context5.n = 12;
+                                _context6.n = 4;
                                 break;
                             }
-                            field = fields[i];
-                            if (field.FieldId) {
-                                _context5.n = 2;
-                                break;
-                            }
-                            return _context5.a(3, 11);
+                            return _context6.d(_regeneratorValues(_loop()), 2);
 
                           case 2:
-                            _context5.n = 3;
-                            return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, field.FieldId);
+                            _ret = _context6.v;
+                            if (!(_ret === 0)) {
+                                _context6.n = 3;
+                                break;
+                            }
+                            return _context6.a(3, 3);
 
                           case 3:
-                            selectFieldResult = _context5.v;
-                            if (selectFieldResult) {
-                                _context5.n = 4;
-                                break;
-                            }
-                            return _context5.a(3, 11);
-
-                          case 4:
-                            _context5.n = 5;
-                            return _assertClassBrand(_CitationDocService_brand, this, _selectFieldReference).call(this);
-
-                          case 5:
-                            isReferenceSelected = _context5.v;
-                            if (isReferenceSelected) {
-                                _context5.n = 6;
-                                break;
-                            }
-                            return _context5.a(3, 11);
-
-                          case 6:
-                            _context5.n = 7;
-                            return _assertClassBrand(_CitationDocService_brand, this, _removeSelectedContent).call(this);
-
-                          case 7:
-                            _context5.n = 8;
-                            return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
-
-                          case 8:
-                            _context5.n = 9;
-                            return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
-
-                          case 9:
-                            formatting = formats.get(field.FieldId);
-                            if (formatting) {
-                                _context5.n = 10;
-                                break;
-                            }
-                            return _context5.a(3, 11);
-
-                          case 10:
-                            _context5.n = 11;
-                            return CslDocFormatter.formatAfterInsert(formatting.formatting);
-
-                          case 11:
                             i++;
-                            _context5.n = 1;
+                            _context6.n = 1;
                             break;
 
-                          case 12:
-                            return _context5.a(2);
+                          case 4:
+                            return _context6.a(2);
                         }
                     }, _callee5, this);
                 }));
