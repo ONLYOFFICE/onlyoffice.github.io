@@ -135,10 +135,10 @@ async function registerButtons(window, undefined)
 				if ("" === AgentState.systemToolsPrompt)
 					AgentState.systemToolsPrompt = window.EditorHelper.getSystemPrompt();
 
-				if (requestData.messages.length === 0) {
-					requestData.messages.push({
+				if (requestData.messages.length === 0 || requestData.messages[0].role !== "system") {
+					requestData.messages.unshift({
 						role: 'system',
-						content: systemPrompt
+						content: AgentState.systemToolsPrompt
 					});
 				}
 			}
