@@ -61,5 +61,8 @@
     "Yes": "Si",
     "No": "No",
     "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Cliccando su „Sì“ Zotero non aggiornerà questa citazione se aggiungi altre citazioni, cambi stile o modifichi l'elemento a cui si riferisce. Cliccando su „No“ le modifiche verranno eliminate.",
-    "Edit citation": "Modifica citazione"
+    "Edit citation": "Modifica citazione",
+    "OK": "OK",
+    "Something went wrong": "Qualcosa è andato storto",
+    "Update your editor to use this feature": "Aggiorna il tuo editor per utilizzare questa funzionalità"
 }

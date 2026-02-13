@@ -48,7 +48,7 @@ import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
 
 class CitationService {
-    #onUserEditCitationManuallyWindow;
+    #additionalWindow;
 
     /**
      * @param {LocalesManager} localesManager
@@ -76,7 +76,7 @@ class CitationService {
             this._bibPrefixNew,
             this._bibSuffixNew,
         );
-        this.#onUserEditCitationManuallyWindow = new AdditionalWindow();
+        this.#additionalWindow = new AdditionalWindow();
     }
 
     /**
@@ -427,7 +427,7 @@ class CitationService {
                     oldContent +
                     "</p>";
                 const bNeedSaveUserInput =
-                    await this.#onUserEditCitationManuallyWindow.show(
+                    await this.#additionalWindow.show(
                         "Saving custom edits",
                         text,
                     );
@@ -615,6 +615,15 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItemsInNotes(notesStyle) {
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003000) {
+            await this.#additionalWindow.showWarningWindow(
+                "Something went wrong",
+                "Update your editor to use this feature",
+            );
+            return;
+        }
+        
         this._storage.clear();
 
         try {
@@ -711,6 +720,15 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async switchingBetweenNotesAndText(notesStyle) {
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003000) {
+            await this.#additionalWindow.showWarningWindow(
+                "Something went wrong",
+                "Update your editor to use this feature",
+            );
+            return;
+        }
+
         this._storage.clear();
 
         try {
@@ -755,8 +773,16 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async convertNotesStyle(notesStyle) {
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003000) {
+            await this.#additionalWindow.showWarningWindow(
+                "Something went wrong",
+                "Update your editor to use this feature",
+            );
+            return;
+        }
+        
         this._storage.clear();
-
         try {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems();
@@ -787,7 +813,7 @@ class CitationService {
         if (!field) return null;
 
         const updatedField =
-            await this.#onUserEditCitationManuallyWindow.showEditWindow(field);
+            await this.#additionalWindow.showEditWindow(field);
         if (!updatedField) {
             // Cancel click
             return null;

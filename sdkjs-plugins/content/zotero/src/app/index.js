@@ -48,7 +48,6 @@ import "../styles.css";
 
 (function () {
     var displayNoneClass = "hidden";
-    var blurClass = "blur";
 
     // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
     //     из библиографии автоматически (это делать только при обновлении библиографии
@@ -170,7 +169,14 @@ import "../styles.css";
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
-        addContextMenuButtons();
+        
+        getEditorVersion().then((editorVersion) => {
+            window.Asc.scope.editorVersion = editorVersion;
+            if (editorVersion >= 9003000) {
+                addContextMenuButtons();
+            }
+        });
+        
     };
 
     function showCitationsAtTheStartFromMyLibrary() {
@@ -741,6 +747,29 @@ import "../styles.css";
             }
         }
     }
+
+    /**
+     * @returns {Promise<number>}
+     */
+    async function getEditorVersion() {
+        try {
+            let version = await new Promise(resolve => {
+                Asc.plugin.executeMethod("GetVersion", [], resolve);
+            });
+            if ("develop" == version)
+                version = "99.99.99";
+
+            let arrVer = version.split(".");
+            while (3 > arrVer.length)
+                arrVer.push("0");
+
+            return 1000000 * parseInt(arrVer[0]) +  1000 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+        } catch (error) {
+            console.error(error);
+            return 99_999_999;
+        }
+		
+	}
 
     function addContextMenuButtons() {
         let buttonMain = new Asc.ButtonContextMenu();

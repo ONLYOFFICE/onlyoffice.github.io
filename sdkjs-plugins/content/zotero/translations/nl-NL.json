@@ -61,5 +61,8 @@
     "Yes": "Ja",
     "No": "Nee",
     "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Klikken op 'Ja' voorkomt dat Zotero deze citaat bijwerkt als u extra citaaten toevoegt, de stijl wijzigt of de item wijzigt waarop deze citaat verwijst. Klikken op 'Nee' verwijdert uw wijzigingen.",
-    "Edit citation": "Bewerk citaat"
+    "Edit citation": "Bewerk citaat",
+    "OK": "OK",
+    "Something went wrong": "Er is iets fout gegaan",
+    "Update your editor to use this feature": "Update uw editor om deze functie te gebruiken"
 }
