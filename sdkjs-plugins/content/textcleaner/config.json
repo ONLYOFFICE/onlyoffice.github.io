@@ -19,7 +19,7 @@
   },
   "guid": "asc.{D8653A43-2F43-4CBB-9A9D-C6D3D0EE7B23}",
   "baseUrl": "",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "variations": [
     {
       "description": "Text Cleaner is a smarter version of 'clear formatting.' It keeps italics and bold while removing line breaks, extra spaces, and other clutter, leaving clean text that matches your document’s styles.",

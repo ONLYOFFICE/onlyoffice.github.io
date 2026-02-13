@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "Enter text manually",
+	"Hide field": "Hide field",
+	"Translating...": "Translating...",
+	"Loading translation engine...": "Loading translation engine...",
+	"Downloading model...": "Downloading model...",
+	"Model loaded - Ready for offline translation": "Model loaded - Ready for offline translation",
+	"Failed to load model: ": "Failed to load model: ",
+	"Ready - Select languages to translate": "Ready - Select languages to translate",
+	"Failed to initialize: ": "Failed to initialize: ",
+	"Translation complete": "Translation complete",
+	"Translation failed: ": "Translation failed: ",
+	"Translation failed": "Translation failed",
+	"Copied to clipboard": "Copied to clipboard",
+	"Copy": "Copy",
+	"Insert to document": "Insert to document",
+	"Offline": "Offline"
+}

@@ -30,9 +30,9 @@
  *
  */
 
-function SpellChecker()
+function SpellChecker(annotatorPopup)
 {
-	TextAnnotator.call(this);
+	TextAnnotator.call(this, annotatorPopup);
 	this.type = 0;
 }
 SpellChecker.prototype = Object.create(TextAnnotator.prototype);
@@ -41,17 +41,6 @@ SpellChecker.prototype.constructor = SpellChecker;
 SpellChecker.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
-
-	let requestEngine = AI.Request.create(AI.ActionType.Chat);
-	if (!requestEngine)
-		return false;
-
-	let isSendedEndLongAction = false;
-	async function checkEndAction()
-	{
-		if (!isSendedEndLongAction)
-			isSendedEndLongAction = true;
-	}
 
 	let argPrompt = `You are a spellcheck corrector. I will provide text that may contain spelling errors in any language. Your task is to identify ALL spelling mistakes and return ONLY the corrections in the following JSON format:
 
@@ -144,16 +133,9 @@ Output: []
 Text to check:`;
 	argPrompt += text;
 
-	let response = "";
-	await requestEngine.chatRequest(argPrompt, false, async function (data)
-	{
-		if (!data)
-			return;
-		await checkEndAction();
-
-		response += data;
-	});
-	await checkEndAction();
+	let response = await this.chatRequest(argPrompt);
+	if (!response)
+		return false;
 
 	let rangeId = 1;
 	let ranges = [];
@@ -171,7 +153,7 @@ Text to check:`;
 
 			while (searchStart < text.length)
 			{
-				const index = text.indexOf(wrong, searchStart);
+				const index = _t.simpleGraphemeIndexOf(text, wrong, searchStart);
 				if (index === -1) break;
 
 				const isStartBoundary = index === 0 || _t._isWordBoundary(text[index - 1]);
@@ -184,7 +166,7 @@ Text to check:`;
 					{
 						ranges.push({
 							"start": index,
-							"length": wrong.length,
+							"length": [...wrong].length,
 							"id": rangeId
 						});
 						_t.paragraphs[paraId][rangeId] = {
