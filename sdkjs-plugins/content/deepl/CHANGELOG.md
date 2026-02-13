@@ -20,3 +20,7 @@
 
 * Bug fix.
 * Using modern API.
+
+## 1.0.5
+
+* Fix work with offline files (Desktop App).

@@ -1,0 +1,234 @@
+<!--
+ (c) Copyright Ascensio System SIA 2024
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bergamot Translator</title>
+	<link rel="stylesheet" href="plugin_style.css">
+	<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+	<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
+	<script src="vendor/select2-4.0.13/js/select2.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<script src="scripts/bergamot.js"></script>
+	<style>
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+			font-family: "Arial";
+			font-size: 11px;
+		}
+
+		#main-container-id {
+			height: 100%;
+		}
+
+		#copy {
+			width:40%;
+			margin-left: 12px;
+			margin-top: 16px;
+			text-align: center;
+		}
+		#paste {
+			float: right;
+			width:40%;
+			margin-right: 12px;
+			margin-top: 16px;
+			text-align: center;
+		}
+		#display {
+			width:100%;
+			margin-left: 12px;
+			font-size: 13px;
+			flex: 1;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.input__head {
+			margin-top: 16px;
+			width: 100%;
+		}
+		.header {
+			margin-right: 3px;
+			font-weight: normal !important;
+		}
+		#source {
+			margin-top: 5px;
+			width: calc(100% - 67px);
+		}
+		#target {
+			float:right;
+			margin-top: 5px;
+			width: calc(100% - 67px);
+		}
+		.select2-results__options {
+			font-size: 11px !important;
+		}
+		.select2-selection__rendered {
+			font-size: 11px !important;
+			margin-top: -1px;
+		}
+		#button_wrapper {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 20px;
+		}
+		.btn-text-default {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#hide_show {
+			width: 130px;
+			margin-top: 16px;
+			margin-bottom: 10px;
+			margin-left: 14px;
+		}
+		#show_manually, #hide_manually {
+			cursor:pointer;
+			border-bottom: 1px dashed #444444;
+		}
+		.noselect {
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		.ps__rail-y {
+			cursor: default !important;
+		}
+		.hidden {
+			display: none !important;
+		}
+		#status_bar {
+			margin: 8px 12px;
+			padding: 6px 10px;
+			border-radius: 3px;
+			font-size: 10px;
+			display: none;
+		}
+		#status_bar.info {
+			background-color: #e8f4fd;
+			color: #1976d2;
+			display: block;
+		}
+		#status_bar.success {
+			background-color: #e8f5e9;
+			color: #388e3c;
+			display: block;
+		}
+		#status_bar.warning {
+			background-color: #fff3e0;
+			color: #f57c00;
+			display: block;
+		}
+		#status_bar.error {
+			background-color: #ffebee;
+			color: #d32f2f;
+			display: block;
+		}
+		#model_progress {
+			width: 100%;
+			height: 4px;
+			background-color: #e0e0e0;
+			border-radius: 2px;
+			margin-top: 4px;
+			display: none;
+		}
+		#model_progress_bar {
+			height: 100%;
+			background-color: #1976d2;
+			border-radius: 2px;
+			transition: width 0.3s ease;
+			width: 0%;
+		}
+		#txt_shower {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			min-height: 0;
+		}
+	</style>
+</head>
+<body id="body" style="left:0px; top:0px; margin:0px; padding:0px;">
+	<div id="main_container-id" style="width:100%; height:100%;margin:0;padding:0; overflow: hidden; display: flex; flex-direction: column">
+
+		<div id="loader-container" class="asc-plugin-loader display-none">
+			<div class="asc-loader-image">
+				<div class="asc-loader-title"></div>
+			</div>
+			<div class="asc-loader-title i18n">
+				Translating...
+			</div>
+		</div>
+		<div id="loader-container2" class="asc-plugin-loader display-none">
+			<div class="asc-loader-image">
+				<div class="asc-loader-title"></div>
+			</div>
+			<div class="asc-loader-title i18n">
+				Loading translation engine...
+			</div>
+		</div>
+
+		<div id="status_bar"></div>
+		<div id="model_progress">
+			<div id="model_progress_bar"></div>
+		</div>
+
+		<div id="main_panel" style="display: flex; flex-direction: column; max-height: 55%;">
+			<div class="input__head" style="display: flex; flex-direction: row; justify-content: space-between;">
+				<span class="prefs__locale_source" style="margin-left: 12px; width: calc(40% + 2px);">
+					<select id="source" class="prefs__set-locale select_example" data-title-id="locale" title="Source Language">
+					</select>
+				</span>
+				<span style="display:flex;">
+					<svg id="arrow" style="margin-top: 6px;" width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path id="arrow-svg-path" d="M10.3537 4.85344C10.5489 4.65812 10.5488 4.34153 10.3534 4.14633L7.17045 0.965364C6.97513 0.770164 6.65854 0.770264 6.46334 0.965588C6.26814 1.16091 6.26824 1.47749 6.46357 1.6727L9.29289 4.50022L6.46536 7.32955C6.27016 7.52487 6.27026 7.84146 6.46559 8.03666C6.66091 8.23186 6.97749 8.23176 7.1727 8.03643L10.3537 4.85344ZM0.000158691 5.00317L10.0002 5L9.99984 4L-0.000158691 4.00317L0.000158691 5.00317Z" fill="#444444"/>
+					</svg>
+				</span>
+				<span class="prefs__locale_target" style="margin-right: 12px; width: calc(40% + 2px);">
+					<select id="target" class="prefs__set-locale select_example" data-title-id="locale" title="Target Language">
+					</select>
+				</span>
+			</div>
+			<div id="hide_show">
+				<label style="display:none;" class="i18n" id="hide_manually">Hide field</label>
+				<label id="show_manually" class="i18n">Enter text manually</label>
+			</div>
+			<textarea id="enter_container" oninput='this.style.height = "";this.style.height = this.scrollHeight + 2 + "px"' class="form-control" style="cursor: text; position: relative; margin: 16px 12px 0px 12px; min-height: 100px; max-height: 100%; height: fit-content; display:none;">
+			</textarea>
+		</div>
+		<div class="separator horizontal" style="width: calc(100% - 24px); margin: 16px 0 16px 12px;"></div>
+		<div id="display" style="width: calc(100% - 12px); position: relative;">
+			<div id="txt_shower" style="width:calc(100% - 20px); margin-right:8px; white-space: normal; word-wrap: break-word;">
+			</div>
+		</div>
+		<div id="vanish_container" class="display-none">
+			<div id="button_wrapper">
+				<div id="copy" class="noselect btn-text-default i18n" style="height: auto; min-height: 20px;">Copy</div>
+				<div id="paste" class="noselect btn-text-default i18n" style="height: auto; min-height: 20px;">Insert to document</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
