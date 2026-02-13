@@ -259,10 +259,17 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
      */
     async convertNotesStyle(fields, notesStyle) {
         const formats = this.#makeFormattingPositions(fields);
+        /** @type {Array<CustomField>} */
+        const editedFields = [];
 
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
             if (!field.FieldId) continue;
+
+            if (!field.Content) { // save user changes
+                editedFields.push(field);
+                continue;
+            }
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
@@ -276,6 +283,16 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             await CslDocFormatter.formatAfterInsert(
                 formatting.formatting,
             );
+        }
+
+        if (editedFields.length) {
+            await new Promise(function (resolve) {
+                window.Asc.plugin.executeMethod(
+                    "UpdateAddinFields",
+                    [editedFields],
+                    resolve,
+                );
+            });
         }
     }
 
