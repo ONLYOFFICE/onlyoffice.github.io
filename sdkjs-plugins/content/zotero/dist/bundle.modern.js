@@ -3516,9 +3516,14 @@ class CitationDocService {
         var _this5 = this;
         return _asyncToGenerator(function*() {
             var formats = _assertClassBrand(_CitationDocService_brand, _this5, _makeFormattingPositions).call(_this5, fields);
+            var editedFields = [];
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 if (!field.FieldId) continue;
+                if (!field.Content) {
+                    editedFields.push(field);
+                    continue;
+                }
                 var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
                 if (!selectFieldResult) continue;
                 var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectFieldReference).call(_this5);
@@ -3529,6 +3534,11 @@ class CitationDocService {
                 var formatting = formats.get(field.FieldId);
                 if (!formatting) continue;
                 yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            }
+            if (editedFields.length) {
+                yield new Promise(function(resolve) {
+                    window.Asc.plugin.executeMethod("UpdateAddinFields", [ editedFields ], resolve);
+                });
             }
         })();
     }
