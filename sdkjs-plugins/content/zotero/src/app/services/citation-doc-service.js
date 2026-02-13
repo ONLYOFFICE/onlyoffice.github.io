@@ -189,7 +189,8 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
 
         if (!formats.size) return;
         for (const [fieldId, formattingPositions] of formats) {
-            await this.#selectField(fieldId);
+            const selectFieldResult = await this.#selectField(fieldId);
+            if (!selectFieldResult) continue;
             await CslDocFormatter.formatAfterUpdate(
                 fieldId,
                 formattingPositions,
@@ -211,8 +212,10 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
                 continue;
             }
 
-            await this.#selectField(field.FieldId);
-            await this.#selectFieldReference();
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            const isReferenceSelected = await this.#selectFieldReference();
+            if (!isReferenceSelected) continue;
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
             await this.#addAddinField(field);
@@ -236,7 +239,8 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             const field = fields[i];
             if (!field.FieldId) continue;
 
-            await this.#selectField(field.FieldId);
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
@@ -260,8 +264,10 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             const field = fields[i];
             if (!field.FieldId) continue;
 
-            await this.#selectField(field.FieldId);
-            await this.#selectFieldReference();
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            const isReferenceSelected = await this.#selectFieldReference();
+            if (!isReferenceSelected) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
@@ -349,25 +355,37 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
     }
     /**
      * @param {string} fieldId
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     #selectField(fieldId) {
         return new Promise(function (resolve) {
+            const editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9003000) {
+                console.error("Cannot select addin field.");
+                console.error("Editor version is less than 9.3.0");
+                resolve(false);
+            }
             window.Asc.plugin.executeMethod(
                 "SelectAddinField",
                 [fieldId],
-                resolve,
+                () => resolve(true),
             );
         });
     }
 
     /**
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     #selectFieldReference() {
         return new Promise(function (resolve) {
             const isCalc = true;
             const isClose = false;
+            const editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9003000) {
+                console.error("Cannot select addin field reference.");
+                console.error("Editor version is less than 9.3.0");
+                resolve(false);
+            }
             Asc.plugin.callCommand(
                 () => {
                     const doc = Api.GetDocument();
@@ -378,7 +396,7 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
                 },
                 isClose,
                 isCalc,
-                resolve,
+                () => resolve(true),
             );
         });
     }
