@@ -325,7 +325,7 @@ div::-moz-selection {
 #footerCont {
     display: flex;
     flex-direction: row;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 #footerCont > span:first-of-type {
