@@ -502,6 +502,10 @@
 		 * If false - tools will be described in system prompt.
 		 */
 		isSupportTools(model) {
+			// Check if model has Tools capability
+			if (model && model.capabilities !== undefined) {
+				return (model.capabilities & AI.CapabilitiesUI.Tools) !== 0;
+			}
 			return false;
 		}
 
