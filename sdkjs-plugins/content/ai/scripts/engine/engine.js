@@ -30,166 +30,6 @@
  *
  */
 
-(function(window, undefined)
-{
-	window.AI = window.AI || {};
-	var AI = window.AI;
-
-	if (!AI.isLocalDesktop)
-		return;
-
-	window.fetch = function(url, obj) {
-		function TextResponse(text, isOk) {
-			if (isOk)
-				this.textResponse = text;
-			else
-				this.message = text;
-
-			this.text = function() { return new Promise(function(resolve) {
-				resolve(text)
-			})};
-			this.json = function() { return new Promise(function(resolve, reject) {
-				try {
-					resolve(JSON.parse(text));
-				} catch (error) {
-					reject(error);
-				}
-			})};
-			this.ok = isOk;
-		};
-
-		return new Promise(function (resolve, reject) {
-			var xhr = new XMLHttpRequest();
-			xhr.open(obj.method, url, true);
-
-			for (let h in obj.headers)
-				if (obj.headers.hasOwnProperty(h))
-					xhr.setRequestHeader(h, obj.headers[h]);
-
-			xhr.onload = function() {
-				if (this.status == 200 || this.status == 0)
-					resolve(new TextResponse(this.response, true));
-				else
-					resolve(new TextResponse(this.response, false));
-			};
-			xhr.onerror = function() {
-				reject(new TextResponse(this.response || "Failed to fetch.", false));
-			};
-
-			xhr.send(obj.body);
-		});
-	};
-
-	/*
-	window.fetchStreamed = function(url, obj) {
-		function StreamResponse(xhr) {
-			this.ok = xhr.status === 200 || xhr.status === 0;
-			this.status = xhr.status;
-			this.statusText = xhr.statusText;
-			this.url = url;
-			
-			if (false) {
-				this.headers = new Map();
-				const headerStr = xhr.getAllResponseHeaders();
-				if (headerStr) {
-					headerStr.split('\r\n').forEach(function(line) {
-						const colonIndex = line.indexOf(': ');
-						if (colonIndex > 0) {
-							const name = line.substring(0, colonIndex).toLowerCase();
-							const value = line.substring(colonIndex + 2);
-							this.headers.set(name, value);
-						}
-					});
-				}
-			}
-
-			let streamController;
-			let bufferLen = 0;
-			
-			this.body = new ReadableStream({
-				start: function(controller) {
-					streamController = controller;
-				}
-			});
-
-			const processStreamData = function() {
-				if (!xhr.response)
-					return;
-
-				let data = new Uint8Array(xhr.response);
-				if (0 === bufferLen) {
-					streamController.enqueue(data);
-				} else {
-					streamController.enqueue(data.slice(bufferLen));
-				}
-				bufferLen = data.length;
-				console.log("progress: " + bufferLen);
-			};
-
-			xhr.addEventListener('progress', function(){
-				processStreamData();
-			});
-			xhr.addEventListener('load', function() {
-				processStreamData();
-				streamController.close();
-			});
-			xhr.addEventListener('error', function() {
-				streamController.error(new Error('Stream error'));
-			});
-
-			this.text = async function() {
-				return xhr.responseText || "";
-			};
-
-			this.json = async function() {
-				let text = await this.text();
-				try {
-					return JSON.parse(text);
-				} catch (error) {
-					return {};
-				}
-			};
-		}
-
-		return new Promise(function(resolve, reject) {
-			const xhr = new XMLHttpRequest();
-			const method = obj.method || 'GET';
-		
-			xhr.open(method, url, true);
-
-			if (obj.headers) {
-				const headerKeys = Object.keys(obj.headers);
-				let i = 0;
-				while (i < headerKeys.length) {
-					const key = headerKeys[i];
-					xhr.setRequestHeader(key, obj.headers[key]);
-					i++;
-				}
-			}
-
-			xhr.responseType = "arraybuffer";
-			xhr.onreadystatechange = function() {
-				console.log("readyState: " + this.readyState);
-				if (this.readyState === 2) {
-					resolve(new StreamResponse(this, true));
-				}
-			};
-
-			xhr.onerror = function() {
-				reject(new Error('Network error'));
-			};
-
-			xhr.ontimeout = function() {
-				reject(new Error('Request timeout'));
-			};
-
-			xhr.send(obj.body || null);
-		});
-	};
-	*/
-
-})(window);
-
 function fetchExternal(url, options, isStreaming) {
 	if (!window.externalFetchRecords) {
 		window.externalFetchRecords = {
@@ -253,6 +93,27 @@ function fetchExternal(url, options, isStreaming) {
 		};
 
 		window.externalFetchRecords.requests[request.id] = request;
+
+		if (options && options.signal) {
+			options.signal.addEventListener('abort', function(){
+				if (!request.aborted) {
+					request.aborted = true;
+					
+					window.Asc.plugin.sendEvent("ai_onExternalFetch", {
+						id : request.id,
+						type : "abort"
+					});
+					
+					if (request.controller) {
+						request.controller.close();
+					}
+					
+					request.resolve(new Error("Request aborted"));
+					delete window.externalFetchRecords.requests[request.id];
+				}
+			});
+		}
+
 		window.Asc.plugin.sendEvent("ai_onExternalFetch", {
 			id : request.id,
 			url : url,
@@ -350,9 +211,10 @@ function fetchExternal(url, options, isStreaming) {
 
 	async function requestWrapperStream(message) {
 
-		function FetchReader(reader) {
+		function FetchReader(reader, abortController) {
 			this.reader = reader;
 			this.decoder = new TextDecoder();
+			this.abortController = abortController;
 
 			this.read = async function() {
 				try {
@@ -369,130 +231,64 @@ function fetchExternal(url, options, isStreaming) {
 					};
 				}
 			};
-		}
 
-		function SimpleRequestReader() {
-			this.decoder = new TextDecoder();
-			this.isComplete = false;
-			this.error = "";
-			this.data = null;
-			this.resolver = null;
-
-			this._complete = function(data) {
-				this.isComplete = true;
-				this._resolve();
-			};
-			
-			this._progress = function(data) {
-				this.data = AscCommon.Base64.decode(data);
-				this._resolve();
-			};
-
-			this._error = function(error) {
-				this.isComplete = true;
-				this.error = error;
-				this._resolve();
-			};
-
-			this._resolve = function() {
-				if (!this.resolver)
-					return;
-
-				if (this.isComplete) {
-					if ("" == this.error) {
-						this.resolver({
-							done: true, 
-							value: ""
-						});
-					}
-					else {
-						this.resolver({
-							error: 1, 
-							message: this.error
-						});
-					}
-					this.resolver = null;
+			this.abort = function() {
+				if (this.abortController) {
+					this.abortController.abort();
 				}
-
-				if (this.data) {
-					this.resolver({
-						done: false, 
-						value: this.decoder.decode(this.data, { stream: true }) 
-					});
-					this.resolver = null;
-					this.data = null;
-				}				
+				if (this.reader) {
+					try {
+						this.reader.cancel();
+					} catch (e) {
+					}
+				}
 			};
-
-			this.read = async function() {
-				return new Promise((resolve) => {
-					this.resolver = resolve;
-					this._resolve();
-				});
-			};			
 		}
 
 		return new Promise(async function (resolve, reject) {
-			if (false) {
-				var reader = new SimpleRequestReader();
-				window.AscSimpleRequest.createRequest({
-					url: message.url,
-					method: message.method + ":stream",
-					headers: message.headers,
-					body: message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : ""),
-					complete: function(e, status) {
-						let data = JSON.parse(e.responseText);
-						reader._complete(data);
-					},
-					error: function(e, status, error) {
-						reader._error(error);
-					},
-					progress: function(e, status) {
-						reader._progress(e.responseText);
-					}
-				});
-				resolve(reader);
-			} else {
-				let request = {
-					method: message.method,
-					headers: message.headers
-				};
-				if (request.method != "GET") {
-					request.body = message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : "");
+			let abortController = new AbortController();
 
-					if (message.isUseProxy) {
-						request = {
+			let request = {
+				method: message.method,
+				headers: message.headers,
+				signal: abortController.signal
+			};
+			if (request.method != "GET") {
+				request.body = message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : "");
+
+				if (message.isUseProxy) {
+					request = {
+						"method" : request.method,
+						"body" : JSON.stringify({
+							"target" : message.url,
 							"method" : request.method,
-							"body" : JSON.stringify({
-								"target" : message.url,
-								"method" : request.method,
-								"headers" : request.headers,
-								"data" : request.body
-							})
+							"headers" : request.headers,
+							"data" : request.body
+						}),
+						"signal": abortController.signal
+					}
+					if (AI.serverSettings){
+						message.url = AI.serverSettings.proxy;
+						request["headers"] = {
+							"Authorization" : "Bearer " + Asc.plugin.info.jwt,
 						}
-						if (AI.serverSettings){
-							message.url = AI.serverSettings.proxy;
-							request["headers"] = {
-								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
-							}
-						} else {
-							message.url = AI.PROXY_URL;
-						}
+					} else {
+						message.url = AI.PROXY_URL;
 					}
 				}
-				
-				try {
-					let response = null;
-					if (!message.url.startsWith("[external]"))
-						response = await fetch(message.url, request);
-					else
-						response = await fetchExternal(message.url, request, true);
+			}
+			
+			try {
+				let response = null;
+				if (!message.url.startsWith("[external]"))
+					response = await fetch(message.url, request);
+				else
+					response = await fetchExternal(message.url, request, true);
 
-					resolve(response.body ? new FetchReader(response.body.getReader()) : null);
-				}
-				catch (error) {
-					resolve(null);
-				}
+				resolve(response.body ? new FetchReader(response.body.getReader(), abortController) : null);
+			}
+			catch (error) {
+				resolve(null);
 			}
 		});
 	}
@@ -705,8 +501,8 @@ function fetchExternal(url, options, isStreaming) {
 	};
 
 	// Chat request with full response (includes tool_calls)
-	AI.Request.prototype.chatRequestFull = async function(content, block, streamFunc) {
-		return await this._wrapRequest(this._chatRequestFull, content, block !== false, streamFunc);
+	AI.Request.prototype.chatRequestAgent = async function(content, block, streamFunc) {
+		return await this._wrapRequest(this._chatRequestAgent, content, block !== false, streamFunc);
 	};
 
 	AI.Request.prototype._chatRequest = async function(content, streamFunc) {
@@ -981,8 +777,8 @@ function fetchExternal(url, options, isStreaming) {
 		}
 	};
 
-	// Full chat request that returns raw response with tool_calls
-	AI.Request.prototype._chatRequestFull = async function(content, streamFunc) {
+	// Version for agent
+	AI.Request.prototype._chatRequestAgent = async function(content, streamFunc) {
 		let provider = null;
 		if (this.modelUI)
 			provider = AI.Storage.getProvider(this.modelUI.provider);
@@ -994,55 +790,212 @@ function fetchExternal(url, options, isStreaming) {
 			};
 		}
 
-		// Check if content contains tools
-		let tools = null;
-		let isMessages = Array.isArray(content);
-
-		// Support for object with messages and tools
-		if (content && typeof content === 'object' && !Array.isArray(content) && content.messages) {
-			tools = content.tools || null;
-			content = content.messages;
-			isMessages = true;
-		}
-
-		if (!isMessages) {
-			content = [{role:"user", content: content}];
-		}
-
 		let headers = AI._getHeaders(provider);
-		let requestBody = {
-			messages: content
-		};
 
 		let objRequest = {
 			headers : headers,
 			method : "POST"
 		};
 
-		objRequest.url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model, {streaming: false});
-		objRequest.body = provider.getChatCompletions(requestBody, this.model);
+		let isStreaming = (undefined !== streamFunc);
+		let options = { streaming: isStreaming };
 
-		// Add tools if provider supports them
-		if (tools && tools.length > 0 && provider.isSupportTools(this.model)) {
-			provider.addTools(objRequest.body, tools);
+		objRequest.url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model, options);
+		objRequest.body = provider.getChatCompletions({ messages : content.messages }, this.model);
+
+		if (content.tools && provider.isSupportTools(this.model)) {
+			provider.addTools(objRequest.body, content.tools);
+		}
+
+		if (isStreaming && options.streamingBody !== false) {
+			objRequest.body.stream = true;
 		}
 
 		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
 
-		let result = await requestWrapper(objRequest);
-		if (result.error) {
-			throw {
-				error : result.error,
-				message : result.message
+		let processResult = function(data, model, isStreaming) {
+			let result = provider.getChatCompletionsResult(data, model, isStreaming ? false : true);
+			if (result.content.length === 0)
+				return "";
+
+			if (0 === result.content[0].indexOf("<think>")) {
+				let end = result.content[0].indexOf("</think>");
+				if (end !== -1)
+					result.content[0] = result.content[0].substring(end + 8);
+			}
+
+			return result.content[0];
+		};
+
+		if (isStreaming) {
+			let readerAsync = await requestWrapperStream(objRequest);
+
+			if (!readerAsync) {
+				if (objRequest.body.stream)
+					delete objRequest.body.stream;
+				let result = await requestWrapper(objRequest);
+				if (result.error) {
+					throw {
+						error : result.error,
+						message : result.message
+					};
+				}
+				return {
+					content: processResult(result, this.model, true),
+					tool_calls: provider.getToolCallsResult ? provider.getToolCallsResult(result) : null,
+					raw: result
+				};
+			}
+
+			// Streaming processing
+			let allContent = "";
+			let tail = "";
+			let isSimpleStream = content.tools ? true : false;
+			
+			let isBufferingFunction = false;
+			let functionBuffer = "";
+
+			let allTools = Object.create(null);
+
+			while (true) {
+				if (window.AgentState.isStopped) {
+					readerAsync.abort();
+					break;
+				}
+
+				const readData = await readerAsync.read();
+				if (readData.error) {
+					throw {
+						error : readData.error,
+						message : readData.message
+					};
+				}
+
+				if (readData.done)
+					break;
+
+				let resultObj = getStreamedResult(tail + readData.value);
+				tail = resultObj.tail;
+
+				let chunks = JSON.parse(resultObj.result);
+
+				let errorObj = null;
+				try {
+					if (chunks.error)
+						errorObj = chunks.error;
+					else if (chunks[0].error)
+						errorObj = chunks[0].error;
+					else if (chunks.data && chunks.data.error)
+						errorObj = chunks.data.error;
+					else if (chunks[0].data && chunks[0].data.error)
+						errorObj = chunks[0].data.error;
+				} catch (err) {
+				}
+
+				if (errorObj) {
+					throw {
+						error : errorObj,
+						message : errorObj.message || JSON.stringify(errorObj)
+					};
+				}
+
+				for (let j = 0, len = chunks.length; j < len; j++) {
+					let chunk = chunks[j];
+
+					// TOOLS DETECTION (only if content tools was presented):
+					if (content.tools) {
+						// chunks from streaming
+						let chunkToolCalls = provider.getToolCallsResult ? provider.getToolCallsResult(chunk) : null;
+						if (chunkToolCalls && chunkToolCalls.length > 0) {
+							for (let tc of chunkToolCalls) {
+								let index = tc.index !== undefined ? tc.index : 0;
+
+								if (!allTools[index]) {
+									allTools[index] = {
+										index: index,
+										id: tc.id || '',
+										type: tc.type || 'function',
+										function: {
+											name: tc.function?.name || '',
+											arguments: tc.function?.arguments || ''
+										}
+									};
+								} else {
+									if (tc.id) allTools[index].id = tc.id;
+									if (tc.type) allTools[index].type = tc.type;
+									if (tc.function?.name) allTools[index].function.name = tc.function.name;
+
+									if (tc.function?.arguments) {
+										allTools[index].function.arguments += tc.function.arguments;
+									}
+								}
+							}
+							continue;
+						}
+					}
+
+					let chunkContent = processResult(chunk, this.model, false);
+					if (!chunkContent)
+						continue;
+
+					allContent += chunkContent;
+					if (isSimpleStream) {
+						await streamFunc(chunkContent);
+					} else if (isBufferingFunction) {
+						functionBuffer += chunkContent;
+					} else {
+						let testFuncCalling = "[functionCalling";
+						let testAllContent = allContent.trimStart();
+
+						if (testAllContent.length >= testFuncCalling.length) {
+							if (!allContent.startsWith(testFuncCalling)) {
+								isSimpleStream = true;
+								functionBuffer = "";
+								await streamFunc(allContent);
+							} else {
+								isBufferingFunction = true;
+								functionBuffer = testAllContent;
+							}
+						} else if (testFuncCalling.startsWith(testAllContent)) {
+							functionBuffer = testAllContent;
+						} else {
+							isSimpleStream = true;
+							functionBuffer = "";
+							await streamFunc(allContent);
+						}
+					}
+				}				
+			}
+
+			if (!window.AgentState.isStopped && !isBufferingFunction && functionBuffer.length > 0) {
+				await streamFunc(allContent);
+			}
+
+			let finalToolCalls = null;
+			if (Object.keys(allTools).length > 0) {
+				finalToolCalls = Object.values(allTools);
+			}
+
+			return {
+				content: allContent,
+				tool_calls: finalToolCalls,
+				raw: null
+			};
+		} else {
+			let result = await requestWrapper(objRequest);
+			if (result.error) {
+				throw {
+					error : result.error,
+					message : result.message
+				};
+			}
+
+			return {
+				content: processResult(result, this.model, true),
+				tool_calls: provider.getToolCallsResult ? provider.getToolCallsResult(result) : null,
+				raw: result
 			};
 		}
-
-		// Return full response including tool_calls
-		return {
-			content: provider.getChatCompletionsResult(result, this.model, true).content[0] || "",
-			tool_calls: provider.getToolCallsResult ? provider.getToolCallsResult(result) : null,
-			raw: result
-		};
 	};
 
 	// IMAGE REQUESTS

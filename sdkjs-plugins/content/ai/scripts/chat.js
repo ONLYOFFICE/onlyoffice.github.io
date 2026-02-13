@@ -41,6 +41,9 @@
 	let bCreateLoader = true;
 	let themeType = 'light';
 	let regenerationMessageIndex = null;	//Index of the message for which a new reply is being created
+	
+	let isAgentRunning = false;
+	let isAgentStopped = false;
 
 	const ErrorCodes = {
 		UNKNOWN: 1
@@ -251,7 +254,7 @@
 				isToolCall: true,
 				functionName: toolCallData.functionName,
 				arguments: toolCallData.arguments,
-				result: toolCallData.result
+				result: toolCallData.result || null
 			};
 
 			this._list.push(toolCall);
@@ -260,6 +263,15 @@
 			$chat.prepend(toolCall.$el);
 			this._renderToolCall(toolCall);
 			$chat.scrollTop($chat[0].scrollHeight);
+			return this._list.length - 1; // Return index for updating later
+		},
+		updateToolCallResult: function(index, result) {
+			if (index < 0 || index >= this._list.length) return;
+			const toolCall = this._list[index];
+			if (toolCall && toolCall.isToolCall) {
+				toolCall.result = result;
+				this._renderToolCall(toolCall);
+			}
 		},
 		get: function() {
 			return this._list;
@@ -374,10 +386,23 @@
 
 		updateTextareaSize();
 
+		// Initialize voice button visibility
+		updateVoiceButtonVisibility();
+
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
 
 		document.getElementById('input_message_submit').addEventListener('click', function() {
 			onSubmit();
+		});
+
+		// Voice input button handler
+		document.getElementById('input_voice_button').addEventListener('click', function() {
+			onVoiceInput();
+		});
+
+		// Stop button handler
+		document.getElementById('input_stop_button').addEventListener('click', function() {
+			onStopAgent();
 		});
 		document.getElementById('input_message').onkeydown = function(e) {
 			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -459,6 +484,9 @@
 
 
 	function onSubmit() {
+		if (isAgentRunning)
+			return;
+
 		let textarea = document.getElementById('input_message');
 		if (textarea.classList.contains('error_border')){
 			setError('Too many tokens in your request.');
@@ -470,6 +498,104 @@
 			textarea.value = '';
 			updateTextareaSize();
 			document.getElementById('cur_tokens').innerText = 0;
+		}
+	};
+
+	function onVoiceInput() {
+		if (isAgentRunning)
+			return;
+
+		if (!recognition) {
+			initVoiceRecognition();
+		}
+
+		if (!recognition) {
+			setError('Voice input is not supported in your browser');
+			return;
+		}
+
+		if (recognition.isRecording) {
+			recognition.engine.stop();
+		} else {
+			try {
+				recognition.engine.start();
+			} catch (e) {
+				console.error('Failed to start voice recognition:', e);
+				setError('Failed to start voice input');
+			}
+		}
+	};
+
+	function onStopAgent() {
+		isAgentStopped = true;
+		updateControlButtonsState();
+		window.Asc.plugin.sendToPlugin("onStopAgent", {});
+	};
+
+	let voiceInputSupported = false;
+	let recognition = null;
+
+	function updateVoiceButtonVisibility() {
+		if (voiceInputSupported) {
+			document.getElementById('input_voice_button').classList.remove('hidden');
+		} else {
+			document.getElementById('input_voice_button').classList.add('hidden');
+		}
+	};
+
+	function initVoiceRecognition() {
+		recognition = window.initVoiceRecognitionEngine();
+
+		if (!recognition)
+			return;
+
+		recognition.onStart = function() {
+			const voiceBtn = document.getElementById('input_voice_button');
+			voiceBtn.classList.add('recording');
+			voiceBtn.title = 'Recording... Click to stop\nSay "comma", "period", etc. for punctuation';
+		};
+
+		recognition.onProgress = function(text) {
+			const textarea = document.getElementById('input_message');
+			const currentValue = textarea.value;
+
+			if (currentValue && !currentValue.endsWith(' ') && !currentValue.endsWith('\n')) {
+				text = ' ' + text;
+			}
+
+			textarea.value = currentValue + text;
+			updateTextareaSize();
+
+			textarea.focus();
+		};
+
+		recognition.onError = function(error) {
+			document.getElementById('input_voice_button').classList.remove('recording');
+			if (error !== 'no-speech' && error !== 'aborted') {
+				setError('Voice input error: ' + error);
+			}
+		};
+
+		recognition.onEnd = function() {
+			const voiceBtn = document.getElementById('input_voice_button');
+			voiceBtn.classList.remove('recording');
+			voiceBtn.title = 'Voice input\nSay "comma", "period", etc. for punctuation';
+		};
+	};
+
+	function updateControlButtonsState() {
+		const submitButton = document.getElementById('input_message_submit');
+		const stopButton = document.getElementById('input_stop_button');
+		const voiceButton = document.getElementById('input_voice_button');
+
+		if (isAgentRunning) {
+			submitButton.classList.add('hidden');
+			stopButton.classList.remove('hidden');
+			if (voiceButton) voiceButton.classList.add('hidden');
+		} else {
+			submitButton.classList.remove('hidden');
+			stopButton.classList.add('hidden');
+			updateVoiceButtonVisibility();
 		}
 	};
 
@@ -542,6 +668,10 @@
 			createTyping();
 		}
 
+		isAgentRunning = true;
+		isAgentStopped = false;
+		updateControlButtonsState();
+
 		let list = isRegenerating
 			? messagesList.get().slice(0, regenerationMessageIndex)
 			: messagesList.get();
@@ -581,8 +711,14 @@
 		clearInterval(interval);
 		interval = null;
 		let element = document.getElementById('loading');
-		element && element.remove();
+		element && element.remove();		
 		return;
+	};
+
+	function finishAgentExecution() {
+		isAgentRunning = false;
+		isAgentStopped = false;
+		updateControlButtonsState();
 	};
 
 	function createLoader() {
@@ -728,6 +864,12 @@
 	window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
+		if (isAgentStopped) {
+			removeTyping();
+			finishAgentExecution();
+			return;
+		}
+
 		let errorCode = null;
 		if(!reply.trim()) {
 			errorCode = ErrorCodes.UNKNOWN;
@@ -741,14 +883,93 @@
 			messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
 		}
 		regenerationMessageIndex = null;
-		
+
 		removeTyping();
+		finishAgentExecution();
+		document.getElementById('input_message').focus();
+	});
+
+	// Streaming support
+	let streamingMessageIndex = null;
+	let streamingContent = '';
+
+	window.Asc.plugin.attachEvent("onChatStreamStart", function() {
+		removeTyping();
+		streamingContent = '';
+
+		if (regenerationMessageIndex !== null) {
+			streamingMessageIndex = regenerationMessageIndex;
+		} else {
+			messagesList.add({ role: 'assistant', content: [''] });
+			streamingMessageIndex = messagesList.get().length - 1;
+		}
+	});
+
+	window.Asc.plugin.attachEvent("onChatStreamChunk", function(chunk) {
+		if (streamingMessageIndex === null)
+			return;
+		if (isAgentStopped) 
+			return;
+
+		streamingContent += chunk;
+		const message = messagesList.get()[streamingMessageIndex];
+		if (message) {
+			if (regenerationMessageIndex !== null) {
+				if (message.content[message.content.length - 1] !== streamingContent) {
+					if (message.content.length === message.activeContentIndex + 1) {
+						message.content[message.activeContentIndex] = streamingContent;
+					} else {
+						message.content.push(streamingContent);
+						message.activeContentIndex = message.content.length - 1;
+					}
+				} else {
+					message.content[message.activeContentIndex] = streamingContent;
+				}
+			} else {
+				message.content[0] = streamingContent;
+			}
+
+			// no update buttons
+			if (message.$el) {
+				const $spanMessage = message.$el.find('.span_message');
+				if ($spanMessage.length > 0) {
+					let c = window.markdownit();
+					let htmlContent = c.render(streamingContent);
+					$spanMessage.html(htmlContent);
+				}
+			}
+
+			// Auto-scroll to bottom
+			let $chat = $('#chat');
+			$chat.scrollTop($chat[0].scrollHeight);
+		}
+	});
+
+	window.Asc.plugin.attachEvent("onChatStreamEnd", function() {
+		streamingMessageIndex = null;
+		streamingContent = '';
+		regenerationMessageIndex = null;
+		removeTyping();
+		finishAgentExecution();
 		document.getElementById('input_message').focus();
 	});
 
 	window.Asc.plugin.attachEvent("onAttachedText", function(text) {
 		// For a future release.
 		// attachedText.set(text);
+	});
+
+	window.Asc.plugin.attachEvent("onVoiceInputSupport", function(isSupported) {
+		voiceInputSupported = isSupported;
+		updateVoiceButtonVisibility();
+
+		// Set initial tooltip
+		if (isSupported) {
+			const voiceBtn = document.getElementById('input_voice_button');
+			if (voiceBtn) {
+				voiceBtn.title = 'Voice input\nSay "comma", "period", etc. for punctuation';
+			}
+		}
 	});
 
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
@@ -762,6 +983,66 @@
 		window.Asc.plugin.sendToPlugin("onUpdateState");
 	});
 
+	// Track tool call indices for updating
+	let toolCallIndices = {};
+
+	window.Asc.plugin.attachEvent("onToolCallStart", function(toolCallData) {
+		// Parse tool call data
+		let funcName = 'Unknown';
+		let funcArgs = '';
+
+		if (toolCallData.type === 'native') {
+			funcName = toolCallData.functionName || 'Unknown';
+			funcArgs = toolCallData.arguments || '';
+		} else if (toolCallData.type === 'system_prompt') {
+			let callStr = toolCallData.call;
+			let nameMatch = callStr.match(/\(([^)]+)\)/);
+			if (nameMatch) {
+				funcName = nameMatch[1];
+			}
+			let argsMatch = callStr.match(/\{[\s\S]*\}/);
+			if (argsMatch) {
+				try {
+					let args = JSON.parse(argsMatch[0]);
+					funcArgs = JSON.stringify(args, null, 2);
+				} catch (e) {
+					funcArgs = argsMatch[0];
+				}
+			}
+		}
+
+		// Add tool call immediately without result
+		const index = messagesList.addToolCall({
+			functionName: funcName,
+			arguments: funcArgs,
+			result: null
+		});
+
+		// Store index for later update
+		if (toolCallData.id) {
+			toolCallIndices[toolCallData.id] = index;
+		}
+	});
+
+	window.Asc.plugin.attachEvent("onToolCallEnd", function(toolCallData) {
+		let result = '';
+
+		if (toolCallData.type === 'native') {
+			result = typeof toolCallData.result === 'object' ?
+				(toolCallData.result.message || toolCallData.result.error || JSON.stringify(toolCallData.result)) :
+				(toolCallData.result || 'Success');
+		} else if (toolCallData.type === 'system_prompt') {
+			result = toolCallData.result ? (toolCallData.result.message || toolCallData.result.error || 'Success') : '';
+		}
+
+		// Update the result for the existing tool call
+		if (toolCallData.id && toolCallIndices[toolCallData.id] !== undefined) {
+			messagesList.updateToolCallResult(toolCallIndices[toolCallData.id], result);
+			delete toolCallIndices[toolCallData.id];
+		}
+	});
+
+	// Keep old event for backward compatibility (deprecated)
 	window.Asc.plugin.attachEvent("onToolCall", function(toolCallData) {
 		// Parse tool call data
 		let funcName = 'Unknown';
