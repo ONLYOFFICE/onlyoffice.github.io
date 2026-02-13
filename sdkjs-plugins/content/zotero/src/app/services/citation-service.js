@@ -619,7 +619,7 @@ class CitationService {
         if (editorVersion && editorVersion < 9003000) {
             await this.#additionalWindow.showWarningWindow(
                 "Something went wrong",
-                "Update your editor to use this feature",
+                "Update your editor to use this feature.",
             );
             return;
         }
@@ -724,7 +724,7 @@ class CitationService {
         if (editorVersion && editorVersion < 9003000) {
             await this.#additionalWindow.showWarningWindow(
                 "Something went wrong",
-                "Update your editor to use this feature",
+                "Update your editor to use this feature.",
             );
             return;
         }
@@ -777,7 +777,7 @@ class CitationService {
         if (editorVersion && editorVersion < 9003000) {
             await this.#additionalWindow.showWarningWindow(
                 "Something went wrong",
-                "Update your editor to use this feature",
+                "Update your editor to use this feature.",
             );
             return;
         }

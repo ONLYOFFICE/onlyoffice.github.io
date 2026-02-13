@@ -5424,7 +5424,7 @@ class CitationService {
         return _asyncToGenerator(function*() {
             var editorVersion = window.Asc.scope.editorVersion;
             if (editorVersion && editorVersion < 9003e3) {
-                yield _classPrivateFieldGet2(_additionalWindow, _this4).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                yield _classPrivateFieldGet2(_additionalWindow, _this4).showWarningWindow("Something went wrong", "Update your editor to use this feature.");
                 return;
             }
             _this4._storage.clear();
@@ -5482,7 +5482,7 @@ class CitationService {
         return _asyncToGenerator(function*() {
             var editorVersion = window.Asc.scope.editorVersion;
             if (editorVersion && editorVersion < 9003e3) {
-                yield _classPrivateFieldGet2(_additionalWindow, _this7).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                yield _classPrivateFieldGet2(_additionalWindow, _this7).showWarningWindow("Something went wrong", "Update your editor to use this feature.");
                 return;
             }
             _this7._storage.clear();
@@ -5512,7 +5512,7 @@ class CitationService {
         return _asyncToGenerator(function*() {
             var editorVersion = window.Asc.scope.editorVersion;
             if (editorVersion && editorVersion < 9003e3) {
-                yield _classPrivateFieldGet2(_additionalWindow, _this8).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                yield _classPrivateFieldGet2(_additionalWindow, _this8).showWarningWindow("Something went wrong", "Update your editor to use this feature.");
                 return;
             }
             _this8._storage.clear();
