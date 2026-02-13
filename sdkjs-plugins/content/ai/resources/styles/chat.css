@@ -410,7 +410,7 @@ input {
 #input_message {
 	flex: 1;
 	padding: 0;
-	padding: 6px 32px 6px 6px;
+	padding: 6px 6px 6px 6px;
 	margin: 2px 2px 2px 2px;
     min-height: 16px;
     max-height: 82px;
@@ -424,22 +424,66 @@ input {
 	margin-bottom: 34px;
 }
 
-#input_message_submit {
+#input_buttons_container {
 	position: absolute;
 	right: 0;
 	bottom: 0;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 7px 7px 7px 0px;
+}
+
+.input_control_button {
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 7px 7px 7px 0px;
+	min-width: 20px;
+	min-height: 20px;
 }
-#input_message_submit:hover {
+.input_control_button:hover {
 	opacity: 0.7;
 }
-#input_message_submit img {
+.input_control_button img,
+.input_control_button .icon {
 	width: 20px;
 	height: 20px;
+	font-size: 16px;
+	line-height: 20px;
+	text-align: center;
+	user-select: none;
+}
+
+#input_stop_button .icon {
+	color: #666;
+	color: var(--text-secondary);
+	font-size: 14px;
+}
+
+body.theme-type-dark #input_stop_button .icon {
+	color: #aaa;
+}
+
+#input_voice_button .icon {
+	font-size: 16px;
+	transition: filter 0.2s, color 0.2s;
+	color: #666;
+	color: var(--text-secondary);
+}
+
+body.theme-type-dark #input_voice_button .icon {
+	color: #aaa;
+}
+
+#input_voice_button.recording .icon {
+	filter: brightness(0) saturate(100%) invert(23%) sepia(96%) saturate(6943%) hue-rotate(357deg) brightness(99%) contrast(114%);
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.5; }
 }
 
 

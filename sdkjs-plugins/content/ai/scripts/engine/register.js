@@ -81,72 +81,127 @@ async function registerButtons(window, undefined)
 			if(!hasOpenedOnce && attachedText && attachedText.trim()) {
 				chatWindow.command("onAttachedText", attachedText);
 			}
+
+			function isSupportVoiceInput() {
+				if (window.AscDesktopEditor)
+					return false;
+				if (window.location.protocol.startsWith("https"))
+					return true;
+
+				return true;
+			}
+
+			chatWindow.command("onVoiceInputSupport", isSupportVoiceInput());
+
 			hasOpenedOnce = true;
 		});
+		
+		var AgentState = {
+			MAX_LOOP_ITERATIONS : 10,
+			isStopped : false,
+			tools : null,
+			systemToolsPrompt : ""		
+		};
+		window.AgentState = AgentState;
+
+		chatWindow.attachEvent("onStopAgent", function() {
+			AgentState.isStopped = true;
+		});
+
 		chatWindow.attachEvent("onChatMessage", async function(messageHistory) {
+			AgentState.isStopped = false;
+
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
 				return;
 
-			// Initialize EditorHelper for tools
-			if (!window.EditorHelper) {
+			if (!window.EditorHelper)
 				window.EditorHelper = new EditorHelperImpl();
-			}
 
 			let provider = AI.Storage.getProvider(requestEngine.modelUI.provider);
 			let isSupportTools = provider && provider.isSupportTools(requestEngine.model);
 
-			// Prepare request with tools
 			let requestData = {
 				messages: messageHistory
 			};
 
-			// Add tools if provider supports them, otherwise use system prompt
 			if (isSupportTools) {
-				let tools = window.EditorHelper.getTools();
-				if (tools && tools.length > 0) {
-					requestData.tools = tools;
-				}
+				if (!AgentState.tools)
+					AgentState.tools = window.EditorHelper.getTools();
+
+				if (AgentState.tools && AgentState.tools.length > 0)
+					requestData.tools = AgentState.tools;
 			} else {
-				// Add system prompt for providers that don't support native tools
-				let systemPrompt = window.EditorHelper.getSystemPrompt();
-				if (systemPrompt) {
-					// Check if first message is system prompt
-					if (requestData.messages.length === 0 || requestData.messages[0].role !== 'system') {
-						requestData.messages.unshift({
-							role: 'system',
-							content: systemPrompt
-						});
-					}
+				if ("" === AgentState.systemToolsPrompt)
+					AgentState.systemToolsPrompt = window.EditorHelper.getSystemPrompt();
+
+				if (requestData.messages.length === 0) {
+					requestData.messages.push({
+						role: 'system',
+						content: systemPrompt
+					});
 				}
 			}
 
-			// Agent loop
-			const MAX_ITERATIONS = 10;
+			// LOOP
 			let iteration = 0;
-
-			while (iteration < MAX_ITERATIONS) {
+			while (iteration < AgentState.MAX_LOOP_ITERATIONS && !AgentState.isStopped) {
 				iteration++;
 
-				// Use full response to get tool_calls
-				let fullResponse = await requestEngine.chatRequestFull(requestData);
-				if (!fullResponse) break;
+				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+				let isSendedEndLongAction = false;
+				async function checkEndAction() {
+					if (!isSendedEndLongAction) {
+						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+						isSendedEndLongAction = true;
+					}
+				}
+
+				let isStreamToChat = false;
+				let fullResponse = await requestEngine.chatRequestAgent(requestData, false, async function(chunk) {
+					if (!isStreamToChat) {
+						isStreamToChat = true;
+						chatWindow.command("onChatStreamStart");
+
+						await checkEndAction();
+					}
+
+					chatWindow.command("onChatStreamChunk", chunk);
+				});
+
+				if (isStreamToChat) {
+					chatWindow.command("onChatStreamEnd");
+				}
+
+				await checkEndAction();
+
+				if (AgentState.isStopped)
+					break;
 
 				let result = fullResponse.content || "";
-				let toolCalls = fullResponse.tool_calls;
 
-				// Check for native tool calls first
+				let toolCalls = fullResponse.tool_calls || null;
+
+				// CHECK TOOLS
 				if (toolCalls && toolCalls.length > 0) {
-					// Process native tool calls (OpenAI, Anthropic format)
 					for (let toolCall of toolCalls) {
+						if (AgentState.isStopped)
+							break;
+
 						try {
 							let funcName = toolCall.function.name;
 							let funcArgs = toolCall.function.arguments;
 
-							// Parse arguments if string
 							let argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
 
-							// Execute tool
+							chatWindow.command("onToolCallStart", {
+								type: 'native',
+								id: toolCall.id,
+								functionName: funcName,
+								arguments: JSON.stringify(argsObj, null, 2)
+							});
+
 							let toolResult = {};
 							try {
 								toolResult = await window.EditorHelper.names2funcs[funcName].call(argsObj);
@@ -154,28 +209,27 @@ async function registerButtons(window, undefined)
 									toolResult = {};
 								toolResult.message = "System function '" + funcName + "' executed successfully";
 							} catch (e) {
-								console.error(errorMsg);
+								console.error(e);
+								let errorMsg = "Error executing function: " + funcName;
 								toolResult = {
 									error: errorMsg
 								};
 							}
 
-							// Notify chat about tool call
-							chatWindow.command("onToolCall", {
+							chatWindow.command("onToolCallEnd", {
 								type: 'native',
+								id: toolCall.id,
 								functionName: funcName,
 								arguments: JSON.stringify(argsObj, null, 2),
 								result: toolResult
 							});
 
-							// Add assistant message with tool call
 							requestData.messages.push({
 								role: 'assistant',
 								content: result || null,
 								tool_calls: [toolCall]
 							});
 
-							// Add tool result to history
 							let toolMessage = {
 								role: 'tool',
 								tool_call_id: toolCall.id,
@@ -191,37 +245,42 @@ async function registerButtons(window, undefined)
 							break;
 						}
 					}
-					// Continue loop to get next response
 					continue;
 				}
 
-				// Check for system prompt style tool calls
+				// CHECK PROMT FUNCTION CALLING
 				if (!toolCalls && result.startsWith("[functionCalling")) {
+					if (AgentState.isStopped)
+						break;
+
 					try {
-						// Parse and execute tool
+						let toolCallId = 'system_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+						chatWindow.command("onToolCallStart", {
+							type: 'system_prompt',
+							id: toolCallId,
+							call: result
+						});
+
 						let toolResult = await window.EditorHelper.callFunc(result);
 
-						// Notify chat about tool call
-						chatWindow.command("onToolCall", {
+						chatWindow.command("onToolCallEnd", {
 							type: 'system_prompt',
+							id: toolCallId,
 							call: result,
 							result: toolResult
 						});
 
-						// Add assistant's function call first
 						requestData.messages.push({
 							role: 'assistant',
 							content: result
 						});
 
-						// Add tool result as user message (system response)
 						if (toolResult.error) {
 							requestData.messages.push({
 								role: 'user',
 								content: "SYSTEM: Function execution failed with error: " + toolResult.error + "\nPlease try a different approach or inform the user about the issue."
-							});
-							// Continue to let AI respond to error
-							continue;
+							});							
 						} else {
 							let resultMessage = "SYSTEM: " + toolResult.message;
 							if (toolResult.prompt) {
@@ -230,22 +289,22 @@ async function registerButtons(window, undefined)
 							requestData.messages.push({
 								role: 'user',
 								content: resultMessage
-							});
-							// Continue loop to get AI's next response
-							continue;
+							});							
 						}
+						continue;
 					} catch (e) {
 						console.error("Tool execution error:", e);
 						break;
 					}
 				}
 
-				// No more tool calls, return final result
-				chatWindow.command("onChatReply", result);
+				if (!isStreamToChat && result) {
+					chatWindow.command("onChatReply", result);
+				}
 				break;
 			}
 
-			if (iteration >= MAX_ITERATIONS) {
+			if (iteration >= AgentState.MAX_LOOP_ITERATIONS) {
 				chatWindow.command("onChatReply", "Maximum iterations reached. Please try again.");
 			}
 		});
