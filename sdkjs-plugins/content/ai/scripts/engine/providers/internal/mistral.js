@@ -144,8 +144,4 @@ class Provider extends AI.Provider {
 		return markdownContent;
 	}
 
-	isSupportTools(model) {
-		return true;
-	}
-
 }

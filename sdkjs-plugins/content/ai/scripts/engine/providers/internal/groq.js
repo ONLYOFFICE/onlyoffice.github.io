@@ -58,8 +58,4 @@ class Provider extends AI.Provider {
 		return AI.CapabilitiesUI.Chat;
 	}
 
-	isSupportTools(model) {
-		return true;
-	}
-
 }
