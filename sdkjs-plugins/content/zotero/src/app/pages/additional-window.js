@@ -42,7 +42,7 @@ class AdditionalWindow {
             isInsideMode: false,
         };
 
-        this.#onShow(variation, text);
+        this.#onShow(variation, text, "default");
         this.#window.show(variation);
 
         return new Promise((resolve, reject) => {
@@ -83,7 +83,7 @@ class AdditionalWindow {
             isInsideMode: false,
         };
 
-        this.#onShow(variation, content);
+        this.#onShow(variation, content, "default");
         this.#window.show(variation);
 
         return new Promise((resolve, reject) => {
@@ -102,12 +102,55 @@ class AdditionalWindow {
             };
         });
     }
+    
+    /**
+     * @param {string} description
+     * @param {string} text
+     */
+    showWarningWindow(description, text) {
+        this.#window = new window.Asc.PluginWindow();
+        const variation = {
+            name: "Zotero",
+            url: "info-window.html",
+            description: window.Asc.plugin.tr(description),
+            isVisual: true,
+            buttons: [
+                {
+                    text: window.Asc.plugin.tr("OK"),
+                    primary: true,
+                    isViewer: false,
+                },
+            ],
+            isModal: false,
+            EditorsSupport: ["word"],
+            size: [350, 76],
+            isViewer: true,
+            isDisplayedInViewer: false,
+            isInsideMode: false,
+        };
+
+        this.#onShow(variation, window.Asc.plugin.tr(text), "warning");
+        this.#window.show(variation);
+
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+
+                this.#hide();
+            };
+        });
+    }  
 
     /**
      * @param {Object} variation
      * @param {any} content
+     * @param {"default" | "warning" | "success"} type
      */
-    #onShow(variation, content) {
+    #onShow(variation, content, type) {
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
         this.#defaultTranslateFn = Asc.plugin.onTranslate;
@@ -121,7 +164,11 @@ class AdditionalWindow {
         };
 
         this.#window.attachEvent("onWindowReady", () => {
-            this.#window.command("onAttachedContent", content);
+            if (type === "warning") {
+                this.#window.command("onWarning", content);
+            } else {
+                this.#window.command("onAttachedContent", content);
+            }
         });
 
         this.#window.attachEvent(

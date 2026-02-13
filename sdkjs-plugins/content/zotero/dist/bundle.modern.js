@@ -3308,6 +3308,7 @@ class CslDocFormatter {
                 for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                     var pos = Asc.scope.formatting[i];
                     var range = run.GetRange(pos.start, pos.end);
+                    if (!range) continue;
                     if ("sup" === pos.type) {
                         range.SetVertAlign("superscript");
                     } else if ("sub" === pos.type) {
@@ -3340,6 +3341,7 @@ class CslDocFormatter {
                 for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                     var pos = Asc.scope.formatting[i];
                     var range = run.GetRange(pos.start, pos.end);
+                    if (!range) continue;
                     if ("sup" === pos.type) {
                         range.SetVertAlign("superscript");
                     } else if ("sub" === pos.type) {
@@ -3463,7 +3465,8 @@ class CitationDocService {
             });
             if (!formats.size) return;
             for (var [fieldId, formattingPositions] of formats) {
-                yield _assertClassBrand(_CitationDocService_brand, _this2, _selectField).call(_this2, fieldId);
+                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this2, _selectField).call(_this2, fieldId);
+                if (!selectFieldResult) continue;
                 yield CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
             }
         })();
@@ -3478,8 +3481,10 @@ class CitationDocService {
                     console.error("Field id is not defined");
                     continue;
                 }
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, field.FieldId);
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _selectFieldReference).call(_this3);
+                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, field.FieldId);
+                if (!selectFieldResult) continue;
+                var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectFieldReference).call(_this3);
+                if (!isReferenceSelected) continue;
                 yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSuperscript).call(_this3);
                 yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSelectedContent).call(_this3);
                 yield _assertClassBrand(_CitationDocService_brand, _this3, _addAddinField).call(_this3, field);
@@ -3496,7 +3501,8 @@ class CitationDocService {
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 if (!field.FieldId) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, field.FieldId);
+                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, field.FieldId);
+                if (!selectFieldResult) continue;
                 yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSelectedContent).call(_this4);
                 yield _assertClassBrand(_CitationDocService_brand, _this4, _addNote).call(_this4, notesStyle);
                 yield _assertClassBrand(_CitationDocService_brand, _this4, _addAddinField).call(_this4, field);
@@ -3513,8 +3519,10 @@ class CitationDocService {
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 if (!field.FieldId) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _selectFieldReference).call(_this5);
+                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
+                if (!selectFieldResult) continue;
+                var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectFieldReference).call(_this5);
+                if (!isReferenceSelected) continue;
                 yield _assertClassBrand(_CitationDocService_brand, _this5, _removeSelectedContent).call(_this5);
                 yield _assertClassBrand(_CitationDocService_brand, _this5, _addNote).call(_this5, notesStyle);
                 yield _assertClassBrand(_CitationDocService_brand, _this5, _addAddinField).call(_this5, field);
@@ -3573,7 +3581,13 @@ function _removeSelectedContent() {
 
 function _selectField(fieldId) {
     return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], resolve);
+        var editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003e3) {
+            console.error("Cannot select addin field.");
+            console.error("Editor version is less than 9.3.0");
+            resolve(false);
+        }
+        window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], () => resolve(true));
     });
 }
 
@@ -3581,13 +3595,19 @@ function _selectFieldReference() {
     return new Promise(function(resolve) {
         var isCalc = true;
         var isClose = false;
+        var editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003e3) {
+            console.error("Cannot select addin field reference.");
+            console.error("Editor version is less than 9.3.0");
+            resolve(false);
+        }
         Asc.plugin.callCommand(() => {
             var doc = Api.GetDocument();
             var note = doc.GetCurrentFootEndnote();
             if (!note) return;
             var reference = note.SelectNoteReference();
             if (!reference) return;
-        }, isClose, isCalc, resolve);
+        }, isClose, isCalc, () => resolve(true));
     });
 }
 
@@ -5173,7 +5193,7 @@ class AdditionalWindow {
             isDisplayedInViewer: false,
             isInsideMode: false
         };
-        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text);
+        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text, "default");
         _classPrivateFieldGet2(_window, this).show(variation);
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = (buttonId, windowId) => {
@@ -5209,7 +5229,7 @@ class AdditionalWindow {
             isDisplayedInViewer: false,
             isInsideMode: false
         };
-        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, content);
+        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, content, "default");
         _classPrivateFieldGet2(_window, this).show(variation);
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = function() {
@@ -5231,13 +5251,45 @@ class AdditionalWindow {
             }();
         });
     }
+    showWarningWindow(description, text) {
+        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
+        var variation = {
+            name: "Zotero",
+            url: "info-window.html",
+            description: window.Asc.plugin.tr(description),
+            isVisual: true,
+            buttons: [ {
+                text: window.Asc.plugin.tr("OK"),
+                primary: true,
+                isViewer: false
+            } ],
+            isModal: false,
+            EditorsSupport: [ "word" ],
+            size: [ 350, 76 ],
+            isViewer: true,
+            isDisplayedInViewer: false,
+            isInsideMode: false
+        };
+        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, window.Asc.plugin.tr(text), "warning");
+        _classPrivateFieldGet2(_window, this).show(variation);
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = (buttonId, windowId) => {
+                if (buttonId === 0) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
+            };
+        });
+    }
     destroy() {
         _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
         _classPrivateFieldSet2(_window, this, null);
     }
 }
 
-function _onShow(variation, content) {
+function _onShow(variation, content, type) {
     _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
     _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
     _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
@@ -5250,7 +5302,11 @@ function _onShow(variation, content) {
         _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
     };
     _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
-        _classPrivateFieldGet2(_window, this).command("onAttachedContent", content);
+        if (type === "warning") {
+            _classPrivateFieldGet2(_window, this).command("onWarning", content);
+        } else {
+            _classPrivateFieldGet2(_window, this).command("onAttachedContent", content);
+        }
     });
     _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
         Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, this).id, [ variation.size[0] - 2, height ] ], () => {});
@@ -5265,14 +5321,14 @@ function _hide() {
     window.Asc.plugin.onThemeChanged = _classPrivateFieldGet2(_defaultThemeChangedFn, this);
 }
 
-var _onUserEditCitationManuallyWindow = new WeakMap;
+var _additionalWindow = new WeakMap;
 
 var _CitationService_brand = new WeakSet;
 
 class CitationService {
     constructor(localesManager, cslStylesManager, sdk) {
         _classPrivateMethodInitSpec(this, _CitationService_brand);
-        _classPrivateFieldInitSpec(this, _onUserEditCitationManuallyWindow, void 0);
+        _classPrivateFieldInitSpec(this, _additionalWindow, void 0);
         this._bibPlaceholderIfEmpty = "Please insert some citation into the document.";
         this._citPrefixNew = "ZOTERO_ITEM";
         this._citSuffixNew = "CSL_CITATION";
@@ -5286,7 +5342,7 @@ class CitationService {
         this._storage = new CSLCitationStorage;
         this._formatter;
         this.citationDocService = new CitationDocService(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew);
-        _classPrivateFieldSet2(_onUserEditCitationManuallyWindow, this, new AdditionalWindow);
+        _classPrivateFieldSet2(_additionalWindow, this, new AdditionalWindow);
     }
     saveAsText() {
         return this.citationDocService.saveAsText();
@@ -5366,6 +5422,11 @@ class CitationService {
     updateCslItemsInNotes(notesStyle) {
         var _this4 = this;
         return _asyncToGenerator(function*() {
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9003e3) {
+                yield _classPrivateFieldGet2(_additionalWindow, _this4).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                return;
+            }
             _this4._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this4, _synchronizeStorageWithDocItems).call(_this4);
@@ -5419,6 +5480,11 @@ class CitationService {
     switchingBetweenNotesAndText(notesStyle) {
         var _this7 = this;
         return _asyncToGenerator(function*() {
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9003e3) {
+                yield _classPrivateFieldGet2(_additionalWindow, _this7).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                return;
+            }
             _this7._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this7, _synchronizeStorageWithDocItems).call(_this7);
@@ -5444,6 +5510,11 @@ class CitationService {
     convertNotesStyle(notesStyle) {
         var _this8 = this;
         return _asyncToGenerator(function*() {
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9003e3) {
+                yield _classPrivateFieldGet2(_additionalWindow, _this8).showWarningWindow("Something went wrong", "Update your editor to use this feature");
+                return;
+            }
             _this8._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8);
@@ -5460,7 +5531,7 @@ class CitationService {
         var _this9 = this;
         return _asyncToGenerator(function*() {
             if (!field) return null;
-            var updatedField = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, _this9).showEditWindow(field);
+            var updatedField = yield _classPrivateFieldGet2(_additionalWindow, _this9).showEditWindow(field);
             if (!updatedField) {
                 return null;
             }
@@ -5691,7 +5762,7 @@ function _getUpdatedFields2() {
                 cslCitation.setPlainCitation(newContent);
             } else if (oldContent !== newContent) {
                 var text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
-                var bNeedSaveUserInput = yield _classPrivateFieldGet2(_onUserEditCitationManuallyWindow, this).show("Saving custom edits", text);
+                var bNeedSaveUserInput = yield _classPrivateFieldGet2(_additionalWindow, this).show("Saving custom edits", text);
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
                     delete field["Content"];
@@ -7373,7 +7444,12 @@ SelectCitationsComponent.prototype.count = function() {
             });
         });
         window.Asc.plugin.onTranslate = applyTranslations;
-        addContextMenuButtons();
+        getEditorVersion().then(editorVersion => {
+            window.Asc.scope.editorVersion = editorVersion;
+            if (editorVersion >= 9003e3) {
+                addContextMenuButtons();
+            }
+        });
     };
     function showCitationsAtTheStartFromMyLibrary() {
         libLoader.show();
@@ -7765,6 +7841,26 @@ SelectCitationsComponent.prototype.count = function() {
                 insertLinkBtn.setText(translate("Insert Citation"));
             }
         }
+    }
+    function getEditorVersion() {
+        return _getEditorVersion.apply(this, arguments);
+    }
+    function _getEditorVersion() {
+        _getEditorVersion = _asyncToGenerator(function*() {
+            try {
+                var version = yield new Promise(resolve => {
+                    Asc.plugin.executeMethod("GetVersion", [], resolve);
+                });
+                if ("develop" == version) version = "99.99.99";
+                var arrVer = version.split(".");
+                while (3 > arrVer.length) arrVer.push("0");
+                return 1e6 * parseInt(arrVer[0]) + 1e3 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
+            } catch (error) {
+                console.error(error);
+                return 99999999;
+            }
+        });
+        return _getEditorVersion.apply(this, arguments);
     }
     function addContextMenuButtons() {
         var buttonMain = new Asc.ButtonContextMenu;
