@@ -61,5 +61,8 @@
     "Yes": "はい",
     "No": "いいえ",
     "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "引用を追加する場合は'はい'をクリックするとZoteroは更新されません。スタイルを変更する場合は'いいえ'をクリックすると変更を破棄します。",
-    "Edit citation": "引用を編集"
+    "Edit citation": "引用を編集",
+    "OK": "OK",
+    "Something went wrong": "何かがうまくいかなかった",
+    "Update your editor to use this feature": "この機能を使用するには、エディターを更新してください"
 }

@@ -19,6 +19,7 @@ class CslDocFormatter {
                     for (let i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                         const pos = Asc.scope.formatting[i];
                         let range = run.GetRange(pos.start, pos.end);
+                        if (!range) continue;
                         if ("sup" === pos.type) {
                             range.SetVertAlign("superscript");
                         } else if ("sub" === pos.type) {
@@ -65,7 +66,7 @@ class CslDocFormatter {
                     for (let i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                         const pos = Asc.scope.formatting[i];
                         let range = run.GetRange(pos.start, pos.end);
-                        //if (!range) continue;
+                        if (!range) continue;
                         if ("sup" === pos.type) {
                             range.SetVertAlign("superscript");
                         } else if ("sub" === pos.type) {

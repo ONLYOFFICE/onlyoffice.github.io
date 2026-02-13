@@ -61,5 +61,8 @@
     "Yes": "Da",
     "No": "Ne",
     "Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.": "Klikom 'Da' prevenite Zotero azuriranje ovog citata ako dodate dodatne citate, promijenite stil ili promijenite stavku na koju se odnosi ovaj citat. Klikom 'Ne' obrisite vasu promjenu.",
-    "Edit citation": "Izmeni citat"
+    "Edit citation": "Izmeni citat",
+    "OK": "OK",
+    "Something went wrong": "Nesto je pošlo po zlu",
+    "Update your editor to use this feature": "Ažurirajte svoj uređivač kako bi koristili ovu funkciju"
 }
