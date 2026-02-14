@@ -37,7 +37,7 @@ function MarkDownStreamer()
 	this.stable = "";
 	this.tail = "";
 
-	this.msPlugins = [Asc.PluginsMD.latex, Asc.PluginsMD.forms];
+	this.msPlugins = [Asc.PluginsMD.latex, Asc.PluginsMD.forms, Asc.PluginsMD.hr];
 
 	this.isStreaming = window.EditorHelper.isSupportStreaming;
 }
