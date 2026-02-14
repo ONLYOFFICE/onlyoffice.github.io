@@ -307,6 +307,9 @@ async function registerButtons(window, undefined)
 			if (iteration >= AgentState.MAX_LOOP_ITERATIONS) {
 				chatWindow.command("onChatReply", "Maximum iterations reached. Please try again.");
 			}
+
+			// always end (may be twice)
+			chatWindow.command("onChatStreamEnd");
 		});
 		chatWindow.attachEvent("onChatReplace", async function(data) {
 			switch (data.type) {
