@@ -294,6 +294,12 @@
 
 			md.inline.ruler.before('emphasis', 'field', parseField);
 			md.renderer.rules.field = renderField;
+		},
+
+		hr: function(md) {
+			md.renderer.rules.hr = function() {
+				return '<hr><br>';
+			};
 		}
 	};
 
@@ -611,7 +617,8 @@
 			data = data.substring(markdownEscape + 5);
 		if (data.endsWith("```"))
 			data = data.slice(0, -3);
-		return isStreaming ? data : this.trimResult(data);
+		let correctData = data.replace(/\n---#/g, '\n---\n#');
+		return isStreaming ? correctData : this.trimResult(correctData);
 	};
 
 	Library.prototype.getJSONResult = function(data) {
