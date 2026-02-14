@@ -554,16 +554,7 @@ function fetchExternal(url, options, isStreaming) {
 
 		let headers = AI._getHeaders(provider);
 
-		// Check if content contains tools
-		let tools = null;
 		let isMessages = Array.isArray(content);
-
-		// Support for object with messages and tools
-		if (content && typeof content === 'object' && !Array.isArray(content) && content.messages) {
-			tools = content.tools || null;
-			content = content.messages;
-			isMessages = true;
-		}
 
 		if (isUseCompletionsInsteadChat && isMessages) {
 			content = content[content.length - 1].content;
@@ -633,11 +624,6 @@ function fetchExternal(url, options, isStreaming) {
 					requestBody.messages = [{role:"user",content:messages[0]}];
 
 				objRequest.body = provider.getChatCompletions(requestBody, this.model);
-
-				// Add tools if provider supports them
-				if (tools && tools.length > 0 && provider.isSupportTools(this.model)) {
-					provider.addTools(objRequest.body, tools);
-				}
 
 				if (isStreaming && options.streamingBody !== false)
 					objRequest.body.stream = true;
@@ -803,7 +789,7 @@ function fetchExternal(url, options, isStreaming) {
 		objRequest.url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model, options);
 		objRequest.body = provider.getChatCompletions({ messages : content.messages }, this.model);
 
-		if (content.tools && provider.isSupportTools(this.model)) {
+		if (content.tools) {
 			provider.addTools(objRequest.body, content.tools);
 		}
 

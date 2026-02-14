@@ -538,7 +538,7 @@ async function initWithTranslate(counter) {
 				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
 					type : "html",
 					options : {
-						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]),
+						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]),
 						separateParagraphs : false
 					}					
 				}]);
@@ -616,7 +616,7 @@ async function initWithTranslate(counter) {
 						data.type = AI.ActionType.OCR;
 						let result = await requestEngine.imageOCRRequest(params.data, isBlock);
 						if (result) {
-							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]);
+							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]);
 						}
 						break;
 					}

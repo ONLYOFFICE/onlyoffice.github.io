@@ -119,7 +119,7 @@ async function registerButtons(window, undefined)
 				window.EditorHelper = new EditorHelperImpl();
 
 			let provider = AI.Storage.getProvider(requestEngine.modelUI.provider);
-			let isSupportTools = provider && provider.isSupportTools(requestEngine.model);
+			let isSupportTools = provider && provider.isSupportTools(requestEngine.model, requestEngine.modelUI);
 
 			let requestData = {
 				messages: messageHistory
@@ -666,7 +666,7 @@ async function registerButtons(window, undefined)
 		let result = await requestEngine.imageOCRRequest(content);
 		if (!result) return;
 
-		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
+		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]);
 	}
 
 	const on_click_text_to_image = async function (params) {

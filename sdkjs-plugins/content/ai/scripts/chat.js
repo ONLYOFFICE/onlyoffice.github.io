@@ -912,6 +912,7 @@
 			return;
 
 		streamingContent += chunk;
+
 		const message = messagesList.get()[streamingMessageIndex];
 		if (message) {
 			if (regenerationMessageIndex !== null) {
@@ -934,8 +935,11 @@
 				const $spanMessage = message.$el.find('.span_message');
 				if ($spanMessage.length > 0) {
 					let c = window.markdownit();
-					let htmlContent = c.render(streamingContent);
+					let htmlContent = c.render(streamingContent.replace(/\n---#/g, '\n---\n#'));
 					$spanMessage.html(htmlContent);
+
+					console.log(streamingContent);
+					console.log(htmlContent);
 				}
 			}
 
