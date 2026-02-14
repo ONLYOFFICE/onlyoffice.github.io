@@ -210,7 +210,6 @@ function fetchExternal(url, options, isStreaming) {
 	}
 
 	async function requestWrapperStream(message) {
-
 		function FetchReader(reader, abortController) {
 			this.reader = reader;
 			this.decoder = new TextDecoder();
@@ -220,77 +219,60 @@ function fetchExternal(url, options, isStreaming) {
 				try {
 					const { done, value } = await this.reader.read();
 					return {
-						done: done, 
+						done: done,
 						value: done ? "" : this.decoder.decode(value, { stream: true })
 					};
 				}
 				catch (error) {
-					return { 
-						error: 1, 
-						message: error.message ? error.message : "" 
+					if (error.name === "AbortError") {
+						return { done: true };
+					}
+					return {
+						error: 1,
+						message: error.message || ""
 					};
 				}
 			};
 
-			this.abort = function() {
-				if (this.abortController) {
-					this.abortController.abort();
-				}
-				if (this.reader) {
-					try {
-						this.reader.cancel();
-					} catch (e) {
-					}
-				}
+			this.abort = async function() {
+				try {
+					if (this.abortController)
+						this.abortController.abort();
+				} catch {}
+
+				try {
+					if (this.reader)
+						await this.reader.cancel();
+				} catch {}
 			};
 		}
 
-		return new Promise(async function (resolve, reject) {
-			let abortController = new AbortController();
+		let abortController = new AbortController();
 
-			let request = {
-				method: message.method,
-				headers: message.headers,
-				signal: abortController.signal
-			};
-			if (request.method != "GET") {
-				request.body = message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : "");
+		let request = {
+			method: message.method,
+			headers: message.headers,
+			signal: abortController.signal
+		};
 
-				if (message.isUseProxy) {
-					request = {
-						"method" : request.method,
-						"body" : JSON.stringify({
-							"target" : message.url,
-							"method" : request.method,
-							"headers" : request.headers,
-							"data" : request.body
-						}),
-						"signal": abortController.signal
-					}
-					if (AI.serverSettings){
-						message.url = AI.serverSettings.proxy;
-						request["headers"] = {
-							"Authorization" : "Bearer " + Asc.plugin.info.jwt,
-						}
-					} else {
-						message.url = AI.PROXY_URL;
-					}
-				}
-			}
-			
-			try {
-				let response = null;
-				if (!message.url.startsWith("[external]"))
-					response = await fetch(message.url, request);
-				else
-					response = await fetchExternal(message.url, request, true);
+		if (request.method !== "GET") {
+			request.body = message.isBlob
+				? message.body
+				: (message.body ? JSON.stringify(message.body) : "");
+		}
 
-				resolve(response.body ? new FetchReader(response.body.getReader(), abortController) : null);
-			}
-			catch (error) {
-				resolve(null);
-			}
-		});
+		try {
+			let response = !message.url.startsWith("[external]")
+				? await fetch(message.url, request)
+				: await fetchExternal(message.url, request, true);
+
+			return response.body
+				? new FetchReader(response.body.getReader(), abortController)
+				: null;
+		}
+		catch (error) {
+			return null;
+		}
 	}
 
 	AI.TmpProviderForModels = null;
@@ -707,7 +689,7 @@ function fetchExternal(url, options, isStreaming) {
 					if (streamFunc) {
 						let isBreak = await streamFunc(dataChunk);
 						if (isBreak === true) {
-							readerAsync.abort();
+							await readerAsync.abort();
 							break;
 						}
 					}
@@ -850,7 +832,7 @@ function fetchExternal(url, options, isStreaming) {
 
 			while (true) {
 				if (window.AgentState.isStopped) {
-					readerAsync.abort();
+					await readerAsync.abort();
 					break;
 				}
 
