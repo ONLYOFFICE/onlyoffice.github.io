@@ -937,9 +937,6 @@
 					let c = window.markdownit();
 					let htmlContent = c.render(streamingContent.replace(/\n---#/g, '\n---\n#'));
 					$spanMessage.html(htmlContent);
-
-					console.log(streamingContent);
-					console.log(htmlContent);
 				}
 			}
 
