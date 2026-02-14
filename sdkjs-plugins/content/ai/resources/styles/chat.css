@@ -411,7 +411,7 @@ input {
 #input_message {
 	flex: 1;
 	padding: 0;
-	padding: 6px 6px 6px 6px;
+	padding: 6px 32px 6px 6px;
 	margin: 2px 2px 2px 2px;
     min-height: 16px;
     max-height: 82px;
@@ -420,6 +420,11 @@ input {
     line-height: 16px;
 	border: none;
 	font-family: Arial, sans-serif;
+}
+
+/* Увеличиваем padding, когда видна кнопка голосового ввода или стоп */
+#input_message_wrapper:has(#input_voice_button:not(.hidden)) #input_message {
+	padding-right: 54px;
 }
 #input_message::-webkit-scrollbar-track {
 	margin-bottom: 34px;
