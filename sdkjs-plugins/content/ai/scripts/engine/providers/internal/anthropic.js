@@ -139,10 +139,6 @@ class Provider extends AI.Provider {
 		}
 	}
 
-	isSupportTools(model) {
-		return true;
-	}
-
 	addTools(body, tools) {
 		if (!tools || tools.length === 0)
 			return;

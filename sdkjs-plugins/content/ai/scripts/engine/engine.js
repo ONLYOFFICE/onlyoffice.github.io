@@ -704,8 +704,13 @@ function fetchExternal(url, options, isStreaming) {
 
 					allChunks += dataChunk;
 
-					if (streamFunc)
-						await streamFunc(dataChunk);
+					if (streamFunc) {
+						let isBreak = await streamFunc(dataChunk);
+						if (isBreak === true) {
+							readerAsync.abort();
+							break;
+						}
+					}
 				}
 				return allChunks;
 			}
