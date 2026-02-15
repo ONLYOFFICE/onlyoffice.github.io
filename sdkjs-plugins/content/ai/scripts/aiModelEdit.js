@@ -188,14 +188,6 @@ var capabilitiesElements = {
 			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Vision
-	},
-	tools: {
-		btn: new ToggleButton({
-			id: 'use-for-tools',
-			label: 'Function Calling / Tools',
-			onToggle: onToggleCapability
-		}),
-		capabilities: AI.CapabilitiesUI.Tools
 	}
 };
 
