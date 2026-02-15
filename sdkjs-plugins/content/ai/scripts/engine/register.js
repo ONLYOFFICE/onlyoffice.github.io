@@ -179,6 +179,9 @@ async function registerButtons(window, undefined)
 				if (AgentState.isStopped)
 					break;
 
+				if (!fullResponse)
+					fullResponse = { content : Asc.plugin.tr("Error:") + " [provider]" };
+
 				let result = fullResponse.content || "";
 
 				let toolCalls = fullResponse.tool_calls || null;
