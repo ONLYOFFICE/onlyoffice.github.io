@@ -41,6 +41,9 @@ SpellChecker.prototype.constructor = SpellChecker;
 SpellChecker.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
+	if (text.length === 0) {
+		return false;
+	}
 
 	let argPrompt = `You are a spellcheck corrector. I will provide text that may contain spelling errors in any language. Your task is to identify ALL spelling mistakes and return ONLY the corrections in the following JSON format:
 
