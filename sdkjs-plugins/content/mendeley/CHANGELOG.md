@@ -16,3 +16,7 @@
 ## 1.0.3
 
 * Add notification that this plugin doesn't work into desktop.
+
+## 1.0.4
+
+* Fix issue with author name.

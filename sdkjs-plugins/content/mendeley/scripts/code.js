@@ -990,8 +990,8 @@
 
         for (var i = 0; i < item[fieldFrom].length; i++) {
             csl[fieldTo].push({
-                given: item.first_name,
-                family: item.last_name
+                given: item[fieldFrom][i].first_name,
+                family: item[fieldFrom][i].last_name
             });
         }
     }
