@@ -39,5 +39,6 @@
 	{ "name": "datepicker", "discussion": "" },
 	{ "name": "news", "discussion": "" },
 	{ "name": "texthighlighter", "discussion": "" },
-	{ "name": "bergamot", "discussion": "" }
+	{ "name": "bergamot", "discussion": "" },
+	{ "name": "textcleaner", "discussion": "" }
 ]
