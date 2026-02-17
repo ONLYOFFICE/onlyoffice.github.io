@@ -27,7 +27,7 @@ interface Asc {
 }
 
 interface AscPlugin {
-    attachEvent: (eventName: string, callback: (event: unknown) => void) => void;
+    attachEvent: (eventName: string, callback: (event: any) => void) => void;
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: () => void) => void;
     detachEvent: (eventName: string) => void;
