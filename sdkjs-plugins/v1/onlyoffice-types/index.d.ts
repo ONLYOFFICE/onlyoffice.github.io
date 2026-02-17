@@ -1,7 +1,109 @@
-declare namespace Asc {
-  interface Theme {
+import type { ApiCell } from "./src/generated/cell";
+import type { ApiSlide } from "./src/generated/slide";
+import type { ApiWord } from "./src/generated/word";
+
+export { ApiCell, ApiSlide, ApiWord };
+
+export type ApiForEditor<T extends EditorType> =
+    T extends "cell" ? ApiCell :
+    T extends "slide" ? ApiSlide :
+    T extends "word" ? ApiWord :
+    never;
+
+declare global {
+    interface Window {
+        Asc: Asc;
+    }
+    /** Available inside callCommand callback - editor API for current editor type */
+    var Api: ApiWord & ApiCell & ApiSlide;
+}
+
+export {};
+
+interface Asc {
+    plugin: AscPlugin;
+    scope: Object;
+    PluginWindow: Function;
+}
+
+interface AscPlugin {
+    attachEvent: (eventName: string, callback: (event: unknown) => void) => void;
+    button: (id: number, text: string) => void;
+    callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: () => void) => void;
+    detachEvent: (eventName: string) => void;
+    executeMethod: (methodName: string, args?: unknown[] | null, callback?: (result: unknown) => void) => void;
+    executeMethodAsync: (methodName: string, args?: unknown[], callback?: (result: unknown) => void) => void;
+    executeCommand: ExecuteCommandCallback;
+    info: PluginInfo;
+    init: () => void;
+    onThemeChanged: (theme: Theme) => void;
+    onThemeChangedBase: (theme: Theme) => void;
+    onTranslate(): any;
+    resizeWindow: (width: number, height: number) => void;
+    sendEvent: (eventName: string, eventData?: unknown) => void;
+    sendToPlugin(message: string, payload?: any): void;
+    theme: Theme;
+    tr: (key: string) => string;
+    trigger: (eventName: string, eventData?: unknown) => void;
+}
+
+interface ExecuteCommandCallback {
+    (command: string, value?: any, callback?: () => void): void;
+}
+
+interface ButtonConfig {
+    isviewer?: boolean;
+    primary?: boolean;
+    text: string;
+    textLocale?: Record<string, string>;
+}
+
+type EditorType = 'word' | 'cell' | 'slide' | 'pdf';
+
+interface IconConfig {
+    [scale: string]: {
+        active?: string;
+        hover?: string;
+        normal: string;
+    };
+}
+
+type InitDataType = 'text' | 'html' | 'ole' | 'desktop' | 'desktop-external' | 'none' | 'sign';
+
+
+type MenuType = 'left' | 'right';
+
+interface PluginInfo {
+    editorType: EditorType;
+    guid: string;
+    isEmbedMode: boolean;
+    isMobileMode: boolean;
+    isViewMode: boolean;
+    jwt: string;
+    lang: string;
+    theme: Theme;
+    userId: string;
+    userName: string;
+}
+
+interface StoreConfig {
+    background?: {
+        dark: string;
+        light: string;
+    };
+    categories?: string[];
+    icons?: {
+        dark: string;
+        light: string;
+    };
+    screenshots?: string[];
+}
+
+interface Theme {
     /** Theme name */
     Name: string;
+    /** Theme name (duplicate for compatibility) */
+    name: string;
     /** Theme type (light/dark) */
     type: "light" | "dark";
     /** Show rulers button */
@@ -526,45 +628,44 @@ declare namespace Asc {
     "toolbar-height-controls": string;
     /** Sprite button icons UID */
     "sprite-button-icons-uid": string;
-    /** Theme name (duplicate for compatibility) */
+}
+
+interface VariationConfig {
+    buttons: ButtonConfig[];
+    cryptoDisabledForExternalCloud: string;
+    cryptoDisabledForInternalCloud: string;
+    cryptoDisabledOnStart: string;
+    cryptoMode: string;
+    description: string;
+    descriptionLocale: Record<string, string>;
+    EditorsSupport: EditorType[];
+    events: string[];
+    icons: string;
+    icons2?: IconConfig[];
+    initData: string;
+    initDataType: InitDataType;
+    initOnSelectionChanged: boolean;
+    isCustomWindow: boolean;
+    isDisplayedInViewer: boolean;
+    isInsideMode: boolean;
+    isModal: boolean;
+    isSystem: boolean;
+    isUpdateOleOnResize: boolean;
+    isViewer: boolean;
+    isVisual: boolean;
+    menu: MenuType;
     name: string;
-  }
-
-  interface ExecuteCommandCallback {
-    (command: string, value?: any, callback?: () => void): void;
-  }
-
-  interface CallCommandCallback {
-    (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: () => void): void;
-  }
-
-  interface AscPlugin {
-    executeMethod(method: string, args: Array<any> | null, callback: (result: any) => void): void;
-    executeCommand: ExecuteCommandCallback;
-    callCommand: CallCommandCallback;
-    init(): void;
-    info: object;
-    sendToPlugin(message: string, payload?: any): void;
-    onTranslate(): any;
-    attachEvent(event: string, handler: Function): void;
-    onThemeChanged(theme: Theme): void;
-    onThemeChangedBase(theme: Theme): void;
-    theme: Theme;
-    tr(key: string): string;
-    button(id: number, text: string): void;
-  }
-
-  interface AscGlobal {
-    plugin: AscPlugin;
-    scope: Object;
-    PluginWindow: Function;
-  }
+    nameLocale: Record<string, string>;
+    size: [number, number];
+    store: StoreConfig;
+    type: VariationType;
+    url: string;
 }
 
-declare global {
-  interface Window {
-    Asc: Asc.AscGlobal;
-  }
-}
+type VariationType = 'window' | 'panel' | 'panelRight' | 'background' | 'system';
 
-export { Asc };
+export type {
+    EditorType,
+    Theme,
+    VariationConfig,
+};
