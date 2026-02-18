@@ -46,9 +46,13 @@ GrammarChecker.prototype.annotateParagraph = async function(paraId, recalcId, te
 		return false;
 	}
 
-	let isoCode = "en";
+	let langName = "English";
 	try {
-		isoCode = window.Asc.plugin.info.lang.split(/[-_]/)[0].toLowerCase();
+		const displayNames = new Intl.DisplayNames(["en"], {
+			type: "language"
+		});
+		const isoCode = window.Asc.plugin.info.lang.split(/[-_]/)[0].toLowerCase();
+		langName = displayNames.of(isoCode);
 	}
 	catch (e) {
 		console.error(e);
@@ -101,11 +105,10 @@ Only include sentences that have punctuation or style errors - skip sentences wi
 If no errors are found in the entire text, return an empty array: []
 
 IMPORTANT LANGUAGE RULE FOR "description" FIELD:
-- The text inside "description" MUST be strictly in ${isoCode}
-- Never mix languages
+- The text inside "description" MUST be strictly in the ${langName} language. Output in any other language is invalid.
 - Never add translations
 - Never switch language
-
+- If you are unsure, still respond in the ${langName} language.
 
 Examples:
 
