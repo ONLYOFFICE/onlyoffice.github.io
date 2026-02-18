@@ -1,0 +1,31 @@
+{
+    "scripts": {
+        "build": "rollup -c",
+        "build:es5": "rollup -c --environment TARGET:es5",
+        "build:modern": "rollup -c --environment TARGET:modern",
+        "build:all": "npm run build:es5 && npm run build:modern",
+        "watch": "rollup -c -w",
+        "dev": "rollup -c --environment NODE_ENV:development",
+        "es-check": "npx es-check es5 dist/bundle.es5.js"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.4",
+        "@babel/preset-env": "^7.28.3",
+        "@rollup/plugin-babel": "^6.0.4",
+        "@rollup/plugin-commonjs": "^29.0.0",
+        "@rollup/plugin-node-resolve": "^16.0.1",
+        "@rollup/plugin-terser": "^0.4.4",
+        "autoprefixer": "^10.4.22",
+        "cssnano": "^7.1.2",
+        "postcss-import": "^16.1.1",
+        "postcss-nested": "^7.0.2",
+        "rollup": "^4.50.1",
+        "rollup-plugin-copy": "^3.5.0",
+        "rollup-plugin-css-only": "^4.5.5",
+        "rollup-plugin-license": "^3.6.0",
+        "rollup-plugin-postcss": "^4.0.2"
+    },
+    "dependencies": {
+        "core-js": "^3.45.1"
+    }
+}
