@@ -1,0 +1,119 @@
+.selectbox-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+
+    .selectbox {
+        position: relative;
+    }
+
+    .selectbox-header {
+        overflow: hidden;
+        border-style: solid;
+        border-width: 1px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+        user-select: none;
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .selectbox-header-open {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .selectbox-selected-text {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 7px;
+    }
+
+    .selectbox-arrow {
+        transition: transform 0.3s ease;
+        width: 24px;
+        height: 22px;
+        text-align: center;
+        line-height: 20px;
+    }
+
+    .selectbox-arrow-open {
+        transform: rotate(180deg);
+    }
+
+    .selectbox-dropdown {
+        display: none;
+        position: absolute;
+        padding: 3px 0;
+        top: calc(100% + 2px);
+        left: 0;
+        right: 0;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 4px;
+        z-index: 1000;
+        max-height: 200px;
+        overflow: hidden;
+    }
+
+    .selectbox-search {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+    }
+
+    .selectbox-search-input {
+        font-size: 11px;
+        width: 100%;
+        padding: 5px 12px 5px 27px;
+        border: none;
+        border-radius: 2px;
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .selectbox-options {
+        max-height: 157px;
+        overflow-y: auto;
+    }
+
+    .selectbox-option {
+        padding: 5.7px 12px 5.7px 27px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s ease;
+        * {
+            pointer-events: none;
+        }
+    }
+    .selectbox-option-divider {
+        margin: 4px 0;
+        border: none;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+
+    .selectbox-checkbox {
+        margin: 0;
+    }
+
+    .selectbox-option-text {
+        flex: 1;
+    }
+
+    .selectbox-disabled {
+        pointer-events: none;
+        .selectbox-header {
+            opacity: 0.65;
+        }
+    }
+}

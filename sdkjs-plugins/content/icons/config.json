@@ -1,0 +1,104 @@
+{
+	"name": "Icons",
+	"nameLocale": {
+		"ru": "Иконки",
+		"fr": "Icônes",
+		"es": "Iconos",
+		"de": "Symbole",
+		"cs": "Ikony",
+		"zh-ZH": "圖示",
+		"pt-BR": "Ícones",
+		"sr-Cyrl-RS": "Иконе",
+		"sr-Latn-RS": "Ikone",
+		"ja-JA": "アイコン",
+		"sq-AL": "Ikona",
+		"it": "Icone",
+		"ar-SA": "الأيقونات"
+	},
+
+	"guid": "asc.{1B6B4FBC-BFFA-4B01-A901-94996D88D1DC}",
+	"version": "1.0.0",
+	"minVersion": "8.2.0",
+
+	"variations": [
+		{
+			"description": "Insert icons into your documents by selecting the appropriate Category or using the Search.",
+			"descriptionLocale": {
+				"ru": "Вставляйте иконки в документы, выбрав нужную категорию или с помощью поиска.",
+				"fr": "Insérez des icônes dans vos documents en sélectionnant la catégorie appropriée ou en utilisant la fonction de recherche.",
+				"es": "Inserte iconos en sus documentos seleccionando la categoría adecuada o utilizando la función de búsqueda.",
+				"de": "Fügen Sie Symbole in Ihre Dokumente ein, indem Sie die entsprechende Kategorie auswählen oder die Suchfunktion verwenden.",
+				"cs": "Vložte ikony do dokumentů výběrem příslušné kategorie nebo pomocí vyhledávání.",
+				"zh-ZH": "在文档中插入图标：可按类别选择合适的图标，或通过搜索快速查找并插入。",
+				"pt-BR": "Insira ícones em seus documentos selecionando a categoria apropriada ou usando a função de pesquisa.",
+				"sr-Cyrl-RS": "Уметните иконе у ваше документе одабиром одговарајуће Категорије или коришћењем Претраге.",
+				"sr-Latn-RS": "Umetnite ikone u vaše dokumente odabirom odgovarajuće Kategorije ili korišćenjem Pretrage.",
+				"ja-JA": "文書にアイコンを挿入するには、適切なカテゴリを選択するか、検索機能を使用してください。",
+				"sq-AL": "Vendos ikonat në dokumentet e tua duke zgjedhur Kategorinë e duhur ose duke përdorur Kërkimin.",
+				"it": "Inserisci icone nei tuoi documenti selezionando la categoria appropriata oppure utilizzando la funzione di ricerca.",
+				"ar-SA": "أدرجوا الأيقونات في مستنداتكم عن طريق اختيار الفئة المناسبة أو باستخدام البحث."
+			},
+			"url": "dist/index.html",
+			"icons": "resources/%theme-type%(light|dark)/icon.svg",
+			"EditorsSupport": ["word", "slide", "cell"],
+			"type": "panel",
+
+			"initDataType": "none",
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true,
+					"textLocale": {
+						"ru": "Вставить",
+						"fr": "Insérer",
+						"es": "Insertar",
+						"de": "Einfügen",
+						"cs": "Vložit",
+						"it": "Inserisci",
+						"sq-AL": "Shtoni",
+						"sr-Cyrl-RS": "Убаци",
+						"sr-Latn-RS": "Ubaci",
+						"zh-ZH": "插入"
+					},
+					"isViewer": false
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen",
+						"cs": "Zrušit",
+						"it": "Annulla",
+						"sq-AL": "Anulo",
+						"sr-Cyrl-RS": "Откажи",
+						"sr-Latn-RS": "Otkaži",
+						"zh-ZH": "取消"
+					}
+				}
+			],
+			"events": [],
+
+			"store": {
+				"background": {
+					"light": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)",
+					"dark": "linear-gradient(90deg, #F9B6FF 0%, #E370EE 102.01%)"
+				},
+				"screenshots": [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+				],
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": ["recommended"]
+			}
+		}
+	],
+
+	"onlyofficeScheme": true
+}

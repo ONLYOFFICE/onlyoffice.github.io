@@ -81,7 +81,7 @@ class Provider extends AI.Provider {
 		return AI.CapabilitiesUI.All;
 	}
 
-	getEndpointUrl(endpoint, model) {
+	getEndpointUrl(endpoint, model, options) {
 		let Types = AI.Endpoints.Types;
 		let url = "";
 		switch (endpoint)
@@ -91,6 +91,10 @@ class Provider extends AI.Provider {
 			break;
 		default:
 			let addon = ":generateContent";
+			if (options && options.streaming) {
+				addon = ":streamGenerateContent";
+				options.streamingBody = false;
+			}
 			if (endpoint === Types.v1.Images_Generations) {
 				if (-1 != model.id.indexOf("imagen-"))
 					addon = ":predict";

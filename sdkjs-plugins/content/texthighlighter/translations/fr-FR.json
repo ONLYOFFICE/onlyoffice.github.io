@@ -1,0 +1,41 @@
+{
+  "TextHighlighter": "Surligneur de texte",
+  "PluginInstructions": "Entrez ou sélectionnez <b>un mot ou une expression</b> à rechercher dans le texte du document, puis configurez les paramètres nécessaires.",
+
+  "TextToSearch": "Texte à rechercher :",
+  "SearchPlaceholder": "Entrez du texte ou sélectionnez-le dans le document",
+  "IgnoreCase": "Ignorer la casse",
+
+  "HighlightColor": "Couleur de surlignage :",
+  "HighlightYellow": "Jaune",
+  "HighlightGreen": "Vert",
+  "HighlightBlue": "Bleu",
+  "HighlightRed": "Rouge",
+  "HighlightNone": "Pas de remplissage",
+"ArrowDropdown": "▸",
+  "TextColorHeader": "Couleur du texte",
+  "TextColorPicker": "Choisir la couleur du texte",
+
+  "TextFormattingHeader": "Formatage du texte",
+  "FormatBold": "Gras",
+  "FormatItalic": "Italique",
+  "FormatUnderline": "Souligné",
+  "FormatStrike": "Barré",
+
+  "ApplyButton": "Appliquer",
+
+  "SearchNoResults": "Recherche terminée. <strong>Aucun résultat trouvé.</strong>",
+  "HighlightMore": "Surligner plus",
+  "HighlightMore2": "Surligner plus",
+
+  "SearchDone": "Terminé ! La recherche est terminée et les styles ont été appliqués.",
+  "MatchesFound": "Correspondances trouvées :",
+  "RevertToOriginal": "Revenir",
+
+  "LoadingMessage": "Traitement en cours...",
+
+  "AboutTitle": "Surligneur de texte",
+  "AboutVersion": "Version 1.0.0",
+  "AboutDescription": "Ce plugin permet de rechercher du texte et d'appliquer des styles de surlignage, de couleur et de formatage dans le document.",
+  "AboutCopyright": "© 2025 Plugin ONLYOFFICE"
+}
