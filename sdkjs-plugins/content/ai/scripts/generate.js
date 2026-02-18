@@ -281,6 +281,8 @@ async function streamPromptResultToDocument(prompt)
 			await checkEndAction();
 		
 		await onStreamEvent(data);
+
+		return window.AgentState && window.AgentState.isStopped ? true : false;
 	} : undefined);
 
 	if (!isSupportStreaming) {

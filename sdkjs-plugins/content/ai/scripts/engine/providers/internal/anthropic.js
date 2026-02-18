@@ -121,12 +121,12 @@ class Provider extends AI.Provider {
 				{
 					role: "user",
 					content: [
-						{							
+						{
 							type: "text",
 							text: message.prompt
 						},
 						{
-							type: "image", 
+							type: "image",
 							source: {
 								type: "base64",
 								media_type: AI.ImageEngine.getMimeTypeFromBase64(message.image),
@@ -137,6 +137,40 @@ class Provider extends AI.Provider {
 				}
 			]
 		}
+	}
+
+	addTools(body, tools) {
+		if (!tools || tools.length === 0)
+			return;
+
+		body.tools = tools.map(tool => ({
+			name: tool.name,
+			description: tool.description,
+			input_schema: tool.parameters
+		}));
+	}
+
+	getToolCallsResult(message) {
+		let data = message.data || message;
+		let content = data.content;
+		if (!content || !Array.isArray(content))
+			return null;
+
+		let toolCalls = [];
+		for (let item of content) {
+			if (item.type === 'tool_use') {
+				toolCalls.push({
+					id: item.id,
+					type: 'function',
+					function: {
+						name: item.name,
+						arguments: JSON.stringify(item.input)
+					}
+				});
+			}
+		}
+
+		return toolCalls.length > 0 ? toolCalls : null;
 	}
 
 }

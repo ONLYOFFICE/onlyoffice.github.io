@@ -53,7 +53,7 @@ class Provider extends AI.Provider {
 			model.endpoints.push(AI.Endpoints.Types.v1.Audio_Translations);
 			return AI.CapabilitiesUI.Audio;
 		}
-		
+
 		model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
 		return AI.CapabilitiesUI.Chat;
 	}

@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Tâches en temps réel",
 	"Coding Help": "Aide au codage",
 	"Visual Analysis": "Analyse visuelle",
+	"Function Calling / Tools": "Appel de fonctions / Outils",
 	"Updating": "Mise à jour",
 	"Your text" : "Votre texte",
 	"Target language" : "Langue cible",
@@ -178,5 +179,8 @@
 	"Hint": "Indice",
 	"Replace": "Remplacer",
 	"Replace + Hint": "Remplacer + Indice",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result",
 	"Generate Document": "Générer un document"
 }
