@@ -132,38 +132,6 @@
 			}
 		}
 
-		try {
-			if (window.AscDesktopEditor) {
-				let model = JSON.parse(window.localStorage.getItem("current-model"));
-				let provider = JSON.parse(window.localStorage.getItem("current-provider"));
-
-				if (model && provider) {
-					AI.DEFAULT_DESKTOP_MODEL = {
-						name : model.name,
-						id : AI.externalModelPrefix + model.id,
-						capabilities : AI.CapabilitiesUI.Chat,
-						endpoints : [AI.Endpoints.Types.v1.Chat_Completions]
-					};
-
-					for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
-						let internalProvider = window.AI.InternalProviders[i];
-						if (provider.baseUrl === internalProvider.url ||
-							provider.baseUrl === (internalProvider.url + "/" + internalProvider.addon)) 
-						{
-							AI.DEFAULT_DESKTOP_MODEL.provider = window.AI.InternalProviders[i].createInstance(provider.name, 
-								internalProvider.url, provider.key, internalProvider.addon);
-							break;	
-						}
-					}
-
-					if (!AI.DEFAULT_DESKTOP_MODEL.provider) {
-						AI.DEFAULT_DESKTOP_MODEL.provider = new AI.Provider(provider.name, provider.baseUrl, provider.key);
-					}
-				};
-			}
-		} catch (e) {
-		}
-
 		if (obj) {
 			let fixVersion2 = false;
 			switch (obj.version)
@@ -235,22 +203,7 @@
 
 				AI.Models = obj.models;
 			}
-		}
-		
-		if (AI.DEFAULT_DESKTOP_MODEL) {
-			AI.Models.push(AI.DEFAULT_DESKTOP_MODEL);
-
-			for (let key in AI.Actions) {
-				if (AI.Actions[key].capabilities === AI.CapabilitiesUI.Chat && AI.Actions[key].model === "") {
-					AI.Actions[key].model = AI.DEFAULT_DESKTOP_MODEL.id;
-				}
-			}
-		}
-
-		if (!window.isCheckGenerationInfo) {
-			await window.waitInit();
-			window.checkGenerationInfo();
-		}
+		}				
 
 		return obj ? true : false;
 	};

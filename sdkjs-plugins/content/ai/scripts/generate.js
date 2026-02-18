@@ -37,7 +37,7 @@ function MarkDownStreamer()
 	this.stable = "";
 	this.tail = "";
 
-	this.msPlugins = [Asc.PluginsMD.latex, Asc.PluginsMD.forms];
+	this.msPlugins = [Asc.PluginsMD.latex, Asc.PluginsMD.forms, Asc.PluginsMD.hr];
 
 	this.isStreaming = window.EditorHelper.isSupportStreaming;
 }
@@ -291,10 +291,10 @@ async function streamPromptResultToDocument(prompt)
 	await checkEndAction();
 }
 
-window.isEnableDocumentGenerate = false;
 async function getFormGenerationPrompt() {
 
 	return await Asc.Editor.callCommand(function(){
+		debugger;
 		let doc = Api.GetDocument();
 		let visitor = doc.GetDocumentVisitor();
 
@@ -389,7 +389,11 @@ Do not apply or repeat this notation in your response; just interpret it as part
 				}
 				case "dateForm":
 				{
-					this.text += (" " + form.GetDate().toString() + " ");
+					let dateObj = form.GetDate();
+					let dateStr = "%NEED_GENERATED%";
+					if (dateObj)
+						dateStr = dateObj.toString();
+					this.text += (" " + dateStr + " ");
 					return;
 				}
 				case "comboBoxForm":
@@ -452,7 +456,7 @@ window.checkGenerationInfo = async function() {
 		Asc.Editor.callMethod("FocusEditor");
 
 	if (Asc.Editor.getType() === "word" && generationValueString !== "") {
-		await streamPromptResultToDocument(generationValue);
+		await streamPromptResultToDocument(generationValueString);
 		return;
 	}
 

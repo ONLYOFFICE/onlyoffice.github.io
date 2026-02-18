@@ -176,6 +176,7 @@
 	"Match": "Поређај",
 	"Proposal for replacement": "Предлог за замену",
 	"Hint": "Hint",
-	"Replace": "Замени", 
-	"Replace + Hint": "Замени + Hint"
+	"Replace": "Замени",
+	"Replace + Hint": "Замени + Hint",
+	"Generate Document": "Генериши документ"
 }

@@ -485,6 +485,48 @@ constructor() {\n\
 		await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		window.Asc.plugin.sendEvent("ai_onCallToolResult", toolResult);
 	});
+
+	try {
+		if (window.AscDesktopEditor) {
+			let model = JSON.parse(window.localStorage.getItem("current-model"));
+			let provider = JSON.parse(window.localStorage.getItem("current-provider"));
+
+			if (model && provider) {
+				AI.DEFAULT_DESKTOP_MODEL = {
+					name : model.name,
+					id : AI.externalModelPrefix + model.id,
+					capabilities : model.capabilities || AI.CapabilitiesUI.Chat,
+					endpoints : [AI.Endpoints.Types.v1.Chat_Completions]
+				};
+
+				for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
+					let internalProvider = window.AI.InternalProviders[i];
+					if (provider.baseUrl === internalProvider.url ||
+						provider.baseUrl === (internalProvider.url + "/" + internalProvider.addon)) 
+					{
+						AI.DEFAULT_DESKTOP_MODEL.provider = window.AI.InternalProviders[i].createInstance(provider.name, 
+							internalProvider.url, provider.key, internalProvider.addon);
+						break;	
+					}
+				}
+
+				if (!AI.DEFAULT_DESKTOP_MODEL.provider) {
+					AI.DEFAULT_DESKTOP_MODEL.provider = new AI.Provider(provider.name, provider.baseUrl, provider.key);
+				}
+			};
+		}
+
+		if (AI.DEFAULT_DESKTOP_MODEL) {
+			AI.Models.push(AI.DEFAULT_DESKTOP_MODEL);
+
+			for (let key in AI.Actions) {
+				if (AI.Actions[key].capabilities === AI.CapabilitiesUI.Chat && AI.Actions[key].model === "") {
+					AI.Actions[key].model = AI.DEFAULT_DESKTOP_MODEL.id;
+				}
+			}
+		}
+	} catch (e) {
+	}
 }
 
 let initCounter = 0;
@@ -713,24 +755,6 @@ async function initWithTranslate(counter) {
 			}
 		}
 
-		if (editorVersion >= 9001000 && window.isEnableDocumentGenerate) {
-
-			if (window.AscDesktopEditor && Asc.Editor.getType() === "word") {
-
-				let buttonGenerate = new Asc.ButtonToolbar(null);
-				buttonGenerate.text = "Generate";
-				buttonGenerate.icons = window.getToolBarButtonIcons("ocr");
-				
-				buttonGenerate.attachOnClick(async function(){
-					let content = await getFormGenerationPrompt();
-					window.AscDesktopEditor.generateNew("docx", "ai", content);
-				});
-
-				Asc.Buttons.updateToolbarMenu(window.buttonMainToolbar.id, window.buttonMainToolbar.name, [buttonGenerate]);
-			}			
-
-		}
-
 		if (editorVersion >= 9000004)
 			window.addSupportAgentMode(editorVersion);
 
@@ -739,6 +763,9 @@ async function initWithTranslate(counter) {
 
 		if (window.Asc.plugin.sendEvent)
 			window.Asc.plugin.sendEvent("ai_onInit", {});
+
+		if (!window.isCheckGenerationInfo)
+			window.checkGenerationInfo();
 	}
 }
 
