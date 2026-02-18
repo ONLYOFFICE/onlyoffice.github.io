@@ -59,6 +59,9 @@ class CslDocFormatter {
                 function () {
                     const doc = Api.GetDocument();
                     const selRange = doc.GetRangeBySelect();
+                    if (!selRange) {
+                        return;
+                    }
                     doc.MoveCursorToPos(
                         selRange.GetEndPos() - Asc.scope.text.length,
                     );
