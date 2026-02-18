@@ -1,5 +1,6 @@
 {
   "name": "News",
+  "offered": "Office Extensions Group",
   "guid": "asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}",
   "version": "1.0.0",
   "baseUrl": "",
