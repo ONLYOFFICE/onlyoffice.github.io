@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ul, ol {
+	padding-inline-start: 20px;
 	margin: 10px;
 }
 
@@ -420,26 +421,75 @@ input {
 	border: none;
 	font-family: Arial, sans-serif;
 }
+
+/* Увеличиваем padding, когда видна кнопка голосового ввода или стоп */
+#input_message_wrapper:has(#input_voice_button:not(.hidden)) #input_message {
+	padding-right: 54px;
+}
 #input_message::-webkit-scrollbar-track {
 	margin-bottom: 34px;
 }
 
-#input_message_submit {
+#input_buttons_container {
 	position: absolute;
 	right: 0;
 	bottom: 0;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 7px 7px 7px 0px;
+}
+
+.input_control_button {
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 7px 7px 7px 0px;
+	min-width: 20px;
+	min-height: 20px;
 }
-#input_message_submit:hover {
+.input_control_button:hover {
 	opacity: 0.7;
 }
-#input_message_submit img {
+.input_control_button img,
+.input_control_button .icon {
 	width: 20px;
 	height: 20px;
+	font-size: 16px;
+	line-height: 20px;
+	text-align: center;
+	user-select: none;
+}
+
+#input_stop_button .icon {
+	color: #666;
+	color: var(--text-secondary);
+	font-size: 14px;
+}
+
+body.theme-type-dark #input_stop_button .icon {
+	color: #aaa;
+}
+
+#input_voice_button .icon {
+	font-size: 16px;
+	transition: filter 0.2s, color 0.2s;
+	color: #666;
+	color: var(--text-secondary);
+}
+
+body.theme-type-dark #input_voice_button .icon {
+	color: #aaa;
+}
+
+#input_voice_button.recording .icon {
+	filter: brightness(0) saturate(100%) invert(23%) sepia(96%) saturate(6943%) hue-rotate(357deg) brightness(99%) contrast(114%);
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.5; }
 }
 
 
@@ -473,3 +523,144 @@ input {
 	width: 20px;
 	height: 20px;
 } */
+/* Tool Call Styles - Minimalistic gray design */
+.tool_call_message {
+	background-color: transparent !important;
+	margin: 8px 0;
+}
+
+.tool_call_content {
+	padding: 8px !important;
+}
+
+/* Header with collapse/expand */
+.tool_call_header {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	padding: 0;
+	user-select: none;
+}
+
+.tool_call_header:hover {
+	opacity: 0.7;
+}
+
+.tool_call_collapse_icon {
+	display: inline-block;
+	width: 16px;
+	font-size: 12px;
+	color: #4CAF50;
+	margin-left: 4px;
+	margin-right: 6px;
+	transition: transform 0.2s;
+}
+
+.tool_call_title {
+	font-size: 11px;
+	color: inherit;
+}
+
+.tool_call_title strong {
+	font-weight: 600;
+	color: inherit;
+}
+
+/* Details section - collapsible */
+.tool_call_details {
+	margin-top: 8px;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
+	max-height: 1000px;
+	opacity: 1;
+}
+
+.tool_call_details.collapsed {
+	max-height: 0;
+	opacity: 0;
+	margin-top: 0;
+}
+
+.tool_call_section {
+	margin: 8px 0;
+	padding: 8px;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	border: 1px solid #e0e0e0;
+}
+
+.tool_call_section strong {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 12px;
+	color: #666;
+}
+
+.tool_call_section pre {
+	margin: 0;
+	font-family: monospace;
+	font-size: 12px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	color: #333;
+}
+
+/* Result section - with colored accent */
+.tool_call_result {
+	margin: 8px 0;
+	padding: 8px;
+	background-color: #f0f9f0;
+	border-radius: 4px;
+	border-left: 3px solid #5cb85c;
+}
+
+.tool_call_result strong {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 12px;
+	color: #5cb85c;
+}
+
+.tool_call_result pre {
+	margin: 0;
+	font-family: monospace;
+	font-size: 12px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	color: #333;
+}
+
+/* Dark theme support */
+body.theme-type-dark .tool_call_message {
+	border-left-color: #555 !important;
+}
+
+body.theme-type-dark .tool_call_collapse_icon {
+	color: #4CAF50;
+}
+
+body.theme-type-dark .tool_call_section {
+	background-color: #2a2a2a;
+	border-color: #444;
+}
+
+body.theme-type-dark .tool_call_section strong {
+	color: #aaa;
+}
+
+body.theme-type-dark .tool_call_section pre {
+	color: #ddd;
+}
+
+body.theme-type-dark .tool_call_result {
+	background-color: #1a3a1a;
+	border-left-color: #5cb85c;
+}
+
+body.theme-type-dark .tool_call_result strong {
+	color: #6cc76c;
+}
+
+body.theme-type-dark .tool_call_result pre {
+	color: #ddd;
+}
