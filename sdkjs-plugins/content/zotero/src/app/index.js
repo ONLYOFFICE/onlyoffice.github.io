@@ -34,6 +34,8 @@
 /// <reference path="./types-global.js" />
 /// <reference path="./zotero/types.js" />
 
+/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+
 import { Theme } from "./theme";
 import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
@@ -453,7 +455,7 @@ import "../styles.css";
     }
 
     /**
-     * @param {ThemeColors} theme - The new theme of the SDK.
+     * @param {AscTheme} theme - The new theme of the SDK.
      */
     Asc.plugin.onThemeChanged = function (theme) {
         window.Asc.plugin.onThemeChangedBase(theme);

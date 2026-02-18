@@ -31,11 +31,14 @@
  */
 
 // @ts-check
-/// <reference path="./types-global.js" />
+
+/**
+ * @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme
+ */
 
 const Theme = {
     /**
-     * @param {ThemeColors} theme
+     * @param {AscTheme} theme
      */
     addStylesForComponents: function (theme) {
         let styles = "";
@@ -572,7 +575,7 @@ const Theme = {
     },
 
     /**
-     * @param {ThemeColors} theme
+     * @param {AscTheme} theme
      */
     fixThemeForIE: function (theme) {
         if (!theme["background-toolbar"]) {
