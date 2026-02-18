@@ -28,6 +28,7 @@
 	"Name" : "الاسم",
 	"URL" : "الرابط",
 	"Key" : "المفتاح",
+	"e.g. abc123...": "على سبيل المثال، abc123...",
 	"Update models list" : "تحديث قائمة النماذج",
 	"Use model for" : "استخدم النموذج في:",
 	"All": "الكل",
@@ -176,5 +177,6 @@
 	"Proposal for replacement": "اقتراح للإضافة",
 	"Hint": "الإرشاد",
 	"Replace": "الإضافة",
-	"Replace + Hint": "إضافة + إرشاد"
+	"Replace + Hint": "إضافة + إرشاد",
+	"Generate Document": "إنشاء مستند"
 }
