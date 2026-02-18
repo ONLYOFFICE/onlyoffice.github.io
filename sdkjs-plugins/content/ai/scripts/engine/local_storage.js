@@ -205,11 +205,6 @@
 			}
 		}				
 
-		if (!window.isCheckGenerationInfo) {
-			await window.waitInit();
-			window.checkGenerationInfo();
-		}
-
 		return obj ? true : false;
 	};
 
