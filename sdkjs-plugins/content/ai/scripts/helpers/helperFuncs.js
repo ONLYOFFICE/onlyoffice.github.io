@@ -229,10 +229,8 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 		result.message = "System function '" + funcName + "' executed successfully";
 		return result;
 	} catch (e) {
-		let errorMsg = "Error calling function: " + funcName;
-		console.error(errorMsg);
 		return {
-			error: errorMsg
+			error: e.message
 		};
 	}
 	
