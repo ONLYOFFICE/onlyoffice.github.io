@@ -1,0 +1,70 @@
+{
+	"name": "OData Import",
+	"nameLocale": {
+		"ru": "Импорт OData",
+		"de": "OData Import",
+		"fr": "Import OData",
+		"es": "Importar OData"
+	},
+
+	"guid": "asc.{6B290456-D38E-4E00-9387-C3105CCF9BDC}",
+	"version": "1.0.0",
+	"minVersion": "8.2.0",
+
+	"variations": [
+		{
+			"description": "Import data from OData feeds into your spreadsheet. Enter an OData service URL, select tables, and paste data directly into cells.",
+			"descriptionLocale": {
+				"ru": "Импортируйте данные из каналов OData в электронную таблицу. Введите URL-адрес службы OData, выберите таблицы и вставьте данные непосредственно в ячейки.",
+				"de": "Importieren Sie Daten aus OData-Feeds in Ihre Tabelle. Geben Sie eine OData-Service-URL ein, wählen Sie Tabellen aus und fügen Sie Daten direkt in Zellen ein.",
+				"fr": "Importez des données depuis des flux OData dans votre feuille de calcul. Entrez l'URL d'un service OData, sélectionnez des tables et collez les données directement dans les cellules.",
+				"es": "Importe datos desde fuentes OData a su hoja de cálculo. Ingrese una URL de servicio OData, seleccione tablas y pegue los datos directamente en las celdas."
+			},
+			"url": "index.html",
+			"icons": "resources/%theme-type%(light|dark)/icon.svg",
+			"EditorsSupport": ["cell"],
+			"type": "panel",
+
+			"initDataType": "none",
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true,
+					"textLocale": {
+						"ru": "Вставить",
+						"fr": "Insérer",
+						"es": "Insertar",
+						"de": "Einfügen"
+					},
+					"isViewer": false
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"textLocale": {
+						"ru": "Отмена",
+						"fr": "Annuler",
+						"es": "Cancelar",
+						"de": "Abbrechen"
+					}
+				}
+			],
+			"events": [],
+
+			"store": {
+				"background": {
+					"light": "linear-gradient(90deg, #4A90D9 0%, #67B26F 100%)",
+					"dark": "linear-gradient(90deg, #4A90D9 0%, #67B26F 100%)"
+				},
+				"screenshots": [],
+				"icons": {
+					"light": "resources/light",
+					"dark": "resources/dark"
+				},
+				"categories": ["recommended"]
+			}
+		}
+	],
+
+	"onlyofficeScheme": true
+}
