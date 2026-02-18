@@ -102,3 +102,45 @@
 
 ## 2.3.2
 * Fix offline work.
+
+## 2.3.3
+* Refactoring custom providers.
+
+## 2.3.4
+* Refactoring custom providers.
+
+## 2.4.0
+* Bug fix.
+
+## 2.4.1
+* Bug fix.
+
+## 2.4.2
+* Add agent for simple functions.
+
+## 2.5.0
+* Add events for another plugins.
+* Bug fix.
+
+## 2.5.1
+* Bug fix.
+
+## 3.0.0
+* Bug fix.
+* Add Grammar & Spelling functionality.
+* Add OpenRouter provider.
+* Refactoring helper functions.
+
+## 3.0.1
+* Bug fix.
+* Translations added.
+
+## 3.0.2
+* Bug fix.
+
+## 3.0.5
+* New Feature: Build Your Own AI Assistants
+* Known issues: immediately after adding the assistant in the desktop application (and only there), the Edit and Delete buttons will not work. After restarting the plugin or reopening the file, they will work correctly. This will be fixed in version 9.3.0.
+
+## 3.0.6
+* Fix bugs with external providers/models.

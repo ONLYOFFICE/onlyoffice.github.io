@@ -1,0 +1,41 @@
+{
+  "TextHighlighter": "文本高亮器",
+  "PluginInstructions": "输入或选择<b>要搜索的单词或短语</b>，并配置所需设置。",
+
+  "TextToSearch": "搜索文本：",
+  "SearchPlaceholder": "输入文本或在文档中选择",
+  "IgnoreCase": "忽略大小写",
+
+  "HighlightColor": "高亮颜色：",
+  "HighlightYellow": "黄色",
+  "HighlightGreen": "绿色",
+  "HighlightBlue": "蓝色",
+  "HighlightRed": "红色",
+  "HighlightNone": "无填充",
+
+  "TextColorHeader": "文字颜色",
+  "TextColorPicker": "选择文字颜色",
+
+  "TextFormattingHeader": "文字格式",
+  "FormatBold": "加粗",
+  "FormatItalic": "斜体",
+  "FormatUnderline": "下划线",
+  "FormatStrike": "删除线",
+
+  "ApplyButton": "应用",
+
+  "SearchNoResults": "搜索完成。<strong>未找到匹配项。</strong>",
+  "HighlightMore": "继续高亮",
+  "HighlightMore2": "继续高亮",
+  "ArrowDropdown": "▸",
+  "SearchDone": "完成！搜索已完成并应用样式。",
+  "MatchesFound": "找到匹配项：",
+  "RevertToOriginal": "恢复",
+
+  "LoadingMessage": "处理中...",
+
+  "AboutTitle": "文本高亮器",
+  "AboutVersion": "版本 1.0.0",
+  "AboutDescription": "该插件允许您搜索文本并在文档中应用高亮、颜色和格式样式。",
+  "AboutCopyright": "© 2025 ONLYOFFICE 插件"
+}

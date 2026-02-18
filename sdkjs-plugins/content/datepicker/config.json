@@ -1,0 +1,113 @@
+{
+  "name": "Date picker",
+  "offered": "Office Extensions Group",
+  "nameLocale": {
+    "cs": "Výběr data",
+    "de": "Datumsauswahl",
+    "es": "Selector de fecha",
+    "fr": "Sélecteur de date",
+    "it": "Selettore data",
+    "ja": "日付ピッカー",
+    "pt": "Seletor de data",
+    "ru": "Выбор даты",
+    "sq": "Zgjedhësi i datës",
+    "sr": "Избор датума",
+    "sp": "Izbor datuma",
+    "zh": "日期选择器"
+  },
+  "guid": "asc.{409e5493-56ae-45e1-8423-c73c84a06c50}",
+  "version": "1.0.0",
+  "description": "A plugin to insert formatted dates into cells.",
+  "descriptionLocale": {
+    "cs": "Plugin pro vkládání formátovaných dat do buněk.",
+    "de": "Ein Plugin zum Einfügen formatierter Daten in Zellen.",
+    "es": "Un complemento para insertar fechas formateadas en celdas.",
+    "fr": "Un plugin pour insérer des dates formatées dans les cellules.",
+    "it": "Un plugin per inserire date formattate nelle celle.",
+    "ja": "セルにフォーマットされた日付を挿入するプラグイン。",
+    "pt": "Um plugin para inserir datas formatadas em células.",
+    "ru": "Плагин для вставки отформатированных дат в ячейки.",
+    "sq": "Një shtojcë për të futur data të formatuara në qeliza.",
+    "sr": "Додатак за убацивање форматираних датума у ћелије.",
+    "sp": "Dodatak za ubacivanje formatiranih datuma u ćelije.",
+    "zh": "用于在单元格中插入格式化日期的插件。"
+  },
+  "type": "panel",
+  "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
+  "variations": [
+    {
+      "description": "Insert formatted dates into spreadsheet cells with a calendar interface.",
+      "descriptionLocale": {
+        "cs": "Vkládejte formátovaná data do buněk tabulky pomocí kalendářního rozhraní.",
+        "de": "Fügen Sie formatierte Daten mit einer Kalender-Oberfläche in Tabellenzellen ein.",
+        "es": "Inserte fechas formateadas en celdas de hojas de cálculo con una interfaz de calendario.",
+        "fr": "Insérez des dates formatées dans les cellules de feuille de calcul avec une interface de calendrier.",
+        "it": "Inserisci date formattate nelle celle del foglio di calcolo con un'interfaccia calendario.",
+        "ja": "カレンダーインターフェースを使用して、スプレッドシートのセルにフォーマットされた日付を挿入します。",
+        "pt-BR": "Insira datas formatadas em células de planilha com uma interface de calendário.",
+        "ru": "Вставляйте отформатированные даты в ячейки электронной таблицы с помощью календарного интерфейса.",
+        "sq": "Futni data të formatuara në qelizat e fletës së llogaritjes me një ndërfaqe kalendari.",
+        "sr": "Убацујте форматиране датуме у ћелије табеле помоћу календарског интерфејса.",
+        "sp": "Ubacujte formatirane datume u ćelije tabele pomoću kalendarskog interfejsa.",
+        "zh": "使用日历界面将格式化日期插入电子表格单元格。"
+      },
+      "url": "index.html",
+      "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/light/icon.svg"
+          },
+          "125%": {
+            "normal": "resources/light/icon@1.25x.svg"
+          },
+          "150%": {
+            "normal": "resources/light/icon@1.5x.svg"
+          },
+          "175%": {
+            "normal": "resources/light/icon@1.75x.svg"
+          },
+          "200%": {
+            "normal": "resources/light/icon@2x.svg"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/dark/icon-dark.svg"
+          },
+          "125%": {
+            "normal": "resources/dark/icon-dark@1.25x.svg"
+          },
+          "150%": {
+            "normal": "resources/dark/icon-dark@1.5x.svg"
+          },
+          "175%": {
+            "normal": "resources/dark/icon-dark@1.75x.svg"
+          },
+          "200%": {
+            "normal": "resources/dark/icon-dark@2x.svg"
+          }
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["cell"],
+      "isVisual": true,
+      "isModal": false,
+      "isInsideMode": true,
+      "initDataType": "none",
+      "initData": "",
+      "isUpdateOleOnResize": true,
+      "buttons": [],
+      "store": {
+        "screenshots": [
+          "resources/store/screenshot1.png",
+          "resources/store/screenshot2.png",
+          "resources/store/screenshot3.png",
+          "resources/store/screenshot4.png"
+        ]
+      }
+    }
+  ]
+}

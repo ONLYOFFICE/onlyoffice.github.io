@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "Zadat text ručně",
+	"Hide field": "Skrýt pole",
+	"Translating...": "Překládám...",
+	"Loading translation engine...": "Načítání překladače...",
+	"Downloading model...": "Stahování modelu...",
+	"Model loaded - Ready for offline translation": "Model načten - Připraven k offline překladu",
+	"Failed to load model: ": "Nepodařilo se načíst model: ",
+	"Ready - Select languages to translate": "Připraven - Vyberte jazyky k překladu",
+	"Failed to initialize: ": "Nepodařilo se inicializovat: ",
+	"Translation complete": "Překlad dokončen",
+	"Translation failed: ": "Překlad selhal: ",
+	"Translation failed": "Překlad selhal",
+	"Copied to clipboard": "Zkopírováno do schránky",
+	"Copy": "Kopírovat",
+	"Insert to document": "Vložit do dokumentu",
+	"Offline": "Offline"
+}

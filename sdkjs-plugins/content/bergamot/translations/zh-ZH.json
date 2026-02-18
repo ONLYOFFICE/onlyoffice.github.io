@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "手动输入文本",
+	"Hide field": "隐藏输入框",
+	"Translating...": "翻译中...",
+	"Loading translation engine...": "加载翻译引擎...",
+	"Downloading model...": "下载模型...",
+	"Model loaded - Ready for offline translation": "模型已加载 - 可进行离线翻译",
+	"Failed to load model: ": "模型加载失败：",
+	"Ready - Select languages to translate": "就绪 - 选择要翻译的语言",
+	"Failed to initialize: ": "初始化失败：",
+	"Translation complete": "翻译完成",
+	"Translation failed: ": "翻译失败：",
+	"Translation failed": "翻译失败",
+	"Copied to clipboard": "已复制到剪贴板",
+	"Copy": "复制",
+	"Insert to document": "插入到文档",
+	"Offline": "离线"
+}

@@ -1,0 +1,18 @@
+{
+	"Enter text manually": "Ввести текст вручную",
+	"Hide field": "Скрыть поле для ввода",
+	"Translating...": "Перевод...",
+	"Loading translation engine...": "Загрузка движка перевода...",
+	"Downloading model...": "Загрузка модели...",
+	"Model loaded - Ready for offline translation": "Модель загружена - Готов к офлайн переводу",
+	"Failed to load model: ": "Ошибка загрузки модели: ",
+	"Ready - Select languages to translate": "Готов - Выберите языки для перевода",
+	"Failed to initialize: ": "Ошибка инициализации: ",
+	"Translation complete": "Перевод завершён",
+	"Translation failed: ": "Ошибка перевода: ",
+	"Translation failed": "Ошибка перевода",
+	"Copied to clipboard": "Скопировано в буфер обмена",
+	"Copy": "Копировать",
+	"Insert to document": "Вставить в документ",
+	"Offline": "Офлайн"
+}

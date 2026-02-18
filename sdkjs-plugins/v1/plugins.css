@@ -354,6 +354,18 @@ a.aboutlink:active {
     -webkit-user-select: none;
 }
 
+.select2-container--default .select2-dropdown {
+    border-radius: 4px !important;
+    overflow: hidden;
+}
+
+.select2-dropdown.select2-dropdown--below {
+    margin-top: 2px;
+}
+.select2-dropdown.select2-dropdown--above {
+    margin-top: -2px;
+}
+
 .select2-dropdown,
 .select2-container--default .select2-selection--single {
     border: 1px solid #cfcfcf !important;

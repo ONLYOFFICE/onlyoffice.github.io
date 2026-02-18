@@ -30,7 +30,7 @@
  *
  */
 
-function registerButtons(window, undefined)
+async function registerButtons(window, undefined)
 {
 	window.AI = window.AI || {};
 	var AI = window.AI;
@@ -136,6 +136,35 @@ function registerButtons(window, undefined)
 		chatWindow.show(variation);
 
 		window.chatWindow = chatWindow;
+	}
+
+	let editorVersion = await Asc.Library.GetEditorVersion();
+	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
+	{
+		let buttonSub = new Asc.ButtonContextMenu(buttonMain);
+		buttonSub.text = "Grammar & Spelling";
+		buttonSub.icons = getContextMenuButtonIcons("grammar");
+		buttonSub.editors = ["word"];
+		buttonSub.addCheckers("Target", "Selection");
+		
+		let buttonAll = new Asc.ButtonContextMenu(buttonSub);
+		buttonAll.text = "Check all";
+		buttonAll.editors = ["word"];
+		buttonAll.addCheckers("Target", "Selection");
+
+		buttonAll.attachOnClick(async function(data){
+			onCheckGrammarSpelling(false);
+		});
+
+		let buttonCurrent = new Asc.ButtonContextMenu(buttonSub);
+		buttonCurrent.text = "Check current text";
+		buttonCurrent.editors = ["word"];
+		buttonCurrent.addCheckers("Target", "Selection");
+
+		buttonCurrent.attachOnClick(async function(data){
+			onCheckGrammarSpelling(true);
+		});
+	
 	}
 
 	// Submenu summarize:
@@ -409,6 +438,42 @@ function registerButtons(window, undefined)
 		});
 	}
 
+	const on_click_ocr = async function () {
+		let requestEngine = AI.Request.create(AI.ActionType.OCR);
+		if (!requestEngine)
+			return;
+
+		let content = await Asc.Library.GetSelectedImage();
+		if (!content) {
+			console.log("you need to select an image to use ocr")
+			return;
+		}
+
+		let result = await requestEngine.imageOCRRequest(content);
+		if (!result) return;
+
+		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
+	}
+
+	const on_click_text_to_image = async function (params) {
+		let requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
+		if (!requestEngine)
+			return;
+
+		let content = await Asc.Library.GetSelectedText();
+		if (!content) {
+			console.log("you need to select text to generate image")
+			return;
+		}
+
+		let result = await requestEngine.imageGenerationRequest(content);
+		if (!result) return;
+
+		if (Asc.plugin.info.editorSubType === "pdf")
+			return await Asc.Library.AddGeneratedImage(result);
+		await Asc.Library.AddOleObject(result, content);
+	}
+
 	if (true)
 	{
 		let buttonImages = new Asc.ButtonContextMenu(buttonMain);
@@ -439,20 +504,7 @@ function registerButtons(window, undefined)
 		let buttonOCR = new Asc.ButtonContextMenu(buttonImages);
 		buttonOCR.text = "OCR";
 		buttonOCR.addCheckers("Image", "OleObject");
-		buttonOCR.attachOnClick(async function(){
-			let requestEngine = AI.Request.create(AI.ActionType.OCR);
-			if (!requestEngine)
-				return;
-
-			let content = await Asc.Library.GetSelectedImage();
-			if (!content)
-				return;
-
-			let result = await requestEngine.imageOCRRequest(content);
-			if (!result) return;
-
-			await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
-		});
+		buttonOCR.attachOnClick(on_click_ocr);
 
 		let buttonExplainImage = new Asc.ButtonContextMenu(buttonImages);
 		buttonExplainImage.text = "Image to Text";
@@ -507,12 +559,14 @@ function registerButtons(window, undefined)
 	window.buttonMainToolbar = buttonMainToolbar;
 	window.getToolBarButtonIcons = getToolBarButtonIcons;
 
+	window.buttonSettings = null;
+
 	if (!AI.serverSettings)
 	{
-		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button1.text = "Settings";
-		button1.icons = getToolBarButtonIcons("settings");
-		button1.attachOnClick(function(data){
+		window.buttonSettings = new Asc.ButtonToolbar(buttonMainToolbar);
+		window.buttonSettings.text = "Settings";
+		window.buttonSettings.icons = getToolBarButtonIcons("settings");
+		window.buttonSettings.attachOnClick(function(data){
 			onOpenSettingsModal();
 		});
 	}
@@ -543,15 +597,12 @@ function registerButtons(window, undefined)
 			});
 		}
 
-		/*
-		// TODO:
-		let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button3.text = "Text to image";
-		button3.icons = getToolBarButtonIcons("text-to-image");
-		button3.attachOnClick(function(data){
-			console.log(data);
-		});
-		*/
+		if (false) {
+			let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
+			button3.text = "Text to Image";
+			button3.icons = getToolBarButtonIcons("text-to-image");
+			button3.attachOnClick(on_click_text_to_image);
+		}
 
 		let button4 = new Asc.ButtonToolbar(buttonMainToolbar);
 		button4.text = "Translation";
@@ -583,6 +634,74 @@ function registerButtons(window, undefined)
 			result = Asc.Library.getTranslateResult(result, content);
 			await Asc.Library.PasteText(result);
 		});
+
+		if (false && Asc.Editor.getType() !== "pdf")
+		{
+			let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
+			button2.text = "OCR";
+			button2.icons = getToolBarButtonIcons("ocr");
+			button2.attachOnClick(on_click_ocr);
+		}
+
+		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word")
+		{
+			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonGS.text = "Grammar & Spelling";
+			buttonGS.icons = getToolBarButtonIcons("grammar");
+			buttonGS.menu = [{
+				text: 'Check all',
+				id: 'sg10n-check-all',
+				onclick: () => onCheckGrammarSpelling(false)
+			}, 
+			{
+				text: 'Check current text',
+				id: 'sg10n-check-text',
+				onclick: () => onCheckGrammarSpelling(true)
+			}];
+			buttonGS.attachOnClick(async function(){
+				onCheckGrammarSpelling(true);
+			});
+			buttonGS.split = true;
+		}
+
+		let neededVersionForAiAssistant = 9002000;
+		/*if (window.AscDesktopEditor) {
+			neededVersionForAiAssistant = 9003000;
+		}*/
+		if (editorVersion >= neededVersionForAiAssistant && Asc.Editor.getType() === "word")
+		{	
+			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonCustomAssistant.text = "Create AI assistant";
+			buttonCustomAssistant.icons = getToolBarButtonIcons("plugin-writer");
+			buttonCustomAssistant.separator = true;
+			buttonCustomAssistant.attachOnClick(function(){
+				customAssistantWindowShow();
+			});
+			const savedAssistants = JSON.parse(
+				localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+			);
+
+			savedAssistants.forEach(element => {
+				const buttonAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+				buttonAssistant.text = element.name;
+				buttonAssistant.icons = getToolBarButtonIcons("written-plugin");
+				buttonAssistant.split = true;
+				buttonAssistant.enableToggle = true;
+				buttonAssistant.menu = [{
+					text: 'Edit',
+					id: element.id + '-edit',
+					onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+				}, 
+				{
+					text: 'Delete',
+					id: element.id + '-delete',
+					onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
+				}];
+				buttonAssistant.attachOnClick(async function(){
+					customAssistantOnClickToolbarIcon(element.id, buttonAssistant);
+				});
+			});
+		}
 	}
 
 	// register actions
@@ -597,7 +716,7 @@ function registerButtons(window, undefined)
 		Vision           : "Vision"
 	};
 
-	AI.Actions = {};
+	AI.Actions = Object.create(null);
 
 	function ActionUI(name, icon, modelId, capabilities) {
 		this.name = name || "";
@@ -611,7 +730,7 @@ function registerButtons(window, undefined)
 	AI.Actions[AI.ActionType.Translation]     = new ActionUI("Translation", "translation");
 	AI.Actions[AI.ActionType.TextAnalyze]     = new ActionUI("Text analysis", "text-analysis-ai");
 	AI.Actions[AI.ActionType.ImageGeneration] = new ActionUI("Image generation", "image-ai", "", AI.CapabilitiesUI.Image);
-	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "text-analysis-ai", "", AI.CapabilitiesUI.Vision);
+	AI.Actions[AI.ActionType.OCR]             = new ActionUI("OCR", "ocr", "", AI.CapabilitiesUI.Vision);
 	AI.Actions[AI.ActionType.Vision]          = new ActionUI("Vision", "vision-ai", "", AI.CapabilitiesUI.Vision);
 
 	AI.ActionsGetKeys = function()
@@ -651,12 +770,26 @@ function registerButtons(window, undefined)
 	{
 		try
 		{
+			// exclude external models
+			let excludeMap = Object.create(null);
+			for (let key in AI.Actions) {
+				if (AI.Actions[key].model.startsWith(AI.externalModelPrefix)) {
+					excludeMap[key] = AI.Actions[key].model;
+					AI.Actions[key].model = "";
+				}
+			}
+
 			window.localStorage.setItem(actions_key, JSON.stringify(AI.Actions));
+			
+			// restore excluded
+			for (let key in excludeMap) {
+				AI.Actions[key].model = excludeMap[key];
+			}
 			return true;
 		}
 		catch (e)
 		{
-		}
+		}		
 		return false;
 	};
 
@@ -695,6 +828,9 @@ function registerButtons(window, undefined)
 			AI.Actions[id].model = model;
 			AI.ActionsSave();
 		}
+
+		if (Asc.plugin.sendEvent)
+			Asc.plugin.sendEvent("ai_onActionsChange", window.getActionsInfo());
 	};
 
 	AI.ActionsLoad();

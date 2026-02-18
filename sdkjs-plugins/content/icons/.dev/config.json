@@ -1,0 +1,15 @@
+{
+    "excludes": [
+        ".dev/*",
+        "node_modules/*",
+        "src/*",
+        "*.map",
+        ".browserslistrc",
+        ".gitignore",
+        "LICENSE",
+        "package.json",
+        "README.md",
+        "package-lock.json",
+        "rollup.config.mjs"
+    ]
+}

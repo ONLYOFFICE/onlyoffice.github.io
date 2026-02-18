@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Resaltador de Texto",
+  "PluginInstructions": "Introduce o selecciona <b>una palabra o frase</b> para buscar en el texto del documento, y configura los ajustes necesarios.",
+  
+  "TextToSearch": "Texto a buscar:",
+  "SearchPlaceholder": "Introduce texto o selecciona en el documento",
+  "IgnoreCase": "Ignorar mayúsculas/minúsculas",
+
+  "HighlightColor": "Color de resaltado:",
+  "HighlightYellow": "Amarillo",
+  "HighlightGreen": "Verde",
+  "HighlightBlue": "Azul",
+  "HighlightRed": "Rojo",
+  "HighlightNone": "Sin relleno",
+  "ArrowDropdown": "▸",
+
+  "TextColorHeader": "Color del texto",
+  "TextColorPicker": "Elige el color del texto",
+
+  "TextFormattingHeader": "Formato del texto",
+  "FormatBold": "Negrita",
+  "FormatItalic": "Cursiva",
+  "FormatUnderline": "Subrayado",
+  "FormatStrike": "Tachado",
+
+  "ApplyButton": "Aplicar",
+
+  "SearchNoResults": "Búsqueda completada. <strong>No se encontraron coincidencias.</strong>",
+  "HighlightMore": "Resaltar más",
+  "HighlightMore2": "Resaltar más",
+
+  "SearchDone": "¡Hecho! La búsqueda se completó y se aplicaron los estilos.",
+  "MatchesFound": "Coincidencias encontradas:",
+  "RevertToOriginal": "Revertir",
+
+  "LoadingMessage": "Procesando...",
+
+  "AboutTitle": "Resaltador de Texto",
+  "AboutVersion": "Versión 1.0.0",
+  "AboutDescription": "Este complemento te permite buscar texto y aplicar resaltado, color y estilos de formato en tu documento.",
+  "AboutCopyright": "© 2025 Complemento ONLYOFFICE"
+}

@@ -15,3 +15,12 @@
 ## 1.0.3
 
 * Update jquery version.
+
+## 1.0.4
+
+* Bug fix.
+* Using modern API.
+
+## 1.0.5
+
+* Fix work with offline files (Desktop App).
