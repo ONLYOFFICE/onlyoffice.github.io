@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Attività in tempo reale",
 	"Coding Help": "Aiuto per la codifica",
 	"Visual Analysis": "Analisi visiva",
+	"Function Calling / Tools": "Chiamata di funzioni / Strumenti",
 	"Updating": "Aggiornamento",
 	"Your text" : "Il tuo testo",
 	"Target language" : "Lingua di destinazione",
@@ -178,5 +179,8 @@
 	"Hint": "Dica",
 	"Replace": "Sostituisci",
 	"Replace + Hint": "Sostituisci + Dica",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result",
 	"Generate Document": "Genera documento"
 }

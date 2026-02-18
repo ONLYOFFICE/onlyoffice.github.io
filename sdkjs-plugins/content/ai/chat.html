@@ -36,14 +36,21 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+
+	<script type="text/javascript" src="vendor/jquery/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="vendor/GPT-3-Encoder/encoder.js"></script>
-	<script src="vendor/md/markdown-it.js"></script>
+	<script type="text/javascript" src="vendor/md/markdown-it.js"></script>
+	
 	<script type="text/javascript" src="components/Tooltip/script.js"></script>
 	<link rel="stylesheet" href="components/Tooltip/style.css">
 	<link rel="stylesheet" href="./resources/styles/chat.css">
 	<script type="text/javascript" src="scripts/utils/theme.js"></script>
+	
+	<script type="text/javascript" src="scripts/helpers/helperFuncs.js"></script>
+	<script type="text/javascript" src="scripts/helpers/helpers.js"></script>
+	<script type="text/javascript" src="scripts/chatVoice.js"></script>
 	<script type="text/javascript" src="scripts/chat.js"></script>
+	
 </head>
 <body style="display: flex;">
 	<div id="chat_window" class="chat_window hidden">
@@ -89,8 +96,16 @@
 		</div>
 		<div id="input_message_wrapper">
 			<textarea id="input_message" rows="1" class="form-control" spellcheck="false"></textarea>
-			<div id="input_message_submit" class="noselect">
-				<img src="resources/icons/light/btn-demote.png" draggable="false" class="icon"/>
+			<div id="input_buttons_container">
+				<div id="input_voice_button" class="input_control_button hidden" title="Voice input">
+					<img src="resources/icons/light/btn-microphone.png" draggable="false" class="icon"/>
+				</div>
+				<div id="input_stop_button" class="input_control_button hidden" title="Stop">
+					<span class="icon">⏹</span>
+				</div>
+				<div id="input_message_submit" class="input_control_button noselect">
+					<img src="resources/icons/light/btn-demote.png" draggable="false" class="icon"/>
+				</div>
 			</div>
 		</div>
 	</div>

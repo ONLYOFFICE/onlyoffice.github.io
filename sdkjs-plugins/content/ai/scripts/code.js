@@ -580,7 +580,7 @@ async function initWithTranslate(counter) {
 				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
 					type : "html",
 					options : {
-						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]),
+						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]),
 						separateParagraphs : false
 					}					
 				}]);
@@ -658,7 +658,7 @@ async function initWithTranslate(counter) {
 						data.type = AI.ActionType.OCR;
 						let result = await requestEngine.imageOCRRequest(params.data, isBlock);
 						if (result) {
-							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]);
+							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]);
 						}
 						break;
 					}
@@ -1338,6 +1338,86 @@ function onOpenAiModelsModal() {
 	aiModelsListWindow.show(variation);
 }
 
+async function detectFunctionCallingSupport(model) {
+	if ((model.capabilities & AI.CapabilitiesUI.Chat) === 0) return;
+	if ((model.capabilities & AI.CapabilitiesUI.Tools) !== 0) return;
+
+	await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + model.name + ")"]);
+
+	try {
+		var provider = AI.createProviderInstance(
+			model.provider.name,
+			model.provider.url,
+			model.provider.key
+		);
+
+		if (!provider)
+			return;
+
+		var tempFullModel = {
+			id: model.id,
+			name: model.name,
+			provider: model.provider.name,
+			endpoints: [],
+			options: {}
+		};
+
+		var tempModelUI = new AI.UI.Model(
+			model.name,
+			model.id,
+			model.provider.name,
+			model.capabilities
+		);
+
+		var request = new AI.Request(tempModelUI);
+		request.model = tempFullModel;
+
+		var testTools = [{
+			name: "get_current_time",
+			description: "Get the current time",
+			parameters: {
+				type: "object",
+				properties: {},
+				required: []
+			}
+		}];
+
+		var testMessages = [
+			{
+				role: "user",
+				content: "What time is it?"
+			}
+		];
+
+		var response = await request._chatRequestAgent({
+			messages: testMessages,
+			tools: testTools
+		}, undefined);
+
+		if (response && response.tool_calls && response.tool_calls.length > 0) {
+			var isSupportTools = false;
+			for (var j = 0; j < response.tool_calls.length; j++) {
+				if (response.tool_calls[j].function &&
+					response.tool_calls[j].function.name === "get_current_time") {
+					isSupportTools = true;
+					break;
+				}
+			}
+
+			if (isSupportTools) {
+				model.capabilities = model.capabilities | AI.CapabilitiesUI.Tools;
+				console.log("[AI tools detection]:" + model.name + ": true");
+			} else {
+				console.log("[AI tools detection]:" + model.name + ": false");
+			}
+		}
+	} catch (error) {
+		console.log("[AI tools detection]:" + model.name + ": false");
+	}
+
+	await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + model.name + ")"]);
+}
+
 /**
  * ADD/EDIT WINDOW
  */
@@ -1357,7 +1437,11 @@ function onOpenEditModal(data) {
 
 	if (!aiModelEditWindow) {
 		aiModelEditWindow = new window.Asc.PluginWindow();
-		aiModelEditWindow.attachEvent("onChangeModel", function(model){
+		aiModelEditWindow.attachEvent("onChangeModel", async function(model){
+			if ((model.capabilities & AI.CapabilitiesUI.Chat) !== 0) {
+				await detectFunctionCallingSupport(model);
+			}
+
 			//Assign this model to actions without a model
 			const models = AI.Storage.serializeModels();
 			let needUpdateSettingsWindow = false;

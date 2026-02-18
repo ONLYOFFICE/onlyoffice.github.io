@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Задачи в режиме реального времени",
 	"Coding Help": "Помощь в кодировании",
 	"Visual Analysis": "Визуальный анализ",
+	"Function Calling / Tools": "Вызов функций / Инструменты",
 	"Updating": "Обновление",
 	"Your text": "Ваш текст",
 	"Target language": "Язык перевода",
@@ -178,5 +179,8 @@
 	"Hint": "Подсказка",
 	"Replace": "Заменa",
 	"Replace + Hint": "Замена + Подсказка",
+	"Function": "Функция",
+	"Arguments": "Параметры",
+	"Result": "Результат",
 	"Generate Document": "Создать документ"
 }

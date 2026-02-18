@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Задаци у реалном времену",
 	"Coding Help": "Помоћ у кодирању",
 	"Visual Analysis": "Визуелна анализа",
+	"Function Calling / Tools": "Позивање функција / Алатке",
 	"Updating": "Ажурирање",
 	"Your text" : "Ваш текст",
 	"Target language" : "Циљни језик",
@@ -178,5 +179,8 @@
 	"Hint": "Hint",
 	"Replace": "Замени",
 	"Replace + Hint": "Замени + Hint",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result",
 	"Generate Document": "Генериши документ"
 }

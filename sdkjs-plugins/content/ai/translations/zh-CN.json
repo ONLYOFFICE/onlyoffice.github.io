@@ -38,6 +38,7 @@
 	"Realtime Tasks": "处理实时任务",
 	"Coding Help": "处理代码",
 	"Visual Analysis": "进行视觉分析",
+	"Function Calling / Tools": "函数调用 / 工具",
 	"Updating": "正在更新",
 	"Your text" : "您的文本",
 	"Target language" : "目标语言",
@@ -178,5 +179,8 @@
 	"Hint": "提示",
 	"Replace": "替换",
 	"Replace + Hint": "替换 + 提示",
+	"Function": "Function",
+	"Arguments": "Arguments",
+	"Result": "Result",
 	"Generate Document": "生成文档"
 }
