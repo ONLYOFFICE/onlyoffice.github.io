@@ -665,20 +665,24 @@ async function registerButtons(window, undefined)
 			lastButton = buttonGS;			
 		}
 
-		if (editorVersion >= 9001000) {
+		if (editorVersion >= 9003000) {
 
 			if (window.AscDesktopEditor && Asc.Editor.getType() === "word") 
 			{
-				let buttonGenerate = new Asc.ButtonToolbar(buttonMainToolbar);
-				buttonGenerate.text = "Generate Document";
-				buttonGenerate.icons = window.getToolBarButtonIcons("form-to-doc");
-				
-				buttonGenerate.attachOnClick(async function(){
-					let content = await getFormGenerationPrompt();
-					window.AscDesktopEditor.generateNew("docx", "ai", content);
-				});
+				let isFillForm = await Asc.Editor.callMethod("IsFillingOFormMode");
+				if (true === isFillForm)
+				{
+					let buttonGenerate = new Asc.ButtonToolbar(buttonMainToolbar);
+					buttonGenerate.text = "Generate Document";
+					buttonGenerate.icons = window.getToolBarButtonIcons("form-to-doc");
+					
+					buttonGenerate.attachOnClick(async function(){
+						let content = await getFormGenerationPrompt();
+						window.AscDesktopEditor.generateNew("docx", "ai", content);
+					});
 
-				lastButton = buttonGenerate;
+					lastButton = buttonGenerate;
+				}
 			}
 		}
 
