@@ -29,6 +29,9 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+
+/// <reference path="../../../v1/onlyoffice-types/index.d.ts" />
+
 (function () {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
     var displayNoneClass = "display-none";
@@ -79,12 +82,9 @@
             }
 
             var wnd = window.open(link, null, "width=500,height=700");
-            var timer = setInterval(function () {
-                if (wnd.closed) {
-                    clearInterval(timer);
-                    showLoader(false);
-                }
-            }, 500);
+            wnd.addEventListener('beforeunload', function () {
+                showLoader(false);
+            });
         },
         getToken: function () {
             return localStorage.getItem("mendToken");
@@ -979,6 +979,7 @@
     function insertInDocument(html) {
         if (html) {
             window.Asc.plugin.executeMethod("PasteHtml", [(html.join) ? html.join('') : html]);
+            //window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Tag" : html, "Lock" : 0}]);
         } else {
             showError(getMessage("Bibliography cannot be created with selected style"));
         }

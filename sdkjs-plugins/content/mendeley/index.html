@@ -35,15 +35,29 @@
     <meta charset="UTF-8">
     <title>Mendeley</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="resources/css/plugin_style.css">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <!--link rel="stylesheet" href="dist/styles.css"-->
+        <link rel="stylesheet" href="resources/css/plugin_style.css">
+    <style id="componentsStyles"></style>
+    <style id="pluginStyles"></style>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="scripts/thirdparty/fetch.umd.js"></script>
-    <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
-    <script src="scripts/thirdparty/url-polyfill.min.js"></script>
+        <script src="scripts/thirdparty/fetch.umd.js"></script>
+        <script src="scripts/thirdparty/promise-polyfill.min.js"></script>
+        <script src="scripts/thirdparty/url-polyfill.min.js"></script>
     <script src="scripts/mendeley-sdk/standalone.min.js"></script>
     <script src="scripts/citeproc/citeproc_commonjs.js"></script>
+    <!--script>
+        if (typeof Promise === 'function' && typeof Promise.any === 'function') {
+            document.write(
+                '<script type="module" src="dist/bundle.modern.js"><\/script>'
+            );
+        } else {
+            document.write(
+                '<script src="dist/bundle.es5.js"><\/script>'
+            );
+        }
+    </script-->
 </head>
 <body spellcheck="false" class="noselect">
     <div id="loader" class="cssload-container display-none">
